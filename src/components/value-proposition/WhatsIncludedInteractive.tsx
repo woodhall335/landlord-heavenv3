@@ -8,12 +8,19 @@ import type {
   NoticeOnlyPreviewData,
   NoticeVariantKey,
 } from '@/lib/previews/noticeOnlyPreviews';
+import type { CompletePackPreviewData, CompletePackVariantKey } from '@/lib/previews/completePackPreviews';
 
-type WhatsIncludedInteractiveProps = {
-  product: 'notice_only';
-  defaultJurisdiction?: JurisdictionKey;
-  previews: NoticeOnlyPreviewData;
-};
+type WhatsIncludedInteractiveProps =
+  | {
+      product: 'notice_only';
+      defaultJurisdiction?: JurisdictionKey;
+      previews: NoticeOnlyPreviewData;
+    }
+  | {
+      product: 'complete_pack';
+      defaultVariant?: CompletePackVariantKey;
+      previews: CompletePackPreviewData;
+    };
 
 type NoticeVariant = {
   key: NoticeVariantKey;
@@ -80,6 +87,58 @@ const differentiators = [
 ];
 
 const jurisdictionOrder: JurisdictionKey[] = ['england', 'wales', 'scotland'];
+
+type DocumentGroup = {
+  title: string;
+  items: string[];
+  emptyText?: string;
+};
+
+type VariantOption = {
+  key: string;
+  label: string;
+  description: string;
+};
+
+const COMPLETE_PACK_VARIANTS: VariantOption[] = [
+  {
+    key: 'section8',
+    label: 'Section 8 Eviction Pack',
+    description: 'Grounds-based eviction pack for rent arrears or breaches.',
+  },
+  {
+    key: 'section21',
+    label: 'Section 21 Eviction Pack',
+    description: 'No-fault eviction pack for England landlords.',
+  },
+];
+
+const buildCompletePackDocumentGroups = (variant: CompletePackVariantKey): DocumentGroup[] => [
+  {
+    title: 'Notices (1)',
+    items: [
+      variant === 'section21'
+        ? 'Section 21 (Form 6A) — Court-ready eviction notice'
+        : 'Section 8 (Form 3) — Court-ready eviction notice',
+    ],
+  },
+  {
+    title: 'Court Forms (3)',
+    items: ['Form N5 — Claim for Possession', 'Form N119 — Particulars of Claim', 'Form N5B — Accelerated Possession'],
+  },
+  {
+    title: 'AI-Generated (1)',
+    items: ['AI Witness Statement'],
+  },
+  {
+    title: 'Guidance (3)',
+    items: ['Service Instructions', 'Service & Validity Checklist', 'Court Filing Guide'],
+  },
+  {
+    title: 'Evidence (2)',
+    items: ['Evidence Collection Checklist', 'Proof of Service Certificate'],
+  },
+];
 
 type PreviewImageProps = {
   src: string;
@@ -156,41 +215,48 @@ const PreviewThumbnail = ({ src, alt, title, width, height, className }: Preview
   );
 };
 
-export const WhatsIncludedInteractive = ({
-  product,
-  defaultJurisdiction = 'england',
-  previews,
-}: WhatsIncludedInteractiveProps) => {
-  if (product !== 'notice_only') {
-    return null;
-  }
+export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) => {
+  const { product, previews } = props;
+  const isNoticeOnly = product === 'notice_only';
+  const initialJurisdiction = product === 'notice_only' ? props.defaultJurisdiction ?? 'england' : 'england';
+  const initialPackVariant = product === 'complete_pack' ? props.defaultVariant ?? 'section21' : 'section21';
 
-  const [selectedJurisdiction, setSelectedJurisdiction] = useState<JurisdictionKey>(defaultJurisdiction);
-  const defaultVariantKey = NOTICE_ONLY_CONFIG[defaultJurisdiction].noticeVariants[0].key;
-  const [selectedNoticeVariant, setSelectedNoticeVariant] = useState<NoticeVariantKey>(defaultVariantKey);
-  const [selectedDocKey, setSelectedDocKey] = useState<string>(
-    previews[defaultJurisdiction]?.[defaultVariantKey]?.[0]?.key ?? 'preview-placeholder',
-  );
+  const [selectedJurisdiction, setSelectedJurisdiction] = useState<JurisdictionKey>(initialJurisdiction);
+  const defaultNoticeVariantKey = NOTICE_ONLY_CONFIG[initialJurisdiction].noticeVariants[0].key;
+  const [selectedNoticeVariant, setSelectedNoticeVariant] = useState<NoticeVariantKey>(defaultNoticeVariantKey);
+  const [selectedPackVariant, setSelectedPackVariant] = useState<CompletePackVariantKey>(initialPackVariant);
+  const [selectedDocKey, setSelectedDocKey] = useState<string>(() => {
+    if (product === 'notice_only') {
+      const noticePreviews = previews as NoticeOnlyPreviewData;
+      return noticePreviews[initialJurisdiction]?.[defaultNoticeVariantKey]?.[0]?.key ?? 'preview-placeholder';
+    }
+    const packPreviews = previews as CompletePackPreviewData;
+    return packPreviews[initialPackVariant]?.[0]?.key ?? 'preview-placeholder';
+  });
 
   const jurisdictionConfig = NOTICE_ONLY_CONFIG[selectedJurisdiction];
   const noticeVariants = jurisdictionConfig.noticeVariants;
 
   useEffect(() => {
+    if (!isNoticeOnly) {
+      return;
+    }
     const nextVariant = NOTICE_ONLY_CONFIG[selectedJurisdiction].noticeVariants[0];
     setSelectedNoticeVariant(nextVariant.key);
-  }, [selectedJurisdiction]);
+  }, [isNoticeOnly, selectedJurisdiction]);
 
   useEffect(() => {
-    const docs = previews[selectedJurisdiction]?.[selectedNoticeVariant] ?? [];
-    setSelectedDocKey((previous) => (docs.some((doc) => doc.key === previous) ? previous : docs[0]?.key ?? 'preview-placeholder'));
-  }, [previews, selectedJurisdiction, selectedNoticeVariant]);
+    const docs = isNoticeOnly
+      ? (previews as NoticeOnlyPreviewData)[selectedJurisdiction]?.[selectedNoticeVariant] ?? []
+      : (previews as CompletePackPreviewData)[selectedPackVariant] ?? [];
+    setSelectedDocKey((previous) =>
+      docs.some((doc) => doc.key === previous) ? previous : docs[0]?.key ?? 'preview-placeholder',
+    );
+  }, [isNoticeOnly, previews, selectedJurisdiction, selectedNoticeVariant, selectedPackVariant]);
 
-  const activeVariant = useMemo(
-    () => noticeVariants.find((variant) => variant.key === selectedNoticeVariant) ?? noticeVariants[0],
-    [noticeVariants, selectedNoticeVariant],
-  );
-
-  const documents = previews[selectedJurisdiction]?.[activeVariant.key] ?? [];
+  const documents = isNoticeOnly
+    ? (previews as NoticeOnlyPreviewData)[selectedJurisdiction]?.[selectedNoticeVariant] ?? []
+    : (previews as CompletePackPreviewData)[selectedPackVariant] ?? [];
   const activeDoc = documents.find((document) => document.key === selectedDocKey) ?? documents[0];
   const activeIndex = useMemo(() => {
     if (!documents.length) {
@@ -217,6 +283,9 @@ export const WhatsIncludedInteractive = ({
   };
 
   const evictionNoticeDocuments = useMemo(() => {
+    if (!isNoticeOnly) {
+      return [];
+    }
     const matchers = [
       /section[-\s]?8/,
       /section[-\s]?21/,
@@ -232,12 +301,32 @@ export const WhatsIncludedInteractive = ({
       const haystack = `${document.title} ${document.key}`.toLowerCase();
       return matchers.some((matcher) => matcher.test(haystack));
     });
-  }, [documents]);
+  }, [documents, isNoticeOnly]);
 
-  const guidanceDocuments = useMemo(
-    () => documents.filter((document) => !evictionNoticeDocuments.some((notice) => notice.key === document.key)),
-    [documents, evictionNoticeDocuments],
-  );
+  const guidanceDocuments = useMemo(() => {
+    if (!isNoticeOnly) {
+      return [];
+    }
+    return documents.filter((document) => !evictionNoticeDocuments.some((notice) => notice.key === document.key));
+  }, [documents, evictionNoticeDocuments, isNoticeOnly]);
+
+  const documentGroups = useMemo<DocumentGroup[]>(() => {
+    if (!isNoticeOnly) {
+      return buildCompletePackDocumentGroups(selectedPackVariant);
+    }
+    return [
+      {
+        title: 'Eviction Notices',
+        items: evictionNoticeDocuments.map((document) => document.title),
+        emptyText: 'Previews coming soon.',
+      },
+      {
+        title: 'Guidance Documents',
+        items: guidanceDocuments.map((document) => document.title),
+        emptyText: 'Previews coming soon.',
+      },
+    ];
+  }, [evictionNoticeDocuments, guidanceDocuments, isNoticeOnly, selectedPackVariant]);
 
   const orderedDocuments = useMemo(() => {
     if (!activeDoc) {
@@ -324,50 +413,56 @@ export const WhatsIncludedInteractive = ({
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-10">
             <h2 className="text-3xl md:text-4xl font-bold text-charcoal">
-              What&apos;s included in your eviction notice only bundle
+              {isNoticeOnly ? 'What\u2019s included in your eviction notice only bundle' : 'What\u2019s included in your complete eviction pack'}
             </h2>
             <p className="mt-3 text-gray-600">
-              Select your jurisdiction, then preview every document in the pack.
+              {isNoticeOnly
+                ? 'Select your jurisdiction, then preview every document in the pack.'
+                : 'England-only pack. Choose Section 8 or Section 21, then preview every document.'}
             </p>
           </div>
 
-          <div className="flex justify-center mb-10" role="tablist" aria-label="Jurisdiction">
-            <div className="inline-flex rounded-full border border-[#7c3aed]/20 bg-white p-1 shadow-sm">
-              {jurisdictionOrder.map((jurisdiction) => {
-                const isActive = selectedJurisdiction === jurisdiction;
-                return (
-                  <button
-                    key={jurisdiction}
-                    role="tab"
-                    type="button"
-                    aria-selected={isActive}
-                    aria-controls={`jurisdiction-panel-${jurisdiction}`}
-                    className={`px-5 py-2 text-sm font-semibold rounded-full transition-all ${
-                      isActive
-                        ? 'bg-[#7c3aed] text-white shadow'
-                        : 'text-[#7c3aed] hover:bg-[#f3e8ff]'
-                    }`}
-                    onClick={() => setSelectedJurisdiction(jurisdiction)}
-                  >
-                    {NOTICE_ONLY_CONFIG[jurisdiction].label}
-                  </button>
-                );
-              })}
+          {isNoticeOnly ? (
+            <div className="flex justify-center mb-10" role="tablist" aria-label="Jurisdiction">
+              <div className="inline-flex rounded-full border border-[#7c3aed]/20 bg-white p-1 shadow-sm">
+                {jurisdictionOrder.map((jurisdiction) => {
+                  const isActive = selectedJurisdiction === jurisdiction;
+                  return (
+                    <button
+                      key={jurisdiction}
+                      role="tab"
+                      type="button"
+                      aria-selected={isActive}
+                      aria-controls={`jurisdiction-panel-${jurisdiction}`}
+                      className={`px-5 py-2 text-sm font-semibold rounded-full transition-all ${
+                        isActive
+                          ? 'bg-[#7c3aed] text-white shadow'
+                          : 'text-[#7c3aed] hover:bg-[#f3e8ff]'
+                      }`}
+                      onClick={() => setSelectedJurisdiction(jurisdiction)}
+                    >
+                      {NOTICE_ONLY_CONFIG[jurisdiction].label}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
-          </div>
+          ) : null}
 
           <div
             role="tabpanel"
-            id={`jurisdiction-panel-${selectedJurisdiction}`}
-            aria-label={`${jurisdictionConfig.label} notice pack details`}
+            id={isNoticeOnly ? `jurisdiction-panel-${selectedJurisdiction}` : 'jurisdiction-panel-england'}
+            aria-label={isNoticeOnly ? `${jurisdictionConfig.label} notice pack details` : 'England complete pack details'}
           >
             <div className="grid md:grid-cols-2 gap-10 items-start">
               <div className="order-2 md:order-1 space-y-6">
                 <div>
-                  <h3 className="text-lg font-semibold text-charcoal mb-3">Notice type</h3>
+                  <h3 className="text-lg font-semibold text-charcoal mb-3">
+                    {isNoticeOnly ? 'Notice type' : 'Pack type'}
+                  </h3>
                   <div className="grid gap-3">
-                    {noticeVariants.map((variant) => {
-                      const isActive = selectedNoticeVariant === variant.key;
+                    {(isNoticeOnly ? noticeVariants : COMPLETE_PACK_VARIANTS).map((variant) => {
+                      const isActive = (isNoticeOnly ? selectedNoticeVariant : selectedPackVariant) === variant.key;
                       return (
                         <button
                           key={variant.key}
@@ -377,7 +472,13 @@ export const WhatsIncludedInteractive = ({
                               ? 'border-[#7c3aed]/60 bg-[#f3e8ff] shadow-sm'
                               : 'border-gray-200 bg-white hover:border-[#7c3aed]/40'
                           }`}
-                          onClick={() => setSelectedNoticeVariant(variant.key)}
+                          onClick={() => {
+                            if (isNoticeOnly) {
+                              setSelectedNoticeVariant(variant.key as NoticeVariantKey);
+                            } else {
+                              setSelectedPackVariant(variant.key as CompletePackVariantKey);
+                            }
+                          }}
                         >
                           <p className="font-semibold text-charcoal">{variant.label}</p>
                           <p className="text-sm text-gray-600 mt-1">{variant.description}</p>
@@ -390,45 +491,31 @@ export const WhatsIncludedInteractive = ({
                 <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <h3 className="text-lg font-semibold text-charcoal">
-                      {jurisdictionConfig.label} — What you receive
+                      {isNoticeOnly ? `${jurisdictionConfig.label} — What you receive` : 'England — What you receive'}
                     </h3>
                     <span className="inline-flex items-center rounded-full bg-[#f3e8ff] px-3 py-1 text-xs font-semibold text-[#7c3aed]">
-                      {jurisdictionConfig.legalNote}
+                      {isNoticeOnly ? jurisdictionConfig.legalNote : 'England only'}
                     </span>
                   </div>
 
                   <div className="mt-5 space-y-4">
-                    <div>
-                      <p className="text-sm font-semibold text-[#7c3aed]">Eviction Notices</p>
-                      <ul className="mt-2 space-y-2 text-sm text-gray-700">
-                        {evictionNoticeDocuments.length ? (
-                          evictionNoticeDocuments.map((document) => (
-                            <li key={document.key} className="flex items-start gap-2">
-                              <span className="mt-1 h-2 w-2 rounded-full bg-[#7c3aed]" />
-                              <span>{document.title}</span>
-                            </li>
-                          ))
-                        ) : (
-                          <li className="text-sm text-gray-500">Previews coming soon.</li>
-                        )}
-                      </ul>
-                    </div>
-
-                    <div>
-                      <p className="text-sm font-semibold text-[#7c3aed]">Guidance Documents</p>
-                      <ul className="mt-2 space-y-2 text-sm text-gray-700">
-                        {guidanceDocuments.length ? (
-                          guidanceDocuments.map((document) => (
-                            <li key={document.key} className="flex items-start gap-2">
-                              <span className="mt-1 h-2 w-2 rounded-full bg-[#7c3aed]/60" />
-                              <span>{document.title}</span>
-                            </li>
-                          ))
-                        ) : (
-                          <li className="text-sm text-gray-500">Previews coming soon.</li>
-                        )}
-                      </ul>
-                    </div>
+                    {documentGroups.map((group) => (
+                      <div key={group.title}>
+                        <p className="text-sm font-semibold text-[#7c3aed]">{group.title}</p>
+                        <ul className="mt-2 space-y-2 text-sm text-gray-700">
+                          {group.items.length ? (
+                            group.items.map((item) => (
+                              <li key={item} className="flex items-start gap-2">
+                                <span className="mt-1 h-2 w-2 rounded-full bg-[#7c3aed]" />
+                                <span>{item}</span>
+                              </li>
+                            ))
+                          ) : (
+                            <li className="text-sm text-gray-500">{group.emptyText ?? 'Previews coming soon.'}</li>
+                          )}
+                        </ul>
+                      </div>
+                    ))}
                   </div>
                 </div>
 
