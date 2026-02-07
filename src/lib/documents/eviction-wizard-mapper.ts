@@ -238,7 +238,7 @@ function mapSection8Grounds(facts: CaseFacts): GroundClaim[] {
     rentFrequency,
   });
 
-  return selections.map((selection) => {
+  return selections.flatMap((selection) => {
     const { code, codeNum, title } = parseGround(selection);
 
     // Look up ground definition to get legal_basis and mandatory status
@@ -250,7 +250,7 @@ function mapSection8Grounds(facts: CaseFacts): GroundClaim[] {
 
     if (['Ground 8', 'Ground 10', 'Ground 11'].includes(code)) {
       if (codeNum === 8 && !ground8Eligible) {
-        return null;
+        return [];
       }
 
       // Use canonical arrears mapper for arrears grounds particulars
@@ -274,14 +274,14 @@ function mapSection8Grounds(facts: CaseFacts): GroundClaim[] {
       particulars = facts.issues.section8_grounds.false_statement_details || '';
     }
 
-    return {
+    return [{
       code,
       title: groundDef?.title || title,  // Use canonical title from definitions
       legal_basis,
       particulars,
       mandatory,
-    };
-  }).filter((ground): ground is GroundClaim => Boolean(ground));
+    }];
+  });
 }
 
 function buildEvictionCaseFromFacts(
