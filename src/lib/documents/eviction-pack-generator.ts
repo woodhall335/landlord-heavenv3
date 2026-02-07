@@ -96,6 +96,20 @@ function formatUKLegalDate(dateString: string | null | undefined): string {
   }
 }
 
+type DerivedEvictionRoute = 'section8' | 'section21';
+
+function deriveEvictionRoute(facts?: Record<string, unknown>): DerivedEvictionRoute | null {
+  if (!facts) return null;
+  const rawRoute = (facts as Record<string, unknown>)?.selected_notice_route ??
+    (facts as Record<string, unknown>)?.eviction_route;
+  const normalized = normalizeRoute(typeof rawRoute === 'string' ? rawRoute : undefined);
+
+  if (normalized === 'section_8') return 'section8';
+  if (normalized === 'section_21') return 'section21';
+
+  return null;
+}
+
 // ============================================================================
 // FIX 3: UNIFIED NOTICE EXPIRY DATE CALCULATOR (Jan 2026)
 // ============================================================================
@@ -1041,6 +1055,9 @@ async function generateEnglandOrWalesEvictionPack(
 ): Promise<EvictionPackDocument[]> {
   const documents: EvictionPackDocument[] = [];
   const jurisdiction = evictionCase.jurisdiction; // 'england' or 'wales'
+  const derivedRoute = deriveEvictionRoute(wizardFacts);
+  const isSection21Route = derivedRoute === 'section21';
+  const isSection8Route = derivedRoute === 'section8';
 
   // 1. Section 8 Notice (if fault-based grounds)
   if (evictionCase.grounds.length > 0) {
@@ -1095,7 +1112,7 @@ async function generateEnglandOrWalesEvictionPack(
   }
 
   // 2. Section 21 Notice (if no-fault) - ENGLAND ONLY
-  if (evictionCase.case_type === 'no_fault') {
+  if (isSection21Route) {
     // Section 21 is ONLY valid in England
     if (jurisdiction !== 'england') {
       throw new Error(
@@ -1387,9 +1404,7 @@ async function generateEnglandOrWalesEvictionPack(
   // Section 21 uses accelerated possession (N5B) - no N5/N119 needed
   // This enforces the route-to-document mapping from pack-contents.ts
   // =========================================================================
-  const isSection21 = evictionCase.case_type === 'no_fault';
-
-  if (!isSection21) {
+  if (isSection8Route) {
     // 3. N5 Claim Form (Section 8 only)
     // CRITICAL: Pass jurisdiction to select correct Wales/England forms
     const service = buildServiceContact({ ...evictionCase, ...caseData });
