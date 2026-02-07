@@ -1,0 +1,33 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#EEF2FF"/>
+      <stop offset="100%" style="stop-color:#E0E7FF"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bgGrad)"/>
+
+  <text x="400" y="40" text-anchor="middle" fill="#4338CA" font-size="24" font-weight="bold" font-family="Arial">SMALL CLAIMS TIPS</text>
+  <text x="400" y="62" text-anchor="middle" fill="#4F46E5" font-size="12" font-family="Arial">Practical guidance for county court claims</text>
+
+  <g transform="translate(140, 120)">
+    <rect x="0" y="0" width="520" height="260" rx="18" fill="#FFFFFF" stroke="#C7D2FE" stroke-width="2"/>
+    <rect x="0" y="0" width="520" height="50" rx="18" fill="#4338CA"/>
+    <text x="260" y="32" text-anchor="middle" fill="white" font-size="16" font-weight="bold" font-family="Arial">CLAIM CHECKLIST</text>
+
+    <g transform="translate(60, 90)" fill="#4338CA" font-family="Arial" font-size="13">
+      <text x="0" y="0">✓ Evidence bundle ready</text>
+      <text x="0" y="28">✓ Letter before action sent</text>
+      <text x="0" y="56">✓ Court fee calculated</text>
+      <text x="0" y="84">✓ Timeline diarised</text>
+    </g>
+
+    <g transform="translate(340, 95)">
+      <rect x="0" y="0" width="120" height="140" rx="14" fill="#EEF2FF" stroke="#4338CA" stroke-width="2"/>
+      <path d="M30 40 H90" stroke="#4338CA" stroke-width="4" stroke-linecap="round"/>
+      <path d="M30 65 H90" stroke="#4338CA" stroke-width="4" stroke-linecap="round"/>
+      <path d="M30 90 H70" stroke="#4338CA" stroke-width="4" stroke-linecap="round"/>
+      <circle cx="90" cy="105" r="10" fill="#4338CA" opacity="0.2"/>
+    </g>
+  </g>
+</svg>
