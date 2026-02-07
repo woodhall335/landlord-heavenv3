@@ -1,0 +1,32 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFFBEB"/>
+      <stop offset="100%" style="stop-color:#FEF3C7"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bgGrad)"/>
+
+  <text x="400" y="40" text-anchor="middle" fill="#B45309" font-size="24" font-weight="bold" font-family="Arial">INTEREST CALCULATION</text>
+  <text x="400" y="62" text-anchor="middle" fill="#D97706" font-size="12" font-family="Arial">Statutory interest on money claims</text>
+
+  <g transform="translate(130, 120)">
+    <rect x="0" y="0" width="540" height="260" rx="18" fill="#FFFFFF" stroke="#FCD34D" stroke-width="2"/>
+    <rect x="0" y="0" width="540" height="50" rx="18" fill="#B45309"/>
+    <text x="270" y="32" text-anchor="middle" fill="white" font-size="16" font-weight="bold" font-family="Arial">INTEREST WORKINGS</text>
+
+    <g transform="translate(60, 90)" font-family="Arial" font-size="13" fill="#B45309">
+      <text x="0" y="0">Principal: £3,500</text>
+      <text x="0" y="28">Rate: 8% per annum</text>
+      <text x="0" y="56">Days outstanding: 90</text>
+      <text x="0" y="84">Interest: £69.04</text>
+    </g>
+
+    <g transform="translate(340, 90)">
+      <circle cx="80" cy="70" r="60" fill="#FFFBEB" stroke="#B45309" stroke-width="2"/>
+      <path d="M55 70 H105" stroke="#B45309" stroke-width="5" stroke-linecap="round"/>
+      <path d="M80 45 V95" stroke="#B45309" stroke-width="5" stroke-linecap="round"/>
+      <text x="80" y="110" text-anchor="middle" fill="#B45309" font-size="14" font-family="Arial">8%</text>
+    </g>
+  </g>
+</svg>
