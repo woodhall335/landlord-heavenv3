@@ -100,7 +100,7 @@ const PreviewImage = ({ src, alt, title, width, height, className }: PreviewImag
   if (hasError) {
     return (
       <div
-        className={`flex h-full w-full items-center justify-center rounded-2xl border border-dashed border-[#7c3aed]/20 bg-[#7c3aed]/10 px-4 text-center ${
+        className={`flex h-full w-full items-center justify-center rounded-2xl border border-dashed border-[#7c3aed]/20 bg-[#f3e8ff] px-4 text-center ${
           className ?? ''
         }`}
       >
@@ -345,7 +345,7 @@ export const WhatsIncludedInteractive = ({
                     className={`px-5 py-2 text-sm font-semibold rounded-full transition-all ${
                       isActive
                         ? 'bg-[#7c3aed] text-white shadow'
-                        : 'text-[#7c3aed] hover:bg-[#7c3aed]/10'
+                        : 'text-[#7c3aed] hover:bg-[#f3e8ff]'
                     }`}
                     onClick={() => setSelectedJurisdiction(jurisdiction)}
                   >
@@ -374,7 +374,7 @@ export const WhatsIncludedInteractive = ({
                           type="button"
                           className={`rounded-2xl border px-4 py-4 text-left transition-all ${
                             isActive
-                              ? 'border-[#7c3aed]/60 bg-[#7c3aed]/10 shadow-sm'
+                              ? 'border-[#7c3aed]/60 bg-[#f3e8ff] shadow-sm'
                               : 'border-gray-200 bg-white hover:border-[#7c3aed]/40'
                           }`}
                           onClick={() => setSelectedNoticeVariant(variant.key)}
@@ -392,7 +392,7 @@ export const WhatsIncludedInteractive = ({
                     <h3 className="text-lg font-semibold text-charcoal">
                       {jurisdictionConfig.label} — What you receive
                     </h3>
-                    <span className="inline-flex items-center rounded-full bg-[#7c3aed]/10 px-3 py-1 text-xs font-semibold text-[#7c3aed]">
+                    <span className="inline-flex items-center rounded-full bg-[#f3e8ff] px-3 py-1 text-xs font-semibold text-[#7c3aed]">
                       {jurisdictionConfig.legalNote}
                     </span>
                   </div>
@@ -432,7 +432,7 @@ export const WhatsIncludedInteractive = ({
                   </div>
                 </div>
 
-                <div className="rounded-2xl border border-[#7c3aed]/15 bg-[#7c3aed]/10 p-5">
+                <div className="rounded-2xl border border-[#7c3aed]/15 bg-[#f3e8ff] p-5">
                   <ul className="space-y-2 text-sm text-[#7c3aed]/90">
                     {differentiators.map((item) => (
                       <li key={item} className="flex items-center gap-2">
@@ -470,7 +470,7 @@ export const WhatsIncludedInteractive = ({
                           onClick={goPrev}
                           disabled={documents.length < 2}
                           aria-label="Previous preview"
-                          className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-transparent text-[#7c3aed] transition hover:border-[#7c3aed]/40 hover:bg-[#7c3aed]/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7c3aed] focus-visible:ring-offset-2 focus-visible:ring-offset-white disabled:text-gray-300 disabled:hover:border-transparent disabled:hover:bg-transparent"
+                          className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-transparent text-[#7c3aed] transition hover:border-[#7c3aed]/40 hover:bg-[#f3e8ff] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7c3aed] focus-visible:ring-offset-2 focus-visible:ring-offset-white disabled:text-gray-300 disabled:hover:border-transparent disabled:hover:bg-transparent"
                         >
                           <span aria-hidden="true">←</span>
                         </button>
@@ -479,7 +479,7 @@ export const WhatsIncludedInteractive = ({
                           onClick={goNext}
                           disabled={documents.length < 2}
                           aria-label="Next preview"
-                          className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-transparent text-[#7c3aed] transition hover:border-[#7c3aed]/40 hover:bg-[#7c3aed]/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7c3aed] focus-visible:ring-offset-2 focus-visible:ring-offset-white disabled:text-gray-300 disabled:hover:border-transparent disabled:hover:bg-transparent"
+                          className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-transparent text-[#7c3aed] transition hover:border-[#7c3aed]/40 hover:bg-[#f3e8ff] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7c3aed] focus-visible:ring-offset-2 focus-visible:ring-offset-white disabled:text-gray-300 disabled:hover:border-transparent disabled:hover:bg-transparent"
                         >
                           <span aria-hidden="true">→</span>
                         </button>
@@ -488,7 +488,7 @@ export const WhatsIncludedInteractive = ({
                     <h4 className="text-xl font-semibold text-charcoal">
                       {activeDoc?.title ?? 'Preview coming soon'}
                     </h4>
-                    <div className="relative w-full overflow-hidden rounded-2xl border border-[#7c3aed]/15 bg-[#7c3aed]/5">
+                    <div className="relative w-full overflow-hidden rounded-2xl border border-[#7c3aed]/15 bg-[#f3e8ff]">
                       {activeDoc ? (
                         <PreviewImage
                           src={activeDoc.src}
@@ -548,7 +548,7 @@ export const WhatsIncludedInteractive = ({
                               onClick={() => setSelectedDocKey(document.key)}
                               className={`absolute left-0 top-0 flex w-36 flex-col items-center gap-2 rounded-2xl border px-2 py-3 text-left shadow-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7c3aed] focus-visible:ring-offset-2 focus-visible:ring-offset-white sm:w-40 ${
                                 isActive
-                                  ? 'border-[#7c3aed]/60 bg-[#7c3aed]/10 shadow'
+                                  ? 'border-[#7c3aed]/60 bg-[#f3e8ff] shadow'
                                   : 'border-gray-200 bg-white hover:border-[#7c3aed]/40'
                               }`}
                               style={{
@@ -556,7 +556,7 @@ export const WhatsIncludedInteractive = ({
                                 transform: `translate(${position.x}px, ${position.y}px) rotate(${rotate}deg) scale(${scale})`,
                               }}
                             >
-                              <div className="w-full overflow-hidden rounded-xl border border-[#7c3aed]/15 bg-[#7c3aed]/5">
+                              <div className="w-full overflow-hidden rounded-xl border border-[#7c3aed]/15 bg-[#f3e8ff]">
                                 <PreviewThumbnail
                                   src={document.src}
                                   alt={document.alt}
