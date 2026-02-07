@@ -139,7 +139,7 @@ const PreviewThumbnail = ({ src, alt, title, width, height, className }: Preview
           className ?? ''
         }`}
       >
-        <p className="text-[11px] font-medium text-gray-500">{title}</p>
+        <p className="text-[11px] font-medium text-gray-500">Preview</p>
       </div>
     );
   }
@@ -224,11 +224,14 @@ export const WhatsIncludedInteractive = ({
     return [activeDoc, ...remaining];
   }, [activeDoc, documents]);
 
-  const visibleDocuments = orderedDocuments.slice(0, 4);
+  const maxVisibleDocuments = 10;
+  const visibleDocuments = orderedDocuments.slice(0, maxVisibleDocuments);
   const extraDocumentCount = Math.max(0, orderedDocuments.length - visibleDocuments.length);
   const hasDocuments = documents.length > 0;
   const stackContainerRef = useRef<HTMLDivElement | null>(null);
   const [stackWidth, setStackWidth] = useState(0);
+  const stackCardRef = useRef<HTMLButtonElement | null>(null);
+  const [stackCardSize, setStackCardSize] = useState({ width: 0, height: 0 });
 
   useEffect(() => {
     const container = stackContainerRef.current;
@@ -236,21 +239,61 @@ export const WhatsIncludedInteractive = ({
       return;
     }
 
-    const updateWidth = () => {
+    const updateMeasurements = () => {
       setStackWidth(container.getBoundingClientRect().width);
+      if (stackCardRef.current) {
+        const rect = stackCardRef.current.getBoundingClientRect();
+        setStackCardSize({ width: rect.width, height: rect.height });
+      }
     };
 
-    updateWidth();
+    updateMeasurements();
 
     if (typeof ResizeObserver === 'undefined') {
-      window.addEventListener('resize', updateWidth);
-      return () => window.removeEventListener('resize', updateWidth);
+      window.addEventListener('resize', updateMeasurements);
+      return () => window.removeEventListener('resize', updateMeasurements);
     }
 
-    const observer = new ResizeObserver(updateWidth);
+    const observer = new ResizeObserver(updateMeasurements);
     observer.observe(container);
+    if (stackCardRef.current) {
+      observer.observe(stackCardRef.current);
+    }
     return () => observer.disconnect();
-  }, []);
+  }, [visibleDocuments.length]);
+
+  const stackLayout = useMemo(() => {
+    const count = visibleDocuments.length;
+    if (!count) {
+      return {
+        count,
+        maxX: 0,
+        yStep: 0,
+        positions: [],
+      };
+    }
+
+    const cardWidth = stackCardSize.width || 0;
+    const maxX = Math.max(stackWidth - cardWidth, 0);
+    const yStep = count > 1 ? Math.min(12, maxX * 0.06) : 0;
+    const positions = visibleDocuments.map((_, index) => {
+      if (count === 1) {
+        return { x: 0, y: 0 };
+      }
+      const ratio = index / (count - 1);
+      return {
+        x: ratio * maxX,
+        y: index * yStep,
+      };
+    });
+
+    return {
+      count,
+      maxX,
+      yStep,
+      positions,
+    };
+  }, [stackCardSize.width, stackWidth, visibleDocuments]);
 
   return (
     <section className="py-16 md:py-20">
@@ -415,8 +458,17 @@ export const WhatsIncludedInteractive = ({
                       <p className="text-sm font-semibold text-charcoal">Preview stack</p>
                       <span className="text-xs text-gray-500">Click a document to preview</span>
                     </div>
-                    <div className="mt-4">
-                      <div className="relative min-h-[240px] sm:min-h-[260px]" ref={stackContainerRef}>
+                    <div className="mt-4 overflow-visible">
+                      <div
+                        className="relative min-h-[240px] sm:min-h-[260px] overflow-visible"
+                        ref={stackContainerRef}
+                        style={{
+                          minHeight: Math.max(
+                            240,
+                            stackCardSize.height + stackLayout.yStep * Math.max(stackLayout.count - 1, 0),
+                          ),
+                        }}
+                      >
                         {!hasDocuments ? (
                           <div className="flex h-full min-h-[200px] items-center justify-center rounded-2xl border border-dashed border-gray-200 bg-gray-50 text-sm text-gray-500">
                             Previews coming soon.
@@ -424,32 +476,26 @@ export const WhatsIncludedInteractive = ({
                         ) : null}
                         {visibleDocuments.map((document, index) => {
                           const isActive = document.key === activeDoc?.key;
-                          const stackIndex = Math.min(index, 4);
-                          const visibleCount = visibleDocuments.length;
-                          const usableWidth = Math.max(stackWidth - 160, 0);
-                          const overlapFactor = 0.7;
-                          const rawStep = visibleCount > 1 ? (usableWidth / (visibleCount - 1)) * overlapFactor : 0;
-                          const xStep = Math.min(Math.max(rawStep, 12), 44);
-                          const yStep = Math.min(Math.max(xStep * 0.6, 6), 30);
-                          const x = stackIndex * xStep;
-                          const y = stackIndex * yStep;
-                          const rotations = [0, -3, 2, -2, 3];
-                          const scales = [1, 0.98, 0.96, 0.94, 0.92];
+                          const stackIndex = index;
+                          const position = stackLayout.positions[stackIndex] ?? { x: 0, y: 0 };
+                          const rotations = [0, -2, 1, -1, 2, -1, 1, -2, 1, -1];
+                          const scales = [1, 0.985, 0.97, 0.96, 0.95, 0.94, 0.94, 0.93, 0.93, 0.92];
                           const rotate = rotations[stackIndex] ?? 0;
                           const scale = scales[stackIndex] ?? 1;
                           return (
                             <button
                               key={document.key}
+                              ref={index === 0 ? stackCardRef : null}
                               type="button"
                               onClick={() => setSelectedDocKey(document.key)}
-                              className={`absolute left-1/2 top-0 flex w-36 flex-col items-center gap-2 rounded-2xl border px-2 py-3 text-left shadow-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7c3aed] focus-visible:ring-offset-2 focus-visible:ring-offset-white sm:w-40 ${
+                              className={`absolute left-0 top-0 flex w-36 flex-col items-center gap-2 rounded-2xl border px-2 py-3 text-left shadow-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7c3aed] focus-visible:ring-offset-2 focus-visible:ring-offset-white sm:w-40 ${
                                 isActive
                                   ? 'border-[#7c3aed]/60 bg-[#7c3aed]/10 shadow'
                                   : 'border-gray-200 bg-white hover:border-[#7c3aed]/40'
                               }`}
                               style={{
                                 zIndex: visibleDocuments.length - index,
-                                transform: `translate(calc(-50% + ${x}px), ${y}px) rotate(${rotate}deg) scale(${scale})`,
+                                transform: `translate(${position.x}px, ${position.y}px) rotate(${rotate}deg) scale(${scale})`,
                               }}
                             >
                               <div className="w-full overflow-hidden rounded-xl border border-[#7c3aed]/15 bg-[#7c3aed]/5">
@@ -467,7 +513,7 @@ export const WhatsIncludedInteractive = ({
                           );
                         })}
                         {extraDocumentCount > 0 ? (
-                          <div className="absolute left-1/2 top-[190px] flex -translate-x-1/2 items-center gap-2 rounded-full border border-[#7c3aed]/30 bg-white px-3 py-1 text-xs font-semibold text-[#7c3aed] shadow-sm">
+                          <div className="absolute left-0 top-[190px] flex items-center gap-2 rounded-full border border-[#7c3aed]/30 bg-white px-3 py-1 text-xs font-semibold text-[#7c3aed] shadow-sm">
                             +{extraDocumentCount} more
                           </div>
                         ) : null}
