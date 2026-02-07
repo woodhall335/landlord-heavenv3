@@ -1387,7 +1387,9 @@ async function generateEnglandOrWalesEvictionPack(
   // Section 21 uses accelerated possession (N5B) - no N5/N119 needed
   // This enforces the route-to-document mapping from pack-contents.ts
   // =========================================================================
-  if (evictionCase.grounds.length > 0) {
+  const isSection21 = evictionCase.case_type === 'no_fault';
+
+  if (!isSection21) {
     // 3. N5 Claim Form (Section 8 only)
     // CRITICAL: Pass jurisdiction to select correct Wales/England forms
     const service = buildServiceContact({ ...evictionCase, ...caseData });
