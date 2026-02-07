@@ -47,7 +47,7 @@ export function proRatePartialPeriods(
     notes?: string;
   }>,
   rentAmount: number,
-  rentFrequency: string,
+  rentFrequency: TenancyFacts['rent_frequency'] | null,
   scheduleEndDate?: string | null
 ): Array<{
   period: string;
@@ -58,7 +58,7 @@ export function proRatePartialPeriods(
   running_balance?: number;
   notes?: string;
 }> {
-  if (!schedule || schedule.length === 0 || !scheduleEndDate) {
+  if (!schedule || schedule.length === 0 || !scheduleEndDate || !rentFrequency) {
     return schedule;
   }
 
