@@ -76,26 +76,34 @@ function getPersistedCount(storageKey: string, baseCount: number, dailyGrowth: n
   try {
     const stored = localStorage.getItem(storageKey);
     if (stored) {
-      const { date, count } = JSON.parse(stored);
+      const { date, count, variance } = JSON.parse(stored) as {
+        date?: string;
+        count?: number;
+        variance?: number;
+      };
 
-      // Same day: use time-based count, capped at max
-      if (date === today) {
-        // Add small variance but cap at max
-        const variance = Math.floor(Math.random() * 20);
-        const newCount = Math.min(timeBasedCount + variance, maxCount);
-        localStorage.setItem(storageKey, JSON.stringify({ date: today, count: newCount }));
-        return newCount;
+      if (date === today && typeof count === 'number') {
+        const stableVariance = typeof variance === 'number' ? variance : Math.floor(Math.random() * 6);
+        const nextCount = Math.min(timeBasedCount + stableVariance, maxCount);
+        const updatedCount = Math.max(count, nextCount);
+
+        if (updatedCount !== count || stableVariance !== variance) {
+          localStorage.setItem(
+            storageKey,
+            JSON.stringify({ date: today, count: updatedCount, variance: stableVariance })
+          );
+        }
+
+        return updatedCount;
       }
     }
 
-    // New day or first visit: start fresh with time-based count + small random
-    const initialVariance = Math.floor(Math.random() * 20);
+    const initialVariance = Math.floor(Math.random() * 6);
     const newCount = Math.min(timeBasedCount + initialVariance, maxCount);
-    localStorage.setItem(storageKey, JSON.stringify({ date: today, count: newCount }));
+    localStorage.setItem(storageKey, JSON.stringify({ date: today, count: newCount, variance: initialVariance }));
     return newCount;
   } catch {
-    // localStorage not available (SSR or privacy mode)
-    return Math.min(timeBasedCount + Math.floor(Math.random() * 20), maxCount);
+    return Math.min(timeBasedCount, maxCount);
   }
 }
 
@@ -115,9 +123,25 @@ export function SocialProofCounter({
   useEffect(() => {
     const storageKey = `social_proof_${variant}`;
     const targetCount = getPersistedCount(storageKey, finalBase, config.dailyGrowth);
+    const animationKey = `social_proof_${variant}_animated_${new Date().toDateString()}`;
 
-    // Animate count up effect
-    const duration = 1200; // 1.2 seconds
+    let shouldAnimate = true;
+    try {
+      shouldAnimate = !sessionStorage.getItem(animationKey);
+      if (shouldAnimate) {
+        sessionStorage.setItem(animationKey, 'true');
+      }
+    } catch {
+      shouldAnimate = true;
+    }
+
+    if (!shouldAnimate) {
+      setDisplayCount(targetCount);
+      setIsAnimating(false);
+      return;
+    }
+
+    const duration = 1200;
     const steps = 30;
     const increment = targetCount / steps;
     let current = 0;

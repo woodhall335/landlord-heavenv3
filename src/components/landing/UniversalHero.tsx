@@ -59,9 +59,10 @@ export function UniversalHero({
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    const animateToTarget = (target: number) => {
-      if (prefersReducedMotion) {
+    const applyTarget = (target: number, shouldAnimate: boolean) => {
+      if (!shouldAnimate || prefersReducedMotion) {
         setUsedTodayCount(target);
+        currentCountRef.current = target;
         return;
       }
 
@@ -86,11 +87,22 @@ export function UniversalHero({
       animationFrameRef.current = window.requestAnimationFrame(step);
     };
 
-    animateToTarget(getTodaysTarget());
+    const initialTarget = getTodaysTarget();
+    applyTarget(initialTarget, false);
 
     const intervalId = window.setInterval(() => {
-      animateToTarget(getTodaysTarget());
-    }, 60_000);
+      const target = getTodaysTarget();
+      if (target === currentCountRef.current) {
+        return;
+      }
+
+      if (target < currentCountRef.current) {
+        applyTarget(target, false);
+        return;
+      }
+
+      applyTarget(target, true);
+    }, 4 * 60 * 1000);
 
     return () => {
       if (animationFrameRef.current) {
