@@ -1619,6 +1619,10 @@ export async function generateCompleteEvictionPack(
                           wizardFacts?.notice?.served_date ||
                           null;
 
+        const rentFrequencyLabel = rentFrequency
+          ? (rentFrequencyDisplay[rentFrequency] ?? rentFrequency)
+          : null;
+
         const scheduleDoc = await generateDocument({
           templatePath: `uk/${jurisdictionKey}/templates/money_claims/schedule_of_arrears.hbs`,
           data: {
@@ -1647,7 +1651,7 @@ export async function generateCompleteEvictionPack(
             ground8_threshold_description: '2 months\' rent',
             meets_threshold_at_notice: meetsThresholdAtNotice,
             meets_threshold_at_schedule: meetsThresholdAtSchedule,
-            rent_frequency: rentFrequencyDisplay[rentFrequency] || rentFrequency,
+            rent_frequency: rentFrequencyLabel,
             // Add generation date (legacy alias)
             generated_date: today,
           },
