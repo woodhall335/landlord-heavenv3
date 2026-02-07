@@ -29,6 +29,33 @@ vi.mock('@/lib/documents/generator', async () => {
   };
 });
 
+vi.mock('@/lib/documents/official-forms-filler', async () => {
+  const actual = await vi.importActual<typeof import('@/lib/documents/official-forms-filler')>(
+    '@/lib/documents/official-forms-filler'
+  );
+  return {
+    ...actual,
+    fillN5Form: vi.fn(async () => Buffer.from('n5')),
+    fillN119Form: vi.fn(async () => Buffer.from('n119')),
+    fillN5BForm: vi.fn(async () => Buffer.from('n5b')),
+  };
+});
+
+vi.mock('@/lib/documents/n5b-field-builder', async () => {
+  const actual = await vi.importActual<typeof import('@/lib/documents/n5b-field-builder')>(
+    '@/lib/documents/n5b-field-builder'
+  );
+  return {
+    ...actual,
+    buildN5BFields: vi.fn(() => ({})),
+    checkN5BMandatoryFields: vi.fn(() => ({
+      isValid: true,
+      missingFields: [],
+      missingLabels: [],
+    })),
+  };
+});
+
 beforeEach(() => {
   process.env.DISABLE_WITNESS_STATEMENT_AI = 'true';
   process.env.DISABLE_COMPLIANCE_AUDIT_AI = 'true';
@@ -146,6 +173,89 @@ describe('Section 21 Route Lock', () => {
     );
 
     expect(form6aDocs.length).toBeGreaterThan(0);
+  });
+});
+
+// ==============================================================================
+// TEST 1B: COMPLETE PACK COURT FORMS INCLUDED BY ROUTE
+// ==============================================================================
+
+describe('Complete Pack court form inclusion by route', () => {
+  it('includes N5 + N119 for Section 8 complete pack', async () => {
+    const section8Facts = {
+      __meta: { case_id: 'TEST-S8-N5-INCLUSION', jurisdiction: 'england' },
+      landlord_name: 'Test Landlord',
+      landlord_address_line1: '1 Test Street',
+      landlord_address_town: 'London',
+      landlord_address_postcode: 'SW1A 1AA',
+      tenant1_name: 'Test Tenant',
+      property_address_line1: '2 Test Road',
+      property_address_town: 'London',
+      property_address_postcode: 'SW1A 2BB',
+      tenancy_start_date: '2023-01-01',
+      rent_amount: 1200,
+      rent_frequency: 'monthly',
+      rent_due_day: 1,
+      eviction_route: 'section_8',
+      selected_notice_route: 'section_8',
+      notice_type: 'Section 8',
+      notice_served_date: '2024-06-01',
+      notice_service_method: 'first_class_post',
+      court_name: 'Test County Court',
+    };
+
+    const pack = await generateCompleteEvictionPack(section8Facts);
+    const documentTypes = pack.documents.map((doc) => doc.document_type);
+
+    expect(documentTypes).toContain('n5_claim');
+    expect(documentTypes).toContain('n119_particulars');
+  });
+
+  it('includes N5B for Section 21 complete pack', async () => {
+    const section21Facts = {
+      __meta: { case_id: 'TEST-S21-N5B-INCLUSION', jurisdiction: 'england' },
+      landlord_full_name: 'Test Landlord',
+      landlord_name: 'Test Landlord',
+      landlord_address_line1: '1 Test Street',
+      landlord_address_town: 'London',
+      landlord_address_postcode: 'SW1A 1AA',
+      tenant_full_name: 'Test Tenant',
+      tenant1_name: 'Test Tenant',
+      property_address_line1: '2 Test Road',
+      property_address_town: 'London',
+      property_address_postcode: 'SW1A 2BB',
+      tenancy_start_date: '2023-01-01',
+      rent_amount: 1200,
+      rent_frequency: 'monthly',
+      rent_due_day: 1,
+      eviction_route: 'section_21',
+      selected_notice_route: 'section_21',
+      notice_type: 'Section 21',
+      section_21_notice_date: '2024-06-01',
+      notice_served_date: '2024-06-01',
+      notice_service_method: 'first_class_post',
+      court_name: 'Test County Court',
+      deposit_protected: true,
+      deposit_amount: 1200,
+      deposit_scheme_name: 'DPS',
+      deposit_protection_date: '2023-01-15',
+      signatory_name: 'Test Landlord',
+      signature_date: '2024-06-01',
+      prescribed_info_given: true,
+      how_to_rent_provided: true,
+      epc_provided: true,
+      gas_certificate_provided: true,
+      has_gas_appliances: true,
+      licensing_required: 'not_required',
+      improvement_notice_served: false,
+      emergency_remedial_action: false,
+      no_prohibited_fees_confirmed: true,
+    };
+
+    const pack = await generateCompleteEvictionPack(section21Facts);
+    const documentTypes = pack.documents.map((doc) => doc.document_type);
+
+    expect(documentTypes).toContain('n5b_claim');
   });
 });
 
