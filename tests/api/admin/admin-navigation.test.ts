@@ -109,6 +109,8 @@ describe('Admin API Endpoints Existence', () => {
     '/api/admin/legal-change/events',
     '/api/admin/orders/refund',
     '/api/admin/orders/resend-email',
+    '/api/admin/test-artifacts/complete-pack/england/section8',
+    '/api/admin/test-artifacts/complete-pack/england/section21',
   ];
 
   function apiRouteToFilePath(route: string): string {

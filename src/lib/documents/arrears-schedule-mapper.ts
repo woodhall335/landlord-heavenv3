@@ -204,6 +204,7 @@ export function generateArrearsParticulars(params: {
   rent_amount: number;
   rent_frequency: TenancyFacts['rent_frequency'];
   include_full_schedule?: boolean;
+  schedule_data?: ArrearsScheduleData;
 }): ParticularsText {
   const {
     arrears_items,
@@ -211,9 +212,10 @@ export function generateArrearsParticulars(params: {
     rent_amount,
     rent_frequency,
     include_full_schedule = false,
+    schedule_data,
   } = params;
 
-  const scheduleData = getArrearsScheduleData({
+  const scheduleData = schedule_data || getArrearsScheduleData({
     arrears_items,
     total_arrears,
     rent_amount,

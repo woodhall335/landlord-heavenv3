@@ -211,6 +211,38 @@ describe('Complete Pack court form inclusion by route', () => {
     expect(documentTypes).toContain('n119_particulars');
   });
 
+  it('includes N5 + N119 for Section 8 even when grounds are empty', async () => {
+    const section8Facts = {
+      __meta: { case_id: 'TEST-S8-N5-EMPTY-GROUNDS', jurisdiction: 'england' },
+      landlord_name: 'Test Landlord',
+      landlord_address_line1: '1 Test Street',
+      landlord_address_town: 'London',
+      landlord_address_postcode: 'SW1A 1AA',
+      tenant1_name: 'Test Tenant',
+      property_address_line1: '2 Test Road',
+      property_address_town: 'London',
+      property_address_postcode: 'SW1A 2BB',
+      tenancy_start_date: '2023-01-01',
+      rent_amount: 1200,
+      rent_frequency: 'monthly',
+      rent_due_day: 1,
+      eviction_route: 'section_8',
+      selected_notice_route: 'section_8',
+      notice_type: 'Section 8',
+      section8_grounds: [],
+      grounds: [],
+      notice_served_date: '2024-06-01',
+      notice_service_method: 'first_class_post',
+      court_name: 'Test County Court',
+    };
+
+    const pack = await generateCompleteEvictionPack(section8Facts);
+    const documentTypes = pack.documents.map((doc) => doc.document_type);
+
+    expect(documentTypes).toContain('n5_claim');
+    expect(documentTypes).toContain('n119_particulars');
+  });
+
   it('includes N5B for Section 21 complete pack', async () => {
     const section21Facts = {
       __meta: { case_id: 'TEST-S21-N5B-INCLUSION', jurisdiction: 'england' },

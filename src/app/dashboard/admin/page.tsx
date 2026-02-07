@@ -65,6 +65,15 @@ interface RecentUser {
   created_at: string;
 }
 
+interface TestArtifactStatus {
+  isLoading: boolean;
+  outputDir?: string;
+  docCount?: number;
+  downloadUrl?: string;
+  storage?: 'local' | 'tmp';
+  error?: string;
+}
+
 export default function AdminDashboardPage() {
   // const router = useRouter();
   const [stats, setStats] = useState<AdminStats | null>(null);
@@ -73,6 +82,10 @@ export default function AdminDashboardPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [hasAccess, setHasAccess] = useState(false);
   const [error, setError] = useState('');
+  const [testArtifacts, setTestArtifacts] = useState<Record<'section8' | 'section21', TestArtifactStatus>>({
+    section8: { isLoading: false },
+    section21: { isLoading: false },
+  });
 
   useEffect(() => {
     checkAccessAndFetch();
@@ -155,6 +168,46 @@ export default function AdminDashboardPage() {
     return Math.round(
       ((stats.revenue.this_month - stats.revenue.last_month) / stats.revenue.last_month) * 100
     );
+  };
+
+  const generateTestArtifacts = async (variant: 'section8' | 'section21') => {
+    setTestArtifacts((prev) => ({
+      ...prev,
+      [variant]: { isLoading: true },
+    }));
+
+    try {
+      const response = await fetch(
+        `/api/admin/test-artifacts/complete-pack/england/${variant}`,
+        { method: 'POST' }
+      );
+      const payload = await response.json().catch(() => ({}));
+
+      if (!response.ok || payload?.ok === false) {
+        const message = payload?.error || 'Failed to generate test artifacts';
+        setTestArtifacts((prev) => ({
+          ...prev,
+          [variant]: { isLoading: false, error: message },
+        }));
+        return;
+      }
+
+      setTestArtifacts((prev) => ({
+        ...prev,
+        [variant]: {
+          isLoading: false,
+          outputDir: payload?.outputDir,
+          docCount: payload?.docCount,
+          downloadUrl: payload?.downloadUrl,
+          storage: payload?.storage,
+        },
+      }));
+    } catch {
+      setTestArtifacts((prev) => ({
+        ...prev,
+        [variant]: { isLoading: false, error: 'Failed to generate test artifacts' },
+      }));
+    }
   };
 
   if (isLoading) {
@@ -515,6 +568,76 @@ export default function AdminDashboardPage() {
                   <span className="font-medium text-charcoal">
                     {formatCurrency(stats.revenue.last_month)}
                   </span>
+                </div>
+              </div>
+            </Card>
+
+            <Card padding="medium">
+              <h3 className="font-semibold text-charcoal mb-2">Test Artifacts</h3>
+              <p className="text-sm text-gray-600 mb-4">
+                Generate complete pack test outputs for England without external side effects.
+              </p>
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <button
+                    type="button"
+                    className="w-full rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
+                    onClick={() => generateTestArtifacts('section8')}
+                    disabled={testArtifacts.section8.isLoading}
+                  >
+                    {testArtifacts.section8.isLoading
+                      ? 'Generating...'
+                      : 'Generate Complete Pack — England Section 8'}
+                  </button>
+                  {testArtifacts.section8.outputDir && (
+                    <div className="rounded-lg bg-emerald-50 px-3 py-2 text-xs text-emerald-700">
+                      Saved to {testArtifacts.section8.outputDir} ({testArtifacts.section8.docCount ?? 0} docs)
+                    </div>
+                  )}
+                  {testArtifacts.section8.downloadUrl && (
+                    <a
+                      href={testArtifacts.section8.downloadUrl}
+                      className="inline-flex items-center justify-center rounded-lg border border-emerald-200 bg-white px-3 py-2 text-xs font-medium text-emerald-700 transition hover:border-emerald-300 hover:text-emerald-800"
+                    >
+                      Download zip
+                    </a>
+                  )}
+                  {testArtifacts.section8.error && (
+                    <div className="rounded-lg bg-red-50 px-3 py-2 text-xs text-red-700">
+                      {testArtifacts.section8.error}
+                    </div>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <button
+                    type="button"
+                    className="w-full rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
+                    onClick={() => generateTestArtifacts('section21')}
+                    disabled={testArtifacts.section21.isLoading}
+                  >
+                    {testArtifacts.section21.isLoading
+                      ? 'Generating...'
+                      : 'Generate Complete Pack — England Section 21'}
+                  </button>
+                  {testArtifacts.section21.outputDir && (
+                    <div className="rounded-lg bg-emerald-50 px-3 py-2 text-xs text-emerald-700">
+                      Saved to {testArtifacts.section21.outputDir} ({testArtifacts.section21.docCount ?? 0} docs)
+                    </div>
+                  )}
+                  {testArtifacts.section21.downloadUrl && (
+                    <a
+                      href={testArtifacts.section21.downloadUrl}
+                      className="inline-flex items-center justify-center rounded-lg border border-emerald-200 bg-white px-3 py-2 text-xs font-medium text-emerald-700 transition hover:border-emerald-300 hover:text-emerald-800"
+                    >
+                      Download zip
+                    </a>
+                  )}
+                  {testArtifacts.section21.error && (
+                    <div className="rounded-lg bg-red-50 px-3 py-2 text-xs text-red-700">
+                      {testArtifacts.section21.error}
+                    </div>
+                  )}
                 </div>
               </div>
             </Card>
