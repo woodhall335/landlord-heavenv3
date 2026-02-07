@@ -9,6 +9,7 @@ import { requireServerAuth } from '@/lib/supabase/server';
 import { isAdmin } from '@/lib/auth';
 import { generateCompleteEvictionPack } from '@/lib/documents/eviction-pack-generator';
 import { buildEnglandSection8CompletePackFacts } from '@/lib/testing/fixtures/complete-pack';
+import { registerArtifactDownload } from '@/lib/test-artifacts/artifactDownloadStore';
 import { saveCompletePackArtifacts } from '@/lib/test-artifacts/saveCompletePackArtifacts';
 import { validateCompletePackDocuments } from '@/lib/test-artifacts/validateCompletePackDocuments';
 import { setupTestAI } from '@/lib/test-artifacts/setupTestAI';
@@ -44,12 +45,17 @@ export async function POST() {
       documents: pack.documents,
       metadata: pack.metadata,
     });
+    const download = result.zipPath ? registerArtifactDownload(result.zipPath) : null;
 
     return NextResponse.json({
       ok: true,
       outputDir: result.outputDir,
       docCount: result.docs.length,
       docs: result.docs.map(({ key, filename }) => ({ key, filename })),
+      storage: result.storage,
+      downloadUrl: download
+        ? `/api/admin/test-artifacts/complete-pack/download?token=${download.token}`
+        : undefined,
     });
   } catch (error: any) {
     if (error?.message === 'Unauthorized - Please log in') {

@@ -69,6 +69,8 @@ interface TestArtifactStatus {
   isLoading: boolean;
   outputDir?: string;
   docCount?: number;
+  downloadUrl?: string;
+  storage?: 'local' | 'tmp';
   error?: string;
 }
 
@@ -196,6 +198,8 @@ export default function AdminDashboardPage() {
           isLoading: false,
           outputDir: payload?.outputDir,
           docCount: payload?.docCount,
+          downloadUrl: payload?.downloadUrl,
+          storage: payload?.storage,
         },
       }));
     } catch {
@@ -590,6 +594,14 @@ export default function AdminDashboardPage() {
                       Saved to {testArtifacts.section8.outputDir} ({testArtifacts.section8.docCount ?? 0} docs)
                     </div>
                   )}
+                  {testArtifacts.section8.downloadUrl && (
+                    <a
+                      href={testArtifacts.section8.downloadUrl}
+                      className="inline-flex items-center justify-center rounded-lg border border-emerald-200 bg-white px-3 py-2 text-xs font-medium text-emerald-700 transition hover:border-emerald-300 hover:text-emerald-800"
+                    >
+                      Download zip
+                    </a>
+                  )}
                   {testArtifacts.section8.error && (
                     <div className="rounded-lg bg-red-50 px-3 py-2 text-xs text-red-700">
                       {testArtifacts.section8.error}
@@ -612,6 +624,14 @@ export default function AdminDashboardPage() {
                     <div className="rounded-lg bg-emerald-50 px-3 py-2 text-xs text-emerald-700">
                       Saved to {testArtifacts.section21.outputDir} ({testArtifacts.section21.docCount ?? 0} docs)
                     </div>
+                  )}
+                  {testArtifacts.section21.downloadUrl && (
+                    <a
+                      href={testArtifacts.section21.downloadUrl}
+                      className="inline-flex items-center justify-center rounded-lg border border-emerald-200 bg-white px-3 py-2 text-xs font-medium text-emerald-700 transition hover:border-emerald-300 hover:text-emerald-800"
+                    >
+                      Download zip
+                    </a>
                   )}
                   {testArtifacts.section21.error && (
                     <div className="rounded-lg bg-red-50 px-3 py-2 text-xs text-red-700">
