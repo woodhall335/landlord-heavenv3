@@ -5,6 +5,8 @@
 - Prefer `.webp`; allow `.png` only if needed.
 - Paths include the document type folder:
   `/images/previews/{product}/{jurisdiction}/{notice-type}/{filename}.webp`
+- Filenames should be URL-safe (no spaces); prefer lowercase + hyphens.
+- The UI derives preview titles from filenames, so keep them descriptive.
 
 ## Examples
 
@@ -32,6 +34,16 @@
 - `/images/previews/notice-only/scotland/notice-to-leave/notice-to-leave-prt-preview.webp`
 - `/images/previews/notice-only/scotland/notice-to-leave/service-instructions-preview.webp`
 - `/images/previews/notice-only/scotland/notice-to-leave/validity-checklist-preview.webp`
+
+### Complete Pack / England / Section 8
+- `/images/previews/complete-pack/england/section8/section-8-form-3-preview.webp`
+- `/images/previews/complete-pack/england/section8/form-n5-preview.webp`
+- `/images/previews/complete-pack/england/section8/form-n119-preview.webp`
+
+### Complete Pack / England / Section 21
+- `/images/previews/complete-pack/england/section21/section-21-form-6a-preview.webp`
+- `/images/previews/complete-pack/england/section21/form-n5-preview.webp`
+- `/images/previews/complete-pack/england/section21/form-n5b-preview.webp`
 
 ## SEO guidance
 - Keep filenames stable and descriptive (used for image SEO + sitemap later).

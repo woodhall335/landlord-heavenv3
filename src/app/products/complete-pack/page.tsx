@@ -27,8 +27,9 @@ import {
   JurisdictionAccordion,
   VsSolicitorComparison,
   VsFreeTemplateComparison,
-  WhatYouGet,
+  WhatsIncludedInteractive,
 } from "@/components/value-proposition";
+import { getCompletePackPreviewData } from "@/lib/previews/completePackPreviews";
 
 // Get price from single source of truth
 const product = PRODUCTS.complete_pack;
@@ -47,6 +48,8 @@ export const metadata: Metadata = {
     canonical: getCanonicalUrl('/products/complete-pack'),
   },
 };
+
+export const runtime = 'nodejs';
 
 // FAQ data for structured data
 const faqs = [
@@ -84,7 +87,9 @@ const faqs = [
   }
 ];
 
-export default function CompleteEvictionPackPage() {
+export default async function CompleteEvictionPackPage() {
+  const previews = await getCompletePackPreviewData();
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Structured Data for SEO */}
@@ -104,14 +109,7 @@ export default function CompleteEvictionPackPage() {
       {/* Hero Section */}
       <UniversalHero {...completePackHeroConfig} />
 
-      {/* What You Get Section */}
-      <section className="py-16 md:py-20">
-        <Container>
-          <div className="max-w-4xl mx-auto">
-            <WhatYouGet product="complete_pack" />
-          </div>
-        </Container>
-      </section>
+      <WhatsIncludedInteractive product="complete_pack" previews={previews} />
 
       <section className="py-16 md:py-20 bg-white">
         <Container>
