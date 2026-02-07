@@ -1,0 +1,76 @@
+{
+  "generatedAt": "2026-02-07T15:22:11.638Z",
+  "runId": "2026-02-07T15-22-11-634Z",
+  "jurisdiction": "england",
+  "variant": "section21",
+  "packSlug": "complete-pack",
+  "docs": [
+    {
+      "key": "section21_notice",
+      "filename": "notice.pdf",
+      "title": "Section 21 Notice - Form 6A",
+      "type": "pdf"
+    },
+    {
+      "key": "n5b_claim",
+      "filename": "n5b.pdf",
+      "title": "N5B Accelerated Possession Claim",
+      "type": "pdf"
+    },
+    {
+      "key": "evidence_checklist",
+      "filename": "evidence-checklist.pdf",
+      "title": "Evidence Checklist (Section 21 Compliance)",
+      "type": "pdf"
+    },
+    {
+      "key": "proof_of_service",
+      "filename": "proof-of-service.pdf",
+      "title": "Proof of Service Certificate",
+      "type": "pdf"
+    },
+    {
+      "key": "witness_statement",
+      "filename": "witness-statement.pdf",
+      "title": "Witness Statement",
+      "type": "pdf"
+    },
+    {
+      "key": "court_bundle_index",
+      "filename": "court-bundle-index.pdf",
+      "title": "Court Bundle Index (Section 21)",
+      "type": "pdf"
+    },
+    {
+      "key": "hearing_checklist",
+      "filename": "hearing-checklist.pdf",
+      "title": "Hearing Checklist (Section 21)",
+      "type": "pdf"
+    },
+    {
+      "key": "case_summary",
+      "filename": "case-summary.pdf",
+      "title": "Eviction Case Summary",
+      "type": "pdf"
+    }
+  ],
+  "skipped": [],
+  "metadata": {
+    "total_documents": 8,
+    "includes_court_forms": true,
+    "includes_expert_guidance": true,
+    "includes_evidence_tools": true,
+    "premium_features": [
+      "Lifetime Cloud Storage",
+      "Priority Support",
+      "Unlimited Regenerations",
+      "Guided Case Analysis",
+      "All Grounds Support",
+      "Evidence Collection Tools",
+      "Step-by-Step Roadmap",
+      "Timeline Expectations",
+      "Expert Guidance",
+      "Proof of Service Templates"
+    ]
+  }
+}

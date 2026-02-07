@@ -1,0 +1,94 @@
+{
+  "generatedAt": "2026-02-07T16:39:15.120Z",
+  "runId": "2026-02-07T16-39-15-115Z",
+  "jurisdiction": "england",
+  "variant": "section8",
+  "packSlug": "complete-pack",
+  "docs": [
+    {
+      "key": "section8_notice",
+      "filename": "notice.pdf",
+      "title": "Section 8 Notice - Notice Seeking Possession",
+      "type": "pdf"
+    },
+    {
+      "key": "n5_claim",
+      "filename": "n5.pdf",
+      "title": "Form N5 - Claim for Possession",
+      "type": "pdf"
+    },
+    {
+      "key": "n119_particulars",
+      "filename": "n119.pdf",
+      "title": "Form N119 - Particulars of Claim",
+      "type": "pdf"
+    },
+    {
+      "key": "arrears_schedule",
+      "filename": "arrears-schedule.pdf",
+      "title": "Schedule of Arrears",
+      "type": "pdf"
+    },
+    {
+      "key": "evidence_checklist",
+      "filename": "evidence-checklist.pdf",
+      "title": "Evidence Collection Checklist",
+      "type": "pdf"
+    },
+    {
+      "key": "proof_of_service",
+      "filename": "proof-of-service.pdf",
+      "title": "Proof of Service Certificate",
+      "type": "pdf"
+    },
+    {
+      "key": "witness_statement",
+      "filename": "witness-statement.pdf",
+      "title": "Witness Statement",
+      "type": "pdf"
+    },
+    {
+      "key": "court_bundle_index",
+      "filename": "court-bundle-index.pdf",
+      "title": "Court Bundle Index",
+      "type": "pdf"
+    },
+    {
+      "key": "hearing_checklist",
+      "filename": "hearing-checklist.pdf",
+      "title": "Hearing Checklist",
+      "type": "pdf"
+    },
+    {
+      "key": "arrears_engagement_letter",
+      "filename": "arrears-engagement-letter.pdf",
+      "title": "Arrears Engagement Letter",
+      "type": "pdf"
+    },
+    {
+      "key": "case_summary",
+      "filename": "case-summary.pdf",
+      "title": "Eviction Case Summary",
+      "type": "pdf"
+    }
+  ],
+  "skipped": [],
+  "metadata": {
+    "total_documents": 11,
+    "includes_court_forms": true,
+    "includes_expert_guidance": true,
+    "includes_evidence_tools": true,
+    "premium_features": [
+      "Lifetime Cloud Storage",
+      "Priority Support",
+      "Unlimited Regenerations",
+      "Guided Case Analysis",
+      "All Grounds Support",
+      "Evidence Collection Tools",
+      "Step-by-Step Roadmap",
+      "Timeline Expectations",
+      "Expert Guidance",
+      "Proof of Service Templates"
+    ]
+  }
+}
