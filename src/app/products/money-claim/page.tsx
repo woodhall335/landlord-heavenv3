@@ -1,14 +1,7 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui";
 import Link from "next/link";
-import { RiCheckboxCircleLine, RiAlertLine } from "react-icons/ri";
-import {
-  FileText,
-  Mail,
-  Calculator,
-  BookOpen,
-  AlertTriangle,
-} from "lucide-react";
+import { FileText, Mail } from "lucide-react";
 import { UniversalHero } from "@/components/landing/UniversalHero";
 import { moneyClaimHeroConfig } from "@/components/landing/heroConfigs";
 import { StructuredData, productSchema, faqPageSchema, breadcrumbSchema } from "@/lib/seo/structured-data";
@@ -19,10 +12,10 @@ import { PRODUCTS } from "@/lib/pricing/products";
 import { FAQSection } from "@/components/marketing/FAQSection";
 import {
   WhyLandlordHeaven,
-  JurisdictionAccordion,
   VsSolicitorComparison,
-  WhatYouGet,
+  WhatsIncludedInteractive,
 } from "@/components/value-proposition";
+import { getMoneyClaimPreviewData } from "@/lib/previews/moneyClaimPreviews";
 
 // Get price from single source of truth
 const product = PRODUCTS.money_claim;
@@ -42,11 +35,13 @@ export const metadata: Metadata = {
   },
 };
 
+export const runtime = 'nodejs';
+
 // FAQ data for structured data
 const faqs = [
   {
     question: "What documents do I get?",
-    answer: "You receive 11 documents: Court Claim Form (N1 or Simple Procedure 3A), Particulars of Claim, Schedule of Debt, Interest Calculation, Letter Before Claim, Defendant Information Sheet, Reply Form, Financial Statement Form, Court Filing Guide, and Enforcement Guide."
+    answer: "You receive 10 documents: Form N1 (Money Claim), Particulars of Claim, Schedule of Arrears, Interest Calculation (s.69 County Courts Act), Letter Before Claim (PAP-DEBT compliant), Defendant Information Sheet, Reply Form, Financial Statement, Court Filing Guide, and Enforcement Guide."
   },
   {
     question: "Can I claim for damage or cleaning after the tenant leaves?",
@@ -86,7 +81,9 @@ const faqs = [
   }
 ];
 
-export default function MoneyClaimPage() {
+export default async function MoneyClaimPage() {
+  const previews = await getMoneyClaimPreviewData();
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Structured Data for SEO */}
@@ -106,31 +103,7 @@ export default function MoneyClaimPage() {
       {/* Hero Section */}
       <UniversalHero {...moneyClaimHeroConfig} />
 
-      {/* Important Warning About Collection */}
-      <section className="py-8">
-        <Container>
-          <div className="max-w-3xl mx-auto">
-            <div className="bg-amber-50 border border-amber-200 rounded-lg p-6 flex items-start gap-4">
-              <AlertTriangle className="w-6 h-6 text-amber-600 shrink-0 mt-1" />
-              <div>
-                <h4 className="font-semibold text-amber-800 mb-2">Important: Consider Before You Claim</h4>
-                <p className="text-amber-700 text-sm">
-                  Even if you win a judgment, collecting money can be difficult. Only pursue a claim if the tenant has income, assets, or you can locate them for enforcement. If they have no assets or have left the country, winning the claim may not result in payment.
-                </p>
-              </div>
-            </div>
-          </div>
-        </Container>
-      </section>
-
-      {/* What You Get Section */}
-      <section className="py-16 md:py-20">
-        <Container>
-          <div className="max-w-4xl mx-auto">
-            <WhatYouGet product="money_claim" />
-          </div>
-        </Container>
-      </section>
+      <WhatsIncludedInteractive product="money_claim" previews={previews} />
 
       <section className="py-16 md:py-20 bg-white">
         <Container>
@@ -171,15 +144,6 @@ export default function MoneyClaimPage() {
                 </Link>
               </div>
             </div>
-          </div>
-        </Container>
-      </section>
-
-      {/* Jurisdiction Accordion */}
-      <section className="py-8">
-        <Container>
-          <div className="max-w-4xl mx-auto">
-            <JurisdictionAccordion product="money_claim" defaultExpanded={true} />
           </div>
         </Container>
       </section>

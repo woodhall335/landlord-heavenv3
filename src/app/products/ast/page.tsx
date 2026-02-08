@@ -297,7 +297,7 @@ export default function ASTPage() {
                   <li>Missing signatures or dates.</li>
                   <li>Mixing England/Wales/Scotland terms.</li>
                 </ul>
-                <Link href="/tenancy-agreements/scotland" className="text-primary text-sm font-medium hover:underline inline-flex mt-3">
+                <Link href="/private-residential-tenancy-agreement-template" className="text-primary text-sm font-medium hover:underline inline-flex mt-3">
                   Scotland PRT guidance →
                 </Link>
               </div>

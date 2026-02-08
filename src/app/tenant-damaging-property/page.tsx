@@ -165,7 +165,7 @@ export default function TenantDamagingPropertyPage() {
                   <li>Wait 30 days for a response</li>
                   <li>
                     If no satisfactory response, start a claim via{' '}
-                    <Link href="/mcol-money-claim-online">Money Claim Online (MCOL)</Link>
+                    <Link href="/money-claim-online-mcol">Money Claim Online (MCOL)</Link>
                   </li>
                 </ol>
 

@@ -15,7 +15,7 @@ export default function EnglandWalesRedirectPage() {
         <nav className="text-sm text-gray-600">
           <Link href="/" className="hover:text-blue-600">Home</Link>
           <span className="mx-2">/</span>
-          <Link href="/tenancy-agreements" className="hover:text-blue-600">Tenancy Agreements</Link>
+          <Link href="/products/ast" className="hover:text-blue-600">Tenancy Agreements</Link>
           <span className="mx-2">/</span>
           <span className="text-gray-900">Choose Jurisdiction</span>
         </nav>
@@ -34,7 +34,7 @@ export default function EnglandWalesRedirectPage() {
           <div className="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
             {/* England Card */}
             <Link
-              href="/tenancy-agreements/england"
+              href="/assured-shorthold-tenancy-agreement-template"
               className="bg-white rounded-2xl shadow-lg p-8 border-t-4 border-blue-600 hover:shadow-xl transition-all hover:scale-105 block"
             >
               <div className="text-6xl mb-4">🏴󠁧󠁢󠁥󠁮󠁧󠁿</div>
@@ -49,7 +49,7 @@ export default function EnglandWalesRedirectPage() {
 
             {/* Wales Card */}
             <Link
-              href="/tenancy-agreements/wales"
+              href="/wales-tenancy-agreement-template"
               className="bg-white rounded-2xl shadow-lg p-8 border-t-4 border-red-600 hover:shadow-xl transition-all hover:scale-105 block"
             >
               <div className="text-6xl mb-4">🏴󠁧󠁢󠁷󠁬󠁳󠁿</div>
@@ -80,10 +80,10 @@ export default function EnglandWalesRedirectPage() {
         <div className="max-w-4xl mx-auto">
           <h3 className="text-xl font-semibold text-gray-900 mb-4">Other UK Jurisdictions</h3>
           <div className="flex gap-6 flex-wrap">
-            <Link href="/tenancy-agreements/scotland" className="text-blue-600 hover:underline font-semibold">
+            <Link href="/private-residential-tenancy-agreement-template" className="text-blue-600 hover:underline font-semibold">
               Scotland Private Residential Tenancy (PRT) →
             </Link>
-            <Link href="/tenancy-agreements/northern-ireland" className="text-blue-600 hover:underline font-semibold">
+            <Link href="/northern-ireland-tenancy-agreement-template" className="text-blue-600 hover:underline font-semibold">
               Northern Ireland Private Tenancy →
             </Link>
           </div>

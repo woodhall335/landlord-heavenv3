@@ -489,7 +489,7 @@ export default function HowToEvictTenantPage() {
                   Wales Eviction Guide →
                 </Link>
                 <Link
-                  href="/tenancy-agreements/wales"
+                  href="/wales-tenancy-agreement-template"
                   className="inline-flex items-center gap-2 bg-white text-red-600 border border-red-600 px-6 py-3 rounded-lg font-medium hover:bg-red-50"
                 >
                   Wales Occupation Contracts →
@@ -572,7 +572,7 @@ export default function HowToEvictTenantPage() {
                   Scotland Eviction Guide →
                 </Link>
                 <Link
-                  href="/tenancy-agreements/scotland"
+                  href="/private-residential-tenancy-agreement-template"
                   className="inline-flex items-center gap-2 bg-white text-blue-600 border border-blue-600 px-6 py-3 rounded-lg font-medium hover:bg-blue-50"
                 >
                   Scotland PRT Agreements →
@@ -635,7 +635,7 @@ export default function HowToEvictTenantPage() {
               </div>
 
               <Link
-                href="/tenancy-agreements/northern-ireland"
+                href="/northern-ireland-tenancy-agreement-template"
                 className="inline-flex items-center gap-2 bg-green-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-green-700"
               >
                 Northern Ireland Tenancy Agreements →

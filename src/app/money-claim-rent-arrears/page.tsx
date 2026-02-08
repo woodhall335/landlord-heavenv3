@@ -83,7 +83,7 @@ export default function MoneyClaimRentArrearsPage() {
                   is separate from eviction proceedings.
                 </p>
                 <p>
-                  In England, you can use <Link href="/mcol-money-claim-online" className="text-primary hover:underline">Money Claim Online (MCOL)</Link> to
+                  In England, you can use <Link href="/money-claim-online-mcol" className="text-primary hover:underline">Money Claim Online (MCOL)</Link> to
                   claim up to £100,000 in unpaid rent, damages, and other debts.
                 </p>
 
@@ -290,7 +290,7 @@ export default function MoneyClaimRentArrearsPage() {
                 <Link href="/products/money-claim" className="hero-btn-primary">
                   Get Money Claim Pack
                 </Link>
-                <Link href="/mcol-money-claim-online" className="hero-btn-secondary">
+                <Link href="/money-claim-online-mcol" className="hero-btn-secondary">
                   Learn About MCOL
                 </Link>
               </div>

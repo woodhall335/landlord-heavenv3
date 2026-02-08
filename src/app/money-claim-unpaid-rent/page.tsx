@@ -81,7 +81,7 @@ export default function MoneyClaimUnpaidRentPage() {
 
               <p className="text-xl text-green-100 mb-8 max-w-2xl mx-auto">
                 Complete guide to recovering unpaid rent through{' '}
-                <Link href="/mcol-money-claim-online" className="text-white hover:underline font-semibold">Money Claim Online (MCOL)</Link> in England & Wales,{' '}
+                <Link href="/money-claim-online-mcol" className="text-white hover:underline font-semibold">Money Claim Online (MCOL)</Link> in England & Wales,{' '}
                 <strong>Simple Procedure</strong> in Scotland, and court processes in
                 Northern Ireland.
               </p>

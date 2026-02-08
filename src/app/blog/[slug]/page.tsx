@@ -28,7 +28,7 @@ import { FAQInline } from '@/components/marketing/FAQSection';
 import { NextLegalSteps } from '@/components/seo/NextLegalSteps';
 import { landingPageLinks, productLinks, guideLinks } from '@/lib/seo/internal-links';
 import { CommercialWizardLinks } from '@/components/seo/CommercialWizardLinks';
-import { analyzeBlogPost } from '@/lib/seo/blog-commercial-linking';
+import { getBlogSeoConfig } from '@/lib/blog/seo';
 
 interface BlogPageProps {
   params: Promise<{ slug: string }>;
@@ -170,7 +170,7 @@ const buildNextLegalSteps = (post: BlogPost, region: BlogRegion | null) => {
       jurisdictionLabel: `${jurisdictionName} rent arrears`,
       scenarioLabel: 'recovering unpaid rent',
       primaryCTA: {
-        label: 'Start money claim pack — £99.99',
+        label: 'Start the Money Claim Pack',
         href: productLinks.moneyClaim.href,
       },
       secondaryCTA: {
@@ -195,34 +195,34 @@ const buildNextLegalSteps = (post: BlogPost, region: BlogRegion | null) => {
   if (isTenancy) {
     const tenancyLink =
       region === 'scotland'
-        ? '/tenancy-agreements/scotland'
+        ? '/private-residential-tenancy-agreement-template'
         : region === 'wales'
-        ? '/tenancy-agreements/wales'
+        ? '/wales-tenancy-agreement-template'
         : region === 'northern-ireland'
-        ? '/tenancy-agreements/northern-ireland'
-        : '/tenancy-agreements/england';
+        ? '/northern-ireland-tenancy-agreement-template'
+        : '/assured-shorthold-tenancy-agreement-template';
 
     return {
       jurisdictionLabel: `${jurisdictionName} tenancy agreements`,
       scenarioLabel: 'creating compliant tenancy agreements',
       primaryCTA: {
-        label: 'Build a tenancy agreement',
-        href: tenancyLink,
+        label: 'Get the Tenancy Agreement Pack',
+        href: '/products/ast',
       },
       secondaryCTA: {
-        label: 'Download tenancy template',
-        href: landingPageLinks.tenancyTemplate.href,
+        label: 'Download the template',
+        href: tenancyLink,
       },
       relatedLinks: [
         {
-          href: tenancyLink,
-          title: `${jurisdictionName} tenancy agreements`,
-          description: 'Jurisdiction-specific tenancy requirements.',
+          href: '/products/ast',
+          title: 'Tenancy Agreement Pack',
+          description: 'Standard and Premium agreements with compliance checks.',
         },
         {
-          href: landingPageLinks.tenancyTemplate.href,
-          title: landingPageLinks.tenancyTemplate.title,
-          description: landingPageLinks.tenancyTemplate.description,
+          href: tenancyLink,
+          title: `${jurisdictionName} tenancy agreement template`,
+          description: 'Jurisdiction-specific tenancy requirements.',
         },
       ],
     };
@@ -235,7 +235,7 @@ const buildNextLegalSteps = (post: BlogPost, region: BlogRegion | null) => {
         scenarioLabel: 'NI landlord compliance',
         primaryCTA: {
           label: 'Create NI tenancy agreement',
-          href: '/tenancy-agreements/northern-ireland',
+          href: '/northern-ireland-tenancy-agreement-template',
         },
         secondaryCTA: {
           label: 'Tenancy agreement templates',
@@ -243,7 +243,7 @@ const buildNextLegalSteps = (post: BlogPost, region: BlogRegion | null) => {
         },
         relatedLinks: [
           {
-            href: '/tenancy-agreements/northern-ireland',
+            href: '/northern-ireland-tenancy-agreement-template',
             title: 'Northern Ireland tenancy agreements',
             description: 'Private tenancy agreements for NI landlords.',
           },
@@ -298,11 +298,11 @@ const buildNextLegalSteps = (post: BlogPost, region: BlogRegion | null) => {
       jurisdictionLabel: `${jurisdictionName} eviction notices`,
       scenarioLabel: 'serving the correct notice',
       primaryCTA: {
-        label: 'Generate eviction notice — £49.99',
+        label: 'Generate an eviction notice',
         href: productLinks.noticeOnly.href,
       },
       secondaryCTA: {
-        label: 'Complete eviction pack — £199.99',
+        label: 'Get the Complete Eviction Pack',
         href: productLinks.completePack.href,
       },
       relatedLinks: [primaryRelated, secondaryRelated],
@@ -429,26 +429,22 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
     return { title: 'Post Not Found' };
   }
 
-  // Truncate title to fit within 70 characters for SEO
-  // Layout template adds "| Landlord Heaven" (18 chars), so max title length is 52
-  const maxTitleLength = 52;
-  const truncatedTitle = post.title.length > maxTitleLength
-    ? post.title.substring(0, maxTitleLength - 3) + '...'
-    : post.title;
+  const postRegion = getPostRegion(slug);
+  const seoConfig = getBlogSeoConfig(post, postRegion);
   // Use canonicalSlug if this post points to another as the canonical version
-  const canonicalUrl = getCanonicalUrl(`/blog/${post.canonicalSlug || slug}`);
+  const canonicalUrl = getCanonicalUrl(seoConfig.canonicalPath);
 
   return {
-    title: truncatedTitle, // Layout template adds "| Landlord Heaven"
-    description: post.metaDescription,
+    title: seoConfig.metaTitle, // Layout template adds "| Landlord Heaven"
+    description: seoConfig.metaDescription,
     keywords: [post.targetKeyword, ...post.secondaryKeywords],
-    robots: 'index,follow',
+    robots: seoConfig.robots,
     alternates: {
       canonical: canonicalUrl,
     },
     openGraph: {
-      title: post.title,
-      description: post.metaDescription,
+      title: seoConfig.metaTitle,
+      description: seoConfig.metaDescription,
       type: 'article',
       url: canonicalUrl,
       publishedTime: post.date,
@@ -466,8 +462,8 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
     },
     twitter: {
       card: 'summary_large_image',
-      title: post.title,
-      description: post.metaDescription,
+      title: seoConfig.metaTitle,
+      description: seoConfig.metaDescription,
     },
   };
 }
@@ -513,13 +509,14 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
   const regionConfig = postRegion ? BLOG_CATEGORIES[postRegion] : null;
 
   // Analyze post for commercial linking (automated CTAs to core product pages)
-  const commercialLinkingResult = analyzeBlogPost(post, postRegion);
+  const seoConfig = getBlogSeoConfig(post, postRegion);
+  const commercialLinkingResult = seoConfig.commercialResult;
 
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    headline: post.title,
-    description: post.metaDescription,
+    headline: seoConfig.metaTitle,
+    description: seoConfig.metaDescription,
     image: post.heroImage || `${SITE_ORIGIN}/og-image.png`,
     datePublished: post.date,
     dateModified: post.updatedDate || post.date,
@@ -580,14 +577,14 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
     breadcrumbItems.push({
       '@type': 'ListItem',
       position: 4,
-      name: post.title,
+      name: seoConfig.metaTitle,
       item: `${SITE_ORIGIN}/blog/${slug}`,
     });
   } else {
     breadcrumbItems.push({
       '@type': 'ListItem',
       position: 3,
-      name: post.title,
+      name: seoConfig.metaTitle,
       item: `${SITE_ORIGIN}/blog/${slug}`,
     });
   }
@@ -599,7 +596,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
   };
 
   // FAQ Schema for rich snippets (only if post has FAQs)
-  const faqSchema = post.faqs && post.faqs.length > 0 ? {
+  const faqSchema = post.faqs && post.faqs.length >= 3 ? {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
     mainEntity: post.faqs.map(faq => ({
@@ -636,7 +633,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
                 </>
               )}
               <span>/</span>
-              <span className="text-gray-900 truncate max-w-[200px]">{post.title}</span>
+              <span className="text-gray-900 truncate max-w-[200px]">{seoConfig.metaTitle}</span>
             </nav>
 
             <div className="max-w-4xl">
@@ -690,12 +687,12 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
 
               {/* Title */}
               <h1 className="text-3xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight">
-                {post.title}
+                {seoConfig.metaTitle}
               </h1>
 
               {/* Description */}
               <p className="text-xl text-gray-600 mb-8">
-                {post.description}
+                {seoConfig.heroIntro}
               </p>
 
               {/* Tags */}
@@ -740,6 +737,29 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
                 role={post.author.role}
                 image={post.author.image}
               />
+
+              <section className="my-8 rounded-2xl border border-purple-200 bg-purple-50 p-6">
+                <h2 className="text-lg font-semibold text-gray-900">Start with the right landlord pack</h2>
+                <p className="text-sm text-gray-700 mt-2">
+                  {seoConfig.primaryCommercialLink.description ??
+                    `Take the next step for ${seoConfig.jurisdictionLabel} landlords with a compliant pack.`}
+                </p>
+                <Link
+                  href={seoConfig.primaryCommercialLink.href}
+                  className="inline-flex items-center mt-4 text-primary font-semibold hover:underline"
+                >
+                  {seoConfig.primaryCommercialLink.anchorText.includes(seoConfig.jurisdictionLabel)
+                    ? seoConfig.primaryCommercialLink.anchorText
+                    : `${seoConfig.primaryCommercialLink.anchorText} for ${seoConfig.jurisdictionLabel}`}
+                </Link>
+                <div className="mt-4 flex flex-wrap gap-3 text-sm text-gray-700">
+                  {seoConfig.supportingLinks.map((link) => (
+                    <Link key={link.href} href={link.href} className="text-primary hover:underline">
+                      {link.label}
+                    </Link>
+                  ))}
+                </div>
+              </section>
 
               {/* Commercial Wizard Links - Automated CTAs based on content analysis */}
               <CommercialWizardLinks

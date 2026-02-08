@@ -11,10 +11,10 @@ export const metadata: Metadata = {
     title: 'Private Tenancy Agreement Northern Ireland 2026 | From £14.99',
     description: 'Create a legally compliant Private Tenancy Agreement for NI. Updated for 2026 with 2025 EICR requirements and rent increase restrictions.',
     type: 'website',
-    url: getCanonicalUrl('/tenancy-agreements/northern-ireland'),
+    url: getCanonicalUrl('/northern-ireland-tenancy-agreement-template'),
   },
   alternates: {
-    canonical: getCanonicalUrl('/tenancy-agreements/northern-ireland'),
+    canonical: getCanonicalUrl('/northern-ireland-tenancy-agreement-template'),
   },
 };
 
@@ -136,13 +136,13 @@ export default function NorthernIrelandTenancyPage() {
         '@type': 'ListItem',
         position: 2,
         name: 'Tenancy Agreements',
-        item: getCanonicalUrl('/tenancy-agreements'),
+        item: getCanonicalUrl('/products/ast'),
       },
       {
         '@type': 'ListItem',
         position: 3,
         name: 'Northern Ireland',
-        item: getCanonicalUrl('/tenancy-agreements/northern-ireland'),
+        item: getCanonicalUrl('/northern-ireland-tenancy-agreement-template'),
       },
     ],
   };
@@ -168,7 +168,7 @@ export default function NorthernIrelandTenancyPage() {
           <nav className="text-sm text-gray-600">
             <Link href="/" className="hover:text-red-600">Home</Link>
             <span className="mx-2">/</span>
-            <Link href="/tenancy-agreements" className="hover:text-red-600">Tenancy Agreements</Link>
+            <Link href="/products/ast" className="hover:text-red-600">Tenancy Agreements</Link>
             <span className="mx-2">/</span>
             <span className="text-gray-900">Northern Ireland</span>
           </nav>
@@ -1086,13 +1086,13 @@ export default function NorthernIrelandTenancyPage() {
           <div className="max-w-4xl mx-auto">
             <h3 className="text-xl font-semibold text-gray-900 mb-4">Other UK Jurisdictions</h3>
             <div className="flex gap-6 flex-wrap">
-              <Link href="/tenancy-agreements/england" className="text-red-600 hover:underline font-semibold">
+              <Link href="/assured-shorthold-tenancy-agreement-template" className="text-red-600 hover:underline font-semibold">
                 England Assured Shorthold Tenancy (AST) →
               </Link>
-              <Link href="/tenancy-agreements/wales" className="text-red-600 hover:underline font-semibold">
+              <Link href="/wales-tenancy-agreement-template" className="text-red-600 hover:underline font-semibold">
                 Wales Occupation Contract →
               </Link>
-              <Link href="/tenancy-agreements/scotland" className="text-red-600 hover:underline font-semibold">
+              <Link href="/private-residential-tenancy-agreement-template" className="text-red-600 hover:underline font-semibold">
                 Scotland Private Residential Tenancy (PRT) →
               </Link>
             </div>

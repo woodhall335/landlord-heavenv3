@@ -290,19 +290,19 @@
 
   <!-- DOCUMENT HEADER -->
   <div class="document-header">
-    <div class="document-title">Private Tenancy Agreement</div>
-    <div class="document-subtitle">Premium Professional Edition</div>
-    <div class="premium-badge">Premium</div>
-    <div class="document-jurisdiction">Northern Ireland &bull; Private Tenancies (Northern Ireland) Order 2006 (as amended)</div>
-    <div class="agreement-date"><strong>Agreement Date:</strong> {{formatUKDate agreement_date}}</div>
-  </div>
+  <div class="document-title">Private Tenancy Agreement</div>
+  <div class="document-subtitle">Premium Professional Edition</div>
+  <div class="premium-badge">Premium</div>
+  <div class="document-jurisdiction">Northern Ireland &bull; Private Tenancies Act (Northern Ireland) 2022 (amending the Private Tenancies (Northern Ireland) Order 2006)</div>
+  <div class="agreement-date"><strong>Agreement Date:</strong> {{formatUKDate agreement_date}}</div>
+</div>
 
   <!-- LEGAL COMPLIANCE NOTICE -->
   <div class="ni-2025-notice">
     <div class="ni-2025-title">Legal Requirements - Northern Ireland</div>
     <p>This agreement complies with current Northern Ireland tenancy regulations:</p>
     <ul>
-      <li><strong>Electrical Safety:</strong> EICR certificates required for private tenancies where mandated by current legislation</li>
+      <li><strong>Electrical Safety:</strong> EICR certificates required for private tenancies (mandatory from April 2025)</li>
       <li><strong>Rent Increases:</strong> Minimum 12-month gap between rent increases</li>
       <li><strong>Notice Requirements:</strong> 3-month written notice required for any rent increase</li>
       <li><strong>Notice to Quit:</strong> Length-based notice periods (28/56/84 days depending on tenancy duration)</li>
@@ -774,7 +774,7 @@
 
     <p class="clause"><span class="clause-num">8.5</span> Maintain a valid Gas Safety Certificate and arrange annual safety checks by a Gas Safe registered engineer.</p>
 
-    <p class="clause"><span class="clause-num">8.6</span> Maintain a valid Electrical Installation Condition Report (EICR) where required by current legislation and ensure electrical safety compliance.</p>
+    <p class="clause"><span class="clause-num">8.6</span> Maintain a valid Electrical Installation Condition Report (EICR) where required by current legislation (mandatory from April 2025) and ensure electrical safety compliance.</p>
 
     <p class="clause"><span class="clause-num">8.7</span> Protect the Tenant's Deposit in an approved scheme and provide prescribed information within statutory timescales.</p>
 
@@ -890,6 +890,8 @@
     <p class="clause">{{additional_terms}}</p>
     {{/if}}
   </div>
+
+  {{> statutory_acknowledgements jurisdiction="northern-ireland" format="html" heading_style="section"}}
 
   <!-- SIGNATURE SECTION -->
   <div class="signature-section">

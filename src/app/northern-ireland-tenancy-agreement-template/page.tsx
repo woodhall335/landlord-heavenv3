@@ -111,8 +111,7 @@ export default function NorthernIrelandTenancyAgreementTemplatePage() {
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: '/' },
-          { name: 'Tenancy Agreements', url: '/tenancy-agreements' },
-          { name: 'Northern Ireland', url: '/tenancy-agreements/northern-ireland' },
+          { name: 'Tenancy Agreement Packs', url: '/products/ast' },
           { name: 'NI Tenancy Agreement Template', url: '/northern-ireland-tenancy-agreement-template' },
         ])}
       />
@@ -124,9 +123,7 @@ export default function NorthernIrelandTenancyAgreementTemplatePage() {
             <ol className="flex items-center space-x-2 text-sm text-slate-600">
               <li><Link href="/" className="hover:text-amber-600">Home</Link></li>
               <li className="text-slate-400">/</li>
-              <li><Link href="/tenancy-agreements" className="hover:text-amber-600">Tenancy Agreements</Link></li>
-              <li className="text-slate-400">/</li>
-              <li><Link href="/tenancy-agreements/northern-ireland" className="hover:text-amber-600">Northern Ireland</Link></li>
+              <li><Link href="/products/ast" className="hover:text-amber-600">Tenancy Agreement Packs</Link></li>
               <li className="text-slate-400">/</li>
               <li className="text-slate-900 font-medium">Template</li>
             </ol>
@@ -164,6 +161,13 @@ export default function NorthernIrelandTenancyAgreementTemplatePage() {
                 View Template Details
               </Link>
             </div>
+            <p className="mt-4 text-sm text-emerald-100">
+              Compare Standard vs Premium in the{' '}
+              <Link href="/products/ast" className="font-semibold text-white hover:underline">
+                Tenancy Agreement Pack overview
+              </Link>
+              .
+            </p>
           </div>
         </section>
 

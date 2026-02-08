@@ -99,7 +99,7 @@ export default function ScotlandPrtModelAgreementGuidePage() {
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: 'https://landlordheaven.co.uk' },
-          { name: 'Tenancy Agreements', url: 'https://landlordheaven.co.uk/tenancy-agreements' },
+          { name: 'Tenancy Agreements', url: 'https://landlordheaven.co.uk/products/ast' },
           { name: 'PRT Model Agreement Guide', url: 'https://landlordheaven.co.uk/scotland-prt-model-agreement-guide' },
         ])}
       />
@@ -110,7 +110,7 @@ export default function ScotlandPrtModelAgreementGuidePage() {
           <nav className="text-sm text-gray-600">
             <Link href="/" className="hover:text-blue-600">Home</Link>
             <span className="mx-2">/</span>
-            <Link href="/tenancy-agreements" className="hover:text-blue-600">Tenancy Agreements</Link>
+            <Link href="/products/ast" className="hover:text-blue-600">Tenancy Agreements</Link>
             <span className="mx-2">/</span>
             <span className="text-gray-900">PRT Model Agreement Guide</span>
           </nav>

@@ -170,7 +170,7 @@ export default function TenancyAgreementTemplatePage() {
       <StructuredData data={faqSchema} />
       <StructuredData data={breadcrumbSchema([
         { name: "Home", url: "https://landlordheaven.co.uk" },
-        { name: "Templates", url: "https://landlordheaven.co.uk/tenancy-agreements" },
+        { name: "Templates", url: "https://landlordheaven.co.uk/products/ast" },
         { name: "Tenancy Agreement Template UK", url: "https://landlordheaven.co.uk/tenancy-agreement-template" }
       ])} />
 
@@ -182,7 +182,7 @@ export default function TenancyAgreementTemplatePage() {
           title="Tenancy Agreement Template UK"
           subtitle={<>Download a free <strong>tenancy agreement template</strong> for England, Wales, or Scotland. Legally compliant contracts trusted by over 10,000 landlords.</>}
           primaryCTA={{ label: "Get Premium AST — £24.99", href: wizardLinkAST }}
-          secondaryCTA={{ label: "View Free Templates", href: "/tenancy-agreements" }}
+          secondaryCTA={{ label: "View Free Templates", href: "/products/ast" }}
           variant="pastel"
         >
           {/* Trust Signals */}
@@ -247,7 +247,7 @@ export default function TenancyAgreementTemplatePage() {
                     </li>
                   </ul>
                   <Link
-                    href="/tenancy-agreements/england"
+                    href="/assured-shorthold-tenancy-agreement-template"
                     className="text-primary font-medium text-sm hover:underline"
                   >
                     Get England AST →
@@ -279,7 +279,7 @@ export default function TenancyAgreementTemplatePage() {
                     </li>
                   </ul>
                   <Link
-                    href="/tenancy-agreements/wales"
+                    href="/wales-tenancy-agreement-template"
                     className="text-primary font-medium text-sm hover:underline"
                   >
                     Get Wales Contract →
@@ -311,7 +311,7 @@ export default function TenancyAgreementTemplatePage() {
                     </li>
                   </ul>
                   <Link
-                    href="/tenancy-agreements/scotland"
+                    href="/private-residential-tenancy-agreement-template"
                     className="text-primary font-medium text-sm hover:underline"
                   >
                     Get Scotland PRT →
@@ -443,7 +443,7 @@ export default function TenancyAgreementTemplatePage() {
                     </li>
                   </ul>
                   <Link
-                    href="/tenancy-agreements"
+                    href="/products/ast"
                     className="hero-btn-secondary block w-full text-center"
                   >
                     Get Free Template
@@ -737,7 +737,7 @@ export default function TenancyAgreementTemplatePage() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
-                  href="/tenancy-agreements"
+                  href="/products/ast"
                   className="hero-btn-secondary inline-flex items-center justify-center gap-2"
                 >
                   <Download className="w-5 h-5" />

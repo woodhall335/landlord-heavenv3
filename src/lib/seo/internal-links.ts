@@ -3,45 +3,43 @@
  *
  * Use these with the RelatedLinks component for SEO-optimized internal linking
  *
- * IMPORTANT: Product links should point to clean SEO landing routes, NOT wizard URLs
- * or old /products/* paths. The landing pages handle CTA to wizard.
+ * IMPORTANT: Product links should point to /products/* routes for revenue alignment.
  */
 
-import { SEO_LANDING_ROUTES, SEO_PRICES } from '@/lib/pricing/products';
 
 export const productLinks = {
   noticeOnly: {
-    href: SEO_LANDING_ROUTES.notice_only,
+    href: '/products/notice-only',
     title: 'Eviction Notice Generator',
-    description: `Court-ready eviction notice — ${SEO_PRICES.evictionNotice.display}`,
+    description: 'Court-ready eviction notice for your jurisdiction.',
     icon: 'document' as const,
     type: 'product' as const,
   },
   completePack: {
-    href: SEO_LANDING_ROUTES.complete_pack,
+    href: '/products/complete-pack',
     title: 'Complete Eviction Bundle',
-    description: `Full eviction package with court forms — ${SEO_PRICES.evictionBundle.display}`,
+    description: 'Full eviction package with court forms and guidance.',
     icon: 'legal' as const,
     type: 'product' as const,
   },
   moneyClaim: {
-    href: SEO_LANDING_ROUTES.money_claim,
+    href: '/products/money-claim',
     title: 'Money Claim Pack',
-    description: `Recover rent, damage, and other tenant debts — ${SEO_PRICES.moneyClaim.display}`,
+    description: 'Recover rent, damage, and other tenant debts.',
     icon: 'document' as const,
     type: 'product' as const,
   },
   tenancyAgreement: {
-    href: SEO_LANDING_ROUTES.ast_standard,
+    href: '/products/ast',
     title: 'Tenancy Agreement Generator',
-    description: `Jurisdiction-specific agreements — from ${SEO_PRICES.tenancyStandard.display}`,
+    description: 'Jurisdiction-specific tenancy agreements and compliance checks.',
     icon: 'document' as const,
     type: 'product' as const,
   },
   premiumTenancyAgreement: {
-    href: SEO_LANDING_ROUTES.ast_premium,
+    href: '/products/ast',
     title: 'Premium Tenancy Agreement',
-    description: `HMO clauses & guarantor provisions — ${SEO_PRICES.tenancyPremium.display}`,
+    description: 'HMO clauses, guarantor provisions, and advanced options.',
     icon: 'document' as const,
     type: 'product' as const,
   },
@@ -167,7 +165,7 @@ export const landingPageLinks = {
     type: 'page' as const,
   },
   tenancyTemplate: {
-    href: '/tenancy-agreement-template',
+    href: '/assured-shorthold-tenancy-agreement-template',
     title: 'Tenancy Agreement Template',
     description: 'AST template download',
     icon: 'document' as const,
@@ -274,14 +272,14 @@ export const moneyClaimGuides = {
     type: 'guide' as const,
   },
   rentArrearsFromTenant: {
-    href: '/money-claim-rent-arrears',
+    href: '/money-claim-unpaid-rent',
     title: 'Claim Rent Arrears from Tenant',
     description: 'Step-by-step rent recovery guide',
     icon: 'legal' as const,
     type: 'guide' as const,
   },
   sueTenantUnpaidRent: {
-    href: '/how-to-sue-tenant-for-unpaid-rent',
+    href: '/money-claim-unpaid-rent',
     title: 'How to Sue Tenant for Unpaid Rent',
     description: 'Court action for rent recovery',
     icon: 'legal' as const,
@@ -1107,7 +1105,7 @@ export const tenancySeoNIPages = {
     type: 'page' as const,
   },
   niTenancyTemplate: {
-    href: '/tenancy-agreement-template-northern-ireland',
+    href: '/northern-ireland-tenancy-agreement-template',
     title: 'NI Tenancy Agreement Template',
     description: 'Private Tenancies Act compliant',
     icon: 'document' as const,
