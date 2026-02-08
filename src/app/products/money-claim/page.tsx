@@ -1,14 +1,7 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui";
 import Link from "next/link";
-import { RiCheckboxCircleLine, RiAlertLine } from "react-icons/ri";
-import {
-  FileText,
-  Mail,
-  Calculator,
-  BookOpen,
-  AlertTriangle,
-} from "lucide-react";
+import { FileText, Mail } from "lucide-react";
 import { UniversalHero } from "@/components/landing/UniversalHero";
 import { moneyClaimHeroConfig } from "@/components/landing/heroConfigs";
 import { StructuredData, productSchema, faqPageSchema, breadcrumbSchema } from "@/lib/seo/structured-data";
@@ -19,7 +12,6 @@ import { PRODUCTS } from "@/lib/pricing/products";
 import { FAQSection } from "@/components/marketing/FAQSection";
 import {
   WhyLandlordHeaven,
-  JurisdictionAccordion,
   VsSolicitorComparison,
   WhatsIncludedInteractive,
 } from "@/components/value-proposition";
@@ -111,23 +103,6 @@ export default async function MoneyClaimPage() {
       {/* Hero Section */}
       <UniversalHero {...moneyClaimHeroConfig} />
 
-      {/* Important Warning About Collection */}
-      <section className="py-8">
-        <Container>
-          <div className="max-w-3xl mx-auto">
-            <div className="bg-amber-50 border border-amber-200 rounded-lg p-6 flex items-start gap-4">
-              <AlertTriangle className="w-6 h-6 text-amber-600 shrink-0 mt-1" />
-              <div>
-                <h4 className="font-semibold text-amber-800 mb-2">Important: Consider Before You Claim</h4>
-                <p className="text-amber-700 text-sm">
-                  Even if you win a judgment, collecting money can be difficult. Only pursue a claim if the tenant has income, assets, or you can locate them for enforcement. If they have no assets or have left the country, winning the claim may not result in payment.
-                </p>
-              </div>
-            </div>
-          </div>
-        </Container>
-      </section>
-
       <WhatsIncludedInteractive product="money_claim" previews={previews} />
 
       <section className="py-16 md:py-20 bg-white">
@@ -169,15 +144,6 @@ export default async function MoneyClaimPage() {
                 </Link>
               </div>
             </div>
-          </div>
-        </Container>
-      </section>
-
-      {/* Jurisdiction Accordion */}
-      <section className="py-8">
-        <Container>
-          <div className="max-w-4xl mx-auto">
-            <JurisdictionAccordion product="money_claim" defaultExpanded={true} />
           </div>
         </Container>
       </section>
