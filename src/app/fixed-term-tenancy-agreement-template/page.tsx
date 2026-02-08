@@ -104,7 +104,7 @@ export default function FixedTermTenancyAgreementPage() {
       <StructuredData data={faqPageSchema(faqs)} />
       <StructuredData data={breadcrumbSchema([
         { name: 'Home', url: 'https://landlordheaven.co.uk' },
-        { name: 'Tenancy Agreements', url: 'https://landlordheaven.co.uk/tenancy-agreement-template' },
+        { name: 'Tenancy Agreements', url: 'https://landlordheaven.co.uk/assured-shorthold-tenancy-agreement-template' },
         { name: 'Fixed Term Tenancy Agreement', url: 'https://landlordheaven.co.uk/fixed-term-tenancy-agreement-template' },
       ])} />
 

@@ -195,34 +195,34 @@ const buildNextLegalSteps = (post: BlogPost, region: BlogRegion | null) => {
   if (isTenancy) {
     const tenancyLink =
       region === 'scotland'
-        ? '/tenancy-agreements/scotland'
+        ? '/private-residential-tenancy-agreement-template'
         : region === 'wales'
-        ? '/tenancy-agreements/wales'
+        ? '/wales-tenancy-agreement-template'
         : region === 'northern-ireland'
-        ? '/tenancy-agreements/northern-ireland'
-        : '/tenancy-agreements/england';
+        ? '/northern-ireland-tenancy-agreement-template'
+        : '/assured-shorthold-tenancy-agreement-template';
 
     return {
       jurisdictionLabel: `${jurisdictionName} tenancy agreements`,
       scenarioLabel: 'creating compliant tenancy agreements',
       primaryCTA: {
-        label: 'Build a tenancy agreement',
-        href: tenancyLink,
+        label: 'Get the Tenancy Agreement Pack',
+        href: '/products/ast',
       },
       secondaryCTA: {
-        label: 'Download tenancy template',
-        href: landingPageLinks.tenancyTemplate.href,
+        label: 'Download the template',
+        href: tenancyLink,
       },
       relatedLinks: [
         {
-          href: tenancyLink,
-          title: `${jurisdictionName} tenancy agreements`,
-          description: 'Jurisdiction-specific tenancy requirements.',
+          href: '/products/ast',
+          title: 'Tenancy Agreement Pack',
+          description: 'Standard and Premium agreements with compliance checks.',
         },
         {
-          href: landingPageLinks.tenancyTemplate.href,
-          title: landingPageLinks.tenancyTemplate.title,
-          description: landingPageLinks.tenancyTemplate.description,
+          href: tenancyLink,
+          title: `${jurisdictionName} tenancy agreement template`,
+          description: 'Jurisdiction-specific tenancy requirements.',
         },
       ],
     };
@@ -235,7 +235,7 @@ const buildNextLegalSteps = (post: BlogPost, region: BlogRegion | null) => {
         scenarioLabel: 'NI landlord compliance',
         primaryCTA: {
           label: 'Create NI tenancy agreement',
-          href: '/tenancy-agreements/northern-ireland',
+          href: '/northern-ireland-tenancy-agreement-template',
         },
         secondaryCTA: {
           label: 'Tenancy agreement templates',
@@ -243,7 +243,7 @@ const buildNextLegalSteps = (post: BlogPost, region: BlogRegion | null) => {
         },
         relatedLinks: [
           {
-            href: '/tenancy-agreements/northern-ireland',
+            href: '/northern-ireland-tenancy-agreement-template',
             title: 'Northern Ireland tenancy agreements',
             description: 'Private tenancy agreements for NI landlords.',
           },

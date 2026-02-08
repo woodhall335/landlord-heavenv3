@@ -689,7 +689,7 @@ export default function Section8RentArrearsEvictionPage() {
                         Get Money Claim Pack — {PRODUCTS.money_claim.displayPrice}
                       </Link>
                       <Link
-                        href="/claim-rent-arrears-tenant"
+                        href="/money-claim-unpaid-rent"
                         className="inline-flex items-center gap-2 text-green-700 font-medium hover:underline text-sm"
                       >
                         Read full guide

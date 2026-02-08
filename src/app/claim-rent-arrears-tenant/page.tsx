@@ -117,7 +117,7 @@ export default function ClaimRentArrearsTenantPage() {
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: getCanonicalUrl('/') },
-          { name: 'Money Claim Guides', url: getCanonicalUrl('/money-claim-rent-arrears') },
+          { name: 'Money Claim Guides', url: getCanonicalUrl('/money-claim-unpaid-rent') },
           { name: 'Claim Rent Arrears', url: getCanonicalUrl('/claim-rent-arrears-tenant') },
         ])}
       />

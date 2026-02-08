@@ -431,7 +431,7 @@ export default function WalesEvictionNoticeTemplatePage() {
                   productLinks.completePack,
                   askHeavenLink,
                   {
-                    href: '/tenancy-agreements/wales',
+                    href: '/wales-tenancy-agreement-template',
                     title: 'Wales Occupation Contracts',
                     description: 'Create compliant occupation contracts',
                     icon: 'document' as const,

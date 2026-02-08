@@ -111,8 +111,8 @@ export default function NIPrivateTenancyAgreementPage() {
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: '/' },
-          { name: 'Tenancy Agreements', url: '/tenancy-agreements' },
-          { name: 'Northern Ireland', url: '/tenancy-agreements/northern-ireland' },
+          { name: 'Tenancy Agreements', url: '/products/ast' },
+          { name: 'Northern Ireland', url: '/northern-ireland-tenancy-agreement-template' },
           { name: 'Private Tenancy Agreement', url: '/ni-private-tenancy-agreement' },
         ])}
       />
@@ -124,9 +124,9 @@ export default function NIPrivateTenancyAgreementPage() {
             <ol className="flex items-center space-x-2 text-sm text-slate-600">
               <li><Link href="/" className="hover:text-emerald-600">Home</Link></li>
               <li className="text-slate-400">/</li>
-              <li><Link href="/tenancy-agreements" className="hover:text-emerald-600">Tenancy Agreements</Link></li>
+              <li><Link href="/products/ast" className="hover:text-emerald-600">Tenancy Agreements</Link></li>
               <li className="text-slate-400">/</li>
-              <li><Link href="/tenancy-agreements/northern-ireland" className="hover:text-emerald-600">Northern Ireland</Link></li>
+              <li><Link href="/northern-ireland-tenancy-agreement-template" className="hover:text-emerald-600">Northern Ireland</Link></li>
               <li className="text-slate-400">/</li>
               <li className="text-slate-900 font-medium">Private Tenancy</li>
             </ol>

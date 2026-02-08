@@ -224,7 +224,7 @@ export function getNextStepsCTAs(input: NextStepsCTAInput): NextStepsCTA[] {
       priority: 1,
     });
     steps.push({
-      href: '/tenancy-agreement-template',
+      href: '/assured-shorthold-tenancy-agreement-template',
       label: 'Tenancy Agreement Template',
       priority: 2,
     });

@@ -125,7 +125,7 @@ export default function ScotlandEvictionNoticesPage() {
                   <ArrowRight className="w-5 h-5" />
                 </Link>
                 <Link
-                  href="/tenancy-agreements/scotland"
+                  href="/private-residential-tenancy-agreement-template"
                   className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold py-4 px-8 rounded-xl transition-colors border border-white/20"
                 >
                   Scotland PRT Agreements
@@ -629,7 +629,7 @@ export default function ScotlandEvictionNoticesPage() {
                     <li>Applying to court instead of Tribunal.</li>
                   </ul>
                   <Link
-                    href="/tenancy-agreements/scotland"
+                    href="/private-residential-tenancy-agreement-template"
                     className="text-primary text-sm font-medium hover:underline inline-flex mt-3"
                   >
                     Review Scotland PRT rules →
@@ -705,7 +705,7 @@ export default function ScotlandEvictionNoticesPage() {
                     description: 'Free Q&A for landlord questions.',
                   },
                   {
-                    href: '/tenancy-agreements/scotland',
+                    href: '/private-residential-tenancy-agreement-template',
                     title: 'Scotland PRT agreements',
                     description: 'Create compliant private residential tenancy agreements.',
                   },

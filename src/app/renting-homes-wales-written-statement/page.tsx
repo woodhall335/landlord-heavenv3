@@ -99,7 +99,7 @@ export default function RentingHomesWalesWrittenStatementPage() {
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: 'https://landlordheaven.co.uk' },
-          { name: 'Tenancy Agreements', url: 'https://landlordheaven.co.uk/tenancy-agreements' },
+          { name: 'Tenancy Agreements', url: 'https://landlordheaven.co.uk/products/ast' },
           { name: 'Written Statement Wales', url: 'https://landlordheaven.co.uk/renting-homes-wales-written-statement' },
         ])}
       />
@@ -110,7 +110,7 @@ export default function RentingHomesWalesWrittenStatementPage() {
           <nav className="text-sm text-gray-600">
             <Link href="/" className="hover:text-red-600">Home</Link>
             <span className="mx-2">/</span>
-            <Link href="/tenancy-agreements" className="hover:text-red-600">Tenancy Agreements</Link>
+            <Link href="/products/ast" className="hover:text-red-600">Tenancy Agreements</Link>
             <span className="mx-2">/</span>
             <span className="text-gray-900">Written Statement Wales</span>
           </nav>

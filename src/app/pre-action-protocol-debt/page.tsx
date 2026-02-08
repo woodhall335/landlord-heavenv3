@@ -141,7 +141,7 @@ export default function PreActionProtocolPage() {
                 <p>
                   If the debtor doesn&apos;t respond, doesn&apos;t pay, and doesn&apos;t make reasonable proposals,
                   you can start court proceedings using{' '}
-                  <Link href="/mcol-money-claim-online">Money Claim Online (MCOL)</Link>.
+                  <Link href="/money-claim-online-mcol">Money Claim Online (MCOL)</Link>.
                 </p>
 
                 <h2>What Must the Letter Before Claim Include?</h2>

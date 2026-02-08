@@ -99,7 +99,7 @@ export default function WalesTenancyAgreementTemplatePage() {
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: 'https://landlordheaven.co.uk' },
-          { name: 'Tenancy Agreements', url: 'https://landlordheaven.co.uk/tenancy-agreements' },
+          { name: 'Tenancy Agreement Packs', url: 'https://landlordheaven.co.uk/products/ast' },
           { name: 'Wales Tenancy Agreement', url: 'https://landlordheaven.co.uk/wales-tenancy-agreement-template' },
         ])}
       />
@@ -110,7 +110,7 @@ export default function WalesTenancyAgreementTemplatePage() {
           <nav className="text-sm text-gray-600">
             <Link href="/" className="hover:text-red-600">Home</Link>
             <span className="mx-2">/</span>
-            <Link href="/tenancy-agreements" className="hover:text-red-600">Tenancy Agreements</Link>
+            <Link href="/products/ast" className="hover:text-red-600">Tenancy Agreement Packs</Link>
             <span className="mx-2">/</span>
             <span className="text-gray-900">Wales Tenancy Agreement</span>
           </nav>
@@ -147,6 +147,13 @@ export default function WalesTenancyAgreementTemplatePage() {
                 Premium Contract — £24.99
               </Link>
             </div>
+            <p className="mt-3 text-sm text-gray-600">
+              Compare features and upgrade options in the{' '}
+              <Link href="/products/ast" className="text-primary font-semibold hover:underline">
+                Tenancy Agreement Pack overview
+              </Link>
+              .
+            </p>
             <p className="mt-4 text-sm text-gray-500">Renting Homes Act compliant • Written statement included • Instant PDF</p>
           </div>
         </section>
