@@ -151,7 +151,7 @@ export default function SueTenantUnpaidRentPage() {
                 <p>If the tenant does not pay or respond adequately:</p>
                 <ul>
                   <li>
-                    <strong>Online:</strong> Use <Link href="/mcol-money-claim-online" className="text-primary hover:underline">Money Claim Online (MCOL)</Link> for
+                    <strong>Online:</strong> Use <Link href="/money-claim-online-mcol" className="text-primary hover:underline">Money Claim Online (MCOL)</Link> for
                     claims up to £100,000
                   </li>
                   <li>
@@ -309,7 +309,7 @@ export default function SueTenantUnpaidRentPage() {
                 <Link href="/products/money-claim" className="hero-btn-primary">
                   Get Money Claim Pack
                 </Link>
-                <Link href="/money-claim-rent-arrears" className="hero-btn-secondary">
+                <Link href="/money-claim-unpaid-rent" className="hero-btn-secondary">
                   Rent Arrears Claim Guide
                 </Link>
               </div>

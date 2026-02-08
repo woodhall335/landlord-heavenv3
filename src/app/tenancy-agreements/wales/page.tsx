@@ -11,10 +11,10 @@ export const metadata: Metadata = {
     title: 'Occupation Contract Wales 2026 | From £14.99',
     description: 'Create a legally compliant Occupation Contract for Wales. Updated for 2026. Standard (£14.99) and Premium (£24.99) options.',
     type: 'website',
-    url: getCanonicalUrl('/tenancy-agreements/wales'),
+    url: getCanonicalUrl('/wales-tenancy-agreement-template'),
   },
   alternates: {
-    canonical: getCanonicalUrl('/tenancy-agreements/wales'),
+    canonical: getCanonicalUrl('/wales-tenancy-agreement-template'),
   },
 };
 
@@ -144,13 +144,13 @@ export default function WalesOccupationContractPage() {
         '@type': 'ListItem',
         position: 2,
         name: 'Tenancy Agreements',
-        item: 'https://landlordheaven.co.uk/tenancy-agreements',
+        item: 'https://landlordheaven.co.uk/products/ast',
       },
       {
         '@type': 'ListItem',
         position: 3,
         name: 'Wales',
-        item: 'https://landlordheaven.co.uk/tenancy-agreements/wales',
+        item: 'https://landlordheaven.co.uk/wales-tenancy-agreement-template',
       },
     ],
   };
@@ -176,7 +176,7 @@ export default function WalesOccupationContractPage() {
           <nav className="text-sm text-gray-600">
             <Link href="/" className="hover:text-red-600">Home</Link>
             <span className="mx-2">/</span>
-            <Link href="/tenancy-agreements" className="hover:text-red-600">Tenancy Agreements</Link>
+            <Link href="/products/ast" className="hover:text-red-600">Tenancy Agreements</Link>
             <span className="mx-2">/</span>
             <span className="text-gray-900">Wales</span>
           </nav>
@@ -441,17 +441,17 @@ export default function WalesOccupationContractPage() {
               Each UK nation has its own tenancy legislation. Make sure you use the correct agreement for your property location.
             </p>
             <div className="grid md:grid-cols-3 gap-4">
-              <Link href="/tenancy-agreements/england" className="block p-6 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+              <Link href="/assured-shorthold-tenancy-agreement-template" className="block p-6 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
                 <img src="/gb-eng.svg" alt="England" className="w-8 h-8 mb-2" />
                 <h3 className="font-semibold text-gray-900">England</h3>
                 <p className="text-sm text-gray-600">Assured Shorthold Tenancy (AST)</p>
               </Link>
-              <Link href="/tenancy-agreements/scotland" className="block p-6 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+              <Link href="/private-residential-tenancy-agreement-template" className="block p-6 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
                 <img src="/gb-sct.svg" alt="Scotland" className="w-8 h-8 mb-2" />
                 <h3 className="font-semibold text-gray-900">Scotland</h3>
                 <p className="text-sm text-gray-600">Private Residential Tenancy (PRT)</p>
               </Link>
-              <Link href="/tenancy-agreements/northern-ireland" className="block p-6 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+              <Link href="/northern-ireland-tenancy-agreement-template" className="block p-6 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
                 <img src="/gb-nir.svg" alt="Northern Ireland" className="w-8 h-8 mb-2" />
                 <h3 className="font-semibold text-gray-900">Northern Ireland</h3>
                 <p className="text-sm text-gray-600">Private Tenancy Agreement</p>

@@ -177,7 +177,7 @@ describe('generateMetadataForPageType', () => {
     const metadata = generateMetadataForPageType({
       title: 'Tenancy Agreement Template',
       description: 'Create your tenancy agreement',
-      path: '/tenancy-agreement-template',
+      path: '/assured-shorthold-tenancy-agreement-template',
       pageType: 'product',
     });
 

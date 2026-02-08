@@ -104,7 +104,7 @@ export default function SixMonthTenancyAgreementPage() {
       <StructuredData data={faqPageSchema(faqs)} />
       <StructuredData data={breadcrumbSchema([
         { name: 'Home', url: 'https://landlordheaven.co.uk' },
-        { name: 'Tenancy Agreements', url: 'https://landlordheaven.co.uk/tenancy-agreement-template' },
+        { name: 'Tenancy Agreements', url: 'https://landlordheaven.co.uk/assured-shorthold-tenancy-agreement-template' },
         { name: '6 Month Tenancy Agreement', url: 'https://landlordheaven.co.uk/6-month-tenancy-agreement-template' },
       ])} />
 
@@ -116,7 +116,7 @@ export default function SixMonthTenancyAgreementPage() {
           title="6 Month Tenancy Agreement Template"
           subtitle={<>Need a <strong>short-term tenancy agreement</strong>? Get a legally compliant 6-month AST template for England and Wales — with clear terms for both landlord and tenant.</>}
           primaryCTA={{ label: 'Get AST Template — £14.99', href: wizardLinkAST }}
-          secondaryCTA={{ label: 'View 12-Month Option', href: '/tenancy-agreement-template' }}
+          secondaryCTA={{ label: 'View 12-Month Option', href: '/assured-shorthold-tenancy-agreement-template' }}
           variant="pastel"
         >
           {/* Trust Signals */}

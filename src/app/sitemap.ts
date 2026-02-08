@@ -62,18 +62,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/eviction-notice', priority: 0.95, changeFrequency: 'weekly' as const },
     { path: '/eviction-pack-england', priority: 0.95, changeFrequency: 'weekly' as const },
     { path: '/money-claim', priority: 0.95, changeFrequency: 'weekly' as const },
-    { path: '/tenancy-agreement', priority: 0.95, changeFrequency: 'weekly' as const },
-    { path: '/premium-tenancy-agreement', priority: 0.95, changeFrequency: 'weekly' as const },
   ];
 
   // Tenancy agreement pages - individual jurisdiction pages
-  const tenancyPages = [
-    { path: '/tenancy-agreements/england', priority: 0.8, changeFrequency: 'weekly' as const },
-    { path: '/tenancy-agreements/wales', priority: 0.8, changeFrequency: 'weekly' as const },
-    { path: '/tenancy-agreements/scotland', priority: 0.8, changeFrequency: 'weekly' as const },
-    { path: '/tenancy-agreements/northern-ireland', priority: 0.8, changeFrequency: 'weekly' as const },
-    // england-wales is a selector hub page (noindex) - not included in sitemap
-  ];
+  const tenancyPages: { path: string; priority: number; changeFrequency: 'weekly' }[] = [];
 
   // Long-tail landing pages - SEO targeted
   const landingPages = [
@@ -81,7 +73,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/eviction-notice-template', priority: 0.9, changeFrequency: 'weekly' as const },
     { path: '/section-8-notice-template', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/rent-arrears-letter-template', priority: 0.8, changeFrequency: 'weekly' as const },
-    { path: '/tenancy-agreement-template', priority: 0.8, changeFrequency: 'weekly' as const },
     // Jurisdiction-specific template pages
     { path: '/wales-eviction-notice-template', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/scotland-notice-to-leave-template', priority: 0.8, changeFrequency: 'weekly' as const },
@@ -93,7 +84,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/how-to-evict-tenant', priority: 0.85, changeFrequency: 'weekly' as const },
     { path: '/wales-eviction-notices', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/scotland-eviction-notices', priority: 0.8, changeFrequency: 'weekly' as const },
-    { path: '/money-claim-unpaid-rent', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/section-21-ban', priority: 0.85, changeFrequency: 'weekly' as const },
     // Q2 2026 SEO pages
     { path: '/n5b-form-guide', priority: 0.8, changeFrequency: 'weekly' as const },
@@ -116,8 +106,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/money-claim-former-tenant', priority: 0.75, changeFrequency: 'weekly' as const },
     { path: '/money-claim-deposit-shortfall', priority: 0.75, changeFrequency: 'weekly' as const },
     // Money Claim SEO Expansion (Q1 2026) - High-intent rent arrears keywords
-    { path: '/money-claim-rent-arrears', priority: 0.85, changeFrequency: 'weekly' as const },
-    { path: '/how-to-sue-tenant-for-unpaid-rent', priority: 0.85, changeFrequency: 'weekly' as const },
+    { path: '/money-claim-unpaid-rent', priority: 0.85, changeFrequency: 'weekly' as const },
     // Money Claim SEO Expansion (Q1 2026) - Process focused
     { path: '/money-claim-online-mcol', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/money-claim-ccj-enforcement', priority: 0.75, changeFrequency: 'weekly' as const },
@@ -130,55 +119,30 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/money-claim-pap-financial-statement', priority: 0.7, changeFrequency: 'monthly' as const },
     // Tenancy Agreement SEO Pages - England (Q1 2026)
     { path: '/assured-shorthold-tenancy-agreement-template', priority: 0.85, changeFrequency: 'weekly' as const },
-    { path: '/ast-template-england', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/tenancy-agreement-template-free', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/joint-tenancy-agreement-template', priority: 0.8, changeFrequency: 'weekly' as const },
     // Tenancy Agreement SEO Pages - Wales (Q1 2026)
-    { path: '/occupation-contract-template-wales', priority: 0.85, changeFrequency: 'weekly' as const },
-    { path: '/renting-homes-wales-written-statement', priority: 0.8, changeFrequency: 'weekly' as const },
-    { path: '/standard-occupation-contract-wales', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/wales-tenancy-agreement-template', priority: 0.8, changeFrequency: 'weekly' as const },
     // Tenancy Agreement SEO Pages - Scotland (Q1 2026)
     { path: '/private-residential-tenancy-agreement-template', priority: 0.85, changeFrequency: 'weekly' as const },
-    { path: '/prt-template-scotland', priority: 0.8, changeFrequency: 'weekly' as const },
-    { path: '/scottish-tenancy-agreement-template', priority: 0.8, changeFrequency: 'weekly' as const },
-    { path: '/scotland-prt-model-agreement-guide', priority: 0.8, changeFrequency: 'weekly' as const },
     // Tenancy Agreement SEO Pages - Northern Ireland (Q1 2026)
     { path: '/northern-ireland-tenancy-agreement-template', priority: 0.85, changeFrequency: 'weekly' as const },
-    { path: '/ni-private-tenancy-agreement', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/notice-to-quit-northern-ireland-guide', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/ni-tenancy-agreement-template-free', priority: 0.8, changeFrequency: 'weekly' as const },
     // Tenancy Agreement SEO Landing Pages - England (Jan 2026)
-    { path: '/assured-shorthold-tenancy-agreement', priority: 0.9, changeFrequency: 'weekly' as const },
-    { path: '/ast-tenancy-agreement-template', priority: 0.85, changeFrequency: 'weekly' as const },
     { path: '/fixed-term-periodic-tenancy-england', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/joint-tenancy-agreement-england', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/renew-tenancy-agreement-england', priority: 0.8, changeFrequency: 'weekly' as const },
     // Tenancy Agreement SEO Landing Pages - Scotland (Jan 2026)
-    { path: '/private-residential-tenancy-agreement-scotland', priority: 0.9, changeFrequency: 'weekly' as const },
-    { path: '/prt-tenancy-agreement-template-scotland', priority: 0.85, changeFrequency: 'weekly' as const },
-    { path: '/joint-prt-tenancy-agreement-scotland', priority: 0.8, changeFrequency: 'weekly' as const },
-    { path: '/update-prt-tenancy-agreement-scotland', priority: 0.8, changeFrequency: 'weekly' as const },
-    { path: '/common-prt-tenancy-mistakes-scotland', priority: 0.8, changeFrequency: 'weekly' as const },
     // Tenancy Agreement SEO Landing Pages - Wales (Jan 2026)
-    { path: '/standard-occupation-contract-wales', priority: 0.9, changeFrequency: 'weekly' as const },
-    { path: '/occupation-contract-template-wales', priority: 0.85, changeFrequency: 'weekly' as const },
-    { path: '/fixed-term-periodic-occupation-contract-wales', priority: 0.8, changeFrequency: 'weekly' as const },
-    { path: '/joint-occupation-contract-wales', priority: 0.8, changeFrequency: 'weekly' as const },
-    { path: '/update-occupation-contract-wales', priority: 0.8, changeFrequency: 'weekly' as const },
     // Tenancy Agreement SEO Landing Pages - Northern Ireland (Jan 2026)
-    { path: '/tenancy-agreement-northern-ireland', priority: 0.9, changeFrequency: 'weekly' as const },
-    { path: '/tenancy-agreement-template-northern-ireland', priority: 0.85, changeFrequency: 'weekly' as const },
-    { path: '/fixed-term-tenancy-agreement-northern-ireland', priority: 0.8, changeFrequency: 'weekly' as const },
-    { path: '/joint-tenancy-agreement-northern-ireland', priority: 0.8, changeFrequency: 'weekly' as const },
-    { path: '/update-tenancy-agreement-northern-ireland', priority: 0.8, changeFrequency: 'weekly' as const },
     // High-Intent SEO Landing Pages (Jan 2026)
     { path: '/form-6a-section-21', priority: 0.9, changeFrequency: 'weekly' as const },
     { path: '/eviction-notice-uk', priority: 0.9, changeFrequency: 'weekly' as const },
     { path: '/no-fault-eviction', priority: 0.85, changeFrequency: 'weekly' as const },
     { path: '/form-3-section-8', priority: 0.9, changeFrequency: 'weekly' as const },
     { path: '/lodger-agreement-template', priority: 0.8, changeFrequency: 'weekly' as const },
-    { path: '/mcol-money-claim-online', priority: 0.85, changeFrequency: 'weekly' as const },
+    { path: '/money-claim-online-mcol', priority: 0.85, changeFrequency: 'weekly' as const },
     { path: '/rolling-tenancy-agreement', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/how-to-rent-guide', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/pre-action-protocol-debt', priority: 0.8, changeFrequency: 'weekly' as const },
@@ -192,7 +156,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const extraIndexablePages = [
     { path: '/apply-possession-order-landlord', priority: 0.8, changeFrequency: 'weekly' as const },
-    { path: '/claim-rent-arrears-tenant', priority: 0.8, changeFrequency: 'weekly' as const },
   ];
 
   const pillarPages = [

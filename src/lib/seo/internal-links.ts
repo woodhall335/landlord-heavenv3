@@ -167,7 +167,7 @@ export const landingPageLinks = {
     type: 'page' as const,
   },
   tenancyTemplate: {
-    href: '/tenancy-agreement-template',
+    href: '/assured-shorthold-tenancy-agreement-template',
     title: 'Tenancy Agreement Template',
     description: 'AST template download',
     icon: 'document' as const,
@@ -274,14 +274,14 @@ export const moneyClaimGuides = {
     type: 'guide' as const,
   },
   rentArrearsFromTenant: {
-    href: '/money-claim-rent-arrears',
+    href: '/money-claim-unpaid-rent',
     title: 'Claim Rent Arrears from Tenant',
     description: 'Step-by-step rent recovery guide',
     icon: 'legal' as const,
     type: 'guide' as const,
   },
   sueTenantUnpaidRent: {
-    href: '/how-to-sue-tenant-for-unpaid-rent',
+    href: '/money-claim-unpaid-rent',
     title: 'How to Sue Tenant for Unpaid Rent',
     description: 'Court action for rent recovery',
     icon: 'legal' as const,
@@ -1107,7 +1107,7 @@ export const tenancySeoNIPages = {
     type: 'page' as const,
   },
   niTenancyTemplate: {
-    href: '/tenancy-agreement-template-northern-ireland',
+    href: '/northern-ireland-tenancy-agreement-template',
     title: 'NI Tenancy Agreement Template',
     description: 'Private Tenancies Act compliant',
     icon: 'document' as const,

@@ -402,7 +402,7 @@ export default function ScotlandNoticeToLeaveTemplatePage() {
                   productLinks.completePack,
                   askHeavenLink,
                   {
-                    href: '/tenancy-agreements/scotland',
+                    href: '/private-residential-tenancy-agreement-template',
                     title: 'Scotland PRT Agreements',
                     description: 'Create compliant private residential tenancy agreements',
                     icon: 'document' as const,

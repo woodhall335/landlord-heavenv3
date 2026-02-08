@@ -11,10 +11,10 @@ export const metadata: Metadata = {
     title: 'PRT Agreement 2026 for Landlords | Scotland Tenancy',
     description: 'Landlord-ready PRT agreement for Scotland with 2026 compliance and clear landlord obligations.',
     type: 'website',
-    url: getCanonicalUrl('/tenancy-agreements/scotland'),
+    url: getCanonicalUrl('/private-residential-tenancy-agreement-template'),
   },
   alternates: {
-    canonical: getCanonicalUrl('/tenancy-agreements/scotland'),
+    canonical: getCanonicalUrl('/private-residential-tenancy-agreement-template'),
   },
 };
 
@@ -144,13 +144,13 @@ export default function ScotlandPRTPage() {
         '@type': 'ListItem',
         position: 2,
         name: 'Tenancy Agreements',
-        item: getCanonicalUrl('/tenancy-agreements'),
+        item: getCanonicalUrl('/products/ast'),
       },
       {
         '@type': 'ListItem',
         position: 3,
         name: 'Scotland',
-        item: getCanonicalUrl('/tenancy-agreements/scotland'),
+        item: getCanonicalUrl('/private-residential-tenancy-agreement-template'),
       },
     ],
   };
@@ -176,7 +176,7 @@ export default function ScotlandPRTPage() {
           <nav className="text-sm text-gray-600">
             <Link href="/" className="hover:text-blue-600">Home</Link>
             <span className="mx-2">/</span>
-            <Link href="/tenancy-agreements" className="hover:text-blue-600">Tenancy Agreements</Link>
+            <Link href="/products/ast" className="hover:text-blue-600">Tenancy Agreements</Link>
             <span className="mx-2">/</span>
             <span className="text-gray-900">Scotland</span>
           </nav>
@@ -1138,13 +1138,13 @@ export default function ScotlandPRTPage() {
           <div className="max-w-4xl mx-auto">
             <h3 className="text-xl font-semibold text-gray-900 mb-4">Other UK Jurisdictions</h3>
             <div className="flex gap-6 flex-wrap">
-              <Link href="/tenancy-agreements/england" className="text-blue-600 hover:underline font-semibold">
+              <Link href="/assured-shorthold-tenancy-agreement-template" className="text-blue-600 hover:underline font-semibold">
                 England AST Agreements →
               </Link>
-              <Link href="/tenancy-agreements/wales" className="text-blue-600 hover:underline font-semibold">
+              <Link href="/wales-tenancy-agreement-template" className="text-blue-600 hover:underline font-semibold">
                 Wales Occupation Contract →
               </Link>
-              <Link href="/tenancy-agreements/northern-ireland" className="text-blue-600 hover:underline font-semibold">
+              <Link href="/northern-ireland-tenancy-agreement-template" className="text-blue-600 hover:underline font-semibold">
                 Northern Ireland Private Tenancy →
               </Link>
             </div>

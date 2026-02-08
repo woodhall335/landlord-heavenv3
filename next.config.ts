@@ -71,6 +71,179 @@ const nextConfig: NextConfig = {
         destination: '/products/money-claim',
         permanent: true,
       },
+      // Money claim canonicalization
+      {
+        source: '/mcol-money-claim-online',
+        destination: '/money-claim-online-mcol',
+        permanent: true,
+      },
+      {
+        source: '/money-claim-rent-arrears',
+        destination: '/money-claim-unpaid-rent',
+        permanent: true,
+      },
+      {
+        source: '/claim-rent-arrears-tenant',
+        destination: '/money-claim-unpaid-rent',
+        permanent: true,
+      },
+      {
+        source: '/how-to-sue-tenant-for-unpaid-rent',
+        destination: '/money-claim-unpaid-rent',
+        permanent: true,
+      },
+
+      // Tenancy agreement pillar consolidation (jurisdiction-specific)
+      {
+        source: '/tenancy-agreement',
+        destination: '/assured-shorthold-tenancy-agreement-template',
+        permanent: true,
+      },
+      {
+        source: '/tenancy-agreement-template',
+        destination: '/assured-shorthold-tenancy-agreement-template',
+        permanent: true,
+      },
+      {
+        source: '/assured-shorthold-tenancy-agreement',
+        destination: '/assured-shorthold-tenancy-agreement-template',
+        permanent: true,
+      },
+      {
+        source: '/ast-tenancy-agreement-template',
+        destination: '/assured-shorthold-tenancy-agreement-template',
+        permanent: true,
+      },
+      {
+        source: '/ast-template-england',
+        destination: '/assured-shorthold-tenancy-agreement-template',
+        permanent: true,
+      },
+      {
+        source: '/tenancy-agreements/england',
+        destination: '/assured-shorthold-tenancy-agreement-template',
+        permanent: true,
+      },
+      {
+        source: '/premium-tenancy-agreement',
+        destination: '/products/ast',
+        permanent: true,
+      },
+      {
+        source: '/occupation-contract-template-wales',
+        destination: '/wales-tenancy-agreement-template',
+        permanent: true,
+      },
+      {
+        source: '/standard-occupation-contract-wales',
+        destination: '/wales-tenancy-agreement-template',
+        permanent: true,
+      },
+      {
+        source: '/joint-occupation-contract-wales',
+        destination: '/wales-tenancy-agreement-template',
+        permanent: true,
+      },
+      {
+        source: '/renting-homes-wales-written-statement',
+        destination: '/wales-tenancy-agreement-template',
+        permanent: true,
+      },
+      {
+        source: '/fixed-term-periodic-occupation-contract-wales',
+        destination: '/wales-tenancy-agreement-template',
+        permanent: true,
+      },
+      {
+        source: '/update-occupation-contract-wales',
+        destination: '/wales-tenancy-agreement-template',
+        permanent: true,
+      },
+      {
+        source: '/tenancy-agreements/wales',
+        destination: '/wales-tenancy-agreement-template',
+        permanent: true,
+      },
+      {
+        source: '/scottish-tenancy-agreement-template',
+        destination: '/private-residential-tenancy-agreement-template',
+        permanent: true,
+      },
+      {
+        source: '/prt-template-scotland',
+        destination: '/private-residential-tenancy-agreement-template',
+        permanent: true,
+      },
+      {
+        source: '/prt-tenancy-agreement-template-scotland',
+        destination: '/private-residential-tenancy-agreement-template',
+        permanent: true,
+      },
+      {
+        source: '/private-residential-tenancy-agreement-scotland',
+        destination: '/private-residential-tenancy-agreement-template',
+        permanent: true,
+      },
+      {
+        source: '/joint-prt-tenancy-agreement-scotland',
+        destination: '/private-residential-tenancy-agreement-template',
+        permanent: true,
+      },
+      {
+        source: '/update-prt-tenancy-agreement-scotland',
+        destination: '/private-residential-tenancy-agreement-template',
+        permanent: true,
+      },
+      {
+        source: '/scotland-prt-model-agreement-guide',
+        destination: '/private-residential-tenancy-agreement-template',
+        permanent: true,
+      },
+      {
+        source: '/common-prt-tenancy-mistakes-scotland',
+        destination: '/private-residential-tenancy-agreement-template',
+        permanent: true,
+      },
+      {
+        source: '/tenancy-agreements/scotland',
+        destination: '/private-residential-tenancy-agreement-template',
+        permanent: true,
+      },
+      {
+        source: '/tenancy-agreement-northern-ireland',
+        destination: '/northern-ireland-tenancy-agreement-template',
+        permanent: true,
+      },
+      {
+        source: '/tenancy-agreement-template-northern-ireland',
+        destination: '/northern-ireland-tenancy-agreement-template',
+        permanent: true,
+      },
+      {
+        source: '/fixed-term-tenancy-agreement-northern-ireland',
+        destination: '/northern-ireland-tenancy-agreement-template',
+        permanent: true,
+      },
+      {
+        source: '/joint-tenancy-agreement-northern-ireland',
+        destination: '/northern-ireland-tenancy-agreement-template',
+        permanent: true,
+      },
+      {
+        source: '/update-tenancy-agreement-northern-ireland',
+        destination: '/northern-ireland-tenancy-agreement-template',
+        permanent: true,
+      },
+      {
+        source: '/ni-private-tenancy-agreement',
+        destination: '/northern-ireland-tenancy-agreement-template',
+        permanent: true,
+      },
+      {
+        source: '/tenancy-agreements/northern-ireland',
+        destination: '/northern-ireland-tenancy-agreement-template',
+        permanent: true,
+      },
       // HMO Pro is parked
       {
         source: '/hmo-pro',

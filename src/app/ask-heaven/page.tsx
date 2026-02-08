@@ -431,7 +431,7 @@ export default async function AskHeavenPage({
                   <span className="text-xs text-gray-500">MCOL & Simple Procedure</span>
                 </Link>
                 <Link
-                  href="/tenancy-agreement-template"
+                  href="/assured-shorthold-tenancy-agreement-template"
                   className="p-4 bg-white rounded-xl border border-gray-200 hover:border-primary/30 hover:shadow-md transition-all group"
                 >
                   <span className="font-medium text-gray-900 group-hover:text-primary block">

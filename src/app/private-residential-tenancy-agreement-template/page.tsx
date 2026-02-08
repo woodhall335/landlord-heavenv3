@@ -91,7 +91,7 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: 'https://landlordheaven.co.uk' },
-          { name: 'Tenancy Agreements', url: 'https://landlordheaven.co.uk/tenancy-agreements' },
+          { name: 'Tenancy Agreement Packs', url: 'https://landlordheaven.co.uk/products/ast' },
           { name: 'PRT Agreement Template', url: 'https://landlordheaven.co.uk/private-residential-tenancy-agreement-template' },
         ])}
       />
@@ -102,7 +102,7 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
           <nav className="text-sm text-gray-600">
             <Link href="/" className="hover:text-blue-600">Home</Link>
             <span className="mx-2">/</span>
-            <Link href="/tenancy-agreements" className="hover:text-blue-600">Tenancy Agreements</Link>
+            <Link href="/products/ast" className="hover:text-blue-600">Tenancy Agreement Packs</Link>
             <span className="mx-2">/</span>
             <span className="text-gray-900">PRT Agreement Template</span>
           </nav>
@@ -139,6 +139,13 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                 Premium PRT — £24.99
               </Link>
             </div>
+            <p className="mt-3 text-sm text-gray-600">
+              See the full package comparison in the{' '}
+              <Link href="/products/ast" className="text-primary font-semibold hover:underline">
+                Tenancy Agreement Pack overview
+              </Link>
+              .
+            </p>
             <p className="mt-4 text-sm text-gray-500">Open-ended tenancy • Tribunal-ready • Instant PDF</p>
           </div>
         </section>
