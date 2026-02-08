@@ -1593,6 +1593,10 @@ export async function generateCompleteEvictionPack(
 
   documents.push(...regionDocs);
 
+  const groundsReliedUpon = (evictionCase.grounds || [])
+    .map((ground) => (typeof ground === 'string' ? ground : ground.code))
+    .filter(Boolean);
+
   // 1.1 Generate Schedule of Arrears if arrears grounds selected
   if (hasArrearsGroundsSelected(selectedGroundCodes)) {
     try {
@@ -1774,6 +1778,7 @@ export async function generateCompleteEvictionPack(
       const sectionsInput = extractWitnessStatementSectionsInput({
         ...wizardFacts,
         ...evictionCase,
+        groundsReliedUpon,
         ...(canonicalArrears
           ? {
             arrears: {
@@ -1803,6 +1808,7 @@ export async function generateCompleteEvictionPack(
       data: {
         ...evictionCase,
         ...(caseData || {}), // Include caseData for compliance dates and N5B fields (if available)
+        groundsReliedUpon,
         witness_statement: witnessStatementContent,
         // Map to template-expected field names
         landlord_name: evictionCase.landlord_full_name,
@@ -1968,6 +1974,7 @@ export async function generateCompleteEvictionPack(
       data: {
         ...evictionCase,
         ...(caseData || {}),
+        groundsReliedUpon,
         landlord_full_name: evictionCase.landlord_full_name,
         tenant_full_name: evictionCase.tenant_full_name,
         tenant_2_name: evictionCase.tenant_2_name,
@@ -2128,6 +2135,7 @@ export async function generateCompleteEvictionPack(
     data: {
       ...evictionCase,
       grounds_data: groundsData,
+      groundsReliedUpon,
       // FIX 5: Add flag for Section 21 no-fault eviction to populate Grounds field
       is_section_21: evictionCase.case_type === 'no_fault',
       generated_at: new Date().toISOString(),
