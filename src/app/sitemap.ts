@@ -18,6 +18,8 @@ import { blogPosts } from '@/lib/blog/posts';
 import { SITE_ORIGIN } from '@/lib/seo';
 import { freeTools, validatorToolRoutes } from '@/lib/tools/tools';
 import { getQuestionRepository } from '@/lib/ask-heaven/questions';
+import { getPostRegion } from '@/lib/blog/categories';
+import { getBlogSeoConfig } from '@/lib/blog/seo';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Use a stable date for pages that don't change frequently
@@ -211,12 +213,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // /auth/login and /auth/signup are not in sitemap
 
   // Blog pages with explicit lastModified dates
-  const blogPostPages = blogPosts.map((post) => ({
-    url: `${SITE_ORIGIN}/blog/${post.slug}`,
-    lastModified: new Date(post.updatedDate || post.date),
-    changeFrequency: 'monthly' as const,
-    priority: 0.8,
-  }));
+  const blogPostPages = blogPosts
+    .map((post) => {
+      const seoConfig = getBlogSeoConfig(post, getPostRegion(post.slug));
+      if (!seoConfig.isIndexable) {
+        return null;
+      }
+      return {
+        url: `${SITE_ORIGIN}/blog/${post.slug}`,
+        lastModified: new Date(post.updatedDate || post.date),
+        changeFrequency: 'monthly' as const,
+        priority: 0.8,
+      };
+    })
+    .filter((entry): entry is MetadataRoute.Sitemap[number] => Boolean(entry));
 
   // ==========================================================================
   // Ask Heaven Q&A Pages

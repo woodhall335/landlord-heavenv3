@@ -100,15 +100,11 @@ function enrichCTA(cta: NextStepsCTA, slug: string): StepLink {
   }
 
   // Handle special label-based descriptions
-  if (cta.label === 'Section 21 Notice Pack') {
-    description = 'Generate a court-ready Section 21 notice in minutes';
-  } else if (cta.label === 'Wales Notice Pack') {
-    description = 'Generate Renting Homes Act compliant notices';
-  } else if (cta.label === 'Scotland Notice Pack') {
-    description = 'Generate Notice to Leave documents for Scotland';
+  if (cta.label === 'Notice Only Bundle') {
+    description = 'Generate a court-ready eviction notice in minutes';
   } else if (cta.label === 'Complete Eviction Pack') {
     description = 'Section 8 notice with all court documents included';
-  } else if (cta.label === 'NI Tenancy Agreement') {
+  } else if (cta.label === 'Tenancy Agreement Pack') {
     description = 'Create a legally compliant tenancy agreement';
   }
 
@@ -147,7 +143,7 @@ export function NextSteps({ slug, category, tags }: NextStepsProps) {
 
   return (
     <section className="mt-12 pt-8 border-t border-gray-200">
-      <h2 className="text-xl font-bold text-gray-900 mb-6">Next Steps</h2>
+      <h2 className="text-xl font-bold text-gray-900 mb-6">What to do next</h2>
       <div className="grid sm:grid-cols-2 gap-4">
         {steps.map((step) => {
           const Icon = step.icon;
