@@ -213,20 +213,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // /auth/login and /auth/signup are not in sitemap
 
   // Blog pages with explicit lastModified dates
-  const blogPostPages = blogPosts
-    .map((post) => {
-      const seoConfig = getBlogSeoConfig(post, getPostRegion(post.slug));
-      if (!seoConfig.isIndexable) {
-        return null;
-      }
-      return {
+  const blogPostPages: MetadataRoute.Sitemap = blogPosts.flatMap((post) => {
+    const seoConfig = getBlogSeoConfig(post, getPostRegion(post.slug));
+    if (!seoConfig.isIndexable) {
+      return [];
+    }
+    return [
+      {
         url: `${SITE_ORIGIN}/blog/${post.slug}`,
         lastModified: new Date(post.updatedDate || post.date),
         changeFrequency: 'monthly' as const,
         priority: 0.8,
-      };
-    })
-    .filter((entry): entry is MetadataRoute.Sitemap[number] => Boolean(entry));
+      },
+    ];
+  });
 
   // ==========================================================================
   // Ask Heaven Q&A Pages
