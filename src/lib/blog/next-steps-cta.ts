@@ -20,6 +20,13 @@ export interface NextStepsCTA {
   priority: number;
 }
 
+const PRODUCT_HREFS = new Set([
+  '/products/notice-only',
+  '/products/complete-pack',
+  '/products/money-claim',
+  '/products/ast',
+]);
+
 // England-only URLs that should NEVER appear for Scotland/Wales/NI content
 export const ENGLAND_ONLY_URLS = [
   '/section-21-notice-template',
@@ -155,7 +162,7 @@ export function getNextStepsCTAs(input: NextStepsCTAInput): NextStepsCTA[] {
     });
     steps.push({
       href: '/products/notice-only',
-      label: 'Section 21 Notice Pack',
+      label: 'Notice Only Bundle',
       priority: 3,
     });
     steps.push({
@@ -220,7 +227,7 @@ export function getNextStepsCTAs(input: NextStepsCTAInput): NextStepsCTA[] {
   ) {
     steps.push({
       href: '/products/ast',
-      label: 'Tenancy Agreement Generator',
+      label: 'Tenancy Agreement Pack',
       priority: 1,
     });
     steps.push({
@@ -261,7 +268,7 @@ export function getNextStepsCTAs(input: NextStepsCTAInput): NextStepsCTA[] {
     if (!steps.some((s) => s.href.includes('notice-only'))) {
       steps.push({
         href: '/products/notice-only',
-        label: 'Wales Notice Pack',
+        label: 'Notice Only Bundle',
         priority: 3,
       });
     }
@@ -288,7 +295,7 @@ export function getNextStepsCTAs(input: NextStepsCTAInput): NextStepsCTA[] {
     if (!steps.some((s) => s.href.includes('notice-only'))) {
       steps.push({
         href: '/products/notice-only',
-        label: 'Scotland Notice Pack',
+        label: 'Notice Only Bundle',
         priority: 3,
       });
     }
@@ -459,7 +466,7 @@ export function getNextStepsCTAs(input: NextStepsCTAInput): NextStepsCTA[] {
     if (!steps.some((s) => s.href.includes('ast'))) {
       steps.push({
         href: '/products/ast',
-        label: 'NI Tenancy Agreement',
+        label: 'Tenancy Agreement Pack',
         priority: 3,
       });
     }
@@ -515,7 +522,7 @@ export function getNextStepsCTAs(input: NextStepsCTAInput): NextStepsCTA[] {
     if (!steps.some((s) => s.href.includes('ast'))) {
       steps.push({
         href: '/products/ast',
-        label: 'Tenancy Agreement Generator',
+        label: 'Tenancy Agreement Pack',
         priority: 2,
       });
     }
@@ -527,22 +534,33 @@ export function getNextStepsCTAs(input: NextStepsCTAInput): NextStepsCTA[] {
     });
   }
 
-  // Always add pricing as a fallback
-  if (!steps.some((s) => s.href === '/pricing')) {
-    steps.push({
-      href: '/pricing',
-      label: 'View All Products',
-      priority: 10,
-    });
-  }
-
-  // Sort by priority and take top 4
-  return steps
+  const uniqueSteps = steps
     .sort((a, b) => a.priority - b.priority)
     .filter(
       (step, index, arr) => arr.findIndex((s) => s.href === step.href) === index
-    ) // Remove duplicates
-    .slice(0, 4);
+    );
+
+  const productSteps = uniqueSteps.filter((step) => PRODUCT_HREFS.has(step.href));
+  const nonProductSteps = uniqueSteps.filter((step) => !PRODUCT_HREFS.has(step.href));
+
+  const fallbackProduct: NextStepsCTA = {
+    href: '/products/ast',
+    label: 'Tenancy Agreement Pack',
+    priority: 99,
+  };
+
+  const primaryProduct = productSteps[0] ?? fallbackProduct;
+
+  const finalSteps: NextStepsCTA[] = [];
+  if (nonProductSteps[0]) {
+    finalSteps.push(nonProductSteps[0]);
+  }
+  if (nonProductSteps[1]) {
+    finalSteps.push(nonProductSteps[1]);
+  }
+  finalSteps.push(primaryProduct);
+
+  return finalSteps.slice(0, 3);
 }
 
 /**
