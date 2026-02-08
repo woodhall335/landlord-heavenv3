@@ -9,6 +9,7 @@ import type {
   NoticeVariantKey,
 } from '@/lib/previews/noticeOnlyPreviews';
 import type { CompletePackPreviewData, CompletePackVariantKey } from '@/lib/previews/completePackPreviews';
+import type { MoneyClaimPreviewData } from '@/lib/previews/moneyClaimPreviews';
 
 type WhatsIncludedInteractiveProps =
   | {
@@ -20,6 +21,10 @@ type WhatsIncludedInteractiveProps =
       product: 'complete_pack';
       defaultVariant?: CompletePackVariantKey;
       previews: CompletePackPreviewData;
+    }
+  | {
+      product: 'money_claim';
+      previews: MoneyClaimPreviewData;
     };
 
 type NoticeVariant = {
@@ -113,6 +118,30 @@ const COMPLETE_PACK_VARIANTS: VariantOption[] = [
   },
 ];
 
+const MONEY_CLAIM_GROUPS: DocumentGroup[] = [
+  {
+    title: 'Court Forms',
+    items: ['Form N1 (Money Claim)'],
+  },
+  {
+    title: 'Court Documents',
+    items: ['Particulars of Claim', 'Schedule of Arrears', 'Interest Calculation (s.69 County Courts Act)'],
+  },
+  {
+    title: 'Pre-Action Protocol',
+    items: [
+      'Letter Before Claim (PAP-DEBT compliant)',
+      'Defendant Information Sheet',
+      'Reply Form',
+      'Financial Statement',
+    ],
+  },
+  {
+    title: 'Guidance',
+    items: ['Court Filing Guide (MCOL / paper)', 'Enforcement Guide'],
+  },
+];
+
 const buildCompletePackDocumentGroups = (variant: CompletePackVariantKey): DocumentGroup[] => {
   const courtForms =
     variant === 'section21'
@@ -146,6 +175,12 @@ const buildCompletePackDocumentGroups = (variant: CompletePackVariantKey): Docum
     },
   ];
 };
+
+const buildMoneyClaimDocumentGroups = (): DocumentGroup[] =>
+  MONEY_CLAIM_GROUPS.map((group) => ({
+    ...group,
+    title: `${group.title} (${group.items.length})`,
+  }));
 
 type PreviewImageProps = {
   src: string;
@@ -225,8 +260,9 @@ const PreviewThumbnail = ({ src, alt, title, width, height, className }: Preview
 export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) => {
   const { product, previews } = props;
   const isNoticeOnly = product === 'notice_only';
-  const initialJurisdiction = product === 'notice_only' ? props.defaultJurisdiction ?? 'england' : 'england';
-  const initialPackVariant = product === 'complete_pack' ? props.defaultVariant ?? 'section21' : 'section21';
+  const isCompletePack = product === 'complete_pack';
+  const initialJurisdiction = isNoticeOnly ? props.defaultJurisdiction ?? 'england' : 'england';
+  const initialPackVariant = isCompletePack ? props.defaultVariant ?? 'section21' : 'section21';
 
   const [selectedJurisdiction, setSelectedJurisdiction] = useState<JurisdictionKey>(initialJurisdiction);
   const defaultNoticeVariantKey = NOTICE_ONLY_CONFIG[initialJurisdiction].noticeVariants[0].key;
@@ -237,12 +273,16 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
       const noticePreviews = previews as NoticeOnlyPreviewData;
       return noticePreviews[initialJurisdiction]?.[defaultNoticeVariantKey]?.[0]?.key ?? 'preview-placeholder';
     }
-    const packPreviews = previews as CompletePackPreviewData;
-    return packPreviews[initialPackVariant]?.[0]?.key ?? 'preview-placeholder';
+    if (isCompletePack) {
+      const packPreviews = previews as CompletePackPreviewData;
+      return packPreviews[initialPackVariant]?.[0]?.key ?? 'preview-placeholder';
+    }
+    const moneyClaimPreviews = previews as MoneyClaimPreviewData;
+    return moneyClaimPreviews[0]?.key ?? 'preview-placeholder';
   });
 
-  const jurisdictionConfig = NOTICE_ONLY_CONFIG[selectedJurisdiction];
-  const noticeVariants = jurisdictionConfig.noticeVariants;
+  const jurisdictionConfig = isNoticeOnly ? NOTICE_ONLY_CONFIG[selectedJurisdiction] : null;
+  const noticeVariants = jurisdictionConfig?.noticeVariants ?? [];
 
   useEffect(() => {
     if (!isNoticeOnly) {
@@ -255,15 +295,19 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
   useEffect(() => {
     const docs = isNoticeOnly
       ? (previews as NoticeOnlyPreviewData)[selectedJurisdiction]?.[selectedNoticeVariant] ?? []
-      : (previews as CompletePackPreviewData)[selectedPackVariant] ?? [];
+      : isCompletePack
+        ? (previews as CompletePackPreviewData)[selectedPackVariant] ?? []
+        : (previews as MoneyClaimPreviewData);
     setSelectedDocKey((previous) =>
       docs.some((doc) => doc.key === previous) ? previous : docs[0]?.key ?? 'preview-placeholder',
     );
-  }, [isNoticeOnly, previews, selectedJurisdiction, selectedNoticeVariant, selectedPackVariant]);
+  }, [isCompletePack, isNoticeOnly, previews, selectedJurisdiction, selectedNoticeVariant, selectedPackVariant]);
 
   const documents = isNoticeOnly
     ? (previews as NoticeOnlyPreviewData)[selectedJurisdiction]?.[selectedNoticeVariant] ?? []
-    : (previews as CompletePackPreviewData)[selectedPackVariant] ?? [];
+    : isCompletePack
+      ? (previews as CompletePackPreviewData)[selectedPackVariant] ?? []
+      : (previews as MoneyClaimPreviewData);
   const activeDoc = documents.find((document) => document.key === selectedDocKey) ?? documents[0];
   const activeIndex = useMemo(() => {
     if (!documents.length) {
@@ -318,22 +362,25 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
   }, [documents, evictionNoticeDocuments, isNoticeOnly]);
 
   const documentGroups = useMemo<DocumentGroup[]>(() => {
-    if (!isNoticeOnly) {
+    if (isNoticeOnly) {
+      return [
+        {
+          title: 'Eviction Notices',
+          items: evictionNoticeDocuments.map((document) => document.title),
+          emptyText: 'Previews coming soon.',
+        },
+        {
+          title: 'Guidance Documents',
+          items: guidanceDocuments.map((document) => document.title),
+          emptyText: 'Previews coming soon.',
+        },
+      ];
+    }
+    if (isCompletePack) {
       return buildCompletePackDocumentGroups(selectedPackVariant);
     }
-    return [
-      {
-        title: 'Eviction Notices',
-        items: evictionNoticeDocuments.map((document) => document.title),
-        emptyText: 'Previews coming soon.',
-      },
-      {
-        title: 'Guidance Documents',
-        items: guidanceDocuments.map((document) => document.title),
-        emptyText: 'Previews coming soon.',
-      },
-    ];
-  }, [evictionNoticeDocuments, guidanceDocuments, isNoticeOnly, selectedPackVariant]);
+    return buildMoneyClaimDocumentGroups();
+  }, [evictionNoticeDocuments, guidanceDocuments, isCompletePack, isNoticeOnly, selectedPackVariant]);
 
   const orderedDocuments = useMemo(() => {
     if (!activeDoc) {
@@ -420,12 +467,18 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-10">
             <h2 className="text-3xl md:text-4xl font-bold text-charcoal">
-              {isNoticeOnly ? 'What\u2019s included in your eviction notice only bundle' : 'What\u2019s included in your complete eviction pack'}
+              {isNoticeOnly
+                ? 'What\u2019s included in your eviction notice only bundle'
+                : isCompletePack
+                  ? 'What\u2019s included in your complete eviction pack'
+                  : 'What\u2019s included in your money claim pack'}
             </h2>
             <p className="mt-3 text-gray-600">
               {isNoticeOnly
                 ? 'Select your jurisdiction, then preview every document in the pack.'
-                : 'England-only pack. Choose Section 8 or Section 21, then preview every document.'}
+                : isCompletePack
+                  ? 'England-only pack. Choose Section 8 or Section 21, then preview every document.'
+                  : 'England-only pack. Preview every document before you buy.'}
             </p>
           </div>
 
@@ -459,49 +512,59 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
           <div
             role="tabpanel"
             id={isNoticeOnly ? `jurisdiction-panel-${selectedJurisdiction}` : 'jurisdiction-panel-england'}
-            aria-label={isNoticeOnly ? `${jurisdictionConfig.label} notice pack details` : 'England complete pack details'}
+            aria-label={
+              isNoticeOnly
+                ? `${jurisdictionConfig?.label ?? 'England'} notice pack details`
+                : isCompletePack
+                  ? 'England complete pack details'
+                  : 'England money claim pack details'
+            }
           >
             <div className="grid md:grid-cols-2 gap-10 items-start">
               <div className="order-2 md:order-1 space-y-6">
-                <div>
-                  <h3 className="text-lg font-semibold text-charcoal mb-3">
-                    {isNoticeOnly ? 'Notice type' : 'Pack type'}
-                  </h3>
-                  <div className="grid gap-3">
-                    {(isNoticeOnly ? noticeVariants : COMPLETE_PACK_VARIANTS).map((variant) => {
-                      const isActive = (isNoticeOnly ? selectedNoticeVariant : selectedPackVariant) === variant.key;
-                      return (
-                        <button
-                          key={variant.key}
-                          type="button"
-                          className={`rounded-2xl border px-4 py-4 text-left transition-all ${
-                            isActive
-                              ? 'border-[#7c3aed]/60 bg-[#f3e8ff] shadow-sm'
-                              : 'border-gray-200 bg-white hover:border-[#7c3aed]/40'
-                          }`}
-                          onClick={() => {
-                            if (isNoticeOnly) {
-                              setSelectedNoticeVariant(variant.key as NoticeVariantKey);
-                            } else {
-                              setSelectedPackVariant(variant.key as CompletePackVariantKey);
-                            }
-                          }}
-                        >
-                          <p className="font-semibold text-charcoal">{variant.label}</p>
-                          <p className="text-sm text-gray-600 mt-1">{variant.description}</p>
-                        </button>
-                      );
-                    })}
+                {isNoticeOnly || isCompletePack ? (
+                  <div>
+                    <h3 className="text-lg font-semibold text-charcoal mb-3">
+                      {isNoticeOnly ? 'Notice type' : 'Pack type'}
+                    </h3>
+                    <div className="grid gap-3">
+                      {(isNoticeOnly ? noticeVariants : COMPLETE_PACK_VARIANTS).map((variant) => {
+                        const isActive = (isNoticeOnly ? selectedNoticeVariant : selectedPackVariant) === variant.key;
+                        return (
+                          <button
+                            key={variant.key}
+                            type="button"
+                            className={`rounded-2xl border px-4 py-4 text-left transition-all ${
+                              isActive
+                                ? 'border-[#7c3aed]/60 bg-[#f3e8ff] shadow-sm'
+                                : 'border-gray-200 bg-white hover:border-[#7c3aed]/40'
+                            }`}
+                            onClick={() => {
+                              if (isNoticeOnly) {
+                                setSelectedNoticeVariant(variant.key as NoticeVariantKey);
+                              } else {
+                                setSelectedPackVariant(variant.key as CompletePackVariantKey);
+                              }
+                            }}
+                          >
+                            <p className="font-semibold text-charcoal">{variant.label}</p>
+                            <p className="text-sm text-gray-600 mt-1">{variant.description}</p>
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
-                </div>
+                ) : null}
 
                 <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <h3 className="text-lg font-semibold text-charcoal">
-                      {isNoticeOnly ? `${jurisdictionConfig.label} — What you receive` : 'England — What you receive'}
+                      {isNoticeOnly
+                        ? `${jurisdictionConfig?.label ?? 'England'} — What you receive`
+                        : 'England — What you receive'}
                     </h3>
                     <span className="inline-flex items-center rounded-full bg-[#f3e8ff] px-3 py-1 text-xs font-semibold text-[#7c3aed]">
-                      {isNoticeOnly ? jurisdictionConfig.legalNote : 'England only'}
+                      {isNoticeOnly ? jurisdictionConfig?.legalNote ?? 'England' : 'England only'}
                     </span>
                   </div>
 
