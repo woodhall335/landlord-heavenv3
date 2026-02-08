@@ -552,6 +552,7 @@ export function loadPrintCss(): string {
  * These partials provide reusable layout components for notices
  */
 let partialsRegistered = false;
+let tenancyPartialsRegistered = false;
 
 export function registerPrintPartials(): void {
   if (partialsRegistered) {
@@ -582,8 +583,32 @@ export function registerPrintPartials(): void {
   }
 }
 
+export function registerTenancyPartials(): void {
+  if (tenancyPartialsRegistered) {
+    return;
+  }
+
+  try {
+    const partialPath = join(
+      process.cwd(),
+      'config',
+      'jurisdictions',
+      'uk',
+      '_partials',
+      'statutory_acknowledgements.hbs'
+    );
+    const partialContent = readFileSync(partialPath, 'utf-8');
+    Handlebars.registerPartial('statutory_acknowledgements', partialContent);
+    tenancyPartialsRegistered = true;
+    console.log('[TEMPLATE SYSTEM] ✅ Registered tenancy partials');
+  } catch (error: any) {
+    console.warn('[TEMPLATE SYSTEM] ⚠️  Could not load tenancy partials:', error.message);
+  }
+}
+
 // Initialize print system on module load
 registerPrintPartials();
+registerTenancyPartials();
 
 // ============================================================================
 // TEMPLATE LOADER
