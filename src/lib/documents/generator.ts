@@ -602,7 +602,11 @@ export function registerTenancyPartials(): void {
     tenancyPartialsRegistered = true;
     console.log('[TEMPLATE SYSTEM] ✅ Registered tenancy partials');
   } catch (error: any) {
-    console.warn('[TEMPLATE SYSTEM] ⚠️  Could not load tenancy partials:', error.message);
+    throw new Error(
+      `[TEMPLATE SYSTEM] ❌ Failed to load tenancy partials (statutory_acknowledgements). ` +
+      `Document generation will fail until this partial is available. ` +
+      `Original error: ${error.message}`
+    );
   }
 }
 
