@@ -26,7 +26,7 @@ const NOTICE_PRICE = SEO_PRICES.evictionNotice.display;
 const MONEY_CLAIM_PRICE = SEO_PRICES.moneyClaim.display;
 const COMPLETE_PACK_PRICE = SEO_PRICES.evictionBundle.display;
 
-const ASK_HEAVEN_CTA_COPY: Record<AskHeavenCtaKey, AskHeavenCtaCopy> = {
+const ASK_HEAVEN_CTA_COPY: Partial<Record<AskHeavenCtaKey, AskHeavenCtaCopy>> = {
   'notice_only:england:eviction': {
     product: 'notice_only',
     title: 'Generate a Section 21 or Section 8 Notice',
