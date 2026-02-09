@@ -23,16 +23,32 @@ export type UniversalHeroProps = {
   headingAs?: 'h1' | 'h2';
   ariaLabel?: string;
   mascotDecorativeOnMobile?: boolean;
+  mascotDecorativeOnDesktop?: boolean;
   id?: string;
 };
 
 const MIN_COUNTER = 200;
 const MAX_COUNTER = 500;
 const DEFAULT_COUNTER = 228;
+const warnedMessages = new Set<string>();
 
 function getTodaysTarget(date = new Date()) {
   const minutesSinceMidnight = date.getHours() * 60 + date.getMinutes();
   return Math.max(MIN_COUNTER, Math.min(MAX_COUNTER, 200 + Math.floor(minutesSinceMidnight / 4)));
+}
+
+function warnOnce(message: string) {
+  if (process.env.NODE_ENV === 'production') {
+    return;
+  }
+
+  if (warnedMessages.has(message)) {
+    return;
+  }
+
+  warnedMessages.add(message);
+  // eslint-disable-next-line no-console
+  console.warn(message);
 }
 
 export function UniversalHero({
@@ -48,6 +64,7 @@ export function UniversalHero({
   headingAs = 'h1',
   ariaLabel = 'Landlord Heaven legal document hero',
   mascotDecorativeOnMobile = true,
+  mascotDecorativeOnDesktop = false,
   id,
 }: UniversalHeroProps) {
   // LOCKED v1: Do not modify this component's layout/visual structure/behavior directly.
@@ -59,30 +76,24 @@ export function UniversalHero({
   const [usedTodayCount, setUsedTodayCount] = useState(DEFAULT_COUNTER);
   const animationFrameRef = useRef<number | null>(null);
   const currentCountRef = useRef(DEFAULT_COUNTER);
-  const HeadingTag = headingAs;
+  const isValidHeading = headingAs === 'h1' || headingAs === 'h2';
+  const HeadingTag = isValidHeading ? headingAs : 'h1';
 
   useEffect(() => {
-    if (process.env.NODE_ENV === 'production') {
-      return;
+    if (!isValidHeading) {
+      warnOnce('UniversalHero: headingAs must be either "h1" or "h2".');
     }
 
-    if (headingAs === 'h1') {
-      const h1Count = document.querySelectorAll('h1').length;
-      if (h1Count > 1) {
-        // eslint-disable-next-line no-console
-        console.warn(
-          'UniversalHero: Multiple <h1> elements detected. Consider using headingAs="h2" when another H1 exists on the page.',
-        );
-      }
+    if (ariaLabel !== undefined && ariaLabel.trim() === '') {
+      warnOnce('UniversalHero: ariaLabel should be non-empty when provided.');
     }
 
-    if (!mascotDecorativeOnMobile && mascotAlt.trim() === '') {
-      // eslint-disable-next-line no-console
-      console.warn(
-        'UniversalHero: mascotAlt should be non-empty when mascotDecorativeOnMobile is false.',
+    if (!mascotDecorativeOnDesktop && mascotAlt.trim() === '') {
+      warnOnce(
+        'UniversalHero: mascotAlt should be non-empty when mascotDecorativeOnDesktop is false.',
       );
     }
-  }, [headingAs, mascotAlt, mascotDecorativeOnMobile]);
+  }, [ariaLabel, isValidHeading, mascotAlt, mascotDecorativeOnDesktop]);
 
   useEffect(() => {
     currentCountRef.current = usedTodayCount;
@@ -260,10 +271,14 @@ export function UniversalHero({
             </div>
           </div>
 
-          <div className="relative z-0 hidden justify-center -ml-10 sm:-ml-2 sm:justify-end lg:ml-0 lg:justify-end min-[900px]:flex">
+          <div
+            className="relative z-0 hidden justify-center -ml-10 sm:-ml-2 sm:justify-end lg:ml-0 lg:justify-end min-[900px]:flex"
+            aria-hidden={mascotDecorativeOnDesktop ? 'true' : undefined}
+          >
             <Image
               src={mascotSrc}
-              alt={mascotAlt}
+              alt={mascotDecorativeOnDesktop ? '' : mascotAlt}
+              aria-hidden={mascotDecorativeOnDesktop ? 'true' : undefined}
               width={620}
               height={620}
               priority

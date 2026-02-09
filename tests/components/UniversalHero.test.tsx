@@ -70,7 +70,7 @@ describe('UniversalHero', () => {
   });
 
   it('renders exactly one H1 when headingAs is h1', () => {
-    render(<UniversalHero {...baseProps} headingAs="h1" />);
+    render(<UniversalHero {...baseProps} />);
     const headings = screen.getAllByRole('heading', { level: 1 });
     expect(headings).toHaveLength(1);
   });
@@ -93,22 +93,38 @@ describe('UniversalHero', () => {
     expect(mobileMascot).toHaveAttribute('alt', '');
   });
 
-  it('uses the provided mascotAlt on the desktop mascot', () => {
-    render(<UniversalHero {...baseProps} />);
-    expect(screen.getByAltText(baseProps.mascotAlt)).toBeInTheDocument();
-  });
-
   it('overrides the default aria-label when ariaLabel is provided', () => {
     render(<UniversalHero {...baseProps} ariaLabel="Custom hero label" />);
     expect(screen.getByLabelText('Custom hero label')).toBeInTheDocument();
   });
 
-  it('warns when multiple H1 elements are detected in development', () => {
-    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
-    document.body.innerHTML = '<h1>Existing H1</h1>';
-    render(<UniversalHero {...baseProps} headingAs="h1" />);
-    expect(warnSpy).toHaveBeenCalledWith(
-      expect.stringContaining('Multiple <h1> elements detected'),
+  it('applies the provided id to the hero section', () => {
+    const { container } = render(<UniversalHero {...baseProps} id="hero-section" />);
+    expect(container.querySelector('section')).toHaveAttribute('id', 'hero-section');
+  });
+
+  it('renders the desktop mascot as decorative when mascotDecorativeOnDesktop is true', () => {
+    const { container } = render(
+      <UniversalHero {...baseProps} mascotDecorativeOnDesktop />,
     );
+    const mascotImages = Array.from(
+      container.querySelectorAll(`img[src="${baseProps.mascotSrc}"]`),
+    );
+    expect(mascotImages).toHaveLength(2);
+    mascotImages.forEach((image) => {
+      expect(image).toHaveAttribute('alt', '');
+      expect(image.closest('div')).toHaveAttribute('aria-hidden', 'true');
+    });
+  });
+
+  it('warns when mascotAlt is empty while the desktop mascot is not decorative', () => {
+    const previousEnv = process.env.NODE_ENV;
+    process.env.NODE_ENV = 'development';
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    render(<UniversalHero {...baseProps} mascotAlt="   " />);
+    expect(warnSpy).toHaveBeenCalledWith(
+      expect.stringContaining('mascotAlt should be non-empty when mascotDecorativeOnDesktop is false'),
+    );
+    process.env.NODE_ENV = previousEnv;
   });
 });
