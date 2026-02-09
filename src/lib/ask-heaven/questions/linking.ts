@@ -15,16 +15,17 @@ import type {
   AskHeavenQuestionListItem,
 } from './types';
 import {
-  isProductAllowedForJurisdiction,
   getAllowedProductsForJurisdiction,
 } from './quality-gates';
+import { getAskHeavenCtaCopy, type AskHeavenCtaIntent } from '@/lib/ask-heaven/cta-copy';
+import type { WizardJurisdiction } from '@/lib/wizard/buildWizardLink';
 
 /**
  * Product/tool link configuration.
  */
 export interface ProductLinkConfig {
   /** Product identifier */
-  product: string;
+  product: 'notice_only' | 'complete_pack' | 'money_claim' | 'tenancy_agreement';
   /** Display name */
   name: string;
   /** URL path (without domain) */
@@ -66,7 +67,6 @@ export const TOPIC_TO_PRODUCTS_MAP: Record<AskHeavenPrimaryTopic, ProductLinkCon
       name: 'Eviction Notice Generator',
       href: 'https://landlordheaven.co.uk/wizard?product=notice_only&src=product_page&topic=eviction',
       description: 'Generate Section 21, Section 8, or jurisdiction-specific notices',
-      price: '£49.99',
       ctaText: 'Create Notice',
     },
     {
@@ -74,26 +74,23 @@ export const TOPIC_TO_PRODUCTS_MAP: Record<AskHeavenPrimaryTopic, ProductLinkCon
       name: 'Complete Eviction Pack',
       href: 'https://landlordheaven.co.uk/products/complete-pack',
       description: 'Full eviction bundle with court forms and guidance',
-      price: '£199.99',
       ctaText: 'Get Full Pack',
     },
   ],
   arrears: [
     {
-      product: 'money_claim',
-      name: 'Money Claim Generator',
-      href: 'https://landlordheaven.co.uk/products/money-claim',
-      description: 'Create court-ready money claim documents for rent arrears',
-      price: '£99.99',
-      ctaText: 'Start Claim',
-    },
-    {
       product: 'notice_only',
       name: 'Section 8 Notice (Rent Arrears)',
       href: 'https://landlordheaven.co.uk/wizard?product=notice_only&src=product_page&topic=eviction',
       description: 'Serve notice for rent arrears under Ground 8, 10, or 11',
-      price: '£49.99',
       ctaText: 'Create Notice',
+    },
+    {
+      product: 'money_claim',
+      name: 'Money Claim Generator',
+      href: 'https://landlordheaven.co.uk/products/money-claim',
+      description: 'Create court-ready money claim documents for rent arrears',
+      ctaText: 'Start Claim',
     },
   ],
   deposit: [
@@ -102,7 +99,6 @@ export const TOPIC_TO_PRODUCTS_MAP: Record<AskHeavenPrimaryTopic, ProductLinkCon
       name: 'Tenancy Agreement',
       href: 'https://landlordheaven.co.uk/products/ast',
       description: 'Compliant tenancy agreements with deposit protection clauses',
-      price: 'From £14.99',
       ctaText: 'Create Agreement',
     },
   ],
@@ -112,7 +108,6 @@ export const TOPIC_TO_PRODUCTS_MAP: Record<AskHeavenPrimaryTopic, ProductLinkCon
       name: 'Tenancy Agreement Generator',
       href: 'https://landlordheaven.co.uk/products/ast',
       description: 'Create AST, PRT, or Occupation Contract for any UK jurisdiction',
-      price: 'From £14.99',
       ctaText: 'Create Agreement',
     },
   ],
@@ -122,7 +117,6 @@ export const TOPIC_TO_PRODUCTS_MAP: Record<AskHeavenPrimaryTopic, ProductLinkCon
       name: 'Compliant Tenancy Agreement',
       href: 'https://landlordheaven.co.uk/products/ast',
       description: 'Agreements with built-in compliance clauses',
-      price: 'From £14.99',
       ctaText: 'Create Agreement',
     },
   ],
@@ -132,7 +126,6 @@ export const TOPIC_TO_PRODUCTS_MAP: Record<AskHeavenPrimaryTopic, ProductLinkCon
       name: 'Property Damage Claim',
       href: 'https://landlordheaven.co.uk/products/money-claim',
       description: 'Claim for property damage, cleaning costs, or unpaid bills',
-      price: '£99.99',
       ctaText: 'Start Claim',
     },
   ],
@@ -142,7 +135,6 @@ export const TOPIC_TO_PRODUCTS_MAP: Record<AskHeavenPrimaryTopic, ProductLinkCon
       name: 'Notice Generator',
       href: 'https://landlordheaven.co.uk/wizard?product=notice_only&src=product_page&topic=eviction',
       description: 'Generate notices with correct notice periods',
-      price: '£49.99',
       ctaText: 'Create Notice',
     },
   ],
@@ -152,7 +144,6 @@ export const TOPIC_TO_PRODUCTS_MAP: Record<AskHeavenPrimaryTopic, ProductLinkCon
       name: 'Court-Ready Pack',
       href: 'https://landlordheaven.co.uk/products/complete-pack',
       description: 'Complete documentation for possession proceedings',
-      price: '£199.99',
       ctaText: 'Get Full Pack',
     },
     {
@@ -160,7 +151,6 @@ export const TOPIC_TO_PRODUCTS_MAP: Record<AskHeavenPrimaryTopic, ProductLinkCon
       name: 'Money Claim Documents',
       href: 'https://landlordheaven.co.uk/products/money-claim',
       description: 'MCOL-ready claim forms and evidence bundles',
-      price: '£99.99',
       ctaText: 'Start Claim',
     },
   ],
@@ -170,7 +160,6 @@ export const TOPIC_TO_PRODUCTS_MAP: Record<AskHeavenPrimaryTopic, ProductLinkCon
       name: 'Fair Tenancy Agreement',
       href: 'https://landlordheaven.co.uk/products/ast',
       description: 'Balanced agreements that protect both parties',
-      price: 'From £14.99',
       ctaText: 'Create Agreement',
     },
   ],
@@ -180,7 +169,6 @@ export const TOPIC_TO_PRODUCTS_MAP: Record<AskHeavenPrimaryTopic, ProductLinkCon
       name: 'Compliant Tenancy Agreement',
       href: 'https://landlordheaven.co.uk/products/ast',
       description: 'Meets all landlord obligations and compliance requirements',
-      price: 'From £14.99',
       ctaText: 'Create Agreement',
     },
   ],
@@ -251,6 +239,21 @@ export const TOPIC_TO_TOOLS_MAP: Record<AskHeavenPrimaryTopic, ToolLinkConfig[]>
   other: [],
 };
 
+const TOOL_JURISDICTION_RESTRICTIONS: Record<AskHeavenJurisdiction, string[]> = {
+  england: [],
+  wales: ['section-21-validator', 'section-8-validator', 'section-21-generator'],
+  scotland: ['section-21-validator', 'section-8-validator', 'section-21-generator'],
+  'northern-ireland': ['section-21-validator', 'section-8-validator', 'section-21-generator'],
+  'uk-wide': [],
+};
+
+function isToolAllowedForJurisdiction(
+  tool: string,
+  jurisdiction: AskHeavenJurisdiction
+): boolean {
+  return !TOOL_JURISDICTION_RESTRICTIONS[jurisdiction]?.includes(tool);
+}
+
 /**
  * Related questions configuration.
  */
@@ -312,13 +315,16 @@ export function getRelatedToolsConfig(
   jurisdiction: AskHeavenJurisdiction
 ): RelatedToolsConfig {
   const allProducts = TOPIC_TO_PRODUCTS_MAP[topic] || [];
-  const tools = TOPIC_TO_TOOLS_MAP[topic] || [];
+  const tools = (TOPIC_TO_TOOLS_MAP[topic] || []).filter((tool) =>
+    isToolAllowedForJurisdiction(tool.tool, jurisdiction)
+  );
 
   // Filter products by jurisdiction
   const allowedProductIds = getAllowedProductsForJurisdiction(jurisdiction);
-  const products = allProducts.filter((p) =>
-    allowedProductIds.includes(p.product)
-  );
+  const products = allProducts
+    .filter((p) => allowedProductIds.includes(p.product))
+    .map((product) => buildJurisdictionAwareProduct(product, topic, jurisdiction))
+    .filter((product): product is ProductLinkConfig => Boolean(product));
 
   // Generate info message for restricted jurisdictions
   let infoMessage: string | null = null;
@@ -356,15 +362,69 @@ export function getRelatedToolsConfig(
  */
 export function buildProductUrl(
   href: string,
-  slug: string
+  slug: string,
+  options?: { jurisdiction?: AskHeavenJurisdiction; includeJurisdiction?: boolean }
 ): string {
   const url = new URL(href, 'https://landlordheaven.co.uk');
   url.searchParams.set('utm_source', 'ask_heaven');
   url.searchParams.set('utm_medium', 'seo');
   url.searchParams.set('utm_campaign', 'pilot');
   url.searchParams.set('utm_content', slug);
+  if (options?.includeJurisdiction && options.jurisdiction && options.jurisdiction !== 'uk-wide') {
+    url.searchParams.set('jurisdiction', options.jurisdiction);
+  }
 
   return url.toString();
+}
+
+function buildJurisdictionAwareProduct(
+  product: ProductLinkConfig,
+  topic: AskHeavenPrimaryTopic,
+  jurisdiction: AskHeavenJurisdiction
+): ProductLinkConfig | null {
+  const resolvedJurisdiction: WizardJurisdiction =
+    jurisdiction === 'uk-wide' ? 'england' : jurisdiction;
+  const intent = mapTopicToIntent(topic);
+  const ctaCopy = getAskHeavenCtaCopy({
+    product: product.product,
+    jurisdiction: resolvedJurisdiction,
+    intent,
+  });
+
+  if (!ctaCopy) {
+    return null;
+  }
+
+  const description = ctaCopy.priceNote
+    ? `${ctaCopy.description} ${ctaCopy.priceNote}.`
+    : ctaCopy.description;
+
+  return {
+    ...product,
+    name: ctaCopy.title,
+    description,
+    price: ctaCopy.displayPrice,
+    ctaText: ctaCopy.buttonText,
+  };
+}
+
+function mapTopicToIntent(topic: AskHeavenPrimaryTopic): AskHeavenCtaIntent {
+  switch (topic) {
+    case 'court_process':
+      return 'court_process';
+    case 'arrears':
+      return 'arrears_notice';
+    case 'damage_claim':
+      return 'arrears_claim';
+    case 'tenancy':
+    case 'deposit':
+    case 'compliance':
+    case 'tenant_rights':
+    case 'landlord_obligations':
+      return 'tenancy';
+    default:
+      return 'eviction';
+  }
 }
 
 /**

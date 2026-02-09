@@ -5,7 +5,10 @@
  * Maps topics to relevant product CTAs based on jurisdiction.
  */
 
+import { SEO_PRICES } from '@/lib/pricing/products';
 import { buildWizardLink, type WizardJurisdiction, type WizardProduct } from '@/lib/wizard/buildWizardLink';
+import type { AskHeavenCtaIntent } from '@/lib/ask-heaven/cta-copy';
+import { getAskHeavenCtaCopy } from '@/lib/ask-heaven/cta-copy';
 
 export type Topic =
   | 'eviction'
@@ -105,7 +108,7 @@ const CTA_CONFIGS: TopicCTAConfig[] = [
   {
     topics: ['eviction'],
     ctas: [
-      { label: 'Notice Only', href: '/products/notice-only', price: 49.99, topic: 'eviction', type: 'wizard' },
+      { label: 'Notice Only', href: '/products/notice-only', price: SEO_PRICES.evictionNotice.amount, topic: 'eviction', type: 'wizard' },
     ],
     excludeJurisdictions: ['northern-ireland'],
   },
@@ -113,7 +116,7 @@ const CTA_CONFIGS: TopicCTAConfig[] = [
   {
     topics: ['eviction'],
     ctas: [
-      { label: 'Complete Pack (England)', href: '/products/complete-pack', price: 199.99, topic: 'eviction', type: 'wizard' },
+      { label: 'Complete Pack (England)', href: '/products/complete-pack', price: SEO_PRICES.evictionBundle.amount, topic: 'eviction', type: 'wizard' },
     ],
     excludeJurisdictions: ['northern-ireland', 'wales', 'scotland'],
   },
@@ -121,7 +124,7 @@ const CTA_CONFIGS: TopicCTAConfig[] = [
   {
     topics: ['arrears', 'damage_claim'],
     ctas: [
-      { label: 'Money Claim Pack (England)', href: '/products/money-claim', price: 99.99, topic: 'arrears', type: 'wizard' },
+      { label: 'Money Claim Pack (England)', href: '/products/money-claim', price: SEO_PRICES.moneyClaim.amount, topic: 'arrears', type: 'wizard' },
     ],
     excludeJurisdictions: ['northern-ireland', 'wales', 'scotland'],
   },
@@ -129,15 +132,15 @@ const CTA_CONFIGS: TopicCTAConfig[] = [
   {
     topics: ['arrears'],
     ctas: [
-      { label: 'Notice Only', href: '/products/notice-only', price: 49.99, topic: 'arrears', type: 'wizard' },
+      { label: 'Notice Only', href: '/products/notice-only', price: SEO_PRICES.evictionNotice.amount, topic: 'arrears', type: 'wizard' },
     ],
     excludeJurisdictions: ['northern-ireland'],
   },
   {
     topics: ['tenancy', 'deposit'],
     ctas: [
-      { label: 'Premium AST', href: '/products/ast?tier=premium', price: 14.99, topic: 'tenancy', type: 'wizard' },
-      { label: 'Standard AST', href: '/products/ast?tier=standard', price: 14.99, topic: 'tenancy', type: 'wizard' },
+      { label: 'Premium AST', href: '/products/ast?tier=premium', price: SEO_PRICES.tenancyPremium.amount, topic: 'tenancy', type: 'wizard' },
+      { label: 'Standard AST', href: '/products/ast?tier=standard', price: SEO_PRICES.tenancyStandard.amount, topic: 'tenancy', type: 'wizard' },
     ],
     // Tenancy agreements are allowed in NI
   },
@@ -255,15 +258,22 @@ export function isComplianceTopic(topic: Topic): boolean {
  */
 export function getRecommendedProduct(
   topic: Topic,
-  jurisdiction?: WizardJurisdiction
+  jurisdiction?: WizardJurisdiction,
+  intent?: AskHeavenCtaIntent
 ): { product: WizardProduct; label: string; description: string } | null {
   // Northern Ireland constraints: only tenancy agreements
   if (jurisdiction === 'northern-ireland') {
     if (topic === 'tenancy' || topic === 'deposit') {
-      return {
+      const copy = getAskHeavenCtaCopy({
         product: 'tenancy_agreement',
-        label: 'Tenancy Agreement',
-        description: 'Create a compliant tenancy agreement for Northern Ireland',
+        jurisdiction,
+        intent: 'tenancy',
+      });
+      if (!copy) return null;
+      return {
+        product: copy.product,
+        label: copy.title,
+        description: copy.description,
       };
     }
     // Don't recommend eviction or money claim products for NI
@@ -276,53 +286,78 @@ export function getRecommendedProduct(
   // complete_pack and money_claim are England-only
   if (jurisdiction === 'wales' || jurisdiction === 'scotland') {
     if (topic === 'arrears') {
-      // Money claim not available - recommend notice_only for arrears-based eviction
-      return {
+      const copy = getAskHeavenCtaCopy({
         product: 'notice_only',
-        label: jurisdiction === 'wales' ? 'Section 173 Notice' : 'Notice to Leave',
-        description: jurisdiction === 'wales'
-          ? 'Generate a Renting Homes Act compliant notice for rent arrears (£49.99)'
-          : 'Create a Notice to Leave for rent arrears under PRT (£49.99)',
+        jurisdiction,
+        intent: 'arrears_notice',
+      });
+      if (!copy) return null;
+      return {
+        product: copy.product,
+        label: copy.title,
+        description: copy.description,
       };
     }
   }
 
   // Standard product recommendations
   switch (topic) {
-    case 'eviction':
+    case 'eviction': {
+      const isCourtIntent = intent === 'court_process' && jurisdiction === 'england';
+      const product: WizardProduct = isCourtIntent ? 'complete_pack' : 'notice_only';
+      const copy = getAskHeavenCtaCopy({
+        product,
+        jurisdiction: jurisdiction ?? 'england',
+        intent: isCourtIntent ? 'court_process' : intent ?? 'eviction',
+      });
+      if (!copy) return null;
       return {
-        product: 'notice_only',
-        label: jurisdiction === 'wales' ? 'Section 173 Notice' : jurisdiction === 'scotland' ? 'Notice to Leave' : 'Eviction Notice',
-        description: jurisdiction === 'wales'
-          ? 'Generate a Renting Homes Act compliant notice (£49.99)'
-          : jurisdiction === 'scotland'
-          ? 'Create a Notice to Leave for PRT tenancies (£49.99)'
-          : 'Create a compliant Section 21 or Section 8 notice (£49.99)',
+        product: copy.product,
+        label: copy.title,
+        description: copy.description,
       };
-    case 'arrears':
-      // Money claim is England-only
+    }
+    case 'arrears': {
+      const shouldUseNotice = intent === 'arrears_notice';
+      const product: WizardProduct = shouldUseNotice ? 'notice_only' : 'money_claim';
+      const copy = getAskHeavenCtaCopy({
+        product,
+        jurisdiction: jurisdiction ?? 'england',
+        intent: shouldUseNotice ? 'arrears_notice' : 'arrears_claim',
+      });
+      if (!copy) return null;
       return {
+        product: copy.product,
+        label: copy.title,
+        description: copy.description,
+      };
+    }
+    case 'damage_claim': {
+      const copy = getAskHeavenCtaCopy({
         product: 'money_claim',
-        label: 'Money Claim Pack',
-        description: 'Recover rent arrears through the courts (£99.99, England only)',
-      };
-    case 'damage_claim':
-      // Money claim for damage/cleaning/utilities - England only
+        jurisdiction: jurisdiction ?? 'england',
+        intent: 'arrears_claim',
+      });
+      if (!copy) return null;
       return {
-        product: 'money_claim',
-        label: 'Money Claim Pack',
-        description: 'Recover property damage, cleaning costs and other tenant debts (£99.99, England only)',
+        product: copy.product,
+        label: copy.title,
+        description: copy.description,
       };
-    case 'tenancy':
+    }
+    case 'tenancy': {
+      const copy = getAskHeavenCtaCopy({
+        product: 'tenancy_agreement',
+        jurisdiction: jurisdiction ?? 'england',
+        intent: 'tenancy',
+      });
+      if (!copy) return null;
       return {
-        product: 'ast_standard',
-        label: jurisdiction === 'scotland' ? 'PRT Agreement' : jurisdiction === 'wales' ? 'Occupation Contract' : 'Tenancy Agreement',
-        description: jurisdiction === 'scotland'
-          ? 'Create a compliant Private Residential Tenancy (£14.99)'
-          : jurisdiction === 'wales'
-          ? 'Generate a Renting Homes Act occupation contract (£14.99)'
-          : 'Create an Assured Shorthold Tenancy agreement (£14.99)',
+        product: copy.product,
+        label: copy.title,
+        description: copy.description,
       };
+    }
     default:
       return null;
   }

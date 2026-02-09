@@ -11,12 +11,13 @@ import type { Jurisdiction } from '@/lib/jurisdiction/types';
 import { EmailCaptureModal } from '@/components/leads/EmailCaptureModal';
 import { RiSendPlaneFill, RiSearchLine, RiBookLine, RiArrowRightLine } from 'react-icons/ri';
 import ReactMarkdown from 'react-markdown';
-import {
-  ASK_HEAVEN_RECOMMENDATION_MAP,
-  type AskHeavenRecommendation,
-  isValidAskHeavenRecommendation,
-} from '@/lib/pricing/products';
+import { isValidAskHeavenRecommendation } from '@/lib/pricing/products';
 import { buildWizardLink, type WizardJurisdiction } from '@/lib/wizard/buildWizardLink';
+import {
+  detectAskHeavenCtaIntent,
+  getDefaultIntentForProduct,
+  getAskHeavenCtaCopy,
+} from '@/lib/ask-heaven/cta-copy';
 import {
   initializeAskHeavenAttribution,
   getAskHeavenAttribution,
@@ -37,7 +38,12 @@ import {
   trackAskHeavenEmailGateShown,
   type AskHeavenTrackingParams,
 } from '@/lib/analytics';
-import { detectTopics, getPrimaryTopic, type Topic } from '@/lib/ask-heaven/topic-detection';
+import {
+  detectTopics,
+  getPrimaryTopic,
+  getRecommendedProduct,
+  type Topic,
+} from '@/lib/ask-heaven/topic-detection';
 import { NextBestActionCard } from '@/components/ask-heaven/NextBestActionCard';
 
 type ChatRole = 'user' | 'assistant';
@@ -867,17 +873,45 @@ export default function AskHeavenPageClient({
                             {m.suggestedProduct && isValidAskHeavenRecommendation(m.suggestedProduct) && (
                               <div className="mt-4">
                                 {(() => {
-                                  const cta = ASK_HEAVEN_RECOMMENDATION_MAP[m.suggestedProduct as AskHeavenRecommendation];
-                                  const wizardUrl = buildWizardLinkWithAttribution(cta.primarySku);
+                                  const topicForIntent = (m.suggestedTopic as Topic) ?? detectedTopic;
+                                  const intent = detectAskHeavenCtaIntent(
+                                    topicForIntent,
+                                    lastQuestion
+                                  ) ?? getDefaultIntentForProduct(m.suggestedProduct as any);
+                                  let cta = intent
+                                    ? getAskHeavenCtaCopy({
+                                        product: m.suggestedProduct as any,
+                                        jurisdiction,
+                                        intent,
+                                      })
+                                    : null;
+                                  if (!cta && topicForIntent && intent) {
+                                    const fallback = getRecommendedProduct(
+                                      topicForIntent,
+                                      jurisdiction as WizardJurisdiction,
+                                      intent
+                                    );
+                                    if (fallback) {
+                                      cta = getAskHeavenCtaCopy({
+                                        product: fallback.product,
+                                        jurisdiction,
+                                        intent,
+                                      });
+                                    }
+                                  }
+                                  if (!cta) {
+                                    return null;
+                                  }
+                                  const wizardUrl = buildWizardLinkWithAttribution(cta.product);
                                   return (
                                     <button
                                       type="button"
-                                      onClick={() => handleCtaClick('wizard', wizardUrl, cta.label, m.suggestedProduct ?? undefined)}
+                                      onClick={() => handleCtaClick('wizard', wizardUrl, cta.title, m.suggestedProduct ?? undefined)}
                                       className="w-full flex items-center justify-between p-4 bg-gradient-to-r from-primary/5 to-primary/10 rounded-xl border border-primary/20 hover:border-primary/40 transition-all group cursor-pointer text-left"
                                     >
                                       <div>
                                         <p className="text-sm font-semibold text-primary group-hover:text-primary-700">
-                                          {cta.label}
+                                          {cta.title}
                                         </p>
                                         <p className="text-xs text-gray-500 mt-0.5">{cta.description}</p>
                                       </div>

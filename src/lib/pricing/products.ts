@@ -138,62 +138,18 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
  * Maps Ask Heaven AI recommendation codes to actual product SKUs
  * The AI uses simplified categories; this maps to our real products
  */
-export const ASK_HEAVEN_RECOMMENDATION_MAP: Record<
-  AskHeavenRecommendation,
-  {
-    primarySku: ProductSku;
-    label: string;
-    description: string;
-    displayPrice: string;
-    priceNote?: string;
-    wizardHref: string;
-  }
-> = {
-  notice_only: {
-    primarySku: 'notice_only',
-    label: 'Generate Eviction Notice',
-    description: 'Create a compliant Section 21, Section 8, or Notice to Leave',
-    displayPrice: SEO_PRICES.evictionNotice.display,
-    wizardHref: '/wizard?product=notice_only',
-  },
-  complete_pack: {
-    primarySku: 'complete_pack',
-    label: 'Get Complete Eviction Pack',
-    description: 'Full bundle with notice, court forms, and guidance',
-    displayPrice: SEO_PRICES.evictionBundle.display,
-    priceNote: 'England only',
-    wizardHref: '/wizard?product=complete_pack',
-  },
-  money_claim: {
-    primarySku: 'money_claim',
-    label: 'Start Money Claim',
-    description: 'Recover unpaid rent, damage, cleaning and other tenant debts',
-    displayPrice: SEO_PRICES.moneyClaim.display,
-    priceNote: 'England only',
-    wizardHref: '/wizard?product=money_claim',
-  },
-  tenancy_agreement: {
-    primarySku: 'ast_standard',
-    label: 'Create Tenancy Agreement',
-    description: 'Generate a compliant AST or PRT',
-    displayPrice: `from ${SEO_PRICES.tenancyStandard.display}`,
-    priceNote: `Standard ${SEO_PRICES.tenancyStandard.display} · Premium ${SEO_PRICES.tenancyPremium.display}`,
-    wizardHref: '/wizard?product=tenancy_agreement',
-  },
-};
+export const ASK_HEAVEN_RECOMMENDATIONS: AskHeavenRecommendation[] = [
+  'notice_only',
+  'complete_pack',
+  'money_claim',
+  'tenancy_agreement',
+];
 
 /**
  * Get product config by SKU
  */
 export function getProduct(sku: ProductSku): ProductConfig {
   return PRODUCTS[sku];
-}
-
-/**
- * Get Ask Heaven CTA config for a recommendation code
- */
-export function getAskHeavenCTA(recommendation: AskHeavenRecommendation) {
-  return ASK_HEAVEN_RECOMMENDATION_MAP[recommendation];
 }
 
 /**
@@ -209,7 +165,7 @@ export function isValidProductSku(value: string): value is ProductSku {
 export function isValidAskHeavenRecommendation(
   value: string
 ): value is AskHeavenRecommendation {
-  return value in ASK_HEAVEN_RECOMMENDATION_MAP;
+  return (ASK_HEAVEN_RECOMMENDATIONS as string[]).includes(value);
 }
 
 /**

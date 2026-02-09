@@ -10,12 +10,11 @@ import {
   RiQuestionLine,
 } from 'react-icons/ri';
 import { buildWizardLink, type WizardJurisdiction } from '@/lib/wizard/buildWizardLink';
+import { type Topic, getRecommendedProduct, isComplianceTopic } from '@/lib/ask-heaven/topic-detection';
 import {
-  type Topic,
-  getRecommendedProduct,
-  isComplianceTopic,
-  getTopicCTAs,
-} from '@/lib/ask-heaven/topic-detection';
+  detectAskHeavenCtaIntent,
+  getAskHeavenCtaCopy,
+} from '@/lib/ask-heaven/cta-copy';
 
 /**
  * CTA Mode types for NextBestActionCard
@@ -376,7 +375,12 @@ export function NextBestActionCard({
 
   // MODE 3: Tenancy/Setup
   if (mode === 'tenancy') {
-    const tenancyCopy = getTenancyCopy(jurisdiction);
+    const tenancyIntentCopy = getAskHeavenCtaCopy({
+      product: 'tenancy_agreement',
+      jurisdiction,
+      intent: 'tenancy',
+    });
+    const tenancyCopy = tenancyIntentCopy ?? getTenancyCopy(jurisdiction);
     const wizardUrl = buildWizardLink({
       product: 'ast_standard',
       jurisdiction,
@@ -397,6 +401,9 @@ export function NextBestActionCard({
             <h4 className="text-sm font-bold text-gray-900">Next best step</h4>
             <p className="text-sm font-semibold text-blue-700 mt-1">{tenancyCopy.title}</p>
             <p className="text-xs text-gray-600 mt-1">{tenancyCopy.description}</p>
+            {tenancyIntentCopy?.priceNote && (
+              <p className="text-[11px] text-gray-500 mt-1">{tenancyIntentCopy.priceNote}</p>
+            )}
             <Link
               href={wizardUrl}
               className="inline-flex items-center gap-2 mt-3 px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
@@ -426,7 +433,8 @@ export function NextBestActionCard({
   }
 
   // MODE 1: Action (Wizard CTA) - Default for eviction/arrears
-  const recommendation = getRecommendedProduct(topic, jurisdiction);
+  const intent = detectAskHeavenCtaIntent(topic, lastQuestion);
+  const recommendation = getRecommendedProduct(topic, jurisdiction, intent ?? undefined);
   if (!recommendation) return null;
 
   const wizardUrl = buildWizardLink({
@@ -439,13 +447,21 @@ export function NextBestActionCard({
     utm_campaign: attribution?.utm_campaign,
   });
 
-  const copy = topic === 'eviction'
+  const defaultCopy = topic === 'eviction'
     ? getEvictionCopy(jurisdiction)
     : {
         title: recommendation.label,
         description: recommendation.description,
         buttonText: 'Start Wizard',
       };
+  const intentCopy = intent
+    ? getAskHeavenCtaCopy({
+        product: recommendation.product,
+        jurisdiction,
+        intent,
+      })
+    : null;
+  const copy = intentCopy ?? defaultCopy;
 
   return (
     <div className="rounded-xl border border-primary/20 bg-gradient-to-br from-primary/5 to-primary/10 p-4 mt-4">

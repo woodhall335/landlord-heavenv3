@@ -284,7 +284,11 @@ export default async function AskHeavenQuestionPage({ params }: PageProps) {
               {/* Sidebar (1 col) */}
               <aside className="space-y-6">
                 {/* Related Tools/Products */}
-                <RelatedTools config={relatedToolsConfig} slug={slug} />
+                <RelatedTools
+                  config={relatedToolsConfig}
+                  slug={slug}
+                  jurisdiction={primaryJurisdiction}
+                />
 
                 {/* Related Questions */}
                 {relatedQuestions.length > 0 && (
