@@ -415,6 +415,7 @@ describe('C) Wales Arrears Schedule Inclusion Tests', () => {
         wales_fault_grounds: ['antisocial_behaviour'],
         arrears_items: undefined,
         total_arrears: 0,
+        asb_description: 'Loud music at night causing disturbance.',
       };
 
       const pack = await generateNoticeOnlyPack(nonArrearsCase);

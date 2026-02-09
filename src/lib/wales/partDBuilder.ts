@@ -24,6 +24,7 @@ import { buildWalesArrearsNarrativeFromSchedule, generateWalesArrearsSummary } f
 import { isWalesSection157ThresholdMet, calculateWalesArrearsInMonths } from './seriousArrearsThreshold';
 import { computeArrears } from '@/lib/arrears-engine';
 import type { ArrearsItem, TenancyFacts } from '@/lib/case-facts/schema';
+import { extractWalesParticularsFromWizardFacts } from './particulars';
 
 // ============================================================================
 // TYPES
@@ -587,6 +588,7 @@ export function buildWalesPartDText(wizardFacts: WalesPartDParams): WalesPartDRe
  * @returns Part D result with generated text and metadata
  */
 export function buildWalesPartDFromWizardFacts(wizardFacts: any): WalesPartDResult {
+  const extractedParticulars = extractWalesParticularsFromWizardFacts(wizardFacts);
   const params: WalesPartDParams = {
     wales_fault_grounds: wizardFacts?.wales_fault_grounds,
     is_community_landlord: wizardFacts?.is_community_landlord ?? false,
@@ -608,10 +610,7 @@ export function buildWalesPartDFromWizardFacts(wizardFacts: any): WalesPartDResu
       wizardFacts?.service_date ??
       wizardFacts?.notice_date ??
       null,
-    breach_description:
-      wizardFacts?.breach_description ??
-      wizardFacts?.breach_details ??
-      null,
+    breach_description: extractedParticulars ?? null,
     // Read Wales-specific ASB keys (wales_asb_*) with fallback to generic keys
     asb_description:
       wizardFacts?.wales_asb_description ??

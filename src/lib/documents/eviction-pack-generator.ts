@@ -49,8 +49,9 @@ import type { ArrearsItem, TenancyFacts } from '@/lib/case-facts/schema';
 import { normalizeSection8Facts } from '@/lib/wizard/normalizeSection8Facts';
 import { SECTION8_GROUND_DEFINITIONS } from '@/lib/grounds/section8-ground-definitions';
 import { mapNoticeOnlyFacts } from '@/lib/case-facts/normalize';
-import { mapWalesFaultGroundsToGroundCodes, hasWalesArrearsGroundSelected } from '@/lib/wales/grounds';
+import { mapWalesFaultGroundsToGroundCodes, hasWalesArrearsGroundSelected, WALES_ARREARS_GROUND_VALUES } from '@/lib/wales/grounds';
 import { buildWalesPartDFromWizardFacts } from '@/lib/wales/partDBuilder';
+import { extractWalesParticularsFromWizardFacts } from '@/lib/wales/particulars';
 import { normalizeRoute, type CanonicalRoute } from '@/lib/wizard/route-normalizer';
 import { generateWalesSection173Notice } from './wales-section173-generator';
 import {
@@ -2629,12 +2630,22 @@ export async function generateNoticeOnlyPack(
         // ========================================================================
         // COURT-GRADE GUARDRAILS: Ensure fault-based route has required data
         // ========================================================================
+        const walesFaultGrounds = Array.isArray(wizardFacts.wales_fault_grounds)
+          ? wizardFacts.wales_fault_grounds
+          : [];
+        const extractedParticulars = extractWalesParticularsFromWizardFacts(wizardFacts);
+        const hasOnlyArrearsGrounds =
+          walesFaultGrounds.length > 0 &&
+          walesFaultGrounds.every((ground: string) => WALES_ARREARS_GROUND_VALUES.includes(ground));
+        const requiresParticulars = walesFaultGrounds.length > 0 && !hasOnlyArrearsGrounds;
+
         const faultBasedGuards = {
           // Must have at least one fault ground selected
-          hasWalesFaultGrounds: Array.isArray(wizardFacts.wales_fault_grounds) &&
-                                 wizardFacts.wales_fault_grounds.length > 0,
-          // Must have breach description or Part D particulars
-          hasParticulars: Boolean(wizardFacts.breach_description || wizardFacts.wales_part_d_particulars),
+          hasWalesFaultGrounds: walesFaultGrounds.length > 0,
+          // Particulars required only for non-arrears grounds
+          hasOnlyArrearsGrounds,
+          requiresParticulars,
+          hasParticulars: Boolean(extractedParticulars),
         };
 
         // Log route guard check
@@ -2646,6 +2657,17 @@ export async function generateNoticeOnlyPack(
             '[generateNoticeOnlyPack] WARNING: fault_based route but no wales_fault_grounds selected. ' +
             'Document may be incomplete.'
           );
+        }
+
+        if (faultBasedGuards.requiresParticulars && !faultBasedGuards.hasParticulars) {
+          const error = new Error(
+            '[generateNoticeOnlyPack] Wales fault-based notice requires particulars for non-arrears grounds.'
+          );
+          console.error('[generateNoticeOnlyPack] Missing required Wales particulars:', {
+            wales_fault_grounds: walesFaultGrounds,
+            requiresParticulars: faultBasedGuards.requiresParticulars,
+          });
+          throw error;
         }
 
         try {
@@ -2667,13 +2689,14 @@ export async function generateNoticeOnlyPack(
             textLength: partDResult.text.length,
           });
 
+          const partDText = partDResult.text ?? '';
           const faultBasedData = {
             ...walesTemplateData,
             // Use the Part D builder output as breach_particulars
             // (The RHW23 template renders this in Part D)
-            breach_particulars: partDResult.text,
+            breach_particulars: partDText,
             // Also provide as rhw23_part_d_text for templates that use this field
-            rhw23_part_d_text: partDResult.text,
+            rhw23_part_d_text: partDText,
             // Include metadata about grounds for template conditionals
             wales_grounds_included: partDResult.groundsIncluded,
           };
