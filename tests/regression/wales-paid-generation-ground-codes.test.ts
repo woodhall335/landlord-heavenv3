@@ -112,6 +112,7 @@ describe('Wales paid generation ground_codes derivation', () => {
       const wizardFacts = {
         ...baseWalesFaultFacts,
         wales_fault_grounds: ['rent_arrears_serious', 'antisocial_behaviour'],
+        asb_description: 'Threatening behaviour towards neighbours.',
         ground_codes: undefined, // Missing - must be derived to section_157, section_161
       };
 

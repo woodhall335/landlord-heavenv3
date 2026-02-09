@@ -629,4 +629,16 @@ describe('buildWalesPartDFromWizardFacts convenience function', () => {
     expect(result.success).toBe(true);
     expect(result.text).toContain('sublet');
   });
+
+  it('should pick Wales-specific particulars and normalize whitespace', () => {
+    const wizardFacts = {
+      wales_fault_grounds: ['breach_of_contract'],
+      wales_breach_particulars: '  Breach line 1 \n  Breach line 2  ',
+    };
+
+    const result = buildWalesPartDFromWizardFacts(wizardFacts);
+
+    expect(result.success).toBe(true);
+    expect(result.text).toContain('Breach line 1\nBreach line 2');
+  });
 });
