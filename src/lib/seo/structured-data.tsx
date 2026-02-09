@@ -73,7 +73,7 @@ export interface Product {
 
 export interface FAQItem {
   question: string;
-  answer: string;
+  answer: string | React.ReactNode;
 }
 
 export interface ArticleSchemaInput {
@@ -282,10 +282,15 @@ export function subscriptionProductSchema(product: Product) {
  * Use this on help pages
  */
 export function faqPageSchema(faqs: FAQItem[]) {
+  const schemaFaqs = faqs.filter(
+    (faq): faq is { question: string; answer: string } =>
+      typeof faq.answer === 'string'
+  );
+
   return {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    "mainEntity": faqs.map(faq => ({
+    "mainEntity": schemaFaqs.map(faq => ({
       "@type": "Question",
       "name": faq.question,
       "acceptedAnswer": {
