@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
+import { StructuredData, breadcrumbSchema, faqPageSchema } from '@/lib/seo/structured-data';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import {
@@ -31,6 +31,8 @@ const wizardLinkCompletePack = buildWizardLink({
   src: 'guide',
   topic: 'eviction',
 });
+
+const faqs = n5bFormFAQs;
 
 export const metadata: Metadata = {
   title: 'N5B Form Guide UK — Accelerated Possession Procedure (2026)',
@@ -69,6 +71,7 @@ export default function N5BFormGuidePage() {
   return (
     <>
       <StructuredData data={pageSchema} />
+      <StructuredData data={faqPageSchema(faqs)} />
       <StructuredData data={breadcrumbSchema([
         { name: 'Home', url: 'https://landlordheaven.co.uk' },
         { name: 'Guides', url: 'https://landlordheaven.co.uk/possession-claim-guide' },
@@ -414,7 +417,7 @@ export default function N5BFormGuidePage() {
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto">
               <FAQSection
-                faqs={n5bFormFAQs}
+                faqs={faqs}
                 title="N5B Form FAQ"
                 showContactCTA={false}
                 variant="white"

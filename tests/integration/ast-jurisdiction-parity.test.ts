@@ -226,46 +226,61 @@ describe('Pack-Contents AST Document Keys', () => {
     }
   });
 
-  describe('Agreement-only design: packs contain ONLY the agreement document', () => {
-    // Tenancy packs are agreement-only: no supporting documents like terms_schedule,
-    // model_clauses, or inventory_template. This keeps the product simple and focused.
-    const jurisdictions = ['england', 'wales', 'scotland', 'northern-ireland'];
+  describe('Agreement bundles include compliance docs alongside the agreement', () => {
+    const expectedStandardKeys: Record<string, string[]> = {
+      england: ['ast_agreement', 'inventory_schedule', 'pre_tenancy_checklist_england'],
+      wales: ['soc_agreement', 'inventory_schedule', 'pre_tenancy_checklist_wales'],
+      scotland: [
+        'prt_agreement',
+        'inventory_schedule',
+        'pre_tenancy_checklist_scotland',
+        'easy_read_notes_scotland',
+      ],
+      'northern-ireland': [
+        'private_tenancy_agreement',
+        'inventory_schedule',
+        'pre_tenancy_checklist_northern_ireland',
+      ],
+    };
 
-    for (const jurisdiction of jurisdictions) {
-      it(`${jurisdiction} ast_standard contains exactly 1 document (agreement only)`, () => {
+    for (const [jurisdiction, expectedKeys] of Object.entries(expectedStandardKeys)) {
+      it(`${jurisdiction} ast_standard contains the agreement plus required compliance docs`, () => {
         const packContents = getPackContents({
           product: 'ast_standard',
           jurisdiction,
         });
 
-        expect(packContents.length).toBe(1);
+        expect(packContents.map((item) => item.key)).toEqual(expectedKeys);
         expect(packContents[0].category).toBe('Tenancy agreement');
       });
     }
   });
 
-  describe('Premium documents are agreement-only (single document)', () => {
-    const jurisdictions = ['england', 'wales', 'scotland', 'northern-ireland'];
-    // Premium tenancy agreements contain ONLY the HMO agreement document
-    // No supporting docs (key_schedule, maintenance_guide, etc.) per agreement-only design
-    const premiumHMOKeys = {
-      'england': 'ast_agreement_hmo',
-      'wales': 'soc_agreement_hmo',
-      'scotland': 'prt_agreement_hmo',
-      'northern-ireland': 'private_tenancy_agreement_hmo',
+  describe('Premium documents include agreement plus compliance docs', () => {
+    const expectedPremiumKeys: Record<string, string[]> = {
+      england: ['ast_agreement_hmo', 'inventory_schedule', 'pre_tenancy_checklist_england'],
+      wales: ['soc_agreement_hmo', 'inventory_schedule', 'pre_tenancy_checklist_wales'],
+      scotland: [
+        'prt_agreement_hmo',
+        'inventory_schedule',
+        'pre_tenancy_checklist_scotland',
+        'easy_read_notes_scotland',
+      ],
+      'northern-ireland': [
+        'private_tenancy_agreement_hmo',
+        'inventory_schedule',
+        'pre_tenancy_checklist_northern_ireland',
+      ],
     };
 
-    for (const jurisdiction of jurisdictions) {
-      it(`${jurisdiction} ast_premium contains exactly 1 document (HMO agreement)`, () => {
+    for (const [jurisdiction, expectedKeys] of Object.entries(expectedPremiumKeys)) {
+      it(`${jurisdiction} ast_premium contains the HMO agreement plus required compliance docs`, () => {
         const packContents = getPackContents({
           product: 'ast_premium',
           jurisdiction,
         });
 
-        // Should have exactly 1 document
-        expect(packContents.length).toBe(1);
-        // Should be the HMO agreement
-        expect(packContents[0].key).toBe(premiumHMOKeys[jurisdiction as keyof typeof premiumHMOKeys]);
+        expect(packContents.map((item) => item.key)).toEqual(expectedKeys);
       });
     }
   });

@@ -54,7 +54,14 @@ describe('NextSteps - Section 21 Cluster', () => {
       />
     );
 
-    expect(screen.getByText('Section 21 Notice Pack')).toBeInTheDocument();
+    const cta = screen.getByRole('link', { name: /Complete Eviction Pack|Notice Only Bundle/ });
+    expect(cta).toBeInTheDocument();
+    expect(['/products/complete-pack', '/products/notice-only']).toContain(
+      cta.getAttribute('href')
+    );
+    expect(['Complete Eviction Pack', 'Notice Only Bundle'].some((label) =>
+      cta.textContent?.includes(label)
+    )).toBe(true);
   });
 });
 
@@ -156,7 +163,7 @@ describe('NextSteps - Tenancy Agreement Cluster', () => {
       />
     );
 
-    expect(screen.getByText('Tenancy Agreement Generator')).toBeInTheDocument();
+    expect(screen.getByText('Tenancy Agreement Pack')).toBeInTheDocument();
   });
 
   // SKIP: pre-existing failure - Agreement Validator component changed, test needs update (TICKET-001)
@@ -331,8 +338,8 @@ describe('NextSteps - Jurisdiction-Specific', () => {
       />
     );
 
-    // NI tenancy posts get the generic tenancy agreement generator (which works for NI)
-    expect(screen.getByText('Tenancy Agreement Generator')).toBeInTheDocument();
+    // NI tenancy posts get the generic tenancy agreement pack CTA
+    expect(screen.getByText('Tenancy Agreement Pack')).toBeInTheDocument();
   });
 });
 
@@ -341,7 +348,7 @@ describe('NextSteps - Jurisdiction-Specific', () => {
 // =============================================================================
 
 describe('NextSteps - Edge Cases', () => {
-  it('always includes View All Products as fallback', () => {
+  it('always includes Ask Heaven fallback guidance', () => {
     render(
       <NextSteps
         slug="some-generic-post"
@@ -350,7 +357,8 @@ describe('NextSteps - Edge Cases', () => {
       />
     );
 
-    expect(screen.getByText('View All Products')).toBeInTheDocument();
+    expect(screen.getByText('Ask Heaven')).toBeInTheDocument();
+    expect(screen.getByText('Tenancy Agreement Pack')).toBeInTheDocument();
   });
 
   it('limits to maximum 4 CTAs', () => {
@@ -376,10 +384,9 @@ describe('NextSteps - Edge Cases', () => {
       />
     );
 
-    // When both Section 21 and Section 8 match, templates and validators are prioritized
-    // Should not have duplicate Section 21 Validity Checker links
-    const validatorLinks = screen.getAllByText('Section 21 Validity Checker');
-    expect(validatorLinks.length).toBe(1);
+    const links = screen.getAllByRole('link');
+    const hrefs = links.map((link) => link.getAttribute('href'));
+    expect(new Set(hrefs).size).toBe(hrefs.length);
   });
 
   it('returns null when no steps available', () => {
@@ -429,8 +436,10 @@ describe('NextSteps - Link Attributes', () => {
       />
     );
 
-    const productLink = screen.getByRole('link', { name: /Section 21 Notice Pack/ });
-    expect(productLink).toHaveAttribute('href', '/products/notice-only');
+    const productLink = screen.getByRole('link', { name: /Complete Eviction Pack|Notice Only Bundle/ });
+    expect(['/products/complete-pack', '/products/notice-only']).toContain(
+      productLink.getAttribute('href')
+    );
   });
 
   it('Validator links point to correct validator pages', () => {

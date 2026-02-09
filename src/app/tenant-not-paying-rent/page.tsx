@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
+import { StructuredData, breadcrumbSchema, faqPageSchema } from '@/lib/seo/structured-data';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import {
@@ -42,6 +42,8 @@ const wizardLinkMoneyClaim = buildWizardLink({
   topic: 'money_claim',
 });
 
+const faqs = tenantNotPayingRentFAQs;
+
 export const metadata: Metadata = {
   title: 'Tenant Not Paying Rent? Your Options Explained (UK 2026)',
   description: 'What to do when your tenant stops paying rent. Rent demand letters, Section 8 eviction, and money claims through court explained.',
@@ -79,6 +81,7 @@ export default function TenantNotPayingRentPage() {
   return (
     <>
       <StructuredData data={pageSchema} />
+      <StructuredData data={faqPageSchema(faqs)} />
       <StructuredData data={breadcrumbSchema([
         { name: 'Home', url: 'https://landlordheaven.co.uk' },
         { name: 'Guides', url: 'https://landlordheaven.co.uk/how-to-evict-tenant' },
@@ -481,7 +484,7 @@ export default function TenantNotPayingRentPage() {
 
         {/* FAQ Section */}
         <FAQSection
-          faqs={tenantNotPayingRentFAQs}
+          faqs={faqs}
           title="Tenant Not Paying Rent: FAQ"
           showContactCTA={false}
           variant="white"

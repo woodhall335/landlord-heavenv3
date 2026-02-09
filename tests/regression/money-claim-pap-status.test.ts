@@ -263,7 +263,7 @@ describe('Filing Guide Template Assertions', () => {
     );
 
     // Should have the plain number format for MCOL entry
-    expect(template).toContain('{{total_claim_amount}}');
+    expect(template).toContain('{{mcol_number total_claim_amount}}');
     // Should have guidance about entering the number
     expect(template).toContain('enter this number');
   });

@@ -1,14 +1,11 @@
 import { describe, expect, it, vi } from 'vitest';
 
-const requireServerAuth = vi.fn(async () => ({ id: 'user-123' }));
-const isAdmin = vi.fn(() => false);
-
 vi.mock('@/lib/supabase/server', () => ({
-  requireServerAuth,
+  requireServerAuth: vi.fn(async () => ({ id: 'user-123' })),
 }));
 
 vi.mock('@/lib/auth', () => ({
-  isAdmin,
+  isAdmin: vi.fn(() => false),
 }));
 
 vi.mock('@/lib/test-artifacts/artifactDownloadStore', () => ({

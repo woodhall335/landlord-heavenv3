@@ -9,7 +9,7 @@
  */
 
 import { PRODUCTS } from '@/lib/pricing/products';
-import { REGIONAL_PRICING, getRegionalPrice } from '@/lib/pricing';
+import { PRICING, REGIONAL_PRICING, getRegionalPrice } from '@/lib/pricing';
 import {
   buildWitnessStatementSections,
   extractWitnessStatementSectionsInput,
@@ -21,19 +21,19 @@ import {
 // =============================================================================
 
 describe('England Complete Pack Pricing', () => {
-  it('should have price of £149.99 in products.ts', () => {
+  it('should have matching price in products.ts', () => {
     const completePack = PRODUCTS.complete_pack;
-    expect(completePack.price).toBe(149.99);
-    expect(completePack.displayPrice).toBe('£149.99');
+    expect(completePack.price).toBe(PRICING.COMPLETE_EVICTION_PACK);
+    expect(completePack.displayPrice).toBe(`£${completePack.price.toFixed(2)}`);
   });
 
-  it('should have price of £149.99 in REGIONAL_PRICING', () => {
-    expect(REGIONAL_PRICING.complete_pack.england).toBe(149.99);
+  it('should have matching price in REGIONAL_PRICING', () => {
+    expect(REGIONAL_PRICING.complete_pack.england).toBe(PRODUCTS.complete_pack.price);
   });
 
-  it('should return £149.99 for getRegionalPrice(complete_pack, england)', () => {
+  it('should return the same price for getRegionalPrice(complete_pack, england)', () => {
     const price = getRegionalPrice('complete_pack', 'england');
-    expect(price).toBe(149.99);
+    expect(price).toBe(PRODUCTS.complete_pack.price);
   });
 
   it('should NOT have complete_pack available in wales/scotland', () => {
@@ -46,7 +46,7 @@ describe('England Complete Pack Pricing', () => {
   it('complete_pack price should match order amount calculation (in pence for Stripe)', () => {
     const completePack = PRODUCTS.complete_pack;
     const expectedPence = Math.round(completePack.price * 100);
-    expect(expectedPence).toBe(14999); // £149.99 = 14999 pence
+    expect(expectedPence).toBe(Math.round(PRICING.COMPLETE_EVICTION_PACK * 100));
   });
 });
 

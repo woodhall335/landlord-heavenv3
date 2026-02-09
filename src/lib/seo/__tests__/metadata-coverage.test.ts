@@ -65,7 +65,7 @@ describe('generateMetadata', () => {
         path: '/test-page',
       });
 
-      expect(metadata.twitter?.title).toBe('Test Title');
+      expect(metadata.twitter?.title).toBe('Test Title | Landlord Heaven');
       expect(metadata.twitter?.description).toBe('Test description for social sharing');
     });
   });
@@ -93,7 +93,7 @@ describe('generateMetadata', () => {
         path: '/test-og',
       });
 
-      expect(metadata.openGraph?.title).toBe('Test OG Title');
+      expect(metadata.openGraph?.title).toBe('Test OG Title | Landlord Heaven');
       expect(metadata.openGraph?.description).toBe('Test OG description');
       expect(metadata.openGraph?.url).toBe('https://landlordheaven.co.uk/test-og');
       expect(metadata.openGraph?.type).toBe('website');
