@@ -107,33 +107,50 @@ export function getPrimaryIntent(
 }
 
 /**
- * Determine if the current blog post is about a topic that
- * should NOT be cannibalized (i.e., is close to a product page)
+ * Determine if the current blog post needs commercial deconflict styling.
  *
- * Returns true if the post should link out rather than compete.
+ * Returns true when the post reads like a template/download intent so we
+ * bias toward informational phrasing and stronger product/pillar linking.
+ * This MUST NOT be used to noindex content.
  */
 export function isCannibalizing(post: BlogPost): boolean {
-  const competingTerms = [
-    // Head terms for core products
-    'section 21 notice',
-    'section 8 notice',
-    'eviction notice uk',
-    'eviction notice england',
-    'tenancy agreement template',
-    'ast template',
-    'assured shorthold tenancy template',
-    'money claim rent',
-    'rent arrears claim',
+  const text = [post.title, post.targetKeyword].filter(Boolean).join(' ').toLowerCase();
+
+  const commercialTriggers = [
+    'template',
+    'download',
+    'pdf',
+    'generator',
+    'form 6a',
+    'form 3',
+    'price',
+    'pricing',
+    'pack',
+    'bundle',
+    'notice only',
+    'complete pack',
+    'mcol',
+    'money claim online',
+    'n5b',
+    'n5b form',
   ];
 
-  const lowerTitle = post.title.toLowerCase();
-  const lowerKeyword = post.targetKeyword.toLowerCase();
+  const headTerms = [
+    'section 21 notice',
+    'section 8 notice',
+    'eviction notice',
+    'tenancy agreement',
+    'assured shorthold tenancy',
+    'ast',
+    'money claim',
+    'rent arrears',
+  ];
 
-  for (const term of competingTerms) {
-    if (lowerTitle.includes(term) || lowerKeyword.includes(term)) {
-      return true;
-    }
-  }
+  const explicitCommercial = ['form 6a', 'form 3', 'n5b', 'n5b form'];
 
-  return false;
+  const hasCommercialTrigger = commercialTriggers.some((term) => text.includes(term));
+  const hasHeadTerm = headTerms.some((term) => text.includes(term));
+  const hasExplicitCommercial = explicitCommercial.some((term) => text.includes(term));
+
+  return hasExplicitCommercial || (hasCommercialTrigger && hasHeadTerm);
 }
