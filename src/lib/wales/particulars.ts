@@ -18,6 +18,17 @@ export const WALES_PARTICULARS_KEYS = [
   'wales.particulars',
 ];
 
+export interface WalesParticularsExtraction {
+  text: string | null;
+  sourceKey: string | null;
+}
+
+const WALES_GENERIC_PARTICULARS_KEYS = new Set([
+  'particulars',
+  'breach_particulars',
+  'fault_particulars',
+]);
+
 function normalizeWhitespace(value: string): string {
   return value
     .replace(/\r\n/g, '\n')
@@ -44,8 +55,15 @@ export function pickFirstNonEmptyString(
   source: Record<string, unknown> | null | undefined,
   keys: string[]
 ): string | null {
+  return pickFirstNonEmptyStringWithKey(source, keys).text;
+}
+
+export function pickFirstNonEmptyStringWithKey(
+  source: Record<string, unknown> | null | undefined,
+  keys: string[]
+): WalesParticularsExtraction {
   if (!source) {
-    return null;
+    return { text: null, sourceKey: null };
   }
 
   for (const key of keys) {
@@ -55,15 +73,38 @@ export function pickFirstNonEmptyString(
     }
     const normalized = normalizeWhitespace(value);
     if (normalized.length > 0) {
-      return normalized;
+      return { text: normalized, sourceKey: key };
     }
   }
 
-  return null;
+  return { text: null, sourceKey: null };
 }
 
 export function extractWalesParticularsFromWizardFacts(
   wizardFacts: Record<string, unknown> | null | undefined
-): string | null {
-  return pickFirstNonEmptyString(wizardFacts, WALES_PARTICULARS_KEYS);
+): WalesParticularsExtraction {
+  const extraction = pickFirstNonEmptyStringWithKey(wizardFacts, WALES_PARTICULARS_KEYS);
+
+  if (
+    process.env.NODE_ENV !== 'production' &&
+    extraction.text &&
+    extraction.sourceKey &&
+    WALES_GENERIC_PARTICULARS_KEYS.has(extraction.sourceKey)
+  ) {
+    const walesFaultGrounds = Array.isArray(wizardFacts?.wales_fault_grounds)
+      ? (wizardFacts?.wales_fault_grounds as string[])
+      : [];
+    const hasSpecificGrounds = walesFaultGrounds.some((ground) =>
+      ground === 'antisocial_behaviour' || ground === 'false_statement'
+    );
+
+    if (hasSpecificGrounds) {
+      console.warn('[wales/particulars] Generic particulars key matched for specific grounds:', {
+        sourceKey: extraction.sourceKey,
+        wales_fault_grounds: walesFaultGrounds,
+      });
+    }
+  }
+
+  return extraction;
 }

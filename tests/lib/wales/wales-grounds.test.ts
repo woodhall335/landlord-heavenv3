@@ -19,6 +19,7 @@ import {
   getWalesFaultGroundsBySection,
   calculateWalesMinNoticePeriod,
   hasWalesArrearsGroundSelected,
+  isWalesArrearsOnlySelection,
   hasWalesSection157Selected,
   WALES_ARREARS_GROUND_VALUES,
   type WalesFaultGroundDef,
@@ -375,6 +376,29 @@ describe('Wales Arrears Ground Detection Helpers', () => {
         .filter((g) => g.requiresArrearsSchedule)
         .map((g) => g.value);
       expect(WALES_ARREARS_GROUND_VALUES).toEqual(expectedValues);
+    });
+  });
+
+  describe('isWalesArrearsOnlySelection()', () => {
+    it('should return true for arrears-only wizard values', () => {
+      expect(isWalesArrearsOnlySelection(['rent_arrears_serious'])).toBe(true);
+      expect(isWalesArrearsOnlySelection(['rent_arrears_other'])).toBe(true);
+    });
+
+    it('should return false for mixed arrears and ASB', () => {
+      expect(isWalesArrearsOnlySelection([
+        'rent_arrears_serious',
+        'antisocial_behaviour',
+      ])).toBe(false);
+    });
+
+    it('should return false for unknown/unsupported values', () => {
+      expect(isWalesArrearsOnlySelection(['unknown_ground'])).toBe(false);
+    });
+
+    it('should handle ground_codes representation for arrears', () => {
+      expect(isWalesArrearsOnlySelection(['section_157'])).toBe(true);
+      expect(isWalesArrearsOnlySelection(['section_159'])).toBe(true);
     });
   });
 
