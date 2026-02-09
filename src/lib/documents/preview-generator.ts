@@ -15,7 +15,7 @@
  */
 
 import { createAdminClient } from '@/lib/supabase/server';
-import { generateDocument } from './generator';
+import { generateDocument } from '@/lib/documents/generator';
 import { getJurisdictionConfig, type TenancyJurisdiction } from './ast-generator';
 import { deriveCanonicalJurisdiction } from '@/lib/types/jurisdiction';
 import crypto from 'crypto';

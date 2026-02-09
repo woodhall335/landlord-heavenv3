@@ -7,7 +7,8 @@
  * Run with: npm test -- tests/integration/wizard-preview-api.test.ts
  */
 
-import { describe, it, expect, vi, beforeAll, afterAll } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { generateDocument } from '@/lib/documents/generator';
 
 // Mock Supabase for integration tests (can be swapped with real client for E2E)
 const mockCase = {
@@ -79,25 +80,7 @@ vi.mock('@/lib/supabase/server', () => ({
 
 // Mock the document generator to return realistic HTML
 vi.mock('@/lib/documents/generator', () => ({
-  generateDocument: vi.fn().mockResolvedValue({
-    html: `
-      <!DOCTYPE html>
-      <html>
-      <head><title>AST Agreement</title></head>
-      <body>
-        <h1>Assured Shorthold Tenancy Agreement</h1>
-        <p>This agreement is made on 1 February 2026</p>
-        <h2>1. Parties</h2>
-        <p>Landlord: Integration Test Landlord</p>
-        <p>Tenant: Integration Test Tenant</p>
-        <h2>2. Property</h2>
-        <p>456 Property Lane, Manchester, M1 1AB</p>
-        <!-- More content would make this multi-page -->
-        ${Array(50).fill('<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>').join('\n')}
-      </body>
-      </html>
-    `,
-  }),
+  generateDocument: vi.fn(),
 }));
 
 vi.mock('@/lib/documents/ast-generator', () => ({
@@ -129,6 +112,28 @@ vi.mock('puppeteer-core', () => ({
     }),
   },
 }));
+
+beforeEach(() => {
+  vi.mocked(generateDocument).mockResolvedValue({
+    html: `
+      <!DOCTYPE html>
+      <html>
+      <head><title>AST Agreement</title></head>
+      <body>
+        <h1>Assured Shorthold Tenancy Agreement</h1>
+        <p>This agreement is made on 1 February 2026</p>
+        <h2>1. Parties</h2>
+        <p>Landlord: Integration Test Landlord</p>
+        <p>Tenant: Integration Test Tenant</p>
+        <h2>2. Property</h2>
+        <p>456 Property Lane, Manchester, M1 1AB</p>
+        <!-- More content would make this multi-page -->
+        ${Array(50).fill('<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>').join('\n')}
+      </body>
+      </html>
+    `,
+  });
+});
 
 describe('Wizard Preview API Integration', () => {
   describe('GET /api/wizard/preview/[caseId]', () => {
