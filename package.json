@@ -11,6 +11,7 @@
     "indexnow": "node scripts/indexnow-submit.mjs",
     "lint": "eslint",
     "test": "vitest run",
+    "test:seo": "vitest tests/seo/single-h1-routes.test.tsx --run",
     "test:pdf": "RUN_PDF_TESTS=true vitest run",
     "test:notice-compliance": "vitest run notice-compliance",
     "law-monitor": "npx tsx scripts/law-monitor-run.ts",
