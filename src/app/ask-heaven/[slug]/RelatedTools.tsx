@@ -12,10 +12,12 @@ import Link from 'next/link';
 import type { RelatedToolsConfig } from '@/lib/ask-heaven/questions/linking';
 import { buildProductUrl } from '@/lib/ask-heaven/questions/linking';
 import { trackAskHeavenPageCtaClick } from '@/lib/analytics';
+import type { AskHeavenJurisdiction } from '@/lib/ask-heaven/questions/types';
 
 interface RelatedToolsProps {
   config: RelatedToolsConfig;
   slug: string;
+  jurisdiction: AskHeavenJurisdiction;
 }
 
 /**
@@ -26,7 +28,7 @@ interface RelatedToolsProps {
  * - Free tool links
  * - Info message for restricted jurisdictions
  */
-export function RelatedTools({ config, slug }: RelatedToolsProps) {
+export function RelatedTools({ config, slug, jurisdiction }: RelatedToolsProps) {
   const { products, tools, showProductCTAs, infoMessage } = config;
 
   // Nothing to show
@@ -50,6 +52,7 @@ export function RelatedTools({ config, slug }: RelatedToolsProps) {
                 product={product}
                 isPrimary={index === 0}
                 slug={slug}
+                jurisdiction={jurisdiction}
               />
             ))}
           </div>
@@ -117,12 +120,17 @@ function ProductCard({
   product,
   isPrimary,
   slug,
+  jurisdiction,
 }: {
   product: RelatedToolsConfig['products'][0];
   isPrimary: boolean;
   slug: string;
+  jurisdiction: AskHeavenJurisdiction;
 }) {
-  const url = buildProductUrl(product.href, slug);
+  const url = buildProductUrl(product.href, slug, {
+    jurisdiction,
+    includeJurisdiction: true,
+  });
 
   return (
     <div
