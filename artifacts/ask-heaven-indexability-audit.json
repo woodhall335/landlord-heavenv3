@@ -1,0 +1,1407 @@
+[
+  {
+    "slug": "how-to-serve-section-21-notice-england",
+    "status": "review",
+    "canonical_slug": null,
+    "jurisdictions": [
+      "england"
+    ],
+    "summaryLength": 108,
+    "wordCount": 1020,
+    "failures": [
+      {
+        "gate": "status",
+        "reason": "Question status is 'review', must be 'approved' for indexing",
+        "severity": "error"
+      }
+    ],
+    "robots": "noindex, follow",
+    "sitemapIncluded": false,
+    "indexabilityStatus": "blocked",
+    "indexabilityLabel": "Status: review",
+    "indexabilityDetails": [
+      "Question must be approved before indexing"
+    ],
+    "primaryBlockReasons": [
+      "status: review"
+    ],
+    "dataSource": "sql-seed"
+  },
+  {
+    "slug": "section-21-validity-checklist-form-6a",
+    "status": "review",
+    "canonical_slug": null,
+    "jurisdictions": [
+      "england"
+    ],
+    "summaryLength": 83,
+    "wordCount": 1019,
+    "failures": [
+      {
+        "gate": "status",
+        "reason": "Question status is 'review', must be 'approved' for indexing",
+        "severity": "error"
+      }
+    ],
+    "robots": "noindex, follow",
+    "sitemapIncluded": false,
+    "indexabilityStatus": "blocked",
+    "indexabilityLabel": "Status: review",
+    "indexabilityDetails": [
+      "Question must be approved before indexing"
+    ],
+    "primaryBlockReasons": [
+      "status: review"
+    ],
+    "dataSource": "sql-seed"
+  },
+  {
+    "slug": "section-21-accelerated-possession-n5b-guide",
+    "status": "review",
+    "canonical_slug": null,
+    "jurisdictions": [
+      "england"
+    ],
+    "summaryLength": 82,
+    "wordCount": 1020,
+    "failures": [
+      {
+        "gate": "status",
+        "reason": "Question status is 'review', must be 'approved' for indexing",
+        "severity": "error"
+      }
+    ],
+    "robots": "noindex, follow",
+    "sitemapIncluded": false,
+    "indexabilityStatus": "blocked",
+    "indexabilityLabel": "Status: review",
+    "indexabilityDetails": [
+      "Question must be approved before indexing"
+    ],
+    "primaryBlockReasons": [
+      "status: review"
+    ],
+    "dataSource": "sql-seed"
+  },
+  {
+    "slug": "when-to-use-section-8-form-3-grounds",
+    "status": "review",
+    "canonical_slug": null,
+    "jurisdictions": [
+      "england"
+    ],
+    "summaryLength": 91,
+    "wordCount": 1023,
+    "failures": [
+      {
+        "gate": "status",
+        "reason": "Question status is 'review', must be 'approved' for indexing",
+        "severity": "error"
+      }
+    ],
+    "robots": "noindex, follow",
+    "sitemapIncluded": false,
+    "indexabilityStatus": "blocked",
+    "indexabilityLabel": "Status: review",
+    "indexabilityDetails": [
+      "Question must be approved before indexing"
+    ],
+    "primaryBlockReasons": [
+      "status: review"
+    ],
+    "dataSource": "sql-seed"
+  },
+  {
+    "slug": "section-8-ground-8-mandatory-arrears",
+    "status": "review",
+    "canonical_slug": null,
+    "jurisdictions": [
+      "england"
+    ],
+    "summaryLength": 78,
+    "wordCount": 1005,
+    "failures": [
+      {
+        "gate": "status",
+        "reason": "Question status is 'review', must be 'approved' for indexing",
+        "severity": "error"
+      }
+    ],
+    "robots": "noindex, follow",
+    "sitemapIncluded": false,
+    "indexabilityStatus": "blocked",
+    "indexabilityLabel": "Status: review",
+    "indexabilityDetails": [
+      "Question must be approved before indexing"
+    ],
+    "primaryBlockReasons": [
+      "status: review"
+    ],
+    "dataSource": "sql-seed"
+  },
+  {
+    "slug": "section-8-ground-10-11-discretionary-arrears",
+    "status": "review",
+    "canonical_slug": null,
+    "jurisdictions": [
+      "england"
+    ],
+    "summaryLength": 71,
+    "wordCount": 1004,
+    "failures": [
+      {
+        "gate": "status",
+        "reason": "Question status is 'review', must be 'approved' for indexing",
+        "severity": "error"
+      }
+    ],
+    "robots": "noindex, follow",
+    "sitemapIncluded": false,
+    "indexabilityStatus": "blocked",
+    "indexabilityLabel": "Status: review",
+    "indexabilityDetails": [
+      "Question must be approved before indexing"
+    ],
+    "primaryBlockReasons": [
+      "status: review"
+    ],
+    "dataSource": "sql-seed"
+  },
+  {
+    "slug": "section-8-notice-periods-england-2025",
+    "status": "review",
+    "canonical_slug": null,
+    "jurisdictions": [
+      "england"
+    ],
+    "summaryLength": 78,
+    "wordCount": 1018,
+    "failures": [
+      {
+        "gate": "status",
+        "reason": "Question status is 'review', must be 'approved' for indexing",
+        "severity": "error"
+      }
+    ],
+    "robots": "noindex, follow",
+    "sitemapIncluded": false,
+    "indexabilityStatus": "blocked",
+    "indexabilityLabel": "Status: review",
+    "indexabilityDetails": [
+      "Question must be approved before indexing"
+    ],
+    "primaryBlockReasons": [
+      "status: review"
+    ],
+    "dataSource": "sql-seed"
+  },
+  {
+    "slug": "section-21-after-fixed-term-periodic",
+    "status": "review",
+    "canonical_slug": null,
+    "jurisdictions": [
+      "england"
+    ],
+    "summaryLength": 71,
+    "wordCount": 1024,
+    "failures": [
+      {
+        "gate": "status",
+        "reason": "Question status is 'review', must be 'approved' for indexing",
+        "severity": "error"
+      }
+    ],
+    "robots": "noindex, follow",
+    "sitemapIncluded": false,
+    "indexabilityStatus": "blocked",
+    "indexabilityLabel": "Status: review",
+    "indexabilityDetails": [
+      "Question must be approved before indexing"
+    ],
+    "primaryBlockReasons": [
+      "status: review"
+    ],
+    "dataSource": "sql-seed"
+  },
+  {
+    "slug": "accelerated-possession-timetable-england",
+    "status": "review",
+    "canonical_slug": null,
+    "jurisdictions": [
+      "england"
+    ],
+    "summaryLength": 80,
+    "wordCount": 1017,
+    "failures": [
+      {
+        "gate": "status",
+        "reason": "Question status is 'review', must be 'approved' for indexing",
+        "severity": "error"
+      }
+    ],
+    "robots": "noindex, follow",
+    "sitemapIncluded": false,
+    "indexabilityStatus": "blocked",
+    "indexabilityLabel": "Status: review",
+    "indexabilityDetails": [
+      "Question must be approved before indexing"
+    ],
+    "primaryBlockReasons": [
+      "status: review"
+    ],
+    "dataSource": "sql-seed"
+  },
+  {
+    "slug": "defended-possession-claim-s8-s21",
+    "status": "review",
+    "canonical_slug": null,
+    "jurisdictions": [
+      "england"
+    ],
+    "summaryLength": 80,
+    "wordCount": 1017,
+    "failures": [
+      {
+        "gate": "status",
+        "reason": "Question status is 'review', must be 'approved' for indexing",
+        "severity": "error"
+      }
+    ],
+    "robots": "noindex, follow",
+    "sitemapIncluded": false,
+    "indexabilityStatus": "blocked",
+    "indexabilityLabel": "Status: review",
+    "indexabilityDetails": [
+      "Question must be approved before indexing"
+    ],
+    "primaryBlockReasons": [
+      "status: review"
+    ],
+    "dataSource": "sql-seed"
+  },
+  {
+    "slug": "court-hearing-prepare-possession-england",
+    "status": "review",
+    "canonical_slug": null,
+    "jurisdictions": [
+      "england"
+    ],
+    "summaryLength": 72,
+    "wordCount": 1019,
+    "failures": [
+      {
+        "gate": "status",
+        "reason": "Question status is 'review', must be 'approved' for indexing",
+        "severity": "error"
+      }
+    ],
+    "robots": "noindex, follow",
+    "sitemapIncluded": false,
+    "indexabilityStatus": "blocked",
+    "indexabilityLabel": "Status: review",
+    "indexabilityDetails": [
+      "Question must be approved before indexing"
+    ],
+    "primaryBlockReasons": [
+      "status: review"
+    ],
+    "dataSource": "sql-seed"
+  },
+  {
+    "slug": "possession-order-what-happens-next",
+    "status": "review",
+    "canonical_slug": null,
+    "jurisdictions": [
+      "england"
+    ],
+    "summaryLength": 75,
+    "wordCount": 1019,
+    "failures": [
+      {
+        "gate": "status",
+        "reason": "Question status is 'review', must be 'approved' for indexing",
+        "severity": "error"
+      }
+    ],
+    "robots": "noindex, follow",
+    "sitemapIncluded": false,
+    "indexabilityStatus": "blocked",
+    "indexabilityLabel": "Status: review",
+    "indexabilityDetails": [
+      "Question must be approved before indexing"
+    ],
+    "primaryBlockReasons": [
+      "status: review"
+    ],
+    "dataSource": "sql-seed"
+  },
+  {
+    "slug": "warrant-of-possession-bailiffs-eviction",
+    "status": "review",
+    "canonical_slug": null,
+    "jurisdictions": [
+      "england"
+    ],
+    "summaryLength": 70,
+    "wordCount": 1018,
+    "failures": [
+      {
+        "gate": "status",
+        "reason": "Question status is 'review', must be 'approved' for indexing",
+        "severity": "error"
+      }
+    ],
+    "robots": "noindex, follow",
+    "sitemapIncluded": false,
+    "indexabilityStatus": "blocked",
+    "indexabilityLabel": "Status: review",
+    "indexabilityDetails": [
+      "Question must be approved before indexing"
+    ],
+    "primaryBlockReasons": [
+      "status: review"
+    ],
+    "dataSource": "sql-seed"
+  },
+  {
+    "slug": "can-i-evict-without-court-england",
+    "status": "review",
+    "canonical_slug": null,
+    "jurisdictions": [
+      "england"
+    ],
+    "summaryLength": 70,
+    "wordCount": 1020,
+    "failures": [
+      {
+        "gate": "status",
+        "reason": "Question status is 'review', must be 'approved' for indexing",
+        "severity": "error"
+      }
+    ],
+    "robots": "noindex, follow",
+    "sitemapIncluded": false,
+    "indexabilityStatus": "blocked",
+    "indexabilityLabel": "Status: review",
+    "indexabilityDetails": [
+      "Question must be approved before indexing"
+    ],
+    "primaryBlockReasons": [
+      "status: review"
+    ],
+    "dataSource": "sql-seed"
+  },
+  {
+    "slug": "section-21-and-deposit-protection-rules",
+    "status": "review",
+    "canonical_slug": null,
+    "jurisdictions": [
+      "england"
+    ],
+    "summaryLength": 80,
+    "wordCount": 1017,
+    "failures": [
+      {
+        "gate": "status",
+        "reason": "Question status is 'review', must be 'approved' for indexing",
+        "severity": "error"
+      }
+    ],
+    "robots": "noindex, follow",
+    "sitemapIncluded": false,
+    "indexabilityStatus": "blocked",
+    "indexabilityLabel": "Status: review",
+    "indexabilityDetails": [
+      "Question must be approved before indexing"
+    ],
+    "primaryBlockReasons": [
+      "status: review"
+    ],
+    "dataSource": "sql-seed"
+  },
+  {
+    "slug": "section-21-gas-safety-epc-how-to-fix",
+    "status": "review",
+    "canonical_slug": null,
+    "jurisdictions": [
+      "england"
+    ],
+    "summaryLength": 70,
+    "wordCount": 1021,
+    "failures": [
+      {
+        "gate": "status",
+        "reason": "Question status is 'review', must be 'approved' for indexing",
+        "severity": "error"
+      }
+    ],
+    "robots": "noindex, follow",
+    "sitemapIncluded": false,
+    "indexabilityStatus": "blocked",
+    "indexabilityLabel": "Status: review",
+    "indexabilityDetails": [
+      "Question must be approved before indexing"
+    ],
+    "primaryBlockReasons": [
+      "status: review"
+    ],
+    "dataSource": "sql-seed"
+  },
+  {
+    "slug": "section-8-grounds-nuisance-anti-social",
+    "status": "review",
+    "canonical_slug": null,
+    "jurisdictions": [
+      "england"
+    ],
+    "summaryLength": 68,
+    "wordCount": 1019,
+    "failures": [
+      {
+        "gate": "status",
+        "reason": "Question status is 'review', must be 'approved' for indexing",
+        "severity": "error"
+      }
+    ],
+    "robots": "noindex, follow",
+    "sitemapIncluded": false,
+    "indexabilityStatus": "blocked",
+    "indexabilityLabel": "Status: review",
+    "indexabilityDetails": [
+      "Question must be approved before indexing"
+    ],
+    "primaryBlockReasons": [
+      "status: review"
+    ],
+    "dataSource": "sql-seed"
+  },
+  {
+    "slug": "notice-seeking-possession-vs-eviction",
+    "status": "review",
+    "canonical_slug": null,
+    "jurisdictions": [
+      "england"
+    ],
+    "summaryLength": 57,
+    "wordCount": 1020,
+    "failures": [
+      {
+        "gate": "status",
+        "reason": "Question status is 'review', must be 'approved' for indexing",
+        "severity": "error"
+      }
+    ],
+    "robots": "noindex, follow",
+    "sitemapIncluded": false,
+    "indexabilityStatus": "blocked",
+    "indexabilityLabel": "Status: review",
+    "indexabilityDetails": [
+      "Question must be approved before indexing"
+    ],
+    "primaryBlockReasons": [
+      "status: review"
+    ],
+    "dataSource": "sql-seed"
+  },
+  {
+    "slug": "accelerated-possession-costs-fees",
+    "status": "review",
+    "canonical_slug": null,
+    "jurisdictions": [
+      "england"
+    ],
+    "summaryLength": 67,
+    "wordCount": 1017,
+    "failures": [
+      {
+        "gate": "status",
+        "reason": "Question status is 'review', must be 'approved' for indexing",
+        "severity": "error"
+      }
+    ],
+    "robots": "noindex, follow",
+    "sitemapIncluded": false,
+    "indexabilityStatus": "blocked",
+    "indexabilityLabel": "Status: review",
+    "indexabilityDetails": [
+      "Question must be approved before indexing"
+    ],
+    "primaryBlockReasons": [
+      "status: review"
+    ],
+    "dataSource": "sql-seed"
+  },
+  {
+    "slug": "section-21-reissue-after-expiry",
+    "status": "review",
+    "canonical_slug": null,
+    "jurisdictions": [
+      "england"
+    ],
+    "summaryLength": 63,
+    "wordCount": 1019,
+    "failures": [
+      {
+        "gate": "status",
+        "reason": "Question status is 'review', must be 'approved' for indexing",
+        "severity": "error"
+      }
+    ],
+    "robots": "noindex, follow",
+    "sitemapIncluded": false,
+    "indexabilityStatus": "blocked",
+    "indexabilityLabel": "Status: review",
+    "indexabilityDetails": [
+      "Question must be approved before indexing"
+    ],
+    "primaryBlockReasons": [
+      "status: review"
+    ],
+    "dataSource": "sql-seed"
+  },
+  {
+    "slug": "rent-arrears-letter-before-action-england",
+    "status": "review",
+    "canonical_slug": null,
+    "jurisdictions": [
+      "england"
+    ],
+    "summaryLength": 78,
+    "wordCount": 1002,
+    "failures": [
+      {
+        "gate": "status",
+        "reason": "Question status is 'review', must be 'approved' for indexing",
+        "severity": "error"
+      }
+    ],
+    "robots": "noindex, follow",
+    "sitemapIncluded": false,
+    "indexabilityStatus": "blocked",
+    "indexabilityLabel": "Status: review",
+    "indexabilityDetails": [
+      "Question must be approved before indexing"
+    ],
+    "primaryBlockReasons": [
+      "status: review"
+    ],
+    "dataSource": "sql-seed"
+  },
+  {
+    "slug": "calculate-rent-arrears-and-interest",
+    "status": "review",
+    "canonical_slug": null,
+    "jurisdictions": [
+      "england"
+    ],
+    "summaryLength": 76,
+    "wordCount": 1001,
+    "failures": [
+      {
+        "gate": "status",
+        "reason": "Question status is 'review', must be 'approved' for indexing",
+        "severity": "error"
+      }
+    ],
+    "robots": "noindex, follow",
+    "sitemapIncluded": false,
+    "indexabilityStatus": "blocked",
+    "indexabilityLabel": "Status: review",
+    "indexabilityDetails": [
+      "Question must be approved before indexing"
+    ],
+    "primaryBlockReasons": [
+      "status: review"
+    ],
+    "dataSource": "sql-seed"
+  },
+  {
+    "slug": "repayment-plan-template-landlord-tenant",
+    "status": "review",
+    "canonical_slug": null,
+    "jurisdictions": [
+      "england"
+    ],
+    "summaryLength": 75,
+    "wordCount": 1002,
+    "failures": [
+      {
+        "gate": "status",
+        "reason": "Question status is 'review', must be 'approved' for indexing",
+        "severity": "error"
+      }
+    ],
+    "robots": "noindex, follow",
+    "sitemapIncluded": false,
+    "indexabilityStatus": "blocked",
+    "indexabilityLabel": "Status: review",
+    "indexabilityDetails": [
+      "Question must be approved before indexing"
+    ],
+    "primaryBlockReasons": [
+      "status: review"
+    ],
+    "dataSource": "sql-seed"
+  },
+  {
+    "slug": "when-to-issue-money-claim-online-rent",
+    "status": "review",
+    "canonical_slug": null,
+    "jurisdictions": [
+      "england"
+    ],
+    "summaryLength": 58,
+    "wordCount": 1004,
+    "failures": [
+      {
+        "gate": "status",
+        "reason": "Question status is 'review', must be 'approved' for indexing",
+        "severity": "error"
+      }
+    ],
+    "robots": "noindex, follow",
+    "sitemapIncluded": false,
+    "indexabilityStatus": "blocked",
+    "indexabilityLabel": "Status: review",
+    "indexabilityDetails": [
+      "Question must be approved before indexing"
+    ],
+    "primaryBlockReasons": [
+      "status: review"
+    ],
+    "dataSource": "sql-seed"
+  },
+  {
+    "slug": "mcol-process-for-rent-arrears-england",
+    "status": "review",
+    "canonical_slug": null,
+    "jurisdictions": [
+      "england"
+    ],
+    "summaryLength": 68,
+    "wordCount": 1002,
+    "failures": [
+      {
+        "gate": "status",
+        "reason": "Question status is 'review', must be 'approved' for indexing",
+        "severity": "error"
+      }
+    ],
+    "robots": "noindex, follow",
+    "sitemapIncluded": false,
+    "indexabilityStatus": "blocked",
+    "indexabilityLabel": "Status: review",
+    "indexabilityDetails": [
+      "Question must be approved before indexing"
+    ],
+    "primaryBlockReasons": [
+      "status: review"
+    ],
+    "dataSource": "sql-seed"
+  },
+  {
+    "slug": "small-claims-for-rent-arrears-evidence",
+    "status": "review",
+    "canonical_slug": null,
+    "jurisdictions": [
+      "england"
+    ],
+    "summaryLength": 68,
+    "wordCount": 1005,
+    "failures": [
+      {
+        "gate": "status",
+        "reason": "Question status is 'review', must be 'approved' for indexing",
+        "severity": "error"
+      }
+    ],
+    "robots": "noindex, follow",
+    "sitemapIncluded": false,
+    "indexabilityStatus": "blocked",
+    "indexabilityLabel": "Status: review",
+    "indexabilityDetails": [
+      "Question must be approved before indexing"
+    ],
+    "primaryBlockReasons": [
+      "status: review"
+    ],
+    "dataSource": "sql-seed"
+  },
+  {
+    "slug": "money-claim-after-tenant-moves-out",
+    "status": "review",
+    "canonical_slug": null,
+    "jurisdictions": [
+      "england"
+    ],
+    "summaryLength": 62,
+    "wordCount": 1003,
+    "failures": [
+      {
+        "gate": "status",
+        "reason": "Question status is 'review', must be 'approved' for indexing",
+        "severity": "error"
+      }
+    ],
+    "robots": "noindex, follow",
+    "sitemapIncluded": false,
+    "indexabilityStatus": "blocked",
+    "indexabilityLabel": "Status: review",
+    "indexabilityDetails": [
+      "Question must be approved before indexing"
+    ],
+    "primaryBlockReasons": [
+      "status: review"
+    ],
+    "dataSource": "sql-seed"
+  },
+  {
+    "slug": "guarantor-liability-for-rent-arrears",
+    "status": "review",
+    "canonical_slug": null,
+    "jurisdictions": [
+      "england"
+    ],
+    "summaryLength": 79,
+    "wordCount": 1000,
+    "failures": [
+      {
+        "gate": "status",
+        "reason": "Question status is 'review', must be 'approved' for indexing",
+        "severity": "error"
+      }
+    ],
+    "robots": "noindex, follow",
+    "sitemapIncluded": false,
+    "indexabilityStatus": "blocked",
+    "indexabilityLabel": "Status: review",
+    "indexabilityDetails": [
+      "Question must be approved before indexing"
+    ],
+    "primaryBlockReasons": [
+      "status: review"
+    ],
+    "dataSource": "sql-seed"
+  },
+  {
+    "slug": "claim-rent-arrears-from-deposit",
+    "status": "review",
+    "canonical_slug": null,
+    "jurisdictions": [
+      "england"
+    ],
+    "summaryLength": 60,
+    "wordCount": 1001,
+    "failures": [
+      {
+        "gate": "status",
+        "reason": "Question status is 'review', must be 'approved' for indexing",
+        "severity": "error"
+      }
+    ],
+    "robots": "noindex, follow",
+    "sitemapIncluded": false,
+    "indexabilityStatus": "blocked",
+    "indexabilityLabel": "Status: review",
+    "indexabilityDetails": [
+      "Question must be approved before indexing"
+    ],
+    "primaryBlockReasons": [
+      "status: review"
+    ],
+    "dataSource": "sql-seed"
+  },
+  {
+    "slug": "rent-arrears-and-section-8-grounds",
+    "status": "review",
+    "canonical_slug": null,
+    "jurisdictions": [
+      "england"
+    ],
+    "summaryLength": 68,
+    "wordCount": 1001,
+    "failures": [
+      {
+        "gate": "status",
+        "reason": "Question status is 'review', must be 'approved' for indexing",
+        "severity": "error"
+      }
+    ],
+    "robots": "noindex, follow",
+    "sitemapIncluded": false,
+    "indexabilityStatus": "blocked",
+    "indexabilityLabel": "Status: review",
+    "indexabilityDetails": [
+      "Question must be approved before indexing"
+    ],
+    "primaryBlockReasons": [
+      "status: review"
+    ],
+    "dataSource": "sql-seed"
+  },
+  {
+    "slug": "ast-vs-periodic-tenancy-england",
+    "status": "review",
+    "canonical_slug": null,
+    "jurisdictions": [
+      "uk-wide"
+    ],
+    "summaryLength": 68,
+    "wordCount": 1002,
+    "failures": [
+      {
+        "gate": "status",
+        "reason": "Question status is 'review', must be 'approved' for indexing",
+        "severity": "error"
+      }
+    ],
+    "robots": "noindex, follow",
+    "sitemapIncluded": false,
+    "indexabilityStatus": "blocked",
+    "indexabilityLabel": "Status: review",
+    "indexabilityDetails": [
+      "Question must be approved before indexing"
+    ],
+    "primaryBlockReasons": [
+      "status: review"
+    ],
+    "dataSource": "sql-seed"
+  },
+  {
+    "slug": "renewing-fixed-term-tenancy-england",
+    "status": "review",
+    "canonical_slug": null,
+    "jurisdictions": [
+      "uk-wide"
+    ],
+    "summaryLength": 69,
+    "wordCount": 1003,
+    "failures": [
+      {
+        "gate": "status",
+        "reason": "Question status is 'review', must be 'approved' for indexing",
+        "severity": "error"
+      }
+    ],
+    "robots": "noindex, follow",
+    "sitemapIncluded": false,
+    "indexabilityStatus": "blocked",
+    "indexabilityLabel": "Status: review",
+    "indexabilityDetails": [
+      "Question must be approved before indexing"
+    ],
+    "primaryBlockReasons": [
+      "status: review"
+    ],
+    "dataSource": "sql-seed"
+  },
+  {
+    "slug": "wales-occupation-contract-vs-tenancy",
+    "status": "review",
+    "canonical_slug": null,
+    "jurisdictions": [
+      "uk-wide"
+    ],
+    "summaryLength": 62,
+    "wordCount": 1003,
+    "failures": [
+      {
+        "gate": "status",
+        "reason": "Question status is 'review', must be 'approved' for indexing",
+        "severity": "error"
+      }
+    ],
+    "robots": "noindex, follow",
+    "sitemapIncluded": false,
+    "indexabilityStatus": "blocked",
+    "indexabilityLabel": "Status: review",
+    "indexabilityDetails": [
+      "Question must be approved before indexing"
+    ],
+    "primaryBlockReasons": [
+      "status: review"
+    ],
+    "dataSource": "sql-seed"
+  },
+  {
+    "slug": "scotland-prt-vs-short-assured",
+    "status": "review",
+    "canonical_slug": null,
+    "jurisdictions": [
+      "uk-wide"
+    ],
+    "summaryLength": 73,
+    "wordCount": 1005,
+    "failures": [
+      {
+        "gate": "status",
+        "reason": "Question status is 'review', must be 'approved' for indexing",
+        "severity": "error"
+      }
+    ],
+    "robots": "noindex, follow",
+    "sitemapIncluded": false,
+    "indexabilityStatus": "blocked",
+    "indexabilityLabel": "Status: review",
+    "indexabilityDetails": [
+      "Question must be approved before indexing"
+    ],
+    "primaryBlockReasons": [
+      "status: review"
+    ],
+    "dataSource": "sql-seed"
+  },
+  {
+    "slug": "joint-tenancy-ending-one-tenant-leaves",
+    "status": "review",
+    "canonical_slug": null,
+    "jurisdictions": [
+      "uk-wide"
+    ],
+    "summaryLength": 67,
+    "wordCount": 1002,
+    "failures": [
+      {
+        "gate": "status",
+        "reason": "Question status is 'review', must be 'approved' for indexing",
+        "severity": "error"
+      }
+    ],
+    "robots": "noindex, follow",
+    "sitemapIncluded": false,
+    "indexabilityStatus": "blocked",
+    "indexabilityLabel": "Status: review",
+    "indexabilityDetails": [
+      "Question must be approved before indexing"
+    ],
+    "primaryBlockReasons": [
+      "status: review"
+    ],
+    "dataSource": "sql-seed"
+  },
+  {
+    "slug": "adding-tenant-to-existing-agreement",
+    "status": "review",
+    "canonical_slug": null,
+    "jurisdictions": [
+      "uk-wide"
+    ],
+    "summaryLength": 66,
+    "wordCount": 1001,
+    "failures": [
+      {
+        "gate": "status",
+        "reason": "Question status is 'review', must be 'approved' for indexing",
+        "severity": "error"
+      }
+    ],
+    "robots": "noindex, follow",
+    "sitemapIncluded": false,
+    "indexabilityStatus": "blocked",
+    "indexabilityLabel": "Status: review",
+    "indexabilityDetails": [
+      "Question must be approved before indexing"
+    ],
+    "primaryBlockReasons": [
+      "status: review"
+    ],
+    "dataSource": "sql-seed"
+  },
+  {
+    "slug": "rent-increase-clause-best-practice-uk",
+    "status": "review",
+    "canonical_slug": null,
+    "jurisdictions": [
+      "uk-wide"
+    ],
+    "summaryLength": 73,
+    "wordCount": 1002,
+    "failures": [
+      {
+        "gate": "status",
+        "reason": "Question status is 'review', must be 'approved' for indexing",
+        "severity": "error"
+      }
+    ],
+    "robots": "noindex, follow",
+    "sitemapIncluded": false,
+    "indexabilityStatus": "blocked",
+    "indexabilityLabel": "Status: review",
+    "indexabilityDetails": [
+      "Question must be approved before indexing"
+    ],
+    "primaryBlockReasons": [
+      "status: review"
+    ],
+    "dataSource": "sql-seed"
+  },
+  {
+    "slug": "tenancy-agreement-checklist-uk-landlord",
+    "status": "review",
+    "canonical_slug": null,
+    "jurisdictions": [
+      "uk-wide"
+    ],
+    "summaryLength": 76,
+    "wordCount": 1001,
+    "failures": [
+      {
+        "gate": "status",
+        "reason": "Question status is 'review', must be 'approved' for indexing",
+        "severity": "error"
+      }
+    ],
+    "robots": "noindex, follow",
+    "sitemapIncluded": false,
+    "indexabilityStatus": "blocked",
+    "indexabilityLabel": "Status: review",
+    "indexabilityDetails": [
+      "Question must be approved before indexing"
+    ],
+    "primaryBlockReasons": [
+      "status: review"
+    ],
+    "dataSource": "sql-seed"
+  },
+  {
+    "slug": "section-173-notice-wales-when-to-use",
+    "status": "review",
+    "canonical_slug": null,
+    "jurisdictions": [
+      "wales"
+    ],
+    "summaryLength": 59,
+    "wordCount": 975,
+    "failures": [
+      {
+        "gate": "status",
+        "reason": "Question status is 'review', must be 'approved' for indexing",
+        "severity": "error"
+      }
+    ],
+    "robots": "noindex, follow",
+    "sitemapIncluded": false,
+    "indexabilityStatus": "blocked",
+    "indexabilityLabel": "Status: review",
+    "indexabilityDetails": [
+      "Question must be approved before indexing"
+    ],
+    "primaryBlockReasons": [
+      "status: review"
+    ],
+    "dataSource": "sql-seed"
+  },
+  {
+    "slug": "wales-occupation-contract-notice-periods",
+    "status": "review",
+    "canonical_slug": null,
+    "jurisdictions": [
+      "wales"
+    ],
+    "summaryLength": 70,
+    "wordCount": 973,
+    "failures": [
+      {
+        "gate": "status",
+        "reason": "Question status is 'review', must be 'approved' for indexing",
+        "severity": "error"
+      }
+    ],
+    "robots": "noindex, follow",
+    "sitemapIncluded": false,
+    "indexabilityStatus": "blocked",
+    "indexabilityLabel": "Status: review",
+    "indexabilityDetails": [
+      "Question must be approved before indexing"
+    ],
+    "primaryBlockReasons": [
+      "status: review"
+    ],
+    "dataSource": "sql-seed"
+  },
+  {
+    "slug": "wales-retaliatory-eviction-protection",
+    "status": "review",
+    "canonical_slug": null,
+    "jurisdictions": [
+      "wales"
+    ],
+    "summaryLength": 69,
+    "wordCount": 973,
+    "failures": [
+      {
+        "gate": "status",
+        "reason": "Question status is 'review', must be 'approved' for indexing",
+        "severity": "error"
+      }
+    ],
+    "robots": "noindex, follow",
+    "sitemapIncluded": false,
+    "indexabilityStatus": "blocked",
+    "indexabilityLabel": "Status: review",
+    "indexabilityDetails": [
+      "Question must be approved before indexing"
+    ],
+    "primaryBlockReasons": [
+      "status: review"
+    ],
+    "dataSource": "sql-seed"
+  },
+  {
+    "slug": "wales-occupation-contract-written-statement",
+    "status": "review",
+    "canonical_slug": null,
+    "jurisdictions": [
+      "wales"
+    ],
+    "summaryLength": 71,
+    "wordCount": 975,
+    "failures": [
+      {
+        "gate": "status",
+        "reason": "Question status is 'review', must be 'approved' for indexing",
+        "severity": "error"
+      }
+    ],
+    "robots": "noindex, follow",
+    "sitemapIncluded": false,
+    "indexabilityStatus": "blocked",
+    "indexabilityLabel": "Status: review",
+    "indexabilityDetails": [
+      "Question must be approved before indexing"
+    ],
+    "primaryBlockReasons": [
+      "status: review"
+    ],
+    "dataSource": "sql-seed"
+  },
+  {
+    "slug": "section-173-validity-checklist-wales",
+    "status": "review",
+    "canonical_slug": null,
+    "jurisdictions": [
+      "wales"
+    ],
+    "summaryLength": 67,
+    "wordCount": 974,
+    "failures": [
+      {
+        "gate": "status",
+        "reason": "Question status is 'review', must be 'approved' for indexing",
+        "severity": "error"
+      }
+    ],
+    "robots": "noindex, follow",
+    "sitemapIncluded": false,
+    "indexabilityStatus": "blocked",
+    "indexabilityLabel": "Status: review",
+    "indexabilityDetails": [
+      "Question must be approved before indexing"
+    ],
+    "primaryBlockReasons": [
+      "status: review"
+    ],
+    "dataSource": "sql-seed"
+  },
+  {
+    "slug": "wales-possession-court-process-section-173",
+    "status": "review",
+    "canonical_slug": null,
+    "jurisdictions": [
+      "wales"
+    ],
+    "summaryLength": 70,
+    "wordCount": 974,
+    "failures": [
+      {
+        "gate": "status",
+        "reason": "Question status is 'review', must be 'approved' for indexing",
+        "severity": "error"
+      }
+    ],
+    "robots": "noindex, follow",
+    "sitemapIncluded": false,
+    "indexabilityStatus": "blocked",
+    "indexabilityLabel": "Status: review",
+    "indexabilityDetails": [
+      "Question must be approved before indexing"
+    ],
+    "primaryBlockReasons": [
+      "status: review"
+    ],
+    "dataSource": "sql-seed"
+  },
+  {
+    "slug": "notice-to-leave-scotland-grounds",
+    "status": "review",
+    "canonical_slug": null,
+    "jurisdictions": [
+      "scotland"
+    ],
+    "summaryLength": 54,
+    "wordCount": 979,
+    "failures": [
+      {
+        "gate": "status",
+        "reason": "Question status is 'review', must be 'approved' for indexing",
+        "severity": "error"
+      }
+    ],
+    "robots": "noindex, follow",
+    "sitemapIncluded": false,
+    "indexabilityStatus": "blocked",
+    "indexabilityLabel": "Status: review",
+    "indexabilityDetails": [
+      "Question must be approved before indexing"
+    ],
+    "primaryBlockReasons": [
+      "status: review"
+    ],
+    "dataSource": "sql-seed"
+  },
+  {
+    "slug": "scotland-prt-notice-periods-2025",
+    "status": "review",
+    "canonical_slug": null,
+    "jurisdictions": [
+      "scotland"
+    ],
+    "summaryLength": 62,
+    "wordCount": 974,
+    "failures": [
+      {
+        "gate": "status",
+        "reason": "Question status is 'review', must be 'approved' for indexing",
+        "severity": "error"
+      }
+    ],
+    "robots": "noindex, follow",
+    "sitemapIncluded": false,
+    "indexabilityStatus": "blocked",
+    "indexabilityLabel": "Status: review",
+    "indexabilityDetails": [
+      "Question must be approved before indexing"
+    ],
+    "primaryBlockReasons": [
+      "status: review"
+    ],
+    "dataSource": "sql-seed"
+  },
+  {
+    "slug": "scotland-eviction-court-process-tribunal",
+    "status": "review",
+    "canonical_slug": null,
+    "jurisdictions": [
+      "scotland"
+    ],
+    "summaryLength": 65,
+    "wordCount": 976,
+    "failures": [
+      {
+        "gate": "status",
+        "reason": "Question status is 'review', must be 'approved' for indexing",
+        "severity": "error"
+      }
+    ],
+    "robots": "noindex, follow",
+    "sitemapIncluded": false,
+    "indexabilityStatus": "blocked",
+    "indexabilityLabel": "Status: review",
+    "indexabilityDetails": [
+      "Question must be approved before indexing"
+    ],
+    "primaryBlockReasons": [
+      "status: review"
+    ],
+    "dataSource": "sql-seed"
+  },
+  {
+    "slug": "scotland-rent-arrears-prt-steps",
+    "status": "review",
+    "canonical_slug": null,
+    "jurisdictions": [
+      "scotland"
+    ],
+    "summaryLength": 46,
+    "wordCount": 977,
+    "failures": [
+      {
+        "gate": "status",
+        "reason": "Question status is 'review', must be 'approved' for indexing",
+        "severity": "error"
+      },
+      {
+        "gate": "summary",
+        "reason": "Summary is missing or too short (minimum 50 characters)",
+        "severity": "error"
+      }
+    ],
+    "robots": "noindex, follow",
+    "sitemapIncluded": false,
+    "indexabilityStatus": "blocked",
+    "indexabilityLabel": "Status: review",
+    "indexabilityDetails": [
+      "Question must be approved before indexing"
+    ],
+    "primaryBlockReasons": [
+      "status: review"
+    ],
+    "dataSource": "sql-seed"
+  },
+  {
+    "slug": "scotland-serving-notice-to-leave",
+    "status": "review",
+    "canonical_slug": null,
+    "jurisdictions": [
+      "scotland"
+    ],
+    "summaryLength": 56,
+    "wordCount": 977,
+    "failures": [
+      {
+        "gate": "status",
+        "reason": "Question status is 'review', must be 'approved' for indexing",
+        "severity": "error"
+      }
+    ],
+    "robots": "noindex, follow",
+    "sitemapIncluded": false,
+    "indexabilityStatus": "blocked",
+    "indexabilityLabel": "Status: review",
+    "indexabilityDetails": [
+      "Question must be approved before indexing"
+    ],
+    "primaryBlockReasons": [
+      "status: review"
+    ],
+    "dataSource": "sql-seed"
+  },
+  {
+    "slug": "scotland-tenant-abandonment-prt",
+    "status": "review",
+    "canonical_slug": null,
+    "jurisdictions": [
+      "scotland"
+    ],
+    "summaryLength": 59,
+    "wordCount": 979,
+    "failures": [
+      {
+        "gate": "status",
+        "reason": "Question status is 'review', must be 'approved' for indexing",
+        "severity": "error"
+      }
+    ],
+    "robots": "noindex, follow",
+    "sitemapIncluded": false,
+    "indexabilityStatus": "blocked",
+    "indexabilityLabel": "Status: review",
+    "indexabilityDetails": [
+      "Question must be approved before indexing"
+    ],
+    "primaryBlockReasons": [
+      "status: review"
+    ],
+    "dataSource": "sql-seed"
+  }
+]
