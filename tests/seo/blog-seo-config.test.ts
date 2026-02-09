@@ -41,6 +41,20 @@ describe('getBlogSeoConfig', () => {
     expect(seoConfig.isIndexable).toBe(false);
   });
 
+  it('keeps form wording when deconflicting commercial titles', () => {
+    const seoConfig = getBlogSeoConfig(
+      {
+        ...basePost,
+        slug: 'section-21-form-6a-template',
+        title: 'Section 21 Form 6A template',
+        targetKeyword: 'section 21 notice form 6a',
+      },
+      'england'
+    );
+
+    expect(seoConfig.metaTitle).toContain('Form 6A');
+  });
+
   it('avoids Wales money-claim labeling or links for money claim keywords', () => {
     const seoConfig = getBlogSeoConfig(
       {

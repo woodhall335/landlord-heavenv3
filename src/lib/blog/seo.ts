@@ -52,13 +52,6 @@ const stripYearsAndPrices = (value: string) =>
       .replace(EXTRA_SEPARATORS, '')
   );
 
-const ensureActionKeyword = (value: string) => {
-  if (/(guide|explained|steps|checklist|overview|process)/i.test(value)) {
-    return value;
-  }
-  return `${value} Guide`;
-};
-
 const ensureInformationalTitle = (value: string) => {
   if (/(guide|explained|steps|checklist|overview|process)/i.test(value)) {
     return value;
@@ -68,7 +61,7 @@ const ensureInformationalTitle = (value: string) => {
 
 const removeCommercialTitleWords = (value: string) =>
   normalizeWhitespace(
-    value.replace(/\b(template|download|pdf|generator|form|pack|bundle)\b/gi, '').trim()
+    value.replace(/\b(template|download|pdf|generator|pack|bundle)\b/gi, '').trim()
   );
 
 const ensureJurisdiction = (value: string, jurisdictionLabel: string) => {
@@ -97,7 +90,7 @@ const normalizeMetaDescription = (value: string, jurisdictionLabel: string) => {
   let description = stripYearsAndPrices(value);
   if (description.length < 140) {
     description = normalizeWhitespace(
-      `${description} Get the ${jurisdictionLabel} steps and choose the right landlord pack.`
+      `${description} Get the ${jurisdictionLabel} steps and choose the right next step.`
     );
   }
   if (description.length > 160) {
@@ -109,7 +102,7 @@ const normalizeMetaDescription = (value: string, jurisdictionLabel: string) => {
 const buildPillarLink = (intent: string, jurisdictionLabel: string) => {
   if (intent === 'money_claim') {
     return {
-      href: '/money-claim-unpaid-rent',
+      href: '/money-claim-online-mcol',
       label: 'Money claim guide (England only)',
     };
   }
@@ -263,7 +256,7 @@ export const getBlogSeoConfig = (post: BlogPost, region: BlogRegion | null): Blo
   const supportingLinks = buildSupportingLinks(primaryIntent, jurisdictionLabel);
 
   const sanitizedTitle = stripYearsAndPrices(post.title);
-  const baseTitle = ensureActionKeyword(sanitizedTitle);
+  const baseTitle = ensureInformationalTitle(sanitizedTitle);
   const withJurisdiction = ensureJurisdiction(baseTitle, jurisdictionLabel);
 
   // Only allow explicit noindex flags from blog metadata.
