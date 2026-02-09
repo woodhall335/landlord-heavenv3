@@ -721,6 +721,76 @@ describe('F) Part D Builder Integration Tests', () => {
 });
 
 // ============================================================================
+// WALES FAULT-BASED PARTICULARS GUARD TESTS
+// ============================================================================
+
+describe('Wales fault-based particulars guard', () => {
+  const baseFaultBasedFacts = {
+    __meta: {
+      case_id: 'test-wales-fault-based-guard',
+      jurisdiction: 'wales',
+    },
+    jurisdiction: 'wales',
+    selected_notice_route: 'wales_fault_based',
+    landlord_full_name: 'John Smith',
+    landlord_address: '123 Main St, Cardiff, CF10 1AA',
+    landlord_email: 'john@example.com',
+    tenant_full_name: 'Jane Doe',
+    contract_holder_full_name: 'Jane Doe',
+    property_address: '456 Rental Ave, Cardiff, CF10 2BB',
+    tenancy_start_date: '2023-01-01',
+    contract_start_date: '2023-01-01',
+    rent_amount: 1000,
+    rent_frequency: 'monthly',
+    service_date: '2024-04-01',
+    notice_date: '2024-04-01',
+    notice_service_date: '2024-04-01',
+    wales_contract_category: 'standard',
+    rent_smart_wales_registered: true,
+    deposit_protected: true,
+  };
+
+  it('arrears-only fault-based does not require particulars and renders Part D', async () => {
+    const wizardFacts = {
+      ...baseFaultBasedFacts,
+      wales_fault_grounds: ['rent_arrears_serious'],
+      arrears_items: [
+        { period_start: '2024-01-01', amount_due: 1000, amount_paid: 0 },
+        { period_start: '2024-02-01', amount_due: 1000, amount_paid: 0 },
+      ],
+      total_arrears: 2000,
+    };
+
+    const pack = await generateNoticeOnlyPack(wizardFacts);
+    const noticeDoc = pack.documents.find((d) => d.category === 'notice');
+
+    expect(noticeDoc?.html).toContain('section 157');
+  });
+
+  it('non-arrears grounds require particulars and fail when missing', async () => {
+    const wizardFacts = {
+      ...baseFaultBasedFacts,
+      wales_fault_grounds: ['antisocial_behaviour'],
+    };
+
+    await expect(generateNoticeOnlyPack(wizardFacts)).rejects.toThrow(
+      'Wales fault-based notice requires particulars for non-arrears grounds.'
+    );
+  });
+
+  it('mixed arrears and non-arrears grounds require particulars', async () => {
+    const wizardFacts = {
+      ...baseFaultBasedFacts,
+      wales_fault_grounds: ['rent_arrears_serious', 'antisocial_behaviour'],
+    };
+
+    await expect(generateNoticeOnlyPack(wizardFacts)).rejects.toThrow(
+      'Wales fault-based notice requires particulars for non-arrears grounds.'
+    );
+  });
+});
+
+// ============================================================================
 // HASWALESSECTION157SELECTED TESTS
 // ============================================================================
 

@@ -49,7 +49,7 @@ import type { ArrearsItem, TenancyFacts } from '@/lib/case-facts/schema';
 import { normalizeSection8Facts } from '@/lib/wizard/normalizeSection8Facts';
 import { SECTION8_GROUND_DEFINITIONS } from '@/lib/grounds/section8-ground-definitions';
 import { mapNoticeOnlyFacts } from '@/lib/case-facts/normalize';
-import { mapWalesFaultGroundsToGroundCodes, hasWalesArrearsGroundSelected, WALES_ARREARS_GROUND_VALUES } from '@/lib/wales/grounds';
+import { mapWalesFaultGroundsToGroundCodes, hasWalesArrearsGroundSelected, isWalesArrearsOnlySelection } from '@/lib/wales/grounds';
 import { buildWalesPartDFromWizardFacts } from '@/lib/wales/partDBuilder';
 import { extractWalesParticularsFromWizardFacts } from '@/lib/wales/particulars';
 import { normalizeRoute, type CanonicalRoute } from '@/lib/wizard/route-normalizer';
@@ -1472,6 +1472,10 @@ export async function generateCompleteEvictionPack(
   // ==========================================================================
   if (jurisdiction === 'wales') {
     const walesFaultGrounds = wizardFacts?.wales_fault_grounds;
+    const noticeRouteForDerivation = wizardFacts?.selected_notice_route ||
+                                      wizardFacts?.eviction_route ||
+                                      wizardFacts?.recommended_route || '';
+    const normalizedWalesRoute = normalizeRoute(noticeRouteForDerivation);
     const hasWalesFaultGrounds = Array.isArray(walesFaultGrounds) && walesFaultGrounds.length > 0;
     const missingGroundCodes = !wizardFacts?.ground_codes ||
                                 (Array.isArray(wizardFacts.ground_codes) && wizardFacts.ground_codes.length === 0);
@@ -1485,6 +1489,23 @@ export async function generateCompleteEvictionPack(
       });
 
       wizardFacts.ground_codes = derivedGroundCodes;
+    }
+
+    if (normalizedWalesRoute === 'fault_based') {
+      const extractedParticulars = extractWalesParticularsFromWizardFacts(wizardFacts);
+      const hasOnlyArrearsGrounds = isWalesArrearsOnlySelection(walesFaultGrounds);
+      const requiresParticulars = hasWalesFaultGrounds && !hasOnlyArrearsGrounds;
+
+      if (requiresParticulars && !extractedParticulars.text) {
+        const error = new Error(
+          '[generateCompleteEvictionPack] Wales fault-based notice requires particulars for non-arrears grounds.'
+        );
+        console.error('[generateCompleteEvictionPack] Missing required Wales particulars:', {
+          wales_fault_grounds: walesFaultGrounds,
+          requiresParticulars,
+        });
+        throw error;
+      }
     }
   }
 
@@ -2634,9 +2655,7 @@ export async function generateNoticeOnlyPack(
           ? wizardFacts.wales_fault_grounds
           : [];
         const extractedParticulars = extractWalesParticularsFromWizardFacts(wizardFacts);
-        const hasOnlyArrearsGrounds =
-          walesFaultGrounds.length > 0 &&
-          walesFaultGrounds.every((ground: string) => WALES_ARREARS_GROUND_VALUES.includes(ground));
+        const hasOnlyArrearsGrounds = isWalesArrearsOnlySelection(walesFaultGrounds);
         const requiresParticulars = walesFaultGrounds.length > 0 && !hasOnlyArrearsGrounds;
 
         const faultBasedGuards = {
@@ -2645,7 +2664,7 @@ export async function generateNoticeOnlyPack(
           // Particulars required only for non-arrears grounds
           hasOnlyArrearsGrounds,
           requiresParticulars,
-          hasParticulars: Boolean(extractedParticulars),
+          hasParticulars: Boolean(extractedParticulars.text),
         };
 
         // Log route guard check
@@ -2673,7 +2692,9 @@ export async function generateNoticeOnlyPack(
         try {
           // Build Part D text using the canonical Wales Part D builder
           // This uses Wales ground definitions as the single source of truth
-          const partDResult = buildWalesPartDFromWizardFacts(wizardFacts);
+          const partDResult = buildWalesPartDFromWizardFacts(wizardFacts, {
+            particularsText: extractedParticulars.text ?? null,
+          });
 
           if (partDResult.warnings.length > 0) {
             console.warn('[generateNoticeOnlyPack] Wales Part D builder warnings:', partDResult.warnings);
