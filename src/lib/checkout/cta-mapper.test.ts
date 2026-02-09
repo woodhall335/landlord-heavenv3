@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { getWizardCta } from '@/lib/checkout/cta-mapper';
+import { PRODUCTS } from '@/lib/pricing/products';
 
 describe('getWizardCta', () => {
   // Skip: Northern Ireland uses tenancy flow (not eviction), which is not yet implemented
@@ -122,7 +123,7 @@ describe('getWizardCta', () => {
 
       // When status is 'pass', notice_only is primary
       expect(result.primary.productKey).toBe('notice_only');
-      expect(result.primary.price).toBe(39.99);
+      expect(result.primary.price).toBe(PRODUCTS.notice_only.price);
     });
 
     // SKIP: pre-existing failure - investigate later

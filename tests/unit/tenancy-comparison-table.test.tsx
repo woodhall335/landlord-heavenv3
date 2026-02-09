@@ -12,19 +12,12 @@
 
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { vi, describe, it, expect } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import {
   TenancyComparisonTable,
   TenancyComparisonSummary,
 } from '@/components/tenancy/TenancyComparisonTable';
-
-// Mock the PRODUCTS import
-vi.mock('@/lib/pricing/products', () => ({
-  PRODUCTS: {
-    ast_standard: { displayPrice: '£9.99' },
-    ast_premium: { displayPrice: '£14.99' },
-  },
-}));
+import { PRODUCTS } from '@/lib/pricing/products';
 
 describe('TenancyComparisonTable', () => {
   // ==========================================================================
@@ -153,12 +146,10 @@ describe('TenancyComparisonTable', () => {
       expect(screen.getByText('Anti-subletting clause')).toBeInTheDocument();
     });
 
-    it('should show document count row', () => {
+    it('should show enforcement defensibility row', () => {
       render(<TenancyComparisonTable jurisdiction="england" />);
 
-      expect(screen.getByText('Number of documents')).toBeInTheDocument();
-      expect(screen.getByText('4')).toBeInTheDocument();
-      expect(screen.getByText('7')).toBeInTheDocument();
+      expect(screen.getByText('Enforcement defensibility')).toBeInTheDocument();
     });
   });
 
@@ -246,13 +237,13 @@ describe('TenancyComparisonTable', () => {
     it('should show Standard price', () => {
       render(<TenancyComparisonTable jurisdiction="england" />);
 
-      expect(screen.getByText('£9.99')).toBeInTheDocument();
+      expect(screen.getByText(PRODUCTS.ast_standard.displayPrice)).toBeInTheDocument();
     });
 
     it('should show Premium price', () => {
       render(<TenancyComparisonTable jurisdiction="england" />);
 
-      expect(screen.getByText('£14.99')).toBeInTheDocument();
+      expect(screen.getByText(PRODUCTS.ast_premium.displayPrice)).toBeInTheDocument();
     });
   });
 

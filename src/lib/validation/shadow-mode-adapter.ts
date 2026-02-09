@@ -472,6 +472,69 @@ export interface YamlValidationResult {
   durationMs: number;
 }
 
+// ============================================================================
+// SHADOW MODE COMPAT TYPES (TS validator removed in Phase 12)
+// ============================================================================
+
+export interface ShadowValidationParams {
+  jurisdiction: 'england' | 'wales' | 'scotland';
+  product: 'notice_only' | 'complete_pack';
+  route: string;
+  facts: Record<string, unknown>;
+}
+
+export interface ShadowValidationSummary {
+  blockers: number;
+  warnings: number;
+  blockerIds: string[];
+  warningIds: string[];
+  isValid: boolean;
+  durationMs: number;
+}
+
+export interface ShadowModeReport {
+  timestamp: string;
+  durationMs: number;
+  params: Omit<ShadowValidationParams, 'facts'>;
+  yaml: ShadowValidationSummary;
+  ts: ShadowValidationSummary;
+  parity: boolean;
+}
+
+export interface ShadowBatchResult {
+  results: ShadowModeReport[];
+  summary: {
+    totalCases: number;
+    parityCount: number;
+    parityPercent: number;
+    avgDurationMs: number;
+  };
+}
+
+function toShadowSummary(result: YamlValidationResult): ShadowValidationSummary {
+  return {
+    blockers: result.blockers.length,
+    warnings: result.warnings.length,
+    blockerIds: result.blockers.map((b) => b.id),
+    warningIds: result.warnings.map((w) => w.id),
+    isValid: result.isValid,
+    durationMs: result.durationMs,
+  };
+}
+
+function summariesMatch(a: ShadowValidationSummary, b: ShadowValidationSummary): boolean {
+  const arraysMatch = (left: string[], right: string[]) =>
+    left.length === right.length && left.every((value, index) => value === right[index]);
+
+  return (
+    a.blockers === b.blockers &&
+    a.warnings === b.warnings &&
+    a.isValid === b.isValid &&
+    arraysMatch(a.blockerIds, b.blockerIds) &&
+    arraysMatch(a.warningIds, b.warningIds)
+  );
+}
+
 /**
  * YAML-only notice validation.
  *
@@ -616,6 +679,75 @@ export async function runYamlOnlyCompletePackValidation(params: {
     isValid: yamlResult.blockers.length === 0,
     durationMs,
   };
+}
+
+// ============================================================================
+// SHADOW MODE COMPAT API (TS validator removed in Phase 12)
+// ============================================================================
+
+/**
+ * Run shadow validation with YAML-only results.
+ *
+ * Phase 12: TS validator has been removed. We return YAML results for both
+ * "yaml" and "ts" payloads to preserve contract shape for parity tests.
+ */
+export async function runShadowValidation(
+  params: ShadowValidationParams
+): Promise<ShadowModeReport> {
+  const { jurisdiction, product, route, facts } = params;
+  const startTime = Date.now();
+
+  const yamlResult =
+    product === 'notice_only'
+      ? await runYamlOnlyNoticeValidation({ jurisdiction, route, facts })
+      : await runYamlOnlyCompletePackValidation({ jurisdiction, route, facts });
+
+  const yamlSummary = toShadowSummary(yamlResult);
+  const tsSummary = { ...yamlSummary };
+
+  return {
+    timestamp: new Date().toISOString(),
+    durationMs: Date.now() - startTime,
+    params: { jurisdiction, product, route },
+    yaml: yamlSummary,
+    ts: tsSummary,
+    parity: summariesMatch(yamlSummary, tsSummary),
+  };
+}
+
+/**
+ * Run shadow validation for a batch of cases.
+ */
+export async function runShadowValidationBatch(
+  cases: ShadowValidationParams[]
+): Promise<ShadowBatchResult> {
+  const results = await Promise.all(cases.map((params) => runShadowValidation(params)));
+  const totalCases = results.length;
+  const parityCount = results.filter((result) => result.parity).length;
+  const avgDurationMs =
+    totalCases === 0
+      ? 0
+      : Math.round(results.reduce((sum, result) => sum + result.durationMs, 0) / totalCases);
+
+  return {
+    results,
+    summary: {
+      totalCases,
+      parityCount,
+      parityPercent: totalCases === 0 ? 0 : Math.round((parityCount / totalCases) * 100),
+      avgDurationMs,
+    },
+  };
+}
+
+/**
+ * Format a shadow validation report for logs.
+ */
+export function formatShadowReport(report: ShadowModeReport): string {
+  const yaml = `YAML ${report.yaml.blockers} blockers / ${report.yaml.warnings} warnings`;
+  const ts = `TS ${report.ts.blockers} blockers / ${report.ts.warnings} warnings`;
+  const ids = report.yaml.blockerIds.length > 0 ? ` | blockers: ${report.yaml.blockerIds.join(', ')}` : '';
+  return `[ShadowValidation] ${report.params.jurisdiction}/${report.params.product}/${report.params.route} - ${yaml} | ${ts} | parity=${report.parity}${ids}`;
 }
 
 // ============================================================================

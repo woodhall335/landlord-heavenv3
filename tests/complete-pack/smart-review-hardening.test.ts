@@ -621,7 +621,7 @@ describe('Smart Review Eligibility', () => {
     const bundle = createBundleWithUploads(3);
     const input: SmartReviewInput = {
       ...createTestInput(bundle),
-      product: 'notice_only',
+      product: 'money_claim',
       caseId: 'skip-test-2',
     };
 

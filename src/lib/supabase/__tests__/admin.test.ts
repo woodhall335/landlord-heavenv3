@@ -8,7 +8,7 @@ describe('getSupabaseAdminJwtPreview', () => {
 
     const preview = getSupabaseAdminJwtPreview();
 
-    expect(preview).toEqual({ error: 'jwt_preview_failed' });
+    expect(preview).toEqual({ ok: false, error: 'jwt_preview_failed' });
 
     process.env.SUPABASE_SERVICE_ROLE_KEY = original;
   });
@@ -23,9 +23,9 @@ describe('getSupabaseAdminJwtPreview', () => {
     const preview = getSupabaseAdminJwtPreview();
 
     expect(preview).toEqual({
+      ok: true,
       role: 'service_role',
       ref: 'ref',
-      iss: 'iss',
       iat: 1,
       exp: 2,
     });

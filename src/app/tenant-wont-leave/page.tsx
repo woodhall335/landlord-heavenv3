@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
+import { StructuredData, breadcrumbSchema, faqPageSchema } from '@/lib/seo/structured-data';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { tenantWontLeaveRelatedLinks } from '@/lib/seo/internal-links';
@@ -25,6 +25,7 @@ import {
 const PAGE_PATH = '/tenant-wont-leave';
 const PAGE_TITLE = "Tenant Won't Leave After Notice";
 const PAGE_TYPE = 'problem' as const;
+const faqs = tenantWontLeaveFAQs;
 
 const wizardLinkNoticeOnly = buildWizardLink({
   product: 'notice_only',
@@ -69,6 +70,7 @@ export default function TenantWontLeavePage() {
   return (
     <>
       <StructuredData data={pageSchema} />
+      <StructuredData data={faqPageSchema(faqs)} />
       <StructuredData data={breadcrumbSchema([
         { name: 'Home', url: 'https://landlordheaven.co.uk' },
         { name: 'Guides', url: 'https://landlordheaven.co.uk/how-to-evict-tenant' },
@@ -408,7 +410,7 @@ export default function TenantWontLeavePage() {
 
         {/* FAQ Section */}
         <FAQSection
-          faqs={tenantWontLeaveFAQs}
+          faqs={faqs}
           title="Tenant Won't Leave: FAQ"
           showContactCTA={false}
           variant="gray"

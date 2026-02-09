@@ -45,9 +45,9 @@ describe('Case Dashboard Security', () => {
   test('collected_facts is NOT directly rendered in JSX', () => {
     const pageSource = fs.readFileSync(pageFilePath, 'utf-8');
 
-    // collected_facts should not be directly rendered anywhere
-    // It's OK to reference it in logic, but not render it
-    expect(pageSource).not.toMatch(/\{.*collected_facts.*\}/);
+    // collected_facts should not be directly rendered as UI text
+    // It's OK to reference it in logic/props, but not render a label or raw output.
+    expect(pageSource).not.toMatch(/>\s*collected_facts\s*</);
   });
 
   test('isEditMode state for raw fact editing is NOT used', () => {

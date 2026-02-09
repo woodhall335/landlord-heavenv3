@@ -199,6 +199,12 @@ function registerHandlebarsHelpers() {
     return a === b;
   });
 
+  // Logical OR (supports subexpressions: {{#if (or a b)}})
+  Handlebars.registerHelper('or', function (...args) {
+    const values = args.slice(0, -1);
+    return values.some(Boolean);
+  });
+
   // Join array with separator
   Handlebars.registerHelper('join', function (array, separator) {
     return Array.isArray(array) ? array.join(separator) : '';
@@ -842,13 +848,14 @@ export function compileTemplate(templateContent: string, data: Record<string, an
     // - Footer stamps use: {{generation_date}}
     // Both must be set and formatted as UK dates to prevent blank fields in PDF text layer.
     const ukFormattedNow = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+    const isoNow = new Date().toISOString().split('T')[0];
     const enrichedData = {
       ...normalizedData,
       // 'current_date' - used by compliance checklist, audit reports, etc.
       // If already provided and normalized, keep it; otherwise use UK-formatted now
       current_date: normalizedData.current_date || ukFormattedNow,
-      // 'generation_date' - used by footer stamps, metadata
-      generation_date: normalizedData.generation_date || ukFormattedNow,
+      // 'generation_date' - used by footer stamps, metadata (ISO fallback preferred)
+      generation_date: normalizedData.generation_date || isoNow,
       generation_timestamp: new Date().toISOString(),
       document_id: generateDocumentId(),
       // Site configuration (for footer, domain, etc.)

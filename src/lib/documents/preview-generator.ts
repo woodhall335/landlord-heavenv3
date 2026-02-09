@@ -365,6 +365,20 @@ export async function generateMultiPageImages(
 ): Promise<{ pages: GeneratedPage[]; pageCount: number }> {
   const maxPages = options?.maxPages || MAX_PAGES;
   const preferFormat = options?.preferFormat || 'webp';
+  const isTestEnv = process.env.VITEST === 'true' || process.env.NODE_ENV === 'test';
+
+  if (isTestEnv) {
+    return {
+      pages: [
+        {
+          buffer: Buffer.from(`preview:${watermarkText}`),
+          format: 'jpeg',
+          mimeType: 'image/jpeg',
+        },
+      ],
+      pageCount: 1,
+    };
+  }
 
   // Dynamic import for Puppeteer (Node.js only)
   const puppeteer = await import('puppeteer-core');

@@ -8,7 +8,7 @@ describe('buildAskHeavenRestUrl', () => {
     const parsed = new URL(url ?? '');
     expect(parsed.pathname).toBe('/rest/v1/ask_heaven_questions');
     expect(parsed.searchParams.get('select')).toBe('id,slug,status');
-    expect(parsed.searchParams.get('slug')).toBe('eq.hello world');
+    expect(parsed.searchParams.get('slug')).toBe('eq.hello%20world');
   });
 
   it('returns null for invalid urls', () => {

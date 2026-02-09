@@ -8,11 +8,11 @@
  *
  * | Product              | England | Wales | Scotland | Northern Ireland |
  * |----------------------|---------|-------|----------|------------------|
- * | Notice Only (£39.99) | ✅      | ✅    | ✅       | ❌               |
- * | Eviction Pack (£149) | ✅      | ❌    | ❌       | ❌               |
+ * | Notice Only (£49.99) | ✅      | ✅    | ✅       | ❌               |
+ * | Eviction Pack (£199) | ✅      | ❌    | ❌       | ❌               |
  * | Money Claim (£99.99) | ✅      | ❌    | ❌       | ❌               |
  * | Tenancy Agreement    | ✅      | ✅    | ✅       | ✅               |
- * | Premium TA (£14.99)  | ✅      | ✅    | ✅       | ✅               |
+ * | Premium TA (£24.99)  | ✅      | ✅    | ✅       | ✅               |
  *
  * @module tests/e2e/region-gating.spec
  */
@@ -58,12 +58,12 @@ const ALL_UK_PRODUCTS: Product[] = ['tenancy_agreement'];
 
 // Expected prices for each product
 const EXPECTED_PRICES: Record<string, number> = {
-  notice_only: 39.99,
-  complete_pack: 149.99,
-  eviction_pack: 149.99,
-  money_claim: 99.99,
-  tenancy_agreement: 9.99,
-  premium_tenancy_agreement: 14.99,
+  notice_only: PRODUCTS.notice_only.price,
+  complete_pack: PRODUCTS.complete_pack.price,
+  eviction_pack: PRODUCTS.complete_pack.price,
+  money_claim: PRODUCTS.money_claim.price,
+  tenancy_agreement: PRODUCTS.ast_standard.price,
+  premium_tenancy_agreement: PRODUCTS.ast_premium.price,
 };
 
 // =============================================================================
