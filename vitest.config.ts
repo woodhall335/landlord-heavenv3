@@ -25,6 +25,10 @@ export default defineConfig({
   resolve: {
     alias: [
       {
+        find: 'server-only',
+        replacement: path.resolve(__dirname, './tests/__mocks__/server-only.ts'),
+      },
+      {
         find: '@/config',
         replacement: path.resolve(__dirname, './config'),
       },
