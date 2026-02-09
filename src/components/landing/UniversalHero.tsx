@@ -20,6 +20,10 @@ export type UniversalHeroProps = {
   feature: string;
   mascotSrc: string;
   mascotAlt: string;
+  headingAs?: 'h1' | 'h2';
+  ariaLabel?: string;
+  mascotDecorativeOnMobile?: boolean;
+  id?: string;
 };
 
 const MIN_COUNTER = 200;
@@ -41,6 +45,10 @@ export function UniversalHero({
   feature,
   mascotSrc,
   mascotAlt,
+  headingAs = 'h1',
+  ariaLabel = 'Landlord Heaven legal document hero',
+  mascotDecorativeOnMobile = true,
+  id,
 }: UniversalHeroProps) {
   // LOCKED v1: Do not modify this component's layout/visual structure/behavior directly.
   // For page-specific hero text, mascot, and CTA customization, pass values via props only.
@@ -51,6 +59,30 @@ export function UniversalHero({
   const [usedTodayCount, setUsedTodayCount] = useState(DEFAULT_COUNTER);
   const animationFrameRef = useRef<number | null>(null);
   const currentCountRef = useRef(DEFAULT_COUNTER);
+  const HeadingTag = headingAs;
+
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'production') {
+      return;
+    }
+
+    if (headingAs === 'h1') {
+      const h1Count = document.querySelectorAll('h1').length;
+      if (h1Count > 1) {
+        // eslint-disable-next-line no-console
+        console.warn(
+          'UniversalHero: Multiple <h1> elements detected. Consider using headingAs="h2" when another H1 exists on the page.',
+        );
+      }
+    }
+
+    if (!mascotDecorativeOnMobile && mascotAlt.trim() === '') {
+      // eslint-disable-next-line no-console
+      console.warn(
+        'UniversalHero: mascotAlt should be non-empty when mascotDecorativeOnMobile is false.',
+      );
+    }
+  }, [headingAs, mascotAlt, mascotDecorativeOnMobile]);
 
   useEffect(() => {
     currentCountRef.current = usedTodayCount;
@@ -115,7 +147,8 @@ export function UniversalHero({
   return (
     <section
       className="relative isolate overflow-hidden pt-12 pb-10 sm:pt-14 sm:pb-12 lg:pt-16 lg:pb-14"
-      aria-label="Landlord Heaven legal document hero"
+      aria-label={ariaLabel}
+      id={id}
     >
       <div className="pointer-events-none absolute inset-0 -z-20" aria-hidden="true">
         <Image
@@ -137,7 +170,8 @@ export function UniversalHero({
           <div className="pointer-events-none absolute -right-6 top-[37.5%] z-0 w-[203px] -translate-y-[80%] min-[420px]:w-[224px] min-[900px]:hidden sm:-translate-y-1/2" aria-hidden="true">
             <Image
               src={mascotSrc}
-              alt=""
+              alt={mascotDecorativeOnMobile ? '' : mascotAlt}
+              aria-hidden={mascotDecorativeOnMobile ? 'true' : undefined}
               width={620}
               height={620}
               priority
@@ -156,7 +190,7 @@ export function UniversalHero({
               <span className="font-medium text-[#2b253d]">Rated 4.8 / 5.0 from 247 reviews</span>
             </p>
 
-            <h1 className="mt-5 max-w-[18ch] pr-24 text-[2.125rem] font-bold leading-[1.1] tracking-tight min-[420px]:pr-28 min-[900px]:pr-0 sm:text-5xl lg:text-6xl">
+            <HeadingTag className="mt-5 max-w-[18ch] pr-24 text-[2.125rem] font-bold leading-[1.1] tracking-tight min-[420px]:pr-28 min-[900px]:pr-0 sm:text-5xl lg:text-6xl">
               <span className="sm:hidden">
                 {hasLegalDocumentsInTitle ? (
                   <>
@@ -183,7 +217,7 @@ export function UniversalHero({
                 </span>
                 <span className="hidden sm:inline">{highlightTitle}</span>
               </span>
-            </h1>
+            </HeadingTag>
 
             <p className="mt-4 w-full rounded-xl bg-white/75 px-4 py-3 pr-24 text-lg leading-relaxed text-[#2b253d] backdrop-blur-[2px] min-[420px]:pr-28 min-[900px]:pr-0 sm:max-w-[52ch] sm:rounded-none sm:bg-transparent sm:p-0 sm:pr-0 sm:text-xl sm:backdrop-blur-0">{subtitle}</p>
 
