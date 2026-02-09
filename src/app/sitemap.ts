@@ -17,7 +17,7 @@ import { MetadataRoute } from 'next';
 import { blogPosts } from '@/lib/blog/posts';
 import { SITE_ORIGIN } from '@/lib/seo';
 import { freeTools, validatorToolRoutes } from '@/lib/tools/tools';
-import { getQuestionRepository } from '@/lib/ask-heaven/questions';
+import { ASK_HEAVEN_CANARY_INDEX_SLUGS, getQuestionRepository } from '@/lib/ask-heaven/questions';
 import { getPostRegion } from '@/lib/blog/categories';
 import { getBlogSeoConfig } from '@/lib/blog/seo';
 
@@ -229,9 +229,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   });
 
   // ==========================================================================
-  // Ask Heaven Q&A Pages
+  // Ask Heaven Q&A Pages (TEMP: Canary allowlist)
   // ==========================================================================
-  // Only include approved questions that are canonical (not duplicates).
+  // Only include the canary allowlist for controlled SEO testing.
   // Questions are noindex by default until approved.
   // See /docs/ask-heaven-seo.md for the review workflow.
   //
@@ -241,9 +241,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let askHeavenPages: MetadataRoute.Sitemap = [];
   try {
     const questionRepository = getQuestionRepository();
-    const approvedQuestions = await questionRepository.getForSitemap();
+    const canaryQuestions = await Promise.all(
+      Array.from(ASK_HEAVEN_CANARY_INDEX_SLUGS).map((slug) =>
+        questionRepository.getBySlug(slug)
+      )
+    );
 
-    askHeavenPages = approvedQuestions
+    askHeavenPages = canaryQuestions
+      .filter((q): q is NonNullable<typeof q> => Boolean(q))
+      .filter((q) => q.canonical_slug === null)
       .filter((q) => /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(q.slug))
       .map((q) => ({
         url: `${SITE_ORIGIN}/ask-heaven/${q.slug}`,

@@ -39,6 +39,18 @@ export const REQUIRED_DISCLAIMER_PATTERNS = [
 export const DUPLICATE_SIMILARITY_THRESHOLD = 0.85;
 
 /**
+ * TEMP: Canary allowlist for indexing specific Ask Heaven question slugs.
+ * This bypasses the status-based noindex gate for controlled SEO testing.
+ */
+export const ASK_HEAVEN_CANARY_INDEX_SLUGS = new Set([
+  'how-to-serve-section-21-notice-england',
+  'when-to-use-section-8-form-3-grounds',
+  'section-173-notice-wales-when-to-use',
+  'notice-to-leave-scotland-grounds',
+  'mcol-process-for-rent-arrears-england',
+]);
+
+/**
  * Products/flows unavailable in specific jurisdictions.
  * Used to prevent product CTAs in unsupported regions.
  */
@@ -312,6 +324,14 @@ export async function canBeIndexed(question: AskHeavenQuestion): Promise<{
  * @returns 'index, follow' or 'noindex, follow'
  */
 export function getMetaRobots(question: AskHeavenQuestion): string {
+  // TEMP: Canary override to allow indexing selected review questions.
+  if (ASK_HEAVEN_CANARY_INDEX_SLUGS.has(question.slug)) {
+    if (question.canonical_slug !== null) {
+      return 'noindex, follow';
+    }
+    return 'index, follow';
+  }
+
   const result = validateQualityGates(question);
 
   if (result.forceNoindex) {
