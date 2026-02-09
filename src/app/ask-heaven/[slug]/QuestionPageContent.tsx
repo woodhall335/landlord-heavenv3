@@ -7,7 +7,7 @@
 
 import React from 'react';
 import Image from 'next/image';
-import ReactMarkdown from 'react-markdown';
+import ReactMarkdown, { type Components } from 'react-markdown';
 import type {
   AskHeavenQuestion,
   QualityGateResult,
@@ -30,46 +30,46 @@ export function QuestionPageContent({
   question,
   qualityResult,
 }: QuestionPageContentProps) {
-  const markdownComponents = {
-    h2: ({ children }: { children: React.ReactNode }) => (
+  const markdownComponents: Components = {
+    h2: ({ children }: React.ComponentPropsWithoutRef<'h2'>) => (
       <h2 className="text-base font-semibold text-gray-900 mt-4 mb-2">
         {children}
       </h2>
     ),
-    h3: ({ children }: { children: React.ReactNode }) => (
+    h3: ({ children }: React.ComponentPropsWithoutRef<'h3'>) => (
       <h3 className="text-sm font-semibold text-gray-900 mt-3 mb-1.5">
         {children}
       </h3>
     ),
-    h4: ({ children }: { children: React.ReactNode }) => (
+    h4: ({ children }: React.ComponentPropsWithoutRef<'h4'>) => (
       <h4 className="text-sm font-medium text-gray-900 mt-3 mb-1">
         {children}
       </h4>
     ),
-    p: ({ children }: { children: React.ReactNode }) => (
+    p: ({ children }: React.ComponentPropsWithoutRef<'p'>) => (
       <p className="text-sm leading-relaxed text-gray-800 mb-2 last:mb-0">
         {children}
       </p>
     ),
-    ul: ({ children }: { children: React.ReactNode }) => (
+    ul: ({ children }: React.ComponentPropsWithoutRef<'ul'>) => (
       <ul className="list-disc pl-5 space-y-1 my-2 text-sm text-gray-800">
         {children}
       </ul>
     ),
-    ol: ({ children }: { children: React.ReactNode }) => (
+    ol: ({ children }: React.ComponentPropsWithoutRef<'ol'>) => (
       <ol className="list-decimal pl-5 space-y-1 my-2 text-sm text-gray-800">
         {children}
       </ol>
     ),
-    li: ({ children }: { children: React.ReactNode }) => (
+    li: ({ children }: React.ComponentPropsWithoutRef<'li'>) => (
       <li className="leading-relaxed">{children}</li>
     ),
-    blockquote: ({ children }: { children: React.ReactNode }) => (
+    blockquote: ({ children }: React.ComponentPropsWithoutRef<'blockquote'>) => (
       <blockquote className="border-l-4 border-primary/30 bg-primary/5 text-gray-700 italic px-4 py-2 my-3 rounded-r-lg">
         {children}
       </blockquote>
     ),
-    a: ({ href, children }: { href?: string; children: React.ReactNode }) => {
+    a: ({ href, children, ...props }: React.ComponentPropsWithoutRef<'a'>) => {
       const isExternal = href?.startsWith('http');
       return (
         <a
@@ -77,43 +77,44 @@ export function QuestionPageContent({
           className="text-primary underline underline-offset-2 break-words"
           target={isExternal ? '_blank' : undefined}
           rel={isExternal ? 'noopener noreferrer' : undefined}
+          {...props}
         >
           {children}
         </a>
       );
     },
-    table: ({ children }: { children: React.ReactNode }) => (
+    table: ({ children }: React.ComponentPropsWithoutRef<'table'>) => (
       <div className="overflow-x-auto my-3">
         <table className="min-w-full text-sm border border-gray-200">
           {children}
         </table>
       </div>
     ),
-    thead: ({ children }: { children: React.ReactNode }) => (
+    thead: ({ children }: React.ComponentPropsWithoutRef<'thead'>) => (
       <thead className="bg-gray-50">{children}</thead>
     ),
-    tbody: ({ children }: { children: React.ReactNode }) => (
+    tbody: ({ children }: React.ComponentPropsWithoutRef<'tbody'>) => (
       <tbody className="divide-y divide-gray-200">{children}</tbody>
     ),
-    tr: ({ children }: { children: React.ReactNode }) => (
+    tr: ({ children }: React.ComponentPropsWithoutRef<'tr'>) => (
       <tr className="align-top">{children}</tr>
     ),
-    th: ({ children }: { children: React.ReactNode }) => (
+    th: ({ children }: React.ComponentPropsWithoutRef<'th'>) => (
       <th className="text-left text-xs font-semibold text-gray-700 px-3 py-2 border-r last:border-r-0">
         {children}
       </th>
     ),
-    td: ({ children }: { children: React.ReactNode }) => (
+    td: ({ children }: React.ComponentPropsWithoutRef<'td'>) => (
       <td className="text-xs text-gray-700 px-3 py-2 border-r last:border-r-0">
         {children}
       </td>
     ),
-    pre: ({ children }: { children: React.ReactNode }) => (
+    pre: ({ children }: React.ComponentPropsWithoutRef<'pre'>) => (
       <pre className="bg-gray-900 text-gray-100 text-xs rounded-lg p-3 overflow-x-auto my-3">
         {children}
       </pre>
     ),
-    code: ({ children }: { children: React.ReactNode }) => (
+    code: ({ children }: React.ComponentPropsWithoutRef<'code'>) => (
       <code className="px-1 py-0.5 rounded bg-gray-200 text-gray-900 text-xs">
         {children}
       </code>
