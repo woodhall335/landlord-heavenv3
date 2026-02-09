@@ -36,6 +36,7 @@ export {
   getWalesFaultGroundsBySection,
   calculateWalesMinNoticePeriod,
   hasWalesArrearsGroundSelected,
+  isWalesArrearsOnlySelection,
   hasWalesSection157Selected,
   type WalesFaultGroundDef,
   type WalesGroundsFilterOptions,

@@ -587,8 +587,12 @@ export function buildWalesPartDText(wizardFacts: WalesPartDParams): WalesPartDRe
  * @param wizardFacts - Raw wizard facts from the database
  * @returns Part D result with generated text and metadata
  */
-export function buildWalesPartDFromWizardFacts(wizardFacts: any): WalesPartDResult {
-  const extractedParticulars = extractWalesParticularsFromWizardFacts(wizardFacts);
+export function buildWalesPartDFromWizardFacts(
+  wizardFacts: any,
+  options?: { particularsText?: string | null }
+): WalesPartDResult {
+  const extractedParticulars =
+    options?.particularsText ?? extractWalesParticularsFromWizardFacts(wizardFacts).text;
   const params: WalesPartDParams = {
     wales_fault_grounds: wizardFacts?.wales_fault_grounds,
     is_community_landlord: wizardFacts?.is_community_landlord ?? false,

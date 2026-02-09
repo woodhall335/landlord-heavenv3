@@ -276,6 +276,39 @@ export const WALES_ARREARS_GROUND_VALUES = WALES_FAULT_GROUNDS
   .filter((g) => g.requiresArrearsSchedule)
   .map((g) => g.value);
 
+const WALES_ARREARS_GROUND_CODES = new Set(
+  WALES_FAULT_GROUNDS
+    .filter((g) => g.requiresArrearsSchedule)
+    .map((g) => `section_${g.section}`)
+);
+
+/**
+ * Check if the provided Wales grounds represent arrears-only selection.
+ *
+ * Accepts mixed representations (wizard enum values or derived ground_codes).
+ * Unknown/unsupported values are treated as non-arrears (conservative).
+ *
+ * @param walesGrounds - Array of ground values or ground_codes
+ * @returns true if all provided grounds are arrears-only values/codes
+ */
+export function isWalesArrearsOnlySelection(
+  walesGrounds: string[] | undefined | null
+): boolean {
+  if (!walesGrounds || !Array.isArray(walesGrounds) || walesGrounds.length === 0) {
+    return false;
+  }
+
+  return walesGrounds.every((ground) => {
+    if (WALES_ARREARS_GROUND_VALUES.includes(ground)) {
+      return true;
+    }
+    if (WALES_ARREARS_GROUND_CODES.has(ground)) {
+      return true;
+    }
+    return false;
+  });
+}
+
 /**
  * Check if any selected Wales fault grounds require an arrears schedule.
  *
