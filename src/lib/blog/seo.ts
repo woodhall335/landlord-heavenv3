@@ -53,11 +53,23 @@ const stripYearsAndPrices = (value: string) =>
   );
 
 const ensureActionKeyword = (value: string) => {
-  if (/(guide|explained|steps|checklist|overview|process|template)/i.test(value)) {
+  if (/(guide|explained|steps|checklist|overview|process)/i.test(value)) {
     return value;
   }
   return `${value} Guide`;
 };
+
+const ensureInformationalTitle = (value: string) => {
+  if (/(guide|explained|steps|checklist|overview|process)/i.test(value)) {
+    return value;
+  }
+  return `${value} Guide`;
+};
+
+const removeCommercialTitleWords = (value: string) =>
+  normalizeWhitespace(
+    value.replace(/\b(template|download|pdf|generator|form|pack|bundle)\b/gi, '').trim()
+  );
 
 const ensureJurisdiction = (value: string, jurisdictionLabel: string) => {
   if (jurisdictionLabel === 'UK') {
@@ -70,17 +82,15 @@ const ensureJurisdiction = (value: string, jurisdictionLabel: string) => {
 };
 
 const enforceTitleLength = (value: string) => {
-  let title = value;
-  if (title.length < 50) {
-    title = `${title} for Landlords`;
+  if (value.length <= 60) {
+    return value;
   }
-  if (title.length < 50) {
-    title = `${title} Guide`;
+  const truncated = value.slice(0, 60);
+  const lastSpace = truncated.lastIndexOf(' ');
+  if (lastSpace <= 0) {
+    return truncated.trim();
   }
-  if (title.length > 60) {
-    title = title.slice(0, 60).trim();
-  }
-  return title;
+  return truncated.slice(0, lastSpace).trim();
 };
 
 const normalizeMetaDescription = (value: string, jurisdictionLabel: string) => {
@@ -100,39 +110,88 @@ const buildPillarLink = (intent: string, jurisdictionLabel: string) => {
   if (intent === 'money_claim') {
     return {
       href: '/money-claim-unpaid-rent',
-      label: `${jurisdictionLabel} rent arrears recovery guide`,
+      label: 'Money claim guide (England only)',
     };
   }
 
   if (intent === 'tenancy_agreement') {
+    if (jurisdictionLabel === 'England') {
+      return {
+        href: '/assured-shorthold-tenancy-agreement-template',
+        label: 'England tenancy agreement guide',
+      };
+    }
+    if (jurisdictionLabel === 'Wales') {
+      return {
+        href: '/wales-tenancy-agreement-template',
+        label: 'Wales tenancy agreement guide',
+      };
+    }
+    if (jurisdictionLabel === 'Scotland') {
+      return {
+        href: '/private-residential-tenancy-agreement-template',
+        label: 'Scotland tenancy agreement guide',
+      };
+    }
+    if (jurisdictionLabel === 'Northern Ireland') {
+      return {
+        href: '/northern-ireland-tenancy-agreement-template',
+        label: 'Northern Ireland tenancy agreement guide',
+      };
+    }
     return {
-      href: '/periodic-tenancy-agreement',
-      label: `${jurisdictionLabel} tenancy agreement pillar guide`,
+      href: '/tenancy-agreement-template',
+      label: 'UK tenancy agreement guide',
     };
   }
 
-  if (intent === 'eviction_notice' || intent === 'eviction_pack') {
+  if (intent === 'eviction_notice') {
+    if (jurisdictionLabel === 'England') {
+      return {
+        href: '/eviction-notice-template',
+        label: 'England eviction notice guide',
+      };
+    }
+    if (jurisdictionLabel === 'Wales') {
+      return {
+        href: '/wales-eviction-notices',
+        label: 'Wales eviction notice guide',
+      };
+    }
+    if (jurisdictionLabel === 'Scotland') {
+      return {
+        href: '/scotland-eviction-notices',
+        label: 'Scotland eviction notice guide',
+      };
+    }
+    return {
+      href: '/eviction-notice-template',
+      label: 'UK eviction notice guide',
+    };
+  }
+
+  if (intent === 'eviction_pack') {
     if (jurisdictionLabel === 'England') {
       return {
         href: '/eviction-process-england',
-        label: 'England eviction process pillar',
+        label: 'England eviction process guide',
       };
     }
     if (jurisdictionLabel === 'Wales') {
       return {
         href: '/eviction-process-wales',
-        label: 'Wales eviction process pillar',
+        label: 'Wales eviction process guide',
       };
     }
     if (jurisdictionLabel === 'Scotland') {
       return {
         href: '/eviction-process-scotland',
-        label: 'Scotland eviction process pillar',
+        label: 'Scotland eviction process guide',
       };
     }
     return {
       href: '/how-to-evict-tenant',
-      label: 'UK eviction process pillar',
+      label: 'UK eviction process guide',
     };
   }
 
@@ -143,37 +202,50 @@ const buildPillarLink = (intent: string, jurisdictionLabel: string) => {
 };
 
 const buildSupportingLinks = (intent: string, jurisdictionLabel: string) => {
-  const links: Array<{ href: string; label: string }> = [];
   const pillar = buildPillarLink(intent, jurisdictionLabel);
-  links.push(pillar);
 
   if (intent === 'money_claim') {
-    links.push({
-      href: '/tools/rent-arrears-calculator',
-      label: `${jurisdictionLabel} rent arrears calculator`,
-    });
-  } else if (intent === 'tenancy_agreement') {
-    links.push({
-      href: '/assured-shorthold-tenancy-agreement-template',
-      label: `${jurisdictionLabel} tenancy agreement template`,
-    });
-  } else if (intent === 'eviction_notice' || intent === 'eviction_pack') {
-    links.push({
-      href: jurisdictionLabel === 'Wales'
-        ? '/wales-eviction-notices'
-        : jurisdictionLabel === 'Scotland'
-        ? '/scotland-eviction-notices'
-        : '/eviction-notice-template',
-      label: `${jurisdictionLabel} eviction notice guide`,
-    });
-  } else {
-    links.push({
-      href: '/tools/rent-arrears-calculator',
-      label: `${jurisdictionLabel} rent arrears calculator`,
-    });
+    return [
+      pillar,
+      {
+        href: '/products/money-claim',
+        label: 'Start a money claim (England only)',
+      },
+    ];
   }
 
-  return links.slice(0, 2);
+  if (intent === 'tenancy_agreement') {
+    const links = [
+      pillar,
+      {
+        href: '/products/ast',
+        label: 'Create a tenancy agreement',
+      },
+    ];
+    return links.slice(0, 2);
+  }
+
+  if (intent === 'eviction_notice' || intent === 'eviction_pack') {
+    return [
+      pillar,
+      {
+        href: jurisdictionLabel === 'England' && intent === 'eviction_pack'
+          ? '/products/complete-pack'
+          : '/products/notice-only',
+        label: jurisdictionLabel === 'England' && intent === 'eviction_pack'
+          ? 'Get the complete eviction pack'
+          : 'Create an eviction notice',
+      },
+    ];
+  }
+
+  return [
+    pillar,
+    {
+      href: '/tools/rent-arrears-calculator',
+      label: 'Rent arrears calculator',
+    },
+  ];
 };
 
 export const isProductHref = (href: string) =>
@@ -183,23 +255,32 @@ export const getBlogSeoConfig = (post: BlogPost, region: BlogRegion | null): Blo
   const jurisdictionLabel = region ? JURISDICTION_LABELS[region] : 'UK';
   const commercialResult = analyzeBlogPost(post, region);
   const primaryIntent = commercialResult.links[0]?.intent ?? 'tenancy_agreement';
-  const primaryCommercialLink = commercialResult.links[0]?.target ?? COMMERCIAL_LINK_TARGETS.tenancy_agreement;
+  let primaryCommercialLink = commercialResult.links[0]?.target ?? COMMERCIAL_LINK_TARGETS.tenancy_agreement;
+  if (primaryIntent === 'eviction_pack' && jurisdictionLabel !== 'England') {
+    primaryCommercialLink = COMMERCIAL_LINK_TARGETS.eviction_notice;
+  }
   const pillarLink = buildPillarLink(primaryIntent, jurisdictionLabel);
   const supportingLinks = buildSupportingLinks(primaryIntent, jurisdictionLabel);
 
   const sanitizedTitle = stripYearsAndPrices(post.title);
-  const actionTitle = ensureActionKeyword(sanitizedTitle);
-  const withJurisdiction = ensureJurisdiction(actionTitle, jurisdictionLabel);
-  const metaTitle = enforceTitleLength(withJurisdiction);
+  const baseTitle = ensureActionKeyword(sanitizedTitle);
+  const withJurisdiction = ensureJurisdiction(baseTitle, jurisdictionLabel);
+
+  // Only allow explicit noindex flags from blog metadata.
+  const shouldNoIndex = Boolean((post as { noindex?: boolean }).noindex);
+  const needsDeconflict = isCannibalizing(post);
+
+  let metaTitleBase = withJurisdiction;
+  if (needsDeconflict) {
+    metaTitleBase = removeCommercialTitleWords(metaTitleBase);
+    metaTitleBase = ensureInformationalTitle(metaTitleBase);
+  }
+  const metaTitle = enforceTitleLength(metaTitleBase);
 
   const heroIntro = normalizeMetaDescription(post.description, jurisdictionLabel);
   const metaDescription = normalizeMetaDescription(post.metaDescription || post.description, jurisdictionLabel);
 
   const canonicalPath = `/blog/${post.canonicalSlug || post.slug}`;
-
-  // SEO cannibalization control: if the post targets a product-equivalent query,
-  // we noindex the post so the product or pillar page stays primary.
-  const shouldNoIndex = isCannibalizing(post);
 
   return {
     title: metaTitle,
