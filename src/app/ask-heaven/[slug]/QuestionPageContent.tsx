@@ -6,6 +6,7 @@
  */
 
 import React from 'react';
+import Image from 'next/image';
 import ReactMarkdown from 'react-markdown';
 import type {
   AskHeavenQuestion,
@@ -29,8 +30,98 @@ export function QuestionPageContent({
   question,
   qualityResult,
 }: QuestionPageContentProps) {
+  const markdownComponents = {
+    h2: ({ children }: { children: React.ReactNode }) => (
+      <h2 className="text-base font-semibold text-gray-900 mt-4 mb-2">
+        {children}
+      </h2>
+    ),
+    h3: ({ children }: { children: React.ReactNode }) => (
+      <h3 className="text-sm font-semibold text-gray-900 mt-3 mb-1.5">
+        {children}
+      </h3>
+    ),
+    h4: ({ children }: { children: React.ReactNode }) => (
+      <h4 className="text-sm font-medium text-gray-900 mt-3 mb-1">
+        {children}
+      </h4>
+    ),
+    p: ({ children }: { children: React.ReactNode }) => (
+      <p className="text-sm leading-relaxed text-gray-800 mb-2 last:mb-0">
+        {children}
+      </p>
+    ),
+    ul: ({ children }: { children: React.ReactNode }) => (
+      <ul className="list-disc pl-5 space-y-1 my-2 text-sm text-gray-800">
+        {children}
+      </ul>
+    ),
+    ol: ({ children }: { children: React.ReactNode }) => (
+      <ol className="list-decimal pl-5 space-y-1 my-2 text-sm text-gray-800">
+        {children}
+      </ol>
+    ),
+    li: ({ children }: { children: React.ReactNode }) => (
+      <li className="leading-relaxed">{children}</li>
+    ),
+    blockquote: ({ children }: { children: React.ReactNode }) => (
+      <blockquote className="border-l-4 border-primary/30 bg-primary/5 text-gray-700 italic px-4 py-2 my-3 rounded-r-lg">
+        {children}
+      </blockquote>
+    ),
+    a: ({ href, children }: { href?: string; children: React.ReactNode }) => {
+      const isExternal = href?.startsWith('http');
+      return (
+        <a
+          href={href}
+          className="text-primary underline underline-offset-2 break-words"
+          target={isExternal ? '_blank' : undefined}
+          rel={isExternal ? 'noopener noreferrer' : undefined}
+        >
+          {children}
+        </a>
+      );
+    },
+    table: ({ children }: { children: React.ReactNode }) => (
+      <div className="overflow-x-auto my-3">
+        <table className="min-w-full text-sm border border-gray-200">
+          {children}
+        </table>
+      </div>
+    ),
+    thead: ({ children }: { children: React.ReactNode }) => (
+      <thead className="bg-gray-50">{children}</thead>
+    ),
+    tbody: ({ children }: { children: React.ReactNode }) => (
+      <tbody className="divide-y divide-gray-200">{children}</tbody>
+    ),
+    tr: ({ children }: { children: React.ReactNode }) => (
+      <tr className="align-top">{children}</tr>
+    ),
+    th: ({ children }: { children: React.ReactNode }) => (
+      <th className="text-left text-xs font-semibold text-gray-700 px-3 py-2 border-r last:border-r-0">
+        {children}
+      </th>
+    ),
+    td: ({ children }: { children: React.ReactNode }) => (
+      <td className="text-xs text-gray-700 px-3 py-2 border-r last:border-r-0">
+        {children}
+      </td>
+    ),
+    pre: ({ children }: { children: React.ReactNode }) => (
+      <pre className="bg-gray-900 text-gray-100 text-xs rounded-lg p-3 overflow-x-auto my-3">
+        {children}
+      </pre>
+    ),
+    code: ({ children }: { children: React.ReactNode }) => (
+      <code className="px-1 py-0.5 rounded bg-gray-200 text-gray-900 text-xs">
+        {children}
+      </code>
+    ),
+  };
+
   return (
-    <article className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+    <article className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
       {/* Quality Warning Banner (for drafts/review) */}
       {question.status !== 'approved' && (
         <div className="bg-amber-50 border-b border-amber-200 px-6 py-3">
@@ -53,10 +144,45 @@ export function QuestionPageContent({
         </div>
       )}
 
-      {/* Answer Content */}
+      {/* Chat-style Content */}
       <div className="p-6 lg:p-8">
-        <div className="prose prose-blue max-w-none">
-          <ReactMarkdown>{question.answer_md}</ReactMarkdown>
+        <div className="rounded-2xl border border-gray-200 bg-gray-50/60 p-4 sm:p-6">
+          <div className="space-y-6">
+            <div className="flex justify-end">
+              <div className="max-w-[85%] md:max-w-[70%]">
+                <div className="rounded-2xl rounded-br-md px-5 py-3 bg-primary">
+                  <p className="whitespace-pre-wrap text-sm leading-relaxed text-white">
+                    {question.question}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex justify-start">
+              <div className="max-w-[85%] md:max-w-[70%]">
+                <div className="flex items-start gap-3">
+                  <div className="flex-shrink-0 w-8 h-8 rounded-full overflow-hidden">
+                    <Image
+                      src="/favicon.png"
+                      alt="Ask Heaven"
+                      width={32}
+                      height={32}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <div className="rounded-2xl rounded-tl-md px-5 py-3 bg-gray-100 text-gray-800">
+                      <div className="break-words [overflow-wrap:anywhere]">
+                        <ReactMarkdown components={markdownComponents}>
+                          {question.answer_md}
+                        </ReactMarkdown>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Word Count Info (dev only) */}
