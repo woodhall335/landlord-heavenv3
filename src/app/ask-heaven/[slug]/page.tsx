@@ -257,3 +257,14 @@ function mapPrimaryTopicToChatTopic(topic: AskHeavenPrimaryTopic): Topic | null 
       return null;
   }
 }
+
+function formatJurisdiction(jurisdiction: string): string {
+  const map: Record<string, string> = {
+    england: 'England',
+    wales: 'Wales',
+    scotland: 'Scotland',
+    'northern-ireland': 'N. Ireland',
+    'uk-wide': 'UK',
+  };
+  return map[jurisdiction] || jurisdiction;
+}
