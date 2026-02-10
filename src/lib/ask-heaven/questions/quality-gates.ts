@@ -50,6 +50,10 @@ export const ASK_HEAVEN_CANARY_INDEX_SLUGS = new Set([
   'mcol-process-for-rent-arrears-england',
 ]);
 
+export function isAskHeavenCanarySlug(slug: string): boolean {
+  return ASK_HEAVEN_CANARY_INDEX_SLUGS.has(slug);
+}
+
 /**
  * Products/flows unavailable in specific jurisdictions.
  * Used to prevent product CTAs in unsupported regions.
@@ -157,7 +161,7 @@ export function validateQualityGates(
   if (question.status !== 'approved') {
     failures.push({
       gate: 'status',
-      reason: `Question status is '${question.status}', must be 'approved' for indexing`,
+      reason: `Current workflow state is '${question.status}' (not published for indexing)`,
       severity: 'error',
     });
   }
@@ -359,8 +363,8 @@ export function getIndexabilityStatus(question: AskHeavenQuestion): {
   if (question.status !== 'approved') {
     return {
       status: 'blocked',
-      label: `Status: ${question.status}`,
-      details: ['Question must be approved before indexing'],
+      label: 'Indexability: No (not published)',
+      details: [`Current workflow state: ${question.status}`],
     };
   }
 

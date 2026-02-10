@@ -128,6 +128,8 @@ interface AskHeavenChatShellProps {
   initialTopic?: Topic | null;
   initialQuestionText?: string | null;
   showReviewWarning?: boolean;
+  chatHeading?: string | null;
+  chatSubheading?: string | null;
 }
 
 export default function AskHeavenChatShell({
@@ -137,6 +139,8 @@ export default function AskHeavenChatShell({
   initialTopic,
   initialQuestionText,
   showReviewWarning,
+  chatHeading,
+  chatSubheading,
 }: AskHeavenChatShellProps): React.ReactElement {
   const router = useRouter();
   const [jurisdiction, setJurisdiction] = useState<Jurisdiction>(
@@ -558,6 +562,37 @@ export default function AskHeavenChatShell({
   // Determine if we're in welcome state (no messages yet)
   const isWelcomeState = chatMessages.length === 0 && !isSending;
 
+  const formatAssistantContent = useCallback((content: string): string => {
+    const lines = content.split(/\r?\n/);
+    let firstNonEmpty = -1;
+    for (let i = 0; i < lines.length; i += 1) {
+      if (lines[i].trim()) {
+        firstNonEmpty = i;
+        break;
+      }
+    }
+
+    if (firstNonEmpty === -1) {
+      return content;
+    }
+
+    const firstLine = lines[firstNonEmpty].trim();
+    if (/^#{1,6}\s*tl;?dr\b[:\-\s]*$/i.test(firstLine)) {
+      lines[firstNonEmpty] = lines[firstNonEmpty].replace(
+        /(#{1,6}\s*)tl;?dr\b[:\-\s]*/i,
+        '$1Summary '
+      );
+      return lines.join('\n');
+    }
+
+    if (/^tl;?dr\b[:\-\s]*$/i.test(firstLine)) {
+      lines[firstNonEmpty] = lines[firstNonEmpty].replace(/^tl;?dr\b[:\-\s]*/i, 'Summary: ');
+      return lines.join('\n');
+    }
+
+    return content;
+  }, []);
+
   return (
     <div className="min-h-[80vh] relative">
       {/* Hero background image */}
@@ -725,6 +760,16 @@ export default function AskHeavenChatShell({
 
         {/* Main Chat Card */}
         <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-xl border border-gray-200/50 overflow-hidden">
+          <div className="px-6 py-5 border-b border-gray-200 bg-white/90">
+            {chatHeading ? (
+              <h1 className="text-2xl md:text-3xl font-bold text-gray-900">{chatHeading}</h1>
+            ) : (
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Ask Heaven</h2>
+            )}
+            <p className="mt-1 text-sm text-gray-600">
+              {chatSubheading ?? "Free landlord assistant for England/Wales/Scotland/N. Ireland"}
+            </p>
+          </div>
           {showReviewWarning && (
             <div className="bg-amber-50 border-b border-amber-200 px-6 py-3">
               <div className="flex items-center gap-2 text-amber-800">
@@ -741,7 +786,7 @@ export default function AskHeavenChatShell({
                   />
                 </svg>
                 <span className="text-sm font-medium">
-                  This content is pending review and may not be fully accurate.
+                  Guidance only — not legal advice.
                 </span>
               </div>
             </div>
@@ -882,7 +927,13 @@ export default function AskHeavenChatShell({
                           <div className="flex-1">
                             <div className="rounded-2xl rounded-tl-md px-5 py-3 bg-gray-100 text-gray-800">
                               <div className="prose prose-sm prose-gray max-w-none [&>p]:mb-2 [&>ul]:my-2 [&>ol]:my-2 [&>li]:my-0.5 [&>h1]:text-base [&>h2]:text-sm [&>h3]:text-sm [&>h1]:font-bold [&>h2]:font-semibold [&>h3]:font-semibold [&>strong]:text-gray-900 [&>p:last-child]:mb-0">
-                                <ReactMarkdown>{m.content}</ReactMarkdown>
+                                <ReactMarkdown
+                                  components={{
+                                    h1: ({ children }: React.ComponentPropsWithoutRef<'h1'>) => (<h2 className="text-sm font-semibold mt-3 mb-2">{children}</h2>),
+                                  }}
+                                >
+                                  {formatAssistantContent(m.content)}
+                                </ReactMarkdown>
                               </div>
                             </div>
 

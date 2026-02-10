@@ -139,7 +139,7 @@ export function QuestionPageContent({
               />
             </svg>
             <span className="text-sm font-medium">
-              This content is pending review and may not be fully accurate.
+              Guidance only — not legal advice.
             </span>
           </div>
         </div>
