@@ -4,6 +4,12 @@ import React from 'react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { productLinks } from '@/lib/seo/internal-links';
+import {
+  RiDraftLine,
+  RiFileList3Line,
+  RiMoneyPoundBoxLine,
+  RiScales3Line,
+} from 'react-icons/ri';
 
 type AskHeavenCardJurisdiction = 'england' | 'wales' | 'scotland' | 'n_ireland' | 'northern-ireland';
 
@@ -20,6 +26,7 @@ interface CardDefinition {
   href: string;
   ariaLabel: string;
   detail?: string;
+  icon: React.ReactNode;
 }
 
 export function AskHeavenNextStepsCards({ jurisdiction = 'england', className }: AskHeavenNextStepsCardsProps) {
@@ -32,6 +39,7 @@ export function AskHeavenNextStepsCards({ jurisdiction = 'england', className }:
       ctaText: 'Generate a compliant notice',
       href: productLinks.noticeOnly.href,
       ariaLabel: 'Open Notice Only Pack',
+      icon: <RiFileList3Line className="h-10 w-10 text-[#8B5CF6]" aria-hidden="true" />,
     },
     {
       title: 'Complete Eviction Pack',
@@ -41,6 +49,7 @@ export function AskHeavenNextStepsCards({ jurisdiction = 'england', className }:
       ctaText: 'Prepare your eviction case',
       href: productLinks.completePack.href,
       ariaLabel: 'Open Complete Eviction Pack',
+      icon: <RiScales3Line className="h-10 w-10 text-[#8B5CF6]" aria-hidden="true" />,
     },
     {
       title: 'Money Claims Pack',
@@ -49,6 +58,7 @@ export function AskHeavenNextStepsCards({ jurisdiction = 'england', className }:
       ctaText: 'Prepare a money claim',
       href: productLinks.moneyClaim.href,
       ariaLabel: 'Open Money Claims Pack',
+      icon: <RiMoneyPoundBoxLine className="h-10 w-10 text-[#14B8A6]" aria-hidden="true" />,
     },
     {
       title: 'Tenancy Agreements',
@@ -57,6 +67,7 @@ export function AskHeavenNextStepsCards({ jurisdiction = 'england', className }:
       ctaText: 'Create a tenancy agreement',
       href: productLinks.tenancyAgreement.href,
       ariaLabel: 'Open Tenancy Agreements',
+      icon: <RiDraftLine className="h-10 w-10 text-[#8B5CF6]" aria-hidden="true" />,
     },
   ];
 
@@ -68,27 +79,32 @@ export function AskHeavenNextStepsCards({ jurisdiction = 'england', className }:
     >
       <h2
         id="ask-heaven-next-steps-heading"
-        className="text-3xl sm:text-4xl font-semibold text-gray-900 text-center"
+        className="text-center text-3xl font-bold tracking-tight text-slate-800 sm:text-5xl"
       >
         What we can help you do next
       </h2>
 
-      <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <div className="mt-9 grid grid-cols-1 gap-6 sm:grid-cols-2">
         {cards.map((card) => (
           <Link
             key={card.title}
             href={card.href}
             aria-label={card.ariaLabel}
-            className="group flex h-full flex-col rounded-2xl border border-violet-200/70 bg-white p-6 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:border-primary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+            className="group flex h-full flex-col rounded-[28px] border border-[#C4B5FD] bg-white p-7 shadow-[0_1px_0_rgba(0,0,0,0.02)] transition-all duration-200 ease-out hover:-translate-y-1 hover:border-[#A78BFA] hover:shadow-[0_18px_35px_-18px_rgba(139,92,246,0.5)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
           >
-            <h3 className="text-lg sm:text-xl font-semibold leading-tight text-gray-900">
-              {card.title} <span className="font-medium text-gray-500">— {card.price}</span>{' '}
-              {card.detail && <span className="font-medium text-gray-500">{card.detail}</span>}
-            </h3>
+            <div className="flex items-start gap-4">
+              <div className="shrink-0 pt-0.5">
+                {card.icon}
+              </div>
+              <h3 className="text-2xl font-semibold leading-tight text-slate-800 sm:text-[2rem]">
+                {card.title} <span className="font-medium text-slate-700">— {card.price}</span>{' '}
+                {card.detail && <span className="font-medium text-slate-600">{card.detail}</span>}
+              </h3>
+            </div>
 
-            <p className="mt-4 text-base leading-relaxed text-gray-700">{card.description}</p>
+            <p className="mt-5 text-xl leading-relaxed text-slate-700 sm:text-[1.85rem]">{card.description}</p>
 
-            <p className="mt-auto pt-5 text-base font-medium text-primary transition-colors group-hover:text-primary-700 group-hover:underline group-focus-visible:underline">
+            <p className="mt-auto pt-5 text-2xl font-medium text-[#6D28D9] transition-all group-hover:text-[#5B21B6] group-hover:underline group-focus-visible:underline sm:text-[1.8rem]">
               <span aria-hidden="true" className="mr-2">→</span>
               {card.ctaText}
             </p>
