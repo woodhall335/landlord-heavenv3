@@ -28,7 +28,7 @@ import {
   breadcrumbSchema,
 } from '@/lib/seo/structured-data';
 import { SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
-import AskHeavenChatShell from '@/components/ask-heaven/AskHeavenChatShell';
+import AskHeavenPageClient from '@/app/ask-heaven/AskHeavenPageClient';
 import { detectAskHeavenCtaIntent } from '@/lib/ask-heaven/cta-copy';
 import { getRecommendedProduct, type Topic } from '@/lib/ask-heaven/topic-detection';
 import type { AskHeavenPrimaryTopic } from '@/lib/ask-heaven/questions/types';
@@ -168,43 +168,45 @@ export default async function AskHeavenQuestionPage({ params }: PageProps) {
       <StructuredData data={qaPageSchema} />
 
       {/* Main Content */}
-      <div className="min-h-[80vh]">
-        <AskHeavenChatShell
-          initialMessages={[
-            {
-              id: `seed-user-${question.id}`,
-              role: 'user',
-              content: question.question,
-              createdAt: question.created_at,
-            },
-            {
-              id: `seed-assistant-${question.id}`,
-              role: 'assistant',
-              content: question.answer_md,
-              createdAt: question.updated_at,
-              suggestedProduct: recommendedProduct?.product,
-              suggestedTopic: chatTopic ?? undefined,
-            },
-          ]}
-          initialJurisdiction={resolvedJurisdiction}
-          initialTopic={chatTopic}
-          initialQuestionText={question.question}
-          showReviewWarning={question.status !== 'approved'}
-        />
-        <div className="max-w-4xl mx-auto px-4 pb-12">
-          <SeoDisclaimer />
-          {process.env.NODE_ENV === 'development' && (
-            <div className="mt-4 text-xs text-gray-400">
-              Debug: {qualityResult.wordCount} words | Status: {question.status} | Indexable:{' '}
-              {qualityResult.passed ? 'Yes' : 'No'}
-              {qualityResult.failures.length > 0 && (
-                <span className="text-red-500">
-                  {' '}
-                  | Issues: {qualityResult.failures.map((f) => f.gate).join(', ')}
-                </span>
-              )}
-            </div>
-          )}
+      <AskHeavenPageClient
+        initialMessages={[
+          {
+            id: `seed-user-${question.id}`,
+            role: 'user',
+            content: question.question,
+            createdAt: question.created_at,
+          },
+          {
+            id: `seed-assistant-${question.id}`,
+            role: 'assistant',
+            content: question.answer_md,
+            createdAt: question.updated_at,
+            suggestedProduct: recommendedProduct?.product,
+            suggestedTopic: chatTopic ?? undefined,
+          },
+        ]}
+        initialJurisdiction={resolvedJurisdiction}
+        initialTopic={chatTopic}
+        initialQuestionText={question.question}
+        showReviewWarning={question.status !== 'approved'}
+      />
+      <div className="bg-white pb-12">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <SeoDisclaimer />
+            {process.env.NODE_ENV === 'development' && (
+              <div className="mt-4 text-xs text-gray-400">
+                Debug: {qualityResult.wordCount} words | Status: {question.status} | Indexable:{' '}
+                {qualityResult.passed ? 'Yes' : 'No'}
+                {qualityResult.failures.length > 0 && (
+                  <span className="text-red-500">
+                    {' '}
+                    | Issues: {qualityResult.failures.map((f) => f.gate).join(', ')}
+                  </span>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </>
