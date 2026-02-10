@@ -761,7 +761,7 @@ export default function AskHeavenChatShell({
         )}
 
         {/* Main Chat Card */}
-        <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-xl border border-gray-200/50 overflow-hidden">
+        <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-xl border border-gray-200/50 overflow-visible">
           <div className="px-6 py-5 border-b border-gray-200 bg-white/90">
             {chatHeading ? (
               <h1 className="text-2xl md:text-3xl font-bold text-gray-900">{chatHeading}</h1>
@@ -1127,14 +1127,18 @@ export default function AskHeavenChatShell({
               </div>
             </div>
           )}
+
+          {!isWelcomeState && hasAssistantMessage && (
+            <div className="px-4 pb-6 sm:px-6 sm:pb-8">
+              <div className="mt-2 rounded-3xl border border-gray-200/60 bg-white p-6 sm:p-8 overflow-visible">
+                <AskHeavenNextStepsCards
+                  jurisdiction={jurisdiction === 'northern-ireland' ? 'n_ireland' : jurisdiction}
+                />
+              </div>
+            </div>
+          )}
         </div>
 
-        {!isWelcomeState && hasAssistantMessage && (
-          <AskHeavenNextStepsCards
-            jurisdiction={jurisdiction === 'northern-ireland' ? 'n_ireland' : jurisdiction}
-            className="px-2"
-          />
-        )}
       </div>
 
       {/* Email Report Modal */}
