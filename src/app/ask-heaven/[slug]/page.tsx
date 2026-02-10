@@ -14,14 +14,11 @@
 
 import React from 'react';
 import { Metadata } from 'next';
-import Link from 'next/link';
 import { notFound, permanentRedirect } from 'next/navigation';
 import {
   getQuestionRepository,
   validateQualityGates,
   getMetaRobots,
-  getRelatedToolsConfig,
-  getRelatedQuestionsConfig,
 } from '@/lib/ask-heaven/questions';
 import type { AskHeavenQuestion } from '@/lib/ask-heaven/questions';
 import { getCanonicalUrl } from '@/lib/seo';
@@ -31,10 +28,11 @@ import {
   breadcrumbSchema,
 } from '@/lib/seo/structured-data';
 import { SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
-import { QuestionPageContent } from './QuestionPageContent';
-import { RelatedTools } from './RelatedTools';
-import { RelatedQuestions } from './RelatedQuestions';
-import { FollowUpCta } from './FollowUpCta';
+import AskHeavenPageClient from '../AskHeavenPageClient';
+import { detectAskHeavenCtaIntent } from '@/lib/ask-heaven/cta-copy';
+import { getRecommendedProduct, type Topic } from '@/lib/ask-heaven/topic-detection';
+import type { AskHeavenPrimaryTopic } from '@/lib/ask-heaven/questions/types';
+import type { Jurisdiction } from '@/lib/jurisdiction/types';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -115,22 +113,13 @@ export default async function AskHeavenQuestionPage({ params }: PageProps) {
   // Validate quality gates for display
   const qualityResult = validateQualityGates(question);
 
-  // Get related content configuration
   const primaryJurisdiction = question.jurisdictions[0] || 'uk-wide';
-  const relatedToolsConfig = getRelatedToolsConfig(
-    question.primary_topic,
-    primaryJurisdiction
-  );
-  const relatedQuestionsConfig = getRelatedQuestionsConfig(
-    question.primary_topic,
-    primaryJurisdiction
-  );
-
-  // Fetch related questions
-  const repository = getQuestionRepository();
-  const relatedQuestions = question.related_slugs.length > 0
-    ? await repository.getRelatedQuestions(question.related_slugs)
-    : [];
+  const resolvedJurisdiction = resolveChatJurisdiction(primaryJurisdiction);
+  const chatTopic = mapPrimaryTopicToChatTopic(question.primary_topic);
+  const intent = detectAskHeavenCtaIntent(chatTopic, question.question);
+  const recommendedProduct = chatTopic
+    ? getRecommendedProduct(chatTopic, resolvedJurisdiction, intent ?? undefined)
+    : null;
 
   // Build breadcrumb items
   const breadcrumbItems = [
@@ -179,144 +168,63 @@ export default async function AskHeavenQuestionPage({ params }: PageProps) {
       <StructuredData data={qaPageSchema} />
 
       {/* Main Content */}
-      <div className="min-h-screen bg-gray-50">
-        {/* Breadcrumbs */}
-        <nav className="bg-white border-b border-gray-100">
-          <div className="container mx-auto px-4 py-3">
-            <ol className="flex items-center gap-2 text-sm text-gray-500">
-              <li>
-                <Link href="/" className="hover:text-primary">
-                  Home
-                </Link>
-              </li>
-              <li>/</li>
-              <li>
-                <Link href="/ask-heaven" className="hover:text-primary">
-                  Ask Heaven
-                </Link>
-              </li>
-              <li>/</li>
-              <li className="text-gray-900 font-medium truncate max-w-xs">
-                {truncate(question.question, 40)}
-              </li>
-            </ol>
-          </div>
-        </nav>
-
-        {/* Question Header */}
-        <header className="bg-white border-b border-gray-200 py-8">
-          <div className="container mx-auto px-4">
-            <div className="max-w-3xl">
-              {/* Jurisdiction badges */}
-              <div className="flex flex-wrap gap-2 mb-4">
-                {question.jurisdictions.map((j) => (
-                  <span
-                    key={j}
-                    className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
-                  >
-                    {formatJurisdiction(j)}
-                  </span>
-                ))}
-                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
-                  {formatTopic(question.primary_topic)}
+      <div className="min-h-[80vh]">
+        <AskHeavenPageClient
+          initialMessages={[
+            {
+              id: `seed-user-${question.id}`,
+              role: 'user',
+              content: question.question,
+              createdAt: question.created_at,
+            },
+            {
+              id: `seed-assistant-${question.id}`,
+              role: 'assistant',
+              content: question.answer_md,
+              createdAt: question.updated_at,
+              suggestedProduct: recommendedProduct?.product,
+              suggestedTopic: chatTopic ?? undefined,
+            },
+          ]}
+          initialJurisdiction={resolvedJurisdiction}
+          initialTopic={chatTopic}
+          initialQuestionText={question.question}
+          statusBanner={question.status !== 'approved' ? (
+            <div className="bg-amber-50 border border-amber-200 px-6 py-3 rounded-2xl">
+              <div className="flex items-center gap-2 text-amber-800">
+                <svg
+                  className="w-5 h-5"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <span className="text-sm font-medium">
+                  This content is pending review and may not be fully accurate.
                 </span>
               </div>
-
-              {/* H1 - The question */}
-              <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
-                {question.question}
-              </h1>
-
-              {/* TL;DR Summary */}
-              <div className="bg-blue-50 border border-blue-100 rounded-lg p-4">
-                <div className="flex items-start gap-3">
-                  <div className="flex-shrink-0 w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm font-bold">
-                    !
-                  </div>
-                  <div>
-                    <p className="font-semibold text-blue-900 text-sm mb-1">
-                      TL;DR
-                    </p>
-                    <p className="text-blue-800">{question.summary}</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-6">
-                <FollowUpCta slug={slug} question={question.question} />
-              </div>
-
-              {/* Last reviewed date */}
-              {question.reviewed_at && (
-                <p className="text-sm text-gray-500 mt-4">
-                  Last reviewed: {formatDate(question.reviewed_at)}
-                </p>
+            </div>
+          ) : null}
+        />
+        <div className="max-w-4xl mx-auto px-4 pb-12">
+          <SeoDisclaimer />
+          {process.env.NODE_ENV === 'development' && (
+            <div className="mt-4 text-xs text-gray-400">
+              Debug: {qualityResult.wordCount} words | Status: {question.status} | Indexable:{' '}
+              {qualityResult.passed ? 'Yes' : 'No'}
+              {qualityResult.failures.length > 0 && (
+                <span className="text-red-500">
+                  {' '}
+                  | Issues: {qualityResult.failures.map((f) => f.gate).join(', ')}
+                </span>
               )}
             </div>
-          </div>
-        </header>
-
-        {/* Main Content Area */}
-        <main className="py-8">
-          <div className="container mx-auto px-4">
-            <div className="grid lg:grid-cols-3 gap-8">
-              {/* Answer Content (2 cols) */}
-              <div className="lg:col-span-2">
-                <QuestionPageContent
-                  question={question}
-                  qualityResult={qualityResult}
-                />
-
-                <div className="mt-10 flex justify-center">
-                  <FollowUpCta
-                    slug={slug}
-                    question={question.question}
-                    className="inline-flex items-center justify-center rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white shadow hover:bg-primary-700 transition-colors"
-                  />
-                </div>
-
-                {/* Disclaimer */}
-                <div className="mt-8">
-                  <SeoDisclaimer />
-                </div>
-              </div>
-
-              {/* Sidebar (1 col) */}
-              <aside className="space-y-6">
-                {/* Related Tools/Products */}
-                <RelatedTools
-                  config={relatedToolsConfig}
-                  slug={slug}
-                  jurisdiction={primaryJurisdiction}
-                />
-
-                {/* Related Questions */}
-                {relatedQuestions.length > 0 && (
-                  <RelatedQuestions
-                    questions={relatedQuestions}
-                    config={relatedQuestionsConfig}
-                  />
-                )}
-
-                {/* Back to Ask Heaven CTA */}
-                <div className="bg-white rounded-xl border border-gray-200 p-4">
-                  <h3 className="font-semibold text-gray-900 mb-2">
-                    Have another question?
-                  </h3>
-                  <p className="text-sm text-gray-600 mb-3">
-                    Ask Heaven is free for UK landlords. Get instant answers to your questions.
-                  </p>
-                  <Link
-                    href="/ask-heaven"
-                    className="block w-full text-center bg-primary text-white font-medium py-2 px-4 rounded-lg hover:bg-primary-700 transition-colors"
-                  >
-                    Ask a Question
-                  </Link>
-                </div>
-              </aside>
-            </div>
-          </div>
-        </main>
+          )}
+        </div>
       </div>
     </>
   );
@@ -325,42 +233,6 @@ export default async function AskHeavenQuestionPage({ params }: PageProps) {
 // =============================================================================
 // Helper Functions
 // =============================================================================
-
-function formatJurisdiction(jurisdiction: string): string {
-  const map: Record<string, string> = {
-    england: 'England',
-    wales: 'Wales',
-    scotland: 'Scotland',
-    'northern-ireland': 'Northern Ireland',
-    'uk-wide': 'UK-Wide',
-  };
-  return map[jurisdiction] || jurisdiction;
-}
-
-function formatTopic(topic: string): string {
-  const map: Record<string, string> = {
-    eviction: 'Eviction',
-    arrears: 'Rent Arrears',
-    deposit: 'Deposit',
-    tenancy: 'Tenancy',
-    compliance: 'Compliance',
-    damage_claim: 'Damage Claim',
-    notice_periods: 'Notice Periods',
-    court_process: 'Court Process',
-    tenant_rights: 'Tenant Rights',
-    landlord_obligations: 'Landlord Duties',
-    other: 'General',
-  };
-  return map[topic] || topic;
-}
-
-function formatDate(isoDate: string): string {
-  return new Date(isoDate).toLocaleDateString('en-GB', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  });
-}
 
 function truncate(text: string, maxLength: number): string {
   if (text.length <= maxLength) return text;
@@ -375,4 +247,44 @@ function extractPlainText(markdown: string): string {
     .replace(/[#*_~]/g, '')
     .replace(/\n+/g, ' ')
     .trim();
+}
+
+function formatJurisdiction(jurisdiction: string): string {
+  const map: Record<string, string> = {
+    england: 'England',
+    wales: 'Wales',
+    scotland: 'Scotland',
+    'northern-ireland': 'Northern Ireland',
+    'uk-wide': 'UK-Wide',
+  };
+  return map[jurisdiction] || jurisdiction;
+}
+
+function resolveChatJurisdiction(jurisdiction: AskHeavenQuestion['jurisdictions'][number]): Jurisdiction {
+  if (jurisdiction === 'uk-wide') {
+    return 'england';
+  }
+  return jurisdiction;
+}
+
+function mapPrimaryTopicToChatTopic(topic: AskHeavenPrimaryTopic): Topic | null {
+  switch (topic) {
+    case 'eviction':
+    case 'notice_periods':
+    case 'court_process':
+      return 'eviction';
+    case 'arrears':
+      return 'arrears';
+    case 'damage_claim':
+      return 'damage_claim';
+    case 'tenancy':
+      return 'tenancy';
+    case 'deposit':
+    case 'compliance':
+    case 'tenant_rights':
+    case 'landlord_obligations':
+      return 'tenancy';
+    default:
+      return null;
+  }
 }

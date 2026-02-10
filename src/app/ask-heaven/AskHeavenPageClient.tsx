@@ -3,21 +3,11 @@
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import Link from 'next/link';
-import Image from 'next/image';
 import type { QuestionDefinition } from '@/lib/validators/question-schema';
 import { normalizeJurisdiction } from '@/lib/jurisdiction/normalize';
 import type { Jurisdiction } from '@/lib/jurisdiction/types';
 import { EmailCaptureModal } from '@/components/leads/EmailCaptureModal';
-import { RiSendPlaneFill, RiSearchLine, RiBookLine, RiArrowRightLine } from 'react-icons/ri';
-import ReactMarkdown from 'react-markdown';
-import { isValidAskHeavenRecommendation } from '@/lib/pricing/products';
 import { buildWizardLink, type WizardJurisdiction } from '@/lib/wizard/buildWizardLink';
-import {
-  detectAskHeavenCtaIntent,
-  getDefaultIntentForProduct,
-  getAskHeavenCtaCopy,
-} from '@/lib/ask-heaven/cta-copy';
 import {
   initializeAskHeavenAttribution,
   getAskHeavenAttribution,
@@ -41,46 +31,14 @@ import {
 import {
   detectTopics,
   getPrimaryTopic,
-  getRecommendedProduct,
   type Topic,
 } from '@/lib/ask-heaven/topic-detection';
-import { NextBestActionCard } from '@/components/ask-heaven/NextBestActionCard';
+import {
+  AskHeavenChatUI,
+  type ChatMessage,
+  type CaseContext,
+} from '@/components/ask-heaven/AskHeavenChatUI';
 
-type ChatRole = 'user' | 'assistant';
-
-interface ChatMessage {
-  id: string;
-  role: ChatRole;
-  content: string;
-  createdAt: string;
-  suggestedProduct?: string | null;
-  suggestedNextStep?: 'wizard' | 'checklist' | 'guide' | 'none' | null;
-  suggestedTopic?: string | null;
-  followUpQuestions?: string[];
-  sources?: string[];
-}
-
-interface EvidenceSummary {
-  id: string;
-  file_name?: string;
-  doc_type?: string | null;
-  doc_type_confidence?: number | null;
-  doc_type_reasons?: string[] | null;
-}
-
-interface CaseContext {
-  evidence: EvidenceSummary[];
-  jurisdiction?: string;
-  validation_summary: {
-    validator_key?: string | null;
-    status: string;
-    blockers?: Array<{ code: string; message: string }>;
-    warnings?: Array<{ code: string; message: string }>;
-    upsell?: { product: string; reason: string } | null;
-  } | null;
-  recommendations: Array<{ code: string; message: string }>;
-  next_questions: QuestionDefinition[];
-}
 
 const defaultJurisdiction: Jurisdiction = 'england';
 
@@ -123,14 +81,30 @@ const EMAIL_GATE_THRESHOLD = 3;
 
 interface AskHeavenPageClientProps {
   initialQuery?: string | null;
+  initialMessages?: ChatMessage[];
+  initialJurisdiction?: Jurisdiction;
+  initialTopic?: Topic | null;
+  initialQuestionText?: string | null;
+  showComposer?: boolean;
+  statusBanner?: React.ReactNode;
 }
 
 export default function AskHeavenPageClient({
   initialQuery,
+  initialMessages,
+  initialJurisdiction,
+  initialTopic,
+  initialQuestionText,
+  showComposer = true,
+  statusBanner,
 }: AskHeavenPageClientProps): React.ReactElement {
   const router = useRouter();
-  const [jurisdiction, setJurisdiction] = useState<Jurisdiction>(defaultJurisdiction);
-  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
+  const [jurisdiction, setJurisdiction] = useState<Jurisdiction>(
+    initialJurisdiction ?? defaultJurisdiction
+  );
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>(
+    () => initialMessages ?? []
+  );
   const [input, setInput] = useState(initialQuery?.trim() ?? '');
   const [isSending, setIsSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -143,9 +117,9 @@ export default function AskHeavenPageClient({
   const [emailStatus, setEmailStatus] = useState<string | null>(null);
   const [emailGateOpen, setEmailGateOpen] = useState(false);
   const [, setEmailGateReason] = useState<'compliance_checklist' | 'threshold_gate' | 'manual'>('threshold_gate');
-  const [detectedTopic, setDetectedTopic] = useState<Topic | null>(null);
+  const [detectedTopic, setDetectedTopic] = useState<Topic | null>(initialTopic ?? null);
   const [suggestedNextStep, setSuggestedNextStep] = useState<'wizard' | 'checklist' | 'guide' | 'none' | null>(null);
-  const [lastQuestion, setLastQuestion] = useState<string>('');
+  const [lastQuestion, setLastQuestion] = useState<string>(initialQuestionText?.trim() ?? '');
   const [attributionInitialized, setAttributionInitialized] = useState(false);
 
   const chatEndRef = useRef<HTMLDivElement>(null);
@@ -172,6 +146,8 @@ export default function AskHeavenPageClient({
           setJurisdiction(normalizedJurisdiction as Jurisdiction);
           setAskHeavenAttribution({ jurisdiction: normalizedJurisdiction });
         }
+      } else if (initialJurisdiction) {
+        setAskHeavenAttribution({ jurisdiction: initialJurisdiction });
       }
 
       setAttributionInitialized(true);
@@ -191,7 +167,7 @@ export default function AskHeavenPageClient({
         });
       }
     }
-  }, [attributionInitialized, searchParams, jurisdiction]);
+  }, [attributionInitialized, searchParams, jurisdiction, initialJurisdiction]);
 
   useEffect(() => {
     if (attributionInitialized) {
@@ -231,6 +207,18 @@ export default function AskHeavenPageClient({
   }, [initialQuestion, chatMessages.length, input]);
 
   useEffect(() => {
+    if (initialQuestionText && !lastQuestion) {
+      setLastQuestion(initialQuestionText.trim());
+    }
+  }, [initialQuestionText, lastQuestion]);
+
+  useEffect(() => {
+    if (initialTopic) {
+      updateCurrentTopic(initialTopic);
+    }
+  }, [initialTopic]);
+
+  useEffect(() => {
     if (!caseId) return;
     const load = async () => {
       try {
@@ -257,6 +245,44 @@ export default function AskHeavenPageClient({
     setQuestionAnswers((prev) => ({ ...prev, [factKey]: value }));
     setQuestionErrors((prev) => ({ ...prev, [factKey]: '' }));
   };
+
+  const handleSubmitAnswers = useCallback(async () => {
+    if (!caseId) return;
+    setAnswersSubmitting(true);
+    setQuestionErrors({});
+    try {
+      const response = await fetch('/api/wizard/answer-questions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ caseId, answers: questionAnswers }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        if (Array.isArray(data?.errors)) {
+          const errorMap: Record<string, string> = {};
+          data.errors.forEach((item: { factKey: string; message: string }) => {
+            errorMap[item.factKey] = item.message;
+          });
+          setQuestionErrors(errorMap);
+        }
+        return;
+      }
+      setCaseContext((prev) =>
+        prev
+          ? {
+              ...prev,
+              validation_summary: data.validation_summary ?? prev.validation_summary,
+              recommendations: data.recommendations ?? prev.recommendations,
+              next_questions: data.next_questions ?? prev.next_questions,
+            }
+          : prev
+      );
+    } catch (err) {
+      console.error('Failed to submit answers', err);
+    } finally {
+      setAnswersSubmitting(false);
+    }
+  }, [caseId, questionAnswers]);
 
   const renderQuestionInput = (question: QuestionDefinition) => {
     const value = questionAnswers[question.factKey];
@@ -531,502 +557,50 @@ export default function AskHeavenPageClient({
   const isWelcomeState = chatMessages.length === 0 && !isSending;
 
   return (
-    <div className="min-h-[80vh] relative">
-      {/* Hero background image */}
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: 'url(/images/herobg.png)' }}
-      />
-
-      <div className="relative z-10 max-w-4xl mx-auto px-4 py-8">
-        {/* Jurisdiction Toggle - Copilot-style pill buttons with flags */}
-        <div className="flex justify-center mb-8">
-          <div className="inline-flex items-center bg-white/80 backdrop-blur-sm rounded-full p-1 shadow-sm border border-gray-200/50">
-            {(Object.keys(jurisdictionLabels) as Jurisdiction[]).map((jur) => (
-              <button
-                key={jur}
-                type="button"
-                onClick={() => setJurisdiction(jur)}
-                className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full transition-all duration-200 ${
-                  jurisdiction === jur
-                    ? 'bg-primary text-white shadow-sm'
-                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100/50'
-                }`}
-              >
-                <Image
-                  src={jurisdictionFlags[jur]}
-                  alt={jurisdictionLabels[jur]}
-                  width={20}
-                  height={15}
-                  className="w-5 h-auto rounded-sm"
-                />
-                {jurisdictionLabels[jur]}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Case Context Panel (if caseId present) */}
-        {caseId && caseContext && (
-          <div className="mb-6 p-4 bg-white/90 backdrop-blur-sm rounded-2xl border border-gray-200/50 shadow-lg">
-            <div className="flex items-center justify-between mb-4">
-              <div>
-                <p className="text-sm font-semibold text-gray-900">Document Review</p>
-                <p className="text-xs text-gray-500">Case-linked evidence and validation insights</p>
-              </div>
-              <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
-                Case {caseId.slice(0, 8)}...
-              </span>
-            </div>
-
-            <div className="space-y-3">
-              {caseContext.evidence.length > 0 && (
-                <div className="flex flex-col gap-2">
-                  <label className="text-xs font-medium text-gray-700">Uploaded evidence</label>
-                  <select
-                    className="rounded-lg border border-gray-200 px-3 py-2 text-sm"
-                    value={selectedEvidenceId ?? ''}
-                    onChange={(event) => setSelectedEvidenceId(event.target.value)}
-                  >
-                    {caseContext.evidence.map((entry) => (
-                      <option key={entry.id} value={entry.id}>
-                        {entry.file_name || 'Uploaded document'}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              )}
-
-              {selectedEvidence && (
-                <div className="rounded-lg border border-gray-200 bg-gray-50 p-3 text-xs">
-                  <p className="font-semibold text-gray-700">Classification</p>
-                  <p className="text-gray-600">
-                    {selectedEvidence.doc_type || 'unknown'}{' '}
-                    {selectedEvidence.doc_type_confidence !== null && selectedEvidence.doc_type_confidence !== undefined
-                      ? `(${Math.round(selectedEvidence.doc_type_confidence * 100)}% confidence)`
-                      : ''}
-                  </p>
-                </div>
-              )}
-
-              {caseContext.validation_summary && (
-                <div className="rounded-lg border border-gray-200 bg-gray-50 p-3 text-xs">
-                  <div className="flex items-center justify-between">
-                    <p className="font-semibold text-gray-700">Validation</p>
-                    <span className="rounded-full bg-gray-200 px-2 py-0.5 text-[10px] text-gray-600">
-                      {caseContext.validation_summary.status}
-                    </span>
-                  </div>
-                </div>
-              )}
-
-              {caseContext.next_questions.length > 0 && (
-                <div className="rounded-lg border border-gray-200 bg-gray-50 p-3 text-xs">
-                  <p className="font-semibold text-gray-700 mb-2">Additional Questions</p>
-                  <div className="space-y-2">
-                    {caseContext.next_questions.map((question) => (
-                      <label key={question.id} className="block">
-                        <span className="text-gray-700">{question.question}</span>
-                        {renderQuestionInput(question)}
-                        {questionErrors[question.factKey] && (
-                          <span className="mt-1 block text-[11px] text-red-600">
-                            {questionErrors[question.factKey]}
-                          </span>
-                        )}
-                      </label>
-                    ))}
-                    <button
-                      type="button"
-                      disabled={answersSubmitting}
-                      onClick={async () => {
-                        if (!caseId) return;
-                        setAnswersSubmitting(true);
-                        setQuestionErrors({});
-                        try {
-                          const response = await fetch('/api/wizard/answer-questions', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ caseId, answers: questionAnswers }),
-                          });
-                          const data = await response.json();
-                          if (!response.ok) {
-                            if (Array.isArray(data?.errors)) {
-                              const errorMap: Record<string, string> = {};
-                              data.errors.forEach((item: { factKey: string; message: string }) => {
-                                errorMap[item.factKey] = item.message;
-                              });
-                              setQuestionErrors(errorMap);
-                            }
-                            return;
-                          }
-                          setCaseContext((prev) =>
-                            prev
-                              ? {
-                                  ...prev,
-                                  validation_summary: data.validation_summary ?? prev.validation_summary,
-                                  recommendations: data.recommendations ?? prev.recommendations,
-                                  next_questions: data.next_questions ?? prev.next_questions,
-                                }
-                              : prev
-                          );
-                        } catch (err) {
-                          console.error('Failed to submit answers', err);
-                        } finally {
-                          setAnswersSubmitting(false);
-                        }
-                      }}
-                      className="mt-2 rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-white disabled:opacity-50 hover:bg-primary-700 transition-colors"
-                    >
-                      {answersSubmitting ? 'Re-checking...' : 'Save & re-check'}
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              <button
-                type="button"
-                className="w-full rounded-lg border border-gray-200 px-3 py-2 text-xs font-medium text-gray-600 hover:bg-gray-50 transition-colors"
-                onClick={() => setEmailOpen(true)}
-              >
-                Email my report
-              </button>
-              {emailStatus && <p className="text-xs text-gray-500">{emailStatus}</p>}
-            </div>
-          </div>
-        )}
-
-        {/* Main Chat Card */}
-        <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-xl border border-gray-200/50 overflow-hidden">
-          {isWelcomeState ? (
-            /* Welcome State - Copilot-inspired centered layout */
-            <div className="px-6 py-12 md:px-12 md:py-16">
-              {/* Owl Icon */}
-              <div className="flex justify-center mb-6">
-                <Image
-                  src="/favicon.png"
-                  alt="Ask Heaven"
-                  width={64}
-                  height={64}
-                  className="drop-shadow-lg"
-                  priority
-                />
-              </div>
-
-              <div className="text-center mb-10">
-                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
-                  Hi, how can I help you?
-                </h2>
-                <p className="text-gray-500 text-lg">
-                  Free UK landlord advice for {jurisdictionLabels[jurisdiction]}
-                </p>
-              </div>
-
-              {/* Main Input */}
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  if (!isSending && input.trim()) {
-                    void handleSend();
-                  }
-                }}
-                className="max-w-2xl mx-auto mb-10"
-              >
-                <div className="relative">
-                  <div className="flex items-center bg-white border-2 border-gray-200 rounded-full shadow-lg hover:border-primary/30 focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10 transition-all">
-                    <div className="pl-5 text-gray-400">
-                      <RiSearchLine className="w-5 h-5" />
-                    </div>
-                    <input
-                      ref={inputRef}
-                      type="text"
-                      className="flex-1 py-4 px-3 text-gray-900 placeholder-gray-400 bg-transparent focus:outline-none text-base"
-                      placeholder="Ask about evictions, rent arrears, deposits..."
-                      value={input}
-                      onChange={(e) => setInput(e.target.value)}
-                      disabled={isSending}
-                    />
-                    <button
-                      type="submit"
-                      disabled={isSending || !input.trim()}
-                      className="m-2 p-3 bg-primary hover:bg-primary-700 text-white rounded-full disabled:opacity-40 disabled:cursor-not-allowed transition-all"
-                      aria-label="Send message"
-                    >
-                      <RiSendPlaneFill className="w-5 h-5" />
-                    </button>
-                  </div>
-                </div>
-                {initialQuestion && (
-                  <p className="mt-3 text-sm text-gray-500 text-center">
-                    We’ve prefilled your question — edit or submit.
-                  </p>
-                )}
-              </form>
-
-              {/* Popular Topics Section with Mascot */}
-              <div className="relative max-w-3xl mx-auto">
-                <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200/50 p-6 pr-32 md:pr-48">
-                  <div className="flex items-center gap-2 mb-4">
-                    <span className="text-xl">📋</span>
-                    <h3 className="font-bold text-gray-900">Popular Topics</h3>
-                  </div>
-                  <div className="space-y-3">
-                    {quickPrompts.map((item) => (
-                      <button
-                        key={item.label}
-                        type="button"
-                        onClick={() => handleQuickPrompt(item.prompt)}
-                        className="group w-full flex items-start gap-3 p-3 bg-gray-50 hover:bg-primary/5 rounded-xl border border-gray-100 hover:border-primary/30 text-left transition-all duration-200"
-                      >
-                        <span className="text-lg flex-shrink-0">{item.icon}</span>
-                        <div>
-                          <p className="font-semibold text-gray-900 group-hover:text-primary transition-colors">
-                            {item.label}
-                          </p>
-                          <p className="text-sm text-gray-500">{item.prompt}</p>
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                {/* Mascot positioned on the right */}
-                <div className="absolute -right-4 md:-right-8 bottom-0 w-32 md:w-56 pointer-events-none">
-                  <Image
-                    src="/images/heromascot.png"
-                    alt="Ask Heaven Mascot"
-                    width={224}
-                    height={280}
-                    className="w-full h-auto drop-shadow-xl"
-                    priority
-                  />
-                </div>
-              </div>
-
-            </div>
-          ) : (
-            /* Chat State - Fixed container with scrollable messages */
-            <div className="flex flex-col h-[600px]">
-              {/* Messages Area - scrollable */}
-              <div ref={chatContainerRef} className="flex-1 overflow-y-auto p-6 space-y-6">
-                {chatMessages.map((m) => (
-                  <div
-                    key={m.id}
-                    className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}
-                  >
-                    {m.role === 'user' ? (
-                      <div className="max-w-[85%] md:max-w-[70%]">
-                        <div className="rounded-2xl rounded-br-md px-5 py-3 bg-primary">
-                          <p className="whitespace-pre-wrap text-sm leading-relaxed" style={{ color: '#ffffff' }}>{m.content}</p>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="max-w-[85%] md:max-w-[70%]">
-                        <div className="flex items-start gap-3">
-                          <div className="flex-shrink-0 w-8 h-8 rounded-full overflow-hidden">
-                            <Image
-                              src="/favicon.png"
-                              alt="Ask Heaven"
-                              width={32}
-                              height={32}
-                              className="w-full h-full object-cover"
-                            />
-                          </div>
-                          <div className="flex-1">
-                            <div className="rounded-2xl rounded-tl-md px-5 py-3 bg-gray-100 text-gray-800">
-                              <div className="prose prose-sm prose-gray max-w-none [&>p]:mb-2 [&>ul]:my-2 [&>ol]:my-2 [&>li]:my-0.5 [&>h1]:text-base [&>h2]:text-sm [&>h3]:text-sm [&>h1]:font-bold [&>h2]:font-semibold [&>h3]:font-semibold [&>strong]:text-gray-900 [&>p:last-child]:mb-0">
-                                <ReactMarkdown>{m.content}</ReactMarkdown>
-                              </div>
-                            </div>
-
-                            {/* Sources */}
-                            {m.sources && m.sources.length > 0 && (
-                              <div className="mt-3 flex items-center gap-2 flex-wrap">
-                                <RiBookLine className="w-4 h-4 text-gray-400" />
-                                {m.sources.map((source, idx) => (
-                                  <span
-                                    key={idx}
-                                    className="px-2 py-1 bg-gray-100 text-xs text-gray-600 rounded-md"
-                                  >
-                                    {source}
-                                  </span>
-                                ))}
-                              </div>
-                            )}
-
-                            {/* Follow-up questions */}
-                            {m.followUpQuestions && m.followUpQuestions.length > 0 && (
-                              <div className="mt-4 space-y-2">
-                                {m.followUpQuestions.map((question, idx) => (
-                                  <button
-                                    key={idx}
-                                    type="button"
-                                    onClick={() => handleFollowupClick(question)}
-                                    className="block w-full text-left text-sm px-4 py-2.5 bg-white border border-gray-200 rounded-xl hover:border-primary/30 hover:bg-primary/5 transition-all group"
-                                  >
-                                    <span className="text-gray-700 group-hover:text-primary">{question}</span>
-                                    <RiArrowRightLine className="inline-block ml-2 w-4 h-4 text-gray-400 group-hover:text-primary transition-colors" />
-                                  </button>
-                                ))}
-                              </div>
-                            )}
-
-                            {/* Product CTA */}
-                            {m.suggestedProduct && isValidAskHeavenRecommendation(m.suggestedProduct) && (
-                              <div className="mt-4">
-                                {(() => {
-                                  const topicForIntent = (m.suggestedTopic as Topic) ?? detectedTopic;
-                                  const intent = detectAskHeavenCtaIntent(
-                                    topicForIntent,
-                                    lastQuestion
-                                  ) ?? getDefaultIntentForProduct(m.suggestedProduct as any);
-                                  let cta = intent
-                                    ? getAskHeavenCtaCopy({
-                                        product: m.suggestedProduct as any,
-                                        jurisdiction,
-                                        intent,
-                                      })
-                                    : null;
-                                  if (!cta && topicForIntent && intent) {
-                                    const fallback = getRecommendedProduct(
-                                      topicForIntent,
-                                      jurisdiction as WizardJurisdiction,
-                                      intent
-                                    );
-                                    if (fallback) {
-                                      cta = getAskHeavenCtaCopy({
-                                        product: fallback.product,
-                                        jurisdiction,
-                                        intent,
-                                      });
-                                    }
-                                  }
-                                  if (!cta) {
-                                    return null;
-                                  }
-                                  const wizardUrl = buildWizardLinkWithAttribution(cta.product);
-                                  return (
-                                    <button
-                                      type="button"
-                                      onClick={() => handleCtaClick('wizard', wizardUrl, cta.title, m.suggestedProduct ?? undefined)}
-                                      className="w-full flex items-center justify-between p-4 bg-gradient-to-r from-primary/5 to-primary/10 rounded-xl border border-primary/20 hover:border-primary/40 transition-all group cursor-pointer text-left"
-                                    >
-                                      <div>
-                                        <p className="text-sm font-semibold text-primary group-hover:text-primary-700">
-                                          {cta.title}
-                                        </p>
-                                        <p className="text-xs text-gray-500 mt-0.5">{cta.description}</p>
-                                      </div>
-                                      <div className="text-right">
-                                        <span className="text-sm font-bold text-gray-900">{cta.displayPrice}</span>
-                                        {cta.priceNote && (
-                                          <span className="block text-[10px] text-gray-400">{cta.priceNote}</span>
-                                        )}
-                                      </div>
-                                    </button>
-                                  );
-                                })()}
-                              </div>
-                            )}
-
-                            {/* Next Best Action CTA - shown when topic matches eviction/money claim/tenancy intent */}
-                            {(!m.suggestedProduct || !isValidAskHeavenRecommendation(m.suggestedProduct)) &&
-                              m.suggestedNextStep === 'wizard' &&
-                              m.suggestedTopic &&
-                              ['eviction', 'arrears', 'tenancy'].includes(m.suggestedTopic) && (
-                                <NextBestActionCard
-                                  topic={m.suggestedTopic as Topic}
-                                  jurisdiction={jurisdiction}
-                                  suggestedNextStep={m.suggestedNextStep}
-                                  lastQuestion={lastQuestion}
-                                  questionCount={getQuestionCount()}
-                                  attribution={getAskHeavenAttribution()}
-                                  onCtaClick={(ctaType, targetUrl, ctaLabel) => handleCtaClick(ctaType as any, targetUrl, ctaLabel, m.suggestedProduct ?? undefined)}
-                                  onRequestEmailCapture={(reason) => {
-                                    setEmailGateReason(reason);
-                                    setEmailGateOpen(true);
-                                  }}
-                                />
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                ))}
-
-                {/* Typing indicator */}
-                {isSending && (
-                  <div className="flex justify-start">
-                    <div className="flex items-start gap-3">
-                      <div className="flex-shrink-0 w-8 h-8 rounded-full overflow-hidden">
-                        <Image
-                          src="/favicon.png"
-                          alt="Ask Heaven"
-                          width={32}
-                          height={32}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      <div className="rounded-2xl rounded-tl-md px-5 py-4 bg-gray-100">
-                        <div className="flex gap-1.5">
-                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                <div ref={chatEndRef} />
-              </div>
-
-              {/* Error Message */}
-              {error && (
-                <div className="mx-6 mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-                  {error}
-                </div>
-              )}
-
-              {/* Input Area */}
-              <div className="border-t border-gray-100 bg-gray-50/50 p-4">
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    if (!isSending && input.trim()) {
-                      void handleSend();
-                    }
-                  }}
-                  className="flex gap-3"
-                >
-                  <div className="flex-1 flex items-center bg-white border border-gray-200 rounded-xl focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/10 transition-all">
-                    <input
-                      ref={inputRef}
-                      type="text"
-                      className="flex-1 px-4 py-3 bg-transparent text-gray-900 placeholder-gray-400 focus:outline-none"
-                      placeholder="Ask a follow-up question..."
-                      value={input}
-                      onChange={(e) => setInput(e.target.value)}
-                      disabled={isSending}
-                    />
-                  </div>
-                  <button
-                    type="submit"
-                    disabled={isSending || !input.trim()}
-                    className="px-5 py-3 bg-primary hover:bg-primary-700 text-white font-semibold rounded-xl disabled:opacity-40 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
-                  >
-                    <span className="hidden sm:inline">{isSending ? 'Sending...' : 'Send'}</span>
-                    <RiSendPlaneFill className="w-5 h-5" />
-                  </button>
-                </form>
-                <p className="mt-3 text-xs text-gray-400 text-center">
-                  For guidance only - not legal advice.
-                  <Link href="/terms" className="text-primary hover:underline ml-1">Terms apply</Link>
-                </p>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
+    <>
+      <AskHeavenChatUI
+        jurisdiction={jurisdiction}
+      jurisdictionLabels={jurisdictionLabels}
+      jurisdictionFlags={jurisdictionFlags}
+      onJurisdictionChange={setJurisdiction}
+      isWelcomeState={isWelcomeState}
+      quickPrompts={quickPrompts}
+      onQuickPrompt={handleQuickPrompt}
+      initialQuestion={initialQuestion}
+      input={input}
+      onInputChange={setInput}
+      onSubmit={() => void handleSend()}
+      isSending={isSending}
+      chatMessages={chatMessages}
+      chatContainerRef={chatContainerRef}
+      chatEndRef={chatEndRef}
+      inputRef={inputRef}
+      onFollowupClick={handleFollowupClick}
+      error={error}
+      detectedTopic={detectedTopic}
+      lastQuestion={lastQuestion}
+      suggestedNextStep={suggestedNextStep}
+      questionCount={getQuestionCount()}
+      onCtaClick={handleCtaClick}
+      buildWizardLinkWithAttribution={buildWizardLinkWithAttribution}
+      onRequestEmailCapture={(reason) => {
+        setEmailGateReason(reason);
+        setEmailGateOpen(true);
+      }}
+      showComposer={showComposer}
+      statusBanner={statusBanner}
+      caseId={caseId}
+      caseContext={caseContext}
+      selectedEvidenceId={selectedEvidenceId}
+      selectedEvidence={selectedEvidence}
+      onSelectEvidence={setSelectedEvidenceId}
+      questionErrors={questionErrors}
+      answersSubmitting={answersSubmitting}
+      renderQuestionInput={renderQuestionInput}
+      onSubmitAnswers={handleSubmitAnswers}
+      onOpenEmail={() => setEmailOpen(true)}
+      emailStatus={emailStatus}
+    />
 
       {/* Email Report Modal */}
       <EmailCaptureModal
@@ -1059,6 +633,6 @@ export default function AskHeavenPageClient({
         includeEmailReport={false}
         onSuccess={handleEmailCaptured}
       />
-    </div>
+    </>
   );
 }
