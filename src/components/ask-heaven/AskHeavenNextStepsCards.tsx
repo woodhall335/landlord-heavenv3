@@ -91,15 +91,15 @@ export function AskHeavenNextStepsCards({ jurisdiction = 'england', className }:
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-violet-100/70 transition-colors duration-300 group-hover:bg-violet-100">
                 {card.icon}
               </div>
-              <h3 className="text-lg font-semibold leading-tight text-gray-900 sm:text-[2rem]">
+              <h3 className="text-lg font-semibold leading-tight text-gray-900 sm:text-2xl">
                 {card.title} <span className="font-medium text-gray-700">— {card.price}</span>{' '}
                 {card.detail && <span className="text-gray-600">{card.detail}</span>}
               </h3>
             </div>
 
-            <p className="mt-6 text-base leading-relaxed text-gray-700 sm:text-[1.6rem]">{card.description}</p>
+            <p className="mt-6 text-base leading-relaxed text-gray-700 sm:text-lg">{card.description}</p>
 
-            <p className="mt-auto pt-6 text-base font-medium text-violet-600 transition-all duration-300 group-hover:text-violet-700 group-hover:underline group-focus-visible:underline sm:text-[1.6rem]">
+            <p className="mt-auto pt-6 text-base font-medium text-violet-600 transition-all duration-300 group-hover:text-violet-700 group-hover:underline group-focus-visible:underline sm:text-lg">
               <span
                 aria-hidden="true"
                 className="mr-2 inline-block transition-transform duration-300 group-hover:translate-x-0.5"
