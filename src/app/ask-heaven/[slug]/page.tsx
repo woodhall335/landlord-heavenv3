@@ -189,6 +189,7 @@ export default async function AskHeavenQuestionPage({ params }: PageProps) {
           initialJurisdiction={resolvedJurisdiction}
           initialTopic={chatTopic}
           initialQuestionText={question.question}
+          showReviewWarning={question.status !== 'approved'}
         />
         <div className="max-w-4xl mx-auto px-4 pb-12">
           <SeoDisclaimer />
