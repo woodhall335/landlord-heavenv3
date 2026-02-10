@@ -35,7 +35,7 @@ export const homeHeroConfig: HeroConfig = {
       <span className="font-semibold"> save 80%+ vs solicitor</span>
     </>
   ),
-  primaryCta: { label: 'Generate Your Documents →', href: '/generate' },
+  primaryCta: { label: 'Generate Your Documents →', href: '/wizard' },
   secondaryCta: { label: 'View Pricing →', href: '/pricing' },
   feature: 'Download instant UK notices & forms',
   mascotSrc: '/images/mascots/landlord-heaven-owl-checklist-golden-coins.png',

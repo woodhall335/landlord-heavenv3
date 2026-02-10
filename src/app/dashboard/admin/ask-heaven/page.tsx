@@ -133,9 +133,9 @@ export default function AskHeavenAdminListPage() {
         <div className="flex flex-col gap-6">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
-              <h1 className="text-2xl font-semibold text-gray-900">Ask Heaven Editorial</h1>
+              <h1 className="text-2xl font-semibold text-gray-900">Ask Heaven Questions</h1>
               <p className="text-sm text-gray-600">
-                Review, approve, and manage Ask Heaven questions.
+                Manage Ask Heaven questions and SEO settings.
               </p>
             </div>
             <div className="flex items-center gap-2">

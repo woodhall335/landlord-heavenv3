@@ -295,7 +295,10 @@ export default async function AskHeavenPage({
       <h1 className="sr-only">Ask Heaven: Free UK Landlord Q&A Tool</h1>
 
       {/* Client-side interactive widget - now prominently placed first */}
-      <AskHeavenPageClient initialQuery={resolvedSearchParams?.q ?? null} />
+      <AskHeavenPageClient
+        initialQuery={resolvedSearchParams?.q ?? null}
+        chatSubheading="Free landlord assistant for England/Wales/Scotland/N. Ireland"
+      />
 
       {/* SSR Content Section - below the main chat for SEO */}
       <div className="bg-white py-16">

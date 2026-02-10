@@ -19,6 +19,7 @@ import {
   getQuestionRepository,
   validateQualityGates,
   getMetaRobots,
+  isAskHeavenCanarySlug,
 } from '@/lib/ask-heaven/questions';
 import type { AskHeavenQuestion } from '@/lib/ask-heaven/questions';
 import { getCanonicalUrl } from '@/lib/seo';
@@ -27,7 +28,6 @@ import {
   faqPageSchema,
   breadcrumbSchema,
 } from '@/lib/seo/structured-data';
-import { SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import AskHeavenPageClient from '@/app/ask-heaven/AskHeavenPageClient';
 import { detectAskHeavenCtaIntent } from '@/lib/ask-heaven/cta-copy';
 import { getRecommendedProduct, type Topic } from '@/lib/ask-heaven/topic-detection';
@@ -112,6 +112,7 @@ export default async function AskHeavenQuestionPage({ params }: PageProps) {
 
   // Validate quality gates for display
   const qualityResult = validateQualityGates(question);
+  const isCanarySlug = isAskHeavenCanarySlug(question.slug);
 
   const primaryJurisdiction = question.jurisdictions[0] || 'uk-wide';
   const resolvedJurisdiction = resolveChatJurisdiction(primaryJurisdiction);
@@ -188,12 +189,13 @@ export default async function AskHeavenQuestionPage({ params }: PageProps) {
         initialJurisdiction={resolvedJurisdiction}
         initialTopic={chatTopic}
         initialQuestionText={question.question}
-        showReviewWarning={question.status !== 'approved'}
+        showReviewWarning={question.status !== 'approved' && !isCanarySlug}
+        chatHeading={question.question}
+        chatSubheading="Free landlord assistant for England/Wales/Scotland/N. Ireland"
       />
       <div className="bg-white pb-12">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <SeoDisclaimer />
             {process.env.NODE_ENV === 'development' && (
               <div className="mt-4 text-xs text-gray-400">
                 Debug: {qualityResult.wordCount} words | Status: {question.status} | Indexable:{' '}

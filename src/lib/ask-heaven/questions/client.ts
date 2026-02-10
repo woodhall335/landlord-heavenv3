@@ -19,6 +19,8 @@ export {
   REQUIRED_DISCLAIMER_PATTERNS,
   DUPLICATE_SIMILARITY_THRESHOLD,
   JURISDICTION_PRODUCT_RESTRICTIONS,
+  ASK_HEAVEN_CANARY_INDEX_SLUGS,
+  isAskHeavenCanarySlug,
   countWords,
   hasRequiredDisclaimer,
   isProductAllowedForJurisdiction,
