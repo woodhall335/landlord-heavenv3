@@ -45,6 +45,7 @@ import {
   type Topic,
 } from '@/lib/ask-heaven/topic-detection';
 import { NextBestActionCard } from '@/components/ask-heaven/NextBestActionCard';
+import { AskHeavenNextStepsCards } from '@/components/ask-heaven/AskHeavenNextStepsCards';
 
 type ChatRole = 'user' | 'assistant';
 
@@ -561,6 +562,7 @@ export default function AskHeavenChatShell({
 
   // Determine if we're in welcome state (no messages yet)
   const isWelcomeState = chatMessages.length === 0 && !isSending;
+  const hasAssistantMessage = chatMessages.some((message) => message.role === 'assistant');
 
   const formatAssistantContent = useCallback((content: string): string => {
     const lines = content.split(/\r?\n/);
@@ -1126,6 +1128,13 @@ export default function AskHeavenChatShell({
             </div>
           )}
         </div>
+
+        {!isWelcomeState && hasAssistantMessage && (
+          <AskHeavenNextStepsCards
+            jurisdiction={jurisdiction === 'northern-ireland' ? 'n_ireland' : jurisdiction}
+            className="px-2"
+          />
+        )}
       </div>
 
       {/* Email Report Modal */}
