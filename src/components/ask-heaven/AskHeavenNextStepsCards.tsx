@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { productLinks } from '@/lib/seo/internal-links';
+import { RiFileList3Line, RiScales3Line, RiMoneyPoundCircleLine, RiFileTextLine } from 'react-icons/ri';
 
 type AskHeavenCardJurisdiction = 'england' | 'wales' | 'scotland' | 'n_ireland' | 'northern-ireland';
 
@@ -20,6 +21,7 @@ interface CardDefinition {
   href: string;
   ariaLabel: string;
   detail?: string;
+  icon: React.ReactNode;
 }
 
 export function AskHeavenNextStepsCards({ jurisdiction = 'england', className }: AskHeavenNextStepsCardsProps) {
@@ -32,6 +34,7 @@ export function AskHeavenNextStepsCards({ jurisdiction = 'england', className }:
       ctaText: 'Generate a compliant notice',
       href: productLinks.noticeOnly.href,
       ariaLabel: 'Open Notice Only Pack',
+      icon: <RiFileList3Line className="h-5 w-5 text-primary" aria-hidden="true" />,
     },
     {
       title: 'Complete Eviction Pack',
@@ -41,6 +44,7 @@ export function AskHeavenNextStepsCards({ jurisdiction = 'england', className }:
       ctaText: 'Prepare your eviction case',
       href: productLinks.completePack.href,
       ariaLabel: 'Open Complete Eviction Pack',
+      icon: <RiScales3Line className="h-5 w-5 text-primary" aria-hidden="true" />,
     },
     {
       title: 'Money Claims Pack',
@@ -49,6 +53,7 @@ export function AskHeavenNextStepsCards({ jurisdiction = 'england', className }:
       ctaText: 'Prepare a money claim',
       href: productLinks.moneyClaim.href,
       ariaLabel: 'Open Money Claims Pack',
+      icon: <RiMoneyPoundCircleLine className="h-5 w-5 text-primary" aria-hidden="true" />,
     },
     {
       title: 'Tenancy Agreements',
@@ -57,6 +62,7 @@ export function AskHeavenNextStepsCards({ jurisdiction = 'england', className }:
       ctaText: 'Create a tenancy agreement',
       href: productLinks.tenancyAgreement.href,
       ariaLabel: 'Open Tenancy Agreements',
+      icon: <RiFileTextLine className="h-5 w-5 text-primary" aria-hidden="true" />,
     },
   ];
 
@@ -68,27 +74,32 @@ export function AskHeavenNextStepsCards({ jurisdiction = 'england', className }:
     >
       <h2
         id="ask-heaven-next-steps-heading"
-        className="text-3xl sm:text-4xl font-semibold text-gray-900 text-center"
+        className="text-center text-3xl font-bold text-gray-900 sm:text-4xl"
       >
         What we can help you do next
       </h2>
 
-      <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2">
         {cards.map((card) => (
           <Link
             key={card.title}
             href={card.href}
             aria-label={card.ariaLabel}
-            className="group flex h-full flex-col rounded-2xl border border-violet-200/70 bg-white p-6 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:border-primary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+            className="group flex h-full flex-col rounded-2xl border border-violet-200/80 bg-white p-6 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-primary/50 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
           >
-            <h3 className="text-lg sm:text-xl font-semibold leading-tight text-gray-900">
-              {card.title} <span className="font-medium text-gray-500">— {card.price}</span>{' '}
-              {card.detail && <span className="font-medium text-gray-500">{card.detail}</span>}
-            </h3>
+            <div className="flex items-start gap-3">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10">
+                {card.icon}
+              </div>
+              <h3 className="text-lg font-semibold leading-tight text-gray-900 sm:text-xl">
+                {card.title} <span className="font-medium text-gray-500">— {card.price}</span>{' '}
+                {card.detail && <span className="font-medium text-gray-500">{card.detail}</span>}
+              </h3>
+            </div>
 
             <p className="mt-4 text-base leading-relaxed text-gray-700">{card.description}</p>
 
-            <p className="mt-auto pt-5 text-base font-medium text-primary transition-colors group-hover:text-primary-700 group-hover:underline group-focus-visible:underline">
+            <p className="mt-auto pt-5 text-base font-medium text-primary transition-all group-hover:text-primary-700 group-hover:underline group-focus-visible:underline">
               <span aria-hidden="true" className="mr-2">→</span>
               {card.ctaText}
             </p>

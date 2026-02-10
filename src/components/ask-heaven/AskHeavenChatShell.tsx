@@ -45,7 +45,6 @@ import {
   type Topic,
 } from '@/lib/ask-heaven/topic-detection';
 import { NextBestActionCard } from '@/components/ask-heaven/NextBestActionCard';
-import { AskHeavenNextStepsCards } from '@/components/ask-heaven/AskHeavenNextStepsCards';
 
 type ChatRole = 'user' | 'assistant';
 
@@ -122,7 +121,7 @@ const jurisdictionFlags: Record<Jurisdiction, string> = {
 // Email gate threshold
 const EMAIL_GATE_THRESHOLD = 3;
 
-interface AskHeavenChatShellProps {
+export interface AskHeavenChatShellProps {
   initialQuery?: string | null;
   initialMessages?: ChatMessage[];
   initialJurisdiction?: Jurisdiction;
@@ -131,6 +130,8 @@ interface AskHeavenChatShellProps {
   showReviewWarning?: boolean;
   chatHeading?: string | null;
   chatSubheading?: string | null;
+  onNextStepsVisibilityChange?: (isVisible: boolean) => void;
+  onJurisdictionChange?: (jurisdiction: Jurisdiction) => void;
 }
 
 export default function AskHeavenChatShell({
@@ -142,6 +143,8 @@ export default function AskHeavenChatShell({
   showReviewWarning,
   chatHeading,
   chatSubheading,
+  onNextStepsVisibilityChange,
+  onJurisdictionChange,
 }: AskHeavenChatShellProps): React.ReactElement {
   const router = useRouter();
   const [jurisdiction, setJurisdiction] = useState<Jurisdiction>(
@@ -563,6 +566,15 @@ export default function AskHeavenChatShell({
   // Determine if we're in welcome state (no messages yet)
   const isWelcomeState = chatMessages.length === 0 && !isSending;
   const hasAssistantMessage = chatMessages.some((message) => message.role === 'assistant');
+  const showNextSteps = !isWelcomeState && hasAssistantMessage;
+
+  useEffect(() => {
+    onNextStepsVisibilityChange?.(showNextSteps);
+  }, [onNextStepsVisibilityChange, showNextSteps]);
+
+  useEffect(() => {
+    onJurisdictionChange?.(jurisdiction);
+  }, [jurisdiction, onJurisdictionChange]);
 
   const formatAssistantContent = useCallback((content: string): string => {
     const lines = content.split(/\r?\n/);
@@ -1128,15 +1140,6 @@ export default function AskHeavenChatShell({
             </div>
           )}
 
-          {!isWelcomeState && hasAssistantMessage && (
-            <div className="px-4 pb-6 sm:px-6 sm:pb-8">
-              <div className="mt-2 rounded-3xl border border-gray-200/60 bg-white p-6 sm:p-8 overflow-visible">
-                <AskHeavenNextStepsCards
-                  jurisdiction={jurisdiction === 'northern-ireland' ? 'n_ireland' : jurisdiction}
-                />
-              </div>
-            </div>
-          )}
         </div>
 
       </div>
