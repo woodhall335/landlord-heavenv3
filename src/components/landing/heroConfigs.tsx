@@ -31,7 +31,7 @@ export const homeHeroConfig: HeroConfig = {
   highlightTitle: 'in Minutes, Not Days',
   subtitle: (
     <>
-      Generate compliant eviction notices, court forms, and tenancy agreements —
+      Reduce possession failure risk with guided notices, court forms, and tenancy agreements —
       <span className="font-semibold"> save 80%+ vs solicitor</span>
     </>
   ),
