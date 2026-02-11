@@ -20,6 +20,7 @@ import { freeTools, validatorToolRoutes } from '@/lib/tools/tools';
 import { getQuestionRepository } from '@/lib/ask-heaven/questions';
 import { getPostRegion } from '@/lib/blog/categories';
 import { getBlogSeoConfig } from '@/lib/blog/seo';
+import { discoverStaticPageRoutes } from '@/lib/seo/static-route-inventory';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Use a stable date for pages that don't change frequently
@@ -269,10 +270,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const excludedPrefixes = ['/admin', '/api', '/auth', '/checkout', '/dashboard', '/wizard', '/success'];
   const noindexPaths = ['/tenancy-agreements/england-wales', '/refunds'];
+
+  // Sitemap policy: curated + auto-discovered static routes.
+  // Keep intentional static exclusions here for any indexable route we explicitly want omitted.
+  const intentionalStaticRouteExclusions = new Set<string>([]);
+
   const isIndexablePath = (path: string) =>
     !excludedPrefixes.some((prefix) => path === prefix || path.startsWith(`${prefix}/`)) &&
     !noindexPaths.includes(path) &&
-    !retiredPaths.has(path);
+    !retiredPaths.has(path) &&
+    !intentionalStaticRouteExclusions.has(path);
 
   // Build sitemap entries
   const marketingEntries = marketingPages.map((page) => {
@@ -304,10 +311,33 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: page.priority,
   }));
 
-  return [
+  const staticPageRoutes = await discoverStaticPageRoutes();
+  const coveredPaths = new Set([...marketingPages, ...datedPages].map((page) => page.path));
+
+  const autoDiscoveredStaticEntries: MetadataRoute.Sitemap = staticPageRoutes
+    .filter((path) => !coveredPaths.has(path) && isIndexablePath(path))
+    .map((path) => ({
+      url: `${SITE_ORIGIN}${path}`,
+      lastModified: STABLE_PRODUCT_DATE,
+      changeFrequency: path === '/' || path.startsWith('/products') || path.startsWith('/tools') ? 'weekly' : 'monthly',
+      priority: path === '/' ? 1.0 : path.startsWith('/products') ? 0.9 : path.startsWith('/tools') ? 0.8 : 0.7,
+    }));
+
+  const dedupedByPath = new Map<string, MetadataRoute.Sitemap[number]>();
+
+  for (const entry of [
     ...marketingEntries,
     ...datedEntries,
+    ...autoDiscoveredStaticEntries,
     ...blogPostPages,
     ...askHeavenPages,
-  ].filter((entry) => isIndexablePath(new URL(entry.url).pathname));
+  ]) {
+    const pathname = new URL(entry.url).pathname;
+    if (!isIndexablePath(pathname) || dedupedByPath.has(pathname)) {
+      continue;
+    }
+    dedupedByPath.set(pathname, entry);
+  }
+
+  return [...dedupedByPath.values()];
 }

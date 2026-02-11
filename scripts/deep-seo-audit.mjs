@@ -229,8 +229,14 @@ async function run() {
   await fs.writeFile(path.join(OUT_DIR,'seo_audit_report.csv'), csv);
 
   const sitemapPaths = new Set(sitemapEntries.map((e)=>e.path));
+  const allowlistPath = path.join(ROOT, 'scripts', 'seo-sitemap-allowlist.json');
+  const allowlistedIntentionalExclusions = new Set(
+    JSON.parse(await fs.readFile(allowlistPath, 'utf8').catch(()=>'{}')).intentionallyExcludedRoutes || [],
+  );
   const publicStaticRoutes = [...staticPageRoutes].filter((p)=>!['/api','/auth','/dashboard','/wizard','/success'].some((x)=>p===x||p.startsWith(`${x}/`)));
-  const missingFromSitemap = publicStaticRoutes.filter((p)=>!sitemapPaths.has(p));
+  const missingFromSitemap = publicStaticRoutes
+    .filter((p)=>!allowlistedIntentionalExclusions.has(p))
+    .filter((p)=>!sitemapPaths.has(p));
 
   const summary = {
     counts: {
