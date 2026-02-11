@@ -41,6 +41,8 @@ export function WizardFlowShell({
   children,
   navigation,
 }: WizardFlowShellProps) {
+  const completionLabel = `${completedCount} of ${totalCount} sections complete`;
+
   return (
     <div
       className={clsx(
@@ -68,22 +70,15 @@ export function WizardFlowShell({
             >
               {title}
             </h1>
-            <span
-              className={clsx(
-                'text-sm whitespace-nowrap',
-                isWizardThemeV2 ? 'font-semibold text-violet-800' : 'text-gray-500'
-              )}
-            >
-              {completedCount} of {totalCount} sections complete
-            </span>
+            {!isWizardThemeV2 && (
+              <span className="text-sm whitespace-nowrap text-gray-500">{completionLabel}</span>
+            )}
           </div>
 
           {isWizardThemeV2 && (
             <div className="mb-2.5 flex items-center justify-between">
               <p className="text-[12px] font-semibold uppercase tracking-wide text-violet-700/90">Progress</p>
-              <p className="text-sm font-semibold text-violet-900">
-                {completedCount} of {totalCount} sections complete
-              </p>
+              <p className="text-sm font-semibold text-violet-900">{completionLabel}</p>
             </div>
           )}
 
