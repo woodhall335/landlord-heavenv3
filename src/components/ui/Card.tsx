@@ -11,6 +11,7 @@
 
 import React from "react";
 import { clsx } from "clsx";
+import { isWizardThemeV2 } from '@/components/wizard/shared/theme';
 
 export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   variant?: "default" | "bordered" | "elevated";
@@ -32,13 +33,13 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(
     ref
   ) => {
     const baseStyles = clsx(
-      "bg-white rounded-2xl",
+      isWizardThemeV2 ? "bg-white rounded-xl" : "bg-white rounded-2xl",
       "transition-all duration-200 ease-out"
     );
 
     const variantStyles = {
-      default: "shadow-sm border border-gray-200",
-      bordered: "shadow-sm border-2 border-gray-300",
+      default: isWizardThemeV2 ? "shadow-[0_4px_14px_rgba(17,24,39,0.06)] border border-violet-100" : "shadow-sm border border-gray-200",
+      bordered: isWizardThemeV2 ? "shadow-sm border border-violet-200" : "shadow-sm border-2 border-gray-300",
       elevated: "shadow-lg border border-gray-100",
     };
 

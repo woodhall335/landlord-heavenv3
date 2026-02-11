@@ -21,10 +21,10 @@
 
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { RiCheckLine, RiErrorWarningLine, RiAlertLine } from 'react-icons/ri';
 
 import { getCaseFacts, saveCaseFacts } from '@/lib/wizard/facts-client';
 import { AskHeavenPanel } from '@/components/wizard/AskHeavenPanel';
+import { WizardFlowShell } from '@/components/wizard/shared/WizardFlowShell';
 import { SmartReviewPanel } from '@/components/wizard/SmartReviewPanel';
 import type { SmartReviewWarningItem, SmartReviewSummary } from '@/components/wizard/SmartReviewPanel';
 
@@ -746,206 +746,131 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-20">
-      {/* Header with progress */}
-      <header className="bg-white border-b border-gray-200 sticky top-20 z-10">
-        <div className="max-w-5xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between mb-2">
-            <h1 className="text-lg font-semibold text-gray-900">
-              {jurisdictionLabel} Pack
-            </h1>
-            <span className="text-sm text-gray-500">
-              {completedCount} of {visibleSections.length} sections complete
-            </span>
-          </div>
-
-          {/* Progress bar */}
-          <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-            <div
-              className="h-full bg-[#7C3AED] transition-all duration-300"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
-
-          {/* Section tabs */}
-          <div className="flex gap-1 mt-4 overflow-x-auto pb-2">
-            {visibleSections.map((section, index) => {
-              const isComplete = section.isComplete(facts);
-              const isCurrent = index === currentSectionIndex;
-              const hasBlocker = (section.hasBlockers?.(facts, jurisdiction) || []).length > 0;
-              const hasWarning = (section.hasWarnings?.(facts, jurisdiction) || []).length > 0;
-
-              return (
-                <button
-                  key={section.id}
-                  onClick={() => setCurrentSectionIndex(index)}
-                  className={`
-                    px-3 py-1.5 text-sm font-medium rounded-md whitespace-nowrap transition-colors
-                    ${isCurrent ? 'bg-[#7C3AED] text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}
-                    ${hasBlocker && !isCurrent ? 'ring-2 ring-red-300' : ''}
-                    ${hasWarning && !hasBlocker && !isCurrent ? 'ring-2 ring-amber-300' : ''}
-                  `}
-                >
-                  <span className="flex items-center gap-1.5">
-                    {isComplete && !hasBlocker && (
-                      <RiCheckLine className="w-4 h-4 text-green-500" />
-                    )}
-                    {hasBlocker && (
-                      <RiErrorWarningLine className="w-4 h-4 text-red-500" />
-                    )}
-                    {hasWarning && !hasBlocker && !isComplete && (
-                      <RiAlertLine className="w-4 h-4 text-amber-500" />
-                    )}
-                    {section.label}
-                  </span>
-                </button>
-              );
-            })}
+    <WizardFlowShell
+      title={`${jurisdictionLabel} Pack`}
+      completedCount={completedCount}
+      totalCount={visibleSections.length}
+      progress={progress}
+      tabs={visibleSections.map((section, index) => ({
+        id: section.id,
+        label: section.label,
+        isCurrent: index === currentSectionIndex,
+        isComplete: section.isComplete(facts),
+        hasIssue:
+          (section.hasBlockers?.(facts, jurisdiction) || []).length > 0 ||
+          (section.hasWarnings?.(facts, jurisdiction) || []).length > 0,
+        onClick: () => setCurrentSectionIndex(index),
+      }))}
+      sectionTitle={currentSection?.label ?? ''}
+      sectionDescription={currentSection?.description}
+      banner={error ? (
+        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+          <div className="flex items-center justify-between">
+            <span className="text-red-700">{error}</span>
+            <button
+              type="button"
+              onClick={handleRetrySave}
+              disabled={saving}
+              className="ml-4 px-3 py-1.5 text-sm font-medium text-red-700 bg-white border border-red-300 rounded-md hover:bg-red-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {saving ? 'Retrying...' : 'Retry'}
+            </button>
           </div>
         </div>
-      </header>
+      ) : undefined}
+      sidebar={(
+        <AskHeavenPanel
+          caseId={caseId}
+          caseType="money_claim"
+          jurisdiction={jurisdiction}
+          product="money_claim"
+          currentQuestionId={currentQuestionId}
+        />
+      )}
+      navigation={(
+        <>
+          <button
+            onClick={handleBack}
+            disabled={currentSectionIndex === 0}
+            className={`
+              px-4 py-2 text-sm font-medium rounded-md transition-colors
+              ${currentSectionIndex === 0
+                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}
+            `}
+          >
+            ← Back
+          </button>
 
-      {/* Main content with sidebar */}
-      <div className="max-w-6xl mx-auto px-4 py-8 flex flex-col lg:flex-row gap-6">
-        {/* Main wizard column */}
-        <main className="flex-1 lg:max-w-3xl">
-          {/* P0-2 FIX: Error banner with retry button */}
-          {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-              <div className="flex items-center justify-between">
-                <span className="text-red-700">{error}</span>
-                <button
-                  type="button"
-                  onClick={handleRetrySave}
-                  disabled={saving}
-                  className="ml-4 px-3 py-1.5 text-sm font-medium text-red-700 bg-white border border-red-300 rounded-md hover:bg-red-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {saving ? 'Retrying...' : 'Retry'}
-                </button>
-              </div>
-            </div>
-          )}
+          <div className="flex items-center gap-2">
+            {saving && <span className="text-sm text-gray-500">Saving...</span>}
 
-          {/* Current section */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <div className="mb-6">
-              <h2 className="text-xl font-semibold text-gray-900">
-                {currentSection?.label}
-              </h2>
-              <p className="text-sm text-gray-500 mt-1">
-                {currentSection?.description}
-              </p>
-            </div>
-
-            {/* Blockers */}
-            {currentBlockers.length > 0 && (
-              <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-                <h3 className="text-sm font-medium text-red-800 mb-2">
-                  Cannot Proceed - Blockers:
-                </h3>
-                <ul className="list-disc list-inside text-sm text-red-700 space-y-1">
-                  {currentBlockers.map((blocker, i) => (
-                    <li key={i}>{blocker}</li>
-                  ))}
-                </ul>
-              </div>
+            {currentSection?.id === 'review' ? (
+              <button
+                onClick={handleComplete}
+                disabled={!caseValidation.valid}
+                className={`
+                  px-6 py-2 text-sm font-medium rounded-md transition-colors
+                  ${!caseValidation.valid
+                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                    : 'bg-green-600 text-white hover:bg-green-700'}
+                `}
+              >
+                Generate Documents
+              </button>
+            ) : (
+              <button
+                onClick={handleNext}
+                disabled={currentSectionIndex === visibleSections.length - 1}
+                className={`
+                  px-6 py-2 text-sm font-medium rounded-md transition-colors
+                  ${currentSectionIndex === visibleSections.length - 1
+                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                    : 'bg-[#7C3AED] text-white hover:bg-[#6D28D9]'}
+                `}
+              >
+                Next →
+              </button>
             )}
-
-            {/* Warnings */}
-            {currentWarnings.length > 0 && (
-              <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-lg">
-                <h3 className="text-sm font-medium text-amber-800 mb-2">
-                  Warnings:
-                </h3>
-                <ul className="list-disc list-inside text-sm text-amber-700 space-y-1">
-                  {currentWarnings.map((warning, i) => (
-                    <li key={i}>{warning}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            {/* Section content */}
-            {renderSection()}
-
-            {/* Smart Review Panel - Show in evidence and review sections */}
-            {(currentSection?.id === 'evidence' || currentSection?.id === 'review') &&
-              smartReviewWarnings.length > 0 && (
-                <div className="mt-6">
-                  <SmartReviewPanel
-                    warnings={smartReviewWarnings}
-                    summary={smartReviewSummary}
-                    defaultCollapsed={currentSection?.id !== 'evidence'}
-                  />
-                </div>
-              )}
           </div>
+        </>
+      )}
+    >
+      {currentBlockers.length > 0 && (
+        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+          <h3 className="text-sm font-medium text-red-800 mb-2">Cannot Proceed - Blockers:</h3>
+          <ul className="list-disc list-inside text-sm text-red-700 space-y-1">
+            {currentBlockers.map((blocker, i) => (
+              <li key={i}>{blocker}</li>
+            ))}
+          </ul>
+        </div>
+      )}
 
-          {/* Navigation */}
-          <div className="flex items-center justify-between mt-6">
-            <button
-              onClick={handleBack}
-              disabled={currentSectionIndex === 0}
-              className={`
-                px-4 py-2 text-sm font-medium rounded-md transition-colors
-                ${currentSectionIndex === 0
-                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}
-              `}
-            >
-              ← Back
-            </button>
+      {currentWarnings.length > 0 && (
+        <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+          <h3 className="text-sm font-medium text-amber-800 mb-2">Warnings:</h3>
+          <ul className="list-disc list-inside text-sm text-amber-700 space-y-1">
+            {currentWarnings.map((warning, i) => (
+              <li key={i}>{warning}</li>
+            ))}
+          </ul>
+        </div>
+      )}
 
-            <div className="flex items-center gap-2">
-              {saving && (
-                <span className="text-sm text-gray-500">Saving...</span>
-              )}
+      {renderSection()}
 
-              {currentSection?.id === 'review' ? (
-                <button
-                  onClick={handleComplete}
-                  disabled={!caseValidation.valid}
-                  className={`
-                    px-6 py-2 text-sm font-medium rounded-md transition-colors
-                    ${!caseValidation.valid
-                      ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                      : 'bg-green-600 text-white hover:bg-green-700'}
-                  `}
-                >
-                  Generate Documents
-                </button>
-              ) : (
-                <button
-                  onClick={handleNext}
-                  disabled={currentSectionIndex === visibleSections.length - 1}
-                  className={`
-                    px-6 py-2 text-sm font-medium rounded-md transition-colors
-                    ${currentSectionIndex === visibleSections.length - 1
-                      ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                      : 'bg-[#7C3AED] text-white hover:bg-[#6D28D9]'}
-                  `}
-                >
-                  Next →
-                </button>
-              )}
-            </div>
-          </div>
-        </main>
-
-        {/* Ask Heaven sidebar */}
-        <aside className="lg:w-80 shrink-0">
-          <div className="sticky top-44">
-            <AskHeavenPanel
-              caseId={caseId}
-              caseType="money_claim"
-              jurisdiction={jurisdiction}
-              product="money_claim"
-              currentQuestionId={currentQuestionId}
+      {(currentSection?.id === 'evidence' || currentSection?.id === 'review') &&
+        smartReviewWarnings.length > 0 && (
+          <div className="mt-6">
+            <SmartReviewPanel
+              warnings={smartReviewWarnings}
+              summary={smartReviewSummary}
+              defaultCollapsed={currentSection?.id !== 'evidence'}
             />
           </div>
-        </aside>
-      </div>
-    </div>
+        )}
+    </WizardFlowShell>
   );
 };
 

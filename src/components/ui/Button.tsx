@@ -12,6 +12,7 @@
 
 import React from "react";
 import { clsx } from "clsx";
+import { isWizardThemeV2 } from '@/components/wizard/shared/theme';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "primary" | "secondary" | "outline" | "ghost" | "danger" | "heroPrimary" | "heroSecondary";
@@ -51,8 +52,8 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     const variantStyles = {
       primary: clsx(
-        "bg-primary text-white",
-        "hover:bg-primary-dark hover:shadow-lg",
+        isWizardThemeV2 ? "bg-violet-600 text-white" : "bg-primary text-white",
+        isWizardThemeV2 ? "hover:bg-violet-700 hover:shadow-md" : "hover:bg-primary-dark hover:shadow-lg",
         "active:scale-[0.98]",
         "focus:ring-primary/50"
       ),
@@ -63,13 +64,13 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         "focus:ring-secondary/50"
       ),
       outline: clsx(
-        "bg-white text-charcoal border-2 border-gray-300",
+        isWizardThemeV2 ? "bg-white text-violet-900 border border-violet-200" : "bg-white text-charcoal border-2 border-gray-300",
         "hover:border-primary hover:text-primary hover:bg-primary/5",
         "active:scale-[0.98]",
         "focus:ring-primary/50"
       ),
       ghost: clsx(
-        "bg-transparent text-charcoal",
+        isWizardThemeV2 ? "bg-transparent text-violet-900" : "bg-transparent text-charcoal",
         "hover:bg-gray-100",
         "active:scale-[0.98]",
         "focus:ring-gray-300/50"
