@@ -2,11 +2,20 @@
   "rules": [
     {
       "userAgent": "*",
-      "allow": [],
+      "allow": [
+        "/",
+        "/blog/",
+        "/_next/"
+      ],
       "disallow": [
-        "/"
+        "/api/",
+        "/dashboard/",
+        "/auth/",
+        "/wizard/",
+        "/admin/",
+        "/checkout/"
       ]
     }
   ],
-  "sitemap": null
+  "sitemap": "https://landlordheaven.co.uk/sitemap.xml"
 }
