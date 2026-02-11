@@ -85,10 +85,15 @@ export function AskHeavenNextStepsCards({ jurisdiction = 'england', className }:
             key={card.title}
             href={card.href}
             aria-label={card.ariaLabel}
-            className="group flex h-full flex-col rounded-[30px] border border-violet-300/90 bg-[#fbfbfd] p-7 shadow-[0_1px_1px_rgba(109,40,217,0.05)] transition-all duration-300 hover:-translate-y-0.5 hover:border-violet-400 hover:bg-white hover:shadow-[0_18px_36px_rgba(109,40,217,0.12)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400/40"
+            className="group relative flex h-full flex-col overflow-hidden rounded-[30px] border border-violet-300/90 bg-[#fbfbfd] p-7 shadow-[0_1px_1px_rgba(109,40,217,0.05)] transition-all duration-300 hover:-translate-y-1 hover:border-violet-400 hover:bg-white hover:shadow-[0_24px_48px_rgba(109,40,217,0.14)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400/40"
           >
-            <div className="flex items-start gap-4">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-violet-100/70 transition-colors duration-300 group-hover:bg-violet-100">
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(167,139,250,0.22),transparent_55%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+            />
+
+            <div className="relative flex items-start gap-4">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-violet-100/70 transition-all duration-300 group-hover:scale-105 group-hover:bg-violet-100 group-hover:shadow-[0_8px_18px_rgba(109,40,217,0.18)]">
                 {card.icon}
               </div>
               <h3 className="text-lg font-semibold leading-tight text-gray-900">
@@ -97,16 +102,22 @@ export function AskHeavenNextStepsCards({ jurisdiction = 'england', className }:
               </h3>
             </div>
 
-            <p className="mt-6 text-base leading-relaxed text-gray-700">{card.description}</p>
+            <p className="relative mt-6 text-base leading-relaxed text-gray-700 transition-colors duration-300 group-hover:text-gray-800">
+              {card.description}
+            </p>
 
-            <p className="mt-auto pt-6 text-base font-medium text-violet-600 transition-all duration-300 group-hover:text-violet-700 group-hover:underline group-focus-visible:underline">
+            <p className="relative mt-auto inline-flex w-fit items-center gap-2 pt-6 text-base font-medium text-violet-600 transition-all duration-300 group-hover:text-violet-700 group-focus-visible:underline">
               <span
                 aria-hidden="true"
-                className="mr-2 inline-block transition-transform duration-300 group-hover:translate-x-0.5"
+                className="inline-block transition-transform duration-300 group-hover:translate-x-1"
               >
                 →
               </span>
               {card.ctaText}
+              <span
+                aria-hidden="true"
+                className="absolute -bottom-0.5 left-0 h-[2px] w-full origin-left scale-x-0 rounded-full bg-violet-500/80 transition-transform duration-300 group-hover:scale-x-100"
+              />
             </p>
           </Link>
         ))}
