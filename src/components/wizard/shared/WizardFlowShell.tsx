@@ -46,7 +46,7 @@ export function WizardFlowShell({
       className={clsx(
         'min-h-screen pt-20',
         isWizardThemeV2
-          ? 'bg-gradient-to-b from-violet-100/70 via-violet-50/40 to-[#FAFAFC]'
+          ? 'bg-gradient-to-b from-violet-100/55 via-violet-50/35 to-[#FAFAFC]'
           : 'bg-gray-50'
       )}
     >
@@ -58,8 +58,8 @@ export function WizardFlowShell({
             : 'bg-white border-gray-200'
         )}
       >
-        <div className={clsx('mx-auto px-4 py-4', isWizardThemeV2 ? 'max-w-[1180px]' : 'max-w-6xl')}>
-          <div className="flex items-center justify-between mb-3">
+        <div className={clsx('mx-auto px-4 py-4', isWizardThemeV2 ? 'max-w-[1240px]' : 'max-w-6xl')}>
+          <div className="flex items-center justify-between mb-3 gap-4">
             <h1
               className={clsx(
                 'font-semibold',
@@ -68,10 +68,24 @@ export function WizardFlowShell({
             >
               {title}
             </h1>
-            <span className={clsx('text-sm', isWizardThemeV2 ? 'text-violet-700' : 'text-gray-500')}>
+            <span
+              className={clsx(
+                'text-sm whitespace-nowrap',
+                isWizardThemeV2 ? 'font-semibold text-violet-800' : 'text-gray-500'
+              )}
+            >
               {completedCount} of {totalCount} sections complete
             </span>
           </div>
+
+          {isWizardThemeV2 && (
+            <div className="mb-2.5 flex items-center justify-between">
+              <p className="text-[12px] font-semibold uppercase tracking-wide text-violet-700/90">Progress</p>
+              <p className="text-sm font-semibold text-violet-900">
+                {completedCount} of {totalCount} sections complete
+              </p>
+            </div>
+          )}
 
           <div
             className={clsx(
@@ -88,19 +102,20 @@ export function WizardFlowShell({
             />
           </div>
 
-          <div className="flex gap-2 mt-4 overflow-x-auto pb-2">
+          <div className="mt-4 overflow-x-auto pb-2">
+            <div className="flex gap-2 min-w-max">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={tab.onClick}
                 className={clsx(
-                  'px-4 py-2 text-sm font-medium rounded-full whitespace-nowrap transition-colors border shrink-0 min-w-fit',
+                  'px-4 py-2 text-sm font-medium rounded-full whitespace-nowrap transition-colors border shrink-0',
                   tab.isCurrent
                     ? isWizardThemeV2
                       ? 'bg-violet-600 text-white border-violet-600 shadow-sm'
                       : 'bg-[#7C3AED] text-white border-[#7C3AED]'
                     : isWizardThemeV2
-                    ? 'bg-white text-violet-900 hover:bg-violet-50 border-violet-200'
+                    ? 'bg-white text-violet-900 hover:bg-violet-50 border-violet-200 shadow-[inset_0_0_0_1px_rgba(139,92,246,0.08)]'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border-transparent',
                   tab.hasIssue && !tab.isCurrent && (isWizardThemeV2 ? 'ring-2 ring-rose-300' : 'ring-2 ring-red-300')
                 )}
@@ -120,12 +135,13 @@ export function WizardFlowShell({
                 </span>
               </button>
             ))}
+            </div>
           </div>
         </div>
       </header>
 
-      <div className={clsx('mx-auto px-4 py-8 flex flex-col lg:flex-row gap-6', isWizardThemeV2 ? 'max-w-[1180px] items-start' : 'max-w-6xl')}>
-        <main className={clsx('flex-1', isWizardThemeV2 ? 'lg:max-w-[820px]' : 'lg:max-w-4xl')}>
+      <div className={clsx('mx-auto px-4 py-8 flex flex-col lg:flex-row gap-6', isWizardThemeV2 ? 'max-w-[1240px] items-start' : 'max-w-6xl')}>
+        <main className={clsx('flex-1', isWizardThemeV2 ? 'lg:max-w-[860px]' : 'lg:max-w-4xl')}>
           {banner}
           <div
             className={clsx(
@@ -157,7 +173,7 @@ export function WizardFlowShell({
             <div
               className={clsx(
                 'px-6 md:px-7 py-4 border-t flex items-center justify-between',
-                isWizardThemeV2 ? 'border-violet-100 bg-gray-50' : 'border-gray-200 bg-white'
+                isWizardThemeV2 ? 'border-violet-100 bg-violet-50/30 min-h-[76px]' : 'border-gray-200 bg-white'
               )}
             >
               {navigation}
@@ -166,8 +182,8 @@ export function WizardFlowShell({
         </main>
 
         {sidebar && (
-          <aside className="lg:w-[320px] shrink-0">
-            <div className="sticky top-44">{sidebar}</div>
+          <aside className="lg:w-[340px] shrink-0 self-start">
+            <div className="sticky top-40">{sidebar}</div>
           </aside>
         )}
       </div>
