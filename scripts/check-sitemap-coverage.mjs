@@ -1,8 +1,8 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { discoverStaticPageRoutes } from '../src/lib/seo/static-route-inventory.shared.mjs';
 
 const ROOT = process.cwd();
-const APP_DIR = path.join(ROOT, 'src/app');
 const ALLOWLIST_PATH = path.join(ROOT, 'scripts', 'seo-sitemap-allowlist.json');
 const SITEMAP_ENTRIES_PATH = path.join(ROOT, 'audit-output', 'seo-current', 'sitemap_entries.json');
 
@@ -16,62 +16,42 @@ const retiredPaths = new Set([
   '/$',
 ]);
 
-const toPosix = (p) => p.split(path.sep).join('/');
-
-async function walk(dir) {
-  const entries = await fs.readdir(dir, { withFileTypes: true });
-  const out = [];
-  for (const entry of entries) {
-    const absPath = path.join(dir, entry.name);
-    if (entry.isDirectory()) out.push(...(await walk(absPath)));
-    else out.push(absPath);
-  }
-  return out;
-}
-
-function routePathFromFile(relFile) {
-  const normalized = toPosix(relFile).replace(/^src\/app/, '');
-  const segs = normalized.split('/').filter(Boolean);
-  segs.pop(); // page.tsx
-  const route = `/${segs.join('/')}`;
-  return route === '/' ? '/' : route;
-}
-
-function isPublicStaticIndexablePath(routePath) {
+function isPublicStaticIndexablePath(routePath, intentionalExclusions) {
   return (
     !excludedPrefixes.some((prefix) => routePath === prefix || routePath.startsWith(`${prefix}/`))
     && !noindexPaths.includes(routePath)
     && !retiredPaths.has(routePath)
+    && !intentionalExclusions.has(routePath)
   );
 }
 
+async function loadSitemapPaths() {
+  const sitemapRaw = await fs.readFile(SITEMAP_ENTRIES_PATH, 'utf8');
+  const entries = JSON.parse(sitemapRaw);
+  return new Set(entries.map((entry) => entry.path));
+}
+
 async function run() {
-  const [allFiles, allowlistRaw, sitemapRaw] = await Promise.all([
-    walk(APP_DIR),
+  const [allowlistRaw, sitemapPaths, staticRoutes] = await Promise.all([
     fs.readFile(ALLOWLIST_PATH, 'utf8'),
-    fs.readFile(SITEMAP_ENTRIES_PATH, 'utf8'),
+    loadSitemapPaths(),
+    discoverStaticPageRoutes(),
   ]);
 
-  const allowlist = new Set((JSON.parse(allowlistRaw).intentionallyExcludedRoutes || []));
-  const sitemapPaths = new Set(JSON.parse(sitemapRaw).map((entry) => entry.path));
+  const allowlistJson = JSON.parse(allowlistRaw);
+  const intentionalExclusions = new Set(allowlistJson.intentionallyExcludedRoutes || []);
 
-  const staticRoutes = [...new Set(allFiles
-    .filter((file) => file.endsWith('/page.tsx'))
-    .map((file) => routePathFromFile(toPosix(path.relative(ROOT, file))))
-    .filter((route) => !route.includes('[')))].sort((a, b) => a.localeCompare(b));
-
-  const missingFromSitemap = staticRoutes
-    .filter((route) => isPublicStaticIndexablePath(route))
-    .filter((route) => !allowlist.has(route))
-    .filter((route) => !sitemapPaths.has(route));
+  const eligibleRoutes = staticRoutes.filter((route) => isPublicStaticIndexablePath(route, intentionalExclusions));
+  const missingFromSitemap = eligibleRoutes.filter((route) => !sitemapPaths.has(route));
 
   if (missingFromSitemap.length > 0) {
-    console.error('Sitemap coverage check failed. Missing static indexable routes:');
+    console.error('Sitemap coverage check failed. Public static routes missing from sitemap:');
     missingFromSitemap.forEach((route) => console.error(`- ${route}`));
+    console.error('\nIf any route should remain off-sitemap intentionally, add it to scripts/seo-sitemap-allowlist.json.');
     process.exit(1);
   }
 
-  console.log(`Sitemap coverage check passed. Checked ${staticRoutes.length} static routes.`);
+  console.log(`Sitemap coverage check passed. Checked ${eligibleRoutes.length} eligible static routes (${staticRoutes.length} total static routes discovered).`);
 }
 
 run().catch((error) => {

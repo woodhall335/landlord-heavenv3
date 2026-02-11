@@ -21,52 +21,65 @@ const pick = (doc, sel, attr) => {
   if (!el) return null;
   return attr ? ((el.getAttribute(attr) || '').trim() || null) : ((el.textContent || '').trim() || null);
 };
-
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-function classifyError(err, status) {
-  if (status === 429) return 'http_429';
+function classifyResponseStatus(status) {
   if (status >= 500) return 'http_5xx';
-  if (!err) return null;
-
-  const message = `${err.message || ''} ${err.cause?.message || ''}`.toLowerCase();
-  if (err.name === 'AbortError' || message.includes('aborted') || message.includes('timeout')) return 'timeout_abort';
-  if (message.includes('enotfound') || message.includes('dns')) return 'dns_error';
-  if (message.includes('econnreset') || message.includes('econnrefused') || message.includes('network') || message.includes('fetch failed')) return 'network_error';
-  if (message.includes('tls') || message.includes('certificate') || message.includes('ssl')) return 'tls_error';
-  return 'fetch_error';
+  if (status >= 400) return 'http_4xx';
+  return null;
 }
 
-function isRetryable({ status, failureCategory }) {
-  return status === 429 || status >= 500 || ['timeout_abort', 'dns_error', 'network_error', 'tls_error'].includes(failureCategory);
+function classifyError(err) {
+  if (!err) return null;
+  const message = `${err.message || ''} ${err.cause?.message || ''}`.toLowerCase();
+  const causeCode = (err.cause && typeof err.cause === 'object' ? err.cause.code : '') || '';
+  const code = `${err.code || ''} ${causeCode}`.toLowerCase();
+
+  if (err.name === 'AbortError' || message.includes('aborted') || message.includes('timeout')) return 'timeout_abort';
+  if (message.includes('enotfound') || message.includes('eai_again') || message.includes('dns') || code.includes('enotfound') || code.includes('eai_again')) return 'dns_error';
+  if (message.includes('tls') || message.includes('certificate') || message.includes('ssl') || code.includes('cert') || code.includes('tls')) return 'tls_error';
+  if (message.includes('econnreset') || message.includes('socket hang up') || code.includes('econnreset')) return 'fetch_failed';
+  if (message.includes('fetch failed') || message.includes('network') || message.includes('econnrefused') || code.includes('econnrefused')) return 'fetch_failed';
+  return 'fetch_failed';
+}
+
+function isRetryable(result) {
+  return result.status === 429
+    || result.status >= 500
+    || ['timeout_abort', 'dns_error', 'tls_error', 'fetch_failed'].includes(result.failureCategory);
+}
+
+function getResponseHeaders(headers) {
+  return {
+    'x-robots-tag': headers.get('x-robots-tag') || '',
+    location: headers.get('location') || '',
+    'cache-control': headers.get('cache-control') || '',
+  };
 }
 
 async function fetchAttempt(url) {
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), TIMEOUT_MS);
+
   try {
     const res = await fetch(url, { redirect: 'follow', signal: controller.signal });
     const html = await res.text();
+
     return {
       status: res.status,
       finalUrl: res.url,
       html,
       error: '',
-      failureCategory: classifyError(null, res.status),
-      responseHeaders: {
-        'x-robots-tag': res.headers.get('x-robots-tag') || '',
-        location: res.headers.get('location') || '',
-        'cache-control': res.headers.get('cache-control') || '',
-      },
+      failureCategory: classifyResponseStatus(res.status),
+      responseHeaders: getResponseHeaders(res.headers),
     };
   } catch (error) {
-    const failureCategory = classifyError(error, 0);
     return {
       status: 0,
       finalUrl: url,
       html: '',
       error: error.message || String(error),
-      failureCategory,
+      failureCategory: classifyError(error),
       responseHeaders: {
         'x-robots-tag': '',
         location: '',
@@ -80,6 +93,7 @@ async function fetchAttempt(url) {
 
 async function fetchWithRetry(url) {
   let latest = null;
+
   for (let attempt = 0; attempt <= RETRIES; attempt += 1) {
     latest = await fetchAttempt(url);
     latest.retryCount = attempt;
@@ -88,8 +102,8 @@ async function fetchWithRetry(url) {
       return latest;
     }
 
-    const backoff = Math.min(4000, 250 * (2 ** attempt));
-    const jitter = Math.floor(Math.random() * 200);
+    const backoff = Math.min(5000, 300 * (2 ** attempt));
+    const jitter = Math.floor(Math.random() * 250);
     await sleep(backoff + jitter);
   }
 
@@ -125,6 +139,7 @@ function inspectHtml(url, finalUrl, status, html, disallow, fetchError, failureC
   const internalLinks = [...doc.querySelectorAll('a[href]')]
     .map((a) => a.getAttribute('href') || '')
     .filter((href) => href.startsWith('/') || href.startsWith(BASE_URL));
+
   const map = new Map();
   for (const href of internalLinks) {
     const p = href.startsWith('http') ? new URL(href).pathname : href;
@@ -205,13 +220,23 @@ async function runQueue(urls, worker) {
   return results;
 }
 
+function dedupeByPath(rows) {
+  const deduped = new Map();
+  for (const row of rows) {
+    if (!deduped.has(row.path)) {
+      deduped.set(row.path, row);
+    }
+  }
+  return [...deduped.values()];
+}
+
 async function run() {
   const sitemapEntries = JSON.parse(await fs.readFile(path.join(OUT_DIR, 'sitemap_entries.json'), 'utf8'));
   const robotsRules = JSON.parse(await fs.readFile(path.join(OUT_DIR, 'robots_rules.json'), 'utf8'));
   const disallow = (robotsRules.rules || []).flatMap((r) => r.disallow || []);
   const urls = [...new Set([...sitemapEntries.map((e) => `${BASE_URL}${e.path}`), ...known.map((p) => `${BASE_URL}${p}`)])].sort();
 
-  const results = await runQueue(urls, async (url) => {
+  const crawled = await runQueue(urls, async (url) => {
     const fetchResult = await fetchWithRetry(url);
     return inspectHtml(
       url,
@@ -226,7 +251,7 @@ async function run() {
     );
   });
 
-  results.sort((a, b) => a.path.localeCompare(b.path));
+  const results = dedupeByPath(crawled).sort((a, b) => a.path.localeCompare(b.path));
 
   const tMap = new Map();
   const dMap = new Map();
@@ -275,7 +300,7 @@ async function run() {
   };
   await fs.writeFile(path.join(OUT_DIR, 'seo_audit_summary.json'), JSON.stringify(summary, null, 2));
 
-  const md = `# Deep SEO Audit Summary\n\n- Audited URLs: ${results.length}\n- Indexable URLs: ${summary.counts.indexableUrls}\n- Duplicate titles: ${summary.counts.duplicateTitles}\n- Duplicate descriptions: ${summary.counts.duplicateDescriptions}\n\n## Runtime crawler config\n- Timeout (ms): ${TIMEOUT_MS}\n- Concurrency: ${CONCURRENCY}\n- Retries: ${RETRIES}\n\n## Non-indexable samples\n${results.filter((r) => !r.indexable).slice(0, 40).map((r) => `- ${r.path}: ${r.indexabilityReasons.join(', ')}`).join('\n')}\n`;
+  const md = `# Deep SEO Audit Summary\n\n- Audited URLs: ${results.length}\n- Indexable URLs: ${summary.counts.indexableUrls}\n- Duplicate titles: ${summary.counts.duplicateTitles}\n- Duplicate descriptions: ${summary.counts.duplicateDescriptions}\n\n## Runtime crawler config\n- Base URL: ${BASE_URL}\n- Timeout (ms): ${TIMEOUT_MS}\n- Concurrency: ${CONCURRENCY}\n- Retries: ${RETRIES}\n\n## Non-indexable samples\n${results.filter((r) => !r.indexable).slice(0, 40).map((r) => `- ${r.path}: ${r.indexabilityReasons.join(', ')}`).join('\n')}\n`;
   await fs.writeFile(path.join(OUT_DIR, 'seo_audit_summary.md'), md);
 
   console.log('runtime crawl complete', results.length, `timeout=${TIMEOUT_MS}`, `concurrency=${CONCURRENCY}`, `retries=${RETRIES}`);
