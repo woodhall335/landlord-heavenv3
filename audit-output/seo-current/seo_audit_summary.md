@@ -1,0 +1,48 @@
+# Deep SEO Audit Summary
+
+- Audited URLs: 216
+- Indexable URLs: 58
+- Duplicate titles: 0
+- Duplicate descriptions: 0
+
+## Non-indexable samples
+- /: 4xx_5xx_or_fetch_error
+- /6-month-tenancy-agreement-template: 4xx_5xx_or_fetch_error
+- /about: 4xx_5xx_or_fetch_error
+- /apply-possession-order-landlord: 4xx_5xx_or_fetch_error
+- /ask-heaven: 4xx_5xx_or_fetch_error
+- /assured-shorthold-tenancy-agreement-template: 4xx_5xx_or_fetch_error
+- /auth/login: 4xx_5xx_or_fetch_error
+- /blog: 4xx_5xx_or_fetch_error
+- /blog/calculating-interest-tenant-debt: 4xx_5xx_or_fetch_error
+- /blog/england-accelerated-possession: 4xx_5xx_or_fetch_error
+- /blog/england-assured-shorthold-tenancy-guide: 4xx_5xx_or_fetch_error
+- /blog/england-bailiff-eviction: 4xx_5xx_or_fetch_error
+- /blog/england-county-court-forms: 4xx_5xx_or_fetch_error
+- /blog/england-deposit-protection: 4xx_5xx_or_fetch_error
+- /blog/england-hmo-licensing: 4xx_5xx_or_fetch_error
+- /blog/england-money-claim-online: 4xx_5xx_or_fetch_error
+- /blog/england-particulars-of-claim: 4xx_5xx_or_fetch_error
+- /blog/england-possession-hearing: 4xx_5xx_or_fetch_error
+- /blog/england-section-21-process: 4xx_5xx_or_fetch_error
+- /blog/england-section-8-ground-1: 4xx_5xx_or_fetch_error
+- /blog/england-section-8-ground-10-11: 4xx_5xx_or_fetch_error
+- /blog/england-section-8-ground-12: 4xx_5xx_or_fetch_error
+- /blog/england-section-8-ground-14: 4xx_5xx_or_fetch_error
+- /blog/england-section-8-ground-17: 4xx_5xx_or_fetch_error
+- /blog/england-section-8-ground-2: 4xx_5xx_or_fetch_error
+- /blog/england-section-8-ground-7: 4xx_5xx_or_fetch_error
+- /blog/england-section-8-ground-8: 4xx_5xx_or_fetch_error
+- /blog/england-section-8-process: 4xx_5xx_or_fetch_error
+- /blog/england-standard-possession: 4xx_5xx_or_fetch_error
+- /blog/fair-wear-tear-vs-tenant-damage: 4xx_5xx_or_fetch_error
+- /blog/how-long-does-eviction-take-uk: 4xx_5xx_or_fetch_error
+- /blog/how-long-does-money-claim-online-take: 4xx_5xx_or_fetch_error
+- /blog/how-to-serve-eviction-notice: 4xx_5xx_or_fetch_error
+- /blog/how-to-write-letter-before-action-unpaid-rent: 4xx_5xx_or_fetch_error
+- /blog/northern-ireland-deposit-protection: 4xx_5xx_or_fetch_error
+- /blog/northern-ireland-eviction-process: 4xx_5xx_or_fetch_error
+- /blog/northern-ireland-landlord-registration: 4xx_5xx_or_fetch_error
+- /blog/northern-ireland-private-tenancies-order: 4xx_5xx_or_fetch_error
+- /blog/recovering-cleaning-costs-from-tenants: 4xx_5xx_or_fetch_error
+- /blog/rent-arrears-eviction-guide: 4xx_5xx_or_fetch_error

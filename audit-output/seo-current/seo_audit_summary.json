@@ -1,0 +1,1108 @@
+{
+  "counts": {
+    "auditedUrls": 216,
+    "indexableUrls": 58,
+    "duplicateTitles": 0,
+    "duplicateDescriptions": 0
+  },
+  "hostProtocolInconsistencies": {
+    "sitemapHosts": [
+      "landlordheaven.co.uk"
+    ],
+    "sitemapProtocols": [
+      "https:"
+    ],
+    "runtimeBaseUrl": "http://localhost:5000"
+  },
+  "mismatches": {
+    "sitemapVsRuntime_non200": [
+      "/",
+      "/6-month-tenancy-agreement-template",
+      "/about",
+      "/apply-possession-order-landlord",
+      "/ask-heaven",
+      "/assured-shorthold-tenancy-agreement-template",
+      "/blog",
+      "/blog/calculating-interest-tenant-debt",
+      "/blog/england-accelerated-possession",
+      "/blog/england-assured-shorthold-tenancy-guide",
+      "/blog/england-bailiff-eviction",
+      "/blog/england-county-court-forms",
+      "/blog/england-deposit-protection",
+      "/blog/england-hmo-licensing",
+      "/blog/england-money-claim-online",
+      "/blog/england-particulars-of-claim",
+      "/blog/england-possession-hearing",
+      "/blog/england-section-21-process",
+      "/blog/england-section-8-ground-1",
+      "/blog/england-section-8-ground-10-11",
+      "/blog/england-section-8-ground-12",
+      "/blog/england-section-8-ground-14",
+      "/blog/england-section-8-ground-17",
+      "/blog/england-section-8-ground-2",
+      "/blog/england-section-8-ground-7",
+      "/blog/england-section-8-ground-8",
+      "/blog/england-section-8-process",
+      "/blog/england-standard-possession",
+      "/blog/fair-wear-tear-vs-tenant-damage",
+      "/blog/how-long-does-eviction-take-uk",
+      "/blog/how-long-does-money-claim-online-take",
+      "/blog/how-to-serve-eviction-notice",
+      "/blog/how-to-write-letter-before-action-unpaid-rent",
+      "/blog/northern-ireland-deposit-protection",
+      "/blog/northern-ireland-eviction-process",
+      "/blog/northern-ireland-landlord-registration",
+      "/blog/northern-ireland-private-tenancies-order",
+      "/blog/recovering-cleaning-costs-from-tenants",
+      "/blog/rent-arrears-eviction-guide",
+      "/blog/rent-smart-wales",
+      "/blog/renters-reform-bill-what-landlords-need-to-know",
+      "/blog/scotland-deposit-protection",
+      "/blog/scotland-eviction-ground-1",
+      "/blog/scotland-eviction-ground-11",
+      "/blog/scotland-eviction-ground-12",
+      "/blog/scotland-eviction-ground-13",
+      "/blog/scotland-eviction-ground-14",
+      "/blog/scotland-eviction-ground-15",
+      "/blog/scotland-eviction-ground-3",
+      "/blog/scotland-eviction-ground-4",
+      "/blog/scotland-eviction-ground-6",
+      "/blog/scotland-eviction-ground-7",
+      "/blog/scotland-eviction-process",
+      "/blog/scotland-first-tier-tribunal",
+      "/blog/scotland-hmo-licensing",
+      "/blog/scotland-landlord-registration",
+      "/blog/scotland-notice-to-leave",
+      "/blog/scotland-private-residential-tenancy",
+      "/blog/scotland-repairing-standard",
+      "/blog/scotland-simple-procedure",
+      "/blog/section-21-vs-section-8",
+      "/blog/should-you-accept-payment-plan-from-tenant",
+      "/blog/small-claims-court-tips-landlords",
+      "/blog/uk-buy-to-let-investment-guide",
+      "/blog/uk-corporate-letting-guide",
+      "/blog/uk-deposit-protection-guide",
+      "/blog/uk-electrical-safety-guide",
+      "/blog/uk-electrical-safety-landlords",
+      "/blog/uk-end-of-tenancy-guide",
+      "/blog/uk-epc-requirements-guide",
+      "/blog/uk-fire-safety-landlords",
+      "/blog/uk-furnished-unfurnished-letting-guide",
+      "/blog/uk-gas-safety-landlords",
+      "/blog/uk-guarantor-agreements-guide",
+      "/blog/uk-hmo-management-guide",
+      "/blog/uk-hmo-regulations-guide",
+      "/blog/uk-holiday-let-regulations-guide",
+      "/blog/what-is-section-21-notice",
+      "/blog/what-to-do-when-tenant-wont-pay",
+      "/blog/when-to-use-guarantor-clause-tenancy",
+      "/contact",
+      "/cookies",
+      "/county-court-claim-form-guide",
+      "/eicr-landlord-requirements",
+      "/eviction-cost-uk",
+      "/eviction-notice",
+      "/eviction-notice-template",
+      "/eviction-notice-uk",
+      "/eviction-pack-england",
+      "/eviction-process-england",
+      "/eviction-process-scotland",
+      "/eviction-process-wales",
+      "/fixed-term-periodic-tenancy-england",
+      "/fixed-term-tenancy-agreement-template",
+      "/form-3-section-8",
+      "/form-6a-section-21",
+      "/help",
+      "/how-to-evict-tenant",
+      "/how-to-rent-guide",
+      "/joint-tenancy-agreement-england",
+      "/joint-tenancy-agreement-template",
+      "/lodger-agreement-template",
+      "/money-claim",
+      "/money-claim-abandoned-goods",
+      "/money-claim-appliance-damage",
+      "/money-claim-bathroom-damage",
+      "/money-claim-carpet-damage",
+      "/money-claim-ccj-enforcement",
+      "/money-claim-cleaning-costs",
+      "/money-claim-council-tax",
+      "/money-claim-deposit-shortfall",
+      "/money-claim-early-termination",
+      "/money-claim-former-tenant",
+      "/money-claim-garden-damage",
+      "/money-claim-guarantor",
+      "/money-claim-letter-before-action",
+      "/money-claim-n1-claim-form",
+      "/money-claim-online-mcol",
+      "/money-claim-pap-financial-statement",
+      "/money-claim-property-damage",
+      "/money-claim-schedule-of-debt",
+      "/money-claim-small-claims-landlord",
+      "/money-claim-tenant-defends",
+      "/money-claim-unpaid-bills",
+      "/money-claim-unpaid-rent",
+      "/money-claim-unpaid-utilities",
+      "/money-claim-wall-damage",
+      "/n5b-form-guide",
+      "/ni-tenancy-agreement-template-free",
+      "/no-fault-eviction",
+      "/northern-ireland-tenancy-agreement-template",
+      "/notice-to-quit-northern-ireland-guide",
+      "/periodic-tenancy-agreement",
+      "/possession-claim-guide",
+      "/pre-action-protocol-debt",
+      "/pricing",
+      "/privacy",
+      "/private-residential-tenancy-agreement-template",
+      "/products/ast",
+      "/products/complete-pack",
+      "/products/money-claim",
+      "/products/notice-only",
+      "/renew-tenancy-agreement-england",
+      "/rent-arrears-letter-template",
+      "/rolling-tenancy-agreement",
+      "/scotland-eviction-notices",
+      "/scotland-notice-to-leave-template",
+      "/section-21-ban",
+      "/section-21-expired-what-next",
+      "/section-21-notice-template",
+      "/section-8-notice-template",
+      "/section-8-rent-arrears-eviction",
+      "/section-8-vs-section-21",
+      "/tenancy-agreement-template-free",
+      "/tenant-wont-leave"
+    ],
+    "sitemapVsIndexable_nonIndexable": [
+      {
+        "path": "/",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/6-month-tenancy-agreement-template",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/about",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/apply-possession-order-landlord",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/ask-heaven",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/assured-shorthold-tenancy-agreement-template",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/calculating-interest-tenant-debt",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/england-accelerated-possession",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/england-assured-shorthold-tenancy-guide",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/england-bailiff-eviction",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/england-county-court-forms",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/england-deposit-protection",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/england-hmo-licensing",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/england-money-claim-online",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/england-particulars-of-claim",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/england-possession-hearing",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/england-section-21-process",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/england-section-8-ground-1",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/england-section-8-ground-10-11",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/england-section-8-ground-12",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/england-section-8-ground-14",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/england-section-8-ground-17",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/england-section-8-ground-2",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/england-section-8-ground-7",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/england-section-8-ground-8",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/england-section-8-process",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/england-standard-possession",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/fair-wear-tear-vs-tenant-damage",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/how-long-does-eviction-take-uk",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/how-long-does-money-claim-online-take",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/how-to-serve-eviction-notice",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/how-to-write-letter-before-action-unpaid-rent",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/northern-ireland-deposit-protection",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/northern-ireland-eviction-process",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/northern-ireland-landlord-registration",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/northern-ireland-private-tenancies-order",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/recovering-cleaning-costs-from-tenants",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/rent-arrears-eviction-guide",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/rent-smart-wales",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/renters-reform-bill-what-landlords-need-to-know",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/scotland-deposit-protection",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/scotland-eviction-ground-1",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/scotland-eviction-ground-11",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/scotland-eviction-ground-12",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/scotland-eviction-ground-13",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/scotland-eviction-ground-14",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/scotland-eviction-ground-15",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/scotland-eviction-ground-3",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/scotland-eviction-ground-4",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/scotland-eviction-ground-6",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/scotland-eviction-ground-7",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/scotland-eviction-process",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/scotland-first-tier-tribunal",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/scotland-hmo-licensing",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/scotland-landlord-registration",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/scotland-notice-to-leave",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/scotland-private-residential-tenancy",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/scotland-repairing-standard",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/scotland-simple-procedure",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/section-21-vs-section-8",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/should-you-accept-payment-plan-from-tenant",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/small-claims-court-tips-landlords",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/uk-buy-to-let-investment-guide",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/uk-corporate-letting-guide",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/uk-deposit-protection-guide",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/uk-electrical-safety-guide",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/uk-electrical-safety-landlords",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/uk-end-of-tenancy-guide",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/uk-epc-requirements-guide",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/uk-fire-safety-landlords",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/uk-furnished-unfurnished-letting-guide",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/uk-gas-safety-landlords",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/uk-guarantor-agreements-guide",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/uk-hmo-management-guide",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/uk-hmo-regulations-guide",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/uk-holiday-let-regulations-guide",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/what-is-section-21-notice",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/what-to-do-when-tenant-wont-pay",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/blog/when-to-use-guarantor-clause-tenancy",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/contact",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/cookies",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/county-court-claim-form-guide",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/eicr-landlord-requirements",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/eviction-cost-uk",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/eviction-notice",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/eviction-notice-template",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/eviction-notice-uk",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/eviction-pack-england",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/eviction-process-england",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/eviction-process-scotland",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/eviction-process-wales",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/fixed-term-periodic-tenancy-england",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/fixed-term-tenancy-agreement-template",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/form-3-section-8",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/form-6a-section-21",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/help",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/how-to-evict-tenant",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/how-to-rent-guide",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/joint-tenancy-agreement-england",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/joint-tenancy-agreement-template",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/lodger-agreement-template",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/money-claim",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/money-claim-abandoned-goods",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/money-claim-appliance-damage",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/money-claim-bathroom-damage",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/money-claim-carpet-damage",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/money-claim-ccj-enforcement",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/money-claim-cleaning-costs",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/money-claim-council-tax",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/money-claim-deposit-shortfall",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/money-claim-early-termination",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/money-claim-former-tenant",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/money-claim-garden-damage",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/money-claim-guarantor",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/money-claim-letter-before-action",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/money-claim-n1-claim-form",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/money-claim-online-mcol",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/money-claim-pap-financial-statement",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/money-claim-property-damage",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/money-claim-schedule-of-debt",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/money-claim-small-claims-landlord",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/money-claim-tenant-defends",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/money-claim-unpaid-bills",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/money-claim-unpaid-rent",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/money-claim-unpaid-utilities",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/money-claim-wall-damage",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/n5b-form-guide",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/ni-tenancy-agreement-template-free",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/no-fault-eviction",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/northern-ireland-tenancy-agreement-template",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/notice-to-quit-northern-ireland-guide",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/periodic-tenancy-agreement",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/possession-claim-guide",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/pre-action-protocol-debt",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/pricing",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/privacy",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/private-residential-tenancy-agreement-template",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/products/ast",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/products/complete-pack",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/products/money-claim",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/products/notice-only",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/renew-tenancy-agreement-england",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/rent-arrears-letter-template",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/rolling-tenancy-agreement",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/scotland-eviction-notices",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/scotland-notice-to-leave-template",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/section-21-ban",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/section-21-expired-what-next",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/section-21-notice-template",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/section-8-notice-template",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/section-8-rent-arrears-eviction",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/section-8-vs-section-21",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/tenancy-agreement-template-free",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      },
+      {
+        "path": "/tenant-wont-leave",
+        "reasons": [
+          "4xx_5xx_or_fetch_error"
+        ]
+      }
+    ]
+  }
+}
