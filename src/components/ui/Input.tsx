@@ -12,6 +12,7 @@
 
 import React from "react";
 import { clsx } from "clsx";
+import { isWizardThemeV2 } from '@/components/wizard/shared/theme';
 
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -45,7 +46,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
 
     const inputBaseStyles = clsx(
       // Base styles
-      "rounded-lg border-2 px-4 py-3",
+      isWizardThemeV2 ? "rounded-xl border px-4 py-3" : "rounded-lg border-2 px-4 py-3",
       "font-normal text-base text-charcoal",
       "placeholder:text-gray-400",
       "transition-all duration-200",
@@ -63,9 +64,9 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           "focus:border-error focus:ring-error/40"
         )
       : clsx(
-          "border-gray-300",
-          "focus:border-primary focus:ring-primary/40",
-          "hover:border-gray-400"
+          isWizardThemeV2 ? "border-violet-200" : "border-gray-300",
+          isWizardThemeV2 ? "focus:border-violet-500 focus:ring-violet-500/30" : "focus:border-primary focus:ring-primary/40",
+          isWizardThemeV2 ? "hover:border-violet-300" : "hover:border-gray-400"
         );
 
     const inputPaddingStyles = clsx(
@@ -158,7 +159,7 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
 
     const textareaBaseStyles = clsx(
       // Base styles
-      "rounded-lg border-2 px-4 py-3",
+      isWizardThemeV2 ? "rounded-xl border px-4 py-3" : "rounded-lg border-2 px-4 py-3",
       "font-normal text-base text-charcoal",
       "placeholder:text-gray-400",
       "transition-all duration-200",
@@ -175,9 +176,9 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           "focus:border-error focus:ring-error/40"
         )
       : clsx(
-          "border-gray-300",
-          "focus:border-primary focus:ring-primary/40",
-          "hover:border-gray-400"
+          isWizardThemeV2 ? "border-violet-200" : "border-gray-300",
+          isWizardThemeV2 ? "focus:border-violet-500 focus:ring-violet-500/30" : "focus:border-primary focus:ring-primary/40",
+          isWizardThemeV2 ? "hover:border-violet-300" : "hover:border-gray-400"
         );
 
     return (
