@@ -21,6 +21,7 @@ import { getQuestionRepository } from '@/lib/ask-heaven/questions';
 import { getPostRegion } from '@/lib/blog/categories';
 import { getBlogSeoConfig } from '@/lib/blog/seo';
 import { discoverStaticPageRoutes } from '@/lib/seo/static-route-inventory';
+import sitemapAllowlist from '../../scripts/seo-sitemap-allowlist.json';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Use a stable date for pages that don't change frequently
@@ -273,7 +274,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Sitemap policy: curated + auto-discovered static routes.
   // Keep intentional static exclusions here for any indexable route we explicitly want omitted.
-  const intentionalStaticRouteExclusions = new Set<string>([]);
+  const intentionalStaticRouteExclusions = new Set<string>(sitemapAllowlist.intentionallyExcludedRoutes);
 
   const isIndexablePath = (path: string) =>
     !excludedPrefixes.some((prefix) => path === prefix || path.startsWith(`${prefix}/`)) &&
