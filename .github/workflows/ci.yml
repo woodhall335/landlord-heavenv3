@@ -48,6 +48,24 @@ jobs:
           ADMIN_USER_IDS: 'test-admin-id'
           NEXT_PUBLIC_APP_URL: 'http://localhost:3000'
 
+      - name: Run sitemap coverage check against runtime sitemap
+        run: |
+          pnpm dev > /tmp/next-dev.log 2>&1 &
+          APP_PID=$!
+          trap 'kill $APP_PID' EXIT
+
+          for i in {1..60}; do
+            if curl -fsS http://127.0.0.1:5000/sitemap.xml > /dev/null; then
+              break
+            fi
+            sleep 2
+          done
+
+          SEO_AUDIT_BASE_URL=http://127.0.0.1:5000 pnpm audit:sitemap-coverage
+        env:
+          ADMIN_USER_IDS: 'test-admin-id'
+          NEXT_PUBLIC_APP_URL: 'http://localhost:3000'
+
   lint:
     runs-on: ubuntu-latest
 
