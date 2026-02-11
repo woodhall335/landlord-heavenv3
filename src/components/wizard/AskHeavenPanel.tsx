@@ -117,7 +117,7 @@ export const AskHeavenPanel: React.FC<AskHeavenPanelProps> = ({
       padding="none"
       className={
         isWizardThemeV2
-          ? "ask-heaven-panel rounded-xl shadow-[0_8px_20px_rgba(17,24,39,0.08)] border border-gray-200 bg-gray-50/95 backdrop-blur"
+          ? "ask-heaven-panel rounded-xl shadow-[0_10px_26px_rgba(76,29,149,0.08)] border border-violet-200/70 bg-white/95 backdrop-blur"
           : "ask-heaven-panel shadow-xl border border-primary/20 bg-white/95 backdrop-blur"
       }
       style={{ paddingTop: '48px', paddingLeft: '24px', paddingRight: '24px', paddingBottom: '24px' }}
@@ -128,8 +128,8 @@ export const AskHeavenPanel: React.FC<AskHeavenPanelProps> = ({
           <RiSparklingLine className="h-5 w-5 text-violet-600" />
         </div>
         <div>
-          <h3 className="text-sm font-semibold text-gray-900">Ask Heaven</h3>
-          <p className="text-xs text-gray-500">
+          <h3 className="text-sm font-semibold text-violet-950">Ask Heaven</h3>
+          <p className="text-xs text-violet-800/80">
             Your AI co-pilot for the {productLabel.toLowerCase()} in {jurisdictionLabel}. Ask
             questions about the process, documents, or legal procedures. It&apos;s guidance only
             and not a substitute for advice from a regulated legal professional.
@@ -138,12 +138,12 @@ export const AskHeavenPanel: React.FC<AskHeavenPanelProps> = ({
       </div>
 
       {/* Q&A helper */}
-      <div className="mt-3 border-t border-gray-100 pt-3">
+      <div className={isWizardThemeV2 ? 'mt-3 border-t border-violet-100 pt-3' : 'mt-3 border-t border-gray-100 pt-3'}>
         <div className="flex items-center gap-2 mb-1">
           <RiChat1Line className="h-3.5 w-3.5 text-violet-600" />
-          <span className="text-xs font-semibold text-gray-800">Ask questions</span>
+          <span className={isWizardThemeV2 ? 'text-xs font-semibold text-violet-900' : 'text-xs font-semibold text-gray-800'}>Ask questions</span>
         </div>
-        <p className="text-xs text-gray-500 mb-2">
+        <p className={isWizardThemeV2 ? 'text-xs text-violet-800/80 mb-2' : 'text-xs text-gray-500 mb-2'}>
           Ask quick questions about this step, the documents we&apos;re generating, or procedure in{' '}
           {jurisdictionLabel}. Answers are general guidance only – not personalised legal advice.
         </p>
@@ -164,7 +164,7 @@ export const AskHeavenPanel: React.FC<AskHeavenPanelProps> = ({
             type="button"
             variant={isWizardThemeV2 ? "primary" : "secondary"}
             size="small"
-            className="w-full justify-center"
+            className={isWizardThemeV2 ? 'w-full justify-center shadow-sm hover:shadow-md' : 'w-full justify-center'}
             onClick={handleAskQuestion}
             disabled={qaLoading || !qaInput.trim()}
           >
@@ -175,7 +175,7 @@ export const AskHeavenPanel: React.FC<AskHeavenPanelProps> = ({
               </>
             ) : (
               <>
-                <RiChat1Line className="mr-2 h-3.5 w-3.5 text-violet-600" />
+                <RiChat1Line className={isWizardThemeV2 ? 'mr-2 h-3.5 w-3.5 text-white' : 'mr-2 h-3.5 w-3.5 text-violet-600'} />
                 Ask a question
               </>
             )}
@@ -190,7 +190,7 @@ export const AskHeavenPanel: React.FC<AskHeavenPanelProps> = ({
         )}
 
         {qaMessages.length > 0 && (
-          <div className="mt-3 max-h-40 overflow-y-auto rounded-md bg-gray-50 px-2.5 py-2 space-y-1.5">
+          <div className={isWizardThemeV2 ? 'mt-3 max-h-40 overflow-y-auto rounded-md bg-violet-50/65 border border-violet-100 px-2.5 py-2 space-y-1.5' : 'mt-3 max-h-40 overflow-y-auto rounded-md bg-gray-50 px-2.5 py-2 space-y-1.5'}>
             {qaMessages.map((m, idx) => (
               <div
                 key={idx}

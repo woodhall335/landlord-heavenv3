@@ -1249,7 +1249,7 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
                 currentSectionIndex === 0
                   ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
                   : isWizardThemeV2
-                  ? 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+                  ? 'bg-white text-violet-900 border border-violet-200 hover:bg-violet-50'
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
               }
             `}
@@ -1257,7 +1257,7 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
             ← Back
           </button>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 justify-end min-w-[220px]">
             {saving && <span className="text-sm text-gray-500">Saving...</span>}
 
             {currentSection?.id === 'review' ? (
@@ -1265,11 +1265,11 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
                 onClick={handleGenerateNotice}
                 disabled={!allComplete || getAllBlockers().length > 0 || generating}
                 className={`
-                  px-6 py-2 text-sm font-medium rounded-md transition-colors
+                  px-6 py-2 text-sm font-medium rounded-md transition-colors min-w-[146px]
                   ${
                     !allComplete || getAllBlockers().length > 0 || generating
                       ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                      : 'bg-violet-600 text-white hover:bg-violet-700'
+                      : 'bg-violet-600 text-white hover:bg-violet-700 shadow-sm'
                   }
                 `}
               >
@@ -1280,11 +1280,11 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
                 onClick={handleNext}
                 disabled={currentSectionIndex === visibleSections.length - 1}
                 className={`
-                  px-6 py-2 text-sm font-medium rounded-md transition-colors
+                  px-6 py-2 text-sm font-medium rounded-md transition-colors min-w-[112px]
                   ${
                     currentSectionIndex === visibleSections.length - 1
                       ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                      : 'bg-violet-600 text-white hover:bg-violet-700'
+                      : 'bg-violet-600 text-white hover:bg-violet-700 shadow-sm'
                   }
                 `}
               >
