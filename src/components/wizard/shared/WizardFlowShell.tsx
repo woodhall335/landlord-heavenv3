@@ -70,17 +70,21 @@ export function WizardFlowShell({
             >
               {title}
             </h1>
-            {!isWizardThemeV2 && (
-              <span className="text-sm whitespace-nowrap text-gray-500">{completionLabel}</span>
-            )}
           </div>
 
-          {isWizardThemeV2 && (
-            <div className="mb-2.5 flex items-center justify-between">
-              <p className="text-[12px] font-semibold uppercase tracking-wide text-violet-700/90">Progress</p>
-              <p className="text-sm font-semibold text-violet-900">{completionLabel}</p>
-            </div>
-          )}
+          <div className="mb-2.5 flex items-center justify-between">
+            <p
+              className={clsx(
+                'text-[12px] font-semibold uppercase tracking-wide',
+                isWizardThemeV2 ? 'text-violet-700/90' : 'text-gray-500'
+              )}
+            >
+              Progress
+            </p>
+            <p className={clsx('text-sm font-semibold', isWizardThemeV2 ? 'text-violet-900' : 'text-gray-700')}>
+              {completionLabel}
+            </p>
+          </div>
 
           <div
             className={clsx(
