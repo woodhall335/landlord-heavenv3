@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Button, Card } from '@/components/ui';
 import { RiSparklingLine, RiChat1Line, RiLoader4Line, RiErrorWarningLine } from 'react-icons/ri';
 import type { Jurisdiction } from '@/lib/jurisdiction/types';
+import { isWizardThemeV2 } from '@/components/wizard/shared/theme';
 
 type CaseType = 'eviction' | 'money_claim' | 'tenancy_agreement';
 type Product = 'notice_only' | 'complete_pack' | 'money_claim' | 'tenancy_agreement' | 'ast_standard' | 'ast_premium';
@@ -114,13 +115,17 @@ export const AskHeavenPanel: React.FC<AskHeavenPanelProps> = ({
   const renderPanelContent = () => (
     <Card
       padding="none"
-      className="ask-heaven-panel shadow-xl border border-primary/20 bg-white/95 backdrop-blur"
+      className={
+        isWizardThemeV2
+          ? "ask-heaven-panel rounded-xl shadow-[0_8px_20px_rgba(17,24,39,0.08)] border border-gray-200 bg-gray-50/95 backdrop-blur"
+          : "ask-heaven-panel shadow-xl border border-primary/20 bg-white/95 backdrop-blur"
+      }
       style={{ paddingTop: '48px', paddingLeft: '24px', paddingRight: '24px', paddingBottom: '24px' }}
     >
       {/* Header */}
       <div className="flex items-start gap-3 mb-4">
         <div className="mt-0.5">
-          <RiSparklingLine className="h-5 w-5 text-[#7C3AED]" />
+          <RiSparklingLine className="h-5 w-5 text-violet-600" />
         </div>
         <div>
           <h3 className="text-sm font-semibold text-gray-900">Ask Heaven</h3>
@@ -135,7 +140,7 @@ export const AskHeavenPanel: React.FC<AskHeavenPanelProps> = ({
       {/* Q&A helper */}
       <div className="mt-3 border-t border-gray-100 pt-3">
         <div className="flex items-center gap-2 mb-1">
-          <RiChat1Line className="h-3.5 w-3.5 text-[#7C3AED]" />
+          <RiChat1Line className="h-3.5 w-3.5 text-violet-600" />
           <span className="text-xs font-semibold text-gray-800">Ask questions</span>
         </div>
         <p className="text-xs text-gray-500 mb-2">
@@ -148,12 +153,16 @@ export const AskHeavenPanel: React.FC<AskHeavenPanelProps> = ({
             value={qaInput}
             onChange={(e) => setQaInput(e.target.value)}
             rows={3}
-            className="w-full rounded-md border border-gray-300 px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-transparent"
+            className={
+              isWizardThemeV2
+                ? "w-full rounded-lg border border-violet-200 bg-white px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-violet-300 focus:border-violet-500"
+                : "w-full rounded-md border border-gray-300 px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-transparent"
+            }
             placeholder='E.g. "Do I need to attach the tenancy agreement?" or "What happens after the court issues the claim?"'
           />
           <Button
             type="button"
-            variant="secondary"
+            variant={isWizardThemeV2 ? "primary" : "secondary"}
             size="small"
             className="w-full justify-center"
             onClick={handleAskQuestion}
@@ -161,12 +170,12 @@ export const AskHeavenPanel: React.FC<AskHeavenPanelProps> = ({
           >
             {qaLoading ? (
               <>
-                <RiLoader4Line className="mr-2 h-3.5 w-3.5 animate-spin text-[#7C3AED]" />
+                <RiLoader4Line className="mr-2 h-3.5 w-3.5 animate-spin text-violet-600" />
                 Asking Ask Heaven…
               </>
             ) : (
               <>
-                <RiChat1Line className="mr-2 h-3.5 w-3.5 text-[#7C3AED]" />
+                <RiChat1Line className="mr-2 h-3.5 w-3.5 text-violet-600" />
                 Ask a question
               </>
             )}
@@ -175,7 +184,7 @@ export const AskHeavenPanel: React.FC<AskHeavenPanelProps> = ({
 
         {qaError && (
           <div className="mt-2 flex items-start gap-2 rounded-md bg-red-50 px-2.5 py-2">
-            <RiErrorWarningLine className="h-3.5 w-3.5 text-[#7C3AED] mt-0.5" />
+            <RiErrorWarningLine className="h-3.5 w-3.5 text-violet-600 mt-0.5" />
             <p className="text-[11px] text-red-700">{qaError}</p>
           </div>
         )}

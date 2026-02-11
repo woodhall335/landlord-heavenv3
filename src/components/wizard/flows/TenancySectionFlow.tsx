@@ -33,6 +33,7 @@ import { useRouter } from 'next/navigation';
 import { getCaseFacts, saveCaseFacts } from '@/lib/wizard/facts-client';
 import { AskHeavenPanel } from '@/components/wizard/AskHeavenPanel';
 import { WizardFlowShell } from '@/components/wizard/shared/WizardFlowShell';
+import { isWizardThemeV2 } from '@/components/wizard/shared/theme';
 import { AskHeavenInlineEnhancer } from '@/components/wizard/AskHeavenInlineEnhancer';
 
 // Analytics and attribution
@@ -655,6 +656,8 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
               px-4 py-2 text-sm font-medium rounded-md transition-colors
               ${currentSectionIndex === 0
                 ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                : isWizardThemeV2
+                ? 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
                 : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}
             `}
           >
@@ -672,7 +675,7 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
                   px-6 py-2 text-sm font-medium rounded-md transition-colors
                   ${currentBlockers.length > 0
                     ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                    : 'bg-green-600 text-white hover:bg-green-700'}
+                    : 'bg-violet-600 text-white hover:bg-violet-700'}
                 `}
               >
                 Generate Documents
@@ -685,7 +688,7 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
                   px-6 py-2 text-sm font-medium rounded-md transition-colors
                   ${currentSectionIndex === visibleSections.length - 1
                     ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                    : 'bg-[#7C3AED] text-white hover:bg-[#6D28D9]'}
+                    : 'bg-violet-600 text-white hover:bg-violet-700'}
                 `}
               >
                 Next →

@@ -58,10 +58,12 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         "focus:ring-primary/50"
       ),
       secondary: clsx(
-        "bg-secondary text-white",
-        "hover:bg-secondary-dark hover:shadow-lg",
+        isWizardThemeV2
+          ? "bg-white text-violet-900 border border-violet-200"
+          : "bg-secondary text-white",
+        isWizardThemeV2 ? "hover:bg-violet-50 hover:shadow-sm" : "hover:bg-secondary-dark hover:shadow-lg",
         "active:scale-[0.98]",
-        "focus:ring-secondary/50"
+        isWizardThemeV2 ? "focus:ring-violet-300/60" : "focus:ring-secondary/50"
       ),
       outline: clsx(
         isWizardThemeV2 ? "bg-white text-violet-900 border border-violet-200" : "bg-white text-charcoal border-2 border-gray-300",
