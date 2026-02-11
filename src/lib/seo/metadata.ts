@@ -282,7 +282,7 @@ export const defaultMetadata: Metadata = {
     default: "Landlord Heaven - Court-Ready Legal Documents for UK Landlords",
     template: "%s | Landlord Heaven"
   },
-  description: "Generate court-ready eviction notices and legal documents in minutes. Save 80%+ vs solicitors. Section 21 ends May 2026 - act now. UK-wide coverage.",
+  description: "Reduce possession failure risk with court-ready notices and legal documents in minutes. Save 80%+ vs solicitors. Section 21 ends May 2026 - act now. UK-wide coverage.",
   keywords: [
     "section 21 notice",
     "section 8 notice",
@@ -325,7 +325,7 @@ export const defaultMetadata: Metadata = {
     url: SITE_ORIGIN,
     siteName: SITE_NAME,
     title: "Landlord Heaven - Court-Ready Legal Documents for UK Landlords",
-    description: "Generate court-ready eviction notices and legal documents in minutes. Save 80%+ vs solicitors. Section 21 ends May 2026.",
+    description: "Reduce possession failure risk with court-ready notices and legal documents in minutes. Save 80%+ vs solicitors. Section 21 ends May 2026.",
     images: [
       {
         url: '/og-image.png',
@@ -339,7 +339,7 @@ export const defaultMetadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: "Landlord Heaven - Court-Ready Legal Documents for UK Landlords",
-    description: "Generate court-ready eviction notices and legal documents. Save 80%+ vs solicitors. Section 21 ends May 2026.",
+    description: "Reduce possession failure risk with court-ready notices and legal documents. Save 80%+ vs solicitors. Section 21 ends May 2026.",
     images: ['/og-image.png'],
     creator: '@LandlordHeaven',
     site: '@LandlordHeaven',

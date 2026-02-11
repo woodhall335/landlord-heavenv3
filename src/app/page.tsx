@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     absolute: 'Landlord Heaven - UK Landlord Legal Documents'
   },
   description:
-    'Generate court-ready eviction notices, tenancy agreements, and legal documents in minutes. Save 80%+ vs solicitors. Section 21 ends May 2026 - act now. Trusted by UK landlords.',
+    'Reduce possession failure risk with court-ready notices, tenancy agreements, and legal documents in minutes. Save 80%+ vs solicitors. Section 21 ends May 2026 - act now. Trusted by UK landlords.',
   keywords: [
     'section 21 notice',
     'section 8 notice',
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Landlord Heaven - Court-Ready Legal Documents for UK Landlords',
     description:
-      'Generate court-ready eviction notices and legal documents in minutes. Save 80%+ vs solicitors. Trusted by UK landlords.',
+      'Reduce possession failure risk with court-ready notices and legal documents in minutes. Save 80%+ vs solicitors. Trusted by UK landlords.',
     type: 'website',
     url: 'https://landlordheaven.co.uk',
   },
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Landlord Heaven - Court-Ready Legal Documents for UK Landlords',
     description:
-      'Generate court-ready eviction notices and legal documents in minutes. Save 80%+ vs solicitors.',
+      'Reduce possession failure risk with court-ready notices and legal documents in minutes. Save 80%+ vs solicitors.',
   },
   alternates: {
     canonical: 'https://landlordheaven.co.uk',

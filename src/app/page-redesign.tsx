@@ -44,7 +44,7 @@ export default function Home() {
 
             {/* Subheadline - Benefit + differentiation */}
             <p className="text-xl md:text-2xl mb-8 text-gray-600 max-w-2xl mx-auto">
-              Generate compliant eviction notices, court forms, and tenancy agreements —
+              Reduce possession failure risk with guided notices, court forms, and tenancy agreements —
               <span className="font-semibold text-gray-800"> save 80%+ vs solicitor fees</span>.
             </p>
 
