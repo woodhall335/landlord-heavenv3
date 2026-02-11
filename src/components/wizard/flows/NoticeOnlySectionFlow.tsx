@@ -40,6 +40,7 @@ import { RiCheckLine, RiErrorWarningLine, RiArrowRightSLine } from 'react-icons/
 
 import { AskHeavenPanel } from '@/components/wizard/AskHeavenPanel';
 import { WizardFlowShell } from '@/components/wizard/shared/WizardFlowShell';
+import { isWizardThemeV2 } from '@/components/wizard/shared/theme';
 
 // Reuse section components from eviction flow
 import { CaseBasicsSection } from '../sections/eviction/CaseBasicsSection';
@@ -1083,7 +1084,7 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
                   >
                     <div className="flex items-center gap-3">
                       {complete && !hasBlocker ? (
-                        <RiCheckLine className="w-5 h-5 text-green-500" />
+                        <RiCheckLine className={isWizardThemeV2 ? "w-5 h-5 text-violet-600" : "w-5 h-5 text-green-500"} />
                       ) : hasBlocker ? (
                         <RiErrorWarningLine className="w-5 h-5 text-red-500" />
                       ) : (
@@ -1122,9 +1123,9 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
 
         {/* Ready to generate */}
         {allComplete && overallBlockers.length === 0 && (
-          <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
-            <h3 className="text-sm font-medium text-green-800 mb-2">Ready to Generate</h3>
-            <p className="text-sm text-green-700">
+          <div className={isWizardThemeV2 ? "p-4 bg-violet-50 border border-violet-200 rounded-lg" : "p-4 bg-green-50 border border-green-200 rounded-lg"}>
+            <h3 className={isWizardThemeV2 ? "text-sm font-medium text-violet-900 mb-2" : "text-sm font-medium text-green-800 mb-2"}>Ready to Generate</h3>
+            <p className={isWizardThemeV2 ? "text-sm text-violet-700" : "text-sm text-green-700"}>
               All sections are complete. Click the button below to generate your notice.
             </p>
           </div>
@@ -1247,6 +1248,8 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
               ${
                 currentSectionIndex === 0
                   ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                  : isWizardThemeV2
+                  ? 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
               }
             `}
@@ -1266,7 +1269,7 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
                   ${
                     !allComplete || getAllBlockers().length > 0 || generating
                       ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                      : 'bg-green-600 text-white hover:bg-green-700'
+                      : 'bg-violet-600 text-white hover:bg-violet-700'
                   }
                 `}
               >
@@ -1281,7 +1284,7 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
                   ${
                     currentSectionIndex === visibleSections.length - 1
                       ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                      : 'bg-[#7C3AED] text-white hover:bg-[#6D28D9]'
+                      : 'bg-violet-600 text-white hover:bg-violet-700'
                   }
                 `}
               >

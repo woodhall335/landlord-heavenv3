@@ -39,6 +39,7 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { WizardFlowShell } from '@/components/wizard/shared/WizardFlowShell';
+import { isWizardThemeV2 } from '@/components/wizard/shared/theme';
 
 import { AskHeavenPanel } from '@/components/wizard/AskHeavenPanel';
 import { SmartReviewPanel } from '@/components/wizard/SmartReviewPanel';
@@ -838,6 +839,8 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
               px-4 py-2 text-sm font-medium rounded-md transition-colors
               ${currentSectionIndex === 0
                 ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                : isWizardThemeV2
+                ? 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
                 : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}
             `}
           >
@@ -855,7 +858,7 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
                   px-6 py-2 text-sm font-medium rounded-md transition-colors
                   ${currentBlockers.length > 0 || hasErrors || uploadsInProgress
                     ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                    : 'bg-green-600 text-white hover:bg-green-700'}
+                    : 'bg-violet-600 text-white hover:bg-violet-700'}
                 `}
               >
                 {uploadsInProgress ? 'Uploading...' : 'Generate Documents'}
@@ -868,7 +871,7 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
                   px-6 py-2 text-sm font-medium rounded-md transition-colors
                   ${currentSectionIndex === visibleSections.length - 1 || hasErrors || uploadsInProgress
                     ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                    : 'bg-[#7C3AED] text-white hover:bg-[#6D28D9]'}
+                    : 'bg-violet-600 text-white hover:bg-violet-700'}
                 `}
               >
                 {uploadsInProgress ? 'Uploading...' : 'Next →'}

@@ -46,7 +46,7 @@ export function WizardFlowShell({
       className={clsx(
         'min-h-screen pt-20',
         isWizardThemeV2
-          ? 'bg-gradient-to-b from-violet-100/80 via-violet-50/40 to-white'
+          ? 'bg-gradient-to-b from-violet-100/70 via-violet-50/40 to-[#FAFAFC]'
           : 'bg-gray-50'
       )}
     >
@@ -58,7 +58,7 @@ export function WizardFlowShell({
             : 'bg-white border-gray-200'
         )}
       >
-        <div className="max-w-6xl mx-auto px-4 py-4">
+        <div className={clsx('mx-auto px-4 py-4', isWizardThemeV2 ? 'max-w-[1180px]' : 'max-w-6xl')}>
           <div className="flex items-center justify-between mb-3">
             <h1
               className={clsx(
@@ -94,10 +94,10 @@ export function WizardFlowShell({
                 key={tab.id}
                 onClick={tab.onClick}
                 className={clsx(
-                  'px-3 py-2 text-sm font-medium rounded-lg whitespace-nowrap transition-colors border',
+                  'px-4 py-2 text-sm font-medium rounded-full whitespace-nowrap transition-colors border shrink-0 min-w-fit',
                   tab.isCurrent
                     ? isWizardThemeV2
-                      ? 'bg-violet-600 text-white border-violet-600'
+                      ? 'bg-violet-600 text-white border-violet-600 shadow-sm'
                       : 'bg-[#7C3AED] text-white border-[#7C3AED]'
                     : isWizardThemeV2
                     ? 'bg-white text-violet-900 hover:bg-violet-50 border-violet-200'
@@ -108,7 +108,7 @@ export function WizardFlowShell({
                 <span className="flex items-center gap-1.5">
                   {tab.isComplete && !tab.hasIssue && (
                     <RiCheckLine
-                      className={clsx('w-4 h-4', isWizardThemeV2 ? 'text-emerald-500' : 'text-green-500')}
+                      className={clsx('w-4 h-4', isWizardThemeV2 ? 'text-violet-500' : 'text-green-500')}
                     />
                   )}
                   {tab.hasIssue && (
@@ -124,14 +124,14 @@ export function WizardFlowShell({
         </div>
       </header>
 
-      <div className="max-w-6xl mx-auto px-4 py-8 flex flex-col lg:flex-row gap-6">
-        <main className="flex-1 lg:max-w-4xl">
+      <div className={clsx('mx-auto px-4 py-8 flex flex-col lg:flex-row gap-6', isWizardThemeV2 ? 'max-w-[1180px] items-start' : 'max-w-6xl')}>
+        <main className={clsx('flex-1', isWizardThemeV2 ? 'lg:max-w-[820px]' : 'lg:max-w-4xl')}>
           {banner}
           <div
             className={clsx(
               'border overflow-hidden',
               isWizardThemeV2
-                ? 'bg-white rounded-2xl border-violet-200 shadow-[0_8px_30px_rgba(124,58,237,0.12)]'
+                ? 'bg-white rounded-xl border-violet-200 shadow-[0_8px_22px_rgba(31,41,55,0.08)]'
                 : 'bg-white rounded-xl shadow-sm border-gray-200'
             )}
           >
@@ -157,7 +157,7 @@ export function WizardFlowShell({
             <div
               className={clsx(
                 'px-6 md:px-7 py-4 border-t flex items-center justify-between',
-                isWizardThemeV2 ? 'border-violet-100 bg-violet-50/40' : 'border-gray-200 bg-white'
+                isWizardThemeV2 ? 'border-violet-100 bg-gray-50' : 'border-gray-200 bg-white'
               )}
             >
               {navigation}
@@ -166,7 +166,7 @@ export function WizardFlowShell({
         </main>
 
         {sidebar && (
-          <aside className="lg:w-80 shrink-0">
+          <aside className="lg:w-[320px] shrink-0">
             <div className="sticky top-44">{sidebar}</div>
           </aside>
         )}
