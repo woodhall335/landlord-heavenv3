@@ -11,6 +11,7 @@ import { ToolFunnelTracker } from '@/components/tools/ToolFunnelTracker';
 import { ToolUpsellCard } from '@/components/tools/ToolUpsellCard';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, toolLinks, landingPageLinks } from '@/lib/seo/internal-links';
+import { FunnelCta } from '@/components/funnels';
 
 export default function RentDemandLetterGenerator() {
   const [formData, setFormData] = useState({
@@ -423,6 +424,18 @@ URL.revokeObjectURL(url);
             <div className="flex items-baseline justify-center gap-2 mb-8">
               <span className="text-5xl md:text-6xl font-bold text-gray-900">FREE</span>
             </div>
+            <div className="max-w-2xl mx-auto mb-8">
+              <FunnelCta
+                title="Need to recover unpaid rent quickly?"
+                subtitle="Use our money claim service for court-ready paperwork and a clear arrears recovery route."
+                primaryHref="/products/money-claim"
+                primaryText="Recover unpaid rent"
+                primaryDataCta="money-claim"
+                location="above-fold"
+                secondaryLinks={[{ href: '/products/complete-pack', text: "If tenant won't leave / eviction support", dataCta: 'complete-pack' }]}
+              />
+            </div>
+
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <a
                 href="#generator"
@@ -493,6 +506,18 @@ URL.revokeObjectURL(url);
             </a>
           </div>
         </div>
+      </div>
+
+      <div className="mb-8">
+        <FunnelCta
+          title="No payment after this letter?"
+          subtitle="Move straight to the next legal step with our money claim pack."
+          primaryHref="/products/money-claim"
+          primaryText="Start money claim"
+          primaryDataCta="money-claim"
+          location="mid"
+          secondaryLinks={[{ href: '/products/complete-pack', text: 'Tenant still in property? Get eviction support', dataCta: 'complete-pack' }]}
+        />
       </div>
 
       <form className="space-y-6">

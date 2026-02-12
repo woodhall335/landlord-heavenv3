@@ -5,6 +5,7 @@ import { getCanonicalUrl } from '@/lib/seo';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { form3Section8FAQs } from '@/data/faqs';
+import { FunnelCta, CrossSellBar } from '@/components/funnels';
 
 export const metadata: Metadata = {
   title: 'Form 3 Section 8 Notice | Download & Guide 2026',
@@ -61,6 +62,20 @@ export default function Form3Section8Page() {
             </div>
           </Container>
         </section>
+
+        <Container>
+          <div className="-mt-8 mb-10">
+            <FunnelCta
+              title="Serve Form 3 correctly from the start"
+              subtitle="Use Notice Only for compliant drafting/serving, or upgrade to full eviction support."
+              primaryHref="/products/notice-only"
+              primaryText="Start Notice Only"
+              primaryDataCta="notice-only"
+              location="above-fold"
+              secondaryLinks={[{ href: '/products/complete-pack', text: 'Want it handled end-to-end?', dataCta: 'complete-pack' }]}
+            />
+          </div>
+        </Container>
 
         {/* Quick Actions */}
         <Container>
@@ -171,6 +186,10 @@ export default function Form3Section8Page() {
                   </table>
                 </div>
 
+                <div className="my-8">
+                  <CrossSellBar context="eviction" location="mid" />
+                </div>
+
                 <h2>How to Complete Form 3</h2>
                 <ol>
                   <li>Enter tenant name(s) and property address</li>
@@ -216,8 +235,8 @@ export default function Form3Section8Page() {
                 <Link href="/tools/free-section-8-notice-generator" className="hero-btn-primary">
                   Free Generator
                 </Link>
-                <Link href="/products/notice-only" className="hero-btn-secondary">
-                  Full Notice Pack
+                <Link href="/products/complete-pack" className="hero-btn-secondary" data-cta="complete-pack" data-cta-location="bottom">
+                  Want it handled end-to-end?
                 </Link>
               </div>
             </div>

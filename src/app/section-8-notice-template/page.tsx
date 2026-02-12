@@ -8,6 +8,7 @@ import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { StandardHero } from '@/components/marketing/StandardHero';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { section8NoticeTemplateFAQs } from '@/data/faqs';
+import { FunnelCta, CrossSellBar } from '@/components/funnels';
 import {
   CheckCircle,
   FileText,
@@ -141,10 +142,34 @@ export default function Section8NoticeTemplatePage() {
           </div>
         </StandardHero>
 
+        <section className="py-8 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <FunnelCta
+                title="Draft and serve your Section 8 notice"
+                subtitle="Use Notice Only for compliant Form 3 drafting, or choose full support for end-to-end eviction."
+                primaryHref="/products/notice-only"
+                primaryText="Start Notice Only"
+                primaryDataCta="notice-only"
+                location="above-fold"
+                secondaryLinks={[{ href: '/products/complete-pack', text: 'Want it handled end-to-end?', dataCta: 'complete-pack' }]}
+              />
+            </div>
+          </div>
+        </section>
+
         {/* Social Proof */}
         <section className="py-6 bg-gray-50 border-y border-gray-100">
           <div className="container mx-auto px-4">
             <SocialProofCounter variant="total" className="justify-center" />
+          </div>
+        </section>
+
+        <section className="py-6 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <CrossSellBar context="eviction" location="mid" />
+            </div>
           </div>
         </section>
 
@@ -562,6 +587,22 @@ export default function Section8NoticeTemplatePage() {
                 Get Your Section 8 Notice Now
                 <ArrowRight className="w-5 h-5" />
               </Link>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-10 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <FunnelCta
+                title="Ready to move this forward?"
+                subtitle="Serve the right notice now and keep your court options open."
+                primaryHref="/products/notice-only"
+                primaryText="Create Section 8 notice"
+                primaryDataCta="notice-only"
+                location="bottom"
+                secondaryLinks={[{ href: '/products/complete-pack', text: 'Want it handled end-to-end?', dataCta: 'complete-pack' }]}
+              />
             </div>
           </div>
         </section>

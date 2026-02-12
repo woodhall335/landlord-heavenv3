@@ -10,6 +10,7 @@ import { buildAskHeavenLink } from '@/lib/ask-heaven/buildAskHeavenLink';
 import { StandardHero } from '@/components/marketing/StandardHero';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { section21NoticeTemplateFAQs } from '@/data/faqs';
+import { FunnelCta } from '@/components/funnels';
 import {
   CheckCircle,
   FileText,
@@ -159,10 +160,46 @@ export default function Section21NoticeTemplatePage() {
           </div>
         </StandardHero>
 
+        <section className="py-8 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <FunnelCta
+                title="Ready to serve a compliant Section 21 notice?"
+                subtitle="Start with Notice Only, or move straight to full possession support if you expect court action."
+                primaryHref="/products/notice-only"
+                primaryText="Start Notice Only"
+                primaryDataCta="notice-only"
+                location="above-fold"
+                secondaryLinks={[
+                  { href: '/products/complete-pack', text: 'Need full eviction support?', dataCta: 'complete-pack' },
+                ]}
+              />
+            </div>
+          </div>
+        </section>
+
         {/* Social Proof */}
         <section className="py-6 bg-gray-50 border-y border-gray-100">
           <div className="container mx-auto px-4">
             <SocialProofCounter variant="total" className="justify-center" />
+          </div>
+        </section>
+
+        <section className="py-10 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <FunnelCta
+                title="Got the steps? We can draft and serve it for you."
+                subtitle="Reduce rejection risk with a compliant notice flow and clear next steps if the tenant does not leave."
+                primaryHref="/products/notice-only"
+                primaryText="Generate my notice"
+                primaryDataCta="notice-only"
+                location="mid"
+                secondaryLinks={[
+                  { href: '/products/complete-pack', text: 'Need full eviction support?', dataCta: 'complete-pack' },
+                ]}
+              />
+            </div>
           </div>
         </section>
 
@@ -453,6 +490,26 @@ export default function Section21NoticeTemplatePage() {
                 Serve Your Notice Before the Deadline
                 <ArrowRight className="w-5 h-5" />
               </Link>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-12 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Choose your next step</h2>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="rounded-xl border border-gray-200 p-6 bg-gray-50">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Notice Only</h3>
+                  <p className="text-gray-600 mb-4">Best when you need to draft and serve a compliant notice quickly.</p>
+                  <Link href="/products/notice-only" className="hero-btn-secondary inline-flex" data-cta="notice-only" data-cta-location="bottom">Start Notice Only</Link>
+                </div>
+                <div className="rounded-xl border border-primary/30 p-6 bg-primary/5">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Complete Pack</h3>
+                  <p className="text-gray-600 mb-4">Best if you want end-to-end support including possession order steps.</p>
+                  <Link href="/products/complete-pack" className="hero-btn-primary inline-flex" data-cta="complete-pack" data-cta-location="bottom">Get full eviction support</Link>
+                </div>
+              </div>
             </div>
           </div>
         </section>
