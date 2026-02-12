@@ -110,7 +110,7 @@ function SignupContent() {
             >
               <div className="absolute inset-0 bg-gradient-to-br from-primary/80 via-primary/60 to-primary-dark/80" />
 
-              <div className="relative z-10 max-w-[85%] md:max-w-full">
+              <div className="relative z-10 max-w-[75%] md:max-w-full">
                 <Link
                   href="/"
                   className="relative z-20 inline-flex items-center gap-2 rounded-full bg-white/15 hover:bg-white/20 border border-white/20 px-4 py-2 text-sm font-medium text-white focus:text-white focus-visible:text-white transition"
@@ -134,7 +134,7 @@ function SignupContent() {
               <div
                 className="
                   absolute z-0 pointer-events-none select-none
-                  top-10 right-6
+                  top-12 -right-10
                   md:top-auto md:right-auto md:left-1/2 md:bottom-0
                   md:-translate-x-1/2 md:translate-y-8
                 "
@@ -147,7 +147,7 @@ function SignupContent() {
                   priority
                   className="
                     h-auto object-contain max-w-none
-                    w-[240px] sm:w-[280px]
+                    w-[360px] sm:w-[420px]
                     md:w-[360px] lg:w-[440px] xl:w-[520px]
                   "
                 />
