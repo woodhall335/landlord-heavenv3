@@ -134,7 +134,7 @@ function SignupContent() {
               <div
                 className="
                   absolute z-0 pointer-events-none select-none
-                  top-12 -right-10
+                  top-4 -right-10 -translate-y-6
                   md:top-auto md:right-auto md:left-1/2 md:bottom-0
                   md:-translate-x-1/2 md:translate-y-8
                 "
