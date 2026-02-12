@@ -134,7 +134,7 @@ function SignupContent() {
               <div
                 className="
                   absolute z-0 pointer-events-none select-none
-                  top-6 right-6
+                  top-10 right-6
                   md:top-auto md:right-auto md:left-1/2 md:bottom-0
                   md:-translate-x-1/2 md:translate-y-8
                 "
@@ -147,7 +147,7 @@ function SignupContent() {
                   priority
                   className="
                     h-auto object-contain max-w-none
-                    w-[180px] sm:w-[220px]
+                    w-[240px] sm:w-[280px]
                     md:w-[360px] lg:w-[440px] xl:w-[520px]
                   "
                 />
