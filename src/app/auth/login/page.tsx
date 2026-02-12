@@ -183,12 +183,12 @@ function LoginContent() {
           <div className="grid md:grid-cols-2">
             {/* Left Side - Branding */}
             <div
-              className="relative overflow-hidden flex flex-col p-8 md:p-12 pt-12 bg-cover bg-center min-h-[380px] sm:min-h-[420px] md:min-h-[520px]"
+              className="relative overflow-hidden flex flex-col p-8 md:p-12 pt-12 bg-cover bg-center min-h-[320px] sm:min-h-[360px] md:min-h-[520px]"
               style={{ backgroundImage: "url('/images/mascots/landlord-heaven-signup-bg.webp')" }}
             >
               <div className="absolute inset-0 bg-gradient-to-br from-primary/80 via-primary/60 to-primary-dark/80" />
 
-              <div className="relative z-10">
+              <div className="relative z-10 max-w-[85%] md:max-w-full">
                 <Link
                   href="/"
                   className="relative z-20 inline-flex items-center gap-2 rounded-full bg-white/15 hover:bg-white/20 border border-white/20 px-4 py-2 text-sm font-medium text-white focus:text-white focus-visible:text-white transition"
@@ -209,13 +209,24 @@ function LoginContent() {
                 </div>
               </div>
 
-              <div className="absolute bottom-0 right-0 z-0 pointer-events-none select-none translate-x-6 md:translate-x-10 translate-y-6 md:translate-y-10">
+              <div
+                className="
+                  absolute z-0 pointer-events-none select-none
+                  top-6 right-6
+                  md:top-auto md:right-auto md:left-1/2 md:bottom-0
+                  md:-translate-x-1/2 md:translate-y-8
+                "
+              >
                 <Image
                   src="/images/mascots/landlord-heaven-login.webp"
-                  alt="Landlord Heaven login mascot"
+                  alt="LandlordHeaven mascot"
                   width={900}
                   height={900}
-                  className="h-auto w-[320px] sm:w-[380px] md:w-[520px] lg:w-[620px] max-w-none object-contain"
+                  className="
+                    h-auto object-contain max-w-none
+                    w-[180px] sm:w-[220px]
+                    md:w-[360px] lg:w-[440px] xl:w-[520px]
+                  "
                   priority
                 />
               </div>
