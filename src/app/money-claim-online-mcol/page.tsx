@@ -13,6 +13,7 @@ import {
   Send,
 } from 'lucide-react';
 import { FAQSection } from '@/components/marketing/FAQSection';
+import { FunnelCta, CrossSellBar } from '@/components/funnels';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { moneyClaimGuides, moneyClaimProcessLinks, productLinks } from '@/lib/seo/internal-links';
 
@@ -442,6 +443,14 @@ export default function MoneyClaimOnlineMCOLPage() {
           </div>
         </section>
 
+        <section className="py-8 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <CrossSellBar context="money-claim" location="mid" />
+            </div>
+          </div>
+        </section>
+
         {/* FAQ Section */}
         <section className="py-12 lg:py-16 bg-white">
           <div className="container mx-auto px-4">
@@ -468,6 +477,21 @@ export default function MoneyClaimOnlineMCOLPage() {
                   moneyClaimGuides.defendedClaims,
                   productLinks.moneyClaim,
                 ]}
+              />
+            </div>
+          </div>
+        </section>
+        <section className="py-10 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <FunnelCta
+                title="Need the right route for your case?"
+                subtitle="Continue your money claim or go back to the decision hub."
+                primaryHref="/products/money-claim"
+                primaryText="Continue with money claim"
+                primaryDataCta="money-claim"
+                location="bottom"
+                secondaryLinks={[{ href: '/tenant-not-paying-rent', text: 'Back to tenant not paying rent hub' }]}
               />
             </div>
           </div>

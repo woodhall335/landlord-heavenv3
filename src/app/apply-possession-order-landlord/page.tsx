@@ -19,6 +19,7 @@ import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import { possessionOrderFAQs } from '@/data/faqs';
+import { FunnelCta } from '@/components/funnels';
 import { PRODUCTS } from '@/lib/pricing/products';
 import {
   CheckCircle,
@@ -149,6 +150,25 @@ export default function ApplyPossessionOrderPage() {
           </div>
         </StandardHero>
 
+        <section className="py-8 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <FunnelCta
+                title="Apply for possession with full support"
+                subtitle="If your notice has expired, move straight to the court stage with the complete pack."
+                primaryHref="/products/complete-pack"
+                primaryText="Start complete pack"
+                primaryDataCta="complete-pack"
+                location="above-fold"
+                secondaryLinks={[
+                  { href: '/products/notice-only', text: 'Only need notice drafting?', dataCta: 'notice-only' },
+                  { href: '/n5b-form-guide', text: 'Accelerated possession (N5B)' },
+                ]}
+              />
+            </div>
+          </div>
+        </section>
+
         {/* Social Proof */}
         <section className="py-6 bg-gray-50 border-y border-gray-100">
           <div className="container mx-auto px-4">
@@ -188,7 +208,11 @@ export default function ApplyPossessionOrderPage() {
 
                   <p className="text-gray-600 mb-4">
                     Paper-based process with no court hearing required. The judge reviews
-                    documents and issues an order if valid.
+                    documents and issues an order if valid. See our{' '}
+                    <Link href="/n5b-form-guide" className="text-primary hover:underline">
+                      accelerated possession (N5B) guide
+                    </Link>
+                    .
                   </p>
 
                   <div className="space-y-3 mb-6">
@@ -231,6 +255,17 @@ export default function ApplyPossessionOrderPage() {
                       <li>• Copy of tenancy agreement</li>
                     </ul>
                   </div>
+                </div>
+
+                <div className="md:col-span-2">
+                  <FunnelCta
+                    title="Need this handled end-to-end?"
+                    subtitle="We can prepare the possession paperwork and guide each filing step."
+                    primaryHref="/products/complete-pack"
+                    primaryText="Get full eviction support"
+                    primaryDataCta="complete-pack"
+                    location="mid"
+                  />
                 </div>
 
                 {/* Standard (N5) */}

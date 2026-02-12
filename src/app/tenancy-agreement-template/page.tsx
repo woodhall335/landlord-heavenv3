@@ -8,6 +8,7 @@ import { productLinks, toolLinks, landingPageLinks } from '@/lib/seo/internal-li
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { buildAskHeavenLink } from '@/lib/ask-heaven/buildAskHeavenLink';
 import { StandardHero } from '@/components/marketing/StandardHero';
+import { FunnelCta } from '@/components/funnels';
 import {
   CheckCircle,
   FileText,
@@ -201,6 +202,22 @@ export default function TenancyAgreementTemplatePage() {
             </span>
           </div>
         </StandardHero>
+
+        <section className="py-8 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <FunnelCta
+                title="Get a compliant tenancy agreement in minutes"
+                subtitle="Start with our AST product and make sure your paperwork supports valid future notice service."
+                primaryHref="/products/ast"
+                primaryText="Start tenancy agreement"
+                primaryDataCta="ast"
+                location="above-fold"
+                secondaryLinks={[{ href: '/section-21-notice-template', text: 'Serving Section 21 correctly depends on compliance' }]}
+              />
+            </div>
+          </div>
+        </section>
 
         {/* Social Proof */}
         <section className="py-6 bg-gray-50 border-y border-gray-100">
@@ -640,6 +657,22 @@ export default function TenancyAgreementTemplatePage() {
                   Right to Rent →
                 </Link>
               </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-10 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <FunnelCta
+                title="Ready to issue your AST?"
+                subtitle="Use our product flow for a cleaner signing process and better compliance records."
+                primaryHref="/products/ast"
+                primaryText="Get AST now"
+                primaryDataCta="ast"
+                location="bottom"
+                secondaryLinks={[{ href: '/section-21-notice-template', text: 'Section 21 compliance guide' }]}
+              />
             </div>
           </div>
         </section>

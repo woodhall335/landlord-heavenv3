@@ -16,6 +16,7 @@ import { FAQSection } from '@/components/seo/FAQSection';
 import { NextLegalSteps } from '@/components/seo/NextLegalSteps';
 import { productLinks, landingPageLinks, toolLinks } from '@/lib/seo/internal-links';
 import { moneyClaimUnpaidRentFAQs } from '@/data/faqs';
+import { FunnelCta, CrossSellBar } from '@/components/funnels';
 
 export const metadata: Metadata = {
   title: 'Reclaim Rent from a Tenant 2026 | Landlord Money Claim Guide',
@@ -86,6 +87,18 @@ export default function MoneyClaimUnpaidRentPage() {
                 Northern Ireland.
               </p>
 
+              <div className="max-w-2xl mx-auto mb-8">
+                <FunnelCta
+                  title="Recover unpaid rent with a court-ready pack"
+                  subtitle="If the tenant still occupies the property, pair debt recovery with eviction action."
+                  primaryHref="/products/money-claim"
+                  primaryText="Start money claim"
+                  primaryDataCta="money-claim"
+                  location="above-fold"
+                  secondaryLinks={[{ href: '/products/complete-pack', text: 'If tenant is still in the property…', dataCta: 'complete-pack' }]}
+                />
+              </div>
+
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
                   href="/products/money-claim"
@@ -105,6 +118,14 @@ export default function MoneyClaimUnpaidRentPage() {
               <p className="mt-4 text-sm text-green-200">
                 Money Claim Pack available for England only
               </p>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-6 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <CrossSellBar context="money-claim" location="mid" />
             </div>
           </div>
         </section>
@@ -731,6 +752,18 @@ export default function MoneyClaimUnpaidRentPage() {
                 Our Money Claim Pack (England only) includes everything you need: letter before action, N1
                 claim form, rent schedule, and step-by-step guidance.
               </p>
+              <div className="max-w-2xl mx-auto mb-8">
+                <FunnelCta
+                  title="Recover unpaid rent with a court-ready pack"
+                  subtitle="If the tenant still occupies the property, pair debt recovery with eviction action."
+                  primaryHref="/products/money-claim"
+                  primaryText="Start money claim"
+                  primaryDataCta="money-claim"
+                  location="above-fold"
+                  secondaryLinks={[{ href: '/products/complete-pack', text: 'If tenant is still in the property…', dataCta: 'complete-pack' }]}
+                />
+              </div>
+
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
                   href="/products/money-claim"
@@ -801,6 +834,24 @@ export default function MoneyClaimUnpaidRentPage() {
           showContactCTA={false}
           variant="white"
         />
+        <section className="py-10 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <FunnelCta
+                title="Unsure whether to evict or claim?"
+                subtitle="Use our decision guide to choose the best route for your case."
+                primaryHref="/products/money-claim"
+                primaryText="Continue with money claim"
+                primaryDataCta="money-claim"
+                location="bottom"
+                secondaryLinks={[
+                  { href: '/products/complete-pack', text: 'If tenant is still in the property…', dataCta: 'complete-pack' },
+                  { href: '/tenant-not-paying-rent', text: 'Back to tenant not paying rent hub' },
+                ]}
+              />
+            </div>
+          </div>
+        </section>
       </main>
     </>
   );

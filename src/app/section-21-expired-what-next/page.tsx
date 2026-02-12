@@ -21,6 +21,7 @@ import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import { section21ExpiredFAQs } from '@/data/faqs';
+import { FunnelCta } from '@/components/funnels';
 import { PRODUCTS } from '@/lib/pricing/products';
 import {
   CheckCircle,
@@ -160,6 +161,25 @@ export default function Section21ExpiredPage() {
           </div>
         </StandardHero>
 
+        <section className="py-8 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <FunnelCta
+                title="Move to possession order support now"
+                subtitle="When a Section 21 expires, the next step is the court route. We can prepare the full pack for you."
+                primaryHref="/products/complete-pack"
+                primaryText="Get Complete Pack"
+                primaryDataCta="complete-pack"
+                location="above-fold"
+                secondaryLinks={[
+                  { href: '/products/notice-only', text: 'Need to (re)serve notice first?', dataCta: 'notice-only' },
+                  { href: '/n5b-form-guide', text: 'Accelerated possession (N5B)' },
+                ]}
+              />
+            </div>
+          </div>
+        </section>
+
         {/* Social Proof */}
         <section className="py-6 bg-gray-50 border-y border-gray-100">
           <div className="container mx-auto px-4">
@@ -230,6 +250,22 @@ export default function Section21ExpiredPage() {
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-10 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <FunnelCta
+                title="Ready to file accelerated possession (N5B)?"
+                subtitle="Avoid delays by preparing the court bundle correctly from the start."
+                primaryHref="/products/complete-pack"
+                primaryText="Start complete eviction pack"
+                primaryDataCta="complete-pack"
+                location="mid"
+                secondaryLinks={[{ href: '/n5b-form-guide', text: 'Read N5B form guide' }]}
+              />
             </div>
           </div>
         </section>

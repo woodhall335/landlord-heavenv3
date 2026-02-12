@@ -14,6 +14,7 @@ import { StandardHero } from '@/components/marketing/StandardHero';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { tenantNotPayingRentFAQs } from '@/data/faqs';
+import { NeedHelpChoosing, FunnelCta } from '@/components/funnels';
 import {
   CheckCircle,
   AlertTriangle,
@@ -120,6 +121,28 @@ export default function TenantNotPayingRentPage() {
         <section className="py-6 bg-gray-50 border-y border-gray-100">
           <div className="container mx-auto px-4">
             <SocialProofCounter variant="total" className="justify-center" />
+          </div>
+        </section>
+
+        <section className="py-8 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <NeedHelpChoosing location="above-fold" />
+
+              <div className="grid md:grid-cols-2 gap-4 mt-6">
+                <div className="rounded-xl border border-gray-200 p-5 bg-gray-50">
+                  <h3 className="font-semibold text-gray-900 mb-2">Tenant still in property</h3>
+                  <p className="text-sm text-gray-700 mb-3">Use possession-focused support to serve Section 8 correctly and progress to court if needed.</p>
+                  <Link href="/products/complete-pack" className="text-primary font-medium hover:underline" data-cta="complete-pack" data-cta-location="above-fold">Go to complete-pack →</Link>
+                  <p className="text-xs text-gray-500 mt-2">Also see <Link href="/section-8-notice-template" className="underline">Section 8 notice template</Link>.</p>
+                </div>
+                <div className="rounded-xl border border-gray-200 p-5 bg-gray-50">
+                  <h3 className="font-semibold text-gray-900 mb-2">Tenant has left owing money</h3>
+                  <p className="text-sm text-gray-700 mb-3">Focus on debt recovery with a money claim and evidence-ready arrears schedule.</p>
+                  <Link href="/products/money-claim" className="text-primary font-medium hover:underline" data-cta="money-claim" data-cta-location="above-fold">Go to money-claim →</Link>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -246,6 +269,22 @@ export default function TenantNotPayingRentPage() {
                   Many landlords evict first, then claim arrears plus any damage costs once the tenant has left.
                 </p>
               </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-10 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <FunnelCta
+                title="Need the quickest route for your exact scenario?"
+                subtitle="Choose full eviction support if possession is the priority, or money claim if recovery is the goal."
+                primaryHref="/products/complete-pack"
+                primaryText="Get full eviction support"
+                primaryDataCta="complete-pack"
+                location="mid"
+                secondaryLinks={[{ href: '/products/money-claim', text: 'Recover money owed instead', dataCta: 'money-claim' }]}
+              />
             </div>
           </div>
         </section>

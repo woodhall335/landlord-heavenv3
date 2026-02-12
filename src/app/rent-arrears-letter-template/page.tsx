@@ -6,6 +6,7 @@ import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, toolLinks, blogLinks, landingPageLinks } from '@/lib/seo/internal-links';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { StandardHero } from '@/components/marketing/StandardHero';
+import { FunnelCta } from '@/components/funnels';
 import {
   CheckCircle,
   FileText,
@@ -163,6 +164,22 @@ export default function RentArrearsLetterTemplatePage() {
           </div>
         </StandardHero>
 
+        <section className="py-8 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <FunnelCta
+                title="Turn arrears letters into recovery action"
+                subtitle="Use Money Claim when payment is still outstanding, or choose eviction support if possession is also needed."
+                primaryHref="/products/money-claim"
+                primaryText="Recover unpaid rent"
+                primaryDataCta="money-claim"
+                location="above-fold"
+                secondaryLinks={[{ href: '/products/complete-pack', text: "If tenant won't leave / eviction support", dataCta: 'complete-pack' }]}
+              />
+            </div>
+          </div>
+        </section>
+
         {/* Social Proof */}
         <section className="py-6 bg-gray-50 border-y border-gray-100">
           <div className="container mx-auto px-4">
@@ -246,6 +263,22 @@ export default function RentArrearsLetterTemplatePage() {
                   </ul>
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-10 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <FunnelCta
+                title="No response to your letter?"
+                subtitle="Escalate with a money claim pack and keep your arrears evidence organised."
+                primaryHref="/products/money-claim"
+                primaryText="Start money claim"
+                primaryDataCta="money-claim"
+                location="mid"
+                secondaryLinks={[{ href: '/products/complete-pack', text: 'Tenant still in property? Get eviction support', dataCta: 'complete-pack' }]}
+              />
             </div>
           </div>
         </section>

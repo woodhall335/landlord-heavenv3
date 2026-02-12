@@ -5,6 +5,7 @@ import { getCanonicalUrl } from '@/lib/seo';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { form6aFAQs } from '@/data/faqs';
+import { FunnelCta } from '@/components/funnels';
 
 export const metadata: Metadata = {
   title: 'Form 6A Section 21 Notice | Download & Guide 2026',
@@ -61,6 +62,20 @@ export default function Form6APage() {
             </div>
           </Container>
         </section>
+
+        <Container>
+          <div className="-mt-8 mb-10">
+            <FunnelCta
+              title="Get a compliant Form 6A drafted and served"
+              subtitle="Start with Notice Only now, and move to full possession support if the tenant stays."
+              primaryHref="/products/notice-only"
+              primaryText="Start Notice Only"
+              primaryDataCta="notice-only"
+              location="above-fold"
+              secondaryLinks={[{ href: '/products/complete-pack', text: 'Need full eviction support?', dataCta: 'complete-pack' }]}
+            />
+          </div>
+        </Container>
 
         {/* Quick Actions */}
         <Container>
@@ -161,6 +176,21 @@ export default function Form6APage() {
                   <li>Not providing the How to Rent guide before serving</li>
                 </ul>
 
+                <div className="my-8">
+                  <FunnelCta
+                    title="Need the next step ready as well?"
+                    subtitle="If your notice expires and the tenant does not leave, you will need possession action."
+                    primaryHref="/products/complete-pack"
+                    primaryText="Get full eviction support"
+                    primaryDataCta="complete-pack"
+                    location="mid"
+                    secondaryLinks={[
+                      { href: '/section-21-expired-what-next', text: 'Read next steps after expiry' },
+                      { href: '/products/notice-only', text: 'Start with Notice Only', dataCta: 'notice-only' },
+                    ]}
+                  />
+                </div>
+
                 <h2>Form 6A vs Form 3 (Section 8)</h2>
                 <p>
                   Form 6A is for <Link href="/no-fault-eviction" className="text-primary hover:underline">no-fault evictions</Link> where you don&apos;t need to
@@ -197,8 +227,8 @@ export default function Form6APage() {
                 <Link href="/tools/free-section-21-notice-generator" className="hero-btn-primary">
                   Free Generator
                 </Link>
-                <Link href="/products/notice-only" className="hero-btn-secondary">
-                  Full Notice Pack
+                <Link href="/products/complete-pack" className="hero-btn-secondary" data-cta="complete-pack" data-cta-location="bottom">
+                  Need full eviction support?
                 </Link>
               </div>
             </div>
