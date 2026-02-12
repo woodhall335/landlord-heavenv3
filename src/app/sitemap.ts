@@ -312,7 +312,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: page.priority,
   }));
 
-  const staticPageRoutes = await discoverStaticPageRoutes();
+  let staticPageRoutes: string[] = [];
+  try {
+    staticPageRoutes = await discoverStaticPageRoutes();
+  } catch (error) {
+    // Do not fail sitemap generation if route discovery cannot read filesystem
+    // in constrained runtime environments (e.g. standalone production builds).
+    console.warn('[Sitemap] Failed to auto-discover static routes:', error);
+  }
   const coveredPaths = new Set([...marketingPages, ...datedPages].map((page) => page.path));
 
   const autoDiscoveredStaticEntries: MetadataRoute.Sitemap = staticPageRoutes
