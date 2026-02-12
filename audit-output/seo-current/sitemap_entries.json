@@ -1,1 +1,2680 @@
-[]
+[
+  {
+    "url": "https://landlordheaven.co.uk/",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "1",
+    "changeFrequency": "weekly",
+    "path": "/",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/pricing",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.9",
+    "changeFrequency": "weekly",
+    "path": "/pricing",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/about",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/about",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/contact",
+    "priority": "0.6",
+    "changeFrequency": "monthly",
+    "path": "/contact",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/help",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/help",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/terms",
+    "priority": "0.3",
+    "changeFrequency": "yearly",
+    "path": "/terms",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/privacy",
+    "priority": "0.3",
+    "changeFrequency": "yearly",
+    "path": "/privacy",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/cookies",
+    "priority": "0.3",
+    "changeFrequency": "yearly",
+    "path": "/cookies",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/products/notice-only",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.9",
+    "changeFrequency": "weekly",
+    "path": "/products/notice-only",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/products/complete-pack",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.9",
+    "changeFrequency": "weekly",
+    "path": "/products/complete-pack",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/products/money-claim",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.9",
+    "changeFrequency": "weekly",
+    "path": "/products/money-claim",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/products/ast",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.9",
+    "changeFrequency": "weekly",
+    "path": "/products/ast",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ask-heaven",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "weekly",
+    "path": "/ask-heaven",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/eviction-notice",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.95",
+    "changeFrequency": "weekly",
+    "path": "/eviction-notice",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/eviction-pack-england",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.95",
+    "changeFrequency": "weekly",
+    "path": "/eviction-pack-england",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/money-claim",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.95",
+    "changeFrequency": "weekly",
+    "path": "/money-claim",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/section-21-notice-template",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.9",
+    "changeFrequency": "weekly",
+    "path": "/section-21-notice-template",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/eviction-notice-template",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.9",
+    "changeFrequency": "weekly",
+    "path": "/eviction-notice-template",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/section-8-notice-template",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "weekly",
+    "path": "/section-8-notice-template",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/rent-arrears-letter-template",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "weekly",
+    "path": "/rent-arrears-letter-template",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/wales-eviction-notice-template",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "weekly",
+    "path": "/wales-eviction-notice-template",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/scotland-notice-to-leave-template",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "weekly",
+    "path": "/scotland-notice-to-leave-template",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/tenant-wont-leave",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "weekly",
+    "path": "/tenant-wont-leave",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/tenant-not-paying-rent",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "weekly",
+    "path": "/tenant-not-paying-rent",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/possession-claim-guide",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "weekly",
+    "path": "/possession-claim-guide",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/eviction-cost-uk",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "weekly",
+    "path": "/eviction-cost-uk",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/how-to-evict-tenant",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.85",
+    "changeFrequency": "weekly",
+    "path": "/how-to-evict-tenant",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/wales-eviction-notices",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "weekly",
+    "path": "/wales-eviction-notices",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/scotland-eviction-notices",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "weekly",
+    "path": "/scotland-eviction-notices",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/section-21-ban",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.85",
+    "changeFrequency": "weekly",
+    "path": "/section-21-ban",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/n5b-form-guide",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "weekly",
+    "path": "/n5b-form-guide",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/warrant-of-possession",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "weekly",
+    "path": "/warrant-of-possession",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/money-claim-cleaning-costs",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "weekly",
+    "path": "/money-claim-cleaning-costs",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/money-claim-property-damage",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "weekly",
+    "path": "/money-claim-property-damage",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/money-claim-unpaid-utilities",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "weekly",
+    "path": "/money-claim-unpaid-utilities",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/money-claim-garden-damage",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.75",
+    "changeFrequency": "weekly",
+    "path": "/money-claim-garden-damage",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/money-claim-carpet-damage",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.75",
+    "changeFrequency": "weekly",
+    "path": "/money-claim-carpet-damage",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/money-claim-appliance-damage",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.75",
+    "changeFrequency": "weekly",
+    "path": "/money-claim-appliance-damage",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/money-claim-wall-damage",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.75",
+    "changeFrequency": "weekly",
+    "path": "/money-claim-wall-damage",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/money-claim-bathroom-damage",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.75",
+    "changeFrequency": "weekly",
+    "path": "/money-claim-bathroom-damage",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/money-claim-abandoned-goods",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.75",
+    "changeFrequency": "weekly",
+    "path": "/money-claim-abandoned-goods",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/money-claim-council-tax",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.75",
+    "changeFrequency": "weekly",
+    "path": "/money-claim-council-tax",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/money-claim-early-termination",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.75",
+    "changeFrequency": "weekly",
+    "path": "/money-claim-early-termination",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/money-claim-unpaid-bills",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.75",
+    "changeFrequency": "weekly",
+    "path": "/money-claim-unpaid-bills",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/money-claim-guarantor",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.75",
+    "changeFrequency": "weekly",
+    "path": "/money-claim-guarantor",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/money-claim-former-tenant",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.75",
+    "changeFrequency": "weekly",
+    "path": "/money-claim-former-tenant",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/money-claim-deposit-shortfall",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.75",
+    "changeFrequency": "weekly",
+    "path": "/money-claim-deposit-shortfall",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/money-claim-unpaid-rent",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.85",
+    "changeFrequency": "weekly",
+    "path": "/money-claim-unpaid-rent",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/money-claim-online-mcol",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "weekly",
+    "path": "/money-claim-online-mcol",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/money-claim-ccj-enforcement",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.75",
+    "changeFrequency": "weekly",
+    "path": "/money-claim-ccj-enforcement",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/money-claim-small-claims-landlord",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "weekly",
+    "path": "/money-claim-small-claims-landlord",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/money-claim-tenant-defends",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.75",
+    "changeFrequency": "weekly",
+    "path": "/money-claim-tenant-defends",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/money-claim-n1-claim-form",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/money-claim-n1-claim-form",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/money-claim-letter-before-action",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.75",
+    "changeFrequency": "monthly",
+    "path": "/money-claim-letter-before-action",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/money-claim-schedule-of-debt",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/money-claim-schedule-of-debt",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/money-claim-pap-financial-statement",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/money-claim-pap-financial-statement",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/assured-shorthold-tenancy-agreement-template",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.85",
+    "changeFrequency": "weekly",
+    "path": "/assured-shorthold-tenancy-agreement-template",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/tenancy-agreement-template-free",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "weekly",
+    "path": "/tenancy-agreement-template-free",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/joint-tenancy-agreement-template",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "weekly",
+    "path": "/joint-tenancy-agreement-template",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/wales-tenancy-agreement-template",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "weekly",
+    "path": "/wales-tenancy-agreement-template",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/private-residential-tenancy-agreement-template",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.85",
+    "changeFrequency": "weekly",
+    "path": "/private-residential-tenancy-agreement-template",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/northern-ireland-tenancy-agreement-template",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.85",
+    "changeFrequency": "weekly",
+    "path": "/northern-ireland-tenancy-agreement-template",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/notice-to-quit-northern-ireland-guide",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "weekly",
+    "path": "/notice-to-quit-northern-ireland-guide",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ni-tenancy-agreement-template-free",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "weekly",
+    "path": "/ni-tenancy-agreement-template-free",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/fixed-term-periodic-tenancy-england",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "weekly",
+    "path": "/fixed-term-periodic-tenancy-england",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/joint-tenancy-agreement-england",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "weekly",
+    "path": "/joint-tenancy-agreement-england",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/renew-tenancy-agreement-england",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "weekly",
+    "path": "/renew-tenancy-agreement-england",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/form-6a-section-21",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.9",
+    "changeFrequency": "weekly",
+    "path": "/form-6a-section-21",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/eviction-notice-uk",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.9",
+    "changeFrequency": "weekly",
+    "path": "/eviction-notice-uk",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/no-fault-eviction",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.85",
+    "changeFrequency": "weekly",
+    "path": "/no-fault-eviction",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/form-3-section-8",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.9",
+    "changeFrequency": "weekly",
+    "path": "/form-3-section-8",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/lodger-agreement-template",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "weekly",
+    "path": "/lodger-agreement-template",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/rolling-tenancy-agreement",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "weekly",
+    "path": "/rolling-tenancy-agreement",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/how-to-rent-guide",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "weekly",
+    "path": "/how-to-rent-guide",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/pre-action-protocol-debt",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "weekly",
+    "path": "/pre-action-protocol-debt",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/tenant-damaging-property",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "weekly",
+    "path": "/tenant-damaging-property",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/eicr-landlord-requirements",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "weekly",
+    "path": "/eicr-landlord-requirements",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/county-court-claim-form-guide",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "weekly",
+    "path": "/county-court-claim-form-guide",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/6-month-tenancy-agreement-template",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "weekly",
+    "path": "/6-month-tenancy-agreement-template",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/fixed-term-tenancy-agreement-template",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "weekly",
+    "path": "/fixed-term-tenancy-agreement-template",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/apply-possession-order-landlord",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "weekly",
+    "path": "/apply-possession-order-landlord",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/eviction-process-england",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.85",
+    "changeFrequency": "weekly",
+    "path": "/eviction-process-england",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/eviction-process-scotland",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.85",
+    "changeFrequency": "weekly",
+    "path": "/eviction-process-scotland",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/eviction-process-wales",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.85",
+    "changeFrequency": "weekly",
+    "path": "/eviction-process-wales",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/section-21-expired-what-next",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.85",
+    "changeFrequency": "weekly",
+    "path": "/section-21-expired-what-next",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/section-8-rent-arrears-eviction",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.85",
+    "changeFrequency": "weekly",
+    "path": "/section-8-rent-arrears-eviction",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/section-8-vs-section-21",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.85",
+    "changeFrequency": "weekly",
+    "path": "/section-8-vs-section-21",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/periodic-tenancy-agreement",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.85",
+    "changeFrequency": "weekly",
+    "path": "/periodic-tenancy-agreement",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/tools",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/tools",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/tools/validators",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.85",
+    "changeFrequency": "weekly",
+    "path": "/tools/validators",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/tools/free-section-21-notice-generator",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "weekly",
+    "path": "/tools/free-section-21-notice-generator",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/tools/free-section-8-notice-generator",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "weekly",
+    "path": "/tools/free-section-8-notice-generator",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/tools/rent-arrears-calculator",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "weekly",
+    "path": "/tools/rent-arrears-calculator",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/tools/hmo-license-checker",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "weekly",
+    "path": "/tools/hmo-license-checker",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/tools/free-rent-demand-letter",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "weekly",
+    "path": "/tools/free-rent-demand-letter",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/tools/validators/section-21",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.9",
+    "changeFrequency": "weekly",
+    "path": "/tools/validators/section-21",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/tools/validators/section-8",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.9",
+    "changeFrequency": "weekly",
+    "path": "/tools/validators/section-8",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.9",
+    "changeFrequency": "weekly",
+    "path": "/blog",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/assured-shorthold-tenancy-agreement",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/assured-shorthold-tenancy-agreement",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ast-template-england",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ast-template-england",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ast-tenancy-agreement-template",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ast-tenancy-agreement-template",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/claim-rent-arrears-tenant",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/claim-rent-arrears-tenant",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/common-prt-tenancy-mistakes-scotland",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/common-prt-tenancy-mistakes-scotland",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/fixed-term-periodic-occupation-contract-wales",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/fixed-term-periodic-occupation-contract-wales",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/fixed-term-tenancy-agreement-northern-ireland",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/fixed-term-tenancy-agreement-northern-ireland",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/how-to-sue-tenant-for-unpaid-rent",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/how-to-sue-tenant-for-unpaid-rent",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/joint-occupation-contract-wales",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/joint-occupation-contract-wales",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/joint-prt-tenancy-agreement-scotland",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/joint-prt-tenancy-agreement-scotland",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/joint-tenancy-agreement-northern-ireland",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/joint-tenancy-agreement-northern-ireland",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/mcol-money-claim-online",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/mcol-money-claim-online",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/money-claim-rent-arrears",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/money-claim-rent-arrears",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ni-private-tenancy-agreement",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ni-private-tenancy-agreement",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/occupation-contract-template-wales",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/occupation-contract-template-wales",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/premium-tenancy-agreement",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/premium-tenancy-agreement",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/private-residential-tenancy-agreement-scotland",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/private-residential-tenancy-agreement-scotland",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/products/money-claim-pack",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.9",
+    "changeFrequency": "weekly",
+    "path": "/products/money-claim-pack",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/prt-template-scotland",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/prt-template-scotland",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/prt-tenancy-agreement-template-scotland",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/prt-tenancy-agreement-template-scotland",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/renting-homes-wales-written-statement",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/renting-homes-wales-written-statement",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/scotland-prt-model-agreement-guide",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/scotland-prt-model-agreement-guide",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/scottish-tenancy-agreement-template",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/scottish-tenancy-agreement-template",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/standard-occupation-contract-wales",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/standard-occupation-contract-wales",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/tenancy-agreement",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/tenancy-agreement",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/tenancy-agreement-northern-ireland",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/tenancy-agreement-northern-ireland",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/tenancy-agreement-template",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/tenancy-agreement-template",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/tenancy-agreement-template-northern-ireland",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/tenancy-agreement-template-northern-ireland",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/tenancy-agreements/england",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/tenancy-agreements/england",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/tenancy-agreements/northern-ireland",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/tenancy-agreements/northern-ireland",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/tenancy-agreements/scotland",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/tenancy-agreements/scotland",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/tenancy-agreements/wales",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/tenancy-agreements/wales",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/update-occupation-contract-wales",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/update-occupation-contract-wales",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/update-prt-tenancy-agreement-scotland",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/update-prt-tenancy-agreement-scotland",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/update-tenancy-agreement-northern-ireland",
+    "lastModified": "2026-01-01T00:00:00.000Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/update-tenancy-agreement-northern-ireland",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "static"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/renters-reform-bill-what-landlords-need-to-know",
+    "lastModified": "2026-01-02T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/renters-reform-bill-what-landlords-need-to-know",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/what-is-section-21-notice",
+    "lastModified": "2026-01-02T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/what-is-section-21-notice",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/section-21-vs-section-8",
+    "lastModified": "2026-01-02T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/section-21-vs-section-8",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/how-to-serve-eviction-notice",
+    "lastModified": "2026-01-02T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/how-to-serve-eviction-notice",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/how-long-does-eviction-take-uk",
+    "lastModified": "2026-01-02T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/how-long-does-eviction-take-uk",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/rent-arrears-eviction-guide",
+    "lastModified": "2026-01-02T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/rent-arrears-eviction-guide",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/england-assured-shorthold-tenancy-guide",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/england-assured-shorthold-tenancy-guide",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/england-section-21-process",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/england-section-21-process",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/england-section-8-process",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/england-section-8-process",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/england-section-8-ground-8",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/england-section-8-ground-8",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/england-accelerated-possession",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/england-accelerated-possession",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/england-standard-possession",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/england-standard-possession",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/england-section-8-ground-10-11",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/england-section-8-ground-10-11",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/england-section-8-ground-14",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/england-section-8-ground-14",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/england-section-8-ground-17",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/england-section-8-ground-17",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/england-section-8-ground-1",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/england-section-8-ground-1",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/england-section-8-ground-2",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/england-section-8-ground-2",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/england-section-8-ground-7",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/england-section-8-ground-7",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/england-section-8-ground-12",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/england-section-8-ground-12",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/england-possession-hearing",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/england-possession-hearing",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/england-bailiff-eviction",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/england-bailiff-eviction",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/england-county-court-forms",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/england-county-court-forms",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/england-deposit-protection",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/england-deposit-protection",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/england-hmo-licensing",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/england-hmo-licensing",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/england-money-claim-online",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/england-money-claim-online",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/england-particulars-of-claim",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/england-particulars-of-claim",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/scotland-private-residential-tenancy",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/scotland-private-residential-tenancy",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/scotland-eviction-process",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/scotland-eviction-process",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/scotland-notice-to-leave",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/scotland-notice-to-leave",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/scotland-first-tier-tribunal",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/scotland-first-tier-tribunal",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/scotland-eviction-ground-12",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/scotland-eviction-ground-12",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/scotland-eviction-ground-1",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/scotland-eviction-ground-1",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/scotland-eviction-ground-4",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/scotland-eviction-ground-4",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/scotland-eviction-ground-11",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/scotland-eviction-ground-11",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/scotland-eviction-ground-3",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/scotland-eviction-ground-3",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/scotland-eviction-ground-14",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/scotland-eviction-ground-14",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/scotland-eviction-ground-6",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/scotland-eviction-ground-6",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/scotland-eviction-ground-7",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/scotland-eviction-ground-7",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/scotland-eviction-ground-13",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/scotland-eviction-ground-13",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/scotland-eviction-ground-15",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/scotland-eviction-ground-15",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/scotland-simple-procedure",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/scotland-simple-procedure",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/scotland-deposit-protection",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/scotland-deposit-protection",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/scotland-landlord-registration",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/scotland-landlord-registration",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/scotland-hmo-licensing",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/scotland-hmo-licensing",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/scotland-repairing-standard",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/scotland-repairing-standard",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/wales-standard-occupation-contract",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/wales-standard-occupation-contract",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/wales-renting-homes-act",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/wales-renting-homes-act",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/wales-eviction-process",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/wales-eviction-process",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/wales-deposit-protection",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/wales-deposit-protection",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/rent-smart-wales",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/rent-smart-wales",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/wales-hmo-licensing",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/wales-hmo-licensing",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/wales-fitness-human-habitation",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/wales-fitness-human-habitation",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/wales-possession-grounds",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/wales-possession-grounds",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/wales-landlord-obligations-checklist",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/wales-landlord-obligations-checklist",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/wales-rent-increases",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/wales-rent-increases",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/wales-abandoned-property",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/wales-abandoned-property",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/wales-joint-tenancies",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/wales-joint-tenancies",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/wales-gas-electrical-safety",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/wales-gas-electrical-safety",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/wales-epc-requirements",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/wales-epc-requirements",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/wales-anti-social-behaviour-possession",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/wales-anti-social-behaviour-possession",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/wales-notice-periods-landlords",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/wales-notice-periods-landlords",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/wales-contract-holder-rights",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/wales-contract-holder-rights",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/wales-residential-property-tribunal",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/wales-residential-property-tribunal",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/northern-ireland-private-tenancies-order",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/northern-ireland-private-tenancies-order",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/northern-ireland-landlord-registration",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/northern-ireland-landlord-registration",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/northern-ireland-deposit-protection",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/northern-ireland-deposit-protection",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/northern-ireland-eviction-process",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/northern-ireland-eviction-process",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/uk-landlord-insurance-guide",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/uk-landlord-insurance-guide",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/uk-landlord-tax-guide",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/uk-landlord-tax-guide",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/uk-gas-safety-landlords",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/uk-gas-safety-landlords",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/uk-electrical-safety-landlords",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/uk-electrical-safety-landlords",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/uk-fire-safety-landlords",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/uk-fire-safety-landlords",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/uk-tenant-referencing-guide",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/uk-tenant-referencing-guide",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/uk-right-to-rent-checks",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/uk-right-to-rent-checks",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/uk-hmo-regulations-guide",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/uk-hmo-regulations-guide",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/uk-deposit-protection-guide",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/uk-deposit-protection-guide",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/uk-rent-arrears-guide",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/uk-rent-arrears-guide",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/uk-tenancy-agreements-guide",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/uk-tenancy-agreements-guide",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/uk-property-maintenance-obligations",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/uk-property-maintenance-obligations",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/uk-end-of-tenancy-guide",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/uk-end-of-tenancy-guide",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/uk-property-inspections-guide",
+    "lastModified": "2026-01-03T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/uk-property-inspections-guide",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/uk-landlord-tenant-communication",
+    "lastModified": "2026-01-04T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/uk-landlord-tenant-communication",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/uk-buy-to-let-investment-guide",
+    "lastModified": "2026-01-04T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/uk-buy-to-let-investment-guide",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/uk-money-claims-online-guide",
+    "lastModified": "2026-01-04T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/uk-money-claims-online-guide",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/uk-landlord-software-tools-guide",
+    "lastModified": "2026-01-04T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/uk-landlord-software-tools-guide",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/uk-property-inventory-guide",
+    "lastModified": "2026-01-04T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/uk-property-inventory-guide",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/uk-rent-collection-methods-guide",
+    "lastModified": "2026-01-04T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/uk-rent-collection-methods-guide",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/uk-epc-requirements-guide",
+    "lastModified": "2026-01-04T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/uk-epc-requirements-guide",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/uk-landlord-licensing-guide",
+    "lastModified": "2026-01-04T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/uk-landlord-licensing-guide",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/uk-guarantor-agreements-guide",
+    "lastModified": "2026-01-04T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/uk-guarantor-agreements-guide",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/uk-letting-agent-selection-guide",
+    "lastModified": "2026-01-04T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/uk-letting-agent-selection-guide",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/uk-void-period-management-guide",
+    "lastModified": "2026-01-04T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/uk-void-period-management-guide",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/uk-property-marketing-guide",
+    "lastModified": "2026-01-04T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/uk-property-marketing-guide",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/uk-tenant-move-in-checklist-guide",
+    "lastModified": "2026-01-04T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/uk-tenant-move-in-checklist-guide",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/uk-landlord-associations-guide",
+    "lastModified": "2026-01-04T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/uk-landlord-associations-guide",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/uk-tenant-retention-guide",
+    "lastModified": "2026-01-04T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/uk-tenant-retention-guide",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/uk-right-to-rent-guide",
+    "lastModified": "2026-01-04T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/uk-right-to-rent-guide",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/uk-smoke-co-alarm-regulations-guide",
+    "lastModified": "2026-01-04T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/uk-smoke-co-alarm-regulations-guide",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/uk-electrical-safety-guide",
+    "lastModified": "2026-01-04T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/uk-electrical-safety-guide",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/uk-furnished-unfurnished-letting-guide",
+    "lastModified": "2026-01-04T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/uk-furnished-unfurnished-letting-guide",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/uk-hmo-management-guide",
+    "lastModified": "2026-01-04T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/uk-hmo-management-guide",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/uk-student-letting-guide",
+    "lastModified": "2026-01-04T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/uk-student-letting-guide",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/uk-holiday-let-regulations-guide",
+    "lastModified": "2026-01-04T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/uk-holiday-let-regulations-guide",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/uk-corporate-letting-guide",
+    "lastModified": "2026-01-04T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/uk-corporate-letting-guide",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/uk-property-portfolio-growth-guide",
+    "lastModified": "2026-01-04T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/uk-property-portfolio-growth-guide",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/how-to-write-letter-before-action-unpaid-rent",
+    "lastModified": "2026-01-15T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/how-to-write-letter-before-action-unpaid-rent",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/what-is-county-court-judgment-landlords",
+    "lastModified": "2026-01-15T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/what-is-county-court-judgment-landlords",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/calculating-interest-tenant-debt",
+    "lastModified": "2026-01-15T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/calculating-interest-tenant-debt",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/how-long-does-money-claim-online-take",
+    "lastModified": "2026-01-15T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/how-long-does-money-claim-online-take",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/when-to-use-guarantor-clause-tenancy",
+    "lastModified": "2026-01-15T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/when-to-use-guarantor-clause-tenancy",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/recovering-cleaning-costs-from-tenants",
+    "lastModified": "2026-01-15T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/recovering-cleaning-costs-from-tenants",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/fair-wear-tear-vs-tenant-damage",
+    "lastModified": "2026-01-15T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/fair-wear-tear-vs-tenant-damage",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/should-you-accept-payment-plan-from-tenant",
+    "lastModified": "2026-01-15T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/should-you-accept-payment-plan-from-tenant",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/small-claims-court-tips-landlords",
+    "lastModified": "2026-01-15T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/small-claims-court-tips-landlords",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/blog/what-to-do-when-tenant-wont-pay",
+    "lastModified": "2026-01-15T00:00:00.000Z",
+    "priority": "0.8",
+    "changeFrequency": "monthly",
+    "path": "/blog/what-to-do-when-tenant-wont-pay",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ask-heaven/section-21-validity-checklist-form-6a",
+    "lastModified": "2026-02-10T17:48:03.050Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ask-heaven/section-21-validity-checklist-form-6a",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ask-heaven/section-21-accelerated-possession-n5b-guide",
+    "lastModified": "2026-02-10T17:48:03.275Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ask-heaven/section-21-accelerated-possession-n5b-guide",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ask-heaven/when-to-use-section-8-form-3-grounds",
+    "lastModified": "2026-02-10T17:48:03.408Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ask-heaven/when-to-use-section-8-form-3-grounds",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ask-heaven/section-8-ground-8-mandatory-arrears",
+    "lastModified": "2026-02-10T17:48:03.578Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ask-heaven/section-8-ground-8-mandatory-arrears",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ask-heaven/section-8-ground-10-11-discretionary-arrears",
+    "lastModified": "2026-02-10T17:48:03.788Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ask-heaven/section-8-ground-10-11-discretionary-arrears",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ask-heaven/section-8-notice-periods-england-2025",
+    "lastModified": "2026-02-10T17:48:03.988Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ask-heaven/section-8-notice-periods-england-2025",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ask-heaven/section-21-after-fixed-term-periodic",
+    "lastModified": "2026-02-10T17:48:04.191Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ask-heaven/section-21-after-fixed-term-periodic",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ask-heaven/accelerated-possession-timetable-england",
+    "lastModified": "2026-02-10T17:48:04.404Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ask-heaven/accelerated-possession-timetable-england",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ask-heaven/defended-possession-claim-s8-s21",
+    "lastModified": "2026-02-10T17:48:04.591Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ask-heaven/defended-possession-claim-s8-s21",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ask-heaven/court-hearing-prepare-possession-england",
+    "lastModified": "2026-02-10T17:48:04.804Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ask-heaven/court-hearing-prepare-possession-england",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ask-heaven/possession-order-what-happens-next",
+    "lastModified": "2026-02-10T17:48:04.984Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ask-heaven/possession-order-what-happens-next",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ask-heaven/warrant-of-possession-bailiffs-eviction",
+    "lastModified": "2026-02-10T17:48:05.118Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ask-heaven/warrant-of-possession-bailiffs-eviction",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ask-heaven/can-i-evict-without-court-england",
+    "lastModified": "2026-02-10T17:48:05.320Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ask-heaven/can-i-evict-without-court-england",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ask-heaven/section-21-and-deposit-protection-rules",
+    "lastModified": "2026-02-10T17:48:05.523Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ask-heaven/section-21-and-deposit-protection-rules",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ask-heaven/section-21-gas-safety-epc-how-to-fix",
+    "lastModified": "2026-02-10T17:48:05.728Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ask-heaven/section-21-gas-safety-epc-how-to-fix",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ask-heaven/section-8-grounds-nuisance-anti-social",
+    "lastModified": "2026-02-10T17:48:05.934Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ask-heaven/section-8-grounds-nuisance-anti-social",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ask-heaven/accelerated-possession-costs-fees",
+    "lastModified": "2026-02-10T17:48:06.231Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ask-heaven/accelerated-possession-costs-fees",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ask-heaven/section-21-reissue-after-expiry",
+    "lastModified": "2026-02-10T17:48:06.331Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ask-heaven/section-21-reissue-after-expiry",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ask-heaven/rent-arrears-letter-before-action-england",
+    "lastModified": "2026-02-10T17:48:06.452Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ask-heaven/rent-arrears-letter-before-action-england",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ask-heaven/repayment-plan-template-landlord-tenant",
+    "lastModified": "2026-02-10T17:48:06.749Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ask-heaven/repayment-plan-template-landlord-tenant",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ask-heaven/when-to-issue-money-claim-online-rent",
+    "lastModified": "2026-02-10T17:48:06.956Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ask-heaven/when-to-issue-money-claim-online-rent",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ask-heaven/mcol-process-for-rent-arrears-england",
+    "lastModified": "2026-02-10T17:48:07.046Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ask-heaven/mcol-process-for-rent-arrears-england",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ask-heaven/small-claims-for-rent-arrears-evidence",
+    "lastModified": "2026-02-10T17:48:07.139Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ask-heaven/small-claims-for-rent-arrears-evidence",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ask-heaven/money-claim-after-tenant-moves-out",
+    "lastModified": "2026-02-10T17:48:07.220Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ask-heaven/money-claim-after-tenant-moves-out",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ask-heaven/guarantor-liability-for-rent-arrears",
+    "lastModified": "2026-02-10T17:48:07.302Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ask-heaven/guarantor-liability-for-rent-arrears",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ask-heaven/claim-rent-arrears-from-deposit",
+    "lastModified": "2026-02-10T17:48:07.401Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ask-heaven/claim-rent-arrears-from-deposit",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ask-heaven/rent-arrears-and-section-8-grounds",
+    "lastModified": "2026-02-10T17:48:07.506Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ask-heaven/rent-arrears-and-section-8-grounds",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ask-heaven/ast-vs-periodic-tenancy-england",
+    "lastModified": "2026-02-10T17:48:07.630Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ask-heaven/ast-vs-periodic-tenancy-england",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ask-heaven/renewing-fixed-term-tenancy-england",
+    "lastModified": "2026-02-10T17:48:07.725Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ask-heaven/renewing-fixed-term-tenancy-england",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ask-heaven/wales-occupation-contract-vs-tenancy",
+    "lastModified": "2026-02-10T17:48:07.822Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ask-heaven/wales-occupation-contract-vs-tenancy",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ask-heaven/scotland-prt-vs-short-assured",
+    "lastModified": "2026-02-10T17:48:07.916Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ask-heaven/scotland-prt-vs-short-assured",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ask-heaven/joint-tenancy-ending-one-tenant-leaves",
+    "lastModified": "2026-02-10T17:48:08.027Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ask-heaven/joint-tenancy-ending-one-tenant-leaves",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ask-heaven/how-to-serve-section-21-notice-england",
+    "lastModified": "2026-02-10T17:48:02.653Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ask-heaven/how-to-serve-section-21-notice-england",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ask-heaven/notice-seeking-possession-vs-eviction",
+    "lastModified": "2026-02-10T17:48:06.121Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ask-heaven/notice-seeking-possession-vs-eviction",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ask-heaven/calculate-rent-arrears-and-interest",
+    "lastModified": "2026-02-10T17:48:06.542Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ask-heaven/calculate-rent-arrears-and-interest",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ask-heaven/rent-increase-clause-best-practice-uk",
+    "lastModified": "2026-02-10T17:48:08.225Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ask-heaven/rent-increase-clause-best-practice-uk",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ask-heaven/tenancy-agreement-checklist-uk-landlord",
+    "lastModified": "2026-02-10T17:48:08.330Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ask-heaven/tenancy-agreement-checklist-uk-landlord",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ask-heaven/section-173-notice-wales-when-to-use",
+    "lastModified": "2026-02-10T17:48:08.426Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ask-heaven/section-173-notice-wales-when-to-use",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ask-heaven/wales-occupation-contract-notice-periods",
+    "lastModified": "2026-02-10T17:48:08.517Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ask-heaven/wales-occupation-contract-notice-periods",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ask-heaven/wales-retaliatory-eviction-protection",
+    "lastModified": "2026-02-10T17:48:08.617Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ask-heaven/wales-retaliatory-eviction-protection",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ask-heaven/wales-occupation-contract-written-statement",
+    "lastModified": "2026-02-10T17:48:08.712Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ask-heaven/wales-occupation-contract-written-statement",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ask-heaven/section-173-validity-checklist-wales",
+    "lastModified": "2026-02-10T17:48:08.995Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ask-heaven/section-173-validity-checklist-wales",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ask-heaven/notice-to-leave-scotland-grounds",
+    "lastModified": "2026-02-10T17:48:09.200Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ask-heaven/notice-to-leave-scotland-grounds",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ask-heaven/scotland-prt-notice-periods-2025",
+    "lastModified": "2026-02-10T17:48:09.295Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ask-heaven/scotland-prt-notice-periods-2025",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ask-heaven/scotland-eviction-court-process-tribunal",
+    "lastModified": "2026-02-10T17:48:09.408Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ask-heaven/scotland-eviction-court-process-tribunal",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ask-heaven/scotland-serving-notice-to-leave",
+    "lastModified": "2026-02-10T17:48:09.500Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ask-heaven/scotland-serving-notice-to-leave",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ask-heaven/scotland-tenant-abandonment-prt",
+    "lastModified": "2026-02-10T17:48:09.603Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ask-heaven/scotland-tenant-abandonment-prt",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ask-heaven/scotland-rent-arrears-prt-steps",
+    "lastModified": "2026-02-11T01:01:54.365Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ask-heaven/scotland-rent-arrears-prt-steps",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ask-heaven/adding-tenant-to-existing-agreement",
+    "lastModified": "2026-02-10T17:48:08.133Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ask-heaven/adding-tenant-to-existing-agreement",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  },
+  {
+    "url": "https://landlordheaven.co.uk/ask-heaven/wales-possession-court-process-section-173",
+    "lastModified": "2026-02-10T17:48:09.092Z",
+    "priority": "0.7",
+    "changeFrequency": "monthly",
+    "path": "/ask-heaven/wales-possession-court-process-section-173",
+    "mapsToExistingRoute": true,
+    "routeMatchKind": "dynamic"
+  }
+]
