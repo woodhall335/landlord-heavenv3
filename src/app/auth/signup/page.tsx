@@ -105,15 +105,15 @@ function SignupContent() {
           <div className="grid md:grid-cols-2">
             {/* Left Side - Branding */}
             <div
-              className="relative overflow-hidden p-8 md:p-12 pt-12 flex flex-col justify-start bg-cover bg-center min-h-[360px] md:min-h-full"
+              className="relative overflow-hidden flex flex-col p-8 md:p-12 pt-12 bg-cover bg-center min-h-[320px] md:min-h-[520px]"
               style={{ backgroundImage: "url('/images/mascots/landlord-heaven-signup-bg.webp')" }}
             >
               <div className="absolute inset-0 bg-gradient-to-br from-primary/80 via-primary/60 to-primary-dark/80" />
 
-              <div className="relative z-10 flex flex-col h-full">
+              <div className="relative z-10">
                 <Link
                   href="/"
-                  className="w-fit text-sm text-white/95 hover:text-white bg-white/10 hover:bg-white/20 border border-white/20 rounded-full px-3 py-1.5 transition-colors"
+                  className="inline-flex items-center gap-2 rounded-full bg-white/15 hover:bg-white/20 border border-white/20 px-4 py-2 text-sm font-medium text-white focus:text-white focus-visible:text-white transition"
                 >
                   ← Back to home
                 </Link>
@@ -129,17 +129,17 @@ function SignupContent() {
                     Start creating court-ready legal documents
                   </p>
                 </div>
+              </div>
 
-                <div className="relative z-10 mt-6 md:mt-auto flex justify-center md:justify-center">
-                  <Image
-                    src="/images/mascots/landlord-heaven-signup.webp"
-                    alt="Landlord Heaven signup mascot"
-                    width={360}
-                    height={300}
-                    className="w-[260px] max-w-[80%] md:w-[360px] h-auto"
-                    priority
-                  />
-                </div>
+              <div className="relative z-10 mt-8 md:mt-auto flex justify-center md:justify-center pb-2 md:pb-6">
+                <Image
+                  src="/images/mascots/landlord-heaven-signup.webp"
+                  alt="Landlord Heaven signup mascot"
+                  width={900}
+                  height={900}
+                  className="h-auto w-[240px] max-w-[85%] md:w-[360px] lg:w-[460px]"
+                  priority
+                />
               </div>
             </div>
 
