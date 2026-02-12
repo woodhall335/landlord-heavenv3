@@ -11,6 +11,7 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 
@@ -103,16 +104,43 @@ function SignupContent() {
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
           <div className="grid md:grid-cols-2">
             {/* Left Side - Branding */}
-            <div className="bg-gradient-to-br from-primary to-primary-dark p-8 md:p-12 pt-12 flex flex-col justify-start">
-              <div className="inline-block bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 mb-6 w-fit">
-                <span className="text-sm font-semibold" style={{ color: 'white' }}>Get Started</span>
+            <div
+              className="relative overflow-hidden p-8 md:p-12 pt-12 flex flex-col justify-start bg-cover bg-center min-h-[360px] md:min-h-full"
+              style={{ backgroundImage: "url('/images/mascots/landlord-heaven-signup-bg.webp')" }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/80 via-primary/60 to-primary-dark/80" />
+
+              <div className="relative z-10 flex flex-col h-full">
+                <Link
+                  href="/"
+                  className="w-fit text-sm text-white/95 hover:text-white bg-white/10 hover:bg-white/20 border border-white/20 rounded-full px-3 py-1.5 transition-colors"
+                >
+                  ← Back to home
+                </Link>
+
+                <div className="mt-6">
+                  <div className="inline-block bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 mb-6 w-fit">
+                    <span className="text-sm font-semibold" style={{ color: 'white' }}>Get Started</span>
+                  </div>
+                  <h1 className="text-3xl md:text-4xl font-bold mb-4" style={{ color: 'white' }}>
+                    Create Your Account
+                  </h1>
+                  <p className="text-lg" style={{ color: 'white' }}>
+                    Start creating court-ready legal documents
+                  </p>
+                </div>
+
+                <div className="relative z-10 mt-6 md:mt-auto flex justify-center md:justify-center">
+                  <Image
+                    src="/images/mascots/landlord-heaven-signup.webp"
+                    alt="Landlord Heaven signup mascot"
+                    width={360}
+                    height={300}
+                    className="w-[260px] max-w-[80%] md:w-[360px] h-auto"
+                    priority
+                  />
+                </div>
               </div>
-              <h1 className="text-3xl md:text-4xl font-bold mb-4" style={{ color: 'white' }}>
-                Create Your Account
-              </h1>
-              <p className="text-lg" style={{ color: 'white' }}>
-                Start creating court-ready legal documents
-              </p>
             </div>
 
             {/* Right Side - Form */}
@@ -216,14 +244,6 @@ function SignupContent() {
                 </p>
               </div>
 
-              <div className="mt-6 text-center">
-                <Link
-                  href="/"
-                  className="text-sm text-gray-600 hover:text-primary"
-                >
-                  ← Back to home
-                </Link>
-              </div>
             </div>
           </div>
         </div>
