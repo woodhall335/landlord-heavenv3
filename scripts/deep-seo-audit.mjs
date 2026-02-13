@@ -6,6 +6,9 @@ const ROOT = process.cwd();
 const APP_DIR = path.join(ROOT, 'src/app');
 const OUT_DIR = path.join(ROOT, 'audit-output', 'seo-current');
 const BASE_URL = process.env.SEO_AUDIT_BASE_URL || 'http://localhost:5000';
+const HTML_FETCH_TIMEOUT_MS = Number(process.env.SEO_AUDIT_HTML_TIMEOUT_MS || 45000);
+const RESOURCE_FETCH_TIMEOUT_MS = Number(process.env.SEO_AUDIT_RESOURCE_TIMEOUT_MS || 20000);
+const DEBUG_SOFT404 = /^(1|true|yes)$/i.test(process.env.SEO_AUDIT_DEBUG_SOFT404 || '');
 
 const toPosix = (p) => p.split(path.sep).join('/');
 
@@ -107,6 +110,30 @@ function parseRobotsTxt(txt) {
   return { rules, sitemap };
 }
 
+async function fetchTextWithTimeout(url, timeoutMs, options = {}) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(new Error(`timeout after ${timeoutMs}ms`)), timeoutMs);
+  try {
+    const res = await fetch(url, { ...options, signal: controller.signal });
+    const text = await res.text();
+    return { res, text };
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+function getMainTextMetrics(doc) {
+  const main = doc.querySelector('main');
+  if (!main) return { mainTextLength: 0, mainTextWords: 0 };
+  const clone = main.cloneNode(true);
+  for (const el of clone.querySelectorAll('script, style, noscript')) el.remove();
+  const mainText = (clone.textContent || '').replace(/\s+/g, ' ').trim();
+  return {
+    mainTextLength: mainText.length,
+    mainTextWords: mainText ? mainText.split(/\s+/).length : 0,
+  };
+}
+
 async function run() {
   await fs.mkdir(OUT_DIR, { recursive: true });
   const files = await walk(APP_DIR);
@@ -143,7 +170,7 @@ async function run() {
   const routeCsv = [routeHeader.join(','), ...routeRows.map((r)=>[r.routePath,r.filePath,r.routeType,r.dynamic,r.hasMetadataExport,r.hasRobotsDirectives,r.hasCanonicalOrAlternates,r.hasStructuredDataRender,r.notes].map(csvEscape).join(','))].join('\n');
   await fs.writeFile(path.join(OUT_DIR,'route_inventory.csv'), routeCsv);
 
-  const sitemapXml = await (await fetch(`${BASE_URL}/sitemap.xml`)).text();
+  const sitemapXml = (await fetchTextWithTimeout(`${BASE_URL}/sitemap.xml`, RESOURCE_FETCH_TIMEOUT_MS)).text;
   const sitemapParsed = parseSitemapXml(sitemapXml);
   const dynamicPatterns = dynamicPageRoutes.map((p)=>({ p, regex: routePatternFromPage(p) }));
   const sitemapEntries = sitemapParsed.map((e)=>{
@@ -155,7 +182,7 @@ async function run() {
   });
   await fs.writeFile(path.join(OUT_DIR,'sitemap_entries.json'), JSON.stringify(sitemapEntries,null,2));
 
-  const robotsTxt = await (await fetch(`${BASE_URL}/robots.txt`)).text();
+  const robotsTxt = (await fetchTextWithTimeout(`${BASE_URL}/robots.txt`, RESOURCE_FETCH_TIMEOUT_MS)).text;
   const robotsRules = parseRobotsTxt(robotsTxt);
   await fs.writeFile(path.join(OUT_DIR,'robots_rules.json'), JSON.stringify(robotsRules,null,2));
 
@@ -167,10 +194,11 @@ async function run() {
   for (const url of [...urls].sort()) {
     let status = 0, finalUrl = url, html = '', fetchError='';
     try {
-      const res = await fetch(url, { redirect: 'follow' });
+      const { res, text } = await fetchTextWithTimeout(url, HTML_FETCH_TIMEOUT_MS, { redirect: 'follow' });
       status = res.status;
       finalUrl = res.url;
-      html = await res.text();
+      html = text;
+      console.log(`[deep-seo-audit] fetched ${url} html.length=${html.length}`);
     } catch (e) { fetchError = e.message; }
 
     const doc = new JSDOM(html).window.document;
@@ -192,6 +220,7 @@ async function run() {
     const jsonLdTypes = [...new Set(jsonLdBlocks.flatMap((b)=> Array.isArray(b) ? b.map((x)=>x?.['@type']) : Array.isArray(b['@graph']) ? b['@graph'].map((x)=>x?.['@type']) : [b['@type']]).filter(Boolean))];
     const h1s = [...doc.querySelectorAll('h1')].map((h)=>(h.textContent||'').trim()).filter(Boolean);
     const h2Count = doc.querySelectorAll('h2').length;
+    const { mainTextLength, mainTextWords } = getMainTextMetrics(doc);
 
     const internalLinks = [...doc.querySelectorAll('a[href]')].map((a)=>a.getAttribute('href')||'').filter((href)=>href.startsWith('/')||href.startsWith(BASE_URL));
     const counts = new Map();
@@ -206,11 +235,40 @@ async function run() {
     const canonicalPointsElsewhere = canonical ? (()=>{ try{return new URL(canonical, BASE_URL).pathname !== pth;}catch{return false;} })() : false;
     const redirectToOther = finalUrl !== url;
     const httpError = status >= 400 || status === 0;
-    const soft404 = /not found|404/i.test(title||'') || /not found/i.test(doc.body?.textContent || '') || (doc.querySelector('main')?.textContent || '').trim().length < 80;
-    const indexabilityReasons = [blockedByRobots && 'blocked_by_robots', noindexMeta && 'noindex_meta', canonicalPointsElsewhere && 'canonical_points_elsewhere', redirectToOther && 'redirect_to_other', httpError && '4xx_5xx_or_fetch_error', soft404 && 'soft_404_signals'].filter(Boolean);
+    const titleOrBodyNotFound = /not found|404/i.test(title||'') || /not found/i.test(doc.body?.textContent || '');
+    const missingH1 = h1s.length === 0;
+    const noSchema = jsonLdBlocks.length === 0;
+    const noInternalLinks = internalLinks.length === 0;
+    const soft404Signals = titleOrBodyNotFound || mainTextWords < 100;
+    const hardSoft404Failure = status === 200 && mainTextWords < 100 && missingH1 && noSchema && noInternalLinks;
+    const indexabilityReasons = [
+      blockedByRobots && 'blocked_by_robots',
+      noindexMeta && 'noindex_meta',
+      canonicalPointsElsewhere && 'canonical_points_elsewhere',
+      redirectToOther && 'redirect_to_other',
+      httpError && '4xx_5xx_or_fetch_error',
+      hardSoft404Failure && 'soft_404_signals',
+    ].filter(Boolean);
     const indexable = indexabilityReasons.length === 0;
 
-    seoRows.push({url,path:pth,status,finalUrl,redirectCount:redirectToOther?1:0,indexable,indexabilityReasons,canonicalOk:Boolean(canonical&&!canonicalPointsElsewhere),title,titleLength:title?.length||0,description,descriptionLength:description?.length||0,robotsMeta,canonical,alternateCount:alternates.length,alternates,ogTitle,ogDescription,ogImage,ogUrl,twitterTitle,twitterDescription,twitterImage,jsonLdCount:jsonLdBlocks.length,jsonLdTypes,h1Count:h1s.length,h1Text:h1s.join(' | '),h2Count,internalLinkCount:internalLinks.length,topInternalLinkTargets:topTargets,missingTitle:!title,missingDescription:!description,missingCanonical:!canonical,missingOgTitle:!ogTitle,missingOgDescription:!ogDescription,missingOgImage:!ogImage,missingTwitterTitle:!twitterTitle,fetchError});
+    if (DEBUG_SOFT404 && soft404Signals) {
+      const debugDir = path.join(OUT_DIR, 'soft404-debug');
+      await fs.mkdir(debugDir, { recursive: true });
+      const safeFile = pth === '/' ? 'home' : pth.replace(/^\/+/, '').replace(/[^a-zA-Z0-9._-]+/g, '_');
+      const snippet = {
+        url,
+        path: pth,
+        status,
+        htmlLength: html.length,
+        first500: html.slice(0, 500),
+        last500: html.slice(-500),
+        mainTextLength,
+        mainTextWords,
+      };
+      await fs.writeFile(path.join(debugDir, `${safeFile}.json`), JSON.stringify(snippet, null, 2));
+    }
+
+    seoRows.push({url,path:pth,status,finalUrl,redirectCount:redirectToOther?1:0,indexable,indexabilityReasons,soft404Signals,canonicalOk:Boolean(canonical&&!canonicalPointsElsewhere),title,titleLength:title?.length||0,description,descriptionLength:description?.length||0,robotsMeta,canonical,alternateCount:alternates.length,alternates,ogTitle,ogDescription,ogImage,ogUrl,twitterTitle,twitterDescription,twitterImage,jsonLdCount:jsonLdBlocks.length,jsonLdTypes,h1Count:h1s.length,h1Text:h1s.join(' | '),h2Count,mainTextLength,mainTextWords,internalLinkCount:internalLinks.length,topInternalLinkTargets:topTargets,missingTitle:!title,missingDescription:!description,missingCanonical:!canonical,missingOgTitle:!ogTitle,missingOgDescription:!ogDescription,missingOgImage:!ogImage,missingTwitterTitle:!twitterTitle,fetchError});
   }
 
   const tMap = new Map(), dMap = new Map();
@@ -224,7 +282,7 @@ async function run() {
   }
 
   await fs.writeFile(path.join(OUT_DIR,'seo_audit_report.json'), JSON.stringify(seoRows,null,2));
-  const headers = ['url','path','status','finalUrl','redirectCount','indexable','indexabilityReasons','canonicalOk','title','titleLength','description','descriptionLength','robotsMeta','canonical','alternateCount','ogTitle','ogDescription','ogImage','ogUrl','twitterTitle','twitterDescription','twitterImage','jsonLdCount','jsonLdTypes','h1Count','h1Text','h2Count','internalLinkCount','topInternalLinkTargets','missingTitle','missingDescription','missingCanonical','missingOgTitle','missingOgDescription','missingOgImage','missingTwitterTitle','duplicateTitle','duplicateDescription','fetchError'];
+  const headers = ['url','path','status','finalUrl','redirectCount','indexable','indexabilityReasons','soft404Signals','canonicalOk','title','titleLength','description','descriptionLength','robotsMeta','canonical','alternateCount','ogTitle','ogDescription','ogImage','ogUrl','twitterTitle','twitterDescription','twitterImage','jsonLdCount','jsonLdTypes','h1Count','h1Text','h2Count','mainTextLength','mainTextWords','internalLinkCount','topInternalLinkTargets','missingTitle','missingDescription','missingCanonical','missingOgTitle','missingOgDescription','missingOgImage','missingTwitterTitle','duplicateTitle','duplicateDescription','fetchError'];
   const csv = [headers.join(','), ...seoRows.map((r)=>headers.map((h)=>csvEscape(r[h])).join(','))].join('\n');
   await fs.writeFile(path.join(OUT_DIR,'seo_audit_report.csv'), csv);
 
