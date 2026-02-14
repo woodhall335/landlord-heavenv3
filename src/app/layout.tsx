@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Header, Footer, GlobalReviewSnippetBar } from "@/components/layout";
+import { Header, Footer } from "@/components/layout";
 import { tryGetServerUser } from "@/lib/supabase/server";
 import { defaultMetadata } from "@/lib/seo";
 import { SITE_ORIGIN } from "@/lib/seo/urls";
@@ -72,7 +72,6 @@ export default async function RootLayout({
         <PopupProvider>
           <Header user={headerUser} />
           <main className="flex-1">
-            <GlobalReviewSnippetBar />
             {children}
           </main>
           <Footer />
