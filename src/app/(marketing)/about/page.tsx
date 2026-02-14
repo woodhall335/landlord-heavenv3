@@ -19,7 +19,7 @@ import {
 
 export const metadata: Metadata = generateMetadata({
   title: "About Us - Mission & Story",
-  description: "Landlord Heaven makes UK landlord legal documents accessible and affordable. Document generation for evictions, tenancies, and HMO compliance.",
+  description: "Landlord Heaven delivers UK landlord legal infrastructure with jurisdiction-specific case bundles for evictions, tenancies, and HMO compliance.",
   path: "/about",
 });
 
@@ -35,7 +35,7 @@ export default function AboutPage() {
       <StructuredData data={aboutPageSchema()} />
       <div className="min-h-screen bg-gray-50">
         <TealHero
-        title="Legal documents should be simple"
+        title="Case preparation should be statutory-grounded"
         subtitle="We make professional-grade landlord paperwork accessible, affordable, and compliant across the UK."
         eyebrow="About Landlord Heaven"
       />
@@ -58,7 +58,7 @@ export default function AboutPage() {
               </p>
 
               <p className="text-xl leading-relaxed">
-                Landlord Heaven generates court-ready legal documents in minutes, not hours. We've made
+                Landlord Heaven generates court-ready, jurisdiction-specific case bundles in minutes, not hours. We've made
                 professional-quality eviction notices, tenancy agreements, and court claims accessible to every UK
                 landlord - at a fraction of solicitor costs.
               </p>
@@ -403,7 +403,7 @@ export default function AboutPage() {
                 </ul>
                 <p className="mt-3">
                   <strong>For legal advice, consult a qualified solicitor.</strong> Our service is designed for
-                  straightforward cases where landlords are confident in their position and want to save money on
+                  straightforward cases where landlords are confident in their position and want jurisdiction-specific statutory guidance for
                   document preparation.
                 </p>
               </div>
@@ -434,7 +434,7 @@ export default function AboutPage() {
                 Start Wizard →
               </Link>
             </div>
-            <p className="mt-4 text-sm text-gray-600">Court-ready documents • AI-powered • 80% cheaper than solicitors</p>
+            <p className="mt-4 text-sm text-gray-600">Court-ready case bundles • AI-powered • statutory-grounded preparation</p>
           </div>
         </Container>
       </section>

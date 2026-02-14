@@ -203,7 +203,7 @@ const faqItems = [
       'Ask Heaven covers England, Wales, Scotland, and Northern Ireland with jurisdiction-specific guidance for each legal system.',
   },
   {
-    question: 'Can I generate documents from Ask Heaven?',
+    question: 'Can I generate a case bundle from Ask Heaven?',
     answer:
       'Yes, you can jump straight into our notice generators, money-claim tools, and tenancy agreement wizards to create the right paperwork.',
   },

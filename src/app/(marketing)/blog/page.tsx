@@ -14,8 +14,8 @@ import { getCanonicalUrl } from '@/lib/seo';
 import { PRODUCTS } from '@/lib/pricing/products';
 
 export const metadata: Metadata = {
-  title: 'Landlord Guides & Legal Resources',
-  description: 'Expert guides for UK landlords on evictions, Section 21, Section 8, tenancy law, rent arrears, and property management. Free legal advice from property experts.',
+  title: 'Landlord Guides & Reform-Aware Legal Resources',
+  description: 'Expert guides for UK landlords on evictions, Section 21, Section 8, tenancy law, rent arrears, and property management. Reform-aware legal guidance from property experts.',
   keywords: [
     'landlord guides',
     'eviction guide uk',
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     'property management tips',
   ],
   openGraph: {
-    title: 'Landlord Guides & Legal Resources | Landlord Heaven',
+    title: 'Landlord Guides & Reform-Aware Legal Resources | Landlord Heaven',
     description: 'Expert guides for UK landlords on evictions, tenancy law, and property management.',
     type: 'website',
     url: getCanonicalUrl('/blog'),
@@ -185,8 +185,8 @@ export default function BlogPage() {
                 Need to Serve an Eviction Notice?
               </h2>
               <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-                Generate court-ready eviction notices in minutes.
-                <span className="font-semibold text-gray-800"> AI-powered compliance, 80% cheaper than solicitors.</span>
+                Generate jurisdiction-specific, court-ready eviction case bundles in minutes.
+                <span className="font-semibold text-gray-800"> AI-powered compliance with statutory-grounded preparation across England, Wales, and Scotland.</span>
               </p>
 
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-8">
@@ -194,7 +194,7 @@ export default function BlogPage() {
                   href="/products/notice-only"
                   className="hero-btn-primary"
                 >
-                  Section 21 Notice — {PRODUCTS.notice_only.displayPrice} →
+                  Generate Eviction Bundle — {PRODUCTS.notice_only.displayPrice} →
                 </Link>
                 <Link
                   href="/products/complete-pack"
@@ -208,7 +208,7 @@ export default function BlogPage() {
               <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-gray-500">
                 <span className="flex items-center gap-2">
                   <Zap className="w-5 h-5 text-primary" />
-                  Instant download
+                  Ready to file
                 </span>
                 <span className="flex items-center gap-2">
                   <ShieldCheck className="w-5 h-5 text-primary" />

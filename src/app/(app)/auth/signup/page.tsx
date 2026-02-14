@@ -126,7 +126,7 @@ function SignupContent() {
                     Create Your Account
                   </h1>
                   <p className="text-lg" style={{ color: 'white' }}>
-                    Start creating court-ready legal documents
+                    Start creating court-ready case bundles
                   </p>
                 </div>
               </div>

@@ -55,7 +55,7 @@ const faqs = [
   },
   {
     question: "What if I need to make changes?",
-    answer: "You can edit your answers and regenerate documents instantly at no extra cost. Unlimited regenerations are included."
+    answer: "You can edit your answers and regenerate your case bundle instantly at no extra cost. Unlimited regenerations are included."
   },
   {
     question: "Which jurisdictions do you support?",

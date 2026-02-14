@@ -91,7 +91,7 @@ export function BlogCTA({
           </Link>
         </div>
         <p className="mt-6 text-sm text-gray-500">
-          Court-ready documents • AI-powered • 80% cheaper than solicitors
+          Court-ready case bundles • AI-powered • statutory-grounded preparation
         </p>
       </div>
     </div>

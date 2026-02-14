@@ -50,14 +50,14 @@ export const metadata: Metadata = {
     'solicitor eviction cost',
     'section 21 cost',
     'section 8 eviction cost',
-    'cheap eviction uk',
+    'eviction cost guidance uk',
   ],
   alternates: {
     canonical: 'https://landlordheaven.co.uk/eviction-cost-uk',
   },
   openGraph: {
     title: 'How Much Does Eviction Cost UK? Full Breakdown | Landlord Heaven',
-    description: 'Complete UK eviction cost breakdown for 2026. Court fees, bailiffs, and ways to save money on eviction.',
+    description: 'Complete UK eviction cost breakdown for 2026. Court fees, bailiffs, and full court-fee and process cost outlook for eviction.',
     type: 'website',
   },
 };
@@ -122,7 +122,7 @@ export default function EvictionCostUkPage() {
           badge="2026 Prices"
           badgeIcon={<PoundSterling className="w-4 h-4" />}
           title="How Much Does Eviction Cost UK?"
-          subtitle={<>Budget between <strong>£500 and £3,000+</strong> depending on your approach. Here&apos;s the full breakdown with ways to save money.</>}
+          subtitle={<>Budget between <strong>£500 and £3,000+</strong> depending on your approach. Here&apos;s the full breakdown with full statutory process cost breakdown.</>}
           primaryCTA={{ label: 'Save £1,000+ — DIY Pack from £49.99', href: wizardLinkNoticeOnly }}
           secondaryCTA={{ label: 'See Complete Pack', href: '/products/complete-pack' }}
           variant="pastel"

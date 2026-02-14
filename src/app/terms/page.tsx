@@ -56,7 +56,7 @@ export default function TermsPage() {
               </p>
               <p className="text-gray-700">
                 <strong>Landlord Heaven is NOT a law firm and does NOT provide legal advice.</strong> Our services
-                generate documents based on information you provide. We do not review your specific circumstances or
+                generate case bundles based on information you provide. We do not review your specific circumstances or
                 provide legal opinions. For legal advice, consult a qualified solicitor.
               </p>
             </div>

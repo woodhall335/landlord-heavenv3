@@ -276,7 +276,7 @@ const ENGLAND_WALES_SECTIONS: WizardSection[] = [
   {
     id: 'review',
     label: 'Review',
-    description: 'Review and generate documents',
+    description: 'Review and generate your case bundle',
     isComplete: () => false, // Always navigable for final review
   },
 ];
@@ -385,7 +385,7 @@ const SCOTLAND_SECTIONS: WizardSection[] = [
   {
     id: 'review',
     label: 'Review',
-    description: 'Review and generate documents',
+    description: 'Review and generate your case bundle',
     jurisdictions: ['scotland'],
     isComplete: () => false, // Always navigable for final review
   },
@@ -861,7 +861,7 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
                     : 'bg-violet-600 text-white hover:bg-violet-700'}
                 `}
               >
-                {uploadsInProgress ? 'Uploading...' : 'Generate Documents'}
+                {uploadsInProgress ? 'Uploading...' : 'Generate Case Bundle'}
               </button>
             ) : (
               <button

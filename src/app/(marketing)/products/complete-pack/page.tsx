@@ -63,7 +63,7 @@ const faqs = [
   },
   {
     question: "What if I need to make changes?",
-    answer: "You can edit your answers and regenerate documents instantly at no extra cost. Unlimited regenerations are included."
+    answer: "You can edit your answers and regenerate your case bundle instantly at no extra cost. Unlimited regenerations are included."
   },
   {
     question: "Which jurisdictions do you support?",
@@ -262,7 +262,7 @@ export default async function CompleteEvictionPackPage() {
                 </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-3">Follow the Process</h3>
                 <p className="text-gray-600">
-                  Use our guides to navigate hearings and enforcement. Regenerate documents if your case changes.
+                  Use our guides to navigate hearings and enforcement. Regenerate your case bundle if your case changes.
                 </p>
               </div>
             </div>

@@ -100,7 +100,7 @@ export function WizardLandingPage({ content, structuredDataUrl }: WizardLandingP
 
             {/* CTA */}
             <Link href={content.wizardUrl} className="hero-btn-primary">
-              Start Now <ArrowRight className="w-5 h-5 inline ml-1" />
+              Start My Case Bundle <ArrowRight className="w-5 h-5 inline ml-1" />
             </Link>
             <div className="mt-4 mb-2">
               <SocialProofCounter variant="today" className="mx-auto" />
@@ -224,7 +224,7 @@ export function WizardLandingPage({ content, structuredDataUrl }: WizardLandingP
               Preview before you pay. Edit and regenerate instantly. Stored in your portal.
             </p>
             <Link href={content.wizardUrl} className="hero-btn-primary">
-              Start Now - {content.price} <ArrowRight className="w-5 h-5 inline ml-1" />
+              Start My Case Bundle - {content.price} <ArrowRight className="w-5 h-5 inline ml-1" />
             </Link>
             <p className="mt-4 text-sm text-gray-600">
               One-time payment • Unlimited regenerations • No subscription

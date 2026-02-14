@@ -1,7 +1,7 @@
 {
   "name": "Landlord Heaven",
   "short_name": "Landlord Heaven",
-  "description": "Generate court-ready eviction notices and legal documents for UK landlords",
+  "description": "Generate court-ready eviction case bundles for UK landlords",
   "start_url": "/",
   "display": "standalone",
   "theme_color": "#692ED4",

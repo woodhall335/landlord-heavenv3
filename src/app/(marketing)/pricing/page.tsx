@@ -8,13 +8,13 @@ import { StandardHero } from "@/components/marketing/StandardHero";
 
 export const metadata: Metadata = generateMetadata({
   title: "Pricing - UK Eviction Case Bundle Comparison",
-  description: "Compare solicitor workflows, DIY templates, and Landlord Heaven AI-validated case preparation. Complete case bundles ready to file.",
+  description: "Compare solicitor workflows and Landlord Heaven AI-validated case preparation. Complete case bundles ready to file.",
   path: "/pricing",
   keywords: [
     "landlord document pricing",
     "eviction notice cost",
     "tenancy agreement price",
-    "landlord legal documents",
+    "landlord eviction case bundles",
     "section 21 notice price",
     "complete eviction pack"
   ]
@@ -67,7 +67,7 @@ export default function PricingPage() {
       <StandardHero
         badge="Transparent Pricing"
         title="Simple, Transparent Pricing"
-        subtitle="Compare solicitor, DIY template, and AI-validated case bundle preparation."
+        subtitle="Compare solicitor workflows and AI-validated case bundle preparation."
         variant="pastel"
       >
         <p className="text-sm text-gray-600">All prices are one-time payments</p>
@@ -411,17 +411,17 @@ export default function PricingPage() {
 
       <Container size="large" className="pb-4">
         <div className="bg-white rounded-lg border border-gray-200 p-6 mb-2 overflow-x-auto">
-          <h2 className="text-2xl font-bold text-charcoal mb-4">Solicitor vs DIY Templates vs Landlord Heaven</h2>
+          <h2 className="text-2xl font-bold text-charcoal mb-4">Solicitor vs Landlord Heaven</h2>
           <table className="w-full text-sm">
-            <thead><tr className="border-b"><th className="text-left py-2">Metric</th><th className="text-center">Solicitor</th><th className="text-center">DIY Templates</th><th className="text-center">Landlord Heaven</th></tr></thead>
+            <thead><tr className="border-b"><th className="text-left py-2">Metric</th><th className="text-center">Solicitor</th><th className="text-center">Landlord Heaven</th></tr></thead>
             <tbody>
-              <tr className="border-b"><td className="py-2">Cost</td><td className="text-center">£300–£2,500</td><td className="text-center">Low</td><td className="text-center">£49–£199</td></tr>
-              <tr className="border-b"><td className="py-2">Time</td><td className="text-center">3–5 days</td><td className="text-center">Manual prep</td><td className="text-center">10 minutes</td></tr>
-              <tr className="border-b"><td className="py-2">Complete Case File</td><td className="text-center">❌ Often staged</td><td className="text-center">❌</td><td className="text-center">✅ Yes</td></tr>
-              <tr className="border-b"><td className="py-2">Jurisdiction-Specific</td><td className="text-center">✅</td><td className="text-center">❌</td><td className="text-center">✅</td></tr>
-              <tr className="border-b"><td className="py-2">Compliance Validation</td><td className="text-center">✅</td><td className="text-center">❌</td><td className="text-center">✅ AI-validated</td></tr>
-              <tr className="border-b"><td className="py-2">Reform-Aware</td><td className="text-center">Varies</td><td className="text-center">❌</td><td className="text-center">✅</td></tr>
-              <tr><td className="py-2">Ready to File</td><td className="text-center">❌</td><td className="text-center">❌</td><td className="text-center">✅</td></tr>
+              <tr className="border-b"><td className="py-2">Cost</td><td className="text-center">£300–£2,500</td><td className="text-center">£49–£199</td></tr>
+              <tr className="border-b"><td className="py-2">Time</td><td className="text-center">3–5 days</td><td className="text-center">10 minutes</td></tr>
+              <tr className="border-b"><td className="py-2">Complete Case File</td><td className="text-center">❌ Often staged</td><td className="text-center">✅ Yes</td></tr>
+              <tr className="border-b"><td className="py-2">Jurisdiction-Specific</td><td className="text-center">✅</td><td className="text-center">✅</td></tr>
+              <tr className="border-b"><td className="py-2">Compliance Validation</td><td className="text-center">✅</td><td className="text-center">✅ AI-validated</td></tr>
+              <tr className="border-b"><td className="py-2">Reform-Aware</td><td className="text-center">Varies</td><td className="text-center">✅</td></tr>
+              <tr><td className="py-2">Ready to File</td><td className="text-center">❌</td><td className="text-center">✅</td></tr>
             </tbody>
           </table>
         </div>

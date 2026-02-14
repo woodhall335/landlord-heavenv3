@@ -385,7 +385,7 @@ function WizardPageInner() {
     );
   }, [selectedDocument]);
 
-  // Handle Start Now button - scroll to the appropriate section based on current step
+  // Handle Start My Case Bundle button - scroll to the appropriate section based on current step
   const handleStartNowClick = () => {
     setTimeout(() => {
       if (step === 2) {
@@ -467,7 +467,7 @@ function WizardPageInner() {
             onClick={handleStartNowClick}
             className="group flex items-center gap-2 px-6 py-3 rounded-full border-2 border-black bg-transparent text-black font-semibold hover:border-purple-600 hover:text-purple-600 hover:shadow-lg transition-all duration-300 animate-subtle-pulse cursor-pointer"
           >
-            Start Now
+            Start My Case Bundle
             <RiArrowDownLine className="w-5 h-5 animate-bounce-slow group-hover:translate-y-1 transition-transform text-[#7C3AED]" />
           </button>
         }

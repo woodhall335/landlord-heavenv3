@@ -501,7 +501,7 @@ export async function sendWelcomeEmail(params: {
 
     <p style="margin: 0 0 15px 0; font-family: Arial, Helvetica, sans-serif; font-size: 18px; font-weight: bold; color: ${COLORS.primary};">What You Can Do:</p>
 
-    ${getFeatureCard('Generate Legal Documents', 'Create Section 8/21 notices, tenancy agreements, money claims, and more.')}
+    ${getFeatureCard('Generate Court-Ready Case Bundles', 'Create Section 8/21 notices, tenancy agreements, money claims, and more.')}
     ${getFeatureCard('HMO Pro (Optional)', 'Manage multiple properties with compliance tracking, automated reminders, and more.')}
     ${getFeatureCard('AI-Powered Guidance', 'Our wizard asks simple questions and generates court-ready documents tailored to your situation.')}
 
@@ -540,7 +540,7 @@ Hi ${name},
 Welcome to Landlord Heaven! We're thrilled to have you join thousands of UK landlords who trust us for their legal document needs.
 
 What You Can Do:
-- Generate Legal Documents: Create Section 8/21 notices, tenancy agreements, money claims, and more.
+- Generate Court-Ready Case Bundles: Create Section 8/21 notices, tenancy agreements, money claims, and more.
 - HMO Pro (Optional): Manage multiple properties with compliance tracking and automated reminders.
 - AI-Powered Guidance: Our wizard generates court-ready documents tailored to your situation.
 

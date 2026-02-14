@@ -348,7 +348,7 @@ export default function HomeContent() {
             </div>
 
             <blockquote className="text-2xl md:text-3xl font-medium text-gray-900 mb-8 leading-relaxed">
-              &ldquo;As a landlord managing multiple properties, trusting the legal documents you generate is everything.
+              &ldquo;As a landlord managing multiple properties, trusting the case bundles you generate is everything.
               They need to be compliant, court-ready, and actually work — and Landlord Heaven has delivered on all fronts.&rdquo;
             </blockquote>
 

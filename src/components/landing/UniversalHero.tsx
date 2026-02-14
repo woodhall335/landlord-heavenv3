@@ -200,7 +200,7 @@ export function UniversalHero({
                 ★★★★★
               </span>
               <span className="font-medium text-[#2b253d]">
-                Rated {REVIEW_RATING}/5 from {reviewCount} reviews
+                {REVIEW_RATING}/5 · {reviewCount} reviews
               </span>
             </p>
 

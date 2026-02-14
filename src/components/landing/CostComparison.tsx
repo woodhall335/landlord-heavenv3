@@ -114,7 +114,7 @@ export function CostComparison() {
                   <span className="font-medium">Ready to file</span> — get documents in minutes
                 </ComparisonItem>
                 <ComparisonItem positive={true}>
-                  <span className="font-medium">No appointments</span> — generate documents anytime
+                  <span className="font-medium">No appointments</span> — generate your case bundle anytime
                 </ComparisonItem>
                 <ComparisonItem positive={true}>
                   <span className="font-medium">Available 24/7</span> — including evenings & weekends
