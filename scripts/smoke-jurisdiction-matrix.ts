@@ -124,11 +124,11 @@ function getExpectedTemplatePaths(
 ): string[] {
   const paths: string[] = [];
 
-  // Based on actual template paths used in generators
+  // Based on actual template paths used in generators - using canonical notice_only paths
   if (product === 'notice_only' || product === 'complete_pack') {
     if (jurisdiction === 'england') {
-      paths.push('uk/england/templates/eviction/section8_notice.hbs');
-      paths.push('uk/england/templates/eviction/section21_form6a.hbs');
+      paths.push('uk/england/templates/notice_only/form_3_section8/notice.hbs');
+      paths.push('uk/england/templates/notice_only/form_6a_section21/notice.hbs');
     } else if (jurisdiction === 'wales') {
       paths.push('uk/wales/templates/eviction/section173_landlords_notice.hbs');
       paths.push('uk/wales/templates/eviction/eviction_roadmap.hbs');

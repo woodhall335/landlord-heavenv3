@@ -101,11 +101,11 @@ function extractTemplateVariables(templateContent: string): Set<string> {
 function findProductTemplates(product: ProductType, jurisdiction: CanonicalJurisdiction): string[] {
   const templates: string[] = [];
 
-  // Jurisdiction-specific eviction templates
+  // Jurisdiction-specific eviction templates - using canonical notice_only paths for England
   if (product === 'notice_only' || product === 'complete_pack') {
     if (jurisdiction === 'england') {
-      templates.push(`config/jurisdictions/uk/england/templates/eviction/section8_notice.hbs`);
-      templates.push(`config/jurisdictions/uk/england/templates/eviction/section21_form6a.hbs`);
+      templates.push(`config/jurisdictions/uk/england/templates/notice_only/form_3_section8/notice.hbs`);
+      templates.push(`config/jurisdictions/uk/england/templates/notice_only/form_6a_section21/notice.hbs`);
     } else if (jurisdiction === 'wales') {
       // Wales uses Section 173, not Section 8/21
       templates.push(`config/jurisdictions/uk/wales/templates/eviction/section173_landlords_notice.hbs`);

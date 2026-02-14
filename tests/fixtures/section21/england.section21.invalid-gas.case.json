@@ -1,0 +1,54 @@
+{
+  "$schema": "../../fixtures.schema.json",
+  "$comment": "Section 21 England - INVALID case: gas safety certificate not served",
+  "case_id": "s21-invalid-gas-001",
+  "jurisdiction": "england",
+  "product": "notice_only",
+  "eviction_route": "section_21",
+  "selected_notice_route": "section_21",
+
+  "flat_facts": {
+    "landlord_full_name": "James Alexander Thompson",
+    "landlord_address": "45 Victoria Gardens\nManchester\nM1 4PQ",
+    "landlord_email": "j.thompson@example.com",
+    "landlord_phone": "07700 900123",
+    "tenant_full_name": "Sarah Elizabeth Williams",
+    "property_address_line1": "Flat 12, Riverside Court",
+    "property_address_line2": "124 Thames Street",
+    "property_city": "London",
+    "property_postcode": "SE1 9AA",
+    "tenancy_start_date": "2023-06-01",
+    "tenancy_type": "ast",
+    "fixed_term": false,
+    "rent_amount": 1500,
+    "rent_frequency": "monthly",
+    "notice_served_date": "2026-01-20",
+    "service_method": "first_class_post",
+
+    "deposit_taken": true,
+    "deposit_amount": 1500,
+    "deposit_protected": true,
+    "deposit_scheme_name": "DPS",
+    "deposit_protection_date": "2023-06-15",
+    "deposit_reference": "DPS-123456",
+    "prescribed_info_served": true,
+
+    "has_gas_appliances": true,
+    "gas_safety_cert_served": false,
+
+    "epc_served": true,
+    "epc_rating": "C",
+    "how_to_rent_served": true,
+    "licensing_required": "not_required",
+    "no_retaliatory_notice": true,
+    "eviction_route": "section_21",
+    "selected_notice_route": "section_21"
+  },
+
+  "expected_error_code": "S21_GAS_SAFETY_NOT_SERVED",
+  "expected_blocker": {
+    "code": "S21_GAS_SAFETY_NOT_SERVED",
+    "message": "Gas Safety Certificate was not provided to the tenant",
+    "legalBasis": "Gas Safety (Installation and Use) Regulations 1998"
+  }
+}

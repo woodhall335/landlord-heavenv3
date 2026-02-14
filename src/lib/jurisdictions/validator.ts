@@ -8,6 +8,8 @@
 import fs from 'fs';
 import path from 'path';
 
+import { normalizeJurisdiction, type CanonicalJurisdiction } from '../types/jurisdiction';
+
 export interface JurisdictionValidationError {
   jurisdiction: string;
   product: string;
@@ -43,28 +45,24 @@ export function validateNoticeOnlyJurisdiction(
   const errors: JurisdictionValidationError[] = [];
   const warnings: string[] = [];
 
-  // Map jurisdiction to folder name
-  const jurisdictionMap: Record<string, string> = {
-    'england': 'england',
-    'england-wales': 'england-wales',
-    'wales': 'wales',
-    'scotland': 'scotland',
-    'northern-ireland': 'northern-ireland',
-  };
+  const canonical = normalizeJurisdiction(jurisdiction);
 
-  const jurisdictionFolder = jurisdictionMap[jurisdiction];
-
-  if (!jurisdictionFolder) {
+  if (!canonical) {
     errors.push({
       jurisdiction,
       product: 'notice_only',
       missingPaths: [],
-      message: `Unknown jurisdiction: ${jurisdiction}. Valid jurisdictions: ${Object.keys(jurisdictionMap).join(', ')}`,
+      message: `Unknown jurisdiction: ${jurisdiction}. Valid jurisdictions: england, wales, scotland, northern-ireland`,
     });
     return { valid: false, errors, warnings };
   }
 
-  const jurisdictionPath = path.join(JURISDICTIONS_BASE, jurisdictionFolder);
+  if (jurisdiction === 'england-wales') {
+    warnings.push('Legacy jurisdiction "england-wales" was normalized to "england"');
+  }
+
+  // Map jurisdiction to folder name
+  const jurisdictionPath = path.join(JURISDICTIONS_BASE, canonical);
   const missingPaths: string[] = [];
 
   // Check if jurisdiction directory exists
@@ -87,7 +85,7 @@ export function validateNoticeOnlyJurisdiction(
   }
 
   // Check for grounds directory (required for England/Scotland eviction grounds)
-  if (jurisdiction === 'england' || jurisdiction === 'england-wales' || jurisdiction === 'scotland') {
+  if (canonical === 'england' || canonical === 'scotland') {
     const groundsPath = path.join(jurisdictionPath, 'grounds');
     if (!directoryExists(groundsPath)) {
       missingPaths.push(groundsPath);
@@ -133,7 +131,7 @@ export function validateNoticeOnlyJurisdiction(
  * Validate multiple jurisdictions at once (for startup checks)
  */
 export function validateAllJurisdictions(): JurisdictionValidationResult {
-  const jurisdictions = ['england', 'england-wales', 'wales', 'scotland'];
+  const jurisdictions: CanonicalJurisdiction[] = ['england', 'wales', 'scotland', 'northern-ireland'];
   const allErrors: JurisdictionValidationError[] = [];
   const allWarnings: string[] = [];
 

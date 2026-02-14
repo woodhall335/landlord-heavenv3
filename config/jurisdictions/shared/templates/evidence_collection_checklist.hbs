@@ -1,17 +1,537 @@
-<h1>Evidence Collection Checklist</h1>
-<p>Case: {{case_id}} | Property: {{property_address}}</p>
-<ul>
-  {{#each required_evidence}}
-    <li><strong>{{this.ground}} - {{this.title}}</strong>
-      <ul>
-        {{#if this.evidence_items}}
-          {{#each this.evidence_items}}
-            <li>{{this}}</li>
-          {{/each}}
-        {{else}}
-          <li>No specific evidence items provided</li>
-        {{/if}}
-      </ul>
-    </li>
-  {{/each}}
-</ul>
+{{!--
+  ============================================================================
+  EVIDENCE COLLECTION CHECKLIST
+  Supporting Document for Eviction Proceedings
+  ============================================================================
+  Comprehensive checklist of evidence needed for court
+--}}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Evidence Collection Checklist</title>
+  <style>
+    {{{print_css}}}
+
+    @page {
+      size: A4;
+      margin: 15mm;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 10pt;
+      line-height: 1.5;
+      color: #1a1a1a;
+      padding: 0;
+      margin: 0;
+    }
+
+    /* Document Header */
+    .doc-header {
+      text-align: center;
+      margin-bottom: 1.5em;
+      padding-bottom: 1em;
+      border-bottom: 3px solid #1a1a1a;
+    }
+
+    .doc-header h1 {
+      font-size: 16pt;
+      font-weight: 700;
+      margin: 0 0 0.25em 0;
+      color: #1a1a1a;
+    }
+
+    .doc-subtitle {
+      font-size: 10pt;
+      color: #666;
+    }
+
+    /* Case Details */
+    .case-details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5em 2em;
+      background: #f8f8f8;
+      padding: 1em;
+      margin: 1.5em 0;
+      border: 1px solid #ddd;
+      font-size: 9pt;
+    }
+
+    .case-details dt {
+      font-weight: 600;
+      color: #666;
+    }
+
+    .case-details dd {
+      margin: 0;
+      color: #1a1a1a;
+    }
+
+    /* Section Headers */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75em;
+      margin: 2em 0 1em 0;
+      padding-bottom: 0.5em;
+      border-bottom: 2px solid #1a1a1a;
+    }
+
+    .section-header .num {
+      background: #1a1a1a;
+      color: white;
+      width: 1.75em;
+      height: 1.75em;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 11pt;
+      flex-shrink: 0;
+    }
+
+    .section-header h2 {
+      font-size: 12pt;
+      font-weight: 600;
+      margin: 0;
+      color: #1a1a1a;
+    }
+
+    /* Checklist Items */
+    .checklist-category {
+      margin: 1.5em 0;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      overflow: hidden;
+      page-break-inside: avoid;
+    }
+
+    .checklist-category-header {
+      padding: 0.75em 1em;
+      background: #1a1a1a;
+      color: white;
+      font-weight: 700;
+      font-size: 10pt;
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+    }
+
+    .checklist-category-content {
+      padding: 0;
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75em;
+      padding: 0.75em 1em;
+      border-bottom: 1px solid #eee;
+      font-size: 9pt;
+    }
+
+    .checklist-item:last-child {
+      border-bottom: none;
+    }
+
+    .checkbox {
+      width: 16px;
+      height: 16px;
+      border: 2px solid #1a1a1a;
+      border-radius: 3px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .checklist-item-content {
+      flex: 1;
+    }
+
+    .checklist-item-title {
+      font-weight: 600;
+      color: #1a1a1a;
+    }
+
+    .checklist-item-description {
+      color: #666;
+      font-size: 8pt;
+      margin-top: 0.25em;
+    }
+
+    .checklist-item-status {
+      font-size: 8pt;
+      padding: 0.2em 0.5em;
+      border-radius: 3px;
+      font-weight: 600;
+    }
+
+    .status-essential {
+      background: #fee2e2;
+      color: #dc2626;
+    }
+
+    .status-recommended {
+      background: #fef3c7;
+      color: #b45309;
+    }
+
+    .status-optional {
+      background: #e0e7ff;
+      color: #4338ca;
+    }
+
+    /* Tips Section */
+    .tips-box {
+      margin: 1.5em 0;
+      padding: 1em;
+      background: #f0fdf4;
+      border: 1px solid #22c55e;
+      border-radius: 4px;
+    }
+
+    .tips-box h3 {
+      font-size: 10pt;
+      font-weight: 700;
+      margin: 0 0 0.75em 0;
+      color: #15803d;
+    }
+
+    .tips-box ul {
+      margin: 0;
+      padding-left: 1.25em;
+    }
+
+    .tips-box li {
+      font-size: 9pt;
+      margin: 0.4em 0;
+      color: #166534;
+    }
+
+    /* Footer */
+    .doc-footer {
+      margin-top: 2em;
+      padding-top: 1em;
+      border-top: 2px solid #1a1a1a;
+      font-size: 9pt;
+      color: #666;
+    }
+
+    .doc-footer p {
+      margin: 0.3em 0;
+    }
+
+    @media print {
+      .checklist-category {
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Document Header -->
+<div class="doc-header">
+  <h1>Evidence Collection Checklist</h1>
+  <div class="doc-subtitle">Gather these documents before court proceedings</div>
+</div>
+
+<!-- Case Details -->
+<dl class="case-details">
+  <dt>Property:</dt>
+  <dd>{{property_address}}</dd>
+  <dt>Tenant:</dt>
+  <dd>{{tenant_name}}</dd>
+  <dt>Case Type:</dt>
+  <dd>{{case_type}}</dd>
+  <dt>Prepared:</dt>
+  <dd>{{current_date}}</dd>
+</dl>
+
+<!-- Essential Documents -->
+<div class="section-header">
+  <span class="num">1</span>
+  <h2>Essential Documents</h2>
+</div>
+
+<div class="checklist-category">
+  <div class="checklist-category-header">📄 Tenancy Documents</div>
+  <div class="checklist-category-content">
+    <div class="checklist-item">
+      <div class="checkbox"></div>
+      <div class="checklist-item-content">
+        <div class="checklist-item-title">Signed Tenancy Agreement</div>
+        <div class="checklist-item-description">Original or certified copy showing all terms and signatures</div>
+      </div>
+      <span class="checklist-item-status status-essential">ESSENTIAL</span>
+    </div>
+    <div class="checklist-item">
+      <div class="checkbox"></div>
+      <div class="checklist-item-content">
+        <div class="checklist-item-title">Any Tenancy Variations or Renewals</div>
+        <div class="checklist-item-description">Amendments to rent, terms, or tenancy type</div>
+      </div>
+      <span class="checklist-item-status status-recommended">IF APPLICABLE</span>
+    </div>
+    <div class="checklist-item">
+      <div class="checkbox"></div>
+      <div class="checklist-item-content">
+        <div class="checklist-item-title">Inventory / Check-in Report</div>
+        <div class="checklist-item-description">Condition of property at start of tenancy</div>
+      </div>
+      <span class="checklist-item-status status-recommended">RECOMMENDED</span>
+    </div>
+  </div>
+</div>
+
+<div class="checklist-category">
+  <div class="checklist-category-header">🔒 Deposit Protection</div>
+  <div class="checklist-category-content">
+    <div class="checklist-item">
+      <div class="checkbox"></div>
+      <div class="checklist-item-content">
+        <div class="checklist-item-title">Deposit Protection Certificate</div>
+        <div class="checklist-item-description">Certificate from DPS, TDS, or MyDeposits confirming protection</div>
+      </div>
+      <span class="checklist-item-status status-essential">ESSENTIAL</span>
+    </div>
+    <div class="checklist-item">
+      <div class="checkbox"></div>
+      <div class="checklist-item-content">
+        <div class="checklist-item-title">Prescribed Information</div>
+        <div class="checklist-item-description">Copy of prescribed information served to tenant</div>
+      </div>
+      <span class="checklist-item-status status-essential">ESSENTIAL</span>
+    </div>
+    <div class="checklist-item">
+      <div class="checkbox"></div>
+      <div class="checklist-item-content">
+        <div class="checklist-item-title">Proof of Service</div>
+        <div class="checklist-item-description">Email, signed receipt, or proof of posting</div>
+      </div>
+      <span class="checklist-item-status status-essential">ESSENTIAL</span>
+    </div>
+  </div>
+</div>
+
+<div class="checklist-category">
+  <div class="checklist-category-header">📋 Compliance Certificates</div>
+  <div class="checklist-category-content">
+    <div class="checklist-item">
+      <div class="checkbox"></div>
+      <div class="checklist-item-content">
+        <div class="checklist-item-title">Gas Safety Certificate (CP12)</div>
+        <div class="checklist-item-description">Current certificate from Gas Safe registered engineer</div>
+      </div>
+      <span class="checklist-item-status status-essential">ESSENTIAL</span>
+    </div>
+    <div class="checklist-item">
+      <div class="checkbox"></div>
+      <div class="checklist-item-content">
+        <div class="checklist-item-title">EICR (Electrical Safety)</div>
+        <div class="checklist-item-description">Electrical Installation Condition Report</div>
+      </div>
+      <span class="checklist-item-status status-essential">ESSENTIAL</span>
+    </div>
+    <div class="checklist-item">
+      <div class="checkbox"></div>
+      <div class="checklist-item-content">
+        <div class="checklist-item-title">Energy Performance Certificate (EPC)</div>
+        <div class="checklist-item-description">Valid EPC with rating E or above</div>
+      </div>
+      <span class="checklist-item-status status-essential">ESSENTIAL</span>
+    </div>
+    <div class="checklist-item">
+      <div class="checkbox"></div>
+      <div class="checklist-item-content">
+        <div class="checklist-item-title">How to Rent Guide</div>
+        <div class="checklist-item-description">Proof you provided the government guide</div>
+      </div>
+      <span class="checklist-item-status status-essential">ESSENTIAL</span>
+    </div>
+  </div>
+</div>
+
+<!-- Notice Evidence -->
+<div class="section-header">
+  <span class="num">2</span>
+  <h2>Notice & Service Evidence</h2>
+</div>
+
+<div class="checklist-category">
+  <div class="checklist-category-header">📬 Notice Service</div>
+  <div class="checklist-category-content">
+    <div class="checklist-item">
+      <div class="checkbox"></div>
+      <div class="checklist-item-content">
+        <div class="checklist-item-title">Copy of Notice Served</div>
+        <div class="checklist-item-description">Exact copy of the notice you served to tenant</div>
+      </div>
+      <span class="checklist-item-status status-essential">ESSENTIAL</span>
+    </div>
+    <div class="checklist-item">
+      <div class="checkbox"></div>
+      <div class="checklist-item-content">
+        <div class="checklist-item-title">Proof of Posting / Delivery</div>
+        <div class="checklist-item-description">Royal Mail receipt, tracking, or recorded delivery confirmation</div>
+      </div>
+      <span class="checklist-item-status status-essential">ESSENTIAL</span>
+    </div>
+    <div class="checklist-item">
+      <div class="checkbox"></div>
+      <div class="checklist-item-content">
+        <div class="checklist-item-title">Witness Statement</div>
+        <div class="checklist-item-description">If hand-delivered, signed statement from witness</div>
+      </div>
+      <span class="checklist-item-status status-recommended">IF HAND-DELIVERED</span>
+    </div>
+    <div class="checklist-item">
+      <div class="checkbox"></div>
+      <div class="checklist-item-content">
+        <div class="checklist-item-title">Photos of Delivery</div>
+        <div class="checklist-item-description">Timestamped photo showing notice through letterbox</div>
+      </div>
+      <span class="checklist-item-status status-recommended">RECOMMENDED</span>
+    </div>
+  </div>
+</div>
+
+<!-- Financial Evidence -->
+<div class="section-header">
+  <span class="num">3</span>
+  <h2>Financial Evidence</h2>
+</div>
+
+<div class="checklist-category">
+  <div class="checklist-category-header">💰 Rent & Arrears</div>
+  <div class="checklist-category-content">
+    <div class="checklist-item">
+      <div class="checkbox"></div>
+      <div class="checklist-item-content">
+        <div class="checklist-item-title">Rent Payment Schedule</div>
+        <div class="checklist-item-description">Statement showing rent due dates, amounts, and payments received</div>
+      </div>
+      <span class="checklist-item-status status-essential">ESSENTIAL</span>
+    </div>
+    <div class="checklist-item">
+      <div class="checkbox"></div>
+      <div class="checklist-item-content">
+        <div class="checklist-item-title">Bank Statements</div>
+        <div class="checklist-item-description">Showing rent payments (or lack thereof)</div>
+      </div>
+      <span class="checklist-item-status status-essential">ESSENTIAL</span>
+    </div>
+    <div class="checklist-item">
+      <div class="checkbox"></div>
+      <div class="checklist-item-content">
+        <div class="checklist-item-title">Arrears Demand Letters</div>
+        <div class="checklist-item-description">Copies of letters/emails requesting payment</div>
+      </div>
+      <span class="checklist-item-status status-recommended">RECOMMENDED</span>
+    </div>
+    <div class="checklist-item">
+      <div class="checkbox"></div>
+      <div class="checklist-item-content">
+        <div class="checklist-item-title">Payment Plan Agreements</div>
+        <div class="checklist-item-description">If applicable, any agreed repayment plans</div>
+      </div>
+      <span class="checklist-item-status status-optional">IF APPLICABLE</span>
+    </div>
+  </div>
+</div>
+
+<!-- Communications -->
+<div class="section-header">
+  <span class="num">4</span>
+  <h2>Communications</h2>
+</div>
+
+<div class="checklist-category">
+  <div class="checklist-category-header">✉️ Correspondence</div>
+  <div class="checklist-category-content">
+    <div class="checklist-item">
+      <div class="checkbox"></div>
+      <div class="checklist-item-content">
+        <div class="checklist-item-title">Email Trail</div>
+        <div class="checklist-item-description">All relevant emails between you and tenant</div>
+      </div>
+      <span class="checklist-item-status status-recommended">RECOMMENDED</span>
+    </div>
+    <div class="checklist-item">
+      <div class="checkbox"></div>
+      <div class="checklist-item-content">
+        <div class="checklist-item-title">Text Messages / WhatsApp</div>
+        <div class="checklist-item-description">Screenshots of relevant messages</div>
+      </div>
+      <span class="checklist-item-status status-recommended">IF APPLICABLE</span>
+    </div>
+    <div class="checklist-item">
+      <div class="checkbox"></div>
+      <div class="checklist-item-content">
+        <div class="checklist-item-title">Letters Sent</div>
+        <div class="checklist-item-description">Copies of all letters with proof of posting</div>
+      </div>
+      <span class="checklist-item-status status-recommended">RECOMMENDED</span>
+    </div>
+  </div>
+</div>
+
+<!-- Ground-Specific Evidence -->
+{{#if required_evidence}}
+<div class="section-header">
+  <span class="num">5</span>
+  <h2>Ground-Specific Evidence</h2>
+</div>
+
+{{#each required_evidence}}
+<div class="checklist-category">
+  <div class="checklist-category-header">{{this.ground}} - {{this.title}}</div>
+  <div class="checklist-category-content">
+    {{#if this.evidence_items}}
+    {{#each this.evidence_items}}
+    <div class="checklist-item">
+      <div class="checkbox"></div>
+      <div class="checklist-item-content">
+        <div class="checklist-item-title">{{this}}</div>
+      </div>
+      <span class="checklist-item-status status-essential">ESSENTIAL</span>
+    </div>
+    {{/each}}
+    {{else}}
+    <div class="checklist-item">
+      <div class="checkbox"></div>
+      <div class="checklist-item-content">
+        <div class="checklist-item-title">Gather evidence specific to this ground</div>
+        <div class="checklist-item-description">Consult the ground requirements for specific evidence needed</div>
+      </div>
+    </div>
+    {{/if}}
+  </div>
+</div>
+{{/each}}
+{{/if}}
+
+<!-- Tips -->
+<div class="tips-box">
+  <h3>📌 Evidence Tips</h3>
+  <ul>
+    <li><strong>Organize chronologically:</strong> Courts prefer evidence in date order</li>
+    <li><strong>Number your pages:</strong> Add page numbers to all documents</li>
+    <li><strong>Create an index:</strong> List all documents with page references</li>
+    <li><strong>Make copies:</strong> Keep originals safe, submit copies to court</li>
+    <li><strong>Highlight key points:</strong> Use highlighter on relevant sections</li>
+    <li><strong>Bundle professionally:</strong> Use a ring binder with dividers</li>
+  </ul>
+</div>
+
+<!-- Footer -->
+<div class="doc-footer">
+  <p><strong>Generated:</strong> {{current_date}}</p>
+  <p><strong>Landlord Heaven</strong> | Evidence Collection Checklist</p>
+</div>
+
+</body>
+</html>

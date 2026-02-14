@@ -1,0 +1,29 @@
+{
+  "ground": "persistent_rent_arrears",
+  "type": "mandatory",
+  "category": "rent_arrears",
+  "name": "Persistent Rent Arrears",
+  "short_description": "Arrears at or above threshold reached at least three times in 3 years",
+  "legal_basis": {
+    "act": "Renting Homes (Wales) Act 2016",
+    "section": "Section 157",
+    "statute_year": "2016"
+  },
+  "requirements": {
+    "pattern": "2 months' (or 8 weeks') arrears accrued at least three separate times in past 3 years",
+    "current_position": "May be under threshold now but history must show repeated breaches"
+  },
+  "notice_period": {
+    "minimum_days": 14,
+    "reference": "Section 157 mandatory ground"
+  },
+  "evidence_required": [
+    "Rent account showing pattern of arrears",
+    "Documentation of at least 3 instances reaching threshold",
+    "Proof of arrears history over 3-year period"
+  ],
+  "success_factors": {
+    "high_probability": ["Consistent arrears records with dates"],
+    "risks": ["Dispute over calculation windows"]
+  }
+}

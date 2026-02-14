@@ -1,22 +1,65 @@
 /**
- * Money Claim Pack Generator (England & Wales)
+ * Money Claim Pack Generator (England)
  *
- * Builds a complete money-claim bundle including:
- * - Official N1 claim form (PDF fill)
- * - Particulars of claim and arrears schedule
- * - Interest calculations and evidence index
- * - Cover sheet describing what is inside the pack
+ * Builds a complete England money-claim bundle including:
+ * - Official N1 claim form (PDF fill via AcroForm)
+ * - Particulars of claim (template)
+ * - Schedule of arrears (template)
+ * - Interest calculation (template)
+ * - Pre-Action Protocol for Debt Claims documents (PAP-DEBT), including:
+ *   - Letter Before Claim
+ *   - Information Sheet for Defendants
+ *   - Reply Form
+ *   - Financial Statement Form
+ * - Filing guide (MCOL or paper)
+ * - Enforcement guide (post-judgment options)
+ *
+ * IMPORTANT: This generator is ENGLAND-ONLY.
+ * - Wales, Scotland, and Northern Ireland are NOT supported
+ * - Scotland has a separate Simple Procedure implementation (sc_money_claim)
+ *
+ * Note:
+ * - This pack is aligned with the Jan 2026 restructure:
+ *   Removed pack cover/summary, evidence index, and hearing prep documents.
  */
+
 
 import { generateDocument } from './generator';
 import { assertOfficialFormExists, fillN1Form, CaseData } from '@/lib/documents/official-forms-filler';
 import { buildServiceContact } from '@/lib/documents/service-contact';
 import { generateMoneyClaimAskHeavenDrafts } from './money-claim-askheaven';
+import { assertValidMoneyClaimData } from './money-claim-validator';
 import type { CaseFacts } from '@/lib/case-facts/schema';
 
 import type { CanonicalJurisdiction } from '@/lib/types/jurisdiction';
 
-export type MoneyClaimJurisdiction = Exclude<CanonicalJurisdiction, 'northern-ireland'>; // england, wales, scotland
+/**
+ * Format a date string as UK legal format: "DD Month YYYY" (e.g., "14 July 2025")
+ * Used for court documents, pleadings and formal notices.
+ */
+function formatUKLegalDate(dateInput: string | Date | undefined): string {
+  if (!dateInput) return '';
+
+  const monthNames = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+
+  // Parse the date - handle both ISO strings and Date objects
+  const dateStr = typeof dateInput === 'string' ? dateInput : dateInput.toISOString();
+  const d = new Date(dateStr + (typeof dateStr === 'string' && !dateStr.includes('T') ? 'T00:00:00.000Z' : ''));
+
+  if (isNaN(d.getTime())) return '';
+
+  const day = d.getUTCDate();
+  const month = monthNames[d.getUTCMonth()];
+  const year = d.getUTCFullYear();
+
+  return `${day} ${month} ${year}`;
+}
+
+// Money Claim is England-only. Wales/Scotland/NI are not supported.
+export type MoneyClaimJurisdiction = 'england';
 
 export interface ArrearsEntry {
   period: string;
@@ -24,6 +67,8 @@ export interface ArrearsEntry {
   amount_due: number;
   amount_paid: number;
   arrears: number;
+  running_balance?: number;
+  notes?: string;
 }
 
 export interface ClaimLineItem {
@@ -44,11 +89,17 @@ export interface MoneyClaimCase {
   landlord_phone?: string;
   claimant_reference?: string;
 
-  // Defendant / tenant
+  // Defendant / tenant (Defendant 1)
   tenant_full_name: string;
-  tenant_2_name?: string;
   property_address: string;
   property_postcode?: string;
+
+  // Second Defendant (if joint tenancy)
+  has_joint_defendants?: boolean;
+  tenant_2_name?: string;
+  tenant_2_address_line1?: string;
+  tenant_2_address_line2?: string;
+  tenant_2_postcode?: string;
 
   // Tenancy / rent
   rent_amount: number;
@@ -69,7 +120,9 @@ export interface MoneyClaimCase {
   other_costs_notes?: string;
   other_amounts_summary?: string;
 
-  // Interest
+  // Interest - REQUIRES EXPLICIT OPT-IN
+  // claim_interest must be true for interest to be calculated and included in documents
+  claim_interest?: boolean;
   interest_rate?: number;
   interest_start_date?: string;
   interest_to_date?: number;
@@ -135,6 +188,8 @@ export interface MoneyClaimPackDocument {
   title: string;
   description: string;
   category: 'court_form' | 'particulars' | 'schedule' | 'guidance' | 'evidence';
+  /** Canonical document type key matching pack-contents (e.g., 'n1_claim', 'particulars_of_claim') */
+  document_type: string;
   html?: string;
   pdf?: Buffer;
   file_name: string;
@@ -158,9 +213,11 @@ interface CalculatedTotals {
   arrears_total: number;
   damages_total: number;
   other_total: number;
-  interest_rate: number;
-  interest_to_date: number;
-  daily_interest: number;
+  claim_interest: boolean;
+  interest_rate: number | null;
+  interest_to_date: number | null;
+  daily_interest: number | null;
+  interest_days: number | null;
   total_claim_amount: number;
   court_fee: number;
   solicitor_costs: number;
@@ -175,30 +232,65 @@ function calculateTotals(claim: MoneyClaimCase): CalculatedTotals {
   const arrears_total =
     claim.arrears_total ||
     (claim.arrears_schedule || []).reduce((total, entry) => total + (entry.arrears || 0), 0);
+
   const damages_total = sumLineItems(claim.damage_items);
   const other_total = sumLineItems(claim.other_charges);
 
   const basePrincipal = arrears_total + damages_total + other_total;
-  const interest_rate = claim.interest_rate ?? 8;
-  const interest_to_date =
-    claim.interest_to_date ??
-    Number((basePrincipal * (interest_rate / 100) * 0.25).toFixed(2));
-  const daily_interest =
-    claim.daily_interest ??
-    Number(((basePrincipal * (interest_rate / 100)) / 365).toFixed(2));
+
+  // INTEREST: Only calculate if user EXPLICITLY opted in via claim_interest === true
+  // No default 8% rate - user must confirm they want to claim interest
+  const claimInterest = claim.claim_interest === true;
+
+  let interest_rate: number | null = null;
+  let interest_to_date: number | null = null;
+  let daily_interest: number | null = null;
+  let interest_days: number | null = null;
+
+  if (claimInterest) {
+    // User opted in - use their rate or suggest 8% statutory rate
+    // Note: The rate should have been explicitly confirmed in the wizard
+    interest_rate = claim.interest_rate ?? 8;
+    daily_interest =
+      claim.daily_interest ?? Number(((basePrincipal * (interest_rate / 100)) / 365).toFixed(2));
+
+    // Calculate actual days from interest_start_date to today for accurate interest
+    // Default to 90 days only if no interest_start_date provided
+    if (claim.interest_start_date) {
+      const startDate = new Date(claim.interest_start_date + 'T00:00:00.000Z');
+      const today = new Date();
+      const diffMs = today.getTime() - startDate.getTime();
+      interest_days = Math.max(0, Math.floor(diffMs / (1000 * 60 * 60 * 24)));
+    } else {
+      interest_days = 90; // Fallback only if no start date provided
+    }
+
+    interest_to_date =
+      claim.interest_to_date ?? Number((daily_interest * interest_days).toFixed(2));
+
+    console.log(
+      `[money-claim] Interest claimed at ${interest_rate}% (user opted in). ` +
+        `Days: ${interest_days}, Interest to date: £${interest_to_date}, Daily rate: £${daily_interest}`
+    );
+  } else {
+    console.log('[money-claim] No interest claimed (user did not opt in or claim_interest !== true)');
+  }
 
   const court_fee = claim.court_fee ?? 355;
   const solicitor_costs = claim.solicitor_costs ?? 0;
-  const total_claim_amount = basePrincipal + interest_to_date;
+
+  const total_claim_amount = basePrincipal + (interest_to_date ?? 0);
   const total_with_fees = total_claim_amount + court_fee + solicitor_costs;
 
   return {
     arrears_total,
     damages_total,
     other_total,
+    claim_interest: claimInterest,
     interest_rate,
     interest_to_date,
     daily_interest,
+    interest_days,
     total_claim_amount,
     court_fee,
     solicitor_costs,
@@ -210,35 +302,44 @@ function buildPreActionSummary(claim: MoneyClaimCase): string {
   const segments: string[] = [];
 
   if (claim.lba_date) {
-    const methods = (claim.lba_method || []).length ? ` via ${(claim.lba_method || []).join(', ')}` : '';
+    const methods =
+      (claim.lba_method || []).length ? ` via ${(claim.lba_method || []).join(', ')}` : '';
     segments.push(`Initial demand sent on ${claim.lba_date}${methods}.`);
   }
+
   if (claim.lba_response_deadline) {
     segments.push(`Response deadline given: ${claim.lba_response_deadline}.`);
   }
+
   if (claim.pap_documents_sent && claim.pap_documents_sent.length) {
     segments.push(`Included PAP/defence forms: ${claim.pap_documents_sent.join(', ')}.`);
   }
+
   if (claim.lba_second_date) {
-    const followUpMethods = (claim.lba_second_method || []).length
-      ? ` via ${(claim.lba_second_method || []).join(', ')}`
-      : '';
+    const followUpMethods =
+      (claim.lba_second_method || []).length
+        ? ` via ${(claim.lba_second_method || []).join(', ')}`
+        : '';
     segments.push(`Follow-up demand sent on ${claim.lba_second_date}${followUpMethods}.`);
   }
+
   if (claim.lba_second_response_deadline) {
     segments.push(`Follow-up response deadline: ${claim.lba_second_response_deadline}.`);
   }
+
   if (claim.tenant_responded !== undefined && claim.tenant_responded !== null) {
-    const responseText = claim.tenant_responded
-      ? `Tenant responded${claim.tenant_response_details ? `: ${claim.tenant_response_details}` : ''}.`
-      : 'No reply received to demands.';
-    segments.push(responseText);
+    segments.push(
+      claim.tenant_responded
+        ? `Tenant responded${claim.tenant_response_details ? `: ${claim.tenant_response_details}` : ''}.`
+        : 'No reply received to demands.'
+    );
   }
+
   if (claim.pap_documents_served) {
-  const methodsArray = claim.pap_service_method ?? [];
-  const methods = methodsArray.length ? methodsArray.join(', ') : 'unspecified method';
-  segments.push(`Pre-action pack served (${methods}).`);
-}
+    const methodsArray = claim.pap_service_method ?? [];
+    const methods = methodsArray.length ? methodsArray.join(', ') : 'unspecified method';
+    segments.push(`Pre-action pack served (${methods}).`);
+  }
 
   if (claim.pap_service_proof) {
     segments.push(`Proof of service noted: ${claim.pap_service_proof}.`);
@@ -261,9 +362,15 @@ function buildN1Payload(claim: MoneyClaimCase, totals: CalculatedTotals): CaseDa
 
     // Defendant
     tenant_full_name: claim.tenant_full_name,
-    tenant_2_name: claim.tenant_2_name,
     property_address: claim.property_address,
     property_postcode: claim.property_postcode,
+
+    // Joint Defendant (Defendant 2)
+    has_joint_defendants: claim.has_joint_defendants,
+    tenant_2_name: claim.tenant_2_name,
+    tenant_2_address_line1: claim.tenant_2_address_line1,
+    tenant_2_address_line2: claim.tenant_2_address_line2,
+    tenant_2_postcode: claim.tenant_2_postcode,
 
     // Tenancy / rent
     tenancy_start_date: claim.tenancy_start_date || '',
@@ -278,6 +385,10 @@ function buildN1Payload(claim: MoneyClaimCase, totals: CalculatedTotals): CaseDa
     solicitor_costs: totals.solicitor_costs,
     claimant_reference: claim.claimant_reference,
     court_name: claim.court_name,
+
+    // Money claim line items (for N1 brief details detection)
+    damage_items: claim.damage_items,
+    other_charges: claim.other_charges,
 
     // Representation (passed through for N1 + fallbacks)
     solicitor_firm: claim.solicitor_firm,
@@ -301,32 +412,53 @@ function buildN1Payload(claim: MoneyClaimCase, totals: CalculatedTotals): CaseDa
   };
 }
 
-async function generateEnglandWalesMoneyClaimPack(
+async function generateEnglandMoneyClaimPack(
   claim: MoneyClaimCase,
   caseFacts?: CaseFacts
 ): Promise<MoneyClaimPack> {
+  // =========================================================================
+  // PRE-GENERATION VALIDATION
+  // Validate all required data and cross-document consistency BEFORE generating
+  // =========================================================================
+  const validationResult = assertValidMoneyClaimData(claim);
+  console.log('[money-claim-pack] Pre-generation validation passed');
+  console.log('[money-claim-pack] Computed totals:', validationResult.computedTotals);
+
   const totals = calculateTotals(claim);
   const generationDate = new Date().toISOString();
   const documents: MoneyClaimPackDocument[] = [];
 
-  // Generate AI-drafted content for premium pack (LBA, PoC, Evidence Index)
+  // Money Claim uses England templates only
+  const templateBase = 'uk/england';
+
+  // Generate AI-drafted content for templates (embedded into docs via templates)
   let askHeavenDrafts;
   if (caseFacts) {
     try {
       askHeavenDrafts = await generateMoneyClaimAskHeavenDrafts(caseFacts, claim, {
         includePostIssue: true,
-        includeRiskReport: false, // Can be enabled for premium users
-        jurisdiction: 'england-wales',
+        includeRiskReport: false,
+        jurisdiction: 'england',
       });
     } catch (error) {
       console.error('Failed to generate AI drafts, proceeding without:', error);
     }
   }
 
+  // Pre-format all dates as UK legal format (DD Month YYYY) for court documents
+  const formattedGenerationDate = formatUKLegalDate(generationDate);
+  const formattedSignatureDate = formatUKLegalDate(claim.signature_date || generationDate);
+  const formattedTenancyStartDate = formatUKLegalDate(claim.tenancy_start_date);
+  const formattedInterestStartDate = formatUKLegalDate(claim.interest_start_date);
+
   const baseTemplateData = {
     ...claim,
     ...totals,
-    generation_date: generationDate.split('T')[0],
+    // All dates pre-formatted as UK legal format (DD Month YYYY)
+    generation_date: formattedGenerationDate,
+    signature_date: formattedSignatureDate,
+    tenancy_start_date: formattedTenancyStartDate,
+    interest_start_date: formattedInterestStartDate,
     total_principal: totals.arrears_total + totals.damages_total + totals.other_total,
     arrears_schedule: claim.arrears_schedule || [],
     damage_items: claim.damage_items || [],
@@ -336,30 +468,15 @@ async function generateEnglandWalesMoneyClaimPack(
     enforcement_notes: claim.enforcement_notes,
     evidence_types_available: claim.evidence_types_available || [],
     arrears_schedule_confirmed: claim.arrears_schedule_confirmed,
-    // Add AI-drafted content if available
     ask_heaven: askHeavenDrafts,
   };
 
-  // PACK COVER
-  const packCover = await generateDocument({
-    templatePath: 'uk/england-wales/templates/money_claims/pack_cover.hbs',
-    data: baseTemplateData,
-    isPreview: false,
-    outputFormat: 'both',
-  });
-
-  documents.push({
-    title: 'Money claim pack summary',
-    description: 'Explains the contents of the bundle, claim totals and filing steps.',
-    category: 'guidance',
-    html: packCover.html,
-    pdf: packCover.pdf,
-    file_name: 'money-claim-pack-summary.pdf',
-  });
+  // PACK COVER - Removed as of Jan 2026 pack restructure
+  // Pack summary document no longer included in the money claim pack
 
   // PARTICULARS OF CLAIM
   const particulars = await generateDocument({
-    templatePath: 'uk/england-wales/templates/money_claims/particulars_of_claim.hbs',
+    templatePath: `${templateBase}/templates/money_claims/particulars_of_claim.hbs`,
     data: baseTemplateData,
     isPreview: false,
     outputFormat: 'both',
@@ -369,14 +486,15 @@ async function generateEnglandWalesMoneyClaimPack(
     title: 'Particulars of claim',
     description: 'Detailed particulars for rent arrears, damages and costs.',
     category: 'particulars',
+    document_type: 'particulars_of_claim',
     html: particulars.html,
     pdf: particulars.pdf,
-    file_name: 'particulars-of-claim.pdf',
+    file_name: '01-particulars-of-claim.pdf',
   });
 
   // SCHEDULE OF ARREARS
   const arrears = await generateDocument({
-    templatePath: 'uk/england-wales/templates/money_claims/schedule_of_arrears.hbs',
+    templatePath: `${templateBase}/templates/money_claims/schedule_of_arrears.hbs`,
     data: baseTemplateData,
     isPreview: false,
     outputFormat: 'both',
@@ -386,72 +504,47 @@ async function generateEnglandWalesMoneyClaimPack(
     title: 'Schedule of arrears',
     description: 'Line-by-line arrears schedule required by HMCTS.',
     category: 'schedule',
+    document_type: 'arrears_schedule',
     html: arrears.html,
     pdf: arrears.pdf,
-    file_name: 'schedule-of-arrears.pdf',
+    file_name: '02-schedule-of-arrears.pdf',
   });
 
-  // INTEREST CALCULATION
-  const interest = await generateDocument({
-    templatePath: 'uk/england-wales/templates/money_claims/interest_workings.hbs',
-    data: baseTemplateData,
-    isPreview: false,
-    outputFormat: 'both',
-  });
+  // INTEREST CALCULATION (optional - only if user opted in)
+  if (totals.claim_interest === true) {
+    const interest = await generateDocument({
+      templatePath: `${templateBase}/templates/money_claims/interest_workings.hbs`,
+      data: baseTemplateData,
+      isPreview: false,
+      outputFormat: 'both',
+    });
 
-  documents.push({
-    title: 'Interest calculation',
-    description: 'Section 69 County Courts Act interest workings and daily rate.',
-    category: 'guidance',
-    html: interest.html,
-    pdf: interest.pdf,
-    file_name: 'interest-calculation.pdf',
-  });
+    documents.push({
+      title: 'Interest calculation',
+      description: 'Section 69 County Courts Act interest workings and daily rate.',
+      category: 'guidance',
+      document_type: 'interest_calculation',
+      html: interest.html,
+      pdf: interest.pdf,
+      file_name: '03-interest-calculation.pdf',
+    });
+  }
 
-  // EVIDENCE INDEX
-  const evidence = await generateDocument({
-    templatePath: 'uk/england-wales/templates/money_claims/evidence_index.hbs',
-    data: baseTemplateData,
-    isPreview: false,
-    outputFormat: 'both',
-  });
-
-  documents.push({
-    title: 'Evidence index',
-    description: 'Checklist of attachments to staple behind the N1 form.',
-    category: 'evidence',
-    html: evidence.html,
-    pdf: evidence.pdf,
-    file_name: 'evidence-index.pdf',
-  });
-
-  // COURT HEARING PREPARATION SHEET (NEW)
-  const hearingPrep = await generateDocument({
-    templatePath: 'uk/england-wales/templates/money_claims/hearing_prep_sheet.hbs',
-    data: baseTemplateData,
-    isPreview: false,
-    outputFormat: 'both',
-  });
-
-  documents.push({
-    title: 'Court Hearing Preparation Sheet',
-    description: 'Structured guidance on what to say, what to bring, and how to present your case if the claim is defended.',
-    category: 'guidance',
-    html: hearingPrep.html,
-    pdf: hearingPrep.pdf,
-    file_name: 'hearing-prep-sheet.pdf',
-  });
+  // EVIDENCE INDEX - Removed as of Jan 2026 pack restructure
+  // COURT HEARING PREPARATION SHEET - Removed as of Jan 2026 pack restructure
 
   // PRE-ACTION PROTOCOL DOCUMENTS (Legally Required)
   const responseDeadline = new Date();
   responseDeadline.setDate(responseDeadline.getDate() + 30);
+
   const extendedData = {
     ...baseTemplateData,
-    response_deadline: responseDeadline.toISOString().split('T')[0],
+    // Response deadline also formatted as UK legal date
+    response_deadline: formatUKLegalDate(responseDeadline),
   };
 
   const letterBeforeClaim = await generateDocument({
-    templatePath: 'uk/england-wales/templates/money_claims/letter_before_claim.hbs',
+    templatePath: `${templateBase}/templates/money_claims/letter_before_claim.hbs`,
     data: extendedData,
     isPreview: false,
     outputFormat: 'both',
@@ -461,13 +554,14 @@ async function generateEnglandWalesMoneyClaimPack(
     title: 'Letter Before Claim (PAP-DEBT)',
     description: 'Pre-Action Protocol letter required before issuing proceedings.',
     category: 'guidance',
+    document_type: 'letter_before_claim',
     html: letterBeforeClaim.html,
     pdf: letterBeforeClaim.pdf,
-    file_name: 'letter-before-claim.pdf',
+    file_name: '04-letter-before-claim.pdf',
   });
 
   const infoSheet = await generateDocument({
-    templatePath: 'uk/england-wales/templates/money_claims/information_sheet_for_defendants.hbs',
+    templatePath: `${templateBase}/templates/money_claims/information_sheet_for_defendants.hbs`,
     data: extendedData,
     isPreview: false,
     outputFormat: 'both',
@@ -477,13 +571,14 @@ async function generateEnglandWalesMoneyClaimPack(
     title: 'Information Sheet for Defendants',
     description: 'Explains defendant rights and options (enclose with Letter Before Claim).',
     category: 'guidance',
+    document_type: 'defendant_info_sheet',
     html: infoSheet.html,
     pdf: infoSheet.pdf,
-    file_name: 'information-sheet-for-defendants.pdf',
+    file_name: '05-information-sheet-for-defendants.pdf',
   });
 
   const replyForm = await generateDocument({
-    templatePath: 'uk/england-wales/templates/money_claims/reply_form.hbs',
+    templatePath: `${templateBase}/templates/money_claims/reply_form.hbs`,
     data: extendedData,
     isPreview: false,
     outputFormat: 'both',
@@ -493,13 +588,14 @@ async function generateEnglandWalesMoneyClaimPack(
     title: 'Reply Form',
     description: 'Form for defendant to respond to Letter Before Claim.',
     category: 'guidance',
+    document_type: 'reply_form',
     html: replyForm.html,
     pdf: replyForm.pdf,
-    file_name: 'reply-form.pdf',
+    file_name: '06-reply-form.pdf',
   });
 
   const financialStatement = await generateDocument({
-    templatePath: 'uk/england-wales/templates/money_claims/financial_statement_form.hbs',
+    templatePath: `${templateBase}/templates/money_claims/financial_statement_form.hbs`,
     data: extendedData,
     isPreview: false,
     outputFormat: 'both',
@@ -509,31 +605,15 @@ async function generateEnglandWalesMoneyClaimPack(
     title: 'Financial Statement Form',
     description: 'Form for defendant to disclose income/expenditure for payment plan.',
     category: 'guidance',
+    document_type: 'financial_statement_form',
     html: financialStatement.html,
     pdf: financialStatement.pdf,
-    file_name: 'financial-statement-form.pdf',
-  });
-
-  // ENFORCEMENT GUIDE (Post-Issue)
-  const enforcementGuide = await generateDocument({
-    templatePath: 'uk/england-wales/templates/money_claims/enforcement_guide.hbs',
-    data: baseTemplateData,
-    isPreview: false,
-    outputFormat: 'both',
-  });
-
-  documents.push({
-    title: 'Enforcement Guide',
-    description: 'Explains enforcement options after obtaining a County Court Judgment.',
-    category: 'guidance',
-    html: enforcementGuide.html,
-    pdf: enforcementGuide.pdf,
-    file_name: 'enforcement-guide.pdf',
+    file_name: '07-financial-statement-form.pdf',
   });
 
   // FILING GUIDE
   const filingGuide = await generateDocument({
-    templatePath: 'uk/england-wales/templates/money_claims/filing_guide.hbs',
+    templatePath: `${templateBase}/templates/money_claims/filing_guide.hbs`,
     data: extendedData,
     isPreview: false,
     outputFormat: 'both',
@@ -543,9 +623,28 @@ async function generateEnglandWalesMoneyClaimPack(
     title: 'Money Claims Filing Guide',
     description: 'Step-by-step instructions for filing via MCOL or paper.',
     category: 'guidance',
+    document_type: 'court_filing_guide',
     html: filingGuide.html,
     pdf: filingGuide.pdf,
-    file_name: 'filing-guide.pdf',
+    file_name: '08-filing-guide.pdf',
+  });
+
+  // ENFORCEMENT GUIDE (Post-Issue)
+  const enforcementGuide = await generateDocument({
+    templatePath: `${templateBase}/templates/money_claims/enforcement_guide.hbs`,
+    data: baseTemplateData,
+    isPreview: false,
+    outputFormat: 'both',
+  });
+
+  documents.push({
+    title: 'Enforcement Guide',
+    description: 'Explains enforcement options after obtaining a County Court Judgment.',
+    category: 'guidance',
+    document_type: 'enforcement_guide',
+    html: enforcementGuide.html,
+    pdf: enforcementGuide.pdf,
+    file_name: '09-enforcement-guide.pdf',
   });
 
   // OFFICIAL N1 FORM
@@ -556,8 +655,9 @@ async function generateEnglandWalesMoneyClaimPack(
     title: 'Form N1 (official PDF)',
     description: 'Completed claim form ready for County Court Money Claims Centre.',
     category: 'court_form',
+    document_type: 'n1_claim',
     pdf: Buffer.from(n1Pdf),
-    file_name: 'n1-claim-form.pdf',
+    file_name: '10-n1-claim-form.pdf',
   });
 
   const caseId = claim.case_id || `MONEY-${Date.now()}`;
@@ -581,11 +681,16 @@ export async function generateMoneyClaimPack(
   claim: MoneyClaimCase,
   caseFacts?: CaseFacts
 ): Promise<MoneyClaimPack> {
-  if (claim.jurisdiction !== 'england-wales') {
+  // GUARDRAIL: Money Claim is ENGLAND-ONLY
+  // Fail loudly if any other jurisdiction is passed
+  if (claim.jurisdiction !== 'england') {
     throw new Error(
-      'Money claim pack generation is currently available only for England & Wales.'
+      `Money Claim is only available for England. ` +
+      `Received jurisdiction: "${claim.jurisdiction}". ` +
+      `For Scotland, use the Simple Procedure product (sc_money_claim). ` +
+      `Wales and Northern Ireland are not supported.`
     );
   }
 
-  return generateEnglandWalesMoneyClaimPack(claim, caseFacts);
+  return generateEnglandMoneyClaimPack(claim, caseFacts);
 }

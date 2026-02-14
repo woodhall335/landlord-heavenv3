@@ -1,0 +1,33 @@
+# Validation Platform Code Owners
+# See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default owners for everything in the repo
+* @engineering-team
+
+# Validation Engine Code
+/src/lib/validation/ @engineering-lead @senior-engineer
+
+# Validation Scripts
+/scripts/validation-*.ts @engineering-lead
+/scripts/audit-eviction-rules.ts @engineering-lead
+
+# England Rules - Requires legal review
+/config/legal-requirements/england/ @engineering-lead @legal-team-england
+
+# Wales Rules - Requires legal review
+/config/legal-requirements/wales/ @engineering-lead @legal-team-wales
+
+# Scotland Rules - Requires legal review
+/config/legal-requirements/scotland/ @engineering-lead @legal-team-scotland
+
+# Message Catalog - Product ownership
+/config/validation/phase13-messages.yaml @product-team @content-lead
+
+# Validation Documentation
+/docs/validation/ @engineering-lead @product-lead
+
+# Validation Tests
+/tests/validation/ @engineering-lead
+
+# GitHub Workflows and Templates
+/.github/ @engineering-lead

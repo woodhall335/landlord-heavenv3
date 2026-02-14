@@ -42,9 +42,11 @@ export async function GET() {
 
     // Jurisdiction breakdown
     const jurisdictionBreakdown = {
-      'england-wales': cases?.filter((c) => (c as any).jurisdiction === 'england-wales').length || 0,
+      england: cases?.filter((c) => (c as any).jurisdiction === 'england').length || 0,
+      wales: cases?.filter((c) => (c as any).jurisdiction === 'wales').length || 0,
       scotland: cases?.filter((c) => (c as any).jurisdiction === 'scotland').length || 0,
       'northern-ireland': cases?.filter((c) => (c as any).jurisdiction === 'northern-ireland').length || 0,
+      legacy_england_wales: cases?.filter((c) => (c as any).jurisdiction === 'england-wales').length || 0,
     };
 
     // Recommended routes (for eviction cases)

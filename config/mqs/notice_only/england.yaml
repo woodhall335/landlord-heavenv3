@@ -46,12 +46,20 @@ questions:
         validation:
           required: true
         width: half
+      # Telephone: Optional per Form 6A - NOT legally mandatory but renders if provided
+      - id: landlord_phone
+        label: "Telephone (optional)"
+        inputType: tel
+        placeholder: "e.g. 020 1234 5678"
+        width: half
+        helperText: "Optional contact number for the notice form"
     maps_to:
       - landlord_full_name
       - landlord_address_line1
       - landlord_address_line2
       - landlord_city
       - landlord_postcode
+      - landlord_phone
 
   # TASK B: Route selection EARLY (before route-dependent questions)
   - id: selected_notice_route
@@ -146,6 +154,35 @@ questions:
     maps_to:
       - fixed_term_end_date
 
+  # Break clause questions - allows earlier exit from fixed term
+  - id: has_break_clause
+    section: Tenancy Details
+    question: "Does the tenancy have a break clause?"
+    inputType: yes_no
+    dependsOn:
+      questionId: is_fixed_term
+      value: true
+    validation:
+      required: true
+    helperText: |
+      A break clause allows landlord or tenant to end the fixed term early.
+      If you have one, you may be able to serve notice before the fixed term ends.
+    maps_to:
+      - has_break_clause
+
+  - id: break_clause_date
+    section: Tenancy Details
+    question: "Earliest break clause date"
+    inputType: date
+    dependsOn:
+      questionId: has_break_clause
+      value: true
+    validation:
+      required: true
+    helperText: "The earliest date you can exercise the break clause (notice can expire on/after this date)"
+    maps_to:
+      - break_clause_date
+
   - id: rent_terms
     section: Rent Details
     question: "Rent details"
@@ -204,9 +241,32 @@ questions:
     inputType: yes_no
     validation:
       required: true
-    helperText: "Deposit protection is critical for Section 21 and important for Section 8"
+    helperText: "Deposit protection is a legal requirement for Section 21 notices. For Section 8, it's not required but good practice."
     maps_to:
       - deposit_taken
+
+  - id: deposit_amount
+    section: Deposit & Compliance
+    question: "Deposit amount"
+    inputType: currency
+    dependsOn:
+      questionId: deposit_taken
+      value: true
+    validation:
+      required: true
+      min: 0
+    helperText: "The total deposit amount collected from the tenant. Required for compliance checking."
+    maps_to:
+      - deposit_amount
+
+  # ========================================
+  # DEPOSIT CAP - INLINE WARNING ONLY (NOT A WIZARD STEP)
+  # ========================================
+  # Deposit cap (Tenant Fees Act 2019) is enforced as an inline warning
+  # on the deposit_amount step, not as a separate confirmation step.
+  # The warning is computed and displayed by StructuredWizard.tsx.
+  # evaluate-notice-compliance.ts computes cap values for messaging.
+  # ========================================
 
   - id: has_gas_appliances
     section: Deposit & Compliance
@@ -214,7 +274,7 @@ questions:
     inputType: yes_no
     validation:
       required: true
-    helperText: "Gas boiler, gas hob, gas fire, etc. Compliance required for Section 21"
+    helperText: "Gas boiler, gas hob, gas fire, etc. Gas safety certification is required for Section 21 but good practice for all notices."
     maps_to:
       - has_gas_appliances
 
@@ -232,7 +292,7 @@ questions:
     validation:
       required: true
     helperText: |
-      **CRITICAL: Section 21 INVALID without this**
+      Deposit protection is a legal requirement for Section 21 notices. For Section 8, it's not required but may be relevant for your records.
 
       Approved schemes:
       • Deposit Protection Service (DPS)
@@ -241,18 +301,121 @@ questions:
     maps_to:
       - deposit_protected
 
+  # NEW: Collect actual deposit scheme name when deposit is protected
+  - id: deposit_scheme_name
+    section: Deposit & Compliance
+    question: "Which deposit protection scheme was used?"
+    inputType: select
+    dependsOn:
+      questionId: deposit_protected_scheme
+      value: true
+    validation:
+      required: true
+    helperText: "Select the government-approved scheme where the deposit is protected."
+    options:
+      - value: "DPS"
+        label: "Deposit Protection Service (DPS)"
+      - value: "MyDeposits"
+        label: "MyDeposits"
+      - value: "TDS"
+        label: "Tenancy Deposit Scheme (TDS)"
+    maps_to:
+      - deposit_scheme
+
+  # CRITICAL: Deposit protection dates for compliance verification
+  - id: deposit_protection_dates
+    section: Deposit & Compliance
+    question: "Deposit protection dates"
+    inputType: group
+    dependsOn:
+      questionId: deposit_protected_scheme
+      value: true
+    helperText: "CRITICAL: These dates verify compliance with the 30-day protection requirement."
+    fields:
+      - id: deposit_paid_date
+        label: "Date deposit was paid by tenant"
+        inputType: date
+        helperText: "When did you receive the deposit?"
+        validation:
+          required: true
+        width: half
+      - id: deposit_protection_date
+        label: "Date deposit was protected"
+        inputType: date
+        helperText: "MUST be within 30 days of receiving deposit"
+        validation:
+          required: true
+        width: half
+    maps_to:
+      - deposit_paid_date
+      - deposit_protection_date
+
+  # CROSS-FIELD VALIDATION: Info panel explaining 30-day compliance timeline
+  - id: deposit_compliance_timeline_info
+    section: Deposit & Compliance
+    question: "30-Day Compliance Timeline"
+    inputType: info
+    dependsOn:
+      questionId: deposit_protected_scheme
+      value: true
+    content: |
+      **📅 CRITICAL: 30-Day Deposit Compliance Timeline**
+
+      From the date the deposit was **paid by tenant**, you must:
+
+      1. **Protect the deposit** in approved scheme (within 30 days)
+      2. **Serve prescribed information** (within 30 days)
+
+      **Example timeline:**
+      - Deposit paid: 1st January
+      - Protection deadline: 31st January
+      - Prescribed info deadline: 31st January
+
+      ⚠️ **If either deadline is missed, your Section 21 notice is INVALID.**
+
+      The system will validate these dates when generating documents.
+
+  # UPDATED: prescribed_info_given now depends on BOTH deposit_taken AND deposit_protected_scheme
+  # Prescribed information can only be given if the deposit was first protected in an approved scheme
   - id: prescribed_info_given
     section: Deposit & Compliance
     question: "Was prescribed information given within 30 days?"
     inputType: yes_no
     dependsOn:
-      questionId: deposit_taken
-      value: true
+      allOf:
+        - questionId: deposit_taken
+          value: true
+        - questionId: deposit_protected_scheme
+          value: true
     validation:
       required: true
-    helperText: "Required information about deposit protection scheme (critical for Section 21)"
+    helperText: "Prescribed information about the deposit protection scheme. This is a legal requirement for Section 21 notices, but not required for Section 8."
     maps_to:
       - prescribed_info_given
+
+  # CRITICAL: Prescribed info date - required for Section 21 validity
+  - id: prescribed_info_served_date
+    section: Deposit & Compliance
+    question: "When was prescribed information served?"
+    inputType: date
+    dependsOn:
+      allOf:
+        - questionId: prescribed_info_given
+          value: true
+        - questionId: deposit_protected_scheme
+          value: true
+    validation:
+      required: true
+    helperText: |
+      CRITICAL FOR SECTION 21: Must be served within 30 days of receiving deposit.
+
+      **Section 21 is INVALID if:**
+      - Prescribed info served more than 30 days after deposit received
+      - Prescribed info never served
+
+      **Tip:** This date should be between deposit_paid_date and deposit_paid_date + 30 days.
+    maps_to:
+      - prescribed_info_date
 
   - id: gas_safety_certificate
     section: Deposit & Compliance
@@ -263,7 +426,7 @@ questions:
       value: true
     validation:
       required: true
-    helperText: "Must be provided and renewed annually (required for Section 21)"
+    helperText: "Must be provided and renewed annually. This is a legal requirement for Section 21 notices."
     maps_to:
       - gas_certificate_provided
 
@@ -275,12 +438,14 @@ questions:
     section: Deposit & Compliance
     question: "Was an EPC provided before tenancy started?"
     inputType: yes_no
+    routes:
+      - section_21
     validation:
       required: true
     helperText: |
-      **EPC required for Section 21**
+      Energy Performance Certificate (EPC) must be provided to tenants.
 
-      This system enforces EPC compliance for all Section 21 notices.
+      This is a legal requirement for Section 21 notices.
 
       **Legal exemptions exist but are not supported:**
       • Listed buildings
@@ -301,6 +466,8 @@ questions:
     section: Deposit & Compliance
     question: "How to Rent Guide"
     inputType: info
+    routes:
+      - section_21
     content: |
       **How to Rent guide requirement:**
 
@@ -316,6 +483,8 @@ questions:
     section: Deposit & Compliance
     question: "Was the 'How to Rent' guide provided?"
     inputType: yes_no
+    routes:
+      - section_21
     validation:
       required: false  # Not required in UI, enforced in API for Section 21
     helperText: |
@@ -328,13 +497,15 @@ questions:
     section: Deposit & Compliance
     question: "Property licensing status"
     inputType: select
+    routes:
+      - section_21
     validation:
       required: true
     options:
       - "not_required"
       - "licensed"
       - "unlicensed"
-    helperText: "HMO or selective licensing (required for Section 21)"
+    helperText: "HMO or selective licensing status. If required and unlicensed, Section 21 notices cannot be served."
     maps_to:
       - property_licensing_status
 
@@ -342,16 +513,187 @@ questions:
     section: Deposit & Compliance
     question: "Has tenant made repair complaints in last 6 months?"
     inputType: yes_no
+    routes:
+      - section_21
     validation:
       required: true
-    helperText: "Retaliatory eviction rules may apply (affects Section 21)"
+    helperText: "Retaliatory eviction rules may apply to Section 21 notices if tenant has made recent repair complaints."
     maps_to:
       - recent_repair_complaints
 
+  # ============================================================
+  # COMPLIANCE CERTIFICATE DATES
+  # ============================================================
+
+  - id: compliance_dates
+    section: Compliance Certificates
+    question: "Compliance certificate dates"
+    inputType: group
+    helperText: "Provide dates for your compliance certificates. This helps verify they were valid when required."
+    fields:
+      - id: gas_cert_date
+        label: "Gas safety certificate date"
+        inputType: date
+        helperText: "Date of most recent gas safety certificate"
+        width: half
+        dependsOn:
+          fieldId: has_gas_appliances
+          value: true
+      - id: gas_cert_expiry
+        label: "Gas certificate expiry date"
+        inputType: date
+        helperText: "Expires 12 months after issue"
+        width: half
+        dependsOn:
+          fieldId: has_gas_appliances
+          value: true
+      - id: epc_certificate_date
+        label: "EPC date"
+        inputType: date
+        helperText: "Energy Performance Certificate date"
+        width: half
+      - id: eicr_provided
+        label: "Was an EICR provided?"
+        inputType: yes_no
+        helperText: "Electrical Installation Condition Report - required since April 2021"
+        width: half
+      - id: eicr_date
+        label: "EICR date"
+        inputType: date
+        helperText: "Date of electrical safety report"
+        width: half
+        dependsOn:
+          fieldId: eicr_provided
+          value: true
+      - id: how_to_rent_date
+        label: "How to Rent guide provided date"
+        inputType: date
+        helperText: "Date the How to Rent guide was given to tenant"
+        width: half
+      - id: prescribed_info_date
+        label: "Deposit prescribed info date"
+        inputType: date
+        helperText: "Date prescribed information was served"
+        width: half
+    maps_to:
+      - compliance.gas_cert_date
+      - compliance.gas_cert_expiry
+      - compliance.epc_certificate_date
+      - compliance.eicr_provided
+      - compliance.eicr_date
+      - compliance.how_to_rent_date
+      - compliance.prescribed_info_date
+
+  # ============================================================
+  # RISK INDICATORS
+  # ============================================================
+
+  - id: risk_indicators
+    section: Risk Assessment
+    question: "Risk factors"
+    inputType: group
+    helperText: "This information helps identify potential issues with your notice."
+    fields:
+      - id: disrepair_complaint_date
+        label: "Date of any disrepair complaint"
+        inputType: date
+        helperText: "CRITICAL: Section 21 invalid if served within 6 months of complaint to council"
+        width: half
+        dependsOn:
+          fieldId: recent_repair_complaints_s21
+          value: true
+      - id: disrepair_issues_list
+        label: "List the disrepair issues"
+        inputType: textarea
+        helperText: "What repairs did the tenant complain about?"
+        width: full
+        dependsOn:
+          fieldId: recent_repair_complaints_s21
+          value: true
+      - id: previous_court_proceedings
+        label: "Previous court proceedings about this tenancy?"
+        inputType: yes_no
+        width: half
+      - id: previous_proceedings_details
+        label: "Previous proceedings details"
+        inputType: textarea
+        helperText: "Dates, case numbers, outcomes"
+        width: full
+        dependsOn:
+          fieldId: previous_court_proceedings
+          value: true
+      - id: tenant_vulnerability
+        label: "Are you aware of any tenant vulnerabilities?"
+        inputType: yes_no
+        helperText: "E.g., elderly, disabled, mental health issues, children"
+        width: half
+      - id: tenant_vulnerability_details
+        label: "Vulnerability details"
+        inputType: textarea
+        helperText: "Courts may consider this when deciding reasonableness"
+        width: full
+        dependsOn:
+          fieldId: tenant_vulnerability
+          value: true
+    maps_to:
+      - risk.disrepair_complaint_date
+      - risk.disrepair_issues_list
+      - risk.previous_court_proceedings
+      - risk.previous_proceedings_details
+      - risk.tenant_vulnerability
+      - risk.tenant_vulnerability_details
+
   # ========================================
-  # SECTION 8 GROUNDS
+  # SECTION 8 ARREARS DETAILS (CRITICAL FOR GROUND 8 VALIDATION)
   # ========================================
 
+  - id: has_rent_arrears
+    section: Section 8 Grounds
+    question: "Are there currently any rent arrears?"
+    inputType: yes_no
+    dependsOn:
+      questionId: selected_notice_route
+      value: section_8
+    validation:
+      required: true
+    helperText: "Select 'Yes' if the tenant owes any unpaid rent. This is required to validate Ground 8, 10, or 11."
+    maps_to:
+      - has_rent_arrears
+
+  - id: arrears_details
+    section: Section 8 Grounds
+    question: "Arrears details"
+    inputType: group
+    dependsOn:
+      questionId: has_rent_arrears
+      value: true
+    validation:
+      required: true
+    helperText: "We need these details to validate Ground 8 (mandatory) threshold and calculate notice periods."
+    fields:
+      - id: arrears_total
+        label: "Total arrears amount (£)"
+        inputType: currency
+        validation:
+          required: true
+          min: 0
+        width: half
+        helperText: "Total amount of rent currently owed"
+      - id: arrears_from_date
+        label: "Arrears started from (optional)"
+        inputType: date
+        width: half
+        helperText: "When did arrears first start accruing?"
+    maps_to:
+      - arrears_total
+      - arrears_from_date
+
+  # ========================================
+  # SECTION 8 GROUNDS (must come BEFORE notice_service for proper flow)
+  # ========================================
+
+  # Ground selection fetches all available grounds from API (config/jurisdictions/uk/england/grounds/)
+  # No static options needed - UI loads complete ground list with descriptions
   - id: section8_grounds_selection
     section: Section 8 Grounds
     question: "Select grounds for eviction"
@@ -361,16 +703,7 @@ questions:
       value: section_8
     validation:
       required: true
-    options:
-      - "Ground 1 - Landlord previously occupied"
-      - "Ground 8 - Serious rent arrears (2+ months)"
-      - "Ground 10 - Some rent arrears"
-      - "Ground 11 - Persistent late payment"
-      - "Ground 12 - Breach of tenancy"
-      - "Ground 13 - Property deterioration"
-      - "Ground 14 - Antisocial behaviour"
-      - "Ground 14A - Domestic violence"
-    helperText: "You can select multiple grounds"
+    helperText: "Select all grounds that apply to your case. Grounds are loaded from legal database."
     maps_to:
       - section8_grounds
 
@@ -423,9 +756,157 @@ questions:
       required: true
     options:
       - value: "minimum"
-        label: "Minimum legal period (14 days)"
+        label: "Minimum legal period (ground-dependent: 14 days or 2 months)"
       - value: "recommended"
         label: "Recommended period (60 days for discretionary grounds)"
-    helperText: "Recommended period improves court success probability"
+    helperText: "Notice period depends on selected grounds. Grounds 10 & 11 require 2 months minimum. All other grounds require 2 weeks minimum."
     maps_to:
       - notice_strategy
+
+  # ========================================
+  # NOTICE SERVICE + EXPIRY (comes AFTER grounds for Section 8)
+  # ========================================
+  # CRITICAL FIX (Jan 2026): Field IDs MUST match the last segment of maps_to paths
+  # for the mapping.ts applyMappedAnswers() function to correctly extract values.
+  # Old field IDs like "notice_service_date" didn't match maps_to "notice_service.notice_date"
+  # which caused values to be silently dropped.
+  # ========================================
+
+  - id: notice_service
+    section: Notice Details
+    question: "Notice service and expiry"
+    inputType: group
+    dependsOn:
+      anyOf:
+        - questionId: selected_notice_route
+          value: section_8
+        - questionId: selected_notice_route
+          value: section_21
+    helperText: "We need these dates to calculate the minimum notice period and check statutory bars."
+    fields:
+      # FIXED: Field ID "notice_date" now matches maps_to "notice_service.notice_date"
+      - id: notice_date
+        label: "Date you will serve the notice*"
+        inputType: date
+        validation:
+          required: true
+        helperText: "This is the date you will actually serve (hand deliver or post) the notice to the tenant."
+      # Section 8 ONLY: User can input expiry date (grounds-driven, strategy-driven)
+      - id: notice_expiry_date
+        label: "Date the notice should expire"
+        inputType: date
+        routes:
+          - section_8
+        validation:
+          required: false
+        helperText: "Will be auto-calculated based on your grounds and service date. You can override if needed."
+      - id: service_method
+        label: "How will you serve the notice?"
+        inputType: select
+        options: ["Post", "By hand", "Email (agreed)", "Other"]
+        validation:
+          required: true
+      - id: serving_capacity
+        label: "In what capacity will you serve the notice?"
+        inputType: select
+        options:
+          - label: "Landlord"
+            value: "landlord"
+          - label: "Joint landlord(s)"
+            value: "joint_landlords"
+          - label: "Landlord's agent / representative"
+            value: "agent"
+        validation:
+          required: true
+        helperText: "Select who will be signing and serving the notice"
+      - id: served_by
+        label: "Name of person serving"
+        inputType: text
+        helperText: "Enter the name of the person who will serve the notice"
+    maps_to:
+      - notice_service.notice_date
+      - notice_service.notice_expiry_date
+      - notice_service.service_method
+      - notice_service.serving_capacity
+      - notice_service.served_by
+
+  # Section 21 ONLY: Computed expiry date (read-only display)
+  # This shows the auto-calculated expiry date based on tenancy terms and service date
+  - id: s21_calculated_expiry_info
+    section: Notice Details
+    question: "Calculated notice expiry date"
+    inputType: info
+    routes:
+      - section_21
+    dependsOn:
+      questionId: selected_notice_route
+      value: section_21
+    content: |
+      **Your Section 21 notice expiry date will be calculated automatically** based on:
+
+      • Your service date (entered above)
+      • Whether tenancy is fixed term or periodic
+      • Fixed term end date (if applicable)
+      • Break clause date (if applicable)
+      • The 4-month restriction from tenancy start
+
+      The system ensures compliance with Housing Act 1988, Section 21(4) requirements
+      (minimum 2 calendar months notice, cannot expire before fixed term ends, etc.)
+
+      **You will see the calculated expiry date on the generated Form 6A.**
+
+  # ============================================================
+  # EVIDENCE WITH DESCRIBE OPTION
+  # ============================================================
+
+  - id: evidence_tenancy_agreement
+    section: Evidence
+    question: "Tenancy Agreement"
+    inputType: group
+    helperText: "Upload your tenancy agreement or summarize key terms."
+    fields:
+      - id: tenancy_agreement_upload
+        label: "Upload tenancy agreement"
+        inputType: upload
+        helperText: "Upload a copy of the AST"
+        width: full
+      - id: tenancy_agreement_describe
+        label: "Or summarize key terms"
+        inputType: textarea
+        helperText: "If unable to upload, describe: start date, rent amount, key terms"
+        placeholder: "E.g., AST started 01/01/2024, rent £1,200pcm due 1st of each month..."
+        width: full
+    maps_to:
+      - evidence.tenancy_agreement_uploads
+      - evidence.tenancy_agreement_description
+
+  - id: evidence_notice_service
+    section: Evidence
+    question: "Notice Service Evidence"
+    inputType: group
+    helperText: "Upload proof of notice service or describe how the notice will be served."
+    fields:
+      - id: notice_service_upload
+        label: "Upload proof of service"
+        inputType: upload
+        helperText: "Proof of posting, signed receipt, etc."
+        width: full
+      - id: notice_service_describe
+        label: "Or describe service method"
+        inputType: textarea
+        helperText: "Describe how and when notice will be served"
+        placeholder: "E.g., Will send by recorded delivery on [date], tracking number to be retained..."
+        width: full
+    maps_to:
+      - evidence.notice_service_uploads
+      - evidence.notice_service_description
+
+  - id: evidence_other
+    section: Evidence
+    question: "Other Supporting Documents"
+    inputType: upload
+    helperText: "Upload any other supporting documents (rent statements, correspondence, etc.)"
+    validation:
+      required: false
+    maps_to:
+      - evidence.other_uploads

@@ -1,0 +1,63 @@
+{
+  "product": "complete_pack",
+  "jurisdiction": "england",
+  "route": "section_8",
+  "case_id": "549f8bbf-82c3-47f5-96fc-fb522b64867b",
+  "landlord": {
+    "full_name": "Tariq Mohammed",
+    "address_line_1": "35 Woodhall Park Avenue",
+    "city": "Pudsey",
+    "postcode": "LS28 7HF",
+    "has_joint_landlords": true
+  },
+  "tenant": {
+    "full_name": "Sonia Shezadi"
+  },
+  "property": {
+    "address_line_1": "16 Waterloo Road",
+    "city": "Pudsey",
+    "postcode": "LS28 7PW"
+  },
+  "tenancy": {
+    "start_date": "2025-07-14",
+    "tenancy_type": "ast_fixed_term",
+    "fixed_term_end_date": "2026-07-14",
+    "has_break_clause": false,
+    "rent_amount": 1000.01,
+    "rent_frequency": "monthly",
+    "rent_due_day": 1
+  },
+  "notice": {
+    "already_served_valid_notice": false,
+    "served_date": "2026-01-19",
+    "service_method": "first_class_post",
+    "expiry_date": "2026-02-02"
+  },
+  "section8": {
+    "grounds": ["ground_8"],
+    "particulars_text": "The tenant has accrued rent arrears amounting to £7,000.07, which corresponds to 7 months of unpaid rent. There are 7 complete rental periods during which no payment has been received. This amount exceeds the threshold for Ground 8 of the Housing Act 1988, which requires at least 2 months of arrears."
+  },
+  "arrears": {
+    "items": [
+      {"period_start":"2025-07-14","period_end":"2025-08-13","due_date":"2025-07-01","amount_due":1000.01,"amount_paid":0.0,"amount_owed":1000.01},
+      {"period_start":"2025-08-14","period_end":"2025-09-13","due_date":"2025-08-01","amount_due":1000.01,"amount_paid":0.0,"amount_owed":1000.01},
+      {"period_start":"2025-09-14","period_end":"2025-10-13","due_date":"2025-09-01","amount_due":1000.01,"amount_paid":0.0,"amount_owed":1000.01},
+      {"period_start":"2025-10-14","period_end":"2025-11-13","due_date":"2025-10-01","amount_due":1000.01,"amount_paid":0.0,"amount_owed":1000.01},
+      {"period_start":"2025-11-14","period_end":"2025-12-13","due_date":"2025-11-01","amount_due":1000.01,"amount_paid":0.0,"amount_owed":1000.01},
+      {"period_start":"2025-12-14","period_end":"2026-01-13","due_date":"2025-12-01","amount_due":1000.01,"amount_paid":0.0,"amount_owed":1000.01},
+      {"period_start":"2026-01-14","period_end":"2026-01-19","due_date":"2026-01-01","amount_due":1000.01,"amount_paid":0.0,"amount_owed":1000.01}
+    ],
+    "total_arrears": 7000.07,
+    "arrears_months": 7.0
+  },
+  "evidence_uploads": [],
+  "court": {
+    "court_name": "Bradford Combined Court Centre",
+    "court_address": "Exchange Square, Drake Street, Bradford, BD1 1JA"
+  },
+  "signing": {
+    "signatory_name": "Tariq Mohammed",
+    "capacity": "claimant_landlord",
+    "signature_date": "2026-01-19"
+  }
+}

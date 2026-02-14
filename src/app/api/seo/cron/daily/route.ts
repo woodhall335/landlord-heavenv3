@@ -4,8 +4,14 @@
  * Triggered daily at 2am-6am
  * Processes content generation queue
  *
- * Usage: Call from Vercel Cron or external cron service
- * Authorization: Requires CRON_SECRET token
+ * Authentication Methods:
+ * 1. Bearer token (manual/API calls): Authorization: Bearer <CRON_SECRET>
+ * 2. Vercel Cron (scheduled): x-vercel-cron header + ?key=<CRON_SECRET> query param
+ *
+ * Usage:
+ * - Health check (no auth): GET /api/seo/cron/daily
+ * - Manual execution: GET/POST with Authorization: Bearer <CRON_SECRET>
+ * - Vercel Cron: GET /api/seo/cron/daily?key=<CRON_SECRET>
  */
 
 import { NextRequest, NextResponse } from 'next/server';
@@ -16,13 +22,70 @@ import {
   warnSupabaseNotConfiguredOnce,
 } from '@/lib/supabase/config';
 
-export async function POST(request: NextRequest) {
-  try {
-    // Verify cron secret
-    const authHeader = request.headers.get('authorization');
-    const cronSecret = process.env.CRON_SECRET;
+/**
+ * Verify cron authorization (supports Bearer token and Vercel Cron with query key)
+ */
+function verifyCronAuth(request: NextRequest): { authorized: boolean; source: string } {
+  const cronSecret = process.env.CRON_SECRET;
 
-    if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
+  if (!cronSecret) {
+    return { authorized: false, source: 'no_secret_configured' };
+  }
+
+  // Method 1: Bearer token
+  const authHeader = request.headers.get('authorization');
+  if (authHeader === `Bearer ${cronSecret}`) {
+    return { authorized: true, source: 'bearer' };
+  }
+
+  // Method 2: Vercel Cron (x-vercel-cron: 1 + secret in query param)
+  const vercelCronHeader = request.headers.get('x-vercel-cron');
+  if (vercelCronHeader === '1') {
+    const keyParam = request.nextUrl.searchParams.get('key');
+    if (keyParam && keyParam.length === cronSecret.length) {
+      let match = true;
+      for (let i = 0; i < cronSecret.length; i++) {
+        if (keyParam[i] !== cronSecret[i]) {
+          match = false;
+        }
+      }
+      if (match) {
+        return { authorized: true, source: 'vercel_cron' };
+      }
+    }
+    return { authorized: false, source: 'vercel_cron_missing_key' };
+  }
+
+  return { authorized: false, source: 'invalid_credentials' };
+}
+
+/**
+ * GET endpoint for Vercel Cron and health checks
+ */
+export async function GET(request: NextRequest) {
+  const authHeader = request.headers.get('authorization');
+  const vercelCronHeader = request.headers.get('x-vercel-cron');
+
+  // Health check (no auth headers)
+  if (!authHeader && !vercelCronHeader) {
+    return NextResponse.json({
+      status: 'ok',
+      job: 'seo-daily',
+    });
+  }
+
+  return executeSEOCron(request);
+}
+
+export async function POST(request: NextRequest) {
+  return executeSEOCron(request);
+}
+
+async function executeSEOCron(request: NextRequest) {
+  try {
+    const auth = verifyCronAuth(request);
+    if (!auth.authorized) {
+      console.warn(`[SEO Cron] Unauthorized attempt: ${auth.source}`);
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 

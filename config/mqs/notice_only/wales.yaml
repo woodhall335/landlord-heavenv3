@@ -46,12 +46,38 @@ questions:
         validation:
           required: true
         width: half
+      # Telephone: Optional - NOT legally mandatory but renders if provided
+      - id: landlord_phone
+        label: "Telephone (optional)"
+        inputType: tel
+        placeholder: "e.g. 020 1234 5678"
+        width: half
+        helperText: "Optional contact number for the notice form"
     maps_to:
       - landlord_full_name
       - landlord_address_line1
       - landlord_address_line2
       - landlord_city
       - landlord_postcode
+      - landlord_phone
+
+  # Contract term type - needed for Section 173 validation
+  - id: is_fixed_term_contract
+    section: Contract Details
+    question: "Is this a fixed-term or periodic contract?"
+    inputType: radio
+    validation:
+      required: true
+    helperText: "This affects which notice types are available to you."
+    options:
+      - value: true
+        label: "Fixed-term (has end date)"
+        helperText: "Contract runs for a set period"
+      - value: false
+        label: "Periodic (rolling)"
+        helperText: "Contract continues month-to-month or week-to-week"
+    maps_to:
+      - is_fixed_term
 
   # TASK B: Route selection EARLY (before route-dependent questions)
   - id: selected_notice_route
@@ -63,13 +89,55 @@ questions:
     helperText: "Select your notice type first. System will ask relevant questions based on your selection."
     options:
       - value: "wales_section_173"
-        label: "Section 173 - No-fault"
-        helperText: "Minimum statutory period, no reason"
+        label: "Section 173 - No-fault (end of fixed term only)"
+        helperText: "6 MONTHS minimum notice. Valid ONLY at end of fixed term."
       - value: "wales_fault_based"
         label: "Fault-based - Grounds required"
-        helperText: "14-30 days, specific sections"
+        helperText: "14-30 days depending on ground, specific sections"
     maps_to:
       - selected_notice_route
+
+  # BLOCKER: Section 173 only valid for fixed-term contracts
+  - id: section_173_periodic_blocker
+    section: Notice Type
+    question: "Section 173 Restriction"
+    inputType: info
+    dependsOn:
+      allOf:
+        - questionId: selected_notice_route
+          value: wales_section_173
+        - questionId: is_fixed_term_contract
+          value: false
+    content: |
+      ⚠️ **INVALID: Section 173 requires fixed-term contract**
+
+      Section 173 notices can ONLY be served at the end of a fixed-term contract.
+
+      For periodic contracts, you must use a fault-based notice under Section 157, 159, or 181.
+
+      **Please select "Fault-based - Grounds required" instead.**
+
+  # BLOCKER: Section 173 cannot be served in first 6 months
+  - id: section_173_six_month_blocker
+    section: Notice Type
+    question: "Section 173 - 6 Month Rule"
+    inputType: info
+    dependsOn:
+      questionId: selected_notice_route
+      value: wales_section_173
+    content: |
+      ⚠️ **SECTION 173 - 6 MONTH OCCUPATION REQUIREMENT**
+
+      Under the Renting Homes (Wales) Act 2016, Section 173(3):
+
+      **You CANNOT serve a Section 173 notice until the contract holder has occupied
+      the dwelling for at least 6 MONTHS from the occupation date.**
+
+      Please verify:
+      - Contract start date was at least 6 months ago
+      - If not, you must wait until the 6-month period has passed
+
+      **Penalty:** A Section 173 notice served before 6 months occupation is INVALID.
 
   - id: contract_holder_full_name
     section: Contract Holder Details
@@ -229,9 +297,31 @@ questions:
       value: wales_section_173
     validation:
       required: true
-    helperText: "CRITICAL: Section 173 invalid without registration"
+    helperText: "CRITICAL: Section 173 invalid without registration. Register at rentsmartales.gov.wales"
     maps_to:
       - rent_smart_wales_registered
+
+  # BLOCKER: Cannot serve Section 173 without Rent Smart Wales registration
+  - id: rent_smart_wales_blocker
+    section: Section 173 Compliance
+    question: "Registration Required"
+    inputType: info
+    dependsOn:
+      allOf:
+        - questionId: selected_notice_route
+          value: wales_section_173
+        - questionId: rent_smart_wales_registered
+          value: false
+    content: |
+      ⛔ **SECTION 173 INVALID WITHOUT REGISTRATION**
+
+      Under the Renting Homes (Wales) Act 2016, Section 16, landlords MUST be registered with Rent Smart Wales to serve a valid Section 173 notice.
+
+      **Your options:**
+      1. Register at https://rentsmart.gov.wales before serving notice
+      2. Use a fault-based notice instead (if grounds apply)
+
+      **Legal consequence:** An unregistered landlord's Section 173 notice is VOID and cannot be enforced by a court.
 
   # TASK A2: Deposit questions for Section 173
   - id: deposit_taken_wales
@@ -278,9 +368,240 @@ questions:
       - "Deposit Protection Service (DPS) Custodial"
       - "MyDeposits Wales"
       - "Tenancy Deposit Scheme (TDS)"
-      - "Other / not sure"
     maps_to:
       - deposit_scheme
+
+  # CRITICAL: Deposit protection dates for Section 173 compliance
+  - id: deposit_protection_dates_s173
+    section: Section 173 Compliance
+    question: "Deposit protection dates"
+    inputType: group
+    dependsOn:
+      allOf:
+        - questionId: selected_notice_route
+          value: wales_section_173
+        - questionId: deposit_protected_wales
+          value: true
+    helperText: "CRITICAL: Verify deposit was protected within 30 days - required for valid Section 173."
+    fields:
+      - id: deposit_paid_date
+        label: "Date deposit was paid by contract holder"
+        inputType: date
+        helperText: "When did you receive the deposit?"
+        validation:
+          required: true
+        width: half
+      - id: deposit_protection_date
+        label: "Date deposit was protected"
+        inputType: date
+        helperText: "MUST be within 30 days of receiving deposit"
+        validation:
+          required: true
+        width: half
+    maps_to:
+      - deposit_paid_date
+      - deposit_protection_date
+
+  # ============================================================
+  # FITNESS FOR HUMAN HABITATION (Wales)
+  # ============================================================
+
+  - id: fitness_for_habitation
+    section: Property Compliance
+    question: "Does the property meet fitness for human habitation requirements?"
+    inputType: radio
+    validation:
+      required: true
+    options:
+      - value: true
+        label: "Yes - property meets fitness standards"
+      - value: false
+        label: "No - there are outstanding fitness issues"
+    helperText: |
+      Under the Renting Homes (Wales) Act 2016, Section 91-92:
+      The dwelling must be fit for human habitation at the start of the contract
+      and throughout the occupation.
+    maps_to:
+      - wales_compliance.property_fit_for_habitation
+
+  - id: fitness_habitation_blocker
+    section: Property Compliance
+    question: "Fitness for Habitation Warning"
+    inputType: info
+    dependsOn:
+      questionId: fitness_for_habitation
+      value: false
+    content: |
+      ⛔ **WARNING: NOTICE MAY BE CHALLENGED**
+
+      Under the Renting Homes (Wales) Act 2016, the landlord has an implied obligation
+      to keep the dwelling fit for human habitation (Section 91).
+
+      **If the property does not meet fitness standards:**
+      - The contract holder may have a defence to possession proceedings
+      - The court may refuse to grant possession
+      - You may be liable for breach of contract
+
+      **Fitness requirements include:**
+      - Structural stability
+      - Freedom from serious damp
+      - Adequate heating, lighting, ventilation
+      - Safe water supply and drainage
+      - Safe gas and electrical installations
+
+      **Recommendation:** Address any fitness issues before serving notice.
+
+  # ============================================================
+  # COMPLIANCE CERTIFICATE DATES (Wales)
+  # ============================================================
+
+  - id: compliance_dates_wales
+    section: Compliance Certificates
+    question: "Compliance certificate dates"
+    inputType: group
+    helperText: "Provide dates for your compliance certificates."
+    fields:
+      - id: gas_cert_date
+        label: "Gas safety certificate date"
+        inputType: date
+        helperText: "Date of most recent gas safety certificate"
+        width: half
+      - id: gas_cert_expiry
+        label: "Gas certificate expiry date"
+        inputType: date
+        helperText: "Expires 12 months after issue"
+        width: half
+      - id: epc_certificate_date
+        label: "EPC date"
+        inputType: date
+        helperText: "Energy Performance Certificate date"
+        width: half
+      - id: eicr_date
+        label: "Electrical safety (EICR) date"
+        inputType: date
+        helperText: "Electrical Installation Condition Report date"
+        width: half
+      - id: written_statement_date
+        label: "Written statement provided date"
+        inputType: date
+        helperText: "Date written statement of contract was provided"
+        width: half
+      - id: prescribed_info_date
+        label: "Deposit prescribed info date"
+        inputType: date
+        helperText: "Date prescribed information was served"
+        width: half
+    maps_to:
+      - compliance.gas_cert_date
+      - compliance.gas_cert_expiry
+      - compliance.epc_certificate_date
+      - compliance.eicr_date
+      - wales_compliance.written_statement_date
+      - compliance.prescribed_info_date
+
+  # ============================================================
+  # RISK INDICATORS (Wales)
+  # ============================================================
+
+  - id: risk_indicators_wales
+    section: Risk Assessment
+    question: "Risk factors"
+    inputType: group
+    helperText: "This information helps identify potential issues with your notice."
+    fields:
+      - id: known_tenant_defences
+        label: "Are you aware of any defences the contract holder may raise?"
+        inputType: textarea
+        helperText: "E.g., claims of disrepair, fitness for habitation issues, harassment"
+        placeholder: "Describe any known or anticipated defences..."
+        width: full
+      - id: disrepair_complaints
+        label: "Has the contract holder complained about disrepair?"
+        inputType: yes_no
+        helperText: "IMPORTANT: May affect validity of Section 173 notice"
+        width: half
+      - id: disrepair_complaint_date
+        label: "Date of disrepair complaint"
+        inputType: date
+        width: half
+        dependsOn:
+          fieldId: disrepair_complaints
+          value: true
+      - id: disrepair_issues_list
+        label: "List the disrepair issues"
+        inputType: textarea
+        width: full
+        dependsOn:
+          fieldId: disrepair_complaints
+          value: true
+      - id: previous_court_proceedings
+        label: "Previous court proceedings about this contract?"
+        inputType: yes_no
+        width: half
+      - id: previous_proceedings_details
+        label: "Previous proceedings details"
+        inputType: textarea
+        helperText: "Dates, case numbers, outcomes"
+        width: full
+        dependsOn:
+          fieldId: previous_court_proceedings
+          value: true
+      - id: tenant_vulnerability
+        label: "Are you aware of any contract holder vulnerabilities?"
+        inputType: yes_no
+        helperText: "E.g., elderly, disabled, mental health issues, children"
+        width: half
+      - id: tenant_vulnerability_details
+        label: "Vulnerability details"
+        inputType: textarea
+        helperText: "Courts may consider this when deciding reasonableness"
+        width: full
+        dependsOn:
+          fieldId: tenant_vulnerability
+          value: true
+    maps_to:
+      - risk.known_tenant_defences
+      - risk.disrepair_complaints
+      - risk.disrepair_complaint_date
+      - risk.disrepair_issues_list
+      - risk.previous_court_proceedings
+      - risk.previous_proceedings_details
+      - risk.tenant_vulnerability
+      - risk.tenant_vulnerability_details
+
+  # ========================================
+  # NOTICE SERVICE + EXPIRY (needed for compliance checks)
+  # ========================================
+
+  - id: notice_service
+    section: Notice Details
+    question: "Notice service and expiry"
+    inputType: group
+    dependsOn:
+      questionId: selected_notice_route
+      value: wales_section_173
+    helperText: "These dates are required to enforce the statutory minimum notice period."
+    fields:
+      - id: notice_service_date
+        label: "Date the notice will be served"
+        inputType: date
+        validation:
+          required: true
+      - id: notice_expiry_date
+        label: "Date the notice should expire"
+        inputType: date
+        validation:
+          required: true
+      - id: service_method
+        label: "How will you serve the notice?"
+        inputType: select
+        options: ["Post", "By hand", "Email (agreed)", "Other"]
+        validation:
+          required: true
+    maps_to:
+      - notice_service.notice_date
+      - notice_service.notice_expiry_date
+      - notice_service.service_method
 
   # ========================================
   # FAULT-BASED SECTIONS
@@ -350,9 +671,35 @@ questions:
       - "Deposit Protection Service (DPS) Custodial"
       - "MyDeposits Wales"
       - "Tenancy Deposit Scheme (TDS)"
-      - "Other / not sure"
     maps_to:
       - deposit_scheme
+
+  # Deposit protection dates for fault-based (optional but recommended)
+  - id: deposit_protection_dates_fault
+    section: Fault-Based Grounds
+    question: "Deposit protection dates"
+    inputType: group
+    dependsOn:
+      allOf:
+        - questionId: selected_notice_route
+          value: wales_fault_based
+        - questionId: deposit_protected_fault
+          value: true
+    helperText: "Record deposit compliance dates - strengthens your case at court."
+    fields:
+      - id: deposit_paid_date
+        label: "Date deposit was paid by contract holder"
+        inputType: date
+        helperText: "When did you receive the deposit?"
+        width: half
+      - id: deposit_protection_date
+        label: "Date deposit was protected"
+        inputType: date
+        helperText: "Should be within 30 days of receiving deposit"
+        width: half
+    maps_to:
+      - deposit_paid_date
+      - deposit_protection_date
 
   - id: rent_arrears_amount
     section: Fault-Based Grounds
@@ -394,3 +741,59 @@ questions:
     helperText: "Specify which contract term was breached and how"
     maps_to:
       - breach_description
+
+  # ============================================================
+  # EVIDENCE WITH DESCRIBE OPTION
+  # ============================================================
+
+  - id: evidence_tenancy_agreement
+    section: Evidence
+    question: "Occupation Contract"
+    inputType: group
+    helperText: "Upload your occupation contract or summarize key terms."
+    fields:
+      - id: tenancy_agreement_upload
+        label: "Upload occupation contract"
+        inputType: upload
+        helperText: "Upload a copy of the written statement"
+        width: full
+      - id: tenancy_agreement_describe
+        label: "Or summarize key terms"
+        inputType: textarea
+        helperText: "If unable to upload, describe: start date, rent amount, key terms"
+        placeholder: "E.g., Standard occupation contract started 01/01/2024, rent £1,200pcm due 1st..."
+        width: full
+    maps_to:
+      - evidence.tenancy_agreement_uploads
+      - evidence.tenancy_agreement_description
+
+  - id: evidence_notice_service
+    section: Evidence
+    question: "Notice Service Evidence"
+    inputType: group
+    helperText: "Upload proof of notice service or describe how notice will be served."
+    fields:
+      - id: notice_service_upload
+        label: "Upload proof of service"
+        inputType: upload
+        helperText: "Proof of posting, signed receipt, etc."
+        width: full
+      - id: notice_service_describe
+        label: "Or describe service method"
+        inputType: textarea
+        helperText: "Describe how and when notice will be served"
+        placeholder: "E.g., Will send Section 173 notice by recorded delivery on [date]..."
+        width: full
+    maps_to:
+      - evidence.notice_service_uploads
+      - evidence.notice_service_description
+
+  - id: evidence_other
+    section: Evidence
+    question: "Other Supporting Documents"
+    inputType: upload
+    helperText: "Upload any other supporting documents (Rent Smart Wales registration, bank statements, etc.)"
+    validation:
+      required: false
+    maps_to:
+      - evidence.other_uploads

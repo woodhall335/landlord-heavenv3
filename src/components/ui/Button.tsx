@@ -12,9 +12,10 @@
 
 import React from "react";
 import { clsx } from "clsx";
+import { isWizardThemeV2 } from '@/components/wizard/shared/theme';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary" | "outline" | "ghost" | "danger";
+  variant?: "primary" | "secondary" | "outline" | "ghost" | "danger" | "heroPrimary" | "heroSecondary";
   size?: "small" | "medium" | "large";
   loading?: boolean;
   fullWidth?: boolean;
@@ -51,25 +52,27 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     const variantStyles = {
       primary: clsx(
-        "bg-primary text-white",
-        "hover:bg-primary-dark hover:shadow-lg",
+        isWizardThemeV2 ? "bg-violet-600 text-white" : "bg-primary text-white",
+        isWizardThemeV2 ? "hover:bg-violet-700 hover:shadow-md" : "hover:bg-primary-dark hover:shadow-lg",
         "active:scale-[0.98]",
         "focus:ring-primary/50"
       ),
       secondary: clsx(
-        "bg-secondary text-white",
-        "hover:bg-secondary-dark hover:shadow-lg",
+        isWizardThemeV2
+          ? "bg-white text-violet-900 border border-violet-200"
+          : "bg-secondary text-white",
+        isWizardThemeV2 ? "hover:bg-violet-50 hover:shadow-sm" : "hover:bg-secondary-dark hover:shadow-lg",
         "active:scale-[0.98]",
-        "focus:ring-secondary/50"
+        isWizardThemeV2 ? "focus:ring-violet-300/60" : "focus:ring-secondary/50"
       ),
       outline: clsx(
-        "bg-white text-charcoal border-2 border-gray-300",
+        isWizardThemeV2 ? "bg-white text-violet-900 border border-violet-200" : "bg-white text-charcoal border-2 border-gray-300",
         "hover:border-primary hover:text-primary hover:bg-primary/5",
         "active:scale-[0.98]",
         "focus:ring-primary/50"
       ),
       ghost: clsx(
-        "bg-transparent text-charcoal",
+        isWizardThemeV2 ? "bg-transparent text-violet-900" : "bg-transparent text-charcoal",
         "hover:bg-gray-100",
         "active:scale-[0.98]",
         "focus:ring-gray-300/50"
@@ -80,6 +83,8 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         "active:scale-[0.98]",
         "focus:ring-error/50"
       ),
+      heroPrimary: "hero-btn-primary",
+      heroSecondary: "hero-btn-secondary",
     };
 
     const sizeStyles = {
@@ -89,16 +94,20 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     };
 
     const widthStyles = fullWidth ? "w-full" : "";
+    const isHeroVariant = variant === "heroPrimary" || variant === "heroSecondary";
 
     return (
       <button
         ref={ref}
         disabled={disabled || loading}
         className={clsx(
-          baseStyles,
+          // Hero variants use their own complete styling from globals.css
+          isHeroVariant ? null : baseStyles,
           variantStyles[variant],
-          sizeStyles[size],
+          isHeroVariant ? null : sizeStyles[size],
           widthStyles,
+          // Ensure disabled states work for hero variants
+          isHeroVariant && (disabled || loading) && "opacity-60 cursor-not-allowed",
           className
         )}
         {...props}

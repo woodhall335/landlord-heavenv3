@@ -1,11 +1,11 @@
 /**
  * QA Validator
  *
- * Uses Claude Sonnet 4 to validate generated legal documents
+ * Uses GPT-4o Mini to validate generated legal documents
  * Ensures documents meet quality standards (target: >85 score)
  */
 
-import { claudeCompletion, ClaudeMessage } from './claude-client';
+import { chatCompletion, ChatMessage, parseAIModel } from './openai-client';
 
 export interface QAValidationRequest {
   document_html: string;
@@ -79,7 +79,7 @@ Respond with JSON:
 }`;
 
 /**
- * Validate a legal document using Claude
+ * Validate a legal document using GPT-4o Mini
  */
 export async function validateDocument(
   request: QAValidationRequest
@@ -111,7 +111,11 @@ Please perform a comprehensive QA review of this legal document. Check for:
 Provide a detailed assessment with specific issues and suggestions for improvement.
 `;
 
-  const messages: ClaudeMessage[] = [
+  const messages: ChatMessage[] = [
+    {
+      role: 'system',
+      content: QA_SYSTEM_PROMPT,
+    },
     {
       role: 'user',
       content: validationPrompt,
@@ -119,11 +123,10 @@ Provide a detailed assessment with specific issues and suggestions for improveme
   ];
 
   try {
-    const response = await claudeCompletion(messages, {
-      model: 'claude-sonnet-4-5-20250929',
+    const response = await chatCompletion(messages, {
+      model: parseAIModel(process.env.AI_MODEL_QA, 'gpt-4o-mini'),
       temperature: 0.3, // Lower temperature for consistent evaluation
       max_tokens: 4096,
-      system: QA_SYSTEM_PROMPT,
     });
 
     // Parse JSON response
@@ -152,8 +155,8 @@ Provide a detailed assessment with specific issues and suggestions for improveme
       issues: parsedResponse.issues || [],
       summary: parsedResponse.summary || '',
       usage: {
-        input_tokens: response.usage.input_tokens,
-        output_tokens: response.usage.output_tokens,
+        input_tokens: response.usage.prompt_tokens,
+        output_tokens: response.usage.completion_tokens,
         total_tokens: response.usage.total_tokens,
         cost_usd: response.cost_usd,
       },

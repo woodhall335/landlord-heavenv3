@@ -1,0 +1,152 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F3F1FF"/>
+      <stop offset="100%" style="stop-color:#E9E5FF"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bgGrad)"/>
+
+  <!-- Ground 10 badge -->
+  <g transform="translate(60, 80)">
+    <circle cx="70" cy="70" r="65" fill="white" stroke="#7C3AED" stroke-width="3"/>
+    <circle cx="70" cy="70" r="48" fill="#7C3AED"/>
+    <text x="70" y="60" text-anchor="middle" fill="white" font-size="12" font-weight="bold" font-family="Arial">GROUND</text>
+    <text x="70" y="88" text-anchor="middle" fill="white" font-size="28" font-weight="bold" font-family="Arial">10</text>
+    <rect x="25" y="150" width="90" height="25" rx="12" fill="#A78BFA"/>
+    <text x="70" y="167" text-anchor="middle" fill="white" font-size="10" font-weight="bold" font-family="Arial">DISCRETIONARY</text>
+  </g>
+
+  <!-- Ground 11 badge -->
+  <g transform="translate(200, 80)">
+    <circle cx="70" cy="70" r="65" fill="white" stroke="#7C3AED" stroke-width="3"/>
+    <circle cx="70" cy="70" r="48" fill="#7C3AED"/>
+    <text x="70" y="60" text-anchor="middle" fill="white" font-size="12" font-weight="bold" font-family="Arial">GROUND</text>
+    <text x="70" y="88" text-anchor="middle" fill="white" font-size="28" font-weight="bold" font-family="Arial">11</text>
+    <rect x="25" y="150" width="90" height="25" rx="12" fill="#A78BFA"/>
+    <text x="70" y="167" text-anchor="middle" fill="white" font-size="10" font-weight="bold" font-family="Arial">DISCRETIONARY</text>
+  </g>
+
+  <!-- Rent arrears explanation -->
+  <g transform="translate(360, 60)">
+    <rect x="0" y="0" width="380" height="160" rx="15" fill="white" stroke="#7C3AED" stroke-width="3"/>
+
+    <rect x="0" y="0" width="380" height="50" rx="15" fill="#7C3AED"/>
+    <rect x="0" y="35" width="380" height="15" fill="#7C3AED"/>
+    <text x="190" y="35" text-anchor="middle" fill="white" font-size="14" font-weight="bold" font-family="Arial">RENT ARREARS GROUNDS</text>
+
+    <g transform="translate(20, 65)">
+      <circle cx="15" cy="15" r="12" fill="#7C3AED"/>
+      <text x="15" y="20" text-anchor="middle" fill="white" font-size="10" font-weight="bold">10</text>
+      <text x="35" y="14" fill="#6D28D9" font-size="11" font-weight="bold" font-family="Arial">Some rent unpaid</text>
+      <text x="35" y="28" fill="#A78BFA" font-size="10" font-family="Arial">At notice AND at hearing</text>
+    </g>
+
+    <g transform="translate(20, 110)">
+      <circle cx="15" cy="15" r="12" fill="#7C3AED"/>
+      <text x="15" y="20" text-anchor="middle" fill="white" font-size="10" font-weight="bold">11</text>
+      <text x="35" y="14" fill="#6D28D9" font-size="11" font-weight="bold" font-family="Arial">Persistent late payment</text>
+      <text x="35" y="28" fill="#A78BFA" font-size="10" font-family="Arial">History of delays (even if now paid)</text>
+    </g>
+  </g>
+
+  <!-- Timeline comparison -->
+  <g transform="translate(60, 240)">
+    <rect x="0" y="0" width="320" height="220" rx="15" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <text x="160" y="28" text-anchor="middle" fill="#7C3AED" font-size="12" font-weight="bold" font-family="Arial">GROUND 10 - UNPAID RENT</text>
+
+    <!-- Rent timeline -->
+    <g transform="translate(20, 50)">
+      <rect x="0" y="0" width="280" height="60" rx="8" fill="#F3F1FF"/>
+      <text x="140" y="20" text-anchor="middle" fill="#6D28D9" font-size="10" font-weight="bold" font-family="Arial">Must prove arrears at:</text>
+
+      <g transform="translate(30, 30)">
+        <circle cx="15" cy="15" r="12" fill="#7C3AED"/>
+        <text x="15" y="19" text-anchor="middle" fill="white" font-size="8" font-weight="bold">1</text>
+        <text x="35" y="19" fill="#6D28D9" font-size="10" font-family="Arial">When notice served</text>
+      </g>
+      <g transform="translate(150, 30)">
+        <circle cx="15" cy="15" r="12" fill="#7C3AED"/>
+        <text x="15" y="19" text-anchor="middle" fill="white" font-size="8" font-weight="bold">2</text>
+        <text x="35" y="19" fill="#6D28D9" font-size="10" font-family="Arial">At court hearing</text>
+      </g>
+    </g>
+
+    <!-- Coins declining -->
+    <g transform="translate(40, 130)">
+      <rect x="0" y="25" width="40" height="40" rx="5" fill="#7C3AED"/>
+      <text x="20" y="50" text-anchor="middle" fill="white" font-size="14" font-weight="bold">£</text>
+      <rect x="55" y="35" width="40" height="30" rx="5" fill="#A78BFA"/>
+      <text x="75" y="55" text-anchor="middle" fill="white" font-size="12" font-weight="bold">£</text>
+      <rect x="110" y="45" width="40" height="20" rx="5" fill="#A78BFA" opacity="0.6"/>
+      <text x="130" y="60" text-anchor="middle" fill="white" font-size="10" font-weight="bold">£</text>
+    </g>
+
+    <text x="160" y="200" text-anchor="middle" fill="#A78BFA" font-size="10" font-family="Arial">Tenant can clear debt to avoid eviction</text>
+  </g>
+
+  <!-- Ground 11 detail -->
+  <g transform="translate(400, 240)">
+    <rect x="0" y="0" width="340" height="220" rx="15" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <text x="170" y="28" text-anchor="middle" fill="#7C3AED" font-size="12" font-weight="bold" font-family="Arial">GROUND 11 - PERSISTENT DELAY</text>
+
+    <!-- Late payment pattern -->
+    <g transform="translate(20, 50)">
+      <rect x="0" y="0" width="300" height="100" rx="8" fill="#F3F1FF"/>
+      <text x="150" y="20" text-anchor="middle" fill="#6D28D9" font-size="10" font-weight="bold" font-family="Arial">Payment History Pattern</text>
+
+      <!-- Calendar icons with late marks -->
+      <g transform="translate(30, 35)">
+        <rect x="0" y="0" width="35" height="35" rx="4" fill="white" stroke="#7C3AED" stroke-width="1"/>
+        <rect x="0" y="0" width="35" height="10" rx="4" fill="#7C3AED"/>
+        <text x="17" y="28" text-anchor="middle" fill="#6D28D9" font-size="10">JAN</text>
+        <circle cx="28" cy="30" r="6" fill="#A78BFA"/>
+        <text x="28" y="33" text-anchor="middle" fill="white" font-size="7">L</text>
+      </g>
+      <g transform="translate(75, 35)">
+        <rect x="0" y="0" width="35" height="35" rx="4" fill="white" stroke="#7C3AED" stroke-width="1"/>
+        <rect x="0" y="0" width="35" height="10" rx="4" fill="#7C3AED"/>
+        <text x="17" y="28" text-anchor="middle" fill="#6D28D9" font-size="10">FEB</text>
+        <circle cx="28" cy="30" r="6" fill="#A78BFA"/>
+        <text x="28" y="33" text-anchor="middle" fill="white" font-size="7">L</text>
+      </g>
+      <g transform="translate(120, 35)">
+        <rect x="0" y="0" width="35" height="35" rx="4" fill="white" stroke="#7C3AED" stroke-width="1"/>
+        <rect x="0" y="0" width="35" height="10" rx="4" fill="#7C3AED"/>
+        <text x="17" y="28" text-anchor="middle" fill="#6D28D9" font-size="10">MAR</text>
+        <circle cx="28" cy="30" r="6" fill="#7C3AED"/>
+        <path d="M25 30 L27 32 L31 28" stroke="white" stroke-width="1.5" fill="none"/>
+      </g>
+      <g transform="translate(165, 35)">
+        <rect x="0" y="0" width="35" height="35" rx="4" fill="white" stroke="#7C3AED" stroke-width="1"/>
+        <rect x="0" y="0" width="35" height="10" rx="4" fill="#7C3AED"/>
+        <text x="17" y="28" text-anchor="middle" fill="#6D28D9" font-size="10">APR</text>
+        <circle cx="28" cy="30" r="6" fill="#A78BFA"/>
+        <text x="28" y="33" text-anchor="middle" fill="white" font-size="7">L</text>
+      </g>
+      <g transform="translate(210, 35)">
+        <rect x="0" y="0" width="35" height="35" rx="4" fill="white" stroke="#7C3AED" stroke-width="1"/>
+        <rect x="0" y="0" width="35" height="10" rx="4" fill="#7C3AED"/>
+        <text x="17" y="28" text-anchor="middle" fill="#6D28D9" font-size="10">MAY</text>
+        <circle cx="28" cy="30" r="6" fill="#A78BFA"/>
+        <text x="28" y="33" text-anchor="middle" fill="white" font-size="7">L</text>
+      </g>
+    </g>
+
+    <g transform="translate(25, 165)">
+      <circle cx="10" cy="10" r="8" fill="#7C3AED"/>
+      <text x="10" y="14" text-anchor="middle" fill="white" font-size="8" font-weight="bold">!</text>
+      <text x="25" y="14" fill="#6D28D9" font-size="10" font-family="Arial">Can succeed even if currently paid up</text>
+    </g>
+
+    <g transform="translate(25, 190)">
+      <circle cx="10" cy="10" r="8" fill="#A78BFA"/>
+      <text x="10" y="14" text-anchor="middle" fill="white" font-size="8">L</text>
+      <text x="25" y="14" fill="#A78BFA" font-size="10" font-family="Arial">= Late payment</text>
+    </g>
+  </g>
+
+  <!-- Decorative elements -->
+  <circle cx="50" cy="50" r="25" fill="#7C3AED" opacity="0.1"/>
+  <circle cx="750" cy="450" r="30" fill="#A78BFA" opacity="0.12"/>
+</svg>

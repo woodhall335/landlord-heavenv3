@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enforcement Guide - Money Claim (Wales)</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 210mm;
+      margin: 0 auto;
+      padding: 20mm;
+      background: white;
+    }
+    .header {
+      text-align: center;
+      border-bottom: 3px solid #c8102e;
+      padding-bottom: 15px;
+      margin-bottom: 30px;
+    }
+    h1 {
+      color: #c8102e;
+      font-size: 24px;
+      margin: 0 0 10px 0;
+    }
+    h2 {
+      color: #c8102e;
+      font-size: 18px;
+      margin-top: 25px;
+      margin-bottom: 15px;
+      border-bottom: 2px solid #e0e0e0;
+      padding-bottom: 5px;
+    }
+    h3 {
+      color: #2d5aa0;
+      font-size: 14px;
+      margin-top: 15px;
+      margin-bottom: 10px;
+    }
+    .case-ref {
+      background: #f5f5f5;
+      padding: 15px;
+      border-left: 4px solid #c8102e;
+      margin-bottom: 25px;
+    }
+    .warning-box {
+      background: #fff3cd;
+      border: 2px solid #ffc107;
+      border-left: 5px solid #ffc107;
+      padding: 15px;
+      margin: 20px 0;
+    }
+    .warning-box strong {
+      color: #856404;
+      display: block;
+      margin-bottom: 8px;
+      font-size: 16px;
+    }
+    .info-box {
+      background: #e7f3ff;
+      border: 1px solid #2196F3;
+      border-left: 4px solid #2196F3;
+      padding: 15px;
+      margin: 15px 0;
+    }
+    .method-section {
+      background: #fafafa;
+      padding: 15px;
+      margin: 15px 0;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+    }
+    .method-section h3 {
+      margin-top: 0;
+    }
+    ul, ol {
+      margin: 10px 0;
+      padding-left: 25px;
+    }
+    li {
+      margin-bottom: 8px;
+    }
+    .steps-list {
+      counter-reset: step-counter;
+      list-style: none;
+      padding-left: 0;
+    }
+    .steps-list li {
+      counter-increment: step-counter;
+      position: relative;
+      padding-left: 40px;
+      margin-bottom: 15px;
+    }
+    .steps-list li:before {
+      content: counter(step-counter);
+      position: absolute;
+      left: 0;
+      top: 0;
+      background: #c8102e;
+      color: white;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 14px;
+    }
+    .cost-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+    }
+    .cost-table th, .cost-table td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: left;
+    }
+    .cost-table th {
+      background: #c8102e;
+      color: white;
+      font-weight: bold;
+    }
+    .cost-table tr:nth-child(even) {
+      background: #f9f9f9;
+    }
+    .footer {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 2px solid #e0e0e0;
+      font-size: 12px;
+      color: #666;
+      text-align: center;
+    }
+    .highlight {
+      background: #ffffcc;
+      padding: 2px 4px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Enforcement Guide</h1>
+    <p><strong>What to Do After Obtaining a County Court Judgment</strong></p>
+    <p>Wales - Post-Judgment Enforcement Options</p>
+  </div>
+
+  <div class="case-ref">
+    <strong>Claimant:</strong> {{landlord_full_name}}<br>
+    <strong>Defendant (Contract-Holder):</strong> {{tenant_full_name}}<br>
+    <strong>Claim Amount:</strong> £{{total_claim_amount}}<br>
+    {{#if claim_number}}<strong>Claim Number:</strong> {{claim_number}}<br>{{/if}}
+    <strong>Generated:</strong> {{generation_date}}
+  </div>
+
+  <div class="warning-box">
+    <strong>⚠️ Important Notice</strong>
+    This guide provides general information only. It is NOT legal advice and does not constitute a substitute for advice from a regulated solicitor or legal professional. Enforcement options depend on your specific circumstances, the defendant's financial situation, and judicial decisions. Always consider taking independent legal advice before proceeding with enforcement action.
+  </div>
+
+  <h2>Introduction</h2>
+  <p>
+    Congratulations on obtaining your County Court Judgment (CCJ). However, a judgment alone does not automatically result in payment. If the defendant does not pay voluntarily within the time specified by the court, you will need to take <strong>enforcement action</strong> to recover the money owed.
+  </p>
+  <p>
+    This guide explains the main enforcement methods available in Wales, the costs involved, and how to choose the most appropriate method based on your circumstances. Wales uses the same County Court enforcement procedures as England.
+  </p>
+
+  {{#if enforcement_preferences}}
+  <div class="info-box">
+    <strong>📋 Your Selected Enforcement Preferences:</strong>
+    <ul>
+      {{#each enforcement_preferences}}
+      <li>{{this}}</li>
+      {{/each}}
+    </ul>
+    {{#if enforcement_notes}}
+    <p><strong>Notes:</strong> {{enforcement_notes}}</p>
+    {{/if}}
+  </div>
+  {{/if}}
+
+  <h2>Before You Start Enforcement</h2>
+  <div class="info-box">
+    <h3>✓ Checklist Before Enforcement</h3>
+    <ul>
+      <li>Wait at least <strong>14 days</strong> from the date judgment was entered before applying for enforcement</li>
+      <li>Check if the defendant has requested time to pay or filed an appeal</li>
+      <li>Gather information about the defendant's financial circumstances (employment, assets, bank details)</li>
+      <li>Consider whether the defendant can actually pay - enforcement against someone with no assets or income may not be worthwhile</li>
+      <li>Be prepared to pay court fees upfront (some are refundable from the defendant if enforcement is successful)</li>
+    </ul>
+  </div>
+
+  <h2>Enforcement Methods</h2>
+  <p>The main enforcement methods available after obtaining a CCJ are:</p>
+
+  <div class="method-section">
+    <h3>1. Attachment of Earnings Order</h3>
+    <p><strong>What it is:</strong> An order requiring the defendant's employer to deduct regular amounts from their wages and pay them directly to you via the court.</p>
+
+    <p><strong>When to use:</strong></p>
+    <ul>
+      <li>The defendant is <span class="highlight">employed</span> (not self-employed)</li>
+      <li>You know their employer's name and address</li>
+      <li>The debt is for a consumer debt or rent arrears</li>
+    </ul>
+
+    <p><strong>Court Fee:</strong> £110 (as of 2024)</p>
+    <p><strong>How to apply:</strong> Complete form N337 and submit to the court that issued the judgment</p>
+  </div>
+
+  <div class="method-section">
+    <h3>2. Warrant of Control (Bailiff Action)</h3>
+    <p><strong>What it is:</strong> An order authorizing enforcement agents (bailiffs) to visit the defendant's address, seize goods, and sell them at auction to recover the debt.</p>
+
+    <p><strong>When to use:</strong></p>
+    <ul>
+      <li>The defendant has <span class="highlight">valuable possessions</span> that can be seized</li>
+      <li>The claim amount is <strong>£5,000 or less</strong> (for County Court enforcement)</li>
+      <li>You know the defendant's home or business address</li>
+    </ul>
+
+    <p><strong>Court Fee:</strong> £77 for claims up to £600; £110 for claims over £600 (plus bailiff fees)</p>
+    <p><strong>How to apply:</strong> Complete form N323 and submit to the court that issued the judgment</p>
+
+    <div class="info-box">
+      <strong>💡 For debts over £5,000:</strong> You need a <strong>Writ of Control</strong> enforced by High Court Enforcement Officers (HCEOs). This requires transferring your judgment to the High Court first (form N293A).
+    </div>
+  </div>
+
+  <div class="method-section">
+    <h3>3. Third Party Debt Order (Bank Account Freeze)</h3>
+    <p><strong>What it is:</strong> An order freezing money in the defendant's bank account or building society, then transferring it to you to satisfy the debt.</p>
+
+    <p><strong>Court Fee:</strong> £110</p>
+    <p><strong>How to apply:</strong> Complete form N349 and provide evidence of the defendant's bank details</p>
+  </div>
+
+  <div class="method-section">
+    <h3>4. Charging Order on Property</h3>
+    <p><strong>What it is:</strong> An order securing your debt against the defendant's property or land. If the property is sold, you get paid from the sale proceeds.</p>
+
+    <p><strong>Court Fee:</strong> £110 for interim order; additional fee for final order</p>
+    <p><strong>How to apply:</strong> Complete form N379 and provide evidence of the defendant's property ownership</p>
+  </div>
+
+  <div class="method-section">
+    <h3>5. Order to Obtain Information (Oral Examination)</h3>
+    <p><strong>What it is:</strong> An order requiring the defendant to attend court and answer questions under oath about their finances, employment, assets, and ability to pay.</p>
+
+    <p><strong>Court Fee:</strong> £55</p>
+    <p><strong>How to apply:</strong> Complete form N316 and submit to the court</p>
+  </div>
+
+  <h2>Enforcement Fees and Costs</h2>
+  <table class="cost-table">
+    <thead>
+      <tr>
+        <th>Enforcement Method</th>
+        <th>Court Fee</th>
+        <th>Recoverable from Defendant?</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Attachment of Earnings</td>
+        <td>£110</td>
+        <td>Yes (if successful)</td>
+      </tr>
+      <tr>
+        <td>Warrant of Control (up to £600)</td>
+        <td>£77</td>
+        <td>Partially (from sale proceeds)</td>
+      </tr>
+      <tr>
+        <td>Warrant of Control (over £600)</td>
+        <td>£110</td>
+        <td>Partially (from sale proceeds)</td>
+      </tr>
+      <tr>
+        <td>Third Party Debt Order</td>
+        <td>£110</td>
+        <td>Yes (if successful)</td>
+      </tr>
+      <tr>
+        <td>Charging Order</td>
+        <td>£110</td>
+        <td>Yes (when property sold)</td>
+      </tr>
+      <tr>
+        <td>Order to Obtain Information</td>
+        <td>£55</td>
+        <td>Yes</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Next Steps</h2>
+  <div class="info-box">
+    <h3>Recommended Action Plan</h3>
+    <p>Based on your claim for <strong>£{{total_claim_amount}}</strong> against {{tenant_full_name}}:</p>
+    <ol>
+      <li><strong>Wait 14 days</strong> from judgment to allow voluntary payment</li>
+      <li><strong>Send a final demand letter</strong> warning of enforcement action</li>
+      <li><strong>If no payment:</strong> Apply for Order to Obtain Information (form N316) to understand defendant's finances</li>
+      <li><strong>Based on financial disclosure:</strong> Choose the most appropriate enforcement method from the options above</li>
+      <li><strong>Monitor and follow up:</strong> Track enforcement progress and be prepared to try alternative methods if needed</li>
+    </ol>
+  </div>
+
+  <h2>Further Resources</h2>
+  <ul>
+    <li><strong>GOV.UK Enforcement Guidance:</strong> <a href="https://www.gov.uk/make-court-claim-for-money/enforce-a-judgment">www.gov.uk/make-court-claim-for-money/enforce-a-judgment</a></li>
+    <li><strong>Court Forms:</strong> Available at <a href="https://www.gov.uk/government/collections/civil-and-family-court-forms">www.gov.uk/government/collections/civil-and-family-court-forms</a></li>
+    <li><strong>Citizens Advice Cymru:</strong> <a href="https://www.citizensadvice.org.uk/wales">www.citizensadvice.org.uk/wales</a></li>
+    <li><strong>Money Claims Online (MCOL):</strong> <a href="https://www.moneyclaim.gov.uk">www.moneyclaim.gov.uk</a></li>
+  </ul>
+
+  <div class="footer">
+    <p>
+      <strong>Document Generated:</strong> {{generation_date}}<br>
+      This document was generated by Landlord Heaven as part of your money claim pack for Wales.<br>
+      <strong>Disclaimer:</strong> This guide is for general information only and does not constitute legal advice.
+    </p>
+  </div>
+</body>
+</html>

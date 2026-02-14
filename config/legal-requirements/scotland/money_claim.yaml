@@ -1,0 +1,23 @@
+requiredOfficialForms:
+  - public/official-forms/scotland/form-3a.pdf
+optionalOfficialForms:
+  - public/official-forms/scotland/simple_procedure_response_form.pdf
+requiredTextBlocks:
+  - id: simple_procedure
+    description: "Simple procedure references"
+    mustAppearIn: template
+    match: "simple procedure"
+    regex: true
+    minOccurrences: 0
+requiredPreconditions:
+  - id: pre_action_protocol
+    requiredFactKeys: []
+    requiredQuestionIds: []
+    mustBeValidatedInFlow: true
+noticeRules:
+  requiredInputsFactKeys: []
+  minimumDays: 0
+  mustComputeExpiryDate: false
+  mustShowUserWarningIfInvalid: false
+legislationReferences:
+  - "Simple Procedure Rules"

@@ -14,7 +14,7 @@
 **Address:** {{property_address}}
 **Postcode:** {{property_postcode}}
 
-**Inspection Date:** {{inspection_date}}
+**Inspection Date:** {{format_date inspection_date 'long'}}
 **Inspection Time:** {{inspection_time}}
 **Inspection Type:** {{inspection_type}} {{!-- Check-in, Check-out, Mid-term --}}
 
@@ -34,25 +34,25 @@
 **Supplier:** {{electricity_supplier}}
 **Meter Number:** {{electricity_meter_number}}
 **Reading:** {{electricity_reading}} units
-**Date/Time:** {{electricity_reading_date}}
+**Date/Time:** {{format_date electricity_reading_date 'long'}}
 {{#if electricity_prepayment}}**Type:** Prepayment meter{{/if}}
 
 ### Gas (if applicable)
 **Supplier:** {{gas_supplier}}
 **Meter Number:** {{gas_meter_number}}
 **Reading:** {{gas_reading}} units
-**Date/Time:** {{gas_reading_date}}
+**Date/Time:** {{format_date gas_reading_date 'long'}}
 {{#if gas_prepayment}}**Type:** Prepayment meter{{/if}}
 
 ### Oil Heating (if applicable)
 **Tank Level:** {{oil_tank_level}} {{!-- e.g., 3/4 full, 400 litres --}}
-**Date:** {{oil_reading_date}}
+**Date:** {{format_date oil_reading_date 'long'}}
 
 ### Water (if metered)
 **Supplier:** Northern Ireland Water
 **Meter Number:** {{water_meter_number}}
 **Reading:** {{water_reading}} units
-**Date/Time:** {{water_reading_date}}
+**Date/Time:** {{format_date water_reading_date 'long'}}
 
 ---
 

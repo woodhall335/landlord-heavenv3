@@ -1,0 +1,124 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#EFF6FF"/>
+      <stop offset="100%" style="stop-color:#DBEAFE"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bgGrad)"/>
+
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" fill="#1E40AF" font-size="22" font-weight="bold" font-family="Arial">EVICTION OVERVIEW - SCOTLAND</text>
+  <text x="400" y="55" text-anchor="middle" fill="#3B82F6" font-size="11" font-family="Arial">Complete guide to eviction under Scottish private tenancy law</text>
+
+  <!-- Map with process icon -->
+  <g transform="translate(60, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#1E40AF" stroke-width="2"/>
+    <g transform="translate(30, 5)">
+      <!-- Scotland map simplified -->
+      <path d="M70 10 C85 20 95 15 105 25 L115 50 C105 60 110 75 100 85 L85 95 C70 105 75 115 60 125
+               L45 130 C30 135 35 140 25 145 L20 130 C30 120 25 110 35 100 L45 80 C55 70 50 60 60 50
+               L50 35 C40 25 50 20 60 15 Z"
+            fill="#1E40AF" opacity="0.2" stroke="#1E40AF" stroke-width="2"/>
+      <!-- FTT badge -->
+      <circle cx="100" cy="50" r="25" fill="#1E40AF"/>
+      <text x="100" y="56" text-anchor="middle" fill="white" font-size="12" font-weight="bold">FTT</text>
+    </g>
+    <text x="100" y="125" text-anchor="middle" fill="#1E40AF" font-size="11" font-weight="bold">SCOTTISH LAW</text>
+    <text x="100" y="143" text-anchor="middle" fill="#3B82F6" font-size="9">First-tier Tribunal</text>
+    <text x="100" y="158" text-anchor="middle" fill="#3B82F6" font-size="9">handles all evictions</text>
+  </g>
+
+  <!-- Key differences -->
+  <g transform="translate(280, 80)">
+    <rect x="0" y="0" width="240" height="175" rx="12" fill="white" stroke="#22C55E" stroke-width="2"/>
+    <rect x="0" y="0" width="240" height="32" rx="12" fill="#22C55E"/>
+    <rect x="0" y="20" width="240" height="12" fill="#22C55E"/>
+    <text x="120" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">SCOTLAND VS ENGLAND</text>
+    <g transform="translate(15, 45)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#22C55E"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#1E40AF" font-size="9">No Section 21 (no-fault)</text>
+    </g>
+    <g transform="translate(15, 68)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#22C55E"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#1E40AF" font-size="9">FTT not county court</text>
+    </g>
+    <g transform="translate(15, 91)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#1E40AF"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#1E40AF" font-size="9">18 eviction grounds</text>
+    </g>
+    <g transform="translate(15, 114)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#1E40AF"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#1E40AF" font-size="9">Private Residential Tenancy</text>
+    </g>
+    <g transform="translate(15, 137)">
+      <text x="0" y="11" fill="#22C55E" font-size="9" font-weight="bold">Stronger tenant protection</text>
+    </g>
+  </g>
+
+  <!-- Notice to Leave -->
+  <g transform="translate(540, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#F59E0B" stroke-width="2"/>
+    <rect x="0" y="0" width="200" height="32" rx="12" fill="#F59E0B"/>
+    <rect x="0" y="20" width="200" height="12" fill="#F59E0B"/>
+    <text x="100" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">NOTICE TO LEAVE</text>
+    <g transform="translate(15, 48)">
+      <circle cx="7" cy="7" r="5" fill="#F59E0B"/>
+      <text x="22" y="11" fill="#1E40AF" font-size="9">Required first step</text>
+    </g>
+    <g transform="translate(15, 71)">
+      <circle cx="7" cy="7" r="5" fill="#F59E0B"/>
+      <text x="22" y="11" fill="#1E40AF" font-size="9">Use Form AT6</text>
+    </g>
+    <g transform="translate(15, 94)">
+      <circle cx="7" cy="7" r="5" fill="#1E40AF"/>
+      <text x="22" y="11" fill="#1E40AF" font-size="9">State the ground(s)</text>
+    </g>
+    <g transform="translate(15, 117)">
+      <circle cx="7" cy="7" r="5" fill="#1E40AF"/>
+      <text x="22" y="11" fill="#1E40AF" font-size="9">Correct notice period</text>
+    </g>
+    <g transform="translate(15, 140)">
+      <text x="0" y="11" fill="#F59E0B" font-size="9" font-weight="bold">28-84 days depending</text>
+    </g>
+  </g>
+
+  <!-- Full process -->
+  <g transform="translate(60, 275)">
+    <rect x="0" y="0" width="680" height="170" rx="12" fill="white" stroke="#1E40AF" stroke-width="2"/>
+    <rect x="0" y="0" width="680" height="32" rx="12" fill="#1E40AF"/>
+    <rect x="0" y="20" width="680" height="12" fill="#1E40AF"/>
+    <text x="340" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">EVICTION PROCESS OVERVIEW</text>
+    <g transform="translate(20, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#1E40AF" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#1E40AF" font-size="10" font-weight="bold">1. NOTICE</text>
+      <text x="100" y="42" text-anchor="middle" fill="#1E40AF" font-size="8">Serve Notice to Leave</text>
+      <text x="100" y="55" text-anchor="middle" fill="#1E40AF" font-size="8">Specify ground(s)</text>
+      <text x="100" y="75" text-anchor="middle" fill="#1E40AF" font-size="8">Wait for notice period</text>
+      <text x="100" y="94" text-anchor="middle" fill="#1E40AF" font-size="8" font-weight="bold">28, 84, or more days</text>
+    </g>
+    <g transform="translate(240, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#F59E0B" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#F59E0B" font-size="10" font-weight="bold">2. TRIBUNAL</text>
+      <text x="100" y="42" text-anchor="middle" fill="#1E40AF" font-size="8">Apply to FTT</text>
+      <text x="100" y="55" text-anchor="middle" fill="#1E40AF" font-size="8">Submit evidence</text>
+      <text x="100" y="75" text-anchor="middle" fill="#1E40AF" font-size="8">Attend hearing</text>
+      <text x="100" y="94" text-anchor="middle" fill="#F59E0B" font-size="8" font-weight="bold">Prove your ground</text>
+    </g>
+    <g transform="translate(460, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#22C55E" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#22C55E" font-size="10" font-weight="bold">3. ENFORCEMENT</text>
+      <text x="100" y="42" text-anchor="middle" fill="#1E40AF" font-size="8">Order granted</text>
+      <text x="100" y="55" text-anchor="middle" fill="#1E40AF" font-size="8">Sheriff officers enforce</text>
+      <text x="100" y="75" text-anchor="middle" fill="#1E40AF" font-size="8">If tenant doesn't leave</text>
+      <text x="100" y="94" text-anchor="middle" fill="#22C55E" font-size="8" font-weight="bold">Regain possession</text>
+    </g>
+  </g>
+
+  <circle cx="40" cy="40" r="20" fill="#1E40AF" opacity="0.1"/>
+  <circle cx="760" cy="460" r="25" fill="#3B82F6" opacity="0.12"/>
+</svg>

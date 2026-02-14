@@ -84,6 +84,15 @@ function deriveRoutesFromFacts(
       if (lower.includes('section_8') || lower.includes('section 8')) routes.push('section_8');
       if (lower.includes('section_21') || lower.includes('section 21')) routes.push('section_21');
       if (lower.includes('notice to leave')) routes.push('notice_to_leave');
+      // Wales routes (Renting Homes Wales Act 2016)
+      if (lower.includes('wales_section_173') || lower.includes('section_173') || lower.includes('section 173')) {
+        routes.push('wales_section_173');
+        routes.push('section_173'); // Also add non-prefixed version for question routes matching
+      }
+      if (lower.includes('wales_fault_based') || lower.includes('fault_based') || lower.includes('fault-based') || lower.includes('fault based')) {
+        routes.push('wales_fault_based');
+        routes.push('fault_based'); // Also add non-prefixed version for question routes matching
+      }
     });
   } else if (routeAnswer) {
     const lower = String(routeAnswer).toLowerCase();
@@ -92,6 +101,15 @@ function deriveRoutesFromFacts(
     if (lower.includes('section_21') || lower.includes('section 21')) routes.push('section_21');
     if (lower.includes('leave')) routes.push('notice_to_leave');
     if (lower.includes('quit')) routes.push('notice_to_quit');
+    // Wales routes (Renting Homes Wales Act 2016)
+    if (lower.includes('wales_section_173') || lower.includes('section_173') || lower.includes('section 173')) {
+      routes.push('wales_section_173');
+      routes.push('section_173'); // Also add non-prefixed version for question routes matching
+    }
+    if (lower.includes('wales_fault_based') || lower.includes('fault_based') || lower.includes('fault-based') || lower.includes('fault based')) {
+      routes.push('wales_fault_based');
+      routes.push('fault_based'); // Also add non-prefixed version for question routes matching
+    }
   }
 
   docRoutes.forEach((r) => {
@@ -237,6 +255,54 @@ export function normalizeAskOnceFacts(facts: WizardFacts, mqs: MasterQuestionSet
   return updatedFacts;
 }
 
+/**
+ * Determines if a question is answered.
+ *
+ * For GROUP questions: Only required fields must be answered.
+ * For other questions: All maps_to paths must be answered.
+ *
+ * This prevents optional fields from blocking wizard progression.
+ */
+function isQuestionAnsweredForMQS(
+  question: ExtendedWizardQuestion,
+  facts: Record<string, any>
+): boolean {
+  const maps = question.maps_to;
+
+  if (maps && maps.length > 0) {
+    // For GROUP questions with fields, only check REQUIRED fields
+    if (question.inputType === 'group' && question.fields && question.fields.length > 0) {
+      // Get required field IDs
+      const requiredFieldIds = new Set(
+        question.fields
+          .filter((field) => field.validation?.required === true)
+          .map((field) => field.id)
+      );
+
+      // If no required fields, question is considered answered
+      if (requiredFieldIds.size === 0) {
+        return true;
+      }
+
+      // Only check maps_to paths that correspond to required fields
+      const requiredPaths = maps.filter((path) => {
+        const lastSegment = path.split('.').pop();
+        return lastSegment && requiredFieldIds.has(lastSegment);
+      });
+
+      // All required paths must be answered
+      return requiredPaths.every((path) => isTruthyValue(getValueAtPath(facts, path)));
+    }
+
+    // For non-group questions, all maps_to paths must be answered
+    return maps.every((path) => isTruthyValue(getValueAtPath(facts, path)));
+  }
+
+  // For questions without maps_to, check if answered directly by question ID
+  const fallbackValue = facts[question.id];
+  return isTruthyValue(fallbackValue);
+}
+
 // Determine the next question from an MQS definition and current facts
 export function getNextMQSQuestion(
   mqs: MasterQuestionSet,
@@ -247,17 +313,8 @@ export function getNextMQSQuestion(
   for (const q of mqs.questions) {
     if (!questionIsApplicable(mqs, q, answered)) continue;
 
-    const maps = q.maps_to;
-    if (maps && maps.length > 0) {
-      const allMapped = maps.every((path) => isTruthyValue(getValueAtPath(answered as Record<string, any>, path)));
-      if (!allMapped) {
-        return q;
-      }
-      continue;
-    }
-
-    const fallbackValue = (answered as Record<string, any>)[q.id];
-    if (!isTruthyValue(fallbackValue)) {
+    // Use the group-aware isQuestionAnswered logic
+    if (!isQuestionAnsweredForMQS(q, answered as Record<string, any>)) {
       return q;
     }
   }
@@ -265,4 +322,4 @@ export function getNextMQSQuestion(
   return null; // no more questions
 }
 
-export { questionIsApplicable, deriveRoutesFromFacts };
+export { questionIsApplicable, deriveRoutesFromFacts, isQuestionAnsweredForMQS };

@@ -1,0 +1,224 @@
+{{!--
+  ============================================================================
+  ARREARS LETTER TEMPLATE
+  Good Practice / Engagement Letter
+  ============================================================================
+  This template supports two modes:
+  - Template mode (is_final_form = false): Shows placeholders for manual completion
+  - Final form mode (is_final_form = true): Fully populated for court packs
+--}}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{#if is_final_form}}Arrears Engagement Letter{{else}}Arrears Letter Template{{/if}}</title>
+  <style>
+    {{{print_css}}}
+
+    @page {
+      size: A4;
+      margin: 20mm;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 11pt;
+      line-height: 1.6;
+      color: #1a1a1a;
+      padding: 0;
+      margin: 0 auto;
+    }
+
+    .template-notice {
+      background: #fff3cd;
+      border: 2px solid #ffc107;
+      padding: 1em;
+      margin-bottom: 2em;
+      text-align: center;
+    }
+
+    .template-notice h3 {
+      margin: 0 0 0.5em 0;
+      color: #856404;
+    }
+
+    .template-notice p {
+      margin: 0;
+      font-size: 10pt;
+      color: #856404;
+    }
+
+    .letter-header {
+      margin-bottom: 2em;
+    }
+
+    .address-block {
+      margin-bottom: 1.5em;
+    }
+
+    .date-line {
+      margin-bottom: 2em;
+    }
+
+    .salutation {
+      margin-bottom: 1.5em;
+    }
+
+    .reference {
+      font-weight: bold;
+      margin-bottom: 1.5em;
+    }
+
+    .letter-body p {
+      margin-bottom: 1em;
+    }
+
+    .action-box {
+      background: #f8f9fa;
+      border-left: 4px solid #1a1a1a;
+      padding: 1em;
+      margin: 1.5em 0;
+    }
+
+    .closing {
+      margin-top: 2em;
+    }
+
+    .signature-block {
+      margin-top: 3em;
+    }
+
+    .fill-in {
+      color: #dc3545;
+      font-style: italic;
+    }
+
+    .instruction {
+      font-size: 9pt;
+      color: #6c757d;
+      background: #f8f9fa;
+      padding: 0.5em;
+      margin-top: 0.5em;
+    }
+  </style>
+</head>
+<body>
+
+{{!-- Only show template notice in template mode --}}
+{{#unless is_final_form}}
+<div class="template-notice">
+  <h3>⚠ TEMPLATE DOCUMENT</h3>
+  <p>This is a template letter. You must customise and send it yourself. Do not claim you have sent this letter unless you actually have.</p>
+</div>
+{{/unless}}
+
+<!-- Letter Header -->
+<div class="letter-header">
+  <div class="address-block">
+    <strong>{{landlord_full_name}}</strong><br>
+    {{#if landlord_address}}
+    {{landlord_address}}<br>
+    {{/if}}
+    {{#if is_final_form}}
+      {{#if landlord_phone}}Tel: {{landlord_phone}}<br>{{/if}}
+      {{#if landlord_email}}Email: {{landlord_email}}{{/if}}
+    {{else}}
+      <span class="fill-in">[Your Contact Details]</span>
+    {{/if}}
+  </div>
+
+  <div class="address-block">
+    <strong>{{tenant_full_name}}</strong><br>
+    {{property_address}}
+  </div>
+
+  <div class="date-line">
+    {{#if is_final_form}}
+      {{format_date letter_date}}
+    {{else}}
+      <span class="fill-in">[Date]</span>
+      <div class="instruction">Enter the date you send this letter</div>
+    {{/if}}
+  </div>
+</div>
+
+<!-- Salutation -->
+<div class="salutation">
+  Dear {{tenant_full_name}},
+</div>
+
+<!-- Reference -->
+<div class="reference">
+  Re: Rent Arrears at {{property_address}}
+</div>
+
+<!-- Letter Body -->
+<div class="letter-body">
+  <p>
+    I am writing to you regarding the outstanding rent arrears on your tenancy at the above property.
+  </p>
+
+  <p>
+    According to my records, the current rent arrears amount to <strong>{{currency arrears_total}}</strong> as at {{#if is_final_form}}{{format_date calculation_date}}{{else}}<span class="fill-in">[date of calculation]</span>{{/if}}.
+  </p>
+
+  <div class="action-box">
+    <strong>What you need to do:</strong>
+    <ul>
+      <li>Pay the arrears in full as soon as possible, OR</li>
+      <li>Contact me immediately to discuss a payment arrangement</li>
+    </ul>
+    <p>Please respond within <strong>14 days</strong> of the date of this letter.</p>
+  </div>
+
+  <p>
+    I understand that financial difficulties can arise, and I am willing to discuss a reasonable payment plan if you are unable to pay the full amount immediately. However, I must receive contact from you to arrange this.
+  </p>
+
+  <p>
+    If I do not receive payment or hear from you within the timeframe above, I will have no choice but to consider taking formal action to recover the arrears and/or possession of the property. This may include:
+  </p>
+
+  <ul>
+    <li>Serving a formal notice seeking possession</li>
+    <li>Commencing court proceedings</li>
+    <li>Reporting the debt to a credit reference agency</li>
+  </ul>
+
+  <p>
+    I hope we can resolve this matter without the need for court action, which would incur additional costs and stress for both of us.
+  </p>
+
+  <p>
+    Please contact me at your earliest convenience to discuss how we can resolve this situation.
+  </p>
+</div>
+
+<!-- Closing -->
+<div class="closing">
+  <p>Yours sincerely,</p>
+</div>
+
+<!-- Signature Block -->
+<div class="signature-block">
+  <p>_______________________________</p>
+  <p><strong>{{landlord_full_name}}</strong></p>
+  <p>Landlord</p>
+</div>
+
+{{!-- Only show instructions in template mode --}}
+{{#unless is_final_form}}
+<div class="instruction" style="margin-top: 3em;">
+  <strong>Instructions for use:</strong>
+  <ul>
+    <li>Fill in the date you send this letter and the date of your arrears calculation</li>
+    <li>Keep a copy of this letter for your records</li>
+    <li>Send by recorded delivery or keep proof of posting</li>
+    <li>If you do not receive a response, this letter can be evidence that you attempted to engage with the tenant before taking formal action</li>
+  </ul>
+</div>
+{{/unless}}
+
+</body>
+</html>

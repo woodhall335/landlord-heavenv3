@@ -303,6 +303,16 @@ export interface PrivateTenancyData {
   landlord_address?: string;
   landlord_email?: string;
   landlord_phone?: string;
+
+  // Guarantor (Premium)
+  guarantor_name?: string;
+  guarantor_address?: string;
+  guarantor_email?: string;
+  guarantor_phone?: string;
+  guarantor_dob?: string;
+  guarantor_relationship?: string;
+  guarantor_required?: boolean;
+  joint_and_several_liability?: boolean;
 }
 
 // ============================================================================

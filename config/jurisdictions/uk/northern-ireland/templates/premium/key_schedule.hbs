@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Key Schedule & Access Cards Inventory</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 20mm;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 11pt;
+      line-height: 1.6;
+      color: #1a202c;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 3px solid #2c5282;
+    }
+
+    .document-title {
+      font-size: 24pt;
+      font-weight: 700;
+      color: #2c5282;
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+
+    .subtitle {
+      font-size: 12pt;
+      color: #4a5568;
+      margin-top: 8px;
+    }
+
+    .section {
+      margin: 25px 0;
+      page-break-inside: avoid;
+    }
+
+    .section-title {
+      font-size: 14pt;
+      font-weight: 700;
+      color: #2c5282;
+      margin-bottom: 15px;
+      padding: 10px 15px;
+      background: linear-gradient(135deg, #e6f2ff 0%, #cce5ff 100%);
+      border-left: 4px solid #2c5282;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px 20px;
+      margin-bottom: 15px;
+    }
+
+    .info-item {
+      padding: 8px 0;
+    }
+
+    .info-label {
+      font-weight: 600;
+      color: #2d3748;
+      display: block;
+      margin-bottom: 3px;
+      font-size: 10pt;
+    }
+
+    .info-value {
+      color: #1a202c;
+      display: block;
+      font-size: 11pt;
+    }
+
+    .key-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+
+    .key-table th {
+      background: #2c5282;
+      color: white;
+      padding: 12px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 10pt;
+    }
+
+    .key-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .key-table tr:nth-child(even) {
+      background-color: #f7fafc;
+    }
+
+    .signature-section {
+      margin-top: 40px;
+      page-break-inside: avoid;
+    }
+
+    .signature-box {
+      border: 2px solid #cbd5e0;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+      background: #f7fafc;
+    }
+
+    .signature-line {
+      border-bottom: 2px solid #2c5282;
+      margin: 30px 0 10px 0;
+      min-height: 50px;
+    }
+
+    .warning-box {
+      background: #fff5f5;
+      border-left: 4px solid #e53e3e;
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 4px;
+    }
+
+    .warning-title {
+      font-weight: 700;
+      color: #c53030;
+      margin-bottom: 8px;
+    }
+
+    .footer {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 2px solid #e2e8f0;
+      font-size: 9pt;
+      color: #718096;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="document-title">
+      Key Schedule &<br/>Access Cards Inventory
+    </div>
+    <div class="subtitle">Private Tenancy Agreement (Northern Ireland) - Supplementary Document</div>
+    <div class="subtitle">Property: {{property_address}}</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Property & Tenancy Details</div>
+    <div class="info-grid">
+      <div class="info-item">
+        <span class="info-label">Property Address:</span>
+        <span class="info-value">{{property_address}}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Tenancy Start Date:</span>
+        <span class="info-value">{{format_date tenancy_start_date}}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Landlord Name:</span>
+        <span class="info-value">{{landlord_full_name}}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Tenant Name(s):</span>
+        <span class="info-value">
+          {{#each tenants}}
+            {{full_name}}{{#unless @last}}, {{/unless}}
+          {{/each}}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Keys & Access Inventory</div>
+
+    <table class="key-table">
+      <thead>
+        <tr>
+          <th>Item Type</th>
+          <th>Quantity Issued</th>
+          <th>Description</th>
+          <th>Replacement Cost</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#if number_of_front_door_keys}}
+        <tr>
+          <td><strong>Front Door Keys</strong></td>
+          <td>{{number_of_front_door_keys}}</td>
+          <td>Main entrance keys</td>
+          <td>£{{key_replacement_cost}} per key</td>
+        </tr>
+        {{/if}}
+
+        {{#if number_of_back_door_keys}}
+        <tr>
+          <td><strong>Back Door Keys</strong></td>
+          <td>{{number_of_back_door_keys}}</td>
+          <td>Rear entrance keys</td>
+          <td>£{{key_replacement_cost}} per key</td>
+        </tr>
+        {{/if}}
+
+        {{#if number_of_window_keys}}
+        <tr>
+          <td><strong>Window Keys</strong></td>
+          <td>{{number_of_window_keys}}</td>
+          <td>Window lock keys</td>
+          <td>£{{key_replacement_cost}} per key</td>
+        </tr>
+        {{/if}}
+
+        {{#if number_of_mailbox_keys}}
+        <tr>
+          <td><strong>Mailbox Keys</strong></td>
+          <td>{{number_of_mailbox_keys}}</td>
+          <td>Mailbox/letterbox keys</td>
+          <td>£{{key_replacement_cost}} per key</td>
+        </tr>
+        {{/if}}
+
+        {{#if access_cards_fobs}}
+        <tr>
+          <td><strong>Access Cards/Fobs</strong></td>
+          <td>{{access_cards_fobs}}</td>
+          <td>Electronic access devices</td>
+          <td>£{{multiply key_replacement_cost 2}} per card/fob</td>
+        </tr>
+        {{/if}}
+      </tbody>
+    </table>
+
+    {{#if other_keys_notes}}
+    <div class="info-item" style="margin-top: 20px;">
+      <span class="info-label">Additional Keys & Access Devices:</span>
+      <span class="info-value">{{other_keys_notes}}</span>
+    </div>
+    {{/if}}
+  </div>
+
+  <div class="warning-box">
+    <div class="warning-title">Important: Key Return Requirements</div>
+    <p><strong>All keys and access cards must be returned at the end of the tenancy.</strong></p>
+    <ul style="margin-top: 10px; margin-left: 20px;">
+      <li>Failure to return keys will result in replacement charges being deducted from your deposit</li>
+      <li>Keys must be returned by: <strong>{{key_return_deadline}}</strong></li>
+      <li>Lost or damaged keys must be reported immediately</li>
+      <li>Do not copy keys without landlord's written permission</li>
+    </ul>
+  </div>
+
+  <div class="signature-section">
+    <div class="section-title">Tenant Acknowledgement</div>
+
+    <p style="margin-bottom: 20px;">
+      I/We acknowledge receipt of the keys and access cards listed above and agree to:
+    </p>
+    <ul style="margin-left: 20px; margin-bottom: 30px; line-height: 1.8;">
+      <li>Keep all keys and access cards secure at all times</li>
+      <li>Not duplicate or copy any keys without written landlord permission</li>
+      <li>Report any lost or stolen keys immediately</li>
+      <li>Return all keys and access cards at the end of the tenancy</li>
+      <li>Pay replacement costs for any keys not returned</li>
+    </ul>
+
+    {{#each tenants}}
+    <div class="signature-box">
+      <div class="info-label">Tenant {{add @index 1}}: {{full_name}}</div>
+      <div class="signature-line"></div>
+      <div class="info-grid" style="margin-top: 15px;">
+        <div class="info-item">
+          <span class="info-label">Signature</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Date</span>
+        </div>
+      </div>
+    </div>
+    {{/each}}
+
+    <div class="signature-box">
+      <div class="info-label">Landlord: {{../landlord_full_name}}</div>
+      <div class="signature-line"></div>
+      <div class="info-grid" style="margin-top: 15px;">
+        <div class="info-item">
+          <span class="info-label">Signature</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Date</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>This Key Schedule forms part of the Private Tenancy Agreement</p>
+    <p>Private Tenancies (Northern Ireland) Order 2006</p>
+    <p>Dated: {{format_date agreement_date}}</p>
+  </div>
+</body>
+</html>

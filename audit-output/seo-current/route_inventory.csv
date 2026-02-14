@@ -1,0 +1,285 @@
+route_path,file_path,route_type,dynamic,has_metadata_export,has_robots_directives,has_canonical_or_alternates,has_structured_data_render,notes
+/,src/app/layout.tsx,marketing,N,Y,N,N,Y,
+/,src/app/page.tsx,marketing,N,Y,N,Y,Y,
+/6-month-tenancy-agreement-template,src/app/6-month-tenancy-agreement-template/page.tsx,marketing,N,Y,N,Y,Y,
+/about,src/app/about/page.tsx,marketing,N,Y,N,N,Y,
+/api/admin/ask-heaven/debug/slug/[slug],src/app/api/admin/ask-heaven/debug/slug/[slug]/route.ts,api,Y,N,N,N,N,api route
+/api/admin/ask-heaven/questions,src/app/api/admin/ask-heaven/questions/route.ts,api,N,N,N,N,N,api route
+/api/admin/ask-heaven/questions/[slug],src/app/api/admin/ask-heaven/questions/[slug]/route.ts,api,Y,N,N,Y,N,api route
+/api/admin/ask-heaven/questions/[slug]/approve,src/app/api/admin/ask-heaven/questions/[slug]/approve/route.ts,api,Y,N,N,N,N,api route
+/api/admin/ask-heaven/questions/[slug]/canonical,src/app/api/admin/ask-heaven/questions/[slug]/canonical/route.ts,api,Y,N,N,Y,N,api route
+/api/admin/check-access,src/app/api/admin/check-access/route.ts,api,N,N,N,N,N,api route
+/api/admin/leads,src/app/api/admin/leads/route.ts,api,N,N,N,N,N,api route
+/api/admin/legal-change/check-now,src/app/api/admin/legal-change/check-now/route.ts,api,N,N,N,N,N,api route
+/api/admin/legal-change/cron-runs,src/app/api/admin/legal-change/cron-runs/route.ts,api,N,N,N,N,N,api route
+/api/admin/legal-change/events,src/app/api/admin/legal-change/events/route.ts,api,N,N,N,N,N,api route
+/api/admin/legal-change/events/[id],src/app/api/admin/legal-change/events/[id]/route.ts,api,Y,N,N,N,N,api route
+/api/admin/legal-change/events/[id]/actions,src/app/api/admin/legal-change/events/[id]/actions/route.ts,api,Y,N,N,N,N,api route
+/api/admin/legal-change/events/[id]/push-pr,src/app/api/admin/legal-change/events/[id]/push-pr/route.ts,api,Y,N,N,N,N,api route
+/api/admin/orders,src/app/api/admin/orders/route.ts,api,N,N,N,N,N,api route
+/api/admin/orders/refund,src/app/api/admin/orders/refund/route.ts,api,N,N,N,N,N,api route
+/api/admin/orders/resend-email,src/app/api/admin/orders/resend-email/route.ts,api,N,N,N,N,N,api route
+/api/admin/stats,src/app/api/admin/stats/route.ts,api,N,N,N,N,N,api route
+/api/admin/test-artifacts/complete-pack/download,src/app/api/admin/test-artifacts/complete-pack/download/route.ts,api,N,N,N,N,N,api route
+/api/admin/test-artifacts/complete-pack/england/section21,src/app/api/admin/test-artifacts/complete-pack/england/section21/route.ts,api,N,N,N,N,N,api route
+/api/admin/test-artifacts/complete-pack/england/section8,src/app/api/admin/test-artifacts/complete-pack/england/section8/route.ts,api,N,N,N,N,N,api route
+/api/admin/users,src/app/api/admin/users/route.ts,api,N,N,N,N,N,api route
+/api/admin/users/metrics,src/app/api/admin/users/metrics/route.ts,api,N,N,N,N,N,api route
+/api/ask-heaven/case,src/app/api/ask-heaven/case/route.ts,api,N,N,N,N,N,api route
+/api/ask-heaven/chat,src/app/api/ask-heaven/chat/route.ts,api,N,N,N,N,N,api route
+/api/ask-heaven/enhance-answer,src/app/api/ask-heaven/enhance-answer/route.ts,api,N,N,N,N,N,api route
+/api/auth/callback,src/app/api/auth/callback/route.ts,api,N,N,N,N,N,api route
+/api/auth/change-password,src/app/api/auth/change-password/route.ts,api,N,N,N,N,N,api route
+/api/auth/forgot-password,src/app/api/auth/forgot-password/route.ts,api,N,N,N,N,N,api route
+/api/auth/login,src/app/api/auth/login/route.ts,api,N,N,N,N,N,api route
+/api/auth/logout,src/app/api/auth/logout/route.ts,api,N,N,N,N,N,api route
+/api/auth/signup,src/app/api/auth/signup/route.ts,api,N,N,N,N,N,api route
+/api/auth/user,src/app/api/auth/user/route.ts,api,N,N,N,N,N,api route
+/api/cases,src/app/api/cases/route.ts,api,N,N,N,N,N,api route
+/api/cases/[id],src/app/api/cases/[id]/route.ts,api,Y,N,N,N,N,api route
+/api/cases/[id]/documents,src/app/api/cases/[id]/documents/route.ts,api,Y,N,N,N,N,api route
+/api/cases/[id]/link,src/app/api/cases/[id]/link/route.ts,api,Y,N,N,N,N,api route
+/api/cases/claim-orphans,src/app/api/cases/claim-orphans/route.ts,api,N,N,N,N,N,api route
+/api/cases/stats,src/app/api/cases/stats/route.ts,api,N,N,N,N,N,api route
+/api/checkout/create,src/app/api/checkout/create/route.ts,api,N,N,N,N,N,api route
+/api/checkout/session/[id],src/app/api/checkout/session/[id]/route.ts,api,Y,N,N,N,N,api route
+/api/checkout/subscription,src/app/api/checkout/subscription/route.ts,api,N,N,N,N,N,api route
+/api/councils,src/app/api/councils/route.ts,api,N,N,N,N,N,api route
+/api/cron/compliance-check,src/app/api/cron/compliance-check/route.ts,api,N,N,N,N,N,api route
+/api/cron/legal-change-check,src/app/api/cron/legal-change-check/route.ts,api,N,N,N,N,N,api route
+/api/documents,src/app/api/documents/route.ts,api,N,N,N,N,N,api route
+/api/documents/[id],src/app/api/documents/[id]/route.ts,api,Y,N,N,N,N,api route
+/api/documents/generate,src/app/api/documents/generate/route.ts,api,N,N,N,Y,N,api route
+/api/documents/thumbnail/[id],src/app/api/documents/thumbnail/[id]/route.ts,api,Y,N,N,N,N,api route
+/api/evidence/download,src/app/api/evidence/download/route.ts,api,N,N,N,Y,N,api route
+/api/grounds/[jurisdiction],src/app/api/grounds/[jurisdiction]/route.ts,api,Y,N,N,N,N,api route
+/api/hmo/properties,src/app/api/hmo/properties/route.ts,api,N,N,N,N,N,api route
+/api/hmo/properties/[id],src/app/api/hmo/properties/[id]/route.ts,api,Y,N,N,N,N,api route
+/api/hmo/stats,src/app/api/hmo/stats/route.ts,api,N,N,N,N,N,api route
+/api/hmo/tenants,src/app/api/hmo/tenants/route.ts,api,N,N,N,N,N,api route
+/api/hmo/tenants/[id],src/app/api/hmo/tenants/[id]/route.ts,api,Y,N,N,N,N,api route
+/api/leads/capture,src/app/api/leads/capture/route.ts,api,N,N,N,N,N,api route
+/api/leads/email-report,src/app/api/leads/email-report/route.ts,api,N,N,N,N,N,api route
+/api/money-claim/pack/[caseId],src/app/api/money-claim/pack/[caseId]/route.ts,api,Y,N,N,Y,N,api route
+/api/money-claim/preview/[caseId],src/app/api/money-claim/preview/[caseId]/route.ts,api,Y,N,N,Y,N,api route
+/api/money-claim/thumbnail/[caseId],src/app/api/money-claim/thumbnail/[caseId]/route.ts,api,Y,N,N,Y,N,api route
+/api/notice-only/preview/[caseId],src/app/api/notice-only/preview/[caseId]/route.ts,api,Y,N,N,Y,N,api route
+/api/notice-only/thumbnail/[caseId],src/app/api/notice-only/thumbnail/[caseId]/route.ts,api,Y,N,N,Y,N,api route
+/api/notice-only/validate/[caseId],src/app/api/notice-only/validate/[caseId]/route.ts,api,Y,N,N,Y,N,api route
+/api/notices/validate-dates,src/app/api/notices/validate-dates/route.ts,api,N,N,N,N,N,api route
+/api/orders/by-session,src/app/api/orders/by-session/route.ts,api,N,N,N,N,N,api route
+/api/orders/fulfill,src/app/api/orders/fulfill/route.ts,api,N,N,N,N,N,api route
+/api/orders/regenerate,src/app/api/orders/regenerate/route.ts,api,N,N,N,Y,N,api route
+/api/orders/resume-fulfillment,src/app/api/orders/resume-fulfillment/route.ts,api,N,N,N,N,N,api route
+/api/orders/status,src/app/api/orders/status/route.ts,api,N,N,N,N,N,api route
+/api/seo/cron/daily,src/app/api/seo/cron/daily/route.ts,api,N,N,N,N,N,api route
+/api/seo/generate,src/app/api/seo/generate/route.ts,api,N,N,N,N,N,api route
+/api/seo/indexnow,src/app/api/seo/indexnow/route.ts,api,N,N,N,N,N,api route
+/api/seo/pages,src/app/api/seo/pages/route.ts,api,N,N,N,N,N,api route
+/api/seo/queue,src/app/api/seo/queue/route.ts,api,N,N,N,N,N,api route
+/api/stripe/customer-portal,src/app/api/stripe/customer-portal/route.ts,api,N,N,N,N,N,api route
+/api/stripe/invoice,src/app/api/stripe/invoice/route.ts,api,N,N,N,N,N,api route
+/api/stripe/webhook,src/app/api/stripe/webhook/route.ts,api,N,N,N,Y,N,api route
+/api/subscription/cancel,src/app/api/subscription/cancel/route.ts,api,N,N,N,N,N,api route
+/api/subscription/resume,src/app/api/subscription/resume/route.ts,api,N,N,N,N,N,api route
+/api/subscription/status,src/app/api/subscription/status/route.ts,api,N,N,N,N,N,api route
+/api/subscription/upgrade,src/app/api/subscription/upgrade/route.ts,api,N,N,N,N,N,api route
+/api/tenancy-agreement/thumbnail/[caseId],src/app/api/tenancy-agreement/thumbnail/[caseId]/route.ts,api,Y,N,N,Y,N,api route
+/api/users/me,src/app/api/users/me/route.ts,api,N,N,N,N,N,api route
+/api/webhooks/stripe,src/app/api/webhooks/stripe/route.ts,api,N,N,N,Y,N,api route
+/api/wizard/analyze,src/app/api/wizard/analyze/route.ts,api,N,N,N,Y,N,api route
+/api/wizard/answer,src/app/api/wizard/answer/route.ts,api,N,N,N,Y,N,api route
+/api/wizard/answer-questions,src/app/api/wizard/answer-questions/route.ts,api,N,N,N,Y,N,api route
+/api/wizard/case/[id],src/app/api/wizard/case/[id]/route.ts,api,Y,N,N,N,N,api route
+/api/wizard/checkpoint,src/app/api/wizard/checkpoint/route.ts,api,N,N,N,Y,N,api route
+/api/wizard/claim,src/app/api/wizard/claim/route.ts,api,N,N,N,N,N,api route
+/api/wizard/generate,src/app/api/wizard/generate/route.ts,api,N,N,N,N,N,api route
+/api/wizard/mqs,src/app/api/wizard/mqs/route.ts,api,N,N,N,Y,N,api route
+/api/wizard/next-question,src/app/api/wizard/next-question/route.ts,api,N,N,N,Y,N,api route
+/api/wizard/preview/[caseId],src/app/api/wizard/preview/[caseId]/route.ts,api,Y,N,N,N,N,api route
+/api/wizard/save-facts,src/app/api/wizard/save-facts/route.ts,api,N,N,N,N,N,api route
+/api/wizard/start,src/app/api/wizard/start/route.ts,api,N,N,N,N,N,api route
+/api/wizard/upload-evidence,src/app/api/wizard/upload-evidence/route.ts,api,N,N,N,Y,N,api route
+/api/wizard/validate,src/app/api/wizard/validate/route.ts,api,N,N,N,Y,N,api route
+/apply-possession-order-landlord,src/app/apply-possession-order-landlord/page.tsx,marketing,N,Y,Y,Y,Y,
+/ask-heaven,src/app/ask-heaven/page.tsx,marketing,N,Y,Y,Y,Y,
+/ask-heaven/[slug],src/app/ask-heaven/[slug]/page.tsx,marketing,Y,Y,Y,Y,Y,
+/assured-shorthold-tenancy-agreement,src/app/assured-shorthold-tenancy-agreement/page.tsx,marketing,N,Y,N,Y,Y,
+/assured-shorthold-tenancy-agreement-template,src/app/assured-shorthold-tenancy-agreement-template/page.tsx,marketing,N,Y,N,Y,Y,
+/ast-template-england,src/app/ast-template-england/page.tsx,marketing,N,Y,N,Y,Y,
+/ast-tenancy-agreement-template,src/app/ast-tenancy-agreement-template/page.tsx,marketing,N,Y,N,Y,Y,
+/auth,src/app/auth/layout.tsx,auth,N,Y,Y,N,N,
+/auth/confirm,src/app/auth/confirm/page.tsx,auth,N,N,N,N,N,client page with no page-level metadata export
+/auth/forgot-password,src/app/auth/forgot-password/page.tsx,auth,N,N,N,N,N,client page with no page-level metadata export
+/auth/login,src/app/auth/login/page.tsx,auth,N,N,N,N,N,client page with no page-level metadata export
+/auth/reset-password,src/app/auth/reset-password/page.tsx,auth,N,N,N,N,N,client page with no page-level metadata export
+/auth/signup,src/app/auth/signup/page.tsx,auth,N,N,N,N,N,client page with no page-level metadata export
+/auth/verify-email,src/app/auth/verify-email/page.tsx,auth,N,N,N,N,N,client page with no page-level metadata export
+/blog,src/app/blog/page.tsx,blog,N,Y,N,Y,Y,
+/blog/[slug],src/app/blog/[slug]/page.tsx,blog,Y,Y,Y,Y,Y,
+/claim-rent-arrears-tenant,src/app/claim-rent-arrears-tenant/page.tsx,marketing,N,Y,Y,Y,Y,
+/common-prt-tenancy-mistakes-scotland,src/app/common-prt-tenancy-mistakes-scotland/page.tsx,marketing,N,Y,N,Y,Y,
+/contact,src/app/contact/page.tsx,marketing,N,Y,N,N,Y,
+/cookies,src/app/cookies/page.tsx,marketing,N,Y,N,N,N,
+/county-court-claim-form-guide,src/app/county-court-claim-form-guide/page.tsx,marketing,N,Y,N,Y,Y,
+/dashboard,src/app/dashboard/layout.tsx,dashboard,N,Y,Y,N,N,
+/dashboard,src/app/dashboard/page.tsx,dashboard,N,N,N,N,N,client page with no page-level metadata export
+/dashboard/admin,src/app/dashboard/admin/page.tsx,dashboard,N,N,N,N,N,client page with no page-level metadata export
+/dashboard/admin/ai-usage,src/app/dashboard/admin/ai-usage/page.tsx,dashboard,N,N,N,N,N,client page with no page-level metadata export
+/dashboard/admin/ask-heaven,src/app/dashboard/admin/ask-heaven/layout.tsx,dashboard,N,Y,Y,N,N,
+/dashboard/admin/ask-heaven,src/app/dashboard/admin/ask-heaven/page.tsx,dashboard,N,N,N,Y,N,client page with no page-level metadata export
+/dashboard/admin/ask-heaven/[slug],src/app/dashboard/admin/ask-heaven/[slug]/page.tsx,dashboard,Y,N,N,Y,N,client page with no page-level metadata export
+/dashboard/admin/email-previews,src/app/dashboard/admin/email-previews/page.tsx,dashboard,N,N,N,N,N,client page with no page-level metadata export
+/dashboard/admin/failed-payments,src/app/dashboard/admin/failed-payments/page.tsx,dashboard,N,N,N,N,N,
+/dashboard/admin/leads,src/app/dashboard/admin/leads/page.tsx,dashboard,N,N,N,N,N,
+/dashboard/admin/legal-changes,src/app/dashboard/admin/legal-changes/page.tsx,dashboard,N,N,N,N,N,client page with no page-level metadata export
+/dashboard/admin/legal-changes/[id],src/app/dashboard/admin/legal-changes/[id]/page.tsx,dashboard,Y,N,N,N,N,client page with no page-level metadata export
+/dashboard/admin/legal-changes/inbox,src/app/dashboard/admin/legal-changes/inbox/page.tsx,dashboard,N,N,N,N,N,client page with no page-level metadata export
+/dashboard/admin/orders,src/app/dashboard/admin/orders/page.tsx,dashboard,N,N,N,N,N,client page with no page-level metadata export
+/dashboard/admin/users,src/app/dashboard/admin/users/page.tsx,dashboard,N,N,N,N,N,client page with no page-level metadata export
+/dashboard/billing,src/app/dashboard/billing/page.tsx,dashboard,N,N,N,N,N,client page with no page-level metadata export
+/dashboard/cases,src/app/dashboard/cases/page.tsx,dashboard,N,N,N,N,N,client page with no page-level metadata export
+/dashboard/cases/[id],src/app/dashboard/cases/[id]/page.tsx,dashboard,Y,N,N,Y,N,client page with no page-level metadata export
+/dashboard/documents,src/app/dashboard/documents/page.tsx,dashboard,N,N,N,N,N,client page with no page-level metadata export
+/dashboard/hmo,src/app/dashboard/hmo/page.tsx,dashboard,N,N,N,N,N,client page with no page-level metadata export
+/dashboard/hmo/properties,src/app/dashboard/hmo/properties/page.tsx,dashboard,N,N,N,N,N,client page with no page-level metadata export
+/dashboard/hmo/properties/[id],src/app/dashboard/hmo/properties/[id]/page.tsx,dashboard,Y,N,N,N,N,client page with no page-level metadata export
+/dashboard/hmo/properties/new,src/app/dashboard/hmo/properties/new/page.tsx,dashboard,N,N,N,N,N,client page with no page-level metadata export
+/dashboard/hmo/tenants,src/app/dashboard/hmo/tenants/page.tsx,dashboard,N,N,N,N,N,client page with no page-level metadata export
+/dashboard/hmo/tenants/new,src/app/dashboard/hmo/tenants/new/page.tsx,dashboard,N,N,N,N,N,client page with no page-level metadata export
+/dashboard/profile,src/app/dashboard/profile/page.tsx,dashboard,N,N,N,N,N,client page with no page-level metadata export
+/dashboard/settings,src/app/dashboard/settings/page.tsx,dashboard,N,N,N,N,N,client page with no page-level metadata export
+/eicr-landlord-requirements,src/app/eicr-landlord-requirements/page.tsx,marketing,N,Y,N,Y,Y,
+/eviction-cost-uk,src/app/eviction-cost-uk/page.tsx,marketing,N,Y,N,Y,Y,
+/eviction-notice,src/app/eviction-notice/page.tsx,marketing,N,Y,Y,Y,Y,
+/eviction-notice-template,src/app/eviction-notice-template/page.tsx,marketing,N,Y,N,Y,Y,
+/eviction-notice-uk,src/app/eviction-notice-uk/page.tsx,marketing,N,Y,N,Y,Y,
+/eviction-pack-england,src/app/eviction-pack-england/page.tsx,marketing,N,Y,Y,Y,Y,
+/eviction-process-england,src/app/eviction-process-england/page.tsx,marketing,N,Y,Y,Y,Y,
+/eviction-process-scotland,src/app/eviction-process-scotland/page.tsx,marketing,N,Y,Y,Y,Y,
+/eviction-process-wales,src/app/eviction-process-wales/page.tsx,marketing,N,Y,Y,Y,Y,
+/fixed-term-periodic-occupation-contract-wales,src/app/fixed-term-periodic-occupation-contract-wales/page.tsx,marketing,N,Y,N,Y,Y,
+/fixed-term-periodic-tenancy-england,src/app/fixed-term-periodic-tenancy-england/page.tsx,marketing,N,Y,N,Y,Y,
+/fixed-term-tenancy-agreement-northern-ireland,src/app/fixed-term-tenancy-agreement-northern-ireland/page.tsx,marketing,N,Y,N,Y,Y,
+/fixed-term-tenancy-agreement-template,src/app/fixed-term-tenancy-agreement-template/page.tsx,marketing,N,Y,N,Y,Y,
+/form-3-section-8,src/app/form-3-section-8/page.tsx,marketing,N,Y,N,Y,Y,
+/form-6a-section-21,src/app/form-6a-section-21/page.tsx,marketing,N,Y,N,Y,Y,
+/help,src/app/help/page.tsx,marketing,N,Y,N,N,N,
+/how-to-evict-tenant,src/app/how-to-evict-tenant/page.tsx,marketing,N,Y,N,Y,Y,
+/how-to-rent-guide,src/app/how-to-rent-guide/page.tsx,marketing,N,Y,N,Y,Y,
+/how-to-sue-tenant-for-unpaid-rent,src/app/how-to-sue-tenant-for-unpaid-rent/page.tsx,marketing,N,Y,N,Y,Y,
+/joint-occupation-contract-wales,src/app/joint-occupation-contract-wales/page.tsx,marketing,N,Y,N,Y,Y,
+/joint-prt-tenancy-agreement-scotland,src/app/joint-prt-tenancy-agreement-scotland/page.tsx,marketing,N,Y,N,Y,Y,
+/joint-tenancy-agreement-england,src/app/joint-tenancy-agreement-england/page.tsx,marketing,N,Y,N,Y,Y,
+/joint-tenancy-agreement-northern-ireland,src/app/joint-tenancy-agreement-northern-ireland/page.tsx,marketing,N,Y,N,Y,Y,
+/joint-tenancy-agreement-template,src/app/joint-tenancy-agreement-template/page.tsx,marketing,N,Y,N,Y,Y,
+/lodger-agreement-template,src/app/lodger-agreement-template/page.tsx,marketing,N,Y,N,Y,Y,
+/mcol-money-claim-online,src/app/mcol-money-claim-online/page.tsx,marketing,N,Y,N,Y,Y,
+/money-claim,src/app/money-claim/page.tsx,marketing,N,Y,Y,Y,Y,
+/money-claim-abandoned-goods,src/app/money-claim-abandoned-goods/page.tsx,marketing,N,Y,N,Y,Y,
+/money-claim-appliance-damage,src/app/money-claim-appliance-damage/page.tsx,marketing,N,Y,N,Y,Y,
+/money-claim-bathroom-damage,src/app/money-claim-bathroom-damage/page.tsx,marketing,N,Y,N,Y,Y,
+/money-claim-carpet-damage,src/app/money-claim-carpet-damage/page.tsx,marketing,N,Y,N,Y,Y,
+/money-claim-ccj-enforcement,src/app/money-claim-ccj-enforcement/page.tsx,marketing,N,Y,N,Y,Y,
+/money-claim-cleaning-costs,src/app/money-claim-cleaning-costs/page.tsx,marketing,N,Y,N,Y,Y,
+/money-claim-council-tax,src/app/money-claim-council-tax/page.tsx,marketing,N,Y,N,Y,Y,
+/money-claim-deposit-shortfall,src/app/money-claim-deposit-shortfall/page.tsx,marketing,N,Y,N,Y,Y,
+/money-claim-early-termination,src/app/money-claim-early-termination/page.tsx,marketing,N,Y,N,Y,Y,
+/money-claim-former-tenant,src/app/money-claim-former-tenant/page.tsx,marketing,N,Y,N,Y,Y,
+/money-claim-garden-damage,src/app/money-claim-garden-damage/page.tsx,marketing,N,Y,N,Y,Y,
+/money-claim-guarantor,src/app/money-claim-guarantor/page.tsx,marketing,N,Y,N,Y,Y,
+/money-claim-letter-before-action,src/app/money-claim-letter-before-action/page.tsx,marketing,N,Y,N,Y,Y,
+/money-claim-n1-claim-form,src/app/money-claim-n1-claim-form/page.tsx,marketing,N,Y,N,Y,Y,
+/money-claim-online-mcol,src/app/money-claim-online-mcol/page.tsx,marketing,N,Y,N,Y,Y,
+/money-claim-pap-financial-statement,src/app/money-claim-pap-financial-statement/page.tsx,marketing,N,Y,N,Y,Y,
+/money-claim-property-damage,src/app/money-claim-property-damage/page.tsx,marketing,N,Y,N,Y,Y,
+/money-claim-rent-arrears,src/app/money-claim-rent-arrears/page.tsx,marketing,N,Y,N,Y,Y,
+/money-claim-schedule-of-debt,src/app/money-claim-schedule-of-debt/page.tsx,marketing,N,Y,N,Y,Y,
+/money-claim-small-claims-landlord,src/app/money-claim-small-claims-landlord/page.tsx,marketing,N,Y,N,Y,Y,
+/money-claim-tenant-defends,src/app/money-claim-tenant-defends/page.tsx,marketing,N,Y,N,Y,Y,
+/money-claim-unpaid-bills,src/app/money-claim-unpaid-bills/page.tsx,marketing,N,Y,N,Y,Y,
+/money-claim-unpaid-rent,src/app/money-claim-unpaid-rent/page.tsx,marketing,N,Y,N,Y,Y,
+/money-claim-unpaid-utilities,src/app/money-claim-unpaid-utilities/page.tsx,marketing,N,Y,N,Y,Y,
+/money-claim-wall-damage,src/app/money-claim-wall-damage/page.tsx,marketing,N,Y,N,Y,Y,
+/n5b-form-guide,src/app/n5b-form-guide/page.tsx,marketing,N,Y,N,Y,Y,
+/ni-private-tenancy-agreement,src/app/ni-private-tenancy-agreement/page.tsx,marketing,N,Y,N,Y,Y,
+/ni-tenancy-agreement-template-free,src/app/ni-tenancy-agreement-template-free/page.tsx,marketing,N,Y,N,Y,Y,
+/no-fault-eviction,src/app/no-fault-eviction/page.tsx,marketing,N,Y,N,Y,Y,
+/northern-ireland-tenancy-agreement-template,src/app/northern-ireland-tenancy-agreement-template/page.tsx,marketing,N,Y,N,Y,Y,
+/notice-to-quit-northern-ireland-guide,src/app/notice-to-quit-northern-ireland-guide/page.tsx,marketing,N,Y,N,Y,Y,
+/occupation-contract-template-wales,src/app/occupation-contract-template-wales/page.tsx,marketing,N,Y,N,Y,Y,
+/periodic-tenancy-agreement,src/app/periodic-tenancy-agreement/page.tsx,marketing,N,Y,N,Y,N,
+/possession-claim-guide,src/app/possession-claim-guide/page.tsx,marketing,N,Y,N,Y,Y,
+/pre-action-protocol-debt,src/app/pre-action-protocol-debt/page.tsx,marketing,N,Y,N,Y,Y,
+/premium-tenancy-agreement,src/app/premium-tenancy-agreement/page.tsx,marketing,N,Y,Y,Y,Y,
+/pricing,src/app/pricing/page.tsx,marketing,N,Y,N,N,Y,
+/privacy,src/app/privacy/page.tsx,marketing,N,Y,N,N,N,
+/private-residential-tenancy-agreement-scotland,src/app/private-residential-tenancy-agreement-scotland/page.tsx,marketing,N,Y,N,Y,Y,
+/private-residential-tenancy-agreement-template,src/app/private-residential-tenancy-agreement-template/page.tsx,marketing,N,Y,N,Y,Y,
+/products/ast,src/app/products/ast/page.tsx,product,N,Y,N,Y,Y,
+/products/complete-pack,src/app/products/complete-pack/page.tsx,product,N,Y,N,Y,Y,
+/products/money-claim,src/app/products/money-claim/page.tsx,product,N,Y,N,Y,Y,
+/products/money-claim-pack,src/app/products/money-claim-pack/page.tsx,product,N,Y,N,Y,N,
+/products/notice-only,src/app/products/notice-only/page.tsx,product,N,Y,N,Y,Y,
+/prt-template-scotland,src/app/prt-template-scotland/page.tsx,marketing,N,Y,N,Y,Y,
+/prt-tenancy-agreement-template-scotland,src/app/prt-tenancy-agreement-template-scotland/page.tsx,marketing,N,Y,N,Y,Y,
+/refunds,src/app/refunds/page.tsx,marketing,N,Y,N,N,N,
+/renew-tenancy-agreement-england,src/app/renew-tenancy-agreement-england/page.tsx,marketing,N,Y,N,Y,Y,
+/rent-arrears-letter-template,src/app/rent-arrears-letter-template/page.tsx,marketing,N,Y,N,N,Y,
+/renting-homes-wales-written-statement,src/app/renting-homes-wales-written-statement/page.tsx,marketing,N,Y,N,Y,Y,
+/robots.txt,src/app/robots.ts,marketing,N,N,N,N,N,
+/rolling-tenancy-agreement,src/app/rolling-tenancy-agreement/page.tsx,marketing,N,Y,N,Y,Y,
+/scotland-eviction-notices,src/app/scotland-eviction-notices/page.tsx,marketing,N,Y,N,Y,Y,
+/scotland-notice-to-leave-template,src/app/scotland-notice-to-leave-template/page.tsx,marketing,N,Y,N,Y,Y,
+/scotland-prt-model-agreement-guide,src/app/scotland-prt-model-agreement-guide/page.tsx,marketing,N,Y,N,Y,Y,
+/scottish-tenancy-agreement-template,src/app/scottish-tenancy-agreement-template/page.tsx,marketing,N,Y,N,Y,Y,
+/section-21-ban,src/app/section-21-ban/page.tsx,marketing,N,Y,N,Y,Y,
+/section-21-expired-what-next,src/app/section-21-expired-what-next/page.tsx,marketing,N,Y,Y,Y,Y,
+/section-21-notice-template,src/app/section-21-notice-template/page.tsx,marketing,N,Y,N,Y,Y,
+/section-8-notice-template,src/app/section-8-notice-template/page.tsx,marketing,N,Y,N,Y,Y,
+/section-8-rent-arrears-eviction,src/app/section-8-rent-arrears-eviction/page.tsx,marketing,N,Y,Y,Y,Y,
+/section-8-vs-section-21,src/app/section-8-vs-section-21/page.tsx,marketing,N,Y,Y,Y,Y,
+/sitemap.xml,src/app/sitemap.ts,marketing,N,N,Y,Y,N,
+/standard-occupation-contract-wales,src/app/standard-occupation-contract-wales/page.tsx,marketing,N,Y,N,Y,Y,
+/success/[product]/[caseId],src/app/success/[product]/[caseId]/page.tsx,marketing,Y,N,N,N,N,client page with no page-level metadata export
+/tenancy-agreement,src/app/tenancy-agreement/page.tsx,marketing,N,Y,Y,Y,Y,
+/tenancy-agreement-northern-ireland,src/app/tenancy-agreement-northern-ireland/page.tsx,marketing,N,Y,N,Y,Y,
+/tenancy-agreement-template,src/app/tenancy-agreement-template/page.tsx,marketing,N,Y,N,Y,Y,
+/tenancy-agreement-template-free,src/app/tenancy-agreement-template-free/page.tsx,marketing,N,Y,N,Y,Y,
+/tenancy-agreement-template-northern-ireland,src/app/tenancy-agreement-template-northern-ireland/page.tsx,marketing,N,Y,N,Y,Y,
+/tenancy-agreements/england,src/app/tenancy-agreements/england/page.tsx,marketing,N,Y,N,Y,Y,
+/tenancy-agreements/england-wales,src/app/tenancy-agreements/england-wales/page.tsx,marketing,N,Y,Y,N,N,
+/tenancy-agreements/northern-ireland,src/app/tenancy-agreements/northern-ireland/page.tsx,marketing,N,Y,N,Y,Y,
+/tenancy-agreements/scotland,src/app/tenancy-agreements/scotland/page.tsx,marketing,N,Y,N,Y,Y,
+/tenancy-agreements/wales,src/app/tenancy-agreements/wales/page.tsx,marketing,N,Y,N,Y,Y,
+/tenant-damaging-property,src/app/tenant-damaging-property/page.tsx,marketing,N,Y,N,Y,Y,
+/tenant-not-paying-rent,src/app/tenant-not-paying-rent/page.tsx,marketing,N,Y,N,Y,Y,
+/tenant-wont-leave,src/app/tenant-wont-leave/page.tsx,marketing,N,Y,N,Y,Y,
+/terms,src/app/terms/page.tsx,marketing,N,Y,N,N,N,
+/tools,src/app/tools/page.tsx,tool,N,Y,N,Y,N,
+/tools/free-rent-demand-letter,src/app/tools/free-rent-demand-letter/layout.tsx,tool,N,Y,N,Y,Y,
+/tools/free-rent-demand-letter,src/app/tools/free-rent-demand-letter/page.tsx,tool,N,N,N,N,N,client page with no page-level metadata export
+/tools/free-section-21-notice-generator,src/app/tools/free-section-21-notice-generator/layout.tsx,tool,N,Y,N,Y,Y,
+/tools/free-section-21-notice-generator,src/app/tools/free-section-21-notice-generator/page.tsx,tool,N,N,N,N,Y,client page with no page-level metadata export
+/tools/free-section-8-notice-generator,src/app/tools/free-section-8-notice-generator/layout.tsx,tool,N,Y,N,Y,Y,
+/tools/free-section-8-notice-generator,src/app/tools/free-section-8-notice-generator/page.tsx,tool,N,N,N,N,Y,client page with no page-level metadata export
+/tools/hmo-license-checker,src/app/tools/hmo-license-checker/layout.tsx,tool,N,Y,N,Y,Y,
+/tools/hmo-license-checker,src/app/tools/hmo-license-checker/page.tsx,tool,N,N,N,N,N,client page with no page-level metadata export
+/tools/rent-arrears-calculator,src/app/tools/rent-arrears-calculator/layout.tsx,tool,N,Y,N,Y,Y,
+/tools/rent-arrears-calculator,src/app/tools/rent-arrears-calculator/page.tsx,tool,N,N,N,N,N,client page with no page-level metadata export
+/tools/validators,src/app/tools/validators/page.tsx,tool,N,Y,N,Y,N,
+/tools/validators/section-21,src/app/tools/validators/section-21/page.tsx,tool,N,Y,N,Y,Y,
+/tools/validators/section-8,src/app/tools/validators/section-8/page.tsx,tool,N,Y,N,Y,Y,
+/update-occupation-contract-wales,src/app/update-occupation-contract-wales/page.tsx,marketing,N,Y,N,Y,Y,
+/update-prt-tenancy-agreement-scotland,src/app/update-prt-tenancy-agreement-scotland/page.tsx,marketing,N,Y,N,Y,Y,
+/update-tenancy-agreement-northern-ireland,src/app/update-tenancy-agreement-northern-ireland/page.tsx,marketing,N,Y,N,Y,Y,
+/wales-eviction-notice-template,src/app/wales-eviction-notice-template/page.tsx,marketing,N,Y,N,Y,Y,
+/wales-eviction-notices,src/app/wales-eviction-notices/page.tsx,marketing,N,Y,N,Y,Y,
+/wales-tenancy-agreement-template,src/app/wales-tenancy-agreement-template/page.tsx,marketing,N,Y,N,Y,Y,
+/warrant-of-possession,src/app/warrant-of-possession/page.tsx,marketing,N,Y,N,Y,Y,
+/wizard,src/app/wizard/layout.tsx,wizard,N,N,Y,Y,N,
+/wizard,src/app/wizard/page.tsx,wizard,N,Y,Y,Y,N,
+/wizard/flow,src/app/wizard/flow/page.tsx,wizard,N,N,N,N,N,client page with no page-level metadata export
+/wizard/preview/[caseId],src/app/wizard/preview/[caseId]/page.tsx,wizard,Y,N,N,N,N,client page with no page-level metadata export
+/wizard/review,src/app/wizard/review/page.tsx,wizard,N,N,N,Y,N,client page with no page-level metadata export
+/wizard/upload-evidence,src/app/wizard/upload-evidence/route.ts,wizard,N,N,N,Y,N,

@@ -1,0 +1,7 @@
+
+> landlord-heavenv3@0.1.0 test
+> vitest run tests/api/notice-compliance.test.ts
+
+
+ RUN  v2.1.9 /home/user/landlord-heavenv3
+

@@ -5,17 +5,18 @@
  * Returns comprehensive platform statistics for admin dashboard
  */
 
-import { createServerSupabaseClient, requireServerAuth } from '@/lib/supabase/server';
+import { createAdminClient, requireServerAuth } from '@/lib/supabase/server';
+import { isAdmin } from '@/lib/auth';
 import { NextResponse } from 'next/server';
 
 export async function GET() {
   try {
     const user = await requireServerAuth();
-    const supabase = await createServerSupabaseClient();
+    // Admin routes use service-role client to bypass RLS for platform metrics.
+    const adminClient = createAdminClient();
 
-    // Check if user is admin
-    const adminIds = process.env.ADMIN_USER_IDS?.split(',') || [];
-    if (!adminIds.includes(user.id)) {
+    // Check if user is admin (with proper trimming of env var)
+    if (!isAdmin(user.id)) {
       return NextResponse.json(
         { error: 'Unauthorized - Admin access required' },
         { status: 403 }
@@ -29,7 +30,7 @@ export async function GET() {
     const endOfLastMonth = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59).toISOString();
 
     // Fetch users stats
-    const { data: allUsers } = await supabase
+    const { data: allUsers } = await adminClient
       .from('users')
       .select('id, email_verified, created_at');
 
@@ -39,16 +40,16 @@ export async function GET() {
       (u: any) => new Date(u.created_at) >= new Date(startOfThisMonth)
     ).length || 0;
 
-    // Fetch active subscribers
-    const { data: subscribers } = await supabase
-      .from('hmo_subscriptions')
-      .select('user_id')
-      .eq('status', 'active');
+    // Fetch active subscribers (from users table hmo_pro_active field)
+    const { data: subscribers } = await adminClient
+      .from('users')
+      .select('id')
+      .eq('hmo_pro_active', true);
 
     const totalSubscribers = subscribers?.length || 0;
 
     // Fetch cases stats
-    const { data: allCases } = await supabase
+    const { data: allCases } = await adminClient
       .from('cases')
       .select('case_type, status');
 
@@ -62,7 +63,7 @@ export async function GET() {
     });
 
     // Fetch documents stats
-    const { data: allDocuments } = await supabase
+    const { data: allDocuments } = await adminClient
       .from('documents')
       .select('is_preview');
 
@@ -70,29 +71,39 @@ export async function GET() {
     const previewDocuments = allDocuments?.filter((d: any) => d.is_preview).length || 0;
     const finalDocuments = totalDocuments - previewDocuments;
 
-    // Fetch revenue stats
-    const { data: allOrders } = await supabase
+    // Fetch revenue stats - use correct field names from schema
+    const { data: allOrders } = await adminClient
       .from('orders')
-      .select('amount, status, created_at')
-      .eq('status', 'succeeded');
+      .select('total_amount, payment_status, created_at')
+      .eq('payment_status', 'paid');
 
-    const totalRevenue = allOrders?.reduce((sum: number, o: any) => sum + o.amount, 0) || 0;
+    const totalRevenue = allOrders?.reduce((sum: number, o: any) => sum + o.total_amount, 0) || 0;
     const revenueThisMonth = allOrders
       ?.filter((o: any) => new Date(o.created_at) >= new Date(startOfThisMonth))
-      .reduce((sum: number, o: any) => sum + o.amount, 0) || 0;
+      .reduce((sum: number, o: any) => sum + o.total_amount, 0) || 0;
     const revenueLastMonth = allOrders
       ?.filter(
         (o: any) =>
           new Date(o.created_at) >= new Date(startOfLastMonth) &&
           new Date(o.created_at) <= new Date(endOfLastMonth)
       )
-      .reduce((sum: number, o: any) => sum + o.amount, 0) || 0;
+      .reduce((sum: number, o: any) => sum + o.total_amount, 0) || 0;
 
     // Calculate MRR from subscriptions (assuming £9.99/month for HMO Pro)
     const subscriptionsMRR = totalSubscribers * 999; // £9.99 in pence
 
+    // Fetch email leads stats
+    const { count: totalLeads } = await adminClient
+      .from('email_subscribers')
+      .select('*', { count: 'exact', head: true });
+
+    const { count: leadsThisMonth } = await adminClient
+      .from('email_subscribers')
+      .select('*', { count: 'exact', head: true })
+      .gte('created_at', startOfThisMonth);
+
     // Fetch AI usage stats
-    const { data: allAIUsage } = await supabase
+    const { data: allAIUsage } = await adminClient
       .from('ai_usage_logs')
       .select('input_tokens, output_tokens, total_cost_usd, created_at');
 
@@ -138,6 +149,10 @@ export async function GET() {
             total_tokens: totalTokens,
             total_cost_usd: totalCostUSD,
             this_month_cost: thisMonthCostUSD,
+          },
+          leads: {
+            total: totalLeads || 0,
+            this_month: leadsThisMonth || 0,
           },
         },
       },

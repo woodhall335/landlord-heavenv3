@@ -1,0 +1,103 @@
+{{!--
+  ============================================================================
+  DEPOSIT DEDUCTIONS CLAUSE
+  ADR-Safe and Legally Compliant
+
+  LEGAL NOTES:
+  - Landlords CANNOT "forfeit" the entire deposit without justification
+  - All deductions must be evidenced and reasonable
+  - Disputes must go through the deposit scheme's ADR process
+  - Tenants have the right to challenge unreasonable deductions
+
+  USAGE:
+  {{> deposit_deductions_clause}}
+  ============================================================================
+--}}
+
+{{#*inline "deposit_deductions_clause"}}
+<div class="subsection">
+  <div class="subsection-title">Deposit Return and Deductions</div>
+
+  <div class="clause">
+    <span class="clause-number">{{clause_prefix}}.1</span>
+    <strong>Return of Deposit:</strong> At the end of the tenancy, the deposit (or the balance after any agreed deductions) will be returned to the Tenant within {{#if deposit_return_days}}{{deposit_return_days}}{{else}}10{{/if}} days of:
+    <ul>
+      <li>Agreement between Landlord and Tenant on any deductions, OR</li>
+      <li>Confirmation that no deductions are to be made</li>
+    </ul>
+  </div>
+
+  <div class="clause">
+    <span class="clause-number">{{clause_prefix}}.2</span>
+    <strong>Permitted Deductions:</strong> The Landlord may only propose deductions from the deposit for:
+    <ul>
+      <li>Damage to the Property, fixtures, fittings, or contents beyond fair wear and tear</li>
+      <li>Cleaning required to return the Property to its check-in condition</li>
+      <li>Missing items listed in the inventory</li>
+      <li>Unpaid rent or other sums due under this Agreement</li>
+      <li>Unpaid utility bills where the Tenant is responsible</li>
+      <li>Cost of replacing lost keys or changing locks</li>
+      <li>Any other breach of this Agreement that has caused financial loss to the Landlord</li>
+    </ul>
+  </div>
+
+  <div class="clause">
+    <span class="clause-number">{{clause_prefix}}.3</span>
+    <strong>Evidence Required:</strong> Any proposed deduction must be supported by evidence, which may include:
+    <ul>
+      <li>Photographs or video from the check-in and check-out reports</li>
+      <li>The signed inventory and schedule of condition</li>
+      <li>Invoices or receipts for repairs or cleaning</li>
+      <li>Quotes from contractors for work required</li>
+    </ul>
+  </div>
+
+  <div class="legal-notice">
+    <div class="legal-notice-title">Dispute Resolution</div>
+    <p>
+      If there is a dispute about deposit deductions that cannot be resolved between the Landlord and Tenant:
+    </p>
+    <ul>
+      <li>Either party may refer the dispute to the <strong>Alternative Dispute Resolution (ADR)</strong> service provided by the deposit protection scheme ({{deposit_scheme_name}})</li>
+      <li>The ADR service is free and will make a binding decision on the disputed amount</li>
+      <li>The deposit will remain protected in the scheme until the dispute is resolved</li>
+      <li>The adjudicator will consider evidence from both parties and make a fair determination</li>
+    </ul>
+    <p style="margin-top: 10px;">
+      <strong>Important:</strong> The Landlord cannot withhold the entire deposit without justification. Deductions must be reasonable, evidenced, and proportionate to the actual loss or cost incurred.
+    </p>
+  </div>
+
+  <div class="explainer-box">
+    <div class="explainer-title">Fair Wear and Tear</div>
+    <p>
+      "Fair wear and tear" means the reasonable deterioration that occurs through normal, everyday use of the Property.
+      Examples include minor scuffs on walls, gradual carpet wear in high-traffic areas, and fading of curtains from sunlight.
+      Tenants are not responsible for fair wear and tear, but are responsible for damage caused by negligence,
+      misuse, or failure to report issues that worsen over time.
+    </p>
+  </div>
+</div>
+{{/inline}}
+
+{{!--
+  ============================================================================
+  SIMPLIFIED DEPOSIT CLAUSE (Markdown format for Scotland/NI)
+  ============================================================================
+--}}
+{{#*inline "deposit_deductions_clause_markdown"}}
+### Deposit Return and Deductions
+
+**Return of Deposit:** At the end of the tenancy, the deposit (or balance after any agreed deductions) will be returned within 10 days of agreement on deductions or confirmation that none are required.
+
+**Permitted Deductions:** The Landlord may only deduct for:
+- Damage beyond fair wear and tear
+- Cleaning to restore the Property to check-in condition
+- Missing items from the inventory
+- Unpaid rent or utility bills
+- Cost of replacing lost keys
+
+**Evidence Required:** All deductions must be supported by evidence (photographs, inventory, invoices, quotes).
+
+**Dispute Resolution:** If a dispute arises, either party may refer it to the deposit scheme's free Alternative Dispute Resolution (ADR) service, which will make a binding decision. Deductions must be reasonable, evidenced, and proportionate.
+{{/inline}}

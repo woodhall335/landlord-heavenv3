@@ -1,0 +1,159 @@
+{{!--
+  ============================================================================
+  SCHEDULE 2: RENT AND DEPOSIT
+  Financial terms and payment details for tenancy agreements
+
+  USAGE:
+  {{> schedule_rent_deposit}}
+  ============================================================================
+--}}
+
+{{#*inline "schedule_rent_deposit"}}
+<section class="schedule" id="schedule-2">
+  <div class="schedule-header">
+    <h2>Schedule 2</h2>
+    <div class="schedule-title">Rent and Deposit</div>
+  </div>
+
+  <h3>Part A: Rent</h3>
+  <table class="data-table">
+    <tr>
+      <td class="label">Rent Amount</td>
+      <td class="value">£{{rent_amount}} per {{rent_period}}</td>
+    </tr>
+    <tr>
+      <td class="label">Payment Due</td>
+      <td class="value">{{rent_due_day}} of each {{rent_period}}</td>
+    </tr>
+    <tr>
+      <td class="label">Payment Method</td>
+      <td class="value">{{payment_method}}</td>
+    </tr>
+    <tr>
+      <td class="label">First Payment Due</td>
+      <td class="value">{{#if first_payment_date}}{{first_payment_date}}{{else}}{{tenancy_start_date}}{{/if}}</td>
+    </tr>
+    {{#if first_payment}}
+    <tr>
+      <td class="label">First Payment Amount</td>
+      <td class="value">£{{first_payment}}</td>
+    </tr>
+    {{/if}}
+  </table>
+
+  <h4>Bank Account for Rent Payments</h4>
+  <table class="data-table">
+    <tr>
+      <td class="label">Account Name</td>
+      <td class="value">{{#if bank_account_name}}{{bank_account_name}}{{else}}{{landlord_full_name}}{{/if}}</td>
+    </tr>
+    <tr>
+      <td class="label">Sort Code</td>
+      <td class="value">{{bank_sort_code}}</td>
+    </tr>
+    <tr>
+      <td class="label">Account Number</td>
+      <td class="value">{{bank_account_number}}</td>
+    </tr>
+    {{#if payment_reference}}
+    <tr>
+      <td class="label">Payment Reference</td>
+      <td class="value">{{payment_reference}}</td>
+    </tr>
+    {{/if}}
+  </table>
+
+  {{#if rent_includes}}
+  <h4>Rent Includes</h4>
+  <p>{{rent_includes}}</p>
+  {{/if}}
+
+  {{#if rent_excludes}}
+  <h4>Rent Excludes</h4>
+  <p>{{rent_excludes}}</p>
+  {{/if}}
+
+  <h3>Part B: Deposit</h3>
+  <table class="data-table">
+    <tr>
+      <td class="label">Deposit Amount</td>
+      <td class="value">£{{deposit_amount}}</td>
+    </tr>
+    <tr>
+      <td class="label">Protection Scheme</td>
+      <td class="value">{{deposit_scheme_name}}</td>
+    </tr>
+    {{#if deposit_certificate_number}}
+    <tr>
+      <td class="label">Certificate Number</td>
+      <td class="value">{{deposit_certificate_number}}</td>
+    </tr>
+    {{/if}}
+  </table>
+
+  <div class="legal-notice">
+    <div class="legal-notice-title">Deposit Protection</div>
+    <p>The Landlord will protect the Deposit in the Scheme within the time required by law and provide the Tenant with the prescribed information. At the end of the tenancy, the Deposit (or the balance thereof after any lawful deductions) will be returned in accordance with the Scheme's procedures.</p>
+  </div>
+
+  <h4>Permitted Deductions from Deposit</h4>
+  <p>The Landlord may make deductions from the Deposit at the end of the tenancy for:</p>
+  <ul>
+    <li>Unpaid rent or other sums due under this Agreement</li>
+    <li>Damage to the Property or Contents beyond fair wear and tear</li>
+    <li>Missing items from the inventory</li>
+    <li>Cleaning costs where the Property is not left in the same condition as at the start of the tenancy (allowing for fair wear and tear)</li>
+    <li>Replacement of keys, fobs, or security devices not returned</li>
+    <li>Any other costs arising from breach of this Agreement</li>
+  </ul>
+  <p>Any dispute regarding deductions may be referred to the Scheme's free alternative dispute resolution service.</p>
+
+  {{#if late_payment_interest_applicable}}
+  <h3>Part C: Late Payment</h3>
+  <table class="data-table">
+    <tr>
+      <td class="label">Interest on Late Payment</td>
+      <td class="value">{{#if late_payment_interest_rate}}{{late_payment_interest_rate}}%{{else}}3%{{/if}} above Bank of England base rate per annum</td>
+    </tr>
+    {{#if grace_period_days}}
+    <tr>
+      <td class="label">Grace Period</td>
+      <td class="value">{{grace_period_days}} days after due date</td>
+    </tr>
+    {{/if}}
+  </table>
+  {{/if}}
+
+  {{#if guarantor_name}}
+  <h3>Part D: Guarantor</h3>
+  <table class="data-table">
+    <tr>
+      <td class="label">Guarantor Name</td>
+      <td class="value">{{guarantor_name}}</td>
+    </tr>
+    <tr>
+      <td class="label">Guarantor Address</td>
+      <td class="value address-text">{{guarantor_address}}</td>
+    </tr>
+    <tr>
+      <td class="label">Contact Email</td>
+      <td class="value email-text">{{guarantor_email}}</td>
+    </tr>
+    <tr>
+      <td class="label">Contact Phone</td>
+      <td class="value">{{guarantor_phone}}</td>
+    </tr>
+    {{#if guarantor_relationship}}
+    <tr>
+      <td class="label">Relationship to Tenant</td>
+      <td class="value">{{guarantor_relationship}}</td>
+    </tr>
+    {{/if}}
+    <tr>
+      <td class="label">Maximum Liability</td>
+      <td class="value">{{#if guarantor_max_liability}}{{guarantor_max_liability}}{{else}}Twelve (12) months' rent plus reasonable enforcement costs{{/if}}</td>
+    </tr>
+  </table>
+  {{/if}}
+</section>
+{{/inline}}

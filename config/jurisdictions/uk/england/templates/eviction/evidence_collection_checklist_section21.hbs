@@ -1,0 +1,505 @@
+{{!--
+  ============================================================================
+  EVIDENCE COLLECTION CHECKLIST
+  Section 21 Accelerated Possession Proceedings
+  ============================================================================
+  Comprehensive checklist of evidence needed for Section 21 no-fault eviction.
+
+  IMPORTANT: Section 21 requires COMPLIANCE documents, not arrears evidence.
+  Do not include arrears schedules or bank statements.
+--}}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Evidence Collection Checklist - Section 21</title>
+  <style>
+    {{{print_css}}}
+
+    @page {
+      size: A4;
+      margin: 15mm;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 10pt;
+      line-height: 1.5;
+      color: #1a1a1a;
+      padding: 0;
+      margin: 0;
+    }
+
+    .doc-header {
+      text-align: center;
+      margin-bottom: 1.5em;
+      padding-bottom: 1em;
+      border-bottom: 3px solid #1a1a1a;
+    }
+
+    .doc-header h1 {
+      font-size: 16pt;
+      font-weight: 700;
+      margin: 0 0 0.25em 0;
+      color: #1a1a1a;
+    }
+
+    .doc-subtitle {
+      font-size: 10pt;
+      color: #666;
+    }
+
+    .info-box {
+      background: #e8f4fd;
+      border: 1px solid #0277bd;
+      border-radius: 4px;
+      padding: 1em;
+      margin-bottom: 1.5em;
+      font-size: 9pt;
+    }
+
+    .info-box strong {
+      color: #01579b;
+    }
+
+    .case-details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5em 2em;
+      background: #f8f8f8;
+      padding: 1em;
+      margin: 1.5em 0;
+      border: 1px solid #ddd;
+      font-size: 9pt;
+    }
+
+    .case-details dt {
+      font-weight: 600;
+      color: #666;
+    }
+
+    .case-details dd {
+      margin: 0;
+      color: #1a1a1a;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75em;
+      margin: 2em 0 1em 0;
+      padding-bottom: 0.5em;
+      border-bottom: 2px solid #1a1a1a;
+    }
+
+    .section-header .num {
+      background: #1a1a1a;
+      color: white;
+      width: 1.75em;
+      height: 1.75em;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 11pt;
+      flex-shrink: 0;
+    }
+
+    .section-header h2 {
+      font-size: 12pt;
+      font-weight: 600;
+      margin: 0;
+      color: #1a1a1a;
+    }
+
+    .checklist-category {
+      margin: 1.5em 0;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      overflow: hidden;
+      page-break-inside: avoid;
+    }
+
+    .checklist-category-header {
+      padding: 0.75em 1em;
+      background: #1a1a1a;
+      color: white;
+      font-weight: 700;
+      font-size: 10pt;
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75em;
+      padding: 0.75em 1em;
+      border-bottom: 1px solid #eee;
+      font-size: 9pt;
+    }
+
+    .checklist-item:last-child {
+      border-bottom: none;
+    }
+
+    .checkbox {
+      width: 16px;
+      height: 16px;
+      border: 2px solid #1a1a1a;
+      border-radius: 3px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .checklist-item-content {
+      flex: 1;
+    }
+
+    .checklist-item-title {
+      font-weight: 600;
+      color: #1a1a1a;
+    }
+
+    .checklist-item-description {
+      color: #666;
+      font-size: 8pt;
+      margin-top: 0.25em;
+    }
+
+    .status-essential {
+      display: inline-block;
+      background: #dc2626;
+      color: white;
+      font-size: 7pt;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-weight: 600;
+    }
+
+    .status-recommended {
+      display: inline-block;
+      background: #f59e0b;
+      color: white;
+      font-size: 7pt;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-weight: 600;
+    }
+
+    .status-optional {
+      display: inline-block;
+      background: #6366f1;
+      color: white;
+      font-size: 7pt;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-weight: 600;
+    }
+
+    .tips-box {
+      margin: 1.5em 0;
+      padding: 1em;
+      background: #f0fdf4;
+      border: 1px solid #22c55e;
+      border-radius: 4px;
+    }
+
+    .tips-box h3 {
+      font-size: 10pt;
+      font-weight: 700;
+      margin: 0 0 0.75em 0;
+      color: #15803d;
+    }
+
+    .tips-box ul {
+      margin: 0;
+      padding-left: 1.25em;
+    }
+
+    .tips-box li {
+      font-size: 9pt;
+      margin: 0.4em 0;
+      color: #166534;
+    }
+
+    .warning-box {
+      background: #fef3c7;
+      border: 1px solid #f59e0b;
+      border-radius: 4px;
+      padding: 1em;
+      margin: 1.5em 0;
+      font-size: 9pt;
+    }
+
+    .warning-box strong {
+      color: #b45309;
+    }
+
+    .doc-footer {
+      margin-top: 2em;
+      padding-top: 1em;
+      border-top: 2px solid #1a1a1a;
+      font-size: 9pt;
+      color: #666;
+    }
+
+    @media print {
+      .checklist-category {
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Document Header -->
+<div class="doc-header">
+  <h1>Evidence Collection Checklist</h1>
+  <div class="doc-subtitle">Section 21 No-Fault Possession - Compliance Documents</div>
+</div>
+
+<!-- Important Note -->
+<div class="info-box">
+  <strong>Section 21 Evidence Focus:</strong> Unlike Section 8 (rent arrears), Section 21 requires evidence
+  of <em>statutory compliance</em>, not financial records. The court will check that you complied with
+  all landlord obligations before issuing a possession order.
+</div>
+
+<!-- Case Details -->
+<dl class="case-details">
+  <dt>Property:</dt>
+  <dd>{{property_address}}</dd>
+  <dt>Tenant:</dt>
+  <dd>{{tenant_full_name}}</dd>
+  <dt>Case Type:</dt>
+  <dd>Section 21 Accelerated Possession</dd>
+  <dt>Prepared:</dt>
+  <dd>{{format_date generated_date "long"}}</dd>
+</dl>
+
+<!-- Section 1: Core Documents -->
+<div class="section-header">
+  <span class="num">1</span>
+  <h2>Core Documents (N5B Attachments)</h2>
+</div>
+
+<div class="checklist-category">
+  <div class="checklist-category-header">Tenancy Documentation</div>
+  <div class="checklist-item">
+    <div class="checkbox"></div>
+    <div class="checklist-item-content">
+      <div class="checklist-item-title">Signed Tenancy Agreement <span class="status-essential">ESSENTIAL</span></div>
+      <div class="checklist-item-description">Original or certified copy of the first written tenancy agreement (marked "A" on N5B)</div>
+    </div>
+  </div>
+  <div class="checklist-item">
+    <div class="checkbox"></div>
+    <div class="checklist-item-content">
+      <div class="checklist-item-title">Any Renewal Agreements <span class="status-recommended">IF APPLICABLE</span></div>
+      <div class="checklist-item-description">Subsequent written agreements if the tenancy was renewed</div>
+    </div>
+  </div>
+</div>
+
+<div class="checklist-category">
+  <div class="checklist-category-header">Section 21 Notice</div>
+  <div class="checklist-item">
+    <div class="checkbox"></div>
+    <div class="checklist-item-content">
+      <div class="checklist-item-title">Section 21 Notice (Form 6A) <span class="status-essential">ESSENTIAL</span></div>
+      <div class="checklist-item-description">Copy of the notice served on the tenant (marked "B" on N5B)</div>
+    </div>
+  </div>
+  <div class="checklist-item">
+    <div class="checkbox"></div>
+    <div class="checklist-item-content">
+      <div class="checklist-item-title">Proof of Service <span class="status-essential">ESSENTIAL</span></div>
+      <div class="checklist-item-description">Evidence of how and when notice was served - posting receipt, delivery confirmation, or witness statement (marked "B1")</div>
+    </div>
+  </div>
+</div>
+
+<!-- Section 2: Deposit Protection -->
+<div class="section-header">
+  <span class="num">2</span>
+  <h2>Deposit Protection</h2>
+</div>
+
+{{#if deposit_amount}}
+<div class="checklist-category">
+  <div class="checklist-category-header">Deposit Compliance</div>
+  <div class="checklist-item">
+    <div class="checkbox"></div>
+    <div class="checklist-item-content">
+      <div class="checklist-item-title">Deposit Protection Certificate <span class="status-essential">ESSENTIAL</span></div>
+      <div class="checklist-item-description">Certificate from {{#if deposit_scheme}}{{deposit_scheme}}{{else}}DPS/TDS/MyDeposits{{/if}} confirming protection (marked "E" on N5B)</div>
+    </div>
+  </div>
+  <div class="checklist-item">
+    <div class="checkbox"></div>
+    <div class="checklist-item-content">
+      <div class="checklist-item-title">Prescribed Information <span class="status-essential">ESSENTIAL</span></div>
+      <div class="checklist-item-description">Copy of prescribed information served to tenant within 30 days</div>
+    </div>
+  </div>
+  <div class="checklist-item">
+    <div class="checkbox"></div>
+    <div class="checklist-item-content">
+      <div class="checklist-item-title">Proof of Service of Prescribed Info <span class="status-recommended">RECOMMENDED</span></div>
+      <div class="checklist-item-description">Email confirmation, signed receipt, or proof of posting</div>
+    </div>
+  </div>
+</div>
+{{else}}
+<div class="warning-box">
+  <strong>No Deposit:</strong> If no deposit was taken, you do not need deposit protection documents.
+  Ensure N5B question 12 indicates "No" for deposit paid.
+</div>
+{{/if}}
+
+<!-- Section 3: Compliance Certificates -->
+<div class="section-header">
+  <span class="num">3</span>
+  <h2>Statutory Compliance Certificates</h2>
+</div>
+
+<div class="checklist-category">
+  <div class="checklist-category-header">Energy Performance</div>
+  <div class="checklist-item">
+    <div class="checkbox"></div>
+    <div class="checklist-item-content">
+      <div class="checklist-item-title">Energy Performance Certificate (EPC) <span class="status-essential">ESSENTIAL</span></div>
+      <div class="checklist-item-description">Valid EPC with rating E or above, provided to tenant (marked "F" on N5B)</div>
+    </div>
+  </div>
+  <div class="checklist-item">
+    <div class="checkbox"></div>
+    <div class="checklist-item-content">
+      <div class="checklist-item-title">Proof EPC Was Provided <span class="status-recommended">RECOMMENDED</span></div>
+      <div class="checklist-item-description">Email, receipt, or confirmation that EPC was given to tenant before tenancy started</div>
+    </div>
+  </div>
+</div>
+
+<div class="checklist-category">
+  <div class="checklist-category-header">Gas Safety</div>
+  <div class="checklist-item">
+    <div class="checkbox"></div>
+    <div class="checklist-item-content">
+      <div class="checklist-item-title">Gas Safety Certificate (CP12) <span class="status-essential">ESSENTIAL</span></div>
+      <div class="checklist-item-description">Current certificate from Gas Safe registered engineer (marked "G" on N5B)</div>
+    </div>
+  </div>
+  <div class="checklist-item">
+    <div class="checkbox"></div>
+    <div class="checklist-item-content">
+      <div class="checklist-item-title">Proof Gas Cert Provided Before Occupation <span class="status-essential">ESSENTIAL</span></div>
+      <div class="checklist-item-description">Evidence that gas safety record was available to tenant BEFORE they moved in</div>
+    </div>
+  </div>
+  <div class="checklist-item">
+    <div class="checkbox"></div>
+    <div class="checklist-item-content">
+      <div class="checklist-item-title">Annual Gas Safety Records <span class="status-recommended">RECOMMENDED</span></div>
+      <div class="checklist-item-description">All gas safety certificates issued during the tenancy (if multi-year)</div>
+    </div>
+  </div>
+</div>
+
+<div class="checklist-category">
+  <div class="checklist-category-header">How to Rent Guide</div>
+  <div class="checklist-item">
+    <div class="checkbox"></div>
+    <div class="checklist-item-content">
+      <div class="checklist-item-title">How to Rent Guide <span class="status-essential">ESSENTIAL</span></div>
+      <div class="checklist-item-description">Copy of the government "How to rent" checklist (marked "H" on N5B)</div>
+    </div>
+  </div>
+  <div class="checklist-item">
+    <div class="checkbox"></div>
+    <div class="checklist-item-content">
+      <div class="checklist-item-title">Proof of Provision <span class="status-essential">ESSENTIAL</span></div>
+      <div class="checklist-item-description">Email confirmation, tenant signature, or receipt showing guide was provided</div>
+    </div>
+  </div>
+</div>
+
+<div class="checklist-category">
+  <div class="checklist-category-header">Electrical Safety (if applicable)</div>
+  <div class="checklist-item">
+    <div class="checkbox"></div>
+    <div class="checklist-item-content">
+      <div class="checklist-item-title">EICR (Electrical Installation Condition Report) <span class="status-recommended">RECOMMENDED</span></div>
+      <div class="checklist-item-description">Required for tenancies starting from 1 July 2020 (new), 1 April 2021 (existing)</div>
+    </div>
+  </div>
+</div>
+
+<!-- Section 4: Additional Supporting Documents -->
+<div class="section-header">
+  <span class="num">4</span>
+  <h2>Supporting Documents</h2>
+</div>
+
+<div class="checklist-category">
+  <div class="checklist-category-header">Timeline Evidence</div>
+  <div class="checklist-item">
+    <div class="checkbox"></div>
+    <div class="checklist-item-content">
+      <div class="checklist-item-title">Proof of Tenancy Start Date <span class="status-recommended">RECOMMENDED</span></div>
+      <div class="checklist-item-description">Move-in inventory, key handover receipt, or similar dated document</div>
+    </div>
+  </div>
+  <div class="checklist-item">
+    <div class="checkbox"></div>
+    <div class="checklist-item-content">
+      <div class="checklist-item-title">Photos of Notice Delivery <span class="status-optional">IF HAND-DELIVERED</span></div>
+      <div class="checklist-item-description">Timestamped photos showing notice through letterbox or tenant receiving it</div>
+    </div>
+  </div>
+</div>
+
+<div class="checklist-category">
+  <div class="checklist-category-header">Correspondence</div>
+  <div class="checklist-item">
+    <div class="checkbox"></div>
+    <div class="checklist-item-content">
+      <div class="checklist-item-title">Relevant Communications <span class="status-optional">IF APPLICABLE</span></div>
+      <div class="checklist-item-description">Any emails or letters discussing end of tenancy (not required but may support your case)</div>
+    </div>
+  </div>
+</div>
+
+<!-- Warning Box -->
+<div class="warning-box">
+  <strong>Not Required for Section 21:</strong> Unlike Section 8 (rent arrears) claims, you do NOT need:
+  <ul style="margin: 0.5em 0 0 0; padding-left: 1.5em;">
+    <li>Schedule of rent arrears</li>
+    <li>Bank statements</li>
+    <li>Payment records</li>
+    <li>Pre-action protocol letters about arrears</li>
+  </ul>
+  Section 21 is a "no-fault" procedure - you do not need to prove any breach by the tenant.
+</div>
+
+<!-- Tips -->
+<div class="tips-box">
+  <h3>Evidence Tips for Section 21</h3>
+  <ul>
+    <li><strong>Date everything:</strong> Compliance is about WHEN you provided documents, not just IF</li>
+    <li><strong>Keep originals safe:</strong> The court may want to see originals, not just copies</li>
+    <li><strong>Version control:</strong> For How to Rent, ensure you have the version current at tenancy start</li>
+    <li><strong>Chain of evidence:</strong> Keep emails/receipts showing when documents were sent to tenant</li>
+    <li><strong>Bundle professionally:</strong> Use a ring binder with dividers matching the N5B attachment labels (A, B, E, F, G, H)</li>
+  </ul>
+</div>
+
+<!-- Footer -->
+<div class="doc-footer">
+  <p><strong>Generated:</strong> {{format_date generated_date "long"}}</p>
+  <p><strong>Landlord Heaven</strong> | Section 21 Evidence Collection Checklist</p>
+</div>
+
+</body>
+</html>
