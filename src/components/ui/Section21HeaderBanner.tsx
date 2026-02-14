@@ -33,11 +33,14 @@ export function Section21HeaderBanner() {
       }
     }
 
-    setIsVisible(true);
-    document.body.classList.add('s21-banner-visible');
+    const showTimer = setTimeout(() => {
+      setIsVisible(true);
+      document.body.classList.add('s21-banner-visible');
+    }, 0);
 
     // Cleanup on unmount
     return () => {
+      clearTimeout(showTimer);
       document.body.classList.remove('s21-banner-visible');
     };
   }, [isExcluded]);

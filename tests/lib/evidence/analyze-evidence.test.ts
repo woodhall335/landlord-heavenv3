@@ -37,8 +37,8 @@ let analyzeEvidence: typeof import('@/lib/evidence/analyze-evidence').analyzeEvi
 
 beforeAll(async () => {
   process.env.OPENAI_API_KEY = 'test-key';
-  const module = await import('@/lib/evidence/analyze-evidence');
-  analyzeEvidence = module.analyzeEvidence;
+  const mod = await import('@/lib/evidence/analyze-evidence');
+  analyzeEvidence = mod.analyzeEvidence;
 });
 
 beforeEach(() => {

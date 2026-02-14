@@ -6,9 +6,10 @@
  * Usage: npx tsx scripts/send-test-emails.ts
  */
 
+import { config as loadEnv } from 'dotenv';
+
 // Load environment variables from .env.local BEFORE importing resend
-// (must use require to avoid ES module hoisting)
-require('dotenv').config({ path: '.env.local' });
+loadEnv({ path: '.env.local' });
 
 async function sendTestEmails() {
   // Dynamic import after env is loaded

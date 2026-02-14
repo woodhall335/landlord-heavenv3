@@ -777,14 +777,6 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
     setSubflowComplete(true);
   }, []);
 
-  // Reset subflow state when switching back to "no"
-  useEffect(() => {
-    if (noticeAlreadyServed === false && subflowComplete) {
-      // Keep subflow complete state if user hasn't changed their answer
-    } else if (noticeAlreadyServed === true) {
-      setSubflowComplete(false);
-    }
-  }, [noticeAlreadyServed, subflowComplete]);
 
   return (
     <div className="space-y-6">

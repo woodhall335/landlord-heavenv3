@@ -194,10 +194,6 @@ type PreviewImageProps = {
 const PreviewImage = ({ src, alt, title, width, height, className }: PreviewImageProps) => {
   const [hasError, setHasError] = useState(false);
 
-  useEffect(() => {
-    setHasError(false);
-  }, [src]);
-
   if (hasError) {
     return (
       <div
@@ -228,10 +224,6 @@ const PreviewImage = ({ src, alt, title, width, height, className }: PreviewImag
 
 const PreviewThumbnail = ({ src, alt, title, width, height, className }: PreviewImageProps) => {
   const [hasError, setHasError] = useState(false);
-
-  useEffect(() => {
-    setHasError(false);
-  }, [src]);
 
   if (hasError || !src) {
     return (
@@ -265,7 +257,7 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
   const initialPackVariant = isCompletePack ? props.defaultVariant ?? 'section21' : 'section21';
 
   const [selectedJurisdiction, setSelectedJurisdiction] = useState<JurisdictionKey>(initialJurisdiction);
-  const defaultNoticeVariantKey = NOTICE_ONLY_CONFIG[initialJurisdiction].noticeVariants[0].key;
+  const defaultNoticeVariantKey = NOTICE_ONLY_CONFIG[selectedJurisdiction].noticeVariants[0].key;
   const [selectedNoticeVariant, setSelectedNoticeVariant] = useState<NoticeVariantKey>(defaultNoticeVariantKey);
   const [selectedPackVariant, setSelectedPackVariant] = useState<CompletePackVariantKey>(initialPackVariant);
   const [selectedDocKey, setSelectedDocKey] = useState<string>(() => {
@@ -283,39 +275,26 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
 
   const jurisdictionConfig = isNoticeOnly ? NOTICE_ONLY_CONFIG[selectedJurisdiction] : null;
   const noticeVariants = jurisdictionConfig?.noticeVariants ?? [];
-
-  useEffect(() => {
-    if (!isNoticeOnly) {
-      return;
-    }
-    const nextVariant = NOTICE_ONLY_CONFIG[selectedJurisdiction].noticeVariants[0];
-    setSelectedNoticeVariant(nextVariant.key);
-  }, [isNoticeOnly, selectedJurisdiction]);
-
-  useEffect(() => {
-    const docs = isNoticeOnly
-      ? (previews as NoticeOnlyPreviewData)[selectedJurisdiction]?.[selectedNoticeVariant] ?? []
-      : isCompletePack
-        ? (previews as CompletePackPreviewData)[selectedPackVariant] ?? []
-        : (previews as MoneyClaimPreviewData);
-    setSelectedDocKey((previous) =>
-      docs.some((doc) => doc.key === previous) ? previous : docs[0]?.key ?? 'preview-placeholder',
-    );
-  }, [isCompletePack, isNoticeOnly, previews, selectedJurisdiction, selectedNoticeVariant, selectedPackVariant]);
+  const effectiveNoticeVariant = noticeVariants.some((variant) => variant.key === selectedNoticeVariant)
+    ? selectedNoticeVariant
+    : noticeVariants[0]?.key;
 
   const documents = isNoticeOnly
-    ? (previews as NoticeOnlyPreviewData)[selectedJurisdiction]?.[selectedNoticeVariant] ?? []
+    ? (previews as NoticeOnlyPreviewData)[selectedJurisdiction]?.[effectiveNoticeVariant ?? 'section21'] ?? []
     : isCompletePack
       ? (previews as CompletePackPreviewData)[selectedPackVariant] ?? []
       : (previews as MoneyClaimPreviewData);
-  const activeDoc = documents.find((document) => document.key === selectedDocKey) ?? documents[0];
+  const effectiveDocKey = documents.some((document) => document.key === selectedDocKey)
+    ? selectedDocKey
+    : documents[0]?.key ?? 'preview-placeholder';
+  const activeDoc = documents.find((document) => document.key === effectiveDocKey) ?? documents[0];
   const activeIndex = useMemo(() => {
     if (!documents.length) {
       return -1;
     }
-    const index = documents.findIndex((document) => document.key === selectedDocKey);
+    const index = documents.findIndex((document) => document.key === effectiveDocKey);
     return index === -1 ? 0 : index;
-  }, [documents, selectedDocKey]);
+  }, [documents, effectiveDocKey]);
 
   const goPrev = () => {
     if (documents.length < 2 || activeIndex === -1) {
@@ -529,7 +508,7 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
                     </h3>
                     <div className="grid gap-3">
                       {(isNoticeOnly ? noticeVariants : COMPLETE_PACK_VARIANTS).map((variant) => {
-                        const isActive = (isNoticeOnly ? selectedNoticeVariant : selectedPackVariant) === variant.key;
+                        const isActive = (isNoticeOnly ? effectiveNoticeVariant : selectedPackVariant) === variant.key;
                         return (
                           <button
                             key={variant.key}

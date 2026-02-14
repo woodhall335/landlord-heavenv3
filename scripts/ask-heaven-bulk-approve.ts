@@ -1,8 +1,6 @@
 #!/usr/bin/env ts-node
-// @ts-nocheck
-
-const { createClient } = require('@supabase/supabase-js');
-const { validateQualityGates } = require('../src/lib/ask-heaven/questions/quality-gates.ts');
+import { createClient } from '@supabase/supabase-js';
+import { validateQualityGates } from '../src/lib/ask-heaven/questions/quality-gates';
 
 const QUESTIONS_TABLE = 'ask_heaven_questions';
 

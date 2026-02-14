@@ -11,35 +11,25 @@ interface Section21CountdownProps {
 // Target: 1 May 2026 00:00:00 BST (British Summer Time)
 const TARGET_DATE = new Date('2026-05-01T00:00:00+01:00');
 
+function calculateTimeLeft() {
+  const now = new Date();
+  const diff = TARGET_DATE.getTime() - now.getTime();
+
+  if (diff <= 0) return { days: 0, hours: 0, minutes: 0 };
+
+  return {
+    days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+    hours: Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+    minutes: Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)),
+  };
+}
+
 export function Section21Countdown({ variant, className = '' }: Section21CountdownProps) {
-  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0 });
-  const [mounted, setMounted] = useState(false);
-
+  const [timeLeft, setTimeLeft] = useState(() => calculateTimeLeft());
   useEffect(() => {
-    setMounted(true);
-
-    const calculate = () => {
-      const now = new Date();
-      const diff = TARGET_DATE.getTime() - now.getTime();
-
-      if (diff <= 0) return { days: 0, hours: 0, minutes: 0 };
-
-      return {
-        days: Math.floor(diff / (1000 * 60 * 60 * 24)),
-        hours: Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-        minutes: Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)),
-      };
-    };
-
-    setTimeLeft(calculate());
-    const interval = setInterval(() => setTimeLeft(calculate()), 60000); // Update every minute
+    const interval = setInterval(() => setTimeLeft(calculateTimeLeft()), 60000); // Update every minute
     return () => clearInterval(interval);
   }, []);
-
-  // Prevent hydration mismatch
-  if (!mounted) {
-    return null;
-  }
 
   // Large variant - for popup modal and landing page hero
   // Check if white text is requested via className

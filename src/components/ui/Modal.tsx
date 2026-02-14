@@ -32,17 +32,20 @@ export const Modal: React.FC<ModalProps> = ({
 
   useEffect(() => {
     if (isOpen) {
-      setIsAnimating(true);
-      // Small delay to ensure the element is mounted before animating
-      requestAnimationFrame(() => {
+      const openTimer = setTimeout(() => {
+        setIsAnimating(true);
+        // Small delay to ensure the element is mounted before animating
         requestAnimationFrame(() => {
-          setIsVisible(true);
+          requestAnimationFrame(() => {
+            setIsVisible(true);
+          });
         });
-      });
-      document.body.style.overflow = 'hidden';
+      }, 0);
+            document.body.style.overflow = 'hidden';
     } else {
-      setIsVisible(false);
+      const closeTimer = setTimeout(() => setIsVisible(false), 0);
       document.body.style.overflow = 'unset';
+      return () => clearTimeout(closeTimer);
     }
 
     return () => {

@@ -10,13 +10,13 @@ const expected = [
   "defendant's details",
   'possession of',
   'Full name of the person signing the Statement of Truth',
-  'Name of claimant's legal representative's firm',
-  'Statement of Truth is signed by the Claimant's legal representative (as defined by CPR 2.3(1))',
-  'building and street - Claimant's or claimant's legal representative's address to which documents or payments should be sent',
-  'Second line of address - Claimant's or claimant's legal representative's address to which documents or payments should be sent',
-  'Town or city - Claimant's or claimant's legal representative's address to which documents or payments should be sent',
-  'County (optional) - Claimant's or claimant's legal representative's address to which documents or payments should be sent',
-  'Postcode - Claimant's or claimant's legal representative's address to which documents or payments should be sent'
+  "Name of claimant's legal representative's firm",
+  "Statement of Truth is signed by the Claimant's legal representative (as defined by CPR 2.3(1))",
+  "building and street - Claimant's or claimant's legal representative's address to which documents or payments should be sent",
+  "Second line of address - Claimant's or claimant's legal representative's address to which documents or payments should be sent",
+  "Town or city - Claimant's or claimant's legal representative's address to which documents or payments should be sent",
+  "County (optional) - Claimant's or claimant's legal representative's address to which documents or payments should be sent",
+  "Postcode - Claimant's or claimant's legal representative's address to which documents or payments should be sent"
 ];
 
 const pdfBytes = await fs.readFile(path.join('public', 'official-forms', 'n5-eng.pdf'));

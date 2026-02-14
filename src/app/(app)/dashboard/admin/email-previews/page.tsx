@@ -254,37 +254,40 @@ export default function AdminEmailPreviewsPage() {
   const [selectedTemplate, setSelectedTemplate] = useState<string>("welcome");
   const [darkMode, setDarkMode] = useState(false);
 
-  const checkAdminAccess = useCallback(async () => {
-    try {
-      // Use server-side admin check for security (handles env var trimming)
-      const response = await fetch("/api/admin/check-access");
-
-      if (response.status === 401) {
-        router.push("/auth/login");
-        return;
-      }
-
-      if (response.status === 403) {
-        router.push("/dashboard");
-        return;
-      }
-
-      if (!response.ok) {
-        console.error("Error checking admin access:", response.statusText);
-        router.push("/dashboard");
-        return;
-      }
-
-      setLoading(false);
-    } catch (error) {
-      console.error("Error checking admin access:", error);
-      router.push("/dashboard");
-    }
-  }, [router]);
-
   useEffect(() => {
-    checkAdminAccess();
-  }, [checkAdminAccess]);
+    let cancelled = false;
+
+    void fetch('/api/admin/check-access')
+      .then((response) => {
+        if (response.status === 401) {
+          router.push('/auth/login');
+          return;
+        }
+
+        if (response.status === 403) {
+          router.push('/dashboard');
+          return;
+        }
+
+        if (!response.ok) {
+          console.error('Error checking admin access:', response.statusText);
+          router.push('/dashboard');
+          return;
+        }
+
+        if (!cancelled) {
+          setLoading(false);
+        }
+      })
+      .catch((error) => {
+        console.error('Error checking admin access:', error);
+        router.push('/dashboard');
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [router]);
 
   const getPreviewHtml = (templateId: string): string => {
     const templates: Record<string, string> = {

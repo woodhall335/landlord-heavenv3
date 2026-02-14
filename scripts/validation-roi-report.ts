@@ -729,7 +729,6 @@ function main() {
   if (baselineArg) {
     const baselinePath = baselineArg.split('=')[1];
     try {
-      const fs = require('fs');
       baseline = JSON.parse(fs.readFileSync(baselinePath, 'utf8'));
     } catch (e) {
       console.warn('Could not load baseline file, using estimates');

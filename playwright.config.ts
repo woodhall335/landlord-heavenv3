@@ -1,4 +1,4 @@
-// @ts-ignore - @playwright/test is an optional dev dependency
+// @ts-expect-error -- @playwright/test is an optional dev dependency in this repo
 import { defineConfig } from '@playwright/test';
 
 const PORT = process.env.E2E_PORT ? Number(process.env.E2E_PORT) : 5000;
