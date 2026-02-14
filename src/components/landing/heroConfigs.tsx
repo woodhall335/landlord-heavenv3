@@ -26,18 +26,18 @@ const astSubtitle: ReactNode = (
 );
 
 export const homeHeroConfig: HeroConfig = {
-  trustText: 'Trusted by UK Landlords',
-  title: 'Legal Documents',
-  highlightTitle: 'in Minutes, Not Days',
+  trustText: 'England, Wales & Scotland Coverage • Reform-aware legal automation',
+  title: 'Complete UK Eviction Case Bundles',
+  highlightTitle: 'in Minutes',
   subtitle: (
     <>
-      Reduce possession failure risk with guided notices, court forms, and tenancy agreements —
-      <span className="font-semibold"> save 80%+ vs solicitor</span>
+      Generate your full Section 21, Section 8, Welsh occupation contract, or Scottish eviction bundle —
+      <span className="font-semibold"> AI-generated, compliance-checked, and ready to file</span>
     </>
   ),
-  primaryCta: { label: 'Generate Your Documents →', href: '/wizard' },
+  primaryCta: { label: 'Generate Your Complete Case Bundle →', href: '/wizard' },
   secondaryCta: { label: 'View Pricing →', href: '/pricing' },
-  feature: 'Download instant UK notices & forms',
+  feature: 'Complete eviction case bundles. AI-generated. Jurisdiction-specific. Court-ready file output.',
   mascotSrc: '/images/mascots/landlord-heaven-owl-checklist-golden-coins.png',
   mascotAlt: 'Landlord Heaven owl mascot holding a pen and shield',
 };
@@ -78,10 +78,10 @@ export const section21HeroConfig: HeroConfig = {
 };
 
 export const noticeOnlyHeroConfig: HeroConfig = {
-  trustText: 'Eviction Notice Only',
-  title: 'Eviction Notice',
-  highlightTitle: 'served correctly, fast',
-  subtitle: 'Legally Valid Eviction Notices for England, Wales & Scotland — £49.99 one-time',
+  trustText: 'Section 21, Section 8, Wales Section 173, and Scotland Notice to Leave coverage',
+  title: 'AI-Validated Eviction',
+  highlightTitle: 'Case Bundle Generation',
+  subtitle: 'Generate jurisdiction-specific, compliance-checked eviction bundles for England, Wales, and Scotland — £49.99 one-time.',
   primaryCta: {
     label: 'Get Your Notice Now →',
     href: '/wizard?product=notice_only&src=product_page&topic=eviction',
@@ -90,16 +90,16 @@ export const noticeOnlyHeroConfig: HeroConfig = {
     label: 'Upgrade to Eviction Pack',
     href: '/products/complete-pack',
   },
-  feature: 'England: Section 21 / Section 8 · Wales: Section 173 · Scotland: Notice to Leave',
+  feature: 'Built against statutory frameworks with reform-aware validation and filing guidance',
   mascotSrc: '/images/mascots/landlord-heaven-owl-eviction-notice.png',
   mascotAlt: 'Landlord Heaven owl mascot holding an eviction notice',
 };
 
 export const completePackHeroConfig: UniversalHeroProps = {
-  trustText: 'Complete eviction support for England landlords',
-  title: 'Complete Eviction Pack',
-  highlightTitle: 'court ready',
-  subtitle: 'Complete eviction pack for England — £199.99 one-time',
+  trustText: 'England possession bundle with N5B and statutory compliance checks',
+  title: 'Complete Eviction Case',
+  highlightTitle: 'Bundle for England',
+  subtitle: 'Complete eviction case bundle for England — AI-validated, compliance-checked, and ready to file for £199.99.',
   primaryCta: {
     label: 'Start Your Eviction Pack →',
     href: '/wizard?product=complete_pack&src=product_page&topic=eviction',
@@ -108,7 +108,7 @@ export const completePackHeroConfig: UniversalHeroProps = {
     label: 'Preview before you buy',
     href: '/wizard?product=complete_pack&src=product_page&topic=eviction',
   },
-  feature: 'Notice, court forms, witness statement, and filing guidance in one pack',
+  feature: 'Section 21/8 notice workflows, N5B claim path, evidence checklist, and filing instructions in one case file',
   mascotSrc: '/images/mascots/landlord-heaven-owl-eviction-notice-keys.png',
   mascotAlt: 'Landlord Heaven owl mascot with eviction notice and keys',
 };

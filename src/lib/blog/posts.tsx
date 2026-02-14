@@ -5,9 +5,9 @@ import { BlogPost } from './types';
 
 const section21TemplateCta = (
   <p className="text-sm text-amber-900 bg-amber-50 border border-amber-200 rounded-lg p-4 my-6">
-    Need a compliant notice fast? Use the{' '}
+    Need a compliance-checked Section 21 case file? Generate the{' '}
     <Link href="/section-21-notice-template" className="text-primary font-semibold hover:underline">
-      Section 21 notice template
+      AI-validated Section 21 eviction bundle
     </Link>{' '}
     for court-ready Form 6A paperwork.
   </p>
@@ -15,9 +15,9 @@ const section21TemplateCta = (
 
 const section8TemplateCta = (
   <p className="text-sm text-amber-900 bg-amber-50 border border-amber-200 rounded-lg p-4 my-6">
-    Serving a grounds-based notice? Start with the{' '}
+    Serving grounds-based possession proceedings? Generate the{' '}
     <Link href="/section-8-notice-template" className="text-primary font-semibold hover:underline">
-      Section 8 notice template
+      AI-validated Section 8 eviction bundle (England)
     </Link>{' '}
     to keep your Form 3 compliant.
   </p>
@@ -50,7 +50,7 @@ export const blogPosts: BlogPost[] = [
   // ============================================
   {
     slug: 'renters-reform-bill-what-landlords-need-to-know',
-    title: 'Renters Reform Bill 2025: What Every UK Landlord Must Know Before May 2026',
+    title: 'What the Renters (Reform) Bill 2023 Means for Section 21 in England',
     description: 'The biggest change to landlord rights in 35 years is here. Learn what the Renters Reform Bill means for your properties, why you must act now, and how to protect your investments.',
     metaDescription: 'Complete guide to the Renters Reform Bill 2025. Section 21 ends May 2026. Learn the changes, new grounds, and why landlords must start eviction proceedings now.',
     date: '2026-01-02',
@@ -6003,7 +6003,7 @@ export const blogPosts: BlogPost[] = [
         <div className="bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl p-8 my-8">
           <h3 className="text-xl font-bold text-gray-900 mb-4">Dealing with Problem Tenants?</h3>
           <p className="text-gray-700 mb-6">
-            Our Complete Eviction Pack includes Section 8 notice templates, incident log templates, and
+            Our Complete Eviction Pack includes Section 8 notices, incident log templates, and
             guidance on building a Ground 14 case. Take action against antisocial behaviour with
             court-ready documentation.
           </p>
@@ -6669,7 +6669,7 @@ export const blogPosts: BlogPost[] = [
         <div className="bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl p-8 my-8">
           <h3 className="text-xl font-bold text-gray-900 mb-4">Recover Your Property</h3>
           <p className="text-gray-700 mb-6">
-            Our Section 8 notice templates include Ground 1 with proper wording for landlord occupation claims.
+            Our Section 8 notices include Ground 1 with proper wording for landlord occupation claims.
             We also provide prior notice templates to ensure you&apos;re protected for future tenancies.
           </p>
           <Link
@@ -33361,7 +33361,7 @@ export const blogPosts: BlogPost[] = [
 
         <ul>
           <li>Tenancy agreement templates (AST, Scotland PRT, Wales)</li>
-          <li>Section 21 and Section 8 notice templates</li>
+          <li>Section 21 and Section 8 notices</li>
           <li>Inventory and check-in/out forms</li>
           <li>Rent increase letters</li>
           <li>Reference request forms</li>
