@@ -41,13 +41,13 @@ export function CostComparison() {
           {/* Section Header */}
           <div className="text-center mb-14">
             <div className="inline-block bg-green-100 rounded-full px-4 py-2 mb-4">
-              <span className="text-sm font-semibold text-green-700">Save 80%+ on Legal Fees</span>
+              <span className="text-sm font-semibold text-green-700">Professional-grade legal preparation at SaaS pricing</span>
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Why Pay Expensive Solicitor Fees?
+              Cost and readiness comparison
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Get the same court-ready documents for a fraction of the cost — instantly.
+              Full case preparation without solicitor delays.
             </p>
           </div>
 
@@ -111,7 +111,7 @@ export function CostComparison() {
 
               <ul className="space-y-4">
                 <ComparisonItem positive={true}>
-                  <span className="font-medium">Instant download</span> — get documents in minutes
+                  <span className="font-medium">Ready to file</span> — get documents in minutes
                 </ComparisonItem>
                 <ComparisonItem positive={true}>
                   <span className="font-medium">No appointments</span> — generate documents anytime
@@ -141,7 +141,7 @@ export function CostComparison() {
           {/* Product Price Anchors - Updated with correct solicitor prices and hover effects */}
           <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4">
             <PriceAnchor
-              product="Generate Jurisdiction Specific Eviction Notices"
+              product="Generate jurisdiction-specific eviction case files"
               ourPrice="£49.99"
               solicitorPrice="£200-300"
               savings="£150+"

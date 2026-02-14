@@ -28,9 +28,9 @@ const product = PRODUCTS.notice_only;
 const price = product.displayPrice;
 
 export const metadata: Metadata = {
-  title: `Eviction Notice Pack 2026 | England, Wales & Scotland | ${price}`,
+  title: `AI-Validated Eviction Case Bundle | England, Wales & Scotland | ${price}`,
   description:
-    `Court-ready eviction notices for England, Wales, and Scotland. Official forms, service instructions, and validity checklist. ${price}.`,
+    `Complete eviction case bundles for England, Wales, and Scotland. AI-generated, compliance-checked, jurisdiction-specific, and ready to file. ${price}.`,
   openGraph: {
     title: `Eviction Notice 2026 | England, Wales & Scotland | ${price}`,
     description: "Court-ready eviction notices for England (Section 21/8), Wales (Section 173), and Scotland (Notice to Leave). Preview before you buy.",
@@ -86,8 +86,8 @@ export default async function NoticeOnlyPage() {
     <div className="min-h-screen bg-gray-50">
       {/* Structured Data for SEO */}
       <StructuredData data={productSchema({
-        name: "Notice Only Pack - Eviction Notices",
-        description: "Court-ready eviction notices for UK landlords. Section 21, Section 8, Section 173, and Notice to Leave. Preview before you buy, edit and regenerate instantly.",
+        name: "AI-Validated Eviction Case Bundle",
+        description: "Complete eviction case bundles for UK landlords: Section 21, Section 8, Section 173, and Notice to Leave workflows with statutory-grounded validation.",
         price: product.price.toString(),
         url: "https://landlordheaven.co.uk/products/notice-only"
       })} />
@@ -102,6 +102,8 @@ export default async function NoticeOnlyPage() {
       <UniversalHero {...noticeOnlyHeroConfig} />
 
       <WhatsIncludedInteractive product="notice_only" defaultJurisdiction="england" previews={previews} />
+
+      <section className="py-8 bg-white"><Container><p className="text-center text-gray-700 font-medium">This bundle is generated specifically for your jurisdiction and statutory framework.</p></Container></section>
 
       {/* Why Landlord Heaven */}
       <section className="py-16 md:py-20">

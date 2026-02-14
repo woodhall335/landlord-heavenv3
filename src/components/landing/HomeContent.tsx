@@ -45,11 +45,10 @@ export default function HomeContent() {
               <span className="text-sm font-semibold text-primary">Simple 3-Step Process</span>
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Get Your Documents in Minutes
+              Complete UK Eviction Case Bundles in Minutes
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Our guided wizard makes creating professional legal documents easy —
-              no legal experience required.
+              Generate a complete, jurisdiction-specific court bundle with statutory-grounded checks for England, Wales, or Scotland.
             </p>
           </div>
 
@@ -63,14 +62,14 @@ export default function HomeContent() {
                 />
                 <Step
                   number="2"
-                  title="Review & Customize"
-                  description="We generate the right documents for your jurisdiction. Review them, make any edits, and approve."
+                  title="Review & Validate"
+                  description="We generate your jurisdiction-specific case file and validate key compliance checks before you approve."
                   time="2-3 minutes"
                 />
                 <Step
                   number="3"
-                  title="Download & Serve"
-                  description="Pay securely and instantly download your documents with service instructions and checklists."
+                  title="File & Proceed"
+                  description="Pay securely and generate your complete case bundle with filing instructions, evidence checklist, and service guidance."
                   time="Instant"
                 />
             </div>
@@ -80,7 +79,7 @@ export default function HomeContent() {
                 href="/wizard?src=homepage"
                 className="hero-btn-primary"
               >
-                Start Your Documents Now →
+                Start Your Complete Case Bundle →
               </Link>
               <p className="mt-4 text-sm text-gray-500">Free to start • Pay only when you're ready</p>
             </div>
@@ -96,10 +95,10 @@ export default function HomeContent() {
               <span className="text-sm font-semibold text-primary">Our Products</span>
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Everything You Need to Manage Tenancies
+              Complete Eviction Preparation Across UK Jurisdictions
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              From serving notices to recovering rent — professional documents at a fraction of solicitor costs.
+              From statutory notices to possession paperwork — AI-validated case preparation without solicitor delays.
             </p>
           </div>
 
@@ -271,6 +270,32 @@ export default function HomeContent() {
         </Container>
       </section>
 
+
+      {/* BUILT FOR CHANGING HOUSING LAW */}
+      <section className="py-20 md:py-24 bg-gray-50">
+        <Container>
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-10">
+              <div className="inline-block bg-primary/10 rounded-full px-4 py-2 mb-4">
+                <span className="text-sm font-semibold text-primary">Built for Changing Housing Law</span>
+              </div>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                Statutory-change aware legal automation
+              </h2>
+              <p className="text-lg text-gray-600">
+                UK eviction law is evolving. From the Renting Homes (Wales) Act to the Renters (Reform) Bill 2023 in England,
+                Landlord Heaven is continuously updated to reflect UK housing law changes.
+              </p>
+            </div>
+            <ul className="grid md:grid-cols-2 gap-3 text-gray-700">
+              <li>✔ Reflect current statutory requirements</li>
+              <li>✔ Monitor legal updates and reform trajectory</li>
+              <li>✔ Generate jurisdiction-specific bundles</li>
+              <li>✔ Adapt as housing legislation evolves</li>
+            </ul>
+          </div>
+        </Container>
+      </section>
       {/* TESTIMONIALS */}
       <Testimonials />
 
@@ -345,10 +370,10 @@ export default function HomeContent() {
         <Container>
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Ready to Get Your Documents?
+              Ready to Generate Your Court-Ready File?
             </h2>
             <p className="text-xl text-gray-600 mb-8">
-              Join thousands of landlords saving time and money.
+              Generate a complete, compliance-checked eviction bundle aligned to your jurisdiction.
               <span className="font-semibold text-gray-800"> Start in under 2 minutes.</span>
             </p>
 
@@ -357,7 +382,7 @@ export default function HomeContent() {
                 href="/wizard?src=homepage"
                 className="hero-btn-primary"
               >
-                Generate Your Documents →
+                Generate Your Complete Case Bundle →
               </Link>
             </div>
 
@@ -365,7 +390,7 @@ export default function HomeContent() {
             <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-gray-500">
               <span className="flex items-center gap-2">
                 <RiFlashlightLine className="w-5 h-5 text-primary" />
-                Instant download
+                Ready-to-file output
               </span>
               <span className="flex items-center gap-2">
                 <RiShieldCheckLine className="w-5 h-5 text-primary" />
@@ -380,9 +405,9 @@ export default function HomeContent() {
             {/* Section 8 CTA - SEO Internal Linking */}
             <div className="mt-8 pt-6 border-t border-gray-300/30">
               <p className="text-gray-600">
-                Generate valid <Link href="/eviction-notice-uk" className="text-primary hover:underline font-medium">eviction notices</Link> for all UK regions.{' '}
-                Need a free Section 8 notice?{' '}
-                <Link href="/section-8-notice-template" className="text-primary hover:underline font-medium">Template</Link>
+                Generate valid <Link href="/eviction-notice-uk" className="text-primary hover:underline font-medium">eviction notices</Link> for England, Wales, and Scotland.{' '}
+                Need a Section 8 eviction bundle?{' '}
+                <Link href="/section-8-notice-template" className="text-primary hover:underline font-medium">Bundle overview</Link>
                 {' • '}
                 <Link href="/tools/free-section-8-notice-generator" className="text-primary hover:underline font-medium">Generator</Link>
                 {' • '}

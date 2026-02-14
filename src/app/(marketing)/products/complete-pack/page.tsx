@@ -36,11 +36,11 @@ const product = PRODUCTS.complete_pack;
 const price = product.displayPrice;
 
 export const metadata: Metadata = {
-  title: `Complete Eviction Pack 2026 for England | Court Forms ${price}`,
+  title: `Complete Eviction Case Bundle 2026 for England | Court Forms ${price}`,
   description:
     `Full eviction bundle for England landlords: Section 21/8 notice, N5/N119 court forms, and AI witness statement. ${price} one-time.`,
   openGraph: {
-    title: `Complete Eviction Pack 2026 for England | Court Forms ${price}`,
+    title: `Complete Eviction Case Bundle 2026 for England | Court Forms ${price}`,
     description: "Complete eviction pack for England landlords. Notice to possession order with N5, N119, witness statement, and court filing guidance included.",
     url: getCanonicalUrl('/products/complete-pack'),
   },
@@ -94,7 +94,7 @@ export default async function CompleteEvictionPackPage() {
     <div className="min-h-screen bg-gray-50">
       {/* Structured Data for SEO */}
       <StructuredData data={productSchema({
-        name: "Complete Eviction Pack",
+        name: "Complete Eviction Case Bundle",
         description: "Complete eviction bundle with all court forms from notice to possession order. Includes N5, N119 forms, AI-drafted witness statements, and step-by-step guidance.",
         price: product.price.toString(),
         url: "https://landlordheaven.co.uk/products/complete-pack"
@@ -103,11 +103,13 @@ export default async function CompleteEvictionPackPage() {
       <StructuredData data={breadcrumbSchema([
         { name: "Home", url: "https://landlordheaven.co.uk" },
         { name: "Products", url: "https://landlordheaven.co.uk/pricing" },
-        { name: "Complete Eviction Pack", url: "https://landlordheaven.co.uk/products/complete-pack" }
+        { name: "Complete Eviction Case Bundle", url: "https://landlordheaven.co.uk/products/complete-pack" }
       ])} />
 
       {/* Hero Section */}
       <UniversalHero {...completePackHeroConfig} />
+
+      <section className="py-8 bg-white"><Container><p className="text-center text-gray-700 font-medium">This bundle is generated specifically for your jurisdiction and statutory framework.</p></Container></section>
 
       <WhatsIncludedInteractive product="complete_pack" previews={previews} />
 
@@ -479,7 +481,7 @@ export default async function CompleteEvictionPackPage() {
                 href="/wizard?product=complete_pack&src=product_page&topic=eviction"
                 className="hero-btn-primary"
               >
-                Get Complete Eviction Pack - {price} →
+                Get Complete Eviction Case Bundle - {price} →
               </Link>
             </div>
           </div>

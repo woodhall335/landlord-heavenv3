@@ -17,10 +17,10 @@ import { StructuredData, websiteSchema } from '@/lib/seo/structured-data';
 
 export const metadata: Metadata = {
   title: {
-    absolute: 'Landlord Heaven - UK Landlord Legal Documents'
+    absolute: 'Complete UK Eviction Case Bundles | Landlord Heaven'
   },
   description:
-    'Reduce possession failure risk with court-ready notices, tenancy agreements, and legal documents in minutes. Save 80%+ vs solicitors. Section 21 ends May 2026 - act now. Trusted by UK landlords.',
+    'Complete eviction case bundles. AI-generated. Compliance-checked. Ready to file. Section 21 and Section 8 in England, Section 173 in Wales, and Notice to Leave workflows in Scotland. Built with awareness of Renters (Reform) Bill 2023 reforms.',
   keywords: [
     'section 21 notice',
     'section 8 notice',
@@ -34,17 +34,17 @@ export const metadata: Metadata = {
     'rent arrears',
   ],
   openGraph: {
-    title: 'Landlord Heaven - Court-Ready Legal Documents for UK Landlords',
+    title: 'Complete UK Eviction Case Bundles in Minutes | Landlord Heaven',
     description:
-      'Reduce possession failure risk with court-ready notices and legal documents in minutes. Save 80%+ vs solicitors. Trusted by UK landlords.',
+      'AI-generated, jurisdiction-specific eviction case bundles for England, Wales, and Scotland. Compliance-checked and ready to file.',
     type: 'website',
     url: 'https://landlordheaven.co.uk',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Landlord Heaven - Court-Ready Legal Documents for UK Landlords',
+    title: 'Complete UK Eviction Case Bundles in Minutes | Landlord Heaven',
     description:
-      'Reduce possession failure risk with court-ready notices and legal documents in minutes. Save 80%+ vs solicitors.',
+      'Generate compliance-checked UK eviction case bundles with statutory-grounded automation.',
   },
   alternates: {
     canonical: 'https://landlordheaven.co.uk',

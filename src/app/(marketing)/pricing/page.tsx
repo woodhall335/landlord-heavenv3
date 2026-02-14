@@ -7,8 +7,8 @@ import { FAQSection } from "@/components/marketing/FAQSection";
 import { StandardHero } from "@/components/marketing/StandardHero";
 
 export const metadata: Metadata = generateMetadata({
-  title: "Pricing - Compare All Products",
-  description: "Compare Landlord Heaven pricing. Eviction notices £49.99, tenancy agreements from £14.99. All one-time payments, no subscriptions.",
+  title: "Pricing - UK Eviction Case Bundle Comparison",
+  description: "Compare solicitor workflows, DIY templates, and Landlord Heaven AI-validated case preparation. Complete case bundles ready to file.",
   path: "/pricing",
   keywords: [
     "landlord document pricing",
@@ -22,6 +22,19 @@ export const metadata: Metadata = generateMetadata({
 
 // FAQ data for structured data
 const faqs = [
+  {
+    question: "Is this a template?",
+    answer: "No. We generate a complete, case-specific court bundle — not a template. Every document is validated for statutory compliance and jurisdiction requirements."
+  },
+  {
+    question: "Do you support Section 8 as well as Section 21?",
+    answer: "Yes. We generate both Section 21 (no-fault) and Section 8 (grounds-based) eviction bundles."
+  },
+  {
+    question: "Do you cover Wales and Scotland?",
+    answer: "Yes. Our system generates jurisdiction-specific eviction bundles for England, Wales, and Scotland."
+  },
+
   {
     question: "Are there any hidden fees?",
     answer: "No. The prices shown are what you pay. No setup fees, no processing fees, no surprise charges. The only additional cost is court fees (paid directly to the court when filing)."
@@ -54,7 +67,7 @@ export default function PricingPage() {
       <StandardHero
         badge="Transparent Pricing"
         title="Simple, Transparent Pricing"
-        subtitle="No hidden fees. No surprises. Choose the product that fits your needs."
+        subtitle="Compare solicitor, DIY template, and AI-validated case bundle preparation."
         variant="pastel"
       >
         <p className="text-sm text-gray-600">All prices are one-time payments</p>
@@ -393,6 +406,25 @@ export default function PricingPage() {
           {/* HMO Pro removed - parked for later review */}
         </div>
 
+      </Container>
+
+
+      <Container size="large" className="pb-4">
+        <div className="bg-white rounded-lg border border-gray-200 p-6 mb-2 overflow-x-auto">
+          <h2 className="text-2xl font-bold text-charcoal mb-4">Solicitor vs DIY Templates vs Landlord Heaven</h2>
+          <table className="w-full text-sm">
+            <thead><tr className="border-b"><th className="text-left py-2">Metric</th><th className="text-center">Solicitor</th><th className="text-center">DIY Templates</th><th className="text-center">Landlord Heaven</th></tr></thead>
+            <tbody>
+              <tr className="border-b"><td className="py-2">Cost</td><td className="text-center">£300–£2,500</td><td className="text-center">Low</td><td className="text-center">£49–£199</td></tr>
+              <tr className="border-b"><td className="py-2">Time</td><td className="text-center">3–5 days</td><td className="text-center">Manual prep</td><td className="text-center">10 minutes</td></tr>
+              <tr className="border-b"><td className="py-2">Complete Case File</td><td className="text-center">❌ Often staged</td><td className="text-center">❌</td><td className="text-center">✅ Yes</td></tr>
+              <tr className="border-b"><td className="py-2">Jurisdiction-Specific</td><td className="text-center">✅</td><td className="text-center">❌</td><td className="text-center">✅</td></tr>
+              <tr className="border-b"><td className="py-2">Compliance Validation</td><td className="text-center">✅</td><td className="text-center">❌</td><td className="text-center">✅ AI-validated</td></tr>
+              <tr className="border-b"><td className="py-2">Reform-Aware</td><td className="text-center">Varies</td><td className="text-center">❌</td><td className="text-center">✅</td></tr>
+              <tr><td className="py-2">Ready to File</td><td className="text-center">❌</td><td className="text-center">❌</td><td className="text-center">✅</td></tr>
+            </tbody>
+          </table>
+        </div>
       </Container>
 
       {/* FAQ Section */}
