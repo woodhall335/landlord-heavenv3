@@ -283,7 +283,7 @@ export default function HomeContent() {
                 Statutory-change aware legal automation
               </h2>
               <p className="text-lg text-gray-600">
-                UK eviction law is evolving. From the Renting Homes (Wales) Act to the Renters (Reform) Bill 2023 in England,
+                UK eviction law is evolving. From the Renting Homes (Wales) Act to the Renters' Rights Act implementation in England,
                 Landlord Heaven is continuously updated to reflect UK housing law changes.
               </p>
             </div>
@@ -333,7 +333,7 @@ export default function HomeContent() {
             <JurisdictionCard
               flag="/gb-nir.svg"
               title="Northern Ireland"
-              forms={["Private Tenancy Agreement", "Notice to Quit", "Private Tenancies Order", "Court Forms"]}
+              forms={["Private Tenancy Agreement", "Northern Ireland tenancy framework", "Tenancy agreements only", "Eviction notices planned"]}
             />
           </div>
         </Container>

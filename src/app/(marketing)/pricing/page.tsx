@@ -71,6 +71,7 @@ export default function PricingPage() {
         variant="pastel"
       >
         <p className="text-sm text-gray-600">All prices are one-time payments</p>
+        <p className="mt-2 text-sm text-gray-600">Notices: England/Wales/Scotland. Complete Pack + Money Claims: England-only. Tenancy agreements: all UK (incl. NI).</p>
       </StandardHero>
 
       <Container size="large" className="py-12">
@@ -210,12 +211,12 @@ export default function PricingPage() {
                 <td className="text-center p-4">✅</td>
               </tr>
               <tr className="border-t bg-gray-50">
-                <td className="p-4 text-gray-700">Full UK Coverage (Eng/Wales/Scot/NI)</td>
-                <td className="text-center p-4">✅</td>
-                <td className="text-center p-4">✅</td>
-                <td className="text-center p-4">✅</td>
-                <td className="text-center p-4">✅</td>
-                <td className="text-center p-4">✅</td>
+                <td className="p-4 text-gray-700">Jurisdiction-specific scope</td>
+                <td className="text-center p-4">England/Wales/Scotland notices</td>
+                <td className="text-center p-4">England only</td>
+                <td className="text-center p-4">England only</td>
+                <td className="text-center p-4">All UK tenancy agreements</td>
+                <td className="text-center p-4">All UK tenancy agreements</td>
               </tr>
               <tr className="border-t">
                 <td className="p-4 text-gray-700">Instant Download</td>
@@ -259,7 +260,7 @@ export default function PricingPage() {
                     className="hero-btn-primary text-sm px-4 py-2"
                     aria-label="Start notice wizard"
                   >
-                    Start Notice Wizard →
+                    Start Notice Bundle Wizard →
                   </Link>
                 </td>
                 <td className="text-center p-6">
@@ -268,7 +269,7 @@ export default function PricingPage() {
                     className="hero-btn-primary text-sm px-4 py-2"
                     aria-label="Start eviction pack wizard"
                   >
-                    Start Eviction Pack Wizard →
+                    Start England Complete Pack Wizard →
                   </Link>
                 </td>
                 <td className="text-center p-6">
@@ -277,7 +278,7 @@ export default function PricingPage() {
                     className="hero-btn-primary text-sm px-4 py-2"
                     aria-label="Start money claim wizard"
                   >
-                    Start Money Claim Wizard →
+                    Start England Money Claim Wizard →
                   </Link>
                 </td>
                 <td className="text-center p-6">
@@ -311,7 +312,7 @@ export default function PricingPage() {
             <div className="text-3xl font-bold text-primary mb-4">£49.99 <span className="text-sm text-gray-600">one-time</span></div>
             <ul className="space-y-2 mb-6 text-sm">
               <li>✅ Section 8/21 Notice</li>
-              <li>✅ Full UK Coverage</li>
+              <li>✅ England/Wales/Scotland notices</li>
               <li>✅ Instant Download</li>
               <li>✅ 12-Month Storage</li>
             </ul>
@@ -320,7 +321,7 @@ export default function PricingPage() {
               className="hero-btn-primary block w-full text-center"
               aria-label="Start notice wizard"
             >
-              Start Notice Wizard →
+              Start Notice Bundle Wizard →
             </Link>
           </div>
 
@@ -340,7 +341,7 @@ export default function PricingPage() {
               className="hero-btn-primary block w-full text-center"
               aria-label="Start eviction pack wizard"
             >
-              Start Eviction Pack Wizard →
+              Start England Complete Pack Wizard →
             </Link>
           </div>
 
@@ -360,7 +361,7 @@ export default function PricingPage() {
               className="hero-btn-primary block w-full text-center"
               aria-label="Start money claim wizard"
             >
-              Start Money Claim Wizard →
+              Start England Money Claim Wizard →
             </Link>
           </div>
 
@@ -371,7 +372,7 @@ export default function PricingPage() {
             <ul className="space-y-2 mb-6 text-sm">
               <li>✅ AST/PRT/NI Agreement</li>
               <li>✅ Core Clauses</li>
-              <li>✅ Full UK Coverage</li>
+              <li>✅ UK tenancy agreements (incl. NI)</li>
               <li>✅ 12+ Month Storage</li>
             </ul>
             <Link

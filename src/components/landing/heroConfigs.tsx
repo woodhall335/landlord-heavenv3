@@ -31,7 +31,7 @@ export const homeHeroConfig: HeroConfig = {
   highlightTitle: 'in Minutes',
   subtitle: (
     <>
-      Generate your full Section 21, Section 8, Welsh occupation contract, or Scottish eviction bundle —
+      Generate your full Section 21, Section 8, Wales Section 173, or Scotland Notice to Leave bundle —
       <span className="font-semibold"> AI-generated, compliance-checked, and ready to file</span>
     </>
   ),

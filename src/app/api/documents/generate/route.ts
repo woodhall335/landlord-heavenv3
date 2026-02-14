@@ -621,7 +621,7 @@ export async function POST(request: Request) {
         {
           code: 'NI_EVICTION_MONEY_CLAIM_NOT_SUPPORTED',
           error: 'Northern Ireland eviction and money claim documents are not yet supported',
-          user_message: 'We currently support tenancy agreements for Northern Ireland. Eviction and money claim support is planned for Q2 2026.',
+          user_message: 'Northern Ireland: tenancy agreements only (eviction notices planned).',
           blocking_issues: [],
           warnings: [],
         },

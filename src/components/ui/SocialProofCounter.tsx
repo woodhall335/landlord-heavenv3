@@ -136,9 +136,12 @@ export function SocialProofCounter({
     }
 
     if (!shouldAnimate) {
-      setDisplayCount(targetCount);
-      setIsAnimating(false);
-      return;
+      const immediateTimer = window.setTimeout(() => {
+        setDisplayCount(targetCount);
+        setIsAnimating(false);
+      }, 0);
+
+      return () => window.clearTimeout(immediateTimer);
     }
 
     const duration = 1200;
@@ -166,11 +169,17 @@ export function SocialProofCounter({
       <div className={`flex items-center justify-center gap-2 text-gray-600 ${className}`}>
         {showIcon && <Icon className="w-5 h-5 text-primary" />}
         <span>
-          Trusted by{' '}
-          <strong className="text-gray-900 font-semibold tabular-nums">
-            {displayCount.toLocaleString()}+
-          </strong>{' '}
-          {config.text}
+          {displayCount > 0 ? (
+            <>
+              Trusted by{' '}
+              <strong className="text-gray-900 font-semibold tabular-nums">
+                {displayCount.toLocaleString()}+
+              </strong>{' '}
+              {config.text}
+            </>
+          ) : (
+            'Trusted by UK landlords'
+          )}
         </span>
       </div>
     );
@@ -183,10 +192,16 @@ export function SocialProofCounter({
     >
       {showIcon && <Icon className="w-4 h-4" />}
       <span>
-        <strong className={`font-semibold tabular-nums ${isAnimating ? 'opacity-70' : ''}`}>
-          {displayCount}
-        </strong>{' '}
-        {config.text}
+        {displayCount > 0 ? (
+          <>
+            <strong className={`font-semibold tabular-nums ${isAnimating ? 'opacity-70' : ''}`}>
+              {displayCount}
+            </strong>{' '}
+            {config.text}
+          </>
+        ) : (
+          'Trusted by UK landlords'
+        )}
       </span>
     </div>
   );
