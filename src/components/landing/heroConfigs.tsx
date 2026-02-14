@@ -78,9 +78,9 @@ export const section21HeroConfig: HeroConfig = {
 };
 
 export const noticeOnlyHeroConfig: HeroConfig = {
-  trustText: 'Section 21, Section 8, Wales Section 173, and Scotland Notice to Leave coverage',
+  trustText: 'Section 21/8, Wales S173 & Scotland Notice to Leave',
   title: 'AI-Validated Eviction',
-  highlightTitle: 'Case Bundle Generation',
+  highlightTitle: 'Notice Generation',
   subtitle: 'Generate jurisdiction-specific, compliance-checked eviction bundles for England, Wales, and Scotland — £49.99 one-time.',
   primaryCta: {
     label: 'Generate Eviction Bundle →',
