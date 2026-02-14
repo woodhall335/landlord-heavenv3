@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { RiCheckLine, RiShieldCheckFill } from 'react-icons/ri';
+import { getDynamicReviewCount, REVIEW_RATING } from '@/lib/reviews/reviewStats';
 
 type HeroCta = {
   label: string;
@@ -47,7 +48,6 @@ function warnOnce(message: string) {
   }
 
   warnedMessages.add(message);
-  // eslint-disable-next-line no-console
   console.warn(message);
 }
 
@@ -78,6 +78,7 @@ export function UniversalHero({
   const currentCountRef = useRef(DEFAULT_COUNTER);
   const isValidHeading = headingAs === 'h1' || headingAs === 'h2';
   const HeadingTag = isValidHeading ? headingAs : 'h1';
+  const reviewCount = getDynamicReviewCount();
 
   useEffect(() => {
     if (!isValidHeading) {
@@ -198,7 +199,9 @@ export function UniversalHero({
               <span className="text-[#facc15]" aria-hidden="true">
                 ★★★★★
               </span>
-              <span className="font-medium text-[#2b253d]">Rated 4.8 / 5.0 from 247 reviews</span>
+              <span className="font-medium text-[#2b253d]">
+                Rated {REVIEW_RATING}/5 from {reviewCount} reviews
+              </span>
             </p>
 
             <HeadingTag className="mt-5 max-w-[18ch] pr-24 text-[2.125rem] font-bold leading-[1.1] tracking-tight min-[420px]:pr-28 min-[900px]:pr-0 sm:text-5xl lg:text-6xl">

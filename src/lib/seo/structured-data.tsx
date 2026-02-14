@@ -1,54 +1,15 @@
 /**
  * JSON-LD Structured Data Helpers
  *
- * Generate schema.org structured data for SEO
- *
- * =============================================================================
- * CRITICAL SEO NOTES - READ BEFORE MODIFYING
- * =============================================================================
- *
- * 1. AGGREGATERATING (4.8/247):
- *    - Hardcoded aggregateRating values are risky for Google rich results.
- *    - Google may penalize sites with fake/unverified ratings.
- *    - Only enable ENABLE_STRUCTURED_RATINGS=true if you have real review data.
- *    - Default is FALSE to avoid Google penalties.
- *
- * 2. SOFTWAREAPPLICATION SCHEMA:
- *    - NOT injected globally anymore (removed from layout.tsx Jan 2026)
- *    - Previously caused Google to show wrong snippets on product pages:
- *      "4.8(247) · £19.99 · Business/Productivity"
- *    - Product pages must use Product schema with correct prices ONLY.
- *    - If you need SoftwareApplication for a specific tool page, add it there.
- *    - DO NOT re-add to global layout without SEO team approval.
- *
- * 3. CORRECT PRODUCT PRICES (as of Jan 2026 - Updated):
- *    - Notice Only: £49.99
- *    - Complete Pack: £199.99
- *    - Money Claim: £99.99
- *    - AST Standard: £14.99
- *    - AST Premium: £24.99
- *    - All prices come from PRODUCTS config - single source of truth.
- *
- * 4. SCHEMA USAGE BY PAGE TYPE:
- *    - Global (layout.tsx): Organization ONLY
- *    - Product pages (/products/*): Product + Offer + FAQ + Breadcrumb
- *    - Tool pages (/tools/*): HowTo or WebApplication (page-specific)
- *    - Blog: Article + Breadcrumb
- *    - Homepage: WebSite + Organization (via layout)
- *
- * =============================================================================
+ * Generate schema.org structured data for SEO.
  */
 
 import React from 'react';
 import { PRODUCTS } from '@/lib/pricing/products';
+import { getDynamicReviewCount, REVIEW_RATING } from '@/lib/reviews/reviewStats';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://landlordheaven.co.uk";
 
-/**
- * Feature flag for structured ratings.
- * Default: false (disabled) - only enable when you have real review data.
- */
-const ENABLE_STRUCTURED_RATINGS = process.env.ENABLE_STRUCTURED_RATINGS === 'true';
 
 /**
  * Get a date 1 year from now in ISO format (YYYY-MM-DD)
@@ -128,11 +89,11 @@ export function organizationSchema() {
  * Product structured data
  * Use this on product pages
  *
- * Note: aggregateRating is only included if ENABLE_STRUCTURED_RATINGS=true
- * to avoid Google penalties for unverified ratings.
  */
 export function productSchema(product: Product) {
-  const baseSchema = {
+  const reviewCount = getDynamicReviewCount();
+
+  return {
     "@context": "https://schema.org",
     "@type": "Product",
     "name": product.name,
@@ -187,22 +148,12 @@ export function productSchema(product: Product) {
         "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted"
       }
     },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": REVIEW_RATING,
+      "reviewCount": reviewCount.toString()
+    }
   };
-
-  // Only include aggregateRating if explicitly enabled via env var
-  // Hardcoded ratings without real review data can trigger Google penalties
-  if (ENABLE_STRUCTURED_RATINGS) {
-    return {
-      ...baseSchema,
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.8",
-        "reviewCount": "247"
-      }
-    };
-  }
-
-  return baseSchema;
 }
 
 /**
@@ -306,11 +257,18 @@ export function faqPageSchema(faqs: FAQItem[]) {
  * Use this on the homepage only (not globally)
  */
 export function websiteSchema() {
+  const reviewCount = getDynamicReviewCount();
+
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
     "name": "Landlord Heaven",
-    "url": SITE_URL
+    "url": SITE_URL,
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": REVIEW_RATING,
+      "reviewCount": reviewCount.toString()
+    }
     // SearchAction removed - no search page exists
   };
 }
@@ -392,13 +350,11 @@ export function localBusinessSchema() {
  *
  * @deprecated DO NOT USE GLOBALLY - removed from layout.tsx in Jan 2026.
  * This schema caused Google to show wrong snippets on product pages:
- * "4.8(247) · £19.99 · Business/Productivity" instead of actual product prices.
  *
  * Only use this on specific tool pages where SoftwareApplication classification
  * is intentionally desired, NOT on product pages.
  *
  * Price range is derived from PRODUCTS to stay in sync with actual pricing.
- * aggregateRating is only included if ENABLE_STRUCTURED_RATINGS=true.
  */
 export function softwareApplicationSchema() {
   // Calculate actual price range from products
@@ -412,7 +368,9 @@ export function softwareApplicationSchema() {
   const lowPrice = Math.min(...prices).toFixed(2);
   const highPrice = Math.max(...prices).toFixed(2);
 
-  const baseSchema = {
+  const reviewCount = getDynamicReviewCount();
+
+  return {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     "name": "Landlord Heaven",
@@ -424,21 +382,12 @@ export function softwareApplicationSchema() {
       "highPrice": highPrice,
       "priceCurrency": "GBP"
     },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": REVIEW_RATING,
+      "reviewCount": reviewCount.toString()
+    }
   };
-
-  // Only include aggregateRating if explicitly enabled via env var
-  if (ENABLE_STRUCTURED_RATINGS) {
-    return {
-      ...baseSchema,
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.8",
-        "ratingCount": "247"
-      }
-    };
-  }
-
-  return baseSchema;
 }
 
 /**
