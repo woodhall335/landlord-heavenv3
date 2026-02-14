@@ -189,7 +189,7 @@ export default function Section21NoticeTemplatePage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <FunnelCta
-                title="Got the steps? We can draft and serve it for you."
+                title="Got the steps? Generate a compliance-checked bundle with service guidance."
                 subtitle="Reduce rejection risk with a compliant notice flow and clear next steps if the tenant does not leave."
                 primaryHref="/products/notice-only"
                 primaryText="Generate my notice"
@@ -501,7 +501,7 @@ export default function Section21NoticeTemplatePage() {
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="rounded-xl border border-gray-200 p-6 bg-gray-50">
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">Notice Only</h3>
-                  <p className="text-gray-600 mb-4">Best when you need to draft and serve a compliant notice quickly.</p>
+                  <p className="text-gray-600 mb-4">Best when you need to generate a compliance-checked notice bundle quickly.</p>
                   <Link href="/products/notice-only" className="hero-btn-secondary inline-flex" data-cta="notice-only" data-cta-location="bottom">Start Notice Only</Link>
                 </div>
                 <div className="rounded-xl border border-primary/30 p-6 bg-primary/5">

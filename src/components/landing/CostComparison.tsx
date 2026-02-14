@@ -95,7 +95,7 @@ export function CostComparison() {
               {/* Popular Badge */}
               <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
                 <span className="bg-primary text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-md animate-subtle-pulse">
-                  SAVE 80%+
+                  FLAT ONE-TIME PRICING
                 </span>
               </div>
 
@@ -132,7 +132,7 @@ export function CostComparison() {
                   href="/wizard"
                   className="hero-btn-primary block w-full text-center"
                 >
-                  Start Saving Now →
+                  Start Notice Bundle Wizard →
                 </Link>
               </div>
             </div>
@@ -211,7 +211,7 @@ function PriceAnchor({
       )}
       <div className="text-xs text-gray-400 line-through">{solicitorPrice}</div>
       <div className={`text-xs font-semibold mt-1 ${highlighted ? 'text-primary' : 'text-green-600'}`}>
-        Save {savings}
+        Typical gap: {savings}
       </div>
     </Link>
   );

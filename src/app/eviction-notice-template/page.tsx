@@ -33,7 +33,7 @@ const wizardLinkNoticeOnly = buildWizardLink({
 
 export const metadata: Metadata = {
   title: 'Eviction Notice Template UK - Possession Notice Download',
-  description: 'Download free UK eviction notice templates. Section 21 and Section 8 notices. Court-ready documents trusted by 10,000+ landlords.',
+  description: 'Choose your jurisdiction and generate an eviction notice template bundle. Section 21/8 (England), Section 173 (Wales), and Notice to Leave (Scotland).',
   keywords: [
     'eviction notice template uk',
     'eviction notice template',
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'Eviction Notice Template UK - Free Download | Landlord Heaven',
-    description: 'Download free UK eviction notice templates. Section 21 and Section 8 notices. Court-ready documents.',
+    description: 'Choose your jurisdiction and generate an eviction notice template bundle with compliance checks.',
     type: 'website',
   },
 };
@@ -61,7 +61,7 @@ export default function EvictionNoticeTemplatePage() {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
     name: 'Eviction Notice Template UK',
-    description: 'Free UK eviction notice templates for landlords. Section 21 and Section 8 notices.',
+    description: 'Jurisdiction-specific eviction notice template bundles for England, Wales, and Scotland.',
     url: 'https://landlordheaven.co.uk/eviction-notice-template',
     mainEntity: {
       '@type': 'Product',
@@ -92,7 +92,7 @@ export default function EvictionNoticeTemplatePage() {
           badge="Section 21 ends 1 May 2026"
           badgeIcon={<AlertTriangle className="w-4 h-4" />}
           title="Eviction Notice Template UK"
-          subtitle={<>Download free <strong>eviction notice templates</strong> for Section 21 and Section 8. Court-ready documents trusted by over 10,000 UK landlords.</>}
+          subtitle={<>Choose your jurisdiction and generate an <strong>eviction notice template bundle</strong> for England, Wales, or Scotland. Compliance-checked and ready to file.</>}
           primaryCTA={{ label: "Get Court-Ready Notice — £49.99", href: wizardLinkNoticeOnly }}
           secondaryCTA={{ label: "Try Free Template", href: "/tools/free-section-21-notice-generator" }}
           variant="pastel"
@@ -131,11 +131,11 @@ export default function EvictionNoticeTemplatePage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
-                Types of Eviction Notices in the UK
+                Types of Eviction Notice Templates by Jurisdiction
               </h2>
               <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
                 Choose the right eviction notice based on your situation. We help you generate
-                court-ready documents for all notice types.
+                compliance-checked template bundles by jurisdiction.
               </p>
 
               <div className="grid md:grid-cols-2 gap-8">
@@ -308,7 +308,7 @@ export default function EvictionNoticeTemplatePage() {
                     Section 21 Possession Notice
                   </h4>
                   <p className="text-gray-600 text-sm">
-                    No-fault eviction — 2 months notice. Ends May 2026.
+                    No-fault evictions (Section 21) end from 1 May 2026 in England.
                   </p>
                 </Link>
                 <Link

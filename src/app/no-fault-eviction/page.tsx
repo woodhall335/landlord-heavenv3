@@ -7,7 +7,7 @@ import { FAQSection } from '@/components/seo/FAQSection';
 import { noFaultEvictionFAQs } from '@/data/faqs';
 
 export const metadata: Metadata = {
-  title: 'No Fault Eviction UK | Section 21 Guide for Landlords [2026]',
+  title: 'No Fault Eviction (England) | Section 21 Guide for Landlords [2026]',
   description:
     'Guide to no-fault evictions using Section 21 in England. Requirements, notice periods, and how to serve a valid notice.',
   keywords: [
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     'no grounds eviction',
   ],
   openGraph: {
-    title: 'No Fault Eviction UK | Section 21 Guide',
+    title: 'No Fault Eviction (England) | Section 21 Guide',
     description:
       'Everything landlords need to know about no-fault evictions using Section 21 in England.',
     type: 'article',
@@ -50,7 +50,7 @@ export default function NoFaultEvictionPage() {
                 <span className="text-sm font-semibold text-primary">England Only</span>
               </div>
               <h1 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
-                No Fault Eviction UK: Section 21 Guide
+                No Fault Eviction (England): Section 21 Guide
               </h1>
               <p className="text-xl text-gray-600 mb-8">
                 A no-fault eviction lets you regain possession of your property without proving the
@@ -98,12 +98,14 @@ export default function NoFaultEvictionPage() {
 
                 <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 my-6">
                   <p className="text-amber-800 font-semibold mb-2">
-                    Renters Reform Bill Warning
+                    Renters’ Rights Act update
                   </p>
                   <p className="text-amber-700 text-sm">
-                    The government has proposed abolishing Section 21 no-fault evictions. While
-                    Section 21 remains valid as of 2026, landlords should stay informed about
-                    upcoming changes.
+                    No-fault evictions (Section 21) end from 1 May 2026 in England.
+                  </p>
+                  <p className="text-amber-700 text-sm mt-2">
+                    Official source:{' '}
+                    <Link href="https://www.gov.uk/government/news/section-21-no-fault-evictions-to-end-on-1-may-2026" className="underline">GOV.UK</Link>
                   </p>
                 </div>
 

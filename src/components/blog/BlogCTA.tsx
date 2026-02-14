@@ -48,7 +48,7 @@ export function BlogCTA({
           <div className="flex-1">
             <h4 className="font-semibold text-gray-900 mb-1">Need a Court-Ready Notice?</h4>
             <p className="text-sm text-gray-600 mb-3">
-              Generate an official Section 21 notice in minutes — guaranteed to be accepted by courts.
+              Generate an official Section 21 notice in minutes — compliance-checked against current statutory requirements.
             </p>
             <Link
               href="/products/notice-only"

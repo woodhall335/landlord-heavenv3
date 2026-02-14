@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     absolute: 'Complete UK Eviction Case Bundles | Landlord Heaven'
   },
   description:
-    'Complete eviction case bundles. AI-generated. Compliance-checked. Ready to file. Section 21 and Section 8 in England, Section 173 in Wales, and Notice to Leave workflows in Scotland. Built with awareness of Renters (Reform) Bill 2023 reforms.',
+    'Complete eviction case bundles. AI-generated. Compliance-checked. Ready to file. Section 21 and Section 8 in England, Section 173 in Wales, and Notice to Leave workflows in Scotland. No-fault evictions (Section 21) end from 1 May 2026 in England.',
   keywords: [
     'section 21 notice',
     'section 8 notice',
