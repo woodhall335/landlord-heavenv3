@@ -55,7 +55,7 @@ export const runtime = 'nodejs';
 const faqs = [
   {
     question: "What documents do I get?",
-    answer: "You receive 7-9 documents depending on jurisdiction: Eviction Notice (Section 8/21 or Notice to Leave), Service Instructions, Validity Checklist, Court/Tribunal Forms (N5 + N119 for E&W, Form E for Scotland), AI Witness Statement, Filing Guide, Evidence Checklist, and Proof of Service Certificate."
+    answer: "You receive an England-only case bundle: Section 21 or Section 8 notice, Service Instructions, Service & Validity Checklist, Court Forms (N5/N5B/N119 route as applicable), AI witness statement draft, Filing Guide, Evidence Checklist, and Proof of Service Certificate."
   },
   {
     question: "Can I preview before I pay?",
@@ -71,11 +71,11 @@ const faqs = [
   },
   {
     question: "Are these genuine official court forms?",
-    answer: "Yes. We use official HMCTS forms (N5, N5B, N119) for England & Wales and First-tier Tribunal forms for Scotland. These are the same forms you'd download from government websites, pre-filled with your case details."
+    answer: "Yes. We use official HMCTS forms (N5, N5B, N119) for England County Court routes. These are the same forms you'd download from government sources, populated with your case details."
   },
   {
     question: "How long does the eviction process take?",
-    answer: "Timelines vary: England & Wales 3-6 months (Section 8 rent arrears fastest; contested cases longer). Scotland 4-8 months (Tribunal process). We include detailed timeline guidance."
+    answer: "Timelines vary by route and whether the claim is defended. We include England-specific filing and timeline guidance for Section 21 and Section 8 routes."
   },
   {
     question: "How long are documents stored?",
@@ -109,9 +109,11 @@ export default async function CompleteEvictionPackPage() {
       {/* Hero Section */}
       <UniversalHero {...completePackHeroConfig} />
 
-      <section className="py-8 bg-white"><Container><p className="text-center text-gray-700 font-medium">This bundle is generated specifically for your jurisdiction and statutory framework.</p></Container></section>
+      <section className="py-8 bg-white"><Container><p className="text-center text-gray-700 font-medium">What you'll receive in your bundle:</p></Container></section>
 
       <WhatsIncludedInteractive product="complete_pack" previews={previews} />
+
+      <section className="py-8 bg-white"><Container><p className="text-center text-gray-700 font-medium">These are example previews. Your bundle is generated specifically for your jurisdiction and tenancy details.</p></Container></section>
 
       <section className="py-16 md:py-20 bg-white">
         <Container>
@@ -302,7 +304,7 @@ export default async function CompleteEvictionPackPage() {
               Typical Eviction Timeline
             </h2>
             <p className="text-center text-gray-600 mb-12">
-              Timelines vary by jurisdiction and grounds. This is a general guide.
+              England-only timeline guidance. Actual timings vary by route, court capacity, and whether the claim is defended.
             </p>
 
             <div className="space-y-6">
@@ -313,7 +315,7 @@ export default async function CompleteEvictionPackPage() {
                 <div>
                   <h3 className="text-lg font-semibold text-charcoal mb-2">Serve Notice (Day 0)</h3>
                   <p className="text-gray-600">
-                    Deliver eviction notice to tenant. Notice period varies: 2 weeks (some rent arrears) to 6 months (Section 173 Wales).
+                    Deliver the England possession notice to the tenant. Notice periods depend on route and grounds (for example Section 8 arrears routes vs Section 21).
                   </p>
                 </div>
               </div>
@@ -325,7 +327,7 @@ export default async function CompleteEvictionPackPage() {
                 <div>
                   <h3 className="text-lg font-semibold text-charcoal mb-2">File with Court/Tribunal (After Notice Period)</h3>
                   <p className="text-gray-600">
-                    Submit claim form (N5/N119 or Form E) with court fee. Court issues claim and serves tenant. Tenant has 14 days to respond.
+                    Submit the relevant England County Court forms (N5/N119 or N5B) with the court fee. The court issues the claim and serves the tenant.
                   </p>
                 </div>
               </div>
@@ -361,9 +363,8 @@ export default async function CompleteEvictionPackPage() {
                 <div>
                   <h4 className="font-semibold text-charcoal mb-2">Timeline Estimates</h4>
                   <p className="text-gray-700">
-                    <strong>England &amp; Wales:</strong> 3-6 months (uncontested); longer if contested<br />
-                    <strong>Scotland:</strong> 4-8 months (Tribunal process)<br />
-                    These are estimates. Actual timelines depend on court backlogs, grounds, and whether the case is contested.
+                    <strong>England:</strong> often 3-6 months for straightforward possession routes; defended claims can take longer.<br />
+                    These are estimates. Actual timelines depend on court backlogs, route selection, and whether the claim is defended.
                   </p>
                 </div>
               </div>
@@ -418,7 +419,7 @@ export default async function CompleteEvictionPackPage() {
                     </td>
                   </tr>
                   <tr>
-                    <td className="px-6 py-4 text-sm text-gray-700 border-b border-gray-100">Court/Tribunal Forms (N5, N119, Form E)</td>
+                    <td className="px-6 py-4 text-sm text-gray-700 border-b border-gray-100">County Court Forms (N5, N5B, N119)</td>
                     <td className="px-6 py-4 text-center border-b border-gray-100">
                       <RiCloseLine className="w-5 h-5 text-gray-300 mx-auto" />
                     </td>

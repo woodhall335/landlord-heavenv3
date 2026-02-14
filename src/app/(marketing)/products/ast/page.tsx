@@ -33,13 +33,13 @@ const standardPrice = PRODUCTS.ast_standard.displayPrice;
 const premiumPrice = PRODUCTS.ast_premium.displayPrice;
 
 export const metadata: Metadata = {
-  title: `Tenancy Agreement Pack 2026 | All UK Regions | From ${standardPrice}`,
+  title: `Tenancy Agreement Template Pack 2026 | UK Jurisdictions | From ${standardPrice}`,
   description:
-    `Compliant tenancy agreements for all UK: AST (England), Occupation Contract (Wales), PRT (Scotland), and NI. From ${standardPrice}.`,
+    `Jurisdiction-specific tenancy agreement template pack: AST (England), Occupation Contract (Wales), PRT (Scotland), and NI private tenancy. Compliance checklist included. From ${standardPrice}.`,
   openGraph: {
     title: `Tenancy Agreement Pack 2026 | England, Wales, Scotland & NI | From ${standardPrice}`,
     description:
-      "Landlord-ready tenancy agreements for all UK regions: AST, Occupation Contracts, PRT, and NI templates. Preview before you buy.",
+      "Jurisdiction-specific tenancy agreement templates: AST, Occupation Contract, PRT, and NI private tenancy. Compliance checklist included. Preview before purchase.",
     type: 'website',
     url: getCanonicalUrl('/products/ast'),
   },
@@ -103,6 +103,8 @@ export default function ASTPage() {
 
       {/* Hero Section */}
       <UniversalHero {...astHeroConfig} />
+
+      <section className="py-8 bg-white"><Container><p className="text-center text-gray-700 font-medium">Includes a jurisdiction-specific compliance checklist and preview-before-pay workflow.</p></Container></section>
 
       {/* What's Included in This Agreement - Integration Layer Disclosure */}
       <section className="py-16 md:py-20 bg-white">
@@ -402,7 +404,7 @@ export default function ASTPage() {
                     <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                     <div>
                       <span className="font-medium">Guarantor Clauses</span>
-                      <span className="text-sm text-gray-500 block">Third-party guarantee provisions</span>
+                      <span className="text-sm text-gray-500 block">Guarantor provisions</span>
                     </div>
                   </li>
                   <li className="flex items-start gap-2">

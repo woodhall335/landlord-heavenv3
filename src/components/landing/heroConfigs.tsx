@@ -20,8 +20,8 @@ const astPremiumPrice = PRODUCTS.ast_premium.displayPrice;
 
 const astSubtitle: ReactNode = (
   <>
-    Generate compliant AST, Occupation Contract, PRT, and NI tenancy agreements in minutes —
-    <span className="font-semibold"> preview before paying and regenerate anytime</span>
+    Generate a jurisdiction-specific tenancy agreement pack: AST (England), Occupation Contract (Wales), PRT (Scotland), and NI private tenancy —
+    <span className="font-semibold"> includes a compliance checklist, preview before paying, and instant regeneration</span>
   </>
 );
 
@@ -43,12 +43,12 @@ export const homeHeroConfig: HeroConfig = {
 };
 
 export const astHeroConfig: HeroConfig = {
-  trustText: 'Trusted tenancy agreements for UK landlords',
-  title: 'Tenancy Agreements',
-  highlightTitle: 'for Every UK Jurisdiction',
+  trustText: 'AST (England) • Occupation Contract (Wales) • PRT (Scotland) • NI private tenancy',
+  title: 'Jurisdiction-Specific',
+  highlightTitle: 'Tenancy Agreement Pack',
   subtitle: astSubtitle,
   primaryCta: {
-    label: `Standard - ${astStandardPrice} →`,
+    label: 'Generate my tenancy agreement pack →',
     href: '/wizard?product=ast_standard&src=product_page&topic=tenancy',
   },
   secondaryCta: {
@@ -78,12 +78,12 @@ export const section21HeroConfig: HeroConfig = {
 };
 
 export const noticeOnlyHeroConfig: HeroConfig = {
-  trustText: 'Section 21/8, Wales S173 & Scotland Notice to Leave',
-  title: 'AI-Validated Eviction',
-  highlightTitle: 'Notice Generation',
-  subtitle: 'Generate jurisdiction-specific, compliance-checked eviction bundles for England, Wales, and Scotland — £49.99 one-time.',
+  trustText: 'Section 21 / Section 8 (England) • Section 173 (Wales) • Notice to Leave (Scotland)',
+  title: 'Eviction Notice Bundle',
+  highlightTitle: 'Jurisdiction-Specific',
+  subtitle: 'Generate a compliance-checked notice bundle with service instructions and a validity checklist. Preview every document before purchase.',
   primaryCta: {
-    label: 'Generate Eviction Bundle →',
+    label: 'Generate my notice bundle →',
     href: '/wizard?product=notice_only&src=product_page&topic=eviction',
   },
   secondaryCta: {
@@ -96,12 +96,12 @@ export const noticeOnlyHeroConfig: HeroConfig = {
 };
 
 export const completePackHeroConfig: UniversalHeroProps = {
-  trustText: 'England possession bundle with N5B and statutory compliance checks',
-  title: 'Complete Eviction Case',
-  highlightTitle: 'Bundle for England',
-  subtitle: 'Complete eviction case bundle for England — AI-validated, compliance-checked, and ready to file for £199.99.',
+  trustText: 'England-only (HMCTS / County Court forms)',
+  title: 'Complete Eviction Case Bundle',
+  highlightTitle: 'England-only',
+  subtitle: 'Section 21/8 notice routes plus N5 / N5B / N119, witness statement drafting, evidence checklist, and filing guide. Preview before purchase.',
   primaryCta: {
-    label: 'Start My Case Bundle →',
+    label: 'Start my England case bundle →',
     href: '/wizard?product=complete_pack&src=product_page&topic=eviction',
   },
   secondaryCta: {
@@ -126,12 +126,12 @@ export const blogHeroConfig: UniversalHeroProps = {
 };
 
 export const moneyClaimHeroConfig: UniversalHeroProps = {
-  trustText: 'Recover rent arrears with court-ready claims',
+  trustText: 'England-only (County Court / MCOL-ready)',
   title: 'Money Claim Pack',
-  highlightTitle: 'recover rent arrears fast',
-  subtitle: 'Fast money claim support for landlords — £99.99 one-time',
+  highlightTitle: 'England-only bundle',
+  subtitle: 'For recovering unpaid rent or tenancy-related debt through the County Court (England). You answer guided questions. We structure your claim clearly for filing.',
   primaryCta: {
-    label: 'Start Money Claim →',
+    label: 'Start my England money claim bundle →',
     href: '/wizard?product=money_claim&src=product_page',
   },
   secondaryCta: {

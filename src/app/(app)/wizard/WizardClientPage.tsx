@@ -49,20 +49,18 @@ function getHeroContent(product: string | null, jurisdiction: string | null): He
   switch (product) {
     case 'notice_only':
       return {
-        title: 'Generate an Eviction Notice',
+        title: 'Generate an Eviction Notice Bundle',
         subtitle: jurisdiction === 'scotland'
           ? 'Notice to Leave for Scottish Private Residential Tenancies'
           : jurisdiction === 'wales'
             ? 'Renting Homes (Wales) Act Compliant Notices'
-            : 'Jurisdiction-Specific & Validated Notices',
+            : 'Section 21/8 (England), Section 173 (Wales), Notice to Leave (Scotland)',
         eyebrow: 'Notice Only',
       };
     case 'complete_pack':
       return {
         title: 'Complete Eviction Pack',
-        subtitle: jurisdiction === 'scotland'
-          ? 'Notice to Leave + First-tier Tribunal Forms'
-          : 'From Notice to Possession Order - Everything You Need',
+        subtitle: 'England-only bundle: Section 21/8 routes with N5 / N5B / N119, witness statement draft, evidence checklist, and filing guidance',
         eyebrow: 'Complete Pack',
       };
     case 'ast_standard':
@@ -80,15 +78,13 @@ function getHeroContent(product: string | null, jurisdiction: string | null): He
     case 'ast_premium':
       return {
         title: 'Premium Tenancy Agreement',
-        subtitle: 'Comprehensive Agreement with Enhanced Clauses & Schedules',
+        subtitle: 'AST (England), Occupation Contract (Wales), PRT (Scotland), NI private tenancy with compliance checklist',
         eyebrow: 'Premium',
       };
     case 'money_claim':
       return {
         title: 'Money Claim Pack',
-        subtitle: jurisdiction === 'scotland'
-          ? 'Simple Procedure for Scottish Sheriff Courts'
-          : 'Recover Rent Arrears & Damages Through the Courts',
+        subtitle: 'England-only (County Court / MCOL-ready). Recover unpaid rent or tenancy-related debt with guided claim structuring.',
         eyebrow: 'Money Claim',
       };
     default:
@@ -125,14 +121,14 @@ const documentOptions: DocumentOption[] = [
   {
     type: 'notice_only',
     title: 'Eviction Notices',
-    description: 'Court-ready possession notices for England, Wales & Scotland with service instructions',
+    description: 'Jurisdiction-specific notice bundles: Section 21/8 (England), Section 173 (Wales), Notice to Leave (Scotland)',
     icon: '📄',
     price: 'From £49.99',
   },
   {
     type: 'complete_pack',
     title: 'Complete Eviction Pack',
-    description: 'Full bundle from notice to possession order with court forms and guidance',
+    description: 'England-only case bundle with N5 / N5B / N119 routes, witness statement draft, and filing guide',
     icon: '⚖️',
     price: '£199.99',
     regionBadge: 'England only',
@@ -140,7 +136,7 @@ const documentOptions: DocumentOption[] = [
   {
     type: 'money_claim',
     title: 'Money Claims',
-    description: 'Rent arrears claims with evidence checklists and court form templates',
+    description: 'England-only money claim bundle for rent arrears and tenancy debts (County Court / MCOL-ready)',
     icon: '💰',
     price: '£99.99',
     regionBadge: 'England only',
@@ -148,7 +144,7 @@ const documentOptions: DocumentOption[] = [
   {
     type: 'tenancy_agreement',
     title: 'Tenancy Agreements',
-    description: 'AST (England), Occupation Contract (Wales), PRT (Scotland), or NI Tenancy Agreement',
+    description: 'AST (England), Occupation Contract (Wales), PRT (Scotland), or NI private tenancy agreement pack',
     icon: '📝',
     price: 'From £14.99',
   },
@@ -175,7 +171,7 @@ function isJurisdictionEnabled(
     return true;
   }
 
-  // Northern Ireland is only supported for tenancy agreements
+  // Northern Ireland: tenancy agreements only (eviction notices planned).
   if (jurisdiction === 'northern-ireland') {
     return documentType === 'tenancy_agreement';
   }

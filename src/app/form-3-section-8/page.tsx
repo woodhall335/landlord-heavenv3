@@ -72,7 +72,7 @@ export default function Form3Section8Page() {
               primaryText="Start Notice Only"
               primaryDataCta="notice-only"
               location="above-fold"
-              secondaryLinks={[{ href: '/products/complete-pack', text: 'Want it handled end-to-end?', dataCta: 'complete-pack' }]}
+              secondaryLinks={[{ href: '/products/complete-pack', text: 'Need the full case bundle?', dataCta: 'complete-pack' }]}
             />
           </div>
         </Container>
@@ -236,7 +236,7 @@ export default function Form3Section8Page() {
                   Free Generator
                 </Link>
                 <Link href="/products/complete-pack" className="hero-btn-secondary" data-cta="complete-pack" data-cta-location="bottom">
-                  Want it handled end-to-end?
+                  Need the full case bundle?
                 </Link>
               </div>
             </div>

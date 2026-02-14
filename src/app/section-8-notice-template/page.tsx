@@ -146,13 +146,13 @@ export default function Section8NoticeTemplatePage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <FunnelCta
-                title="Draft and serve your Section 8 notice"
-                subtitle="Use Notice Only for compliant Form 3 drafting, or choose full support for end-to-end eviction."
+                title="Prepare your Section 8 notice bundle"
+                subtitle="Use Notice Only for compliant Form 3 drafting, or choose a full case bundle for court paperwork guidance."
                 primaryHref="/products/notice-only"
                 primaryText="Start Notice Only"
                 primaryDataCta="notice-only"
                 location="above-fold"
-                secondaryLinks={[{ href: '/products/complete-pack', text: 'Want it handled end-to-end?', dataCta: 'complete-pack' }]}
+                secondaryLinks={[{ href: '/products/complete-pack', text: 'Need the full case bundle?', dataCta: 'complete-pack' }]}
               />
             </div>
           </div>
@@ -601,7 +601,7 @@ export default function Section8NoticeTemplatePage() {
                 primaryText="Create Section 8 notice"
                 primaryDataCta="notice-only"
                 location="bottom"
-                secondaryLinks={[{ href: '/products/complete-pack', text: 'Want it handled end-to-end?', dataCta: 'complete-pack' }]}
+                secondaryLinks={[{ href: '/products/complete-pack', text: 'Need the full case bundle?', dataCta: 'complete-pack' }]}
               />
             </div>
           </div>

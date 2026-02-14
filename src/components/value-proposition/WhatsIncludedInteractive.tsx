@@ -121,7 +121,7 @@ const COMPLETE_PACK_VARIANTS: VariantOption[] = [
 const MONEY_CLAIM_GROUPS: DocumentGroup[] = [
   {
     title: 'Court Forms',
-    items: ['Form N1 (Money Claim)'],
+    items: ['Claim form (N1 / MCOL-equivalent structure)'],
   },
   {
     title: 'Court Documents',
