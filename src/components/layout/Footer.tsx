@@ -22,7 +22,7 @@ export function Footer() {
               />
             </div>
             <p className="text-sm leading-relaxed mb-4" style={{ color: '#bdbdbd' }}>
-              Court-ready legal documents for UK landlords.
+              Court-ready, jurisdiction-specific case bundles for UK landlords.
             </p>
             <div className="flex flex-wrap gap-3 text-xs">
               <div className="flex items-center gap-1">

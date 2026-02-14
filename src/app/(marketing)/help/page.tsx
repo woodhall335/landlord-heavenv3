@@ -109,9 +109,9 @@ export default function HelpPage() {
                       <p className="mt-2">
                         Benefits of having an account:
                         <br />• Access documents anytime from any device
-                        <br />• Re-download documents if you lose them
+                        <br />• Re-download your case bundle if you lose it
                         <br />• Track all your cases in one dashboard
-                        <br />• Regenerate documents with updated information
+                        <br />• Regenerate your case bundle with updated information
                       </p>
                     </>
                   ),

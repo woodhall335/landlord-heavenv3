@@ -288,7 +288,7 @@ const SECTIONS: WizardSection[] = [
   {
     id: 'review',
     label: 'Review',
-    description: 'Review and generate documents',
+    description: 'Review and generate your case bundle',
     isComplete: () => false, // Always navigable for final review
   },
 ];
@@ -819,7 +819,7 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
                     : 'bg-violet-600 text-white hover:bg-violet-700'}
                 `}
               >
-                Generate Documents
+                Generate Case Bundle
               </button>
             ) : (
               <button

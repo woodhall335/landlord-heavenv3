@@ -777,7 +777,7 @@ export const ReviewSection: React.FC<SectionProps> = ({
         )}
       </div>
 
-      {/* CTA buttons removed - the "Generate Documents" button in the wizard footer is the primary action */}
+      {/* CTA buttons removed - the "Generate Case Bundle" button in the wizard footer is the primary action */}
       {/* Users should use the footer navigation to proceed */}
 
       {validation.blockers.length > 0 && (

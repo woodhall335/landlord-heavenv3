@@ -33,7 +33,7 @@ const variantDefaults: Record<EmptyStateVariant, { icon: React.ReactNode; title:
   cases: {
     icon: <RiFileTextLine className="w-16 h-16" />,
     title: "No cases yet",
-    description: "Create your first case to get started with generating legal documents.",
+    description: "Create your first case to get started with generating court-ready case bundles.",
   },
   documents: {
     icon: <RiFolderOpenLine className="w-16 h-16" />,

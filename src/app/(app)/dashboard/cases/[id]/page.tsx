@@ -306,7 +306,7 @@ export default function CaseDetailPage() {
       if (!response.ok) {
         // 422 = missing user, 403 = permission denied - both are fatal
         if (response.status === 422 || response.status === 403) {
-          setRetryError(data.user_message || data.error || 'Unable to generate documents. Please contact support.');
+          setRetryError(data.user_message || data.error || 'Unable to generate your case bundle. Please contact support.');
           setRetryErrorFatal(true);
           setIsRetrying(false);
           return false;
@@ -847,7 +847,7 @@ export default function CaseDetailPage() {
         if (data.error === 'EDIT_WINDOW_EXPIRED') {
           throw new Error(data.message || 'The 30-day editing period has ended. Downloads remain available.');
         }
-        throw new Error(data.message || data.error || 'Failed to regenerate documents');
+        throw new Error(data.message || data.error || 'Failed to regenerate case bundle');
       }
 
       setMessage({
@@ -859,7 +859,7 @@ export default function CaseDetailPage() {
       await Promise.all([fetchCaseDocuments(), fetchOrderStatus()]);
     } catch (err: any) {
       console.error('Error regenerating documents:', err);
-      setMessage({ type: 'error', text: err.message || 'Failed to regenerate documents' });
+      setMessage({ type: 'error', text: err.message || 'Failed to regenerate case bundle' });
     } finally {
       setIsRegenerating(false);
     }
@@ -1075,10 +1075,10 @@ export default function CaseDetailPage() {
               </div>
               <div className="flex-1">
                 <h2 className="text-xl font-bold text-green-800 mb-1">
-                  Payment received — your documents are ready!
+                  Payment received — your case bundle is ready!
                 </h2>
                 <p className="text-green-700 mb-3">
-                  Thank you for your purchase. Your legal documents have been generated and are ready to download below.
+                  Thank you for your purchase. Your jurisdiction-specific eviction case bundle is ready to download below.
                 </p>
                 <div className="flex flex-wrap gap-3">
                   <button
@@ -1086,7 +1086,7 @@ export default function CaseDetailPage() {
                     className="inline-flex items-center px-4 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-colors"
                   >
                     <RiDownloadLine className="w-4 h-4 mr-2" />
-                    Go to Downloads
+                    Download Case Bundle
                   </button>
                   <button
                     onClick={() => setShowPaymentSuccess(false)}
@@ -1211,7 +1211,7 @@ export default function CaseDetailPage() {
             <div className="flex items-start gap-3">
               <RiErrorWarningLine className="w-6 h-6 text-error flex-shrink-0" />
               <div className="flex-1">
-                <h3 className="text-xl font-semibold text-charcoal">Unable to generate documents</h3>
+                <h3 className="text-xl font-semibold text-charcoal">Unable to generate case bundle</h3>
                 <p className="text-gray-700 mt-1">
                   {retryError}
                 </p>

@@ -260,7 +260,7 @@ export const Section21ActionRequired: React.FC<Section21ActionRequiredProps> = (
           ) : (
             <>
               <RiRefreshLine className="w-4 h-4 mr-2" />
-              Confirm & Generate Documents
+              Confirm & Generate Case Bundle
             </>
           )}
         </Button>

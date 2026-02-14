@@ -85,8 +85,8 @@ export default function PrivacyPage() {
             <h2 className="text-2xl font-semibold text-charcoal mt-8 mb-4">3. How We Use Your Data</h2>
             <p className="text-gray-700 leading-relaxed mb-4">We use your data to:</p>
             <ul className="list-disc pl-6 mb-4 text-gray-700 space-y-2">
-              <li><strong>Provide Services:</strong> Generate documents, manage your account, process payments</li>
-              <li><strong>Document Processing:</strong> Analyze your case information to generate accurate legal documents</li>
+              <li><strong>Provide Services:</strong> Generate case bundles, manage your account, process payments</li>
+              <li><strong>Document Processing:</strong> Analyze your case information to generate accurate case bundles</li>
               <li><strong>Communication:</strong> Send service emails, updates, and support responses</li>
               <li><strong>Improvement:</strong> Improve our services, fix bugs, develop new features</li>
               <li><strong>Legal Compliance:</strong> Comply with legal obligations, prevent fraud</li>
@@ -136,7 +136,7 @@ export default function PrivacyPage() {
                   Document Processing Services
                 </h4>
                 <p className="text-sm text-gray-700">
-                  Process your case information to generate legal documents. Data is anonymized where possible.
+                  Process your case information to generate case bundles. Data is anonymized where possible.
                 </p>
               </div>
 

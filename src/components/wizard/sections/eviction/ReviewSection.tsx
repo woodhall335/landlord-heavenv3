@@ -177,7 +177,7 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
           canProceed ? 'text-green-900' : 'text-amber-900'
         }`}>
           {canProceed
-            ? '✓ Ready to Generate Documents'
+            ? '✓ Ready to Generate Case Bundle'
             : '⚠ Please Resolve Issues Before Proceeding'
           }
         </h3>

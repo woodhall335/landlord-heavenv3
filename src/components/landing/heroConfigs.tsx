@@ -55,7 +55,7 @@ export const astHeroConfig: HeroConfig = {
     label: `Premium (HMO-Ready) - ${astPremiumPrice} →`,
     href: '/wizard?product=ast_premium&src=product_page&topic=tenancy',
   },
-  feature: 'AST (England), Occupation Contract (Wales), PRT (Scotland), and NI templates',
+  feature: 'AST (England), Occupation Contract (Wales), PRT (Scotland), and NI jurisdiction-specific agreements',
   mascotSrc: '/images/mascots/landlord-heaven-owl-tenancy-tools.png',
   mascotAlt: 'Landlord Heaven owl mascot with tenancy agreement documents',
 };
@@ -66,7 +66,7 @@ export const section21HeroConfig: HeroConfig = {
   highlightTitle: 'Generated in Minutes',
   subtitle: (
     <>
-      Create compliant Section 21 paperwork with guided steps and instant downloads —
+      Create compliant Section 21 paperwork with guided steps and ready-to-file bundle output —
       <span className="font-semibold"> no legal drafting required</span>
     </>
   ),
@@ -83,7 +83,7 @@ export const noticeOnlyHeroConfig: HeroConfig = {
   highlightTitle: 'Case Bundle Generation',
   subtitle: 'Generate jurisdiction-specific, compliance-checked eviction bundles for England, Wales, and Scotland — £49.99 one-time.',
   primaryCta: {
-    label: 'Get Your Notice Now →',
+    label: 'Generate Eviction Bundle →',
     href: '/wizard?product=notice_only&src=product_page&topic=eviction',
   },
   secondaryCta: {
@@ -101,7 +101,7 @@ export const completePackHeroConfig: UniversalHeroProps = {
   highlightTitle: 'Bundle for England',
   subtitle: 'Complete eviction case bundle for England — AI-validated, compliance-checked, and ready to file for £199.99.',
   primaryCta: {
-    label: 'Start Your Eviction Pack →',
+    label: 'Start My Case Bundle →',
     href: '/wizard?product=complete_pack&src=product_page&topic=eviction',
   },
   secondaryCta: {

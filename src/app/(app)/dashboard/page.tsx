@@ -189,7 +189,7 @@ export default function DashboardPage() {
                   <div className="flex-1">
                     <h3 className="text-xl font-semibold text-charcoal">Payment confirmed</h3>
                     <p className="text-gray-700 mt-1">
-                      Your payment was successful. View your case to download your documents.
+                      Your payment was successful. Your jurisdiction-specific eviction case bundle is ready.
                     </p>
                     <div className="mt-4">
                       <Link href={`/dashboard/cases/${sessionOrder.case_id}`}>

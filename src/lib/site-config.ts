@@ -12,7 +12,7 @@ export const SITE_CONFIG = {
 
   // Branding
   name: 'Landlord Heaven',
-  tagline: 'Professional Legal Documents for UK Landlords',
+  tagline: 'Statutory-grounded legal infrastructure for UK landlords',
 
   // Contact
   support_email: 'support@landlordheaven.co.uk',
