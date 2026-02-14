@@ -292,7 +292,7 @@ const SECTIONS: WizardSection[] = [
   {
     id: 'review',
     label: 'Review',
-    description: 'Review and generate documents',
+    description: 'Review and generate your case bundle',
     isComplete: () => false, // Always navigable for final review
   },
 ];
@@ -678,7 +678,7 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
                     : 'bg-violet-600 text-white hover:bg-violet-700'}
                 `}
               >
-                Generate Documents
+                Generate Case Bundle
               </button>
             ) : (
               <button
@@ -2090,7 +2090,7 @@ const ReviewSection: React.FC<SectionProps> = ({ facts }) => {
         <div className="bg-green-50 border border-green-200 rounded-lg p-4">
           <h4 className="font-medium text-green-800 mb-2">Ready to Generate</h4>
           <p className="text-sm text-green-700">
-            All sections are complete. Click "Generate Documents" to create your tenancy agreement.
+            All sections are complete. Click "Generate Case Bundle" to create your tenancy agreement.
           </p>
         </div>
       )}

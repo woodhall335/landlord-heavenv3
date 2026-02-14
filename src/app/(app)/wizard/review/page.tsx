@@ -315,7 +315,7 @@ function ReviewPageInner() {
           }
 
           // Extract the user-friendly error message from server response
-          const errorMessage = responseData.message || responseData.error || 'Failed to regenerate documents';
+          const errorMessage = responseData.message || responseData.error || 'Failed to regenerate case bundle';
           setRegenerationError(errorMessage);
           setComplianceTimingError(null); // Clear structured error
           setIsRegenerating(false);
@@ -331,7 +331,7 @@ function ReviewPageInner() {
       } catch (error: any) {
         console.error('Regeneration failed:', error);
         setRegenerationError(
-          error.message || 'Failed to regenerate documents. Please try again or contact support.'
+          error.message || 'Failed to regenerate case bundle. Please try again or contact support.'
         );
         setIsRegenerating(false);
       }

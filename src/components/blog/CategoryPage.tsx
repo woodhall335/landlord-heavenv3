@@ -256,7 +256,7 @@ export function CategoryPage({ region, posts }: CategoryPageProps) {
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto text-center">
               <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-                Need Legal Documents for {config.name}?
+                Need a Court-Ready Case Bundle for {config.name}?
               </h2>
               <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
                 Generate court-ready notices and agreements compliant with {config.name} law.

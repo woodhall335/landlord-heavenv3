@@ -244,7 +244,7 @@ export async function GET(
   } catch (genError) {
     console.error('Money claim pack generation error:', genError);
     return NextResponse.json(
-      { error: 'Failed to generate documents. Please try again or contact support.' },
+      { error: 'Failed to generate case bundle. Please try again or contact support.' },
       { status: 500 }
     );
   }

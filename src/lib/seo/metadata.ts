@@ -39,7 +39,7 @@ export const CORE_KEYWORDS = [
   'section 8',
   'tenancy agreement',
   'court-ready documents',
-  'landlord legal documents',
+  'landlord eviction case bundles',
 ];
 
 /**
@@ -279,17 +279,17 @@ export function auditMetadata(config: SEOMetadataConfig): SEOAuditResult {
  */
 export const defaultMetadata: Metadata = {
   title: {
-    default: "Landlord Heaven - Court-Ready Legal Documents for UK Landlords",
+    default: "Landlord Heaven - Court-Ready Eviction Case Bundles for UK Landlords",
     template: "%s | Landlord Heaven"
   },
-  description: "Reduce possession failure risk with court-ready notices and legal documents in minutes. Save 80%+ vs solicitors. Section 21 ends May 2026 - act now. UK-wide coverage.",
+  description: "Reduce possession failure risk with court-ready notices and jurisdiction-specific case bundles in minutes. Reduce possession failure risk with statutory-grounded preparation. Section 21 ends May 2026 - act now. UK-wide coverage.",
   keywords: [
     "section 21 notice",
     "section 8 notice",
     "eviction notice",
     "section 21 ban 2026",
     "tenancy agreement",
-    "landlord legal documents",
+    "landlord eviction case bundles",
     "UK landlord",
     "rent arrears",
     "money claim",
@@ -324,22 +324,22 @@ export const defaultMetadata: Metadata = {
     locale: 'en_GB',
     url: SITE_ORIGIN,
     siteName: SITE_NAME,
-    title: "Landlord Heaven - Court-Ready Legal Documents for UK Landlords",
-    description: "Reduce possession failure risk with court-ready notices and legal documents in minutes. Save 80%+ vs solicitors. Section 21 ends May 2026.",
+    title: "Landlord Heaven - Court-Ready Eviction Case Bundles for UK Landlords",
+    description: "Reduce possession failure risk with court-ready notices and jurisdiction-specific case bundles in minutes. Reduce possession failure risk with statutory-grounded preparation. Section 21 ends May 2026.",
     images: [
       {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: "Landlord Heaven - Court-Ready Legal Documents for UK Landlords",
+        alt: "Landlord Heaven - Court-Ready Eviction Case Bundles for UK Landlords",
         type: 'image/png',
       }
     ]
   },
   twitter: {
     card: 'summary_large_image',
-    title: "Landlord Heaven - Court-Ready Legal Documents for UK Landlords",
-    description: "Reduce possession failure risk with court-ready notices and legal documents. Save 80%+ vs solicitors. Section 21 ends May 2026.",
+    title: "Landlord Heaven - Court-Ready Eviction Case Bundles for UK Landlords",
+    description: "Reduce possession failure risk with court-ready notices and statutory-grounded preparation. Section 21 ends May 2026.",
     images: ['/og-image.png'],
     creator: '@LandlordHeaven',
     site: '@LandlordHeaven',

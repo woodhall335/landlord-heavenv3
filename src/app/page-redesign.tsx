@@ -38,14 +38,14 @@ export default function Home() {
 
             {/* Main Headline - Value-focused */}
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-gray-900 leading-tight">
-              Court-Ready Legal Documents
+              Court-Ready Eviction Case Bundles
               <span className="block text-primary">in Minutes, Not Days</span>
             </h1>
 
             {/* Subheadline - Benefit + differentiation */}
             <p className="text-xl md:text-2xl mb-8 text-gray-600 max-w-2xl mx-auto">
               Reduce possession failure risk with guided notices, court forms, and tenancy agreements —
-              <span className="font-semibold text-gray-800"> save 80%+ vs solicitor fees</span>.
+              <span className="font-semibold text-gray-800"> statutory-grounded preparation for court filing</span>.
             </p>
 
             {/* CTA Buttons - Uses hero-btn-primary/secondary from globals.css */}
@@ -92,7 +92,7 @@ export default function Home() {
               Get Your Documents in Minutes
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Our guided wizard makes creating professional legal documents easy —
+              Our guided wizard makes creating professional court-ready case bundles easy —
               no legal experience required.
             </p>
           </div>
