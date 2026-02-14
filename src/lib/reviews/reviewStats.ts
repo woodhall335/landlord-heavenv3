@@ -1,12 +1,11 @@
-const START_DATE = new Date("2026-02-14");
+const START_DATE_UTC = Date.UTC(2026, 1, 14);
 const BASE_REVIEW_COUNT = 247;
 const DAILY_INCREMENT = 11;
 
 export function getDynamicReviewCount() {
   const now = new Date();
-  const daysElapsed = Math.floor(
-    (now.getTime() - START_DATE.getTime()) / (1000 * 60 * 60 * 24)
-  );
+  const todayUTC = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
+  const daysElapsed = Math.max(0, Math.floor((todayUTC - START_DATE_UTC) / 86400000));
 
   return BASE_REVIEW_COUNT + daysElapsed * DAILY_INCREMENT;
 }
