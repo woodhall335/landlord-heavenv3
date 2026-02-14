@@ -89,7 +89,7 @@ export default async function MoneyClaimPage() {
       {/* Structured Data for SEO */}
       <StructuredData data={productSchema({
         name: "Money Claim Pack - Recover Rent Arrears",
-        description: "Recover unpaid rent arrears through UK courts. AI-drafted Particulars of Claim and Letter Before Action. PAP-DEBT compliance, N1 form, interest calculator, and enforcement guidance included.",
+        description: "Recover unpaid rent arrears through the County Court in England. Structured claim documents, PAP-DEBT support, N1 format, interest calculation, and filing guidance included.",
         price: product.price.toString(),
         url: "https://landlordheaven.co.uk/products/money-claim"
       })} />
@@ -103,7 +103,11 @@ export default async function MoneyClaimPage() {
       {/* Hero Section */}
       <UniversalHero {...moneyClaimHeroConfig} />
 
+      <section className="py-8 bg-white"><Container><p className="text-center text-gray-700 font-medium">What you'll receive in your bundle:</p></Container></section>
+
       <WhatsIncludedInteractive product="money_claim" previews={previews} />
+
+      <section className="py-8 bg-white"><Container><p className="text-center text-gray-700 font-medium">These are example previews. Your bundle is generated specifically for your jurisdiction and tenancy details.</p></Container></section>
 
       <section className="py-16 md:py-20 bg-white">
         <Container>
@@ -127,9 +131,9 @@ export default async function MoneyClaimPage() {
               <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
                 <h3 className="font-semibold text-gray-900 mb-3">Court fees</h3>
                 <ul className="space-y-2 text-sm text-gray-600">
-                  <li>Fees vary by claim size and route.</li>
+                  <li>Fees vary by claim size and filing route.</li>
                   <li>Most fees can be added to the claim.</li>
-                  <li>Pack includes fee guidance by jurisdiction.</li>
+                  <li>Pack includes England County Court fee guidance.</li>
                 </ul>
               </div>
               <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">

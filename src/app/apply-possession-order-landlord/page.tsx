@@ -259,7 +259,7 @@ export default function ApplyPossessionOrderPage() {
 
                 <div className="md:col-span-2">
                   <FunnelCta
-                    title="Need this handled end-to-end?"
+                    title="Need the full case bundle?"
                     subtitle="We can prepare the possession paperwork and guide each filing step."
                     primaryHref="/products/complete-pack"
                     primaryText="Get full eviction support"

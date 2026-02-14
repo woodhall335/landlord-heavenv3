@@ -28,12 +28,12 @@ const product = PRODUCTS.notice_only;
 const price = product.displayPrice;
 
 export const metadata: Metadata = {
-  title: `AI-Validated Eviction Case Bundle | England, Wales & Scotland | ${price}`,
+  title: `Eviction Notice Template Bundle — Jurisdiction-Specific | England, Wales & Scotland | ${price}`,
   description:
-    `Complete eviction case bundles for England, Wales, and Scotland. AI-generated, compliance-checked, jurisdiction-specific, and ready to file. ${price}.`,
+    `Jurisdiction-specific eviction notice template bundles for England, Wales, and Scotland. Includes service instructions, validity checklist, and preview before purchase. ${price}.`,
   openGraph: {
     title: `Eviction Notice 2026 | England, Wales & Scotland | ${price}`,
-    description: "Court-ready eviction notices for England (Section 21/8), Wales (Section 173), and Scotland (Notice to Leave). Preview before you buy.",
+    description: "Eviction notice template bundle for England (Section 21/8), Wales (Section 173), and Scotland (Notice to Leave). Includes service instructions, validity checklist, and preview before purchase.",
     url: getCanonicalUrl('/products/notice-only'),
   },
   alternates: {
@@ -67,7 +67,7 @@ const faqs = [
   },
   {
     question: "What if my notice is invalid?",
-    answer: "Our system checks for common compliance blockers (deposit protection, gas safety, EPC, How to Rent) before generating your notice. If your notice is later rejected due to an error in our document generation, we'll regenerate it free. We cannot guarantee court acceptance as that depends on your specific circumstances and evidence."
+    answer: "Our system checks common compliance blockers (deposit protection, gas safety, EPC, How to Rent) before generating your notice. If you change your case details, you can regenerate your bundle instantly. Court acceptance always depends on your facts, evidence, and service."
   },
   {
     question: "How long are documents stored?",
@@ -101,9 +101,11 @@ export default async function NoticeOnlyPage() {
       {/* Hero Section */}
       <UniversalHero {...noticeOnlyHeroConfig} />
 
+      <section className="py-8 bg-white"><Container><p className="text-center text-gray-700 font-medium">What you'll receive in your bundle:</p></Container></section>
+
       <WhatsIncludedInteractive product="notice_only" defaultJurisdiction="england" previews={previews} />
 
-      <section className="py-8 bg-white"><Container><p className="text-center text-gray-700 font-medium">This bundle is generated specifically for your jurisdiction and statutory framework.</p></Container></section>
+      <section className="py-8 bg-white"><Container><p className="text-center text-gray-700 font-medium">These are example previews. Your bundle is generated specifically for your jurisdiction and tenancy details.</p></Container></section>
 
       {/* Why Landlord Heaven */}
       <section className="py-16 md:py-20">
@@ -157,7 +159,7 @@ export default async function NoticeOnlyPage() {
                 href="/wizard?product=notice_only&src=product_page&topic=eviction"
                 className="hero-btn-primary"
               >
-                Start Your Notice Now →
+                Generate my notice bundle →
               </Link>
             </div>
           </div>
