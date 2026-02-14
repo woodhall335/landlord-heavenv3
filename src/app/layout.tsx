@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Header, Footer } from "@/components/layout";
+import { Header, Footer, GlobalReviewSnippetBar } from "@/components/layout";
 import { tryGetServerUser } from "@/lib/supabase/server";
 import { defaultMetadata } from "@/lib/seo";
 import { SITE_ORIGIN } from "@/lib/seo/urls";
@@ -50,7 +50,6 @@ export default async function RootLayout({
           SEO FIX (Jan 2026): SoftwareApplication schema REMOVED from global injection.
 
           PROBLEM: Google was showing incorrect snippets on product pages:
-          "4.8(247) · £19.99 · Business/Productivity" instead of actual product prices.
 
           ROOT CAUSE: Global SoftwareApplication schema was being combined with
           Product schema on /products/* pages, causing Google to misclassify products
@@ -72,7 +71,10 @@ export default async function RootLayout({
         <Section21HeaderBanner />
         <PopupProvider>
           <Header user={headerUser} />
-          <main className="flex-1">{children}</main>
+          <main className="flex-1">
+            <GlobalReviewSnippetBar />
+            {children}
+          </main>
           <Footer />
         </PopupProvider>
         <TrackingPixels />
