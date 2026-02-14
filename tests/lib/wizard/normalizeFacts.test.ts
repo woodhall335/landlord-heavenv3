@@ -84,9 +84,9 @@ describe('clearDependentFacts', () => {
   let batchClearDependentFacts: typeof import('@/lib/wizard/normalizeFacts').batchClearDependentFacts;
 
   beforeAll(async () => {
-    const module = await import('@/lib/wizard/normalizeFacts');
-    clearDependentFacts = module.clearDependentFacts;
-    batchClearDependentFacts = module.batchClearDependentFacts;
+    const mod = await import('@/lib/wizard/normalizeFacts');
+    clearDependentFacts = mod.clearDependentFacts;
+    batchClearDependentFacts = mod.batchClearDependentFacts;
   });
 
   describe('deposit_taken clearing', () => {

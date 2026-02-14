@@ -78,7 +78,7 @@ describe('Money Claim England-Only Enforcement', () => {
   describe('Type Definitions', () => {
     it('MoneyClaimJurisdiction type is strictly england', () => {
       // This is a compile-time test - if the type is wrong, TypeScript will fail
-      const jurisdiction: 'england' = 'england';
+      const jurisdiction = 'england' as const;
       expect(jurisdiction).toBe('england');
     });
   });

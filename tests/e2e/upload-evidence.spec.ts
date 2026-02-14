@@ -2,7 +2,7 @@ import path from 'path';
 import { describe, it } from 'vitest';
 
 const caseId = process.env.E2E_CASE_ID;
-// @ts-ignore - @playwright/test is an optional dev dependency
+// @ts-expect-error -- @playwright/test is an optional dev dependency in this repo
 const playwright = await import('@playwright/test').catch(() => null) as typeof import('@playwright/test') | null;
 
 if (!playwright) {

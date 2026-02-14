@@ -167,15 +167,7 @@ export function ContentLinker({
 export function useCommercialLinking(
   options: AnalyzeContentOptions
 ): CommercialLinkingResult {
-  return useMemo(() => analyzeContent(options), [
-    options.pathname,
-    options.title,
-    options.description,
-    options.heading,
-    options.bodyText,
-    options.jurisdiction,
-    options.optOut,
-  ]);
+  return useMemo(() => analyzeContent(options), [options]);
 }
 
 // =============================================================================

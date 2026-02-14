@@ -35,7 +35,7 @@ describe('FIX 1 REGRESSION: N5B Claimant Name Field Mapping', () => {
     // Import the official-forms-filler module to access internal constants
     // We use dynamic import to access the module's internal structure
     const modulePath = '../official-forms-filler';
-    const module = await import(modulePath);
+    const mod = await import(modulePath);
 
     // The N5B_FIELDS constant should have:
     // FIRST_CLAIMANT_FIRST_NAMES pointing to "First Claimant's last name" (the visual "First name(s)" field)

@@ -168,12 +168,15 @@ export function MultiPageViewer({
    * Initial fetch and polling setup
    */
   useEffect(() => {
-    fetchManifest();
+    const initTimer = setTimeout(() => {
+      void fetchManifest();
+    }, 0);
 
     // Start polling for processing state
     pollIntervalRef.current = setInterval(fetchManifest, 5000);
 
     return () => {
+      clearTimeout(initTimer);
       if (pollIntervalRef.current) {
         clearInterval(pollIntervalRef.current);
       }

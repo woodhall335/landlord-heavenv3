@@ -4,6 +4,6 @@
 import type { TestingLibraryMatchers } from '@testing-library/jest-dom/matchers';
 
 declare module 'vitest' {
-  interface Assertion<T = any> extends TestingLibraryMatchers<T, void> {}
-  interface AsymmetricMatchersContaining extends TestingLibraryMatchers<unknown, void> {}
+  type Assertion<T = any> = TestingLibraryMatchers<T, void>;
+  type AsymmetricMatchersContaining = TestingLibraryMatchers<unknown, void>;
 }

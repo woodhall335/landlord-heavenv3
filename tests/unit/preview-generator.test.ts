@@ -447,8 +447,6 @@ describe('Watermark Security', () => {
   it('should use HMAC with server-side salt for user hash', () => {
     // The actual implementation uses HMAC with PREVIEW_WATERMARK_SECRET
     // This test validates the concept
-    const crypto = require('crypto');
-
     const salt = 'test-secret-salt';
     const userId = 'user-123';
 
@@ -470,7 +468,6 @@ describe('Watermark Security', () => {
   });
 
   it('should generate different hashes for different users', () => {
-    const crypto = require('crypto');
     const salt = 'test-secret-salt';
 
     const hash1 = crypto.createHmac('sha256', salt).update('user-1').digest('hex').substring(0, 8);
@@ -482,8 +479,6 @@ describe('Watermark Security', () => {
 
 describe('Storage Path Security', () => {
   it('should generate unguessable storage paths', () => {
-    const crypto = require('crypto');
-
     const pathSecret = 'path-secret';
     const caseId = 'case-123';
     const product = 'ast_standard';

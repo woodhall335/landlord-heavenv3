@@ -39,7 +39,7 @@ type AskHeavenModules = {
   };
 };
 
-function loadAskHeavenModules(): AskHeavenModules {
+async function loadAskHeavenModules(): Promise<AskHeavenModules> {
   const originalResolveFilename = Module._resolveFilename;
   Module._resolveFilename = function resolveFilename(request, parent, isMain, options) {
     if (request === 'server-only') {
@@ -52,8 +52,7 @@ function loadAskHeavenModules(): AskHeavenModules {
     return originalResolveFilename.call(this, request, parent, isMain, options);
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const questionsModule = require('../src/lib/ask-heaven/questions/index.ts');
+  const questionsModule = await import('../src/lib/ask-heaven/questions');
   return questionsModule as AskHeavenModules;
 }
 
@@ -427,7 +426,7 @@ function toCsvValue(value: unknown): string {
 async function main() {
   ensureArtifactsDir();
 
-  const modules = loadAskHeavenModules();
+  const modules = await loadAskHeavenModules();
   let questions = await loadQuestionsFromRepository(modules);
   let dataSource = 'repository';
 

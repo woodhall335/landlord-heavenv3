@@ -464,7 +464,7 @@ export async function renderPdfPagesToBase64(
 
       await page.setContent(html, { waitUntil: 'networkidle0' });
       const dataUrls = await page.evaluate(async () => {
-        // @ts-ignore - window properties are defined in the injected script
+        // @ts-expect-error -- renderError/renderPages are attached in injected browser script
         if ((window as any).renderError) {
           throw new Error((window as any).renderError);
         }

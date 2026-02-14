@@ -5,6 +5,9 @@
  * Ensures correct template selection and data mapping from wizard answers.
  */
 
+import fs from 'fs';
+import Handlebars from 'handlebars';
+import path from 'path';
 import { describe, it, expect, beforeEach } from 'vitest';
 import { mapNoticeOnlyFacts } from '../../src/lib/case-facts/normalize';
 import fs from 'fs';
@@ -476,10 +479,6 @@ describe('Regression: Concrete Scenario Validation', () => {
  * to ensure the template logic correctly handles licensing_required and retaliatory_eviction_clear.
  */
 describe('Template Rendering - Licensing & Retaliatory Eviction', () => {
-  const Handlebars = require('handlebars');
-  const fs = require('fs');
-  const path = require('path');
-
   // Register the 'eq' helper (must match generator.ts implementation)
   Handlebars.registerHelper('eq', function (this: any, a: any, b: any, options?: any) {
     if (arguments.length === 3 && options && typeof options.fn === 'function') {

@@ -86,7 +86,7 @@ export default function ScotlandPRTPage() {
         name: 'Standard PRT',
         price: '14.99',
         priceCurrency: 'GBP',
-        priceValidUntil: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+        priceValidUntil: PRICE_VALID_UNTIL,
         availability: 'https://schema.org/InStock',
         shippingDetails: {
           '@type': 'OfferShippingDetails',
@@ -109,7 +109,7 @@ export default function ScotlandPRTPage() {
         name: 'Premium PRT',
         price: '14.99',
         priceCurrency: 'GBP',
-        priceValidUntil: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+        priceValidUntil: PRICE_VALID_UNTIL,
         availability: 'https://schema.org/InStock',
         shippingDetails: {
           '@type': 'OfferShippingDetails',

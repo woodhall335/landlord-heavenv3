@@ -31,13 +31,13 @@ await compareFields('n5-eng.pdf', [
   "defendant's details",
   'possession of',
   'Full name of the person signing the Statement of Truth',
-  'Name of claimant's legal representative's firm',
-  'Statement of Truth is signed by the Claimant's legal representative (as defined by CPR 2.3(1))',
-  'building and street - Claimant's or claimant's legal representative's address to which documents or payments should be sent',
-  'Second line of address - Claimant's or claimant's legal representative's address to which documents or payments should be sent',
-  'Town or city - Claimant's or claimant's legal representative's address to which documents or payments should be sent',
-  'County (optional) - Claimant's or claimant's legal representative's address to which documents or payments should be sent',
-  'Postcode - Claimant's or claimant's legal representative's address to which documents or payments should be sent'
+  "Name of claimant's legal representative's firm",
+  "Statement of Truth is signed by the Claimant's legal representative (as defined by CPR 2.3(1))",
+  "building and street - Claimant's or claimant's legal representative's address to which documents or payments should be sent",
+  "Second line of address - Claimant's or claimant's legal representative's address to which documents or payments should be sent",
+  "Town or city - Claimant's or claimant's legal representative's address to which documents or payments should be sent",
+  "County (optional) - Claimant's or claimant's legal representative's address to which documents or payments should be sent",
+  "Postcode - Claimant's or claimant's legal representative's address to which documents or payments should be sent"
 ]);
 
 await compareFields('n119-eng.pdf', [
@@ -45,7 +45,7 @@ await compareFields('n119-eng.pdf', [
   'name of claimant',
   'name of defendant',
   'The claimant has a right to possession of:',
-  'To the best of the claimant's knowledge the following persons are in possession of the property:',
+  "To the best of the claimant's knowledge the following persons are in possession of the property:",
   '3(a) Type of tenancy',
   '3(a) Date of tenancy',
   '3(b) The current rent is',
@@ -54,8 +54,8 @@ await compareFields('n119-eng.pdf', [
   '6. Year notice served',
   '13. The claimant is - other',
   '13. Details if the claimant is some other entity',
-  'I believe that the facts stated in these particulars of claim are true',
-  'The Claimant believes that the facts stated in these particulars of claim are true. I am authorised by the claimant to sign this statement',
-  'Statement of Truth signed by Claimant's legal representative (as defined by CPR 2.3(1))',
-  'Name of claimant's legal representative's firm'
+  "I believe that the facts stated in these particulars of claim are true",
+  "The Claimant believes that the facts stated in these particulars of claim are true. I am authorised by the claimant to sign this statement",
+  "Statement of Truth signed by Claimant's legal representative (as defined by CPR 2.3(1))",
+  "Name of claimant's legal representative's firm"
 ]);

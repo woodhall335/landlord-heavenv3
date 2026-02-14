@@ -16,6 +16,7 @@
 import { getServerUser, tryCreateServerSupabaseClient } from '@/lib/supabase/server';
 import { htmlToPreviewThumbnail, pdfToPreviewThumbnail, getBrowserDiagnostics } from '@/lib/documents/generator';
 import { NextResponse } from 'next/server';
+import { createClient } from '@supabase/supabase-js';
 
 // Force Node.js runtime - Puppeteer/@sparticuz/chromium cannot run on Edge
 export const runtime = 'nodejs';
@@ -66,8 +67,6 @@ function tryCreateAdminClient() {
   }
 
   try {
-    // Dynamic import to avoid 'server-only' issues in edge cases
-    const { createClient } = require('@supabase/supabase-js');
     return createClient(url, serviceRoleKey, {
       auth: { autoRefreshToken: false, persistSession: false },
     });

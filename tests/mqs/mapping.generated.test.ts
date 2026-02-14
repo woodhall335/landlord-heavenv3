@@ -1,15 +1,16 @@
 // SKIP: pre-existing failure - investigate later
 // Skipping 4 failing tests for wales/scotland MQS mappings
 
+import fs from "fs";
+import path from "path";
+import yaml from "js-yaml";
 import { describe, expect, it } from "vitest";
 
 import { getCapabilityMatrix } from "../../src/lib/jurisdictions/capabilities/matrix";
 import { getFlowMapping } from "../../src/lib/mqs/mapping.generated";
 
 function loadQuestionIds(jurisdiction: string, productDir: string): Set<string> {
-  const mqs = require("path").join(process.cwd(), "config", "mqs", productDir, `${jurisdiction}.yaml`);
-  const fs = require("fs");
-  const yaml = require("js-yaml");
+  const mqs = path.join(process.cwd(), "config", "mqs", productDir, `${jurisdiction}.yaml`);
   const raw = fs.readFileSync(mqs, "utf8");
   const doc = yaml.load(raw) as any;
   const questions = Array.isArray(doc?.questions) ? doc.questions : [];

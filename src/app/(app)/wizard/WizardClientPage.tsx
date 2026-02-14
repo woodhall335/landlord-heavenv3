@@ -288,8 +288,25 @@ function WizardPageInner() {
     return allJurisdictions.find((j) => j.value === jurisdictionParam) ?? null;
   }, [jurisdictionParam, preselectedDocument]);
 
+  // Show incompatibility warning if URL params are incompatible
+  const incompatibilityMessage = useMemo(() => {
+    if (!productParam || !jurisdictionParam) return null;
+    if (!isValidJurisdiction(jurisdictionParam)) return null;
+    const docType = mapProductToDocumentType(productParam);
+    if (!docType) return null;
+    return getUnsupportedProductMessage(
+      productParam as any,
+      jurisdictionParam
+    );
+  }, [productParam, jurisdictionParam]);
+
   const [selectedDocument, setSelectedDocument] =
-    useState<DocumentOption | null>(preselectedDocument);
+    useState<DocumentOption | null>(() => {
+      if (jurisdictionParam === 'northern-ireland' && incompatibilityMessage) {
+        return documentOptions.find((d) => d.type === 'tenancy_agreement') ?? preselectedDocument;
+      }
+      return preselectedDocument;
+    });
   const [selectedJurisdiction, setSelectedJurisdiction] =
     useState<JurisdictionOption | null>(preselectedJurisdiction);
 
@@ -302,49 +319,32 @@ function WizardPageInner() {
 
   const [step, setStep] = useState<1 | 2>(initialStep);
 
-  // Show incompatibility warning if URL params are incompatible
-  const [showIncompatibilityWarning, setShowIncompatibilityWarning] = useState(false);
-  const incompatibilityMessage = useMemo(() => {
-    if (!productParam || !jurisdictionParam) return null;
-    if (!isValidJurisdiction(jurisdictionParam)) return null;
-    const docType = mapProductToDocumentType(productParam);
-    if (!docType) return null;
-    return getUnsupportedProductMessage(
-      productParam as any,
-      jurisdictionParam
-    );
-  }, [productParam, jurisdictionParam]);
-
   // Handle NI incompatibility with auto-fallback
-  const [autoSwitchedProduct, setAutoSwitchedProduct] = useState<string | null>(null);
+  const autoSwitchedProduct = useMemo(() => {
+    if (!incompatibilityMessage || jurisdictionParam !== 'northern-ireland' || !productParam) {
+      return null;
+    }
+    return getFallbackProduct(productParam as any, 'northern-ireland');
+  }, [incompatibilityMessage, jurisdictionParam, productParam]);
+  const [dismissedMessage, setDismissedMessage] = useState<string | null>(null);
+  const showIncompatibilityWarning = Boolean(incompatibilityMessage);
 
   useEffect(() => {
     if (incompatibilityMessage) {
-      setShowIncompatibilityWarning(true);
-
       // Auto-switch to tenancy agreement for NI
       if (jurisdictionParam === 'northern-ireland' && productParam) {
-        const fallbackProduct = getFallbackProduct(productParam as any, 'northern-ireland');
-
         // Track the incompatible choice
         trackWizardIncompatibleChoice({
           attemptedProduct: productParam,
           jurisdiction: 'northern-ireland',
-          resolvedProduct: fallbackProduct,
+          resolvedProduct: autoSwitchedProduct ?? undefined,
           action: 'auto_switch',
           src: srcParam || undefined,
           topic: topicParam || undefined,
         });
-
-        // Auto-select tenancy agreement
-        const tenancyDoc = documentOptions.find((d) => d.type === 'tenancy_agreement');
-        if (tenancyDoc) {
-          setSelectedDocument(tenancyDoc);
-          setAutoSwitchedProduct(fallbackProduct);
-        }
       }
     }
-  }, [incompatibilityMessage, jurisdictionParam, productParam, srcParam, topicParam]);
+  }, [autoSwitchedProduct, incompatibilityMessage, jurisdictionParam, productParam, srcParam, topicParam]);
 
   // Initialize attribution and track entry view on mount
   useEffect(() => {
@@ -470,7 +470,7 @@ function WizardPageInner() {
       />
       <Container size="large" className="py-12">
         {/* Incompatibility Warning */}
-        {showIncompatibilityWarning && incompatibilityMessage && (
+        {showIncompatibilityWarning && incompatibilityMessage && dismissedMessage !== incompatibilityMessage && (
           <div className="max-w-2xl mx-auto mb-8 p-4 bg-amber-50 border border-amber-200 rounded-lg">
             <div className="flex items-start gap-3">
               <RiAlertLine className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
@@ -483,7 +483,7 @@ function WizardPageInner() {
                   </p>
                 )}
                 <button
-                  onClick={() => setShowIncompatibilityWarning(false)}
+                  onClick={() => setDismissedMessage(incompatibilityMessage)}
                   className="text-amber-600 text-sm underline mt-2 hover:text-amber-800"
                 >
                   Dismiss

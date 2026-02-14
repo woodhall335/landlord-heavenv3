@@ -513,9 +513,6 @@ export async function refreshPRStatus(eventId: string): Promise<PRStatus | null>
  * Get all events eligible for Push PR.
  */
 export function getEventsEligibleForPushPR(actor: string): LegalChangeEvent[] {
-  // Import locally to avoid circular dependency
-  const { listEvents } = require('./legal-change-events');
-
   const actionRequiredEvents = listEvents({ states: ['action_required'] });
 
   return actionRequiredEvents.filter((event: LegalChangeEvent) => {
@@ -538,9 +535,6 @@ export function getPushPRDashboard(actor: string): {
     createdAt: string;
   }>;
 } {
-  // Import locally to avoid circular dependency
-  const { listEvents, getEvent } = require('./legal-change-events');
-
   const actionRequiredEvents = listEvents({ states: ['action_required'] });
   const implementedEvents = listEvents({ states: ['implemented'] });
 

@@ -7,7 +7,7 @@
 
 'use client';
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { isLeadCaptured, setLeadEmail } from '@/lib/leads/local';
 
 export interface UseEmailGateOptions {
@@ -58,12 +58,7 @@ export interface UseEmailGateReturn {
  */
 export function useEmailGate({ source, onProceed }: UseEmailGateOptions): UseEmailGateReturn {
   const [showGate, setShowGate] = useState(false);
-  const [isCaptured, setIsCaptured] = useState(false);
-
-  // Check localStorage on mount
-  useEffect(() => {
-    setIsCaptured(isLeadCaptured());
-  }, []);
+  const [isCaptured, setIsCaptured] = useState(() => isLeadCaptured());
 
   const checkGateAndProceed = useCallback(() => {
     if (isLeadCaptured()) {

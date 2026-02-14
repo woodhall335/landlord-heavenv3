@@ -34,8 +34,6 @@ export function ValidationProgress({ isActive, className = '' }: ValidationProgr
 
   useEffect(() => {
     if (!isActive) {
-      setCurrentStep(0);
-      setCompletedSteps(new Set());
       return;
     }
 
@@ -78,9 +76,11 @@ export function ValidationProgress({ isActive, className = '' }: ValidationProgr
 
       <div className="space-y-2">
         {ANALYSIS_STEPS.map((step, index) => {
-          const isCompleted = completedSteps.has(index);
-          const isCurrent = currentStep === index;
-          const isPending = index > currentStep;
+          const activeStep = isActive ? currentStep : 0;
+          const activeCompletedSteps = isActive ? completedSteps : new Set<number>();
+          const isCompleted = activeCompletedSteps.has(index);
+          const isCurrent = activeStep === index;
+          const isPending = index > activeStep;
 
           return (
             <div
@@ -114,7 +114,7 @@ export function ValidationProgress({ isActive, className = '' }: ValidationProgr
       <div className="mt-4 h-1.5 bg-purple-200 rounded-full overflow-hidden">
         <div
           className="h-full bg-purple-600 rounded-full transition-all duration-500 ease-out"
-          style={{ width: `${((currentStep + 1) / ANALYSIS_STEPS.length) * 100}%` }}
+          style={{ width: `${(((isActive ? currentStep : 0) + 1) / ANALYSIS_STEPS.length) * 100}%` }}
         />
       </div>
     </div>

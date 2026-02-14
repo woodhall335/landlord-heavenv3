@@ -101,7 +101,7 @@ export default function EnglandASTPage() {
         name: 'Standard AST',
         price: '14.99',
         priceCurrency: 'GBP',
-        priceValidUntil: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+        priceValidUntil: PRICE_VALID_UNTIL,
         availability: 'https://schema.org/InStock',
         shippingDetails: {
           '@type': 'OfferShippingDetails',
@@ -124,7 +124,7 @@ export default function EnglandASTPage() {
         name: 'Premium AST',
         price: '14.99',
         priceCurrency: 'GBP',
-        priceValidUntil: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+        priceValidUntil: PRICE_VALID_UNTIL,
         availability: 'https://schema.org/InStock',
         shippingDetails: {
           '@type': 'OfferShippingDetails',

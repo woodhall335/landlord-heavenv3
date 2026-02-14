@@ -1130,7 +1130,7 @@ const Section173TimingValidationPanel: React.FC<Section173TimingValidationPanelP
     if (validation?.earliestExpiryDate) {
       onUpdate({ notice_expiry_date: validation.earliestExpiryDate });
     }
-  }, [validation?.earliestExpiryDate, onUpdate]);
+  }, [validation, onUpdate]);
 
   // Handle using earliest valid service date
   const handleUseEarliestService = useCallback(() => {
@@ -1140,7 +1140,7 @@ const Section173TimingValidationPanel: React.FC<Section173TimingValidationPanelP
         notice_service_date: validation.earliestServiceDate,
       });
     }
-  }, [validation?.earliestServiceDate, onUpdate]);
+  }, [validation, onUpdate]);
 
   // Don't render if no contract start date (can't validate)
   if (!validationFacts.contract_start_date) {
