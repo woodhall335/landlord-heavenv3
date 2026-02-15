@@ -43,7 +43,7 @@ export const homeHeroConfig: HeroConfig = {
 };
 
 export const astHeroConfig: HeroConfig = {
-  trustText: 'AST (England) • Occupation Contract (Wales) • PRT (Scotland) • NI private tenancy',
+  trustText: 'AST (England) • Occupation Contract (Wales) • PRT (Scotland) • NI',
   title: 'Jurisdiction-Specific',
   highlightTitle: 'Tenancy Agreement Pack',
   subtitle: astSubtitle,

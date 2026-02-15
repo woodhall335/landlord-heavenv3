@@ -1,8 +1,59 @@
 route_path,file_path,route_type,dynamic,has_metadata_export,has_robots_directives,has_canonical_or_alternates,has_structured_data_render,notes
 /,src/app/layout.tsx,marketing,N,Y,N,N,Y,
-/,src/app/page.tsx,marketing,N,Y,N,Y,Y,
+/(app)/auth,src/app/(app)/auth/layout.tsx,marketing,N,Y,Y,N,N,
+/(app)/auth/confirm,src/app/(app)/auth/confirm/page.tsx,marketing,N,N,N,N,N,client page with no page-level metadata export
+/(app)/auth/forgot-password,src/app/(app)/auth/forgot-password/page.tsx,marketing,N,N,N,N,N,client page with no page-level metadata export
+/(app)/auth/login,src/app/(app)/auth/login/page.tsx,marketing,N,N,N,N,N,client page with no page-level metadata export
+/(app)/auth/reset-password,src/app/(app)/auth/reset-password/page.tsx,marketing,N,N,N,N,N,client page with no page-level metadata export
+/(app)/auth/signup,src/app/(app)/auth/signup/page.tsx,marketing,N,N,N,N,N,client page with no page-level metadata export
+/(app)/auth/verify-email,src/app/(app)/auth/verify-email/page.tsx,marketing,N,N,N,N,N,client page with no page-level metadata export
+/(app)/dashboard,src/app/(app)/dashboard/layout.tsx,marketing,N,Y,Y,N,N,
+/(app)/dashboard,src/app/(app)/dashboard/page.tsx,marketing,N,N,N,N,N,client page with no page-level metadata export
+/(app)/dashboard/admin,src/app/(app)/dashboard/admin/page.tsx,marketing,N,N,N,N,N,client page with no page-level metadata export
+/(app)/dashboard/admin/ai-usage,src/app/(app)/dashboard/admin/ai-usage/page.tsx,marketing,N,N,N,N,N,client page with no page-level metadata export
+/(app)/dashboard/admin/ask-heaven,src/app/(app)/dashboard/admin/ask-heaven/layout.tsx,marketing,N,Y,Y,N,N,
+/(app)/dashboard/admin/ask-heaven,src/app/(app)/dashboard/admin/ask-heaven/page.tsx,marketing,N,N,N,Y,N,client page with no page-level metadata export
+/(app)/dashboard/admin/ask-heaven/[slug],src/app/(app)/dashboard/admin/ask-heaven/[slug]/page.tsx,marketing,Y,N,N,Y,N,client page with no page-level metadata export
+/(app)/dashboard/admin/email-previews,src/app/(app)/dashboard/admin/email-previews/page.tsx,marketing,N,N,N,N,N,client page with no page-level metadata export
+/(app)/dashboard/admin/failed-payments,src/app/(app)/dashboard/admin/failed-payments/page.tsx,marketing,N,N,N,N,N,
+/(app)/dashboard/admin/leads,src/app/(app)/dashboard/admin/leads/page.tsx,marketing,N,N,N,N,N,
+/(app)/dashboard/admin/legal-changes,src/app/(app)/dashboard/admin/legal-changes/page.tsx,marketing,N,N,N,N,N,client page with no page-level metadata export
+/(app)/dashboard/admin/legal-changes/[id],src/app/(app)/dashboard/admin/legal-changes/[id]/page.tsx,marketing,Y,N,N,N,N,client page with no page-level metadata export
+/(app)/dashboard/admin/legal-changes/inbox,src/app/(app)/dashboard/admin/legal-changes/inbox/page.tsx,marketing,N,N,N,N,N,client page with no page-level metadata export
+/(app)/dashboard/admin/orders,src/app/(app)/dashboard/admin/orders/page.tsx,marketing,N,N,N,N,N,client page with no page-level metadata export
+/(app)/dashboard/admin/users,src/app/(app)/dashboard/admin/users/page.tsx,marketing,N,N,N,N,N,client page with no page-level metadata export
+/(app)/dashboard/billing,src/app/(app)/dashboard/billing/page.tsx,marketing,N,N,N,N,N,client page with no page-level metadata export
+/(app)/dashboard/cases,src/app/(app)/dashboard/cases/page.tsx,marketing,N,N,N,N,N,client page with no page-level metadata export
+/(app)/dashboard/cases/[id],src/app/(app)/dashboard/cases/[id]/page.tsx,marketing,Y,N,N,Y,N,client page with no page-level metadata export
+/(app)/dashboard/documents,src/app/(app)/dashboard/documents/page.tsx,marketing,N,N,N,N,N,client page with no page-level metadata export
+/(app)/dashboard/hmo,src/app/(app)/dashboard/hmo/page.tsx,marketing,N,N,N,N,N,client page with no page-level metadata export
+/(app)/dashboard/hmo/properties,src/app/(app)/dashboard/hmo/properties/page.tsx,marketing,N,N,N,N,N,client page with no page-level metadata export
+/(app)/dashboard/hmo/properties/[id],src/app/(app)/dashboard/hmo/properties/[id]/page.tsx,marketing,Y,N,N,N,N,client page with no page-level metadata export
+/(app)/dashboard/hmo/properties/new,src/app/(app)/dashboard/hmo/properties/new/page.tsx,marketing,N,N,N,N,N,client page with no page-level metadata export
+/(app)/dashboard/hmo/tenants,src/app/(app)/dashboard/hmo/tenants/page.tsx,marketing,N,N,N,N,N,client page with no page-level metadata export
+/(app)/dashboard/hmo/tenants/new,src/app/(app)/dashboard/hmo/tenants/new/page.tsx,marketing,N,N,N,N,N,client page with no page-level metadata export
+/(app)/dashboard/profile,src/app/(app)/dashboard/profile/page.tsx,marketing,N,N,N,N,N,client page with no page-level metadata export
+/(app)/dashboard/settings,src/app/(app)/dashboard/settings/page.tsx,marketing,N,N,N,N,N,client page with no page-level metadata export
+/(app)/success/[product]/[caseId],src/app/(app)/success/[product]/[caseId]/page.tsx,marketing,Y,N,N,N,N,client page with no page-level metadata export
+/(app)/wizard,src/app/(app)/wizard/layout.tsx,marketing,N,N,Y,Y,N,
+/(app)/wizard,src/app/(app)/wizard/page.tsx,marketing,N,Y,Y,Y,N,
+/(app)/wizard/flow,src/app/(app)/wizard/flow/page.tsx,marketing,N,N,N,N,N,client page with no page-level metadata export
+/(app)/wizard/preview/[caseId],src/app/(app)/wizard/preview/[caseId]/page.tsx,marketing,Y,N,N,N,N,client page with no page-level metadata export
+/(app)/wizard/review,src/app/(app)/wizard/review/page.tsx,marketing,N,N,N,Y,N,client page with no page-level metadata export
+/(app)/wizard/upload-evidence,src/app/(app)/wizard/upload-evidence/route.ts,marketing,N,N,N,Y,N,
+/(marketing),src/app/(marketing)/page.tsx,marketing,N,Y,N,Y,Y,
+/(marketing)/about,src/app/(marketing)/about/page.tsx,marketing,N,Y,N,N,Y,
+/(marketing)/blog,src/app/(marketing)/blog/page.tsx,marketing,N,Y,N,Y,Y,
+/(marketing)/blog/[slug],src/app/(marketing)/blog/[slug]/page.tsx,marketing,Y,Y,Y,Y,Y,
+/(marketing)/contact,src/app/(marketing)/contact/page.tsx,marketing,N,Y,N,N,Y,
+/(marketing)/help,src/app/(marketing)/help/page.tsx,marketing,N,Y,N,N,N,
+/(marketing)/pricing,src/app/(marketing)/pricing/page.tsx,marketing,N,Y,N,N,Y,
+/(marketing)/products/ast,src/app/(marketing)/products/ast/page.tsx,marketing,N,Y,N,Y,Y,
+/(marketing)/products/complete-pack,src/app/(marketing)/products/complete-pack/page.tsx,marketing,N,Y,N,Y,Y,
+/(marketing)/products/money-claim,src/app/(marketing)/products/money-claim/page.tsx,marketing,N,Y,N,Y,Y,
+/(marketing)/products/money-claim-pack,src/app/(marketing)/products/money-claim-pack/page.tsx,marketing,N,Y,N,Y,N,
+/(marketing)/products/notice-only,src/app/(marketing)/products/notice-only/page.tsx,marketing,N,Y,N,Y,Y,
 /6-month-tenancy-agreement-template,src/app/6-month-tenancy-agreement-template/page.tsx,marketing,N,Y,N,Y,Y,
-/about,src/app/about/page.tsx,marketing,N,Y,N,N,Y,
 /api/admin/ask-heaven/debug/slug/[slug],src/app/api/admin/ask-heaven/debug/slug/[slug]/route.ts,api,Y,N,N,N,N,api route
 /api/admin/ask-heaven/questions,src/app/api/admin/ask-heaven/questions/route.ts,api,N,N,N,N,N,api route
 /api/admin/ask-heaven/questions/[slug],src/app/api/admin/ask-heaven/questions/[slug]/route.ts,api,Y,N,N,Y,N,api route
@@ -108,47 +159,10 @@ route_path,file_path,route_type,dynamic,has_metadata_export,has_robots_directive
 /assured-shorthold-tenancy-agreement-template,src/app/assured-shorthold-tenancy-agreement-template/page.tsx,marketing,N,Y,N,Y,Y,
 /ast-template-england,src/app/ast-template-england/page.tsx,marketing,N,Y,N,Y,Y,
 /ast-tenancy-agreement-template,src/app/ast-tenancy-agreement-template/page.tsx,marketing,N,Y,N,Y,Y,
-/auth,src/app/auth/layout.tsx,auth,N,Y,Y,N,N,
-/auth/confirm,src/app/auth/confirm/page.tsx,auth,N,N,N,N,N,client page with no page-level metadata export
-/auth/forgot-password,src/app/auth/forgot-password/page.tsx,auth,N,N,N,N,N,client page with no page-level metadata export
-/auth/login,src/app/auth/login/page.tsx,auth,N,N,N,N,N,client page with no page-level metadata export
-/auth/reset-password,src/app/auth/reset-password/page.tsx,auth,N,N,N,N,N,client page with no page-level metadata export
-/auth/signup,src/app/auth/signup/page.tsx,auth,N,N,N,N,N,client page with no page-level metadata export
-/auth/verify-email,src/app/auth/verify-email/page.tsx,auth,N,N,N,N,N,client page with no page-level metadata export
-/blog,src/app/blog/page.tsx,blog,N,Y,N,Y,Y,
-/blog/[slug],src/app/blog/[slug]/page.tsx,blog,Y,Y,Y,Y,Y,
 /claim-rent-arrears-tenant,src/app/claim-rent-arrears-tenant/page.tsx,marketing,N,Y,Y,Y,Y,
 /common-prt-tenancy-mistakes-scotland,src/app/common-prt-tenancy-mistakes-scotland/page.tsx,marketing,N,Y,N,Y,Y,
-/contact,src/app/contact/page.tsx,marketing,N,Y,N,N,Y,
 /cookies,src/app/cookies/page.tsx,marketing,N,Y,N,N,N,
 /county-court-claim-form-guide,src/app/county-court-claim-form-guide/page.tsx,marketing,N,Y,N,Y,Y,
-/dashboard,src/app/dashboard/layout.tsx,dashboard,N,Y,Y,N,N,
-/dashboard,src/app/dashboard/page.tsx,dashboard,N,N,N,N,N,client page with no page-level metadata export
-/dashboard/admin,src/app/dashboard/admin/page.tsx,dashboard,N,N,N,N,N,client page with no page-level metadata export
-/dashboard/admin/ai-usage,src/app/dashboard/admin/ai-usage/page.tsx,dashboard,N,N,N,N,N,client page with no page-level metadata export
-/dashboard/admin/ask-heaven,src/app/dashboard/admin/ask-heaven/layout.tsx,dashboard,N,Y,Y,N,N,
-/dashboard/admin/ask-heaven,src/app/dashboard/admin/ask-heaven/page.tsx,dashboard,N,N,N,Y,N,client page with no page-level metadata export
-/dashboard/admin/ask-heaven/[slug],src/app/dashboard/admin/ask-heaven/[slug]/page.tsx,dashboard,Y,N,N,Y,N,client page with no page-level metadata export
-/dashboard/admin/email-previews,src/app/dashboard/admin/email-previews/page.tsx,dashboard,N,N,N,N,N,client page with no page-level metadata export
-/dashboard/admin/failed-payments,src/app/dashboard/admin/failed-payments/page.tsx,dashboard,N,N,N,N,N,
-/dashboard/admin/leads,src/app/dashboard/admin/leads/page.tsx,dashboard,N,N,N,N,N,
-/dashboard/admin/legal-changes,src/app/dashboard/admin/legal-changes/page.tsx,dashboard,N,N,N,N,N,client page with no page-level metadata export
-/dashboard/admin/legal-changes/[id],src/app/dashboard/admin/legal-changes/[id]/page.tsx,dashboard,Y,N,N,N,N,client page with no page-level metadata export
-/dashboard/admin/legal-changes/inbox,src/app/dashboard/admin/legal-changes/inbox/page.tsx,dashboard,N,N,N,N,N,client page with no page-level metadata export
-/dashboard/admin/orders,src/app/dashboard/admin/orders/page.tsx,dashboard,N,N,N,N,N,client page with no page-level metadata export
-/dashboard/admin/users,src/app/dashboard/admin/users/page.tsx,dashboard,N,N,N,N,N,client page with no page-level metadata export
-/dashboard/billing,src/app/dashboard/billing/page.tsx,dashboard,N,N,N,N,N,client page with no page-level metadata export
-/dashboard/cases,src/app/dashboard/cases/page.tsx,dashboard,N,N,N,N,N,client page with no page-level metadata export
-/dashboard/cases/[id],src/app/dashboard/cases/[id]/page.tsx,dashboard,Y,N,N,Y,N,client page with no page-level metadata export
-/dashboard/documents,src/app/dashboard/documents/page.tsx,dashboard,N,N,N,N,N,client page with no page-level metadata export
-/dashboard/hmo,src/app/dashboard/hmo/page.tsx,dashboard,N,N,N,N,N,client page with no page-level metadata export
-/dashboard/hmo/properties,src/app/dashboard/hmo/properties/page.tsx,dashboard,N,N,N,N,N,client page with no page-level metadata export
-/dashboard/hmo/properties/[id],src/app/dashboard/hmo/properties/[id]/page.tsx,dashboard,Y,N,N,N,N,client page with no page-level metadata export
-/dashboard/hmo/properties/new,src/app/dashboard/hmo/properties/new/page.tsx,dashboard,N,N,N,N,N,client page with no page-level metadata export
-/dashboard/hmo/tenants,src/app/dashboard/hmo/tenants/page.tsx,dashboard,N,N,N,N,N,client page with no page-level metadata export
-/dashboard/hmo/tenants/new,src/app/dashboard/hmo/tenants/new/page.tsx,dashboard,N,N,N,N,N,client page with no page-level metadata export
-/dashboard/profile,src/app/dashboard/profile/page.tsx,dashboard,N,N,N,N,N,client page with no page-level metadata export
-/dashboard/settings,src/app/dashboard/settings/page.tsx,dashboard,N,N,N,N,N,client page with no page-level metadata export
 /eicr-landlord-requirements,src/app/eicr-landlord-requirements/page.tsx,marketing,N,Y,N,Y,Y,
 /eviction-cost-uk,src/app/eviction-cost-uk/page.tsx,marketing,N,Y,N,Y,Y,
 /eviction-notice,src/app/eviction-notice/page.tsx,marketing,N,Y,Y,Y,Y,
@@ -164,7 +178,6 @@ route_path,file_path,route_type,dynamic,has_metadata_export,has_robots_directive
 /fixed-term-tenancy-agreement-template,src/app/fixed-term-tenancy-agreement-template/page.tsx,marketing,N,Y,N,Y,Y,
 /form-3-section-8,src/app/form-3-section-8/page.tsx,marketing,N,Y,N,Y,Y,
 /form-6a-section-21,src/app/form-6a-section-21/page.tsx,marketing,N,Y,N,Y,Y,
-/help,src/app/help/page.tsx,marketing,N,Y,N,N,N,
 /how-to-evict-tenant,src/app/how-to-evict-tenant/page.tsx,marketing,N,Y,N,Y,Y,
 /how-to-rent-guide,src/app/how-to-rent-guide/page.tsx,marketing,N,Y,N,Y,Y,
 /how-to-sue-tenant-for-unpaid-rent,src/app/how-to-sue-tenant-for-unpaid-rent/page.tsx,marketing,N,Y,N,Y,Y,
@@ -212,15 +225,9 @@ route_path,file_path,route_type,dynamic,has_metadata_export,has_robots_directive
 /possession-claim-guide,src/app/possession-claim-guide/page.tsx,marketing,N,Y,N,Y,Y,
 /pre-action-protocol-debt,src/app/pre-action-protocol-debt/page.tsx,marketing,N,Y,N,Y,Y,
 /premium-tenancy-agreement,src/app/premium-tenancy-agreement/page.tsx,marketing,N,Y,Y,Y,Y,
-/pricing,src/app/pricing/page.tsx,marketing,N,Y,N,N,Y,
 /privacy,src/app/privacy/page.tsx,marketing,N,Y,N,N,N,
 /private-residential-tenancy-agreement-scotland,src/app/private-residential-tenancy-agreement-scotland/page.tsx,marketing,N,Y,N,Y,Y,
 /private-residential-tenancy-agreement-template,src/app/private-residential-tenancy-agreement-template/page.tsx,marketing,N,Y,N,Y,Y,
-/products/ast,src/app/products/ast/page.tsx,product,N,Y,N,Y,Y,
-/products/complete-pack,src/app/products/complete-pack/page.tsx,product,N,Y,N,Y,Y,
-/products/money-claim,src/app/products/money-claim/page.tsx,product,N,Y,N,Y,Y,
-/products/money-claim-pack,src/app/products/money-claim-pack/page.tsx,product,N,Y,N,Y,N,
-/products/notice-only,src/app/products/notice-only/page.tsx,product,N,Y,N,Y,Y,
 /prt-template-scotland,src/app/prt-template-scotland/page.tsx,marketing,N,Y,N,Y,Y,
 /prt-tenancy-agreement-template-scotland,src/app/prt-tenancy-agreement-template-scotland/page.tsx,marketing,N,Y,N,Y,Y,
 /refunds,src/app/refunds/page.tsx,marketing,N,Y,N,N,N,
@@ -241,7 +248,6 @@ route_path,file_path,route_type,dynamic,has_metadata_export,has_robots_directive
 /section-8-vs-section-21,src/app/section-8-vs-section-21/page.tsx,marketing,N,Y,Y,Y,Y,
 /sitemap.xml,src/app/sitemap.ts,marketing,N,N,Y,Y,N,
 /standard-occupation-contract-wales,src/app/standard-occupation-contract-wales/page.tsx,marketing,N,Y,N,Y,Y,
-/success/[product]/[caseId],src/app/success/[product]/[caseId]/page.tsx,marketing,Y,N,N,N,N,client page with no page-level metadata export
 /tenancy-agreement,src/app/tenancy-agreement/page.tsx,marketing,N,Y,Y,Y,Y,
 /tenancy-agreement-northern-ireland,src/app/tenancy-agreement-northern-ireland/page.tsx,marketing,N,Y,N,Y,Y,
 /tenancy-agreement-template,src/app/tenancy-agreement-template/page.tsx,marketing,N,Y,N,Y,Y,
@@ -277,9 +283,3 @@ route_path,file_path,route_type,dynamic,has_metadata_export,has_robots_directive
 /wales-eviction-notices,src/app/wales-eviction-notices/page.tsx,marketing,N,Y,N,Y,Y,
 /wales-tenancy-agreement-template,src/app/wales-tenancy-agreement-template/page.tsx,marketing,N,Y,N,Y,Y,
 /warrant-of-possession,src/app/warrant-of-possession/page.tsx,marketing,N,Y,N,Y,Y,
-/wizard,src/app/wizard/layout.tsx,wizard,N,N,Y,Y,N,
-/wizard,src/app/wizard/page.tsx,wizard,N,Y,Y,Y,N,
-/wizard/flow,src/app/wizard/flow/page.tsx,wizard,N,N,N,N,N,client page with no page-level metadata export
-/wizard/preview/[caseId],src/app/wizard/preview/[caseId]/page.tsx,wizard,Y,N,N,N,N,client page with no page-level metadata export
-/wizard/review,src/app/wizard/review/page.tsx,wizard,N,N,N,Y,N,client page with no page-level metadata export
-/wizard/upload-evidence,src/app/wizard/upload-evidence/route.ts,wizard,N,N,N,Y,N,

@@ -5,8 +5,8 @@
     "priority": "1",
     "changeFrequency": "weekly",
     "path": "/",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "static"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/pricing",
@@ -14,8 +14,8 @@
     "priority": "0.9",
     "changeFrequency": "weekly",
     "path": "/pricing",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "static"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/about",
@@ -23,16 +23,16 @@
     "priority": "0.7",
     "changeFrequency": "monthly",
     "path": "/about",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "static"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/contact",
     "priority": "0.6",
     "changeFrequency": "monthly",
     "path": "/contact",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "static"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/help",
@@ -40,8 +40,8 @@
     "priority": "0.7",
     "changeFrequency": "monthly",
     "path": "/help",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "static"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/terms",
@@ -73,8 +73,8 @@
     "priority": "0.9",
     "changeFrequency": "weekly",
     "path": "/products/notice-only",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "static"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/products/complete-pack",
@@ -82,8 +82,8 @@
     "priority": "0.9",
     "changeFrequency": "weekly",
     "path": "/products/complete-pack",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "static"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/products/money-claim",
@@ -91,8 +91,8 @@
     "priority": "0.9",
     "changeFrequency": "weekly",
     "path": "/products/money-claim",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "static"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/products/ast",
@@ -100,8 +100,8 @@
     "priority": "0.9",
     "changeFrequency": "weekly",
     "path": "/products/ast",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "static"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/ask-heaven",
@@ -874,323 +874,8 @@
     "priority": "0.9",
     "changeFrequency": "weekly",
     "path": "/blog",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "static"
-  },
-  {
-    "url": "https://landlordheaven.co.uk/assured-shorthold-tenancy-agreement",
-    "lastModified": "2026-01-01T00:00:00.000Z",
-    "priority": "0.7",
-    "changeFrequency": "monthly",
-    "path": "/assured-shorthold-tenancy-agreement",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "static"
-  },
-  {
-    "url": "https://landlordheaven.co.uk/ast-template-england",
-    "lastModified": "2026-01-01T00:00:00.000Z",
-    "priority": "0.7",
-    "changeFrequency": "monthly",
-    "path": "/ast-template-england",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "static"
-  },
-  {
-    "url": "https://landlordheaven.co.uk/ast-tenancy-agreement-template",
-    "lastModified": "2026-01-01T00:00:00.000Z",
-    "priority": "0.7",
-    "changeFrequency": "monthly",
-    "path": "/ast-tenancy-agreement-template",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "static"
-  },
-  {
-    "url": "https://landlordheaven.co.uk/claim-rent-arrears-tenant",
-    "lastModified": "2026-01-01T00:00:00.000Z",
-    "priority": "0.7",
-    "changeFrequency": "monthly",
-    "path": "/claim-rent-arrears-tenant",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "static"
-  },
-  {
-    "url": "https://landlordheaven.co.uk/common-prt-tenancy-mistakes-scotland",
-    "lastModified": "2026-01-01T00:00:00.000Z",
-    "priority": "0.7",
-    "changeFrequency": "monthly",
-    "path": "/common-prt-tenancy-mistakes-scotland",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "static"
-  },
-  {
-    "url": "https://landlordheaven.co.uk/fixed-term-periodic-occupation-contract-wales",
-    "lastModified": "2026-01-01T00:00:00.000Z",
-    "priority": "0.7",
-    "changeFrequency": "monthly",
-    "path": "/fixed-term-periodic-occupation-contract-wales",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "static"
-  },
-  {
-    "url": "https://landlordheaven.co.uk/fixed-term-tenancy-agreement-northern-ireland",
-    "lastModified": "2026-01-01T00:00:00.000Z",
-    "priority": "0.7",
-    "changeFrequency": "monthly",
-    "path": "/fixed-term-tenancy-agreement-northern-ireland",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "static"
-  },
-  {
-    "url": "https://landlordheaven.co.uk/how-to-sue-tenant-for-unpaid-rent",
-    "lastModified": "2026-01-01T00:00:00.000Z",
-    "priority": "0.7",
-    "changeFrequency": "monthly",
-    "path": "/how-to-sue-tenant-for-unpaid-rent",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "static"
-  },
-  {
-    "url": "https://landlordheaven.co.uk/joint-occupation-contract-wales",
-    "lastModified": "2026-01-01T00:00:00.000Z",
-    "priority": "0.7",
-    "changeFrequency": "monthly",
-    "path": "/joint-occupation-contract-wales",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "static"
-  },
-  {
-    "url": "https://landlordheaven.co.uk/joint-prt-tenancy-agreement-scotland",
-    "lastModified": "2026-01-01T00:00:00.000Z",
-    "priority": "0.7",
-    "changeFrequency": "monthly",
-    "path": "/joint-prt-tenancy-agreement-scotland",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "static"
-  },
-  {
-    "url": "https://landlordheaven.co.uk/joint-tenancy-agreement-northern-ireland",
-    "lastModified": "2026-01-01T00:00:00.000Z",
-    "priority": "0.7",
-    "changeFrequency": "monthly",
-    "path": "/joint-tenancy-agreement-northern-ireland",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "static"
-  },
-  {
-    "url": "https://landlordheaven.co.uk/mcol-money-claim-online",
-    "lastModified": "2026-01-01T00:00:00.000Z",
-    "priority": "0.7",
-    "changeFrequency": "monthly",
-    "path": "/mcol-money-claim-online",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "static"
-  },
-  {
-    "url": "https://landlordheaven.co.uk/money-claim-rent-arrears",
-    "lastModified": "2026-01-01T00:00:00.000Z",
-    "priority": "0.7",
-    "changeFrequency": "monthly",
-    "path": "/money-claim-rent-arrears",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "static"
-  },
-  {
-    "url": "https://landlordheaven.co.uk/ni-private-tenancy-agreement",
-    "lastModified": "2026-01-01T00:00:00.000Z",
-    "priority": "0.7",
-    "changeFrequency": "monthly",
-    "path": "/ni-private-tenancy-agreement",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "static"
-  },
-  {
-    "url": "https://landlordheaven.co.uk/occupation-contract-template-wales",
-    "lastModified": "2026-01-01T00:00:00.000Z",
-    "priority": "0.7",
-    "changeFrequency": "monthly",
-    "path": "/occupation-contract-template-wales",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "static"
-  },
-  {
-    "url": "https://landlordheaven.co.uk/premium-tenancy-agreement",
-    "lastModified": "2026-01-01T00:00:00.000Z",
-    "priority": "0.7",
-    "changeFrequency": "monthly",
-    "path": "/premium-tenancy-agreement",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "static"
-  },
-  {
-    "url": "https://landlordheaven.co.uk/private-residential-tenancy-agreement-scotland",
-    "lastModified": "2026-01-01T00:00:00.000Z",
-    "priority": "0.7",
-    "changeFrequency": "monthly",
-    "path": "/private-residential-tenancy-agreement-scotland",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "static"
-  },
-  {
-    "url": "https://landlordheaven.co.uk/products/money-claim-pack",
-    "lastModified": "2026-01-01T00:00:00.000Z",
-    "priority": "0.9",
-    "changeFrequency": "weekly",
-    "path": "/products/money-claim-pack",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "static"
-  },
-  {
-    "url": "https://landlordheaven.co.uk/prt-template-scotland",
-    "lastModified": "2026-01-01T00:00:00.000Z",
-    "priority": "0.7",
-    "changeFrequency": "monthly",
-    "path": "/prt-template-scotland",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "static"
-  },
-  {
-    "url": "https://landlordheaven.co.uk/prt-tenancy-agreement-template-scotland",
-    "lastModified": "2026-01-01T00:00:00.000Z",
-    "priority": "0.7",
-    "changeFrequency": "monthly",
-    "path": "/prt-tenancy-agreement-template-scotland",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "static"
-  },
-  {
-    "url": "https://landlordheaven.co.uk/renting-homes-wales-written-statement",
-    "lastModified": "2026-01-01T00:00:00.000Z",
-    "priority": "0.7",
-    "changeFrequency": "monthly",
-    "path": "/renting-homes-wales-written-statement",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "static"
-  },
-  {
-    "url": "https://landlordheaven.co.uk/scotland-prt-model-agreement-guide",
-    "lastModified": "2026-01-01T00:00:00.000Z",
-    "priority": "0.7",
-    "changeFrequency": "monthly",
-    "path": "/scotland-prt-model-agreement-guide",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "static"
-  },
-  {
-    "url": "https://landlordheaven.co.uk/scottish-tenancy-agreement-template",
-    "lastModified": "2026-01-01T00:00:00.000Z",
-    "priority": "0.7",
-    "changeFrequency": "monthly",
-    "path": "/scottish-tenancy-agreement-template",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "static"
-  },
-  {
-    "url": "https://landlordheaven.co.uk/standard-occupation-contract-wales",
-    "lastModified": "2026-01-01T00:00:00.000Z",
-    "priority": "0.7",
-    "changeFrequency": "monthly",
-    "path": "/standard-occupation-contract-wales",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "static"
-  },
-  {
-    "url": "https://landlordheaven.co.uk/tenancy-agreement",
-    "lastModified": "2026-01-01T00:00:00.000Z",
-    "priority": "0.7",
-    "changeFrequency": "monthly",
-    "path": "/tenancy-agreement",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "static"
-  },
-  {
-    "url": "https://landlordheaven.co.uk/tenancy-agreement-northern-ireland",
-    "lastModified": "2026-01-01T00:00:00.000Z",
-    "priority": "0.7",
-    "changeFrequency": "monthly",
-    "path": "/tenancy-agreement-northern-ireland",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "static"
-  },
-  {
-    "url": "https://landlordheaven.co.uk/tenancy-agreement-template",
-    "lastModified": "2026-01-01T00:00:00.000Z",
-    "priority": "0.7",
-    "changeFrequency": "monthly",
-    "path": "/tenancy-agreement-template",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "static"
-  },
-  {
-    "url": "https://landlordheaven.co.uk/tenancy-agreement-template-northern-ireland",
-    "lastModified": "2026-01-01T00:00:00.000Z",
-    "priority": "0.7",
-    "changeFrequency": "monthly",
-    "path": "/tenancy-agreement-template-northern-ireland",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "static"
-  },
-  {
-    "url": "https://landlordheaven.co.uk/tenancy-agreements/england",
-    "lastModified": "2026-01-01T00:00:00.000Z",
-    "priority": "0.7",
-    "changeFrequency": "monthly",
-    "path": "/tenancy-agreements/england",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "static"
-  },
-  {
-    "url": "https://landlordheaven.co.uk/tenancy-agreements/northern-ireland",
-    "lastModified": "2026-01-01T00:00:00.000Z",
-    "priority": "0.7",
-    "changeFrequency": "monthly",
-    "path": "/tenancy-agreements/northern-ireland",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "static"
-  },
-  {
-    "url": "https://landlordheaven.co.uk/tenancy-agreements/scotland",
-    "lastModified": "2026-01-01T00:00:00.000Z",
-    "priority": "0.7",
-    "changeFrequency": "monthly",
-    "path": "/tenancy-agreements/scotland",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "static"
-  },
-  {
-    "url": "https://landlordheaven.co.uk/tenancy-agreements/wales",
-    "lastModified": "2026-01-01T00:00:00.000Z",
-    "priority": "0.7",
-    "changeFrequency": "monthly",
-    "path": "/tenancy-agreements/wales",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "static"
-  },
-  {
-    "url": "https://landlordheaven.co.uk/update-occupation-contract-wales",
-    "lastModified": "2026-01-01T00:00:00.000Z",
-    "priority": "0.7",
-    "changeFrequency": "monthly",
-    "path": "/update-occupation-contract-wales",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "static"
-  },
-  {
-    "url": "https://landlordheaven.co.uk/update-prt-tenancy-agreement-scotland",
-    "lastModified": "2026-01-01T00:00:00.000Z",
-    "priority": "0.7",
-    "changeFrequency": "monthly",
-    "path": "/update-prt-tenancy-agreement-scotland",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "static"
-  },
-  {
-    "url": "https://landlordheaven.co.uk/update-tenancy-agreement-northern-ireland",
-    "lastModified": "2026-01-01T00:00:00.000Z",
-    "priority": "0.7",
-    "changeFrequency": "monthly",
-    "path": "/update-tenancy-agreement-northern-ireland",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "static"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/renters-reform-bill-what-landlords-need-to-know",
@@ -1198,8 +883,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/renters-reform-bill-what-landlords-need-to-know",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/what-is-section-21-notice",
@@ -1207,8 +892,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/what-is-section-21-notice",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/section-21-vs-section-8",
@@ -1216,8 +901,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/section-21-vs-section-8",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/how-to-serve-eviction-notice",
@@ -1225,8 +910,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/how-to-serve-eviction-notice",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/how-long-does-eviction-take-uk",
@@ -1234,8 +919,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/how-long-does-eviction-take-uk",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/rent-arrears-eviction-guide",
@@ -1243,8 +928,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/rent-arrears-eviction-guide",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/england-assured-shorthold-tenancy-guide",
@@ -1252,8 +937,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/england-assured-shorthold-tenancy-guide",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/england-section-21-process",
@@ -1261,8 +946,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/england-section-21-process",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/england-section-8-process",
@@ -1270,8 +955,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/england-section-8-process",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/england-section-8-ground-8",
@@ -1279,8 +964,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/england-section-8-ground-8",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/england-accelerated-possession",
@@ -1288,8 +973,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/england-accelerated-possession",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/england-standard-possession",
@@ -1297,8 +982,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/england-standard-possession",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/england-section-8-ground-10-11",
@@ -1306,8 +991,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/england-section-8-ground-10-11",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/england-section-8-ground-14",
@@ -1315,8 +1000,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/england-section-8-ground-14",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/england-section-8-ground-17",
@@ -1324,8 +1009,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/england-section-8-ground-17",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/england-section-8-ground-1",
@@ -1333,8 +1018,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/england-section-8-ground-1",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/england-section-8-ground-2",
@@ -1342,8 +1027,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/england-section-8-ground-2",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/england-section-8-ground-7",
@@ -1351,8 +1036,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/england-section-8-ground-7",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/england-section-8-ground-12",
@@ -1360,8 +1045,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/england-section-8-ground-12",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/england-possession-hearing",
@@ -1369,8 +1054,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/england-possession-hearing",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/england-bailiff-eviction",
@@ -1378,8 +1063,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/england-bailiff-eviction",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/england-county-court-forms",
@@ -1387,8 +1072,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/england-county-court-forms",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/england-deposit-protection",
@@ -1396,8 +1081,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/england-deposit-protection",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/england-hmo-licensing",
@@ -1405,8 +1090,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/england-hmo-licensing",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/england-money-claim-online",
@@ -1414,8 +1099,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/england-money-claim-online",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/england-particulars-of-claim",
@@ -1423,8 +1108,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/england-particulars-of-claim",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/scotland-private-residential-tenancy",
@@ -1432,8 +1117,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/scotland-private-residential-tenancy",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/scotland-eviction-process",
@@ -1441,8 +1126,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/scotland-eviction-process",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/scotland-notice-to-leave",
@@ -1450,8 +1135,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/scotland-notice-to-leave",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/scotland-first-tier-tribunal",
@@ -1459,8 +1144,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/scotland-first-tier-tribunal",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/scotland-eviction-ground-12",
@@ -1468,8 +1153,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/scotland-eviction-ground-12",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/scotland-eviction-ground-1",
@@ -1477,8 +1162,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/scotland-eviction-ground-1",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/scotland-eviction-ground-4",
@@ -1486,8 +1171,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/scotland-eviction-ground-4",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/scotland-eviction-ground-11",
@@ -1495,8 +1180,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/scotland-eviction-ground-11",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/scotland-eviction-ground-3",
@@ -1504,8 +1189,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/scotland-eviction-ground-3",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/scotland-eviction-ground-14",
@@ -1513,8 +1198,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/scotland-eviction-ground-14",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/scotland-eviction-ground-6",
@@ -1522,8 +1207,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/scotland-eviction-ground-6",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/scotland-eviction-ground-7",
@@ -1531,8 +1216,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/scotland-eviction-ground-7",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/scotland-eviction-ground-13",
@@ -1540,8 +1225,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/scotland-eviction-ground-13",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/scotland-eviction-ground-15",
@@ -1549,8 +1234,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/scotland-eviction-ground-15",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/scotland-simple-procedure",
@@ -1558,8 +1243,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/scotland-simple-procedure",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/scotland-deposit-protection",
@@ -1567,8 +1252,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/scotland-deposit-protection",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/scotland-landlord-registration",
@@ -1576,8 +1261,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/scotland-landlord-registration",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/scotland-hmo-licensing",
@@ -1585,8 +1270,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/scotland-hmo-licensing",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/scotland-repairing-standard",
@@ -1594,8 +1279,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/scotland-repairing-standard",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/wales-standard-occupation-contract",
@@ -1603,8 +1288,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/wales-standard-occupation-contract",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/wales-renting-homes-act",
@@ -1612,8 +1297,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/wales-renting-homes-act",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/wales-eviction-process",
@@ -1621,8 +1306,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/wales-eviction-process",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/wales-deposit-protection",
@@ -1630,8 +1315,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/wales-deposit-protection",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/rent-smart-wales",
@@ -1639,8 +1324,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/rent-smart-wales",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/wales-hmo-licensing",
@@ -1648,8 +1333,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/wales-hmo-licensing",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/wales-fitness-human-habitation",
@@ -1657,8 +1342,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/wales-fitness-human-habitation",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/wales-possession-grounds",
@@ -1666,8 +1351,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/wales-possession-grounds",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/wales-landlord-obligations-checklist",
@@ -1675,8 +1360,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/wales-landlord-obligations-checklist",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/wales-rent-increases",
@@ -1684,8 +1369,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/wales-rent-increases",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/wales-abandoned-property",
@@ -1693,8 +1378,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/wales-abandoned-property",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/wales-joint-tenancies",
@@ -1702,8 +1387,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/wales-joint-tenancies",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/wales-gas-electrical-safety",
@@ -1711,8 +1396,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/wales-gas-electrical-safety",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/wales-epc-requirements",
@@ -1720,8 +1405,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/wales-epc-requirements",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/wales-anti-social-behaviour-possession",
@@ -1729,8 +1414,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/wales-anti-social-behaviour-possession",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/wales-notice-periods-landlords",
@@ -1738,8 +1423,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/wales-notice-periods-landlords",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/wales-contract-holder-rights",
@@ -1747,8 +1432,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/wales-contract-holder-rights",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/wales-residential-property-tribunal",
@@ -1756,8 +1441,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/wales-residential-property-tribunal",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/northern-ireland-private-tenancies-order",
@@ -1765,8 +1450,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/northern-ireland-private-tenancies-order",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/northern-ireland-landlord-registration",
@@ -1774,8 +1459,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/northern-ireland-landlord-registration",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/northern-ireland-deposit-protection",
@@ -1783,8 +1468,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/northern-ireland-deposit-protection",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/northern-ireland-eviction-process",
@@ -1792,8 +1477,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/northern-ireland-eviction-process",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/uk-landlord-insurance-guide",
@@ -1801,8 +1486,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/uk-landlord-insurance-guide",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/uk-landlord-tax-guide",
@@ -1810,8 +1495,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/uk-landlord-tax-guide",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/uk-gas-safety-landlords",
@@ -1819,8 +1504,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/uk-gas-safety-landlords",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/uk-electrical-safety-landlords",
@@ -1828,8 +1513,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/uk-electrical-safety-landlords",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/uk-fire-safety-landlords",
@@ -1837,8 +1522,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/uk-fire-safety-landlords",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/uk-tenant-referencing-guide",
@@ -1846,8 +1531,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/uk-tenant-referencing-guide",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/uk-right-to-rent-checks",
@@ -1855,8 +1540,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/uk-right-to-rent-checks",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/uk-hmo-regulations-guide",
@@ -1864,8 +1549,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/uk-hmo-regulations-guide",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/uk-deposit-protection-guide",
@@ -1873,8 +1558,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/uk-deposit-protection-guide",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/uk-rent-arrears-guide",
@@ -1882,8 +1567,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/uk-rent-arrears-guide",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/uk-tenancy-agreements-guide",
@@ -1891,8 +1576,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/uk-tenancy-agreements-guide",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/uk-property-maintenance-obligations",
@@ -1900,8 +1585,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/uk-property-maintenance-obligations",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/uk-end-of-tenancy-guide",
@@ -1909,8 +1594,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/uk-end-of-tenancy-guide",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/uk-property-inspections-guide",
@@ -1918,8 +1603,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/uk-property-inspections-guide",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/uk-landlord-tenant-communication",
@@ -1927,8 +1612,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/uk-landlord-tenant-communication",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/uk-buy-to-let-investment-guide",
@@ -1936,8 +1621,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/uk-buy-to-let-investment-guide",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/uk-money-claims-online-guide",
@@ -1945,8 +1630,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/uk-money-claims-online-guide",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/uk-landlord-software-tools-guide",
@@ -1954,8 +1639,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/uk-landlord-software-tools-guide",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/uk-property-inventory-guide",
@@ -1963,8 +1648,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/uk-property-inventory-guide",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/uk-rent-collection-methods-guide",
@@ -1972,8 +1657,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/uk-rent-collection-methods-guide",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/uk-epc-requirements-guide",
@@ -1981,8 +1666,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/uk-epc-requirements-guide",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/uk-landlord-licensing-guide",
@@ -1990,8 +1675,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/uk-landlord-licensing-guide",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/uk-guarantor-agreements-guide",
@@ -1999,8 +1684,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/uk-guarantor-agreements-guide",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/uk-letting-agent-selection-guide",
@@ -2008,8 +1693,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/uk-letting-agent-selection-guide",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/uk-void-period-management-guide",
@@ -2017,8 +1702,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/uk-void-period-management-guide",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/uk-property-marketing-guide",
@@ -2026,8 +1711,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/uk-property-marketing-guide",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/uk-tenant-move-in-checklist-guide",
@@ -2035,8 +1720,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/uk-tenant-move-in-checklist-guide",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/uk-landlord-associations-guide",
@@ -2044,8 +1729,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/uk-landlord-associations-guide",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/uk-tenant-retention-guide",
@@ -2053,8 +1738,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/uk-tenant-retention-guide",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/uk-right-to-rent-guide",
@@ -2062,8 +1747,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/uk-right-to-rent-guide",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/uk-smoke-co-alarm-regulations-guide",
@@ -2071,8 +1756,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/uk-smoke-co-alarm-regulations-guide",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/uk-electrical-safety-guide",
@@ -2080,8 +1765,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/uk-electrical-safety-guide",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/uk-furnished-unfurnished-letting-guide",
@@ -2089,8 +1774,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/uk-furnished-unfurnished-letting-guide",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/uk-hmo-management-guide",
@@ -2098,8 +1783,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/uk-hmo-management-guide",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/uk-student-letting-guide",
@@ -2107,8 +1792,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/uk-student-letting-guide",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/uk-holiday-let-regulations-guide",
@@ -2116,8 +1801,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/uk-holiday-let-regulations-guide",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/uk-corporate-letting-guide",
@@ -2125,8 +1810,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/uk-corporate-letting-guide",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/uk-property-portfolio-growth-guide",
@@ -2134,8 +1819,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/uk-property-portfolio-growth-guide",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/how-to-write-letter-before-action-unpaid-rent",
@@ -2143,8 +1828,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/how-to-write-letter-before-action-unpaid-rent",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/what-is-county-court-judgment-landlords",
@@ -2152,8 +1837,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/what-is-county-court-judgment-landlords",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/calculating-interest-tenant-debt",
@@ -2161,8 +1846,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/calculating-interest-tenant-debt",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/how-long-does-money-claim-online-take",
@@ -2170,8 +1855,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/how-long-does-money-claim-online-take",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/when-to-use-guarantor-clause-tenancy",
@@ -2179,8 +1864,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/when-to-use-guarantor-clause-tenancy",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/recovering-cleaning-costs-from-tenants",
@@ -2188,8 +1873,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/recovering-cleaning-costs-from-tenants",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/fair-wear-tear-vs-tenant-damage",
@@ -2197,8 +1882,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/fair-wear-tear-vs-tenant-damage",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/should-you-accept-payment-plan-from-tenant",
@@ -2206,8 +1891,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/should-you-accept-payment-plan-from-tenant",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/small-claims-court-tips-landlords",
@@ -2215,8 +1900,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/small-claims-court-tips-landlords",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/blog/what-to-do-when-tenant-wont-pay",
@@ -2224,8 +1909,8 @@
     "priority": "0.8",
     "changeFrequency": "monthly",
     "path": "/blog/what-to-do-when-tenant-wont-pay",
-    "mapsToExistingRoute": true,
-    "routeMatchKind": "dynamic"
+    "mapsToExistingRoute": false,
+    "routeMatchKind": "missing"
   },
   {
     "url": "https://landlordheaven.co.uk/ask-heaven/section-21-validity-checklist-form-6a",
