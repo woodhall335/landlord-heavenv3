@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getCanonicalUrl } from '@/lib/seo/urls';
 
+const PRICE_VALID_UNTIL = '2026-12-31';
+
 export const metadata: Metadata = {
   title: 'Assured Shorthold Tenancy Agreement (AST) England 2026 | From £14.99',
   description: 'Create a legally compliant AST for England. Updated for 2026 with Housing Act 1988 and Tenant Fees Act 2019 compliance. From £14.99.',

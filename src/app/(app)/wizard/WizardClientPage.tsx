@@ -333,11 +333,13 @@ function WizardPageInner() {
     if (incompatibilityMessage) {
       // Auto-switch to tenancy agreement for NI
       if (jurisdictionParam === 'northern-ireland' && productParam) {
+        if (!autoSwitchedProduct) return;
+
         // Track the incompatible choice
         trackWizardIncompatibleChoice({
           attemptedProduct: productParam,
           jurisdiction: 'northern-ireland',
-          resolvedProduct: autoSwitchedProduct ?? undefined,
+          resolvedProduct: autoSwitchedProduct,
           action: 'auto_switch',
           src: srcParam || undefined,
           topic: topicParam || undefined,

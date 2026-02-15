@@ -1579,7 +1579,6 @@ async function renderPdfPagesToImages(buffer: Buffer, maxPages: number): Promise
 </html>`;
     await page.setContent(html, { waitUntil: 'networkidle0' });
     const dataUrls = await page.evaluate(async () => {
-      // @ts-expect-error -- renderError/renderPages are attached in injected browser script
       if ((window as any).renderError) {
         throw new Error((window as any).renderError);
       }
