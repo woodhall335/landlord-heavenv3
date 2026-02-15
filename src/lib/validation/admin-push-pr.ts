@@ -15,6 +15,7 @@ import {
   LegalChangeEvent,
   EventState,
   getEvent,
+  listEvents,
   updateEvent,
   transitionEvent,
   linkPrToEvent,
