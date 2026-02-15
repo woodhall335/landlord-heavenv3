@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { getCanonicalUrl } from '@/lib/seo/urls';
 import { FAQSection } from '@/components/marketing/FAQSection';
+import { getCanonicalUrl } from '@/lib/seo/urls';
+
+const PRICE_VALID_UNTIL = '2026-12-31';
 
 export const metadata: Metadata = {
   title: 'PRT Agreement 2026 for Landlords | Scotland Tenancy',

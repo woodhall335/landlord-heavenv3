@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { FAQSection } from '@/components/marketing/FAQSection';
 import { getCanonicalUrl } from '@/lib/seo/urls';
 
+const PRICE_VALID_UNTIL = '2026-12-31';
+
 export const metadata: Metadata = {
   title: 'Occupation Contract Wales 2026 | From £14.99',
   description: 'Create a legally compliant Occupation Contract for Wales under the Renting Homes (Wales) Act 2016. Updated for 2026. From £14.99.',
