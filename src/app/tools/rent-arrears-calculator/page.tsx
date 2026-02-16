@@ -6,7 +6,7 @@ import { Button, Card, Container, Input } from '@/components/ui';
 import { RiAlertLine } from 'react-icons/ri';
 import { useEmailGate } from '@/hooks/useEmailGate';
 import { ToolEmailGate } from '@/components/ui/ToolEmailGate';
-import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
+import { UsageTodayCounter } from '@/components/seo/UsageTodayCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, blogLinks, toolLinks, landingPageLinks } from '@/lib/seo/internal-links';
 import { ToolFunnelTracker } from '@/components/tools/ToolFunnelTracker';
@@ -400,7 +400,7 @@ link.href = url;
             </div>
             <p className="mt-4 text-sm text-gray-600">Instant calculation • Professional summary • Upgrade for court claims</p>
             <div className="mt-6">
-              <SocialProofCounter variant="today" className="mx-auto" />
+              <UsageTodayCounter className="mx-auto" />
             </div>
           </div>
         </Container>

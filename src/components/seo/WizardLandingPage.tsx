@@ -7,7 +7,7 @@
 
 import Link from 'next/link';
 import { Container } from '@/components/ui';
-import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
+import { UsageTodayCounter } from '@/components/seo/UsageTodayCounter';
 import {
   Eye,
   RefreshCw,
@@ -103,7 +103,7 @@ export function WizardLandingPage({ content, structuredDataUrl }: WizardLandingP
               Start My Case Bundle <ArrowRight className="w-5 h-5 inline ml-1" />
             </Link>
             <div className="mt-4 mb-2">
-              <SocialProofCounter variant="today" className="mx-auto" />
+              <UsageTodayCounter className="mx-auto" />
             </div>
           </div>
         </Container>

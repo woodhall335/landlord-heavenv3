@@ -6,7 +6,7 @@ import { Container } from '@/components/ui/Container';
 import { RiAlertLine, RiInformationLine, RiExternalLinkLine } from 'react-icons/ri';
 import { useEmailGate } from '@/hooks/useEmailGate';
 import { ToolEmailGate } from '@/components/ui/ToolEmailGate';
-import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
+import { UsageTodayCounter } from '@/components/seo/UsageTodayCounter';
 import { ToolFunnelTracker } from '@/components/tools/ToolFunnelTracker';
 import { ToolUpsellCard } from '@/components/tools/ToolUpsellCard';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
@@ -452,7 +452,7 @@ URL.revokeObjectURL(url);
             </div>
             <p className="mt-4 text-sm text-gray-600">Instant download • Basic template • Upgrade for legal compliance</p>
             <div className="mt-6">
-              <SocialProofCounter variant="today" className="mx-auto" />
+              <UsageTodayCounter className="mx-auto" />
             </div>
           </div>
         </Container>

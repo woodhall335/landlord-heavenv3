@@ -6,7 +6,7 @@ import { Container } from '@/components/ui/Container';
 import councilsData from '@/config/jurisdictions/uk/england/councils.json';
 import { useEmailGate } from '@/hooks/useEmailGate';
 import { ToolEmailGate } from '@/components/ui/ToolEmailGate';
-import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
+import { UsageTodayCounter } from '@/components/seo/UsageTodayCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, toolLinks } from '@/lib/seo/internal-links';
 import { PRODUCTS } from '@/lib/pricing/products';
@@ -412,7 +412,7 @@ export default function HMOLicenseChecker() {
             </div>
             <p className="mt-4 text-sm text-gray-600">Instant assessment • HMO guidance • Upgrade for professional agreements</p>
             <div className="mt-6">
-              <SocialProofCounter variant="today" className="mx-auto" />
+              <UsageTodayCounter className="mx-auto" />
             </div>
           </div>
         </Container>
