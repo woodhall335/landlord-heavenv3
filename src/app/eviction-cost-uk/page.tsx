@@ -5,19 +5,17 @@ import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import {
   evictionCostRelatedLinks,
-  productLinks,
-  guideLinks,
 } from '@/lib/seo/internal-links';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { StandardHero } from '@/components/marketing/StandardHero';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
+import { FAQSection } from '@/components/seo/FAQSection';
 import {
   CheckCircle,
   Clock,
   ArrowRight,
   PoundSterling,
   Shield,
-  Calculator,
   FileText,
   Gavel,
   Users,
@@ -30,12 +28,6 @@ const wizardLinkNoticeOnly = buildWizardLink({
   topic: 'eviction',
 });
 
-const wizardLinkCompletePack = buildWizardLink({
-  product: 'complete_pack',
-  jurisdiction: 'england',
-  src: 'guide',
-  topic: 'eviction',
-});
 
 export const metadata: Metadata = {
   title: 'How Much Does Eviction Cost UK? Full Breakdown (2026)',
@@ -519,30 +511,7 @@ export default function EvictionCostUkPage() {
         </section>
 
         {/* FAQ Section */}
-        <section className="py-16 lg:py-20">
-          <div className="container mx-auto px-4">
-            <div className="max-w-3xl mx-auto">
-              <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">
-                Eviction Cost FAQ
-              </h2>
-
-              <div className="space-y-6">
-                {faqs.map((faq, index) => (
-                  <div key={index} className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-                    <h3 className="font-semibold text-gray-900 mb-2">{faq.question}</h3>
-                    <p className="text-gray-600">{faq.answer}</p>
-                  </div>
-                ))}
-              </div>
-
-              <SeoCtaBlock
-                pageType="general"
-                variant="faq"
-                jurisdiction="england"
-              />
-            </div>
-          </div>
-        </section>
+        <FAQSection faqs={faqs} includeSchema={false} showContactCTA={false} />
 
         {/* Final CTA */}
         <section className="py-16 lg:py-20 bg-gray-50">

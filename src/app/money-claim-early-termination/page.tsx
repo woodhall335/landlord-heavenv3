@@ -12,7 +12,7 @@ import {
   Receipt,
   Calculator,
 } from 'lucide-react';
-import { FAQSection } from '@/components/marketing/FAQSection';
+import { FAQSection } from '@/components/seo/FAQSection';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { moneyClaimGuides, moneyClaimRentLinks, productLinks, toolLinks } from '@/lib/seo/internal-links';
 

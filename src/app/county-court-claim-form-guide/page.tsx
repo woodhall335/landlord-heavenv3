@@ -11,6 +11,7 @@ import {
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { StandardHero } from '@/components/marketing/StandardHero';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
+import { FAQSection } from '@/components/seo/FAQSection';
 import {
   CheckCircle,
   FileText,
@@ -487,26 +488,13 @@ export default function CountyCourtClaimFormGuidePage() {
               </div>
 
               {/* FAQ Section */}
-              <h2 className="text-3xl font-bold text-gray-900 mt-16 mb-8">
-                Frequently Asked Questions
-              </h2>
+        </div>
+      </div>
+    </section>
 
-              <div className="space-y-6 mb-12">
-                {faqs.map((faq, index) => (
-                  <div key={index} className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2 flex items-start gap-3">
-                      <HelpCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                      {faq.question}
-                    </h3>
-                    <p className="text-gray-700 pl-8">{faq.answer}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
+    <FAQSection faqs={faqs} includeSchema={false} showContactCTA={false} />
 
-        {/* CTA Section */}
+    {/* CTA Section */}
         <SeoCtaBlock
           pageType="court"
           variant="final"

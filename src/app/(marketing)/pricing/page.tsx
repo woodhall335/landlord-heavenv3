@@ -3,7 +3,7 @@ import { Container } from "@/components/ui";
 import Link from "next/link";
 import { generateMetadata } from "@/lib/seo";
 import { StructuredData, faqPageSchema } from "@/lib/seo/structured-data";
-import { FAQSection } from "@/components/marketing/FAQSection";
+import { FAQSection } from "@/components/seo/FAQSection";
 import { StandardHero } from "@/components/marketing/StandardHero";
 
 export const metadata: Metadata = generateMetadata({

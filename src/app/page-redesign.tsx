@@ -17,7 +17,7 @@
 import Link from "next/link";
 import { Container } from "@/components/ui";
 import { TrustBar, CostComparison, Testimonials } from "@/components/landing";
-import { FAQSection } from "@/components/marketing/FAQSection";
+import { FAQSection } from "@/components/seo/FAQSection";
 import { RiFileTextLine, RiScales3Line, RiMoneyPoundCircleLine, RiClipboardLine, RiCheckLine, RiArrowRightLine, RiTimeLine, RiShieldCheckLine, RiGlobalLine, RiFlashlightLine } from 'react-icons/ri';
 
 export default function Home() {

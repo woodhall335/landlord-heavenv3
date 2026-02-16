@@ -13,7 +13,7 @@ import {
   Receipt,
   Scale,
 } from 'lucide-react';
-import { FAQSection } from '@/components/marketing/FAQSection';
+import { FAQSection } from '@/components/seo/FAQSection';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { moneyClaimGuides, productLinks, toolLinks } from '@/lib/seo/internal-links';
 

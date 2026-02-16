@@ -14,7 +14,7 @@ import { RelatedLinks } from "@/components/seo/RelatedLinks";
 import { productLinks, toolLinks, blogLinks, landingPageLinks } from "@/lib/seo/internal-links";
 import { getCanonicalUrl } from "@/lib/seo";
 import { PRODUCTS } from "@/lib/pricing/products";
-import { FAQSection } from "@/components/marketing/FAQSection";
+import { FAQSection } from "@/components/seo/FAQSection";
 import {
   WhyLandlordHeaven,
   VsSolicitorComparison,

@@ -12,7 +12,7 @@ import {
   PoundSterling,
   Send,
 } from 'lucide-react';
-import { FAQSection } from '@/components/marketing/FAQSection';
+import { FAQSection } from '@/components/seo/FAQSection';
 import { FunnelCta, CrossSellBar } from '@/components/funnels';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { moneyClaimGuides, moneyClaimProcessLinks, productLinks } from '@/lib/seo/internal-links';

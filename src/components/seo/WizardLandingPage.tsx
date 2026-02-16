@@ -20,7 +20,7 @@ import {
   ArrowRight,
   AlertTriangle,
 } from 'lucide-react';
-import { FAQSection } from '@/components/marketing/FAQSection';
+import { FAQSection } from '@/components/seo/FAQSection';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { StructuredData, productSchema, faqPageSchema, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { AskHeavenWidget } from '@/components/ask-heaven/AskHeavenWidget';

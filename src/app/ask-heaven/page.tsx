@@ -8,7 +8,7 @@ import AskHeavenPageClient from './AskHeavenPageClient';
 import { getCanonicalUrl } from '@/lib/seo';
 import { StructuredData, faqPageSchema, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { buildAskHeavenLink, type AskHeavenTopic } from '@/lib/ask-heaven/buildAskHeavenLink';
-import { FAQSection } from '@/components/marketing/FAQSection';
+import { FAQSection } from '@/components/seo/FAQSection';
 import { SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { CommercialWizardLinks } from '@/components/seo/CommercialWizardLinks';
 import { analyzeContent } from '@/lib/seo/commercial-linking';
