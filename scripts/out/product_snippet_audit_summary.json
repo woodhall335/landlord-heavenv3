@@ -1,0 +1,75 @@
+{
+  "totalPages": 15,
+  "passed": [
+    "/eviction-notice",
+    "/eviction-pack-england",
+    "/money-claim",
+    "/products/ast",
+    "/products/complete-pack",
+    "/products/money-claim",
+    "/products/notice-only"
+  ],
+  "failed": [
+    {
+      "route": "/premium-tenancy-agreement",
+      "issues": [
+        "non_indexable:canonical_points_elsewhere",
+        "non_indexable:redirect_to_other"
+      ]
+    },
+    {
+      "route": "/products/money-claim-pack",
+      "issues": [
+        "non_indexable:canonical_points_elsewhere",
+        "non_indexable:redirect_to_other"
+      ]
+    },
+    {
+      "route": "/tenancy-agreement",
+      "issues": [
+        "missing_product_schema",
+        "non_indexable:canonical_points_elsewhere",
+        "non_indexable:redirect_to_other"
+      ]
+    },
+    {
+      "route": "/tenancy-agreements/england",
+      "issues": [
+        "missing_product_schema",
+        "non_indexable:canonical_points_elsewhere",
+        "non_indexable:redirect_to_other"
+      ]
+    },
+    {
+      "route": "/tenancy-agreements/england-wales",
+      "issues": [
+        "missing_product_schema",
+        "non_indexable:noindex_meta"
+      ]
+    },
+    {
+      "route": "/tenancy-agreements/northern-ireland",
+      "issues": [
+        "missing_product_schema",
+        "non_indexable:canonical_points_elsewhere",
+        "non_indexable:redirect_to_other"
+      ]
+    },
+    {
+      "route": "/tenancy-agreements/scotland",
+      "issues": [
+        "missing_product_schema",
+        "non_indexable:canonical_points_elsewhere",
+        "non_indexable:redirect_to_other"
+      ]
+    },
+    {
+      "route": "/tenancy-agreements/wales",
+      "issues": [
+        "missing_product_schema",
+        "non_indexable:canonical_points_elsewhere",
+        "non_indexable:redirect_to_other"
+      ]
+    }
+  ]
+}
