@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { useEmailGate } from '@/hooks/useEmailGate';
 import { ToolEmailGate } from '@/components/ui/ToolEmailGate';
-import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
+import { UsageTodayCounter } from '@/components/seo/UsageTodayCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, blogLinks, landingPageLinks } from '@/lib/seo/internal-links';
 import { StructuredData, breadcrumbSchema, faqPageSchema } from '@/lib/seo/structured-data';
@@ -395,7 +395,7 @@ export default function FreeSection8Tool() {
             </div>
             <p className="mt-4 text-sm text-gray-600">Instant download • Basic template • Upgrade for legal compliance</p>
             <div className="mt-6">
-              <SocialProofCounter variant="today" className="mx-auto" />
+              <UsageTodayCounter className="mx-auto" />
             </div>
           </div>
         </Container>

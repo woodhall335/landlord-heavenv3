@@ -78,7 +78,7 @@ export const section21HeroConfig: HeroConfig = {
 };
 
 export const noticeOnlyHeroConfig: HeroConfig = {
-  trustText: 'Section 21 / Section 8 (England) • Section 173 (Wales) • Notice to Leave (Scotland)',
+  trustText: 'S21 & S8 (England) • S173 • Notice to Leave',
   title: 'Eviction Notice Bundle',
   highlightTitle: 'Jurisdiction-Specific',
   subtitle: 'Generate a compliance-checked notice bundle with service instructions and a validity checklist. Preview every document before purchase.',
