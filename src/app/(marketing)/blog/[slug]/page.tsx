@@ -24,7 +24,7 @@ import { Calendar, Clock, Tag, ChevronLeft, Share2, RefreshCw, CheckCircle } fro
 import { getCanonicalUrl, SITE_ORIGIN } from '@/lib/seo';
 import { AskHeavenWidget } from '@/components/ask-heaven/AskHeavenWidget';
 import type { AskHeavenTopic } from '@/lib/ask-heaven/buildAskHeavenLink';
-import { FAQInline } from '@/components/marketing/FAQSection';
+import { FAQInline } from '@/components/seo/FAQSection';
 import { NextLegalSteps } from '@/components/seo/NextLegalSteps';
 import { landingPageLinks, productLinks, guideLinks } from '@/lib/seo/internal-links';
 import { CommercialWizardLinks } from '@/components/seo/CommercialWizardLinks';

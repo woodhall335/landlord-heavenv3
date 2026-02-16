@@ -5,6 +5,7 @@ import { StructuredData, faqPageSchema, breadcrumbSchema, articleSchema } from '
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { tenancyAgreementScotlandLinks } from '@/lib/seo/internal-links';
+import { FAQSection } from '@/components/seo/FAQSection';
 
 export const metadata: Metadata = {
   title: 'Private Residential Tenancy Agreement Template Scotland 2026 | PRT Download',
@@ -308,19 +309,7 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
         </section>
 
         {/* FAQ Section */}
-        <section className="container mx-auto px-4 py-16">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold text-gray-900 mb-8">Frequently Asked Questions</h2>
-            <div className="space-y-4">
-              {faqs.map((faq, index) => (
-                <div key={index} className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-                  <h3 className="font-semibold text-gray-900 mb-2">{faq.question}</h3>
-                  <p className="text-gray-600">{faq.answer}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+        <FAQSection faqs={faqs} includeSchema={false} showContactCTA={false} />
 
         {/* Final CTA */}
         <SeoCtaBlock

@@ -17,6 +17,7 @@ import { StructuredData, faqPageSchema, breadcrumbSchema, articleSchema } from '
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { tenancyAgreementNILinks } from '@/lib/seo/internal-links';
+import { FAQSection } from '@/components/seo/FAQSection';
 
 export const metadata: Metadata = {
   title: 'Private Tenancy Agreement NI | Complete 2026 Guide & Template',
@@ -422,28 +423,7 @@ export default function NIPrivateTenancyAgreementPage() {
           />
 
           {/* FAQ Section */}
-          <section className="mb-12">
-            <h2 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-3">
-              <RiQuestionLine className="w-6 h-6 text-emerald-600" />
-              Frequently Asked Questions
-            </h2>
-            <div className="space-y-4">
-              {faqs.map((faq, index) => (
-                <details
-                  key={index}
-                  className="group bg-white border border-slate-200 rounded-lg shadow-sm"
-                >
-                  <summary className="flex items-center justify-between cursor-pointer p-4 font-medium text-slate-900 hover:bg-slate-50">
-                    {faq.question}
-                    <RiArrowRightLine className="w-5 h-5 text-slate-400 transition-transform group-open:rotate-90" />
-                  </summary>
-                  <div className="px-4 pb-4 text-slate-600">
-                    {faq.answer}
-                  </div>
-                </details>
-              ))}
-            </div>
-          </section>
+        <FAQSection faqs={faqs} includeSchema={false} showContactCTA={false} />
 
           {/* Final CTA */}
           <section className="bg-gradient-to-br from-emerald-800 to-slate-900 rounded-2xl p-8 text-center text-white">

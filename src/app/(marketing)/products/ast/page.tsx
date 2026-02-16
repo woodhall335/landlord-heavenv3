@@ -17,7 +17,7 @@ import { productLinks, toolLinks, landingPageLinks } from "@/lib/seo/internal-li
 import { StructuredData, productSchema, breadcrumbSchema, faqPageSchema } from "@/lib/seo/structured-data";
 import { getCanonicalUrl } from "@/lib/seo";
 import { PRODUCTS } from "@/lib/pricing/products";
-import { FAQSection } from "@/components/marketing/FAQSection";
+import { FAQSection } from "@/components/seo/FAQSection";
 import {
   WhyLandlordHeaven,
   JurisdictionAccordion,
