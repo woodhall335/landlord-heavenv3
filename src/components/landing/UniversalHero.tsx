@@ -98,6 +98,7 @@ export function UniversalHero({
   const shouldShowReviewPill = showReviewPill ?? Boolean(trustText);
   const shouldShowUsageCounter = showUsageCounter ?? Boolean(trustText);
   const isCenter = align === 'center';
+  const shouldRenderMedia = !hideMedia && mediaSrc !== null;
 
   useEffect(() => {
     if (!isValidHeading) {
@@ -132,7 +133,7 @@ export function UniversalHero({
       <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-black/25 via-black/15 to-black/30" aria-hidden="true" />
 
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className={clsx('grid items-center gap-8 lg:gap-10', !hideMedia && mediaSrc !== null && 'lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]')}>
+        <div className={clsx('grid items-center gap-8 lg:gap-10', shouldRenderMedia && 'lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]')}>
           <div className={clsx('relative z-10 w-full min-w-0', isCenter ? 'text-center lg:text-center' : 'text-left', hideMedia && 'max-w-3xl mx-auto')}>
             {badge && (
               <div className={clsx('mb-4 inline-flex items-center gap-2 rounded-full border border-white/50 bg-white/20 px-4 py-2 text-sm font-semibold text-white backdrop-blur-sm', isCenter && 'mx-auto')}>
@@ -227,7 +228,7 @@ export function UniversalHero({
             )}
           </div>
 
-          {!hideMedia && mediaSrc !== null && (
+          {shouldRenderMedia && (
             <div className="relative z-10 mt-4 flex justify-center sm:mt-0 lg:justify-end" aria-hidden={mascotDecorativeOnDesktop ? 'true' : undefined}>
               <Image
                 src={resolvedMediaSrc}

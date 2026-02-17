@@ -17,7 +17,8 @@
 import React, { Suspense, useMemo, useState, useRef, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
-import { Button, Container, TealHero } from '@/components/ui';
+import { Button, Container } from '@/components/ui';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { clsx } from 'clsx';
 import { RiArrowDownLine, RiArrowLeftLine, RiCheckLine, RiAlertLine } from 'react-icons/ri';
 import {
@@ -456,19 +457,24 @@ function WizardPageInner() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <TealHero
+      <UniversalHero
+        badge={heroContent.eyebrow}
         title={heroContent.title}
         subtitle={heroContent.subtitle}
-        eyebrow={heroContent.eyebrow}
         align="center"
         hideMedia
-        actions={
+        showReviewPill={false}
+        showUsageCounter={false}
+        backgroundImageSrc="/images/bg.webp"
+        actionsSlot={
           <button
             onClick={handleStartNowClick}
-            className="hero-btn-primary group inline-flex items-center gap-2"
+            className="hero-btn-primary group inline-flex"
           >
-            Start My Case Bundle
-            <RiArrowDownLine className="h-5 w-5 animate-bounce-slow text-current transition-transform group-hover:translate-y-1" />
+            <span className="flex flex-col items-center justify-center gap-1">
+              <span>Start My Case Bundle</span>
+              <RiArrowDownLine className="mx-auto block h-5 w-5 animate-bounce-slow text-current transition-transform group-hover:translate-y-1" />
+            </span>
           </button>
         }
       />
