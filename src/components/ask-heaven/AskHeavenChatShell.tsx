@@ -612,7 +612,7 @@ export default function AskHeavenChatShell({
       {/* Hero background image */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: 'url(/images/herobg.png)' }}
+        style={{ backgroundImage: 'url(/images/bg.webp)' }}
       />
 
       <div className="relative z-10 max-w-4xl mx-auto px-4 py-8">
