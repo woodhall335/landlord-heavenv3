@@ -14,6 +14,7 @@
 import { Metadata } from 'next';
 import { SEO_PRICES, SEO_LANDING_ROUTES } from '@/lib/pricing/products';
 import WizardClientPage from './WizardClientPage';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
 
 /**
  * Base URL for canonical links
@@ -170,5 +171,10 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
 }
 
 export default function WizardPage() {
-  return <WizardClientPage />;
+  return (
+    <>
+      <HeaderConfig mode="autoOnScroll" />
+      <WizardClientPage />
+    </>
+  );
 }
