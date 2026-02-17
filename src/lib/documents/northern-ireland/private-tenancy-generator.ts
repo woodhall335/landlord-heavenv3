@@ -374,7 +374,7 @@ export function validatePrivateTenancyData(data: PrivateTenancyData): Validation
   if (!data.first_payment_date) warnings.push('First payment date should be specified');
 
   // Deposit validation
-  if (!data.deposit_amount || data.deposit_amount < 0) {
+  if (data.deposit_amount === null || data.deposit_amount === undefined || data.deposit_amount < 0) {
     errors.push('Deposit amount is required (can be 0)');
   }
 

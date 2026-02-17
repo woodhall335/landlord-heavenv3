@@ -34,6 +34,7 @@ import {
   type ComplianceTimingBlockResponse,
 } from '@/lib/documents/compliance-timing-types';
 import crypto from 'crypto';
+import { getMissingRequiredTenancyFields } from '@/lib/validation/tenancy-details-validator';
 
 /**
  * Normalize display SKUs to payment SKUs for order storage
@@ -347,7 +348,37 @@ export async function POST(request: Request) {
         );
       }
 
+
       if (caseData) {
+        const isTenancyAgreementCheckout = normalizedProductType === 'ast_standard' || normalizedProductType === 'ast_premium';
+        const isTenancyAgreementCase =
+          caseData.case_type === 'tenancy_agreement' ||
+          (typeof caseData.case_type === 'string' && caseData.case_type.includes('tenancy_agreement'));
+
+        // HARD GATE: Block tenancy checkout unless all critical tenancy facts are complete
+        // Applies to all tenancy agreement variants (ast_standard, ast_premium, and future tenancy_agreement case types)
+        if (isTenancyAgreementCheckout && isTenancyAgreementCase) {
+          const collectedFacts = (caseData as any).collected_facts || {};
+          const missingTenancyFields = getMissingRequiredTenancyFields(collectedFacts);
+
+          if (missingTenancyFields.length > 0) {
+            logger.warn('Tenancy checkout blocked due to incomplete tenancy details', {
+              caseId: case_id,
+              userId: user.id,
+              productType: product_type,
+              normalizedProductType,
+              missingFields: missingTenancyFields,
+            });
+
+            return NextResponse.json(
+              {
+                error: 'Incomplete tenancy details',
+                missing_fields: missingTenancyFields,
+              },
+              { status: 400 }
+            );
+          }
+        }
         // Check money claim jurisdiction restrictions
         if (product_type === 'money_claim' && !['england', 'wales'].includes(caseData.jurisdiction)) {
           return NextResponse.json(

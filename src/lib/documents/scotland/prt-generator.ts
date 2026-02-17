@@ -277,7 +277,7 @@ export function validatePRTData(data: PRTData): { valid: boolean; errors: string
   if (!data.tenancy_start_date) errors.push('Tenancy start date is required');
   if (!data.tenants || data.tenants.length === 0) errors.push('At least one tenant is required');
   if (!data.rent_amount || data.rent_amount <= 0) errors.push('Valid rent amount is required');
-  if (!data.deposit_amount || data.deposit_amount < 0) errors.push('Deposit amount is required');
+  if (data.deposit_amount === null || data.deposit_amount === undefined || data.deposit_amount < 0) errors.push('Deposit amount is required');
 
   // Landlord registration (CRITICAL in Scotland)
   if (!data.landlord_reg_number) {

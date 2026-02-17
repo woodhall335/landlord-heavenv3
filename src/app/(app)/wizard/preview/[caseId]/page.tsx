@@ -73,7 +73,10 @@ function ASTCheckoutButton({
 }) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [tenancyBlockingError, setTenancyBlockingError] = useState<string | null>(null);
+  const [missingFields, setMissingFields] = useState<string[]>([]);
   const supabase = getSupabaseBrowserClient();
+  const router = useRouter();
 
   const handleCheckout = async () => {
     setIsLoading(true);
@@ -117,6 +120,15 @@ function ASTCheckoutButton({
       const data = await response.json();
 
       if (!response.ok) {
+        const apiMissingFields = Array.isArray(data?.missing_fields) ? data.missing_fields : [];
+
+        if (response.status === 400 && data?.error === 'Incomplete tenancy details') {
+          setMissingFields(apiMissingFields);
+          setTenancyBlockingError('Your tenancy details are incomplete. Please complete all required sections before checkout.');
+          setIsLoading(false);
+          return;
+        }
+
         throw new Error(data.error || 'Failed to create checkout session');
       }
 
@@ -146,8 +158,49 @@ function ASTCheckoutButton({
     }
   };
 
+  const redirectToWizardForFixes = () => {
+    const params = new URLSearchParams({
+      type: 'tenancy_agreement',
+      case_id: caseId,
+      product,
+      source: 'checkout_blocked',
+    });
+
+    if (missingFields.length > 0) {
+      params.set('highlight_sections', missingFields.join(','));
+    }
+
+    router.push(`/wizard/flow?${params.toString()}`);
+  };
+
   return (
     <>
+      {tenancyBlockingError && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="w-full max-w-lg rounded-xl bg-white p-6 shadow-2xl">
+            <h3 className="text-xl font-semibold text-gray-900">Checkout blocked</h3>
+            <p className="mt-3 text-sm text-gray-700">{tenancyBlockingError}</p>
+            {missingFields.length > 0 && (
+              <div className="mt-4 rounded-lg bg-red-50 p-3">
+                <p className="text-sm font-medium text-red-800">Missing required sections:</p>
+                <ul className="mt-2 list-disc pl-5 text-sm text-red-700">
+                  {missingFields.map((field) => (
+                    <li key={field}>{field}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            <div className="mt-6 flex justify-end gap-3">
+              <button
+                onClick={redirectToWizardForFixes}
+                className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary/90"
+              >
+                Return to wizard
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       <button
         onClick={handleCheckout}
         disabled={isLoading}
