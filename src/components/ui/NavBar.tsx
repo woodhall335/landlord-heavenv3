@@ -8,6 +8,7 @@ import { clsx } from "clsx";
 import { RiArrowDownSLine, RiMenuLine, RiLogoutBoxLine, RiDashboardLine } from 'react-icons/ri';
 import { getSupabaseBrowserClient } from '@/lib/supabase/client';
 import { freeTools } from '@/lib/tools/tools';
+import type { HeaderMode } from '@/components/layout/HeaderModeContext';
 
 interface NavItem {
   href: string;
@@ -21,7 +22,11 @@ interface NavBarUser {
 
 interface NavBarProps {
   user?: NavBarUser | null;
+  headerMode: HeaderMode;
+  scrollThreshold: number;
 }
+
+type EffectiveHeaderState = 'solid' | 'transparent';
 
 const primaryLinks: NavItem[] = [
   { href: "/products/notice-only", label: "Notice Only" },
@@ -36,17 +41,45 @@ const freeToolsLinks: NavItem[] = freeTools.map((tool) => ({
   label: tool.label,
 }));
 
-export function NavBar({ user: serverUser }: NavBarProps) {
+export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [showFreeTools, setShowFreeTools] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
-  // Client-side auth state - starts with server prop, updates on auth changes
   const [clientUser, setClientUser] = useState<NavBarUser | null>(serverUser || null);
+  const [effectiveHeaderState, setEffectiveHeaderState] = useState<EffectiveHeaderState>(
+    headerMode === 'solid' ? 'solid' : 'transparent',
+  );
 
-  // Check auth state on mount and listen for changes
+  useEffect(() => {
+    if (headerMode === 'solid') {
+      setEffectiveHeaderState('solid');
+      return;
+    }
+
+    if (headerMode === 'transparent') {
+      setEffectiveHeaderState('transparent');
+      return;
+    }
+
+    const setFromScroll = () => {
+      setEffectiveHeaderState(window.scrollY > scrollThreshold ? 'solid' : 'transparent');
+    };
+
+    setFromScroll();
+    window.addEventListener('scroll', setFromScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', setFromScroll);
+    };
+  }, [headerMode, scrollThreshold]);
+
+  useEffect(() => {
+    setOpen(false);
+  }, [effectiveHeaderState]);
+
   const checkAuthState = useCallback(async () => {
     try {
       const supabase = getSupabaseBrowserClient();
@@ -66,10 +99,8 @@ export function NavBar({ user: serverUser }: NavBarProps) {
   }, []);
 
   useEffect(() => {
-    // Check auth state on mount
     checkAuthState();
 
-    // Listen for auth state changes
     const supabase = getSupabaseBrowserClient();
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
@@ -94,8 +125,13 @@ export function NavBar({ user: serverUser }: NavBarProps) {
     };
   }, [checkAuthState]);
 
-  // Use client-side state (more up-to-date than server prop)
   const user = clientUser;
+
+  const isSolid = effectiveHeaderState === 'solid';
+  const textClass = isSolid ? 'text-[#111827]' : 'text-white';
+  const secondaryTextClass = isSolid ? 'text-gray-700' : 'text-white/90';
+  const hoverTextClass = isSolid ? 'hover:text-[#692ED4]' : 'hover:text-white/75';
+  const logoSrc = isSolid ? '/images/logo.png' : '/images/logo2.png';
 
   const handleLogout = async () => {
     setIsLoggingOut(true);
@@ -114,12 +150,15 @@ export function NavBar({ user: serverUser }: NavBarProps) {
 
   return (
     <header
-      className="site-header fixed left-0 right-0 z-50 bg-white border-b border-gray-200 shadow-sm"
+      className={clsx(
+        'site-header fixed left-0 right-0 z-50 transition-colors duration-200',
+        isSolid ? 'bg-white border-b border-[#E5EE7B]' : 'bg-transparent border-b border-transparent',
+      )}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-8">
         <Link href="/" className="flex items-center hover:opacity-80 transition-opacity">
           <Image
-            src="/headerlogo2.png"
+            src={logoSrc}
             alt="Landlord Heaven - Legal Documents for Landlords"
             width={280}
             height={50}
@@ -129,25 +168,18 @@ export function NavBar({ user: serverUser }: NavBarProps) {
         </Link>
 
         <nav className="items-center gap-9 lg:flex hidden">
-          {/* Free Tools Dropdown */}
-          <div
-            className="relative"
-            onMouseEnter={() => setShowFreeTools(true)}
-            onMouseLeave={() => setShowFreeTools(false)}
-          >
+          <div className="relative" onMouseEnter={() => setShowFreeTools(true)} onMouseLeave={() => setShowFreeTools(false)}>
             <Link
               href="/tools"
-              className="text-sm font-semibold text-gray-700 hover:text-[#692ED4] transition-colors relative py-2 flex items-center gap-1"
+              className={clsx('text-sm font-semibold transition-colors relative py-2 flex items-center gap-1', secondaryTextClass, hoverTextClass)}
               aria-label="Free tools hub"
             >
               Free Tools
-              <RiArrowDownSLine className="h-4 w-4 text-[#692ED4]" />
+              <RiArrowDownSLine className={clsx('h-4 w-4', isSolid ? 'text-[#692ED4]' : 'text-white')} />
             </Link>
 
             {showFreeTools && (
-              <div
-                className="absolute left-0 top-full pt-2 w-56 z-50"
-              >
+              <div className="absolute left-0 top-full pt-2 w-56 z-50">
                 <div className="rounded-xl bg-white shadow-lg border border-gray-200 py-2">
                   {freeToolsLinks.map((item) => (
                     <Link
@@ -168,10 +200,10 @@ export function NavBar({ user: serverUser }: NavBarProps) {
               key={item.href}
               href={item.href}
               className={clsx(
-                "text-sm font-semibold transition-colors relative py-2",
+                'text-sm font-semibold transition-colors relative py-2',
                 pathname === item.href
-                  ? "text-[#692ED4] after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-[#692ED4]"
-                  : "text-gray-700 hover:text-[#692ED4]"
+                  ? clsx(textClass, 'after:absolute after:bottom-[-4px] after:left-0 after:right-0 after:h-[2px] after:bg-[#73AEED]')
+                  : clsx(secondaryTextClass, hoverTextClass)
               )}
             >
               {item.label}
@@ -181,76 +213,72 @@ export function NavBar({ user: serverUser }: NavBarProps) {
 
         <div className="items-center gap-4 lg:flex hidden">
           {user ? (
-            <div className="flex items-center gap-2 rounded-full bg-gray-100 px-3 py-2 text-sm text-charcoal">
+            <div className={clsx('flex items-center gap-2 rounded-full px-3 py-2 text-sm', isSolid ? 'bg-gray-100 text-charcoal' : 'bg-white/20 text-white backdrop-blur-sm')}>
               <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-primary text-white font-bold">
                 {user.name?.[0]?.toUpperCase() || user.email[0].toUpperCase()}
               </span>
-              <Link
-                href="/dashboard"
-                className="text-gray-500 hover:text-primary transition-colors"
-                title="Dashboard"
-              >
+              <Link href="/dashboard" className={clsx('transition-colors', isSolid ? 'text-gray-500 hover:text-primary' : 'text-white/90 hover:text-white')} title="Dashboard">
                 <RiDashboardLine className="h-5 w-5" />
               </Link>
-              <button
-                onClick={handleLogout}
-                disabled={isLoggingOut}
-                className="text-gray-500 hover:text-red-600 transition-colors"
-                title="Logout"
-              >
+              <button onClick={handleLogout} disabled={isLoggingOut} className={clsx('transition-colors', isSolid ? 'text-gray-500 hover:text-red-600' : 'text-white/90 hover:text-red-200')} title="Logout">
                 <RiLogoutBoxLine className="h-5 w-5" />
               </button>
             </div>
           ) : (
-            <Link href="/auth/login" className="header-login-btn">
+            <Link
+              href="/auth/login"
+              className={clsx(
+                'inline-flex items-center justify-center rounded-lg px-6 py-2.5 text-sm font-semibold transition-all duration-200 border-2',
+                isSolid
+                  ? 'border-primary text-primary bg-white hover:bg-primary/5'
+                  : 'border-primary bg-primary text-white hover:bg-primary-dark'
+              )}
+            >
               Login
             </Link>
           )}
         </div>
 
         <button
-          className="inline-flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-2 text-sm font-semibold text-gray-700 lg:hidden"
+          className={clsx(
+            'inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold lg:hidden border',
+            isSolid
+              ? 'border-gray-200 text-gray-700 bg-white'
+              : 'border-white/40 text-white bg-white/10 backdrop-blur-sm'
+          )}
           onClick={() => setOpen(!open)}
           aria-expanded={open}
         >
           <span>Menu</span>
-          <RiMenuLine className="h-5 w-5 text-[#692ED4]" />
+          <RiMenuLine className={clsx('h-5 w-5', isSolid ? 'text-[#692ED4]' : 'text-white')} />
         </button>
       </div>
 
       {open && (
-        <div className="border-t border-gray-200 bg-white lg:hidden">
+        <div className={clsx('border-t lg:hidden', isSolid ? 'border-gray-200 bg-white' : 'border-white/25 bg-[#111827]/95 backdrop-blur-sm')}>
           <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-4">
-            {/* Free Tools Section */}
             <div>
-              <div className="mb-2 text-xs font-bold uppercase text-gray-500">Free Tools</div>
-              <Link
-                href="/tools"
-                className="block py-2 text-sm font-semibold text-charcoal hover:text-[#692ED4]"
-                onClick={() => setOpen(false)}
-              >
+              <div className={clsx('mb-2 text-xs font-bold uppercase', isSolid ? 'text-gray-500' : 'text-white/70')}>Free Tools</div>
+              <Link href="/tools" className={clsx('block py-2 text-sm font-semibold', isSolid ? 'text-charcoal hover:text-[#692ED4]' : 'text-white hover:text-white/80')} onClick={() => setOpen(false)}>
                 Free Tools Hub
               </Link>
               {freeToolsLinks.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="block py-2 text-sm font-semibold text-charcoal hover:text-[#692ED4]"
-                  onClick={() => setOpen(false)}
-                >
+                <Link key={item.href} href={item.href} className={clsx('block py-2 text-sm font-semibold', isSolid ? 'text-charcoal hover:text-[#692ED4]' : 'text-white hover:text-white/80')} onClick={() => setOpen(false)}>
                   {item.label}
                 </Link>
               ))}
             </div>
 
-            <div className="border-t border-gray-200 pt-4">
+            <div className={clsx('pt-4', isSolid ? 'border-t border-gray-200' : 'border-t border-white/20')}>
               {primaryLinks.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
                   className={clsx(
-                    "block py-2 text-sm font-semibold",
-                    pathname === item.href ? "text-primary" : "text-charcoal"
+                    'block py-2 text-sm font-semibold relative',
+                    pathname === item.href
+                      ? clsx(isSolid ? 'text-[#111827]' : 'text-white', 'after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-16 after:bg-[#73AEED]')
+                      : isSolid ? 'text-charcoal' : 'text-white'
                   )}
                   onClick={() => setOpen(false)}
                 >
@@ -260,22 +288,18 @@ export function NavBar({ user: serverUser }: NavBarProps) {
             </div>
 
             {user ? (
-              <div className="border-t border-gray-200 pt-4 mt-2">
+              <div className={clsx('pt-4 mt-2', isSolid ? 'border-t border-gray-200' : 'border-t border-white/20')}>
                 <div className="flex items-center gap-3 mb-4">
                   <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-primary text-white font-bold">
                     {user.name?.[0]?.toUpperCase() || user.email[0].toUpperCase()}
                   </span>
                   <div>
-                    <p className="font-semibold text-charcoal">{user.name || user.email}</p>
-                    {user.name && <p className="text-xs text-gray-500">{user.email}</p>}
+                    <p className={clsx('font-semibold', isSolid ? 'text-charcoal' : 'text-white')}>{user.name || user.email}</p>
+                    {user.name && <p className={clsx('text-xs', isSolid ? 'text-gray-500' : 'text-white/70')}>{user.email}</p>}
                   </div>
                 </div>
                 <div className="flex flex-col gap-2">
-                  <Link
-                    href="/dashboard"
-                    className="flex items-center gap-2 py-2 text-sm font-semibold text-primary"
-                    onClick={() => setOpen(false)}
-                  >
+                  <Link href="/dashboard" className={clsx('flex items-center gap-2 py-2 text-sm font-semibold', isSolid ? 'text-primary' : 'text-white')} onClick={() => setOpen(false)}>
                     Go to Dashboard
                   </Link>
                   <button
@@ -284,7 +308,7 @@ export function NavBar({ user: serverUser }: NavBarProps) {
                       handleLogout();
                     }}
                     disabled={isLoggingOut}
-                    className="flex items-center gap-2 py-2 text-sm font-semibold text-red-600 hover:text-red-700"
+                    className={clsx('flex items-center gap-2 py-2 text-sm font-semibold', isSolid ? 'text-red-600 hover:text-red-700' : 'text-red-200 hover:text-red-100')}
                   >
                     <RiLogoutBoxLine className="h-4 w-4" />
                     {isLoggingOut ? 'Logging out...' : 'Logout'}
@@ -292,19 +316,11 @@ export function NavBar({ user: serverUser }: NavBarProps) {
                 </div>
               </div>
             ) : (
-              <div className="border-t border-gray-200 pt-4 mt-2">
-                <Link
-                  href="/auth/login"
-                  className="block py-2 text-sm font-semibold text-primary"
-                  onClick={() => setOpen(false)}
-                >
+              <div className={clsx('pt-4 mt-2', isSolid ? 'border-t border-gray-200' : 'border-t border-white/20')}>
+                <Link href="/auth/login" className={clsx('block py-2 text-sm font-semibold', isSolid ? 'text-primary' : 'text-white')} onClick={() => setOpen(false)}>
                   Login
                 </Link>
-                <Link
-                  href="/auth/signup"
-                  className="block py-2 text-sm font-semibold text-charcoal"
-                  onClick={() => setOpen(false)}
-                >
+                <Link href="/auth/signup" className={clsx('block py-2 text-sm font-semibold', isSolid ? 'text-charcoal' : 'text-white/90')} onClick={() => setOpen(false)}>
                   Create Account
                 </Link>
               </div>

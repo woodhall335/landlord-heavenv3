@@ -13,6 +13,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Container } from "@/components/ui";
 import { Hero, TrustBar, CostComparison, Testimonials } from "@/components/landing";
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { RiFileTextLine, RiScales3Line, RiMoneyPoundCircleLine, RiClipboardLine, RiCheckLine, RiArrowRightLine, RiShieldCheckLine, RiGlobalLine, RiFlashlightLine, RiSendPlaneFill, RiAddLine, RiMicLine } from 'react-icons/ri';
 
 export default function HomeContent() {
@@ -29,6 +30,7 @@ export default function HomeContent() {
 
   return (
     <div className="bg-white">
+      <HeaderConfig mode="autoOnScroll" />
       <Hero />
 
       {/* TRUST BAR */}

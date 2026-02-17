@@ -3,6 +3,7 @@ import { Container } from "@/components/ui";
 import Link from "next/link";
 import { FileText, Mail } from "lucide-react";
 import { UniversalHero } from "@/components/landing/UniversalHero";
+import { HeaderConfig } from "@/components/layout/HeaderConfig";
 import { moneyClaimHeroConfig } from "@/components/landing/heroConfigs";
 import { StructuredData, productSchema, faqPageSchema, breadcrumbSchema } from "@/lib/seo/structured-data";
 import { RelatedLinks } from "@/components/seo/RelatedLinks";
@@ -86,6 +87,7 @@ export default async function MoneyClaimPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <HeaderConfig mode="autoOnScroll" />
       {/* Structured Data for SEO */}
       <StructuredData data={productSchema({
         name: "Money Claim Pack - Recover Rent Arrears",

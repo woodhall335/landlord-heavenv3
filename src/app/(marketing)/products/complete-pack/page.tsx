@@ -15,6 +15,7 @@ import {
   Clock,
 } from "lucide-react";
 import { UniversalHero } from "@/components/landing/UniversalHero";
+import { HeaderConfig } from "@/components/layout/HeaderConfig";
 import { completePackHeroConfig } from "@/components/landing/heroConfigs";
 import { StructuredData, productSchema, faqPageSchema, breadcrumbSchema } from "@/lib/seo/structured-data";
 import { RelatedLinks } from "@/components/seo/RelatedLinks";
@@ -92,6 +93,7 @@ export default async function CompleteEvictionPackPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <HeaderConfig mode="autoOnScroll" />
       {/* Structured Data for SEO */}
       <StructuredData data={productSchema({
         name: "Complete Eviction Case Bundle",
