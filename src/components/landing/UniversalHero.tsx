@@ -225,7 +225,7 @@ export function UniversalHero({
             )}
           </div>
 
-          <div className="relative z-10 flex justify-center lg:justify-end" aria-hidden={mascotDecorativeOnDesktop ? 'true' : undefined}>
+          <div className="relative z-10 mt-4 flex justify-center sm:mt-0 lg:justify-end" aria-hidden={mascotDecorativeOnDesktop ? 'true' : undefined}>
             <Image
               src={resolvedMediaSrc}
               alt={isDecorativeMedia ? '' : resolvedMediaAlt}
@@ -234,7 +234,7 @@ export function UniversalHero({
               height={650}
               priority={mediaPriority}
               sizes="(max-width: 1024px) 92vw, 46vw"
-              className="h-auto w-full max-w-[680px]"
+              className="mx-auto h-auto w-[92%] max-w-[680px] sm:w-full"
             />
           </div>
         </div>
