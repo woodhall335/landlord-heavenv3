@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Container } from "@/components/ui";
 import Link from "next/link";
 import Image from "next/image";
-import { FAQInline } from "@/components/marketing/FAQSection";
+import { FAQInline } from "@/components/seo/FAQSection";
 
 export const metadata: Metadata = {
   title: "Help Center",

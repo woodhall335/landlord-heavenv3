@@ -13,7 +13,7 @@ import {
   ClipboardList,
   Receipt,
 } from 'lucide-react';
-import { FAQSection } from '@/components/marketing/FAQSection';
+import { FAQSection } from '@/components/seo/FAQSection';
 import { NextLegalSteps } from '@/components/seo/NextLegalSteps';
 import { productLinks, toolLinks } from '@/lib/seo/internal-links';
 

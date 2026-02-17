@@ -7,7 +7,7 @@
 
 "use client";
 
-import React, { useState, useId } from "react";
+import React, { useRef, useState, useId } from "react";
 import Link from "next/link";
 import { Container } from "@/components/ui";
 import { clsx } from "clsx";
@@ -33,6 +33,12 @@ export interface FAQSectionProps {
   variant?: "default" | "gray" | "white";
   /** Whether to use accordion behavior (one at a time) or allow multiple open */
   accordion?: boolean;
+  /** Optional section id for deep linking */
+  id?: string;
+  /** Optional additional section classes */
+  className?: string;
+  /** Which item should be open by default. Set null for all closed. */
+  defaultOpenIndex?: number | null;
 }
 
 /**
@@ -43,11 +49,15 @@ function FAQAccordionItem({
   isOpen,
   onToggle,
   index,
+  buttonRef,
+  onKeyDown,
 }: {
   item: FAQItem;
   isOpen: boolean;
   onToggle: () => void;
   index: number;
+  buttonRef?: (el: HTMLButtonElement | null) => void;
+  onKeyDown?: (event: React.KeyboardEvent<HTMLButtonElement>) => void;
 }) {
   const baseId = useId();
   const questionId = `faq-question-${baseId}-${index}`;
@@ -57,7 +67,9 @@ function FAQAccordionItem({
     <div className="border-b border-gray-200 last:border-b-0">
       <button
         id={questionId}
+        ref={buttonRef}
         onClick={onToggle}
+        onKeyDown={onKeyDown}
         className="w-full py-5 flex items-start justify-between gap-4 text-left hover:text-primary transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-lg"
         aria-expanded={isOpen}
         aria-controls={answerId}
@@ -111,8 +123,12 @@ export function FAQSection({
   showContactCTA = true,
   variant = "default",
   accordion = true,
+  id,
+  className,
+  defaultOpenIndex = 0,
 }: FAQSectionProps) {
-  const [openIndex, setOpenIndex] = useState<number | null>(0);
+  const [openIndex, setOpenIndex] = useState<number | null>(defaultOpenIndex);
+  const buttonRefs = useRef<Array<HTMLButtonElement | null>>([]);
 
   const bgClass = {
     default: "bg-white",
@@ -128,8 +144,33 @@ export function FAQSection({
     }
   };
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>, index: number) => {
+    if (!faqs.length) return;
+
+    let targetIndex: number | null = null;
+    switch (event.key) {
+      case "ArrowDown":
+        targetIndex = (index + 1) % faqs.length;
+        break;
+      case "ArrowUp":
+        targetIndex = (index - 1 + faqs.length) % faqs.length;
+        break;
+      case "Home":
+        targetIndex = 0;
+        break;
+      case "End":
+        targetIndex = faqs.length - 1;
+        break;
+      default:
+        return;
+    }
+
+    event.preventDefault();
+    buttonRefs.current[targetIndex]?.focus();
+  };
+
   return (
-    <section className={clsx("py-16 md:py-20", bgClass)}>
+    <section id={id} className={clsx("py-16 md:py-20", bgClass, className)}>
       <Container>
         <div className="max-w-3xl mx-auto">
           {/* Section Header */}
@@ -152,6 +193,10 @@ export function FAQSection({
                 index={index}
                 isOpen={openIndex === index}
                 onToggle={() => handleToggle(index)}
+                buttonRef={(el) => {
+                  buttonRefs.current[index] = el;
+                }}
+                onKeyDown={(e) => handleKeyDown(e, index)}
               />
             ))}
           </div>

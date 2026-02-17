@@ -25,6 +25,7 @@
 import React from 'react';
 import {
   FAQSection as MarketingFAQSection,
+  FAQInline as MarketingFAQInline,
   type FAQItem,
   type FAQSectionProps as MarketingFAQSectionProps,
 } from '@/components/marketing/FAQSection';
@@ -80,6 +81,16 @@ export function FAQSection({
       <MarketingFAQSection faqs={faqs} {...props} />
     </>
   );
+}
+
+
+export interface FAQInlineProps {
+  faqs: FAQItem[];
+  className?: string;
+}
+
+export function FAQInline({ faqs, className }: FAQInlineProps) {
+  return <MarketingFAQInline faqs={faqs} className={className} />;
 }
 
 export default FAQSection;
