@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { RiCheckLine, RiShieldCheckFill } from 'react-icons/ri';
 import { UsageTodayCounter } from '@/components/seo/UsageTodayCounter';
 import { getDynamicReviewCount, REVIEW_RATING } from '@/lib/reviews/reviewStats';
+import { clsx } from 'clsx';
 
 type HeroCta = {
   label: string;
@@ -13,13 +14,15 @@ type HeroCta = {
 };
 
 export type UniversalHeroProps = {
-  trustText: string;
+  trustText?: string;
+  badge?: string;
+  badgeIcon?: ReactNode;
   title: string;
-  highlightTitle: string;
-  subtitle: ReactNode;
-  primaryCta: HeroCta;
-  secondaryCta: HeroCta;
-  feature: string;
+  highlightTitle?: string;
+  subtitle?: ReactNode;
+  primaryCta?: HeroCta;
+  secondaryCta?: HeroCta;
+  feature?: string;
   mascotSrc?: string;
   mascotAlt?: string;
   mediaSrc?: string;
@@ -30,6 +33,12 @@ export type UniversalHeroProps = {
   mascotDecorativeOnMobile?: boolean;
   mascotDecorativeOnDesktop?: boolean;
   id?: string;
+  align?: 'left' | 'center';
+  children?: ReactNode;
+  actionsSlot?: ReactNode;
+  showReviewPill?: boolean;
+  showUsageCounter?: boolean;
+  backgroundImageSrc?: string;
 };
 
 const warnedMessages = new Set<string>();
@@ -49,6 +58,8 @@ function warnOnce(message: string) {
 
 export function UniversalHero({
   trustText,
+  badge,
+  badgeIcon,
   title,
   highlightTitle,
   subtitle,
@@ -65,6 +76,12 @@ export function UniversalHero({
   mascotDecorativeOnMobile = true,
   mascotDecorativeOnDesktop = false,
   id,
+  align = 'left',
+  children,
+  actionsSlot,
+  showReviewPill,
+  showUsageCounter,
+  backgroundImageSrc = '/images/bg.webp',
 }: UniversalHeroProps) {
   const mobileTitleParts = title.split('Legal Documents');
   const hasLegalDocumentsInTitle = mobileTitleParts.length > 1;
@@ -76,6 +93,9 @@ export function UniversalHero({
   const resolvedMediaSrc = mediaSrc ?? mascotSrc ?? '/images/laptop.webp';
   const resolvedMediaAlt = mediaAlt ?? mascotAlt ?? 'Laptop showing legal workflow dashboard';
   const isDecorativeMedia = mascotDecorativeOnDesktop || mascotDecorativeOnMobile;
+  const shouldShowReviewPill = showReviewPill ?? Boolean(trustText);
+  const shouldShowUsageCounter = showUsageCounter ?? Boolean(trustText);
+  const isCenter = align === 'center';
 
   useEffect(() => {
     if (!isValidHeading) {
@@ -99,7 +119,7 @@ export function UniversalHero({
     >
       <div className="pointer-events-none absolute inset-0 -z-20" aria-hidden="true">
         <Image
-          src="/images/bg5.webp"
+          src={backgroundImageSrc}
           alt="Purple sky background with clouds"
           fill
           priority
@@ -107,23 +127,32 @@ export function UniversalHero({
           className="object-cover object-center"
         />
       </div>
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-black/10 via-transparent to-white/15" aria-hidden="true" />
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-black/25 via-black/15 to-black/30" aria-hidden="true" />
 
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-10">
-          <div className="relative z-10 w-full min-w-0 text-[#1F1B2E]">
-            <p className="hidden w-full max-w-xl flex-wrap items-center justify-center gap-x-3 gap-y-1 rounded-full border border-white/80 bg-white/85 px-4 py-2 text-center text-sm font-semibold shadow-sm backdrop-blur-sm sm:flex sm:w-auto sm:justify-start sm:text-left">
-              <RiShieldCheckFill className="h-5 w-5 text-[#7c3aed]" aria-hidden="true" />
-              <span>{trustText}</span>
-              <span className="text-[#facc15]" aria-hidden="true">
-                ★★★★★
-              </span>
-              <span className="font-medium text-[#2b253d]">
-                {REVIEW_RATING}/5 · {reviewCount} reviews
-              </span>
-            </p>
+          <div className={clsx('relative z-10 w-full min-w-0', isCenter ? 'text-center lg:text-center' : 'text-left')}>
+            {badge && (
+              <div className={clsx('mb-4 inline-flex items-center gap-2 rounded-full border border-white/50 bg-white/20 px-4 py-2 text-sm font-semibold text-white backdrop-blur-sm', isCenter && 'mx-auto')}>
+                {badgeIcon}
+                <span className="text-white">{badge}</span>
+              </div>
+            )}
 
-            <HeadingTag className="mt-5 max-w-[18ch] text-[2.125rem] font-bold leading-[1.1] tracking-tight sm:text-5xl lg:max-w-none lg:text-6xl">
+            {shouldShowReviewPill && trustText && (
+              <p className={clsx('hidden w-full max-w-xl flex-wrap items-center gap-x-3 gap-y-1 rounded-full border border-white/80 bg-white/85 px-4 py-2 text-sm font-semibold shadow-sm backdrop-blur-sm sm:flex', isCenter ? 'mx-auto justify-center text-center' : 'justify-start text-left')}>
+                <RiShieldCheckFill className="h-5 w-5 text-[#7c3aed]" aria-hidden="true" />
+                <span>{trustText}</span>
+                <span className="text-[#facc15]" aria-hidden="true">
+                  ★★★★★
+                </span>
+                <span className="font-medium text-[#2b253d]">
+                  {REVIEW_RATING}/5 · {reviewCount} reviews
+                </span>
+              </p>
+            )}
+
+            <HeadingTag className="mt-5 max-w-[18ch] text-[2.125rem] font-bold leading-[1.1] tracking-tight text-white sm:text-5xl lg:max-w-none lg:text-6xl">
               <span className="sm:hidden">
                 {hasLegalDocumentsInTitle ? (
                   <>
@@ -136,45 +165,64 @@ export function UniversalHero({
                 )}
               </span>
               <span className="hidden sm:inline">{title}</span>
-              <span className="block text-[#7c3aed]">
-                <span className="sm:hidden">
-                  {shouldForceMobileHighlightBreak && mobileHighlightParts.length === 2 ? (
-                    <>
-                      {mobileHighlightParts[0]},
-                      <br />
-                      {mobileHighlightParts[1]}
-                    </>
-                  ) : (
-                    highlightTitle
-                  )}
+              {highlightTitle && (
+                <span className="block text-white">
+                  <span className="sm:hidden">
+                    {shouldForceMobileHighlightBreak && mobileHighlightParts.length === 2 ? (
+                      <>
+                        {mobileHighlightParts[0]},
+                        <br />
+                        {mobileHighlightParts[1]}
+                      </>
+                    ) : (
+                      highlightTitle
+                    )}
+                  </span>
+                  <span className="hidden sm:inline">{highlightTitle}</span>
                 </span>
-                <span className="hidden sm:inline">{highlightTitle}</span>
-              </span>
+              )}
             </HeadingTag>
 
-            <p className="mt-4 w-full rounded-xl bg-white/75 px-4 py-3 text-lg leading-relaxed text-[#2b253d] backdrop-blur-[2px] sm:max-w-[52ch] sm:rounded-none sm:bg-transparent sm:p-0 sm:text-xl sm:backdrop-blur-0">{subtitle}</p>
+            {subtitle && (
+              <p className={clsx('mt-4 w-full px-0 py-0 text-lg leading-relaxed text-white/85 sm:max-w-[52ch] sm:text-xl')}>
+                {subtitle}
+              </p>
+            )}
 
-            <div className="mt-6 flex w-full flex-col gap-3 sm:flex-row sm:items-center">
-              <div className="w-full sm:w-auto">
-                <Link href={primaryCta.href} className="hero-btn-primary flex w-full justify-center text-center sm:w-auto">
-                  {primaryCta.label}
-                </Link>
+            {(primaryCta || secondaryCta || actionsSlot) && (
+              <div className={clsx('mt-6 flex w-full flex-col gap-3 sm:flex-row sm:items-center', isCenter && 'sm:justify-center')}>
+                {primaryCta && (
+                  <div className="w-full sm:w-auto">
+                    <Link href={primaryCta.href} className="hero-btn-primary flex w-full justify-center text-center sm:w-auto">
+                      {primaryCta.label}
+                    </Link>
+                  </div>
+                )}
+                {secondaryCta && (
+                  <div className="w-full sm:w-auto">
+                    <Link href={secondaryCta.href} className="hero-btn-secondary flex w-full justify-center text-center sm:w-auto">
+                      {secondaryCta.label}
+                    </Link>
+                  </div>
+                )}
+                {actionsSlot}
               </div>
-              <div className="w-full sm:w-auto">
-                <Link href={secondaryCta.href} className="hero-btn-secondary flex w-full justify-center text-center sm:w-auto">
-                  {secondaryCta.label}
-                </Link>
+            )}
+
+            {feature && (
+              <div className="mt-6 flex items-start gap-2 text-base font-medium text-white/85 sm:text-lg">
+                <RiCheckLine className="mt-0.5 h-5 w-5 flex-none text-white" aria-hidden="true" />
+                <span className="text-white/85">{feature}</span>
               </div>
-            </div>
+            )}
 
-            <div className="mt-6 flex items-start gap-2 text-base font-medium text-[#2b253d] sm:text-lg">
-              <RiCheckLine className="mt-0.5 h-5 w-5 flex-none text-[#7c3aed]" aria-hidden="true" />
-              <span>{feature}</span>
-            </div>
+            {children}
 
-            <div className="mt-5">
-              <UsageTodayCounter />
-            </div>
+            {shouldShowUsageCounter && (
+              <div className="mt-5 text-white/90">
+                <UsageTodayCounter />
+              </div>
+            )}
           </div>
 
           <div className="relative z-10 flex justify-center lg:justify-end" aria-hidden={mascotDecorativeOnDesktop ? 'true' : undefined}>

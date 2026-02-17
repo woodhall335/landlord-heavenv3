@@ -129,8 +129,8 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
 
   const isSolid = effectiveHeaderState === 'solid';
   const textClass = isSolid ? 'text-[#111827]' : 'text-white';
-  const secondaryTextClass = isSolid ? 'text-gray-700' : 'text-white/90';
-  const hoverTextClass = isSolid ? 'hover:text-[#692ED4]' : 'hover:text-white/75';
+  const secondaryTextClass = isSolid ? 'text-gray-700' : 'text-white';
+  const hoverTextClass = isSolid ? 'hover:text-[#692ED4]' : 'hover:text-white hover:opacity-80 focus:text-white focus:opacity-80';
   const logoSrc = isSolid ? '/images/logo.png' : '/images/logo2.png';
 
   const handleLogout = async () => {
@@ -277,7 +277,7 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
                   className={clsx(
                     'block py-2 text-sm font-semibold relative',
                     pathname === item.href
-                      ? clsx(isSolid ? 'text-[#111827]' : 'text-white', 'after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-16 after:bg-[#73AEED]')
+                      ? clsx(isSolid ? 'text-[#111827]' : 'text-white', 'after:absolute after:left-0 after:bottom-[-4px] after:h-[2px] after:w-16 after:bg-[#73AEED]')
                       : isSolid ? 'text-charcoal' : 'text-white'
                   )}
                   onClick={() => setOpen(false)}
@@ -320,7 +320,7 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
                 <Link href="/auth/login" className={clsx('block py-2 text-sm font-semibold', isSolid ? 'text-primary' : 'text-white')} onClick={() => setOpen(false)}>
                   Login
                 </Link>
-                <Link href="/auth/signup" className={clsx('block py-2 text-sm font-semibold', isSolid ? 'text-charcoal' : 'text-white/90')} onClick={() => setOpen(false)}>
+                <Link href="/auth/signup" className={clsx('block py-2 text-sm font-semibold', isSolid ? 'text-charcoal' : 'text-white')} onClick={() => setOpen(false)}>
                   Create Account
                 </Link>
               </div>
