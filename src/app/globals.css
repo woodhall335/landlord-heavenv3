@@ -217,11 +217,16 @@ a[class*="text-white"]:not([class*="hover:"]):hover {
 }
 
 .hero-btn-secondary:hover {
-  background-color: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.95);
   color: var(--primary-dark);
   border-color: var(--primary-dark);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.12);
   transform: translateY(-1px);
+}
+
+.hero-btn-secondary:focus-visible {
+  outline: 3px solid rgba(255, 255, 255, 0.95);
+  outline-offset: 2px;
 }
 
 .hero-btn-secondary:active {
