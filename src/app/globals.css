@@ -217,7 +217,7 @@ a[class*="text-white"]:not([class*="hover:"]):hover {
 }
 
 .hero-btn-secondary:hover {
-  background-color: rgba(124, 58, 237, 0.05);
+  background-color: rgba(124, 58, 237, 0.10);
   border-color: var(--primary-dark);
   color: var(--primary-dark);
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15);
