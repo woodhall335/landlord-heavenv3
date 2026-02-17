@@ -34,6 +34,17 @@ type CaseType = 'eviction' | 'money_claim' | 'tenancy_agreement';
 type Jurisdiction = 'england' | 'wales' | 'scotland' | 'northern-ireland' | null;
 type AskHeavenProduct = 'notice_only' | 'complete_pack' | 'money_claim' | 'tenancy_agreement';
 
+
+const TENANCY_FIELD_TO_SECTION: Record<string, string> = {
+  deposit_amount: 'deposit',
+  tenancy_start_date: 'tenancy',
+  rent_amount: 'rent',
+  term_length: 'tenancy',
+  landlord_full_name: 'landlord',
+  tenants: 'tenants',
+};
+
+
 function WizardFlowContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -51,6 +62,12 @@ function WizardFlowContent() {
   const mode = searchParams.get('mode');
   const jumpTo = searchParams.get('jump_to'); // Question ID to jump to (from End Validator "Fix this" button)
   const fixMode = searchParams.get('fix_mode') === 'true'; // Single-question fix mode (returns to validation after save)
+  const highlightSectionsParam = searchParams.get('highlight_sections');
+  const highlightedTenancySections = (highlightSectionsParam || '')
+    .split(',')
+    .map((field) => field.trim())
+    .filter(Boolean)
+    .map((field) => TENANCY_FIELD_TO_SECTION[field] || field);
 
   // SAFETY GUARD: For editing paid cases, use order's product_type to prevent downgrade
   const [effectiveProduct, setEffectiveProduct] = useState<string | null>(product);
@@ -369,6 +386,7 @@ function WizardFlowContent() {
             ? normalizedProduct
             : 'tenancy_agreement'
         }
+        highlightedSections={highlightedTenancySections}
       />
     );
   }

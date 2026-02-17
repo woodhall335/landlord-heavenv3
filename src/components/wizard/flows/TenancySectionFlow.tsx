@@ -63,6 +63,7 @@ interface TenancySectionFlowProps {
   caseId: string;
   jurisdiction: Jurisdiction;
   product?: 'tenancy_agreement' | 'ast_standard' | 'ast_premium';
+  highlightedSections?: string[];
 }
 
 /**
@@ -318,6 +319,7 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
   caseId,
   jurisdiction,
   product = 'tenancy_agreement',
+  highlightedSections = [],
 }) => {
   const router = useRouter();
 
@@ -372,6 +374,21 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
   }, [facts, isProductLocked]);
 
   const currentSection = visibleSections[currentSectionIndex];
+
+  const highlightedSectionSet = useMemo(
+    () => new Set(highlightedSections.filter(Boolean)),
+    [highlightedSections]
+  );
+
+  // If checkout sends highlighted sections, jump user to the first highlighted section
+  useEffect(() => {
+    if (highlightedSectionSet.size === 0 || visibleSections.length === 0) return;
+
+    const highlightedIndex = visibleSections.findIndex((section) => highlightedSectionSet.has(section.id));
+    if (highlightedIndex >= 0 && highlightedIndex !== currentSectionIndex) {
+      setCurrentSectionIndex(highlightedIndex);
+    }
+  }, [highlightedSectionSet, visibleSections, currentSectionIndex]);
 
   // Save facts to backend
   const saveFactsToServer = useCallback(
@@ -618,26 +635,37 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
         label: section.label,
         isCurrent: index === currentSectionIndex,
         isComplete: section.isComplete(facts),
-        hasIssue: (section.hasBlockers?.(facts) || []).length > 0,
+        hasIssue:
+          (section.hasBlockers?.(facts) || []).length > 0 ||
+          (highlightedSectionSet.has(section.id) && !section.isComplete(facts)),
         onClick: () => setCurrentSectionIndex(index),
       }))}
       sectionTitle={currentSection?.label ?? ''}
       sectionDescription={currentSection?.description}
-      banner={error ? (
-        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-          <div className="flex items-center justify-between">
-            <span className="text-red-700">{error}</span>
-            <button
-              type="button"
-              onClick={handleRetrySave}
-              disabled={saving}
-              className="ml-4 px-3 py-1.5 text-sm font-medium text-red-700 bg-white border border-red-300 rounded-md hover:bg-red-50 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {saving ? 'Retrying...' : 'Retry'}
-            </button>
-          </div>
-        </div>
-      ) : undefined}
+      banner={
+        <>
+          {highlightedSections.length > 0 && (
+            <div className="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
+              Please complete the highlighted sections before checkout.
+            </div>
+          )}
+          {error ? (
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+              <div className="flex items-center justify-between">
+                <span className="text-red-700">{error}</span>
+                <button
+                  type="button"
+                  onClick={handleRetrySave}
+                  disabled={saving}
+                  className="ml-4 px-3 py-1.5 text-sm font-medium text-red-700 bg-white border border-red-300 rounded-md hover:bg-red-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {saving ? 'Retrying...' : 'Retry'}
+                </button>
+              </div>
+            </div>
+          ) : undefined}
+        </>
+      }
       sidebar={(
         <AskHeavenPanel
           caseId={caseId}

@@ -673,7 +673,7 @@ export function validateASTData(data: ASTData): string[] {
     errors.push('rent_amount must be greater than 0');
   }
 
-  if (!data.deposit_amount || data.deposit_amount < 0) {
+  if (data.deposit_amount === null || data.deposit_amount === undefined || data.deposit_amount < 0) {
     errors.push('deposit_amount is required');
   }
 

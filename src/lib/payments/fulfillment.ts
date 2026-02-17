@@ -18,6 +18,7 @@ import {
   type Section21MissingConfirmation,
 } from '@/lib/validation/section21-checkout-validator';
 import { safeUpdateOrderWithMetadata } from '@/lib/payments/safe-order-metadata';
+import { getMissingRequiredTenancyFields } from '@/lib/validation/tenancy-details-validator';
 
 // =============================================================================
 // TYPES
@@ -344,6 +345,44 @@ export async function fulfillOrder({
     .from('orders')
     .update({ fulfillment_status: 'processing' })
     .eq('id', orderId);
+
+  const isTenancyAgreementProduct = productType === 'ast_standard' || productType === 'ast_premium';
+  if (isTenancyAgreementProduct) {
+    const missingTenancyFields = getMissingRequiredTenancyFields(wizardFacts as Record<string, unknown>);
+
+    if (missingTenancyFields.length > 0) {
+      const safeFailureMessage =
+        'Unable to fulfill tenancy agreement order: missing required tenancy facts';
+
+      console.error(
+        '[fulfillment] Tenancy fulfillment blocked due to missing required facts',
+        {
+          orderId,
+          caseId,
+          productType,
+          missing_fields: missingTenancyFields,
+        }
+      );
+
+      await safeUpdateOrderWithMetadata(
+        supabase,
+        orderId,
+        { fulfillment_status: 'failed' },
+        {
+          validation: 'tenancy_required_fields_missing',
+          missing_fields: missingTenancyFields,
+          last_attempt: new Date().toISOString(),
+          error: safeFailureMessage,
+        }
+      );
+
+      return {
+        status: 'incomplete',
+        documents: 0,
+        error: `${safeFailureMessage}: ${missingTenancyFields.join(', ')}`,
+      };
+    }
+  }
 
   try {
     if (productType === 'notice_only' || productType === 'complete_pack') {
