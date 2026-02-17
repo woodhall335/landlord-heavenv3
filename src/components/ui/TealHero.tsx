@@ -12,6 +12,7 @@ interface TealHeroProps {
   actions?: React.ReactNode;
   breadcrumb?: React.ReactNode;
   align?: 'center' | 'left';
+  hideMedia?: boolean;
 }
 
 export function TealHero({
@@ -21,6 +22,7 @@ export function TealHero({
   actions,
   breadcrumb,
   align = 'center',
+  hideMedia = false,
 }: TealHeroProps) {
   return (
     <UniversalHero
@@ -32,6 +34,7 @@ export function TealHero({
       showReviewPill={false}
       showUsageCounter={false}
       backgroundImageSrc="/images/bg.webp"
+      hideMedia={hideMedia}
     >
       {breadcrumb && <div className="mb-4 text-sm text-white/80">{breadcrumb}</div>}
     </UniversalHero>

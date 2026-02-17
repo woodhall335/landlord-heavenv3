@@ -217,10 +217,10 @@ a[class*="text-white"]:not([class*="hover:"]):hover {
 }
 
 .hero-btn-secondary:hover {
-  background-color: rgba(124, 58, 237, 0.10);
-  border-color: var(--primary-dark);
+  background-color: rgba(255, 255, 255, 0.95);
   color: var(--primary-dark);
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15);
+  border-color: var(--primary-dark);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
   transform: translateY(-1px);
 }
 

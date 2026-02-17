@@ -460,13 +460,15 @@ function WizardPageInner() {
         title={heroContent.title}
         subtitle={heroContent.subtitle}
         eyebrow={heroContent.eyebrow}
+        align="center"
+        hideMedia
         actions={
           <button
             onClick={handleStartNowClick}
-            className="group flex items-center gap-2 px-6 py-3 rounded-full border-2 border-black bg-transparent text-black font-semibold hover:border-purple-600 hover:text-purple-600 hover:shadow-lg transition-all duration-300 animate-subtle-pulse cursor-pointer"
+            className="hero-btn-primary group inline-flex items-center gap-2"
           >
             Start My Case Bundle
-            <RiArrowDownLine className="w-5 h-5 animate-bounce-slow group-hover:translate-y-1 transition-transform text-[#7C3AED]" />
+            <RiArrowDownLine className="h-5 w-5 animate-bounce-slow text-current transition-transform group-hover:translate-y-1" />
           </button>
         }
       />
