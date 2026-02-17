@@ -34,7 +34,7 @@ import {
   type ComplianceTimingBlockResponse,
 } from '@/lib/documents/compliance-timing-types';
 import crypto from 'crypto';
-import { getMissingRequiredTenancyFields } from '@/lib/validation/tenancy-details-validator';
+import { validateTenancyRequiredFacts } from '@/lib/validation/tenancy-details-validator';
 
 /**
  * Normalize display SKUs to payment SKUs for order storage
@@ -359,7 +359,13 @@ export async function POST(request: Request) {
         // Applies to all tenancy agreement variants (ast_standard, ast_premium, and future tenancy_agreement case types)
         if (isTenancyAgreementCheckout && isTenancyAgreementCase) {
           const collectedFacts = (caseData as any).collected_facts || {};
-          const missingTenancyFields = getMissingRequiredTenancyFields(collectedFacts);
+          const tenancyValidation = validateTenancyRequiredFacts(collectedFacts, {
+            jurisdiction: (caseData as any).jurisdiction,
+          });
+          const missingTenancyFields = [
+            ...tenancyValidation.missing_fields,
+            ...tenancyValidation.invalid_fields,
+          ];
 
           if (missingTenancyFields.length > 0) {
             logger.warn('Tenancy checkout blocked due to incomplete tenancy details', {
@@ -374,6 +380,7 @@ export async function POST(request: Request) {
               {
                 error: 'Incomplete tenancy details',
                 missing_fields: missingTenancyFields,
+                invalid_fields: tenancyValidation.invalid_fields,
               },
               { status: 400 }
             );

@@ -53,6 +53,7 @@ import {
 import { detectPremiumRecommendation, type PremiumRecommendationResult } from '@/lib/utils/premium-recommendation';
 import { PremiumRecommendationBanner } from '@/components/tenancy/PremiumRecommendationBanner';
 import { ClauseDiffPreview } from '@/components/tenancy/ClauseDiffPreview';
+import { validateTenancyRequiredFacts } from '@/lib/validation/tenancy-details-validator';
 
 // Section components - we'll create these inline for now
 import { Button, Input } from '@/components/ui';
@@ -147,6 +148,22 @@ const getJurisdictionTerminology = (jurisdiction: Jurisdiction) => {
       };
   }
 };
+
+
+function getTenancyValidationBlockers(facts: Record<string, unknown>, jurisdiction: Jurisdiction): string[] {
+  const validation = validateTenancyRequiredFacts(facts, { jurisdiction });
+  const blockers: string[] = [];
+
+  if (validation.missing_fields.length > 0) {
+    blockers.push(`Missing required tenancy facts: ${validation.missing_fields.join(', ')}`);
+  }
+
+  if (validation.invalid_fields.length > 0) {
+    blockers.push(`Invalid tenancy facts: ${validation.invalid_fields.join(', ')}`);
+  }
+
+  return blockers;
+}
 
 // Section definition type
 interface WizardSection {
@@ -562,7 +579,10 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
   const progress = Math.round((completedCount / visibleSections.length) * 100);
 
   // Get blockers and warnings for current section
-  const currentBlockers = currentSection?.hasBlockers?.(facts) || [];
+  const currentBlockers = [
+    ...(currentSection?.hasBlockers?.(facts) || []),
+    ...(currentSection?.id === 'review' ? getTenancyValidationBlockers(facts, jurisdiction) : []),
+  ];
   const currentWarnings = currentSection?.hasWarnings?.(facts) || [];
 
   // Jurisdiction label

@@ -18,7 +18,7 @@ import {
   type Section21MissingConfirmation,
 } from '@/lib/validation/section21-checkout-validator';
 import { safeUpdateOrderWithMetadata } from '@/lib/payments/safe-order-metadata';
-import { getMissingRequiredTenancyFields } from '@/lib/validation/tenancy-details-validator';
+import { validateTenancyRequiredFacts } from '@/lib/validation/tenancy-details-validator';
 
 // =============================================================================
 // TYPES
@@ -348,7 +348,13 @@ export async function fulfillOrder({
 
   const isTenancyAgreementProduct = productType === 'ast_standard' || productType === 'ast_premium';
   if (isTenancyAgreementProduct) {
-    const missingTenancyFields = getMissingRequiredTenancyFields(wizardFacts as Record<string, unknown>);
+    const tenancyValidation = validateTenancyRequiredFacts(wizardFacts as Record<string, unknown>, {
+      jurisdiction: jurisdiction as any,
+    });
+    const missingTenancyFields = [
+      ...tenancyValidation.missing_fields,
+      ...tenancyValidation.invalid_fields,
+    ];
 
     if (missingTenancyFields.length > 0) {
       const safeFailureMessage =
