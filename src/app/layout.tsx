@@ -12,6 +12,7 @@ import { PopupProvider } from "@/components/providers/PopupProvider";
 import { TrackingPixels } from "@/components/analytics/TrackingPixels";
 import { Section21HeaderBanner } from "@/components/ui/Section21HeaderBanner";
 import { Analytics } from "@vercel/analytics/next";
+import { HeaderModeProvider } from "@/components/layout/HeaderModeContext";
 
 
 export const metadata: Metadata = {
@@ -68,14 +69,16 @@ export default async function RootLayout({
         />
       </head>
       <body className="font-sans antialiased flex flex-col min-h-screen">
-        <Section21HeaderBanner />
-        <PopupProvider>
-          <Header user={headerUser} />
-          <main className="flex-1">
-            {children}
-          </main>
-          <Footer />
-        </PopupProvider>
+        <HeaderModeProvider>
+          <Section21HeaderBanner />
+          <PopupProvider>
+            <Header user={headerUser} />
+            <main className="flex-1">
+              {children}
+            </main>
+            <Footer />
+          </PopupProvider>
+        </HeaderModeProvider>
         <TrackingPixels />
         <Analytics />
       </body>

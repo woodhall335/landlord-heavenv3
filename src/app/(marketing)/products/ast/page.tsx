@@ -26,6 +26,7 @@ import {
 import { TenancyComparisonTable } from "@/components/tenancy/TenancyComparisonTable";
 import { ClauseDiffPreview } from "@/components/tenancy/ClauseDiffPreview";
 import { UniversalHero } from "@/components/landing/UniversalHero";
+import { HeaderConfig } from "@/components/layout/HeaderConfig";
 import { astHeroConfig } from "@/components/landing/heroConfigs";
 
 // Get prices from single source of truth
@@ -87,6 +88,7 @@ const faqs = [
 export default function ASTPage() {
   return (
     <div className="min-h-screen bg-gray-50">
+      <HeaderConfig mode="autoOnScroll" />
       {/* Structured Data for SEO */}
       <StructuredData data={productSchema({
         name: "Tenancy Agreements - AST, PRT, Occupation Contract, NI",

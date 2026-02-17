@@ -8,6 +8,7 @@ import { blogPosts } from '@/lib/blog/posts';
 import { Section21Countdown } from '@/components/ui/Section21Countdown';
 import { BLOG_CATEGORIES, getPostCountsByRegion, BlogRegion } from '@/lib/blog/categories';
 import { UniversalHero } from '@/components/landing/UniversalHero';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { blogHeroConfig } from '@/components/landing/heroConfigs';
 import { Zap, ShieldCheck, Globe, ArrowRight } from 'lucide-react';
 import { getCanonicalUrl } from '@/lib/seo';
@@ -78,6 +79,7 @@ export default function BlogPage() {
 
   return (
     <>
+      <HeaderConfig mode="autoOnScroll" />
       <StructuredData data={blogSchema} />
 
       <main>

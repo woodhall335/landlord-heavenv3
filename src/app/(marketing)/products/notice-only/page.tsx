@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { UniversalHero } from "@/components/landing/UniversalHero";
+import { HeaderConfig } from "@/components/layout/HeaderConfig";
 import { noticeOnlyHeroConfig } from "@/components/landing/heroConfigs";
 import { Container } from "@/components/ui";
 import Link from "next/link";
@@ -84,6 +85,7 @@ export default async function NoticeOnlyPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <HeaderConfig mode="autoOnScroll" />
       {/* Structured Data for SEO */}
       <StructuredData data={productSchema({
         name: "AI-Validated Eviction Case Bundle",

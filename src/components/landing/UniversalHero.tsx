@@ -20,8 +20,11 @@ export type UniversalHeroProps = {
   primaryCta: HeroCta;
   secondaryCta: HeroCta;
   feature: string;
-  mascotSrc: string;
-  mascotAlt: string;
+  mascotSrc?: string;
+  mascotAlt?: string;
+  mediaSrc?: string;
+  mediaAlt?: string;
+  mediaPriority?: boolean;
   headingAs?: 'h1' | 'h2';
   ariaLabel?: string;
   mascotDecorativeOnMobile?: boolean;
@@ -54,14 +57,15 @@ export function UniversalHero({
   feature,
   mascotSrc,
   mascotAlt,
+  mediaSrc,
+  mediaAlt,
+  mediaPriority = true,
   headingAs = 'h1',
   ariaLabel = 'Landlord Heaven legal document hero',
   mascotDecorativeOnMobile = true,
   mascotDecorativeOnDesktop = false,
   id,
 }: UniversalHeroProps) {
-  // LOCKED v1: Do not modify this component's layout/visual structure/behavior directly.
-  // For page-specific hero text, mascot, and CTA customization, pass values via props only.
   const mobileTitleParts = title.split('Legal Documents');
   const hasLegalDocumentsInTitle = mobileTitleParts.length > 1;
   const shouldForceMobileHighlightBreak = highlightTitle === 'in Minutes, Not Days';
@@ -69,6 +73,9 @@ export function UniversalHero({
   const isValidHeading = headingAs === 'h1' || headingAs === 'h2';
   const HeadingTag = isValidHeading ? headingAs : 'h1';
   const reviewCount = getDynamicReviewCount();
+  const resolvedMediaSrc = mediaSrc ?? mascotSrc ?? '/images/laptop.webp';
+  const resolvedMediaAlt = mediaAlt ?? mascotAlt ?? 'Laptop showing legal workflow dashboard';
+  const isDecorativeMedia = mascotDecorativeOnDesktop || mascotDecorativeOnMobile;
 
   useEffect(() => {
     if (!isValidHeading) {
@@ -79,22 +86,20 @@ export function UniversalHero({
       warnOnce('UniversalHero: ariaLabel should be non-empty when provided.');
     }
 
-    if (!mascotDecorativeOnDesktop && mascotAlt.trim() === '') {
-      warnOnce(
-        'UniversalHero: mascotAlt should be non-empty when mascotDecorativeOnDesktop is false.',
-      );
+    if (!isDecorativeMedia && resolvedMediaAlt.trim() === '') {
+      warnOnce('UniversalHero: mediaAlt should be non-empty when media is not decorative.');
     }
-  }, [ariaLabel, isValidHeading, mascotAlt, mascotDecorativeOnDesktop]);
+  }, [ariaLabel, isDecorativeMedia, isValidHeading, resolvedMediaAlt]);
 
   return (
     <section
-      className="relative isolate overflow-hidden pt-12 pb-10 sm:pt-14 sm:pb-12 lg:pt-16 lg:pb-14"
+      className="relative isolate overflow-hidden pt-28 pb-10 sm:pt-32 sm:pb-12 lg:pt-36 lg:pb-16"
       aria-label={ariaLabel}
       id={id}
     >
       <div className="pointer-events-none absolute inset-0 -z-20" aria-hidden="true">
         <Image
-          src="/images/herobg.png"
+          src="/images/bg5.webp"
           alt="Purple sky background with clouds"
           fill
           priority
@@ -102,26 +107,10 @@ export function UniversalHero({
           className="object-cover object-center"
         />
       </div>
-      <div
-        className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-white/10 via-white/20 to-white/30"
-        aria-hidden="true"
-      />
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-black/10 via-transparent to-white/15" aria-hidden="true" />
 
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="relative min-[900px]:grid min-[900px]:grid-cols-[minmax(0,1.45fr)_minmax(0,0.55fr)] min-[900px]:items-center min-[900px]:gap-4 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-10">
-          <div className="pointer-events-none absolute -right-6 top-[37.5%] z-0 w-[203px] -translate-y-[80%] min-[420px]:w-[224px] min-[900px]:hidden sm:-translate-y-1/2" aria-hidden="true">
-            <Image
-              src={mascotSrc}
-              alt={mascotDecorativeOnMobile ? '' : mascotAlt}
-              aria-hidden={mascotDecorativeOnMobile ? 'true' : undefined}
-              width={620}
-              height={620}
-              priority
-              sizes="(max-width: 420px) 203px, (max-width: 899px) 224px"
-              className="h-auto w-full"
-            />
-          </div>
-
+        <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-10">
           <div className="relative z-10 w-full min-w-0 text-[#1F1B2E]">
             <p className="hidden w-full max-w-xl flex-wrap items-center justify-center gap-x-3 gap-y-1 rounded-full border border-white/80 bg-white/85 px-4 py-2 text-center text-sm font-semibold shadow-sm backdrop-blur-sm sm:flex sm:w-auto sm:justify-start sm:text-left">
               <RiShieldCheckFill className="h-5 w-5 text-[#7c3aed]" aria-hidden="true" />
@@ -134,7 +123,7 @@ export function UniversalHero({
               </span>
             </p>
 
-            <HeadingTag className="mt-5 max-w-[18ch] pr-24 text-[2.125rem] font-bold leading-[1.1] tracking-tight min-[420px]:pr-28 min-[900px]:pr-0 sm:text-5xl lg:text-6xl">
+            <HeadingTag className="mt-5 max-w-[18ch] text-[2.125rem] font-bold leading-[1.1] tracking-tight sm:text-5xl lg:max-w-none lg:text-6xl">
               <span className="sm:hidden">
                 {hasLegalDocumentsInTitle ? (
                   <>
@@ -163,7 +152,7 @@ export function UniversalHero({
               </span>
             </HeadingTag>
 
-            <p className="mt-4 w-full rounded-xl bg-white/75 px-4 py-3 pr-24 text-lg leading-relaxed text-[#2b253d] backdrop-blur-[2px] min-[420px]:pr-28 min-[900px]:pr-0 sm:max-w-[52ch] sm:rounded-none sm:bg-transparent sm:p-0 sm:pr-0 sm:text-xl sm:backdrop-blur-0">{subtitle}</p>
+            <p className="mt-4 w-full rounded-xl bg-white/75 px-4 py-3 text-lg leading-relaxed text-[#2b253d] backdrop-blur-[2px] sm:max-w-[52ch] sm:rounded-none sm:bg-transparent sm:p-0 sm:text-xl sm:backdrop-blur-0">{subtitle}</p>
 
             <div className="mt-6 flex w-full flex-col gap-3 sm:flex-row sm:items-center">
               <div className="w-full sm:w-auto">
@@ -188,19 +177,16 @@ export function UniversalHero({
             </div>
           </div>
 
-          <div
-            className="relative z-0 hidden justify-center -ml-10 sm:-ml-2 sm:justify-end lg:ml-0 lg:justify-end min-[900px]:flex"
-            aria-hidden={mascotDecorativeOnDesktop ? 'true' : undefined}
-          >
+          <div className="relative z-10 flex justify-center lg:justify-end" aria-hidden={mascotDecorativeOnDesktop ? 'true' : undefined}>
             <Image
-              src={mascotSrc}
-              alt={mascotDecorativeOnDesktop ? '' : mascotAlt}
-              aria-hidden={mascotDecorativeOnDesktop ? 'true' : undefined}
-              width={620}
-              height={620}
-              priority
-              sizes="(max-width: 640px) 320px, (max-width: 1024px) 320px, (max-width: 1280px) 38vw, 620px"
-              className="h-auto w-full max-w-[320px] sm:max-w-[240px] md:max-w-[300px] lg:max-w-[500px] xl:max-w-[560px]"
+              src={resolvedMediaSrc}
+              alt={isDecorativeMedia ? '' : resolvedMediaAlt}
+              aria-hidden={isDecorativeMedia ? 'true' : undefined}
+              width={980}
+              height={650}
+              priority={mediaPriority}
+              sizes="(max-width: 1024px) 92vw, 46vw"
+              className="h-auto w-full max-w-[680px]"
             />
           </div>
         </div>

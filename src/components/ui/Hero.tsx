@@ -64,7 +64,7 @@ export function Hero({
       {variant === 'secondary' && (
         <div className="absolute inset-0 z-0">
           <Image
-            src="/images/herobg.png"
+            src="/images/bg5.webp"
             alt=""
             fill
             className="object-cover object-center"
