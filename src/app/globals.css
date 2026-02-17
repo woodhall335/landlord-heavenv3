@@ -60,7 +60,12 @@ body {
 }
 
 /* Typography defaults for better readability */
-h1, h2, h3, h4, h5, h6 {
+h1:not([class*="text-"]),
+h2:not([class*="text-"]),
+h3:not([class*="text-"]),
+h4:not([class*="text-"]),
+h5:not([class*="text-"]),
+h6:not([class*="text-"]) {
   color: #1A1A1A;
   font-weight: 700;
   line-height: 1.2;
@@ -87,7 +92,7 @@ footer a:hover {
   color: #ffffff !important;
 }
 
-p {
+p:not([class*="text-"]) {
   color: #4A5568; /* gray-600 for body text */
   line-height: 1.6;
 }
