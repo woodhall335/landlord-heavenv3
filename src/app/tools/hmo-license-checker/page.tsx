@@ -1,12 +1,12 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import Link from 'next/link';
+import { UniversalHero } from '@/components/landing/UniversalHero';
+import { HeaderConfig } from '@/components/layout';
 import { Container } from '@/components/ui/Container';
 import councilsData from '@/config/jurisdictions/uk/england/councils.json';
 import { useEmailGate } from '@/hooks/useEmailGate';
 import { ToolEmailGate } from '@/components/ui/ToolEmailGate';
-import { UsageTodayCounter } from '@/components/seo/UsageTodayCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, toolLinks } from '@/lib/seo/internal-links';
 import { PRODUCTS } from '@/lib/pricing/products';
@@ -377,46 +377,25 @@ export default function HMOLicenseChecker() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <HeaderConfig mode="autoOnScroll" />
       <ToolFunnelTracker
         toolName={upsellConfig.toolName}
         toolType={upsellConfig.toolType}
         jurisdiction={upsellConfig.jurisdiction}
       />
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-36">
-        <Container>
-          <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-              <span className="text-sm font-semibold text-primary">Free Tool</span>
-            </div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">HMO License Checker</h1>
-            <p className="text-xl md:text-2xl mb-6 text-gray-600">
-              Check if Your Rental Property Requires HMO Licensing
-            </p>
-            <div className="flex items-baseline justify-center gap-2 mb-8">
-              <span className="text-5xl md:text-6xl font-bold text-gray-900">FREE</span>
-            </div>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              <a
-                href="#checker"
-                className="hero-btn-primary"
-              >
-                Start Free Checker →
-              </a>
-              <Link
-                href="/products/ast"
-                className="hero-btn-secondary"
-              >
-                Get HMO Tenancy Agreement →
-              </Link>
-            </div>
-            <p className="mt-4 text-sm text-gray-600">Instant assessment • HMO guidance • Upgrade for professional agreements</p>
-            <div className="mt-6">
-              <UsageTodayCounter className="mx-auto" />
-            </div>
-          </div>
-        </Container>
-      </section>
+      <UniversalHero
+        badge="Free Tool"
+        title="HMO License Checker"
+        subtitle="Check if Your Rental Property Requires HMO Licensing"
+        align="center"
+        hideMedia
+        showReviewPill={false}
+        showUsageCounter
+        primaryCta={{ label: 'Start Free Checker →', href: '#checker' }}
+        secondaryCta={{ label: 'Get HMO Tenancy Agreement →', href: '/products/ast' }}
+      >
+        <p className="mt-4 text-sm text-white/90">Instant assessment • HMO guidance • Upgrade for professional agreements</p>
+      </UniversalHero>
 
       {/* Legal Disclaimer Banner */}
       <div className="border-b-2 border-warning-500 bg-warning-50 py-4">

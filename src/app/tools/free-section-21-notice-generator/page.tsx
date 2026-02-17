@@ -1,11 +1,11 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import Link from 'next/link';
+import { UniversalHero } from '@/components/landing/UniversalHero';
+import { HeaderConfig } from '@/components/layout';
 import { Container } from '@/components/ui/Container';
 import { useEmailGate } from '@/hooks/useEmailGate';
 import { ToolEmailGate } from '@/components/ui/ToolEmailGate';
-import { UsageTodayCounter } from '@/components/seo/UsageTodayCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, blogLinks, landingPageLinks } from '@/lib/seo/internal-links';
 import { StructuredData, breadcrumbSchema, faqPageSchema } from '@/lib/seo/structured-data';
@@ -302,6 +302,7 @@ export default function FreeSection21Tool() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <HeaderConfig mode="autoOnScroll" />
       <ToolFunnelTracker
         toolName={upsellConfig.toolName}
         toolType={upsellConfig.toolType}
@@ -318,44 +319,22 @@ export default function FreeSection21Tool() {
         ])}
       />
       <StructuredData data={faqPageSchema(faqItems)} />
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-36">
-        <Container>
-          <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-              <span className="text-sm font-semibold text-primary">Free Tool</span>
-            </div>
-            <div className="inline-flex items-center gap-2 rounded-full bg-amber-100 px-4 py-2 text-xs font-semibold text-amber-900 mb-4">
-              England only
-            </div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Create a Section 21 Notice Template (England)</h1>
-            <p className="text-xl md:text-2xl mb-6 text-gray-600">
-              Create a free Section 21 notice template in the official Form 6A format.
-            </p>
-            <div className="flex items-baseline justify-center gap-2 mb-8">
-              <span className="text-5xl md:text-6xl font-bold text-gray-900">FREE</span>
-            </div>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              <a
-                href="#generator"
-                className="hero-btn-primary"
-              >
-                Start Free Generator →
-              </a>
-              <Link
-                href="/products/notice-only?product=section21"
-                className="hero-btn-secondary"
-              >
-                Get Court-Ready Pack — {noticeOnlyPrice}
-              </Link>
-            </div>
-            <p className="mt-4 text-sm text-gray-600">Instant download • Basic template • Upgrade for legal compliance</p>
-            <div className="mt-6">
-              <UsageTodayCounter className="mx-auto" />
-            </div>
-          </div>
-        </Container>
-      </section>
+      <UniversalHero
+        badge="Free Tool"
+        title="Create a Section 21 Notice Template (England)"
+        subtitle="Create a free Section 21 notice template in the official Form 6A format."
+        align="center"
+        hideMedia
+        showReviewPill={false}
+        showUsageCounter
+        primaryCta={{ label: 'Start Free Generator →', href: '#generator' }}
+        secondaryCta={{ label: `Get Court-Ready Pack — ${noticeOnlyPrice}`, href: '/products/notice-only?product=section21' }}
+      >
+        <div className="mt-2 inline-flex items-center gap-2 rounded-full bg-amber-100 px-4 py-2 text-xs font-semibold text-amber-900">
+          England only
+        </div>
+        <p className="mt-4 text-sm text-white/90">Instant download • Basic template • Upgrade for legal compliance</p>
+      </UniversalHero>
 
       {/* Legal Disclaimer Banner */}
       <div className="border-b-2 border-warning-500 bg-warning-50 py-4">

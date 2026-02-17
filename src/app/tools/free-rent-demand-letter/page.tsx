@@ -1,12 +1,12 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import Link from 'next/link';
+import { UniversalHero } from '@/components/landing/UniversalHero';
+import { HeaderConfig } from '@/components/layout';
 import { Container } from '@/components/ui/Container';
 import { RiAlertLine, RiInformationLine, RiExternalLinkLine } from 'react-icons/ri';
 import { useEmailGate } from '@/hooks/useEmailGate';
 import { ToolEmailGate } from '@/components/ui/ToolEmailGate';
-import { UsageTodayCounter } from '@/components/seo/UsageTodayCounter';
 import { ToolFunnelTracker } from '@/components/tools/ToolFunnelTracker';
 import { ToolUpsellCard } from '@/components/tools/ToolUpsellCard';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
@@ -405,58 +405,36 @@ URL.revokeObjectURL(url);
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <HeaderConfig mode="autoOnScroll" />
       <ToolFunnelTracker
         toolName={upsellConfig.toolName}
         toolType={upsellConfig.toolType}
         jurisdiction={upsellConfig.jurisdiction}
       />
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-36">
-        <Container>
-          <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-              <span className="text-sm font-semibold text-primary">Free Tool</span>
-            </div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Rent Demand Letter Generator</h1>
-            <p className="text-xl md:text-2xl mb-6 text-gray-600">
-              Generate a Professional Rent Demand Letter for Unpaid Arrears
-            </p>
-            <div className="flex items-baseline justify-center gap-2 mb-8">
-              <span className="text-5xl md:text-6xl font-bold text-gray-900">FREE</span>
-            </div>
-            <div className="max-w-2xl mx-auto mb-8">
-              <FunnelCta
-                title="Need to recover unpaid rent quickly?"
-                subtitle="Use our money claim service for court-ready paperwork and a clear arrears recovery route."
-                primaryHref="/products/money-claim"
-                primaryText="Recover unpaid rent"
-                primaryDataCta="money-claim"
-                location="above-fold"
-                secondaryLinks={[{ href: '/products/complete-pack', text: "If tenant won't leave / eviction support", dataCta: 'complete-pack' }]}
-              />
-            </div>
-
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              <a
-                href="#generator"
-                className="hero-btn-primary"
-              >
-                Start Free Generator →
-              </a>
-              <Link
-                href="/products/notice-only?product=demand_letter"
-                className="hero-btn-secondary"
-              >
-                Get Court-Ready Version →
-              </Link>
-            </div>
-            <p className="mt-4 text-sm text-gray-600">Instant download • Basic template • Upgrade for legal compliance</p>
-            <div className="mt-6">
-              <UsageTodayCounter className="mx-auto" />
-            </div>
-          </div>
-        </Container>
-      </section>
+      <UniversalHero
+        badge="Free Tool"
+        title="Rent Demand Letter Generator"
+        subtitle="Generate a Professional Rent Demand Letter for Unpaid Arrears"
+        align="center"
+        hideMedia
+        showReviewPill={false}
+        showUsageCounter
+        primaryCta={{ label: 'Start Free Generator →', href: '#generator' }}
+        secondaryCta={{ label: 'Get Court-Ready Version →', href: '/products/notice-only?product=demand_letter' }}
+      >
+        <div className="mx-auto mt-8 max-w-2xl">
+          <FunnelCta
+            title="Need to recover unpaid rent quickly?"
+            subtitle="Use our money claim service for court-ready paperwork and a clear arrears recovery route."
+            primaryHref="/products/money-claim"
+            primaryText="Recover unpaid rent"
+            primaryDataCta="money-claim"
+            location="above-fold"
+            secondaryLinks={[{ href: '/products/complete-pack', text: "If tenant won't leave / eviction support", dataCta: 'complete-pack' }]}
+          />
+        </div>
+        <p className="mt-4 text-sm text-white/90">Instant download • Basic template • Upgrade for legal compliance</p>
+      </UniversalHero>
 
       {/* Legal Disclaimer Banner */}
       <div className="border-b-2 border-warning-500 bg-warning-50 py-4">
