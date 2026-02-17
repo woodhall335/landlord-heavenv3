@@ -10,6 +10,8 @@ import { Container } from '@/components/ui/Container';
 import { RiFileCheckLine, RiAlertLine } from 'react-icons/ri';
 import { getCanonicalUrl } from '@/lib/seo';
 import { AskHeavenWidget } from '@/components/ask-heaven/AskHeavenWidget';
+import { UniversalHero } from '@/components/landing/UniversalHero';
+import { HeaderConfig } from '@/components/layout';
 
 export const metadata: Metadata = {
   title: 'Eviction Notice Validity Checker | Check Your Notice is Valid',
@@ -56,25 +58,21 @@ const validators = [
 export default function ValidatorsHubPage() {
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-20">
-        <Container>
-          <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-              <span className="text-sm font-semibold text-primary">Free Tools</span>
-            </div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">
-              Eviction Notice Validity Checker
-            </h1>
-            <p className="text-xl md:text-2xl mb-6 text-gray-600">
-              Upload your notices and documents for instant AI-powered validation
-            </p>
-            <p className="text-sm text-gray-500">
-              Get instant feedback on blockers, warnings, and next steps
-            </p>
-          </div>
-        </Container>
-      </section>
+      <HeaderConfig mode="autoOnScroll" />
+      <UniversalHero
+        badge="Free Tools"
+        title="Eviction Notice Validity Checker"
+        subtitle={
+          <>
+            Upload your notices and documents for instant AI-powered validation
+            <span className="mt-2 block text-sm text-white/75">Get instant feedback on blockers, warnings, and next steps</span>
+          </>
+        }
+        align="center"
+        hideMedia
+        showReviewPill={false}
+        showUsageCounter={false}
+      />
 
       {/* Disclaimer Banner */}
       <div className="border-b-2 border-warning-500 bg-warning-50 py-4">

@@ -2,11 +2,12 @@
 
 import React, { useMemo, useState, useCallback } from 'react';
 import Link from 'next/link';
+import { UniversalHero } from '@/components/landing/UniversalHero';
+import { HeaderConfig } from '@/components/layout';
 import { Button, Card, Container, Input } from '@/components/ui';
 import { RiAlertLine } from 'react-icons/ri';
 import { useEmailGate } from '@/hooks/useEmailGate';
 import { ToolEmailGate } from '@/components/ui/ToolEmailGate';
-import { UsageTodayCounter } from '@/components/seo/UsageTodayCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, blogLinks, toolLinks, landingPageLinks } from '@/lib/seo/internal-links';
 import { ToolFunnelTracker } from '@/components/tools/ToolFunnelTracker';
@@ -365,46 +366,25 @@ link.href = url;
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <HeaderConfig mode="autoOnScroll" />
       <ToolFunnelTracker
         toolName={upsellConfig.toolName}
         toolType={upsellConfig.toolType}
         jurisdiction={upsellConfig.jurisdiction}
       />
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-36">
-        <Container>
-          <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-              <span className="text-sm font-semibold text-primary">Free Tool</span>
-            </div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Rent Arrears Calculator</h1>
-            <p className="text-xl md:text-2xl mb-6 text-gray-600">
-              Calculate Outstanding Rent and Statutory Interest
-            </p>
-            <div className="flex items-baseline justify-center gap-2 mb-8">
-              <span className="text-5xl md:text-6xl font-bold text-gray-900">FREE</span>
-            </div>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              <a
-                href="#calculator"
-                className="hero-btn-primary"
-              >
-                Start Free Calculator →
-              </a>
-              <Link
-                href="/products/money-claim"
-                className="hero-btn-secondary"
-              >
-                Upgrade to Money Claim Pack →
-              </Link>
-            </div>
-            <p className="mt-4 text-sm text-gray-600">Instant calculation • Professional summary • Upgrade for court claims</p>
-            <div className="mt-6">
-              <UsageTodayCounter className="mx-auto" />
-            </div>
-          </div>
-        </Container>
-      </section>
+      <UniversalHero
+        badge="Free Tool"
+        title="Rent Arrears Calculator"
+        subtitle="Calculate Outstanding Rent and Statutory Interest"
+        align="center"
+        hideMedia
+        showReviewPill={false}
+        showUsageCounter
+        primaryCta={{ label: 'Start Free Calculator →', href: '#calculator' }}
+        secondaryCta={{ label: 'Upgrade to Money Claim Pack →', href: '/products/money-claim' }}
+      >
+        <p className="mt-4 text-sm text-white/90">Instant calculation • Professional summary • Upgrade for court claims</p>
+      </UniversalHero>
 
       <Container className="py-12 space-y-8">
         <Card id="calculator" padding="large">
