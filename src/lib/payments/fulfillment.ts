@@ -375,7 +375,8 @@ export async function fulfillOrder({
         orderId,
         { fulfillment_status: 'failed' },
         {
-          validation: 'tenancy_required_fields_missing',
+          validation: 'incomplete',
+          tenancy_validation_code: 'tenancy_required_fields_missing',
           missing_fields: missingTenancyFields,
           last_attempt: new Date().toISOString(),
           error: safeFailureMessage,

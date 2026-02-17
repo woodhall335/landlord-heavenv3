@@ -288,6 +288,20 @@ describe('OrderMetadata type', () => {
     expect(metadata['custom_field']).toBe('custom_value');
     expect(metadata['another_field']).toBe(123);
   });
+
+  it('supports tenancy validation details while keeping validation in union', () => {
+    const metadata: OrderMetadata = {
+      validation: 'incomplete',
+      tenancy_validation_code: 'tenancy_required_fields_missing',
+      missing_fields: ['tenant_name'],
+      invalid_fields: ['tenancy_start_date'],
+    };
+
+    expect(metadata.validation).toBe('incomplete');
+    expect(metadata.tenancy_validation_code).toBe('tenancy_required_fields_missing');
+    expect(metadata.missing_fields).toEqual(['tenant_name']);
+    expect(metadata.invalid_fields).toEqual(['tenancy_start_date']);
+  });
 });
 
 describe('Backward Compatibility', () => {
