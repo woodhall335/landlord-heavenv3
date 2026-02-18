@@ -14,6 +14,10 @@ import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { RiFileTextLine, RiDownloadLine, RiDeleteBinLine } from 'react-icons/ri';
 import { downloadDocument } from '@/lib/documents/download';
+import {
+  getDashboardDocumentCategory,
+  getDashboardDocumentTitle,
+} from '@/lib/documents/dashboard-document-display';
 
 interface Document {
   id: string;
@@ -41,6 +45,7 @@ export default function DocumentsPage() {
   const [sortBy, setSortBy] = useState<SortBy>('newest');
   const [showPreviewOnly, setShowPreviewOnly] = useState(false);
   const [downloadingDocId, setDownloadingDocId] = useState<string | null>(null);
+  const [fetchError, setFetchError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchDocuments();
@@ -59,9 +64,13 @@ export default function DocumentsPage() {
       if (response.ok) {
         const data = await response.json();
         setDocuments(data.documents || []);
+        setFetchError(null);
+      } else {
+        setFetchError('We could not load your documents right now. Please refresh and try again.');
       }
     } catch (error) {
       console.error('Failed to fetch documents:', error);
+      setFetchError('We could not load your documents right now. Please refresh and try again.');
     } finally {
       setIsLoading(false);
     }
@@ -72,7 +81,7 @@ export default function DocumentsPage() {
 
     // Apply type filter
     if (filterType !== 'all') {
-      filtered = filtered.filter((doc) => doc.document_type === filterType);
+      filtered = filtered.filter((doc) => getDashboardDocumentCategory(doc.document_type) === filterType);
     }
 
     // Apply preview filter
@@ -105,15 +114,6 @@ export default function DocumentsPage() {
       hour: '2-digit',
       minute: '2-digit',
     });
-  };
-
-  const getDocumentTypeLabel = (type: string): string => {
-    const labels: Record<string, string> = {
-      eviction: 'Eviction Notice',
-      money_claim: 'Money Claim',
-      tenancy_agreement: 'Tenancy Agreement',
-    };
-    return labels[type] || type;
   };
 
   const handleDownload = async (doc: Document) => {
@@ -190,6 +190,12 @@ export default function DocumentsPage() {
 
       <Container size="large" className="py-8">
         {/* Filters and Sorting */}
+        {fetchError && (
+          <Card padding="medium" className="mb-6 border border-red-200 bg-red-50">
+            <p className="text-sm text-red-700">{fetchError}</p>
+          </Card>
+        )}
+
         <Card padding="medium" className="mb-6">
           <div className="space-y-4">
             {/* Type Filter */}
@@ -303,7 +309,7 @@ export default function DocumentsPage() {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
                         <h3 className="text-lg font-semibold text-charcoal truncate">
-                          {doc.document_title}
+                          {doc.document_title || getDashboardDocumentTitle(doc.document_type)}
                         </h3>
                         {doc.is_preview && (
                           <Badge variant="warning" size="small">
@@ -327,7 +333,7 @@ export default function DocumentsPage() {
                         </p>
                       ) : (
                         <p className="text-sm text-gray-600 mb-2">
-                          {getDocumentTypeLabel(doc.document_type)}
+                          {getDashboardDocumentTitle(doc.document_type)}
                         </p>
                       )}
                       <div className="text-xs text-gray-500">
@@ -357,8 +363,13 @@ export default function DocumentsPage() {
                         ) : (
                           <RiDownloadLine className="w-4 h-4 mr-1 text-[#7C3AED]" />
                         )}
-                        {downloadingDocId === doc.id ? 'Loading...' : 'Download'}
+                        {downloadingDocId === doc.id ? 'Loading...' : 'View / Download'}
                       </Button>
+                    )}
+                    {!doc.pdf_url && (
+                      <Badge variant="warning" size="small">
+                        File unavailable
+                      </Badge>
                     )}
                     <button
                       onClick={() => handleDelete(doc.id)}
