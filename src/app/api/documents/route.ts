@@ -54,16 +54,35 @@ export async function GET(request: Request) {
     const isPreviewParam = searchParams.get('is_preview');
     const latestPerTypeParam = searchParams.get('latest_per_type');
 
+    // Collect case ownership context so documents remain visible even when
+    // legacy/generated rows have null/mismatched user_id.
+    const { data: ownedCases } = await supabase
+      .from('cases')
+      .select('id')
+      .eq('user_id', user.id);
+
+    const ownedCaseIds = (ownedCases || []).map((c) => c.id);
+
     // Build query
     let query = supabase
       .from('documents')
       .select('*')
-      .eq('user_id', user.id)
       .order('created_at', { ascending: false });
 
     // Apply filters
     if (caseId) {
+      // Strong access control for case-scoped reads
+      if (!ownedCaseIds.includes(caseId)) {
+        return NextResponse.json({ error: 'Case not found' }, { status: 404 });
+      }
+
       query = query.eq('case_id', caseId);
+    } else if (ownedCaseIds.length > 0) {
+      // Dashboard: include documents directly owned by user OR attached to owned cases.
+      query = query.or(`user_id.eq.${user.id},case_id.in.(${ownedCaseIds.join(',')})`);
+    } else {
+      // User has no cases: keep direct ownership filter only.
+      query = query.eq('user_id', user.id);
     }
 
     if (documentType) {

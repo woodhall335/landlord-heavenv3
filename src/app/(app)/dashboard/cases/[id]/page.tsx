@@ -27,6 +27,7 @@ import type { PackItem } from '@/lib/products';
 import { formatEditWindowEndDate } from '@/lib/payments/edit-window';
 import { deriveDisplayStatus } from '@/lib/case-status';
 import { validateUrlProduct, type CanonicalJurisdiction } from '@/lib/tenancy/product-normalization';
+import { doesDocumentTypeMatch, getDashboardDocumentTitle } from '@/lib/documents/dashboard-document-display';
 
 interface CaseDetails {
   id: string;
@@ -1528,7 +1529,7 @@ export default function CaseDetailPage() {
                     <ul className="grid grid-cols-1 md:grid-cols-2 gap-1 text-sm text-purple-800">
                       {packContents.slice(0, 10).map((item) => {
                         const docExists = documents.some(
-                          (d) => d.document_type === item.key && !d.is_preview
+                          (d) => doesDocumentTypeMatch(item.key, d.document_type) && !d.is_preview
                         );
                         return (
                           <li key={item.key} className="flex items-center gap-2">
@@ -1585,7 +1586,7 @@ export default function CaseDetailPage() {
                           </div>
                           <div className="flex-1 min-w-0">
                             <div className="font-medium text-charcoal truncate">
-                              {doc.document_title}
+                              {doc.document_title || getDashboardDocumentTitle(doc.document_type)}
                             </div>
                             <div className="text-xs text-gray-500">
                               {formatDate(doc.created_at)}
@@ -1614,6 +1615,11 @@ export default function CaseDetailPage() {
                                 </>
                               )}
                             </button>
+                          )}
+                          {!doc.pdf_url && (
+                            <Badge variant="warning" size="small">
+                              File unavailable
+                            </Badge>
                           )}
                         </div>
                       </div>
