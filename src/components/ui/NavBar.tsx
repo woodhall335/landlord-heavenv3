@@ -131,7 +131,6 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
   const textClass = isSolid ? 'text-[#111827]' : 'text-white';
   const secondaryTextClass = isSolid ? 'text-gray-700' : 'text-white';
   const hoverTextClass = isSolid ? 'hover:text-[#692ED4]' : 'hover:text-white hover:opacity-80 focus:text-white focus:opacity-80';
-  const logoSrc = isSolid ? '/images/logo.png' : '/images/logo2.png';
 
   const handleLogout = async () => {
     setIsLoggingOut(true);
@@ -158,12 +157,13 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-8">
         <Link href="/" className="flex items-center hover:opacity-80 transition-opacity">
           <Image
-            src={logoSrc}
-            alt="Landlord Heaven - Legal Documents for Landlords"
-            width={280}
-            height={50}
+            src={isSolid ? "/images/logo.png" : "/images/logo2.png"}
+            alt="Landlord Heaven"
+            width={160}
+            height={40}
             priority
-            className="h-10 w-auto"
+            sizes="160px"
+            className="h-8 w-auto"
           />
         </Link>
 
