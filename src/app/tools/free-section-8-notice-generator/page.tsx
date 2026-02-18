@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo } from 'react';
+import { Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { HeaderConfig } from '@/components/layout';
@@ -34,7 +35,7 @@ const faqItems = [
   },
 ];
 
-export default function FreeSection8Tool() {
+function FreeSection8ToolInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -113,5 +114,13 @@ export default function FreeSection8Tool() {
         ]}
       />
     </div>
+  );
+}
+
+export default function FreeSection8Tool() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gray-50" />}>
+      <FreeSection8ToolInner />
+    </Suspense>
   );
 }
