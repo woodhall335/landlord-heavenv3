@@ -1,312 +1,67 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useEffect, useMemo } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { HeaderConfig } from '@/components/layout';
 import { Container } from '@/components/ui/Container';
-import { useEmailGate } from '@/hooks/useEmailGate';
-import { ToolEmailGate } from '@/components/ui/ToolEmailGate';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, blogLinks, landingPageLinks } from '@/lib/seo/internal-links';
 import { StructuredData, breadcrumbSchema, faqPageSchema } from '@/lib/seo/structured-data';
-import { PRODUCTS } from '@/lib/pricing/products';
 import { ToolFunnelTracker } from '@/components/tools/ToolFunnelTracker';
-import { ToolUpsellCard } from '@/components/tools/ToolUpsellCard';
+import WizardFlowPage from '@/app/(app)/wizard/flow/page';
 
-// SEO Metadata (exported from separate metadata.ts file for client components)
-// See: src/app/tools/free-section-21-notice-generator/metadata.ts
+const REQUIRED_PARAMS = {
+  type: 'eviction',
+  jurisdiction: 'england',
+  product: 'notice_only',
+  src: 'product_page',
+  topic: 'eviction',
+} as const;
 
 const faqItems = [
   {
-    question: 'Is this Section 21 generator free to use?',
-    answer:
-      'Yes. This tool generates a free Section 21 template for England so you can preview the format before upgrading.',
+    question: 'What does this Section 21 tool do?',
+    answer: 'It guides you through the details needed to build a Section 21 notice preview.',
   },
   {
-    question: 'Is this template court-ready?',
-    answer:
-      'The free template is a basic preview only. The paid pack includes court-ready formatting and compliance checks.',
+    question: 'How long does it take?',
+    answer: 'Most landlords can complete the guided flow in a few minutes.',
   },
   {
-    question: 'Which form does this create?',
-    answer:
-      'It creates a Section 21 notice in the prescribed Form 6A format used in England.',
-  },
-  {
-    question: 'Can I use this for Wales or Scotland?',
-    answer:
-      'No. Section 21 notices apply to England only. Wales and Scotland use different notice types.',
-  },
-  {
-    question: 'What do I need to serve a valid Section 21 notice?',
-    answer:
-      'You must follow Form 6A requirements, provide required compliance documents, and give the correct notice period. The paid pack guides you through these steps.',
-  },
-  {
-    question: 'Can I regenerate if I make a mistake?',
-    answer:
-      'Yes. You can edit your details and regenerate the template at any time.',
+    question: 'Can I review details before finalising?',
+    answer: 'Yes. You can preview and review your notice details before proceeding further.',
   },
 ];
 
 export default function FreeSection21Tool() {
-  const [formData, setFormData] = useState({
-    landlordName: '',
-    tenantName: '',
-    propertyAddress: '',
-    noticeDate: '',
-  });
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
-  const noticeOnlyPrice = PRODUCTS.notice_only.displayPrice;
-  const upsellConfig = {
-    toolName: 'Free Section 21 Notice Generator',
-    toolType: 'generator' as const,
-    productName: 'Notice Only Pack',
-    ctaLabel: `Upgrade to court-ready pack — ${noticeOnlyPrice}`,
-    ctaHref: '/products/notice-only?product=section21',
-    jurisdiction: 'england',
-    jurisdictionLabel: 'England only',
-    freeIncludes: [
-      'Basic Section 21 template preview',
-      'Manual completion only',
-      'No court validation checks',
-    ],
-    paidIncludes: [
-      'Court-ready Form 6A notice',
-      'Compliance checklist and serving steps',
-      'Evidence-ready pack for court',
-    ],
-  };
+  const needsParamUpdate = useMemo(() => {
+    return Object.entries(REQUIRED_PARAMS).some(
+      ([key, value]) => searchParams.get(key) !== value
+    );
+  }, [searchParams]);
 
-  // PDF generation function (called after email captured)
-  const generatePDF = useCallback(async () => {
-    setIsGenerating(true);
+  useEffect(() => {
+    if (!needsParamUpdate) return;
 
-    try {
-      // Import pdf-lib dynamically (client-side only)
-      const { PDFDocument, rgb, StandardFonts } = await import('pdf-lib');
+    const next = new URLSearchParams(searchParams.toString());
+    Object.entries(REQUIRED_PARAMS).forEach(([key, value]) => {
+      next.set(key, value);
+    });
 
-      // Create a new PDF document
-      const pdfDoc = await PDFDocument.create();
-      const page = pdfDoc.addPage([595, 842]); // A4 size in points
-      const { width, height } = page.getSize();
-
-      // Load fonts
-      const boldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
-      const regularFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
-
-      let yPosition = height - 80;
-
-      // Title
-      page.drawText('SECTION 21 NOTICE', {
-        x: 50,
-        y: yPosition,
-        size: 20,
-        font: boldFont,
-        color: rgb(0, 0, 0),
-      });
-      yPosition -= 25;
-
-      page.drawText('Housing Act 1988 Section 21(1)(b) or Section 21(4)(a)', {
-        x: 50,
-        y: yPosition,
-        size: 10,
-        font: regularFont,
-        color: rgb(0.3, 0.3, 0.3),
-      });
-      yPosition -= 40;
-
-      // From section
-      page.drawText('From (Landlord):', {
-        x: 50,
-        y: yPosition,
-        size: 12,
-        font: boldFont,
-        color: rgb(0, 0, 0),
-      });
-      yPosition -= 20;
-
-      page.drawText(formData.landlordName || '[Landlord Name]', {
-        x: 50,
-        y: yPosition,
-        size: 11,
-        font: regularFont,
-        color: rgb(0, 0, 0),
-      });
-      yPosition -= 35;
-
-      // To section
-      page.drawText('To (Tenant):', {
-        x: 50,
-        y: yPosition,
-        size: 12,
-        font: boldFont,
-        color: rgb(0, 0, 0),
-      });
-      yPosition -= 20;
-
-      page.drawText(formData.tenantName || '[Tenant Name]', {
-        x: 50,
-        y: yPosition,
-        size: 11,
-        font: regularFont,
-        color: rgb(0, 0, 0),
-      });
-      yPosition -= 35;
-
-      // Property address section
-      page.drawText('Property Address:', {
-        x: 50,
-        y: yPosition,
-        size: 12,
-        font: boldFont,
-        color: rgb(0, 0, 0),
-      });
-      yPosition -= 20;
-
-      const addressLines = (formData.propertyAddress || '[Property Address]').split('\n');
-      addressLines.forEach((line) => {
-        page.drawText(line, {
-          x: 50,
-          y: yPosition,
-          size: 11,
-          font: regularFont,
-          color: rgb(0, 0, 0),
-        });
-        yPosition -= 18;
-      });
-      yPosition -= 20;
-
-      // Notice text
-      page.drawText('NOTICE REQUIRING POSSESSION', {
-        x: 50,
-        y: yPosition,
-        size: 14,
-        font: boldFont,
-        color: rgb(0, 0, 0),
-      });
-      yPosition -= 30;
-
-      const noticeText = [
-        'I/We give you notice that I/we require possession of the property known as the above address',
-        'which you hold as tenant.',
-        '',
-        `I/We require you to leave the property after: ${formData.noticeDate || '[Notice Date]'}`,
-        '',
-        'This notice is given under Section 21 of the Housing Act 1988.',
-      ];
-
-      noticeText.forEach((line) => {
-        if (line === '') {
-          yPosition -= 10;
-        } else {
-          const words = line.split(' ');
-          let currentLine = '';
-          words.forEach((word) => {
-            const testLine = currentLine + word + ' ';
-            if (testLine.length * 6 > width - 100) {
-              page.drawText(currentLine.trim(), {
-                x: 50,
-                y: yPosition,
-                size: 11,
-                font: regularFont,
-                color: rgb(0, 0, 0),
-              });
-              yPosition -= 18;
-              currentLine = word + ' ';
-            } else {
-              currentLine = testLine;
-            }
-          });
-          if (currentLine.trim()) {
-            page.drawText(currentLine.trim(), {
-              x: 50,
-              y: yPosition,
-              size: 11,
-              font: regularFont,
-              color: rgb(0, 0, 0),
-            });
-            yPosition -= 18;
-          }
-        }
-      });
-
-      yPosition -= 40;
-
-      // Signature section
-      page.drawText('Signed: _______________________________', {
-        x: 50,
-        y: yPosition,
-        size: 11,
-        font: regularFont,
-        color: rgb(0, 0, 0),
-      });
-      yPosition -= 30;
-
-      page.drawText(`Date: ${new Date().toLocaleDateString('en-GB')}`, {
-        x: 50,
-        y: yPosition,
-        size: 11,
-        font: regularFont,
-        color: rgb(0, 0, 0),
-      });
-
-      // Add footer
-      page.drawText('www.LandlordHeaven.co.uk', {
-        x: 50,
-        y: 50,
-        size: 8,
-        font: regularFont,
-        color: rgb(0.5, 0.5, 0.5),
-      });
-
-      // Serialize the PDF to bytes
-      const pdfBytes = await pdfDoc.save();
-
-      // Create a blob and download
-      const blob = new Blob([new Uint8Array(pdfBytes)], { type: 'application/pdf' });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `Section-21-Notice-FREE-${Date.now()}.pdf`;
-      link.click();
-      URL.revokeObjectURL(url);
-
-      setShowUpgradePrompt(true);
-      setIsGenerating(false);
-    } catch (error) {
-      console.error('PDF generation failed:', error);
-      setIsGenerating(false);
-      alert('Failed to generate PDF. Please try again.');
-    }
-  }, [formData]);
-
-  // Email gate hook - requires email before PDF download
-  const gate = useEmailGate({
-    source: 'tool:section-21-generator',
-    onProceed: generatePDF,
-  });
-
-  // Handler that checks gate before generating
-  const handleGenerate = () => {
-    gate.checkGateAndProceed();
-  };
-
-  const isFormValid =
-    formData.landlordName &&
-    formData.tenantName &&
-    formData.propertyAddress &&
-    formData.noticeDate;
+    router.replace(`?${next.toString()}`, { scroll: false });
+  }, [needsParamUpdate, router, searchParams]);
 
   return (
     <div className="min-h-screen bg-gray-50">
       <HeaderConfig mode="autoOnScroll" />
       <ToolFunnelTracker
-        toolName={upsellConfig.toolName}
-        toolType={upsellConfig.toolType}
-        jurisdiction={upsellConfig.jurisdiction}
+        toolName="Section 21 Notice Generator"
+        toolType="generator"
+        jurisdiction="england"
       />
       <StructuredData
         data={breadcrumbSchema([
@@ -319,261 +74,34 @@ export default function FreeSection21Tool() {
         ])}
       />
       <StructuredData data={faqPageSchema(faqItems)} />
+
       <UniversalHero
-        badge="Free Tool"
-        title="Create a Section 21 Notice Template (England)"
-        subtitle="Create a free Section 21 notice template in the official Form 6A format."
+        title="Section 21 Notice Generator"
+        subtitle="Create a compliant Section 21 notice preview in minutes."
         align="center"
         hideMedia
         showReviewPill={false}
         showUsageCounter
-        primaryCta={{ label: 'Start Free Generator →', href: '#generator' }}
-        secondaryCta={{ label: `Get Court-Ready Pack — ${noticeOnlyPrice}`, href: '/products/notice-only?product=section21' }}
-      >
-        <div className="mt-2 inline-flex items-center gap-2 rounded-full bg-amber-100 px-4 py-2 text-xs font-semibold text-amber-900">
-          England only
-        </div>
-        <p className="mt-4 text-sm text-white/90">Instant download • Basic template • Upgrade for legal compliance</p>
-      </UniversalHero>
+        primaryCta={{ label: 'Start now', href: '#generator' }}
+      />
 
-      {/* Legal Disclaimer Banner */}
-      <div className="border-b-2 border-warning-500 bg-warning-50 py-4">
+      <div className="py-20 md:py-24" id="generator">
         <Container>
-          <div className="flex items-start gap-3">
-            <svg
-              className="mt-1 h-6 w-6 shrink-0 text-warning-700"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              aria-hidden="true"
-            >
-              <path
-                fillRule="evenodd"
-                d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z"
-                clipRule="evenodd"
-              />
-            </svg>
-            <div>
-              <p className="text-sm font-semibold text-warning-900">
-                Legal Disclaimer
-              </p>
-              <p className="text-sm text-warning-800">
-                This free version is not court-ready and is provided for general informational use only. It is not legal advice. For legally validated, court-ready documents, upgrade to the paid version.
-              </p>
-            </div>
+          <div className="mx-auto max-w-5xl space-y-8">
+            <section className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
+              <h2 className="text-2xl font-bold text-gray-900">How it works</h2>
+              <ol className="mt-4 list-decimal space-y-2 pl-5 text-sm text-gray-700">
+                <li>Start now and answer a few questions</li>
+                <li>Preview your notice instantly</li>
+                <li>Unlock the final version when you&apos;re ready</li>
+              </ol>
+            </section>
+
+            {!needsParamUpdate && <WizardFlowPage />}
           </div>
         </Container>
       </div>
 
-      {/* Main Content */}
-      <div className="py-20 md:py-24">
-        <Container>
-          <div className="max-w-4xl mx-auto">
-            <div id="generator" className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
-              <h2 className="mb-6 text-2xl font-bold text-gray-900">
-                Generate Your Section 21 Notice
-              </h2>
-
-      <form className="space-y-6">
-        {/* Landlord Name */}
-        <div>
-          <label
-            htmlFor="landlordName"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Landlord Name <span className="text-error-500">*</span>
-          </label>
-          <input
-            type="text"
-            id="landlordName"
-            value={formData.landlordName}
-            onChange={(e) =>
-              setFormData({ ...formData, landlordName: e.target.value })
-            }
-            className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-3 transition-all focus:border-primary-500 focus:ring-4 focus:ring-primary-200"
-            placeholder="Your full legal name"
-          />
-        </div>
-
-        {/* Tenant Name */}
-        <div>
-          <label
-            htmlFor="tenantName"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Tenant Name <span className="text-error-500">*</span>
-          </label>
-          <input
-            type="text"
-            id="tenantName"
-            value={formData.tenantName}
-            onChange={(e) =>
-              setFormData({ ...formData, tenantName: e.target.value })
-            }
-            className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-3 transition-all focus:border-primary-500 focus:ring-4 focus:ring-primary-200"
-            placeholder="Tenant's full name"
-          />
-        </div>
-
-        {/* Property Address */}
-        <div>
-          <label
-            htmlFor="propertyAddress"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Property Address <span className="text-error-500">*</span>
-          </label>
-          <textarea
-            id="propertyAddress"
-            value={formData.propertyAddress}
-            onChange={(e) =>
-              setFormData({ ...formData, propertyAddress: e.target.value })
-            }
-            rows={3}
-            className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-3 transition-all focus:border-primary-500 focus:ring-4 focus:ring-primary-200"
-            placeholder="Full property address including postcode"
-          />
-        </div>
-
-        {/* Notice Date */}
-        <div>
-          <label
-            htmlFor="noticeDate"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Notice Date <span className="text-error-500">*</span>
-          </label>
-          <input
-            type="date"
-            id="noticeDate"
-            value={formData.noticeDate}
-            onChange={(e) =>
-              setFormData({ ...formData, noticeDate: e.target.value })
-            }
-            className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-3 transition-all focus:border-primary-500 focus:ring-4 focus:ring-primary-200"
-          />
-          <p className="mt-1 text-xs text-gray-500">
-            The notice period starts from this date
-          </p>
-        </div>
-
-        {/* Generate Button */}
-        <button
-          type="button"
-          onClick={handleGenerate}
-          disabled={!isFormValid || isGenerating}
-          className="hero-btn-primary w-full disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          {isGenerating
-            ? 'Generating...'
-            : 'Generate Free Notice'}
-        </button>
-        {showUpgradePrompt && (
-          <div className="mt-6">
-            <ToolUpsellCard {...upsellConfig} />
-          </div>
-        )}
-      </form>
-
-      {/* Comparison Table */}
-      <div className="mt-12 rounded-xl border border-gray-200 bg-gray-50 p-6">
-        <h3 className="mb-4 text-xl font-semibold text-gray-900">
-          Free vs Court-Ready Comparison
-        </h3>
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead>
-              <tr className="border-b border-gray-300">
-                <th className="pb-3 text-left text-sm font-medium text-gray-600">
-                  Feature
-                </th>
-                <th className="pb-3 text-center text-sm font-medium text-gray-600">
-                  Free
-                </th>
-                <th className="pb-3 text-center text-sm font-medium text-gray-600">
-                  {noticeOnlyPrice}
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200">
-              <tr>
-                <td className="py-3 text-sm text-gray-700">Basic template</td>
-                <td className="text-center">✓</td>
-                <td className="text-center">✓</td>
-              </tr>
-              <tr>
-                <td className="py-3 text-sm text-gray-700">
-                  Court-ready formatting
-                </td>
-                <td className="text-center text-gray-400">✗</td>
-                <td className="text-center text-success-600">✓</td>
-              </tr>
-              <tr>
-                <td className="py-3 text-sm text-gray-700">
-                  Deposit protection checks
-                </td>
-                <td className="text-center text-gray-400">✗</td>
-                <td className="text-center text-success-600">✓</td>
-              </tr>
-              <tr>
-                <td className="py-3 text-sm text-gray-700">
-                  Prescribed info verification
-                </td>
-                <td className="text-center text-gray-400">✗</td>
-                <td className="text-center text-success-600">✓</td>
-              </tr>
-              <tr>
-                <td className="py-3 text-sm text-gray-700">
-                  Ask Heaven AI optimization
-                </td>
-                <td className="text-center text-gray-400">✗</td>
-                <td className="text-center text-success-600">✓</td>
-              </tr>
-              <tr>
-                <td className="py-3 text-sm text-gray-700">
-                  Red flag detection
-                </td>
-                <td className="text-center text-gray-400">✗</td>
-                <td className="text-center text-success-600">✓</td>
-              </tr>
-              <tr>
-                <td className="py-3 text-sm text-gray-700">
-                  Watermark
-                </td>
-                <td className="text-center text-warning-600">Yes</td>
-                <td className="text-center text-success-600">No</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div className="mt-10">
-        <ToolUpsellCard {...upsellConfig} />
-      </div>
-
-              {/* Educational Content */}
-              <div className="mt-8 rounded-xl bg-primary-50 p-6">
-                <h3 className="mb-3 text-lg font-semibold text-gray-900">
-                  What is a Section 21 Notice?
-                </h3>
-                <p className="text-sm text-gray-700 leading-relaxed">
-                  A Section 21 notice is a formal notice used by landlords in England
-                  to end an assured shorthold tenancy (AST) without providing a specific
-                  reason. It requires at least 2 months' notice and must comply with
-                  strict legal requirements to be valid.
-                </p>
-                <p className="mt-3 text-sm font-semibold text-primary-600">
-                  ⚠️ Important: A Section 21 notice can be invalidated if you haven't
-                  protected the deposit correctly or provided prescribed information.
-                  Our paid version includes these critical checks.
-                </p>
-              </div>
-            </div>
-          </div>
-        </Container>
-      </div>
-
-      {/* Related Resources */}
       <RelatedLinks
         title="Related Resources"
         links={[
@@ -584,16 +112,6 @@ export default function FreeSection21Tool() {
           landingPageLinks.section21Template,
         ]}
       />
-
-      {/* Email Gate Modal */}
-      {gate.showGate && (
-        <ToolEmailGate
-          toolName="Section 21 Notice"
-          source={gate.source}
-          onEmailCaptured={gate.handleSuccess}
-          onClose={gate.handleClose}
-        />
-      )}
     </div>
   );
 }
