@@ -55,7 +55,7 @@ describe('NextBestActionCard - Eviction Topic', () => {
     );
 
     expect(screen.getByText('Next best step')).toBeInTheDocument();
-    expect(screen.getByText('Serve an Eviction Notice')).toBeInTheDocument();
+    expect(screen.getByText('Generate a Section 21 or Section 8 Notice')).toBeInTheDocument();
     expect(screen.getByText(/Create a compliant Section 21 or Section 8 notice/i)).toBeInTheDocument();
   });
 
@@ -69,7 +69,7 @@ describe('NextBestActionCard - Eviction Topic', () => {
       />
     );
 
-    expect(screen.getByText('Serve a Section 173 Notice')).toBeInTheDocument();
+    expect(screen.getByText('Generate a Section 173 Notice')).toBeInTheDocument();
     expect(screen.getByText(/renting homes act/i)).toBeInTheDocument();
   });
 
@@ -83,7 +83,7 @@ describe('NextBestActionCard - Eviction Topic', () => {
       />
     );
 
-    expect(screen.getByText('Serve a Notice to Leave')).toBeInTheDocument();
+    expect(screen.getByText('Generate a Notice to Leave')).toBeInTheDocument();
     expect(screen.getByText(/prt tenancies/i)).toBeInTheDocument();
   });
 
@@ -133,7 +133,7 @@ describe('NextBestActionCard - Arrears Topic', () => {
     );
 
     expect(screen.getByText('Next best step')).toBeInTheDocument();
-    expect(screen.getByText('Money Claim Pack')).toBeInTheDocument();
+    expect(screen.getByText('Start a Money Claim')).toBeInTheDocument();
   });
 
   it('renders Notice to Leave for Scotland arrears (money claim not available)', () => {
@@ -149,8 +149,8 @@ describe('NextBestActionCard - Arrears Topic', () => {
     );
 
     // Should show Notice to Leave, not money claim
-    expect(screen.getByText('Notice to Leave')).toBeInTheDocument();
-    expect(screen.getByText(/rent arrears under PRT/i)).toBeInTheDocument();
+    expect(screen.getByText('Generate a Notice to Leave')).toBeInTheDocument();
+    expect(screen.getByText(/PRT tenancies in Scotland/i)).toBeInTheDocument();
   });
 
   it('shows Northern Ireland info notice for arrears', () => {
@@ -198,7 +198,7 @@ describe('NextBestActionCard - Tenancy Topic', () => {
     );
 
     expect(screen.getByText('Next best step')).toBeInTheDocument();
-    expect(screen.getByText('Create a Tenancy Agreement')).toBeInTheDocument();
+    expect(screen.getByText('Create an AST Tenancy Agreement')).toBeInTheDocument();
     expect(screen.getByText(/Assured Shorthold Tenancy/i)).toBeInTheDocument();
   });
 
