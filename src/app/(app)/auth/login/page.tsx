@@ -11,10 +11,10 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import Image from 'next/image';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { getSupabaseBrowserClient } from '@/lib/supabase/client';
+import { AuthHeroShell } from '@/components/auth/AuthHeroShell';
 
 interface UserProfile {
   is_admin?: boolean;
@@ -177,144 +177,93 @@ function LoginContent() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 flex items-center justify-center py-12 px-4">
-      <div className="w-full max-w-4xl">
-        <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-          <div className="grid md:grid-cols-2">
-            {/* Left Side - Branding */}
-            <div
-              className="relative overflow-hidden flex flex-col p-8 md:p-12 pt-12 bg-cover bg-center min-h-[320px] sm:min-h-[360px] md:min-h-[520px]"
-              style={{ backgroundImage: "url('/images/mascots/landlord-heaven-signup-bg.webp')" }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/80 via-primary/60 to-primary-dark/80" />
-
-              <div className="relative z-10 max-w-[75%] md:max-w-full">
-                <Link
-                  href="/"
-                  className="relative z-20 inline-flex items-center gap-2 rounded-full bg-white/15 hover:bg-white/20 border border-white/20 px-4 py-2 text-sm font-medium text-white focus:text-white focus-visible:text-white transition"
-                >
-                  ← Back to home
-                </Link>
-
-                <div className="mt-6">
-                  <div className="inline-block bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 mb-6 w-fit">
-                    <span className="text-sm font-semibold" style={{ color: 'white' }}>Account</span>
-                  </div>
-                  <h1 className="text-3xl md:text-4xl font-bold mb-4" style={{ color: 'white' }}>
-                    Welcome Back
-                  </h1>
-                  <p className="text-lg" style={{ color: 'white' }}>
-                    Log in to access your documents and cases
-                  </p>
-                </div>
-              </div>
-
-              <div
-                className="
-                  absolute z-0 pointer-events-none select-none
-                  top-4 -right-10 -translate-y-6
-                  md:top-auto md:right-auto md:left-1/2 md:bottom-0
-                  md:-translate-x-1/2 md:translate-y-8
-                "
-              >
-                <Image
-                  src="/images/mascots/landlord-heaven-login.webp"
-                  alt="LandlordHeaven mascot"
-                  width={900}
-                  height={900}
-                  className="
-                    h-auto object-contain max-w-none
-                    w-[360px] sm:w-[420px]
-                    md:w-[360px] lg:w-[440px] xl:w-[520px]
-                  "
-                  priority
-                />
-              </div>
-            </div>
-
-            {/* Right Side - Form */}
-            <div className="p-8 md:p-12">
-              <form onSubmit={handleSubmit} className="space-y-6">
-                {error && (
-                  <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
-                    <p className="text-sm text-red-900">{error}</p>
-                  </div>
-                )}
-
-                <Input
-                  label="Email address"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="you@example.com"
-                  required
-                  autoComplete="email"
-                />
-
-                <Input
-                  label="Password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  required
-                  autoComplete="current-password"
-                />
-
-                <div className="flex items-center justify-between">
-                  <label className="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary"
-                    />
-                    <span className="text-sm text-gray-700">Remember me</span>
-                  </label>
-
-                  <Link
-                    href="/auth/forgot-password"
-                    className="text-sm text-primary hover:text-primary-dark font-medium"
-                  >
-                    Forgot password?
-                  </Link>
-                </div>
-
-                <Button
-                  type="submit"
-                  variant="heroPrimary"
-                  size="large"
-                  loading={isLoading}
-                  fullWidth
-                >
-                  Log in
-                </Button>
-              </form>
-
-              <div className="mt-6 pt-6 border-t border-gray-200">
-                <p className="text-center text-sm text-gray-600">
-                  Don't have an account?{' '}
-                  <Link
-                    href={`/auth/signup${redirectUrl ? `?redirect=${encodeURIComponent(redirectUrl)}` : ''}${caseId ? `${redirectUrl ? '&' : '?'}case_id=${caseId}` : ''}`}
-                    className="text-primary hover:text-primary-dark font-medium"
-                  >
-                    Sign up
-                  </Link>
-                </p>
-              </div>
-            </div>
+    <AuthHeroShell
+      title="Welcome Back"
+      subtitle="Log in to access your documents and cases"
+    >
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {error && (
+          <div className="rounded-lg border border-red-200 bg-red-50 p-4">
+            <p className="text-sm text-red-900">{error}</p>
           </div>
+        )}
+
+        <Input
+          label="Email address"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="you@example.com"
+          required
+          autoComplete="email"
+          fullWidth
+          className="bg-white/90"
+        />
+
+        <Input
+          label="Password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="••••••••"
+          required
+          autoComplete="current-password"
+          fullWidth
+          className="bg-white/90"
+        />
+
+        <div className="flex items-center justify-between gap-4">
+          <label className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+            />
+            <span className="text-sm text-gray-700">Remember me</span>
+          </label>
+
+          <Link
+            href="/auth/forgot-password"
+            className="text-sm font-medium text-primary hover:text-primary-dark"
+          >
+            Forgot password?
+          </Link>
         </div>
+
+        <Button
+          type="submit"
+          variant="heroPrimary"
+          size="large"
+          loading={isLoading}
+          fullWidth
+        >
+          Log in
+        </Button>
+      </form>
+
+      <div className="mt-6 border-t border-gray-200 pt-6">
+        <p className="text-center text-sm text-gray-600">
+          Don't have an account?{' '}
+          <Link
+            href={`/auth/signup${redirectUrl ? `?redirect=${encodeURIComponent(redirectUrl)}` : ''}${caseId ? `${redirectUrl ? '&' : '?'}case_id=${caseId}` : ''}`}
+            className="font-medium text-primary hover:text-primary-dark"
+          >
+            Sign up
+          </Link>
+        </p>
       </div>
-    </div>
+    </AuthHeroShell>
   );
 }
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>
-    }>
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center bg-gray-50">
+          <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-primary"></div>
+        </div>
+      }
+    >
       <LoginContent />
     </Suspense>
   );
