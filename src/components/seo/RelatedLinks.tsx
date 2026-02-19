@@ -110,7 +110,7 @@ export function RelatedLinks({
   const showControls = links.length > itemsPerView;
 
   return (
-    <section className={`pb-12 md:pb-16 ${className}`}>
+    <section className={`pb-16 md:pb-20 ${className}`}>
       <div className="container mx-auto px-4">
         <div className="max-w-5xl mx-auto">
           <div className="flex items-center justify-between mb-6">

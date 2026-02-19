@@ -9,9 +9,37 @@ import { useEmailGate } from '@/hooks/useEmailGate';
 import { ToolEmailGate } from '@/components/ui/ToolEmailGate';
 import { ToolFunnelTracker } from '@/components/tools/ToolFunnelTracker';
 import { ToolUpsellCard } from '@/components/tools/ToolUpsellCard';
+import { FAQSection } from '@/components/seo/FAQSection';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, toolLinks, landingPageLinks } from '@/lib/seo/internal-links';
-import { FunnelCta } from '@/components/funnels';
+
+const faqs = [
+  {
+    question: 'Is a rent demand letter legally required?',
+    answer:
+      "A demand letter is not strictly legally required before serving a Section 8 notice, but it's strongly recommended. However, if you're planning to pursue a money claim through the courts, the Pre-Action Protocol for Debt Claims requires you to give the debtor (tenant) notice and an opportunity to pay before starting proceedings. Failing to follow the protocol can result in cost penalties.",
+  },
+  {
+    question: 'How long should I give the tenant to pay?',
+    answer:
+      "14 days is standard and reasonable for a rent demand letter. This gives the tenant time to arrange payment or contact you to discuss the situation. If you're following the Pre-Action Protocol for a money claim, you should give at least 30 days before starting court proceedings, but your initial demand can be 14 days.",
+  },
+  {
+    question: 'What if the tenant ignores the demand letter?',
+    answer:
+      "If the tenant doesn't respond or pay by the deadline, you have several options: (1) Serve a Section 8 notice seeking possession based on rent arrears grounds 8, 10, or 11. (2) Start a money claim through the courts to recover the debt (without seeking possession). (3) Continue to pursue payment informally while considering your options. Our Complete Eviction Pack (£199.99) includes Section 8 notices with compliance checks.",
+  },
+  {
+    question: 'Can I charge interest on rent arrears?',
+    answer:
+      "Only if your tenancy agreement specifically includes a clause allowing you to charge interest on late rent payments. Check your AST carefully. Even if your agreement includes an interest clause, the rate must be reasonable (typically 3-5% above Bank of England base rate). If there's no interest clause in your tenancy agreement, you cannot charge interest unless and until you obtain a county court judgment (CCJ).",
+  },
+  {
+    question: 'Should I send a demand letter before a Section 8 notice?',
+    answer:
+      "Yes, it's good practice to send a demand letter before serving a Section 8 notice. Here's why: (1) It gives the tenant a chance to pay and avoid eviction proceedings. (2) It shows the court you tried to resolve the matter reasonably. (3) The tenant may have a genuine reason for non-payment (e.g., benefits delay) and may be able to pay quickly once reminded. (4) It strengthens your case if you proceed to court. Many judges look favorably on landlords who've tried to work with tenants before legal action.",
+  },
+];
 
 export default function RentDemandLetterGenerator() {
   const [formData, setFormData] = useState({
@@ -422,17 +450,6 @@ URL.revokeObjectURL(url);
         primaryCta={{ label: 'Start Free Generator →', href: '#generator' }}
         secondaryCta={{ label: 'Get Court-Ready Version →', href: '/products/notice-only?product=demand_letter' }}
       >
-        <div className="mx-auto mt-8 max-w-2xl">
-          <FunnelCta
-            title="Need to recover unpaid rent quickly?"
-            subtitle="Use our money claim service for court-ready paperwork and a clear arrears recovery route."
-            primaryHref="/products/money-claim"
-            primaryText="Recover unpaid rent"
-            primaryDataCta="money-claim"
-            location="above-fold"
-            secondaryLinks={[{ href: '/products/complete-pack', text: "If tenant won't leave / eviction support", dataCta: 'complete-pack' }]}
-          />
-        </div>
         <p className="mt-4 text-sm text-white/90">Instant download • Basic template • Upgrade for legal compliance</p>
       </UniversalHero>
 
@@ -484,18 +501,6 @@ URL.revokeObjectURL(url);
             </a>
           </div>
         </div>
-      </div>
-
-      <div className="mb-8">
-        <FunnelCta
-          title="No payment after this letter?"
-          subtitle="Move straight to the next legal step with our money claim pack."
-          primaryHref="/products/money-claim"
-          primaryText="Start money claim"
-          primaryDataCta="money-claim"
-          location="mid"
-          secondaryLinks={[{ href: '/products/complete-pack', text: 'Tenant still in property? Get eviction support', dataCta: 'complete-pack' }]}
-        />
       </div>
 
       <form className="space-y-6">
@@ -810,83 +815,18 @@ URL.revokeObjectURL(url);
           </div>
         </div>
 
-        {/* FAQ Section */}
-        <div className="rounded-xl border border-gray-200 bg-white p-6">
-          <h3 className="mb-6 text-xl font-semibold text-gray-900">
-            Frequently Asked Questions
-          </h3>
-          <div className="space-y-6">
-            <div>
-              <h4 className="mb-2 font-semibold text-gray-900">
-                Is a rent demand letter legally required?
-              </h4>
-              <p className="text-sm text-gray-700 leading-relaxed">
-                A demand letter is not strictly legally required before serving a Section 8 notice,
-                but it's strongly recommended. However, if you're planning to pursue a money claim
-                through the courts, the Pre-Action Protocol for Debt Claims requires you to give the
-                debtor (tenant) notice and an opportunity to pay before starting proceedings. Failing
-                to follow the protocol can result in cost penalties.
-              </p>
-            </div>
-
-            <div>
-              <h4 className="mb-2 font-semibold text-gray-900">
-                How long should I give the tenant to pay?
-              </h4>
-              <p className="text-sm text-gray-700 leading-relaxed">
-                14 days is standard and reasonable for a rent demand letter. This gives the tenant
-                time to arrange payment or contact you to discuss the situation. If you're following
-                the Pre-Action Protocol for a money claim, you should give at least 30 days before
-                starting court proceedings, but your initial demand can be 14 days.
-              </p>
-            </div>
-
-            <div>
-              <h4 className="mb-2 font-semibold text-gray-900">
-                What if the tenant ignores the demand letter?
-              </h4>
-              <p className="text-sm text-gray-700 leading-relaxed">
-                If the tenant doesn't respond or pay by the deadline, you have several options:
-                (1) Serve a Section 8 notice seeking possession based on rent arrears grounds 8, 10,
-                or 11. (2) Start a money claim through the courts to recover the debt (without seeking
-                possession). (3) Continue to pursue payment informally while considering your options.
-                Our Complete Eviction Pack (£199.99) includes Section 8 notices with compliance checks.
-              </p>
-            </div>
-
-            <div>
-              <h4 className="mb-2 font-semibold text-gray-900">
-                Can I charge interest on rent arrears?
-              </h4>
-              <p className="text-sm text-gray-700 leading-relaxed">
-                Only if your tenancy agreement specifically includes a clause allowing you to charge
-                interest on late rent payments. Check your AST carefully. Even if your agreement
-                includes an interest clause, the rate must be reasonable (typically 3-5% above Bank of
-                England base rate). If there's no interest clause in your tenancy agreement, you
-                cannot charge interest unless and until you obtain a county court judgment (CCJ).
-              </p>
-            </div>
-
-            <div>
-              <h4 className="mb-2 font-semibold text-gray-900">
-                Should I send a demand letter before a Section 8 notice?
-              </h4>
-              <p className="text-sm text-gray-700 leading-relaxed">
-                Yes, it's good practice to send a demand letter before serving a Section 8 notice.
-                Here's why: (1) It gives the tenant a chance to pay and avoid eviction proceedings.
-                (2) It shows the court you tried to resolve the matter reasonably. (3) The tenant may
-                have a genuine reason for non-payment (e.g., benefits delay) and may be able to pay
-                quickly once reminded. (4) It strengthens your case if you proceed to court. Many
-                judges look favorably on landlords who've tried to work with tenants before legal action.
-              </p>
-            </div>
-          </div>
-        </div>
       </div>
             </div>
           </div>
         </Container>
       </div>
+
+      <FAQSection
+        title="Frequently Asked Questions"
+        faqs={faqs}
+        showContactCTA={false}
+        variant="white"
+      />
 
       {/* Related Resources */}
       <Container className="pb-12">
