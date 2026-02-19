@@ -144,7 +144,7 @@ function FreeSection8ToolInner() {
             </div>
             <div className="flex items-center justify-center p-4 md:p-6">
               <Image
-                src="/images/previews/notice-only/england/section8/section-8-eviction-notice.webp"
+                src="/images/section%208%20notice.webp"
                 alt="Section 8 notice (Form 3) preview"
                 width={900}
                 height={1273}
