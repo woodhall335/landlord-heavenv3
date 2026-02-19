@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, Suspense } from 'react';
+import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { HeaderConfig } from '@/components/layout';
@@ -34,7 +35,7 @@ const faqItems = [
   },
 ];
 
-export default function FreeSection8Tool() {
+function FreeSection8ToolInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -87,20 +88,72 @@ export default function FreeSection8Tool() {
 
       <div className="py-20 md:py-24" id="generator">
         <Container>
-          <div className="mx-auto max-w-5xl space-y-8">
-            <section className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
-              <h2 className="text-2xl font-bold text-gray-900">How it works</h2>
-              <ol className="mt-4 list-decimal space-y-2 pl-5 text-sm text-gray-700">
-                <li>Start now and answer a few questions</li>
-                <li>Preview your notice instantly</li>
-                <li>Unlock the final version when you&apos;re ready</li>
-              </ol>
-            </section>
-
-            {!needsParamUpdate && <WizardFlowPage />}
-          </div>
+          <div className="mx-auto max-w-5xl">{!needsParamUpdate && <WizardFlowPage />}</div>
         </Container>
       </div>
+
+      <Container>
+        <section className="mx-auto mb-12 max-w-5xl rounded-2xl border border-gray-200 bg-white p-8 shadow-sm md:p-10">
+          <div className="grid gap-8 md:grid-cols-2 md:gap-10">
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900">Free Section 8 notice preview</h2>
+              <div className="mt-4 space-y-4 text-sm text-gray-700 md:text-base">
+                <p>
+                  A Section 8 notice is used in England when a landlord seeks possession based on
+                  specific legal grounds, such as rent arrears or other tenancy breaches. This tool
+                  helps you build a free preview so you can review your draft notice before deciding
+                  whether to unlock the final version.
+                </p>
+                <p>
+                  The guided wizard is not just a document builder. It supports grounds selection and
+                  checks core inputs to reduce avoidable errors, including consistency between grounds,
+                  high-level notice timing expectations by ground, and rent arrears details where
+                  relevant. You can preview first and unlock the final downloadable version when ready.
+                </p>
+                <div>
+                  <h3 className="text-base font-semibold text-gray-900">Common Section 8 grounds</h3>
+                  <ul className="mt-2 list-disc space-y-1 pl-5">
+                    <li>Rent arrears grounds, including Grounds 8, 10, and 11</li>
+                    <li>Tenancy breach-related grounds, such as damage, nuisance, or other breaches</li>
+                    <li>Other grounds like false statement (Ground 17), depending on the facts</li>
+                  </ul>
+                </div>
+                <div>
+                  <h3 className="text-base font-semibold text-gray-900">What the wizard checks</h3>
+                  <ul className="mt-2 list-disc space-y-1 pl-5">
+                    <li>Selected grounds align with your stated possession reason</li>
+                    <li>Notice timing inputs are checked against high-level ground-based expectations</li>
+                    <li>Rent arrears figures, periods, and dates are captured for clearer review</li>
+                  </ul>
+                </div>
+                <div>
+                  <h3 className="text-base font-semibold text-gray-900">Typical validity issues</h3>
+                  <ul className="mt-2 list-disc space-y-1 pl-5">
+                    <li>Commonly valid: facts and evidence match the grounds selected</li>
+                    <li>
+                      Commonly invalid: wrong grounds chosen, inconsistent arrears data, or timing
+                      errors
+                    </li>
+                    <li>
+                      Mixing mandatory and discretionary grounds without clear facts can weaken a
+                      notice
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center justify-center p-4 md:p-6">
+              <Image
+                src="/images/previews/notice-only/england/section8/section-8-eviction-notice.webp"
+                alt="Section 8 notice (Form 3) preview"
+                width={900}
+                height={1273}
+                className="h-auto w-full max-w-md"
+              />
+            </div>
+          </div>
+        </section>
+      </Container>
 
       <RelatedLinks
         title="Related Resources"
@@ -113,5 +166,13 @@ export default function FreeSection8Tool() {
         ]}
       />
     </div>
+  );
+}
+
+export default function FreeSection8Tool() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gray-50" />}>
+      <FreeSection8ToolInner />
+    </Suspense>
   );
 }
