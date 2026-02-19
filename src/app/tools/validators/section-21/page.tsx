@@ -15,6 +15,8 @@ import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { PRODUCTS } from '@/lib/pricing/products';
 import { ToolFunnelTracker } from '@/components/tools/ToolFunnelTracker';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { productLinks, toolLinks, landingPageLinks, blogLinks } from '@/lib/seo/internal-links';
 
 // Pre-built wizard links for Section 21 validator page
@@ -209,93 +211,15 @@ export default function Section21ValidatorPage() {
         ])}
       />
 
-      {/* SSR Above-the-Fold Content */}
-      <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-8 md:pt-32">
-        <Container>
-          <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 rounded-full bg-amber-100 px-4 py-2 text-xs font-semibold text-amber-900 mb-4">
-              England only
-            </div>
-            {/* H1 - SSR Rendered */}
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-gray-900">
-              Check Your Section 21 Notice (England)
-            </h1>
-
-            {/* Intro paragraph with target keywords */}
-            <p className="text-lg md:text-xl text-gray-600 mb-6">
-              Free online <strong>Section 21 notice checker</strong> for England landlords. Upload
-              your Form 6A to check if it&apos;s valid for court. Get an instant report on deposit
-              protection, prescribed information, gas safety, EPC, and notice period compliance.
-            </p>
-
-            {/* England-only disclaimer - SSR visible */}
-            <div className="bg-amber-50 border-l-4 border-amber-500 p-4 mb-6 rounded-r-lg text-left max-w-2xl mx-auto">
-              <p className="text-amber-900 text-sm">
-                <strong>🏴󠁧󠁢󠁥󠁮󠁧󠁿 England only:</strong> Section 21 notices apply to{' '}
-                <strong>England only</strong>. Different eviction rules apply in{' '}
-                <Link
-                  href="/wales-eviction-notices"
-                  className="text-amber-700 underline hover:text-amber-900"
-                >
-                  Wales (Renting Homes Act)
-                </Link>
-                ,{' '}
-                <Link
-                  href="/scotland-eviction-notices"
-                  className="text-amber-700 underline hover:text-amber-900"
-                >
-                  Scotland (Notice to Leave)
-                </Link>
-                , and{' '}
-                <Link
-                  href="/how-to-evict-tenant#northern-ireland"
-                  className="text-amber-700 underline hover:text-amber-900"
-                >
-                  Northern Ireland
-                </Link>
-                .
-              </p>
-            </div>
-
-            {/* Quick internal links - SSR */}
-            <div className="flex flex-wrap gap-2 justify-center text-sm mb-6">
-              <Link
-                href="/section-21-notice-template"
-                className="text-primary hover:underline font-medium"
-              >
-                Section 21 notice template
-              </Link>
-              <span className="text-gray-400">•</span>
-              <Link
-                href="/section-8-notice-template"
-                className="text-primary hover:underline font-medium"
-              >
-                Section 8 template
-              </Link>
-              <span className="text-gray-400">•</span>
-              <Link
-                href="/how-to-evict-tenant"
-                className="text-primary hover:underline font-medium"
-              >
-                How to evict a tenant
-              </Link>
-              <span className="text-gray-400">•</span>
-              <Link
-                href="/tools/validators/section-8"
-                className="text-primary hover:underline font-medium"
-              >
-                Section 8 checker
-              </Link>
-            </div>
-
-            {/* Trust signals */}
-            <p className="text-xs text-gray-500">
-              Not legal advice. This tool checks key legal requirements but cannot guarantee court
-              outcomes.
-            </p>
-          </div>
-        </Container>
-      </section>
+      <HeaderConfig mode="autoOnScroll" />
+      <UniversalHero
+        badge="England only"
+        title="Check Your Section 21 Notice (England)"
+        subtitle="Free online Section 21 notice checker for England landlords. Upload your Form 6A to check if it's valid for court. Get an instant report on deposit protection, prescribed information, gas safety, EPC, and notice period compliance."
+        align="center"
+        hideMedia
+        showReviewPill={false}
+      />
 
       {/* Quick Checklist - SSR for SEO */}
       <section className="bg-white py-8 border-b border-gray-100">

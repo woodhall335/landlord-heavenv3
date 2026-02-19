@@ -23,8 +23,6 @@ import {
   JurisdictionAccordion,
   VsSolicitorComparison,
 } from "@/components/value-proposition";
-import { TenancyComparisonTable } from "@/components/tenancy/TenancyComparisonTable";
-import { ClauseDiffPreview } from "@/components/tenancy/ClauseDiffPreview";
 import { UniversalHero } from "@/components/landing/UniversalHero";
 import { HeaderConfig } from "@/components/layout/HeaderConfig";
 import { astHeroConfig } from "@/components/landing/heroConfigs";
@@ -106,7 +104,6 @@ export default function ASTPage() {
       {/* Hero Section */}
       <UniversalHero {...astHeroConfig} />
 
-      <section className="py-8 bg-white"><Container><p className="text-center text-gray-700 font-medium">Includes a jurisdiction-specific compliance checklist and preview-before-pay workflow.</p></Container></section>
 
       {/* What's Included in This Agreement - Integration Layer Disclosure */}
       <section className="py-16 md:py-20 bg-white">
@@ -310,126 +307,6 @@ export default function ASTPage() {
         </Container>
       </section>
 
-      {/* What You Get - Standard vs Premium */}
-      <section className="py-16 md:py-20">
-        <Container>
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4 text-center">
-              Standard vs Premium
-            </h2>
-            <p className="text-center text-gray-600 mb-12">
-              Both are legally valid agreements. Premium includes additional clauses for HMOs and multi-tenant properties.
-            </p>
-
-            <div className="grid md:grid-cols-2 gap-8">
-              {/* Standard */}
-              <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <h3 className="text-xl font-bold text-charcoal mb-2">Standard Plan Features</h3>
-                <p className="text-sm text-gray-600 mb-4">For single households and standard residential lets — {standardPrice}</p>
-                <ul className="space-y-3">
-                  <li className="flex items-start gap-2">
-                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
-                    <div>
-                      <span className="font-medium">Jurisdiction-Specific Agreement</span>
-                      <span className="text-sm text-gray-500 block">AST (England) / Occupation Contract (Wales) / PRT (Scotland) / NI Tenancy</span>
-                    </div>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
-                    <div>
-                      <span className="font-medium">Core Tenancy Clauses</span>
-                      <span className="text-sm text-gray-500 block">Rent, deposit, duration, tenant &amp; landlord obligations</span>
-                    </div>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
-                    <div>
-                      <span className="font-medium">Pets &amp; Break Clauses</span>
-                      <span className="text-sm text-gray-500 block">Optional clauses included if selected</span>
-                    </div>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
-                    <div>
-                      <span className="font-medium">Property Care Requirements</span>
-                      <span className="text-sm text-gray-500 block">Access, maintenance, and conduct rules</span>
-                    </div>
-                  </li>
-                </ul>
-                <div className="mt-6">
-                  <Link
-                    href="/wizard?product=ast_standard&src=product_page&topic=tenancy"
-                    className="hero-btn-secondary block w-full text-center"
-                  >
-                    Get Standard - {standardPrice}
-                  </Link>
-                </div>
-              </div>
-
-              {/* Premium */}
-              <div className="bg-white rounded-lg border-2 border-primary p-6 relative">
-                <div className="absolute -top-3 right-4 bg-primary text-white text-xs font-bold px-3 py-1 rounded-full">
-                  HMO READY
-                </div>
-                <h3 className="text-xl font-bold text-charcoal mb-2">Premium Plan Features</h3>
-                <p className="text-sm text-gray-600 mb-4">For HMOs, student lets &amp; multi-tenant properties — {premiumPrice}</p>
-                <ul className="space-y-3">
-                  <li className="flex items-start gap-2">
-                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
-                    <div>
-                      <span className="font-medium">All Standard Clauses</span>
-                      <span className="text-sm text-gray-500 block">Plus HMO-specific provisions</span>
-                    </div>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
-                    <div>
-                      <span className="font-medium">Joint &amp; Several Liability</span>
-                      <span className="text-sm text-gray-500 block">Each tenant fully liable for entire rent</span>
-                    </div>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
-                    <div>
-                      <span className="font-medium">Shared Facilities Rules</span>
-                      <span className="text-sm text-gray-500 block">Kitchen, bathroom, communal area responsibilities</span>
-                    </div>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
-                    <div>
-                      <span className="font-medium">Tenant Replacement Procedure</span>
-                      <span className="text-sm text-gray-500 block">Process when a sharer leaves mid-tenancy</span>
-                    </div>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
-                    <div>
-                      <span className="font-medium">Guarantor Clauses</span>
-                      <span className="text-sm text-gray-500 block">Guarantor provisions</span>
-                    </div>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
-                    <div>
-                      <span className="font-medium">Rent Review &amp; Anti-Subletting</span>
-                      <span className="text-sm text-gray-500 block">CPI/RPI-linked increases, Airbnb prohibition</span>
-                    </div>
-                  </li>
-                </ul>
-                <div className="mt-6">
-                  <Link
-                    href="/wizard?product=ast_premium&src=product_page&topic=tenancy"
-                    className="hero-btn-primary block w-full text-center"
-                  >
-                    Get Premium - {premiumPrice}
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
-        </Container>
-      </section>
 
       {/* Jurisdiction Details */}
       <section className="py-16 md:py-20 bg-white">
@@ -537,41 +414,6 @@ export default function ASTPage() {
         </Container>
       </section>
 
-      {/* Premium Features - Jurisdiction-Aware Comparison Table */}
-      <section className="py-16 md:py-20 bg-white">
-        <Container>
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4 text-center">
-              Detailed Feature Comparison
-            </h2>
-            <p className="text-center text-gray-600 mb-4">
-              Both are legally valid tenancy agreements. Premium includes clauses commonly required under the Housing Act 2004 for HMOs and multi-tenant properties.
-            </p>
-            <p className="text-center text-sm text-gray-500 mb-12">
-              Click &quot;Why does this matter?&quot; to see the legal rationale for each feature.
-            </p>
-
-            <TenancyComparisonTable
-              jurisdiction="england"
-              highlightPremium={true}
-              showRationale={true}
-            />
-          </div>
-        </Container>
-      </section>
-
-      {/* Clause Diff Preview - Visual comparison of actual clauses */}
-      <section className="py-16 md:py-20">
-        <Container>
-          <div className="max-w-5xl mx-auto">
-            <ClauseDiffPreview
-              jurisdiction="england"
-              showUpgradeCTA={true}
-              variant="full"
-            />
-          </div>
-        </Container>
-      </section>
 
       {/* Comparison vs Solicitor */}
       <section className="py-16 md:py-20 bg-white">

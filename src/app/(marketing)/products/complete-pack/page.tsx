@@ -3,16 +3,8 @@ import { Container } from "@/components/ui";
 import Link from "next/link";
 import { RiCheckboxCircleLine, RiCloseLine, RiAlertLine } from "react-icons/ri";
 import {
-  Sparkles,
   ScrollText,
-  FileText,
-  Scale,
-  BookOpen,
-  Target,
-  FolderOpen,
   BadgePoundSterling,
-  Package,
-  Clock,
 } from "lucide-react";
 import { UniversalHero } from "@/components/landing/UniversalHero";
 import { HeaderConfig } from "@/components/layout/HeaderConfig";
@@ -111,7 +103,6 @@ export default async function CompleteEvictionPackPage() {
       {/* Hero Section */}
       <UniversalHero {...completePackHeroConfig} />
 
-      <section className="py-8 bg-white"><Container><p className="text-center text-gray-700 font-medium">What you'll receive in your bundle:</p></Container></section>
 
       <WhatsIncludedInteractive product="complete_pack" previews={previews} />
 

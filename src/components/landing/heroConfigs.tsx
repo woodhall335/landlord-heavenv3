@@ -46,7 +46,6 @@ export const homeHeroConfig: HeroConfig = {
     </>
   ),
   primaryCta: { label: 'Generate Your Complete Case Bundle →', href: '/wizard' },
-  secondaryCta: { label: 'View Pricing →', href: '/pricing' },
   feature: 'Complete eviction case bundles. AI-generated. Jurisdiction-specific. Court-ready file output.',
   ...defaultHeroMedia,
 };
@@ -77,10 +76,6 @@ export const noticeOnlyHeroConfig: HeroConfig = {
     label: 'Generate my notice bundle →',
     href: '/wizard?product=notice_only&src=product_page&topic=eviction',
   },
-  secondaryCta: {
-    label: 'Upgrade to Eviction Pack',
-    href: '/products/complete-pack',
-  },
   feature: 'Built against statutory frameworks with reform-aware validation and filing guidance',
   ...defaultHeroMedia,
 };
@@ -92,10 +87,6 @@ export const completePackHeroConfig: HeroConfig = {
   subtitle: 'Section 21/8 notice routes plus N5 / N5B / N119, witness statement drafting, evidence checklist, and filing guide. Preview before purchase.',
   primaryCta: {
     label: 'Start my England case bundle →',
-    href: '/wizard?product=complete_pack&src=product_page&topic=eviction',
-  },
-  secondaryCta: {
-    label: 'Preview before you buy',
     href: '/wizard?product=complete_pack&src=product_page&topic=eviction',
   },
   feature: 'Section 21/8 notice workflows, N5B claim path, evidence checklist, and filing instructions in one case file',
@@ -120,10 +111,6 @@ export const moneyClaimHeroConfig: HeroConfig = {
   subtitle: 'For recovering unpaid rent or tenancy-related debt through the County Court (England). You answer guided questions. We structure your claim clearly for filing.',
   primaryCta: {
     label: 'Start my England money claim bundle →',
-    href: '/wizard?product=money_claim&src=product_page',
-  },
-  secondaryCta: {
-    label: 'Preview before you buy',
     href: '/wizard?product=money_claim&src=product_page',
   },
   feature: 'N1 claim form, PAP-DEBT letter, and interest calculator included',
