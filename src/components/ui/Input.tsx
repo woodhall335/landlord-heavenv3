@@ -79,7 +79,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {label && (
           <label
             htmlFor={inputId}
-            className="text-sm font-medium text-charcoal"
+            className="text-left text-sm font-medium text-charcoal"
           >
             {label}
           </label>
@@ -186,7 +186,7 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         {label && (
           <label
             htmlFor={inputId}
-            className="text-sm font-medium text-charcoal"
+            className="text-left text-sm font-medium text-charcoal"
           >
             {label}
           </label>

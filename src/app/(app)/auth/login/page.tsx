@@ -213,7 +213,7 @@ function LoginContent() {
         />
 
         <div className="flex items-center justify-between gap-4">
-          <label className="flex items-center gap-2">
+          <label className="flex items-center gap-2 text-left">
             <input
               type="checkbox"
               className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"

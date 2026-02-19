@@ -177,7 +177,7 @@ function SignupContent() {
             onChange={(e) => setAgreedToTerms(e.target.checked)}
             className="mt-0.5 h-5 w-5 rounded border-gray-300 text-primary focus:ring-primary"
           />
-          <label className="text-sm text-gray-700">
+          <label className="text-left text-sm text-gray-700">
             I agree to the{' '}
             <Link href="/terms" className="text-primary hover:underline">
               Terms of Service
