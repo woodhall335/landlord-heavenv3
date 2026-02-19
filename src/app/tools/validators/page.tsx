@@ -9,7 +9,6 @@ import { Metadata } from 'next';
 import { Container } from '@/components/ui/Container';
 import { RiFileCheckLine, RiAlertLine } from 'react-icons/ri';
 import { getCanonicalUrl } from '@/lib/seo';
-import { AskHeavenWidget } from '@/components/ask-heaven/AskHeavenWidget';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { HeaderConfig } from '@/components/layout';
 
@@ -167,16 +166,6 @@ export default function ValidatorsHubPage() {
             </div>
           </div>
 
-          {/* Ask Heaven Widget */}
-          <div className="mt-12 max-w-2xl mx-auto">
-            <AskHeavenWidget
-              variant="banner"
-              source="validator"
-              topic="general"
-              title="Have questions about your documents?"
-              description="Ask Heaven can help explain validation results and guide you on next steps."
-            />
-          </div>
         </Container>
       </div>
     </div>

@@ -105,7 +105,6 @@ export default async function MoneyClaimPage() {
       {/* Hero Section */}
       <UniversalHero {...moneyClaimHeroConfig} />
 
-      <section className="py-8 bg-white"><Container><p className="text-center text-gray-700 font-medium">What you'll receive in your bundle:</p></Container></section>
 
       <WhatsIncludedInteractive product="money_claim" previews={previews} />
 
