@@ -19,7 +19,7 @@ import { RiFileTextLine, RiScales3Line, RiMoneyPoundCircleLine, RiClipboardLine,
 export default function HomeContent() {
   const router = useRouter();
   const [askQuestion, setAskQuestion] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading] = useState(false);
 
   const handleAskQuestion = async () => {
     if (!askQuestion.trim()) return;
@@ -87,16 +87,13 @@ export default function HomeContent() {
       </section>
 
       {/* PRODUCTS */}
-      <section className="py-20 md:py-24 bg-white">
+      <section className="py-20 md:py-24 bg-[#f8f5ff]">
         <Container>
           <div className="text-center mb-14">
-            <div className="inline-block bg-primary/10 rounded-full px-4 py-2 mb-4">
-              <span className="text-sm font-semibold text-primary">Our Products</span>
-            </div>
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               Complete Eviction Preparation Across UK Jurisdictions
             </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-xl text-[#59527a] max-w-3xl mx-auto">
               From statutory notices to possession paperwork — AI-validated case preparation without solicitor delays.
             </p>
           </div>
@@ -107,7 +104,6 @@ export default function HomeContent() {
               title="Eviction Notices"
               description="Section 8, Section 21, and devolved equivalents with service instructions."
               price="£49.99"
-              solicitorPrice="£200-300"
               icon={<RiFileTextLine className="w-7 h-7" />}
             />
             <ProductCard
@@ -115,7 +111,6 @@ export default function HomeContent() {
               title="Complete Eviction Pack"
               description="Full bundle from notice to possession order with court forms and guidance."
               price="£199.99"
-              badge="England only"
               icon={<RiScales3Line className="w-7 h-7" />}
               popular={true}
             />
@@ -124,8 +119,6 @@ export default function HomeContent() {
               title="Money Claim Pack"
               description="Rent arrears claims with evidence checklists and particulars of claim."
               price="£99.99"
-              solicitorPrice="£400-600"
-              badge="England only"
               icon={<RiMoneyPoundCircleLine className="w-7 h-7" />}
             />
             <ProductCard
@@ -468,51 +461,39 @@ function ProductCard({
   title,
   description,
   price,
-  solicitorPrice,
   icon,
   popular = false,
-  badge,
 }: {
   href: string;
   title: string;
   description: string;
   price: string;
-  solicitorPrice?: string;
   icon: React.ReactNode;
   popular?: boolean;
-  badge?: string;
 }) {
   return (
     <Link href={href} className="product-card-wrapper group relative cursor-pointer">
       {popular && (
         <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
-          <span className="bg-primary text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
+          <span className="bg-gradient-to-r from-[#7c3aed] to-[#692ed4] text-white text-xs font-bold tracking-wide px-5 py-1.5 rounded-full shadow-lg">
             MOST POPULAR
           </span>
         </div>
       )}
-      <div className={`product-card-inner bg-white rounded-2xl p-8 h-full transition-all duration-300 group-hover:shadow-2xl group-hover:-translate-y-2 ${popular ? 'border-2 border-[#7C3AED] shadow-lg' : 'card-hover-border'}`}>
-        <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary group-hover:scale-110 transition-all duration-300 text-primary group-hover:text-white">
+      <div className={`product-card-inner bg-white rounded-3xl p-8 h-full transition-all duration-300 border ${popular ? 'border-2 border-[#7C3AED] shadow-xl' : 'border-[#e4dcff] shadow-md'} group-hover:shadow-2xl group-hover:-translate-y-1 flex flex-col`}>
+        <div className="w-14 h-14 bg-purple-100 rounded-2xl flex items-center justify-center mb-6 text-primary">
           {icon}
         </div>
 
-        <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors">
+        <h3 className="text-4xl font-bold text-[#1d1948] mb-3 leading-tight group-hover:text-primary transition-colors">
           {title}
         </h3>
-        <p className="text-gray-600 mb-4 text-sm">{description}</p>
+        <p className="text-[#5d5a78] mb-5 text-lg leading-relaxed">{description}</p>
 
-        <div className="flex items-center justify-between">
-          <div>
-            <span className="text-primary font-bold">{price}</span>
-            {badge && (
-              <span className="ml-2 text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">
-                {badge}
-              </span>
-            )}
-          </div>
-          <span className="text-primary flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all duration-300">
-            Learn more
-            <span className="inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
+        <div className="mt-auto">
+          <span className="block text-primary font-bold text-[2rem] mb-6">{price}</span>
+          <span className="block text-center bg-gradient-to-r from-[#6f2ae3] to-[#8f46ff] text-white font-semibold rounded-2xl py-3.5 text-xl shadow-lg shadow-violet-300/40">
+            Get Started
           </span>
         </div>
       </div>
