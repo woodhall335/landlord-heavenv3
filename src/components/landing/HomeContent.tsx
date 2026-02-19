@@ -12,7 +12,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Container } from "@/components/ui";
-import { Hero, TrustBar, CostComparison, Testimonials } from "@/components/landing";
+import { Hero, TrustBar, Testimonials } from "@/components/landing";
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { RiFileTextLine, RiScales3Line, RiMoneyPoundCircleLine, RiClipboardLine, RiCheckLine, RiArrowRightLine, RiShieldCheckLine, RiGlobalLine, RiFlashlightLine, RiSendPlaneFill, RiAddLine, RiMicLine } from 'react-icons/ri';
 
@@ -35,9 +35,6 @@ export default function HomeContent() {
 
       {/* TRUST BAR */}
       <TrustBar />
-
-      {/* COST COMPARISON */}
-      <CostComparison />
 
       {/* HOW IT WORKS */}
       <section className="py-20 md:py-24 bg-gray-50">
