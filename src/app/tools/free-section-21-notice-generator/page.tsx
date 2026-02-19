@@ -137,7 +137,7 @@ function FreeSection21ToolInner() {
               </div>
               <div className="flex items-center justify-center p-4 md:p-6">
                 <Image
-                  src="/images/previews/notice-only/england/section21/section21 form6a eviction notice.webp"
+                  src="/images/section%2021%20notice.webp"
                   alt="Section 21 notice (Form 6A) preview"
                   width={900}
                   height={1273}
