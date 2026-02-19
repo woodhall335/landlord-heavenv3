@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, Suspense } from 'react';
+import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { HeaderConfig } from '@/components/layout';
@@ -108,21 +109,41 @@ function FreeSection21ToolInner() {
               validates those details as you go to reduce common errors. You can preview first,
               then unlock the final downloadable version when you&apos;re ready.
             </p>
-            <div>
-              <h3 className="text-base font-semibold text-gray-900">What the wizard checks</h3>
-              <ul className="mt-2 list-disc space-y-1 pl-5">
-                <li>AST, landlord, tenant, and property details are complete and consistent</li>
-                <li>Notice dates align with high-level timing rules for Section 21 service</li>
-                <li>Core compliance signals that can affect validity are captured for review</li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-base font-semibold text-gray-900">Typical validity issues</h3>
-              <ul className="mt-2 list-disc space-y-1 pl-5">
-                <li>Commonly valid: correct tenancy details, timing, and required documents tracked</li>
-                <li>Commonly invalid: key details missing, date logic errors, or compliance gaps</li>
-                <li>Section 21 does not use possession grounds lists in the way Section 8 does</li>
-              </ul>
+            <div className="grid gap-8 md:grid-cols-2 md:gap-10">
+              <div className="space-y-4">
+                <div>
+                  <h3 className="text-base font-semibold text-gray-900">What the wizard checks</h3>
+                  <ul className="mt-2 list-disc space-y-1 pl-5">
+                    <li>AST, landlord, tenant, and property details are complete and consistent</li>
+                    <li>Notice dates align with high-level timing rules for Section 21 service</li>
+                    <li>Core compliance signals that can affect validity are captured for review</li>
+                  </ul>
+                </div>
+                <div>
+                  <h3 className="text-base font-semibold text-gray-900">Typical validity issues</h3>
+                  <ul className="mt-2 list-disc space-y-1 pl-5">
+                    <li>
+                      Commonly valid: correct tenancy details, timing, and required documents
+                      tracked
+                    </li>
+                    <li>
+                      Commonly invalid: key details missing, date logic errors, or compliance gaps
+                    </li>
+                    <li>
+                      Section 21 does not use possession grounds lists in the way Section 8 does
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div className="flex items-center justify-center p-4 md:p-6">
+                <Image
+                  src="/images/previews/notice-only/england/section21/section21 form6a eviction notice.webp"
+                  alt="Section 21 notice (Form 6A) preview"
+                  width={900}
+                  height={1273}
+                  className="h-auto w-full max-w-md"
+                />
+              </div>
             </div>
           </div>
         </section>
