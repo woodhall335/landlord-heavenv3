@@ -1,13 +1,13 @@
 'use client';
 
 import React, { useMemo, useState, useCallback } from 'react';
-import Link from 'next/link';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { HeaderConfig } from '@/components/layout';
 import { Button, Card, Container, Input } from '@/components/ui';
 import { RiAlertLine } from 'react-icons/ri';
 import { useEmailGate } from '@/hooks/useEmailGate';
 import { ToolEmailGate } from '@/components/ui/ToolEmailGate';
+import { FAQSection } from '@/components/seo/FAQSection';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, blogLinks, toolLinks, landingPageLinks } from '@/lib/seo/internal-links';
 import { ToolFunnelTracker } from '@/components/tools/ToolFunnelTracker';
@@ -30,6 +30,34 @@ const defaultSchedule: ScheduleItem[] = [
     dueAmount: 750,
     paidAmount: 0,
     paymentDate: '',
+  },
+];
+
+const faqs = [
+  {
+    question: 'How should I evidence rent arrears for court?',
+    answer:
+      "Prepare a clear rent schedule showing all payments due and received, with a running balance. Attach your tenancy agreement, bank statements highlighting missed payments, and copies of all communications with the tenant about the arrears. The court wants to see you've made reasonable attempts to resolve the issue before litigation.",
+  },
+  {
+    question: 'Can I claim interest on rent arrears?',
+    answer:
+      "Yes. You can claim statutory interest at 8% per annum under the Late Payment of Commercial Debts (Interest) Act 1998. Interest runs from each payment's due date until it's paid or judgment is entered. You must state your intention to claim interest in your pre-action letter. Some tenancy agreements include contractual interest clauses—check yours carefully.",
+  },
+  {
+    question: 'What if my tenant disputes the arrears amount?',
+    answer:
+      "Request a detailed breakdown from the tenant showing which payments they believe they've made. Check your records carefully—mistakes happen. If there's a genuine dispute, consider mediation before court. If the tenant simply refuses to pay without valid reason, proceed with your money claim and let the court decide. Keep all communication professional and documented.",
+  },
+  {
+    question: 'Should I serve a Section 8 notice or file a money claim?',
+    answer:
+      'It depends on your goal. A Section 8 notice (Ground 8 requires 8+ weeks arrears) seeks possession of the property. A money claim pursues the debt even after the tenant has left. Many landlords do both: serve a Section 8 to regain possession, then file a money claim for any remaining debt. Our Complete Pack guides you through both processes.',
+  },
+  {
+    question: "Is this calculator's 8% interest calculation legally accurate?",
+    answer:
+      "This calculator uses the standard statutory rate of 8% per annum as simple interest. While widely accepted, actual court awards may vary based on jurisdiction, the judge's discretion, and your specific tenancy agreement. For a court-ready arrears schedule with jurisdiction-specific calculations and full legal validation, upgrade to our Money Claim Pack.",
   },
 ];
 
@@ -549,33 +577,6 @@ link.href = url;
                   may differ depending on jurisdiction and judge discretion. Use this as a directional estimate only.
                 </p>
               </div>
-              <div className="bg-white p-4 rounded-lg border border-gray-200">
-                <h3 className="font-semibold text-charcoal mb-2">Need a court-ready pack?</h3>
-                <p className="text-gray-700 text-sm leading-relaxed">
-                  Upgrade to the Money Claim Pack for a pre-filled claim form, particulars of claim, PAP/Pre-action letters, and
-                  an arrears schedule you can file immediately.
-                </p>
-                <div className="mt-3 flex flex-col sm:flex-row gap-2">
-                  <Link
-                    href="/wizard/flow?type=money_claim&jurisdiction=england&product=money_claim&src=product_page&topic=arrears"
-                    className="hero-btn-primary flex-1 text-center"
-                  >
-                    Start Money Claim (England)
-                  </Link>
-                  <Link
-                    href="/wizard/flow?type=money_claim&jurisdiction=wales&product=money_claim&src=product_page&topic=arrears"
-                    className="hero-btn-secondary flex-1 text-center"
-                  >
-                    Start Money Claim (Wales)
-                  </Link>
-                  <Link
-                    href="/wizard/flow?type=money_claim&jurisdiction=scotland&product=money_claim&src=product_page&topic=arrears"
-                    className="hero-btn-secondary flex-1 text-center"
-                  >
-                    Start Simple Procedure (Scotland)
-                  </Link>
-                </div>
-              </div>
             </div>
 
             <div className="mt-8">
@@ -623,61 +624,14 @@ link.href = url;
           </div>
         </Card>
 
-        <Card padding="large">
-          <h2 className="text-2xl font-semibold text-charcoal mb-4">Frequently Asked Questions</h2>
-          <div className="space-y-6 text-gray-700 leading-relaxed">
-            <div>
-              <p className="font-semibold text-gray-900 text-lg mb-2">How should I evidence rent arrears for court?</p>
-              <p>
-                Prepare a clear rent schedule showing all payments due and received, with a running balance. Attach your
-                tenancy agreement, bank statements highlighting missed payments, and copies of all communications with the
-                tenant about the arrears. The court wants to see you've made reasonable attempts to resolve the issue
-                before litigation.
-              </p>
-            </div>
-
-            <div>
-              <p className="font-semibold text-gray-900 text-lg mb-2">Can I claim interest on rent arrears?</p>
-              <p>
-                Yes. You can claim statutory interest at 8% per annum under the Late Payment of Commercial Debts (Interest)
-                Act 1998. Interest runs from each payment's due date until it's paid or judgment is entered. You must state
-                your intention to claim interest in your pre-action letter. Some tenancy agreements include contractual
-                interest clauses—check yours carefully.
-              </p>
-            </div>
-
-            <div>
-              <p className="font-semibold text-gray-900 text-lg mb-2">What if my tenant disputes the arrears amount?</p>
-              <p>
-                Request a detailed breakdown from the tenant showing which payments they believe they've made. Check your
-                records carefully—mistakes happen. If there's a genuine dispute, consider mediation before court. If the
-                tenant simply refuses to pay without valid reason, proceed with your money claim and let the court decide.
-                Keep all communication professional and documented.
-              </p>
-            </div>
-
-            <div>
-              <p className="font-semibold text-gray-900 text-lg mb-2">Should I serve a Section 8 notice or file a money claim?</p>
-              <p>
-                It depends on your goal. A Section 8 notice (Ground 8 requires 8+ weeks arrears) seeks possession of the
-                property. A money claim pursues the debt even after the tenant has left. Many landlords do both: serve a
-                Section 8 to regain possession, then file a money claim for any remaining debt. Our Complete Pack guides
-                you through both processes.
-              </p>
-            </div>
-
-            <div>
-              <p className="font-semibold text-gray-900 text-lg mb-2">Is this calculator's 8% interest calculation legally accurate?</p>
-              <p>
-                This calculator uses the standard statutory rate of 8% per annum as simple interest. While widely accepted,
-                actual court awards may vary based on jurisdiction, the judge's discretion, and your specific tenancy
-                agreement. For a court-ready arrears schedule with jurisdiction-specific calculations and full legal
-                validation, upgrade to our Money Claim Pack.
-              </p>
-            </div>
-          </div>
-        </Card>
       </Container>
+
+      <FAQSection
+        title="Frequently Asked Questions"
+        faqs={faqs}
+        showContactCTA={false}
+        variant="white"
+      />
 
       {/* Related Resources */}
       <Container className="pb-12">

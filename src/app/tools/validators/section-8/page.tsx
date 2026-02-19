@@ -18,6 +18,7 @@ import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { productLinks, toolLinks, landingPageLinks } from '@/lib/seo/internal-links';
+import { FAQSection } from '@/components/seo/FAQSection';
 
 // Pre-built wizard links for Section 8 validator page
 const wizardLinkNoticeOnly = buildWizardLink({
@@ -152,6 +153,12 @@ const faqSchema = {
     },
   ],
 };
+
+
+const faqs = faqSchema.mainEntity.map((faq) => ({
+  question: faq.name,
+  answer: faq.acceptedAnswer.text,
+}));
 
 const howToSchema = {
   '@context': 'https://schema.org',
@@ -652,18 +659,12 @@ export default function Section8ValidatorPage() {
               </li>
             </ul>
 
-            <h2 className="text-2xl font-bold text-charcoal mb-6 mt-12">
-              Frequently Asked Questions
-            </h2>
-
-            <div className="space-y-6">
-              {faqSchema.mainEntity.map((faq, index) => (
-                <div key={index} className="bg-white rounded-lg p-6 shadow-sm">
-                  <h3 className="text-lg font-semibold text-charcoal mb-2">{faq.name}</h3>
-                  <p className="text-gray-700">{faq.acceptedAnswer.text}</p>
-                </div>
-              ))}
-            </div>
+            <FAQSection
+              title="Frequently Asked Questions"
+              faqs={faqs}
+              showContactCTA={false}
+              variant="white"
+            />
 
             <div className="mt-12 p-6 bg-purple-50 rounded-lg">
               <h3 className="text-xl font-semibold text-charcoal mb-4">
