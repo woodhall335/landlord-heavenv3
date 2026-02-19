@@ -135,24 +135,6 @@ export function Testimonials() {
           ))}
         </div>
 
-        {/* Aggregate Stats with trust signals */}
-        <div className="mt-14 text-center">
-          <div className="inline-flex flex-wrap items-center justify-center gap-6 md:gap-8 bg-white rounded-2xl md:rounded-full px-6 md:px-8 py-4 shadow-sm border border-gray-100">
-            <div className="flex items-center gap-2">
-              <StarRating rating={5} />
-              <span className="text-sm font-medium text-gray-700">4.9/5 average rating</span>
-            </div>
-            <div className="hidden md:block h-6 w-px bg-gray-200" />
-            <div className="flex items-center gap-1.5 text-sm font-medium text-gray-700">
-              <RiVerifiedBadgeFill className="w-4 h-4 text-blue-500" />
-              <span>500+ verified reviews</span>
-            </div>
-            <div className="hidden md:block h-6 w-px bg-gray-200" />
-            <div className="text-sm font-medium text-gray-700">
-              UK-based support
-            </div>
-          </div>
-        </div>
       </Container>
     </section>
   );
