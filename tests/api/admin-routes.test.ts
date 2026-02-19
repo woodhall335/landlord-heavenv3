@@ -500,7 +500,7 @@ describe('Response Shape Assertions', () => {
 // Smoke Test: No Admin Pages Depend on Missing Endpoints
 // =========================================================================
 describe('Admin Pages Endpoint Dependencies', () => {
-  const ADMIN_PAGES_DIR = path.join(process.cwd(), 'src/app/dashboard/admin');
+  const ADMIN_PAGES_DIR = path.join(process.cwd(), 'src/app/(app)/dashboard/admin');
   const ADMIN_API_DIR = path.join(process.cwd(), 'src/app/api/admin');
 
   // Endpoints that should exist based on admin page usage

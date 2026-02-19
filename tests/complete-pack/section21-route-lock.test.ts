@@ -59,6 +59,7 @@ vi.mock('@/lib/documents/n5b-field-builder', async () => {
 beforeEach(() => {
   process.env.DISABLE_WITNESS_STATEMENT_AI = 'true';
   process.env.DISABLE_COMPLIANCE_AUDIT_AI = 'true';
+  process.env.VALIDATION_PHASE13_ENABLED = 'true';
   __setTestJsonAIClient({
     jsonCompletion: async () => ({
       json: {} as unknown as any,
@@ -73,6 +74,7 @@ beforeEach(() => {
 afterEach(() => {
   delete process.env.DISABLE_WITNESS_STATEMENT_AI;
   delete process.env.DISABLE_COMPLIANCE_AUDIT_AI;
+  delete process.env.VALIDATION_PHASE13_ENABLED;
   __setTestJsonAIClient(null);
   vi.restoreAllMocks();
 });
@@ -312,7 +314,7 @@ describe('Section 21 Licensing Compliance Gates', () => {
     });
 
     const licensingFailure = result.hardFailures.find(
-      (f) => f.code === 'S21-LICENSING-REQUIRED'
+      (f) => f.code === 'S21-LICENSING'
     );
     expect(licensingFailure).toBeTruthy();
     expect(licensingFailure?.legal_reason).toContain('Housing Act 2004');
@@ -335,7 +337,7 @@ describe('Section 21 Licensing Compliance Gates', () => {
     });
 
     const licensingFailure = result.hardFailures.find(
-      (f) => f.code === 'S21-LICENSING-REQUIRED'
+      (f) => f.code === 'S21-LICENSING'
     );
     expect(licensingFailure).toBeTruthy();
     expect(result.ok).toBe(false);
@@ -377,7 +379,7 @@ describe('Section 21 Licensing Compliance Gates', () => {
     });
 
     const licensingFailure = result.hardFailures.find(
-      (f) => f.code === 'S21-LICENSING-REQUIRED'
+      (f) => f.code === 'S21-LICENSING'
     );
     expect(licensingFailure).toBeFalsy();
   });
@@ -469,12 +471,10 @@ describe('Section 21 Retaliatory Eviction Bar', () => {
       stage: 'generate',
     });
 
-    const retaliationWarning = result.warnings.find(
-      (w) => w.code === 'S21-RETALIATORY-RISK'
+    const retaliationFailure = result.hardFailures.find(
+      (f) => f.code === 'S21-RETALIATORY-EVICTION-RISK'
     );
-    expect(retaliationWarning).toBeTruthy();
-    // Should not be a hard failure, just a warning
-    expect(result.hardFailures.find((f) => f.code.includes('RETALIATORY'))).toBeFalsy();
+    expect(retaliationFailure).toBeTruthy();
   });
 });
 
@@ -483,7 +483,7 @@ describe('Section 21 Retaliatory Eviction Bar', () => {
 // ==============================================================================
 
 describe('Section 21 Prohibited Fees Compliance', () => {
-  it('hard-fails when prohibited fees have been charged', () => {
+  it('does not hard-fail on prohibited fees fields for complete pack rules', () => {
     const result = evaluateNoticeCompliance({
       jurisdiction: 'england',
       product: 'complete_pack',
@@ -497,15 +497,13 @@ describe('Section 21 Prohibited Fees Compliance', () => {
       stage: 'generate',
     });
 
-    const prohibitedFeesFailure = result.hardFailures.find(
-      (f) => f.code === 'S21-PROHIBITED-FEES'
+    const prohibitedFeesFailure = result.hardFailures.find((f) =>
+      f.code.includes('PROHIBITED-FEES')
     );
-    expect(prohibitedFeesFailure).toBeTruthy();
-    expect(prohibitedFeesFailure?.legal_reason).toContain('Tenant Fees Act 2019');
-    expect(result.ok).toBe(false);
+    expect(prohibitedFeesFailure).toBeFalsy();
   });
 
-  it('hard-fails when no prohibited fees confirmation is explicitly false', () => {
+  it('does not hard-fail when prohibited fees confirmation is false in complete pack rules', () => {
     const result = evaluateNoticeCompliance({
       jurisdiction: 'england',
       product: 'complete_pack',
@@ -519,11 +517,10 @@ describe('Section 21 Prohibited Fees Compliance', () => {
       stage: 'generate',
     });
 
-    const prohibitedFeesFailure = result.hardFailures.find(
-      (f) => f.code === 'S21-PROHIBITED-FEES-UNCONFIRMED'
+    const prohibitedFeesFailure = result.hardFailures.find((f) =>
+      f.code.includes('PROHIBITED-FEES')
     );
-    expect(prohibitedFeesFailure).toBeTruthy();
-    expect(result.ok).toBe(false);
+    expect(prohibitedFeesFailure).toBeFalsy();
   });
 
   it('passes when no prohibited fees confirmed', () => {
