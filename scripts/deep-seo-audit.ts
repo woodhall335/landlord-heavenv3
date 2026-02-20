@@ -2,12 +2,14 @@ import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import { JSDOM } from 'jsdom';
 
+import { auditOutDir, ensureDir, writeJSON } from './_auditPaths';
 import sitemap from '../src/app/sitemap';
 import robots from '../src/app/robots';
 
 const ROOT = process.cwd();
 const APP_DIR = path.join(ROOT, 'src/app');
-const OUT_DIR = path.join(ROOT, 'audit-output', 'seo-current');
+const AUDIT_DIR = auditOutDir('seo-current');
+const LATEST_DIR = auditOutDir('seo-current', { latest: true });
 const BASE_URL = process.env.SEO_AUDIT_BASE_URL || 'http://localhost:5000';
 
 type RouteRow = {
@@ -102,7 +104,7 @@ function csvEscape(value: unknown) {
 }
 
 async function main() {
-  await fs.mkdir(OUT_DIR, { recursive: true });
+  await ensureDir(AUDIT_DIR);
 
   const allFiles = await walk(APP_DIR);
   const targetBaseNames = new Set(['page.tsx', 'layout.tsx', 'route.ts', 'sitemap.ts', 'robots.ts']);
@@ -149,13 +151,13 @@ async function main() {
 
   routeRows.sort((a, b) => a.routePath.localeCompare(b.routePath) || a.filePath.localeCompare(b.filePath));
 
-  const routesJsonPath = path.join(OUT_DIR, 'route_inventory.json');
-  await fs.writeFile(routesJsonPath, JSON.stringify(routeRows, null, 2));
+  const routesJsonPath = path.join(AUDIT_DIR, 'route_inventory.json');
+  await writeJSON(routesJsonPath, routeRows);
   const routesCsv = [
     ['route_path', 'file_path', 'route_type', 'dynamic', 'has_metadata_export', 'has_robots_directives', 'has_canonical_or_alternates', 'has_structured_data_render', 'notes'].join(','),
     ...routeRows.map((r) => [r.routePath, r.filePath, r.routeType, r.dynamic, r.hasMetadataExport, r.hasRobotsDirectives, r.hasCanonicalOrAlternates, r.hasStructuredDataRender, r.notes].map(csvEscape).join(',')),
   ].join('\n');
-  await fs.writeFile(path.join(OUT_DIR, 'route_inventory.csv'), routesCsv);
+  await fs.writeFile(path.join(AUDIT_DIR, 'route_inventory.csv'), routesCsv);
 
   const sitemapEntriesRaw = await sitemap();
   const dynamicPatterns = dynamicPageRoutes.map((p) => ({ p, regex: routePatternFromPage(p) }));
@@ -175,10 +177,10 @@ async function main() {
     };
   });
 
-  await fs.writeFile(path.join(OUT_DIR, 'sitemap_entries.json'), JSON.stringify(sitemapEntries, null, 2));
+  await writeJSON(path.join(AUDIT_DIR, 'sitemap_entries.json'), sitemapEntries);
 
   const robotsConfig = robots();
-  await fs.writeFile(path.join(OUT_DIR, 'robots_rules.json'), JSON.stringify(robotsConfig, null, 2));
+  await writeJSON(path.join(AUDIT_DIR, 'robots_rules.json'), robotsConfig);
 
   const knownImportantRoutes = [
     '/', '/pricing', '/tools', '/products/notice-only', '/products/complete-pack', '/products/money-claim', '/products/ast', '/blog', '/help', '/contact', '/about', '/ask-heaven', '/eviction-notice', '/money-claim', '/wizard', '/dashboard', '/auth/login'
@@ -341,7 +343,7 @@ async function main() {
     (row as any).duplicateDescription = desc ? (descMap.get(desc)! > 1) : false;
   }
 
-  await fs.writeFile(path.join(OUT_DIR, 'seo_audit_report.json'), JSON.stringify(seoRows, null, 2));
+  await writeJSON(path.join(AUDIT_DIR, 'seo_audit_report.json'), seoRows);
   const seoHeaders = [
     'url','path','status','finalUrl','redirectCount','indexable','indexabilityReasons','canonicalOk','title','titleLength','description','descriptionLength','robotsMeta','canonical','alternateCount','ogTitle','ogDescription','ogImage','ogUrl','twitterTitle','twitterDescription','twitterImage','jsonLdCount','jsonLdTypes','h1Count','h1Text','h2Count','internalLinkCount','topInternalLinkTargets','missingTitle','missingDescription','missingCanonical','missingOgTitle','missingOgDescription','missingOgImage','missingTwitterTitle','duplicateTitle','duplicateDescription','fetchError'
   ];
@@ -349,7 +351,7 @@ async function main() {
     seoHeaders.join(','),
     ...seoRows.map((row) => seoHeaders.map((h) => csvEscape((row as any)[h])).join(',')),
   ].join('\n');
-  await fs.writeFile(path.join(OUT_DIR, 'seo_audit_report.csv'), seoCsv);
+  await fs.writeFile(path.join(AUDIT_DIR, 'seo_audit_report.csv'), seoCsv);
 
   const sitemapPaths = new Set(sitemapEntries.map((e) => e.path));
   const publicStaticRoutes = Array.from(staticPageRoutes).filter((p) => !['/dashboard','/wizard'].some((x) => p === x || p.startsWith(`${x}/`)) && !['/auth','/api','/success'].some((x) => p === x || p.startsWith(`${x}/`)));
@@ -381,7 +383,7 @@ async function main() {
     },
   };
 
-  await fs.writeFile(path.join(OUT_DIR, 'seo_audit_summary.json'), JSON.stringify(summary, null, 2));
+  await writeJSON(path.join(AUDIT_DIR, 'seo_audit_summary.json'), summary);
 
   const md = [
     '# Deep SEO Audit Summary',
@@ -403,9 +405,12 @@ async function main() {
     ...seoRows.filter((r) => !(r as any).indexable).slice(0, 50).map((r) => `- ${r.path}: ${(r.indexabilityReasons as string[]).join(', ')}`),
   ].join('\n');
 
-  await fs.writeFile(path.join(OUT_DIR, 'seo_audit_summary.md'), md);
+  await fs.writeFile(path.join(AUDIT_DIR, 'seo_audit_summary.md'), md);
 
-  console.log(`Wrote SEO audit outputs to ${OUT_DIR}`);
+  await fs.rm(LATEST_DIR, { recursive: true, force: true });
+  await fs.cp(AUDIT_DIR, LATEST_DIR, { recursive: true, force: true });
+
+  console.log(`Wrote SEO audit outputs to ${AUDIT_DIR} (latest mirrored at ${LATEST_DIR})`);
 }
 
 main().catch((err) => {
