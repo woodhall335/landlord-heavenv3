@@ -198,7 +198,7 @@ export function UniversalHero({
 
             {shouldRenderMedia && (
               <div
-                className="float-right mt-3 mb-6 ml-4 w-[110%] max-w-[680px] translate-x-[20%] pt-0 lg:hidden"
+                className="relative float-right ml-4 mt-3 mb-6 w-[68%] max-w-[520px] transform-gpu origin-top-right scale-[1.5] translate-x-[20%] pt-0 lg:hidden"
                 aria-hidden={mascotDecorativeOnDesktop ? 'true' : undefined}
               >
                 <Image

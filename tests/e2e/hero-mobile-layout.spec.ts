@@ -16,8 +16,11 @@ if (!playwright) {
       viewport: { width: 390, height: 844 },
     });
 
-    test('keeps mobile hero media floated, wrapped by subtitle text, and bleeding offscreen', async ({ page }) => {
-      await page.goto('/products/notice-only');
+    const targets = ['/products/notice-only', '/products/money-claim'];
+
+    for (const route of targets) {
+      test(`keeps mobile hero media floated, wrapped subtitle text, and bleed on ${route}`, async ({ page }) => {
+        await page.goto(route);
 
       const hero = page.locator('section[aria-label="Landlord Heaven legal document hero"]').first();
       const mediaWrapper = hero.locator('div.float-right.lg\\:hidden').first();
@@ -59,7 +62,8 @@ if (!playwright) {
       expect(geometry.mediaRight).toBeGreaterThan(geometry.viewportWidth);
       expect(geometry.subtitleLeft).toBeLessThan(geometry.mediaLeft);
       expect(geometry.subtitleTop).toBeLessThan(geometry.mediaBottom);
-      expect(geometry.ctaTop).toBeGreaterThanOrEqual(Math.max(geometry.subtitleBottom, geometry.mediaBottom) - 1);
-    });
+        expect(geometry.ctaTop).toBeGreaterThanOrEqual(Math.max(geometry.subtitleBottom, geometry.mediaBottom) - 1);
+      });
+    }
   });
 }
