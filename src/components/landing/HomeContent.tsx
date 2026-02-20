@@ -475,7 +475,7 @@ function ProductCard({
           {icon}
         </div>
 
-        <h3 className="text-4xl font-bold text-[#1d1948] mb-3 leading-tight group-hover:text-primary transition-colors">
+        <h3 className="text-2xl font-bold text-[#1d1948] mb-3 leading-tight group-hover:text-primary transition-colors">
           {title}
         </h3>
         <p className="text-[#5d5a78] mb-5 text-lg leading-relaxed">{description}</p>
