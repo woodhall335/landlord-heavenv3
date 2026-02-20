@@ -507,7 +507,7 @@ function JurisdictionCard({
       <div className="w-16 h-16 bg-white rounded-full border border-gray-200 shadow-sm flex items-center justify-center mx-auto mb-4 overflow-hidden">
         <Image src={flag} alt={title} width={48} height={48} className="w-12 h-12 object-contain" />
       </div>
-      <h3 className="text-4xl font-bold text-[#0f172a] mb-5 text-center">{title}</h3>
+      <h3 className="text-2xl font-bold text-[#0f172a] mb-5 text-center">{title}</h3>
       <ul className="text-base text-gray-700 space-y-2.5 mb-6 flex-1">
         {forms.map((form) => (
           <li key={form} className="flex items-start gap-2.5 border-b border-gray-100 pb-2.5 last:border-b-0 last:pb-0">
