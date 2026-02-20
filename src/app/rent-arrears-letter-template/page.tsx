@@ -37,8 +37,8 @@ const wizardLinkNoticeOnly = buildWizardLink({
 });
 
 export const metadata: Metadata = {
-  title: 'Rent Arrears Letter Template - Free Download',
-  description: 'Download a free rent arrears letter template. Formal demand letters for unpaid rent. Escalate to money claim or eviction. Trusted by 10,000+ UK landlords.',
+  title: 'Rent Arrears Letter Template UK | Free Download + Examples',
+  description: 'Rent arrears letter template UK landlords can send today. Use staged demand letters, payment deadlines, and escalation steps before MCOL or Section 8 action.',
   keywords: [
     'rent arrears letter template',
     'rent demand letter',
@@ -141,8 +141,8 @@ export default function RentArrearsLetterTemplatePage() {
         <StandardHero
           badge="Recover your rent"
           badgeIcon={<PoundSterling className="w-4 h-4" />}
-          title="Rent Arrears Letter Template"
-          subtitle={<>Download a free <strong>rent arrears letter template</strong> to demand unpaid rent. Escalate to eviction or money claim if needed.</>}
+          title="Rent Arrears Letter Template UK"
+          subtitle={<>Use this <strong>rent arrears letter template UK</strong> landlords rely on to chase unpaid rent quickly, set clear deadlines, and escalate correctly if payment is still not made.</>}
           primaryCTA={{ label: "Get Money Claim Pack — £99.99", href: wizardLinkMoneyClaim }}
           secondaryCTA={{ label: "Try Free Template", href: "/tools/free-rent-demand-letter" }}
           variant="pastel"

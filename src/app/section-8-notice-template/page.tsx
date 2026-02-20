@@ -41,8 +41,8 @@ const wizardLinkNoticeOnly = buildWizardLink({
 });
 
 export const metadata: Metadata = {
-  title: 'Section 8 Notice Template 2026 for Landlords | Free Form 3',
-  description: 'Section 8 notice template for grounds-based eviction. Avoid delays and compliance errors. Free Form 3 template included.',
+  title: 'Section 8 Notice Template | Form 3 Download for Landlords',
+  description: 'Section 8 notice template with Form 3 structure, grounds guidance, and timelines. Download free or build a court-ready notice for rent arrears and other breaches.',
   keywords: [
     'section 8 notice',
     'section 8 notice template',
@@ -63,7 +63,7 @@ export const metadata: Metadata = {
     canonical: 'https://landlordheaven.co.uk/section-8-notice-template',
   },
   openGraph: {
-    title: 'Section 8 Notice Template 2026 for Landlords | Free Form 3',
+    title: 'Section 8 Notice Template | Form 3 Download for Landlords',
     description: 'Free Section 8 notice template for landlords in England. Serve the correct Form 3 with grounds, timelines, and compliance clarity.',
     type: 'website',
   },
@@ -104,8 +104,8 @@ export default function Section8NoticeTemplatePage() {
         <StandardHero
           badge="Works after May 2026"
           badgeIcon={<CheckCircle className="w-4 h-4" />}
-          title="Section 8 Notice (Form 3) — Free Template for England"
-          subtitle={<>Download a free <strong>Section 8 notice</strong> template for England. You must serve notice on <Link href="/form-3-section-8" className="text-primary hover:underline">Form 3</Link>. Grounds-based eviction for rent arrears (Ground 8, 10, 11), antisocial behaviour, property damage and more.</>}
+          title="Section 8 Notice Template (Form 3) for England"
+          subtitle={<>Need a <strong>Section 8 notice template</strong>? Use this Form 3 guide to choose the right grounds, notice periods, and wording for rent arrears, antisocial behaviour, and other tenancy breaches.</>}
           primaryCTA={{ label: "Get Complete Pack — £199.99", href: wizardLinkCompletePack }}
           secondaryCTA={{ label: "Try Free Template", href: "/tools/free-section-8-notice-generator" }}
           variant="pastel"

@@ -18,9 +18,9 @@ import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { moneyClaimGuides, moneyClaimProcessLinks, productLinks } from '@/lib/seo/internal-links';
 
 export const metadata: Metadata = {
-  title: 'Money Claim Online (MCOL) for Landlords 2026 | How to Use Guide',
+  title: 'Money Claim Online (MCOL) Guide for Landlords | Claim Unpaid Rent',
   description:
-    'Step-by-step guide to using Money Claim Online to recover tenant debts. How MCOL works, fees, timelines, and what happens after you submit.',
+    'Money Claim Online (MCOL) guide for landlords recovering unpaid rent and tenant debt. Learn fees, timelines, evidence, and how to submit a stronger claim.',
   keywords: [
     'money claim online',
     'MCOL',
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     'MCOL process',
   ],
   openGraph: {
-    title: 'Money Claim Online (MCOL) for Landlords 2026 | How to Use Guide',
+    title: 'Money Claim Online (MCOL) Guide for Landlords | Claim Unpaid Rent',
     description:
       'Complete guide to using the Money Claim Online system for landlord tenant debt recovery.',
     type: 'article',
@@ -131,12 +131,11 @@ export default function MoneyClaimOnlineMCOLPage() {
               </div>
 
               <h1 className="text-4xl lg:text-5xl font-bold mb-6">
-                Money Claim Online (MCOL) Guide
+                Money Claim Online (MCOL) for Landlords
               </h1>
 
               <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-                The government&apos;s online system for recovering debts up to £100,000.
-                How it works, what it costs, and how to use it effectively.
+                Need to use Money Claim Online (MCOL) for unpaid rent? This guide explains exactly how landlords file, what court fees apply, and how to prepare evidence that supports faster recovery.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -176,6 +175,13 @@ export default function MoneyClaimOnlineMCOLPage() {
                 </p>
               </div>
 
+              <div className="bg-blue-50 border border-blue-200 rounded-xl p-5 mb-8">
+                <p className="text-blue-900">
+                  If your Letter Before Action has expired and payment is still outstanding, move straight into a
+                  <Link href="/products/money-claim" className="font-semibold underline ml-1">court-ready Money Claim pack</Link>
+                  so your particulars, evidence schedule, and filing steps stay aligned.
+                </p>
+              </div>
               <div className="grid md:grid-cols-3 gap-6 mb-8">
                 <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
                   <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">

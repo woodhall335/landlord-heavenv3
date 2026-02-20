@@ -61,8 +61,8 @@ const complianceLinks = {
 };
 
 export const metadata: Metadata = {
-  title: 'Section 21 Notice Template 2026 for Landlords | Free Form 6A',
-  description: 'Section 21 notice template for landlords. Build a court-ready Form 6A to avoid delays and invalid notices. Free template available.',
+  title: 'Section 21 Notice Template | Form 6A Download & Court-Ready Builder',
+  description: 'Section 21 notice template with Form 6A wording, service guidance, and compliance checks. Download free or generate a court-ready notice in minutes.',
   keywords: [
     'section 21 notice template',
     'section 21 template',
@@ -75,7 +75,7 @@ export const metadata: Metadata = {
     canonical: 'https://landlordheaven.co.uk/section-21-notice-template',
   },
   openGraph: {
-    title: 'Section 21 Notice Template 2026 for Landlords | Free Form 6A',
+    title: 'Section 21 Notice Template | Form 6A Download & Court-Ready Builder',
     description: 'Free Section 21 notice template for landlords in England. Build a compliant Form 6A fast and avoid costly delays.',
     type: 'website',
   },
@@ -117,8 +117,8 @@ export default function Section21NoticeTemplatePage() {
         <StandardHero
           badge="Section 21 ends 1 May 2026"
           badgeIcon={<AlertTriangle className="w-4 h-4" />}
-          title="Section 21 Notice Template (England) / Court-Ready Form 6A"
-          subtitle={<>Download a free <strong>Section 21 notice template</strong> or generate a court-ready <strong>Form 6A</strong> in minutes. Trusted by over 10,000 UK landlords.</>}
+          title="Section 21 Notice Template (Form 6A) for England"
+          subtitle={<>Need a <strong>Section 21 notice template</strong> now? Download a free version for reference or generate a compliance-checked <strong>Form 6A</strong> you can serve with confidence.</>}
           primaryCTA={{ label: "Get Court-Ready Notice — £49.99", href: wizardLink }}
           secondaryCTA={{ label: "Try Free Template", href: "/tools/free-section-21-notice-generator" }}
           variant="pastel"

@@ -7,9 +7,9 @@ import { FAQSection } from '@/components/seo/FAQSection';
 import { lodgerAgreementFAQs } from '@/data/faqs';
 
 export const metadata: Metadata = {
-  title: 'Lodger Agreement Template UK | Free Download 2026',
+  title: 'Lodger Agreement Template UK (Live-In Landlords) | Free Template for Live-In Landlords',
   description:
-    'Free lodger agreement template for UK landlords. For live-in landlords sharing their home. Includes rent, notice periods, and house rules.',
+    'Lodger agreement template UK for live-in landlords. Download a free template, understand lodger rights, and create terms for rent, notice, and house rules.',
   keywords: [
     'lodger agreement template',
     'lodger agreement UK',
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     'room rental agreement UK',
   ],
   openGraph: {
-    title: 'Lodger Agreement Template UK | Landlord Heaven',
+    title: 'Lodger Agreement Template UK (Live-In Landlords) | Landlord Heaven',
     description:
       'Free lodger agreement template for live-in landlords. Download or generate online.',
     type: 'article',
@@ -50,15 +50,17 @@ export default function LodgerAgreementPage() {
                 <span className="text-sm font-semibold text-primary">Live-In Landlords</span>
               </div>
               <h1 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
-                Lodger Agreement Template UK
+                Lodger Agreement Template UK (Live-In Landlords)
               </h1>
               <p className="text-xl text-gray-600 mb-8">
-                If you&apos;re a live-in landlord letting a room in your home, you need a lodger
-                agreement - not a tenancy agreement. Get the right document for your situation.
+                Need a lodger agreement template UK landlords can use with confidence? If you live in the property, you normally need a lodger agreement rather than an AST. Start with the right legal structure, then customise rent, notice, and house rules.
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4">
                 <Link href="/products/ast" className="hero-btn-primary">
                   Get Lodger Agreement
+                </Link>
+                <Link href="/products/ast" className="hero-btn-secondary">
+                  Compare Standard vs Premium Pack
                 </Link>
               </div>
             </div>
@@ -124,6 +126,12 @@ export default function LodgerAgreementPage() {
                     <strong>House rules:</strong> Guests, smoking, pets, quiet hours, etc.
                   </li>
                 </ul>
+
+                <p className="bg-purple-50 border border-purple-200 rounded-lg p-4">
+                  If you want a faster route from free template to signed paperwork, use our
+                  <Link href="/products/ast" className="text-primary hover:underline"> tenancy agreement product pack</Link>
+                  to generate and download your final document in one flow.
+                </p>
 
                 <h2>Rent a Room Scheme</h2>
                 <p>

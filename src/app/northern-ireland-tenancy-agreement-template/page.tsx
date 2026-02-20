@@ -20,8 +20,8 @@ import { tenancyAgreementNILinks } from '@/lib/seo/internal-links';
 import { FAQSection } from '@/components/seo/FAQSection';
 
 export const metadata: Metadata = {
-  title: 'Northern Ireland Tenancy Agreement Template 2026 | Private Tenancies Act Compliant',
-  description: 'Create a legally compliant NI tenancy agreement for 2026. Updated for the Private Tenancies Act (NI) 2022 with all prescribed terms.',
+  title: 'Northern Ireland Tenancy Agreement Template | NI Compliant 2026',
+  description: 'Northern Ireland tenancy agreement template updated for Private Tenancies Act (NI) 2022 rules. Create compliant tenancy terms and prescribed information quickly.',
   keywords: [
     'Northern Ireland tenancy agreement template',
     'NI tenancy agreement',
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     canonical: getCanonicalUrl('/northern-ireland-tenancy-agreement-template'),
   },
   openGraph: {
-    title: 'Northern Ireland Tenancy Agreement Template 2026 | Private Tenancies Act Compliant',
+    title: 'Northern Ireland Tenancy Agreement Template | NI Compliant 2026',
     description: 'Create a legally compliant NI tenancy agreement. Private Tenancies Act (NI) 2022 compliant. From £14.99.',
     type: 'article',
     url: getCanonicalUrl('/northern-ireland-tenancy-agreement-template'),
@@ -101,7 +101,7 @@ export default function NorthernIrelandTenancyAgreementTemplatePage() {
     <>
       <StructuredData
         data={articleSchema({
-          headline: 'Northern Ireland Tenancy Agreement Template 2026 | Private Tenancies Act Compliant',
+          headline: 'Northern Ireland Tenancy Agreement Template (NI) | Private Tenancies Act Compliant',
           description: 'Create a legally compliant Northern Ireland tenancy agreement template for 2026. Fully updated for the Private Tenancies Act (NI) 2022 with all prescribed terms.',
           url: getCanonicalUrl('/northern-ireland-tenancy-agreement-template'),
           datePublished: '2024-01-15',
@@ -139,11 +139,10 @@ export default function NorthernIrelandTenancyAgreementTemplatePage() {
               <span className="text-sm font-medium">Private Tenancies Act 2022 Compliant</span>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              Northern Ireland Tenancy Agreement Template 2026
+              Northern Ireland Tenancy Agreement Template (NI)
             </h1>
             <p className="text-xl text-emerald-100 mb-8 max-w-2xl">
-              Create a legally compliant Private Tenancy Agreement for Northern Ireland in minutes.
-              Fully updated for the Private Tenancies Act (NI) 2022 with all prescribed terms and mandatory clauses.
+              Need a Northern Ireland tenancy agreement template that meets current law? Build a compliant NI agreement with the prescribed terms required by the Private Tenancies Act (NI) 2022, including rent, deposit, and notice clauses.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link

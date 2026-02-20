@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import Link from 'next/link';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { HeaderConfig } from '@/components/layout';
 import { Container } from '@/components/ui/Container';
@@ -450,7 +451,7 @@ URL.revokeObjectURL(url);
         primaryCta={{ label: 'Start Free Generator →', href: '#generator' }}
         secondaryCta={{ label: 'Get Court-Ready Version →', href: '/products/notice-only?product=demand_letter' }}
       >
-        <p className="mt-4 text-sm text-white/90">Instant download • Basic template • Upgrade for legal compliance</p>
+        <p className="mt-4 text-sm text-white/90">Instant download • Basic template • Upgrade for legal compliance • Need examples? See our <Link href="/rent-arrears-letter-template" className="underline font-semibold">rent arrears letter template guide</Link></p>
       </UniversalHero>
 
       {/* Legal Disclaimer Banner */}

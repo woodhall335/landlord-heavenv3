@@ -132,7 +132,7 @@ export default function Section8VsSection21Page() {
               <span className="text-primary">Which Should You Use?</span>
             </>
           }
-          subtitle="The two main eviction notices in England have different uses, notice periods, and court processes. Here is how to choose the right one."
+          subtitle={<>The two main eviction notices in England have different uses, notice periods, and court processes. Here is how to choose the right one — then use our <Link href="/section-8-notice-template" className="text-primary hover:underline">Section 8 notice template</Link> or <Link href="/section-21-notice-template" className="text-primary hover:underline">Section 21 notice template</Link> to draft the right form.</>}
           primaryCTA={{
             label: `Get Both Notices — ${PRODUCTS.notice_only.displayPrice}`,
             href: noticeOnlyLink,

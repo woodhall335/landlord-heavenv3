@@ -8,9 +8,9 @@ import { form6aFAQs } from '@/data/faqs';
 import { FunnelCta } from '@/components/funnels';
 
 export const metadata: Metadata = {
-  title: 'Form 6A Section 21 Notice | Download & Guide 2026',
+  title: 'Form 6A Section 21 Notice | Official Template + Guide',
   description:
-    'Form 6A is the prescribed Section 21 notice for England. Download the official form or generate a pre-filled notice instantly.',
+    'Form 6A Section 21 notice guide for England landlords. Download the official template, avoid invalid service mistakes, and generate a pre-filled notice fast.',
   keywords: [
     'form 6a',
     'form 6a section 21',
@@ -52,12 +52,10 @@ export default function Form6APage() {
                 <span className="text-sm font-semibold text-primary">England Only</span>
               </div>
               <h1 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
-                Form 6A: Section 21 Notice for England
+                Form 6A Section 21 Notice Template (England)
               </h1>
               <p className="text-xl text-gray-600 mb-8">
-                Form 6A is the official prescribed form for serving a Section 21 "no-fault" eviction
-                notice in England. Using the wrong form or completing it incorrectly will invalidate
-                your notice.
+                Need a Form 6A Section 21 notice? Form 6A is the prescribed notice for no-fault possession in England, and small errors can invalidate your notice. This page shows what to include, how to set dates correctly, and when to use a compliance-checked Notice Only service.
               </p>
             </div>
           </Container>
@@ -120,6 +118,12 @@ export default function Form6APage() {
                   You must use Form 6A (or a form "substantially to the same effect") for all
                   assured shorthold tenancies in England where you want to regain possession without
                   proving fault.
+                </p>
+
+                <p className="bg-purple-50 border border-purple-200 rounded-lg p-4">
+                  Once your dates and compliance documents are confirmed, you can move from a free template to a
+                  <Link href="/products/notice-only" className="text-primary hover:underline"> court-ready Notice Only pack</Link>
+                  that prepares service evidence and next-step guidance.
                 </p>
 
                 <h2>When Can You Use Form 6A?</h2>

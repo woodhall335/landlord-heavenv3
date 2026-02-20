@@ -129,7 +129,7 @@ export default function TenancyAgreementTemplateFreeComparisonPage() {
             <p className="text-xl text-gray-700 mb-8 max-w-3xl mx-auto">
               Searching for a <strong>free tenancy agreement template</strong>? Understand what free options
               actually offer, what they miss, and when investing £14.99 in a professional template
-              could save you thousands in disputes and failed evictions.
+              could save you thousands in disputes and failed evictions. If you are renting a room in your own home, use a <Link href="/lodger-agreement-template" className="text-primary hover:underline">lodger agreement template</Link> instead of an AST.
             </p>
           </div>
         </section>
