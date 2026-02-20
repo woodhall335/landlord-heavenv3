@@ -198,7 +198,7 @@ export function UniversalHero({
 
             {shouldRenderMedia && (
               <div
-                className="relative block w-[70%] max-w-[420px] float-right transform-gpu translate-x-[20%] pt-6 ml-2 mb-2 lg:hidden"
+                className="relative block w-[85%] max-w-[540px] float-right transform-gpu translate-x-[20%] -translate-y-[20%] pt-12 ml-1 mb-1 lg:hidden"
                 aria-hidden={mascotDecorativeOnDesktop ? 'true' : undefined}
               >
                 <Image
@@ -208,7 +208,7 @@ export function UniversalHero({
                   width={980}
                   height={650}
                   priority={mediaPriority}
-                  sizes="(max-width: 1024px) 70vw, 46vw"
+                  sizes="(max-width: 1024px) 85vw, 46vw"
                   className="h-auto w-full"
                 />
               </div>
@@ -238,24 +238,6 @@ export function UniversalHero({
                 )}
                 {actionsSlot}
               </div>
-            )}
-
-            {shouldShowReviewPill && trustText && (
-              <p
-                className={clsx(
-                  'hidden clear-both mt-6 w-full flex-wrap items-center justify-center gap-x-3 gap-y-1 rounded-full border border-white/80 bg-white/85 px-4 py-2 text-center text-sm font-semibold shadow-sm backdrop-blur-sm sm:flex lg:hidden',
-                  isCenter && 'mx-auto'
-                )}
-              >
-                <RiShieldCheckFill className="h-5 w-5 text-[#7c3aed]" aria-hidden="true" />
-                <span>{trustText}</span>
-                <span className="text-[#facc15]" aria-hidden="true">
-                  ★★★★★
-                </span>
-                <span className="font-medium text-[#2b253d]">
-                  {REVIEW_RATING}/5 · {reviewCount} reviews
-                </span>
-              </p>
             )}
 
             {feature && (

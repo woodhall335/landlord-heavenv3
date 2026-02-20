@@ -24,8 +24,7 @@ const astPremiumPrice = PRODUCTS.ast_premium.displayPrice;
 
 const astSubtitle: ReactNode = (
   <>
-    Generate a jurisdiction-specific tenancy agreement pack: AST (England), Occupation Contract (Wales), PRT (Scotland), and NI private tenancy —
-    <span className="font-semibold"> includes a compliance checklist, preview before paying, and instant regeneration</span>
+    Generate a jurisdiction-specific tenancy agreement pack: AST (England), Occupation Contract (Wales), PRT (Scotland), and NI private tenancy, tailored for your jurisdiction.
   </>
 );
 
@@ -36,6 +35,7 @@ const defaultHeroMedia = {
 };
 
 export const homeHeroConfig: HeroConfig = {
+  ...defaultHeroMedia,
   trustText: 'England, Wales & Scotland Coverage • Reform-aware legal automation',
   title: 'Complete UK Eviction Case Bundles',
   highlightTitle: 'in Minutes',
@@ -47,10 +47,10 @@ export const homeHeroConfig: HeroConfig = {
   ),
   primaryCta: { label: 'Generate Your Complete Case Bundle →', href: '/wizard' },
   feature: 'Complete eviction case bundles. AI-generated. Jurisdiction-specific. Court-ready file output.',
-  ...defaultHeroMedia,
 };
 
 export const astHeroConfig: HeroConfig = {
+  ...defaultHeroMedia,
   trustText: 'AST (England) • Occupation Contract (Wales) • PRT (Scotland) • NI',
   title: 'Jurisdiction-Specific',
   highlightTitle: 'Tenancy Agreement Pack',
@@ -64,10 +64,10 @@ export const astHeroConfig: HeroConfig = {
     href: '/wizard?product=ast_premium&src=product_page&topic=tenancy',
   },
   feature: 'AST (England), Occupation Contract (Wales), PRT (Scotland), and NI jurisdiction-specific agreements',
-  ...defaultHeroMedia,
 };
 
 export const noticeOnlyHeroConfig: HeroConfig = {
+  ...defaultHeroMedia,
   trustText: 'S21 & S8 (England) • S173 • Notice to Leave',
   title: 'Eviction Notice Bundle',
   highlightTitle: 'Jurisdiction-Specific',
@@ -77,23 +77,23 @@ export const noticeOnlyHeroConfig: HeroConfig = {
     href: '/wizard?product=notice_only&src=product_page&topic=eviction',
   },
   feature: 'Built against statutory frameworks with reform-aware validation and filing guidance',
-  ...defaultHeroMedia,
 };
 
 export const completePackHeroConfig: HeroConfig = {
+  ...defaultHeroMedia,
   trustText: 'England-only (HMCTS / County Court forms)',
   title: 'Complete Eviction Case Bundle',
-  highlightTitle: 'England-only',
+  highlightTitle: 'HMCTS / County Court forms',
   subtitle: 'Section 21/8 notice routes plus N5 / N5B / N119, witness statement drafting, evidence checklist, and filing guide. Preview before purchase.',
   primaryCta: {
     label: 'Start my England case bundle →',
     href: '/wizard?product=complete_pack&src=product_page&topic=eviction',
   },
   feature: 'Section 21/8 notice workflows, N5B claim path, evidence checklist, and filing instructions in one case file',
-  ...defaultHeroMedia,
 };
 
 export const blogHeroConfig: HeroConfig = {
+  ...defaultHeroMedia,
   trustText: 'Landlord Guides & Insights',
   title: 'Landlord Guides',
   highlightTitle: 'built for confident decisions',
@@ -101,18 +101,17 @@ export const blogHeroConfig: HeroConfig = {
   primaryCta: { label: 'Browse Guides →', href: '/blog' },
   secondaryCta: { label: 'View Latest Posts →', href: '/blog?view=latest' },
   feature: 'Step-by-step legal guidance updated for UK regulations',
-  ...defaultHeroMedia,
 };
 
 export const moneyClaimHeroConfig: HeroConfig = {
+  ...defaultHeroMedia,
   trustText: 'England-only (County Court / MCOL-ready)',
   title: 'Money Claim Pack',
-  highlightTitle: 'England-only bundle',
+  highlightTitle: 'County Court bundle',
   subtitle: 'For recovering unpaid rent or tenancy-related debt through the County Court (England). You answer guided questions. We structure your claim clearly for filing.',
   primaryCta: {
     label: 'Start my England money claim bundle →',
     href: '/wizard?product=money_claim&src=product_page',
   },
   feature: 'N1 claim form, PAP-DEBT letter, and interest calculator included',
-  ...defaultHeroMedia,
 };
