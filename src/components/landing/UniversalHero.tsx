@@ -40,6 +40,9 @@ export type UniversalHeroProps = {
   showReviewPill?: boolean;
   showUsageCounter?: boolean;
   backgroundImageSrc?: string;
+  mobileMediaScale?: number;
+  mobileMediaTranslateXPercent?: number;
+  mobileMediaWidthPercent?: number;
 };
 
 const warnedMessages = new Set<string>();
@@ -84,6 +87,9 @@ export function UniversalHero({
   showReviewPill,
   showUsageCounter,
   backgroundImageSrc = '/images/bg.webp',
+  mobileMediaScale = 1.5,
+  mobileMediaTranslateXPercent = 20,
+  mobileMediaWidthPercent = 70,
 }: UniversalHeroProps) {
   const mobileTitleParts = title.split('Legal Documents');
   const hasLegalDocumentsInTitle = mobileTitleParts.length > 1;
@@ -198,7 +204,15 @@ export function UniversalHero({
 
             {shouldRenderMedia && (
               <div
-                className="relative block float-right w-1/2 max-w-[260px] ml-4 mb-3 pt-4 sm:max-w-[320px] lg:hidden lg:translate-x-[20%] lg:-translate-y-[20%]"
+                className={clsx(
+                  'relative lg:hidden float-right clear-none',
+                  'max-w-none transform-gpu origin-right',
+                  'ml-4 mb-3 mt-2'
+                )}
+                style={{
+                  width: `${mobileMediaWidthPercent}%`,
+                  transform: `translateX(${mobileMediaTranslateXPercent}%) scale(${mobileMediaScale})`,
+                }}
                 aria-hidden={mascotDecorativeOnDesktop ? 'true' : undefined}
               >
                 <Image
