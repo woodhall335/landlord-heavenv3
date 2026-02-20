@@ -133,7 +133,12 @@ export function UniversalHero({
       <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-black/25 via-black/15 to-black/30" aria-hidden="true" />
 
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className={clsx('grid items-center gap-8 lg:gap-10', shouldRenderMedia && 'lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]')}>
+        <div
+          className={clsx(
+            'block gap-8 lg:grid lg:items-center lg:gap-10',
+            shouldRenderMedia && 'lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]'
+          )}
+        >
           <div className={clsx('relative z-10 w-full min-w-0', isCenter ? 'text-center lg:text-center' : 'text-left', hideMedia && 'max-w-3xl mx-auto')}>
             {badge && (
               <div className={clsx('mb-4 inline-flex items-center gap-2 rounded-full border border-white/50 bg-white/20 px-4 py-2 text-sm font-semibold text-white backdrop-blur-sm', isCenter && 'mx-auto')}>
@@ -143,7 +148,7 @@ export function UniversalHero({
             )}
 
             {shouldShowReviewPill && trustText && (
-              <p className={clsx('hidden w-full max-w-xl flex-wrap items-center gap-x-3 gap-y-1 rounded-full border border-white/80 bg-white/85 px-4 py-2 text-sm font-semibold shadow-sm backdrop-blur-sm sm:flex', isCenter ? 'mx-auto justify-center text-center' : 'justify-start text-left')}>
+              <p className={clsx('hidden w-full max-w-xl flex-wrap items-center gap-x-3 gap-y-1 rounded-full border border-white/80 bg-white/85 px-4 py-2 text-sm font-semibold shadow-sm backdrop-blur-sm lg:flex', isCenter ? 'mx-auto justify-center text-center' : 'justify-start text-left')}>
                 <RiShieldCheckFill className="h-5 w-5 text-[#7c3aed]" aria-hidden="true" />
                 <span>{trustText}</span>
                 <span className="text-[#facc15]" aria-hidden="true">
@@ -155,7 +160,12 @@ export function UniversalHero({
               </p>
             )}
 
-            <HeadingTag className="mt-5 max-w-[18ch] text-[2.125rem] font-bold leading-[1.1] tracking-tight text-white sm:text-5xl lg:max-w-none lg:text-6xl">
+            <HeadingTag
+              className={clsx(
+                'mt-5 text-[2.125rem] font-bold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-6xl',
+                shouldRenderMedia ? 'max-w-none' : 'max-w-[18ch] lg:max-w-none'
+              )}
+            >
               <span className="sm:hidden">
                 {hasLegalDocumentsInTitle ? (
                   <>
@@ -186,6 +196,21 @@ export function UniversalHero({
               )}
             </HeadingTag>
 
+            {shouldRenderMedia && (
+              <div className="float-right ml-4 mb-4 block w-[70%] max-w-[420px] pt-6 lg:hidden" aria-hidden={mascotDecorativeOnDesktop ? 'true' : undefined}>
+                <Image
+                  src={resolvedMediaSrc}
+                  alt={isDecorativeMedia ? '' : resolvedMediaAlt}
+                  aria-hidden={isDecorativeMedia ? 'true' : undefined}
+                  width={980}
+                  height={650}
+                  priority={mediaPriority}
+                  sizes="(max-width: 1024px) 70vw, 46vw"
+                  className="h-auto w-full"
+                />
+              </div>
+            )}
+
             {subtitle && (
               <p className={clsx('mt-4 w-full px-0 py-0 text-lg leading-relaxed text-white/85 sm:max-w-[52ch] sm:text-xl', isCenter && 'sm:mx-auto')}>
                 {subtitle}
@@ -193,7 +218,7 @@ export function UniversalHero({
             )}
 
             {(primaryCta || secondaryCta || actionsSlot) && (
-              <div className={clsx('mt-6 flex w-full flex-col gap-3 sm:flex-row sm:items-center', isCenter && 'sm:justify-center')}>
+              <div className={clsx('clear-both mt-6 flex w-full flex-col gap-3 sm:flex-row sm:items-center lg:clear-none', isCenter && 'sm:justify-center')}>
                 {primaryCta && (
                   <div className="w-full sm:w-auto">
                     <Link href={primaryCta.href} className="hero-btn-primary flex w-full justify-center text-center sm:w-auto">
@@ -212,8 +237,26 @@ export function UniversalHero({
               </div>
             )}
 
+            {shouldShowReviewPill && trustText && (
+              <p
+                className={clsx(
+                  'clear-both mt-6 flex w-full flex-wrap items-center justify-center gap-x-3 gap-y-1 rounded-full border border-white/80 bg-white/85 px-4 py-2 text-center text-sm font-semibold shadow-sm backdrop-blur-sm lg:hidden',
+                  isCenter && 'mx-auto'
+                )}
+              >
+                <RiShieldCheckFill className="h-5 w-5 text-[#7c3aed]" aria-hidden="true" />
+                <span>{trustText}</span>
+                <span className="text-[#facc15]" aria-hidden="true">
+                  ★★★★★
+                </span>
+                <span className="font-medium text-[#2b253d]">
+                  {REVIEW_RATING}/5 · {reviewCount} reviews
+                </span>
+              </p>
+            )}
+
             {feature && (
-              <div className="mt-6 flex items-start gap-2 text-base font-medium text-white/85 sm:text-lg">
+              <div className="clear-both mt-6 flex w-full items-start gap-2 text-base font-medium text-white/85 sm:text-lg">
                 <RiCheckLine className="mt-0.5 h-5 w-5 flex-none text-white" aria-hidden="true" />
                 <span className="text-white/85">{feature}</span>
               </div>
@@ -222,14 +265,17 @@ export function UniversalHero({
             {children}
 
             {shouldShowUsageCounter && (
-              <div className="mt-5 text-white/90">
+              <div className="clear-both mt-5 w-full text-white/90">
                 <UsageTodayCounter />
               </div>
             )}
           </div>
 
           {shouldRenderMedia && (
-            <div className="relative z-10 mt-4 flex justify-center sm:mt-0 lg:justify-end" aria-hidden={mascotDecorativeOnDesktop ? 'true' : undefined}>
+            <div
+              className="relative z-10 hidden h-full items-end justify-end lg:flex"
+              aria-hidden={mascotDecorativeOnDesktop ? 'true' : undefined}
+            >
               <Image
                 src={resolvedMediaSrc}
                 alt={isDecorativeMedia ? '' : resolvedMediaAlt}
@@ -238,7 +284,7 @@ export function UniversalHero({
                 height={650}
                 priority={mediaPriority}
                 sizes="(max-width: 1024px) 92vw, 46vw"
-                className="mx-auto h-auto w-[92%] max-w-[680px] sm:w-full"
+                className="h-auto w-full max-w-[680px]"
               />
             </div>
           )}
