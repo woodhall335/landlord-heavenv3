@@ -197,7 +197,10 @@ export function UniversalHero({
             </HeadingTag>
 
             {shouldRenderMedia && (
-              <div className="float-right ml-4 mb-4 block w-[70%] max-w-[420px] pt-6 lg:hidden" aria-hidden={mascotDecorativeOnDesktop ? 'true' : undefined}>
+              <div
+                className="relative block w-[70%] max-w-[420px] float-right transform-gpu translate-x-[20%] pt-6 ml-2 mb-2 lg:hidden"
+                aria-hidden={mascotDecorativeOnDesktop ? 'true' : undefined}
+              >
                 <Image
                   src={resolvedMediaSrc}
                   alt={isDecorativeMedia ? '' : resolvedMediaAlt}
@@ -240,7 +243,7 @@ export function UniversalHero({
             {shouldShowReviewPill && trustText && (
               <p
                 className={clsx(
-                  'clear-both mt-6 flex w-full flex-wrap items-center justify-center gap-x-3 gap-y-1 rounded-full border border-white/80 bg-white/85 px-4 py-2 text-center text-sm font-semibold shadow-sm backdrop-blur-sm lg:hidden',
+                  'hidden clear-both mt-6 w-full flex-wrap items-center justify-center gap-x-3 gap-y-1 rounded-full border border-white/80 bg-white/85 px-4 py-2 text-center text-sm font-semibold shadow-sm backdrop-blur-sm sm:flex lg:hidden',
                   isCenter && 'mx-auto'
                 )}
               >
@@ -273,7 +276,7 @@ export function UniversalHero({
 
           {shouldRenderMedia && (
             <div
-              className="relative z-10 hidden h-full items-end justify-end lg:flex"
+              className="relative z-10 hidden h-full items-center justify-end lg:flex"
               aria-hidden={mascotDecorativeOnDesktop ? 'true' : undefined}
             >
               <Image
