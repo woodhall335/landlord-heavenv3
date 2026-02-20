@@ -56,7 +56,7 @@ export default function PreActionProtocolPage() {
                 Pre-Action Protocol. This guide explains what you need to do and when.
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Link href="/products/money-claim" className="hero-btn-primary">
+                <Link href="/products/money-claim" data-testid="guide-primary-cta" className="hero-btn-primary">
                   Get Pre-Action Letter Pack
                 </Link>
                 <Link href="/tools/rent-arrears-calculator" className="hero-btn-secondary">

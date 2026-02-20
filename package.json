@@ -43,7 +43,9 @@
     "ci": "npm run audit:official-forms-clean && npm run test && npm run validate:wizard-mappings && npm run audit:legal-v2 && npm run audit:tenancy-variants && npm run audit:tenancy-clauses && npm run audit:seo-metadata && npm run audit:eviction-rules && npm run validation:lint-rules && npm run validation:governance-check",
     "audit:sitemap-coverage": "node scripts/check-sitemap-coverage.mjs",
     "audit:main-text": "node scripts/assert-main-text.mjs",
-    "audit:cannibalisation": "node scripts/cannibalisation-audit.mjs"
+    "audit:cannibalisation": "node scripts/cannibalisation-audit.mjs",
+    "audit:funnel": "playwright test tests/funnel/funnel.spec.ts",
+    "audit:pw:install": "playwright install --with-deps"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.70.1",
@@ -100,6 +102,7 @@
     "tailwindcss": "^4",
     "ts-node": "^10.9.2",
     "typescript": "^5",
-    "vitest": "^2.1.9"
+    "vitest": "^2.1.9",
+    "@playwright/test": "^1.55.0"
   }
 }
