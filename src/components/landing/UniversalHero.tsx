@@ -40,9 +40,6 @@ export type UniversalHeroProps = {
   showReviewPill?: boolean;
   showUsageCounter?: boolean;
   backgroundImageSrc?: string;
-  mobileMediaScale?: number;
-  mobileMediaTranslateXPercent?: number;
-  mobileMediaWidthPercent?: number;
 };
 
 const warnedMessages = new Set<string>();
@@ -87,9 +84,6 @@ export function UniversalHero({
   showReviewPill,
   showUsageCounter,
   backgroundImageSrc = '/images/bg.webp',
-  mobileMediaScale = 1.5,
-  mobileMediaTranslateXPercent = 20,
-  mobileMediaWidthPercent = 70,
 }: UniversalHeroProps) {
   const mobileTitleParts = title.split('Legal Documents');
   const hasLegalDocumentsInTitle = mobileTitleParts.length > 1;
@@ -203,32 +197,26 @@ export function UniversalHero({
             </HeadingTag>
 
             {shouldRenderMedia && (
-              <div
-                className={clsx(
-                  'relative lg:hidden float-right clear-none',
-                  'max-w-none transform-gpu origin-right',
-                  'ml-4 mb-3 mt-2'
-                )}
-                style={{
-                  width: `${mobileMediaWidthPercent}%`,
-                  transform: `translateX(${mobileMediaTranslateXPercent}%) scale(${mobileMediaScale})`,
-                }}
-                aria-hidden={mascotDecorativeOnDesktop ? 'true' : undefined}
-              >
-                <Image
-                  src={resolvedMediaSrc}
-                  alt={isDecorativeMedia ? '' : resolvedMediaAlt}
-                  aria-hidden={isDecorativeMedia ? 'true' : undefined}
-                  width={980}
-                  height={650}
-                  priority={mediaPriority}
-                  sizes="(max-width: 1024px) 85vw, 46vw"
-                  className="h-auto w-full"
-                />
+              <div className="mt-6 flex items-start gap-4 lg:hidden">
+                {subtitle && <div className="flex-1 text-lg leading-relaxed text-white/85">{subtitle}</div>}
+                <div className="relative w-[55%] shrink-0" aria-hidden={mascotDecorativeOnDesktop ? 'true' : undefined}>
+                  <div className="transform translate-x-[25%]">
+                    <Image
+                      src={resolvedMediaSrc}
+                      alt={isDecorativeMedia ? '' : resolvedMediaAlt}
+                      aria-hidden={isDecorativeMedia ? 'true' : undefined}
+                      width={980}
+                      height={650}
+                      priority={mediaPriority}
+                      sizes="(max-width: 1024px) 85vw, 46vw"
+                      className="h-auto w-full"
+                    />
+                  </div>
+                </div>
               </div>
             )}
 
-            {subtitle && (
+            {subtitle && !shouldRenderMedia && (
               <p
                 className={clsx(
                   'mt-4 px-0 py-0 text-lg leading-relaxed text-white/85 sm:max-w-[52ch] sm:text-xl',
@@ -240,8 +228,14 @@ export function UniversalHero({
               </p>
             )}
 
+            {subtitle && shouldRenderMedia && (
+              <p className={clsx('mt-4 hidden px-0 py-0 text-lg leading-relaxed text-white/85 sm:max-w-[52ch] sm:text-xl lg:block', isCenter && 'sm:mx-auto')}>
+                {subtitle}
+              </p>
+            )}
+
             {(primaryCta || secondaryCta || actionsSlot) && (
-              <div className={clsx('clear-both mt-6 flex w-full flex-col gap-3 sm:flex-row sm:items-center lg:clear-none', isCenter && 'sm:justify-center')}>
+              <div className={clsx('mt-6 flex w-full flex-col gap-3 sm:flex-row sm:items-center', isCenter && 'sm:justify-center')}>
                 {primaryCta && (
                   <div className="w-full sm:w-auto">
                     <Link href={primaryCta.href} className="hero-btn-primary flex w-full justify-center text-center sm:w-auto">
@@ -261,7 +255,7 @@ export function UniversalHero({
             )}
 
             {feature && (
-              <div className="clear-both mt-6 flex w-full items-start gap-2 text-base font-medium text-white/85 sm:text-lg">
+              <div className="mt-6 flex w-full items-start gap-2 text-base font-medium text-white/85 sm:text-lg">
                 <RiCheckLine className="mt-0.5 h-5 w-5 flex-none text-white" aria-hidden="true" />
                 <span className="text-white/85">{feature}</span>
               </div>
@@ -270,7 +264,7 @@ export function UniversalHero({
             {children}
 
             {shouldShowUsageCounter && (
-              <div className="clear-both mt-5 w-full text-white/90">
+              <div className="mt-5 w-full text-white/90">
                 <UsageTodayCounter />
               </div>
             )}
