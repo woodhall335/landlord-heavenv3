@@ -16,8 +16,8 @@ if (!playwright) {
       viewport: { width: 390, height: 844 },
     });
 
-    test('keeps floating hero media wrap, transformed image, and CTA below content', async ({ page }) => {
-      await page.goto('/');
+    test('keeps mobile hero media floated, wrapped by subtitle text, and bleeding offscreen', async ({ page }) => {
+      await page.goto('/products/notice-only');
 
       const hero = page.locator('section[aria-label="Landlord Heaven legal document hero"]').first();
       const mediaWrapper = hero.locator('div.float-right.lg\\:hidden').first();
@@ -28,22 +28,6 @@ if (!playwright) {
       await expect(mediaWrapper).toBeVisible();
       await expect(subtitle).toBeVisible();
       await expect(cta).toBeVisible();
-
-      const mediaStyles = await mediaWrapper.evaluate((el) => {
-        const computed = window.getComputedStyle(el);
-        return {
-          display: computed.display,
-          float: computed.float,
-          transform: computed.transform,
-          inlineTransform: (el as HTMLElement).style.transform,
-        };
-      });
-
-      expect(mediaStyles.display).toBe('block');
-      expect(mediaStyles.float).toBe('right');
-      expect(mediaStyles.transform).not.toBe('none');
-      expect(mediaStyles.inlineTransform).toContain('translateX(');
-      expect(mediaStyles.inlineTransform).toContain('scale(');
 
       const geometry = await page.evaluate(() => {
         const heroRoot = document.querySelector('section[aria-label="Landlord Heaven legal document hero"]');
@@ -60,18 +44,22 @@ if (!playwright) {
         const ctaRect = ctaEl.getBoundingClientRect();
 
         return {
+          viewportWidth: window.innerWidth,
           mediaLeft: mediaRect.left,
+          mediaRight: mediaRect.right,
+          mediaTop: mediaRect.top,
           mediaBottom: mediaRect.bottom,
           subtitleLeft: subtitleRect.left,
+          subtitleTop: subtitleRect.top,
           subtitleBottom: subtitleRect.bottom,
           ctaTop: ctaRect.top,
         };
       });
 
+      expect(geometry.mediaRight).toBeGreaterThan(geometry.viewportWidth);
       expect(geometry.subtitleLeft).toBeLessThan(geometry.mediaLeft);
+      expect(geometry.subtitleTop).toBeLessThan(geometry.mediaBottom);
       expect(geometry.ctaTop).toBeGreaterThanOrEqual(Math.max(geometry.subtitleBottom, geometry.mediaBottom) - 1);
-
-      await hero.screenshot({ path: 'test-results/hero-mobile-layout.png' });
     });
   });
 }
