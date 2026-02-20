@@ -65,6 +65,7 @@ export function ToolUpsellCard({
         <Link
           href={ctaHref}
           onClick={handleUpsellClick}
+          data-testid="tool-upsell-cta"
           className="hero-btn-primary text-center"
         >
           {ctaLabel}

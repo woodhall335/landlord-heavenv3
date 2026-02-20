@@ -202,6 +202,7 @@ function ASTCheckoutButton({
         </div>
       )}
       <button
+        data-testid="preview-checkout-cta"
         onClick={handleCheckout}
         disabled={isLoading}
         className="w-full py-4 bg-primary text-white rounded-xl font-semibold text-lg hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-lg hover:shadow-xl"

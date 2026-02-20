@@ -248,7 +248,11 @@ export function UniversalHero({
               <div className={clsx(CTA_WRAP_CLASSES, shouldRenderMedia && 'clear-both lg:clear-none', isCenter && 'sm:justify-center')}>
                 {primaryCta && (
                   <div className="w-full sm:w-auto">
-                    <Link href={primaryCta.href} className="hero-btn-primary flex w-full justify-center text-center sm:w-auto">
+                    <Link
+                      href={primaryCta.href}
+                      data-testid="hero-primary-cta"
+                      className="hero-btn-primary flex w-full justify-center text-center sm:w-auto"
+                    >
                       {primaryCta.label}
                     </Link>
                   </div>
