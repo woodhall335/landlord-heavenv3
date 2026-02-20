@@ -116,7 +116,7 @@ export function UniversalHero({
 
   return (
     <section
-      className="relative isolate overflow-hidden pt-28 pb-10 sm:pt-32 sm:pb-12 lg:pt-36 lg:pb-16"
+      className="relative isolate overflow-visible pt-28 pb-10 sm:pt-32 sm:pb-12 lg:overflow-hidden lg:pt-36 lg:pb-16"
       aria-label={ariaLabel}
       id={id}
     >
@@ -198,7 +198,7 @@ export function UniversalHero({
 
             {shouldRenderMedia && (
               <div
-                className="relative float-right ml-4 mt-3 mb-6 w-[68%] max-w-[520px] transform-gpu origin-top-right scale-[1.5] translate-x-[20%] pt-0 lg:hidden"
+                className="relative z-0 float-right mr-[-20%] ml-4 mt-3 mb-5 w-[72%] max-w-[560px] pt-0 sm:w-[64%] lg:hidden"
                 aria-hidden={mascotDecorativeOnDesktop ? 'true' : undefined}
               >
                 <Image
@@ -209,7 +209,7 @@ export function UniversalHero({
                   height={650}
                   priority={mediaPriority}
                   sizes="(max-width: 1024px) 95vw, 46vw"
-                  className="h-auto w-full"
+                  className="relative z-0 h-auto w-full"
                 />
               </div>
             )}
@@ -227,7 +227,12 @@ export function UniversalHero({
             )}
 
             {subtitle && shouldRenderMedia && (
-              <p className={clsx('mt-4 px-0 py-0 text-lg leading-relaxed text-white/85 sm:max-w-[52ch] sm:text-xl', isCenter && 'sm:mx-auto')}>
+              <p
+                className={clsx(
+                  'relative z-10 mt-4 px-0 py-0 text-lg leading-relaxed text-white/85 sm:max-w-[52ch] sm:text-xl',
+                  isCenter && 'sm:mx-auto'
+                )}
+              >
                 {subtitle}
               </p>
             )}
