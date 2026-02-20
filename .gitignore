@@ -64,3 +64,10 @@ artifacts/notice_only/_reports/
 tests/output/
 
 .tmp/
+
+# Audit and browser test artifacts
+audit-output/**
+!audit-output/.gitkeep
+playwright-report/**
+test-results/**
+.lighthouseci/**
