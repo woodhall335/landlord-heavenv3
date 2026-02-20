@@ -30,6 +30,10 @@ if (!playwright) {
         await expect(mediaWrapper).toBeVisible();
         await expect(subtitle).toBeVisible();
 
+        const scrollWidth = await page.evaluate(() => document.documentElement.scrollWidth);
+        const innerWidth = await page.evaluate(() => window.innerWidth);
+        expect(scrollWidth).toBe(innerWidth);
+
         const geometry = await page.evaluate(() => {
           const heroRoot = document.querySelector('section[aria-label="Landlord Heaven legal document hero"]');
           const media = heroRoot?.querySelector('div.float-right.lg\\:hidden');

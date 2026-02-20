@@ -68,7 +68,7 @@ export default async function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema()) }}
         />
       </head>
-      <body className="font-sans antialiased flex flex-col min-h-screen">
+      <body className="font-sans antialiased flex flex-col min-h-screen overflow-x-hidden">
         <HeaderModeProvider>
           <Section21HeaderBanner />
           <PopupProvider>
