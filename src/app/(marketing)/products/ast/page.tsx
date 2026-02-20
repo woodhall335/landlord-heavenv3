@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui";
 import Link from "next/link";
+import Image from "next/image";
 import { RiCheckboxCircleLine } from "react-icons/ri";
 import {
   Home,
@@ -20,7 +21,6 @@ import { PRODUCTS } from "@/lib/pricing/products";
 import { FAQSection } from "@/components/seo/FAQSection";
 import {
   WhyLandlordHeaven,
-  JurisdictionAccordion,
   VsSolicitorComparison,
 } from "@/components/value-proposition";
 import { UniversalHero } from "@/components/landing/UniversalHero";
@@ -84,6 +84,69 @@ const faqs = [
 ];
 
 export default function ASTPage() {
+  const regionCards = [
+    {
+      flagSrc: "/gb-eng.svg",
+      flagAlt: "England flag",
+      name: "England",
+      agreementType: "Assured Shorthold Tenancy (AST)",
+      features: [
+        "Compliant with Housing Act 1988",
+        "Deposit protection requirements included",
+        "How to Rent Guide acknowledgement",
+        "Section 21/8 grounds referenced",
+      ],
+      noteLabel: "HMO note:",
+      note: "Properties with 5+ people from 2+ households require mandatory HMO licensing under Housing Act 2004.",
+      href: "/wizard?product=tenancy_agreement&jurisdiction=england",
+    },
+    {
+      flagSrc: "/gb-wls.svg",
+      flagAlt: "Wales flag",
+      name: "Wales",
+      agreementType: "Standard Occupation Contract",
+      features: [
+        "Compliant with Renting Homes (Wales) Act 2016",
+        'Uses "Contract Holder" terminology',
+        "Rent Smart Wales registration referenced",
+        "Section 173 notice provisions",
+      ],
+      noteLabel: "Note:",
+      note: "Wales uses Occupation Contracts, not ASTs. Different eviction procedures apply.",
+      href: "/wizard?product=tenancy_agreement&jurisdiction=wales",
+    },
+    {
+      flagSrc: "/gb-sct.svg",
+      flagAlt: "Scotland flag",
+      name: "Scotland",
+      agreementType: "Private Residential Tenancy (PRT)",
+      features: [
+        "Compliant with Private Housing (Tenancies) (Scotland) Act 2016",
+        "Open-ended tenancy (no fixed end date)",
+        "Rent Pressure Zone compatible",
+        "First-tier Tribunal jurisdiction",
+      ],
+      noteLabel: "Key difference:",
+      note: "PRTs are open-ended. Tenants can give 28 days' notice at any time.",
+      href: "/wizard?product=tenancy_agreement&jurisdiction=scotland",
+    },
+    {
+      flagSrc: "/gb-nir.svg",
+      flagAlt: "Northern Ireland flag",
+      name: "Northern Ireland",
+      agreementType: "Private Tenancy",
+      features: [
+        "Compliant with Private Tenancies Act (NI) 2022",
+        "Rent increase restrictions (12-month gap)",
+        "Electrical safety mandatory from April 2025",
+        "County Court Northern Ireland jurisdiction",
+      ],
+      noteLabel: "Note:",
+      note: "Tenancy deposit protection and Energy Performance Certificates required.",
+      href: "/wizard?product=tenancy_agreement&jurisdiction=northern-ireland",
+    },
+  ];
+
   return (
     <div className="min-h-screen bg-gray-50">
       <HeaderConfig mode="autoOnScroll" />
@@ -311,7 +374,7 @@ export default function ASTPage() {
       {/* Jurisdiction Details */}
       <section className="py-16 md:py-20 bg-white">
         <Container>
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-7xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4 text-center">
               What You Get By Region
             </h2>
@@ -319,88 +382,32 @@ export default function ASTPage() {
               The wizard automatically generates the correct agreement type for your property&apos;s jurisdiction
             </p>
 
-            <div className="grid md:grid-cols-2 gap-6">
-              {/* England */}
-              <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-2xl">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span>
-                  <h3 className="text-lg font-semibold text-charcoal">England</h3>
-                </div>
-                <p className="text-sm font-medium text-gray-900 mb-2">Assured Shorthold Tenancy (AST)</p>
-                <ul className="text-sm text-gray-600 space-y-1">
-                  <li>• Compliant with Housing Act 1988</li>
-                  <li>• Deposit protection requirements included</li>
-                  <li>• How to Rent Guide acknowledgement</li>
-                  <li>• Section 21/8 grounds referenced</li>
-                </ul>
-                <p className="mt-3 text-xs text-gray-500">
-                  <strong>HMO note:</strong> Properties with 5+ people from 2+ households require mandatory HMO licensing under Housing Act 2004.
-                </p>
-              </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+              {regionCards.map((region) => (
+                <article key={region.name} className="h-full bg-white border border-gray-200 rounded-2xl shadow-sm p-6 md:p-7 flex flex-col">
+                  <div className="flex items-center gap-3 mb-3">
+                    <Image src={region.flagSrc} alt={region.flagAlt} width={28} height={21} className="w-7 h-5 object-cover rounded-sm border border-gray-100" />
+                    <h3 className="text-2xl font-semibold text-charcoal">{region.name}</h3>
+                  </div>
+                  <p className="text-lg font-medium text-gray-900 mb-4">{region.agreementType}</p>
+                  <ul className="text-base text-gray-700 list-disc pl-5 space-y-2">
+                    {region.features.map((feature) => (
+                      <li key={feature}>{feature}</li>
+                    ))}
+                  </ul>
+                  <p className="mt-4 text-sm text-gray-600">
+                    <strong>{region.noteLabel}</strong> {region.note}
+                  </p>
 
-              {/* Wales */}
-              <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-2xl">🏴󠁧󠁢󠁷󠁬󠁳󠁿</span>
-                  <h3 className="text-lg font-semibold text-charcoal">Wales</h3>
-                </div>
-                <p className="text-sm font-medium text-gray-900 mb-2">Standard Occupation Contract</p>
-                <ul className="text-sm text-gray-600 space-y-1">
-                  <li>• Compliant with Renting Homes (Wales) Act 2016</li>
-                  <li>• Uses &quot;Contract Holder&quot; terminology</li>
-                  <li>• Rent Smart Wales registration referenced</li>
-                  <li>• Section 173 notice provisions</li>
-                </ul>
-                <p className="mt-3 text-xs text-gray-500">
-                  <strong>Note:</strong> Wales uses Occupation Contracts, not ASTs. Different eviction procedures apply.
-                </p>
-              </div>
-
-              {/* Scotland */}
-              <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-2xl">🏴󠁧󠁢󠁳󠁣󠁴󠁿</span>
-                  <h3 className="text-lg font-semibold text-charcoal">Scotland</h3>
-                </div>
-                <p className="text-sm font-medium text-gray-900 mb-2">Private Residential Tenancy (PRT)</p>
-                <ul className="text-sm text-gray-600 space-y-1">
-                  <li>• Compliant with Private Housing (Tenancies) (Scotland) Act 2016</li>
-                  <li>• Open-ended tenancy (no fixed end date)</li>
-                  <li>• Rent Pressure Zone compatible</li>
-                  <li>• First-tier Tribunal jurisdiction</li>
-                </ul>
-                <p className="mt-3 text-xs text-gray-500">
-                  <strong>Key difference:</strong> PRTs are open-ended. Tenants can give 28 days&apos; notice at any time.
-                </p>
-              </div>
-
-              {/* Northern Ireland */}
-              <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-2xl">🇬🇧</span>
-                  <h3 className="text-lg font-semibold text-charcoal">Northern Ireland</h3>
-                </div>
-                <p className="text-sm font-medium text-gray-900 mb-2">Private Tenancy</p>
-                <ul className="text-sm text-gray-600 space-y-1">
-                  <li>• Compliant with Private Tenancies Act (NI) 2022</li>
-                  <li>• Rent increase restrictions (12-month gap)</li>
-                  <li>• Electrical safety mandatory from April 2025</li>
-                  <li>• County Court Northern Ireland jurisdiction</li>
-                </ul>
-                <p className="mt-3 text-xs text-gray-500">
-                  <strong>Note:</strong> Tenancy deposit protection and Energy Performance Certificates required.
-                </p>
-              </div>
+                  <Link
+                    href={region.href}
+                    className="mt-auto block w-full text-center bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-lg font-semibold text-charcoal hover:bg-gray-100 transition-colors"
+                  >
+                    Choose Region
+                  </Link>
+                </article>
+              ))}
             </div>
-          </div>
-        </Container>
-      </section>
-
-      {/* Jurisdiction Accordion - Additional Details */}
-      <section className="py-8">
-        <Container>
-          <div className="max-w-4xl mx-auto">
-            <JurisdictionAccordion product="ast" defaultExpanded={false} />
           </div>
         </Container>
       </section>
