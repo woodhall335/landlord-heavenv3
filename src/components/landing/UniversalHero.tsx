@@ -197,22 +197,20 @@ export function UniversalHero({
             </HeadingTag>
 
             {shouldRenderMedia && (
-              <div className="mt-6 flex items-start gap-4 lg:hidden">
-                {subtitle && <div className="flex-1 text-lg leading-relaxed text-white/85">{subtitle}</div>}
-                <div className="relative w-[55%] shrink-0" aria-hidden={mascotDecorativeOnDesktop ? 'true' : undefined}>
-                  <div className="transform translate-x-[25%]">
-                    <Image
-                      src={resolvedMediaSrc}
-                      alt={isDecorativeMedia ? '' : resolvedMediaAlt}
-                      aria-hidden={isDecorativeMedia ? 'true' : undefined}
-                      width={980}
-                      height={650}
-                      priority={mediaPriority}
-                      sizes="(max-width: 1024px) 85vw, 46vw"
-                      className="h-auto w-full"
-                    />
-                  </div>
-                </div>
+              <div
+                className="float-right mt-3 mb-6 ml-4 w-[110%] max-w-[680px] translate-x-[20%] pt-0 lg:hidden"
+                aria-hidden={mascotDecorativeOnDesktop ? 'true' : undefined}
+              >
+                <Image
+                  src={resolvedMediaSrc}
+                  alt={isDecorativeMedia ? '' : resolvedMediaAlt}
+                  aria-hidden={isDecorativeMedia ? 'true' : undefined}
+                  width={980}
+                  height={650}
+                  priority={mediaPriority}
+                  sizes="(max-width: 1024px) 95vw, 46vw"
+                  className="h-auto w-full"
+                />
               </div>
             )}
 
@@ -229,13 +227,13 @@ export function UniversalHero({
             )}
 
             {subtitle && shouldRenderMedia && (
-              <p className={clsx('mt-4 hidden px-0 py-0 text-lg leading-relaxed text-white/85 sm:max-w-[52ch] sm:text-xl lg:block', isCenter && 'sm:mx-auto')}>
+              <p className={clsx('mt-4 px-0 py-0 text-lg leading-relaxed text-white/85 sm:max-w-[52ch] sm:text-xl', isCenter && 'sm:mx-auto')}>
                 {subtitle}
               </p>
             )}
 
             {(primaryCta || secondaryCta || actionsSlot) && (
-              <div className={clsx('mt-6 flex w-full flex-col gap-3 sm:flex-row sm:items-center', isCenter && 'sm:justify-center')}>
+              <div className={clsx('mt-6 flex w-full flex-col gap-3 sm:flex-row sm:items-center', shouldRenderMedia && 'clear-both lg:clear-none', isCenter && 'sm:justify-center')}>
                 {primaryCta && (
                   <div className="w-full sm:w-auto">
                     <Link href={primaryCta.href} className="hero-btn-primary flex w-full justify-center text-center sm:w-auto">
