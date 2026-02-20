@@ -48,6 +48,11 @@
   --font-sans: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
+html,
+body {
+  overflow-x: clip;
+}
+
 /* Light mode only - no dark mode for production SaaS */
 body {
   background: var(--background);
