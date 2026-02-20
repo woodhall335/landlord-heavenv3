@@ -195,6 +195,32 @@ export default function LodgerAgreementPage() {
             </div>
 
     
+
+        <section className="py-10 bg-white" id="snippet-opportunities">
+          <div className="container mx-auto px-4">
+            <div className="max-w-5xl mx-auto prose prose-slate max-w-none">
+              <h2>What Is a Lodger Agreement?</h2>
+              <p>A lodger agreement is a written contract between a resident landlord and someone renting a room in the landlord’s home. It sets rent, notice terms, house rules, and included services. Clear written terms help prevent disputes and show each party’s rights and obligations.</p>
+
+              <h2>Rolling Tenancy Agreement</h2>
+              <p>A rolling tenancy agreement continues periodically, usually month to month, after an initial fixed term ends or where no fixed term is used. Payments and notice periods repeat by period. The agreement should state notice requirements clearly so both parties understand how arrangements can end.</p>
+
+              <h3>Lodger vs Tenant Comparison</h3>
+              <table>
+                <thead>
+                  <tr><th>Point</th><th>Lodger</th><th>Tenant</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>Landlord residence</td><td>Landlord lives in property</td><td>Landlord usually lives elsewhere</td></tr>
+                  <tr><td>Legal status</td><td>Licensee arrangement</td><td>Tenancy with statutory rights</td></tr>
+                  <tr><td>Possession route</td><td>Reasonable notice and licence terms</td><td>Formal possession process</td></tr>
+                  <tr><td>Exclusive possession</td><td>Usually limited</td><td>Usually granted</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
         <section className="py-16 bg-white" id="guide-navigation">
           <div className="container mx-auto px-4">
             <div className="max-w-5xl mx-auto">

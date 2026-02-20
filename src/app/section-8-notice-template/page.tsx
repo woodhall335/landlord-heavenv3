@@ -617,6 +617,56 @@ export default function Section8NoticeTemplatePage() {
         </section>
 
 
+
+        <section className="py-10 bg-white" id="snippet-opportunities">
+          <div className="container mx-auto px-4">
+            <div className="max-w-5xl mx-auto prose prose-slate max-w-none">
+              <h2>What Is Section 8 Notice?</h2>
+              <p>A Section 8 notice is a possession notice used in England when a landlord relies on specific legal grounds, such as rent arrears or breach of tenancy terms. It is served on Form 3 and must state the grounds and notice period clearly to support court action.</p>
+
+              <h2>Section 8 Notice Rent Arrears</h2>
+              <p>For rent arrears, landlords commonly use Grounds 8, 10, and 11 on a Section 8 notice. Ground 8 is mandatory when arrears meet the required level at service and hearing, while Grounds 10 and 11 are discretionary and depend on the court’s assessment of reasonableness.</p>
+
+              <h2>Section 8 Form 3 Template</h2>
+              <p>A Section 8 Form 3 template should include accurate party details, property address, selected grounds, arrears figures, and the correct notice period. Errors in ground selection or dates can undermine possession claims, so landlords should cross-check the tenancy file before serving.</p>
+
+              <h2>Grounds for Eviction</h2>
+              <p>Grounds for eviction under Section 8 are legal reasons listed in Schedule 2 of the Housing Act 1988. Some grounds are mandatory and some discretionary. The landlord must prove the ground relied upon using tenancy documents, arrears schedules, statements, and evidence of service.</p>
+
+              <h2>Section 8 vs Section 21</h2>
+              <p>Section 8 is fault-based and depends on proving specific statutory grounds, while Section 21 is no-fault and focuses on procedural compliance. Section 8 can include rent arrears recovery in one pathway; Section 21 is often used where no breach allegations are needed.</p>
+
+              <h3>How to Serve a Section 8 Notice</h3>
+              <ol>
+                <li>Confirm the tenancy type and current arrears balance.</li>
+                <li>Select the correct statutory grounds on Form 3.</li>
+                <li>Set the notice period required for each ground used.</li>
+                <li>Serve the notice by an approved contractual method.</li>
+                <li>Retain proof of service and evidence bundle notes.</li>
+              </ol>
+
+              <h3>Section 8 vs Section 21 Comparison</h3>
+              <table>
+                <thead>
+                  <tr><th>Point</th><th>Section 8</th><th>Section 21</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>Basis</td><td>Fault-based grounds</td><td>No-fault route</td></tr>
+                  <tr><td>Form</td><td>Form 3</td><td>Form 6A</td></tr>
+                  <tr><td>Arrears claim</td><td>Can include arrears in claim</td><td>Possession only route first</td></tr>
+                  <tr><td>Evidence focus</td><td>Proof of breach and arrears</td><td>Compliance and service validity</td></tr>
+                </tbody>
+              </table>
+
+              <h3>Definition: Ground 8</h3>
+              <p>Ground 8 is a mandatory rent arrears ground under Section 8. For weekly tenancies, at least eight weeks of arrears are usually required; for monthly tenancies, at least two months. The arrears threshold must normally be met at both notice service and the court hearing.</p>
+
+              <h3>Definition: Form 3</h3>
+              <p>Form 3 is the prescribed notice form used for Section 8 possession proceedings in England. It identifies the legal grounds, explains the allegations, and sets the notice period. Accurate completion is essential because unclear grounds or incorrect dates can weaken the court claim.</p>
+            </div>
+          </div>
+        </section>
+
         <section className="py-16 bg-white" id="guide-navigation">
           <div className="container mx-auto px-4">
             <div className="max-w-5xl mx-auto">

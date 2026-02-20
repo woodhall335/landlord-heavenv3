@@ -437,6 +437,35 @@ export default function NorthernIrelandTenancyAgreementTemplatePage() {
           />
 
   
+
+        <section className="py-10 bg-white" id="snippet-opportunities">
+          <div className="container mx-auto px-4">
+            <div className="max-w-5xl mx-auto prose prose-slate max-w-none">
+              <h2>Tenancy Agreement Northern Ireland Template</h2>
+              <p>A Northern Ireland tenancy agreement template should set out the parties, property address, rent terms, deposit terms, repair responsibilities, and notice clauses in line with local law. It should also reflect current Private Tenancies Act duties, including information and receipt requirements where applicable.</p>
+
+              <h3>NI Tenancy vs England AST</h3>
+              <table>
+                <thead>
+                  <tr><th>Point</th><th>Northern Ireland tenancy</th><th>England AST</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>Core regime</td><td>Private Tenancies NI framework</td><td>Housing Act 1988 AST framework</td></tr>
+                  <tr><td>Possession notices</td><td>Notice to Quit and NI procedures</td><td>Section 8 / Section 21 pathways</td></tr>
+                  <tr><td>Terminology</td><td>Private tenancy terms</td><td>Assured shorthold tenancy terms</td></tr>
+                  <tr><td>Compliance checks</td><td>NI-specific statutory duties</td><td>England-specific prescribed requirements</td></tr>
+                </tbody>
+              </table>
+
+              <h3>Definition: Private Residential Tenancy (PRT)</h3>
+              <p>Private Residential Tenancy (PRT) is the main tenancy model used in Scotland’s private rented sector. It is open-ended and gives tenants stronger security than fixed-term structures used elsewhere. Landlords should avoid mixing Scottish PRT terminology into Northern Ireland tenancy documents.</p>
+
+              <h3>Definition: Notice to Leave</h3>
+              <p>Notice to Leave is a Scottish notice used to begin possession action in a Private Residential Tenancy. It identifies the ground relied on and the notice period required. It is not the same as forms used in England or Northern Ireland and should not be used cross-jurisdiction.</p>
+            </div>
+          </div>
+        </section>
+
         <section className="py-16 bg-white" id="guide-navigation">
           <div className="container mx-auto px-4">
             <div className="max-w-5xl mx-auto">

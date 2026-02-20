@@ -524,6 +524,34 @@ export default function Section21NoticeTemplatePage() {
         </section>
 
 
+
+        <section className="py-10 bg-white" id="snippet-opportunities">
+          <div className="container mx-auto px-4">
+            <div className="max-w-5xl mx-auto prose prose-slate max-w-none">
+              <h2>What Is Form 6A?</h2>
+              <p>Form 6A is the prescribed notice for serving a Section 21 no-fault possession notice in England. It sets out the parties, property, and notice dates in a required format. Landlords should use the correct version and ensure all statutory prerequisites are satisfied before service.</p>
+
+              <h2>How Long Is a Section 21 Notice?</h2>
+              <p>A Section 21 notice must usually give at least two months’ notice. The end date should provide the full statutory period after valid service. If the notice period is short or calculated incorrectly, the court can refuse possession and require the landlord to restart the notice process.</p>
+
+              <h2>Section 21 Notice Deposit Protection</h2>
+              <p>Deposit protection is central to Section 21 validity. If the deposit was not protected on time or prescribed information was not served correctly, a Section 21 notice can fail. Landlords should check scheme records and documentary evidence before issuing the notice.</p>
+
+              <h2>Section 21 Eviction Timeline UK</h2>
+              <p>The Section 21 timeline typically involves notice service, a two-month waiting period, possession proceedings if the tenant remains, and potential enforcement by bailiff or High Court process. Actual timing depends on court backlog, document quality, and whether the tenant raises a defence.</p>
+
+              <h3>How to Serve a Section 21 Notice</h3>
+              <ol>
+                <li>Check deposit compliance and key tenancy documents.</li>
+                <li>Complete Form 6A using exact tenant and property details.</li>
+                <li>Calculate a valid expiry date with full notice period.</li>
+                <li>Serve by the method allowed in the tenancy agreement.</li>
+                <li>Store proof of service and a dated chronology.</li>
+              </ol>
+            </div>
+          </div>
+        </section>
+
         <section className="py-16 bg-white" id="guide-navigation">
           <div className="container mx-auto px-4">
             <div className="max-w-5xl mx-auto">
