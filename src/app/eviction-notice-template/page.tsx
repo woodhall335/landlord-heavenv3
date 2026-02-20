@@ -92,7 +92,7 @@ export default function EvictionNoticeTemplatePage() {
           badge="Section 21 ends 1 May 2026"
           badgeIcon={<AlertTriangle className="w-4 h-4" />}
           title="Eviction Notice Template UK"
-          subtitle={<>Choose your jurisdiction and generate an <strong>eviction notice template bundle</strong> for England, Wales, or Scotland. Compliance-checked and ready to file.</>}
+          subtitle={<>Choose your jurisdiction and generate an <strong>eviction notice template bundle</strong> for England, Wales, or Scotland. Compliance-checked and ready to file. Need form-specific help first? Start with our <Link href="/form-6a-section-21" className="text-primary hover:underline">Form 6A Section 21 guide</Link>.</>}
           primaryCTA={{ label: "Get Court-Ready Notice — £49.99", href: wizardLinkNoticeOnly }}
           secondaryCTA={{ label: "Try Free Template", href: "/tools/free-section-21-notice-generator" }}
           variant="pastel"
