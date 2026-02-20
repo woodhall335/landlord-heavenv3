@@ -112,7 +112,6 @@ export default function HomeContent() {
               description="Full bundle from notice to possession order with court forms and guidance."
               price="£199.99"
               icon={<RiScales3Line className="w-7 h-7" />}
-              popular={true}
             />
             <ProductCard
               href="/products/money-claim"
@@ -462,25 +461,16 @@ function ProductCard({
   description,
   price,
   icon,
-  popular = false,
 }: {
   href: string;
   title: string;
   description: string;
   price: string;
   icon: React.ReactNode;
-  popular?: boolean;
 }) {
   return (
     <Link href={href} className="product-card-wrapper group relative cursor-pointer">
-      {popular && (
-        <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
-          <span className="bg-gradient-to-r from-[#7c3aed] to-[#692ed4] text-white text-xs font-bold tracking-wide px-5 py-1.5 rounded-full shadow-lg">
-            MOST POPULAR
-          </span>
-        </div>
-      )}
-      <div className={`product-card-inner bg-white rounded-3xl p-8 h-full transition-all duration-300 border ${popular ? 'border-2 border-[#7C3AED] shadow-xl' : 'border-[#e4dcff] shadow-md'} group-hover:shadow-2xl group-hover:-translate-y-1 flex flex-col`}>
+      <div className="product-card-inner bg-white rounded-3xl p-8 h-full transition-all duration-300 border border-[#e4dcff] shadow-md group-hover:shadow-2xl group-hover:-translate-y-1 flex flex-col">
         <div className="w-14 h-14 bg-purple-100 rounded-2xl flex items-center justify-center mb-6 text-primary">
           {icon}
         </div>
