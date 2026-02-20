@@ -13,6 +13,13 @@ type HeroCta = {
   href: string;
 };
 
+// DO NOT MODIFY WITHOUT UPDATING TESTS: these classes define the mobile hero layout contract
+// that keeps subtitle readability, right-edge media bleed, and CTA placement stable across pages.
+const SECTION_WRAP_CLASSES = 'relative isolate overflow-visible pt-28 pb-10 sm:pt-32 sm:pb-12 lg:overflow-hidden lg:pt-36 lg:pb-16';
+const MOBILE_MEDIA_WRAP_CLASSES = 'relative z-0 float-right mr-[-20%] ml-4 mt-3 mb-5 w-[72%] max-w-[560px] pt-0 sm:w-[64%] lg:hidden';
+const SUBTITLE_CLASSES = 'relative z-10 mt-4 px-0 py-0 text-lg leading-relaxed text-white/85 sm:max-w-[52ch] sm:text-xl';
+const CTA_WRAP_CLASSES = 'mt-6 flex w-full flex-col gap-3 sm:flex-row sm:items-center';
+
 export type UniversalHeroProps = {
   trustText?: string;
   badge?: string;
@@ -116,7 +123,7 @@ export function UniversalHero({
 
   return (
     <section
-      className="relative isolate overflow-visible pt-28 pb-10 sm:pt-32 sm:pb-12 lg:overflow-hidden lg:pt-36 lg:pb-16"
+      className={SECTION_WRAP_CLASSES}
       aria-label={ariaLabel}
       id={id}
     >
@@ -198,7 +205,7 @@ export function UniversalHero({
 
             {shouldRenderMedia && (
               <div
-                className="relative z-0 float-right mr-[-20%] ml-4 mt-3 mb-5 w-[72%] max-w-[560px] pt-0 sm:w-[64%] lg:hidden"
+                className={MOBILE_MEDIA_WRAP_CLASSES}
                 aria-hidden={mascotDecorativeOnDesktop ? 'true' : undefined}
               >
                 <Image
@@ -229,7 +236,7 @@ export function UniversalHero({
             {subtitle && shouldRenderMedia && (
               <p
                 className={clsx(
-                  'relative z-10 mt-4 px-0 py-0 text-lg leading-relaxed text-white/85 sm:max-w-[52ch] sm:text-xl',
+                  SUBTITLE_CLASSES,
                   isCenter && 'sm:mx-auto'
                 )}
               >
@@ -238,7 +245,7 @@ export function UniversalHero({
             )}
 
             {(primaryCta || secondaryCta || actionsSlot) && (
-              <div className={clsx('mt-6 flex w-full flex-col gap-3 sm:flex-row sm:items-center', shouldRenderMedia && 'clear-both lg:clear-none', isCenter && 'sm:justify-center')}>
+              <div className={clsx(CTA_WRAP_CLASSES, shouldRenderMedia && 'clear-both lg:clear-none', isCenter && 'sm:justify-center')}>
                 {primaryCta && (
                   <div className="w-full sm:w-auto">
                     <Link href={primaryCta.href} className="hero-btn-primary flex w-full justify-center text-center sm:w-auto">
