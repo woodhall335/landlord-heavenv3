@@ -215,7 +215,13 @@ export function UniversalHero({
             )}
 
             {subtitle && (
-              <p className={clsx('mt-4 w-full px-0 py-0 text-lg leading-relaxed text-white/85 sm:max-w-[52ch] sm:text-xl', isCenter && 'sm:mx-auto')}>
+              <p
+                className={clsx(
+                  'mt-4 px-0 py-0 text-lg leading-relaxed text-white/85 sm:max-w-[52ch] sm:text-xl',
+                  shouldRenderMedia ? 'w-auto lg:w-full' : 'w-full',
+                  isCenter && 'sm:mx-auto'
+                )}
+              >
                 {subtitle}
               </p>
             )}
