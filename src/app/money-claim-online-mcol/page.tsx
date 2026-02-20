@@ -466,6 +466,41 @@ export default function MoneyClaimOnlineMCOLPage() {
         </section>
 
 
+
+        <section className="py-10 bg-white" id="snippet-opportunities">
+          <div className="container mx-auto px-4">
+            <div className="max-w-5xl mx-auto prose prose-slate max-w-none">
+              <h2>What Is Money Claim Online?</h2>
+              <p>Money Claim Online is the HM Courts online service for issuing many county court debt claims in England and Wales. Landlords use it to recover unpaid rent when they seek a money judgment. The claim must include accurate amounts, dates, and supporting particulars.</p>
+
+              <h2>How to Recover Rent Arrears</h2>
+              <p>To recover rent arrears, landlords normally document the debt, send a Letter Before Action, allow a reasonable response period, and then issue a court claim if payment is not made. A complete rent schedule and tenancy evidence are essential to support judgment and enforcement.</p>
+
+              <h2>How Long Does MCOL Take?</h2>
+              <p>MCOL timing depends on whether the defendant pays, admits, or defends the claim. Uncontested cases can progress to judgment quickly, while defended claims take longer and may proceed to hearing. Court workload and document quality significantly affect total time to outcome.</p>
+
+              <h2>N1 Claim Form</h2>
+              <p>The N1 claim form is the county court claim form used to start many money claims, including rent arrears disputes outside simple online pathways. It sets out claimant and defendant details, the amount claimed, and particulars of claim. Precision is essential to avoid procedural delay.</p>
+
+              <h3>MCOL vs Possession Claim</h3>
+              <table>
+                <thead>
+                  <tr><th>Point</th><th>MCOL</th><th>Possession claim</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>Main objective</td><td>Recover debt judgment</td><td>Recover property possession</td></tr>
+                  <tr><td>Typical form path</td><td>Online claim or N1 route</td><td>N5/N119 or N5B route</td></tr>
+                  <tr><td>Arrears evidence</td><td>Core focus of claim</td><td>Supports grounds and order terms</td></tr>
+                  <tr><td>Outcome</td><td>CCJ and enforcement options</td><td>Possession order and enforcement</td></tr>
+                </tbody>
+              </table>
+
+              <h3>Definition: Money Claim Online (MCOL)</h3>
+              <p>Money Claim Online (MCOL) is a government digital platform for issuing and managing eligible county court money claims. It allows claimants to submit claim details, pay court fees, track responses, and request judgment when appropriate. It is commonly used for straightforward debt recovery cases.</p>
+            </div>
+          </div>
+        </section>
+
         <section className="py-16 bg-white" id="guide-navigation">
           <div className="container mx-auto px-4">
             <div className="max-w-5xl mx-auto">
