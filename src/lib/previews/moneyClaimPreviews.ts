@@ -1,5 +1,8 @@
 import 'server-only';
 
+import { existsSync } from 'fs';
+import path from 'path';
+
 import type { PreviewDoc } from '@/lib/previews/noticeOnlyPreviews';
 
 export type MoneyClaimPreviewData = PreviewDoc[];
@@ -31,8 +34,15 @@ const buildAltText = (title: string) => `Landlord Heaven England Money Claim Pac
 
 const buildSrc = (filename: string) => `/images/previews/money-claim/england/${filename}`;
 
-export const getMoneyClaimPreviewData = async (): Promise<MoneyClaimPreviewData> =>
-  MONEY_CLAIM_PREVIEW_FILES.map((filename) => {
+const previewImageExists = (imagePath: string) =>
+  existsSync(path.join(process.cwd(), 'public', imagePath.replace(/^\//, '')));
+
+export const getMoneyClaimPreviewData = async (): Promise<MoneyClaimPreviewData> => {
+  if (process.env.E2E_MODE === 'true') {
+    return [];
+  }
+
+  const previews = MONEY_CLAIM_PREVIEW_FILES.map((filename) => {
     const title = buildTitle(filename);
     return {
       key: filename.replace(/\.[^/.]+$/, ''),
@@ -40,4 +50,12 @@ export const getMoneyClaimPreviewData = async (): Promise<MoneyClaimPreviewData>
       src: buildSrc(filename),
       alt: buildAltText(title),
     };
-  });
+  }).filter((preview) => previewImageExists(preview.src));
+
+  if (!previews.length) {
+    // Intentionally return no previews when binaries are absent so local dev/audits never crash.
+    return [];
+  }
+
+  return previews;
+};

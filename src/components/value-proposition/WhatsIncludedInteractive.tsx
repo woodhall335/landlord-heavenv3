@@ -218,6 +218,7 @@ const PreviewImage = ({ src, alt, title, width, height, className }: PreviewImag
       height={height}
       className={className}
       onError={() => setHasError(true)}
+      unoptimized
     />
   );
 };
@@ -245,6 +246,7 @@ const PreviewThumbnail = ({ src, alt, title, width, height, className }: Preview
       height={height}
       className={className}
       onError={() => setHasError(true)}
+      unoptimized
     />
   );
 };
@@ -584,21 +586,22 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
 
               <div className="order-1 md:order-2">
                 <div className="rounded-3xl border border-[#7c3aed]/15 bg-white p-6 shadow-lg">
-                  <div
-                    className="space-y-3 focus-visible:outline-none"
-                    tabIndex={0}
-                    onKeyDown={(event) => {
-                      if (event.key === 'ArrowLeft') {
-                        event.preventDefault();
-                        goPrev();
-                      }
-                      if (event.key === 'ArrowRight') {
-                        event.preventDefault();
-                        goNext();
-                      }
-                    }}
-                  >
-                    <div className="flex items-center justify-between gap-3">
+                  {hasDocuments ? (
+                    <div
+                      className="space-y-3 focus-visible:outline-none"
+                      tabIndex={0}
+                      onKeyDown={(event) => {
+                        if (event.key === 'ArrowLeft') {
+                          event.preventDefault();
+                          goPrev();
+                        }
+                        if (event.key === 'ArrowRight') {
+                          event.preventDefault();
+                          goNext();
+                        }
+                      }}
+                    >
+                      <div className="flex items-center justify-between gap-3">
                       <p className="text-sm font-semibold text-[#7c3aed]">Active preview</p>
                       <div className="flex items-center gap-2">
                         <button
@@ -645,9 +648,18 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
                         </div>
                       )}
                     </div>
-                  </div>
+                    </div>
+                  ) : (
+                    <div className="rounded-2xl border border-dashed border-gray-200 bg-gray-50 px-6 py-12 text-center">
+                      <p className="text-sm font-semibold text-charcoal">Previews unavailable in this environment</p>
+                      <p className="mt-2 text-xs text-gray-600">
+                        Preview image binaries are optional and were not found for this run.
+                      </p>
+                    </div>
+                  )}
 
-                  <div className="mt-6">
+                  {hasDocuments ? (
+                    <div className="mt-6">
                     <div className="flex items-center justify-between">
                       <p className="text-sm font-semibold text-charcoal">Preview stack</p>
                       <span className="text-xs text-gray-500">Click a document to preview</span>
@@ -663,11 +675,6 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
                           ),
                         }}
                       >
-                        {!hasDocuments ? (
-                          <div className="flex h-full min-h-[200px] items-center justify-center rounded-2xl border border-dashed border-gray-200 bg-gray-50 text-sm text-gray-500">
-                            Previews coming soon.
-                          </div>
-                        ) : null}
                         {visibleDocuments.map((document, index) => {
                           const isActive = document.key === activeDoc?.key;
                           const stackIndex = index;
@@ -714,6 +721,7 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
                       </div>
                     </div>
                   </div>
+                  ) : null}
                 </div>
               </div>
             </div>
