@@ -40,6 +40,36 @@ async function screenshot(page, fileName) {
   await page.screenshot({ path: path.join(screensDir, fileName), fullPage: true });
 }
 
+async function waitForNonZeroLayout(page) {
+  await page.waitForFunction(
+    () => document.body && document.body.clientWidth > 0 && document.body.clientHeight > 0,
+    { timeout: 5000 },
+  );
+}
+
+async function safeScreenshot(page, fileName, { diagnostics, stepDiagnostics, stepName } = {}) {
+  try {
+    await waitForNonZeroLayout(page);
+    await screenshot(page, fileName);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    if (stepDiagnostics) {
+      stepDiagnostics.screenshot_skipped = true;
+      stepDiagnostics.screenshot_error = message;
+    }
+
+    if (diagnostics?.screenshotIssues) {
+      diagnostics.screenshotIssues.push({
+        screenshot_skipped: true,
+        step: stepName ?? 'unknown',
+        file: fileName,
+        message,
+        timestamp: new Date().toISOString(),
+      });
+    }
+  }
+}
+
 async function waitForAnySelector(page, selectors, timeoutMs) {
   const started = Date.now();
   while (Date.now() - started < timeoutMs) {
@@ -61,6 +91,7 @@ function attachDiagnostics(page) {
     failedResponses: [],
     requestFailures: [],
     requests: [],
+    screenshotIssues: [],
   };
 
   page.on('console', (msg) => {
@@ -111,7 +142,8 @@ function attachDiagnostics(page) {
   return diagnostics;
 }
 
-async function clickAndRecord({ page, journey, stepName, selectors, expectedUrlIncludes, successWhen }) {
+async function clickAndRecord({ page, journey, stepName, selectors, expectedUrlIncludes, successWhen, diagnostics }) {
+  const stepDiagnostics = {};
   const selectorUsed = await waitForAnySelector(page, selectors, STEP_TIMEOUT_MS);
   if (!selectorUsed) throw new Error(`Missing CTA for ${stepName}: ${selectors.join(' OR ')}`);
 
@@ -143,9 +175,9 @@ async function clickAndRecord({ page, journey, stepName, selectors, expectedUrlI
     throw new Error(`URL did not change after ${stepName}`);
   }
 
-  await screenshot(page, `${journey}_${sanitizeName(stepName)}.png`).catch(() => {});
+  await safeScreenshot(page, `${journey}_${sanitizeName(stepName)}.png`, { diagnostics, stepDiagnostics, stepName });
 
-  return { step_name: stepName, clicked_text, clicked_href, url_before, url_after, timestamp: new Date().toISOString() };
+  return { step_name: stepName, clicked_text, clicked_href, url_before, url_after, timestamp: new Date().toISOString(), diagnostics: stepDiagnostics };
 }
 
 async function createMoneyClaimCase() {
@@ -188,6 +220,8 @@ async function runJourney(browser, journey, fn) {
     await page.setCacheEnabled(false);
   }
 
+  await page.setViewport({ width: 1280, height: 720 });
+
   try {
     await fn(page, {
       setStep: (step) => {
@@ -199,7 +233,10 @@ async function runJourney(browser, journey, fn) {
 
     results.push({ journey, status: 'pass', started_at, completed_at: new Date().toISOString(), steps, diagnostics });
   } catch (error) {
-    await screenshot(page, `FAIL_${journey}_${sanitizeName(currentStep)}.png`).catch(() => {});
+    await safeScreenshot(page, `FAIL_${journey}_${sanitizeName(currentStep)}.png`, {
+      diagnostics,
+      stepName: currentStep,
+    });
     const message = summarizeError(error);
     results.push({
       journey,
@@ -272,6 +309,17 @@ async function writeOutputs() {
     lines.push('');
   }
 
+  const screenshotSkips = results.flatMap((row) => row.diagnostics?.screenshotIssues ?? []);
+  lines.push('## Screenshot skips', '');
+  if (!screenshotSkips.length) {
+    lines.push('- No screenshot skips captured.');
+  } else {
+    for (const skip of screenshotSkips) {
+      lines.push(`- ${skip.step}: ${skip.file} (${skip.message})`);
+    }
+  }
+  lines.push('');
+
   const topErrors = collectTopErrors();
   lines.push('## Top diagnostics', '');
   if (!topErrors.length) {
@@ -290,10 +338,10 @@ async function main() {
   const browser = await launchBrowser();
 
   try {
-    await runJourney(browser, 'journey_a_guide_to_paid', async (page, { setStep, steps }) => {
+    await runJourney(browser, 'journey_a_guide_to_paid', async (page, { setStep, steps, diagnostics }) => {
       setStep('open guide page');
       await page.goto(`${BASE_URL}/pre-action-protocol-debt`, { waitUntil: 'domcontentloaded', timeout: STEP_TIMEOUT_MS });
-      await screenshot(page, 'journey_a_guide_to_paid_start.png');
+      await safeScreenshot(page, 'journey_a_guide_to_paid_start.png', { diagnostics, stepName: 'open guide page' });
 
       setStep('guide primary cta');
       steps.push(await clickAndRecord({
@@ -302,13 +350,14 @@ async function main() {
         stepName: 'guide primary cta',
         selectors: ['[data-testid="guide-primary-cta"]', '[data-testid="hero-primary-cta"]'],
         expectedUrlIncludes: '/products/money-claim',
+        diagnostics,
       }));
     });
 
-    await runJourney(browser, 'journey_b_tool_to_paid', async (page, { setStep, steps }) => {
+    await runJourney(browser, 'journey_b_tool_to_paid', async (page, { setStep, steps, diagnostics }) => {
       setStep('open tool page');
       await page.goto(`${BASE_URL}/tools/rent-arrears-calculator`, { waitUntil: 'domcontentloaded', timeout: STEP_TIMEOUT_MS });
-      await screenshot(page, 'journey_b_tool_to_paid_start.png');
+      await safeScreenshot(page, 'journey_b_tool_to_paid_start.png', { diagnostics, stepName: 'open tool page' });
 
       setStep('tool upsell cta');
       steps.push(await clickAndRecord({
@@ -317,6 +366,7 @@ async function main() {
         stepName: 'tool upsell cta',
         selectors: ['[data-testid="tool-upsell-cta"]', '[data-testid="hero-primary-cta"]'],
         expectedUrlIncludes: '/products/',
+        diagnostics,
       }));
     });
 
@@ -331,6 +381,7 @@ async function main() {
         stepName: 'paid product start wizard',
         selectors: ['[data-testid="hero-primary-cta"]'],
         expectedUrlIncludes: '/wizard',
+        diagnostics,
       }));
 
       setStep('create wizard case');
@@ -357,6 +408,7 @@ async function main() {
           const checkoutMessageSeen = diagnostics.console.some((entry) => entry.text.includes('Checkout'));
           return Boolean(modalVisible || checkoutCallSeen || checkoutMessageSeen);
         },
+        diagnostics,
       }));
     });
   } finally {
