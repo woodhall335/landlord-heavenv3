@@ -125,6 +125,8 @@ async function main() {
     exit_code: null,
     error_excerpt: null,
     busy_ports_detected: [],
+    e2e_mode: process.env.E2E_MODE === 'true',
+    recommended_usage: 'E2E_MODE=true npm run audit:env:check && E2E_MODE=true npm run audit:funnel',
   };
 
   let serverProcess;
@@ -139,7 +141,7 @@ async function main() {
 
     serverProcess = spawn('npm', ['run', 'dev', '--', '--port', String(port)], {
       stdio: ['ignore', 'pipe', 'pipe'],
-      env: { ...process.env, PORT: String(port), BASE_URL: baseUrl },
+      env: { ...process.env, PORT: String(port), BASE_URL: baseUrl, E2E_MODE: process.env.E2E_MODE },
       detached: true,
       shell: false,
     });
@@ -160,7 +162,7 @@ async function main() {
 
     await waitForReady(baseUrl, serverProcess, runLog);
 
-    const commandResult = await runCommand(commandArgs, { ...process.env, PORT: String(port), BASE_URL: baseUrl });
+    const commandResult = await runCommand(commandArgs, { ...process.env, PORT: String(port), BASE_URL: baseUrl, E2E_MODE: process.env.E2E_MODE });
     runLog.exit_code = commandResult.code;
 
     if (commandResult.signal) {

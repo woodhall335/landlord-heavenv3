@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { DocumentList } from './DocumentList';
 import { DocumentInfo } from './DocumentCard';
 import { getSupabaseBrowserClient } from '@/lib/supabase/client';
@@ -55,7 +55,7 @@ export function PreviewPageLayout({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [complianceBlock, setComplianceBlock] = useState<ComplianceBlockState | null>(null);
-  const supabase = getSupabaseBrowserClient();
+  const e2eModeEnabled = useMemo(() => process.env.NEXT_PUBLIC_E2E_MODE === 'true' || process.env.E2E_MODE === 'true', []);
 
   const handleCheckout = async () => {
     setIsLoading(true);
@@ -63,6 +63,13 @@ export function PreviewPageLayout({
     setComplianceBlock(null); // Clear any previous compliance block
 
     try {
+      if (e2eModeEnabled) {
+        const params = new URLSearchParams({ product, caseId });
+        window.location.href = `/checkout/e2e-started?${params.toString()}`;
+        return;
+      }
+
+      const supabase = getSupabaseBrowserClient();
       const { data: { user } } = await supabase.auth.getUser();
 
       if (!user) {
