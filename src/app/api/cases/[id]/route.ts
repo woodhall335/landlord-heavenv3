@@ -11,6 +11,7 @@ import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { logMutation } from '@/lib/auth/audit-log';
 import { checkMutationAllowed } from '@/lib/payments/edit-window-enforcement';
+import { getCase as getE2ECase } from '@/lib/e2eStore';
 
 /**
  * GET - Fetch specific case by ID
@@ -22,6 +23,21 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
+
+    const e2eCase = getE2ECase(id);
+    if (e2eCase) {
+      return NextResponse.json(
+        {
+          success: true,
+          case: {
+            ...e2eCase,
+            wizard_progress: 100,
+            document_count: 0,
+          },
+        },
+        { status: 200 }
+      );
+    }
 
     // Use admin client to bypass RLS - we do our own access control below
     const adminSupabase = createAdminClient();

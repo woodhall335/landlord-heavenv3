@@ -45,7 +45,8 @@
     "audit:main-text": "node scripts/assert-main-text.mjs",
     "audit:cannibalisation": "node scripts/cannibalisation-audit.mjs",
     "audit:funnel": "node scripts/run-with-server.mjs -- node scripts/funnel-audit.mjs",
-    "audit:pw:install": "playwright install --with-deps"
+    "audit:pw:install": "playwright install --with-deps",
+    "audit:env:check": "node scripts/audit-env-check.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.70.1",

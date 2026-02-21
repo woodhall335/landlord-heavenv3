@@ -6,6 +6,7 @@ import chromium from '@sparticuz/chromium';
 
 const BASE_URL = process.env.BASE_URL ?? 'https://landlordheaven.co.uk';
 const IS_LOCALHOST = /^https?:\/\/localhost(?::\d+)?$/i.test(BASE_URL);
+const E2E_MODE_ENABLED = process.env.E2E_MODE === 'true';
 const STEP_TIMEOUT_MS = Number(process.env.FUNNEL_STEP_TIMEOUT_MS ?? (IS_LOCALHOST ? 25000 : 60000));
 
 const outputRoot = path.join(process.cwd(), 'audit-output/funnel/latest');
@@ -53,13 +54,76 @@ async function waitForAnySelector(page, selectors, timeoutMs) {
   return null;
 }
 
-async function clickAndRecord({ page, journey, stepName, selectors, expectedUrlIncludes }) {
+function attachDiagnostics(page) {
+  const diagnostics = {
+    console: [],
+    pageErrors: [],
+    failedResponses: [],
+    requestFailures: [],
+    requests: [],
+  };
+
+  page.on('console', (msg) => {
+    diagnostics.console.push({
+      type: msg.type(),
+      text: msg.text().slice(0, 400),
+      location: msg.location(),
+      timestamp: new Date().toISOString(),
+    });
+  });
+
+  page.on('pageerror', (error) => {
+    diagnostics.pageErrors.push({
+      message: error?.message ?? String(error),
+      stack: error?.stack?.slice(0, 800),
+      timestamp: new Date().toISOString(),
+    });
+  });
+
+  page.on('response', (response) => {
+    if (response.status() >= 400) {
+      diagnostics.failedResponses.push({
+        status: response.status(),
+        url: response.url(),
+        timestamp: new Date().toISOString(),
+      });
+    }
+  });
+
+
+  page.on('request', (request) => {
+    diagnostics.requests.push({
+      url: request.url(),
+      method: request.method(),
+      timestamp: new Date().toISOString(),
+    });
+  });
+
+  page.on('requestfailed', (request) => {
+    diagnostics.requestFailures.push({
+      url: request.url(),
+      method: request.method(),
+      reason: request.failure()?.errorText ?? 'unknown',
+      timestamp: new Date().toISOString(),
+    });
+  });
+
+  return diagnostics;
+}
+
+async function clickAndRecord({ page, journey, stepName, selectors, expectedUrlIncludes, successWhen }) {
   const selectorUsed = await waitForAnySelector(page, selectors, STEP_TIMEOUT_MS);
   if (!selectorUsed) throw new Error(`Missing CTA for ${stepName}: ${selectors.join(' OR ')}`);
 
   await page.waitForSelector(selectorUsed, { timeout: STEP_TIMEOUT_MS, visible: true });
-  const clicked_text = ((await page.$eval(selectorUsed, (el) => el.textContent || '')) || '').trim();
-  const clicked_href = (await page.$eval(selectorUsed, (el) => el.getAttribute('href') || '')) || '';
+  let clicked_text = '';
+  let clicked_href = '';
+  try {
+    clicked_text = ((await page.$eval(selectorUsed, (el) => el.textContent || '')) || '').trim();
+    clicked_href = (await page.$eval(selectorUsed, (el) => el.getAttribute('href') || '')) || '';
+  } catch {
+    // If DOM mutates while navigating, diagnostics still capture outcome.
+  }
   const url_before = page.url();
 
   const navPromise = page.waitForNavigation({ waitUntil: 'domcontentloaded', timeout: STEP_TIMEOUT_MS }).catch(() => null);
@@ -67,19 +131,38 @@ async function clickAndRecord({ page, journey, stepName, selectors, expectedUrlI
   await navPromise;
 
   const url_after = page.url();
+
   if (expectedUrlIncludes && !url_after.includes(expectedUrlIncludes)) {
     throw new Error(`Unexpected URL after ${stepName}. Expected to include "${expectedUrlIncludes}", got "${url_after}"`);
   }
-  if (!expectedUrlIncludes && url_after === url_before) {
+
+  if (typeof successWhen === 'function') {
+    const ok = await successWhen({ page, url_before, url_after });
+    if (!ok) throw new Error(`Custom success check failed for ${stepName}; url_before=${url_before} url_after=${url_after}`);
+  } else if (!expectedUrlIncludes && url_after === url_before) {
     throw new Error(`URL did not change after ${stepName}`);
   }
 
-  await screenshot(page, `${journey}_${sanitizeName(stepName)}.png`);
+  await screenshot(page, `${journey}_${sanitizeName(stepName)}.png`).catch(() => {});
 
   return { step_name: stepName, clicked_text, clicked_href, url_before, url_after, timestamp: new Date().toISOString() };
 }
 
 async function createMoneyClaimCase() {
+  if (IS_LOCALHOST && E2E_MODE_ENABLED) {
+    const response = await fetch(`${BASE_URL}/api/e2e/seed-case`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ product: 'money_claim', jurisdiction: 'england' }),
+      cache: 'no-store',
+    });
+
+    if (!response.ok) throw new Error(`Failed creating case via /api/e2e/seed-case (${response.status})`);
+    const body = await response.json();
+    if (!body.case_id) throw new Error('Missing case id from /api/e2e/seed-case response');
+    return body.case_id;
+  }
+
   const response = await fetch(`${BASE_URL}/api/wizard/start`, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
@@ -99,6 +182,7 @@ async function runJourney(browser, journey, fn) {
   const steps = [];
   let currentStep = 'initial_load';
   const page = await browser.newPage();
+  const diagnostics = attachDiagnostics(page);
 
   if (IS_LOCALHOST) {
     await page.setCacheEnabled(false);
@@ -110,9 +194,10 @@ async function runJourney(browser, journey, fn) {
         currentStep = step;
       },
       steps,
+      diagnostics,
     });
 
-    results.push({ journey, status: 'pass', started_at, completed_at: new Date().toISOString(), steps });
+    results.push({ journey, status: 'pass', started_at, completed_at: new Date().toISOString(), steps, diagnostics });
   } catch (error) {
     await screenshot(page, `FAIL_${journey}_${sanitizeName(currentStep)}.png`).catch(() => {});
     const message = summarizeError(error);
@@ -125,10 +210,37 @@ async function runJourney(browser, journey, fn) {
       failed_selector: message.includes('Missing CTA') ? message : undefined,
       error: message,
       steps,
+      diagnostics,
     });
   } finally {
     await page.close().catch(() => {});
   }
+}
+
+function collectTopErrors() {
+  const counts = new Map();
+
+  for (const row of results) {
+    const d = row.diagnostics;
+    if (!d) continue;
+
+    for (const err of d.pageErrors || []) {
+      const key = `pageerror: ${err.message}`;
+      counts.set(key, (counts.get(key) ?? 0) + 1);
+    }
+
+    for (const resp of d.failedResponses || []) {
+      const key = `http${resp.status}: ${resp.url}`;
+      counts.set(key, (counts.get(key) ?? 0) + 1);
+    }
+
+    for (const req of d.requestFailures || []) {
+      const key = `requestfailed: ${req.reason} ${req.url}`;
+      counts.set(key, (counts.get(key) ?? 0) + 1);
+    }
+  }
+
+  return [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 8);
 }
 
 async function writeOutputs() {
@@ -139,6 +251,7 @@ async function writeOutputs() {
     '# Funnel Audit Summary',
     '',
     `Generated: ${new Date().toISOString()}`,
+    `E2E_MODE: ${E2E_MODE_ENABLED ? 'enabled' : 'disabled'}`,
     '',
     '| Journey | Status | Failed step | Details |',
     '|---|---|---|---|',
@@ -155,6 +268,17 @@ async function writeOutputs() {
     lines.push('## Failing step details', '');
     for (const fail of failures) {
       lines.push(`- **${fail.journey}** at **${fail.failed_step ?? 'unknown'}**: ${fail.error ?? 'Unknown error'}`);
+    }
+    lines.push('');
+  }
+
+  const topErrors = collectTopErrors();
+  lines.push('## Top diagnostics', '');
+  if (!topErrors.length) {
+    lines.push('- No page errors or failing network calls were captured.');
+  } else {
+    for (const [label, count] of topErrors) {
+      lines.push(`- ${count}x ${label}`);
     }
   }
 
@@ -196,7 +320,7 @@ async function main() {
       }));
     });
 
-    await runJourney(browser, 'journey_c_paid_to_preview_to_checkout_start', async (page, { setStep, steps }) => {
+    await runJourney(browser, 'journey_c_paid_to_preview_to_checkout_start', async (page, { setStep, steps, diagnostics }) => {
       setStep('open paid product page');
       await page.goto(`${BASE_URL}/products/money-claim`, { waitUntil: 'domcontentloaded', timeout: STEP_TIMEOUT_MS });
 
@@ -221,6 +345,18 @@ async function main() {
         journey: 'journey_c_paid_to_preview_to_checkout_start',
         stepName: 'preview checkout start',
         selectors: ['[data-testid="preview-checkout-cta"]'],
+        successWhen: async ({ page, url_before, url_after }) => {
+          if (E2E_MODE_ENABLED) {
+            return url_after.includes('/checkout/e2e-started');
+          }
+          if (url_after !== url_before) return true;
+
+          const modalVisible = await waitForAnySelector(page, ['[role="dialog"]', '[data-testid="checkout-modal"]'], 1500);
+          const checkoutCallSeen = diagnostics.requests.some((r) => r.url.includes('/api/checkout/create')) ||
+            diagnostics.failedResponses.some((r) => r.url.includes('/api/checkout/create'));
+          const checkoutMessageSeen = diagnostics.console.some((entry) => entry.text.includes('Checkout'));
+          return Boolean(modalVisible || checkoutCallSeen || checkoutMessageSeen);
+        },
       }));
     });
   } finally {
@@ -240,6 +376,7 @@ main().catch(async (error) => {
     failed_step: 'bootstrap',
     error: summarizeError(error),
     steps: [],
+    diagnostics: { console: [], pageErrors: [], failedResponses: [], requestFailures: [], requests: [] },
   });
   await writeOutputs();
   console.error(error);

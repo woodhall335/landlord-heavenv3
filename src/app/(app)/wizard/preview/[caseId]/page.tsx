@@ -7,7 +7,7 @@
 
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { Button, Card, Loading, ValidationErrors, type ValidationIssue } from '@/components/ui';
 import { useToast } from '@/components/ui/Toast';
@@ -65,24 +65,33 @@ function ASTCheckoutButton({
   product,
   productName,
   price,
+  jurisdiction,
 }: {
   caseId: string;
   product: string;
   productName: string;
   price: string;
+  jurisdiction?: string;
 }) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [tenancyBlockingError, setTenancyBlockingError] = useState<string | null>(null);
   const [missingFields, setMissingFields] = useState<string[]>([]);
-  const supabase = getSupabaseBrowserClient();
   const router = useRouter();
+  const e2eModeEnabled = useMemo(() => process.env.NEXT_PUBLIC_E2E_MODE === 'true' || process.env.E2E_MODE === 'true', []);
 
   const handleCheckout = async () => {
     setIsLoading(true);
     setError(null);
 
     try {
+      if (e2eModeEnabled) {
+        const params = new URLSearchParams({ product, caseId, ...(jurisdiction ? { jurisdiction } : {}) });
+        window.location.href = `/checkout/e2e-started?${params.toString()}`;
+        return;
+      }
+
+      const supabase = getSupabaseBrowserClient();
       const { data: { user } } = await supabase.auth.getUser();
 
       if (!user) {
@@ -232,6 +241,7 @@ export default function WizardPreviewPage() {
   const searchParams = useSearchParams();
   const { showToast } = useToast();
   const caseId = params.caseId as string;
+  const e2eModeEnabled = useMemo(() => process.env.NEXT_PUBLIC_E2E_MODE === 'true' || process.env.E2E_MODE === 'true', []);
 
   const [caseData, setCaseData] = useState<CaseData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -447,6 +457,12 @@ export default function WizardPreviewPage() {
           setSelectedProduct('notice_only');
         } else if (inferredProduct) {
           setSelectedProduct(inferredProduct);
+        }
+
+        // E2E mode: skip preview generation dependencies so checkout CTA remains deterministic.
+        if (e2eModeEnabled) {
+          setLoading(false);
+          return;
         }
 
         // Determine if this is a notice_only case (for choosing correct preview API)
@@ -1152,6 +1168,7 @@ export default function WizardPreviewPage() {
                     product={product}
                     productName={productMeta.name}
                     price={productMeta.price}
+                    jurisdiction={caseData.jurisdiction}
                   />
 
                   {/* Trust Signals */}
