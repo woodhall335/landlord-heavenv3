@@ -103,7 +103,6 @@
     "tailwindcss": "^4",
     "ts-node": "^10.9.2",
     "typescript": "^5",
-    "vitest": "^2.1.9",
-    "@playwright/test": "^1.55.0"
+    "vitest": "^2.1.9"
   }
 }
