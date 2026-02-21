@@ -69,22 +69,22 @@
 
 **Type of Tenancy:** Private Residential Tenancy (PRT)
 
-**Tenancy Start Date:** {{tenancy_start_date}}
+**Tenancy Start Date:** {{format_date tenancy_start_date 'long'}}
 
 **Monthly Rent:** £{{monthly_rent}}
 
 **Deposit Amount:** £{{deposit_amount}}
 **Deposit Protected with:** {{deposit_scheme}}
-**Deposit Protected on:** {{deposit_protected_date}}
+**Deposit Protected on:** {{format_date deposit_protected_date 'long'}}
 
 ---
 
 ## SECTION 5: NOTICE TO LEAVE DETAILS
 
-**Notice to Leave Served on:** {{notice_served_date}}
+**Notice to Leave Served on:** {{format_date notice_served_date 'long'}}
 **Method of Service:** {{service_method}} {{!-- Hand delivery, Recorded delivery, Email, etc. --}}
 
-**Date Notice Expires:** {{notice_expiry_date}}
+**Date Notice Expires:** {{format_date notice_expiry_date 'long'}}
 
 **Notice Period Given:** {{notice_period}} days
 
@@ -134,12 +134,12 @@ The landlord is applying for an eviction order on the following ground(s):
 
 The landlord has complied with the Pre-Action Requirements (Notices) (Scotland) Regulations 2020:
 
-**Pre-Action Requirements Notice Served:** {{pre_action_date}}
+**Pre-Action Requirements Notice Served:** {{format_date pre_action_date 'long'}}
 **Method of Service:** {{pre_action_method}}
 
 **Compliance Summary:**
 
-1. **Notice Served:** Written notice explaining the arrears sent on {{pre_action_date}}
+1. **Notice Served:** Written notice explaining the arrears sent on {{format_date pre_action_date 'long'}}
 2. **Rent Arrears Information:** Details of arrears, rent payments, and housing costs included
 3. **Financial Assistance Information:** Information about benefits and financial assistance provided
 4. **Sources of Advice:** Information about debt and housing advice services provided
@@ -156,14 +156,14 @@ The landlord has complied with the Pre-Action Requirements (Notices) (Scotland) 
 {{#if rent_arrears}}
 
 **Current Rent Arrears:** £{{current_arrears}}
-**As of Date:** {{arrears_calculation_date}}
+**As of Date:** {{format_date arrears_calculation_date 'long'}}
 
 ### Rent Account Summary
 
 | Date | Description | Debit (£) | Credit (£) | Balance (£) |
 |------|-------------|-----------|------------|-------------|
 {{#each rent_ledger}}
-| {{date}} | {{description}} | {{debit}} | {{credit}} | {{balance}} |
+| {{format_date date}} | {{description}} | {{debit}} | {{credit}} | {{balance}} |
 {{/each}}
 
 **Arrears History:**
@@ -175,7 +175,7 @@ The landlord has complied with the Pre-Action Requirements (Notices) (Scotland) 
 **Attempts to Recover Arrears:**
 
 {{#each recovery_attempts}}
-- {{date}}: {{method}} - {{outcome}}
+- {{format_date date}}: {{method}} - {{outcome}}
 {{/each}}
 
 {{/if}}
@@ -203,7 +203,7 @@ The Tribunal must be satisfied that it is reasonable to grant an eviction order.
 **Attempts to Resolve Situation:**
 
 {{#each resolution_attempts}}
-- {{date}}: {{description}} - {{outcome}}
+- {{format_date date}}: {{description}} - {{outcome}}
 {{/each}}
 
 ---
@@ -295,7 +295,7 @@ I/We declare that:
 
 **Position:** {{applicant_position}} {{!-- Landlord, Agent, Representative --}}
 
-**Date:** {{application_date}}
+**Date:** {{format_date application_date 'long'}}
 
 ---
 
@@ -363,7 +363,7 @@ The tenant has the right to:
 
 ---
 
-**Document generated:** {{generation_date}}
+**Document generated:** {{format_date generation_date 'long'}}
 **Reference:** {{document_reference}}
 
 *This application is formatted for submission to the First-tier Tribunal for Scotland (Housing and Property Chamber) under the Private Housing (Tenancies) (Scotland) Act 2016*

@@ -38,8 +38,32 @@ export interface ChatMessage {
   content: string;
 }
 
+/**
+ * Supported AI model types.
+ */
+export type SupportedAIModel = 'gpt-4' | 'gpt-4-turbo' | 'gpt-4o' | 'gpt-4o-mini';
+
+/**
+ * Valid AI model values for type checking.
+ */
+const VALID_AI_MODELS: SupportedAIModel[] = ['gpt-4', 'gpt-4-turbo', 'gpt-4o', 'gpt-4o-mini'];
+
+/**
+ * Parse an AI model string from environment variable.
+ * Returns the fallback if the value is not a valid model.
+ */
+export function parseAIModel(
+  env: string | undefined,
+  fallback: SupportedAIModel = 'gpt-4o-mini'
+): SupportedAIModel {
+  if (env && VALID_AI_MODELS.includes(env as SupportedAIModel)) {
+    return env as SupportedAIModel;
+  }
+  return fallback;
+}
+
 export interface ChatCompletionOptions {
-  model?: 'gpt-4' | 'gpt-4-turbo' | 'gpt-4o' | 'gpt-4o-mini';
+  model?: SupportedAIModel;
   temperature?: number;
   max_tokens?: number;
   top_p?: number;

@@ -1,0 +1,36 @@
+{
+  "$schema": "../../fixtures.schema.json",
+  "$comment": "Section 21 England - INVALID case: deposit not protected",
+  "case_id": "s21-invalid-deposit-001",
+  "jurisdiction": "england",
+  "product": "notice_only",
+  "eviction_route": "section_21",
+
+  "flat_facts": {
+    "landlord_full_name": "James Alexander Thompson",
+    "landlord_address": "45 Victoria Gardens\nManchester\nM1 4PQ",
+    "tenant_full_name": "Sarah Elizabeth Williams",
+    "property_address_line1": "Flat 12, Riverside Court",
+    "property_city": "London",
+    "property_postcode": "SE1 9AA",
+    "tenancy_start_date": "2023-06-01",
+    "rent_amount": 1500,
+    "rent_frequency": "monthly",
+    "notice_served_date": "2026-01-20",
+    "service_method": "first_class_post",
+
+    "deposit_taken": true,
+    "deposit_amount": 1500,
+    "deposit_protected": false,
+
+    "has_gas_appliances": true,
+    "gas_safety_cert_served": true,
+    "epc_served": true,
+    "how_to_rent_served": true,
+    "licensing_required": "not_required",
+    "no_retaliatory_notice": true,
+    "eviction_route": "section_21"
+  },
+
+  "expected_error_code": "S21_DEPOSIT_NOT_PROTECTED"
+}

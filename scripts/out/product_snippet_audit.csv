@@ -1,0 +1,16 @@
+url,status,indexable,has_product_schema,product_schema_valid,offer_valid,schema_types_found,price,currency,availability,issues
+http://localhost:5000/eviction-notice,200,true,true,true,true,Organization|Product|FAQPage|BreadcrumbList,49.99,GBP,https://schema.org/InStock,
+http://localhost:5000/eviction-pack-england,200,true,true,true,true,Organization|Product|FAQPage|BreadcrumbList,199.99,GBP,https://schema.org/InStock,
+http://localhost:5000/money-claim,200,true,true,true,true,Organization|Product|FAQPage|BreadcrumbList,99.99,GBP,https://schema.org/InStock,
+http://localhost:5000/premium-tenancy-agreement,200,false,true,true,true,Organization|Product|FAQPage|BreadcrumbList,14.99,GBP,https://schema.org/InStock,non_indexable:canonical_points_elsewhere|non_indexable:redirect_to_other
+http://localhost:5000/products/ast,200,true,true,true,true,Organization|Product|FAQPage|BreadcrumbList,14.99,GBP,https://schema.org/InStock,
+http://localhost:5000/products/complete-pack,200,true,true,true,true,Organization|Product|FAQPage|BreadcrumbList,199.99,GBP,https://schema.org/InStock,
+http://localhost:5000/products/money-claim,200,true,true,true,true,Organization|Product|FAQPage|BreadcrumbList,99.99,GBP,https://schema.org/InStock,
+http://localhost:5000/products/money-claim-pack,200,false,true,true,true,Organization|Product|FAQPage|BreadcrumbList,99.99,GBP,https://schema.org/InStock,non_indexable:canonical_points_elsewhere|non_indexable:redirect_to_other
+http://localhost:5000/products/notice-only,200,true,true,true,true,Organization|Product|FAQPage|BreadcrumbList,49.99,GBP,https://schema.org/InStock,
+http://localhost:5000/tenancy-agreement,200,false,false,false,false,Organization|Article|BreadcrumbList|FAQPage,,,,missing_product_schema|non_indexable:canonical_points_elsewhere|non_indexable:redirect_to_other
+http://localhost:5000/tenancy-agreements/england,200,false,false,false,false,Organization|Article|BreadcrumbList|FAQPage,,,,missing_product_schema|non_indexable:canonical_points_elsewhere|non_indexable:redirect_to_other
+http://localhost:5000/tenancy-agreements/england-wales,200,false,false,false,false,Organization,,,,missing_product_schema|non_indexable:noindex_meta
+http://localhost:5000/tenancy-agreements/northern-ireland,200,false,false,false,false,Organization|Article|FAQPage|BreadcrumbList,,,,missing_product_schema|non_indexable:canonical_points_elsewhere|non_indexable:redirect_to_other
+http://localhost:5000/tenancy-agreements/scotland,200,false,false,false,false,Organization|Article|FAQPage|BreadcrumbList,,,,missing_product_schema|non_indexable:canonical_points_elsewhere|non_indexable:redirect_to_other
+http://localhost:5000/tenancy-agreements/wales,200,false,false,false,false,Organization|Article|FAQPage|BreadcrumbList,,,,missing_product_schema|non_indexable:canonical_points_elsewhere|non_indexable:redirect_to_other

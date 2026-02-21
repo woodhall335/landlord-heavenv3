@@ -50,7 +50,7 @@ public/official-forms/**/*.pdf
 !public/official-forms/README.md
 !public/official-forms/scotland/notice_to_leave.pdf
 !public/official-forms/scotland/form_e_eviction.pdf
-!public/official-forms/scotland/simple_procedure_claim_form.pdf
+!public/official-forms/scotland/form-3a.pdf
 !public/official-forms/scotland/simple_procedure_response_form.pdf
 
 # Sample/test documents (not to be committed)
@@ -59,3 +59,15 @@ test-*.pdf
 sample-*.html
 test-*.html
 artifacts/notice_only/_reports/
+
+# Generated test output (PDFs, HTML, and debug artifacts)
+tests/output/
+
+.tmp/
+
+# Audit and browser test artifacts
+audit-output/**
+!audit-output/.gitkeep
+playwright-report/**
+test-results/**
+.lighthouseci/**

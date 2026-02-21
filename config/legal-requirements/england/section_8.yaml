@@ -1,0 +1,23 @@
+requiredOfficialForms:
+  - public/official-forms/n5-eng.pdf
+  - public/official-forms/n119-eng.pdf
+optionalOfficialForms: []
+requiredTextBlocks:
+  - id: section8_notice
+    description: "Section 8 prescribed wording"
+    mustAppearIn: template
+    match: "Section 8"
+    regex: false
+    minOccurrences: 0
+requiredPreconditions:
+  - id: rent_arrears_confirmation
+    requiredFactKeys: []
+    requiredQuestionIds: []
+    mustBeValidatedInFlow: true
+noticeRules:
+  requiredInputsFactKeys: []
+  minimumDays: 0
+  mustComputeExpiryDate: true
+  mustShowUserWarningIfInvalid: true
+legislationReferences:
+  - "Housing Act 1988"

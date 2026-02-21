@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { wizardFactsToCaseFacts } from './normalize';
+import { wizardFactsToCaseFacts, resolveNoticeServiceDate, resolveNoticeExpiryDate } from './normalize';
 import type { WizardFacts } from './schema';
 
 describe('wizardFactsToCaseFacts', () => {
@@ -26,12 +26,12 @@ describe('wizardFactsToCaseFacts', () => {
 
     test('should map property country from property_country field', () => {
       const wizard: WizardFacts = {
-        property_country: 'england-wales',
+        property_country: 'england',
       };
 
       const result = wizardFactsToCaseFacts(wizard);
 
-      expect(result.property.country).toBe('england-wales');
+      expect(result.property.country).toBe('england');
     });
 
     test('should fallback to jurisdiction field for country', () => {
@@ -46,13 +46,13 @@ describe('wizardFactsToCaseFacts', () => {
 
     test('should prefer property_country over jurisdiction', () => {
       const wizard: WizardFacts = {
-        property_country: 'england-wales',
+        property_country: 'wales',
         jurisdiction: 'scotland',
       };
 
       const result = wizardFactsToCaseFacts(wizard);
 
-      expect(result.property.country).toBe('england-wales');
+      expect(result.property.country).toBe('wales');
     });
 
     test('should map HMO status', () => {
@@ -164,6 +164,106 @@ describe('wizardFactsToCaseFacts', () => {
       expect(result.tenancy.deposit_protected).toBeNull();
       expect(result.tenancy.deposit_scheme_name).toBeNull();
       expect(result.tenancy.deposit_protection_date).toBeNull();
+    });
+
+    // =========================================================================
+    // Fixed Term End Date Mapping Tests (Section 21 PDF fix)
+    // =========================================================================
+
+    test('should map end_date from fixed_term_end_date (flat payload)', () => {
+      const wizard: WizardFacts = {
+        tenancy_type: 'Assured Shorthold Tenancy (Fixed term)',
+        fixed_term_end_date: '2026-07-14',
+      };
+
+      const result = wizardFactsToCaseFacts(wizard);
+
+      expect(result.tenancy.end_date).toBe('2026-07-14');
+      expect(result.tenancy.fixed_term).toBe(true);
+    });
+
+    test('should map end_date from nested tenancy.fixed_term_end_date', () => {
+      const wizard: WizardFacts = {
+        'tenancy.fixed_term_end_date': '2026-07-14',
+        tenancy_type: 'AST Fixed Term',
+      };
+
+      const result = wizardFactsToCaseFacts(wizard);
+
+      expect(result.tenancy.end_date).toBe('2026-07-14');
+      expect(result.tenancy.fixed_term).toBe(true);
+    });
+
+    test('should map end_date from case_facts.tenancy.fixed_term_end_date', () => {
+      const wizard: WizardFacts = {
+        'case_facts.tenancy.fixed_term_end_date': '2026-07-14',
+      };
+
+      const result = wizardFactsToCaseFacts(wizard);
+
+      expect(result.tenancy.end_date).toBe('2026-07-14');
+    });
+
+    test('should prefer tenancy_end_date over fixed_term_end_date when both present', () => {
+      const wizard: WizardFacts = {
+        tenancy_end_date: '2026-08-01',
+        fixed_term_end_date: '2026-07-14',
+      };
+
+      const result = wizardFactsToCaseFacts(wizard);
+
+      expect(result.tenancy.end_date).toBe('2026-08-01');
+    });
+
+    test('should infer fixed_term=true from tenancy_type containing "fixed term" (case insensitive)', () => {
+      const wizard: WizardFacts = {
+        tenancy_type: 'Assured Shorthold Tenancy (Fixed term)',
+      };
+
+      const result = wizardFactsToCaseFacts(wizard);
+
+      expect(result.tenancy.fixed_term).toBe(true);
+    });
+
+    test('should infer fixed_term=true from tenancy_type "ast_fixed"', () => {
+      const wizard: WizardFacts = {
+        tenancy_type: 'ast_fixed',
+      };
+
+      const result = wizardFactsToCaseFacts(wizard);
+
+      expect(result.tenancy.fixed_term).toBe(true);
+    });
+
+    test('should infer fixed_term=true from tenancy_type "fixed_term"', () => {
+      const wizard: WizardFacts = {
+        tenancy_type: 'fixed_term',
+      };
+
+      const result = wizardFactsToCaseFacts(wizard);
+
+      expect(result.tenancy.fixed_term).toBe(true);
+    });
+
+    test('should NOT infer fixed_term from tenancy_type that does not indicate fixed term', () => {
+      const wizard: WizardFacts = {
+        tenancy_type: 'Assured Shorthold Tenancy (Periodic)',
+      };
+
+      const result = wizardFactsToCaseFacts(wizard);
+
+      expect(result.tenancy.fixed_term).toBeNull();
+    });
+
+    test('should prefer explicit is_fixed_term over tenancy_type inference', () => {
+      const wizard: WizardFacts = {
+        tenancy_type: 'Assured Shorthold Tenancy (Fixed term)',
+        is_fixed_term: false,
+      };
+
+      const result = wizardFactsToCaseFacts(wizard);
+
+      expect(result.tenancy.fixed_term).toBe(false);
     });
   });
 
@@ -452,7 +552,7 @@ describe('wizardFactsToCaseFacts', () => {
         property_address_line2: 'Flat 4B',
         property_city: 'London',
         property_postcode: 'SW1A 1AA',
-        property_country: 'england-wales',
+        property_country: 'england',
         property_is_hmo: false,
 
         // Tenancy
@@ -487,13 +587,13 @@ describe('wizardFactsToCaseFacts', () => {
 
       // Verify meta
       expect(result.meta.product).toBe('tenancy_agreement');
-      expect(result.meta.original_product).toBe('tenancy_agreement/england-wales');
+      expect(result.meta.original_product).toBe('tenancy_agreement/england-wales'); // Keep as-is - this is historical metadata
       expect(result.meta.product_tier).toBe('standard');
 
       // Verify property
       expect(result.property.address_line1).toBe('123 High Street');
       expect(result.property.postcode).toBe('SW1A 1AA');
-      expect(result.property.country).toBe('england-wales');
+      expect(result.property.country).toBe('england'); // Now using canonical england
       expect(result.property.is_hmo).toBe(false);
 
       // Verify tenancy
@@ -521,7 +621,7 @@ describe('wizardFactsToCaseFacts', () => {
 
         property_address_line1: '789 Main Road',
         property_postcode: 'EC1A 1BB',
-        property_country: 'england-wales',
+        property_country: 'england',
         property_is_hmo: true,
 
         tenancy_type: 'ast',
@@ -731,6 +831,84 @@ describe('wizardFactsToCaseFacts', () => {
 
       expect(result.notice.expiry_date).toBe('2024-06-01');
     });
+
+    // =========================================================================
+    // Notice Service Method from Nested Paths (Section 21 PDF fix)
+    // =========================================================================
+
+    test('should resolve service_method from notice_service.service_method', () => {
+      const wizard: WizardFacts = {
+        notice_service: {
+          service_method: 'first_class_post',
+        },
+      };
+
+      const result = wizardFactsToCaseFacts(wizard);
+
+      expect(result.notice.service_method).toBe('first_class_post');
+    });
+
+    test('should resolve service_method from notice_service.method', () => {
+      const wizard: WizardFacts = {
+        notice_service: {
+          method: 'recorded_delivery',
+        },
+      };
+
+      const result = wizardFactsToCaseFacts(wizard);
+
+      expect(result.notice.service_method).toBe('recorded_delivery');
+    });
+
+    test('should normalize "Hand delivery" to "hand_delivery"', () => {
+      const wizard: WizardFacts = {
+        notice_service_method: 'Hand delivery',
+      };
+
+      const result = wizardFactsToCaseFacts(wizard);
+
+      expect(result.notice.service_method).toBe('hand_delivery');
+    });
+
+    test('should normalize "First class post" to "first_class_post"', () => {
+      const wizard: WizardFacts = {
+        notice_service_method: 'First class post',
+      };
+
+      const result = wizardFactsToCaseFacts(wizard);
+
+      expect(result.notice.service_method).toBe('first_class_post');
+    });
+
+    test('should normalize "Recorded delivery" to "recorded_delivery"', () => {
+      const wizard: WizardFacts = {
+        notice_service_method: 'Recorded delivery',
+      };
+
+      const result = wizardFactsToCaseFacts(wizard);
+
+      expect(result.notice.service_method).toBe('recorded_delivery');
+    });
+
+    test('should normalize "In person" to "hand_delivery"', () => {
+      const wizard: WizardFacts = {
+        notice_service_method: 'In person',
+      };
+
+      const result = wizardFactsToCaseFacts(wizard);
+
+      expect(result.notice.service_method).toBe('hand_delivery');
+    });
+
+    test('should preserve already-canonical service_method values', () => {
+      const wizard: WizardFacts = {
+        notice_service_method: 'hand_delivery',
+      };
+
+      const result = wizardFactsToCaseFacts(wizard);
+
+      expect(result.notice.service_method).toBe('hand_delivery');
+    });
   });
 
   describe('Court Mapping', () => {
@@ -839,5 +1017,196 @@ describe('wizardFactsToCaseFacts', () => {
 
       expect(result.money_claim.solicitor_costs).toBeNull();
     });
+  });
+
+  // =============================================================================
+  // KNOWN STRUCTURES - Verify notice and service_contact are recognized
+  // =============================================================================
+  // These tests verify that notice and service_contact are in the knownStructures
+  // list and won't trigger "unexpected object" warnings during normalization.
+
+  describe('Known Structures - notice and service_contact', () => {
+    test('should produce CaseFacts with notice as a proper nested structure', () => {
+      const wizard: WizardFacts = {
+        notice_type: 'section_8',
+        notice_date: '2024-03-01',
+        notice_expiry_date: '2024-05-01',
+      };
+
+      const result = wizardFactsToCaseFacts(wizard);
+
+      // notice should be a proper nested object (not flattened/stringified)
+      expect(result.notice).toBeDefined();
+      expect(typeof result.notice).toBe('object');
+      expect(result.notice).not.toBeNull();
+      expect(result.notice.notice_type).toBe('section_8');
+      expect(result.notice.notice_date).toBe('2024-03-01');
+    });
+
+    test('should produce CaseFacts with service_contact as a proper nested structure', () => {
+      const wizard: WizardFacts = {
+        service_name: 'Legal Services Ltd',
+        service_email: 'service@legal.com',
+        service_phone: '020 5555 4444',
+      };
+
+      const result = wizardFactsToCaseFacts(wizard);
+
+      // service_contact should be a proper nested object (not flattened/stringified)
+      expect(result.service_contact).toBeDefined();
+      expect(typeof result.service_contact).toBe('object');
+      expect(result.service_contact).not.toBeNull();
+      expect(result.service_contact.service_name).toBe('Legal Services Ltd');
+    });
+
+    test('should NOT flatten notice or service_contact to strings', () => {
+      const wizard: WizardFacts = {
+        notice_type: 'section_21',
+        service_name: 'Agent Ltd',
+      };
+
+      const result = wizardFactsToCaseFacts(wizard);
+
+      // Verify they are objects, not strings (which would happen if they were flattened)
+      expect(typeof result.notice).toBe('object');
+      expect(typeof result.service_contact).toBe('object');
+
+      // Make sure they're not JSON strings
+      expect(typeof (result as any).notice).not.toBe('string');
+      expect(typeof (result as any).service_contact).not.toBe('string');
+    });
+  });
+});
+
+// =============================================================================
+// NOTICE SERVICE DATE RESOLUTION TESTS
+// =============================================================================
+// These tests verify that the canonical service date resolver correctly
+// finds dates from various storage paths (field IDs vs maps_to paths).
+
+describe('resolveNoticeServiceDate', () => {
+  test('should return null for empty wizard facts', () => {
+    const wizard: WizardFacts = {};
+    expect(resolveNoticeServiceDate(wizard)).toBeNull();
+  });
+
+  test('should resolve date from notice_service.notice_date (maps_to path)', () => {
+    const wizard: WizardFacts = {
+      notice_service: {
+        notice_date: '2026-02-01',
+      },
+    };
+    expect(resolveNoticeServiceDate(wizard)).toBe('2026-02-01');
+  });
+
+  test('should resolve date from notice.notice_date (Scotland maps_to path)', () => {
+    const wizard: WizardFacts = {
+      notice: {
+        notice_date: '2026-03-15',
+      },
+    };
+    expect(resolveNoticeServiceDate(wizard)).toBe('2026-03-15');
+  });
+
+  test('should resolve date from notice_service_date (direct field ID)', () => {
+    const wizard: WizardFacts = {
+      notice_service_date: '2026-04-01',
+    };
+    expect(resolveNoticeServiceDate(wizard)).toBe('2026-04-01');
+  });
+
+  test('should resolve date from service_date (legacy field)', () => {
+    const wizard: WizardFacts = {
+      service_date: '2026-05-01',
+    };
+    expect(resolveNoticeServiceDate(wizard)).toBe('2026-05-01');
+  });
+
+  test('should resolve date from notice_date (Scotland field ID)', () => {
+    const wizard: WizardFacts = {
+      notice_date: '2026-06-01',
+    };
+    expect(resolveNoticeServiceDate(wizard)).toBe('2026-06-01');
+  });
+
+  test('should prefer maps_to path over field ID (notice_service.notice_date wins)', () => {
+    const wizard: WizardFacts = {
+      notice_service: {
+        notice_date: '2026-02-01', // maps_to path
+      },
+      notice_service_date: '2025-12-23', // field ID (should be ignored)
+    };
+    expect(resolveNoticeServiceDate(wizard)).toBe('2026-02-01');
+  });
+
+  test('should return ISO date format for valid dates', () => {
+    const wizard: WizardFacts = {
+      notice_service_date: '2026-01-15T10:30:00Z',
+    };
+    // Should return just the date part
+    expect(resolveNoticeServiceDate(wizard)).toBe('2026-01-15');
+  });
+
+  test('should ignore invalid date strings', () => {
+    const wizard: WizardFacts = {
+      notice_service_date: 'not-a-date',
+      service_date: '2026-07-01', // valid fallback
+    };
+    expect(resolveNoticeServiceDate(wizard)).toBe('2026-07-01');
+  });
+
+  test('should ignore empty strings', () => {
+    const wizard: WizardFacts = {
+      notice_service_date: '',
+      service_date: '2026-08-01',
+    };
+    expect(resolveNoticeServiceDate(wizard)).toBe('2026-08-01');
+  });
+});
+
+describe('resolveNoticeExpiryDate', () => {
+  test('should return null for empty wizard facts', () => {
+    const wizard: WizardFacts = {};
+    expect(resolveNoticeExpiryDate(wizard)).toBeNull();
+  });
+
+  test('should resolve date from notice_service.notice_expiry_date (maps_to path)', () => {
+    const wizard: WizardFacts = {
+      notice_service: {
+        notice_expiry_date: '2026-04-01',
+      },
+    };
+    expect(resolveNoticeExpiryDate(wizard)).toBe('2026-04-01');
+  });
+
+  test('should resolve date from notice_expiry_date (direct field ID)', () => {
+    const wizard: WizardFacts = {
+      notice_expiry_date: '2026-05-01',
+    };
+    expect(resolveNoticeExpiryDate(wizard)).toBe('2026-05-01');
+  });
+
+  test('should resolve date from expiry_date (legacy field)', () => {
+    const wizard: WizardFacts = {
+      expiry_date: '2026-06-01',
+    };
+    expect(resolveNoticeExpiryDate(wizard)).toBe('2026-06-01');
+  });
+
+  test('should resolve date from earliest_leaving_date (Scotland)', () => {
+    const wizard: WizardFacts = {
+      earliest_leaving_date: '2026-07-01',
+    };
+    expect(resolveNoticeExpiryDate(wizard)).toBe('2026-07-01');
+  });
+
+  test('should prefer maps_to path over field ID', () => {
+    const wizard: WizardFacts = {
+      notice_service: {
+        notice_expiry_date: '2026-04-01', // maps_to path
+      },
+      notice_expiry_date: '2025-12-23', // field ID (should be ignored)
+    };
+    expect(resolveNoticeExpiryDate(wizard)).toBe('2026-04-01');
   });
 });

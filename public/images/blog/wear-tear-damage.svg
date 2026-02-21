@@ -1,0 +1,32 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFF7ED"/>
+      <stop offset="100%" style="stop-color:#FFEDD5"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bgGrad)"/>
+
+  <text x="400" y="40" text-anchor="middle" fill="#C2410C" font-size="24" font-weight="bold" font-family="Arial">WEAR, TEAR &amp; DAMAGE</text>
+  <text x="400" y="62" text-anchor="middle" fill="#EA580C" font-size="12" font-family="Arial">Distinguishing fair wear from chargeable damage</text>
+
+  <g transform="translate(120, 120)">
+    <rect x="0" y="0" width="560" height="260" rx="18" fill="#FFFFFF" stroke="#FDBA74" stroke-width="2"/>
+    <rect x="0" y="0" width="560" height="52" rx="18" fill="#C2410C"/>
+    <text x="280" y="34" text-anchor="middle" fill="white" font-size="16" font-weight="bold" font-family="Arial">PROPERTY CONDITION</text>
+
+    <g transform="translate(60, 90)">
+      <rect x="0" y="0" width="180" height="140" rx="14" fill="#FFEDD5" stroke="#C2410C" stroke-width="2"/>
+      <text x="90" y="40" text-anchor="middle" fill="#C2410C" font-size="14" font-weight="bold" font-family="Arial">FAIR WEAR</text>
+      <path d="M35 70 H145" stroke="#FB923C" stroke-width="4" stroke-linecap="round"/>
+      <path d="M35 95 H120" stroke="#FDBA74" stroke-width="4" stroke-linecap="round"/>
+    </g>
+
+    <g transform="translate(320, 90)">
+      <rect x="0" y="0" width="180" height="140" rx="14" fill="#FED7AA" stroke="#C2410C" stroke-width="2"/>
+      <text x="90" y="40" text-anchor="middle" fill="#C2410C" font-size="14" font-weight="bold" font-family="Arial">DAMAGE</text>
+      <path d="M40 75 L140 65" stroke="#C2410C" stroke-width="4" stroke-linecap="round"/>
+      <path d="M40 95 L140 110" stroke="#C2410C" stroke-width="4" stroke-linecap="round"/>
+    </g>
+  </g>
+</svg>

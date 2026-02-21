@@ -1,0 +1,230 @@
+/**
+ * Signup Page
+ *
+ * User registration with email/password
+ * Creates auth account + user profile
+ * Supports redirect param for returning to checkout flow
+ */
+
+'use client';
+
+import React, { useState, useEffect, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
+import { Input } from '@/components/ui/Input';
+import { Button } from '@/components/ui/Button';
+import { AuthHeroShell } from '@/components/auth/AuthHeroShell';
+
+function SignupContent() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // Get redirect and case_id from URL params (passed from preview page)
+  const redirectUrl = searchParams.get('redirect');
+  const caseId = searchParams.get('case_id');
+
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+    confirmPassword: '',
+    fullName: '',
+    phone: '',
+  });
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
+
+  // Store redirect info in localStorage for after email confirmation
+  useEffect(() => {
+    if (redirectUrl || caseId) {
+      localStorage.setItem('auth_redirect', JSON.stringify({
+        url: redirectUrl || null,
+        caseId: caseId || null,
+        timestamp: Date.now(),
+      }));
+    }
+  }, [redirectUrl, caseId]);
+
+  const handleChange = (field: string, value: string) => {
+    setFormData({ ...formData, [field]: value });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+
+    // Validation
+    if (formData.password !== formData.confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+
+    if (formData.password.length < 8) {
+      setError('Password must be at least 8 characters');
+      return;
+    }
+
+    if (!agreedToTerms) {
+      setError('Please agree to the Terms of Service and Privacy Policy');
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const response = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+          full_name: formData.fullName || undefined,
+          phone: formData.phone || undefined,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        // Show success message
+        router.push('/auth/verify-email?email=' + encodeURIComponent(formData.email));
+      } else {
+        setError(data.error || 'Failed to create account');
+      }
+    } catch {
+      setError('Something went wrong. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <AuthHeroShell
+      title="Create Account"
+      subtitle="Create an account to access your documents and cases"
+    >
+      <form onSubmit={handleSubmit} className="space-y-5">
+        {error && (
+          <div className="rounded-lg border border-red-200 bg-red-50 p-4">
+            <p className="text-sm text-red-900">{error}</p>
+          </div>
+        )}
+
+        <Input
+          label="Full name"
+          type="text"
+          value={formData.fullName}
+          onChange={(e) => handleChange('fullName', e.target.value)}
+          placeholder="John Smith"
+          autoComplete="name"
+          fullWidth
+          className="bg-white/90"
+        />
+
+        <Input
+          label="Email address"
+          type="email"
+          value={formData.email}
+          onChange={(e) => handleChange('email', e.target.value)}
+          placeholder="you@example.com"
+          required
+          autoComplete="email"
+          fullWidth
+          className="bg-white/90"
+        />
+
+        <Input
+          label="Phone number (optional)"
+          type="tel"
+          value={formData.phone}
+          onChange={(e) => handleChange('phone', e.target.value)}
+          placeholder="+44 7700 900000"
+          autoComplete="tel"
+          helperText="We'll only use this for important account notifications"
+          fullWidth
+          className="bg-white/90"
+        />
+
+        <Input
+          label="Password"
+          type="password"
+          value={formData.password}
+          onChange={(e) => handleChange('password', e.target.value)}
+          placeholder="••••••••"
+          required
+          autoComplete="new-password"
+          helperText="Minimum 8 characters"
+          fullWidth
+          className="bg-white/90"
+        />
+
+        <Input
+          label="Confirm password"
+          type="password"
+          value={formData.confirmPassword}
+          onChange={(e) => handleChange('confirmPassword', e.target.value)}
+          placeholder="••••••••"
+          required
+          autoComplete="new-password"
+          fullWidth
+          className="bg-white/90"
+        />
+
+        <div className="flex items-start gap-3">
+          <input
+            type="checkbox"
+            checked={agreedToTerms}
+            onChange={(e) => setAgreedToTerms(e.target.checked)}
+            className="mt-0.5 h-5 w-5 rounded border-gray-300 text-primary focus:ring-primary"
+          />
+          <label className="text-left text-sm text-gray-700">
+            I agree to the{' '}
+            <Link href="/terms" className="text-primary hover:underline">
+              Terms of Service
+            </Link>{' '}
+            and{' '}
+            <Link href="/privacy" className="text-primary hover:underline">
+              Privacy Policy
+            </Link>
+          </label>
+        </div>
+
+        <Button
+          type="submit"
+          variant="heroPrimary"
+          size="large"
+          loading={isLoading}
+          fullWidth
+        >
+          Create account
+        </Button>
+      </form>
+
+      <div className="mt-6 border-t border-gray-200 pt-6">
+        <p className="text-center text-sm text-gray-600">
+          Already have an account?{' '}
+          <Link
+            href={`/auth/login${redirectUrl ? `?redirect=${encodeURIComponent(redirectUrl)}` : ''}${caseId ? `${redirectUrl ? '&' : '?'}case_id=${caseId}` : ''}`}
+            className="font-medium text-primary hover:text-primary-dark"
+          >
+            Log in
+          </Link>
+        </p>
+      </div>
+    </AuthHeroShell>
+  );
+}
+
+export default function SignupPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center bg-gray-50">
+          <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-primary"></div>
+        </div>
+      }
+    >
+      <SignupContent />
+    </Suspense>
+  );
+}

@@ -12,7 +12,7 @@
 
 ---
 
-**Date:** {{notice_date}}
+**Date:** {{format_date notice_date 'long'}}
 
 ---
 
@@ -60,7 +60,7 @@ This notice is being sent to you because you are in rent arrears. Your landlord 
 **Rent Due Date:** {{rent_due_date}} of each month
 
 **Total Arrears:** £{{total_arrears}}
-**Arrears as of:** {{arrears_calculation_date}}
+**Arrears as of:** {{format_date arrears_calculation_date 'long'}}
 
 ### Breakdown of Arrears
 
@@ -75,7 +75,7 @@ This notice is being sent to you because you are in rent arrears. Your landlord 
 ### Recent Payment History
 
 {{#each recent_payments}}
-- {{date}}: £{{amount}} received {{#if payment_method}}({{payment_method}}){{/if}}
+- {{format_date date}}: £{{amount}} received {{#if payment_method}}({{payment_method}}){{/if}}
 {{/each}}
 
 {{#if no_recent_payments}}
@@ -310,7 +310,7 @@ If this happens, contact the police immediately.
 
 ## RESPOND NOW
 
-**Please contact us by:** {{response_deadline_date}}
+**Please contact us by:** {{format_date response_deadline_date 'long'}}
 
 The sooner you get in touch, the more options we can explore together.
 
@@ -327,7 +327,7 @@ This Pre-Action Requirements Notice has been sent in accordance with the Pre-Act
 {{landlord_name}}
 {{landlord_address}}
 
-**Date:** {{notice_date}}
+**Date:** {{format_date notice_date 'long'}}
 
 **Sent by:** {{delivery_method}} {{!-- Recorded Delivery, Email, etc. --}}
 
@@ -344,7 +344,7 @@ I/We acknowledge receipt of this Pre-Action Requirements Notice.
 ---
 
 **Document Reference:** {{document_reference}}
-**Generated:** {{generation_date}}
+**Generated:** {{format_date generation_date 'long'}}
 
 *This notice complies with the Pre-Action Requirements (Notices) (Scotland) Regulations 2020*
 

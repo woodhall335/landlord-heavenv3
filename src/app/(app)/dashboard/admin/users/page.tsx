@@ -1,0 +1,301 @@
+"use client";
+
+import { useState, useEffect, useCallback } from "react";
+import { Container } from "@/components/ui";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+
+interface User {
+  id: string;
+  email: string;
+  full_name: string | null;
+  email_verified: boolean;
+  hmo_pro_active: boolean;
+  hmo_pro_tier: string | null;
+  created_at: string;
+  last_sign_in_at: string | null;
+}
+
+interface UserWithStats extends User {
+  subscription_tier?: string;
+  order_count?: number;
+  total_revenue?: number;
+}
+
+export default function AdminUsersPage() {
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
+  const [users, setUsers] = useState<UserWithStats[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterTier, setFilterTier] = useState<string>("all");
+  const [sortBy, setSortBy] = useState<"signup" | "revenue" | "email">("signup");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const usersPerPage = 20;
+
+  const checkAdminAccess = useCallback(async () => {
+    try {
+      // Use server-side admin check for security (handles env var trimming)
+      const response = await fetch("/api/admin/check-access");
+
+      if (response.status === 401) {
+        router.push("/auth/login");
+        return;
+      }
+
+      if (response.status === 403) {
+        router.push("/dashboard");
+        return;
+      }
+
+      if (!response.ok) {
+        console.error("Error checking admin access:", response.statusText);
+        router.push("/dashboard");
+        return;
+      }
+
+      setLoading(false);
+    } catch (error) {
+      console.error("Error checking admin access:", error);
+      router.push("/dashboard");
+    }
+  }, [router]);
+
+  const loadUsers = useCallback(async () => {
+    try {
+      const params = new URLSearchParams({
+        page: String(currentPage),
+        per_page: String(usersPerPage),
+        search: searchTerm,
+        sort: sortBy,
+      });
+
+      const response = await fetch(`/api/admin/users/metrics?${params.toString()}`);
+
+      if (!response.ok) {
+        throw new Error(`Failed to load users: ${response.statusText}`);
+      }
+
+      const payload = await response.json();
+      const usersWithStats: UserWithStats[] = payload.users || [];
+      const count = payload.count || 0;
+
+      // Apply tier filter
+      let filteredUsers = usersWithStats;
+      if (filterTier !== "all") {
+        filteredUsers = usersWithStats.filter((u) => {
+          if (filterTier === "hmo_pro") return !!u.subscription_tier;
+          if (filterTier === "none") return !u.subscription_tier;
+          return u.subscription_tier === filterTier;
+        });
+      }
+
+      // Apply revenue sort if needed
+      if (sortBy === "revenue") {
+        filteredUsers.sort((a, b) => (b.total_revenue || 0) - (a.total_revenue || 0));
+      }
+
+      setUsers(filteredUsers);
+      setTotalPages(Math.ceil((count || 0) / usersPerPage));
+    } catch (error) {
+      console.error("Error loading users:", error);
+    }
+  }, [searchTerm, filterTier, sortBy, currentPage, usersPerPage]);
+
+  useEffect(() => {
+    checkAdminAccess();
+  }, [checkAdminAccess]);
+
+  useEffect(() => {
+    if (loading) return;
+    loadUsers();
+  }, [loading, loadUsers]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 py-12">
+        <Container size="large">
+          <div className="animate-pulse">
+            <div className="h-8 bg-gray-200 rounded w-1/4 mb-8"></div>
+            <div className="h-96 bg-gray-200 rounded"></div>
+          </div>
+        </Container>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50 py-12">
+      <Container size="large">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-charcoal mb-2">User Management</h1>
+          <p className="text-gray-600">Manage all user accounts and subscriptions</p>
+        </div>
+
+        {/* Filters */}
+        <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
+          <div className="grid md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-charcoal mb-2">Search</label>
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Search by email or name..."
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-charcoal mb-2">Subscription Tier</label>
+              <select
+                value={filterTier}
+                onChange={(e) => setFilterTier(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+              >
+                <option value="all">All Users</option>
+                <option value="hmo_pro">HMO Pro Subscribers</option>
+                <option value="none">No Subscription</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-charcoal mb-2">Sort By</label>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as any)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+              >
+                <option value="signup">Signup Date</option>
+                <option value="email">Email</option>
+                <option value="revenue">Total Revenue</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        {/* Users Table */}
+        <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="text-left p-4 text-sm font-semibold text-charcoal">User</th>
+                  <th className="text-left p-4 text-sm font-semibold text-charcoal">Email</th>
+                  <th className="text-left p-4 text-sm font-semibold text-charcoal">Subscription</th>
+                  <th className="text-left p-4 text-sm font-semibold text-charcoal">Orders</th>
+                  <th className="text-left p-4 text-sm font-semibold text-charcoal">Revenue</th>
+                  <th className="text-left p-4 text-sm font-semibold text-charcoal">Joined</th>
+                  <th className="text-left p-4 text-sm font-semibold text-charcoal">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {users.map((user) => (
+                  <tr key={user.id} className="border-t hover:bg-gray-50">
+                    <td className="p-4">
+                      <div>
+                        <p className="font-semibold text-charcoal">{user.full_name || "No name"}</p>
+                        <p className="text-xs text-gray-500">{user.id.slice(0, 8)}...</p>
+                      </div>
+                    </td>
+                    <td className="p-4">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm text-gray-700">{user.email}</span>
+                        {user.email_verified && (
+                          <span className="text-xs text-success">✓</span>
+                        )}
+                      </div>
+                    </td>
+                    <td className="p-4">
+                      {user.subscription_tier ? (
+                        <span className="inline-block px-2 py-1 rounded-full text-xs bg-purple-100 text-purple-700">
+                          HMO Pro
+                        </span>
+                      ) : (
+                        <span className="text-sm text-gray-500">None</span>
+                      )}
+                    </td>
+                    <td className="p-4">
+                      <span className="text-sm text-gray-700">{user.order_count || 0}</span>
+                    </td>
+                    <td className="p-4">
+                      <span className="font-semibold text-charcoal">
+                        £{(user.total_revenue || 0).toFixed(2)}
+                      </span>
+                    </td>
+                    <td className="p-4">
+                      <span className="text-sm text-gray-700">
+                        {new Date(user.created_at).toLocaleDateString()}
+                      </span>
+                    </td>
+                    <td className="p-4">
+                      <div className="flex gap-2">
+                        <Link
+                          href={`/dashboard/admin/users/${user.id}`}
+                          className="text-primary hover:underline text-sm"
+                        >
+                          View
+                        </Link>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="border-t p-4 flex items-center justify-between">
+              <p className="text-sm text-gray-600">
+                Page {currentPage} of {totalPages}
+              </p>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                  disabled={currentPage === 1}
+                  className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-semibold hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Previous
+                </button>
+                <button
+                  onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                  disabled={currentPage === totalPages}
+                  className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-semibold hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Summary Stats */}
+        <div className="grid md:grid-cols-4 gap-6 mt-6">
+          <div className="bg-white rounded-lg border border-gray-200 p-6">
+            <p className="text-sm text-gray-600 mb-1">Total Users</p>
+            <p className="text-3xl font-bold text-charcoal">{users.length}</p>
+          </div>
+          <div className="bg-white rounded-lg border border-gray-200 p-6">
+            <p className="text-sm text-gray-600 mb-1">HMO Pro Subscribers</p>
+            <p className="text-3xl font-bold text-purple-600">
+              {users.filter((u) => u.subscription_tier).length}
+            </p>
+          </div>
+          <div className="bg-white rounded-lg border border-gray-200 p-6">
+            <p className="text-sm text-gray-600 mb-1">Total Orders</p>
+            <p className="text-3xl font-bold text-charcoal">
+              {users.reduce((sum, u) => sum + (u.order_count || 0), 0)}
+            </p>
+          </div>
+          <div className="bg-white rounded-lg border border-gray-200 p-6">
+            <p className="text-sm text-gray-600 mb-1">Total Revenue</p>
+            <p className="text-3xl font-bold text-success">
+              £{users.reduce((sum, u) => sum + (u.total_revenue || 0), 0).toFixed(2)}
+            </p>
+          </div>
+        </div>
+      </Container>
+    </div>
+  );
+}

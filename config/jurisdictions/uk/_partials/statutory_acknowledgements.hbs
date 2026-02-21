@@ -1,0 +1,71 @@
+{{#if_eq format "markdown"}}
+## Statutory Acknowledgements
+Please tick to confirm:
+{{#if_eq jurisdiction "england"}}
+- ☐ I confirm I have received the current “How to Rent” guide (version/date: __________).
+- ☐ I acknowledge the Tenancy Deposit Prescribed Information has been provided (where applicable).
+- ☐ I understand possession may be sought under Section 21 and/or Section 8 of the Housing Act 1988 (where applicable).
+- ☐ I understand that HMO licensing may be required if the property meets HMO criteria (where applicable).
+{{/if_eq}}
+{{#if_eq jurisdiction "wales"}}
+- ☐ I acknowledge this is a Standard Occupation Contract under the Renting Homes (Wales) Act 2016.
+- ☐ I understand “no-fault” possession uses Section 173 (not Section 21) (where applicable).
+- ☐ I acknowledge Rent Smart Wales requirements may apply (where applicable).
+{{/if_eq}}
+{{#if_eq jurisdiction "scotland"}}
+- ☐ I acknowledge this is a Private Residential Tenancy and is open-ended (no fixed end date).
+- ☐ I understand disputes are handled by the First-tier Tribunal for Scotland.
+- ☐ I understand tenant notice is generally 28 days (subject to statute/terms).
+{{/if_eq}}
+{{#if_eq jurisdiction "northern-ireland"}}
+- ☐ I acknowledge this tenancy is governed by the Private Tenancies Act (NI) 2022 (where applicable).
+- ☐ I acknowledge rent increases cannot generally occur more frequently than every 12 months (where applicable).
+- ☐ I acknowledge electrical safety requirements become mandatory from April 2025 (where applicable).
+- ☐ I acknowledge deposit protection and EPC obligations may apply (where applicable).
+{{/if_eq}}
+
+{{else}}
+<div class="statutory-acknowledgements">
+  {{#if heading_style}}
+    {{#if_eq heading_style "section"}}
+  <div class="section-title">Statutory Acknowledgements</div>
+    {{/if_eq}}
+    {{#if_eq heading_style "subsection"}}
+  <div class="subsection-title">Statutory Acknowledgements</div>
+    {{/if_eq}}
+    {{#if_eq heading_style "h2"}}
+  <h2>Statutory Acknowledgements</h2>
+    {{/if_eq}}
+    {{#if_eq heading_style "h3"}}
+  <h3>Statutory Acknowledgements</h3>
+    {{/if_eq}}
+  {{else}}
+  <h2>Statutory Acknowledgements</h2>
+  {{/if}}
+  <p>Please tick to confirm:</p>
+  <ul>
+    {{#if_eq jurisdiction "england"}}
+    <li>☐ I confirm I have received the current “How to Rent” guide (version/date: __________).</li>
+    <li>☐ I acknowledge the Tenancy Deposit Prescribed Information has been provided (where applicable).</li>
+    <li>☐ I understand possession may be sought under Section 21 and/or Section 8 of the Housing Act 1988 (where applicable).</li>
+    <li>☐ I understand that HMO licensing may be required if the property meets HMO criteria (where applicable).</li>
+    {{/if_eq}}
+    {{#if_eq jurisdiction "wales"}}
+    <li>☐ I acknowledge this is a Standard Occupation Contract under the Renting Homes (Wales) Act 2016.</li>
+    <li>☐ I understand “no-fault” possession uses Section 173 (not Section 21) (where applicable).</li>
+    <li>☐ I acknowledge Rent Smart Wales requirements may apply (where applicable).</li>
+    {{/if_eq}}
+    {{#if_eq jurisdiction "scotland"}}
+    <li>☐ I acknowledge this is a Private Residential Tenancy and is open-ended (no fixed end date).</li>
+    <li>☐ I understand disputes are handled by the First-tier Tribunal for Scotland.</li>
+    <li>☐ I understand tenant notice is generally 28 days (subject to statute/terms).</li>
+    {{/if_eq}}
+    {{#if_eq jurisdiction "northern-ireland"}}
+    <li>☐ I acknowledge this tenancy is governed by the Private Tenancies Act (NI) 2022 (where applicable).</li>
+    <li>☐ I acknowledge rent increases cannot generally occur more frequently than every 12 months (where applicable).</li>
+    <li>☐ I acknowledge electrical safety requirements become mandatory from April 2025 (where applicable).</li>
+    <li>☐ I acknowledge deposit protection and EPC obligations may apply (where applicable).</li>
+    {{/if_eq}}
+  </ul>
+</div>
+{{/if_eq}}

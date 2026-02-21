@@ -20,42 +20,88 @@ export const TenancySection: React.FC<SectionProps> = ({
   const tenancy = facts.tenancy || {};
   const property = facts.property || {};
 
+  /**
+   * Updates tenancy data in both nested (tenancy.*) and top-level keys.
+   * The validator expects top-level keys like tenancy_start_date, rent_amount, rent_frequency.
+   * We maintain both for backward compatibility and to ensure validation works correctly.
+   */
   const updateTenancy = (field: string, value: any) => {
-    onUpdate({
+    // Map nested fields to top-level validator keys
+    const topLevelKeyMap: Record<string, string> = {
+      start_date: 'tenancy_start_date',
+      end_date: 'tenancy_end_date',
+      rent_amount: 'rent_amount',
+      rent_frequency: 'rent_frequency',
+      rent_due_day: 'rent_due_day',
+    };
+
+    const topLevelKey = topLevelKeyMap[field];
+
+    const updates: Record<string, any> = {
       tenancy: {
         ...tenancy,
         [field]: value,
       },
-    });
+    };
+
+    // Also write to top-level key for validator compatibility
+    if (topLevelKey) {
+      updates[topLevelKey] = value;
+    }
+
+    onUpdate(updates);
   };
 
+  /**
+   * Updates property address data in both nested (property.*) and top-level keys.
+   * The validator expects top-level keys like property_address_line1, property_address_postcode.
+   * We maintain both for backward compatibility and to ensure validation works correctly.
+   */
   const updateProperty = (field: string, value: any) => {
-    onUpdate({
+    // Map nested fields to top-level validator keys
+    const topLevelKeyMap: Record<string, string> = {
+      address_line1: 'property_address_line1',
+      address_line2: 'property_address_line2',
+      city: 'property_address_town',
+      postcode: 'property_address_postcode',
+    };
+
+    const topLevelKey = topLevelKeyMap[field];
+
+    const updates: Record<string, any> = {
       property: {
         ...property,
         [field]: value,
       },
-    });
+    };
+
+    // Also write to top-level key for validator compatibility
+    if (topLevelKey) {
+      updates[topLevelKey] = value;
+    }
+
+    onUpdate(updates);
   };
 
   return (
     <div className="space-y-4">
       <p className="text-sm text-gray-600">
         We use these details to map your claim to the correct court forms and rules for{' '}
-        {jurisdiction === 'england-wales' ? 'England & Wales' : 'Scotland'}.
+        {(jurisdiction === 'england' || jurisdiction === 'wales') ? 'England & Wales' : 'Scotland'}.
       </p>
 
       {/* Full property address */}
       <div className="space-y-3">
         <div className="space-y-1">
           <label className="text-sm font-medium text-charcoal">
-            Property address line 1
+            Property address line 1 <span className="text-red-500">*</span>
           </label>
           <input
             type="text"
             className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-            value={property.address_line1 || ''}
+            value={property.address_line1 || facts.property_address_line1 || ''}
             onChange={(e) => updateProperty('address_line1', e.target.value)}
+            placeholder="e.g. 16 Waterloo Road"
           />
         </div>
 
@@ -67,8 +113,9 @@ export const TenancySection: React.FC<SectionProps> = ({
           <input
             type="text"
             className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-            value={property.address_line2 || ''}
+            value={property.address_line2 || facts.property_address_line2 || ''}
             onChange={(e) => updateProperty('address_line2', e.target.value)}
+            placeholder="Building, estate or area"
           />
         </div>
 
@@ -78,18 +125,22 @@ export const TenancySection: React.FC<SectionProps> = ({
             <input
               type="text"
               className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-              value={property.city || ''}
+              value={property.city || facts.property_address_town || ''}
               onChange={(e) => updateProperty('city', e.target.value)}
+              placeholder="e.g. Pudsey"
             />
           </div>
 
           <div className="space-y-1">
-            <label className="text-sm font-medium text-charcoal">Postcode</label>
+            <label className="text-sm font-medium text-charcoal">
+              Postcode <span className="text-red-500">*</span>
+            </label>
             <input
               type="text"
               className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-              value={property.postcode || ''}
+              value={property.postcode || facts.property_address_postcode || ''}
               onChange={(e) => updateProperty('postcode', e.target.value)}
+              placeholder="e.g. LS28 7PW"
             />
           </div>
         </div>
@@ -98,11 +149,13 @@ export const TenancySection: React.FC<SectionProps> = ({
       {/* Tenancy dates */}
       <div className="grid gap-4 md:grid-cols-2">
         <div className="space-y-1">
-          <label className="text-sm font-medium text-charcoal">Tenancy start date</label>
+          <label className="text-sm font-medium text-charcoal">
+            Tenancy start date <span className="text-red-500">*</span>
+          </label>
           <input
             type="date"
             className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-            value={tenancy.start_date || ''}
+            value={tenancy.start_date || facts.tenancy_start_date || ''}
             onChange={(e) => updateTenancy('start_date', e.target.value)}
           />
         </div>
@@ -115,7 +168,7 @@ export const TenancySection: React.FC<SectionProps> = ({
           <input
             type="date"
             className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-            value={tenancy.end_date || ''}
+            value={tenancy.end_date || facts.tenancy_end_date || ''}
             onChange={(e) => updateTenancy('end_date', e.target.value)}
           />
         </div>
@@ -124,27 +177,32 @@ export const TenancySection: React.FC<SectionProps> = ({
       {/* Rent basics */}
       <div className="grid gap-4 md:grid-cols-2">
         <div className="space-y-1">
-          <label className="text-sm font-medium text-charcoal">Rent amount</label>
+          <label className="text-sm font-medium text-charcoal">
+            Rent amount (£) <span className="text-red-500">*</span>
+          </label>
           <input
             type="number"
             min={0}
             step="0.01"
             className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-            value={tenancy.rent_amount ?? ''}
+            value={tenancy.rent_amount ?? facts.rent_amount ?? ''}
             onChange={(e) =>
               updateTenancy(
                 'rent_amount',
                 e.target.value === '' ? null : Number(e.target.value),
               )
             }
+            placeholder="e.g. 750"
           />
         </div>
 
         <div className="space-y-1">
-          <label className="text-sm font-medium text-charcoal">Rent frequency</label>
+          <label className="text-sm font-medium text-charcoal">
+            Rent frequency <span className="text-red-500">*</span>
+          </label>
           <select
             className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-            value={tenancy.rent_frequency || ''}
+            value={tenancy.rent_frequency || facts.rent_frequency || ''}
             onChange={(e) => updateTenancy('rent_frequency', e.target.value)}
           >
             <option value="">Select frequency</option>
@@ -156,46 +214,28 @@ export const TenancySection: React.FC<SectionProps> = ({
         </div>
       </div>
 
-      {/* Rent due day / weekday */}
-      <div className="grid gap-4 md:grid-cols-2">
-        <div className="space-y-1">
-          <label className="text-sm font-medium text-charcoal">
-            On which day is rent due each period?
-          </label>
-          <input
-            type="number"
-            min={1}
-            max={31}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-            value={tenancy.rent_due_day ?? ''}
-            onChange={(e) =>
-              updateTenancy(
-                'rent_due_day',
-                e.target.value === '' ? null : Number(e.target.value),
-              )
-            }
-          />
-        </div>
-
-        <div className="space-y-1">
-          <label className="text-sm font-medium text-charcoal">
-            Usual rent payment day of the week
-          </label>
-          <select
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-            value={tenancy.usual_payment_weekday || ''}
-            onChange={(e) => updateTenancy('usual_payment_weekday', e.target.value)}
-          >
-            <option value="">Select day</option>
-            <option value="monday">Monday</option>
-            <option value="tuesday">Tuesday</option>
-            <option value="wednesday">Wednesday</option>
-            <option value="thursday">Thursday</option>
-            <option value="friday">Friday</option>
-            <option value="saturday">Saturday</option>
-            <option value="sunday">Sunday</option>
-          </select>
-        </div>
+      {/* Rent due day */}
+      <div className="space-y-1">
+        <label className="text-sm font-medium text-charcoal">
+          On which day is rent due each period?
+        </label>
+        <input
+          type="number"
+          min={1}
+          max={31}
+          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+          value={tenancy.rent_due_day ?? facts.rent_due_day ?? ''}
+          onChange={(e) =>
+            updateTenancy(
+              'rent_due_day',
+              e.target.value === '' ? null : Number(e.target.value),
+            )
+          }
+          placeholder="e.g. 1 (for the 1st of the month)"
+        />
+        <p className="text-xs text-gray-500">
+          This helps calculate the arrears schedule correctly.
+        </p>
       </div>
     </div>
   );

@@ -3,10 +3,12 @@
  *
  * GET /api/wizard/case/[caseId]
  * Retrieves a specific case by ID
+ * ALLOWS ANONYMOUS ACCESS - Users can access their anonymous cases
  */
 
-import { createServerSupabaseClient, requireServerAuth } from '@/lib/supabase/server';
+import { createAdminClient, getServerUser } from '@/lib/supabase/server';
 import { NextResponse, NextRequest } from 'next/server';
+import { getCasePaymentStatus } from '@/lib/payments/entitlement';
 
 type RouteParams = { id: string };
 
@@ -16,38 +18,64 @@ export async function GET(
 ) {
   try {
     const { id: caseId } = await context.params;
-    const supabase = await createServerSupabaseClient();
+
+    // Use admin client to bypass RLS - we do our own access control below
+    const adminSupabase = createAdminClient();
 
     // Try to get a user, but don't fail if unauthenticated
-    let user: { id: string } | null = null;
-    try {
-      user = await requireServerAuth();
-    } catch {
-      user = null;
-    }
+    const user = await getServerUser();
 
-    // Base query: case by id
-    let query = supabase.from('cases').select('*').eq('id', caseId);
-
-    // If logged in, enforce ownership OR allow anonymous cases (user_id IS NULL)
-    if (user) {
-      query = query.or(`user_id.eq.${user.id},user_id.is.null`);
-    } else {
-      // If not logged in, only show anonymous cases
-      query = query.is('user_id', null);
-    }
-
-    const { data: caseData, error } = await query.single();
+    // Fetch the case using admin client (bypasses RLS)
+    const { data: caseData, error } = await adminSupabase
+      .from('cases')
+      .select('*')
+      .eq('id', caseId)
+      .single();
 
     if (error || !caseData) {
-      console.error('Case not found or not accessible:', { error, caseId, userId: user?.id });
+      console.error('Case not found:', { error, caseId });
       return NextResponse.json({ error: 'Case not found' }, { status: 404 });
     }
+
+    // Type assertion for the case record properties we need
+    const caseRecord = caseData as {
+      id: string;
+      user_id: string | null;
+      [key: string]: unknown;
+    };
+
+    // Manual access control: user can access if:
+    // 1. They own the case (user_id matches)
+    // 2. The case is anonymous (user_id is null) - anyone can access
+    const isOwner = user && caseRecord.user_id === user.id;
+    const isAnonymousCase = caseRecord.user_id === null;
+
+    if (!isOwner && !isAnonymousCase) {
+      console.error('Access denied to case:', { caseId, userId: user?.id, caseUserId: caseRecord.user_id });
+      return NextResponse.json({ error: 'Case not found' }, { status: 404 });
+    }
+
+    const paymentStatus = await getCasePaymentStatus(caseId);
+    const purchasedProduct = paymentStatus.latestOrder?.product_type || null;
+
+    const hydratedCase = {
+      ...caseData,
+      collected_facts: paymentStatus.hasPaidOrder
+        ? {
+            ...(caseData as any).collected_facts,
+            __meta: {
+              ...(((caseData as any).collected_facts || {}).__meta || {}),
+              purchased_product: purchasedProduct,
+              entitlements: paymentStatus.paidProducts,
+            },
+          }
+        : (caseData as any).collected_facts,
+    };
 
     return NextResponse.json(
       {
         success: true,
-        case: caseData,
+        case: hydratedCase,
       },
       { status: 200 }
     );

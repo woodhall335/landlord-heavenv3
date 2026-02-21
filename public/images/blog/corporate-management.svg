@@ -1,0 +1,130 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#EFF6FF"/>
+      <stop offset="100%" style="stop-color:#DBEAFE"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bgGrad)"/>
+
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" fill="#1E40AF" font-size="22" font-weight="bold" font-family="Arial">CORPORATE PROPERTY MANAGEMENT</text>
+  <text x="400" y="55" text-anchor="middle" fill="#3B82F6" font-size="11" font-family="Arial">Managing properties let to companies</text>
+
+  <!-- Building with gears icon -->
+  <g transform="translate(60, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#1E40AF" stroke-width="2"/>
+    <g transform="translate(25, 8)">
+      <!-- Office building -->
+      <rect x="25" y="20" width="80" height="65" fill="#DBEAFE" stroke="#1E40AF" stroke-width="2"/>
+      <rect x="35" y="30" width="15" height="12" fill="white" stroke="#1E40AF" stroke-width="1"/>
+      <rect x="60" y="30" width="15" height="12" fill="white" stroke="#1E40AF" stroke-width="1"/>
+      <rect x="35" y="50" width="15" height="12" fill="white" stroke="#1E40AF" stroke-width="1"/>
+      <rect x="60" y="50" width="15" height="12" fill="white" stroke="#1E40AF" stroke-width="1"/>
+      <rect x="50" y="65" width="30" height="20" fill="#1E40AF"/>
+      <!-- Gear -->
+      <circle cx="115" cy="55" r="18" fill="#3B82F6"/>
+      <circle cx="115" cy="55" r="8" fill="#DBEAFE"/>
+      <rect x="110" y="35" width="10" height="8" fill="#3B82F6"/>
+      <rect x="110" y="67" width="10" height="8" fill="#3B82F6"/>
+      <rect x="95" y="50" width="8" height="10" fill="#3B82F6"/>
+      <rect x="127" y="50" width="8" height="10" fill="#3B82F6"/>
+    </g>
+    <text x="100" y="125" text-anchor="middle" fill="#1E40AF" font-size="11" font-weight="bold">CORPORATE</text>
+    <text x="100" y="143" text-anchor="middle" fill="#3B82F6" font-size="9">Property</text>
+    <text x="100" y="158" text-anchor="middle" fill="#3B82F6" font-size="9">management</text>
+  </g>
+
+  <!-- Key differences -->
+  <g transform="translate(280, 80)">
+    <rect x="0" y="0" width="240" height="175" rx="12" fill="white" stroke="#1E40AF" stroke-width="2"/>
+    <rect x="0" y="0" width="240" height="32" rx="12" fill="#1E40AF"/>
+    <rect x="0" y="20" width="240" height="12" fill="#1E40AF"/>
+    <text x="120" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">KEY DIFFERENCES</text>
+    <g transform="translate(15, 45)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#3B82F6"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#1E40AF" font-size="9">Company is tenant</text>
+    </g>
+    <g transform="translate(15, 68)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#3B82F6"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#1E40AF" font-size="9">Occupiers may change</text>
+    </g>
+    <g transform="translate(15, 91)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#1E40AF"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#1E40AF" font-size="9">Not AST protected</text>
+    </g>
+    <g transform="translate(15, 114)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#1E40AF"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#1E40AF" font-size="9">Business relationship</text>
+    </g>
+    <g transform="translate(15, 137)">
+      <text x="0" y="11" fill="#3B82F6" font-size="9" font-weight="bold">Different legal framework</text>
+    </g>
+  </g>
+
+  <!-- Management approach -->
+  <g transform="translate(540, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#22C55E" stroke-width="2"/>
+    <rect x="0" y="0" width="200" height="32" rx="12" fill="#22C55E"/>
+    <rect x="0" y="20" width="200" height="12" fill="#22C55E"/>
+    <text x="100" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">MANAGEMENT FOCUS</text>
+    <g transform="translate(15, 48)">
+      <circle cx="7" cy="7" r="5" fill="#22C55E"/>
+      <text x="22" y="11" fill="#1E40AF" font-size="9">Regular liaison</text>
+    </g>
+    <g transform="translate(15, 71)">
+      <circle cx="7" cy="7" r="5" fill="#22C55E"/>
+      <text x="22" y="11" fill="#1E40AF" font-size="9">Contract compliance</text>
+    </g>
+    <g transform="translate(15, 94)">
+      <circle cx="7" cy="7" r="5" fill="#1E40AF"/>
+      <text x="22" y="11" fill="#1E40AF" font-size="9">Property standards</text>
+    </g>
+    <g transform="translate(15, 117)">
+      <circle cx="7" cy="7" r="5" fill="#1E40AF"/>
+      <text x="22" y="11" fill="#1E40AF" font-size="9">Renewal planning</text>
+    </g>
+    <g transform="translate(15, 140)">
+      <text x="0" y="11" fill="#22C55E" font-size="9" font-weight="bold">Professional service</text>
+    </g>
+  </g>
+
+  <!-- Essentials -->
+  <g transform="translate(60, 275)">
+    <rect x="0" y="0" width="680" height="170" rx="12" fill="white" stroke="#1E40AF" stroke-width="2"/>
+    <rect x="0" y="0" width="680" height="32" rx="12" fill="#1E40AF"/>
+    <rect x="0" y="20" width="680" height="12" fill="#1E40AF"/>
+    <text x="340" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">CORPORATE LETTING MANAGEMENT</text>
+    <g transform="translate(20, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#3B82F6" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#3B82F6" font-size="10" font-weight="bold">AGREEMENT</text>
+      <text x="100" y="42" text-anchor="middle" fill="#1E40AF" font-size="8">Company let agreement</text>
+      <text x="100" y="55" text-anchor="middle" fill="#1E40AF" font-size="8">Named occupiers list</text>
+      <text x="100" y="75" text-anchor="middle" fill="#1E40AF" font-size="8">Use restrictions</text>
+      <text x="100" y="94" text-anchor="middle" fill="#3B82F6" font-size="8" font-weight="bold">Break clause terms</text>
+    </g>
+    <g transform="translate(240, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#22C55E" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#22C55E" font-size="10" font-weight="bold">COMMUNICATION</text>
+      <text x="100" y="42" text-anchor="middle" fill="#1E40AF" font-size="8">Company contact person</text>
+      <text x="100" y="55" text-anchor="middle" fill="#1E40AF" font-size="8">Regular check-ins</text>
+      <text x="100" y="75" text-anchor="middle" fill="#1E40AF" font-size="8">Issue escalation</text>
+      <text x="100" y="94" text-anchor="middle" fill="#22C55E" font-size="8" font-weight="bold">Professional approach</text>
+    </g>
+    <g transform="translate(460, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#F59E0B" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#F59E0B" font-size="10" font-weight="bold">RENEWALS</text>
+      <text x="100" y="42" text-anchor="middle" fill="#1E40AF" font-size="8">Early discussions</text>
+      <text x="100" y="55" text-anchor="middle" fill="#1E40AF" font-size="8">Market rent review</text>
+      <text x="100" y="75" text-anchor="middle" fill="#1E40AF" font-size="8">Contract updates</text>
+      <text x="100" y="94" text-anchor="middle" fill="#F59E0B" font-size="8" font-weight="bold">Long-term relationships</text>
+    </g>
+  </g>
+
+  <circle cx="40" cy="40" r="20" fill="#1E40AF" opacity="0.1"/>
+  <circle cx="760" cy="460" r="25" fill="#3B82F6" opacity="0.12"/>
+</svg>

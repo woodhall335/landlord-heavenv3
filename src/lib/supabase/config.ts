@@ -16,7 +16,6 @@ type SupabaseWarnState = {
 const warnMessage = 'Supabase not configured, continuing in anonymous mode';
 
 declare global {
-  // eslint-disable-next-line no-var
   var __supabaseWarnState: SupabaseWarnState | undefined;
 }
 

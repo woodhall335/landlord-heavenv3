@@ -1,4 +1,7 @@
-import { NavBar } from "@/components/ui";
+'use client';
+
+import { NavBar } from '@/components/ui';
+import { useHeaderMode } from './HeaderModeContext';
 
 interface HeaderProps {
   user?: {
@@ -8,5 +11,7 @@ interface HeaderProps {
 }
 
 export function Header({ user }: HeaderProps) {
-  return <NavBar user={user} />;
+  const { headerMode, scrollThreshold } = useHeaderMode();
+
+  return <NavBar user={user} headerMode={headerMode} scrollThreshold={scrollThreshold} />;
 }

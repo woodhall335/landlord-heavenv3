@@ -1,0 +1,567 @@
+# Complete Pack Validation Rules - England
+# Tiered validation: blocker (cannot proceed) | warning (risk displayed) | suggestion (optional improvement)
+# All rules are deterministic and testable
+# Migrated 1:1 from pre-generation-check.ts runRuleBasedChecks()
+#
+# PARITY STATUS (Phase 5):
+# - Rule IDs aligned with TS codes from pre-generation-check.ts
+# - Complete pack validates different rules than notice_only (evaluateNoticeCompliance)
+# - Main differences: explicit false checks, deposit detail warnings, contradiction checks
+#
+# PHASE 13 CORRECTNESS IMPROVEMENTS:
+# - Rules marked with `requires_feature: phase13` are correctness improvements beyond legacy TS
+# - Enable with VALIDATION_PHASE13_ENABLED=true
+# - These rules improve legal accuracy but were excluded during migration for parity
+# - Phase 13 rules: s21_deposit_cap_exceeded, s21_four_month_bar, s21_notice_period_short,
+#   s21_licensing_required_not_licensed, s21_retaliatory_improvement_notice,
+#   s21_retaliatory_emergency_action, s8_notice_period_short
+
+version: "1.0"
+jurisdiction: england
+product: complete_pack
+last_updated: "2026-01-26"
+
+metadata:
+  effective_from: "2026-01-26"
+  source:
+    - "Housing Act 1988"
+    - "Housing Act 2004"
+    - "Deregulation Act 2015"
+    - "Tenant Fees Act 2019"
+    - "pre-generation-check.ts"
+  notes: "England Complete Pack covers Section 21 and Section 8 with full court document generation (N5, N5B, N119)."
+  parity_status: "Phase 5 complete - 100% parity with TS runRuleBasedChecks"
+
+# Route identifiers
+routes:
+  - section_21
+  - section_8
+
+# =============================================================================
+# SECTION 21 RULES (No-fault eviction with N5B court form)
+# =============================================================================
+
+section_21_rules:
+
+  # ---------------------------------------------------------------------------
+  # DEPOSIT COMPLIANCE (Housing Act 2004 s.213)
+  # TS Code: S21_DEPOSIT_NOT_PROTECTED
+  # TS logic: depositTaken = facts.deposit_taken === true || (facts.deposit_amount && facts.deposit_amount > 0)
+  # ---------------------------------------------------------------------------
+
+  - id: s21_deposit_not_protected
+    severity: blocker
+    applies_to: [section_21]
+    applies_when:
+      # TS: depositTaken && !depositProtected (where depositProtected = deposit_protected === true || deposit_protected_scheme === true)
+      - condition: "(facts.deposit_taken === true || (facts.deposit_amount && facts.deposit_amount > 0)) && facts.deposit_protected !== true && facts.deposit_protected_scheme !== true"
+    message: "Section 21 invalid without deposit protection."
+    rationale: "Housing Act 2004 s.213 requires deposits to be protected in an approved scheme."
+    field: deposit_protected
+
+  # NOTE: s21_deposit_protection_unconfirmed is not in TS runRuleBasedChecks - commented out for parity
+  # - id: s21_deposit_protection_unconfirmed
+  #   severity: blocker
+  #   applies_to: [section_21]
+  #   applies_when:
+  #     - condition: "facts.deposit_taken === true && facts.deposit_protected !== true && facts.deposit_protected !== false"
+  #   message: "Confirm whether the deposit is protected before generating Section 21."
+  #   rationale: "Deposit protection status must be confirmed for Section 21 validity."
+  #   field: deposit_protected
+
+  # ---------------------------------------------------------------------------
+  # PRESCRIBED INFORMATION (Housing Act 2004 s.213)
+  # TS Code: S21_PRESCRIBED_INFO_MISSING
+  # TS Logic: fires when depositTaken && !prescribedInfo (regardless of deposit_protected)
+  # ---------------------------------------------------------------------------
+
+  - id: s21_prescribed_info_missing
+    severity: blocker
+    applies_to: [section_21]
+    applies_when:
+      # TS: depositTaken && !prescribedInfo (NOT checking deposit_protected!)
+      - condition: "(facts.deposit_taken === true || (facts.deposit_amount && facts.deposit_amount > 0)) && facts.prescribed_info_served !== true && facts.prescribed_info_given !== true"
+    message: "Section 21 requires prescribed information to be served."
+    rationale: "Housing Act 2004 s.213(6) requires prescribed info within 30 days of deposit protection."
+    field: prescribed_info_served
+
+  # ---------------------------------------------------------------------------
+  # DEPOSIT DETAILS FOR N5B FORM (warnings)
+  # TS Codes: S21_MISSING_DEPOSIT_AMOUNT, S21_MISSING_DEPOSIT_DATE, S21_MISSING_DEPOSIT_SCHEME
+  # ---------------------------------------------------------------------------
+
+  - id: s21_missing_deposit_amount
+    severity: warning
+    applies_to: [section_21]
+    applies_when:
+      # TS: depositTaken && !facts.deposit_amount
+      - condition: "(facts.deposit_taken === true || (facts.deposit_amount && facts.deposit_amount > 0)) && !facts.deposit_amount"
+    message: "Deposit amount needed for Form N5B."
+    rationale: "N5B form requires the deposit amount to be specified."
+    field: deposit_amount
+
+  - id: s21_missing_deposit_date
+    severity: warning
+    applies_to: [section_21]
+    applies_when:
+      # TS: depositTaken && !facts.deposit_protection_date
+      - condition: "(facts.deposit_taken === true || (facts.deposit_amount && facts.deposit_amount > 0)) && !facts.deposit_protection_date"
+    message: "Deposit protection date needed for Form N5B."
+    rationale: "N5B form requires the date the deposit was protected."
+    field: deposit_protection_date
+
+  - id: s21_missing_deposit_scheme
+    severity: warning
+    applies_to: [section_21]
+    applies_when:
+      # TS: depositTaken && !facts.deposit_scheme_name
+      - condition: "(facts.deposit_taken === true || (facts.deposit_amount && facts.deposit_amount > 0)) && !facts.deposit_scheme_name"
+    message: "Deposit scheme name needed for Form N5B."
+    rationale: "N5B form requires specification of which scheme holds the deposit."
+    field: deposit_scheme_name
+
+  # ---------------------------------------------------------------------------
+  # DEPOSIT CAP (Tenant Fees Act 2019)
+  # Phase 13: Deposit cap enforcement for complete_pack
+  # ---------------------------------------------------------------------------
+
+  - id: s21_deposit_cap_exceeded
+    severity: blocker
+    applies_to: [section_21]
+    requires_feature: phase13
+    applies_when:
+      - condition: "facts.deposit_taken === true && computed.deposit_exceeds_cap === true && facts.deposit_reduced_to_legal_cap_confirmed !== 'yes' && facts.deposit_reduced_to_legal_cap_confirmed !== true && facts.deposit_reduced_to_legal_cap_confirmed !== 'not_applicable'"
+    message: "Deposit exceeds the legal cap. Under the Tenant Fees Act 2019, excess deposits must be returned before Section 21 is valid."
+    rationale: "Tenant Fees Act 2019 s.3 caps deposits at 5 weeks rent (6 weeks if annual rent > 50000)."
+    field: deposit_reduced_to_legal_cap_confirmed
+
+  # ---------------------------------------------------------------------------
+  # HOW TO RENT GUIDE (Deregulation Act 2015)
+  # TS Code: S21_HOW_TO_RENT_MISSING
+  # TS Logic: howToRentServed = (h2r_served === true || h2r_provided === true)
+  #           fires when howToRentServed === false (i.e., neither is explicitly true)
+  # ---------------------------------------------------------------------------
+
+  - id: s21_how_to_rent_missing
+    severity: blocker
+    applies_to: [section_21]
+    applies_when:
+      # TS: tenancy_start_date >= '2015-10-01' && howToRentServed === false
+      # where howToRentServed = (h2r_served === true || h2r_provided === true)
+      # So fires when NEITHER is explicitly true
+      - condition: "facts.tenancy_start_date && facts.tenancy_start_date >= '2015-10-01' && facts.how_to_rent_served !== true && facts.how_to_rent_provided !== true"
+    message: "Section 21 requires 'How to Rent' guide for post-October 2015 tenancies."
+    rationale: "Deregulation Act 2015 requires the guide for all ASTs starting from 1 October 2015."
+    field: how_to_rent_provided
+
+  # ---------------------------------------------------------------------------
+  # EPC (Energy Performance of Buildings Regulations)
+  # ---------------------------------------------------------------------------
+
+  - id: s21_epc_missing
+    severity: blocker
+    applies_to: [section_21]
+    applies_when:
+      - condition: "facts.epc_gas_cert_served === false || facts.epc_provided === false"
+    message: "Section 21 requires EPC to be provided."
+    rationale: "Energy Performance Certificate must be provided to tenants."
+    field: epc_provided
+
+  # ---------------------------------------------------------------------------
+  # GAS SAFETY
+  # ---------------------------------------------------------------------------
+
+  - id: s21_gas_cert_missing
+    severity: blocker
+    applies_to: [section_21]
+    applies_when:
+      - condition: "facts.has_gas_appliances === true && facts.gas_certificate_provided !== true && facts.epc_gas_cert_served !== true"
+    message: "Section 21 requires gas safety certificate for properties with gas."
+    rationale: "Landlords must provide a copy of the gas safety record."
+    field: gas_certificate_provided
+
+  # ---------------------------------------------------------------------------
+  # RETALIATORY EVICTION (Deregulation Act 2015 s.33)
+  # TS Code: S21_RETALIATORY_EVICTION_RISK
+  # ---------------------------------------------------------------------------
+
+  - id: s21_retaliatory_eviction_risk
+    severity: blocker
+    applies_to: [section_21]
+    applies_when:
+      # TS: no_retaliatory_notice === false OR recent_repair_complaints === true
+      # Using separate conditions for OR logic (any match triggers the rule)
+      - condition: "facts.no_retaliatory_notice === false"
+      - condition: "facts.recent_repair_complaints === true"
+    message: "Section 21 may be invalid due to recent repair complaints."
+    rationale: "Deregulation Act 2015 s.33 creates a 6-month bar after improvement notices."
+    field: recent_repair_complaints
+
+  # ---------------------------------------------------------------------------
+  # PHASE 13 CORRECTNESS IMPROVEMENTS
+  # These rules improve legal accuracy beyond the legacy TS parity baseline.
+  # Enable with VALIDATION_PHASE13_ENABLED=true
+  # ---------------------------------------------------------------------------
+
+  - id: s21_retaliatory_improvement_notice
+    severity: blocker
+    applies_to: [section_21]
+    requires_feature: phase13
+    applies_when:
+      - condition: "facts.improvement_notice_served === true || facts.local_authority_improvement_notice === true"
+    message: "Section 21 notice is INVALID while an improvement notice is in effect."
+    rationale: "Deregulation Act 2015 s.33 creates a retaliatory eviction bar for 6 months after an improvement notice."
+    field: improvement_notice_served
+
+  - id: s21_retaliatory_emergency_action
+    severity: blocker
+    applies_to: [section_21]
+    requires_feature: phase13
+    applies_when:
+      - condition: "facts.emergency_remedial_action === true || facts.local_authority_emergency_action === true"
+    message: "Section 21 notice is INVALID while emergency remedial action notice is in effect."
+    rationale: "Deregulation Act 2015 s.33 applies retaliatory eviction bar for 6 months after emergency remedial action."
+    field: emergency_remedial_action
+
+  - id: s21_licensing_required_not_licensed
+    severity: blocker
+    applies_to: [section_21]
+    requires_feature: phase13
+    applies_when:
+      - condition: "facts.licensing_required && facts.licensing_required !== 'not_required' && facts.has_valid_licence === false"
+    message: "Section 21 notices are INVALID for unlicensed properties requiring a licence."
+    rationale: "Housing Act 2004 s.75 (HMO) and s.98 (selective) prevent Section 21 on unlicensed properties."
+    field: has_valid_licence
+
+  - id: s21_four_month_bar
+    severity: blocker
+    applies_to: [section_21]
+    requires_feature: phase13
+    applies_when:
+      - condition: "computed.within_four_month_bar === true"
+    message: "Section 21 cannot be served within the first four months of the tenancy."
+    rationale: "Housing Act 1988 s.21(4B) prohibits Section 21 in first 4 months."
+    field: tenancy_start_date
+
+  - id: s21_notice_period_short
+    severity: blocker
+    applies_to: [section_21]
+    requires_feature: phase13
+    applies_when:
+      - condition: "computed.notice_period_too_short === true"
+    message: "Expiry date is earlier than the statutory two-month minimum."
+    rationale: "Section 21 requires at least 2 months notice."
+    field: notice_expiry_date
+
+# =============================================================================
+# SECTION 8 RULES (Fault-based eviction with N5 court form)
+# =============================================================================
+
+section_8_rules:
+
+  # ---------------------------------------------------------------------------
+  # GROUNDS SELECTION (Housing Act 1988 Schedule 2)
+  # TS Code: S8_NO_GROUNDS
+  # ---------------------------------------------------------------------------
+
+  - id: s8_no_grounds
+    severity: blocker
+    applies_to: [section_8]
+    applies_when:
+      # TS: !grounds || (Array.isArray(grounds) && grounds.length === 0)
+      # where grounds = facts.section8_grounds || facts.section8_grounds_selection
+      - condition: "!facts.section8_grounds && !facts.section8_grounds_selection"
+      - condition: "Array.isArray(facts.section8_grounds) && facts.section8_grounds.length === 0"
+      - condition: "Array.isArray(facts.section8_grounds_selection) && facts.section8_grounds_selection.length === 0"
+    message: "Section 8 requires at least one ground for possession."
+    rationale: "Housing Act 1988 Schedule 2 requires at least one ground."
+    field: section8_grounds
+
+  # ---------------------------------------------------------------------------
+  # ARREARS GROUNDS (8, 10, 11)
+  # TS Code: S8_ARREARS_GROUND_NO_DATA
+  # ---------------------------------------------------------------------------
+
+  - id: s8_arrears_ground_no_data
+    severity: blocker
+    applies_to: [section_8]
+    applies_when:
+      # TS: has arrears ground (8/10/11) but !hasArrears && !totalArrears
+      - condition: "computed.has_arrears_ground === true && facts.has_rent_arrears !== true && facts.has_arrears !== true && !facts.total_arrears && !facts.arrears_total && !facts.arrears_at_notice_date"
+    message: "Arrears grounds selected but no arrears data provided."
+    rationale: "Grounds 8, 10, 11 require evidence of rent arrears."
+    field: total_arrears
+
+  # ---------------------------------------------------------------------------
+  # GROUND 8 THRESHOLD (2+ months arrears)
+  # TS Code: GROUND_8_THRESHOLD_NOT_MET
+  # TS Logic: Only fires when Ground 8 selected AND (totalArrears OR arrears_items) AND rentAmount > 0
+  #           AND eligibility check fails
+  # ---------------------------------------------------------------------------
+
+  - id: ground_8_threshold_not_met
+    severity: blocker
+    applies_to: [section_8]
+    applies_when:
+      # TS only checks threshold when there's arrears data AND rent_amount
+      # So we need: has_ground_8 AND has arrears data AND rent_amount AND not eligible
+      - condition: "computed.has_ground_8 === true && (facts.total_arrears || facts.arrears_total || (facts.arrears_items && facts.arrears_items.length > 0)) && facts.rent_amount && facts.rent_amount > 0 && computed.ground_8_eligible === false"
+    message: "Ground 8 requires at least 2 months' arrears at notice AND hearing."
+    rationale: "Housing Act 1988 Schedule 2 Ground 8 is mandatory but requires 2+ months arrears."
+    field: total_arrears
+
+  # ---------------------------------------------------------------------------
+  # ASB GROUND (14)
+  # TS Code: S8_ASB_GROUND_NO_DATA
+  # ---------------------------------------------------------------------------
+
+  - id: s8_asb_ground_no_data
+    severity: warning
+    applies_to: [section_8]
+    applies_when:
+      # TS: has Ground 14 but !hasAsb && !asbDetails
+      - condition: "computed.has_ground_14 === true && facts.has_asb !== true && !facts.section8_details && !facts.ground_particulars"
+    message: "Ground 14 (nuisance/ASB) selected but no ASB details provided."
+    rationale: "ASB incidents should be documented for Ground 14."
+    field: section8_details
+
+  # ---------------------------------------------------------------------------
+  # BREACH GROUND (12)
+  # TS Code: S8_BREACH_GROUND_NO_DATA
+  # ---------------------------------------------------------------------------
+
+  - id: s8_breach_ground_no_data
+    severity: warning
+    applies_to: [section_8]
+    applies_when:
+      # TS: has Ground 12 but !hasBreach && !breachDetails
+      - condition: "computed.has_ground_12 === true && facts.has_breaches !== true && !facts.section8_details && !facts.ground_particulars"
+    message: "Ground 12 (breach) selected but no breach details provided."
+    rationale: "Breach details should be documented for Ground 12."
+    field: section8_details
+
+  # ---------------------------------------------------------------------------
+  # GROUND PARTICULARS
+  # TS Code: S8_NO_PARTICULARS
+  # ---------------------------------------------------------------------------
+
+  - id: s8_no_particulars
+    severity: blocker
+    applies_to: [section_8]
+    applies_when:
+      # TS: has grounds but !particulars
+      - condition: "(facts.section8_grounds || facts.section8_grounds_selection) && !facts.section8_details && !facts.ground_particulars"
+    message: "Section 8 requires particulars of each ground."
+    rationale: "The notice and court forms require specific details for each ground."
+    field: ground_particulars
+
+  # ---------------------------------------------------------------------------
+  # NOTICE PERIOD (Phase 13)
+  # Notice period enforcement for complete_pack
+  # ---------------------------------------------------------------------------
+
+  - id: s8_notice_period_short
+    severity: blocker
+    applies_to: [section_8]
+    requires_feature: phase13
+    applies_when:
+      - condition: "computed.s8_notice_period_too_short === true"
+    message: "Expiry date is earlier than the statutory minimum for the selected grounds."
+    rationale: "Notice periods vary by ground: 2 weeks for mandatory grounds (1, 2, 5-7, 7A, 7B, 8), 2 months for discretionary."
+    field: notice_expiry_date
+
+# =============================================================================
+# COMMON RULES (Apply to both routes)
+# =============================================================================
+
+common_rules:
+
+  # ---------------------------------------------------------------------------
+  # PARTY INFORMATION
+  # TS Codes: MISSING_LANDLORD_NAME, MISSING_TENANT_NAME, MISSING_PROPERTY_ADDRESS
+  # ---------------------------------------------------------------------------
+
+  - id: missing_landlord_name
+    severity: blocker
+    applies_to: [section_21, section_8]
+    applies_when:
+      # TS: !facts.landlord_full_name && !facts.landlord_name
+      - condition: "!facts.landlord_full_name && !facts.landlord_name"
+    message: "Landlord name is required for document generation."
+    rationale: "Court forms require the claimant to be identified."
+    field: landlord_full_name
+
+  - id: missing_tenant_name
+    severity: blocker
+    applies_to: [section_21, section_8]
+    applies_when:
+      # TS: !facts.tenant_full_name && !facts.tenant_name
+      - condition: "!facts.tenant_full_name && !facts.tenant_name"
+    message: "Tenant name is required for document generation."
+    rationale: "Court forms require the defendant to be identified."
+    field: tenant_full_name
+
+  - id: missing_property_address
+    severity: blocker
+    applies_to: [section_21, section_8]
+    applies_when:
+      # TS: !facts.property_address_line1
+      - condition: "!facts.property_address_line1"
+    message: "Property address is required for document generation."
+    rationale: "Court forms require the property address."
+    field: property_address_line1
+
+  # ---------------------------------------------------------------------------
+  # TENANCY DATES
+  # TS Codes: MISSING_TENANCY_START_DATE, FUTURE_TENANCY_START
+  # ---------------------------------------------------------------------------
+
+  - id: missing_tenancy_start_date
+    severity: blocker
+    applies_to: [section_21, section_8]
+    applies_when:
+      # TS: !facts.tenancy_start_date
+      - condition: "!facts.tenancy_start_date"
+    message: "Tenancy start date is required for notice period calculations."
+    rationale: "Start date is needed for notice period and four-month bar calculations."
+    field: tenancy_start_date
+
+  - id: future_tenancy_start
+    severity: blocker
+    applies_to: [section_21, section_8]
+    applies_when:
+      # TS: facts.tenancy_start_date > today
+      - condition: "facts.tenancy_start_date && computed.tenancy_start_in_future === true"
+    message: "Tenancy start date cannot be in the future."
+    rationale: "Cannot evict from a tenancy that has not begun."
+    field: tenancy_start_date
+
+  # ---------------------------------------------------------------------------
+  # NOTICE SERVICE
+  # TS Codes: MISSING_NOTICE_SERVICE_DATE, NOTICE_BEFORE_TENANCY, EXPIRY_BEFORE_SERVICE
+  # ---------------------------------------------------------------------------
+
+  - id: missing_notice_service_date
+    severity: blocker
+    applies_to: [section_21, section_8]
+    applies_when:
+      # TS: !noticeServiceDate (where noticeServiceDate = facts.notice_served_date || facts.notice_service_date)
+      - condition: "!facts.notice_served_date && !facts.notice_service_date"
+    message: "Notice service date is required for court applications."
+    rationale: "Court forms require the notice service date."
+    field: notice_served_date
+
+  - id: notice_before_tenancy
+    severity: blocker
+    applies_to: [section_21, section_8]
+    applies_when:
+      # TS: noticeServiceDate < facts.tenancy_start_date
+      - condition: "computed.notice_before_tenancy_start === true"
+    message: "Notice cannot be served before the tenancy started."
+    rationale: "Eviction notice must be served during the tenancy."
+    field: notice_served_date
+
+  - id: expiry_before_service
+    severity: blocker
+    applies_to: [section_21, section_8]
+    applies_when:
+      # TS: noticeExpiry <= noticeServiceDate
+      - condition: "computed.expiry_before_service === true"
+    message: "Notice expiry date must be after service date."
+    rationale: "Notice period runs from service to expiry."
+    field: notice_expiry_date
+
+  # ---------------------------------------------------------------------------
+  # ARREARS DATA CONSISTENCY
+  # TS Codes: ARREARS_CONTRADICTION, ARREARS_AMOUNT_MISSING
+  # ---------------------------------------------------------------------------
+
+  - id: arrears_contradiction
+    severity: warning
+    applies_to: [section_21, section_8]
+    applies_when:
+      # TS: totalArrears > 0 && hasArrearsExplicit === false
+      - condition: "(facts.total_arrears || facts.arrears_total) && (facts.total_arrears > 0 || facts.arrears_total > 0) && (facts.has_rent_arrears === false || facts.has_arrears === false)"
+    message: "Arrears amount provided but has_arrears is false."
+    rationale: "Data inconsistency between arrears flag and amount."
+    field: has_rent_arrears
+
+  - id: arrears_amount_missing
+    severity: warning
+    applies_to: [section_21, section_8]
+    applies_when:
+      # TS: hasArrearsExplicit === true && (!totalArrears || totalArrears === 0)
+      - condition: "(facts.has_rent_arrears === true || facts.has_arrears === true) && !facts.total_arrears && !facts.arrears_total"
+    message: "Arrears indicated but no amount specified."
+    rationale: "Arrears amount should be provided if arrears exist."
+    field: total_arrears
+
+# =============================================================================
+# VALIDATION SUMMARY CONFIG
+# =============================================================================
+
+summary:
+  blocker_prevents_generation: true
+  warning_shown_in_review: true
+  suggestion_shown_as_tips: true
+  group_by_section: true
+  sections:
+    - id: parties
+      label: "Party Details"
+      rules:
+        - missing_landlord_name
+        - missing_tenant_name
+        - missing_property_address
+    - id: tenancy
+      label: "Tenancy Information"
+      rules:
+        - missing_tenancy_start_date
+        - future_tenancy_start
+    - id: deposit
+      label: "Deposit Compliance"
+      rules:
+        - s21_deposit_not_protected
+        - s21_prescribed_info_missing
+        - s21_deposit_cap_exceeded
+        - s21_missing_deposit_amount
+        - s21_missing_deposit_date
+        - s21_missing_deposit_scheme
+    - id: safety_compliance
+      label: "Safety Compliance"
+      rules:
+        - s21_how_to_rent_missing
+        - s21_epc_missing
+        - s21_gas_cert_missing
+    - id: retaliatory
+      label: "Retaliatory Eviction"
+      rules:
+        - s21_retaliatory_eviction_risk
+        - s21_retaliatory_improvement_notice
+        - s21_retaliatory_emergency_action
+    - id: licensing
+      label: "Property Licensing"
+      rules:
+        - s21_licensing_required_not_licensed
+    - id: grounds
+      label: "Grounds for Possession"
+      rules:
+        - s8_no_grounds
+        - s8_arrears_ground_no_data
+        - ground_8_threshold_not_met
+        - s8_asb_ground_no_data
+        - s8_breach_ground_no_data
+        - s8_no_particulars
+    - id: notice_service
+      label: "Notice Service"
+      rules:
+        - missing_notice_service_date
+        - notice_before_tenancy
+        - expiry_before_service
+        - s21_four_month_bar
+        - s21_notice_period_short
+        - s8_notice_period_short
+    - id: arrears
+      label: "Arrears Data"
+      rules:
+        - arrears_contradiction
+        - arrears_amount_missing

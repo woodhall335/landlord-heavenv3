@@ -128,12 +128,121 @@ function normalizeApprovedPets(value: any): string | undefined {
 }
 
 /**
+ * Format bank payment details into a professional, complete format.
+ * If fields are missing, uses bracketed placeholders instead of truncated/blank output.
+ */
+function formatPaymentDetails(
+  accountName: string | undefined,
+  sortCode: string | undefined,
+  accountNumber: string | undefined,
+  rawPaymentDetails: string | undefined
+): string {
+  const hasStructuredDetails = accountName || sortCode || accountNumber;
+
+  if (hasStructuredDetails) {
+    const parts: string[] = [];
+
+    // Account name
+    if (accountName && accountName.trim()) {
+      parts.push(`Account Name: ${accountName.trim()}`);
+    } else {
+      parts.push('Account Name: [TO BE COMPLETED BEFORE SIGNING]');
+    }
+
+    // Sort code
+    if (sortCode && sortCode.trim()) {
+      // Format sort code with hyphens if not already formatted
+      const formatted = sortCode.replace(/[^0-9]/g, '').replace(/(\d{2})(\d{2})(\d{2})/, '$1-$2-$3');
+      parts.push(`Sort Code: ${formatted}`);
+    } else {
+      parts.push('Sort Code: [TO BE COMPLETED BEFORE SIGNING]');
+    }
+
+    // Account number
+    if (accountNumber && accountNumber.trim()) {
+      parts.push(`Account Number: ${accountNumber.trim()}`);
+    } else {
+      parts.push('Account Number: [TO BE COMPLETED BEFORE SIGNING]');
+    }
+
+    return parts.join(' | ');
+  }
+
+  // Fallback to raw payment details if provided
+  if (rawPaymentDetails && rawPaymentDetails.trim()) {
+    // Check if it looks like a truncated/incomplete value (single token without structure)
+    const trimmed = rawPaymentDetails.trim();
+    if (trimmed.length < 15 && !trimmed.includes(':') && !trimmed.includes(' ')) {
+      // Looks incomplete - wrap it with a note
+      return `${trimmed} [COMPLETE BANK DETAILS REQUIRED BEFORE SIGNING]`;
+    }
+    return trimmed;
+  }
+
+  // No payment details at all - return full placeholder
+  return 'Account Name: [TO BE COMPLETED] | Sort Code: [TO BE COMPLETED] | Account Number: [TO BE COMPLETED]';
+}
+
+/**
+ * Calculate first payment amount and date.
+ * - First payment defaults to monthly rent amount
+ * - First payment date defaults to tenancy start date
+ * - Returns placeholder strings if values cannot be determined
+ */
+function calculateFirstPayment(
+  rentAmount: number | string | undefined,
+  tenancyStartDate: string | undefined,
+  explicitFirstPayment: number | string | undefined,
+  explicitFirstPaymentDate: string | undefined
+): { amount: string; date: string } {
+  // First payment amount - coerce to number safely (values may come as strings from DB)
+  let amount: string;
+  if (explicitFirstPayment !== undefined && explicitFirstPayment !== null && explicitFirstPayment !== '') {
+    const numAmount = typeof explicitFirstPayment === 'string' ? parseFloat(explicitFirstPayment) : Number(explicitFirstPayment);
+    amount = !isNaN(numAmount) && numAmount > 0 ? numAmount.toFixed(2) : '[AMOUNT TO BE COMPLETED BEFORE SIGNING]';
+  } else if (rentAmount !== undefined && rentAmount !== null && rentAmount !== '') {
+    // Coerce rentAmount to number - it might come as string from database
+    const numRent = typeof rentAmount === 'string' ? parseFloat(rentAmount) : Number(rentAmount);
+    amount = !isNaN(numRent) && numRent > 0 ? numRent.toFixed(2) : '[AMOUNT TO BE COMPLETED BEFORE SIGNING]';
+  } else {
+    amount = '[AMOUNT TO BE COMPLETED BEFORE SIGNING]';
+  }
+
+  // First payment date
+  let date: string;
+  if (explicitFirstPaymentDate && String(explicitFirstPaymentDate).trim()) {
+    date = String(explicitFirstPaymentDate).trim();
+  } else if (tenancyStartDate && String(tenancyStartDate).trim()) {
+    date = String(tenancyStartDate).trim();
+  } else {
+    date = '[DATE TO BE COMPLETED BEFORE SIGNING]';
+  }
+
+  return { amount, date };
+}
+
+/**
  * Maps WizardFacts (flat DB format) to ASTData (document generator format).
  *
  * @param wizardFacts - Flat facts from case_facts.facts or collected_facts
+ * @param options - Optional configuration including canonical jurisdiction
+ * @param options.canonicalJurisdiction - If provided, ALWAYS use this jurisdiction
+ *        instead of deriving from wizardFacts. This is critical for ensuring
+ *        Scotland cases never get Wales/England templates.
  * @returns ASTData ready for AST document generation
  */
-export function mapWizardToASTData(wizardFacts: WizardFacts): ASTData {
+export function mapWizardToASTData(
+  wizardFacts: WizardFacts,
+  options?: { canonicalJurisdiction?: string }
+): ASTData {
+  // Log canonical jurisdiction usage for debugging
+  if (options?.canonicalJurisdiction) {
+    console.log(
+      `[AST Mapper] Using canonical jurisdiction: "${options.canonicalJurisdiction}" ` +
+      `(overrides any derived value from wizardFacts)`
+    );
+  }
+
   // Convert flat WizardFacts to nested CaseFacts domain model
   const caseFacts = wizardFactsToCaseFacts(wizardFacts);
 
@@ -144,14 +253,14 @@ export function mapWizardToASTData(wizardFacts: WizardFacts): ASTData {
   // Build addresses from CaseFacts
   const property_address = buildAddress(
     caseFacts.property.address_line1,
-    caseFacts.property.address_line1,
+    caseFacts.property.address_line2 ?? null,
     caseFacts.property.city,
     caseFacts.property.postcode
   );
 
   const landlord_address = buildAddress(
     caseFacts.parties.landlord.address_line1,
-    caseFacts.parties.landlord.address_line1,
+    caseFacts.parties.landlord.address_line2 ?? null,
     caseFacts.parties.landlord.city,
     caseFacts.parties.landlord.postcode
   );
@@ -179,7 +288,7 @@ export function mapWizardToASTData(wizardFacts: WizardFacts): ASTData {
     agent_name: caseFacts.parties.agent.name ?? undefined,
     agent_address: buildAddress(
       caseFacts.parties.agent.address_line1,
-      caseFacts.parties.agent.address_line1,
+      caseFacts.parties.agent.address_line2 ?? null,
       caseFacts.parties.agent.city,
       caseFacts.parties.agent.postcode
     ),
@@ -215,14 +324,37 @@ export function mapWizardToASTData(wizardFacts: WizardFacts): ASTData {
     rent_amount: caseFacts.tenancy.rent_amount ?? 0,
     rent_period: mapRentPeriod(caseFacts.tenancy.rent_frequency),
     rent_due_day: caseFacts.tenancy.rent_due_day != null ? String(caseFacts.tenancy.rent_due_day) : '',
-    payment_method: getValueAtPath(wizardFacts, 'payment_method') || '',
-    payment_details: getValueAtPath(wizardFacts, 'payment_details') || '',
+    payment_method: getValueAtPath(wizardFacts, 'payment_method') || 'Bank Transfer',
+
+    // Payment details - formatted with proper structure or placeholders
+    payment_details: formatPaymentDetails(
+      getValueAtPath(wizardFacts, 'bank_account_name'),
+      getValueAtPath(wizardFacts, 'bank_sort_code'),
+      getValueAtPath(wizardFacts, 'bank_account_number'),
+      getValueAtPath(wizardFacts, 'payment_details')
+    ),
     bank_account_name: getValueAtPath(wizardFacts, 'bank_account_name'),
     bank_sort_code: getValueAtPath(wizardFacts, 'bank_sort_code'),
     bank_account_number: getValueAtPath(wizardFacts, 'bank_account_number'),
 
+    // First payment - calculated from rent or explicit values, with placeholders for missing data
+    first_payment: calculateFirstPayment(
+      caseFacts.tenancy.rent_amount ?? undefined,
+      caseFacts.tenancy.start_date ?? undefined,
+      getValueAtPath(wizardFacts, 'first_payment'),
+      getValueAtPath(wizardFacts, 'first_payment_date')
+    ).amount,
+    first_payment_date: calculateFirstPayment(
+      caseFacts.tenancy.rent_amount ?? undefined,
+      caseFacts.tenancy.start_date ?? undefined,
+      getValueAtPath(wizardFacts, 'first_payment'),
+      getValueAtPath(wizardFacts, 'first_payment_date')
+    ).date,
+
     // Deposit - use CaseFacts
+    // Output both deposit_scheme and deposit_scheme_name for template compatibility
     deposit_amount: caseFacts.tenancy.deposit_amount ?? 0,
+    deposit_scheme: normalizeDepositScheme(caseFacts.tenancy.deposit_scheme_name) as any,
     deposit_scheme_name: normalizeDepositScheme(caseFacts.tenancy.deposit_scheme_name) as any,
     deposit_paid_date: getValueAtPath(wizardFacts, 'deposit_paid_date'),
     deposit_protection_date: caseFacts.tenancy.deposit_protection_date ?? undefined,
@@ -261,12 +393,23 @@ export function mapWizardToASTData(wizardFacts: WizardFacts): ASTData {
     how_to_rent_provision_date: getValueAtPath(wizardFacts, 'how_to_rent_provision_date'),
     how_to_rent_guide_provided: coerceBoolean(getValueAtPath(wizardFacts, 'how_to_rent_guide_provided')),
 
-    // Safety Certificates
+    // Safety Certificates - boolean flags
     gas_safety_certificate: coerceBoolean(getValueAtPath(wizardFacts, 'gas_safety_certificate')),
     epc_rating: getValueAtPath(wizardFacts, 'epc_rating'),
     electrical_safety_certificate: coerceBoolean(getValueAtPath(wizardFacts, 'electrical_safety_certificate')),
     smoke_alarms_fitted: coerceBoolean(getValueAtPath(wizardFacts, 'smoke_alarms_fitted')),
     carbon_monoxide_alarms: coerceBoolean(getValueAtPath(wizardFacts, 'carbon_monoxide_alarms')),
+
+    // Safety Certificate Dates - for compliance verification
+    gas_safety_certificate_date: getValueAtPath(wizardFacts, 'gas_safety_certificate_date'),
+    gas_safety_certificate_expiry: getValueAtPath(wizardFacts, 'gas_safety_certificate_expiry'),
+    epc_certificate_date: getValueAtPath(wizardFacts, 'epc_certificate_date'),
+    eicr_certificate_date: getValueAtPath(wizardFacts, 'eicr_certificate_date'),
+    eicr_next_inspection_date: getValueAtPath(wizardFacts, 'eicr_next_inspection_date'),
+    how_to_rent_guide_date: getValueAtPath(wizardFacts, 'how_to_rent_guide_date'),
+
+    // Prescribed Information Date
+    prescribed_information_date: getValueAtPath(wizardFacts, 'prescribed_information_date'),
 
     // Maintenance
     landlord_maintenance_responsibilities: getValueAtPath(wizardFacts, 'landlord_maintenance_responsibilities'),
@@ -311,17 +454,17 @@ export function mapWizardToASTData(wizardFacts: WizardFacts): ASTData {
 
     // Premium Enhanced Features - Late Payment Interest
     late_payment_interest_applicable: coerceBoolean(getValueAtPath(wizardFacts, 'late_payment_interest_applicable')),
-    late_payment_interest_rate: Number(getValueAtPath(wizardFacts, 'late_payment_interest_rate')),
-    grace_period_days: Number(getValueAtPath(wizardFacts, 'grace_period_days')),
-    late_payment_admin_fee: Number(getValueAtPath(wizardFacts, 'late_payment_admin_fee')),
+    late_payment_interest_rate: Number(getValueAtPath(wizardFacts, 'late_payment_interest_rate')) ?? 0,
+    grace_period_days: Number(getValueAtPath(wizardFacts, 'grace_period_days')) ?? 0,
+    late_payment_admin_fee: Number(getValueAtPath(wizardFacts, 'late_payment_admin_fee')) ?? 0,
 
     // Premium Enhanced Features - Key Schedule
-    number_of_front_door_keys: Number(getValueAtPath(wizardFacts, 'number_of_front_door_keys')),
-    number_of_back_door_keys: Number(getValueAtPath(wizardFacts, 'number_of_back_door_keys')),
-    number_of_window_keys: Number(getValueAtPath(wizardFacts, 'number_of_window_keys')),
-    number_of_mailbox_keys: Number(getValueAtPath(wizardFacts, 'number_of_mailbox_keys')),
-    access_cards_fobs: Number(getValueAtPath(wizardFacts, 'access_cards_fobs')),
-    key_replacement_cost: Number(getValueAtPath(wizardFacts, 'key_replacement_cost')),
+    number_of_front_door_keys: Number(getValueAtPath(wizardFacts, 'number_of_front_door_keys')) ?? 0,
+    number_of_back_door_keys: Number(getValueAtPath(wizardFacts, 'number_of_back_door_keys')) ?? 0,
+    number_of_window_keys: Number(getValueAtPath(wizardFacts, 'number_of_window_keys')) ?? 0,
+    number_of_mailbox_keys: Number(getValueAtPath(wizardFacts, 'number_of_mailbox_keys')) ?? 0,
+    access_cards_fobs: Number(getValueAtPath(wizardFacts, 'access_cards_fobs')) ?? 0,
+    key_replacement_cost: Number(getValueAtPath(wizardFacts, 'key_replacement_cost')) ?? 0,
     other_keys_notes: getValueAtPath(wizardFacts, 'other_keys_notes'),
 
     // Premium Enhanced Features - Contractor Access
@@ -377,11 +520,20 @@ export function mapWizardToASTData(wizardFacts: WizardFacts): ASTData {
     regular_cleaning_expectations: getValueAtPath(wizardFacts, 'regular_cleaning_expectations'),
     deep_cleaning_areas: getValueAtPath(wizardFacts, 'deep_cleaning_areas'),
     cleaning_checklist_provided: coerceBoolean(getValueAtPath(wizardFacts, 'cleaning_checklist_provided')),
-    cleaning_cost_estimates: Number(getValueAtPath(wizardFacts, 'cleaning_cost_estimates')),
+    cleaning_cost_estimates: Number(getValueAtPath(wizardFacts, 'cleaning_cost_estimates')) ?? 0,
 
-    // Jurisdiction
-    jurisdiction_england: true,
-    jurisdiction_wales: false,
+    // Jurisdiction - CRITICAL: Use canonical jurisdiction if provided (from fulfillment resolver)
+    // This ensures Scotland cases ALWAYS get Scotland templates, never Wales/England.
+    // Priority: canonicalJurisdiction > __meta.jurisdiction > property.country > property_country
+    jurisdiction: options?.canonicalJurisdiction ||
+                  caseFacts.meta.jurisdiction ||
+                  caseFacts.property.country ||
+                  getValueAtPath(wizardFacts, 'property_country') ||
+                  getValueAtPath(wizardFacts, '__meta.jurisdiction') ||
+                  undefined,
+    // Legacy boolean flags for template compatibility - derive from resolved jurisdiction
+    jurisdiction_england: (options?.canonicalJurisdiction || caseFacts.meta.jurisdiction || caseFacts.property.country || getValueAtPath(wizardFacts, 'property_country')) === 'england',
+    jurisdiction_wales: (options?.canonicalJurisdiction || caseFacts.meta.jurisdiction || caseFacts.property.country || getValueAtPath(wizardFacts, 'property_country')) === 'wales',
 
     // Meta
     joint_and_several_liability: jointLiability ?? tenants.length > 1,

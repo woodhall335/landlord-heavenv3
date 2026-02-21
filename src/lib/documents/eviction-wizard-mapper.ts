@@ -1,12 +1,149 @@
 import type { CaseFacts } from '@/lib/case-facts/schema';
-import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
+import {
+  wizardFactsToCaseFacts,
+  resolveNoticeServiceMethod,
+  resolveNoticeServiceMethodDetail,
+} from '@/lib/case-facts/normalize';
 import type { GroundClaim, EvictionCase } from './eviction-pack-generator';
 import type { CaseData } from './official-forms-filler';
 import type { ScotlandCaseData } from './scotland-forms-filler';
 import { GROUND_DEFINITIONS } from './section8-generator';
+import { generateArrearsParticulars } from './arrears-schedule-mapper';
+import { computeEvictionArrears } from '@/lib/eviction/arrears/computeArrears';
+import { isGround8Eligible } from '@/lib/grounds/ground8-threshold';
+import { EvidenceCategory } from '@/lib/evidence/schema';
+import { calculatePossessionFees } from '@/lib/court-fees/hmcts-fees';
+import {
+  buildN5BFields,
+  mergeN5BFieldsIntoCaseData,
+  logN5BFieldStatus,
+  type N5BFields,
+} from './n5b-field-builder';
 
+/**
+ * Build address string from components, with deduplication.
+ * Prevents duplicate city/postcode when address_line2 already contains them.
+ *
+ * Example fix: Prevents "... LS28 7PW\nPudsey\nLS28 7PW" duplication
+ * Input: ["123 Main Street", "Pudsey LS28 7PW", "Pudsey", "LS28 7PW"]
+ * Output: "123 Main Street\nPudsey LS28 7PW"
+ */
 function buildAddress(...parts: Array<string | null | undefined>): string {
-  return parts.filter(Boolean).join('\n');
+  const cleanParts = parts
+    .filter((p): p is string => typeof p === 'string' && p.trim().length > 0)
+    .map(p => p.trim());
+
+  if (cleanParts.length === 0) return '';
+
+  // Build address with deduplication - check if part is already present in earlier parts
+  const result: string[] = [];
+  const addressSoFarLower: string[] = []; // Track all parts we've added (lowercase for comparison)
+
+  for (const part of cleanParts) {
+    const partLower = part.toLowerCase();
+
+    // Check if this part (or its content) is already included in any earlier part
+    const isSubstringOfExisting = addressSoFarLower.some(existing => existing.includes(partLower));
+
+    // Also check if this part already contains one of the existing parts (shouldn't add duplicate info)
+    const containsExisting = addressSoFarLower.some(existing => partLower.includes(existing) && existing.length > 3);
+
+    if (!isSubstringOfExisting) {
+      // Only skip if the part is redundant (already fully contained in a previous line)
+      // This allows "Pudsey LS28 7PW" even if "Pudsey" was added, but not "LS28 7PW" again
+      result.push(part);
+      addressSoFarLower.push(partLower);
+    }
+  }
+
+  return result.join('\n');
+}
+
+/**
+ * Converts internal service method enum values to human-readable format for court forms.
+ * N5B form field 10a requires proper court-ready text, not internal identifiers.
+ *
+ * @param method - The internal service method value (e.g., 'first_class_post')
+ * @returns Human-readable format (e.g., 'First class post') or null if no mapping
+ */
+function formatServiceMethodForCourt(method: string | null | undefined): string | null {
+  if (!method) return null;
+
+  const methodMapping: Record<string, string> = {
+    // Post methods
+    'first_class_post': 'First class post',
+    'recorded_delivery': 'Recorded delivery',
+    'special_delivery': 'Special delivery',
+    'registered_post': 'Registered post',
+    // Hand delivery
+    'hand_delivery': 'By hand',
+    'hand_delivered': 'By hand',
+    'by_hand': 'By hand',
+    'in_person': 'By hand',
+    'personal_service': 'Personal service',
+    // Email (only valid if agreed in tenancy)
+    'email': 'Email',
+    // Other
+    'other': 'Other method',
+  };
+
+  // Normalize the input and look up
+  const normalized = method.toLowerCase().replace(/[\s-]+/g, '_').trim();
+
+  if (methodMapping[normalized]) {
+    return methodMapping[normalized];
+  }
+
+  // If already human-readable (e.g., "First class post"), return as-is
+  if (method.includes(' ') || /^[A-Z]/.test(method)) {
+    return method;
+  }
+
+  // Fallback: capitalize first letter and replace underscores with spaces
+  return method
+    .replace(/_/g, ' ')
+    .replace(/^(\w)/, (match) => match.toUpperCase());
+}
+
+// =============================================================================
+// P0-2: N5B ATTACHMENT CHECKBOX TRUTHFULNESS HELPER
+// =============================================================================
+// This helper checks if an evidence file with a specific category has been
+// uploaded. It examines the facts.evidence.files[] array (canonical source)
+// for files matching the given category.
+//
+// Used to determine whether N5B attachment checkboxes (E, F, G) should be
+// ticked based on ACTUAL uploads, not compliance flags.
+// =============================================================================
+
+interface EvidenceFileEntry {
+  id: string;
+  category?: string;
+  [key: string]: any;
+}
+
+/**
+ * Check if an evidence file exists for a given category in the evidence files list.
+ * This is the source of truth for N5B attachment checkboxes.
+ *
+ * @param evidenceFiles - The evidence.files array from wizard facts
+ * @param category - The evidence category to check (from EvidenceCategory enum)
+ * @returns true if at least one file with the matching category exists
+ */
+function hasUploadForCategory(
+  evidenceFiles: EvidenceFileEntry[] | undefined,
+  category: EvidenceCategory | string
+): boolean {
+  if (!Array.isArray(evidenceFiles) || evidenceFiles.length === 0) {
+    return false;
+  }
+
+  // Check for exact category match
+  return evidenceFiles.some((file) => {
+    const fileCategory = file.category?.toLowerCase();
+    const targetCategory = category.toLowerCase();
+    return fileCategory === targetCategory;
+  });
 }
 
 function normaliseFrequency(
@@ -18,15 +155,60 @@ function normaliseFrequency(
   return 'monthly';
 }
 
+/**
+ * Derive deposit scheme checkbox flag for N5B form.
+ * Matches scheme name against known variants.
+ */
+function deriveDepositSchemeFlag(
+  schemeName: string | null | undefined,
+  scheme: 'dps' | 'mydeposits' | 'tds'
+): boolean {
+  if (!schemeName) return false;
+  const normalized = schemeName.toLowerCase().replace(/[\s\-_]/g, '');
+
+  switch (scheme) {
+    case 'dps':
+      return normalized.includes('dps') ||
+             normalized.includes('depositprotectionservice') ||
+             normalized.includes('thedeposit');
+    case 'mydeposits':
+      return normalized.includes('mydeposit');
+    case 'tds':
+      return normalized.includes('tds') ||
+             normalized.includes('tenancydepositscheme');
+    default:
+      return false;
+  }
+}
+
 function deriveCaseType(evictionRoute: any): EvictionCase['case_type'] {
   const route = Array.isArray(evictionRoute) ? evictionRoute : [evictionRoute].filter(Boolean);
-  const hasSection21 = route.some((r) => typeof r === 'string' && r.toLowerCase().includes('section 21'));
+  // ==========================================================================
+  // CASE TYPE DERIVATION
+  // ==========================================================================
+  // The wizard emits eviction_route as either 'section_21' or 'section_8'.
+  // We check for Section 21 variants (with underscores, spaces, or concatenated)
+  // and classify those as 'no_fault' evictions. All other routes (including
+  // Section 8 with any grounds - arrears, ASB, breach) are classified as
+  // 'rent_arrears' which is the general eviction case type.
+  //
+  // Note: Section 8 can be used for non-arrears grounds (e.g., Ground 14 ASB),
+  // but for court form purposes, the 'rent_arrears' case_type covers all
+  // fault-based evictions. The actual grounds are specified separately.
+  // ==========================================================================
+  const hasSection21 = route.some((r) => {
+    if (typeof r !== 'string') return false;
+    const normalized = r.toLowerCase().replace(/_/g, ' ');
+    return normalized.includes('section 21') || normalized === 'section21';
+  });
   if (hasSection21) return 'no_fault';
   return 'rent_arrears';
 }
 
 function parseGround(option: string): { code: string; codeNum: number | '14A'; title: string } {
-  const match = option.match(/ground\s*([0-9a-z]+)/i);
+  // Match ground number in formats: "ground 8", "ground_8", "Ground 8", "Ground_8"
+  // Uses [\s_]* to allow spaces, underscores, or nothing between "ground" and the number
+  const match = option.match(/ground[\s_]*([0-9a-z]+)/i);
   const codeStr = match ? match[1].toUpperCase() : '';
   const codeNum = (codeStr === '14A' ? '14A' : parseInt(codeStr)) as number | '14A';
   const code = codeStr ? `Ground ${codeStr}` : option.trim();
@@ -36,10 +218,30 @@ function parseGround(option: string): { code: string; codeNum: number | '14A'; t
 
 function mapSection8Grounds(facts: CaseFacts): GroundClaim[] {
   const selections = facts.issues.section8_grounds.selected_grounds || [];
-  return selections.map((selection) => {
+  const noticeDate =
+    facts.notice.notice_date ||
+    facts.notice.service_date ||
+    undefined;
+  const rentAmount = facts.tenancy.rent_amount || 0;
+  const rentFrequency = facts.tenancy.rent_frequency || 'monthly';
+  const canonicalArrears = computeEvictionArrears({
+    arrears_items: facts.issues.rent_arrears.arrears_items,
+    total_arrears: facts.issues.rent_arrears.total_arrears,
+    rent_amount: rentAmount,
+    rent_frequency: rentFrequency,
+    rent_due_day: facts.tenancy.rent_due_day,
+    schedule_end_date: noticeDate,
+  });
+  const ground8Eligible = isGround8Eligible({
+    arrearsTotal: canonicalArrears.total,
+    rentAmount,
+    rentFrequency,
+  });
+
+  return selections.flatMap((selection) => {
     const { code, codeNum, title } = parseGround(selection);
 
-    // ✅ FIX: Look up ground definition to get legal_basis and mandatory status
+    // Look up ground definition to get legal_basis and mandatory status
     const groundDef = GROUND_DEFINITIONS[codeNum];
     const legal_basis = groundDef?.legal_basis || 'Housing Act 1988, Schedule 2';
     const mandatory = groundDef?.mandatory || false;
@@ -47,12 +249,21 @@ function mapSection8Grounds(facts: CaseFacts): GroundClaim[] {
     let particulars = '';
 
     if (['Ground 8', 'Ground 10', 'Ground 11'].includes(code)) {
-      particulars =
-        (facts.issues.section8_grounds.arrears_breakdown as string) ||
-        (facts.issues.rent_arrears.total_arrears
-          ? `Rent arrears outstanding: £${facts.issues.rent_arrears.total_arrears}`
-          : '') ||
-        '';
+      if (codeNum === 8 && !ground8Eligible) {
+        return [];
+      }
+
+      // Use canonical arrears mapper for arrears grounds particulars
+      // This ensures particulars are generated from authoritative arrears_items
+      const arrearsParticulars = generateArrearsParticulars({
+        arrears_items: canonicalArrears.items,
+        total_arrears: canonicalArrears.total,
+        rent_amount: rentAmount,
+        rent_frequency: rentFrequency,
+        include_full_schedule: false, // Summary for notice, full schedule as separate PDF
+        schedule_data: canonicalArrears.scheduleData,
+      });
+      particulars = arrearsParticulars.particulars;
     } else if (code === 'Ground 12') {
       particulars = facts.issues.section8_grounds.breach_details || '';
     } else if (code === 'Ground 13' || code === 'Ground 15') {
@@ -63,13 +274,13 @@ function mapSection8Grounds(facts: CaseFacts): GroundClaim[] {
       particulars = facts.issues.section8_grounds.false_statement_details || '';
     }
 
-    return {
+    return [{
       code,
       title: groundDef?.title || title,  // Use canonical title from definitions
-      legal_basis,  // ✅ FIX: Add legal_basis
+      legal_basis,
       particulars,
-      mandatory,  // ✅ FIX: Use correct mandatory status from definitions
-    };
+      mandatory,
+    }];
   });
 }
 
@@ -97,9 +308,9 @@ function buildEvictionCaseFromFacts(
   // Ensure canonical jurisdiction
   let jurisdiction = (facts.meta.jurisdiction as any) || 'england';
   if (jurisdiction === 'england-wales') {
-    // Migrate based on property_location if available
-    const propertyLocation = (wizardFacts as any)?.property_location;
-    jurisdiction = propertyLocation === 'wales' ? 'wales' : 'england';
+    // Migrate based on property country if available
+    const propertyCountry = facts.property.country;
+    jurisdiction = propertyCountry === 'wales' ? 'wales' : 'england';
   }
 
   const evictionCase: EvictionCase = {
@@ -155,9 +366,80 @@ function buildEvictionCaseFromFacts(
     deposit_protected: facts.tenancy.deposit_protected || undefined,
     deposit_protection_date: facts.tenancy.deposit_protection_date || undefined,
     court_name: facts.court.court_name || undefined,
+    court_address: facts.court.court_address || undefined,
   };
 
   return { evictionCase, caseType };
+}
+
+/**
+ * Builds N5B-specific fields for CaseData using the canonical N5B field builder.
+ *
+ * This function:
+ * 1. Uses buildN5BFields() to resolve wizard aliases and parse booleans
+ * 2. Applies fallbacks from CaseFacts compliance data
+ * 3. Returns fields suitable for spreading into CaseData
+ *
+ * @param wizardFacts - Raw wizard facts object
+ * @param facts - Normalized CaseFacts object for fallback values
+ * @returns Object with N5B fields to spread into CaseData
+ */
+function buildN5BFieldsForCaseData(
+  wizardFacts: Record<string, unknown>,
+  facts: CaseFacts
+): Partial<CaseData> {
+  // Build N5B fields using canonical builder (handles aliases and boolean parsing)
+  const n5bFields = buildN5BFields(wizardFacts);
+
+  // Log field status in dev mode for debugging
+  logN5BFieldStatus(n5bFields, 'buildCaseData');
+
+  // Return fields with fallbacks from CaseFacts where appropriate
+  return {
+    // Q9a-Q9g: AST Verification (no fallbacks - must come from wizard)
+    n5b_q9a_after_feb_1997: n5bFields.n5b_q9a_after_feb_1997,
+    n5b_q9b_has_notice_not_ast: n5bFields.n5b_q9b_has_notice_not_ast,
+    n5b_q9c_has_exclusion_clause: n5bFields.n5b_q9c_has_exclusion_clause,
+    n5b_q9d_is_agricultural_worker: n5bFields.n5b_q9d_is_agricultural_worker,
+    n5b_q9e_is_succession_tenancy: n5bFields.n5b_q9e_is_succession_tenancy,
+    n5b_q9f_was_secure_tenancy: n5bFields.n5b_q9f_was_secure_tenancy,
+    n5b_q9g_is_schedule_10: n5bFields.n5b_q9g_is_schedule_10,
+
+    // Q10a: Notice service method (handled separately in main buildCaseData)
+    // Don't include here to avoid overwriting the existing logic
+
+    // Q15: EPC - with fallback from CaseFacts compliance
+    epc_provided: n5bFields.epc_provided ?? facts.compliance.epc_provided ?? undefined,
+    epc_provided_date: n5bFields.epc_provided_date || undefined,
+
+    // Q16-Q17: Gas Safety - with fallbacks
+    has_gas_at_property: n5bFields.has_gas_at_property ?? true, // Default true for most properties
+    gas_safety_before_occupation: n5bFields.gas_safety_before_occupation,
+    gas_safety_before_occupation_date: n5bFields.gas_safety_before_occupation_date,
+    gas_safety_check_date:
+      n5bFields.gas_safety_check_date ||
+      facts.compliance.gas_safety_cert_date || // Fallback to existing cert_date
+      undefined,
+    gas_safety_served_date: n5bFields.gas_safety_served_date,
+    gas_safety_service_dates: n5bFields.gas_safety_service_dates,
+    gas_safety_provided:
+      n5bFields.gas_safety_provided ??
+      facts.compliance.gas_safety_cert_provided ??
+      undefined,
+
+    // Q18: How to Rent
+    how_to_rent_provided: n5bFields.how_to_rent_provided,
+    how_to_rent_date: n5bFields.how_to_rent_date,
+    how_to_rent_method: n5bFields.how_to_rent_method,
+
+    // Q19: Tenant Fees Act 2019 - default to false (compliant) if not answered
+    n5b_q19_has_unreturned_prohibited_payment:
+      n5bFields.n5b_q19_has_unreturned_prohibited_payment ?? false,
+    n5b_q19b_holding_deposit: n5bFields.n5b_q19b_holding_deposit ?? false,
+
+    // Q20: Paper Determination
+    n5b_q20_paper_determination: n5bFields.n5b_q20_paper_determination,
+  };
 }
 
 function buildCaseData(
@@ -182,9 +464,16 @@ function buildCaseData(
     claimant_reference: facts.court.claimant_reference || undefined,
     tenant_full_name: evictionCase.tenant_full_name,
     tenant_2_name: evictionCase.tenant_2_name,
+    // P0 FIX: Support up to 4 joint tenants
+    tenant_3_name: wizardFacts.tenant3_name || undefined,
+    tenant_4_name: wizardFacts.tenant4_name || undefined,
     property_address: evictionCase.property_address,
     property_postcode: evictionCase.property_address_postcode,
     tenancy_start_date: evictionCase.tenancy_start_date,
+    // N5B Q7: Tenancy agreement date (may differ from start date)
+    tenancy_agreement_date:
+      wizardFacts.tenancy_agreement_date ||
+      evictionCase.tenancy_start_date, // Fallback to start date if not provided
     fixed_term: evictionCase.fixed_term,
     fixed_term_end_date: evictionCase.fixed_term_end_date,
     rent_amount: evictionCase.rent_amount,
@@ -196,12 +485,29 @@ function buildCaseData(
     section_21_notice_date: wizardFacts.section_21_notice_date || facts.notice.notice_date || undefined,
     notice_served_date:
       wizardFacts.notice_served_date || wizardFacts.notice_date || facts.notice.notice_date || undefined,
+    // ✅ FIX: Map notice_service_method for N5B form field 10a ("How was the notice served")
+    // Uses centralized resolveNoticeServiceMethod() for single source of truth
+    // CRITICAL: Must output human-readable format (e.g., "First class post") not internal enum
+    notice_service_method: (() => {
+      const method = resolveNoticeServiceMethod(wizardFacts);
+      if (method === 'other') {
+        // For "other" method, include the detail text
+        const detail = resolveNoticeServiceMethodDetail(wizardFacts);
+        return detail ? `Other: ${detail}` : 'Other method';
+      }
+      // Convert internal enum to human-readable format for N5B form
+      const humanReadableMethod = formatServiceMethodForCourt(method || facts.notice.service_method);
+      return humanReadableMethod || undefined;
+    })(),
     particulars_of_claim: facts.court.particulars_of_claim || undefined,
     total_arrears:
       wizardFacts.total_arrears ||
       wizardFacts.rent_arrears_amount ||
       facts.issues.rent_arrears.total_arrears ||
       undefined,
+
+    // Arrears items for N119 particulars generation
+    arrears_items: facts.issues.rent_arrears.arrears_items || undefined,
 
     // ✅ FIXED: removed invalid amount_owing access
     arrears_at_notice_date:
@@ -210,12 +516,45 @@ function buildCaseData(
       facts.issues.rent_arrears.total_arrears ||
       undefined,
 
-    court_fee: facts.court.claim_amount_costs || undefined,
+    // =========================================================================
+    // COURT FEE AUTO-CALCULATION
+    // =========================================================================
+    // If no manual fee is provided, auto-calculate based on claim type and arrears.
+    // Uses HMCTS fee structure from hmcts-fees.ts.
+    // - Standard/Accelerated possession: £355
+    // - Plus money claim fee if claiming arrears (banded by amount)
+    // =========================================================================
+    court_fee: (() => {
+      // Use manually entered fee if provided
+      if (facts.court.claim_amount_costs) {
+        return facts.court.claim_amount_costs;
+      }
+
+      // Auto-calculate based on claim type and arrears
+      const totalArrears =
+        wizardFacts.total_arrears ||
+        wizardFacts.rent_arrears_amount ||
+        facts.issues.rent_arrears.total_arrears ||
+        0;
+
+      // Map claim type to fee calculator type
+      const feeClaimType = claimType === 'section_21' ? 'accelerated_section21' : 'section_8';
+      const calculatedFees = calculatePossessionFees(feeClaimType, totalArrears);
+
+      return calculatedFees.totalFee;
+    })(),
     solicitor_costs: facts.court.claim_amount_other || undefined,
     deposit_amount: facts.tenancy.deposit_amount || undefined,
+    // Standardize deposit scheme naming - output both variants for template compatibility
     deposit_scheme: (facts.tenancy.deposit_scheme_name as any) || undefined,
+    deposit_scheme_name: (facts.tenancy.deposit_scheme_name as any) || undefined,
     deposit_protection_date: facts.tenancy.deposit_protection_date || undefined,
     deposit_reference: facts.tenancy.deposit_reference || undefined,
+
+    // N5B deposit scheme checkboxes - derive from deposit_scheme_name
+    deposit_scheme_dps: deriveDepositSchemeFlag(facts.tenancy.deposit_scheme_name, 'dps'),
+    deposit_scheme_mydeposits: deriveDepositSchemeFlag(facts.tenancy.deposit_scheme_name, 'mydeposits'),
+    deposit_scheme_tds: deriveDepositSchemeFlag(facts.tenancy.deposit_scheme_name, 'tds'),
     solicitor_firm: evictionCase.solicitor_firm,
     solicitor_address: evictionCase.solicitor_address,
     solicitor_phone: evictionCase.solicitor_phone,
@@ -228,10 +567,136 @@ function buildCaseData(
     service_postcode: evictionCase.service_postcode,
     service_phone: evictionCase.service_phone,
     service_email: evictionCase.service_email,
-    court_name: evictionCase.court_name || wizardFacts.court_name || 'County Court',
-    signatory_name: evictionCase.landlord_full_name,
-    signature_date: new Date().toISOString().split('T')[0],
+    court_name: evictionCase.court_name || wizardFacts.court_name,
+    court_address: evictionCase.court_address || wizardFacts.court_address,
+    signatory_name: wizardFacts.signatory_name || evictionCase.landlord_full_name,
+    signature_date: wizardFacts.signature_date || new Date().toISOString().split('T')[0],
     notice_expiry_date: wizardFacts.notice_expiry_date || facts.notice.expiry_date || undefined,
+
+    // =========================================================================
+    // N5B QUESTION 8: SUBSEQUENT TENANCY
+    // =========================================================================
+    subsequent_tenancy: wizardFacts.subsequent_tenancy ?? false,
+
+    // =========================================================================
+    // N5B QUESTION 13: DEPOSIT RETURNED
+    // =========================================================================
+    deposit_returned: wizardFacts.deposit_returned ?? false,
+
+    // =========================================================================
+    // N5B QUESTION 14a: PRESCRIBED INFORMATION GIVEN
+    // =========================================================================
+    // Maps from Section 21 compliance question to N5B Q14a checkbox
+    // Note: This is a Statement of Truth - only true if actually served
+    deposit_prescribed_info_given:
+      wizardFacts.prescribed_info_served ??
+      facts.tenancy.prescribed_info_given ??
+      undefined,
+
+    // =========================================================================
+    // N5B ATTACHMENT CHECKBOXES - A, B, B1 (Trust-based document confirmations)
+    // =========================================================================
+    // These are now based on user confirmations that they HAVE the documents
+    // to attach, rather than requiring file uploads.
+    tenancy_agreement_uploaded:
+      wizardFacts.has_tenancy_agreement_copy === true ||
+      facts.evidence.tenancy_agreement_uploaded ||
+      undefined,
+    notice_copy_available:
+      wizardFacts.has_section21_notice_copy === true ||
+      wizardFacts.notice_copy_available ||
+      wizardFacts.notice_uploaded ||
+      undefined,
+    service_proof_available:
+      wizardFacts.has_proof_of_service === true ||
+      wizardFacts.service_proof_available ||
+      wizardFacts.proof_of_service_uploaded ||
+      undefined,
+
+    // =========================================================================
+    // N5B ATTACHMENT CHECKBOXES - E, F, G (Trust-based document confirmations)
+    // =========================================================================
+    // These are now based on user confirmations that they HAVE the documents
+    // to attach. The user confirms they will attach these to the N5B form.
+    // Legacy: Also check for actual file uploads for backwards compatibility.
+    deposit_certificate_uploaded:
+      wizardFacts.has_deposit_certificate_copy === true ||
+      hasUploadForCategory(
+        (wizardFacts as any)?.evidence?.files,
+        EvidenceCategory.DEPOSIT_PROTECTION_CERTIFICATE
+      ),
+    epc_uploaded:
+      wizardFacts.has_epc_copy === true ||
+      hasUploadForCategory(
+        (wizardFacts as any)?.evidence?.files,
+        EvidenceCategory.EPC
+      ),
+    gas_safety_uploaded:
+      wizardFacts.has_gas_certificate_copy === true ||
+      hasUploadForCategory(
+        (wizardFacts as any)?.evidence?.files,
+        EvidenceCategory.GAS_SAFETY_CERTIFICATE
+      ),
+    // P0 FIX: How to Rent attachment checkbox (H) was missing
+    how_to_rent_uploaded:
+      wizardFacts.has_how_to_rent_copy === true ||
+      hasUploadForCategory(
+        (wizardFacts as any)?.evidence?.files,
+        EvidenceCategory.HOW_TO_RENT_PROOF
+      ),
+
+    // =========================================================================
+    // N5B FIELDS - Built using canonical N5B field builder
+    // =========================================================================
+    // Uses buildN5BFields() to resolve wizard aliases and parse booleans
+    // This ensures consistent handling across all N5B fields
+    // See n5b-field-builder.ts for the complete alias mapping
+    // =========================================================================
+    ...buildN5BFieldsForCaseData(wizardFacts, facts),
+
+    // =========================================================================
+    // N5B DEFENDANT SERVICE ADDRESS
+    // =========================================================================
+    defendant_service_address_same_as_property:
+      wizardFacts.defendant_service_address_same_as_property ?? true,
+    defendant_service_address_line1:
+      wizardFacts.defendant_service_address_same_as_property === false
+        ? wizardFacts.defendant_service_address_line1
+        : facts.property.address_line1,
+    defendant_service_address_town:
+      wizardFacts.defendant_service_address_same_as_property === false
+        ? wizardFacts.defendant_service_address_town
+        : facts.property.city,
+    defendant_service_address_postcode:
+      wizardFacts.defendant_service_address_same_as_property === false
+        ? wizardFacts.defendant_service_address_postcode
+        : facts.property.postcode,
+
+    // =========================================================================
+    // N5 CHECKBOX FLAG DERIVATION
+    // =========================================================================
+    // These flags control checkboxes and conditional sections in the N5 form.
+    // They must be derived from the claim type and case data.
+    // =========================================================================
+
+    // Property type - always true for residential tenancies (AST)
+    property_is_dwelling: true,
+
+    // Claim type flags - derived from claim_type for checkbox rendering
+    ground_section_8: claimType === 'section_8',
+    ground_section_21: claimType === 'section_21',
+
+    // Arrears flags - controls arrears sections and "claiming rent arrears" checkbox
+    rent_arrears: !!(
+      wizardFacts.total_arrears ||
+      wizardFacts.rent_arrears_amount ||
+      facts.issues.rent_arrears.total_arrears
+    ),
+    claiming_rent_arrears: !!(
+      wizardFacts.total_arrears ||
+      wizardFacts.rent_arrears_amount ||
+      facts.issues.rent_arrears.total_arrears
+    ),
   } as CaseData;
 }
 

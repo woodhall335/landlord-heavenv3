@@ -7,6 +7,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
+import { isAdmin } from '@/lib/auth';
 import { z } from 'zod';
 
 const QueueSchema = z.object({
@@ -31,8 +32,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const adminIds = process.env.ADMIN_USER_IDS?.split(',') || [];
-    if (!adminIds.includes(user.id)) {
+    // Check if user is admin (with proper trimming of env var)
+    if (!isAdmin(user.id)) {
       return NextResponse.json({ error: 'Admin access required' }, { status: 403 });
     }
 
@@ -54,7 +55,7 @@ export async function POST(request: NextRequest) {
         content_type: params.contentType,
         target_keyword: params.targetKeyword,
         location: params.location,
-        jurisdiction: params.jurisdiction || 'england-wales',
+        jurisdiction: params.jurisdiction || 'england',
         word_count_target: params.wordCountTarget || 1500,
         priority: params.priority || 5,
         scheduled_for: params.scheduledFor || new Date().toISOString(),
@@ -96,8 +97,8 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const adminIds = process.env.ADMIN_USER_IDS?.split(',') || [];
-    if (!adminIds.includes(user.id)) {
+    // Check if user is admin (with proper trimming of env var)
+    if (!isAdmin(user.id)) {
       return NextResponse.json({ error: 'Admin access required' }, { status: 403 });
     }
 

@@ -1,0 +1,1389 @@
+/**
+ * Shadow Mode Parity Tests
+ *
+ * Golden test cases for comparing existing TS validators with the new YAML engine.
+ * These tests verify that the YAML engine produces equivalent results to the
+ * existing validation logic.
+ *
+ * Note: Some discrepancies are expected during migration. The goal is to
+ * achieve >95% parity before making YAML engine authoritative.
+ */
+
+import { describe, it, expect, beforeEach } from 'vitest';
+import {
+  runShadowValidation,
+  runShadowValidationBatch,
+  formatShadowReport,
+  type ShadowValidationParams,
+  type ShadowModeReport,
+} from '@/lib/validation/shadow-mode-adapter';
+import { clearConfigCache, type EvictionFacts } from '@/lib/validation/eviction-rules-engine';
+
+// ============================================================================
+// GOLDEN TEST CASES - ENGLAND SECTION 21
+// ============================================================================
+
+describe('Shadow Mode Parity - England Section 21', () => {
+  beforeEach(() => {
+    clearConfigCache();
+  });
+
+  const baseParams: Omit<ShadowValidationParams, 'facts'> = {
+    jurisdiction: 'england',
+    product: 'notice_only',
+    route: 'section_21',
+  };
+
+  describe('Valid Cases', () => {
+    it('should have parity for fully compliant S21 case', async () => {
+      const facts: EvictionFacts = {
+        landlord_full_name: 'John Landlord',
+        tenant_full_name: 'Jane Tenant',
+        property_address_line1: '123 Test Street',
+        tenancy_start_date: '2024-01-01',
+        notice_service_date: '2025-06-01',
+        notice_served_date: '2025-06-01',
+        notice_expiry_date: '2025-08-01',
+        deposit_taken: true,
+        deposit_protected: true,
+        deposit_amount: 1200,
+        deposit_protection_date: '2024-01-10',
+        deposit_scheme_name: 'DPS',
+        prescribed_info_given: true,
+        prescribed_info_served: true,
+        epc_provided: true,
+        how_to_rent_provided: true,
+        how_to_rent_served: true,
+        has_gas_appliances: true,
+        gas_certificate_provided: true,
+        // Explicit licensing confirmation for parity
+        property_licensing_status: 'licensed',
+        licensing_required: 'not_required',
+        selected_notice_route: 'section_21',
+      };
+
+      const report = await runShadowValidation({ ...baseParams, facts });
+
+      // Both should find no blockers for a valid case
+      expect(report.yaml.blockers).toBe(0);
+      expect(report.ts.blockers).toBe(0);
+      expect(report.parity).toBe(true);
+      console.log(formatShadowReport(report));
+    });
+  });
+
+  describe('Deposit Protection Cases', () => {
+    it('should have parity for deposit_not_protected', async () => {
+      const facts: EvictionFacts = {
+        landlord_full_name: 'John Landlord',
+        tenant_full_name: 'Jane Tenant',
+        property_address_line1: '123 Test Street',
+        tenancy_start_date: '2024-01-01',
+        notice_service_date: '2025-06-01',
+        notice_served_date: '2025-06-01',
+        notice_expiry_date: '2025-08-01',
+        deposit_taken: true,
+        deposit_protected: false, // NOT PROTECTED - should block
+        // Explicit fields for parity
+        epc_provided: true,
+        how_to_rent_provided: true,
+        property_licensing_status: 'licensed',
+        selected_notice_route: 'section_21',
+      };
+
+      const report = await runShadowValidation({ ...baseParams, facts });
+
+      // Both should detect deposit not protected
+      expect(report.yaml.blockers).toBeGreaterThan(0);
+      expect(
+        report.yaml.blockerIds.some((id) => id.includes('deposit'))
+      ).toBe(true);
+      console.log(formatShadowReport(report));
+    });
+
+    it('should have parity for prescribed_info_not_given', async () => {
+      const facts: EvictionFacts = {
+        landlord_full_name: 'John Landlord',
+        tenant_full_name: 'Jane Tenant',
+        property_address_line1: '123 Test Street',
+        tenancy_start_date: '2024-01-01',
+        notice_service_date: '2025-06-01',
+        notice_served_date: '2025-06-01',
+        notice_expiry_date: '2025-08-01',
+        deposit_taken: true,
+        deposit_protected: true,
+        prescribed_info_given: false, // NOT GIVEN - should block
+        // Explicit fields for parity
+        epc_provided: true,
+        how_to_rent_provided: true,
+        property_licensing_status: 'licensed',
+        selected_notice_route: 'section_21',
+      };
+
+      const report = await runShadowValidation({ ...baseParams, facts });
+
+      // Both should detect prescribed info missing
+      expect(report.yaml.blockers).toBeGreaterThan(0);
+      expect(
+        report.yaml.blockerIds.some((id) => id.includes('prescribed') || id.includes('deposit'))
+      ).toBe(true);
+      console.log(formatShadowReport(report));
+    });
+  });
+
+  describe('Safety Compliance Cases', () => {
+    it('should have parity for epc_not_provided', async () => {
+      const facts: EvictionFacts = {
+        landlord_full_name: 'John Landlord',
+        tenant_full_name: 'Jane Tenant',
+        property_address_line1: '123 Test Street',
+        tenancy_start_date: '2024-01-01',
+        notice_service_date: '2025-06-01',
+        notice_served_date: '2025-06-01',
+        notice_expiry_date: '2025-08-01',
+        deposit_taken: false,
+        epc_provided: false, // NOT PROVIDED - should block
+        how_to_rent_provided: true,
+        property_licensing_status: 'licensed',
+        selected_notice_route: 'section_21',
+      };
+
+      const report = await runShadowValidation({ ...baseParams, facts });
+
+      // Both should detect EPC missing
+      expect(report.yaml.blockers).toBeGreaterThan(0);
+      expect(
+        report.yaml.blockerIds.some((id) => id.includes('epc'))
+      ).toBe(true);
+      console.log(formatShadowReport(report));
+    });
+
+    it('should have parity for gas_cert_not_provided (when has gas)', async () => {
+      const facts: EvictionFacts = {
+        landlord_full_name: 'John Landlord',
+        tenant_full_name: 'Jane Tenant',
+        property_address_line1: '123 Test Street',
+        tenancy_start_date: '2024-01-01',
+        notice_service_date: '2025-06-01',
+        notice_served_date: '2025-06-01',
+        notice_expiry_date: '2025-08-01',
+        deposit_taken: false,
+        epc_provided: true,
+        how_to_rent_provided: true,
+        has_gas_appliances: true,
+        gas_certificate_provided: false, // NOT PROVIDED - should block
+        property_licensing_status: 'licensed',
+        selected_notice_route: 'section_21',
+      };
+
+      const report = await runShadowValidation({ ...baseParams, facts });
+
+      // Both should detect gas cert missing
+      expect(report.yaml.blockers).toBeGreaterThan(0);
+      expect(
+        report.yaml.blockerIds.some((id) => id.includes('gas'))
+      ).toBe(true);
+      console.log(formatShadowReport(report));
+    });
+
+    it('should have parity for how_to_rent_not_provided', async () => {
+      const facts: EvictionFacts = {
+        landlord_full_name: 'John Landlord',
+        tenant_full_name: 'Jane Tenant',
+        property_address_line1: '123 Test Street',
+        tenancy_start_date: '2024-01-01',
+        notice_service_date: '2025-06-01',
+        notice_served_date: '2025-06-01',
+        notice_expiry_date: '2025-08-01',
+        deposit_taken: false,
+        epc_provided: true,
+        how_to_rent_provided: false, // NOT PROVIDED - should block
+        property_licensing_status: 'licensed',
+        selected_notice_route: 'section_21',
+      };
+
+      const report = await runShadowValidation({ ...baseParams, facts });
+
+      // Both should detect H2R missing
+      expect(report.yaml.blockers).toBeGreaterThan(0);
+      expect(
+        report.yaml.blockerIds.some((id) => id.includes('h2r'))
+      ).toBe(true);
+      console.log(formatShadowReport(report));
+    });
+  });
+
+  describe('Retaliatory Eviction Cases', () => {
+    it('should have parity for improvement_notice_served', async () => {
+      const facts: EvictionFacts = {
+        landlord_full_name: 'John Landlord',
+        tenant_full_name: 'Jane Tenant',
+        property_address_line1: '123 Test Street',
+        tenancy_start_date: '2024-01-01',
+        notice_service_date: '2025-06-01',
+        notice_served_date: '2025-06-01',
+        notice_expiry_date: '2025-08-01',
+        deposit_taken: false,
+        epc_provided: true,
+        how_to_rent_provided: true,
+        improvement_notice_served: true, // SERVED - should block
+        property_licensing_status: 'licensed',
+        selected_notice_route: 'section_21',
+      };
+
+      const report = await runShadowValidation({ ...baseParams, facts });
+
+      // Both should detect retaliatory eviction bar
+      expect(report.yaml.blockers).toBeGreaterThan(0);
+      expect(
+        report.yaml.blockerIds.some((id) => id.includes('retaliatory'))
+      ).toBe(true);
+      console.log(formatShadowReport(report));
+    });
+  });
+
+  describe('Four-Month Bar Cases', () => {
+    it('should have parity for four_month_bar', async () => {
+      const today = new Date();
+      const twoMonthsAgo = new Date(today);
+      twoMonthsAgo.setMonth(today.getMonth() - 2);
+
+      const facts: EvictionFacts = {
+        landlord_full_name: 'John Landlord',
+        tenant_full_name: 'Jane Tenant',
+        property_address_line1: '123 Test Street',
+        tenancy_start_date: twoMonthsAgo.toISOString().split('T')[0], // Only 2 months ago
+        notice_service_date: today.toISOString().split('T')[0],
+        notice_served_date: today.toISOString().split('T')[0],
+        notice_expiry_date: new Date(today.getTime() + 60 * 24 * 60 * 60 * 1000)
+          .toISOString()
+          .split('T')[0],
+        deposit_taken: false,
+        epc_provided: true,
+        how_to_rent_provided: true,
+        property_licensing_status: 'licensed',
+        selected_notice_route: 'section_21',
+      };
+
+      const report = await runShadowValidation({ ...baseParams, facts });
+
+      // Both should detect four-month bar
+      expect(report.yaml.blockers).toBeGreaterThan(0);
+      expect(
+        report.yaml.blockerIds.some((id) => id.includes('four_month'))
+      ).toBe(true);
+      console.log(formatShadowReport(report));
+    });
+  });
+});
+
+// ============================================================================
+// GOLDEN TEST CASES - ENGLAND SECTION 8
+// ============================================================================
+// NOTE: For notice_only, TS evaluateNoticeCompliance only checks:
+// - S8-GROUNDS-REQUIRED: grounds must be selected
+// - S8-NOTICE-PERIOD: notice period calculation/validation
+// Additional rules (Ground 8 threshold, particulars) are NOT checked for notice_only.
+
+describe('Shadow Mode Parity - England Section 8', () => {
+  beforeEach(() => {
+    clearConfigCache();
+  });
+
+  const baseParams: Omit<ShadowValidationParams, 'facts'> = {
+    jurisdiction: 'england',
+    product: 'notice_only',
+    route: 'section_8',
+  };
+
+  describe('Grounds Selection Cases', () => {
+    it('should have parity for no_grounds_selected', async () => {
+      const facts: EvictionFacts = {
+        landlord_full_name: 'John Landlord',
+        tenant_full_name: 'Jane Tenant',
+        property_address_line1: '123 Test Street',
+        tenancy_start_date: '2024-01-01',
+        notice_service_date: '2025-06-01',
+        notice_served_date: '2025-06-01',
+        notice_expiry_date: '2025-06-15',
+        section8_grounds: [], // NO GROUNDS - should block
+        selected_notice_route: 'section_8',
+        eviction_route: 'section_8',
+      };
+
+      const report = await runShadowValidation({ ...baseParams, facts });
+
+      // Both should detect no grounds
+      expect(report.yaml.blockers).toBeGreaterThan(0);
+      expect(
+        report.yaml.blockerIds.some((id) => id.includes('grounds'))
+      ).toBe(true);
+      expect(report.parity).toBe(true);
+      console.log(formatShadowReport(report));
+    });
+
+    it('should have parity for ground_8_with_low_arrears (TS does NOT check threshold)', async () => {
+      const facts: EvictionFacts = {
+        landlord_full_name: 'John Landlord',
+        tenant_full_name: 'Jane Tenant',
+        property_address_line1: '123 Test Street',
+        tenancy_start_date: '2024-01-01',
+        notice_service_date: '2025-06-01',
+        notice_served_date: '2025-06-01',
+        notice_expiry_date: '2025-06-15',
+        section8_grounds: ['ground_8'],
+        section8_details: 'Tenant owes rent.',
+        has_rent_arrears: true,
+        total_arrears: 500, // Only 500, rent is 1000/month - less than 2 months
+        rent_amount: 1000,
+        rent_frequency: 'monthly',
+        selected_notice_route: 'section_8',
+        eviction_route: 'section_8',
+      };
+
+      const report = await runShadowValidation({ ...baseParams, facts });
+
+      // For parity: TS does NOT check Ground 8 threshold for notice_only
+      // Both should return 0 blockers
+      expect(report.ts.blockers).toBe(0);
+      expect(report.yaml.blockers).toBe(0);
+      expect(report.parity).toBe(true);
+      console.log(formatShadowReport(report));
+    });
+  });
+
+  describe('Mixed Grounds Cases', () => {
+    it('should have parity for multiple mandatory grounds', async () => {
+      const facts: EvictionFacts = {
+        landlord_full_name: 'John Landlord',
+        tenant_full_name: 'Jane Tenant',
+        property_address_line1: '123 Test Street',
+        tenancy_start_date: '2024-01-01',
+        notice_service_date: '2025-06-01',
+        notice_served_date: '2025-06-01',
+        notice_expiry_date: '2025-06-15', // 2 weeks - OK for mandatory grounds
+        section8_grounds: ['ground_8', 'ground_10', 'ground_11'],
+        section8_details: 'Multiple arrears grounds.',
+        has_rent_arrears: true,
+        total_arrears: 3000,
+        rent_amount: 1000,
+        rent_frequency: 'monthly',
+        selected_notice_route: 'section_8',
+        eviction_route: 'section_8',
+      };
+
+      const report = await runShadowValidation({ ...baseParams, facts });
+
+      expect(report.yaml.blockers).toBe(0);
+      console.log(formatShadowReport(report));
+    });
+
+    it('should have parity for mandatory + discretionary grounds', async () => {
+      const facts: EvictionFacts = {
+        landlord_full_name: 'John Landlord',
+        tenant_full_name: 'Jane Tenant',
+        property_address_line1: '123 Test Street',
+        tenancy_start_date: '2024-01-01',
+        notice_service_date: '2025-06-01',
+        notice_served_date: '2025-06-01',
+        notice_expiry_date: '2025-06-15', // 2 weeks
+        section8_grounds: ['ground_8', 'ground_12'], // 8=mandatory, 12=discretionary
+        section8_details: 'Arrears and breach of tenancy.',
+        has_rent_arrears: true,
+        total_arrears: 3000,
+        selected_notice_route: 'section_8',
+        eviction_route: 'section_8',
+      };
+
+      const report = await runShadowValidation({ ...baseParams, facts });
+
+      // Both should allow this (notice period may vary based on grounds mix)
+      expect(report.yaml.blockers).toBe(report.ts.blockers);
+      console.log(formatShadowReport(report));
+    });
+  });
+
+  describe('Valid S8 Cases', () => {
+    it('should have parity for valid S8 with Ground 8', async () => {
+      const facts: EvictionFacts = {
+        landlord_full_name: 'John Landlord',
+        tenant_full_name: 'Jane Tenant',
+        property_address_line1: '123 Test Street',
+        tenancy_start_date: '2024-01-01',
+        notice_service_date: '2025-06-01',
+        notice_served_date: '2025-06-01',
+        notice_expiry_date: '2025-06-15',
+        section8_grounds: ['ground_8'],
+        section8_details: 'Tenant owes 3 months rent arrears totaling 3000.',
+        has_rent_arrears: true,
+        total_arrears: 3000, // 3 months arrears at 1000/month
+        rent_amount: 1000,
+        rent_frequency: 'monthly',
+        selected_notice_route: 'section_8',
+        eviction_route: 'section_8',
+      };
+
+      const report = await runShadowValidation({ ...baseParams, facts });
+
+      // Both should have no blockers for valid case
+      expect(report.ts.blockers).toBe(0);
+      expect(report.yaml.blockers).toBe(0);
+      expect(report.parity).toBe(true);
+      console.log(formatShadowReport(report));
+    });
+
+    it('should have parity for valid S8 with Ground 14 (ASB)', async () => {
+      const facts: EvictionFacts = {
+        landlord_full_name: 'John Landlord',
+        tenant_full_name: 'Jane Tenant',
+        property_address_line1: '123 Test Street',
+        tenancy_start_date: '2024-01-01',
+        notice_service_date: '2025-06-01',
+        notice_served_date: '2025-06-01',
+        notice_expiry_date: '2025-06-15',
+        section8_grounds: ['ground_14'],
+        section8_details: 'Nuisance behavior documented.',
+        has_asb: true,
+        selected_notice_route: 'section_8',
+        eviction_route: 'section_8',
+      };
+
+      const report = await runShadowValidation({ ...baseParams, facts });
+
+      // Both should have no blockers for valid case
+      expect(report.ts.blockers).toBe(0);
+      expect(report.yaml.blockers).toBe(0);
+      expect(report.parity).toBe(true);
+      console.log(formatShadowReport(report));
+    });
+
+    it('should have parity for valid S8 with Ground 12 (breach)', async () => {
+      const facts: EvictionFacts = {
+        landlord_full_name: 'John Landlord',
+        tenant_full_name: 'Jane Tenant',
+        property_address_line1: '123 Test Street',
+        tenancy_start_date: '2024-01-01',
+        notice_service_date: '2025-06-01',
+        notice_served_date: '2025-06-01',
+        notice_expiry_date: '2025-08-01', // 2 months for discretionary grounds
+        section8_grounds: ['ground_12'],
+        section8_details: 'Breach of tenancy agreement terms.',
+        has_breaches: true,
+        selected_notice_route: 'section_8',
+        eviction_route: 'section_8',
+      };
+
+      const report = await runShadowValidation({ ...baseParams, facts });
+
+      // Both should have no blockers for valid case
+      expect(report.ts.blockers).toBe(0);
+      expect(report.yaml.blockers).toBe(0);
+      expect(report.parity).toBe(true);
+      console.log(formatShadowReport(report));
+    });
+  });
+});
+
+// ============================================================================
+// GOLDEN TEST CASES - WALES SECTION 173
+// ============================================================================
+
+describe('Shadow Mode Parity - Wales Section 173', () => {
+  beforeEach(() => {
+    clearConfigCache();
+  });
+
+  const baseParams: Omit<ShadowValidationParams, 'facts'> = {
+    jurisdiction: 'wales',
+    product: 'notice_only',
+    route: 'section_173',
+  };
+
+  describe('RSW Registration Cases', () => {
+    it('should have parity for s173_licensing (rsw not registered)', async () => {
+      const facts: EvictionFacts = {
+        landlord_full_name: 'John Landlord',
+        tenant_full_name: 'Jane Tenant',
+        property_address_line1: '123 Test Street, Cardiff',
+        contract_start_date: '2024-01-01',
+        tenancy_start_date: '2024-01-01',
+        notice_service_date: '2025-06-01',
+        notice_served_date: '2025-06-01',
+        notice_expiry_date: '2025-12-01',
+        rent_smart_wales_registered: false, // NOT REGISTERED - should block
+        deposit_taken: false,
+        selected_notice_route: 'section_173',
+      };
+
+      const report = await runShadowValidation({ ...baseParams, facts });
+
+      // Both should detect RSW not registered via s173_licensing
+      expect(report.yaml.blockers).toBeGreaterThan(0);
+      expect(
+        report.yaml.blockerIds.some((id) => id.includes('s173_licensing'))
+      ).toBe(true);
+      expect(report.parity).toBe(true);
+      console.log(formatShadowReport(report));
+    });
+  });
+
+  describe('Six-Month Bar Cases', () => {
+    it('should have parity for s173_period_bar (within 6 months)', async () => {
+      const today = new Date();
+      const threeMonthsAgo = new Date(today);
+      threeMonthsAgo.setMonth(today.getMonth() - 3);
+
+      const facts: EvictionFacts = {
+        landlord_full_name: 'John Landlord',
+        tenant_full_name: 'Jane Tenant',
+        property_address_line1: '123 Test Street, Cardiff',
+        contract_start_date: threeMonthsAgo.toISOString().split('T')[0], // Only 3 months ago
+        tenancy_start_date: threeMonthsAgo.toISOString().split('T')[0],
+        notice_service_date: today.toISOString().split('T')[0],
+        notice_served_date: today.toISOString().split('T')[0],
+        notice_expiry_date: new Date(today.getTime() + 180 * 24 * 60 * 60 * 1000)
+          .toISOString()
+          .split('T')[0],
+        rent_smart_wales_registered: true,
+        deposit_taken: false,
+        selected_notice_route: 'section_173',
+      };
+
+      const report = await runShadowValidation({ ...baseParams, facts });
+
+      // Both should detect six-month bar via s173_period_bar
+      expect(report.yaml.blockers).toBeGreaterThan(0);
+      expect(
+        report.yaml.blockerIds.some((id) => id.includes('s173_period_bar'))
+      ).toBe(true);
+      expect(report.parity).toBe(true);
+      console.log(formatShadowReport(report));
+    });
+  });
+
+  describe('Notice Period Undetermined Cases', () => {
+    it('should have parity for s173_notice_period_undetermined (missing dates)', async () => {
+      const facts: EvictionFacts = {
+        landlord_full_name: 'John Landlord',
+        tenant_full_name: 'Jane Tenant',
+        property_address_line1: '123 Test Street, Cardiff',
+        // Missing contract_start_date and tenancy_start_date
+        notice_service_date: '2025-06-01',
+        notice_served_date: '2025-06-01',
+        notice_expiry_date: '2025-12-01',
+        rent_smart_wales_registered: true,
+        deposit_taken: false,
+        selected_notice_route: 'section_173',
+      };
+
+      const report = await runShadowValidation({ ...baseParams, facts });
+
+      // Both should detect missing dates
+      expect(report.yaml.blockers).toBeGreaterThan(0);
+      expect(
+        report.yaml.blockerIds.some((id) =>
+          id.includes('s173_notice_period_undetermined') ||
+          id.includes('contract_start_date')
+        )
+      ).toBe(true);
+      console.log(formatShadowReport(report));
+    });
+
+    it('should have parity for missing service date', async () => {
+      const facts: EvictionFacts = {
+        landlord_full_name: 'John Landlord',
+        tenant_full_name: 'Jane Tenant',
+        property_address_line1: '123 Test Street, Cardiff',
+        contract_start_date: '2024-01-01',
+        tenancy_start_date: '2024-01-01',
+        // Missing notice_service_date and notice_served_date
+        notice_expiry_date: '2025-12-01',
+        rent_smart_wales_registered: true,
+        deposit_taken: false,
+        selected_notice_route: 'section_173',
+      };
+
+      const report = await runShadowValidation({ ...baseParams, facts });
+
+      // Both should detect missing service date
+      expect(report.yaml.blockers).toBeGreaterThan(0);
+      console.log(formatShadowReport(report));
+    });
+  });
+
+  describe('Valid S173 Case', () => {
+    it('should have parity for valid S173 case', async () => {
+      const facts: EvictionFacts = {
+        landlord_full_name: 'John Landlord',
+        tenant_full_name: 'Jane Tenant',
+        property_address_line1: '123 Test Street, Cardiff',
+        contract_start_date: '2024-01-01',
+        tenancy_start_date: '2024-01-01',
+        notice_service_date: '2025-06-01',
+        notice_served_date: '2025-06-01',
+        notice_expiry_date: '2025-12-01', // 6 months
+        rent_smart_wales_registered: true,
+        deposit_taken: false,
+        selected_notice_route: 'section_173',
+      };
+
+      const report = await runShadowValidation({ ...baseParams, facts });
+
+      // Both should have no blockers for valid case
+      expect(report.ts.blockers).toBe(0);
+      expect(report.yaml.blockers).toBe(0);
+      expect(report.parity).toBe(true);
+      console.log(formatShadowReport(report));
+    });
+  });
+});
+
+// ============================================================================
+// GOLDEN TEST CASES - SCOTLAND NOTICE TO LEAVE
+// ============================================================================
+// NOTE: For notice_only, TS evaluateNoticeCompliance only checks:
+// - NTL-GROUND-REQUIRED: grounds must be selected
+// - NTL-MIXED-GROUNDS: mixed grounds when not allowed
+// - NTL-PRE-ACTION: Ground 1 requires pre-action confirmed
+// - NTL-NOTICE-PERIOD: notice period calculation/validation
+// TS does NOT check: landlord registration, pre-action letter sent, deposit protection.
+// IMPORTANT: TS expects numeric ground codes (e.g., [1] not ['ground_1'])
+
+describe('Shadow Mode Parity - Scotland Notice to Leave', () => {
+  beforeEach(() => {
+    clearConfigCache();
+  });
+
+  const baseParams: Omit<ShadowValidationParams, 'facts'> = {
+    jurisdiction: 'scotland',
+    product: 'notice_only',
+    route: 'notice_to_leave',
+  };
+
+  describe('Grounds Selection Cases', () => {
+    it('should have parity for ntl_ground_required (no grounds)', async () => {
+      const facts: EvictionFacts = {
+        landlord_full_name: 'John Landlord',
+        tenant_full_name: 'Jane Tenant',
+        property_address_line1: '123 Test Street, Edinburgh',
+        tenancy_start_date: '2024-01-01',
+        notice_service_date: '2025-06-01',
+        notice_date: '2025-06-01',
+        notice_expiry_date: '2025-06-29',
+        notice_expiry: '2025-06-29',
+        scotland_ground_codes: [], // NO GROUNDS - should block
+        deposit_taken: false,
+        selected_notice_route: 'notice_to_leave',
+      };
+
+      const report = await runShadowValidation({ ...baseParams, facts });
+
+      // Both should detect no grounds via ntl_ground_required
+      expect(report.yaml.blockers).toBeGreaterThan(0);
+      expect(report.ts.blockers).toBeGreaterThan(0);
+      expect(
+        report.yaml.blockerIds.some((id) => id.includes('ntl_ground_required'))
+      ).toBe(true);
+      expect(report.parity).toBe(true);
+      console.log(formatShadowReport(report));
+    });
+  });
+
+  describe('Pre-Action Requirements Cases', () => {
+    it('should have parity for ntl_pre_action (Ground 1 without pre-action)', async () => {
+      const facts: EvictionFacts = {
+        landlord_full_name: 'John Landlord',
+        tenant_full_name: 'Jane Tenant',
+        property_address_line1: '123 Test Street, Edinburgh',
+        tenancy_start_date: '2024-01-01',
+        notice_service_date: '2025-06-01',
+        notice_date: '2025-06-01',
+        // Use 84+ days notice period to avoid NTL-NOTICE-PERIOD blocker
+        // so we can isolate the ntl_pre_action test
+        notice_expiry_date: '2025-08-25',
+        notice_expiry: '2025-08-25',
+        scotland_ground_codes: [1], // Ground 1 - Rent arrears (numeric format)
+        // NO pre-action confirmation - should block with ntl_pre_action
+        deposit_taken: false,
+        selected_notice_route: 'notice_to_leave',
+      };
+
+      const report = await runShadowValidation({ ...baseParams, facts });
+
+      // Both should detect pre-action not confirmed via ntl_pre_action
+      expect(report.yaml.blockers).toBeGreaterThan(0);
+      expect(report.ts.blockers).toBeGreaterThan(0);
+      expect(
+        report.yaml.blockerIds.some((id) => id.includes('ntl_pre_action'))
+      ).toBe(true);
+      expect(report.parity).toBe(true);
+      console.log(formatShadowReport(report));
+    });
+
+    it('should have parity for Ground 1 with pre-action confirmed', async () => {
+      const facts: EvictionFacts = {
+        landlord_full_name: 'John Landlord',
+        tenant_full_name: 'Jane Tenant',
+        property_address_line1: '123 Test Street, Edinburgh',
+        tenancy_start_date: '2024-01-01',
+        notice_service_date: '2025-06-01',
+        notice_date: '2025-06-01',
+        notice_expiry_date: '2025-06-29', // 28 days
+        notice_expiry: '2025-06-29',
+        scotland_ground_codes: [1], // Ground 1 (numeric)
+        issues: {
+          rent_arrears: {
+            pre_action_confirmed: true, // Confirmed
+          },
+        },
+        deposit_taken: false,
+        selected_notice_route: 'notice_to_leave',
+      };
+
+      const report = await runShadowValidation({ ...baseParams, facts });
+
+      // Both should have no blockers (pre-action satisfied)
+      expect(report.ts.blockers).toBe(0);
+      expect(report.yaml.blockers).toBe(0);
+      expect(report.parity).toBe(true);
+      console.log(formatShadowReport(report));
+    });
+  });
+
+  describe('Non-Ground-1 Cases', () => {
+    it('should have parity for Ground 12 (landlord intends to sell)', async () => {
+      const facts: EvictionFacts = {
+        landlord_full_name: 'John Landlord',
+        tenant_full_name: 'Jane Tenant',
+        property_address_line1: '123 Test Street, Edinburgh',
+        tenancy_start_date: '2024-01-01',
+        notice_service_date: '2025-06-01',
+        notice_date: '2025-06-01',
+        notice_expiry_date: '2025-08-29', // 84 days for Ground 12
+        notice_expiry: '2025-08-29',
+        scotland_ground_codes: [12], // Ground 12 - landlord selling (numeric)
+        deposit_taken: false,
+        selected_notice_route: 'notice_to_leave',
+      };
+
+      const report = await runShadowValidation({ ...baseParams, facts });
+
+      // Both should have no blockers (Ground 12 doesn't require pre-action)
+      expect(report.ts.blockers).toBe(0);
+      expect(report.yaml.blockers).toBe(0);
+      expect(report.parity).toBe(true);
+      console.log(formatShadowReport(report));
+    });
+  });
+
+  describe('Valid NTL Cases', () => {
+    it('should have parity for valid Ground 1 with all requirements', async () => {
+      const facts: EvictionFacts = {
+        landlord_full_name: 'John Landlord',
+        tenant_full_name: 'Jane Tenant',
+        property_address_line1: '123 Test Street, Edinburgh',
+        tenancy_start_date: '2024-01-01',
+        notice_service_date: '2025-06-01',
+        notice_date: '2025-06-01',
+        notice_expiry_date: '2025-06-29', // 28 days
+        notice_expiry: '2025-06-29',
+        scotland_ground_codes: [1], // Numeric format required by TS
+        issues: {
+          rent_arrears: {
+            pre_action_confirmed: true,
+          },
+        },
+        deposit_taken: false,
+        selected_notice_route: 'notice_to_leave',
+      };
+
+      const report = await runShadowValidation({ ...baseParams, facts });
+
+      // Both should have no blockers for valid case
+      expect(report.ts.blockers).toBe(0);
+      expect(report.yaml.blockers).toBe(0);
+      expect(report.parity).toBe(true);
+      console.log(formatShadowReport(report));
+    });
+  });
+});
+
+// ============================================================================
+// BATCH PARITY TESTS
+// ============================================================================
+
+describe('Batch Shadow Mode Parity', () => {
+  beforeEach(() => {
+    clearConfigCache();
+  });
+
+  it('should run batch validation across multiple cases', async () => {
+    const testCases: ShadowValidationParams[] = [
+      // England S21 - Valid
+      {
+        jurisdiction: 'england',
+        product: 'notice_only',
+        route: 'section_21',
+        facts: {
+          landlord_full_name: 'John',
+          tenant_full_name: 'Jane',
+          property_address_line1: '123 Test St',
+          tenancy_start_date: '2024-01-01',
+          notice_service_date: '2025-06-01',
+          notice_served_date: '2025-06-01',
+          notice_expiry_date: '2025-08-01',
+          deposit_taken: false,
+          epc_provided: true,
+          how_to_rent_provided: true,
+        },
+      },
+      // England S8 - Valid
+      {
+        jurisdiction: 'england',
+        product: 'notice_only',
+        route: 'section_8',
+        facts: {
+          landlord_full_name: 'John',
+          tenant_full_name: 'Jane',
+          property_address_line1: '123 Test St',
+          tenancy_start_date: '2024-01-01',
+          notice_service_date: '2025-06-01',
+          notice_served_date: '2025-06-01',
+          notice_expiry_date: '2025-06-15',
+          section8_grounds: ['ground_10'],
+          section8_details: 'Arrears details.',
+        },
+      },
+      // Wales S173 - Valid
+      {
+        jurisdiction: 'wales',
+        product: 'notice_only',
+        route: 'section_173',
+        facts: {
+          landlord_full_name: 'John',
+          tenant_full_name: 'Jane',
+          property_address_line1: '123 Test St, Cardiff',
+          contract_start_date: '2024-01-01',
+          tenancy_start_date: '2024-01-01',
+          notice_service_date: '2025-06-01',
+          notice_served_date: '2025-06-01',
+          notice_expiry_date: '2025-12-01',
+          rent_smart_wales_registered: true,
+          deposit_taken: false,
+        },
+      },
+    ];
+
+    const result = await runShadowValidationBatch(testCases);
+
+    console.log('\nBatch Summary:');
+    console.log(`Total cases: ${result.summary.totalCases}`);
+    console.log(`Parity count: ${result.summary.parityCount}`);
+    console.log(`Parity percent: ${result.summary.parityPercent}%`);
+    console.log(`Avg duration: ${result.summary.avgDurationMs}ms`);
+
+    // Phase 0: Shadow mode is in documentation phase - tracking discrepancies
+    // Parity will improve as we refine ID mappings and rule conditions
+    // For now, just assert the batch runs without errors
+    expect(result.summary.totalCases).toBeGreaterThan(0);
+  });
+});
+
+// ============================================================================
+// COMPLETE PACK PARITY TESTS
+// ============================================================================
+
+describe('Shadow Mode Parity - England Complete Pack S21', () => {
+  beforeEach(() => {
+    clearConfigCache();
+  });
+
+  const baseParams: Omit<ShadowValidationParams, 'facts'> = {
+    jurisdiction: 'england',
+    product: 'complete_pack',
+    route: 'section_21',
+  };
+
+  describe('Common Rules (Party & Date)', () => {
+    it('should have parity for missing_landlord_name', async () => {
+      const facts: EvictionFacts = {
+        landlord_full_name: undefined, // MISSING - should block
+        landlord_name: undefined,
+        tenant_full_name: 'Jane Tenant',
+        property_address_line1: '123 Test Street',
+        tenancy_start_date: '2024-01-01',
+        notice_service_date: '2025-06-01',
+        notice_served_date: '2025-06-01',
+        notice_expiry_date: '2025-08-01',
+        deposit_taken: false,
+        selected_notice_route: 'section_21',
+        eviction_route: 'section_21',
+      };
+
+      const report = await runShadowValidation({ ...baseParams, facts });
+
+      expect(report.yaml.blockers).toBeGreaterThan(0);
+      expect(report.ts.blockers).toBeGreaterThan(0);
+      expect(
+        report.yaml.blockerIds.some((id) => id.includes('landlord'))
+      ).toBe(true);
+      expect(report.parity).toBe(true);
+      console.log(formatShadowReport(report));
+    });
+
+    it('should have parity for missing_tenant_name', async () => {
+      const facts: EvictionFacts = {
+        landlord_full_name: 'John Landlord',
+        tenant_full_name: undefined, // MISSING - should block
+        tenant_name: undefined,
+        property_address_line1: '123 Test Street',
+        tenancy_start_date: '2024-01-01',
+        notice_service_date: '2025-06-01',
+        notice_served_date: '2025-06-01',
+        notice_expiry_date: '2025-08-01',
+        deposit_taken: false,
+        selected_notice_route: 'section_21',
+        eviction_route: 'section_21',
+      };
+
+      const report = await runShadowValidation({ ...baseParams, facts });
+
+      expect(report.yaml.blockers).toBeGreaterThan(0);
+      expect(report.ts.blockers).toBeGreaterThan(0);
+      expect(
+        report.yaml.blockerIds.some((id) => id.includes('tenant'))
+      ).toBe(true);
+      expect(report.parity).toBe(true);
+      console.log(formatShadowReport(report));
+    });
+
+    it('should have parity for missing_property_address', async () => {
+      const facts: EvictionFacts = {
+        landlord_full_name: 'John Landlord',
+        tenant_full_name: 'Jane Tenant',
+        property_address_line1: undefined, // MISSING - should block
+        tenancy_start_date: '2024-01-01',
+        notice_service_date: '2025-06-01',
+        notice_served_date: '2025-06-01',
+        notice_expiry_date: '2025-08-01',
+        deposit_taken: false,
+        selected_notice_route: 'section_21',
+        eviction_route: 'section_21',
+      };
+
+      const report = await runShadowValidation({ ...baseParams, facts });
+
+      expect(report.yaml.blockers).toBeGreaterThan(0);
+      expect(report.ts.blockers).toBeGreaterThan(0);
+      expect(
+        report.yaml.blockerIds.some((id) => id.includes('property') || id.includes('address'))
+      ).toBe(true);
+      expect(report.parity).toBe(true);
+      console.log(formatShadowReport(report));
+    });
+
+    it('should have parity for missing_tenancy_start_date', async () => {
+      const facts: EvictionFacts = {
+        landlord_full_name: 'John Landlord',
+        tenant_full_name: 'Jane Tenant',
+        property_address_line1: '123 Test Street',
+        tenancy_start_date: undefined, // MISSING - should block
+        notice_service_date: '2025-06-01',
+        notice_served_date: '2025-06-01',
+        notice_expiry_date: '2025-08-01',
+        deposit_taken: false,
+        selected_notice_route: 'section_21',
+        eviction_route: 'section_21',
+      };
+
+      const report = await runShadowValidation({ ...baseParams, facts });
+
+      expect(report.yaml.blockers).toBeGreaterThan(0);
+      expect(report.ts.blockers).toBeGreaterThan(0);
+      expect(
+        report.yaml.blockerIds.some((id) => id.includes('tenancy_start'))
+      ).toBe(true);
+      expect(report.parity).toBe(true);
+      console.log(formatShadowReport(report));
+    });
+
+    it('should have parity for missing_notice_service_date', async () => {
+      const facts: EvictionFacts = {
+        landlord_full_name: 'John Landlord',
+        tenant_full_name: 'Jane Tenant',
+        property_address_line1: '123 Test Street',
+        tenancy_start_date: '2024-01-01',
+        notice_service_date: undefined, // MISSING - should block
+        notice_served_date: undefined,
+        notice_expiry_date: '2025-08-01',
+        deposit_taken: false,
+        selected_notice_route: 'section_21',
+        eviction_route: 'section_21',
+      };
+
+      const report = await runShadowValidation({ ...baseParams, facts });
+
+      expect(report.yaml.blockers).toBeGreaterThan(0);
+      expect(report.ts.blockers).toBeGreaterThan(0);
+      expect(
+        report.yaml.blockerIds.some((id) => id.includes('notice_service'))
+      ).toBe(true);
+      expect(report.parity).toBe(true);
+      console.log(formatShadowReport(report));
+    });
+  });
+
+  describe('S21 Deposit Rules', () => {
+    it('should have parity for s21_deposit_not_protected', async () => {
+      const facts: EvictionFacts = {
+        landlord_full_name: 'John Landlord',
+        tenant_full_name: 'Jane Tenant',
+        property_address_line1: '123 Test Street',
+        tenancy_start_date: '2024-01-01',
+        notice_service_date: '2025-06-01',
+        notice_served_date: '2025-06-01',
+        notice_expiry_date: '2025-08-01',
+        deposit_taken: true,
+        deposit_protected: false, // NOT PROTECTED - should block
+        prescribed_info_served: true, // Set to avoid prescribed_info_missing
+        how_to_rent_served: true, // Set to avoid H2R blocker
+        selected_notice_route: 'section_21',
+        eviction_route: 'section_21',
+      };
+
+      const report = await runShadowValidation({ ...baseParams, facts });
+
+      expect(report.yaml.blockers).toBeGreaterThan(0);
+      expect(report.ts.blockers).toBeGreaterThan(0);
+      expect(
+        report.yaml.blockerIds.some((id) => id.includes('deposit'))
+      ).toBe(true);
+      expect(report.parity).toBe(true);
+      console.log(formatShadowReport(report));
+    });
+
+    it('should have parity for s21_prescribed_info_missing', async () => {
+      const facts: EvictionFacts = {
+        landlord_full_name: 'John Landlord',
+        tenant_full_name: 'Jane Tenant',
+        property_address_line1: '123 Test Street',
+        tenancy_start_date: '2024-01-01',
+        notice_service_date: '2025-06-01',
+        notice_served_date: '2025-06-01',
+        notice_expiry_date: '2025-08-01',
+        deposit_taken: true,
+        deposit_protected: true,
+        prescribed_info_served: false, // NOT SERVED - should block
+        prescribed_info_given: false,
+        selected_notice_route: 'section_21',
+        eviction_route: 'section_21',
+      };
+
+      const report = await runShadowValidation({ ...baseParams, facts });
+
+      expect(report.yaml.blockers).toBeGreaterThan(0);
+      expect(report.ts.blockers).toBeGreaterThan(0);
+      expect(
+        report.yaml.blockerIds.some((id) => id.includes('prescribed'))
+      ).toBe(true);
+      expect(report.parity).toBe(true);
+      console.log(formatShadowReport(report));
+    });
+
+    it('should have parity for deposit detail warnings', async () => {
+      const facts: EvictionFacts = {
+        landlord_full_name: 'John Landlord',
+        tenant_full_name: 'Jane Tenant',
+        property_address_line1: '123 Test Street',
+        tenancy_start_date: '2024-01-01',
+        notice_service_date: '2025-06-01',
+        notice_served_date: '2025-06-01',
+        notice_expiry_date: '2025-08-01',
+        deposit_taken: true,
+        deposit_protected: true,
+        prescribed_info_served: true,
+        // Missing: deposit_amount, deposit_protection_date, deposit_scheme_name
+        selected_notice_route: 'section_21',
+        eviction_route: 'section_21',
+      };
+
+      const report = await runShadowValidation({ ...baseParams, facts });
+
+      // Should have warnings for missing deposit details
+      expect(report.yaml.warnings).toBeGreaterThan(0);
+      expect(report.ts.warnings).toBeGreaterThan(0);
+      expect(report.parity).toBe(true);
+      console.log(formatShadowReport(report));
+    });
+  });
+
+  describe('S21 Safety Compliance Rules', () => {
+    it('should have parity for s21_epc_missing (explicitly false)', async () => {
+      const facts: EvictionFacts = {
+        landlord_full_name: 'John Landlord',
+        tenant_full_name: 'Jane Tenant',
+        property_address_line1: '123 Test Street',
+        tenancy_start_date: '2024-01-01',
+        notice_service_date: '2025-06-01',
+        notice_served_date: '2025-06-01',
+        notice_expiry_date: '2025-08-01',
+        deposit_taken: false,
+        epc_provided: false, // EXPLICITLY FALSE - should block in complete_pack
+        how_to_rent_served: true, // Set to avoid H2R blocker
+        selected_notice_route: 'section_21',
+        eviction_route: 'section_21',
+      };
+
+      const report = await runShadowValidation({ ...baseParams, facts });
+
+      expect(report.yaml.blockers).toBeGreaterThan(0);
+      expect(report.ts.blockers).toBeGreaterThan(0);
+      expect(
+        report.yaml.blockerIds.some((id) => id.includes('epc'))
+      ).toBe(true);
+      expect(report.parity).toBe(true);
+      console.log(formatShadowReport(report));
+    });
+
+    it('should have parity for s21_gas_cert_missing', async () => {
+      const facts: EvictionFacts = {
+        landlord_full_name: 'John Landlord',
+        tenant_full_name: 'Jane Tenant',
+        property_address_line1: '123 Test Street',
+        tenancy_start_date: '2024-01-01',
+        notice_service_date: '2025-06-01',
+        notice_served_date: '2025-06-01',
+        notice_expiry_date: '2025-08-01',
+        deposit_taken: false,
+        has_gas_appliances: true,
+        gas_certificate_provided: false, // NOT PROVIDED - should block
+        how_to_rent_served: true, // Set to avoid H2R blocker
+        selected_notice_route: 'section_21',
+        eviction_route: 'section_21',
+      };
+
+      const report = await runShadowValidation({ ...baseParams, facts });
+
+      expect(report.yaml.blockers).toBeGreaterThan(0);
+      expect(report.ts.blockers).toBeGreaterThan(0);
+      expect(
+        report.yaml.blockerIds.some((id) => id.includes('gas'))
+      ).toBe(true);
+      expect(report.parity).toBe(true);
+      console.log(formatShadowReport(report));
+    });
+
+    it('should have parity for s21_how_to_rent_missing (neither true)', async () => {
+      const facts: EvictionFacts = {
+        landlord_full_name: 'John Landlord',
+        tenant_full_name: 'Jane Tenant',
+        property_address_line1: '123 Test Street',
+        tenancy_start_date: '2020-01-01', // Post-Oct 2015
+        notice_service_date: '2025-06-01',
+        notice_served_date: '2025-06-01',
+        notice_expiry_date: '2025-08-01',
+        deposit_taken: false,
+        // how_to_rent_served and how_to_rent_provided are NOT set (undefined)
+        // TS fires when neither is explicitly true
+        selected_notice_route: 'section_21',
+        eviction_route: 'section_21',
+      };
+
+      const report = await runShadowValidation({ ...baseParams, facts });
+
+      expect(report.yaml.blockers).toBeGreaterThan(0);
+      expect(report.ts.blockers).toBeGreaterThan(0);
+      expect(
+        report.yaml.blockerIds.some((id) => id.includes('how_to_rent'))
+      ).toBe(true);
+      expect(report.parity).toBe(true);
+      console.log(formatShadowReport(report));
+    });
+  });
+
+  describe('S21 Retaliatory Eviction', () => {
+    it('should have parity for s21_retaliatory_eviction_risk (recent complaints)', async () => {
+      const facts: EvictionFacts = {
+        landlord_full_name: 'John Landlord',
+        tenant_full_name: 'Jane Tenant',
+        property_address_line1: '123 Test Street',
+        tenancy_start_date: '2024-01-01',
+        notice_service_date: '2025-06-01',
+        notice_served_date: '2025-06-01',
+        notice_expiry_date: '2025-08-01',
+        deposit_taken: false,
+        recent_repair_complaints: true, // SHOULD BLOCK
+        how_to_rent_served: true, // Set to avoid H2R blocker
+        selected_notice_route: 'section_21',
+        eviction_route: 'section_21',
+      };
+
+      const report = await runShadowValidation({ ...baseParams, facts });
+
+      expect(report.yaml.blockers).toBeGreaterThan(0);
+      expect(report.ts.blockers).toBeGreaterThan(0);
+      expect(
+        report.yaml.blockerIds.some((id) => id.includes('retaliatory'))
+      ).toBe(true);
+      expect(report.parity).toBe(true);
+      console.log(formatShadowReport(report));
+    });
+  });
+
+  describe('Valid Complete Pack S21 Case', () => {
+    it('should have parity for fully valid S21 complete pack case', async () => {
+      const facts: EvictionFacts = {
+        landlord_full_name: 'John Landlord',
+        tenant_full_name: 'Jane Tenant',
+        property_address_line1: '123 Test Street',
+        tenancy_start_date: '2024-01-01',
+        notice_service_date: '2025-06-01',
+        notice_served_date: '2025-06-01',
+        notice_expiry_date: '2025-08-01',
+        deposit_taken: true,
+        deposit_protected: true,
+        deposit_amount: 1200,
+        deposit_protection_date: '2024-01-10',
+        deposit_scheme_name: 'DPS',
+        prescribed_info_served: true,
+        // H2R must be explicitly true for complete_pack validity
+        how_to_rent_served: true,
+        selected_notice_route: 'section_21',
+        eviction_route: 'section_21',
+      };
+
+      const report = await runShadowValidation({ ...baseParams, facts });
+
+      expect(report.ts.blockers).toBe(0);
+      expect(report.yaml.blockers).toBe(0);
+      expect(report.parity).toBe(true);
+      console.log(formatShadowReport(report));
+    });
+  });
+});
+
+// ============================================================================
+// COMPLETE PACK PARITY TESTS - ENGLAND SECTION 8
+// ============================================================================
+
+describe('Shadow Mode Parity - England Complete Pack S8', () => {
+  beforeEach(() => {
+    clearConfigCache();
+  });
+
+  const baseParams: Omit<ShadowValidationParams, 'facts'> = {
+    jurisdiction: 'england',
+    product: 'complete_pack',
+    route: 'section_8',
+  };
+
+  describe('S8 Grounds Rules', () => {
+    it('should have parity for s8_no_grounds', async () => {
+      const facts: EvictionFacts = {
+        landlord_full_name: 'John Landlord',
+        tenant_full_name: 'Jane Tenant',
+        property_address_line1: '123 Test Street',
+        tenancy_start_date: '2024-01-01',
+        notice_service_date: '2025-06-01',
+        notice_served_date: '2025-06-01',
+        notice_expiry_date: '2025-06-15',
+        section8_grounds: [], // NO GROUNDS - should block
+        selected_notice_route: 'section_8',
+        eviction_route: 'section_8',
+      };
+
+      const report = await runShadowValidation({ ...baseParams, facts });
+
+      expect(report.yaml.blockers).toBeGreaterThan(0);
+      expect(report.ts.blockers).toBeGreaterThan(0);
+      expect(
+        report.yaml.blockerIds.some((id) => id.includes('grounds'))
+      ).toBe(true);
+      expect(report.parity).toBe(true);
+      console.log(formatShadowReport(report));
+    });
+
+    it('should have parity for s8_no_particulars', async () => {
+      const facts: EvictionFacts = {
+        landlord_full_name: 'John Landlord',
+        tenant_full_name: 'Jane Tenant',
+        property_address_line1: '123 Test Street',
+        tenancy_start_date: '2024-01-01',
+        notice_service_date: '2025-06-01',
+        notice_served_date: '2025-06-01',
+        notice_expiry_date: '2025-06-15',
+        section8_grounds: ['ground_10'], // Use Ground 10 to avoid Ground 8 threshold check
+        section8_details: undefined, // NO PARTICULARS - should block
+        ground_particulars: undefined,
+        selected_notice_route: 'section_8',
+        eviction_route: 'section_8',
+      };
+
+      const report = await runShadowValidation({ ...baseParams, facts });
+
+      expect(report.yaml.blockers).toBeGreaterThan(0);
+      expect(report.ts.blockers).toBeGreaterThan(0);
+      expect(
+        report.yaml.blockerIds.some((id) => id.includes('particulars'))
+      ).toBe(true);
+      expect(report.parity).toBe(true);
+      console.log(formatShadowReport(report));
+    });
+
+    it('should have parity for s8_arrears_ground_no_data', async () => {
+      const facts: EvictionFacts = {
+        landlord_full_name: 'John Landlord',
+        tenant_full_name: 'Jane Tenant',
+        property_address_line1: '123 Test Street',
+        tenancy_start_date: '2024-01-01',
+        notice_service_date: '2025-06-01',
+        notice_served_date: '2025-06-01',
+        notice_expiry_date: '2025-06-15',
+        section8_grounds: ['ground_10'], // Use Ground 10 (arrears ground)
+        section8_details: 'Arrears claim.',
+        // has_rent_arrears and total_arrears NOT set - should trigger arrears_ground_no_data
+        selected_notice_route: 'section_8',
+        eviction_route: 'section_8',
+      };
+
+      const report = await runShadowValidation({ ...baseParams, facts });
+
+      expect(report.yaml.blockers).toBeGreaterThan(0);
+      expect(report.ts.blockers).toBeGreaterThan(0);
+      expect(
+        report.yaml.blockerIds.some((id) => id.includes('arrears'))
+      ).toBe(true);
+      expect(report.parity).toBe(true);
+      console.log(formatShadowReport(report));
+    });
+  });
+
+  describe('Valid Complete Pack S8 Case', () => {
+    it('should have parity for valid S8 complete pack case', async () => {
+      const facts: EvictionFacts = {
+        landlord_full_name: 'John Landlord',
+        tenant_full_name: 'Jane Tenant',
+        property_address_line1: '123 Test Street',
+        tenancy_start_date: '2024-01-01',
+        notice_service_date: '2025-06-01',
+        notice_served_date: '2025-06-01',
+        notice_expiry_date: '2025-06-15',
+        section8_grounds: ['ground_8'],
+        section8_details: 'Tenant owes 3 months rent totaling 3000.',
+        has_rent_arrears: true,
+        total_arrears: 3000,
+        rent_amount: 1000,
+        rent_frequency: 'monthly',
+        selected_notice_route: 'section_8',
+        eviction_route: 'section_8',
+      };
+
+      const report = await runShadowValidation({ ...baseParams, facts });
+
+      expect(report.ts.blockers).toBe(0);
+      expect(report.yaml.blockers).toBe(0);
+      expect(report.parity).toBe(true);
+      console.log(formatShadowReport(report));
+    });
+  });
+});

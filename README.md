@@ -46,6 +46,14 @@ Your app will be available at:
 arduino
 Copy code
 http://localhost:3000
+
+---
+
+## ✅ Testing
+
+- Run the full suite (legacy failures may still exist): `pnpm test`
+- Run the SEO single-H1 guardrail: `pnpm test:seo`
+
 🧠 Project Architecture
 Full documentation is located in /docs.
 

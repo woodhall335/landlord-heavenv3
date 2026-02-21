@@ -23,8 +23,8 @@ export function buildEnglandWalesSections(
 ): BundleSection[] {
   const sections: BundleSection[] = [];
 
-  // Section 1: Index
-  sections.push(buildIndexSection(caseFacts, decisionOutput, caseIntel, 'england-wales'));
+  // Section 1: Index (using 'ew_bundle_format' as internal format identifier, NOT a jurisdiction)
+  sections.push(buildIndexSection(caseFacts, decisionOutput, caseIntel, 'ew_bundle_format'));
 
   // Section 2: Case Summary
   sections.push(buildCaseSummarySection(caseIntel, 'A'));
@@ -107,10 +107,10 @@ export function buildEnglandWalesSections(
     order: 8,
   });
 
-  // Section 9: Timeline
+  // Section 9: Timeline (using 'ew_bundle_format' as internal format identifier, NOT a jurisdiction)
   const timeline = generateBundleTimeline(
     caseIntel.evidence.extracted_timeline,
-    'england-wales'
+    'ew_bundle_format'
   );
   sections.push({
     id: 'timeline',
@@ -263,14 +263,14 @@ function buildIndexSection(
   caseFacts: CaseFacts,
   decisionOutput: DecisionOutput,
   caseIntel: CaseIntelligence,
-  jurisdiction: string
+  formatIdentifier: string // Internal format identifier (NOT a jurisdiction): 'ew_bundle_format' | 'scotland'
 ): BundleSection {
   const entries: IndexEntry[] = [];
 
   // Will be populated with actual page numbers during PDF assembly
   // This is a placeholder structure
 
-  if (jurisdiction === 'scotland') {
+  if (formatIdentifier === 'scotland') {
     entries.push(
       { title: 'Case Summary', tab: '1', page: 1 },
       { title: 'Form E - Application', tab: '2', page: 3 },

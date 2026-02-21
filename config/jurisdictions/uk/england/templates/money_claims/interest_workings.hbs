@@ -2,19 +2,24 @@
 
 <p><strong>Principal claimed:</strong> {{currency total_principal}}</p>
 <p><strong>Interest rate:</strong> {{interest_rate}}% per annum</p>
-<p><strong>Accrued interest to {{generation_date}}:</strong> {{currency interest_to_date}}</p>
+<p><strong>Interest start date:</strong> {{#if interest_start_date}}{{interest_start_date}}{{else}}Not specified{{/if}}</p>
+<p><strong>Calculation date:</strong> {{generation_date}}</p>
+<p><strong>Days of interest:</strong> {{#if interest_days}}{{interest_days}} days{{else}}Not calculated{{/if}}</p>
 <p><strong>Daily rate:</strong> {{currency daily_interest}} ({{interest_rate}}% / 365)</p>
+<p><strong>Accrued interest to date:</strong> {{currency interest_to_date}}</p>
 
 <h2>Working</h2>
 <p>
-  Daily rate calculation: ({{currency total_principal}} x {{interest_rate}}%) / 365 = {{currency daily_interest}}
+  <strong>Step 1 - Daily rate:</strong> ({{currency total_principal}} x {{interest_rate}}%) / 365 = {{currency daily_interest}} per day
 </p>
 <p>
-  Interest claimed to issue date: {{currency daily_interest}} x 90 (assumed 90 days) = {{currency interest_to_date}}
-  {{#if interest_start_date}} starting from {{interest_start_date}}{{/if}}.
+  <strong>Step 2 - Interest accrued:</strong> {{currency daily_interest}} x {{#if interest_days}}{{interest_days}}{{else}}0{{/if}} days = {{currency interest_to_date}}
 </p>
 
+<h2>Interest continues</h2>
 <p>
-  Continue to apply the daily rate until judgment or earlier payment. Update this page if you issue after the
-  above calculation date.
+  Interest continues to accrue at {{currency daily_interest}} per day from {{generation_date}} until judgment or earlier payment.
+</p>
+<p>
+  <em>Note: Update this calculation if you file after the above calculation date. You may claim interest up to and including the date of issue.</em>
 </p>
