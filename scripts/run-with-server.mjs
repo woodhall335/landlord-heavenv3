@@ -13,7 +13,6 @@ const argv = process.argv.slice(2);
 const separatorIndex = argv.indexOf('--');
 const commandArgs = separatorIndex >= 0 ? argv.slice(separatorIndex + 1) : argv;
 const isWindows = process.platform === 'win32';
-const npmCommand = isWindows ? 'npm.cmd' : 'npm';
 
 if (!commandArgs.length) {
   console.error('Usage: node scripts/run-with-server.mjs -- <command> [args...]');
@@ -63,15 +62,6 @@ async function waitForReady(baseUrl, serverProcess, readinessState) {
 }
 
 function killProcessGroup(pid) {
-  if (isWindows) {
-    try {
-      spawn('taskkill', ['/pid', String(pid), '/t', '/f'], { stdio: 'ignore' });
-    } catch {
-      // no-op
-    }
-    return;
-  }
-
   try {
     process.kill(-pid, 'SIGTERM');
   } catch {
@@ -79,10 +69,48 @@ function killProcessGroup(pid) {
   }
 }
 
+function spawnDevServer(port, baseUrl) {
+  const env = {
+    ...process.env,
+    PORT: String(port),
+    BASE_URL: baseUrl,
+    E2E_MODE: process.env.E2E_MODE,
+    NEXT_PUBLIC_E2E_MODE: process.env.NEXT_PUBLIC_E2E_MODE,
+  };
+
+  if (process.platform === 'win32') {
+    return spawn('cmd.exe', ['/d', '/s', '/c', 'npm', 'run', 'dev'], {
+      stdio: ['ignore', 'pipe', 'pipe'],
+      env,
+      shell: false,
+      detached: false,
+    });
+  }
+
+  return spawn('npm', ['run', 'dev', '--', '--port', String(port)], {
+    stdio: ['ignore', 'pipe', 'pipe'],
+    env,
+    shell: false,
+    detached: true,
+  });
+}
+
 async function stopServer(serverProcess) {
   if (!serverProcess || serverProcess.pid == null) return;
 
-  killProcessGroup(serverProcess.pid);
+  if (isWindows) {
+    try {
+      spawn('taskkill', ['/PID', String(serverProcess.pid), '/T', '/F'], {
+        stdio: 'ignore',
+        shell: false,
+      });
+    } catch {
+      // no-op
+    }
+  } else {
+    killProcessGroup(serverProcess.pid);
+  }
+
   await sleep(1000);
 
   if (serverProcess.exitCode === null) {
@@ -141,12 +169,7 @@ async function main() {
     runLog.requested_port = port;
     runLog.port = port;
 
-    serverProcess = spawn(npmCommand, ['run', 'dev'], {
-      stdio: ['ignore', 'pipe', 'pipe'],
-      env: childEnv,
-      detached: true,
-      shell: false,
-    });
+    serverProcess = spawnDevServer(port, baseUrl);
 
     const appendLog = (chunk) => {
       serverLogBuffer = `${serverLogBuffer}${String(chunk)}`.slice(-4000);
