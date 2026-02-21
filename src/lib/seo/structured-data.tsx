@@ -257,18 +257,11 @@ export function faqPageSchema(faqs: FAQItem[]) {
  * Use this on the homepage only (not globally)
  */
 export function websiteSchema() {
-  const reviewCount = getDynamicReviewCount();
-
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
     "name": "Landlord Heaven",
     "url": SITE_URL,
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": REVIEW_RATING,
-      "reviewCount": reviewCount.toString()
-    }
     // SearchAction removed - no search page exists
   };
 }
