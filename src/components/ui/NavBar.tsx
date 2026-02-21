@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect, useCallback } from "react";
 import { clsx } from "clsx";
 import { RiArrowDownSLine, RiMenuLine, RiLogoutBoxLine, RiDashboardLine } from 'react-icons/ri';
+import type { AuthChangeEvent, Session } from '@supabase/supabase-js';
 import { getSupabaseBrowserClient } from '@/lib/supabase/client';
 import { freeTools } from '@/lib/tools/tools';
 import type { HeaderMode } from '@/components/layout/HeaderModeContext';
@@ -103,7 +104,7 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
 
     const supabase = getSupabaseBrowserClient();
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
+      async (event: AuthChangeEvent, session: Session | null) => {
         if (event === 'SIGNED_IN' && session?.user) {
           setClientUser({
             email: session.user.email || '',
