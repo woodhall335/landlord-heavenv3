@@ -5,16 +5,15 @@ import { getCanonicalUrl } from '@/lib/seo/urls';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, toolLinks, landingPageLinks } from '@/lib/seo/internal-links';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { buildAskHeavenLink } from '@/lib/ask-heaven/buildAskHeavenLink';
 import { StandardHero } from '@/components/marketing/StandardHero';
 import { FunnelCta } from '@/components/funnels';
+import { IntentProductCTA, RelatedProductsModule, getIntentProductHref } from '@/components/seo/IntentProductCTA';
 import {
   CheckCircle,
   FileText,
   Shield,
   Clock,
-  ArrowRight,
   Download,
   X,
   Home,
@@ -24,13 +23,6 @@ import {
   Lock,
   Banknote
 } from 'lucide-react';
-
-// Pre-built wizard link for tenancy agreement template page
-const wizardLinkAST = buildWizardLink({
-  product: 'ast_standard',
-  src: 'template',
-  topic: 'tenancy',
-});
 
 // Pre-built Ask Heaven compliance links for tenancy agreement page
 const complianceLinks = {
@@ -182,7 +174,7 @@ export default function TenancyAgreementTemplatePage() {
           badgeIcon={<FileText className="w-4 h-4" />}
           title="Tenancy Agreement Template UK"
           subtitle={<>Download a free <strong>tenancy agreement template</strong> for England, Wales, or Scotland. Legally compliant contracts trusted by over 10,000 landlords.</>}
-          primaryCTA={{ label: "Get Premium AST — £24.99", href: wizardLinkAST }}
+          primaryCTA={{ label: "Get Premium AST — £24.99", href: getIntentProductHref({ product: "ast", src: "seo_landing" }) }}
           secondaryCTA={{ label: "View Free Templates", href: "/products/ast" }}
           variant="pastel"
         >
@@ -209,7 +201,7 @@ export default function TenancyAgreementTemplatePage() {
               <FunnelCta
                 title="Get a compliant tenancy agreement in minutes"
                 subtitle="Start with our AST product and make sure your paperwork supports valid future notice service."
-                primaryHref="/products/ast"
+                primaryHref={getIntentProductHref({ product: "ast", src: "seo_landing" })}
                 primaryText="Start tenancy agreement"
                 primaryDataCta="ast"
                 location="above-fold"
@@ -667,7 +659,7 @@ export default function TenancyAgreementTemplatePage() {
               <FunnelCta
                 title="Ready to issue your AST?"
                 subtitle="Use our product flow for a cleaner signing process and better compliance records."
-                primaryHref="/products/ast"
+                primaryHref={getIntentProductHref({ product: "ast", src: "seo_landing" })}
                 primaryText="Get AST now"
                 primaryDataCta="ast"
                 location="bottom"
@@ -776,13 +768,11 @@ export default function TenancyAgreementTemplatePage() {
                   <Download className="w-5 h-5" />
                   View Free Templates
                 </Link>
-                <Link
-                  href={wizardLinkAST}
+                <IntentProductCTA
+                  intent={{ product: "ast", src: "seo_landing" }}
+                  label="Get Premium AST — £24.99"
                   className="hero-btn-secondary inline-flex items-center justify-center gap-2"
-                >
-                  Get Premium AST — £24.99
-                  <ArrowRight className="w-5 h-5" />
-                </Link>
+                />
               </div>
               <p className="mt-8 text-white/70 text-sm">
                 England, Wales & Scotland &bull; 50+ Clauses &bull; Legally Compliant
@@ -790,6 +780,9 @@ export default function TenancyAgreementTemplatePage() {
             </div>
           </div>
         </section>
+
+        {/* Related Products */}
+        <RelatedProductsModule products={['ast', 'notice_only', 'money_claim']} />
 
         {/* Related Resources */}
         <section className="py-16 lg:py-20">

@@ -71,6 +71,23 @@ const nextConfig: NextConfig = {
         destination: '/products/money-claim',
         permanent: true,
       },
+      // True duplicate SEO landing URLs -> canonical SEO landing pages
+      {
+        source: '/eviction-notice',
+        destination: '/eviction-notice-template',
+        permanent: true,
+      },
+      {
+        source: '/eviction-notice-uk',
+        destination: '/eviction-notice-template',
+        permanent: true,
+      },
+      {
+        source: '/joint-tenancy-agreement-england',
+        destination: '/joint-tenancy-agreement-template',
+        permanent: true,
+      },
+
       // Money claim canonicalization
       {
         source: '/mcol-money-claim-online',
@@ -96,11 +113,6 @@ const nextConfig: NextConfig = {
       // Tenancy agreement pillar consolidation (jurisdiction-specific)
       {
         source: '/tenancy-agreement',
-        destination: '/assured-shorthold-tenancy-agreement-template',
-        permanent: true,
-      },
-      {
-        source: '/tenancy-agreement-template',
         destination: '/assured-shorthold-tenancy-agreement-template',
         permanent: true,
       },
