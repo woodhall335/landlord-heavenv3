@@ -13,6 +13,8 @@ const logPath = path.join(outputRoot, 'server_run_log.json');
 const argv = process.argv.slice(2);
 const separatorIndex = argv.indexOf('--');
 const commandArgs = separatorIndex >= 0 ? argv.slice(separatorIndex + 1) : argv;
+const isWindows = process.platform === 'win32';
+const npmCommand = isWindows ? 'npm.cmd' : 'npm';
 
 if (!commandArgs.length) {
   console.error('Usage: node scripts/run-with-server.mjs -- <command> [args...]');
@@ -139,11 +141,11 @@ async function main() {
     runLog.port = port;
     runLog.busy_ports_detected = busyPorts;
 
-    serverProcess = spawn('npm', ['run', 'dev', '--', '--port', String(port)], {
+    serverProcess = spawn(npmCommand, ['run', 'dev', '--', '--port', String(port)], {
       stdio: ['ignore', 'pipe', 'pipe'],
       env: { ...process.env, PORT: String(port), BASE_URL: baseUrl, E2E_MODE: process.env.E2E_MODE },
       detached: true,
-      shell: false,
+      shell: isWindows,
     });
 
     const appendLog = (chunk) => {
