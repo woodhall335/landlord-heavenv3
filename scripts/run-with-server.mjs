@@ -70,6 +70,7 @@ function killProcessGroup(pid) {
 }
 
 function spawnDevServer(port, baseUrl) {
+  const npmBin = process.platform === 'win32' ? 'npm.cmd' : 'npm';
   const env = {
     ...process.env,
     PORT: String(port),
@@ -78,20 +79,11 @@ function spawnDevServer(port, baseUrl) {
     NEXT_PUBLIC_E2E_MODE: process.env.NEXT_PUBLIC_E2E_MODE,
   };
 
-  if (process.platform === 'win32') {
-    return spawn('cmd.exe', ['/d', '/s', '/c', 'npm', 'run', 'dev'], {
-      stdio: ['ignore', 'pipe', 'pipe'],
-      env,
-      shell: false,
-      detached: false,
-    });
-  }
-
-  return spawn('npm', ['run', 'dev', '--', '--port', String(port)], {
+  return spawn(npmBin, ['run', 'dev', '--', '--port', String(port)], {
     stdio: ['ignore', 'pipe', 'pipe'],
     env,
     shell: false,
-    detached: true,
+    detached: !isWindows,
   });
 }
 
