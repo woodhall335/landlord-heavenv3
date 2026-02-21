@@ -135,14 +135,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/ni-tenancy-agreement-template-free', priority: 0.8, changeFrequency: 'weekly' as const },
     // Tenancy Agreement SEO Landing Pages - England (Jan 2026)
     { path: '/fixed-term-periodic-tenancy-england', priority: 0.8, changeFrequency: 'weekly' as const },
-    { path: '/joint-tenancy-agreement-england', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/renew-tenancy-agreement-england', priority: 0.8, changeFrequency: 'weekly' as const },
     // Tenancy Agreement SEO Landing Pages - Scotland (Jan 2026)
     // Tenancy Agreement SEO Landing Pages - Wales (Jan 2026)
     // Tenancy Agreement SEO Landing Pages - Northern Ireland (Jan 2026)
     // High-Intent SEO Landing Pages (Jan 2026)
     { path: '/form-6a-section-21', priority: 0.9, changeFrequency: 'weekly' as const },
-    { path: '/eviction-notice-uk', priority: 0.9, changeFrequency: 'weekly' as const },
     { path: '/no-fault-eviction', priority: 0.85, changeFrequency: 'weekly' as const },
     { path: '/form-3-section-8', priority: 0.9, changeFrequency: 'weekly' as const },
     { path: '/lodger-agreement-template', priority: 0.8, changeFrequency: 'weekly' as const },

@@ -18,6 +18,7 @@ export type WizardJurisdiction = 'england' | 'wales' | 'scotland' | 'northern-ir
 export type WizardSource =
   | 'product_page'
   | 'template'
+  | 'seo_landing'
   | 'validator'
   | 'tool'
   | 'blog'

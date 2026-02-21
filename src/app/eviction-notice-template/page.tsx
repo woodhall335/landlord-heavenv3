@@ -4,32 +4,23 @@ import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { Section21Countdown } from '@/components/ui/Section21Countdown';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
-import { productLinks, toolLinks, blogLinks, landingPageLinks } from '@/lib/seo/internal-links';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
+import { productLinks, toolLinks, blogLinks } from '@/lib/seo/internal-links';
 import { StandardHero } from '@/components/marketing/StandardHero';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { IntentProductCTA, RelatedProductsModule, getIntentProductHref } from '@/components/seo/IntentProductCTA';
 import { evictionNoticeTemplateFAQs } from '@/data/faqs';
 import {
   CheckCircle,
-  FileText,
   Shield,
   Clock,
   ArrowRight,
   Download,
   AlertTriangle,
   X,
-  Gavel,
   Scale,
   Home,
   Users
 } from 'lucide-react';
-
-// Pre-built wizard link for eviction template page (jurisdiction unspecified)
-const wizardLinkNoticeOnly = buildWizardLink({
-  product: 'notice_only',
-  src: 'template',
-  topic: 'eviction',
-});
 
 export const metadata: Metadata = {
   title: 'Eviction Notice Template UK - Possession Notice Download',
@@ -93,7 +84,7 @@ export default function EvictionNoticeTemplatePage() {
           badgeIcon={<AlertTriangle className="w-4 h-4" />}
           title="Eviction Notice Template UK"
           subtitle={<>Choose your jurisdiction and generate an <strong>eviction notice template bundle</strong> for England, Wales, or Scotland. Compliance-checked and ready to file. Need form-specific help first? Start with our <Link href="/form-6a-section-21" className="text-primary hover:underline">Form 6A Section 21 guide</Link>.</>}
-          primaryCTA={{ label: "Get Court-Ready Notice — £49.99", href: wizardLinkNoticeOnly }}
+          primaryCTA={{ label: "Get Court-Ready Notice — £49.99", href: getIntentProductHref({ product: "notice_only", src: "seo_landing" }) }}
           secondaryCTA={{ label: "Try Free Template", href: "/tools/free-section-21-notice-generator" }}
           variant="pastel"
         >
@@ -417,12 +408,12 @@ export default function EvictionNoticeTemplatePage() {
                       <span className="text-gray-700 font-medium">Email support</span>
                     </li>
                   </ul>
-                  <Link
-                    href={wizardLinkNoticeOnly}
+                  <IntentProductCTA
+                    intent={{ product: "notice_only", src: "seo_landing" }}
+                    label="Get Court-Ready Notice"
                     className="hero-btn-primary block w-full text-center"
-                  >
-                    Get Court-Ready Notice
-                  </Link>
+                    showArrow={false}
+                  />
                 </div>
               </div>
 
@@ -495,13 +486,11 @@ export default function EvictionNoticeTemplatePage() {
                 Act now if you need to evict without proving grounds.
               </p>
               <Section21Countdown variant="large" className="mb-8 [&_*]:text-white" />
-              <Link
-                href={wizardLinkNoticeOnly}
+              <IntentProductCTA
+                intent={{ product: "notice_only", src: "seo_landing" }}
+                label="Serve Your Notice Before the Deadline"
                 className="hero-btn-secondary inline-flex items-center gap-2"
-              >
-                Serve Your Notice Before the Deadline
-                <ArrowRight className="w-5 h-5" />
-              </Link>
+              />
             </div>
           </div>
         </section>
@@ -533,13 +522,11 @@ export default function EvictionNoticeTemplatePage() {
                   <Download className="w-5 h-5" />
                   Try Free Template
                 </Link>
-                <Link
-                  href={wizardLinkNoticeOnly}
+                <IntentProductCTA
+                  intent={{ product: "notice_only", src: "seo_landing" }}
+                  label="Get Court-Ready — £49.99"
                   className="hero-btn-secondary inline-flex items-center justify-center gap-2"
-                >
-                  Get Court-Ready — £49.99
-                  <ArrowRight className="w-5 h-5" />
-                </Link>
+                />
               </div>
               <p className="mt-8 text-white/70 text-sm">
                 Section 21 & 8 Included &bull; AI Compliance Check &bull; Designed for Court Acceptance
@@ -547,6 +534,9 @@ export default function EvictionNoticeTemplatePage() {
             </div>
           </div>
         </section>
+
+        {/* Related Products */}
+        <RelatedProductsModule products={['notice_only', 'complete_pack', 'money_claim']} />
 
         {/* Related Resources */}
         <section className="py-16 lg:py-20">

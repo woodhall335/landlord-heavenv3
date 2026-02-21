@@ -5,7 +5,6 @@
  * Renders all content sections with proper semantic HTML for SEO.
  */
 
-import Link from 'next/link';
 import { Container } from '@/components/ui';
 import { UsageTodayCounter } from '@/components/seo/UsageTodayCounter';
 import {
@@ -16,14 +15,12 @@ import {
   ShieldCheck,
   FileText,
   Scale,
-  HelpCircle,
-  ArrowRight,
   AlertTriangle,
 } from 'lucide-react';
 import { FAQSection } from '@/components/seo/FAQSection';
-import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { StructuredData, productSchema, faqPageSchema, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { AskHeavenWidget } from '@/components/ask-heaven/AskHeavenWidget';
+import { IntentProductCTA, RelatedProductsModule, type IntentProduct } from '@/components/seo/IntentProductCTA';
 import type { WizardLandingContent, NoticeType, CourtForm, JurisdictionCoverage, WhyUseThisSection, LegalValidationExplainer } from '@/lib/seo/wizard-landing-content';
 
 interface WizardLandingPageProps {
@@ -99,9 +96,11 @@ export function WizardLandingPage({ content, structuredDataUrl }: WizardLandingP
             </div>
 
             {/* CTA */}
-            <Link href={content.wizardUrl} className="hero-btn-primary">
-              Start My Case Bundle <ArrowRight className="w-5 h-5 inline ml-1" />
-            </Link>
+            <IntentProductCTA
+              intent={{ product: toIntentProduct(content.product), src: "seo_landing" }}
+              label="Start My Case Bundle"
+              className="hero-btn-primary"
+            />
             <div className="mt-4 mb-2">
               <UsageTodayCounter className="mx-auto" />
             </div>
@@ -215,6 +214,8 @@ export function WizardLandingPage({ content, structuredDataUrl }: WizardLandingP
         </Container>
       </section>
 
+      <RelatedProductsModule products={buildRelatedIntentProducts(content.product)} />
+
       {/* Final CTA */}
       <section className="py-16 md:py-20 bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50">
         <Container>
@@ -223,9 +224,11 @@ export function WizardLandingPage({ content, structuredDataUrl }: WizardLandingP
             <p className="text-xl mb-8 text-gray-600">
               Preview before you pay. Edit and regenerate instantly. Stored in your portal.
             </p>
-            <Link href={content.wizardUrl} className="hero-btn-primary">
-              Start My Case Bundle - {content.price} <ArrowRight className="w-5 h-5 inline ml-1" />
-            </Link>
+            <IntentProductCTA
+              intent={{ product: toIntentProduct(content.product), src: "seo_landing" }}
+              label={`Start My Case Bundle - ${content.price}`}
+              className="hero-btn-primary"
+            />
             <p className="mt-4 text-sm text-gray-600">
               One-time payment • Unlimited regenerations • No subscription
             </p>
@@ -443,6 +446,23 @@ function LegalValidationExplainerSection({ explainer }: { explainer: LegalValida
       </Container>
     </section>
   );
+}
+
+
+function toIntentProduct(product: string): IntentProduct {
+  if (product === 'ast_standard' || product === 'ast_premium' || product === 'tenancy_agreement') {
+    return 'ast';
+  }
+  if (product === 'notice_only' || product === 'money_claim' || product === 'complete_pack') {
+    return product;
+  }
+  return 'notice_only';
+}
+
+function buildRelatedIntentProducts(product: string): IntentProduct[] {
+  const current = toIntentProduct(product);
+  const all: IntentProduct[] = ['notice_only', 'money_claim', 'complete_pack', 'ast'];
+  return [current, ...all.filter((item) => item !== current)].slice(0, 3);
 }
 
 /**
