@@ -44,7 +44,7 @@
     "audit:sitemap-coverage": "node scripts/check-sitemap-coverage.mjs",
     "audit:main-text": "node scripts/assert-main-text.mjs",
     "audit:cannibalisation": "node scripts/cannibalisation-audit.mjs",
-    "audit:funnel": "node scripts/funnel-audit.mjs",
+    "audit:funnel": "node scripts/run-with-server.mjs -- node scripts/funnel-audit.mjs",
     "audit:pw:install": "playwright install --with-deps"
   },
   "dependencies": {

@@ -1,20 +1,16 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { spawn } from 'node:child_process';
 import puppeteer from 'puppeteer';
 import puppeteerCore from 'puppeteer-core';
 import chromium from '@sparticuz/chromium';
 
-const DEFAULT_PORT = process.env.FUNNEL_PORT ?? process.env.E2E_PORT ?? '5100';
-const BASE_URL = process.env.FUNNEL_BASE_URL ?? `http://localhost:${DEFAULT_PORT}`;
-const STEP_TIMEOUT_MS = Number(process.env.FUNNEL_STEP_TIMEOUT_MS ?? 60000);
-const SERVER_TIMEOUT_MS = Number(process.env.FUNNEL_SERVER_TIMEOUT_MS ?? 90000);
-const START_SERVER_COMMAND = process.env.FUNNEL_START_COMMAND ?? `node node_modules/next/dist/bin/next dev --webpack -H 0.0.0.0 -p ${new URL(BASE_URL).port}`;
+const BASE_URL = process.env.BASE_URL ?? 'https://landlordheaven.co.uk';
+const IS_LOCALHOST = /^https?:\/\/localhost(?::\d+)?$/i.test(BASE_URL);
+const STEP_TIMEOUT_MS = Number(process.env.FUNNEL_STEP_TIMEOUT_MS ?? (IS_LOCALHOST ? 25000 : 60000));
 
 const outputRoot = path.join(process.cwd(), 'audit-output/funnel/latest');
 const screensDir = path.join(outputRoot, 'screens');
 const results = [];
-let serverProcess;
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const sanitizeName = (name) => name.replace(/\s+/g, '-').toLowerCase();
@@ -22,60 +18,6 @@ const summarizeError = (error) => (error instanceof Error ? `${error.name}: ${er
 
 async function ensureDirs() {
   await fs.mkdir(screensDir, { recursive: true });
-}
-
-async function isServerReachable() {
-  try {
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 3000);
-    const response = await fetch(BASE_URL, { signal: controller.signal });
-    clearTimeout(timer);
-    return !!response;
-  } catch {
-    return false;
-  }
-}
-
-async function maybeStartServer() {
-  if (await isServerReachable()) return;
-
-
-  await fs.rm(path.join(process.cwd(), '.next/dev/lock'), { force: true }).catch(() => {});
-  let serverLogs = '';
-  serverProcess = spawn(START_SERVER_COMMAND, {
-    stdio: ['ignore', 'pipe', 'pipe'],
-    env: process.env,
-    shell: true,
-  });
-
-  serverProcess.stdout?.on('data', (chunk) => {
-    serverLogs = `${serverLogs}${String(chunk)}`.slice(-2000);
-  });
-  serverProcess.stderr?.on('data', (chunk) => {
-    serverLogs = `${serverLogs}${String(chunk)}`.slice(-2000);
-  });
-
-  const startAt = Date.now();
-  while (Date.now() - startAt < SERVER_TIMEOUT_MS) {
-    if (await isServerReachable()) return;
-    if (serverProcess.exitCode !== null) {
-      throw new Error(`Failed to start server via "${START_SERVER_COMMAND}" (exit ${serverProcess.exitCode}) ${serverLogs}`);
-    }
-    await sleep(1000);
-  }
-
-  throw new Error(`Timed out waiting for ${BASE_URL}`);
-}
-
-async function stopServer() {
-  if (!serverProcess) return;
-  try {
-    serverProcess.kill('SIGTERM');
-    await sleep(500);
-    if (serverProcess.exitCode === null) serverProcess.kill('SIGKILL');
-  } catch {
-    // no-op cleanup
-  }
 }
 
 async function launchBrowser() {
@@ -101,9 +43,11 @@ async function waitForAnySelector(page, selectors, timeoutMs) {
   const started = Date.now();
   while (Date.now() - started < timeoutMs) {
     for (const selector of selectors) {
+      // eslint-disable-next-line no-await-in-loop
       const el = await page.$(selector);
       if (el) return selector;
     }
+    // eslint-disable-next-line no-await-in-loop
     await sleep(200);
   }
   return null;
@@ -140,6 +84,7 @@ async function createMoneyClaimCase() {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({ product: 'money_claim', jurisdiction: 'england' }),
+    cache: IS_LOCALHOST ? 'no-store' : 'default',
   });
 
   if (!response.ok) throw new Error(`Failed creating case via /api/wizard/start (${response.status})`);
@@ -154,6 +99,10 @@ async function runJourney(browser, journey, fn) {
   const steps = [];
   let currentStep = 'initial_load';
   const page = await browser.newPage();
+
+  if (IS_LOCALHOST) {
+    await page.setCacheEnabled(false);
+  }
 
   try {
     await fn(page, {
@@ -214,7 +163,6 @@ async function writeOutputs() {
 
 async function main() {
   await ensureDirs();
-  await maybeStartServer();
   const browser = await launchBrowser();
 
   try {
@@ -277,7 +225,6 @@ async function main() {
     });
   } finally {
     await browser.close().catch(() => {});
-    await stopServer();
     await writeOutputs();
   }
 
@@ -294,7 +241,6 @@ main().catch(async (error) => {
     error: summarizeError(error),
     steps: [],
   });
-  await stopServer();
   await writeOutputs();
   console.error(error);
   process.exitCode = 1;
