@@ -3,14 +3,23 @@ import path from 'node:path';
 import { JSDOM } from 'jsdom';
 
 import { auditOutDir, ensureDir, writeJSON } from './_auditPaths';
-import sitemap from '../src/app/sitemap';
-import robots from '../src/app/robots';
 
 const ROOT = process.cwd();
 const APP_DIR = path.join(ROOT, 'src/app');
 const AUDIT_DIR = auditOutDir('seo-current');
 const LATEST_DIR = auditOutDir('seo-current', { latest: true });
 const BASE_URL = process.env.SEO_AUDIT_BASE_URL || 'http://localhost:5000';
+
+const MONEY_PAGES = [
+  '/pricing',
+  '/products/money-claim',
+  '/money-claim',
+  '/products/notice-only',
+  '/eviction-notice-template',
+  '/products/complete-pack',
+  '/tools',
+  '/blog',
+];
 
 type RouteRow = {
   routePath: string;
@@ -27,12 +36,11 @@ type RouteRow = {
 type SitemapEntryDump = {
   url: string;
   path: string;
-  lastModified?: string;
-  priority?: number;
-  changeFrequency?: string;
   mapsToExistingRoute: boolean;
   routeMatchKind: 'static' | 'dynamic' | 'missing';
 };
+
+type SeoRow = Record<string, unknown>;
 
 function toPosix(p: string) {
   return p.split(path.sep).join('/');
@@ -71,10 +79,10 @@ function routePathFromFile(relFile: string): string {
   const segs = normalized.split('/').filter(Boolean);
   const file = segs.pop()!;
   if (file === 'page.tsx' || file === 'layout.tsx' || file === 'route.ts') {
-    const p = '/' + segs.join('/');
+    const p = `/${segs.join('/')}`;
     return p === '/' ? '/' : p;
   }
-  return '/' + segs.join('/');
+  return `/${segs.join('/')}`;
 }
 
 function routePatternFromPage(routePath: string): RegExp {
@@ -103,8 +111,119 @@ function csvEscape(value: unknown) {
   return s;
 }
 
+function normalizeBaseUrl(baseUrl: string) {
+  const parsed = new URL(baseUrl);
+  return parsed.toString().replace(/\/$/, '');
+}
+
+async function fetchText(url: string, timeoutMs = 15000) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const res = await fetch(url, { redirect: 'follow', signal: controller.signal });
+    return {
+      status: res.status,
+      ok: res.ok,
+      url: res.url,
+      text: await res.text(),
+    };
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+function parseLocTags(xml: string) {
+  const matches = xml.matchAll(/<loc\b[^>]*>([\s\S]*?)<\/loc>/gi);
+  return Array.from(matches)
+    .map((m) => m[1].replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1').trim())
+    .filter(Boolean)
+    .map((value) => value.replace(/&amp;/g, '&'));
+}
+
+function isSitemapIndex(xml: string) {
+  return /<sitemapindex\b/i.test(xml);
+}
+
+async function fetchSitemapUrls(baseUrl: string) {
+  const candidates = [`${baseUrl}/sitemap.xml`, `${baseUrl}/sitemap_index.xml`];
+  let rootSitemapBody = '';
+  let rootSitemapUrl = '';
+
+  for (const candidate of candidates) {
+    try {
+      const res = await fetchText(candidate);
+      if (res.status === 404) continue;
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      rootSitemapBody = res.text;
+      rootSitemapUrl = res.url;
+      break;
+    } catch {
+      continue;
+    }
+  }
+
+  if (!rootSitemapBody) {
+    throw new Error(`Unable to fetch sitemap from ${candidates.join(' or ')}`);
+  }
+
+  const urlSet = new Set<string>();
+  const visited = new Set<string>();
+
+  const processSitemap = async (sitemapUrl: string, xml: string) => {
+    if (visited.has(sitemapUrl)) return;
+    visited.add(sitemapUrl);
+
+    if (isSitemapIndex(xml)) {
+      for (const loc of parseLocTags(xml)) {
+        try {
+          const nestedUrl = new URL(loc, sitemapUrl).toString();
+          if (visited.has(nestedUrl)) continue;
+          const nested = await fetchText(nestedUrl);
+          if (!nested.ok) continue;
+          await processSitemap(nested.url, nested.text);
+        } catch {
+          continue;
+        }
+      }
+      return;
+    }
+
+    for (const loc of parseLocTags(xml)) {
+      try {
+        const normalized = new URL(loc, sitemapUrl).toString();
+        urlSet.add(normalized);
+      } catch {
+        continue;
+      }
+    }
+  };
+
+  await processSitemap(rootSitemapUrl, rootSitemapBody);
+  return Array.from(urlSet);
+}
+
+async function fetchRobots(baseUrl: string) {
+  try {
+    const res = await fetchText(`${baseUrl}/robots.txt`);
+    return res.ok ? res.text : '';
+  } catch {
+    return '';
+  }
+}
+
+function parseRobotsDisallow(robotsText: string) {
+  return robotsText
+    .split(/\r?\n/)
+    .map((line) => line.split('#')[0].trim())
+    .filter(Boolean)
+    .filter((line) => /^disallow\s*:/i.test(line))
+    .map((line) => line.replace(/^disallow\s*:/i, '').trim())
+    .filter(Boolean);
+}
+
 async function main() {
   await ensureDir(AUDIT_DIR);
+  const runtimeBaseUrl = normalizeBaseUrl(BASE_URL);
 
   const allFiles = await walk(APP_DIR);
   const targetBaseNames = new Set(['page.tsx', 'layout.tsx', 'route.ts', 'sitemap.ts', 'robots.ts']);
@@ -151,27 +270,23 @@ async function main() {
 
   routeRows.sort((a, b) => a.routePath.localeCompare(b.routePath) || a.filePath.localeCompare(b.filePath));
 
-  const routesJsonPath = path.join(AUDIT_DIR, 'route_inventory.json');
-  await writeJSON(routesJsonPath, routeRows);
+  await writeJSON(path.join(AUDIT_DIR, 'route_inventory.json'), routeRows);
   const routesCsv = [
     ['route_path', 'file_path', 'route_type', 'dynamic', 'has_metadata_export', 'has_robots_directives', 'has_canonical_or_alternates', 'has_structured_data_render', 'notes'].join(','),
     ...routeRows.map((r) => [r.routePath, r.filePath, r.routeType, r.dynamic, r.hasMetadataExport, r.hasRobotsDirectives, r.hasCanonicalOrAlternates, r.hasStructuredDataRender, r.notes].map(csvEscape).join(',')),
   ].join('\n');
   await fs.writeFile(path.join(AUDIT_DIR, 'route_inventory.csv'), routesCsv);
 
-  const sitemapEntriesRaw = await sitemap();
+  const sitemapUrls = await fetchSitemapUrls(runtimeBaseUrl);
   const dynamicPatterns = dynamicPageRoutes.map((p) => ({ p, regex: routePatternFromPage(p) }));
-  const sitemapEntries: SitemapEntryDump[] = sitemapEntriesRaw.map((entry) => {
-    const parsed = new URL(entry.url);
+  const sitemapEntries: SitemapEntryDump[] = sitemapUrls.map((entryUrl) => {
+    const parsed = new URL(entryUrl);
     const p = parsed.pathname;
     const hasStatic = staticPageRoutes.has(p);
     const dynMatch = dynamicPatterns.find((d) => d.regex.test(p));
     return {
-      url: entry.url,
+      url: parsed.toString(),
       path: p,
-      lastModified: entry.lastModified ? new Date(entry.lastModified).toISOString() : undefined,
-      priority: entry.priority,
-      changeFrequency: entry.changeFrequency,
       mapsToExistingRoute: hasStatic || Boolean(dynMatch),
       routeMatchKind: hasStatic ? 'static' : dynMatch ? 'dynamic' : 'missing',
     };
@@ -179,25 +294,20 @@ async function main() {
 
   await writeJSON(path.join(AUDIT_DIR, 'sitemap_entries.json'), sitemapEntries);
 
-  const robotsConfig = robots();
-  await writeJSON(path.join(AUDIT_DIR, 'robots_rules.json'), robotsConfig);
-
-  const knownImportantRoutes = [
-    '/', '/pricing', '/tools', '/products/notice-only', '/products/complete-pack', '/products/money-claim', '/products/ast', '/blog', '/help', '/contact', '/about', '/ask-heaven', '/eviction-notice', '/money-claim', '/wizard', '/dashboard', '/auth/login'
-  ];
+  const robotsText = await fetchRobots(runtimeBaseUrl);
+  const robotsDisallow = parseRobotsDisallow(robotsText);
+  await writeJSON(path.join(AUDIT_DIR, 'robots_rules.json'), {
+    source: `${runtimeBaseUrl}/robots.txt`,
+    disallow: robotsDisallow,
+    raw: robotsText,
+  });
 
   const auditedUrls = new Set<string>([
-    ...sitemapEntries.map((e) => `${BASE_URL}${e.path}`),
-    ...knownImportantRoutes.map((p) => `${BASE_URL}${p}`),
+    ...sitemapEntries.map((e) => `${runtimeBaseUrl}${e.path}`),
+    ...MONEY_PAGES.map((p) => `${runtimeBaseUrl}${p}`),
   ]);
 
-  const robotsDisallow = (() => {
-    const r = robotsConfig.rules;
-    const rules = Array.isArray(r) ? r : [r];
-    return rules.flatMap((x) => Array.isArray(x.disallow) ? x.disallow : (x.disallow ? [x.disallow] : []));
-  })();
-
-  const seoRows: Record<string, unknown>[] = [];
+  const seoRows: SeoRow[] = [];
 
   for (const url of Array.from(auditedUrls).sort()) {
     let finalUrl = url;
@@ -252,10 +362,11 @@ async function main() {
 
     const h1s = Array.from(doc.querySelectorAll('h1')).map((h) => (h.textContent || '').trim()).filter(Boolean);
     const h2Count = doc.querySelectorAll('h2').length;
+    const wordCount = (doc.body?.textContent || '').replace(/\s+/g, ' ').trim().split(' ').filter(Boolean).length;
 
     const internalLinks = Array.from(doc.querySelectorAll('a[href]'))
       .map((a) => a.getAttribute('href') || '')
-      .filter((href) => href.startsWith('/') || href.startsWith(BASE_URL));
+      .filter((href) => href.startsWith('/') || href.startsWith(runtimeBaseUrl));
     const linkCounts = new Map<string, number>();
     for (const href of internalLinks) {
       const p = href.startsWith('http') ? new URL(href).pathname : href;
@@ -268,7 +379,13 @@ async function main() {
 
     const blockedByRobots = robotsDisallow.some((rule) => rule !== '/' && pathName.startsWith(rule.replace(/\*$/, '')));
     const noindexMeta = normalizedRobots.includes('noindex');
-    const canonicalPointsElsewhere = Boolean(canonical && (() => { try { return new URL(canonical, BASE_URL).pathname !== pathName; } catch { return false; } })());
+    const canonicalPointsElsewhere = Boolean(canonical && (() => {
+      try {
+        return new URL(canonical, runtimeBaseUrl).pathname !== pathName;
+      } catch {
+        return false;
+      }
+    })());
     const redirectToOther = redirectCount > 0;
     const statusError = status >= 400 || status === 0;
     const soft404 = /not found|page not found|404/i.test(title || '') || /not found/i.test(doc.body?.textContent || '') || (doc.querySelector('main')?.textContent || '').trim().length < 80;
@@ -314,6 +431,7 @@ async function main() {
       h1Count: h1s.length,
       h1Text: h1s.join(' | '),
       h2Count,
+      wordCount,
       internalLinkCount: internalLinks.length,
       topInternalLinkTargets: topTargets,
       missingTitle: !title,
@@ -339,13 +457,13 @@ async function main() {
   for (const row of seoRows) {
     const title = String(row.title || '');
     const desc = String(row.description || '');
-    (row as any).duplicateTitle = title ? (titleMap.get(title)! > 1) : false;
-    (row as any).duplicateDescription = desc ? (descMap.get(desc)! > 1) : false;
+    row.duplicateTitle = title ? (titleMap.get(title)! > 1) : false;
+    row.duplicateDescription = desc ? (descMap.get(desc)! > 1) : false;
   }
 
   await writeJSON(path.join(AUDIT_DIR, 'seo_audit_report.json'), seoRows);
   const seoHeaders = [
-    'url','path','status','finalUrl','redirectCount','indexable','indexabilityReasons','canonicalOk','title','titleLength','description','descriptionLength','robotsMeta','canonical','alternateCount','ogTitle','ogDescription','ogImage','ogUrl','twitterTitle','twitterDescription','twitterImage','jsonLdCount','jsonLdTypes','h1Count','h1Text','h2Count','internalLinkCount','topInternalLinkTargets','missingTitle','missingDescription','missingCanonical','missingOgTitle','missingOgDescription','missingOgImage','missingTwitterTitle','duplicateTitle','duplicateDescription','fetchError'
+    'url', 'path', 'status', 'finalUrl', 'redirectCount', 'indexable', 'indexabilityReasons', 'canonicalOk', 'title', 'titleLength', 'description', 'descriptionLength', 'robotsMeta', 'canonical', 'alternateCount', 'ogTitle', 'ogDescription', 'ogImage', 'ogUrl', 'twitterTitle', 'twitterDescription', 'twitterImage', 'jsonLdCount', 'jsonLdTypes', 'h1Count', 'h1Text', 'h2Count', 'wordCount', 'internalLinkCount', 'topInternalLinkTargets', 'missingTitle', 'missingDescription', 'missingCanonical', 'missingOgTitle', 'missingOgDescription', 'missingOgImage', 'missingTwitterTitle', 'duplicateTitle', 'duplicateDescription', 'fetchError',
   ];
   const seoCsv = [
     seoHeaders.join(','),
@@ -354,7 +472,7 @@ async function main() {
   await fs.writeFile(path.join(AUDIT_DIR, 'seo_audit_report.csv'), seoCsv);
 
   const sitemapPaths = new Set(sitemapEntries.map((e) => e.path));
-  const publicStaticRoutes = Array.from(staticPageRoutes).filter((p) => !['/dashboard','/wizard'].some((x) => p === x || p.startsWith(`${x}/`)) && !['/auth','/api','/success'].some((x) => p === x || p.startsWith(`${x}/`)));
+  const publicStaticRoutes = Array.from(staticPageRoutes).filter((p) => !['/dashboard', '/wizard'].some((x) => p === x || p.startsWith(`${x}/`)) && !['/auth', '/api', '/success'].some((x) => p === x || p.startsWith(`${x}/`)));
   const missingFromSitemap = publicStaticRoutes.filter((p) => !sitemapPaths.has(p));
   const sitemapNon200 = seoRows.filter((r) => sitemapPaths.has(String(r.path)) && Number(r.status) !== 200).map((r) => r.path);
   const sitemapNonIndexable = seoRows.filter((r) => sitemapPaths.has(String(r.path)) && !(r as any).indexable).map((r) => ({ path: r.path, reasons: r.indexabilityReasons }));
@@ -373,7 +491,7 @@ async function main() {
     hostProtocolInconsistencies: {
       sitemapHosts: Array.from(new Set(sitemapEntries.map((e) => new URL(e.url).host))),
       sitemapProtocols: Array.from(new Set(sitemapEntries.map((e) => new URL(e.url).protocol))),
-      runtimeBaseUrl: BASE_URL,
+      runtimeBaseUrl,
     },
     mismatches: {
       sitemapEntriesWithoutRoutes: sitemapEntries.filter((e) => !e.mapsToExistingRoute).map((e) => e.path),
