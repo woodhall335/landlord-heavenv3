@@ -340,7 +340,9 @@ async function main() {
   try {
     await runJourney(browser, 'journey_a_guide_to_paid', async (page, { setStep, steps, diagnostics }) => {
       setStep('open guide page');
-      await page.goto(`${BASE_URL}/pre-action-protocol-debt`, { waitUntil: 'domcontentloaded', timeout: STEP_TIMEOUT_MS });
+      const guideUrl = `${BASE_URL}/pre-action-protocol-debt`;
+      await page.goto(guideUrl, { waitUntil: 'domcontentloaded', timeout: STEP_TIMEOUT_MS });
+      await page.waitForSelector('h1, [data-testid="guide-primary-cta"]', { timeout: 15000 });
       await safeScreenshot(page, 'journey_a_guide_to_paid_start.png', { diagnostics, stepName: 'open guide page' });
 
       setStep('guide primary cta');

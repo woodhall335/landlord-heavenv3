@@ -163,7 +163,9 @@ test('funnel audit journeys (stop before payment)', async ({ page }) => {
   };
 
   await run('journey_a_guide_to_paid', async (steps) => {
-    await page.goto('/pre-action-protocol-debt');
+    const guideUrl = '/pre-action-protocol-debt';
+    await page.goto(guideUrl);
+    await page.waitForSelector('h1, [data-testid="guide-primary-cta"]', { timeout: 15000 });
     await assertPageLoaded(page);
     await page.screenshot({ path: path.join(screensDir, 'journey_a_guide_to_paid_start.png'), fullPage: true });
 
