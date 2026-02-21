@@ -497,7 +497,7 @@ export default function TenancyAgreementTemplatePage() {
                     </li>
                   </ul>
                   <Link
-                    href={wizardLinkAST}
+                    href={getIntentProductHref({ product: "ast", src: "seo_landing" })}
                     className="hero-btn-primary block w-full text-center"
                   >
                     Get Premium AST
