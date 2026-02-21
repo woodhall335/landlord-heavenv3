@@ -1,14 +1,13 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import net from 'node:net';
 import { spawn } from 'node:child_process';
 
-const DEFAULT_PORT = Number(process.env.PORT ?? 3100);
-const MAX_PORT_OFFSET = 20;
+const DEFAULT_PORT = 5000;
 const READINESS_TIMEOUT_MS = 60000;
 const READINESS_INTERVAL_MS = 250;
 const outputRoot = path.join(process.cwd(), 'audit-output/funnel/latest');
 const logPath = path.join(outputRoot, 'server_run_log.json');
+const packageJsonPath = path.join(process.cwd(), 'package.json');
 
 const argv = process.argv.slice(2);
 const separatorIndex = argv.indexOf('--');
@@ -23,35 +22,20 @@ if (!commandArgs.length) {
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-async function isPortBusy(port) {
-  return new Promise((resolve) => {
-    const socket = new net.Socket();
-    socket.setTimeout(300);
-    socket.once('connect', () => {
-      socket.destroy();
-      resolve(true);
-    });
-    socket.once('timeout', () => {
-      socket.destroy();
-      resolve(false);
-    });
-    socket.once('error', () => resolve(false));
-    socket.connect(port, '127.0.0.1');
-  });
-}
+async function detectDevPort() {
+  try {
+    const packageJson = JSON.parse(await fs.readFile(packageJsonPath, 'utf8'));
+    const devScript = String(packageJson?.scripts?.dev ?? '');
+    const shortPortMatch = devScript.match(/(?:^|\s)-p\s+(\d+)/);
+    if (shortPortMatch) return Number(shortPortMatch[1]);
 
-async function pickPort(preferredPort) {
-  const busyPorts = [];
-
-  for (let offset = 0; offset <= MAX_PORT_OFFSET; offset += 1) {
-    const port = preferredPort + offset;
-    // eslint-disable-next-line no-await-in-loop
-    const busy = await isPortBusy(port);
-    if (!busy) return { port, busyPorts };
-    busyPorts.push(port);
+    const longPortMatch = devScript.match(/(?:^|\s)--port\s+(\d+)/);
+    if (longPortMatch) return Number(longPortMatch[1]);
+  } catch {
+    // Fall back to default
   }
 
-  throw new Error(`Unable to find a free port from ${preferredPort} to ${preferredPort + MAX_PORT_OFFSET}`);
+  return DEFAULT_PORT;
 }
 
 async function waitForReady(baseUrl, serverProcess, readinessState) {
@@ -79,6 +63,15 @@ async function waitForReady(baseUrl, serverProcess, readinessState) {
 }
 
 function killProcessGroup(pid) {
+  if (isWindows) {
+    try {
+      spawn('taskkill', ['/pid', String(pid), '/t', '/f'], { stdio: 'ignore' });
+    } catch {
+      // no-op
+    }
+    return;
+  }
+
   try {
     process.kill(-pid, 'SIGTERM');
   } catch {
@@ -93,6 +86,8 @@ async function stopServer(serverProcess) {
   await sleep(1000);
 
   if (serverProcess.exitCode === null) {
+    if (isWindows) return;
+
     try {
       process.kill(-serverProcess.pid, 'SIGKILL');
     } catch {
@@ -119,14 +114,13 @@ async function main() {
   await fs.mkdir(outputRoot, { recursive: true });
 
   const runLog = {
-    requested_port: DEFAULT_PORT,
+    requested_port: null,
     port: DEFAULT_PORT,
     pid: null,
     start_time: new Date().toISOString(),
     ready_time: null,
     exit_code: null,
     error_excerpt: null,
-    busy_ports_detected: [],
     e2e_mode: process.env.E2E_MODE === 'true',
     recommended_usage: 'E2E_MODE=true npm run audit:env:check && E2E_MODE=true npm run audit:funnel',
   };
@@ -135,17 +129,23 @@ async function main() {
   let serverLogBuffer = "";
 
   try {
-    const { port, busyPorts } = await pickPort(DEFAULT_PORT);
+    const port = await detectDevPort();
     const baseUrl = `http://localhost:${port}`;
+    const childEnv = {
+      ...process.env,
+      BASE_URL: baseUrl,
+      E2E_MODE: process.env.E2E_MODE,
+      NEXT_PUBLIC_E2E_MODE: process.env.NEXT_PUBLIC_E2E_MODE,
+    };
 
+    runLog.requested_port = port;
     runLog.port = port;
-    runLog.busy_ports_detected = busyPorts;
 
-    serverProcess = spawn(npmCommand, ['run', 'dev', '--', '--port', String(port)], {
+    serverProcess = spawn(npmCommand, ['run', 'dev'], {
       stdio: ['ignore', 'pipe', 'pipe'],
-      env: { ...process.env, PORT: String(port), BASE_URL: baseUrl, E2E_MODE: process.env.E2E_MODE },
+      env: childEnv,
       detached: true,
-      shell: isWindows,
+      shell: false,
     });
 
     const appendLog = (chunk) => {
@@ -164,7 +164,7 @@ async function main() {
 
     await waitForReady(baseUrl, serverProcess, runLog);
 
-    const commandResult = await runCommand(commandArgs, { ...process.env, PORT: String(port), BASE_URL: baseUrl, E2E_MODE: process.env.E2E_MODE });
+    const commandResult = await runCommand(commandArgs, childEnv);
     runLog.exit_code = commandResult.code;
 
     if (commandResult.signal) {
