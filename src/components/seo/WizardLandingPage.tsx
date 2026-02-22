@@ -6,6 +6,8 @@
  */
 
 import { Container } from '@/components/ui';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { UsageTodayCounter } from '@/components/seo/UsageTodayCounter';
 import {
   Eye,
@@ -49,64 +51,42 @@ export function WizardLandingPage({ content, structuredDataUrl }: WizardLandingP
         ])}
       />
 
+      <HeaderConfig mode="autoOnScroll" />
+
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-24">
-        <Container>
-          <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">{content.h1}</h1>
-            <p className="text-xl md:text-2xl mb-4 text-gray-600">{content.subheading}</p>
+      <UniversalHero
+        title={content.h1}
+        subtitle={content.subheading}
+        align="center"
+        actionsSlot={(
+          <IntentProductCTA
+            intent={{ product: toIntentProduct(content.product), src: "seo_landing" }}
+            label="Start My Case Bundle"
+            className="hero-btn-primary w-full sm:w-auto"
+          />
+        )}
+      >
+        <div className="mt-8 flex items-baseline justify-center gap-2 text-white">
+          <span className="text-5xl md:text-6xl font-bold">{content.price}</span>
+          <span className="text-lg text-white/85">one-time</span>
+        </div>
 
-            {/* Jurisdiction badges */}
-            <div className="flex flex-wrap justify-center gap-2 mb-4">
-              {content.jurisdictions.map((jurisdiction) => (
-                <span
-                  key={jurisdiction}
-                  className="text-sm bg-green-50 text-green-700 px-3 py-1 rounded-full"
-                >
-                  {getJurisdictionFlag(jurisdiction)} {jurisdiction}
-                </span>
-              ))}
-            </div>
+        <div className="mt-6 flex flex-wrap justify-center gap-4 text-sm text-white/90">
+          <span className="flex items-center gap-1">
+            <Eye className="w-4 h-4" /> Preview before you buy
+          </span>
+          <span className="flex items-center gap-1">
+            <RefreshCw className="w-4 h-4" /> Edit &amp; regenerate (unlimited)
+          </span>
+          <span className="flex items-center gap-1">
+            <Cloud className="w-4 h-4" /> Portal storage (12+ months)
+          </span>
+        </div>
 
-            {/* England-only warning if applicable */}
-            {content.jurisdictions.length === 1 && content.jurisdictions[0] === 'England' && (
-              <p className="text-sm text-amber-700 bg-amber-50 inline-block px-3 py-1 rounded-full mb-4">
-                <AlertTriangle className="w-4 h-4 inline mr-1" />
-                England only
-              </p>
-            )}
-
-            {/* Price */}
-            <div className="flex items-baseline justify-center gap-2 mb-6">
-              <span className="text-5xl md:text-6xl font-bold text-gray-900">{content.price}</span>
-              <span className="text-gray-500 text-lg">one-time</span>
-            </div>
-
-            {/* Key differentiators */}
-            <div className="flex flex-wrap justify-center gap-4 mb-8 text-sm">
-              <span className="flex items-center gap-1 text-gray-700">
-                <Eye className="w-4 h-4 text-primary" /> Preview before you buy
-              </span>
-              <span className="flex items-center gap-1 text-gray-700">
-                <RefreshCw className="w-4 h-4 text-primary" /> Edit &amp; regenerate (unlimited)
-              </span>
-              <span className="flex items-center gap-1 text-gray-700">
-                <Cloud className="w-4 h-4 text-primary" /> Portal storage (12+ months)
-              </span>
-            </div>
-
-            {/* CTA */}
-            <IntentProductCTA
-              intent={{ product: toIntentProduct(content.product), src: "seo_landing" }}
-              label="Start My Case Bundle"
-              className="hero-btn-primary"
-            />
-            <div className="mt-4 mb-2">
-              <UsageTodayCounter className="mx-auto" />
-            </div>
-          </div>
-        </Container>
-      </section>
+        <div className="mt-5 mb-2 text-white/90">
+          <UsageTodayCounter className="mx-auto" />
+        </div>
+      </UniversalHero>
 
       {/* What You Get Section */}
       <section className="py-16 md:py-20 bg-white">
