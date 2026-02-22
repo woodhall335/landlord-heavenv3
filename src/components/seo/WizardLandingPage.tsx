@@ -28,9 +28,10 @@ import type { WizardLandingContent, NoticeType, CourtForm, JurisdictionCoverage,
 interface WizardLandingPageProps {
   content: WizardLandingContent;
   structuredDataUrl: string;
+  showAskHeavenWidget?: boolean;
 }
 
-export function WizardLandingPage({ content, structuredDataUrl }: WizardLandingPageProps) {
+export function WizardLandingPage({ content, structuredDataUrl, showAskHeavenWidget = true }: WizardLandingPageProps) {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Structured Data */}
@@ -179,20 +180,21 @@ export function WizardLandingPage({ content, structuredDataUrl }: WizardLandingP
         variant="gray"
       />
 
-      {/* Ask Heaven Widget */}
-      <section className="py-16 md:py-20">
-        <Container>
-          <div className="max-w-2xl mx-auto">
-            <AskHeavenWidget
-              variant="banner"
-              source="seo"
-              product={content.product}
-              title="Have questions?"
-              description="Ask Heaven can help you understand your options and requirements."
-            />
-          </div>
-        </Container>
-      </section>
+      {showAskHeavenWidget && (
+        <section className="py-16 md:py-20">
+          <Container>
+            <div className="max-w-2xl mx-auto">
+              <AskHeavenWidget
+                variant="banner"
+                source="seo"
+                product={content.product}
+                title="Have questions?"
+                description="Ask Heaven can help you understand your options and requirements."
+              />
+            </div>
+          </Container>
+        </section>
+      )}
 
       <RelatedProductsModule products={buildRelatedIntentProducts(content.product)} />
 

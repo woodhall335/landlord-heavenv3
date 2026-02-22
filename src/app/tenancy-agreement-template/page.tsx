@@ -3,19 +3,16 @@ import Link from 'next/link';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo/urls';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
-import { RelatedLinks } from '@/components/seo/RelatedLinks';
-import { productLinks, toolLinks, landingPageLinks } from '@/lib/seo/internal-links';
-import { buildAskHeavenLink } from '@/lib/ask-heaven/buildAskHeavenLink';
 import { StandardHero } from '@/components/marketing/StandardHero';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { FunnelCta } from '@/components/funnels';
-import { IntentProductCTA, RelatedProductsModule, getIntentProductHref } from '@/components/seo/IntentProductCTA';
+import { FAQSection } from '@/components/seo/FAQSection';
+import { RelatedProductsModule, getIntentProductHref } from '@/components/seo/IntentProductCTA';
 import {
   CheckCircle,
   FileText,
   Shield,
   Clock,
-  Download,
   X,
   Home,
   Users,
@@ -25,43 +22,10 @@ import {
   Banknote
 } from 'lucide-react';
 
-// Pre-built Ask Heaven compliance links for tenancy agreement page
-const complianceLinks = {
-  deposit: buildAskHeavenLink({
-    source: 'page_cta',
-    topic: 'deposit',
-    prompt: 'How do I protect a tenancy deposit in a government scheme?',
-    utm_campaign: 'tenancy-agreement-template',
-  }),
-  gasSafety: buildAskHeavenLink({
-    source: 'page_cta',
-    topic: 'gas_safety',
-    prompt: 'Do I need a gas safety certificate before tenant moves in?',
-    utm_campaign: 'tenancy-agreement-template',
-  }),
-  epc: buildAskHeavenLink({
-    source: 'page_cta',
-    topic: 'epc',
-    prompt: 'Do I need to give tenant EPC before they sign tenancy agreement?',
-    utm_campaign: 'tenancy-agreement-template',
-  }),
-  rightToRent: buildAskHeavenLink({
-    source: 'page_cta',
-    topic: 'right_to_rent',
-    prompt: 'What Right to Rent checks do I need to do before tenancy starts?',
-    utm_campaign: 'tenancy-agreement-template',
-  }),
-  smokeAlarms: buildAskHeavenLink({
-    source: 'page_cta',
-    topic: 'smoke_alarms',
-    prompt: 'What are the smoke and CO alarm requirements for landlords?',
-    utm_campaign: 'tenancy-agreement-template',
-  }),
-};
 
 export const metadata: Metadata = {
-  title: 'Tenancy Agreement Template UK - Free Download',
-  description: 'Download a free UK tenancy agreement template. AST templates for England, Wales, Scotland. Legally compliant contracts trusted by 10,000+ landlords.',
+  title: 'Tenancy Agreement Template UK - Standard & Premium',
+  description: 'Get a UK tenancy agreement template. Standard and premium AST options for England, Wales, and Scotland. Legally compliant contracts trusted by 10,000+ landlords.',
   keywords: [
     'tenancy agreement template',
     'tenancy agreement template uk',
@@ -72,8 +36,8 @@ export const metadata: Metadata = {
     'tenancy contract template',
   ],
   openGraph: {
-    title: 'Tenancy Agreement Template UK - Free Download | Landlord Heaven',
-    description: 'Download a free UK tenancy agreement template. AST templates for England, Wales, Scotland.',
+    title: 'Tenancy Agreement Template UK - Standard & Premium | Landlord Heaven',
+    description: 'Get a UK tenancy agreement template. Standard and premium AST options for England, Wales, and Scotland.',
     url: getCanonicalUrl('/tenancy-agreement-template'),
     type: 'website',
   },
@@ -87,7 +51,7 @@ export default function TenancyAgreementTemplatePage() {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
     name: 'Tenancy Agreement Template UK',
-    description: 'Free UK tenancy agreement templates for landlords. AST templates for England, Wales, and Scotland.',
+    description: 'UK tenancy agreement templates for landlords. AST templates for England, Wales, and Scotland.',
     url: 'https://landlordheaven.co.uk/tenancy-agreement-template',
     mainEntity: {
       '@type': 'Product',
@@ -175,9 +139,9 @@ export default function TenancyAgreementTemplatePage() {
           badge="Updated for 2025/2026"
           badgeIcon={<FileText className="w-4 h-4" />}
           title="Tenancy Agreement Template UK"
-          subtitle={<>Download a free <strong>tenancy agreement template</strong> for England, Wales, or Scotland. Legally compliant contracts trusted by over 10,000 landlords.</>}
+          subtitle={<>Get a <strong>tenancy agreement template</strong> for England, Wales, or Scotland. Legally compliant contracts trusted by over 10,000 landlords.</>}
           primaryCTA={{ label: "Get Premium AST — £24.99", href: getIntentProductHref({ product: "ast", src: "seo_landing" }) }}
-          secondaryCTA={{ label: "View Free Templates", href: "/products/ast" }}
+          secondaryCTA={{ label: "Get Standard Template", href: "/products/ast" }}
           variant="pastel"
         >
           {/* Trust Signals */}
@@ -409,19 +373,19 @@ export default function TenancyAgreementTemplatePage() {
           </div>
         </section>
 
-        {/* Free vs Paid Comparison */}
+        {/* Standard vs Premium Comparison */}
         <section className="py-16 lg:py-20">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
-                Free Template vs Premium Agreement
+                Standard vs Premium Tenancy Agreement
               </h2>
               <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                Start with our free template or get a fully customised agreement with our premium version.
+                Choose a standard agreement or get a fully customised premium version.
               </p>
 
               <div className="grid md:grid-cols-2 gap-8">
-                {/* Free Version */}
+                {/* Standard Version */}
                 <div className="bg-gray-50 rounded-2xl p-8 border border-gray-200">
                   <div className="text-center mb-6">
                     <span className="text-sm font-medium text-gray-500 uppercase tracking-wide">Standard Template</span>
@@ -457,11 +421,11 @@ export default function TenancyAgreementTemplatePage() {
                     href="/products/ast"
                     className="hero-btn-secondary block w-full text-center"
                   >
-                    Get Free Template
+                    Get Standard Template
                   </Link>
                 </div>
 
-                {/* Paid Version */}
+                {/* Premium Version */}
                 <div className="bg-primary/5 rounded-2xl p-8 border-2 border-primary relative">
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                     <span className="bg-primary text-white text-xs font-bold px-3 py-1 rounded-full uppercase">
@@ -600,61 +564,6 @@ export default function TenancyAgreementTemplatePage() {
           </div>
         </section>
 
-        {/* Ask Heaven Compliance CTA */}
-        <section className="py-8 bg-purple-50">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              <div className="flex items-start gap-4 mb-4">
-                <span className="text-4xl">☁️</span>
-                <div>
-                  <p className="font-semibold text-gray-900 mb-1">
-                    Questions about landlord compliance?
-                  </p>
-                  <p className="text-gray-600 text-sm">
-                    Our free{' '}
-                    <Link href="/ask-heaven?src=page_cta&topic=tenancy" className="text-primary font-medium hover:underline">
-                      Ask Heaven Q&amp;A tool
-                    </Link>{' '}
-                    can help you understand your legal obligations before the tenancy starts.
-                  </p>
-                </div>
-              </div>
-              <div className="grid sm:grid-cols-5 gap-2 ml-14">
-                <Link
-                  href={complianceLinks.deposit}
-                  className="text-xs bg-white border border-purple-200 hover:border-primary text-gray-700 hover:text-primary px-3 py-2 rounded-lg transition-colors text-center"
-                >
-                  Deposit rules →
-                </Link>
-                <Link
-                  href={complianceLinks.epc}
-                  className="text-xs bg-white border border-purple-200 hover:border-primary text-gray-700 hover:text-primary px-3 py-2 rounded-lg transition-colors text-center"
-                >
-                  EPC rules →
-                </Link>
-                <Link
-                  href={complianceLinks.gasSafety}
-                  className="text-xs bg-white border border-purple-200 hover:border-primary text-gray-700 hover:text-primary px-3 py-2 rounded-lg transition-colors text-center"
-                >
-                  Gas safety →
-                </Link>
-                <Link
-                  href={complianceLinks.smokeAlarms}
-                  className="text-xs bg-white border border-purple-200 hover:border-primary text-gray-700 hover:text-primary px-3 py-2 rounded-lg transition-colors text-center"
-                >
-                  Smoke alarms →
-                </Link>
-                <Link
-                  href={complianceLinks.rightToRent}
-                  className="text-xs bg-white border border-purple-200 hover:border-primary text-gray-700 hover:text-primary px-3 py-2 rounded-lg transition-colors text-center"
-                >
-                  Right to Rent →
-                </Link>
-              </div>
-            </div>
-          </div>
-        </section>
-
         <section className="py-10 bg-white">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
@@ -672,136 +581,41 @@ export default function TenancyAgreementTemplatePage() {
         </section>
 
         {/* FAQ Section */}
-        <section className="py-16 lg:py-20">
-          <div className="container mx-auto px-4">
-            <div className="max-w-3xl mx-auto">
-              <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">
-                Tenancy Agreement Template FAQ
-              </h2>
-
-              <div className="space-y-6">
-                <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-                  <h3 className="font-semibold text-gray-900 mb-2">
-                    What is an assured shorthold tenancy (AST)?
-                  </h3>
-                  <p className="text-gray-600">
-                    An assured shorthold tenancy (AST) is the most common type of tenancy in England.
-                    It gives tenants the right to live in a property for a set period, typically 6-12
-                    months, with rights protected by law. Landlords can use Section 21 or Section 8
-                    to regain possession.
-                  </p>
-                </div>
-
-                <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-                  <h3 className="font-semibold text-gray-900 mb-2">
-                    What should be included in a tenancy agreement?
-                  </h3>
-                  <p className="text-gray-600">
-                    A tenancy agreement should include: names of landlord and tenants, property address,
-                    rent amount and payment dates, deposit amount and protection scheme, tenancy start
-                    and end dates, responsibilities for repairs and utilities, and any special terms
-                    or restrictions.
-                  </p>
-                </div>
-
-                <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-                  <h3 className="font-semibold text-gray-900 mb-2">
-                    Is a verbal tenancy agreement legally binding?
-                  </h3>
-                  <p className="text-gray-600">
-                    Yes, a verbal tenancy agreement is legally binding. However, having a written
-                    agreement protects both landlord and tenant by clearly setting out the terms.
-                    Without written evidence, disputes become difficult to resolve.
-                  </p>
-                </div>
-
-                <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-                  <h3 className="font-semibold text-gray-900 mb-2">
-                    Do I need a different agreement for Scotland?
-                  </h3>
-                  <p className="text-gray-600">
-                    Yes. Scotland uses Private Residential Tenancies (PRT) under the Private Housing
-                    (Tenancies) (Scotland) Act 2016, not ASTs. PRTs have different rules including
-                    no fixed end date and different eviction grounds.
-                  </p>
-                </div>
-
-                <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-                  <h3 className="font-semibold text-gray-900 mb-2">
-                    Can I write my own tenancy agreement?
-                  </h3>
-                  <p className="text-gray-600">
-                    Yes, but it must comply with current housing law. DIY agreements often miss
-                    important clauses or include unenforceable terms. Using a professionally drafted
-                    template ensures legal compliance and protects your interests.
-                  </p>
-                </div>
-
-                <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-                  <h3 className="font-semibold text-gray-900 mb-2">
-                    How long should a tenancy agreement be?
-                  </h3>
-                  <p className="text-gray-600">
-                    The minimum AST is 6 months, but 12 months is most common. Fixed terms give
-                    certainty to both parties. After the fixed term, the tenancy becomes periodic
-                    (rolling month-to-month) unless renewed.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Final CTA */}
-        <section className="py-16 lg:py-20 bg-gray-50">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto bg-gradient-to-br from-primary to-primary/90 rounded-3xl p-8 lg:p-12 text-white text-center">
-              <h2 className="text-3xl lg:text-4xl font-bold mb-4">
-                Get Your Tenancy Agreement Template Now
-              </h2>
-              <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-                Protect yourself and your property with a legally compliant tenancy agreement.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link
-                  href="/products/ast"
-                  className="hero-btn-secondary inline-flex items-center justify-center gap-2"
-                >
-                  <Download className="w-5 h-5" />
-                  View Free Templates
-                </Link>
-                <IntentProductCTA
-                  intent={{ product: "ast", src: "seo_landing" }}
-                  label="Get Premium AST — £24.99"
-                  className="hero-btn-secondary inline-flex items-center justify-center gap-2"
-                />
-              </div>
-              <p className="mt-8 text-white/70 text-sm">
-                England, Wales & Scotland &bull; 50+ Clauses &bull; Legally Compliant
-              </p>
-            </div>
-          </div>
-        </section>
+        <FAQSection
+          title="Tenancy Agreement Template FAQ"
+          faqs={[
+            {
+              question: 'What is an assured shorthold tenancy (AST)?',
+              answer: 'An assured shorthold tenancy (AST) is the most common type of tenancy in England. It gives tenants the right to live in a property for a set period, typically 6-12 months, with rights protected by law. Landlords can use Section 21 or Section 8 to regain possession.',
+            },
+            {
+              question: 'What should be included in a tenancy agreement?',
+              answer: 'A tenancy agreement should include: names of landlord and tenants, property address, rent amount and payment dates, deposit amount and protection scheme, tenancy start and end dates, responsibilities for repairs and utilities, and any special terms or restrictions.',
+            },
+            {
+              question: 'Is a verbal tenancy agreement legally binding?',
+              answer: 'Yes, a verbal tenancy agreement is legally binding. However, having a written agreement protects both landlord and tenant by clearly setting out the terms. Without written evidence, disputes become difficult to resolve.',
+            },
+            {
+              question: 'Do I need a different agreement for Scotland?',
+              answer: 'Yes. Scotland uses Private Residential Tenancies (PRT) under the Private Housing (Tenancies) (Scotland) Act 2016, not ASTs. PRTs have different rules including no fixed end date and different eviction grounds.',
+            },
+            {
+              question: 'Can I write my own tenancy agreement?',
+              answer: 'Yes, but it must comply with current housing law. DIY agreements often miss important clauses or include unenforceable terms. Using a professionally drafted template ensures legal compliance and protects your interests.',
+            },
+            {
+              question: 'How long should a tenancy agreement be?',
+              answer: 'The minimum AST is 6 months, but 12 months is most common. Fixed terms give certainty to both parties. After the fixed term, the tenancy becomes periodic (rolling month-to-month) unless renewed.',
+            },
+          ]}
+          showContactCTA={false}
+          variant="white"
+        />
 
         {/* Related Products */}
         <RelatedProductsModule products={['ast', 'notice_only', 'money_claim']} />
 
-        {/* Related Resources */}
-        <section className="py-16 lg:py-20">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              <RelatedLinks
-                title="Related Resources"
-                links={[
-                  productLinks.tenancyAgreement,
-                  toolLinks.section21Generator,
-                  toolLinks.hmoChecker,
-                  landingPageLinks.evictionTemplate,
-                ]}
-              />
-            </div>
-          </div>
-        </section>
       </main>
     </>
   );

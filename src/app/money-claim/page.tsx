@@ -44,5 +44,5 @@ export const metadata: Metadata = {
 };
 
 export default function MoneyClaimPage() {
-  return <WizardLandingPage content={moneyClaimContent} structuredDataUrl={canonicalUrl} />;
+  return <WizardLandingPage content={moneyClaimContent} structuredDataUrl={canonicalUrl} showAskHeavenWidget={false} />;
 }

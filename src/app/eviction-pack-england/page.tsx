@@ -43,5 +43,5 @@ export const metadata: Metadata = {
 };
 
 export default function EvictionPackEnglandPage() {
-  return <WizardLandingPage content={completePackContent} structuredDataUrl={canonicalUrl} />;
+  return <WizardLandingPage content={completePackContent} structuredDataUrl={canonicalUrl} showAskHeavenWidget={false} />;
 }
