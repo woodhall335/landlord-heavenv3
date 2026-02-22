@@ -401,6 +401,7 @@ export default function HMOLicenseChecker() {
         align="center"
         hideMedia
         showReviewPill={false}
+        showTrustPositioningBar
         showUsageCounter
         primaryCta={{ label: 'Start Free Checker →', href: '#checker' }}
         secondaryCta={{ label: 'Get HMO Tenancy Agreement →', href: '/products/ast' }}

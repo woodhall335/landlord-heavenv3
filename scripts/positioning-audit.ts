@@ -11,6 +11,7 @@ export interface RouteAuditResult {
   heuristicTemplateMatches: string[];
   trustMatches: string[];
   trustCounts: Record<string, number>;
+  trustInjected: boolean;
 }
 
 const PAGE_ROOT = path.join(process.cwd(), 'src', 'app');
@@ -48,6 +49,16 @@ const trustSignals = [
   'step-by-step',
   'guided wizard',
   'reduces the risk of mistakes',
+] as const;
+
+const trustInjectorTokens = [
+  'trustpositioningbar',
+  'positioning_one_liner',
+  '<standardhero',
+  'standardhero(',
+  '<wizardlandingpage',
+  'wizardlandingpage(',
+  'showtrustpositioningbar',
 ] as const;
 
 const templateContextWords = ['free', 'download', 'generic', 'blank'];
@@ -117,15 +128,17 @@ export function auditPositioning(filePaths?: string[]): RouteAuditResult[] {
 
       const forbiddenMatches = forbiddenPhrases.filter((phrase) => content.includes(phrase));
       const trustCounts = Object.fromEntries(trustSignals.map((s) => [s, countPhrase(content, s)]));
+      const trustInjected = trustInjectorTokens.some((token) => content.includes(token));
       const trustMatches = Object.entries(trustCounts)
         .filter(([, count]) => count > 0)
         .map(([signal]) => signal);
 
       const heuristicTemplateMatches = getTemplateHeuristicMatches(content);
       const hasForbidden = forbiddenMatches.length > 0;
+      const trustSignalsDetected = trustMatches.length > 0 || trustInjected;
       const status: RouteAuditStatus = hasForbidden
         ? 'FAIL'
-        : trustMatches.length === 0 || heuristicTemplateMatches.length > 0
+        : !trustSignalsDetected || heuristicTemplateMatches.length > 0
           ? 'WARN'
           : 'PASS';
 
@@ -137,6 +150,7 @@ export function auditPositioning(filePaths?: string[]): RouteAuditResult[] {
         heuristicTemplateMatches,
         trustMatches,
         trustCounts,
+        trustInjected,
       };
     })
     .filter((result) => isAuditedRoute(result.route))
@@ -145,8 +159,8 @@ export function auditPositioning(filePaths?: string[]): RouteAuditResult[] {
 
 function printResults(results: RouteAuditResult[]) {
   console.log('\n=== Positioning Audit ===\n');
-  console.log('Status | Route | Trust Count | Forbidden/Heuristic');
-  console.log('---|---|---:|---');
+  console.log('Status | Route | Trust Count | Trust Injected | Forbidden/Heuristic');
+  console.log('---|---|---:|---|---');
 
   for (const result of results) {
     const totalTrust = Object.values(result.trustCounts).reduce((sum, n) => sum + n, 0);
@@ -154,8 +168,9 @@ function printResults(results: RouteAuditResult[]) {
       .filter(Boolean)
       .join(', ') || '-';
 
-    console.log(`${result.status.padEnd(5)} | ${result.route} | ${String(totalTrust).padStart(2)} | ${forbidden}`);
-    if (result.forbiddenMatches.length > 0 || result.heuristicTemplateMatches.length > 0 || result.trustMatches.length === 0) {
+    const trustInjectedLabel = `trust_injected=${result.trustInjected ? 'true' : 'false'}`;
+    console.log(`${result.status.padEnd(5)} | ${result.route} | ${String(totalTrust).padStart(2)} | ${trustInjectedLabel} | ${forbidden}`);
+    if (result.forbiddenMatches.length > 0 || result.heuristicTemplateMatches.length > 0 || (result.trustMatches.length === 0 && !result.trustInjected)) {
       console.log(`  file: ${result.filePath}`);
       if (result.forbiddenMatches.length > 0) {
         console.log(`  forbidden: ${result.forbiddenMatches.join(', ')}`);
@@ -163,6 +178,7 @@ function printResults(results: RouteAuditResult[]) {
       if (result.heuristicTemplateMatches.length > 0) {
         console.log(`  template-context: ${result.heuristicTemplateMatches.slice(0, 3).join(' || ')}`);
       }
+      console.log(`  ${trustInjectedLabel}`);
       console.log(`  trust-signals: ${result.trustMatches.join(', ') || '(none)'}`);
     }
   }

@@ -70,6 +70,7 @@ export default function ValidatorsHubPage() {
         align="center"
         hideMedia
         showReviewPill={false}
+        showTrustPositioningBar
         showUsageCounter={false}
       />
 
