@@ -9,7 +9,7 @@
  */
 export const SEO_PRICES = {
   evictionNotice: { amount: 49.99, display: '£49.99' },
-  evictionBundle: { amount: 199.99, display: '£199.99' },
+  evictionBundle: { amount: 129.99, display: '£129.99' },
   moneyClaim: { amount: 99.99, display: '£99.99' },
   tenancyStandard: { amount: 14.99, display: '£14.99' },
   tenancyPremium: { amount: 24.99, display: '£24.99' },

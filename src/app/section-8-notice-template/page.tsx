@@ -115,7 +115,7 @@ export default function Section8NoticeTemplatePage() {
           badgeIcon={<CheckCircle className="w-4 h-4" />}
           title="Section 8 Notice Template (Form 3) for England"
           subtitle={<>Need a <strong>Section 8 notice template</strong>? Use this Form 3 guide to choose the right grounds, notice periods, and wording for rent arrears, antisocial behaviour, and other tenancy breaches.</>}
-          primaryCTA={{ label: "Get Complete Pack — £199.99", href: wizardLinkCompletePack }}
+          primaryCTA={{ label: "Get Complete Pack — £129.99", href: wizardLinkCompletePack }}
           secondaryCTA={{ label: "Try Free Template", href: "/tools/free-section-8-notice-generator" }}
           variant="pastel"
         >
@@ -471,7 +471,7 @@ export default function Section8NoticeTemplatePage() {
                   </div>
                   <div className="text-center mb-6">
                     <span className="text-sm font-medium text-primary uppercase tracking-wide">Complete Pack</span>
-                    <div className="text-4xl font-bold text-gray-900 mt-2">£199.99</div>
+                    <div className="text-4xl font-bold text-gray-900 mt-2">£129.99</div>
                   </div>
                   <ul className="space-y-4 mb-8">
                     <li className="flex items-start gap-3">
@@ -881,7 +881,7 @@ export default function Section8NoticeTemplatePage() {
                   href={wizardLinkCompletePack}
                   className="hero-btn-secondary inline-flex items-center justify-center gap-2"
                 >
-                  Get Complete Pack — £199.99
+                  Get Complete Pack — £129.99
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               </div>

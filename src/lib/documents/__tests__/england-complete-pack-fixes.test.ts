@@ -2,7 +2,7 @@
  * Regression Tests: England Complete Pack Fixes
  *
  * Tests for fixes to critical bugs in the England complete_pack product:
- * 1. Price mismatch (£199.99 -> £149.99) - P0 Critical
+ * 1. Price mismatch (£129.99 -> £129.99) - P0 Critical
  * 2. Schedule of arrears missing rent_amount/tenancy_start_date
  * 3. Witness statement "undefined" bug
  * 4. Address duplication in documents
@@ -399,14 +399,14 @@ describe('Address Deduplication', () => {
 
 describe('Complete Pack Integration', () => {
   it('should have consistent pricing across all sources', () => {
-    // All sources must agree on £149.99
+    // All sources must agree on £129.99
     const priceFromProducts = PRODUCTS.complete_pack.price;
     const priceFromRegional = REGIONAL_PRICING.complete_pack.england;
     const priceFromFunction = getRegionalPrice('complete_pack', 'england');
 
-    expect(priceFromProducts).toBe(149.99);
-    expect(priceFromRegional).toBe(149.99);
-    expect(priceFromFunction).toBe(149.99);
+    expect(priceFromProducts).toBe(129.99);
+    expect(priceFromRegional).toBe(129.99);
+    expect(priceFromFunction).toBe(129.99);
 
     // All should match
     expect(priceFromProducts).toBe(priceFromRegional);

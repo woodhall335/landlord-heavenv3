@@ -261,7 +261,7 @@ export default function AssuredShortholdTenancyAgreementTemplatePage() {
                 <p className="text-sm text-gray-600">Section 21 or Section 8 notices when you need to regain possession</p>
               </Link>
               <Link href="/products/complete-pack" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                <h3 className="font-semibold text-gray-900">Complete Eviction Pack — £199.99</h3>
+                <h3 className="font-semibold text-gray-900">Complete Eviction Pack — £129.99</h3>
                 <p className="text-sm text-gray-600">Full eviction package including court forms and witness statements</p>
               </Link>
               <Link href="/products/money-claim" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
