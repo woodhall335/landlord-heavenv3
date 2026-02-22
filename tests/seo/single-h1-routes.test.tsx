@@ -5,10 +5,10 @@
 import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, render } from '@testing-library/react';
-import NoticeOnlyPage from '@/app/products/notice-only/page';
-import CompletePackPage from '@/app/products/complete-pack/page';
-import MoneyClaimPage from '@/app/products/money-claim/page';
-import AstPage from '@/app/products/ast/page';
+import NoticeOnlyPage from '@/app/(marketing)/products/notice-only/page';
+import CompletePackPage from '@/app/(marketing)/products/complete-pack/page';
+import MoneyClaimPage from '@/app/(marketing)/products/money-claim/page';
+import AstPage from '@/app/(marketing)/products/ast/page';
 import TenancyAgreementTemplatePage from '@/app/tenancy-agreement-template/page';
 import AssuredShortholdTenancyAgreementTemplatePage from '@/app/assured-shorthold-tenancy-agreement-template/page';
 import WalesTenancyAgreementTemplatePage from '@/app/wales-tenancy-agreement-template/page';
@@ -18,7 +18,7 @@ import EvictionNoticeTemplatePage from '@/app/eviction-notice-template/page';
 import EvictionProcessEnglandPage from '@/app/eviction-process-england/page';
 import MoneyClaimOnlineMcolPage from '@/app/money-claim-online-mcol/page';
 import MoneyClaimUnpaidRentPage from '@/app/money-claim-unpaid-rent/page';
-import BlogSlugPage from '@/app/blog/[slug]/page';
+import BlogSlugPage from '@/app/(marketing)/blog/[slug]/page';
 import RentArrearsCalculatorPage from '@/app/tools/rent-arrears-calculator/page';
 import Section21NoticeGeneratorPage from '@/app/tools/free-section-21-notice-generator/page';
 import AskHeavenPage from '@/app/ask-heaven/page';
@@ -67,6 +67,10 @@ vi.mock('next/navigation', () => ({
     prefetch: vi.fn(),
   }),
   useSearchParams: () => new URLSearchParams(),
+}));
+
+vi.mock('@/components/layout/HeaderConfig', () => ({
+  HeaderConfig: () => null,
 }));
 
 const renderPage = async (renderer: () => React.ReactElement | Promise<React.ReactElement>) => {
