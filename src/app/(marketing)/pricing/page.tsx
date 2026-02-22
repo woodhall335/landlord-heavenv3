@@ -5,6 +5,7 @@ import { generateMetadata } from "@/lib/seo";
 import { StructuredData, faqPageSchema } from "@/lib/seo/structured-data";
 import { FAQSection } from "@/components/seo/FAQSection";
 import { StandardHero } from "@/components/marketing/StandardHero";
+import { HeaderConfig } from "@/components/layout/HeaderConfig";
 
 export const metadata: Metadata = generateMetadata({
   title: "Pricing - UK Eviction Case Bundle Comparison",
@@ -60,6 +61,8 @@ const faqs = [
 export default function PricingPage() {
   return (
     <div className="min-h-screen bg-gray-50">
+      <HeaderConfig mode="autoOnScroll" />
+
       {/* Structured Data for SEO */}
       <StructuredData data={faqPageSchema(faqs)} />
 

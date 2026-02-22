@@ -7,6 +7,7 @@ import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, toolLinks, landingPageLinks } from '@/lib/seo/internal-links';
 import { buildAskHeavenLink } from '@/lib/ask-heaven/buildAskHeavenLink';
 import { StandardHero } from '@/components/marketing/StandardHero';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { FunnelCta } from '@/components/funnels';
 import { IntentProductCTA, RelatedProductsModule, getIntentProductHref } from '@/components/seo/IntentProductCTA';
 import {
@@ -161,6 +162,7 @@ export default function TenancyAgreementTemplatePage() {
     <>
       <StructuredData data={pageSchema} />
       <StructuredData data={faqSchema} />
+      <HeaderConfig mode="autoOnScroll" />
       <StructuredData data={breadcrumbSchema([
         { name: "Home", url: "https://landlordheaven.co.uk" },
         { name: "Templates", url: "https://landlordheaven.co.uk/products/ast" },
