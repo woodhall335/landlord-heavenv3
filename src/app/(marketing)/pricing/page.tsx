@@ -89,7 +89,7 @@ export default function PricingPage() {
                 </th>
                 <th className="text-center p-6">
                   <div className="font-semibold text-charcoal mb-2">Complete Pack</div>
-                  <div className="text-2xl font-bold text-primary mb-1">£199.99</div>
+                  <div className="text-2xl font-bold text-primary mb-1">£129.99</div>
                   <div className="text-xs text-amber-600 font-medium">England only</div>
                   <div className="text-sm text-gray-600">One-time</div>
                 </th>
@@ -328,7 +328,7 @@ export default function PricingPage() {
           {/* Complete Eviction Pack */}
           <div className="bg-white rounded-lg border-2 border-gray-200 p-6">
             <h3 className="text-2xl font-bold text-charcoal mb-2">Complete Pack</h3>
-            <div className="text-3xl font-bold text-primary mb-2">£199.99 <span className="text-sm text-gray-600">one-time</span></div>
+            <div className="text-3xl font-bold text-primary mb-2">£129.99 <span className="text-sm text-gray-600">one-time</span></div>
             <div className="text-xs text-amber-600 font-medium mb-4">England only</div>
             <ul className="space-y-2 mb-6 text-sm">
               <li>✅ Section 8/21 Notice</li>

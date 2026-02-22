@@ -119,7 +119,7 @@ export default function WarrantOfPossessionPage() {
           badgeIcon={<Gavel className="w-4 h-4" />}
           title="Warrant of Possession — Bailiff Eviction"
           subtitle={<>Your tenant won&apos;t leave despite the court order? A <strong>warrant of possession</strong> authorizes bailiffs to physically remove them.</>}
-          primaryCTA={{ label: 'Get Complete Pack — £199.99', href: wizardLinkCompletePack }}
+          primaryCTA={{ label: 'Get Complete Pack — £129.99', href: wizardLinkCompletePack }}
           secondaryCTA={{ label: 'View Possession Claim Guide', href: '/possession-claim-guide' }}
           variant="pastel"
         >

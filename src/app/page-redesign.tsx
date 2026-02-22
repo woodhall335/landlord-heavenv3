@@ -167,7 +167,7 @@ export default function Home() {
               href="/products/complete-pack"
               title="Complete Eviction Pack"
               description="Full bundle from notice to possession order with court forms and guidance."
-              price="£199.99"
+              price="£129.99"
               solicitorPrice="£1,500-2,500"
               icon={<RiScales3Line className="w-7 h-7" />}
               popular
@@ -282,7 +282,7 @@ export default function Home() {
           },
           {
             question: "What's included in each pack?",
-            answer: "Notice Only (£49.99): The appropriate eviction notice for your situation plus service instructions. Complete Pack (£199.99): Everything from notice through to court claim forms, witness statements, and filing guidance. Money Claim (£99.99): Pre-action letters, claim forms, evidence templates, and enforcement guidance."
+            answer: "Notice Only (£49.99): The appropriate eviction notice for your situation plus service instructions. Complete Pack (£129.99): Everything from notice through to court claim forms, witness statements, and filing guidance. Money Claim (£99.99): Pre-action letters, claim forms, evidence templates, and enforcement guidance."
           },
         ]}
         showContactCTA={true}

@@ -110,7 +110,7 @@ export default function HomeContent() {
               href="/products/complete-pack"
               title="Complete Eviction Pack"
               description="Full bundle from notice to possession order with court forms and guidance."
-              price="£199.99"
+              price="£129.99"
               icon={<RiScales3Line className="w-7 h-7" />}
             />
             <ProductCard

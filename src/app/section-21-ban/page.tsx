@@ -98,7 +98,7 @@ export default function Section21BanPage() {
                 href="/products/complete-pack"
                 className="bg-white/10 hover:bg-white/20 text-white font-semibold py-4 px-8 rounded-lg transition-colors text-lg border border-white/30"
               >
-                Complete Eviction Pack — £199.99
+                Complete Eviction Pack — £129.99
               </Link>
             </div>
           </div>
@@ -218,7 +218,7 @@ export default function Section21BanPage() {
                 <tr>
                   <td className="p-4 font-medium">Cost with us</td>
                   <td className="p-4 text-primary font-semibold">From £49.99</td>
-                  <td className="p-4">From £199.99</td>
+                  <td className="p-4">From £129.99</td>
                 </tr>
               </tbody>
             </table>
@@ -251,7 +251,7 @@ export default function Section21BanPage() {
                 <CheckCircle className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
                 <div>
                   <div className="font-semibold text-gray-900">Lower costs</div>
-                  <p className="text-gray-600">Section 21 notices from £49.99 vs £199.99+ for Section 8</p>
+                  <p className="text-gray-600">Section 21 notices from £49.99 vs £129.99+ for Section 8</p>
                 </div>
               </div>
               <div className="flex items-start gap-4">
@@ -288,7 +288,7 @@ export default function Section21BanPage() {
                 href="/products/complete-pack"
                 className="bg-white/10 hover:bg-white/20 text-white font-semibold py-4 px-8 rounded-lg transition-colors text-lg border border-white/30"
               >
-                Complete Eviction Pack — £199.99
+                Complete Eviction Pack — £129.99
               </Link>
             </div>
           </div>
@@ -369,7 +369,7 @@ export default function Section21BanPage() {
                 href: productLinks.noticeOnly.href,
               }}
               secondaryCTA={{
-                label: 'Complete eviction pack — £199.99',
+                label: 'Complete eviction pack — £129.99',
                 href: productLinks.completePack.href,
               }}
               relatedLinks={[

@@ -131,7 +131,7 @@ const documentOptions: DocumentOption[] = [
     title: 'Complete Eviction Pack',
     description: 'England-only case bundle with N5 / N5B / N119 routes, witness statement draft, and filing guide',
     icon: '⚖️',
-    price: '£199.99',
+    price: '£129.99',
     regionBadge: 'England only',
   },
   {

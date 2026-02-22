@@ -258,8 +258,8 @@ function buildUpsell(product: string | null, facts: Record<string, any>) {
   if (product === 'notice_only') {
     return {
       product: 'eviction_pack',
-      price: 199.99,
-      reason: applyPricingMessage(199.99, 'Upgrade to the Eviction Pack for court-ready documents'),
+      price: 129.99,
+      reason: applyPricingMessage(129.99, 'Upgrade to the Eviction Pack for court-ready documents'),
     };
   }
   if (product === 'money_claim') {

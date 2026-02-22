@@ -667,7 +667,7 @@ export function getProductMeta(product: string): ProductMeta {
     },
     'complete_pack': {
       name: 'Complete Eviction Pack',
-      price: '£199.99',
+      price: '£129.99',
       originalPrice: '£2,500+',
       savings: 'Save £2,300+ vs solicitors',
       features: [

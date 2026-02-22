@@ -38,7 +38,7 @@ export function AskHeavenNextStepsCards({ jurisdiction = 'england', className }:
     },
     {
       title: 'Complete Eviction Pack',
-      price: '£199.99',
+      price: '£129.99',
       detail: '(England)',
       description: "Best if you're going to court and want a full, court-ready eviction bundle.",
       ctaText: 'Prepare your eviction case',

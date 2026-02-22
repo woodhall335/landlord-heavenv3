@@ -1,4 +1,5 @@
 import { normalizeJurisdiction } from '@/lib/jurisdiction/normalize';
+import { PRODUCTS } from '@/lib/pricing/products';
 
 export type ProductKey =
   | 'notice_only'
@@ -29,11 +30,11 @@ export interface CtaInput {
 }
 
 const PRICE_MAP: Record<ProductKey, number> = {
-  notice_only: 49.99,
-  complete_pack: 199.99,
-  money_claim: 99.99,
-  ast_standard: 14.99,
-  ast_premium: 24.99,
+  notice_only: PRODUCTS.notice_only.price,
+  complete_pack: PRODUCTS.complete_pack.price,
+  money_claim: PRODUCTS.money_claim.price,
+  ast_standard: PRODUCTS.ast_standard.price,
+  ast_premium: PRODUCTS.ast_premium.price,
 };
 
 const CTA_LABELS: Record<ProductKey, string> = {
