@@ -1030,6 +1030,7 @@ export default function ScotlandPRTPage() {
 
         {/* FAQ Section */}
         <FAQSection
+          showTrustPositioningBar
           title="Frequently Asked Questions"
           faqs={[
             {

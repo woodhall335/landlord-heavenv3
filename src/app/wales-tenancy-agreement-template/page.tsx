@@ -299,6 +299,7 @@ export default function WalesTenancyAgreementTemplatePage() {
 
         {/* Mid-page CTA */}
         <SeoCtaBlock
+          showTrustPositioningBar
           pageType="tenancy"
           variant="section"
           jurisdiction="wales"

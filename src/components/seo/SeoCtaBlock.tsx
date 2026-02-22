@@ -18,6 +18,7 @@ import { ArrowRight, Shield, Clock, FileText, Gavel, PoundSterling } from 'lucid
 import { PRODUCTS } from '@/lib/pricing/products';
 import { buildWizardLink, type WizardJurisdiction } from '@/lib/wizard/buildWizardLink';
 import { trackLandingCtaClick } from '@/components/analytics/LandingPageTracker';
+import { TrustPositioningBar } from '@/components/marketing/TrustPositioningBar';
 
 export type SeoPageType = 'problem' | 'court' | 'money' | 'general' | 'tenancy';
 
@@ -42,6 +43,8 @@ interface SeoCtaBlockProps {
   jurisdiction?: WizardJurisdiction;
   /** Additional CSS classes */
   className?: string;
+  /** Optional trust positioning bar under CTA heading */
+  showTrustPositioningBar?: boolean;
 }
 
 // Pre-configured CTA content by page type
@@ -157,6 +160,7 @@ export function SeoCtaBlock({
   description,
   jurisdiction,
   className = '',
+  showTrustPositioningBar = false,
 }: SeoCtaBlockProps) {
   const config = ctaConfig[pageType];
   const product = PRODUCTS[config.primary.product];
@@ -203,6 +207,9 @@ export function SeoCtaBlock({
             <p className="text-gray-600">
               {description || config.sectionDescription}
             </p>
+            {showTrustPositioningBar ? (
+              <TrustPositioningBar variant="compact" className="mx-auto mt-6 max-w-5xl" />
+            ) : null}
           </div>
           <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
             <Link
@@ -235,6 +242,9 @@ export function SeoCtaBlock({
             <p className="text-gray-600 text-sm mb-4">
               {description || config.faqDescription}
             </p>
+            {showTrustPositioningBar ? (
+              <TrustPositioningBar variant="compact" className="mx-auto mt-6 max-w-5xl" />
+            ) : null}
             <div className="flex flex-col sm:flex-row gap-3">
               <Link
                 href={wizardHref}
@@ -283,6 +293,9 @@ export function SeoCtaBlock({
         <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
           {description || 'Court-ready format. AI compliance check. Trusted by over 10,000 UK landlords.'}
         </p>
+        {showTrustPositioningBar ? (
+          <TrustPositioningBar variant="compact" className="mx-auto mt-6 max-w-5xl" />
+        ) : null}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
             href={wizardHref}

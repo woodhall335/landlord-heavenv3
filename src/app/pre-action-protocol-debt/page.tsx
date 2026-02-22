@@ -210,6 +210,7 @@ export default function PreActionProtocolPage() {
             {/* FAQ Section */}
             <div className="mb-12">
               <FAQSection
+          showTrustPositioningBar
                 faqs={preActionProtocolFAQs}
                 title="Pre-Action Protocol FAQ"
                 showContactCTA={false}

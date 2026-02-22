@@ -405,6 +405,7 @@ export default function NoticeToQuitNIGuidePage() {
 
           {/* Mid-page CTA */}
           <SeoCtaBlock
+          showTrustPositioningBar
             pageType="tenancy"
             variant="section"
             jurisdiction="northern-ireland"

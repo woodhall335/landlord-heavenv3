@@ -727,6 +727,7 @@ export default function ScotlandEvictionNoticesPage() {
 
         {/* FAQ Section */}
         <FAQSection
+          showTrustPositioningBar
           title="Scottish Eviction FAQ"
           faqs={scotlandEvictionFAQs}
           showContactCTA={false}

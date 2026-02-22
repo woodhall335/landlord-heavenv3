@@ -187,6 +187,7 @@ export default function TenantDamagingPropertyPage() {
             {/* FAQ Section */}
             <div className="mb-12">
               <FAQSection
+          showTrustPositioningBar
                 faqs={tenantDamagingPropertyFAQs}
                 title="Tenant Property Damage FAQ"
                 showContactCTA={false}

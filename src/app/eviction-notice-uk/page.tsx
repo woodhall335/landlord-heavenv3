@@ -287,6 +287,7 @@ export default function EvictionNoticeUKPage() {
             {/* FAQ Section */}
             <div className="mb-12">
               <FAQSection
+          showTrustPositioningBar
                 faqs={evictionNoticeUKFAQs}
                 title="UK Eviction Notice FAQ"
                 showContactCTA={false}

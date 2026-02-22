@@ -385,6 +385,7 @@ export default function WalesOccupationContractPage() {
 
         {/* FAQ Section */}
         <FAQSection
+          showTrustPositioningBar
           title="Frequently Asked Questions"
           faqs={[
             {

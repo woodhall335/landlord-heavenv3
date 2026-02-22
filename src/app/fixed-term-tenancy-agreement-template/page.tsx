@@ -490,6 +490,7 @@ export default function FixedTermTenancyAgreementPage() {
 
     {/* CTA Section */}
         <SeoCtaBlock
+          showTrustPositioningBar
           pageType="tenancy"
           variant="final"
           title="Create Your Fixed Term Tenancy Agreement"

@@ -292,6 +292,7 @@ export default function ScottishTenancyAgreementTemplatePage() {
 
         {/* Mid-page CTA */}
         <SeoCtaBlock
+          showTrustPositioningBar
           pageType="tenancy"
           variant="section"
           jurisdiction="scotland"

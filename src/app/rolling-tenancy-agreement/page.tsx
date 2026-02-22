@@ -174,6 +174,7 @@ export default function RollingTenancyPage() {
             {/* FAQ Section */}
             <div className="mb-12">
               <FAQSection
+          showTrustPositioningBar
                 faqs={rollingTenancyFAQs}
                 title="Rolling Tenancy FAQ"
                 showContactCTA={false}

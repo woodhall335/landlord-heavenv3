@@ -328,6 +328,7 @@ export default function AstTemplateEnglandPage() {
 
         {/* Mid-page CTA */}
         <SeoCtaBlock
+          showTrustPositioningBar
           pageType="tenancy"
           variant="section"
           jurisdiction="england"

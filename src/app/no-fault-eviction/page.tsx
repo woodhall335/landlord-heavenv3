@@ -161,6 +161,7 @@ export default function NoFaultEvictionPage() {
             {/* FAQ Section */}
             <div className="mb-12">
               <FAQSection
+          showTrustPositioningBar
                 faqs={noFaultEvictionFAQs}
                 title="No-Fault Eviction FAQ"
                 showContactCTA={false}
