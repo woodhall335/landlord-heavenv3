@@ -73,8 +73,8 @@ export default function PricingPage() {
         subtitle="Compare solicitor workflows and AI-validated case bundle preparation."
         variant="pastel"
       >
-        <p className="text-sm text-gray-600">All prices are one-time payments</p>
-        <p className="mt-2 text-sm text-gray-600">Notices: England/Wales/Scotland. Complete Pack + Money Claims: England-only. Tenancy agreements: all UK (incl. NI).</p>
+        <p className="text-sm text-white">All prices are one-time payments</p>
+        <p className="mt-2 text-sm text-white">Notices: England/Wales/Scotland. Complete Pack + Money Claims: England-only. Tenancy agreements: all UK (incl. NI).</p>
       </StandardHero>
 
       <Container size="large" className="py-12">
