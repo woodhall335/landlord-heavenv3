@@ -165,7 +165,7 @@ export default function ASTPage() {
       ])} />
 
       {/* Hero Section */}
-      <UniversalHero {...astHeroConfig} />
+      <UniversalHero {...astHeroConfig} showTrustPositioningBar />
 
 
       {/* What's Included in This Agreement - Integration Layer Disclosure */}
