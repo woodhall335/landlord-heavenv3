@@ -512,6 +512,7 @@ export default function ASTPage() {
       <FAQSection
         title="Frequently Asked Questions"
         faqs={faqs}
+        includeSchema={false}
         showContactCTA={false}
         variant="white"
       />
