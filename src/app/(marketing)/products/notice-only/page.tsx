@@ -239,6 +239,7 @@ export default async function NoticeOnlyPage() {
       <FAQSection
         title="Frequently Asked Questions"
         faqs={faqs}
+        includeSchema={false}
         showContactCTA={false}
         variant="white"
       />
