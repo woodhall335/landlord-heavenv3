@@ -6,6 +6,7 @@
 import React from 'react';
 import { clsx } from 'clsx';
 import { UniversalHero } from '@/components/landing/UniversalHero';
+import { TrustPositioningBar } from '@/components/marketing/TrustPositioningBar';
 
 export interface StandardHeroCTA {
   label: string;
@@ -68,7 +69,8 @@ export function StandardHero({
         >
           <div className={clsx('mt-2 text-white', align === 'center' ? 'text-center' : 'text-left')}>
             <div className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight text-white">{title}</div>
-            {children}
+            <TrustPositioningBar variant="compact" />
+        {children}
           </div>
         </UniversalHero>
       </section>
@@ -91,6 +93,7 @@ export function StandardHero({
         showReviewPill={false}
         showUsageCounter={false}
       >
+        <TrustPositioningBar variant="compact" />
         {children}
       </UniversalHero>
     </section>

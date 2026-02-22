@@ -17,7 +17,7 @@ None
 None
 
 ## Route Question Issues
-- scotland / notice_only () — Missing selected_notice_route options; defaulted route | MQS: config\mqs\notice_only\scotland.yaml
+- scotland / notice_only () — Missing selected_notice_route options; defaulted route | MQS: config/mqs/notice_only/scotland.yaml
 
 ## Missing Facts Schema Coverage
 None

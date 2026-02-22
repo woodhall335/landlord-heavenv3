@@ -160,7 +160,7 @@ export default function RentArrearsLetterTemplatePage() {
           title="Rent Arrears Letter Template UK"
           subtitle={<>Use this <strong>rent arrears letter template UK</strong> landlords rely on to chase unpaid rent quickly, set clear deadlines, and escalate correctly if payment is still not made.</>}
           primaryCTA={{ label: "Get Money Claim Pack — £99.99", href: wizardLinkMoneyClaim }}
-          secondaryCTA={{ label: "Try Free Template", href: "/tools/free-rent-demand-letter" }}
+          secondaryCTA={{ label: "Try Free Starter Document", href: "/tools/free-rent-demand-letter" }}
           variant="pastel"
         >
           {/* Trust Signals */}
@@ -397,7 +397,7 @@ export default function RentArrearsLetterTemplatePage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
-                Free Template vs Money Claim Pack
+                Free Starter Document vs Money Claim Pack
               </h2>
               <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
                 Start with our free rent demand letter. Upgrade to the Money Claim Pack if you need
@@ -408,7 +408,7 @@ export default function RentArrearsLetterTemplatePage() {
                 {/* Free Version */}
                 <div className="bg-gray-50 rounded-2xl p-8 border border-gray-200">
                   <div className="text-center mb-6">
-                    <span className="text-sm font-medium text-gray-500 uppercase tracking-wide">Free Template</span>
+                    <span className="text-sm font-medium text-gray-500 uppercase tracking-wide">Free Starter Document</span>
                     <div className="text-4xl font-bold text-gray-900 mt-2">£0</div>
                   </div>
                   <ul className="space-y-4 mb-8">
@@ -441,7 +441,7 @@ export default function RentArrearsLetterTemplatePage() {
                     href="/tools/free-rent-demand-letter"
                     className="hero-btn-secondary block w-full text-center"
                   >
-                    Try Free Template
+                    Try Free Starter Document
                   </Link>
                 </div>
 
@@ -659,7 +659,7 @@ export default function RentArrearsLetterTemplatePage() {
             <div className="max-w-5xl mx-auto prose prose-slate max-w-none">
               <h2>Common Mistakes That Cause Rejection or Delay</h2>
               <ul>
-                <li>Using a generic template without checking tenancy type and jurisdiction.</li>
+                <li>Using a generic document draft without checking tenancy type and jurisdiction.</li>
                 <li>Serving before prerequisites are satisfied or without required enclosures.</li>
                 <li>Date errors: invalid expiry dates, inconsistent chronology, or impossible timelines.</li>
                 <li>Amount errors: rent arrears totals that do not reconcile to ledger entries.</li>
@@ -907,7 +907,7 @@ export default function RentArrearsLetterTemplatePage() {
                   className="hero-btn-secondary inline-flex items-center justify-center gap-2"
                 >
                   <Download className="w-5 h-5" />
-                  Try Free Template
+                  Try Free Starter Document
                 </Link>
                 <Link
                   href={wizardLinkMoneyClaim}

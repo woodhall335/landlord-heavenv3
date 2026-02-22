@@ -555,7 +555,7 @@ export default function MoneyClaimOnlineMCOLPage() {
             <div className="max-w-5xl mx-auto prose prose-slate max-w-none">
               <h2>Common Mistakes That Cause Rejection or Delay</h2>
               <ul>
-                <li>Using a generic template without checking tenancy type and jurisdiction.</li>
+                <li>Using a generic document draft without checking tenancy type and jurisdiction.</li>
                 <li>Serving before prerequisites are satisfied or without required enclosures.</li>
                 <li>Date errors: invalid expiry dates, inconsistent chronology, or impossible timelines.</li>
                 <li>Amount errors: rent arrears totals that do not reconcile to ledger entries.</li>

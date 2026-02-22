@@ -3,7 +3,7 @@
  *
  * Two comparison tables for marketing pages:
  * 1. Landlord Heaven vs Solicitor
- * 2. Landlord Heaven vs Free Template
+ * 2. Landlord Heaven vs Free Starter Document
  *
  * DEFENSIBLE POSITIONING (as of Jan 2026):
  * - No specific price claims without citation
@@ -131,7 +131,7 @@ export function VsSolicitorComparison({ product = 'notice_only' }: ComparisonTab
 }
 
 // ========================================
-// VS FREE TEMPLATE COMPARISON
+// VS FREE STARTER DOCUMENT COMPARISON
 // ========================================
 
 export function VsFreeTemplateComparison({ product = 'notice_only' }: ComparisonTableProps) {
@@ -194,7 +194,7 @@ export function VsFreeTemplateComparison({ product = 'notice_only' }: Comparison
   return (
     <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
       <div className="px-6 py-4 bg-gray-50 border-b border-gray-200">
-        <h3 className="text-lg font-semibold text-charcoal">Landlord Heaven vs Free Templates</h3>
+        <h3 className="text-lg font-semibold text-charcoal">Landlord Heaven vs Free Starter Documents</h3>
       </div>
 
       <div className="overflow-x-auto">
@@ -208,7 +208,7 @@ export function VsFreeTemplateComparison({ product = 'notice_only' }: Comparison
                 Landlord Heaven
               </th>
               <th className="px-6 py-3 text-center text-sm font-semibold text-gray-500 border-b border-gray-200">
-                Free Templates
+                Free Starter Documents
               </th>
             </tr>
           </thead>

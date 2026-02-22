@@ -204,7 +204,7 @@ export default function AssuredShortholdTenancyAgreementTemplatePage() {
         {/* Key Clauses Section */}
         <section className="container mx-auto px-4 py-16">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">Key Clauses Users Miss in Free Templates</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-6">Key Clauses Users Miss in Free Starter Documents</h2>
             <p className="text-gray-700 mb-8">
               Free AST templates downloaded from the internet often lack crucial clauses that protect landlords
               in disputes. Here are the most commonly missing provisions that our templates include:

@@ -157,7 +157,7 @@ export default function AstTenancyAgreementTemplatePage() {
                 What Makes a Good AST Template?
               </h2>
               <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                Not all tenancy agreement templates are equal. Many free templates found online
+                Not all tenancy agreement templates are equal. Many free starter documents found online
                 contain outdated terms or clauses that courts will not enforce.
               </p>
 
@@ -190,7 +190,7 @@ export default function AstTenancyAgreementTemplatePage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
-                Free Templates vs Professional Templates
+                Free Starter Documents vs Professional Templates
               </h2>
               <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
                 Understanding the risks of using free tenancy agreement templates.
@@ -202,7 +202,7 @@ export default function AstTenancyAgreementTemplatePage() {
                     <XCircle className="w-6 h-6 text-red-600" />
                   </div>
                   <h3 className="text-xl font-bold text-gray-900 mb-4">
-                    Risks of Free Templates
+                    Risks of Free Starter Documents
                   </h3>
                   <ul className="space-y-3">
                     <li className="flex items-start gap-3 text-gray-600">

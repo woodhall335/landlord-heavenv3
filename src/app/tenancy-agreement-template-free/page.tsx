@@ -9,7 +9,7 @@ import { FAQSection } from '@/components/seo/FAQSection';
 
 export const metadata: Metadata = {
   title: 'Free Tenancy Agreement Template UK vs Paid: What You Need to Know 2026',
-  description: 'Comparing free tenancy agreement templates vs professionally drafted ASTs. What free templates miss and why £14.99 is worth it.',
+  description: 'Comparing free tenancy agreement templates vs professionally drafted ASTs. What free starter documents miss and why £14.99 is worth it.',
   keywords: [
     'free tenancy agreement template',
     'tenancy agreement template free',
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'Free Tenancy Agreement Template UK vs Paid: What You Need to Know 2026',
-    description: 'Comparing free tenancy agreement templates vs professionally drafted ASTs. What free templates miss and when paid is worth it.',
+    description: 'Comparing free tenancy agreement templates vs professionally drafted ASTs. What free starter documents miss and when paid is worth it.',
     type: 'article',
     url: getCanonicalUrl('/tenancy-agreement-template-free'),
   },
@@ -36,30 +36,30 @@ export const metadata: Metadata = {
 const faqs = [
   {
     question: 'Are free tenancy agreement templates legally valid?',
-    answer: 'A free tenancy agreement can be legally binding if it contains the essential elements: identification of parties, property details, tenancy term, rent amount, and signatures. However, legal validity and being "fit for purpose" are different things. Free templates often lack critical clauses for deposit protection compliance, rent review mechanisms, and proper termination provisions that leave landlords vulnerable when disputes arise or eviction becomes necessary.',
+    answer: 'A free tenancy agreement can be legally binding if it contains the essential elements: identification of parties, property details, tenancy term, rent amount, and signatures. However, legal validity and being "fit for purpose" are different things. Free starter documents often lack critical clauses for deposit protection compliance, rent review mechanisms, and proper termination provisions that leave landlords vulnerable when disputes arise or eviction becomes necessary.',
   },
   {
     question: 'What do free tenancy agreement templates typically miss?',
-    answer: 'Common omissions in free templates include: (1) Tenant Fees Act 2019 compliant deposit clauses, (2) Section 21-compatible prescribed information, (3) Break clause provisions that don\'t invalidate eviction rights, (4) Joint and several liability clauses for multiple tenants, (5) Proper rent review mechanisms under Section 13, (6) HMO-specific terms, (7) Garden and exterior maintenance obligations, (8) Utility transfer requirements, (9) Insurance and liability provisions, and (10) Access for repairs and inspection clauses.',
+    answer: 'Common omissions in free starter documents include: (1) Tenant Fees Act 2019 compliant deposit clauses, (2) Section 21-compatible prescribed information, (3) Break clause provisions that don\'t invalidate eviction rights, (4) Joint and several liability clauses for multiple tenants, (5) Proper rent review mechanisms under Section 13, (6) HMO-specific terms, (7) Garden and exterior maintenance obligations, (8) Utility transfer requirements, (9) Insurance and liability provisions, and (10) Access for repairs and inspection clauses.',
   },
   {
-    question: 'Can I serve a Section 21 notice with a free template AST?',
-    answer: 'Technically yes, but many Section 21 notices fail because of defects in the underlying tenancy agreement. Free templates often omit prescribed deposit information or contain clauses that inadvertently waive eviction rights. Our templates are specifically drafted to maintain Section 21 validity, with break clauses, deposit terms, and notice provisions that comply with Deregulation Act 2015 requirements.',
+    question: 'Can I serve a Section 21 notice with a free starter document AST?',
+    answer: 'Technically yes, but many Section 21 notices fail because of defects in the underlying tenancy agreement. Free starter documents often omit prescribed deposit information or contain clauses that inadvertently waive eviction rights. Our templates are specifically drafted to maintain Section 21 validity, with break clauses, deposit terms, and notice provisions that comply with Deregulation Act 2015 requirements.',
   },
   {
-    question: 'Why would I pay £14.99 when free templates exist?',
+    question: 'Why would I pay £14.99 when free starter documents exist?',
     answer: 'Consider the cost of problems: a deposit dispute can cost £500-2,000 in adjudication time and potential losses; a failed Section 21 can add months to eviction and cost thousands in lost rent; unclear terms lead to expensive disputes. For £14.99, you get a template drafted for legal compliance, validated deposit terms, proper eviction pathway preservation, and clauses that actually protect you when things go wrong. The £14.99 pays for itself many times over.',
   },
   {
-    question: 'Do free templates work for HMOs or multiple tenants?',
-    answer: 'Free templates rarely handle HMOs properly. Multi-tenant properties need specific clauses for: joint and several liability (so each tenant is responsible for full rent), shared area responsibilities, individual room allocation, separate deposit handling, and compliance with HMO licensing requirements. Our Premium AST (£24.99) includes all HMO-specific provisions.',
+    question: 'Do free starter documents work for HMOs or multiple tenants?',
+    answer: 'Free starter documents rarely handle HMOs properly. Multi-tenant properties need specific clauses for: joint and several liability (so each tenant is responsible for full rent), shared area responsibilities, individual room allocation, separate deposit handling, and compliance with HMO licensing requirements. Our Premium AST (£24.99) includes all HMO-specific provisions.',
   },
   {
-    question: 'What happens if my free template is out of date?',
-    answer: 'Tenancy law changes frequently. The Tenant Fees Act 2019 fundamentally changed deposit rules. The Deregulation Act 2015 added Section 21 requirements. EICR regulations came in 2020. Free templates from government sites or legal forums are often years out of date. Our templates are reviewed quarterly and updated whenever legislation changes.',
+    question: 'What happens if my free starter document is out of date?',
+    answer: 'Tenancy law changes frequently. The Tenant Fees Act 2019 fundamentally changed deposit rules. The Deregulation Act 2015 added Section 21 requirements. EICR regulations came in 2020. Free starter documents from government sites or legal forums are often years out of date. Our templates are reviewed quarterly and updated whenever legislation changes.',
   },
   {
-    question: 'Can I modify a free template to add missing clauses?',
+    question: 'Can I modify a free starter document to add missing clauses?',
     answer: 'You can, but this is where landlords get into trouble. Adding clauses without legal expertise can create contradictions, unfair terms, or unenforceable provisions. For example, a poorly drafted break clause can prevent you serving Section 21 at the right time. Our wizard asks the right questions and generates professionally drafted clauses that work together without conflicts.',
   },
   {
@@ -67,19 +67,19 @@ const faqs = [
     answer: 'The UK government does not provide official tenancy agreement templates for ASTs. The "model agreement" published by the Ministry of Housing, Communities and Local Government is a guide to terms, not a ready-to-use template. It requires significant customisation and doesn\'t include deposit protection terms, break clauses, or jurisdiction-specific provisions.',
   },
   {
-    question: 'What if my tenant disputes terms in a free template?',
-    answer: 'Free templates often contain generic or ambiguous terms that tenants (or their solicitors) can challenge. In deposit disputes, adjudicators scrutinise the agreement terms carefully. Unclear obligations around cleaning, garden maintenance, or "reasonable wear and tear" frequently result in landlords losing deductions they should have been entitled to. Professional templates use precise, tested language.',
+    question: 'What if my tenant disputes terms in a free starter document?',
+    answer: 'Free starter documents often contain generic or ambiguous terms that tenants (or their solicitors) can challenge. In deposit disputes, adjudicators scrutinise the agreement terms carefully. Unclear obligations around cleaning, garden maintenance, or "reasonable wear and tear" frequently result in landlords losing deductions they should have been entitled to. Professional templates use precise, tested language.',
   },
   {
-    question: 'Should I get a solicitor to review a free template instead?',
-    answer: 'A solicitor review typically costs £150-400 per agreement. They may recommend substantial changes that the free template didn\'t anticipate. For £14.99-14.99, our templates are already drafted to professional standards, validated against current legislation, and include all the clauses a solicitor would recommend. It\'s significantly more cost-effective.',
+    question: 'Should I get a solicitor to review a free starter document instead?',
+    answer: 'A solicitor review typically costs £150-400 per agreement. They may recommend substantial changes that the free starter document didn\'t anticipate. For £14.99-14.99, our templates are already drafted to professional standards, validated against current legislation, and include all the clauses a solicitor would recommend. It\'s significantly more cost-effective.',
   },
   {
-    question: 'Do free templates include inventory provisions?',
-    answer: 'Most free templates mention inventories briefly but don\'t include proper provisions for check-in/check-out procedures, photographic evidence requirements, or the legal implications of not having an inventory. Our Premium AST includes comprehensive inventory sections that support deposit deduction claims if damage occurs.',
+    question: 'Do free starter documents include inventory provisions?',
+    answer: 'Most free starter documents mention inventories briefly but don\'t include proper provisions for check-in/check-out procedures, photographic evidence requirements, or the legal implications of not having an inventory. Our Premium AST includes comprehensive inventory sections that support deposit deduction claims if damage occurs.',
   },
   {
-    question: 'How do I know if a free template is legitimate?',
+    question: 'How do I know if a free starter document is legitimate?',
     answer: 'Be cautious of templates from: generic document sites (often US-based or outdated UK), forums where users share modified versions, sites that collect email addresses for marketing. Legitimate sources include (with caveats): the government\'s model agreement (requires customisation), major letting agent associations (often behind membership paywalls). The safest approach is a purpose-built service like ours.',
   },
 ];
@@ -143,7 +143,7 @@ export default function TenancyAgreementTemplateFreeComparisonPage() {
                 <thead>
                   <tr className="bg-gray-900 text-white">
                     <th className="px-6 py-4 text-left font-semibold">Feature</th>
-                    <th className="px-6 py-4 text-center font-semibold">Free Templates</th>
+                    <th className="px-6 py-4 text-center font-semibold">Free Starter Documents</th>
                     <th className="px-6 py-4 text-center font-semibold bg-amber-600">Landlord Heaven</th>
                   </tr>
                 </thead>
@@ -219,7 +219,7 @@ export default function TenancyAgreementTemplateFreeComparisonPage() {
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl font-bold text-gray-900 mb-6">The True Cost of &ldquo;Free&rdquo;</h2>
             <p className="text-gray-700 mb-8">
-              Free templates aren&apos;t actually free when problems arise. Here&apos;s what defective agreements can cost:
+              Free starter documents aren&apos;t actually free when problems arise. Here&apos;s what defective agreements can cost:
             </p>
             <div className="grid md:grid-cols-2 gap-6">
               <div className="bg-red-50 p-6 rounded-xl border border-red-200">
@@ -259,10 +259,10 @@ export default function TenancyAgreementTemplateFreeComparisonPage() {
         {/* When Free Might Work */}
         <section className="container mx-auto px-4 py-16">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">When a Free Template Might Be Acceptable</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-6">When a Free Starter Document Might Be Acceptable</h2>
             <div className="prose prose-lg max-w-none text-gray-700">
               <p>
-                To be fair, there are limited situations where a basic free template could work:
+                To be fair, there are limited situations where a basic free starter document could work:
               </p>
               <ul>
                 <li>

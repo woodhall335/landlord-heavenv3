@@ -7,9 +7,9 @@ import { FAQSection } from '@/components/seo/FAQSection';
 import { lodgerAgreementFAQs } from '@/data/faqs';
 
 export const metadata: Metadata = {
-  title: 'Lodger Agreement Template UK (Live-In Landlords) | Free Template for Live-In Landlords',
+  title: 'Lodger Agreement Template UK (Live-In Landlords) | Free Starter Document for Live-In Landlords',
   description:
-    'Lodger agreement template UK for live-in landlords. Download a free template, understand lodger rights, and create terms for rent, notice, and house rules.',
+    'Lodger agreement template UK for live-in landlords. Download a free starter document, understand lodger rights, and create terms for rent, notice, and house rules.',
   keywords: [
     'lodger agreement template',
     'lodger agreement UK',
@@ -137,7 +137,7 @@ export default function LodgerAgreementPage() {
                 </ul>
 
                 <p className="bg-purple-50 border border-purple-200 rounded-lg p-4">
-                  If you want a faster route from free template to signed paperwork, use our
+                  If you want a faster route from free starter document to signed paperwork, use our
                   <Link href="/products/ast" className="text-primary hover:underline"> tenancy agreement product pack</Link>
                   to generate and download your final document in one flow.
                 </p>
@@ -275,7 +275,7 @@ export default function LodgerAgreementPage() {
             <div className="max-w-5xl mx-auto prose prose-slate max-w-none">
               <h2>Common Mistakes That Cause Rejection or Delay</h2>
               <ul>
-                <li>Using a generic template without checking tenancy type and jurisdiction.</li>
+                <li>Using a generic document draft without checking tenancy type and jurisdiction.</li>
                 <li>Serving before prerequisites are satisfied or without required enclosures.</li>
                 <li>Date errors: invalid expiry dates, inconsistent chronology, or impossible timelines.</li>
                 <li>Amount errors: rent arrears totals that do not reconcile to ledger entries.</li>

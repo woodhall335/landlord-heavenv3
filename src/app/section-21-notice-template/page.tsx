@@ -129,7 +129,7 @@ export default function Section21NoticeTemplatePage() {
           title="Section 21 Notice Template (Form 6A) for England"
           subtitle={<>Need a <strong>Section 21 notice template</strong> now? Download a free version for reference or generate a compliance-checked <strong>Form 6A</strong> you can serve with confidence.</>}
           primaryCTA={{ label: "Get Court-Ready Notice — £49.99", href: wizardLink }}
-          secondaryCTA={{ label: "Try Free Template", href: "/tools/free-section-21-notice-generator" }}
+          secondaryCTA={{ label: "Try Free Starter Document", href: "/tools/free-section-21-notice-generator" }}
           variant="pastel"
         >
           {/* Countdown */}
@@ -217,7 +217,7 @@ export default function Section21NoticeTemplatePage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
-                Free Template vs Court-Ready Notice
+                Free Starter Document vs Court-Ready Notice
               </h2>
               <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
                 Our free Section 21 template is great for understanding the <Link href="/no-fault-eviction" className="text-primary hover:underline">no-fault eviction process</Link>, but for
@@ -228,7 +228,7 @@ export default function Section21NoticeTemplatePage() {
                 {/* Free Version */}
                 <div className="bg-gray-50 rounded-2xl p-8 border border-gray-200">
                   <div className="text-center mb-6">
-                    <span className="text-sm font-medium text-gray-500 uppercase tracking-wide">Free Template</span>
+                    <span className="text-sm font-medium text-gray-500 uppercase tracking-wide">Free Starter Document</span>
                     <div className="text-4xl font-bold text-gray-900 mt-2">£0</div>
                   </div>
                   <ul className="space-y-4 mb-8">
@@ -261,7 +261,7 @@ export default function Section21NoticeTemplatePage() {
                     href="/tools/free-section-21-notice-generator"
                     className="hero-btn-secondary block w-full text-center"
                   >
-                    Try Free Template
+                    Try Free Starter Document
                   </Link>
                 </div>
 
@@ -606,7 +606,7 @@ export default function Section21NoticeTemplatePage() {
             <div className="max-w-5xl mx-auto prose prose-slate max-w-none">
               <h2>Common Mistakes That Cause Rejection or Delay</h2>
               <ul>
-                <li>Using a generic template without checking tenancy type and jurisdiction.</li>
+                <li>Using a generic document draft without checking tenancy type and jurisdiction.</li>
                 <li>Serving before prerequisites are satisfied or without required enclosures.</li>
                 <li>Date errors: invalid expiry dates, inconsistent chronology, or impossible timelines.</li>
                 <li>Amount errors: rent arrears totals that do not reconcile to ledger entries.</li>
@@ -761,7 +761,7 @@ export default function Section21NoticeTemplatePage() {
                   className="hero-btn-secondary inline-flex items-center justify-center gap-2"
                 >
                   <Download className="w-5 h-5" />
-                  Try Free Template
+                  Try Free Starter Document
                 </Link>
                 <Link
                   href={wizardLink}

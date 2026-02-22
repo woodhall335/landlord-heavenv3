@@ -85,7 +85,7 @@ export default function EvictionNoticeTemplatePage() {
           title="Eviction Notice Template UK"
           subtitle={<>Choose your jurisdiction and generate an <strong>eviction notice template bundle</strong> for England, Wales, or Scotland. Compliance-checked and ready to file. Need form-specific help first? Start with our <Link href="/form-6a-section-21" className="text-primary hover:underline">Form 6A Section 21 guide</Link>.</>}
           primaryCTA={{ label: "Get Court-Ready Notice — £49.99", href: getIntentProductHref({ product: "notice_only", src: "seo_landing" }) }}
-          secondaryCTA={{ label: "Try Free Template", href: "/tools/free-section-21-notice-generator" }}
+          secondaryCTA={{ label: "Try Free Starter Document", href: "/tools/free-section-21-notice-generator" }}
           variant="pastel"
         >
           {/* Countdown */}
@@ -323,10 +323,10 @@ export default function EvictionNoticeTemplatePage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
-                Free Template vs Court-Ready Notice
+                Free Starter Document vs Court-Ready Notice
               </h2>
               <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                Our free templates help you understand the process. For proper compliance,
+                Our free starter documents help you understand the process. For proper compliance,
                 choose our court-ready version with AI compliance checking.
               </p>
 
@@ -334,7 +334,7 @@ export default function EvictionNoticeTemplatePage() {
                 {/* Free Version */}
                 <div className="bg-white rounded-2xl p-8 border border-gray-200">
                   <div className="text-center mb-6">
-                    <span className="text-sm font-medium text-gray-500 uppercase tracking-wide">Free Template</span>
+                    <span className="text-sm font-medium text-gray-500 uppercase tracking-wide">Free Starter Document</span>
                     <div className="text-4xl font-bold text-gray-900 mt-2">£0</div>
                   </div>
                   <ul className="space-y-4 mb-8">
@@ -367,7 +367,7 @@ export default function EvictionNoticeTemplatePage() {
                     href="/tools/free-section-21-notice-generator"
                     className="hero-btn-secondary block w-full text-center"
                   >
-                    Try Free Template
+                    Try Free Starter Document
                   </Link>
                 </div>
 
@@ -520,7 +520,7 @@ export default function EvictionNoticeTemplatePage() {
                   className="hero-btn-secondary inline-flex items-center justify-center gap-2"
                 >
                   <Download className="w-5 h-5" />
-                  Try Free Template
+                  Try Free Starter Document
                 </Link>
                 <IntentProductCTA
                   intent={{ product: "notice_only", src: "seo_landing" }}
