@@ -216,6 +216,7 @@ export default function Form3Section8Page() {
             {/* FAQ Section */}
             <div className="mb-12">
               <FAQSection
+          showTrustPositioningBar
                 faqs={form3Section8FAQs}
                 title="Form 3 Section 8 FAQ"
                 showContactCTA={false}

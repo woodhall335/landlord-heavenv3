@@ -447,6 +447,7 @@ URL.revokeObjectURL(url);
         align="center"
         hideMedia
         showReviewPill={false}
+        showTrustPositioningBar
         showUsageCounter
         primaryCta={{ label: 'Start Free Generator →', href: '#generator' }}
         secondaryCta={{ label: 'Get Court-Ready Version →', href: '/products/notice-only?product=demand_letter' }}

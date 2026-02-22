@@ -414,6 +414,7 @@ export default function OccupationContractTemplateWalesPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <SeoCtaBlock
+          showTrustPositioningBar
                 pageType="tenancy"
                 variant="section"
                 pagePath={PAGE_PATH}

@@ -445,6 +445,7 @@ export default function SixMonthTenancyAgreementPage() {
 
     {/* CTA Section */}
         <SeoCtaBlock
+          showTrustPositioningBar
           pageType="tenancy"
           variant="final"
           title="Get Your 6 Month Tenancy Agreement"

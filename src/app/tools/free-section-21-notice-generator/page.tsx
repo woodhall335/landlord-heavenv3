@@ -82,6 +82,7 @@ function FreeSection21ToolInner() {
         align="center"
         hideMedia
         showReviewPill={false}
+        showTrustPositioningBar
         showUsageCounter
         primaryCta={{ label: 'Start now', href: '#generator' }}
       />

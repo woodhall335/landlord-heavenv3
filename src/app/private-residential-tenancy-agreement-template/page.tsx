@@ -280,6 +280,7 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
 
         {/* Mid-page CTA */}
         <SeoCtaBlock
+          showTrustPositioningBar
           pageType="tenancy"
           variant="section"
           jurisdiction="scotland"

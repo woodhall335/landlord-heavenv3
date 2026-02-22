@@ -227,6 +227,7 @@ export default function Section8ValidatorPage() {
         align="center"
         hideMedia
         showReviewPill={false}
+        showTrustPositioningBar
       />
 
       {/* Quick Checklist - SSR for SEO */}

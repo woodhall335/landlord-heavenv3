@@ -12,6 +12,7 @@ import Link from "next/link";
 import { Container } from "@/components/ui";
 import { clsx } from "clsx";
 import { ChevronDown, Headphones } from "lucide-react";
+import { TrustPositioningBar } from "@/components/marketing/TrustPositioningBar";
 
 export interface FAQItem {
   question: string;
@@ -39,6 +40,8 @@ export interface FAQSectionProps {
   className?: string;
   /** Which item should be open by default. Set null for all closed. */
   defaultOpenIndex?: number | null;
+  /** Optional trust positioning bar beneath heading copy */
+  showTrustPositioningBar?: boolean;
 }
 
 /**
@@ -126,6 +129,7 @@ export function FAQSection({
   id,
   className,
   defaultOpenIndex = 0,
+  showTrustPositioningBar = false,
 }: FAQSectionProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(defaultOpenIndex);
   const buttonRefs = useRef<Array<HTMLButtonElement | null>>([]);
@@ -182,6 +186,9 @@ export function FAQSection({
             )}
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{title}</h2>
             {intro && <p className="text-xl text-gray-600">{intro}</p>}
+            {showTrustPositioningBar ? (
+              <TrustPositioningBar variant="compact" className="mx-auto mt-6 max-w-5xl" />
+            ) : null}
           </div>
 
           {/* FAQ Accordion */}

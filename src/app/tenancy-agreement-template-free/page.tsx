@@ -290,6 +290,7 @@ export default function TenancyAgreementTemplateFreeComparisonPage() {
 
         {/* Mid-page CTA */}
         <SeoCtaBlock
+          showTrustPositioningBar
           pageType="tenancy"
           variant="section"
           jurisdiction="england"

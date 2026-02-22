@@ -204,6 +204,7 @@ export default function EICRPage() {
             {/* FAQ Section */}
             <div className="mb-12">
               <FAQSection
+          showTrustPositioningBar
                 faqs={eicrFAQs}
                 title="EICR Frequently Asked Questions"
                 showContactCTA={false}

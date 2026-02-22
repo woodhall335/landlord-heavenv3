@@ -169,6 +169,7 @@ export default function HowToRentGuidePage() {
             {/* FAQ Section */}
             <div className="mb-12">
               <FAQSection
+          showTrustPositioningBar
                 faqs={howToRentGuideFAQs}
                 title="How to Rent Guide FAQ"
                 showContactCTA={false}

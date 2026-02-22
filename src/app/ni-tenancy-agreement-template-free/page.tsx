@@ -467,6 +467,7 @@ export default function NITenancyAgreementTemplateFreeComparisonPage() {
 
           {/* Mid-page CTA */}
           <SeoCtaBlock
+          showTrustPositioningBar
             pageType="tenancy"
             variant="section"
             jurisdiction="northern-ireland"

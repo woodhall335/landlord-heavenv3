@@ -407,6 +407,7 @@ link.href = url;
         align="center"
         hideMedia
         showReviewPill={false}
+        showTrustPositioningBar
         showUsageCounter
         primaryCta={{ label: 'Start Free Calculator →', href: '#calculator' }}
         secondaryCta={{ label: 'Upgrade to Money Claim Pack →', href: '/products/money-claim' }}

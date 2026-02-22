@@ -978,6 +978,7 @@ export default function NorthernIrelandTenancyPage() {
 
         {/* FAQ Section */}
         <FAQSection
+          showTrustPositioningBar
           title="Frequently Asked Questions"
           faqs={[
             {

@@ -219,6 +219,7 @@ export default function PrtTemplateScotlandPage() {
 
         {/* Mid-page CTA */}
         <SeoCtaBlock
+          showTrustPositioningBar
           pageType="tenancy"
           variant="section"
           jurisdiction="scotland"

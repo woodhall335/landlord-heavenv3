@@ -417,6 +417,7 @@ export default function NIPrivateTenancyAgreementPage() {
 
           {/* Mid-page CTA */}
           <SeoCtaBlock
+          showTrustPositioningBar
             pageType="tenancy"
             variant="section"
             jurisdiction="northern-ireland"
