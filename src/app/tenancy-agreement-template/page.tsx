@@ -181,7 +181,7 @@ export default function TenancyAgreementTemplatePage() {
           variant="pastel"
         >
           {/* Trust Signals */}
-          <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600">
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-6 text-sm text-white">
             <span className="flex items-center gap-2">
               <CheckCircle className="w-4 h-4 text-green-500" />
               England, Wales & Scotland
