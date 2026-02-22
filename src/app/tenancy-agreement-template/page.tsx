@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo/urls';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
@@ -122,6 +123,71 @@ export default function TenancyAgreementTemplatePage() {
     ],
   };
 
+
+
+  const regionCards = [
+    {
+      flagSrc: '/gb-eng.svg',
+      flagAlt: 'England flag',
+      name: 'England',
+      agreementType: 'Assured Shorthold Tenancy (AST)',
+      features: [
+        'Compliant with Housing Act 1988',
+        'Deposit protection requirements included',
+        'How to Rent Guide acknowledgement',
+        'Section 21/8 grounds referenced',
+      ],
+      noteLabel: 'HMO note:',
+      note: 'Properties with 5+ people from 2+ households require mandatory HMO licensing under Housing Act 2004.',
+      href: '/wizard?product=tenancy_agreement&jurisdiction=england',
+    },
+    {
+      flagSrc: '/gb-wls.svg',
+      flagAlt: 'Wales flag',
+      name: 'Wales',
+      agreementType: 'Standard Occupation Contract',
+      features: [
+        'Compliant with Renting Homes (Wales) Act 2016',
+        'Uses "Contract Holder" terminology',
+        'Rent Smart Wales registration referenced',
+        'Section 173 notice provisions',
+      ],
+      noteLabel: 'Note:',
+      note: 'Wales uses Occupation Contracts, not ASTs. Different eviction procedures apply.',
+      href: '/wizard?product=tenancy_agreement&jurisdiction=wales',
+    },
+    {
+      flagSrc: '/gb-sct.svg',
+      flagAlt: 'Scotland flag',
+      name: 'Scotland',
+      agreementType: 'Private Residential Tenancy (PRT)',
+      features: [
+        'Compliant with Private Housing (Tenancies) (Scotland) Act 2016',
+        'Open-ended tenancy (no fixed end date)',
+        'Rent Pressure Zone compatible',
+        'First-tier Tribunal jurisdiction',
+      ],
+      noteLabel: 'Note:',
+      note: 'Scotland has no fixed-term AST equivalent. PRTs continue until ended by notice.',
+      href: '/wizard?product=tenancy_agreement&jurisdiction=scotland',
+    },
+    {
+      flagSrc: '/gb-nir.svg',
+      flagAlt: 'Northern Ireland flag',
+      name: 'Northern Ireland',
+      agreementType: 'Private Tenancy Agreement',
+      features: [
+        'Compliant with Private Tenancies (NI) Order 2006',
+        'Tenancy Information Notice requirements',
+        'Rent book requirements where applicable',
+        'Notice to Quit framework',
+      ],
+      noteLabel: 'Note:',
+      note: 'NI tenancy law differs from England/Wales/Scotland. The template follows NI private tenancy rules.',
+      href: '/wizard?product=tenancy_agreement&jurisdiction=northern-ireland',
+    },
+  ];
+
   return (
     <>
       <StructuredData data={pageSchema} />
@@ -141,7 +207,7 @@ export default function TenancyAgreementTemplatePage() {
           title="Tenancy Agreement Template UK"
           subtitle={<>Get a <strong>tenancy agreement template</strong> for England, Wales, or Scotland. Legally compliant contracts trusted by over 10,000 landlords.</>}
           primaryCTA={{ label: "Get Premium AST — £24.99", href: getIntentProductHref({ product: "ast", src: "seo_landing" }) }}
-          secondaryCTA={{ label: "Get Standard Template", href: "/products/ast" }}
+          secondaryCTA={{ label: "Get Standard", href: "/products/ast" }}
           variant="pastel"
         >
           {/* Trust Signals */}
@@ -184,115 +250,46 @@ export default function TenancyAgreementTemplatePage() {
           </div>
         </section>
 
-        {/* Agreement Types by Region */}
-        <section className="py-16 lg:py-20">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
-                Tenancy Agreements for Every UK Region
+        {/* Jurisdiction Details */}
+        <section className="py-16 md:py-20 bg-white"> 
+          <div className="container mx-auto px-4"> 
+            <div className="max-w-7xl mx-auto"> 
+              <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4 text-center"> 
+                What You Get By Region
               </h2>
-              <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                Each UK nation has different tenancy laws. We provide the correct agreement type
-                for your jurisdiction. Live-in landlords should use our <Link href="/lodger-agreement-template" className="text-primary hover:underline">lodger agreement template</Link> instead.
+              <p className="text-center text-gray-600 mb-12">
+                The wizard automatically generates the correct agreement type for your property&apos;s jurisdiction
               </p>
 
-              <div className="grid md:grid-cols-3 gap-6">
-                {/* England */}
-                <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
-                  <div className="w-12 h-12 bg-red-50 rounded-xl flex items-center justify-center mb-4">
-                    <span className="text-2xl">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span>
-                  </div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">England</h3>
-                  <p className="text-gray-600 text-sm mb-4">
-                    <strong>Assured Shorthold Tenancy (AST)</strong> under Housing Act 1988.
-                    Most common residential tenancy type.
-                  </p>
-                  <ul className="space-y-2 text-sm text-gray-600 mb-4">
-                    <li className="flex items-center gap-2">
-                      <CheckCircle className="w-4 h-4 text-green-500" />
-                      6-12 month fixed terms
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle className="w-4 h-4 text-green-500" />
-                      Section 21/8 eviction
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle className="w-4 h-4 text-green-500" />
-                      Deposit protection required
-                    </li>
-                  </ul>
-                  <Link
-                    href="/assured-shorthold-tenancy-agreement-template"
-                    className="text-primary font-medium text-sm hover:underline"
-                  >
-                    Get England AST →
-                  </Link>
-                </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+                {regionCards.map((region) => (
+                  <article key={region.name} className="h-full bg-white border border-gray-200 rounded-2xl shadow-sm p-6 md:p-7 flex flex-col">
+                    <div className="flex items-center gap-3 mb-3">
+                      <Image src={region.flagSrc} alt={region.flagAlt} width={28} height={21} className="w-7 h-5 object-cover rounded-sm border border-gray-100" />
+                      <h3 className="text-2xl font-semibold text-charcoal">{region.name}</h3>
+                    </div>
+                    <p className="text-lg font-medium text-gray-900 mb-4">{region.agreementType}</p>
+                    <ul className="text-base text-gray-700 list-disc pl-5 space-y-2">
+                      {region.features.map((feature) => (
+                        <li key={feature}>{feature}</li>
+                      ))}
+                    </ul>
+                    <p className="mt-4 text-sm text-gray-600">
+                      <strong>{region.noteLabel}</strong> {region.note}
+                    </p>
 
-                {/* Wales */}
-                <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
-                  <div className="w-12 h-12 bg-red-50 rounded-xl flex items-center justify-center mb-4">
-                    <span className="text-2xl">🏴󠁧󠁢󠁷󠁬󠁳󠁿</span>
-                  </div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">Wales</h3>
-                  <p className="text-gray-600 text-sm mb-4">
-                    <strong>Occupation Contract</strong> under Renting Homes (Wales) Act 2016.
-                    Replaced ASTs from Dec 2022.
-                  </p>
-                  <ul className="space-y-2 text-sm text-gray-600 mb-4">
-                    <li className="flex items-center gap-2">
-                      <CheckCircle className="w-4 h-4 text-green-500" />
-                      Written statement required
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle className="w-4 h-4 text-green-500" />
-                      Fitness for habitation
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle className="w-4 h-4 text-green-500" />
-                      6 month no-fault period
-                    </li>
-                  </ul>
-                  <Link
-                    href="/wales-tenancy-agreement-template"
-                    className="text-primary font-medium text-sm hover:underline"
-                  >
-                    Get Wales Contract →
-                  </Link>
-                </div>
-
-                {/* Scotland */}
-                <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
-                  <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center mb-4">
-                    <span className="text-2xl">🏴󠁧󠁢󠁳󠁣󠁴󠁿</span>
-                  </div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">Scotland</h3>
-                  <p className="text-gray-600 text-sm mb-4">
-                    <strong>Private Residential Tenancy (PRT)</strong> under 2016 Act.
-                    No fixed end date - open-ended.
-                  </p>
-                  <ul className="space-y-2 text-sm text-gray-600 mb-4">
-                    <li className="flex items-center gap-2">
-                      <CheckCircle className="w-4 h-4 text-green-500" />
-                      No minimum fixed term
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle className="w-4 h-4 text-green-500" />
-                      18 eviction grounds
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle className="w-4 h-4 text-green-500" />
-                      Rent cap compliance
-                    </li>
-                  </ul>
-                  <Link
-                    href="/private-residential-tenancy-agreement-template"
-                    className="text-primary font-medium text-sm hover:underline"
-                  >
-                    Get Scotland PRT →
-                  </Link>
-                </div>
+                    <Link
+                      href={region.href}
+                      className="mt-auto block w-full text-center bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-lg font-semibold text-charcoal hover:bg-gray-100 transition-colors"
+                    >
+                      Choose Region
+                    </Link>
+                  </article>
+                ))}
               </div>
+              <p className="text-gray-600 text-center mt-8 max-w-2xl mx-auto">
+                Live-in landlords should use our <Link href="/lodger-agreement-template" className="text-primary hover:underline">lodger agreement template</Link> instead.
+              </p>
             </div>
           </div>
         </section>
@@ -381,20 +378,20 @@ export default function TenancyAgreementTemplatePage() {
                 Standard vs Premium Tenancy Agreement
               </h2>
               <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                Choose a standard agreement or get a fully customised premium version.
+                Choose between our standard tenancy agreement and our premium AST package.
               </p>
 
               <div className="grid md:grid-cols-2 gap-8">
                 {/* Standard Version */}
                 <div className="bg-gray-50 rounded-2xl p-8 border border-gray-200">
                   <div className="text-center mb-6">
-                    <span className="text-sm font-medium text-gray-500 uppercase tracking-wide">Standard Template</span>
+                    <span className="text-sm font-medium text-gray-500 uppercase tracking-wide">Standard</span>
                     <div className="text-4xl font-bold text-gray-900 mt-2">£0</div>
                   </div>
                   <ul className="space-y-4 mb-8">
                     <li className="flex items-start gap-3">
                       <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span className="text-gray-600">Basic AST template</span>
+                      <span className="text-gray-600">Standard tenancy agreement (wizard-generated)</span>
                     </li>
                     <li className="flex items-start gap-3">
                       <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
@@ -402,7 +399,7 @@ export default function TenancyAgreementTemplatePage() {
                     </li>
                     <li className="flex items-start gap-3">
                       <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span className="text-gray-600">PDF download</span>
+                      <span className="text-gray-600">Preview + PDF download</span>
                     </li>
                     <li className="flex items-start gap-3 text-gray-400">
                       <X className="w-5 h-5 flex-shrink-0 mt-0.5" />
@@ -421,7 +418,7 @@ export default function TenancyAgreementTemplatePage() {
                     href="/products/ast"
                     className="hero-btn-secondary block w-full text-center"
                   >
-                    Get Standard Template
+                    Get Standard
                   </Link>
                 </div>
 
