@@ -378,7 +378,7 @@ export default function AdminEmailPreviewsPage() {
             </tr>
           </table>
           ${getWarningBox(`<strong style="color: #FEF3C7;">Security Notice:</strong><br>This link expires in 1 hour. If you didn't request this, please ignore this email or contact support.`)}
-          <p style="margin: 25px 0 0 0; font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: ${COLORS.mutedGray}; word-break: break-all; line-height: 1.5;">If the button doesn't work, copy and paste this link into your browser:<br><a href="${appUrl}/auth/reset-password?token=xxx" style="color: ${COLORS.primaryLight}; text-decoration: none;">${appUrl}/auth/reset-password?token=xxx</a></p>
+          <p style="margin: 25px 0 0 0; font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: ${COLORS.mutedGray}; word-break: break-all; line-height: 1.5;">If the button doesn't work, manual drafting this link into your browser:<br><a href="${appUrl}/auth/reset-password?token=xxx" style="color: ${COLORS.primaryLight}; text-decoration: none;">${appUrl}/auth/reset-password?token=xxx</a></p>
           <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top: 30px; border-top: 1px solid ${COLORS.border}; padding-top: 20px;">
             <tr>
               <td>

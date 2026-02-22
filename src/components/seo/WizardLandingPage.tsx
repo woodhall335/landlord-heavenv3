@@ -22,6 +22,7 @@ import {
 import { FAQSection } from '@/components/seo/FAQSection';
 import { StructuredData, productSchema, faqPageSchema, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { AskHeavenWidget } from '@/components/ask-heaven/AskHeavenWidget';
+import { TrustPositioningBar } from '@/components/marketing/TrustPositioningBar';
 import { IntentProductCTA, RelatedProductsModule, type IntentProduct } from '@/components/seo/IntentProductCTA';
 import type { WizardLandingContent, NoticeType, CourtForm, JurisdictionCoverage, WhyUseThisSection, LegalValidationExplainer } from '@/lib/seo/wizard-landing-content';
 
@@ -71,6 +72,8 @@ export function WizardLandingPage({ content, structuredDataUrl, showAskHeavenWid
           <span className="text-5xl md:text-6xl font-bold">{content.price}</span>
           <span className="text-lg text-white/85">one-time</span>
         </div>
+
+        <TrustPositioningBar variant="compact" className="mx-auto mt-6 max-w-5xl" />
 
         <div className="mt-6 flex flex-wrap justify-center gap-4 text-sm text-white/90">
           <span className="flex items-center gap-1">

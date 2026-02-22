@@ -9,7 +9,7 @@ import { evictionNoticeUKFAQs } from '@/data/faqs';
 export const metadata: Metadata = {
   title: 'Eviction Notice UK | Types, Templates & How to Serve [2026]',
   description:
-    'Guide to eviction notices in the UK. Covers Section 21, Section 8, Scotland Notice to Leave, and Wales notices. Free templates.',
+    'Guide to eviction notices in the UK. Covers Section 21, Section 8, Scotland Notice to Leave, and Wales notices. Free starter documents.',
   keywords: [
     'eviction notice UK',
     'eviction notice template UK',

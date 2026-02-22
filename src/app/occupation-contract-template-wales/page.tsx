@@ -225,7 +225,7 @@ export default function OccupationContractTemplateWalesPage() {
                     Risks of Using the Wrong Template
                   </h2>
                   <p className="text-amber-800 mb-4">
-                    Free templates and English AST templates are not valid for Welsh properties.
+                    Free starter documents and English AST templates are not valid for Welsh properties.
                     Using the wrong template can cost you months of delay and legal fees.
                   </p>
                   <div className="grid md:grid-cols-2 gap-4">
@@ -235,7 +235,7 @@ export default function OccupationContractTemplateWalesPage() {
                         <li>English AST templates used in Wales</li>
                         <li>Missing fundamental terms required by law</li>
                         <li>Outdated templates from before December 2022</li>
-                        <li>Free templates without proper legal review</li>
+                        <li>Free starter documents without proper legal review</li>
                       </ul>
                     </div>
                     <div className="bg-white rounded-lg p-4 border border-amber-200">
@@ -332,7 +332,7 @@ export default function OccupationContractTemplateWalesPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
-                Free Templates vs Professional Templates
+                Free Starter Documents vs Professional Templates
               </h2>
               <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
                 Why the template you choose matters for your Welsh letting.
@@ -342,7 +342,7 @@ export default function OccupationContractTemplateWalesPage() {
                 <div className="bg-white rounded-2xl p-6 border-2 border-red-200 shadow-sm">
                   <div className="flex items-center gap-2 mb-4">
                     <XCircle className="w-6 h-6 text-red-500" />
-                    <h3 className="text-xl font-bold text-gray-900">Free Templates</h3>
+                    <h3 className="text-xl font-bold text-gray-900">Free Starter Documents</h3>
                   </div>
                   <ul className="space-y-3 mb-6">
                     <li className="flex items-start gap-2 text-gray-600">

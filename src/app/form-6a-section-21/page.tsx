@@ -130,7 +130,7 @@ export default function Form6APage() {
                 </p>
 
                 <p className="bg-purple-50 border border-purple-200 rounded-lg p-4">
-                  Once your dates and compliance documents are confirmed, you can move from a free template to a
+                  Once your dates and compliance documents are confirmed, you can move from a free starter document to a
                   <Link href="/products/notice-only" className="text-primary hover:underline"> court-ready Notice Only pack</Link>
                   that prepares service evidence and next-step guidance.
                 </p>
@@ -234,7 +234,7 @@ export default function Form6APage() {
               <p>A Section 21 notice is normally invalid if the tenancy deposit was not protected correctly and prescribed information was not served within the legal deadline. Landlords should resolve deposit issues before serving notice. Courts commonly check deposit compliance first when deciding whether possession can proceed.</p>
 
               <h2>Section 21 Template Free</h2>
-              <p>A free Section 21 template should mirror Form 6A wording and include property details, tenant names, landlord details, and a valid notice expiry date. Free templates are useful only when completed accurately and served with reliable proof, because formatting or date errors can invalidate possession action.</p>
+              <p>A free Section 21 template should mirror Form 6A wording and include property details, tenant names, landlord details, and a valid notice expiry date. Free starter documents are useful only when completed accurately and served with reliable proof, because formatting or date errors can invalidate possession action.</p>
 
               <h2>Section 21 Eviction Timeline UK</h2>
               <p>A typical Section 21 timeline includes serving Form 6A, waiting the full notice period, issuing a possession claim if the tenant stays, and then enforcing any possession order. Timeframes vary by court workload, service quality, and whether paperwork is disputed at any stage.</p>
@@ -311,7 +311,7 @@ export default function Form6APage() {
             <div className="max-w-5xl mx-auto prose prose-slate max-w-none">
               <h2>Common Mistakes That Cause Rejection or Delay</h2>
               <ul>
-                <li>Using a generic template without checking tenancy type and jurisdiction.</li>
+                <li>Using a generic document draft without checking tenancy type and jurisdiction.</li>
                 <li>Serving before prerequisites are satisfied or without required enclosures.</li>
                 <li>Date errors: invalid expiry dates, inconsistent chronology, or impossible timelines.</li>
                 <li>Amount errors: rent arrears totals that do not reconcile to ledger entries.</li>

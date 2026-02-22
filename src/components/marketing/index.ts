@@ -9,3 +9,5 @@ export type { HeroProps, HeroAction, TrustIndicator } from "./Hero";
 
 export { FAQSection, FAQInline } from "./FAQSection";
 export type { FAQSectionProps, FAQItem } from "./FAQSection";
+
+export { TrustPositioningBar } from "./TrustPositioningBar";

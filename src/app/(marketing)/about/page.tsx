@@ -369,7 +369,7 @@ export default function AboutPage() {
                   Official Government Forms
                 </h4>
                 <p className="text-sm text-gray-700">
-                  We use actual Form 6A, N5, AT6, and other official forms - not generic templates. Courts require these
+                  We use actual Form 6A, N5, AT6, and other official forms - not generic document drafts. Courts require these
                   specific formats.
                 </p>
               </div>

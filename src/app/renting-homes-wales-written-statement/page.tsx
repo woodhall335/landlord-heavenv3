@@ -79,8 +79,8 @@ const faqs = [
     answer: 'No. You must still provide: (1) EPC before marketing and at occupation, (2) Gas Safety Certificate annually (if applicable), (3) EICR for electrical safety, (4) Deposit protection prescribed information within 30 days. The written statement confirms you have (or will) provide these documents but doesn\'t replace them.',
   },
   {
-    question: 'Can I use a generic template for the written statement?',
-    answer: 'Using a generic template is risky. The written statement must include specific fundamental and supplementary terms as defined by Welsh regulations. Generic UK templates or England ASTs don\'t contain the correct Welsh terms. Our Wales-specific template ensures all required terms are included and properly formatted.',
+    question: 'Can I use a generic document draft for the written statement?',
+    answer: 'Using a generic document draft is risky. The written statement must include specific fundamental and supplementary terms as defined by Welsh regulations. Generic UK templates or England ASTs don\'t contain the correct Welsh terms. Our Wales-specific template ensures all required terms are included and properly formatted.',
   },
 ];
 

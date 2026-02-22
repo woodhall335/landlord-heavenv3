@@ -77,12 +77,12 @@ const faqs = [
     answer: 'The Private Tenancies Act (Northern Ireland) 2022 is the main legislation governing private rentals in NI. It introduced mandatory written tenancy agreements (criminal offence if missing), enhanced deposit protection rules, tiered notice periods based on tenancy length, landlord registration requirements, and restrictions on rent increases. All NI tenancy agreements must comply with this Act.'
   },
   {
-    question: 'How do I know if a free template includes all prescribed terms?',
+    question: 'How do I know if a free starter document includes all prescribed terms?',
     answer: 'Check that the template includes: landlord and tenant full names and addresses; property address; landlord registration number; rent amount, frequency, and payment method; deposit amount and protection scheme name; tenancy start date; fixed term or periodic status; repair responsibilities; notice requirements; emergency contact details; and a statement of tenant rights. Missing any prescribed term makes the template non-compliant.'
   },
   {
-    question: 'Do free templates include deposit protection information correctly?',
-    answer: 'Usually not. NI has specific deposit protection requirements: maximum 2 months\' rent, protection within 14 days, prescribed information within 28 days, and specific approved schemes. Free templates often use England\'s 5-week cap, wrong scheme names, or miss the prescribed information requirements entirely. Our template auto-generates correct deposit clauses for NI.'
+    question: 'Do free starter documents include deposit protection information correctly?',
+    answer: 'Usually not. NI has specific deposit protection requirements: maximum 2 months\' rent, protection within 14 days, prescribed information within 28 days, and specific approved schemes. Free starter documents often use England\'s 5-week cap, wrong scheme names, or miss the prescribed information requirements entirely. Our template auto-generates correct deposit clauses for NI.'
   },
   {
     question: 'What happens if my tenancy agreement is missing prescribed terms?',
@@ -93,8 +93,8 @@ const faqs = [
     answer: 'Yes, paying for a properly drafted NI-specific template is strongly recommended. The cost (typically £10-50) is negligible compared to: £2,500+ in potential fines; months of delayed eviction; deposit penalty claims; or civil liability. Professional templates are regularly updated for law changes, include all prescribed terms, and may offer guidance or support. It\'s a business expense that protects your investment.'
   },
   {
-    question: 'Can a free template be updated for the Private Tenancies Act 2022?',
-    answer: 'While you could theoretically update a free template yourself, this requires detailed knowledge of the Private Tenancies Act 2022, subsequent regulations, and case law interpretations. Most landlords lack this expertise. It\'s safer and more cost-effective to use a template specifically designed for the 2022 Act and regularly maintained by legal professionals who track NI tenancy law changes.'
+    question: 'Can a free starter document be updated for the Private Tenancies Act 2022?',
+    answer: 'While you could theoretically update a free starter document yourself, this requires detailed knowledge of the Private Tenancies Act 2022, subsequent regulations, and case law interpretations. Most landlords lack this expertise. It\'s safer and more cost-effective to use a template specifically designed for the 2022 Act and regularly maintained by legal professionals who track NI tenancy law changes.'
   }
 ];
 
@@ -116,7 +116,7 @@ export default function NITenancyAgreementTemplateFreeComparisonPage() {
           { name: 'Home', url: '/' },
           { name: 'Tenancy Agreements', url: '/products/ast' },
           { name: 'Northern Ireland', url: '/northern-ireland-tenancy-agreement-template' },
-          { name: 'Free Template Comparison', url: '/ni-tenancy-agreement-template-free' },
+          { name: 'Free Starter Document Comparison', url: '/ni-tenancy-agreement-template-free' },
         ])}
       />
 
@@ -179,7 +179,7 @@ export default function NITenancyAgreementTemplateFreeComparisonPage() {
                 <h2 className="text-lg font-bold text-red-900">Criminal Liability Warning</h2>
                 <p className="text-red-800 mt-2">
                   Under the Private Tenancies Act (NI) 2022, failing to provide a compliant written tenancy agreement
-                  within 28 days is a <strong>criminal offence</strong>. Using an inadequate free template can result
+                  within 28 days is a <strong>criminal offence</strong>. Using an inadequate free starter document can result
                   in fixed penalty notices (£500), prosecution (up to £2,500), and prevent you from ever evicting your tenant legally.
                 </p>
               </div>
@@ -194,7 +194,7 @@ export default function NITenancyAgreementTemplateFreeComparisonPage() {
             <p className="text-xl text-slate-600 leading-relaxed">
               We understand why landlords search for free tenancy agreement templates - it seems like an unnecessary
               expense for a simple document. But Northern Ireland's tenancy law is significantly stricter than England's,
-              and the consequences of getting it wrong are severe. Let's examine whether free templates actually deliver
+              and the consequences of getting it wrong are severe. Let's examine whether free starter documents actually deliver
               what NI landlords need.
             </p>
           </section>
@@ -208,7 +208,7 @@ export default function NITenancyAgreementTemplateFreeComparisonPage() {
             <div className="bg-slate-800 text-white rounded-xl p-6 mb-6">
               <p className="text-slate-300 mb-4">
                 Northern Ireland has its own tenancy legislation, completely separate from England, Wales, and Scotland.
-                Free templates found online are almost always designed for English ASTs - they are legally useless in NI.
+                Free starter documents found online are almost always designed for English ASTs - they are legally useless in NI.
               </p>
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="bg-slate-700 rounded-lg p-4">
@@ -244,7 +244,7 @@ export default function NITenancyAgreementTemplateFreeComparisonPage() {
                 <thead>
                   <tr className="bg-slate-100">
                     <th className="border border-slate-200 px-4 py-3 text-left font-semibold">Feature</th>
-                    <th className="border border-slate-200 px-4 py-3 text-center font-semibold text-red-700">Free Templates</th>
+                    <th className="border border-slate-200 px-4 py-3 text-center font-semibold text-red-700">Free Starter Documents</th>
                     <th className="border border-slate-200 px-4 py-3 text-center font-semibold text-emerald-700">Our Template</th>
                   </tr>
                 </thead>

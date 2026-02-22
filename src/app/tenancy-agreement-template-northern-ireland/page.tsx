@@ -211,7 +211,7 @@ export default function TenancyAgreementTemplateNorthernIrelandPage() {
                 </div>
                 <div>
                   <h2 className="text-xl font-bold text-amber-900 mb-2">
-                    Why Free Templates May Not Be Suitable for NI
+                    Why Free Starter Documents May Not Be Suitable for NI
                   </h2>
                   <p className="text-amber-800 mb-4">
                     Free tenancy agreement templates found online are often outdated, designed for

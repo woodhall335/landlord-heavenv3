@@ -205,7 +205,7 @@ export default function PrtTenancyAgreementTemplateScotlandPage() {
                 </div>
                 <div>
                   <h2 className="text-xl font-bold text-amber-900 mb-2">
-                    Free Templates May Cost You More
+                    Free Starter Documents May Cost You More
                   </h2>
                   <p className="text-amber-800 mb-4">
                     Many free PRT templates found online are outdated, incomplete, or copied from
@@ -215,7 +215,7 @@ export default function PrtTenancyAgreementTemplateScotlandPage() {
                   <div className="grid md:grid-cols-2 gap-4">
                     <div className="bg-white rounded-lg p-4 border border-amber-200">
                       <h3 className="font-semibold text-amber-900 mb-2">
-                        Problems with Free Templates
+                        Problems with Free Starter Documents
                       </h3>
                       <ul className="text-sm text-amber-800 space-y-1">
                         <li>* May reference wrong legislation</li>
