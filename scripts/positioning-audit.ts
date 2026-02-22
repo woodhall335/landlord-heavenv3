@@ -136,10 +136,9 @@ export function auditPositioning(filePaths?: string[]): RouteAuditResult[] {
       const heuristicTemplateMatches = getTemplateHeuristicMatches(content);
       const hasForbidden = forbiddenMatches.length > 0;
       const trustSignalsDetected = trustMatches.length > 0 || trustInjected;
-      const hasTemplateRiskWithoutTrust = heuristicTemplateMatches.length > 0 && !trustSignalsDetected;
       const status: RouteAuditStatus = hasForbidden
         ? 'FAIL'
-        : !trustSignalsDetected || hasTemplateRiskWithoutTrust
+        : !trustSignalsDetected || heuristicTemplateMatches.length > 0
           ? 'WARN'
           : 'PASS';
 
