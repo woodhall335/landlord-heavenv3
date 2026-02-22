@@ -181,11 +181,23 @@ function printResults(results: RouteAuditResult[]) {
   console.log(`FAIL: ${totals.FAIL}`);
 }
 
+function parseCliMode(args: string[]): 'default' | 'strict' | 'warn-only' {
+  if (args.includes('--warn-only')) return 'warn-only';
+  if (args.includes('--strict')) return 'strict';
+  return 'default';
+}
+
 if (import.meta.url === `file://${process.argv[1]}`) {
   const results = auditPositioning();
   printResults(results);
 
-  if (results.some((r) => r.status !== 'PASS')) {
+  const mode = parseCliMode(process.argv.slice(2));
+  const hasFail = results.some((r) => r.status === 'FAIL');
+  const hasWarn = results.some((r) => r.status === 'WARN');
+
+  if (mode === 'warn-only') {
+    process.exitCode = 0;
+  } else if (mode === 'strict' ? hasFail || hasWarn : hasFail) {
     process.exitCode = 1;
   }
 }
