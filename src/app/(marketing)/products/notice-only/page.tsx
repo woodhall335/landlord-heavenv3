@@ -101,7 +101,7 @@ export default async function NoticeOnlyPage() {
       ])} />
 
       {/* Hero Section */}
-      <UniversalHero {...noticeOnlyHeroConfig} />
+      <UniversalHero {...noticeOnlyHeroConfig} showTrustPositioningBar />
 
 
       <WhatsIncludedInteractive product="notice_only" defaultJurisdiction="england" previews={previews} />

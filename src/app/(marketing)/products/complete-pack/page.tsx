@@ -101,7 +101,7 @@ export default async function CompleteEvictionPackPage() {
       ])} />
 
       {/* Hero Section */}
-      <UniversalHero {...completePackHeroConfig} />
+      <UniversalHero {...completePackHeroConfig} showTrustPositioningBar />
 
 
       <WhatsIncludedInteractive product="complete_pack" previews={previews} />

@@ -103,7 +103,7 @@ export default async function MoneyClaimPage() {
       ])} />
 
       {/* Hero Section */}
-      <UniversalHero {...moneyClaimHeroConfig} />
+      <UniversalHero {...moneyClaimHeroConfig} showTrustPositioningBar />
 
 
       <WhatsIncludedInteractive product="money_claim" previews={previews} />
