@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { getCanonicalUrl } from '@/lib/seo';
-import { StructuredData, breadcrumbSchema, faqPageSchema } from '@/lib/seo/structured-data';
+import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { lodgerAgreementFAQs } from '@/data/faqs';
 
@@ -47,7 +47,6 @@ export default function LodgerAgreementPage() {
 
   return (
     <>
-      <StructuredData data={faqPageSchema(enhancedFaqs)} />
       <StructuredData data={breadcrumbSchema(breadcrumbs)} />
 
       <div className="min-h-screen bg-gray-50">

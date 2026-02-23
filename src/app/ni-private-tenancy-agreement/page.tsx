@@ -13,7 +13,7 @@ import {
   RiGroupLine,
   RiInformationLine
 } from 'react-icons/ri';
-import { StructuredData, faqPageSchema, breadcrumbSchema, articleSchema } from '@/lib/seo/structured-data';
+import { StructuredData, breadcrumbSchema, articleSchema } from '@/lib/seo/structured-data';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { tenancyAgreementNILinks } from '@/lib/seo/internal-links';
@@ -108,7 +108,6 @@ export default function NIPrivateTenancyAgreementPage() {
           dateModified: '2025-01-20',
         })}
       />
-      <StructuredData data={faqPageSchema(faqs)} />
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: '/' },

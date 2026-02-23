@@ -25,6 +25,42 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       // Legacy/old URLs that were indexed by search engines
+
+      {
+        source: '/section-21-vs-section-8',
+        destination: '/section-8-vs-section-21',
+        permanent: true,
+      },
+      {
+        source: '/tools/validators/money-claim',
+        destination: '/products/money-claim',
+        permanent: true,
+      },
+      {
+        source: '/tools/validators/scotland-notice-to-leave',
+        destination: '/scotland-notice-to-leave-template',
+        permanent: true,
+      },
+      {
+        source: '/tools/validators/tenancy-agreement',
+        destination: '/tenancy-agreement-template',
+        permanent: true,
+      },
+      {
+        source: '/tenancy-agreements/premium',
+        destination: '/products/ast',
+        permanent: true,
+      },
+      {
+        source: '/tools/validators/wales-notice',
+        destination: '/wales-eviction-notice-template',
+        permanent: true,
+      },
+      {
+        source: '/\$',
+        destination: '/',
+        permanent: true,
+      },
       {
         source: '/tenancy-agreements/standard',
         destination: '/tenancy-agreements/england-wales',

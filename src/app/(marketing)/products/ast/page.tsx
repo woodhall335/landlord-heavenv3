@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { RelatedLinks } from "@/components/seo/RelatedLinks";
 import { productLinks, toolLinks, landingPageLinks } from "@/lib/seo/internal-links";
-import { StructuredData, productSchema, breadcrumbSchema, faqPageSchema } from "@/lib/seo/structured-data";
+import { StructuredData, productSchema, breadcrumbSchema } from "@/lib/seo/structured-data";
 import { getCanonicalUrl } from "@/lib/seo";
 import { PRODUCTS } from "@/lib/pricing/products";
 import { FAQSection } from "@/components/seo/FAQSection";
@@ -157,7 +157,6 @@ export default function ASTPage() {
         price: PRODUCTS.ast_standard.price.toString(),
         url: "https://landlordheaven.co.uk/products/ast"
       })} />
-      <StructuredData data={faqPageSchema(faqs)} />
       <StructuredData data={breadcrumbSchema([
         { name: "Home", url: "https://landlordheaven.co.uk" },
         { name: "Products", url: "https://landlordheaven.co.uk/pricing" },

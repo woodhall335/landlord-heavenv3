@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { getCanonicalUrl } from '@/lib/seo';
-import { StructuredData, breadcrumbSchema, faqPageSchema } from '@/lib/seo/structured-data';
+import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { form6aFAQs } from '@/data/faqs';
 import { FunnelCta } from '@/components/funnels';
@@ -49,7 +49,6 @@ export default function Form6APage() {
 
   return (
     <>
-      <StructuredData data={faqPageSchema(enhancedFaqs)} />
       <StructuredData data={breadcrumbSchema(breadcrumbs)} />
 
       <div className="min-h-screen bg-gray-50">
@@ -443,7 +442,8 @@ export default function Form6APage() {
 
         {/* FAQ Section */}
             <div className="mt-12">
-              <FAQSection
+              {/* FAQ schema must be rendered exactly once (via FAQSection). */}
+      <FAQSection
                 faqs={enhancedFaqs}
                 title="Form 6A Frequently Asked Questions"
                 showContactCTA={false}

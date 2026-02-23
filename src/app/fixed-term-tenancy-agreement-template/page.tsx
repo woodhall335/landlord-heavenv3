@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { StructuredData, breadcrumbSchema, faqPageSchema } from '@/lib/seo/structured-data';
+import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import {
@@ -102,7 +102,6 @@ export default function FixedTermTenancyAgreementPage() {
   return (
     <>
       <StructuredData data={pageSchema} />
-      <StructuredData data={faqPageSchema(faqs)} />
       <StructuredData data={breadcrumbSchema([
         { name: 'Home', url: 'https://landlordheaven.co.uk' },
         { name: 'Tenancy Agreements', url: 'https://landlordheaven.co.uk/assured-shorthold-tenancy-agreement-template' },

@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { StructuredData, breadcrumbSchema, faqPageSchema } from '@/lib/seo/structured-data';
+import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { Section21Countdown } from '@/components/ui/Section21Countdown';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
@@ -114,7 +114,6 @@ export default function Section21NoticeTemplatePage() {
   return (
     <>
       <StructuredData data={pageSchema} />
-      <StructuredData data={faqPageSchema(enhancedFaqs)} />
       <StructuredData data={breadcrumbSchema([
         { name: "Home", url: "https://landlordheaven.co.uk" },
         { name: "Templates", url: "https://landlordheaven.co.uk/eviction-notice-template" },

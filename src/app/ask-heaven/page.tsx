@@ -6,7 +6,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import AskHeavenPageClient from './AskHeavenPageClient';
 import { getCanonicalUrl } from '@/lib/seo';
-import { StructuredData, faqPageSchema, breadcrumbSchema } from '@/lib/seo/structured-data';
+import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { buildAskHeavenLink, type AskHeavenTopic } from '@/lib/ask-heaven/buildAskHeavenLink';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
@@ -281,7 +281,6 @@ export default async function AskHeavenPage({
   return (
     <>
       {/* SSR Structured Data - visible to Googlebot immediately */}
-      <StructuredData data={faqPageSchema(faqItems)} />
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: 'https://landlordheaven.co.uk' },

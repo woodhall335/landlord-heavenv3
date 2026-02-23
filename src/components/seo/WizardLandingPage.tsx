@@ -20,7 +20,7 @@ import {
   AlertTriangle,
 } from 'lucide-react';
 import { FAQSection } from '@/components/seo/FAQSection';
-import { StructuredData, productSchema, faqPageSchema, breadcrumbSchema } from '@/lib/seo/structured-data';
+import { StructuredData, productSchema, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { AskHeavenWidget } from '@/components/ask-heaven/AskHeavenWidget';
 import { TrustPositioningBar } from '@/components/marketing/TrustPositioningBar';
 import { IntentProductCTA, RelatedProductsModule, type IntentProduct } from '@/components/seo/IntentProductCTA';
@@ -44,7 +44,6 @@ export function WizardLandingPage({ content, structuredDataUrl, showAskHeavenWid
           url: structuredDataUrl,
         })}
       />
-      <StructuredData data={faqPageSchema(content.faqs)} />
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: 'https://landlordheaven.co.uk' },
