@@ -223,12 +223,12 @@ export function WizardLandingPage({ content, structuredDataUrl, showAskHeavenWid
               />
             </div>
             {isCompletePackEnglandPage ? (
-              <ul className="mt-5 mx-auto max-w-md space-y-2 text-left text-sm text-gray-700">
-                <li>✓ Preview before paying</li>
-                <li>✓ Unlimited regenerations</li>
-                <li>✓ Stored 12+ months</li>
-                <li>✓ One-time {content.price}</li>
-              </ul>
+              <div className="mt-4 flex flex-col md:flex-row md:flex-wrap md:items-center md:justify-center gap-2 md:gap-8 text-sm text-gray-600">
+                <span className="flex items-center gap-2 whitespace-nowrap">✓ Preview before paying</span>
+                <span className="flex items-center gap-2 whitespace-nowrap">✓ Unlimited regenerations</span>
+                <span className="flex items-center gap-2 whitespace-nowrap">✓ Stored 12+ months</span>
+                <span className="flex items-center gap-2 whitespace-nowrap">✓ One-time £129.99</span>
+              </div>
             ) : (
               <p className="mt-4 text-sm text-gray-600">
                 One-time payment • Unlimited regenerations • No subscription

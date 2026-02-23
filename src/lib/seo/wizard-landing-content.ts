@@ -325,7 +325,7 @@ export const completePackContent: WizardLandingContent = {
       name: 'N119 Particulars of Claim',
       formNumber: 'N119',
       description:
-        'Particulars of Claim for possession of property — the detailed statement of your case. Includes: grounds cited, rent arrears history with dates and amounts, tenancy details, and breach specifics. This is where your case is made — many competitors don\'t include this.',
+        'Particulars of Claim for possession of property — the detailed statement of your case. Includes: grounds cited, rent arrears history with dates and amounts, tenancy details, and breach specifics. This document sets out the legal basis of your claim, including grounds and arrears schedule.',
       route: 'section8',
     },
   ],
@@ -333,7 +333,7 @@ export const completePackContent: WizardLandingContent = {
   whatYouGet: [
     'Eviction notice (Section 21 Form 6A or Section 8 Form 3) with correct statutory wording',
     'Court claim forms: N5B for accelerated possession OR N5 + N119 for standard possession',
-    'N119 Particulars of Claim — the detailed case statement many landlords forget or get wrong',
+    'Particulars of Claim (N119) — professionally structured case statement drafted in the correct legal format',
     'AI-drafted witness statement with your case details',
     'Service instructions and validity checklist',
     'Court filing guide with step-by-step instructions — where to file, court fees, timelines',
@@ -349,7 +349,7 @@ export const completePackContent: WizardLandingContent = {
       'Most eviction failures happen at the court filing stage, not the notice stage. An incomplete or inconsistent court submission leads to rejected claims, wasted fees, and months of delay. This bundle prepares the FULL court route — from notice to filed claim — ensuring your documents work together.',
     benefits: [
       'We map your situation to the correct possession route: Section 21 → N5B accelerated, or Section 8 → N5 + N119 standard',
-      'We create the Particulars of Claim (N119) — the detailed statement of your case that many landlords omit or draft incorrectly',
+      'We draft your Particulars of Claim in the correct legal format, ensuring grounds, dates, and amounts are clearly structured.',
       'For rent arrears: we itemise amounts, dates, and running totals in the particulars — exactly what the court requires',
       'For breach grounds: we detail the specific ground(s) and supporting facts in the correct legal format',
       'All forms are internally consistent — notice, claim form, and particulars align and cross-reference correctly',
