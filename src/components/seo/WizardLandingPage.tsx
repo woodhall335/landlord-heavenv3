@@ -35,6 +35,14 @@ interface WizardLandingPageProps {
 
 export function WizardLandingPage({ content, structuredDataUrl, showAskHeavenWidget = true }: WizardLandingPageProps) {
   const isCompletePackEnglandPage = content.slug === 'eviction-pack-england';
+  const isMoneyClaimPage = content.slug === 'money-claim';
+  const showHeroPrice = !isCompletePackEnglandPage && !isMoneyClaimPage;
+
+  const heroCtaLabel = isMoneyClaimPage
+    ? 'Start My Case Bundle — £99.99'
+    : isCompletePackEnglandPage
+      ? 'Start My Case Bundle — £129.99'
+      : 'Start My Case Bundle';
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -65,15 +73,17 @@ export function WizardLandingPage({ content, structuredDataUrl, showAskHeavenWid
         actionsSlot={(
           <IntentProductCTA
             intent={{ product: toIntentProduct(content.product), src: "seo_landing" }}
-            label="Start My Case Bundle"
+            label={heroCtaLabel}
             className="hero-btn-primary w-full sm:w-auto"
           />
         )}
       >
-        <div className="mt-8 flex items-baseline justify-center gap-2 text-white">
-          <span className="text-5xl md:text-6xl font-bold">{content.price}</span>
-          <span className="text-lg text-white/85">one-time</span>
-        </div>
+        {showHeroPrice && (
+          <div className="mt-8 flex items-baseline justify-center gap-2 text-white">
+            <span className="text-5xl md:text-6xl font-bold">{content.price}</span>
+            <span className="text-lg text-white/85">one-time</span>
+          </div>
+        )}
 
         <TrustPositioningBar variant="compact" className="mx-auto mt-6 max-w-5xl" />
 
