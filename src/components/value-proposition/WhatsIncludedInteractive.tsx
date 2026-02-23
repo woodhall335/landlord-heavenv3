@@ -18,6 +18,7 @@ type WhatsIncludedInteractiveProps =
       previews: NoticeOnlyPreviewData;
       titleOverride?: string;
       subtitleOverride?: string;
+      showIntro?: boolean;
     }
   | {
       product: 'complete_pack';
@@ -25,12 +26,14 @@ type WhatsIncludedInteractiveProps =
       previews: CompletePackPreviewData;
       titleOverride?: string;
       subtitleOverride?: string;
+      showIntro?: boolean;
     }
   | {
       product: 'money_claim';
       previews: MoneyClaimPreviewData;
       titleOverride?: string;
       subtitleOverride?: string;
+      showIntro?: boolean;
     };
 
 type NoticeVariant = {
@@ -260,6 +263,7 @@ const PreviewThumbnail = ({ src, alt, title, width, height, className }: Preview
 export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) => {
   const { product, previews } = props;
   const isNoticeOnly = product === 'notice_only';
+  const showIntro = props.showIntro ?? true;
   const isCompletePack = product === 'complete_pack';
   const initialJurisdiction = isNoticeOnly ? props.defaultJurisdiction ?? 'england' : 'england';
   const initialPackVariant = isCompletePack ? props.defaultVariant ?? 'section21' : 'section21';
@@ -452,24 +456,26 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
     <section className="py-16 md:py-20">
       <Container>
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl md:text-4xl font-bold text-charcoal">
-              {props.titleOverride ??
-                (isNoticeOnly
-                ? 'What\u2019s included in your eviction notice only bundle'
-                : isCompletePack
-                  ? 'What\u2019s included in your complete eviction pack'
-                  : 'What\u2019s included in your money claim pack')}
-            </h2>
-            <p className="mt-3 text-gray-600">
-              {props.subtitleOverride ??
-                (isNoticeOnly
-                ? 'Select your jurisdiction, then preview every document in the pack.'
-                : isCompletePack
-                  ? 'England-only pack. Choose Section 8 or Section 21, then preview every document.'
-                  : 'England-only pack. Preview every document before you buy.')}
-            </p>
-          </div>
+          {showIntro ? (
+            <div className="text-center mb-10">
+              <h2 className="text-3xl md:text-4xl font-bold text-charcoal">
+                {props.titleOverride ??
+                  (isNoticeOnly
+                  ? 'What’s included in your eviction notice only bundle'
+                  : isCompletePack
+                    ? 'What’s included in your complete eviction pack'
+                    : 'What’s included in your money claim pack')}
+              </h2>
+              <p className="mt-3 text-gray-600">
+                {props.subtitleOverride ??
+                  (isNoticeOnly
+                  ? 'Select your jurisdiction, then preview every document in the pack.'
+                  : isCompletePack
+                    ? 'England-only pack. Choose Section 8 or Section 21, then preview every document.'
+                    : 'England-only pack. Preview every document before you buy.')}
+              </p>
+            </div>
+          ) : null}
 
           {isNoticeOnly ? (
             <div className="flex justify-center mb-10" role="tablist" aria-label="Jurisdiction">

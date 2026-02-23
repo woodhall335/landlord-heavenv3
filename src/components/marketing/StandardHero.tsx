@@ -26,6 +26,7 @@ export interface StandardHeroProps {
   variant?: 'pastel' | 'white';
   children?: React.ReactNode;
   className?: string;
+  showTrustPositioningBar?: boolean;
 }
 
 function normalizeTitle(title: React.ReactNode): { title: string; highlightTitle?: string } {
@@ -48,6 +49,7 @@ export function StandardHero({
   variant = 'pastel',
   children,
   className,
+  showTrustPositioningBar = true,
 }: StandardHeroProps) {
   const normalized = normalizeTitle(title);
 
@@ -69,7 +71,7 @@ export function StandardHero({
         >
           <div className={clsx('mt-2 text-white', align === 'center' ? 'text-center' : 'text-left')}>
             <div className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight text-white">{title}</div>
-            <TrustPositioningBar variant="compact" />
+            {showTrustPositioningBar ? <TrustPositioningBar variant="compact" /> : null}
         {children}
           </div>
         </UniversalHero>
@@ -93,7 +95,7 @@ export function StandardHero({
         showReviewPill={false}
         showUsageCounter={false}
       >
-        <TrustPositioningBar variant="compact" />
+        {showTrustPositioningBar ? <TrustPositioningBar variant="compact" /> : null}
         {children}
       </UniversalHero>
     </section>
