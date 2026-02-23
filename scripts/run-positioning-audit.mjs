@@ -1,8 +1,10 @@
 import { spawnSync } from 'node:child_process';
+import { existsSync } from 'node:fs';
 import path from 'node:path';
 
 const args = process.argv.slice(2);
 
+// Preserve existing NODE_OPTIONS and append warning suppressions (if missing)
 const existingNodeOptions = process.env.NODE_OPTIONS?.trim() ?? '';
 const warningFlags = [
   '--disable-warning=MODULE_TYPELESS_PACKAGE_JSON',
@@ -13,46 +15,37 @@ const nodeOptions = warningFlags.reduce((options, flag) => {
   return options.includes(flag) ? options : `${options} ${flag}`.trim();
 }, existingNodeOptions);
 
-// Quote for cmd.exe: wrap in "..." only when needed,
-// and escape embedded quotes by doubling them.
-function cmdQuote(s) {
-  const str = String(s);
-  // Quote if it contains whitespace or common cmd metacharacters
-  if (!/[ \t&()^[\]{}=;!'+,`~|<>"]/g.test(str)) return str;
-  return `"${str.replaceAll('"', '""')}"`;
+// Optional debug output: set LH_AUDIT_DEBUG=1
+const debug = process.env.LH_AUDIT_DEBUG === '1';
+
+// Resolve ts-node ESM CLI entrypoint directly (no .cmd shims)
+const tsNodeEsmCli = path.resolve('node_modules', 'ts-node', 'dist', 'bin-esm.js');
+
+if (!existsSync(tsNodeEsmCli)) {
+  console.error('[run-positioning-audit] ts-node ESM CLI not found:', tsNodeEsmCli);
+  console.error('[run-positioning-audit] Have you installed dependencies? Try: npm install');
+  process.exit(1);
 }
 
-const env = {
-  ...process.env,
-  NODE_OPTIONS: nodeOptions,
-};
+const auditEntrypoint = path.resolve('scripts', 'positioning-audit.ts');
 
-const childArgs = ['scripts/positioning-audit.ts', ...args];
+const nodeExe = process.execPath; // the current Node binary
+const nodeArgs = [tsNodeEsmCli, auditEntrypoint, ...args];
 
-let result;
-
-if (process.platform === 'win32') {
-  const comspec = process.env.ComSpec || 'cmd.exe';
-
-  // Use the local shim, but run it THROUGH cmd.exe (critical).
-  const tsNodeEsmCmd = path.resolve('node_modules', '.bin', 'ts-node-esm.cmd');
-
-  // Build a single command line for cmd.exe
-  const command = [tsNodeEsmCmd, ...childArgs].map(cmdQuote).join(' ');
-
-  result = spawnSync(comspec, ['/d', '/s', '/c', command], {
-    stdio: 'inherit',
-    env,
-  });
-} else {
-  // POSIX: execute the local bin directly
-  const tsNodeEsmBin = path.resolve('node_modules', '.bin', 'ts-node-esm');
-
-  result = spawnSync(tsNodeEsmBin, childArgs, {
-    stdio: 'inherit',
-    env,
-  });
+if (debug) {
+  console.error('[run-positioning-audit] node:', nodeExe);
+  console.error('[run-positioning-audit] args:', nodeArgs.join(' '));
+  console.error('[run-positioning-audit] cwd:', process.cwd());
+  console.error('[run-positioning-audit] NODE_OPTIONS:', nodeOptions);
 }
+
+const result = spawnSync(nodeExe, nodeArgs, {
+  stdio: 'inherit',
+  env: {
+    ...process.env,
+    NODE_OPTIONS: nodeOptions,
+  },
+});
 
 if (result.error) {
   console.error('[run-positioning-audit] Failed to spawn:', result.error);
