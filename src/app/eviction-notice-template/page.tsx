@@ -7,11 +7,11 @@ import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, toolLinks, blogLinks } from '@/lib/seo/internal-links';
 import { StandardHero } from '@/components/marketing/StandardHero';
 import { FAQSection } from '@/components/seo/FAQSection';
-import { IntentProductCTA, RelatedProductsModule, getIntentProductHref } from '@/components/seo/IntentProductCTA';
+import { IntentProductCTA, getIntentProductHref } from '@/components/seo/IntentProductCTA';
 import { evictionNoticeTemplateFAQs } from '@/data/faqs';
 import { EvictionNoticeBundlePreviewSection } from '@/components/seo/EvictionNoticeBundlePreviewSection';
 import { getNoticeOnlyPreviewData } from '@/lib/previews/noticeOnlyPreviews';
-import { CheckCircle, Shield, Clock, ArrowRight, AlertTriangle, Scale, Home, Users } from 'lucide-react';
+import { CheckCircle, ArrowRight, AlertTriangle, Scale, Home, Users } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Eviction Notice Template UK - Possession Notice Download',
@@ -84,26 +84,8 @@ export default async function EvictionNoticeTemplatePage() {
           }
           primaryCTA={{ label: 'Generate Court-Ready Notice — £49.99', href: getIntentProductHref({ product: 'notice_only', src: 'seo_landing' }) }}
           variant="pastel"
-        >
-          <div className="mb-4">
-            <Section21Countdown variant="badge" />
-          </div>
-
-          <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600">
-            <span className="flex items-center gap-2">
-              <CheckCircle className="w-4 h-4 text-green-500" />
-              Jurisdiction-first routing
-            </span>
-            <span className="flex items-center gap-2">
-              <Shield className="w-4 h-4 text-green-500" />
-              Statutory framework checks
-            </span>
-            <span className="flex items-center gap-2">
-              <Clock className="w-4 h-4 text-green-500" />
-              Ready in 5 minutes
-            </span>
-          </div>
-        </StandardHero>
+          showTrustPositioningBar={false}
+        />
 
         <EvictionNoticeBundlePreviewSection previews={previews} />
 
@@ -213,7 +195,6 @@ export default async function EvictionNoticeTemplatePage() {
           </div>
         </section>
 
-        <RelatedProductsModule products={['notice_only', 'complete_pack', 'money_claim']} />
 
         <section className="py-16 lg:py-20">
           <div className="container mx-auto px-4">
