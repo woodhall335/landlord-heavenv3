@@ -16,15 +16,21 @@ type WhatsIncludedInteractiveProps =
       product: 'notice_only';
       defaultJurisdiction?: JurisdictionKey;
       previews: NoticeOnlyPreviewData;
+      titleOverride?: string;
+      subtitleOverride?: string;
     }
   | {
       product: 'complete_pack';
       defaultVariant?: CompletePackVariantKey;
       previews: CompletePackPreviewData;
+      titleOverride?: string;
+      subtitleOverride?: string;
     }
   | {
       product: 'money_claim';
       previews: MoneyClaimPreviewData;
+      titleOverride?: string;
+      subtitleOverride?: string;
     };
 
 type NoticeVariant = {
@@ -448,18 +454,20 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-10">
             <h2 className="text-3xl md:text-4xl font-bold text-charcoal">
-              {isNoticeOnly
+              {props.titleOverride ??
+                (isNoticeOnly
                 ? 'What\u2019s included in your eviction notice only bundle'
                 : isCompletePack
                   ? 'What\u2019s included in your complete eviction pack'
-                  : 'What\u2019s included in your money claim pack'}
+                  : 'What\u2019s included in your money claim pack')}
             </h2>
             <p className="mt-3 text-gray-600">
-              {isNoticeOnly
+              {props.subtitleOverride ??
+                (isNoticeOnly
                 ? 'Select your jurisdiction, then preview every document in the pack.'
                 : isCompletePack
                   ? 'England-only pack. Choose Section 8 or Section 21, then preview every document.'
-                  : 'England-only pack. Preview every document before you buy.'}
+                  : 'England-only pack. Preview every document before you buy.')}
             </p>
           </div>
 
