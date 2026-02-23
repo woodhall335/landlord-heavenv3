@@ -4,27 +4,14 @@ import { HeaderConfig } from "@/components/layout/HeaderConfig";
 import { noticeOnlyHeroConfig } from "@/components/landing/heroConfigs";
 import { Container } from "@/components/ui";
 import Link from "next/link";
-import {
-  Zap,
-  CheckCircle2,
-  ShieldCheck,
-  BadgePoundSterling,
-} from "lucide-react";
+import { Zap, CheckCircle2, ShieldCheck, BadgePoundSterling } from "lucide-react";
 import { StructuredData, productSchema, breadcrumbSchema } from "@/lib/seo/structured-data";
-import { RelatedLinks } from "@/components/seo/RelatedLinks";
-import { productLinks, toolLinks, blogLinks, landingPageLinks } from "@/lib/seo/internal-links";
-import { getCanonicalUrl } from "@/lib/seo";
 import { PRODUCTS } from "@/lib/pricing/products";
 import { FAQSection } from "@/components/seo/FAQSection";
-import {
-  WhyLandlordHeaven,
-  VsSolicitorComparison,
-  VsFreeTemplateComparison,
-  WhatsIncludedInteractive,
-} from "@/components/value-proposition";
+import { WhyLandlordHeaven, WhatsIncludedInteractive } from "@/components/value-proposition";
 import { getNoticeOnlyPreviewData } from "@/lib/previews/noticeOnlyPreviews";
+import { getCanonicalUrl } from "@/lib/seo";
 
-// Get price from single source of truth
 const product = PRODUCTS.notice_only;
 const price = product.displayPrice;
 
@@ -44,7 +31,6 @@ export const metadata: Metadata = {
 
 export const runtime = 'nodejs';
 
-// FAQ data for structured data
 const faqs = [
   {
     question: "What documents do I get?",
@@ -86,7 +72,6 @@ export default async function NoticeOnlyPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <HeaderConfig mode="autoOnScroll" />
-      {/* Structured Data for SEO */}
       <StructuredData data={productSchema({
         name: "AI-Validated Eviction Case Bundle",
         description: "Complete eviction case bundles for UK landlords: Section 21, Section 8, Section 173, and Notice to Leave workflows with statutory-grounded validation.",
@@ -99,15 +84,12 @@ export default async function NoticeOnlyPage() {
         { name: "Notice Only Pack", url: "https://landlordheaven.co.uk/products/notice-only" }
       ])} />
 
-      {/* Hero Section */}
       <UniversalHero {...noticeOnlyHeroConfig} showTrustPositioningBar />
-
 
       <WhatsIncludedInteractive product="notice_only" defaultJurisdiction="england" previews={previews} />
 
       <section className="py-8 bg-white"><Container><p className="text-center text-gray-700 font-medium">These are example previews. Your bundle is generated specifically for your jurisdiction and tenancy details.</p></Container></section>
 
-      {/* Why Landlord Heaven */}
       <section className="py-16 md:py-20">
         <Container>
           <div className="max-w-4xl mx-auto">
@@ -116,7 +98,6 @@ export default async function NoticeOnlyPage() {
         </Container>
       </section>
 
-      {/* How It Works */}
       <section className="py-16 md:py-20 bg-white">
         <Container>
           <div className="max-w-4xl mx-auto">
@@ -124,163 +105,81 @@ export default async function NoticeOnlyPage() {
 
             <div className="grid md:grid-cols-3 gap-8">
               <div className="text-center">
-                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
-                  1
-                </div>
+                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">1</div>
                 <h3 className="text-xl font-semibold text-charcoal mb-3">Answer Simple Questions</h3>
-                <p className="text-gray-600">
-                  Our wizard asks about your property, tenancy, and grounds for eviction. Ask Heaven helps you choose the right route.
-                </p>
+                <p className="text-gray-600">Our wizard asks about your property, tenancy, and grounds for eviction. Ask Heaven helps you choose the right route.</p>
               </div>
 
               <div className="text-center">
-                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
-                  2
-                </div>
+                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">2</div>
                 <h3 className="text-xl font-semibold text-charcoal mb-3">Preview Your Documents</h3>
-                <p className="text-gray-600">
-                  See exactly what you&apos;ll get with watermarked previews. Edit answers and regenerate instantly until you&apos;re satisfied.
-                </p>
+                <p className="text-gray-600">See exactly what you&apos;ll get with watermarked previews. Edit answers and regenerate instantly until you&apos;re satisfied.</p>
               </div>
 
               <div className="text-center">
-                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
-                  3
-                </div>
+                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">3</div>
                 <h3 className="text-xl font-semibold text-charcoal mb-3">Download &amp; Serve</h3>
-                <p className="text-gray-600">
-                  Pay once, download your documents, and follow the service instructions to serve your notice correctly.
-                </p>
+                <p className="text-gray-600">Pay once, download your documents, and follow the service instructions to serve your notice correctly.</p>
               </div>
             </div>
 
             <div className="mt-12 text-center">
-              <Link
-                href="/wizard?product=notice_only&src=product_page&topic=eviction"
-                className="hero-btn-primary"
-              >
-                Generate my notice bundle →
-              </Link>
+              <Link href="/wizard?product=notice_only&src=product_page&topic=eviction" className="hero-btn-primary">Generate my notice bundle →</Link>
             </div>
           </div>
         </Container>
       </section>
 
-      {/* Comparison: vs Solicitor */}
-      <section className="py-16 md:py-20">
-        <Container>
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-8 text-center">
-              How We Compare
-            </h2>
-            <div className="space-y-8">
-              <VsSolicitorComparison product="notice_only" />
-              <VsFreeTemplateComparison product="notice_only" />
-            </div>
-          </div>
-        </Container>
-      </section>
-
-      {/* Why Choose Notice Only */}
       <section className="py-16 md:py-20 bg-white">
         <Container>
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-12 text-center">
-              Why Choose Notice Only?
-            </h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-12 text-center">Why Choose Notice Only?</h2>
 
             <div className="grid md:grid-cols-2 gap-6">
               <div className="bg-gray-50 rounded-lg border border-gray-200 p-6">
-                <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
-                  <Zap className="w-7 h-7 text-primary" />
-                </div>
+                <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4"><Zap className="w-7 h-7 text-primary" /></div>
                 <h3 className="text-xl font-semibold text-charcoal mb-2">Fast - Under 10 Minutes</h3>
-                <p className="text-gray-700">
-                  Answer questions, preview your documents, and download. No waiting days for solicitor appointments.
-                </p>
+                <p className="text-gray-700">Answer questions, preview your documents, and download. No waiting days for solicitor appointments.</p>
               </div>
 
               <div className="bg-gray-50 rounded-lg border border-gray-200 p-6">
-                <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
-                  <CheckCircle2 className="w-7 h-7 text-primary" />
-                </div>
+                <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4"><CheckCircle2 className="w-7 h-7 text-primary" /></div>
                 <h3 className="text-xl font-semibold text-charcoal mb-2">Official Forms</h3>
-                <p className="text-gray-700">
-                  Government-approved forms: Form 6A (Section 21), Form 3 (Section 8), RHW forms (Wales), Notice to Leave (Scotland).
-                </p>
+                <p className="text-gray-700">Government-approved forms: Form 6A (Section 21), Form 3 (Section 8), RHW forms (Wales), Notice to Leave (Scotland).</p>
               </div>
 
               <div className="bg-gray-50 rounded-lg border border-gray-200 p-6">
-                <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
-                  <ShieldCheck className="w-7 h-7 text-primary" />
-                </div>
+                <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4"><ShieldCheck className="w-7 h-7 text-primary" /></div>
                 <h3 className="text-xl font-semibold text-charcoal mb-2">Compliance Checks</h3>
-                <p className="text-gray-700">
-                  Ask Heaven flags common blockers: deposit protection, gas safety, EPC, How to Rent. Fix issues before serving.
-                </p>
+                <p className="text-gray-700">Ask Heaven flags common blockers: deposit protection, gas safety, EPC, How to Rent. Fix issues before serving.</p>
               </div>
 
               <div className="bg-gray-50 rounded-lg border border-gray-200 p-6">
-                <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
-                  <BadgePoundSterling className="w-7 h-7 text-primary" />
-                </div>
+                <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4"><BadgePoundSterling className="w-7 h-7 text-primary" /></div>
                 <h3 className="text-xl font-semibold text-charcoal mb-2">One-Time Payment</h3>
-                <p className="text-gray-700">
-                  {price} covers everything. No subscription, no hidden fees. Unlimited regenerations included.
-                </p>
+                <p className="text-gray-700">{price} covers everything. No subscription, no hidden fees. Unlimited regenerations included.</p>
               </div>
             </div>
           </div>
         </Container>
       </section>
 
-      {/* FAQ */}
-      <FAQSection
-        title="Frequently Asked Questions"
-        faqs={faqs}
-        includeSchema={false}
-        showContactCTA={false}
-        variant="white"
-      />
+      <FAQSection title="Frequently Asked Questions" faqs={faqs} includeSchema={false} showContactCTA={false} variant="white" />
 
-      {/* Related Resources */}
-      <section className="py-16 md:py-20">
-        <Container>
-          <div className="max-w-4xl mx-auto">
-            <RelatedLinks
-              title="Related Resources"
-              links={[
-                productLinks.completePack,
-                toolLinks.section21Generator,
-                toolLinks.section8Generator,
-                blogLinks.whatIsSection21,
-                blogLinks.section21VsSection8,
-                landingPageLinks.evictionTemplate,
-              ]}
-            />
-          </div>
-        </Container>
-      </section>
-
-      {/* CTA Section */}
       <section className="py-16 md:py-20 bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50">
         <Container>
           <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Ready to Get Your Notice?</h2>
-            <p className="text-xl mb-8 text-gray-600">
-              Preview before you pay. Edit and regenerate instantly. Stored in your portal.
-            </p>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Ready to Generate Your Notice Bundle?</h2>
+            <p className="text-xl mb-8 text-gray-600">Jurisdiction-specific notices for England, Wales &amp; Scotland with compliance checks and watermarked previews before purchase.</p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              <Link
-                href="/wizard?product=notice_only&src=product_page&topic=eviction"
-                className="hero-btn-primary"
-              >
-                Start Your Notice - {price} →
-              </Link>
+              <Link href="/wizard?product=notice_only&src=product_page&topic=eviction" className="hero-btn-primary">Generate my notice bundle →</Link>
             </div>
-            <p className="mt-4 text-sm text-gray-600">
-              One-time payment • Unlimited regenerations • No subscription
-            </p>
+            <ul className="mt-6 flex flex-col items-center gap-2 text-sm text-gray-700 md:flex-row md:justify-center md:gap-6" aria-label="Purchase reassurance">
+              <li>✓ Preview before paying</li>
+              <li>✓ Unlimited regenerations</li>
+              <li>✓ Stored 12+ months</li>
+              <li>✓ One-time payment — no subscription</li>
+            </ul>
           </div>
         </Container>
       </section>

@@ -68,10 +68,9 @@ export const astHeroConfig: HeroConfig = {
 
 export const noticeOnlyHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
-  trustText: 'S21 & S8 (England) • S173 • Notice to Leave',
-  title: 'Eviction Notice Bundle',
-  highlightTitle: 'Jurisdiction-Specific',
-  subtitle: 'Generate a compliance-checked notice bundle with service instructions and a validity checklist. Preview every document before purchase.',
+  trustText: 'England (Form 6A & Form 3) • Wales (Section 173 & RHW23) • Scotland (Notice to Leave)',
+  title: 'Eviction Notice Bundle — £49.99',
+  subtitle: 'Jurisdiction-specific notices for England, Wales & Scotland — compliance-checked and reform-aware. Preview every document before purchase.',
   primaryCta: {
     label: 'Generate my notice bundle →',
     href: '/wizard?product=notice_only&src=product_page&topic=eviction',
