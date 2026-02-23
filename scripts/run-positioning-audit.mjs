@@ -12,8 +12,6 @@ const nodeOptions = warningFlags.reduce((options, flag) => {
   return options.includes(flag) ? options : `${options} ${flag}`.trim();
 }, existingNodeOptions);
 
-// Use npx because `ts-node-esm` may not be on PATH on Windows,
-// but `npx ts-node-esm ...` reliably resolves the local binary.
 const npxCmd = process.platform === 'win32' ? 'npx.cmd' : 'npx';
 
 const result = spawnSync(
@@ -21,7 +19,6 @@ const result = spawnSync(
   ['--no-install', 'ts-node-esm', 'scripts/positioning-audit.ts', ...args],
   {
     stdio: 'inherit',
-    // shell:false is fine here; we're explicitly calling npx(.cmd)
     shell: false,
     env: {
       ...process.env,
@@ -29,6 +26,12 @@ const result = spawnSync(
     },
   }
 );
+
+// If spawn failed (e.g. npx not found), show why.
+if (result.error) {
+  console.error('[run-positioning-audit] Failed to spawn:', result.error);
+  process.exit(1);
+}
 
 if (typeof result.status === 'number') {
   process.exit(result.status);
