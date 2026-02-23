@@ -1,4 +1,5 @@
 import { spawnSync } from 'node:child_process';
+import path from 'node:path';
 
 const args = process.argv.slice(2);
 
@@ -12,54 +13,26 @@ const nodeOptions = warningFlags.reduce((options, flag) => {
   return options.includes(flag) ? options : `${options} ${flag}`.trim();
 }, existingNodeOptions);
 
-// Quote for cmd.exe: wrap in "..." only when needed,
-// and escape embedded quotes by doubling them.
-function cmdQuote(s) {
-  const str = String(s);
-  // Quote if it contains whitespace or common cmd metacharacters
-  if (!/[ \t&()^[\]{}=;!'+,`~|<>"]/g.test(str)) return str;
-  return `"${str.replaceAll('"', '""')}"`;
-}
+// Prefer the locally-installed ts-node-esm binary for reliability.
+// This avoids npx/cmd.exe quoting issues on Windows.
+const tsNodeEsmBin =
+  process.platform === 'win32'
+    ? path.join('node_modules', '.bin', 'ts-node-esm.cmd')
+    : path.join('node_modules', '.bin', 'ts-node-esm');
 
-let result;
+const childArgs = ['scripts/positioning-audit.ts', ...args];
 
-if (process.platform === 'win32') {
-  const comspec = process.env.ComSpec || 'cmd.exe';
-
-  const parts = [
-    'npx',
-    '--no-install',
-    'ts-node-esm',
-    'scripts/positioning-audit.ts',
-    ...args,
-  ];
-
-  // IMPORTANT: don't add backslashes. cmd.exe wants raw quotes.
-  const command = parts.map(cmdQuote).join(' ');
-
-  result = spawnSync(comspec, ['/d', '/s', '/c', command], {
-    stdio: 'inherit',
-    env: {
-      ...process.env,
-      NODE_OPTIONS: nodeOptions,
-    },
-  });
-} else {
-  result = spawnSync(
-    'npx',
-    ['--no-install', 'ts-node-esm', 'scripts/positioning-audit.ts', ...args],
-    {
-      stdio: 'inherit',
-      env: {
-        ...process.env,
-        NODE_OPTIONS: nodeOptions,
-      },
-    }
-  );
-}
+const result = spawnSync(tsNodeEsmBin, childArgs, {
+  stdio: 'inherit',
+  env: {
+    ...process.env,
+    NODE_OPTIONS: nodeOptions,
+  },
+});
 
 if (result.error) {
   console.error('[run-positioning-audit] Failed to spawn:', result.error);
+  console.error('[run-positioning-audit] Tried:', tsNodeEsmBin, childArgs.join(' '));
   process.exit(1);
 }
 
