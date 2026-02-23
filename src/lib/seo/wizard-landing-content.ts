@@ -284,7 +284,7 @@ export const completePackContent: WizardLandingContent = {
   title: `Complete Eviction Bundle 2026 – England | N5, N5B, N119 + Particulars of Claim | ${SEO_PRICES.evictionBundle.display}`,
   description:
     'End-to-end eviction paperwork for England: Section 21 notice + N5B, or Section 8 notice + N5 + N119 Particulars of Claim. We create the full court route — not just the notice. All forms mapped and validated.',
-  h1: 'Complete Eviction Bundle – England Only',
+  h1: 'Complete Eviction Bundle – England (Section 21 & Section 8)',
   subheading:
     'End-to-end eviction paperwork: notice, court forms, Particulars of Claim, and filing guide — mapped to the correct possession route',
 
