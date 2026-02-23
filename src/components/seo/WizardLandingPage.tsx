@@ -24,6 +24,7 @@ import { StructuredData, productSchema, breadcrumbSchema } from '@/lib/seo/struc
 import { AskHeavenWidget } from '@/components/ask-heaven/AskHeavenWidget';
 import { TrustPositioningBar } from '@/components/marketing/TrustPositioningBar';
 import { IntentProductCTA, RelatedProductsModule, type IntentProduct } from '@/components/seo/IntentProductCTA';
+import { CompletePackPreviewSection } from '@/components/seo/complete-pack-england/CompletePackPreviewSection';
 import type { WizardLandingContent, NoticeType, CourtForm, JurisdictionCoverage, WhyUseThisSection, LegalValidationExplainer } from '@/lib/seo/wizard-landing-content';
 
 interface WizardLandingPageProps {
@@ -33,6 +34,8 @@ interface WizardLandingPageProps {
 }
 
 export function WizardLandingPage({ content, structuredDataUrl, showAskHeavenWidget = true }: WizardLandingPageProps) {
+  const isCompletePackEnglandPage = content.slug === 'eviction-pack-england';
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Structured Data */}
@@ -90,6 +93,10 @@ export function WizardLandingPage({ content, structuredDataUrl, showAskHeavenWid
           <UsageTodayCounter className="mx-auto" />
         </div>
       </UniversalHero>
+
+      {isCompletePackEnglandPage && <CompletePackPreviewSection />}
+
+      {isCompletePackEnglandPage && <WhyAccuracyMattersSection />}
 
       {/* What You Get Section */}
       <section className="py-16 md:py-20 bg-white">
@@ -206,20 +213,62 @@ export function WizardLandingPage({ content, structuredDataUrl, showAskHeavenWid
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Ready to Get Started?</h2>
             <p className="text-xl mb-8 text-gray-600">
-              Preview before you pay. Edit and regenerate instantly. Stored in your portal.
+              Solicitor-grade procedural checks and court-ready documents, designed to reduce rejected claims.
             </p>
             <IntentProductCTA
               intent={{ product: toIntentProduct(content.product), src: "seo_landing" }}
               label={`Start My Case Bundle - ${content.price}`}
               className="hero-btn-primary"
             />
-            <p className="mt-4 text-sm text-gray-600">
-              One-time payment • Unlimited regenerations • No subscription
-            </p>
+            {isCompletePackEnglandPage ? (
+              <ul className="mt-5 inline-flex flex-col items-start gap-2 text-sm text-gray-700">
+                <li>✓ Preview before paying</li>
+                <li>✓ Unlimited regenerations</li>
+                <li>✓ Stored 12+ months</li>
+                <li>✓ One-time {content.price}</li>
+              </ul>
+            ) : (
+              <p className="mt-4 text-sm text-gray-600">
+                One-time payment • Unlimited regenerations • No subscription
+              </p>
+            )}
           </div>
         </Container>
       </section>
     </div>
+  );
+}
+
+function WhyAccuracyMattersSection() {
+  return (
+    <section className="py-14 md:py-16 bg-gray-50">
+      <Container>
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-charcoal text-center">Why Accuracy Matters</h2>
+          <ul className="mt-8 space-y-3">
+            <li className="flex items-start gap-3 bg-white p-4 rounded-lg border border-gray-200">
+              <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" />
+              <span className="text-gray-700">Rejected claims delay possession.</span>
+            </li>
+            <li className="flex items-start gap-3 bg-white p-4 rounded-lg border border-gray-200">
+              <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" />
+              <span className="text-gray-700">Court fees are non-refundable.</span>
+            </li>
+            <li className="flex items-start gap-3 bg-white p-4 rounded-lg border border-gray-200">
+              <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" />
+              <span className="text-gray-700">Inconsistent paperwork can invalidate your claim.</span>
+            </li>
+            <li className="flex items-start gap-3 bg-white p-4 rounded-lg border border-gray-200">
+              <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" />
+              <span className="text-gray-700">Missing Particulars (N119) frequently cause failure.</span>
+            </li>
+          </ul>
+          <p className="mt-6 text-center text-gray-800 font-medium">
+            This bundle prepares the full possession route — not just the notice.
+          </p>
+        </div>
+      </Container>
+    </section>
   );
 }
 
