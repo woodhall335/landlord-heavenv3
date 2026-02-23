@@ -47,9 +47,9 @@
     "audit:funnel": "node scripts/run-with-server.mjs -- node scripts/funnel-audit.mjs",
     "audit:pw:install": "playwright install --with-deps",
     "audit:env:check": "node scripts/audit-env-check.mjs",
-    "audit:positioning": "node scripts/run-positioning-audit.mjs",
-    "audit:positioning:strict": "node scripts/run-positioning-audit.mjs --strict",
-    "audit:positioning:warn-only": "node scripts/run-positioning-audit.mjs --warn-only"
+    "audit:positioning": "node --disable-warning=DEP0180 scripts/run-positioning-audit.mjs",
+    "audit:positioning:strict": "node --disable-warning=DEP0180 scripts/run-positioning-audit.mjs --strict",
+    "audit:positioning:warn-only": "node --disable-warning=DEP0180 scripts/run-positioning-audit.mjs --warn-only"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.70.1",
