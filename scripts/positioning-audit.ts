@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 export type RouteAuditStatus = 'PASS' | 'WARN' | 'FAIL';
 
@@ -203,11 +204,19 @@ function parseCliMode(args: string[]): 'default' | 'strict' | 'warn-only' {
   return 'default';
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+const selfPath = path.resolve(fileURLToPath(import.meta.url));
+const argvCandidates = process.argv
+  .slice(1)
+  .filter((arg) => arg && !arg.startsWith('-'))
+  .map((arg) => path.resolve(arg));
+const isMain = argvCandidates.includes(selfPath);
+
+if (isMain) {
   const results = auditPositioning();
   printResults(results);
 
-  const mode = parseCliMode(process.argv.slice(2));
+  const selfArgIndex = process.argv.findIndex((arg, idx) => idx > 0 && arg && !arg.startsWith('-') && path.resolve(arg) === selfPath);
+  const mode = parseCliMode(selfArgIndex >= 0 ? process.argv.slice(selfArgIndex + 1) : process.argv.slice(2));
   const hasFail = results.some((r) => r.status === 'FAIL');
   const hasWarn = results.some((r) => r.status === 'WARN');
 
