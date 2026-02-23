@@ -1,10 +1,10 @@
 import { spawnSync } from 'node:child_process';
-import { existsSync } from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const args = process.argv.slice(2);
 
-// Preserve existing NODE_OPTIONS and append warning suppressions (if missing)
+// Keep any existing NODE_OPTIONS and add the suppressions if missing
 const existingNodeOptions = process.env.NODE_OPTIONS?.trim() ?? '';
 const warningFlags = [
   '--disable-warning=MODULE_TYPELESS_PACKAGE_JSON',
@@ -15,37 +15,27 @@ const nodeOptions = warningFlags.reduce((options, flag) => {
   return options.includes(flag) ? options : `${options} ${flag}`.trim();
 }, existingNodeOptions);
 
-// Optional debug output: set LH_AUDIT_DEBUG=1
-const debug = process.env.LH_AUDIT_DEBUG === '1';
+// Resolve project root from this file location (scripts/run-positioning-audit.mjs)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const projectRoot = path.resolve(__dirname, '..');
 
-// Resolve ts-node ESM CLI entrypoint directly (no .cmd shims)
-const tsNodeEsmCli = path.resolve('node_modules', 'ts-node', 'dist', 'bin-esm.js');
+// Use ts-node’s ESM CLI entrypoint (NOT the Node loader)
+const tsNodeEsmBin = path.join(projectRoot, 'node_modules', 'ts-node', 'dist', 'bin-esm.js');
+const auditScript = path.join(projectRoot, 'scripts', 'positioning-audit.ts');
 
-if (!existsSync(tsNodeEsmCli)) {
-  console.error('[run-positioning-audit] ts-node ESM CLI not found:', tsNodeEsmCli);
-  console.error('[run-positioning-audit] Have you installed dependencies? Try: npm install');
-  process.exit(1);
-}
-
-const auditEntrypoint = path.resolve('scripts', 'positioning-audit.ts');
-
-const nodeExe = process.execPath; // the current Node binary
-const nodeArgs = [tsNodeEsmCli, auditEntrypoint, ...args];
-
-if (debug) {
-  console.error('[run-positioning-audit] node:', nodeExe);
-  console.error('[run-positioning-audit] args:', nodeArgs.join(' '));
-  console.error('[run-positioning-audit] cwd:', process.cwd());
-  console.error('[run-positioning-audit] NODE_OPTIONS:', nodeOptions);
-}
-
-const result = spawnSync(nodeExe, nodeArgs, {
-  stdio: 'inherit',
-  env: {
-    ...process.env,
-    NODE_OPTIONS: nodeOptions,
-  },
-});
+const result = spawnSync(
+  process.execPath,
+  [tsNodeEsmBin, auditScript, ...args],
+  {
+    cwd: projectRoot,
+    stdio: 'inherit',
+    env: {
+      ...process.env,
+      NODE_OPTIONS: nodeOptions,
+    },
+  }
+);
 
 if (result.error) {
   console.error('[run-positioning-audit] Failed to spawn:', result.error);
