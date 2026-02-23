@@ -1,5 +1,5 @@
 export const POSITIONING_ONE_LINER =
-  'Unlike generic form builders, we validate 20+ legal requirements before generating court-ready documents — the same checks a property solicitor would review.';
+  'Unlike generic form builders, we validate 20+ legal requirements before generating court-ready documents — reducing the risk of rejected claims.';
 
 export const POSITIONING_BULLETS = [
   'Compliance checks included before documents are generated',

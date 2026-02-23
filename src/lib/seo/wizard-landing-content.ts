@@ -339,7 +339,7 @@ export const completePackContent: WizardLandingContent = {
     'Court filing guide with step-by-step instructions — where to file, court fees, timelines',
     'Evidence checklist for court preparation',
     'Proof of service certificate template',
-    'Unlimited regenerations and 12+ months portal storage',
+    'Unlimited regenerations with 12+ months portal storage',
   ],
 
   // NEW: Why landlords use this - emphasising full court route
@@ -505,7 +505,7 @@ export const moneyClaimContent: WizardLandingContent = {
     'Court filing guide — England county court filing, court fees, and timelines',
     'Enforcement guide — bailiffs, attachment of earnings, charging orders',
     'Reply Form and Financial Statement templates',
-    'Unlimited regenerations and 12+ months portal storage',
+    'Unlimited regenerations with 12+ months portal storage',
   ],
 
   // NEW: Why landlords use this
@@ -898,7 +898,7 @@ export const astPremiumContent: WizardLandingContent = {
     'Anti-subletting clause: Airbnb and short-let prohibition',
     'Late payment provisions with reasonable charges',
     'Enhanced house rules for multi-tenant properties',
-    'Unlimited regenerations and 12+ months portal storage',
+    'Unlimited regenerations with 12+ months portal storage',
   ],
 
   // NEW: Why landlords use Premium

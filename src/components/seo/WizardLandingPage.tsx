@@ -205,7 +205,7 @@ export function WizardLandingPage({ content, structuredDataUrl, showAskHeavenWid
         </section>
       )}
 
-      <RelatedProductsModule products={buildRelatedIntentProducts(content.product)} />
+      {!isCompletePackEnglandPage && <RelatedProductsModule products={buildRelatedIntentProducts(content.product)} />}
 
       {/* Final CTA */}
       <section className="py-16 md:py-20 bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50">
@@ -215,13 +215,15 @@ export function WizardLandingPage({ content, structuredDataUrl, showAskHeavenWid
             <p className="text-xl mb-8 text-gray-600">
               Solicitor-grade procedural checks and court-ready documents, designed to reduce rejected claims.
             </p>
-            <IntentProductCTA
-              intent={{ product: toIntentProduct(content.product), src: "seo_landing" }}
-              label={`Start My Case Bundle - ${content.price}`}
-              className="hero-btn-primary"
-            />
+            <div className="mx-auto w-full max-w-md">
+              <IntentProductCTA
+                intent={{ product: toIntentProduct(content.product), src: "seo_landing" }}
+                label={`Start My Case Bundle - ${content.price}`}
+                className="hero-btn-primary w-full"
+              />
+            </div>
             {isCompletePackEnglandPage ? (
-              <ul className="mt-5 inline-flex flex-col items-start gap-2 text-sm text-gray-700">
+              <ul className="mt-5 mx-auto max-w-md space-y-2 text-left text-sm text-gray-700">
                 <li>✓ Preview before paying</li>
                 <li>✓ Unlimited regenerations</li>
                 <li>✓ Stored 12+ months</li>
