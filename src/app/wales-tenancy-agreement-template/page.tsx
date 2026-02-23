@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getCanonicalUrl } from '@/lib/seo/urls';
-import { StructuredData, faqPageSchema, breadcrumbSchema, articleSchema } from '@/lib/seo/structured-data';
+import { StructuredData, breadcrumbSchema, articleSchema } from '@/lib/seo/structured-data';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { tenancyAgreementWalesLinks } from '@/lib/seo/internal-links';
@@ -96,7 +96,6 @@ export default function WalesTenancyAgreementTemplatePage() {
           dateModified: '2026-01-25',
         })}
       />
-      <StructuredData data={faqPageSchema(faqs)} />
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: 'https://landlordheaven.co.uk' },

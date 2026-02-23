@@ -9,7 +9,7 @@ import {
 import { UniversalHero } from "@/components/landing/UniversalHero";
 import { HeaderConfig } from "@/components/layout/HeaderConfig";
 import { completePackHeroConfig } from "@/components/landing/heroConfigs";
-import { StructuredData, productSchema, faqPageSchema, breadcrumbSchema } from "@/lib/seo/structured-data";
+import { StructuredData, productSchema, breadcrumbSchema } from "@/lib/seo/structured-data";
 import { RelatedLinks } from "@/components/seo/RelatedLinks";
 import { productLinks, toolLinks, blogLinks, landingPageLinks } from "@/lib/seo/internal-links";
 import { getCanonicalUrl } from "@/lib/seo";
@@ -93,7 +93,6 @@ export default async function CompleteEvictionPackPage() {
         price: product.price.toString(),
         url: "https://landlordheaven.co.uk/products/complete-pack"
       })} />
-      <StructuredData data={faqPageSchema(faqs)} />
       <StructuredData data={breadcrumbSchema([
         { name: "Home", url: "https://landlordheaven.co.uk" },
         { name: "Products", url: "https://landlordheaven.co.uk/pricing" },

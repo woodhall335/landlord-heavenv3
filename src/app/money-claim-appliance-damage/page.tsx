@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getCanonicalUrl } from '@/lib/seo/urls';
-import { StructuredData, faqPageSchema, breadcrumbSchema, articleSchema } from '@/lib/seo/structured-data';
+import { StructuredData, breadcrumbSchema, articleSchema } from '@/lib/seo/structured-data';
 import {
   CheckCircle,
   ArrowRight,
@@ -110,7 +110,6 @@ export default function MoneyClaimApplianceDamagePage() {
           dateModified: '2026-01-15',
         })}
       />
-      <StructuredData data={faqPageSchema(faqs)} />
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: 'https://landlordheaven.co.uk' },

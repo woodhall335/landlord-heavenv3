@@ -10,7 +10,7 @@ import {
   ShieldCheck,
   BadgePoundSterling,
 } from "lucide-react";
-import { StructuredData, productSchema, faqPageSchema, breadcrumbSchema } from "@/lib/seo/structured-data";
+import { StructuredData, productSchema, breadcrumbSchema } from "@/lib/seo/structured-data";
 import { RelatedLinks } from "@/components/seo/RelatedLinks";
 import { productLinks, toolLinks, blogLinks, landingPageLinks } from "@/lib/seo/internal-links";
 import { getCanonicalUrl } from "@/lib/seo";
@@ -93,7 +93,6 @@ export default async function NoticeOnlyPage() {
         price: product.price.toString(),
         url: "https://landlordheaven.co.uk/products/notice-only"
       })} />
-      <StructuredData data={faqPageSchema(faqs)} />
       <StructuredData data={breadcrumbSchema([
         { name: "Home", url: "https://landlordheaven.co.uk" },
         { name: "Products", url: "https://landlordheaven.co.uk/pricing" },

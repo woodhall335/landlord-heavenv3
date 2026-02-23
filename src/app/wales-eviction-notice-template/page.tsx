@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { StructuredData, breadcrumbSchema, faqPageSchema } from '@/lib/seo/structured-data';
+import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, guideLinks, askHeavenLink } from '@/lib/seo/internal-links';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
@@ -103,7 +103,6 @@ export default function WalesEvictionNoticeTemplatePage() {
   return (
     <>
       <StructuredData data={pageSchema} />
-      <StructuredData data={faqPageSchema(faqs)} />
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: 'https://landlordheaven.co.uk' },

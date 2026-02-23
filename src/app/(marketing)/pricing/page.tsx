@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Container } from "@/components/ui";
 import Link from "next/link";
 import { generateMetadata } from "@/lib/seo";
-import { StructuredData, faqPageSchema } from "@/lib/seo/structured-data";
+import { StructuredData } from "@/lib/seo/structured-data";
 import { FAQSection } from "@/components/seo/FAQSection";
 import { StandardHero } from "@/components/marketing/StandardHero";
 import { HeaderConfig } from "@/components/layout/HeaderConfig";
@@ -64,7 +64,6 @@ export default function PricingPage() {
       <HeaderConfig mode="autoOnScroll" />
 
       {/* Structured Data for SEO */}
-      <StructuredData data={faqPageSchema(faqs)} />
 
       {/* Hero Section */}
       <StandardHero
@@ -432,6 +431,7 @@ export default function PricingPage() {
       </Container>
 
       {/* FAQ Section */}
+      {/* FAQ schema must be rendered exactly once (via FAQSection). */}
       <FAQSection
         title="Pricing FAQs"
         faqs={[
