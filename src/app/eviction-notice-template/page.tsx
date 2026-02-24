@@ -63,16 +63,15 @@ export default async function EvictionNoticeTemplatePage() {
   };
 
   return (
-    <>
+    <div className="min-h-screen bg-gray-50">
       <StructuredData data={pageSchema} />
       <StructuredData data={breadcrumbSchema([
         { name: 'Home', url: 'https://landlordheaven.co.uk' },
         { name: 'Eviction Notice Template', url: 'https://landlordheaven.co.uk/eviction-notice-template' },
       ])} />
 
-      <div className="min-h-screen bg-gray-50">
-        <HeaderConfig mode="autoOnScroll" />
-        <main>
+      <HeaderConfig mode="autoOnScroll" />
+      <main>
         <StandardHero
           badge="Section 21 ends 1 May 2026"
           badgeIcon={<AlertTriangle className="w-4 h-4" />}
@@ -216,8 +215,7 @@ export default async function EvictionNoticeTemplatePage() {
             </div>
           </div>
         </section>
-        </main>
-      </div>
-    </>
+      </main>
+    </div>
   );
 }
