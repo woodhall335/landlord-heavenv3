@@ -6,6 +6,7 @@ import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, toolLinks, blogLinks } from '@/lib/seo/internal-links';
 import { StandardHero } from '@/components/marketing/StandardHero';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { IntentProductCTA, getIntentProductHref } from '@/components/seo/IntentProductCTA';
 import { evictionNoticeTemplateFAQs } from '@/data/faqs';
@@ -69,7 +70,9 @@ export default async function EvictionNoticeTemplatePage() {
         { name: 'Eviction Notice Template', url: 'https://landlordheaven.co.uk/eviction-notice-template' },
       ])} />
 
-      <main>
+      <div className="min-h-screen bg-gray-50">
+        <HeaderConfig mode="autoOnScroll" />
+        <main>
         <StandardHero
           badge="Section 21 ends 1 May 2026"
           badgeIcon={<AlertTriangle className="w-4 h-4" />}
@@ -213,7 +216,8 @@ export default async function EvictionNoticeTemplatePage() {
             </div>
           </div>
         </section>
-      </main>
+        </main>
+      </div>
     </>
   );
 }
