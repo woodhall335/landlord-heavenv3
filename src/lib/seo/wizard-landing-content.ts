@@ -115,9 +115,9 @@ export const noticeOnlyContent: WizardLandingContent = {
   title: `Eviction Notice Generator 2026 | England, Wales & Scotland | ${SEO_PRICES.evictionNotice.display}`,
   description:
     'Generate procedurally correct eviction notices for England (Section 21, Section 8), Wales (Section 173/181 under Renting Homes Wales Act 2016), and Scotland (Notice to Leave). Correct notice type, statutory wording, and notice periods. Official forms included.',
-  h1: 'Eviction Notice Generator',
+  h1: 'Need a Section 21 or Section 8 Notice?',
   subheading:
-    'Procedurally correct notices with the right notice type, statutory wording, and notice period for your jurisdiction',
+    'Jurisdiction-specific eviction notices for England, Wales & Scotland — compliance-checked with watermarked previews before you pay.',
 
   product: 'notice_only',
   wizardUrl: '/wizard?product=notice_only&src=product_page&topic=eviction',
@@ -284,9 +284,9 @@ export const completePackContent: WizardLandingContent = {
   title: `Complete Eviction Bundle 2026 – England | N5, N5B, N119 + Particulars of Claim | ${SEO_PRICES.evictionBundle.display}`,
   description:
     'End-to-end eviction paperwork for England: Section 21 notice + N5B, or Section 8 notice + N5 + N119 Particulars of Claim. We create the full court route — not just the notice. All forms mapped and validated.',
-  h1: 'Complete Eviction Bundle – England (Section 21 & Section 8)',
+  h1: 'Taking Your Tenant to Court? Complete Section 21 / Section 8 Eviction Pack (England)',
   subheading:
-    'End-to-end eviction paperwork: notice, court forms, Particulars of Claim, and filing guide — mapped to the correct possession route',
+    'Notice + N5/N5B + N119 + witness statement + filing guide — generated, validated, and internally consistent to reduce rejected possession claims.',
 
   product: 'complete_pack',
   wizardUrl: '/wizard?product=complete_pack&src=product_page&topic=eviction',

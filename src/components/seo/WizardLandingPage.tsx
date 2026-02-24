@@ -35,14 +35,23 @@ interface WizardLandingPageProps {
 
 export function WizardLandingPage({ content, structuredDataUrl, showAskHeavenWidget = true }: WizardLandingPageProps) {
   const isCompletePackEnglandPage = content.slug === 'eviction-pack-england';
+  const isNoticeOnlyPage = content.slug === 'eviction-notice';
   const isMoneyClaimPage = content.slug === 'money-claim';
   const showHeroPrice = !isCompletePackEnglandPage && !isMoneyClaimPage;
 
-  const heroCtaLabel = isMoneyClaimPage
-    ? 'Start My Case Bundle — £99.99'
-    : isCompletePackEnglandPage
-      ? 'Start My Case Bundle —'
-      : 'Start My Case Bundle';
+  const heroCtaLabel = isCompletePackEnglandPage
+    ? 'Start & Preview Complete Pack — £129.99'
+    : isNoticeOnlyPage
+      ? 'Generate My Notice — £49.99'
+      : isMoneyClaimPage
+        ? 'Start My Case Bundle — £99.99'
+        : 'Start My Case Bundle';
+
+  const heroHelperCopy = isCompletePackEnglandPage
+    ? 'Avoid wasted court fees — file correctly the first time.'
+    : isNoticeOnlyPage
+      ? 'Serve correctly. Avoid invalid notices. Move your case forward.'
+      : null;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -71,11 +80,18 @@ export function WizardLandingPage({ content, structuredDataUrl, showAskHeavenWid
         subtitle={content.subheading}
         align="center"
         actionsSlot={(
-          <IntentProductCTA
-            intent={{ product: toIntentProduct(content.product), src: "seo_landing" }}
-            label={heroCtaLabel}
-            className="hero-btn-primary w-full sm:w-auto"
-          />
+          <div className="w-full sm:w-auto">
+            <IntentProductCTA
+              intent={{ product: toIntentProduct(content.product), src: "seo_landing" }}
+              label={heroCtaLabel}
+              className="hero-btn-primary w-full sm:w-auto"
+            />
+            {heroHelperCopy ? (
+              <p className="mt-3 text-center text-sm text-white/75">
+                {heroHelperCopy}
+              </p>
+            ) : null}
+          </div>
         )}
       >
         {showHeroPrice && (

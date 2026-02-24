@@ -84,10 +84,21 @@ export default async function EvictionNoticeTemplatePage() {
               </span>
             </>
           }
-          primaryCTA={{ label: 'Generate Court-Ready Notice — £49.99', href: getIntentProductHref({ product: 'notice_only', src: 'seo_landing' }) }}
+          primaryCTA={{
+            label: 'Generate Section 21 / Section 8 Notice',
+            href: '/wizard?product=notice_only&src=seo_landing&topic=eviction',
+          }}
+          secondaryCTA={{
+            label: 'Need the full court bundle?',
+            href: '/eviction-pack-england',
+          }}
           variant="pastel"
           showTrustPositioningBar={false}
-        />
+        >
+          <p className="mt-3 text-sm text-white/75 sm:text-base">
+            Going to court next? The complete bundle includes N5/N5B + N119 and filing guidance.
+          </p>
+        </StandardHero>
 
         <EvictionNoticeBundlePreviewSection previews={previews} />
 
