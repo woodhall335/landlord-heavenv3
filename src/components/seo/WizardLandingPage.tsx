@@ -41,7 +41,7 @@ export function WizardLandingPage({ content, structuredDataUrl, showAskHeavenWid
   const heroCtaLabel = isMoneyClaimPage
     ? 'Start My Case Bundle — £99.99'
     : isCompletePackEnglandPage
-      ? 'Start My Case Bundle — £129.99'
+      ? 'Start My Case Bundle —'
       : 'Start My Case Bundle';
 
   return (
