@@ -5,6 +5,7 @@ import { UniversalHero } from '@/components/landing/UniversalHero';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { Container } from '@/components/ui';
 import { Section21Countdown } from '@/components/ui/Section21Countdown';
+import { FAQSection } from '@/components/seo/FAQSection';
 import {
   StructuredData,
   faqPageSchema,
@@ -12,8 +13,6 @@ import {
   articleSchema,
 } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
-import { landingPageLinks, productLinks, blogLinks } from '@/lib/seo/internal-links';
-import { NextLegalSteps } from '@/components/seo/NextLegalSteps';
 import { PRODUCTS } from '@/lib/pricing/products';
 
 const noticePrice = PRODUCTS.notice_only.displayPrice;
@@ -101,11 +100,6 @@ export default function Section21BanPage() {
             label: `Complete Eviction Pack — ${completePackPrice}`,
             href: '/products/complete-pack',
           }}
-          actionsSlot={
-            <div className="w-full pt-2">
-              <Section21Countdown className="mx-auto max-w-3xl" variant="large" />
-            </div>
-          }
         />
 
         <section className="bg-white py-16 md:py-20">
@@ -333,53 +327,8 @@ export default function Section21BanPage() {
 
         <section className="py-16 md:py-20">
           <Container>
-            <div className="mx-auto max-w-3xl rounded-xl bg-white p-8 shadow-sm md:p-10">
-              <h2 className="mb-8 text-3xl font-bold text-gray-900">Frequently Asked Questions</h2>
-
-              <div className="space-y-6">
-                {faqs.map((faq) => (
-                  <div key={faq.question}>
-                    <h3 className="mb-2 text-lg font-semibold text-gray-900">{faq.question}</h3>
-                    <p className="text-gray-600">{faq.answer}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </Container>
-        </section>
-
-        <section className="bg-white py-16 md:py-20">
-          <Container>
-            <div className="mx-auto max-w-5xl">
-              <NextLegalSteps
-                jurisdictionLabel="England eviction deadlines"
-                scenarioLabel="post-ban eviction planning"
-                primaryCTA={{
-                  label: `Generate Section 21 notice — ${noticePrice}`,
-                  href: productLinks.noticeOnly.href,
-                }}
-                secondaryCTA={{
-                  label: `Complete eviction pack — ${completePackPrice}`,
-                  href: productLinks.completePack.href,
-                }}
-                relatedLinks={[
-                  {
-                    href: landingPageLinks.section21Template.href,
-                    title: landingPageLinks.section21Template.title,
-                    description: landingPageLinks.section21Template.description,
-                  },
-                  {
-                    href: landingPageLinks.section8Template.href,
-                    title: landingPageLinks.section8Template.title,
-                    description: landingPageLinks.section8Template.description,
-                  },
-                  {
-                    href: blogLinks.section21VsSection8.href,
-                    title: blogLinks.section21VsSection8.title,
-                    description: blogLinks.section21VsSection8.description,
-                  },
-                ]}
-              />
+            <div className="mx-auto max-w-3xl">
+              <FAQSection title="Frequently Asked Questions" faqs={faqs} showContactCTA={false} variant="white" />
             </div>
           </Container>
         </section>
