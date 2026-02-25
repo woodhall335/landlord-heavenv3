@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui";
 import Link from "next/link";
+import Image from "next/image";
 import { RiCheckboxCircleLine, RiCloseLine, RiAlertLine } from "react-icons/ri";
 import {
   ScrollText,
@@ -103,7 +104,24 @@ export default async function CompleteEvictionPackPage() {
       <UniversalHero {...completePackHeroConfig} showTrustPositioningBar />
 
 
-      <WhatsIncludedInteractive product="complete_pack" previews={previews} />
+      <section className="py-10 md:py-14">
+        <Container>
+          <div className="mx-auto grid max-w-6xl overflow-hidden rounded-3xl border border-[#E6DBFF] bg-white shadow-[0_14px_36px_rgba(15,23,42,0.06)] md:grid-cols-5">
+            <div className="flex items-center justify-center bg-[#692ed4]/5 p-8 md:col-span-2 md:p-10">
+              <Image
+                src="/images/what_you_get.webp"
+                alt="What you get illustration"
+                width={360}
+                height={360}
+                className="h-auto w-full max-w-[360px] object-contain"
+              />
+            </div>
+            <div className="md:col-span-3">
+              <WhatsIncludedInteractive product="complete_pack" previews={previews} />
+            </div>
+          </div>
+        </Container>
+      </section>
 
       <section className="bg-[#fcfaff] py-10"><Container><div className="mx-auto max-w-4xl rounded-2xl border border-[#E6DBFF] bg-[#F3EEFF] px-6 py-5 text-center shadow-[0_10px_30px_rgba(105,46,212,0.08)]"><p className="text-center font-medium text-gray-700">These are example previews. Your bundle is generated specifically for your jurisdiction and tenancy details.</p></div></Container></section>
 
@@ -207,6 +225,15 @@ export default async function CompleteEvictionPackPage() {
       {/* Why Landlord Heaven */}
       <section className="py-16 md:py-20">
         <Container>
+          <div className="mb-10 flex justify-center">
+            <Image
+              src="/images/why_this_bundle.webp"
+              alt="Why this bundle illustration"
+              width={340}
+              height={340}
+              className="h-auto w-full max-w-[340px] object-contain"
+            />
+          </div>
           <div className="max-w-4xl mx-auto rounded-3xl border border-[#E6DBFF] bg-white p-6 shadow-[0_14px_36px_rgba(15,23,42,0.06)] md:p-10">
             <WhyLandlordHeaven variant="full" />
           </div>
@@ -276,13 +303,24 @@ export default async function CompleteEvictionPackPage() {
       {/* Comparison Tables */}
       <section className="py-16 md:py-20">
         <Container>
-          <div className="max-w-4xl mx-auto rounded-3xl border border-[#E6DBFF] bg-white p-6 shadow-[0_14px_36px_rgba(15,23,42,0.06)] md:p-10">
-            <h2 className="text-3xl md:text-5xl font-bold text-charcoal mb-8 text-center">
-              How We Compare
-            </h2>
-            <div className="space-y-8">
-              <VsSolicitorComparison product="complete_pack" />
-              <VsFreeTemplateComparison product="complete_pack" />
+          <div className="mx-auto grid max-w-6xl items-center gap-10 rounded-3xl border border-[#E6DBFF] bg-white p-6 shadow-[0_14px_36px_rgba(15,23,42,0.06)] md:p-10 lg:grid-cols-2">
+            <div>
+              <h2 className="text-3xl md:text-5xl font-bold text-charcoal mb-8 text-center lg:text-left">
+                How We Compare
+              </h2>
+              <div className="space-y-8">
+                <VsSolicitorComparison product="complete_pack" />
+                <VsFreeTemplateComparison product="complete_pack" />
+              </div>
+            </div>
+            <div className="flex justify-center">
+              <Image
+                src="/images/why_accuracy_matters.webp"
+                alt="Why accuracy matters illustration"
+                width={640}
+                height={640}
+                className="h-auto w-full max-w-[640px] object-contain"
+              />
             </div>
           </div>
         </Container>
