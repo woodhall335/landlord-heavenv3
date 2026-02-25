@@ -106,19 +106,8 @@ export default async function CompleteEvictionPackPage() {
 
       <section className="py-10 md:py-14">
         <Container>
-          <div className="mx-auto grid max-w-6xl overflow-hidden rounded-3xl border border-[#E6DBFF] bg-white shadow-[0_14px_36px_rgba(15,23,42,0.06)] md:grid-cols-5">
-            <div className="flex items-center justify-center bg-[#692ed4]/5 p-8 md:col-span-2 md:p-10">
-              <Image
-                src="/images/what_you_get.webp"
-                alt="What you get illustration"
-                width={360}
-                height={360}
-                className="h-auto w-full max-w-[360px] object-contain"
-              />
-            </div>
-            <div className="md:col-span-3">
-              <WhatsIncludedInteractive product="complete_pack" previews={previews} />
-            </div>
+          <div className="mx-auto max-w-6xl overflow-hidden rounded-3xl border border-[#E6DBFF] bg-white shadow-[0_14px_36px_rgba(15,23,42,0.06)]">
+            <WhatsIncludedInteractive product="complete_pack" previews={previews} />
           </div>
         </Container>
       </section>
@@ -303,24 +292,13 @@ export default async function CompleteEvictionPackPage() {
       {/* Comparison Tables */}
       <section className="py-16 md:py-20">
         <Container>
-          <div className="mx-auto grid max-w-6xl items-center gap-10 rounded-3xl border border-[#E6DBFF] bg-white p-6 shadow-[0_14px_36px_rgba(15,23,42,0.06)] md:p-10 lg:grid-cols-2">
-            <div>
-              <h2 className="text-3xl md:text-5xl font-bold text-charcoal mb-8 text-center lg:text-left">
-                How We Compare
-              </h2>
-              <div className="space-y-8">
-                <VsSolicitorComparison product="complete_pack" />
-                <VsFreeTemplateComparison product="complete_pack" />
-              </div>
-            </div>
-            <div className="flex justify-center">
-              <Image
-                src="/images/why_accuracy_matters.webp"
-                alt="Why accuracy matters illustration"
-                width={640}
-                height={640}
-                className="h-auto w-full max-w-[640px] object-contain"
-              />
+          <div className="mx-auto max-w-6xl rounded-3xl border border-[#E6DBFF] bg-white p-6 shadow-[0_14px_36px_rgba(15,23,42,0.06)] md:p-10">
+            <h2 className="text-3xl md:text-5xl font-bold text-charcoal mb-8 text-center lg:text-left">
+              How We Compare
+            </h2>
+            <div className="space-y-8">
+              <VsSolicitorComparison product="complete_pack" />
+              <VsFreeTemplateComparison product="complete_pack" />
             </div>
           </div>
         </Container>

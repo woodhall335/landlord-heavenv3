@@ -102,19 +102,8 @@ export default async function EvictionNoticeTemplatePage() {
 
         <section className="py-10 md:py-14">
           <div className="container mx-auto px-4">
-            <div className="mx-auto grid max-w-6xl overflow-hidden rounded-3xl border border-[#E6DBFF] bg-white shadow-[0_14px_36px_rgba(15,23,42,0.06)] md:grid-cols-5">
-              <div className="flex items-center justify-center bg-[#692ed4]/5 p-8 md:col-span-2 md:p-10">
-                <Image
-                  src="/images/what_you_get.webp"
-                  alt="What you get illustration"
-                  width={360}
-                  height={360}
-                  className="h-auto w-full max-w-[360px] object-contain"
-                />
-              </div>
-              <div className="md:col-span-3">
-                <EvictionNoticeBundlePreviewSection previews={previews} />
-              </div>
+            <div className="mx-auto max-w-6xl overflow-hidden rounded-3xl border border-[#E6DBFF] bg-white shadow-[0_14px_36px_rgba(15,23,42,0.06)]">
+              <EvictionNoticeBundlePreviewSection previews={previews} />
             </div>
           </div>
         </section>
