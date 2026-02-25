@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { isAdmin } from "@/lib/auth";
 import { createAdminClient, requireServerAuth } from "@/lib/supabase/server";
+import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 
 const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -12,6 +13,7 @@ export async function GET(
   try {
     const user = await requireServerAuth();
     const supabase = createAdminClient();
+    const adminSupabase = createSupabaseAdminClient();
 
     if (!isAdmin(user.id)) {
       return NextResponse.json(
@@ -29,7 +31,7 @@ export async function GET(
     const { data: targetUser, error: userError } = await supabase
       .from("users")
       .select(
-        "id, email, full_name, email_verified, hmo_pro_active, hmo_pro_tier, created_at, last_sign_in_at"
+        "id, email, full_name, hmo_pro_active, hmo_pro_tier, created_at"
       )
       .eq("id", id)
       .maybeSingle();
@@ -42,6 +44,22 @@ export async function GET(
     if (!targetUser) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
+
+    const { data: authUserResponse, error: authUserError } = await adminSupabase.auth.admin.getUserById(id);
+
+    if (authUserError) {
+      console.error("Failed to fetch auth user:", authUserError);
+      return NextResponse.json({ error: "Failed to fetch user" }, { status: 500 });
+    }
+
+    const authUser = authUserResponse?.user;
+
+    if (!authUser) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    const email_verified = Boolean(authUser.email_confirmed_at);
+    const last_sign_in_at = authUser.last_sign_in_at ?? null;
 
     const { data: orders, error: ordersError } = await supabase
       .from("orders")
@@ -73,6 +91,8 @@ export async function GET(
       {
         user: {
           ...targetUser,
+          email_verified,
+          last_sign_in_at,
           subscription_tier: targetUser.hmo_pro_tier,
         },
         metrics,

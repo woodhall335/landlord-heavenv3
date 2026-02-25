@@ -108,8 +108,8 @@ export default function AdminUserDetailPage() {
     }
   }, [router, userId]);
 
-  const formatDate = (value?: string | null) => {
-    if (!value) return "-";
+  const formatDate = (value?: string | null, fallback = "-") => {
+    if (!value) return fallback;
     return new Date(value).toLocaleString();
   };
 
@@ -199,7 +199,7 @@ export default function AdminUserDetailPage() {
               </tr>
               <tr className="border-t">
                 <td className="p-4 font-semibold text-charcoal">Last sign in</td>
-                <td className="p-4 text-gray-700">{formatDate(user.last_sign_in_at)}</td>
+                <td className="p-4 text-gray-700">{formatDate(user.last_sign_in_at, "Never")}</td>
               </tr>
             </tbody>
           </table>
