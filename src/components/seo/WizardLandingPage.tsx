@@ -9,6 +9,7 @@ import { Container } from '@/components/ui';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { UsageTodayCounter } from '@/components/seo/UsageTodayCounter';
+import Image from 'next/image';
 import {
   Eye,
   RefreshCw,
@@ -127,24 +128,53 @@ export function WizardLandingPage({ content, structuredDataUrl, showAskHeavenWid
       {/* What You Get Section */}
       <section className="py-16 md:py-20 bg-white">
         <Container>
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-6xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-8 text-center">
               What You Get
             </h2>
-            <ul className="grid md:grid-cols-2 gap-4">
-              {content.whatYouGet.map((item, index) => (
-                <li key={index} className="flex items-start gap-3 bg-gray-50 p-4 rounded-lg">
-                  <CheckCircle2 className="w-5 h-5 text-green-600 mt-0.5 shrink-0" />
-                  <span className="text-gray-700">{item}</span>
-                </li>
-              ))}
-            </ul>
+
+            {isCompletePackEnglandPage ? (
+              <div className="rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+                <div className="grid md:grid-cols-5">
+                  <div className="md:col-span-2 bg-[#692ed4]/5 p-6 md:p-8 lg:p-10 flex items-center justify-center">
+                    <Image
+                      src="/images/what_you_get.webp"
+                      alt="Eviction pack documents included in the complete bundle"
+                      width={560}
+                      height={560}
+                      className="h-auto w-full max-w-[360px] object-contain"
+                    />
+                  </div>
+                  <div className="md:col-span-3 p-6 md:p-8 lg:p-10">
+                    <ul className="space-y-4 md:space-y-5">
+                      {content.whatYouGet.map((item, index) => (
+                        <li key={index} className="flex items-start gap-3 md:gap-4">
+                          <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#692ed4] text-white">
+                            <CheckCircle2 className="h-4 w-4" />
+                          </span>
+                          <span className="text-base md:text-lg leading-relaxed text-gray-800">{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <ul className="grid md:grid-cols-2 gap-4">
+                {content.whatYouGet.map((item, index) => (
+                  <li key={index} className="flex items-start gap-3 bg-gray-50 p-4 rounded-lg">
+                    <CheckCircle2 className="w-5 h-5 text-[#692ed4] mt-0.5 shrink-0" />
+                    <span className="text-gray-700">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         </Container>
       </section>
 
       {/* Why Use This Section (NEW) */}
-      <WhyUseThisSectionComponent whyUseThis={content.whyUseThis} />
+      <WhyUseThisSectionComponent whyUseThis={content.whyUseThis} isCompletePackEnglandPage={isCompletePackEnglandPage} />
 
       {/* Notice Types (if applicable) */}
       {content.noticeTypes && content.noticeTypes.length > 0 && (
@@ -269,31 +299,45 @@ export function WizardLandingPage({ content, structuredDataUrl, showAskHeavenWid
 
 function WhyAccuracyMattersSection() {
   return (
-    <section className="py-14 md:py-16 bg-gray-50">
+    <section className="py-14 md:py-16 bg-[#f3e8ff]">
       <Container>
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-charcoal text-center">Why Accuracy Matters</h2>
-          <ul className="mt-8 space-y-3">
-            <li className="flex items-start gap-3 bg-white p-4 rounded-lg border border-gray-200">
-              <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" />
-              <span className="text-gray-700">Rejected claims delay possession.</span>
-            </li>
-            <li className="flex items-start gap-3 bg-white p-4 rounded-lg border border-gray-200">
-              <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" />
-              <span className="text-gray-700">Court fees are non-refundable.</span>
-            </li>
-            <li className="flex items-start gap-3 bg-white p-4 rounded-lg border border-gray-200">
-              <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" />
-              <span className="text-gray-700">Inconsistent paperwork can invalidate your claim.</span>
-            </li>
-            <li className="flex items-start gap-3 bg-white p-4 rounded-lg border border-gray-200">
-              <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" />
-              <span className="text-gray-700">Missing Particulars (N119) frequently cause failure.</span>
-            </li>
-          </ul>
-          <p className="mt-6 text-center text-gray-800 font-medium">
-            This bundle prepares the full possession route — not just the notice.
-          </p>
+        <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+          <div>
+            <h2 className="text-3xl md:text-4xl font-bold text-charcoal">Why Accuracy Matters</h2>
+            <p className="mt-4 text-lg text-gray-700 leading-relaxed">
+              Rejected claims cost time and money.
+            </p>
+            <ul className="mt-6 space-y-3">
+              <li className="flex items-start gap-3 bg-white/95 p-4 rounded-xl border border-[#692ed4]/10 shadow-sm">
+                <AlertTriangle className="w-5 h-5 text-[#692ed4]/70 mt-0.5 shrink-0" />
+                <span className="text-gray-700">Rejected claims delay possession.</span>
+              </li>
+              <li className="flex items-start gap-3 bg-white/95 p-4 rounded-xl border border-[#692ed4]/10 shadow-sm">
+                <AlertTriangle className="w-5 h-5 text-[#692ed4]/70 mt-0.5 shrink-0" />
+                <span className="text-gray-700">Court fees are non-refundable.</span>
+              </li>
+              <li className="flex items-start gap-3 bg-white/95 p-4 rounded-xl border border-[#692ed4]/10 shadow-sm">
+                <AlertTriangle className="w-5 h-5 text-[#692ed4]/70 mt-0.5 shrink-0" />
+                <span className="text-gray-700">Inconsistent paperwork can invalidate your claim.</span>
+              </li>
+              <li className="flex items-start gap-3 bg-white/95 p-4 rounded-xl border border-[#692ed4]/10 shadow-sm">
+                <AlertTriangle className="w-5 h-5 text-[#692ed4]/70 mt-0.5 shrink-0" />
+                <span className="text-gray-700">Missing Particulars (N119) frequently cause failure.</span>
+              </li>
+            </ul>
+            <p className="mt-6 text-lg text-gray-800 font-medium leading-relaxed">
+              This bundle prepares the full possession route — not just the notice.
+            </p>
+          </div>
+          <div className="flex items-center justify-center">
+            <Image
+              src="/images/why_accuracy_matters.webp"
+              alt="Illustration showing why accurate possession paperwork matters"
+              width={960}
+              height={720}
+              className="h-auto w-full max-w-[640px] object-contain"
+            />
+          </div>
         </div>
       </Container>
     </section>
@@ -440,22 +484,64 @@ function JurisdictionCoverageSection({
 /**
  * Why Use This Section Component (NEW)
  */
-function WhyUseThisSectionComponent({ whyUseThis }: { whyUseThis: WhyUseThisSection }) {
+function WhyUseThisSectionComponent({
+  whyUseThis,
+  isCompletePackEnglandPage,
+}: {
+  whyUseThis: WhyUseThisSection;
+  isCompletePackEnglandPage: boolean;
+}) {
+  if (!isCompletePackEnglandPage) {
+    return (
+      <section className="py-16 md:py-20 bg-white">
+        <Container>
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4 text-center">
+              {whyUseThis.heading}
+            </h2>
+            <p className="text-center text-gray-700 mb-8 max-w-3xl mx-auto">
+              {whyUseThis.intro}
+            </p>
+            <ul className="space-y-3">
+              {whyUseThis.benefits.map((benefit, index) => (
+                <li key={index} className="flex items-start gap-3 bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                  <CheckCircle2 className="w-5 h-5 text-[#692ed4] mt-0.5 shrink-0" />
+                  <span className="text-gray-700">{benefit}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </Container>
+      </section>
+    );
+  }
+
   return (
-    <section className="py-16 md:py-20 bg-gradient-to-br from-amber-50 via-orange-50 to-amber-50">
+    <section className="py-16 md:py-20 bg-[#692ed4]/[0.03]">
       <Container>
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4 text-center">
+        <div className="max-w-5xl mx-auto">
+          <div className="flex justify-center mb-6">
+            <Image
+              src="/images/why_this_bundle.webp"
+              alt="Documents folder illustration for full possession route bundle"
+              width={340}
+              height={220}
+              className="h-auto w-full max-w-[300px] md:max-w-[340px] object-contain"
+            />
+          </div>
+          <h2 className="text-3xl md:text-5xl font-bold text-charcoal mb-4 text-center">
             {whyUseThis.heading}
           </h2>
-          <p className="text-center text-gray-700 mb-8 max-w-3xl mx-auto">
+          <p className="text-center text-gray-700 mb-10 max-w-4xl mx-auto text-lg leading-relaxed">
             {whyUseThis.intro}
           </p>
-          <ul className="space-y-3">
+          <ul className="space-y-4">
             {whyUseThis.benefits.map((benefit, index) => (
-              <li key={index} className="flex items-start gap-3 bg-white p-4 rounded-lg shadow-sm">
-                <CheckCircle2 className="w-5 h-5 text-green-600 mt-0.5 shrink-0" />
-                <span className="text-gray-700">{benefit}</span>
+              <li key={index} className="flex items-start gap-3 md:gap-4 bg-white border border-gray-200 p-5 md:p-6 rounded-xl shadow-sm">
+                <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#692ed4] text-white">
+                  <CheckCircle2 className="h-4 w-4" />
+                </span>
+                <span className="text-gray-800 text-base md:text-lg md:leading-relaxed">{benefit}</span>
               </li>
             ))}
           </ul>
