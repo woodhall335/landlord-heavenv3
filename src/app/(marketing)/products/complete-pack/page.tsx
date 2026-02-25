@@ -84,7 +84,7 @@ export default async function CompleteEvictionPackPage() {
   const previews = await getCompletePackPreviewData();
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#fcfaff]">
       <HeaderConfig mode="autoOnScroll" />
       {/* Structured Data for SEO */}
       <StructuredData data={productSchema({
@@ -105,11 +105,11 @@ export default async function CompleteEvictionPackPage() {
 
       <WhatsIncludedInteractive product="complete_pack" previews={previews} />
 
-      <section className="py-8 bg-white"><Container><p className="text-center text-gray-700 font-medium">These are example previews. Your bundle is generated specifically for your jurisdiction and tenancy details.</p></Container></section>
+      <section className="bg-[#fcfaff] py-10"><Container><div className="mx-auto max-w-4xl rounded-2xl border border-[#E6DBFF] bg-[#F3EEFF] px-6 py-5 text-center shadow-[0_10px_30px_rgba(105,46,212,0.08)]"><p className="text-center font-medium text-gray-700">These are example previews. Your bundle is generated specifically for your jurisdiction and tenancy details.</p></div></Container></section>
 
-      <section className="py-16 md:py-20 bg-white">
+      <section className="py-16 md:py-20">
         <Container>
-          <div className="max-w-4xl mx-auto text-center">
+          <div className="max-w-4xl mx-auto rounded-3xl border border-[#E6DBFF] bg-white p-8 text-center shadow-[0_14px_36px_rgba(15,23,42,0.06)] md:p-10">
             <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4">
               Eviction Pack Timeline & Costs
             </h2>
@@ -117,8 +117,8 @@ export default async function CompleteEvictionPackPage() {
               Plan your eviction steps, budget for court fees, and keep the process moving with the
               correct documents from day one.
             </p>
-            <div className="grid md:grid-cols-3 gap-6 text-left">
-              <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+            <div className="grid gap-6 text-left md:grid-cols-3">
+              <div className="rounded-2xl border border-[#E6DBFF] bg-[#F3EEFF] p-6 shadow-[0_12px_28px_rgba(105,46,212,0.08)]">
                 <h3 className="font-semibold text-gray-900 mb-3">Typical timeline</h3>
                 <ul className="space-y-2 text-sm text-gray-600">
                   <li>Notice period: 2 weeks to 2 months.</li>
@@ -126,7 +126,7 @@ export default async function CompleteEvictionPackPage() {
                   <li>Bailiff stage (if needed): 2–6 weeks.</li>
                 </ul>
               </div>
-              <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+              <div className="rounded-2xl border border-[#E6DBFF] bg-[#F3EEFF] p-6 shadow-[0_12px_28px_rgba(105,46,212,0.08)]">
                 <h3 className="font-semibold text-gray-900 mb-3">Costs to expect</h3>
                 <ul className="space-y-2 text-sm text-gray-600">
                   <li>Court fees vary by claim route.</li>
@@ -134,7 +134,7 @@ export default async function CompleteEvictionPackPage() {
                   <li>Pack keeps documents compliant to avoid re-filing.</li>
                 </ul>
               </div>
-              <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+              <div className="rounded-2xl border border-[#E6DBFF] bg-[#F3EEFF] p-6 shadow-[0_12px_28px_rgba(105,46,212,0.08)]">
                 <h3 className="font-semibold text-gray-900 mb-3">Next legal steps</h3>
                 <p className="text-sm text-gray-600 mb-3">
                   After the notice expires, file the correct court or tribunal claim promptly to
@@ -150,21 +150,21 @@ export default async function CompleteEvictionPackPage() {
       </section>
 
       {/* Jurisdiction Accordion */}
-      <section className="py-8">
+      <section className="py-10">
         <Container>
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-4xl mx-auto rounded-3xl border border-[#E6DBFF] bg-white p-4 shadow-[0_12px_34px_rgba(15,23,42,0.06)] md:p-6">
             <JurisdictionAccordion product="complete_pack" defaultExpanded={true} />
           </div>
         </Container>
       </section>
 
       {/* AI Witness Statement Feature */}
-      <section className="py-16 md:py-20 bg-gradient-to-br from-blue-50 to-indigo-50">
+      <section className="py-16 md:py-20 bg-[#F3EEFF]">
         <Container>
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
-              <div className="w-16 h-16 bg-purple-100 rounded-xl flex items-center justify-center mx-auto mb-4">
-                <ScrollText className="w-8 h-8 text-primary" />
+              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-xl border border-[#E6DBFF] bg-white">
+                <ScrollText className="h-8 w-8 text-[#692ED4]" />
               </div>
               <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4">
                 AI Witness Statement (Included)
@@ -174,25 +174,25 @@ export default async function CompleteEvictionPackPage() {
               </p>
             </div>
 
-            <div className="bg-white rounded-xl border-2 border-blue-200 p-6 shadow-lg max-w-xl mx-auto">
+            <div className="mx-auto max-w-xl rounded-2xl border border-[#E6DBFF] bg-white p-6 shadow-[0_14px_36px_rgba(105,46,212,0.12)]">
               <p className="text-gray-700 mb-4">
                 Ask Heaven analyzes your case details and drafts a professional witness statement for court proceedings:
               </p>
               <ul className="space-y-2 text-sm text-gray-700">
                 <li className="flex items-start gap-2">
-                  <span className="text-blue-600 font-bold">✓</span>
+                  <span className="font-bold text-[#692ED4]">✓</span>
                   <span>Chronological timeline of events</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-blue-600 font-bold">✓</span>
+                  <span className="font-bold text-[#692ED4]">✓</span>
                   <span>Legal formatting and structure</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-blue-600 font-bold">✓</span>
+                  <span className="font-bold text-[#692ED4]">✓</span>
                   <span>Ground-specific evidence references</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-blue-600 font-bold">✓</span>
+                  <span className="font-bold text-[#692ED4]">✓</span>
                   <span>Ready for court submission</span>
                 </li>
               </ul>
@@ -207,21 +207,21 @@ export default async function CompleteEvictionPackPage() {
       {/* Why Landlord Heaven */}
       <section className="py-16 md:py-20">
         <Container>
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-4xl mx-auto rounded-3xl border border-[#E6DBFF] bg-white p-6 shadow-[0_14px_36px_rgba(15,23,42,0.06)] md:p-10">
             <WhyLandlordHeaven variant="full" />
           </div>
         </Container>
       </section>
 
       {/* How It Works */}
-      <section className="py-16 md:py-20 bg-white">
+      <section className="py-16 md:py-20 bg-[#F3EEFF]">
         <Container>
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-12 text-center">How It Works</h2>
+            <h2 className="mb-12 text-center text-3xl font-bold text-charcoal md:text-5xl">How It Works</h2>
 
-            <div className="grid md:grid-cols-4 gap-8">
-              <div className="text-center">
-                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+              <div className="rounded-2xl border border-[#E6DBFF] bg-white p-6 text-center shadow-[0_10px_26px_rgba(105,46,212,0.08)]">
+                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#692ED4] text-2xl font-bold text-white">
                   1
                 </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-3">Describe Your Case</h3>
@@ -230,8 +230,8 @@ export default async function CompleteEvictionPackPage() {
                 </p>
               </div>
 
-              <div className="text-center">
-                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
+              <div className="rounded-2xl border border-[#E6DBFF] bg-white p-6 text-center shadow-[0_10px_26px_rgba(105,46,212,0.08)]">
+                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#692ED4] text-2xl font-bold text-white">
                   2
                 </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-3">Preview Your Pack</h3>
@@ -240,8 +240,8 @@ export default async function CompleteEvictionPackPage() {
                 </p>
               </div>
 
-              <div className="text-center">
-                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
+              <div className="rounded-2xl border border-[#E6DBFF] bg-white p-6 text-center shadow-[0_10px_26px_rgba(105,46,212,0.08)]">
+                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#692ED4] text-2xl font-bold text-white">
                   3
                 </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-3">Download &amp; File</h3>
@@ -250,8 +250,8 @@ export default async function CompleteEvictionPackPage() {
                 </p>
               </div>
 
-              <div className="text-center">
-                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
+              <div className="rounded-2xl border border-[#E6DBFF] bg-white p-6 text-center shadow-[0_10px_26px_rgba(105,46,212,0.08)]">
+                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#692ED4] text-2xl font-bold text-white">
                   4
                 </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-3">Follow the Process</h3>
@@ -276,8 +276,8 @@ export default async function CompleteEvictionPackPage() {
       {/* Comparison Tables */}
       <section className="py-16 md:py-20">
         <Container>
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-8 text-center">
+          <div className="max-w-4xl mx-auto rounded-3xl border border-[#E6DBFF] bg-white p-6 shadow-[0_14px_36px_rgba(15,23,42,0.06)] md:p-10">
+            <h2 className="text-3xl md:text-5xl font-bold text-charcoal mb-8 text-center">
               How We Compare
             </h2>
             <div className="space-y-8">
@@ -292,7 +292,7 @@ export default async function CompleteEvictionPackPage() {
       <section className="py-16 md:py-20 bg-white">
         <Container>
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-12 text-center">
+            <h2 className="text-3xl md:text-5xl font-bold text-charcoal mb-12 text-center">
               Typical Eviction Timeline
             </h2>
             <p className="text-center text-gray-600 mb-12">
@@ -300,8 +300,8 @@ export default async function CompleteEvictionPackPage() {
             </p>
 
             <div className="space-y-6">
-              <div className="bg-gray-50 rounded-lg border border-gray-200 p-6 flex items-start gap-4">
-                <div className="shrink-0 w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary font-bold">
+              <div className="flex items-start gap-4 rounded-2xl border border-[#E6DBFF] bg-[#F3EEFF] p-6">
+                <div className="shrink-0 flex h-12 w-12 items-center justify-center rounded-full bg-white text-[#692ED4] font-bold border border-[#E6DBFF]">
                   1
                 </div>
                 <div>
@@ -312,8 +312,8 @@ export default async function CompleteEvictionPackPage() {
                 </div>
               </div>
 
-              <div className="bg-gray-50 rounded-lg border border-gray-200 p-6 flex items-start gap-4">
-                <div className="shrink-0 w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary font-bold">
+              <div className="flex items-start gap-4 rounded-2xl border border-[#E6DBFF] bg-[#F3EEFF] p-6">
+                <div className="shrink-0 flex h-12 w-12 items-center justify-center rounded-full bg-white text-[#692ED4] font-bold border border-[#E6DBFF]">
                   2
                 </div>
                 <div>
@@ -324,8 +324,8 @@ export default async function CompleteEvictionPackPage() {
                 </div>
               </div>
 
-              <div className="bg-gray-50 rounded-lg border border-gray-200 p-6 flex items-start gap-4">
-                <div className="shrink-0 w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary font-bold">
+              <div className="flex items-start gap-4 rounded-2xl border border-[#E6DBFF] bg-[#F3EEFF] p-6">
+                <div className="shrink-0 flex h-12 w-12 items-center justify-center rounded-full bg-white text-[#692ED4] font-bold border border-[#E6DBFF]">
                   3
                 </div>
                 <div>
@@ -336,8 +336,8 @@ export default async function CompleteEvictionPackPage() {
                 </div>
               </div>
 
-              <div className="bg-gray-50 rounded-lg border border-gray-200 p-6 flex items-start gap-4">
-                <div className="shrink-0 w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary font-bold">
+              <div className="flex items-start gap-4 rounded-2xl border border-[#E6DBFF] bg-[#F3EEFF] p-6">
+                <div className="shrink-0 flex h-12 w-12 items-center justify-center rounded-full bg-white text-[#692ED4] font-bold border border-[#E6DBFF]">
                   4
                 </div>
                 <div>
@@ -349,9 +349,9 @@ export default async function CompleteEvictionPackPage() {
               </div>
             </div>
 
-            <div className="mt-8 bg-primary-50 border border-primary-200 rounded-lg p-6">
+            <div className="mt-8 rounded-2xl border border-[#E6DBFF] bg-[#F3EEFF] p-6">
               <div className="flex items-start gap-3">
-                <RiAlertLine className="w-6 h-6 text-primary shrink-0" />
+                <RiAlertLine className="h-6 w-6 shrink-0 text-[#692ED4]" />
                 <div>
                   <h4 className="font-semibold text-charcoal mb-2">Timeline Estimates</h4>
                   <p className="text-gray-700">
@@ -368,15 +368,15 @@ export default async function CompleteEvictionPackPage() {
       {/* Complete Pack vs Notice Only */}
       <section className="py-16 md:py-20">
         <Container>
-          <div className="max-w-5xl mx-auto">
+          <div className="max-w-5xl mx-auto rounded-3xl border border-[#E6DBFF] bg-white p-6 shadow-[0_14px_36px_rgba(15,23,42,0.06)] md:p-10">
             <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4 text-center">
               Complete Pack vs Notice Only
             </h2>
             <p className="text-center text-gray-600 mb-12">Which option is right for you?</p>
 
             <div className="overflow-x-auto">
-              <table className="w-full bg-white rounded-lg border border-gray-200">
-                <thead className="bg-gray-50">
+              <table className="w-full overflow-hidden rounded-2xl border border-[#E6DBFF] bg-white">
+                <thead className="bg-[#F3EEFF]">
                   <tr>
                     <th className="px-6 py-4 text-left text-sm font-semibold text-charcoal border-b border-gray-200">
                       Feature
@@ -384,7 +384,7 @@ export default async function CompleteEvictionPackPage() {
                     <th className="px-6 py-4 text-center text-sm font-semibold text-charcoal border-b border-gray-200">
                       Notice Only<br />{PRODUCTS.notice_only.displayPrice}
                     </th>
-                    <th className="px-6 py-4 text-center text-sm font-semibold text-primary border-b border-gray-200">
+                    <th className="px-6 py-4 text-center text-sm font-semibold text-[#692ED4] border-b border-[#E6DBFF] bg-[#F3EEFF]">
                       Complete Pack<br />{price}
                     </th>
                   </tr>
@@ -395,19 +395,19 @@ export default async function CompleteEvictionPackPage() {
                       Eviction Notice
                     </td>
                     <td className="px-6 py-4 text-center border-b border-gray-100">
-                      <RiCheckboxCircleLine className="w-5 h-5 text-primary mx-auto" />
+                      <RiCheckboxCircleLine className="mx-auto h-5 w-5 text-[#692ED4]" />
                     </td>
-                    <td className="px-6 py-4 text-center border-b border-gray-100 bg-primary-subtle">
-                      <RiCheckboxCircleLine className="w-5 h-5 text-primary mx-auto" />
+                    <td className="px-6 py-4 text-center border-b border-gray-100 bg-[#F3EEFF]">
+                      <RiCheckboxCircleLine className="mx-auto h-5 w-5 text-[#692ED4]" />
                     </td>
                   </tr>
                   <tr>
                     <td className="px-6 py-4 text-sm text-gray-700 border-b border-gray-100">Service Instructions + Checklist</td>
                     <td className="px-6 py-4 text-center border-b border-gray-100">
-                      <RiCheckboxCircleLine className="w-5 h-5 text-primary mx-auto" />
+                      <RiCheckboxCircleLine className="mx-auto h-5 w-5 text-[#692ED4]" />
                     </td>
-                    <td className="px-6 py-4 text-center border-b border-gray-100 bg-primary-subtle">
-                      <RiCheckboxCircleLine className="w-5 h-5 text-primary mx-auto" />
+                    <td className="px-6 py-4 text-center border-b border-gray-100 bg-[#F3EEFF]">
+                      <RiCheckboxCircleLine className="mx-auto h-5 w-5 text-[#692ED4]" />
                     </td>
                   </tr>
                   <tr>
@@ -415,8 +415,8 @@ export default async function CompleteEvictionPackPage() {
                     <td className="px-6 py-4 text-center border-b border-gray-100">
                       <RiCloseLine className="w-5 h-5 text-gray-300 mx-auto" />
                     </td>
-                    <td className="px-6 py-4 text-center border-b border-gray-100 bg-primary-subtle">
-                      <RiCheckboxCircleLine className="w-5 h-5 text-primary mx-auto" />
+                    <td className="px-6 py-4 text-center border-b border-gray-100 bg-[#F3EEFF]">
+                      <RiCheckboxCircleLine className="mx-auto h-5 w-5 text-[#692ED4]" />
                     </td>
                   </tr>
                   <tr>
@@ -424,8 +424,8 @@ export default async function CompleteEvictionPackPage() {
                     <td className="px-6 py-4 text-center border-b border-gray-100">
                       <RiCloseLine className="w-5 h-5 text-gray-300 mx-auto" />
                     </td>
-                    <td className="px-6 py-4 text-center border-b border-gray-100 bg-primary-subtle">
-                      <RiCheckboxCircleLine className="w-5 h-5 text-primary mx-auto" />
+                    <td className="px-6 py-4 text-center border-b border-gray-100 bg-[#F3EEFF]">
+                      <RiCheckboxCircleLine className="mx-auto h-5 w-5 text-[#692ED4]" />
                     </td>
                   </tr>
                   <tr>
@@ -433,8 +433,8 @@ export default async function CompleteEvictionPackPage() {
                     <td className="px-6 py-4 text-center border-b border-gray-100">
                       <RiCloseLine className="w-5 h-5 text-gray-300 mx-auto" />
                     </td>
-                    <td className="px-6 py-4 text-center border-b border-gray-100 bg-primary-subtle">
-                      <RiCheckboxCircleLine className="w-5 h-5 text-primary mx-auto" />
+                    <td className="px-6 py-4 text-center border-b border-gray-100 bg-[#F3EEFF]">
+                      <RiCheckboxCircleLine className="mx-auto h-5 w-5 text-[#692ED4]" />
                     </td>
                   </tr>
                   <tr>
@@ -442,8 +442,8 @@ export default async function CompleteEvictionPackPage() {
                     <td className="px-6 py-4 text-center border-b border-gray-100">
                       <RiCloseLine className="w-5 h-5 text-gray-300 mx-auto" />
                     </td>
-                    <td className="px-6 py-4 text-center border-b border-gray-100 bg-primary-subtle">
-                      <RiCheckboxCircleLine className="w-5 h-5 text-primary mx-auto" />
+                    <td className="px-6 py-4 text-center border-b border-gray-100 bg-[#F3EEFF]">
+                      <RiCheckboxCircleLine className="mx-auto h-5 w-5 text-[#692ED4]" />
                     </td>
                   </tr>
                   <tr>
@@ -451,8 +451,8 @@ export default async function CompleteEvictionPackPage() {
                     <td className="px-6 py-4 text-center border-b border-gray-100">
                       <RiCloseLine className="w-5 h-5 text-gray-300 mx-auto" />
                     </td>
-                    <td className="px-6 py-4 text-center border-b border-gray-100 bg-primary-subtle">
-                      <RiCheckboxCircleLine className="w-5 h-5 text-primary mx-auto" />
+                    <td className="px-6 py-4 text-center border-b border-gray-100 bg-[#F3EEFF]">
+                      <RiCheckboxCircleLine className="mx-auto h-5 w-5 text-[#692ED4]" />
                     </td>
                   </tr>
                   <tr>
@@ -460,7 +460,7 @@ export default async function CompleteEvictionPackPage() {
                     <td className="px-6 py-4 text-center text-sm text-gray-600">
                       Testing the waters, simple cases, want notice first
                     </td>
-                    <td className="px-6 py-4 text-center text-sm font-semibold text-primary bg-primary-subtle">
+                    <td className="px-6 py-4 text-center text-sm font-semibold text-primary bg-[#F3EEFF]">
                       Committed to court action, need complete DIY solution
                     </td>
                   </tr>
@@ -482,13 +482,13 @@ export default async function CompleteEvictionPackPage() {
       </section>
 
       {/* Cross-sell: Money Claim for Rent Arrears Recovery */}
-      <section className="py-12 md:py-16 bg-blue-50">
+      <section className="py-12 md:py-16 bg-[#F3EEFF]">
         <Container>
           <div className="max-w-3xl mx-auto">
-            <div className="bg-white rounded-xl border-2 border-blue-200 p-6 md:p-8 shadow-sm">
+            <div className="rounded-2xl border border-[#E6DBFF] bg-white p-6 shadow-[0_12px_28px_rgba(105,46,212,0.1)] md:p-8">
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center shrink-0">
-                  <BadgePoundSterling className="w-6 h-6 text-blue-600" />
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-[#E6DBFF] bg-[#F3EEFF]">
+                  <BadgePoundSterling className="h-6 w-6 text-[#692ED4]" />
                 </div>
                 <div className="flex-1">
                   <h3 className="text-xl font-bold text-charcoal mb-2">
@@ -502,13 +502,13 @@ export default async function CompleteEvictionPackPage() {
                   <div className="flex flex-col sm:flex-row gap-3">
                     <Link
                       href="/wizard?product=money_claim&src=complete_pack_crosssell"
-                      className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
+                      className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#692ED4] px-5 py-2.5 font-semibold text-white transition-colors hover:bg-[#5a21be]"
                     >
                       Get Money Claim Pack — {PRODUCTS.money_claim.displayPrice}
                     </Link>
                     <Link
                       href="/money-claim-unpaid-rent"
-                      className="inline-flex items-center justify-center gap-2 px-5 py-2.5 border border-blue-300 text-blue-700 font-medium rounded-lg hover:bg-blue-50 transition-colors"
+                      className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#CDB8F6] px-5 py-2.5 font-medium text-[#692ED4] transition-colors hover:bg-[#F3EEFF]"
                     >
                       Learn about money claims →
                     </Link>
@@ -548,11 +548,11 @@ export default async function CompleteEvictionPackPage() {
       </section>
 
       {/* Final CTA */}
-      <section className="py-16 md:py-20 bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50">
+      <section className="py-16 md:py-20">
         <Container>
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Ready to Start Your Eviction?</h2>
-            <p className="text-xl mb-8 text-gray-600">
+          <div className="mx-auto max-w-3xl rounded-3xl border border-[#E6DBFF] bg-gradient-to-br from-[#692ED4] via-[#7A3BE5] to-[#5a21be] p-8 text-center text-white shadow-[0_24px_60px_rgba(105,46,212,0.35)] md:p-12">
+            <h2 className="mb-4 text-3xl font-bold md:text-4xl">Ready to Start Your Eviction?</h2>
+            <p className="mb-8 text-xl text-white/90">
               Preview before you pay. Edit and regenerate instantly. Stored in your portal.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -569,7 +569,7 @@ export default async function CompleteEvictionPackPage() {
                 Or Just Get Notice - {PRODUCTS.notice_only.displayPrice}
               </Link>
             </div>
-            <p className="mt-4 text-sm text-gray-600">
+            <p className="mt-4 text-sm text-white/80">
               One-time payment • Unlimited regenerations • No subscription
             </p>
           </div>

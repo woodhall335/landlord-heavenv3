@@ -62,7 +62,7 @@ export default async function EvictionNoticeTemplatePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#fcfaff]">
       <StructuredData data={pageSchema} />
       <StructuredData data={breadcrumbSchema([
         { name: 'Home', url: 'https://landlordheaven.co.uk' },
@@ -101,18 +101,18 @@ export default async function EvictionNoticeTemplatePage() {
 
         <EvictionNoticeBundlePreviewSection previews={previews} />
 
-        <section className="py-16 lg:py-20">
+        <section className="bg-[#F3EEFF] py-16 lg:py-20">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
-              <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">Types of Eviction Notices by Jurisdiction</h2>
+              <h2 className="mb-4 text-center text-3xl font-bold text-gray-900 lg:text-5xl">Types of Eviction Notices by Jurisdiction</h2>
               <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
                 Your wizard route is jurisdiction-specific from the first question, ensuring England, Wales, and Scotland follow the correct statutory pathways.
               </p>
 
-              <div className="grid lg:grid-cols-3 gap-6">
-                <article className="bg-white rounded-[16px] p-6 border border-gray-200 shadow-[0_8px_24px_rgba(15,23,42,0.06)]">
+              <div className="grid gap-6 lg:grid-cols-3">
+                <article className="rounded-2xl border border-[#E6DBFF] bg-white p-6 shadow-[0_12px_30px_rgba(105,46,212,0.1)]">
                   <div className="flex items-center gap-3 mb-5">
-                    <div className="w-12 h-12 bg-[#f3e8ff] rounded-xl flex items-center justify-center">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#F3EEFF] border border-[#E6DBFF]">
                       <Landmark className="w-6 h-6 text-[#692ed4]" />
                     </div>
                     <div>
@@ -128,9 +128,9 @@ export default async function EvictionNoticeTemplatePage() {
                   <Link href="/products/notice-only" className="inline-flex items-center gap-2 text-[#692ed4] font-medium hover:underline">Generate by jurisdiction <ArrowRight className="w-4 h-4" /></Link>
                 </article>
 
-                <article className="bg-white rounded-[16px] p-6 border border-gray-200 shadow-[0_8px_24px_rgba(15,23,42,0.06)]">
+                <article className="rounded-2xl border border-[#E6DBFF] bg-white p-6 shadow-[0_12px_30px_rgba(105,46,212,0.1)]">
                   <div className="flex items-center gap-3 mb-5">
-                    <div className="w-12 h-12 bg-[#f3e8ff] rounded-xl flex items-center justify-center">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#F3EEFF] border border-[#E6DBFF]">
                       <Scale className="w-6 h-6 text-[#692ed4]" />
                     </div>
                     <div>
@@ -146,9 +146,9 @@ export default async function EvictionNoticeTemplatePage() {
                   <Link href="/products/notice-only" className="inline-flex items-center gap-2 text-[#692ed4] font-medium hover:underline">Generate by jurisdiction <ArrowRight className="w-4 h-4" /></Link>
                 </article>
 
-                <article className="bg-white rounded-[16px] p-6 border border-gray-200 shadow-[0_8px_24px_rgba(15,23,42,0.06)]">
+                <article className="rounded-2xl border border-[#E6DBFF] bg-white p-6 shadow-[0_12px_30px_rgba(105,46,212,0.1)]">
                   <div className="flex items-center gap-3 mb-5">
-                    <div className="w-12 h-12 bg-[#f3e8ff] rounded-xl flex items-center justify-center">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#F3EEFF] border border-[#E6DBFF]">
                       <FileText className="w-6 h-6 text-[#692ed4]" />
                     </div>
                     <div>
@@ -165,7 +165,7 @@ export default async function EvictionNoticeTemplatePage() {
                 </article>
               </div>
 
-              <div className="mt-8 bg-white rounded-2xl p-6 border border-gray-200 shadow-[0_8px_24px_rgba(15,23,42,0.05)]">
+              <div className="mt-8 rounded-2xl border border-[#E6DBFF] bg-white p-6 shadow-[0_10px_28px_rgba(105,46,212,0.08)]">
                 <div className="flex items-start gap-4">
                   <Info className="w-5 h-5 text-[#692ed4] flex-shrink-0 mt-0.5" />
                   <div>
@@ -185,11 +185,11 @@ export default async function EvictionNoticeTemplatePage() {
           </div>
         </section>
 
-        <section className="py-16 lg:py-20 bg-[#f3e8ff]">
+        <section className="py-16 lg:py-20 bg-white">
           <div className="container mx-auto px-4">
             <div className="max-w-5xl mx-auto">
               <div className="grid lg:grid-cols-2 gap-6 lg:gap-8 items-stretch">
-                <div className="bg-white rounded-2xl p-8 border border-gray-200 shadow-[0_10px_30px_rgba(15,23,42,0.08)]">
+                <div className="rounded-2xl border border-[#E6DBFF] bg-[#F3EEFF] p-8 shadow-[0_12px_30px_rgba(105,46,212,0.08)]">
                   <h2 className="text-3xl font-bold text-gray-900 mb-6">Why the correct notice matters</h2>
                   <ul className="space-y-4">
                     <li className="flex gap-3 text-gray-700"><AlertTriangle className="w-5 h-5 mt-0.5 text-[#692ed4]" /> Incorrect wording can invalidate possession claims</li>
@@ -200,7 +200,7 @@ export default async function EvictionNoticeTemplatePage() {
                   <p className="mt-6 text-gray-800 font-medium">Serving the correct notice, in the correct format, for your jurisdiction is the foundation of a successful possession claim.</p>
                 </div>
 
-                <div className="bg-white rounded-2xl border border-gray-200 shadow-[0_10px_30px_rgba(15,23,42,0.08)] p-8 flex items-center justify-center">
+                <div className="flex items-center justify-center rounded-2xl border border-[#E6DBFF] bg-[#F3EEFF] p-8 shadow-[0_12px_30px_rgba(105,46,212,0.08)]">
                   <div className="w-full max-w-sm">
                     <div className="rounded-2xl border border-[#e9d5ff] bg-[#f8f2ff] p-6">
                       <div className="flex items-center justify-between mb-5">
@@ -226,7 +226,7 @@ export default async function EvictionNoticeTemplatePage() {
           </div>
         </section>
 
-        <section className="py-12 bg-primary text-white">
+        <section className="py-12 bg-gradient-to-r from-[#692ED4] via-[#7A3BE5] to-[#5a21be] text-white">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto text-center">
               <h2 className="text-2xl lg:text-3xl font-bold mb-4">Section 21 Ends 1 May 2026</h2>
@@ -239,7 +239,7 @@ export default async function EvictionNoticeTemplatePage() {
 
         <FAQSection faqs={evictionNoticeTemplateFAQs} title="Eviction Notice Template FAQ" showContactCTA={false} variant="gray" />
 
-        <section className="py-16 lg:py-20">
+        <section className="bg-[#F3EEFF] py-16 lg:py-20">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto bg-gradient-to-br from-primary to-primary/90 rounded-3xl p-8 lg:p-12 text-white text-center">
               <h2 className="text-3xl lg:text-4xl font-bold mb-4">Generate Your Jurisdiction-Specific Notice Bundle</h2>
@@ -251,7 +251,7 @@ export default async function EvictionNoticeTemplatePage() {
         </section>
 
 
-        <section className="py-16 lg:py-20">
+        <section className="bg-[#F3EEFF] py-16 lg:py-20">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <RelatedLinks
