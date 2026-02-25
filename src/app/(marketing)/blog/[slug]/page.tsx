@@ -29,6 +29,8 @@ import { NextLegalSteps } from '@/components/seo/NextLegalSteps';
 import { landingPageLinks, productLinks, guideLinks } from '@/lib/seo/internal-links';
 import { CommercialWizardLinks } from '@/components/seo/CommercialWizardLinks';
 import { getBlogSeoConfig } from '@/lib/blog/seo';
+import { NextStepWidget } from '@/components/journey/NextStepWidget';
+import type { StageEstimate } from '@/lib/journey/state';
 
 interface BlogPageProps {
   params: Promise<{ slug: string }>;
@@ -114,6 +116,34 @@ function getComplianceTopicForPost(slug: string): { topic: AskHeavenTopic; promp
 }
 
 const MAX_RELATED_GUIDES = 12;
+
+
+function inferBlogStageHint(post: BlogPost): StageEstimate {
+  const haystack = `${post.title} ${post.targetKeyword} ${post.tags.join(' ')}`.toLowerCase();
+
+  if (['n5', 'n5b', 'court', 'hearing', 'bailiff', 'warrant'].some((keyword) => haystack.includes(keyword))) {
+    return 'court_ready';
+  }
+
+  if (
+    ['serving notice', 'eviction notice', 'proof of service', 'section 8', 'section 21', 'notice to leave'].some(
+      (keyword) => haystack.includes(keyword),
+    )
+  ) {
+    return 'notice_ready';
+  }
+
+  if (['demand letter', 'letter before action', 'arrears letter'].some((keyword) => haystack.includes(keyword))) {
+    return 'demand_sent';
+  }
+
+  if (['arrears', 'late rent', 'missed payment'].some((keyword) => haystack.includes(keyword))) {
+    return 'early_arrears';
+  }
+
+  return 'unknown';
+}
+
 
 const buildNextLegalSteps = (post: BlogPost, region: BlogRegion | null) => {
   const target = post.targetKeyword.toLowerCase();
@@ -550,6 +580,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
   };
 
   const legalSteps = buildNextLegalSteps(post, postRegion);
+  const stageHint = inferBlogStageHint(post);
 
   // Build breadcrumb items - include category if post belongs to a region
   const breadcrumbItems = [
@@ -769,6 +800,8 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
                 utmSource="blog_post"
               />
 
+              <NextStepWidget stageHint={stageHint} location="blog_mid_article" />
+
               {/* Article Content */}
               <div className="prose prose-lg max-w-none prose-headings:scroll-mt-24 prose-headings:font-bold prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-6 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-4 prose-p:text-gray-600 prose-p:leading-relaxed prose-li:text-gray-600 prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900 prose-table:border-collapse prose-th:bg-gray-100 prose-th:p-3 prose-th:text-left prose-td:p-3 prose-td:border-b">
                 {post.content}
@@ -800,6 +833,8 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
                   />
                 </div>
               )}
+              <NextStepWidget stageHint={stageHint} location="blog_end" />
+
               <NextSteps slug={slug} category={post.category} tags={post.tags} />
 
               {/* Bottom CTA */}

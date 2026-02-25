@@ -10,6 +10,9 @@ import { useEmailGate } from '@/hooks/useEmailGate';
 import { ToolEmailGate } from '@/components/ui/ToolEmailGate';
 import { ToolFunnelTracker } from '@/components/tools/ToolFunnelTracker';
 import { ToolUpsellCard } from '@/components/tools/ToolUpsellCard';
+import { NextStepWidget } from '@/components/journey/NextStepWidget';
+import { trackToolComplete } from '@/lib/journey/events';
+import { setJourneyState } from '@/lib/journey/state';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, toolLinks, landingPageLinks } from '@/lib/seo/internal-links';
@@ -411,6 +414,32 @@ URL.revokeObjectURL(url);
     }
   }, [formData]);
 
+
+  useEffect(() => {
+    if (!generated) return;
+
+    setJourneyState(
+      {
+        stage_estimate: 'demand_sent',
+        last_touch: {
+          type: 'tool',
+          id: 'free-rent-demand-letter',
+          ts: Date.now(),
+        },
+      },
+      'free_rent_demand_letter_complete',
+    );
+
+    trackToolComplete({
+      tool_name: 'free_rent_demand_letter',
+      context: {
+        journey_state: {
+          stage_estimate: 'demand_sent',
+        },
+      },
+    });
+  }, [generated]);
+
   // Email gate hook - requires email before PDF download
   const gate = useEmailGate({
     source: 'tool:rent-demand-letter',
@@ -710,10 +739,22 @@ URL.revokeObjectURL(url);
         </button>
 
         {generated && (
-          <div className="rounded-lg bg-success-50 border border-success-200 p-4">
+          <div className="rounded-lg bg-success-50 border border-success-200 p-4 space-y-4">
             <p className="text-sm text-success-800 font-medium">
               ✓ Demand letter generated successfully! Your PDF has been downloaded.
             </p>
+
+            <div className="rounded-lg border border-gray-200 bg-white p-4">
+              <h3 className="font-semibold text-gray-900">What happens next</h3>
+              <ol className="mt-2 space-y-2 text-sm text-gray-700 list-decimal list-inside">
+                <li>Serve the demand letter and keep proof of service.</li>
+                <li>Allow the stated deadline to expire.</li>
+                <li>If unpaid, prepare notice/court documents using the recommended pack.</li>
+              </ol>
+            </div>
+
+            <NextStepWidget stageHint="demand_sent" location="tool_result" />
+
             <div className="mt-4">
               <ToolUpsellCard {...upsellConfig} />
             </div>
