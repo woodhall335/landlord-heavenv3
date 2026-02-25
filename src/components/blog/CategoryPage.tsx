@@ -4,10 +4,11 @@ import { StructuredData } from '@/lib/seo/structured-data';
 import { BlogCard } from './BlogCard';
 import { BlogFilteredList } from './BlogFilteredList';
 import { Section21Countdown } from '@/components/ui/Section21Countdown';
-import { BlogRegion, CategoryConfig, BLOG_CATEGORIES, getPostCountsByRegion } from '@/lib/blog/categories';
+import { BlogRegion, BLOG_CATEGORIES, getPostCountsByRegion } from '@/lib/blog/categories';
 import { blogPosts } from '@/lib/blog/posts';
 import { FileText, MapPin, ArrowRight, Scale, Clock } from 'lucide-react';
-import { getCanonicalUrl, SITE_ORIGIN } from '@/lib/seo';
+import { SITE_ORIGIN } from '@/lib/seo';
+import { NextStepWidget } from '@/components/journey/NextStepWidget';
 
 interface CategoryPageProps {
   region: BlogRegion;
@@ -179,6 +180,12 @@ export function CategoryPage({ region, posts }: CategoryPageProps) {
           </div>
         </section>
 
+        <section className="py-8">
+          <div className="container mx-auto px-4">
+            <NextStepWidget location="blog_category_mid" />
+          </div>
+        </section>
+
         {/* Featured Post */}
         {featuredPost && (
           <section className="py-12 lg:py-16">
@@ -248,6 +255,12 @@ export function CategoryPage({ region, posts }: CategoryPageProps) {
                 </Link>
               ))}
             </div>
+          </div>
+        </section>
+
+        <section className="py-8">
+          <div className="container mx-auto px-4">
+            <NextStepWidget location="blog_category_end" />
           </div>
         </section>
 

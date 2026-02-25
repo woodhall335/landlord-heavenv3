@@ -33,6 +33,8 @@ import { detectAskHeavenCtaIntent } from '@/lib/ask-heaven/cta-copy';
 import { getRecommendedProduct, type Topic } from '@/lib/ask-heaven/topic-detection';
 import type { AskHeavenPrimaryTopic } from '@/lib/ask-heaven/questions/types';
 import type { Jurisdiction } from '@/lib/jurisdiction/types';
+import { NextStepWidget } from '@/components/journey/NextStepWidget';
+import { JourneyStageUpdater } from '@/components/journey/JourneyStageUpdater';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -169,6 +171,11 @@ export default async function AskHeavenQuestionPage({ params }: PageProps) {
       <StructuredData data={qaPageSchema} />
 
       {/* Main Content */}
+      <JourneyStageUpdater
+        topicHint={`${question.primary_topic} ${question.question}`}
+        sourceId={`/ask-heaven/${slug}`}
+      />
+
       <AskHeavenPageClient
         initialMessages={[
           {
@@ -194,6 +201,11 @@ export default async function AskHeavenQuestionPage({ params }: PageProps) {
         chatSubheading="Free landlord assistant for England/Wales/Scotland/N. Ireland"
       />
       <div className="bg-white pb-12">
+        <div className="container mx-auto px-4 pt-8">
+          <div className="max-w-4xl mx-auto">
+            <NextStepWidget location="ask_heaven_slug" />
+          </div>
+        </div>
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             {process.env.NODE_ENV === 'development' && (

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo, useState, useCallback } from 'react';
+import React, { useMemo, useState, useCallback, useEffect, useRef } from 'react';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { HeaderConfig } from '@/components/layout';
 import { Button, Card, Container, Input } from '@/components/ui';
@@ -12,6 +12,10 @@ import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, blogLinks, toolLinks, landingPageLinks } from '@/lib/seo/internal-links';
 import { ToolFunnelTracker } from '@/components/tools/ToolFunnelTracker';
 import { ToolUpsellCard } from '@/components/tools/ToolUpsellCard';
+import { NextStepWidget } from '@/components/journey/NextStepWidget';
+import { trackToolComplete } from '@/lib/journey/events';
+import { setJourneyState, type StageEstimate } from '@/lib/journey/state';
+import { bucketArrears, bucketMonthsInArrears } from '@/lib/journey/stage';
 
 // Note: Metadata moved to layout.tsx (client components cannot export metadata)
 
@@ -121,6 +125,54 @@ export default function RentArrearsCalculator() {
       { totalDue: 0, totalPaid: 0, totalOutstanding: 0, totalInterest: 0 },
     );
   }, [schedule]);
+
+
+  const completionTrackedRef = useRef(false);
+
+  const arrearsBand = useMemo(() => bucketArrears(totals.totalOutstanding), [totals.totalOutstanding]);
+  const monthsInArrearsBand = useMemo(
+    () => bucketMonthsInArrears(totals.totalOutstanding, rentAmount),
+    [rentAmount, totals.totalOutstanding],
+  );
+  const stageHint: StageEstimate = useMemo(() => {
+    const months = rentAmount > 0 ? totals.totalOutstanding / rentAmount : 0;
+    return months >= 2 ? 'notice_ready' : 'early_arrears';
+  }, [rentAmount, totals.totalOutstanding]);
+
+  useEffect(() => {
+    if (totals.totalOutstanding <= 0) {
+      completionTrackedRef.current = false;
+      return;
+    }
+
+    setJourneyState(
+      {
+        stage_estimate: stageHint,
+        arrears_band: arrearsBand,
+        months_in_arrears_band: monthsInArrearsBand,
+        last_touch: {
+          type: 'tool',
+          id: 'rent-arrears-calculator',
+          ts: Date.now(),
+        },
+      },
+      'rent_arrears_calculator_complete',
+    );
+
+    if (!completionTrackedRef.current) {
+      completionTrackedRef.current = true;
+      trackToolComplete({
+        tool_name: 'rent_arrears_calculator',
+        context: {
+          journey_state: {
+            arrears_band: arrearsBand,
+            months_in_arrears_band: monthsInArrearsBand,
+            stage_estimate: stageHint,
+          },
+        },
+      });
+    }
+  }, [arrearsBand, monthsInArrearsBand, stageHint, totals.totalOutstanding]);
 
   // Calculate interest using 8% per annum simple interest from earliest unpaid due date
   // Formula: Principal × Annual Rate × (Days Outstanding ÷ 365)
@@ -579,6 +631,10 @@ link.href = url;
                 </p>
               </div>
             </div>
+
+            {totals.totalOutstanding > 0 && (
+              <NextStepWidget stageHint={stageHint} location="tool_result" />
+            )}
 
             <div className="mt-8">
               <ToolUpsellCard {...upsellConfig} />

@@ -12,6 +12,7 @@ import { FAQSection } from '@/components/seo/FAQSection';
 import { SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { CommercialWizardLinks } from '@/components/seo/CommercialWizardLinks';
 import { analyzeContent } from '@/lib/seo/commercial-linking';
+import { NextStepWidget } from '@/components/journey/NextStepWidget';
 
 // Compliance topics data for SSR section
 interface ComplianceTopic {
@@ -303,6 +304,8 @@ export default async function AskHeavenPage({
       <div className="bg-white py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
+            <NextStepWidget location="ask_heaven_hub" />
+
             {/* Intro section */}
             <div className="text-center mb-12">
               <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium mb-4">
