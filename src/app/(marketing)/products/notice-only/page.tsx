@@ -4,6 +4,7 @@ import { HeaderConfig } from "@/components/layout/HeaderConfig";
 import { noticeOnlyHeroConfig } from "@/components/landing/heroConfigs";
 import { Container } from "@/components/ui";
 import Link from "next/link";
+import Image from "next/image";
 import { Zap, CheckCircle2, ShieldCheck, BadgePoundSterling } from "lucide-react";
 import { StructuredData, productSchema, breadcrumbSchema } from "@/lib/seo/structured-data";
 import { PRODUCTS } from "@/lib/pricing/products";
@@ -86,7 +87,24 @@ export default async function NoticeOnlyPage() {
 
       <UniversalHero {...noticeOnlyHeroConfig} showTrustPositioningBar />
 
-      <WhatsIncludedInteractive product="notice_only" defaultJurisdiction="england" previews={previews} />
+      <section className="py-10 md:py-14">
+        <Container>
+          <div className="mx-auto grid max-w-6xl overflow-hidden rounded-3xl border border-[#E6DBFF] bg-white shadow-[0_14px_36px_rgba(15,23,42,0.06)] md:grid-cols-5">
+            <div className="flex items-center justify-center bg-[#692ed4]/5 p-8 md:col-span-2 md:p-10">
+              <Image
+                src="/images/what_you_get.webp"
+                alt="What you get illustration"
+                width={360}
+                height={360}
+                className="h-auto w-full max-w-[360px] object-contain"
+              />
+            </div>
+            <div className="md:col-span-3">
+              <WhatsIncludedInteractive product="notice_only" defaultJurisdiction="england" previews={previews} />
+            </div>
+          </div>
+        </Container>
+      </section>
 
       <section className="bg-[#fcfaff] py-10">
         <Container>
@@ -138,32 +156,56 @@ export default async function NoticeOnlyPage() {
 
       <section className="py-16 md:py-20 bg-white">
         <Container>
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl md:text-5xl font-bold text-charcoal mb-12 text-center">Why Choose Notice Only?</h2>
+          <div className="max-w-6xl mx-auto">
+            <div className="mb-10 flex justify-center">
+              <Image
+                src="/images/why_this_bundle.webp"
+                alt="Why this bundle illustration"
+                width={340}
+                height={340}
+                className="h-auto w-full max-w-[340px] object-contain"
+              />
+            </div>
 
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="rounded-2xl border border-[#E6DBFF] bg-[#F3EEFF] p-6 shadow-[0_12px_30px_rgba(105,46,212,0.07)]">
-                <div className="w-14 h-14 bg-white rounded-xl border border-[#E6DBFF] flex items-center justify-center mb-4"><Zap className="w-7 h-7 text-[#692ED4]" /></div>
-                <h3 className="text-xl font-semibold text-charcoal mb-2">Fast - Under 10 Minutes</h3>
-                <p className="text-gray-700">Answer questions, preview your documents, and download. No waiting days for solicitor appointments.</p>
+            <div className="grid items-center gap-10 lg:grid-cols-2">
+              <div>
+                <h2 className="text-3xl md:text-5xl font-bold text-charcoal mb-12 text-center lg:text-left">Why Choose Notice Only?</h2>
+
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="rounded-2xl border border-[#E6DBFF] bg-[#F3EEFF] p-6 shadow-[0_12px_30px_rgba(105,46,212,0.07)]">
+                    <div className="w-14 h-14 bg-white rounded-xl border border-[#E6DBFF] flex items-center justify-center mb-4"><Zap className="w-7 h-7 text-[#692ED4]" /></div>
+                    <h3 className="text-xl font-semibold text-charcoal mb-2">Fast - Under 10 Minutes</h3>
+                    <p className="text-gray-700">Answer questions, preview your documents, and download. No waiting days for solicitor appointments.</p>
+                  </div>
+
+                  <div className="rounded-2xl border border-[#E6DBFF] bg-[#F3EEFF] p-6 shadow-[0_12px_30px_rgba(105,46,212,0.07)]">
+                    <div className="w-14 h-14 bg-white rounded-xl border border-[#E6DBFF] flex items-center justify-center mb-4"><CheckCircle2 className="w-7 h-7 text-[#692ED4]" /></div>
+                    <h3 className="text-xl font-semibold text-charcoal mb-2">Official Forms</h3>
+                    <p className="text-gray-700">Government-approved forms: Form 6A (Section 21), Form 3 (Section 8), RHW forms (Wales), Notice to Leave (Scotland).</p>
+                  </div>
+
+                  <div className="rounded-2xl border border-[#E6DBFF] bg-[#F3EEFF] p-6 shadow-[0_12px_30px_rgba(105,46,212,0.07)]">
+                    <div className="w-14 h-14 bg-white rounded-xl border border-[#E6DBFF] flex items-center justify-center mb-4"><ShieldCheck className="w-7 h-7 text-[#692ED4]" /></div>
+                    <h3 className="text-xl font-semibold text-charcoal mb-2">Compliance Checks</h3>
+                    <p className="text-gray-700">Ask Heaven flags common blockers: deposit protection, gas safety, EPC, How to Rent. Fix issues before serving.</p>
+                  </div>
+
+                  <div className="rounded-2xl border border-[#E6DBFF] bg-[#F3EEFF] p-6 shadow-[0_12px_30px_rgba(105,46,212,0.07)]">
+                    <div className="w-14 h-14 bg-white rounded-xl border border-[#E6DBFF] flex items-center justify-center mb-4"><BadgePoundSterling className="w-7 h-7 text-[#692ED4]" /></div>
+                    <h3 className="text-xl font-semibold text-charcoal mb-2">One-Time Payment</h3>
+                    <p className="text-gray-700">{price} covers everything. No subscription, no hidden fees. Unlimited regenerations included.</p>
+                  </div>
+                </div>
               </div>
 
-              <div className="rounded-2xl border border-[#E6DBFF] bg-[#F3EEFF] p-6 shadow-[0_12px_30px_rgba(105,46,212,0.07)]">
-                <div className="w-14 h-14 bg-white rounded-xl border border-[#E6DBFF] flex items-center justify-center mb-4"><CheckCircle2 className="w-7 h-7 text-[#692ED4]" /></div>
-                <h3 className="text-xl font-semibold text-charcoal mb-2">Official Forms</h3>
-                <p className="text-gray-700">Government-approved forms: Form 6A (Section 21), Form 3 (Section 8), RHW forms (Wales), Notice to Leave (Scotland).</p>
-              </div>
-
-              <div className="rounded-2xl border border-[#E6DBFF] bg-[#F3EEFF] p-6 shadow-[0_12px_30px_rgba(105,46,212,0.07)]">
-                <div className="w-14 h-14 bg-white rounded-xl border border-[#E6DBFF] flex items-center justify-center mb-4"><ShieldCheck className="w-7 h-7 text-[#692ED4]" /></div>
-                <h3 className="text-xl font-semibold text-charcoal mb-2">Compliance Checks</h3>
-                <p className="text-gray-700">Ask Heaven flags common blockers: deposit protection, gas safety, EPC, How to Rent. Fix issues before serving.</p>
-              </div>
-
-              <div className="rounded-2xl border border-[#E6DBFF] bg-[#F3EEFF] p-6 shadow-[0_12px_30px_rgba(105,46,212,0.07)]">
-                <div className="w-14 h-14 bg-white rounded-xl border border-[#E6DBFF] flex items-center justify-center mb-4"><BadgePoundSterling className="w-7 h-7 text-[#692ED4]" /></div>
-                <h3 className="text-xl font-semibold text-charcoal mb-2">One-Time Payment</h3>
-                <p className="text-gray-700">{price} covers everything. No subscription, no hidden fees. Unlimited regenerations included.</p>
+              <div className="flex justify-center">
+                <Image
+                  src="/images/why_accuracy_matters.webp"
+                  alt="Why accuracy matters illustration"
+                  width={640}
+                  height={640}
+                  className="h-auto w-full max-w-[640px] object-contain"
+                />
               </div>
             </div>
           </div>
