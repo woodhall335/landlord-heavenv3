@@ -35,10 +35,11 @@ function getDeviceType(): DeviceType {
 
 function sanitizeJourneyStateSnapshot(state: JourneyState): Partial<JourneyState> {
   const sanitized: Partial<JourneyState> = {};
+  const writableSanitized = sanitized as Record<keyof JourneyState, JourneyState[keyof JourneyState]>;
 
   for (const [key, value] of Object.entries(state) as Array<[keyof JourneyState, JourneyState[keyof JourneyState]]>) {
     if (ALLOWED_JOURNEY_KEYS.has(key)) {
-      sanitized[key] = value;
+      writableSanitized[key] = value;
     }
   }
 
@@ -65,13 +66,14 @@ function buildContext(override?: Partial<JourneyEventContext>): JourneyEventCont
 
 function sanitizeContext(context: JourneyEventContext): JourneyEventContext {
   const sanitized: Partial<JourneyEventContext> = {};
+  const writableSanitized = sanitized as Record<keyof JourneyEventContext, JourneyEventContext[keyof JourneyEventContext]>;
 
   for (const [key, value] of Object.entries(context) as Array<[
     keyof JourneyEventContext,
     JourneyEventContext[keyof JourneyEventContext],
   ]>) {
     if (ALLOWED_CONTEXT_KEYS.has(key)) {
-      sanitized[key] = value;
+      writableSanitized[key] = value;
     }
   }
 
