@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { Section21Countdown } from '@/components/ui/Section21Countdown';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
@@ -99,11 +100,37 @@ export default async function EvictionNoticeTemplatePage() {
           </p>
         </StandardHero>
 
-        <EvictionNoticeBundlePreviewSection previews={previews} />
+        <section className="py-10 md:py-14">
+          <div className="container mx-auto px-4">
+            <div className="mx-auto grid max-w-6xl overflow-hidden rounded-3xl border border-[#E6DBFF] bg-white shadow-[0_14px_36px_rgba(15,23,42,0.06)] md:grid-cols-5">
+              <div className="flex items-center justify-center bg-[#692ed4]/5 p-8 md:col-span-2 md:p-10">
+                <Image
+                  src="/images/what_you_get.webp"
+                  alt="What you get illustration"
+                  width={360}
+                  height={360}
+                  className="h-auto w-full max-w-[360px] object-contain"
+                />
+              </div>
+              <div className="md:col-span-3">
+                <EvictionNoticeBundlePreviewSection previews={previews} />
+              </div>
+            </div>
+          </div>
+        </section>
 
         <section className="bg-[#F3EEFF] py-16 lg:py-20">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
+              <div className="mb-10 flex justify-center">
+                <Image
+                  src="/images/why_this_bundle.webp"
+                  alt="Why this bundle illustration"
+                  width={340}
+                  height={340}
+                  className="h-auto w-full max-w-[340px] object-contain"
+                />
+              </div>
               <h2 className="mb-4 text-center text-3xl font-bold text-gray-900 lg:text-5xl">Types of Eviction Notices by Jurisdiction</h2>
               <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
                 Your wizard route is jurisdiction-specific from the first question, ensuring England, Wales, and Scotland follow the correct statutory pathways.
@@ -201,25 +228,13 @@ export default async function EvictionNoticeTemplatePage() {
                 </div>
 
                 <div className="flex items-center justify-center rounded-2xl border border-[#E6DBFF] bg-[#F3EEFF] p-8 shadow-[0_12px_30px_rgba(105,46,212,0.08)]">
-                  <div className="w-full max-w-sm">
-                    <div className="rounded-2xl border border-[#e9d5ff] bg-[#f8f2ff] p-6">
-                      <div className="flex items-center justify-between mb-5">
-                        <div className="inline-flex items-center gap-2 text-[#692ed4] font-semibold text-sm">
-                          <FileText className="w-4 h-4" />
-                          Notice Validity File
-                        </div>
-                        <span className="text-xs text-gray-500">Reviewed</span>
-                      </div>
-                      <div className="space-y-3">
-                        {['Statutory wording', 'Jurisdiction route', 'Notice period', 'Service details'].map((item) => (
-                          <div key={item} className="flex items-center justify-between rounded-xl border border-[#e9d5ff] bg-white px-3 py-2 text-sm text-gray-700">
-                            <span>{item}</span>
-                            <CheckCircle className="w-4 h-4 text-[#692ed4]" />
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
+                  <Image
+                    src="/images/why_accuracy_matters.webp"
+                    alt="Why accuracy matters illustration"
+                    width={640}
+                    height={640}
+                    className="h-auto w-full max-w-[640px] object-contain"
+                  />
                 </div>
               </div>
             </div>
