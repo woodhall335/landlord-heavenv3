@@ -2,17 +2,16 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { Section21Countdown } from '@/components/ui/Section21Countdown';
-import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, toolLinks, blogLinks } from '@/lib/seo/internal-links';
 import { StandardHero } from '@/components/marketing/StandardHero';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { FAQSection } from '@/components/seo/FAQSection';
-import { IntentProductCTA, getIntentProductHref } from '@/components/seo/IntentProductCTA';
+import { IntentProductCTA } from '@/components/seo/IntentProductCTA';
 import { evictionNoticeTemplateFAQs } from '@/data/faqs';
 import { EvictionNoticeBundlePreviewSection } from '@/components/seo/EvictionNoticeBundlePreviewSection';
 import { getNoticeOnlyPreviewData } from '@/lib/previews/noticeOnlyPreviews';
-import { CheckCircle, ArrowRight, AlertTriangle, Scale, Home, Users } from 'lucide-react';
+import { CheckCircle, ArrowRight, AlertTriangle, Scale, FileText, Landmark, Info } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Eviction Notice Template UK - Possession Notice Download',
@@ -86,11 +85,11 @@ export default async function EvictionNoticeTemplatePage() {
           }
           primaryCTA={{
             label: 'Generate Section 21 / Section 8 Notice',
-            href: '/wizard?product=notice_only&src=seo_landing&topic=eviction',
+            href: '/products/notice-only',
           }}
           secondaryCTA={{
             label: 'Need the full court bundle?',
-            href: '/eviction-pack-england',
+            href: '/products/complete-pack',
           }}
           variant="pastel"
           showTrustPositioningBar={false}
@@ -102,12 +101,6 @@ export default async function EvictionNoticeTemplatePage() {
 
         <EvictionNoticeBundlePreviewSection previews={previews} />
 
-        <section className="py-6 bg-gray-50 border-y border-gray-100">
-          <div className="container mx-auto px-4">
-            <SocialProofCounter variant="total" className="justify-center" />
-          </div>
-        </section>
-
         <section className="py-16 lg:py-20">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
@@ -116,69 +109,118 @@ export default async function EvictionNoticeTemplatePage() {
                 Your wizard route is jurisdiction-specific from the first question, ensuring England, Wales, and Scotland follow the correct statutory pathways.
               </p>
 
-              <div className="grid md:grid-cols-2 gap-8">
-                <div className="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
-                      <Home className="w-6 h-6 text-blue-600" />
+              <div className="grid lg:grid-cols-3 gap-6">
+                <article className="bg-white rounded-[16px] p-6 border border-gray-200 shadow-[0_8px_24px_rgba(15,23,42,0.06)]">
+                  <div className="flex items-center gap-3 mb-5">
+                    <div className="w-12 h-12 bg-[#f3e8ff] rounded-xl flex items-center justify-center">
+                      <Landmark className="w-6 h-6 text-[#692ed4]" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold text-gray-900">England Notices</h3>
+                      <h3 className="text-lg font-semibold text-gray-900">England</h3>
                       <span className="text-sm text-gray-500">Housing Act 1988</span>
                     </div>
                   </div>
-                  <ul className="space-y-2 mb-6 text-gray-700">
-                    <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-500" /> Section 21 Notice (Form 6A)</li>
-                    <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-500" /> Section 8 Notice (Form 3)</li>
-                    <li className="flex items-center gap-2"><AlertTriangle className="w-4 h-4 text-amber-500" /> Reform deadline awareness built in</li>
+                  <ul className="space-y-3 mb-6 text-gray-700 text-sm">
+                    <li className="flex items-start gap-2"><CheckCircle className="w-4 h-4 mt-0.5 text-[#692ed4]" /> Section 21 Notice (Form 6A)</li>
+                    <li className="flex items-start gap-2"><CheckCircle className="w-4 h-4 mt-0.5 text-[#692ed4]" /> Section 8 Notice (Form 3)</li>
+                    <li className="flex items-start gap-2"><CheckCircle className="w-4 h-4 mt-0.5 text-[#692ed4]" /> Reform deadline awareness built in</li>
                   </ul>
-                  <Link href="/section-21-notice-template" className="inline-flex items-center gap-2 text-primary font-medium hover:underline">Get England notice help <ArrowRight className="w-4 h-4" /></Link>
-                </div>
+                  <Link href="/products/notice-only" className="inline-flex items-center gap-2 text-[#692ed4] font-medium hover:underline">Generate by jurisdiction <ArrowRight className="w-4 h-4" /></Link>
+                </article>
 
-                <div className="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
-                      <Scale className="w-6 h-6 text-purple-600" />
+                <article className="bg-white rounded-[16px] p-6 border border-gray-200 shadow-[0_8px_24px_rgba(15,23,42,0.06)]">
+                  <div className="flex items-center gap-3 mb-5">
+                    <div className="w-12 h-12 bg-[#f3e8ff] rounded-xl flex items-center justify-center">
+                      <Scale className="w-6 h-6 text-[#692ed4]" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold text-gray-900">Wales &amp; Scotland Notices</h3>
-                      <span className="text-sm text-gray-500">RHW Act / PRT Rules</span>
+                      <h3 className="text-lg font-semibold text-gray-900">Wales</h3>
+                      <span className="text-sm text-gray-500">Renting Homes / Section 173 &amp; RHW23</span>
                     </div>
                   </div>
-                  <ul className="space-y-2 mb-6 text-gray-700">
-                    <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-500" /> Wales: Section 173 &amp; RHW23</li>
-                    <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-500" /> Scotland: Notice to Leave</li>
-                    <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-500" /> Ground and notice-period validation</li>
+                  <ul className="space-y-3 mb-6 text-gray-700 text-sm">
+                    <li className="flex items-start gap-2"><CheckCircle className="w-4 h-4 mt-0.5 text-[#692ed4]" /> Occupation contract pathway checks</li>
+                    <li className="flex items-start gap-2"><CheckCircle className="w-4 h-4 mt-0.5 text-[#692ed4]" /> Section 173 notice and RHW23 workflow</li>
+                    <li className="flex items-start gap-2"><CheckCircle className="w-4 h-4 mt-0.5 text-[#692ed4]" /> Notice-period and service validation</li>
                   </ul>
-                  <Link href={getIntentProductHref({ product: 'notice_only', src: 'seo_landing' })} className="inline-flex items-center gap-2 text-primary font-medium hover:underline">Generate by jurisdiction <ArrowRight className="w-4 h-4" /></Link>
-                </div>
+                  <Link href="/products/notice-only" className="inline-flex items-center gap-2 text-[#692ed4] font-medium hover:underline">Generate by jurisdiction <ArrowRight className="w-4 h-4" /></Link>
+                </article>
+
+                <article className="bg-white rounded-[16px] p-6 border border-gray-200 shadow-[0_8px_24px_rgba(15,23,42,0.06)]">
+                  <div className="flex items-center gap-3 mb-5">
+                    <div className="w-12 h-12 bg-[#f3e8ff] rounded-xl flex items-center justify-center">
+                      <FileText className="w-6 h-6 text-[#692ed4]" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-gray-900">Scotland</h3>
+                      <span className="text-sm text-gray-500">PRT / Notice to Leave</span>
+                    </div>
+                  </div>
+                  <ul className="space-y-3 mb-6 text-gray-700 text-sm">
+                    <li className="flex items-start gap-2"><CheckCircle className="w-4 h-4 mt-0.5 text-[#692ed4]" /> Notice to Leave for Private Residential Tenancies</li>
+                    <li className="flex items-start gap-2"><CheckCircle className="w-4 h-4 mt-0.5 text-[#692ed4]" /> Ground-specific timeline checks</li>
+                    <li className="flex items-start gap-2"><CheckCircle className="w-4 h-4 mt-0.5 text-[#692ed4]" /> Service and statutory wording validation</li>
+                  </ul>
+                  <Link href="/products/notice-only" className="inline-flex items-center gap-2 text-[#692ed4] font-medium hover:underline">Generate by jurisdiction <ArrowRight className="w-4 h-4" /></Link>
+                </article>
               </div>
 
-              <div className="mt-8 bg-primary/5 rounded-xl p-6 border border-primary/20">
+              <div className="mt-8 bg-white rounded-2xl p-6 border border-gray-200 shadow-[0_8px_24px_rgba(15,23,42,0.05)]">
                 <div className="flex items-start gap-4">
-                  <Users className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
+                  <Info className="w-5 h-5 text-[#692ed4] flex-shrink-0 mt-0.5" />
                   <div>
                     <h3 className="font-semibold text-gray-900 mb-1">Not sure which notice to use?</h3>
                     <p className="text-gray-600 text-sm">The wizard identifies your jurisdiction first, then maps your facts to the right statutory notice route before document generation.</p>
                   </div>
                 </div>
               </div>
+
+              <p className="mt-8 text-center text-gray-700">
+                Need the full court bundle?{' '}
+                <Link href="/products/complete-pack" className="font-semibold text-[#692ed4] hover:underline">
+                  View Complete Pack
+                </Link>
+              </p>
             </div>
           </div>
         </section>
 
-        <section className="py-16 lg:py-20 bg-gray-50">
+        <section className="py-16 lg:py-20 bg-[#f3e8ff]">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">Why the correct notice matters</h2>
-              <div className="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm">
-                <ul className="space-y-4">
-                  <li className="flex gap-3 text-gray-700"><AlertTriangle className="w-5 h-5 mt-0.5 text-amber-500" /> Incorrect wording can invalidate possession claims</li>
-                  <li className="flex gap-3 text-gray-700"><AlertTriangle className="w-5 h-5 mt-0.5 text-amber-500" /> Notice periods differ by jurisdiction and ground</li>
-                  <li className="flex gap-3 text-gray-700"><AlertTriangle className="w-5 h-5 mt-0.5 text-amber-500" /> Reform updates change statutory requirements</li>
-                  <li className="flex gap-3 text-gray-700"><AlertTriangle className="w-5 h-5 mt-0.5 text-amber-500" /> Errors can reset your eviction timeline</li>
-                </ul>
-                <p className="mt-6 text-gray-800 font-medium">Serving the correct notice, in the correct format, for your jurisdiction is the foundation of a successful possession claim.</p>
+            <div className="max-w-5xl mx-auto">
+              <div className="grid lg:grid-cols-2 gap-6 lg:gap-8 items-stretch">
+                <div className="bg-white rounded-2xl p-8 border border-gray-200 shadow-[0_10px_30px_rgba(15,23,42,0.08)]">
+                  <h2 className="text-3xl font-bold text-gray-900 mb-6">Why the correct notice matters</h2>
+                  <ul className="space-y-4">
+                    <li className="flex gap-3 text-gray-700"><AlertTriangle className="w-5 h-5 mt-0.5 text-[#692ed4]" /> Incorrect wording can invalidate possession claims</li>
+                    <li className="flex gap-3 text-gray-700"><AlertTriangle className="w-5 h-5 mt-0.5 text-[#692ed4]" /> Notice periods differ by jurisdiction and ground</li>
+                    <li className="flex gap-3 text-gray-700"><AlertTriangle className="w-5 h-5 mt-0.5 text-[#692ed4]" /> Reform updates change statutory requirements</li>
+                    <li className="flex gap-3 text-gray-700"><AlertTriangle className="w-5 h-5 mt-0.5 text-[#692ed4]" /> Errors can reset your eviction timeline</li>
+                  </ul>
+                  <p className="mt-6 text-gray-800 font-medium">Serving the correct notice, in the correct format, for your jurisdiction is the foundation of a successful possession claim.</p>
+                </div>
+
+                <div className="bg-white rounded-2xl border border-gray-200 shadow-[0_10px_30px_rgba(15,23,42,0.08)] p-8 flex items-center justify-center">
+                  <div className="w-full max-w-sm">
+                    <div className="rounded-2xl border border-[#e9d5ff] bg-[#f8f2ff] p-6">
+                      <div className="flex items-center justify-between mb-5">
+                        <div className="inline-flex items-center gap-2 text-[#692ed4] font-semibold text-sm">
+                          <FileText className="w-4 h-4" />
+                          Notice Validity File
+                        </div>
+                        <span className="text-xs text-gray-500">Reviewed</span>
+                      </div>
+                      <div className="space-y-3">
+                        {['Statutory wording', 'Jurisdiction route', 'Notice period', 'Service details'].map((item) => (
+                          <div key={item} className="flex items-center justify-between rounded-xl border border-[#e9d5ff] bg-white px-3 py-2 text-sm text-gray-700">
+                            <span>{item}</span>
+                            <CheckCircle className="w-4 h-4 text-[#692ed4]" />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
