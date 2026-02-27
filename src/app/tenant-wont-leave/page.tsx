@@ -31,7 +31,7 @@ const faqs = tenantWontLeaveFAQs;
 const wizardLinkNoticeOnly = buildWizardLink({
   product: 'notice_only',
   jurisdiction: 'england',
-  src: 'seo_tenant-wont-leave',
+  src: 'seo_tenant_wont_leave',
   topic: 'eviction',
 });
 

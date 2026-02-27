@@ -66,7 +66,7 @@ const evictionGrounds = [
   { ground: '18', description: 'Overcrowding statutory notice', notice: '28 days', type: 'Mandatory' },
 ];
 
-const wizardHref = '/wizard?product=notice_only&src=seo_scotland-eviction-notices&topic=eviction';
+const wizardHref = '/wizard?product=notice_only&topic=eviction&src=seo_scotland_eviction_notices';
 
 export default function ScotlandEvictionNoticesPage() {
   return (

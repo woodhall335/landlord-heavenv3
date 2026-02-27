@@ -39,7 +39,7 @@ const breadcrumbs = [
   { name: 'Eviction Notice UK', url: '/eviction-notice-uk' },
 ];
 
-const wizardHref = '/wizard?product=notice_only&src=seo_eviction-notice-uk&topic=eviction';
+const wizardHref = '/wizard?product=notice_only&topic=eviction&src=seo_eviction_notice_uk';
 
 export default function EvictionNoticeUKPage() {
   return (

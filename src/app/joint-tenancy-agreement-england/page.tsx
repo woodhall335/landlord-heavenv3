@@ -34,14 +34,14 @@ const PAGE_TYPE = 'tenancy' as const;
 const wizardLinkStandard = buildWizardLink({
   product: 'ast_standard',
   jurisdiction: 'england',
-  src: 'seo_joint-tenancy-agreement-england',
+  src: 'seo_joint_tenancy_agreement_england',
   topic: 'tenancy',
 });
 
 const wizardLinkPremium = buildWizardLink({
   product: 'ast_premium',
   jurisdiction: 'england',
-  src: 'seo_joint-tenancy-agreement-england',
+  src: 'seo_joint_tenancy_agreement_england',
   topic: 'tenancy',
 });
 

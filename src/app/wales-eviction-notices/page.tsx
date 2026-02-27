@@ -43,7 +43,7 @@ export const metadata: Metadata = {
   },
 };
 
-const wizardHref = '/wizard?product=notice_only&src=seo_wales-eviction-notices&topic=eviction';
+const wizardHref = '/wizard?product=notice_only&topic=eviction&src=seo_wales_eviction_notices';
 
 export default function WalesEvictionNoticesPage() {
   return (

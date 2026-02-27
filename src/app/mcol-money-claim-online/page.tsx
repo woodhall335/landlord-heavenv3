@@ -12,7 +12,7 @@ import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 const moneyClaimWizardLink = buildWizardLink({
   product: 'money_claim',
   jurisdiction: 'england',
-  src: 'seo_mcol-money-claim-online',
+  src: 'seo_mcol_money_claim_online',
   topic: 'debt',
 });
 

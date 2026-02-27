@@ -50,7 +50,7 @@ export default function TenantDamagingPropertyPage() {
           badge="Landlord Guide"
           title="Tenant Damaging Property: Your Options"
           subtitle="Understand your legal options and start a compliant claim for damage-related losses."
-          primaryCta={{ label: 'Recover Damage Costs', href: '/wizard?product=money_claim&topic=debt&src=seo_tenant-damaging-property' }}
+          primaryCta={{ label: 'Recover Damage Costs', href: '/wizard?product=money_claim&topic=debt&src=seo_tenant_damaging_property' }}
           align="center"
           showTrustPositioningBar
         />

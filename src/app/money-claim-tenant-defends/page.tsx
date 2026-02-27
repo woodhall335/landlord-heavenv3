@@ -104,7 +104,7 @@ export default function MoneyClaimTenantDefendsPage() {
     trustText: 'Solicitor-grade • Compliance-checked • Court-ready',
     primaryCta: {
       label: 'Start Money Claim →',
-      href: '/wizard?product=money_claim&topic=debt&src=seo_money-claim-tenant-defends',
+      href: '/wizard?product=money_claim&topic=debt&src=seo_money_claim_tenant_defends',
     },
     secondaryCta: {
       label: 'View Money Claim Pack →',
@@ -160,7 +160,7 @@ export default function MoneyClaimTenantDefendsPage() {
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
-                  href="/wizard?product=money_claim&topic=debt&src=seo_money-claim-tenant-defends"
+                  href="/wizard?product=money_claim&topic=debt&src=seo_money_claim_tenant_defends"
                   className="inline-flex items-center justify-center gap-2 bg-white text-rose-800 font-semibold py-4 px-8 rounded-xl hover:bg-rose-50 transition-colors"
                 >
                   Start Money Claim
@@ -468,7 +468,7 @@ export default function MoneyClaimTenantDefendsPage() {
                 professionally drafted documents and guidance on evidence gathering.
               </p>
               <Link
-                href="/wizard?product=money_claim&topic=debt&src=seo_money-claim-tenant-defends"
+                href="/wizard?product=money_claim&topic=debt&src=seo_money_claim_tenant_defends"
                 className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
               >
                 Start Your Claim — £99.99

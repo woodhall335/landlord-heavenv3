@@ -29,7 +29,7 @@ import {
 const wizardLinkCompletePack = buildWizardLink({
   product: 'notice_only',
   jurisdiction: 'england',
-  src: 'seo_possession-claim-guide',
+  src: 'seo_possession_claim_guide',
   topic: 'eviction',
 });
 

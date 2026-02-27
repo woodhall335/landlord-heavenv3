@@ -45,14 +45,14 @@ import {
 const moneyClaimLink = buildWizardLink({
   product: 'money_claim',
   jurisdiction: 'england',
-  src: 'seo_claim-rent-arrears-tenant',
+  src: 'seo_claim_rent_arrears_tenant',
   topic: 'debt',
 });
 
 const completePackLink = buildWizardLink({
   product: 'notice_only',
   jurisdiction: 'england',
-  src: 'seo_claim-rent-arrears-tenant',
+  src: 'seo_claim_rent_arrears_tenant',
   topic: 'eviction',
 });
 

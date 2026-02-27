@@ -13,7 +13,7 @@ import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 const wizardLinkStandard = buildWizardLink({
   product: 'tenancy_agreement',
   topic: 'tenancy',
-  src: 'seo_tenancy-agreement-template-free',
+  src: 'seo_tenancy_agreement_template_free',
 });
 
 export const metadata: Metadata = {

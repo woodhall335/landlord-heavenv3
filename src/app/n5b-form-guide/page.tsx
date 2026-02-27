@@ -30,7 +30,7 @@ import {
 const wizardLinkCompletePack = buildWizardLink({
   product: 'notice_only',
   jurisdiction: 'england',
-  src: 'seo_n5b-form-guide',
+  src: 'seo_n5b_form_guide',
   topic: 'eviction',
 });
 

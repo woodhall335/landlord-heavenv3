@@ -24,7 +24,7 @@ import { FunnelCta, CrossSellBar } from '@/components/funnels';
 const moneyClaimWizardLink = buildWizardLink({
   product: 'money_claim',
   jurisdiction: 'england',
-  src: 'seo_money-claim-unpaid-rent',
+  src: 'seo_money_claim_unpaid_rent',
   topic: 'debt',
 });
 

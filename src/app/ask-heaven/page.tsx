@@ -297,7 +297,7 @@ export default async function AskHeavenPage({
       <UniversalHero
         title="Ask Heaven: Legally Validated Landlord Q&A"
         subtitle="Get solicitor-grade, compliance-checked and court-ready guidance, then move straight into the right workflow."
-        primaryCta={{ label: 'Start Wizard', href: '/wizard?product=notice_only&src=seo_ask_heaven&topic=eviction' }}
+        primaryCta={{ label: 'Start Wizard', href: '/wizard?product=notice_only&topic=eviction&src=seo_ask_heaven' }}
         showTrustPositioningBar
         hideMedia
       />

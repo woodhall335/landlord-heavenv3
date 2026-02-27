@@ -40,7 +40,7 @@ const breadcrumbs = [
   { name: 'Form 6A Section 21', url: '/form-6a-section-21' },
 ];
 
-const wizardHref = '/wizard?product=notice_only&src=seo_form-6a-section-21&topic=eviction';
+const wizardHref = '/wizard?product=notice_only&topic=eviction&src=seo_form_6a_section_21';
 
 export default function Form6APage() {
 

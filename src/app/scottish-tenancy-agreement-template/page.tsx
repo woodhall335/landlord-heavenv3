@@ -112,7 +112,7 @@ export default function ScottishTenancyAgreementTemplatePage() {
         <UniversalHero
           title="Scottish Tenancy Agreement"
           subtitle="Generate a legally validated Scottish tenancy agreement with solicitor-grade, compliance-checked PRT terms."
-          primaryCta={{ label: "Start now", href: "/wizard?product=ast_standard&src=seo_scottish-tenancy-agreement-template&topic=tenancy&jurisdiction=scotland" }}
+          primaryCta={{ label: "Start now", href: "/wizard?product=ast_standard&topic=tenancy&src=seo_scottish_tenancy_agreement_template&jurisdiction=scotland" }}
           showTrustPositioningBar
           hideMedia
         />
@@ -146,13 +146,13 @@ export default function ScottishTenancyAgreementTemplatePage() {
             </p>
             <div className="flex gap-4 justify-center flex-wrap">
               <Link
-                href="/wizard?product=ast_standard&src=seo_scottish-tenancy-agreement-template&topic=tenancy&jurisdiction=scotland"
+                href="/wizard?product=ast_standard&topic=tenancy&src=seo_scottish_tenancy_agreement_template&jurisdiction=scotland"
                 className="inline-flex items-center gap-2 bg-white border-2 border-blue-600 text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors"
               >
                 Standard PRT — £14.99
               </Link>
               <Link
-                href="/wizard?product=ast_premium&src=seo_scottish-tenancy-agreement-template&topic=tenancy&jurisdiction=scotland"
+                href="/wizard?product=ast_premium&topic=tenancy&src=seo_scottish_tenancy_agreement_template&jurisdiction=scotland"
                 className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
               >
                 Premium PRT — £24.99

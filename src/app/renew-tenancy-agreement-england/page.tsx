@@ -33,14 +33,14 @@ const PAGE_TYPE = 'tenancy' as const;
 const wizardLinkStandard = buildWizardLink({
   product: 'tenancy_agreement',
   jurisdiction: 'england',
-  src: 'seo_renew-tenancy-agreement-england',
+  src: 'seo_renew_tenancy_agreement_england',
   topic: 'tenancy',
 });
 
 const wizardLinkPremium = buildWizardLink({
   product: 'tenancy_agreement',
   jurisdiction: 'england',
-  src: 'seo_renew-tenancy-agreement-england',
+  src: 'seo_renew_tenancy_agreement_england',
   topic: 'tenancy',
 });
 

@@ -26,7 +26,7 @@ import {
 const wizardLinkNoticeOnly = buildWizardLink({
   product: 'notice_only',
   jurisdiction: 'england',
-  src: 'seo_eviction-cost-uk',
+  src: 'seo_eviction_cost_uk',
   topic: 'eviction',
 });
 

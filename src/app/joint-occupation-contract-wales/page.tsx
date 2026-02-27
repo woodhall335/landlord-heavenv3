@@ -33,14 +33,14 @@ const PAGE_TYPE = 'tenancy' as const;
 const wizardLinkStandard = buildWizardLink({
   product: 'ast_standard',
   jurisdiction: 'wales',
-  src: 'seo_joint-occupation-contract-wales',
+  src: 'seo_joint_occupation_contract_wales',
   topic: 'tenancy',
 });
 
 const wizardLinkPremium = buildWizardLink({
   product: 'ast_premium',
   jurisdiction: 'wales',
-  src: 'seo_joint-occupation-contract-wales',
+  src: 'seo_joint_occupation_contract_wales',
   topic: 'tenancy',
 });
 

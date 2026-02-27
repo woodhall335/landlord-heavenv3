@@ -5,7 +5,8 @@ import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { updatePrtRelatedLinks } from '@/lib/seo/internal-links';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
-import { StandardHero } from '@/components/marketing/StandardHero';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import { FAQSection } from '@/components/seo/FAQSection';
@@ -85,6 +86,7 @@ export default function UpdatePrtTenancyAgreementScotlandPage() {
 
   return (
     <>
+      <HeaderConfig mode="autoOnScroll" />
       <StructuredData data={pageSchema} />
       <StructuredData
         data={breadcrumbSchema([
@@ -107,7 +109,7 @@ export default function UpdatePrtTenancyAgreementScotlandPage() {
 
       <main>
         {/* Hero Section */}
-        <StandardHero
+        <UniversalHero
           badge="Scotland Only"
           badgeIcon={<Scale className="w-4 h-4" />}
           title="Update Your PRT Tenancy Agreement"
@@ -117,11 +119,11 @@ export default function UpdatePrtTenancyAgreementScotlandPage() {
               Scotland. Rent increases, tenant changes, and term variations explained step by step.
             </>
           }
-          primaryCTA={{
+          primaryCta={{
             label: `Create New PRT — ${PRODUCTS.ast_standard.displayPrice}`,
             href: wizardLinkStandard,
           }}
-          secondaryCTA={{
+          secondaryCta={{
             label: 'Premium Agreement with Extras',
             href: wizardLinkPremium,
           }}
@@ -142,7 +144,7 @@ export default function UpdatePrtTenancyAgreementScotlandPage() {
               Ready in Minutes
             </span>
           </div>
-        </StandardHero>
+        </UniversalHero>
 
         {/* Social Proof */}
         <section className="py-6 bg-gray-50 border-y border-gray-100">

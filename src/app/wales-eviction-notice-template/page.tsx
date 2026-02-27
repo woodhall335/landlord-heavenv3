@@ -25,7 +25,7 @@ import {
 const wizardLink = buildWizardLink({
   product: 'notice_only',
   jurisdiction: 'wales',
-  src: 'seo_wales-eviction-notice-template',
+  src: 'seo_wales_eviction_notice_template',
   topic: 'eviction',
 });
 

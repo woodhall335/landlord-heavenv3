@@ -38,7 +38,7 @@ const breadcrumbs = [
 ];
 
 export default function RollingTenancyPage() {
-  const wizardHref = '/wizard?product=tenancy_agreement&topic=tenancy&src=seo_rolling-tenancy-agreement';
+  const wizardHref = '/wizard?product=tenancy_agreement&topic=tenancy&src=seo_rolling_tenancy_agreement';
 
   return (
     <>

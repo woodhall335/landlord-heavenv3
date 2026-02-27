@@ -14,7 +14,8 @@ import {
   guideLinks,
 } from '@/lib/seo/internal-links';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
-import { StandardHero } from '@/components/marketing/StandardHero';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
@@ -40,7 +41,7 @@ import {
 const completePackLink = buildWizardLink({
   product: 'notice_only',
   jurisdiction: 'england',
-  src: 'seo_apply-possession-order-landlord',
+  src: 'seo_apply_possession_order_landlord',
   topic: 'eviction',
 });
 
@@ -85,6 +86,7 @@ export const metadata: Metadata = {
 export default function ApplyPossessionOrderPage() {
   return (
     <>
+      <HeaderConfig mode="autoOnScroll" />
       <SeoLandingWrapper
         pagePath="/apply-possession-order-landlord"
         pageTitle="Apply for Possession Order Landlord"
@@ -113,16 +115,16 @@ export default function ApplyPossessionOrderPage() {
 
       <main>
         {/* Hero Section */}
-        <StandardHero
+        <UniversalHero
           badge="England"
           badgeIcon={<Gavel className="w-4 h-4" />}
           title="Apply for a Possession Order"
           subtitle="Your eviction notice has expired but your tenant has not left. Here is how to apply to the court for a possession order using Form N5B or N5."
-          primaryCTA={{
+          primaryCta={{
             label: `Create Eviction Notice — ${PRODUCTS.notice_only.displayPrice}`,
             href: completePackLink,
           }}
-          secondaryCTA={{
+          secondaryCta={{
             label: 'Need the full court pack instead?',
             href: '/products/complete-pack',
           }}
@@ -142,7 +144,7 @@ export default function ApplyPossessionOrderPage() {
               Step-by-Step Guide
             </span>
           </div>
-        </StandardHero>
+        </UniversalHero>
 
         <section className="py-8 bg-white">
           <div className="container mx-auto px-4">

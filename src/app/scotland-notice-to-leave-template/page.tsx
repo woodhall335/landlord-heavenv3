@@ -26,7 +26,7 @@ import {
 const wizardLink = buildWizardLink({
   product: 'notice_only',
   jurisdiction: 'scotland',
-  src: 'seo_scotland-notice-to-leave-template',
+  src: 'seo_scotland_notice_to_leave_template',
   topic: 'eviction',
 });
 

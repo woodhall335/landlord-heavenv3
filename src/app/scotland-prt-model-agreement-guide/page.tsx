@@ -6,6 +6,9 @@ import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { tenancyAgreementScotlandLinks } from '@/lib/seo/internal-links';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 
 export const metadata: Metadata = {
   title: 'Scotland PRT Model Agreement Guide 2026 | Government Template vs Ours',
@@ -32,6 +35,14 @@ export const metadata: Metadata = {
     url: getCanonicalUrl('/scotland-prt-model-agreement-guide'),
   },
 };
+
+
+const wizardLinkPrt = buildWizardLink({
+  product: 'tenancy_agreement',
+  topic: 'tenancy',
+  jurisdiction: 'scotland',
+  src: 'seo_scotland_prt_model_agreement_guide',
+});
 
 const faqs = [
   {
@@ -87,6 +98,7 @@ const faqs = [
 export default function ScotlandPrtModelAgreementGuidePage() {
   return (
     <>
+      <HeaderConfig mode="autoOnScroll" />
       <StructuredData
         data={articleSchema({
           headline: 'Scotland PRT Model Agreement Guide 2026',
@@ -105,6 +117,14 @@ export default function ScotlandPrtModelAgreementGuidePage() {
       />
 
       <main className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-blue-50">
+
+        <UniversalHero
+          badge="Comparison Guide"
+          title="Scotland PRT Model Agreement: What It Is and What It Lacks"
+          subtitle="The Scottish Government publishes a free model PRT agreement. Learn what it covers, what it omits, and why many landlords use a solicitor-grade drafted alternative."
+          primaryCta={{ label: 'Build Your Scotland PRT Agreement', href: wizardLinkPrt }}
+        />
+
         {/* Breadcrumb */}
         <div className="container mx-auto px-4 pt-24 pb-4">
           <nav className="text-sm text-gray-600">
@@ -125,9 +145,9 @@ export default function ScotlandPrtModelAgreementGuidePage() {
             <span className="inline-flex items-center gap-2 bg-amber-100 text-amber-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
               Comparison Guide
             </span>
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
               Scotland PRT Model Agreement: What It Is and What It Lacks
-            </h1>
+            </h2>
             <p className="text-xl text-gray-700 mb-8 max-w-3xl mx-auto">
               The Scottish Government publishes a free &ldquo;model&rdquo; PRT agreement. But is it enough?
               Learn what the model agreement provides, what it&apos;s missing, and why many landlords

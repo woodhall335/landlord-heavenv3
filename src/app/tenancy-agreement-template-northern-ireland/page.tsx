@@ -33,14 +33,14 @@ const PAGE_TYPE = 'tenancy' as const;
 const wizardLinkStandard = buildWizardLink({
   product: 'tenancy_agreement',
   jurisdiction: 'northern-ireland',
-  src: 'seo_tenancy-agreement-template-northern-ireland',
+  src: 'seo_tenancy_agreement_template_northern_ireland',
   topic: 'tenancy',
 });
 
 const wizardLinkPremium = buildWizardLink({
   product: 'tenancy_agreement',
   jurisdiction: 'northern-ireland',
-  src: 'seo_tenancy-agreement-template-northern-ireland',
+  src: 'seo_tenancy_agreement_template_northern_ireland',
   topic: 'tenancy',
 });
 

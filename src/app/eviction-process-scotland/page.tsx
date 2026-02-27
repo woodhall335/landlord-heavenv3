@@ -43,14 +43,14 @@ import {
 const completePackLink = buildWizardLink({
   product: 'complete_pack',
   jurisdiction: 'scotland',
-  src: 'seo_eviction-process-scotland',
+  src: 'seo_eviction_process_scotland',
   topic: 'eviction',
 });
 
 const noticeOnlyLink = buildWizardLink({
   product: 'notice_only',
   jurisdiction: 'scotland',
-  src: 'seo_eviction-process-scotland',
+  src: 'seo_eviction_process_scotland',
   topic: 'eviction',
 });
 
