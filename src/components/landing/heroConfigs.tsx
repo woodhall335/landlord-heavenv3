@@ -24,8 +24,9 @@ const astPremiumPrice = PRODUCTS.ast_premium.displayPrice;
 
 const astSubtitle: ReactNode = (
   <>
-    Generate a jurisdiction-specific tenancy agreement pack: AST (England), Occupation Contract (Wales), PRT (Scotland),
-    and NI private tenancy, tailored for your jurisdiction.
+    Generate a jurisdiction-specific tenancy agreement: AST (England),
+    Occupation Contract (Wales), PRT (Scotland), and NI private tenancy —
+    tailored to your jurisdiction and compliance requirements.
   </>
 );
 
@@ -35,20 +36,25 @@ const defaultHeroMedia = {
   headerMode: 'autoOnScroll' as HeaderMode,
 };
 
-/**
- * HOME HERO
- * - Shift from "templates/bundles" to solicitor-grade documents
- * - Add proper wizard attribution: product + topic + src
- */
+/* ============================================================
+   HOME HERO
+   ============================================================ */
+
 export const homeHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
-  trustText: 'Court-ready • Updated for current housing law • UK jurisdiction coverage',
+  trustText:
+    'Court-ready • Updated for current housing law • UK jurisdiction coverage',
   title: 'Solicitor-Grade',
   highlightTitle: 'Landlord Documents',
   subtitle: (
     <>
-      Generate legally validated eviction notices, tenancy agreements, and rent recovery claims —
-      <span className="font-semibold"> compliance-checked and ready to file</span>.
+      Generate legally validated eviction notices, tenancy agreements, and rent
+      recovery claims —
+      <span className="font-semibold">
+        {' '}
+        compliance-checked and ready to file
+      </span>
+      .
     </>
   ),
   primaryCta: {
@@ -63,14 +69,19 @@ export const homeHeroConfig: HeroConfig = {
     'Legally validated landlord documents with compliance checks, filing guidance, and jurisdiction-specific outputs.',
 };
 
+/* ============================================================
+   TENANCY AGREEMENTS
+   ============================================================ */
+
 export const astHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
-  trustText: 'AST (England) • Occupation Contract (Wales) • PRT (Scotland) • NI',
+  trustText:
+    'Court-ready • Updated for current housing law • England • Wales • Scotland • NI',
   title: 'Jurisdiction-Specific',
-  highlightTitle: 'Tenancy Agreement Pack',
+  highlightTitle: 'Tenancy Agreement',
   subtitle: astSubtitle,
   primaryCta: {
-    label: 'Generate my tenancy agreement pack →',
+    label: 'Generate my tenancy agreement →',
     href: '/wizard?product=ast_standard&src=product_page&topic=tenancy',
   },
   secondaryCta: {
@@ -78,59 +89,81 @@ export const astHeroConfig: HeroConfig = {
     href: '/wizard?product=ast_premium&src=product_page&topic=tenancy',
   },
   feature:
-    'AST (England), Occupation Contract (Wales), PRT (Scotland), and NI jurisdiction-specific agreements',
+    'AST (England), Occupation Contract (Wales), PRT (Scotland), and NI jurisdiction-specific agreements.',
 };
+
+/* ============================================================
+   NOTICE ONLY (Eviction Notices)
+   ============================================================ */
 
 export const noticeOnlyHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
-  trustText: 'England (S21 & S8) • Wales (S173 & RHW23) • Scotland (Notice to Leave)',
-  title: 'Eviction Notice Bundle',
+  trustText:
+    'Court-ready • Updated for current housing law • England (S21 & S8) • Wales (S173 & RHW23) • Scotland (Notice to Leave)',
+  title: 'Eviction Notice',
+  highlightTitle: 'Documents',
   subtitle:
     'Jurisdiction-specific notices for England, Wales & Scotland — compliance-checked and reform-aware. Preview every document before purchase.',
   primaryCta: {
-    label: 'Generate my notice bundle →',
+    label: 'Generate my eviction notice →',
     href: '/wizard?product=notice_only&src=product_page&topic=eviction',
   },
-  feature: 'Built against statutory frameworks with reform-aware validation and filing guidance',
+  feature:
+    'Built against statutory frameworks with reform-aware validation and filing guidance.',
 };
+
+/* ============================================================
+   COMPLETE PACK (England Court Route)
+   ============================================================ */
 
 export const completePackHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
-  trustText: 'England-only (HMCTS / County Court forms)',
-  title: 'Complete Eviction Case Bundle',
-  highlightTitle: 'HMCTS / County Court forms',
+  trustText:
+    'Court-ready • Updated for current housing law • England-only (HMCTS / County Court forms)',
+  title: 'Complete',
+  highlightTitle: 'Court Bundle',
   subtitle:
     'Section 21/8 notice routes plus N5 / N5B / N119, witness statement drafting, evidence checklist, and filing guide. Preview before purchase.',
   primaryCta: {
-    label: 'Start my England case bundle →',
+    label: 'Start my England court bundle →',
     href: '/wizard?product=complete_pack&src=product_page&topic=eviction',
   },
   feature:
-    'Section 21/8 notice workflows, N5B claim path, evidence checklist, and filing instructions in one case file',
+    'Section 21/8 notice workflows, N5B claim path, evidence checklist, and filing instructions in one structured case file.',
 };
+
+/* ============================================================
+   MONEY CLAIM
+   ============================================================ */
+
+export const moneyClaimHeroConfig: HeroConfig = {
+  ...defaultHeroMedia,
+  trustText:
+    'Court-ready • Updated for current housing law • England-only (County Court / MCOL-ready)',
+  title: 'Money Claim',
+  highlightTitle: 'Documents',
+  subtitle:
+    'For recovering unpaid rent or tenancy-related debt through the County Court (England). You answer guided questions. We structure your claim clearly for filing.',
+  primaryCta: {
+    label: 'Start my England money claim →',
+    href: '/wizard?product=money_claim&topic=debt&src=product_page',
+  },
+  feature:
+    'N1 claim form, PAP-DEBT letter, interest calculation, and structured particulars of claim included.',
+};
+
+/* ============================================================
+   BLOG
+   ============================================================ */
 
 export const blogHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
   trustText: 'Landlord Guides & Insights',
   title: 'Landlord Guides',
-  highlightTitle: 'built for confident decisions',
-  subtitle: 'Practical advice on evictions, tenancy law, and property management for UK landlords.',
+  highlightTitle: 'Built for Confident Decisions',
+  subtitle:
+    'Practical guidance on evictions, tenancy law, and landlord compliance across the UK.',
   primaryCta: { label: 'Browse Guides →', href: '/blog' },
   secondaryCta: { label: 'View Latest Posts →', href: '/blog?view=latest' },
-  feature: 'Step-by-step legal guidance updated for UK regulations',
-};
-
-export const moneyClaimHeroConfig: HeroConfig = {
-  ...defaultHeroMedia,
-  trustText: 'England-only (County Court / MCOL-ready)',
-  title: 'Money Claim Pack',
-  highlightTitle: 'County Court bundle',
-  subtitle:
-    'For recovering unpaid rent or tenancy-related debt through the County Court (England). You answer guided questions. We structure your claim clearly for filing.',
-  primaryCta: {
-    label: 'Start my England money claim bundle →',
-    // ✅ add topic + keep src attribution
-    href: '/wizard?product=money_claim&topic=debt&src=product_page',
-  },
-  feature: 'N1 claim form, PAP-DEBT letter, and interest calculator included',
+  feature: 'Step-by-step legal guidance updated for current UK regulations.',
 };
