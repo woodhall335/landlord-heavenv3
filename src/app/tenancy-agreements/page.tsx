@@ -3,24 +3,24 @@ import { getCanonicalUrl } from '@/lib/seo/urls';
 import { McolStyleScaffold } from '@/components/seo/McolStyleScaffold';
 import { Container } from '@/components/ui';
 
-const canonicalUrl = getCanonicalUrl('/section-21-notice-template');
+const canonicalUrl = getCanonicalUrl('/tenancy-agreements');
 
 export const metadata: Metadata = {
-  title: 'Section 21 Notice Template | Landlord Heaven',
-  description: 'Guide, templates, and practical next steps for Section 21 Notice Template.',
+  title: 'Tenancy Agreements | Landlord Heaven',
+  description: 'Guide, templates, and practical next steps for Tenancy Agreements.',
   alternates: { canonical: canonicalUrl },
   openGraph: {
-    title: 'Section 21 Notice Template | Landlord Heaven',
-    description: 'Guide, templates, and practical next steps for Section 21 Notice Template.',
+    title: 'Tenancy Agreements | Landlord Heaven',
+    description: 'Guide, templates, and practical next steps for Tenancy Agreements.',
     url: canonicalUrl,
     type: 'article',
   },
 };
 
-export default function Section21NoticeTemplatePage() {
+export default function TenancyAgreementsPage() {
   const primaryCta = {
     label: 'Start now with guided wizard →',
-    href: '/wizard?product=notice_only&src=seo_section_21_notice_template&topic=eviction',
+    href: '/wizard?product=ast_standard&src=seo_tenancy_agreements&topic=tenancy',
   };
 
   const secondaryCta = {
@@ -31,13 +31,13 @@ export default function Section21NoticeTemplatePage() {
   return (
     <McolStyleScaffold
       canonicalUrl={canonicalUrl}
-      title={'Section 21 Notice Template'}
+      title={'Tenancy Agreements'}
       subtitle={'Understand the process, avoid mistakes, and take the next step confidently.'}
       badge={'Landlord guide'}
       trustText={'Used by UK landlords • Practical templates • Step-by-step guidance'}
       primaryCta={primaryCta}
       secondaryCta={secondaryCta}
-      topicLabel={'Eviction pathway'}
+      topicLabel={'Tenancy pathway'}
       intro={'This page keeps the same route intent and is now presented in the same visual system as the MCOL page for consistent experience and conversion flow.'}
       faqs={[
         { question: 'Who is this for?', answer: 'This guide is designed for landlords who need a clear, practical route forward.' },

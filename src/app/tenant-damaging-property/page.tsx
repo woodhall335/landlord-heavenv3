@@ -1,220 +1,69 @@
-import { Metadata } from 'next';
-import Link from 'next/link';
-import { Container } from '@/components/ui/Container';
-import { getCanonicalUrl } from '@/lib/seo';
-import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
-import { FAQSection } from '@/components/seo/FAQSection';
-import { tenantDamagingPropertyFAQs } from '@/data/faqs';
+import type { Metadata } from 'next';
+import { getCanonicalUrl } from '@/lib/seo/urls';
+import { McolStyleScaffold } from '@/components/seo/McolStyleScaffold';
+import { Container } from '@/components/ui';
+
+const canonicalUrl = getCanonicalUrl('/tenant-damaging-property');
 
 export const metadata: Metadata = {
-  title: 'Tenant Damaging Property | Landlord Rights & Actions UK 2026',
-  description:
-    'What to do when a tenant damages your property. Learn about your legal options including Section 8 eviction, deposit deductions, and money claims for damages.',
-  keywords: [
-    'tenant damaging property',
-    'tenant damage to property',
-    'landlord property damage',
-    'tenant causing damage',
-    'evict tenant for damage',
-    'claim damages from tenant',
-    'section 8 ground 13',
-  ],
+  title: 'Tenant Damaging Property | Landlord Heaven',
+  description: 'Guide, templates, and practical next steps for Tenant Damaging Property.',
+  alternates: { canonical: canonicalUrl },
   openGraph: {
     title: 'Tenant Damaging Property | Landlord Heaven',
-    description:
-      'What landlords can do when tenants damage their property - eviction, deposit, and claims.',
+    description: 'Guide, templates, and practical next steps for Tenant Damaging Property.',
+    url: canonicalUrl,
     type: 'article',
-    url: getCanonicalUrl('/tenant-damaging-property'),
-  },
-  alternates: {
-    canonical: getCanonicalUrl('/tenant-damaging-property'),
   },
 };
 
-const breadcrumbs = [
-  { name: 'Home', url: '/' },
-  { name: 'Tenant Damaging Property', url: '/tenant-damaging-property' },
-];
-
 export default function TenantDamagingPropertyPage() {
+  const primaryCta = {
+    label: 'Start now with guided wizard →',
+    href: '/wizard?product=ast_standard&src=seo_tenant_damaging_property&topic=tenancy',
+  };
+
+  const secondaryCta = {
+    label: 'Browse products →',
+    href: '/products',
+  };
+
   return (
-    <>
-      <StructuredData data={breadcrumbSchema(breadcrumbs)} />
-
-      <div className="min-h-screen bg-gray-50">
-        {/* Hero Section */}
-        <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-20">
-          <Container>
-            <div className="max-w-3xl mx-auto text-center">
-              <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-                <span className="text-sm font-semibold text-primary">Landlord Guide</span>
-              </div>
-              <h1 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
-                Tenant Damaging Property: Your Options
-              </h1>
-              <p className="text-xl text-gray-600 mb-8">
-                When a tenant damages your property, you have several legal options. This guide
-                covers eviction, deposit deductions, and money claims.
-              </p>
-            </div>
-          </Container>
-        </section>
-
-        {/* Main Content */}
+    <McolStyleScaffold
+      canonicalUrl={canonicalUrl}
+      title={'Tenant Damaging Property'}
+      subtitle={'Understand the process, avoid mistakes, and take the next step confidently.'}
+      badge={'Landlord guide'}
+      trustText={'Used by UK landlords • Practical templates • Step-by-step guidance'}
+      primaryCta={primaryCta}
+      secondaryCta={secondaryCta}
+      topicLabel={'Tenancy pathway'}
+      intro={'This page keeps the same route intent and is now presented in the same visual system as the MCOL page for consistent experience and conversion flow.'}
+      faqs={[
+        { question: 'Who is this for?', answer: 'This guide is designed for landlords who need a clear, practical route forward.' },
+        { question: 'What does the wizard do?', answer: 'It asks a few questions and routes you to the right document and process.' },
+        { question: 'Is this suitable across UK jurisdictions?', answer: 'The journey is designed to surface the right pathway based on your answers and location.' },
+      ]}
+      relatedLinks={[
+        { href: '/money-claim-online-mcol', title: 'Money Claim Online (MCOL)' },
+        { href: '/eviction-process-england', title: 'Eviction Process (England)' },
+        { href: '/tenancy-agreement-template', title: 'Tenancy Agreement Template' },
+      ]}
+    >
+      <section className="py-10 md:py-14">
         <Container>
-          <div className="max-w-4xl mx-auto py-12">
-            <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm mb-12">
-              <div className="prose prose-slate max-w-none">
-                <h2>Step 1: Document the Damage</h2>
-                <p>
-                  Before taking any action, thoroughly document the damage:
-                </p>
-                <ul>
-                  <li>
-                    <strong>Photographs:</strong> Take dated photos of all damage from multiple angles
-                  </li>
-                  <li>
-                    <strong>Video:</strong> A walkthrough video can provide context
-                  </li>
-                  <li>
-                    <strong>Written report:</strong> Describe each item of damage in writing
-                  </li>
-                  <li>
-                    <strong>Quotes/invoices:</strong> Get repair estimates or invoices from contractors
-                  </li>
-                  <li>
-                    <strong>Inventory comparison:</strong> Compare to the check-in inventory
-                  </li>
-                </ul>
-
-                <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 my-6">
-                  <p className="text-amber-800 font-semibold mb-2">Important</p>
-                  <p className="text-amber-700 text-sm">
-                    Good documentation is essential. Without evidence, you&apos;ll struggle to prove your
-                    case in deposit disputes or court proceedings.
-                  </p>
-                </div>
-
-                <h2>Option 1: Eviction (Section 8)</h2>
-                <p>
-                  If the damage is serious enough, you can seek to evict the tenant using Section 8
-                  grounds:
-                </p>
-
-                <h3>Ground 13 - Property Deterioration</h3>
-                <p>
-                  &quot;The condition of the dwelling-house or any of the common parts has deteriorated
-                  owing to acts of waste by, or the neglect or default of, the tenant.&quot;
-                </p>
-                <ul>
-                  <li>This is a <strong>discretionary ground</strong></li>
-                  <li>The court will consider if eviction is reasonable</li>
-                  <li>Notice period: 2 weeks minimum</li>
-                </ul>
-
-                <h3>Ground 12 - Breach of Tenancy</h3>
-                <p>
-                  If the tenant has breached a term of the tenancy agreement (e.g., a clause
-                  requiring them to maintain the property), you can use Ground 12.
-                </p>
-                <ul>
-                  <li>This is a <strong>discretionary ground</strong></li>
-                  <li>Check your tenancy agreement for relevant clauses</li>
-                  <li>Notice period: 2 weeks minimum</li>
-                </ul>
-
-                <h2>Option 2: Deposit Deductions</h2>
-                <p>
-                  You can deduct repair costs from the tenant&apos;s deposit for damage beyond normal
-                  wear and tear. The process:
-                </p>
-                <ol>
-                  <li>Document all damage with photos and inventory comparison</li>
-                  <li>Get quotes or invoices for repairs</li>
-                  <li>Propose deductions to the tenant in writing</li>
-                  <li>If they agree, deduct and return the remainder</li>
-                  <li>If they dispute, use the deposit scheme&apos;s free dispute resolution</li>
-                </ol>
-
-                <h3>Wear and Tear vs Damage</h3>
-                <p>
-                  You cannot deduct for normal wear and tear. Examples:
-                </p>
-                <ul>
-                  <li>
-                    <strong>Wear and tear:</strong> Faded curtains, worn carpet in doorways, small
-                    marks on walls
-                  </li>
-                  <li>
-                    <strong>Damage:</strong> Holes in walls, burns in carpet, broken fixtures,
-                    stained/ripped curtains
-                  </li>
-                </ul>
-
-                <h2>Option 3: Money Claim</h2>
-                <p>
-                  If the damage costs exceed the deposit, you can make a money claim through the
-                  county court:
-                </p>
-                <ol>
-                  <li>
-                    Follow the{' '}
-                    <Link href="/pre-action-protocol-debt">Pre-Action Protocol for Debt Claims</Link>
-                  </li>
-                  <li>Send a Letter Before Claim with evidence of the damage</li>
-                  <li>Wait 30 days for a response</li>
-                  <li>
-                    If no satisfactory response, start a claim via{' '}
-                    <Link href="/money-claim-online-mcol">Money Claim Online (MCOL)</Link>
-                  </li>
-                </ol>
-
-                <h2>Can I Do Both Eviction and Money Claim?</h2>
-                <p>
-                  Yes. You can pursue eviction to remove the tenant AND a separate money claim to
-                  recover repair costs. These are separate legal processes.
-                </p>
-
-                <h2>What About Criminal Damage?</h2>
-                <p>
-                  If the damage is deliberate and severe, it may constitute criminal damage. You can
-                  report it to the police, though they may treat it as a civil matter in some cases.
-                  A police report can support your civil case.
-                </p>
-              </div>
+          <div className="mx-auto grid max-w-5xl gap-5 md:grid-cols-2">
+            <div className="rounded-2xl border border-[#E6DBFF] bg-white p-6 shadow-sm">
+              <h2 className="text-xl font-semibold text-slate-900">Key points</h2>
+              <p className="mt-3 text-slate-700">Use this section to review requirements, timelines, and the safest next action for your case.</p>
             </div>
-
-            {/* FAQ Section */}
-            <div className="mb-12">
-              <FAQSection
-          showTrustPositioningBar
-                faqs={tenantDamagingPropertyFAQs}
-                title="Tenant Property Damage FAQ"
-                showContactCTA={false}
-                variant="white"
-              />
-            </div>
-
-            {/* CTA */}
-            <div className="p-8 bg-purple-50 rounded-2xl text-center">
-              <h2 className="text-2xl font-bold mb-4 text-gray-900">
-                Need to Take Action?
-              </h2>
-              <p className="text-gray-600 mb-6">
-                Generate eviction notices or start a money claim for property damage.
-              </p>
-              <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Link href="/tools/free-section-8-notice-generator" className="hero-btn-primary">
-                  Section 8 Notice
-                </Link>
-                <Link href="/products/money-claim" className="hero-btn-secondary">
-                  Money Claim Pack
-                </Link>
-              </div>
+            <div className="rounded-2xl border border-[#E6DBFF] bg-white p-6 shadow-sm">
+              <h2 className="text-xl font-semibold text-slate-900">Next action</h2>
+              <p className="mt-3 text-slate-700">Start the wizard for a tailored path with document-ready outputs.</p>
             </div>
           </div>
         </Container>
-      </div>
-    </>
+      </section>
+    </McolStyleScaffold>
   );
 }
