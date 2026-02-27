@@ -11,6 +11,8 @@ import {
 } from '@/lib/seo/internal-links';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { StandardHero } from '@/components/marketing/StandardHero';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { n5bFormFAQs } from '@/data/faqs';
@@ -26,9 +28,9 @@ import {
 } from 'lucide-react';
 
 const wizardLinkCompletePack = buildWizardLink({
-  product: 'complete_pack',
+  product: 'notice_only',
   jurisdiction: 'england',
-  src: 'guide',
+  src: 'seo_n5b-form-guide',
   topic: 'eviction',
 });
 
@@ -56,6 +58,7 @@ export const metadata: Metadata = {
     title: 'N5B Form Guide UK — Accelerated Possession | Landlord Heaven',
     description: 'How to use Form N5B for accelerated possession after serving Section 21 notice. Step-by-step guide.',
     type: 'website',
+    url: 'https://landlordheaven.co.uk/n5b-form-guide',
   },
 };
 
@@ -78,6 +81,16 @@ export default function N5BFormGuidePage() {
       ])} />
 
       <main>
+        <HeaderConfig mode="autoOnScroll" />
+        <UniversalHero
+          title="N5B Form Guide"
+          subtitle="Use accelerated possession correctly after Section 21 service, with filing steps and evidence checks."
+          primaryCta={{ label: 'Get Complete Pack — £129.99', href: wizardLinkCompletePack }}
+          secondaryCta={{ label: 'Need Section 21 First?', href: '/section-21-notice-template' }}
+          showTrustPositioningBar
+          hideMedia
+        />
+
         {/* Hero Section */}
         <StandardHero
           badge="Section 21 Only"

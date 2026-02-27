@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getCanonicalUrl } from '@/lib/seo/urls';
-import { StructuredData, breadcrumbSchema, articleSchema } from '@/lib/seo/structured-data';
+import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import {
   AlertTriangle,
   CheckCircle,
@@ -64,19 +66,11 @@ const evictionGrounds = [
   { ground: '18', description: 'Overcrowding statutory notice', notice: '28 days', type: 'Mandatory' },
 ];
 
+const wizardHref = '/wizard?product=notice_only&src=seo_scotland-eviction-notices&topic=eviction';
+
 export default function ScotlandEvictionNoticesPage() {
   return (
     <>
-      <StructuredData
-        data={articleSchema({
-          headline: 'Scotland Eviction Notices (Landlord Guide)',
-          description:
-            'Landlord guide to Scottish eviction notices, Notice to Leave requirements, and tribunal steps.',
-          url: getCanonicalUrl('/scotland-eviction-notices'),
-          datePublished: '2026-01-01',
-          dateModified: '2026-01-01',
-        })}
-      />
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: 'https://landlordheaven.co.uk' },
@@ -86,6 +80,16 @@ export default function ScotlandEvictionNoticesPage() {
       />
 
       <main className="min-h-screen bg-gray-50">
+        <HeaderConfig mode="autoOnScroll" />
+        <UniversalHero
+          title="Scotland Eviction Notices"
+          subtitle="Understand Notice to Leave rules, PRT eviction grounds, and the First-tier Tribunal route for landlords in Scotland."
+          primaryCta={{ label: 'Start Scotland Notice', href: wizardHref }}
+          secondaryCta={{ label: 'Scotland PRT Agreements', href: '/private-residential-tenancy-agreement-template' }}
+          showTrustPositioningBar
+          hideMedia
+        />
+
         {/* Hero Section */}
         <section className="bg-gradient-to-br from-blue-900 to-blue-800 text-white py-16 lg:py-24">
           <div className="container mx-auto px-4">
@@ -94,9 +98,9 @@ export default function ScotlandEvictionNoticesPage() {
                 <span className="text-5xl">🏴󠁧󠁢󠁳󠁣󠁴󠁿</span>
               </div>
 
-              <h1 className="text-4xl lg:text-5xl font-bold mb-6">
+              <h2 className="text-4xl lg:text-5xl font-bold mb-6">
                 Scotland Eviction Notices (Landlord Guide)
-              </h1>
+              </h2>
 
               <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
                 Complete guide to <strong>Notice to Leave</strong> and{' '}
@@ -118,7 +122,7 @@ export default function ScotlandEvictionNoticesPage() {
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
-                  href="/products/notice-only"
+                  href={wizardHref}
                   className="inline-flex items-center justify-center gap-2 bg-white text-blue-800 font-semibold py-4 px-8 rounded-xl hover:bg-blue-50 transition-colors"
                 >
                   Get Scotland Notice — £49.99

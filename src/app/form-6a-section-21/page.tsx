@@ -6,6 +6,8 @@ import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { form6aFAQs } from '@/data/faqs';
 import { FunnelCta } from '@/components/funnels';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 
 export const metadata: Metadata = {
   title: 'Form 6A Section 21 Notice | Official Template + Guide',
@@ -38,6 +40,8 @@ const breadcrumbs = [
   { name: 'Form 6A Section 21', url: '/form-6a-section-21' },
 ];
 
+const wizardHref = '/wizard?product=notice_only&src=seo_form-6a-section-21&topic=eviction';
+
 export default function Form6APage() {
 
   const enhancedFaqs = [
@@ -52,6 +56,16 @@ export default function Form6APage() {
       <StructuredData data={breadcrumbSchema(breadcrumbs)} />
 
       <div className="min-h-screen bg-gray-50">
+        <HeaderConfig mode="autoOnScroll" />
+        <UniversalHero
+          title="Form 6A Section 21 Guide"
+          subtitle="Follow the prescribed Form 6A requirements and generate a compliance-checked Section 21 notice workflow."
+          primaryCta={{ label: 'Start Notice Only', href: wizardHref }}
+          secondaryCta={{ label: 'Need full eviction support?', href: '/products/complete-pack' }}
+          showTrustPositioningBar
+          hideMedia
+        />
+
         {/* Hero Section */}
         <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-20">
           <Container>
@@ -59,9 +73,9 @@ export default function Form6APage() {
               <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
                 <span className="text-sm font-semibold text-primary">England Only</span>
               </div>
-              <h1 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
+              <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
                 Form 6A Section 21 Notice Template (England)
-              </h1>
+              </h2>
               <p className="text-xl text-gray-600 mb-8">
                 Need a Form 6A Section 21 notice? Form 6A is the prescribed notice for no-fault possession in England, and small errors can invalidate your notice. This page shows what to include, how to set dates correctly, and when to use a compliance-checked Notice Only service.
               </p>
@@ -74,7 +88,7 @@ export default function Form6APage() {
             <FunnelCta
               title="Get a compliant Form 6A drafted and served"
               subtitle="Start with Notice Only now, and move to full possession support if the tenant stays."
-              primaryHref="/products/notice-only"
+              primaryHref={wizardHref}
               primaryText="Start Notice Only"
               primaryDataCta="notice-only"
               location="above-fold"

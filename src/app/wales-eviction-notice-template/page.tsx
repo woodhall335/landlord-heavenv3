@@ -5,6 +5,8 @@ import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, guideLinks, askHeavenLink } from '@/lib/seo/internal-links';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { StandardHero } from '@/components/marketing/StandardHero';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { AskHeavenWidget } from '@/components/ask-heaven/AskHeavenWidget';
 import { FAQSection } from '@/components/seo/FAQSection';
@@ -23,7 +25,7 @@ import {
 const wizardLink = buildWizardLink({
   product: 'notice_only',
   jurisdiction: 'wales',
-  src: 'template',
+  src: 'seo_wales-eviction-notice-template',
   topic: 'eviction',
 });
 
@@ -115,6 +117,16 @@ export default function WalesEvictionNoticeTemplatePage() {
       />
 
       <main>
+        <HeaderConfig mode="autoOnScroll" />
+        <UniversalHero
+          title="Wales Eviction Notice Guide"
+          subtitle="Create Wales possession notices under the Renting Homes Act with the right route, notice periods, and evidence details."
+          primaryCta={{ label: 'Start Wales Notice', href: wizardLink }}
+          secondaryCta={{ label: 'Learn About Wales Eviction', href: '/wales-eviction-notices' }}
+          showTrustPositioningBar
+          hideMedia
+        />
+
         {/* Hero Section */}
         <StandardHero
           badge="Wales Renting Homes Act"

@@ -27,9 +27,9 @@ import {
 } from 'lucide-react';
 
 const wizardLinkCompletePack = buildWizardLink({
-  product: 'complete_pack',
+  product: 'notice_only',
   jurisdiction: 'england',
-  src: 'seo_possession_claim_guide',
+  src: 'seo_possession-claim-guide',
   topic: 'eviction',
 });
 
@@ -55,6 +55,7 @@ export const metadata: Metadata = {
     title: 'Possession Claim Guide UK — Court Process Explained | Landlord Heaven',
     description: 'Step-by-step guide to applying for court possession orders. Forms, fees, and timelines for UK landlords.',
     type: 'website',
+    url: 'https://landlordheaven.co.uk/possession-claim-guide',
   },
 };
 

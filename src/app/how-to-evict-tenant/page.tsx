@@ -47,7 +47,7 @@ const complianceLinks = {
   }),
 };
 
-const wizardHref = '/wizard?product=notice_only&src=seo_how_to_evict_tenant&topic=eviction';
+const wizardHref = '/wizard?product=notice_only&src=seo_how-to-evict-tenant&topic=eviction';
 
 export const metadata: Metadata = {
   title: 'How to Evict a Tenant in 2026 (Landlord Guide)',
@@ -84,8 +84,6 @@ export default function HowToEvictTenantPage() {
           description:
             'Landlord guide to eviction steps, notice periods, court routes, and compliant documents across the UK.',
           url: getCanonicalUrl('/how-to-evict-tenant'),
-          datePublished: '2026-01-01',
-          dateModified: '2026-01-01',
         })}
       />
       <StructuredData
