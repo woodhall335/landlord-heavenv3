@@ -3,7 +3,6 @@ import Link from 'next/link';
 import {
   StructuredData,
   breadcrumbSchema,
-  articleSchema,
   HOWTO_SCHEMAS,
 } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo/urls';
@@ -17,7 +16,8 @@ import {
   moneyClaimGuides,
 } from '@/lib/seo/internal-links';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
-import { StandardHero } from '@/components/marketing/StandardHero';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
@@ -57,7 +57,7 @@ const moneyClaimLink = buildWizardLink({
   product: 'money_claim',
   jurisdiction: 'england',
   src: 'seo_money_claim',
-  topic: 'money_claim',
+  topic: 'debt',
 });
 
 export const metadata: Metadata = {
@@ -110,16 +110,6 @@ export default function Section8RentArrearsEvictionPage() {
 
       {/* Structured Data */}
       <StructuredData
-        data={articleSchema({
-          headline: 'Section 8 Rent Arrears Eviction: Ground 8, 10, 11 Guide',
-          description:
-            'Complete guide to evicting a tenant for rent arrears using Section 8 notice. Covers Ground 8 mandatory eviction, notice periods, and court process.',
-          url: getCanonicalUrl('/section-8-rent-arrears-eviction'),
-          datePublished: '2026-01-30',
-          dateModified: '2026-01-30',
-        })}
-      />
-      <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: getCanonicalUrl('/') },
           { name: 'Eviction Guides', url: getCanonicalUrl('/how-to-evict-tenant') },
@@ -128,44 +118,17 @@ export default function Section8RentArrearsEvictionPage() {
       />
       <StructuredData data={HOWTO_SCHEMAS.section8Process} />
 
+      <HeaderConfig mode="autoOnScroll" />
       <main>
         {/* Hero Section */}
-        <StandardHero
-          badge="England"
-          badgeIcon={<PoundSterling className="w-4 h-4" />}
-          title={
-            <>
-              Section 8 Eviction
-              <br />
-              <span className="text-primary">For Rent Arrears</span>
-            </>
-          }
-          subtitle="Evict your tenant for unpaid rent using Section 8 Grounds 8, 10, and 11. Only 2 weeks notice required. Ground 8 gives mandatory possession."
-          primaryCTA={{
-            label: `Get Section 8 Notice — ${PRODUCTS.notice_only.displayPrice}`,
-            href: noticeOnlyLink,
-          }}
-          secondaryCTA={{
-            label: 'Also Need Court Forms?',
-            href: completePackLink,
-          }}
-          variant="pastel"
-        >
-          <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600 mt-4">
-            <span className="flex items-center gap-2">
-              <Clock className="w-4 h-4 text-green-500" />
-              2 Weeks Notice
-            </span>
-            <span className="flex items-center gap-2">
-              <Shield className="w-4 h-4 text-green-500" />
-              Ground 8 Mandatory
-            </span>
-            <span className="flex items-center gap-2">
-              <CheckCircle className="w-4 h-4 text-green-500" />
-              Grounds 8, 10, 11 Included
-            </span>
-          </div>
-        </StandardHero>
+        <UniversalHero
+          title="Section 8 Rent Arrears Eviction"
+          subtitle="Follow a legally validated, solicitor-grade, compliance-checked and court-ready route for Grounds 8, 10 and 11."
+          primaryCta={{ label: `Get Section 8 Notice — ${PRODUCTS.notice_only.displayPrice}`, href: noticeOnlyLink }}
+          secondaryCta={{ label: 'Also Need Court Forms?', href: completePackLink }}
+          showTrustPositioningBar
+          hideMedia
+        />
 
         {/* Social Proof */}
         <section className="py-6 bg-gray-50 border-y border-gray-100">

@@ -5,7 +5,8 @@ import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, toolLinks, blogLinks, landingPageLinks } from '@/lib/seo/internal-links';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
-import { StandardHero } from '@/components/marketing/StandardHero';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { section8NoticeTemplateFAQs } from '@/data/faqs';
 import { FunnelCta, CrossSellBar } from '@/components/funnels';
@@ -29,14 +30,14 @@ import {
 const wizardLinkCompletePack = buildWizardLink({
   product: 'complete_pack',
   jurisdiction: 'england',
-  src: 'template',
+  src: 'seo_section_8_notice_template',
   topic: 'eviction',
 });
 
 const wizardLinkNoticeOnly = buildWizardLink({
   product: 'notice_only',
   jurisdiction: 'england',
-  src: 'template',
+  src: 'seo_section_8_notice_template',
   topic: 'eviction',
 });
 
@@ -107,48 +108,17 @@ export default function Section8NoticeTemplatePage() {
         { name: "Section 8 Notice Template", url: "https://landlordheaven.co.uk/section-8-notice-template" }
       ])} />
 
+      <HeaderConfig mode="autoOnScroll" />
       <main>
         {/* Hero Section */}
-        <StandardHero
-          badge="Works after May 2026"
-          badgeIcon={<CheckCircle className="w-4 h-4" />}
-          title="Section 8 Notice Template (Form 3) for England"
-          subtitle={<>Need a <strong>Section 8 notice template</strong>? Use this Form 3 guide to choose the right grounds, notice periods, and wording for rent arrears, antisocial behaviour, and other tenancy breaches.</>}
-          primaryCTA={{ label: "Get Complete Pack — £129.99", href: wizardLinkCompletePack }}
-          secondaryCTA={{ label: "Try Free Starter Document", href: "/tools/free-section-8-notice-generator" }}
-          variant="pastel"
-        >
-          {/* Jurisdiction Notice - England Only */}
-          <div className="bg-amber-50 border-l-4 border-amber-500 p-4 mb-6 rounded-r-lg max-w-2xl mx-auto text-left">
-            <p className="text-amber-900 text-sm">
-              <strong>England only:</strong> Section 8 notices apply to <strong>England only</strong>.
-              Different eviction grounds and processes apply in{' '}
-              <Link href="/wales-eviction-notices" className="text-amber-700 underline hover:text-amber-900">
-                Wales (Renting Homes Act)
-              </Link>{' '}
-              and{' '}
-              <Link href="/scotland-eviction-notices" className="text-amber-700 underline hover:text-amber-900">
-                Scotland (PRT eviction grounds)
-              </Link>.
-            </p>
-          </div>
-
-          {/* Trust Signals */}
-          <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600">
-            <span className="flex items-center gap-2">
-              <CheckCircle className="w-4 h-4 text-green-500" />
-              17 Grounds Covered
-            </span>
-            <span className="flex items-center gap-2">
-              <Shield className="w-4 h-4 text-green-500" />
-              Designed for Court Acceptance
-            </span>
-            <span className="flex items-center gap-2">
-              <Clock className="w-4 h-4 text-green-500" />
-              Ready in 5 Minutes
-            </span>
-          </div>
-        </StandardHero>
+        <UniversalHero
+          title="Section 8 Notice for Landlords"
+          subtitle="Prepare a legally validated, solicitor-grade, compliance-checked and court-ready Section 8 notice."
+          primaryCta={{ label: "Start Section 8 Wizard", href: wizardLinkNoticeOnly }}
+          secondaryCta={{ label: "Complete eviction path", href: wizardLinkCompletePack }}
+          showTrustPositioningBar
+          hideMedia
+        />
 
         <section className="py-8 bg-white">
           <div className="container mx-auto px-4">

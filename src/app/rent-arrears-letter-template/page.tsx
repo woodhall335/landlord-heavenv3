@@ -1,11 +1,12 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { StructuredData } from '@/lib/seo/structured-data';
+import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, toolLinks, blogLinks, landingPageLinks } from '@/lib/seo/internal-links';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
-import { StandardHero } from '@/components/marketing/StandardHero';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { FunnelCta } from '@/components/funnels';
 import {
   CheckCircle,
@@ -26,14 +27,14 @@ import {
 // Pre-built wizard links for rent arrears template page
 const wizardLinkMoneyClaim = buildWizardLink({
   product: 'money_claim',
-  src: 'template',
-  topic: 'arrears',
+  src: 'seo_rent_arrears_letter_template',
+  topic: 'debt',
 });
 
 const wizardLinkNoticeOnly = buildWizardLink({
   product: 'notice_only',
-  src: 'template',
-  topic: 'arrears',
+  src: 'seo_rent_arrears_letter_template',
+  topic: 'debt',
 });
 
 export const metadata: Metadata = {
@@ -48,10 +49,12 @@ export const metadata: Metadata = {
     'tenant rent arrears',
     'formal rent demand',
   ],
+  alternates: { canonical: 'https://landlordheaven.co.uk/rent-arrears-letter-template' },
   openGraph: {
     title: 'Rent Arrears Letter Template - Free Download | Landlord Heaven',
     description: 'Download a free rent arrears letter template. Formal demand letters for unpaid rent.',
     type: 'website',
+    url: 'https://landlordheaven.co.uk/rent-arrears-letter-template',
   },
 };
 
@@ -152,33 +155,18 @@ export default function RentArrearsLetterTemplatePage() {
       <StructuredData data={pageSchema} />
       <StructuredData data={faqSchema} />
 
+      <HeaderConfig mode="autoOnScroll" />
+      <StructuredData data={breadcrumbSchema([{ name: 'Home', url: 'https://landlordheaven.co.uk' }, { name: 'Rent Arrears Letter Template', url: 'https://landlordheaven.co.uk/rent-arrears-letter-template' }])} />
       <main>
         {/* Hero Section */}
-        <StandardHero
-          badge="Recover your rent"
-          badgeIcon={<PoundSterling className="w-4 h-4" />}
-          title="Rent Arrears Letter Template UK"
-          subtitle={<>Use this <strong>rent arrears letter template UK</strong> landlords rely on to chase unpaid rent quickly, set clear deadlines, and escalate correctly if payment is still not made.</>}
-          primaryCTA={{ label: "Get Money Claim Pack — £99.99", href: wizardLinkMoneyClaim }}
-          secondaryCTA={{ label: "Try Free Starter Document", href: "/tools/free-rent-demand-letter" }}
-          variant="pastel"
-        >
-          {/* Trust Signals */}
-          <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600">
-            <span className="flex items-center gap-2">
-              <CheckCircle className="w-4 h-4 text-green-500" />
-              Professional Format
-            </span>
-            <span className="flex items-center gap-2">
-              <Shield className="w-4 h-4 text-green-500" />
-              Legally Sound
-            </span>
-            <span className="flex items-center gap-2">
-              <Clock className="w-4 h-4 text-green-500" />
-              Ready in 2 Minutes
-            </span>
-          </div>
-        </StandardHero>
+        <UniversalHero
+          title="Rent Arrears Letter for Landlords"
+          subtitle="Use legally validated, solicitor-grade, compliance-checked and court-ready wording before escalation."
+          primaryCta={{ label: "Start Money Claim Wizard", href: wizardLinkMoneyClaim }}
+          secondaryCta={{ label: "Section 8 route", href: wizardLinkNoticeOnly }}
+          showTrustPositioningBar
+          hideMedia
+        />
 
         <section className="py-8 bg-white">
           <div className="container mx-auto px-4">

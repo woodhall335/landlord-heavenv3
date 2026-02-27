@@ -5,6 +5,8 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import AskHeavenPageClient from './AskHeavenPageClient';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { getCanonicalUrl } from '@/lib/seo';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { buildAskHeavenLink, type AskHeavenTopic } from '@/lib/ask-heaven/buildAskHeavenLink';
@@ -281,6 +283,7 @@ export default async function AskHeavenPage({
 
   return (
     <>
+      <HeaderConfig mode="autoOnScroll" />
       {/* SSR Structured Data - visible to Googlebot immediately */}
       <StructuredData
         data={breadcrumbSchema([
@@ -291,8 +294,13 @@ export default async function AskHeavenPage({
       />
       <StructuredData data={complianceTopicsItemListSchema()} />
 
-      {/* Hidden H1 for SEO - visually hidden but accessible */}
-      <h1 className="sr-only">Ask Heaven: Free UK Landlord Q&A Tool</h1>
+      <UniversalHero
+        title="Ask Heaven: Legally Validated Landlord Q&A"
+        subtitle="Get solicitor-grade, compliance-checked and court-ready guidance, then move straight into the right workflow."
+        primaryCta={{ label: 'Start Wizard', href: '/wizard?product=notice_only&src=seo_ask_heaven&topic=eviction' }}
+        showTrustPositioningBar
+        hideMedia
+      />
 
       {/* Client-side interactive widget - now prominently placed first */}
       <AskHeavenPageClient
