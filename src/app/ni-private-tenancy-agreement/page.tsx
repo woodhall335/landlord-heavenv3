@@ -18,10 +18,12 @@ import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { tenancyAgreementNILinks } from '@/lib/seo/internal-links';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 
 export const metadata: Metadata = {
-  title: 'Private Tenancy Agreement NI | Complete 2026 Guide & Template',
-  description: 'Complete guide to Private Tenancy Agreements in Northern Ireland. Understand your rights under the Private Tenancies Act 2022 and create a compliant agreement.',
+  title: 'Northern Ireland Private Tenancy Agreement 2026 | Legally Validated',
+  description: 'Create a Northern Ireland private tenancy agreement with solicitor-grade drafting and compliance-checked terms.',
   keywords: [
     'private tenancy agreement NI',
     'NI private tenancy',
@@ -38,8 +40,8 @@ export const metadata: Metadata = {
     canonical: getCanonicalUrl('/ni-private-tenancy-agreement'),
   },
   openGraph: {
-    title: 'Private Tenancy Agreement NI | Complete 2026 Guide & Template',
-    description: 'Complete guide to Private Tenancies in Northern Ireland. Private Tenancies Act 2022 explained.',
+    title: 'Northern Ireland Private Tenancy Agreement 2026 | Legally Validated',
+    description: 'Legally validated NI private tenancy agreement with compliance-checked clauses.',
     type: 'article',
     url: getCanonicalUrl('/ni-private-tenancy-agreement'),
   },
@@ -117,7 +119,16 @@ export default function NIPrivateTenancyAgreementPage() {
         ])}
       />
 
+      <HeaderConfig mode="autoOnScroll" />
+
       <main className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+        <UniversalHero
+          title="Northern Ireland Private Tenancy Agreement"
+          subtitle="Create a legally validated Northern Ireland tenancy agreement with solicitor-grade, compliance-checked wording."
+          primaryCta={{ label: "Start now", href: "/wizard?product=ast_standard&src=seo_ni_private_tenancy_agreement&topic=tenancy&jurisdiction=northern-ireland" }}
+          showTrustPositioningBar
+          hideMedia
+        />
         {/* Breadcrumb */}
         <nav className="bg-white border-b border-slate-200">
           <div className="max-w-4xl mx-auto px-4 py-3">
@@ -140,16 +151,16 @@ export default function NIPrivateTenancyAgreementPage() {
               <RiShieldCheckLine className="w-5 h-5" />
               <span className="text-sm font-medium">Private Tenancies Act (NI) 2022</span>
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
               Private Tenancy Agreement NI: Complete Guide 2026
-            </h1>
+            </h2>
             <p className="text-xl text-emerald-100 mb-8 max-w-2xl">
               Everything you need to know about Private Tenancy Agreements in Northern Ireland.
               Understand the Private Tenancies Act 2022, your rights, and create a compliant agreement.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
-                href="/wizard?product=ast_standard&src=seo_ni_private_tenancy&topic=tenancy&jurisdiction=northern-ireland"
+                href="/wizard?product=ast_standard&src=seo_ni_private_tenancy_agreement&topic=tenancy&jurisdiction=northern-ireland"
                 className="inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold px-8 py-4 rounded-lg transition-colors"
               >
                 <RiFileTextLine className="w-5 h-5" />
@@ -435,7 +446,7 @@ export default function NIPrivateTenancyAgreementPage() {
               Private Tenancy Agreement for Northern Ireland in minutes.
             </p>
             <Link
-              href="/wizard?product=ast_standard&src=seo_ni_private_tenancy&topic=tenancy&jurisdiction=northern-ireland"
+              href="/wizard?product=ast_standard&src=seo_ni_private_tenancy_agreement&topic=tenancy&jurisdiction=northern-ireland"
               className="inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold px-8 py-4 rounded-lg transition-colors"
             >
               <RiDownloadLine className="w-5 h-5" />

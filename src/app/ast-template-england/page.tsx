@@ -6,10 +6,12 @@ import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { tenancyAgreementEnglandLinks } from '@/lib/seo/internal-links';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 
 export const metadata: Metadata = {
-  title: 'AST Template England 2026 | Assured Shorthold Tenancy Agreement Download',
-  description: 'Download an AST template for England. Housing Act 1988 and Tenant Fees Act 2019 compliant. Instant PDF from £14.99.',
+  title: 'AST England Agreement 2026 | Legally Validated',
+  description: 'Generate an AST for England with solicitor-grade drafting and compliance checks for Housing Act 1988 and Tenant Fees Act 2019.',
   keywords: [
     'AST template England',
     'England AST download',
@@ -26,8 +28,8 @@ export const metadata: Metadata = {
     canonical: getCanonicalUrl('/ast-template-england'),
   },
   openGraph: {
-    title: 'AST Template England 2026 | Assured Shorthold Tenancy Agreement Download',
-    description: 'Download an AST template for England. Housing Act 1988 & Tenant Fees Act 2019 compliant. From £14.99.',
+    title: 'AST England Agreement 2026 | Legally Validated',
+    description: 'Legally validated AST for England with Housing Act 1988 and Tenant Fees Act 2019 compliance checks.',
     type: 'article',
     url: getCanonicalUrl('/ast-template-england'),
   },
@@ -104,7 +106,16 @@ export default function AstTemplateEnglandPage() {
         ])}
       />
 
+      <HeaderConfig mode="autoOnScroll" />
+
       <main className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50">
+        <UniversalHero
+          title="AST England Agreement"
+          subtitle="Generate a legally validated, solicitor-grade AST for England that is compliance-checked and court-ready."
+          primaryCta={{ label: "Start now", href: "/wizard?product=ast_standard&src=seo_ast_template_england&topic=tenancy&jurisdiction=england" }}
+          showTrustPositioningBar
+          hideMedia
+        />
         {/* Breadcrumb Navigation */}
         <div className="container mx-auto px-4 pt-24 pb-4">
           <nav className="text-sm text-gray-600">
@@ -125,9 +136,9 @@ export default function AstTemplateEnglandPage() {
             <span className="inline-flex items-center gap-2 bg-purple-100 text-purple-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
               England-Specific
             </span>
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
               AST Template for England
-            </h1>
+            </h2>
             <p className="text-xl text-gray-700 mb-8 max-w-3xl mx-auto">
               Generate an <strong>Assured Shorthold Tenancy Agreement</strong> specifically designed for
               England&apos;s legal framework. Our wizard ensures your AST meets all Housing Act 1988
@@ -135,13 +146,13 @@ export default function AstTemplateEnglandPage() {
             </p>
             <div className="flex gap-4 justify-center flex-wrap">
               <Link
-                href="/wizard?product=ast_standard&src=seo_ast_england&topic=tenancy&jurisdiction=england"
+                href="/wizard?product=ast_standard&src=seo_ast_template_england&topic=tenancy&jurisdiction=england"
                 className="inline-flex items-center gap-2 bg-white border-2 border-purple-600 text-purple-600 px-6 py-3 rounded-lg font-semibold hover:bg-purple-50 transition-colors"
               >
                 Standard AST — £14.99
               </Link>
               <Link
-                href="/wizard?product=ast_premium&src=seo_ast_england&topic=tenancy&jurisdiction=england"
+                href="/wizard?product=ast_premium&src=seo_ast_template_england&topic=tenancy&jurisdiction=england"
                 className="inline-flex items-center gap-2 bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors"
               >
                 Premium AST — £24.99

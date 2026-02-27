@@ -13,6 +13,8 @@ import {
   Receipt,
 } from 'lucide-react';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { moneyClaimGuides, productLinks } from '@/lib/seo/internal-links';
 
@@ -118,7 +120,16 @@ export default function MoneyClaimApplianceDamagePage() {
         ])}
       />
 
+      <HeaderConfig mode="autoOnScroll" />
+
       <main className="min-h-screen bg-gray-50">
+        <UniversalHero
+          title="Money Claim for Appliance Damage"
+          subtitle="Recover appliance damage losses with a legally validated, solicitor-grade, court-ready money claim workflow."
+          primaryCta={{ label: "Start now", href: "/wizard?product=money_claim&reason=property_damage&src=seo_money_claim_appliance_damage&topic=debt" }}
+          showTrustPositioningBar
+          hideMedia
+        />
         {/* Hero Section */}
         <section className="bg-gradient-to-br from-slate-900 to-slate-800 text-white py-16 lg:py-24">
           <div className="container mx-auto px-4">
@@ -128,9 +139,9 @@ export default function MoneyClaimApplianceDamagePage() {
                 Recover appliance costs
               </div>
 
-              <h1 className="text-4xl lg:text-5xl font-bold mb-6">
+              <h2 className="text-4xl lg:text-5xl font-bold mb-6">
                 Claim for Damaged Appliances &amp; White Goods from Tenant
-              </h1>
+              </h2>
 
               <p className="text-xl text-slate-100 mb-8 max-w-2xl mx-auto">
                 When tenants damage or break washing machines, ovens, fridges, and other
@@ -139,7 +150,7 @@ export default function MoneyClaimApplianceDamagePage() {
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
-                  href="/wizard?product=money_claim&reason=property_damage&src=seo_appliance_damage"
+                  href="/wizard?product=money_claim&reason=property_damage&src=seo_money_claim_appliance_damage&topic=debt"
                   className="inline-flex items-center justify-center gap-2 bg-white text-slate-800 font-semibold py-4 px-8 rounded-xl hover:bg-slate-50 transition-colors"
                 >
                   Start Appliance Damage Claim
@@ -415,7 +426,7 @@ export default function MoneyClaimApplianceDamagePage() {
                 and guidance for recovering appliance damage costs.
               </p>
               <Link
-                href="/wizard?product=money_claim&reason=property_damage&src=seo_appliance_damage"
+                href="/wizard?product=money_claim&reason=property_damage&src=seo_money_claim_appliance_damage&topic=debt"
                 className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
               >
                 Start Your Claim — £99.99

@@ -6,10 +6,12 @@ import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { tenancyAgreementScotlandLinks } from '@/lib/seo/internal-links';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 
 export const metadata: Metadata = {
-  title: 'PRT Template Scotland 2026 | Private Residential Tenancy Agreement',
-  description: 'Download a PRT template for Scotland. Private Housing (Tenancies) Act 2016 compliant with all 18 eviction grounds. From £14.99.',
+  title: 'PRT Agreement Scotland 2026 | Legally Validated',
+  description: 'Generate a Scotland PRT agreement with solicitor-grade drafting and compliance checks under the Private Housing (Tenancies) Act 2016.',
   keywords: [
     'PRT template Scotland',
     'Scotland PRT download',
@@ -26,8 +28,8 @@ export const metadata: Metadata = {
     canonical: getCanonicalUrl('/prt-template-scotland'),
   },
   openGraph: {
-    title: 'PRT Template Scotland 2026 | Private Residential Tenancy Agreement',
-    description: 'Download a PRT template for Scotland. Private Housing (Tenancies) Act 2016 compliant. From £14.99.',
+    title: 'PRT Agreement Scotland 2026 | Legally Validated',
+    description: 'Legally validated Scotland PRT agreement with compliance-checked terms.',
     type: 'article',
     url: getCanonicalUrl('/prt-template-scotland'),
   },
@@ -104,7 +106,16 @@ export default function PrtTemplateScotlandPage() {
         ])}
       />
 
+      <HeaderConfig mode="autoOnScroll" />
+
       <main className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-blue-50">
+        <UniversalHero
+          title="PRT Agreement Scotland"
+          subtitle="Generate a legally validated PRT agreement with solicitor-grade drafting and Scotland compliance checks."
+          primaryCta={{ label: "Start now", href: "/wizard?product=ast_standard&src=seo_prt_template_scotland&topic=tenancy&jurisdiction=scotland" }}
+          showTrustPositioningBar
+          hideMedia
+        />
         {/* Breadcrumb */}
         <div className="container mx-auto px-4 pt-24 pb-4">
           <nav className="text-sm text-gray-600">
@@ -125,9 +136,9 @@ export default function PrtTemplateScotlandPage() {
             <span className="inline-flex items-center gap-2 bg-indigo-100 text-indigo-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
               Scotland-Specific
             </span>
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
               PRT Template for Scotland
-            </h1>
+            </h2>
             <p className="text-xl text-gray-700 mb-8 max-w-3xl mx-auto">
               Generate a <strong>Private Residential Tenancy agreement</strong> for your Scottish property.
               Our PRT template includes all statutory terms, landlord registration provisions,
@@ -135,13 +146,13 @@ export default function PrtTemplateScotlandPage() {
             </p>
             <div className="flex gap-4 justify-center flex-wrap">
               <Link
-                href="/wizard?product=ast_standard&src=seo_prt_scotland&topic=tenancy&jurisdiction=scotland"
+                href="/wizard?product=ast_standard&src=seo_prt_template_scotland&topic=tenancy&jurisdiction=scotland"
                 className="inline-flex items-center gap-2 bg-white border-2 border-indigo-600 text-indigo-600 px-6 py-3 rounded-lg font-semibold hover:bg-indigo-50 transition-colors"
               >
                 Standard PRT — £14.99
               </Link>
               <Link
-                href="/wizard?product=ast_premium&src=seo_prt_scotland&topic=tenancy&jurisdiction=scotland"
+                href="/wizard?product=ast_premium&src=seo_prt_template_scotland&topic=tenancy&jurisdiction=scotland"
                 className="inline-flex items-center gap-2 bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors"
               >
                 Premium PRT — £24.99

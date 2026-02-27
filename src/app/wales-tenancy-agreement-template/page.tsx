@@ -6,10 +6,12 @@ import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { tenancyAgreementWalesLinks } from '@/lib/seo/internal-links';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 
 export const metadata: Metadata = {
-  title: 'Wales Tenancy Agreement Template 2026 | Occupation Contract Download',
-  description: 'Download a tenancy agreement template for Wales. Occupation Contracts replaced ASTs in 2022. Renting Homes Act compliant. From £14.99.',
+  title: 'Wales Tenancy Agreement 2026 | Legally Validated Occupation Contract',
+  description: 'Create a Wales tenancy agreement (occupation contract) with solicitor-grade drafting and Renting Homes Act compliance checks.',
   keywords: [
     'Wales tenancy agreement template',
     'Welsh tenancy agreement',
@@ -26,8 +28,8 @@ export const metadata: Metadata = {
     canonical: getCanonicalUrl('/wales-tenancy-agreement-template'),
   },
   openGraph: {
-    title: 'Wales Tenancy Agreement Template 2026 | Occupation Contract Download',
-    description: 'Download a legally compliant tenancy agreement for Wales. Occupation Contracts since 2022. From £14.99.',
+    title: 'Wales Tenancy Agreement 2026 | Legally Validated Occupation Contract',
+    description: 'Legally validated Wales occupation contract with compliance-checked Renting Homes Act clauses.',
     type: 'article',
     url: getCanonicalUrl('/wales-tenancy-agreement-template'),
   },
@@ -104,7 +106,16 @@ export default function WalesTenancyAgreementTemplatePage() {
         ])}
       />
 
+      <HeaderConfig mode="autoOnScroll" />
+
       <main className="min-h-screen bg-gradient-to-br from-red-50 via-white to-green-50">
+        <UniversalHero
+          title="Wales Tenancy Agreement"
+          subtitle="Create a legally validated Wales occupation contract with solicitor-grade and compliance-checked wording."
+          primaryCta={{ label: "Start now", href: "/wizard?product=ast_standard&src=seo_wales_tenancy_agreement_template&topic=tenancy&jurisdiction=wales" }}
+          showTrustPositioningBar
+          hideMedia
+        />
         {/* Breadcrumb Navigation */}
         <div className="container mx-auto px-4 pt-24 pb-4">
           <nav className="text-sm text-gray-600">
@@ -125,9 +136,9 @@ export default function WalesTenancyAgreementTemplatePage() {
             <span className="inline-flex items-center gap-2 bg-red-100 text-red-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
               Cytundeb Tenantiaeth Cymru
             </span>
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
               Wales Tenancy Agreement Template
-            </h1>
+            </h2>
             <p className="text-xl text-gray-700 mb-8 max-w-3xl mx-auto">
               Looking for a <strong>tenancy agreement for Wales</strong>? Since December 2022,
               Welsh properties require <strong>Occupation Contracts</strong> — not ASTs.
@@ -135,13 +146,13 @@ export default function WalesTenancyAgreementTemplatePage() {
             </p>
             <div className="flex gap-4 justify-center flex-wrap">
               <Link
-                href="/wizard?product=ast_standard&src=seo_wales_tenancy&topic=tenancy&jurisdiction=wales"
+                href="/wizard?product=ast_standard&src=seo_wales_tenancy_agreement_template&topic=tenancy&jurisdiction=wales"
                 className="inline-flex items-center gap-2 bg-white border-2 border-red-600 text-red-600 px-6 py-3 rounded-lg font-semibold hover:bg-red-50 transition-colors"
               >
                 Standard Contract — £14.99
               </Link>
               <Link
-                href="/wizard?product=ast_premium&src=seo_wales_tenancy&topic=tenancy&jurisdiction=wales"
+                href="/wizard?product=ast_premium&src=seo_wales_tenancy_agreement_template&topic=tenancy&jurisdiction=wales"
                 className="inline-flex items-center gap-2 bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors"
               >
                 Premium Contract — £24.99

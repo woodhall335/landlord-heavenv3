@@ -14,6 +14,8 @@ import {
   Clock,
 } from 'lucide-react';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { moneyClaimGuides, moneyClaimCleaningLinks, productLinks } from '@/lib/seo/internal-links';
 
@@ -119,7 +121,16 @@ export default function MoneyClaimAbandonedGoodsPage() {
         ])}
       />
 
+      <HeaderConfig mode="autoOnScroll" />
+
       <main className="min-h-screen bg-gray-50">
+        <UniversalHero
+          title="Money Claim for Abandoned Goods Costs"
+          subtitle="Recover abandoned goods and clearance costs using a legally validated, court-ready money claim route."
+          primaryCta={{ label: "Start now", href: "/wizard?product=money_claim&reason=cleaning&src=seo_money_claim_abandoned_goods&topic=debt" }}
+          showTrustPositioningBar
+          hideMedia
+        />
         {/* Hero Section */}
         <section className="bg-gradient-to-br from-violet-900 to-violet-800 text-white py-16 lg:py-24">
           <div className="container mx-auto px-4">
@@ -129,9 +140,9 @@ export default function MoneyClaimAbandonedGoodsPage() {
                 Recover clearance costs
               </div>
 
-              <h1 className="text-4xl lg:text-5xl font-bold mb-6">
+              <h2 className="text-4xl lg:text-5xl font-bold mb-6">
                 Claim for Abandoned Goods Removal from Tenant
-              </h1>
+              </h2>
 
               <p className="text-xl text-violet-100 mb-8 max-w-2xl mx-auto">
                 When tenants leave belongings behind, learn the legal process for
@@ -140,7 +151,7 @@ export default function MoneyClaimAbandonedGoodsPage() {
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
-                  href="/wizard?product=money_claim&reason=cleaning&src=seo_abandoned_goods"
+                  href="/wizard?product=money_claim&reason=cleaning&src=seo_money_claim_abandoned_goods&topic=debt"
                   className="inline-flex items-center justify-center gap-2 bg-white text-violet-800 font-semibold py-4 px-8 rounded-xl hover:bg-violet-50 transition-colors"
                 >
                   Start Abandoned Goods Claim
@@ -508,7 +519,7 @@ export default function MoneyClaimAbandonedGoodsPage() {
                 and guidance for recovering clearance costs.
               </p>
               <Link
-                href="/wizard?product=money_claim&reason=cleaning&src=seo_abandoned_goods"
+                href="/wizard?product=money_claim&reason=cleaning&src=seo_money_claim_abandoned_goods&topic=debt"
                 className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
               >
                 Start Your Claim — £99.99

@@ -6,11 +6,13 @@ import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { tenancyAgreementEnglandLinks } from '@/lib/seo/internal-links';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { tenancyAgreementTemplateFAQs } from '@/data/faqs';
 
 export const metadata: Metadata = {
-  title: 'Assured Shorthold Tenancy Agreement Template 2026 | Legally Compliant AST',
-  description: 'Download an Assured Shorthold Tenancy Agreement (AST) template for England. Housing Act 1988 & Tenant Fees Act 2019 compliant. From £14.99.',
+  title: 'Assured Shorthold Tenancy Agreement 2026 | Legally Validated AST',
+  description: 'Create an Assured Shorthold Tenancy Agreement for England with solicitor-grade drafting and compliance checks for Housing Act 1988 and Tenant Fees Act 2019.',
   keywords: [
     'assured shorthold tenancy agreement template',
     'AST template',
@@ -27,8 +29,8 @@ export const metadata: Metadata = {
     canonical: getCanonicalUrl('/assured-shorthold-tenancy-agreement-template'),
   },
   openGraph: {
-    title: 'Assured Shorthold Tenancy Agreement Template 2026 | Legally Compliant AST',
-    description: 'Download a legally compliant AST template for England. Housing Act 1988 & Tenant Fees Act 2019 compliant. From £14.99.',
+    title: 'Assured Shorthold Tenancy Agreement 2026 | Legally Validated AST',
+    description: 'Legally validated AST agreement for England with Housing Act 1988 and Tenant Fees Act 2019 compliance checks.',
     type: 'article',
     url: getCanonicalUrl('/assured-shorthold-tenancy-agreement-template'),
   },
@@ -54,7 +56,16 @@ export default function AssuredShortholdTenancyAgreementTemplatePage() {
         ])}
       />
 
+      <HeaderConfig mode="autoOnScroll" />
+
       <main className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+        <UniversalHero
+          title="Assured Shorthold Tenancy Agreement for England"
+          subtitle="Create a legally validated, solicitor-grade AST that is compliance-checked for England and ready to sign."
+          primaryCta={{ label: "Start now", href: "/wizard?product=ast_standard&src=seo_assured_shorthold_tenancy_agreement_template&topic=tenancy&jurisdiction=england" }}
+          showTrustPositioningBar
+          hideMedia
+        />
         {/* Breadcrumb Navigation */}
         <div className="container mx-auto px-4 pt-24 pb-4">
           <nav className="text-sm text-gray-600">
@@ -73,9 +84,9 @@ export default function AssuredShortholdTenancyAgreementTemplatePage() {
               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
               Updated for 2026 Legislation
             </span>
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
               Assured Shorthold Tenancy Agreement Template
-            </h1>
+            </h2>
             <p className="text-xl text-gray-700 mb-8 max-w-3xl mx-auto">
               Create a <strong>legally compliant AST</strong> for your England rental property in minutes.
               Note: An AST is not suitable for lodgers — use a <Link href="/lodger-agreement-template" className="text-primary hover:underline">lodger agreement</Link> instead.
@@ -84,13 +95,13 @@ export default function AssuredShortholdTenancyAgreementTemplatePage() {
             </p>
             <div className="flex gap-4 justify-center flex-wrap">
               <Link
-                href="/wizard?product=ast_standard&src=seo_ast_template&topic=tenancy&jurisdiction=england"
+                href="/wizard?product=ast_standard&src=seo_assured_shorthold_tenancy_agreement_template&topic=tenancy&jurisdiction=england"
                 className="inline-flex items-center gap-2 bg-white border-2 border-blue-600 text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors"
               >
                 Standard AST — £14.99
               </Link>
               <Link
-                href="/wizard?product=ast_premium&src=seo_ast_template&topic=tenancy&jurisdiction=england"
+                href="/wizard?product=ast_premium&src=seo_assured_shorthold_tenancy_agreement_template&topic=tenancy&jurisdiction=england"
                 className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
               >
                 Premium AST — £24.99

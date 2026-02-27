@@ -6,10 +6,12 @@ import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { tenancyAgreementEnglandLinks } from '@/lib/seo/internal-links';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 
 export const metadata: Metadata = {
-  title: 'Joint Tenancy Agreement Template UK 2026 | Multiple Tenants AST',
-  description: 'Create a joint tenancy agreement for multiple tenants in England. Joint and several liability clauses included. From £14.99.',
+  title: 'Joint Tenancy Agreement UK 2026 | Legally Validated',
+  description: 'Create a joint tenancy agreement for multiple tenants in England with solicitor-grade wording and compliance-checked clauses.',
   keywords: [
     'joint tenancy agreement template',
     'multiple tenants tenancy agreement',
@@ -26,8 +28,8 @@ export const metadata: Metadata = {
     canonical: getCanonicalUrl('/joint-tenancy-agreement-template'),
   },
   openGraph: {
-    title: 'Joint Tenancy Agreement Template UK 2026 | Multiple Tenants AST',
-    description: 'Create a joint tenancy agreement for multiple tenants in England. Joint and several liability clauses included.',
+    title: 'Joint Tenancy Agreement UK 2026 | Legally Validated',
+    description: 'Legally validated joint tenancy agreement for England with joint and several liability clauses.',
     type: 'article',
     url: getCanonicalUrl('/joint-tenancy-agreement-template'),
   },
@@ -104,7 +106,16 @@ export default function JointTenancyAgreementTemplatePage() {
         ])}
       />
 
+      <HeaderConfig mode="autoOnScroll" />
+
       <main className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+        <UniversalHero
+          title="Joint Tenancy Agreement"
+          subtitle="Generate a legally validated joint tenancy agreement with compliance-checked clauses for multiple tenants."
+          primaryCta={{ label: "Start now", href: "/wizard?product=ast_standard&src=seo_joint_tenancy_agreement_template&topic=tenancy&jurisdiction=england" }}
+          showTrustPositioningBar
+          hideMedia
+        />
         {/* Breadcrumb Navigation */}
         <div className="container mx-auto px-4 pt-24 pb-4">
           <nav className="text-sm text-gray-600">
@@ -122,9 +133,9 @@ export default function JointTenancyAgreementTemplatePage() {
             <span className="inline-flex items-center gap-2 bg-indigo-100 text-indigo-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
               Multiple Tenants
             </span>
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
               Joint Tenancy Agreement Template
-            </h1>
+            </h2>
             <p className="text-xl text-gray-700 mb-8 max-w-3xl mx-auto">
               Renting to <strong>couples, flatmates, or house-sharers</strong>? Our joint tenancy agreement
               includes essential <strong>joint and several liability</strong> clauses that protect you when
@@ -132,13 +143,13 @@ export default function JointTenancyAgreementTemplatePage() {
             </p>
             <div className="flex gap-4 justify-center flex-wrap">
               <Link
-                href="/wizard?product=ast_standard&src=seo_joint_tenancy&topic=tenancy&jurisdiction=england"
+                href="/wizard?product=ast_standard&src=seo_joint_tenancy_agreement_template&topic=tenancy&jurisdiction=england"
                 className="inline-flex items-center gap-2 bg-white border-2 border-indigo-600 text-indigo-600 px-6 py-3 rounded-lg font-semibold hover:bg-indigo-50 transition-colors"
               >
                 Standard AST — £14.99
               </Link>
               <Link
-                href="/wizard?product=ast_premium&src=seo_joint_tenancy&topic=tenancy&jurisdiction=england"
+                href="/wizard?product=ast_premium&src=seo_joint_tenancy_agreement_template&topic=tenancy&jurisdiction=england"
                 className="inline-flex items-center gap-2 bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors"
               >
                 Premium AST — £24.99
