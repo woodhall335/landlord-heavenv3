@@ -14,6 +14,8 @@ import {
   MessageSquare,
 } from 'lucide-react';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { FunnelCta, CrossSellBar } from '@/components/funnels';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { moneyClaimGuides, moneyClaimProcessLinks, productLinks } from '@/lib/seo/internal-links';
@@ -120,7 +122,16 @@ export default function MoneyClaimSmallClaimsLandlordPage() {
         ])}
       />
 
+      <HeaderConfig mode="autoOnScroll" />
+
       <main className="min-h-screen bg-gray-50">
+        <UniversalHero
+          title="Small Claims Guide for Landlords"
+          subtitle="Build a legally validated, solicitor-grade, compliance-checked and court-ready debt claim package."
+          primaryCta={{ label: "Start now", href: "/wizard?product=money_claim&topic=debt&src=seo_money_claim_small_claims_landlord" }}
+          showTrustPositioningBar
+          hideMedia
+        />
         {/* Hero Section */}
         <section className="bg-gradient-to-br from-emerald-900 to-emerald-800 text-white py-16 lg:py-24">
           <div className="container mx-auto px-4">
@@ -130,9 +141,9 @@ export default function MoneyClaimSmallClaimsLandlordPage() {
                 Navigate small claims confidently
               </div>
 
-              <h1 className="text-4xl lg:text-5xl font-bold mb-6">
+              <h2 className="text-4xl lg:text-5xl font-bold mb-6">
                 Small Claims Court for Landlords
-              </h1>
+              </h2>
 
               <p className="text-xl text-emerald-100 mb-8 max-w-2xl mx-auto">
                 Everything you need to know about the small claims track: what to expect,
@@ -141,7 +152,7 @@ export default function MoneyClaimSmallClaimsLandlordPage() {
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
-                  href="/wizard?product=money_claim&src=seo_small_claims"
+                  href="/wizard?product=money_claim&topic=debt&src=seo_money_claim_small_claims_landlord"
                   className="inline-flex items-center justify-center gap-2 bg-white text-emerald-800 font-semibold py-4 px-8 rounded-xl hover:bg-emerald-50 transition-colors"
                 >
                   Start Money Claim
@@ -421,7 +432,7 @@ export default function MoneyClaimSmallClaimsLandlordPage() {
                 Letter Before Action, Particulars of Claim, and step-by-step guidance.
               </p>
               <Link
-                href="/wizard?product=money_claim&src=seo_small_claims"
+                href="/wizard?product=money_claim&topic=debt&src=seo_money_claim_small_claims_landlord"
                 className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
               >
                 Start Your Claim — £99.99

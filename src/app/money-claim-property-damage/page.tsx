@@ -14,6 +14,8 @@ import {
   Receipt,
 } from 'lucide-react';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { NextLegalSteps } from '@/components/seo/NextLegalSteps';
 import { productLinks, toolLinks } from '@/lib/seo/internal-links';
 
@@ -118,7 +120,16 @@ export default function MoneyClaimPropertyDamagePage() {
         ])}
       />
 
+      <HeaderConfig mode="autoOnScroll" />
+
       <main className="min-h-screen bg-gray-50">
+        <UniversalHero
+          title="Money Claim for Property Damage"
+          subtitle="Build a legally validated, solicitor-grade, compliance-checked and court-ready debt claim package."
+          primaryCta={{ label: "Start now", href: "/wizard?product=money_claim&topic=debt&src=seo_money_claim_property_damage" }}
+          showTrustPositioningBar
+          hideMedia
+        />
         {/* Hero Section */}
         <section className="bg-gradient-to-br from-orange-900 to-orange-800 text-white py-16 lg:py-24">
           <div className="container mx-auto px-4">
@@ -128,9 +139,9 @@ export default function MoneyClaimPropertyDamagePage() {
                 Recover repair costs
               </div>
 
-              <h1 className="text-4xl lg:text-5xl font-bold mb-6">
+              <h2 className="text-4xl lg:text-5xl font-bold mb-6">
                 Claim for Property Damage from Tenant
-              </h1>
+              </h2>
 
               <p className="text-xl text-orange-100 mb-8 max-w-2xl mx-auto">
                 When <Link href="/tenant-damaging-property" className="text-white hover:underline font-semibold">tenant damage</Link> exceeds the deposit, recover your repair costs
@@ -139,7 +150,7 @@ export default function MoneyClaimPropertyDamagePage() {
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
-                  href="/wizard?product=money_claim&reason=property_damage&src=seo_damage"
+                  href="/wizard?product=money_claim&reason=property_damage&topic=debt&src=seo_money_claim_property_damage"
                   className="inline-flex items-center justify-center gap-2 bg-white text-orange-800 font-semibold py-4 px-8 rounded-xl hover:bg-orange-50 transition-colors"
                 >
                   Start Property Damage Claim
@@ -430,7 +441,7 @@ export default function MoneyClaimPropertyDamagePage() {
                   property damage claims.
                 </p>
                 <Link
-                  href="/wizard?product=money_claim&reason=property_damage&src=seo_damage"
+                  href="/wizard?product=money_claim&reason=property_damage&topic=debt&src=seo_money_claim_property_damage"
                   className="inline-flex items-center gap-2 bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-orange-700"
                 >
                   <FileText className="w-4 h-4" />
@@ -509,7 +520,7 @@ export default function MoneyClaimPropertyDamagePage() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
-                  href="/wizard?product=money_claim&reason=property_damage&src=seo_damage"
+                  href="/wizard?product=money_claim&reason=property_damage&topic=debt&src=seo_money_claim_property_damage"
                   className="inline-flex items-center justify-center gap-2 bg-white text-orange-700 font-semibold py-4 px-8 rounded-xl hover:bg-orange-50 transition-colors"
                 >
                   Start Property Damage Claim
@@ -538,7 +549,7 @@ export default function MoneyClaimPropertyDamagePage() {
                 scenarioLabel="recovering repair costs from tenants"
                 primaryCTA={{
                   label: 'Start property damage claim',
-                  href: '/wizard?product=money_claim&reason=property_damage&src=seo_damage',
+                  href: '/wizard?product=money_claim&reason=property_damage&topic=debt&src=seo_money_claim_property_damage',
                 }}
                 secondaryCTA={{
                   label: 'View Money Claim Pack',

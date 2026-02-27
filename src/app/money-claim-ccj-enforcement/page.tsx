@@ -14,6 +14,8 @@ import {
   Car,
 } from 'lucide-react';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { moneyClaimGuides, moneyClaimEnforcementLinks, productLinks } from '@/lib/seo/internal-links';
 
@@ -119,7 +121,16 @@ export default function MoneyClaimCCJEnforcementPage() {
         ])}
       />
 
+      <HeaderConfig mode="autoOnScroll" />
+
       <main className="min-h-screen bg-gray-50">
+        <UniversalHero
+          title="Money Claim CCJ Enforcement Support"
+          subtitle="Build a legally validated, solicitor-grade, compliance-checked and court-ready debt claim package."
+          primaryCta={{ label: "Start now", href: "/wizard?product=money_claim&topic=debt&src=seo_money_claim_ccj_enforcement" }}
+          showTrustPositioningBar
+          hideMedia
+        />
         {/* Hero Section */}
         <section className="bg-gradient-to-br from-slate-900 to-slate-800 text-white py-16 lg:py-24">
           <div className="container mx-auto px-4">
@@ -129,9 +140,9 @@ export default function MoneyClaimCCJEnforcementPage() {
                 Enforce your judgment
               </div>
 
-              <h1 className="text-4xl lg:text-5xl font-bold mb-6">
+              <h2 className="text-4xl lg:text-5xl font-bold mb-6">
                 CCJ Enforcement: Getting Paid
-              </h1>
+              </h2>
 
               <p className="text-xl text-slate-100 mb-8 max-w-2xl mx-auto">
                 You have a County Court Judgment - now what? Learn how to actually
@@ -140,7 +151,7 @@ export default function MoneyClaimCCJEnforcementPage() {
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
-                  href="/wizard?product=money_claim&src=seo_ccj_enforcement"
+                  href="/wizard?product=money_claim&topic=debt&src=seo_money_claim_ccj_enforcement"
                   className="inline-flex items-center justify-center gap-2 bg-white text-slate-800 font-semibold py-4 px-8 rounded-xl hover:bg-slate-50 transition-colors"
                 >
                   Start Money Claim
@@ -402,7 +413,7 @@ export default function MoneyClaimCCJEnforcementPage() {
                 everything you need to get your judgment.
               </p>
               <Link
-                href="/wizard?product=money_claim&src=seo_ccj_enforcement"
+                href="/wizard?product=money_claim&topic=debt&src=seo_money_claim_ccj_enforcement"
                 className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
               >
                 Start Your Money Claim — £99.99

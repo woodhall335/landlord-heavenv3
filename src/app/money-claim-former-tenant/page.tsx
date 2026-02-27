@@ -12,6 +12,8 @@ import {
   MapPin,
 } from 'lucide-react';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { moneyClaimGuides, moneyClaimEnforcementLinks, productLinks } from '@/lib/seo/internal-links';
 
@@ -117,7 +119,16 @@ export default function MoneyClaimFormerTenantPage() {
         ])}
       />
 
+      <HeaderConfig mode="autoOnScroll" />
+
       <main className="min-h-screen bg-gray-50">
+        <UniversalHero
+          title="Money Claim Against a Former Tenant"
+          subtitle="Build a legally validated, solicitor-grade, compliance-checked and court-ready debt claim package."
+          primaryCta={{ label: "Start now", href: "/wizard?product=money_claim&topic=debt&src=seo_money_claim_former_tenant" }}
+          showTrustPositioningBar
+          hideMedia
+        />
         {/* Hero Section */}
         <section className="bg-gradient-to-br from-gray-900 to-gray-800 text-white py-16 lg:py-24">
           <div className="container mx-auto px-4">
@@ -127,9 +138,9 @@ export default function MoneyClaimFormerTenantPage() {
                 Trace and recover
               </div>
 
-              <h1 className="text-4xl lg:text-5xl font-bold mb-6">
+              <h2 className="text-4xl lg:text-5xl font-bold mb-6">
                 Claim Against Former Tenant Who Left Owing Money
-              </h1>
+              </h2>
 
               <p className="text-xl text-gray-100 mb-8 max-w-2xl mx-auto">
                 Just because a tenant has left doesn&apos;t mean they&apos;ve escaped
@@ -138,7 +149,7 @@ export default function MoneyClaimFormerTenantPage() {
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
-                  href="/wizard?product=money_claim&reason=rent_arrears&src=seo_former_tenant"
+                  href="/wizard?product=money_claim&reason=rent_arrears&topic=debt&src=seo_money_claim_former_tenant"
                   className="inline-flex items-center justify-center gap-2 bg-white text-gray-800 font-semibold py-4 px-8 rounded-xl hover:bg-gray-50 transition-colors"
                 >
                   Start Former Tenant Claim
@@ -337,7 +348,7 @@ export default function MoneyClaimFormerTenantPage() {
                 former tenants, plus guidance on tracing and enforcement.
               </p>
               <Link
-                href="/wizard?product=money_claim&reason=rent_arrears&src=seo_former_tenant"
+                href="/wizard?product=money_claim&reason=rent_arrears&topic=debt&src=seo_money_claim_former_tenant"
                 className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
               >
                 Start Your Claim — £99.99
