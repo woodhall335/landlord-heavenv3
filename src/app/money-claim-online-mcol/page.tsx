@@ -126,7 +126,7 @@ export default function MoneyClaimOnlineMCOLPage() {
       'Recover unpaid rent and tenancy debt with a court-ready pack. Clear particulars, interest calculation, and a step-by-step filing guide — built for MCOL.',
     primaryCta: {
       label: 'Prepare my MCOL claim pack →',
-      href: '/wizard?product=money_claim&src=seo_mcol_guide',
+      href: '/wizard?product=money_claim&topic=debt&src=seo_money-claim-online-mcol',
     },
     secondaryCta: {
       label: 'View Money Claim Pack →',
@@ -306,7 +306,10 @@ export default function MoneyClaimOnlineMCOLPage() {
                 </ol>
 
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                  <Link href="/wizard?product=money_claim&src=seo_mcol_guide" className="hero-btn-primary">
+                  <Link
+                    href="/wizard?product=money_claim&topic=debt&src=seo_money-claim-online-mcol"
+                    className="hero-btn-primary"
+                  >
                     Prepare my claim pack →
                   </Link>
                   <Link
@@ -416,7 +419,10 @@ export default function MoneyClaimOnlineMCOLPage() {
               </div>
 
               <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-                <Link href="/wizard?product=money_claim&src=seo_mcol_guide" className="hero-btn-primary">
+                <Link
+                  href="/wizard?product=money_claim&topic=debt&src=seo_money-claim-online-mcol"
+                  className="hero-btn-primary"
+                >
                   Prepare my claim — £99.99 →
                 </Link>
                 <p className="text-sm text-gray-600">
@@ -472,7 +478,10 @@ export default function MoneyClaimOnlineMCOLPage() {
               </p>
 
               <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
-                <Link href="/wizard?product=money_claim&src=seo_mcol_guide" className="hero-btn-primary">
+                <Link
+                  href="/wizard?product=money_claim&topic=debt&src=seo_money-claim-online-mcol"
+                  className="hero-btn-primary"
+                >
                   Prepare my MCOL claim pack →
                 </Link>
               </div>

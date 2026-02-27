@@ -14,6 +14,9 @@ import {
 } from 'lucide-react';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
+import { moneyClaimHeroConfig } from '@/components/landing/heroConfigs';
 import { moneyClaimGuides, productLinks } from '@/lib/seo/internal-links';
 
 export const metadata: Metadata = {
@@ -98,6 +101,22 @@ const faqs = [
 ];
 
 export default function MoneyClaimWallDamagePage() {
+  const hero = {
+    ...moneyClaimHeroConfig,
+    trustText: 'Solicitor-grade • Compliance-checked • Court-ready',
+    primaryCta: {
+      label: 'Start Money Claim →',
+      href: '/wizard?product=money_claim&topic=debt&src=seo_money-claim-wall-damage',
+    },
+    secondaryCta: {
+      label: 'View Money Claim Pack →',
+      href: '/products/money-claim',
+    },
+    title: 'Claim Tenant Wall & Door Damage Properly',
+    subtitle:
+      'Create a solicitor-grade, compliance-checked damages claim backed by evidence and clear cost schedules.',
+  };
+
   return (
     <>
       <StructuredData
@@ -119,6 +138,10 @@ export default function MoneyClaimWallDamagePage() {
       />
 
       <main className="min-h-screen bg-gray-50">
+        <HeaderConfig mode="autoOnScroll" />
+
+        <UniversalHero {...hero} />
+
         {/* Hero Section */}
         <section className="bg-gradient-to-br from-rose-900 to-rose-800 text-white py-16 lg:py-24">
           <div className="container mx-auto px-4">
@@ -128,9 +151,9 @@ export default function MoneyClaimWallDamagePage() {
                 Recover repair costs
               </div>
 
-              <h1 className="text-4xl lg:text-5xl font-bold mb-6">
+              <h2 className="text-4xl lg:text-5xl font-bold mb-6">
                 Claim for Wall &amp; Door Damage from Tenant
-              </h1>
+              </h2>
 
               <p className="text-xl text-rose-100 mb-8 max-w-2xl mx-auto">
                 When tenants leave holes in walls, damaged doors, or broken fixtures,
@@ -139,7 +162,7 @@ export default function MoneyClaimWallDamagePage() {
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
-                  href="/wizard?product=money_claim&reason=property_damage&src=seo_wall_damage"
+                  href="/wizard?product=money_claim&topic=debt&reason=property_damage&src=seo_money-claim-wall-damage"
                   className="inline-flex items-center justify-center gap-2 bg-white text-rose-800 font-semibold py-4 px-8 rounded-xl hover:bg-rose-50 transition-colors"
                 >
                   Start Wall Damage Claim
@@ -428,7 +451,7 @@ export default function MoneyClaimWallDamagePage() {
                 and guidance for recovering repair costs.
               </p>
               <Link
-                href="/wizard?product=money_claim&reason=property_damage&src=seo_wall_damage"
+                href="/wizard?product=money_claim&topic=debt&reason=property_damage&src=seo_money-claim-wall-damage"
                 className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
               >
                 Start Your Claim — £99.99

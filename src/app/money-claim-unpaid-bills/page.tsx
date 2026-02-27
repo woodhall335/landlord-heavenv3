@@ -13,7 +13,10 @@ import {
 } from 'lucide-react';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
-import { moneyClaimGuides, moneyClaimUtilitiesLinks, productLinks } from '@/lib/seo/internal-links';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
+import { moneyClaimHeroConfig } from '@/components/landing/heroConfigs';
+import { moneyClaimGuides, productLinks } from '@/lib/seo/internal-links';
 
 export const metadata: Metadata = {
   title: 'Claim Unpaid Bills from Tenant 2026 | Water, Broadband & More',
@@ -97,6 +100,22 @@ const faqs = [
 ];
 
 export default function MoneyClaimUnpaidBillsPage() {
+  const hero = {
+    ...moneyClaimHeroConfig,
+    trustText: 'Solicitor-grade • Compliance-checked • Court-ready',
+    primaryCta: {
+      label: 'Start Money Claim →',
+      href: '/wizard?product=money_claim&topic=debt&src=seo_money-claim-unpaid-bills',
+    },
+    secondaryCta: {
+      label: 'View Money Claim Pack →',
+      href: '/products/money-claim',
+    },
+    title: 'Claim Unpaid Tenant Bills with Confidence',
+    subtitle:
+      'Build a compliance-checked, court-ready claim for unpaid water, broadband, and tenancy-linked bills.',
+  };
+
   return (
     <>
       <StructuredData
@@ -118,6 +137,10 @@ export default function MoneyClaimUnpaidBillsPage() {
       />
 
       <main className="min-h-screen bg-gray-50">
+        <HeaderConfig mode="autoOnScroll" />
+
+        <UniversalHero {...hero} />
+
         {/* Hero Section */}
         <section className="bg-gradient-to-br from-cyan-900 to-cyan-800 text-white py-16 lg:py-24">
           <div className="container mx-auto px-4">
@@ -127,9 +150,9 @@ export default function MoneyClaimUnpaidBillsPage() {
                 Recover tenant bill debts
               </div>
 
-              <h1 className="text-4xl lg:text-5xl font-bold mb-6">
+              <h2 className="text-4xl lg:text-5xl font-bold mb-6">
                 Claim Unpaid Bills from Tenant
-              </h1>
+              </h2>
 
               <p className="text-xl text-cyan-100 mb-8 max-w-2xl mx-auto">
                 Water rates, broadband, TV licence, and other bills your tenant
@@ -138,7 +161,7 @@ export default function MoneyClaimUnpaidBillsPage() {
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
-                  href="/wizard?product=money_claim&reason=unpaid_bills&src=seo_unpaid_bills"
+                  href="/wizard?product=money_claim&topic=debt&reason=unpaid_bills&src=seo_money-claim-unpaid-bills"
                   className="inline-flex items-center justify-center gap-2 bg-white text-cyan-800 font-semibold py-4 px-8 rounded-xl hover:bg-cyan-50 transition-colors"
                 >
                   Start Unpaid Bills Claim
@@ -379,7 +402,7 @@ export default function MoneyClaimUnpaidBillsPage() {
                 for recovering all types of tenant debts.
               </p>
               <Link
-                href="/wizard?product=money_claim&reason=unpaid_bills&src=seo_unpaid_bills"
+                href="/wizard?product=money_claim&topic=debt&reason=unpaid_bills&src=seo_money-claim-unpaid-bills"
                 className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
               >
                 Start Your Claim — £99.99

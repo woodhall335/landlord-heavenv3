@@ -15,6 +15,9 @@ import {
   ClipboardList,
 } from 'lucide-react';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
+import { moneyClaimHeroConfig } from '@/components/landing/heroConfigs';
 import { NextLegalSteps } from '@/components/seo/NextLegalSteps';
 import { productLinks, toolLinks } from '@/lib/seo/internal-links';
 
@@ -100,6 +103,22 @@ const faqs = [
 ];
 
 export default function MoneyClaimUnpaidUtilitiesPage() {
+  const hero = {
+    ...moneyClaimHeroConfig,
+    trustText: 'Solicitor-grade • Compliance-checked • Court-ready',
+    primaryCta: {
+      label: 'Start Money Claim →',
+      href: '/wizard?product=money_claim&topic=debt&src=seo_money-claim-unpaid-utilities',
+    },
+    secondaryCta: {
+      label: 'View Money Claim Pack →',
+      href: '/products/money-claim',
+    },
+    title: 'Recover Unpaid Utilities from Tenants',
+    subtitle:
+      'Prepare a legally validated, court-ready utility debt claim with clear evidence and figures.',
+  };
+
   return (
     <>
       <StructuredData
@@ -120,6 +139,10 @@ export default function MoneyClaimUnpaidUtilitiesPage() {
       />
 
       <main className="min-h-screen bg-gray-50">
+        <HeaderConfig mode="autoOnScroll" />
+
+        <UniversalHero {...hero} />
+
         {/* Hero Section */}
         <section className="bg-gradient-to-br from-blue-900 to-blue-800 text-white py-16 lg:py-24">
           <div className="container mx-auto px-4">
@@ -129,9 +152,9 @@ export default function MoneyClaimUnpaidUtilitiesPage() {
                 Recover unpaid bills
               </div>
 
-              <h1 className="text-4xl lg:text-5xl font-bold mb-6">
+              <h2 className="text-4xl lg:text-5xl font-bold mb-6">
                 Claim Unpaid Utilities from Tenant
-              </h1>
+              </h2>
 
               <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
                 When tenants leave unpaid gas, electricity, water, or other bills in your
@@ -140,7 +163,7 @@ export default function MoneyClaimUnpaidUtilitiesPage() {
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
-                  href="/wizard?product=money_claim&reason=unpaid_utilities&src=seo_utilities"
+                  href="/wizard?product=money_claim&topic=debt&reason=unpaid_utilities&src=seo_money-claim-unpaid-utilities"
                   className="inline-flex items-center justify-center gap-2 bg-white text-blue-800 font-semibold py-4 px-8 rounded-xl hover:bg-blue-50 transition-colors"
                 >
                   Start Utilities Claim
@@ -454,7 +477,7 @@ export default function MoneyClaimUnpaidUtilitiesPage() {
                   debt builder, court form guidance, and step-by-step instructions for utility claims.
                 </p>
                 <Link
-                  href="/wizard?product=money_claim&reason=unpaid_utilities&src=seo_utilities"
+                  href="/wizard?product=money_claim&topic=debt&reason=unpaid_utilities&src=seo_money-claim-unpaid-utilities"
                   className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700"
                 >
                   <FileText className="w-4 h-4" />
@@ -555,7 +578,7 @@ export default function MoneyClaimUnpaidUtilitiesPage() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
-                  href="/wizard?product=money_claim&reason=unpaid_utilities&src=seo_utilities"
+                  href="/wizard?product=money_claim&topic=debt&reason=unpaid_utilities&src=seo_money-claim-unpaid-utilities"
                   className="inline-flex items-center justify-center gap-2 bg-white text-blue-700 font-semibold py-4 px-8 rounded-xl hover:bg-blue-50 transition-colors"
                 >
                   Start Utilities Claim
@@ -581,7 +604,7 @@ export default function MoneyClaimUnpaidUtilitiesPage() {
                 scenarioLabel="recovering unpaid utility costs from tenants"
                 primaryCTA={{
                   label: 'Start utilities claim',
-                  href: '/wizard?product=money_claim&reason=unpaid_utilities&src=seo_utilities',
+                  href: '/wizard?product=money_claim&topic=debt&reason=unpaid_utilities&src=seo_money-claim-unpaid-utilities',
                 }}
                 secondaryCTA={{
                   label: 'View Money Claim Pack',
