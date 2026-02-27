@@ -59,7 +59,7 @@ export const homeHeroConfig: HeroConfig = {
   ),
   primaryCta: {
     label: 'Start eviction workflow →',
-    href: '/wizard?product=notice_only&topic=eviction&src=seo_homepage',
+    href: '/wizard?product',
   },
   secondaryCta: {
     label: 'Recover unpaid rent →',
