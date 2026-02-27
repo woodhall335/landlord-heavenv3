@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import {
   evaluateSection21Precheck,
+  getSection21PrecheckCompleteness,
   SECTION21_PRECHECK_DEFAULT_INPUT,
   Section21BlockerReasonCode,
   Section21WarningReasonCode,
@@ -12,6 +13,63 @@ const mockBank = {
 };
 
 describe('section21Precheck', () => {
+  it('completeness flags unsure and conditional missing fields', () => {
+    const completeness = getSection21PrecheckCompleteness({
+      ...SECTION21_PRECHECK_DEFAULT_INPUT,
+      tenancy_start_date: '2025-01-01',
+      is_replacement_tenancy: 'yes',
+      tenancy_type: 'periodic',
+      rent_period: 'monthly',
+      planned_service_date: '2026-02-02',
+      service_method: 'email',
+      service_before_430pm: 'yes',
+      tenant_consented_email_service: 'no',
+      deposit_taken: 'yes',
+      epc_required: 'yes',
+      gas_installed: 'yes',
+      landlord_type: 'private_landlord',
+      property_requires_hmo_licence: 'no',
+      property_requires_selective_licence: 'no',
+      improvement_notice_served: 'no',
+      emergency_remedial_action_served: 'no',
+      prohibited_payment_outstanding: 'no',
+      has_proof_of_service_plan: 'yes',
+    });
+
+    expect(completeness.complete).toBe(false);
+    expect(completeness.missingLabels).toContain('Original tenancy start date');
+    expect(completeness.missingLabels).toContain('Deposit received date');
+    expect(completeness.missingLabels).toContain('Tenant consent to email service');
+  });
+
+  it('returns incomplete when inputs are not complete even if blockers exist', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => ({ json: async () => mockBank })));
+    const result = await evaluateSection21Precheck({
+      ...SECTION21_PRECHECK_DEFAULT_INPUT,
+      tenancy_start_date: '2025-01-01',
+      is_replacement_tenancy: 'no',
+      tenancy_type: 'periodic',
+      rent_period: 'monthly',
+      planned_service_date: '2026-05-01',
+      service_method: 'hand',
+      service_before_430pm: 'yes',
+      deposit_taken: 'no',
+      epc_required: 'no',
+      gas_installed: 'no',
+      landlord_type: 'unsure',
+      property_requires_hmo_licence: 'no',
+      property_requires_selective_licence: 'no',
+      improvement_notice_served: 'no',
+      emergency_remedial_action_served: 'no',
+      prohibited_payment_outstanding: 'no',
+      has_proof_of_service_plan: 'yes',
+    });
+
+    expect(result.status).toBe('incomplete');
+    expect(result.missing_labels).toContain('Landlord type');
+    expect(result.blockers.some((b) => b.code === Section21BlockerReasonCode.B001_PLANNED_SERVICE_ON_AFTER_MAY_2026)).toBe(true);
+  });
+
   it('returns valid status with computed dates for compliant baseline', async () => {
     vi.stubGlobal('fetch', vi.fn(async () => ({ json: async () => mockBank })));
     const result = await evaluateSection21Precheck({
@@ -30,6 +88,7 @@ describe('section21Precheck', () => {
       epc_served_date: '2025-01-01',
       gas_installed: 'no',
       how_to_rent_served_date: '2025-01-01',
+      how_to_rent_served_method: 'hardcopy',
       how_to_rent_was_current_version_at_tenancy_start: 'yes',
       property_requires_hmo_licence: 'no',
       property_requires_selective_licence: 'no',
@@ -45,7 +104,7 @@ describe('section21Precheck', () => {
     expect(result.latest_court_start_date).toBe('2026-07-31');
   });
 
-  it('returns risky with exact blocker message for May 2026 transition', async () => {
+  it('returns risky with exact blocker message for May 2026 transition once complete', async () => {
     vi.stubGlobal('fetch', vi.fn(async () => ({ json: async () => mockBank })));
     const result = await evaluateSection21Precheck({
       ...SECTION21_PRECHECK_DEFAULT_INPUT,
@@ -60,7 +119,6 @@ describe('section21Precheck', () => {
       epc_required: 'no',
       gas_installed: 'no',
       landlord_type: 'social_provider',
-      how_to_rent_was_current_version_at_tenancy_start: 'yes',
       property_requires_hmo_licence: 'no',
       property_requires_selective_licence: 'no',
       improvement_notice_served: 'no',
@@ -89,7 +147,6 @@ describe('section21Precheck', () => {
       epc_required: 'no',
       gas_installed: 'no',
       landlord_type: 'social_provider',
-      how_to_rent_was_current_version_at_tenancy_start: 'yes',
       property_requires_hmo_licence: 'no',
       property_requires_selective_licence: 'no',
       improvement_notice_served: 'no',

@@ -110,6 +110,7 @@ type Reason = { code: string; message: string };
 
 export interface Section21PrecheckResult {
   status: 'incomplete'|'valid'|'risky';
+  missing_labels?: string[];
   deemed_service_date: string|null;
   minimum_notice_months: number|null;
   earliest_after_date: string|null;
@@ -124,6 +125,11 @@ export interface Section21PrecheckResult {
     gatedDetails: string[];
   };
 }
+
+export type Section21Completeness = {
+  complete: boolean;
+  missingLabels: string[];
+};
 
 const CTA_HREF = '/wizard/flow?type=eviction&jurisdiction=england&product=notice_only&src=product_page&topic=eviction';
 const BANK_CACHE_KEY = 'lh_bank_holidays_ew';
@@ -267,9 +273,70 @@ function requiredField(input: Section21PrecheckInput, key: keyof Section21Preche
   }
 }
 
+export function getSection21PrecheckCompleteness(input: Section21PrecheckInput): Section21Completeness {
+  const missingLabels: string[] = [];
+  const addMissing = (label: string) => {
+    if (!missingLabels.includes(label)) missingLabels.push(label);
+  };
+
+  if (!input.tenancy_start_date) addMissing('Tenancy start date');
+  if (input.is_replacement_tenancy === 'unsure') addMissing('Replacement tenancy');
+  if (input.is_replacement_tenancy === 'yes' && !input.original_tenancy_start_date) addMissing('Original tenancy start date');
+  if (input.tenancy_type === 'unsure') addMissing('Tenancy type');
+  if (input.tenancy_type === 'fixed_term' && !input.fixed_term_end_date) addMissing('Fixed term end date');
+  if (input.tenancy_type === 'fixed_term' && input.has_break_clause === 'unsure') addMissing('Break clause');
+  if (input.tenancy_type === 'fixed_term' && input.has_break_clause === 'yes' && !input.break_clause_earliest_end_date) addMissing('Earliest break end date');
+  if (input.rent_period === 'unsure' || input.rent_period === 'other') addMissing('Rent period');
+  if (!input.planned_service_date) addMissing('Planned service date');
+  if (input.service_method === 'unsure' || input.service_method === 'other') addMissing('Service method');
+  if (input.service_before_430pm === 'unsure') addMissing('Service before 4:30pm');
+  if (input.service_method === 'email' && input.tenant_consented_email_service !== 'yes') addMissing('Tenant consent to email service');
+
+  if (input.deposit_taken === 'unsure') addMissing('Deposit taken');
+  if (input.deposit_taken === 'yes') {
+    if (!input.deposit_received_date) addMissing('Deposit received date');
+    if (!input.deposit_protected_date) addMissing('Deposit protected date');
+    if (!input.deposit_prescribed_info_served_tenant_date) addMissing('Prescribed information given to tenant — date');
+    if (!input.deposit_paid_by_relevant_person || input.deposit_paid_by_relevant_person === 'unsure') addMissing('Deposit paid by someone else (relevant person)');
+    if (input.deposit_paid_by_relevant_person === 'yes' && !input.deposit_prescribed_info_served_relevant_person_date) {
+      addMissing('Prescribed information given to deposit payer (relevant person) — date');
+    }
+    if (!input.deposit_returned_in_full_or_agreed || input.deposit_returned_in_full_or_agreed === 'unsure') addMissing('Deposit returned in full / by agreement');
+    if (input.deposit_returned_in_full_or_agreed === 'yes' && !input.deposit_returned_date) addMissing('Deposit returned date');
+    if (!input.deposit_claim_resolved_by_court || input.deposit_claim_resolved_by_court === 'unsure') addMissing('Deposit claim resolved by court');
+  }
+
+  if (input.epc_required === 'unsure') addMissing('EPC required');
+  if (input.epc_required === 'yes' && !input.epc_served_date) addMissing('EPC served date');
+  if (input.gas_installed === 'unsure') addMissing('Gas installed');
+  if (input.gas_installed === 'yes' && !input.gas_safety_record_issue_date) addMissing('Gas safety record issue date');
+  if (input.gas_installed === 'yes' && !input.gas_safety_record_served_date) addMissing('Gas safety record served date');
+  if (input.landlord_type === 'unsure') addMissing('Landlord type');
+  if (input.landlord_type === 'private_landlord') {
+    if (!input.how_to_rent_served_date) addMissing('How to Rent served date');
+    if (!input.how_to_rent_served_method || input.how_to_rent_served_method === 'unsure') addMissing('How to Rent served method');
+    if (input.how_to_rent_served_method === 'email' && input.tenant_consented_email_service !== 'yes') addMissing('Tenant consent to email service');
+    if (input.how_to_rent_was_current_version_at_tenancy_start === 'unsure') addMissing('How to Rent was current at tenancy start');
+  }
+
+  if (input.property_requires_hmo_licence === 'unsure') addMissing('Property requires HMO licence');
+  if (input.property_requires_hmo_licence === 'yes' && (!input.hmo_licence_in_place || input.hmo_licence_in_place === 'unsure')) addMissing('HMO licence in place');
+  if (input.property_requires_selective_licence === 'unsure') addMissing('Property requires selective licence');
+  if (input.property_requires_selective_licence === 'yes' && (!input.selective_licence_in_place || input.selective_licence_in_place === 'unsure')) addMissing('Selective licence in place');
+  if (input.improvement_notice_served === 'unsure') addMissing('Improvement notice served');
+  if (input.improvement_notice_served === 'yes' && !input.improvement_notice_date) addMissing('Improvement notice date served');
+  if (input.emergency_remedial_action_served === 'unsure') addMissing('Emergency remedial action served');
+  if (input.emergency_remedial_action_served === 'yes' && !input.emergency_remedial_action_date) addMissing('Emergency remedial action date served');
+  if (input.prohibited_payment_outstanding === 'unsure') addMissing('Prohibited payment outstanding');
+  if (input.has_proof_of_service_plan === 'unsure') addMissing('Proof of service evidence plan in place');
+
+  return { complete: missingLabels.length === 0, missingLabels };
+}
+
 export async function evaluateSection21Precheck(input: Section21PrecheckInput): Promise<Section21PrecheckResult> {
   const blockers: Reason[] = [];
   const warnings: Reason[] = [];
+  const completeness = getSection21PrecheckCompleteness(input);
 
   requiredField(input, 'tenancy_start_date', blockers);
   requiredField(input, 'planned_service_date', blockers);
@@ -338,7 +405,7 @@ export async function evaluateSection21Precheck(input: Section21PrecheckInput): 
     if (gasIssueDate && plannedServiceDate && addCalendarMonths(gasIssueDate, 12) < plannedServiceDate) addBlocker(blockers, Section21BlockerReasonCode.B012_GAS_SAFETY_NOT_CURRENT);
   }
 
-  const landlordType = input.landlord_type === 'unsure' ? 'private_landlord' : input.landlord_type;
+  const landlordType = input.landlord_type;
   const htrDate = parseISODateLocal(input.how_to_rent_served_date);
   if (landlordType !== 'social_provider' && (!htrDate || (plannedServiceDate && htrDate > plannedServiceDate))) addBlocker(blockers, Section21BlockerReasonCode.B013_HOW_TO_RENT_MISSING);
   if (input.how_to_rent_served_method === 'email' && input.tenant_consented_email_service !== 'yes') addBlocker(blockers, Section21BlockerReasonCode.B004_EMAIL_NOT_CONSENTED);
@@ -384,15 +451,18 @@ export async function evaluateSection21Precheck(input: Section21PrecheckInput): 
     ? new Date(Math.min(addCalendarMonths(deemed.date, 6).getTime(), parseISODateLocal('2026-07-31')!.getTime()))
     : null;
 
-  const hasMissing = blockers.some((b) => b.code === 'MISSING_REQUIRED');
-  const status: Section21PrecheckResult['status'] = hasMissing ? 'incomplete' : blockers.length ? 'risky' : 'valid';
+  const status: Section21PrecheckResult['status'] = !completeness.complete ? 'incomplete' : blockers.length ? 'risky' : 'valid';
   const headline = status === 'valid'
     ? 'Section 21 appears valid based on your answers.'
     : status === 'risky'
       ? 'Section 21 may be invalid based on your answers. Section 8 may be safer in this case.'
-      : 'Complete the required fields to run the Section 21 pre-check.';
+      : 'Incomplete — answer the questions to check eligibility.';
 
-  const ctaLabel = status === 'risky' ? 'Use Section 8 Instead – Start Workflow' : 'Section 21 is Valid – Continue';
+  const ctaLabel = status === 'incomplete'
+    ? 'Complete the check to continue'
+    : status === 'risky'
+      ? 'Use Section 8 Instead – Start Workflow'
+      : 'Section 21 is Valid – Continue';
   const gatedSummary = status === 'incomplete'
     ? 'Answer the questions above to check eligibility.'
     : status === 'risky'
@@ -409,6 +479,7 @@ export async function evaluateSection21Precheck(input: Section21PrecheckInput): 
 
   return {
     status,
+    missing_labels: completeness.complete ? undefined : completeness.missingLabels,
     deemed_service_date: deemed.date ? toISODate(deemed.date) : null,
     minimum_notice_months: minimumMonths,
     earliest_after_date: earliestAfterDate ? toISODate(earliestAfterDate) : null,
