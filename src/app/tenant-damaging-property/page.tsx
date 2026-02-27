@@ -207,6 +207,25 @@ export default function TenantDamagingPropertyPage() {
                 </Link>
               </div>
             </div>
+
+
+            <div className="mt-8 rounded-2xl border border-gray-200 bg-white p-6">
+              <h2 className="text-xl font-bold text-gray-900 mb-3">What should you do next?</h2>
+              <div className="grid sm:grid-cols-2 gap-3 text-sm">
+                <Link href="/products/money-claim" className="rounded-lg border border-gray-200 p-3 hover:border-primary transition-colors">
+                  Recover damage costs with a money claim
+                </Link>
+                <Link href="/section-8-notice-template" className="rounded-lg border border-gray-200 p-3 hover:border-primary transition-colors">
+                  Start Section 8 eviction for breach grounds
+                </Link>
+                <Link href="/possession-claim-guide" className="rounded-lg border border-gray-200 p-3 hover:border-primary transition-colors">
+                  Move to possession claim if tenant stays
+                </Link>
+                <Link href="/tenancy-agreements" className="rounded-lg border border-gray-200 p-3 hover:border-primary transition-colors">
+                  Strengthen future tenancy clauses after this case
+                </Link>
+              </div>
+            </div>
           </div>
         </Container>
       </div>
