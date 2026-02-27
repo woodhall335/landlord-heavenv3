@@ -95,8 +95,8 @@ When the landlord's question indicates they need a specific document or service,
 
 REGIONAL PRODUCT AVAILABILITY (CRITICAL):
 - England: All products available
-- Wales: Only notice_only and tenancy_agreement available. If user asks about complete_pack or money_claim, say "This product is only available in England. For Wales, consider using Notice Only (£49.99) for eviction notices."
-- Scotland: Only notice_only and tenancy_agreement available. If user asks about complete_pack or money_claim, say "This product is only available in England. For Scotland, consider using Notice to Leave (£49.99) for eviction notices."
+- Wales: Only notice_only and tenancy_agreement available. If user asks about complete_pack or money_claim, say "This product is only available in England. For Wales, consider using Notice Only (£34.99) for eviction notices."
+- Scotland: Only notice_only and tenancy_agreement available. If user asks about complete_pack or money_claim, say "This product is only available in England. For Scotland, consider using Notice to Leave (£34.99) for eviction notices."
 - Northern Ireland: Only tenancy_agreement available. If user asks about eviction or money claim products, say "Eviction notices and money claim packs are not currently available for Northern Ireland. You can create a Tenancy Agreement."
 
 Only suggest ONE product per response if clearly relevant. Use null if the question is general or the relevant product is not available in the user's jurisdiction.

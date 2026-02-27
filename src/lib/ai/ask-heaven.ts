@@ -409,8 +409,8 @@ export function getRegionalProductGuidance(jurisdiction: string, product?: strin
     if ((normalizedJurisdiction === 'wales' || normalizedJurisdiction === 'scotland') && englandOnlyProducts.includes(product)) {
       const regionName = normalizedJurisdiction === 'wales' ? 'Wales' : 'Scotland';
       const alternative = product === 'money_claim'
-        ? 'Consider using Notice Only (£49.99) for rent arrears eviction notices instead.'
-        : 'Consider using Notice Only (£49.99) for eviction notices instead.';
+        ? 'Consider using Notice Only (£34.99) for rent arrears eviction notices instead.'
+        : 'Consider using Notice Only (£34.99) for eviction notices instead.';
       return `⚠️ ${product} is only available in England, not ${regionName}. ${alternative}`;
     }
   }
@@ -421,10 +421,10 @@ export function getRegionalProductGuidance(jurisdiction: string, product?: strin
       return 'All products are available in England: Notice Only, Complete Pack, Money Claim Pack, and Tenancy Agreement.';
 
     case 'wales':
-      return 'In Wales, only Notice Only (£49.99) and Tenancy Agreement are available. Complete Pack and Money Claim Pack are England-only.';
+      return 'In Wales, only Notice Only (£34.99) and Tenancy Agreement are available. Complete Pack and Money Claim Pack are England-only.';
 
     case 'scotland':
-      return 'In Scotland, only Notice Only (£49.99) and Tenancy Agreement are available. Complete Pack and Money Claim Pack are England-only.';
+      return 'In Scotland, only Notice Only (£34.99) and Tenancy Agreement are available. Complete Pack and Money Claim Pack are England-only.';
 
     case 'northern-ireland':
     case 'northern ireland':

@@ -86,18 +86,18 @@ export default function PricingPage() {
                 <th className="text-left p-6 font-semibold text-charcoal">Feature</th>
                 <th className="text-center p-6">
                   <div className="font-semibold text-charcoal mb-2">Notices</div>
-                  <div className="text-2xl font-bold text-primary mb-1">£49.99</div>
+                  <div className="text-2xl font-bold text-primary mb-1">£34.99</div>
                   <div className="text-sm text-gray-600">One-time</div>
                 </th>
                 <th className="text-center p-6">
                   <div className="font-semibold text-charcoal mb-2">Complete Pack</div>
-                  <div className="text-2xl font-bold text-primary mb-1">£129.99</div>
+                  <div className="text-2xl font-bold text-primary mb-1">£59.99</div>
                   <div className="text-xs text-amber-600 font-medium">England only</div>
                   <div className="text-sm text-gray-600">One-time</div>
                 </th>
                 <th className="text-center p-6">
                   <div className="font-semibold text-charcoal mb-2">Money Claims</div>
-                  <div className="text-2xl font-bold text-primary mb-1">£99.99</div>
+                  <div className="text-2xl font-bold text-primary mb-1">£44.99</div>
                   <div className="text-xs text-amber-600 font-medium">England only</div>
                   <div className="text-sm text-gray-600">One-time</div>
                 </th>
@@ -311,7 +311,7 @@ export default function PricingPage() {
           {/* Notices */}
           <div className="bg-white rounded-lg border-2 border-gray-200 p-6">
             <h3 className="text-2xl font-bold text-charcoal mb-2">Notices</h3>
-            <div className="text-3xl font-bold text-primary mb-4">£49.99 <span className="text-sm text-gray-600">one-time</span></div>
+            <div className="text-3xl font-bold text-primary mb-4">£34.99 <span className="text-sm text-gray-600">one-time</span></div>
             <ul className="space-y-2 mb-6 text-sm">
               <li>✅ Section 8/21 Notice</li>
               <li>✅ England/Wales/Scotland notices</li>
@@ -330,7 +330,7 @@ export default function PricingPage() {
           {/* Complete Eviction Pack */}
           <div className="bg-white rounded-lg border-2 border-gray-200 p-6">
             <h3 className="text-2xl font-bold text-charcoal mb-2">Complete Pack</h3>
-            <div className="text-3xl font-bold text-primary mb-2">£129.99 <span className="text-sm text-gray-600">one-time</span></div>
+            <div className="text-3xl font-bold text-primary mb-2">£59.99 <span className="text-sm text-gray-600">one-time</span></div>
             <div className="text-xs text-amber-600 font-medium mb-4">England only</div>
             <ul className="space-y-2 mb-6 text-sm">
               <li>✅ Section 8/21 Notice</li>
@@ -350,7 +350,7 @@ export default function PricingPage() {
           {/* Money Claims */}
           <div className="bg-white rounded-lg border-2 border-gray-200 p-6">
             <h3 className="text-2xl font-bold text-charcoal mb-2">Money Claims</h3>
-            <div className="text-3xl font-bold text-primary mb-2">£99.99 <span className="text-sm text-gray-600">one-time</span></div>
+            <div className="text-3xl font-bold text-primary mb-2">£44.99 <span className="text-sm text-gray-600">one-time</span></div>
             <div className="text-xs text-amber-600 font-medium mb-4">England only</div>
             <ul className="space-y-2 mb-6 text-sm">
               <li>✅ Money Claim Forms</li>

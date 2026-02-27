@@ -101,7 +101,7 @@ export default function WalesEvictionNoticesPage() {
                   href={wizardHref}
                   className="inline-flex items-center justify-center gap-2 bg-white text-red-800 font-semibold py-4 px-8 rounded-xl hover:bg-red-50 transition-colors"
                 >
-                  Get Wales Notice — £49.99
+                  Get Wales Notice — £34.99
                   <ArrowRight className="w-5 h-5" />
                 </Link>
                 <Link
@@ -509,13 +509,13 @@ export default function WalesEvictionNoticesPage() {
                   href="/products/notice-only"
                   className="inline-flex items-center justify-center gap-2 bg-white text-red-700 font-semibold py-4 px-8 rounded-xl hover:bg-red-50 transition-colors"
                 >
-                  Get Wales Notice — £49.99
+                  Get Wales Notice — £34.99
                 </Link>
                 <Link
                   href="/products/complete-pack"
                   className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold py-4 px-8 rounded-xl transition-colors border border-white/30"
                 >
-                  Complete Pack — £129.99
+                  Complete Pack — £59.99
                 </Link>
               </div>
             </div>
@@ -546,11 +546,11 @@ export default function WalesEvictionNoticesPage() {
                 jurisdictionLabel="Wales eviction notices"
                 scenarioLabel="Renting Homes Act possession"
                 primaryCTA={{
-                  label: 'Generate Wales notice — £49.99',
+                  label: 'Generate Wales notice — £34.99',
                   href: productLinks.noticeOnly.href,
                 }}
                 secondaryCTA={{
-                  label: 'Complete eviction pack — £129.99',
+                  label: 'Complete eviction pack — £59.99',
                   href: productLinks.completePack.href,
                 }}
                 relatedLinks={[

@@ -166,21 +166,21 @@ export default function HomeContent() {
               href="/products/notice-only"
               title="Eviction Notices"
               description="Section 8, Section 21, and devolved equivalents with service instructions."
-              price="£49.99"
+              price="£34.99"
               icon={<RiFileTextLine className="w-7 h-7" />}
             />
             <ProductCard
               href="/products/complete-pack"
               title="Complete Eviction Pack"
               description="Full bundle from notice to possession order with court forms and guidance."
-              price="£129.99"
+              price="£59.99"
               icon={<RiScales3Line className="w-7 h-7" />}
             />
             <ProductCard
               href="/products/money-claim"
               title="Money Claim Pack"
               description="Rent arrears claims with evidence checklists and particulars of claim."
-              price="£99.99"
+              price="£44.99"
               icon={<RiMoneyPoundCircleLine className="w-7 h-7" />}
             />
             <ProductCard

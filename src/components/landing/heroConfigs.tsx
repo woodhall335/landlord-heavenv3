@@ -75,8 +75,7 @@ export const homeHeroConfig: HeroConfig = {
 
 export const astHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
-  trustText:
-    'Court-ready • Updated for current housing law • England • Wales • Scotland • NI',
+  trustText: 'Court-ready • Updated for current housing law • UK-wide coverage',
   title: 'Jurisdiction-Specific',
   highlightTitle: 'Tenancy Agreement',
   subtitle: astSubtitle,
@@ -99,7 +98,7 @@ export const astHeroConfig: HeroConfig = {
 export const noticeOnlyHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
   trustText:
-    'Court-ready • Updated for current housing law • England (S21 & S8) • Wales (S173 & RHW23) • Scotland (Notice to Leave)',
+    'Court-ready • Updated for current housing law • England, Wales & Scotland',
   title: 'Eviction Notice',
   highlightTitle: 'Documents',
   subtitle:
@@ -118,8 +117,7 @@ export const noticeOnlyHeroConfig: HeroConfig = {
 
 export const completePackHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
-  trustText:
-    'Court-ready • Updated for current housing law • England-only (HMCTS / County Court forms)',
+  trustText: 'Court-ready • Updated for current housing law • England-only',
   title: 'Complete',
   highlightTitle: 'Court Bundle',
   subtitle:
@@ -138,8 +136,7 @@ export const completePackHeroConfig: HeroConfig = {
 
 export const moneyClaimHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
-  trustText:
-    'Court-ready • Updated for current housing law • England-only (County Court / MCOL-ready)',
+  trustText: 'Court-ready • Updated for current housing law • England-only',
   title: 'Money Claim',
   highlightTitle: 'Documents',
   subtitle:

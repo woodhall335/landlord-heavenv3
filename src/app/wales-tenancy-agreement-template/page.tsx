@@ -328,12 +328,12 @@ export default function WalesTenancyAgreementTemplatePage() {
               <Link href="/products/notice-only" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
                 <h3 className="font-semibold text-gray-900">Welsh Eviction Notices</h3>
                 <p className="text-sm text-gray-600 mb-2">Section 173 & 181 notices</p>
-                <span className="text-red-600 font-medium">£49.99</span>
+                <span className="text-red-600 font-medium">£34.99</span>
               </Link>
               <Link href="/products/money-claim" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
                 <h3 className="font-semibold text-gray-900">Welsh Money Claims</h3>
                 <p className="text-sm text-gray-600 mb-2">Recover rent & damage</p>
-                <span className="text-red-600 font-medium">£99.99</span>
+                <span className="text-red-600 font-medium">£44.99</span>
               </Link>
               <Link href="/ask-heaven" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
                 <h3 className="font-semibold text-gray-900">Ask Heaven for Wales</h3>

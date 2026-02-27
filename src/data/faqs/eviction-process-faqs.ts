@@ -26,7 +26,7 @@ export const evictionProcessEnglandFAQs: FAQItem[] = [
   {
     question: 'How much does it cost to evict a tenant in England?',
     answer:
-      'Court fees are approximately £355 for possession claims. Bailiff fees for warrant of possession are around £130. If using a solicitor, expect £500-3000 depending on complexity. Our Complete Eviction Pack provides all documents you need for £129.99.',
+      'Court fees are approximately £355 for possession claims. Bailiff fees for warrant of possession are around £130. If using a solicitor, expect £500-3000 depending on complexity. Our Complete Eviction Pack provides all documents you need for £59.99.',
   },
   {
     question: 'Can I evict a tenant without going to court in England?',

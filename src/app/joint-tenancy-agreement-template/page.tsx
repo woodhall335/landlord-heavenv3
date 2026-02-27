@@ -365,11 +365,11 @@ export default function JointTenancyAgreementTemplatePage() {
             </p>
             <div className="grid md:grid-cols-2 gap-4">
               <Link href="/products/notice-only" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                <h3 className="font-semibold text-gray-900">Eviction Notices — £49.99</h3>
+                <h3 className="font-semibold text-gray-900">Eviction Notices — £34.99</h3>
                 <p className="text-sm text-gray-600">Section 21 or Section 8 to end the entire joint tenancy</p>
               </Link>
               <Link href="/products/money-claim" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                <h3 className="font-semibold text-gray-900">Money Claims — £99.99</h3>
+                <h3 className="font-semibold text-gray-900">Money Claims — £44.99</h3>
                 <p className="text-sm text-gray-600">Recover rent arrears from any or all joint tenants</p>
               </Link>
             </div>

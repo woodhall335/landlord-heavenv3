@@ -423,7 +423,7 @@ export default function MoneyClaimOnlineMCOLPage() {
                   href="/wizard?product=money_claim&topic=debt&src=seo_money_claim_online_mcol"
                   className="hero-btn-primary"
                 >
-                  Prepare my claim — £99.99 →
+                  Prepare my claim — £44.99 →
                 </Link>
                 <p className="text-sm text-gray-600">
                   Court fees are extra (paid directly to MCOL). You can usually claim them back.

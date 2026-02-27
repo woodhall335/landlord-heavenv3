@@ -248,12 +248,12 @@ export default function PrtTemplateScotlandPage() {
               <Link href="/products/notice-only" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
                 <h3 className="font-semibold text-gray-900">Scottish Notice to Leave</h3>
                 <p className="text-sm text-gray-600 mb-2">All 18 grounds with correct notice periods</p>
-                <span className="text-indigo-600 font-medium">£49.99</span>
+                <span className="text-indigo-600 font-medium">£34.99</span>
               </Link>
               <Link href="/products/money-claim" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
                 <h3 className="font-semibold text-gray-900">Scottish Money Claims</h3>
                 <p className="text-sm text-gray-600 mb-2">Simple Procedure for Scottish courts</p>
-                <span className="text-indigo-600 font-medium">£99.99</span>
+                <span className="text-indigo-600 font-medium">£44.99</span>
               </Link>
               <Link href="/ask-heaven" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
                 <h3 className="font-semibold text-gray-900">Ask Heaven for Scotland</h3>

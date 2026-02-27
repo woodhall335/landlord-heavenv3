@@ -181,13 +181,13 @@ describe('Measurement Protocol', () => {
       await sendServerPurchaseEvent({
         clientId: '1234567890.1705226400',
         transactionId: 'order-abc-123',
-        value: 49.99,
+        value: 34.99,
         currency: 'GBP',
         items: [
           {
             item_id: 'complete_pack',
             item_name: 'Complete Eviction Pack',
-            price: 49.99,
+            price: 34.99,
             quantity: 1,
             item_category: 'legal_document',
           },
@@ -198,7 +198,7 @@ describe('Measurement Protocol', () => {
 
       expect(requestBody.events[0].name).toBe('purchase');
       expect(requestBody.events[0].params.transaction_id).toBe('order-abc-123');
-      expect(requestBody.events[0].params.value).toBe(49.99);
+      expect(requestBody.events[0].params.value).toBe(34.99);
       expect(requestBody.events[0].params.currency).toBe('GBP');
       expect(requestBody.events[0].params.items).toHaveLength(1);
       expect(requestBody.events[0].params.items[0].item_id).toBe('complete_pack');

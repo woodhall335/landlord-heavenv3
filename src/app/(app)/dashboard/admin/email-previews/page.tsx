@@ -345,7 +345,7 @@ export default function AdminEmailPreviewsPage() {
                   </tr>
                   <tr>
                     <td style="padding: 10px 0; font-family: Arial, Helvetica, sans-serif; font-size: 16px; font-weight: bold; color: ${COLORS.white};">Total Paid:</td>
-                    <td style="padding: 10px 0; font-family: Arial, Helvetica, sans-serif; font-size: 18px; font-weight: bold; color: ${COLORS.primary}; text-align: right;">£49.99</td>
+                    <td style="padding: 10px 0; font-family: Arial, Helvetica, sans-serif; font-size: 18px; font-weight: bold; color: ${COLORS.primary}; text-align: right;">£34.99</td>
                   </tr>
                 </table>
               </td>

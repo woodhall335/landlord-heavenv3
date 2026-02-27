@@ -57,7 +57,7 @@ function normalizeToPaymentSku(productType: string): string {
 
 /**
  * Map product types to Stripe Price IDs
- * Note: money_claim is £99.99, sc_money_claim (discontinued) shares the same Stripe price ID
+ * Note: money_claim is £44.99, sc_money_claim (discontinued) shares the same Stripe price ID
  * Jurisdiction-specific display SKUs (prt_*, occupation_*, ni_*) map to the same prices as ast_*
  */
 const PRODUCT_TO_PRICE_ID: Record<string, string> = {
@@ -632,7 +632,7 @@ export async function POST(request: Request) {
       : undefined;
 
     // Create order record using admin client to avoid RLS issues
-    // Amount comes from products.ts (source of truth) - already in GBP (e.g., 49.99)
+    // Amount comes from products.ts (source of truth) - already in GBP (e.g., 34.99)
     // Attribution fields are stored for revenue reporting (Migration 012)
     const orderPayload = {
         user_id: user.id,
@@ -728,7 +728,7 @@ export async function POST(request: Request) {
     // Use idempotency key if we have a case_id (prevents duplicate Stripe sessions)
     const stripeOptions = idempotencyKey ? { idempotencyKey } : undefined;
 
-    // Convert price from GBP (e.g., 99.99) to pence (9999) for Stripe
+    // Convert price from GBP (e.g., 44.99) to pence (9999) for Stripe
     const unitAmountPence = Math.round(product.price * 100);
 
     const session = await stripe.checkout.sessions.create(

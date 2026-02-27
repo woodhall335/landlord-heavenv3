@@ -8,9 +8,9 @@
  * Update ONLY here when prices change. All landing pages reference these values.
  */
 export const SEO_PRICES = {
-  evictionNotice: { amount: 49.99, display: '£49.99' },
-  evictionBundle: { amount: 129.99, display: '£129.99' },
-  moneyClaim: { amount: 99.99, display: '£99.99' },
+  evictionNotice: { amount: 34.99, display: '£34.99' },
+  evictionBundle: { amount: 59.99, display: '£59.99' },
+  moneyClaim: { amount: 44.99, display: '£44.99' },
   tenancyStandard: { amount: 14.99, display: '£14.99' },
   tenancyPremium: { amount: 24.99, display: '£24.99' },
 } as const;
@@ -60,7 +60,7 @@ export interface ProductConfig {
   label: string;
   shortLabel: string;
   description: string;
-  /** Numeric price in GBP (e.g., 49.99) */
+  /** Numeric price in GBP (e.g., 34.99) */
   price: number;
   displayPrice: string;
   priceNote?: string;

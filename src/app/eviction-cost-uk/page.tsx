@@ -80,7 +80,7 @@ const faqs = [
   },
   {
     question: 'What is the cheapest way to evict a tenant?',
-    answer: 'The most affordable route is DIY using our document packs. Notice Only Pack (£49.99) for serving notice, or Complete Pack (£129.99) for full eviction including court forms. Add court fees (£355-485) for total cost of ~£500-640.',
+    answer: 'The most affordable route is DIY using our document packs. Notice Only Pack (£34.99) for serving notice, or Complete Pack (£59.99) for full eviction including court forms. Add court fees (£355-485) for total cost of ~£500-640.',
   },
   {
     question: 'Are there any hidden costs in eviction?',
@@ -127,7 +127,7 @@ export default function EvictionCostUkPage() {
           badgeIcon={<PoundSterling className="w-4 h-4" />}
           title="How Much Does Eviction Cost UK?"
           subtitle={<>Budget between <strong>£500 and £3,000+</strong> depending on your approach. Here&apos;s the full breakdown with full statutory process cost breakdown.</>}
-          primaryCTA={{ label: 'Save £1,000+ — DIY Pack from £49.99', href: wizardLinkNoticeOnly }}
+          primaryCTA={{ label: 'Save £1,000+ — DIY Pack from £34.99', href: wizardLinkNoticeOnly }}
           secondaryCTA={{ label: 'See Complete Pack', href: '/products/complete-pack' }}
           variant="pastel"
         >
@@ -176,7 +176,7 @@ export default function EvictionCostUkPage() {
                   <ul className="space-y-3 mb-6">
                     <li className="flex items-center justify-between text-sm">
                       <span className="text-gray-600">Notice Pack</span>
-                      <span className="font-medium">£49.99</span>
+                      <span className="font-medium">£34.99</span>
                     </li>
                     <li className="flex items-center justify-between text-sm">
                       <span className="text-gray-600">Court fee (N5B)</span>
@@ -206,7 +206,7 @@ export default function EvictionCostUkPage() {
                   <ul className="space-y-3 mb-6">
                     <li className="flex items-center justify-between text-sm">
                       <span className="text-gray-600">Complete Pack</span>
-                      <span className="font-medium">£129.99</span>
+                      <span className="font-medium">£59.99</span>
                     </li>
                     <li className="flex items-center justify-between text-sm">
                       <span className="text-gray-600">Court fee</span>
@@ -319,7 +319,7 @@ export default function EvictionCostUkPage() {
                         <br />
                         <span className="text-sm text-gray-500">Section 21 + Section 8 notices</span>
                       </td>
-                      <td className="px-6 py-4 text-right font-medium text-green-700">£49.99</td>
+                      <td className="px-6 py-4 text-right font-medium text-green-700">£34.99</td>
                     </tr>
                     <tr className="bg-green-50">
                       <td className="px-6 py-4 text-gray-700">
@@ -327,7 +327,7 @@ export default function EvictionCostUkPage() {
                         <br />
                         <span className="text-sm text-gray-500">Notices + all court forms + witness statements</span>
                       </td>
-                      <td className="px-6 py-4 text-right font-medium text-green-700">£129.99</td>
+                      <td className="px-6 py-4 text-right font-medium text-green-700">£59.99</td>
                     </tr>
                     <tr>
                       <td className="px-6 py-4 text-gray-700">
@@ -403,7 +403,7 @@ export default function EvictionCostUkPage() {
                 variant="section"
                 jurisdiction="england"
                 title="Keep Costs Low — Use Our DIY Packs"
-                description="Court-ready documents at a fraction of solicitor costs. Notice Only from £49.99, Complete Pack £129.99."
+                description="Court-ready documents at a fraction of solicitor costs. Notice Only from £34.99, Complete Pack £59.99."
               />
             </div>
           </div>
@@ -505,7 +505,7 @@ export default function EvictionCostUkPage() {
                         className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors"
                       >
                         <Gavel className="w-5 h-5" />
-                        Get Money Claim Pack — £99.99
+                        Get Money Claim Pack — £44.99
                       </Link>
                       <Link
                         href="/money-claim-unpaid-rent"
@@ -534,7 +534,7 @@ export default function EvictionCostUkPage() {
                 variant="final"
                 jurisdiction="england"
                 title="Start Your Eviction for Less"
-                description="Court-ready documents from £49.99. Save over £1,000 compared to solicitor fees."
+                description="Court-ready documents from £34.99. Save over £1,000 compared to solicitor fees."
               />
 
               <SeoDisclaimer className="max-w-4xl mx-auto" />

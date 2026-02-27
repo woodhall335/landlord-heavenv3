@@ -392,7 +392,7 @@ export default function MoneyClaimEarlyTerminationPage() {
                 href="/wizard?product=money_claim&reason=rent_arrears&topic=debt&src=seo_money_claim_early_termination"
                 className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
               >
-                Start Your Claim — £99.99
+                Start Your Claim — £44.99
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <p className="text-sm text-gray-500 mt-3">

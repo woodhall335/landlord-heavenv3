@@ -72,7 +72,7 @@ export default function RentArrearsLetterTemplatePage() {
       offers: {
         '@type': 'AggregateOffer',
         lowPrice: '0',
-        highPrice: '149.99',
+        highPrice: '59.99',
         priceCurrency: 'GBP',
         offerCount: '3',
       },
@@ -333,7 +333,7 @@ export default function RentArrearsLetterTemplatePage() {
                     href={wizardLinkMoneyClaim}
                     className="inline-flex items-center gap-2 text-primary font-medium hover:underline"
                   >
-                    Get Money Claim Pack — £99.99
+                    Get Money Claim Pack — £44.99
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
@@ -371,7 +371,7 @@ export default function RentArrearsLetterTemplatePage() {
                     href={wizardLinkNoticeOnly}
                     className="inline-flex items-center gap-2 text-primary font-medium hover:underline"
                   >
-                    Get Eviction Notice — £49.99
+                    Get Eviction Notice — £34.99
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
@@ -442,7 +442,7 @@ export default function RentArrearsLetterTemplatePage() {
                   </div>
                   <div className="text-center mb-6">
                     <span className="text-sm font-medium text-primary uppercase tracking-wide">Money Claim Pack</span>
-                    <div className="text-4xl font-bold text-gray-900 mt-2">£99.99</div>
+                    <div className="text-4xl font-bold text-gray-900 mt-2">£44.99</div>
                   </div>
                   <ul className="space-y-4 mb-8">
                     <li className="flex items-start gap-3">
@@ -901,7 +901,7 @@ export default function RentArrearsLetterTemplatePage() {
                   href={wizardLinkMoneyClaim}
                   className="hero-btn-secondary inline-flex items-center justify-center gap-2"
                 >
-                  Get Money Claim Pack — £99.99
+                  Get Money Claim Pack — £44.99
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               </div>
