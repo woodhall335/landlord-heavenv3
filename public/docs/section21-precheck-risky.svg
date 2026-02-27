@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700">
+  <rect width="1200" height="700" fill="#f8f7ff"/>
+  <rect x="80" y="60" width="1040" height="560" rx="20" fill="#ffffff" stroke="#7c3aed" stroke-width="3"/>
+  <text x="120" y="130" font-family="Arial" font-size="42" font-weight="700" fill="#1f2937">⚠️ Quick compliance &amp; timing check</text>
+  <text x="120" y="180" font-family="Arial" font-size="28" fill="#4b5563">One mistake can invalidate a Section 21 notice. Check in 60 seconds.</text>
+  <rect x="120" y="430" width="960" height="160" rx="12" fill="#f5f3ff" stroke="#7c3aed" stroke-width="2"/>
+  <text x="150" y="490" font-family="Arial" font-size="34" font-weight="700" fill="#4c1d95">Section 21 may be invalid based on your answers.</text>
+  <text x="150" y="528" font-family="Arial" font-size="28" fill="#5b21b6">Section 8 may be safer in this case.</text>
+  <rect x="150" y="542" width="900" height="40" rx="8" fill="#7c3aed"/>
+  <text x="600" y="569" text-anchor="middle" font-family="Arial" font-size="24" font-weight="700" fill="#ffffff">Use Section 8 Instead – Start Workflow</text>
+</svg>

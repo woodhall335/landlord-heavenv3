@@ -10,6 +10,7 @@ import type {
 } from '@/lib/previews/noticeOnlyPreviews';
 import type { CompletePackPreviewData, CompletePackVariantKey } from '@/lib/previews/completePackPreviews';
 import type { MoneyClaimPreviewData } from '@/lib/previews/moneyClaimPreviews';
+import Section21ComplianceTimingPanel from '@/components/products/Section21ComplianceTimingPanel';
 
 type WhatsIncludedInteractiveProps =
   | {
@@ -457,6 +458,8 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
       <Container>
         <div className="max-w-6xl mx-auto">
           {showIntro ? (
+            <>
+            {isNoticeOnly && selectedJurisdiction === 'england' ? <Section21ComplianceTimingPanel /> : null}
             <div className="text-center mb-10">
               <h2 className="text-3xl md:text-4xl font-bold text-charcoal">
                 {props.titleOverride ??
@@ -475,6 +478,7 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
                     : 'England-only pack. Preview every document before you buy.')}
               </p>
             </div>
+            </>
           ) : null}
 
           {isNoticeOnly ? (
