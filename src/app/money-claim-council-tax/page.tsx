@@ -12,6 +12,8 @@ import {
   Receipt,
 } from 'lucide-react';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { moneyClaimGuides, moneyClaimUtilitiesLinks, productLinks } from '@/lib/seo/internal-links';
 
@@ -117,7 +119,16 @@ export default function MoneyClaimCouncilTaxPage() {
         ])}
       />
 
+      <HeaderConfig mode="autoOnScroll" />
+
       <main className="min-h-screen bg-gray-50">
+        <UniversalHero
+          title="Money Claim for Unpaid Council Tax"
+          subtitle="Build a legally validated, solicitor-grade, compliance-checked and court-ready debt claim package."
+          primaryCta={{ label: "Start now", href: "/wizard?product=money_claim&topic=debt&src=seo_money_claim_council_tax" }}
+          showTrustPositioningBar
+          hideMedia
+        />
         {/* Hero Section */}
         <section className="bg-gradient-to-br from-indigo-900 to-indigo-800 text-white py-16 lg:py-24">
           <div className="container mx-auto px-4">
@@ -127,9 +138,9 @@ export default function MoneyClaimCouncilTaxPage() {
                 Recover council tax costs
               </div>
 
-              <h1 className="text-4xl lg:text-5xl font-bold mb-6">
+              <h2 className="text-4xl lg:text-5xl font-bold mb-6">
                 Claim Unpaid Council Tax from Tenant
-              </h1>
+              </h2>
 
               <p className="text-xl text-indigo-100 mb-8 max-w-2xl mx-auto">
                 When your tenancy agreement makes the tenant liable for council tax
@@ -138,7 +149,7 @@ export default function MoneyClaimCouncilTaxPage() {
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
-                  href="/wizard?product=money_claim&reason=unpaid_council_tax&src=seo_council_tax"
+                  href="/wizard?product=money_claim&reason=unpaid_council_tax&topic=debt&src=seo_money_claim_council_tax"
                   className="inline-flex items-center justify-center gap-2 bg-white text-indigo-800 font-semibold py-4 px-8 rounded-xl hover:bg-indigo-50 transition-colors"
                 >
                   Start Council Tax Claim
@@ -341,7 +352,7 @@ export default function MoneyClaimCouncilTaxPage() {
                 and guidance for recovering council tax costs.
               </p>
               <Link
-                href="/wizard?product=money_claim&reason=unpaid_council_tax&src=seo_council_tax"
+                href="/wizard?product=money_claim&reason=unpaid_council_tax&topic=debt&src=seo_money_claim_council_tax"
                 className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
               >
                 Start Your Claim — £99.99

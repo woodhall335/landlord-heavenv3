@@ -12,14 +12,16 @@ import {
   ClipboardList,
 } from 'lucide-react';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { moneyClaimGuides, moneyClaimForms, moneyClaimFormLinks, productLinks } from '@/lib/seo/internal-links';
 import { scheduleOfDebtFAQs } from '@/data/faqs';
 
 export const metadata: Metadata = {
-  title: 'Schedule of Debt Template for Landlords 2026 | Rent Arrears Breakdown',
+  title: 'Schedule of Debt for Landlords 2026 | Rent Arrears Breakdown',
   description:
-    'How to create a Schedule of Debt for tenant money claims. Template and examples for rent arrears, damage costs, and other landlord claims.',
+    'How to create a court-ready Schedule of Debt for tenant money claims, with structured examples for arrears and damage costs.',
   keywords: [
     'schedule of debt',
     'rent arrears schedule',
@@ -33,7 +35,7 @@ export const metadata: Metadata = {
     'tenant arrears breakdown',
   ],
   openGraph: {
-    title: 'Schedule of Debt Template for Landlords 2026 | Rent Arrears Breakdown',
+    title: 'Schedule of Debt for Landlords 2026 | Rent Arrears Breakdown',
     description:
       'How to create a clear Schedule of Debt for court claims against tenants.',
     type: 'article',
@@ -65,7 +67,16 @@ export default function MoneyClaimScheduleOfDebtPage() {
         ])}
       />
 
+      <HeaderConfig mode="autoOnScroll" />
+
       <main className="min-h-screen bg-gray-50">
+        <UniversalHero
+          title="Schedule of Debt for Money Claims"
+          subtitle="Build a legally validated, solicitor-grade, compliance-checked and court-ready debt claim package."
+          primaryCta={{ label: "Start now", href: "/wizard?product=money_claim&topic=debt&src=seo_money_claim_schedule_of_debt" }}
+          showTrustPositioningBar
+          hideMedia
+        />
         {/* Hero Section */}
         <section className="bg-gradient-to-br from-teal-900 to-teal-800 text-white py-16 lg:py-24">
           <div className="container mx-auto px-4">
@@ -75,9 +86,9 @@ export default function MoneyClaimScheduleOfDebtPage() {
                 Essential for court claims
               </div>
 
-              <h1 className="text-4xl lg:text-5xl font-bold mb-6">
+              <h2 className="text-4xl lg:text-5xl font-bold mb-6">
                 Schedule of Debt Guide
-              </h1>
+              </h2>
 
               <p className="text-xl text-teal-100 mb-8 max-w-2xl mx-auto">
                 A clear breakdown of what your tenant owes makes your claim easier to
@@ -86,7 +97,7 @@ export default function MoneyClaimScheduleOfDebtPage() {
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
-                  href="/wizard?product=money_claim&src=seo_schedule"
+                  href="/wizard?product=money_claim&topic=debt&src=seo_money_claim_schedule_of_debt"
                   className="inline-flex items-center justify-center gap-2 bg-white text-teal-800 font-semibold py-4 px-8 rounded-xl hover:bg-teal-50 transition-colors"
                 >
                   Generate Your Schedule
@@ -355,7 +366,7 @@ export default function MoneyClaimScheduleOfDebtPage() {
                 of Debt based on the information you provide about your claim.
               </p>
               <Link
-                href="/wizard?product=money_claim&src=seo_schedule"
+                href="/wizard?product=money_claim&topic=debt&src=seo_money_claim_schedule_of_debt"
                 className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
               >
                 Generate Your Documents — £99.99

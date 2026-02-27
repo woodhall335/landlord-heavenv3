@@ -14,6 +14,8 @@ import {
   Receipt,
 } from 'lucide-react';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { NextLegalSteps } from '@/components/seo/NextLegalSteps';
 import { productLinks, toolLinks } from '@/lib/seo/internal-links';
 import { cleaningCostsFAQs } from '@/data/faqs';
@@ -66,7 +68,16 @@ export default function MoneyClaimCleaningCostsPage() {
         ])}
       />
 
+      <HeaderConfig mode="autoOnScroll" />
+
       <main className="min-h-screen bg-gray-50">
+        <UniversalHero
+          title="Money Claim for Cleaning Costs"
+          subtitle="Build a legally validated, solicitor-grade, compliance-checked and court-ready debt claim package."
+          primaryCta={{ label: "Start now", href: "/wizard?product=money_claim&topic=debt&src=seo_money_claim_cleaning_costs" }}
+          showTrustPositioningBar
+          hideMedia
+        />
         {/* Hero Section */}
         <section className="bg-gradient-to-br from-teal-900 to-teal-800 text-white py-16 lg:py-24">
           <div className="container mx-auto px-4">
@@ -76,9 +87,9 @@ export default function MoneyClaimCleaningCostsPage() {
                 Recover cleaning costs
               </div>
 
-              <h1 className="text-4xl lg:text-5xl font-bold mb-6">
+              <h2 className="text-4xl lg:text-5xl font-bold mb-6">
                 Claim Cleaning &amp; Rubbish Removal Costs from Tenant
-              </h1>
+              </h2>
 
               <p className="text-xl text-teal-100 mb-8 max-w-2xl mx-auto">
                 When tenants leave your property in an unacceptable state, recover
@@ -87,7 +98,7 @@ export default function MoneyClaimCleaningCostsPage() {
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
-                  href="/wizard?product=money_claim&reason=cleaning&src=seo_cleaning"
+                  href="/wizard?product=money_claim&reason=cleaning&topic=debt&src=seo_money_claim_cleaning_costs"
                   className="inline-flex items-center justify-center gap-2 bg-white text-teal-800 font-semibold py-4 px-8 rounded-xl hover:bg-teal-50 transition-colors"
                 >
                   Start Cleaning Costs Claim
@@ -515,7 +526,7 @@ export default function MoneyClaimCleaningCostsPage() {
                   costs builder, and step-by-step guidance for cleaning and rubbish removal claims.
                 </p>
                 <Link
-                  href="/wizard?product=money_claim&reason=cleaning&src=seo_cleaning"
+                  href="/wizard?product=money_claim&reason=cleaning&topic=debt&src=seo_money_claim_cleaning_costs"
                   className="inline-flex items-center gap-2 bg-teal-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-teal-700"
                 >
                   <FileText className="w-4 h-4" />
@@ -539,7 +550,7 @@ export default function MoneyClaimCleaningCostsPage() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
-                  href="/wizard?product=money_claim&reason=cleaning&src=seo_cleaning"
+                  href="/wizard?product=money_claim&reason=cleaning&topic=debt&src=seo_money_claim_cleaning_costs"
                   className="inline-flex items-center justify-center gap-2 bg-white text-teal-700 font-semibold py-4 px-8 rounded-xl hover:bg-teal-50 transition-colors"
                 >
                   Start Cleaning Costs Claim
@@ -565,7 +576,7 @@ export default function MoneyClaimCleaningCostsPage() {
                 scenarioLabel="recovering cleaning and rubbish removal costs"
                 primaryCTA={{
                   label: 'Start cleaning costs claim',
-                  href: '/wizard?product=money_claim&reason=cleaning&src=seo_cleaning',
+                  href: '/wizard?product=money_claim&reason=cleaning&topic=debt&src=seo_money_claim_cleaning_costs',
                 }}
                 secondaryCTA={{
                   label: 'View Money Claim Pack',

@@ -12,13 +12,15 @@ import {
   ClipboardList,
 } from 'lucide-react';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { moneyClaimGuides, moneyClaimForms, moneyClaimFormLinks, productLinks } from '@/lib/seo/internal-links';
 
 export const metadata: Metadata = {
-  title: 'Letter Before Action Template for Landlords 2026 | Pre-Action Protocol',
+  title: 'Letter Before Action for Landlords 2026 | Pre-Action Protocol Compliance',
   description:
-    'Free guide to writing a Letter Before Action for tenant debt claims. What to include, when to send, and Pre-Action Protocol requirements.',
+    'Solicitor-grade guidance to prepare a compliant Letter Before Action for tenant debt claims, with Pre-Action Protocol requirements.',
   keywords: [
     'letter before action',
     'letter before action template',
@@ -32,7 +34,7 @@ export const metadata: Metadata = {
     'tenant debt letter',
   ],
   openGraph: {
-    title: 'Letter Before Action Template for Landlords 2026 | Pre-Action Protocol',
+    title: 'Letter Before Action for Landlords 2026 | Pre-Action Protocol Compliance',
     description:
       'Complete guide to Letter Before Action for landlord money claims against tenants.',
     type: 'article',
@@ -117,7 +119,16 @@ export default function MoneyClaimLetterBeforeActionPage() {
         ])}
       />
 
+      <HeaderConfig mode="autoOnScroll" />
+
       <main className="min-h-screen bg-gray-50">
+        <UniversalHero
+          title="Letter Before Action for Money Claim"
+          subtitle="Build a legally validated, solicitor-grade, compliance-checked and court-ready debt claim package."
+          primaryCta={{ label: "Start now", href: "/wizard?product=money_claim&topic=debt&src=seo_money_claim_letter_before_action" }}
+          showTrustPositioningBar
+          hideMedia
+        />
         {/* Hero Section */}
         <section className="bg-gradient-to-br from-orange-900 to-orange-800 text-white py-16 lg:py-24">
           <div className="container mx-auto px-4">
@@ -127,9 +138,9 @@ export default function MoneyClaimLetterBeforeActionPage() {
                 Required before court action
               </div>
 
-              <h1 className="text-4xl lg:text-5xl font-bold mb-6">
+              <h2 className="text-4xl lg:text-5xl font-bold mb-6">
                 Letter Before Action Guide
-              </h1>
+              </h2>
 
               <p className="text-xl text-orange-100 mb-8 max-w-2xl mx-auto">
                 The <Link href="/pre-action-protocol-debt" className="text-white hover:underline font-semibold">Pre-Action Protocol</Link> requires a formal demand letter before issuing
@@ -138,7 +149,7 @@ export default function MoneyClaimLetterBeforeActionPage() {
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
-                  href="/wizard?product=money_claim&src=seo_lba"
+                  href="/wizard?product=money_claim&topic=debt&src=seo_money_claim_letter_before_action"
                   className="inline-flex items-center justify-center gap-2 bg-white text-orange-800 font-semibold py-4 px-8 rounded-xl hover:bg-orange-50 transition-colors"
                 >
                   Generate Your Letter
@@ -376,7 +387,7 @@ export default function MoneyClaimLetterBeforeActionPage() {
                 you&apos;ll need.
               </p>
               <Link
-                href="/wizard?product=money_claim&src=seo_lba"
+                href="/wizard?product=money_claim&topic=debt&src=seo_money_claim_letter_before_action"
                 className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
               >
                 Generate Your Documents — £99.99
