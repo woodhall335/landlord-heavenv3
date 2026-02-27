@@ -1,14 +1,7 @@
 /**
  * Landing Page - Server Component
  *
- * High-converting landing page for Landlord Heaven.
- * Server component for proper SEO metadata export.
- *
- * Design Principles:
- * - Trust-first: Professional, clean, credible
- * - Value clarity: Savings immediately obvious
- * - Anxiety reduction: Simple process, support available
- * - Action-oriented: Single primary CTA per section
+ * Homepage routing via marketing route-group.
  */
 
 import { Metadata } from 'next';
@@ -17,34 +10,35 @@ import { StructuredData, websiteSchema } from '@/lib/seo/structured-data';
 
 export const metadata: Metadata = {
   title: {
-    absolute: 'Complete UK Eviction Case Bundles | Landlord Heaven'
+    absolute:
+      'Solicitor-Grade Landlord Documents | Eviction Notices, Tenancy Agreements & Money Claims | Landlord Heaven',
   },
   description:
-    'Complete eviction case bundles. AI-generated. Compliance-checked. Ready to file. Section 21 and Section 8 in England, Section 173 in Wales, and Notice to Leave workflows in Scotland. No-fault evictions (Section 21) end from 1 May 2026 in England.',
+    'Create legally validated landlord documents including eviction notices, tenancy agreements, and court-ready money claims. Start the correct legal route in minutes.',
   keywords: [
-    'section 21 notice',
-    'section 8 notice',
     'eviction notice UK',
-    'landlord documents',
-    'tenancy agreement',
-    'court-ready documents',
-    'UK landlord',
-    'eviction pack',
+    'section 8 notice',
+    'section 21 notice',
+    'possession claim',
     'money claim',
     'rent arrears',
+    'tenancy agreement',
+    'landlord documents',
   ],
   openGraph: {
-    title: 'Complete UK Eviction Case Bundles in Minutes | Landlord Heaven',
+    title:
+      'Solicitor-Grade Landlord Documents | Eviction Notices, Tenancy Agreements & Money Claims',
     description:
-      'AI-generated, jurisdiction-specific eviction case bundles for England, Wales, and Scotland. Compliance-checked and ready to file.',
+      'Create legally validated landlord documents including eviction notices, tenancy agreements, and court-ready money claims. Start the correct legal route in minutes.',
     type: 'website',
     url: 'https://landlordheaven.co.uk',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Complete UK Eviction Case Bundles in Minutes | Landlord Heaven',
+    title:
+      'Solicitor-Grade Landlord Documents | Eviction Notices, Tenancy Agreements & Money Claims',
     description:
-      'Generate compliance-checked UK eviction case bundles with statutory-grounded automation.',
+      'Create legally validated landlord documents including eviction notices, tenancy agreements, and court-ready money claims. Start the correct legal route in minutes.',
   },
   alternates: {
     canonical: 'https://landlordheaven.co.uk',
@@ -54,7 +48,6 @@ export const metadata: Metadata = {
 export default function HomePage() {
   return (
     <>
-      {/* WebSite schema - homepage only */}
       <StructuredData data={websiteSchema()} />
       <HomeContent />
     </>

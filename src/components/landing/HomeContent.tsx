@@ -13,8 +13,39 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Container } from "@/components/ui";
 import { Hero, TrustBar, Testimonials } from "@/components/landing";
-import { HeaderConfig } from '@/components/layout/HeaderConfig';
-import { RiFileTextLine, RiScales3Line, RiMoneyPoundCircleLine, RiClipboardLine, RiCheckLine, RiArrowRightLine, RiShieldCheckLine, RiGlobalLine, RiFlashlightLine, RiSendPlaneFill, RiAddLine, RiMicLine, RiMapPin2Fill } from 'react-icons/ri';
+import { HeaderConfig } from "@/components/layout/HeaderConfig";
+import {
+  RiFileTextLine,
+  RiScales3Line,
+  RiMoneyPoundCircleLine,
+  RiClipboardLine,
+  RiCheckLine,
+  RiArrowRightLine,
+  RiShieldCheckLine,
+  RiGlobalLine,
+  RiFlashlightLine,
+  RiSendPlaneFill,
+  RiAddLine,
+  RiMicLine,
+  RiMapPin2Fill,
+} from "react-icons/ri";
+
+const SEO_SRC = "seo_homepage";
+
+const primaryPaths = [
+  {
+    label: "Start Eviction",
+    href: `/wizard?product=notice_only&topic=eviction&src=${SEO_SRC}`,
+  },
+  {
+    label: "Recover Unpaid Rent",
+    href: `/wizard?product=money_claim&topic=debt&src=${SEO_SRC}`,
+  },
+  {
+    label: "Create Tenancy Agreement",
+    href: `/wizard?product=tenancy_agreement&topic=tenancy&src=${SEO_SRC}`,
+  },
+];
 
 export default function HomeContent() {
   const router = useRouter();
@@ -33,6 +64,35 @@ export default function HomeContent() {
       <HeaderConfig mode="autoOnScroll" />
       <Hero />
 
+      {/* LEGAL DECISION GATEWAY (adds 3-lane routing without removing existing hero visuals) */}
+      <section className="py-10 bg-white">
+        <Container>
+          <div className="rounded-3xl border border-gray-200 bg-white p-6 md:p-8 shadow-sm">
+            <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">
+              Legal decision gateway
+            </p>
+            <h2 className="mt-2 text-2xl md:text-3xl font-bold text-gray-900">
+              Choose the correct legal route
+            </h2>
+            <p className="mt-2 text-gray-600 max-w-3xl">
+              Start an eviction, recover unpaid rent, or create/update an agreement — all routed through the correct workflow.
+            </p>
+
+            <div className="mt-6 grid gap-3 sm:grid-cols-3">
+              {primaryPaths.map((path) => (
+                <Link
+                  key={path.label}
+                  href={path.href}
+                  className="inline-flex items-center justify-center rounded-2xl border border-gray-300 px-5 py-3 text-center text-sm font-semibold text-gray-900 transition hover:border-gray-900 hover:bg-gray-50"
+                >
+                  {path.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </Container>
+      </section>
+
       {/* TRUST BAR */}
       <TrustBar />
 
@@ -41,46 +101,48 @@ export default function HomeContent() {
         <Container>
           <div className="text-center mb-14">
             <div className="inline-block bg-primary/10 rounded-full px-4 py-2 mb-4">
-              <span className="text-sm font-semibold text-primary">Simple 3-Step Process</span>
+              <span className="text-sm font-semibold text-primary">
+                Simple 3-Step Process
+              </span>
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               Complete UK Eviction Case Bundles in Minutes
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Generate a complete, jurisdiction-specific court bundle with statutory-grounded checks for England, Wales, or Scotland.
+              Generate a complete, jurisdiction-specific court bundle with
+              statutory-grounded checks for England, Wales, or Scotland.
             </p>
           </div>
 
           <div className="max-w-5xl mx-auto">
             <div className="grid md:grid-cols-3 gap-8 md:gap-12">
-                <Step
-                  number="1"
-                  title="Answer Questions"
-                  description="Tell us about your situation. Our wizard asks simple questions about your property, tenant, and what you need."
-                  time="5-10 minutes"
-                />
-                <Step
-                  number="2"
-                  title="Review & Validate"
-                  description="We generate your jurisdiction-specific case file and validate key compliance checks before you approve."
-                  time="2-3 minutes"
-                />
-                <Step
-                  number="3"
-                  title="File & Proceed"
-                  description="Pay securely and generate your complete case bundle with filing instructions, evidence checklist, and service guidance."
-                  time="Instant"
-                />
+              <Step
+                number="1"
+                title="Answer Questions"
+                description="Tell us about your situation. Our wizard asks simple questions about your property, tenant, and what you need."
+                time="5-10 minutes"
+              />
+              <Step
+                number="2"
+                title="Review & Validate"
+                description="We generate your jurisdiction-specific case file and validate key compliance checks before you approve."
+                time="2-3 minutes"
+              />
+              <Step
+                number="3"
+                title="File & Proceed"
+                description="Pay securely and generate your complete case bundle with filing instructions, evidence checklist, and service guidance."
+                time="Instant"
+              />
             </div>
 
             <div className="mt-14 text-center">
-              <Link
-                href="/wizard?src=homepage"
-                className="hero-btn-primary"
-              >
-                Start Your Complete Case Bundle →
+              <Link href={primaryPaths[0].href} className="hero-btn-primary">
+                Start Eviction Workflow →
               </Link>
-              <p className="mt-4 text-sm text-gray-500">Free to start • Pay only when you're ready</p>
+              <p className="mt-4 text-sm text-gray-500">
+                Free to start • Pay only when you're ready
+              </p>
             </div>
           </div>
         </Container>
@@ -94,7 +156,8 @@ export default function HomeContent() {
               Complete Eviction Preparation Across UK Jurisdictions
             </h2>
             <p className="text-xl text-[#59527a] max-w-3xl mx-auto">
-              From statutory notices to possession paperwork — AI-validated case preparation without solicitor delays.
+              From statutory notices to possession paperwork — AI-validated case
+              preparation without solicitor delays.
             </p>
           </div>
 
@@ -149,7 +212,9 @@ export default function HomeContent() {
                 height={48}
                 className="rounded-xl"
               />
-              <span className="text-2xl font-bold text-gray-900">Ask Heaven</span>
+              <span className="text-2xl font-bold text-gray-900">
+                Ask Heaven
+              </span>
             </div>
 
             <div className="text-center mb-10">
@@ -218,9 +283,21 @@ export default function HomeContent() {
               {/* Quick Prompt Cards */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {[
-                  { label: 'Eviction notice help', icon: '📄', prompt: 'How do I serve an eviction notice to my tenant?' },
-                  { label: 'Rent arrears recovery', icon: '💷', prompt: 'How do I recover unpaid rent from a tenant?' },
-                  { label: 'Deposit protection rules', icon: '🛡️', prompt: 'What are the deposit protection requirements?' },
+                  {
+                    label: "Eviction notice help",
+                    icon: "📄",
+                    prompt: "How do I serve an eviction notice to my tenant?",
+                  },
+                  {
+                    label: "Rent arrears recovery",
+                    icon: "💷",
+                    prompt: "How do I recover unpaid rent from a tenant?",
+                  },
+                  {
+                    label: "Deposit protection rules",
+                    icon: "🛡️",
+                    prompt: "What are the deposit protection requirements?",
+                  },
                 ].map((item) => (
                   <button
                     key={item.label}
@@ -232,7 +309,9 @@ export default function HomeContent() {
                     <p className="font-semibold text-gray-900 group-hover:text-primary transition-colors">
                       {item.label}
                     </p>
-                    <p className="text-sm text-gray-500 mt-1 line-clamp-2">{item.prompt}</p>
+                    <p className="text-sm text-gray-500 mt-1 line-clamp-2">
+                      {item.prompt}
+                    </p>
                   </button>
                 ))}
               </div>
@@ -254,13 +333,15 @@ export default function HomeContent() {
               </div>
 
               <p className="mt-6 text-center text-xs text-gray-400">
-                For guidance only — not legal advice. <Link href="/terms" className="text-primary hover:underline">Terms apply</Link>
+                For guidance only — not legal advice.{" "}
+                <Link href="/terms" className="text-primary hover:underline">
+                  Terms apply
+                </Link>
               </p>
             </div>
           </div>
         </Container>
       </section>
-
 
       {/* BUILT FOR CHANGING HOUSING LAW */}
       <section className="py-20 md:py-24 bg-gray-50">
@@ -268,14 +349,18 @@ export default function HomeContent() {
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-10">
               <div className="inline-block bg-primary/10 rounded-full px-4 py-2 mb-4">
-                <span className="text-sm font-semibold text-primary">Built for Changing Housing Law</span>
+                <span className="text-sm font-semibold text-primary">
+                  Built for Changing Housing Law
+                </span>
               </div>
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
                 Statutory-change aware legal automation
               </h2>
               <p className="text-lg text-gray-600">
-                UK eviction law is evolving. From the Renting Homes (Wales) Act to the Renters' Rights Act implementation in England,
-                Landlord Heaven is continuously updated to reflect UK housing law changes.
+                UK eviction law is evolving. From the Renting Homes (Wales) Act
+                to the Renters' Rights Act implementation in England, Landlord
+                Heaven is continuously updated to reflect UK housing law
+                changes.
               </p>
             </div>
             <ul className="grid md:grid-cols-2 gap-3 text-gray-700">
@@ -287,6 +372,7 @@ export default function HomeContent() {
           </div>
         </Container>
       </section>
+
       {/* TESTIMONIALS */}
       <Testimonials />
 
@@ -296,13 +382,16 @@ export default function HomeContent() {
           <div className="text-center mb-12 md:mb-14">
             <div className="inline-flex items-center gap-2 rounded-full bg-[#692ed4]/10 px-5 py-2.5 mb-5">
               <RiMapPin2Fill className="w-4 h-4 text-[#692ed4]" />
-              <span className="text-sm font-semibold text-[#692ed4]">UK-Wide Coverage</span>
+              <span className="text-sm font-semibold text-[#692ed4]">
+                UK-Wide Coverage
+              </span>
             </div>
             <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-[#0f172a] mb-5">
               The Right Documents for Your Region
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Housing law differs across the UK. We automatically generate jurisdiction-specific documents.
+              Housing law differs across the UK. We automatically generate
+              jurisdiction-specific documents.
             </p>
           </div>
 
@@ -311,25 +400,45 @@ export default function HomeContent() {
               flag="/gb-eng.svg"
               title="England"
               regionSlug="england"
-              forms={["Assured Shorthold Tenancy", "Section 21 Notice", "Section 8 Notice", "County Court Forms"]}
+              forms={[
+                "Assured Shorthold Tenancy",
+                "Section 21 Notice",
+                "Section 8 Notice",
+                "County Court Forms",
+              ]}
             />
             <JurisdictionCard
               flag="/gb-wls.svg"
               title="Wales"
               regionSlug="wales"
-              forms={["Standard Occupation Contract", "Section 173 Notice", "Renting Homes Act Forms", "County Court Forms"]}
+              forms={[
+                "Standard Occupation Contract",
+                "Section 173 Notice",
+                "Renting Homes Act Forms",
+                "County Court Forms",
+              ]}
             />
             <JurisdictionCard
               flag="/gb-sct.svg"
               title="Scotland"
               regionSlug="scotland"
-              forms={["Private Residential Tenancy", "Notice to Leave", "First-tier Tribunal Forms", "Simple Procedure"]}
+              forms={[
+                "Private Residential Tenancy",
+                "Notice to Leave",
+                "First-tier Tribunal Forms",
+                "Simple Procedure",
+              ]}
             />
             <JurisdictionCard
               flag="/gb-nir.svg"
               title="Northern Ireland"
               regionSlug="northern-ireland"
-              forms={["Private Tenancy Agreement", "Northern Ireland tenancy framework", "Tenancy agreements only", "Eviction notices planned"]}
+              forms={[
+                "Private Tenancy Agreement",
+                "Northern Ireland tenancy framework",
+                "Tenancy agreements only",
+                "Eviction notices planned",
+              ]}
             />
           </div>
         </Container>
@@ -340,12 +449,16 @@ export default function HomeContent() {
         <Container>
           <div className="max-w-4xl mx-auto text-center">
             <div className="inline-block bg-primary/10 rounded-full px-4 py-2 mb-8">
-              <span className="text-sm font-semibold text-primary">What Landlords Say</span>
+              <span className="text-sm font-semibold text-primary">
+                What Landlords Say
+              </span>
             </div>
 
             <blockquote className="text-2xl md:text-3xl font-medium text-gray-900 mb-8 leading-relaxed">
-              &ldquo;As a landlord managing multiple properties, trusting the case bundles you generate is everything.
-              They need to be compliant, court-ready, and actually work — and Landlord Heaven has delivered on all fronts.&rdquo;
+              &ldquo;As a landlord managing multiple properties, trusting the case
+              bundles you generate is everything. They need to be compliant,
+              court-ready, and actually work — and Landlord Heaven has delivered
+              on all fronts.&rdquo;
             </blockquote>
 
             <div className="flex items-center justify-center gap-4">
@@ -354,7 +467,9 @@ export default function HomeContent() {
               </div>
               <div className="text-left">
                 <div className="font-bold text-gray-900">Sarah Johnson</div>
-                <div className="text-gray-500">Property Portfolio Manager, Urban Estates Ltd</div>
+                <div className="text-gray-500">
+                  Property Portfolio Manager, Urban Estates Ltd
+                </div>
               </div>
             </div>
           </div>
@@ -369,16 +484,17 @@ export default function HomeContent() {
               Ready to Generate Your Court-Ready File?
             </h2>
             <p className="text-xl text-gray-600 mb-8">
-              Generate a complete, compliance-checked eviction bundle aligned to your jurisdiction.
-              <span className="font-semibold text-gray-800"> Start in under 2 minutes.</span>
+              Generate a complete, compliance-checked eviction bundle aligned to
+              your jurisdiction.
+              <span className="font-semibold text-gray-800">
+                {" "}
+                Start in under 2 minutes.
+              </span>
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-8">
-              <Link
-                href="/wizard?src=homepage"
-                className="hero-btn-primary"
-              >
-                Generate Your Complete Case Bundle →
+              <Link href={primaryPaths[0].href} className="hero-btn-primary">
+                Start Eviction Workflow →
               </Link>
             </div>
 
@@ -401,13 +517,35 @@ export default function HomeContent() {
             {/* Section 8 CTA - SEO Internal Linking */}
             <div className="mt-8 pt-6 border-t border-gray-300/30">
               <p className="text-gray-600">
-                Generate valid <Link href="/eviction-notice-uk" className="text-primary hover:underline font-medium">eviction notices</Link> for England, Wales, and Scotland.{' '}
-                Need a Section 8 eviction bundle?{' '}
-                <Link href="/section-8-notice-template" className="text-primary hover:underline font-medium">Bundle overview</Link>
-                {' • '}
-                <Link href="/tools/free-section-8-notice-generator" className="text-primary hover:underline font-medium">Generator</Link>
-                {' • '}
-                <Link href="/tools/validators/section-8" className="text-primary hover:underline font-medium">Checker</Link>
+                Generate valid{" "}
+                <Link
+                  href="/eviction-notice-uk"
+                  className="text-primary hover:underline font-medium"
+                >
+                  eviction notices
+                </Link>{" "}
+                for England, Wales, and Scotland. Need a Section 8 eviction
+                bundle?{" "}
+                <Link
+                  href="/section-8-notice-template"
+                  className="text-primary hover:underline font-medium"
+                >
+                  Bundle overview
+                </Link>
+                {" • "}
+                <Link
+                  href="/tools/free-section-8-notice-generator"
+                  className="text-primary hover:underline font-medium"
+                >
+                  Generator
+                </Link>
+                {" • "}
+                <Link
+                  href="/tools/validators/section-8"
+                  className="text-primary hover:underline font-medium"
+                >
+                  Checker
+                </Link>
               </p>
             </div>
           </div>
@@ -446,11 +584,11 @@ function Step({
           {stepNumber}
         </div>
       </div>
-      <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors">{title}</h3>
+      <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors">
+        {title}
+      </h3>
       <p className="text-gray-600">{stepDescription}</p>
-      {time && (
-        <p className="text-sm text-primary mt-2 font-medium">{time}</p>
-      )}
+      {time && <p className="text-sm text-primary mt-2 font-medium">{time}</p>}
     </div>
   );
 }
@@ -505,19 +643,30 @@ function JurisdictionCard({
   return (
     <div className="h-full rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-300 hover:shadow-md flex flex-col">
       <div className="w-16 h-16 bg-white rounded-full border border-gray-200 shadow-sm flex items-center justify-center mx-auto mb-4 overflow-hidden">
-        <Image src={flag} alt={title} width={48} height={48} className="w-12 h-12 object-contain" />
+        <Image
+          src={flag}
+          alt={title}
+          width={48}
+          height={48}
+          className="w-12 h-12 object-contain"
+        />
       </div>
-      <h3 className="text-2xl font-bold text-[#0f172a] mb-5 text-center">{title}</h3>
+      <h3 className="text-2xl font-bold text-[#0f172a] mb-5 text-center">
+        {title}
+      </h3>
       <ul className="text-base text-gray-700 space-y-2.5 mb-6 flex-1">
         {forms.map((form) => (
-          <li key={form} className="flex items-start gap-2.5 border-b border-gray-100 pb-2.5 last:border-b-0 last:pb-0">
+          <li
+            key={form}
+            className="flex items-start gap-2.5 border-b border-gray-100 pb-2.5 last:border-b-0 last:pb-0"
+          >
             <RiCheckLine className="w-4 h-4 text-[#692ed4] shrink-0 mt-0.5" />
             {form}
           </li>
         ))}
       </ul>
       <Link
-        href={`/wizard?jurisdiction=${regionSlug}&src=homepage`}
+        href={`/wizard?jurisdiction=${regionSlug}&product=notice_only&topic=eviction&src=${SEO_SRC}`}
         className="w-full h-12 rounded-xl bg-[#692ed4] hover:bg-[#5a27b8] text-white text-lg font-semibold inline-flex items-center justify-center gap-2 transition-colors"
       >
         Choose Region
