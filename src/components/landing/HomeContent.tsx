@@ -28,6 +28,7 @@ import {
   RiAddLine,
   RiMicLine,
   RiMapPin2Fill,
+  RiHome6Line,
 } from "react-icons/ri";
 
 const SEO_SRC = "seo_homepage";
@@ -36,14 +37,17 @@ const primaryPaths = [
   {
     label: "Start Eviction",
     href: `/wizard?product=notice_only&topic=eviction&src=${SEO_SRC}`,
+    icon: RiHome6Line,
   },
   {
     label: "Recover Unpaid Rent",
     href: `/wizard?product=money_claim&topic=debt&src=${SEO_SRC}`,
+    icon: RiMoneyPoundCircleLine,
   },
   {
     label: "Create Tenancy Agreement",
     href: `/wizard?product=tenancy_agreement&topic=tenancy&src=${SEO_SRC}`,
+    icon: RiFileTextLine,
   },
 ];
 
@@ -65,27 +69,32 @@ export default function HomeContent() {
       <Hero />
 
       {/* LEGAL DECISION GATEWAY (adds 3-lane routing without removing existing hero visuals) */}
-      <section className="py-10 bg-white">
+      <section className="py-10 bg-[#f7f7fb]">
         <Container>
-          <div className="rounded-3xl border border-gray-200 bg-white p-6 md:p-8 shadow-sm">
-            <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">
+          <div className="rounded-[2rem] border border-[#ddddea] bg-[#f8f8fd] p-6 md:p-10 shadow-[0_2px_12px_rgba(15,23,42,0.04)]">
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">
               Legal decision gateway
             </p>
-            <h2 className="mt-2 text-2xl md:text-3xl font-bold text-gray-900">
+            <h2 className="mt-3 text-4xl md:text-5xl font-bold tracking-tight text-[#16163f]">
               Choose the correct legal route
             </h2>
-            <p className="mt-2 text-gray-600 max-w-3xl">
+            <p className="mt-4 max-w-4xl text-2xl leading-relaxed text-[#3b3b4f]">
               Start an eviction, recover unpaid rent, or create/update an agreement — all routed through the correct workflow.
             </p>
 
-            <div className="mt-6 grid gap-3 sm:grid-cols-3">
+            <div className="mt-8 grid gap-4 md:grid-cols-3">
               {primaryPaths.map((path) => (
                 <Link
                   key={path.label}
                   href={path.href}
-                  className="inline-flex items-center justify-center rounded-2xl border border-gray-300 px-5 py-3 text-center text-sm font-semibold text-gray-900 transition hover:border-gray-900 hover:bg-gray-50"
+                  className="group flex min-h-40 flex-col items-center justify-center rounded-3xl border border-[#e2e2f0] bg-white px-6 py-8 text-center shadow-[0_4px_14px_rgba(15,23,42,0.05)] transition hover:-translate-y-0.5 hover:border-[#cfcff0] hover:shadow-[0_8px_20px_rgba(15,23,42,0.08)]"
                 >
-                  {path.label}
+                  <span className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-b from-[#a987ff] to-[#6a2dd8] text-white shadow-md">
+                    <path.icon className="h-8 w-8" />
+                  </span>
+                  <span className="text-[2rem] font-semibold leading-tight text-[#18184d]">
+                    {path.label}
+                  </span>
                 </Link>
               ))}
             </div>
@@ -440,38 +449,6 @@ export default function HomeContent() {
                 "Eviction notices planned",
               ]}
             />
-          </div>
-        </Container>
-      </section>
-
-      {/* TESTIMONIAL QUOTE */}
-      <section className="py-20 md:py-24 bg-white">
-        <Container>
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-block bg-primary/10 rounded-full px-4 py-2 mb-8">
-              <span className="text-sm font-semibold text-primary">
-                What Landlords Say
-              </span>
-            </div>
-
-            <blockquote className="text-2xl md:text-3xl font-medium text-gray-900 mb-8 leading-relaxed">
-              &ldquo;As a landlord managing multiple properties, trusting the case
-              bundles you generate is everything. They need to be compliant,
-              court-ready, and actually work — and Landlord Heaven has delivered
-              on all fronts.&rdquo;
-            </blockquote>
-
-            <div className="flex items-center justify-center gap-4">
-              <div className="w-14 h-14 bg-gray-200 rounded-full flex items-center justify-center text-xl font-bold text-gray-600">
-                SJ
-              </div>
-              <div className="text-left">
-                <div className="font-bold text-gray-900">Sarah Johnson</div>
-                <div className="text-gray-500">
-                  Property Portfolio Manager, Urban Estates Ltd
-                </div>
-              </div>
-            </div>
           </div>
         </Container>
       </section>
