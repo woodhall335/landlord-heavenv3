@@ -112,7 +112,7 @@ export default function RentingHomesWalesWrittenStatementPage() {
         <UniversalHero
           title="Renting Homes Wales Written Statement"
           subtitle="Create a legally validated, solicitor-grade written statement that is compliance-checked for Wales."
-          primaryCta={{ label: "Start now", href: "/wizard?product=ast_standard&src=seo_renting_homes_wales_written_statement&topic=tenancy&jurisdiction=wales" }}
+          primaryCta={{ label: "Start now", href: "/wizard?product=ast_standard&src=seo_renting-homes-wales-written-statement&topic=tenancy&jurisdiction=wales" }}
           showTrustPositioningBar
           hideMedia
         />
@@ -146,7 +146,7 @@ export default function RentingHomesWalesWrittenStatementPage() {
             </p>
             <div className="flex gap-4 justify-center flex-wrap">
               <Link
-                href="/wizard?product=ast_standard&src=seo_renting_homes_wales_written_statement&topic=tenancy&jurisdiction=wales"
+                href="/wizard?product=ast_standard&src=seo_renting-homes-wales-written-statement&topic=tenancy&jurisdiction=wales"
                 className="inline-flex items-center gap-2 bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors"
               >
                 Get Compliant Written Statement — £14.99

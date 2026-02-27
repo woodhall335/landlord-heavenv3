@@ -37,14 +37,14 @@ const PAGE_TYPE = 'tenancy' as const;
 const wizardLinkStandard = buildWizardLink({
   product: 'ast_standard',
   jurisdiction: 'scotland',
-  src: 'seo_joint_prt_tenancy_agreement_scotland',
+  src: 'seo_joint-prt-tenancy-agreement-scotland',
   topic: 'tenancy',
 });
 
 const wizardLinkPremium = buildWizardLink({
   product: 'ast_premium',
   jurisdiction: 'scotland',
-  src: 'seo_joint_prt_tenancy_agreement_scotland',
+  src: 'seo_joint-prt-tenancy-agreement-scotland',
   topic: 'tenancy',
 });
 

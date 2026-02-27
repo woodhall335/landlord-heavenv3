@@ -5,6 +5,7 @@ import { getCanonicalUrl } from '@/lib/seo';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { eicrFAQs } from '@/data/faqs';
+import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 
 export const metadata: Metadata = {
   title: 'EICR Landlord Requirements UK | Electrical Safety Guide 2026',
@@ -29,6 +30,13 @@ export const metadata: Metadata = {
     canonical: getCanonicalUrl('/eicr-landlord-requirements'),
   },
 };
+
+const noticeOnlyLink = buildWizardLink({
+  product: 'notice_only',
+  jurisdiction: 'england',
+  src: 'seo_eicr-landlord-requirements',
+  topic: 'eviction',
+});
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -221,8 +229,8 @@ export default function EICRPage() {
                 Make sure you&apos;ve got your EICR sorted, then generate your notice.
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Link href="/tools/free-section-21-notice-generator" className="hero-btn-primary">
-                  Generate Section 21 Notice
+                <Link href={noticeOnlyLink} className="hero-btn-primary">
+                  Create Section 21 Notice
                 </Link>
                 <Link href="/tools/validators/section-21" className="hero-btn-secondary">
                   Check Compliance

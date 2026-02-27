@@ -33,21 +33,21 @@ const PAGE_TYPE = 'tenancy' as const;
 const wizardLinkStandard = buildWizardLink({
   product: 'ast_standard',
   jurisdiction: 'wales',
-  src: 'seo_occupation_contract_template_wales',
+  src: 'seo_occupation-contract-template-wales',
   topic: 'tenancy',
 });
 
 const wizardLinkPremium = buildWizardLink({
   product: 'ast_premium',
   jurisdiction: 'wales',
-  src: 'seo_occupation_contract_template_wales',
+  src: 'seo_occupation-contract-template-wales',
   topic: 'tenancy',
 });
 
 export const metadata: Metadata = {
   title: 'Occupation Contract Template Wales | Welsh Written Statement Template',
   description:
-    'Download an occupation contract template for Wales. Renting Homes Act 2016 compliant with all fundamental and supplementary terms.',
+    'Get an occupation contract template for Wales. Renting Homes Act 2016 compliant with all fundamental and supplementary terms.',
   keywords: [
     'occupation contract template wales',
     'welsh tenancy agreement template',
@@ -78,7 +78,7 @@ export default function OccupationContractTemplateWalesPage() {
     '@type': 'WebPage',
     name: 'Occupation Contract Template Wales',
     description:
-      'Download a legally compliant occupation contract template for Wales, with written statement and all Renting Homes Act 2016 requirements.',
+      'Get a legally compliant occupation contract template for Wales, with written statement and all Renting Homes Act 2016 requirements.',
     url: 'https://landlordheaven.co.uk/occupation-contract-template-wales',
   };
 
