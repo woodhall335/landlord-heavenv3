@@ -10,7 +10,7 @@ import type {
 } from '@/lib/previews/noticeOnlyPreviews';
 import type { CompletePackPreviewData, CompletePackVariantKey } from '@/lib/previews/completePackPreviews';
 import type { MoneyClaimPreviewData } from '@/lib/previews/moneyClaimPreviews';
-import Section21ComplianceTimingPanel from '@/components/products/Section21ComplianceTimingPanel';
+import Section21PrecheckPanel from '@/components/precheck/Section21PrecheckPanel';
 
 type WhatsIncludedInteractiveProps =
   | {
@@ -459,7 +459,19 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
         <div className="max-w-6xl mx-auto">
           {showIntro ? (
             <>
-            {isNoticeOnly && selectedJurisdiction === 'england' ? <Section21ComplianceTimingPanel /> : null}
+            {isNoticeOnly && selectedJurisdiction === 'england' ? (
+              <Section21PrecheckPanel
+                ctaHref="/wizard/flow?type=eviction&jurisdiction=england&product=notice_only&src=product_page&topic=eviction"
+                emailGate={{
+                  enabled: true,
+                  source: 's21_precheck_results_gate',
+                  tags: ['s21_precheck', 'product_notice_only', 'england'],
+                  gateStorageKey: 'lh_gate_s21_notice_only',
+                  includeEmailReport: false,
+                }}
+                ui={{ accentHex: '#7c3aed' }}
+              />
+            ) : null}
             <div className="text-center mb-10">
               <h2 className="text-3xl md:text-4xl font-bold text-charcoal">
                 {props.titleOverride ??
