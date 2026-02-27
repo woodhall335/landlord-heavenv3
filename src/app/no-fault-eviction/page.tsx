@@ -4,6 +4,8 @@ import { Container } from '@/components/ui/Container';
 import { getCanonicalUrl } from '@/lib/seo';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { noFaultEvictionFAQs } from '@/data/faqs';
 
 export const metadata: Metadata = {
@@ -36,37 +38,23 @@ const breadcrumbs = [
   { name: 'No Fault Eviction', url: '/no-fault-eviction' },
 ];
 
+const wizardHref = '/wizard?product=notice_only&src=seo_no_fault_eviction&topic=eviction';
+
 export default function NoFaultEvictionPage() {
   return (
     <>
       <StructuredData data={breadcrumbSchema(breadcrumbs)} />
 
       <div className="min-h-screen bg-gray-50">
-        {/* Hero Section */}
-        <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-20">
-          <Container>
-            <div className="max-w-3xl mx-auto text-center">
-              <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-                <span className="text-sm font-semibold text-primary">England Only</span>
-              </div>
-              <h1 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
-                No Fault Eviction (England): Section 21 Guide
-              </h1>
-              <p className="text-xl text-gray-600 mb-8">
-                A no-fault eviction lets you regain possession of your property without proving the
-                tenant has breached the tenancy. In England, this is done using a Section 21 notice.
-              </p>
-              <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Link href="/tools/free-section-21-notice-generator" className="hero-btn-primary">
-                  Generate Section 21 Notice
-                </Link>
-                <Link href="/products/notice-only" className="hero-btn-secondary">
-                  Get Full Notice Pack
-                </Link>
-              </div>
-            </div>
-          </Container>
-        </section>
+        <HeaderConfig mode="autoOnScroll" />
+        <UniversalHero
+          title="No-Fault Eviction (England): Section 21 Guide"
+          subtitle="Check Section 21 eligibility, notice timing, and service steps before moving to possession proceedings."
+          primaryCta={{ label: 'Start Section 21 Wizard', href: wizardHref }}
+          secondaryCta={{ label: 'Section 21 requirements', href: '#requirements' }}
+          showTrustPositioningBar
+          hideMedia
+        />
 
         {/* Main Content */}
         <Container>
@@ -85,7 +73,7 @@ export default function NoFaultEvictionPage() {
                   under the Housing Act 1988. The prescribed form is <Link href="/form-6a-section-21">Form 6A</Link>.
                 </p>
 
-                <h2>Requirements for a Valid No-Fault Eviction</h2>
+                <h2 id="requirements">Requirements for a Valid No-Fault Eviction</h2>
                 <p>Before serving a Section 21 notice, you must have:</p>
                 <ul>
                   <li>Protected the tenant&apos;s deposit in a government-approved scheme</li>

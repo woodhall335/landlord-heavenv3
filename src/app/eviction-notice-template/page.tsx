@@ -5,7 +5,7 @@ import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { Section21Countdown } from '@/components/ui/Section21Countdown';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, toolLinks, blogLinks } from '@/lib/seo/internal-links';
-import { StandardHero } from '@/components/marketing/StandardHero';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { IntentProductCTA } from '@/components/seo/IntentProductCTA';
@@ -15,7 +15,7 @@ import { getNoticeOnlyPreviewData } from '@/lib/previews/noticeOnlyPreviews';
 import { CheckCircle, ArrowRight, AlertTriangle, Scale, FileText, Landmark, Info } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Eviction Notice Template UK - Possession Notice Download',
+  title: 'Eviction Notice UK | Solicitor-Grade Possession Notice Builder',
   description: 'Choose your jurisdiction and generate an eviction notice template bundle. Section 21/8 (England), Section 173 (Wales), and Notice to Leave (Scotland).',
   keywords: [
     'eviction notice template uk',
@@ -33,13 +33,15 @@ export const metadata: Metadata = {
     canonical: 'https://landlordheaven.co.uk/eviction-notice-template',
   },
   openGraph: {
-    title: 'Eviction Notice Template UK | Landlord Heaven',
+    title: 'Eviction Notice UK | Solicitor-Grade Possession Notice Builder',
     description: 'Choose your jurisdiction and generate an eviction notice template bundle with compliance checks.',
     type: 'website',
+    url: 'https://landlordheaven.co.uk/eviction-notice-template',
   },
 };
 
 export default async function EvictionNoticeTemplatePage() {
+  const wizardHref = '/wizard?product=notice_only&src=seo_eviction_notice_template&topic=eviction';
   const previews = await getNoticeOnlyPreviewData();
 
   const pageSchema = {
@@ -72,33 +74,14 @@ export default async function EvictionNoticeTemplatePage() {
 
       <HeaderConfig mode="autoOnScroll" />
       <main>
-        <StandardHero
-          badge="Section 21 ends 1 May 2026"
-          badgeIcon={<AlertTriangle className="w-4 h-4" />}
-          title="Region-Specific Eviction Notice Generator – UK"
-          subtitle={
-            <>
-              England (Section 21 Form 6A &amp; Section 8 Form 3), Wales (Section 173 &amp; RHW23), Scotland (Notice to Leave) — generated correctly for your jurisdiction with reform-aware compliance checks.
-              <span className="block mt-3">
-                Unlike generic form builders, we validate <strong>20+ legal requirements</strong> before generating court-ready documents — reducing the risk of rejected claims.
-              </span>
-            </>
-          }
-          primaryCTA={{
-            label: 'Generate Section 21 / Section 8 Notice',
-            href: '/products/notice-only',
-          }}
-          secondaryCTA={{
-            label: 'Need the full court bundle?',
-            href: '/products/complete-pack',
-          }}
-          variant="pastel"
-          showTrustPositioningBar={false}
-        >
-          <p className="mt-3 text-sm text-white/75 sm:text-base">
-            Going to court next? The complete bundle includes N5/N5B + N119 and filing guidance.
-          </p>
-        </StandardHero>
+        <UniversalHero
+          title="Region-Specific Eviction Notice Builder for UK Landlords"
+          subtitle="Generate jurisdiction-correct notices for England, Wales, or Scotland with solicitor-grade compliance checks before service."
+          primaryCta={{ label: 'Start Eviction Notice Wizard', href: wizardHref }}
+          secondaryCta={{ label: 'Need the full court bundle?', href: '/products/complete-pack' }}
+          showTrustPositioningBar
+          hideMedia
+        />
 
         <section className="py-10 md:py-14">
           <div className="container mx-auto px-4">
@@ -236,7 +219,7 @@ export default async function EvictionNoticeTemplatePage() {
               <h2 className="text-2xl lg:text-3xl font-bold mb-4">Section 21 Ends 1 May 2026</h2>
               <p className="text-white/90 mb-6 max-w-2xl mx-auto">The Renters&apos; Rights Act abolishes no-fault evictions. Act now if you need to evict without proving grounds.</p>
               <Section21Countdown variant="large" className="mb-8 [&_*]:text-white" />
-              <IntentProductCTA intent={{ product: 'notice_only', src: 'seo_landing' }} label="Generate Court-Ready Notice — £49.99" className="hero-btn-secondary inline-flex items-center gap-2" />
+              <IntentProductCTA intent={{ product: 'notice_only', src: 'seo_eviction_notice_template', topic: 'eviction' }} label="Generate Court-Ready Notice — £49.99" className="hero-btn-secondary inline-flex items-center gap-2" />
             </div>
           </div>
         </section>
@@ -248,7 +231,7 @@ export default async function EvictionNoticeTemplatePage() {
             <div className="max-w-4xl mx-auto bg-gradient-to-br from-primary to-primary/90 rounded-3xl p-8 lg:p-12 text-white text-center">
               <h2 className="text-3xl lg:text-4xl font-bold mb-4">Generate Your Jurisdiction-Specific Notice Bundle</h2>
               <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">Preview every watermarked document before you pay, then complete your bundle with one-time payment.</p>
-              <IntentProductCTA intent={{ product: 'notice_only', src: 'seo_landing' }} label="Generate Court-Ready Notice — £49.99" className="hero-btn-secondary inline-flex items-center justify-center gap-2" />
+              <IntentProductCTA intent={{ product: 'notice_only', src: 'seo_eviction_notice_template', topic: 'eviction' }} label="Generate Court-Ready Notice — £49.99" className="hero-btn-secondary inline-flex items-center justify-center gap-2" />
               <p className="mt-8 text-white/70 text-sm">Preview before paying (watermarked) • Compliance checks • Jurisdiction-specific formatting</p>
             </div>
           </div>

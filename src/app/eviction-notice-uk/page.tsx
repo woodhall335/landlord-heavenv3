@@ -4,12 +4,14 @@ import { Container } from '@/components/ui/Container';
 import { getCanonicalUrl } from '@/lib/seo';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { evictionNoticeUKFAQs } from '@/data/faqs';
 
 export const metadata: Metadata = {
-  title: 'Eviction Notice UK | Types, Templates & How to Serve [2026]',
+  title: 'Eviction Notice UK | Types and Service Rules for Landlords [2026]',
   description:
-    'Guide to eviction notices in the UK. Covers Section 21, Section 8, Scotland Notice to Leave, and Wales notices. Free starter documents.',
+    'Guide to eviction notices in the UK. Covers Section 21, Section 8, Scotland Notice to Leave, and Wales notices with compliant next-step workflows.',
   keywords: [
     'eviction notice UK',
     'eviction notice template UK',
@@ -37,30 +39,23 @@ const breadcrumbs = [
   { name: 'Eviction Notice UK', url: '/eviction-notice-uk' },
 ];
 
+const wizardHref = '/wizard?product=notice_only&src=seo_eviction_notice_uk&topic=eviction';
+
 export default function EvictionNoticeUKPage() {
   return (
     <>
       <StructuredData data={breadcrumbSchema(breadcrumbs)} />
 
       <div className="min-h-screen bg-gray-50">
-        {/* Hero Section */}
-        <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-20">
-          <Container>
-            <div className="max-w-3xl mx-auto text-center">
-              <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-                <span className="text-sm font-semibold text-primary">UK Landlord Guide</span>
-              </div>
-              <h1 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
-                Eviction Notice UK: Complete Guide for Landlords
-              </h1>
-              <p className="text-xl text-gray-600 mb-8">
-                Serving the correct eviction notice is the essential first step to legally regain
-                possession of your property. The type of notice you need depends on your location
-                and circumstances.
-              </p>
-            </div>
-          </Container>
-        </section>
+        <HeaderConfig mode="autoOnScroll" />
+        <UniversalHero
+          title="Eviction Notice UK: Jurisdiction-Correct Guide for Landlords"
+          subtitle="Understand which notice applies in England, Wales, Scotland, or Northern Ireland and start a solicitor-grade workflow for your case."
+          primaryCta={{ label: 'Start Eviction Wizard', href: wizardHref }}
+          secondaryCta={{ label: 'Compare notice routes', href: '#england' }}
+          showTrustPositioningBar
+          hideMedia
+        />
 
         {/* Region Selector */}
         <Container>
