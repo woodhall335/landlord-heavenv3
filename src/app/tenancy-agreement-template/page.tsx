@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo/urls';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
-import { StandardHero } from '@/components/marketing/StandardHero';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { FunnelCta } from '@/components/funnels';
 import { FAQSection } from '@/components/seo/FAQSection';
@@ -25,8 +25,8 @@ import {
 
 
 export const metadata: Metadata = {
-  title: 'Tenancy Agreement Template UK - Standard & Premium',
-  description: 'Get a UK tenancy agreement template. Standard and premium AST options for England, Wales, and Scotland. Legally compliant contracts trusted by 10,000+ landlords.',
+  title: 'Tenancy Agreement UK | Create a Compliant Contract',
+  description: 'Create a UK tenancy agreement with guided steps for England, Wales, Scotland, and Northern Ireland. Compliant clauses and clear landlord workflow.',
   keywords: [
     'tenancy agreement template',
     'tenancy agreement template uk',
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     'tenancy contract template',
   ],
   openGraph: {
-    title: 'Tenancy Agreement Template UK - Standard & Premium | Landlord Heaven',
+    title: 'Tenancy Agreement UK | Create a Compliant Contract | Landlord Heaven',
     description: 'Get a UK tenancy agreement template. Standard and premium AST options for England, Wales, and Scotland.',
     url: getCanonicalUrl('/tenancy-agreement-template'),
     type: 'website',
@@ -139,7 +139,7 @@ export default function TenancyAgreementTemplatePage() {
       ],
       noteLabel: 'HMO note:',
       note: 'Properties with 5+ people from 2+ households require mandatory HMO licensing under Housing Act 2004.',
-      href: '/wizard?product=tenancy_agreement&jurisdiction=england',
+      href: '/wizard?product=tenancy_agreement&topic=tenancy&jurisdiction=england&src=seo_tenancy-agreement-template',
     },
     {
       flagSrc: '/gb-wls.svg',
@@ -154,7 +154,7 @@ export default function TenancyAgreementTemplatePage() {
       ],
       noteLabel: 'Note:',
       note: 'Wales uses Occupation Contracts, not ASTs. Different eviction procedures apply.',
-      href: '/wizard?product=tenancy_agreement&jurisdiction=wales',
+      href: '/wizard?product=tenancy_agreement&topic=tenancy&jurisdiction=wales&src=seo_tenancy-agreement-template',
     },
     {
       flagSrc: '/gb-sct.svg',
@@ -169,7 +169,7 @@ export default function TenancyAgreementTemplatePage() {
       ],
       noteLabel: 'Note:',
       note: 'Scotland has no fixed-term AST equivalent. PRTs continue until ended by notice.',
-      href: '/wizard?product=tenancy_agreement&jurisdiction=scotland',
+      href: '/wizard?product=tenancy_agreement&topic=tenancy&jurisdiction=scotland&src=seo_tenancy-agreement-template',
     },
     {
       flagSrc: '/gb-nir.svg',
@@ -184,15 +184,15 @@ export default function TenancyAgreementTemplatePage() {
       ],
       noteLabel: 'Note:',
       note: 'NI tenancy law differs from England/Wales/Scotland. The template follows NI private tenancy rules.',
-      href: '/wizard?product=tenancy_agreement&jurisdiction=northern-ireland',
+      href: '/wizard?product=tenancy_agreement&topic=tenancy&jurisdiction=northern-ireland&src=seo_tenancy-agreement-template',
     },
   ];
 
   return (
     <>
+      <HeaderConfig mode="autoOnScroll" />
       <StructuredData data={pageSchema} />
       <StructuredData data={faqSchema} />
-      <HeaderConfig mode="autoOnScroll" />
       <StructuredData data={breadcrumbSchema([
         { name: "Home", url: "https://landlordheaven.co.uk" },
         { name: "Templates", url: "https://landlordheaven.co.uk/products/ast" },
@@ -201,13 +201,13 @@ export default function TenancyAgreementTemplatePage() {
 
       <main>
         {/* Hero Section */}
-        <StandardHero
+        <UniversalHero
           badge="Updated for 2025/2026"
           badgeIcon={<FileText className="w-4 h-4" />}
           title="Tenancy Agreement Template UK"
           subtitle={<>Get a <strong>tenancy agreement template</strong> for England, Wales, or Scotland. Legally compliant contracts trusted by over 10,000 landlords.</>}
-          primaryCTA={{ label: "Get Premium AST — £24.99", href: getIntentProductHref({ product: "ast", src: "seo_landing" }) }}
-          secondaryCTA={{ label: "Get Standard", href: "/products/ast" }}
+          primaryCta={{ label: "Get Premium AST — £24.99", href: "/wizard?product=tenancy_agreement&topic=tenancy&src=seo_tenancy-agreement-template" }}
+          secondaryCta={{ label: "Get Standard", href: "/products/ast" }}
           variant="pastel"
         >
           {/* Trust Signals */}
@@ -225,7 +225,7 @@ export default function TenancyAgreementTemplatePage() {
               Ready in Minutes
             </span>
           </div>
-        </StandardHero>
+        </UniversalHero>
 
         <section className="py-8 bg-white">
           <div className="container mx-auto px-4">

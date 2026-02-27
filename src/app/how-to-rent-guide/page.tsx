@@ -1,6 +1,8 @@
 import { Metadata } from 'next';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { getCanonicalUrl } from '@/lib/seo';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { FAQSection } from '@/components/seo/FAQSection';
@@ -38,26 +40,19 @@ const breadcrumbs = [
 export default function HowToRentGuidePage() {
   return (
     <>
+      <HeaderConfig mode="autoOnScroll" />
       <StructuredData data={breadcrumbSchema(breadcrumbs)} />
 
       <div className="min-h-screen bg-gray-50">
         {/* Hero Section */}
-        <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-20">
-          <Container>
-            <div className="max-w-3xl mx-auto text-center">
-              <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-                <span className="text-sm font-semibold text-primary">England Only</span>
-              </div>
-              <h1 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
-                How to Rent Guide: Landlord Requirements
-              </h1>
-              <p className="text-xl text-gray-600 mb-8">
-                The How to Rent guide is a government document you must give to tenants in England.
-                Failure to provide it blocks your ability to serve a valid Section 21 notice.
-              </p>
-            </div>
-          </Container>
-        </section>
+                <UniversalHero
+          badge="Landlord Guide"
+          title="How to Rent Guide for Landlords"
+          subtitle="Landlord-focused guide to serving and evidencing How to Rent compliance."
+          primaryCta={{ label: 'Create Tenancy Agreement', href: '/wizard?product=tenancy_agreement&topic=tenancy&src=seo_how-to-rent-guide' }}
+          align="center"
+          showTrustPositioningBar
+        />
 
         {/* Main Content */}
         <Container>

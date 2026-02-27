@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import Link from 'next/link';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
@@ -10,7 +11,7 @@ import {
   landingPageLinks,
 } from '@/lib/seo/internal-links';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
-import { StandardHero } from '@/components/marketing/StandardHero';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { tenantNotPayingRentFAQs } from '@/data/faqs';
@@ -32,15 +33,15 @@ import {
 const wizardLinkNoticeOnly = buildWizardLink({
   product: 'notice_only',
   jurisdiction: 'england',
-  src: 'guide',
+  src: 'seo_tenant-not-paying-rent',
   topic: 'eviction',
 });
 
 const wizardLinkMoneyClaim = buildWizardLink({
   product: 'money_claim',
   jurisdiction: 'england',
-  src: 'guide',
-  topic: 'money_claim',
+  src: 'seo_tenant-not-paying-rent',
+  topic: 'debt',
 });
 
 const faqs = tenantNotPayingRentFAQs;
@@ -81,6 +82,7 @@ export default function TenantNotPayingRentPage() {
 
   return (
     <>
+      <HeaderConfig mode="autoOnScroll" />
       <StructuredData data={pageSchema} />
       <StructuredData data={breadcrumbSchema([
         { name: 'Home', url: 'https://landlordheaven.co.uk' },
@@ -90,13 +92,13 @@ export default function TenantNotPayingRentPage() {
 
       <main>
         {/* Hero Section */}
-        <StandardHero
+        <UniversalHero
           badge="England Only"
           badgeIcon={<PoundSterling className="w-4 h-4" />}
           title="Tenant Not Paying Rent?"
           subtitle={<>You have <strong>three main options</strong>: demand payment, evict for rent arrears, or claim the money through court. Here&apos;s how each works.</>}
-          primaryCTA={{ label: 'Get Section 8 Notice — £49.99', href: wizardLinkNoticeOnly }}
-          secondaryCTA={{ label: 'Claim Unpaid Rent', href: '/products/money-claim' }}
+          primaryCta={{ label: 'Claim Unpaid Rent', href: wizardLinkMoneyClaim }}
+          secondaryCta={{ label: 'Start Eviction Notice', href: wizardLinkNoticeOnly }}
           variant="pastel"
         >
           {/* Trust Signals */}
@@ -114,7 +116,7 @@ export default function TenantNotPayingRentPage() {
               2 Weeks Notice Period
             </span>
           </div>
-        </StandardHero>
+        </UniversalHero>
 
         {/* Social Proof */}
         <section className="py-6 bg-gray-50 border-y border-gray-100">

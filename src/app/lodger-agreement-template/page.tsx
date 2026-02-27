@@ -1,15 +1,17 @@
 import { Metadata } from 'next';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { getCanonicalUrl } from '@/lib/seo';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { lodgerAgreementFAQs } from '@/data/faqs';
 
 export const metadata: Metadata = {
-  title: 'Lodger Agreement Template UK (Live-In Landlords) | Free Starter Document for Live-In Landlords',
+  title: 'Lodger Agreement UK (Live-In Landlords) | Compliance Guide & Builder',
   description:
-    'Lodger agreement template UK for live-in landlords. Download a free starter document, understand lodger rights, and create terms for rent, notice, and house rules.',
+    'Lodger agreement guidance for live-in landlords. Understand lodger rights and create clear terms for rent, notice, and house rules.',
   keywords: [
     'lodger agreement template',
     'lodger agreement UK',
@@ -22,7 +24,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Lodger Agreement Template UK (Live-In Landlords) | Landlord Heaven',
     description:
-      'Free lodger agreement template for live-in landlords. Download or generate online.',
+      'Lodger agreement guidance and document creation for live-in landlords.',
     type: 'article',
     url: getCanonicalUrl('/lodger-agreement-template'),
   },
@@ -47,33 +49,19 @@ export default function LodgerAgreementPage() {
 
   return (
     <>
+      <HeaderConfig mode="autoOnScroll" />
       <StructuredData data={breadcrumbSchema(breadcrumbs)} />
 
       <div className="min-h-screen bg-gray-50">
         {/* Hero Section */}
-        <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-20">
-          <Container>
-            <div className="max-w-3xl mx-auto text-center">
-              <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-                <span className="text-sm font-semibold text-primary">Live-In Landlords</span>
-              </div>
-              <h1 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
-                Lodger Agreement Template UK (Live-In Landlords)
-              </h1>
-              <p className="text-xl text-gray-600 mb-8">
-                Need a lodger agreement template UK landlords can use with confidence? If you live in the property, you normally need a lodger agreement rather than an AST. Start with the right legal structure, then customise rent, notice, and house rules.
-              </p>
-              <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Link href="/products/ast" className="hero-btn-primary">
-                  Get Lodger Agreement
-                </Link>
-                <Link href="/products/ast" className="hero-btn-secondary">
-                  Compare Standard vs Premium Pack
-                </Link>
-              </div>
-            </div>
-          </Container>
-        </section>
+                <UniversalHero
+          badge="Landlord Guide"
+          title="Lodger Agreement Template UK"
+          subtitle="Lodger agreements for live-in landlords in the UK."
+          primaryCta={{ label: 'Create Lodger Agreement', href: '/wizard?product=tenancy_agreement&topic=tenancy&src=seo_lodger-agreement-template' }}
+          align="center"
+          showTrustPositioningBar
+        />
 
         {/* Main Content */}
         <Container>

@@ -1,11 +1,12 @@
 import { Metadata } from 'next';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import Link from 'next/link';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { tenantWontLeaveRelatedLinks } from '@/lib/seo/internal-links';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
-import { StandardHero } from '@/components/marketing/StandardHero';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import { FAQSection } from '@/components/seo/FAQSection';
@@ -30,7 +31,7 @@ const faqs = tenantWontLeaveFAQs;
 const wizardLinkNoticeOnly = buildWizardLink({
   product: 'notice_only',
   jurisdiction: 'england',
-  src: 'guide',
+  src: 'seo_tenant-wont-leave',
   topic: 'eviction',
 });
 
@@ -69,6 +70,7 @@ export default function TenantWontLeavePage() {
 
   return (
     <>
+      <HeaderConfig mode="autoOnScroll" />
       <StructuredData data={pageSchema} />
       <StructuredData data={breadcrumbSchema([
         { name: 'Home', url: 'https://landlordheaven.co.uk' },
@@ -86,13 +88,13 @@ export default function TenantWontLeavePage() {
 
       <main>
         {/* Hero Section */}
-        <StandardHero
+        <UniversalHero
           badge="England Only"
           badgeIcon={<Scale className="w-4 h-4" />}
           title="Tenant Won't Leave After Notice?"
           subtitle={<>Your tenant ignoring your eviction notice is frustrating — but you <strong>must follow the legal process</strong>. Here&apos;s exactly what to do next.</>}
-          primaryCTA={{ label: 'Get Court-Ready Notice — £49.99', href: wizardLinkNoticeOnly }}
-          secondaryCTA={{ label: 'Need Court Forms Too?', href: '/products/complete-pack' }}
+          primaryCta={{ label: 'Get Court-Ready Notice — £49.99', href: wizardLinkNoticeOnly }}
+          secondaryCta={{ label: 'Need Court Forms Too?', href: '/products/complete-pack' }}
           variant="pastel"
         >
           {/* Trust Signals */}
@@ -110,7 +112,7 @@ export default function TenantWontLeavePage() {
               Ready in 5 Minutes
             </span>
           </div>
-        </StandardHero>
+        </UniversalHero>
 
         {/* Social Proof */}
         <section className="py-6 bg-gray-50 border-y border-gray-100">

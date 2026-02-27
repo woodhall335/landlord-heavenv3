@@ -1,6 +1,8 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { getCanonicalUrl } from '@/lib/seo';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { FAQSection } from '@/components/seo/FAQSection';
@@ -36,28 +38,22 @@ const breadcrumbs = [
 ];
 
 export default function RollingTenancyPage() {
+  const wizardHref = '/wizard?product=tenancy_agreement&topic=tenancy&src=seo_rolling-tenancy-agreement';
+
   return (
     <>
+      <HeaderConfig mode="autoOnScroll" />
       <StructuredData data={breadcrumbSchema(breadcrumbs)} />
 
       <div className="min-h-screen bg-gray-50">
-        {/* Hero Section */}
-        <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-20">
-          <Container>
-            <div className="max-w-3xl mx-auto text-center">
-              <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-                <span className="text-sm font-semibold text-primary">Landlord Guide</span>
-              </div>
-              <h1 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
-                Rolling Tenancy Agreement UK
-              </h1>
-              <p className="text-xl text-gray-600 mb-8">
-                A rolling tenancy (periodic tenancy) continues month-to-month without a fixed end
-                date. Learn how they work and how to manage them effectively.
-              </p>
-            </div>
-          </Container>
-        </section>
+        <UniversalHero
+          badge="Landlord Guide"
+          title="Rolling Tenancy Agreement UK"
+          subtitle="A rolling tenancy (periodic tenancy) continues month-to-month without a fixed end date. Learn how they work and set up compliant terms in minutes."
+          primaryCta={{ label: 'Create Tenancy Agreement', href: wizardHref }}
+          align="center"
+          showTrustPositioningBar
+        />
 
         {/* Main Content */}
         <Container>
