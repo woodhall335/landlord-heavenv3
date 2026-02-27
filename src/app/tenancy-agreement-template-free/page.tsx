@@ -6,10 +6,19 @@ import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { tenancyAgreementEnglandLinks } from '@/lib/seo/internal-links';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { UniversalHero } from '@/components/landing/UniversalHero';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
+
+const wizardLinkStandard = buildWizardLink({
+  product: 'tenancy_agreement',
+  topic: 'tenancy',
+  src: 'seo_tenancy_agreement_template_free',
+});
 
 export const metadata: Metadata = {
-  title: 'Free Tenancy Agreement Template UK vs Paid: What You Need to Know 2026',
-  description: 'Comparing free tenancy agreement templates vs professionally drafted ASTs. What free starter documents miss and why £14.99 is worth it.',
+  title: 'Free Tenancy Agreement Template UK: Compliance Risks & Better Alternatives',
+  description: 'Compare basic starter tenancy templates with solicitor-grade, compliance-checked tenancy agreements and understand the legal risks before you let.',
   keywords: [
     'free tenancy agreement template',
     'tenancy agreement template free',
@@ -26,8 +35,8 @@ export const metadata: Metadata = {
     canonical: getCanonicalUrl('/tenancy-agreement-template-free'),
   },
   openGraph: {
-    title: 'Free Tenancy Agreement Template UK vs Paid: What You Need to Know 2026',
-    description: 'Comparing free tenancy agreement templates vs professionally drafted ASTs. What free starter documents miss and when paid is worth it.',
+    title: 'Free Tenancy Agreement Template UK: Compliance Risks | Landlord Heaven',
+    description: 'Compare basic starter tenancy templates with solicitor-grade, compliance-checked AST drafting before you let.',
     type: 'article',
     url: getCanonicalUrl('/tenancy-agreement-template-free'),
   },
@@ -92,8 +101,6 @@ export default function TenancyAgreementTemplateFreeComparisonPage() {
           headline: 'Free Tenancy Agreement Template UK vs Paid: What You Need to Know',
           description: 'Comparing free tenancy agreement templates vs professionally drafted ASTs.',
           url: getCanonicalUrl('/tenancy-agreement-template-free'),
-          datePublished: '2026-01-01',
-          dateModified: '2026-01-25',
         })}
       />
       <StructuredData
@@ -104,7 +111,24 @@ export default function TenancyAgreementTemplateFreeComparisonPage() {
         ])}
       />
 
+      <HeaderConfig mode="autoOnScroll" />
+
       <main className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50">
+        <UniversalHero
+          badge="UK Landlords"
+          title="Tenancy Agreement Compliance Guide"
+          subtitle={
+            <>
+              Compare basic starter documents with <strong>solicitor-grade, compliance-checked</strong>{' '}
+              tenancy agreements so you can choose the right protection before your tenancy starts.
+            </>
+          }
+          primaryCta={{
+            label: 'Create Compliance-Checked Tenancy Agreement',
+            href: wizardLinkStandard,
+          }}
+        />
+
         {/* Breadcrumb Navigation */}
         <div className="container mx-auto px-4 pt-24 pb-4">
           <nav className="text-sm text-gray-600">
@@ -122,9 +146,9 @@ export default function TenancyAgreementTemplateFreeComparisonPage() {
             <span className="inline-flex items-center gap-2 bg-amber-100 text-amber-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
               Comparison Guide
             </span>
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
               Free Tenancy Agreement Templates vs Paid: An Honest Comparison
-            </h1>
+            </h2>
             <p className="text-xl text-gray-700 mb-8 max-w-3xl mx-auto">
               Searching for a <strong>free tenancy agreement template</strong>? Understand what free options
               actually offer, what they miss, and when investing £14.99 in a professional template

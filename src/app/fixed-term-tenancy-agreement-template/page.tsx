@@ -9,7 +9,8 @@ import {
   tenancyAgreementPageLinks,
 } from '@/lib/seo/internal-links';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
-import { StandardHero } from '@/components/marketing/StandardHero';
+import { UniversalHero } from '@/components/landing/UniversalHero';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { FAQSection } from '@/components/seo/FAQSection';
 import {
@@ -27,7 +28,8 @@ import {
 const wizardLinkAST = buildWizardLink({
   product: 'ast_standard',
   jurisdiction: 'england',
-  src: 'template',
+  src: 'seo_fixed_term_tenancy_agreement_template',
+  topic: 'tenancy',
 });
 
 export const metadata: Metadata = {
@@ -52,6 +54,7 @@ export const metadata: Metadata = {
     title: 'Fixed Term Tenancy Agreement UK 2026 | Landlord Heaven',
     description: 'Complete guide to fixed term tenancy agreements. Templates, break clauses, and end of term options.',
     type: 'website',
+    url: 'https://landlordheaven.co.uk/fixed-term-tenancy-agreement-template',
   },
 };
 
@@ -108,16 +111,17 @@ export default function FixedTermTenancyAgreementPage() {
         { name: 'Fixed Term Tenancy Agreement', url: 'https://landlordheaven.co.uk/fixed-term-tenancy-agreement-template' },
       ])} />
 
+      <HeaderConfig mode="autoOnScroll" />
+
       <main>
         {/* Hero Section */}
-        <StandardHero
+        <UniversalHero
           badge="England & Wales"
           badgeIcon={<Calendar className="w-4 h-4" />}
           title="Fixed Term Tenancy Agreement Template"
           subtitle={<>Create a <strong>fixed term tenancy agreement</strong> for 6, 12, or 24 months. Set clear expectations with a legally compliant AST that protects both landlord and tenant.</>}
-          primaryCTA={{ label: 'Get AST Template — £14.99', href: wizardLinkAST }}
-          secondaryCTA={{ label: 'Compare Periodic Tenancy', href: '/rolling-tenancy-agreement' }}
-          variant="pastel"
+          primaryCta={{ label: 'Get AST Template — £14.99', href: wizardLinkAST }}
+          secondaryCta={{ label: 'Compare Periodic Tenancy', href: '/rolling-tenancy-agreement' }}
         >
           {/* Trust Signals */}
           <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600 mt-4">
@@ -134,7 +138,7 @@ export default function FixedTermTenancyAgreementPage() {
               Housing Act Compliant
             </span>
           </div>
-        </StandardHero>
+        </UniversalHero>
 
         {/* Social Proof */}
         <section className="py-6 bg-gray-50 border-y border-gray-100">

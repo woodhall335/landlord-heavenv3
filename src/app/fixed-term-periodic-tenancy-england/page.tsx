@@ -5,7 +5,8 @@ import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { fixedTermPeriodicEnglandRelatedLinks } from '@/lib/seo/internal-links';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
-import { StandardHero } from '@/components/marketing/StandardHero';
+import { UniversalHero } from '@/components/landing/UniversalHero';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import { FAQSection } from '@/components/seo/FAQSection';
@@ -32,14 +33,14 @@ const PAGE_TYPE = 'tenancy' as const;
 const wizardLinkStandard = buildWizardLink({
   product: 'ast_standard',
   jurisdiction: 'england',
-  src: 'guide',
+  src: 'seo_fixed_term_periodic_tenancy_england',
   topic: 'tenancy',
 });
 
 const wizardLinkPremium = buildWizardLink({
   product: 'ast_premium',
   jurisdiction: 'england',
-  src: 'guide',
+  src: 'seo_fixed_term_periodic_tenancy_england',
   topic: 'tenancy',
 });
 
@@ -66,6 +67,7 @@ export const metadata: Metadata = {
     description:
       'Which tenancy type is right for your property? Compare fixed term and periodic tenancies in England.',
     type: 'website',
+    url: 'https://landlordheaven.co.uk/fixed-term-periodic-tenancy-england',
   },
 };
 
@@ -101,9 +103,11 @@ export default function FixedTermPeriodicTenancyEnglandPage() {
         jurisdiction="england"
       />
 
+      <HeaderConfig mode="autoOnScroll" />
+
       <main>
         {/* Hero Section */}
-        <StandardHero
+        <UniversalHero
           badge="England Only"
           badgeIcon={<Scale className="w-4 h-4" />}
           title="Fixed Term vs Periodic Tenancy"
@@ -114,15 +118,14 @@ export default function FixedTermPeriodicTenancyEnglandPage() {
               letting situation.
             </>
           }
-          primaryCTA={{
+          primaryCta={{
             label: `Create Tenancy Agreement — ${PRODUCTS.ast_standard.displayPrice}`,
             href: wizardLinkStandard,
           }}
-          secondaryCTA={{
+          secondaryCta={{
             label: 'Premium with Break Clause',
             href: wizardLinkPremium,
           }}
-          variant="pastel"
         >
           {/* Trust Signals */}
           <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600 mt-4">
@@ -139,7 +142,7 @@ export default function FixedTermPeriodicTenancyEnglandPage() {
               Ready in Minutes
             </span>
           </div>
-        </StandardHero>
+        </UniversalHero>
 
         {/* Social Proof */}
         <section className="py-6 bg-gray-50 border-y border-gray-100">

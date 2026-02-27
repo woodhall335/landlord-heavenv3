@@ -5,7 +5,8 @@ import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { astMainRelatedLinks } from '@/lib/seo/internal-links';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
-import { StandardHero } from '@/components/marketing/StandardHero';
+import { UniversalHero } from '@/components/landing/UniversalHero';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import { FAQSection } from '@/components/seo/FAQSection';
@@ -33,14 +34,14 @@ const PAGE_TYPE = 'tenancy' as const;
 const wizardLinkStandard = buildWizardLink({
   product: 'ast_standard',
   jurisdiction: 'england',
-  src: 'guide',
+  src: 'seo_assured_shorthold_tenancy_agreement',
   topic: 'tenancy',
 });
 
 const wizardLinkPremium = buildWizardLink({
   product: 'ast_premium',
   jurisdiction: 'england',
-  src: 'guide',
+  src: 'seo_assured_shorthold_tenancy_agreement',
   topic: 'tenancy',
 });
 
@@ -68,6 +69,7 @@ export const metadata: Metadata = {
     description:
       'Create a legally valid AST for England. Court-enforceable tenancy agreement compliant with current legislation.',
     type: 'website',
+    url: 'https://landlordheaven.co.uk/assured-shorthold-tenancy-agreement',
   },
 };
 
@@ -103,9 +105,11 @@ export default function AssuredShortholdTenancyAgreementPage() {
         jurisdiction="england"
       />
 
+      <HeaderConfig mode="autoOnScroll" />
+
       <main>
         {/* Hero Section */}
-        <StandardHero
+        <UniversalHero
           badge="England Only"
           badgeIcon={<Scale className="w-4 h-4" />}
           title="Assured Shorthold Tenancy Agreement"
@@ -116,15 +120,14 @@ export default function AssuredShortholdTenancyAgreementPage() {
               eviction rights.
             </>
           }
-          primaryCTA={{
+          primaryCta={{
             label: `Create Tenancy Agreement — ${PRODUCTS.ast_standard.displayPrice}`,
             href: wizardLinkStandard,
           }}
-          secondaryCTA={{
+          secondaryCta={{
             label: 'Premium Agreement with Extra Protection',
             href: wizardLinkPremium,
           }}
-          variant="pastel"
         >
           {/* Trust Signals */}
           <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600 mt-4">
@@ -141,7 +144,7 @@ export default function AssuredShortholdTenancyAgreementPage() {
               Ready in Minutes
             </span>
           </div>
-        </StandardHero>
+        </UniversalHero>
 
         {/* Social Proof */}
         <section className="py-6 bg-gray-50 border-y border-gray-100">
