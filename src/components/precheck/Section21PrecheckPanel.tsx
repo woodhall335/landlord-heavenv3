@@ -14,14 +14,12 @@ import {
 } from '@/lib/section21Precheck';
 
 const triState: YesNoUnsure[] = ['yes', 'no', 'unsure'];
+const PAGE_GATE_FALLBACK_KEY = 'lh_gate_s21_notice_only';
 
+const STEP_TITLES = ['Tenancy & service', 'Deposit', 'Prescribed documents', 'Licensing & result'] as const;
 
 type Section21PrecheckPanelProps = {
   ctaHref: string;
-  ctaLabels?: {
-    valid?: string;
-    risky?: string;
-  };
   emailGate?: {
     enabled?: boolean;
     source?: string;
@@ -38,71 +36,475 @@ type Section21PrecheckPanelProps = {
   };
 };
 
-const DEFAULT_CTA_LABELS = {
-  valid: 'Section 21 is Valid – Continue',
-  risky: 'Use Section 8 Instead – Start Workflow',
+type CtaConfig = {
+  label: string;
+  enabled: boolean;
+  tone: 'neutral' | 'warning' | 'success';
+  message: string;
 };
 
-function Segmented({ value, onChange, accentHex }: { value: YesNoUnsure; onChange: (v: YesNoUnsure) => void; accentHex: string }) {
-  return <div className="inline-flex rounded-full border bg-white p-1 text-sm" style={{ borderColor: `${accentHex}4d` }}>{triState.map((option) => <button key={option} type="button" onClick={() => onChange(option)} className="rounded-full px-3 py-1.5 font-medium capitalize" style={value === option ? { backgroundColor: accentHex, color: '#fff' } : { color: accentHex }}>{option}</button>)}</div>;
+export function getStatusCtaConfig(status: Section21PrecheckResult['status'] | null): CtaConfig {
+  if (status === 'risky') {
+    return {
+      label: 'Use Section 8 Instead – Start Workflow',
+      enabled: true,
+      tone: 'warning',
+      message: 'Section 21 may be invalid based on your answers. Section 8 may be safer in this case.',
+    };
+  }
+
+  if (status === 'valid') {
+    return {
+      label: 'Section 21 is Valid – Continue',
+      enabled: true,
+      tone: 'success',
+      message: 'Section 21 appears valid based on your answers.',
+    };
+  }
+
+  return {
+    label: 'Complete the check to continue',
+    enabled: false,
+    tone: 'neutral',
+    message: 'Incomplete — answer the questions to check eligibility.',
+  };
+}
+
+function Segmented({
+  label,
+  value,
+  onChange,
+  accentHex,
+}: {
+  label: string;
+  value: YesNoUnsure;
+  onChange: (v: YesNoUnsure) => void;
+  accentHex: string;
+}) {
+  return (
+    <div className="space-y-2">
+      <p className="text-sm font-medium text-gray-800">{label}</p>
+      <div className="inline-flex rounded-full border bg-white p-1 text-sm" style={{ borderColor: `${accentHex}4d` }}>
+        {triState.map((option) => (
+          <button
+            key={option}
+            type="button"
+            onClick={() => onChange(option)}
+            className="rounded-full px-3 py-1.5 font-medium capitalize"
+            style={value === option ? { backgroundColor: accentHex, color: '#fff' } : { color: accentHex }}
+          >
+            {option}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
 }
 
 function DateField({ label, value, onChange }: { label: string; value: string | null; onChange: (v: string | null) => void }) {
-  return <label className="flex flex-col gap-1 text-sm"><span className="font-medium text-gray-700">{label}</span><input type="date" value={value ?? ''} onChange={(e) => onChange(e.target.value || null)} className="rounded-lg border border-gray-300 px-3 py-2" /></label>;
+  return (
+    <label className="flex flex-col gap-1 text-sm">
+      <span className="font-medium text-gray-700">{label}</span>
+      <input
+        type="date"
+        value={value ?? ''}
+        onChange={(e) => onChange(e.target.value || null)}
+        className="rounded-lg border border-gray-300 px-3 py-2"
+      />
+    </label>
+  );
 }
 
-export default function Section21PrecheckPanel({ ctaHref, ctaLabels, emailGate, ui }: Section21PrecheckPanelProps) {
+function missingForStep(input: Section21PrecheckInput, step: number): string[] {
+  const missing: string[] = [];
+  if (step === 1) {
+    if (!input.tenancy_start_date) missing.push('Tenancy start date');
+    if (input.is_replacement_tenancy === 'unsure') missing.push('Replacement tenancy');
+    if (input.is_replacement_tenancy === 'yes' && !input.original_tenancy_start_date) missing.push('Original tenancy start date');
+    if (input.tenancy_type === 'unsure') missing.push('Tenancy type');
+    if (input.tenancy_type === 'fixed_term' && !input.fixed_term_end_date) missing.push('Fixed term end date');
+    if (input.tenancy_type === 'fixed_term' && input.has_break_clause === 'unsure') missing.push('Break clause');
+    if (input.tenancy_type === 'fixed_term' && input.has_break_clause === 'yes' && !input.break_clause_earliest_end_date) {
+      missing.push('Break clause earliest end date');
+    }
+    if (input.rent_period === 'unsure' || input.rent_period === 'other') missing.push('Rent period');
+    if (!input.planned_service_date) missing.push('Planned service date');
+    if (input.service_method === 'unsure' || input.service_method === 'other') missing.push('Service method');
+    if (input.service_before_430pm === 'unsure') missing.push('Service before 4:30pm');
+    if (input.service_method === 'email' && input.tenant_consented_email_service !== 'yes') missing.push('Email service consent (must be yes)');
+  }
+
+  if (step === 2) {
+    if (input.deposit_taken === 'unsure') missing.push('Deposit taken');
+    if (input.deposit_taken === 'yes') {
+      if (!input.deposit_received_date) missing.push('Deposit received date');
+      if (!input.deposit_protected_date) missing.push('Deposit protected date');
+      if (!input.deposit_prescribed_info_served_tenant_date) missing.push('Prescribed information (PI) given to tenant — date');
+      if (!input.deposit_paid_by_relevant_person || input.deposit_paid_by_relevant_person === 'unsure') missing.push('Deposit paid by relevant person');
+      if (input.deposit_paid_by_relevant_person === 'yes' && !input.deposit_prescribed_info_served_relevant_person_date) {
+        missing.push('Prescribed information (PI) given to deposit payer (relevant person) — date');
+      }
+      if (!input.deposit_returned_in_full_or_agreed || input.deposit_returned_in_full_or_agreed === 'unsure') {
+        missing.push('Deposit returned in full or by agreement');
+      }
+      if (input.deposit_returned_in_full_or_agreed === 'yes' && !input.deposit_returned_date) missing.push('Deposit returned date');
+      if (!input.deposit_claim_resolved_by_court || input.deposit_claim_resolved_by_court === 'unsure') {
+        missing.push('Deposit claim resolved by court');
+      }
+    }
+  }
+
+  if (step === 3) {
+    if (input.epc_required === 'unsure') missing.push('EPC required');
+    if (input.epc_required === 'yes' && !input.epc_served_date) missing.push('EPC served date');
+    if (input.gas_installed === 'unsure') missing.push('Gas installed');
+    if (input.gas_installed === 'yes' && !input.gas_safety_record_issue_date) missing.push('Gas safety record issue date');
+    if (input.gas_installed === 'yes' && !input.gas_safety_record_served_date) missing.push('Gas safety record served date');
+    if (input.landlord_type === 'unsure') missing.push('Landlord type');
+
+    if (input.landlord_type === 'private_landlord') {
+      if (!input.how_to_rent_served_date) missing.push('How to Rent served date');
+      if (!input.how_to_rent_served_method || input.how_to_rent_served_method === 'unsure') missing.push('How to Rent served method');
+      if (input.how_to_rent_served_method === 'email' && input.tenant_consented_email_service !== 'yes') {
+        missing.push('Email service consent (must be yes)');
+      }
+      if (input.how_to_rent_was_current_version_at_tenancy_start === 'unsure') {
+        missing.push('How to Rent current at tenancy start');
+      }
+    }
+  }
+
+  if (step === 4) {
+    if (input.property_requires_hmo_licence === 'unsure') missing.push('Property requires HMO licence');
+    if (input.property_requires_hmo_licence === 'yes' && (!input.hmo_licence_in_place || input.hmo_licence_in_place === 'unsure')) {
+      missing.push('HMO licence in place');
+    }
+    if (input.property_requires_selective_licence === 'unsure') missing.push('Property requires selective licence');
+    if (
+      input.property_requires_selective_licence === 'yes' &&
+      (!input.selective_licence_in_place || input.selective_licence_in_place === 'unsure')
+    ) {
+      missing.push('Selective licence in place');
+    }
+    if (input.improvement_notice_served === 'unsure') missing.push('Improvement notice served');
+    if (input.improvement_notice_served === 'yes' && !input.improvement_notice_date) missing.push('Improvement notice date');
+    if (input.emergency_remedial_action_served === 'unsure') missing.push('Emergency remedial action served');
+    if (input.emergency_remedial_action_served === 'yes' && !input.emergency_remedial_action_date) {
+      missing.push('Emergency remedial action date');
+    }
+    if (input.prohibited_payment_outstanding === 'unsure') missing.push('Prohibited payment outstanding');
+    if (input.has_proof_of_service_plan === 'unsure') missing.push('Proof of service plan');
+  }
+
+  return missing;
+}
+
+export default function Section21PrecheckPanel({ ctaHref, emailGate, ui }: Section21PrecheckPanelProps) {
   const accentHex = ui?.accentHex ?? '#7c3aed';
   const heading = ui?.heading ?? '⚠️ Quick compliance & timing check';
   const subtitle = ui?.subtitle ?? 'One mistake can invalidate a Section 21 notice. Check in 60 seconds.';
   const panelVariant = ui?.variant ?? 'full';
+
   const gateEnabled = emailGate?.enabled ?? true;
-  const gateStorageKey = emailGate?.gateStorageKey ?? 'lh_s21_precheck_gate';
+  const gateStorageKey = emailGate?.gateStorageKey ?? PAGE_GATE_FALLBACK_KEY;
   const gateSource = emailGate?.source ?? 's21_precheck_results_gate';
   const gateTags = emailGate?.tags ?? ['s21_precheck', 'product_notice_only', 'england'];
   const includeEmailReport = emailGate?.includeEmailReport ?? false;
-  const mergedCtaLabels = { ...DEFAULT_CTA_LABELS, ...ctaLabels };
+
   const [input, setInput] = useState<Section21PrecheckInput>(SECTION21_PRECHECK_DEFAULT_INPUT);
   const [result, setResult] = useState<Section21PrecheckResult | null>(null);
+  const [step, setStep] = useState(1);
   const [openModal, setOpenModal] = useState(false);
   const [gateOpen, setGateOpen] = useState(
-    typeof window !== 'undefined' && (!gateEnabled || isLeadCaptured() || localStorage.getItem(gateStorageKey) === '1')
+    typeof window !== 'undefined' &&
+      (!gateEnabled || isLeadCaptured() || localStorage.getItem(gateStorageKey) === '1' || localStorage.getItem(PAGE_GATE_FALLBACK_KEY) === '1')
   );
+
+  const sanitizeInput = (draft: Section21PrecheckInput): Section21PrecheckInput => {
+    const next = { ...draft };
+
+    if (next.is_replacement_tenancy !== 'yes') next.original_tenancy_start_date = null;
+    if (next.tenancy_type !== 'fixed_term') {
+      next.fixed_term_end_date = null;
+      next.has_break_clause = 'unsure';
+      next.break_clause_earliest_end_date = null;
+    }
+    if (next.tenancy_type === 'fixed_term' && next.has_break_clause !== 'yes') next.break_clause_earliest_end_date = null;
+
+    if (next.service_method !== 'email') next.tenant_consented_email_service = null;
+
+    if (next.deposit_taken !== 'yes') {
+      next.deposit_received_date = null;
+      next.deposit_protected_date = null;
+      next.deposit_prescribed_info_served_tenant_date = null;
+      next.deposit_paid_by_relevant_person = null;
+      next.deposit_prescribed_info_served_relevant_person_date = null;
+      next.deposit_returned_in_full_or_agreed = null;
+      next.deposit_returned_date = null;
+      next.deposit_claim_resolved_by_court = null;
+    }
+    if (next.deposit_paid_by_relevant_person !== 'yes') next.deposit_prescribed_info_served_relevant_person_date = null;
+    if (next.deposit_returned_in_full_or_agreed !== 'yes') next.deposit_returned_date = null;
+
+    if (next.epc_required !== 'yes') next.epc_served_date = null;
+
+    if (next.gas_installed !== 'yes') {
+      next.gas_safety_record_issue_date = null;
+      next.gas_safety_record_served_date = null;
+    }
+
+    if (next.landlord_type !== 'private_landlord') next.how_to_rent_was_current_version_at_tenancy_start = 'unsure';
+
+    if (next.property_requires_hmo_licence !== 'yes') next.hmo_licence_in_place = null;
+    if (next.property_requires_selective_licence !== 'yes') next.selective_licence_in_place = null;
+    if (next.improvement_notice_served !== 'yes') next.improvement_notice_date = null;
+    if (next.emergency_remedial_action_served !== 'yes') next.emergency_remedial_action_date = null;
+
+    return next;
+  };
+
+  const update = <K extends keyof Section21PrecheckInput>(key: K, value: Section21PrecheckInput[K]) => {
+    setInput((prev) => sanitizeInput({ ...prev, [key]: value }));
+  };
 
   useEffect(() => {
     let active = true;
     evaluateSection21Precheck(input).then((next) => active && setResult(next));
-    return () => { active = false; };
+    return () => {
+      active = false;
+    };
   }, [input]);
 
-  const statusBadge = useMemo(() => !result || result.status === 'incomplete' ? 'Incomplete' : result.status === 'risky' ? 'Risky' : 'Appears valid', [result]);
-  const update = <K extends keyof Section21PrecheckInput>(key: K, value: Section21PrecheckInput[K]) => setInput((prev) => ({ ...prev, [key]: value }));
+  const stepMissing = useMemo(() => missingForStep(input, step), [input, step]);
+  const allMissing = useMemo(() => [1, 2, 3, 4].flatMap((s) => missingForStep(input, s)), [input]);
+
+  const ctaConfig = getStatusCtaConfig(result?.status ?? null);
 
   return (
-    <div className={`mx-auto mb-8 w-full max-w-[800px] rounded-2xl border-l-4 bg-white shadow-sm ${panelVariant === 'compact' ? 'p-4 md:p-5' : 'p-5 md:p-6'}`} style={{ borderLeftColor: accentHex }}>
+    <div
+      className={`mx-auto mb-8 w-full max-w-[800px] rounded-2xl border-l-4 bg-white shadow-sm ${panelVariant === 'compact' ? 'p-4 md:p-5' : 'p-5 md:p-6'}`}
+      style={{ borderLeftColor: accentHex }}
+    >
       <h3 className="text-2xl font-bold text-gray-900">{heading}</h3>
       <p className="mt-2 text-gray-600">{subtitle}</p>
-      <div className="mt-5 space-y-5">
-        <div><p className="mb-2 font-semibold">A) Compliance / prerequisites</p><div className="grid gap-3 md:grid-cols-2">{[['deposit_taken', 'Deposit taken?'], ['epc_required', 'EPC required?'], ['gas_installed', 'Gas installed?'], ['property_requires_hmo_licence', 'HMO licence required?'], ['property_requires_selective_licence', 'Selective licence required?'], ['improvement_notice_served', 'Improvement notice served?'], ['emergency_remedial_action_served', 'Emergency remedial action served?'], ['prohibited_payment_outstanding', 'Prohibited payment outstanding?'], ['has_proof_of_service_plan', 'Proof-of-service plan in place?'], ['is_replacement_tenancy', 'Replacement tenancy?']].map(([key, label]) => <div key={key} className="flex items-center justify-between gap-3 rounded-lg border border-gray-100 p-2"><span className="text-sm">{label}</span><Segmented value={input[key as keyof Section21PrecheckInput] as YesNoUnsure} onChange={(v) => update(key as keyof Section21PrecheckInput, v as never)} accentHex={accentHex} /></div>)}</div></div>
 
-        <div>
-          <p className="mb-2 font-semibold">B) Timing inputs</p>
-          <div className="grid gap-3 md:grid-cols-2">
-            <DateField label="Tenancy start date" value={input.tenancy_start_date || null} onChange={(v) => update('tenancy_start_date', v ?? '')} /><DateField label="Original tenancy start date" value={input.original_tenancy_start_date} onChange={(v) => update('original_tenancy_start_date', v)} /><DateField label="Planned service date" value={input.planned_service_date || null} onChange={(v) => update('planned_service_date', v ?? '')} /><DateField label="Fixed term end date" value={input.fixed_term_end_date} onChange={(v) => update('fixed_term_end_date', v)} /><DateField label="Break clause earliest end date" value={input.break_clause_earliest_end_date} onChange={(v) => update('break_clause_earliest_end_date', v)} /><DateField label="Deposit received date" value={input.deposit_received_date} onChange={(v) => update('deposit_received_date', v)} /><DateField label="Deposit protected date" value={input.deposit_protected_date} onChange={(v) => update('deposit_protected_date', v)} /><DateField label="PI served (tenant)" value={input.deposit_prescribed_info_served_tenant_date} onChange={(v) => update('deposit_prescribed_info_served_tenant_date', v)} /><DateField label="Deposit returned date" value={input.deposit_returned_date} onChange={(v) => update('deposit_returned_date', v)} /><DateField label="PI served (relevant person)" value={input.deposit_prescribed_info_served_relevant_person_date} onChange={(v) => update('deposit_prescribed_info_served_relevant_person_date', v)} /><DateField label="EPC served date" value={input.epc_served_date} onChange={(v) => update('epc_served_date', v)} /><DateField label="Gas safety issue date" value={input.gas_safety_record_issue_date} onChange={(v) => update('gas_safety_record_issue_date', v)} /><DateField label="Gas safety served date" value={input.gas_safety_record_served_date} onChange={(v) => update('gas_safety_record_served_date', v)} /><DateField label="How to Rent served date" value={input.how_to_rent_served_date} onChange={(v) => update('how_to_rent_served_date', v)} /><DateField label="Improvement notice date" value={input.improvement_notice_date} onChange={(v) => update('improvement_notice_date', v)} /><DateField label="Emergency remedial action date" value={input.emergency_remedial_action_date} onChange={(v) => update('emergency_remedial_action_date', v)} />
-          </div>
-          <div className="mt-3 grid gap-3 md:grid-cols-3">
-            <select className="rounded-lg border border-gray-300 px-3 py-2 text-sm" value={input.tenancy_type} onChange={(e) => update('tenancy_type', e.target.value as Section21PrecheckInput['tenancy_type'])}><option value="unsure">Tenancy type</option><option value="fixed_term">Fixed term</option><option value="periodic">Periodic</option></select><select className="rounded-lg border border-gray-300 px-3 py-2 text-sm" value={input.rent_period} onChange={(e) => update('rent_period', e.target.value as Section21PrecheckInput['rent_period'])}><option value="unsure">Rent period</option><option value="weekly">Weekly</option><option value="fortnightly">Fortnightly</option><option value="four_weekly">Four-weekly</option><option value="monthly">Monthly</option><option value="quarterly">Quarterly</option><option value="yearly">Yearly</option><option value="other">Other</option></select><select className="rounded-lg border border-gray-300 px-3 py-2 text-sm" value={input.service_method} onChange={(e) => update('service_method', e.target.value as Section21PrecheckInput['service_method'])}><option value="unsure">Service method</option><option value="hand">Hand</option><option value="first_class_post">First class post</option><option value="document_exchange">Document exchange</option><option value="email">Email</option><option value="other">Other</option></select><select className="rounded-lg border border-gray-300 px-3 py-2 text-sm" value={input.landlord_type} onChange={(e) => update('landlord_type', e.target.value as Section21PrecheckInput['landlord_type'])}><option value="unsure">Landlord type</option><option value="private_landlord">Private landlord</option><option value="social_provider">Social provider</option></select><select className="rounded-lg border border-gray-300 px-3 py-2 text-sm" value={input.how_to_rent_served_method ?? 'unsure'} onChange={(e) => update('how_to_rent_served_method', e.target.value as Section21PrecheckInput['how_to_rent_served_method'])}><option value="unsure">How to Rent served method</option><option value="hardcopy">Hardcopy</option><option value="email">Email</option></select><select className="rounded-lg border border-gray-300 px-3 py-2 text-sm" value={input.service_before_430pm} onChange={(e) => update('service_before_430pm', e.target.value as YesNoUnsure)}><option value="unsure">Before 4:30pm?</option><option value="yes">Yes</option><option value="no">No</option></select><select className="rounded-lg border border-gray-300 px-3 py-2 text-sm" value={input.tenant_consented_email_service ?? 'unsure'} onChange={(e) => update('tenant_consented_email_service', e.target.value as YesNoUnsure)}><option value="unsure">Email service consent</option><option value="yes">Yes</option><option value="no">No</option></select><select className="rounded-lg border border-gray-300 px-3 py-2 text-sm" value={input.has_break_clause} onChange={(e) => update('has_break_clause', e.target.value as YesNoUnsure)}><option value="unsure">Break clause?</option><option value="yes">Yes</option><option value="no">No</option></select><select className="rounded-lg border border-gray-300 px-3 py-2 text-sm" value={input.deposit_returned_in_full_or_agreed ?? 'unsure'} onChange={(e) => update('deposit_returned_in_full_or_agreed', e.target.value as YesNoUnsure)}><option value="unsure">Deposit returned in full?</option><option value="yes">Yes</option><option value="no">No</option></select><select className="rounded-lg border border-gray-300 px-3 py-2 text-sm" value={input.deposit_claim_resolved_by_court ?? 'unsure'} onChange={(e) => update('deposit_claim_resolved_by_court', e.target.value as YesNoUnsure)}><option value="unsure">Deposit claim resolved by court?</option><option value="yes">Yes</option><option value="no">No</option></select><select className="rounded-lg border border-gray-300 px-3 py-2 text-sm" value={input.hmo_licence_in_place ?? 'unsure'} onChange={(e) => update('hmo_licence_in_place', e.target.value as YesNoUnsure)}><option value="unsure">HMO licence in place?</option><option value="yes">Yes</option><option value="no">No</option></select><select className="rounded-lg border border-gray-300 px-3 py-2 text-sm" value={input.selective_licence_in_place ?? 'unsure'} onChange={(e) => update('selective_licence_in_place', e.target.value as YesNoUnsure)}><option value="unsure">Selective licence in place?</option><option value="yes">Yes</option><option value="no">No</option></select><select className="rounded-lg border border-gray-300 px-3 py-2 text-sm" value={input.how_to_rent_was_current_version_at_tenancy_start} onChange={(e) => update('how_to_rent_was_current_version_at_tenancy_start', e.target.value as YesNoUnsure)}><option value="unsure">How to Rent current at start?</option><option value="yes">Yes</option><option value="no">No</option></select><select className="rounded-lg border border-gray-300 px-3 py-2 text-sm" value={input.deposit_paid_by_relevant_person ?? 'unsure'} onChange={(e) => update('deposit_paid_by_relevant_person', e.target.value as YesNoUnsure)}><option value="unsure">Deposit paid by relevant person?</option><option value="yes">Yes</option><option value="no">No</option></select>
-          </div>
-        </div>
-
-        <div className="rounded-xl border border-gray-200 p-4" style={{ backgroundColor: '#faf7ff' }}><p className="text-sm font-semibold">Status preview</p><div className="mt-2 flex items-center gap-3"><span className="rounded-full bg-white px-3 py-1 text-xs font-semibold border" style={{ color: accentHex, borderColor: `${accentHex}4d` }}>{statusBadge}</span><span className="text-sm text-gray-700">{result?.display.gatedSummary ?? 'Loading...'}</span></div>
-          {result && result.status !== 'incomplete' && gateEnabled && !gateOpen && <button type="button" onClick={() => setOpenModal(true)} className="mt-3 rounded-lg px-4 py-2 text-sm font-semibold text-white" style={{ backgroundColor: accentHex }}>Reveal full results</button>}
-          {result && result.status !== 'incomplete' && gateOpen && <div className="mt-4 space-y-2 text-sm text-gray-700"><p className="font-semibold">{result.display.headline}</p><ul className="list-disc pl-5">{result.blockers.map((item) => <li key={item.code + item.message}>{item.message}</li>)}{result.warnings.map((item) => <li key={item.code + item.message}>{item.message}</li>)}</ul><div className="grid gap-1 pt-2"><p>Deemed service date: {formatDateUK(result.deemed_service_date)}</p><p>Earliest leave-after date: {formatDateUK(result.earliest_after_date)}</p><p>Latest court start date: {formatDateUK(result.latest_court_start_date)}</p></div></div>}
-          <Link href={ctaHref} className="mt-4 block w-full rounded-lg px-4 py-3 text-center font-semibold text-white" style={{ background: `linear-gradient(to right, #692ed4, ${accentHex})` }}>{result?.status === 'risky' ? mergedCtaLabels.risky : mergedCtaLabels.valid}</Link>
-        </div>
+      <div className="mt-5 rounded-lg border border-gray-100 bg-gray-50 px-4 py-3 text-sm font-semibold text-gray-700">
+        Step {step} of 4 — {STEP_TITLES[step - 1]}
       </div>
 
-      {gateEnabled ? <EmailCaptureModal open={openModal} onClose={() => setOpenModal(false)} source={gateSource} tags={gateTags} includeEmailReport={includeEmailReport} reportCaseId={emailGate?.reportCaseId} title="Reveal your full Section 21 pre-check results" description="Enter your email to unlock detailed reasons, date calculations, and next-step guidance." primaryLabel="Reveal results" onSuccess={() => { setGateOpen(true); if (typeof window !== 'undefined') localStorage.setItem(gateStorageKey, '1'); }} /> : null}
+      <div className="mt-4 space-y-4">
+        {step === 1 ? (
+          <>
+            <DateField label="Tenancy start date" value={input.tenancy_start_date || null} onChange={(v) => update('tenancy_start_date', v ?? '')} />
+            <Segmented label="Replacement tenancy?" value={input.is_replacement_tenancy} onChange={(v) => update('is_replacement_tenancy', v)} accentHex={accentHex} />
+            {input.is_replacement_tenancy === 'yes' ? (
+              <DateField label="Original tenancy start date" value={input.original_tenancy_start_date} onChange={(v) => update('original_tenancy_start_date', v)} />
+            ) : null}
+            <label className="flex flex-col gap-1 text-sm">
+              <span className="font-medium text-gray-700">Tenancy type</span>
+              <select className="rounded-lg border border-gray-300 px-3 py-2" value={input.tenancy_type} onChange={(e) => update('tenancy_type', e.target.value as Section21PrecheckInput['tenancy_type'])}>
+                <option value="unsure">Unsure</option>
+                <option value="fixed_term">Fixed term</option>
+                <option value="periodic">Periodic</option>
+              </select>
+            </label>
+            {input.tenancy_type === 'fixed_term' ? (
+              <>
+                <DateField label="Fixed term end date" value={input.fixed_term_end_date} onChange={(v) => update('fixed_term_end_date', v)} />
+                <Segmented label="Has break clause?" value={input.has_break_clause} onChange={(v) => update('has_break_clause', v)} accentHex={accentHex} />
+                {input.has_break_clause === 'yes' ? (
+                  <DateField label="Break clause earliest end date" value={input.break_clause_earliest_end_date} onChange={(v) => update('break_clause_earliest_end_date', v)} />
+                ) : null}
+              </>
+            ) : null}
+            <label className="flex flex-col gap-1 text-sm">
+              <span className="font-medium text-gray-700">Rent period</span>
+              <select className="rounded-lg border border-gray-300 px-3 py-2" value={input.rent_period} onChange={(e) => update('rent_period', e.target.value as Section21PrecheckInput['rent_period'])}>
+                <option value="unsure">Unsure</option><option value="weekly">Weekly</option><option value="fortnightly">Fortnightly</option><option value="four_weekly">Four-weekly</option><option value="monthly">Monthly</option><option value="quarterly">Quarterly</option><option value="yearly">Yearly</option><option value="other">Other</option>
+              </select>
+            </label>
+            <DateField label="Planned service date" value={input.planned_service_date || null} onChange={(v) => update('planned_service_date', v ?? '')} />
+            <label className="flex flex-col gap-1 text-sm">
+              <span className="font-medium text-gray-700">Service method</span>
+              <select className="rounded-lg border border-gray-300 px-3 py-2" value={input.service_method} onChange={(e) => update('service_method', e.target.value as Section21PrecheckInput['service_method'])}>
+                <option value="unsure">Unsure</option><option value="hand">Hand delivery</option><option value="first_class_post">First class post</option><option value="document_exchange">Document exchange</option><option value="email">Email</option><option value="other">Other</option>
+              </select>
+            </label>
+            <Segmented label="Service before 4:30pm?" value={input.service_before_430pm} onChange={(v) => update('service_before_430pm', v)} accentHex={accentHex} />
+            {input.service_method === 'email' ? (
+              <>
+                <Segmented
+                  label="Tenant consented to email service?"
+                  value={input.tenant_consented_email_service ?? 'unsure'}
+                  onChange={(v) => update('tenant_consented_email_service', v)}
+                  accentHex={accentHex}
+                />
+                {input.tenant_consented_email_service !== 'yes' ? (
+                  <p className="text-sm font-medium text-amber-700">Email service requires tenant consent.</p>
+                ) : null}
+              </>
+            ) : null}
+          </>
+        ) : null}
+
+        {step === 2 ? (
+          <>
+            <Segmented label="Deposit taken?" value={input.deposit_taken} onChange={(v) => update('deposit_taken', v)} accentHex={accentHex} />
+            {input.deposit_taken === 'no' ? <p className="text-sm text-gray-700">No deposit taken — deposit rules don’t apply.</p> : null}
+            {input.deposit_taken === 'yes' ? (
+              <div className="space-y-4 rounded-xl border border-gray-200 p-4">
+                <p className="text-sm text-gray-700">These dates determine whether Section 21 is barred under deposit rules.</p>
+                <DateField label="Deposit received date" value={input.deposit_received_date} onChange={(v) => update('deposit_received_date', v)} />
+                <DateField label="Deposit protected date" value={input.deposit_protected_date} onChange={(v) => update('deposit_protected_date', v)} />
+                <DateField
+                  label="Prescribed information (PI) given to tenant — date"
+                  value={input.deposit_prescribed_info_served_tenant_date}
+                  onChange={(v) => update('deposit_prescribed_info_served_tenant_date', v)}
+                />
+                <Segmented label="Deposit paid by relevant person?" value={input.deposit_paid_by_relevant_person ?? 'unsure'} onChange={(v) => update('deposit_paid_by_relevant_person', v)} accentHex={accentHex} />
+                {input.deposit_paid_by_relevant_person === 'yes' ? (
+                  <DateField
+                    label="Prescribed information (PI) given to deposit payer (relevant person) — date"
+                    value={input.deposit_prescribed_info_served_relevant_person_date}
+                    onChange={(v) => update('deposit_prescribed_info_served_relevant_person_date', v)}
+                  />
+                ) : null}
+                <Segmented label="Deposit returned in full or agreed?" value={input.deposit_returned_in_full_or_agreed ?? 'unsure'} onChange={(v) => update('deposit_returned_in_full_or_agreed', v)} accentHex={accentHex} />
+                {input.deposit_returned_in_full_or_agreed === 'yes' ? <DateField label="Deposit returned date" value={input.deposit_returned_date} onChange={(v) => update('deposit_returned_date', v)} /> : null}
+                <Segmented label="Deposit claim resolved by court?" value={input.deposit_claim_resolved_by_court ?? 'unsure'} onChange={(v) => update('deposit_claim_resolved_by_court', v)} accentHex={accentHex} />
+              </div>
+            ) : null}
+          </>
+        ) : null}
+
+        {step === 3 ? (
+          <>
+            <Segmented label="EPC required?" value={input.epc_required} onChange={(v) => update('epc_required', v)} accentHex={accentHex} />
+            {input.epc_required === 'yes' ? <DateField label="EPC served date" value={input.epc_served_date} onChange={(v) => update('epc_served_date', v)} /> : null}
+
+            <Segmented label="Gas installed?" value={input.gas_installed} onChange={(v) => update('gas_installed', v)} accentHex={accentHex} />
+            {input.gas_installed === 'yes' ? (
+              <>
+                <DateField label="Gas safety record issue date" value={input.gas_safety_record_issue_date} onChange={(v) => update('gas_safety_record_issue_date', v)} />
+                <DateField label="Gas safety record served date" value={input.gas_safety_record_served_date} onChange={(v) => update('gas_safety_record_served_date', v)} />
+              </>
+            ) : null}
+
+            <label className="flex flex-col gap-1 text-sm">
+              <span className="font-medium text-gray-700">Landlord type</span>
+              <select className="rounded-lg border border-gray-300 px-3 py-2" value={input.landlord_type} onChange={(e) => update('landlord_type', e.target.value as Section21PrecheckInput['landlord_type'])}>
+                <option value="unsure">Unsure</option><option value="private_landlord">Private landlord</option><option value="social_provider">Social provider</option>
+              </select>
+            </label>
+
+            <DateField label="How to Rent served date" value={input.how_to_rent_served_date} onChange={(v) => update('how_to_rent_served_date', v)} />
+            <label className="flex flex-col gap-1 text-sm">
+              <span className="font-medium text-gray-700">How to Rent served method</span>
+              <select className="rounded-lg border border-gray-300 px-3 py-2" value={input.how_to_rent_served_method ?? 'unsure'} onChange={(e) => update('how_to_rent_served_method', e.target.value as Section21PrecheckInput['how_to_rent_served_method'])}>
+                <option value="unsure">Unsure</option><option value="hardcopy">Hardcopy</option><option value="email">Email</option>
+              </select>
+            </label>
+            {input.how_to_rent_served_method === 'email' && input.tenant_consented_email_service !== 'yes' ? (
+              <p className="text-sm font-medium text-amber-700">Email service requires tenant consent.</p>
+            ) : null}
+            {input.landlord_type === 'private_landlord' ? (
+              <Segmented label="How to Rent was current version at tenancy start?" value={input.how_to_rent_was_current_version_at_tenancy_start} onChange={(v) => update('how_to_rent_was_current_version_at_tenancy_start', v)} accentHex={accentHex} />
+            ) : null}
+          </>
+        ) : null}
+
+        {step === 4 ? (
+          <>
+            <Segmented label="Property requires HMO licence?" value={input.property_requires_hmo_licence} onChange={(v) => update('property_requires_hmo_licence', v)} accentHex={accentHex} />
+            {input.property_requires_hmo_licence === 'yes' ? <Segmented label="HMO licence in place?" value={input.hmo_licence_in_place ?? 'unsure'} onChange={(v) => update('hmo_licence_in_place', v)} accentHex={accentHex} /> : null}
+            <Segmented label="Property requires selective licence?" value={input.property_requires_selective_licence} onChange={(v) => update('property_requires_selective_licence', v)} accentHex={accentHex} />
+            {input.property_requires_selective_licence === 'yes' ? <Segmented label="Selective licence in place?" value={input.selective_licence_in_place ?? 'unsure'} onChange={(v) => update('selective_licence_in_place', v)} accentHex={accentHex} /> : null}
+            <Segmented label="Improvement notice served?" value={input.improvement_notice_served} onChange={(v) => update('improvement_notice_served', v)} accentHex={accentHex} />
+            {input.improvement_notice_served === 'yes' ? <DateField label="Improvement notice date" value={input.improvement_notice_date} onChange={(v) => update('improvement_notice_date', v)} /> : null}
+            <Segmented label="Emergency remedial action served?" value={input.emergency_remedial_action_served} onChange={(v) => update('emergency_remedial_action_served', v)} accentHex={accentHex} />
+            {input.emergency_remedial_action_served === 'yes' ? <DateField label="Emergency remedial action date" value={input.emergency_remedial_action_date} onChange={(v) => update('emergency_remedial_action_date', v)} /> : null}
+            <Segmented label="Prohibited payment outstanding?" value={input.prohibited_payment_outstanding} onChange={(v) => update('prohibited_payment_outstanding', v)} accentHex={accentHex} />
+            <Segmented label="Proof of service evidence plan in place?" value={input.has_proof_of_service_plan} onChange={(v) => update('has_proof_of_service_plan', v)} accentHex={accentHex} />
+
+            <div className="rounded-xl border border-gray-200 p-4" style={{ backgroundColor: '#faf7ff' }}>
+              <p className="text-sm font-semibold">Status preview</p>
+              <p className={`mt-2 text-sm ${ctaConfig.tone === 'warning' ? 'text-amber-800' : ctaConfig.tone === 'success' ? 'text-emerald-700' : 'text-gray-700'}`}>{ctaConfig.message}</p>
+
+              {result?.status === 'incomplete' ? (
+                <div className="mt-3 rounded-lg border border-gray-200 bg-white p-3 text-sm text-gray-700">
+                  <p className="font-medium">Missing fields:</p>
+                  <ul className="mt-1 list-disc pl-5">
+                    {allMissing.slice(0, 8).map((item) => <li key={item}>{item}</li>)}
+                  </ul>
+                </div>
+              ) : null}
+
+              {result && result.status !== 'incomplete' && gateEnabled && !gateOpen ? (
+                <button type="button" onClick={() => setOpenModal(true)} className="mt-3 rounded-lg px-4 py-2 text-sm font-semibold text-white" style={{ backgroundColor: accentHex }}>
+                  Reveal full results
+                </button>
+              ) : null}
+
+              {result && result.status !== 'incomplete' && gateOpen ? (
+                <div className="mt-4 space-y-2 text-sm text-gray-700">
+                  <p className="font-semibold">{result.display.headline}</p>
+                  <ul className="list-disc pl-5">
+                    {result.blockers.map((item) => <li key={item.code + item.message}>{item.message}</li>)}
+                    {result.warnings.map((item) => <li key={item.code + item.message}>{item.message}</li>)}
+                  </ul>
+                  <div className="grid gap-1 pt-2">
+                    <p>Deemed service date: {formatDateUK(result.deemed_service_date)}</p>
+                    <p>Earliest leave-after date: {formatDateUK(result.earliest_after_date)}</p>
+                    <p>Latest court start date: {formatDateUK(result.latest_court_start_date)}</p>
+                  </div>
+                </div>
+              ) : null}
+
+              {ctaConfig.enabled ? (
+                <Link href={ctaHref} className="mt-4 block w-full rounded-lg px-4 py-3 text-center font-semibold text-white" style={{ background: `linear-gradient(to right, #692ed4, ${accentHex})` }}>
+                  {ctaConfig.label}
+                </Link>
+              ) : (
+                <button type="button" disabled className="mt-4 block w-full rounded-lg bg-gray-200 px-4 py-3 text-center font-semibold text-gray-500">
+                  {ctaConfig.label}
+                </button>
+              )}
+            </div>
+          </>
+        ) : null}
+      </div>
+
+      <div className="mt-6 flex items-center justify-between gap-3">
+        <button type="button" onClick={() => setStep((prev) => Math.max(1, prev - 1))} disabled={step === 1} className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 disabled:cursor-not-allowed disabled:opacity-40">
+          Back
+        </button>
+        <button type="button" onClick={() => setStep((prev) => Math.min(4, prev + 1))} disabled={step === 4 || stepMissing.length > 0} className="rounded-lg px-4 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:bg-gray-300" style={{ backgroundColor: stepMissing.length ? undefined : accentHex }}>
+          Next
+        </button>
+      </div>
+
+      {stepMissing.length > 0 && step < 4 ? <p className="mt-3 text-sm text-amber-700">Complete this step to continue.</p> : null}
+
+      {gateEnabled ? (
+        <EmailCaptureModal
+          open={openModal}
+          onClose={() => setOpenModal(false)}
+          source={gateSource}
+          tags={gateTags}
+          includeEmailReport={includeEmailReport}
+          reportCaseId={emailGate?.reportCaseId}
+          title="Reveal your full Section 21 pre-check results"
+          description="Enter your email to unlock detailed reasons, date calculations, and next-step guidance."
+          primaryLabel="Reveal results"
+          onSuccess={() => {
+            setGateOpen(true);
+            if (typeof window !== 'undefined') {
+              localStorage.setItem(gateStorageKey, '1');
+              localStorage.setItem(PAGE_GATE_FALLBACK_KEY, '1');
+            }
+          }}
+        />
+      ) : null}
     </div>
   );
 }
