@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700">
+  <rect width="1200" height="700" fill="#f8f7ff"/>
+  <rect x="80" y="60" width="1040" height="560" rx="20" fill="#ffffff" stroke="#7c3aed" stroke-width="3"/>
+  <text x="120" y="130" font-family="Arial" font-size="42" font-weight="700" fill="#1f2937">⚠️ Quick compliance &amp; timing check</text>
+  <text x="120" y="180" font-family="Arial" font-size="28" fill="#4b5563">One mistake can invalidate a Section 21 notice. Check in 60 seconds.</text>
+  <rect x="120" y="470" width="960" height="120" rx="12" fill="#ecfdf3" stroke="#16a34a" stroke-width="2"/>
+  <text x="150" y="530" font-family="Arial" font-size="34" font-weight="700" fill="#166534">Section 21 appears valid based on your answers.</text>
+  <rect x="150" y="548" width="900" height="36" rx="8" fill="#16a34a"/>
+  <text x="600" y="573" text-anchor="middle" font-family="Arial" font-size="24" font-weight="700" fill="#ffffff">Section 21 is Valid – Continue</text>
+</svg>
