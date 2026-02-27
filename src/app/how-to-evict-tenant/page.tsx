@@ -13,6 +13,8 @@ import {
   MapPin,
 } from 'lucide-react';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { NextLegalSteps } from '@/components/seo/NextLegalSteps';
 import { landingPageLinks, productLinks, guideLinks } from '@/lib/seo/internal-links';
 import { howToEvictTenantFAQs } from '@/data/faqs';
@@ -44,6 +46,8 @@ const complianceLinks = {
     utm_campaign: 'how-to-evict-tenant',
   }),
 };
+
+const wizardHref = '/wizard?product=notice_only&src=seo_how_to_evict_tenant&topic=eviction';
 
 export const metadata: Metadata = {
   title: 'How to Evict a Tenant in 2026 (Landlord Guide)',
@@ -92,44 +96,15 @@ export default function HowToEvictTenantPage() {
       />
 
       <main className="min-h-screen bg-gray-50">
-        {/* Hero Section */}
-        <section className="bg-gradient-to-br from-gray-900 to-gray-800 text-white py-16 lg:py-24">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto text-center">
-              <div className="inline-flex items-center gap-2 bg-amber-500/20 text-amber-300 px-4 py-2 rounded-full text-sm font-medium mb-6">
-                <AlertTriangle className="w-4 h-4" />
-                Section 21 ends 1 May 2026 in England
-              </div>
-
-              <h1 className="text-4xl lg:text-5xl font-bold mb-6">
-                How to Evict a Tenant in the UK (Landlord Guide)
-              </h1>
-
-              <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-                Complete guide to legally evicting a tenant across <strong>England</strong>,{' '}
-                <strong>Wales</strong>, <strong>Scotland</strong> and{' '}
-                <strong>Northern Ireland</strong>. Step-by-step process, notice periods, and
-                court procedures.
-              </p>
-
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link
-                  href="/products/notice-only"
-                  className="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white font-semibold py-4 px-8 rounded-xl transition-colors"
-                >
-                  Get Eviction Notice — £49.99
-                  <ArrowRight className="w-5 h-5" />
-                </Link>
-                <Link
-                  href="/products/complete-pack"
-                  className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold py-4 px-8 rounded-xl transition-colors border border-white/20"
-                >
-                  Complete Eviction Pack — £129.99
-                </Link>
-              </div>
-            </div>
-          </div>
-        </section>
+        <HeaderConfig mode="autoOnScroll" />
+        <UniversalHero
+          title="How to Evict a Tenant in the UK (Landlord Guide)"
+          subtitle="Follow the jurisdiction-specific eviction process for England, Wales, Scotland, or Northern Ireland and start with a solicitor-grade notice workflow."
+          primaryCta={{ label: 'Start Eviction Wizard', href: wizardHref }}
+          secondaryCta={{ label: 'Jump to jurisdiction steps', href: '#england' }}
+          showTrustPositioningBar
+          hideMedia
+        />
 
         {/* Quick Jump Navigation */}
         <section className="py-8 bg-white border-b">

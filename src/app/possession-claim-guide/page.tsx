@@ -10,7 +10,8 @@ import {
   landingPageLinks,
 } from '@/lib/seo/internal-links';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
-import { StandardHero } from '@/components/marketing/StandardHero';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { FAQSection } from '@/components/seo/FAQSection';
 import {
@@ -28,7 +29,7 @@ import {
 const wizardLinkCompletePack = buildWizardLink({
   product: 'complete_pack',
   jurisdiction: 'england',
-  src: 'guide',
+  src: 'seo_possession_claim_guide',
   topic: 'eviction',
 });
 
@@ -111,32 +112,15 @@ export default function PossessionClaimGuidePage() {
       ])} />
 
       <main>
-        {/* Hero Section */}
-        <StandardHero
-          badge="England Only"
-          badgeIcon={<Gavel className="w-4 h-4" />}
+        <HeaderConfig mode="autoOnScroll" />
+        <UniversalHero
           title="Possession Claim Guide UK"
-          subtitle={<>Your tenant hasn&apos;t left after the notice expired? Here&apos;s how to <strong>apply for a court possession order</strong> to legally regain your property.</>}
-          primaryCTA={{ label: 'Get Complete Pack — £129.99', href: wizardLinkCompletePack }}
-          secondaryCTA={{ label: 'Learn About N5B Form', href: '/n5b-form-guide' }}
-          variant="pastel"
-        >
-          {/* Trust Signals */}
-          <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600 mt-4">
-            <span className="flex items-center gap-2">
-              <CheckCircle className="w-4 h-4 text-green-500" />
-              All Court Forms Included
-            </span>
-            <span className="flex items-center gap-2">
-              <Shield className="w-4 h-4 text-green-500" />
-              Witness Statement Template
-            </span>
-            <span className="flex items-center gap-2">
-              <FileText className="w-4 h-4 text-green-500" />
-              Step-by-Step Instructions
-            </span>
-          </div>
-        </StandardHero>
+          subtitle="Prepare and file possession claim paperwork with solicitor-grade guidance for landlords."
+          primaryCta={{ label: 'Start Possession Wizard', href: wizardLinkCompletePack }}
+          secondaryCta={{ label: 'Jump to key steps', href: '#before-you-apply' }}
+          showTrustPositioningBar
+          hideMedia
+        />
 
         {/* Social Proof */}
         <section className="py-6 bg-gray-50 border-y border-gray-100">

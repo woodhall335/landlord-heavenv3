@@ -57,7 +57,7 @@ const moneyClaimLink = buildWizardLink({
   product: 'money_claim',
   jurisdiction: 'england',
   src: 'seo_section_8_rent_arrears_eviction',
-  topic: 'debt',
+  topic: 'eviction',
 });
 
 export const metadata: Metadata = {

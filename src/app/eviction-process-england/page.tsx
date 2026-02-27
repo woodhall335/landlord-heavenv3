@@ -11,7 +11,8 @@ import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { evictionRelatedLinks, productLinks, toolLinks, guideLinks, askHeavenLink } from '@/lib/seo/internal-links';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
-import { StandardHero } from '@/components/marketing/StandardHero';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
@@ -39,14 +40,14 @@ import {
 const completePackLink = buildWizardLink({
   product: 'complete_pack',
   jurisdiction: 'england',
-  src: 'seo_eviction',
+  src: 'seo_eviction_process_england',
   topic: 'eviction',
 });
 
 const noticeOnlyLink = buildWizardLink({
   product: 'notice_only',
   jurisdiction: 'england',
-  src: 'seo_eviction',
+  src: 'seo_eviction_process_england',
   topic: 'eviction',
 });
 
@@ -119,37 +120,15 @@ export default function EvictionProcessEnglandPage() {
       <StructuredData data={HOWTO_SCHEMAS.section21Process} />
 
       <main>
-        {/* Hero Section */}
-        <StandardHero
-          badge="England"
-          badgeIcon={<Gavel className="w-4 h-4" />}
+        <HeaderConfig mode="autoOnScroll" />
+        <UniversalHero
           title="Eviction Process England"
-          subtitle="The complete landlord guide to legally evicting a tenant in England. From serving notice to bailiff enforcement."
-          primaryCTA={{
-            label: `Get Complete Eviction Pack — ${PRODUCTS.complete_pack.displayPrice}`,
-            href: completePackLink,
-          }}
-          secondaryCTA={{
-            label: `Just Need the Notice? — ${PRODUCTS.notice_only.displayPrice}`,
-            href: noticeOnlyLink,
-          }}
-          variant="pastel"
-        >
-          <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600 mt-4">
-            <span className="flex items-center gap-2">
-              <CheckCircle className="w-4 h-4 text-green-500" />
-              Section 21 & Section 8 Included
-            </span>
-            <span className="flex items-center gap-2">
-              <Shield className="w-4 h-4 text-green-500" />
-              Court-Ready Documents
-            </span>
-            <span className="flex items-center gap-2">
-              <FileText className="w-4 h-4 text-green-500" />
-              N5B, N5, N119 Forms
-            </span>
-          </div>
-        </StandardHero>
+          subtitle="Follow the legal eviction route in England from notice service to possession order and enforcement."
+          primaryCta={{ label: 'Start Eviction Wizard', href: completePackLink }}
+          secondaryCta={{ label: 'Jump to key steps', href: '#requirements' }}
+          showTrustPositioningBar
+          hideMedia
+        />
 
         {/* Social Proof */}
         <section className="py-6 bg-gray-50 border-y border-gray-100">

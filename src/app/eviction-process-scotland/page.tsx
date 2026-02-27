@@ -15,7 +15,8 @@ import {
   askHeavenLink,
 } from '@/lib/seo/internal-links';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
-import { StandardHero } from '@/components/marketing/StandardHero';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
@@ -42,14 +43,14 @@ import {
 const completePackLink = buildWizardLink({
   product: 'complete_pack',
   jurisdiction: 'scotland',
-  src: 'seo_eviction',
+  src: 'seo_eviction_process_scotland',
   topic: 'eviction',
 });
 
 const noticeOnlyLink = buildWizardLink({
   product: 'notice_only',
   jurisdiction: 'scotland',
-  src: 'seo_eviction',
+  src: 'seo_eviction_process_scotland',
   topic: 'eviction',
 });
 
@@ -120,37 +121,15 @@ export default function EvictionProcessScotlandPage() {
       />
 
       <main>
-        {/* Hero Section */}
-        <StandardHero
-          badge="Scotland"
-          badgeIcon={<MapPin className="w-4 h-4" />}
+        <HeaderConfig mode="autoOnScroll" />
+        <UniversalHero
           title="Eviction Process Scotland"
-          subtitle="The complete guide to legally evicting a tenant in Scotland. Notice to Leave, 18 eviction grounds, and First-tier Tribunal explained."
-          primaryCTA={{
-            label: `Get Scotland Eviction Pack — ${PRODUCTS.complete_pack.displayPrice}`,
-            href: completePackLink,
-          }}
-          secondaryCTA={{
-            label: `Just Need the Notice? — ${PRODUCTS.notice_only.displayPrice}`,
-            href: noticeOnlyLink,
-          }}
-          variant="pastel"
-        >
-          <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600 mt-4">
-            <span className="flex items-center gap-2">
-              <FileText className="w-4 h-4 text-green-500" />
-              Notice to Leave Template
-            </span>
-            <span className="flex items-center gap-2">
-              <Shield className="w-4 h-4 text-green-500" />
-              All 18 Grounds Covered
-            </span>
-            <span className="flex items-center gap-2">
-              <Gavel className="w-4 h-4 text-green-500" />
-              Tribunal Application
-            </span>
-          </div>
-        </StandardHero>
+          subtitle="Follow the legal Scottish route from Notice to Leave through tribunal and enforcement."
+          primaryCta={{ label: 'Start Eviction Wizard', href: completePackLink }}
+          secondaryCta={{ label: 'Jump to key steps', href: '#timeline' }}
+          showTrustPositioningBar
+          hideMedia
+        />
 
         {/* Social Proof */}
         <section className="py-6 bg-gray-50 border-y border-gray-100">

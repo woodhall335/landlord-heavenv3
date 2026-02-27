@@ -16,7 +16,8 @@ import {
   possessionClaimRelatedLinks,
 } from '@/lib/seo/internal-links';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
-import { StandardHero } from '@/components/marketing/StandardHero';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
@@ -44,14 +45,14 @@ import {
 const completePackLink = buildWizardLink({
   product: 'complete_pack',
   jurisdiction: 'england',
-  src: 'seo_eviction',
+  src: 'seo_section_21_expired_what_next',
   topic: 'eviction',
 });
 
 const noticeOnlyLink = buildWizardLink({
   product: 'notice_only',
   jurisdiction: 'england',
-  src: 'seo_eviction',
+  src: 'seo_section_21_expired_what_next',
   topic: 'eviction',
 });
 
@@ -123,43 +124,15 @@ export default function Section21ExpiredPage() {
       />
 
       <main>
-        {/* Hero Section */}
-        <StandardHero
-          badge="England"
-          badgeIcon={<Calendar className="w-4 h-4" />}
-          title={
-            <>
-              Section 21 Expired?
-              <br />
-              <span className="text-primary">Here&apos;s What to Do Next</span>
-            </>
-          }
-          subtitle="Your notice has expired but your tenant has not left. You cannot force them out—you must go to court. Here is the exact process."
-          primaryCTA={{
-            label: `Get Court Forms — ${PRODUCTS.complete_pack.displayPrice}`,
-            href: completePackLink,
-          }}
-          secondaryCTA={{
-            label: 'Learn About Form N5B',
-            href: '#accelerated-procedure',
-          }}
-          variant="pastel"
-        >
-          <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600 mt-4">
-            <span className="flex items-center gap-2">
-              <CheckCircle className="w-4 h-4 text-green-500" />
-              N5B Accelerated Form Included
-            </span>
-            <span className="flex items-center gap-2">
-              <Shield className="w-4 h-4 text-green-500" />
-              No Hearing Required
-            </span>
-            <span className="flex items-center gap-2">
-              <Clock className="w-4 h-4 text-green-500" />
-              4-8 Week Process
-            </span>
-          </div>
-        </StandardHero>
+        <HeaderConfig mode="autoOnScroll" />
+        <UniversalHero
+          title="Section 21 Expired: What to Do Next"
+          subtitle="Move from an expired Section 21 notice to the correct possession claim steps and enforcement route."
+          primaryCta={{ label: 'Continue with Eviction Wizard', href: completePackLink }}
+          secondaryCta={{ label: 'Jump to key steps', href: '#next-steps' }}
+          showTrustPositioningBar
+          hideMedia
+        />
 
         <section className="py-8 bg-white">
           <div className="container mx-auto px-4">

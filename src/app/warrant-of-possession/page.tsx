@@ -9,7 +9,8 @@ import {
   guideLinks,
 } from '@/lib/seo/internal-links';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
-import { StandardHero } from '@/components/marketing/StandardHero';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { FAQSection } from '@/components/seo/FAQSection';
 import {
@@ -29,7 +30,7 @@ import {
 const wizardLinkCompletePack = buildWizardLink({
   product: 'complete_pack',
   jurisdiction: 'england',
-  src: 'guide',
+  src: 'seo_warrant_of_possession',
   topic: 'eviction',
 });
 
@@ -112,32 +113,15 @@ export default function WarrantOfPossessionPage() {
       ])} />
 
       <main>
-        {/* Hero Section */}
-        <StandardHero
-          badge="Final Step"
-          badgeIcon={<Gavel className="w-4 h-4" />}
-          title="Warrant of Possession — Bailiff Eviction"
-          subtitle={<>Your tenant won&apos;t leave despite the court order? A <strong>warrant of possession</strong> authorizes bailiffs to physically remove them.</>}
-          primaryCTA={{ label: 'Get Complete Pack — £129.99', href: wizardLinkCompletePack }}
-          secondaryCTA={{ label: 'View Possession Claim Guide', href: '/possession-claim-guide' }}
-          variant="pastel"
-        >
-          {/* Trust Signals */}
-          <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600 mt-4">
-            <span className="flex items-center gap-2">
-              <CheckCircle className="w-4 h-4 text-green-500" />
-              N325 Form Guidance
-            </span>
-            <span className="flex items-center gap-2">
-              <Shield className="w-4 h-4 text-green-500" />
-              Eviction Day Checklist
-            </span>
-            <span className="flex items-center gap-2">
-              <Clock className="w-4 h-4 text-green-500" />
-              4-6 Weeks Typical Wait
-            </span>
-          </div>
-        </StandardHero>
+        <HeaderConfig mode="autoOnScroll" />
+        <UniversalHero
+          title="Warrant of Possession Guide"
+          subtitle="Understand when to apply for a warrant and prepare enforcement paperwork correctly."
+          primaryCta={{ label: 'Start Enforcement Wizard', href: wizardLinkCompletePack }}
+          secondaryCta={{ label: 'Jump to key steps', href: '#when-to-apply' }}
+          showTrustPositioningBar
+          hideMedia
+        />
 
         {/* Social Proof */}
         <section className="py-6 bg-gray-50 border-y border-gray-100">

@@ -15,7 +15,8 @@ import {
   askHeavenLink,
 } from '@/lib/seo/internal-links';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
-import { StandardHero } from '@/components/marketing/StandardHero';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
@@ -43,14 +44,14 @@ import {
 const completePackLink = buildWizardLink({
   product: 'complete_pack',
   jurisdiction: 'wales',
-  src: 'seo_eviction',
+  src: 'seo_eviction_process_wales',
   topic: 'eviction',
 });
 
 const noticeOnlyLink = buildWizardLink({
   product: 'notice_only',
   jurisdiction: 'wales',
-  src: 'seo_eviction',
+  src: 'seo_eviction_process_wales',
   topic: 'eviction',
 });
 
@@ -121,37 +122,15 @@ export default function EvictionProcessWalesPage() {
       />
 
       <main>
-        {/* Hero Section */}
-        <StandardHero
-          badge="Wales"
-          badgeIcon={<MapPin className="w-4 h-4" />}
+        <HeaderConfig mode="autoOnScroll" />
+        <UniversalHero
           title="Eviction Process Wales"
-          subtitle="The complete guide to evicting a contract-holder in Wales. Section 173 (no-fault) and Section 178 (breach) notices under the Renting Homes Act 2016."
-          primaryCTA={{
-            label: `Get Wales Eviction Pack — ${PRODUCTS.complete_pack.displayPrice}`,
-            href: completePackLink,
-          }}
-          secondaryCTA={{
-            label: `Just Need the Notice? — ${PRODUCTS.notice_only.displayPrice}`,
-            href: noticeOnlyLink,
-          }}
-          variant="pastel"
-        >
-          <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600 mt-4">
-            <span className="flex items-center gap-2">
-              <FileText className="w-4 h-4 text-green-500" />
-              Section 173 & 178 Included
-            </span>
-            <span className="flex items-center gap-2">
-              <Shield className="w-4 h-4 text-green-500" />
-              Renting Homes Act Compliant
-            </span>
-            <span className="flex items-center gap-2">
-              <Gavel className="w-4 h-4 text-green-500" />
-              Court Forms Included
-            </span>
-          </div>
-        </StandardHero>
+          subtitle="Follow the legal Wales possession route from RHW notices to court action and enforcement."
+          primaryCta={{ label: 'Start Eviction Wizard', href: completePackLink }}
+          secondaryCta={{ label: 'Jump to key steps', href: '#timeline' }}
+          showTrustPositioningBar
+          hideMedia
+        />
 
         {/* Social Proof */}
         <section className="py-6 bg-gray-50 border-y border-gray-100">

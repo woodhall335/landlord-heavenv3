@@ -7,7 +7,8 @@ import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, toolLinks, blogLinks, landingPageLinks } from '@/lib/seo/internal-links';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { buildAskHeavenLink } from '@/lib/ask-heaven/buildAskHeavenLink';
-import { StandardHero } from '@/components/marketing/StandardHero';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { section21NoticeTemplateFAQs } from '@/data/faqs';
 import { FunnelCta } from '@/components/funnels';
@@ -28,7 +29,7 @@ import {
 const wizardLink = buildWizardLink({
   product: 'notice_only',
   jurisdiction: 'england',
-  src: 'template',
+  src: 'seo_section_21_notice_template',
   topic: 'eviction',
 });
 
@@ -121,52 +122,15 @@ export default function Section21NoticeTemplatePage() {
       ])} />
 
       <main>
-        {/* Hero Section */}
-        <StandardHero
-          badge="Section 21 ends 1 May 2026"
-          badgeIcon={<AlertTriangle className="w-4 h-4" />}
-          title="Section 21 Notice Template (Form 6A) for England"
-          subtitle={<>Need a <strong>Section 21 notice template</strong> now? Download a free version for reference or generate a compliance-checked <strong>Form 6A</strong> you can serve with confidence.</>}
-          primaryCTA={{ label: "Get Court-Ready Notice — £49.99", href: wizardLink }}
-          secondaryCTA={{ label: "Try Free Starter Document", href: "/tools/free-section-21-notice-generator" }}
-          variant="pastel"
-        >
-          {/* Countdown */}
-          <div className="flex justify-center mb-6">
-            <Section21Countdown variant="badge" />
-          </div>
-
-          {/* Jurisdiction Notice - England Only */}
-          <div className="bg-amber-50 border-l-4 border-amber-500 p-4 mb-6 rounded-r-lg max-w-2xl mx-auto">
-            <p className="text-amber-900 text-sm">
-              <strong>England only:</strong> Section 21 notices apply to <strong>England only</strong>.
-              Different rules apply in{' '}
-              <Link href="/wales-eviction-notices" className="text-amber-700 underline hover:text-amber-900">
-                Wales (Renting Homes Act)
-              </Link>{' '}
-              and{' '}
-              <Link href="/scotland-eviction-notices" className="text-amber-700 underline hover:text-amber-900">
-                Scotland (Notice to Leave)
-              </Link>.
-            </p>
-          </div>
-
-          {/* Trust Signals */}
-          <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600">
-            <span className="flex items-center gap-2">
-              <CheckCircle className="w-4 h-4 text-green-500" />
-              Official Form 6A
-            </span>
-            <span className="flex items-center gap-2">
-              <Shield className="w-4 h-4 text-green-500" />
-              Official Form 6A Format
-            </span>
-            <span className="flex items-center gap-2">
-              <Clock className="w-4 h-4 text-green-500" />
-              Ready in 5 Minutes
-            </span>
-          </div>
-        </StandardHero>
+        <HeaderConfig mode="autoOnScroll" />
+        <UniversalHero
+          title="Section 21 Notice Guide for Landlords"
+          subtitle="Build a solicitor-grade Section 21 notice workflow with compliance checks before service."
+          primaryCta={{ label: 'Start Section 21 Wizard', href: wizardLink }}
+          secondaryCta={{ label: 'Jump to key steps', href: '#checklist' }}
+          showTrustPositioningBar
+          hideMedia
+        />
 
         <section className="py-8 bg-white">
           <div className="container mx-auto px-4">
