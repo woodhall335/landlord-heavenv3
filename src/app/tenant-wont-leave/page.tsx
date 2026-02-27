@@ -95,7 +95,7 @@ export default function TenantWontLeavePage() {
           title="Tenant Won't Leave After Notice?"
           subtitle={<>Your tenant ignoring your eviction notice is frustrating — but you <strong>must follow the legal process</strong>. Here&apos;s exactly what to do next.</>}
           primaryCta={{ label: 'Get Court-Ready Notice — £49.99', href: wizardLinkNoticeOnly }}
-          secondaryCta={{ label: 'Need Court Forms Too?', href: '/products/complete-pack' }}
+          secondaryCta={{ label: 'Go to Possession Claim Guide', href: '/possession-claim-guide' }}
           variant="pastel"
         >
           {/* Trust Signals */}
@@ -318,6 +318,28 @@ export default function TenantWontLeavePage() {
                 title="Need All the Court Forms?"
                 description="Our Complete Eviction Pack includes notices, possession claim forms (N5, N5B), witness statements, and step-by-step instructions."
               />
+            </div>
+          </div>
+        </section>
+
+        <section className="py-10 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto rounded-2xl border border-gray-200 bg-gray-50 p-6">
+              <h2 className="text-xl font-bold text-gray-900 mb-3">What should you do next?</h2>
+              <div className="grid sm:grid-cols-2 gap-3 text-sm">
+                <Link href={wizardLinkNoticeOnly} className="rounded-lg border border-gray-200 bg-white p-3 hover:border-primary transition-colors">
+                  Start a compliant eviction notice
+                </Link>
+                <Link href="/possession-claim-guide" className="rounded-lg border border-gray-200 bg-white p-3 hover:border-primary transition-colors">
+                  Move to possession claim stage
+                </Link>
+                <Link href="/section-8-rent-arrears-eviction" className="rounded-lg border border-gray-200 bg-white p-3 hover:border-primary transition-colors">
+                  Use Section 8 if arrears are involved
+                </Link>
+                <Link href="/section-21-notice-template" className="rounded-lg border border-gray-200 bg-white p-3 hover:border-primary transition-colors">
+                  Use Section 21 for no-fault route
+                </Link>
+              </div>
             </div>
           </div>
         </section>

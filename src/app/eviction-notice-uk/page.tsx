@@ -279,6 +279,26 @@ export default function EvictionNoticeUKPage() {
               </div>
             </section>
 
+            <section className="mb-12">
+              <div className="rounded-2xl border border-gray-200 bg-gray-50 p-6">
+                <h2 className="text-xl font-bold text-gray-900 mb-3">What should you do next?</h2>
+                <div className="grid sm:grid-cols-2 gap-3 text-sm">
+                  <Link href="/section-8-rent-arrears-eviction" className="rounded-lg border border-gray-200 bg-white p-3 hover:border-primary transition-colors">
+                    Choose Section 8 when arrears or breach grounds apply
+                  </Link>
+                  <Link href="/section-21-notice-template" className="rounded-lg border border-gray-200 bg-white p-3 hover:border-primary transition-colors">
+                    Use Section 21 for no-fault possession route
+                  </Link>
+                  <Link href="/products/money-claim" className="rounded-lg border border-gray-200 bg-white p-3 hover:border-primary transition-colors">
+                    Recover unpaid rent with a money claim alongside eviction
+                  </Link>
+                  <Link href="/tenancy-agreements" className="rounded-lg border border-gray-200 bg-white p-3 hover:border-primary transition-colors">
+                    Tighten future tenancy terms after this case
+                  </Link>
+                </div>
+              </div>
+            </section>
+
             {/* FAQ Section */}
             <div className="mb-12">
               <FAQSection

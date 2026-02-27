@@ -291,6 +291,28 @@ export default function TenantNotPayingRentPage() {
           </div>
         </section>
 
+        <section className="py-10 bg-gray-50">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto rounded-2xl border border-gray-200 bg-white p-6">
+              <h2 className="text-xl font-bold text-gray-900 mb-3">Related actions for rent arrears cases</h2>
+              <div className="grid sm:grid-cols-2 gap-3 text-sm">
+                <Link href="/section-8-rent-arrears-eviction" className="rounded-lg border border-gray-200 p-3 hover:border-primary transition-colors">
+                  Use Section 8 for arrears-based eviction
+                </Link>
+                <Link href="/section-21-notice-template" className="rounded-lg border border-gray-200 p-3 hover:border-primary transition-colors">
+                  Use Section 21 for no-fault possession
+                </Link>
+                <Link href="/products/money-claim" className="rounded-lg border border-gray-200 p-3 hover:border-primary transition-colors">
+                  Recover arrears with a money claim pack
+                </Link>
+                <Link href="/tenancy-agreements" className="rounded-lg border border-gray-200 p-3 hover:border-primary transition-colors">
+                  Update your next tenancy agreement to prevent repeat arrears
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Section 8 Grounds Detail */}
         <section className="py-16 lg:py-20 bg-gray-50">
           <div className="container mx-auto px-4">
