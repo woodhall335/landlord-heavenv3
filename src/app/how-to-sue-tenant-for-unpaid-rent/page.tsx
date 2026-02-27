@@ -12,7 +12,7 @@ import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 const moneyClaimWizardLink = buildWizardLink({
   product: 'money_claim',
   jurisdiction: 'england',
-  src: 'seo_how-to-sue-tenant-for-unpaid-rent',
+  src: 'seo_how_to_sue_tenant_for_unpaid_rent',
   topic: 'debt',
 });
 

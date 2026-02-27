@@ -58,7 +58,7 @@ export default function LodgerAgreementPage() {
           badge="Landlord Guide"
           title="Lodger Agreement Template UK"
           subtitle="Lodger agreements for live-in landlords in the UK."
-          primaryCta={{ label: 'Create Lodger Agreement', href: '/wizard?product=tenancy_agreement&topic=tenancy&src=seo_lodger-agreement-template' }}
+          primaryCta={{ label: 'Create Lodger Agreement', href: '/wizard?product=tenancy_agreement&topic=tenancy&src=seo_lodger_agreement_template' }}
           align="center"
           showTrustPositioningBar
         />

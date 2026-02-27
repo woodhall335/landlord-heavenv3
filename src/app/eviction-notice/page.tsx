@@ -7,7 +7,7 @@ import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/eviction-notice');
-const wizardHref = '/wizard?product=notice_only&src=seo_eviction-notice&topic=eviction';
+const wizardHref = '/wizard?product=notice_only&topic=eviction&src=seo_eviction_notice';
 
 export const metadata: Metadata = {
   title: 'Eviction Notice Service | Legally Validated Notice Pack',

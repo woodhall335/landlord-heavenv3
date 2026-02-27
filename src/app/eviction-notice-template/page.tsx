@@ -41,7 +41,7 @@ export const metadata: Metadata = {
 };
 
 export default async function EvictionNoticeTemplatePage() {
-  const wizardHref = '/wizard?product=notice_only&src=seo_eviction-notice-template&topic=eviction';
+  const wizardHref = '/wizard?product=notice_only&topic=eviction&src=seo_eviction_notice_template';
   const previews = await getNoticeOnlyPreviewData();
 
   const pageSchema = {
@@ -219,7 +219,7 @@ export default async function EvictionNoticeTemplatePage() {
               <h2 className="text-2xl lg:text-3xl font-bold mb-4">Section 21 Ends 1 May 2026</h2>
               <p className="text-white/90 mb-6 max-w-2xl mx-auto">The Renters&apos; Rights Act abolishes no-fault evictions. Act now if you need to evict without proving grounds.</p>
               <Section21Countdown variant="large" className="mb-8 [&_*]:text-white" />
-              <IntentProductCTA intent={{ product: 'notice_only', src: 'seo_eviction-notice-template', topic: 'eviction' }} label="Generate Court-Ready Notice — £49.99" className="hero-btn-secondary inline-flex items-center gap-2" />
+              <IntentProductCTA intent={{ product: 'notice_only', src: 'seo_eviction_notice_template', topic: 'eviction' }} label="Generate Court-Ready Notice — £49.99" className="hero-btn-secondary inline-flex items-center gap-2" />
             </div>
           </div>
         </section>
@@ -231,7 +231,7 @@ export default async function EvictionNoticeTemplatePage() {
             <div className="max-w-4xl mx-auto bg-gradient-to-br from-primary to-primary/90 rounded-3xl p-8 lg:p-12 text-white text-center">
               <h2 className="text-3xl lg:text-4xl font-bold mb-4">Generate Your Jurisdiction-Specific Notice Bundle</h2>
               <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">Preview every watermarked document before you pay, then complete your bundle with one-time payment.</p>
-              <IntentProductCTA intent={{ product: 'notice_only', src: 'seo_eviction-notice-template', topic: 'eviction' }} label="Generate Court-Ready Notice — £49.99" className="hero-btn-secondary inline-flex items-center justify-center gap-2" />
+              <IntentProductCTA intent={{ product: 'notice_only', src: 'seo_eviction_notice_template', topic: 'eviction' }} label="Generate Court-Ready Notice — £49.99" className="hero-btn-secondary inline-flex items-center justify-center gap-2" />
               <p className="mt-8 text-white/70 text-sm">Preview before paying (watermarked) • Compliance checks • Jurisdiction-specific formatting</p>
             </div>
           </div>

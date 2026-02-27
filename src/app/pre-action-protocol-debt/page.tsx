@@ -49,7 +49,7 @@ export default function PreActionProtocolPage() {
           badge="Landlord Guide"
           title="Pre-Action Protocol for Debt Claims"
           subtitle="Follow the correct pre-action debt process before issuing a county court claim."
-          primaryCta={{ label: 'Start Debt Recovery Wizard', href: '/wizard?product=money_claim&topic=debt&src=seo_pre-action-protocol-debt' }}
+          primaryCta={{ label: 'Start Debt Recovery Wizard', href: '/wizard?product=money_claim&topic=debt&src=seo_pre_action_protocol_debt' }}
           align="center"
           showTrustPositioningBar
         />

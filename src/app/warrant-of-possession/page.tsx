@@ -30,7 +30,7 @@ import {
 const wizardLinkCompletePack = buildWizardLink({
   product: 'notice_only',
   jurisdiction: 'england',
-  src: 'seo_warrant-of-possession',
+  src: 'seo_warrant_of_possession',
   topic: 'eviction',
 });
 

@@ -45,14 +45,14 @@ import {
 const noticeOnlyLink = buildWizardLink({
   product: 'notice_only',
   jurisdiction: 'england',
-  src: 'seo_section-8-vs-section-21',
+  src: 'seo_section_8_vs_section_21',
   topic: 'eviction',
 });
 
 const completePackLink = buildWizardLink({
   product: 'notice_only',
   jurisdiction: 'england',
-  src: 'seo_section-8-vs-section-21',
+  src: 'seo_section_8_vs_section_21',
   topic: 'eviction',
 });
 

@@ -33,14 +33,14 @@ import {
 const wizardLinkNoticeOnly = buildWizardLink({
   product: 'notice_only',
   jurisdiction: 'england',
-  src: 'seo_tenant-not-paying-rent',
+  src: 'seo_tenant_not_paying_rent',
   topic: 'eviction',
 });
 
 const wizardLinkMoneyClaim = buildWizardLink({
   product: 'money_claim',
   jurisdiction: 'england',
-  src: 'seo_tenant-not-paying-rent',
+  src: 'seo_tenant_not_paying_rent',
   topic: 'debt',
 });
 

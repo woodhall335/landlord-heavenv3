@@ -46,7 +46,7 @@ const breadcrumbs = [
 const moneyClaimWizardLink = buildWizardLink({
   product: 'money_claim',
   jurisdiction: 'england',
-  src: 'seo_money-claim-rent-arrears',
+  src: 'seo_money_claim_rent_arrears',
   topic: 'debt',
 });
 

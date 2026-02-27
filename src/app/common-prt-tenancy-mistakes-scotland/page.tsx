@@ -5,7 +5,8 @@ import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { prtMistakesRelatedLinks } from '@/lib/seo/internal-links';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
-import { StandardHero } from '@/components/marketing/StandardHero';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import { FAQSection } from '@/components/seo/FAQSection';
@@ -37,14 +38,14 @@ const PAGE_TYPE = 'tenancy' as const;
 const wizardLinkStandard = buildWizardLink({
   product: 'ast_standard',
   jurisdiction: 'scotland',
-  src: 'seo_common-prt-tenancy-mistakes-scotland',
+  src: 'seo_common_prt_tenancy_mistakes_scotland',
   topic: 'tenancy',
 });
 
 const wizardLinkPremium = buildWizardLink({
   product: 'ast_premium',
   jurisdiction: 'scotland',
-  src: 'seo_common-prt-tenancy-mistakes-scotland',
+  src: 'seo_common_prt_tenancy_mistakes_scotland',
   topic: 'tenancy',
 });
 
@@ -85,6 +86,7 @@ export default function CommonPrtTenancyMistakesScotlandPage() {
 
   return (
     <>
+      <HeaderConfig mode="autoOnScroll" />
       <StructuredData data={pageSchema} />
       <StructuredData
         data={breadcrumbSchema([
@@ -107,7 +109,7 @@ export default function CommonPrtTenancyMistakesScotlandPage() {
 
       <main>
         {/* Hero Section */}
-        <StandardHero
+        <UniversalHero
           badge="Scotland Only"
           badgeIcon={<Scale className="w-4 h-4" />}
           title="Common PRT Tenancy Mistakes"
@@ -117,11 +119,11 @@ export default function CommonPrtTenancyMistakesScotlandPage() {
               tenants and recovering rent. Essential compliance guidance for PRTs.
             </>
           }
-          primaryCTA={{
+          primaryCta={{
             label: `Create Compliant PRT — ${PRODUCTS.ast_standard.displayPrice}`,
             href: wizardLinkStandard,
           }}
-          secondaryCTA={{
+          secondaryCta={{
             label: 'Premium Agreement with Extras',
             href: wizardLinkPremium,
           }}
@@ -142,7 +144,7 @@ export default function CommonPrtTenancyMistakesScotlandPage() {
               Avoid Costly Errors
             </span>
           </div>
-        </StandardHero>
+        </UniversalHero>
 
         {/* Social Proof */}
         <section className="py-6 bg-gray-50 border-y border-gray-100">

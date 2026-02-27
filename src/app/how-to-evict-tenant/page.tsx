@@ -47,7 +47,7 @@ const complianceLinks = {
   }),
 };
 
-const wizardHref = '/wizard?product=notice_only&src=seo_how-to-evict-tenant&topic=eviction';
+const wizardHref = '/wizard?product=notice_only&topic=eviction&src=seo_how_to_evict_tenant';
 
 export const metadata: Metadata = {
   title: 'How to Evict a Tenant in 2026 (Landlord Guide)',

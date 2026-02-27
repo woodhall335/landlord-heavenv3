@@ -9,7 +9,8 @@ import {
   toolLinks,
 } from '@/lib/seo/internal-links';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
-import { StandardHero } from '@/components/marketing/StandardHero';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { FAQSection } from '@/components/seo/FAQSection';
 import {
@@ -26,7 +27,7 @@ import {
 const wizardLinkNoticeOnly = buildWizardLink({
   product: 'notice_only',
   jurisdiction: 'england',
-  src: 'seo_county-court-claim-form-guide',
+  src: 'seo_county_court_claim_form_guide',
   topic: 'eviction',
 });
 
@@ -101,6 +102,7 @@ export default function CountyCourtClaimFormGuidePage() {
 
   return (
     <>
+      <HeaderConfig mode="autoOnScroll" />
       <StructuredData data={pageSchema} />
       <StructuredData data={breadcrumbSchema([
         { name: 'Home', url: 'https://landlordheaven.co.uk' },
@@ -110,13 +112,13 @@ export default function CountyCourtClaimFormGuidePage() {
 
       <main>
         {/* Hero Section */}
-        <StandardHero
+        <UniversalHero
           badge="England & Wales"
           badgeIcon={<Scale className="w-4 h-4" />}
           title="County Court Claim Form Guide UK"
           subtitle={<>Not sure which <strong>county court claim form</strong> to use? This guide explains Form N1, N5, and N5B — so you file the right claim the first time.</>}
-          primaryCTA={{ label: 'Create Eviction Notice — £39.99', href: wizardLinkNoticeOnly }}
-          secondaryCTA={{ label: 'Need Possession Instead?', href: '/possession-claim-guide' }}
+          primaryCta={{ label: 'Create Eviction Notice — £39.99', href: wizardLinkNoticeOnly }}
+          secondaryCta={{ label: 'Need Possession Instead?', href: '/possession-claim-guide' }}
           variant="pastel"
         >
           {/* Trust Signals */}
@@ -134,7 +136,7 @@ export default function CountyCourtClaimFormGuidePage() {
               Step-by-Step Guidance
             </span>
           </div>
-        </StandardHero>
+        </UniversalHero>
 
         {/* Social Proof */}
         <section className="py-6 bg-gray-50 border-y border-gray-100">

@@ -6,6 +6,8 @@ import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { eicrFAQs } from '@/data/faqs';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 
 export const metadata: Metadata = {
   title: 'EICR Landlord Requirements UK | Electrical Safety Guide 2026',
@@ -34,7 +36,7 @@ export const metadata: Metadata = {
 const noticeOnlyLink = buildWizardLink({
   product: 'notice_only',
   jurisdiction: 'england',
-  src: 'seo_eicr-landlord-requirements',
+  src: 'seo_eicr_landlord_requirements',
   topic: 'eviction',
 });
 
@@ -46,9 +48,16 @@ const breadcrumbs = [
 export default function EICRPage() {
   return (
     <>
+      <HeaderConfig mode="autoOnScroll" />
       <StructuredData data={breadcrumbSchema(breadcrumbs)} />
 
       <div className="min-h-screen bg-gray-50">
+        <UniversalHero
+          badge="Safety Compliance"
+          title="EICR Landlord Requirements UK"
+          subtitle="The Electrical Safety Standards regulations require landlords in England to have electrical installations inspected every 5 years. Non-compliance can result in fines up to £30,000."
+          primaryCta={{ label: "Create Section 21 Notice", href: noticeOnlyLink }}
+        />
         {/* Hero Section */}
         <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-20">
           <Container>
@@ -56,9 +65,9 @@ export default function EICRPage() {
               <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
                 <span className="text-sm font-semibold text-primary">Safety Compliance</span>
               </div>
-              <h1 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
+              <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
                 EICR Landlord Requirements UK
-              </h1>
+              </h2>
               <p className="text-xl text-gray-600 mb-8">
                 The Electrical Safety Standards regulations require landlords in England to have
                 electrical installations inspected every 5 years. Non-compliance can result in

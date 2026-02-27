@@ -49,7 +49,7 @@ export default function HowToRentGuidePage() {
           badge="Landlord Guide"
           title="How to Rent Guide for Landlords"
           subtitle="Landlord-focused guide to serving and evidencing How to Rent compliance."
-          primaryCta={{ label: 'Create Tenancy Agreement', href: '/wizard?product=tenancy_agreement&topic=tenancy&src=seo_how-to-rent-guide' }}
+          primaryCta={{ label: 'Create Tenancy Agreement', href: '/wizard?product=tenancy_agreement&topic=tenancy&src=seo_how_to_rent_guide' }}
           align="center"
           showTrustPositioningBar
         />
