@@ -1,48 +1,51 @@
 import type { Metadata } from 'next';
-import { WizardLandingPage } from '@/components/seo/WizardLandingPage';
-import { moneyClaimContent } from '@/lib/seo/wizard-landing-content';
+import Link from 'next/link';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
+import { Container } from '@/components/layout/Container';
+import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/money-claim');
+const wizardHref = '/wizard?product=money_claim&src=seo_money_claim&topic=debt';
 
 export const metadata: Metadata = {
-  title: moneyClaimContent.title,
-  description: moneyClaimContent.description,
-  keywords: [
-    'money claim',
-    'N1 form',
-    'N1 claim form',
-    'rent arrears claim',
-    'county court claim',
-    'interest calculation',
-    'daily rate',
-    'PAP-DEBT',
-    'letter before claim',
-    'tenant debt recovery',
-    'MCOL',
-    'money claim online',
-    'landlord money claim',
-  ],
+  title: 'Money Claim for Landlords | Solicitor-Grade Debt Recovery',
+  description:
+    'Prepare a legally validated, solicitor-grade, compliance-checked and court-ready money claim path for tenant debt and arrears recovery.',
+  alternates: { canonical: canonicalUrl },
   openGraph: {
-    title: moneyClaimContent.title,
-    description: moneyClaimContent.description,
+    title: 'Money Claim for Landlords | Solicitor-Grade Debt Recovery',
+    description:
+      'Prepare a legally validated, solicitor-grade, compliance-checked and court-ready money claim path for tenant debt and arrears recovery.',
     url: canonicalUrl,
     type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: moneyClaimContent.title,
-    description: moneyClaimContent.description,
-  },
-  alternates: {
-    canonical: canonicalUrl,
-  },
-  robots: {
-    index: true,
-    follow: true,
   },
 };
 
 export default function MoneyClaimPage() {
-  return <WizardLandingPage content={moneyClaimContent} structuredDataUrl={canonicalUrl} showAskHeavenWidget={false} />;
+  return (
+    <div className="min-h-screen bg-white">
+      <HeaderConfig mode="autoOnScroll" />
+      <main>
+        <StructuredData
+          data={breadcrumbSchema([
+            { name: 'Home', url: getCanonicalUrl('/') },
+            { name: 'Money Claim', url: canonicalUrl },
+          ])}
+        />
+        <UniversalHero
+          title="Court-Ready Money Claim for Rent Debt"
+          subtitle="Generate a legally validated, solicitor-grade and compliance-checked debt recovery workflow before filing your claim."
+          primaryCta={{ label: 'Start Money Claim Wizard', href: wizardHref }}
+          showTrustPositioningBar
+          hideMedia
+        />
+
+        <Container className="py-12">
+          <Link href={wizardHref} className="hero-btn-primary">Start debt claim wizard</Link>
+        </Container>
+      </main>
+    </div>
+  );
 }

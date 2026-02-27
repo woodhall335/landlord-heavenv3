@@ -6,6 +6,8 @@ import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { form3Section8FAQs } from '@/data/faqs';
 import { FunnelCta, CrossSellBar } from '@/components/funnels';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 
 export const metadata: Metadata = {
   title: 'Form 3 Section 8 Notice | Download & Guide 2026',
@@ -41,19 +43,26 @@ const breadcrumbs = [
 export default function Form3Section8Page() {
   return (
     <>
+      <HeaderConfig mode="autoOnScroll" />
       <StructuredData data={breadcrumbSchema(breadcrumbs)} />
 
       <div className="min-h-screen bg-gray-50">
-        {/* Hero Section */}
-        <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-20">
+        <UniversalHero
+          title="Form 3 Section 8 Notice for England"
+          subtitle="Generate a legally validated, solicitor-grade, compliance-checked and court-ready Section 8 Form 3 workflow."
+          primaryCta={{ label: 'Start Section 8 Wizard', href: '/wizard?product=notice_only&src=seo_form_3_section_8&topic=eviction' }}
+          showTrustPositioningBar
+          hideMedia
+        />
+        <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 py-10">
           <Container>
             <div className="max-w-3xl mx-auto text-center">
               <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
                 <span className="text-sm font-semibold text-primary">England Only</span>
               </div>
-              <h1 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
+              <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
                 Form 3: Section 8 Notice for England
-              </h1>
+              </h2>
               <p className="text-xl text-gray-600 mb-8">
                 Form 3 is the official prescribed form for serving a Section 8 eviction notice in
                 England. Use it when you have grounds for possession such as rent arrears, breach
@@ -68,7 +77,7 @@ export default function Form3Section8Page() {
             <FunnelCta
               title="Serve Form 3 correctly from the start"
               subtitle="Use Notice Only for compliant drafting/serving, or upgrade to full eviction support."
-              primaryHref="/products/notice-only"
+              primaryHref="/wizard?product=notice_only&src=seo_form_3_section_8&topic=eviction"
               primaryText="Start Notice Only"
               primaryDataCta="notice-only"
               location="above-fold"

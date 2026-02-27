@@ -1,47 +1,52 @@
 import type { Metadata } from 'next';
-import { WizardLandingPage } from '@/components/seo/WizardLandingPage';
-import { astPremiumContent } from '@/lib/seo/wizard-landing-content';
+import Link from 'next/link';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
+import { Container } from '@/components/layout/Container';
+import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/premium-tenancy-agreement');
+const wizardHref = '/wizard?product=tenancy_agreement&src=seo_premium_tenancy_agreement&topic=tenancy';
 
 export const metadata: Metadata = {
-  title: astPremiumContent.title,
-  description: astPremiumContent.description,
-  keywords: [
-    'premium tenancy agreement',
-    'HMO clauses',
-    'guarantor clauses',
-    'HMO tenancy agreement',
-    'student tenancy agreement',
-    'joint and several liability',
-    'multi-tenant agreement',
-    'AST premium',
-    'occupation contract premium',
-    'PRT premium',
-    'Housing Act 2004',
-    'HMO licensing',
-  ],
+  title: 'Premium Tenancy Agreement | Solicitor-Grade Landlord Contract',
+  description:
+    'Build a legally validated, solicitor-grade, compliance-checked and court-ready premium tenancy agreement for advanced landlord scenarios.',
+  alternates: { canonical: canonicalUrl },
   openGraph: {
-    title: astPremiumContent.title,
-    description: astPremiumContent.description,
+    title: 'Premium Tenancy Agreement | Solicitor-Grade Landlord Contract',
+    description:
+      'Build a legally validated, solicitor-grade, compliance-checked and court-ready premium tenancy agreement for advanced landlord scenarios.',
     url: canonicalUrl,
     type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: astPremiumContent.title,
-    description: astPremiumContent.description,
-  },
-  alternates: {
-    canonical: canonicalUrl,
-  },
-  robots: {
-    index: true,
-    follow: true,
   },
 };
 
 export default function PremiumTenancyAgreementPage() {
-  return <WizardLandingPage content={astPremiumContent} structuredDataUrl={canonicalUrl} />;
+  return (
+    <div className="min-h-screen bg-white">
+      <HeaderConfig mode="autoOnScroll" />
+      <main>
+        <StructuredData
+          data={breadcrumbSchema([
+            { name: 'Home', url: getCanonicalUrl('/') },
+            { name: 'Premium Tenancy Agreement', url: canonicalUrl },
+          ])}
+        />
+        <UniversalHero
+          title="Premium Court-Ready Tenancy Agreement"
+          subtitle="Create a legally validated, solicitor-grade and compliance-checked contract tailored to complex tenancy arrangements."
+          primaryCta={{ label: 'Start Tenancy Wizard', href: wizardHref }}
+          secondaryCta={{ label: 'Standard agreement', href: '/tenancy-agreement' }}
+          showTrustPositioningBar
+          hideMedia
+        />
+
+        <Container className="py-12">
+          <Link href={wizardHref} className="hero-btn-primary">Create premium agreement</Link>
+        </Container>
+      </main>
+    </div>
+  );
 }

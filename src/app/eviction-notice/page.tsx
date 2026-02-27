@@ -1,47 +1,57 @@
 import type { Metadata } from 'next';
-import { WizardLandingPage } from '@/components/seo/WizardLandingPage';
-import { noticeOnlyContent } from '@/lib/seo/wizard-landing-content';
+import Link from 'next/link';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
+import { Container } from '@/components/layout/Container';
+import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/eviction-notice');
+const wizardHref = '/wizard?product=notice_only&src=seo_eviction_notice&topic=eviction';
 
 export const metadata: Metadata = {
-  title: noticeOnlyContent.title,
-  description: noticeOnlyContent.description,
-  keywords: [
-    'eviction notice',
-    'section 21 notice',
-    'section 8 notice',
-    'notice to leave scotland',
-    'section 173 wales',
-    'legally validated',
-    'procedurally correct',
-    'eviction notice generator',
-    'landlord eviction',
-    'england eviction',
-    'wales eviction',
-    'scotland eviction',
-  ],
+  title: 'Eviction Notice Service | Legally Validated Notice Pack',
+  description:
+    'Create a legally validated, solicitor-grade, compliance-checked and court-ready eviction notice with guided support for UK landlords.',
+  alternates: { canonical: canonicalUrl },
   openGraph: {
-    title: noticeOnlyContent.title,
-    description: noticeOnlyContent.description,
+    title: 'Eviction Notice Service | Legally Validated Notice Pack',
+    description:
+      'Create a legally validated, solicitor-grade, compliance-checked and court-ready eviction notice with guided support for UK landlords.',
     url: canonicalUrl,
     type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: noticeOnlyContent.title,
-    description: noticeOnlyContent.description,
-  },
-  alternates: {
-    canonical: canonicalUrl,
-  },
-  robots: {
-    index: true,
-    follow: true,
   },
 };
 
 export default function EvictionNoticePage() {
-  return <WizardLandingPage content={noticeOnlyContent} structuredDataUrl={canonicalUrl} />;
+  return (
+    <div className="min-h-screen bg-white">
+      <HeaderConfig mode="autoOnScroll" />
+      <main>
+        <StructuredData
+          data={breadcrumbSchema([
+            { name: 'Home', url: getCanonicalUrl('/') },
+            { name: 'Eviction Notice', url: canonicalUrl },
+          ])}
+        />
+        <UniversalHero
+          title="Legally Validated Eviction Notice for Landlords"
+          subtitle="Build a solicitor-grade, compliance-checked and court-ready notice package in minutes."
+          primaryCta={{ label: 'Start Eviction Wizard', href: wizardHref }}
+          secondaryCta={{ label: 'See complete pack', href: '/eviction-pack-england' }}
+          showTrustPositioningBar
+          hideMedia
+        />
+
+        <Container className="py-12">
+          <p className="text-lg text-gray-700">
+            Need a faster route to correct paperwork? Use the guided wizard to generate your notice with the right details and jurisdiction-specific wording.
+          </p>
+          <div className="mt-6">
+            <Link href={wizardHref} className="hero-btn-primary">Start now</Link>
+          </div>
+        </Container>
+      </main>
+    </div>
+  );
 }

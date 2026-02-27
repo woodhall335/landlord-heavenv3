@@ -10,7 +10,6 @@ import {
   StructuredData,
   faqPageSchema,
   breadcrumbSchema,
-  articleSchema,
 } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 import { PRODUCTS } from '@/lib/pricing/products';
@@ -62,6 +61,7 @@ const faqs = [
 ];
 
 export default function Section21BanPage() {
+  const wizardHref = '/wizard?product=notice_only&src=seo_section_21_ban&topic=eviction';
   const breadcrumbItems = [
     { name: 'Home', url: 'https://landlordheaven.co.uk' },
     { name: 'Section 21 Ban', url: 'https://landlordheaven.co.uk/section-21-ban' },
@@ -71,16 +71,6 @@ export default function Section21BanPage() {
     <div className="min-h-screen bg-gray-50">
       <HeaderConfig mode="autoOnScroll" />
       <main>
-        <StructuredData
-          data={articleSchema({
-            headline: 'Section 21 Ban 2026 - Landlord Deadline',
-            description:
-              'Landlord guidance on the Section 21 ban deadline, key dates, and next legal steps.',
-            url: getCanonicalUrl('/section-21-ban'),
-            datePublished: '2026-01-01',
-            dateModified: '2026-01-01',
-          })}
-        />
         <StructuredData data={faqPageSchema(faqs)} />
         <StructuredData data={breadcrumbSchema(breadcrumbItems)} />
 
@@ -88,17 +78,17 @@ export default function Section21BanPage() {
           badge="Final Months Before Section 21 Ends"
           badgeIcon={<AlertTriangle className="h-4 w-4" aria-hidden="true" />}
           title="Section 21 Ends 1 May 2026"
-          subtitle="After 1 May 2026, landlords lose the Section 21 route. Serve notice now while it’s still legal."
+          subtitle="After 1 May 2026, landlords lose the Section 21 route. Use a legally validated, solicitor-grade, compliance-checked and court-ready notice workflow now."
           align="center"
           hideMedia
           showTrustPositioningBar
           primaryCta={{
             label: `Start Your Section 21 Today — ${noticePrice}`,
-            href: '/products/notice-only',
+            href: wizardHref,
           }}
           secondaryCta={{
             label: `Complete Eviction Pack — ${completePackPrice}`,
-            href: '/products/complete-pack',
+            href: '/wizard?product=notice_only&src=seo_section_21_ban&topic=eviction',
           }}
         />
 
@@ -125,7 +115,7 @@ export default function Section21BanPage() {
                 </li>
               </ul>
               <div className="mt-8">
-                <Link href="/products/notice-only" className="hero-btn-primary">
+                <Link href={wizardHref} className="hero-btn-primary">
                   Serve Notice Before the Ban
                 </Link>
               </div>
