@@ -3,7 +3,6 @@ import Link from 'next/link';
 import {
   StructuredData,
   breadcrumbSchema,
-  articleSchema,
   HOWTO_SCHEMAS,
 } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo/urls';
@@ -16,7 +15,8 @@ import {
   moneyClaimGuides,
 } from '@/lib/seo/internal-links';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
-import { StandardHero } from '@/components/marketing/StandardHero';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
@@ -45,19 +45,19 @@ import {
 const moneyClaimLink = buildWizardLink({
   product: 'money_claim',
   jurisdiction: 'england',
-  src: 'seo_money_claim',
-  topic: 'money_claim',
+  src: 'seo_claim-rent-arrears-tenant',
+  topic: 'debt',
 });
 
 const completePackLink = buildWizardLink({
-  product: 'complete_pack',
+  product: 'notice_only',
   jurisdiction: 'england',
-  src: 'seo_eviction',
+  src: 'seo_claim-rent-arrears-tenant',
   topic: 'eviction',
 });
 
 export const metadata: Metadata = {
-  title: 'Claim Rent Arrears from Tenant | Money Claim Guide | Landlord Heaven',
+  title: 'Claim Rent Arrears from Tenant | Solicitor-Style Money Claim Guide',
   description:
     'How to claim unpaid rent from a tenant through the county court. Letter Before Action, MCOL process, and CCJ enforcement.',
   keywords: [
@@ -71,7 +71,7 @@ export const metadata: Metadata = {
     'tenant owes rent',
   ],
   openGraph: {
-    title: 'Claim Rent Arrears from Tenant | Money Claim Guide | Landlord Heaven',
+    title: 'Claim Rent Arrears from Tenant | Solicitor-Style Money Claim Guide',
     description:
       'How to claim unpaid rent from a tenant through the county court. Complete landlord guide.',
     type: 'article',
@@ -96,6 +96,7 @@ export const metadata: Metadata = {
 export default function ClaimRentArrearsTenantPage() {
   return (
     <>
+      <HeaderConfig mode="autoOnScroll" />
       <SeoLandingWrapper
         pagePath="/claim-rent-arrears-tenant"
         pageTitle="Claim Rent Arrears from Tenant"
@@ -103,17 +104,6 @@ export default function ClaimRentArrearsTenantPage() {
         jurisdiction="england"
       />
 
-      {/* Structured Data */}
-      <StructuredData
-        data={articleSchema({
-          headline: 'How to Claim Rent Arrears from a Tenant: Money Claim Guide',
-          description:
-            'Complete guide to claiming unpaid rent from a tenant through the county court. Covers Letter Before Action, MCOL, and CCJ enforcement.',
-          url: getCanonicalUrl('/claim-rent-arrears-tenant'),
-          datePublished: '2026-01-30',
-          dateModified: '2026-01-30',
-        })}
-      />
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: getCanonicalUrl('/') },
@@ -125,16 +115,16 @@ export default function ClaimRentArrearsTenantPage() {
 
       <main>
         {/* Hero Section */}
-        <StandardHero
+        <UniversalHero
           badge="England Only"
           badgeIcon={<PoundSterling className="w-4 h-4" />}
           title="Claim Rent Arrears from Your Tenant"
           subtitle="Recover unpaid rent through the county court with Money Claim Online (MCOL). Add 8% statutory interest. Get a CCJ if they do not pay."
-          primaryCTA={{
+          primaryCta={{
             label: `Start Money Claim — ${PRODUCTS.money_claim.displayPrice}`,
             href: moneyClaimLink,
           }}
-          secondaryCTA={{
+          secondaryCta={{
             label: 'Also Need Eviction?',
             href: completePackLink,
           }}
@@ -154,7 +144,7 @@ export default function ClaimRentArrearsTenantPage() {
               Interest Calculator
             </span>
           </div>
-        </StandardHero>
+        </UniversalHero>
 
         {/* Social Proof */}
         <section className="py-6 bg-gray-50 border-y border-gray-100">

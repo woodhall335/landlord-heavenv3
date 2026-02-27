@@ -44,14 +44,14 @@ import {
 const completePackLink = buildWizardLink({
   product: 'complete_pack',
   jurisdiction: 'wales',
-  src: 'seo_eviction_process_wales',
+  src: 'seo_eviction-process-wales',
   topic: 'eviction',
 });
 
 const noticeOnlyLink = buildWizardLink({
   product: 'notice_only',
   jurisdiction: 'wales',
-  src: 'seo_eviction_process_wales',
+  src: 'seo_eviction-process-wales',
   topic: 'eviction',
 });
 

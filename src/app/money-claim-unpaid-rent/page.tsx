@@ -1,7 +1,10 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
+import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { getCanonicalUrl } from '@/lib/seo/urls';
-import { StructuredData, breadcrumbSchema, articleSchema } from '@/lib/seo/structured-data';
+import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import {
   CheckCircle,
   ArrowRight,
@@ -18,8 +21,15 @@ import { productLinks, landingPageLinks, toolLinks } from '@/lib/seo/internal-li
 import { moneyClaimUnpaidRentFAQs } from '@/data/faqs';
 import { FunnelCta, CrossSellBar } from '@/components/funnels';
 
+const moneyClaimWizardLink = buildWizardLink({
+  product: 'money_claim',
+  jurisdiction: 'england',
+  src: 'seo_money-claim-unpaid-rent',
+  topic: 'debt',
+});
+
 export const metadata: Metadata = {
-  title: 'Reclaim Rent from a Tenant 2026 | Landlord Money Claim Guide',
+  title: 'Reclaim Rent from a Tenant | Solicitor-Style Money Claim Guide',
   description:
     'Reclaim unpaid rent without costly delays. Follow the compliant money-claim process, understand fees and timelines.',
   keywords: [
@@ -35,7 +45,7 @@ export const metadata: Metadata = {
     'N1 claim form',
   ],
   openGraph: {
-    title: 'Reclaim Rent from a Tenant 2026 | Landlord Money Claim Guide',
+    title: 'Reclaim Rent from a Tenant | Solicitor-Style Money Claim Guide',
     description:
       'Landlord guide to recovering unpaid rent through courts in England, Wales, Scotland and Northern Ireland.',
     type: 'article',
@@ -49,16 +59,7 @@ export const metadata: Metadata = {
 export default function MoneyClaimUnpaidRentPage() {
   return (
     <>
-      <StructuredData
-        data={articleSchema({
-          headline: 'Claim Unpaid Rent in the UK (Landlord Guide)',
-          description:
-            'Landlord guide to reclaiming unpaid rent via MCOL (England & Wales), Simple Procedure (Scotland), and NI small claims.',
-          url: getCanonicalUrl('/money-claim-unpaid-rent'),
-          datePublished: '2026-01-01',
-          dateModified: '2026-01-01',
-        })}
-      />
+      <HeaderConfig mode="autoOnScroll" />
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: 'https://landlordheaven.co.uk' },
@@ -67,60 +68,28 @@ export default function MoneyClaimUnpaidRentPage() {
       />
 
       <main className="min-h-screen bg-gray-50">
-        {/* Hero Section */}
-        <section className="bg-gradient-to-br from-green-900 to-green-800 text-white py-16 lg:py-24">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto text-center">
-              <div className="inline-flex items-center gap-2 bg-green-700/50 text-green-100 px-4 py-2 rounded-full text-sm font-medium mb-6">
-                <PoundSterling className="w-4 h-4" />
-                Recover what you&apos;re owed
-              </div>
-
-              <h1 className="text-4xl lg:text-5xl font-bold mb-6">
-                Claim Unpaid Rent in the UK (Landlord Guide)
-              </h1>
-
-              <p className="text-xl text-green-100 mb-8 max-w-2xl mx-auto">
-                Complete guide to recovering unpaid rent through{' '}
-                <Link href="/money-claim-online-mcol" className="text-white hover:underline font-semibold">Money Claim Online (MCOL)</Link> in England & Wales,{' '}
-                <strong>Simple Procedure</strong> in Scotland, and court processes in
-                Northern Ireland.
-              </p>
-
-              <div className="max-w-2xl mx-auto mb-8">
-                <FunnelCta
-                  title="Recover unpaid rent with a court-ready pack"
-                  subtitle="If the tenant still occupies the property, pair debt recovery with eviction action."
-                  primaryHref="/products/money-claim"
-                  primaryText="Start money claim"
-                  primaryDataCta="money-claim"
-                  location="above-fold"
-                  secondaryLinks={[{ href: '/products/complete-pack', text: 'If tenant is still in the property…', dataCta: 'complete-pack' }]}
-                />
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link
-                  href="/products/money-claim"
-                  className="inline-flex items-center justify-center gap-2 bg-white text-green-800 font-semibold py-4 px-8 rounded-xl hover:bg-green-50 transition-colors"
-                >
-                  Get Money Claim Pack — £99.99
-                  <ArrowRight className="w-5 h-5" />
-                </Link>
-                <Link
-                  href="/tools/rent-arrears-calculator"
-                  className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold py-4 px-8 rounded-xl transition-colors border border-white/20"
-                >
-                  <Calculator className="w-5 h-5" />
-                  Calculate Arrears + Interest
-                </Link>
-              </div>
-              <p className="mt-4 text-sm text-green-200">
-                Money Claim Pack available for England only
-              </p>
-            </div>
+        <UniversalHero
+          badge="Recover what you're owed"
+          badgeIcon={<PoundSterling className="w-4 h-4" />}
+          title="Claim Unpaid Rent in the UK (Landlord Guide)"
+          subtitle={<>Complete guide to recovering unpaid rent through <Link href="/money-claim-online-mcol" className="text-primary hover:underline font-semibold">Money Claim Online (MCOL)</Link> in England & Wales, <strong>Simple Procedure</strong> in Scotland, and court processes in Northern Ireland.</>}
+          primaryCta={{ label: 'Start Money Claim Wizard', href: moneyClaimWizardLink }}
+          secondaryCta={{ label: 'Calculate Arrears + Interest', href: '/tools/rent-arrears-calculator' }}
+          variant="pastel"
+        >
+          <div className="max-w-2xl mx-auto mb-8">
+            <FunnelCta
+              title="Recover unpaid rent with a court-ready pack"
+              subtitle="If the tenant still occupies the property, pair debt recovery with eviction action."
+              primaryHref="/products/money-claim"
+              primaryText="Start money claim"
+              primaryDataCta="money-claim"
+              location="above-fold"
+              secondaryLinks={[{ href: '/products/complete-pack', text: 'If tenant is still in the property…', dataCta: 'complete-pack' }]}
+            />
           </div>
-        </section>
+          <p className="mt-4 text-sm text-gray-600">Money Claim Pack available for England only</p>
+        </UniversalHero>
 
         <section className="py-6 bg-white">
           <div className="container mx-auto px-4">

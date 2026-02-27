@@ -5,9 +5,12 @@ import { getCanonicalUrl } from '@/lib/seo';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { rentArrearsClaimFAQs } from '@/data/faqs';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
+import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 
 export const metadata: Metadata = {
-  title: 'Claim Rent Arrears from Tenant | Money Claim Guide 2026',
+  title: 'Claim Rent Arrears from Tenant | Solicitor-Style Money Claim Guide',
   description:
     'How to claim rent arrears from a tenant in England. Step-by-step guide to recovering unpaid rent through MCOL and the County Court.',
   keywords: [
@@ -23,7 +26,7 @@ export const metadata: Metadata = {
     'unpaid rent claim',
   ],
   openGraph: {
-    title: 'Claim Rent Arrears from Tenant | Landlord Heaven',
+    title: 'Claim Rent Arrears from Tenant | Solicitor-Style Money Claim Guide',
     description:
       'Complete guide to claiming rent arrears from a tenant through the County Court. Pre-action protocol, MCOL process, and enforcement.',
     type: 'article',
@@ -39,37 +42,29 @@ const breadcrumbs = [
   { name: 'Claim Rent Arrears from Tenant', url: '/money-claim-rent-arrears' },
 ];
 
+
+const moneyClaimWizardLink = buildWizardLink({
+  product: 'money_claim',
+  jurisdiction: 'england',
+  src: 'seo_money-claim-rent-arrears',
+  topic: 'debt',
+});
+
 export default function MoneyClaimRentArrearsPage() {
   return (
     <>
+      <HeaderConfig mode="autoOnScroll" />
       <StructuredData data={breadcrumbSchema(breadcrumbs)} />
 
       <div className="min-h-screen bg-gray-50">
-        {/* Hero Section */}
-        <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-20">
-          <Container>
-            <div className="max-w-3xl mx-auto text-center">
-              <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-                <span className="text-sm font-semibold text-primary">Rent Recovery</span>
-              </div>
-              <h1 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
-                Claim Rent Arrears from Your Tenant
-              </h1>
-              <p className="text-xl text-gray-600 mb-8">
-                A step-by-step guide for landlords in England to recover unpaid rent through the
-                County Court. From pre-action letters to enforcement.
-              </p>
-              <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Link href="/products/money-claim" className="hero-btn-primary">
-                  Get Money Claim Pack
-                </Link>
-                <Link href="/tools/rent-arrears-calculator" className="hero-btn-secondary">
-                  Calculate Arrears
-                </Link>
-              </div>
-            </div>
-          </Container>
-        </section>
+        <UniversalHero
+          badge="Rent Recovery"
+          title="Claim Rent Arrears from Your Tenant"
+          subtitle="A step-by-step guide for landlords in England to recover unpaid rent through the County Court. From pre-action letters to enforcement."
+          primaryCta={{ label: 'Start Money Claim Wizard', href: moneyClaimWizardLink }}
+          secondaryCta={{ label: 'Calculate Arrears', href: '/tools/rent-arrears-calculator' }}
+          variant="pastel"
+        />
 
         {/* Main Content */}
         <Container>
