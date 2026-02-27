@@ -1,14 +1,16 @@
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
+import type { WizardSource, WizardTopic } from '@/lib/wizard/buildWizardLink';
 
 export type IntentProduct = 'notice_only' | 'money_claim' | 'complete_pack' | 'ast';
-export type IntentSource = 'seo_landing' | 'guide' | 'tool';
+export type IntentSource = WizardSource;
 
 interface IntentProductCTAProps {
   intent: {
     product: IntentProduct;
     src: IntentSource;
+    topic?: WizardTopic;
   };
   label: string;
   className?: string;
@@ -43,12 +45,12 @@ const WIZARD_AVAILABLE: Record<IntentProduct, boolean> = {
   ast: true,
 };
 
-export function getIntentProductHref(intent: { product: IntentProduct; src: IntentSource }): string {
+export function getIntentProductHref(intent: { product: IntentProduct; src: IntentSource; topic?: WizardTopic }): string {
   if (WIZARD_AVAILABLE[intent.product]) {
     return buildWizardLink({
       product: WIZARD_PRODUCT_MAP[intent.product],
       src: intent.src,
-      topic: WIZARD_TOPIC_MAP[intent.product],
+      topic: intent.topic ?? WIZARD_TOPIC_MAP[intent.product],
     });
   }
 
