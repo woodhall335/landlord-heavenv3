@@ -32,7 +32,9 @@ export type WizardSource =
   | 'about'
   | 'seo_eviction'
   | 'seo_money_claim'
-  | 'seo_tenancy';
+  | 'seo_tenancy'
+  | 'seo_section_8_notice_template'
+  | 'seo_rent_arrears_letter_template';
 
 export type WizardTopic =
   | 'eviction'
@@ -41,6 +43,7 @@ export type WizardTopic =
   | 'deposit'
   | 'compliance'
   | 'money_claim'
+  | 'debt'
   | 'general';
 
 export interface BuildWizardLinkParams {
