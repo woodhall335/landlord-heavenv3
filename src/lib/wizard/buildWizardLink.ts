@@ -34,7 +34,8 @@ export type WizardSource =
   | 'seo_money_claim'
   | 'seo_tenancy'
   | 'seo_section_8_notice_template'
-  | 'seo_rent_arrears_letter_template';
+  | 'seo_rent_arrears_letter_template'
+  | 'seo_section_8_rent_arrears_eviction';
 
 export type WizardTopic =
   | 'eviction'
