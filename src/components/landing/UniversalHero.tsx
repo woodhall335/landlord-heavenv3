@@ -22,6 +22,7 @@ const SUBTITLE_CLASSES = 'relative z-10 mt-4 px-0 py-0 text-lg leading-relaxed t
 const CTA_WRAP_CLASSES = 'mt-6 flex w-full flex-col gap-3 sm:flex-row sm:items-center';
 
 export type UniversalHeroProps = {
+  variant?: 'pastel';
   trustText?: string;
   badge?: string;
   badgeIcon?: ReactNode;
