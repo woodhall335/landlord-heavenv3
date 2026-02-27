@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
@@ -7,8 +8,7 @@ import {
   landingPageLinks,
   tenancyAgreementPageLinks,
 } from '@/lib/seo/internal-links';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
-import { StandardHero } from '@/components/marketing/StandardHero';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { FAQSection } from '@/components/seo/FAQSection';
 import {
@@ -19,15 +19,11 @@ import {
   AlertTriangle,
 } from 'lucide-react';
 
-const wizardLinkAST = buildWizardLink({
-  product: 'ast_standard',
-  jurisdiction: 'england',
-  src: 'template',
-});
+const wizardLinkAST = '/wizard?product=tenancy_agreement&topic=tenancy&src=seo_6-month-tenancy-agreement-template';
 
 export const metadata: Metadata = {
   title: '6 Month Tenancy Agreement Template UK 2026 — Short-Term AST',
-  description: 'Free 6 month tenancy agreement template for UK landlords. Short-term AST with notice periods, break clauses, and renewal options.',
+  description: '6 month tenancy agreement guidance and compliant AST creation for UK landlords. Includes notice periods, break clauses, and renewal options.',
   keywords: [
     '6 month tenancy agreement',
     '6 month tenancy agreement template',
@@ -44,9 +40,10 @@ export const metadata: Metadata = {
     canonical: 'https://landlordheaven.co.uk/6-month-tenancy-agreement-template',
   },
   openGraph: {
-    title: '6 Month Tenancy Agreement Template UK 2026 | Landlord Heaven',
-    description: 'Short-term AST template for 6-month tenancies. Download free or get a court-ready version.',
+    title: '6 Month Tenancy Agreement UK 2026 | Landlord Heaven',
+    description: 'Short-term AST guidance and compliant document creation for 6-month tenancies.',
     type: 'website',
+    url: 'https://landlordheaven.co.uk/6-month-tenancy-agreement-template',
   },
 };
 
@@ -96,6 +93,7 @@ export default function SixMonthTenancyAgreementPage() {
 
   return (
     <>
+      <HeaderConfig mode="autoOnScroll" />
       <StructuredData data={pageSchema} />
       <StructuredData data={breadcrumbSchema([
         { name: 'Home', url: 'https://landlordheaven.co.uk' },
@@ -105,13 +103,13 @@ export default function SixMonthTenancyAgreementPage() {
 
       <main>
         {/* Hero Section */}
-        <StandardHero
+        <UniversalHero
           badge="England & Wales"
           badgeIcon={<Calendar className="w-4 h-4" />}
           title="6 Month Tenancy Agreement Template"
           subtitle={<>Need a <strong>short-term tenancy agreement</strong>? Get a legally compliant 6-month AST template for England and Wales — with clear terms for both landlord and tenant.</>}
-          primaryCTA={{ label: 'Get AST Template — £14.99', href: wizardLinkAST }}
-          secondaryCTA={{ label: 'View 12-Month Option', href: '/assured-shorthold-tenancy-agreement-template' }}
+          primaryCta={{ label: 'Get AST Template — £14.99', href: wizardLinkAST }}
+          secondaryCta={{ label: 'View 12-Month Option', href: '/assured-shorthold-tenancy-agreement-template' }}
           variant="pastel"
         >
           {/* Trust Signals */}
@@ -129,7 +127,7 @@ export default function SixMonthTenancyAgreementPage() {
               Instant Download
             </span>
           </div>
-        </StandardHero>
+        </UniversalHero>
 
         {/* Social Proof */}
         <section className="py-6 bg-gray-50 border-y border-gray-100">

@@ -1,6 +1,8 @@
 import { Metadata } from 'next';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { getCanonicalUrl } from '@/lib/seo';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { FAQSection } from '@/components/seo/FAQSection';
@@ -38,34 +40,19 @@ const breadcrumbs = [
 export default function PreActionProtocolPage() {
   return (
     <>
+      <HeaderConfig mode="autoOnScroll" />
       <StructuredData data={breadcrumbSchema(breadcrumbs)} />
 
       <div className="min-h-screen bg-gray-50">
         {/* Hero Section */}
-        <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-20">
-          <Container>
-            <div className="max-w-3xl mx-auto text-center">
-              <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-                <span className="text-sm font-semibold text-primary">Money Claims</span>
-              </div>
-              <h1 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
-                Pre-Action Protocol for Debt Claims
-              </h1>
-              <p className="text-xl text-gray-600 mb-8">
-                Before claiming rent arrears through the county court, you must follow the
-                Pre-Action Protocol. This guide explains what you need to do and when.
-              </p>
-              <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Link href="/products/money-claim" data-testid="guide-primary-cta" className="hero-btn-primary">
-                  Get Pre-Action Letter Pack
-                </Link>
-                <Link href="/tools/rent-arrears-calculator" className="hero-btn-secondary">
-                  Calculate Arrears
-                </Link>
-              </div>
-            </div>
-          </Container>
-        </section>
+                <UniversalHero
+          badge="Landlord Guide"
+          title="Pre-Action Protocol for Debt Claims"
+          subtitle="Follow the correct pre-action debt process before issuing a county court claim."
+          primaryCta={{ label: 'Start Debt Recovery Wizard', href: '/wizard?product=money_claim&topic=debt&src=seo_pre-action-protocol-debt' }}
+          align="center"
+          showTrustPositioningBar
+        />
 
         {/* Main Content */}
         <Container>

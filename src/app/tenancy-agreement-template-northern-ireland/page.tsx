@@ -1,11 +1,12 @@
 import { Metadata } from 'next';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import Link from 'next/link';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { niTenancyTemplateRelatedLinks } from '@/lib/seo/internal-links';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
-import { StandardHero } from '@/components/marketing/StandardHero';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import { FAQSection } from '@/components/seo/FAQSection';
@@ -30,16 +31,16 @@ const PAGE_TITLE = 'Tenancy Agreement Template Northern Ireland';
 const PAGE_TYPE = 'tenancy' as const;
 
 const wizardLinkStandard = buildWizardLink({
-  product: 'ast_standard',
+  product: 'tenancy_agreement',
   jurisdiction: 'northern-ireland',
-  src: 'guide',
+  src: 'seo_tenancy-agreement-template-northern-ireland',
   topic: 'tenancy',
 });
 
 const wizardLinkPremium = buildWizardLink({
-  product: 'ast_premium',
+  product: 'tenancy_agreement',
   jurisdiction: 'northern-ireland',
-  src: 'guide',
+  src: 'seo_tenancy-agreement-template-northern-ireland',
   topic: 'tenancy',
 });
 
@@ -80,6 +81,7 @@ export default function TenancyAgreementTemplateNorthernIrelandPage() {
 
   return (
     <>
+      <HeaderConfig mode="autoOnScroll" />
       <StructuredData data={pageSchema} />
       <StructuredData
         data={breadcrumbSchema([
@@ -102,7 +104,7 @@ export default function TenancyAgreementTemplateNorthernIrelandPage() {
 
       <main>
         {/* Hero Section */}
-        <StandardHero
+        <UniversalHero
           badge="Northern Ireland Only"
           badgeIcon={<Scale className="w-4 h-4" />}
           title="Tenancy Agreement Template Northern Ireland"
@@ -113,11 +115,11 @@ export default function TenancyAgreementTemplateNorthernIrelandPage() {
               immediate use.
             </>
           }
-          primaryCTA={{
+          primaryCta={{
             label: `Get NI Template — ${PRODUCTS.ast_standard.displayPrice}`,
             href: wizardLinkStandard,
           }}
-          secondaryCTA={{
+          secondaryCta={{
             label: 'Premium Template with Extras',
             href: wizardLinkPremium,
           }}
@@ -138,7 +140,7 @@ export default function TenancyAgreementTemplateNorthernIrelandPage() {
               Court-Ready
             </span>
           </div>
-        </StandardHero>
+        </UniversalHero>
 
         {/* Social Proof */}
         <section className="py-6 bg-gray-50 border-y border-gray-100">

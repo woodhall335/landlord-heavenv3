@@ -1,6 +1,8 @@
 import { Metadata } from 'next';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { getCanonicalUrl } from '@/lib/seo';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { FAQSection } from '@/components/seo/FAQSection';
@@ -39,26 +41,19 @@ const breadcrumbs = [
 export default function TenantDamagingPropertyPage() {
   return (
     <>
+      <HeaderConfig mode="autoOnScroll" />
       <StructuredData data={breadcrumbSchema(breadcrumbs)} />
 
       <div className="min-h-screen bg-gray-50">
         {/* Hero Section */}
-        <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-20">
-          <Container>
-            <div className="max-w-3xl mx-auto text-center">
-              <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-                <span className="text-sm font-semibold text-primary">Landlord Guide</span>
-              </div>
-              <h1 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
-                Tenant Damaging Property: Your Options
-              </h1>
-              <p className="text-xl text-gray-600 mb-8">
-                When a tenant damages your property, you have several legal options. This guide
-                covers eviction, deposit deductions, and money claims.
-              </p>
-            </div>
-          </Container>
-        </section>
+                <UniversalHero
+          badge="Landlord Guide"
+          title="Tenant Damaging Property: Your Options"
+          subtitle="Understand your legal options and start a compliant claim for damage-related losses."
+          primaryCta={{ label: 'Recover Damage Costs', href: '/wizard?product=money_claim&topic=debt&src=seo_tenant-damaging-property' }}
+          align="center"
+          showTrustPositioningBar
+        />
 
         {/* Main Content */}
         <Container>
