@@ -38,7 +38,7 @@ const breadcrumbs = [
   { name: 'No Fault Eviction', url: '/no-fault-eviction' },
 ];
 
-const wizardHref = '/wizard?product=notice_only&src=seo_no_fault_eviction&topic=eviction';
+const wizardHref = '/wizard?product=notice_only&src=seo_no-fault-eviction&topic=eviction';
 
 export default function NoFaultEvictionPage() {
   return (

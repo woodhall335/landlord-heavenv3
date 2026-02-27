@@ -28,9 +28,9 @@ import {
 } from 'lucide-react';
 
 const wizardLinkCompletePack = buildWizardLink({
-  product: 'complete_pack',
+  product: 'notice_only',
   jurisdiction: 'england',
-  src: 'seo_warrant_of_possession',
+  src: 'seo_warrant-of-possession',
   topic: 'eviction',
 });
 
@@ -56,6 +56,7 @@ export const metadata: Metadata = {
     title: 'Warrant of Possession UK — Bailiff Eviction Guide | Landlord Heaven',
     description: 'Apply for bailiff enforcement after getting a possession order. County court vs High Court options explained.',
     type: 'website',
+    url: 'https://landlordheaven.co.uk/warrant-of-possession',
   },
 };
 

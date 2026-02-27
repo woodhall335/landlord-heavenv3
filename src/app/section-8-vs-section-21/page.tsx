@@ -17,6 +17,8 @@ import {
 } from '@/lib/seo/internal-links';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { StandardHero } from '@/components/marketing/StandardHero';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
@@ -43,14 +45,14 @@ import {
 const noticeOnlyLink = buildWizardLink({
   product: 'notice_only',
   jurisdiction: 'england',
-  src: 'seo_eviction',
+  src: 'seo_section-8-vs-section-21',
   topic: 'eviction',
 });
 
 const completePackLink = buildWizardLink({
-  product: 'complete_pack',
+  product: 'notice_only',
   jurisdiction: 'england',
-  src: 'seo_eviction',
+  src: 'seo_section-8-vs-section-21',
   topic: 'eviction',
 });
 
@@ -108,8 +110,6 @@ export default function Section8VsSection21Page() {
           description:
             'Complete comparison of Section 8 and Section 21 eviction notices. Notice periods, court process, costs, and when to use each.',
           url: getCanonicalUrl('/section-8-vs-section-21'),
-          datePublished: '2026-01-30',
-          dateModified: '2026-01-30',
         })}
       />
       <StructuredData
@@ -121,6 +121,16 @@ export default function Section8VsSection21Page() {
       />
 
       <main>
+        <HeaderConfig mode="autoOnScroll" />
+        <UniversalHero
+          title="Section 8 vs Section 21"
+          subtitle="Compare notice routes, timing, and evidence requirements so you choose the right eviction notice first time."
+          primaryCta={{ label: `Start Notice Pack — ${PRODUCTS.notice_only.displayPrice}`, href: noticeOnlyLink }}
+          secondaryCta={{ label: 'Need Court Forms Too?', href: completePackLink }}
+          showTrustPositioningBar
+          hideMedia
+        />
+
         {/* Hero Section */}
         <StandardHero
           badge="England"

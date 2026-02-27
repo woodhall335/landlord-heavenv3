@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getCanonicalUrl } from '@/lib/seo/urls';
-import { StructuredData, breadcrumbSchema, articleSchema } from '@/lib/seo/structured-data';
+import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import {
   AlertTriangle,
   CheckCircle,
@@ -14,6 +14,8 @@ import { NextLegalSteps } from '@/components/seo/NextLegalSteps';
 import { productLinks, askHeavenLink } from '@/lib/seo/internal-links';
 import { AskHeavenWidget } from '@/components/ask-heaven/AskHeavenWidget';
 import { walesEvictionFAQs } from '@/data/faqs';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 
 export const metadata: Metadata = {
   title: 'Wales Eviction Notice 2026 for Landlords | Renting Homes Act',
@@ -41,19 +43,11 @@ export const metadata: Metadata = {
   },
 };
 
+const wizardHref = '/wizard?product=notice_only&src=seo_wales-eviction-notices&topic=eviction';
+
 export default function WalesEvictionNoticesPage() {
   return (
     <>
-      <StructuredData
-        data={articleSchema({
-          headline: 'Eviction Notices in Wales (Landlord Guide)',
-          description:
-            'Landlord guide to Wales eviction notices, notice periods, and possession routes under the Renting Homes (Wales) Act 2016.',
-          url: getCanonicalUrl('/wales-eviction-notices'),
-          datePublished: '2026-01-01',
-          dateModified: '2026-01-01',
-        })}
-      />
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: 'https://landlordheaven.co.uk' },
@@ -63,6 +57,16 @@ export default function WalesEvictionNoticesPage() {
       />
 
       <main className="min-h-screen bg-gray-50">
+        <HeaderConfig mode="autoOnScroll" />
+        <UniversalHero
+          title="Wales Eviction Notices"
+          subtitle="Follow the Renting Homes (Wales) Act process with the right notice route, notice periods, and possession steps."
+          primaryCta={{ label: 'Start Wales Notice', href: wizardHref }}
+          secondaryCta={{ label: 'Wales Occupation Contracts', href: '/wales-tenancy-agreement-template' }}
+          showTrustPositioningBar
+          hideMedia
+        />
+
         {/* Hero Section */}
         <section className="bg-gradient-to-br from-red-900 to-red-800 text-white py-16 lg:py-24">
           <div className="container mx-auto px-4">
@@ -71,9 +75,9 @@ export default function WalesEvictionNoticesPage() {
                 <span className="text-5xl">🏴󠁧󠁢󠁷󠁬󠁳󠁿</span>
               </div>
 
-              <h1 className="text-4xl lg:text-5xl font-bold mb-6">
+              <h2 className="text-4xl lg:text-5xl font-bold mb-6">
                 Wales Eviction Notices (Landlord Guide)
-              </h1>
+              </h2>
 
               <p className="text-xl text-red-100 mb-8 max-w-2xl mx-auto">
                 Complete guide to the <strong>Renting Homes (Wales) Act 2016</strong>. How to
@@ -94,7 +98,7 @@ export default function WalesEvictionNoticesPage() {
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
-                  href="/products/notice-only"
+                  href={wizardHref}
                   className="inline-flex items-center justify-center gap-2 bg-white text-red-800 font-semibold py-4 px-8 rounded-xl hover:bg-red-50 transition-colors"
                 >
                   Get Wales Notice — £49.99

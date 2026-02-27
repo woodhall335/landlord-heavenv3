@@ -8,6 +8,8 @@ import {
 } from '@/lib/seo/internal-links';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { StandardHero } from '@/components/marketing/StandardHero';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { FAQSection } from '@/components/seo/FAQSection';
 import {
@@ -24,7 +26,7 @@ import {
 const wizardLinkNoticeOnly = buildWizardLink({
   product: 'notice_only',
   jurisdiction: 'england',
-  src: 'guide',
+  src: 'seo_eviction-cost-uk',
   topic: 'eviction',
 });
 
@@ -51,6 +53,7 @@ export const metadata: Metadata = {
     title: 'How Much Does Eviction Cost UK? Full Breakdown | Landlord Heaven',
     description: 'Complete UK eviction cost breakdown for 2026. Court fees, bailiffs, and full court-fee and process cost outlook for eviction.',
     type: 'website',
+    url: 'https://landlordheaven.co.uk/eviction-cost-uk',
   },
 };
 
@@ -108,6 +111,16 @@ export default function EvictionCostUkPage() {
       ])} />
 
       <main>
+        <HeaderConfig mode="autoOnScroll" />
+        <UniversalHero
+          title="Eviction Cost UK Guide"
+          subtitle="Estimate realistic eviction costs across notice, court, and enforcement stages before you start."
+          primaryCta={{ label: 'Start Notice Workflow', href: wizardLinkNoticeOnly }}
+          secondaryCta={{ label: 'See Complete Pack', href: '/products/complete-pack' }}
+          showTrustPositioningBar
+          hideMedia
+        />
+
         {/* Hero Section */}
         <StandardHero
           badge="2026 Prices"

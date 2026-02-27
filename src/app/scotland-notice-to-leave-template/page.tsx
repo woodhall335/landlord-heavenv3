@@ -5,6 +5,8 @@ import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, guideLinks, askHeavenLink } from '@/lib/seo/internal-links';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { StandardHero } from '@/components/marketing/StandardHero';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { AskHeavenWidget } from '@/components/ask-heaven/AskHeavenWidget';
 import { FAQSection } from '@/components/seo/FAQSection';
@@ -24,7 +26,7 @@ import {
 const wizardLink = buildWizardLink({
   product: 'notice_only',
   jurisdiction: 'scotland',
-  src: 'template',
+  src: 'seo_scotland-notice-to-leave-template',
   topic: 'eviction',
 });
 
@@ -107,6 +109,16 @@ export default function ScotlandNoticeToLeaveTemplatePage() {
       />
 
       <main>
+        <HeaderConfig mode="autoOnScroll" />
+        <UniversalHero
+          title="Scotland Notice to Leave Guide"
+          subtitle="Prepare a compliant Notice to Leave for PRT tenancies with the right grounds, notice periods, and tribunal-ready details."
+          primaryCta={{ label: 'Start Scotland Notice', href: wizardLink }}
+          secondaryCta={{ label: 'Learn About Scotland Eviction', href: '/scotland-eviction-notices' }}
+          showTrustPositioningBar
+          hideMedia
+        />
+
         {/* Hero Section */}
         <StandardHero
           badge="Scotland PRT Framework"
