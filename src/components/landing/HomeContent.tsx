@@ -78,7 +78,7 @@ export default function HomeContent() {
             <h2 className="mt-3 text-4xl md:text-5xl font-bold tracking-tight text-[#16163f]">
               Choose the correct legal route
             </h2>
-            <p className="mt-4 max-w-4xl text-2xl leading-relaxed text-[#3b3b4f]">
+            <p className="mt-4 max-w-4xl text-1xl leading-relaxed text-[#3b3b4f]">
               Start an eviction, recover unpaid rent, or create/update an agreement — all routed through the correct workflow.
             </p>
 
@@ -92,7 +92,7 @@ export default function HomeContent() {
                   <span className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-b from-[#a987ff] to-[#6a2dd8] text-white shadow-md">
                     <path.icon className="h-8 w-8" />
                   </span>
-                  <span className="text-[2rem] font-semibold leading-tight text-[#18184d]">
+                  <span className="text-[1rem] font-semibold leading-tight text-[#18184d]">
                     {path.label}
                   </span>
                 </Link>
