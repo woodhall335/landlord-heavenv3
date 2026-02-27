@@ -5,7 +5,8 @@ import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { astTemplateRelatedLinks } from '@/lib/seo/internal-links';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
-import { StandardHero } from '@/components/marketing/StandardHero';
+import { UniversalHero } from '@/components/landing/UniversalHero';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import { FAQSection } from '@/components/seo/FAQSection';
@@ -33,14 +34,14 @@ const PAGE_TYPE = 'tenancy' as const;
 const wizardLinkStandard = buildWizardLink({
   product: 'ast_standard',
   jurisdiction: 'england',
-  src: 'guide',
+  src: 'seo_ast_tenancy_agreement_template',
   topic: 'tenancy',
 });
 
 const wizardLinkPremium = buildWizardLink({
   product: 'ast_premium',
   jurisdiction: 'england',
-  src: 'guide',
+  src: 'seo_ast_tenancy_agreement_template',
   topic: 'tenancy',
 });
 
@@ -67,6 +68,7 @@ export const metadata: Metadata = {
     description:
       'Court-ready AST template for England. Updated for 2026 legislation. Protect your eviction rights.',
     type: 'website',
+    url: 'https://landlordheaven.co.uk/ast-tenancy-agreement-template',
   },
 };
 
@@ -102,9 +104,11 @@ export default function AstTenancyAgreementTemplatePage() {
         jurisdiction="england"
       />
 
+      <HeaderConfig mode="autoOnScroll" />
+
       <main>
         {/* Hero Section */}
-        <StandardHero
+        <UniversalHero
           badge="England Only"
           badgeIcon={<Scale className="w-4 h-4" />}
           title="AST Tenancy Agreement Template"
@@ -115,15 +119,14 @@ export default function AstTenancyAgreementTemplatePage() {
               interests as a landlord.
             </>
           }
-          primaryCTA={{
+          primaryCta={{
             label: `Get Template — ${PRODUCTS.ast_standard.displayPrice}`,
             href: wizardLinkStandard,
           }}
-          secondaryCTA={{
+          secondaryCta={{
             label: 'Premium Template with Extras',
             href: wizardLinkPremium,
           }}
-          variant="pastel"
         >
           {/* Trust Signals */}
           <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600 mt-4">
@@ -140,7 +143,7 @@ export default function AstTenancyAgreementTemplatePage() {
               Instant Download
             </span>
           </div>
-        </StandardHero>
+        </UniversalHero>
 
         {/* Social Proof */}
         <section className="py-6 bg-gray-50 border-y border-gray-100">

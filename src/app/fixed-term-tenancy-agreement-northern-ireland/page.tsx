@@ -5,7 +5,8 @@ import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { niFixedTermRelatedLinks } from '@/lib/seo/internal-links';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
-import { StandardHero } from '@/components/marketing/StandardHero';
+import { UniversalHero } from '@/components/landing/UniversalHero';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import { FAQSection } from '@/components/seo/FAQSection';
@@ -32,14 +33,14 @@ const PAGE_TYPE = 'tenancy' as const;
 const wizardLinkStandard = buildWizardLink({
   product: 'ast_standard',
   jurisdiction: 'northern-ireland',
-  src: 'guide',
+  src: 'seo_fixed_term_tenancy_agreement_northern_ireland',
   topic: 'tenancy',
 });
 
 const wizardLinkPremium = buildWizardLink({
   product: 'ast_premium',
   jurisdiction: 'northern-ireland',
-  src: 'guide',
+  src: 'seo_fixed_term_tenancy_agreement_northern_ireland',
   topic: 'tenancy',
 });
 
@@ -65,6 +66,7 @@ export const metadata: Metadata = {
     description:
       'Create a fixed term tenancy agreement for Northern Ireland. Understand fixed term vs periodic tenancies under NI law.',
     type: 'website',
+    url: 'https://landlordheaven.co.uk/fixed-term-tenancy-agreement-northern-ireland',
   },
 };
 
@@ -100,9 +102,11 @@ export default function FixedTermTenancyAgreementNorthernIrelandPage() {
         jurisdiction="northern-ireland"
       />
 
+      <HeaderConfig mode="autoOnScroll" />
+
       <main>
         {/* Hero Section */}
-        <StandardHero
+        <UniversalHero
           badge="Northern Ireland Only"
           badgeIcon={<Scale className="w-4 h-4" />}
           title="Fixed Term Tenancy Agreement Northern Ireland"
@@ -113,15 +117,14 @@ export default function FixedTermTenancyAgreementNorthernIrelandPage() {
               affects your options.
             </>
           }
-          primaryCTA={{
+          primaryCta={{
             label: `Create Fixed Term Tenancy — ${PRODUCTS.ast_standard.displayPrice}`,
             href: wizardLinkStandard,
           }}
-          secondaryCTA={{
+          secondaryCta={{
             label: 'Premium Agreement with Break Clause',
             href: wizardLinkPremium,
           }}
-          variant="pastel"
         >
           {/* Trust Signals */}
           <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600 mt-4">
@@ -138,7 +141,7 @@ export default function FixedTermTenancyAgreementNorthernIrelandPage() {
               Income Security
             </span>
           </div>
-        </StandardHero>
+        </UniversalHero>
 
         {/* Social Proof */}
         <section className="py-6 bg-gray-50 border-y border-gray-100">

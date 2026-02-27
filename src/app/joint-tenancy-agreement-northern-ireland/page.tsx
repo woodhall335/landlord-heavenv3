@@ -5,7 +5,8 @@ import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { niJointTenancyRelatedLinks } from '@/lib/seo/internal-links';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
-import { StandardHero } from '@/components/marketing/StandardHero';
+import { UniversalHero } from '@/components/landing/UniversalHero';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import { FAQSection } from '@/components/seo/FAQSection';
@@ -33,14 +34,14 @@ const PAGE_TYPE = 'tenancy' as const;
 const wizardLinkStandard = buildWizardLink({
   product: 'ast_standard',
   jurisdiction: 'northern-ireland',
-  src: 'guide',
+  src: 'seo_joint_tenancy_agreement_northern_ireland',
   topic: 'tenancy',
 });
 
 const wizardLinkPremium = buildWizardLink({
   product: 'ast_premium',
   jurisdiction: 'northern-ireland',
-  src: 'guide',
+  src: 'seo_joint_tenancy_agreement_northern_ireland',
   topic: 'tenancy',
 });
 
@@ -66,6 +67,7 @@ export const metadata: Metadata = {
     description:
       'Create a joint tenancy agreement for multiple tenants in Northern Ireland. Understand joint and several liability under NI law.',
     type: 'website',
+    url: 'https://landlordheaven.co.uk/joint-tenancy-agreement-northern-ireland',
   },
 };
 
@@ -101,9 +103,11 @@ export default function JointTenancyAgreementNorthernIrelandPage() {
         jurisdiction="northern-ireland"
       />
 
+      <HeaderConfig mode="autoOnScroll" />
+
       <main>
         {/* Hero Section */}
-        <StandardHero
+        <UniversalHero
           badge="Northern Ireland Only"
           badgeIcon={<Scale className="w-4 h-4" />}
           title="Joint Tenancy Agreement Northern Ireland"
@@ -114,15 +118,14 @@ export default function JointTenancyAgreementNorthernIrelandPage() {
               letting to couples, sharers, or groups.
             </>
           }
-          primaryCTA={{
+          primaryCta={{
             label: `Create Joint Tenancy — ${PRODUCTS.ast_standard.displayPrice}`,
             href: wizardLinkStandard,
           }}
-          secondaryCTA={{
+          secondaryCta={{
             label: 'Premium Agreement with Guarantor',
             href: wizardLinkPremium,
           }}
-          variant="pastel"
         >
           {/* Trust Signals */}
           <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600 mt-4">
@@ -139,7 +142,7 @@ export default function JointTenancyAgreementNorthernIrelandPage() {
               Rent Protection
             </span>
           </div>
-        </StandardHero>
+        </UniversalHero>
 
         {/* Social Proof */}
         <section className="py-6 bg-gray-50 border-y border-gray-100">

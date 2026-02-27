@@ -5,7 +5,8 @@ import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { prtTemplateRelatedLinks } from '@/lib/seo/internal-links';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
-import { StandardHero } from '@/components/marketing/StandardHero';
+import { UniversalHero } from '@/components/landing/UniversalHero';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import { FAQSection } from '@/components/seo/FAQSection';
@@ -36,14 +37,14 @@ const PAGE_TYPE = 'tenancy' as const;
 const wizardLinkStandard = buildWizardLink({
   product: 'ast_standard',
   jurisdiction: 'scotland',
-  src: 'guide',
+  src: 'seo_prt_tenancy_agreement_template_scotland',
   topic: 'tenancy',
 });
 
 const wizardLinkPremium = buildWizardLink({
   product: 'ast_premium',
   jurisdiction: 'scotland',
-  src: 'guide',
+  src: 'seo_prt_tenancy_agreement_template_scotland',
   topic: 'tenancy',
 });
 
@@ -69,6 +70,7 @@ export const metadata: Metadata = {
     description:
       'Download a legally valid PRT template for Scotland. Compliant with the 2016 Act and ready for the First-tier Tribunal.',
     type: 'website',
+    url: 'https://landlordheaven.co.uk/prt-tenancy-agreement-template-scotland',
   },
 };
 
@@ -104,9 +106,11 @@ export default function PrtTenancyAgreementTemplateScotlandPage() {
         jurisdiction="scotland"
       />
 
+      <HeaderConfig mode="autoOnScroll" />
+
       <main>
         {/* Hero Section */}
-        <StandardHero
+        <UniversalHero
           badge="Scotland Only"
           badgeIcon={<Scale className="w-4 h-4" />}
           title="PRT Tenancy Agreement Template"
@@ -116,15 +120,14 @@ export default function PrtTenancyAgreementTemplateScotlandPage() {
               Scotland. Fully compliant with the 2016 Act and ready for the First-tier Tribunal.
             </>
           }
-          primaryCTA={{
+          primaryCta={{
             label: `Create PRT Template — ${PRODUCTS.ast_standard.displayPrice}`,
             href: wizardLinkStandard,
           }}
-          secondaryCTA={{
+          secondaryCta={{
             label: 'Premium Template with Extras',
             href: wizardLinkPremium,
           }}
-          variant="pastel"
         >
           {/* Trust Signals */}
           <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600 mt-4">
@@ -141,7 +144,7 @@ export default function PrtTenancyAgreementTemplateScotlandPage() {
               Instant Download
             </span>
           </div>
-        </StandardHero>
+        </UniversalHero>
 
         {/* Social Proof */}
         <section className="py-6 bg-gray-50 border-y border-gray-100">

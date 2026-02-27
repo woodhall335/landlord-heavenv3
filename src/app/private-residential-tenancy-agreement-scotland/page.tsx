@@ -5,7 +5,8 @@ import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { prtMainRelatedLinks } from '@/lib/seo/internal-links';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
-import { StandardHero } from '@/components/marketing/StandardHero';
+import { UniversalHero } from '@/components/landing/UniversalHero';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import { FAQSection } from '@/components/seo/FAQSection';
@@ -34,14 +35,14 @@ const PAGE_TYPE = 'tenancy' as const;
 const wizardLinkStandard = buildWizardLink({
   product: 'ast_standard',
   jurisdiction: 'scotland',
-  src: 'guide',
+  src: 'seo_private_residential_tenancy_agreement_scotland',
   topic: 'tenancy',
 });
 
 const wizardLinkPremium = buildWizardLink({
   product: 'ast_premium',
   jurisdiction: 'scotland',
-  src: 'guide',
+  src: 'seo_private_residential_tenancy_agreement_scotland',
   topic: 'tenancy',
 });
 
@@ -68,6 +69,7 @@ export const metadata: Metadata = {
     description:
       'Create a legally valid PRT for Scotland. Compliant with Scottish tenancy law and enforceable at the First-tier Tribunal.',
     type: 'website',
+    url: 'https://landlordheaven.co.uk/private-residential-tenancy-agreement-scotland',
   },
 };
 
@@ -103,9 +105,11 @@ export default function PrivateResidentialTenancyAgreementScotlandPage() {
         jurisdiction="scotland"
       />
 
+      <HeaderConfig mode="autoOnScroll" />
+
       <main>
         {/* Hero Section */}
-        <StandardHero
+        <UniversalHero
           badge="Scotland Only"
           badgeIcon={<Scale className="w-4 h-4" />}
           title="Private Residential Tenancy Agreement"
@@ -115,15 +119,14 @@ export default function PrivateResidentialTenancyAgreementScotlandPage() {
               Housing (Tenancies) (Scotland) Act 2016 and enforceable at the First-tier Tribunal.
             </>
           }
-          primaryCTA={{
+          primaryCta={{
             label: `Create PRT Agreement — ${PRODUCTS.ast_standard.displayPrice}`,
             href: wizardLinkStandard,
           }}
-          secondaryCTA={{
+          secondaryCta={{
             label: 'Premium Agreement with Extras',
             href: wizardLinkPremium,
           }}
-          variant="pastel"
         >
           {/* Trust Signals */}
           <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600 mt-4">
@@ -140,7 +143,7 @@ export default function PrivateResidentialTenancyAgreementScotlandPage() {
               Ready in Minutes
             </span>
           </div>
-        </StandardHero>
+        </UniversalHero>
 
         {/* Social Proof */}
         <section className="py-6 bg-gray-50 border-y border-gray-100">

@@ -5,7 +5,8 @@ import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { occupationContractMainRelatedLinks } from '@/lib/seo/internal-links';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
-import { StandardHero } from '@/components/marketing/StandardHero';
+import { UniversalHero } from '@/components/landing/UniversalHero';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import { FAQSection } from '@/components/seo/FAQSection';
@@ -33,14 +34,14 @@ const PAGE_TYPE = 'tenancy' as const;
 const wizardLinkStandard = buildWizardLink({
   product: 'ast_standard',
   jurisdiction: 'wales',
-  src: 'guide',
+  src: 'seo_standard_occupation_contract_wales',
   topic: 'tenancy',
 });
 
 const wizardLinkPremium = buildWizardLink({
   product: 'ast_premium',
   jurisdiction: 'wales',
-  src: 'guide',
+  src: 'seo_standard_occupation_contract_wales',
   topic: 'tenancy',
 });
 
@@ -68,6 +69,7 @@ export const metadata: Metadata = {
     description:
       'Create a legally valid occupation contract for Wales. Fully compliant with the Renting Homes (Wales) Act 2016.',
     type: 'website',
+    url: 'https://landlordheaven.co.uk/standard-occupation-contract-wales',
   },
 };
 
@@ -103,9 +105,11 @@ export default function StandardOccupationContractWalesPage() {
         jurisdiction="wales"
       />
 
+      <HeaderConfig mode="autoOnScroll" />
+
       <main>
         {/* Hero Section */}
-        <StandardHero
+        <UniversalHero
           badge="Wales Only"
           badgeIcon={<Scale className="w-4 h-4" />}
           title="Standard Occupation Contract Wales"
@@ -116,15 +120,14 @@ export default function StandardOccupationContractWalesPage() {
               and all fundamental terms included.
             </>
           }
-          primaryCTA={{
+          primaryCta={{
             label: `Create Occupation Contract — ${PRODUCTS.ast_standard.displayPrice}`,
             href: wizardLinkStandard,
           }}
-          secondaryCTA={{
+          secondaryCta={{
             label: 'Premium Contract with Extra Protection',
             href: wizardLinkPremium,
           }}
-          variant="pastel"
         >
           {/* Trust Signals */}
           <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600 mt-4">
@@ -141,7 +144,7 @@ export default function StandardOccupationContractWalesPage() {
               Ready in Minutes
             </span>
           </div>
-        </StandardHero>
+        </UniversalHero>
 
         {/* Social Proof */}
         <section className="py-6 bg-gray-50 border-y border-gray-100">
