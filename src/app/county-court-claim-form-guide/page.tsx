@@ -23,16 +23,10 @@ import {
   HelpCircle,
 } from 'lucide-react';
 
-const wizardLinkMoneyClaim = buildWizardLink({
-  product: 'money_claim',
+const wizardLinkNoticeOnly = buildWizardLink({
+  product: 'notice_only',
   jurisdiction: 'england',
-  src: 'guide',
-});
-
-const wizardLinkCompletePack = buildWizardLink({
-  product: 'complete_pack',
-  jurisdiction: 'england',
-  src: 'guide',
+  src: 'seo_county-court-claim-form-guide',
   topic: 'eviction',
 });
 
@@ -121,7 +115,7 @@ export default function CountyCourtClaimFormGuidePage() {
           badgeIcon={<Scale className="w-4 h-4" />}
           title="County Court Claim Form Guide UK"
           subtitle={<>Not sure which <strong>county court claim form</strong> to use? This guide explains Form N1, N5, and N5B — so you file the right claim the first time.</>}
-          primaryCTA={{ label: 'Get Money Claim Pack — £99.99', href: wizardLinkMoneyClaim }}
+          primaryCTA={{ label: 'Create Eviction Notice — £39.99', href: wizardLinkNoticeOnly }}
           secondaryCTA={{ label: 'Need Possession Instead?', href: '/possession-claim-guide' }}
           variant="pastel"
         >

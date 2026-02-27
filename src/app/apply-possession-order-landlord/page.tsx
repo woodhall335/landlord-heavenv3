@@ -38,18 +38,12 @@ import {
 } from 'lucide-react';
 
 const completePackLink = buildWizardLink({
-  product: 'complete_pack',
+  product: 'notice_only',
   jurisdiction: 'england',
-  src: 'seo_eviction',
+  src: 'seo_apply-possession-order-landlord',
   topic: 'eviction',
 });
 
-const noticeOnlyLink = buildWizardLink({
-  product: 'notice_only',
-  jurisdiction: 'england',
-  src: 'seo_eviction',
-  topic: 'eviction',
-});
 
 export const metadata: Metadata = {
   title: 'Apply for Possession Order | Landlord Court Forms N5B N5 | Landlord Heaven',
@@ -125,12 +119,12 @@ export default function ApplyPossessionOrderPage() {
           title="Apply for a Possession Order"
           subtitle="Your eviction notice has expired but your tenant has not left. Here is how to apply to the court for a possession order using Form N5B or N5."
           primaryCTA={{
-            label: `Get Court Forms — ${PRODUCTS.complete_pack.displayPrice}`,
+            label: `Create Eviction Notice — ${PRODUCTS.notice_only.displayPrice}`,
             href: completePackLink,
           }}
           secondaryCTA={{
-            label: 'Just Need the Notice?',
-            href: noticeOnlyLink,
+            label: 'Need the full court pack instead?',
+            href: '/products/complete-pack',
           }}
           variant="pastel"
         >

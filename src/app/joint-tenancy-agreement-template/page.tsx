@@ -112,7 +112,7 @@ export default function JointTenancyAgreementTemplatePage() {
         <UniversalHero
           title="Joint Tenancy Agreement"
           subtitle="Generate a legally validated joint tenancy agreement with compliance-checked clauses for multiple tenants."
-          primaryCta={{ label: "Start now", href: "/wizard?product=ast_standard&src=seo_joint_tenancy_agreement_template&topic=tenancy&jurisdiction=england" }}
+          primaryCta={{ label: "Start now", href: "/wizard?product=ast_standard&src=seo_joint-tenancy-agreement-template&topic=tenancy&jurisdiction=england" }}
           showTrustPositioningBar
           hideMedia
         />
@@ -143,13 +143,13 @@ export default function JointTenancyAgreementTemplatePage() {
             </p>
             <div className="flex gap-4 justify-center flex-wrap">
               <Link
-                href="/wizard?product=ast_standard&src=seo_joint_tenancy_agreement_template&topic=tenancy&jurisdiction=england"
+                href="/wizard?product=ast_standard&src=seo_joint-tenancy-agreement-template&topic=tenancy&jurisdiction=england"
                 className="inline-flex items-center gap-2 bg-white border-2 border-indigo-600 text-indigo-600 px-6 py-3 rounded-lg font-semibold hover:bg-indigo-50 transition-colors"
               >
                 Standard AST — £14.99
               </Link>
               <Link
-                href="/wizard?product=ast_premium&src=seo_joint_tenancy_agreement_template&topic=tenancy&jurisdiction=england"
+                href="/wizard?product=ast_premium&src=seo_joint-tenancy-agreement-template&topic=tenancy&jurisdiction=england"
                 className="inline-flex items-center gap-2 bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors"
               >
                 Premium AST — £24.99

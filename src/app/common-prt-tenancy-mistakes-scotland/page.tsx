@@ -37,14 +37,14 @@ const PAGE_TYPE = 'tenancy' as const;
 const wizardLinkStandard = buildWizardLink({
   product: 'ast_standard',
   jurisdiction: 'scotland',
-  src: 'guide',
+  src: 'seo_common-prt-tenancy-mistakes-scotland',
   topic: 'tenancy',
 });
 
 const wizardLinkPremium = buildWizardLink({
   product: 'ast_premium',
   jurisdiction: 'scotland',
-  src: 'guide',
+  src: 'seo_common-prt-tenancy-mistakes-scotland',
   topic: 'tenancy',
 });
 
