@@ -3,18 +3,19 @@ import Link from 'next/link';
 import { getCanonicalUrl } from '@/lib/seo/urls';
 import { StructuredData, breadcrumbSchema, articleSchema } from '@/lib/seo/structured-data';
 import {
-  CheckCircle,
   ArrowRight,
   AlertTriangle,
   Shield,
   FileText,
   XCircle,
   MessageSquare,
-  Scale,
 } from 'lucide-react';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
-import { moneyClaimGuides, moneyClaimProcessLinks, productLinks } from '@/lib/seo/internal-links';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
+import { moneyClaimHeroConfig } from '@/components/landing/heroConfigs';
+import { moneyClaimGuides, productLinks } from '@/lib/seo/internal-links';
 
 export const metadata: Metadata = {
   title: 'What If Tenant Defends Money Claim? 2026 | Landlord Guide',
@@ -98,6 +99,22 @@ const faqs = [
 ];
 
 export default function MoneyClaimTenantDefendsPage() {
+  const hero = {
+    ...moneyClaimHeroConfig,
+    trustText: 'Solicitor-grade • Compliance-checked • Court-ready',
+    primaryCta: {
+      label: 'Start Money Claim →',
+      href: '/wizard?product=money_claim&topic=debt&src=seo_money-claim-tenant-defends',
+    },
+    secondaryCta: {
+      label: 'View Money Claim Pack →',
+      href: '/products/money-claim',
+    },
+    title: 'Tenant Defended Your Money Claim?',
+    subtitle:
+      'Respond with a legally validated, solicitor-grade strategy and evidence plan for a stronger hearing position.',
+  };
+
   return (
     <>
       <StructuredData
@@ -119,6 +136,10 @@ export default function MoneyClaimTenantDefendsPage() {
       />
 
       <main className="min-h-screen bg-gray-50">
+        <HeaderConfig mode="autoOnScroll" />
+
+        <UniversalHero {...hero} />
+
         {/* Hero Section */}
         <section className="bg-gradient-to-br from-rose-900 to-rose-800 text-white py-16 lg:py-24">
           <div className="container mx-auto px-4">
@@ -128,9 +149,9 @@ export default function MoneyClaimTenantDefendsPage() {
                 When they fight back
               </div>
 
-              <h1 className="text-4xl lg:text-5xl font-bold mb-6">
+              <h2 className="text-4xl lg:text-5xl font-bold mb-6">
                 What If the Tenant Defends?
-              </h1>
+              </h2>
 
               <p className="text-xl text-rose-100 mb-8 max-w-2xl mx-auto">
                 Your tenant has filed a defence to your money claim. Here&apos;s what to
@@ -139,7 +160,7 @@ export default function MoneyClaimTenantDefendsPage() {
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
-                  href="/wizard?product=money_claim&src=seo_tenant_defends"
+                  href="/wizard?product=money_claim&topic=debt&src=seo_money-claim-tenant-defends"
                   className="inline-flex items-center justify-center gap-2 bg-white text-rose-800 font-semibold py-4 px-8 rounded-xl hover:bg-rose-50 transition-colors"
                 >
                   Start Money Claim
@@ -447,7 +468,7 @@ export default function MoneyClaimTenantDefendsPage() {
                 professionally drafted documents and guidance on evidence gathering.
               </p>
               <Link
-                href="/wizard?product=money_claim&src=seo_tenant_defends"
+                href="/wizard?product=money_claim&topic=debt&src=seo_money-claim-tenant-defends"
                 className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
               >
                 Start Your Claim — £99.99
