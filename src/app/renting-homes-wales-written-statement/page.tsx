@@ -6,6 +6,8 @@ import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { tenancyAgreementWalesLinks } from '@/lib/seo/internal-links';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 
 export const metadata: Metadata = {
   title: 'Renting Homes Wales Written Statement 2026 | Legal Requirements Explained',
@@ -104,7 +106,16 @@ export default function RentingHomesWalesWrittenStatementPage() {
         ])}
       />
 
+      <HeaderConfig mode="autoOnScroll" />
+
       <main className="min-h-screen bg-gradient-to-br from-red-50 via-white to-amber-50">
+        <UniversalHero
+          title="Renting Homes Wales Written Statement"
+          subtitle="Create a legally validated, solicitor-grade written statement that is compliance-checked for Wales."
+          primaryCta={{ label: "Start now", href: "/wizard?product=ast_standard&src=seo_renting_homes_wales_written_statement&topic=tenancy&jurisdiction=wales" }}
+          showTrustPositioningBar
+          hideMedia
+        />
         {/* Breadcrumb Navigation */}
         <div className="container mx-auto px-4 pt-24 pb-4">
           <nav className="text-sm text-gray-600">
@@ -125,9 +136,9 @@ export default function RentingHomesWalesWrittenStatementPage() {
             <span className="inline-flex items-center gap-2 bg-amber-100 text-amber-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
               Legal Requirement Guide
             </span>
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
               Written Statement Requirements for Wales Landlords
-            </h1>
+            </h2>
             <p className="text-xl text-gray-700 mb-8 max-w-3xl mx-auto">
               The <strong>Renting Homes (Wales) Act 2016</strong> requires all landlords to provide a
               <strong> written statement</strong> within 14 days of occupation.
@@ -135,7 +146,7 @@ export default function RentingHomesWalesWrittenStatementPage() {
             </p>
             <div className="flex gap-4 justify-center flex-wrap">
               <Link
-                href="/wizard?product=ast_standard&src=seo_written_statement_wales&topic=tenancy&jurisdiction=wales"
+                href="/wizard?product=ast_standard&src=seo_renting_homes_wales_written_statement&topic=tenancy&jurisdiction=wales"
                 className="inline-flex items-center gap-2 bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors"
               >
                 Get Compliant Written Statement — £14.99

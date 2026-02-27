@@ -34,12 +34,12 @@ const wizardLinkMoneyClaim = buildWizardLink({
 const wizardLinkNoticeOnly = buildWizardLink({
   product: 'notice_only',
   src: 'seo_rent_arrears_letter_template',
-  topic: 'debt',
+  topic: 'eviction',
 });
 
 export const metadata: Metadata = {
-  title: 'Rent Arrears Letter Template UK | Free Download + Examples',
-  description: 'Rent arrears letter template UK landlords can send today. Use staged demand letters, payment deadlines, and escalation steps before MCOL or Section 8 action.',
+  title: 'Rent Arrears Letter UK (Legally Validated) | Landlord Heaven',
+  description: 'Rent arrears letter guidance for UK landlords with legally validated, compliance-checked wording and escalation steps before MCOL or Section 8 action.',
   keywords: [
     'rent arrears letter template',
     'rent demand letter',
@@ -51,8 +51,8 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: 'https://landlordheaven.co.uk/rent-arrears-letter-template' },
   openGraph: {
-    title: 'Rent Arrears Letter Template - Free Download | Landlord Heaven',
-    description: 'Download a free rent arrears letter template. Formal demand letters for unpaid rent.',
+    title: 'Rent Arrears Letter UK (Legally Validated) | Landlord Heaven',
+    description: 'Rent arrears letter guidance with solicitor-grade wording and escalation steps for unpaid rent.',
     type: 'website',
     url: 'https://landlordheaven.co.uk/rent-arrears-letter-template',
   },

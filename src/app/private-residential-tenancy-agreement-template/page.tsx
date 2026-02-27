@@ -6,10 +6,12 @@ import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { tenancyAgreementScotlandLinks } from '@/lib/seo/internal-links';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 
 export const metadata: Metadata = {
-  title: 'Private Residential Tenancy Agreement Template Scotland 2026 | PRT Download',
-  description: 'Download a Private Residential Tenancy (PRT) agreement for Scotland. Private Housing (Tenancies) Act 2016 compliant. From £14.99.',
+  title: 'Private Residential Tenancy Agreement 2026 | Legally Validated PRT',
+  description: 'Create a Scotland Private Residential Tenancy agreement with solicitor-grade drafting and compliance checks under the 2016 Act.',
   keywords: [
     'private residential tenancy agreement template',
     'PRT agreement Scotland',
@@ -26,8 +28,8 @@ export const metadata: Metadata = {
     canonical: getCanonicalUrl('/private-residential-tenancy-agreement-template'),
   },
   openGraph: {
-    title: 'Private Residential Tenancy Agreement Template Scotland 2026 | PRT Download',
-    description: 'Download a PRT agreement for Scotland. Private Housing (Tenancies) Act 2016 compliant. From £14.99.',
+    title: 'Private Residential Tenancy Agreement 2026 | Legally Validated PRT',
+    description: 'Legally validated Scotland PRT agreement with compliance-checked clauses under the 2016 Act.',
     type: 'article',
     url: getCanonicalUrl('/private-residential-tenancy-agreement-template'),
   },
@@ -96,7 +98,16 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
         ])}
       />
 
+      <HeaderConfig mode="autoOnScroll" />
+
       <main className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
+        <UniversalHero
+          title="Private Residential Tenancy Agreement (Scotland)"
+          subtitle="Create a legally validated, solicitor-grade PRT agreement that is compliance-checked for Scotland."
+          primaryCta={{ label: "Start now", href: "/wizard?product=ast_standard&src=seo_private_residential_tenancy_agreement_template&topic=tenancy&jurisdiction=scotland" }}
+          showTrustPositioningBar
+          hideMedia
+        />
         {/* Breadcrumb Navigation */}
         <div className="container mx-auto px-4 pt-24 pb-4">
           <nav className="text-sm text-gray-600">
@@ -117,9 +128,9 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
             <span className="inline-flex items-center gap-2 bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
               Private Housing (Tenancies) Act 2016
             </span>
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
               Private Residential Tenancy Agreement Template
-            </h1>
+            </h2>
             <p className="text-xl text-gray-700 mb-8 max-w-3xl mx-auto">
               Create a <strong>legally compliant PRT</strong> for your Scottish property.
               Our template meets all requirements of the Private Housing (Tenancies) (Scotland) Act 2016,
@@ -127,13 +138,13 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
             </p>
             <div className="flex gap-4 justify-center flex-wrap">
               <Link
-                href="/wizard?product=ast_standard&src=seo_prt_template&topic=tenancy&jurisdiction=scotland"
+                href="/wizard?product=ast_standard&src=seo_private_residential_tenancy_agreement_template&topic=tenancy&jurisdiction=scotland"
                 className="inline-flex items-center gap-2 bg-white border-2 border-blue-600 text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors"
               >
                 Standard PRT — £14.99
               </Link>
               <Link
-                href="/wizard?product=ast_premium&src=seo_prt_template&topic=tenancy&jurisdiction=scotland"
+                href="/wizard?product=ast_premium&src=seo_private_residential_tenancy_agreement_template&topic=tenancy&jurisdiction=scotland"
                 className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
               >
                 Premium PRT — £24.99

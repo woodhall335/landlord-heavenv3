@@ -19,6 +19,8 @@ import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { tenancyAgreementNILinks } from '@/lib/seo/internal-links';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { northernIrelandFAQs } from '@/data/faqs';
 
 export const metadata: Metadata = {
@@ -68,7 +70,16 @@ export default function NoticeToQuitNIGuidePage() {
         ])}
       />
 
+      <HeaderConfig mode="autoOnScroll" />
+
       <main className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+        <UniversalHero
+          title="Notice to Quit (Northern Ireland)"
+          subtitle="Follow a legally validated, solicitor-grade and compliance-checked route for serving a Northern Ireland Notice to Quit."
+          primaryCta={{ label: "Start now", href: "/wizard?product=notice_only&src=seo_notice_to_quit_northern_ireland_guide&topic=eviction&jurisdiction=northern-ireland" }}
+          showTrustPositioningBar
+          hideMedia
+        />
         {/* Breadcrumb */}
         <nav className="bg-white border-b border-slate-200">
           <div className="max-w-4xl mx-auto px-4 py-3">
@@ -91,16 +102,16 @@ export default function NoticeToQuitNIGuidePage() {
               <RiFileWarningLine className="w-5 h-5" />
               <span className="text-sm font-medium">Private Tenancies Act 2022 Requirements</span>
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
               Notice to Quit Northern Ireland: Complete Guide 2026
-            </h1>
+            </h2>
             <p className="text-xl text-red-100 mb-8 max-w-2xl">
               Master the Notice to Quit process in Northern Ireland. Learn about notice periods, valid grounds,
               correct service methods, and the common mistakes that invalidate eviction notices.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
-                href="/wizard?product=notice_only&src=seo_ni_ntq_guide&topic=eviction&jurisdiction=northern-ireland"
+                href="/wizard?product=notice_only&src=seo_notice_to_quit_northern_ireland_guide&topic=eviction&jurisdiction=northern-ireland"
                 className="inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold px-8 py-4 rounded-lg transition-colors"
               >
                 <RiFileTextLine className="w-5 h-5" />
@@ -194,7 +205,7 @@ export default function NoticeToQuitNIGuidePage() {
                 Create one now before attempting any eviction action.
               </p>
               <Link
-                href="/wizard?product=ast_standard&src=seo_ni_ntq_guide_prereq&topic=tenancy&jurisdiction=northern-ireland"
+                href="/wizard?product=ast_standard&src=seo_notice_to_quit_northern_ireland_guide&topic=tenancy&jurisdiction=northern-ireland"
                 className="inline-flex items-center gap-2 text-emerald-700 font-medium hover:text-emerald-800"
               >
                 Create Tenancy Agreement First <RiArrowRightLine className="w-4 h-4" />
@@ -431,7 +442,7 @@ export default function NoticeToQuitNIGuidePage() {
               Our wizard ensures all prescribed terms are included for Northern Ireland.
             </p>
             <Link
-              href="/wizard?product=ast_standard&src=seo_ni_ntq_guide_final&topic=tenancy&jurisdiction=northern-ireland"
+              href="/wizard?product=ast_standard&src=seo_notice_to_quit_northern_ireland_guide&topic=tenancy&jurisdiction=northern-ireland"
               className="inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold px-8 py-4 rounded-lg transition-colors"
             >
               <RiDownloadLine className="w-5 h-5" />

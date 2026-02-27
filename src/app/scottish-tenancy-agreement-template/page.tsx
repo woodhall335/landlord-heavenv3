@@ -6,10 +6,12 @@ import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { tenancyAgreementScotlandLinks } from '@/lib/seo/internal-links';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 
 export const metadata: Metadata = {
-  title: 'Scottish Tenancy Agreement Template 2026 | PRT Download for Landlords',
-  description: 'Download a Scottish tenancy agreement template. Private Residential Tenancy (PRT) with landlord registration requirements. From £14.99.',
+  title: 'Scottish Tenancy Agreement 2026 | Legally Validated PRT',
+  description: 'Create a Scottish tenancy agreement (PRT) with solicitor-grade drafting and compliance checks for landlord requirements.',
   keywords: [
     'Scottish tenancy agreement template',
     'Scotland tenancy agreement',
@@ -26,8 +28,8 @@ export const metadata: Metadata = {
     canonical: getCanonicalUrl('/scottish-tenancy-agreement-template'),
   },
   openGraph: {
-    title: 'Scottish Tenancy Agreement Template 2026 | PRT Download for Landlords',
-    description: 'Download a Scottish tenancy agreement (PRT). Private Housing (Tenancies) Act 2016 compliant. From £14.99.',
+    title: 'Scottish Tenancy Agreement 2026 | Legally Validated PRT',
+    description: 'Legally validated Scottish tenancy agreement (PRT) with compliance-checked clauses.',
     type: 'article',
     url: getCanonicalUrl('/scottish-tenancy-agreement-template'),
   },
@@ -104,7 +106,16 @@ export default function ScottishTenancyAgreementTemplatePage() {
         ])}
       />
 
+      <HeaderConfig mode="autoOnScroll" />
+
       <main className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+        <UniversalHero
+          title="Scottish Tenancy Agreement"
+          subtitle="Generate a legally validated Scottish tenancy agreement with solicitor-grade, compliance-checked PRT terms."
+          primaryCta={{ label: "Start now", href: "/wizard?product=ast_standard&src=seo_scottish_tenancy_agreement_template&topic=tenancy&jurisdiction=scotland" }}
+          showTrustPositioningBar
+          hideMedia
+        />
         {/* Breadcrumb */}
         <div className="container mx-auto px-4 pt-24 pb-4">
           <nav className="text-sm text-gray-600">
@@ -125,9 +136,9 @@ export default function ScottishTenancyAgreementTemplatePage() {
             <span className="inline-flex items-center gap-2 bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
               Aontachadh Màl na h-Alba
             </span>
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
               Scottish Tenancy Agreement Template
-            </h1>
+            </h2>
             <p className="text-xl text-gray-700 mb-8 max-w-3xl mx-auto">
               Looking for a <strong>tenancy agreement for Scotland</strong>? Our Scottish tenancy template
               generates a fully compliant <strong>Private Residential Tenancy (PRT)</strong> — the only
@@ -135,13 +146,13 @@ export default function ScottishTenancyAgreementTemplatePage() {
             </p>
             <div className="flex gap-4 justify-center flex-wrap">
               <Link
-                href="/wizard?product=ast_standard&src=seo_scottish_tenancy&topic=tenancy&jurisdiction=scotland"
+                href="/wizard?product=ast_standard&src=seo_scottish_tenancy_agreement_template&topic=tenancy&jurisdiction=scotland"
                 className="inline-flex items-center gap-2 bg-white border-2 border-blue-600 text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors"
               >
                 Standard PRT — £14.99
               </Link>
               <Link
-                href="/wizard?product=ast_premium&src=seo_scottish_tenancy&topic=tenancy&jurisdiction=scotland"
+                href="/wizard?product=ast_premium&src=seo_scottish_tenancy_agreement_template&topic=tenancy&jurisdiction=scotland"
                 className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
               >
                 Premium PRT — £24.99

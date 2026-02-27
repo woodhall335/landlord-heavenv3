@@ -42,21 +42,21 @@ import {
 const completePackLink = buildWizardLink({
   product: 'complete_pack',
   jurisdiction: 'england',
-  src: 'seo_eviction',
+  src: 'seo_section_8_rent_arrears_eviction',
   topic: 'eviction',
 });
 
 const noticeOnlyLink = buildWizardLink({
   product: 'notice_only',
   jurisdiction: 'england',
-  src: 'seo_eviction',
+  src: 'seo_section_8_rent_arrears_eviction',
   topic: 'eviction',
 });
 
 const moneyClaimLink = buildWizardLink({
   product: 'money_claim',
   jurisdiction: 'england',
-  src: 'seo_money_claim',
+  src: 'seo_section_8_rent_arrears_eviction',
   topic: 'debt',
 });
 

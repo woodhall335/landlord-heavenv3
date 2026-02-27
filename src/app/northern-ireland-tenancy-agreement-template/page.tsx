@@ -18,10 +18,12 @@ import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { tenancyAgreementNILinks } from '@/lib/seo/internal-links';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 
 export const metadata: Metadata = {
-  title: 'Northern Ireland Tenancy Agreement Template | NI Compliant 2026',
-  description: 'Northern Ireland tenancy agreement template updated for Private Tenancies Act (NI) 2022 rules. Create compliant tenancy terms and prescribed information quickly.',
+  title: 'Northern Ireland Tenancy Agreement 2026 | Legally Validated',
+  description: 'Generate a Northern Ireland tenancy agreement with solicitor-grade terms and compliance checks for private tenancies.',
   keywords: [
     'Northern Ireland tenancy agreement template',
     'NI tenancy agreement',
@@ -38,8 +40,8 @@ export const metadata: Metadata = {
     canonical: getCanonicalUrl('/northern-ireland-tenancy-agreement-template'),
   },
   openGraph: {
-    title: 'Northern Ireland Tenancy Agreement Template | NI Compliant 2026',
-    description: 'Create a legally compliant NI tenancy agreement. Private Tenancies Act (NI) 2022 compliant. From £14.99.',
+    title: 'Northern Ireland Tenancy Agreement 2026 | Legally Validated',
+    description: 'Legally validated Northern Ireland tenancy agreement with compliance-checked clauses.',
     type: 'article',
     url: getCanonicalUrl('/northern-ireland-tenancy-agreement-template'),
   },
@@ -124,7 +126,16 @@ export default function NorthernIrelandTenancyAgreementTemplatePage() {
         ])}
       />
 
+      <HeaderConfig mode="autoOnScroll" />
+
       <main className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+        <UniversalHero
+          title="Northern Ireland Tenancy Agreement"
+          subtitle="Generate a legally validated tenancy agreement for Northern Ireland that is compliance-checked and court-ready."
+          primaryCta={{ label: "Start now", href: "/wizard?product=ast_standard&src=seo_northern_ireland_tenancy_agreement_template&topic=tenancy&jurisdiction=northern-ireland" }}
+          showTrustPositioningBar
+          hideMedia
+        />
         {/* Breadcrumb */}
         <nav className="bg-white border-b border-slate-200">
           <div className="max-w-4xl mx-auto px-4 py-3">
@@ -145,15 +156,15 @@ export default function NorthernIrelandTenancyAgreementTemplatePage() {
               <RiShieldCheckLine className="w-5 h-5" />
               <span className="text-sm font-medium">Private Tenancies Act 2022 Compliant</span>
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
               Northern Ireland Tenancy Agreement Template (NI)
-            </h1>
+            </h2>
             <p className="text-xl text-emerald-100 mb-8 max-w-2xl">
               Need a Northern Ireland tenancy agreement template that meets current law? Build a compliant NI agreement with the prescribed terms required by the Private Tenancies Act (NI) 2022, including rent, deposit, and notice clauses.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
-                href="/wizard?product=ast_standard&src=seo_ni_tenancy_template&topic=tenancy&jurisdiction=northern-ireland"
+                href="/wizard?product=ast_standard&src=seo_northern_ireland_tenancy_agreement_template&topic=tenancy&jurisdiction=northern-ireland"
                 className="inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold px-8 py-4 rounded-lg transition-colors"
               >
                 <RiFileTextLine className="w-5 h-5" />
@@ -662,7 +673,7 @@ export default function NorthernIrelandTenancyAgreementTemplatePage() {
               Get a fully compliant Private Tenancy Agreement in under 5 minutes.
             </p>
             <Link
-              href="/wizard?product=ast_standard&src=seo_ni_tenancy_template&topic=tenancy&jurisdiction=northern-ireland"
+              href="/wizard?product=ast_standard&src=seo_northern_ireland_tenancy_agreement_template&topic=tenancy&jurisdiction=northern-ireland"
               className="inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold px-8 py-4 rounded-lg transition-colors"
             >
               <RiDownloadLine className="w-5 h-5" />
