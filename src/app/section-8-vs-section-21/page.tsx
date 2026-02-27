@@ -59,7 +59,7 @@ const completePackLink = buildWizardLink({
 export const metadata: Metadata = {
   title: 'Section 8 vs Section 21 | Which Eviction Notice to Use | Landlord Heaven',
   description:
-    'Section 8 vs Section 21: which eviction notice should you use? Compare notice periods, court process, grounds, and costs. Get court-ready notices from £49.99.',
+    'Section 8 vs Section 21: which eviction notice should you use? Compare notice periods, court process, grounds, and costs. Get court-ready notices from £34.99.',
   keywords: [
     'section 8 vs section 21',
     'should i use section 8 or section 21',

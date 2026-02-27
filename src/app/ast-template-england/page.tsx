@@ -357,12 +357,12 @@ export default function AstTemplateEnglandPage() {
               <Link href="/products/notice-only" className="bg-orange-50 p-5 rounded-lg hover:shadow-md transition-shadow">
                 <h3 className="font-semibold text-gray-900 mb-1">Eviction Notices</h3>
                 <p className="text-sm text-gray-600 mb-2">Section 21 & Section 8 notices when you need to regain possession.</p>
-                <span className="text-orange-600 font-medium">From £49.99</span>
+                <span className="text-orange-600 font-medium">From £34.99</span>
               </Link>
               <Link href="/products/money-claim" className="bg-green-50 p-5 rounded-lg hover:shadow-md transition-shadow">
                 <h3 className="font-semibold text-gray-900 mb-1">Money Claims</h3>
                 <p className="text-sm text-gray-600 mb-2">Recover rent arrears and property damage through the courts.</p>
-                <span className="text-green-600 font-medium">From £99.99</span>
+                <span className="text-green-600 font-medium">From £44.99</span>
               </Link>
               <Link href="/ask-heaven" className="bg-blue-50 p-5 rounded-lg hover:shadow-md transition-shadow">
                 <h3 className="font-semibold text-gray-900 mb-1">Ask Heaven</h3>

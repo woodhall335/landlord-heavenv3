@@ -304,7 +304,7 @@ async function addTableOfContents(
   });
   yPos -= 20;
 
-  tocPage.drawText('Complete purchase (£49.99) to download full unredacted documents.', {
+  tocPage.drawText('Complete purchase (£34.99) to download full unredacted documents.', {
     x: 50,
     y: yPos,
     size: 11,

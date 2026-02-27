@@ -520,13 +520,13 @@ export const blogPosts: BlogPost[] = [
               href="/products/notice-only"
               className="inline-flex items-center bg-primary hover:bg-primary/90 text-white font-medium py-3 px-6 rounded-lg transition-colors"
             >
-              Get Section 21 Notice — £49.99
+              Get Section 21 Notice — £34.99
             </Link>
             <Link
               href="/products/complete-pack"
               className="inline-flex items-center bg-gray-100 hover:bg-gray-200 text-gray-900 font-medium py-3 px-6 rounded-lg transition-colors"
             >
-              Complete Eviction Pack — £149.99
+              Complete Eviction Pack — £59.99
             </Link>
           </div>
         </div>
@@ -608,9 +608,9 @@ export const blogPosts: BlogPost[] = [
 
         <ul>
           <li><Link href="/products/notice-only" className="text-primary hover:underline">
-            Generate Court-Ready Section 21 Notice — £49.99</Link></li>
+            Generate Court-Ready Section 21 Notice — £34.99</Link></li>
           <li><Link href="/products/complete-pack" className="text-primary hover:underline">
-            Complete Eviction Pack (notices + court forms) — £149.99</Link></li>
+            Complete Eviction Pack (notices + court forms) — £59.99</Link></li>
           <li><Link href="/blog/what-is-section-21-notice" className="text-primary hover:underline">
             Complete Section 21 Guide</Link></li>
           <li><Link href="/blog/section-21-vs-section-8" className="text-primary hover:underline">
@@ -908,7 +908,7 @@ export const blogPosts: BlogPost[] = [
           <li><Link href="/tools/free-section-21-notice-generator" className="text-primary hover:underline">
             Free Section 21 Generator</Link> — Preview version (not court-ready)</li>
           <li><Link href="/products/notice-only" className="text-primary hover:underline">
-            Court-Ready Section 21 Notice</Link> — Official Form 6A, £49.99</li>
+            Court-Ready Section 21 Notice</Link> — Official Form 6A, £34.99</li>
         </ul>
 
         <h3>Option 2: Download from Gov.uk</h3>
@@ -1615,7 +1615,7 @@ export const blogPosts: BlogPost[] = [
 
         <ul>
           <li><Link href="/products/notice-only" className="text-primary hover:underline">
-            Get Court-Ready Eviction Notice — £49.99</Link></li>
+            Get Court-Ready Eviction Notice — £34.99</Link></li>
           <li><Link href="/blog/what-is-section-21-notice" className="text-primary hover:underline">
             Complete Section 21 Guide</Link></li>
           <li><Link href="/blog/how-long-does-eviction-take-uk" className="text-primary hover:underline">
@@ -2292,7 +2292,7 @@ export const blogPosts: BlogPost[] = [
           <li><Link href="/tools/free-rent-demand-letter" className="text-primary hover:underline">
             Free Rent Demand Letter Generator</Link></li>
           <li><Link href="/products/notice-only" className="text-primary hover:underline">
-            Generate Section 8 Notice — £49.99</Link></li>
+            Generate Section 8 Notice — £34.99</Link></li>
           <li><Link href="/products/money-claim" className="text-primary hover:underline">
             Money Claim Document Pack</Link></li>
         </ul>
@@ -7778,13 +7778,13 @@ export const blogPosts: BlogPost[] = [
               href="/products/notice-only"
               className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
             >
-              Get Section 8 Notice — £49.99
+              Get Section 8 Notice — £34.99
             </Link>
             <Link
               href="/products/complete-pack"
               className="inline-flex items-center bg-gray-100 hover:bg-gray-200 text-gray-900 font-medium py-3 px-6 rounded-lg transition-colors"
             >
-              Complete Eviction Pack — £149.99
+              Complete Eviction Pack — £59.99
             </Link>
           </div>
         </div>
@@ -8193,7 +8193,7 @@ export const blogPosts: BlogPost[] = [
             href="/products/complete-pack"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
-            Get Complete Eviction Pack — £149.99
+            Get Complete Eviction Pack — £59.99
           </Link>
         </div>
       </>
@@ -8581,7 +8581,7 @@ export const blogPosts: BlogPost[] = [
             href="/products/complete-pack"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
-            Get Complete Eviction Pack — £149.99
+            Get Complete Eviction Pack — £59.99
           </Link>
         </div>
       </>
@@ -9011,7 +9011,7 @@ export const blogPosts: BlogPost[] = [
             href="/products/complete-pack"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
-            Get Complete Eviction Pack — £149.99
+            Get Complete Eviction Pack — £59.99
           </Link>
         </div>
       </>
@@ -37785,7 +37785,7 @@ export const blogPosts: BlogPost[] = [
             href="/wizard?product=money_claim&src=blog_lba"
             className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors"
           >
-            Start Your Money Claim — £99.99
+            Start Your Money Claim — £44.99
           </Link>
         </div>
 
@@ -38017,7 +38017,7 @@ export const blogPosts: BlogPost[] = [
             href="/wizard?product=money_claim&src=blog_ccj"
             className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors"
           >
-            Start Your Claim — £99.99
+            Start Your Claim — £44.99
           </Link>
         </div>
 
@@ -38228,7 +38228,7 @@ export const blogPosts: BlogPost[] = [
             href="/wizard?product=money_claim&src=blog_interest"
             className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors"
           >
-            Start Your Claim — £99.99
+            Start Your Claim — £44.99
           </Link>
         </div>
 
@@ -38433,7 +38433,7 @@ export const blogPosts: BlogPost[] = [
             href="/wizard?product=money_claim&src=blog_mcol_timeline"
             className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors"
           >
-            Start Your Claim — £99.99
+            Start Your Claim — £44.99
           </Link>
         </div>
 
@@ -38649,7 +38649,7 @@ export const blogPosts: BlogPost[] = [
             href="/wizard?product=money_claim&reason=guarantor&src=blog_guarantor"
             className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors"
           >
-            Start Guarantor Claim — £99.99
+            Start Guarantor Claim — £44.99
           </Link>
         </div>
 
@@ -38863,7 +38863,7 @@ export const blogPosts: BlogPost[] = [
             href="/wizard?product=money_claim&reason=cleaning&src=blog_cleaning"
             className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors"
           >
-            Start Your Claim — £99.99
+            Start Your Claim — £44.99
           </Link>
         </div>
 
@@ -39092,7 +39092,7 @@ export const blogPosts: BlogPost[] = [
             href="/wizard?product=money_claim&reason=damage&src=blog_wear_tear"
             className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors"
           >
-            Start Your Claim — £99.99
+            Start Your Claim — £44.99
           </Link>
         </div>
 
@@ -39275,7 +39275,7 @@ export const blogPosts: BlogPost[] = [
             href="/wizard?product=money_claim&src=blog_payment_plan"
             className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors"
           >
-            Start Court Claim — £99.99
+            Start Court Claim — £44.99
           </Link>
         </div>
 
@@ -39500,7 +39500,7 @@ export const blogPosts: BlogPost[] = [
             href="/wizard?product=money_claim&src=blog_small_claims"
             className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors"
           >
-            Start Your Claim — £99.99
+            Start Your Claim — £44.99
           </Link>
         </div>
 
@@ -39735,7 +39735,7 @@ export const blogPosts: BlogPost[] = [
             href="/wizard?product=money_claim&src=blog_wont_pay"
             className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors"
           >
-            Start Your Claim — £99.99
+            Start Your Claim — £44.99
           </Link>
         </div>
 

@@ -57,7 +57,7 @@ const noticeOnlyLink = buildWizardLink({
 export const metadata: Metadata = {
   title: 'Eviction Process Scotland | Notice to Leave & Tribunal | Landlord Heaven',
   description:
-    'Complete guide to evicting a tenant in Scotland. Notice to Leave, 18 eviction grounds, First-tier Tribunal process. Get court-ready documents from £49.99.',
+    'Complete guide to evicting a tenant in Scotland. Notice to Leave, 18 eviction grounds, First-tier Tribunal process. Get court-ready documents from £34.99.',
   keywords: [
     'eviction process scotland landlord',
     'eviction tribunal scotland',

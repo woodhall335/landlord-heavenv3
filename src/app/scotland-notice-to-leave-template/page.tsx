@@ -88,7 +88,7 @@ export default function ScotlandNoticeToLeaveTemplatePage() {
         'Court-ready Notice to Leave for Scottish landlords under the PRT framework',
       offers: {
         '@type': 'Offer',
-        price: '49.99',
+        price: '34.99',
         priceCurrency: 'GBP',
       },
     },
@@ -130,7 +130,7 @@ export default function ScotlandNoticeToLeaveTemplatePage() {
               Housing (Tenancies) Act 2016. All 18 eviction grounds with correct notice periods.
             </>
           }
-          primaryCTA={{ label: 'Get Scotland Notice — £49.99', href: wizardLink }}
+          primaryCTA={{ label: 'Get Scotland Notice — £34.99', href: wizardLink }}
           secondaryCTA={{
             label: 'Learn About Scotland Eviction',
             href: '/scotland-eviction-notices',
@@ -385,7 +385,7 @@ export default function ScotlandNoticeToLeaveTemplatePage() {
                   href={wizardLink}
                   className="bg-white text-blue-700 font-semibold py-3 px-6 rounded-lg hover:bg-blue-50 transition-colors inline-flex items-center justify-center gap-2"
                 >
-                  Get Scotland Notice — £49.99
+                  Get Scotland Notice — £34.99
                   <ArrowRight className="w-5 h-5" />
                 </Link>
                 <Link

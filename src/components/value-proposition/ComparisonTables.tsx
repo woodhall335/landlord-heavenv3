@@ -31,7 +31,7 @@ interface ComparisonRow {
 
 export function VsSolicitorComparison({ product = 'notice_only' }: ComparisonTableProps) {
   const productConfig = PRODUCTS[product];
-  const price = productConfig?.displayPrice || '£49.99';
+  const price = productConfig?.displayPrice || '£34.99';
 
   const rows: ComparisonRow[] = [
     {
@@ -136,7 +136,7 @@ export function VsSolicitorComparison({ product = 'notice_only' }: ComparisonTab
 
 export function VsFreeTemplateComparison({ product = 'notice_only' }: ComparisonTableProps) {
   const productConfig = PRODUCTS[product];
-  const price = productConfig?.displayPrice || '£49.99';
+  const price = productConfig?.displayPrice || '£34.99';
 
   const rows: ComparisonRow[] = [
     {

@@ -28,7 +28,7 @@ export function AskHeavenNextStepsCards({ jurisdiction = 'england', className }:
   const cards: CardDefinition[] = [
     {
       title: 'Notice Only Pack',
-      price: '£49.99',
+      price: '£34.99',
       description:
         'Best if you need to serve or check an eviction notice (Section 21, Section 8, Section 173, or Notice to Leave).',
       ctaText: 'Generate a compliant notice',
@@ -38,7 +38,7 @@ export function AskHeavenNextStepsCards({ jurisdiction = 'england', className }:
     },
     {
       title: 'Complete Eviction Pack',
-      price: '£129.99',
+      price: '£59.99',
       detail: '(England)',
       description: "Best if you're going to court and want a full, court-ready eviction bundle.",
       ctaText: 'Prepare your eviction case',
@@ -48,7 +48,7 @@ export function AskHeavenNextStepsCards({ jurisdiction = 'england', className }:
     },
     {
       title: 'Money Claims Pack',
-      price: '£99.99',
+      price: '£44.99',
       description: 'Best for claiming back rent arrears, damage costs, or unpaid invoices.',
       ctaText: 'Prepare a money claim',
       href: productLinks.moneyClaim.href,

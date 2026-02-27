@@ -104,7 +104,7 @@ export function CostComparison() {
                   Landlord Heaven
                 </div>
                 <div className="text-4xl md:text-5xl font-bold text-gray-900">
-                  £49.99
+                  £34.99
                 </div>
                 <div className="text-gray-500 mt-1">for eviction notices</div>
               </div>
@@ -142,14 +142,14 @@ export function CostComparison() {
           <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4">
             <PriceAnchor
               product="Generate jurisdiction-specific eviction case files"
-              ourPrice="£49.99"
+              ourPrice="£34.99"
               solicitorPrice="£200-300"
               savings="£150+"
               href="/products/notice-only"
             />
             <PriceAnchor
               product="Complete Eviction Packs Including Court Docs"
-              ourPrice="£129.99"
+              ourPrice="£59.99"
               solicitorPrice="£1,500-2,500"
               savings="£1,300+"
               href="/products/complete-pack"
@@ -158,7 +158,7 @@ export function CostComparison() {
             />
             <PriceAnchor
               product="Claim Unpaid Rent and Damages"
-              ourPrice="£99.99"
+              ourPrice="£44.99"
               solicitorPrice="£800-1200"
               savings="£650+"
               href="/products/money-claim"

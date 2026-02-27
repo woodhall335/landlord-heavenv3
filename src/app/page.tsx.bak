@@ -112,13 +112,13 @@ export default function Home() {
           {
             title: "Complete Eviction Pack",
             description: "Full eviction bundle from notice to possession order—court forms, guidance, and evidence checklists.",
-            badge: "£149.99",
+            badge: "£59.99",
             icon: "⚖️",
           },
           {
             title: "Money Claims",
             description: "Rent arrears claims with evidence checklists, POC templates, and guidance notes.",
-            badge: "£129.99",
+            badge: "£59.99",
             icon: "💷",
           },
           {

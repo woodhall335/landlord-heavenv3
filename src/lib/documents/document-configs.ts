@@ -654,7 +654,7 @@ export function getProductMeta(product: string): ProductMeta {
   const products: Record<string, ProductMeta> = {
     'notice_only': {
       name: 'Notice Only Pack',
-      price: '£49.99',
+      price: '£34.99',
       originalPrice: '£150+',
       savings: 'Save £100+ vs solicitors',
       features: [
@@ -667,7 +667,7 @@ export function getProductMeta(product: string): ProductMeta {
     },
     'complete_pack': {
       name: 'Complete Eviction Pack',
-      price: '£129.99',
+      price: '£59.99',
       originalPrice: '£2,500+',
       savings: 'Save £2,300+ vs solicitors',
       features: [
@@ -681,7 +681,7 @@ export function getProductMeta(product: string): ProductMeta {
     },
     'money_claim': {
       name: 'Money Claim Pack',
-      price: '£99.99',
+      price: '£44.99',
       originalPrice: '£3,000+',
       savings: 'Save £2,900+ vs solicitors',
       features: [
@@ -697,7 +697,7 @@ export function getProductMeta(product: string): ProductMeta {
     },
     'sc_money_claim': {
       name: 'Simple Procedure Pack',
-      price: '£99.99',
+      price: '£44.99',
       originalPrice: '£3,000+',
       savings: 'Save £2,850+ vs solicitors',
       features: [

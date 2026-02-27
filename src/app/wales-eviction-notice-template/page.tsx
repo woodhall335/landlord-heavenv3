@@ -96,7 +96,7 @@ export default function WalesEvictionNoticeTemplatePage() {
       description: 'Court-ready Wales eviction notices for landlords under the Renting Homes Act',
       offers: {
         '@type': 'Offer',
-        price: '49.99',
+        price: '34.99',
         priceCurrency: 'GBP',
       },
     },
@@ -139,7 +139,7 @@ export default function WalesEvictionNoticeTemplatePage() {
               landlords.
             </>
           }
-          primaryCTA={{ label: 'Get Wales Notice — £49.99', href: wizardLink }}
+          primaryCTA={{ label: 'Get Wales Notice — £34.99', href: wizardLink }}
           secondaryCTA={{ label: 'Learn About Wales Eviction', href: '/wales-eviction-notices' }}
           variant="pastel"
         >
@@ -395,7 +395,7 @@ export default function WalesEvictionNoticeTemplatePage() {
                   href={wizardLink}
                   className="bg-white text-red-700 font-semibold py-3 px-6 rounded-lg hover:bg-red-50 transition-colors inline-flex items-center justify-center gap-2"
                 >
-                  Get Wales Notice — £49.99
+                  Get Wales Notice — £34.99
                   <ArrowRight className="w-5 h-5" />
                 </Link>
                 <Link

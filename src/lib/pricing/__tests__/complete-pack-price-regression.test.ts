@@ -26,9 +26,9 @@ function walkFiles(dirPath: string, out: string[] = []): string[] {
 }
 
 describe('Complete Pack temporary price regression checks', () => {
-  it('keeps all central complete_pack price sources aligned at 129.99', () => {
-    expect(SEO_PRICES.evictionBundle.amount).toBe(129.99);
-    expect(SEO_PRICES.evictionBundle.display).toBe('£129.99');
+  it('keeps all central complete_pack price sources aligned at 59.99', () => {
+    expect(SEO_PRICES.evictionBundle.amount).toBe(59.99);
+    expect(SEO_PRICES.evictionBundle.display).toBe('£59.99');
     expect(PRODUCTS.complete_pack.price).toBe(SEO_PRICES.evictionBundle.amount);
     expect(PRODUCTS.complete_pack.displayPrice).toBe(SEO_PRICES.evictionBundle.display);
     expect(PRICING.COMPLETE_EVICTION_PACK).toBe(SEO_PRICES.evictionBundle.amount);
