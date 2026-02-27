@@ -146,7 +146,7 @@ export default function HomeContent() {
             </div>
 
             <div className="mt-14 text-center">
-              <Link href={primaryPaths[0].href} className="hero-btn-primary">
+              <Link href="/wizard?product" className="hero-btn-primary">
                 Start Eviction Workflow →
               </Link>
               <p className="mt-4 text-sm text-gray-500">
@@ -470,7 +470,7 @@ export default function HomeContent() {
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-8">
-              <Link href={primaryPaths[0].href} className="hero-btn-primary">
+              <Link href="/wizard?product" className="hero-btn-primary">
                 Start Eviction Workflow →
               </Link>
             </div>
