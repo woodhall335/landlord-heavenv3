@@ -5,9 +5,19 @@ import { getCanonicalUrl } from '@/lib/seo';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { mcolFAQs } from '@/data/faqs';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
+import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
+
+const moneyClaimWizardLink = buildWizardLink({
+  product: 'money_claim',
+  jurisdiction: 'england',
+  src: 'seo_mcol-money-claim-online',
+  topic: 'debt',
+});
 
 export const metadata: Metadata = {
-  title: 'MCOL Money Claim Online | How to Claim Rent Arrears 2026',
+  title: 'MCOL Money Claim Online | Solicitor-Style Landlord Guide',
   description:
     'Guide to MCOL (Money Claim Online) for UK landlords. Recover rent arrears through the county court. Step-by-step process.',
   keywords: [
@@ -20,7 +30,7 @@ export const metadata: Metadata = {
     'small claims court landlord',
   ],
   openGraph: {
-    title: 'MCOL Money Claim Online | Landlord Heaven',
+    title: 'MCOL Money Claim Online | Solicitor-Style Landlord Guide',
     description:
       'How to use Money Claim Online (MCOL) to recover rent arrears from a tenant.',
     type: 'article',
@@ -39,34 +49,18 @@ const breadcrumbs = [
 export default function MCOLPage() {
   return (
     <>
+      <HeaderConfig mode="autoOnScroll" />
       <StructuredData data={breadcrumbSchema(breadcrumbs)} />
 
       <div className="min-h-screen bg-gray-50">
-        {/* Hero Section */}
-        <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-20">
-          <Container>
-            <div className="max-w-3xl mx-auto text-center">
-              <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-                <span className="text-sm font-semibold text-primary">Debt Recovery</span>
-              </div>
-              <h1 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
-                MCOL: Money Claim Online for Landlords
-              </h1>
-              <p className="text-xl text-gray-600 mb-8">
-                MCOL (Money Claim Online) is the government system for claiming debts through the
-                county court. Use it to recover rent arrears, damages, or unpaid bills from tenants.
-              </p>
-              <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Link href="/products/money-claim" className="hero-btn-primary">
-                  Get Money Claim Pack
-                </Link>
-                <Link href="/tools/rent-arrears-calculator" className="hero-btn-secondary">
-                  Calculate Arrears
-                </Link>
-              </div>
-            </div>
-          </Container>
-        </section>
+        <UniversalHero
+          badge="Debt Recovery"
+          title="MCOL: Money Claim Online for Landlords"
+          subtitle="MCOL (Money Claim Online) is the government system for claiming debts through the county court. Use it to recover rent arrears, damages, or unpaid bills from tenants."
+          primaryCta={{ label: 'Start Money Claim Wizard', href: moneyClaimWizardLink }}
+          secondaryCta={{ label: 'Calculate Arrears', href: '/tools/rent-arrears-calculator' }}
+          variant="pastel"
+        />
 
         {/* Main Content */}
         <Container>

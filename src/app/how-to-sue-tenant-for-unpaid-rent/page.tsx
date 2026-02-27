@@ -5,9 +5,19 @@ import { getCanonicalUrl } from '@/lib/seo';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { sueTenantUnpaidRentFAQs } from '@/data/faqs';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
+import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
+
+const moneyClaimWizardLink = buildWizardLink({
+  product: 'money_claim',
+  jurisdiction: 'england',
+  src: 'seo_how-to-sue-tenant-for-unpaid-rent',
+  topic: 'debt',
+});
 
 export const metadata: Metadata = {
-  title: 'How to Sue a Tenant for Unpaid Rent | Landlord Guide 2026',
+  title: 'How to Sue a Tenant for Unpaid Rent | Solicitor-Style Landlord Guide',
   description:
     'Guide to suing a tenant for unpaid rent in England. County Court process, pre-action requirements, court fees, and enforcement.',
   keywords: [
@@ -23,7 +33,7 @@ export const metadata: Metadata = {
     'CCJ for rent arrears',
   ],
   openGraph: {
-    title: 'How to Sue a Tenant for Unpaid Rent | Landlord Heaven',
+    title: 'How to Sue a Tenant for Unpaid Rent | Solicitor-Style Landlord Guide',
     description:
       'Complete guide to taking a tenant to court for unpaid rent. Pre-action protocol, court process, and enforcement.',
     type: 'article',
@@ -42,34 +52,18 @@ const breadcrumbs = [
 export default function SueTenantUnpaidRentPage() {
   return (
     <>
+      <HeaderConfig mode="autoOnScroll" />
       <StructuredData data={breadcrumbSchema(breadcrumbs)} />
 
       <div className="min-h-screen bg-gray-50">
-        {/* Hero Section */}
-        <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-20">
-          <Container>
-            <div className="max-w-3xl mx-auto text-center">
-              <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-                <span className="text-sm font-semibold text-primary">Legal Action</span>
-              </div>
-              <h1 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
-                How to Sue a Tenant for Unpaid Rent
-              </h1>
-              <p className="text-xl text-gray-600 mb-8">
-                A practical guide for landlords in England who need to take legal action to recover
-                rent arrears from a current or former tenant.
-              </p>
-              <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Link href="/products/money-claim" className="hero-btn-primary">
-                  Get Money Claim Pack
-                </Link>
-                <Link href="/tools/rent-arrears-calculator" className="hero-btn-secondary">
-                  Calculate What You&apos;re Owed
-                </Link>
-              </div>
-            </div>
-          </Container>
-        </section>
+        <UniversalHero
+          badge="Legal Action"
+          title="How to Sue a Tenant for Unpaid Rent"
+          subtitle="A practical guide for landlords in England who need to take legal action to recover rent arrears from a current or former tenant."
+          primaryCta={{ label: 'Start Money Claim Wizard', href: moneyClaimWizardLink }}
+          secondaryCta={{ label: 'Calculate What You\'re Owed', href: '/tools/rent-arrears-calculator' }}
+          variant="pastel"
+        />
 
         {/* Main Content */}
         <Container>

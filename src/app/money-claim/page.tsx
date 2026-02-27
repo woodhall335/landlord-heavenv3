@@ -7,7 +7,7 @@ import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/money-claim');
-const wizardHref = '/wizard?product=money_claim&src=seo_money_claim&topic=debt';
+const wizardHref = '/wizard?product=money_claim&src=seo_money-claim&topic=debt';
 
 export const metadata: Metadata = {
   title: 'Money Claim for Landlords | Solicitor-Grade Debt Recovery',

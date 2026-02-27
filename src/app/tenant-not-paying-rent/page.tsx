@@ -47,7 +47,7 @@ const wizardLinkMoneyClaim = buildWizardLink({
 const faqs = tenantNotPayingRentFAQs;
 
 export const metadata: Metadata = {
-  title: 'Tenant Not Paying Rent? Your Options Explained (UK 2026)',
+  title: 'Tenant Not Paying Rent? Solicitor-Style Options Guide',
   description: 'What to do when your tenant stops paying rent. Rent demand letters, Section 8 eviction, and money claims through court explained.',
   keywords: [
     'tenant not paying rent',
@@ -65,9 +65,10 @@ export const metadata: Metadata = {
     canonical: 'https://landlordheaven.co.uk/tenant-not-paying-rent',
   },
   openGraph: {
-    title: 'Tenant Not Paying Rent? Your Options Explained | Landlord Heaven',
+    title: 'Tenant Not Paying Rent? Solicitor-Style Options Guide',
     description: 'Practical guide for UK landlords dealing with rent arrears. Demand letters, eviction, and money claims explained.',
     type: 'website',
+    url: 'https://landlordheaven.co.uk/tenant-not-paying-rent',
   },
 };
 

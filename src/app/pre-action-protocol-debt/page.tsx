@@ -9,7 +9,7 @@ import { FAQSection } from '@/components/seo/FAQSection';
 import { preActionProtocolFAQs } from '@/data/faqs';
 
 export const metadata: Metadata = {
-  title: 'Pre-Action Protocol for Debt Claims | Landlord Guide 2026',
+  title: 'Pre-Action Protocol for Debt Claims | Solicitor-Style Guide',
   description:
     'Guide to the Pre-Action Protocol for Debt Claims. Required before money claims for rent arrears. Letter templates included.',
   keywords: [
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     'money claim pre action',
   ],
   openGraph: {
-    title: 'Pre-Action Protocol for Debt Claims | Landlord Heaven',
+    title: 'Pre-Action Protocol for Debt Claims | Solicitor-Style Guide',
     description:
       'What landlords need to know about the Pre-Action Protocol before claiming rent arrears.',
     type: 'article',

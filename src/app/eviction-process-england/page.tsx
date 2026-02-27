@@ -40,14 +40,14 @@ import {
 const completePackLink = buildWizardLink({
   product: 'complete_pack',
   jurisdiction: 'england',
-  src: 'seo_eviction_process_england',
+  src: 'seo_eviction-process-england',
   topic: 'eviction',
 });
 
 const noticeOnlyLink = buildWizardLink({
   product: 'notice_only',
   jurisdiction: 'england',
-  src: 'seo_eviction_process_england',
+  src: 'seo_eviction-process-england',
   topic: 'eviction',
 });
 

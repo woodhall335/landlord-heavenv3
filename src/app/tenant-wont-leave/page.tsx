@@ -36,7 +36,7 @@ const wizardLinkNoticeOnly = buildWizardLink({
 });
 
 export const metadata: Metadata = {
-  title: 'Tenant Won\'t Leave After Notice? What to Do Next (UK)',
+  title: 'Tenant Won\'t Leave After Notice? Solicitor-Style Next Steps',
   description: 'What to do when your tenant refuses to leave after an eviction notice in England. Legal options, court possession process, and bailiff enforcement explained.',
   keywords: [
     'tenant won\'t leave',
@@ -53,9 +53,10 @@ export const metadata: Metadata = {
     canonical: 'https://landlordheaven.co.uk/tenant-wont-leave',
   },
   openGraph: {
-    title: 'Tenant Won\'t Leave After Notice? What to Do Next | Landlord Heaven',
+    title: 'Tenant Won\'t Leave After Notice? Solicitor-Style Next Steps',
     description: 'Legal options when your tenant refuses to leave after serving an eviction notice. Court process and bailiff enforcement explained.',
     type: 'website',
+    url: 'https://landlordheaven.co.uk/tenant-wont-leave',
   },
 };
 

@@ -9,7 +9,7 @@ import { FAQSection } from '@/components/seo/FAQSection';
 import { tenantDamagingPropertyFAQs } from '@/data/faqs';
 
 export const metadata: Metadata = {
-  title: 'Tenant Damaging Property | Landlord Rights & Actions UK 2026',
+  title: 'Tenant Damaging Property | Solicitor-Style Landlord Options',
   description:
     'What to do when a tenant damages your property. Learn about your legal options including Section 8 eviction, deposit deductions, and money claims for damages.',
   keywords: [
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     'section 8 ground 13',
   ],
   openGraph: {
-    title: 'Tenant Damaging Property | Landlord Heaven',
+    title: 'Tenant Damaging Property | Solicitor-Style Landlord Options',
     description:
       'What landlords can do when tenants damage their property - eviction, deposit, and claims.',
     type: 'article',
