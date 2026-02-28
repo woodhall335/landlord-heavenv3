@@ -13,6 +13,7 @@ import { WhyLandlordHeaven, WhatsIncludedInteractive } from "@/components/value-
 import Section21ComplianceTimingPanel from "@/components/products/Section21ComplianceTimingPanel";
 import { getNoticeOnlyPreviewData } from "@/lib/previews/noticeOnlyPreviews";
 import { getCanonicalUrl } from "@/lib/seo";
+import { HowItWorksThreeStep } from "@/components/marketing/HowItWorksThreeStep";
 
 const product = PRODUCTS.notice_only;
 const price = product.displayPrice;
@@ -122,32 +123,10 @@ export default async function NoticeOnlyPage() {
 
       <section className="bg-[#F3EEFF] py-16 md:py-20">
         <Container>
-          <div className="max-w-4xl mx-auto">
-            <h2 className="mb-12 text-center text-3xl font-bold text-charcoal md:text-5xl">How It Works</h2>
+          <HowItWorksThreeStep />
 
-            <div className="grid gap-6 md:grid-cols-3">
-              <div className="rounded-2xl border border-[#E6DBFF] bg-white p-6 text-center shadow-[0_10px_30px_rgba(105,46,212,0.08)]">
-                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#692ED4] text-2xl font-bold text-white">1</div>
-                <h3 className="text-xl font-semibold text-charcoal mb-3">Answer Simple Questions</h3>
-                <p className="text-gray-600">Our wizard asks about your property, tenancy, and grounds for eviction. Ask Heaven helps you choose the right route.</p>
-              </div>
-
-              <div className="rounded-2xl border border-[#E6DBFF] bg-white p-6 text-center shadow-[0_10px_30px_rgba(105,46,212,0.08)]">
-                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#692ED4] text-2xl font-bold text-white">2</div>
-                <h3 className="text-xl font-semibold text-charcoal mb-3">Preview Your Documents</h3>
-                <p className="text-gray-600">See exactly what you&apos;ll get with watermarked previews. Edit answers and regenerate instantly until you&apos;re satisfied.</p>
-              </div>
-
-              <div className="rounded-2xl border border-[#E6DBFF] bg-white p-6 text-center shadow-[0_10px_30px_rgba(105,46,212,0.08)]">
-                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#692ED4] text-2xl font-bold text-white">3</div>
-                <h3 className="text-xl font-semibold text-charcoal mb-3">Download &amp; Serve</h3>
-                <p className="text-gray-600">Pay once, download your documents, and follow the service instructions to serve your notice correctly.</p>
-              </div>
-            </div>
-
-            <div className="mt-12 text-center">
-              <Link href="/wizard?product=notice_only&src=product_page&topic=eviction" className="hero-btn-primary">Generate my notice bundle →</Link>
-            </div>
+          <div className="mt-12 text-center">
+            <Link href="/wizard?product=notice_only&src=product_page&topic=eviction" className="hero-btn-primary">Generate my notice bundle →</Link>
           </div>
         </Container>
       </section>

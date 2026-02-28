@@ -25,6 +25,7 @@ import {
 } from "@/components/value-proposition";
 import { getCompletePackPreviewData } from "@/lib/previews/completePackPreviews";
 import { Section21ComplianceTimingPanel } from '@/components/products/Section21ComplianceTimingPanel';
+import { HowItWorksThreeStep } from "@/components/marketing/HowItWorksThreeStep";
 
 // Get price from single source of truth
 const product = PRODUCTS.complete_pack;
@@ -243,59 +244,15 @@ export default async function CompleteEvictionPackPage() {
       {/* How It Works */}
       <section className="py-16 md:py-20 bg-[#F3EEFF]">
         <Container>
-          <div className="max-w-4xl mx-auto">
-            <h2 className="mb-12 text-center text-3xl font-bold text-charcoal md:text-5xl">How It Works</h2>
+          <HowItWorksThreeStep />
 
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-              <div className="rounded-2xl border border-[#E6DBFF] bg-white p-6 text-center shadow-[0_10px_26px_rgba(105,46,212,0.08)]">
-                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#692ED4] text-2xl font-bold text-white">
-                  1
-                </div>
-                <h3 className="text-xl font-semibold text-charcoal mb-3">Describe Your Case</h3>
-                <p className="text-gray-600">
-                  Tell us about your tenancy, the issue, and what&apos;s happened. Ask Heaven helps you choose the right route.
-                </p>
-              </div>
-
-              <div className="rounded-2xl border border-[#E6DBFF] bg-white p-6 text-center shadow-[0_10px_26px_rgba(105,46,212,0.08)]">
-                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#692ED4] text-2xl font-bold text-white">
-                  2
-                </div>
-                <h3 className="text-xl font-semibold text-charcoal mb-3">Preview Your Pack</h3>
-                <p className="text-gray-600">
-                  Review all documents with watermarked previews. Edit answers and regenerate until you&apos;re satisfied.
-                </p>
-              </div>
-
-              <div className="rounded-2xl border border-[#E6DBFF] bg-white p-6 text-center shadow-[0_10px_26px_rgba(105,46,212,0.08)]">
-                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#692ED4] text-2xl font-bold text-white">
-                  3
-                </div>
-                <h3 className="text-xl font-semibold text-charcoal mb-3">Download &amp; File</h3>
-                <p className="text-gray-600">
-                  Pay once, download your complete pack. Follow the filing guide to submit to court or tribunal.
-                </p>
-              </div>
-
-              <div className="rounded-2xl border border-[#E6DBFF] bg-white p-6 text-center shadow-[0_10px_26px_rgba(105,46,212,0.08)]">
-                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#692ED4] text-2xl font-bold text-white">
-                  4
-                </div>
-                <h3 className="text-xl font-semibold text-charcoal mb-3">Follow the Process</h3>
-                <p className="text-gray-600">
-                  Use our guides to navigate hearings and enforcement. Regenerate your case bundle if your case changes.
-                </p>
-              </div>
-            </div>
-
-            <div className="mt-12 text-center">
-              <Link
-                href="/wizard?product=complete_pack&src=product_page&topic=eviction"
-                className="hero-btn-primary"
-              >
-                Start Your Complete Pack →
-              </Link>
-            </div>
+          <div className="mt-12 text-center">
+            <Link
+              href="/wizard?product=complete_pack&src=product_page&topic=eviction"
+              className="hero-btn-primary"
+            >
+              Start Your Complete Pack →
+            </Link>
           </div>
         </Container>
       </section>
