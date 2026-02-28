@@ -126,19 +126,19 @@ export default function HomeContent() {
           <div className="max-w-5xl mx-auto">
             <div className="grid md:grid-cols-3 gap-8 md:gap-12">
               <Step
-                number="1"
+                iconSrc="/images/howitworks1.webp"
                 title="Answer Questions"
                 description="Tell us about your situation. Our wizard asks simple questions about your property, tenant, and what you need."
                 time="5-10 minutes"
               />
               <Step
-                number="2"
+                iconSrc="/images/howitworks2.webp"
                 title="Review & Validate"
                 description="We generate your jurisdiction-specific case file and validate key compliance checks before you approve."
                 time="2-3 minutes"
               />
               <Step
-                number="3"
+                iconSrc="/images/howitworks3.webp"
                 title="File & Proceed"
                 description="Pay securely and generate your complete case bundle with filing instructions, evidence checklist, and service guidance."
                 time="Instant"
@@ -537,28 +537,31 @@ export default function HomeContent() {
    ============================================================ */
 
 function Step({
-  number,
-  n,
+  iconSrc,
   title,
   description,
   desc,
   time,
 }: {
-  number?: string;
-  n?: string;
+  iconSrc: string;
   title: string;
   description?: string;
   desc?: string;
   time?: string;
 }) {
-  const stepNumber = number || n || "1";
   const stepDescription = description || desc || "";
 
   return (
     <div className="text-center group">
       <div className="relative z-10">
-        <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-6 transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-primary/30">
-          {stepNumber}
+        <div className="mx-auto mb-6 flex items-center justify-center transition-all duration-300 group-hover:scale-110">
+          <Image
+            src={iconSrc}
+            alt={title}
+            width={96}
+            height={96}
+            className="h-[72px] w-[72px] md:h-[96px] md:w-[96px] object-contain"
+          />
         </div>
       </div>
       <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors">
