@@ -135,6 +135,21 @@ describe('Section21PrecheckPanel wizard flow', () => {
     expect(screen.getByRole('button', { name: 'Continue → Email' })).toBeInTheDocument();
   });
 
+
+  it('step 5 remains locked even if isLeadCaptured() is true', () => {
+    mockIsLeadCaptured.mockReturnValue(true);
+
+    renderPanel();
+    goToStep4();
+    fireEvent.click(screen.getByRole('button', { name: 'Continue → Email' }));
+
+    expect(screen.getByText('Step 5 of 5 — Email + results')).toBeInTheDocument();
+
+    // Should still be locked because gating is tool-specific now
+    expect(screen.queryByText('Section 21 looks valid')).not.toBeInTheDocument();
+    expect(screen.getByLabelText('Email address')).toBeInTheDocument();
+  });
+
   it('step 5 hides results until lead capture succeeds with consent checked', async () => {
     renderPanel();
     goToStep4();
@@ -146,8 +161,11 @@ describe('Section21PrecheckPanel wizard flow', () => {
     const revealButton = screen.getByRole('button', { name: 'Reveal results' });
     expect(revealButton).toBeDisabled();
 
-    fireEvent.change(screen.getByLabelText('Email address'), { target: { value: 'landlord@example.com' } });
+    fireEvent.change(screen.getByLabelText('Email address'), { target: { value: 'not-an-email' } });
     fireEvent.click(screen.getByRole('checkbox'));
+    expect(screen.getByRole('button', { name: 'Reveal results' })).toBeDisabled();
+
+    fireEvent.change(screen.getByLabelText('Email address'), { target: { value: 'landlord@example.com' } });
     expect(screen.getByRole('button', { name: 'Reveal results' })).toBeEnabled();
 
     fireEvent.click(screen.getByRole('button', { name: 'Reveal results' }));
