@@ -11,6 +11,7 @@ import { productLinks, blogLinks, landingPageLinks } from '@/lib/seo/internal-li
 import { StructuredData, breadcrumbSchema, faqPageSchema } from '@/lib/seo/structured-data';
 import { ToolFunnelTracker } from '@/components/tools/ToolFunnelTracker';
 import WizardFlowPage from '@/app/(app)/wizard/flow/page';
+import { Section21ComplianceTimingPanel } from '@/components/products/Section21ComplianceTimingPanel';
 
 const REQUIRED_PARAMS = {
   type: 'eviction',
@@ -86,6 +87,15 @@ function FreeSection21ToolInner() {
         showUsageCounter
         primaryCta={{ label: 'Start now', href: '#generator' }}
       />
+
+
+      <section className="py-10 md:py-14 bg-white">
+        <Container>
+          <div className="mx-auto max-w-5xl">
+            <Section21ComplianceTimingPanel />
+          </div>
+        </Container>
+      </section>
 
       <div className="py-20 md:py-24" id="generator">
         <Container>
