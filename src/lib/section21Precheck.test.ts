@@ -13,40 +13,37 @@ const mockBank = {
 };
 
 describe('section21Precheck', () => {
-  it('completeness flags unsure and conditional missing fields', () => {
+  it('completeness does not treat unsure tri-state answers as missing', () => {
     const completeness = getSection21PrecheckCompleteness({
       ...SECTION21_PRECHECK_DEFAULT_INPUT,
       tenancy_start_date: '2025-01-01',
-      is_replacement_tenancy: 'yes',
-      tenancy_type: 'periodic',
-      rent_period: 'monthly',
+      is_replacement_tenancy: 'unsure',
+      tenancy_type: 'unsure',
+      rent_period: 'unsure',
       planned_service_date: '2026-02-02',
-      service_method: 'email',
-      service_before_430pm: 'yes',
-      tenant_consented_email_service: 'no',
-      deposit_taken: 'yes',
-      epc_required: 'yes',
-      gas_installed: 'yes',
-      landlord_type: 'private_landlord',
-      property_requires_hmo_licence: 'no',
-      property_requires_selective_licence: 'no',
-      improvement_notice_served: 'no',
-      emergency_remedial_action_served: 'no',
-      prohibited_payment_outstanding: 'no',
-      has_proof_of_service_plan: 'yes',
+      service_method: 'hand',
+      service_before_430pm: 'unsure',
+      deposit_taken: 'unsure',
+      epc_required: 'unsure',
+      gas_installed: 'unsure',
+      landlord_type: 'social_provider',
+      property_requires_hmo_licence: 'unsure',
+      property_requires_selective_licence: 'unsure',
+      improvement_notice_served: 'unsure',
+      emergency_remedial_action_served: 'unsure',
+      prohibited_payment_outstanding: 'unsure',
+      has_proof_of_service_plan: 'unsure',
     });
 
-    expect(completeness.complete).toBe(false);
-    expect(completeness.missing_labels).toContain('Original tenancy start date');
-    expect(completeness.missing_labels).toContain('Deposit received date');
-    expect(completeness.missing_labels).toContain('Tenant consent to email service');
+    expect(completeness.complete).toBe(true);
+    expect(completeness.missing_labels).toEqual([]);
   });
 
   it('returns incomplete when inputs are not complete even if blockers exist', async () => {
     vi.stubGlobal('fetch', vi.fn(async () => ({ json: async () => mockBank })));
     const result = await evaluateSection21Precheck({
       ...SECTION21_PRECHECK_DEFAULT_INPUT,
-      tenancy_start_date: '2025-01-01',
+      tenancy_start_date: '',
       is_replacement_tenancy: 'no',
       tenancy_type: 'periodic',
       rent_period: 'monthly',
@@ -56,7 +53,7 @@ describe('section21Precheck', () => {
       deposit_taken: 'no',
       epc_required: 'no',
       gas_installed: 'no',
-      landlord_type: 'unsure',
+      landlord_type: 'social_provider',
       property_requires_hmo_licence: 'no',
       property_requires_selective_licence: 'no',
       improvement_notice_served: 'no',
@@ -66,8 +63,68 @@ describe('section21Precheck', () => {
     });
 
     expect(result.status).toBe('incomplete');
-    expect(result.missing_labels).toContain('Landlord type');
-    expect(result.blockers.some((b) => b.code === Section21BlockerReasonCode.B001_PLANNED_SERVICE_ON_AFTER_MAY_2026)).toBe(true);
+    expect(result.missing_labels).toContain('Tenancy start date');
+    expect(result.blockers).toEqual([]);
+  });
+
+  it('fixed term without break clause clamps earliest leave-after date to fixed term end date', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => ({ json: async () => mockBank })));
+    const result = await evaluateSection21Precheck({
+      ...SECTION21_PRECHECK_DEFAULT_INPUT,
+      landlord_type: 'private_landlord',
+      tenancy_start_date: '2025-01-01',
+      is_replacement_tenancy: 'no',
+      tenancy_type: 'fixed_term',
+      fixed_term_end_date: '2026-07-14',
+      has_break_clause: 'no',
+      rent_period: 'monthly',
+      planned_service_date: '2026-03-08',
+      service_method: 'hand',
+      service_before_430pm: 'yes',
+      deposit_taken: 'no',
+      epc_required: 'yes',
+      epc_served_date: '2025-01-01',
+      gas_installed: 'no',
+      how_to_rent_served_date: '2025-01-01',
+      how_to_rent_served_method: 'hardcopy',
+      how_to_rent_was_current_version_at_tenancy_start: 'yes',
+      property_requires_hmo_licence: 'no',
+      property_requires_selective_licence: 'no',
+      improvement_notice_served: 'no',
+      emergency_remedial_action_served: 'no',
+      prohibited_payment_outstanding: 'no',
+      has_proof_of_service_plan: 'yes',
+    });
+
+    expect(result.earliest_after_date).toBe('2026-07-14');
+    expect(result.warnings.some((w) => w.code === Section21WarningReasonCode.W005_FIXED_TERM_END_AFTER_MIN_NOTICE)).toBe(false);
+  });
+
+  it('service_before_430pm unsure still triggers service-method blocker via evaluation', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => ({ json: async () => mockBank })));
+    const result = await evaluateSection21Precheck({
+      ...SECTION21_PRECHECK_DEFAULT_INPUT,
+      tenancy_start_date: '2025-01-01',
+      is_replacement_tenancy: 'no',
+      tenancy_type: 'periodic',
+      rent_period: 'monthly',
+      planned_service_date: '2026-04-01',
+      service_method: 'hand',
+      service_before_430pm: 'unsure',
+      deposit_taken: 'no',
+      epc_required: 'no',
+      gas_installed: 'no',
+      landlord_type: 'social_provider',
+      property_requires_hmo_licence: 'no',
+      property_requires_selective_licence: 'no',
+      improvement_notice_served: 'no',
+      emergency_remedial_action_served: 'no',
+      prohibited_payment_outstanding: 'no',
+      has_proof_of_service_plan: 'yes',
+    });
+
+    expect(result.status).toBe('risky');
+    expect(result.blockers.some((b) => b.code === Section21BlockerReasonCode.B003_SERVICE_METHOD_UNSAFE)).toBe(true);
   });
 
   it('returns valid status with computed dates for compliant baseline', async () => {
