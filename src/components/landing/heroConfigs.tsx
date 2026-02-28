@@ -75,6 +75,7 @@ export const homeHeroConfig: HeroConfig = {
 
 export const astHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
+  mediaSrc: '/images/tenancy_agreements.webp',
   trustText: 'Court-ready • Updated for current housing law • UK-wide coverage',
   title: 'Jurisdiction-Specific',
   highlightTitle: 'Tenancy Agreement',
@@ -97,6 +98,7 @@ export const astHeroConfig: HeroConfig = {
 
 export const noticeOnlyHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
+  mediaSrc: '/images/notice_bundles.webp',
   trustText:
     'Court-ready • Updated for current housing law • England, Wales & Scotland',
   title: 'Eviction Notice',
@@ -117,6 +119,7 @@ export const noticeOnlyHeroConfig: HeroConfig = {
 
 export const completePackHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
+  mediaSrc: '/images/eviction_packs.webp',
   trustText: 'Court-ready • Updated for current housing law • England-only',
   title: 'Complete',
   highlightTitle: 'Court Bundle',
@@ -136,6 +139,7 @@ export const completePackHeroConfig: HeroConfig = {
 
 export const moneyClaimHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
+  mediaSrc: '/images/money_claims.webp',
   trustText: 'Court-ready • Updated for current housing law • England-only',
   title: 'Money Claim',
   highlightTitle: 'Documents',
