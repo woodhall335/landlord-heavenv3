@@ -13,6 +13,7 @@ export interface CaptureLeadParams {
   jurisdiction?: string;
   caseId?: string;
   tags?: string[];
+  marketingConsent?: boolean;
 }
 
 export interface EmailReportParams {
@@ -42,6 +43,7 @@ export async function captureLead(params: CaptureLeadParams): Promise<LeadCaptur
         jurisdiction: params.jurisdiction,
         caseId: params.caseId,
         tags: params.tags,
+        marketing_consent: params.marketingConsent,
       }),
     });
 

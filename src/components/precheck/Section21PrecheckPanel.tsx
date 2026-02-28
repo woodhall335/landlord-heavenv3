@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
-import EmailCaptureModal from '@/components/leads/EmailCaptureModal';
+import { captureLeadWithReport } from '@/components/leads/useLeadCapture';
 import { isLeadCaptured } from '@/lib/leads/local';
 import {
   evaluateSection21Precheck,
@@ -15,8 +15,7 @@ import {
 } from '@/lib/section21Precheck';
 
 const triState: YesNoUnsure[] = ['yes', 'no', 'unsure'];
-const PAGE_GATE_FALLBACK_KEY = 'lh_gate_s21_notice_only';
-const STEP_TITLES = ['Tenancy & service', 'Deposit', 'Prescribed documents', 'Licensing & restrictions + results'] as const;
+const STEP_TITLES = ['Tenancy & service', 'Deposit', 'Prescribed documents', 'Licensing & restrictions', 'Email + results'] as const;
 
 /**
  * ✅ IMPORTANT: gate steps by missing_keys, not labels (labels can drift / be renamed)
@@ -183,7 +182,7 @@ export default function Section21PrecheckPanel({ ctaHref, emailGate, ui }: Secti
   const panelVariant = ui?.variant ?? 'full';
 
   const gateEnabled = emailGate?.enabled ?? true;
-  const gateStorageKey = emailGate?.gateStorageKey ?? PAGE_GATE_FALLBACK_KEY;
+  const gateStorageKey = emailGate?.gateStorageKey ?? 'lh_gate_s21_precheck';
   const gateSource = emailGate?.source ?? 's21_precheck_results_gate';
   const gateTags = emailGate?.tags ?? ['s21_precheck', 'product_notice_only', 'england'];
   const includeEmailReport = emailGate?.includeEmailReport ?? false;
@@ -191,14 +190,11 @@ export default function Section21PrecheckPanel({ ctaHref, emailGate, ui }: Secti
   const [input, setInput] = useState<Section21PrecheckInput>(SECTION21_PRECHECK_DEFAULT_INPUT);
   const [result, setResult] = useState<Section21PrecheckResult | null>(null);
   const [step, setStep] = useState(1);
-  const [openModal, setOpenModal] = useState(false);
-  const [gateOpen, setGateOpen] = useState(
-    typeof window !== 'undefined' &&
-      (!gateEnabled ||
-        isLeadCaptured() ||
-        localStorage.getItem(gateStorageKey) === '1' ||
-        localStorage.getItem(PAGE_GATE_FALLBACK_KEY) === '1')
-  );
+  const [gateOpen, setGateOpen] = useState(false);
+  const [email, setEmail] = useState('');
+  const [marketingConsent, setMarketingConsent] = useState(false);
+  const [captureLoading, setCaptureLoading] = useState(false);
+  const [captureError, setCaptureError] = useState<string | null>(null);
 
   const update = <K extends keyof Section21PrecheckInput>(key: K, value: Section21PrecheckInput[K]) => {
     setInput((prev) => {
@@ -258,6 +254,11 @@ export default function Section21PrecheckPanel({ ctaHref, emailGate, ui }: Secti
     };
   }, [input]);
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    setGateOpen(!gateEnabled || isLeadCaptured() || localStorage.getItem(gateStorageKey) === '1');
+  }, [gateEnabled, gateStorageKey]);
+
   const completeness = useMemo(() => getSection21PrecheckCompleteness(input), [input]);
 
   // ✅ Step gating based on missing_keys (stable)
@@ -267,6 +268,52 @@ export default function Section21PrecheckPanel({ ctaHref, emailGate, ui }: Secti
   }, [completeness.missing_keys, step]);
 
   const ctaConfig = getStatusCtaConfig(result?.status ?? null);
+
+  const handleLeadCapture = async () => {
+    const trimmedEmail = email.trim();
+    if (!trimmedEmail) {
+      setCaptureError('Please enter your email address.');
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(trimmedEmail)) {
+      setCaptureError('Please enter a valid email address.');
+      return;
+    }
+
+    if (!marketingConsent) {
+      setCaptureError('Please confirm email consent to reveal your results.');
+      return;
+    }
+
+    setCaptureError(null);
+    setCaptureLoading(true);
+
+    try {
+      const captureResult = await captureLeadWithReport(
+        {
+          email: trimmedEmail,
+          source: gateSource,
+          tags: gateTags,
+          marketingConsent,
+        },
+        includeEmailReport ? emailGate?.reportCaseId : undefined
+      );
+
+      if (!captureResult.success) {
+        setCaptureError(captureResult.error || 'Failed to save email. Please try again.');
+        return;
+      }
+
+      setGateOpen(true);
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(gateStorageKey, '1');
+      }
+    } finally {
+      setCaptureLoading(false);
+    }
+  };
 
   return (
     <div
@@ -279,7 +326,7 @@ export default function Section21PrecheckPanel({ ctaHref, emailGate, ui }: Secti
       <p className="mt-2 text-gray-600">{subtitle}</p>
 
       <div className="mt-5 rounded-lg border border-gray-100 bg-gray-50 px-4 py-3 text-sm font-semibold text-gray-700">
-        Step {step} of 4 — {STEP_TITLES[step - 1]}
+        Step {step} of 5 — {STEP_TITLES[step - 1]}
       </div>
 
       <div className="mt-4 space-y-4">
@@ -429,61 +476,90 @@ export default function Section21PrecheckPanel({ ctaHref, emailGate, ui }: Secti
             <Segmented label="Prohibited payment outstanding?" value={input.prohibited_payment_outstanding} onChange={(v) => update('prohibited_payment_outstanding', v)} accentHex={accentHex} />
             <Segmented label="Proof of service evidence plan in place?" value={input.has_proof_of_service_plan} onChange={(v) => update('has_proof_of_service_plan', v)} accentHex={accentHex} />
 
-            <div id="section21-precheck-results" className="rounded-xl border border-gray-200 p-4" style={{ backgroundColor: '#faf7ff' }}>
-              <p className="text-sm font-semibold">Result preview</p>
-              {ctaConfig.message !== result?.display.headline ? (
-                <p className={`mt-2 text-sm ${ctaConfig.tone === 'warning' ? 'text-amber-800' : ctaConfig.tone === 'success' ? 'text-emerald-700' : 'text-gray-700'}`}>
-                  {ctaConfig.message}
-                </p>
-              ) : null}
-
-              {result?.status === 'incomplete' ? (
-                <div className="mt-3 rounded-lg border border-gray-200 bg-white p-3 text-sm text-gray-700">
-                  <p className="font-medium">You still need:</p>
-                  <ul className="mt-1 list-disc pl-5">
-                    {(result.missing_labels ?? completeness.missing_labels).slice(0, 10).map((item) => (
-                      <li key={item}>{item}</li>
-                    ))}
-                  </ul>
-                </div>
-              ) : null}
-
-              {result && result.status !== 'incomplete' && gateEnabled && !gateOpen ? (
-                <button type="button" onClick={() => setOpenModal(true)} className="mt-3 rounded-lg px-4 py-2 text-sm font-semibold text-white" style={{ backgroundColor: accentHex }}>
-                  Reveal full results
-                </button>
-              ) : null}
-
-              {result && result.status !== 'incomplete' && gateOpen ? (
-                <div className="mt-4 space-y-2 text-sm text-gray-700">
-                  <p className="font-semibold">{result.display.headline}</p>
-                  <ul className="list-disc pl-5">
-                    {result.blockers.map((item) => (
-                      <li key={item.code + item.message}>{item.message}</li>
-                    ))}
-                    {result.warnings.map((item) => (
-                      <li key={item.code + item.message}>{item.message}</li>
-                    ))}
-                  </ul>
-                  <div className="grid gap-1 pt-2">
-                    <p>Deemed service date: {formatDateUK(result.deemed_service_date)}</p>
-                    <p>Earliest leave-after date: {formatDateUK(result.earliest_after_date)}</p>
-                    <p>Latest court start date: {formatDateUK(result.latest_court_start_date)}</p>
-                  </div>
-                </div>
-              ) : null}
-
-              {ctaConfig.enabled ? (
-                <Link href={ctaHref} className="mt-4 block w-full rounded-lg px-4 py-3 text-center font-semibold text-white" style={{ background: `linear-gradient(to right, #692ed4, ${accentHex})` }}>
-                  {ctaConfig.label}
-                </Link>
-              ) : (
-                <button type="button" disabled className="mt-4 block w-full rounded-lg bg-gray-200 px-4 py-3 text-center font-semibold text-gray-500">
-                  {ctaConfig.label}
-                </button>
-              )}
-            </div>
           </>
+        ) : null}
+
+        {step === 5 ? (
+          <div id="section21-precheck-results" className="rounded-xl border border-gray-200 p-4" style={{ backgroundColor: '#faf7ff' }}>
+            <p className="text-sm text-gray-700">Enter your email and consent preferences to unlock your full Section 21 pre-check results.</p>
+
+            {gateEnabled && !gateOpen ? (
+              <div className="mt-4 space-y-4">
+                <label className="flex flex-col gap-1 text-sm">
+                  <span className="font-medium text-gray-700">Email address</span>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(event) => setEmail(event.target.value)}
+                    className="rounded-lg border border-gray-300 px-3 py-2"
+                    placeholder="you@example.com"
+                    autoComplete="email"
+                  />
+                </label>
+
+                <label className="flex items-start gap-2 text-sm text-gray-700">
+                  <input
+                    type="checkbox"
+                    checked={marketingConsent}
+                    onChange={(event) => setMarketingConsent(event.target.checked)}
+                    className="mt-0.5"
+                  />
+                  <span>I agree to receive emails about eviction guidance and related products. You can unsubscribe anytime.</span>
+                </label>
+
+                {captureError ? <p className="text-sm text-red-700">{captureError}</p> : null}
+
+                <button
+                  type="button"
+                  onClick={handleLeadCapture}
+                  disabled={captureLoading || !marketingConsent}
+                  className="rounded-lg px-4 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:bg-gray-300"
+                  style={{ backgroundColor: captureLoading || !marketingConsent ? undefined : accentHex }}
+                >
+                  {captureLoading ? 'Saving...' : 'Reveal results'}
+                </button>
+              </div>
+            ) : null}
+
+            {result?.status === 'incomplete' ? (
+              <div className="mt-3 rounded-lg border border-gray-200 bg-white p-3 text-sm text-gray-700">
+                <p className="font-medium">You still need:</p>
+                <ul className="mt-1 list-disc pl-5">
+                  {(result.missing_labels ?? completeness.missing_labels).slice(0, 10).map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
+
+            {result && result.status !== 'incomplete' && gateOpen ? (
+              <div className="mt-4 space-y-2 text-sm text-gray-700">
+                <p className="font-semibold">{result.display.headline}</p>
+                <ul className="list-disc pl-5">
+                  {result.blockers.map((item) => (
+                    <li key={item.code + item.message}>{item.message}</li>
+                  ))}
+                  {result.warnings.map((item) => (
+                    <li key={item.code + item.message}>{item.message}</li>
+                  ))}
+                </ul>
+                <div className="grid gap-1 pt-2">
+                  <p>Deemed service date: {formatDateUK(result.deemed_service_date)}</p>
+                  <p>Earliest leave-after date: {formatDateUK(result.earliest_after_date)}</p>
+                  <p>Latest court start date: {formatDateUK(result.latest_court_start_date)}</p>
+                </div>
+                {ctaConfig.enabled ? (
+                  <Link href={ctaHref} className="mt-4 block w-full rounded-lg px-4 py-3 text-center font-semibold text-white" style={{ background: `linear-gradient(to right, #692ed4, ${accentHex})` }}>
+                    {ctaConfig.label}
+                  </Link>
+                ) : (
+                  <button type="button" disabled className="mt-4 block w-full rounded-lg bg-gray-200 px-4 py-3 text-center font-semibold text-gray-500">
+                    {ctaConfig.label}
+                  </button>
+                )}
+              </div>
+            ) : null}
+          </div>
         ) : null}
       </div>
 
@@ -496,53 +572,20 @@ export default function Section21PrecheckPanel({ ctaHref, emailGate, ui }: Secti
         >
           Back
         </button>
-        {step < 4 ? (
+        {step < 5 ? (
           <button
             type="button"
-            onClick={() => setStep((prev) => Math.min(4, prev + 1))}
+            onClick={() => setStep((prev) => Math.min(5, prev + 1))}
             disabled={stepMissingKeys.length > 0}
             className="rounded-lg px-4 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:bg-gray-300"
             style={{ backgroundColor: stepMissingKeys.length ? undefined : accentHex }}
           >
-            Next
+            {step === 4 ? 'Continue → Email' : 'Next'}
           </button>
-        ) : (
-          <button
-            type="button"
-            onClick={() => {
-              const resultsCard = document.getElementById('section21-precheck-results');
-              resultsCard?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }}
-            className="rounded-lg px-4 py-2 text-sm font-semibold text-white"
-            style={{ backgroundColor: accentHex }}
-          >
-            Finish
-          </button>
-        )}
+        ) : null}
       </div>
 
-      {stepMissingKeys.length > 0 && step < 4 ? <p className="mt-3 text-sm text-amber-700">Complete this step to continue.</p> : null}
-
-      {gateEnabled ? (
-        <EmailCaptureModal
-          open={openModal}
-          onClose={() => setOpenModal(false)}
-          source={gateSource}
-          tags={gateTags}
-          includeEmailReport={includeEmailReport}
-          reportCaseId={emailGate?.reportCaseId}
-          title="Reveal your full Section 21 pre-check results"
-          description="Enter your email to unlock detailed reasons, date calculations, and next-step guidance."
-          primaryLabel="Reveal results"
-          onSuccess={() => {
-            setGateOpen(true);
-            if (typeof window !== 'undefined') {
-              localStorage.setItem(gateStorageKey, '1');
-              localStorage.setItem(PAGE_GATE_FALLBACK_KEY, '1');
-            }
-          }}
-        />
-      ) : null}
+      {stepMissingKeys.length > 0 && step < 5 ? <p className="mt-3 text-sm text-amber-700">Complete this step to continue.</p> : null}
     </div>
   );
 }

@@ -8,6 +8,7 @@ const captureSchema = z.object({
   jurisdiction: z.string().optional(),
   caseId: z.string().uuid().optional(),
   tags: z.array(z.string()).optional(),
+  marketing_consent: z.boolean().optional(),
 });
 
 export async function POST(request: Request) {
@@ -22,7 +23,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const { email, source, jurisdiction, caseId, tags } = parsed.data;
+    const { email, source, jurisdiction, caseId, tags, marketing_consent } = parsed.data;
     const supabase = createAdminClient();
 
     const { error: upsertError } = await supabase.from('email_subscribers').upsert(
@@ -31,7 +32,7 @@ export async function POST(request: Request) {
         source: source ?? null,
         jurisdiction: jurisdiction ?? null,
         last_case_id: caseId ?? null,
-        tags: tags ?? [],
+        tags: [...(tags ?? []), ...(marketing_consent ? ['marketing_consent:true'] : ['marketing_consent:false'])],
         last_seen_at: new Date().toISOString(),
       },
       { onConflict: 'email' },
@@ -45,7 +46,7 @@ export async function POST(request: Request) {
     const { error: eventError } = await supabase.from('email_events').insert({
       email,
       event_type: 'lead_captured',
-      event_data: { source, jurisdiction, caseId, tags },
+      event_data: { source, jurisdiction, caseId, tags, marketing_consent },
     });
 
     if (eventError) {
