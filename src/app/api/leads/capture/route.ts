@@ -24,7 +24,14 @@ export async function POST(request: Request) {
     }
 
     const { email, source, jurisdiction, caseId, tags, marketing_consent } = parsed.data;
+    const isSection21PrecheckFunnel = source === 's21_precheck_results_gate' || (tags ?? []).includes('s21_precheck');
+
+    if (isSection21PrecheckFunnel && marketing_consent !== true) {
+      return NextResponse.json({ error: 'Marketing consent required' }, { status: 400 });
+    }
+
     const supabase = createAdminClient();
+    const consentTag = marketing_consent === true ? ['marketing_consent:true'] : ['marketing_consent:false'];
 
     const { error: upsertError } = await supabase.from('email_subscribers').upsert(
       {
@@ -32,7 +39,7 @@ export async function POST(request: Request) {
         source: source ?? null,
         jurisdiction: jurisdiction ?? null,
         last_case_id: caseId ?? null,
-        tags: [...(tags ?? []), ...(marketing_consent ? ['marketing_consent:true'] : ['marketing_consent:false'])],
+        tags: [...(tags ?? []), ...consentTag],
         last_seen_at: new Date().toISOString(),
       },
       { onConflict: 'email' },

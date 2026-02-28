@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { captureLeadWithReport } from '@/components/leads/useLeadCapture';
-import { isLeadCaptured } from '@/lib/leads/local';
 import {
   evaluateSection21Precheck,
   formatDateUK,
@@ -195,6 +194,9 @@ export default function Section21PrecheckPanel({ ctaHref, emailGate, ui }: Secti
   const [marketingConsent, setMarketingConsent] = useState(false);
   const [captureLoading, setCaptureLoading] = useState(false);
   const [captureError, setCaptureError] = useState<string | null>(null);
+  const trimmedEmail = email.trim();
+  const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail);
+  const canRevealResults = !captureLoading && marketingConsent && isEmailValid;
 
   const update = <K extends keyof Section21PrecheckInput>(key: K, value: Section21PrecheckInput[K]) => {
     setInput((prev) => {
@@ -256,7 +258,7 @@ export default function Section21PrecheckPanel({ ctaHref, emailGate, ui }: Secti
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    setGateOpen(!gateEnabled || isLeadCaptured() || localStorage.getItem(gateStorageKey) === '1');
+    setGateOpen(!gateEnabled || localStorage.getItem(gateStorageKey) === '1');
   }, [gateEnabled, gateStorageKey]);
 
   const completeness = useMemo(() => getSection21PrecheckCompleteness(input), [input]);
@@ -270,14 +272,12 @@ export default function Section21PrecheckPanel({ ctaHref, emailGate, ui }: Secti
   const ctaConfig = getStatusCtaConfig(result?.status ?? null);
 
   const handleLeadCapture = async () => {
-    const trimmedEmail = email.trim();
     if (!trimmedEmail) {
       setCaptureError('Please enter your email address.');
       return;
     }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(trimmedEmail)) {
+    if (!isEmailValid) {
       setCaptureError('Please enter a valid email address.');
       return;
     }
@@ -490,7 +490,10 @@ export default function Section21PrecheckPanel({ ctaHref, emailGate, ui }: Secti
                   <input
                     type="email"
                     value={email}
-                    onChange={(event) => setEmail(event.target.value)}
+                    onChange={(event) => {
+                      setEmail(event.target.value);
+                      setCaptureError(null);
+                    }}
                     className="rounded-lg border border-gray-300 px-3 py-2"
                     placeholder="you@example.com"
                     autoComplete="email"
@@ -501,7 +504,10 @@ export default function Section21PrecheckPanel({ ctaHref, emailGate, ui }: Secti
                   <input
                     type="checkbox"
                     checked={marketingConsent}
-                    onChange={(event) => setMarketingConsent(event.target.checked)}
+                    onChange={(event) => {
+                      setMarketingConsent(event.target.checked);
+                      setCaptureError(null);
+                    }}
                     className="mt-0.5"
                   />
                   <span>I agree to receive emails about eviction guidance and related products. You can unsubscribe anytime.</span>
@@ -512,9 +518,9 @@ export default function Section21PrecheckPanel({ ctaHref, emailGate, ui }: Secti
                 <button
                   type="button"
                   onClick={handleLeadCapture}
-                  disabled={captureLoading || !marketingConsent}
+                  disabled={!canRevealResults}
                   className="rounded-lg px-4 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:bg-gray-300"
-                  style={{ backgroundColor: captureLoading || !marketingConsent ? undefined : accentHex }}
+                  style={{ backgroundColor: canRevealResults ? accentHex : undefined }}
                 >
                   {captureLoading ? 'Saving...' : 'Reveal results'}
                 </button>
