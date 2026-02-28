@@ -355,29 +355,54 @@ export default function HomeContent() {
       {/* BUILT FOR CHANGING HOUSING LAW */}
       <section className="py-20 md:py-24 bg-gray-50">
         <Container>
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-10">
-              <div className="inline-block bg-primary/10 rounded-full px-4 py-2 mb-4">
-                <span className="text-sm font-semibold text-primary">
-                  Built for Changing Housing Law
-                </span>
+          <div className="max-w-6xl mx-auto">
+            <div className="grid md:grid-cols-2 gap-10 md:gap-14 items-center">
+              <div>
+                <div className="inline-block bg-primary/10 rounded-full px-4 py-2 mb-4">
+                  <span className="text-sm font-semibold text-primary">
+                    Built for Changing Housing Law
+                  </span>
+                </div>
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                  Statutory-change aware legal automation
+                </h2>
+                <p className="text-lg text-gray-600">
+                  UK eviction law is evolving. From the Renting Homes (Wales)
+                  Act to the Renters' Rights Act implementation in England,
+                  Landlord Heaven is continuously updated to reflect UK housing
+                  law changes.
+                </p>
+
+                <ul className="mt-8 space-y-3 text-gray-700 md:ml-auto md:max-w-md">
+                  <li className="flex items-start gap-3">
+                    <RiCheckLine className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+                    <span>Reflect current statutory requirements</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <RiCheckLine className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+                    <span>Monitor legal updates and reform trajectory</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <RiCheckLine className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+                    <span>Generate jurisdiction-specific bundles</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <RiCheckLine className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+                    <span>Adapt as housing legislation evolves</span>
+                  </li>
+                </ul>
               </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                Statutory-change aware legal automation
-              </h2>
-              <p className="text-lg text-gray-600">
-                UK eviction law is evolving. From the Renting Homes (Wales) Act
-                to the Renters' Rights Act implementation in England, Landlord
-                Heaven is continuously updated to reflect UK housing law
-                changes.
-              </p>
+
+              <div className="flex justify-center md:justify-end">
+                <Image
+                  src="/images/Statutory-change.webp"
+                  alt="Statutory-change aware legal automation"
+                  width={720}
+                  height={720}
+                  className="w-full max-w-[520px] h-auto object-contain"
+                />
+              </div>
             </div>
-            <ul className="grid md:grid-cols-2 gap-3 text-gray-700">
-              <li>✔ Reflect current statutory requirements</li>
-              <li>✔ Monitor legal updates and reform trajectory</li>
-              <li>✔ Generate jurisdiction-specific bundles</li>
-              <li>✔ Adapt as housing legislation evolves</li>
-            </ul>
           </div>
         </Container>
       </section>
