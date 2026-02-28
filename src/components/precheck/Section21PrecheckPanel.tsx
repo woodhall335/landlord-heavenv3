@@ -15,9 +15,8 @@ import {
 } from '@/lib/section21Precheck';
 
 const triState: YesNoUnsure[] = ['yes', 'no', 'unsure'];
-const yesNoState: YesNoUnsure[] = ['yes', 'no'];
 const PAGE_GATE_FALLBACK_KEY = 'lh_gate_s21_notice_only';
-const STEP_TITLES = ['Tenancy & service timing', 'Deposit compliance', 'Prescribed documents', 'Restrictions + result'] as const;
+const STEP_TITLES = ['Tenancy & service', 'Deposit', 'Prescribed documents', 'Licensing & restrictions + results'] as const;
 
 const STEP_LABELS: Record<number, string[]> = {
   1: [
@@ -147,7 +146,7 @@ export default function Section21PrecheckPanel({ ctaHref, emailGate, ui }: Secti
 
       if (key === 'epc_required' && value !== 'yes') next.epc_served_date = null;
 
-      if (key === 'landlord_type' && value === 'social_provider') {
+      if (key === 'landlord_type' && value !== 'private_landlord') {
         next.how_to_rent_served_date = null;
         next.how_to_rent_served_method = null;
         next.how_to_rent_was_current_version_at_tenancy_start = 'unsure';
@@ -169,7 +168,7 @@ export default function Section21PrecheckPanel({ ctaHref, emailGate, ui }: Secti
   }, [input]);
 
   const completeness = useMemo(() => getSection21PrecheckCompleteness(input), [input]);
-  const stepMissing = useMemo(() => completeness.missingLabels.filter((label) => STEP_LABELS[step].includes(label)), [completeness, step]);
+  const stepMissing = useMemo(() => completeness.missing_labels.filter((label) => STEP_LABELS[step].includes(label)), [completeness, step]);
   const ctaConfig = getStatusCtaConfig(result?.status ?? null);
 
   return (
@@ -212,16 +211,16 @@ export default function Section21PrecheckPanel({ ctaHref, emailGate, ui }: Secti
                 <option value="unsure">Unsure</option><option value="hand">Hand delivery</option><option value="first_class_post">First class post</option><option value="document_exchange">Document exchange</option><option value="email">Email</option><option value="other">Other</option>
               </select>
             </label>
-            <Segmented label="Service before 4:30pm?" value={input.service_before_430pm} onChange={(v) => update('service_before_430pm', v)} accentHex={accentHex} options={yesNoState} />
+            <Segmented label="Service before 4:30pm?" value={input.service_before_430pm} onChange={(v) => update('service_before_430pm', v)} accentHex={accentHex} />
             {input.service_method === 'email' ? (
-              <Segmented label="Tenant consent to email service?" value={input.tenant_consented_email_service ?? 'unsure'} onChange={(v) => update('tenant_consented_email_service', v)} accentHex={accentHex} options={yesNoState} />
+              <Segmented label="Tenant consent to email service?" value={input.tenant_consented_email_service ?? 'unsure'} onChange={(v) => update('tenant_consented_email_service', v)} accentHex={accentHex} />
             ) : null}
           </>
         ) : null}
 
         {step === 2 ? (
           <>
-            <Segmented label="Deposit taken?" value={input.deposit_taken} onChange={(v) => update('deposit_taken', v)} accentHex={accentHex} options={yesNoState} />
+            <Segmented label="Deposit taken?" value={input.deposit_taken} onChange={(v) => update('deposit_taken', v)} accentHex={accentHex} />
             {input.deposit_taken === 'no' ? <p className="text-sm text-gray-700">No deposit taken — deposit rules don’t apply.</p> : null}
             {input.deposit_taken === 'yes' ? (
               <div className="space-y-4 rounded-xl border border-gray-200 p-4">
@@ -229,11 +228,11 @@ export default function Section21PrecheckPanel({ ctaHref, emailGate, ui }: Secti
                 <DateField label="Deposit received date" value={input.deposit_received_date} onChange={(v) => update('deposit_received_date', v)} />
                 <DateField label="Deposit protected date" value={input.deposit_protected_date} onChange={(v) => update('deposit_protected_date', v)} />
                 <DateField label="Prescribed information given to tenant — date" value={input.deposit_prescribed_info_served_tenant_date} onChange={(v) => update('deposit_prescribed_info_served_tenant_date', v)} />
-                <Segmented label="Deposit paid by someone else (relevant person)?" value={input.deposit_paid_by_relevant_person ?? 'unsure'} onChange={(v) => update('deposit_paid_by_relevant_person', v)} accentHex={accentHex} options={yesNoState} />
+                <Segmented label="Deposit paid by someone else (relevant person)?" value={input.deposit_paid_by_relevant_person ?? 'unsure'} onChange={(v) => update('deposit_paid_by_relevant_person', v)} accentHex={accentHex} />
                 {input.deposit_paid_by_relevant_person === 'yes' ? <DateField label="Prescribed information given to deposit payer (relevant person) — date" value={input.deposit_prescribed_info_served_relevant_person_date} onChange={(v) => update('deposit_prescribed_info_served_relevant_person_date', v)} /> : null}
-                <Segmented label="Deposit returned in full / by agreement?" value={input.deposit_returned_in_full_or_agreed ?? 'unsure'} onChange={(v) => update('deposit_returned_in_full_or_agreed', v)} accentHex={accentHex} options={yesNoState} />
+                <Segmented label="Deposit returned in full / by agreement?" value={input.deposit_returned_in_full_or_agreed ?? 'unsure'} onChange={(v) => update('deposit_returned_in_full_or_agreed', v)} accentHex={accentHex} />
                 {input.deposit_returned_in_full_or_agreed === 'yes' ? <DateField label="Deposit returned date" value={input.deposit_returned_date} onChange={(v) => update('deposit_returned_date', v)} /> : null}
-                <Segmented label="Deposit claim resolved by court?" value={input.deposit_claim_resolved_by_court ?? 'unsure'} onChange={(v) => update('deposit_claim_resolved_by_court', v)} accentHex={accentHex} options={yesNoState} />
+                <Segmented label="Deposit claim resolved by court?" value={input.deposit_claim_resolved_by_court ?? 'unsure'} onChange={(v) => update('deposit_claim_resolved_by_court', v)} accentHex={accentHex} />
               </div>
             ) : null}
           </>
@@ -241,10 +240,10 @@ export default function Section21PrecheckPanel({ ctaHref, emailGate, ui }: Secti
 
         {step === 3 ? (
           <>
-            <Segmented label="EPC required?" value={input.epc_required} onChange={(v) => update('epc_required', v)} accentHex={accentHex} options={yesNoState} />
+            <Segmented label="EPC required?" value={input.epc_required} onChange={(v) => update('epc_required', v)} accentHex={accentHex} />
             {input.epc_required === 'yes' ? <DateField label="EPC served date" value={input.epc_served_date} onChange={(v) => update('epc_served_date', v)} /> : null}
 
-            <Segmented label="Gas installed?" value={input.gas_installed} onChange={(v) => update('gas_installed', v)} accentHex={accentHex} options={yesNoState} />
+            <Segmented label="Gas installed?" value={input.gas_installed} onChange={(v) => update('gas_installed', v)} accentHex={accentHex} />
             {input.gas_installed === 'yes' ? (
               <>
                 <DateField label="Gas safety record issue date" value={input.gas_safety_record_issue_date} onChange={(v) => update('gas_safety_record_issue_date', v)} />
@@ -266,9 +265,9 @@ export default function Section21PrecheckPanel({ ctaHref, emailGate, ui }: Secti
                     <option value="unsure">Unsure</option><option value="hardcopy">Hardcopy</option><option value="email">Email</option>
                   </select>
                 </label>
-                <Segmented label="How to Rent was current at tenancy start?" value={input.how_to_rent_was_current_version_at_tenancy_start} onChange={(v) => update('how_to_rent_was_current_version_at_tenancy_start', v)} accentHex={accentHex} options={yesNoState} />
+                <Segmented label="How to Rent was current at tenancy start?" value={input.how_to_rent_was_current_version_at_tenancy_start} onChange={(v) => update('how_to_rent_was_current_version_at_tenancy_start', v)} accentHex={accentHex} />
                 {input.how_to_rent_served_method === 'email' ? (
-                  <Segmented label="Tenant consent to email service?" value={input.tenant_consented_email_service ?? 'unsure'} onChange={(v) => update('tenant_consented_email_service', v)} accentHex={accentHex} options={yesNoState} />
+                  <Segmented label="Tenant consent to email service?" value={input.tenant_consented_email_service ?? 'unsure'} onChange={(v) => update('tenant_consented_email_service', v)} accentHex={accentHex} />
                 ) : null}
               </>
             ) : null}
@@ -277,16 +276,16 @@ export default function Section21PrecheckPanel({ ctaHref, emailGate, ui }: Secti
 
         {step === 4 ? (
           <>
-            <Segmented label="Property requires HMO licence?" value={input.property_requires_hmo_licence} onChange={(v) => update('property_requires_hmo_licence', v)} accentHex={accentHex} options={yesNoState} />
-            {input.property_requires_hmo_licence === 'yes' ? <Segmented label="Licence in place?" value={input.hmo_licence_in_place ?? 'unsure'} onChange={(v) => update('hmo_licence_in_place', v)} accentHex={accentHex} options={yesNoState} /> : null}
-            <Segmented label="Property requires selective licence?" value={input.property_requires_selective_licence} onChange={(v) => update('property_requires_selective_licence', v)} accentHex={accentHex} options={yesNoState} />
-            {input.property_requires_selective_licence === 'yes' ? <Segmented label="Licence in place?" value={input.selective_licence_in_place ?? 'unsure'} onChange={(v) => update('selective_licence_in_place', v)} accentHex={accentHex} options={yesNoState} /> : null}
-            <Segmented label="Improvement notice served?" value={input.improvement_notice_served} onChange={(v) => update('improvement_notice_served', v)} accentHex={accentHex} options={yesNoState} />
+            <Segmented label="Property requires HMO licence?" value={input.property_requires_hmo_licence} onChange={(v) => update('property_requires_hmo_licence', v)} accentHex={accentHex} />
+            {input.property_requires_hmo_licence === 'yes' ? <Segmented label="Licence in place?" value={input.hmo_licence_in_place ?? 'unsure'} onChange={(v) => update('hmo_licence_in_place', v)} accentHex={accentHex} /> : null}
+            <Segmented label="Property requires selective licence?" value={input.property_requires_selective_licence} onChange={(v) => update('property_requires_selective_licence', v)} accentHex={accentHex} />
+            {input.property_requires_selective_licence === 'yes' ? <Segmented label="Licence in place?" value={input.selective_licence_in_place ?? 'unsure'} onChange={(v) => update('selective_licence_in_place', v)} accentHex={accentHex} /> : null}
+            <Segmented label="Improvement notice served?" value={input.improvement_notice_served} onChange={(v) => update('improvement_notice_served', v)} accentHex={accentHex} />
             {input.improvement_notice_served === 'yes' ? <DateField label="Date served" value={input.improvement_notice_date} onChange={(v) => update('improvement_notice_date', v)} /> : null}
-            <Segmented label="Emergency remedial action served?" value={input.emergency_remedial_action_served} onChange={(v) => update('emergency_remedial_action_served', v)} accentHex={accentHex} options={yesNoState} />
+            <Segmented label="Emergency remedial action served?" value={input.emergency_remedial_action_served} onChange={(v) => update('emergency_remedial_action_served', v)} accentHex={accentHex} />
             {input.emergency_remedial_action_served === 'yes' ? <DateField label="Date served" value={input.emergency_remedial_action_date} onChange={(v) => update('emergency_remedial_action_date', v)} /> : null}
-            <Segmented label="Prohibited payment outstanding?" value={input.prohibited_payment_outstanding} onChange={(v) => update('prohibited_payment_outstanding', v)} accentHex={accentHex} options={yesNoState} />
-            <Segmented label="Proof of service evidence plan in place?" value={input.has_proof_of_service_plan} onChange={(v) => update('has_proof_of_service_plan', v)} accentHex={accentHex} options={yesNoState} />
+            <Segmented label="Prohibited payment outstanding?" value={input.prohibited_payment_outstanding} onChange={(v) => update('prohibited_payment_outstanding', v)} accentHex={accentHex} />
+            <Segmented label="Proof of service evidence plan in place?" value={input.has_proof_of_service_plan} onChange={(v) => update('has_proof_of_service_plan', v)} accentHex={accentHex} />
 
             <div className="rounded-xl border border-gray-200 p-4" style={{ backgroundColor: '#faf7ff' }}>
               <p className="text-sm font-semibold">Result preview</p>
@@ -295,7 +294,7 @@ export default function Section21PrecheckPanel({ ctaHref, emailGate, ui }: Secti
               {result?.status === 'incomplete' ? (
                 <div className="mt-3 rounded-lg border border-gray-200 bg-white p-3 text-sm text-gray-700">
                   <p className="font-medium">You still need:</p>
-                  <ul className="mt-1 list-disc pl-5">{(result.missing_labels ?? completeness.missingLabels).slice(0, 10).map((item) => <li key={item}>{item}</li>)}</ul>
+                  <ul className="mt-1 list-disc pl-5">{(result.missing_labels ?? completeness.missing_labels).slice(0, 10).map((item) => <li key={item}>{item}</li>)}</ul>
                 </div>
               ) : null}
 

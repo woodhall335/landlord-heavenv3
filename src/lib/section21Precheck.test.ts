@@ -37,9 +37,9 @@ describe('section21Precheck', () => {
     });
 
     expect(completeness.complete).toBe(false);
-    expect(completeness.missingLabels).toContain('Original tenancy start date');
-    expect(completeness.missingLabels).toContain('Deposit received date');
-    expect(completeness.missingLabels).toContain('Tenant consent to email service');
+    expect(completeness.missing_labels).toContain('Original tenancy start date');
+    expect(completeness.missing_labels).toContain('Deposit received date');
+    expect(completeness.missing_labels).toContain('Tenant consent to email service');
   });
 
   it('returns incomplete when inputs are not complete even if blockers exist', async () => {
@@ -130,6 +130,70 @@ describe('section21Precheck', () => {
     expect(result.status).toBe('risky');
     const blocker = result.blockers.find((b) => b.code === Section21BlockerReasonCode.B001_PLANNED_SERVICE_ON_AFTER_MAY_2026);
     expect(blocker?.message).toBe('Planned service date is on or after 1 May 2026. Section 21 cannot usually be used after this date in England.');
+  });
+
+
+
+  it('maps CTA labels by status', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => ({ json: async () => mockBank })));
+
+    const incomplete = await evaluateSection21Precheck({
+      ...SECTION21_PRECHECK_DEFAULT_INPUT,
+      tenancy_start_date: '',
+      planned_service_date: '',
+    });
+    expect(incomplete.status).toBe('incomplete');
+    expect(incomplete.display.ctaLabel).toBe('Complete the check to continue');
+
+    const risky = await evaluateSection21Precheck({
+      ...SECTION21_PRECHECK_DEFAULT_INPUT,
+      tenancy_start_date: '2025-01-01',
+      is_replacement_tenancy: 'no',
+      tenancy_type: 'periodic',
+      rent_period: 'monthly',
+      planned_service_date: '2026-05-01',
+      service_method: 'hand',
+      service_before_430pm: 'yes',
+      deposit_taken: 'no',
+      epc_required: 'no',
+      gas_installed: 'no',
+      landlord_type: 'social_provider',
+      property_requires_hmo_licence: 'no',
+      property_requires_selective_licence: 'no',
+      improvement_notice_served: 'no',
+      emergency_remedial_action_served: 'no',
+      prohibited_payment_outstanding: 'no',
+      has_proof_of_service_plan: 'yes',
+    });
+    expect(risky.status).toBe('risky');
+    expect(risky.display.ctaLabel).toBe('Use Section 8 Instead – Start Workflow');
+
+    const valid = await evaluateSection21Precheck({
+      ...SECTION21_PRECHECK_DEFAULT_INPUT,
+      landlord_type: 'private_landlord',
+      tenancy_start_date: '2025-01-01',
+      is_replacement_tenancy: 'no',
+      tenancy_type: 'periodic',
+      rent_period: 'monthly',
+      planned_service_date: '2026-02-02',
+      service_method: 'first_class_post',
+      service_before_430pm: 'yes',
+      deposit_taken: 'no',
+      epc_required: 'yes',
+      epc_served_date: '2025-01-01',
+      gas_installed: 'no',
+      how_to_rent_served_date: '2025-01-01',
+      how_to_rent_served_method: 'hardcopy',
+      how_to_rent_was_current_version_at_tenancy_start: 'yes',
+      property_requires_hmo_licence: 'no',
+      property_requires_selective_licence: 'no',
+      improvement_notice_served: 'no',
+      emergency_remedial_action_served: 'no',
+      prohibited_payment_outstanding: 'no',
+      has_proof_of_service_plan: 'yes',
+    });
+    expect(valid.status).toBe('valid');
+    expect(valid.display.ctaLabel).toBe('Section 21 is Valid – Continue');
   });
 
   it('warns on weak proof of service and clamps end-of-month addCalendarMonths', async () => {
