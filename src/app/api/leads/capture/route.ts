@@ -31,7 +31,8 @@ export async function POST(request: Request) {
     }
 
     const supabase = createAdminClient();
-    const consentTag = marketing_consent === true ? ['marketing_consent:true'] : ['marketing_consent:false'];
+    const consentTag = marketing_consent === true ? ['marketing_consent:true'] : [];
+    const dedupedTags = Array.from(new Set([...(tags ?? []), ...consentTag]));
 
     const { error: upsertError } = await supabase.from('email_subscribers').upsert(
       {
@@ -39,7 +40,7 @@ export async function POST(request: Request) {
         source: source ?? null,
         jurisdiction: jurisdiction ?? null,
         last_case_id: caseId ?? null,
-        tags: [...(tags ?? []), ...consentTag],
+        tags: dedupedTags,
         last_seen_at: new Date().toISOString(),
       },
       { onConflict: 'email' },
