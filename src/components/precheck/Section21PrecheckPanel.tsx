@@ -429,11 +429,13 @@ export default function Section21PrecheckPanel({ ctaHref, emailGate, ui }: Secti
             <Segmented label="Prohibited payment outstanding?" value={input.prohibited_payment_outstanding} onChange={(v) => update('prohibited_payment_outstanding', v)} accentHex={accentHex} />
             <Segmented label="Proof of service evidence plan in place?" value={input.has_proof_of_service_plan} onChange={(v) => update('has_proof_of_service_plan', v)} accentHex={accentHex} />
 
-            <div className="rounded-xl border border-gray-200 p-4" style={{ backgroundColor: '#faf7ff' }}>
+            <div id="section21-precheck-results" className="rounded-xl border border-gray-200 p-4" style={{ backgroundColor: '#faf7ff' }}>
               <p className="text-sm font-semibold">Result preview</p>
-              <p className={`mt-2 text-sm ${ctaConfig.tone === 'warning' ? 'text-amber-800' : ctaConfig.tone === 'success' ? 'text-emerald-700' : 'text-gray-700'}`}>
-                {ctaConfig.message}
-              </p>
+              {ctaConfig.message !== result?.display.headline ? (
+                <p className={`mt-2 text-sm ${ctaConfig.tone === 'warning' ? 'text-amber-800' : ctaConfig.tone === 'success' ? 'text-emerald-700' : 'text-gray-700'}`}>
+                  {ctaConfig.message}
+                </p>
+              ) : null}
 
               {result?.status === 'incomplete' ? (
                 <div className="mt-3 rounded-lg border border-gray-200 bg-white p-3 text-sm text-gray-700">
@@ -494,15 +496,29 @@ export default function Section21PrecheckPanel({ ctaHref, emailGate, ui }: Secti
         >
           Back
         </button>
-        <button
-          type="button"
-          onClick={() => setStep((prev) => Math.min(4, prev + 1))}
-          disabled={step === 4 || stepMissingKeys.length > 0}
-          className="rounded-lg px-4 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:bg-gray-300"
-          style={{ backgroundColor: stepMissingKeys.length ? undefined : accentHex }}
-        >
-          Next
-        </button>
+        {step < 4 ? (
+          <button
+            type="button"
+            onClick={() => setStep((prev) => Math.min(4, prev + 1))}
+            disabled={stepMissingKeys.length > 0}
+            className="rounded-lg px-4 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:bg-gray-300"
+            style={{ backgroundColor: stepMissingKeys.length ? undefined : accentHex }}
+          >
+            Next
+          </button>
+        ) : (
+          <button
+            type="button"
+            onClick={() => {
+              const resultsCard = document.getElementById('section21-precheck-results');
+              resultsCard?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }}
+            className="rounded-lg px-4 py-2 text-sm font-semibold text-white"
+            style={{ backgroundColor: accentHex }}
+          >
+            Finish
+          </button>
+        )}
       </div>
 
       {stepMissingKeys.length > 0 && step < 4 ? <p className="mt-3 text-sm text-amber-700">Complete this step to continue.</p> : null}

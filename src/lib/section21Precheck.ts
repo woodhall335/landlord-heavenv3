@@ -82,6 +82,8 @@ export enum Section21WarningReasonCode {
   W004_PROOF_OF_SERVICE_WEAK = 'W004_PROOF_OF_SERVICE_WEAK',
   W005_FIXED_TERM_END_AFTER_MIN_NOTICE = 'W005_FIXED_TERM_END_AFTER_MIN_NOTICE',
   W006_DEPOSIT_RETURNED_BUT_LATE = 'W006_DEPOSIT_RETURNED_BUT_LATE',
+  W007_TENANCY_TYPE_UNKNOWN = 'W007_TENANCY_TYPE_UNKNOWN',
+  W008_REPLACEMENT_TENANCY_UNKNOWN = 'W008_REPLACEMENT_TENANCY_UNKNOWN',
 }
 
 const BLOCKER_MESSAGES: Record<Section21BlockerReasonCode, string> = {
@@ -137,6 +139,10 @@ const WARNING_MESSAGES: Record<Section21WarningReasonCode, string> = {
     'Fixed term ends after the minimum notice period. Ensure the notice date is not earlier than fixed term end unless a valid break clause applies.',
   W006_DEPOSIT_RETURNED_BUT_LATE:
     'Deposit appears to have been returned after late compliance. Section 21 may be possible, but risk remains — consider advice.',
+  W007_TENANCY_TYPE_UNKNOWN:
+    'Tenancy type is unknown. Timing rules for Section 21 may differ and cannot be fully confirmed.',
+  W008_REPLACEMENT_TENANCY_UNKNOWN:
+    'It is unclear whether this is a replacement tenancy. The 4-month rule may be calculated inaccurately.',
 };
 
 type Reason = { code: string; message: string };
@@ -316,62 +322,62 @@ export function getSection21PrecheckCompleteness(input: Section21PrecheckInput):
   };
 
   if (!input.tenancy_start_date) addMissing('tenancy_start_date', 'Tenancy start date');
-  if (input.is_replacement_tenancy === 'unsure') addMissing('is_replacement_tenancy', 'Replacement tenancy');
+  if (!input.is_replacement_tenancy) addMissing('is_replacement_tenancy', 'Replacement tenancy');
   if (input.is_replacement_tenancy === 'yes' && !input.original_tenancy_start_date) addMissing('original_tenancy_start_date', 'Original tenancy start date');
-  if (input.tenancy_type === 'unsure') addMissing('tenancy_type', 'Tenancy type');
+  if (!input.tenancy_type) addMissing('tenancy_type', 'Tenancy type');
   if (input.tenancy_type === 'fixed_term' && !input.fixed_term_end_date) addMissing('fixed_term_end_date', 'Fixed term end date');
-  if (input.tenancy_type === 'fixed_term' && input.has_break_clause === 'unsure') addMissing('has_break_clause', 'Break clause');
+  if (input.tenancy_type === 'fixed_term' && !input.has_break_clause) addMissing('has_break_clause', 'Break clause');
   if (input.tenancy_type === 'fixed_term' && input.has_break_clause === 'yes' && !input.break_clause_earliest_end_date) addMissing('break_clause_earliest_end_date', 'Earliest break end date');
 
-  if (input.rent_period === 'unsure' || input.rent_period === 'other') addMissing('rent_period', 'Rent period');
+  if (!input.rent_period) addMissing('rent_period', 'Rent period');
   if (!input.planned_service_date) addMissing('planned_service_date', 'Planned service date');
-  if (input.service_method === 'unsure' || input.service_method === 'other') addMissing('service_method', 'Service method');
-  if (input.service_before_430pm === 'unsure') addMissing('service_before_430pm', 'Service before 4:30pm');
-  if (input.service_method === 'email' && input.tenant_consented_email_service !== 'yes') addMissing('tenant_consented_email_service', 'Tenant consent to email service');
+  if (!input.service_method) addMissing('service_method', 'Service method');
+  if (!input.service_before_430pm) addMissing('service_before_430pm', 'Service before 4:30pm');
+  if (input.service_method === 'email' && input.tenant_consented_email_service === null) addMissing('tenant_consented_email_service', 'Tenant consent to email service');
 
-  if (input.deposit_taken === 'unsure') addMissing('deposit_taken', 'Deposit taken');
+  if (!input.deposit_taken) addMissing('deposit_taken', 'Deposit taken');
   if (input.deposit_taken === 'yes') {
     if (!input.deposit_received_date) addMissing('deposit_received_date', 'Deposit received date');
     if (!input.deposit_protected_date) addMissing('deposit_protected_date', 'Deposit protected date');
     if (!input.deposit_prescribed_info_served_tenant_date) addMissing('deposit_prescribed_info_served_tenant_date', 'Prescribed information given to tenant — date');
-    if (!input.deposit_paid_by_relevant_person || input.deposit_paid_by_relevant_person === 'unsure') addMissing('deposit_paid_by_relevant_person', 'Deposit paid by someone else (relevant person)');
+    if (input.deposit_paid_by_relevant_person === null) addMissing('deposit_paid_by_relevant_person', 'Deposit paid by someone else (relevant person)');
     if (input.deposit_paid_by_relevant_person === 'yes' && !input.deposit_prescribed_info_served_relevant_person_date) {
       addMissing('deposit_prescribed_info_served_relevant_person_date', 'Prescribed information given to deposit payer (relevant person) — date');
     }
-    if (!input.deposit_returned_in_full_or_agreed || input.deposit_returned_in_full_or_agreed === 'unsure') addMissing('deposit_returned_in_full_or_agreed', 'Deposit returned in full / by agreement');
+    if (input.deposit_returned_in_full_or_agreed === null) addMissing('deposit_returned_in_full_or_agreed', 'Deposit returned in full / by agreement');
     if (input.deposit_returned_in_full_or_agreed === 'yes' && !input.deposit_returned_date) addMissing('deposit_returned_date', 'Deposit returned date');
-    if (!input.deposit_claim_resolved_by_court || input.deposit_claim_resolved_by_court === 'unsure') addMissing('deposit_claim_resolved_by_court', 'Deposit claim resolved by court');
+    if (input.deposit_claim_resolved_by_court === null) addMissing('deposit_claim_resolved_by_court', 'Deposit claim resolved by court');
   }
 
-  if (input.epc_required === 'unsure') addMissing('epc_required', 'EPC required');
+  if (!input.epc_required) addMissing('epc_required', 'EPC required');
   if (input.epc_required === 'yes' && !input.epc_served_date) addMissing('epc_served_date', 'EPC served date');
 
-  if (input.gas_installed === 'unsure') addMissing('gas_installed', 'Gas installed');
+  if (!input.gas_installed) addMissing('gas_installed', 'Gas installed');
   if (input.gas_installed === 'yes' && !input.gas_safety_record_issue_date) addMissing('gas_safety_record_issue_date', 'Gas safety record issue date');
   if (input.gas_installed === 'yes' && !input.gas_safety_record_served_date) addMissing('gas_safety_record_served_date', 'Gas safety record served date');
 
-  if (input.landlord_type === 'unsure') addMissing('landlord_type', 'Landlord type');
+  if (!input.landlord_type) addMissing('landlord_type', 'Landlord type');
   if (input.landlord_type === 'private_landlord') {
     if (!input.how_to_rent_served_date) addMissing('how_to_rent_served_date', 'How to Rent served date');
-    if (!input.how_to_rent_served_method || input.how_to_rent_served_method === 'unsure') addMissing('how_to_rent_served_method', 'How to Rent served method');
-    if (input.how_to_rent_served_method === 'email' && input.tenant_consented_email_service !== 'yes') addMissing('tenant_consented_email_service', 'Tenant consent to email service');
-    if (input.how_to_rent_was_current_version_at_tenancy_start === 'unsure') addMissing('how_to_rent_was_current_version_at_tenancy_start', 'How to Rent was current at tenancy start');
+    if (!input.how_to_rent_served_method) addMissing('how_to_rent_served_method', 'How to Rent served method');
+    if (input.how_to_rent_served_method === 'email' && input.tenant_consented_email_service === null) addMissing('tenant_consented_email_service', 'Tenant consent to email service');
+    if (!input.how_to_rent_was_current_version_at_tenancy_start) addMissing('how_to_rent_was_current_version_at_tenancy_start', 'How to Rent was current at tenancy start');
   }
 
-  if (input.property_requires_hmo_licence === 'unsure') addMissing('property_requires_hmo_licence', 'Property requires HMO licence');
-  if (input.property_requires_hmo_licence === 'yes' && (!input.hmo_licence_in_place || input.hmo_licence_in_place === 'unsure')) addMissing('hmo_licence_in_place', 'HMO licence in place');
+  if (!input.property_requires_hmo_licence) addMissing('property_requires_hmo_licence', 'Property requires HMO licence');
+  if (input.property_requires_hmo_licence === 'yes' && input.hmo_licence_in_place === null) addMissing('hmo_licence_in_place', 'HMO licence in place');
 
-  if (input.property_requires_selective_licence === 'unsure') addMissing('property_requires_selective_licence', 'Property requires selective licence');
-  if (input.property_requires_selective_licence === 'yes' && (!input.selective_licence_in_place || input.selective_licence_in_place === 'unsure')) addMissing('selective_licence_in_place', 'Selective licence in place');
+  if (!input.property_requires_selective_licence) addMissing('property_requires_selective_licence', 'Property requires selective licence');
+  if (input.property_requires_selective_licence === 'yes' && input.selective_licence_in_place === null) addMissing('selective_licence_in_place', 'Selective licence in place');
 
-  if (input.improvement_notice_served === 'unsure') addMissing('improvement_notice_served', 'Improvement notice served');
+  if (!input.improvement_notice_served) addMissing('improvement_notice_served', 'Improvement notice served');
   if (input.improvement_notice_served === 'yes' && !input.improvement_notice_date) addMissing('improvement_notice_date', 'Improvement notice date served');
 
-  if (input.emergency_remedial_action_served === 'unsure') addMissing('emergency_remedial_action_served', 'Emergency remedial action served');
+  if (!input.emergency_remedial_action_served) addMissing('emergency_remedial_action_served', 'Emergency remedial action served');
   if (input.emergency_remedial_action_served === 'yes' && !input.emergency_remedial_action_date) addMissing('emergency_remedial_action_date', 'Emergency remedial action date served');
 
-  if (input.prohibited_payment_outstanding === 'unsure') addMissing('prohibited_payment_outstanding', 'Prohibited payment outstanding');
-  if (input.has_proof_of_service_plan === 'unsure') addMissing('has_proof_of_service_plan', 'Proof of service evidence plan in place');
+  if (!input.prohibited_payment_outstanding) addMissing('prohibited_payment_outstanding', 'Prohibited payment outstanding');
+  if (!input.has_proof_of_service_plan) addMissing('has_proof_of_service_plan', 'Proof of service evidence plan in place');
 
   return { complete: missing_keys.length === 0, missing_keys, missing_labels };
 }
@@ -411,6 +417,12 @@ export async function evaluateSection21Precheck(input: Section21PrecheckInput): 
 
   const deemed = computeDeemedServiceDate(input, bankHolidays);
   if (deemed.blocker) addBlocker(blockers, deemed.blocker);
+
+  if (input.rent_period === 'unsure' || input.rent_period === 'other') {
+    addBlocker(blockers, Section21BlockerReasonCode.B005_RENT_PERIOD_UNKNOWN);
+  }
+  if (input.tenancy_type === 'unsure') addWarning(warnings, Section21WarningReasonCode.W007_TENANCY_TYPE_UNKNOWN);
+  if (input.is_replacement_tenancy === 'unsure') addWarning(warnings, Section21WarningReasonCode.W008_REPLACEMENT_TENANCY_UNKNOWN);
 
   if (plannedServiceDate && plannedServiceDate >= parseISODateLocal('2026-05-01')!) {
     addBlocker(blockers, Section21BlockerReasonCode.B001_PLANNED_SERVICE_ON_AFTER_MAY_2026);
@@ -520,12 +532,24 @@ export async function evaluateSection21Precheck(input: Section21PrecheckInput): 
 
   if (input.tenancy_type === 'fixed_term') {
     const ftEnd = parseISODateLocal(input.fixed_term_end_date);
+    const breakClauseEarliestEnd = parseISODateLocal(input.break_clause_earliest_end_date);
     if (!ftEnd) addBlocker(blockers, Section21BlockerReasonCode.B019_FIXED_TERM_DATES_INCOMPLETE);
     if (input.has_break_clause === 'unsure') addBlocker(blockers, Section21BlockerReasonCode.B019_FIXED_TERM_DATES_INCOMPLETE);
-    if (input.has_break_clause === 'yes' && !parseISODateLocal(input.break_clause_earliest_end_date)) {
+    if (input.has_break_clause === 'yes' && !breakClauseEarliestEnd) {
       addBlocker(blockers, Section21BlockerReasonCode.B019_FIXED_TERM_DATES_INCOMPLETE);
     }
-    if (ftEnd && earliestAfterDate && ftEnd > earliestAfterDate) addWarning(warnings, Section21WarningReasonCode.W005_FIXED_TERM_END_AFTER_MIN_NOTICE);
+
+    const noticeBasedDate = earliestAfterDate;
+    if (earliestAfterDate && input.has_break_clause === 'no' && ftEnd && ftEnd > earliestAfterDate) {
+      earliestAfterDate = ftEnd;
+    }
+    if (earliestAfterDate && input.has_break_clause === 'yes' && breakClauseEarliestEnd && breakClauseEarliestEnd > earliestAfterDate) {
+      earliestAfterDate = breakClauseEarliestEnd;
+    }
+
+    if (ftEnd && noticeBasedDate && ftEnd > noticeBasedDate && input.has_break_clause !== 'no') {
+      addWarning(warnings, Section21WarningReasonCode.W005_FIXED_TERM_END_AFTER_MIN_NOTICE);
+    }
   }
 
   const latestCourtStart =
