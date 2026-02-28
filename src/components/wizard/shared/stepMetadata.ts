@@ -136,15 +136,6 @@ addEntries('notice_only', 'scotland', {
   scotland_notice: EVICTION_BASE.scotland_notice,
   review: EVICTION_BASE.review,
 });
-addEntries('notice_only', 'northern-ireland', {
-  case_basics: EVICTION_BASE.case_basics,
-  parties: EVICTION_BASE.parties,
-  property: EVICTION_BASE.property,
-  tenancy: EVICTION_BASE.tenancy,
-  notice: EVICTION_BASE.notice,
-  section8_arrears: EVICTION_BASE.section8_arrears,
-  review: EVICTION_BASE.review,
-});
 
 addEntries('complete_pack', 'england', {
   case_basics: EVICTION_BASE.case_basics,
@@ -158,45 +149,9 @@ addEntries('complete_pack', 'england', {
   court_signing: EVICTION_BASE.court_signing,
   review: EVICTION_BASE.review,
 });
-addEntries('complete_pack', 'wales', {
-  case_basics: EVICTION_BASE.case_basics,
-  parties: EVICTION_BASE.parties,
-  property: EVICTION_BASE.property,
-  tenancy: EVICTION_BASE.tenancy,
-  notice: EVICTION_BASE.notice,
-  section21_compliance: EVICTION_BASE.section21_compliance,
-  section8_arrears: EVICTION_BASE.section8_arrears,
-  evidence: EVICTION_BASE.evidence,
-  court_signing: EVICTION_BASE.court_signing,
-  review: EVICTION_BASE.review,
-});
-addEntries('complete_pack', 'scotland', {
-  scotland_basics: EVICTION_BASE.scotland_basics,
-  parties: EVICTION_BASE.parties,
-  property: EVICTION_BASE.property,
-  tenancy: EVICTION_BASE.tenancy,
-  scotland_grounds: EVICTION_BASE.scotland_grounds,
-  scotland_notice: EVICTION_BASE.scotland_notice,
-  evidence: EVICTION_BASE.evidence,
-  scotland_tribunal: EVICTION_BASE.scotland_tribunal,
-  review: EVICTION_BASE.review,
-});
-addEntries('complete_pack', 'northern-ireland', {
-  case_basics: EVICTION_BASE.case_basics,
-  parties: EVICTION_BASE.parties,
-  property: EVICTION_BASE.property,
-  tenancy: EVICTION_BASE.tenancy,
-  notice: EVICTION_BASE.notice,
-  section8_arrears: EVICTION_BASE.section8_arrears,
-  evidence: EVICTION_BASE.evidence,
-  court_signing: EVICTION_BASE.court_signing,
-  review: EVICTION_BASE.review,
-});
 
 (['money_claim', 'money_claim_england_wales', 'money_claim_scotland'] as const).forEach((product) => {
-  ALL_JURISDICTIONS.forEach((jurisdiction) => {
-    addEntries(product, jurisdiction, MONEY_CLAIM_BASE);
-  });
+  addEntries(product, 'england', MONEY_CLAIM_BASE);
 });
 
 (['tenancy_agreement', 'ast_standard', 'ast_premium'] as const).forEach((product) => {
@@ -215,4 +170,39 @@ export function getStepMetadata(
   stepId: string
 ): StepMetadata | undefined {
   return WIZARD_STEP_METADATA[makeStepKey(product, jurisdiction, stepId)];
+}
+
+export function isSupportedJurisdictionForProduct(
+  product: WizardProduct,
+  jurisdiction: WizardJurisdiction
+): boolean {
+  if (product === 'complete_pack') {
+    return jurisdiction === 'england';
+  }
+
+  if (
+    product === 'money_claim' ||
+    product === 'money_claim_england_wales' ||
+    product === 'money_claim_scotland'
+  ) {
+    return jurisdiction === 'england';
+  }
+
+  if (product === 'notice_only') {
+    return jurisdiction !== 'northern-ireland';
+  }
+
+  return true;
+}
+
+export function countMetadataKeysByProductJurisdiction(): Record<string, Record<string, number>> {
+  return Object.keys(WIZARD_STEP_METADATA).reduce<Record<string, Record<string, number>>>(
+    (counts, key) => {
+      const [product, jurisdiction] = key.split('.') as [WizardProduct, WizardJurisdiction, ...string[]];
+      counts[product] ??= {};
+      counts[product][jurisdiction] = (counts[product][jurisdiction] ?? 0) + 1;
+      return counts;
+    },
+    {}
+  );
 }
