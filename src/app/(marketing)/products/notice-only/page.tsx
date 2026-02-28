@@ -10,6 +10,7 @@ import { StructuredData, productSchema, breadcrumbSchema } from "@/lib/seo/struc
 import { PRODUCTS } from "@/lib/pricing/products";
 import { FAQSection } from "@/components/seo/FAQSection";
 import { WhyLandlordHeaven, WhatsIncludedInteractive } from "@/components/value-proposition";
+import Section21ComplianceTimingPanel from "@/components/products/Section21ComplianceTimingPanel";
 import { getNoticeOnlyPreviewData } from "@/lib/previews/noticeOnlyPreviews";
 import { getCanonicalUrl } from "@/lib/seo";
 
@@ -86,6 +87,14 @@ export default async function NoticeOnlyPage() {
       ])} />
 
       <UniversalHero {...noticeOnlyHeroConfig} showTrustPositioningBar />
+
+      <section className="py-10 md:py-14">
+        <Container>
+          <div className="mx-auto max-w-6xl">
+            <Section21ComplianceTimingPanel />
+          </div>
+        </Container>
+      </section>
 
       <section className="py-10 md:py-14">
         <Container>
