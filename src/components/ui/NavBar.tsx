@@ -259,18 +259,49 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
         <div className={clsx('border-t lg:hidden', isSolid ? 'border-gray-200 bg-white' : 'border-white/25 bg-[#111827]/95 backdrop-blur-sm')}>
           <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-4">
             <div>
-              <div className={clsx('mb-2 text-xs font-bold uppercase', isSolid ? 'text-gray-500' : 'text-white/70')}>Free Tools</div>
-              <Link href="/tools" className={clsx('block py-2 text-sm font-semibold', isSolid ? 'text-charcoal hover:text-[#692ED4]' : 'text-white hover:text-white/80')} onClick={() => setOpen(false)}>
-                Free Tools Hub
-              </Link>
-              {freeToolsLinks.map((item) => (
-                <Link key={item.href} href={item.href} className={clsx('block py-2 text-sm font-semibold', isSolid ? 'text-charcoal hover:text-[#692ED4]' : 'text-white hover:text-white/80')} onClick={() => setOpen(false)}>
-                  {item.label}
-                </Link>
-              ))}
+              <div className={clsx('mb-2 text-xs font-bold uppercase', isSolid ? 'text-gray-500' : 'text-white/70')}>Account Management</div>
+              {user ? (
+                <>
+                  <div className="mb-4 flex items-center gap-3">
+                    <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-primary text-white font-bold">
+                      {user.name?.[0]?.toUpperCase() || user.email[0].toUpperCase()}
+                    </span>
+                    <div>
+                      <p className={clsx('font-semibold', isSolid ? 'text-charcoal' : 'text-white')}>{user.name || user.email}</p>
+                      {user.name && <p className={clsx('text-xs', isSolid ? 'text-gray-500' : 'text-white/70')}>{user.email}</p>}
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <Link href="/dashboard" className={clsx('flex items-center gap-2 py-2 text-sm font-semibold', isSolid ? 'text-primary' : 'text-white')} onClick={() => setOpen(false)}>
+                      Go to Dashboard
+                    </Link>
+                    <button
+                      onClick={() => {
+                        setOpen(false);
+                        handleLogout();
+                      }}
+                      disabled={isLoggingOut}
+                      className={clsx('flex items-center gap-2 py-2 text-sm font-semibold', isSolid ? 'text-red-600 hover:text-red-700' : 'text-red-200 hover:text-red-100')}
+                    >
+                      <RiLogoutBoxLine className="h-4 w-4" />
+                      {isLoggingOut ? 'Logging out...' : 'Logout'}
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <Link href="/auth/login" className={clsx('block py-2 text-sm font-semibold', isSolid ? 'text-primary' : 'text-white')} onClick={() => setOpen(false)}>
+                    Login
+                  </Link>
+                  <Link href="/auth/signup" className={clsx('block py-2 text-sm font-semibold', isSolid ? 'text-charcoal' : 'text-white')} onClick={() => setOpen(false)}>
+                    Create Account
+                  </Link>
+                </>
+              )}
             </div>
 
             <div className={clsx('pt-4', isSolid ? 'border-t border-gray-200' : 'border-t border-white/20')}>
+              <div className={clsx('mb-2 text-xs font-bold uppercase', isSolid ? 'text-gray-500' : 'text-white/70')}>Validated Eviction Processes</div>
               {primaryLinks.map((item) => (
                 <Link
                   key={item.href}
@@ -288,44 +319,17 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
               ))}
             </div>
 
-            {user ? (
-              <div className={clsx('pt-4 mt-2', isSolid ? 'border-t border-gray-200' : 'border-t border-white/20')}>
-                <div className="flex items-center gap-3 mb-4">
-                  <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-primary text-white font-bold">
-                    {user.name?.[0]?.toUpperCase() || user.email[0].toUpperCase()}
-                  </span>
-                  <div>
-                    <p className={clsx('font-semibold', isSolid ? 'text-charcoal' : 'text-white')}>{user.name || user.email}</p>
-                    {user.name && <p className={clsx('text-xs', isSolid ? 'text-gray-500' : 'text-white/70')}>{user.email}</p>}
-                  </div>
-                </div>
-                <div className="flex flex-col gap-2">
-                  <Link href="/dashboard" className={clsx('flex items-center gap-2 py-2 text-sm font-semibold', isSolid ? 'text-primary' : 'text-white')} onClick={() => setOpen(false)}>
-                    Go to Dashboard
-                  </Link>
-                  <button
-                    onClick={() => {
-                      setOpen(false);
-                      handleLogout();
-                    }}
-                    disabled={isLoggingOut}
-                    className={clsx('flex items-center gap-2 py-2 text-sm font-semibold', isSolid ? 'text-red-600 hover:text-red-700' : 'text-red-200 hover:text-red-100')}
-                  >
-                    <RiLogoutBoxLine className="h-4 w-4" />
-                    {isLoggingOut ? 'Logging out...' : 'Logout'}
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <div className={clsx('pt-4 mt-2', isSolid ? 'border-t border-gray-200' : 'border-t border-white/20')}>
-                <Link href="/auth/login" className={clsx('block py-2 text-sm font-semibold', isSolid ? 'text-primary' : 'text-white')} onClick={() => setOpen(false)}>
-                  Login
+            <div className={clsx('pt-4', isSolid ? 'border-t border-gray-200' : 'border-t border-white/20')}>
+              <div className={clsx('mb-2 text-xs font-bold uppercase', isSolid ? 'text-gray-500' : 'text-white/70')}>Free Tools</div>
+              <Link href="/tools" className={clsx('block py-2 text-sm font-semibold', isSolid ? 'text-charcoal hover:text-[#692ED4]' : 'text-white hover:text-white/80')} onClick={() => setOpen(false)}>
+                Free Tools Hub
+              </Link>
+              {freeToolsLinks.map((item) => (
+                <Link key={item.href} href={item.href} className={clsx('block py-2 text-sm font-semibold', isSolid ? 'text-charcoal hover:text-[#692ED4]' : 'text-white hover:text-white/80')} onClick={() => setOpen(false)}>
+                  {item.label}
                 </Link>
-                <Link href="/auth/signup" className={clsx('block py-2 text-sm font-semibold', isSolid ? 'text-charcoal' : 'text-white')} onClick={() => setOpen(false)}>
-                  Create Account
-                </Link>
-              </div>
-            )}
+              ))}
+            </div>
           </div>
         </div>
       )}
