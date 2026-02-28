@@ -17,6 +17,7 @@ import {
   WhatsIncludedInteractive,
 } from "@/components/value-proposition";
 import { getMoneyClaimPreviewData } from "@/lib/previews/moneyClaimPreviews";
+import { HowItWorksThreeStep } from "@/components/marketing/HowItWorksThreeStep";
 
 // Get price from single source of truth
 const product = PRODUCTS.money_claim;
@@ -248,80 +249,15 @@ export default async function MoneyClaimPage() {
       {/* How It Works */}
       <section className="py-16 md:py-20 bg-white">
         <Container>
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-12 text-center">How It Works</h2>
+          <HowItWorksThreeStep />
 
-            <div className="grid md:grid-cols-4 gap-6">
-              <div className="text-center">
-                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
-                  1
-                </div>
-                <h3 className="text-lg font-semibold text-charcoal mb-2">Calculate Arrears</h3>
-                <p className="text-sm text-gray-600">
-                  Tell us rent amount, payment dates, and what&apos;s been paid. We calculate total arrears + interest.
-                </p>
-              </div>
-
-              <div className="text-center">
-                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
-                  2
-                </div>
-                <h3 className="text-lg font-semibold text-charcoal mb-2">Preview Your Documents</h3>
-                <p className="text-sm text-gray-600">
-                  Review all documents with watermarked previews. Edit answers and regenerate until satisfied.
-                </p>
-              </div>
-
-              <div className="text-center">
-                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
-                  3
-                </div>
-                <h3 className="text-lg font-semibold text-charcoal mb-2">File Online or Paper</h3>
-                <p className="text-sm text-gray-600">
-                  File via Money Claim Online (MCOL) or post to your local county court. We include both methods.
-                </p>
-              </div>
-
-              <div className="text-center">
-                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
-                  4
-                </div>
-                <h3 className="text-lg font-semibold text-charcoal mb-2">Enforce Judgment</h3>
-                <p className="text-sm text-gray-600">
-                  If tenant doesn&apos;t pay, use our enforcement guide for bailiffs, wage attachment, or charging orders.
-                </p>
-              </div>
-            </div>
-
-            <div className="mt-12 bg-gray-50 rounded-lg p-6">
-              <h4 className="font-semibold text-charcoal mb-3">Typical Timeline:</h4>
-              <div className="space-y-2 text-sm text-gray-700">
-                <p className="flex items-center gap-2">
-                  <span className="text-primary">→</span> <strong>Day 1:</strong> File claim with court (pay court fee)
-                </p>
-                <p className="flex items-center gap-2">
-                  <span className="text-primary">→</span> <strong>Day 7:</strong> Court serves claim on tenant
-                </p>
-                <p className="flex items-center gap-2">
-                  <span className="text-primary">→</span> <strong>Day 21:</strong> Tenant has 14 days to respond
-                </p>
-                <p className="flex items-center gap-2">
-                  <span className="text-primary">→</span> <strong>Day 28:</strong> If no response, apply for default judgment
-                </p>
-                <p className="flex items-center gap-2">
-                  <span className="text-primary">→</span> <strong>Day 42+:</strong> Enforcement (if needed)
-                </p>
-              </div>
-            </div>
-
-            <div className="mt-8 text-center">
-              <Link
-                href="/wizard?product=money_claim&src=product_page"
-                className="hero-btn-primary"
-              >
-                Start Money Claim - {price} →
-              </Link>
-            </div>
+          <div className="mt-8 text-center">
+            <Link
+              href="/wizard?product=money_claim&src=product_page"
+              className="hero-btn-primary"
+            >
+              Start Money Claim - {price} →
+            </Link>
           </div>
         </Container>
       </section>
