@@ -1,0 +1,168 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F3F1FF"/>
+      <stop offset="100%" style="stop-color:#E9E5FF"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bgGrad)"/>
+
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" fill="#7C3AED" font-size="22" font-weight="bold" font-family="Arial">WALES LANDLORD CHECKLIST</text>
+  <text x="400" y="55" text-anchor="middle" fill="#6D28D9" font-size="11" font-family="Arial">Complete compliance checklist for Welsh landlords</text>
+
+  <!-- Checklist icon -->
+  <g transform="translate(60, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#22C55E" stroke-width="2"/>
+
+    <g transform="translate(40, 10)">
+      <!-- Large checkmark in circle -->
+      <circle cx="60" cy="45" r="40" fill="#22C55E" opacity="0.2"/>
+      <circle cx="60" cy="45" r="30" fill="#22C55E"/>
+      <path d="M45 45 L55 55 L78 32" stroke="white" stroke-width="6" fill="none" stroke-linecap="round"/>
+    </g>
+
+    <text x="100" y="125" text-anchor="middle" fill="#22C55E" font-size="11" font-weight="bold">COMPLIANCE</text>
+    <text x="100" y="143" text-anchor="middle" fill="#6D28D9" font-size="9">All requirements</text>
+    <text x="100" y="158" text-anchor="middle" fill="#6D28D9" font-size="9">in one place</text>
+  </g>
+
+  <!-- Before letting -->
+  <g transform="translate(280, 80)">
+    <rect x="0" y="0" width="240" height="175" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="240" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="240" height="12" fill="#7C3AED"/>
+    <text x="120" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">BEFORE LETTING</text>
+
+    <g transform="translate(15, 45)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#22C55E"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Rent Smart Wales registration</text>
+    </g>
+    <g transform="translate(15, 68)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#22C55E"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Landlord licence obtained</text>
+    </g>
+    <g transform="translate(15, 91)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#22C55E"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Training completed</text>
+    </g>
+    <g transform="translate(15, 114)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#22C55E"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">EPC rating E or above</text>
+    </g>
+    <g transform="translate(15, 137)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#22C55E"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">HMO licence (if applicable)</text>
+    </g>
+  </g>
+
+  <!-- Safety requirements -->
+  <g transform="translate(540, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#F59E0B" stroke-width="2"/>
+    <rect x="0" y="0" width="200" height="32" rx="12" fill="#F59E0B"/>
+    <rect x="0" y="20" width="200" height="12" fill="#F59E0B"/>
+    <text x="100" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">SAFETY</text>
+
+    <g transform="translate(15, 48)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#22C55E"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Gas Safety Certificate</text>
+    </g>
+    <g transform="translate(15, 71)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#22C55E"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">EICR (5 yearly)</text>
+    </g>
+    <g transform="translate(15, 94)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#22C55E"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Smoke alarms every floor</text>
+    </g>
+    <g transform="translate(15, 117)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#22C55E"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">CO detectors where needed</text>
+    </g>
+    <g transform="translate(15, 140)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#22C55E"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Fitness for habitation</text>
+    </g>
+  </g>
+
+  <!-- At start of tenancy -->
+  <g transform="translate(60, 275)">
+    <rect x="0" y="0" width="680" height="170" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="680" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="680" height="12" fill="#7C3AED"/>
+    <text x="340" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">AT START OF TENANCY</text>
+
+    <g transform="translate(20, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#22C55E" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#22C55E" font-size="10" font-weight="bold">WITHIN 14 DAYS</text>
+      <g transform="translate(10, 30)">
+        <rect x="0" y="0" width="10" height="10" rx="2" fill="#22C55E"/>
+        <path d="M2 5 L4 7 L8 3" stroke="white" stroke-width="1.5" fill="none"/>
+        <text x="16" y="9" fill="#6D28D9" font-size="7">Written statement</text>
+      </g>
+      <g transform="translate(10, 48)">
+        <rect x="0" y="0" width="10" height="10" rx="2" fill="#22C55E"/>
+        <path d="M2 5 L4 7 L8 3" stroke="white" stroke-width="1.5" fill="none"/>
+        <text x="16" y="9" fill="#6D28D9" font-size="7">All contract terms</text>
+      </g>
+      <g transform="translate(10, 66)">
+        <rect x="0" y="0" width="10" height="10" rx="2" fill="#22C55E"/>
+        <path d="M2 5 L4 7 L8 3" stroke="white" stroke-width="1.5" fill="none"/>
+        <text x="16" y="9" fill="#6D28D9" font-size="7">Signed by both parties</text>
+      </g>
+    </g>
+
+    <g transform="translate(240, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#7C3AED" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#7C3AED" font-size="10" font-weight="bold">WITHIN 30 DAYS</text>
+      <g transform="translate(10, 30)">
+        <rect x="0" y="0" width="10" height="10" rx="2" fill="#7C3AED"/>
+        <path d="M2 5 L4 7 L8 3" stroke="white" stroke-width="1.5" fill="none"/>
+        <text x="16" y="9" fill="#6D28D9" font-size="7">Deposit protected</text>
+      </g>
+      <g transform="translate(10, 48)">
+        <rect x="0" y="0" width="10" height="10" rx="2" fill="#7C3AED"/>
+        <path d="M2 5 L4 7 L8 3" stroke="white" stroke-width="1.5" fill="none"/>
+        <text x="16" y="9" fill="#6D28D9" font-size="7">Prescribed info given</text>
+      </g>
+      <g transform="translate(10, 66)">
+        <rect x="0" y="0" width="10" height="10" rx="2" fill="#7C3AED"/>
+        <path d="M2 5 L4 7 L8 3" stroke="white" stroke-width="1.5" fill="none"/>
+        <text x="16" y="9" fill="#6D28D9" font-size="7">Scheme certificate</text>
+      </g>
+    </g>
+
+    <g transform="translate(460, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#F59E0B" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#F59E0B" font-size="10" font-weight="bold">PROVIDE TO TENANT</text>
+      <g transform="translate(10, 30)">
+        <rect x="0" y="0" width="10" height="10" rx="2" fill="#F59E0B"/>
+        <path d="M2 5 L4 7 L8 3" stroke="white" stroke-width="1.5" fill="none"/>
+        <text x="16" y="9" fill="#6D28D9" font-size="7">EPC certificate</text>
+      </g>
+      <g transform="translate(10, 48)">
+        <rect x="0" y="0" width="10" height="10" rx="2" fill="#F59E0B"/>
+        <path d="M2 5 L4 7 L8 3" stroke="white" stroke-width="1.5" fill="none"/>
+        <text x="16" y="9" fill="#6D28D9" font-size="7">Gas safety record</text>
+      </g>
+      <g transform="translate(10, 66)">
+        <rect x="0" y="0" width="10" height="10" rx="2" fill="#F59E0B"/>
+        <path d="M2 5 L4 7 L8 3" stroke="white" stroke-width="1.5" fill="none"/>
+        <text x="16" y="9" fill="#6D28D9" font-size="7">How to Rent guide</text>
+      </g>
+    </g>
+  </g>
+
+  <circle cx="40" cy="40" r="20" fill="#7C3AED" opacity="0.1"/>
+  <circle cx="760" cy="460" r="25" fill="#A78BFA" opacity="0.12"/>
+</svg>

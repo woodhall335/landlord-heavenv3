@@ -2,11 +2,15 @@
 
 'use client';
 
-import React from 'react';
+import React, { useCallback } from 'react';
+import { AskHeavenInlineEnhancer } from '@/components/wizard/AskHeavenInlineEnhancer';
+import { trackMoneyClaimLineItemAdded, type MoneyClaimReason } from '@/lib/analytics';
 
 interface SectionProps {
   facts: any;
   onUpdate: (updates: Record<string, any>) => void | Promise<void>;
+  /** Optional: jurisdiction for analytics tracking */
+  jurisdiction?: string;
 }
 
 type DamageItem = {
@@ -16,7 +20,7 @@ type DamageItem = {
   amount?: number | null;
 };
 
-export const DamagesSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
+export const DamagesSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction }) => {
   const moneyClaim = facts.money_claim || {};
   const items: DamageItem[] = Array.isArray(moneyClaim.damage_items)
     ? moneyClaim.damage_items
@@ -24,11 +28,83 @@ export const DamagesSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
 
   const otherCostsNotes = moneyClaim.other_costs_notes || '';
 
+  // Helper to get current claim reasons for analytics
+  const getClaimReasons = useCallback((): MoneyClaimReason[] => {
+    const reasons: MoneyClaimReason[] = [];
+    if (facts.claiming_rent_arrears === true) reasons.push('rent_arrears');
+    const otherTypes: string[] = facts.money_claim?.other_amounts_types || [];
+    if (otherTypes.includes('property_damage')) reasons.push('property_damage');
+    if (otherTypes.includes('cleaning')) reasons.push('cleaning');
+    if (otherTypes.includes('unpaid_utilities')) reasons.push('unpaid_utilities');
+    if (otherTypes.includes('unpaid_council_tax')) reasons.push('unpaid_council_tax');
+    if (facts.claiming_other === true || otherTypes.includes('other_charges')) reasons.push('other_tenant_debt');
+    return reasons;
+  }, [facts]);
+
+  /**
+   * Calculate subtotals by category from damage items
+   */
+  const calculateCategoryTotals = (itemsList: DamageItem[]) => {
+    const totals = {
+      damage: 0,
+      cleaning: 0,
+      utilities: 0,
+      council_tax: 0,
+      other: 0,
+    };
+
+    itemsList.forEach((item) => {
+      const amount = item.amount || 0;
+      switch (item.category) {
+        case 'property_damage':
+          totals.damage += amount;
+          break;
+        case 'cleaning':
+          totals.cleaning += amount;
+          break;
+        case 'unpaid_utilities':
+          totals.utilities += amount;
+          break;
+        case 'unpaid_council_tax':
+          totals.council_tax += amount;
+          break;
+        case 'legal_costs':
+        case 'other':
+        default:
+          totals.other += amount;
+          break;
+      }
+    });
+
+    return totals;
+  };
+
+  /**
+   * Persist damage items and update money_claim.totals for combined total calculation
+   */
   const persist = (nextItems: DamageItem[]) => {
+    const categoryTotals = calculateCategoryTotals(nextItems);
+    const existingTotals = moneyClaim.totals || {};
+
+    // Calculate new combined total
+    const rentArrearsTotal = existingTotals.rent_arrears || facts.total_arrears || 0;
+    const combinedTotal =
+      rentArrearsTotal +
+      categoryTotals.damage +
+      categoryTotals.cleaning +
+      categoryTotals.utilities +
+      categoryTotals.council_tax +
+      categoryTotals.other;
+
     onUpdate({
       money_claim: {
         ...moneyClaim,
         damage_items: nextItems,
+        totals: {
+          ...existingTotals,
+          ...categoryTotals,
+          combined_total: combinedTotal,
+        },
       },
     });
   };
@@ -40,7 +116,16 @@ export const DamagesSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
       description: '',
       amount: null,
     };
-    persist([...items, newItem]);
+    const nextItems = [...items, newItem];
+    persist(nextItems);
+
+    // Track line item added (category will be set later when user selects)
+    trackMoneyClaimLineItemAdded({
+      category: 'new_item',
+      reasons: getClaimReasons(),
+      jurisdiction: jurisdiction || facts.__meta?.jurisdiction || 'unknown',
+      item_count: nextItems.length,
+    });
   };
 
   const updateItem = (id: string, patch: Partial<DamageItem>) => {
@@ -164,6 +249,21 @@ export const DamagesSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
               </div>
             </div>
           ))}
+
+          {/* Total summary */}
+          <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 mt-4">
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-medium text-charcoal">
+                Total damages & costs
+              </span>
+              <span className="text-lg font-semibold text-charcoal">
+                £{items.reduce((sum, item) => sum + (item.amount || 0), 0).toFixed(2)}
+              </span>
+            </div>
+            <p className="text-xs text-gray-500 mt-1">
+              This is the sum of all itemised amounts above.
+            </p>
+          </div>
         </div>
       )}
 
@@ -172,11 +272,22 @@ export const DamagesSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
           Anything else the court should know about these amounts?
         </label>
         <textarea
-          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm min-h-[100px]"
+          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm min-h-[100px] focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
           value={otherCostsNotes}
           onChange={(e) => handleNotesChange(e.target.value)}
           placeholder="For example: some figures are estimates pending final contractor invoices, or you agreed a reduced amount with the tenant but they still did not pay."
         />
+
+        {/* Ask Heaven Inline Enhancer */}
+        <AskHeavenInlineEnhancer
+          questionId="other_costs_notes"
+          questionText="Additional notes about damages and costs claimed"
+          answer={otherCostsNotes}
+          onApply={(newText) => handleNotesChange(newText)}
+          context={{ product: 'money_claim', damage_items: items }}
+          apiMode="generic"
+        />
+
         <p className="text-xs text-gray-500">
           This helps explain your schedule of damages and can be used in the particulars
           of claim.

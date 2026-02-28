@@ -13,8 +13,8 @@ import Stripe from 'stripe';
 import { HMO_PRO_ENABLED } from '@/lib/feature-flags';
 
 // Initialize Stripe client
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-11-17.clover',
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_placeholder', {
+  apiVersion: '2025-12-15.clover',
   typescript: true,
 });
 
@@ -377,6 +377,120 @@ export function isOneTimeProduct(priceId: string): boolean {
     PRICE_IDS.STANDARD_AST,
     PRICE_IDS.PREMIUM_AST,
   ].includes(priceId);
+}
+
+// ============================================================================
+// STRIPE ID VALIDATION GUARDRAILS
+// ============================================================================
+
+/**
+ * Stripe ID prefix patterns
+ */
+const STRIPE_ID_PATTERNS = {
+  PRICE: 'price_',
+  PRODUCT: 'prod_',
+  CUSTOMER: 'cus_',
+  SUBSCRIPTION: 'sub_',
+  SESSION: 'cs_',
+  PAYMENT_INTENT: 'pi_',
+} as const;
+
+/**
+ * Error thrown when invalid Stripe ID is used
+ */
+export class StripePriceIdError extends Error {
+  code: string;
+  invalidId: string;
+  expectedPrefix: string;
+  context?: string;
+
+  constructor(
+    invalidId: string,
+    expectedPrefix: string,
+    context?: string
+  ) {
+    const message = context
+      ? `Invalid Stripe ID in ${context}: Expected ${expectedPrefix}xxx, got ${invalidId}. Check your STRIPE_PRICE_ID_* env variables.`
+      : `Invalid Stripe ID: Expected ${expectedPrefix}xxx, got ${invalidId}`;
+    super(message);
+    this.name = 'StripePriceIdError';
+    this.code = 'INVALID_STRIPE_ID';
+    this.invalidId = invalidId;
+    this.expectedPrefix = expectedPrefix;
+    this.context = context;
+  }
+}
+
+/**
+ * Validate that an ID is a valid Stripe Price ID (starts with price_)
+ *
+ * @param priceId - The ID to validate
+ * @param context - Optional context for error message (e.g., "NOTICE_ONLY product")
+ * @throws StripePriceIdError if the ID is not a valid price ID
+ */
+export function assertValidPriceId(priceId: string, context?: string): void {
+  if (!priceId) {
+    throw new StripePriceIdError('(empty)', STRIPE_ID_PATTERNS.PRICE, context);
+  }
+
+  // Check if it's a product ID (common mistake)
+  if (priceId.startsWith(STRIPE_ID_PATTERNS.PRODUCT)) {
+    throw new StripePriceIdError(priceId, STRIPE_ID_PATTERNS.PRICE, context);
+  }
+
+  // Check if it starts with price_
+  if (!priceId.startsWith(STRIPE_ID_PATTERNS.PRICE)) {
+    throw new StripePriceIdError(priceId, STRIPE_ID_PATTERNS.PRICE, context);
+  }
+}
+
+/**
+ * Check if a string looks like a Stripe Price ID
+ */
+export function isValidPriceIdFormat(id: string): boolean {
+  return typeof id === 'string' && id.startsWith(STRIPE_ID_PATTERNS.PRICE);
+}
+
+/**
+ * Check if a string looks like a Stripe Product ID
+ */
+export function isProductId(id: string): boolean {
+  return typeof id === 'string' && id.startsWith(STRIPE_ID_PATTERNS.PRODUCT);
+}
+
+/**
+ * Validate all configured price IDs at startup (dev mode)
+ * Logs warnings for any misconfigured price IDs
+ */
+export function validateAllPriceIds(): { valid: boolean; errors: string[] } {
+  const errors: string[] = [];
+
+  const priceIdChecks = [
+    { key: 'NOTICE_ONLY', value: PRICE_IDS.NOTICE_ONLY },
+    { key: 'EVICTION_PACK', value: PRICE_IDS.EVICTION_PACK },
+    { key: 'MONEY_CLAIM', value: PRICE_IDS.MONEY_CLAIM },
+    { key: 'STANDARD_AST', value: PRICE_IDS.STANDARD_AST },
+    { key: 'PREMIUM_AST', value: PRICE_IDS.PREMIUM_AST },
+  ];
+
+  for (const { key, value } of priceIdChecks) {
+    if (!value || value === 'undefined') {
+      errors.push(`STRIPE_PRICE_ID_${key} is not set`);
+    } else if (isProductId(value)) {
+      errors.push(
+        `STRIPE_PRICE_ID_${key} contains a Product ID (${value}), expected Price ID (price_xxx)`
+      );
+    } else if (!isValidPriceIdFormat(value)) {
+      errors.push(
+        `STRIPE_PRICE_ID_${key} has invalid format (${value}), expected Price ID (price_xxx)`
+      );
+    }
+  }
+
+  return {
+    valid: errors.length === 0,
+    errors,
+  };
 }
 
 export default stripe;

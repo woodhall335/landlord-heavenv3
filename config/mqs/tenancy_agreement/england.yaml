@@ -681,6 +681,7 @@ questions:
         label: "Deposit amount"
         inputType: currency
         placeholder: "1400"
+        helperText: "⚠️ TENANT FEES ACT 2019: Maximum deposit is 5 weeks' rent (or 6 weeks if annual rent exceeds £50,000). Excess deposits are unlawful."
         validation:
           required: true
           min: 0
@@ -725,11 +726,24 @@ questions:
     section: Deposit
     question: "Prescribed information compliance"
     inputType: yes_no
-    helperText: "STATUTORY REQUIREMENT: You MUST serve prescribed information to the tenant and any relevant person within 30 days of receiving the deposit. This is a legal obligation under the Housing Act 2004. Failure to comply can result in: (1) Being ordered to pay the tenant 1-3x the deposit amount in compensation, (2) Inability to serve a valid Section 21 notice until compliance is achieved and the tenant has held the deposit for the required period. Non-compliance exposes you to significant financial and legal risk."
+    helperText: "STATUTORY REQUIREMENT: You MUST serve prescribed information to the tenant within 30 days of receiving the deposit. Failure to comply invalidates Section 21 notices."
     validation:
       required: true
     maps_to:
       - deposit.prescribed_information_served
+
+  - id: prescribed_information_date
+    section: Deposit
+    question: "When was/will prescribed information be served?"
+    inputType: date
+    helperText: "CRITICAL: Must be within 30 days of receiving the deposit. This date is required to validate Section 21 eligibility."
+    dependsOn:
+      questionId: prescribed_information_served
+      value: true
+    validation:
+      required: true
+    maps_to:
+      - deposit.prescribed_information_date
 
   # 7. Bills & utilities
   - id: bills_utilities
@@ -815,7 +829,7 @@ questions:
     section: Safety & Compliance
     question: "Certificates and legal pack items"
     inputType: group
-    helperText: "These drive the legal validity summary."
+    helperText: "These drive the legal validity summary. Certificate dates are critical for compliance verification."
     fields:
       - id: epc_rating
         label: "EPC rating"
@@ -831,9 +845,19 @@ questions:
         validation:
           required: true
         width: half
+      - id: epc_certificate_date
+        label: "EPC certificate date"
+        inputType: date
+        helperText: "EPCs are valid for 10 years from issue date"
+        validation:
+          required: true
+        width: half
       - id: right_to_rent_check_date
         label: "Date right-to-rent checks completed (England only)"
         inputType: date
+        helperText: "MANDATORY: Must be completed BEFORE the tenancy starts"
+        validation:
+          required: true
         width: half
       - id: gas_safety_certificate
         label: "Current gas safety certificate provided?"
@@ -841,11 +865,50 @@ questions:
         validation:
           required: true
         width: half
+      - id: gas_safety_certificate_date
+        label: "Gas safety certificate date"
+        inputType: date
+        helperText: "Gas certificates are valid for 12 months from issue date"
+        dependsOn:
+          questionId: gas_safety_certificate
+          value: true
+        validation:
+          required: true
+        width: half
+      - id: gas_safety_certificate_expiry
+        label: "Gas safety certificate expiry"
+        inputType: date
+        helperText: "Enter the expiry date shown on the certificate"
+        dependsOn:
+          questionId: gas_safety_certificate
+          value: true
+        validation:
+          required: true
+        width: half
       - id: electrical_safety_certificate
         label: "Electrical safety (EICR) provided?"
         inputType: yes_no
+        helperText: "MANDATORY since April 2020: EICR required for all new tenancies"
         validation:
           required: true
+        width: half
+      - id: eicr_certificate_date
+        label: "EICR certificate date"
+        inputType: date
+        helperText: "EICRs are typically valid for 5 years"
+        dependsOn:
+          questionId: electrical_safety_certificate
+          value: true
+        validation:
+          required: true
+        width: half
+      - id: eicr_next_inspection_date
+        label: "EICR next inspection due"
+        inputType: date
+        helperText: "Date shown on certificate for next inspection"
+        dependsOn:
+          questionId: electrical_safety_certificate
+          value: true
         width: half
       - id: smoke_alarms_fitted
         label: "Smoke alarms fitted and tested?"
@@ -863,17 +926,33 @@ questions:
         label: "Latest 'How to Rent' guide given? (England only - required for valid S21)"
         inputType: yes_no
         defaultValue: false
-        helperText: "You MUST provide the latest government 'How to Rent' guide before or at the start of the tenancy. Failure to do so will invalidate any Section 21 notice, meaning you cannot use the accelerated possession procedure."
+        helperText: "You MUST provide the latest government 'How to Rent' guide before or at the start of the tenancy. Failure to do so will invalidate any Section 21 notice."
+        validation:
+          required: true
+        width: half
+      - id: how_to_rent_guide_date
+        label: "Date 'How to Rent' guide provided"
+        inputType: date
+        helperText: "Must be on or before the tenancy start date"
+        dependsOn:
+          questionId: how_to_rent_guide_provided
+          value: true
         validation:
           required: true
         width: half
     maps_to:
       - gas_safety_certificate
+      - compliance.gas_cert_date
+      - compliance.gas_cert_expiry
       - electrical_safety_certificate
+      - compliance.eicr_date
+      - compliance.eicr_next_inspection_date
       - epc_rating
+      - compliance.epc_certificate_date
       - smoke_alarms_fitted
       - carbon_monoxide_alarms
       - how_to_rent_guide_provided
+      - compliance.how_to_rent_date
       - right_to_rent_check_date
 
   # 9. Maintenance & repairs

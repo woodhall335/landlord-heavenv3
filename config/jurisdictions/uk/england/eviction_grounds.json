@@ -12,7 +12,7 @@
       "fullLegalText": "Not later than the beginning of the tenancy the landlord gave notice in writing to the tenant that possession might be recovered on this ground or the court is of the opinion that it is just and equitable to dispense with the requirement of notice and (in either case)—\n(a) at some time before the beginning of the tenancy, the landlord who is seeking possession or, in the case of joint landlords seeking possession, at least one of them occupied the dwelling-house as his only or principal home; or\n(b) the landlord who is seeking possession or, in the case of joint landlords seeking possession, at least one of them requires the dwelling-house as his or his spouse's only or principal home and neither the landlord (or, in the case of joint landlords, any one of them) nor any other person who, as landlord, derived title under the landlord who gave the notice mentioned above acquired the reversion on the tenancy for money or money's worth.",
       "statute": "Housing Act 1988, Schedule 2, Part I, Ground 1",
       "notice_required": "Yes - written notice before or at start of tenancy",
-      "notice_period_days": 14,
+      "notice_period_days": 60,
       "court_decision": "Mandatory - court must grant possession if ground proven",
       "required_evidence": [
         "Written notice given to tenant before/at start of tenancy",
@@ -36,7 +36,7 @@
       "fullLegalText": "Not later than the beginning of the tenancy the landlord gave notice in writing to the tenant that possession might be recovered on this ground or the court is of the opinion that it is just and equitable to dispense with the requirement of notice and the dwelling-house is subject to a mortgage granted before the beginning of the tenancy and—\n(a) the mortgagee is entitled to exercise a power of sale conferred on him by the mortgage or by section 101 of the Law of Property Act 1925; and\n(b) the mortgagee requires possession of the dwelling-house for the purpose of disposing of it with vacant possession in exercise of that power; and\n(c) either notice was given as mentioned above or the court is satisfied that the mortgagee is likely to suffer financial hardship unless the court gives such directions.",
       "statute": "Housing Act 1988, Schedule 2, Part I, Ground 2",
       "notice_required": "Yes - written notice before or at start of tenancy",
-      "notice_period_days": 14,
+      "notice_period_days": 60,
       "court_decision": "Mandatory",
       "required_evidence": [
         "Written notice given before/at start of tenancy",

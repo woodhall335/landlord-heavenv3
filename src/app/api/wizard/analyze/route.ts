@@ -8,15 +8,20 @@
 
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { createServerSupabaseClient, getServerUser } from '@/lib/supabase/server';
+import { getServerUser } from '@/lib/supabase/server';
+import { createSupabaseAdminClient, logSupabaseAdminDiagnostics } from '@/lib/supabase/admin';
 import { getOrCreateWizardFacts } from '@/lib/case-facts/store';
 import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 import type { CaseFacts } from '@/lib/case-facts/schema';
 import { runDecisionEngine, checkEPCForSection21, type DecisionOutput } from '@/lib/decision-engine';
 import { getLawProfile } from '@/lib/law-profile';
+import { normalizeJurisdiction } from '@/lib/types/jurisdiction';
+import { getSelectedGrounds } from '@/lib/grounds';
+
+export const runtime = 'nodejs';
 
 const analyzeSchema = z.object({
-  case_id: z.string().min(1),
+  case_id: z.string().uuid(),
   // Optional Ask Heaven question for Q&A-style analysis
   question: z.string().optional(),
 });
@@ -61,9 +66,12 @@ function normaliseEvidence(facts: CaseFacts): EvidenceSnapshot {
   };
 }
 
-function computeRoute(facts: CaseFacts, jurisdiction: string, caseType: string): string {
+function computeRoute(facts: CaseFacts, jurisdiction: string, caseType: string, wizardFacts?: any): string {
   if (caseType === 'money_claim') return 'money_claim';
   if (jurisdiction === 'scotland') return 'notice_to_leave';
+  // Check user's explicit eviction_route selection from Case Basics first
+  if (wizardFacts?.eviction_route) return wizardFacts.eviction_route;
+  if (wizardFacts?.selected_notice_route) return wizardFacts.selected_notice_route;
   if (facts.notice.notice_type) return facts.notice.notice_type;
   return 'standard_possession';
 }
@@ -182,7 +190,7 @@ function computeStrength(facts: CaseFacts): { score: number; red_flags: string[]
     }
 
     // 5. Jurisdiction sanity checks – E&W small-claims style
-    if (facts.property.country === 'england-wales') {
+    if (facts.property.country === 'england' || facts.property.country === 'wales') {
       if (arrears > 10000) {
         red_flags.push(
           'Total claim appears to be above £10,000 – this may fall outside the small-claims track. Check whether this product is suitable.'
@@ -257,7 +265,13 @@ function buildCaseSummary(facts: CaseFacts, jurisdiction: string) {
       facts.issues.rent_arrears.arrears_items.length > 0) ||
     facts.money_claim.arrears_schedule_confirmed === true;
 
-  const lbaSent = facts.money_claim.lba_sent;
+  // Pre-action letter status - check the correct fields from PreActionSection
+  // User selected "Yes, I've already sent it": letter_before_claim_sent=true OR pap_letter_date is set
+  // User selected "No, generate for me": generate_pap_documents=true
+  const lbaSent = facts.money_claim.letter_before_claim_sent === true ||
+    facts.money_claim.pap_letter_date ||
+    facts.money_claim.lba_sent;
+  const willGenerateLetter = facts.money_claim.generate_pap_documents === true;
   const papServed = facts.money_claim.pap_documents_served;
   const preActionConfirmed = facts.money_claim.pre_action_deadline_confirmation;
 
@@ -276,7 +290,8 @@ function buildCaseSummary(facts: CaseFacts, jurisdiction: string) {
     if (!facts.evidence.rent_schedule_uploaded) {
       missing_prerequisites.push('Rent schedule document upload');
     }
-    if (!lbaSent && !papServed) {
+    // Pre-action is satisfied if: already sent OR we'll generate it for them
+    if (!lbaSent && !papServed && !willGenerateLetter) {
       missing_prerequisites.push('Pre-action demand / Letter Before Claim');
     }
   }
@@ -285,7 +300,7 @@ function buildCaseSummary(facts: CaseFacts, jurisdiction: string) {
   if (isMoneyClaim) {
     if ((lbaSent || papServed) && preActionConfirmed) {
       pre_action_status = 'complete';
-    } else if (lbaSent || papServed) {
+    } else if (lbaSent || papServed || willGenerateLetter) {
       pre_action_status = 'partial';
     } else {
       pre_action_status = 'missing';
@@ -306,8 +321,10 @@ function buildCaseSummary(facts: CaseFacts, jurisdiction: string) {
     has_arrears: hasArrears,
     damages,
     other_charges,
-    interest_rate: facts.money_claim.interest_rate,
-    interest_start_date: facts.money_claim.interest_start_date,
+    // Interest: only include if user explicitly opted in
+    charge_interest: facts.money_claim.charge_interest === true,
+    interest_rate: facts.money_claim.charge_interest === true ? facts.money_claim.interest_rate : null,
+    interest_start_date: facts.money_claim.charge_interest === true ? facts.money_claim.interest_start_date : null,
     sheriffdom: facts.money_claim.sheriffdom,
     route: jurisdiction === 'scotland' ? 'simple_procedure' : 'money_claim',
 
@@ -499,8 +516,9 @@ function craftAskHeavenAnswer(
   const { score, red_flags, compliance } = computeStrength(facts);
   const summary = buildCaseSummary(facts, jurisdiction);
   const arrears = facts.issues.rent_arrears.total_arrears;
-  const interestRate =
-    facts.money_claim.interest_rate ?? (jurisdiction === 'scotland' ? 8 : 8);
+  // Interest: only show if user explicitly opted in via charge_interest === true
+  const claimInterest = facts.money_claim.charge_interest === true;
+  const interestRate = claimInterest ? (facts.money_claim.interest_rate ?? 8) : null;
   const hasDamages = (facts.money_claim.damage_items || []).length > 0;
   const hasOther = (facts.money_claim.other_charges || []).length > 0;
   const isMoneyClaim = isMoneyClaimCase(facts);
@@ -558,9 +576,11 @@ function craftAskHeavenAnswer(
     }
   }
 
-  const interestLine =
-    ` We apply a simple ${interestRate}% per annum statutory interest line with a daily rate in the particulars where permitted.` +
-    ' You can adjust the dates or amounts in the wizard and regenerate the documents if your figures change.';
+  // Interest line: only include if user explicitly opted in
+  const interestLine = claimInterest && interestRate
+    ? ` We apply a simple ${interestRate}% per annum statutory interest line with a daily rate in the particulars where permitted.` +
+      ' You can adjust the dates or amounts in the wizard and regenerate the documents if your figures change.'
+    : '';
 
   const disclaimer =
     ' This explanation is for information only and is not legal advice. Courts make their own decisions, and a strong claim on paper can still be defended or refused if the facts or evidence do not support it.';
@@ -572,6 +592,7 @@ function craftAskHeavenAnswer(
 
 export async function POST(request: Request) {
   try {
+    logSupabaseAdminDiagnostics({ route: '/api/wizard/analyze', writesUsingAdmin: true });
     const user = await getServerUser();
     const body = await request.json();
     const validation = analyzeSchema.safeParse(body);
@@ -585,24 +606,22 @@ export async function POST(request: Request) {
 
     const { case_id, question } = validation.data;
 
-    // Create properly typed Supabase client
-    const supabase = await createServerSupabaseClient();
+    // Use admin client to bypass RLS - we do our own access control below
+    const adminSupabase = createSupabaseAdminClient();
 
-    let query = supabase.from('cases').select('*').eq('id', case_id);
-    if (user) {
-      query = query.eq('user_id', user.id);
-    } else {
-      query = query.is('user_id', null);
-    }
-
-    const { data, error: caseError } = await query.single();
+    // Fetch the case using admin client (bypasses RLS)
+    const { data, error: caseError } = await adminSupabase
+      .from('cases')
+      .select('*')
+      .eq('id', case_id)
+      .single();
 
     if (caseError || !data) {
       console.error('Case not found:', caseError);
       return NextResponse.json({ error: 'Case not found' }, { status: 404 });
     }
 
-    // Type assertion: we know data exists after the null check
+    // Type assertion for the case record properties we need
     const caseData = data as {
       id: string;
       jurisdiction: string;
@@ -611,27 +630,64 @@ export async function POST(request: Request) {
       wizard_progress: number | null;
     };
 
-    // Northern Ireland gating: only tenancy agreements are supported
-    if (caseData.jurisdiction === 'northern-ireland' && caseData.case_type !== 'tenancy_agreement') {
+    // Manual access control: user can access if:
+    // 1. They own the case (user_id matches)
+    // 2. The case is anonymous (user_id is null) - anyone can access
+    const isOwner = user && caseData.user_id === user.id;
+    const isAnonymousCase = caseData.user_id === null;
+
+    if (!isOwner && !isAnonymousCase) {
+      console.error('Access denied to case:', { case_id, userId: user?.id, caseUserId: caseData.user_id });
+      return NextResponse.json({ error: 'Case not found' }, { status: 404 });
+    }
+
+    let canonicalJurisdiction = normalizeJurisdiction(caseData.jurisdiction);
+
+    // Load flat WizardFacts from DB and convert to nested CaseFacts for analysis
+    const wizardFacts = await getOrCreateWizardFacts(adminSupabase, case_id);
+    const facts = wizardFactsToCaseFacts(wizardFacts);
+
+    if (!canonicalJurisdiction) {
+      canonicalJurisdiction =
+        normalizeJurisdiction((caseData as any)?.property_location) ||
+        normalizeJurisdiction(facts.property.country as string | null);
+    }
+
+    if (canonicalJurisdiction === 'england' && facts.property.country === 'wales') {
+      canonicalJurisdiction = 'wales';
+    }
+
+    if (!canonicalJurisdiction) {
       return NextResponse.json(
         {
-          // IMPORTANT: stable machine-readable code (no imports inside the handler)
-          error: 'NI_EVICTION_MONEY_CLAIM_NOT_SUPPORTED',
-          message:
-            'We currently support tenancy agreements for Northern Ireland. For England & Wales and Scotland, we support evictions (notices and court packs) and money claims. Northern Ireland eviction and money claim support is planned for Q2 2026.',
-          supported: {
-            'northern-ireland': ['tenancy_agreement'],
-            'england-wales': ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
-            scotland: ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
-          },
+          error: 'INVALID_JURISDICTION',
+          message: 'Jurisdiction must be one of england, wales, scotland, or northern-ireland.',
         },
         { status: 400 }
       );
     }
 
-    // Load flat WizardFacts from DB and convert to nested CaseFacts for analysis
-    const wizardFacts = await getOrCreateWizardFacts(supabase, case_id);
-    const facts = wizardFactsToCaseFacts(wizardFacts);
+    // Northern Ireland gating: only tenancy agreements are supported
+    if (canonicalJurisdiction === 'northern-ireland' && caseData.case_type !== 'tenancy_agreement') {
+      return NextResponse.json(
+        {
+          // IMPORTANT: stable machine-readable code (no imports inside the handler)
+          code: 'NI_EVICTION_MONEY_CLAIM_NOT_SUPPORTED',
+          error: 'NI_EVICTION_MONEY_CLAIM_NOT_SUPPORTED',
+          user_message:
+            'Northern Ireland: tenancy agreements only (eviction notices planned). England & Wales and Scotland support evictions (notices and court packs) and money claims where available.',
+          supported: {
+            'northern-ireland': ['tenancy_agreement'],
+            england: ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
+            wales: ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
+            scotland: ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
+          },
+          blocking_issues: [],
+          warnings: [],
+        },
+        { status: 422 }
+      );
+    }
 
     const evidence = normaliseEvidence(facts);
     facts.evidence.tenancy_agreement_uploaded = evidence.tenancy_agreement_uploaded;
@@ -649,24 +705,24 @@ export async function POST(request: Request) {
       files: evidence.files,
     };
 
-    const route = computeRoute(facts, caseData.jurisdiction, caseData.case_type);
+    const route = computeRoute(facts, canonicalJurisdiction, caseData.case_type, wizardFacts);
     const product =
       (facts.meta?.product as string | undefined) ||
       (facts.meta?.original_product as string | undefined) ||
       (caseData as any)?.product ||
       (caseData.case_type === 'eviction' ? 'complete_pack' : caseData.case_type);
     const { score, red_flags, compliance } = computeStrength(facts);
-    const summary = buildCaseSummary(facts, caseData.jurisdiction);
+    const summary = buildCaseSummary(facts, canonicalJurisdiction);
     const askHeavenAnswer = craftAskHeavenAnswer(
       question,
       facts,
-      caseData.jurisdiction
+      canonicalJurisdiction
     );
 
     // NEW: compute structured case_health block for the UI (money-claim aware)
     const caseHealth = buildCaseHealth(
       facts,
-      caseData.jurisdiction,
+      canonicalJurisdiction,
       caseData.case_type,
       score,
       summary,
@@ -680,7 +736,7 @@ export async function POST(request: Request) {
     if (caseData.case_type === 'eviction') {
       try {
         decisionEngineOutput = runDecisionEngine({
-          jurisdiction: caseData.jurisdiction as 'england-wales' | 'scotland' | 'northern-ireland',
+          jurisdiction: canonicalJurisdiction,
           product: facts.meta.product as any || 'notice_only',
           case_type: 'eviction',
           facts,
@@ -719,21 +775,44 @@ export async function POST(request: Request) {
       }
     }
 
+    // Ground-aware evidence suggestions for eviction cases
+    // Only show suggestions relevant to the user's selected grounds
     if (caseData.case_type === 'eviction') {
+      // Get user's selected grounds from wizard facts
+      const selectedGrounds: string[] = getSelectedGrounds(wizardFacts as any);
+      const normalizeGround = (g: string) => g.replace(/^ground\s*/i, '').trim();
+      const normalizedSelectedGrounds = selectedGrounds.map(normalizeGround);
+
+      // Check if arrears grounds (8, 10, 11) are selected
+      const hasArrearsGrounds = normalizedSelectedGrounds.some(g => ['8', '10', '11'].includes(g));
+      // Check if damage/deterioration grounds (13, 15) are selected
+      const hasDamageGrounds = normalizedSelectedGrounds.some(g => ['13', '15'].includes(g));
+      // Check if ASB grounds (14, 14ZA) are selected
+      const hasASBGrounds = normalizedSelectedGrounds.some(g => ['14', '14ZA', '14A'].includes(g));
+
+      // Tenancy agreement is always relevant
       if (!evidence.tenancy_agreement_uploaded) {
-        compliance.push('Tenancy agreement not uploaded yet – add it under evidence to strengthen your position.');
+        compliance.push('If you have it, a copy of your tenancy agreement will strengthen your case.');
       }
-      if (!evidence.rent_schedule_uploaded) {
-        compliance.push('Rent schedule missing – courts expect a clear arrears schedule. Upload it under evidence.');
+
+      // Rent schedule only relevant for arrears grounds
+      if (hasArrearsGrounds && !evidence.rent_schedule_uploaded) {
+        compliance.push('A detailed rent schedule showing arrears will support your arrears claim.');
       }
+
+      // Correspondence is generally useful but phrased conditionally
       if (!evidence.correspondence_uploaded) {
-        compliance.push('No correspondence uploaded – add key emails or letters showing the dispute history.');
+        compliance.push('If available, correspondence with the tenant about the issues can support your case.');
       }
-      if (!evidence.damage_photos_uploaded) {
-        compliance.push('Damage/photos evidence missing – upload photos if you rely on property damage or disrepair.');
+
+      // Damage photos only relevant for damage/deterioration grounds
+      if (hasDamageGrounds && !evidence.damage_photos_uploaded) {
+        compliance.push('Photographs of damage will support your property deterioration claim.');
       }
-      if (!evidence.authority_letters_uploaded) {
-        compliance.push('Council/police letters not uploaded – include them if anti-social behaviour is part of your case.');
+
+      // Council/police letters only relevant for ASB grounds
+      if (hasASBGrounds && !evidence.authority_letters_uploaded) {
+        compliance.push('Council or police correspondence will significantly strengthen your ASB case.');
       }
     }
 
@@ -751,16 +830,63 @@ export async function POST(request: Request) {
     } | null = null;
 
     if (product === 'notice_only' && decisionEngineOutput) {
-      // NOTICE_ONLY: Decision engine ALWAYS wins (no user override allowed)
-      // The decision engine auto-routes to the legally valid option
+      // NOTICE_ONLY: Respect user's explicit route selection when that route is allowed
+      // Only auto-route when user's selection is blocked or no explicit selection made
 
       const allowedRoutes = decisionEngineOutput.allowed_routes || [];
       const recommendedRoute = decisionEngineOutput.recommended_routes[0] || null;
       const blockedRoutes = decisionEngineOutput.blocked_routes || [];
 
-      // If S21 is blocked, auto-route to S8/Notice to Leave
-      if (blockedRoutes.includes('section_21')) {
-        const fallbackRoute = caseData.jurisdiction === 'scotland' ? 'notice_to_leave' : 'section_8';
+      // Check for user's explicit route selection (eviction_route from CaseBasicsSection)
+      const userExplicitRoute = (wizardFacts as any).eviction_route ||
+                                (wizardFacts as any).selected_notice_route ||
+                                null;
+
+      // If user explicitly selected a route and it's allowed, use it
+      if (userExplicitRoute && !blockedRoutes.includes(userExplicitRoute)) {
+        finalRecommendedRoute = userExplicitRoute;
+
+        // If decision engine recommended a different route, log it but respect user choice
+        if (recommendedRoute && recommendedRoute !== userExplicitRoute) {
+          console.log(`[NOTICE_ONLY] User explicitly selected ${userExplicitRoute}, respecting choice (decision engine recommended ${recommendedRoute})`);
+        }
+      }
+      // If user selected a blocked route, auto-route to alternative
+      else if (userExplicitRoute && blockedRoutes.includes(userExplicitRoute)) {
+        const fallbackRoute =
+          userExplicitRoute === 'section_21'
+            ? 'section_8'
+            : userExplicitRoute === 'section_8' && allowedRoutes.includes('section_21')
+            ? 'section_21'
+            : recommendedRoute || (canonicalJurisdiction === 'scotland'
+              ? 'notice_to_leave'
+              : canonicalJurisdiction === 'wales'
+              ? 'wales_section_173'
+              : 'section_8');
+        finalRecommendedRoute = fallbackRoute;
+
+        const blockingIssues = decisionEngineOutput.blocking_issues
+          .filter(b => b.route === userExplicitRoute && b.severity === 'blocking')
+          .map(b => b.description);
+
+        const routeExplanation = decisionEngineOutput.route_explanations?.[userExplicitRoute as keyof typeof decisionEngineOutput.route_explanations] ||
+          `${userExplicitRoute.replace('_', ' ')} is not available due to compliance issues.`;
+
+        route_override = {
+          from: userExplicitRoute,
+          to: fallbackRoute,
+          reason: routeExplanation,
+          blocking_issues: blockingIssues.length > 0 ? blockingIssues : undefined,
+        };
+      }
+      // If S21 is blocked (legacy check for when no explicit selection)
+      else if (blockedRoutes.includes('section_21')) {
+        const fallbackRoute =
+          canonicalJurisdiction === 'scotland'
+            ? 'notice_to_leave'
+            : canonicalJurisdiction === 'wales'
+            ? 'wales_section_173'
+            : 'section_8';
         finalRecommendedRoute = fallbackRoute;
 
         const blockingIssues = decisionEngineOutput.blocking_issues
@@ -777,40 +903,67 @@ export async function POST(request: Request) {
           blocking_issues: blockingIssues.length > 0 ? blockingIssues : undefined,
         };
       } else if (recommendedRoute) {
-        // Use decision engine recommendation
+        // No explicit user selection - use decision engine recommendation
         finalRecommendedRoute = recommendedRoute;
-
-        // Check if wizard has already auto-selected a route (selected_notice_route)
-        // This would be set by the answer endpoint after deposit_and_compliance
-        const wizardSelectedRoute = (wizardFacts as any).selected_notice_route || null;
-
-        // If wizard already selected a route that differs from decision engine, note the override
-        if (wizardSelectedRoute && wizardSelectedRoute !== recommendedRoute) {
-          const routeExplanation = decisionEngineOutput.route_explanations?.[recommendedRoute as keyof typeof decisionEngineOutput.route_explanations] ||
-            `Based on your case details, ${recommendedRoute.replace('_', ' ')} is the legally valid route.`;
-
-          route_override = {
-            from: wizardSelectedRoute,
-            to: recommendedRoute,
-            reason: routeExplanation,
-          };
-        }
       } else if (allowedRoutes.length > 0) {
         // Fallback to first allowed route
         finalRecommendedRoute = allowedRoutes[0];
       } else {
         // Ultimate fallback
-        finalRecommendedRoute = caseData.jurisdiction === 'scotland' ? 'notice_to_leave' : 'section_8';
+        finalRecommendedRoute =
+          canonicalJurisdiction === 'scotland'
+            ? 'notice_to_leave'
+            : canonicalJurisdiction === 'wales'
+            ? 'wales_section_173'
+            : 'section_8';
       }
     } else if (decisionEngineOutput) {
-      // For complete_pack: Use decision engine recommendation
-      finalRecommendedRoute = decisionEngineOutput.recommended_routes[0] || route;
+      // For complete_pack: Respect user's explicit route selection if valid
+      // Check both selected_notice_route and eviction_route (user's Case Basics selection)
+      const userSelectedRoute = (wizardFacts as any).selected_notice_route ||
+                                 (wizardFacts as any).eviction_route ||
+                                 null;
+      const allowedRoutes = decisionEngineOutput.allowed_routes || [];
+      const blockedRoutes = decisionEngineOutput.blocked_routes || [];
+
+      if (userSelectedRoute) {
+        // User explicitly selected a route - use it if allowed
+        if (blockedRoutes.includes(userSelectedRoute)) {
+          // User's selected route is blocked - auto-route to alternative
+          const fallbackRoute =
+            userSelectedRoute === 'section_21'
+              ? 'section_8'
+              : userSelectedRoute === 'section_8'
+              ? (allowedRoutes.includes('section_21') ? 'section_21' : 'section_8')
+              : decisionEngineOutput.recommended_routes[0] || route;
+
+          finalRecommendedRoute = fallbackRoute;
+
+          const blockingIssues = decisionEngineOutput.blocking_issues
+            .filter(b => b.route === userSelectedRoute && b.severity === 'blocking')
+            .map(b => b.description);
+
+          route_override = {
+            from: userSelectedRoute,
+            to: fallbackRoute,
+            reason: decisionEngineOutput.route_explanations?.[userSelectedRoute as keyof typeof decisionEngineOutput.route_explanations] ||
+              `${userSelectedRoute.replace('_', ' ')} is not available due to compliance issues.`,
+            blocking_issues: blockingIssues.length > 0 ? blockingIssues : undefined,
+          };
+        } else {
+          // User's selected route is allowed - use it
+          finalRecommendedRoute = userSelectedRoute;
+        }
+      } else {
+        // No explicit user selection - use decision engine recommendation
+        finalRecommendedRoute = decisionEngineOutput.recommended_routes[0] || route;
+      }
     } else {
       // Fallback if no decision engine output
       finalRecommendedRoute = route;
     }
 
-    await supabase
+    await adminSupabase
       .from('cases')
       .update({
         recommended_route: finalRecommendedRoute,
@@ -830,7 +983,7 @@ export async function POST(request: Request) {
 
     if (caseData.case_type === 'eviction') {
       const isNoticeOnly = product === 'notice_only';
-      if (caseData.jurisdiction === 'scotland') {
+      if (canonicalJurisdiction === 'scotland') {
         previewDocuments.push(
           { id: 'notice_to_leave', document_type: 'notice', document_title: 'Notice to Leave' },
           {
@@ -845,18 +998,65 @@ export async function POST(request: Request) {
             document_title: 'Eviction roadmap & service checklist',
           },
         );
-      } else {
+      } else if (canonicalJurisdiction === 'wales') {
         previewDocuments.push(
           {
-            id: 's8_notice',
+            id: 'rhw16_or_rhw17',
             document_type: 'notice',
-            document_title: 'Section 8 notice (Form 3)',
+            document_title: 'Section 173 notice (RHW16/17)',
           },
           {
-            id: 's21_notice',
+            id: 'rhw23',
             document_type: 'notice',
-            document_title: 'Section 21 notice (Form 6A)',
+            document_title: 'RHW23 breach notice',
           },
+          {
+            id: 'service_proofs',
+            document_type: 'guidance',
+            document_title: 'Service checklist & certificates of service',
+          },
+        );
+      } else {
+        // England: Show route-specific notices based on recommended route
+        const isSection21Route = finalRecommendedRoute === 'section_21' ||
+                                  finalRecommendedRoute === 'accelerated_possession' ||
+                                  finalRecommendedRoute === 'accelerated_section21';
+        const isSection8Route = finalRecommendedRoute === 'section_8' ||
+                                 finalRecommendedRoute === 'section8_notice';
+
+        if (isSection21Route) {
+          previewDocuments.push(
+            {
+              id: 's21_notice',
+              document_type: 'notice',
+              document_title: 'Section 21 notice (Form 6A)',
+            },
+          );
+        } else if (isSection8Route) {
+          previewDocuments.push(
+            {
+              id: 's8_notice',
+              document_type: 'notice',
+              document_title: 'Section 8 notice (Form 3)',
+            },
+          );
+        } else {
+          // Fallback: show both if route is unclear
+          previewDocuments.push(
+            {
+              id: 's8_notice',
+              document_type: 'notice',
+              document_title: 'Section 8 notice (Form 3)',
+            },
+            {
+              id: 's21_notice',
+              document_type: 'notice',
+              document_title: 'Section 21 notice (Form 6A)',
+            },
+          );
+        }
+
+        previewDocuments.push(
           {
             id: 'service_proofs',
             document_type: 'guidance',
@@ -865,26 +1065,37 @@ export async function POST(request: Request) {
         );
 
         if (!isNoticeOnly) {
-          previewDocuments.push(
-            {
-              id: 'n5',
+          // Section 21 uses accelerated possession (N5B only)
+          // Section 8 uses standard possession (N5 + N119)
+          if (isSection21Route) {
+            previewDocuments.push({
+              id: 'n5b',
               document_type: 'court_form',
-              document_title: 'N5 claim form',
+              document_title: 'N5B accelerated possession claim',
               requiredToFile: true,
-            },
-            {
-              id: 'n119',
-              document_type: 'court_form',
-              document_title: 'N119 particulars of claim',
-              requiredToFile: true,
-            },
-          );
+            });
+          } else {
+            previewDocuments.push(
+              {
+                id: 'n5',
+                document_type: 'court_form',
+                document_title: 'N5 claim form',
+                requiredToFile: true,
+              },
+              {
+                id: 'n119',
+                document_type: 'court_form',
+                document_title: 'N119 particulars of claim',
+                requiredToFile: true,
+              },
+            );
+          }
         }
       }
     }
 
         // Get law profile for version tracking and legal metadata
-    const law_profile = getLawProfile(caseData.jurisdiction, caseData.case_type);
+    const law_profile = getLawProfile(canonicalJurisdiction, caseData.case_type);
 
     // Derived fields for final analysis UI (non-blocking, informative only)
     const case_strength_band =
@@ -892,23 +1103,31 @@ export async function POST(request: Request) {
 
     let is_court_ready: boolean | null = null;
     let readiness_summary: string | null = null;
-    let recommended_route_label: string = route;
+    // Use finalRecommendedRoute for the label since that's what's actually recommended
+    const effectiveRoute = finalRecommendedRoute || route;
+    let recommended_route_label: string = effectiveRoute;
 
     // Human-friendly route labels for the UI
     if (caseData.case_type === 'eviction') {
-      if (caseData.jurisdiction === 'england-wales') {
-        if (route === 'section_21') {
+      if (canonicalJurisdiction === 'england') {
+        if (effectiveRoute === 'section_21') {
           recommended_route_label =
             'Section 21 possession (accelerated or standard, depending on compliance)';
-        } else if (route === 'section_8') {
+        } else if (effectiveRoute === 'section_8') {
           recommended_route_label = 'Section 8 standard possession (N5 + N119)';
-        } else if (route === 'notice_only') {
+        } else if (effectiveRoute === 'notice_only') {
           recommended_route_label = 'Notice-only route (serve notice now, claim later)';
-        } else if (route === 'standard_possession') {
+        } else if (effectiveRoute === 'standard_possession') {
           recommended_route_label = 'Standard possession (N5 + N119)';
         }
-      } else if (caseData.jurisdiction === 'scotland') {
-        if (route === 'notice_to_leave') {
+      } else if (canonicalJurisdiction === 'wales') {
+        if (effectiveRoute === 'wales_section_173') {
+          recommended_route_label = 'Section 173 notice (no fault)';
+        } else if (effectiveRoute === 'wales_fault_based') {
+          recommended_route_label = 'Section 157/159 breach notice (RHW23)';
+        }
+      } else if (canonicalJurisdiction === 'scotland') {
+        if (effectiveRoute === 'notice_to_leave') {
           recommended_route_label = 'Notice to Leave + Form E (First-tier Tribunal)';
         }
       }
@@ -946,8 +1165,108 @@ export async function POST(request: Request) {
       }
     }
 
+    // Build case_facts object for review page consumption
+    // Contains persisted wizard facts relevant to grounds selection and review display
+    // IMPORTANT: Include Section 21 compliance fields for Review page validation
+    const wf = wizardFacts as any;
+    const caseFacts = {
+      section8_grounds: getSelectedGrounds(wizardFacts as any),
+      include_recommended_grounds: wf?.include_recommended_grounds || false,
+      // Check both flat and nested locations for arrears_items (notice_only stores in nested location)
+      arrears_items: wf?.arrears_items ||
+                     wf?.issues?.rent_arrears?.arrears_items || [],
+      recommended_grounds: decisionEngineOutput?.recommended_grounds || [],
+      jurisdiction: canonicalJurisdiction,
+      eviction_route: wf?.eviction_route || null,
+      selected_notice_route: wf?.selected_notice_route || null,
+      // Wales fault-based grounds for document list display
+      wales_fault_grounds: wf?.wales_fault_grounds || [],
+
+      // Section 21 compliance fields - CRITICAL for Review page validation
+      // These fields may be at top-level or nested in compliance/section21/property containers
+      // The Review page uses buildSection21ValidationInputFromFacts() which expects these fields
+      deposit_taken: wf?.deposit_taken ?? wf?.compliance?.deposit_taken ?? wf?.tenancy?.deposit_taken,
+      deposit_amount: wf?.deposit_amount ?? wf?.compliance?.deposit_amount ?? wf?.tenancy?.deposit_amount,
+      deposit_protected: wf?.deposit_protected ?? wf?.deposit_protected_scheme ?? wf?.compliance?.deposit_protected,
+      deposit_scheme: wf?.deposit_scheme ?? wf?.deposit_scheme_name ?? wf?.compliance?.deposit_scheme,
+      prescribed_info_served: wf?.prescribed_info_served ?? wf?.prescribed_info_given ?? wf?.compliance?.prescribed_info_served,
+
+      // Gas safety
+      has_gas_appliances: wf?.has_gas_appliances ?? wf?.property_has_gas ?? wf?.property?.has_gas_appliances,
+      gas_safety_cert_served: wf?.gas_safety_cert_served ?? wf?.gas_certificate_provided ?? wf?.compliance?.gas_safety_cert_served,
+
+      // EPC - support both key variants
+      epc_served: wf?.epc_served ?? wf?.epc_provided ?? wf?.compliance?.epc_served ?? wf?.property?.epc_served,
+      epc_provided: wf?.epc_provided ?? wf?.epc_served ?? wf?.compliance?.epc_provided ?? wf?.property?.epc_provided,
+
+      // How to Rent - support all key variants
+      how_to_rent_served: wf?.how_to_rent_served ?? wf?.how_to_rent_provided ?? wf?.how_to_rent_given ?? wf?.compliance?.how_to_rent_served,
+      how_to_rent_provided: wf?.how_to_rent_provided ?? wf?.how_to_rent_served ?? wf?.how_to_rent_given ?? wf?.compliance?.how_to_rent_provided,
+
+      // Licensing
+      licensing_required: wf?.licensing_required ?? wf?.property?.licensing_required,
+      has_valid_licence: wf?.has_valid_licence ?? wf?.has_license ?? wf?.property?.has_valid_licence,
+
+      // Retaliatory eviction
+      improvement_notice_served: wf?.improvement_notice_served ?? wf?.compliance?.improvement_notice_served,
+      no_retaliatory_notice: wf?.no_retaliatory_notice ?? wf?.compliance?.no_retaliatory_notice,
+
+      // Tenancy dates
+      tenancy_start_date: wf?.tenancy_start_date ?? wf?.tenancy?.start_date,
+
+      // =========================================================================
+      // TENANCY AGREEMENT FIELDS (TenancySectionFlow)
+      // These fields are used by TenancyReviewContent for validation and display
+      // =========================================================================
+
+      // Property address - TenancySectionFlow uses separate fields
+      property_address: wf?.property_address ?? wf?.property_full_address,
+      property_address_line1: wf?.property_address_line1 ?? wf?.property?.address_line1,
+      property_address_town: wf?.property_address_town ?? wf?.property?.city,
+      property_address_postcode: wf?.property_address_postcode ?? wf?.property?.postcode,
+      property_type: wf?.property_type,
+      number_of_bedrooms: wf?.number_of_bedrooms,
+      furnished_status: wf?.furnished_status,
+
+      // Landlord details
+      landlord_name: wf?.landlord_name ?? wf?.landlord?.name,
+      landlord_full_name: wf?.landlord_full_name ?? wf?.landlord?.full_name,
+      landlord_email: wf?.landlord_email ?? wf?.landlord?.email,
+      landlord_phone: wf?.landlord_phone ?? wf?.landlord?.phone,
+      landlord_address_line1: wf?.landlord_address_line1 ?? wf?.landlord?.address_line1,
+      landlord_address_town: wf?.landlord_address_town ?? wf?.landlord?.city,
+      landlord_address_postcode: wf?.landlord_address_postcode ?? wf?.landlord?.postcode,
+
+      // Tenants - TenancySectionFlow stores as array with full_name
+      tenants: wf?.tenants ?? [],
+      number_of_tenants: wf?.number_of_tenants,
+      tenant_names: wf?.tenant_names,
+      tenant_1_name: wf?.tenant_1_name,
+
+      // Tenancy details
+      is_fixed_term: wf?.is_fixed_term ?? wf?.tenancy?.fixed_term,
+      tenancy_end_date: wf?.tenancy_end_date ?? wf?.tenancy?.end_date,
+      term_length: wf?.term_length,
+
+      // Rent - TenancySectionFlow uses rent_amount and rent_period
+      rent_amount: wf?.rent_amount ?? wf?.tenancy?.rent_amount,
+      rent_period: wf?.rent_period ?? wf?.rent_frequency ?? wf?.tenancy?.rent_frequency,
+      rent_frequency: wf?.rent_frequency ?? wf?.rent_period ?? wf?.tenancy?.rent_frequency,
+      rent_due_day: wf?.rent_due_day ?? wf?.tenancy?.rent_due_day,
+      payment_method: wf?.payment_method,
+
+      // Product tier (for premium vs standard)
+      product_tier: wf?.product_tier ?? wf?.__meta?.product_tier,
+
+      // HMO
+      is_hmo: wf?.is_hmo ?? wf?.property?.is_hmo,
+      hmo_license_number: wf?.hmo_licence_number ?? wf?.hmo_license_number,
+    };
+
     return NextResponse.json({
       case_id,
+      jurisdiction: canonicalJurisdiction, // Include jurisdiction for UI display
+      case_type: caseData.case_type, // Include case_type for UI context
       product,
       recommended_route: finalRecommendedRoute,
       recommended_route_label,
@@ -967,6 +1286,8 @@ export async function POST(request: Request) {
       decision_engine: decisionEngineOutput,
       // Legal change framework metadata
       law_profile,
+      // Case facts for review page - contains persisted wizard data
+      case_facts: caseFacts,
     });
 
   } catch (error: any) {

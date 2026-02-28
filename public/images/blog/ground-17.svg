@@ -1,0 +1,105 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F3F1FF"/>
+      <stop offset="100%" style="stop-color:#E9E5FF"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bgGrad)"/>
+
+  <!-- Ground 17 badge -->
+  <g transform="translate(80, 80)">
+    <circle cx="80" cy="80" r="75" fill="white" stroke="#7C3AED" stroke-width="4"/>
+    <circle cx="80" cy="80" r="55" fill="#7C3AED"/>
+    <text x="80" y="70" text-anchor="middle" fill="white" font-size="14" font-weight="bold" font-family="Arial">GROUND</text>
+    <text x="80" y="100" text-anchor="middle" fill="white" font-size="32" font-weight="bold" font-family="Arial">17</text>
+    <rect x="30" y="170" width="100" height="30" rx="15" fill="#6D28D9"/>
+    <text x="80" y="190" text-anchor="middle" fill="white" font-size="11" font-weight="bold" font-family="Arial">MANDATORY</text>
+  </g>
+
+  <!-- Main explanation card -->
+  <g transform="translate(260, 60)">
+    <rect x="0" y="0" width="460" height="200" rx="15" fill="white" stroke="#7C3AED" stroke-width="3"/>
+
+    <rect x="0" y="0" width="460" height="55" rx="15" fill="#7C3AED"/>
+    <rect x="0" y="40" width="460" height="15" fill="#7C3AED"/>
+    <text x="230" y="38" text-anchor="middle" fill="white" font-size="16" font-weight="bold" font-family="Arial">FALSE STATEMENT BY TENANT</text>
+
+    <text x="25" y="85" fill="#6D28D9" font-size="12" font-weight="bold" font-family="Arial">What it means:</text>
+    <text x="25" y="105" fill="#6D28D9" font-size="11" font-family="Arial">Tenant induced landlord to grant the tenancy by</text>
+    <text x="25" y="120" fill="#6D28D9" font-size="11" font-family="Arial">making a false statement knowingly or recklessly.</text>
+
+    <text x="25" y="150" fill="#6D28D9" font-size="12" font-weight="bold" font-family="Arial">Key point:</text>
+    <text x="25" y="170" fill="#A78BFA" font-size="11" font-family="Arial">The false statement must have induced the landlord to</text>
+    <text x="25" y="185" fill="#A78BFA" font-size="11" font-family="Arial">grant the tenancy - it must be material to the decision</text>
+  </g>
+
+  <!-- False statement examples -->
+  <g transform="translate(80, 280)">
+    <rect x="0" y="0" width="300" height="180" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <text x="150" y="25" text-anchor="middle" fill="#7C3AED" font-size="11" font-weight="bold" font-family="Arial">EXAMPLES OF FALSE STATEMENTS</text>
+
+    <g transform="translate(20, 45)">
+      <circle cx="10" cy="10" r="8" fill="#6D28D9"/>
+      <text x="10" y="14" text-anchor="middle" fill="white" font-size="10" font-weight="bold">X</text>
+      <text x="25" y="10" fill="#6D28D9" font-size="10" font-weight="bold" font-family="Arial">False employment info</text>
+      <text x="25" y="22" fill="#A78BFA" font-size="9" font-family="Arial">Claiming job that doesn't exist</text>
+    </g>
+
+    <g transform="translate(20, 80)">
+      <circle cx="10" cy="10" r="8" fill="#6D28D9"/>
+      <text x="10" y="14" text-anchor="middle" fill="white" font-size="10" font-weight="bold">X</text>
+      <text x="25" y="10" fill="#6D28D9" font-size="10" font-weight="bold" font-family="Arial">Fake references</text>
+      <text x="25" y="22" fill="#A78BFA" font-size="9" font-family="Arial">Forged landlord references</text>
+    </g>
+
+    <g transform="translate(20, 115)">
+      <circle cx="10" cy="10" r="8" fill="#6D28D9"/>
+      <text x="10" y="14" text-anchor="middle" fill="white" font-size="10" font-weight="bold">X</text>
+      <text x="25" y="10" fill="#6D28D9" font-size="10" font-weight="bold" font-family="Arial">False income details</text>
+      <text x="25" y="22" fill="#A78BFA" font-size="9" font-family="Arial">Inflated salary or fake documents</text>
+    </g>
+
+    <g transform="translate(20, 150)">
+      <circle cx="10" cy="10" r="8" fill="#6D28D9"/>
+      <text x="10" y="14" text-anchor="middle" fill="white" font-size="10" font-weight="bold">X</text>
+      <text x="25" y="10" fill="#6D28D9" font-size="10" font-weight="bold" font-family="Arial">Hidden CCJs/bankruptcy</text>
+      <text x="25" y="22" fill="#A78BFA" font-size="9" font-family="Arial">Concealing credit issues</text>
+    </g>
+  </g>
+
+  <!-- Requirements -->
+  <g transform="translate(400, 280)">
+    <rect x="0" y="0" width="320" height="180" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <text x="160" y="25" text-anchor="middle" fill="#7C3AED" font-size="11" font-weight="bold" font-family="Arial">REQUIREMENTS TO PROVE</text>
+
+    <g transform="translate(20, 50)">
+      <rect x="0" y="0" width="280" height="45" rx="8" fill="#F3F1FF"/>
+      <circle cx="20" cy="22" r="15" fill="#7C3AED"/>
+      <text x="20" y="27" text-anchor="middle" fill="white" font-size="12" font-weight="bold">1</text>
+      <text x="45" y="18" fill="#6D28D9" font-size="10" font-weight="bold" font-family="Arial">Statement was false</text>
+      <text x="45" y="32" fill="#A78BFA" font-size="9" font-family="Arial">Incorrect information provided</text>
+    </g>
+
+    <g transform="translate(20, 105)">
+      <rect x="0" y="0" width="280" height="45" rx="8" fill="#F3F1FF"/>
+      <circle cx="20" cy="22" r="15" fill="#7C3AED"/>
+      <text x="20" y="27" text-anchor="middle" fill="white" font-size="12" font-weight="bold">2</text>
+      <text x="45" y="18" fill="#6D28D9" font-size="10" font-weight="bold" font-family="Arial">Tenant knew/was reckless</text>
+      <text x="45" y="32" fill="#A78BFA" font-size="9" font-family="Arial">Not an innocent mistake</text>
+    </g>
+
+    <rect x="100" y="158" width="120" height="18" rx="5" fill="#7C3AED"/>
+    <text x="160" y="170" text-anchor="middle" fill="white" font-size="9" font-weight="bold" font-family="Arial">2 WEEKS NOTICE</text>
+  </g>
+
+  <!-- Bottom note -->
+  <g transform="translate(80, 470)">
+    <rect x="0" y="0" width="640" height="25" rx="12" fill="#F3F1FF"/>
+    <text x="320" y="17" text-anchor="middle" fill="#7C3AED" font-size="10" font-weight="bold" font-family="Arial">Landlord must prove statement induced them to grant tenancy</text>
+  </g>
+
+  <!-- Decorative elements -->
+  <circle cx="50" cy="50" r="25" fill="#7C3AED" opacity="0.1"/>
+  <circle cx="750" cy="450" r="30" fill="#A78BFA" opacity="0.12"/>
+</svg>

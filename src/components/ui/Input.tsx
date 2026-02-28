@@ -12,6 +12,7 @@
 
 import React from "react";
 import { clsx } from "clsx";
+import { isWizardThemeV2 } from '@/components/wizard/shared/theme';
 
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -45,14 +46,14 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
 
     const inputBaseStyles = clsx(
       // Base styles
-      "rounded-lg border-2 px-4 py-3",
+      isWizardThemeV2 ? "rounded-xl border px-4 py-3" : "rounded-lg border-2 px-4 py-3",
       "font-normal text-base text-charcoal",
       "placeholder:text-gray-400",
       "transition-all duration-200",
       // Min height for touch target
       "min-h-touch",
       // Focus states
-      "focus:outline-none focus:ring-2 focus:ring-offset-1",
+      "focus:outline-none focus:ring-2 focus:ring-offset-2",
       // Disabled styles
       "disabled:bg-gray-100 disabled:text-gray-500 disabled:cursor-not-allowed"
     );
@@ -60,12 +61,12 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const inputVariantStyles = hasError
       ? clsx(
           "border-error",
-          "focus:border-error focus:ring-error/20"
+          "focus:border-error focus:ring-error/40"
         )
       : clsx(
-          "border-gray-300",
-          "focus:border-primary focus:ring-primary/20",
-          "hover:border-gray-400"
+          isWizardThemeV2 ? "border-violet-200" : "border-gray-300",
+          isWizardThemeV2 ? "focus:border-violet-500 focus:ring-violet-500/30" : "focus:border-primary focus:ring-primary/40",
+          isWizardThemeV2 ? "hover:border-violet-300" : "hover:border-gray-400"
         );
 
     const inputPaddingStyles = clsx(
@@ -78,7 +79,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {label && (
           <label
             htmlFor={inputId}
-            className="text-sm font-medium text-charcoal"
+            className="text-left text-sm font-medium text-charcoal"
           >
             {label}
           </label>
@@ -158,13 +159,13 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
 
     const textareaBaseStyles = clsx(
       // Base styles
-      "rounded-lg border-2 px-4 py-3",
+      isWizardThemeV2 ? "rounded-xl border px-4 py-3" : "rounded-lg border-2 px-4 py-3",
       "font-normal text-base text-charcoal",
       "placeholder:text-gray-400",
       "transition-all duration-200",
       "resize-vertical",
       // Focus states
-      "focus:outline-none focus:ring-2 focus:ring-offset-1",
+      "focus:outline-none focus:ring-2 focus:ring-offset-2",
       // Disabled styles
       "disabled:bg-gray-100 disabled:text-gray-500 disabled:cursor-not-allowed"
     );
@@ -172,12 +173,12 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
     const textareaVariantStyles = hasError
       ? clsx(
           "border-error",
-          "focus:border-error focus:ring-error/20"
+          "focus:border-error focus:ring-error/40"
         )
       : clsx(
-          "border-gray-300",
-          "focus:border-primary focus:ring-primary/20",
-          "hover:border-gray-400"
+          isWizardThemeV2 ? "border-violet-200" : "border-gray-300",
+          isWizardThemeV2 ? "focus:border-violet-500 focus:ring-violet-500/30" : "focus:border-primary focus:ring-primary/40",
+          isWizardThemeV2 ? "hover:border-violet-300" : "hover:border-gray-400"
         );
 
     return (
@@ -185,7 +186,7 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         {label && (
           <label
             htmlFor={inputId}
-            className="text-sm font-medium text-charcoal"
+            className="text-left text-sm font-medium text-charcoal"
           >
             {label}
           </label>

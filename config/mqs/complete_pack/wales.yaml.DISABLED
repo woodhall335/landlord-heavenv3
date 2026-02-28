@@ -1,0 +1,704 @@
+# config/mqs/complete_pack/wales.yaml
+#
+# WALES-ONLY Eviction Pack (Renting Homes Wales Act 2016 - Section 173)
+# Split from england-wales.yaml as part of canonical jurisdiction implementation
+# Version 2.0.0 - Wales jurisdiction
+
+__meta:
+  version: "2.0.0"
+  effective_from: "2025-12-16"
+  last_updated: "2025-12-16"
+  legal_review_date: "2025-12-16"
+  jurisdiction: "wales"
+  product: "complete_pack"
+
+id: complete_pack_wales_v2
+product: complete_pack
+jurisdiction: wales
+version: "2.0.0"
+
+questions:
+  # 1. Eviction route selection (Wales: Section 173 or fault-based)
+  - id: selected_notice_route
+    section: Eviction Type
+    question: "Which eviction route are you using?"
+    inputType: select
+    options:
+      - value: wales_section_173
+        label: "Section 173 (no-fault notice)"
+      - value: wales_fault_based
+        label: "Breach of contract (fault-based)"
+    helperText: "Wales uses Section 173 notices under the Renting Homes (Wales) Act 2016. Section 21 does NOT apply in Wales."
+    validation:
+      required: true
+    maps_to:
+      - selected_notice_route
+
+  # ============================================================
+  # SECTION 173 QUESTIONS (WALES NO-FAULT)
+  # ============================================================
+
+  - id: section173_compliance
+    section: Section 173 Compliance
+    question: "Section 173 compliance checks"
+    inputType: group
+    routes:
+      - wales_section_173
+    dependsOn:
+      questionId: selected_notice_route
+      value: wales_section_173
+    helperText: "All must be YES to use Section 173 no-fault possession."
+    fields:
+      - id: deposit_protected
+        label: "Deposit protected within 30 days?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: prescribed_info_served
+        label: "Prescribed information served?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: written_statement_provided
+        label: "Written statement of contract provided?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: fitness_for_habitation
+        label: "Property meets fitness for human habitation?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: six_month_minimum_passed
+        label: "At least 6 months since occupation began?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+    maps_to:
+      - wales_section173.deposit_protected
+      - wales_section173.prescribed_info_served
+      - wales_section173.written_statement_provided
+      - wales_section173.fitness_for_habitation
+      - wales_section173.six_month_minimum_passed
+
+  # ============================================================
+  # FAULT-BASED QUESTIONS (WALES)
+  # ============================================================
+
+  - id: wales_breach_grounds
+    section: Breach Grounds
+    question: "What breach of contract are you relying on?"
+    inputType: multiselect
+    routes:
+      - wales_fault_based
+    dependsOn:
+      questionId: selected_notice_route
+      value: wales_fault_based
+    options:
+      - "Rent arrears (2 months or more)"
+      - "Persistent rent arrears"
+      - "Breach of contract terms"
+      - "Anti-social behavior"
+      - "Damage to property"
+      - "False statement to obtain tenancy"
+    helperText: "Select all breach grounds that apply under Renting Homes (Wales) Act 2016."
+    validation:
+      required: true
+    maps_to:
+      - wales_breach_grounds
+
+  - id: wales_breach_details
+    section: Breach Evidence
+    question: "Provide details for your breach grounds"
+    inputType: textarea
+    routes:
+      - wales_fault_based
+    dependsOn:
+      questionId: selected_notice_route
+      value: wales_fault_based
+    helperText: "Describe the facts supporting each breach. Be specific with dates and evidence."
+    placeholder: "E.g., Rent arrears: £2,400 owed, representing 8 weeks unpaid rent. Last payment 01/11/2025."
+    validation:
+      required: true
+    maps_to:
+      - wales_breach_details
+
+  # ============================================================
+  # COMMON EVICTION PACK QUESTIONS
+  # ============================================================
+
+  - id: property_address
+    section: Property
+    question: "Property address"
+    inputType: group
+    helperText: "The rental property being repossessed"
+    fields:
+      - id: property_address_line1
+        label: "Building and street"
+        inputType: text
+        validation:
+          required: true
+        width: full
+      - id: property_address_town
+        label: "Town/City"
+        inputType: text
+        validation:
+          required: true
+        width: half
+      - id: property_address_postcode
+        label: "Postcode"
+        inputType: text
+        validation:
+          required: true
+        width: half
+    maps_to:
+      - property_address_line1
+      - property_address_town
+      - property_address_postcode
+
+  - id: tenancy_start_date
+    section: Tenancy
+    question: "Occupation contract start date"
+    inputType: date
+    helperText: "When the current occupation contract began"
+    validation:
+      required: true
+    maps_to:
+      - tenancy_start_date
+
+  - id: contract_holder_details
+    section: Contract Holder
+    question: "Lead contract holder details"
+    inputType: group
+    helperText: "In Wales, tenants are called 'contract holders'"
+    fields:
+      - id: tenant_full_name
+        label: "Full name"
+        inputType: text
+        validation:
+          required: true
+        width: full
+      - id: tenant_email
+        label: "Email"
+        inputType: email
+        width: half
+      - id: tenant_phone
+        label: "Phone"
+        inputType: tel
+        width: half
+    maps_to:
+      - tenant_full_name
+      - tenant_email
+      - tenant_phone
+
+  - id: landlord_details
+    section: Landlord
+    question: "Landlord details"
+    inputType: group
+    fields:
+      - id: landlord_full_name
+        label: "Full name"
+        inputType: text
+        validation:
+          required: true
+        width: full
+      - id: landlord_address_line1
+        label: "Address line 1"
+        inputType: text
+        validation:
+          required: true
+        width: full
+      - id: landlord_address_town
+        label: "Town/City"
+        inputType: text
+        validation:
+          required: true
+        width: half
+      - id: landlord_address_postcode
+        label: "Postcode"
+        inputType: text
+        validation:
+          required: true
+        width: half
+      - id: landlord_registration_number
+        label: "Rent Smart Wales registration number"
+        inputType: text
+        helperText: "All landlords in Wales must be registered with Rent Smart Wales"
+        validation:
+          required: true
+        width: full
+    maps_to:
+      - landlord_full_name
+      - landlord_address_line1
+      - landlord_address_town
+      - landlord_address_postcode
+      - landlord_registration_number
+
+  # ============================================================
+  # PHASE 1: COMPLIANCE CERTIFICATE DATES (Wales-specific)
+  # ============================================================
+
+  - id: wales_compliance_dates
+    section: Compliance Certificates
+    question: "Compliance certificate details"
+    inputType: group
+    helperText: "Provide dates for required safety certificates."
+    fields:
+      - id: gas_cert_date
+        label: "Gas safety certificate date"
+        inputType: date
+        helperText: "Date of most recent gas safety certificate"
+        width: half
+      - id: gas_cert_expiry
+        label: "Gas certificate expiry date"
+        inputType: date
+        helperText: "Must be valid - expires 12 months after issue"
+        width: half
+      - id: epc_certificate_date
+        label: "EPC date"
+        inputType: date
+        helperText: "Energy Performance Certificate date"
+        width: half
+      - id: eicr_date
+        label: "Electrical safety (EICR) date"
+        inputType: date
+        helperText: "Electrical Installation Condition Report date"
+        width: half
+      - id: written_statement_date
+        label: "Written statement provided date"
+        inputType: date
+        helperText: "Date written statement of contract was provided"
+        width: half
+      - id: prescribed_info_date
+        label: "Prescribed information date"
+        inputType: date
+        helperText: "Date deposit prescribed information was served"
+        width: half
+    maps_to:
+      - compliance.gas_cert_date
+      - compliance.gas_cert_expiry
+      - compliance.epc_certificate_date
+      - compliance.eicr_date
+      - wales_compliance.written_statement_date
+      - compliance.prescribed_info_date
+
+  # ============================================================
+  # PHASE 3: RISK INDICATORS
+  # ============================================================
+
+  - id: risk_indicators
+    section: Risk Assessment
+    question: "Risk factors (helps assess case strength)"
+    inputType: group
+    helperText: "This information helps generate a more accurate risk assessment for your case."
+    fields:
+      - id: known_tenant_defences
+        label: "Are you aware of any defences the contract holder may raise?"
+        inputType: textarea
+        helperText: "E.g., claims of disrepair, fitness for habitation issues, harassment, discrimination, retaliatory eviction"
+        placeholder: "Describe any known or anticipated contract holder defences..."
+        width: full
+      - id: previous_court_proceedings
+        label: "Have there been previous court proceedings about this contract?"
+        inputType: yes_no
+        width: half
+      - id: previous_proceedings_details
+        label: "Previous proceedings details"
+        inputType: textarea
+        helperText: "Dates, case numbers, outcomes"
+        width: full
+        dependsOn:
+          fieldId: previous_court_proceedings
+          value: true
+      - id: disrepair_complaints
+        label: "Has the contract holder complained about disrepair?"
+        inputType: yes_no
+        helperText: "IMPORTANT: May affect validity of Section 173 notice"
+        width: half
+      - id: disrepair_complaint_date
+        label: "Date of disrepair complaint"
+        inputType: date
+        width: half
+        dependsOn:
+          fieldId: disrepair_complaints
+          value: true
+      - id: disrepair_issues_list
+        label: "List the disrepair issues complained about"
+        inputType: textarea
+        width: full
+        dependsOn:
+          fieldId: disrepair_complaints
+          value: true
+      - id: tenant_vulnerability
+        label: "Are you aware of any contract holder vulnerabilities?"
+        inputType: yes_no
+        helperText: "E.g., elderly, disabled, mental health issues, children in household"
+        width: half
+      - id: tenant_vulnerability_details
+        label: "Vulnerability details"
+        inputType: textarea
+        helperText: "Courts may consider vulnerability when deciding reasonableness"
+        width: full
+        dependsOn:
+          fieldId: tenant_vulnerability
+          value: true
+    maps_to:
+      - risk.known_tenant_defences
+      - risk.previous_court_proceedings
+      - risk.previous_proceedings_details
+      - risk.disrepair_complaints
+      - risk.disrepair_complaint_date
+      - risk.disrepair_issues_list
+      - risk.tenant_vulnerability
+      - risk.tenant_vulnerability_details
+
+  # ============================================================
+  # PHASE 4: WALES BREACH GROUNDS - DETAILED QUESTIONS
+  # ============================================================
+
+  # Rent Arrears (2 months or more)
+  - id: wales_rent_arrears_details
+    section: Rent Arrears Details
+    question: "Rent arrears details"
+    inputType: group
+    routes:
+      - wales_fault_based
+    dependsOn:
+      questionId: wales_breach_grounds
+      contains: "Rent arrears (2 months or more)"
+    helperText: "Provide detailed information about the rent arrears."
+    fields:
+      - id: w_arrears_amount
+        label: "Current arrears (£)"
+        inputType: number
+        validation:
+          required: true
+        width: half
+      - id: w_last_payment_date
+        label: "Date of last rent payment"
+        inputType: date
+        width: half
+      - id: w_last_payment_amount
+        label: "Amount of last payment (£)"
+        inputType: number
+        width: half
+      - id: w_arrears_history
+        label: "Arrears history"
+        inputType: textarea
+        helperText: "Describe when arrears started, any partial payments, pattern of non-payment"
+        validation:
+          required: true
+        width: full
+      - id: w_payment_demands_sent
+        label: "What payment demands have you sent?"
+        inputType: textarea
+        helperText: "List dates and methods of rent demands/reminders sent"
+        validation:
+          required: true
+        width: full
+      - id: w_tenant_response
+        label: "How has the contract holder responded?"
+        inputType: textarea
+        helperText: "Describe any responses, promises to pay, or lack of response"
+        width: full
+    maps_to:
+      - wales_arrears.amount
+      - wales_arrears.last_payment_date
+      - wales_arrears.last_payment_amount
+      - wales_arrears.history
+      - wales_arrears.payment_demands_sent
+      - wales_arrears.tenant_response
+
+  # Anti-social behaviour
+  - id: wales_asb_details
+    section: Anti-social Behaviour Details
+    question: "Anti-social behaviour details"
+    inputType: group
+    routes:
+      - wales_fault_based
+    dependsOn:
+      questionId: wales_breach_grounds
+      contains: "Anti-social behavior"
+    helperText: "Document ALL incidents of anti-social behaviour thoroughly."
+    fields:
+      - id: w_asb_type
+        label: "Type of behaviour"
+        inputType: multiselect
+        options:
+          - "Noise nuisance"
+          - "Verbal abuse/threats"
+          - "Physical violence"
+          - "Harassment of neighbours"
+          - "Criminal activity"
+          - "Drug dealing/use"
+          - "Damage to common areas"
+          - "Intimidation"
+          - "Other antisocial behaviour"
+        validation:
+          required: true
+        width: full
+      - id: w_asb_incident_count
+        label: "How many incidents have there been?"
+        inputType: number
+        validation:
+          required: true
+          min: 1
+        width: half
+      - id: w_asb_incidents_description
+        label: "Describe each incident with dates"
+        inputType: textarea
+        helperText: "For each incident: date, time, what happened, who was affected, any witnesses"
+        validation:
+          required: true
+        width: full
+      - id: w_asb_affected_parties
+        label: "Who has been affected?"
+        inputType: textarea
+        helperText: "Neighbours, other residents, landlord, visitors - include names if possible"
+        validation:
+          required: true
+        width: full
+      - id: w_asb_police_involved
+        label: "Has the police been involved?"
+        inputType: yes_no
+        width: half
+      - id: w_asb_police_reference
+        label: "Police reference numbers"
+        inputType: textarea
+        helperText: "Include crime reference numbers, dates of reports"
+        width: full
+        dependsOn:
+          fieldId: w_asb_police_involved
+          value: true
+      - id: w_asb_warnings_issued
+        label: "What warnings have you given the contract holder?"
+        inputType: textarea
+        helperText: "Dates, content, and tenant's response to any written warnings"
+        width: full
+    maps_to:
+      - wales_asb.type
+      - wales_asb.incident_count
+      - wales_asb.incidents_description
+      - wales_asb.affected_parties
+      - wales_asb.police_involved
+      - wales_asb.police_reference
+      - wales_asb.warnings_issued
+
+  # Damage to property
+  - id: wales_damage_details
+    section: Property Damage Details
+    question: "Property damage details"
+    inputType: group
+    routes:
+      - wales_fault_based
+    dependsOn:
+      questionId: wales_breach_grounds
+      contains: "Damage to property"
+    helperText: "Provide details of the damage caused."
+    fields:
+      - id: w_damage_description
+        label: "Describe the damage"
+        inputType: textarea
+        helperText: "Be specific about what damage has occurred"
+        validation:
+          required: true
+        width: full
+      - id: w_damage_discovered_date
+        label: "When was the damage discovered?"
+        inputType: date
+        validation:
+          required: true
+        width: half
+      - id: w_damage_cost
+        label: "Estimated cost to repair (£)"
+        inputType: number
+        width: half
+      - id: w_damage_evidence
+        label: "What evidence do you have?"
+        inputType: textarea
+        helperText: "Photos, inspection reports, contractor quotes, inventory comparison"
+        validation:
+          required: true
+        width: full
+      - id: w_damage_tenant_notified
+        label: "Has the contract holder been notified of this damage?"
+        inputType: yes_no
+        width: half
+      - id: w_damage_tenant_response
+        label: "Contract holder's response"
+        inputType: textarea
+        width: full
+    maps_to:
+      - wales_damage.description
+      - wales_damage.discovered_date
+      - wales_damage.cost
+      - wales_damage.evidence
+      - wales_damage.tenant_notified
+      - wales_damage.tenant_response
+
+  # ============================================================
+  # PHASE 5: COMMUNICATION TIMELINE
+  # ============================================================
+
+  - id: communication_timeline
+    section: Communication History
+    question: "Key communications with contract holder"
+    inputType: group
+    helperText: "Document important communications to strengthen your witness statement."
+    fields:
+      - id: communication_entries
+        label: "Communication log"
+        inputType: repeater
+        helperText: "Add each significant communication"
+        fields:
+          - id: comm_date
+            label: "Date"
+            inputType: date
+            width: quarter
+          - id: comm_method
+            label: "Method"
+            inputType: select
+            options:
+              - value: email
+                label: "Email"
+              - value: letter
+                label: "Letter"
+              - value: phone
+                label: "Phone call"
+              - value: text
+                label: "Text/WhatsApp"
+              - value: in_person
+                label: "In person"
+            width: quarter
+          - id: comm_summary
+            label: "Summary"
+            inputType: textarea
+            helperText: "Brief summary of what was discussed/communicated"
+            width: half
+        width: full
+      - id: communication_narrative
+        label: "Additional context"
+        inputType: textarea
+        helperText: "Any additional context about your communications with the contract holder"
+        placeholder: "E.g., Contract holder has been unresponsive since October 2025, all attempts to contact have been unsuccessful..."
+        width: full
+    maps_to:
+      - communication_timeline.entries
+      - communication_timeline.narrative
+
+  # ============================================================
+  # PHASE 6: EVIDENCE WITH DESCRIBE OPTION
+  # ============================================================
+
+  - id: evidence_tenancy_agreement
+    section: Evidence
+    question: "Occupation Contract"
+    inputType: group
+    helperText: "Upload your occupation contract or summarize key terms."
+    fields:
+      - id: tenancy_agreement_upload
+        label: "Upload occupation contract"
+        inputType: upload
+        helperText: "Upload a copy of the written statement of occupation contract"
+        width: full
+      - id: tenancy_agreement_describe
+        label: "Or summarize key terms"
+        inputType: textarea
+        helperText: "If unable to upload, describe: contract start date, rent amount, key terms relevant to your case"
+        placeholder: "E.g., Standard occupation contract started 01/01/2024, rent £1,200pcm due 1st of each month, contract holder agreed to no pets, no subletting..."
+        width: full
+    maps_to:
+      - evidence.tenancy_agreement_uploads
+      - evidence.tenancy_agreement_description
+
+  - id: evidence_bank_statements
+    section: Evidence
+    question: "Rent Payment Evidence"
+    inputType: group
+    helperText: "Upload bank statements showing rent payments or summarize payment history."
+    fields:
+      - id: bank_statements_upload
+        label: "Upload bank statements"
+        inputType: upload
+        helperText: "Upload statements showing rent payments received (or not received)"
+        width: full
+      - id: bank_statements_describe
+        label: "Or describe payment history"
+        inputType: textarea
+        helperText: "Summarize the rent payment pattern if unable to upload statements"
+        placeholder: "E.g., Rent of £1,200 was paid on time from Jan-June 2024. Payments stopped in July. Partial payment of £400 received on 15/08/2024. No payments since..."
+        width: full
+    maps_to:
+      - evidence.bank_statements_uploads
+      - evidence.bank_statements_description
+
+  - id: evidence_notice_service
+    section: Evidence
+    question: "Notice Service Evidence"
+    inputType: group
+    helperText: "Upload proof of notice service or describe how the notice was served."
+    fields:
+      - id: notice_service_upload
+        label: "Upload proof of service"
+        inputType: upload
+        helperText: "Proof of posting, signed receipt, email confirmation, etc."
+        width: full
+      - id: notice_service_describe
+        label: "Or describe how notice was served"
+        inputType: textarea
+        helperText: "Describe the method, date, and any proof you have of service"
+        placeholder: "E.g., Section 173 notice dated 01/10/2025 was sent by recorded delivery on 02/10/2025. Royal Mail tracking shows delivered 03/10/2025..."
+        width: full
+    maps_to:
+      - evidence.notice_service_uploads
+      - evidence.notice_service_description
+
+  - id: evidence_correspondence
+    section: Evidence
+    question: "Contract Holder Correspondence"
+    inputType: group
+    helperText: "Upload correspondence or summarize key communications."
+    fields:
+      - id: correspondence_upload
+        label: "Upload correspondence"
+        inputType: upload
+        helperText: "Upload emails, letters, text messages with contract holder"
+        width: full
+      - id: correspondence_describe
+        label: "Or summarize key correspondence"
+        inputType: textarea
+        helperText: "Summarize important communications: dates, what was discussed, contract holder's responses"
+        placeholder: "E.g., 01/06/2024 - Emailed contract holder re: missed rent payment, they replied saying would pay next week. 15/06/2024 - Sent formal written warning by post..."
+        width: full
+    maps_to:
+      - evidence.correspondence_uploads
+      - evidence.correspondence_description
+
+  - id: evidence_other
+    section: Evidence
+    question: "Other Supporting Documents"
+    inputType: upload
+    helperText: "Upload any other supporting documents not covered above (Rent Smart Wales registration, inspection reports, etc.)."
+    validation:
+      required: false
+    maps_to:
+      - evidence.other_uploads
+
+  # Legacy field - retained for backward compatibility
+  - id: evidence_uploads
+    section: Evidence
+    question: "Upload supporting documents"
+    inputType: upload
+    helperText: "Occupation contract, notice served, deposit certificate, rent statements, Rent Smart Wales registration, etc."
+    validation:
+      required: false
+    deprecated: true
+    deprecated_message: "Use categorized upload fields above for Smart Review support"
+    maps_to:
+      - evidence.pack_documents_uploaded
+      - evidence.other_uploads

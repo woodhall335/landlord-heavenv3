@@ -1,0 +1,878 @@
+{
+  "jurisdiction": "Northern Ireland",
+  "version": "1.0",
+  "description": "Superset facts schema for Northern Ireland",
+  "common_facts": {},
+  "auto_generated": {
+    "product_tier": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "tenancy.ni_suitability.tenant_is_individual": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "tenancy.ni_suitability.main_home": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "tenancy.ni_suitability.landlord_lives_at_property": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "tenancy.ni_suitability.holiday_or_licence": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "property_address_line1": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "property_address_town": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "property_address_postcode": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "property_type": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "number_of_bedrooms": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "furnished_status": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "parking_available": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "parking_details": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "has_garden": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "garden_maintenance": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "landlord_full_name": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "landlord_email": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "landlord_phone": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "landlord_address_line1": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "landlord_address_town": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "landlord_address_postcode": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "landlord_registration_number": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "agent_usage": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "agent_name": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "agent_address": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "agent_email": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "agent_phone": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "agent_signs": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "number_of_tenants": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "tenants.0.full_name": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "tenants.0.dob": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "tenants.0.email": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "tenants.0.phone": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "tenants.1.full_name": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "tenants.1.dob": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "tenants.1.email": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "tenants.1.phone": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "tenants.2.full_name": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "tenants.2.dob": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "tenants.2.email": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "tenants.2.phone": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "tenants.3.full_name": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "tenants.3.dob": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "tenants.3.email": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "tenants.3.phone": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "tenants.4.full_name": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "tenants.4.dob": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "tenants.4.email": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "tenants.4.phone": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "tenancy_start_date": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "is_fixed_term": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "term_length": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "tenancy_end_date": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "ni_notice_period_days": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "rent_amount": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "rent_period": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "rent_due_day": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "payment_method": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "payment_details": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "bank_account_name": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "bank_sort_code": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "bank_account_number": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "deposit_amount": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "deposit_scheme_name": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "deposit_paid_date": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "deposit_protection_date": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "deposit.already_protected": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "deposit.reference_number": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "deposit.prescribed_information_served": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "council_tax_responsibility": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "utilities_responsibility": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "internet_responsibility": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "meter_reading_gas": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "meter_reading_electric": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "meter_reading_water": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "utility_transfer_responsibility": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "gas_safety_certificate": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "electrical_safety_certificate": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "epc_rating": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "smoke_alarms_fitted": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "carbon_monoxide_alarms": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "fitness_standard_compliance": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "landlord_maintenance_responsibilities": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "repairs_reporting_method": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "emergency_contact": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "inventory_attached": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "professional_cleaning_required": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "decoration_condition": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "property_description": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "landlord_access_notice": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "inspection_frequency": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "end_of_tenancy_viewings": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "pets_allowed": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "approved_pets": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "smoking_allowed": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "subletting_allowed": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "rent_increase_clause": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "rent_increase_method": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "rent_increase_frequency": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "break_clause": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "break_clause_months": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "break_clause_notice_period": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "additional_terms": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "guarantor_required": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "guarantor_name": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "guarantor_address": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "guarantor_email": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "guarantor_phone": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "guarantor_dob": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "guarantor_relationship": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "joint_and_several_liability": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "is_hmo": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "number_of_sharers": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "communal_areas": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "hmo_licence_status": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "hmo_licence_number": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "hmo_licence_expiry": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "communal_cleaning": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "tenant_insurance_required": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "inventory_schedule_notes": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "late_payment_interest_applicable": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "late_payment_interest_rate": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "grace_period_days": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "late_payment_admin_fee": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "number_of_front_door_keys": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "number_of_back_door_keys": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "number_of_window_keys": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "number_of_mailbox_keys": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "access_cards_fobs": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "key_replacement_cost": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "other_keys_notes": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "contractor_access_notice_period": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "emergency_access_allowed": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "contractor_access_hours": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "tenant_presence_required": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "emergency_landlord_phone": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "emergency_plumber_phone": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "emergency_electrician_phone": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "emergency_gas_engineer_phone": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "emergency_locksmith_phone": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "water_shutoff_location": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "electricity_fuse_box_location": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "gas_shutoff_location": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "boiler_service_frequency": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "boiler_service_responsibility": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "gutter_cleaning_frequency": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "gutter_cleaning_responsibility": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "window_cleaning_frequency": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "appliance_maintenance_notes": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "lawn_mowing_frequency": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "lawn_mowing_responsibility": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "hedge_trimming_responsibility": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "weed_control_responsibility": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "outdoor_furniture_notes": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "pre_tenancy_meeting_required": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "move_in_inspection_required": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "photographic_inventory_provided": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "tenant_handbook_provided": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "utility_accounts_transfer_deadline": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "council_tax_registration_deadline": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "checkout_inspection_required": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "professional_cleaning_standard": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "carpet_cleaning_required": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "oven_cleaning_required": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "garden_condition_required": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "key_return_deadline": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "forwarding_address_required": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "deposit_return_timeline": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "regular_cleaning_expectations": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "deep_cleaning_areas": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "cleaning_checklist_provided": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "cleaning_cost_estimates": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "evidence.tenancy_agreement_uploaded": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "evidence.other_evidence_uploaded": {
+      "type": "string",
+      "required": false,
+      "description": "Auto-generated placeholder to align MQS and validators"
+    }
+  }
+}

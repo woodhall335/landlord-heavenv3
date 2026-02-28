@@ -1,155 +1,574 @@
----
-title: Eviction Compliance Audit Report
-category: supporting_documents
-description: Comprehensive compliance check for eviction proceedings
-filename: compliance-audit.pdf
----
+{{!--
+  ============================================================================
+  AI COMPLIANCE AUDIT REPORT
+  Ask Heaven AI - Legal Compliance Analysis
+  ============================================================================
+  Harmonized design system matching other eviction pack documents
+--}}
 
-EVICTION COMPLIANCE AUDIT REPORT
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Compliance Audit Report</title>
+  <style>
+    {{{print_css}}}
 
-==================================================================
+    /* ===== COMPLIANCE AUDIT STYLES ===== */
+    @page {
+      size: A4;
+      margin: 15mm;
+    }
 
-LANDLORD: {{landlord_name}}
-PROPERTY: {{property_address}}
-TENANT: {{tenant_name}}
-JURISDICTION: England & Wales
-NOTICE TYPE: {{notice_type}}
-AUDIT DATE: {{current_date}}
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 10pt;
+      line-height: 1.5;
+      color: #1a1a1a;
+      padding: 0;
+      margin: 0;
+    }
 
-==================================================================
+    /* Document Header */
+    .doc-header {
+      text-align: center;
+      margin-bottom: 1.5em;
+      padding-bottom: 1em;
+      border-bottom: 3px solid #1a1a1a;
+    }
 
-OVERALL ASSESSMENT: {{compliance_audit.overall_status}}
+    .doc-header h1 {
+      font-size: 16pt;
+      font-weight: 700;
+      margin: 0 0 0.25em 0;
+      color: #1a1a1a;
+    }
 
+    .doc-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #7c3aed, #5b21b6);
+      color: white;
+      padding: 0.4em 1em;
+      font-size: 9pt;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      border-radius: 3px;
+    }
+
+    /* Case Details Box */
+    .case-details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5em 2em;
+      background: #f8f8f8;
+      padding: 1em;
+      margin: 1.5em 0;
+      border: 1px solid #ddd;
+      font-size: 9pt;
+    }
+
+    .case-details dt {
+      font-weight: 600;
+      color: #666;
+    }
+
+    .case-details dd {
+      margin: 0;
+      color: #1a1a1a;
+    }
+
+    /* Overall Assessment */
+    .overall-assessment {
+      text-align: center;
+      padding: 1.5em;
+      margin: 1.5em 0;
+      border-radius: 4px;
+    }
+
+    .overall-assessment.ready {
+      background: #dcfce7;
+      border: 2px solid #22c55e;
+    }
+
+    .overall-assessment.needs-work {
+      background: #fef3c7;
+      border: 2px solid #f59e0b;
+    }
+
+    .overall-assessment.critical {
+      background: #fee2e2;
+      border: 2px solid #dc2626;
+    }
+
+    .overall-assessment h2 {
+      font-size: 14pt;
+      margin: 0 0 0.5em 0;
+    }
+
+    .overall-assessment p {
+      font-size: 10pt;
+      margin: 0;
+    }
+
+    .status-icon {
+      font-size: 24pt;
+      margin-bottom: 0.25em;
+    }
+
+    /* Section Headers */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75em;
+      margin: 2em 0 1em 0;
+      padding-bottom: 0.5em;
+      border-bottom: 2px solid #1a1a1a;
+    }
+
+    .section-header .num {
+      background: #1a1a1a;
+      color: white;
+      width: 1.75em;
+      height: 1.75em;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 11pt;
+      flex-shrink: 0;
+    }
+
+    .section-header h2 {
+      font-size: 12pt;
+      font-weight: 600;
+      margin: 0;
+      color: #1a1a1a;
+    }
+
+    /* Compliance Check Items */
+    .compliance-grid {
+      display: grid;
+      gap: 1em;
+      margin: 1em 0;
+    }
+
+    .compliance-item {
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      overflow: hidden;
+      page-break-inside: avoid;
+    }
+
+    .compliance-item-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75em;
+      padding: 0.75em 1em;
+      background: #f5f5f5;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .compliance-item-header.pass {
+      background: #dcfce7;
+      border-color: #22c55e;
+    }
+
+    .compliance-item-header.fail {
+      background: #fee2e2;
+      border-color: #dc2626;
+    }
+
+    .compliance-item-header.warning {
+      background: #fef3c7;
+      border-color: #f59e0b;
+    }
+
+    .compliance-item-header .icon {
+      font-size: 14pt;
+    }
+
+    .compliance-item-header h3 {
+      font-size: 10pt;
+      font-weight: 600;
+      margin: 0;
+      flex: 1;
+    }
+
+    .compliance-item-header .status {
+      font-size: 9pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .compliance-item-content {
+      padding: 0.75em 1em;
+      font-size: 9pt;
+      line-height: 1.5;
+    }
+
+    /* Action Plan */
+    .action-box {
+      margin: 1em 0;
+      border-radius: 4px;
+      overflow: hidden;
+      page-break-inside: avoid;
+    }
+
+    .action-box.critical {
+      border: 2px solid #dc2626;
+    }
+
+    .action-box.recommended {
+      border: 2px solid #f59e0b;
+    }
+
+    .action-box-header {
+      padding: 0.6em 1em;
+      font-weight: 700;
+      font-size: 10pt;
+    }
+
+    .action-box.critical .action-box-header {
+      background: #dc2626;
+      color: white;
+    }
+
+    .action-box.recommended .action-box-header {
+      background: #f59e0b;
+      color: white;
+    }
+
+    .action-box-content {
+      padding: 1em;
+      background: #fff;
+    }
+
+    .action-box-content ol {
+      margin: 0;
+      padding-left: 1.5em;
+    }
+
+    .action-box-content li {
+      margin: 0.5em 0;
+      line-height: 1.5;
+    }
+
+    /* Notes Section */
+    .notes-section {
+      margin: 2em 0;
+      padding: 1em;
+      background: #f8f8f8;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    .notes-section h3 {
+      font-size: 10pt;
+      font-weight: 700;
+      margin: 0 0 0.75em 0;
+      text-transform: uppercase;
+    }
+
+    .notes-section ol {
+      margin: 0;
+      padding-left: 1.5em;
+    }
+
+    .notes-section li {
+      font-size: 9pt;
+      line-height: 1.5;
+      margin: 0.4em 0;
+      color: #555;
+    }
+
+    /* Footer */
+    .doc-footer {
+      margin-top: 2em;
+      padding-top: 1em;
+      border-top: 2px solid #1a1a1a;
+      font-size: 9pt;
+      color: #666;
+    }
+
+    .doc-footer p {
+      margin: 0.3em 0;
+    }
+
+    @media print {
+      .compliance-item,
+      .action-box,
+      .overall-assessment {
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Document Header -->
+<div class="doc-header">
+  <h1>Compliance Audit Report</h1>
+  <span class="doc-badge">Ask Heaven AI Analysis</span>
+</div>
+
+<!-- Case Details -->
+<dl class="case-details">
+  <dt>Landlord:</dt>
+  <dd>{{landlord_name}}</dd>
+  <dt>Property:</dt>
+  <dd>{{property_address}}</dd>
+  <dt>Tenant:</dt>
+  <dd>{{tenant_name}}</dd>
+  <dt>Notice Type:</dt>
+  <dd>{{notice_type}}</dd>
+  <dt>Jurisdiction:</dt>
+  <dd>England & Wales</dd>
+  <dt>Audit Date:</dt>
+  <dd>{{current_date}}</dd>
+</dl>
+
+<!-- Overall Assessment -->
 {{#if (eq compliance_audit.overall_status "ready")}}
-✅ Your case appears compliant and ready to proceed with eviction.
+<div class="overall-assessment ready">
+  <div class="status-icon">✅</div>
+  <h2>COMPLIANT - Ready to Proceed</h2>
+  <p>Your case appears compliant and ready to proceed with eviction. All critical requirements have been met.</p>
+</div>
 {{else if (eq compliance_audit.overall_status "needs_work")}}
-⚠️  Your case has some issues that should be addressed to strengthen your position.
+<div class="overall-assessment needs-work">
+  <div class="status-icon">⚠️</div>
+  <h2>NEEDS ATTENTION</h2>
+  <p>Your case has some issues that should be addressed to strengthen your position before proceeding.</p>
+</div>
 {{else}}
-❌ Your case has CRITICAL issues that block eviction. You must resolve these before proceeding.
+<div class="overall-assessment critical">
+  <div class="status-icon">❌</div>
+  <h2>CRITICAL ISSUES FOUND</h2>
+  <p>Your case has critical issues that must be resolved before you can proceed with eviction.</p>
+</div>
 {{/if}}
 
-==================================================================
+<!-- Compliance Checks -->
+<div class="section-header">
+  <span class="num">1</span>
+  <h2>Compliance Checklist</h2>
+</div>
 
-COMPLIANCE CHECKLIST
+<div class="compliance-grid">
+  <!-- Deposit Protection -->
+  <div class="compliance-item">
+    <div class="compliance-item-header {{#if compliance_audit.deposit_ok}}pass{{else}}fail{{/if}}">
+      <span class="icon">{{#if compliance_audit.deposit_ok}}✅{{else}}❌{{/if}}</span>
+      <h3>Deposit Protection</h3>
+      <span class="status">{{#if compliance_audit.deposit_ok}}PASS{{else}}FAIL{{/if}}</span>
+    </div>
+    <div class="compliance-item-content">
+      {{{compliance_audit.deposit_protection}}}
+    </div>
+  </div>
 
-1. DEPOSIT PROTECTION
-{{compliance_audit.deposit_protection}}
+  <!-- Gas Safety Certificate -->
+  <div class="compliance-item">
+    <div class="compliance-item-header {{#if compliance_audit.gas_ok}}pass{{else}}fail{{/if}}">
+      <span class="icon">{{#if compliance_audit.gas_ok}}✅{{else}}❌{{/if}}</span>
+      <h3>Gas Safety Certificate</h3>
+      <span class="status">{{#if compliance_audit.gas_ok}}PASS{{else}}FAIL{{/if}}</span>
+    </div>
+    <div class="compliance-item-content">
+      {{{compliance_audit.gas_safety}}}
+    </div>
+  </div>
 
-2. GAS SAFETY CERTIFICATE
-{{compliance_audit.gas_safety}}
+  <!-- Electrical Safety -->
+  <div class="compliance-item">
+    <div class="compliance-item-header {{#if compliance_audit.electrical_ok}}pass{{else}}warning{{/if}}">
+      <span class="icon">{{#if compliance_audit.electrical_ok}}✅{{else}}⚠️{{/if}}</span>
+      <h3>Electrical Safety Certificate</h3>
+      <span class="status">{{#if compliance_audit.electrical_ok}}PASS{{else}}CHECK{{/if}}</span>
+    </div>
+    <div class="compliance-item-content">
+      {{{compliance_audit.electrical_safety}}}
+    </div>
+  </div>
 
-3. ELECTRICAL SAFETY CERTIFICATE
-{{compliance_audit.electrical_safety}}
+  <!-- EPC -->
+  <div class="compliance-item">
+    <div class="compliance-item-header {{#if compliance_audit.epc_ok}}pass{{else}}fail{{/if}}">
+      <span class="icon">{{#if compliance_audit.epc_ok}}✅{{else}}❌{{/if}}</span>
+      <h3>Energy Performance Certificate (EPC)</h3>
+      <span class="status">{{#if compliance_audit.epc_ok}}PASS{{else}}FAIL{{/if}}</span>
+    </div>
+    <div class="compliance-item-content">
+      {{{compliance_audit.epc}}}
+    </div>
+  </div>
 
-4. ENERGY PERFORMANCE CERTIFICATE (EPC)
-{{compliance_audit.epc}}
+  <!-- How to Rent Guide -->
+  <div class="compliance-item">
+    <div class="compliance-item-header {{#if compliance_audit.how_to_rent_ok}}pass{{else}}fail{{/if}}">
+      <span class="icon">{{#if compliance_audit.how_to_rent_ok}}✅{{else}}❌{{/if}}</span>
+      <h3>How to Rent Guide</h3>
+      <span class="status">{{#if compliance_audit.how_to_rent_ok}}PASS{{else}}FAIL{{/if}}</span>
+    </div>
+    <div class="compliance-item-content">
+      {{{compliance_audit.how_to_rent}}}
+    </div>
+  </div>
 
-5. HOW TO RENT GUIDE
-{{compliance_audit.how_to_rent}}
+  <!-- Licensing -->
+  <div class="compliance-item">
+    <div class="compliance-item-header {{#if compliance_audit.licensing_ok}}pass{{else}}warning{{/if}}">
+      <span class="icon">{{#if compliance_audit.licensing_ok}}✅{{else}}⚠️{{/if}}</span>
+      <h3>Property Licensing (HMO/Selective)</h3>
+      <span class="status">{{#if compliance_audit.licensing_ok}}PASS{{else}}CHECK{{/if}}</span>
+    </div>
+    <div class="compliance-item-content">
+      {{{compliance_audit.licensing}}}
+    </div>
+  </div>
 
-6. LICENSING (HMO/SELECTIVE)
-{{compliance_audit.licensing}}
+  <!-- Retaliatory Eviction -->
+  <div class="compliance-item">
+    <div class="compliance-item-header {{#if compliance_audit.no_retaliation}}pass{{else}}warning{{/if}}">
+      <span class="icon">{{#if compliance_audit.no_retaliation}}✅{{else}}⚠️{{/if}}</span>
+      <h3>Retaliatory Eviction Risk</h3>
+      <span class="status">{{#if compliance_audit.no_retaliation}}LOW RISK{{else}}CHECK{{/if}}</span>
+    </div>
+    <div class="compliance-item-content">
+      {{{compliance_audit.retaliatory_eviction}}}
+    </div>
+  </div>
 
-7. RETALIATORY EVICTION RISK
-{{compliance_audit.retaliatory_eviction}}
+  <!-- Disrepair Issues -->
+  <div class="compliance-item">
+    <div class="compliance-item-header {{#if compliance_audit.no_disrepair}}pass{{else}}warning{{/if}}">
+      <span class="icon">{{#if compliance_audit.no_disrepair}}✅{{else}}⚠️{{/if}}</span>
+      <h3>Property Disrepair Issues</h3>
+      <span class="status">{{#if compliance_audit.no_disrepair}}NONE{{else}}CHECK{{/if}}</span>
+    </div>
+    <div class="compliance-item-content">
+      {{{compliance_audit.disrepair_risk}}}
+    </div>
+  </div>
+</div>
 
-8. DISREPAIR ISSUES
-{{compliance_audit.disrepair_risk}}
+<!-- Section 21 Validity (if applicable) -->
+{{#if compliance_audit.s21_analysis}}
+<div class="section-header">
+  <span class="num">2</span>
+  <h2>Section 21 Validity Analysis</h2>
+</div>
 
-==================================================================
-
-SECTION 21 VALIDITY
-
-Section 21 Valid: {{#if compliance_audit.s21_valid}}✅ YES{{else}}❌ NO{{/if}}
-
-{{#if compliance_audit.s21_blocking_issues}}
-{{#if (gt compliance_audit.s21_blocking_issues.length 0)}}
-Blocking Issues:
-{{#each compliance_audit.s21_blocking_issues}}
-- {{this}}
-{{/each}}
+<div class="compliance-item">
+  <div class="compliance-item-header {{#if compliance_audit.s21_valid}}pass{{else}}fail{{/if}}">
+    <span class="icon">{{#if compliance_audit.s21_valid}}✅{{else}}❌{{/if}}</span>
+    <h3>Section 21 Notice Valid?</h3>
+    <span class="status">{{#if compliance_audit.s21_valid}}YES{{else}}NO{{/if}}</span>
+  </div>
+  <div class="compliance-item-content">
+    {{#if compliance_audit.s21_blocking_issues}}
+    <p><strong>Blocking Issues:</strong></p>
+    <ul>
+      {{#each compliance_audit.s21_blocking_issues}}
+      <li>{{this}}</li>
+      {{/each}}
+    </ul>
+    {{else}}
+    <p>No blocking issues identified. Your Section 21 notice should be valid if served correctly.</p>
+    {{/if}}
+  </div>
+</div>
 {{/if}}
-{{/if}}
 
-==================================================================
-
-SECTION 8 GROUNDS ANALYSIS
-
-Available Grounds:
+<!-- Section 8 Grounds (if applicable) -->
 {{#if compliance_audit.s8_grounds}}
-{{#each compliance_audit.s8_grounds}}
-- {{this}}
-{{/each}}
-{{else}}
-No Section 8 grounds identified from the information provided.
+<div class="section-header">
+  <span class="num">{{#if compliance_audit.s21_analysis}}3{{else}}2{{/if}}</span>
+  <h2>Section 8 Grounds Analysis</h2>
+</div>
+
+<div class="compliance-item">
+  <div class="compliance-item-header pass">
+    <span class="icon">📋</span>
+    <h3>Available Grounds</h3>
+  </div>
+  <div class="compliance-item-content">
+    <ul>
+      {{#each compliance_audit.s8_grounds}}
+      <li>{{this}}</li>
+      {{/each}}
+    </ul>
+    {{#if compliance_audit.s8_recommendations}}
+    <p style="margin-top: 1em;"><strong>Recommendations:</strong></p>
+    <ul>
+      {{#each compliance_audit.s8_recommendations}}
+      <li>{{this}}</li>
+      {{/each}}
+    </ul>
+    {{/if}}
+  </div>
+</div>
 {{/if}}
 
-Recommendations:
-{{#if compliance_audit.s8_recommendations}}
-{{#each compliance_audit.s8_recommendations}}
-- {{this}}
-{{/each}}
-{{else}}
-No specific Section 8 recommendations at this time.
-{{/if}}
-
-==================================================================
-
-ACTION PLAN
+<!-- Action Plan -->
+<div class="section-header">
+  <span class="num">{{#if compliance_audit.s8_grounds}}{{#if compliance_audit.s21_analysis}}4{{else}}3{{/if}}{{else}}{{#if compliance_audit.s21_analysis}}3{{else}}2{{/if}}{{/if}}</span>
+  <h2>Action Plan</h2>
+</div>
 
 {{#if compliance_audit.critical_actions}}
-{{#if (gt compliance_audit.critical_actions.length 0)}}
-CRITICAL ACTIONS (Must Complete Before Proceeding):
-{{#each compliance_audit.critical_actions}}
-{{@index}}. {{this}}
-{{/each}}
-
-{{/if}}
+<div class="action-box critical">
+  <div class="action-box-header">🚨 CRITICAL ACTIONS - Must Complete Before Proceeding</div>
+  <div class="action-box-content">
+    <ol>
+      {{#each compliance_audit.critical_actions}}
+      <li>{{this}}</li>
+      {{/each}}
+    </ol>
+  </div>
+</div>
 {{/if}}
 
 {{#if compliance_audit.recommended_actions}}
-{{#if (gt compliance_audit.recommended_actions.length 0)}}
-RECOMMENDED ACTIONS (Should Complete to Strengthen Case):
-{{#each compliance_audit.recommended_actions}}
-{{@index}}. {{this}}
-{{/each}}
-
-{{/if}}
+<div class="action-box recommended">
+  <div class="action-box-header">💡 RECOMMENDED ACTIONS - Strengthen Your Case</div>
+  <div class="action-box-content">
+    <ol>
+      {{#each compliance_audit.recommended_actions}}
+      <li>{{this}}</li>
+      {{/each}}
+    </ol>
+  </div>
+</div>
 {{/if}}
 
 {{#unless compliance_audit.critical_actions}}
 {{#unless compliance_audit.recommended_actions}}
-No immediate actions required. Your compliance appears to be in order.
+<p style="padding: 1em; background: #dcfce7; border-radius: 4px;">
+  ✅ <strong>No immediate actions required.</strong> Your compliance appears to be in order. Proceed with serving your notice.
+</p>
 {{/unless}}
 {{/unless}}
 
-==================================================================
+<!-- Important Notes -->
+<div class="notes-section">
+  <h3>Important Notes</h3>
+  <ol>
+    <li>This audit is based on the information you provided. If any information is inaccurate or incomplete, the results may not be reliable.</li>
+    <li>This is not legal advice. For complex cases or if you're unsure about any compliance issue, consult a solicitor.</li>
+    <li>Compliance requirements can change. Ensure you're following current regulations at the time of serving notice.</li>
+    <li>Even if compliant, eviction outcomes depend on many factors. Courts have discretion and may consider tenant circumstances.</li>
+    <li>Keep copies of all compliance documents (certificates, deposit protection confirmation, How to Rent guide, etc.) for court.</li>
+  </ol>
+</div>
 
-IMPORTANT NOTES:
+<!-- Footer -->
+<div class="doc-footer">
+  <p><strong>Generated by Ask Heaven AI:</strong> {{current_date}}</p>
+  <p><strong>Landlord Heaven</strong> | AI Compliance Audit Report</p>
+</div>
 
-1. This audit is based on the information you provided. If any information
-   is inaccurate or incomplete, the audit results may not be reliable.
-
-2. This is not legal advice. For complex cases or if you're unsure about
-   any compliance issue, consult a solicitor.
-
-3. Compliance requirements can change. Ensure you're following current
-   regulations at the time of serving notice and filing court claim.
-
-4. Even if compliant, eviction is never guaranteed. Courts have discretion
-   and may consider tenant circumstances.
-
-5. Keep copies of all compliance documents (certificates, deposit protection
-   confirmation, How to Rent guide, etc.) for court submission.
-
-==================================================================
-
-NEXT STEPS:
-
-1. Address all CRITICAL ACTIONS listed above (if any)
-2. Consider addressing RECOMMENDED ACTIONS to strengthen your case
-3. Gather evidence of compliance (certificates, receipts, emails)
-4. Serve notice only when fully compliant
-5. Keep detailed records of all communications and actions
-
-==================================================================
+</body>
+</html>

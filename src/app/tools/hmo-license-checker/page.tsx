@@ -1,9 +1,16 @@
 'use client';
 
-import { useState } from 'react';
-import Link from 'next/link';
+import { useState, useCallback } from 'react';
+import { UniversalHero } from '@/components/landing/UniversalHero';
+import { HeaderConfig } from '@/components/layout';
 import { Container } from '@/components/ui/Container';
-import councilsData from '@/config/jurisdictions/uk/england-wales/councils.json';
+import councilsData from '@/config/jurisdictions/uk/england/councils.json';
+import { useEmailGate } from '@/hooks/useEmailGate';
+import { ToolEmailGate } from '@/components/ui/ToolEmailGate';
+import { RelatedLinks } from '@/components/seo/RelatedLinks';
+import { FAQSection } from '@/components/seo/FAQSection';
+import { productLinks, toolLinks } from '@/lib/seo/internal-links';
+import { ToolFunnelTracker } from '@/components/tools/ToolFunnelTracker';
 
 // Function to lookup council by postcode
 function getCouncilByPostcode(postcode: string): { name: string; website: string } | null {
@@ -29,8 +36,42 @@ export default function HMOLicenseChecker() {
 
   const [isGenerating, setIsGenerating] = useState(false);
   const [generated, setGenerated] = useState(false);
+  const toolTrackingConfig = {
+    toolName: 'HMO License Checker',
+    toolType: 'checker' as const,
+    jurisdiction: 'england',
+  };
 
-  const handleGenerate = async () => {
+  const faqs = [
+    {
+      question: 'How do I know if my property is an HMO?',
+      answer:
+        'Your property is an HMO if at least 3 tenants live there, forming more than 1 household, and share toilet, bathroom, or kitchen facilities. Use this free checker as a starting point, then contact your local council for confirmation. They can tell you if your property meets the HMO definition and whether it needs a license.',
+    },
+    {
+      question: 'What happens if I operate an unlicensed HMO?',
+      answer:
+        "Operating an unlicensed HMO is a criminal offence. You can face unlimited fines (commonly £30,000+), rent repayment orders forcing you to repay up to 12 months' rent to your tenants, and you cannot serve Section 21 notices to end tenancies. You may also be prosecuted and end up with a criminal record.",
+    },
+    {
+      question: 'How much does an HMO license cost?',
+      answer:
+        "HMO license fees vary significantly by council, typically ranging from £500 to £1,500+ per property. The license usually lasts for 5 years. Contact your local council for exact fees. While this may seem expensive, it's far less than the penalties for operating without one.",
+    },
+    {
+      question: 'Can I convert my property to an HMO?',
+      answer:
+        "In many areas, you'll need planning permission to convert a property into an HMO, especially if you're changing from a single-family dwelling (C3 use class) to an HMO (C4 or Sui Generis). Check with your local planning authority before converting. You'll also need to meet HMO property standards, which include requirements for room sizes, fire safety, and amenities.",
+    },
+    {
+      question: 'Do I need separate tenancy agreements for HMO tenants?',
+      answer:
+        'You can use either individual agreements for each tenant or a single joint agreement for all tenants. Individual agreements give you more flexibility (tenants can move out independently) but require more administration. Joint agreements make all tenants jointly and severally liable for the rent, providing more security. Our paid HMO tenancy agreement product (from £14.99) includes both options with HMO-specific terms.',
+    },
+  ];
+
+  // PDF generation function (called after email captured)
+  const generatePDF = useCallback(async () => {
     setIsGenerating(true);
 
     try {
@@ -294,7 +335,7 @@ export default function HMOLicenseChecker() {
       });
 
       // Footer
-      page.drawText(`Generated: ${new Date().toLocaleDateString('en-GB')} | www.LandlordHeaven.com`, {
+      page.drawText(`Generated: ${new Date().toLocaleDateString('en-GB')} | www.LandlordHeaven.co.uk`, {
         x: 50,
         y: 50,
         size: 8,
@@ -325,6 +366,17 @@ export default function HMOLicenseChecker() {
       setIsGenerating(false);
       alert('Failed to generate PDF. Please try again.');
     }
+  }, [formData]);
+
+  // Email gate hook - requires email before PDF download
+  const gate = useEmailGate({
+    source: 'tool:hmo-license-checker',
+    onProceed: generatePDF,
+  });
+
+  // Handler that checks gate before generating
+  const handleGenerate = () => {
+    gate.checkGateAndProceed();
   };
 
   const isFormValid =
@@ -336,38 +388,26 @@ export default function HMOLicenseChecker() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
-      <section className="bg-linear-to-br from-purple-50 via-purple-100 to-purple-50 py-16 md:py-24">
-        <Container>
-          <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-              <span className="text-sm font-semibold text-primary">Free Tool</span>
-            </div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">HMO License Checker</h1>
-            <p className="text-xl md:text-2xl mb-6 text-gray-600">
-              Check if Your Rental Property Requires HMO Licensing
-            </p>
-            <div className="flex items-baseline justify-center gap-2 mb-8">
-              <span className="text-5xl md:text-6xl font-bold text-gray-900">FREE</span>
-            </div>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              <a
-                href="#checker"
-                className="hero-btn-primary"
-              >
-                Start Free Checker →
-              </a>
-              <Link
-                href="/products/ast"
-                className="hero-btn-secondary"
-              >
-                Get HMO Tenancy Agreement →
-              </Link>
-            </div>
-            <p className="mt-4 text-sm text-gray-600">Instant assessment • HMO guidance • Upgrade for professional agreements</p>
-          </div>
-        </Container>
-      </section>
+      <HeaderConfig mode="autoOnScroll" />
+      <ToolFunnelTracker
+        toolName={toolTrackingConfig.toolName}
+        toolType={toolTrackingConfig.toolType}
+        jurisdiction={toolTrackingConfig.jurisdiction}
+      />
+      <UniversalHero
+        badge="Free Tool"
+        title="HMO License Checker"
+        subtitle="Check if Your Rental Property Requires HMO Licensing"
+        align="center"
+        hideMedia
+        showReviewPill={false}
+        showTrustPositioningBar
+        showUsageCounter
+        primaryCta={{ label: 'Start Free Checker →', href: '#checker' }}
+        secondaryCta={{ label: 'Get HMO Tenancy Agreement →', href: '/products/ast' }}
+      >
+        <p className="mt-4 text-sm text-white/90">Instant assessment • HMO guidance • Upgrade for professional agreements</p>
+      </UniversalHero>
 
       {/* Legal Disclaimer Banner */}
       <div className="border-b-2 border-warning-500 bg-warning-50 py-4">
@@ -398,7 +438,7 @@ export default function HMOLicenseChecker() {
       </div>
 
       {/* Main Content */}
-      <div className="py-16 md:py-20">
+      <div className="py-20 md:py-24">
         <Container>
           <div className="max-w-4xl mx-auto">
             <div id="checker" className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
@@ -543,7 +583,7 @@ export default function HMOLicenseChecker() {
           type="button"
           onClick={handleGenerate}
           disabled={!isFormValid || isGenerating}
-          className="w-full rounded-xl bg-primary-600 px-6 py-4 text-lg font-semibold text-white transition-all hover:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-50"
+          className="hero-btn-primary w-full disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isGenerating
             ? 'Generating Assessment...'
@@ -625,80 +665,39 @@ export default function HMOLicenseChecker() {
           </div>
         </div>
 
-        {/* FAQ Section */}
-        <div className="rounded-xl border border-gray-200 bg-white p-6">
-          <h3 className="mb-6 text-xl font-semibold text-gray-900">
-            Frequently Asked Questions
-          </h3>
-          <div className="space-y-6">
-            <div>
-              <h4 className="mb-2 font-semibold text-gray-900">
-                How do I know if my property is an HMO?
-              </h4>
-              <p className="text-sm text-gray-700 leading-relaxed">
-                Your property is an HMO if at least 3 tenants live there, forming more than 1 household,
-                and share toilet, bathroom, or kitchen facilities. Use this free checker as a starting
-                point, then contact your local council for confirmation. They can tell you if your
-                property meets the HMO definition and whether it needs a license.
-              </p>
-            </div>
-
-            <div>
-              <h4 className="mb-2 font-semibold text-gray-900">
-                What happens if I operate an unlicensed HMO?
-              </h4>
-              <p className="text-sm text-gray-700 leading-relaxed">
-                Operating an unlicensed HMO is a criminal offence. You can face unlimited fines
-                (commonly £30,000+), rent repayment orders forcing you to repay up to 12 months' rent
-                to your tenants, and you cannot serve Section 21 notices to end tenancies. You may also
-                be prosecuted and end up with a criminal record.
-              </p>
-            </div>
-
-            <div>
-              <h4 className="mb-2 font-semibold text-gray-900">
-                How much does an HMO license cost?
-              </h4>
-              <p className="text-sm text-gray-700 leading-relaxed">
-                HMO license fees vary significantly by council, typically ranging from £500 to £1,500+
-                per property. The license usually lasts for 5 years. Contact your local council for
-                exact fees. While this may seem expensive, it's far less than the penalties for
-                operating without one.
-              </p>
-            </div>
-
-            <div>
-              <h4 className="mb-2 font-semibold text-gray-900">
-                Can I convert my property to an HMO?
-              </h4>
-              <p className="text-sm text-gray-700 leading-relaxed">
-                In many areas, you'll need planning permission to convert a property into an HMO,
-                especially if you're changing from a single-family dwelling (C3 use class) to an HMO
-                (C4 or Sui Generis). Check with your local planning authority before converting. You'll
-                also need to meet HMO property standards, which include requirements for room sizes,
-                fire safety, and amenities.
-              </p>
-            </div>
-
-            <div>
-              <h4 className="mb-2 font-semibold text-gray-900">
-                Do I need separate tenancy agreements for HMO tenants?
-              </h4>
-              <p className="text-sm text-gray-700 leading-relaxed">
-                You can use either individual agreements for each tenant or a single joint agreement
-                for all tenants. Individual agreements give you more flexibility (tenants can move out
-                independently) but require more administration. Joint agreements make all tenants
-                jointly and severally liable for the rent, providing more security. Our paid HMO
-                tenancy agreement product (£39.99) includes both options with HMO-specific terms.
-              </p>
-            </div>
-          </div>
-        </div>
       </div>
             </div>
           </div>
         </Container>
       </div>
+
+      <FAQSection
+        title="Frequently Asked Questions"
+        faqs={faqs}
+        showContactCTA={false}
+        variant="white"
+      />
+
+      {/* Related Resources */}
+      <RelatedLinks
+        title="Related Resources"
+        links={[
+          productLinks.tenancyAgreement,
+          toolLinks.rentArrearsCalculator,
+          toolLinks.section21Generator,
+          toolLinks.section8Generator,
+        ]}
+      />
+
+      {/* Email Gate Modal */}
+      {gate.showGate && (
+        <ToolEmailGate
+          toolName="HMO License Assessment"
+          source={gate.source}
+          onEmailCaptured={gate.handleSuccess}
+          onClose={gate.handleClose}
+        />
+      )}
     </div>
   );
 }

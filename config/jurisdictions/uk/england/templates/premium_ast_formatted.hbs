@@ -1,9 +1,22 @@
 {{!--
-  Premium Assured Shorthold Tenancy Agreement
-  England & Wales - Professional Edition
+  ============================================================================
+  PREMIUM ASSURED SHORTHOLD TENANCY AGREEMENT
+  England Only - Solicitor-Grade Premium Edition
 
-  This template generates a beautifully formatted, legally comprehensive
-  tenancy agreement with proper styling and signature blocks.
+  LEGAL NOTE: This Assured Shorthold Tenancy (AST) agreement applies to England ONLY.
+  Premium includes: detailed guarantor provisions, HMO terms, late payment, key schedule,
+  maintenance, emergency procedures, and enhanced move-in/out checklists.
+
+  STRUCTURE:
+  1. Cover/Title
+  2. Parties (including Guarantor if applicable)
+  3. Definitions & Interpretation
+  4. Core Clauses (Property, Term, Rent, Deposit, Obligations)
+  5. Premium Clauses (Late Payment, Access, Maintenance)
+  6. Guarantor Agreement (if applicable)
+  7. Signatures
+  8. Schedules (1-7 with premium additions)
+  ============================================================================
 --}}
 
 <!DOCTYPE html>
@@ -13,1896 +26,431 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Premium Assured Shorthold Tenancy Agreement</title>
   <style>
-    @page {
-      size: A4;
-      margin: 20mm 15mm;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Helvetica Neue', Arial, sans-serif;
-      font-size: 11pt;
-      line-height: 1.6;
-      color: #1a1a1a;
-      margin: 0;
-      padding: 0;
-    }
-
-    .document-header {
-      text-align: center;
-      margin-bottom: 30px;
-      padding: 30px 0;
-      border-bottom: 3px solid #2c5282;
-    }
-
-    .document-title {
-      font-size: 28pt;
-      font-weight: bold;
-      color: #2c5282;
-      margin: 0 0 10px 0;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-    }
-
-    .document-subtitle {
-      font-size: 14pt;
-      color: #4a5568;
-      margin: 5px 0;
-    }
-
-    .agreement-date {
-      font-size: 12pt;
-      color: #718096;
-      margin-top: 15px;
-      font-style: italic;
-    }
-
-    .section-header {
-      background: linear-gradient(135deg, #2c5282 0%, #2d3748 100%);
-      color: white;
-      padding: 15px 20px;
-      margin: 40px 0 20px 0;
-      font-size: 16pt;
-      font-weight: bold;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      page-break-after: avoid;
-    }
-
-    .section-number {
-      background: white;
-      color: #2c5282;
-      border-radius: 50%;
-      width: 35px;
-      height: 35px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      margin-right: 15px;
-      font-size: 16pt;
-      font-weight: bold;
-    }
-
-    .subsection {
-      margin: 25px 0;
-      page-break-inside: avoid;
-    }
-
-    .subsection-title {
-      font-size: 13pt;
-      font-weight: bold;
-      color: #2c5282;
-      margin-bottom: 10px;
-      border-left: 4px solid #2c5282;
-      padding-left: 15px;
-    }
-
-    .clause {
-      margin: 15px 0;
-      padding-left: 30px;
-    }
-
-    .clause-number {
-      font-weight: bold;
-      color: #2c5282;
-      display: inline-block;
-      min-width: 40px;
-    }
-
-    .explainer-box {
-      background: #f7fafc;
-      border-left: 4px solid #4299e1;
-      padding: 15px;
-      margin: 15px 0;
-      font-size: 10pt;
-      color: #4a5568;
-      page-break-inside: avoid;
-    }
-
-    .explainer-title {
-      font-weight: bold;
-      color: #2c5282;
-      margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-    }
-
-    .explainer-icon {
-      display: inline-block;
-      margin-right: 8px;
-      font-size: 14pt;
-    }
-
-    .warning-box {
-      background: #fff5f5;
-      border-left: 4px solid #f56565;
-      padding: 15px;
-      margin: 15px 0;
-      font-size: 10pt;
-      color: #742a2a;
-      page-break-inside: avoid;
-    }
-
-    .warning-title {
-      font-weight: bold;
-      color: #c53030;
-      margin-bottom: 8px;
-    }
-
-    .important-box {
-      background: #fffaf0;
-      border: 2px solid #ed8936;
-      padding: 15px;
-      margin: 15px 0;
-      font-size: 10pt;
-      page-break-inside: avoid;
-    }
-
-    .important-title {
-      font-weight: bold;
-      color: #c05621;
-      margin-bottom: 8px;
-      font-size: 11pt;
-    }
-
-    .party-details {
-      background: #f7fafc;
-      padding: 20px;
-      margin: 15px 0;
-      border-radius: 8px;
-      border: 1px solid #cbd5e0;
-    }
-
-    .party-label {
-      font-weight: bold;
-      color: #2c5282;
-      font-size: 12pt;
-      margin-bottom: 10px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    .party-info {
-      margin-left: 20px;
-      line-height: 1.8;
-    }
-
-    .property-highlight {
-      background: linear-gradient(135deg, #2c5282 0%, #2d3748 100%);
-      color: white;
-      padding: 25px;
-      margin: 20px 0;
-      border-radius: 8px;
-      text-align: center;
-      page-break-inside: avoid;
-    }
-
-    .property-address {
-      font-size: 18pt;
-      font-weight: bold;
-      margin-bottom: 15px;
-    }
-
-    .property-details {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 15px;
-      margin-top: 15px;
-    }
-
-    .property-detail-item {
-      background: rgba(255, 255, 255, 0.1);
-      padding: 10px;
-      border-radius: 4px;
-    }
-
-    .property-detail-label {
-      font-size: 9pt;
-      opacity: 0.8;
-      margin-bottom: 5px;
-    }
-
-    .property-detail-value {
-      font-size: 12pt;
-      font-weight: bold;
-    }
-
-    .financial-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 20px 0;
-      background: white;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-
-    .financial-table th {
-      background: #2c5282;
-      color: white;
-      padding: 15px;
-      text-align: left;
-      font-weight: bold;
-      text-transform: uppercase;
-      font-size: 10pt;
-      letter-spacing: 1px;
-    }
-
-    .financial-table td {
-      padding: 15px;
-      border-bottom: 1px solid #e2e8f0;
-    }
-
-    .financial-table tr:last-child td {
-      border-bottom: none;
-    }
-
-    .financial-table .label {
-      font-weight: 600;
-      color: #4a5568;
-    }
-
-    .financial-table .value {
-      font-size: 13pt;
-      font-weight: bold;
-      color: #2c5282;
-    }
-
-    .signature-section {
-      margin-top: 60px;
-      page-break-before: always;
-      padding-top: 40px;
-    }
-
-    .signature-title {
-      font-size: 18pt;
-      font-weight: bold;
-      color: #2c5282;
-      text-align: center;
-      margin-bottom: 40px;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-    }
-
-    .signature-blocks {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 40px;
-      margin: 40px 0;
-    }
-
-    .signature-block {
-      border: 2px solid #2c5282;
-      padding: 30px;
-      border-radius: 8px;
-      background: #f7fafc;
-    }
-
-    .signature-party {
-      font-weight: bold;
-      color: #2c5282;
-      font-size: 12pt;
-      margin-bottom: 20px;
-      text-transform: uppercase;
-    }
-
-    .signature-line {
-      border-bottom: 2px solid #2c5282;
-      margin: 30px 0 10px 0;
-      height: 50px;
-    }
-
-    .signature-label {
-      font-size: 9pt;
-      color: #718096;
-      margin-top: 5px;
-    }
-
-    .signature-date {
-      margin-top: 20px;
-    }
-
-    .signature-date-label {
-      font-size: 9pt;
-      color: #718096;
-      margin-bottom: 5px;
-    }
-
-    .signature-date-line {
-      border-bottom: 2px solid #2c5282;
-      width: 150px;
-      height: 30px;
-    }
-
-    .witness-section {
-      margin-top: 40px;
-      padding: 20px;
-      background: #fffaf0;
-      border: 1px solid #ed8936;
-      border-radius: 8px;
-    }
-
-    .witness-title {
-      font-weight: bold;
-      color: #c05621;
-      margin-bottom: 15px;
-    }
-
-    .legal-notice {
-      background: #f7fafc;
-      border: 2px solid #2c5282;
-      padding: 20px;
-      margin: 30px 0;
-      border-radius: 8px;
-      page-break-inside: avoid;
-    }
-
-    .legal-notice-title {
-      font-weight: bold;
-      color: #2c5282;
-      font-size: 12pt;
-      margin-bottom: 15px;
-      text-transform: uppercase;
-    }
-
-    ul, ol {
-      margin: 10px 0;
-      padding-left: 30px;
-    }
-
-    li {
-      margin: 8px 0;
-    }
-
-    .checklist {
-      list-style: none;
-      padding-left: 0;
-    }
-
-    .checklist li:before {
-      content: "✓ ";
-      color: #48bb78;
-      font-weight: bold;
-      margin-right: 10px;
-    }
-
-    .page-break {
-      page-break-before: always;
-    }
-
-    .footer-info {
-      margin-top: 40px;
-      padding-top: 20px;
-      border-top: 1px solid #cbd5e0;
-      font-size: 9pt;
-      color: #718096;
-      text-align: center;
-    }
-
-    @media print {
-      .page-break {
-        page-break-before: always;
-      }
-
-      .section-header,
-      .subsection,
-      .explainer-box,
-      .warning-box,
-      .party-details {
-        page-break-inside: avoid;
-      }
-    }
+    @page { size: A4; margin: 25mm 20mm; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Georgia', 'Times New Roman', serif; font-size: 11pt; line-height: 1.5; color: #1a1a1a; background: white; }
+    h1, h2, h3, h4 { font-family: 'Arial', 'Helvetica', sans-serif; font-weight: 600; margin-top: 0; page-break-after: avoid; }
+    h1 { font-size: 18pt; text-align: center; margin-bottom: 6pt; text-transform: uppercase; letter-spacing: 1pt; }
+    h2 { font-size: 13pt; border-bottom: 1pt solid #333; padding-bottom: 4pt; margin: 20pt 0 12pt 0; text-transform: uppercase; }
+    h3 { font-size: 11pt; margin: 14pt 0 8pt 0; }
+    h4 { font-size: 10pt; margin: 10pt 0 6pt 0; }
+    p { margin: 0 0 8pt 0; text-align: justify; hyphens: auto; }
+    .doc-header { text-align: center; border-bottom: 2pt solid #333; padding-bottom: 15pt; margin-bottom: 20pt; }
+    .doc-subtitle { font-size: 10pt; color: #555; margin: 5pt 0; }
+    .doc-date { font-size: 10pt; margin-top: 10pt; }
+    .premium-badge { display: inline-block; background: #2c5282; color: white; padding: 3pt 10pt; font-size: 9pt; text-transform: uppercase; letter-spacing: 1pt; margin-top: 8pt; }
+    .parties-section { margin: 15pt 0; }
+    .party-block { margin: 10pt 0; padding-left: 20pt; }
+    .party-role { font-weight: bold; text-transform: uppercase; font-size: 9pt; letter-spacing: 0.5pt; margin-bottom: 3pt; }
+    .party-details-text { line-height: 1.6; }
+    .definitions-list { list-style: none; margin: 0; padding: 0; }
+    .definitions-list li { margin: 6pt 0; }
+    .defined-term { font-weight: bold; }
+    .clause { margin: 8pt 0; padding-left: 30pt; text-indent: -30pt; }
+    .clause-num { display: inline-block; width: 28pt; font-weight: bold; }
+    .data-table { width: 100%; border-collapse: collapse; margin: 12pt 0; font-size: 10pt; }
+    .data-table th, .data-table td { border: 0.5pt solid #666; padding: 6pt 8pt; text-align: left; vertical-align: top; }
+    .data-table th { background: #f5f5f5; font-weight: bold; font-size: 9pt; text-transform: uppercase; }
+    .data-table td.label { width: 35%; font-weight: 500; background: #fafafa; }
+    .data-table td.value { width: 65%; word-wrap: break-word; overflow-wrap: anywhere; }
+    .schedule { page-break-before: always; margin-top: 0; }
+    .schedule-header { text-align: center; border: 1pt solid #333; padding: 10pt; margin-bottom: 15pt; background: #f8f8f8; }
+    .schedule-header h2 { border: none; margin: 0; padding: 0; }
+    .schedule-title { font-size: 12pt; margin-top: 5pt; font-weight: normal; text-transform: none; }
+    .signature-section { page-break-inside: avoid; margin-top: 30pt; }
+    .signature-block { margin: 25pt 0; page-break-inside: avoid; }
+    .signature-role { font-weight: bold; text-transform: uppercase; font-size: 9pt; margin-bottom: 8pt; }
+    .signature-name { margin-bottom: 20pt; }
+    .signature-line { border-bottom: 1pt solid #333; width: 250pt; height: 25pt; }
+    .signature-label { font-size: 9pt; color: #555; margin-top: 3pt; }
+    .signature-date-line { border-bottom: 1pt solid #333; width: 150pt; display: inline-block; margin-left: 10pt; }
+    .legal-notice { border: 1pt solid #333; padding: 10pt; margin: 12pt 0; background: #fffef5; page-break-inside: avoid; }
+    .legal-notice-title { font-weight: bold; font-size: 10pt; margin-bottom: 6pt; text-transform: uppercase; }
+    ul, ol { margin: 6pt 0 6pt 25pt; padding: 0; }
+    li { margin: 4pt 0; }
+    .wrap-text, .email-text, .address-text { word-wrap: break-word; overflow-wrap: anywhere; }
+    .doc-footer { margin-top: 30pt; padding-top: 10pt; border-top: 0.5pt solid #999; font-size: 8pt; color: #666; text-align: center; }
+    .premium-section { border-left: 3pt solid #2c5282; padding-left: 12pt; margin: 15pt 0; }
+    .premium-label { font-size: 8pt; color: #2c5282; text-transform: uppercase; letter-spacing: 0.5pt; margin-bottom: 5pt; }
+    @media print { .schedule { page-break-before: always; } .signature-section, .signature-block, .legal-notice, .schedule-header { page-break-inside: avoid; } h2, h3, h4 { page-break-after: avoid; } .data-table, .data-table tr { page-break-inside: avoid; } }
   </style>
 </head>
 <body>
 
-  <!-- DOCUMENT HEADER -->
-  <div class="document-header">
-    <div class="document-title">
-      Premium Assured Shorthold<br/>Tenancy Agreement
-    </div>
-    <div class="document-subtitle">
-      England & Wales &mdash; Professional Edition
-    </div>
-    <div class="agreement-date">
-      This Agreement is dated: <strong>{{agreement_date}}</strong>
-    </div>
+  <!-- COVER -->
+  <div class="doc-header">
+    <h1>Assured Shorthold Tenancy Agreement</h1>
+    <div class="doc-subtitle">Housing Act 1988 (as amended)</div>
+    <div class="doc-subtitle">England</div>
+    <div class="premium-badge">Premium Edition</div>
+    <div class="doc-date">Dated: <strong>{{formatUKDate agreement_date}}</strong></div>
   </div>
 
-  <div class="explainer-box">
-    <div class="explainer-title">
-      <span class="explainer-icon">ℹ️</span>
-      About This Agreement
-    </div>
-    <p>
-      This is a legally binding contract between the Landlord and Tenant(s) for the rental of a residential property.
-      It is governed by the Housing Act 1988 (as amended) and complies with all current England & Wales legislation
-      including the Tenant Fees Act 2019 and deposit protection requirements.
-    </p>
-  </div>
-
-  <!-- SECTION 1: THE PARTIES -->
-  <div class="section-header">
-    <span class="section-number">1</span>
-    The Parties
-  </div>
-
-  <div class="party-details">
-    <div class="party-label">🏠 Landlord</div>
-    <div class="party-info">
-      <strong>Name:</strong> {{landlord_full_name}}<br/>
-      <strong>Address:</strong> {{landlord_address}}<br/>
-      <strong>Email:</strong> {{landlord_email}}<br/>
-      <strong>Phone:</strong> {{landlord_phone}}
-    </div>
-  </div>
-
-  {{#if agent_name}}
-  <div class="party-details">
-    <div class="party-label">🏢 Landlord's Agent</div>
-    <div class="party-info">
-      <strong>Name:</strong> {{agent_name}}<br/>
-      <strong>Address:</strong> {{agent_address}}<br/>
-      <strong>Email:</strong> {{agent_email}}<br/>
-      <strong>Phone:</strong> {{agent_phone}}
-    </div>
-  </div>
-
-  <div class="explainer-box">
-    <div class="explainer-title">
-      <span class="explainer-icon">ℹ️</span>
-      About the Agent
-    </div>
-    <p>
-      The Landlord has appointed {{agent_name}} to act on their behalf. All communications regarding this tenancy
-      should be directed to the Agent unless otherwise specified.
-    </p>
-  </div>
-  {{/if}}
-
-  <div class="party-details">
-    <div class="party-label">👤 Tenant(s)</div>
-    <div class="party-info">
-      {{#each tenants}}
-      <div style="margin-bottom: 15px;">
-        <strong>Tenant {{add @index 1}}:</strong> {{this.full_name}}<br/>
-        <strong>Date of Birth:</strong> {{this.dob}}<br/>
-        <strong>Email:</strong> {{this.email}}<br/>
-        <strong>Phone:</strong> {{this.phone}}
+  <!-- 1. PARTIES -->
+  <h2>1. Parties</h2>
+  <div class="parties-section">
+    <div class="party-block">
+      <div class="party-role">Landlord</div>
+      <div class="party-details-text">
+        <strong>{{landlord_full_name}}</strong><br>
+        <span class="address-text">{{landlord_address}}</span><br>
+        <span class="email-text">{{landlord_email}}</span> | {{landlord_phone}}
       </div>
-      {{/each}}
     </div>
+
+    {{#if agent_name}}
+    <div class="party-block">
+      <div class="party-role">Landlord's Agent</div>
+      <div class="party-details-text">
+        <strong>{{agent_name}}</strong><br>
+        <span class="address-text">{{agent_address}}</span><br>
+        <span class="email-text">{{agent_email}}</span> | {{agent_phone}}
+      </div>
+    </div>
+    {{/if}}
+
+    <div class="party-block">
+      <div class="party-role">Tenant{{#if multiple_tenants}}s{{/if}}</div>
+      <div class="party-details-text">
+        {{#each tenants}}
+        <strong>{{this.full_name}}</strong>{{#if this.dob}} (DOB: {{formatUKDate this.dob}}){{/if}}<br>
+        <span class="email-text">{{this.email}}</span>{{#if this.phone}} | {{this.phone}}{{/if}}{{#unless @last}}<br><br>{{/unless}}
+        {{/each}}
+      </div>
+    </div>
+
+    {{#if guarantor_name}}
+    <div class="party-block">
+      <div class="party-role">Guarantor</div>
+      <div class="party-details-text">
+        <strong>{{guarantor_name}}</strong><br>
+        <span class="address-text">{{guarantor_address}}</span><br>
+        <span class="email-text">{{guarantor_email}}</span> | {{guarantor_phone}}<br>
+        {{#if guarantor_dob}}DOB: {{formatUKDate guarantor_dob}} | {{/if}}{{#if guarantor_relationship}}Relationship: {{guarantor_relationship}}{{/if}}
+      </div>
+    </div>
+    {{/if}}
   </div>
 
-  {{#if joint_and_several_liability}}
-  <div class="important-box">
-    <div class="important-title">⚠️ Joint and Several Liability</div>
-    <p>
-      Where there are multiple Tenants, each Tenant is jointly and severally liable for all obligations under this Agreement.
-      This means each Tenant is individually responsible for the full rent and all other obligations, not just their share.
-    </p>
-  </div>
+  <!-- 2. DEFINITIONS -->
+  <h2>2. Definitions and Interpretation</h2>
+  <p>In this Agreement, unless the context requires otherwise:</p>
+  <ul class="definitions-list">
+    <li><span class="defined-term">"Agreement"</span> means this tenancy agreement and all Schedules.</li>
+    <li><span class="defined-term">"Landlord"</span> means {{landlord_full_name}} and successors in title.</li>
+    {{#if agent_name}}<li><span class="defined-term">"Agent"</span> means {{agent_name}}, authorised to act on behalf of the Landlord.</li>{{/if}}
+    <li><span class="defined-term">"Tenant"</span> means {{#each tenants}}{{this.full_name}}{{#unless @last}}, {{/unless}}{{/each}}{{#if multiple_tenants}} (jointly and severally liable){{/if}}.</li>
+    {{#if guarantor_name}}<li><span class="defined-term">"Guarantor"</span> means {{guarantor_name}}, whose obligations are set out in Section 9.</li>{{/if}}
+    <li><span class="defined-term">"Property"</span> means {{property_address}} as described in Schedule 1.</li>
+    <li><span class="defined-term">"Term"</span> means the {{#if is_fixed_term}}fixed term from {{formatUKDate tenancy_start_date}} to {{formatUKDate tenancy_end_date}}{{else}}periodic tenancy from {{formatUKDate tenancy_start_date}}{{/if}} and any statutory continuation.</li>
+    <li><span class="defined-term">"Rent"</span> means £{{rent_amount}} per {{rent_period}} payable as set out in Schedule 2.</li>
+    <li><span class="defined-term">"Deposit"</span> means £{{deposit_amount}} protected in the Scheme as set out in Schedule 2.</li>
+    <li><span class="defined-term">"Scheme"</span> means {{deposit_scheme_name}}.</li>
+    <li><span class="defined-term">"Contents"</span> means items listed in any inventory.</li>
+    <li><span class="defined-term">"Written Notice"</span> means notice in writing by hand, post, or email.</li>
+    <li><span class="defined-term">"Working Day"</span> means any day other than Saturday, Sunday, or public holiday in England.</li>
+  </ul>
+  <p>Words importing the singular include the plural. Where there is more than one Tenant, their obligations are joint and several.</p>
+
+  <!-- 3. THE PROPERTY -->
+  <h2>3. The Property</h2>
+  <p class="clause"><span class="clause-num">3.1</span> The Landlord lets to the Tenant the Property described in Schedule 1 for the Term, together with any Contents listed in the inventory.</p>
+  <p class="clause"><span class="clause-num">3.2</span> The Property is let for use as a private residential dwelling only.</p>
+  <p class="clause"><span class="clause-num">3.3</span> The Landlord warrants that all compliance certificates are valid and will be provided to the Tenant.</p>
+
+  <!-- 4. THE TERM -->
+  <h2>4. The Term</h2>
+  {{#if is_fixed_term}}
+  <p class="clause"><span class="clause-num">4.1</span> The tenancy begins on <strong>{{formatUKDate tenancy_start_date}}</strong> and ends on <strong>{{formatUKDate tenancy_end_date}}</strong>.</p>
+  <p class="clause"><span class="clause-num">4.2</span> Upon expiry of the fixed term, unless either party serves notice, the tenancy continues as a statutory periodic tenancy.</p>
+  {{else}}
+  <p class="clause"><span class="clause-num">4.1</span> The tenancy begins on <strong>{{formatUKDate tenancy_start_date}}</strong> as a periodic (monthly) tenancy.</p>
+  <p class="clause"><span class="clause-num">4.2</span> The tenancy continues until terminated by proper notice.</p>
   {{/if}}
+  <p class="clause"><span class="clause-num">4.3</span> The Landlord may seek possession using Section 21 (minimum 2 months' notice) or Section 8 (fault-based) of the Housing Act 1988.</p>
+  <p class="clause"><span class="clause-num">4.4</span> The Tenant may end the tenancy by giving at least one month's written notice expiring on a rent due date.</p>
+
+  <!-- 5. RENT -->
+  <h2>5. Rent</h2>
+  <p class="clause"><span class="clause-num">5.1</span> The Tenant shall pay the Rent of <strong>£{{rent_amount}}</strong> per {{rent_period}} in advance on the <strong>{{rent_due_day}}</strong> of each {{rent_period}}.</p>
+  <p class="clause"><span class="clause-num">5.2</span> Payment shall be made by {{payment_method}} to the account in Schedule 2.</p>
+  <p class="clause"><span class="clause-num">5.3</span> The first payment is due on or before {{formatUKDate tenancy_start_date}}.</p>
+  <div class="premium-section">
+    <div class="premium-label">Premium: Late Payment</div>
+    <p class="clause"><span class="clause-num">5.4</span> If rent remains unpaid for {{#if grace_period_days}}{{grace_period_days}}{{else}}14{{/if}} days after the due date, interest accrues at {{#if late_payment_interest_rate}}{{late_payment_interest_rate}}%{{else}}3%{{/if}} above the Bank of England base rate per annum.</p>
+    <p class="clause"><span class="clause-num">5.5</span> The Tenant will receive a written reminder if rent is more than 7 days overdue. Persistent arrears may result in proceedings for possession.</p>
+  </div>
+
+  <!-- 6. DEPOSIT -->
+  <h2>6. Deposit</h2>
+  <p class="clause"><span class="clause-num">6.1</span> The Tenant has paid a Deposit of <strong>£{{deposit_amount}}</strong>.</p>
+  <p class="clause"><span class="clause-num">6.2</span> The Landlord will protect the Deposit in the Scheme within 30 days and provide prescribed information.</p>
+  <p class="clause"><span class="clause-num">6.3</span> The Deposit may be applied against unpaid rent, damage beyond fair wear and tear, cleaning costs, missing inventory items, or other sums due.</p>
+  <p class="clause"><span class="clause-num">6.4</span> Disputes may be referred to the Scheme's free ADR service.</p>
+
+  <!-- 7. TENANT OBLIGATIONS -->
+  <h2>7. Tenant Obligations</h2>
+  <p class="clause"><span class="clause-num">7.1</span> <strong>Rent:</strong> Pay the Rent on time and in full.</p>
+  <p class="clause"><span class="clause-num">7.2</span> <strong>Utilities:</strong> Pay charges for gas, electricity, water, council tax, and internet as set out in Schedule 3.</p>
+  <p class="clause"><span class="clause-num">7.3</span> <strong>Care:</strong> Keep the Property clean and in good condition, promptly report disrepair.</p>
+  <p class="clause"><span class="clause-num">7.4</span> <strong>Access:</strong> Allow the Landlord access with at least 24 hours' notice (except emergencies).</p>
+  <p class="clause"><span class="clause-num">7.5</span> <strong>Use:</strong> Use the Property as a private residence only; comply with Schedule 5 (House Rules).</p>
+  <p class="clause"><span class="clause-num">7.6</span> <strong>Nuisance:</strong> Not cause nuisance or disturbance to neighbours.</p>
+  <p class="clause"><span class="clause-num">7.7</span> <strong>Subletting:</strong> Not sublet or assign without prior written consent.</p>
+  <p class="clause"><span class="clause-num">7.8</span> <strong>Alterations:</strong> Not make alterations without prior written consent.</p>
+  <p class="clause"><span class="clause-num">7.9</span> <strong>Insurance:</strong> Not invalidate the Landlord's insurance.</p>
+  <p class="clause"><span class="clause-num">7.10</span> <strong>End of Tenancy:</strong> Return the Property in original condition (fair wear and tear excepted), return all keys, provide forwarding address.</p>
+
+  <!-- 8. LANDLORD OBLIGATIONS -->
+  <h2>8. Landlord Obligations</h2>
+  <p class="clause"><span class="clause-num">8.1</span> <strong>Quiet Enjoyment:</strong> Allow the Tenant to occupy without interference.</p>
+  <p class="clause"><span class="clause-num">8.2</span> <strong>Repairs:</strong> Keep structure, exterior, and services (water, gas, electricity, heating, sanitation) in repair.</p>
+  <p class="clause"><span class="clause-num">8.3</span> <strong>Safety:</strong> Ensure valid Gas Safety Certificate, EICR, smoke and CO alarms, EPC rating E+.</p>
+  <p class="clause"><span class="clause-num">8.4</span> <strong>Deposit:</strong> Protect in scheme within 30 days; provide prescribed information.</p>
+  <p class="clause"><span class="clause-num">8.5</span> <strong>Documents:</strong> Provide How to Rent guide, EPC, Gas Safety Certificate, EICR.</p>
+  <p class="clause"><span class="clause-num">8.6</span> <strong>Insurance:</strong> Maintain buildings insurance.</p>
+  <div class="premium-section">
+    <div class="premium-label">Premium: Emergency Contacts</div>
+    <p class="clause"><span class="clause-num">8.7</span> The Landlord provides emergency contact details in Schedule 6 for use outside normal hours.</p>
+  </div>
+  <p class="clause"><span class="clause-num">8.8</span> <strong>Right to Rent:</strong> The Landlord confirms that the required Right to Rent checks have been carried out in accordance with the Immigration Act 2014 before the Tenant occupies the Property. Nothing in this Agreement makes the Tenant responsible for the Landlord's compliance with Right to Rent requirements.</p>
 
   {{#if guarantor_name}}
-  <div class="party-details">
-    <div class="party-label">🛡️ Guarantor</div>
-    <div class="party-info">
-      <strong>Name:</strong> {{guarantor_name}}<br/>
-      <strong>Address:</strong> {{guarantor_address}}<br/>
-      <strong>Email:</strong> {{guarantor_email}}<br/>
-      <strong>Phone:</strong> {{guarantor_phone}}<br/>
-      <strong>Date of Birth:</strong> {{guarantor_dob}}<br/>
-      <strong>Relationship to Tenant:</strong> {{guarantor_relationship}}
-    </div>
-  </div>
-
+  <!-- 9. GUARANTOR AGREEMENT -->
+  <h2>9. Guarantor Agreement</h2>
   <div class="legal-notice">
-    <div class="legal-notice-title">🛡️ Guarantor Agreement</div>
-    <p style="margin-bottom: 15px;">
-      <strong>The Guarantor hereby agrees to act as guarantor for the Tenant(s) named above and undertakes the following:</strong>
-    </p>
-
-    <div style="margin: 20px 0;">
-      <p style="margin: 10px 0;"><strong>1. Joint and Several Liability</strong></p>
-      <p style="margin-left: 20px;">
-        The Guarantor agrees to be jointly and severally liable with the Tenant for all obligations under this Agreement.
-        This means the Guarantor is fully responsible for the Tenant's obligations, not just guaranteeing them.
-      </p>
-
-      <p style="margin: 10px 0;"><strong>2. Rent Payment Guarantee</strong></p>
-      <p style="margin-left: 20px;">
-        If the Tenant fails to pay rent when due, the Guarantor must pay the outstanding rent within 14 days of
-        receiving written demand from the Landlord. This includes rent arrears, interest on late payments, and
-        any costs incurred in recovering the debt.
-      </p>
-
-      <p style="margin: 10px 0;"><strong>3. Damage and Dilapidation</strong></p>
-      <p style="margin-left: 20px;">
-        The Guarantor is liable for any damage to the Property beyond fair wear and tear, including cleaning costs,
-        repair costs, and replacement of fixtures and fittings damaged by the Tenant.
-      </p>
-
-      <p style="margin: 10px 0;"><strong>4. Breach of Agreement</strong></p>
-      <p style="margin-left: 20px;">
-        If the Tenant breaches any term of this Agreement, the Guarantor must remedy the breach or compensate the
-        Landlord for any losses suffered, including legal costs.
-      </p>
-
-      <p style="margin: 10px 0;"><strong>5. Continuing Guarantee</strong></p>
-      <p style="margin-left: 20px;">
-        This guarantee continues throughout the tenancy including any statutory periodic tenancy that arises after
-        the fixed term expires. The guarantee remains valid even if the tenancy terms are varied by agreement
-        between Landlord and Tenant.
-      </p>
-
-      <p style="margin: 10px 0;"><strong>6. Maximum Liability</strong></p>
-      <p style="margin-left: 20px;">
-        The Guarantor's liability is capped at: <strong>£{{multiply rent_amount 12}}</strong> (12 months' rent)
-        plus reasonable costs of enforcement. This cap does not apply to rent arrears accrued during the initial fixed term.
-      </p>
-
-      <p style="margin: 10px 0;"><strong>7. Independent Legal Advice</strong></p>
-      <p style="margin-left: 20px;">
-        The Guarantor confirms they have been advised to seek independent legal advice before signing this guarantee
-        and understands the full extent of their obligations.
-      </p>
-    </div>
+    <div class="legal-notice-title">Important Notice to Guarantor</div>
+    <p>By signing this Agreement, the Guarantor makes a legally binding commitment. The Guarantor should seek independent legal advice before signing.</p>
   </div>
-
-  <div class="warning-box">
-    <div class="warning-title">⚠️ Important Notice to Guarantor</div>
-    <p>
-      By signing this Agreement as Guarantor, you are making a serious financial commitment. You will be responsible
-      for paying the Tenant's rent and other obligations if they fail to do so. This could amount to thousands of pounds.
-      <strong>You should seek independent legal advice before signing.</strong>
-    </p>
-  </div>
+  <p class="clause"><span class="clause-num">9.1</span> The Guarantor guarantees the Tenant's obligations and is jointly and severally liable with the Tenant.</p>
+  <p class="clause"><span class="clause-num">9.2</span> If the Tenant fails to pay rent or breaches any term, the Guarantor shall pay or remedy the breach on demand.</p>
+  <p class="clause"><span class="clause-num">9.3</span> This guarantee continues throughout the tenancy including any periodic continuation.</p>
+  <p class="clause"><span class="clause-num">9.4</span> The Guarantor is liable for damage beyond fair wear and tear and any costs of enforcement.</p>
+  <p class="clause"><span class="clause-num">9.5</span> The Guarantor's liability is capped at {{#if guarantor_max_liability}}{{guarantor_max_liability}}{{else}}twelve (12) months' rent plus reasonable enforcement costs{{/if}}.</p>
+  <p class="clause"><span class="clause-num">9.6</span> The Guarantor will be released when tenancy ends and all obligations are satisfied, or upon the Landlord's written release.</p>
+  <p class="clause"><span class="clause-num">9.7</span> The Guarantor confirms they have been advised to seek independent legal advice.</p>
   {{/if}}
 
-  <!-- RIGHT TO RENT COMPLIANCE SECTION -->
-  <div class="section-header" style="margin-top: 40px;">
-    <span class="section-number">1A</span>
-    Right to Rent Compliance
-  </div>
-
-  <div class="legal-notice">
-    <div class="legal-notice-title">🆔 Immigration Act 2014 - Right to Rent Requirements</div>
-    <p>
-      Under the Immigration Act 2014, Landlords in England must check that all tenants aged 18 or over have the
-      right to rent property in the UK. This Agreement cannot commence until satisfactory Right to Rent checks
-      have been completed.
-    </p>
-  </div>
-
-  <div class="subsection">
-    <div class="subsection-title">📋 Document Verification</div>
-
-    <div class="clause">
-      <span class="clause-number">1A.1</span>
-      <strong>Landlord's Confirmation:</strong> The Landlord confirms that Right to Rent checks have been completed
-      for all Tenants named in this Agreement on <strong>{{right_to_rent_check_date}}</strong>.
-    </div>
-
-    <div class="clause">
-      <span class="clause-number">1A.2</span>
-      <strong>Documents Checked:</strong> The following original documents were inspected and copied:
-      <ul>
-        <li>British/Irish passport (current or expired within last 2 years), OR</li>
-        <li>Biometric Residence Permit showing indefinite leave to remain, OR</li>
-        <li>Valid visa with permission to rent (time-limited or indefinite), OR</li>
-        <li>Other acceptable documents as listed in the Home Office Right to Rent guidance</li>
-      </ul>
-    </div>
-
-    <div class="clause">
-      <span class="clause-number">1A.3</span>
-      <strong>Record Keeping:</strong> The Landlord will retain copies of the immigration documents checked for the
-      duration of the tenancy plus 12 months after it ends, as required by law.
-    </div>
-
-    <div class="clause">
-      <span class="clause-number">1A.4</span>
-      <strong>Time-Limited Immigration Status:</strong> Where a Tenant has time-limited permission to rent, the
-      Landlord will conduct follow-up checks before the immigration permission expires. The Tenant must provide
-      updated documentation when requested.
-    </div>
-
-    <div class="clause">
-      <span class="clause-number">1A.5</span>
-      <strong>Tenant's Ongoing Obligations:</strong> The Tenant must immediately notify the Landlord of any changes
-      to their immigration status. Failure to maintain the right to rent may result in termination of this tenancy.
-    </div>
-  </div>
-
-  <div class="explainer-box">
-    <div class="explainer-title">
-      <span class="explainer-icon">ℹ️</span>
-      Why Right to Rent Checks Matter
-    </div>
-    <p>
-      <strong>For Landlords:</strong> Failure to conduct Right to Rent checks can result in a civil penalty of up to
-      £3,000 per tenant, or criminal prosecution with unlimited fines and up to 5 years imprisonment for repeat offenses
-      or knowingly renting to illegal immigrants.
-    </p>
-    <p style="margin-top: 10px;">
-      <strong>For Tenants:</strong> You must have valid immigration permission to rent in England. Renting without
-      permission is a criminal offense and may affect future immigration applications.
-    </p>
-  </div>
-
-  <div class="warning-box">
-    <div class="warning-title">⚠️ Data Protection Notice</div>
-    <p>
-      Personal data collected for Right to Rent checks (including copies of passports and immigration documents) will
-      be processed in accordance with UK GDPR. This data will only be used for immigration compliance purposes and
-      will be securely stored and destroyed 12 months after the tenancy ends.
-    </p>
-  </div>
-
-  <!-- PAGE BREAK -->
-  <div class="page-break"></div>
-
-  <!-- SECTION 2: THE PROPERTY -->
-  <div class="section-header">
-    <span class="section-number">2</span>
-    The Property
-  </div>
-
-  <div class="property-highlight">
-    <div class="property-address">
-      📍 {{property_address}}
-    </div>
-    <div class="property-details">
-      <div class="property-detail-item">
-        <div class="property-detail-label">Property Type</div>
-        <div class="property-detail-value">{{property_type}}</div>
-      </div>
-      <div class="property-detail-item">
-        <div class="property-detail-label">Bedrooms</div>
-        <div class="property-detail-value">{{number_of_bedrooms}}</div>
-      </div>
-      <div class="property-detail-item">
-        <div class="property-detail-label">Furnished Status</div>
-        <div class="property-detail-value">{{furnished_status}}</div>
-      </div>
-      <div class="property-detail-item">
-        <div class="property-detail-label">Council Tax Band</div>
-        <div class="property-detail-value">{{council_tax_band}}</div>
-      </div>
-      <div class="property-detail-item">
-        <div class="property-detail-label">EPC Rating</div>
-        <div class="property-detail-value">{{epc_rating}}</div>
-      </div>
-      <div class="property-detail-item">
-        <div class="property-detail-label">Parking</div>
-        <div class="property-detail-value">{{#if parking_available}}Yes{{else}}No{{/if}}</div>
-      </div>
-    </div>
-  </div>
-
-  {{#if parking_available}}
-  <div class="subsection">
-    <div class="subsection-title">🚗 Parking</div>
-    <div class="clause">
-      <span class="clause-number">2.1</span>
-      Parking is included: {{parking_details}}
-    </div>
-  </div>
-  {{/if}}
-
-  <!-- SECTION 3: THE TERM -->
-  <div class="section-header">
-    <span class="section-number">3</span>
-    The Term
-  </div>
-
-  <div class="subsection">
-    <div class="subsection-title">📅 Tenancy Period</div>
-
-    <div class="clause">
-      <span class="clause-number">3.1</span>
-      <strong>Tenancy Start Date:</strong> {{tenancy_start_date}}
-    </div>
-
-    {{#if is_fixed_term}}
-    <div class="clause">
-      <span class="clause-number">3.2</span>
-      <strong>Tenancy End Date:</strong> {{tenancy_end_date}} at 12:00 noon
-    </div>
-
-    <div class="clause">
-      <span class="clause-number">3.3</span>
-      <strong>Fixed Term Length:</strong> {{term_length}}
-    </div>
-
-    <div class="clause">
-      <span class="clause-number">3.4</span>
-      Upon expiry of the fixed term, unless either party serves notice to end the tenancy, this agreement will
-      automatically continue as a periodic (rolling) tenancy on the same terms.
-    </div>
-    {{else}}
-    <div class="clause">
-      <span class="clause-number">3.2</span>
-      This is a <strong>periodic (monthly rolling) tenancy</strong> which will continue indefinitely until
-      terminated by either party serving the required notice.
-    </div>
-    {{/if}}
-  </div>
-
-  <div class="explainer-box">
-    <div class="explainer-title">
-      <span class="explainer-icon">ℹ️</span>
-      How Notice Periods Work
-    </div>
-    <ul>
-      <li><strong>During Fixed Term:</strong> Neither party can end the tenancy early unless there's a break clause or the Tenant breaches the agreement.</li>
-      <li><strong>After Fixed Term (Periodic):</strong> Landlord must give at least 2 months' notice using Form 6A (Section 21). Tenant must give at least 1 month's notice.</li>
-      <li><strong>For Breach:</strong> Landlord may serve Section 8 notice for specific grounds (e.g., rent arrears) with notice periods ranging from 2 weeks to 2 months depending on the ground.</li>
-    </ul>
-  </div>
-
-  <!-- PAGE BREAK -->
-  <div class="page-break"></div>
-
-  <!-- SECTION 4: RENT -->
-  <div class="section-header">
-    <span class="section-number">4</span>
-    Rent & Payments
-  </div>
-
-  <table class="financial-table">
-    <tr>
-      <th>Payment Item</th>
-      <th>Amount</th>
-      <th>Frequency</th>
-    </tr>
-    <tr>
-      <td class="label">Monthly Rent</td>
-      <td class="value">£{{rent_amount}}</td>
-      <td>Monthly</td>
-    </tr>
-    <tr>
-      <td class="label">Payment Due Date</td>
-      <td class="value">{{rent_due_day}} of each month</td>
-      <td>-</td>
-    </tr>
-    <tr>
-      <td class="label">Payment Method</td>
-      <td class="value">{{payment_method}}</td>
-      <td>-</td>
-    </tr>
-  </table>
-
-  <div class="subsection">
-    <div class="subsection-title">💳 Bank Account Details</div>
-
-    <div class="party-details">
-      <div class="party-info">
-        <strong>Account Name:</strong> {{bank_account_name}}<br/>
-        <strong>Sort Code:</strong> {{bank_sort_code}}<br/>
-        <strong>Account Number:</strong> {{bank_account_number}}
-      </div>
-    </div>
-
-    <div class="clause">
-      <span class="clause-number">4.1</span>
-      The Tenant must pay rent by {{payment_method}} to the bank account above.
-    </div>
-
-    <div class="clause">
-      <span class="clause-number">4.2</span>
-      Rent is due on the {{rent_due_day}} of each month in advance.
-    </div>
-
-    <div class="clause">
-      <span class="clause-number">4.3</span>
-      The first payment of £{{rent_amount}} is due on or before {{tenancy_start_date}}.
-    </div>
-  </div>
-
-  <div class="warning-box">
-    <div class="warning-title">⚠️ Late Payment</div>
-    <p>
-      If rent is unpaid for 14 days or more after the due date, interest will accrue at 3% above the Bank of England
-      base rate per annum. Additionally, the Landlord may serve a Section 8 Notice seeking possession on Ground 8
-      (serious rent arrears - at least 2 months' arrears) or Grounds 10 & 11 (some rent arrears).
-    </p>
-  </div>
-
-  {{#if rent_increase_clause}}
-  <div class="subsection">
-    <div class="subsection-title">📈 Rent Increase Provisions (Premium)</div>
-
-    <div class="legal-notice">
-      <div class="legal-notice-title">📊 Annual Rent Review Clause</div>
-      <p>
-        This tenancy includes an annual rent review provision. Rent may be increased in accordance with the terms below.
-      </p>
-    </div>
-
-    <div class="clause">
-      <span class="clause-number">4.4</span>
-      <strong>Rent Increase Mechanism:</strong> The rent may be increased annually on the anniversary of the tenancy start date,
-      subject to the following conditions:
-      <ul>
-        {{#if rent_increase_method}}
-        <li><strong>Method:</strong> {{rent_increase_method}}</li>
-        {{/if}}
-        <li><strong>Frequency:</strong> {{#if rent_increase_frequency}}{{rent_increase_frequency}}{{else}}Once per year{{/if}}</li>
-        <li><strong>Notice Period:</strong> The Landlord must give at least <strong>1 month's written notice</strong> before any rent increase takes effect</li>
-        <li><strong>During Fixed Term:</strong> Rent increases during the initial fixed term are only permitted if this clause is included</li>
-        <li><strong>After Fixed Term:</strong> During periodic tenancy, the Landlord may use Section 13 notice procedure OR this clause (whichever is applicable)</li>
-      </ul>
-    </div>
-
-    <div class="clause">
-      <span class="clause-number">4.5</span>
-      <strong>Index-Linked Increase (RPI/CPI):</strong> Annual rent increases will be calculated based on the
-      <strong>Consumer Price Index (CPI)</strong> or <strong>Retail Price Index (RPI)</strong> as published by the
-      Office for National Statistics, capped at a maximum of <strong>5% per annum</strong>.
-    </div>
-
-    <div class="clause">
-      <span class="clause-number">4.6</span>
-      <strong>Calculation Formula:</strong> The new rent will be calculated as follows:
-      <ul>
-        <li>Current Rent × (1 + CPI/RPI percentage change) = New Rent</li>
-        <li>Example: If current rent is £1,000/month and CPI is 3.2%, new rent = £1,000 × 1.032 = £1,032/month</li>
-        <li>If index increase exceeds 5%, the increase is capped at 5%</li>
-        <li>If index is negative (deflation), rent will not decrease but remain at current level</li>
-      </ul>
-    </div>
-
-    <div class="clause">
-      <span class="clause-number">4.7</span>
-      <strong>Market Rent Alternative:</strong> Alternatively, the Landlord may propose an increase to the prevailing market rent,
-      provided it is fair and reasonable. The Tenant may challenge any proposed increase they consider excessive by:
-      <ul>
-        <li>Negotiating directly with the Landlord</li>
-        <li>Referring the matter to a First-tier Tribunal (Property Chamber) for determination</li>
-        <li>The Tribunal will assess whether the proposed rent is reasonable compared to similar properties in the area</li>
-      </ul>
-    </div>
-
-    <div class="explainer-box">
-      <div class="explainer-title">
-        <span class="explainer-icon">ℹ️</span>
-        Understanding Rent Increases
-      </div>
-      <p>
-        Rent increases linked to CPI/RPI are transparent and predictable, reflecting general inflation. This protects
-        both parties: landlords maintain rental income value, while tenants avoid arbitrary large increases. You can
-        check current CPI/RPI rates at <a href="https://www.ons.gov.uk">www.ons.gov.uk</a> (Office for National Statistics).
-      </p>
-    </div>
-
-    <div class="warning-box">
-      <div class="warning-title">⚠️ Tenant Rights on Rent Increases</div>
-      <p><strong>Important:</strong> You have the right to:</p>
-      <ul>
-        <li>Receive proper written notice (minimum 1 month) before any rent increase</li>
-        <li>Challenge unreasonable increases via First-tier Tribunal</li>
-        <li>End the tenancy if you don't wish to accept the increase (give proper notice as per Section 3)</li>
-        <li>Request evidence of CPI/RPI calculation</li>
-      </ul>
-      <p style="margin-top: 10px;">
-        The Landlord cannot increase rent more than once per year without your written agreement. During the initial
-        fixed term, rent can only increase if this clause is included in the Agreement.
-      </p>
-    </div>
-  </div>
-  {{/if}}
-
-  <!-- SECTION 5: DEPOSIT -->
-  <div class="section-header">
-    <span class="section-number">5</span>
-    Deposit
-  </div>
-
-  <table class="financial-table">
-    <tr>
-      <th>Deposit Details</th>
-      <th>Information</th>
-    </tr>
-    <tr>
-      <td class="label">Deposit Amount</td>
-      <td class="value">£{{deposit_amount}}</td>
-    </tr>
-    <tr>
-      <td class="label">Protection Scheme</td>
-      <td class="value">{{deposit_scheme_name}}</td>
-    </tr>
-    <tr>
-      <td class="label">Maximum Permitted (5 weeks)</td>
-      <td class="value">£{{max_legal_deposit}}</td>
-    </tr>
-  </table>
-
-  <div class="legal-notice">
-    <div class="legal-notice-title">✅ Tenant Fees Act 2019 Compliance</div>
-    <ul class="checklist">
-      <li>Deposit does not exceed 5 weeks' rent (as annual rent is {{#if high_value_property}}over{{else}}under{{/if}} £50,000)</li>
-      <li>Deposit will be protected within 30 days in an authorized scheme</li>
-      <li>Prescribed information will be provided within 30 days</li>
-      <li>No prohibited fees have been charged</li>
-    </ul>
-  </div>
-
-  <div class="subsection">
-    <div class="subsection-title">🛡️ Deposit Protection</div>
-
-    <div class="clause">
-      <span class="clause-number">5.1</span>
-      The Landlord will protect the deposit in {{deposit_scheme_name}} within 30 calendar days of receipt.
-    </div>
-
-    <div class="clause">
-      <span class="clause-number">5.2</span>
-      The Landlord will provide the Tenant with the Prescribed Information within 30 calendar days, including:
-      <ul>
-        <li>Amount of deposit paid</li>
-        <li>Address of the property</li>
-        <li>Name and contact details of the deposit scheme</li>
-        <li>How the deposit will be protected</li>
-        <li>How to apply for release of the deposit</li>
-        <li>What to do if there is a dispute</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="warning-box">
-    <div class="warning-title">⚠️ Failure to Protect Deposit</div>
-    <p>
-      <strong>Landlord:</strong> If you fail to protect the deposit or provide the Prescribed Information within 30 days,
-      you may be ordered to pay the Tenant 1-3 times the deposit amount in compensation. You will also be unable to
-      serve a valid Section 21 notice until the deposit is protected and information provided.
-    </p>
-  </div>
-
-  <!-- PAGE BREAK -->
-  <div class="page-break"></div>
-
-  <!-- SECTION 6: BILLS & UTILITIES -->
-  <div class="section-header">
-    <span class="section-number">6</span>
-    Bills & Utilities
-  </div>
-
-  <table class="financial-table">
-    <tr>
-      <th>Utility/Bill</th>
-      <th>Responsibility</th>
-    </tr>
-    <tr>
-      <td class="label">Council Tax</td>
-      <td class="value">{{council_tax_responsibility}}</td>
-    </tr>
-    <tr>
-      <td class="label">Gas, Electric, Water</td>
-      <td class="value">{{utilities_responsibility}}</td>
-    </tr>
-    <tr>
-      <td class="label">Internet/Broadband</td>
-      <td class="value">{{internet_responsibility}}</td>
-    </tr>
-  </table>
-
-  <div class="subsection">
-    <div class="subsection-title">📊 Utility Obligations</div>
-
-    <div class="clause">
-      <span class="clause-number">6.1</span>
-      The Tenant is responsible for paying the following utilities and services:
-      {{council_tax_responsibility}}, {{utilities_responsibility}}, {{internet_responsibility}}.
-    </div>
-
-    <div class="clause">
-      <span class="clause-number">6.2</span>
-      The Tenant must take meter readings at the start and end of the tenancy.
-    </div>
-
-    <div class="clause">
-      <span class="clause-number">6.3</span>
-      The Tenant must notify utility companies of their occupancy and ensure all bills are paid promptly.
-    </div>
-  </div>
-
-  <!-- PAGE BREAK -->
-  <div class="page-break"></div>
-
-  <!-- SECTION 6A: TENANT OBLIGATIONS -->
-  <div class="section-header">
-    <span class="section-number">6A</span>
-    Tenant Obligations
-  </div>
-
-  <div class="subsection">
-    <div class="subsection-title">🏠 Care of Property</div>
-
-    <div class="clause">
-      <span class="clause-number">6A.1</span>
-      <strong>Cleanliness & Maintenance:</strong> The Tenant must:
-      <ul>
-        <li>Keep the Property clean, tidy, and in good decorative order</li>
-        <li>Keep the Property adequately heated and ventilated to prevent condensation, dampness, and mould growth</li>
-        <li>Report any defects, damage, or disrepair to the Landlord promptly (within 48 hours of discovery)</li>
-        <li>Not cause or permit any damage to the Property, fixtures, fittings, or furnishings</li>
-        <li>Make good any damage caused by the Tenant, their family, or visitors (fair wear and tear excepted)</li>
-      </ul>
-    </div>
-
-    <div class="clause">
-      <span class="clause-number">6A.2</span>
-      <strong>Condensation Prevention:</strong> The Tenant must take reasonable steps to prevent condensation by:
-      <ul>
-        <li>Opening windows regularly to allow ventilation</li>
-        <li>Using extractor fans in bathrooms and kitchens during and after use</li>
-        <li>Keeping trickle vents open where fitted</li>
-        <li>Not blocking air vents or ventilation grilles</li>
-        <li>Wiping down surfaces prone to condensation</li>
-        <li>Reporting any signs of dampness or mould immediately</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="subsection">
-    <div class="subsection-title">🔨 Alterations & Decorations</div>
-
-    <div class="clause">
-      <span class="clause-number">6A.3</span>
-      <strong>Prohibition on Alterations:</strong> The Tenant must NOT:
-      <ul>
-        <li>Make any structural alterations, additions, or improvements to the Property</li>
-        <li>Remove, alter, or damage any of the Landlord's fixtures, fittings, or furnishings</li>
-        <li>Install or remove any appliances, heating systems, or built-in furniture</li>
-        <li>Change locks or add additional security devices without written consent</li>
-        <li>Install satellite dishes, aerials, or external signage</li>
-        <li>Make any permanent alterations without the Landlord's prior written consent</li>
-      </ul>
-    </div>
-
-    <div class="clause">
-      <span class="clause-number">6A.4</span>
-      <strong>Decorations:</strong> The Tenant must not:
-      <ul>
-        <li>Paint or redecorate the Property without written consent</li>
-        <li>Remove or alter existing decorations, wallpaper, or wall coverings</li>
-        <li>Affix anything to walls with nails, screws, or adhesives that cause permanent damage</li>
-        <li>Display external decorations visible from outside without consent</li>
-      </ul>
-      <p style="margin-top: 10px;">
-        <strong>Picture Hanging:</strong> The Tenant may use small picture hooks or 3M Command strips for hanging
-        lightweight pictures and mirrors. All holes must be filled and touched up at the end of the tenancy.
-      </p>
-    </div>
-  </div>
-
-  <div class="subsection">
-    <div class="subsection-title">🚫 Subletting & Assignment (Premium Enhanced)</div>
-
-    <div class="legal-notice">
-      <div class="legal-notice-title">⚠️ STRICTLY PROHIBITED - Criminal Offense</div>
-      <p>
-        Subletting all or part of the Property without written consent is a serious breach of this Agreement and may
-        constitute a criminal offense under the Prevention of Social Housing Fraud Act 2013 (if applicable).
-        Unauthorized subletting can result in immediate eviction and criminal prosecution.
-      </p>
-    </div>
-
-    <div class="clause">
-      <span class="clause-number">6A.5</span>
-      <strong>Absolute Prohibition:</strong> The Tenant must NOT:
-      <ul>
-        <li>Sublet the whole or any part of the Property</li>
-        <li>Assign or transfer the tenancy to another person</li>
-        <li>Part with possession or share occupation of the Property</li>
-        <li>Take in lodgers, paying guests, or subletting tenants</li>
-        <li>Allow any other person to occupy the Property as their main residence</li>
-      </ul>
-      <p style="margin-top: 10px;">Without the Landlord's prior written consent, which may be granted or refused at the Landlord's absolute discretion.</p>
-    </div>
-
-    <div class="clause">
-      <span class="clause-number">6A.6</span>
-      <strong>Short-Term Letting STRICTLY PROHIBITED:</strong> The Tenant must NOT:
-      <ul>
-        <li>List the Property on <strong>Airbnb, Booking.com, VRBO,</strong> or any short-term letting platform</li>
-        <li>Advertise the Property for short-term holiday lets, serviced accommodation, or commercial stays</li>
-        <li>Use the Property for any form of commercial hospitality, guest house, or hotel-type operation</li>
-        <li>Rent out rooms or the entire Property on a short-term basis (less than 90 days)</li>
-        <li>Accept payment from guests, visitors, or temporary occupants in exchange for accommodation</li>
-      </ul>
-    </div>
-
-    <div class="warning-box">
-      <div class="warning-title">⚠️ Consequences of Breach</div>
-      <p><strong>If the Tenant breaches the subletting prohibition, the Landlord may:</strong></p>
-      <ul>
-        <li>Serve immediate Notice to Quit and seek possession under Ground 12 (breach of obligation)</li>
-        <li>Claim damages for loss of control, unauthorized profits, and increased insurance costs</li>
-        <li>Report the breach to Airbnb/platforms for account suspension</li>
-        <li>Report criminal fraud to police (if social housing or Right to Buy property)</li>
-        <li>Forfeit the entire tenancy deposit</li>
-      </ul>
-      <p style="margin-top: 10px;">
-        <strong>Tenant Financial Liability:</strong> The Tenant may be liable for ALL income earned from unauthorized
-        subletting, plus legal costs, plus damages. Courts have ordered subtenants to pay landlords £10,000+ in damages.
-      </p>
-    </div>
-
-    <div class="explainer-box">
-      <div class="explainer-title">
-        <span class="explainer-icon">ℹ️</span>
-        Why Subletting is Prohibited
-      </div>
-      <p>
-        Subletting creates serious legal, financial, and safety risks: unknown occupants may damage the property,
-        increase insurance costs, violate planning/licensing laws, breach the Landlord's mortgage conditions, and
-        create liability for accidents. Airbnb/short-term lets are particularly problematic as they create constant
-        turnover of strangers, noise complaints from neighbors, and commercial use of residential property.
-      </p>
-    </div>
-  </div>
-
-  <div class="subsection">
-    <div class="subsection-title">🔑 Access for Inspections & Repairs</div>
-
-    <div class="clause">
-      <span class="clause-number">6A.7</span>
-      <strong>Landlord's Right of Access:</strong> The Tenant must allow the Landlord or their agents reasonable access to the Property upon at least <strong>24 hours' written notice</strong> for the following purposes:
-      <ul>
-        <li><strong>Inspections:</strong> Routine property inspections (maximum once per quarter / every 3 months)</li>
-        <li><strong>Repairs & Maintenance:</strong> Carrying out repairs, maintenance, or improvements</li>
-        <li><strong>Viewings:</strong> Showing the Property to prospective tenants or purchasers (only in final 2 months of tenancy)</li>
-        <li><strong>Safety Checks:</strong> Gas safety checks, electrical inspections, EPC assessments, smoke alarm testing</li>
-        <li><strong>Valuations:</strong> Mortgage valuations or insurance assessments</li>
-      </ul>
-    </div>
-
-    <div class="clause">
-      <span class="clause-number">6A.8</span>
-      <strong>Emergency Access:</strong> In case of emergency (fire, flood, gas leak, burst pipes, structural danger),
-      the Landlord or emergency services may enter the Property immediately without prior notice. The Tenant must provide
-      emergency contact details and ensure keys are accessible to the Landlord for emergencies.
-    </div>
-
-    <div class="clause">
-      <span class="clause-number">6A.9</span>
-      <strong>Reasonable Access Times:</strong> Access will normally be between 9:00 AM and 6:00 PM Monday to Friday,
-      or at other times mutually agreed. The Tenant should not unreasonably refuse access when proper notice is given.
-    </div>
-  </div>
-
-  <div class="subsection">
-    <div class="subsection-title">♻️ Waste Disposal & Recycling</div>
-
-    <div class="clause">
-      <span class="clause-number">6A.10</span>
-      <strong>Waste Management:</strong> The Tenant must:
-      <ul>
-        <li>Dispose of all household rubbish and waste appropriately in designated bins</li>
-        <li>Follow the local council's recycling guidelines and use recycling bins correctly</li>
-        <li>Place wheelie bins and recycling boxes out for collection on the correct days</li>
-        <li>Return bins to their designated storage area promptly after collection</li>
-        <li>Not allow rubbish to accumulate inside or outside the Property</li>
-        <li>Not dump large items, furniture, or bulky waste without arranging proper disposal</li>
-        <li>Pay for council bulky waste collection or use licensed waste disposal services</li>
-      </ul>
-    </div>
-
-    {{#if has_garden}}
-    <div class="clause">
-      <span class="clause-number">6A.11</span>
-      <strong>Garden Waste:</strong> The Tenant must dispose of garden waste responsibly using the council's garden waste
-      collection service (if provided) or composting. Do not burn garden waste or dump it in general waste bins.
-    </div>
-    {{/if}}
-  </div>
-
-  <div class="subsection">
-    <div class="subsection-title">🤝 Neighbourhood & Nuisance Prevention</div>
-
-    <div class="clause">
-      <span class="clause-number">6A.12</span>
-      <strong>Nuisance Prohibition:</strong> The Tenant must NOT:
-      <ul>
-        <li>Cause nuisance, annoyance, or disturbance to neighbors or other occupants of nearby properties</li>
-        <li>Play loud music, television, or instruments between <strong>11:00 PM and 7:00 AM</strong></li>
-        <li>Hold parties or gatherings that cause excessive noise, parking problems, or antisocial behavior</li>
-        <li>Use the Property for illegal activities, drug use, or criminal purposes</li>
-        <li>Engage in threatening, abusive, or harassing behavior towards neighbors</li>
-        <li>Allow visitors, guests, or family members to cause nuisance</li>
-      </ul>
-    </div>
-
-    <div class="clause">
-      <span class="clause-number">6A.13</span>
-      <strong>Antisocial Behaviour:</strong> The Tenant must not engage in antisocial behavior as defined by the
-      Anti-social Behaviour, Crime and Policing Act 2014. This includes harassment, noise nuisance, threatening behavior,
-      vandalism, or any conduct causing alarm or distress to others. Breach may result in immediate eviction proceedings
-      under Ground 14 (nuisance or illegal use).
-    </div>
-
-    <div class="clause">
-      <span class="clause-number">6A.14</span>
-      <strong>Parking & Vehicles:</strong> {{#if parking_available}}The Tenant may use the designated parking space(s)
-      for {{parking_details}}. The Tenant must not park in unauthorized areas, block access, or cause obstruction.
-      {{else}}The Tenant must not park on the Property or surrounding areas without permission.{{/if}}
-      Abandoned, untaxed, or uninsured vehicles will be reported to the council for removal.
-    </div>
-  </div>
-
-  <div class="subsection">
-    <div class="subsection-title">🛡️ Contents Insurance Requirement (Premium)</div>
-
-    <div class="legal-notice">
-      <div class="legal-notice-title">✅ Mandatory Insurance Requirement</div>
-      <p>
-        As a condition of this Premium Tenancy Agreement, the Tenant <strong>MUST</strong> obtain and maintain
-        adequate contents insurance for the full duration of the tenancy.
-      </p>
-    </div>
-
-    <div class="clause">
-      <span class="clause-number">6A.15</span>
-      <strong>Tenant Contents Insurance:</strong> The Tenant must:
-      <ul>
-        <li>Obtain comprehensive contents insurance covering personal belongings to their full replacement value</li>
-        <li>Ensure the policy includes <strong>third-party liability cover</strong> of at least <strong>£1,000,000</strong></li>
-        <li>Provide proof of insurance to the Landlord within <strong>14 days of tenancy start</strong></li>
-        <li>Maintain continuous insurance cover throughout the tenancy</li>
-        <li>Provide updated proof of insurance upon renewal</li>
-      </ul>
-    </div>
-
-    <div class="clause">
-      <span class="clause-number">6A.16</span>
-      <strong>Landlord's Insurance:</strong> The Landlord's buildings insurance does NOT cover the Tenant's personal
-      belongings, furniture, electronics, clothing, or other contents. The Tenant is solely responsible for insuring
-      their own possessions against theft, fire, flood, and accidental damage.
-    </div>
-
-    <div class="warning-box">
-      <div class="warning-title">⚠️ Why Contents Insurance is Mandatory</div>
-      <p>
-        Contents insurance protects YOU from financial loss if your belongings are damaged, stolen, or destroyed.
-        Without insurance, you could lose thousands of pounds worth of possessions. The third-party liability element
-        also protects you if you accidentally damage the Property (e.g., fire, flood, leaving taps running).
-      </p>
-    </div>
-
-    <div class="explainer-box">
-      <div class="explainer-title">
-        <span class="explainer-icon">ℹ️</span>
-        Affordable Contents Insurance
-      </div>
-      <p>
-        Tenant contents insurance typically costs £5-15 per month for £20,000-30,000 of cover. Providers include:
-        Direct Line, Aviva, Admiral, Simply Business, and specialist tenant insurers like Urban Jungle and Homelet.
-        Some policies include accidental damage cover for the Landlord's property.
-      </p>
-    </div>
-  </div>
-
-  <div class="subsection">
-    <div class="subsection-title">🧹 End of Tenancy Obligations</div>
-
-    <div class="clause">
-      <span class="clause-number">6A.17</span>
-      <strong>Notice to Terminate:</strong> The Tenant must give the Landlord proper written notice to end the tenancy:
-      <ul>
-        <li><strong>During Fixed Term:</strong> Tenant cannot end early unless break clause exists (see Section 3)</li>
-        <li><strong>After Fixed Term (Periodic):</strong> At least <strong>{{tenant_notice_period}}</strong> notice in writing</li>
-        <li>Notice must expire on the last day of a rental period (e.g., if rent due 1st of month, notice expires on last day of month)</li>
-      </ul>
-    </div>
-
-    <div class="clause">
-      <span class="clause-number">6A.18</span>
-      <strong>Property Condition at End:</strong> At the end of the tenancy, the Tenant must:
-      <ul>
-        <li>Return the Property <strong>clean, tidy, and in the same condition</strong> as at the start (fair wear and tear excepted)</li>
-        <li>Arrange professional cleaning of carpets, upholstery, ovens, and kitchen appliances</li>
-        <li>Remove all personal belongings, furniture (if unfurnished tenancy), and rubbish</li>
-        <li>Repair or compensate for any damage beyond fair wear and tear</li>
-        <li>Return all keys, fobs, parking permits, and access devices to the Landlord</li>
-        <li>Ensure all utility final readings are taken and bills settled</li>
-        <li>Provide a forwarding address for return of deposit and correspondence</li>
-      </ul>
-    </div>
-
-    <div class="clause">
-      <span class="clause-number">6A.19</span>
-      <strong>Professional Cleaning:</strong> {{#if professional_cleaning_required}}The Tenant MUST arrange professional
-      cleaning by a recognized company at the end of the tenancy. Receipts must be provided to the Landlord.
-      {{else}}The Tenant is strongly advised to arrange professional cleaning to ensure the Property is returned in
-      acceptable condition and avoid deposit deductions.{{/if}}
-    </div>
-
-    <div class="warning-box">
-      <div class="warning-title">⚠️ Deposit Deductions</div>
-      <p>
-        Failure to return the Property in good condition will result in deposit deductions for:
-        cleaning (£100-300+), damage repair, missing items, key replacement (£100+ for lock changes), and
-        outstanding bills. Professional cleaning costs £80-200 depending on property size - much less than deposit deductions.
-      </p>
-    </div>
-  </div>
-
-  {{#if has_shared_facilities}}
-  <div class="subsection">
-    <div class="subsection-title">🏘️ HMO & Shared Facilities (Premium)</div>
-
-    <div class="legal-notice">
-      <div class="legal-notice-title">🏠 House in Multiple Occupation (HMO) Provisions</div>
-      <p>
-        This Property {{#if is_hmo}}IS{{else}}includes{{/if}} shared facilities and communal areas. Additional terms apply
-        to ensure all occupants can enjoy the Property peacefully and safely.
-      </p>
-    </div>
-
-    <div class="clause">
-      <span class="clause-number">6A.20</span>
-      <strong>Room License Agreement:</strong> {{#if is_hmo}}This Agreement grants the Tenant a license to occupy the
-      room(s) specified in Section 2, together with shared use of communal facilities. This is NOT an exclusive tenancy
-      of the entire Property.{{else}}This Agreement includes shared use of communal areas as specified below.{{/if}}
-    </div>
-
-    <div class="clause">
-      <span class="clause-number">6A.21</span>
-      <strong>Shared Facilities:</strong> The Tenant has shared access to the following communal areas and facilities:
-      <ul>
-        {{#if communal_areas}}
-        <li>{{communal_areas}}</li>
-        {{else}}
-        <li>Kitchen (cooking facilities, appliances, food storage)</li>
-        <li>Bathrooms/WC (shared with other occupants)</li>
-        <li>Common hallways, stairs, and entrance</li>
-        <li>Living room / common room (if applicable)</li>
-        <li>Garden / outdoor space (if applicable)</li>
-        <li>Laundry facilities (washing machine, dryer)</li>
-        {{/if}}
-      </ul>
-    </div>
-
-    <div class="clause">
-      <span class="clause-number">6A.22</span>
-      <strong>Exclusive Use of Bedroom:</strong> The Tenant has exclusive use of their designated bedroom(s) as specified
-      in Section 2. No other occupant may enter the Tenant's bedroom without permission. The Landlord retains the right
-      to access for inspections, repairs, and emergencies (with proper notice).
-    </div>
-
-    <div class="clause">
-      <span class="clause-number">6A.23</span>
-      <strong>Communal Area Responsibilities:</strong> The Tenant must:
-      <ul>
-        <li><strong>Cleanliness:</strong> Keep shared areas clean and tidy after use</li>
-        <li><strong>Kitchen:</strong> Wash dishes immediately, clean surfaces, store food properly, label personal items</li>
-        <li><strong>Bathroom:</strong> Clean after use, remove hair from drains, use bathroom spray/ventilation</li>
-        <li><strong>Respect Others:</strong> Use shared facilities considerately, allowing fair access to all occupants</li>
-        <li><strong>Shared Items:</strong> Not remove or monopolize shared appliances, cookware, or furniture</li>
-        <li><strong>Noise:</strong> Keep noise to minimum in communal areas, especially after 10:00 PM</li>
-      </ul>
-    </div>
-
-    {{#if communal_cleaning}}
-    <div class="clause">
-      <span class="clause-number">6A.24</span>
-      <strong>Communal Cleaning Arrangements:</strong> {{communal_cleaning}}
-    </div>
-    {{else}}
-    <div class="clause">
-      <span class="clause-number">6A.24</span>
-      <strong>Cleaning Rota:</strong> All occupants are responsible for maintaining communal areas. The Landlord may implement
-      a cleaning rota or hire professional cleaners (costs shared among occupants). Failure to participate in cleaning may
-      result in professional cleaning charges deducted from the Tenant's deposit.
-    </div>
-    {{/if}}
-
-    <div class="clause">
-      <span class="clause-number">6A.25</span>
-      <strong>Guest Policy (HMO):</strong> The Tenant may have visitors, subject to these restrictions:
-      <ul>
-        <li>No overnight guests for more than <strong>2 consecutive nights</strong> without prior agreement</li>
-        <li>Maximum <strong>1 guest at a time</strong> in shared areas during peak times</li>
-        <li>Guests must not cause noise, nuisance, or inconvenience to other occupants</li>
-        <li>The Tenant remains responsible for guest behavior and any damage caused</li>
-        <li>No guests permitted to use the Property as their primary residence</li>
-      </ul>
-    </div>
-
-    <div class="clause">
-      <span class="clause-number">6A.26</span>
-      <strong>Fire Safety & Emergency Exits:</strong> The Tenant must:
-      <ul>
-        <li>Keep fire doors closed at all times (never prop open or obstruct)</li>
-        <li>Keep escape routes, hallways, and stairs clear of obstructions</li>
-        <li>Not store items in communal hallways or landings (fire hazard)</li>
-        <li>Test smoke alarms monthly and report any faults immediately</li>
-        <li>Familiarize themselves with fire escape routes and assembly points</li>
-        <li>Not tamper with fire extinguishers, smoke alarms, or fire safety equipment</li>
-      </ul>
-    </div>
-
-    {{#if is_hmo}}
-    <div class="clause">
-      <span class="clause-number">6A.27</span>
-      <strong>HMO Licensing:</strong> This Property is licensed as a House in Multiple Occupation under the Housing Act 2004.
-      The Landlord holds a valid HMO license (license number: _____________). The Property complies with HMO standards including:
-      <ul>
-        <li>Minimum room sizes (6.51m² for single occupancy, 10.22m² for double occupancy)</li>
-        <li>Adequate kitchen and bathroom facilities for the number of occupants</li>
-        <li>Fire safety measures (fire doors, smoke alarms, fire extinguishers, emergency lighting)</li>
-        <li>Gas and electrical safety certificates</li>
-        <li>Proper waste disposal facilities</li>
-      </ul>
-    </div>
-    {{/if}}
-
-    <div class="clause">
-      <span class="clause-number">6A.28</span>
-      <strong>Replacement Occupants:</strong> If a fellow occupant leaves and a new occupant moves in:
-      <ul>
-        <li>The Landlord will conduct appropriate referencing and Right to Rent checks</li>
-        <li>Existing occupants do not have a veto but may raise genuine concerns</li>
-        <li>The Landlord will introduce new occupants and provide contact details</li>
-        <li>This Agreement continues with the same terms regardless of changes to other occupants</li>
-      </ul>
-    </div>
-
-    <div class="warning-box">
-      <div class="warning-title">⚠️ HMO Rules - Serious Breaches</div>
-      <p><strong>Serious breaches that may result in immediate eviction:</strong></p>
-      <ul>
-        <li>Persistent failure to keep communal areas clean (health hazard)</li>
-        <li>Blocking fire exits or tampering with fire safety equipment</li>
-        <li>Causing serious nuisance to other occupants (harassment, noise, antisocial behavior)</li>
-        <li>Unauthorized occupants or subletting your room</li>
-        <li>Damage to communal facilities or other occupants' property</li>
-      </ul>
-    </div>
-
-    <div class="explainer-box">
-      <div class="explainer-title">
-        <span class="explainer-icon">ℹ️</span>
-        Living in Shared Accommodation
-      </div>
-      <p>
-        HMOs and shared houses require cooperation, respect, and consideration. Communicate openly with fellow occupants
-        about issues before they escalate. Most problems (cleaning, noise, shared item use) can be resolved through
-        respectful discussion. If issues persist, raise them with the Landlord in writing.
-      </p>
-      <p style="margin-top: 10px;">
-        <strong>Your Rights:</strong> You have the right to quiet enjoyment of your bedroom, fair access to shared facilities,
-        a safe and well-maintained property, and protection from harassment by other occupants or the Landlord.
-      </p>
-    </div>
-  </div>
-  {{/if}}
-
-  <!-- PAGE BREAK -->
-  <div class="page-break"></div>
-
-  <!-- SECTION 7: PROPERTY RULES -->
-  <div class="section-header">
-    <span class="section-number">7</span>
-    Property Rules & Restrictions
-  </div>
-
-  <div class="subsection">
-    <div class="subsection-title">🐾 Pet Agreement</div>
-
-    {{#if pets_allowed}}
-    <div class="legal-notice">
-      <div class="legal-notice-title">✅ Pets Are Permitted - Subject to Terms Below</div>
-      <p>
-        The Landlord permits the Tenant to keep pet(s) at the Property subject to the terms and conditions set out
-        in this Pet Agreement. This is a privilege that may be withdrawn if the terms are breached.
-      </p>
-    </div>
-
-    <div class="clause">
-      <span class="clause-number">7.1</span>
-      <strong>Approved Pets:</strong> The following pets are specifically approved under this Agreement:
-    </div>
-
-    <div class="party-details" style="margin: 15px 0;">
-      <div class="party-info">
-        <strong>Pet Details:</strong><br/>
-        {{#if pet_type}}Type/Species: {{pet_type}}<br/>{{/if}}
-        {{#if pet_breed}}Breed: {{pet_breed}}<br/>{{/if}}
-        {{#if pet_age}}Age: {{pet_age}}<br/>{{/if}}
-        {{#if pet_name}}Name: {{pet_name}}<br/>{{/if}}
-        {{#if pet_weight}}Weight: {{pet_weight}}<br/>{{/if}}
-        {{#unless pet_type}}General Approval: {{approved_pets}}{{/unless}}
-      </div>
-    </div>
-
-    <div class="clause">
-      <span class="clause-number">7.2</span>
-      <strong>Additional Pets:</strong> The Tenant must not keep any additional pets without the Landlord's prior
-      written consent. Any request for additional pets must be made in writing with full details of the proposed pet.
-    </div>
-
-    <div class="clause">
-      <span class="clause-number">7.3</span>
-      <strong>Pet Damage Liability:</strong> The Tenant accepts full liability for any damage, soiling, scratching,
-      or destruction caused by the pet(s) to the Property, fixtures, fittings, furnishings, carpets, flooring, doors,
-      walls, or garden. This includes but is not limited to:
-      <ul>
-        <li>Scratched doors, door frames, and skirting boards</li>
-        <li>Damaged carpets, flooring, and upholstery</li>
-        <li>Chewed furniture, cables, or fixtures</li>
-        <li>Stained or soiled carpets and furnishings</li>
-        <li>Garden damage (digging, fouling, plant destruction)</li>
-        <li>Odor removal and specialist cleaning</li>
-      </ul>
-    </div>
-
-    {{#if pet_deposit_amount}}
-    <div class="clause">
-      <span class="clause-number">7.4</span>
-      <strong>Pet Deposit:</strong> In addition to the standard tenancy deposit, the Tenant has paid a pet deposit of
-      <strong>£{{pet_deposit_amount}}</strong>. This deposit will be protected in the same scheme as the tenancy deposit
-      and is specifically held against pet-related damage. The pet deposit does not limit the Tenant's liability for
-      pet damage exceeding this amount.
-    </div>
-    {{/if}}
-
-    <div class="clause">
-      <span class="clause-number">7.5</span>
-      <strong>Pet Insurance:</strong> The Tenant {{#if pet_insurance_required}}MUST{{else}}is strongly advised to{{/if}}
-      obtain and maintain third-party liability insurance covering damage caused by the pet to a minimum value of £1,000,000.
-      {{#if pet_insurance_required}}Proof of insurance must be provided to the Landlord within 14 days of the tenancy start
-      and upon renewal.{{/if}}
-    </div>
-
-    <div class="clause">
-      <span class="clause-number">7.6</span>
-      <strong>Nuisance and Behavior:</strong> The Tenant must ensure that the pet(s):
-      <ul>
-        <li>Do not cause nuisance, annoyance, or disturbance to neighbors through noise, smell, or behavior</li>
-        <li>Are kept under proper control at all times</li>
-        <li>Do not foul communal areas or neighboring properties</li>
-        <li>Are not left alone for extended periods causing distress or noise</li>
-        <li>Comply with any building/estate rules regarding pets</li>
-      </ul>
-    </div>
-
-    <div class="clause">
-      <span class="clause-number">7.7</span>
-      <strong>Flea and Pest Control:</strong> The Tenant must ensure the Property is treated for fleas and other
-      pet-related pests at least every {{#if flea_treatment_frequency}}{{flea_treatment_frequency}}{{else}}3 months{{/if}}.
-      Evidence of treatment must be provided upon request.
-    </div>
-
-    <div class="clause">
-      <span class="clause-number">7.8</span>
-      <strong>Professional Cleaning:</strong> At the end of the tenancy, the Tenant must arrange professional carpet
-      and upholstery cleaning by a recognized company to remove pet hair, odors, and stains. Receipts must be provided
-      to the Landlord. The cost of this cleaning cannot be deducted from the deposit without prior agreement.
-    </div>
-
-    <div class="clause">
-      <span class="clause-number">7.9</span>
-      <strong>Waste Disposal:</strong> The Tenant must dispose of all pet waste hygienically and promptly. This includes:
-      <ul>
-        <li>Daily removal of waste from the garden</li>
-        <li>Proper disposal of litter and waste in designated bins</li>
-        <li>Cleaning of any pet toilet areas regularly</li>
-      </ul>
-    </div>
-
-    <div class="clause">
-      <span class="clause-number">7.10</span>
-      <strong>Dangerous Dogs:</strong> The Tenant confirms that no pet kept at the Property is a banned breed under the
-      Dangerous Dogs Act 1991 (Pit Bull Terrier, Japanese Tosa, Dogo Argentino, Fila Brasileiro). Keeping a banned breed
-      is a criminal offense and will result in immediate termination of this tenancy.
-    </div>
-
-    <div class="clause">
-      <span class="clause-number">7.11</span>
-      <strong>Vaccinations and Health:</strong> The Tenant must ensure all pets are:
-      <ul>
-        <li>Up to date with vaccinations and worming treatments</li>
-        <li>Microchipped (where legally required)</li>
-        <li>Licensed (where applicable, e.g., dog licenses in certain areas)</li>
-        <li>In good health and receive proper veterinary care</li>
-      </ul>
-    </div>
-
-    <div class="clause">
-      <span class="clause-number">7.12</span>
-      <strong>Removal of Pet:</strong> If the pet causes significant damage, persistent nuisance, or the Tenant breaches
-      these pet terms, the Landlord may require removal of the pet from the Property. The Tenant has 14 days to rehome
-      the pet or this Agreement may be terminated.
-    </div>
-
-    <div class="warning-box">
-      <div class="warning-title">⚠️ Important Pet Responsibilities</div>
-      <p>
-        Keeping pets is a significant responsibility. Damage caused by pets is typically not covered by the Landlord's
-        insurance and may exceed the deposit. The Tenant may be liable for thousands of pounds in repair costs for
-        serious pet damage. Consider pet insurance carefully.
-      </p>
-    </div>
-
-    {{else}}
-    <div class="clause">
-      <span class="clause-number">7.1</span>
-      <strong>NO PETS:</strong> The Tenant must not keep any pets or animals at the Property without the Landlord's
-      prior written consent, which may be granted or refused at the Landlord's absolute discretion.
-    </div>
-
-    <div class="clause">
-      <span class="clause-number">7.2</span>
-      <strong>Request to Keep Pets:</strong> If the Tenant wishes to keep a pet during the tenancy, they must submit
-      a written request to the Landlord including:
-      <ul>
-        <li>Type and breed of pet</li>
-        <li>Age, weight, and temperament</li>
-        <li>Proof of pet insurance (third-party liability minimum £1,000,000)</li>
-        <li>Vaccination and microchip records</li>
-        <li>References from previous landlords regarding the pet</li>
-      </ul>
-      The Landlord is not obliged to grant permission and may impose additional conditions or require a pet deposit.
-    </div>
-
-    <div class="explainer-box">
-      <div class="explainer-title">
-        <span class="explainer-icon">ℹ️</span>
-        Model Tenancy Agreement 2021
-      </div>
-      <p>
-        The government's Model Tenancy Agreement (2021) recommends that landlords consider reasonable requests for pets.
-        However, landlords retain the right to refuse permission where there are reasonable grounds, such as property
-        unsuitability, lease restrictions, or concerns about damage or nuisance.
-      </p>
-    </div>
-    {{/if}}
-  </div>
-
-  <div class="subsection">
-    <div class="subsection-title">🚭 Smoking</div>
-
-    {{#if smoking_allowed}}
-    <div class="clause">
-      <span class="clause-number">7.2</span>
-      Smoking and vaping <strong>ARE PERMITTED</strong> inside the property.
-    </div>
-    {{else}}
-    <div class="clause">
-      <span class="clause-number">7.2</span>
-      Smoking and vaping are <strong>STRICTLY PROHIBITED</strong> inside the property. The Tenant may smoke outside only.
-    </div>
-    {{/if}}
-  </div>
-
-  <!-- PAGE BREAK -->
-  <div class="page-break"></div>
-
-  <!-- SECTION 8: LEGAL COMPLIANCE & TENANT INFORMATION -->
-  <div class="section-header">
-    <span class="section-number">8</span>
-    Legal Compliance & Tenant Information
-  </div>
-
-  <div class="subsection">
-    <div class="subsection-title">📖 How to Rent Guide</div>
-
-    <div class="legal-notice">
-      <div class="legal-notice-title">✅ Mandatory Tenant Information</div>
-      <p>
-        Under the Deregulation Act 2015, the Landlord must provide the Tenant with the latest version of the
-        government's "How to Rent: The checklist for renting in England" guide before the tenancy begins.
-      </p>
-    </div>
-
-    <div class="clause">
-      <span class="clause-number">8.1</span>
-      <strong>Provision of Guide:</strong> The Landlord confirms that the latest version of the "How to Rent" guide
-      (dated {{how_to_rent_version}}) has been provided to the Tenant on {{how_to_rent_provision_date}}.
-    </div>
-
-    <div class="clause">
-      <span class="clause-number">8.2</span>
-      <strong>Access to Latest Version:</strong> The official "How to Rent" guide can always be accessed online at:
-      <br/><br/>
-      <strong>🔗 <a href="https://www.gov.uk/government/publications/how-to-rent">https://www.gov.uk/government/publications/how-to-rent</a></strong>
-      <br/><br/>
-      The Tenant is encouraged to read this guide thoroughly as it explains their rights and responsibilities,
-      including how to end a tenancy, what happens at the end of a fixed term, and how to resolve disputes.
-    </div>
-
-    <div class="clause">
-      <span class="clause-number">8.3</span>
-      <strong>Importance of Compliance:</strong> Failure to provide this guide may prevent the Landlord from serving
-      a valid Section 21 notice (no-fault eviction). The Tenant should keep their copy for reference throughout the tenancy.
-    </div>
-  </div>
-
-  <div class="subsection">
-    <div class="subsection-title">🏛️ Additional Legal Documents</div>
-
-    <div class="clause">
-      <span class="clause-number">8.4</span>
-      <strong>Documents Provided:</strong> The Landlord has provided or will provide the following mandatory documents:
-      <ul class="checklist">
-        <li>Energy Performance Certificate (EPC) - Current rating: {{epc_rating}}</li>
-        <li>Gas Safety Certificate (valid for 12 months from issue)</li>
-        <li>Electrical Installation Condition Report (EICR) - valid for 5 years</li>
-        <li>Deposit Protection Prescribed Information (within 30 days of receiving deposit)</li>
-        <li>How to Rent guide (latest version)</li>
-        {{#if inventory_provided}}<li>Property Inventory and Schedule of Condition</li>{{/if}}
-      </ul>
-    </div>
-
-    <div class="clause">
-      <span class="clause-number">8.5</span>
-      <strong>Right to Copies:</strong> The Tenant has the right to request copies of these documents at any time
-      during the tenancy. The Landlord must provide copies within 28 days of a written request.
-    </div>
-  </div>
-
-  <div class="explainer-box">
-    <div class="explainer-title">
-      <span class="explainer-icon">ℹ️</span>
-      Why These Documents Matter
-    </div>
-    <p>
-      These documents are legally required and protect both parties. The EPC shows energy efficiency (properties
-      must achieve minimum rating E). Gas and electrical certificates prove safety compliance. The deposit protection
-      information explains how your deposit is protected and how to get it back. The How to Rent guide explains your
-      rights throughout the tenancy.
-    </p>
-  </div>
-
-  <div class="warning-box">
-    <div class="warning-title">⚠️ Landlord Compliance Notice</div>
-    <p>
-      <strong>Landlord:</strong> Failure to provide these documents may result in:
-    </p>
-    <ul>
-      <li>Inability to serve valid Section 21 notice (no-fault eviction)</li>
-      <li>Civil penalties up to £5,000 for missing EPC</li>
-      <li>Criminal prosecution for missing Gas Safety Certificate</li>
-      <li>Compensation of 1-3x deposit for missing deposit protection information</li>
-    </ul>
-    <p style="margin-top: 10px;">
-      Ensure all documents are up to date and provided to tenants at the correct times.
-    </p>
-  </div>
-
-  <!-- SIGNATURE SECTION -->
+  <!-- 10. GENERAL PROVISIONS -->
+  <h2>{{#if guarantor_name}}10{{else}}9{{/if}}. General Provisions</h2>
+  <p class="clause"><span class="clause-num">{{#if guarantor_name}}10{{else}}9{{/if}}.1</span> This Agreement constitutes the entire agreement between the parties.</p>
+  <p class="clause"><span class="clause-num">{{#if guarantor_name}}10{{else}}9{{/if}}.2</span> Variations must be in writing signed by all parties.</p>
+  <p class="clause"><span class="clause-num">{{#if guarantor_name}}10{{else}}9{{/if}}.3</span> This Agreement is governed by the laws of England and Wales.</p>
+  <p class="clause"><span class="clause-num">{{#if guarantor_name}}10{{else}}9{{/if}}.4</span> Notices may be served by hand, first-class post, or email.</p>
+  <p class="clause"><span class="clause-num">{{#if guarantor_name}}10{{else}}9{{/if}}.5</span> If any provision is unenforceable, the remaining provisions continue in effect.</p>
+
+  {{> statutory_acknowledgements jurisdiction="england" format="html" heading_style="h2"}}
+
+  <!-- SIGNATURES -->
   <div class="signature-section">
-    <div class="signature-title">
-      Signatures
-    </div>
+    <h2>Signatures</h2>
+    <p>By signing below, the parties confirm they have read, understood, and agree to be bound by this Agreement and all Schedules.</p>
 
-    <div class="explainer-box">
-      <div class="explainer-title">
-        <span class="explainer-icon">✍️</span>
-        Signing This Agreement
-      </div>
-      <p>
-        By signing below, all parties confirm they have read, understood, and agree to be bound by all terms of this Agreement.
-        Each party should retain a signed copy for their records.
-      </p>
-    </div>
-
-    <div class="signature-blocks">
-      <!-- LANDLORD SIGNATURE -->
-      <div class="signature-block">
-        <div class="signature-party">Landlord</div>
-        <div style="margin-bottom: 20px;">
-          <strong>Name:</strong> {{landlord_full_name}}
-        </div>
-        <div class="signature-line"></div>
-        <div class="signature-label">Signature</div>
-        <div class="signature-date">
-          <div class="signature-date-label">Date:</div>
-          <div class="signature-date-line"></div>
-        </div>
-      </div>
-
-      <!-- AGENT SIGNATURE (if applicable) -->
-      {{#if agent_name}}
-      <div class="signature-block">
-        <div class="signature-party">Landlord's Agent</div>
-        <div style="margin-bottom: 20px;">
-          <strong>Name:</strong> {{agent_name}}
-        </div>
-        <div class="signature-line"></div>
-        <div class="signature-label">Signature</div>
-        <div class="signature-date">
-          <div class="signature-date-label">Date:</div>
-          <div class="signature-date-line"></div>
-        </div>
-      </div>
-      {{/if}}
-    </div>
-
-    <!-- TENANT SIGNATURES -->
-    {{#each tenants}}
-    <div class="signature-block" style="margin-top: 30px;">
-      <div class="signature-party">Tenant {{add @index 1}}</div>
-      <div style="margin-bottom: 20px;">
-        <strong>Name:</strong> {{this.full_name}}
-      </div>
+    <div class="signature-block">
+      <div class="signature-role">Landlord</div>
+      <div class="signature-name">Name: {{landlord_full_name}}</div>
       <div class="signature-line"></div>
       <div class="signature-label">Signature</div>
-      <div class="signature-date">
-        <div class="signature-date-label">Date:</div>
-        <div class="signature-date-line"></div>
-      </div>
+      <div style="margin-top: 10pt;">Date: <span class="signature-date-line"></span></div>
+    </div>
+
+    {{#if agent_name}}
+    <div class="signature-block">
+      <div class="signature-role">Agent</div>
+      <div class="signature-name">Name: {{agent_name}}</div>
+      <div class="signature-line"></div>
+      <div class="signature-label">Signature</div>
+      <div style="margin-top: 10pt;">Date: <span class="signature-date-line"></span></div>
+    </div>
+    {{/if}}
+
+    {{#each tenants}}
+    <div class="signature-block">
+      <div class="signature-role">Tenant {{add @index 1}}</div>
+      <div class="signature-name">Name: {{this.full_name}}</div>
+      <div class="signature-line"></div>
+      <div class="signature-label">Signature</div>
+      <div style="margin-top: 10pt;">Date: <span class="signature-date-line"></span></div>
     </div>
     {{/each}}
 
-    <!-- GUARANTOR SIGNATURE (if applicable) -->
     {{#if guarantor_name}}
-    <div class="signature-block" style="margin-top: 30px;">
-      <div class="signature-party">Guarantor</div>
-      <div style="margin-bottom: 20px;">
-        <strong>Name:</strong> {{guarantor_name}}
-      </div>
+    <div class="signature-block">
+      <div class="signature-role">Guarantor</div>
+      <div class="signature-name">Name: {{guarantor_name}}</div>
       <div class="signature-line"></div>
       <div class="signature-label">Signature</div>
-      <div class="signature-date">
-        <div class="signature-date-label">Date:</div>
-        <div class="signature-date-line"></div>
-      </div>
+      <div style="margin-top: 10pt;">Date: <span class="signature-date-line"></span></div>
     </div>
     {{/if}}
-
-    <!-- WITNESS SECTION -->
-    <div class="witness-section">
-      <div class="witness-title">⚖️ Witness (Optional but Recommended)</div>
-      <p style="margin-bottom: 20px; font-size: 10pt;">
-        While not legally required for assured shorthold tenancies, having signatures witnessed adds an extra layer of
-        authenticity and can be useful if the agreement is ever disputed.
-      </p>
-
-      <div class="party-info">
-        <strong>Witness Name:</strong> _________________________________<br/><br/>
-        <strong>Witness Address:</strong> _________________________________<br/><br/>
-        <strong>Witness Signature:</strong> _________________________________<br/><br/>
-        <strong>Date:</strong> _________________________________
-      </div>
-    </div>
   </div>
 
+  <!-- SCHEDULE 1: PROPERTY -->
+  <section class="schedule">
+    <div class="schedule-header">
+      <h2>Schedule 1</h2>
+      <div class="schedule-title">Property Details</div>
+    </div>
+    <table class="data-table">
+      <tr><td class="label">Address</td><td class="value address-text">{{property_address}}</td></tr>
+      {{#if property_type}}<tr><td class="label">Type</td><td class="value">{{property_type}}</td></tr>{{/if}}
+      {{#if number_of_bedrooms}}<tr><td class="label">Bedrooms</td><td class="value">{{number_of_bedrooms}}</td></tr>{{/if}}
+      {{#if furnished_status}}<tr><td class="label">Furnished</td><td class="value">{{furnished_status}}</td></tr>{{/if}}
+      {{#if council_tax_band}}<tr><td class="label">Council Tax</td><td class="value">Band {{council_tax_band}}</td></tr>{{/if}}
+      {{#if epc_rating}}<tr><td class="label">EPC</td><td class="value">{{epc_rating}}</td></tr>{{/if}}
+      {{#if parking_available}}<tr><td class="label">Parking</td><td class="value">{{#if parking_details}}{{parking_details}}{{else}}Included{{/if}}</td></tr>{{/if}}
+    </table>
+    <h3>Compliance</h3>
+    <table class="data-table">
+      <tr><td class="label">Gas Safety</td><td class="value">{{#if gas_safety_certificate}}Valid{{else}}To be provided{{/if}}</td></tr>
+      <tr><td class="label">EICR</td><td class="value">{{#if electrical_safety_certificate}}Valid{{else}}To be provided{{/if}}</td></tr>
+      <tr><td class="label">EPC</td><td class="value">{{#if epc_rating}}{{epc_rating}}{{else}}To be provided{{/if}}</td></tr>
+      <tr><td class="label">Smoke/CO Alarms</td><td class="value">Fitted as required</td></tr>
+    </table>
+    <h3>Documents Provided</h3>
+    <ul>
+      <li>How to Rent guide (current version)</li>
+      <li>Energy Performance Certificate</li>
+      <li>Gas Safety Certificate</li>
+      <li>Electrical Installation Condition Report</li>
+      <li>Deposit prescribed information (within 30 days)</li>
+    </ul>
+  </section>
+
+  <!-- SCHEDULE 2: RENT & DEPOSIT -->
+  <section class="schedule">
+    <div class="schedule-header">
+      <h2>Schedule 2</h2>
+      <div class="schedule-title">Rent and Deposit</div>
+    </div>
+    <h3>Part A: Rent</h3>
+    <table class="data-table">
+      <tr><td class="label">Amount</td><td class="value">£{{rent_amount}} per {{rent_period}}</td></tr>
+      <tr><td class="label">Due Date</td><td class="value">{{rent_due_day}} of each {{rent_period}}</td></tr>
+      <tr><td class="label">Method</td><td class="value">{{payment_method}}</td></tr>
+      <tr><td class="label">First Payment</td><td class="value">{{#if first_payment_date}}{{formatUKDate first_payment_date}}{{else}}{{formatUKDate tenancy_start_date}}{{/if}}</td></tr>
+    </table>
+    <h4>Bank Details</h4>
+    <table class="data-table">
+      <tr><td class="label">Account Name</td><td class="value">{{#if bank_account_name}}{{bank_account_name}}{{else}}{{landlord_full_name}}{{/if}}</td></tr>
+      <tr><td class="label">Sort Code</td><td class="value">{{bank_sort_code}}</td></tr>
+      <tr><td class="label">Account Number</td><td class="value">{{bank_account_number}}</td></tr>
+    </table>
+    <h3>Part B: Deposit</h3>
+    <table class="data-table">
+      <tr><td class="label">Amount</td><td class="value">£{{deposit_amount}}</td></tr>
+      <tr><td class="label">Scheme</td><td class="value">{{deposit_scheme_name}}</td></tr>
+    </table>
+    <div class="legal-notice">
+      <div class="legal-notice-title">Deposit Protection</div>
+      <p>Protected within 30 days. Disputes referred to ADR service. Deductions only for: unpaid rent, damage beyond fair wear and tear, missing items, cleaning, unreturned keys.</p>
+    </div>
+    {{#if guarantor_name}}
+    <h3>Part C: Guarantor</h3>
+    <table class="data-table">
+      <tr><td class="label">Name</td><td class="value">{{guarantor_name}}</td></tr>
+      <tr><td class="label">Address</td><td class="value address-text">{{guarantor_address}}</td></tr>
+      <tr><td class="label">Contact</td><td class="value email-text">{{guarantor_email}} | {{guarantor_phone}}</td></tr>
+      <tr><td class="label">Max Liability</td><td class="value">{{#if guarantor_max_liability}}{{guarantor_max_liability}}{{else}}12 months' rent + costs{{/if}}</td></tr>
+    </table>
+    {{/if}}
+  </section>
+
+  <!-- SCHEDULE 3: UTILITIES -->
+  <section class="schedule">
+    <div class="schedule-header">
+      <h2>Schedule 3</h2>
+      <div class="schedule-title">Utilities and Services</div>
+    </div>
+    <table class="data-table">
+      <tr><th>Utility</th><th>Responsibility</th><th>Notes</th></tr>
+      <tr><td>Council Tax</td><td>{{#if council_tax_responsibility}}{{council_tax_responsibility}}{{else}}Tenant{{/if}}</td><td>{{#if council_tax_band}}Band {{council_tax_band}}{{/if}}</td></tr>
+      <tr><td>Gas</td><td>{{#if utilities_responsibility}}{{utilities_responsibility}}{{else}}Tenant{{/if}}</td><td>Register with supplier</td></tr>
+      <tr><td>Electricity</td><td>{{#if utilities_responsibility}}{{utilities_responsibility}}{{else}}Tenant{{/if}}</td><td>Register with supplier</td></tr>
+      <tr><td>Water</td><td>{{#if utilities_responsibility}}{{utilities_responsibility}}{{else}}Tenant{{/if}}</td><td></td></tr>
+      <tr><td>Internet</td><td>{{#if internet_responsibility}}{{internet_responsibility}}{{else}}Tenant{{/if}}</td><td></td></tr>
+      <tr><td>TV Licence</td><td>Tenant</td><td>If required</td></tr>
+      <tr><td>Buildings Insurance</td><td>Landlord</td><td>Tenant arranges contents</td></tr>
+    </table>
+    {{#if meter_reading_gas}}{{#if meter_reading_electric}}
+    <h3>Meter Readings</h3>
+    <table class="data-table">
+      {{#if meter_reading_gas}}<tr><td class="label">Gas</td><td class="value">{{meter_reading_gas}}</td></tr>{{/if}}
+      {{#if meter_reading_electric}}<tr><td class="label">Electricity</td><td class="value">{{meter_reading_electric}}</td></tr>{{/if}}
+      {{#if meter_reading_water}}<tr><td class="label">Water</td><td class="value">{{meter_reading_water}}</td></tr>{{/if}}
+    </table>
+    {{/if}}{{/if}}
+  </section>
+
+  <!-- SCHEDULE 4: INVENTORY -->
+  <section class="schedule">
+    <div class="schedule-header">
+      <h2>Schedule 4</h2>
+      <div class="schedule-title">Inventory and Condition</div>
+    </div>
+    {{#if inventory_attached}}<p>Detailed inventory attached separately.</p>{{else}}<p>Tenant should photograph property condition at start.</p>{{/if}}
+    <h3>Keys</h3>
+    <table class="data-table">
+      {{#if number_of_front_door_keys}}<tr><td class="label">Front Door</td><td class="value">{{number_of_front_door_keys}}</td></tr>{{/if}}
+      {{#if number_of_back_door_keys}}<tr><td class="label">Back Door</td><td class="value">{{number_of_back_door_keys}}</td></tr>{{/if}}
+      {{#if access_cards_fobs}}<tr><td class="label">Fobs/Cards</td><td class="value">{{access_cards_fobs}}</td></tr>{{/if}}
+      {{#if number_of_mailbox_keys}}<tr><td class="label">Mailbox</td><td class="value">{{number_of_mailbox_keys}}</td></tr>{{/if}}
+    </table>
+    <p>All keys must be returned. {{#if key_replacement_cost}}Replacement cost: £{{key_replacement_cost}}.{{/if}}</p>
+  </section>
+
+  <!-- SCHEDULE 5: HOUSE RULES -->
+  <section class="schedule">
+    <div class="schedule-header">
+      <h2>Schedule 5</h2>
+      <div class="schedule-title">House Rules</div>
+    </div>
+    <h3>Pets</h3>
+    <table class="data-table"><tr><td class="label">Permitted</td><td class="value">{{#if pets_allowed}}Yes{{#if approved_pets}} ({{approved_pets}}){{/if}}{{else}}No (consent required){{/if}}</td></tr></table>
+    <h3>Smoking</h3>
+    <table class="data-table"><tr><td class="label">Permitted</td><td class="value">{{#if smoking_allowed}}Outdoors only{{else}}No{{/if}}</td></tr></table>
+    <h3>Subletting</h3>
+    <p>Not permitted without prior written consent. No short-term letting platforms.</p>
+    <h3>Quiet Hours</h3>
+    <p>Keep noise reasonable, especially 11pm-7am.</p>
+    {{#if has_garden}}<h3>Garden</h3><p>Tenant maintains in reasonable condition.</p>{{/if}}
+    <h3>Alterations</h3>
+    <p>Not permitted without consent. Minor fixtures may be allowed.</p>
+  </section>
+
+  <!-- SCHEDULE 6: EMERGENCY CONTACTS (PREMIUM) -->
+  <section class="schedule">
+    <div class="schedule-header">
+      <h2>Schedule 6</h2>
+      <div class="schedule-title">Emergency Contacts (Premium)</div>
+    </div>
+    <table class="data-table">
+      <tr><td class="label">Landlord/Agent</td><td class="value">{{#if emergency_landlord_phone}}{{emergency_landlord_phone}}{{else}}{{landlord_phone}}{{/if}}</td></tr>
+      {{#if emergency_plumber_phone}}<tr><td class="label">Plumber</td><td class="value">{{emergency_plumber_phone}}</td></tr>{{/if}}
+      {{#if emergency_electrician_phone}}<tr><td class="label">Electrician</td><td class="value">{{emergency_electrician_phone}}</td></tr>{{/if}}
+      {{#if emergency_gas_engineer_phone}}<tr><td class="label">Gas Engineer</td><td class="value">{{emergency_gas_engineer_phone}}</td></tr>{{/if}}
+      {{#if emergency_locksmith_phone}}<tr><td class="label">Locksmith</td><td class="value">{{emergency_locksmith_phone}}</td></tr>{{/if}}
+    </table>
+    <h3>Shut-Off Locations</h3>
+    <table class="data-table">
+      {{#if water_shutoff_location}}<tr><td class="label">Water</td><td class="value">{{water_shutoff_location}}</td></tr>{{/if}}
+      {{#if electricity_fuse_box_location}}<tr><td class="label">Electricity</td><td class="value">{{electricity_fuse_box_location}}</td></tr>{{/if}}
+      {{#if gas_shutoff_location}}<tr><td class="label">Gas</td><td class="value">{{gas_shutoff_location}}</td></tr>{{/if}}
+    </table>
+    <h3>In Emergency</h3>
+    <ul>
+      <li>Gas leak: Call National Gas Emergency 0800 111 999, open windows, do not use switches</li>
+      <li>Water leak: Turn off at stopcock, then call landlord/agent</li>
+      <li>Power failure: Check fuse box, call landlord/agent if not resolved</li>
+      <li>Fire: Evacuate, call 999, then notify landlord</li>
+    </ul>
+  </section>
+
   <!-- FOOTER -->
-  <div class="footer-info">
-    <p>
-      <strong>Document Reference:</strong> AST-PREMIUM-{{case_id}}<br/>
-      <strong>Generated by:</strong> Landlord Heaven Professional Services<br/>
-      <strong>Date Generated:</strong> {{current_date}}<br/>
-      <br/>
-      This agreement complies with the Housing Act 1988 (as amended), Tenant Fees Act 2019,
-      and all applicable England & Wales residential tenancy legislation current as of {{current_date}}.
-    </p>
+  <div class="doc-footer">
+    <p>Premium Assured Shorthold Tenancy Agreement &mdash; England</p>
+    <p>Generated: {{formatUKDate current_date}} | Reference: {{#if case_id}}{{case_id}}{{else}}{{document_id}}{{/if}}</p>
+    <p>Compliant with Housing Act 1988, Deregulation Act 2015, Tenant Fees Act 2019, Immigration Act 2014</p>
   </div>
 
 </body>

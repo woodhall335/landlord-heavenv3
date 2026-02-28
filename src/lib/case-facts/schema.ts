@@ -17,10 +17,13 @@ export interface WizardFactsMeta {
   product_tier?: string | null;
   jurisdiction?: 'england' | 'wales' | 'scotland' | 'northern-ireland' | null;
   case_id?: string | null;
+  purchased_product?: string | null;
+  entitlements?: string[] | null;
 }
 
 export interface WizardFacts {
   __meta?: WizardFactsMeta;
+  __smart_review?: PersistedSmartReview;
   [key: string]: any; // Flat MQS keys like property_address_line1, tenants.0.full_name, etc.
 }
 
@@ -47,6 +50,10 @@ export interface TenancyFacts {
   deposit_reference?: string | null;
   // For deposit prescribed information (England & Wales)
   prescribed_info_given?: boolean | null;
+  // Deposit cap confirmation (England Section 21 only - Tenant Fees Act 2019)
+  // Required when deposit_amount exceeds legal cap (5 weeks rent, or 6 weeks if annual rent > £50k)
+  // Confirms landlord has refunded/reduced deposit to within legal limit
+  deposit_reduced_to_legal_cap_confirmed?: boolean | null;
 }
 
 export interface PropertyAddress {
@@ -92,6 +99,12 @@ export interface ArrearsItem {
   rent_paid: number;
   // Some modules work directly with "amount_owed"
   amount_owed?: number | null;
+  // Pro-rata fields for partial final periods
+  is_pro_rated?: boolean;
+  /** Notes explaining pro-rata calculation e.g. "Pro-rated (20 days)" */
+  notes?: string;
+  /** Number of days in this period (for pro-rata calculation display) */
+  days_in_period?: number;
 }
 
 export interface IssueFacts {
@@ -156,6 +169,8 @@ export interface CourtFacts {
   total_claim_amount: number | null;
   claimant_reference?: string | null;
   court_name?: string | null;
+  court_address?: string | null;
+  court_postcode?: string | null;
   particulars_of_claim?: string | null;
   n5_required: boolean | null;
   n119_required: boolean | null;
@@ -166,12 +181,16 @@ export interface CourtFacts {
 
 export interface EvidenceFacts {
   tenancy_agreement_uploaded: boolean;
+  tenancy_agreement_description?: string | null;
   rent_schedule_uploaded: boolean;
   correspondence_uploaded: boolean;
+  correspondence_description?: string | null;
   damage_photos_uploaded: boolean;
   authority_letters_uploaded: boolean;
   bank_statements_uploaded: boolean;
+  bank_statements_description?: string | null;
   other_evidence_uploaded: boolean;
+  notice_service_description?: string | null;
   // Legacy / compatibility flags – keep for older flows but mirror into new categories
   safety_certificates_uploaded?: boolean;
   asb_evidence_uploaded?: boolean;
@@ -179,6 +198,33 @@ export interface EvidenceFacts {
   photos_uploaded?: boolean;
   missing_evidence_notes: string[];
   analysis?: Record<string, any>;
+  // Evidence files array - dynamically populated from wizard facts
+  files?: Array<{
+    id?: string;
+    category?: string;
+    file_name?: string;
+    [key: string]: any;
+  }>;
+  // Money claim evidence descriptions
+  tenancy_type?: string | null;
+  tenancy_written_or_verbal?: string | null;
+  rent_clause_description?: string | null;
+  arrears_calculation_method?: string | null;
+  arrears_ledger_available?: boolean | null;
+  arrears_period_description?: string | null;
+  bank_statements_available?: boolean | null;
+  inventory_checkout_available?: boolean | null;
+  damage_photos_available?: boolean | null;
+  damage_photos_description?: string | null;
+  repair_quotes_description?: string | null;
+  before_photos_available?: boolean | null;
+  correspondence_preserved?: boolean | null;
+  correspondence_format?: string[] | null;
+  key_correspondence_summary?: string | null;
+  money_claim_evidence_uploaded?: boolean | null;
+  // Wales-specific
+  contract_type?: string | null;
+  contract_written_or_verbal?: string | null;
 }
 
 export interface ServiceContactFacts {
@@ -207,7 +253,13 @@ export interface MoneyClaimFacts {
   lba_date?: string | null;
   lba_method?: string[] | null;
   lba_response_deadline?: string | null;
-  pap_documents_sent?: string[] | null;
+  pap_documents_sent?: string[] | null | false;
+  /** Flag indicating we will generate PAP documents for the user */
+  generate_pap_documents?: boolean | null;
+  /** Flag from PreActionSection indicating user has already sent a letter before claim */
+  letter_before_claim_sent?: boolean | null;
+  /** Date when the PAP letter was sent (from PreActionSection) */
+  pap_letter_date?: string | null;
   tenant_responded?: boolean | null;
   tenant_response_details?: string | null;
   lba_second_sent?: boolean | null;
@@ -239,6 +291,12 @@ export interface MoneyClaimFacts {
   other_charges_notes?: string | null; // from ArrearsSection
   other_costs_notes?: string | null; // from DamagesSection
   other_amounts_summary?: string | null; // from ClaimDetailsSection
+  // Claim type selection - used by wizard and rules engine
+  other_amounts_types?: string[] | null; // e.g., ['property_damage', 'cleaning', 'unpaid_utilities']
+  // Deposit deduction tracking - prevents double recovery
+  deposit_deductions_confirmed?: boolean | null;
+  // Tenant still in property flag
+  tenant_still_in_property?: boolean | null;
 }
 
 export interface MetaFacts {
@@ -247,6 +305,68 @@ export interface MetaFacts {
   product_tier?: string | null;
   jurisdiction?: 'england' | 'wales' | 'scotland' | 'northern-ireland' | null;
   case_id?: string | null;
+}
+
+// =============================================================================
+// Smart Review Persistence Types
+// =============================================================================
+
+/**
+ * Persisted Smart Review warning (stripped to essential fields for storage).
+ * Full warning type is in evidence/warnings.ts.
+ */
+export interface PersistedSmartReviewWarning {
+  code: string;
+  severity: 'info' | 'warning' | 'blocker';
+  title: string;
+  message: string;
+  fields: string[];
+  relatedUploads: string[];
+  suggestedUserAction: string;
+  confidence?: number;
+  comparison?: {
+    wizardValue: any;
+    extractedValue: any;
+    source?: string;
+  };
+}
+
+/**
+ * Persisted Smart Review run metadata.
+ * Stored in case_facts.facts.__smart_review to survive refresh.
+ */
+export interface PersistedSmartReview {
+  /** When this run occurred (ISO timestamp) */
+  ranAt: string;
+  /** All warnings from the most recent run */
+  warnings: PersistedSmartReviewWarning[];
+  /** Summary counts from the run */
+  summary: {
+    documentsProcessed: number;
+    documentsCached: number;
+    documentsSkipped: number;
+    documentsTimedOut: number;
+    pagesProcessed: number;
+    warningsTotal: number;
+    warningsBlocker: number;
+    warningsWarning: number;
+    warningsInfo: number;
+  };
+  /** Limits that were applied */
+  limitsApplied?: {
+    maxFilesPerRun: number;
+    maxPagesPerPdf: number;
+    maxTotalPages: number;
+    filesExceededLimit?: boolean;
+    pagesExceededLimit?: boolean;
+  };
+  /** If Smart Review was skipped */
+  skipped?: {
+    reason: string;
+    code: string;
+  };
+  /** Total cost in USD (for internal tracking) */
+  costUsd?: number;
 }
 
 // -----------------------------------------------------------------------------
@@ -264,8 +384,197 @@ export interface CaseHealth {
 
 export interface ComplianceFacts {
   gas_safety_cert_provided?: boolean | null;
+  gas_safety_cert_date?: string | null;
+  gas_safety_cert_expiry?: string | null;
+  // Aliases for MQS compatibility
+  gas_cert_date?: string | null;
+  gas_cert_expiry?: string | null;
   epc_provided?: boolean | null;
+  epc_date?: string | null;
+  epc_certificate_date?: string | null; // Alias for MQS
   how_to_rent_given?: boolean | null;
+  how_to_rent_date?: string | null;
+  prescribed_info_date?: string | null;
+  eicr_provided?: boolean | null;
+  eicr_date?: string | null;
+  eicr_satisfactory?: boolean | null;
+}
+
+// =============================================================================
+// SECTION 21 COMPLIANCE FACTS
+// =============================================================================
+
+export interface Section21Facts {
+  prescribed_info_date?: string | null;
+  how_to_rent_date?: string | null;
+  epc_certificate_date?: string | null;
+  gas_cert_date?: string | null;
+  gas_cert_expiry?: string | null;
+  eicr_provided?: boolean | null;
+  eicr_date?: string | null;
+  eicr_expiry?: string | null;
+}
+
+// =============================================================================
+// GROUND-SPECIFIC FACTS (Section 8)
+// =============================================================================
+
+export interface Ground8Facts {
+  arrears_at_notice: number | null;
+  arrears_current: number | null;
+  last_payment_date: string | null;
+  last_payment_amount: number | null;
+  payment_demands_sent: string | null;
+  tenant_response: string | null;
+}
+
+export interface Ground10Facts {
+  arrears_amount: number | null;
+  arrears_history: string | null;
+  attempts_to_recover: string | null;
+}
+
+export interface Ground11Facts {
+  pattern_description: string | null;
+  late_payment_dates: string | null;
+  warnings_issued: string | null;
+}
+
+export interface Ground12Facts {
+  breach_type: string[] | null;
+  tenancy_clause: string | null;
+  breach_dates: string | null;
+  breach_evidence: string | null;
+  warnings_issued: string | null;
+}
+
+export interface Ground13Facts {
+  damage_description: string | null;
+  damage_discovered_date: string | null;
+  damage_cost: number | null;
+  evidence_available: string | null;
+  tenant_notified: boolean | null;
+  tenant_response: string | null;
+}
+
+export interface Ground14Facts {
+  behaviour_type: string[] | null;
+  incident_count: number | null;
+  incidents_description: string | null;
+  affected_parties: string | null;
+  witnesses: boolean | null;
+  witness_names: string | null;
+  police_involved: boolean | null;
+  police_reference: string | null;
+  council_involved: boolean | null;
+  council_reference: string | null;
+  warnings_issued: string | null;
+}
+
+export interface Ground15Facts {
+  furniture_damaged: string | null;
+  damage_cost: number | null;
+  inventory_available: boolean | null;
+  evidence_description: string | null;
+}
+
+export interface Ground17Facts {
+  statement_made: string | null;
+  statement_date: string | null;
+  how_statement_made: string | null;
+  true_facts: string | null;
+  reliance_on_statement: string | null;
+  discovery_date: string | null;
+  discovery_method: string | null;
+  // Aliases for MQS compatibility
+  false_statement?: string | null;
+  when_discovered?: string | null;
+  how_discovered?: string | null;
+  evidence?: string | null;
+  induced_granting?: boolean | null;
+}
+
+// =============================================================================
+// RISK INDICATORS
+// =============================================================================
+
+export interface RiskFacts {
+  // Core eviction risk indicators
+  known_tenant_defences: string | null;
+  previous_court_proceedings: boolean | null;
+  previous_proceedings_details: string | null;
+  disrepair_complaints: boolean | null;
+  disrepair_complaint_date: string | null;
+  disrepair_issues_list: string | null;
+  tenant_vulnerability: boolean | null;
+  tenant_vulnerability_details: string | null;
+  // Aliases for MQS compatibility
+  tenant_vulnerability_known?: boolean | null;
+  vulnerability_details?: string | null;
+  // Money claim risk indicators
+  tenant_disputes_claim?: boolean | null;
+  contract_holder_disputes_claim?: boolean | null; // Wales terminology
+  defender_disputes_claim?: boolean | null; // Scotland terminology
+  dispute_details?: string | null;
+  deposit_dispute_pending?: boolean | null;
+  deposit_dispute_amount?: number | null;
+  tenant_counterclaim_likely?: boolean | null;
+  contract_holder_counterclaim_likely?: boolean | null; // Wales terminology
+  defender_counterclaim_likely?: boolean | null; // Scotland terminology
+  counterclaim_grounds?: string[] | null;
+  payment_plan_offered?: boolean | null;
+  payment_plan_response?: string | null;
+  rent_smart_wales_compliant?: boolean | null; // Wales specific
+}
+
+// =============================================================================
+// COMMUNICATION TIMELINE
+// =============================================================================
+
+export interface CommunicationEntry {
+  date: string | null;
+  method: string | null;
+  summary: string | null;
+}
+
+export interface CommunicationTimelineFacts {
+  entries: CommunicationEntry[];
+  narrative: string | null;
+  // Complete pack communication fields
+  log?: string | null;
+  total_attempts?: number | null;
+  tenant_responsiveness?: string | null;
+  // Money claim communication timeline
+  first_arrears_notice_date?: string | null;
+  first_notice_method?: string | null;
+  subsequent_reminders_sent?: number | null;
+  final_demand_date?: string | null;
+  tenant_acknowledged_debt?: boolean | null;
+  contract_holder_acknowledged_debt?: boolean | null; // Wales terminology
+  defender_acknowledged_debt?: boolean | null; // Scotland terminology
+  acknowledgment_date?: string | null;
+  tenant_made_partial_payment?: boolean | null;
+  contract_holder_made_partial_payment?: boolean | null; // Wales terminology
+  defender_made_partial_payment?: boolean | null; // Scotland terminology
+  last_partial_payment_date?: string | null;
+  last_partial_payment_amount?: number | null;
+}
+
+// =============================================================================
+// SCOTLAND PRE-ACTION PROTOCOL
+// =============================================================================
+
+export interface ScotlandPreActionFacts {
+  rent_statement_sent: boolean | null;
+  rent_statement_date: string | null;
+  advice_signposting: boolean | null;
+  signposted_to: string[] | null;
+  reasonable_time_given: boolean | null;
+  time_given_details: string | null;
+  payment_plan_offered: boolean | null;
+  payment_plan_details: string | null;
+  housing_benefit_check: boolean | null;
+  housing_benefit_details: string | null;
 }
 
 export interface CaseFacts {
@@ -281,6 +590,23 @@ export interface CaseFacts {
   meta: MetaFacts;
   case_health: CaseHealth;
   compliance: ComplianceFacts;
+  // Section 21 specific compliance data
+  section21?: Section21Facts;
+  // Ground-specific details (Section 8)
+  ground_8?: Ground8Facts;
+  ground_10?: Ground10Facts;
+  ground_11?: Ground11Facts;
+  ground_12?: Ground12Facts;
+  ground_13?: Ground13Facts;
+  ground_14?: Ground14Facts;
+  ground_15?: Ground15Facts;
+  ground_17?: Ground17Facts;
+  // Risk assessment data
+  risk?: RiskFacts;
+  // Communication timeline
+  communication_timeline?: CommunicationTimelineFacts;
+  // Scotland pre-action protocol
+  scotland_pre_action?: ScotlandPreActionFacts;
 }
 
 // =============================================================================
@@ -321,6 +647,7 @@ export const createEmptyCaseFacts = (): CaseFacts => ({
     deposit_protection_date: null,
     deposit_reference: null,
     prescribed_info_given: null,
+    deposit_reduced_to_legal_cap_confirmed: null,
   },
   property: {
     address_line1: null,
@@ -387,6 +714,8 @@ export const createEmptyCaseFacts = (): CaseFacts => ({
     total_claim_amount: null,
     claimant_reference: null,
     court_name: null,
+    court_address: null,
+    court_postcode: null,
     particulars_of_claim: null,
     n5_required: null,
     n119_required: null,
@@ -436,6 +765,9 @@ export const createEmptyCaseFacts = (): CaseFacts => ({
     lba_method: null,
     lba_response_deadline: null,
     pap_documents_sent: null,
+    generate_pap_documents: null,
+    letter_before_claim_sent: null,
+    pap_letter_date: null,
     tenant_responded: null,
     tenant_response_details: null,
     lba_second_sent: null,
@@ -462,6 +794,9 @@ export const createEmptyCaseFacts = (): CaseFacts => ({
     help_with_fees_needed: null,
     enforcement_preferences: null,
     enforcement_notes: null,
+    other_amounts_types: null,
+    deposit_deductions_confirmed: null,
+    tenant_still_in_property: null,
   },
   meta: {
     product: null,
@@ -478,7 +813,158 @@ export const createEmptyCaseFacts = (): CaseFacts => ({
   },
   compliance: {
     gas_safety_cert_provided: null,
+    gas_safety_cert_date: null,
+    gas_safety_cert_expiry: null,
+    gas_cert_date: null,
+    gas_cert_expiry: null,
     epc_provided: null,
+    epc_date: null,
+    epc_certificate_date: null,
     how_to_rent_given: null,
+    how_to_rent_date: null,
+    prescribed_info_date: null,
+    eicr_provided: null,
+    eicr_date: null,
+    eicr_satisfactory: null,
+  },
+  // Section 21 specific compliance data
+  section21: {
+    prescribed_info_date: null,
+    how_to_rent_date: null,
+    epc_certificate_date: null,
+    gas_cert_date: null,
+    gas_cert_expiry: null,
+    eicr_provided: null,
+    eicr_date: null,
+    eicr_expiry: null,
+  },
+  // Ground-specific details (Section 8)
+  ground_8: {
+    arrears_at_notice: null,
+    arrears_current: null,
+    last_payment_date: null,
+    last_payment_amount: null,
+    payment_demands_sent: null,
+    tenant_response: null,
+  },
+  ground_10: {
+    arrears_amount: null,
+    arrears_history: null,
+    attempts_to_recover: null,
+  },
+  ground_11: {
+    pattern_description: null,
+    late_payment_dates: null,
+    warnings_issued: null,
+  },
+  ground_12: {
+    breach_type: null,
+    tenancy_clause: null,
+    breach_dates: null,
+    breach_evidence: null,
+    warnings_issued: null,
+  },
+  ground_13: {
+    damage_description: null,
+    damage_discovered_date: null,
+    damage_cost: null,
+    evidence_available: null,
+    tenant_notified: null,
+    tenant_response: null,
+  },
+  ground_14: {
+    behaviour_type: null,
+    incident_count: null,
+    incidents_description: null,
+    affected_parties: null,
+    witnesses: null,
+    witness_names: null,
+    police_involved: null,
+    police_reference: null,
+    council_involved: null,
+    council_reference: null,
+    warnings_issued: null,
+  },
+  ground_15: {
+    furniture_damaged: null,
+    damage_cost: null,
+    inventory_available: null,
+    evidence_description: null,
+  },
+  ground_17: {
+    statement_made: null,
+    statement_date: null,
+    how_statement_made: null,
+    true_facts: null,
+    reliance_on_statement: null,
+    discovery_date: null,
+    discovery_method: null,
+    // Aliases for MQS compatibility
+    false_statement: null,
+    when_discovered: null,
+    how_discovered: null,
+    evidence: null,
+    induced_granting: null,
+  },
+  risk: {
+    known_tenant_defences: null,
+    previous_court_proceedings: null,
+    previous_proceedings_details: null,
+    disrepair_complaints: null,
+    disrepair_complaint_date: null,
+    disrepair_issues_list: null,
+    tenant_vulnerability: null,
+    tenant_vulnerability_details: null,
+    // Aliases for MQS compatibility
+    tenant_vulnerability_known: null,
+    vulnerability_details: null,
+    // Money claim risk indicators
+    tenant_disputes_claim: null,
+    contract_holder_disputes_claim: null,
+    defender_disputes_claim: null,
+    dispute_details: null,
+    deposit_dispute_pending: null,
+    deposit_dispute_amount: null,
+    tenant_counterclaim_likely: null,
+    contract_holder_counterclaim_likely: null,
+    defender_counterclaim_likely: null,
+    counterclaim_grounds: null,
+    payment_plan_offered: null,
+    payment_plan_response: null,
+    rent_smart_wales_compliant: null,
+  },
+  communication_timeline: {
+    entries: [],
+    narrative: null,
+    // Complete pack communication fields
+    log: null,
+    total_attempts: null,
+    tenant_responsiveness: null,
+    // Money claim communication timeline
+    first_arrears_notice_date: null,
+    first_notice_method: null,
+    subsequent_reminders_sent: null,
+    final_demand_date: null,
+    tenant_acknowledged_debt: null,
+    contract_holder_acknowledged_debt: null,
+    defender_acknowledged_debt: null,
+    acknowledgment_date: null,
+    tenant_made_partial_payment: null,
+    contract_holder_made_partial_payment: null,
+    defender_made_partial_payment: null,
+    last_partial_payment_date: null,
+    last_partial_payment_amount: null,
+  },
+  scotland_pre_action: {
+    rent_statement_sent: null,
+    rent_statement_date: null,
+    advice_signposting: null,
+    signposted_to: null,
+    reasonable_time_given: null,
+    time_given_details: null,
+    payment_plan_offered: null,
+    payment_plan_details: null,
+    housing_benefit_check: null,
+    housing_benefit_details: null,
   },
 });

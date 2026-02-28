@@ -1,0 +1,21 @@
+requiredOfficialForms: []
+optionalOfficialForms: []
+requiredTextBlocks:
+  - id: welsh_tenancy_terms
+    description: "Welsh tenancy agreement core terms"
+    mustAppearIn: template
+    match: "occupation contract"
+    regex: false
+    minOccurrences: 0
+requiredPreconditions:
+  - id: contract_handover
+    requiredFactKeys: []
+    requiredQuestionIds: []
+    mustBeValidatedInFlow: true
+noticeRules:
+  requiredInputsFactKeys: []
+  minimumDays: 0
+  mustComputeExpiryDate: false
+  mustShowUserWarningIfInvalid: false
+legislationReferences:
+  - "Renting Homes (Wales) Act 2016"

@@ -1,0 +1,22 @@
+requiredOfficialForms:
+  - public/official-forms/N1_1224.pdf
+optionalOfficialForms: []
+requiredTextBlocks:
+  - id: welsh_money_claim
+    description: "Welsh money claim wording"
+    mustAppearIn: template
+    match: "claim"
+    regex: false
+    minOccurrences: 0
+requiredPreconditions:
+  - id: claim_basis
+    requiredFactKeys: []
+    requiredQuestionIds: []
+    mustBeValidatedInFlow: true
+noticeRules:
+  requiredInputsFactKeys: []
+  minimumDays: 0
+  mustComputeExpiryDate: false
+  mustShowUserWarningIfInvalid: false
+legislationReferences:
+  - "Civil Procedure Rules"

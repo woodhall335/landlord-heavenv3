@@ -2,82 +2,191 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
-import { Button } from "./Button";
+import { usePathname, useRouter } from "next/navigation";
+import { useState, useEffect, useCallback } from "react";
 import { clsx } from "clsx";
+import { RiArrowDownSLine, RiMenuLine, RiLogoutBoxLine, RiDashboardLine } from 'react-icons/ri';
+import type { AuthChangeEvent, Session } from '@supabase/supabase-js';
+import { getSupabaseBrowserClient } from '@/lib/supabase/client';
+import { freeTools } from '@/lib/tools/tools';
+import type { HeaderMode } from '@/components/layout/HeaderModeContext';
 
 interface NavItem {
   href: string;
   label: string;
 }
 
-interface NavBarProps {
-  user?: { email: string; name?: string } | null;
+interface NavBarUser {
+  email: string;
+  name?: string;
 }
+
+interface NavBarProps {
+  user?: NavBarUser | null;
+  headerMode: HeaderMode;
+  scrollThreshold: number;
+}
+
+type EffectiveHeaderState = 'solid' | 'transparent';
 
 const primaryLinks: NavItem[] = [
   { href: "/products/notice-only", label: "Notice Only" },
   { href: "/products/complete-pack", label: "Eviction Pack" },
   { href: "/products/money-claim", label: "Money Claims" },
   { href: "/products/ast", label: "Tenancy Agreements" },
-  // HMO Pro removed from navigation for V1 - will be re-enabled in V2
-  // { href: "/hmo-pro", label: "HMO Pro" },
+  { href: "/blog", label: "Landlord Guides" },
 ];
 
-const freeToolsLinks: NavItem[] = [
-  { href: "/tools/free-section-21-notice-generator", label: "Section 21 Notice" },
-  { href: "/tools/free-section-8-notice-generator", label: "Section 8 Notice" },
-  { href: "/tools/rent-arrears-calculator", label: "Rent Arrears Calculator" },
-  { href: "/tools/hmo-license-checker", label: "HMO License Checker" },
-  { href: "/tools/free-rent-demand-letter", label: "Rent Demand Letter" },
-];
+const freeToolsLinks: NavItem[] = freeTools.map((tool) => ({
+  href: tool.href,
+  label: tool.label,
+}));
 
-export function NavBar({ user }: NavBarProps) {
+export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBarProps) {
   const pathname = usePathname();
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [showFreeTools, setShowFreeTools] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  const [clientUser, setClientUser] = useState<NavBarUser | null>(serverUser || null);
+  const [effectiveHeaderState, setEffectiveHeaderState] = useState<EffectiveHeaderState>(
+    headerMode === 'solid' ? 'solid' : 'transparent',
+  );
+
+  useEffect(() => {
+    if (headerMode === 'solid') {
+      setEffectiveHeaderState('solid');
+      return;
+    }
+
+    if (headerMode === 'transparent') {
+      setEffectiveHeaderState('transparent');
+      return;
+    }
+
+    const setFromScroll = () => {
+      setEffectiveHeaderState(window.scrollY > scrollThreshold ? 'solid' : 'transparent');
+    };
+
+    setFromScroll();
+    window.addEventListener('scroll', setFromScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', setFromScroll);
+    };
+  }, [headerMode, scrollThreshold]);
+
+  useEffect(() => {
+    setOpen(false);
+  }, [effectiveHeaderState]);
+
+  const checkAuthState = useCallback(async () => {
+    try {
+      const supabase = getSupabaseBrowserClient();
+      const { data: { user: authUser } } = await supabase.auth.getUser();
+
+      if (authUser) {
+        setClientUser({
+          email: authUser.email || '',
+          name: authUser.user_metadata?.full_name,
+        });
+      } else {
+        setClientUser(null);
+      }
+    } catch {
+      // Keep current state on error
+    }
+  }, []);
+
+  useEffect(() => {
+    checkAuthState();
+
+    const supabase = getSupabaseBrowserClient();
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event: AuthChangeEvent, session: Session | null) => {
+        if (event === 'SIGNED_IN' && session?.user) {
+          setClientUser({
+            email: session.user.email || '',
+            name: session.user.user_metadata?.full_name,
+          });
+        } else if (event === 'SIGNED_OUT') {
+          setClientUser(null);
+        } else if (event === 'TOKEN_REFRESHED' && session?.user) {
+          setClientUser({
+            email: session.user.email || '',
+            name: session.user.user_metadata?.full_name,
+          });
+        }
+      }
+    );
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [checkAuthState]);
+
+  const user = clientUser;
+
+  const isSolid = effectiveHeaderState === 'solid';
+  const textClass = isSolid ? 'text-[#111827]' : 'text-white';
+  const secondaryTextClass = isSolid ? 'text-gray-700' : 'text-white';
+  const hoverTextClass = isSolid ? 'hover:text-[#692ED4]' : 'hover:text-white hover:opacity-80 focus:text-white focus:opacity-80';
+
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    try {
+      const supabase = getSupabaseBrowserClient();
+      await supabase.auth.signOut();
+      setClientUser(null);
+      router.push('/');
+      router.refresh();
+    } catch (error) {
+      console.error('Logout error:', error);
+    } finally {
+      setIsLoggingOut(false);
+    }
+  };
 
   return (
-    <header className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
+    <header
+      className={clsx(
+        'site-header fixed left-0 right-0 z-50 transition-colors duration-200',
+        isSolid ? 'bg-white border-b border-[#E5EE7B]' : 'bg-transparent border-b border-transparent',
+      )}
+    >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-8">
         <Link href="/" className="flex items-center hover:opacity-80 transition-opacity">
           <Image
-            src="/logo.png"
-            alt="Landlord Heaven - Legal Documents for Landlords"
-            width={280}
-            height={50}
+            src={isSolid ? "/images/logo.png" : "/images/logo2.png"}
+            alt="Landlord Heaven"
+            width={160}
+            height={40}
             priority
-            className="h-10 w-auto"
+            sizes="160px"
+            className="h-8 w-auto"
           />
         </Link>
 
-        <nav className="hidden items-center gap-9 lg:flex">
-          {/* Free Tools Dropdown */}
-          <div
-            className="relative"
-            onMouseEnter={() => setShowFreeTools(true)}
-            onMouseLeave={() => setShowFreeTools(false)}
-          >
-            <button
-              className="text-sm font-semibold text-gray-700 hover:text-primary transition-colors relative py-2 flex items-center gap-1"
+        <nav className="items-center gap-9 lg:flex hidden">
+          <div className="relative" onMouseEnter={() => setShowFreeTools(true)} onMouseLeave={() => setShowFreeTools(false)}>
+            <Link
+              href="/tools"
+              className={clsx('text-sm font-semibold transition-colors relative py-2 flex items-center gap-1', secondaryTextClass, hoverTextClass)}
+              aria-label="Free tools hub"
             >
               Free Tools
-              <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-              </svg>
-            </button>
+              <RiArrowDownSLine className={clsx('h-4 w-4', isSolid ? 'text-[#692ED4]' : 'text-white')} />
+            </Link>
 
             {showFreeTools && (
-              <div
-                className="absolute left-0 top-full pt-2 w-56 z-50"
-              >
+              <div className="absolute left-0 top-full pt-2 w-56 z-50">
                 <div className="rounded-xl bg-white shadow-lg border border-gray-200 py-2">
                   {freeToolsLinks.map((item) => (
                     <Link
                       key={item.href}
                       href={item.href}
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary transition-colors"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-[#692ED4] transition-colors"
                     >
                       {item.label}
                     </Link>
@@ -92,10 +201,10 @@ export function NavBar({ user }: NavBarProps) {
               key={item.href}
               href={item.href}
               className={clsx(
-                "text-sm font-semibold transition-colors relative py-2",
+                'text-sm font-semibold transition-colors relative py-2',
                 pathname === item.href
-                  ? "text-primary after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-primary"
-                  : "text-gray-700 hover:text-primary"
+                  ? clsx(textClass, 'after:absolute after:bottom-[-4px] after:left-0 after:right-0 after:h-[2px] after:bg-[#73AEED]')
+                  : clsx(secondaryTextClass, hoverTextClass)
               )}
             >
               {item.label}
@@ -103,64 +212,105 @@ export function NavBar({ user }: NavBarProps) {
           ))}
         </nav>
 
-        <div className="hidden items-center gap-4 lg:flex">
+        <div className="items-center gap-4 lg:flex hidden">
           {user ? (
-            <div className="flex items-center gap-3 rounded-full bg-gray-100 px-4 py-2 text-sm text-charcoal">
+            <div className={clsx('flex items-center gap-2 rounded-full px-3 py-2 text-sm', isSolid ? 'bg-gray-100 text-charcoal' : 'bg-white/20 text-white backdrop-blur-sm')}>
               <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-primary text-white font-bold">
                 {user.name?.[0]?.toUpperCase() || user.email[0].toUpperCase()}
               </span>
-              <span className="max-w-[140px] truncate font-semibold">{user.name || user.email}</span>
-              <Link href="/dashboard" className="text-primary hover:text-primary-dark font-semibold">
-                Dashboard
+              <Link href="/dashboard" className={clsx('transition-colors', isSolid ? 'text-gray-500 hover:text-primary' : 'text-white/90 hover:text-white')} title="Dashboard">
+                <RiDashboardLine className="h-5 w-5" />
               </Link>
+              <button onClick={handleLogout} disabled={isLoggingOut} className={clsx('transition-colors', isSolid ? 'text-gray-500 hover:text-red-600' : 'text-white/90 hover:text-red-200')} title="Logout">
+                <RiLogoutBoxLine className="h-5 w-5" />
+              </button>
             </div>
           ) : (
-            <Link href="/auth/login">
-              <Button variant="primary" size="medium" className="px-7 shadow-md hover:shadow-lg">
-                Login
-              </Button>
+            <Link
+              href="/auth/login"
+              className={clsx(
+                'inline-flex items-center justify-center rounded-lg px-6 py-2.5 text-sm font-semibold transition-all duration-200 border-2',
+                isSolid
+                  ? 'border-primary text-primary bg-white hover:bg-primary/5'
+                  : 'border-primary bg-primary text-white hover:bg-primary-dark'
+              )}
+            >
+              Login
             </Link>
           )}
         </div>
 
         <button
-          className="inline-flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-2 text-sm font-semibold text-gray-700 lg:hidden"
+          className={clsx(
+            'inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold lg:hidden border',
+            isSolid
+              ? 'border-gray-200 text-gray-700 bg-white'
+              : 'border-white/40 text-white bg-white/10 backdrop-blur-sm'
+          )}
           onClick={() => setOpen(!open)}
           aria-expanded={open}
         >
           <span>Menu</span>
-          <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
-            <path d="M4 7h16M4 12h16M4 17h16" />
-          </svg>
+          <RiMenuLine className={clsx('h-5 w-5', isSolid ? 'text-[#692ED4]' : 'text-white')} />
         </button>
       </div>
 
       {open && (
-        <div className="border-t border-gray-200 bg-white lg:hidden">
+        <div className={clsx('border-t lg:hidden', isSolid ? 'border-gray-200 bg-white' : 'border-white/25 bg-[#111827]/95 backdrop-blur-sm')}>
           <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-4">
-            {/* Free Tools Section */}
             <div>
-              <div className="mb-2 text-xs font-bold uppercase text-gray-500">Free Tools</div>
-              {freeToolsLinks.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="block py-2 text-sm font-semibold text-charcoal hover:text-primary"
-                  onClick={() => setOpen(false)}
-                >
-                  {item.label}
-                </Link>
-              ))}
+              <div className={clsx('mb-2 text-xs font-bold uppercase', isSolid ? 'text-gray-500' : 'text-white/70')}>Account Management</div>
+              {user ? (
+                <>
+                  <div className="mb-4 flex items-center gap-3">
+                    <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-primary text-white font-bold">
+                      {user.name?.[0]?.toUpperCase() || user.email[0].toUpperCase()}
+                    </span>
+                    <div>
+                      <p className={clsx('font-semibold', isSolid ? 'text-charcoal' : 'text-white')}>{user.name || user.email}</p>
+                      {user.name && <p className={clsx('text-xs', isSolid ? 'text-gray-500' : 'text-white/70')}>{user.email}</p>}
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <Link href="/dashboard" className={clsx('flex items-center gap-2 py-2 text-sm font-semibold', isSolid ? 'text-primary' : 'text-white')} onClick={() => setOpen(false)}>
+                      Go to Dashboard
+                    </Link>
+                    <button
+                      onClick={() => {
+                        setOpen(false);
+                        handleLogout();
+                      }}
+                      disabled={isLoggingOut}
+                      className={clsx('flex items-center gap-2 py-2 text-sm font-semibold', isSolid ? 'text-red-600 hover:text-red-700' : 'text-red-200 hover:text-red-100')}
+                    >
+                      <RiLogoutBoxLine className="h-4 w-4" />
+                      {isLoggingOut ? 'Logging out...' : 'Logout'}
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <Link href="/auth/login" className={clsx('block py-2 text-sm font-semibold', isSolid ? 'text-primary' : 'text-white')} onClick={() => setOpen(false)}>
+                    Login
+                  </Link>
+                  <Link href="/auth/signup" className={clsx('block py-2 text-sm font-semibold', isSolid ? 'text-charcoal' : 'text-white')} onClick={() => setOpen(false)}>
+                    Create Account
+                  </Link>
+                </>
+              )}
             </div>
 
-            <div className="border-t border-gray-200 pt-4">
+            <div className={clsx('pt-4', isSolid ? 'border-t border-gray-200' : 'border-t border-white/20')}>
+              <div className={clsx('mb-2 text-xs font-bold uppercase', isSolid ? 'text-gray-500' : 'text-white/70')}>Validated Eviction Processes</div>
               {primaryLinks.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
                   className={clsx(
-                    "block py-2 text-sm font-semibold",
-                    pathname === item.href ? "text-primary" : "text-charcoal"
+                    'block py-2 text-sm font-semibold relative',
+                    pathname === item.href
+                      ? clsx(isSolid ? 'text-[#111827]' : 'text-white', 'after:absolute after:left-0 after:bottom-[-4px] after:h-[2px] after:w-16 after:bg-[#73AEED]')
+                      : isSolid ? 'text-charcoal' : 'text-white'
                   )}
                   onClick={() => setOpen(false)}
                 >
@@ -169,13 +319,17 @@ export function NavBar({ user }: NavBarProps) {
               ))}
             </div>
 
-            {user && (
-              <div className="flex items-center gap-3 pt-2">
-                <Link href="/dashboard" className="text-sm font-semibold text-primary">
-                  Go to dashboard
+            <div className={clsx('pt-4', isSolid ? 'border-t border-gray-200' : 'border-t border-white/20')}>
+              <div className={clsx('mb-2 text-xs font-bold uppercase', isSolid ? 'text-gray-500' : 'text-white/70')}>Free Tools</div>
+              <Link href="/tools" className={clsx('block py-2 text-sm font-semibold', isSolid ? 'text-charcoal hover:text-[#692ED4]' : 'text-white hover:text-white/80')} onClick={() => setOpen(false)}>
+                Free Tools Hub
+              </Link>
+              {freeToolsLinks.map((item) => (
+                <Link key={item.href} href={item.href} className={clsx('block py-2 text-sm font-semibold', isSolid ? 'text-charcoal hover:text-[#692ED4]' : 'text-white hover:text-white/80')} onClick={() => setOpen(false)}>
+                  {item.label}
                 </Link>
-              </div>
-            )}
+              ))}
+            </div>
           </div>
         </div>
       )}

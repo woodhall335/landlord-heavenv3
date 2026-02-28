@@ -10,6 +10,28 @@
  * 2. Run tests: npm run test:integration
  */
 
+import { vi } from 'vitest';
+import { POST as generateHandler } from '../route';
+
+const testCaseStore = new Map<string, Record<string, any>>();
+
+vi.mock('../getCaseFacts', () => ({
+  getCaseFacts: async (caseId: string) => testCaseStore.get(caseId) ?? {},
+}));
+
+vi.mock('@/lib/testing/wizard-test-helpers', () => ({
+  createTestCase: async (facts: Record<string, any>) => {
+    const id = `test-case-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+    testCaseStore.set(id, facts);
+    return id;
+  },
+  cleanupTestCase: async (caseId: string) => {
+    testCaseStore.delete(caseId);
+  },
+  getTestBaseUrl: () => 'http://localhost:3000',
+  verifyTestEnvironment: () => {},
+}));
+
 import {
   createTestCase,
   cleanupTestCase,
@@ -17,17 +39,34 @@ import {
   verifyTestEnvironment,
 } from '@/lib/testing/wizard-test-helpers';
 
+process.env.SUPABASE_URL_TEST = process.env.SUPABASE_URL_TEST || 'http://localhost:54321';
+process.env.SUPABASE_SERVICE_ROLE_KEY_TEST =
+  process.env.SUPABASE_SERVICE_ROLE_KEY_TEST || 'test-service-role-key';
+process.env.TEST_BASE_URL = process.env.TEST_BASE_URL || 'http://localhost:3000';
+
 describe('API Enforcement - Real Pattern (Integration)', () => {
   let testCaseId: string;
+  let originalFetch: typeof global.fetch;
 
   beforeAll(() => {
     verifyTestEnvironment();
+
+    originalFetch = global.fetch;
+    global.fetch = async (input: RequestInfo | URL, init?: RequestInit) => {
+      const request = new Request(input as RequestInfo, init);
+      return (await generateHandler(request)) as Response;
+    };
   });
 
   afterEach(async () => {
     if (testCaseId) {
       await cleanupTestCase(testCaseId);
     }
+  });
+
+  afterAll(() => {
+    testCaseStore.clear();
+    global.fetch = originalFetch;
   });
 
   // ========================================

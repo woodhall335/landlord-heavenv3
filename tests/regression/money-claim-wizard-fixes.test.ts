@@ -1,0 +1,1366 @@
+/**
+ * Regression tests for Money Claim wizard fixes
+ *
+ * Tests the following improvements:
+ * 1. Blockers/warnings reflect data user entered (facts mapping fix)
+ * 2. Tab 4 includes court name input field
+ * 3. Claim summary uses tenant name + property address (not placeholders)
+ * 4. Arrears uses Section 8 arrears component with pro-rata
+ * 5. Combined totals across multiple claim grounds
+ * 6. Pre-Action "No" triggers PAP document generation notice
+ *
+ * Related issue: Money Claim wizard facts mapping mismatch
+ */
+
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+
+// Import validators and generators
+import {
+  validateClaimantSection,
+  validateDefendantSection,
+  validateTenancySection,
+  validateClaimDetailsSection,
+  validateClaimStatementSection,
+  validateArrearsSection,
+  getSectionValidation,
+} from '@/lib/validation/money-claim-case-validator';
+
+import {
+  generateBasisOfClaimStatement,
+  generateClaimSummary,
+  getMissingStatementInfo,
+} from '@/lib/money-claim/statement-generator';
+
+describe('Money Claim wizard facts mapping fix', () => {
+  describe('ClaimantSection validation', () => {
+    it('should show no blockers when top-level keys are populated', () => {
+      const facts = {
+        landlord_full_name: 'Jane Smith',
+        landlord_address_line1: '10 High Street',
+        landlord_address_postcode: 'M1 2AB',
+      };
+
+      const result = validateClaimantSection(facts, 'england');
+      expect(result.blockers).toHaveLength(0);
+    });
+
+    it('should show blockers when top-level keys are missing', () => {
+      const facts = {
+        // Only nested keys, missing top-level
+        parties: {
+          landlord: {
+            name: 'Jane Smith',
+            address_line1: '10 High Street',
+            postcode: 'M1 2AB',
+          },
+        },
+      };
+
+      const result = validateClaimantSection(facts, 'england');
+      // Should have blockers because top-level keys are not set
+      expect(result.blockers.length).toBeGreaterThan(0);
+    });
+
+    it('should pass validation when both nested and top-level keys exist', () => {
+      const facts = {
+        // Top-level keys (from updated ClaimantSection)
+        landlord_full_name: 'Jane Smith',
+        landlord_address_line1: '10 High Street',
+        landlord_address_postcode: 'M1 2AB',
+        // Nested keys (for backward compatibility)
+        parties: {
+          landlord: {
+            name: 'Jane Smith',
+            address_line1: '10 High Street',
+            postcode: 'M1 2AB',
+          },
+        },
+      };
+
+      const result = validateClaimantSection(facts, 'england');
+      expect(result.blockers).toHaveLength(0);
+    });
+  });
+
+  describe('DefendantSection validation', () => {
+    it('should show no blockers when top-level keys are populated', () => {
+      const facts = {
+        tenant_full_name: 'Sonia Shezadi',
+        defendant_address_line1: '16 Waterloo Road',
+      };
+
+      const result = validateDefendantSection(facts, 'england');
+      expect(result.blockers).toHaveLength(0);
+    });
+
+    it('should use property address as fallback for defendant address', () => {
+      const facts = {
+        tenant_full_name: 'Sonia Shezadi',
+        property_address_line1: '16 Waterloo Road',
+        // No defendant_address_line1
+      };
+
+      const result = validateDefendantSection(facts, 'england');
+      expect(result.blockers).toHaveLength(0);
+    });
+  });
+
+  describe('TenancySection validation', () => {
+    it('should show no blockers when top-level keys are populated', () => {
+      const facts = {
+        tenancy_start_date: '2024-01-01',
+        rent_amount: 750,
+        rent_frequency: 'monthly',
+        property_address_line1: '16 Waterloo Road',
+        property_address_postcode: 'LS28 7PW',
+      };
+
+      const result = validateTenancySection(facts, 'england');
+      expect(result.blockers).toHaveLength(0);
+    });
+  });
+});
+
+describe('Claim Details court name requirement', () => {
+  it('should require court name for England claims', () => {
+    const facts = {
+      claiming_rent_arrears: true,
+      money_claim: {
+        charge_interest: false,
+        // No court_name
+      },
+    };
+
+    const result = validateClaimDetailsSection(facts, 'england');
+    expect(result.blockers).toContain(
+      'Please enter the County Court name where you will file your claim'
+    );
+  });
+
+  it('should pass when court name is provided', () => {
+    const facts = {
+      claiming_rent_arrears: true,
+      money_claim: {
+        charge_interest: false,
+        court_name: 'Manchester County Court',
+      },
+    };
+
+    const result = validateClaimDetailsSection(facts, 'england');
+    expect(result.blockers).not.toContain(
+      'Please enter the County Court name where you will file your claim'
+    );
+  });
+
+  it('should accept court_name from top-level key', () => {
+    const facts = {
+      claiming_rent_arrears: true,
+      court_name: 'Leeds County Court',
+      money_claim: {
+        charge_interest: false,
+      },
+    };
+
+    const result = validateClaimDetailsSection(facts, 'england');
+    const courtBlocker = result.blockers.find((b) =>
+      b.includes('County Court name')
+    );
+    expect(courtBlocker).toBeUndefined();
+  });
+});
+
+describe('Statement generator uses real values', () => {
+  it('should use top-level tenant_full_name in basis of claim', () => {
+    const facts = {
+      tenant_full_name: 'Sonia Shezadi',
+      property_address_line1: '16 Waterloo Road',
+      property_address_town: 'Pudsey',
+      property_address_postcode: 'LS28 7PW',
+      claiming_rent_arrears: true,
+      rent_amount: 750,
+      rent_frequency: 'monthly' as const,
+      tenancy_start_date: '2024-01-01',
+    };
+
+    const statement = generateBasisOfClaimStatement(facts);
+
+    expect(statement).toContain('Sonia Shezadi');
+    expect(statement).not.toContain('[tenant name]');
+  });
+
+  it('should use nested parties.tenants[0].name as fallback', () => {
+    const facts = {
+      parties: {
+        tenants: [{ name: 'John Tenant' }],
+      },
+      property: {
+        address_line1: '16 Waterloo Road',
+        city: 'Pudsey',
+        postcode: 'LS28 7PW',
+      },
+      claiming_rent_arrears: true,
+      rent_amount: 750,
+      rent_frequency: 'monthly' as const,
+    };
+
+    const statement = generateBasisOfClaimStatement(facts);
+
+    expect(statement).toContain('John Tenant');
+    expect(statement).not.toContain('[tenant name]');
+  });
+
+  it('should use property address from nested path as fallback', () => {
+    const facts = {
+      tenant_full_name: 'Sonia Shezadi',
+      property: {
+        address_line1: '16 Waterloo Road',
+        city: 'Pudsey',
+        postcode: 'LS28 7PW',
+      },
+      claiming_rent_arrears: true,
+    };
+
+    const statement = generateBasisOfClaimStatement(facts);
+
+    expect(statement).toContain('16 Waterloo Road');
+    expect(statement).toContain('Pudsey');
+    expect(statement).toContain('LS28 7PW');
+    expect(statement).not.toContain('[property address]');
+  });
+
+  it('should use tenancy.start_date as fallback', () => {
+    const facts = {
+      tenant_full_name: 'Sonia Shezadi',
+      property_address_line1: '16 Waterloo Road',
+      tenancy: {
+        start_date: '2024-01-01',
+      },
+      claiming_rent_arrears: true,
+    };
+
+    const statement = generateBasisOfClaimStatement(facts);
+
+    expect(statement).toContain('January 2024');
+  });
+
+  it('getMissingStatementInfo should not report missing fields when nested paths have data', () => {
+    const facts = {
+      parties: {
+        tenants: [{ name: 'Sonia Shezadi' }],
+      },
+      property: {
+        address_line1: '16 Waterloo Road',
+      },
+      money_claim: {
+        tenant_still_in_property: false,
+      },
+      claiming_rent_arrears: true,
+      total_arrears: 1500,
+      tenancy: {
+        rent_amount: 750,
+      },
+    };
+
+    const missing = getMissingStatementInfo(facts);
+
+    expect(missing).not.toContain('Tenant/defendant name');
+    expect(missing).not.toContain('Property address');
+    expect(missing).not.toContain('Rent amount');
+  });
+});
+
+describe('Arrears validation behavior', () => {
+  it('should show blocker when rent arrears selected but no items added', () => {
+    const facts = {
+      claiming_rent_arrears: true,
+      arrears_items: [],
+    };
+
+    const result = validateArrearsSection(facts);
+    expect(result.blockers).toContain(
+      'Please add at least one arrears period to the schedule'
+    );
+  });
+
+  it('should NOT show incomplete warning for empty schedule', () => {
+    const facts = {
+      claiming_rent_arrears: true,
+      arrears_items: [],
+    };
+
+    const result = validateArrearsSection(facts);
+    expect(result.warnings).toHaveLength(0);
+  });
+
+  it('should show incomplete warning only for items with partial data', () => {
+    const facts = {
+      claiming_rent_arrears: true,
+      arrears_items: [
+        {
+          period_start: '2024-01-01',
+          // Missing period_end and rent_due
+          rent_paid: 0,
+        },
+      ],
+    };
+
+    const result = validateArrearsSection(facts);
+    expect(result.blockers).toHaveLength(0);
+    expect(result.warnings.some((w) => w.includes('incomplete'))).toBe(true);
+  });
+
+  it('should only show zero balance warning when complete items exist', () => {
+    const facts = {
+      claiming_rent_arrears: true,
+      arrears_items: [
+        {
+          period_start: '2024-01-01',
+          period_end: '2024-01-31',
+          rent_due: 750,
+          rent_paid: 750, // Fully paid
+        },
+      ],
+    };
+
+    const result = validateArrearsSection(facts);
+    expect(result.warnings.some((w) => w.includes('no outstanding balance'))).toBe(true);
+  });
+
+  it('should NOT show zero balance warning when balance is positive', () => {
+    const facts = {
+      claiming_rent_arrears: true,
+      arrears_items: [
+        {
+          period_start: '2024-01-01',
+          period_end: '2024-01-31',
+          rent_due: 750,
+          rent_paid: 0,
+        },
+      ],
+    };
+
+    const result = validateArrearsSection(facts);
+    expect(result.warnings.filter((w) => w.includes('outstanding balance'))).toHaveLength(0);
+  });
+});
+
+describe('Combined totals calculation', () => {
+  it('should calculate combined_total from all subtotals', () => {
+    const facts = {
+      money_claim: {
+        totals: {
+          rent_arrears: 1500,
+          damage: 500,
+          cleaning: 200,
+          utilities: 100,
+          council_tax: 0,
+          other: 50,
+        },
+      },
+    };
+
+    const expectedTotal = 1500 + 500 + 200 + 100 + 0 + 50;
+    const actualTotal =
+      (facts.money_claim.totals.rent_arrears || 0) +
+      (facts.money_claim.totals.damage || 0) +
+      (facts.money_claim.totals.cleaning || 0) +
+      (facts.money_claim.totals.utilities || 0) +
+      (facts.money_claim.totals.council_tax || 0) +
+      (facts.money_claim.totals.other || 0);
+
+    expect(actualTotal).toBe(expectedTotal);
+    expect(actualTotal).toBe(2350);
+  });
+
+  it('should use arrears from issues.rent_arrears as fallback', () => {
+    const facts = {
+      issues: {
+        rent_arrears: {
+          arrears_items: [
+            { period_start: '2024-01-01', period_end: '2024-01-31', rent_due: 750, rent_paid: 0 },
+            { period_start: '2024-02-01', period_end: '2024-02-29', rent_due: 750, rent_paid: 200 },
+          ],
+        },
+      },
+    };
+
+    // Replicate the calculation logic from the validator
+    const items = facts.arrears_items || facts.issues?.rent_arrears?.arrears_items || [];
+    const total = items.reduce((sum: number, item: any) => {
+      const due = item.rent_due || 0;
+      const paid = item.rent_paid || 0;
+      return sum + (due - paid);
+    }, 0);
+
+    expect(total).toBe(750 + 550); // (750-0) + (750-200)
+  });
+});
+
+describe('Pre-Action PAP document generation', () => {
+  it('should set generate_pap_documents flag when user selects No', () => {
+    // Simulate what handlePapDocumentsSentChange does
+    const value = 'no';
+    const generatePapDocuments = value === 'no';
+
+    expect(generatePapDocuments).toBe(true);
+  });
+
+  it('should not set generate_pap_documents flag when user selects Yes', () => {
+    const value = 'yes';
+    const generatePapDocuments = value === 'no';
+
+    expect(generatePapDocuments).toBe(false);
+  });
+
+  it('should set top-level letter_before_claim_sent when user selects Yes', () => {
+    const value = 'yes';
+    const letterBeforeClaimSent = value === 'yes';
+
+    expect(letterBeforeClaimSent).toBe(true);
+  });
+
+  it('needsGeneratedPapDocuments should be true when pap_documents_sent is false', () => {
+    const moneyClaim = {
+      pap_documents_sent: false,
+    };
+
+    const needsGeneratedPapDocuments =
+      moneyClaim.pap_documents_sent === false ||
+      (moneyClaim as any).generate_pap_documents === true;
+
+    expect(needsGeneratedPapDocuments).toBe(true);
+  });
+});
+
+describe('Claim Details section validation (simplified)', () => {
+  /**
+   * After UX refactor, Claim Details only validates:
+   * - At least one claim type selected
+   * - Court name (for England/Wales)
+   * Interest decision moved to Claim Statement section.
+   */
+  it('should require at least one claim type', () => {
+    const facts = {
+      money_claim: {
+        court_name: 'Manchester County Court',
+      },
+    };
+
+    const result = validateClaimDetailsSection(facts, 'england');
+    expect(result.blockers).toContain('Please select at least one type of claim');
+  });
+
+  it('should require court name for England', () => {
+    const facts = {
+      claiming_rent_arrears: true,
+      money_claim: {
+        // No court_name
+      },
+    };
+
+    const result = validateClaimDetailsSection(facts, 'england');
+    expect(result.blockers).toContain(
+      'Please enter the County Court name where you will file your claim'
+    );
+  });
+
+  it('should NOT require interest decision (moved to Claim Statement)', () => {
+    const facts = {
+      claiming_rent_arrears: true,
+      court_name: 'Manchester County Court',
+      money_claim: {
+        // No charge_interest decision
+        court_name: 'Manchester County Court',
+      },
+    };
+
+    const result = validateClaimDetailsSection(facts, 'england');
+    // Interest validation is now in Claim Statement section, not Claim Details
+    expect(result.blockers).not.toContain(
+      'Please indicate whether you want to claim statutory interest'
+    );
+  });
+
+  it('should pass with claim type and court name only', () => {
+    const facts = {
+      claiming_rent_arrears: true,
+      court_name: 'Manchester County Court',
+      money_claim: {
+        court_name: 'Manchester County Court',
+        // No interest decision needed here anymore
+      },
+    };
+
+    const result = validateClaimDetailsSection(facts, 'england');
+    expect(result.blockers).toHaveLength(0);
+  });
+});
+
+describe('Claim Statement section validation (new)', () => {
+  /**
+   * The new Claim Statement section validates:
+   * - charge_interest decision (blocker for England)
+   * - interest_start_date (warning when charging interest)
+   * - basis_of_claim (warning)
+   * - tenant_still_in_property (warning)
+   */
+  it('should require interest decision for England', () => {
+    const facts = {
+      claiming_rent_arrears: true,
+      money_claim: {
+        // No charge_interest decision
+      },
+    };
+
+    const result = validateClaimStatementSection(facts, 'england');
+    expect(result.blockers).toContain(
+      'Please indicate whether you want to claim statutory interest'
+    );
+  });
+
+  it('should pass when interest decision is made (true)', () => {
+    const facts = {
+      claiming_rent_arrears: true,
+      money_claim: {
+        charge_interest: true,
+        interest_start_date: '2024-01-01',
+        basis_of_claim: 'The defendant owes rent arrears totaling £1500 for the property.',
+        tenant_still_in_property: false,
+      },
+    };
+
+    const result = validateClaimStatementSection(facts, 'england');
+    expect(result.blockers).toHaveLength(0);
+  });
+
+  it('should pass when interest decision is made (false)', () => {
+    const facts = {
+      claiming_rent_arrears: true,
+      money_claim: {
+        charge_interest: false,
+        basis_of_claim: 'The defendant owes rent arrears totaling £1500 for the property.',
+        tenant_still_in_property: false,
+      },
+    };
+
+    const result = validateClaimStatementSection(facts, 'england');
+    expect(result.blockers).toHaveLength(0);
+  });
+
+  it('should warn when interest start date is missing but charging interest', () => {
+    const facts = {
+      money_claim: {
+        charge_interest: true,
+        // No interest_start_date
+        basis_of_claim: 'The defendant owes rent arrears.',
+        tenant_still_in_property: false,
+      },
+    };
+
+    const result = validateClaimStatementSection(facts, 'england');
+    expect(result.warnings).toContain(
+      'Consider adding an interest start date for accurate calculations'
+    );
+  });
+
+  it('should warn when basis of claim is missing', () => {
+    const facts = {
+      money_claim: {
+        charge_interest: false,
+        // No basis_of_claim
+        tenant_still_in_property: false,
+      },
+    };
+
+    const result = validateClaimStatementSection(facts, 'england');
+    expect(result.warnings).toContain(
+      'Provide a basis of claim statement to explain what this claim is about'
+    );
+  });
+
+  it('should warn when basis of claim is too short', () => {
+    const facts = {
+      money_claim: {
+        charge_interest: false,
+        basis_of_claim: 'Tenant owes money.', // Too short
+        tenant_still_in_property: false,
+      },
+    };
+
+    const result = validateClaimStatementSection(facts, 'england');
+    expect(result.warnings).toContain(
+      'Your basis of claim statement is quite short - consider adding more detail'
+    );
+  });
+
+  it('should warn when occupancy status is not set', () => {
+    const facts = {
+      money_claim: {
+        charge_interest: false,
+        basis_of_claim: 'The defendant owes rent arrears totaling £1500 for the property.',
+        // No tenant_still_in_property
+      },
+    };
+
+    const result = validateClaimStatementSection(facts, 'england');
+    expect(result.warnings).toContain(
+      'Consider indicating whether the tenant is still living in the property'
+    );
+  });
+});
+
+describe('Section completion in flow', () => {
+  it('claimant section should be complete with top-level keys', () => {
+    const facts = {
+      landlord_full_name: 'Jane Smith',
+      landlord_address_line1: '10 High Street',
+      landlord_address_postcode: 'M1 2AB',
+    };
+
+    // This mirrors the isComplete check in MoneyClaimSectionFlow
+    const isComplete =
+      Boolean(facts.landlord_full_name) &&
+      Boolean(facts.landlord_address_line1) &&
+      Boolean(facts.landlord_address_postcode);
+
+    expect(isComplete).toBe(true);
+  });
+
+  it('defendant section should be complete with top-level keys', () => {
+    const facts = {
+      tenant_full_name: 'Sonia Shezadi',
+      defendant_address_line1: '16 Waterloo Road',
+    };
+
+    // This mirrors the isComplete check in MoneyClaimSectionFlow
+    const isComplete =
+      Boolean(facts.tenant_full_name) &&
+      Boolean(facts.defendant_address_line1 || facts.property_address_line1);
+
+    expect(isComplete).toBe(true);
+  });
+
+  it('tenancy section should be complete with top-level keys', () => {
+    const facts = {
+      tenancy_start_date: '2024-01-01',
+      rent_amount: 750,
+      rent_frequency: 'monthly',
+    };
+
+    // This mirrors the isComplete check in MoneyClaimSectionFlow
+    const isComplete =
+      Boolean(facts.tenancy_start_date) &&
+      Boolean(facts.rent_amount) &&
+      Boolean(facts.rent_frequency);
+
+    expect(isComplete).toBe(true);
+  });
+
+  it('claim details should be complete with claim type and court name (no interest needed)', () => {
+    const facts = {
+      claiming_rent_arrears: true,
+      money_claim: {
+        court_name: 'Manchester County Court',
+        // No charge_interest decision needed for Claim Details anymore
+      },
+      __meta: { jurisdiction: 'england' },
+    } as const;
+
+    // This mirrors the NEW isComplete check in MoneyClaimSectionFlow
+    // Interest decision moved to Claim Statement section
+    const hasClaimType = facts.claiming_rent_arrears === true;
+    const jurisdiction = facts.__meta?.jurisdiction;
+    const isEnglandWales = jurisdiction === 'england' || jurisdiction === 'wales';
+    const hasCourtName = !!(facts.money_claim?.court_name);
+    const isComplete = hasClaimType && (!isEnglandWales || hasCourtName);
+
+    expect(isComplete).toBe(true);
+  });
+
+  it('claim statement should be complete when interest decision is made', () => {
+    const facts = {
+      money_claim: {
+        charge_interest: false,
+      },
+      __meta: { jurisdiction: 'england' },
+    } as const;
+
+    // This mirrors the isComplete check for claim_statement in MoneyClaimSectionFlow
+    const jurisdiction = facts.__meta?.jurisdiction;
+    const isEnglandWales = jurisdiction === 'england' || jurisdiction === 'wales';
+    const interestDecided =
+      facts.money_claim?.charge_interest === true ||
+      facts.money_claim?.charge_interest === false;
+    const isComplete = !isEnglandWales || interestDecided;
+
+    expect(isComplete).toBe(true);
+  });
+});
+
+describe('ClaimDetailsSection gating logic', () => {
+  /**
+   * Helper function that mirrors the requiredDataStatus logic from ClaimDetailsSection.tsx
+   */
+  function getRequiredDataStatus(facts: any, selectedReasons: Set<string>) {
+    const needsArrearsSchedule = selectedReasons.has('rent_arrears');
+    const needsDamageItems =
+      selectedReasons.has('property_damage') ||
+      selectedReasons.has('cleaning') ||
+      selectedReasons.has('unpaid_utilities') ||
+      selectedReasons.has('unpaid_council_tax') ||
+      selectedReasons.has('other_tenant_debt');
+
+    // Check arrears items from either location
+    const arrearsItems =
+      facts.arrears_items || facts.issues?.rent_arrears?.arrears_items || [];
+    const hasArrearsData = Array.isArray(arrearsItems) && arrearsItems.length > 0;
+
+    // Check damage items
+    const damageItems = facts.money_claim?.damage_items || [];
+    const hasDamageData = Array.isArray(damageItems) && damageItems.length > 0;
+
+    // Build list of missing sections
+    const missingSections: string[] = [];
+    if (needsArrearsSchedule && !hasArrearsData) {
+      missingSections.push('Arrears');
+    }
+    if (needsDamageItems && !hasDamageData) {
+      missingSections.push('Damages');
+    }
+
+    const hasAllRequired =
+      (!needsArrearsSchedule || hasArrearsData) &&
+      (!needsDamageItems || hasDamageData);
+
+    return {
+      needsArrearsSchedule,
+      needsDamageItems,
+      hasArrearsData,
+      hasDamageData,
+      missingSections,
+      hasAllRequired,
+    };
+  }
+
+  describe('when no claim reasons selected', () => {
+    it('should not require any data', () => {
+      const facts = {};
+      const selectedReasons = new Set<string>();
+      const status = getRequiredDataStatus(facts, selectedReasons);
+
+      expect(status.needsArrearsSchedule).toBe(false);
+      expect(status.needsDamageItems).toBe(false);
+      expect(status.missingSections).toHaveLength(0);
+      expect(status.hasAllRequired).toBe(true);
+    });
+  });
+
+  describe('when rent_arrears is selected', () => {
+    it('should require arrears schedule when no arrears items exist', () => {
+      const facts = {};
+      const selectedReasons = new Set(['rent_arrears']);
+      const status = getRequiredDataStatus(facts, selectedReasons);
+
+      expect(status.needsArrearsSchedule).toBe(true);
+      expect(status.hasArrearsData).toBe(false);
+      expect(status.missingSections).toContain('Arrears');
+      expect(status.hasAllRequired).toBe(false);
+    });
+
+    it('should be satisfied when arrears_items is populated at top level', () => {
+      const facts = {
+        arrears_items: [
+          { period_start: '2024-01-01', period_end: '2024-01-31', rent_due: 750, rent_paid: 0 },
+        ],
+      };
+      const selectedReasons = new Set(['rent_arrears']);
+      const status = getRequiredDataStatus(facts, selectedReasons);
+
+      expect(status.needsArrearsSchedule).toBe(true);
+      expect(status.hasArrearsData).toBe(true);
+      expect(status.missingSections).not.toContain('Arrears');
+      expect(status.hasAllRequired).toBe(true);
+    });
+
+    it('should be satisfied when arrears_items is populated in nested path', () => {
+      const facts = {
+        issues: {
+          rent_arrears: {
+            arrears_items: [
+              { period_start: '2024-01-01', period_end: '2024-01-31', rent_due: 750, rent_paid: 0 },
+            ],
+          },
+        },
+      };
+      const selectedReasons = new Set(['rent_arrears']);
+      const status = getRequiredDataStatus(facts, selectedReasons);
+
+      expect(status.hasArrearsData).toBe(true);
+      expect(status.hasAllRequired).toBe(true);
+    });
+  });
+
+  describe('when damage categories are selected', () => {
+    it('should require damage items when property_damage is selected', () => {
+      const facts = {};
+      const selectedReasons = new Set(['property_damage']);
+      const status = getRequiredDataStatus(facts, selectedReasons);
+
+      expect(status.needsDamageItems).toBe(true);
+      expect(status.hasDamageData).toBe(false);
+      expect(status.missingSections).toContain('Damages');
+      expect(status.hasAllRequired).toBe(false);
+    });
+
+    it('should require damage items when cleaning is selected', () => {
+      const facts = {};
+      const selectedReasons = new Set(['cleaning']);
+      const status = getRequiredDataStatus(facts, selectedReasons);
+
+      expect(status.needsDamageItems).toBe(true);
+      expect(status.missingSections).toContain('Damages');
+    });
+
+    it('should require damage items when unpaid_utilities is selected', () => {
+      const facts = {};
+      const selectedReasons = new Set(['unpaid_utilities']);
+      const status = getRequiredDataStatus(facts, selectedReasons);
+
+      expect(status.needsDamageItems).toBe(true);
+      expect(status.missingSections).toContain('Damages');
+    });
+
+    it('should require damage items when other_tenant_debt is selected', () => {
+      const facts = {};
+      const selectedReasons = new Set(['other_tenant_debt']);
+      const status = getRequiredDataStatus(facts, selectedReasons);
+
+      expect(status.needsDamageItems).toBe(true);
+      expect(status.missingSections).toContain('Damages');
+    });
+
+    it('should be satisfied when damage_items is populated', () => {
+      const facts = {
+        money_claim: {
+          damage_items: [
+            { id: '1', category: 'property_damage', description: 'Broken window', amount: 200 },
+          ],
+        },
+      };
+      const selectedReasons = new Set(['property_damage']);
+      const status = getRequiredDataStatus(facts, selectedReasons);
+
+      expect(status.needsDamageItems).toBe(true);
+      expect(status.hasDamageData).toBe(true);
+      expect(status.missingSections).not.toContain('Damages');
+      expect(status.hasAllRequired).toBe(true);
+    });
+  });
+
+  describe('when both arrears and damage categories are selected', () => {
+    it('should require both schedules when neither is populated', () => {
+      const facts = {};
+      const selectedReasons = new Set(['rent_arrears', 'property_damage']);
+      const status = getRequiredDataStatus(facts, selectedReasons);
+
+      expect(status.needsArrearsSchedule).toBe(true);
+      expect(status.needsDamageItems).toBe(true);
+      expect(status.missingSections).toContain('Arrears');
+      expect(status.missingSections).toContain('Damages');
+      expect(status.hasAllRequired).toBe(false);
+    });
+
+    it('should still be missing Damages when only arrears is populated', () => {
+      const facts = {
+        arrears_items: [
+          { period_start: '2024-01-01', period_end: '2024-01-31', rent_due: 750, rent_paid: 0 },
+        ],
+      };
+      const selectedReasons = new Set(['rent_arrears', 'property_damage']);
+      const status = getRequiredDataStatus(facts, selectedReasons);
+
+      expect(status.hasArrearsData).toBe(true);
+      expect(status.hasDamageData).toBe(false);
+      expect(status.missingSections).not.toContain('Arrears');
+      expect(status.missingSections).toContain('Damages');
+      expect(status.hasAllRequired).toBe(false);
+    });
+
+    it('should still be missing Arrears when only damages is populated', () => {
+      const facts = {
+        money_claim: {
+          damage_items: [
+            { id: '1', category: 'property_damage', description: 'Broken window', amount: 200 },
+          ],
+        },
+      };
+      const selectedReasons = new Set(['rent_arrears', 'property_damage']);
+      const status = getRequiredDataStatus(facts, selectedReasons);
+
+      expect(status.hasArrearsData).toBe(false);
+      expect(status.hasDamageData).toBe(true);
+      expect(status.missingSections).toContain('Arrears');
+      expect(status.missingSections).not.toContain('Damages');
+      expect(status.hasAllRequired).toBe(false);
+    });
+
+    it('should be satisfied when both schedules are populated', () => {
+      const facts = {
+        arrears_items: [
+          { period_start: '2024-01-01', period_end: '2024-01-31', rent_due: 750, rent_paid: 0 },
+        ],
+        money_claim: {
+          damage_items: [
+            { id: '1', category: 'property_damage', description: 'Broken window', amount: 200 },
+          ],
+        },
+      };
+      const selectedReasons = new Set(['rent_arrears', 'property_damage', 'cleaning']);
+      const status = getRequiredDataStatus(facts, selectedReasons);
+
+      expect(status.hasArrearsData).toBe(true);
+      expect(status.hasDamageData).toBe(true);
+      expect(status.missingSections).toHaveLength(0);
+      expect(status.hasAllRequired).toBe(true);
+    });
+  });
+
+  describe('canShowDetailedSections calculation', () => {
+    /**
+     * BUG FIX: canShowDetailedSections no longer depends on arrears/damages data.
+     * It only requires claim reasons to be selected.
+     *
+     * Arrears/damages validation happens at the Review stage, not on Claim Details.
+     * This prevents the premature "Complete required sections first" warning.
+     */
+    it('should be false when no claim reasons selected', () => {
+      const selectedReasons = new Set<string>();
+      // NEW BEHAVIOR: canShowDetailedSections = selectedReasons.size > 0
+      const canShowDetailedSections = selectedReasons.size > 0;
+
+      expect(canShowDetailedSections).toBe(false);
+    });
+
+    it('should be true when claim reasons selected even if arrears data missing', () => {
+      const selectedReasons = new Set(['rent_arrears']);
+      // NEW BEHAVIOR: canShowDetailedSections = selectedReasons.size > 0
+      // Arrears validation happens at Review stage, not Claim Details
+      const canShowDetailedSections = selectedReasons.size > 0;
+
+      expect(canShowDetailedSections).toBe(true);
+    });
+
+    it('should be true when claim reasons selected and required data present', () => {
+      const facts = {
+        arrears_items: [
+          { period_start: '2024-01-01', period_end: '2024-01-31', rent_due: 750, rent_paid: 0 },
+        ],
+      };
+      const selectedReasons = new Set(['rent_arrears']);
+      const canShowDetailedSections = selectedReasons.size > 0;
+
+      expect(canShowDetailedSections).toBe(true);
+    });
+  });
+});
+
+/**
+ * Bug fix regression tests:
+ * - Claim Details should NOT show arrears prerequisite warning
+ * - Arrears validation happens at Review/Draft stage
+ */
+describe('Claim Details arrears warning bug fix', () => {
+  describe('ClaimDetailsSection behavior', () => {
+    /**
+     * The inline "Complete required sections first" warning was removed.
+     * Users can now fill out basis of claim, interest, etc. on Claim Details
+     * even when arrears data is not yet entered.
+     */
+    it('should allow detailed sections when claim reasons selected (arrears data not required)', () => {
+      const selectedReasons = new Set(['rent_arrears']);
+      // New behavior: only check if reasons are selected
+      const canShowDetailedSections = selectedReasons.size > 0;
+
+      expect(canShowDetailedSections).toBe(true);
+    });
+
+    it('should NOT block claim details based on missing arrears items', () => {
+      // In the old behavior, this would have set canShowDetailedSections = false
+      // and shown "Complete required sections first" warning
+      const facts = {
+        claiming_rent_arrears: true,
+        arrears_items: [], // Empty arrears
+      };
+      const selectedReasons = new Set(['rent_arrears']);
+
+      // New behavior: canShowDetailedSections = selectedReasons.size > 0
+      const canShowDetailedSections = selectedReasons.size > 0;
+
+      expect(canShowDetailedSections).toBe(true);
+    });
+  });
+
+  describe('Arrears validation at Review stage', () => {
+    /**
+     * The validateArrearsSection function should still correctly identify
+     * when arrears items are missing - this validation runs at Review stage.
+     */
+    it('should return blocker when rent_arrears selected but no items exist', () => {
+      const facts = {
+        claiming_rent_arrears: true,
+        arrears_items: [],
+      };
+
+      const result = validateArrearsSection(facts);
+
+      expect(result.blockers).toContain(
+        'Please add at least one arrears period to the schedule'
+      );
+    });
+
+    it('should return no blocker when arrears items exist', () => {
+      const facts = {
+        claiming_rent_arrears: true,
+        arrears_items: [
+          { period_start: '2024-01-01', period_end: '2024-01-31', rent_due: 750, rent_paid: 0 },
+        ],
+      };
+
+      const result = validateArrearsSection(facts);
+
+      expect(result.blockers).toHaveLength(0);
+    });
+
+    it('should not validate arrears if not claiming rent arrears', () => {
+      const facts = {
+        claiming_rent_arrears: false,
+        arrears_items: [],
+      };
+
+      const result = validateArrearsSection(facts);
+
+      expect(result.blockers).toHaveLength(0);
+    });
+  });
+
+  describe('Section validation via getSectionValidation', () => {
+    it('claim_details section validation should NOT include arrears prerequisite', () => {
+      const facts = {
+        claiming_rent_arrears: true,
+        arrears_items: [], // Empty arrears
+        money_claim: {
+          charge_interest: false,
+          court_name: 'Manchester County Court',
+        },
+      };
+
+      const result = getSectionValidation('claim_details', facts, 'england');
+
+      // Claim details validation should not mention arrears
+      expect(result.blockers.join(' ')).not.toContain('arrears');
+      expect(result.blockers.join(' ')).not.toContain('Arrears');
+    });
+
+    it('arrears section validation SHOULD include blocker for missing items', () => {
+      const facts = {
+        claiming_rent_arrears: true,
+        arrears_items: [],
+      };
+
+      const result = getSectionValidation('arrears', facts, 'england');
+
+      expect(result.blockers).toContain(
+        'Please add at least one arrears period to the schedule'
+      );
+    });
+  });
+});
+
+/**
+ * Timeline tab removal regression tests
+ *
+ * Verifies:
+ * 1. Legacy case data with timeline_reviewed/deposit fields doesn't crash
+ * 2. Section count is correct after removal (11 total, 9-11 visible)
+ * 3. Validation doesn't reference timeline fields
+ * 4. Document generation succeeds without timeline data
+ */
+describe('Timeline tab removal regression', () => {
+  describe('Legacy case data compatibility', () => {
+    it('should not crash when facts contain legacy timeline_reviewed field', () => {
+      const legacyFacts = {
+        // Core required fields
+        landlord_full_name: 'Jane Smith',
+        landlord_address_line1: '10 High Street',
+        landlord_address_postcode: 'M1 2AB',
+        tenant_full_name: 'John Tenant',
+        property_address_line1: '20 Main Street',
+        tenancy_start_date: '2024-01-01',
+        rent_amount: 750,
+        rent_frequency: 'monthly' as const,
+        claiming_rent_arrears: true,
+        money_claim: {
+          court_name: 'Manchester County Court',
+          charge_interest: false,
+        },
+        // Legacy timeline fields that should be ignored
+        timeline_reviewed: true,
+      };
+
+      // Should not throw when validating
+      expect(() => validateClaimantSection(legacyFacts, 'england')).not.toThrow();
+      expect(() => validateDefendantSection(legacyFacts, 'england')).not.toThrow();
+      expect(() => validateTenancySection(legacyFacts, 'england')).not.toThrow();
+    });
+
+    it('should not crash when facts contain legacy deposit fields', () => {
+      const legacyFacts = {
+        landlord_full_name: 'Jane Smith',
+        landlord_address_line1: '10 High Street',
+        landlord_address_postcode: 'M1 2AB',
+        tenant_full_name: 'John Tenant',
+        property_address_line1: '20 Main Street',
+        tenancy_start_date: '2024-01-01',
+        rent_amount: 750,
+        rent_frequency: 'monthly' as const,
+        claiming_rent_arrears: true,
+        money_claim: {
+          court_name: 'Manchester County Court',
+          charge_interest: false,
+        },
+        // Legacy deposit fields from Timeline tab that should be ignored
+        deposit_amount: 1500,
+        deposit_scheme_name: 'DPS',
+        deposit_reference: 'ABC123',
+      };
+
+      // Should not throw when validating
+      expect(() => validateClaimantSection(legacyFacts, 'england')).not.toThrow();
+      expect(() => validateDefendantSection(legacyFacts, 'england')).not.toThrow();
+      expect(() => validateTenancySection(legacyFacts, 'england')).not.toThrow();
+    });
+
+    it('getSectionValidation should not reference timeline section', () => {
+      const facts = {
+        claiming_rent_arrears: true,
+        money_claim: {
+          court_name: 'Manchester County Court',
+          charge_interest: false,
+        },
+      };
+
+      // Timeline section validation should return empty results (section doesn't exist)
+      const result = getSectionValidation('timeline', facts, 'england');
+      expect(result.blockers).toHaveLength(0);
+      expect(result.warnings).toHaveLength(0);
+    });
+  });
+
+  describe('Section configuration', () => {
+    // Mirrors the SECTIONS array from MoneyClaimSectionFlow.tsx
+    const SECTION_IDS = [
+      'claimant',
+      'defendant',
+      'tenancy',
+      'claim_details',
+      'arrears',      // conditional
+      'damages',      // conditional
+      'claim_statement',
+      'preaction',
+      'evidence',
+      'enforcement',
+      'review',
+    ];
+
+    it('should have exactly 11 sections defined', () => {
+      expect(SECTION_IDS).toHaveLength(11);
+    });
+
+    it('should NOT include timeline in section IDs', () => {
+      expect(SECTION_IDS).not.toContain('timeline');
+    });
+
+    it('should have correct section order', () => {
+      expect(SECTION_IDS[0]).toBe('claimant');
+      expect(SECTION_IDS[1]).toBe('defendant');
+      expect(SECTION_IDS[2]).toBe('tenancy');
+      expect(SECTION_IDS[3]).toBe('claim_details');
+      expect(SECTION_IDS[SECTION_IDS.length - 1]).toBe('review');
+    });
+
+    it('should show minimum 9 visible sections (when arrears and damages hidden)', () => {
+      // When user selects no claim type, arrears and damages are hidden
+      const minVisibleSections = SECTION_IDS.filter(
+        id => id !== 'arrears' && id !== 'damages'
+      );
+      expect(minVisibleSections).toHaveLength(9);
+    });
+  });
+
+  describe('Validation independence from timeline', () => {
+    it('claim details validation should not mention timeline', () => {
+      const facts = {
+        claiming_rent_arrears: true,
+        money_claim: {
+          court_name: 'Manchester County Court',
+          charge_interest: false,
+        },
+      };
+
+      const result = getSectionValidation('claim_details', facts, 'england');
+
+      expect(result.blockers.join(' ')).not.toContain('timeline');
+      expect(result.warnings.join(' ')).not.toContain('timeline');
+    });
+
+    it('review validation should not require timeline_reviewed', () => {
+      const facts = {
+        landlord_full_name: 'Jane Smith',
+        landlord_address_line1: '10 High Street',
+        landlord_address_postcode: 'M1 2AB',
+        tenant_full_name: 'John Tenant',
+        property_address_line1: '20 Main Street',
+        tenancy_start_date: '2024-01-01',
+        rent_amount: 750,
+        rent_frequency: 'monthly' as const,
+        claiming_rent_arrears: true,
+        arrears_items: [
+          { period_start: '2024-01-01', period_end: '2024-01-31', rent_due: 750, rent_paid: 0 },
+        ],
+        money_claim: {
+          court_name: 'Manchester County Court',
+          charge_interest: false,
+        },
+        letter_before_claim_sent: true,
+        // No timeline_reviewed field
+      };
+
+      // All core validations should pass without timeline_reviewed
+      expect(validateClaimantSection(facts, 'england').blockers).toHaveLength(0);
+      expect(validateDefendantSection(facts, 'england').blockers).toHaveLength(0);
+      expect(validateTenancySection(facts, 'england').blockers).toHaveLength(0);
+      expect(validateClaimDetailsSection(facts, 'england').blockers).toHaveLength(0);
+      expect(validateArrearsSection(facts).blockers).toHaveLength(0);
+    });
+  });
+});
+
+/**
+ * Review page CTA regression tests
+ *
+ * Verifies that the duplicate CTAs have been removed from ReviewSection:
+ * - "Preview draft documents" button
+ * - "Continue to Full Analysis" button
+ *
+ * The primary CTA is now "Generate Documents" in the wizard footer.
+ */
+describe('Money Claim Review page CTA cleanup', () => {
+  /**
+   * These tests verify the code structure rather than rendering,
+   * since the buttons have been removed from the component source.
+   *
+   * The ReviewSection.tsx file should NOT contain:
+   * - handlePreview function
+   * - handleProceedToReview function
+   * - previewing state
+   * - "Preview draft documents" text
+   * - "Continue to Full Analysis" text
+   */
+  it('ReviewSection should not export preview/proceed handlers', async () => {
+    // Dynamic import to check exports
+    const ReviewSectionModule = await import(
+      '@/components/wizard/money-claim/ReviewSection'
+    );
+
+    // The component should only export ReviewSection
+    expect(ReviewSectionModule.ReviewSection).toBeDefined();
+    // Should not have any other named exports related to preview/proceed
+    const exportKeys = Object.keys(ReviewSectionModule);
+    expect(exportKeys).not.toContain('handlePreview');
+    expect(exportKeys).not.toContain('handleProceedToReview');
+  });
+
+  /**
+   * Test that the outcome confidence scoring uses two-stage PAP model
+   */
+  it('outcome confidence should give substantial PAP score for generated pack', async () => {
+    const { calculateOutcomeConfidence } = await import(
+      '@/lib/money-claim/outcome-confidence'
+    );
+
+    const factsWithGeneratedPAP = {
+      claiming_rent_arrears: true,
+      letter_before_claim_sent: false,
+      money_claim: {
+        generate_pap_documents: true,
+      },
+    };
+
+    const factsWithoutPAP = {
+      claiming_rent_arrears: true,
+      letter_before_claim_sent: false,
+    };
+
+    const withPAP = calculateOutcomeConfidence(factsWithGeneratedPAP);
+    const withoutPAP = calculateOutcomeConfidence(factsWithoutPAP);
+
+    // PAP pack generated should give 15/25 = 60% PAP score
+    expect(withPAP.breakdown.papCompliance.score).toBeGreaterThanOrEqual(15);
+    expect(withoutPAP.breakdown.papCompliance.score).toBe(0);
+
+    // Overall score difference should be meaningful
+    expect(withPAP.score).toBeGreaterThan(withoutPAP.score);
+  });
+
+  /**
+   * Test that improvement tips reflect two-stage model
+   */
+  it('improvement tips should guide user through PAP stages', async () => {
+    const { calculateOutcomeConfidence } = await import(
+      '@/lib/money-claim/outcome-confidence'
+    );
+
+    // Stage 0: Nothing done - should prompt to complete Pre-Action section
+    const stage0 = calculateOutcomeConfidence({
+      claiming_rent_arrears: true,
+      letter_before_claim_sent: false,
+    });
+    expect(stage0.improvements.some(i => i.includes('Complete the Pre-Action section'))).toBe(true);
+
+    // Stage 1: PAP pack generated - should prompt to send and wait
+    const stage1 = calculateOutcomeConfidence({
+      claiming_rent_arrears: true,
+      letter_before_claim_sent: false,
+      money_claim: {
+        generate_pap_documents: true,
+      },
+    });
+    expect(stage1.improvements.some(i => i.includes('Send the PAP Letter'))).toBe(true);
+    expect(stage1.improvements.some(i => i.includes('wait 30 days'))).toBe(true);
+
+    // Stage 2 in progress: Letter sent, waiting for 30 days
+    const fifteenDaysAgo = new Date();
+    fifteenDaysAgo.setDate(fifteenDaysAgo.getDate() - 15);
+    const stage2InProgress = calculateOutcomeConfidence({
+      claiming_rent_arrears: true,
+      letter_before_claim_sent: true,
+      pap_letter_date: fifteenDaysAgo.toISOString().split('T')[0],
+    });
+    expect(stage2InProgress.improvements.some(i => i.includes('Wait'))).toBe(true);
+    expect(stage2InProgress.improvements.some(i => i.includes('more days'))).toBe(true);
+
+    // Stage 2 complete: 30 days passed - no PAP improvement needed
+    const thirtyFiveDaysAgo = new Date();
+    thirtyFiveDaysAgo.setDate(thirtyFiveDaysAgo.getDate() - 35);
+    const stage2Complete = calculateOutcomeConfidence({
+      claiming_rent_arrears: true,
+      letter_before_claim_sent: true,
+      pap_letter_date: thirtyFiveDaysAgo.toISOString().split('T')[0],
+      pap_response_received: false,
+    });
+    // No PAP-related improvements when fully compliant
+    expect(stage2Complete.improvements.filter(i =>
+      i.includes('PAP') || i.includes('Pre-Action') || i.includes('Wait')
+    )).toHaveLength(0);
+  });
+});

@@ -1,13 +1,14 @@
 /**
  * Modal Component
  *
- * Accessible modal dialog with backdrop and animations
+ * Accessible modal dialog with backdrop and smooth animations
  */
 
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { RiCloseLine } from 'react-icons/ri';
 
 interface ModalProps {
   isOpen: boolean;
@@ -26,11 +27,25 @@ export const Modal: React.FC<ModalProps> = ({
   size = 'medium',
   showCloseButton = true,
 }) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
+
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = 'hidden';
+      const openTimer = setTimeout(() => {
+        setIsAnimating(true);
+        // Small delay to ensure the element is mounted before animating
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            setIsVisible(true);
+          });
+        });
+      }, 0);
+            document.body.style.overflow = 'hidden';
     } else {
+      const closeTimer = setTimeout(() => setIsVisible(false), 0);
       document.body.style.overflow = 'unset';
+      return () => clearTimeout(closeTimer);
     }
 
     return () => {
@@ -38,18 +53,30 @@ export const Modal: React.FC<ModalProps> = ({
     };
   }, [isOpen]);
 
+  // Handle animation end to unmount
+  const handleTransitionEnd = () => {
+    if (!isVisible) {
+      setIsAnimating(false);
+    }
+  };
+
+  const handleClose = () => {
+    setIsVisible(false);
+    setTimeout(onClose, 200); // Wait for animation to complete
+  };
+
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isOpen) {
-        onClose();
+        handleClose();
       }
     };
 
     document.addEventListener('keydown', handleEscape);
     return () => document.removeEventListener('keydown', handleEscape);
-  }, [isOpen, onClose]);
+  }, [isOpen]);
 
-  if (!isOpen) return null;
+  if (!isOpen && !isAnimating) return null;
 
   const sizeClasses = {
     small: 'max-w-md',
@@ -58,17 +85,26 @@ export const Modal: React.FC<ModalProps> = ({
   };
 
   const modalContent = (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      {/* Backdrop */}
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      onTransitionEnd={handleTransitionEnd}
+    >
+      {/* Backdrop with fade animation */}
       <div
-        className="absolute inset-0 bg-black bg-opacity-50 transition-opacity"
-        onClick={onClose}
+        className={`absolute inset-0 bg-black transition-opacity duration-200 ease-out ${
+          isVisible ? 'bg-opacity-50' : 'bg-opacity-0'
+        }`}
+        onClick={handleClose}
         aria-hidden="true"
       />
 
-      {/* Modal */}
+      {/* Modal with scale + fade animation */}
       <div
-        className={`relative bg-white rounded-lg shadow-xl ${sizeClasses[size]} w-full max-h-[90vh] overflow-hidden`}
+        className={`relative bg-white rounded-2xl shadow-2xl ${sizeClasses[size]} w-full max-h-[90vh] overflow-hidden transition-all duration-200 ease-out ${
+          isVisible
+            ? 'opacity-100 scale-100 translate-y-0'
+            : 'opacity-0 scale-95 translate-y-4'
+        }`}
         role="dialog"
         aria-modal="true"
         aria-labelledby={title ? 'modal-title' : undefined}
@@ -77,24 +113,17 @@ export const Modal: React.FC<ModalProps> = ({
         {(title || showCloseButton) && (
           <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
             {title && (
-              <h2 id="modal-title" className="text-xl font-semibold text-charcoal">
+              <h2 id="modal-title" className="text-xl font-semibold text-gray-900">
                 {title}
               </h2>
             )}
             {showCloseButton && (
               <button
-                onClick={onClose}
-                className="text-gray-400 hover:text-gray-600 transition-colors"
+                onClick={handleClose}
+                className="p-1 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-all duration-150"
                 aria-label="Close modal"
               >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
+                <RiCloseLine className="w-6 h-6" />
               </button>
             )}
           </div>

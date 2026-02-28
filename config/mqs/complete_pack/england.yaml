@@ -2,20 +2,49 @@
 #
 # ENGLAND-ONLY Eviction Pack (Section 8 + Section 21)
 # Split from england-wales.yaml as part of canonical jurisdiction implementation
-# Version 2.0.0 - England jurisdiction
+# Version 2.1.0 - England jurisdiction
+# 2.1.0: Added court-ready fields (notice dates, arrears amounts, deposit details)
 
 __meta:
-  version: "2.0.0"
+  version: "2.5.0"
   effective_from: "2025-12-16"
-  last_updated: "2025-12-16"
-  legal_review_date: "2025-12-16"
+  last_updated: "2025-12-26"
+  legal_review_date: "2025-12-26"
   jurisdiction: "england"
   product: "complete_pack"
+  changelog:
+    - version: "2.5.0"
+      date: "2025-12-26"
+      changes:
+        - "Added solicitor_details question (solicitor_firm, solicitor_reference, dx_number)"
+        - "Shows conditionally when signatory_capacity is 'solicitor'"
+        - "Required for N5/N5B/N119 Statement of Truth - Legal Representative section"
+    - version: "2.4.0"
+      date: "2025-12-26"
+      changes:
+        - "Added rent_due_day (critical for Section 8 notice period description)"
+        - "Added signatory_name, signatory_capacity, signature_date (required for court form Statement of Truth)"
+        - "Added joint landlords question (all landlords must be named on court forms)"
+    - version: "2.3.0"
+      date: "2025-12-26"
+      changes:
+        - "Section 8: Added date validation for notice_expiry_date based on grounds"
+        - "Section 8: Expiry date now validated against earliest legal date per ground"
+        - "Added joint tenants question (critical for valid notices)"
+        - "Added tenancy_type and fixed_term_end_date (affects notice timing)"
+        - "Added has_gas_appliances (conditional gas cert requirement)"
+        - "Added licensing questions for Section 21 validity"
+    - version: "2.2.0"
+      date: "2025-12-26"
+      changes:
+        - "Added notice_service_method question (required for N5B field 10a)"
+        - "Added court_name question (required for court forms N5, N5B, N119)"
+        - "Added arrears_schedule question for Ground 8 (canonical arrears_items)"
 
-id: complete_pack_england_v2
+id: complete_pack_england_v4
 product: complete_pack
 jurisdiction: england
-version: "2.0.0"
+version: "2.4.0"
 
 questions:
   # 1. Eviction route selection (England: Section 8 or Section 21)
@@ -24,13 +53,146 @@ questions:
     question: "Which eviction route are you using?"
     inputType: select
     options:
-      - "Section 8 (fault-based)"
-      - "Section 21 (no-fault)"
+      - value: "section_8"
+        label: "Section 8 (fault-based)"
+      - value: "section_21"
+        label: "Section 21 (no-fault)"
     helperText: "Section 8 requires grounds. Section 21 (England only) does not require a reason."
     validation:
       required: true
     maps_to:
       - selected_notice_route
+
+  # ============================================================
+  # NOTICE SERVICE DETAILS (COMMON FOR BOTH ROUTES)
+  # ============================================================
+
+  - id: notice_service_details
+    section: Notice Service
+    question: "When was the notice served?"
+    inputType: group
+    helperText: "The date you served the eviction notice on the tenant(s)."
+    fields:
+      - id: notice_served_date
+        label: "Date notice was served"
+        inputType: date
+        validation:
+          required: true
+        width: half
+        maps_to: notice_served_date
+      - id: notice_expiry_date
+        label: "Notice expiry date (if known)"
+        inputType: date
+        # ===================================================================
+        # SECTION 8 DATE VALIDATION (Phase 3.3)
+        # The expiry date must meet the minimum notice period based on grounds:
+        #   - Ground 8 (serious arrears): 14 days minimum
+        #   - Grounds 10, 11 (some arrears, persistent delay): 60 days minimum
+        #   - Ground 14 (nuisance): 14 days (or immediate for serious ASB)
+        # When multiple grounds, the MAXIMUM period applies.
+        # If left blank, the system auto-calculates the earliest valid date.
+        # ===================================================================
+        helperText: "Leave blank to auto-calculate based on notice type and grounds. For Section 8, the minimum notice period varies by ground (14-60 days)."
+        width: half
+        maps_to: notice_expiry_date
+        validation:
+          # Custom validation rule for Section 8 expiry date
+          # UI should call validateSection8ExpiryDate() if eviction_route is section_8
+          custom:
+            type: section8_expiry_date
+            error_message: "Expiry date is too early for the selected grounds. See suggested date below."
+            dependencies:
+              - notice_served_date
+              - section8_grounds
+              - tenancy_start_date
+
+  # ============================================================
+  # NOTICE SERVICE METHOD (Required for N5B field 10a)
+  # ============================================================
+  - id: notice_service_method
+    section: Notice Service
+    question: "How was the notice served on the tenant?"
+    inputType: select
+    helperText: "Required for court forms. Select how the notice was delivered to the tenant."
+    options:
+      - value: "first_class_post"
+        label: "First class post"
+      - value: "recorded_delivery"
+        label: "Recorded delivery / signed for"
+      - value: "hand_delivered"
+        label: "Hand delivered to tenant"
+      - value: "left_at_property"
+        label: "Left at the property"
+      - value: "email"
+        label: "Email (if permitted by tenancy)"
+      - value: "other"
+        label: "Other method"
+    validation:
+      required: true
+    maps_to:
+      - notice_service_method
+
+  # ============================================================
+  # NOTICE SERVICE METHOD DETAIL (Required when "other" selected)
+  # For N5B field 10a - must describe the service method used
+  # ============================================================
+  - id: notice_service_method_detail
+    section: Notice Service
+    question: "Please describe how the notice was served"
+    inputType: textarea
+    dependsOn:
+      questionId: notice_service_method
+      value: "other"
+    helperText: "Provide details of the service method used. This will appear on court forms (N5B field 10a)."
+    placeholder: "e.g., Served via process server on [date]"
+    validation:
+      required: true
+    maps_to:
+      - notice_service_method_detail
+
+  # ============================================================
+  # RENT DETAILS (COMMON FOR BOTH ROUTES)
+  # ============================================================
+
+  - id: rent_details
+    section: Rent
+    question: "Rent details"
+    inputType: group
+    helperText: "Current rent amount and payment frequency"
+    fields:
+      - id: rent_amount
+        label: "Monthly rent amount (£)"
+        inputType: number
+        validation:
+          required: true
+        width: half
+        maps_to: rent_amount
+      - id: rent_frequency
+        label: "Payment frequency"
+        inputType: select
+        options:
+          - "weekly"
+          - "fortnightly"
+          - "monthly"
+        validation:
+          required: true
+        width: half
+        maps_to: rent_frequency
+      # ===================================================================
+      # RENT DUE DAY (Phase 3.3 - Critical for Section 8 notices)
+      # Section 8 notice requires the specific day rent is due to properly
+      # describe the rental period and calculate arrears.
+      # ===================================================================
+      - id: rent_due_day
+        label: "Day rent is due"
+        inputType: number
+        helperText: "Day of the month rent is due (1-31). For weekly, enter day of week (1=Mon, 7=Sun)."
+        validation:
+          required: true
+          min: 1
+          max: 31
+        width: half
+        maps_to: rent_due_day
 
   # ============================================================
   # SECTION 8 QUESTIONS
@@ -44,7 +206,7 @@ questions:
       - section_8
     dependsOn:
       questionId: eviction_route
-      value: "Section 8 (fault-based)"
+      value: "section_8"
     options:
       - "Ground 1 - Landlord occupation"
       - "Ground 2 - Mortgage lender requiring possession"
@@ -73,7 +235,7 @@ questions:
       - section_8
     dependsOn:
       questionId: eviction_route
-      value: "Section 8 (fault-based)"
+      value: "section_8"
     helperText: "Describe the facts supporting each ground. Be specific with dates and evidence."
     placeholder: "E.g., Ground 8: Rent arrears currently stand at £3,200, representing 10 weeks of unpaid rent. Last payment received 15/10/2025."
     validation:
@@ -81,57 +243,790 @@ questions:
     maps_to:
       - section8_details
 
+  - id: rent_arrears_amount
+    section: Arrears Details
+    question: "Total rent arrears amount"
+    inputType: group
+    routes:
+      - section_8
+    dependsOn:
+      questionId: eviction_route
+      value: "section_8"
+    helperText: "Enter the total arrears for Forms N5 and N119. Required for arrears grounds (8, 10, 11)."
+    fields:
+      - id: total_arrears
+        label: "Total arrears outstanding (£)"
+        inputType: number
+        validation:
+          required: true
+        width: half
+        maps_to: total_arrears
+      - id: arrears_at_notice_date
+        label: "Arrears at date of notice (£)"
+        inputType: number
+        helperText: "Amount outstanding when notice was served"
+        width: half
+        maps_to: arrears_at_notice_date
+
+  # ============================================================
+  # ARREARS SCHEDULE (Required for Ground 8 court proceedings)
+  # ============================================================
+  # Ground 8 requires authoritative period-by-period arrears data.
+  # The court needs to see a detailed schedule of rent due vs paid.
+  # This is enforced as a BLOCKER in complete pack validation.
+  - id: arrears_schedule
+    section: Arrears Details
+    question: "Arrears schedule"
+    inputType: arrears_schedule
+    routes:
+      - section_8
+    dependsOn:
+      questionId: section8_grounds
+      contains: "Ground 8"
+    helperText: "Required for Ground 8. Enter the rent due and amount paid for each period. Courts require a detailed breakdown to verify the 2-month arrears threshold is met."
+    validation:
+      required: true
+      min_items: 1
+    config:
+      # UI should use tenancy_start_date and rent_frequency to generate periods
+      period_source: "tenancy_start_date"
+      frequency_source: "rent_frequency"
+      amount_source: "rent_amount"
+      # Show columns for period, rent due, rent paid, amount owed
+      columns:
+        - id: period_start
+          label: "Period start"
+          type: date
+        - id: period_end
+          label: "Period end"
+          type: date
+        - id: rent_due
+          label: "Rent due (£)"
+          type: number
+        - id: rent_paid
+          label: "Rent paid (£)"
+          type: number
+        - id: amount_owed
+          label: "Amount owed (£)"
+          type: calculated
+          formula: "rent_due - rent_paid"
+    maps_to:
+      - arrears_items
+
   # ============================================================
   # SECTION 21 QUESTIONS (ENGLAND ONLY)
+  # Comprehensive N5B-ready questions with inline validation
   # ============================================================
 
-  - id: section21_compliance
+  # -----------------------------------------------------------
+  # DEPOSIT COMPLIANCE (N5B Questions 12-14)
+  # -----------------------------------------------------------
+  - id: deposit_taken
     section: Section 21 Compliance
-    question: "Section 21 compliance checks"
+    question: "Was a deposit taken for this tenancy?"
+    inputType: yes_no
+    routes:
+      - section_21
+    dependsOn:
+      questionId: eviction_route
+      value: "section_21"
+    helperText: "Includes any deposit for this tenancy or a prior tenancy at the same property."
+    validation:
+      required: true
+    maps_to:
+      - deposit_taken
+
+  - id: deposit_compliance
+    section: Section 21 Compliance
+    question: "Deposit protection compliance"
+    inputType: group
+    routes:
+      - section_21
+    dependsOn:
+      questionId: deposit_taken
+      value: true
+    helperText: "CRITICAL: Deposit must be protected within 30 days AND prescribed information served within 30 days. Section 21 is INVALID if these requirements are not met."
+    fields:
+      - id: deposit_amount
+        label: "Deposit amount taken (£)"
+        inputType: number
+        helperText: "The amount of deposit collected from the tenant"
+        validation:
+          required: true
+          min: 0
+        width: half
+        maps_to: deposit_amount
+      - id: deposit_protected
+        label: "Is the deposit protected in a government-approved scheme?"
+        inputType: yes_no
+        helperText: "Must be protected in DPS, MyDeposits, or TDS within 30 days of receipt"
+        validation:
+          required: true
+          assertValue: true
+          assertMessage: "Section 21 cannot be used if deposit is not protected. Protect the deposit first or use Section 8."
+        width: half
+        maps_to: deposit_protected
+      - id: deposit_protected_within_30_days
+        label: "Was the deposit protected within 30 days of receipt?"
+        inputType: yes_no
+        helperText: "The 30-day deadline runs from when you received the deposit, not the tenancy start date."
+        validation:
+          required: true
+          assertValue: true
+          assertMessage: "Section 21 cannot be used if deposit was protected late. The deposit must be protected within 30 days of receipt."
+        width: half
+        maps_to: deposit_protected_within_30_days
+      - id: deposit_protection_date
+        label: "Date deposit was protected"
+        inputType: date
+        helperText: "Date shown on your deposit protection certificate"
+        validation:
+          required: true
+        width: half
+        maps_to: deposit_protection_date
+      - id: prescribed_info_served
+        label: "Was the prescribed information served on the tenant?"
+        inputType: yes_no
+        helperText: "Prescribed info must be served within 30 days of protecting the deposit."
+        validation:
+          required: true
+          assertValue: true
+          assertMessage: "Section 21 cannot be used if prescribed information was not served within 30 days of deposit protection."
+        width: half
+        maps_to: prescribed_info_served
+      - id: prescribed_info_date
+        label: "Date prescribed info was served"
+        inputType: date
+        helperText: "Must be within 30 days of deposit protection"
+        validation:
+          required: true
+        width: half
+        maps_to: prescribed_info_date
+
+  - id: deposit_returned
+    section: Section 21 Compliance
+    question: "Has the deposit been returned to the tenant?"
+    inputType: yes_no
+    routes:
+      - section_21
+    dependsOn:
+      questionId: deposit_taken
+      value: true
+    helperText: "For N5B question 13. If the deposit has been returned, answer YES."
+    validation:
+      required: true
+    maps_to:
+      - deposit_returned
+
+  # -----------------------------------------------------------
+  # DEPOSIT CAP VALIDATION (Tenant Fees Act 2019)
+  # Maximum: 5 weeks rent (<£50k annual) or 6 weeks (>£50k annual)
+  # The system AUTOMATICALLY calculates whether deposit exceeds cap
+  # based on rent_amount, rent_frequency, and deposit_amount.
+  # This confirmation is only needed if the deposit was OVER the cap
+  # and has since been reduced/refunded.
+  # -----------------------------------------------------------
+  - id: deposit_cap_info
+    section: Section 21 Compliance
+    question: "Deposit cap (Tenant Fees Act 2019)"
+    inputType: info
+    routes:
+      - section_21
+    dependsOn:
+      questionId: deposit_taken
+      value: true
+    helperText: "Under Tenant Fees Act 2019, the deposit cannot exceed 5 weeks rent (or 6 weeks if annual rent is £50,000+). The system will automatically check this based on your rent and deposit amounts."
+
+  - id: deposit_reduced_to_legal_cap_confirmed
+    section: Section 21 Compliance
+    question: "If your deposit originally exceeded the legal cap, have you reduced or refunded the excess?"
+    inputType: select
+    routes:
+      - section_21
+    dependsOn:
+      questionId: deposit_taken
+      value: true
+    helperText: "If your deposit was over the legal cap when collected, you must refund the excess before using Section 21. Select 'Not applicable' if your deposit was always within the cap."
+    options:
+      - value: "not_applicable"
+        label: "Not applicable - deposit was always within cap"
+      - value: "yes"
+        label: "Yes - I have refunded/reduced to within cap"
+      - value: "no"
+        label: "No - deposit still exceeds cap"
+    validation:
+      required: true
+    maps_to:
+      - deposit_reduced_to_legal_cap_confirmed
+
+  # -----------------------------------------------------------
+  # PRESCRIBED DOCUMENTS (Section 21A Housing Act 1988)
+  # -----------------------------------------------------------
+  - id: how_to_rent_compliance
+    section: Section 21 Compliance
+    question: "'How to Rent' guide compliance"
     inputType: group
     routes:
       - section_21
     dependsOn:
       questionId: eviction_route
-      value: "Section 21 (no-fault)"
-    helperText: "All must be YES to use Section 21."
+      value: "section_21"
+    helperText: "The current 'How to Rent' guide must be provided to tenants at the start of each new tenancy (since 1 October 2015)."
     fields:
-      - id: deposit_protected
-        label: "Deposit protected within 30 days?"
-        inputType: yes_no
-        validation:
-          required: true
-        width: half
-      - id: prescribed_info_served
-        label: "Prescribed information served?"
-        inputType: yes_no
-        validation:
-          required: true
-        width: half
       - id: how_to_rent_served
-        label: "'How to Rent' guide served?"
+        label: "Was the 'How to Rent' guide provided to the tenant?"
         inputType: yes_no
         validation:
           required: true
+          assertValue: true
+          assertMessage: "Section 21 cannot be used if the How to Rent guide was not provided. Provide it now (but note this may not cure the defect for existing tenancies)."
+        width: full
+        maps_to: how_to_rent_served
+      - id: how_to_rent_date
+        label: "Date How to Rent was provided"
+        inputType: date
+        helperText: "Must be the version current at the date provided"
         width: half
-      - id: epc_gas_cert_served
-        label: "EPC & Gas Safety cert served?"
+        maps_to: how_to_rent_date
+
+  - id: epc_compliance
+    section: Section 21 Compliance
+    question: "Energy Performance Certificate (EPC) compliance"
+    inputType: group
+    routes:
+      - section_21
+    dependsOn:
+      questionId: eviction_route
+      value: "section_21"
+    helperText: "A valid EPC must be provided to tenants before they move in. EPCs are valid for 10 years."
+    fields:
+      - id: epc_served
+        label: "Was a valid EPC provided to the tenant?"
         inputType: yes_no
         validation:
           required: true
+          assertValue: true
+          assertMessage: "Section 21 cannot be used if EPC was not provided. Obtain and provide an EPC first."
+        width: full
+        maps_to: epc_served
+      - id: epc_certificate_date
+        label: "EPC certificate date"
+        inputType: date
+        helperText: "Date on the EPC - must be valid (within 10 years)"
         width: half
-      - id: no_retaliatory_notice
-        label: "No retaliatory eviction (6 months after complaint)?"
-        inputType: yes_no
-        validation:
-          required: true
+        maps_to: epc_certificate_date
+      - id: epc_rating
+        label: "EPC rating (A-G)"
+        inputType: select
+        options:
+          - value: "A"
+            label: "A"
+          - value: "B"
+            label: "B"
+          - value: "C"
+            label: "C"
+          - value: "D"
+            label: "D"
+          - value: "E"
+            label: "E"
+          - value: "F"
+            label: "F (may need improvement)"
+          - value: "G"
+            label: "G (may need improvement)"
+        helperText: "Minimum EPC rating E required for letting (unless exempt)"
         width: half
+        maps_to: epc_rating
+
+  # ============================================================
+  # GAS APPLIANCES (Phase 3.3: Conditional gas cert requirement)
+  # Only require gas safety cert if property has gas appliances.
+  # ============================================================
+  - id: has_gas_appliances
+    section: Section 21 Compliance
+    question: "Does the property have gas appliances?"
+    inputType: yes_no
+    routes:
+      - section_21
+    dependsOn:
+      questionId: eviction_route
+      value: "section_21"
+    helperText: "If the property has a gas boiler, gas hob, or gas fire, you need a valid gas safety certificate."
+    validation:
+      required: true
     maps_to:
-      - section21.deposit_protected
-      - section21.prescribed_info_served
-      - section21.how_to_rent_served
-      - section21.epc_gas_cert_served
-      - section21.no_retaliatory_notice
+      - has_gas_appliances
+
+  - id: gas_safety_cert_served
+    section: Section 21 Compliance
+    question: "Gas Safety Certificate details"
+    inputType: group
+    routes:
+      - section_21
+    dependsOn:
+      questionId: has_gas_appliances
+      value: true
+    helperText: "A copy of the current Gas Safety Certificate (CP12) must be provided to tenants within 28 days of the check."
+    fields:
+      - id: gas_cert_served
+        label: "Was the Gas Safety Certificate served to the tenant?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: full
+        maps_to: gas_cert_served
+      - id: gas_cert_date
+        label: "Gas certificate date (optional)"
+        inputType: date
+        helperText: "Date of the gas safety check on the certificate"
+        width: half
+        maps_to: gas_cert_date
+      - id: gas_cert_expiry
+        label: "Gas certificate expiry date (optional)"
+        inputType: date
+        helperText: "Usually 12 months from check date"
+        width: half
+        maps_to: gas_cert_expiry
+
+  # ============================================================
+  # ELECTRICAL SAFETY (EICR - Required since June 2020)
+  # ============================================================
+  - id: electrical_safety
+    section: Section 21 Compliance
+    question: "Electrical safety (EICR)"
+    inputType: group
+    routes:
+      - section_21
+    dependsOn:
+      questionId: eviction_route
+      value: "section_21"
+    helperText: "Since 1 July 2020, landlords must have an EICR (Electrical Installation Condition Report) every 5 years."
+    fields:
+      - id: eicr_provided
+        label: "Has a valid EICR been provided to the tenant?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: full
+        maps_to: eicr_provided
+      - id: eicr_date
+        label: "EICR certificate date (optional)"
+        inputType: date
+        helperText: "Date of the electrical inspection - must be within 5 years"
+        width: half
+        maps_to: eicr_date
+      - id: eicr_expiry
+        label: "EICR expiry date (optional)"
+        inputType: date
+        helperText: "Usually 5 years from inspection date, or earlier if stated on report"
+        width: half
+        maps_to: eicr_expiry
+
+  # ============================================================
+  # LICENSING (Phase 3.3: S21 can be blocked if unlicensed)
+  # HMO licensing and selective licensing can block Section 21.
+  # ============================================================
+  - id: licensing_required
+    section: Section 21 Compliance
+    question: "Is the property required to be licensed?"
+    inputType: select
+    routes:
+      - section_21
+    dependsOn:
+      questionId: eviction_route
+      value: "section_21"
+    helperText: "Properties may require licensing if they are HMOs (5+ occupants from 2+ households) or in a selective licensing area. Check with your local council."
+    options:
+      - value: "not_required"
+        label: "No licensing required"
+      - value: "hmo_mandatory"
+        label: "Mandatory HMO licence required"
+      - value: "hmo_additional"
+        label: "Additional HMO licence required"
+      - value: "selective"
+        label: "Selective licence required"
+    validation:
+      required: true
+    maps_to:
+      - licensing_required
+
+  - id: has_valid_licence
+    section: Section 21 Compliance
+    question: "Do you have a valid licence for this property?"
+    inputType: yes_no
+    routes:
+      - section_21
+    dependsOn:
+      questionId: licensing_required
+      valueNotEqual: "not_required"
+    helperText: "CRITICAL: Section 21 notices are INVALID if the property should be licensed but isn't. You cannot use Section 21 until the property is properly licensed."
+    validation:
+      required: true
+      # Blocking validation - must be YES to proceed
+      assertValue: true
+      assertMessage: "Section 21 cannot be used if the property requires a licence but does not have one. Apply for a licence or use Section 8 instead."
+    maps_to:
+      - has_valid_licence
+
+  # ============================================================
+  # RETALIATORY EVICTION BAR (Deregulation Act 2015, s.33)
+  # Section 21 is INVALID if local authority has issued:
+  # - Improvement notice (Housing Act 2004, s.11)
+  # - Emergency remedial action notice (Housing Act 2004, s.40)
+  # ============================================================
+  - id: improvement_notice_served
+    section: Section 21 Compliance
+    question: "Has the local authority served an improvement notice on this property?"
+    inputType: yes_no
+    routes:
+      - section_21
+    dependsOn:
+      questionId: eviction_route
+      value: "section_21"
+    helperText: "CRITICAL: If the local authority has served an improvement notice under Housing Act 2004 (s.11), you CANNOT serve a valid Section 21 notice for 6 months. This is the 'retaliatory eviction' protection."
+    validation:
+      required: true
+      # Block if YES - improvement notice blocks Section 21
+      assertValue: false
+      assertMessage: "Section 21 cannot be used while an improvement notice is in effect. Wait 6 months after compliance, or use Section 8 if grounds exist."
+    maps_to:
+      - improvement_notice_served
+
+  - id: emergency_remedial_action
+    section: Section 21 Compliance
+    question: "Has the local authority taken emergency remedial action on this property?"
+    inputType: yes_no
+    routes:
+      - section_21
+    dependsOn:
+      questionId: eviction_route
+      value: "section_21"
+    helperText: "CRITICAL: If the local authority has taken emergency remedial action under Housing Act 2004 (s.40), you CANNOT serve a valid Section 21 notice for 6 months."
+    validation:
+      required: true
+      # Block if YES - emergency action blocks Section 21
+      assertValue: false
+      assertMessage: "Section 21 cannot be used while emergency remedial action is in effect. Wait 6 months, or use Section 8 if grounds exist."
+    maps_to:
+      - emergency_remedial_action
+
+  # ============================================================
+  # PROHIBITED FEES CONFIRMATION (Tenant Fees Act 2019)
+  # Section 21 may be invalid if prohibited fees charged
+  # ============================================================
+  - id: no_prohibited_fees_confirmed
+    section: Section 21 Compliance
+    question: "Do you confirm no prohibited fees have been charged to the tenant?"
+    inputType: yes_no
+    routes:
+      - section_21
+    dependsOn:
+      questionId: eviction_route
+      value: "section_21"
+    helperText: "Under the Tenant Fees Act 2019 (s.13), a Section 21 notice cannot be given while the tenant is owed a prohibited payment. Prohibited fees include admin fees, check-out fees, and excessive deposits."
+    validation:
+      required: true
+      # Block if NO - prohibited fees block Section 21
+      assertValue: true
+      assertMessage: "Section 21 cannot be used if prohibited fees have been charged and not refunded. Refund any prohibited fees before serving notice."
+    maps_to:
+      - no_prohibited_fees_confirmed
+
+  # -----------------------------------------------------------
+  # 4-MONTH RESTRICTION (Section 21(4B) Housing Act 1988)
+  # Cannot serve Section 21 in first 4 months of tenancy
+  # -----------------------------------------------------------
+  - id: four_month_restriction
+    section: Section 21 Compliance
+    question: "4-month restriction compliance"
+    inputType: group
+    routes:
+      - section_21
+    dependsOn:
+      questionId: eviction_route
+      value: "section_21"
+    helperText: "CRITICAL: Section 21 notice cannot be served in the first 4 months of a tenancy. The notice is INVALID if served too early."
+    fields:
+      - id: tenancy_over_4_months
+        label: "Has the tenancy been running for at least 4 months?"
+        inputType: yes_no
+        helperText: "Count from the tenancy start date. If less than 4 months, you cannot serve Section 21 yet."
+        validation:
+          required: true
+          assertValue: true
+          assertMessage: "Section 21 cannot be served in the first 4 months of a tenancy. Wait until 4 months have passed from the tenancy start date."
+        width: full
+        maps_to: tenancy_over_4_months
+
+  # -----------------------------------------------------------
+  # SUBSEQUENT TENANCY (N5B Question 8)
+  # -----------------------------------------------------------
+  - id: subsequent_tenancy
+    section: Section 21 Compliance
+    question: "Has any subsequent written tenancy agreement been entered into?"
+    inputType: yes_no
+    routes:
+      - section_21
+    dependsOn:
+      questionId: eviction_route
+      value: "section_21"
+    helperText: "For N5B question 8. If the original tenancy has been renewed or a new agreement signed, answer YES."
+    validation:
+      required: true
+    maps_to:
+      - subsequent_tenancy
+
+  # -----------------------------------------------------------
+  # TENANCY AGREEMENT DATE (N5B Question 7)
+  # This may differ from tenancy start date (Q6)
+  # -----------------------------------------------------------
+  - id: tenancy_agreement_date
+    section: Section 21 Compliance
+    question: "What date is the tenancy agreement dated?"
+    inputType: date
+    routes:
+      - section_21
+    dependsOn:
+      questionId: eviction_route
+      value: "section_21"
+    helperText: "N5B Question 7: The date shown on the written tenancy agreement. Often the same as tenancy start date, but may differ."
+    validation:
+      required: true
+    maps_to:
+      - tenancy_agreement_date
+
+  # ============================================================
+  # N5B QUESTIONS 9a-9g: AST VERIFICATION (STATEMENT OF TRUTH)
+  # ============================================================
+  # CRITICAL: These questions are mandatory for Form N5B.
+  # Courts WILL reject claims with missing answers.
+  # These are Statement of Truth declarations - user MUST confirm.
+  # ============================================================
+  - id: n5b_ast_verification
+    section: N5B AST Verification
+    question: "Assured Shorthold Tenancy verification (N5B Questions 9a-9g)"
+    inputType: group
+    routes:
+      - section_21
+    dependsOn:
+      questionId: eviction_route
+      value: "section_21"
+    helperText: "IMPORTANT: These questions are required for Form N5B. Your answers form part of the Statement of Truth. Courts will reject claims with missing answers."
+    fields:
+      # Q9a - Tenancy created after 28 February 1997
+      - id: n5b_q9a_after_feb_1997
+        label: "Q9a: Was this tenancy created on or after 28 February 1997?"
+        inputType: yes_no
+        helperText: "Most modern tenancies are. Answer YES unless you know the original tenancy started before this date."
+        validation:
+          required: true
+        width: full
+        maps_to: n5b_q9a_after_feb_1997
+      # Q9b - No notice that tenancy is NOT an AST
+      - id: n5b_q9b_no_notice_not_ast
+        label: "Q9b: Confirm that NO notice was served stating the tenancy is NOT an assured shorthold tenancy?"
+        inputType: yes_no
+        helperText: "Answer YES if you never gave the tenant a notice saying this would NOT be an AST. (Most landlords should answer YES)"
+        validation:
+          required: true
+        width: full
+        maps_to: n5b_q9b_no_notice_not_ast
+      # Q9c - No exclusion clause in tenancy agreement
+      - id: n5b_q9c_no_exclusion_clause
+        label: "Q9c: Confirm the tenancy agreement does NOT contain a clause stating it is NOT an AST?"
+        inputType: yes_no
+        helperText: "Check your tenancy agreement. Answer YES if there is no such clause. (Standard AST agreements should answer YES)"
+        validation:
+          required: true
+        width: full
+        maps_to: n5b_q9c_no_exclusion_clause
+      # Q9d - Tenant not agricultural worker
+      - id: n5b_q9d_not_agricultural_worker
+        label: "Q9d: Confirm the tenant is NOT an agricultural worker occupying the property as part of their employment?"
+        inputType: yes_no
+        helperText: "Answer YES for standard residential tenancies. Agricultural workers have special protections."
+        validation:
+          required: true
+        width: full
+        maps_to: n5b_q9d_not_agricultural_worker
+      # Q9e - Not succession tenancy
+      - id: n5b_q9e_not_succession_tenancy
+        label: "Q9e: Confirm this is NOT a tenancy that arose by succession from a Rent Act protected tenancy?"
+        inputType: yes_no
+        helperText: "Answer YES for standard modern tenancies. Succession from Rent Act tenancies (pre-1989) have different rules."
+        validation:
+          required: true
+        width: full
+        maps_to: n5b_q9e_not_succession_tenancy
+      # Q9f - Not former secure tenancy
+      - id: n5b_q9f_not_former_secure
+        label: "Q9f: Confirm this is NOT a tenancy that was previously a secure tenancy?"
+        inputType: yes_no
+        helperText: "Answer YES for private tenancies. Secure tenancies are typically with councils or housing associations."
+        validation:
+          required: true
+        width: full
+        maps_to: n5b_q9f_not_former_secure
+      # Q9g - Not Schedule 10 LGHA 1989 tenancy
+      - id: n5b_q9g_not_schedule_10
+        label: "Q9g: Confirm this is NOT a long leasehold tenancy granted under Schedule 10 of the Local Government and Housing Act 1989?"
+        inputType: yes_no
+        helperText: "Answer YES for standard AST rentals. Schedule 10 applies to specific long leasehold situations."
+        validation:
+          required: true
+        width: full
+        maps_to: n5b_q9g_not_schedule_10
+
+  # ============================================================
+  # N5B QUESTION 19: TENANT FEES ACT 2019 COMPLIANCE
+  # ============================================================
+  # Section 21 may be invalid if prohibited payments were taken
+  # and not refunded, or if holding deposit rules were breached.
+  # ============================================================
+  - id: n5b_tenant_fees_act
+    section: N5B Tenant Fees Act
+    question: "Tenant Fees Act 2019 compliance (N5B Question 19)"
+    inputType: group
+    routes:
+      - section_21
+    dependsOn:
+      questionId: eviction_route
+      value: "section_21"
+    helperText: "IMPORTANT: The Tenant Fees Act 2019 restricts what payments landlords can require. Section 21 may be invalid if these rules were breached."
+    fields:
+      # Q19a - Prohibited payment taken and not refunded
+      - id: n5b_q19_prohibited_payment
+        label: "Q19: Has any prohibited payment been required or taken from the tenant that has not been refunded?"
+        inputType: yes_no
+        helperText: "Prohibited payments include admin fees, check-out fees, and excessive deposits. Answer NO if no prohibited fees were charged, or all have been refunded."
+        validation:
+          required: true
+        width: full
+        maps_to: n5b_q19_prohibited_payment
+      # Q19b - Holding deposit (on/after 1 June 2019)
+      - id: n5b_q19b_holding_deposit
+        label: "Q19b: Was a holding deposit paid on or after 1 June 2019?"
+        inputType: select
+        options:
+          - value: "no"
+            label: "No holding deposit was paid"
+          - value: "yes_compliant"
+            label: "Yes, and it was handled in compliance with the Act"
+          - value: "yes_breach"
+            label: "Yes, but the holding deposit rules may have been breached"
+        helperText: "Holding deposits are limited to 1 week's rent and must be returned within 15 days if tenancy doesn't proceed (unless tenant defaults)."
+        validation:
+          required: true
+        width: full
+        maps_to: n5b_q19b_holding_deposit
+
+  # ============================================================
+  # N5B QUESTION 20: CONSENT TO PAPER DETERMINATION
+  # ============================================================
+  # The court can decide the case without a hearing if the tenant
+  # doesn't respond. This question asks for consent to paper
+  # determination if the tenant seeks postponement.
+  # ============================================================
+  - id: n5b_q20_paper_determination
+    section: N5B Court Preference
+    question: "Do you consent to a paper determination if the tenant seeks postponement? (N5B Question 20)"
+    inputType: yes_no
+    routes:
+      - section_21
+    dependsOn:
+      questionId: eviction_route
+      value: "section_21"
+    helperText: "N5B Q20: If the tenant responds seeking postponement of possession, do you agree to the matter being dealt with on paper without a hearing? Answering YES can speed up the process."
+    validation:
+      required: true
+    maps_to:
+      - n5b_q20_paper_determination
+
+  # ============================================================
+  # N5B DEFENDANT ADDRESS FOR SERVICE (Page 5)
+  # ============================================================
+  # The defendant's address for service, usually the property
+  # address but can be different if known.
+  # ============================================================
+  - id: n5b_defendant_service_address
+    section: N5B Court Details
+    question: "Defendant's address for service"
+    inputType: group
+    routes:
+      - section_21
+    dependsOn:
+      questionId: eviction_route
+      value: "section_21"
+    helperText: "Where court documents should be sent to the defendant. Usually the property address unless you know they have a different address."
+    fields:
+      - id: defendant_service_address_same_as_property
+        label: "Is the defendant's address for service the same as the property address?"
+        inputType: yes_no
+        helperText: "Select YES if documents should be sent to the rental property."
+        validation:
+          required: true
+        width: full
+        maps_to: defendant_service_address_same_as_property
+      - id: defendant_service_address_line1
+        label: "Building and street"
+        inputType: text
+        dependsOn:
+          fieldId: defendant_service_address_same_as_property
+          value: false
+        width: full
+        maps_to: defendant_service_address_line1
+      - id: defendant_service_address_town
+        label: "Town/City"
+        inputType: text
+        dependsOn:
+          fieldId: defendant_service_address_same_as_property
+          value: false
+        width: half
+        maps_to: defendant_service_address_town
+      - id: defendant_service_address_postcode
+        label: "Postcode"
+        inputType: text
+        dependsOn:
+          fieldId: defendant_service_address_same_as_property
+          value: false
+        width: half
+        maps_to: defendant_service_address_postcode
+
+  # -----------------------------------------------------------
+  # DEPOSIT SCHEME DETAILS (Required for N5B)
+  # -----------------------------------------------------------
+  - id: deposit_scheme_details
+    section: Section 21 Compliance
+    question: "Deposit protection scheme details"
+    inputType: group
+    routes:
+      - section_21
+    dependsOn:
+      questionId: deposit_taken
+      value: true
+    helperText: "Specify which scheme protects the deposit. Required for N5B form."
+    fields:
+      - id: deposit_scheme_name
+        label: "Which scheme is the deposit protected with?"
+        inputType: select
+        options:
+          - value: "DPS"
+            label: "DPS (Deposit Protection Service)"
+          - value: "MyDeposits"
+            label: "MyDeposits"
+          - value: "TDS"
+            label: "TDS (Tenancy Deposit Scheme)"
+        validation:
+          required: true
+        width: half
+        maps_to: deposit_scheme_name
+      - id: deposit_reference
+        label: "Deposit reference number"
+        inputType: text
+        helperText: "Reference number from the protection scheme"
+        validation:
+          required: true
+        width: half
+        maps_to: deposit_reference
 
   # ============================================================
   # COMMON EVICTION PACK QUESTIONS
@@ -149,22 +1044,21 @@ questions:
         validation:
           required: true
         width: full
+        maps_to: property_address_line1
       - id: property_address_town
         label: "Town/City"
         inputType: text
         validation:
           required: true
         width: half
+        maps_to: property_address_town
       - id: property_address_postcode
         label: "Postcode"
         inputType: text
         validation:
           required: true
         width: half
-    maps_to:
-      - property_address_line1
-      - property_address_town
-      - property_address_postcode
+        maps_to: property_address_postcode
 
   - id: tenancy_start_date
     section: Tenancy
@@ -175,6 +1069,42 @@ questions:
       required: true
     maps_to:
       - tenancy_start_date
+
+  # ============================================================
+  # TENANCY TYPE (Affects notice timing and validity)
+  # Phase 3.3: Minimum necessary question for court-ready packs
+  # ============================================================
+  - id: tenancy_type
+    section: Tenancy
+    question: "What type of tenancy is this?"
+    inputType: select
+    helperText: "The tenancy type affects which notices can be used and notice periods."
+    options:
+      - value: "ast_fixed"
+        label: "Assured Shorthold Tenancy (Fixed term)"
+      - value: "ast_periodic"
+        label: "Assured Shorthold Tenancy (Periodic/Rolling)"
+      - value: "assured"
+        label: "Assured Tenancy (pre-1997)"
+      - value: "regulated"
+        label: "Regulated Tenancy (pre-1989)"
+    validation:
+      required: true
+    maps_to:
+      - tenancy_type
+
+  - id: fixed_term_end_date
+    section: Tenancy
+    question: "Fixed term end date"
+    inputType: date
+    helperText: "Required if tenancy is fixed term. Section 21 notices cannot expire before the fixed term ends."
+    dependsOn:
+      questionId: tenancy_type
+      value: "ast_fixed"
+    validation:
+      required: true
+    maps_to:
+      - fixed_term_end_date
 
   - id: tenant_details
     section: Tenant
@@ -187,18 +1117,59 @@ questions:
         validation:
           required: true
         width: full
+        maps_to: tenant_full_name
       - id: tenant_email
         label: "Email"
         inputType: email
         width: half
+        maps_to: tenant_email
       - id: tenant_phone
         label: "Phone"
         inputType: tel
         width: half
+        maps_to: tenant_phone
+
+  # ============================================================
+  # JOINT TENANTS (Critical for valid notices)
+  # Phase 3.3: Minimum necessary question for court-ready packs
+  # A notice is INVALID if it omits joint tenants named on the tenancy.
+  # ============================================================
+  - id: has_joint_tenants
+    section: Tenant
+    question: "Are there joint tenants on the tenancy agreement?"
+    inputType: yes_no
+    helperText: "CRITICAL: All tenants named on the tenancy agreement MUST be named on the notice. Omitting a joint tenant makes the notice invalid."
+    validation:
+      required: true
     maps_to:
-      - tenant_full_name
-      - tenant_email
-      - tenant_phone
+      - has_joint_tenants
+
+  - id: additional_tenants
+    section: Tenant
+    question: "Additional tenant details"
+    inputType: group
+    helperText: "Enter details for all additional tenants named on the tenancy agreement."
+    dependsOn:
+      questionId: has_joint_tenants
+      value: true
+    fields:
+      - id: tenant2_name
+        label: "Second tenant full name"
+        inputType: text
+        validation:
+          required: true
+        width: full
+        maps_to: tenant2_name
+      - id: tenant3_name
+        label: "Third tenant full name (if applicable)"
+        inputType: text
+        width: full
+        maps_to: tenant3_name
+      - id: tenant4_name
+        label: "Fourth tenant full name (if applicable)"
+        inputType: text
+        width: full
+        maps_to: tenant4_name
 
   - id: landlord_details
     section: Landlord
@@ -211,36 +1182,805 @@ questions:
         validation:
           required: true
         width: full
+        maps_to: landlord_full_name
       - id: landlord_address_line1
         label: "Address line 1"
         inputType: text
         validation:
           required: true
         width: full
+        maps_to: landlord_address_line1
       - id: landlord_address_town
         label: "Town/City"
         inputType: text
         validation:
           required: true
         width: half
+        maps_to: landlord_address_town
       - id: landlord_address_postcode
         label: "Postcode"
         inputType: text
         validation:
           required: true
         width: half
-    maps_to:
-      - landlord_full_name
-      - landlord_address_line1
-      - landlord_address_town
-      - landlord_address_postcode
+        maps_to: landlord_address_postcode
 
-  - id: evidence_uploads
-    section: Evidence
-    question: "Upload supporting documents"
-    inputType: upload
-    helperText: "Tenancy agreement, notice served, deposit certificate, rent statements, etc."
+  # ============================================================
+  # JOINT LANDLORDS (Critical for valid court forms)
+  # Phase 3.3: All landlords named on tenancy must be named on court forms.
+  # ============================================================
+  - id: has_joint_landlords
+    section: Landlord
+    question: "Are there multiple landlords on the tenancy agreement?"
+    inputType: yes_no
+    helperText: "If there are joint landlords (e.g., husband and wife), all must be named on court forms as claimants."
     validation:
-      required: false
+      required: true
     maps_to:
-      - evidence.pack_documents_uploaded
+      - has_joint_landlords
+
+  - id: additional_landlord
+    section: Landlord
+    question: "Second landlord details"
+    inputType: group
+    helperText: "Enter details for the second landlord named on the tenancy agreement."
+    dependsOn:
+      questionId: has_joint_landlords
+      value: true
+    fields:
+      - id: landlord2_name
+        label: "Second landlord full name"
+        inputType: text
+        validation:
+          required: true
+        width: full
+        maps_to: landlord2_name
+
+  # ============================================================
+  # COURT DETAILS (Required for N5, N5B, N119 court forms)
+  # ============================================================
+  - id: court_name
+    section: Court
+    question: "Which county court will handle your claim?"
+    inputType: text
+    helperText: "Required for court forms. Use HMCTS Court Finder (https://www.gov.uk/find-court-tribunal) to find your local County Court based on the property address."
+    placeholder: "e.g., Central London County Court"
+    validation:
+      required: true
+    maps_to:
+      - court_name
+
+  # ============================================================
+  # SIGNATORY DETAILS (Required for court form Statement of Truth)
+  # Phase 3.3: N5, N5B, N119 all require a signature and date.
+  # ============================================================
+  - id: signatory_details
+    section: Court
+    question: "Who will sign the court forms?"
+    inputType: group
+    helperText: "Court forms include a Statement of Truth that must be signed. False statements can result in contempt of court."
+    fields:
+      - id: signatory_name
+        label: "Full name of person signing"
+        inputType: text
+        helperText: "Usually the landlord, or their solicitor if represented."
+        validation:
+          required: true
+        width: full
+        maps_to: signatory_name
+      - id: signatory_capacity
+        label: "Capacity"
+        inputType: select
+        options:
+          - value: "claimant"
+            label: "Claimant (Landlord)"
+          - value: "solicitor"
+            label: "Claimant's Solicitor"
+          - value: "agent"
+            label: "Claimant's Agent"
+        validation:
+          required: true
+        width: half
+        maps_to: signatory_capacity
+      - id: signature_date
+        label: "Date of signature"
+        inputType: date
+        helperText: "Usually today's date when submitting the claim."
+        validation:
+          required: true
+        width: half
+        maps_to: signature_date
+
+  # ============================================================
+  # SOLICITOR DETAILS (Required when signatory is solicitor)
+  # N5, N5B, N119 have fields for solicitor firm name
+  # ============================================================
+  - id: solicitor_details
+    section: Court
+    question: "Solicitor firm details"
+    inputType: group
+    helperText: "Required when court forms are signed by a solicitor."
+    dependsOn:
+      questionId: signatory_capacity
+      value: "solicitor"
+    fields:
+      - id: solicitor_firm
+        label: "Solicitor firm name"
+        inputType: text
+        validation:
+          required: true
+        width: full
+        maps_to: solicitor_firm
+      - id: solicitor_reference
+        label: "Your reference"
+        inputType: text
+        helperText: "Optional - your case reference number"
+        width: half
+        maps_to: claimant_reference
+      - id: solicitor_dx
+        label: "DX number"
+        inputType: text
+        helperText: "Optional - Document Exchange number"
+        width: half
+        maps_to: dx_number
+
+  # ============================================================
+  # DOCUMENT AVAILABILITY CONFIRMATIONS (Trust-Based)
+  # ============================================================
+  # These questions confirm the user has the required documents
+  # to attach to their court forms. N5B requires specific attachments.
+
+  - id: document_confirmations_header
+    section: Documents for Court
+    question: "Documents to attach to your court forms"
+    inputType: info
+    helperText: "You must attach certain documents to your N5B claim form. Confirm you have these available."
+
+  - id: document_tenancy_agreement
+    section: Documents for Court
+    question: "Do you have a copy of the tenancy agreement to attach?"
+    inputType: yes_no
+    helperText: "N5B Attachment A: A copy of the written tenancy agreement must be attached."
+    validation:
+      required: true
+      assertValue: true
+      assertMessage: "You must attach a copy of the tenancy agreement to your N5B form. Locate this document before proceeding."
+    maps_to:
+      - has_tenancy_agreement_copy
+
+  - id: document_section21_notice
+    section: Documents for Court
+    question: "Do you have a copy of the Section 21 notice to attach?"
+    inputType: yes_no
+    routes:
+      - section_21
+    dependsOn:
+      questionId: eviction_route
+      value: "section_21"
+    helperText: "N5B Attachment B: A copy of the notice served on the tenant (Form 6A) must be attached."
+    validation:
+      required: true
+      assertValue: true
+      assertMessage: "You must attach a copy of the Section 21 notice to your N5B form."
+    maps_to:
+      - has_section21_notice_copy
+
+  - id: document_proof_of_service
+    section: Documents for Court
+    question: "Do you have proof of service for the notice?"
+    inputType: yes_no
+    helperText: "N5B Attachment B1: Evidence showing when and how the notice was served (e.g., proof of posting, delivery receipt, witness statement)."
+    validation:
+      required: true
+      assertValue: true
+      assertMessage: "You need proof showing when and how the notice was served."
+    maps_to:
+      - has_proof_of_service
+
+  - id: document_deposit_certificate
+    section: Documents for Court
+    question: "Do you have the deposit protection certificate to attach?"
+    inputType: yes_no
+    routes:
+      - section_21
+    dependsOn:
+      questionId: deposit_taken
+      value: true
+    helperText: "N5B Attachment E: If a deposit was paid, attach the protection certificate from DPS, MyDeposits, or TDS."
+    validation:
+      required: true
+      assertValue: true
+      assertMessage: "You must attach the deposit protection certificate if a deposit was taken."
+    maps_to:
+      - has_deposit_certificate_copy
+
+  - id: document_epc
+    section: Documents for Court
+    question: "Do you have the EPC to attach?"
+    inputType: yes_no
+    routes:
+      - section_21
+    dependsOn:
+      questionId: eviction_route
+      value: "section_21"
+    helperText: "N5B Attachment F: Attach a copy of the Energy Performance Certificate."
+    validation:
+      required: true
+      assertValue: true
+      assertMessage: "You must attach a copy of the EPC to your N5B form."
+    maps_to:
+      - has_epc_copy
+
+  - id: document_gas_safety
+    section: Documents for Court
+    question: "Do you have the Gas Safety Certificate to attach?"
+    inputType: yes_no
+    routes:
+      - section_21
+    dependsOn:
+      questionId: has_gas_appliances
+      value: true
+    helperText: "N5B Attachment G: If the property has gas appliances, attach a copy of the current Gas Safety Certificate (CP12)."
+    validation:
+      required: true
+      assertValue: true
+      assertMessage: "You must attach a copy of the Gas Safety Certificate if the property has gas appliances."
+    maps_to:
+      - has_gas_certificate_copy
+
+  # -----------------------------------------------------------
+  # OPTIONAL: Description of notice service for witness statement
+  # -----------------------------------------------------------
+  - id: notice_service_description
+    section: Documents for Court
+    question: "Describe how you served the notice"
+    inputType: textarea
+    helperText: "Provide details for your witness statement: date, time, method, who was present. This strengthens your case."
+    placeholder: "E.g., On 15 January 2025 at 10:30am, I posted the Section 21 notice by recorded delivery to the property address. Tracking number: AB123456789GB. I received confirmation of delivery on 17 January 2025."
+    validation:
+      required: true
+    maps_to:
+      - evidence.notice_service_description
+
+  # ============================================================
+  # PHASE 3: RISK INDICATORS (For Case Risk Assessment)
+  # ============================================================
+  - id: risk_indicators
+    section: Risk Assessment
+    question: "Risk factors (helps assess case strength)"
+    inputType: group
+    helperText: "This information helps generate a more accurate risk assessment for your case."
+    fields:
+      - id: known_tenant_defences
+        label: "Are you aware of any defences the tenant may raise?"
+        inputType: textarea
+        helperText: "E.g., claims of disrepair, deposit issues, harassment, discrimination, retaliatory eviction"
+        placeholder: "Describe any known or anticipated tenant defences..."
+        width: full
+      - id: previous_court_proceedings
+        label: "Have there been previous court proceedings about this tenancy?"
+        inputType: yes_no
+        width: half
+      - id: previous_proceedings_details
+        label: "Previous proceedings details"
+        inputType: textarea
+        helperText: "Dates, case numbers, outcomes"
+        width: full
+        dependsOn:
+          fieldId: previous_court_proceedings
+          value: true
+      - id: disrepair_complaints
+        label: "Has the tenant complained about disrepair?"
+        inputType: yes_no
+        helperText: "IMPORTANT: Section 21 may be invalid if served within 6 months of a disrepair complaint"
+        width: half
+      - id: disrepair_complaint_date
+        label: "Date of disrepair complaint"
+        inputType: date
+        width: half
+        dependsOn:
+          fieldId: disrepair_complaints
+          value: true
+      - id: disrepair_issues_list
+        label: "List the disrepair issues complained about"
+        inputType: textarea
+        width: full
+        dependsOn:
+          fieldId: disrepair_complaints
+          value: true
+      - id: tenant_vulnerability
+        label: "Are you aware of any tenant vulnerabilities?"
+        inputType: yes_no
+        helperText: "E.g., elderly, disabled, mental health issues, children in household"
+        width: half
+      - id: tenant_vulnerability_details
+        label: "Vulnerability details"
+        inputType: textarea
+        helperText: "Courts may consider vulnerability when deciding reasonableness"
+        width: full
+        dependsOn:
+          fieldId: tenant_vulnerability
+          value: true
+    maps_to:
+      - risk.known_tenant_defences
+      - risk.previous_court_proceedings
+      - risk.previous_proceedings_details
+      - risk.disrepair_complaints
+      - risk.disrepair_complaint_date
+      - risk.disrepair_issues_list
+      - risk.tenant_vulnerability
+      - risk.tenant_vulnerability_details
+
+  # ============================================================
+  # PHASE 4: PER-GROUND QUESTION SETS (Section 8)
+  # Detailed questions for each ground to improve witness statement quality
+  # ============================================================
+
+  # GROUND 8 - Serious Rent Arrears (2+ months)
+  - id: ground_8_details
+    section: Ground 8 Details
+    question: "Ground 8 - Serious rent arrears details"
+    inputType: group
+    routes:
+      - section_8
+    dependsOn:
+      questionId: section8_grounds
+      contains: "Ground 8"
+    helperText: "Ground 8 is MANDATORY if arrears are 8+ weeks (weekly/fortnightly) or 2+ months (monthly) at both notice date AND court hearing."
+    fields:
+      - id: g8_arrears_at_notice
+        label: "Arrears when notice was served (£)"
+        inputType: number
+        validation:
+          required: true
+        width: half
+      - id: g8_arrears_current
+        label: "Current arrears (£)"
+        inputType: number
+        validation:
+          required: true
+        width: half
+      - id: g8_last_payment_date
+        label: "Date of last rent payment"
+        inputType: date
+        width: half
+      - id: g8_last_payment_amount
+        label: "Amount of last payment (£)"
+        inputType: number
+        width: half
+      - id: g8_payment_demands_sent
+        label: "What payment demands have you sent?"
+        inputType: textarea
+        helperText: "List dates and methods of rent demands/reminders sent"
+        validation:
+          required: true
+        width: full
+      - id: g8_tenant_response
+        label: "How has the tenant responded to payment demands?"
+        inputType: textarea
+        helperText: "Describe any responses, promises to pay, or lack of response"
+        width: full
+    maps_to:
+      - ground_8.arrears_at_notice
+      - ground_8.arrears_current
+      - ground_8.last_payment_date
+      - ground_8.last_payment_amount
+      - ground_8.payment_demands_sent
+      - ground_8.tenant_response
+
+  # GROUND 10 - Some Rent Arrears
+  - id: ground_10_details
+    section: Ground 10 Details
+    question: "Ground 10 - Rent arrears details"
+    inputType: group
+    routes:
+      - section_8
+    dependsOn:
+      questionId: section8_grounds
+      contains: "Ground 10"
+    helperText: "Ground 10 is DISCRETIONARY - some rent is owed. Court considers reasonableness."
+    fields:
+      - id: g10_arrears_amount
+        label: "Current arrears (£)"
+        inputType: number
+        validation:
+          required: true
+        width: half
+      - id: g10_arrears_history
+        label: "Arrears history"
+        inputType: textarea
+        helperText: "Describe the history of arrears - when they started, any partial payments, patterns"
+        validation:
+          required: true
+        width: full
+      - id: g10_attempts_to_recover
+        label: "What attempts have you made to recover the arrears?"
+        inputType: textarea
+        helperText: "Include dates and methods of contact"
+        validation:
+          required: true
+        width: full
+    maps_to:
+      - ground_10.arrears_amount
+      - ground_10.arrears_history
+      - ground_10.attempts_to_recover
+
+  # GROUND 11 - Persistent Delay
+  - id: ground_11_details
+    section: Ground 11 Details
+    question: "Ground 11 - Persistent delay in paying rent"
+    inputType: group
+    routes:
+      - section_8
+    dependsOn:
+      questionId: section8_grounds
+      contains: "Ground 11"
+    helperText: "Ground 11 is DISCRETIONARY - tenant persistently delays rent even if eventually paid."
+    fields:
+      - id: g11_pattern_description
+        label: "Describe the pattern of late payments"
+        inputType: textarea
+        helperText: "How often is rent late? By how many days/weeks typically?"
+        validation:
+          required: true
+        width: full
+      - id: g11_late_payment_dates
+        label: "List specific late payment instances"
+        inputType: textarea
+        helperText: "Include dates rent was due and dates actually paid"
+        validation:
+          required: true
+        width: full
+      - id: g11_warnings_issued
+        label: "What warnings have you given about late payment?"
+        inputType: textarea
+        helperText: "Dates and content of any written warnings"
+        width: full
+    maps_to:
+      - ground_11.pattern_description
+      - ground_11.late_payment_dates
+      - ground_11.warnings_issued
+
+  # GROUND 12 - Breach of Tenancy
+  - id: ground_12_details
+    section: Ground 12 Details
+    question: "Ground 12 - Breach of tenancy agreement"
+    inputType: group
+    routes:
+      - section_8
+    dependsOn:
+      questionId: section8_grounds
+      contains: "Ground 12"
+    helperText: "Ground 12 is DISCRETIONARY - tenant has breached tenancy terms (other than rent)."
+    fields:
+      - id: g12_breach_type
+        label: "Type of breach"
+        inputType: multiselect
+        options:
+          - "Unauthorized subletting"
+          - "Unauthorized occupants"
+          - "Unauthorized pets"
+          - "Property damage"
+          - "Commercial use of property"
+          - "Failure to allow access for repairs"
+          - "Other breach"
+        validation:
+          required: true
+        width: full
+      - id: g12_tenancy_clause
+        label: "Which tenancy clause(s) were breached?"
+        inputType: textarea
+        helperText: "Quote or reference the specific clause(s) from the tenancy agreement"
+        validation:
+          required: true
+        width: full
+      - id: g12_breach_dates
+        label: "When did the breach(es) occur?"
+        inputType: textarea
+        helperText: "Specific dates or ongoing period"
+        validation:
+          required: true
+        width: full
+      - id: g12_breach_evidence
+        label: "What evidence do you have of the breach?"
+        inputType: textarea
+        helperText: "Photos, inspection reports, witness accounts, correspondence"
+        validation:
+          required: true
+        width: full
+      - id: g12_warnings_issued
+        label: "Have you warned the tenant about this breach?"
+        inputType: textarea
+        helperText: "Dates and content of any written warnings, tenant's response"
+        width: full
+    maps_to:
+      - ground_12.breach_type
+      - ground_12.tenancy_clause
+      - ground_12.breach_dates
+      - ground_12.breach_evidence
+      - ground_12.warnings_issued
+
+  # GROUND 13 - Waste/Neglect/Damage
+  - id: ground_13_details
+    section: Ground 13 Details
+    question: "Ground 13 - Waste, neglect, or acts causing deterioration"
+    inputType: group
+    routes:
+      - section_8
+    dependsOn:
+      questionId: section8_grounds
+      contains: "Ground 13"
+    helperText: "Ground 13 is DISCRETIONARY - tenant or lodger has caused deterioration."
+    fields:
+      - id: g13_damage_description
+        label: "Describe the damage or deterioration"
+        inputType: textarea
+        helperText: "Be specific about what damage has occurred"
+        validation:
+          required: true
+        width: full
+      - id: g13_damage_discovered_date
+        label: "When was the damage discovered?"
+        inputType: date
+        validation:
+          required: true
+        width: half
+      - id: g13_damage_cost
+        label: "Estimated cost to repair (£)"
+        inputType: number
+        width: half
+      - id: g13_evidence_available
+        label: "What evidence do you have?"
+        inputType: textarea
+        helperText: "Photos, inspection reports, contractor quotes, inventory comparison"
+        validation:
+          required: true
+        width: full
+      - id: g13_tenant_notified
+        label: "Has the tenant been notified of this damage?"
+        inputType: yes_no
+        width: half
+      - id: g13_tenant_response
+        label: "Tenant's response to damage notification"
+        inputType: textarea
+        width: full
+    maps_to:
+      - ground_13.damage_description
+      - ground_13.damage_discovered_date
+      - ground_13.damage_cost
+      - ground_13.evidence_available
+      - ground_13.tenant_notified
+      - ground_13.tenant_response
+
+  # GROUND 14 - Nuisance/Annoyance
+  - id: ground_14_details
+    section: Ground 14 Details
+    question: "Ground 14 - Nuisance, annoyance, or illegal activity"
+    inputType: group
+    routes:
+      - section_8
+    dependsOn:
+      questionId: section8_grounds
+      contains: "Ground 14"
+    helperText: "Ground 14 is DISCRETIONARY (or mandatory for serious ASB). Document ALL incidents thoroughly."
+    fields:
+      - id: g14_behaviour_type
+        label: "Type of behaviour"
+        inputType: multiselect
+        options:
+          - "Noise nuisance"
+          - "Verbal abuse/threats"
+          - "Physical violence"
+          - "Harassment of neighbours"
+          - "Criminal activity"
+          - "Drug dealing/use"
+          - "Damage to common areas"
+          - "Intimidation"
+          - "Other antisocial behaviour"
+        validation:
+          required: true
+        width: full
+      - id: g14_incident_count
+        label: "How many incidents have there been?"
+        inputType: number
+        validation:
+          required: true
+          min: 1
+        width: half
+      - id: g14_incidents_description
+        label: "Describe each incident with dates"
+        inputType: textarea
+        helperText: "For each incident: date, time, what happened, who was affected, any witnesses"
+        validation:
+          required: true
+        width: full
+      - id: g14_affected_parties
+        label: "Who has been affected?"
+        inputType: textarea
+        helperText: "Neighbours, other residents, landlord, visitors - include names if possible"
+        validation:
+          required: true
+        width: full
+      - id: g14_witnesses
+        label: "Are there witnesses who can provide statements?"
+        inputType: yes_no
+        width: half
+      - id: g14_witness_names
+        label: "Witness names and contact details"
+        inputType: textarea
+        width: full
+        dependsOn:
+          fieldId: g14_witnesses
+          value: true
+      - id: g14_police_involved
+        label: "Has the police been involved?"
+        inputType: yes_no
+        width: half
+      - id: g14_police_reference
+        label: "Police reference numbers"
+        inputType: textarea
+        helperText: "Include crime reference numbers, dates of reports"
+        width: full
+        dependsOn:
+          fieldId: g14_police_involved
+          value: true
+      - id: g14_council_involved
+        label: "Has the local council (ASB team) been involved?"
+        inputType: yes_no
+        width: half
+      - id: g14_council_reference
+        label: "Council/ASB team reference"
+        inputType: textarea
+        width: full
+        dependsOn:
+          fieldId: g14_council_involved
+          value: true
+      - id: g14_warnings_issued
+        label: "What warnings have you given the tenant?"
+        inputType: textarea
+        helperText: "Dates, content, and tenant's response to any written warnings"
+        width: full
+    maps_to:
+      - ground_14.behaviour_type
+      - ground_14.incident_count
+      - ground_14.incidents_description
+      - ground_14.affected_parties
+      - ground_14.witnesses
+      - ground_14.witness_names
+      - ground_14.police_involved
+      - ground_14.police_reference
+      - ground_14.council_involved
+      - ground_14.council_reference
+      - ground_14.warnings_issued
+
+  # GROUND 15 - Damage to Furniture
+  - id: ground_15_details
+    section: Ground 15 Details
+    question: "Ground 15 - Damage to furniture"
+    inputType: group
+    routes:
+      - section_8
+    dependsOn:
+      questionId: section8_grounds
+      contains: "Ground 15"
+    helperText: "Ground 15 is DISCRETIONARY - tenant has caused damage to landlord's furniture."
+    fields:
+      - id: g15_furniture_damaged
+        label: "List the furniture items damaged"
+        inputType: textarea
+        helperText: "Describe each item, its condition before and after"
+        validation:
+          required: true
+        width: full
+      - id: g15_damage_cost
+        label: "Estimated cost of damage (£)"
+        inputType: number
+        width: half
+      - id: g15_inventory_available
+        label: "Do you have an inventory from move-in?"
+        inputType: yes_no
+        width: half
+      - id: g15_evidence_description
+        label: "Evidence of damage"
+        inputType: textarea
+        helperText: "Photos, inventory comparison, receipts for items"
+        validation:
+          required: true
+        width: full
+    maps_to:
+      - ground_15.furniture_damaged
+      - ground_15.damage_cost
+      - ground_15.inventory_available
+      - ground_15.evidence_description
+
+  # GROUND 17 - False Statement
+  - id: ground_17_details
+    section: Ground 17 Details
+    question: "Ground 17 - False statement by tenant"
+    inputType: group
+    routes:
+      - section_8
+    dependsOn:
+      questionId: section8_grounds
+      contains: "Ground 17"
+    helperText: "Ground 17 is DISCRETIONARY - tenant made a false statement to obtain tenancy."
+    fields:
+      - id: g17_false_statement
+        label: "What false statement was made?"
+        inputType: textarea
+        helperText: "Quote or describe the false statement"
+        validation:
+          required: true
+        width: full
+      - id: g17_when_discovered
+        label: "When did you discover it was false?"
+        inputType: date
+        validation:
+          required: true
+        width: half
+      - id: g17_how_discovered
+        label: "How did you discover the statement was false?"
+        inputType: textarea
+        validation:
+          required: true
+        width: full
+      - id: g17_evidence
+        label: "What evidence proves the statement was false?"
+        inputType: textarea
+        helperText: "Documents, records, third-party confirmation"
+        validation:
+          required: true
+        width: full
+      - id: g17_induced_granting
+        label: "Did the false statement induce you to grant the tenancy?"
+        inputType: yes_no
+        helperText: "Would you have refused the tenancy if you knew the truth?"
+        validation:
+          required: true
+        width: half
+    maps_to:
+      - ground_17.false_statement
+      - ground_17.when_discovered
+      - ground_17.how_discovered
+      - ground_17.evidence
+      - ground_17.induced_granting
+
+  # ============================================================
+  # PHASE 5: COMMUNICATION TIMELINE
+  # Structured log of communications with tenant
+  # ============================================================
+  - id: communication_timeline
+    section: Communication History
+    question: "Key communications with tenant"
+    inputType: group
+    helperText: "Document important communications - these strengthen your witness statement and show reasonable attempts to resolve issues."
+    fields:
+      - id: communication_log
+        label: "Communication log"
+        inputType: textarea
+        helperText: "For each communication, include: DATE | METHOD (email/letter/phone/in-person) | SUMMARY | TENANT'S RESPONSE"
+        placeholder: "Example:\n15/01/2025 | Email | Sent rent demand for £1,200 | Tenant promised to pay by 20th\n22/01/2025 | Phone | Called re unpaid rent | No answer\n25/01/2025 | Letter | Formal written warning | Tenant replied saying would pay in February"
+        validation:
+          required: false
+        width: full
+      - id: total_contact_attempts
+        label: "Total number of contact attempts made"
+        inputType: number
+        width: half
+      - id: tenant_responsiveness
+        label: "How responsive has the tenant been?"
+        inputType: select
+        options:
+          - value: "responsive"
+            label: "Generally responsive"
+          - value: "sometimes"
+            label: "Sometimes responds"
+          - value: "rarely"
+            label: "Rarely responds"
+          - value: "never"
+            label: "Never responds"
+        width: half
+    maps_to:
+      - communication.log
+      - communication.total_attempts
+      - communication.tenant_responsiveness

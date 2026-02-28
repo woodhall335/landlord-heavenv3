@@ -165,7 +165,7 @@ export async function generateLetterBeforeAction(
   }
 
   return generateDocument({
-    templatePath: 'uk/england-wales/templates/letter_before_action.hbs',
+    templatePath: 'uk/england/templates/letter_before_action.hbs',
     data,
     isPreview,
     outputFormat: 'both',
@@ -202,7 +202,7 @@ export async function generateRentDemandLetter(
   };
 
   return generateDocument({
-    templatePath: 'uk/england-wales/templates/letter_before_action.hbs',
+    templatePath: 'uk/england/templates/letter_before_action.hbs',
     data: letterData,
     isPreview,
     outputFormat: 'both',
@@ -239,7 +239,7 @@ export async function generateBreachWarningLetter(
   };
 
   return generateDocument({
-    templatePath: 'uk/england-wales/templates/letter_before_action.hbs',
+    templatePath: 'uk/england/templates/letter_before_action.hbs',
     data: letterData,
     isPreview,
     outputFormat: 'both',

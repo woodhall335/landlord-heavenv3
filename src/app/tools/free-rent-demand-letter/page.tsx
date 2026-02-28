@@ -1,8 +1,49 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
+import { UniversalHero } from '@/components/landing/UniversalHero';
+import { HeaderConfig } from '@/components/layout';
 import { Container } from '@/components/ui/Container';
+import { RiAlertLine, RiInformationLine, RiExternalLinkLine } from 'react-icons/ri';
+import { useEmailGate } from '@/hooks/useEmailGate';
+import { ToolEmailGate } from '@/components/ui/ToolEmailGate';
+import { ToolFunnelTracker } from '@/components/tools/ToolFunnelTracker';
+import { ToolUpsellCard } from '@/components/tools/ToolUpsellCard';
+import { NextStepWidget } from '@/components/journey/NextStepWidget';
+import { trackToolComplete } from '@/lib/journey/events';
+import { setJourneyState } from '@/lib/journey/state';
+import { FAQSection } from '@/components/seo/FAQSection';
+import { RelatedLinks } from '@/components/seo/RelatedLinks';
+import { productLinks, toolLinks, landingPageLinks } from '@/lib/seo/internal-links';
+
+const faqs = [
+  {
+    question: 'Is a rent demand letter legally required?',
+    answer:
+      "A demand letter is not strictly legally required before serving a Section 8 notice, but it's strongly recommended. However, if you're planning to pursue a money claim through the courts, the Pre-Action Protocol for Debt Claims requires you to give the debtor (tenant) notice and an opportunity to pay before starting proceedings. Failing to follow the protocol can result in cost penalties.",
+  },
+  {
+    question: 'How long should I give the tenant to pay?',
+    answer:
+      "14 days is standard and reasonable for a rent demand letter. This gives the tenant time to arrange payment or contact you to discuss the situation. If you're following the Pre-Action Protocol for a money claim, you should give at least 30 days before starting court proceedings, but your initial demand can be 14 days.",
+  },
+  {
+    question: 'What if the tenant ignores the demand letter?',
+    answer:
+      "If the tenant doesn't respond or pay by the deadline, you have several options: (1) Serve a Section 8 notice seeking possession based on rent arrears grounds 8, 10, or 11. (2) Start a money claim through the courts to recover the debt (without seeking possession). (3) Continue to pursue payment informally while considering your options. Our Complete Eviction Pack (£59.99) includes Section 8 notices with compliance checks.",
+  },
+  {
+    question: 'Can I charge interest on rent arrears?',
+    answer:
+      "Only if your tenancy agreement specifically includes a clause allowing you to charge interest on late rent payments. Check your AST carefully. Even if your agreement includes an interest clause, the rate must be reasonable (typically 3-5% above Bank of England base rate). If there's no interest clause in your tenancy agreement, you cannot charge interest unless and until you obtain a county court judgment (CCJ).",
+  },
+  {
+    question: 'Should I send a demand letter before a Section 8 notice?',
+    answer:
+      "Yes, it's good practice to send a demand letter before serving a Section 8 notice. Here's why: (1) It gives the tenant a chance to pay and avoid eviction proceedings. (2) It shows the court you tried to resolve the matter reasonably. (3) The tenant may have a genuine reason for non-payment (e.g., benefits delay) and may be able to pay quickly once reminded. (4) It strengthens your case if you proceed to court. Many judges look favorably on landlords who've tried to work with tenants before legal action.",
+  },
+];
 
 export default function RentDemandLetterGenerator() {
   const [formData, setFormData] = useState({
@@ -19,6 +60,26 @@ export default function RentDemandLetterGenerator() {
 
   const [isGenerating, setIsGenerating] = useState(false);
   const [generated, setGenerated] = useState(false);
+  const upsellConfig = {
+    toolName: 'Free Rent Demand Letter Generator',
+    toolType: 'generator' as const,
+    productName: 'Money Claim Pack',
+    ctaLabel: 'Upgrade to court-ready pack — £44.99',
+    ctaHref: '/products/money-claim',
+    jurisdiction: 'uk',
+    freeIncludes: [
+      'Basic demand letter PDF',
+      'Manual arrears follow-up',
+      'No court filing pack',
+    ],
+    paidIncludes: [
+      'Pre-filled claim forms',
+      'PAP/Pre-action letters bundle',
+      'Evidence-ready arrears schedule',
+    ],
+    description:
+      'If the tenant does not pay, upgrade for a court-ready money claim bundle with forms and evidence templates.',
+  };
 
   // Set default payment deadline to 14 days from today
   useEffect(() => {
@@ -28,7 +89,8 @@ export default function RentDemandLetterGenerator() {
     setFormData((prev) => ({ ...prev, paymentDeadline: formattedDate }));
   }, []);
 
-  const handleGenerate = async () => {
+  // PDF generation function (called after email captured)
+  const generatePDF = useCallback(async () => {
     // Validate all required fields
     if (!formData.landlordName?.trim()) {
       alert('Please enter your name');
@@ -317,7 +379,7 @@ export default function RentDemandLetterGenerator() {
       });
 
       // Footer
-      page.drawText(`Generated: ${new Date().toLocaleDateString('en-GB')} | www.LandlordHeaven.com`, {
+      page.drawText(`Generated: ${new Date().toLocaleDateString('en-GB')} | www.LandlordHeaven.co.uk`, {
         x: 50,
         y: 50,
         size: 8,
@@ -350,6 +412,43 @@ URL.revokeObjectURL(url);
       setIsGenerating(false);
       alert('Failed to generate PDF. Please try again.');
     }
+  }, [formData]);
+
+
+  useEffect(() => {
+    if (!generated) return;
+
+    setJourneyState(
+      {
+        stage_estimate: 'demand_sent',
+        last_touch: {
+          type: 'tool',
+          id: 'free-rent-demand-letter',
+          ts: Date.now(),
+        },
+      },
+      'free_rent_demand_letter_complete',
+    );
+
+    trackToolComplete({
+      tool_name: 'free_rent_demand_letter',
+      context: {
+        journey_state: {
+          stage_estimate: 'demand_sent',
+        },
+      },
+    });
+  }, [generated]);
+
+  // Email gate hook - requires email before PDF download
+  const gate = useEmailGate({
+    source: 'tool:rent-demand-letter',
+    onProceed: generatePDF,
+  });
+
+  // Handler that checks gate before generating
+  const handleGenerate = () => {
+    gate.checkGateAndProceed();
   };
 
   const isFormValid =
@@ -364,55 +463,32 @@ URL.revokeObjectURL(url);
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
-      <section className="bg-linear-to-br from-purple-50 via-purple-100 to-purple-50 py-16 md:py-24">
-        <Container>
-          <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-              <span className="text-sm font-semibold text-primary">Free Tool</span>
-            </div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Rent Demand Letter Generator</h1>
-            <p className="text-xl md:text-2xl mb-6 text-gray-600">
-              Generate a Professional Rent Demand Letter for Unpaid Arrears
-            </p>
-            <div className="flex items-baseline justify-center gap-2 mb-8">
-              <span className="text-5xl md:text-6xl font-bold text-gray-900">FREE</span>
-            </div>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              <a
-                href="#generator"
-                className="hero-btn-primary"
-              >
-                Start Free Generator →
-              </a>
-              <Link
-                href="/products/notice-only?product=demand_letter"
-                className="hero-btn-secondary"
-              >
-                Get Court-Ready Version →
-              </Link>
-            </div>
-            <p className="mt-4 text-sm text-gray-600">Instant download • Basic template • Upgrade for legal compliance</p>
-          </div>
-        </Container>
-      </section>
+      <HeaderConfig mode="autoOnScroll" />
+      <ToolFunnelTracker
+        toolName={upsellConfig.toolName}
+        toolType={upsellConfig.toolType}
+        jurisdiction={upsellConfig.jurisdiction}
+      />
+      <UniversalHero
+        badge="Free Tool"
+        title="Rent Demand Letter Generator"
+        subtitle="Generate a Professional Rent Demand Letter for Unpaid Arrears"
+        align="center"
+        hideMedia
+        showReviewPill={false}
+        showTrustPositioningBar
+        showUsageCounter
+        primaryCta={{ label: 'Start Free Generator →', href: '#generator' }}
+        secondaryCta={{ label: 'Get Court-Ready Version →', href: '/products/notice-only?product=demand_letter' }}
+      >
+        <p className="mt-4 text-sm text-white/90">Instant download • Basic template • Upgrade for legal compliance • Need examples? See our <Link href="/rent-arrears-letter-template" className="underline font-semibold">rent arrears letter template guide</Link></p>
+      </UniversalHero>
 
       {/* Legal Disclaimer Banner */}
       <div className="border-b-2 border-warning-500 bg-warning-50 py-4">
         <Container>
           <div className="flex items-start gap-3">
-            <svg
-              className="mt-1 h-6 w-6 shrink-0 text-warning-700"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              aria-hidden="true"
-            >
-              <path
-                fillRule="evenodd"
-                d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z"
-                clipRule="evenodd"
-              />
-            </svg>
+            <RiAlertLine className="mt-1 h-6 w-6 shrink-0 text-[#7C3AED]" />
             <div>
               <p className="text-sm font-semibold text-warning-900">
                 Legal Disclaimer
@@ -426,7 +502,7 @@ URL.revokeObjectURL(url);
       </div>
 
       {/* Main Content */}
-      <div className="py-16 md:py-20">
+      <div className="py-20 md:py-24">
         <Container>
           <div className="max-w-4xl mx-auto">
             <div id="generator" className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
@@ -436,9 +512,7 @@ URL.revokeObjectURL(url);
 
       <div className="mb-6 rounded-lg border-2 border-primary-200 bg-primary-50 p-5">
         <div className="flex items-start gap-3">
-          <svg className="mt-0.5 h-6 w-6 shrink-0 text-primary-600" fill="currentColor" viewBox="0 0 20 20">
-            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-          </svg>
+          <RiInformationLine className="mt-0.5 h-6 w-6 shrink-0 text-[#7C3AED]" />
           <div>
             <h3 className="font-semibold text-gray-900 mb-2">
               Need to calculate arrears first?
@@ -454,9 +528,7 @@ URL.revokeObjectURL(url);
               className="inline-flex items-center gap-1.5 rounded-lg bg-white px-4 py-2 text-sm font-semibold text-primary-600 border-2 border-primary-200 hover:bg-primary-50 hover:border-primary-300 transition-all"
             >
               Open Arrears Calculator
-              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-              </svg>
+              <RiExternalLinkLine className="h-4 w-4 text-[#7C3AED]" />
             </a>
           </div>
         </div>
@@ -659,7 +731,7 @@ URL.revokeObjectURL(url);
           type="button"
           onClick={handleGenerate}
           disabled={!isFormValid || isGenerating}
-          className="w-full rounded-xl bg-primary-600 px-6 py-4 text-lg font-semibold text-white transition-all hover:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-50"
+          className="hero-btn-primary w-full disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isGenerating
             ? 'Generating Letter...'
@@ -667,64 +739,31 @@ URL.revokeObjectURL(url);
         </button>
 
         {generated && (
-          <div className="rounded-lg bg-success-50 border border-success-200 p-4">
+          <div className="rounded-lg bg-success-50 border border-success-200 p-4 space-y-4">
             <p className="text-sm text-success-800 font-medium">
               ✓ Demand letter generated successfully! Your PDF has been downloaded.
             </p>
+
+            <div className="rounded-lg border border-gray-200 bg-white p-4">
+              <h3 className="font-semibold text-gray-900">What happens next</h3>
+              <ol className="mt-2 space-y-2 text-sm text-gray-700 list-decimal list-inside">
+                <li>Serve the demand letter and keep proof of service.</li>
+                <li>Allow the stated deadline to expire.</li>
+                <li>If unpaid, prepare notice/court documents using the recommended pack.</li>
+              </ol>
+            </div>
+
+            <NextStepWidget stageHint="demand_sent" location="tool_result" />
+
+            <div className="mt-4">
+              <ToolUpsellCard {...upsellConfig} />
+            </div>
           </div>
         )}
       </form>
 
-      {/* Secondary Upgrade Box */}
-      <div className="mt-8 rounded-xl border-2 border-primary-200 bg-linear-to-br from-purple-50 to-white p-6">
-        <h3 className="mb-2 text-lg font-semibold text-gray-900">
-          Need to pursue a money claim?
-        </h3>
-        <p className="mb-4 text-sm text-gray-700">
-          If the tenant doesn't pay after receiving your demand letter, you may need to take
-          court action. Our Complete Money Claims Pack includes everything you need.
-        </p>
-        <div className="mb-4">
-          <p className="text-2xl font-bold text-blue-600">£179.99</p>
-          <ul className="mt-3 space-y-2 text-sm text-gray-700">
-            <li className="flex items-start gap-2">
-              <svg className="mt-0.5 h-5 w-5 shrink-0 text-success-500" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
-              </svg>
-              Complete Money Claims Pack
-            </li>
-            <li className="flex items-start gap-2">
-              <svg className="mt-0.5 h-5 w-5 shrink-0 text-success-500" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
-              </svg>
-              N1 claim form (England & Wales)
-            </li>
-            <li className="flex items-start gap-2">
-              <svg className="mt-0.5 h-5 w-5 shrink-0 text-success-500" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
-              </svg>
-              Form 3A (Scotland)
-            </li>
-            <li className="flex items-start gap-2">
-              <svg className="mt-0.5 h-5 w-5 shrink-0 text-success-500" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
-              </svg>
-              Particulars of claim templates
-            </li>
-            <li className="flex items-start gap-2">
-              <svg className="mt-0.5 h-5 w-5 shrink-0 text-success-500" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
-              </svg>
-              Evidence bundle templates
-            </li>
-          </ul>
-        </div>
-        <a
-          href="/products/money-claim"
-          className="block w-full rounded-xl bg-blue-600 px-6 py-3 text-center font-semibold text-white transition-all hover:bg-blue-700 hover:scale-105"
-        >
-          Get Money Claims Pack
-        </a>
+      <div className="mt-8">
+        <ToolUpsellCard {...upsellConfig} />
       </div>
 
       {/* Educational Content */}
@@ -819,83 +858,41 @@ URL.revokeObjectURL(url);
           </div>
         </div>
 
-        {/* FAQ Section */}
-        <div className="rounded-xl border border-gray-200 bg-white p-6">
-          <h3 className="mb-6 text-xl font-semibold text-gray-900">
-            Frequently Asked Questions
-          </h3>
-          <div className="space-y-6">
-            <div>
-              <h4 className="mb-2 font-semibold text-gray-900">
-                Is a rent demand letter legally required?
-              </h4>
-              <p className="text-sm text-gray-700 leading-relaxed">
-                A demand letter is not strictly legally required before serving a Section 8 notice,
-                but it's strongly recommended. However, if you're planning to pursue a money claim
-                through the courts, the Pre-Action Protocol for Debt Claims requires you to give the
-                debtor (tenant) notice and an opportunity to pay before starting proceedings. Failing
-                to follow the protocol can result in cost penalties.
-              </p>
-            </div>
-
-            <div>
-              <h4 className="mb-2 font-semibold text-gray-900">
-                How long should I give the tenant to pay?
-              </h4>
-              <p className="text-sm text-gray-700 leading-relaxed">
-                14 days is standard and reasonable for a rent demand letter. This gives the tenant
-                time to arrange payment or contact you to discuss the situation. If you're following
-                the Pre-Action Protocol for a money claim, you should give at least 30 days before
-                starting court proceedings, but your initial demand can be 14 days.
-              </p>
-            </div>
-
-            <div>
-              <h4 className="mb-2 font-semibold text-gray-900">
-                What if the tenant ignores the demand letter?
-              </h4>
-              <p className="text-sm text-gray-700 leading-relaxed">
-                If the tenant doesn't respond or pay by the deadline, you have several options:
-                (1) Serve a Section 8 notice seeking possession based on rent arrears grounds 8, 10,
-                or 11. (2) Start a money claim through the courts to recover the debt (without seeking
-                possession). (3) Continue to pursue payment informally while considering your options.
-                Our Complete Eviction Pack (£149.99) includes Section 8 notices with compliance checks.
-              </p>
-            </div>
-
-            <div>
-              <h4 className="mb-2 font-semibold text-gray-900">
-                Can I charge interest on rent arrears?
-              </h4>
-              <p className="text-sm text-gray-700 leading-relaxed">
-                Only if your tenancy agreement specifically includes a clause allowing you to charge
-                interest on late rent payments. Check your AST carefully. Even if your agreement
-                includes an interest clause, the rate must be reasonable (typically 3-5% above Bank of
-                England base rate). If there's no interest clause in your tenancy agreement, you
-                cannot charge interest unless and until you obtain a county court judgment (CCJ).
-              </p>
-            </div>
-
-            <div>
-              <h4 className="mb-2 font-semibold text-gray-900">
-                Should I send a demand letter before a Section 8 notice?
-              </h4>
-              <p className="text-sm text-gray-700 leading-relaxed">
-                Yes, it's good practice to send a demand letter before serving a Section 8 notice.
-                Here's why: (1) It gives the tenant a chance to pay and avoid eviction proceedings.
-                (2) It shows the court you tried to resolve the matter reasonably. (3) The tenant may
-                have a genuine reason for non-payment (e.g., benefits delay) and may be able to pay
-                quickly once reminded. (4) It strengthens your case if you proceed to court. Many
-                judges look favorably on landlords who've tried to work with tenants before legal action.
-              </p>
-            </div>
-          </div>
-        </div>
       </div>
             </div>
           </div>
         </Container>
       </div>
+
+      <FAQSection
+        title="Frequently Asked Questions"
+        faqs={faqs}
+        showContactCTA={false}
+        variant="white"
+      />
+
+      {/* Related Resources */}
+      <Container className="pb-12">
+        <RelatedLinks
+          title="Related Resources"
+          links={[
+            productLinks.moneyClaim,
+            toolLinks.rentArrearsCalculator,
+            toolLinks.section8Generator,
+            landingPageLinks.rentArrearsTemplate,
+          ]}
+        />
+      </Container>
+
+      {/* Email Gate Modal */}
+      {gate.showGate && (
+        <ToolEmailGate
+          toolName="Rent Demand Letter"
+          source={gate.source}
+          onEmailCaptured={gate.handleSuccess}
+          onClose={gate.handleClose}
+        />
+      )}
     </div>
   );
 }

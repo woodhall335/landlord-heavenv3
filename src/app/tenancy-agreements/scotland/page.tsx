@@ -1,15 +1,22 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { FAQSection } from '@/components/seo/FAQSection';
+import { getCanonicalUrl } from '@/lib/seo/urls';
+
+const PRICE_VALID_UNTIL = '2026-12-31';
 
 export const metadata: Metadata = {
-  title: 'Private Residential Tenancy Agreement (PRT) | Scotland | Landlord Heaven',
-  description: 'Create a legally compliant Private Residential Tenancy (PRT) agreement for Scotland. Complies with Private Housing (Tenancies) (Scotland) Act 2016 and Repairing Standard. Standard and Premium options available.',
+  title: 'PRT Agreement 2026 for Landlords | Scotland Tenancy',
+  description: 'Scotland PRT agreement for landlords. Private residential tenancy updated for 2026 with full compliance. Start your agreement.',
   keywords: 'PRT, Private Residential Tenancy, tenancy agreement Scotland, PRT agreement, Scottish tenancy, landlord registration Scotland, First-tier Tribunal, repairing standard, Housing Scotland Act 2006',
   openGraph: {
-    title: 'Private Residential Tenancy Agreement (PRT) | Scotland',
-    description: 'Create a legally compliant PRT for Scotland. Open-ended tenancy with full legal compliance.',
+    title: 'PRT Agreement 2026 for Landlords | Scotland Tenancy',
+    description: 'Landlord-ready PRT agreement for Scotland with 2026 compliance and clear landlord obligations.',
     type: 'website',
-    url: 'https://landlordheaven.co.uk/tenancy-agreements/scotland',
+    url: getCanonicalUrl('/private-residential-tenancy-agreement-template'),
+  },
+  alternates: {
+    canonical: getCanonicalUrl('/private-residential-tenancy-agreement-template'),
   },
 };
 
@@ -74,18 +81,78 @@ export default function ScotlandPRTPage() {
     '@type': 'Product',
     name: 'Private Residential Tenancy Agreement (PRT)',
     description: 'Legally compliant PRT agreement for Scotland',
+    image: 'https://landlordheaven.co.uk/og-image.png',
     offers: [
       {
         '@type': 'Offer',
         name: 'Standard PRT',
-        price: '39.99',
+        price: '14.99',
         priceCurrency: 'GBP',
+        priceValidUntil: PRICE_VALID_UNTIL,
+        availability: 'https://schema.org/InStock',
+        shippingDetails: {
+          '@type': 'OfferShippingDetails',
+          shippingRate: { '@type': 'MonetaryAmount', value: '0', currency: 'GBP' },
+          shippingDestination: { '@type': 'DefinedRegion', addressCountry: 'GB' },
+          deliveryTime: {
+            '@type': 'ShippingDeliveryTime',
+            handlingTime: { '@type': 'QuantitativeValue', minValue: '0', maxValue: '0', unitCode: 'MIN' },
+            transitTime: { '@type': 'QuantitativeValue', minValue: '0', maxValue: '0', unitCode: 'MIN' },
+          },
+        },
+        hasMerchantReturnPolicy: {
+          '@type': 'MerchantReturnPolicy',
+          applicableCountry: 'GB',
+          returnPolicyCategory: 'https://schema.org/MerchantReturnNotPermitted',
+        },
       },
       {
         '@type': 'Offer',
         name: 'Premium PRT',
-        price: '59.00',
+        price: '14.99',
         priceCurrency: 'GBP',
+        priceValidUntil: PRICE_VALID_UNTIL,
+        availability: 'https://schema.org/InStock',
+        shippingDetails: {
+          '@type': 'OfferShippingDetails',
+          shippingRate: { '@type': 'MonetaryAmount', value: '0', currency: 'GBP' },
+          shippingDestination: { '@type': 'DefinedRegion', addressCountry: 'GB' },
+          deliveryTime: {
+            '@type': 'ShippingDeliveryTime',
+            handlingTime: { '@type': 'QuantitativeValue', minValue: '0', maxValue: '0', unitCode: 'MIN' },
+            transitTime: { '@type': 'QuantitativeValue', minValue: '0', maxValue: '0', unitCode: 'MIN' },
+          },
+        },
+        hasMerchantReturnPolicy: {
+          '@type': 'MerchantReturnPolicy',
+          applicableCountry: 'GB',
+          returnPolicyCategory: 'https://schema.org/MerchantReturnNotPermitted',
+        },
+      },
+    ],
+  };
+
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: getCanonicalUrl('/'),
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Tenancy Agreements',
+        item: getCanonicalUrl('/products/ast'),
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: 'Scotland',
+        item: getCanonicalUrl('/private-residential-tenancy-agreement-template'),
       },
     ],
   };
@@ -100,14 +167,18 @@ export default function ScotlandPRTPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
 
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50">
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-20">
         {/* Breadcrumb Navigation */}
         <div className="container mx-auto px-4 py-4">
           <nav className="text-sm text-gray-600">
             <Link href="/" className="hover:text-blue-600">Home</Link>
             <span className="mx-2">/</span>
-            <Link href="/tenancy-agreements" className="hover:text-blue-600">Tenancy Agreements</Link>
+            <Link href="/products/ast" className="hover:text-blue-600">Tenancy Agreements</Link>
             <span className="mx-2">/</span>
             <span className="text-gray-900">Scotland</span>
           </nav>
@@ -125,16 +196,16 @@ export default function ScotlandPRTPage() {
             </p>
             <div className="flex gap-4 justify-center flex-wrap">
               <Link
-                href="/wizard?jurisdiction=scotland&document_type=prt_agreement"
-                className="bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors text-lg"
+                href="/wizard?product=ast_standard&src=product_page&topic=tenancy&jurisdiction=scotland"
+                className="hero-btn-secondary"
               >
-                Create Standard PRT - £39.99
+                Create Standard PRT - £14.99
               </Link>
               <Link
-                href="/wizard?jurisdiction=scotland&document_type=prt_premium"
-                className="bg-primary text-white px-8 py-4 rounded-lg font-semibold hover:hover:bg-primary-dark transition-colors text-lg"
+                href="/wizard?product=ast_premium&src=product_page&topic=tenancy&jurisdiction=scotland"
+                className="hero-btn-primary"
               >
-                Create Premium PRT - £59.00
+                Create Premium PRT - £24.99
               </Link>
             </div>
           </div>
@@ -643,7 +714,7 @@ export default function ScotlandPRTPage() {
 
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="bg-white/10 backdrop-blur rounded-lg p-6">
-                  <h4 className="text-xl font-bold mb-3">Standard PRT - £39.99</h4>
+                  <h4 className="text-xl font-bold mb-3">Standard PRT - £14.99</h4>
                   <ul className="space-y-2 text-sm">
                     <li>✓ All legal essentials for Scottish PRTs</li>
                     <li>✓ Compliant with PH(T)(S) Act 2016</li>
@@ -654,7 +725,7 @@ export default function ScotlandPRTPage() {
                     <li>✓ Clear, professional formatting</li>
                   </ul>
                   <Link
-                    href="/wizard?jurisdiction=scotland&document_type=prt_agreement"
+                    href="/wizard?product=ast_standard&src=product_page&topic=tenancy&jurisdiction=scotland"
                     className="mt-4 block text-center bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors"
                   >
                     Create Standard PRT
@@ -665,7 +736,7 @@ export default function ScotlandPRTPage() {
                   <div className="inline-block bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-xs font-bold mb-2">
                     RECOMMENDED
                   </div>
-                  <h4 className="text-xl font-bold mb-3">Premium PRT - £59.00</h4>
+                  <h4 className="text-xl font-bold mb-3">Premium PRT - £14.99</h4>
                   <ul className="space-y-2 text-sm">
                     <li>✓ Everything in Standard PLUS:</li>
                     <li>✓ Comprehensive inventory section with white goods grid</li>
@@ -676,9 +747,10 @@ export default function ScotlandPRTPage() {
                     <li>✓ Detailed Repairing Standard explanation</li>
                     <li>✓ First-tier Tribunal process guidance</li>
                     <li>✓ Superior professional presentation</li>
+                    <li className="font-semibold text-yellow-300">✓ Covers HMOs (Houses in Multiple Occupation)</li>
                   </ul>
                   <Link
-                    href="/wizard?jurisdiction=scotland&document_type=prt_premium"
+                    href="/wizard?product=ast_premium&src=product_page&topic=tenancy&jurisdiction=scotland"
                     className="mt-4 block text-center bg-white text-purple-600 px-6 py-3 rounded-lg font-semibold hover:bg-purple-50 transition-colors"
                   >
                     Create Premium PRT
@@ -864,6 +936,39 @@ export default function ScotlandPRTPage() {
           </div>
         </section>
 
+        <section className="container mx-auto px-4 py-12">
+          <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8">
+            <h2 className="text-3xl font-bold text-gray-900 mb-6">
+              PRT Notice Periods & Compliance Checklist
+            </h2>
+            <p className="text-gray-700 mb-8">
+              Landlords can only end a PRT with valid grounds and the correct notice length. This
+              checklist helps avoid tribunal delays or rejected notices.
+            </p>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">Notice periods</h3>
+                <ul className="space-y-2 text-sm text-gray-600">
+                  <li>28 days for rent arrears and antisocial behaviour.</li>
+                  <li>84 days for most other landlord grounds.</li>
+                  <li>Ground and notice must be cited on the Notice to Leave.</li>
+                </ul>
+              </div>
+              <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">Common mistakes</h3>
+                <ul className="space-y-2 text-sm text-gray-600">
+                  <li>Incorrect ground or notice period.</li>
+                  <li>Missing landlord registration number.</li>
+                  <li>Applying to the wrong forum.</li>
+                </ul>
+                <Link href="/scotland-eviction-notices" className="text-blue-600 hover:underline text-sm font-semibold inline-flex mt-3">
+                  See Notice to Leave guidance →
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Related Documents */}
         <section className="container mx-auto px-4 py-12">
           <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8">
@@ -875,7 +980,7 @@ export default function ScotlandPRTPage() {
                 <p className="text-gray-700 text-sm mb-3">
                   Official notice from landlord to tenant to end a PRT, stating the ground(s) for ending the tenancy and the notice period.
                 </p>
-                <Link href="/products/notice-to-leave" className="text-blue-600 hover:underline text-sm font-semibold">
+                <Link href="/products/notice-only" className="text-blue-600 hover:underline text-sm font-semibold">
                   Learn More →
                 </Link>
               </div>
@@ -924,131 +1029,82 @@ export default function ScotlandPRTPage() {
         </section>
 
         {/* FAQ Section */}
-        <section className="container mx-auto px-4 py-12 bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Frequently Asked Questions</h2>
+        <FAQSection
+          showTrustPositioningBar
+          title="Frequently Asked Questions"
+          faqs={[
+            {
+              question: "Is a Private Residential Tenancy (PRT) agreement legally valid in Scotland?",
+              answer: "Yes. Our PRT agreements are drafted to comply with the Private Housing (Tenancies) (Scotland) Act 2016, Housing (Scotland) Act 2006, and all current Scottish tenancy legislation. Both Standard and Premium versions are legally binding when properly executed by landlord and tenant(s)."
+            },
+            {
+              question: "Do I need to register as a landlord in Scotland?",
+              answer: "Yes, it's mandatory. All landlords in Scotland must register with their local council before letting a property. You'll receive a landlord registration number which must be included in your PRT agreement. Failure to register is a criminal offense with fines up to £50,000. Register at least 4-6 weeks before your first tenancy starts at landlordregistrationscotland.gov.uk."
+            },
+            {
+              question: "What is the difference between Standard and Premium PRT agreements?",
+              answer: "The Standard PRT (£14.99) covers all legal essentials for Scottish tenancies, including open-ended structure, 18 grounds for possession, Repairing Standard obligations, and landlord registration. The Premium PRT (£24.99) adds: comprehensive inventory section with white goods grid, exhaustive terms and conditions (13 detailed clauses), professional gradient styling (Scotland blue theme), rights of change clauses, enhanced legal compliance information boxes, detailed Repairing Standard explanation, First-tier Tribunal guidance, and superior professional presentation."
+            },
+            {
+              question: "What is the maximum deposit I can charge in Scotland?",
+              answer: "In Scotland, the maximum deposit is 2 months' rent. This is lower than England & Wales. Our wizard automatically validates your deposit amount to ensure compliance with Scottish law. You must also protect the deposit in an approved scheme (SafeDeposits Scotland, MyDeposits Scotland, or Letting Protection Service Scotland) within 30 working days."
+            },
+            {
+              question: "Are PRTs fixed-term or open-ended?",
+              answer: "All PRTs in Scotland are open-ended (periodic) by law. There is no fixed end date like England & Wales ASTs. The tenancy continues indefinitely until either party ends it with proper notice. This gives tenants greater security while landlords retain the ability to end tenancies with valid grounds (e.g., selling, moving in, rent arrears)."
+            },
+            {
+              question: "How do I evict a tenant under a PRT?",
+              answer: "Landlords must have one of 18 legal grounds for eviction. Common grounds include: landlord intends to live in property (84 days' notice), landlord intends to sell (84 days' notice), rent arrears of 3+ consecutive months (28 days' notice), breach of tenancy terms (28 days' notice). You must serve a Notice to Leave with the correct notice period. If the tenant doesn't leave voluntarily, you must apply to the First-tier Tribunal for Scotland for an eviction order."
+            },
+            {
+              question: "What is the Repairing Standard?",
+              answer: "The Repairing Standard is the minimum legal standard for the physical condition of private rented properties in Scotland. Landlords must ensure: property is wind and watertight with sound structure, all installations for water, gas, electricity, heating, and sanitation are safe and working, fixtures and appliances are in reasonable state of repair, common areas are safe, and RCDs are installed for electrical safety. If your landlord fails to meet the Repairing Standard, you can apply to the First-tier Tribunal for enforcement."
+            },
+            {
+              question: "Can I increase the rent during a PRT?",
+              answer: "Yes, but with restrictions. Landlords can increase rent once per year using the prescribed Rent Increase Notice form. You must give 3 months' notice. Tenants can challenge the increase via the First-tier Tribunal if they believe the new rent is unreasonable compared to similar properties. The Tribunal can reduce the increase or reject it entirely."
+            },
+            {
+              question: "Can tenants have pets?",
+              answer: "It's up to the landlord. Our wizard asks whether pets are allowed, what types, and how many. The Scottish Government encourages landlords to consider pet requests positively. If you allow pets, you can request a higher deposit (up to the 2 months' rent maximum) or require pet insurance. You cannot charge additional pet rent or pet fees beyond the deposit cap."
+            },
+            {
+              question: "Do I need an HMO licence?",
+              answer: "If you're letting to 3 or more unrelated tenants who share facilities (kitchen, bathroom), your property may be a House in Multiple Occupation (HMO) and require a licence from your local council. HMO licensing requirements vary by council. Check with your local authority before letting. Failure to licence an HMO is a criminal offense."
+            },
+            {
+              question: "How quickly can I get my PRT agreement?",
+              answer: "Immediately! Our wizard takes approximately 10-15 minutes to complete. Once you've answered all questions and paid, your professionally formatted PRT is generated instantly and available for download as a PDF. You can print it, email it to tenants, or use it digitally with e-signature services."
+            }
+          ]}
+          showContactCTA={false}
+          variant="gray"
+        />
 
-            <div className="space-y-4">
-              <details className="bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-shadow">
-                <summary className="font-semibold text-lg text-gray-900">
-                  Is a Private Residential Tenancy (PRT) agreement legally valid in Scotland?
-                </summary>
-                <p className="mt-3 text-gray-700">
-                  Yes. Our PRT agreements are drafted to comply with the Private Housing (Tenancies) (Scotland) Act 2016, Housing (Scotland) Act 2006, and all current Scottish tenancy legislation. Both Standard and Premium versions are legally binding when properly executed by landlord and tenant(s).
-                </p>
-              </details>
-
-              <details className="bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-shadow">
-                <summary className="font-semibold text-lg text-gray-900">
-                  Do I need to register as a landlord in Scotland?
-                </summary>
-                <p className="mt-3 text-gray-700">
-                  <strong>Yes, it's mandatory.</strong> All landlords in Scotland must register with their local council before letting a property. You'll receive a landlord registration number which must be included in your PRT agreement. Failure to register is a <strong>criminal offense</strong> with fines up to <strong>£50,000</strong>. Register at least 4-6 weeks before your first tenancy starts at <a href="https://www.landlordregistrationscotland.gov.uk" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">landlordregistrationscotland.gov.uk</a>.
-                </p>
-              </details>
-
-              <details className="bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-shadow">
-                <summary className="font-semibold text-lg text-gray-900">
-                  What is the difference between Standard and Premium PRT agreements?
-                </summary>
-                <p className="mt-3 text-gray-700">
-                  The <strong>Standard PRT (£39.99)</strong> covers all legal essentials for Scottish tenancies, including open-ended structure, 18 grounds for possession, Repairing Standard obligations, and landlord registration.
-                </p>
-                <p className="mt-2 text-gray-700">
-                  The <strong>Premium PRT (£59.00)</strong> adds: comprehensive inventory section with white goods grid, exhaustive terms and conditions (13 detailed clauses), professional gradient styling (Scotland blue theme), rights of change clauses, enhanced legal compliance information boxes, detailed Repairing Standard explanation, First-tier Tribunal guidance, and superior professional presentation.
-                </p>
-              </details>
-
-              <details className="bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-shadow">
-                <summary className="font-semibold text-lg text-gray-900">
-                  What is the maximum deposit I can charge in Scotland?
-                </summary>
-                <p className="mt-3 text-gray-700">
-                  In Scotland, the maximum deposit is <strong>2 months' rent</strong>. This is lower than England & Wales. Our wizard automatically validates your deposit amount to ensure compliance with Scottish law. You must also protect the deposit in an approved scheme (SafeDeposits Scotland, MyDeposits Scotland, or Letting Protection Service Scotland) within <strong>30 working days</strong>.
-                </p>
-              </details>
-
-              <details className="bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-shadow">
-                <summary className="font-semibold text-lg text-gray-900">
-                  Are PRTs fixed-term or open-ended?
-                </summary>
-                <p className="mt-3 text-gray-700">
-                  All PRTs in Scotland are <strong>open-ended (periodic)</strong> by law. There is no fixed end date like England & Wales ASTs. The tenancy continues indefinitely until either party ends it with proper notice. This gives tenants greater security while landlords retain the ability to end tenancies with valid grounds (e.g., selling, moving in, rent arrears).
-                </p>
-              </details>
-
-              <details className="bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-shadow">
-                <summary className="font-semibold text-lg text-gray-900">
-                  How do I evict a tenant under a PRT?
-                </summary>
-                <p className="mt-3 text-gray-700">
-                  Landlords must have one of <strong>18 legal grounds</strong> for eviction. Common grounds include:
-                </p>
-                <ul className="list-disc list-inside text-gray-700 mt-2 space-y-1">
-                  <li>Landlord intends to live in property (84 days' notice)</li>
-                  <li>Landlord intends to sell (84 days' notice)</li>
-                  <li>Rent arrears of 3+ consecutive months (28 days' notice)</li>
-                  <li>Breach of tenancy terms (28 days' notice)</li>
-                </ul>
-                <p className="mt-2 text-gray-700">
-                  You must serve a <strong>Notice to Leave</strong> with the correct notice period. If the tenant doesn't leave voluntarily, you must apply to the <strong>First-tier Tribunal for Scotland (Housing and Property Chamber)</strong> for an eviction order. You cannot forcibly remove tenants yourself.
-                </p>
-              </details>
-
-              <details className="bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-shadow">
-                <summary className="font-semibold text-lg text-gray-900">
-                  What is the Repairing Standard?
-                </summary>
-                <p className="mt-3 text-gray-700">
-                  The <strong>Repairing Standard</strong> is the minimum legal standard for the physical condition of private rented properties in Scotland. Landlords must ensure:
-                </p>
-                <ul className="list-disc list-inside text-gray-700 mt-2 space-y-1">
-                  <li>Property is wind and watertight, with sound structure and exterior</li>
-                  <li>All installations for water, gas, electricity, heating, and sanitation are safe and working</li>
-                  <li>Fixtures, fittings, and appliances provided are in reasonable state of repair</li>
-                  <li>Common areas are in reasonable state of repair and safe</li>
-                  <li>Residual current devices (RCDs) are installed for electrical safety</li>
-                </ul>
-                <p className="mt-2 text-gray-700">
-                  If your landlord fails to meet the Repairing Standard, you can apply to the First-tier Tribunal for enforcement.
-                </p>
-              </details>
-
-              <details className="bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-shadow">
-                <summary className="font-semibold text-lg text-gray-900">
-                  Can I increase the rent during a PRT?
-                </summary>
-                <p className="mt-3 text-gray-700">
-                  Yes, but with restrictions. Landlords can increase rent <strong>once per year</strong> using the prescribed <strong>Rent Increase Notice</strong> form. You must give <strong>3 months' notice</strong>. Tenants can challenge the increase via the First-tier Tribunal if they believe the new rent is unreasonable compared to similar properties. The Tribunal can reduce the increase or reject it entirely.
-                </p>
-              </details>
-
-              <details className="bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-shadow">
-                <summary className="font-semibold text-lg text-gray-900">
-                  Can tenants have pets?
-                </summary>
-                <p className="mt-3 text-gray-700">
-                  It's up to the landlord. Our wizard asks whether pets are allowed, what types, and how many. The Scottish Government encourages landlords to consider pet requests positively. If you allow pets, you can request a higher deposit (up to the 2 months' rent maximum) or require pet insurance. You cannot charge additional "pet rent" or pet fees beyond the deposit cap.
-                </p>
-              </details>
-
-              <details className="bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-shadow">
-                <summary className="font-semibold text-lg text-gray-900">
-                  Do I need an HMO licence?
-                </summary>
-                <p className="mt-3 text-gray-700">
-                  If you're letting to <strong>3 or more unrelated tenants</strong> who share facilities (kitchen, bathroom), your property may be a <strong>House in Multiple Occupation (HMO)</strong> and require a licence from your local council. HMO licensing requirements vary by council. Check with your local authority before letting. Failure to licence an HMO is a criminal offense.
-                </p>
-              </details>
-
-              <details className="bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-shadow">
-                <summary className="font-semibold text-lg text-gray-900">
-                  How quickly can I get my PRT agreement?
-                </summary>
-                <p className="mt-3 text-gray-700">
-                  Immediately! Our wizard takes approximately 10-15 minutes to complete. Once you've answered all questions and paid, your professionally formatted PRT is generated instantly and available for download as a PDF. You can print it, email it to tenants, or use it digitally with e-signature services.
-                </p>
-              </details>
+        {/* Related Links */}
+        <section className="container mx-auto px-4 py-12">
+          <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8">
+            <h2 className="text-3xl font-bold text-gray-900 mb-6">Related Links</h2>
+            <div className="grid md:grid-cols-2 gap-4">
+              <Link href="/private-residential-tenancy-agreement-template" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+                PRT Agreement Template 2026
+              </Link>
+              <Link href="/prt-template-scotland" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+                Scotland PRT Template
+              </Link>
+              <Link href="/scottish-tenancy-agreement-template" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+                Scottish Tenancy Template Guide
+              </Link>
+              <Link href="/scotland-prt-model-agreement-guide" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+                Model PRT Agreement Guide
+              </Link>
+              <Link href="/scotland-eviction-notices" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+                Scotland eviction guide
+              </Link>
+              <Link href="/ask-heaven" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+                Ask Heaven (free landlord Q&amp;A)
+              </Link>
             </div>
           </div>
         </section>
@@ -1062,16 +1118,16 @@ export default function ScotlandPRTPage() {
             </p>
             <div className="flex gap-6 justify-center flex-wrap">
               <Link
-                href="/wizard?jurisdiction=scotland&document_type=prt_agreement"
+                href="/wizard?product=ast_standard&src=product_page&topic=tenancy&jurisdiction=scotland"
                 className="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold hover:bg-blue-50 transition-colors text-lg shadow-lg"
               >
-                Standard PRT - £39.99
+                Standard PRT - £14.99
               </Link>
               <Link
-                href="/wizard?jurisdiction=scotland&document_type=prt_premium"
+                href="/wizard?product=ast_premium&src=product_page&topic=tenancy&jurisdiction=scotland"
                 className="bg-yellow-400 text-gray-900 px-8 py-4 rounded-lg font-semibold hover:bg-yellow-300 transition-colors text-lg shadow-lg"
               >
-                Premium PRT - £59.00 ⭐
+                Premium PRT - £14.99 ⭐
               </Link>
             </div>
             <p className="mt-6 text-sm opacity-75">
@@ -1085,10 +1141,13 @@ export default function ScotlandPRTPage() {
           <div className="max-w-4xl mx-auto">
             <h3 className="text-xl font-semibold text-gray-900 mb-4">Other UK Jurisdictions</h3>
             <div className="flex gap-6 flex-wrap">
-              <Link href="/tenancy-agreements/england-wales" className="text-blue-600 hover:underline font-semibold">
-                England & Wales Assured Shorthold Tenancy (AST) →
+              <Link href="/assured-shorthold-tenancy-agreement-template" className="text-blue-600 hover:underline font-semibold">
+                England AST Agreements →
               </Link>
-              <Link href="/tenancy-agreements/northern-ireland" className="text-blue-600 hover:underline font-semibold">
+              <Link href="/wales-tenancy-agreement-template" className="text-blue-600 hover:underline font-semibold">
+                Wales Occupation Contract →
+              </Link>
+              <Link href="/northern-ireland-tenancy-agreement-template" className="text-blue-600 hover:underline font-semibold">
                 Northern Ireland Private Tenancy →
               </Link>
             </div>

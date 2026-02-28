@@ -1,0 +1,509 @@
+import type { Metadata } from "next";
+import { Container } from "@/components/ui";
+import Link from "next/link";
+import { generateMetadata } from "@/lib/seo";
+import { StructuredData } from "@/lib/seo/structured-data";
+import { FAQSection } from "@/components/seo/FAQSection";
+import { StandardHero } from "@/components/marketing/StandardHero";
+import { HeaderConfig } from "@/components/layout/HeaderConfig";
+
+export const metadata: Metadata = generateMetadata({
+  title: "Pricing - UK Eviction Case Bundle Comparison",
+  description: "Compare solicitor workflows and Landlord Heaven AI-validated case preparation. Complete case bundles ready to file.",
+  path: "/pricing",
+  keywords: [
+    "landlord document pricing",
+    "eviction notice cost",
+    "tenancy agreement price",
+    "landlord eviction case bundles",
+    "section 21 notice price",
+    "complete eviction pack"
+  ]
+});
+
+// FAQ data for structured data
+const faqs = [
+  {
+    question: "Is this a template?",
+    answer: "No. We generate a complete, case-specific court bundle — not a template. Every document is validated for statutory compliance and jurisdiction requirements."
+  },
+  {
+    question: "Do you support Section 8 as well as Section 21?",
+    answer: "Yes. We generate both Section 21 (no-fault) and Section 8 (grounds-based) eviction bundles."
+  },
+  {
+    question: "Do you cover Wales and Scotland?",
+    answer: "Yes. Our system generates jurisdiction-specific eviction bundles for England, Wales, and Scotland."
+  },
+
+  {
+    question: "Are there any hidden fees?",
+    answer: "No. The prices shown are what you pay. No setup fees, no processing fees, no surprise charges. The only additional cost is court fees (paid directly to the court when filing)."
+  },
+  {
+    question: "What is your refund policy?",
+    answer: "All products are instantly delivered digital documents. Due to the instant nature of our digital products, we cannot offer refunds once documents have been generated and delivered. Refunds are only available for technical errors, duplicate charges, or unauthorized transactions."
+  },
+  {
+    question: "Do you offer discounts for multiple documents?",
+    answer: "For portfolio landlords needing multiple documents per month, contact sales@landlordheaven.co.uk for custom pricing and volume discounts."
+  },
+  {
+    question: "How much do solicitors charge for the same services?",
+    answer: "Typical solicitor fees: Eviction notice £200-300, Court claim preparation £300-500, Money claim £200-350, Tenancy agreement £150-400, HMO compliance consultation £500+ per year. You save £200-400 per case using Landlord Heaven."
+  },
+  {
+    question: "Can I purchase additional products later?",
+    answer: "Yes! You can purchase any product at any time. Each product is independent and addresses different landlord needs."
+  }
+];
+
+export default function PricingPage() {
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <HeaderConfig mode="autoOnScroll" />
+
+      {/* Structured Data for SEO */}
+
+      {/* Hero Section */}
+      <StandardHero
+        badge="Transparent Pricing"
+        title="Simple, Transparent Pricing"
+        subtitle="Compare solicitor workflows and AI-validated case bundle preparation."
+        variant="pastel"
+      >
+        <p className="text-sm text-white">All prices are one-time payments</p>
+        <p className="mt-2 text-sm text-white">Notices: England/Wales/Scotland. Complete Pack + Money Claims: England-only. Tenancy agreements: all UK (incl. NI).</p>
+      </StandardHero>
+
+      <Container size="large" className="py-12">
+
+        {/* Comparison Table - Desktop */}
+        <div className="hidden lg:block overflow-x-auto mb-12">
+          <table className="w-full bg-white shadow-lg rounded-lg overflow-hidden">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="text-left p-6 font-semibold text-charcoal">Feature</th>
+                <th className="text-center p-6">
+                  <div className="font-semibold text-charcoal mb-2">Notices</div>
+                  <div className="text-2xl font-bold text-primary mb-1">£34.99</div>
+                  <div className="text-sm text-gray-600">One-time</div>
+                </th>
+                <th className="text-center p-6">
+                  <div className="font-semibold text-charcoal mb-2">Complete Pack</div>
+                  <div className="text-2xl font-bold text-primary mb-1">£59.99</div>
+                  <div className="text-xs text-amber-600 font-medium">England only</div>
+                  <div className="text-sm text-gray-600">One-time</div>
+                </th>
+                <th className="text-center p-6">
+                  <div className="font-semibold text-charcoal mb-2">Money Claims</div>
+                  <div className="text-2xl font-bold text-primary mb-1">£44.99</div>
+                  <div className="text-xs text-amber-600 font-medium">England only</div>
+                  <div className="text-sm text-gray-600">One-time</div>
+                </th>
+                <th className="text-center p-6">
+                  <div className="font-semibold text-charcoal mb-2">Standard AST</div>
+                  <div className="text-2xl font-bold text-primary mb-1">£14.99</div>
+                  <div className="text-sm text-gray-600">One-time</div>
+                </th>
+                <th className="text-center p-6">
+                  <div className="font-semibold text-charcoal mb-2">Premium AST</div>
+                  <div className="text-2xl font-bold text-primary mb-1">£24.99</div>
+                  <div className="text-sm text-gray-600">One-time</div>
+                </th>
+                {/* HMO Pro column removed - parked for later review */}
+              </tr>
+            </thead>
+            <tbody className="text-sm">
+              <tr className="border-t">
+                <td className="p-4 font-semibold text-charcoal bg-gray-50" colSpan={6}>
+                  Eviction Documents
+                </td>
+              </tr>
+              <tr className="border-t">
+                <td className="p-4 text-gray-700">Section 8/21 Notice</td>
+                <td className="text-center p-4">✅</td>
+                <td className="text-center p-4">✅</td>
+                <td className="text-center p-4">❌</td>
+                <td className="text-center p-4">❌</td>
+                <td className="text-center p-4">❌</td>
+              </tr>
+              <tr className="border-t bg-gray-50">
+                <td className="p-4 text-gray-700">Court Possession Claim (N5/N5B)</td>
+                <td className="text-center p-4">❌</td>
+                <td className="text-center p-4">✅</td>
+                <td className="text-center p-4">❌</td>
+                <td className="text-center p-4">❌</td>
+                <td className="text-center p-4">❌</td>
+              </tr>
+              <tr className="border-t">
+                <td className="p-4 text-gray-700">Witness Statement</td>
+                <td className="text-center p-4">❌</td>
+                <td className="text-center p-4">✅</td>
+                <td className="text-center p-4">✅</td>
+                <td className="text-center p-4">❌</td>
+                <td className="text-center p-4">❌</td>
+              </tr>
+              <tr className="border-t bg-gray-50">
+                <td className="p-4 text-gray-700">Money Claim for Arrears</td>
+                <td className="text-center p-4">❌</td>
+                <td className="text-center p-4">❌</td>
+                <td className="text-center p-4">✅</td>
+                <td className="text-center p-4">❌</td>
+                <td className="text-center p-4">❌</td>
+              </tr>
+              <tr className="border-t">
+                <td className="p-4 text-gray-700">Rent Arrears Schedule</td>
+                <td className="text-center p-4">❌</td>
+                <td className="text-center p-4">❌</td>
+                <td className="text-center p-4">✅</td>
+                <td className="text-center p-4">❌</td>
+                <td className="text-center p-4">❌</td>
+              </tr>
+
+              <tr className="border-t">
+                <td className="p-4 font-semibold text-charcoal bg-gray-50" colSpan={6}>
+                  Tenancy Agreements
+                </td>
+              </tr>
+              <tr className="border-t">
+                <td className="p-4 text-gray-700">Assured Shorthold Tenancy (AST)</td>
+                <td className="text-center p-4">❌</td>
+                <td className="text-center p-4">❌</td>
+                <td className="text-center p-4">❌</td>
+                <td className="text-center p-4">✅</td>
+                <td className="text-center p-4">✅</td>
+              </tr>
+              <tr className="border-t bg-gray-50">
+                <td className="p-4 text-gray-700">Scotland PRT / NI Agreement</td>
+                <td className="text-center p-4">❌</td>
+                <td className="text-center p-4">❌</td>
+                <td className="text-center p-4">❌</td>
+                <td className="text-center p-4">✅</td>
+                <td className="text-center p-4">✅</td>
+              </tr>
+              <tr className="border-t">
+                <td className="p-4 text-gray-700">HMO Clauses & Guarantors</td>
+                <td className="text-center p-4">❌</td>
+                <td className="text-center p-4">❌</td>
+                <td className="text-center p-4">❌</td>
+                <td className="text-center p-4">❌</td>
+                <td className="text-center p-4">✅</td>
+              </tr>
+              <tr className="border-t bg-gray-50">
+                <td className="p-4 text-gray-700">Rent Increase Provisions</td>
+                <td className="text-center p-4">❌</td>
+                <td className="text-center p-4">❌</td>
+                <td className="text-center p-4">❌</td>
+                <td className="text-center p-4">❌</td>
+                <td className="text-center p-4">✅</td>
+              </tr>
+
+              <tr className="border-t">
+                <td className="p-4 font-semibold text-charcoal bg-gray-50" colSpan={6}>
+                  Support & Features
+                </td>
+              </tr>
+              <tr className="border-t">
+                <td className="p-4 text-gray-700">Smart Document Generation</td>
+                <td className="text-center p-4">✅</td>
+                <td className="text-center p-4">✅</td>
+                <td className="text-center p-4">✅</td>
+                <td className="text-center p-4">✅</td>
+                <td className="text-center p-4">✅</td>
+              </tr>
+              <tr className="border-t bg-gray-50">
+                <td className="p-4 text-gray-700">Jurisdiction-specific scope</td>
+                <td className="text-center p-4">England/Wales/Scotland notices</td>
+                <td className="text-center p-4">England only</td>
+                <td className="text-center p-4">England only</td>
+                <td className="text-center p-4">All UK tenancy agreements</td>
+                <td className="text-center p-4">All UK tenancy agreements</td>
+              </tr>
+              <tr className="border-t">
+                <td className="p-4 text-gray-700">Instant Download</td>
+                <td className="text-center p-4">✅</td>
+                <td className="text-center p-4">✅</td>
+                <td className="text-center p-4">✅</td>
+                <td className="text-center p-4">✅</td>
+                <td className="text-center p-4">✅</td>
+              </tr>
+              <tr className="border-t bg-gray-50">
+                <td className="p-4 text-gray-700">Email Support</td>
+                <td className="text-center p-4">✅</td>
+                <td className="text-center p-4">✅</td>
+                <td className="text-center p-4">✅</td>
+                <td className="text-center p-4">✅</td>
+                <td className="text-center p-4">✅</td>
+              </tr>
+              <tr className="border-t">
+                <td className="p-4 text-gray-700">Document Storage</td>
+                <td className="text-center p-4">12+ months</td>
+                <td className="text-center p-4">12+ months</td>
+                <td className="text-center p-4">12+ months</td>
+                <td className="text-center p-4">12+ months</td>
+                <td className="text-center p-4">12+ months</td>
+              </tr>
+
+              <tr className="border-t bg-gray-100">
+                <td className="p-6 font-semibold text-charcoal">Best For:</td>
+                <td className="text-center p-6 text-xs text-gray-700">Simple eviction notices</td>
+                <td className="text-center p-6 text-xs text-gray-700">Full eviction process</td>
+                <td className="text-center p-6 text-xs text-gray-700">Rent arrears claims</td>
+                <td className="text-center p-6 text-xs text-gray-700">Standard lettings</td>
+                <td className="text-center p-6 text-xs text-gray-700">HMOs & complex</td>
+              </tr>
+
+              <tr className="border-t">
+                <td className="p-6"></td>
+                <td className="text-center p-6">
+                  <Link
+                    href="/wizard?product=notice_only&src=pricing&topic=eviction"
+                    className="hero-btn-primary text-sm px-4 py-2"
+                    aria-label="Start notice wizard"
+                  >
+                    Start Notice Bundle Wizard →
+                  </Link>
+                </td>
+                <td className="text-center p-6">
+                  <Link
+                    href="/wizard?product=complete_pack&src=pricing&topic=eviction"
+                    className="hero-btn-primary text-sm px-4 py-2"
+                    aria-label="Start eviction pack wizard"
+                  >
+                    Start England Complete Pack Wizard →
+                  </Link>
+                </td>
+                <td className="text-center p-6">
+                  <Link
+                    href="/wizard?product=money_claim&src=pricing&topic=arrears"
+                    className="hero-btn-primary text-sm px-4 py-2"
+                    aria-label="Start money claim wizard"
+                  >
+                    Start England Money Claim Wizard →
+                  </Link>
+                </td>
+                <td className="text-center p-6">
+                  <Link
+                    href="/wizard?product=ast_standard&src=pricing&topic=tenancy"
+                    className="hero-btn-primary text-sm px-4 py-2"
+                    aria-label="Create standard tenancy agreement"
+                  >
+                    Create Tenancy Agreement →
+                  </Link>
+                </td>
+                <td className="text-center p-6">
+                  <Link
+                    href="/wizard?product=ast_premium&src=pricing&topic=tenancy"
+                    className="hero-btn-primary text-sm px-4 py-2"
+                    aria-label="Create premium tenancy agreement"
+                  >
+                    Create Tenancy Agreement →
+                  </Link>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        {/* Mobile Cards */}
+        <div className="lg:hidden space-y-6 mb-12">
+          {/* Notices */}
+          <div className="bg-white rounded-lg border-2 border-gray-200 p-6">
+            <h3 className="text-2xl font-bold text-charcoal mb-2">Notices</h3>
+            <div className="text-3xl font-bold text-primary mb-4">£34.99 <span className="text-sm text-gray-600">one-time</span></div>
+            <ul className="space-y-2 mb-6 text-sm">
+              <li>✅ Section 8/21 Notice</li>
+              <li>✅ England/Wales/Scotland notices</li>
+              <li>✅ Instant Download</li>
+              <li>✅ 12-Month Storage</li>
+            </ul>
+            <Link
+              href="/wizard?product=notice_only&src=pricing&topic=eviction"
+              className="hero-btn-primary block w-full text-center"
+              aria-label="Start notice wizard"
+            >
+              Start Notice Bundle Wizard →
+            </Link>
+          </div>
+
+          {/* Complete Eviction Pack */}
+          <div className="bg-white rounded-lg border-2 border-gray-200 p-6">
+            <h3 className="text-2xl font-bold text-charcoal mb-2">Complete Pack</h3>
+            <div className="text-3xl font-bold text-primary mb-2">£59.99 <span className="text-sm text-gray-600">one-time</span></div>
+            <div className="text-xs text-amber-600 font-medium mb-4">England only</div>
+            <ul className="space-y-2 mb-6 text-sm">
+              <li>✅ Section 8/21 Notice</li>
+              <li>✅ Court Possession Claim</li>
+              <li>✅ Witness Statement</li>
+              <li>✅ Full Eviction Bundle</li>
+            </ul>
+            <Link
+              href="/wizard?product=complete_pack&src=pricing&topic=eviction"
+              className="hero-btn-primary block w-full text-center"
+              aria-label="Start eviction pack wizard"
+            >
+              Start England Complete Pack Wizard →
+            </Link>
+          </div>
+
+          {/* Money Claims */}
+          <div className="bg-white rounded-lg border-2 border-gray-200 p-6">
+            <h3 className="text-2xl font-bold text-charcoal mb-2">Money Claims</h3>
+            <div className="text-3xl font-bold text-primary mb-2">£44.99 <span className="text-sm text-gray-600">one-time</span></div>
+            <div className="text-xs text-amber-600 font-medium mb-4">England only</div>
+            <ul className="space-y-2 mb-6 text-sm">
+              <li>✅ Money Claim Forms</li>
+              <li>✅ Arrears Schedule</li>
+              <li>✅ Witness Statement</li>
+              <li>✅ Enforcement Tools</li>
+            </ul>
+            <Link
+              href="/wizard?product=money_claim&src=pricing&topic=arrears"
+              className="hero-btn-primary block w-full text-center"
+              aria-label="Start money claim wizard"
+            >
+              Start England Money Claim Wizard →
+            </Link>
+          </div>
+
+          {/* Standard AST */}
+          <div className="bg-white rounded-lg border-2 border-gray-200 p-6">
+            <h3 className="text-2xl font-bold text-charcoal mb-2">Standard AST</h3>
+            <div className="text-3xl font-bold text-primary mb-4">£14.99 <span className="text-sm text-gray-600">one-time</span></div>
+            <ul className="space-y-2 mb-6 text-sm">
+              <li>✅ AST/PRT/NI Agreement</li>
+              <li>✅ Core Clauses</li>
+              <li>✅ UK tenancy agreements (incl. NI)</li>
+              <li>✅ 12+ Month Storage</li>
+            </ul>
+            <Link
+              href="/wizard?product=ast_standard&src=pricing&topic=tenancy"
+              className="hero-btn-primary block w-full text-center"
+              aria-label="Create standard tenancy agreement"
+            >
+              Create Tenancy Agreement →
+            </Link>
+          </div>
+
+          {/* Premium AST */}
+          <div className="bg-white rounded-lg border-2 border-gray-200 p-6">
+            <h3 className="text-2xl font-bold text-charcoal mb-2">Premium AST</h3>
+            <div className="text-3xl font-bold text-primary mb-4">£24.99 <span className="text-sm text-gray-600">one-time</span></div>
+            <ul className="space-y-2 mb-6 text-sm">
+              <li>✅ Everything in Standard</li>
+              <li>✅ HMO Clauses</li>
+              <li>✅ Guarantor Provisions</li>
+              <li>✅ Rent Increases</li>
+              <li>✅ Advanced Protection</li>
+            </ul>
+            <Link
+              href="/wizard?product=ast_premium&src=pricing&topic=tenancy"
+              className="hero-btn-primary block w-full text-center"
+              aria-label="Create premium tenancy agreement"
+            >
+              Create Tenancy Agreement →
+            </Link>
+          </div>
+
+          {/* HMO Pro removed - parked for later review */}
+        </div>
+
+      </Container>
+
+
+      <Container size="large" className="pb-4">
+        <div className="bg-white rounded-lg border border-gray-200 p-6 mb-2 overflow-x-auto">
+          <h2 className="text-2xl font-bold text-charcoal mb-4">Solicitor vs Landlord Heaven</h2>
+          <table className="w-full text-sm">
+            <thead><tr className="border-b"><th className="text-left py-2">Metric</th><th className="text-center">Solicitor</th><th className="text-center">Landlord Heaven</th></tr></thead>
+            <tbody>
+              <tr className="border-b"><td className="py-2">Cost</td><td className="text-center">£300–£2,500</td><td className="text-center">£49–£199</td></tr>
+              <tr className="border-b"><td className="py-2">Time</td><td className="text-center">3–5 days</td><td className="text-center">10 minutes</td></tr>
+              <tr className="border-b"><td className="py-2">Complete Case File</td><td className="text-center">❌ Often staged</td><td className="text-center">✅ Yes</td></tr>
+              <tr className="border-b"><td className="py-2">Jurisdiction-Specific</td><td className="text-center">✅</td><td className="text-center">✅</td></tr>
+              <tr className="border-b"><td className="py-2">Compliance Validation</td><td className="text-center">✅</td><td className="text-center">✅ AI-validated</td></tr>
+              <tr className="border-b"><td className="py-2">Reform-Aware</td><td className="text-center">Varies</td><td className="text-center">✅</td></tr>
+              <tr><td className="py-2">Ready to File</td><td className="text-center">❌</td><td className="text-center">✅</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </Container>
+
+      {/* FAQ Section */}
+      {/* FAQ schema must be rendered exactly once (via FAQSection). */}
+      <FAQSection
+        title="Pricing FAQs"
+        faqs={[
+          {
+            question: "Are there any hidden fees?",
+            answer: "No. The prices shown are what you pay. No setup fees, no processing fees, no surprise charges. The only additional cost is court fees (paid directly to the court when filing)."
+          },
+          {
+            question: "What is your refund policy?",
+            answer: (
+              <>
+                All products are instantly delivered digital documents. Due to the instant nature of our digital products, we cannot offer refunds once documents have been generated and delivered. Refunds are only available for technical errors, duplicate charges, or unauthorized transactions. See our{" "}
+                <Link href="/refunds" className="text-primary hover:underline">full refund policy</Link>{" "}
+                for details.
+              </>
+            )
+          },
+          {
+            question: "Do you offer discounts for multiple documents?",
+            answer: "For portfolio landlords needing multiple documents per month, contact sales@landlordheaven.co.uk for custom pricing and volume discounts."
+          },
+          {
+            question: "How much do solicitors charge for the same services?",
+            answer: (
+              <>
+                <p className="mb-2">Typical solicitor fees:</p>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>Eviction notice: £200-300</li>
+                  <li>Court claim preparation: £300-500</li>
+                  <li>Money claim: £200-350</li>
+                  <li>Tenancy agreement: £150-400</li>
+                  <li>HMO compliance consultation: £500+ per year</li>
+                </ul>
+                <p className="mt-2"><strong>You save £200-400 per case</strong> using Landlord Heaven.</p>
+              </>
+            )
+          },
+          {
+            question: "Can I purchase additional products later?",
+            answer: "Yes! You can purchase any product at any time. Each product is independent and addresses different landlord needs. If you need assistance choosing the right products, contact support@landlordheaven.co.uk for guidance."
+          }
+        ]}
+        showContactCTA={false}
+        variant="white"
+      />
+
+      {/* CTA */}
+      <section className="py-16 md:py-20 bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50">
+        <Container>
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Still Have Questions?</h2>
+            <p className="text-xl mb-8 text-gray-600">
+              Not sure which product is right for you? Our support team is here to help.
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+              <Link
+                href="/contact"
+                className="hero-btn-primary"
+              >
+                Contact Us →
+              </Link>
+              <Link
+                href="/help"
+                className="hero-btn-secondary"
+              >
+                Browse FAQ →
+              </Link>
+            </div>
+            <p className="mt-4 text-sm text-gray-600">Quick response • Expert guidance • No obligation</p>
+          </div>
+        </Container>
+      </section>
+    </div>
+  );
+}

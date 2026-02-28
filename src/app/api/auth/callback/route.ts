@@ -3,6 +3,9 @@
  *
  * GET /api/auth/callback
  * Handles email confirmation and OAuth redirects
+ *
+ * For email confirmation, redirects to client-side /auth/confirm page
+ * which handles session setup more robustly.
  */
 
 import { createServerSupabaseClient } from '@/lib/supabase/server';
@@ -19,7 +22,21 @@ export async function GET(request: Request) {
 
     if (error) {
       console.error('Auth callback error:', error);
-      return NextResponse.redirect(`${requestUrl.origin}/auth/error?message=${encodeURIComponent(error.message)}`);
+
+      // For PKCE errors, redirect to client-side confirm page which can
+      // handle the error more gracefully and guide the user
+      if (error.message.includes('PKCE') || error.message.includes('code verifier')) {
+        // Pass the code to the client page in case it can still be used
+        // (e.g., if the client has the verifier in localStorage)
+        return NextResponse.redirect(
+          `${requestUrl.origin}/auth/confirm?code=${code}&error=pkce`
+        );
+      }
+
+      // For other errors, redirect to the confirm page with error info
+      return NextResponse.redirect(
+        `${requestUrl.origin}/auth/confirm?error=${encodeURIComponent(error.message)}`
+      );
     }
   }
 

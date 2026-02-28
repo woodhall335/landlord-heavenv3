@@ -8,6 +8,7 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 import yaml from 'js-yaml';
 import { DecisionRule, GroundDefinition } from './types';
+import type { AnyJurisdiction } from '../types/jurisdiction';
 
 // ============================================================================
 // TYPES FOR YAML STRUCTURE
@@ -43,6 +44,15 @@ interface DecisionEngineYAML {
 
 const configCache = new Map<string, any>();
 
+const RULESET_MAP: Record<AnyJurisdiction, string> = {
+  england: 'england',
+  wales: 'wales',
+  scotland: 'scotland',
+  'northern-ireland': 'northern-ireland',
+  'england-wales': 'england', // legacy shim: map to england (no combined config exists)
+  'england & wales': 'england',
+};
+
 // ============================================================================
 // LOADERS
 // ============================================================================
@@ -51,7 +61,8 @@ const configCache = new Map<string, any>();
  * Load decision rules for a jurisdiction
  */
 export function loadDecisionRules(jurisdiction: string): DecisionRulesYAML {
-  const cacheKey = `decision_rules_${jurisdiction}`;
+  const rulesetKey = RULESET_MAP[jurisdiction as AnyJurisdiction] || jurisdiction;
+  const cacheKey = `decision_rules_${rulesetKey}`;
 
   if (configCache.has(cacheKey)) {
     return configCache.get(cacheKey);
@@ -62,7 +73,7 @@ export function loadDecisionRules(jurisdiction: string): DecisionRulesYAML {
     'config',
     'jurisdictions',
     'uk',
-    jurisdiction,
+    rulesetKey,
     'decision_rules.yaml'
   );
 
@@ -80,7 +91,8 @@ export function loadDecisionRules(jurisdiction: string): DecisionRulesYAML {
  * Load decision engine rules for a jurisdiction
  */
 export function loadDecisionEngine(jurisdiction: string): DecisionEngineYAML {
-  const cacheKey = `decision_engine_${jurisdiction}`;
+  const rulesetKey = RULESET_MAP[jurisdiction as AnyJurisdiction] || jurisdiction;
+  const cacheKey = `decision_engine_${rulesetKey}`;
 
   if (configCache.has(cacheKey)) {
     return configCache.get(cacheKey);
@@ -91,7 +103,7 @@ export function loadDecisionEngine(jurisdiction: string): DecisionEngineYAML {
     'config',
     'jurisdictions',
     'uk',
-    jurisdiction,
+    rulesetKey,
     'rules',
     'decision_engine.yaml'
   );

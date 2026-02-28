@@ -1,12 +1,35 @@
 // Vitest global setup
-// Additional matchers are not added because we avoid external dependencies in this environment.
 
-import { vi } from 'vitest';
+import { vi, afterEach, beforeEach } from 'vitest';
 import { config as loadEnv } from 'dotenv';
 import path from 'path';
 
+// Import jest-dom matchers for Vitest
+import '@testing-library/jest-dom/vitest';
+
 // Load environment variables from .env.local file for tests
 loadEnv({ path: path.resolve(__dirname, '.env.local') });
+
+// Set a dummy Resend API key for tests that import the email module
+// This prevents the Resend client from throwing during test imports
+if (!process.env.RESEND_API_KEY) {
+  process.env.RESEND_API_KEY = 're_test_dummy_key_for_testing';
+}
+
+// Mock 'server-only' package used by Next.js for server-only code
+// This package throws an error when imported in client code, but in tests
+// we need to mock it to allow testing server-side functions
+vi.mock('server-only', () => ({}));
+
+// Global mock cleanup to prevent mock bleed between test files
+// This fixes issues where tests pass individually but fail when run together
+beforeEach(() => {
+  vi.clearAllMocks();
+});
+
+afterEach(() => {
+  vi.restoreAllMocks();
+});
 
 // Avoid launching Chromium during default test runs. Environments without the
 // required system libraries can still execute the suite because Puppeteer is

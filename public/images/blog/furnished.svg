@@ -1,0 +1,126 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F3F1FF"/>
+      <stop offset="100%" style="stop-color:#E9E5FF"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bgGrad)"/>
+
+  <!-- Living room scene -->
+  <g transform="translate(80, 100)">
+    <rect x="0" y="0" width="320" height="240" rx="15" fill="white" stroke="#7C3AED" stroke-width="3"/>
+
+    <!-- Floor -->
+    <rect x="10" y="200" width="300" height="30" rx="5" fill="#F3F1FF"/>
+
+    <!-- Sofa -->
+    <rect x="30" y="140" width="140" height="60" rx="10" fill="#7C3AED"/>
+    <rect x="35" y="135" width="30" height="40" rx="5" fill="#6D28D9"/>
+    <rect x="135" y="135" width="30" height="40" rx="5" fill="#6D28D9"/>
+    <rect x="40" y="145" width="120" height="35" rx="5" fill="#A78BFA"/>
+
+    <!-- Coffee table -->
+    <rect x="75" y="175" width="80" height="25" rx="5" fill="#6D28D9"/>
+    <rect x="85" y="195" width="10" height="20" fill="#6D28D9"/>
+    <rect x="135" y="195" width="10" height="20" fill="#6D28D9"/>
+
+    <!-- TV stand -->
+    <rect x="200" y="110" width="100" height="90" rx="5" fill="#F3F1FF" stroke="#7C3AED" stroke-width="1"/>
+    <rect x="220" y="120" width="60" height="40" rx="3" fill="#7C3AED"/>
+    <rect x="235" y="165" width="30" height="8" rx="2" fill="#A78BFA"/>
+
+    <!-- Lamp -->
+    <rect x="260" y="70" width="6" height="50" fill="#7C3AED"/>
+    <path d="M250 70 L263 70 L270 40 L256 40 Z" fill="#A78BFA"/>
+
+    <text x="160" y="25" text-anchor="middle" fill="#7C3AED" font-size="12" font-weight="bold" font-family="Arial">LIVING ROOM</text>
+  </g>
+
+  <!-- Bedroom scene -->
+  <g transform="translate(430, 100)">
+    <rect x="0" y="0" width="280" height="240" rx="15" fill="white" stroke="#7C3AED" stroke-width="3"/>
+
+    <!-- Floor -->
+    <rect x="10" y="200" width="260" height="30" rx="5" fill="#F3F1FF"/>
+
+    <!-- Bed -->
+    <rect x="30" y="130" width="140" height="70" rx="5" fill="#7C3AED"/>
+    <rect x="25" y="125" width="150" height="15" rx="5" fill="#6D28D9"/>
+    <rect x="35" y="140" width="130" height="50" rx="5" fill="#A78BFA"/>
+    <!-- Pillows -->
+    <rect x="40" y="145" width="35" height="20" rx="8" fill="white"/>
+    <rect x="85" y="145" width="35" height="20" rx="8" fill="white"/>
+
+    <!-- Bedside table -->
+    <rect x="180" y="155" width="40" height="45" rx="5" fill="#6D28D9"/>
+    <rect x="185" y="165" width="30" height="15" rx="3" fill="#7C3AED"/>
+    <!-- Lamp on table -->
+    <rect x="195" y="140" width="10" height="20" fill="#A78BFA"/>
+    <ellipse cx="200" cy="135" rx="15" ry="8" fill="#A78BFA"/>
+
+    <!-- Wardrobe -->
+    <rect x="225" y="60" width="45" height="140" rx="5" fill="#7C3AED"/>
+    <line x1="247" y1="65" x2="247" y2="195" stroke="#6D28D9" stroke-width="2"/>
+    <circle cx="240" cy="130" r="3" fill="#A78BFA"/>
+    <circle cx="255" cy="130" r="3" fill="#A78BFA"/>
+
+    <text x="140" y="25" text-anchor="middle" fill="#7C3AED" font-size="12" font-weight="bold" font-family="Arial">BEDROOM</text>
+  </g>
+
+  <!-- Furnished vs Unfurnished comparison -->
+  <g transform="translate(80, 370)">
+    <rect x="0" y="0" width="300" height="100" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="300" height="35" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="22" width="300" height="13" fill="#7C3AED"/>
+    <text x="150" y="25" text-anchor="middle" fill="white" font-size="12" font-weight="bold" font-family="Arial">FURNISHED INCLUDES</text>
+
+    <g transform="translate(15, 45)">
+      <circle cx="8" cy="8" r="6" fill="#7C3AED"/>
+      <text x="22" y="12" fill="#6D28D9" font-size="10" font-family="Arial">Beds &amp; mattresses</text>
+    </g>
+    <g transform="translate(15, 68)">
+      <circle cx="8" cy="8" r="6" fill="#7C3AED"/>
+      <text x="22" y="12" fill="#6D28D9" font-size="10" font-family="Arial">Sofas &amp; seating</text>
+    </g>
+    <g transform="translate(150, 45)">
+      <circle cx="8" cy="8" r="6" fill="#7C3AED"/>
+      <text x="22" y="12" fill="#6D28D9" font-size="10" font-family="Arial">Wardrobes</text>
+    </g>
+    <g transform="translate(150, 68)">
+      <circle cx="8" cy="8" r="6" fill="#7C3AED"/>
+      <text x="22" y="12" fill="#6D28D9" font-size="10" font-family="Arial">Tables &amp; chairs</text>
+    </g>
+  </g>
+
+  <!-- Fire safety notice -->
+  <g transform="translate(410, 370)">
+    <rect x="0" y="0" width="300" height="100" rx="12" fill="white" stroke="#6D28D9" stroke-width="2"/>
+    <rect x="0" y="0" width="300" height="35" rx="12" fill="#6D28D9"/>
+    <rect x="0" y="22" width="300" height="13" fill="#6D28D9"/>
+    <text x="150" y="25" text-anchor="middle" fill="white" font-size="12" font-weight="bold" font-family="Arial">SAFETY REQUIREMENTS</text>
+
+    <g transform="translate(15, 45)">
+      <circle cx="10" cy="10" r="8" fill="#7C3AED"/>
+      <text x="10" y="14" text-anchor="middle" fill="white" font-size="8" font-weight="bold">!</text>
+      <text x="28" y="14" fill="#6D28D9" font-size="10" font-family="Arial">Fire-resistant labels required</text>
+    </g>
+    <g transform="translate(15, 70)">
+      <circle cx="10" cy="10" r="8" fill="#7C3AED"/>
+      <text x="10" y="14" text-anchor="middle" fill="white" font-size="8" font-weight="bold">!</text>
+      <text x="28" y="14" fill="#6D28D9" font-size="10" font-family="Arial">FR foam in upholstery since 1988</text>
+    </g>
+  </g>
+
+  <!-- Higher rent badge -->
+  <g transform="translate(720, 50)">
+    <circle cx="0" cy="50" r="45" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <text x="0" y="40" text-anchor="middle" fill="#7C3AED" font-size="10" font-weight="bold" font-family="Arial">HIGHER</text>
+    <text x="0" y="55" text-anchor="middle" fill="#7C3AED" font-size="10" font-weight="bold" font-family="Arial">RENT</text>
+    <text x="0" y="75" text-anchor="middle" fill="#6D28D9" font-size="10" font-family="Arial">+10-15%</text>
+  </g>
+
+  <!-- Decorative elements -->
+  <circle cx="50" cy="50" r="25" fill="#7C3AED" opacity="0.1"/>
+  <circle cx="750" cy="280" r="30" fill="#A78BFA" opacity="0.12"/>
+</svg>

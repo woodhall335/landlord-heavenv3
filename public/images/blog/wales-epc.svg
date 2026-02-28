@@ -1,0 +1,146 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F3F1FF"/>
+      <stop offset="100%" style="stop-color:#E9E5FF"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bgGrad)"/>
+
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" fill="#7C3AED" font-size="22" font-weight="bold" font-family="Arial">EPC REQUIREMENTS - WALES</text>
+  <text x="400" y="55" text-anchor="middle" fill="#6D28D9" font-size="11" font-family="Arial">Energy Performance Certificate rules for Welsh landlords</text>
+
+  <!-- EPC rating display -->
+  <g transform="translate(60, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#22C55E" stroke-width="2"/>
+
+    <g transform="translate(25, 10)">
+      <!-- EPC rating bars -->
+      <rect x="0" y="0" width="80" height="12" fill="#22C55E"/>
+      <text x="90" y="10" fill="#22C55E" font-size="10" font-weight="bold">A</text>
+      <rect x="0" y="15" width="70" height="12" fill="#22C55E"/>
+      <text x="80" y="25" fill="#22C55E" font-size="10" font-weight="bold">B</text>
+      <rect x="0" y="30" width="60" height="12" fill="#84CC16"/>
+      <text x="70" y="40" fill="#84CC16" font-size="10" font-weight="bold">C</text>
+      <rect x="0" y="45" width="50" height="12" fill="#F59E0B"/>
+      <text x="60" y="55" fill="#F59E0B" font-size="10" font-weight="bold">D</text>
+      <rect x="0" y="60" width="40" height="12" rx="2" fill="#F59E0B" stroke="#7C3AED" stroke-width="2"/>
+      <text x="50" y="70" fill="#7C3AED" font-size="10" font-weight="bold">E min</text>
+      <rect x="0" y="75" width="30" height="12" fill="#EF4444"/>
+      <text x="40" y="85" fill="#EF4444" font-size="10" font-weight="bold">F</text>
+      <rect x="0" y="90" width="20" height="12" fill="#DC2626"/>
+      <text x="30" y="100" fill="#DC2626" font-size="10" font-weight="bold">G</text>
+    </g>
+
+    <text x="100" y="130" text-anchor="middle" fill="#22C55E" font-size="11" font-weight="bold">MIN RATING: E</text>
+    <text x="100" y="148" text-anchor="middle" fill="#6D28D9" font-size="9">Cannot let F or G</text>
+    <text x="100" y="163" text-anchor="middle" fill="#6D28D9" font-size="9">rated properties</text>
+  </g>
+
+  <!-- Requirements -->
+  <g transform="translate(280, 80)">
+    <rect x="0" y="0" width="240" height="175" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="240" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="240" height="12" fill="#7C3AED"/>
+    <text x="120" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">EPC REQUIREMENTS</text>
+
+    <g transform="translate(15, 45)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#22C55E"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Valid EPC before letting</text>
+    </g>
+    <g transform="translate(15, 68)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#22C55E"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Give copy to tenant</text>
+    </g>
+    <g transform="translate(15, 91)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#22C55E"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Display in adverts</text>
+    </g>
+    <g transform="translate(15, 114)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#7C3AED"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Valid for 10 years</text>
+    </g>
+    <g transform="translate(15, 137)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#7C3AED"/>
+      <path d="M3 7 L6 10 L11 4" stroke="white" stroke-width="2" fill="none"/>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Renew when needed</text>
+    </g>
+  </g>
+
+  <!-- Exemptions -->
+  <g transform="translate(540, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#F59E0B" stroke-width="2"/>
+    <rect x="0" y="0" width="200" height="32" rx="12" fill="#F59E0B"/>
+    <rect x="0" y="20" width="200" height="12" fill="#F59E0B"/>
+    <text x="100" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">EXEMPTIONS</text>
+
+    <g transform="translate(15, 48)">
+      <circle cx="7" cy="7" r="5" fill="#F59E0B"/>
+      <text x="7" y="10" text-anchor="middle" fill="white" font-size="7" font-weight="bold">!</text>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Listed buildings</text>
+    </g>
+    <g transform="translate(15, 71)">
+      <circle cx="7" cy="7" r="5" fill="#F59E0B"/>
+      <text x="7" y="10" text-anchor="middle" fill="white" font-size="7" font-weight="bold">!</text>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Conservation areas</text>
+    </g>
+    <g transform="translate(15, 94)">
+      <circle cx="7" cy="7" r="5" fill="#7C3AED"/>
+      <text x="7" y="10" text-anchor="middle" fill="white" font-size="7" font-weight="bold">!</text>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Cost cap £3,500</text>
+    </g>
+    <g transform="translate(15, 117)">
+      <circle cx="7" cy="7" r="5" fill="#7C3AED"/>
+      <text x="7" y="10" text-anchor="middle" fill="white" font-size="7" font-weight="bold">!</text>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">Must register exemption</text>
+    </g>
+    <g transform="translate(15, 140)">
+      <circle cx="7" cy="7" r="5" fill="#6D28D9"/>
+      <text x="7" y="10" text-anchor="middle" fill="white" font-size="7" font-weight="bold">!</text>
+      <text x="22" y="11" fill="#6D28D9" font-size="9">5-year validity</text>
+    </g>
+  </g>
+
+  <!-- Penalties and improvements -->
+  <g transform="translate(60, 275)">
+    <rect x="0" y="0" width="680" height="170" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="680" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="680" height="12" fill="#7C3AED"/>
+    <text x="340" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">PENALTIES AND IMPROVEMENTS</text>
+
+    <g transform="translate(20, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#EF4444" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#EF4444" font-size="10" font-weight="bold">PENALTIES</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">F/G property: up to</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">£5,000 fine</text>
+      <text x="100" y="75" text-anchor="middle" fill="#6D28D9" font-size="8">Per property per</text>
+      <text x="100" y="88" text-anchor="middle" fill="#6D28D9" font-size="8">breach</text>
+    </g>
+
+    <g transform="translate(240, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#22C55E" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#22C55E" font-size="10" font-weight="bold">IMPROVEMENTS</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">Insulation</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">Heating upgrades</text>
+      <text x="100" y="75" text-anchor="middle" fill="#6D28D9" font-size="8">Double glazing</text>
+      <text x="100" y="88" text-anchor="middle" fill="#6D28D9" font-size="8">LED lighting</text>
+    </g>
+
+    <g transform="translate(460, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#7C3AED" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#7C3AED" font-size="10" font-weight="bold">FUTURE CHANGES</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">Target raising to C</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">Phased introduction</text>
+      <text x="100" y="75" text-anchor="middle" fill="#6D28D9" font-size="8">Check latest rules</text>
+      <text x="100" y="94" text-anchor="middle" fill="#7C3AED" font-size="8" font-weight="bold">Plan improvements now</text>
+    </g>
+  </g>
+
+  <circle cx="40" cy="40" r="20" fill="#7C3AED" opacity="0.1"/>
+  <circle cx="760" cy="460" r="25" fill="#A78BFA" opacity="0.12"/>
+</svg>

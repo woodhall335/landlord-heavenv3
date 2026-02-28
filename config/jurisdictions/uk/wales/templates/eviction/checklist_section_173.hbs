@@ -1,119 +1,324 @@
+{{!--
+  ============================================================================
+  SECTION 173 LANDLORD'S NOTICE - SERVICE AND VALIDITY CHECKLIST
+  Renting Homes (Wales) Act 2016, Section 173
+  ============================================================================
+  Harmonized design system matching England checklist templates
+--}}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Section 173 Landlord's Notice - Service and Validity Checklist</title>
   <style>
+    {{{print_css}}}
+
+    /* ===== @PAGE OVERRIDE - MATCH FORM MARGINS ===== */
+    @page {
+      size: A4;
+      margin: 10mm;
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      line-height: 1.6;
-      padding: 40px;
-      color: #333;
+      padding: 0;
+      margin: 0 auto;
     }
-    h1 {
+
+    /* ===== KEEP-TOGETHER UTILITIES ===== */
+    .keep-together {
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+    }
+
+    .details-section h2,
+    .numbered-badge {
+      page-break-after: avoid !important;
+      break-after: avoid-page !important;
+    }
+
+    /* ===== HARMONIZED DOCUMENT STYLES ===== */
+
+    .doc-header {
+      text-align: center;
+      margin-bottom: 1.5em;
+      padding-bottom: 1em;
+      border-bottom: 2px solid #1a1a1a;
+    }
+
+    .doc-header h1 {
+      font-size: 14pt;
+      font-weight: 600;
+      margin: 0 0 0.5em 0;
+      line-height: 1.3;
       color: #1a1a1a;
-      border-bottom: 3px solid #dc2626;
-      padding-bottom: 10px;
-      margin-bottom: 20px;
     }
-    h2 {
-      color: #dc2626;
-      margin-top: 30px;
-      margin-bottom: 15px;
-    }
-    h3 {
-      color: #1a1a1a;
-      margin-top: 20px;
-      margin-bottom: 10px;
-    }
-    .section {
-      margin: 25px 0;
-    }
-    .info-box {
-      background: #fef2f2;
-      border-left: 4px solid #dc2626;
-      padding: 15px;
-      margin: 20px 0;
-    }
-    .warning {
-      background: #fef3c7;
-      border-left: 4px solid #f59e0b;
-      padding: 15px;
-      margin: 20px 0;
-    }
-    .critical {
-      background: #fee2e2;
-      border-left: 4px solid #dc2626;
-      padding: 15px;
-      margin: 20px 0;
-      font-weight: bold;
-    }
-    .checklist {
-      background: #f9fafb;
-      border: 1px solid #e5e7eb;
-      padding: 20px;
-      border-radius: 5px;
-      margin: 20px 0;
-    }
-    .checkbox {
+
+    .doc-badge {
       display: inline-block;
-      width: 18px;
-      height: 18px;
-      border: 2px solid #333;
-      margin-right: 10px;
-      vertical-align: middle;
+      background: #1a1a1a;
+      color: white;
+      padding: 0.3em 0.8em;
+      font-size: 10pt;
+      font-weight: 600;
+      letter-spacing: 0.5px;
     }
-    ul {
-      margin-left: 20px;
+
+    .purpose-box {
+      border: 2px solid #1a1a1a;
+      padding: 1em;
+      margin: 1.5em 0;
+      background: #fafafa;
+    }
+
+    .purpose-box p {
+      font-size: 10pt;
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    h2 {
+      page-break-after: avoid;
+    }
+
+    .details-section {
+      margin: 1.5em 0;
+    }
+
+    .details-section h2 {
+      font-size: 12pt;
+      font-weight: 600;
+      margin: 0 0 1em 0;
+      padding-bottom: 0.5em;
+      border-bottom: 2px solid #1a1a1a;
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+    }
+
+    .details-section h2 .num {
+      background: #1a1a1a;
+      color: white;
+      width: 1.5em;
+      height: 1.5em;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10pt;
+    }
+
+    .details-grid {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 0.5em 1em;
+      font-size: 10pt;
+    }
+
+    .details-grid dt {
+      font-weight: 600;
+      color: #444;
+    }
+
+    .details-grid dd {
+      margin: 0;
+      color: #1a1a1a;
+      padding-bottom: 0.5em;
+      border-bottom: 1px solid #eee;
+    }
+
+    .checklist-box {
+      border: 1px solid #1a1a1a;
+      margin: 1.5em 0;
+      page-break-inside: avoid;
+    }
+
+    .checklist-box h3 {
+      font-size: 11pt;
+      font-weight: 700;
+      margin: 0;
+      padding: 0.6em 0.8em;
+      background: #1a1a1a;
+      color: white;
+    }
+
+    .checklist-box .content {
+      padding: 1em;
+      background: #fff;
+    }
+
+    .checklist-box p {
+      font-size: 10pt;
+      margin: 0 0 0.75em 0;
+      font-weight: 500;
+    }
+
+    .checklist-box ul {
+      margin: 0;
+      padding: 0;
       list-style: none;
     }
-    li {
-      margin: 12px 0;
+
+    .checklist-box li {
+      font-size: 10pt;
+      line-height: 1.6;
+      margin: 0.6em 0;
+      padding-left: 2em;
+      position: relative;
     }
-    .field-label {
-      font-weight: bold;
-      color: #1a1a1a;
+
+    .checklist-box li .checkbox {
+      position: absolute;
+      left: 0;
+      top: 0.15em;
+      width: 14px;
+      height: 14px;
+      border: 1.5px solid #1a1a1a;
+      background: white;
     }
-    footer {
-      margin-top: 50px;
-      padding-top: 20px;
-      border-top: 2px solid #e5e7eb;
-      font-size: 0.9em;
-      color: #6b7280;
+
+    .checklist-box li ul {
+      margin-top: 0.5em;
+      padding-left: 0;
+    }
+
+    .checklist-box li li {
+      padding-left: 1.5em;
+      margin: 0.3em 0;
+      font-size: 9pt;
+      color: #555;
+    }
+
+    .checklist-box li li::before {
+      content: "•";
+      position: absolute;
+      left: 0.5em;
+    }
+
+    .checklist-box li li .checkbox {
+      display: none;
+    }
+
+    .alert-box {
+      padding: 1em;
+      margin: 1.5em 0;
+      border-left: 4px solid;
+      page-break-inside: avoid;
+    }
+
+    .alert-box.warning {
+      background: #fffbeb;
+      border-color: #f59e0b;
+    }
+
+    .alert-box.critical {
+      background: #fef2f2;
+      border-color: #dc2626;
+    }
+
+    .alert-box h4 {
+      font-size: 10pt;
+      font-weight: 700;
+      margin: 0 0 0.5em 0;
+    }
+
+    .alert-box p {
+      font-size: 10pt;
+      line-height: 1.5;
+      margin: 0.3em 0;
+    }
+
+    .alert-box ul {
+      margin: 0.5em 0 0 0;
+      padding-left: 1.5em;
+      font-size: 10pt;
+    }
+
+    .alert-box li {
+      margin: 0.3em 0;
+    }
+
+    .doc-footer {
+      margin-top: 2em;
+      padding-top: 1em;
+      border-top: 2px solid #1a1a1a;
+      font-size: 9pt;
+      color: #666;
+    }
+
+    .doc-footer p {
+      margin: 0.3em 0;
+    }
+
+    .checklist {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    .checklist-section {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    @media print {
+      .checklist-box,
+      .alert-box {
+        page-break-inside: avoid;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>Section 173 Landlord's Notice - Service and Validity Checklist</h1>
 
-  <div class="info-box">
-    <strong>Purpose:</strong> Use this checklist to verify your Section 173 notice (no-fault possession) was served correctly under the Renting Homes (Wales) Act 2016. Keep this checklist with your evidence file.
-  </div>
+<!-- Document Header -->
+<div class="doc-header">
+  <h1>Service and Validity Checklist</h1>
+  <span class="doc-badge">Section 173 Notice (Wales)</span>
+</div>
 
-  <div class="section">
-    <h2>Notice Details</h2>
-    <p><span class="field-label">Landlord:</span> {{landlord_full_name}}</p>
+<!-- Purpose -->
+<div class="purpose-box">
+  <p><strong>Purpose:</strong> Use this checklist to verify your Section 173 notice (no-fault possession) was served correctly under the Renting Homes (Wales) Act 2016. Keep this checklist with your evidence file.</p>
+</div>
+
+<!-- Notice Details -->
+<div class="details-section">
+  <h2><span class="num">1</span> Notice Details</h2>
+  <dl class="details-grid">
+    <dt>Landlord:</dt>
+    <dd>{{landlord_full_name}}</dd>
     {{#if landlord_address}}
-    <p><span class="field-label">Landlord Address:</span> {{landlord_address}}</p>
+    <dt>Landlord Address:</dt>
+    <dd>{{landlord_address}}</dd>
     {{/if}}
-    <p><span class="field-label">Contract-Holder:</span> {{contract_holder_full_name}}</p>
-    <p><span class="field-label">Property Address:</span> {{property_address}}</p>
-    <p><span class="field-label">Occupation Contract Start Date:</span> {{contract_start_date_formatted}}</p>
-    <p><span class="field-label">Notice Service Date:</span> {{service_date_formatted}}</p>
-    <p><span class="field-label">Earliest Possession Date (on or after):</span> {{expiry_date}}</p>
-  </div>
+    <dt>Contract-Holder:</dt>
+    <dd>{{contract_holder_full_name}}</dd>
+    <dt>Property Address:</dt>
+    <dd>{{property_address}}</dd>
+    <dt>Contract Start Date:</dt>
+    <dd>{{contract_start_date_formatted}}</dd>
+    <dt>Notice Service Date:</dt>
+    <dd>{{service_date_formatted}}</dd>
+    <dt>Earliest Possession Date:</dt>
+    <dd>{{expiry_date_formatted}}</dd>
+  </dl>
+</div>
 
-  <div class="section">
-    <h2>Service Evidence Checklist</h2>
-    <div class="checklist">
-      <p><strong>Confirm you have collected and retained the following evidence of service:</strong></p>
+<!-- Service Evidence -->
+<div class="details-section">
+  <h2><span class="num">2</span> Service Evidence Checklist</h2>
+
+  <div class="checklist-box">
+    <h3>Evidence of Service</h3>
+    <div class="content">
+      <p>Confirm you have collected and retained the following evidence of service:</p>
       <ul>
         <li><span class="checkbox"></span> Original signed Section 173 Landlord's Notice</li>
         <li><span class="checkbox"></span> Copy of the notice served to contract-holder</li>
         <li><span class="checkbox"></span> Date and time of service recorded</li>
         <li><span class="checkbox"></span> Method of service documented (hand delivery / first class post / recorded delivery)</li>
         <li><span class="checkbox"></span> Proof of service:
-          <ul style="margin-left: 30px; margin-top: 8px;">
+          <ul>
             <li>If hand delivered: Photo of letterbox with notice visible, witness statement</li>
             <li>If posted: Proof of postage receipt (Royal Mail certificate of posting)</li>
             <li>If recorded delivery: Tracking number and delivery confirmation</li>
@@ -123,45 +328,55 @@
         <li><span class="checkbox"></span> Any correspondence from contract-holder acknowledging receipt</li>
       </ul>
     </div>
-
-    <div class="warning">
-      <strong>Keep All Evidence:</strong> If you need to apply for a possession order, you must prove service. Without clear evidence, your claim may be rejected by the court.
-    </div>
   </div>
 
-  <div class="section">
-    <h2>Validity Requirements (Renting Homes (Wales) Act 2016, Section 173)</h2>
-    <div class="checklist">
-      <p><strong>Verify your notice meets these validity requirements:</strong></p>
+  <div class="alert-box warning">
+    <h4>Keep All Evidence</h4>
+    <p>If you need to apply for a possession order, you must prove service. Without clear evidence, your claim may be rejected by the court.</p>
+  </div>
+</div>
+
+<!-- Validity Requirements -->
+<div class="details-section">
+  <h2><span class="num">3</span> Validity Requirements</h2>
+
+  <div class="checklist-box">
+    <h3>Notice Validity (Renting Homes (Wales) Act 2016, Section 173)</h3>
+    <div class="content">
+      <p>Verify your notice meets these validity requirements:</p>
       <ul>
         <li><span class="checkbox"></span> Notice is in writing and contains required information (landlord, contract-holder, property address)</li>
-        <li><span class="checkbox"></span> Notice gives at least 6 months notice</li>
+        <li><span class="checkbox"></span> The landlord has given at least six months' notice as required by section 173 of the Renting Homes (Wales) Act 2016. The notice expiry date is not earlier than six months after the date of service.</li>
         <li><span class="checkbox"></span> Notice not served within the first 6 months of occupation contract (prohibited period)</li>
         <li><span class="checkbox"></span> Contract is a standard occupation contract (not secure or prohibited)</li>
-        <li><span class="checkbox"></span"> Notice specifies possession date is on or after: <strong>{{expiry_date}}</strong></li>
+        <li><span class="checkbox"></span> Notice specifies possession date is on or after: <strong>{{expiry_date_formatted}}</strong></li>
         <li><span class="checkbox"></span> Notice signed and dated by landlord or landlord's agent</li>
         <li><span class="checkbox"></span> Landlord is registered with Rent Smart Wales (legally required)</li>
         <li><span class="checkbox"></span> If deposit taken, deposit protected in approved Welsh scheme (DPS Wales, TDS Wales, MyDeposits Wales)</li>
       </ul>
     </div>
-
-    <div class="critical">
-      ⚠️ <strong>CRITICAL WALES-SPECIFIC REQUIREMENTS:</strong>
-      <ul style="margin-top: 10px;">
-        <li>Section 173 notices can only be used for standard occupation contracts (most AST-equivalent tenancies)</li>
-        <li>You must be registered with Rent Smart Wales - unlicensed landlords cannot serve valid notices</li>
-        <li>The 6-month prohibited period is absolute - notices served earlier are invalid</li>
-        <li>The notice must give at least 6 months notice under the Renting Homes (Wales) Act 2016</li>
-      </ul>
-    </div>
   </div>
 
-  <div class="section">
-    <h2>After Service</h2>
-    <div class="checklist">
-      <p><strong>Post-service actions:</strong></p>
+  <div class="alert-box critical">
+    <h4>CRITICAL: Wales-Specific Requirements</h4>
+    <ul>
+      <li>Section 173 notices can only be used for standard occupation contracts (most AST-equivalent tenancies)</li>
+      <li>You must be registered with Rent Smart Wales - unlicensed landlords cannot serve valid notices</li>
+      <li>The six-month prohibited period is absolute - notices served within the first six months of the occupation contract are invalid</li>
+      <li>The notice must give at least six months' notice under section 173 of the Renting Homes (Wales) Act 2016. The notice expiry date must not be earlier than six months after the date of service.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- After Service -->
+<div class="details-section">
+  <h2><span class="num">4</span> After Service</h2>
+
+  <div class="checklist-box">
+    <h3>Post-Service Actions</h3>
+    <div class="content">
       <ul>
-        <li><span class="checkbox"></span> Wait until possession date has passed: <strong>{{expiry_date}}</strong></li>
+        <li><span class="checkbox"></span> Wait until possession date has passed: <strong>{{expiry_date_formatted}}</strong></li>
         <li><span class="checkbox"></span> Do not change locks or remove contract-holder belongings (illegal eviction)</li>
         <li><span class="checkbox"></span> Do not harass contract-holder or cut off utilities</li>
         <li><span class="checkbox"></span> If contract-holder remains after possession date, apply to court for possession order</li>
@@ -169,12 +384,15 @@
       </ul>
     </div>
   </div>
+</div>
 
-  <footer>
-    <p><strong>Legal Basis:</strong> Renting Homes (Wales) Act 2016, Section 173</p>
-    <p><strong>Rent Smart Wales:</strong> All landlords in Wales must be registered</p>
-    <p><strong>Generated:</strong> {{generated_date}}</p>
-    <p><strong>Landlord Heaven Notice Only Pack</strong> | Wales</p>
-  </footer>
+<!-- Footer -->
+<div class="doc-footer">
+  <p><strong>Legal Basis:</strong> Renting Homes (Wales) Act 2016, Section 173</p>
+  <p><strong>Rent Smart Wales:</strong> All landlords in Wales must be registered</p>
+  <p><strong>Generated:</strong> {{generated_date}}</p>
+  <p><strong>Landlord Heaven Notice Only Pack</strong> | Wales</p>
+</div>
+
 </body>
 </html>

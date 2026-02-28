@@ -14,7 +14,7 @@
  */
 export interface CaseFacts {
   // Tenancy basics
-  jurisdiction: 'england-wales' | 'scotland';
+  jurisdiction: 'england' | 'wales' | 'scotland' | 'northern-ireland';
   tenancy_type?: 'AST' | 'regulated' | 'excluded' | 'lodger';
   tenancy_start_date?: string;
   tenancy_end_date?: string; // For fixed term
@@ -140,6 +140,7 @@ export interface Section21Recommendation {
   compliance_checks: ComplianceCheck[];
   red_flags?: RedFlag[];
   can_use_accelerated?: boolean;
+  blocking_reasons?: string[];
 }
 
 /**

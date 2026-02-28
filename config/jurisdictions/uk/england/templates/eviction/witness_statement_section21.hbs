@@ -1,0 +1,499 @@
+{{!--
+  ============================================================================
+  WITNESS STATEMENT FOR SECTION 21 POSSESSION PROCEEDINGS
+  Civil Procedure Rules, Practice Direction 32
+  ============================================================================
+  Witness statement specifically designed for Section 21 accelerated possession.
+  Focuses on statutory compliance rather than rent arrears.
+
+  IMPORTANT: This statement confirms compliance with Housing Act 1988 requirements
+  for a valid Section 21 notice.
+--}}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Witness Statement of {{landlord_full_name}} - Section 21 Possession</title>
+  <style>
+    {{{print_css}}}
+
+    /* ===== WITNESS STATEMENT STYLES ===== */
+
+    /* Document Header */
+    .court-header {
+      text-align: center;
+      margin-bottom: 2em;
+      padding-bottom: 1.5em;
+      border-bottom: 3px solid #1a1a1a;
+    }
+
+    .court-name {
+      font-size: 12pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin: 0 0 0.5em 0;
+    }
+
+    .claim-number {
+      font-size: 10pt;
+      color: #666;
+      margin: 0;
+    }
+
+    .claim-number-box {
+      display: inline-block;
+      border: 2px solid #1a1a1a;
+      padding: 0.5em 1em;
+      margin-top: 0.5em;
+      font-family: monospace;
+      min-width: 180px;
+      min-height: 1.5em;
+      font-size: 12pt;
+    }
+
+    /* Parties Block */
+    .parties-block {
+      margin: 1.5em 0;
+      padding: 1em;
+      border: 1px solid #ddd;
+      background: #fafafa;
+    }
+
+    .party-row {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 1em;
+      align-items: center;
+      margin: 0.75em 0;
+    }
+
+    .party-name {
+      font-size: 11pt;
+      font-weight: 600;
+    }
+
+    .party-role {
+      font-size: 9pt;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .party-divider {
+      text-align: center;
+      font-style: italic;
+      color: #999;
+    }
+
+    /* Document Title */
+    .doc-title {
+      text-align: center;
+      margin: 2em 0;
+      padding: 1em;
+      background: #1a1a1a;
+      color: white;
+    }
+
+    .doc-title h1 {
+      font-size: 14pt;
+      font-weight: 700;
+      margin: 0;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Opening Statement */
+    .opening-statement {
+      font-size: 11pt;
+      line-height: 1.6;
+      margin: 1.5em 0;
+      padding: 1em;
+      background: #f5f5f5;
+      border-left: 3px solid #1a1a1a;
+    }
+
+    /* Numbered Paragraphs */
+    .statement-section {
+      margin: 2em 0;
+    }
+
+    .statement-section h2 {
+      font-size: 11pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin: 0 0 1em 0;
+      padding-bottom: 0.5em;
+      border-bottom: 2px solid #1a1a1a;
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+    }
+
+    .statement-section h2 .num {
+      background: #1a1a1a;
+      color: white;
+      width: 1.5em;
+      height: 1.5em;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10pt;
+    }
+
+    .statement-content {
+      font-size: 10pt;
+      line-height: 1.7;
+      text-align: justify;
+    }
+
+    .statement-content p {
+      margin: 0.75em 0;
+    }
+
+    .numbered-para {
+      padding-left: 2em;
+      position: relative;
+      margin: 0.75em 0;
+    }
+
+    .numbered-para::before {
+      position: absolute;
+      left: 0;
+      font-weight: 600;
+    }
+
+    /* Compliance Table */
+    .compliance-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1em 0;
+      font-size: 9pt;
+    }
+
+    .compliance-table th,
+    .compliance-table td {
+      border: 1px solid #1a1a1a;
+      padding: 8px;
+      text-align: left;
+    }
+
+    .compliance-table th {
+      background: #e9ecef;
+      font-weight: 600;
+    }
+
+    .compliance-table tr:nth-child(even) td {
+      background: #f9f9f9;
+    }
+
+    /* Signature Block */
+    .signature-block {
+      margin: 3em 0 2em 0;
+      page-break-inside: avoid;
+    }
+
+    .statement-of-truth {
+      border: 2px solid #1a1a1a;
+      padding: 1.25em;
+      margin-bottom: 2em;
+      background: #fafafa;
+    }
+
+    .statement-of-truth h3 {
+      font-size: 11pt;
+      font-weight: 700;
+      margin: 0 0 0.75em 0;
+      text-transform: uppercase;
+    }
+
+    .statement-of-truth p {
+      font-size: 10pt;
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    .signature-area {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2em;
+      margin-top: 2em;
+    }
+
+    .signature-field {
+      font-size: 10pt;
+    }
+
+    .signature-field label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.5em;
+    }
+
+    .signature-field .line {
+      border-bottom: 1px solid #1a1a1a;
+      min-height: 2em;
+      margin-bottom: 0.25em;
+    }
+
+    .signature-field .value {
+      min-height: 1.5em;
+    }
+
+    /* Notes Section */
+    .notes-section {
+      margin: 2em 0;
+      padding: 1em;
+      border: 1px solid #ddd;
+      background: #f9f9f9;
+    }
+
+    .notes-section h3 {
+      font-size: 10pt;
+      font-weight: 700;
+      margin: 0 0 0.75em 0;
+      text-transform: uppercase;
+    }
+
+    .notes-section ol {
+      margin: 0;
+      padding-left: 1.5em;
+    }
+
+    .notes-section li {
+      font-size: 9pt;
+      line-height: 1.5;
+      margin: 0.4em 0;
+      color: #555;
+    }
+
+    /* Footer */
+    .doc-footer {
+      margin-top: 2em;
+      padding-top: 1em;
+      border-top: 2px solid #1a1a1a;
+      font-size: 9pt;
+      color: #666;
+    }
+
+    @media print {
+      .signature-block,
+      .statement-of-truth {
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Court Header -->
+<div class="court-header">
+  <p class="court-name">In the {{#if court_name}}{{court_name}}{{else}}County Court{{/if}}</p>
+  <p class="claim-number">Claim No: </p>
+  <div class="claim-number-box">&nbsp;</div>
+</div>
+
+<!-- Parties -->
+<div class="parties-block">
+  <div class="party-row">
+    <div>
+      <p class="party-name">{{landlord_full_name}}{{#if landlord_2_name}}<br>{{landlord_2_name}}{{/if}}</p>
+    </div>
+    <div></div>
+    <div style="text-align: right;">
+      <p class="party-role">Claimant{{#if landlord_2_name}}s{{/if}}</p>
+    </div>
+  </div>
+  <div class="party-divider">&ndash; and &ndash;</div>
+  <div class="party-row">
+    <div>
+      <p class="party-name">{{tenant_full_name}}{{#if tenant_2_name}}<br>{{tenant_2_name}}{{/if}}</p>
+    </div>
+    <div></div>
+    <div style="text-align: right;">
+      <p class="party-role">Defendant{{#if tenant_2_name}}s{{/if}}</p>
+    </div>
+  </div>
+</div>
+
+<!-- Document Title -->
+<div class="doc-title">
+  <h1>Witness Statement of {{landlord_full_name}}</h1>
+</div>
+
+<!-- Opening Statement -->
+<div class="opening-statement">
+  I, <strong>{{landlord_full_name}}</strong>, of <strong>{{landlord_address}}</strong>, will say as follows:
+</div>
+
+<!-- Section 1: Introduction -->
+<div class="statement-section">
+  <h2><span class="num">1</span> Introduction</h2>
+  <div class="statement-content">
+    <p>1.1 I am the claimant in these proceedings and the landlord of the property at <strong>{{property_address}}</strong> ("the Property").</p>
+    <p>1.2 I make this statement in support of my claim for possession under Section 21 of the Housing Act 1988.</p>
+    <p>1.3 The facts stated in this witness statement are within my own knowledge and are true.</p>
+  </div>
+</div>
+
+<!-- Section 2: Tenancy -->
+<div class="statement-section">
+  <h2><span class="num">2</span> The Tenancy</h2>
+  <div class="statement-content">
+    <p>2.1 The defendant{{#if tenant_2_name}}s{{/if}} entered into an Assured Shorthold Tenancy of the Property on <strong>{{#if tenancy_start_date}}{{format_date tenancy_start_date "long"}}{{else}}[tenancy start date]{{/if}}</strong>.</p>
+    <p>2.2 The tenancy agreement was signed on {{#if tenancy_agreement_date}}{{format_date tenancy_agreement_date "long"}}{{else}}the same date{{/if}}.</p>
+    <p>2.3 The tenancy is an Assured Shorthold Tenancy within the meaning of Chapter II of Part I of the Housing Act 1988.</p>
+    {{#if fixed_term}}
+    <p>2.4 The tenancy was granted for a fixed term ending on {{#if fixed_term_end_date}}{{format_date fixed_term_end_date "long"}}{{else}}[fixed term end date]{{/if}}.</p>
+    {{else}}
+    <p>2.4 The tenancy continues as a periodic tenancy on a {{rent_frequency}} basis.</p>
+    {{/if}}
+  </div>
+</div>
+
+<!-- Section 3: Section 21 Notice -->
+<div class="statement-section">
+  <h2><span class="num">3</span> Section 21 Notice</h2>
+  <div class="statement-content">
+    <p>3.1 I served a valid Section 21 notice (Form 6A) on the defendant{{#if tenant_2_name}}s{{/if}} on <strong>{{#if notice_served_date}}{{format_date notice_served_date "long"}}{{else}}[notice service date]{{/if}}</strong>.</p>
+    <p>3.2 The notice was served by <strong>{{#if notice_service_method}}{{notice_service_method}}{{else}}[service method]{{/if}}</strong>.</p>
+    <p>3.3 The notice required possession of the Property on or after <strong>{{#if notice_expiry_date}}{{format_date notice_expiry_date "long"}}{{else}}[notice expiry date]{{/if}}</strong>.</p>
+    <p>3.4 A copy of the notice is attached to the claim form at Tab B.</p>
+    <p>3.5 The notice period given was at least two months, as required by Section 21(1) of the Housing Act 1988.</p>
+    {{#if fixed_term}}
+    <p>3.6 The notice expiry date was not before the end of the fixed term of the tenancy.</p>
+    {{/if}}
+    <p>3.7 The defendant{{#if tenant_2_name}}s have{{else}} has{{/if}} not vacated the Property despite the notice period having expired.</p>
+  </div>
+</div>
+
+<!-- Section 4: Statutory Compliance -->
+<div class="statement-section">
+  <h2><span class="num">4</span> Statutory Compliance</h2>
+  <div class="statement-content">
+    <p>4.1 I confirm that I have complied with all statutory requirements for the service of a valid Section 21 notice. Specifically:</p>
+
+    <table class="compliance-table">
+      <thead>
+        <tr>
+          <th>Requirement</th>
+          <th>Status</th>
+          <th>Date/Details</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#if deposit_amount}}
+        <tr>
+          <td><strong>Deposit Protection</strong><br>Housing Act 2004, s.213</td>
+          <td>Protected with {{#if deposit_scheme}}{{deposit_scheme}}{{else}}authorised scheme{{/if}}</td>
+          <td>{{#if deposit_protection_date}}Protected on {{format_date deposit_protection_date "short"}}{{else}}Within 30 days{{/if}}</td>
+        </tr>
+        <tr>
+          <td><strong>Prescribed Information</strong><br>Housing (Tenancy Deposits) Regulations</td>
+          <td>Provided to defendant</td>
+          <td>Within 30 days of receiving deposit</td>
+        </tr>
+        {{else}}
+        <tr>
+          <td><strong>Deposit</strong></td>
+          <td colspan="2">No deposit was taken for this tenancy</td>
+        </tr>
+        {{/if}}
+        <tr>
+          <td><strong>Gas Safety Certificate (CP12)</strong><br>Gas Safety Regulations 1998</td>
+          <td>Provided to defendant</td>
+          <td>Before occupation and annually{{#if gas_safety_check_date}}<br>Last check: {{format_date gas_safety_check_date "short"}}{{/if}}</td>
+        </tr>
+        <tr>
+          <td><strong>Energy Performance Certificate</strong><br>Energy Performance Regulations</td>
+          <td>Provided to defendant</td>
+          <td>{{#if epc_provided_date}}{{format_date epc_provided_date "short"}}{{else}}At or before tenancy start{{/if}}</td>
+        </tr>
+        <tr>
+          <td><strong>How to Rent Guide</strong><br>Deregulation Act 2015</td>
+          <td>Current version provided</td>
+          <td>{{#if how_to_rent_date}}{{format_date how_to_rent_date "short"}}{{else}}At or before tenancy start{{/if}}{{#if how_to_rent_method}} ({{how_to_rent_method}}){{/if}}</td>
+        </tr>
+        <tr>
+          <td><strong>Tenant Fees Act 2019</strong></td>
+          <td>No prohibited payments taken</td>
+          <td>Fully compliant</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>4.2 Copies of the relevant certificates are attached to the claim form at Tabs E, F, G, and H.</p>
+  </div>
+</div>
+
+<!-- Section 5: Assured Shorthold Tenancy Confirmation -->
+<div class="statement-section">
+  <h2><span class="num">5</span> Assured Shorthold Tenancy Confirmation</h2>
+  <div class="statement-content">
+    <p>5.1 I confirm that:</p>
+    <p>(a) The tenancy was created on or after 28 February 1997;</p>
+    <p>(b) No notice was given to the defendant stating that the tenancy is not an assured shorthold tenancy;</p>
+    <p>(c) The tenancy agreement does not contain a provision stating it is not an assured shorthold tenancy;</p>
+    <p>(d) The defendant is not an agricultural worker occupying the Property as part of their employment;</p>
+    <p>(e) The tenancy did not arise on the death of a tenant under a Rent Act protected tenancy;</p>
+    <p>(f) The tenancy was not formerly a secure tenancy; and</p>
+    <p>(g) The tenancy was not granted under Schedule 10 to the Local Government and Housing Act 1989.</p>
+    <p>5.2 Accordingly, the tenancy is an assured shorthold tenancy and the accelerated possession procedure under CPR Part 55 applies.</p>
+  </div>
+</div>
+
+<!-- Section 6: Conclusion -->
+<div class="statement-section">
+  <h2><span class="num">6</span> Conclusion</h2>
+  <div class="statement-content">
+    <p>6.1 The Section 21 notice served on the defendant{{#if tenant_2_name}}s{{/if}} was valid and has expired.</p>
+    <p>6.2 The defendant{{#if tenant_2_name}}s have{{else}} has{{/if}} not vacated the Property.</p>
+    <p>6.3 I respectfully ask the court to make an order for possession of the Property.</p>
+  </div>
+</div>
+
+<!-- Signature Block -->
+<div class="signature-block">
+  <div class="statement-of-truth">
+    <h3>Statement of Truth</h3>
+    <p>I believe that the facts stated in this witness statement are true. I understand that proceedings for contempt of court may be brought against anyone who makes, or causes to be made, a false statement in a document verified by a statement of truth without an honest belief in its truth.</p>
+  </div>
+
+  <div class="signature-area">
+    <div class="signature-field">
+      <label>Signed:</label>
+      <div class="line"></div>
+      <div class="value">{{landlord_full_name}}</div>
+    </div>
+    <div class="signature-field">
+      <label>Dated:</label>
+      <div class="line"></div>
+      {{!-- FIX 4: Auto-populate statement date with generation date --}}
+      <div class="value">{{#if statement_date}}{{statement_date}}{{/if}}</div>
+    </div>
+  </div>
+</div>
+
+<!-- Notes -->
+<div class="notes-section">
+  <h3>Important Notes</h3>
+  <ol>
+    <li>This witness statement must be signed and dated before submission to court.</li>
+    <li>For accelerated possession, a witness statement is optional but recommended.</li>
+    <li>If a hearing is required, you may be called to give oral evidence. Ensure all facts are accurate.</li>
+    <li>Keep the original signed copy. Submit copies to the court.</li>
+    <li>Do not alter this statement after signing. Create a supplemental statement if needed.</li>
+  </ol>
+</div>
+
+<!-- Footer -->
+<div class="doc-footer">
+  <p><strong>Generated:</strong> {{format_date generated_date "long"}}</p>
+  <p><strong>Landlord Heaven</strong> | Section 21 Witness Statement</p>
+</div>
+
+</body>
+</html>

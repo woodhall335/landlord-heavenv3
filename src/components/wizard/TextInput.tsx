@@ -1,11 +1,27 @@
 /**
  * Text Input
  *
- * Simple text input with validation and optional multi-field support
+ * Simple text input with validation and optional multi-field support.
+ * Optionally supports Ask Heaven inline enhancement for multiline (textarea) inputs.
  */
 
 import React from 'react';
 import { clsx } from 'clsx';
+import { RiErrorWarningLine } from 'react-icons/ri';
+import { AskHeavenInlineEnhancer, type AskHeavenInlineEnhancerProps } from './AskHeavenInlineEnhancer';
+
+export interface AskHeavenConfig {
+  /** Case ID for MQS mode */
+  caseId?: string;
+  /** Question/field ID */
+  questionId: string;
+  /** Human-readable question text */
+  questionText?: string;
+  /** API mode: 'mqs' | 'generic' | 'auto' */
+  apiMode?: AskHeavenInlineEnhancerProps['apiMode'];
+  /** Additional context for AI enhancement */
+  context?: Record<string, any>;
+}
 
 export interface TextInputProps {
   value?: string;
@@ -19,6 +35,8 @@ export interface TextInputProps {
   disabled?: boolean;
   multiline?: boolean;
   rows?: number;
+  /** Optional Ask Heaven configuration for AI enhancement (only for multiline inputs) */
+  askHeavenConfig?: AskHeavenConfig;
 }
 
 export const TextInput: React.FC<TextInputProps> = ({
@@ -33,6 +51,7 @@ export const TextInput: React.FC<TextInputProps> = ({
   disabled = false,
   multiline = false,
   rows = 3,
+  askHeavenConfig,
 }) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     let newValue = e.target.value;
@@ -88,11 +107,22 @@ export const TextInput: React.FC<TextInputProps> = ({
         />
       )}
 
+      {/* Ask Heaven Inline Enhancer for multiline inputs */}
+      {multiline && askHeavenConfig && (
+        <AskHeavenInlineEnhancer
+          caseId={askHeavenConfig.caseId}
+          questionId={askHeavenConfig.questionId}
+          questionText={askHeavenConfig.questionText}
+          answer={value}
+          onApply={onChange}
+          apiMode={askHeavenConfig.apiMode || 'auto'}
+          context={askHeavenConfig.context}
+        />
+      )}
+
       {error && (
         <p className="text-sm text-error flex items-center gap-1">
-          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-          </svg>
+          <RiErrorWarningLine className="w-4 h-4 text-[#7C3AED]" />
           {error}
         </p>
       )}

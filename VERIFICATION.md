@@ -126,7 +126,7 @@ Before deploying to production:
 - [x] Jurisdiction-specific copy (Scotland vs E&W)
 - [x] Decision engine returns allowed_routes
 - [x] Checkpoint API exposes blocking info
-- [ ] PDF domain updated to landlordheaven.com
+- [x] PDF domain updated to landlordheaven.co.uk
 - [ ] Unit tests added
 - [ ] E2E tests added
 
@@ -136,7 +136,7 @@ Before deploying to production:
 
 1. **Add Unit Tests** for date calculations
 2. **Add E2E Tests** for full wizard flows
-3. **Update PDF domain** to landlordheaven.com systematically
+3. ~~**Update PDF domain** to landlordheaven.co.uk systematically~~ ✅ Done
 4. **Fix any markdown rendering** in PDFs (if present)
 
 ---

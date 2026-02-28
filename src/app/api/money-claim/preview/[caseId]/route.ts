@@ -1,8 +1,12 @@
+import { NextResponse } from 'next/server';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
 import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 import type { CaseFacts } from '@/lib/case-facts/schema';
 import { mapCaseFactsToMoneyClaimCase } from '@/lib/documents/money-claim-wizard-mapper';
 import { generateMoneyClaimPack } from '@/lib/documents/money-claim-pack-generator';
+import { deriveCanonicalJurisdiction, type CanonicalJurisdiction } from '@/lib/types/jurisdiction';
+import { validateForPreview } from '@/lib/validation/previewValidation';
+import { assertPreviewAllowed } from '@/lib/payments/entitlement';
 
 type CaseRow = any;
 
@@ -51,6 +55,75 @@ export async function GET(
       caseRow.case_facts ||
       {};
 
+    // ============================================================================
+    // JURISDICTION VALIDATION & NI BLOCKING
+    // ============================================================================
+    const jurisdiction = deriveCanonicalJurisdiction(
+      caseRow.jurisdiction,
+      wizardFacts,
+    ) as CanonicalJurisdiction | undefined;
+
+    if (!jurisdiction) {
+      return NextResponse.json(
+        {
+          code: 'INVALID_JURISDICTION',
+          error: 'Invalid or missing jurisdiction',
+          user_message: 'A supported jurisdiction is required to generate a money claim preview.',
+          blocking_issues: [],
+          warnings: [],
+        },
+        { status: 422 },
+      );
+    }
+
+    // NI money claims are not supported
+    if (jurisdiction === 'northern-ireland') {
+      return NextResponse.json(
+        {
+          code: 'NI_MONEY_CLAIM_UNSUPPORTED',
+          error: 'NI_MONEY_CLAIM_UNSUPPORTED',
+          user_message:
+            'Money claims are not supported in Northern Ireland. Tenancy agreements remain available.',
+          blocking_issues: [{
+            code: 'NI_MONEY_CLAIM_UNSUPPORTED',
+            fields: ['jurisdiction'],
+            user_fix_hint: 'Money claims are not available in Northern Ireland. Only tenancy agreements are currently supported.',
+          }],
+          warnings: [],
+        },
+        { status: 422 },
+      );
+    }
+
+    // ============================================================================
+    // UNIFIED VALIDATION VIA REQUIREMENTS ENGINE
+    // ============================================================================
+    console.log('[MONEY-CLAIM-PREVIEW] Running unified validation via validateForPreview');
+    const validationError = validateForPreview({
+      jurisdiction,
+      product: 'money_claim',
+      route: 'money_claim',
+      facts: wizardFacts,
+      caseId,
+    });
+
+    if (validationError) {
+      console.warn('[MONEY-CLAIM-PREVIEW] Unified validation blocked preview:', {
+        case_id: caseId,
+      });
+      return validationError; // Already a NextResponse with standardized 422 payload
+    }
+
+    // ============================================================================
+    // PREVIEW ENTITLEMENT CHECK - Determines if watermark should be applied
+    // ============================================================================
+    const previewStatus = await assertPreviewAllowed({
+      caseId,
+      product: 'money_claim',
+      userId: user?.id,
+    });
+    const applyWatermark = previewStatus.applyWatermark;
+
     const caseFacts = wizardFactsToCaseFacts(wizardFacts) as CaseFacts;
     const moneyClaimCase = mapCaseFactsToMoneyClaimCase(caseFacts);
 
@@ -86,6 +159,17 @@ export async function GET(
     chunks.push(
       `<html><head><title>Money claim preview</title></head><body style="font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.5; padding: 24px;">`
     );
+
+    // Add watermark banner for unpaid cases
+    if (applyWatermark) {
+      chunks.push(
+        `<div style="background: #fef3c7; border: 2px solid #f59e0b; border-radius: 8px; padding: 16px; margin-bottom: 24px; text-align: center;">
+          <div style="font-size: 24px; font-weight: bold; color: #92400e; margin-bottom: 8px;">PREVIEW ONLY</div>
+          <p style="font-size: 14px; color: #92400e; margin: 0;">This is a draft preview. The final court-ready documents will be available after payment.</p>
+        </div>`
+      );
+    }
+
     chunks.push(
       `<h1 style="font-size: 20px; margin-bottom: 8px;">Money claim preview</h1>`
     );
@@ -125,6 +209,16 @@ export async function GET(
     chunks.push(
       `<p style="margin-top: 24px; font-size: 12px; color: #6b7280;">This is a preview only. The full pack contains court-ready PDFs and a complete evidence bundle.</p>`
     );
+
+    // Add footer watermark for unpaid cases
+    if (applyWatermark) {
+      chunks.push(
+        `<div style="position: fixed; bottom: 0; left: 0; right: 0; background: #fef3c7; border-top: 2px solid #f59e0b; padding: 12px; text-align: center;">
+          <span style="font-weight: bold; color: #92400e;">PREVIEW - Complete your purchase to access court-ready documents</span>
+        </div>`
+      );
+    }
+
     chunks.push(`</body></html>`);
 
     const htmlResponse = chunks.join('\n');

@@ -26,6 +26,49 @@ export type LegacyJurisdiction = 'england-wales' | 'england & wales';
 export type AnyJurisdiction = CanonicalJurisdiction | LegacyJurisdiction;
 
 /**
+ * Normalize a raw jurisdiction value to the canonical key.
+ * - FAIL CLOSED: Legacy "england-wales" returns undefined (caller must handle)
+ * - Returns undefined for invalid or missing values
+ */
+export function normalizeJurisdiction(
+  raw: string | null | undefined
+): CanonicalJurisdiction | undefined {
+  if (!raw || typeof raw !== 'string') return undefined;
+
+  const normalized = raw.toLowerCase().trim();
+
+  if (normalized === 'england' || normalized === 'wales' || normalized === 'scotland') {
+    return normalized as CanonicalJurisdiction;
+  }
+
+  if (normalized === 'northern-ireland') return 'northern-ireland';
+
+  // FAIL CLOSED: Legacy england-wales requires migration via migrateToCanonicalJurisdiction with property_location
+  if (
+    normalized === 'england-wales' ||
+    normalized === 'england & wales' ||
+    normalized === 'england and wales'
+  ) {
+    console.error(
+      `[JURISDICTION] Legacy jurisdiction "${raw}" detected. Use migrateToCanonicalJurisdiction with property_location.`
+    );
+    return undefined;
+  }
+
+  return undefined;
+}
+
+/**
+ * Render a jurisdiction key for template selection.
+ * Only allows individual canonical countries (no combined keys).
+ */
+export function renderingJurisdictionKey(
+  jurisdiction: Exclude<CanonicalJurisdiction, 'northern-ireland'>
+): 'england' | 'wales' | 'scotland' {
+  return jurisdiction;
+}
+
+/**
  * Migrate legacy jurisdiction to canonical value
  * If england-wales is provided without property_location context, defaults to 'england'
  */
@@ -53,17 +96,54 @@ export function migrateToCanonicalJurisdiction(
     if (propertyLocation === 'wales') return 'wales';
     if (propertyLocation === 'england') return 'england';
 
-    // Default to England (safest assumption for Section 21 compatibility)
-    console.warn(
-      `[MIGRATION] Converting legacy jurisdiction "${jurisdiction}" to "england". ` +
-      `To target Wales, use jurisdiction="wales" explicitly.`
-    );
-    return 'england';
+    // FAIL CLOSED: Cannot resolve without property location
+    // Do NOT default to england - this could apply wrong legal framework
+    const errorMessage =
+      `[MIGRATION] Cannot migrate legacy jurisdiction "${jurisdiction}" without property_location hint. ` +
+      `Legacy england-wales cases must provide explicit property_location.`;
+
+    console.error(errorMessage);
+
+    // Development-only: Throw error to catch bugs early
+    if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
+      console.error(
+        `⚠️  GUARDRAIL VIOLATION: Attempted to use legacy "england-wales" jurisdiction without property_location. ` +
+        `This will fail in production. Add property_location to your request.`
+      );
+    }
+
+    return null;
   }
 
   // Unrecognized value
   console.error(`[JURISDICTION] Invalid jurisdiction value: "${jurisdiction}"`);
   return null;
+}
+
+/**
+ * Derive a canonical jurisdiction using any available hints from stored facts.
+ *
+ * - Accepts legacy inputs ("england-wales", "england & wales", etc.) but
+ *   always returns a canonical key.
+ * - Prefers explicit property location hints when present (wizard facts or
+ *   nested case facts may expose `property_location` or `property.country`).
+ */
+export function deriveCanonicalJurisdiction(
+  jurisdiction: string | null | undefined,
+  facts?: Record<string, any> | null
+): CanonicalJurisdiction | null {
+  const propertyLocation =
+    (facts as any)?.property_location ||
+    (facts as any)?.property?.country ||
+    (facts as any)?.property?.jurisdiction ||
+    null;
+
+  return migrateToCanonicalJurisdiction(
+    jurisdiction,
+    propertyLocation === 'wales' || propertyLocation === 'england'
+      ? propertyLocation
+      : null,
+  );
 }
 
 /**

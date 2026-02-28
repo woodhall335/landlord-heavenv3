@@ -3,10 +3,10 @@
 # PROPERTY INVENTORY & CONDITION REPORT
 
 **Property:** {{property_address}}
-**Inspection Date:** {{inspection_date}}
+**Inspection Date:** {{format_date inspection_date 'long'}}
 **Inspection Time:** {{inspection_time}}
 **Inspector:** {{inspector_name}}
-**Tenancy Start:** {{tenancy_start_date}}
+**Tenancy Start:** {{format_date tenancy_start_date 'long'}}
 
 **Landlord:** {{landlord_name}}
 **Tenant(s):** {{tenant_names}}
@@ -56,7 +56,6 @@ Patio/Decking: {{garden.patio}}
 {{#each entrance_hall}}
 **{{this.item}}**
 Condition: {{this.condition}}
-Quantity: {{this.quantity}}
 Description: {{this.description}}
 Notes: {{this.notes}}
 {{/each}}
@@ -170,7 +169,7 @@ Reading: {{water_meter.reading}}
 ## KEYS & ACCESS
 
 {{#each keys}}
-- {{this.description}}: {{this.quantity}} provided
+- {{this.description}}{{#if this.quantity}}: {{this.quantity}} provided{{/if}}{{#if this.notes}} - {{this.notes}}{{/if}}
 {{/each}}
 
 ---
@@ -206,7 +205,7 @@ I certify this inventory accurately reflects the property condition.
 
 Signed: _________________________
 Name: {{inspector_name}}
-Date: {{inspection_date}}
+Date: {{format_date inspection_date 'long'}}
 
 ### Tenant(s):
 

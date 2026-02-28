@@ -112,12 +112,23 @@ export interface PRTData {
 
   // Legal Compliance & Safety
   gas_safety_certificate?: boolean;
+  gas_safety_certificate_date?: string;
+  gas_safety_certificate_expiry?: string;
   epc_rating?: string; // e.g., "C", "D" (minimum E required)
+  epc_certificate_date?: string;
   epc_expiry?: string;
   electrical_safety_certificate?: boolean;
+  eicr_certificate_date?: string;
+  eicr_next_inspection_date?: string;
   smoke_alarms_fitted?: boolean;
+  smoke_alarm_test_date?: string;
   carbon_monoxide_alarms?: boolean;
   repairing_standard_statement?: boolean; // Scotland-specific
+
+  // Deposit Compliance Dates - 30 WORKING DAYS requirement
+  deposit_paid_date?: string;
+  deposit_protection_date?: string;
+  prescribed_information_date?: string;
 
   // Maintenance & Repairs
   landlord_maintenance_responsibilities?: string;
@@ -237,6 +248,16 @@ export interface PRTData {
   product_tier?: string;
   document_id?: string;
   generation_timestamp?: string;
+
+  // Guarantor (Premium)
+  guarantor_name?: string;
+  guarantor_address?: string;
+  guarantor_email?: string;
+  guarantor_phone?: string;
+  guarantor_dob?: string;
+  guarantor_relationship?: string;
+  guarantor_required?: boolean;
+  joint_and_several_liability?: boolean;
 }
 
 // ============================================================================
@@ -256,7 +277,7 @@ export function validatePRTData(data: PRTData): { valid: boolean; errors: string
   if (!data.tenancy_start_date) errors.push('Tenancy start date is required');
   if (!data.tenants || data.tenants.length === 0) errors.push('At least one tenant is required');
   if (!data.rent_amount || data.rent_amount <= 0) errors.push('Valid rent amount is required');
-  if (!data.deposit_amount || data.deposit_amount < 0) errors.push('Deposit amount is required');
+  if (data.deposit_amount === null || data.deposit_amount === undefined || data.deposit_amount < 0) errors.push('Deposit amount is required');
 
   // Landlord registration (CRITICAL in Scotland)
   if (!data.landlord_reg_number) {
@@ -355,6 +376,90 @@ export async function generatePremiumPRT(
   // Generate from premium formatted template
   return generateDocument({
     templatePath: 'uk/scotland/templates/prt_agreement_premium.hbs',
+    data: enrichedData,
+    isPreview,
+    outputFormat,
+  });
+}
+
+/**
+ * Generates a standard HMO PRT agreement for Scotland
+ */
+export async function generateHMOPRT(
+  data: PRTData,
+  isPreview = false,
+  outputFormat: 'html' | 'pdf' | 'both' = 'html'
+): Promise<GeneratedDocument> {
+  // Validate data
+  const validation = validatePRTData(data);
+  if (!validation.valid) {
+    throw new Error(`HMO PRT data validation failed:\n${validation.errors.join('\n')}`);
+  }
+
+  // Validate HMO-specific requirements
+  if (!data.is_hmo) {
+    data.is_hmo = true;
+  }
+
+  // Enrich data with defaults
+  const enrichedData: PRTData = {
+    ...data,
+    is_hmo: true,
+    multiple_tenants: data.tenants.length > 1,
+    absence_notification_days: data.absence_notification_days || 28,
+    rent_period: data.rent_period || 'month',
+    is_fixed_term: false, // PRTs are always open-ended
+    document_id: data.document_id || `PRT-HMO-${Date.now()}`,
+    generation_timestamp: data.generation_timestamp || new Date().toISOString(),
+  };
+
+  // Generate from HMO template
+  return generateDocument({
+    templatePath: 'uk/scotland/templates/prt_agreement_hmo.hbs',
+    data: enrichedData,
+    isPreview,
+    outputFormat,
+  });
+}
+
+/**
+ * Generates a premium HMO PRT agreement for Scotland with HBS-style formatting
+ * Uses the same styling system as Wales premium agreements
+ */
+export async function generatePremiumHMOPRT(
+  data: PRTData,
+  isPreview = false,
+  outputFormat: 'html' | 'pdf' | 'both' = 'both'
+): Promise<GeneratedDocument> {
+  // Validate data
+  const validation = validatePRTData(data);
+  if (!validation.valid) {
+    throw new Error(`Premium HMO PRT data validation failed:\n${validation.errors.join('\n')}`);
+  }
+
+  // Validate HMO-specific requirements
+  if (!data.is_hmo) {
+    data.is_hmo = true;
+  }
+
+  // Enrich data with defaults
+  const enrichedData: PRTData = {
+    ...data,
+    is_hmo: true,
+    multiple_tenants: data.tenants.length > 1,
+    absence_notification_days: data.absence_notification_days || 28,
+    rent_period: data.rent_period || 'month',
+    is_fixed_term: false, // PRTs are always open-ended
+    current_date: data.current_date || new Date().toLocaleDateString('en-GB'),
+    current_year: data.current_year || new Date().getFullYear(),
+    document_id: data.document_id || `PRT-HMO-PREMIUM-${Date.now()}`,
+    generation_timestamp: data.generation_timestamp || new Date().toISOString(),
+    product_tier: 'premium',
+  };
+
+  // Generate from premium HMO template with HBS-style formatting
+  return generateDocument({
+    templatePath: 'uk/scotland/templates/prt_agreement_hmo_premium.hbs',
     data: enrichedData,
     isPreview,
     outputFormat,

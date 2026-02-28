@@ -1,0 +1,21 @@
+requiredOfficialForms: []
+optionalOfficialForms: []
+requiredTextBlocks:
+  - id: tenancy_core_terms
+    description: "Tenancy agreement core terms"
+    mustAppearIn: template
+    match: "Tenancy"
+    regex: false
+    minOccurrences: 0
+requiredPreconditions:
+  - id: tenant_details
+    requiredFactKeys: []
+    requiredQuestionIds: []
+    mustBeValidatedInFlow: true
+noticeRules:
+  requiredInputsFactKeys: []
+  minimumDays: 0
+  mustComputeExpiryDate: false
+  mustShowUserWarningIfInvalid: false
+legislationReferences:
+  - "Housing Act 1988"

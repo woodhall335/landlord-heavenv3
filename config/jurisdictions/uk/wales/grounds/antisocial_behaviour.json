@@ -1,0 +1,29 @@
+{
+  "ground": "antisocial_behaviour",
+  "type": "discretionary",
+  "category": "conduct",
+  "name": "Anti-Social Behaviour or Criminal Conduct",
+  "short_description": "Nuisance, annoyance, or criminal activity linked to the dwelling",
+  "legal_basis": {
+    "act": "Renting Homes (Wales) Act 2016",
+    "section": "Section 159",
+    "statute_year": "2016"
+  },
+  "requirements": {
+    "behaviour": "Conduct causing nuisance/annoyance or criminal conviction",
+    "scope": "Includes contract-holder, household members, visitors"
+  },
+  "notice_period": {
+    "minimum_days": 56,
+    "reference": "Can be shorter for serious ASB under court discretion"
+  },
+  "evidence_required": [
+    "Incident logs and witness statements",
+    "Police reports or crime reference numbers",
+    "Warning letters",
+    "Court convictions if applicable"
+  ],
+  "success_factors": {
+    "considerations": ["Severity and frequency", "Impact on neighbours", "Supportive evidence from authorities"]
+  }
+}

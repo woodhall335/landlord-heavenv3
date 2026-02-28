@@ -438,7 +438,7 @@ function getFactsJurisdiction(facts: CaseFacts): string {
     meta.jurisdiction ||
     meta.case_jurisdiction ||
     meta.jurisdiction_code ||
-    'england-wales'
+    'england' // Default to England (most common jurisdiction)
   );
 }
 
@@ -626,9 +626,6 @@ function buildBreachFactsContext(facts: CaseFacts): string {
 
 function getJurisdictionContext(jurisdiction: string): string {
   switch (jurisdiction.toLowerCase()) {
-    case 'england':
-    case 'wales':
-    case 'england-wales': // Legacy compatibility
     case 'england':
     case 'wales':
       return `CONTEXT: England & Wales eviction law. Use Section 8/Section 21 terminology where appropriate.`;

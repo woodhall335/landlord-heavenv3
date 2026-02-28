@@ -1,8 +1,21 @@
 'use client';
 
-import React, { useMemo, useState } from 'react';
-import Link from 'next/link';
+import React, { useMemo, useState, useCallback, useEffect, useRef } from 'react';
+import { UniversalHero } from '@/components/landing/UniversalHero';
+import { HeaderConfig } from '@/components/layout';
 import { Button, Card, Container, Input } from '@/components/ui';
+import { RiAlertLine } from 'react-icons/ri';
+import { useEmailGate } from '@/hooks/useEmailGate';
+import { ToolEmailGate } from '@/components/ui/ToolEmailGate';
+import { FAQSection } from '@/components/seo/FAQSection';
+import { RelatedLinks } from '@/components/seo/RelatedLinks';
+import { productLinks, blogLinks, toolLinks, landingPageLinks } from '@/lib/seo/internal-links';
+import { ToolFunnelTracker } from '@/components/tools/ToolFunnelTracker';
+import { ToolUpsellCard } from '@/components/tools/ToolUpsellCard';
+import { NextStepWidget } from '@/components/journey/NextStepWidget';
+import { trackToolComplete } from '@/lib/journey/events';
+import { setJourneyState, type StageEstimate } from '@/lib/journey/state';
+import { bucketArrears, bucketMonthsInArrears } from '@/lib/journey/stage';
 
 // Note: Metadata moved to layout.tsx (client components cannot export metadata)
 
@@ -24,10 +37,58 @@ const defaultSchedule: ScheduleItem[] = [
   },
 ];
 
+const faqs = [
+  {
+    question: 'How should I evidence rent arrears for court?',
+    answer:
+      "Prepare a clear rent schedule showing all payments due and received, with a running balance. Attach your tenancy agreement, bank statements highlighting missed payments, and copies of all communications with the tenant about the arrears. The court wants to see you've made reasonable attempts to resolve the issue before litigation.",
+  },
+  {
+    question: 'Can I claim interest on rent arrears?',
+    answer:
+      "Yes. You can claim statutory interest at 8% per annum under the Late Payment of Commercial Debts (Interest) Act 1998. Interest runs from each payment's due date until it's paid or judgment is entered. You must state your intention to claim interest in your pre-action letter. Some tenancy agreements include contractual interest clauses—check yours carefully.",
+  },
+  {
+    question: 'What if my tenant disputes the arrears amount?',
+    answer:
+      "Request a detailed breakdown from the tenant showing which payments they believe they've made. Check your records carefully—mistakes happen. If there's a genuine dispute, consider mediation before court. If the tenant simply refuses to pay without valid reason, proceed with your money claim and let the court decide. Keep all communication professional and documented.",
+  },
+  {
+    question: 'Should I serve a Section 8 notice or file a money claim?',
+    answer:
+      'It depends on your goal. A Section 8 notice (Ground 8 requires 8+ weeks arrears) seeks possession of the property. A money claim pursues the debt even after the tenant has left. Many landlords do both: serve a Section 8 to regain possession, then file a money claim for any remaining debt. Our Complete Pack guides you through both processes.',
+  },
+  {
+    question: "Is this calculator's 8% interest calculation legally accurate?",
+    answer:
+      "This calculator uses the standard statutory rate of 8% per annum as simple interest. While widely accepted, actual court awards may vary based on jurisdiction, the judge's discretion, and your specific tenancy agreement. For a court-ready arrears schedule with jurisdiction-specific calculations and full legal validation, upgrade to our Money Claim Pack.",
+  },
+];
+
 export default function RentArrearsCalculator() {
   const [rentAmount, setRentAmount] = useState(750);
   const [frequency, setFrequency] = useState<'month' | 'week'>('month');
   const [schedule, setSchedule] = useState<ScheduleItem[]>(defaultSchedule);
+  const upsellConfig = {
+    toolName: 'Rent Arrears Calculator',
+    toolType: 'calculator' as const,
+    productName: 'Money Claim Pack',
+    ctaLabel: 'Upgrade to court-ready pack — £44.99',
+    ctaHref: '/products/money-claim',
+    jurisdiction: 'uk',
+    freeIncludes: [
+      'Arrears and interest totals',
+      'Basic schedule PDF export',
+      'No court filing pack',
+    ],
+    paidIncludes: [
+      'Pre-filled claim forms',
+      'PAP/Pre-action letters bundle',
+      'Evidence-ready arrears schedule',
+    ],
+    description:
+      'Move from calculations to a court-ready money claim bundle with the required forms and evidence templates.',
+  };
 
   const totals = useMemo(() => {
     const today = new Date();
@@ -64,6 +125,54 @@ export default function RentArrearsCalculator() {
       { totalDue: 0, totalPaid: 0, totalOutstanding: 0, totalInterest: 0 },
     );
   }, [schedule]);
+
+
+  const completionTrackedRef = useRef(false);
+
+  const arrearsBand = useMemo(() => bucketArrears(totals.totalOutstanding), [totals.totalOutstanding]);
+  const monthsInArrearsBand = useMemo(
+    () => bucketMonthsInArrears(totals.totalOutstanding, rentAmount),
+    [rentAmount, totals.totalOutstanding],
+  );
+  const stageHint: StageEstimate = useMemo(() => {
+    const months = rentAmount > 0 ? totals.totalOutstanding / rentAmount : 0;
+    return months >= 2 ? 'notice_ready' : 'early_arrears';
+  }, [rentAmount, totals.totalOutstanding]);
+
+  useEffect(() => {
+    if (totals.totalOutstanding <= 0) {
+      completionTrackedRef.current = false;
+      return;
+    }
+
+    setJourneyState(
+      {
+        stage_estimate: stageHint,
+        arrears_band: arrearsBand,
+        months_in_arrears_band: monthsInArrearsBand,
+        last_touch: {
+          type: 'tool',
+          id: 'rent-arrears-calculator',
+          ts: Date.now(),
+        },
+      },
+      'rent_arrears_calculator_complete',
+    );
+
+    if (!completionTrackedRef.current) {
+      completionTrackedRef.current = true;
+      trackToolComplete({
+        tool_name: 'rent_arrears_calculator',
+        context: {
+          journey_state: {
+            arrears_band: arrearsBand,
+            months_in_arrears_band: monthsInArrearsBand,
+            stage_estimate: stageHint,
+          },
+        },
+      });
+    }
+  }, [arrearsBand, monthsInArrearsBand, stageHint, totals.totalOutstanding]);
 
   // Calculate interest using 8% per annum simple interest from earliest unpaid due date
   // Formula: Principal × Annual Rate × (Days Outstanding ÷ 365)
@@ -147,7 +256,8 @@ export default function RentArrearsCalculator() {
     setSchedule((prev) => (prev.length > 1 ? prev.filter((item) => item.id !== id) : prev));
   };
 
-  const handleSavePDF = async () => {
+  // PDF generation function (called after email captured)
+  const generatePDF = useCallback(async () => {
     if (schedule.length === 0 || totals.totalOutstanding === 0) {
       alert('Please add at least one arrears period first');
       return;
@@ -321,42 +431,41 @@ link.href = url;
       console.error('PDF error:', error);
       alert('Failed to generate PDF. Please try again.');
     }
+  }, [schedule, totals, rentAmount, estimatedInterest, daysOutstanding]);
+
+  // Email gate hook - requires email before PDF download
+  const gate = useEmailGate({
+    source: 'tool:rent-arrears-calculator',
+    onProceed: generatePDF,
+  });
+
+  // Handler that checks gate before generating
+  const handleSavePDF = () => {
+    gate.checkGateAndProceed();
   };
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
-      <section className="bg-linear-to-br from-purple-50 via-purple-100 to-purple-50 py-16 md:py-24">
-        <Container>
-          <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-              <span className="text-sm font-semibold text-primary">Free Tool</span>
-            </div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Rent Arrears Calculator</h1>
-            <p className="text-xl md:text-2xl mb-6 text-gray-600">
-              Calculate Outstanding Rent and Statutory Interest
-            </p>
-            <div className="flex items-baseline justify-center gap-2 mb-8">
-              <span className="text-5xl md:text-6xl font-bold text-gray-900">FREE</span>
-            </div>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              <a
-                href="#calculator"
-                className="hero-btn-primary"
-              >
-                Start Free Calculator →
-              </a>
-              <Link
-                href="/products/money-claim"
-                className="hero-btn-secondary"
-              >
-                Upgrade to Money Claim Pack →
-              </Link>
-            </div>
-            <p className="mt-4 text-sm text-gray-600">Instant calculation • Professional summary • Upgrade for court claims</p>
-          </div>
-        </Container>
-      </section>
+      <HeaderConfig mode="autoOnScroll" />
+      <ToolFunnelTracker
+        toolName={upsellConfig.toolName}
+        toolType={upsellConfig.toolType}
+        jurisdiction={upsellConfig.jurisdiction}
+      />
+      <UniversalHero
+        badge="Free Tool"
+        title="Rent Arrears Calculator"
+        subtitle="Calculate Outstanding Rent and Statutory Interest"
+        align="center"
+        hideMedia
+        showReviewPill={false}
+        showTrustPositioningBar
+        showUsageCounter
+        primaryCta={{ label: 'Start Free Calculator →', href: '#calculator' }}
+        secondaryCta={{ label: 'Upgrade to Money Claim Pack →', href: '/products/money-claim' }}
+      >
+        <p className="mt-4 text-sm text-white/90">Instant calculation • Professional summary • Upgrade for court claims</p>
+      </UniversalHero>
 
       <Container className="py-12 space-y-8">
         <Card id="calculator" padding="large">
@@ -496,9 +605,7 @@ link.href = url;
                     <strong>From:</strong> {interestFromDate ? new Date(interestFromDate + 'T00:00:00').toLocaleDateString('en-GB') : 'N/A'} to {new Date().toLocaleDateString('en-GB')} ({daysOutstanding} days)
                   </p>
                   <div className="flex items-start gap-2 mt-3 pt-3 border-t border-warning-300">
-                    <svg className="h-4 w-4 text-warning-600 shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
-                    </svg>
+                    <RiAlertLine className="h-4 w-4 text-[#7C3AED] shrink-0 mt-0.5" />
                     <p className="text-warning-800 font-medium">
                       <strong>Important:</strong> We use a simple 8% per annum rate on any outstanding balance from its due date up to today. Actual court awards may differ depending on jurisdiction and judge discretion. Use this as a directional estimate only.
                     </p>
@@ -510,7 +617,7 @@ link.href = url;
             <button
               onClick={handleSavePDF}
               disabled={totals.totalOutstanding === 0}
-              className="mt-6 w-full rounded-xl bg-primary-600 px-6 py-4 text-lg font-semibold text-white transition-all hover:bg-primary-700 focus:ring-4 focus:ring-primary-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="hero-btn-primary mt-6 w-full disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Save Schedule as PDF
             </button>
@@ -523,27 +630,14 @@ link.href = url;
                   may differ depending on jurisdiction and judge discretion. Use this as a directional estimate only.
                 </p>
               </div>
-              <div className="bg-white p-4 rounded-lg border border-gray-200">
-                <h3 className="font-semibold text-charcoal mb-2">Need a court-ready pack?</h3>
-                <p className="text-gray-700 text-sm leading-relaxed">
-                  Upgrade to the Money Claim Pack for a pre-filled claim form, particulars of claim, PAP/Pre-action letters, and
-                  an arrears schedule you can file immediately.
-                </p>
-                <div className="mt-3 flex flex-col sm:flex-row gap-2">
-                  <Link
-                    href="/wizard/flow?type=money_claim&jurisdiction=england-wales&product=money_claim&product_variant=money_claim_england_wales"
-                    className="flex-1 text-center bg-primary-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-primary-700 transition"
-                  >
-                    Start Money Claim (E&W)
-                  </Link>
-                  <Link
-                    href="/wizard/flow?type=money_claim&jurisdiction=scotland&product=money_claim&product_variant=money_claim_scotland"
-                    className="flex-1 text-center bg-white text-primary border-2 border-primary px-4 py-2 rounded-lg font-semibold hover:bg-gray-50 transition"
-                  >
-                    Start Simple Procedure (Scotland)
-                  </Link>
-                </div>
-              </div>
+            </div>
+
+            {totals.totalOutstanding > 0 && (
+              <NextStepWidget stageHint={stageHint} location="tool_result" />
+            )}
+
+            <div className="mt-8">
+              <ToolUpsellCard {...upsellConfig} />
             </div>
           </div>
         </Card>
@@ -587,61 +681,38 @@ link.href = url;
           </div>
         </Card>
 
-        <Card padding="large">
-          <h2 className="text-2xl font-semibold text-charcoal mb-4">Frequently Asked Questions</h2>
-          <div className="space-y-6 text-gray-700 leading-relaxed">
-            <div>
-              <p className="font-semibold text-gray-900 text-lg mb-2">How should I evidence rent arrears for court?</p>
-              <p>
-                Prepare a clear rent schedule showing all payments due and received, with a running balance. Attach your
-                tenancy agreement, bank statements highlighting missed payments, and copies of all communications with the
-                tenant about the arrears. The court wants to see you've made reasonable attempts to resolve the issue
-                before litigation.
-              </p>
-            </div>
-
-            <div>
-              <p className="font-semibold text-gray-900 text-lg mb-2">Can I claim interest on rent arrears?</p>
-              <p>
-                Yes. You can claim statutory interest at 8% per annum under the Late Payment of Commercial Debts (Interest)
-                Act 1998. Interest runs from each payment's due date until it's paid or judgment is entered. You must state
-                your intention to claim interest in your pre-action letter. Some tenancy agreements include contractual
-                interest clauses—check yours carefully.
-              </p>
-            </div>
-
-            <div>
-              <p className="font-semibold text-gray-900 text-lg mb-2">What if my tenant disputes the arrears amount?</p>
-              <p>
-                Request a detailed breakdown from the tenant showing which payments they believe they've made. Check your
-                records carefully—mistakes happen. If there's a genuine dispute, consider mediation before court. If the
-                tenant simply refuses to pay without valid reason, proceed with your money claim and let the court decide.
-                Keep all communication professional and documented.
-              </p>
-            </div>
-
-            <div>
-              <p className="font-semibold text-gray-900 text-lg mb-2">Should I serve a Section 8 notice or file a money claim?</p>
-              <p>
-                It depends on your goal. A Section 8 notice (Ground 8 requires 8+ weeks arrears) seeks possession of the
-                property. A money claim pursues the debt even after the tenant has left. Many landlords do both: serve a
-                Section 8 to regain possession, then file a money claim for any remaining debt. Our Complete Pack guides
-                you through both processes.
-              </p>
-            </div>
-
-            <div>
-              <p className="font-semibold text-gray-900 text-lg mb-2">Is this calculator's 8% interest calculation legally accurate?</p>
-              <p>
-                This calculator uses the standard statutory rate of 8% per annum as simple interest. While widely accepted,
-                actual court awards may vary based on jurisdiction, the judge's discretion, and your specific tenancy
-                agreement. For a court-ready arrears schedule with jurisdiction-specific calculations and full legal
-                validation, upgrade to our Money Claim Pack.
-              </p>
-            </div>
-          </div>
-        </Card>
       </Container>
+
+      <FAQSection
+        title="Frequently Asked Questions"
+        faqs={faqs}
+        showContactCTA={false}
+        variant="white"
+      />
+
+      {/* Related Resources */}
+      <Container className="pb-12">
+        <RelatedLinks
+          title="Related Resources"
+          links={[
+            productLinks.moneyClaim,
+            productLinks.completePack,
+            toolLinks.section8Generator,
+            blogLinks.rentArrearsEviction,
+            landingPageLinks.rentArrearsTemplate,
+          ]}
+        />
+      </Container>
+
+      {/* Email Gate Modal */}
+      {gate.showGate && (
+        <ToolEmailGate
+          toolName="Rent Arrears Schedule"
+          source={gate.source}
+          onEmailCaptured={gate.handleSuccess}
+          onClose={gate.handleClose}
+        />
+      )}
     </div>
   );
 }

@@ -1,0 +1,626 @@
+/**
+ * WizardLandingPage Component
+ *
+ * Comprehensive SEO landing page for wizard entry points.
+ * Renders all content sections with proper semantic HTML for SEO.
+ */
+
+import { Container } from '@/components/ui';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
+import { UsageTodayCounter } from '@/components/seo/UsageTodayCounter';
+import Image from 'next/image';
+import {
+  Eye,
+  RefreshCw,
+  Cloud,
+  CheckCircle2,
+  ShieldCheck,
+  FileText,
+  Scale,
+  AlertTriangle,
+} from 'lucide-react';
+import { FAQSection } from '@/components/seo/FAQSection';
+import { StructuredData, productSchema, breadcrumbSchema } from '@/lib/seo/structured-data';
+import { AskHeavenWidget } from '@/components/ask-heaven/AskHeavenWidget';
+import { TrustPositioningBar } from '@/components/marketing/TrustPositioningBar';
+import { IntentProductCTA, RelatedProductsModule, type IntentProduct } from '@/components/seo/IntentProductCTA';
+import { CompletePackPreviewSection } from '@/components/seo/complete-pack-england/CompletePackPreviewSection';
+import type { WizardLandingContent, NoticeType, CourtForm, JurisdictionCoverage, WhyUseThisSection, LegalValidationExplainer } from '@/lib/seo/wizard-landing-content';
+
+interface WizardLandingPageProps {
+  content: WizardLandingContent;
+  structuredDataUrl: string;
+  showAskHeavenWidget?: boolean;
+}
+
+export function WizardLandingPage({ content, structuredDataUrl, showAskHeavenWidget = true }: WizardLandingPageProps) {
+  const isCompletePackEnglandPage = content.slug === 'eviction-pack-england';
+  const isNoticeOnlyPage = content.slug === 'eviction-notice';
+  const isMoneyClaimPage = content.slug === 'money-claim';
+  const showHeroPrice = !isCompletePackEnglandPage && !isMoneyClaimPage;
+
+  const heroCtaLabel = isCompletePackEnglandPage
+    ? 'Start & Preview Complete Pack — £59.99'
+    : isNoticeOnlyPage
+      ? 'Generate My Notice — £34.99'
+      : isMoneyClaimPage
+        ? 'Start My Case Bundle — £44.99'
+        : 'Start My Case Bundle';
+
+  const heroHelperCopy = isCompletePackEnglandPage
+    ? 'Avoid wasted court fees — file correctly the first time.'
+    : isNoticeOnlyPage
+      ? 'Serve correctly. Avoid invalid notices. Move your case forward.'
+      : null;
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Structured Data */}
+      <StructuredData
+        data={productSchema({
+          name: content.h1,
+          description: content.description,
+          price: content.price.replace('£', ''),
+          url: structuredDataUrl,
+        })}
+      />
+      <StructuredData
+        data={breadcrumbSchema([
+          { name: 'Home', url: 'https://landlordheaven.co.uk' },
+          { name: 'Products', url: 'https://landlordheaven.co.uk/pricing' },
+          { name: content.h1, url: structuredDataUrl },
+        ])}
+      />
+
+      <HeaderConfig mode="autoOnScroll" />
+
+      {/* Hero Section */}
+      <UniversalHero
+        title={content.h1}
+        subtitle={content.subheading}
+        align="center"
+        actionsSlot={(
+          <div className="w-full sm:w-auto">
+            <IntentProductCTA
+              intent={{ product: toIntentProduct(content.product), src: "seo_landing" }}
+              label={heroCtaLabel}
+              className="hero-btn-primary w-full sm:w-auto"
+            />
+            {heroHelperCopy ? (
+              <p className="mt-3 text-center text-sm text-white/75">
+                {heroHelperCopy}
+              </p>
+            ) : null}
+          </div>
+        )}
+      >
+        {showHeroPrice && (
+          <div className="mt-8 flex items-baseline justify-center gap-2 text-white">
+            <span className="text-5xl md:text-6xl font-bold">{content.price}</span>
+            <span className="text-lg text-white/85">one-time</span>
+          </div>
+        )}
+
+        <TrustPositioningBar variant="compact" className="mx-auto mt-6 max-w-5xl" />
+
+        <div className="mt-6 flex flex-wrap justify-center gap-4 text-sm text-white/90">
+          <span className="flex items-center gap-1">
+            <Eye className="w-4 h-4" /> Preview before you buy
+          </span>
+          <span className="flex items-center gap-1">
+            <RefreshCw className="w-4 h-4" /> Edit &amp; regenerate (unlimited)
+          </span>
+          <span className="flex items-center gap-1">
+            <Cloud className="w-4 h-4" /> Portal storage (12+ months)
+          </span>
+        </div>
+
+        <div className="mt-5 mb-2 text-white/90">
+          <UsageTodayCounter className="mx-auto" />
+        </div>
+      </UniversalHero>
+
+      {isCompletePackEnglandPage && <CompletePackPreviewSection />}
+
+      {isCompletePackEnglandPage && <WhyAccuracyMattersSection />}
+
+      {/* What You Get Section */}
+      <section className="py-16 md:py-20 bg-white">
+        <Container>
+          <div className="max-w-6xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-8 text-center">
+              What You Get
+            </h2>
+
+            {isCompletePackEnglandPage ? (
+              <div className="rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+                <div className="grid md:grid-cols-5">
+                  <div className="md:col-span-2 bg-[#692ed4]/5 p-6 md:p-8 lg:p-10 flex items-center justify-center">
+                    <Image
+                      src="/images/what_you_get.webp"
+                      alt="Eviction pack documents included in the complete bundle"
+                      width={560}
+                      height={560}
+                      className="h-auto w-full max-w-[360px] object-contain"
+                    />
+                  </div>
+                  <div className="md:col-span-3 p-6 md:p-8 lg:p-10">
+                    <ul className="space-y-4 md:space-y-5">
+                      {content.whatYouGet.map((item, index) => (
+                        <li key={index} className="flex items-start gap-3 md:gap-4">
+                          <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#692ed4] text-white">
+                            <CheckCircle2 className="h-4 w-4" />
+                          </span>
+                          <span className="text-base md:text-lg leading-relaxed text-gray-800">{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <ul className="grid md:grid-cols-2 gap-4">
+                {content.whatYouGet.map((item, index) => (
+                  <li key={index} className="flex items-start gap-3 bg-gray-50 p-4 rounded-lg">
+                    <CheckCircle2 className="w-5 h-5 text-[#692ed4] mt-0.5 shrink-0" />
+                    <span className="text-gray-700">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </Container>
+      </section>
+
+      {/* Why Use This Section (NEW) */}
+      <WhyUseThisSectionComponent whyUseThis={content.whyUseThis} isCompletePackEnglandPage={isCompletePackEnglandPage} />
+
+      {/* Notice Types (if applicable) */}
+      {content.noticeTypes && content.noticeTypes.length > 0 && (
+        <NoticeTypesSection noticeTypes={content.noticeTypes} />
+      )}
+
+      {/* Court Forms (if applicable) */}
+      {content.courtForms && content.courtForms.length > 0 && (
+        <CourtFormsSection courtForms={content.courtForms} />
+      )}
+
+      {/* Jurisdiction Coverage (if applicable) */}
+      {content.jurisdictionCoverage && content.jurisdictionCoverage.length > 0 && (
+        <JurisdictionCoverageSection jurisdictionCoverage={content.jurisdictionCoverage} />
+      )}
+
+      {/* How Validation Works */}
+      <section className="py-16 md:py-20 bg-white">
+        <Container>
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4 text-center">
+              How Validation Works
+            </h2>
+            <p className="text-center text-gray-600 mb-8">
+              Our system performs systematic validation to ensure documents are correctly generated
+            </p>
+            <div className="grid md:grid-cols-2 gap-4">
+              {content.howValidationWorks.map((item, index) => (
+                <div key={index} className="flex items-start gap-3 p-4 bg-blue-50 rounded-lg">
+                  <ShieldCheck className="w-5 h-5 text-primary mt-0.5 shrink-0" />
+                  <span className="text-gray-700">{item}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* Legal Validation Explainer (NEW) */}
+      <LegalValidationExplainerSection explainer={content.legalValidationExplainer} />
+
+      {/* Who This Is For */}
+      <section className="py-16 md:py-20">
+        <Container>
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-8 text-center">
+              Who This Is For
+            </h2>
+            <ul className="space-y-4 max-w-2xl mx-auto">
+              {content.whoThisIsFor.map((item, index) => (
+                <li key={index} className="flex items-start gap-3">
+                  <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white font-semibold shrink-0">
+                    {index + 1}
+                  </div>
+                  <span className="text-gray-700 pt-1">{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </Container>
+      </section>
+
+      {/* FAQ Section */}
+      <FAQSection
+        title="Frequently Asked Questions"
+        faqs={content.faqs}
+        showContactCTA={false}
+        variant="gray"
+      />
+
+      {showAskHeavenWidget && (
+        <section className="py-16 md:py-20">
+          <Container>
+            <div className="max-w-2xl mx-auto">
+              <AskHeavenWidget
+                variant="banner"
+                source="seo"
+                product={content.product}
+                title="Have questions?"
+                description="Ask Heaven can help you understand your options and requirements."
+              />
+            </div>
+          </Container>
+        </section>
+      )}
+
+      {!isCompletePackEnglandPage && <RelatedProductsModule products={buildRelatedIntentProducts(content.product)} />}
+
+      {/* Final CTA */}
+      <section className="py-16 md:py-20 bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50">
+        <Container>
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Ready to Get Started?</h2>
+            <p className="text-xl mb-8 text-gray-600">
+              Solicitor-grade procedural checks and court-ready documents, designed to reduce rejected claims.
+            </p>
+            <div className="mx-auto w-full max-w-md">
+              <IntentProductCTA
+                intent={{ product: toIntentProduct(content.product), src: "seo_landing" }}
+                label={`Start My Case Bundle - ${content.price}`}
+                className="hero-btn-primary w-full"
+              />
+            </div>
+            {isCompletePackEnglandPage ? (
+              <div className="mt-4 flex flex-col md:flex-row md:flex-wrap md:items-center md:justify-center gap-2 md:gap-8 text-sm text-gray-600">
+                <span className="flex items-center gap-2 whitespace-nowrap">✓ Preview before paying</span>
+                <span className="flex items-center gap-2 whitespace-nowrap">✓ Unlimited regenerations</span>
+                <span className="flex items-center gap-2 whitespace-nowrap">✓ Stored 12+ months</span>
+                <span className="flex items-center gap-2 whitespace-nowrap">✓ One-time £59.99</span>
+              </div>
+            ) : (
+              <p className="mt-4 text-sm text-gray-600">
+                One-time payment • Unlimited regenerations • No subscription
+              </p>
+            )}
+          </div>
+        </Container>
+      </section>
+    </div>
+  );
+}
+
+function WhyAccuracyMattersSection() {
+  return (
+    <section className="py-14 md:py-16 bg-[#f3e8ff]">
+      <Container>
+        <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+          <div>
+            <h2 className="text-3xl md:text-4xl font-bold text-charcoal">Why Accuracy Matters</h2>
+            <p className="mt-4 text-lg text-gray-700 leading-relaxed">
+              Rejected claims cost time and money.
+            </p>
+            <ul className="mt-6 space-y-3">
+              <li className="flex items-start gap-3 bg-white/95 p-4 rounded-xl border border-[#692ed4]/10 shadow-sm">
+                <AlertTriangle className="w-5 h-5 text-[#692ed4]/70 mt-0.5 shrink-0" />
+                <span className="text-gray-700">Rejected claims delay possession.</span>
+              </li>
+              <li className="flex items-start gap-3 bg-white/95 p-4 rounded-xl border border-[#692ed4]/10 shadow-sm">
+                <AlertTriangle className="w-5 h-5 text-[#692ed4]/70 mt-0.5 shrink-0" />
+                <span className="text-gray-700">Court fees are non-refundable.</span>
+              </li>
+              <li className="flex items-start gap-3 bg-white/95 p-4 rounded-xl border border-[#692ed4]/10 shadow-sm">
+                <AlertTriangle className="w-5 h-5 text-[#692ed4]/70 mt-0.5 shrink-0" />
+                <span className="text-gray-700">Inconsistent paperwork can invalidate your claim.</span>
+              </li>
+              <li className="flex items-start gap-3 bg-white/95 p-4 rounded-xl border border-[#692ed4]/10 shadow-sm">
+                <AlertTriangle className="w-5 h-5 text-[#692ed4]/70 mt-0.5 shrink-0" />
+                <span className="text-gray-700">Missing Particulars (N119) frequently cause failure.</span>
+              </li>
+            </ul>
+            <p className="mt-6 text-lg text-gray-800 font-medium leading-relaxed">
+              This bundle prepares the full possession route — not just the notice.
+            </p>
+          </div>
+          <div className="flex items-center justify-center">
+            <Image
+              src="/images/why_accuracy_matters.webp"
+              alt="Illustration showing why accurate possession paperwork matters"
+              width={960}
+              height={720}
+              className="h-auto w-full max-w-[640px] object-contain"
+            />
+          </div>
+        </div>
+      </Container>
+    </section>
+  );
+}
+
+/**
+ * Notice Types Section Component
+ */
+function NoticeTypesSection({ noticeTypes }: { noticeTypes: NoticeType[] }) {
+  return (
+    <section className="py-16 md:py-20">
+      <Container>
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4 text-center">
+            Notice Types We Generate
+          </h2>
+          <p className="text-center text-gray-600 mb-8">
+            Legally validated and procedurally correct notices for each jurisdiction
+          </p>
+
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse">
+              <thead>
+                <tr className="bg-gray-100">
+                  <th className="text-left p-4 border-b font-semibold">Notice Type</th>
+                  <th className="text-left p-4 border-b font-semibold">Jurisdiction</th>
+                  <th className="text-left p-4 border-b font-semibold">Description</th>
+                  <th className="text-left p-4 border-b font-semibold">Legal Basis</th>
+                </tr>
+              </thead>
+              <tbody>
+                {noticeTypes.map((notice, index) => (
+                  <tr key={index} className="border-b hover:bg-gray-50">
+                    <td className="p-4 font-medium">{notice.name}</td>
+                    <td className="p-4">
+                      <span className="inline-flex items-center gap-1 bg-green-50 text-green-700 px-2 py-1 rounded text-sm">
+                        {getJurisdictionFlag(notice.jurisdiction)} {notice.jurisdiction}
+                      </span>
+                    </td>
+                    <td className="p-4 text-gray-600 text-sm">{notice.description}</td>
+                    <td className="p-4 text-gray-500 text-sm">{notice.legalBasis}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </Container>
+    </section>
+  );
+}
+
+/**
+ * Court Forms Section Component
+ */
+function CourtFormsSection({ courtForms }: { courtForms: CourtForm[] }) {
+  return (
+    <section className="py-16 md:py-20">
+      <Container>
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4 text-center">
+            Court Forms Included
+          </h2>
+          <p className="text-center text-gray-600 mb-8">
+            Official HMCTS forms generated and validated with your case details
+          </p>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            {courtForms.map((form, index) => (
+              <div key={index} className="bg-white rounded-lg border border-gray-200 p-6">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center shrink-0">
+                    <FileText className="w-6 h-6 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900">{form.name}</h3>
+                    <span className="text-sm text-primary font-mono">{form.formNumber}</span>
+                    <p className="text-gray-600 text-sm mt-2">{form.description}</p>
+                    {form.route && (
+                      <span className="inline-block mt-2 text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
+                        {form.route === 'section21' ? 'Section 21 Route' : 'Section 8 Route'}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </Container>
+    </section>
+  );
+}
+
+/**
+ * Jurisdiction Coverage Section Component
+ */
+function JurisdictionCoverageSection({
+  jurisdictionCoverage,
+}: {
+  jurisdictionCoverage: JurisdictionCoverage[];
+}) {
+  return (
+    <section className="py-16 md:py-20">
+      <Container>
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4 text-center">
+            Coverage by Jurisdiction
+          </h2>
+          <p className="text-center text-gray-600 mb-8">
+            Jurisdiction-specific agreements with correct terminology and legal requirements
+          </p>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            {jurisdictionCoverage.map((jurisdiction, index) => (
+              <div key={index} className="bg-white rounded-xl border border-gray-200 p-6">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-2xl">{jurisdiction.flag}</span>
+                  <h3 className="text-lg font-semibold text-charcoal">{jurisdiction.name}</h3>
+                </div>
+                <p className="text-sm font-medium text-primary mb-2">{jurisdiction.agreementType}</p>
+                <p className="text-xs text-gray-500 mb-3">{jurisdiction.legalBasis}</p>
+                <ul className="text-sm text-gray-600 space-y-1">
+                  {jurisdiction.keyFeatures.map((feature, fIndex) => (
+                    <li key={fIndex} className="flex items-start gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-green-600 mt-0.5 shrink-0" />
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+                {jurisdiction.notes && (
+                  <p className="mt-3 text-xs text-gray-500 italic">{jurisdiction.notes}</p>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </Container>
+    </section>
+  );
+}
+
+/**
+ * Why Use This Section Component (NEW)
+ */
+function WhyUseThisSectionComponent({
+  whyUseThis,
+  isCompletePackEnglandPage,
+}: {
+  whyUseThis: WhyUseThisSection;
+  isCompletePackEnglandPage: boolean;
+}) {
+  if (!isCompletePackEnglandPage) {
+    return (
+      <section className="py-16 md:py-20 bg-white">
+        <Container>
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4 text-center">
+              {whyUseThis.heading}
+            </h2>
+            <p className="text-center text-gray-700 mb-8 max-w-3xl mx-auto">
+              {whyUseThis.intro}
+            </p>
+            <ul className="space-y-3">
+              {whyUseThis.benefits.map((benefit, index) => (
+                <li key={index} className="flex items-start gap-3 bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                  <CheckCircle2 className="w-5 h-5 text-[#692ed4] mt-0.5 shrink-0" />
+                  <span className="text-gray-700">{benefit}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </Container>
+      </section>
+    );
+  }
+
+  return (
+    <section className="py-16 md:py-20 bg-[#692ed4]/[0.03]">
+      <Container>
+        <div className="max-w-5xl mx-auto">
+          <div className="flex justify-center mb-6">
+            <Image
+              src="/images/why_this_bundle.webp"
+              alt="Documents folder illustration for full possession route bundle"
+              width={340}
+              height={220}
+              className="h-auto w-full max-w-[300px] md:max-w-[340px] object-contain"
+            />
+          </div>
+          <h2 className="text-3xl md:text-5xl font-bold text-charcoal mb-4 text-center">
+            {whyUseThis.heading}
+          </h2>
+          <p className="text-center text-gray-700 mb-10 max-w-4xl mx-auto text-lg leading-relaxed">
+            {whyUseThis.intro}
+          </p>
+          <ul className="space-y-4">
+            {whyUseThis.benefits.map((benefit, index) => (
+              <li key={index} className="flex items-start gap-3 md:gap-4 bg-white border border-gray-200 p-5 md:p-6 rounded-xl shadow-sm">
+                <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#692ed4] text-white">
+                  <CheckCircle2 className="h-4 w-4" />
+                </span>
+                <span className="text-gray-800 text-base md:text-lg md:leading-relaxed">{benefit}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </Container>
+    </section>
+  );
+}
+
+/**
+ * Legal Validation Explainer Section Component (NEW)
+ */
+function LegalValidationExplainerSection({ explainer }: { explainer: LegalValidationExplainer }) {
+  return (
+    <section className="py-16 md:py-20 bg-gray-50">
+      <Container>
+        <div className="max-w-4xl mx-auto">
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <Scale className="w-6 h-6 text-primary" />
+            <h2 className="text-2xl md:text-3xl font-bold text-charcoal">
+              What &quot;Validation&quot; Means
+            </h2>
+          </div>
+          <p className="text-center text-gray-600 mb-8">
+            Our system performs procedural checks — not legal advice
+          </p>
+
+          <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
+            <h3 className="font-semibold text-charcoal mb-4">What our validation checks:</h3>
+            <ul className="space-y-2">
+              {explainer.whatItMeans.map((item, index) => (
+                <li key={index} className="flex items-start gap-2 text-gray-700">
+                  <ShieldCheck className="w-4 h-4 text-primary mt-1 shrink-0" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+            <div className="flex items-start gap-3">
+              <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" />
+              <p className="text-sm text-amber-800">
+                {explainer.disclaimer}
+              </p>
+            </div>
+          </div>
+        </div>
+      </Container>
+    </section>
+  );
+}
+
+
+function toIntentProduct(product: string): IntentProduct {
+  if (product === 'ast_standard' || product === 'ast_premium' || product === 'tenancy_agreement') {
+    return 'ast';
+  }
+  if (product === 'notice_only' || product === 'money_claim' || product === 'complete_pack') {
+    return product;
+  }
+  return 'notice_only';
+}
+
+function buildRelatedIntentProducts(product: string): IntentProduct[] {
+  const current = toIntentProduct(product);
+  const all: IntentProduct[] = ['notice_only', 'money_claim', 'complete_pack', 'ast'];
+  return [current, ...all.filter((item) => item !== current)].slice(0, 3);
+}
+
+/**
+ * Helper function to get jurisdiction flag
+ */
+function getJurisdictionFlag(jurisdiction: string): string {
+  const flags: Record<string, string> = {
+    England: '🏴󠁧󠁢󠁥󠁮󠁧󠁿',
+    Wales: '🏴󠁧󠁢󠁷󠁬󠁳󠁿',
+    Scotland: '🏴󠁧󠁢󠁳󠁣󠁴󠁿',
+    'Northern Ireland': '🇬🇧',
+  };
+  return flags[jurisdiction] || '🇬🇧';
+}

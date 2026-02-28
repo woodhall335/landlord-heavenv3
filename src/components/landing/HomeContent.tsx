@@ -1,0 +1,612 @@
+/**
+ * HomeContent - Client Component
+ *
+ * Contains all the interactive homepage content.
+ * Extracted from page.tsx to allow server component with metadata export.
+ */
+
+"use client";
+
+import { useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { Container } from "@/components/ui";
+import { Hero, TrustBar, Testimonials } from "@/components/landing";
+import { HeaderConfig } from "@/components/layout/HeaderConfig";
+import { HowItWorksThreeStep } from "@/components/marketing/HowItWorksThreeStep";
+import {
+  RiFileTextLine,
+  RiScales3Line,
+  RiMoneyPoundCircleLine,
+  RiClipboardLine,
+  RiCheckLine,
+  RiArrowRightLine,
+  RiShieldCheckLine,
+  RiGlobalLine,
+  RiFlashlightLine,
+  RiSendPlaneFill,
+  RiAddLine,
+  RiMicLine,
+  RiMapPin2Fill,
+  RiHome6Line,
+} from "react-icons/ri";
+
+const SEO_SRC = "seo_homepage";
+
+const primaryPaths = [
+  {
+    label: "Start Eviction",
+    href: `/wizard?product=notice_only&topic=eviction&src=${SEO_SRC}`,
+    icon: RiHome6Line,
+  },
+  {
+    label: "Recover Unpaid Rent",
+    href: `/wizard?product=money_claim&topic=debt&src=${SEO_SRC}`,
+    icon: RiMoneyPoundCircleLine,
+  },
+  {
+    label: "Create Tenancy Agreement",
+    href: `/wizard?product=tenancy_agreement&topic=tenancy&src=${SEO_SRC}`,
+    icon: RiFileTextLine,
+  },
+];
+
+export default function HomeContent() {
+  const router = useRouter();
+  const [askQuestion, setAskQuestion] = useState("");
+  const [isLoading] = useState(false);
+
+  const handleAskQuestion = async () => {
+    if (!askQuestion.trim()) return;
+
+    // Navigate to Ask Heaven page with the question as a query parameter
+    router.push(`/ask-heaven?q=${encodeURIComponent(askQuestion)}`);
+  };
+
+  return (
+    <div className="bg-white">
+      <HeaderConfig mode="autoOnScroll" />
+      <Hero />
+
+      {/* LEGAL DECISION GATEWAY (adds 3-lane routing without removing existing hero visuals) */}
+      <section className="py-10 bg-[#f7f7fb]">
+        <Container>
+          <div className="rounded-[2rem] border border-[#ddddea] bg-[#f8f8fd] p-6 md:p-10 shadow-[0_2px_12px_rgba(15,23,42,0.04)]">
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">
+              Legal decision gateway
+            </p>
+            <h2 className="mt-3 text-4xl md:text-5xl font-bold tracking-tight text-[#16163f]">
+              Choose the correct legal route
+            </h2>
+            <p className="mt-4 max-w-4xl text-1xl leading-relaxed text-[#3b3b4f]">
+              Start an eviction, recover unpaid rent, or create/update an agreement — all routed through the correct workflow.
+            </p>
+
+            <div className="mt-8 grid gap-4 md:grid-cols-3">
+              {primaryPaths.map((path) => (
+                <Link
+                  key={path.label}
+                  href={path.href}
+                  className="group flex min-h-40 flex-col items-center justify-center rounded-3xl border border-[#e2e2f0] bg-white px-6 py-8 text-center shadow-[0_4px_14px_rgba(15,23,42,0.05)] transition hover:-translate-y-0.5 hover:border-[#cfcff0] hover:shadow-[0_8px_20px_rgba(15,23,42,0.08)]"
+                >
+                  <span className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-b from-[#a987ff] to-[#6a2dd8] text-white shadow-md">
+                    <path.icon className="h-8 w-8" />
+                  </span>
+                  <span className="text-[1rem] font-semibold leading-tight text-[#18184d]">
+                    {path.label}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* TRUST BAR */}
+      <TrustBar />
+
+      {/* HOW IT WORKS */}
+      <section className="py-20 md:py-24 bg-gray-50">
+        <Container>
+          <HowItWorksThreeStep />
+
+          <div className="max-w-5xl mx-auto">
+            <div className="mt-14 text-center">
+              <Link href="/wizard?product" className="hero-btn-primary">
+                Start Eviction Workflow →
+              </Link>
+              <p className="mt-4 text-sm text-gray-500">
+                Free to start • Pay only when you're ready
+              </p>
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* PRODUCTS */}
+      <section className="py-20 md:py-24 bg-[#f8f5ff]">
+        <Container>
+          <div className="text-center mb-14">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Complete Eviction Preparation Across UK Jurisdictions
+            </h2>
+            <p className="text-xl text-[#59527a] max-w-3xl mx-auto">
+              From statutory notices to possession paperwork — AI-validated case
+              preparation without solicitor delays.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+            <ProductCard
+              href="/products/notice-only"
+              title="Eviction Notices"
+              description="Section 8, Section 21, and devolved equivalents with service instructions."
+              price="£34.99"
+              icon={<RiFileTextLine className="w-7 h-7" />}
+            />
+            <ProductCard
+              href="/products/complete-pack"
+              title="Complete Eviction Pack"
+              description="Full bundle from notice to possession order with court forms and guidance."
+              price="£59.99"
+              icon={<RiScales3Line className="w-7 h-7" />}
+            />
+            <ProductCard
+              href="/products/money-claim"
+              title="Money Claim Pack"
+              description="Rent arrears claims with evidence checklists and particulars of claim."
+              price="£44.99"
+              icon={<RiMoneyPoundCircleLine className="w-7 h-7" />}
+            />
+            <ProductCard
+              href="/products/ast"
+              title="Tenancy Agreements"
+              description="Compliant ASTs with optional clauses for HMOs and students."
+              price="From £14.99"
+              icon={<RiClipboardLine className="w-7 h-7" />}
+            />
+          </div>
+        </Container>
+      </section>
+
+      {/* ASK HEAVEN */}
+      <section className="py-20 md:py-24 relative overflow-hidden">
+        {/* Gradient background matching Ask Heaven page */}
+        <div className="absolute inset-0 bg-gradient-to-br from-violet-100 via-fuchsia-50 to-cyan-50 opacity-70" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-purple-200/30 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-pink-200/30 via-transparent to-transparent" />
+
+        <Container className="relative z-10">
+          <div className="max-w-3xl mx-auto">
+            {/* Ask Heaven Branding */}
+            <div className="flex items-center justify-center gap-3 mb-8">
+              <Image
+                src="/favicon.png"
+                alt="Ask Heaven"
+                width={48}
+                height={48}
+                className="rounded-xl"
+              />
+              <span className="text-2xl font-bold text-gray-900">
+                Ask Heaven
+              </span>
+            </div>
+
+            <div className="text-center mb-10">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
+                Hi, how can I help you?
+              </h2>
+              <p className="text-gray-500 text-lg">
+                Free UK landlord advice — no sign-up required
+              </p>
+            </div>
+
+            {/* Main Chat Card */}
+            <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-xl border border-gray-200/50 overflow-hidden p-6 md:p-8">
+              {/* Main Input */}
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  if (!isLoading && askQuestion.trim()) {
+                    handleAskQuestion();
+                  }
+                }}
+                className="mb-8"
+              >
+                <div className="relative">
+                  <div className="flex items-center bg-white border-2 border-gray-200 rounded-2xl shadow-lg hover:border-primary/30 focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10 transition-all">
+                    <button
+                      type="button"
+                      className="p-4 text-gray-400 hover:text-gray-600 transition-colors"
+                      aria-label="Add attachment"
+                      disabled
+                    >
+                      <RiAddLine className="w-5 h-5" />
+                    </button>
+                    <input
+                      type="text"
+                      className="flex-1 py-4 text-gray-900 placeholder-gray-400 bg-transparent focus:outline-none text-base"
+                      placeholder="Ask about evictions, rent arrears, deposits..."
+                      value={askQuestion}
+                      onChange={(e) => setAskQuestion(e.target.value)}
+                      disabled={isLoading}
+                    />
+                    <button
+                      type="button"
+                      className="p-4 text-gray-400 hover:text-gray-600 transition-colors"
+                      aria-label="Voice input"
+                      disabled
+                    >
+                      <RiMicLine className="w-5 h-5" />
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={isLoading || !askQuestion.trim()}
+                      className="m-2 p-3 bg-primary hover:bg-primary-700 text-white rounded-xl disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                      aria-label="Send message"
+                    >
+                      {isLoading ? (
+                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      ) : (
+                        <RiSendPlaneFill className="w-5 h-5" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+              </form>
+
+              {/* Quick Prompt Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {[
+                  {
+                    label: "Eviction notice help",
+                    icon: "📄",
+                    prompt: "How do I serve an eviction notice to my tenant?",
+                  },
+                  {
+                    label: "Rent arrears recovery",
+                    icon: "💷",
+                    prompt: "How do I recover unpaid rent from a tenant?",
+                  },
+                  {
+                    label: "Deposit protection rules",
+                    icon: "🛡️",
+                    prompt: "What are the deposit protection requirements?",
+                  },
+                ].map((item) => (
+                  <button
+                    key={item.label}
+                    type="button"
+                    onClick={() => setAskQuestion(item.prompt)}
+                    className="group p-4 bg-white rounded-2xl border border-gray-200 hover:border-primary/30 hover:shadow-lg text-left transition-all duration-200"
+                  >
+                    <span className="text-2xl mb-2 block">{item.icon}</span>
+                    <p className="font-semibold text-gray-900 group-hover:text-primary transition-colors">
+                      {item.label}
+                    </p>
+                    <p className="text-sm text-gray-500 mt-1 line-clamp-2">
+                      {item.prompt}
+                    </p>
+                  </button>
+                ))}
+              </div>
+
+              {/* Trust indicators */}
+              <div className="flex flex-wrap items-center justify-center gap-6 mt-8 text-sm text-gray-500">
+                <span className="flex items-center gap-2">
+                  <RiShieldCheckLine className="w-4 h-4 text-green-500" />
+                  Free to use
+                </span>
+                <span className="flex items-center gap-2">
+                  <RiShieldCheckLine className="w-4 h-4 text-green-500" />
+                  No sign-up required
+                </span>
+                <span className="flex items-center gap-2">
+                  <RiShieldCheckLine className="w-4 h-4 text-green-500" />
+                  UK law focused
+                </span>
+              </div>
+
+              <p className="mt-6 text-center text-xs text-gray-400">
+                For guidance only — not legal advice.{" "}
+                <Link href="/terms" className="text-primary hover:underline">
+                  Terms apply
+                </Link>
+              </p>
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* BUILT FOR CHANGING HOUSING LAW */}
+      <section className="py-20 md:py-24 bg-gray-50">
+        <Container>
+          <div className="max-w-6xl mx-auto">
+            <div className="grid md:grid-cols-2 gap-10 md:gap-14 items-center">
+              <div>
+                <div className="inline-block bg-primary/10 rounded-full px-4 py-2 mb-4">
+                  <span className="text-sm font-semibold text-primary">
+                    Built for Changing Housing Law
+                  </span>
+                </div>
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                  Statutory-change aware legal automation
+                </h2>
+                <p className="text-lg text-gray-600">
+                  UK eviction law is evolving. From the Renting Homes (Wales)
+                  Act to the Renters' Rights Act implementation in England,
+                  Landlord Heaven is continuously updated to reflect UK housing
+                  law changes.
+                </p>
+
+                <ul className="mt-8 space-y-3 text-gray-700">
+                  <li className="flex items-start gap-3">
+                    <RiCheckLine className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+                    <span>Reflect current statutory requirements</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <RiCheckLine className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+                    <span>Monitor legal updates and reform trajectory</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <RiCheckLine className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+                    <span>Generate jurisdiction-specific bundles</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <RiCheckLine className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+                    <span>Adapt as housing legislation evolves</span>
+                  </li>
+                </ul>
+              </div>
+
+              <div className="flex justify-center md:justify-end">
+                <Image
+                  src="/images/Statutory-change.webp"
+                  alt="Statutory-change aware legal automation"
+                  width={720}
+                  height={720}
+                  className="w-full max-w-[520px] h-auto object-contain"
+                />
+              </div>
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* TESTIMONIALS */}
+      <Testimonials />
+
+      {/* UK COVERAGE */}
+      <section className="py-20 md:py-24 bg-white">
+        <Container>
+          <div className="text-center mb-12 md:mb-14">
+            <div className="inline-flex items-center gap-2 rounded-full bg-[#692ed4]/10 px-5 py-2.5 mb-5">
+              <RiMapPin2Fill className="w-4 h-4 text-[#692ed4]" />
+              <span className="text-sm font-semibold text-[#692ed4]">
+                UK-Wide Coverage
+              </span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-[#0f172a] mb-5">
+              The Right Documents for Your Region
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Housing law differs across the UK. We automatically generate
+              jurisdiction-specific documents.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto items-stretch">
+            <JurisdictionCard
+              flag="/gb-eng.svg"
+              title="England"
+              regionSlug="england"
+              forms={[
+                "Assured Shorthold Tenancy",
+                "Section 21 Notice",
+                "Section 8 Notice",
+                "County Court Forms",
+              ]}
+            />
+            <JurisdictionCard
+              flag="/gb-wls.svg"
+              title="Wales"
+              regionSlug="wales"
+              forms={[
+                "Standard Occupation Contract",
+                "Section 173 Notice",
+                "Renting Homes Act Forms",
+                "County Court Forms",
+              ]}
+            />
+            <JurisdictionCard
+              flag="/gb-sct.svg"
+              title="Scotland"
+              regionSlug="scotland"
+              forms={[
+                "Private Residential Tenancy",
+                "Notice to Leave",
+                "First-tier Tribunal Forms",
+                "Simple Procedure",
+              ]}
+            />
+            <JurisdictionCard
+              flag="/gb-nir.svg"
+              title="Northern Ireland"
+              regionSlug="northern-ireland"
+              forms={[
+                "Private Tenancy Agreement",
+                "Northern Ireland tenancy framework",
+                "Tenancy agreements only",
+                "Eviction notices planned",
+              ]}
+            />
+          </div>
+        </Container>
+      </section>
+
+      {/* FINAL CTA */}
+      <section className="py-20 md:py-24 bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50">
+        <Container>
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Ready to Generate Your Court-Ready File?
+            </h2>
+            <p className="text-xl text-gray-600 mb-8">
+              Generate a complete, compliance-checked eviction bundle aligned to
+              your jurisdiction.
+              <span className="font-semibold text-gray-800">
+                {" "}
+                Start in under 2 minutes.
+              </span>
+            </p>
+
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-8">
+              <Link href="/wizard?product" className="hero-btn-primary">
+                Start Eviction Workflow →
+              </Link>
+            </div>
+
+            {/* Final trust indicators */}
+            <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-gray-500">
+              <span className="flex items-center gap-2">
+                <RiFlashlightLine className="w-5 h-5 text-primary" />
+                Ready-to-file output
+              </span>
+              <span className="flex items-center gap-2">
+                <RiShieldCheckLine className="w-5 h-5 text-primary" />
+                Court-ready format
+              </span>
+              <span className="flex items-center gap-2">
+                <RiGlobalLine className="w-5 h-5 text-primary" />
+                All UK jurisdictions
+              </span>
+            </div>
+
+            {/* Section 8 CTA - SEO Internal Linking */}
+            <div className="mt-8 pt-6 border-t border-gray-300/30">
+              <p className="text-gray-600">
+                Generate valid{" "}
+                <Link
+                  href="/eviction-notice-uk"
+                  className="text-primary hover:underline font-medium"
+                >
+                  eviction notices
+                </Link>{" "}
+                for England, Wales, and Scotland. Need a Section 8 eviction
+                bundle?{" "}
+                <Link
+                  href="/section-8-notice-template"
+                  className="text-primary hover:underline font-medium"
+                >
+                  Bundle overview
+                </Link>
+                {" • "}
+                <Link
+                  href="/tools/free-section-8-notice-generator"
+                  className="text-primary hover:underline font-medium"
+                >
+                  Generator
+                </Link>
+                {" • "}
+                <Link
+                  href="/tools/validators/section-8"
+                  className="text-primary hover:underline font-medium"
+                >
+                  Checker
+                </Link>
+              </p>
+            </div>
+          </div>
+        </Container>
+      </section>
+    </div>
+  );
+}
+
+/* ============================================================
+   LOCAL COMPONENTS
+   ============================================================ */
+
+function ProductCard({
+  href,
+  title,
+  description,
+  price,
+  icon,
+}: {
+  href: string;
+  title: string;
+  description: string;
+  price: string;
+  icon: React.ReactNode;
+}) {
+  return (
+    <Link href={href} className="product-card-wrapper group relative cursor-pointer">
+      <div className="product-card-inner bg-white rounded-3xl p-8 h-full transition-all duration-300 border border-[#e4dcff] shadow-md group-hover:shadow-2xl group-hover:-translate-y-1 flex flex-col">
+        <div className="w-14 h-14 bg-purple-100 rounded-2xl flex items-center justify-center mb-6 text-primary">
+          {icon}
+        </div>
+
+        <h3 className="text-2xl font-bold text-[#1d1948] mb-3 leading-tight group-hover:text-primary transition-colors">
+          {title}
+        </h3>
+        <p className="text-[#5d5a78] mb-5 text-lg leading-relaxed">{description}</p>
+
+        <div className="mt-auto">
+          <span className="block text-primary font-bold text-[2rem] mb-6">{price}</span>
+          <span className="block text-center bg-gradient-to-r from-[#6f2ae3] to-[#8f46ff] text-white font-semibold rounded-2xl py-3.5 text-xl shadow-lg shadow-violet-300/40">
+            Get Started
+          </span>
+        </div>
+      </div>
+    </Link>
+  );
+}
+
+function JurisdictionCard({
+  flag,
+  title,
+  regionSlug,
+  forms,
+}: {
+  flag: string;
+  title: string;
+  regionSlug: string;
+  forms: string[];
+}) {
+  return (
+    <div className="h-full rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-300 hover:shadow-md flex flex-col">
+      <div className="w-16 h-16 bg-white rounded-full border border-gray-200 shadow-sm flex items-center justify-center mx-auto mb-4 overflow-hidden">
+        <Image
+          src={flag}
+          alt={title}
+          width={48}
+          height={48}
+          className="w-12 h-12 object-contain"
+        />
+      </div>
+      <h3 className="text-2xl font-bold text-[#0f172a] mb-5 text-center">
+        {title}
+      </h3>
+      <ul className="text-base text-gray-700 space-y-2.5 mb-6 flex-1">
+        {forms.map((form) => (
+          <li
+            key={form}
+            className="flex items-start gap-2.5 border-b border-gray-100 pb-2.5 last:border-b-0 last:pb-0"
+          >
+            <RiCheckLine className="w-4 h-4 text-[#692ed4] shrink-0 mt-0.5" />
+            {form}
+          </li>
+        ))}
+      </ul>
+      <Link
+        href={`/wizard?jurisdiction=${regionSlug}&product=notice_only&topic=eviction&src=${SEO_SRC}`}
+        className="w-full h-12 rounded-xl bg-[#692ed4] hover:bg-[#5a27b8] text-white text-lg font-semibold inline-flex items-center justify-center gap-2 transition-colors"
+      >
+        Choose Region
+        <RiArrowRightLine className="w-5 h-5" />
+      </Link>
+    </div>
+  );
+}

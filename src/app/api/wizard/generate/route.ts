@@ -4,22 +4,28 @@
  *
  * Enforces legal compliance before generating documents.
  * Cannot be bypassed - API-layer enforcement.
+ *
+ * PRE-GENERATION VALIDATION:
+ * - Rule-based consistency check always runs for complete_pack
+ * - Optional LLM check via ENABLE_LLM_CONSISTENCY_CHECK env flag
+ * - BLOCKER issues return 400 and prevent generation
+ * - WARNING issues are logged but allow generation
  */
 
 import { NextResponse } from 'next/server';
 import { handleLegalError, LegalComplianceError, ValidationError } from '@/lib/errors/legal-errors';
+import { getCaseFacts } from './getCaseFacts';
+import {
+  deriveJurisdictionFromFacts,
+  deriveRouteFromFacts,
+  runYamlOnlyCompletePackValidation,
+  trackYamlOnlyValidation,
+} from '@/lib/validation/shadow-mode-adapter';
 
 // Helper function to parse dates consistently (CLAUDE CODE FIX #2)
 function parseUTCDate(dateStr: string): Date {
   const [year, month, day] = dateStr.split('-').map(Number);
   return new Date(Date.UTC(year, month - 1, day, 0, 0, 0, 0));
-}
-
-// Mock function - replace with actual implementation
-async function getCaseFacts(caseId: string): Promise<Record<string, any>> {
-  // In production, this would fetch from Supabase
-  // For now, return mock data
-  return {};
 }
 
 export async function POST(request: Request) {
@@ -41,6 +47,77 @@ export async function POST(request: Request) {
     }
 
     const caseFacts = await getCaseFacts(caseId);
+
+    // ========================================
+    // PRE-GENERATION CONSISTENCY CHECK (complete_pack only)
+    // ========================================
+
+    // Determine product from documentType or caseFacts
+    // Note: section21_notice and wales_section_173 are notice-only types, not complete_pack
+    const isNoticeOnlyDocType = documentType === 'section21_notice' ||
+      documentType === 'wales_section_173' ||
+      documentType === 'section8_notice' ||
+      documentType.startsWith('notice_');
+    const product = caseFacts.__meta?.product || caseFacts.product ||
+      (isNoticeOnlyDocType ? 'notice_only' :
+        (documentType.includes('eviction') || documentType.includes('pack') ? 'complete_pack' : 'notice_only'));
+
+    if (product === 'complete_pack' || product === 'eviction_pack') {
+      // ========================================================================
+      // Phase 12: YAML-only validation (TS validators removed)
+      // ========================================================================
+      let blockers: Array<{ code: string; description?: string }> = [];
+      let warnings: Array<{ code: string; description?: string }> = [];
+
+      console.log('[API Generate] Using YAML-only validation for complete_pack (Phase 12)');
+      try {
+        const yamlResult = await runYamlOnlyCompletePackValidation({
+          jurisdiction: deriveJurisdictionFromFacts(caseFacts) as 'england' | 'wales' | 'scotland',
+          route: deriveRouteFromFacts(caseFacts),
+          facts: caseFacts,
+        });
+
+        trackYamlOnlyValidation(true);
+
+        blockers = yamlResult.blockers.map((b) => ({
+          code: b.id,
+          description: b.message,
+        }));
+        warnings = yamlResult.warnings.map((w) => ({
+          code: w.id,
+          description: w.message,
+        }));
+
+      } catch (error) {
+        trackYamlOnlyValidation(false);
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        console.error('[API Generate] YAML validation error:', {
+          error: errorMessage,
+          product,
+        });
+        throw error; // Re-throw to trigger 500 error
+      }
+
+      // Log warnings but don't block
+      if (warnings.length > 0) {
+        console.log(`[API Generate] Pre-generation warnings:`, warnings.map(w => w.code));
+      }
+
+      // Block on blocker issues
+      if (blockers.length > 0) {
+        console.log(`[API Generate] Pre-generation blockers:`, blockers.map(b => b.code));
+        return NextResponse.json(
+          {
+            error: 'PRE_GENERATION_VALIDATION_FAILED',
+            code: 'CONSISTENCY_CHECK_FAILED',
+            message: 'Document generation blocked due to data inconsistencies',
+            blocking_issues: blockers,
+            warnings: warnings,
+          },
+          { status: 400 }
+        );
+      }
+    }
 
     // ========================================
     // WALES SECTION 173 ENFORCEMENT
@@ -130,6 +207,41 @@ export async function POST(request: Request) {
           ),
           { status: 403 }
         );
+      }
+
+      // DEPOSIT CAP ENFORCEMENT (Tenant Fees Act 2019)
+      // 5 weeks rent max (or 6 weeks if annual rent > £50,000)
+      // Blocks Section 21 unless landlord confirms refund/reduction
+      if (caseFacts.deposit_taken === true && caseFacts.deposit_amount && caseFacts.rent_amount) {
+        const rentFrequency = caseFacts.rent_frequency ?? 'monthly';
+        let annualRent = caseFacts.rent_amount * 12;
+        if (rentFrequency === 'weekly') annualRent = caseFacts.rent_amount * 52;
+        else if (rentFrequency === 'fortnightly') annualRent = caseFacts.rent_amount * 26;
+        else if (rentFrequency === 'quarterly') annualRent = caseFacts.rent_amount * 4;
+        else if (rentFrequency === 'yearly') annualRent = caseFacts.rent_amount;
+
+        const weeklyRent = annualRent / 52;
+        const maxWeeks = annualRent > 50000 ? 6 : 5;
+        const maxDeposit = weeklyRent * maxWeeks;
+
+        if (caseFacts.deposit_amount > maxDeposit) {
+          const confirmationValue = caseFacts.deposit_reduced_to_legal_cap_confirmed;
+          const isConfirmed = confirmationValue === 'yes' || confirmationValue === true;
+
+          if (!isConfirmed) {
+            return NextResponse.json(
+              handleLegalError(
+                new LegalComplianceError(
+                  'SECTION21_DEPOSIT_CAP_EXCEEDED',
+                  `Section 21 invalid: deposit £${caseFacts.deposit_amount.toFixed(2)} exceeds legal cap of £${maxDeposit.toFixed(2)} (${maxWeeks} weeks' rent). ` +
+                    `Tenant Fees Act 2019 requires the deposit to be within the cap. ` +
+                    `Confirm you have refunded/reduced the deposit, or use Section 8 instead.`
+                )
+              ),
+              { status: 403 }
+            );
+          }
+        }
       }
 
       // Gas certificate (ONLY if gas appliances)

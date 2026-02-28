@@ -1,0 +1,906 @@
+{{!--
+  ============================================================================
+  PREMIUM OCCUPATION CONTRACT
+  Wales Only - Solicitor-Grade Professional Edition
+
+  LEGAL NOTE: This Premium Occupation Contract applies to Wales ONLY under
+  the Renting Homes (Wales) Act 2016. It includes enhanced provisions for
+  guarantors, rent reviews, and comprehensive property management terms.
+
+  STRUCTURE:
+  1. Cover/Title
+  2. Parties (incl. Guarantor when present)
+  3. Definitions & Interpretation
+  4. Core Clauses (Dwelling, Term, Rent, Deposit, Obligations)
+  5. Guarantor Provisions (when applicable)
+  6. Signatures
+  7. Schedules (Dwelling, Rent/Deposit, Utilities, Inventory, House Rules)
+  ============================================================================
+--}}
+
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Premium Occupation Contract</title>
+  <style>
+    /* ===== PAGE SETUP ===== */
+    @page {
+      size: A4;
+      margin: 25mm 20mm 25mm 20mm;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      font-size: 11pt;
+      line-height: 1.5;
+      color: #1a1a1a;
+      background: white;
+    }
+
+    /* ===== TYPOGRAPHY ===== */
+    h1, h2, h3, h4 {
+      font-family: 'Arial', 'Helvetica', sans-serif;
+      font-weight: 600;
+      margin-top: 0;
+      page-break-after: avoid;
+    }
+
+    h1 {
+      font-size: 18pt;
+      text-align: center;
+      margin-bottom: 6pt;
+      text-transform: uppercase;
+      letter-spacing: 1pt;
+    }
+
+    h2 {
+      font-size: 13pt;
+      border-bottom: 1pt solid #333;
+      padding-bottom: 4pt;
+      margin: 20pt 0 12pt 0;
+      text-transform: uppercase;
+    }
+
+    h3 {
+      font-size: 11pt;
+      margin: 14pt 0 8pt 0;
+    }
+
+    p {
+      margin: 0 0 8pt 0;
+      text-align: justify;
+      hyphens: auto;
+    }
+
+    /* ===== DOCUMENT HEADER ===== */
+    .doc-header {
+      text-align: center;
+      border-bottom: 2pt solid #c8102e;
+      padding-bottom: 15pt;
+      margin-bottom: 20pt;
+    }
+
+    .doc-subtitle {
+      font-size: 10pt;
+      color: #555;
+      margin: 5pt 0;
+    }
+
+    .doc-jurisdiction {
+      font-size: 10pt;
+      color: #c8102e;
+      font-weight: bold;
+      margin: 5pt 0;
+    }
+
+    .premium-badge {
+      display: inline-block;
+      background: #c8102e;
+      color: white;
+      padding: 3pt 12pt;
+      font-size: 8pt;
+      text-transform: uppercase;
+      letter-spacing: 1pt;
+      margin: 5pt 0;
+    }
+
+    .doc-date {
+      font-size: 10pt;
+      margin-top: 10pt;
+    }
+
+    /* ===== PARTIES ===== */
+    .parties-section {
+      margin: 15pt 0;
+    }
+
+    .party-block {
+      margin: 10pt 0;
+      padding-left: 20pt;
+    }
+
+    .party-role {
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: 9pt;
+      letter-spacing: 0.5pt;
+      margin-bottom: 3pt;
+    }
+
+    .party-details-text {
+      line-height: 1.6;
+    }
+
+    /* ===== DEFINITIONS ===== */
+    .definitions-section {
+      margin: 20pt 0;
+    }
+
+    .definitions-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .definitions-list li {
+      margin: 6pt 0;
+      padding-left: 0;
+    }
+
+    .defined-term {
+      font-weight: bold;
+    }
+
+    /* ===== CLAUSES ===== */
+    .clause {
+      margin: 8pt 0;
+      padding-left: 30pt;
+      text-indent: -30pt;
+    }
+
+    .clause-num {
+      display: inline-block;
+      width: 28pt;
+      font-weight: bold;
+    }
+
+    .sub-clause {
+      margin: 6pt 0 6pt 30pt;
+      padding-left: 25pt;
+      text-indent: -25pt;
+    }
+
+    .sub-clause-num {
+      display: inline-block;
+      width: 23pt;
+    }
+
+    /* ===== TABLES ===== */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12pt 0;
+      font-size: 10pt;
+    }
+
+    .data-table th,
+    .data-table td {
+      border: 0.5pt solid #666;
+      padding: 6pt 8pt;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .data-table th {
+      background: #f5f5f5;
+      font-weight: bold;
+      font-size: 9pt;
+      text-transform: uppercase;
+    }
+
+    .data-table td.label {
+      width: 35%;
+      font-weight: 500;
+      background: #fafafa;
+    }
+
+    .data-table td.value {
+      width: 65%;
+      word-wrap: break-word;
+      overflow-wrap: anywhere;
+    }
+
+    /* ===== SCHEDULES ===== */
+    .schedule {
+      page-break-before: always;
+      margin-top: 0;
+    }
+
+    .schedule-header {
+      text-align: center;
+      border: 1pt solid #c8102e;
+      padding: 10pt;
+      margin-bottom: 15pt;
+      background: #fef7f7;
+    }
+
+    .schedule-header h2 {
+      border: none;
+      margin: 0;
+      padding: 0;
+      color: #c8102e;
+    }
+
+    .schedule-title {
+      font-size: 12pt;
+      margin-top: 5pt;
+      font-weight: normal;
+      text-transform: none;
+    }
+
+    /* ===== SIGNATURES ===== */
+    /* CRITICAL: Signatures MUST always start on a fresh page for legal documents */
+    .signature-section {
+      page-break-before: always;
+      page-break-inside: avoid;
+      margin-top: 0;
+      padding-top: 20pt;
+      min-height: 400pt;
+    }
+
+    .signature-block {
+      margin: 25pt 0;
+      page-break-inside: avoid;
+    }
+
+    .signature-role {
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: 9pt;
+      margin-bottom: 8pt;
+    }
+
+    .signature-name {
+      margin-bottom: 20pt;
+    }
+
+    .signature-line {
+      border-bottom: 1pt solid #333;
+      width: 250pt;
+      height: 25pt;
+    }
+
+    .signature-label {
+      font-size: 9pt;
+      color: #555;
+      margin-top: 3pt;
+    }
+
+    .signature-date-line {
+      border-bottom: 1pt solid #333;
+      width: 150pt;
+      display: inline-block;
+      margin-left: 10pt;
+    }
+
+    /* ===== LEGAL NOTICES ===== */
+    .legal-notice {
+      border: 1pt solid #c8102e;
+      padding: 10pt;
+      margin: 12pt 0;
+      background: #fef7f7;
+      page-break-inside: avoid;
+    }
+
+    .legal-notice-title {
+      font-weight: bold;
+      font-size: 10pt;
+      margin-bottom: 6pt;
+      text-transform: uppercase;
+      color: #c8102e;
+    }
+
+    /* ===== LISTS ===== */
+    ul, ol {
+      margin: 6pt 0 6pt 25pt;
+      padding: 0;
+    }
+
+    li {
+      margin: 4pt 0;
+    }
+
+    /* ===== TEXT OVERFLOW ===== */
+    .wrap-text, .email-text, .address-text {
+      word-wrap: break-word;
+      overflow-wrap: anywhere;
+    }
+
+    /* ===== FOOTER ===== */
+    .doc-footer {
+      margin-top: 30pt;
+      padding-top: 10pt;
+      border-top: 0.5pt solid #999;
+      font-size: 8pt;
+      color: #666;
+      text-align: center;
+    }
+
+    /* ===== PRINT ===== */
+    @media print {
+      .schedule { page-break-before: always; }
+      .signature-section, .signature-block, .legal-notice, .schedule-header { page-break-inside: avoid; }
+      h2, h3, h4 { page-break-after: avoid; }
+      .data-table, .data-table tr { page-break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== COVER / TITLE ===== -->
+  <div class="doc-header">
+    <h1>Premium Occupation Contract</h1>
+    <div class="premium-badge">Premium Edition</div>
+    <div class="doc-subtitle">Renting Homes (Wales) Act 2016</div>
+    <div class="doc-jurisdiction">Wales</div>
+    <div class="doc-date">Dated: <strong>{{formatUKDate agreement_date}}</strong></div>
+  </div>
+
+  <div class="legal-notice">
+    <div class="legal-notice-title">Written Statement</div>
+    <p>This document is the written statement of the occupation contract as required under section 31 of the Renting Homes (Wales) Act 2016. The landlord must provide this to the contract-holder within 14 days of the occupation date.</p>
+  </div>
+
+  <!-- ===== 1. PARTIES ===== -->
+  <h2>1. Parties</h2>
+  <div class="parties-section">
+    <div class="party-block">
+      <div class="party-role">Landlord</div>
+      <div class="party-details-text">
+        <strong>{{landlord_full_name}}</strong><br>
+        <span class="address-text">{{landlord_address}}</span><br>
+        <span class="email-text">{{landlord_email}}</span> | {{landlord_phone}}
+      </div>
+    </div>
+
+    {{#if rent_smart_wales_number}}
+    <div class="party-block">
+      <div class="party-role">Rent Smart Wales</div>
+      <div class="party-details-text">
+        Registration: <strong>{{rent_smart_wales_number}}</strong>{{#if rent_smart_wales_license_number}}<br>Licence: <strong>{{rent_smart_wales_license_number}}</strong>{{/if}}
+      </div>
+    </div>
+    {{/if}}
+
+    {{#if agent_name}}
+    <div class="party-block">
+      <div class="party-role">Landlord's Agent</div>
+      <div class="party-details-text">
+        <strong>{{agent_name}}</strong><br>
+        <span class="address-text">{{agent_address}}</span><br>
+        <span class="email-text">{{agent_email}}</span> | {{agent_phone}}{{#if agent_rent_smart_wales_license}}<br>RSW Licence: {{agent_rent_smart_wales_license}}{{/if}}
+      </div>
+    </div>
+    {{/if}}
+
+    <div class="party-block">
+      <div class="party-role">Contract-Holder{{#if multiple_tenants}}s{{/if}}</div>
+      <div class="party-details-text">
+        {{#each tenants}}
+        <strong>{{this.full_name}}</strong>{{#if this.dob}} (DOB: {{formatUKDate this.dob}}){{/if}}<br>
+        <span class="email-text">{{this.email}}</span>{{#if this.phone}} | {{this.phone}}{{/if}}{{#unless @last}}<br><br>{{/unless}}
+        {{/each}}
+      </div>
+    </div>
+
+    {{#if guarantor_name}}
+    <div class="party-block">
+      <div class="party-role">Guarantor</div>
+      <div class="party-details-text">
+        <strong>{{guarantor_name}}</strong><br>
+        <span class="address-text">{{guarantor_address}}</span><br>
+        <span class="email-text">{{guarantor_email}}</span> | {{guarantor_phone}}
+      </div>
+    </div>
+    {{/if}}
+  </div>
+
+  <!-- ===== 2. DEFINITIONS ===== -->
+  <h2>2. Definitions and Interpretation</h2>
+  <p>In this Contract, unless the context requires otherwise:</p>
+  <ul class="definitions-list">
+    <li><span class="defined-term">"Contract"</span> means this occupation contract and the Schedules attached.</li>
+    <li><span class="defined-term">"Landlord"</span> means {{landlord_full_name}} and successors in title.</li>
+    {{#if agent_name}}<li><span class="defined-term">"Agent"</span> means {{agent_name}}, the Landlord's authorised agent.</li>{{/if}}
+    <li><span class="defined-term">"Contract-Holder"</span> means {{#each tenants}}{{this.full_name}}{{#unless @last}}, {{/unless}}{{/each}}{{#if multiple_tenants}} (jointly and severally){{/if}}.</li>
+    {{#if guarantor_name}}<li><span class="defined-term">"Guarantor"</span> means {{guarantor_name}}.</li>{{/if}}
+    <li><span class="defined-term">"Dwelling"</span> means {{property_address}} as described in Schedule 1.</li>
+    <li><span class="defined-term">"Occupation Date"</span> means {{formatUKDate tenancy_start_date}}.</li>
+    <li><span class="defined-term">"Term"</span> means the {{#if is_fixed_term}}fixed term from {{formatUKDate tenancy_start_date}} to {{formatUKDate tenancy_end_date}}{{else}}periodic contract from {{formatUKDate tenancy_start_date}}{{/if}} and any continuation.</li>
+    <li><span class="defined-term">"Rent"</span> means £{{rent_amount}} per {{rent_period}} as set out in Schedule 2.</li>
+    <li><span class="defined-term">"Deposit"</span> means £{{deposit_amount}} held in {{deposit_scheme_name}} as set out in Schedule 2.</li>
+    <li><span class="defined-term">"Scheme"</span> means the government-authorised deposit protection scheme.</li>
+    <li><span class="defined-term">"RH(W)A 2016"</span> means the Renting Homes (Wales) Act 2016.</li>
+    <li><span class="defined-term">"Written Notice"</span> means notice in writing by hand, post, or email.</li>
+  </ul>
+  <p>Words importing the singular include the plural. Where there is more than one Contract-Holder, their obligations are joint and several.</p>
+
+  <!-- ===== 3. THE DWELLING ===== -->
+  <h2>3. The Dwelling</h2>
+  <p class="clause"><span class="clause-num">3.1</span> The Landlord lets to the Contract-Holder the Dwelling described in Schedule 1 for the Term.</p>
+  <p class="clause"><span class="clause-num">3.2</span> The Dwelling is let for use as a private residential dwelling only.</p>
+  <p class="clause"><span class="clause-num">3.3</span> The Landlord warrants that the Dwelling is fit for human habitation in accordance with section 91 of RH(W)A 2016.</p>
+  <p class="clause"><span class="clause-num">3.4</span> All required compliance certificates are valid and have been or will be provided to the Contract-Holder.</p>
+
+  <!-- ===== 4. THE TERM ===== -->
+  <h2>4. The Term</h2>
+  {{#if is_fixed_term}}
+  <p class="clause"><span class="clause-num">4.1</span> The occupation date is <strong>{{formatUKDate tenancy_start_date}}</strong> and the contract ends on <strong>{{formatUKDate tenancy_end_date}}</strong> (the "Fixed Term").</p>
+  <p class="clause"><span class="clause-num">4.2</span> Upon expiry of the Fixed Term, unless either party serves notice, this contract continues as a periodic standard contract on the same terms.</p>
+  {{else}}
+  <p class="clause"><span class="clause-num">4.1</span> The occupation date is <strong>{{formatUKDate tenancy_start_date}}</strong> and this is a periodic standard contract.</p>
+  <p class="clause"><span class="clause-num">4.2</span> The contract continues until terminated by either party giving proper notice.</p>
+  {{/if}}
+  <p class="clause"><span class="clause-num">4.3</span> The Landlord may give notice under section 173 RH(W)A 2016 (no-fault, minimum 6 months' notice) or seek possession on breach grounds.</p>
+  <p class="clause"><span class="clause-num">4.4</span> The Contract-Holder may end the contract by giving at least 4 weeks' written notice (or one rental period, whichever is longer).</p>
+
+  <!-- ===== 5. RENT ===== -->
+  <h2>5. Rent</h2>
+  <p class="clause"><span class="clause-num">5.1</span> The Contract-Holder shall pay the Rent of <strong>£{{rent_amount}}</strong> per {{rent_period}} in advance on the <strong>{{rent_due_day}}</strong> of each {{rent_period}}.</p>
+  <p class="clause"><span class="clause-num">5.2</span> Payment shall be made by {{payment_method}} to the account specified in Schedule 2.</p>
+  <p class="clause"><span class="clause-num">5.3</span> The first payment is due on or before {{formatUKDate tenancy_start_date}}.</p>
+  <p class="clause"><span class="clause-num">5.4</span> If rent remains unpaid for 14 days after the due date, interest may accrue at 3% above the Bank of England base rate per annum.</p>
+  <p class="clause"><span class="clause-num">5.5</span> Rent increases require at least 2 months' written notice under section 123 RH(W)A 2016 and may be challenged at the Residential Property Tribunal Wales.</p>
+
+  <!-- ===== 6. DEPOSIT ===== -->
+  <h2>6. Deposit</h2>
+  <p class="clause"><span class="clause-num">6.1</span> The Contract-Holder has paid a Deposit of <strong>£{{deposit_amount}}</strong>.</p>
+  <p class="clause"><span class="clause-num">6.2</span> The Landlord will protect the Deposit in {{deposit_scheme_name}} within 30 days and provide the prescribed information.</p>
+  <p class="clause"><span class="clause-num">6.3</span> The Deposit may be applied against unpaid rent, damage beyond fair wear and tear, cleaning costs, missing inventory items, or other sums due under this Contract.</p>
+  <p class="clause"><span class="clause-num">6.4</span> Any dispute over deductions may be referred to the Scheme's free alternative dispute resolution service.</p>
+
+  <!-- ===== 7. CONTRACT-HOLDER OBLIGATIONS ===== -->
+  <h2>7. Contract-Holder Obligations</h2>
+  <p class="clause"><span class="clause-num">7.1</span> <strong>Rent:</strong> Pay the Rent on time and in full.</p>
+  <p class="clause"><span class="clause-num">7.2</span> <strong>Utilities:</strong> Pay all charges for gas, electricity, water, council tax, telephone, and internet as set out in Schedule 3.</p>
+  <p class="clause"><span class="clause-num">7.3</span> <strong>Care of Dwelling:</strong> Keep the Dwelling clean and in good condition, not cause damage, and promptly report any disrepair to the Landlord.</p>
+  <p class="clause"><span class="clause-num">7.4</span> <strong>Access:</strong> Allow the Landlord (with at least 24 hours' notice, except in emergency) to enter the Dwelling for inspection, repairs, or safety checks.</p>
+  <p class="clause"><span class="clause-num">7.5</span> <strong>Use:</strong> Use the Dwelling only as a private residence and comply with the House Rules in Schedule 5.</p>
+  <p class="clause"><span class="clause-num">7.6</span> <strong>Nuisance:</strong> Not cause nuisance, annoyance, or disturbance to neighbours.</p>
+  <p class="clause"><span class="clause-num">7.7</span> <strong>Subletting:</strong> Not sublet, assign, or part with possession without the Landlord's prior written consent.</p>
+  <p class="clause"><span class="clause-num">7.8</span> <strong>Alterations:</strong> Not make alterations to the Dwelling without the Landlord's prior written consent.</p>
+  <p class="clause"><span class="clause-num">7.9</span> <strong>Insurance:</strong> Not do anything that would invalidate the Landlord's insurance.</p>
+  <p class="clause"><span class="clause-num">7.10</span> <strong>Contents Insurance:</strong> Obtain and maintain adequate contents insurance for personal belongings throughout the contract.</p>
+  <p class="clause"><span class="clause-num">7.11</span> <strong>End of Contract:</strong> Return the Dwelling at the end of the contract in the same condition as at the start (fair wear and tear excepted), return all keys, and provide a forwarding address.</p>
+
+  <!-- ===== 8. LANDLORD OBLIGATIONS ===== -->
+  <h2>8. Landlord Obligations</h2>
+  <p class="clause"><span class="clause-num">8.1</span> <strong>Quiet Enjoyment:</strong> Allow the Contract-Holder to occupy the Dwelling without interference, except as permitted by this Contract.</p>
+  <p class="clause"><span class="clause-num">8.2</span> <strong>Fitness:</strong> Ensure the Dwelling is and remains fit for human habitation (section 91 RH(W)A 2016).</p>
+  <p class="clause"><span class="clause-num">8.3</span> <strong>Repairs:</strong> Keep the structure, exterior, and installations for water, gas, electricity, heating, and sanitation in repair and proper working order.</p>
+  <p class="clause"><span class="clause-num">8.4</span> <strong>Safety:</strong> Ensure the Dwelling has valid Gas Safety Certificate, Electrical Installation Condition Report, smoke and carbon monoxide alarms, and an EPC rating of E or above.</p>
+  <p class="clause"><span class="clause-num">8.5</span> <strong>Deposit:</strong> Protect the Deposit in a government-authorised scheme and provide prescribed information within 30 days.</p>
+  <p class="clause"><span class="clause-num">8.6</span> <strong>Written Statement:</strong> Provide this written statement within 14 days of the occupation date.</p>
+  <p class="clause"><span class="clause-num">8.7</span> <strong>Rent Smart Wales:</strong> Be registered (and licensed if self-managing) with Rent Smart Wales.</p>
+  <p class="clause"><span class="clause-num">8.8</span> <strong>Insurance:</strong> Maintain buildings insurance for the Dwelling.</p>
+
+  {{#if guarantor_name}}
+  <!-- ===== 9. GUARANTOR ===== -->
+  <h2>9. Guarantor</h2>
+  <p class="clause"><span class="clause-num">9.1</span> The Guarantor guarantees the Contract-Holder's obligations under this Contract and agrees to be jointly and severally liable with the Contract-Holder.</p>
+  <p class="clause"><span class="clause-num">9.2</span> If the Contract-Holder fails to pay rent or breaches any obligation, the Guarantor will pay or remedy the breach within 14 days of written demand.</p>
+  <p class="clause"><span class="clause-num">9.3</span> This guarantee continues throughout the contract including any periodic continuation.</p>
+  <p class="clause"><span class="clause-num">9.4</span> The Guarantor's liability is capped at {{#if guarantor_max_liability}}{{guarantor_max_liability}}{{else}}twelve months' rent plus reasonable enforcement costs{{/if}}.</p>
+  <p class="clause"><span class="clause-num">9.5</span> The Guarantor confirms they have been advised to seek independent legal advice before signing.</p>
+  <p class="clause"><span class="clause-num">9.6</span> The Landlord may pursue the Guarantor without first exhausting remedies against the Contract-Holder.</p>
+  {{/if}}
+
+  <!-- ===== 10. GENERAL ===== -->
+  <h2>{{#if guarantor_name}}10{{else}}9{{/if}}. General Provisions</h2>
+  <p class="clause"><span class="clause-num">{{#if guarantor_name}}10{{else}}9{{/if}}.1</span> This Contract constitutes the entire agreement between the parties.</p>
+  <p class="clause"><span class="clause-num">{{#if guarantor_name}}10{{else}}9{{/if}}.2</span> No variation is effective unless in writing and signed by all parties.</p>
+  <p class="clause"><span class="clause-num">{{#if guarantor_name}}10{{else}}9{{/if}}.3</span> This Contract is governed by the laws of Wales and the Renting Homes (Wales) Act 2016.</p>
+  <p class="clause"><span class="clause-num">{{#if guarantor_name}}10{{else}}9{{/if}}.4</span> Disputes may be referred to the Residential Property Tribunal Wales.</p>
+  <p class="clause"><span class="clause-num">{{#if guarantor_name}}10{{else}}9{{/if}}.5</span> Notices may be served by hand, first-class post, or email to the addresses given in this Contract.</p>
+  <p class="clause"><span class="clause-num">{{#if guarantor_name}}10{{else}}9{{/if}}.6</span> If any provision is unenforceable, the remaining provisions continue in effect.</p>
+
+  {{> statutory_acknowledgements jurisdiction="wales" format="html" heading_style="h2"}}
+
+  <!-- ===== SIGNATURES ===== -->
+  <div class="signature-section">
+    <h2>Signatures</h2>
+    <p>By signing below, the parties confirm they have read, understood, and agree to be bound by all terms of this Contract and the attached Schedules.</p>
+
+    <div class="signature-block">
+      <div class="signature-role">Landlord</div>
+      <div class="signature-name">Name: {{landlord_full_name}}</div>
+      <div class="signature-line"></div>
+      <div class="signature-label">Signature</div>
+      <div style="margin-top: 10pt;">Date: <span class="signature-date-line"></span></div>
+    </div>
+
+    {{#if agent_name}}
+    <div class="signature-block">
+      <div class="signature-role">Agent (signing on behalf of Landlord)</div>
+      <div class="signature-name">Name: {{agent_name}}</div>
+      <div class="signature-line"></div>
+      <div class="signature-label">Signature</div>
+      <div style="margin-top: 10pt;">Date: <span class="signature-date-line"></span></div>
+    </div>
+    {{/if}}
+
+    {{#each tenants}}
+    <div class="signature-block">
+      <div class="signature-role">Contract-Holder {{add @index 1}}</div>
+      <div class="signature-name">Name: {{this.full_name}}</div>
+      <div class="signature-line"></div>
+      <div class="signature-label">Signature</div>
+      <div style="margin-top: 10pt;">Date: <span class="signature-date-line"></span></div>
+    </div>
+    {{/each}}
+
+    {{#if guarantor_name}}
+    <div class="signature-block">
+      <div class="signature-role">Guarantor</div>
+      <div class="signature-name">Name: {{guarantor_name}}</div>
+      <div class="signature-line"></div>
+      <div class="signature-label">Signature</div>
+      <div style="margin-top: 10pt;">Date: <span class="signature-date-line"></span></div>
+    </div>
+    {{/if}}
+  </div>
+
+  <!-- ===== SCHEDULE 1: DWELLING ===== -->
+  <section class="schedule">
+    <div class="schedule-header">
+      <h2>Schedule 1</h2>
+      <div class="schedule-title">Dwelling Details</div>
+    </div>
+
+    <table class="data-table">
+      <tr>
+        <td class="label">Dwelling Address</td>
+        <td class="value address-text">{{property_address}}</td>
+      </tr>
+      {{#if property_type}}
+      <tr>
+        <td class="label">Property Type</td>
+        <td class="value">{{property_type}}</td>
+      </tr>
+      {{/if}}
+      {{#if number_of_bedrooms}}
+      <tr>
+        <td class="label">Bedrooms</td>
+        <td class="value">{{number_of_bedrooms}}</td>
+      </tr>
+      {{/if}}
+      {{#if furnished_status}}
+      <tr>
+        <td class="label">Furnished Status</td>
+        <td class="value">{{#eq furnished_status "furnished"}}Furnished{{/eq}}{{#eq furnished_status "unfurnished"}}Unfurnished{{/eq}}{{#eq furnished_status "part-furnished"}}Part-Furnished{{/eq}}{{#unless (eq furnished_status "furnished")}}{{#unless (eq furnished_status "unfurnished")}}{{#unless (eq furnished_status "part-furnished")}}{{furnished_status}}{{/unless}}{{/unless}}{{/unless}}</td>
+      </tr>
+      {{/if}}
+      {{#if council_tax_band}}
+      <tr>
+        <td class="label">Council Tax Band</td>
+        <td class="value">{{council_tax_band}}</td>
+      </tr>
+      {{/if}}
+      {{#if epc_rating}}
+      <tr>
+        <td class="label">EPC Rating</td>
+        <td class="value">{{epc_rating}}</td>
+      </tr>
+      {{/if}}
+      {{#if parking_available}}
+      <tr>
+        <td class="label">Parking</td>
+        <td class="value">{{#if parking_details}}{{parking_details}}{{else}}Included{{/if}}</td>
+      </tr>
+      {{/if}}
+    </table>
+
+    <h3>Compliance Certificates</h3>
+    <table class="data-table">
+      <tr>
+        <td class="label">Gas Safety Certificate</td>
+        <td class="value">{{#if gas_safety_certificate}}Valid{{#if gas_safety_certificate_expiry}} (expires {{formatUKDate gas_safety_certificate_expiry}}){{/if}}{{else}}To be provided{{/if}}</td>
+      </tr>
+      <tr>
+        <td class="label">EICR</td>
+        <td class="value">{{#if electrical_safety_certificate}}Valid{{#if eicr_next_inspection_date}} (next inspection {{formatUKDate eicr_next_inspection_date}}){{/if}}{{else}}To be provided{{/if}}</td>
+      </tr>
+      <tr>
+        <td class="label">EPC</td>
+        <td class="value">{{#if epc_rating}}Rating {{epc_rating}}{{#if epc_expiry}} (valid until {{formatUKDate epc_expiry}}){{/if}}{{else}}To be provided{{/if}}</td>
+      </tr>
+      <tr>
+        <td class="label">Smoke Alarms</td>
+        <td class="value">{{#if smoke_alarms_fitted}}Fitted{{else}}Fitted (legally required){{/if}}</td>
+      </tr>
+      <tr>
+        <td class="label">CO Alarms</td>
+        <td class="value">{{#if carbon_monoxide_alarms}}Fitted{{else}}Fitted where required{{/if}}</td>
+      </tr>
+    </table>
+
+    <h3>Documents to be Provided</h3>
+    <p>The Landlord confirms the following have been or will be provided to the Contract-Holder:</p>
+    <ul>
+      <li>This Written Statement (within 14 days of occupation)</li>
+      <li>Energy Performance Certificate</li>
+      <li>Gas Safety Certificate (annually)</li>
+      <li>Electrical Installation Condition Report</li>
+      <li>Deposit protection prescribed information (within 30 days)</li>
+    </ul>
+  </section>
+
+  <!-- ===== SCHEDULE 2: RENT & DEPOSIT ===== -->
+  <section class="schedule">
+    <div class="schedule-header">
+      <h2>Schedule 2</h2>
+      <div class="schedule-title">Rent and Deposit</div>
+    </div>
+
+    <h3>Part A: Rent</h3>
+    <table class="data-table">
+      <tr>
+        <td class="label">Rent Amount</td>
+        <td class="value">£{{rent_amount}} per {{rent_period}}</td>
+      </tr>
+      <tr>
+        <td class="label">Payment Due</td>
+        <td class="value">{{rent_due_day}} of each {{rent_period}}</td>
+      </tr>
+      <tr>
+        <td class="label">Payment Method</td>
+        <td class="value">{{payment_method}}</td>
+      </tr>
+      <tr>
+        <td class="label">First Payment</td>
+        <td class="value">{{#if first_payment_date}}{{formatUKDate first_payment_date}}{{else}}{{formatUKDate tenancy_start_date}}{{/if}}</td>
+      </tr>
+    </table>
+
+    <h4>Bank Details</h4>
+    <table class="data-table">
+      <tr>
+        <td class="label">Account Name</td>
+        <td class="value">{{#if bank_account_name}}{{bank_account_name}}{{else}}{{landlord_full_name}}{{/if}}</td>
+      </tr>
+      <tr>
+        <td class="label">Sort Code</td>
+        <td class="value">{{bank_sort_code}}</td>
+      </tr>
+      <tr>
+        <td class="label">Account Number</td>
+        <td class="value">{{bank_account_number}}</td>
+      </tr>
+    </table>
+
+    <h3>Part B: Deposit</h3>
+    <table class="data-table">
+      <tr>
+        <td class="label">Deposit Amount</td>
+        <td class="value">£{{deposit_amount}}</td>
+      </tr>
+      <tr>
+        <td class="label">Protection Scheme</td>
+        <td class="value">{{deposit_scheme_name}}</td>
+      </tr>
+    </table>
+
+    <div class="legal-notice">
+      <div class="legal-notice-title">Deposit Protection</div>
+      <p>The Deposit will be protected within 30 days and prescribed information provided. At contract end, the Deposit (less any lawful deductions) will be returned via the Scheme's procedures. Disputes may be referred to the Scheme's free ADR service.</p>
+    </div>
+
+    <h4>Permitted Deductions</h4>
+    <ul>
+      <li>Unpaid rent or other sums due</li>
+      <li>Damage beyond fair wear and tear</li>
+      <li>Missing inventory items</li>
+      <li>Cleaning costs if not left in comparable condition</li>
+      <li>Unreturned keys or access devices</li>
+    </ul>
+
+    {{#if late_payment_interest_applicable}}
+    <h3>Part C: Late Payment</h3>
+    <table class="data-table">
+      <tr>
+        <td class="label">Interest on Late Payment</td>
+        <td class="value">{{#if late_payment_interest_rate}}{{late_payment_interest_rate}}%{{else}}3%{{/if}} above Bank of England base rate per annum</td>
+      </tr>
+      {{#if grace_period_days}}
+      <tr>
+        <td class="label">Grace Period</td>
+        <td class="value">{{grace_period_days}} days after due date</td>
+      </tr>
+      {{/if}}
+    </table>
+    {{/if}}
+
+    {{#if guarantor_name}}
+    <h3>Part D: Guarantor</h3>
+    <table class="data-table">
+      <tr>
+        <td class="label">Guarantor Name</td>
+        <td class="value">{{guarantor_name}}</td>
+      </tr>
+      <tr>
+        <td class="label">Guarantor Address</td>
+        <td class="value address-text">{{guarantor_address}}</td>
+      </tr>
+      <tr>
+        <td class="label">Contact Email</td>
+        <td class="value email-text">{{guarantor_email}}</td>
+      </tr>
+      <tr>
+        <td class="label">Contact Phone</td>
+        <td class="value">{{guarantor_phone}}</td>
+      </tr>
+      {{#if guarantor_relationship}}
+      <tr>
+        <td class="label">Relationship to Contract-Holder</td>
+        <td class="value">{{guarantor_relationship}}</td>
+      </tr>
+      {{/if}}
+      <tr>
+        <td class="label">Maximum Liability</td>
+        <td class="value">{{#if guarantor_max_liability}}{{guarantor_max_liability}}{{else}}Twelve (12) months' rent plus reasonable enforcement costs{{/if}}</td>
+      </tr>
+    </table>
+    {{/if}}
+  </section>
+
+  <!-- ===== SCHEDULE 3: UTILITIES ===== -->
+  <section class="schedule">
+    <div class="schedule-header">
+      <h2>Schedule 3</h2>
+      <div class="schedule-title">Utilities and Services</div>
+    </div>
+
+    <table class="data-table">
+      <tr>
+        <th style="width: 40%;">Utility</th>
+        <th style="width: 30%;">Responsibility</th>
+        <th style="width: 30%;">Notes</th>
+      </tr>
+      <tr>
+        <td>Council Tax</td>
+        <td>{{#if council_tax_responsibility}}{{council_tax_responsibility}}{{else}}Contract-Holder{{/if}}</td>
+        <td>{{#if council_tax_band}}Band {{council_tax_band}}{{/if}}</td>
+      </tr>
+      <tr>
+        <td>Gas</td>
+        <td>{{#if utilities_responsibility}}{{utilities_responsibility}}{{else}}Contract-Holder{{/if}}</td>
+        <td>Register with supplier</td>
+      </tr>
+      <tr>
+        <td>Electricity</td>
+        <td>{{#if utilities_responsibility}}{{utilities_responsibility}}{{else}}Contract-Holder{{/if}}</td>
+        <td>Register with supplier</td>
+      </tr>
+      <tr>
+        <td>Water</td>
+        <td>{{#if utilities_responsibility}}{{utilities_responsibility}}{{else}}Contract-Holder{{/if}}</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Internet</td>
+        <td>{{#if internet_responsibility}}{{internet_responsibility}}{{else}}Contract-Holder{{/if}}</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>TV Licence</td>
+        <td>Contract-Holder</td>
+        <td>If required</td>
+      </tr>
+      <tr>
+        <td>Buildings Insurance</td>
+        <td>Landlord</td>
+        <td>Contract-Holder arranges contents</td>
+      </tr>
+    </table>
+
+    <p>The Contract-Holder must notify utility suppliers of occupation within 7 days and provide meter readings at start and end of contract.</p>
+
+    {{#if meter_reading_gas}}{{#if meter_reading_electric}}
+    <h3>Meter Readings at Start</h3>
+    <table class="data-table">
+      {{#if meter_reading_gas}}<tr><td class="label">Gas</td><td class="value">{{meter_reading_gas}}</td></tr>{{/if}}
+      {{#if meter_reading_electric}}<tr><td class="label">Electricity</td><td class="value">{{meter_reading_electric}}</td></tr>{{/if}}
+      {{#if meter_reading_water}}<tr><td class="label">Water</td><td class="value">{{meter_reading_water}}</td></tr>{{/if}}
+    </table>
+    {{/if}}{{/if}}
+  </section>
+
+  <!-- ===== SCHEDULE 4: INVENTORY ===== -->
+  <section class="schedule">
+    <div class="schedule-header">
+      <h2>Schedule 4</h2>
+      <div class="schedule-title">Inventory and Condition</div>
+    </div>
+
+    {{#if inventory_attached}}
+    <p>A detailed inventory and schedule of condition is attached or provided separately and forms part of this Contract.</p>
+    {{else}}
+    <p>{{#if inventory_provided}}An inventory will be provided at or before the occupation date.{{else}}The Contract-Holder should prepare a photographic record of the Dwelling's condition at the start of the contract.{{/if}}</p>
+    {{/if}}
+
+    <h3>Keys and Access Devices</h3>
+    <table class="data-table">
+      {{#if number_of_front_door_keys}}<tr><td class="label">Front Door Keys</td><td class="value">{{number_of_front_door_keys}}</td></tr>{{/if}}
+      {{#if number_of_back_door_keys}}<tr><td class="label">Back Door Keys</td><td class="value">{{number_of_back_door_keys}}</td></tr>{{/if}}
+      {{#if access_cards_fobs}}<tr><td class="label">Access Cards/Fobs</td><td class="value">{{access_cards_fobs}}</td></tr>{{/if}}
+      {{#if number_of_mailbox_keys}}<tr><td class="label">Mailbox Keys</td><td class="value">{{number_of_mailbox_keys}}</td></tr>{{/if}}
+    </table>
+    <p>All keys must be returned at contract end. Lost key replacement will be charged to the Contract-Holder.</p>
+
+    <h3>Condition at End of Contract</h3>
+    <p>The Contract-Holder must return the Dwelling in the same condition as at the start (fair wear and tear excepted). A check-out inspection will be conducted, preferably with the Contract-Holder present.</p>
+  </section>
+
+  <!-- ===== SCHEDULE 5: HOUSE RULES ===== -->
+  <section class="schedule">
+    <div class="schedule-header">
+      <h2>Schedule 5</h2>
+      <div class="schedule-title">House Rules</div>
+    </div>
+
+    <h3>Permitted Use</h3>
+    <p>The Dwelling is let for use as a private residential dwelling only. The Contract-Holder must not use the Dwelling for trade or business, or do anything causing nuisance to neighbours.</p>
+
+    <h3>Pets</h3>
+    <table class="data-table">
+      <tr>
+        <td class="label">Pets Permitted</td>
+        <td class="value">{{#if pets_allowed}}Yes{{#if approved_pets}} ({{approved_pets}}){{/if}}{{else}}No (consent required){{/if}}</td>
+      </tr>
+    </table>
+    {{#if pets_allowed}}
+    <p>Approved pets must be kept under control, not cause nuisance, and be up to date with vaccinations. The Contract-Holder is liable for any pet damage.</p>
+    {{else}}
+    <p>The Contract-Holder may request consent for pets in writing. The Landlord will not unreasonably refuse well-behaved pets.</p>
+    {{/if}}
+
+    <h3>Smoking</h3>
+    <table class="data-table">
+      <tr>
+        <td class="label">Smoking Permitted</td>
+        <td class="value">{{#if smoking_allowed}}Outdoors only{{else}}No{{/if}}</td>
+      </tr>
+    </table>
+
+    <h3>Subletting</h3>
+    <p>The Contract-Holder must not sublet, take in lodgers, or list the Dwelling on short-term letting platforms without prior written consent. Unauthorised subletting is a serious breach.</p>
+
+    <h3>Quiet Enjoyment</h3>
+    <p>The Contract-Holder must behave considerately, keep noise reasonable (especially 11pm-7am), and ensure visitors respect these rules.</p>
+
+    {{#if has_garden}}
+    <h3>Garden</h3>
+    <p>The Contract-Holder is responsible for keeping the garden in reasonable condition: mowing lawns, trimming hedges, and keeping paths clear.</p>
+    {{/if}}
+
+    <h3>Alterations</h3>
+    <p>No alterations without prior written consent. Minor picture hooks may be permitted. Any alterations become the Landlord's property.</p>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <div class="doc-footer">
+    <p>Premium Occupation Contract &mdash; Wales</p>
+    <p>Generated: {{formatUKDate current_date}} | Reference: {{#if case_id}}{{case_id}}{{else}}{{document_id}}{{/if}}</p>
+    <p>Compliant with Renting Homes (Wales) Act 2016, Housing (Wales) Act 2014</p>
+  </div>
+
+</body>
+</html>

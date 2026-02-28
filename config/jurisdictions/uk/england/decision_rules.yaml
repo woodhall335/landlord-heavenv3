@@ -19,12 +19,16 @@ section_8_grounds:
       court_type: "mandatory"
       description: "At least 8 weeks' (2 months') rent arrears at both notice and hearing"
       required_facts:
-        - rent_amount_monthly
-        - arrears_amount
-        - arrears_duration_months
-        - current_arrears_amount
+        # Using MQS canonical facts - validator derives monthly rent from rent_amount + rent_frequency
+        - rent_amount
+        - rent_frequency
+        - arrears_total
+      optional_facts:
+        # These are derived or computed, not directly required from user input
+        - arrears_from_date
       eligibility_rules:
-        - "arrears_amount >= (rent_amount_monthly * 2)"
+        # Validator derives arrears_months from arrears_total / (rent_amount adjusted for frequency)
+        - "arrears_total >= 2 months rent equivalent"
         - "arrears at time of notice >= 8 weeks rent"
         - "arrears at time of hearing >= 8 weeks rent"
       success_probability: 95
@@ -32,7 +36,7 @@ section_8_grounds:
 
     ground_1:
       title: "Landlord previously occupied as only or principal home"
-      notice_period_days: 14
+      notice_period_days: 60  # 2 months - Housing Act 1988, Schedule 2, Part IV
       court_type: "mandatory"
       description: "Property was landlord's home before letting"
       required_facts:
@@ -46,7 +50,7 @@ section_8_grounds:
 
     ground_2:
       title: "Mortgage lender requires possession"
-      notice_period_days: 14
+      notice_period_days: 60  # 2 months - Housing Act 1988, Schedule 2, Part IV
       court_type: "mandatory"
       description: "Property is mortgaged and lender requires possession for default"
       required_facts:
@@ -95,7 +99,7 @@ section_8_grounds:
 
     ground_5:
       title: "Property required for minister of religion"
-      notice_period_days: 14
+      notice_period_days: 60  # 2 months - Housing Act 1988, Schedule 2, Part IV
       court_type: "mandatory"
       description: "Property is held for occupation by minister of religion"
       required_facts:
@@ -111,7 +115,7 @@ section_8_grounds:
 
     ground_6:
       title: "Intention to demolish or reconstruct"
-      notice_period_days: 14
+      notice_period_days: 60  # 2 months - Housing Act 1988, Schedule 2, Part IV
       court_type: "mandatory"
       description: "Landlord intends to demolish, reconstruct or carry out substantial works"
       required_facts:
@@ -129,7 +133,7 @@ section_8_grounds:
 
     ground_7:
       title: "Death of periodic tenant (within 12 months)"
-      notice_period_days: 14
+      notice_period_days: 60  # 2 months - Housing Act 1988, Schedule 2, Part IV
       court_type: "mandatory"
       description: "Tenant has died and proceedings begun within 12 months"
       required_facts:
@@ -149,13 +153,16 @@ section_8_grounds:
 
     ground_10:
       title: "Rent arrears (some arrears)"
-      notice_period_days: 14
+      notice_period_days: 14  # 2 weeks
       court_type: "discretionary"
       description: "Some rent is unpaid at notice and hearing"
       required_facts:
-        - rent_amount_monthly
-        - arrears_amount
-        - arrears_duration_months
+        # Using MQS canonical facts
+        - rent_amount
+        - rent_frequency
+        - arrears_total
+      optional_facts:
+        - arrears_from_date
       eligibility_rules:
         - "some rent lawfully due is unpaid at date of notice"
         - "some rent lawfully due is unpaid at date of hearing"
@@ -165,10 +172,15 @@ section_8_grounds:
 
     ground_11:
       title: "Persistent delay in paying rent"
-      notice_period_days: 14
+      notice_period_days: 14  # 2 weeks
       court_type: "discretionary"
       description: "Tenant persistently delays paying rent"
       required_facts:
+        # Using MQS canonical facts - particulars describe payment history
+        - ground_particulars
+      optional_facts:
+        # These facts are not collected by MQS wizard - documented in particulars instead
+        # If future MQS collects these, they can be moved to required_facts
         - payment_history
         - late_payment_instances
         - late_payment_duration
@@ -177,6 +189,7 @@ section_8_grounds:
         - "whether or not rent is in arrears at notice/hearing"
       success_probability: 65
       statute: "Housing Act 1988, Schedule 2, Ground 11"
+      notes: "Late payment pattern should be documented in ground_particulars"
 
     ground_12:
       title: "Breach of tenancy obligation"
@@ -184,6 +197,10 @@ section_8_grounds:
       court_type: "discretionary"
       description: "Tenant has broken term of tenancy (other than rent)"
       required_facts:
+        # Using MQS canonical facts - details documented in ground_particulars
+        - ground_particulars
+      optional_facts:
+        # These can be captured in ground_particulars free text
         - breach_type
         - breach_description
         - breach_evidence
@@ -200,6 +217,10 @@ section_8_grounds:
       court_type: "discretionary"
       description: "Condition of dwelling has deteriorated due to waste, neglect or default"
       required_facts:
+        # Using MQS canonical facts - details documented in ground_particulars
+        - ground_particulars
+      optional_facts:
+        # These can be captured in ground_particulars free text
         - property_condition
         - deterioration_description
         - tenant_responsibility
@@ -218,6 +239,10 @@ section_8_grounds:
       court_type: "discretionary"
       description: "Tenant or person residing causing nuisance or convicted of illegal/immoral use"
       required_facts:
+        # Using MQS canonical facts - details documented in ground_particulars
+        - ground_particulars
+      optional_facts:
+        # These can be captured in ground_particulars free text
         - nuisance_type
         - nuisance_description
         - affected_parties
@@ -236,6 +261,10 @@ section_8_grounds:
       court_type: "discretionary"
       description: "Dwelling occupied by married couple/civil partners and one partner has left due to violence"
       required_facts:
+        # Using MQS canonical facts - details documented in ground_particulars
+        - ground_particulars
+      optional_facts:
+        # These can be captured in ground_particulars free text
         - relationship_type
         - violence_occurred
         - partner_left_property
@@ -253,6 +282,10 @@ section_8_grounds:
       court_type: "discretionary"
       description: "Condition of furniture has deteriorated due to ill-treatment"
       required_facts:
+        # Using MQS canonical facts - details documented in ground_particulars
+        - ground_particulars
+      optional_facts:
+        # These can be captured in ground_particulars free text
         - furniture_condition
         - deterioration_description
         - tenant_responsibility
@@ -269,6 +302,10 @@ section_8_grounds:
       court_type: "discretionary"
       description: "Tenancy obtained by false statement made knowingly or recklessly by tenant"
       required_facts:
+        # Using MQS canonical facts - details documented in ground_particulars
+        - ground_particulars
+      optional_facts:
+        # These can be captured in ground_particulars free text
         - false_statement_description
         - statement_made_by
         - material_influence

@@ -1,0 +1,270 @@
+---
+title: Case Risk Assessment Report
+category: guidance
+description: Comprehensive risk analysis for Wales eviction proceedings
+filename: risk-report.pdf
+---
+
+CASE RISK ASSESSMENT REPORT - WALES
+
+==================================================================
+
+LANDLORD: {{landlord_name}}
+PROPERTY: {{property_address}}
+CONTRACT-HOLDER: {{tenant_name}}
+CASE TYPE: {{case_type}}
+JURISDICTION: Wales (Renting Homes (Wales) Act 2016)
+ASSESSMENT DATE: {{current_date}}
+
+==================================================================
+
+OVERALL RISK SCORE: {{risk_assessment.success_probability}}%
+
+{{#if (gte risk_assessment.success_probability 70)}}
+✅ **STRONG CASE** - High likelihood of success
+Your case has strong merits. Proceed with confidence, ensuring all Wales-specific compliance requirements are met.
+
+{{else if (gte risk_assessment.success_probability 50)}}
+⚠️  **MODERATE CASE** - Reasonable likelihood of success
+Your case has merit but there are some concerns. Address the issues below to strengthen your position.
+
+{{else}}
+❌ **WEAK CASE** - Significant concerns
+Your case has serious weaknesses. Strongly recommend addressing all red flags before proceeding or consider alternative resolution.
+
+{{/if}}
+
+==================================================================
+
+WALES-SPECIFIC RISK FACTORS
+
+1. RENT SMART WALES COMPLIANCE
+{{#if compliance.rent_smart_wales_registered}}
+✅ Registered with Rent Smart Wales - Essential requirement met
+{{else}}
+❌ NOT REGISTERED - This is a FATAL flaw. Your eviction notice may be INVALID.
+   All landlords in Wales must be registered. Register immediately at rentsmartswales.gov.wales
+{{/if}}
+
+2. WRITTEN STATEMENT PROVIDED
+{{#if compliance.written_statement_provided}}
+✅ Written statement provided as required
+{{else}}
+⚠️  Written statement may not have been provided within 14 days
+   This could affect your case
+{{/if}}
+
+3. SECTION 173 TIMING
+{{#if (or (eq notice.route 'wales_section_173') (eq notice.route 'section_173'))}}
+   - Contract must be at least 6 months old to serve Section 173
+   - Notice period must be at least 6 months
+   {{#if risk_assessment.s173_timing_valid}}
+   ✅ Timing requirements appear to be met
+   {{else}}
+   ❌ Timing requirements may not be met - check carefully
+   {{/if}}
+{{else}}
+   Fault-based notice - different timing rules apply
+{{/if}}
+
+==================================================================
+
+CASE STRENGTHS
+
+{{#if risk_assessment.strengths}}
+{{#each risk_assessment.strengths}}
+✓ {{this}}
+{{/each}}
+{{else}}
+Based on the information provided, specific strengths have not been identified.
+Consider strengthening your case by:
+- Ensuring Rent Smart Wales registration is current
+- Gathering comprehensive evidence
+- Following proper Welsh procedures
+- Documenting all communications with contract-holder
+{{/if}}
+
+==================================================================
+
+RED FLAGS (CRITICAL ISSUES)
+
+{{#if risk_assessment.red_flags}}
+{{#if (gt risk_assessment.red_flags.length 0)}}
+{{#each risk_assessment.red_flags}}
+❌ {{this}}
+
+{{/each}}
+
+**ACTION REQUIRED:** These are serious issues that could block or significantly weaken your case. Address these BEFORE proceeding with eviction or court action.
+
+{{else}}
+✅ No critical red flags identified.
+{{/if}}
+{{else}}
+✅ No critical red flags identified.
+{{/if}}
+
+==================================================================
+
+COMPLIANCE ISSUES
+
+{{#if risk_assessment.compliance_issues}}
+{{#if (gt risk_assessment.compliance_issues.length 0)}}
+{{#each risk_assessment.compliance_issues}}
+⚠️  {{this}}
+
+{{/each}}
+
+**RECOMMENDED:** Address these compliance gaps to strengthen your case and avoid delays or challenges.
+
+{{else}}
+✅ No compliance issues identified.
+{{/if}}
+{{else}}
+✅ No compliance issues identified.
+{{/if}}
+
+==================================================================
+
+MISSING EVIDENCE
+
+{{#if risk_assessment.missing_evidence}}
+{{#if (gt risk_assessment.missing_evidence.length 0)}}
+The following evidence would strengthen your case:
+
+{{#each risk_assessment.missing_evidence}}
+• {{this}}
+{{/each}}
+
+{{else}}
+Your evidence collection appears complete based on the information provided.
+{{/if}}
+{{else}}
+Ensure you have the following evidence ready:
+• Signed occupation contract / written statement
+• Proof of Rent Smart Wales registration
+• Proof of deposit protection (if deposit taken)
+• Gas safety certificate (if applicable)
+• Electrical safety certificate (if applicable)
+• Rent payment records/bank statements
+• Correspondence with contract-holder
+• Proof of service for any notices served
+• Photographs (if claiming damage)
+• Witness statements (if applicable)
+{{/if}}
+
+==================================================================
+
+TACTICAL RECOMMENDATIONS
+
+{{#if risk_assessment.recommendations}}
+{{#each risk_assessment.recommendations}}
+{{@index}}. {{this}}
+
+{{/each}}
+{{else}}
+
+Based on your case assessment for Wales:
+
+1. **Verify Rent Smart Wales Registration**
+   This is non-negotiable. Check your registration is current and valid.
+
+2. **Address All Red Flags First**
+   Do not proceed until critical issues are resolved.
+
+3. **Use Correct Welsh Forms**
+   Ensure you're using RHW series forms, not England forms.
+
+4. **Strengthen Compliance**
+   Fix any compliance gaps identified above.
+
+5. **Gather Comprehensive Evidence**
+   Collect and organize all supporting documents.
+
+6. **Consider Timing**
+   For Section 173: Cannot serve in first 6 months, notice period is 6 months.
+
+7. **Document Everything**
+   Keep detailed records of all communications, attempts to resolve, and actions taken.
+
+8. **Seek Legal Advice if Unsure**
+   For complex cases or if you have doubts, consult a Welsh housing law solicitor.
+
+{{/if}}
+
+==================================================================
+
+ESTIMATED TIMELINE FOR WALES
+
+Based on your case type and Welsh jurisdiction:
+
+**Section 173 (No-Fault) - Wales**
+- Serve notice: Day 0
+- Notice period: 6 months minimum
+- File court claim: After notice expires
+- Court processing: 4-8 weeks
+- Hearing (if needed): 4-8 weeks
+- Possession order: After hearing/decision
+- Bailiff eviction: 2-6 weeks after order
+**Total: 8-11 months typically**
+
+**Fault-Based (Section 157/159/161/162) - Wales**
+- Serve notice: Day 0
+- Notice period: 14 days to 2 months (ground dependent)
+- File court claim: After notice expires
+- Court processing: 4-8 weeks
+- Hearing: 4-12 weeks
+- Possession order: At court's discretion
+- Bailiff eviction: 2-6 weeks after order
+**Total: 4-8 months typically**
+
+**Note:** These are estimates. Actual timelines vary based on:
+- Court workload in your area
+- Whether contract-holder defends
+- Complexity of your case
+- Any compliance issues
+
+==================================================================
+
+IMPORTANT DISCLAIMERS
+
+1. **Wales-Specific Advice**
+   This assessment is based on the Renting Homes (Wales) Act 2016 which
+   applies ONLY in Wales. If your property is in England, different rules apply.
+
+2. **This is Not Legal Advice**
+   This risk assessment is based on the information you provided and general
+   legal principles. It is not a substitute for professional legal advice.
+
+3. **Courts Have Discretion**
+   Even strong cases can face unexpected challenges. Courts consider
+   contract-holder circumstances, proportionality, and public interest.
+
+4. **Rent Smart Wales is Mandatory**
+   There is NO exception. If you are not registered, your notice is invalid
+   and your case will fail.
+
+5. **Success Not Guaranteed**
+   A high risk score indicates likelihood, not certainty.
+
+==================================================================
+
+NEXT STEPS
+
+1. ✅ Review this risk assessment carefully
+2. ❌ Address all RED FLAGS before proceeding
+3. ⚠️  Fix compliance issues to strengthen your case
+4. 📄 Gather all missing evidence
+5. ⚖️  Ensure you're following Welsh legal procedure
+6. 📧 Keep detailed records of all actions
+7. 🎯 Proceed only when confident your case is strong
+
+**Need Help?**
+- For complex cases: Consult a Welsh housing law solicitor
+- For Rent Smart Wales queries: rentsmartswales.gov.wales
+- For housing advice: Shelter Cymru (0800 495 4095)
+
+==================================================================
+
+Generated by Landlord Heaven on {{current_date}}
+This report is based on Welsh housing law and information provided at generation.

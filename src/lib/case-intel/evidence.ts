@@ -362,8 +362,14 @@ function extractUploadedEvidence(
   facts: CaseFacts,
   summary: { [category: string]: EvidenceItem[] }
 ): void {
-  // Check evidence flags
-  if (facts.evidence?.correspondence_uploaded) {
+  const evidenceFiles = (facts.evidence?.files || []) as Array<{ id?: string; category?: string; file_name?: string }>;
+
+  const hasCategory = (categories: string[]) =>
+    evidenceFiles.some((file) =>
+      categories.includes((file.category || '').toLowerCase())
+    );
+
+  if (hasCategory(['correspondence', 'notice_served_proof'])) {
     summary.communications.push({
       id: 'correspondence_uploads',
       category: 'communications',
@@ -373,7 +379,7 @@ function extractUploadedEvidence(
     });
   }
 
-  if (facts.evidence?.bank_statements_uploaded) {
+  if (hasCategory(['bank_statements'])) {
     summary.arrears.push({
       id: 'bank_statements',
       category: 'arrears',
@@ -383,23 +389,13 @@ function extractUploadedEvidence(
     });
   }
 
-  if (facts.evidence?.asb_logs_uploaded) {
-    summary.asb.push({
-      id: 'asb_logs',
-      category: 'asb',
+  if (hasCategory(['other'])) {
+    summary.other.push({
+      id: 'other_uploads',
+      category: 'other',
       type: 'upload',
-      content: 'ASB logs uploaded',
-      quality: 'strong',
-    });
-  }
-
-  if (facts.evidence?.photos_uploaded) {
-    summary.damage.push({
-      id: 'photos',
-      category: 'damage',
-      type: 'upload',
-      content: 'Photos uploaded',
-      quality: 'strong',
+      content: 'Supporting documents uploaded',
+      quality: 'adequate',
     });
   }
 }
@@ -449,6 +445,9 @@ function identifyMissingEvidence(
   decisionOutput: DecisionOutput
 ): MissingEvidence[] {
   const missing: MissingEvidence[] = [];
+  const evidenceFiles = (facts.evidence?.files || []) as Array<{ category?: string }>;
+  const hasEvidence = (categories: string[]) =>
+    evidenceFiles.some((file) => categories.includes((file.category || '').toLowerCase()));
 
   // Check for recommended grounds
   const recommendedGrounds = decisionOutput.recommended_grounds || [];
@@ -456,7 +455,7 @@ function identifyMissingEvidence(
   for (const ground of recommendedGrounds) {
     if (ground.code === '8' || ground.code === '10' || ground.code === '11') {
       // Arrears grounds - need payment history
-      if (!facts.evidence?.bank_statements_uploaded) {
+      if (!hasEvidence(['bank_statements'])) {
         missing.push({
           item: 'Bank statements or payment history',
           reason: `Required to prove arrears for ${ground.title}`,
@@ -480,7 +479,7 @@ function identifyMissingEvidence(
 
     if (ground.code === '14') {
       // ASB ground - need incident logs
-      if (!facts.evidence?.asb_logs_uploaded && !facts.issues.asb?.incidents) {
+      if (!hasEvidence(['asb_logs', 'asb_evidence', 'correspondence']) && !facts.issues.asb?.incidents) {
         missing.push({
           item: 'ASB incident logs with dates and details',
           reason: `Required for ${ground.title}`,
@@ -489,7 +488,7 @@ function identifyMissingEvidence(
         });
       }
 
-      if (!facts.evidence?.correspondence_uploaded) {
+      if (!hasEvidence(['correspondence'])) {
         missing.push({
           item: 'Correspondence with tenant about ASB',
           reason: `Shows landlord attempted to resolve issue for ${ground.title}`,
@@ -501,7 +500,7 @@ function identifyMissingEvidence(
 
     if (ground.code === '12') {
       // Breach ground - need evidence of breach
-      if (!facts.evidence?.correspondence_uploaded) {
+      if (!hasEvidence(['correspondence'])) {
         missing.push({
           item: 'Correspondence about tenancy breach',
           reason: `Shows landlord notified tenant of breach for ${ground.title}`,
@@ -513,7 +512,7 @@ function identifyMissingEvidence(
 
     if (ground.code === '15') {
       // Damage ground - need photos
-      if (!facts.evidence?.photos_uploaded) {
+      if (!hasEvidence(['other', 'damage_photos'])) {
         missing.push({
           item: 'Photos of damage',
           reason: `Visual evidence required for ${ground.title}`,

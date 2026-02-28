@@ -5,9 +5,66 @@
  * domain model used by document generators and analysis tools.
  */
 
-import type { WizardFacts, CaseFacts, PartyDetails } from './schema';
+import type { WizardFacts, CaseFacts, PartyDetails, ArrearsItem } from './schema';
 import { createEmptyCaseFacts } from './schema';
 import { normalizeRoutes, getPrimaryRoute, routeToDocumentType } from '../wizard/route-normalizer';
+import { normalizeJurisdiction } from '../types/jurisdiction';
+import {
+  SECTION8_GROUND_DEFINITIONS,
+  type Section8GroundDefinition,
+} from '../grounds/section8-ground-definitions';
+import { calculateSection21ExpiryDate } from '../documents/notice-date-calculator';
+import { getArrearsScheduleData, type ArrearsScheduleData } from '../documents/arrears-schedule-mapper';
+import { computeEvictionArrears } from '@/lib/eviction/arrears/computeArrears';
+import { getGround8Threshold, isGround8Eligible } from '@/lib/grounds/ground8-threshold';
+
+// =============================================================================
+// DATE FORMATTING UTILITIES
+// =============================================================================
+
+/**
+ * Formats a date string (YYYY-MM-DD or parseable) to UK legal format.
+ * Example: "2026-01-15" -> "15 January 2026"
+ *
+ * @param dateStr - The date string in YYYY-MM-DD format or any parseable date
+ * @returns Formatted date string (e.g., "15 January 2026") or null if invalid
+ */
+export function formatUkLegalDate(dateStr: string | null | undefined): string | null {
+  if (!dateStr || typeof dateStr !== 'string') return null;
+
+  try {
+    const parsed = new Date(dateStr);
+    if (Number.isNaN(parsed.getTime())) return null;
+
+    return new Intl.DateTimeFormat('en-GB', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    }).format(parsed);
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Builds a human-readable string of grounds for display in checklists.
+ * Example: "Ground 8 (mandatory) – Serious rent arrears; Ground 10 – Rent arrears"
+ *
+ * @param grounds - Array of ground objects with code, title, and mandatory fields
+ * @returns Formatted grounds string or null if no grounds
+ */
+export function buildGroundDescriptions(grounds: any[] | null | undefined): string | null {
+  if (!grounds || !Array.isArray(grounds) || grounds.length === 0) return null;
+
+  return grounds
+    .map((g) => {
+      const groundLabel = `Ground ${g.code || g.number || '?'}`;
+      const mandatoryLabel = g.mandatory ? ' (mandatory)' : '';
+      const title = g.title ? ` – ${g.title}` : '';
+      return `${groundLabel}${mandatoryLabel}${title}`;
+    })
+    .join('; ');
+}
 
 /**
  * Helper to safely get a value from flat wizard facts using dot notation.
@@ -60,6 +117,53 @@ function coerceBoolean(value: any): boolean | null {
   return Boolean(value);
 }
 
+function coerceNumber(value: any): number | null {
+  if (value === null || value === undefined) return null;
+  if (typeof value === 'number') return Number.isFinite(value) ? value : null;
+  if (typeof value === 'string') {
+    const parsed = Number.parseFloat(value);
+    return Number.isFinite(parsed) ? parsed : null;
+  }
+  return null;
+}
+
+function coerceStringArray(value: any): string[] | null {
+  if (value === null || value === undefined) return null;
+  if (Array.isArray(value)) {
+    return value.filter((v) => typeof v === 'string' || (v && typeof v === 'object' && v.value))
+      .map((v) => (typeof v === 'string' ? v : v.value || String(v)));
+  }
+  if (typeof value === 'string') {
+    return value.split(',').map((s) => s.trim()).filter(Boolean);
+  }
+  return null;
+}
+
+function parseCurrencyAmount(value: any): number | null {
+  if (value === null || value === undefined) return null;
+  if (typeof value === 'number') return Number.isFinite(value) ? value : null;
+
+  if (typeof value === 'string') {
+    const cleaned = value.replace(/[^0-9,.-]/g, '').replace(/,/g, '');
+    if (!cleaned.trim()) return null;
+    const parsed = Number.parseFloat(cleaned);
+    return Number.isFinite(parsed) ? parsed : null;
+  }
+
+  if (typeof value === 'object') {
+    const nestedValue =
+      (value as any).amount ??
+      (value as any).value ??
+      (value as any).label ??
+      (value as any).text;
+    if (nestedValue !== undefined && nestedValue !== null) {
+      return parseCurrencyAmount(nestedValue);
+    }
+  }
+
+  return null;
+}
+
 /**
  * Helper to set nested values on CaseFacts using paths like
  * "parties.landlord.name" or "issues.rent_arrears.arrears_items.0".
@@ -102,6 +206,314 @@ function setNestedValue(target: Record<string, any>, path: string, value: any) {
   });
 }
 
+// =============================================================================
+// CANONICAL SERVICE DATE RESOLUTION
+// =============================================================================
+
+/**
+ * Resolves the canonical notice service date from wizard facts.
+ *
+ * This helper provides a single source of truth for notice service dates,
+ * addressing the mismatch between wizard field IDs and maps_to paths.
+ *
+ * PRECEDENCE ORDER:
+ * 1. User-entered date from wizard (maps_to paths)
+ * 2. Direct field ID keys (legacy)
+ * 3. Fallback to null (caller must decide whether to default to today)
+ *
+ * PATHS CHECKED (by jurisdiction):
+ * - England/Wales: notice_service.notice_date, notice_service_date, service_date
+ * - Scotland: notice.notice_date, notice_date
+ * - Legacy: service_date (flat key)
+ *
+ * @param wizard - The wizard facts object
+ * @returns The canonical service date string (YYYY-MM-DD) or null if not found
+ */
+export function resolveNoticeServiceDate(wizard: WizardFacts): string | null {
+  // Check all possible paths in precedence order
+  // IMPORTANT: Section 8 notice templates use service_date, notice_service_date, intended_service_date
+  // This list covers all legacy field IDs plus current wizard field IDs across all products
+  // FIX: Added nested paths for section21.* and notice_service.date variants
+  const candidates = [
+    // Complete pack MQS maps_to path (England)
+    'notice_served_date',
+    // England/Wales maps_to path (nested from MQS maps_to)
+    'notice_service.notice_date',
+    // Alternative nested path - notice_service.date (some wizards use this)
+    'notice_service.date',
+    // Section 21 specific nested paths
+    'section21.notice_service_date',
+    'section21.service_date',
+    'section21.notice_date',
+    // Scotland maps_to path
+    'notice.notice_date',
+    'notice.date',
+    // Direct field IDs (wizard stores by field id) - most common for notice-only
+    'notice_service_date',
+    'service_date',
+    // Section 8 specific date fields (used by complete pack and N5 forms)
+    'section_8_notice_date',
+    'section8_notice_date',
+    // Intended service date (used in Form 3 Section 8 template)
+    'intended_service_date',
+    // Scotland field ID
+    'notice_date',
+    // Tenancy nested paths
+    'tenancy.notice_service_date',
+    'tenancy.service_date',
+    // Additional legacy aliases that may exist in older wizard data
+    'date_notice_served',
+    'date_of_service',
+    'served_on',
+    'served_date',
+  ];
+
+  for (const path of candidates) {
+    const value = getWizardValue(wizard, path);
+    if (value && typeof value === 'string' && value.trim()) {
+      // Validate it looks like a date (YYYY-MM-DD or parseable)
+      const parsed = new Date(value);
+      if (!Number.isNaN(parsed.getTime())) {
+        // Return in ISO format (YYYY-MM-DD)
+        return parsed.toISOString().split('T')[0];
+      }
+    }
+  }
+
+  return null;
+}
+
+/**
+ * Resolves the canonical notice expiry date from wizard facts.
+ *
+ * Similar to resolveNoticeServiceDate but for expiry dates.
+ *
+ * @param wizard - The wizard facts object
+ * @returns The canonical expiry date string (YYYY-MM-DD) or null if not found
+ */
+export function resolveNoticeExpiryDate(wizard: WizardFacts): string | null {
+  // Check all possible paths for expiry/possession dates
+  // IMPORTANT: Templates use earliest_possession_date_formatted, notice_expiry_date, etc.
+  // This list covers all legacy field IDs plus current wizard field IDs across all products
+  // FIX: Added nested paths for section21.* and notice_service.expiry_date variants
+  const candidates = [
+    // England/Wales maps_to path (nested from MQS maps_to)
+    'notice_service.notice_expiry_date',
+    'notice_service.expiry_date',
+    // Section 21 specific nested paths
+    'section21.notice_expiry_date',
+    'section21.expiry_date',
+    'section21.earliest_possession_date',
+    'section21.possession_date',
+    // Direct field IDs - most common for notice-only
+    'notice_expiry_date',
+    'expiry_date',
+    // Section 8 specific (earliest date court can hear possession claim)
+    'earliest_possession_date',
+    'section8_expiry_date',
+    'section_8_expiry_date',
+    // Additional Section 8 legacy aliases
+    'earliest_court_date',
+    'earliest_hearing_date',
+    'possession_date',
+    // Scotland
+    'earliest_leaving_date',
+    'earliest_tribunal_date',
+    // Tenancy nested paths
+    'tenancy.expiry_date',
+    'tenancy.notice_expiry_date',
+    // Legacy aliases
+    'notice_end_date',
+    'end_date',
+  ];
+
+  for (const path of candidates) {
+    const value = getWizardValue(wizard, path);
+    if (value && typeof value === 'string' && value.trim()) {
+      const parsed = new Date(value);
+      if (!Number.isNaN(parsed.getTime())) {
+        return parsed.toISOString().split('T')[0];
+      }
+    }
+  }
+
+  return null;
+}
+
+// =============================================================================
+// CANONICAL SERVICE METHOD RESOLUTION
+// =============================================================================
+
+/**
+ * Valid service method values for notices.
+ * These are the canonical values that map to N5B field 10a options.
+ */
+export type NoticeServiceMethod =
+  | 'first_class_post'
+  | 'recorded_delivery'
+  | 'hand_delivered'
+  | 'left_at_property'
+  | 'email'
+  | 'other';
+
+/**
+ * Resolves the canonical notice service method from wizard facts.
+ *
+ * This helper provides a single source of truth for how the notice was served,
+ * addressing the mismatch between wizard field IDs and maps_to paths.
+ *
+ * IMPORTANT: If the method is 'other', also call resolveNoticeServiceMethodDetail()
+ * to get the free-text description for N5B field 10a.
+ *
+ * PATHS CHECKED:
+ * - notice_service_method (direct MQS field)
+ * - notice_service.service_method (nested from maps_to)
+ * - service_method (legacy flat key)
+ * - section21.service_method (Section 21 specific)
+ *
+ * @param wizard - The wizard facts object
+ * @returns The canonical service method string or null if not found
+ */
+export function resolveNoticeServiceMethod(wizard: WizardFacts): NoticeServiceMethod | string | null {
+  // Check all possible paths in precedence order
+  const candidates = [
+    // Direct MQS field (most common)
+    'notice_service_method',
+    // Nested from MQS maps_to
+    'notice_service.service_method',
+    'notice_service.method',
+    // Section 21 specific nested paths
+    'section21.notice_service_method',
+    'section21.service_method',
+    // Section 8 specific paths
+    'section8.service_method',
+    // Legacy flat keys
+    'service_method',
+    'method_of_service',
+    'delivery_method',
+    // Notice nested paths
+    'notice.service_method',
+    'notice.method',
+  ];
+
+  for (const path of candidates) {
+    const value = getWizardValue(wizard, path);
+    if (value && typeof value === 'string' && value.trim()) {
+      // Normalize common aliases to canonical values
+      const normalized = normalizeServiceMethod(value);
+      return normalized;
+    }
+  }
+
+  return null;
+}
+
+/**
+ * Resolves the service method detail text (used when method is 'other').
+ *
+ * This is required for N5B field 10a when the user selects "Other method".
+ *
+ * @param wizard - The wizard facts object
+ * @returns The service method detail text or null if not found
+ */
+export function resolveNoticeServiceMethodDetail(wizard: WizardFacts): string | null {
+  const candidates = [
+    // Direct MQS field
+    'notice_service_method_detail',
+    // Nested from MQS maps_to
+    'notice_service.service_method_detail',
+    'notice_service.method_detail',
+    // Legacy flat keys
+    'service_method_detail',
+    'service_method_other',
+    'other_service_method',
+    'delivery_method_detail',
+  ];
+
+  for (const path of candidates) {
+    const value = getWizardValue(wizard, path);
+    if (value && typeof value === 'string' && value.trim()) {
+      return value.trim();
+    }
+  }
+
+  return null;
+}
+
+/**
+ * Normalizes service method aliases to canonical values.
+ * Handles various input formats and common typos.
+ */
+function normalizeServiceMethod(value: string): NoticeServiceMethod | string {
+  const normalized = value.toLowerCase().replace(/[\s_-]+/g, '_').trim();
+
+  const aliases: Record<string, NoticeServiceMethod> = {
+    // First class post
+    'first_class_post': 'first_class_post',
+    'first_class': 'first_class_post',
+    'firstclass': 'first_class_post',
+    'post': 'first_class_post',
+    'postal': 'first_class_post',
+    'regular_post': 'first_class_post',
+
+    // Recorded delivery
+    'recorded_delivery': 'recorded_delivery',
+    'recorded': 'recorded_delivery',
+    'signed_for': 'recorded_delivery',
+    'signed': 'recorded_delivery',
+    'registered': 'recorded_delivery',
+    'registered_post': 'recorded_delivery',
+    'special_delivery': 'recorded_delivery',
+
+    // Hand delivered
+    'hand_delivered': 'hand_delivered',
+    'hand': 'hand_delivered',
+    'in_person': 'hand_delivered',
+    'personal': 'hand_delivered',
+    'personal_delivery': 'hand_delivered',
+    'personally': 'hand_delivered',
+    'delivered_by_hand': 'hand_delivered',
+
+    // Left at property
+    'left_at_property': 'left_at_property',
+    'letterbox': 'left_at_property',
+    'letter_box': 'left_at_property',
+    'through_letterbox': 'left_at_property',
+    'left_at_address': 'left_at_property',
+    'left_at_door': 'left_at_property',
+
+    // Email
+    'email': 'email',
+    'electronic': 'email',
+    'e_mail': 'email',
+
+    // Other
+    'other': 'other',
+    'other_method': 'other',
+  };
+
+  return aliases[normalized] || value;
+}
+
+/**
+ * Gets the display label for a service method value.
+ * Used for rendering on forms and documents.
+ */
+export function getServiceMethodLabel(method: NoticeServiceMethod | string | null): string {
+  if (!method) return '';
+
+  const labels: Record<NoticeServiceMethod, string> = {
+    'first_class_post': 'First class post',
+    'recorded_delivery': 'Recorded delivery / signed for',
+    'hand_delivered': 'Hand delivered to tenant',
+    'left_at_property': 'Left at the property',
+    'email': 'Email',
+    'other': 'Other method',
+  };
+
+  return labels[method as NoticeServiceMethod] || method;
+}
+
 /**
  * Helper to extract tenant data from flat wizard facts
  * Looks for keys like "tenants.0.full_name", "tenants.0.email", etc.
@@ -141,11 +553,13 @@ function extractTenants(wizard: WizardFacts): PartyDetails[] {
   const tenants: PartyDetails[] = [];
 
   const explicitPrimaryName =
-    getWizardValue(wizard, 'tenant_full_name') ||  // IMPORTANT: Notice Only YAML maps to this
-    getWizardValue(wizard, 'tenant1_name') ||
     getWizardValue(wizard, 'defendant_name_1') ||
     getWizardValue(wizard, 'defendant_full_name') ||
     getWizardValue(wizard, 'defender_full_name') ||
+    getWizardValue(wizard, 'tenant_full_name') || // IMPORTANT: Notice Only YAML maps to this
+    getWizardValue(wizard, 'tenant.full_name') || // Nested object format (complete_pack fixture)
+    getWizardValue(wizard, 'tenant.name') || // Nested object format (alternative)
+    getWizardValue(wizard, 'tenant1_name') ||
     getWizardValue(wizard, 'defendant_name');
 
   if (explicitPrimaryName) {
@@ -254,6 +668,17 @@ function extractTenants(wizard: WizardFacts): PartyDetails[] {
     });
 
   return tenants;
+}
+
+function extractSharedArrearsAmount(wizard: WizardFacts): number | null {
+  const sharedArrearsRaw = getFirstValue(wizard, [
+    'ground_particulars.shared_arrears.amount',
+    'ground_particulars.shared_arrears.total_amount_owed',
+    'section_8_particulars.shared_arrears.amount',
+    'section_8_particulars.shared_arrears.total_amount_owed',
+  ]);
+
+  return parseCurrencyAmount(sharedArrearsRaw);
 }
 
 
@@ -407,6 +832,7 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
 
   const base = createEmptyCaseFacts();
 
+
   // Apply any MQS answers that map directly to case_facts.* paths
   Object.entries(wizard).forEach(([key, value]) => {
     if (!key.startsWith('case_facts.')) return;
@@ -440,6 +866,7 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     'property_address',
     'property_address_line1',
     'property.address_line1',
+    'property.address_line_1', // Nested object format (complete_pack fixture)
   ]);
   base.property.address_line2 ??= getFirstValue(wizard, [
     'case_facts.property.address_line2',
@@ -466,6 +893,9 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     'property_country',
     'jurisdiction',
   ]) as any;
+
+  const normalizedCountry = normalizeJurisdiction(base.property.country as any);
+  base.property.country = normalizedCountry ?? null;
   const propertyIsHmo = getFirstValue(wizard, [
     'case_facts.property.is_hmo',
     'property_is_hmo',
@@ -499,28 +929,57 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
   base.tenancy.start_date ??= getFirstValue(wizard, [
     'case_facts.tenancy.start_date',
     'tenancy_start_date',
+    'tenancy.start_date', // Nested object format (complete_pack fixture)
     'start_date',
   ]);
   base.tenancy.end_date ??= getFirstValue(wizard, [
     'case_facts.tenancy.end_date',
     'tenancy_end_date',
+    'fixed_term_end_date',
+    'tenancy.fixed_term_end_date',
+    'case_facts.tenancy.fixed_term_end_date',
   ]);
+
+  // Resolve fixed_term from explicit fields or infer from tenancy_type
   const fixedTerm = getFirstValue(wizard, ['tenancy_fixed_term', 'is_fixed_term']);
   if (fixedTerm !== null && fixedTerm !== undefined) {
     base.tenancy.fixed_term = coerceBoolean(fixedTerm);
+  } else {
+    // Infer fixed_term from tenancy_type if not explicitly set
+    const tenancyType = getFirstValue(wizard, [
+      'tenancy_type',
+      'tenancy.tenancy_type',
+      'case_facts.tenancy.tenancy_type',
+    ]);
+    if (tenancyType && typeof tenancyType === 'string') {
+      const lowerType = tenancyType.toLowerCase();
+      // Check for common fixed term indicators
+      if (
+        lowerType.includes('fixed term') ||
+        lowerType.includes('fixed-term') ||
+        lowerType === 'ast_fixed' ||
+        lowerType === 'fixed_term' ||
+        lowerType === 'fixed'
+      ) {
+        base.tenancy.fixed_term = true;
+      }
+    }
   }
   base.tenancy.fixed_term_months ??= getWizardValue(wizard, 'tenancy_fixed_term_months');
   base.tenancy.rent_amount ??= getFirstValue(wizard, [
     'case_facts.tenancy.rent_amount',
+    'tenancy.rent_amount', // Nested object format (complete_pack fixture)
     'rent_amount',
   ]);
   base.tenancy.rent_frequency ??= getFirstValue(wizard, [
     'case_facts.tenancy.rent_frequency',
+    'tenancy.rent_frequency', // Nested object format (complete_pack fixture)
     'rent_frequency',
     'rent_period',
   ]) as any;
   base.tenancy.rent_due_day ??= getFirstValue(wizard, [
     'case_facts.tenancy.rent_due_day',
+    'tenancy.rent_due_day', // Nested object format (complete_pack fixture)
     'rent_due_day',
   ]);
   base.tenancy.usual_payment_weekday ??= getFirstValue(wizard, [
@@ -536,6 +995,19 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
   );
   base.tenancy.deposit_reference ??= getWizardValue(wizard, 'deposit_reference');
 
+  // Prescribed information (Section 21 requirement when deposit taken)
+  // Check multiple possible field names for backwards compatibility
+  const prescribedInfoValue = getFirstValue(wizard, [
+    'case_facts.tenancy.prescribed_info_given',
+    'prescribed_info_given',
+    'prescribed_info_provided',
+    'prescribed_info_served',
+    'tenancy.prescribed_info_given',
+  ]);
+  if (prescribedInfoValue !== null && prescribedInfoValue !== undefined) {
+    base.tenancy.prescribed_info_given = coerceBoolean(prescribedInfoValue);
+  }
+
   // =============================================================================
   // PARTIES - Landlord, agent, solicitor, tenants
   // =============================================================================
@@ -545,14 +1017,16 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     'claimant_full_name',
     'pursuer_full_name',
     'landlord.name',
+    'landlord.full_name', // Nested object format (complete_pack fixture)
     'landlord_full_name',
   ]);
   base.parties.landlord.co_claimant ??= getFirstValue(wizard, [
     'case_facts.parties.landlord.co_claimant',
     'landlord_co_claimant',
+    'landlord2_full_name',
+    'landlord2_name',
     'claimant_secondary_name',
     'pursuer_secondary_name',
-    'claimant_secondary_name',
   ]);
   base.parties.landlord.email ??= getFirstValue(wizard, [
     'case_facts.parties.landlord.email',
@@ -574,6 +1048,7 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     'claimant_address.address_line1',
     'pursuer_address.address_line1',
     'landlord.address_line1',
+    'landlord.address_line_1', // Nested object format (complete_pack fixture)
     'landlord_address',
   ]);
   base.parties.landlord.address_line2 ??= getFirstValue(wizard, [
@@ -679,25 +1154,67 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
   // =============================================================================
   // ISSUES - Arrears, ASB, other breaches, Section 8 grounds, AST verification
   // =============================================================================
+  const sharedArrearsAmount = extractSharedArrearsAmount(wizard);
+
   base.issues.rent_arrears.has_arrears ??= getFirstValue(wizard, [
     'case_facts.issues.rent_arrears.has_arrears',
     'has_rent_arrears',
     'rent_arrears.has_arrears',
   ]);
-  base.issues.rent_arrears.total_arrears ??= getFirstValue(wizard, [
-    'case_facts.issues.rent_arrears.total_arrears',
-    'total_arrears',
-    'arrears_total',
-    'rent_arrears.total_arrears',
-  ]);
-  base.issues.rent_arrears.arrears_at_notice_date ??= getFirstValue(wizard, [
-    'case_facts.issues.rent_arrears.arrears_at_notice_date',
-    'arrears_at_notice_date',
-    'arrears_summary.arrears_at_notice_date',
-  ]);
+
+  const totalArrearsRaw =
+    base.issues.rent_arrears.total_arrears ??
+    getFirstValue(wizard, [
+      'case_facts.issues.rent_arrears.total_arrears',
+      'arrears.total_arrears', // Nested object format (complete_pack fixture)
+      'total_arrears',
+      'arrears_total',
+      'rent_arrears.total_arrears',
+    ]);
+  const parsedTotalArrears = parseCurrencyAmount(totalArrearsRaw);
+  if (parsedTotalArrears !== null) {
+    base.issues.rent_arrears.total_arrears = parsedTotalArrears;
+  } else if (
+    (base.issues.rent_arrears.total_arrears === null || base.issues.rent_arrears.total_arrears === undefined) &&
+    sharedArrearsAmount !== null
+  ) {
+    base.issues.rent_arrears.total_arrears = sharedArrearsAmount;
+  }
+
+  const arrearsAtNoticeRaw =
+    base.issues.rent_arrears.arrears_at_notice_date ??
+    getFirstValue(wizard, [
+      'case_facts.issues.rent_arrears.arrears_at_notice_date',
+      'arrears_at_notice_date',
+      'arrears_summary.arrears_at_notice_date',
+    ]);
+  const parsedArrearsAtNotice = parseCurrencyAmount(arrearsAtNoticeRaw);
+  if (parsedArrearsAtNotice !== null) {
+    base.issues.rent_arrears.arrears_at_notice_date = parsedArrearsAtNotice;
+  } else if (
+    (base.issues.rent_arrears.arrears_at_notice_date === null ||
+      base.issues.rent_arrears.arrears_at_notice_date === undefined) &&
+    sharedArrearsAmount !== null
+  ) {
+    base.issues.rent_arrears.arrears_at_notice_date = sharedArrearsAmount;
+  }
+
+  if (
+    base.issues.rent_arrears.has_arrears === null ||
+    base.issues.rent_arrears.has_arrears === undefined
+  ) {
+    const derivedArrears =
+      base.issues.rent_arrears.arrears_at_notice_date ??
+      base.issues.rent_arrears.total_arrears ??
+      sharedArrearsAmount;
+    if (derivedArrears !== null && derivedArrears !== undefined) {
+      base.issues.rent_arrears.has_arrears = derivedArrears > 0;
+    }
+  }
   if (!base.issues.rent_arrears.arrears_items.length) {
     const arrearsItems = getFirstValue(wizard, [
       'case_facts.issues.rent_arrears.arrears_items',
+      'arrears.items', // Nested object format (complete_pack fixture)
       'arrears_items',
     ]);
     if (Array.isArray(arrearsItems)) {
@@ -748,6 +1265,7 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
   // Section 8 ground-specific details (England & Wales)
   const section8Grounds = getFirstValue(wizard, [
     'case_facts.issues.section8_grounds.selected_grounds',
+    'section8.grounds', // Nested object format (complete_pack fixture)
     'section8_grounds',
     'section8_grounds_selection',
     'selected_grounds',
@@ -760,6 +1278,7 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
 
   base.issues.section8_grounds.arrears_breakdown ??= getFirstValue(wizard, [
     'case_facts.issues.section8_grounds.arrears_breakdown',
+    'section8.particulars_text', // Nested object format (complete_pack fixture)
     'arrears_breakdown',
     'section8_arrears_details',
   ]);
@@ -783,6 +1302,174 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     'ground17_details',
     'false_statement_description',
   ]);
+
+  // =============================================================================
+  // GROUND-SPECIFIC DETAILED FACTS (Section 8 per-ground questions)
+  // =============================================================================
+
+  // Ground 8 - Serious Rent Arrears
+  base.ground_8 = {
+    arrears_at_notice: parseCurrencyAmount(getWizardValue(wizard, 'ground_8.arrears_at_notice') ?? getWizardValue(wizard, 'g8_arrears_at_notice')),
+    arrears_current: parseCurrencyAmount(getWizardValue(wizard, 'ground_8.arrears_current') ?? getWizardValue(wizard, 'g8_arrears_current')),
+    last_payment_date: getWizardValue(wizard, 'ground_8.last_payment_date') ?? getWizardValue(wizard, 'g8_last_payment_date'),
+    last_payment_amount: parseCurrencyAmount(getWizardValue(wizard, 'ground_8.last_payment_amount') ?? getWizardValue(wizard, 'g8_last_payment_amount')),
+    payment_demands_sent: getWizardValue(wizard, 'ground_8.payment_demands_sent') ?? getWizardValue(wizard, 'g8_payment_demands_sent'),
+    tenant_response: getWizardValue(wizard, 'ground_8.tenant_response') ?? getWizardValue(wizard, 'g8_tenant_response'),
+  };
+
+  // Ground 10 - Some Rent Arrears
+  base.ground_10 = {
+    arrears_amount: parseCurrencyAmount(getWizardValue(wizard, 'ground_10.arrears_amount') ?? getWizardValue(wizard, 'g10_arrears_amount')),
+    arrears_history: getWizardValue(wizard, 'ground_10.arrears_history') ?? getWizardValue(wizard, 'g10_arrears_history'),
+    attempts_to_recover: getWizardValue(wizard, 'ground_10.attempts_to_recover') ?? getWizardValue(wizard, 'g10_attempts_to_recover'),
+  };
+
+  // Ground 11 - Persistent Delay
+  base.ground_11 = {
+    pattern_description: getWizardValue(wizard, 'ground_11.pattern_description') ?? getWizardValue(wizard, 'g11_pattern_description'),
+    late_payment_dates: getWizardValue(wizard, 'ground_11.late_payment_dates') ?? getWizardValue(wizard, 'g11_late_payment_dates'),
+    warnings_issued: getWizardValue(wizard, 'ground_11.warnings_issued') ?? getWizardValue(wizard, 'g11_warnings_issued'),
+  };
+
+  // Ground 12 - Breach of Tenancy
+  const g12BreachType = getWizardValue(wizard, 'ground_12.breach_type') ?? getWizardValue(wizard, 'g12_breach_type');
+  base.ground_12 = {
+    breach_type: Array.isArray(g12BreachType) ? g12BreachType : (g12BreachType ? [g12BreachType] : null),
+    tenancy_clause: getWizardValue(wizard, 'ground_12.tenancy_clause') ?? getWizardValue(wizard, 'g12_tenancy_clause'),
+    breach_dates: getWizardValue(wizard, 'ground_12.breach_dates') ?? getWizardValue(wizard, 'g12_breach_dates'),
+    breach_evidence: getWizardValue(wizard, 'ground_12.breach_evidence') ?? getWizardValue(wizard, 'g12_breach_evidence'),
+    warnings_issued: getWizardValue(wizard, 'ground_12.warnings_issued') ?? getWizardValue(wizard, 'g12_warnings_issued'),
+  };
+
+  // Ground 13 - Waste/Neglect/Damage
+  base.ground_13 = {
+    damage_description: getWizardValue(wizard, 'ground_13.damage_description') ?? getWizardValue(wizard, 'g13_damage_description'),
+    damage_discovered_date: getWizardValue(wizard, 'ground_13.damage_discovered_date') ?? getWizardValue(wizard, 'g13_damage_discovered_date'),
+    damage_cost: parseCurrencyAmount(getWizardValue(wizard, 'ground_13.damage_cost') ?? getWizardValue(wizard, 'g13_damage_cost')),
+    evidence_available: getWizardValue(wizard, 'ground_13.evidence_available') ?? getWizardValue(wizard, 'g13_evidence_available'),
+    tenant_notified: coerceBoolean(getWizardValue(wizard, 'ground_13.tenant_notified') ?? getWizardValue(wizard, 'g13_tenant_notified')),
+    tenant_response: getWizardValue(wizard, 'ground_13.tenant_response') ?? getWizardValue(wizard, 'g13_tenant_response'),
+  };
+
+  // Ground 14 - Nuisance/Annoyance
+  const g14BehaviourType = getWizardValue(wizard, 'ground_14.behaviour_type') ?? getWizardValue(wizard, 'g14_behaviour_type');
+  base.ground_14 = {
+    behaviour_type: Array.isArray(g14BehaviourType) ? g14BehaviourType : (g14BehaviourType ? [g14BehaviourType] : null),
+    incident_count: parseCurrencyAmount(getWizardValue(wizard, 'ground_14.incident_count') ?? getWizardValue(wizard, 'g14_incident_count')),
+    incidents_description: getWizardValue(wizard, 'ground_14.incidents_description') ?? getWizardValue(wizard, 'g14_incidents_description'),
+    affected_parties: getWizardValue(wizard, 'ground_14.affected_parties') ?? getWizardValue(wizard, 'g14_affected_parties'),
+    witnesses: coerceBoolean(getWizardValue(wizard, 'ground_14.witnesses') ?? getWizardValue(wizard, 'g14_witnesses')),
+    witness_names: getWizardValue(wizard, 'ground_14.witness_names') ?? getWizardValue(wizard, 'g14_witness_names'),
+    police_involved: coerceBoolean(getWizardValue(wizard, 'ground_14.police_involved') ?? getWizardValue(wizard, 'g14_police_involved')),
+    police_reference: getWizardValue(wizard, 'ground_14.police_reference') ?? getWizardValue(wizard, 'g14_police_reference'),
+    council_involved: coerceBoolean(getWizardValue(wizard, 'ground_14.council_involved') ?? getWizardValue(wizard, 'g14_council_involved')),
+    council_reference: getWizardValue(wizard, 'ground_14.council_reference') ?? getWizardValue(wizard, 'g14_council_reference'),
+    warnings_issued: getWizardValue(wizard, 'ground_14.warnings_issued') ?? getWizardValue(wizard, 'g14_warnings_issued'),
+  };
+
+  // Ground 15 - Damage to Furniture
+  base.ground_15 = {
+    furniture_damaged: getWizardValue(wizard, 'ground_15.furniture_damaged') ?? getWizardValue(wizard, 'g15_furniture_damaged'),
+    damage_cost: parseCurrencyAmount(getWizardValue(wizard, 'ground_15.damage_cost') ?? getWizardValue(wizard, 'g15_damage_cost')),
+    inventory_available: coerceBoolean(getWizardValue(wizard, 'ground_15.inventory_available') ?? getWizardValue(wizard, 'g15_inventory_available')),
+    evidence_description: getWizardValue(wizard, 'ground_15.evidence_description') ?? getWizardValue(wizard, 'g15_evidence_description'),
+  };
+
+  // Ground 17 - False Statement
+  base.ground_17 = {
+    statement_made: getWizardValue(wizard, 'ground_17.statement_made') ?? getWizardValue(wizard, 'g17_statement_made'),
+    statement_date: getWizardValue(wizard, 'ground_17.statement_date') ?? getWizardValue(wizard, 'g17_statement_date'),
+    how_statement_made: getWizardValue(wizard, 'ground_17.how_statement_made') ?? getWizardValue(wizard, 'g17_how_statement_made'),
+    true_facts: getWizardValue(wizard, 'ground_17.true_facts') ?? getWizardValue(wizard, 'g17_true_facts'),
+    reliance_on_statement: getWizardValue(wizard, 'ground_17.reliance_on_statement') ?? getWizardValue(wizard, 'g17_reliance_on_statement'),
+    discovery_date: getWizardValue(wizard, 'ground_17.discovery_date') ?? getWizardValue(wizard, 'g17_discovery_date'),
+    discovery_method: getWizardValue(wizard, 'ground_17.discovery_method') ?? getWizardValue(wizard, 'g17_discovery_method'),
+  };
+
+  // =============================================================================
+  // RISK INDICATORS
+  // =============================================================================
+
+  base.risk = {
+    // Core eviction risk indicators
+    known_tenant_defences: getWizardValue(wizard, 'risk.known_tenant_defences') ?? getWizardValue(wizard, 'known_tenant_defences'),
+    previous_court_proceedings: coerceBoolean(getWizardValue(wizard, 'risk.previous_court_proceedings') ?? getWizardValue(wizard, 'previous_court_proceedings')),
+    previous_proceedings_details: getWizardValue(wizard, 'risk.previous_proceedings_details') ?? getWizardValue(wizard, 'previous_proceedings_details'),
+    disrepair_complaints: coerceBoolean(getWizardValue(wizard, 'risk.disrepair_complaints') ?? getWizardValue(wizard, 'disrepair_complaints')),
+    disrepair_complaint_date: getWizardValue(wizard, 'risk.disrepair_complaint_date') ?? getWizardValue(wizard, 'disrepair_complaint_date'),
+    disrepair_issues_list: getWizardValue(wizard, 'risk.disrepair_issues_list') ?? getWizardValue(wizard, 'disrepair_issues_list'),
+    tenant_vulnerability: coerceBoolean(getWizardValue(wizard, 'risk.tenant_vulnerability') ?? getWizardValue(wizard, 'tenant_vulnerability')),
+    tenant_vulnerability_details: getWizardValue(wizard, 'risk.tenant_vulnerability_details') ?? getWizardValue(wizard, 'tenant_vulnerability_details'),
+    // Money claim risk indicators
+    tenant_disputes_claim: coerceBoolean(getWizardValue(wizard, 'risk.tenant_disputes_claim')),
+    contract_holder_disputes_claim: coerceBoolean(getWizardValue(wizard, 'risk.contract_holder_disputes_claim')),
+    defender_disputes_claim: coerceBoolean(getWizardValue(wizard, 'risk.defender_disputes_claim')),
+    dispute_details: getWizardValue(wizard, 'risk.dispute_details'),
+    deposit_dispute_pending: coerceBoolean(getWizardValue(wizard, 'risk.deposit_dispute_pending')),
+    deposit_dispute_amount: coerceNumber(getWizardValue(wizard, 'risk.deposit_dispute_amount')),
+    tenant_counterclaim_likely: coerceBoolean(getWizardValue(wizard, 'risk.tenant_counterclaim_likely')),
+    contract_holder_counterclaim_likely: coerceBoolean(getWizardValue(wizard, 'risk.contract_holder_counterclaim_likely')),
+    defender_counterclaim_likely: coerceBoolean(getWizardValue(wizard, 'risk.defender_counterclaim_likely')),
+    counterclaim_grounds: coerceStringArray(getWizardValue(wizard, 'risk.counterclaim_grounds')),
+    payment_plan_offered: coerceBoolean(getWizardValue(wizard, 'risk.payment_plan_offered')),
+    payment_plan_response: getWizardValue(wizard, 'risk.payment_plan_response'),
+    rent_smart_wales_compliant: coerceBoolean(getWizardValue(wizard, 'risk.rent_smart_wales_compliant')),
+  };
+
+  // =============================================================================
+  // COMMUNICATION TIMELINE
+  // =============================================================================
+
+  const commEntries: any[] = [];
+  // Try to parse communication timeline entries array
+  const rawCommEntries = getWizardValue(wizard, 'communication_timeline.entries') ?? getWizardValue(wizard, 'communication_entries');
+  if (Array.isArray(rawCommEntries)) {
+    for (const entry of rawCommEntries) {
+      if (entry && typeof entry === 'object') {
+        commEntries.push({
+          date: entry.date ?? entry.comm_date ?? null,
+          method: entry.method ?? entry.comm_method ?? null,
+          summary: entry.summary ?? entry.comm_summary ?? null,
+        });
+      }
+    }
+  }
+  base.communication_timeline = {
+    entries: commEntries,
+    narrative: getWizardValue(wizard, 'communication_timeline.narrative') ?? getWizardValue(wizard, 'communication_narrative'),
+    // Money claim communication timeline fields
+    first_arrears_notice_date: getWizardValue(wizard, 'communication.first_arrears_notice_date'),
+    first_notice_method: getWizardValue(wizard, 'communication.first_notice_method'),
+    subsequent_reminders_sent: coerceNumber(getWizardValue(wizard, 'communication.subsequent_reminders_sent')),
+    final_demand_date: getWizardValue(wizard, 'communication.final_demand_date'),
+    tenant_acknowledged_debt: coerceBoolean(getWizardValue(wizard, 'communication.tenant_acknowledged_debt')),
+    contract_holder_acknowledged_debt: coerceBoolean(getWizardValue(wizard, 'communication.contract_holder_acknowledged_debt')),
+    defender_acknowledged_debt: coerceBoolean(getWizardValue(wizard, 'communication.defender_acknowledged_debt')),
+    acknowledgment_date: getWizardValue(wizard, 'communication.acknowledgment_date'),
+    tenant_made_partial_payment: coerceBoolean(getWizardValue(wizard, 'communication.tenant_made_partial_payment')),
+    contract_holder_made_partial_payment: coerceBoolean(getWizardValue(wizard, 'communication.contract_holder_made_partial_payment')),
+    defender_made_partial_payment: coerceBoolean(getWizardValue(wizard, 'communication.defender_made_partial_payment')),
+    last_partial_payment_date: getWizardValue(wizard, 'communication.last_partial_payment_date'),
+    last_partial_payment_amount: coerceNumber(getWizardValue(wizard, 'communication.last_partial_payment_amount')),
+  };
+
+  // =============================================================================
+  // SCOTLAND PRE-ACTION PROTOCOL
+  // =============================================================================
+
+  const scotlandSignposted = getWizardValue(wizard, 'scotland_pre_action.signposted_to') ?? getWizardValue(wizard, 'signposted_to');
+  base.scotland_pre_action = {
+    rent_statement_sent: coerceBoolean(getWizardValue(wizard, 'scotland_pre_action.rent_statement_sent') ?? getWizardValue(wizard, 'rent_statement_sent')),
+    rent_statement_date: getWizardValue(wizard, 'scotland_pre_action.rent_statement_date') ?? getWizardValue(wizard, 'rent_statement_date'),
+    advice_signposting: coerceBoolean(getWizardValue(wizard, 'scotland_pre_action.advice_signposting') ?? getWizardValue(wizard, 'advice_signposting')),
+    signposted_to: Array.isArray(scotlandSignposted) ? scotlandSignposted : (scotlandSignposted ? [scotlandSignposted] : null),
+    reasonable_time_given: coerceBoolean(getWizardValue(wizard, 'scotland_pre_action.reasonable_time_given') ?? getWizardValue(wizard, 'reasonable_time_given')),
+    time_given_details: getWizardValue(wizard, 'scotland_pre_action.time_given_details') ?? getWizardValue(wizard, 'time_given_details'),
+    payment_plan_offered: coerceBoolean(getWizardValue(wizard, 'scotland_pre_action.payment_plan_offered') ?? getWizardValue(wizard, 'payment_plan_offered')),
+    payment_plan_details: getWizardValue(wizard, 'scotland_pre_action.payment_plan_details') ?? getWizardValue(wizard, 'payment_plan_details'),
+    housing_benefit_check: coerceBoolean(getWizardValue(wizard, 'scotland_pre_action.housing_benefit_check') ?? getWizardValue(wizard, 'housing_benefit_check')),
+    housing_benefit_details: getWizardValue(wizard, 'scotland_pre_action.housing_benefit_details') ?? getWizardValue(wizard, 'housing_benefit_details'),
+  };
 
   // N5B AST verification (for accelerated possession)
   const astIsAst = getFirstValue(wizard, [
@@ -839,6 +1526,19 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
   // NOTICE - Section 8, Section 21, etc.
   // =============================================================================
 
+  const rawNoticeType = (wizard as any).notice_type;
+  const rawNoticeDate = (wizard as any).notice_date;
+  const rawNoticeExpiry = (wizard as any).notice_expiry_date ?? (wizard as any).expiry_date;
+  const rawNoticeServiceMethod = (wizard as any).notice_service_method;
+  const rawNoticeServedBy = (wizard as any).notice_served_by;
+
+
+  if (rawNoticeType) base.notice.notice_type = rawNoticeType as any;
+  if (rawNoticeDate) base.notice.notice_date = rawNoticeDate as any;
+  if (rawNoticeExpiry) base.notice.expiry_date = rawNoticeExpiry as any;
+  if (rawNoticeServiceMethod) base.notice.service_method = rawNoticeServiceMethod as any;
+  if (rawNoticeServedBy) base.notice.served_by = rawNoticeServedBy as any;
+
   // ROUTE NORMALIZATION: Convert user's route intent to canonical format
   // Handles legacy human-readable labels (e.g., "Section 8 - rent arrears / breach")
   // and new canonical values (e.g., "section_8")
@@ -869,16 +1569,22 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     'notice_reason',
   ]);
   base.notice.notice_date ??= getFirstValue(wizard, [
+    'notice_served_date',
     'case_facts.notice.notice_date',
+    'notice.served_date', // Nested object format (complete_pack fixture)
+    'notice.notice_date', // Nested object format variant
     'notice_date',
   ]);
   base.notice.service_date ??= getFirstValue(wizard, [
+    'notice_served_date',
     'case_facts.notice.service_date',
+    'notice.served_date', // Nested object format (complete_pack fixture)
     'notice_service_date',
     'service_date',
   ]);
   base.notice.expiry_date ??= getFirstValue(wizard, [
     'case_facts.notice.expiry_date',
+    'notice.expiry_date', // Nested object format (complete_pack fixture)
     'notice_expiry_date',
     'expiry_date',
   ]);
@@ -886,12 +1592,62 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     'case_facts.notice.service_method',
     'notice_service_method',
     'service_method',
+    'notice_service.service_method',
+    'notice_service.method',
+    'notice.service_method',
   ]);
+
+  // Normalize service method to canonical enum values if needed
+  if (base.notice.service_method && typeof base.notice.service_method === 'string') {
+    const methodLower = base.notice.service_method.toLowerCase().trim();
+    // Map common labels to canonical enum values
+    const serviceMethodMap: Record<string, string> = {
+      'hand delivery': 'hand_delivery',
+      'hand-delivery': 'hand_delivery',
+      'in person': 'hand_delivery',
+      'in_person': 'hand_delivery',
+      'personal delivery': 'hand_delivery',
+      'first class post': 'first_class_post',
+      'first-class post': 'first_class_post',
+      'first class': 'first_class_post',
+      '1st class post': 'first_class_post',
+      'recorded delivery': 'recorded_delivery',
+      'recorded post': 'recorded_delivery',
+      'signed for': 'recorded_delivery',
+      'signed_for': 'recorded_delivery',
+      'special delivery': 'special_delivery',
+      'special post': 'special_delivery',
+      'email': 'email',
+      'electronic': 'email',
+      'post': 'first_class_post',
+      'postal': 'first_class_post',
+    };
+    if (serviceMethodMap[methodLower]) {
+      base.notice.service_method = serviceMethodMap[methodLower] as any;
+    }
+  }
   base.notice.served_by ??= getFirstValue(wizard, [
     'case_facts.notice.served_by',
     'notice_served_by',
     'served_by',
   ]);
+
+  // Defensive fallback: ensure simple keys populate notice block even if normalization above misses them
+  if (!base.notice.notice_type && typeof (wizard as any).notice_type === 'string') {
+    base.notice.notice_type = (wizard as any).notice_type as any;
+  }
+  if (!base.notice.notice_date && typeof (wizard as any).notice_served_date === 'string') {
+    base.notice.notice_date = (wizard as any).notice_served_date as any;
+  }
+  if (!base.notice.notice_date && typeof (wizard as any).notice_date === 'string') {
+    base.notice.notice_date = (wizard as any).notice_date as any;
+  }
+  if (!base.notice.expiry_date && typeof (wizard as any).notice_expiry_date === 'string') {
+    base.notice.expiry_date = (wizard as any).notice_expiry_date as any;
+  }
+  if (!base.notice.expiry_date && typeof (wizard as any).expiry_date === 'string') {
+    base.notice.expiry_date = (wizard as any).expiry_date as any;
+  }
 
   // =============================================================================
   // COURT - Claim amounts and form requirements
@@ -926,9 +1682,19 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
   ]);
   base.court.court_name ??= getFirstValue(wizard, [
     'case_facts.court.court_name',
+    'court.court_name', // Nested object format (complete_pack fixture)
     'court_name',
     'preferred_court',
     'sheriffdom',
+  ]);
+  base.court.court_address ??= getFirstValue(wizard, [
+    'case_facts.court.court_address',
+    'court.court_address', // Nested object format (complete_pack fixture)
+    'court_address',
+  ]);
+  base.court.court_postcode ??= getFirstValue(wizard, [
+    'case_facts.court.court_postcode',
+    'court_postcode',
   ]);
   base.court.particulars_of_claim ??= getFirstValue(wizard, [
     'case_facts.court.particulars_of_claim',
@@ -1010,6 +1776,103 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
       'other_evidence_uploaded',
     ]) ?? base.evidence.other_evidence_uploaded
   );
+
+  // Evidence description fields (describe instead of upload)
+  base.evidence.tenancy_agreement_description = getFirstValue(wizard, [
+    'evidence.tenancy_agreement_description',
+    'tenancy_agreement_describe',
+  ]);
+  base.evidence.bank_statements_description = getFirstValue(wizard, [
+    'evidence.bank_statements_description',
+    'bank_statements_describe',
+  ]);
+  base.evidence.notice_service_description = getFirstValue(wizard, [
+    'evidence.notice_service_description',
+    'notice_service_describe',
+  ]);
+  base.evidence.correspondence_description = getFirstValue(wizard, [
+    'evidence.correspondence_description',
+    'correspondence_describe',
+  ]);
+
+  // =============================================================================
+  // MONEY CLAIM EVIDENCE DESCRIPTIONS
+  // =============================================================================
+  base.evidence.tenancy_type = getFirstValue(wizard, [
+    'evidence.tenancy_type',
+    'tenancy_type',
+  ]);
+  base.evidence.tenancy_written_or_verbal = getFirstValue(wizard, [
+    'evidence.tenancy_written_or_verbal',
+    'tenancy_written_or_verbal',
+  ]);
+  base.evidence.rent_clause_description = getFirstValue(wizard, [
+    'evidence.rent_clause_description',
+    'rent_clause_description',
+  ]);
+  base.evidence.arrears_calculation_method = getFirstValue(wizard, [
+    'evidence.arrears_calculation_method',
+    'arrears_calculation_method',
+  ]);
+  base.evidence.arrears_ledger_available = coerceBoolean(getFirstValue(wizard, [
+    'evidence.arrears_ledger_available',
+    'arrears_ledger_available',
+  ]));
+  base.evidence.arrears_period_description = getFirstValue(wizard, [
+    'evidence.arrears_period_description',
+    'arrears_period_description',
+  ]);
+  base.evidence.bank_statements_available = coerceBoolean(getFirstValue(wizard, [
+    'evidence.bank_statements_available',
+    'bank_statements_available',
+  ]));
+  base.evidence.inventory_checkout_available = coerceBoolean(getFirstValue(wizard, [
+    'evidence.inventory_checkout_available',
+    'inventory_checkout_available',
+  ]));
+  base.evidence.damage_photos_available = coerceBoolean(getFirstValue(wizard, [
+    'evidence.damage_photos_available',
+    'damage_photos_available',
+  ]));
+  base.evidence.damage_photos_description = getFirstValue(wizard, [
+    'evidence.damage_photos_description',
+    'damage_photos_description',
+  ]);
+  base.evidence.repair_quotes_description = getFirstValue(wizard, [
+    'evidence.repair_quotes_description',
+    'repair_quotes_description',
+  ]);
+  base.evidence.before_photos_available = coerceBoolean(getFirstValue(wizard, [
+    'evidence.before_photos_available',
+    'before_photos_available',
+  ]));
+  base.evidence.correspondence_preserved = coerceBoolean(getFirstValue(wizard, [
+    'evidence.correspondence_preserved',
+    'correspondence_preserved',
+  ]));
+  const correspondenceFormat = getFirstValue(wizard, [
+    'evidence.correspondence_format',
+    'correspondence_format',
+  ]);
+  base.evidence.correspondence_format = coerceStringArray(correspondenceFormat);
+  base.evidence.key_correspondence_summary = getFirstValue(wizard, [
+    'evidence.key_correspondence_summary',
+    'key_correspondence_summary',
+  ]);
+  base.evidence.money_claim_evidence_uploaded = coerceBoolean(getFirstValue(wizard, [
+    'evidence.money_claim_evidence_uploaded',
+    'money_claim_evidence_uploaded',
+  ]));
+  // Wales-specific evidence fields
+  base.evidence.contract_type = getFirstValue(wizard, [
+    'evidence.contract_type',
+    'contract_type',
+  ]);
+  base.evidence.contract_written_or_verbal = getFirstValue(wizard, [
+    'evidence.contract_written_or_verbal',
+    'contract_written_or_verbal',
+  ]);
+
   const missingEvidenceNotes = getFirstValue(wizard, [
     'case_facts.evidence.missing_evidence_notes',
     'evidence.missing_evidence_notes',
@@ -1074,6 +1937,16 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     'service_contact.service_phone',
     'service_phone',
   ]);
+
+  if (!base.service_contact.service_name && typeof (wizard as any)['service_contact.service_name'] === 'string') {
+    base.service_contact.service_name = (wizard as any)['service_contact.service_name'];
+  }
+  if (!base.service_contact.service_email && typeof (wizard as any)['service_contact.service_email'] === 'string') {
+    base.service_contact.service_email = (wizard as any)['service_contact.service_email'];
+  }
+  if (!base.service_contact.service_phone && typeof (wizard as any)['service_contact.service_phone'] === 'string') {
+    base.service_contact.service_phone = (wizard as any)['service_contact.service_phone'];
+  }
 
   // =============================================================================
   // MONEY CLAIM - Claim breakdown, interest, pre-action
@@ -1159,6 +2032,35 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
   if (lbaSent !== null && lbaSent !== undefined) {
     base.money_claim.lba_sent = coerceBoolean(lbaSent);
   }
+
+  // Map letter_before_claim_sent from PreActionSection
+  const letterBeforeClaimSent = getFirstValue(wizard, [
+    'letter_before_claim_sent',
+    'case_facts.money_claim.letter_before_claim_sent',
+  ]);
+  if (letterBeforeClaimSent !== null && letterBeforeClaimSent !== undefined) {
+    (base.money_claim as any).letter_before_claim_sent = coerceBoolean(letterBeforeClaimSent);
+  }
+
+  // Map pap_letter_date (top-level fact set by PreActionSection)
+  const papLetterDate = getFirstValue(wizard, [
+    'pap_letter_date',
+    'case_facts.money_claim.pap_letter_date',
+  ]);
+  if (papLetterDate) {
+    (base.money_claim as any).pap_letter_date = papLetterDate;
+  }
+
+  // Map generate_pap_documents from PreActionSection
+  const generatePapDocuments = getFirstValue(wizard, [
+    'money_claim.generate_pap_documents',
+    'generate_pap_documents',
+    'case_facts.money_claim.generate_pap_documents',
+  ]);
+  if (generatePapDocuments !== null && generatePapDocuments !== undefined) {
+    (base.money_claim as any).generate_pap_documents = coerceBoolean(generatePapDocuments);
+  }
+
   base.money_claim.lba_date ??= getFirstValue(wizard, [
     'lba_date',
     'case_facts.money_claim.lba_date',
@@ -1368,6 +2270,7 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
   // =============================================================================
   const gasSafety = getFirstValue(wizard, [
     'case_facts.compliance.gas_safety_cert_provided',
+    'gas_certificate_provided', // Canonical wizard key
     'gas_safety_cert_provided',
     'gas_safety_certificate_provided',
   ]);
@@ -1385,11 +2288,79 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
 
   const howToRent = getFirstValue(wizard, [
     'case_facts.compliance.how_to_rent_given',
+    'how_to_rent_provided', // Canonical wizard key
     'how_to_rent_given',
     'how_to_rent_guide_provided',
   ]);
   if (howToRent !== null && howToRent !== undefined) {
     base.compliance.how_to_rent_given = coerceBoolean(howToRent);
+  }
+
+  // Compliance dates (Phase 1 enhancements)
+  base.compliance.gas_safety_cert_date = getFirstValue(wizard, [
+    'compliance.gas_cert_date',
+    'gas_cert_date',
+  ]);
+  base.compliance.gas_safety_cert_expiry = getFirstValue(wizard, [
+    'compliance.gas_cert_expiry',
+    'gas_cert_expiry',
+  ]);
+  base.compliance.epc_date = getFirstValue(wizard, [
+    'compliance.epc_certificate_date',
+    'epc_certificate_date',
+  ]);
+  base.compliance.how_to_rent_date = getFirstValue(wizard, [
+    'compliance.how_to_rent_date',
+    'how_to_rent_date',
+  ]);
+  base.compliance.prescribed_info_date = getFirstValue(wizard, [
+    'compliance.prescribed_info_date',
+    'prescribed_info_date',
+  ]);
+
+  // EICR (Electrical Safety)
+  const eicrProvided = getFirstValue(wizard, [
+    'compliance.eicr_provided',
+    'eicr_provided',
+    'electrical_safety_cert_provided',
+  ]);
+  if (eicrProvided !== null && eicrProvided !== undefined) {
+    base.compliance.eicr_provided = coerceBoolean(eicrProvided);
+  }
+  base.compliance.eicr_date = getFirstValue(wizard, [
+    'compliance.eicr_date',
+    'eicr_date',
+    'eicr_report_date',
+  ]);
+  const eicrSatisfactory = getFirstValue(wizard, [
+    'compliance.eicr_satisfactory',
+    'eicr_satisfactory',
+  ]);
+  if (eicrSatisfactory !== null && eicrSatisfactory !== undefined) {
+    base.compliance.eicr_satisfactory = coerceBoolean(eicrSatisfactory);
+  }
+
+  // Recent repair complaints (retaliatory eviction protection)
+  const recentRepairComplaints = getFirstValue(wizard, [
+    'recent_repair_complaints',
+    'repair_complaints',
+    'outstanding_repairs',
+    'tenant_complained',
+  ]);
+  if (recentRepairComplaints !== null && recentRepairComplaints !== undefined) {
+    (base.compliance as any).recent_repair_complaints = coerceBoolean(recentRepairComplaints);
+  }
+
+  const noRetaliatoryNotice = getFirstValue(wizard, ['no_retaliatory_notice']);
+  if (
+    noRetaliatoryNotice !== null &&
+    noRetaliatoryNotice !== undefined &&
+    (base.compliance as any).recent_repair_complaints === undefined
+  ) {
+    const normalizedValue = coerceBoolean(noRetaliatoryNotice);
+    if (normalizedValue !== null && normalizedValue !== undefined) {
+      (base.compliance as any).recent_repair_complaints = !normalizedValue;
+    }
   }
 
   // Keep "breaches" in sync with "other_breaches" for modules that expect either
@@ -1500,10 +2471,21 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
         'eviction',
         'meta',
         'case_health',
+        'notice',             // CaseFacts.notice (NoticeFacts)
+        'service_contact',    // CaseFacts.service_contact (ServiceContactFacts)
+        'scotland_pre_action', // Scotland-specific pre-action protocol facts
+        'communication_timeline', // Structured communication history with entries array
+        'risk',               // CaseFacts.risk - Risk assessment factors (tenant defences, vulnerabilities, etc.)
+        'section21',          // Section 21 notice configuration/facts object
+        'section8',           // Section 8 notice configuration/facts object
       ];
 
-      if (knownStructures.includes(key)) {
-        // Skip known nested structures
+      // Check if key matches ground_* pattern (e.g., ground_8, ground_10, ground_17)
+      // These are structured objects containing ground-specific details
+      const isGroundObject = /^ground[_\s]?\d+$/i.test(key);
+
+      if (knownStructures.includes(key) || isGroundObject) {
+        // Skip known nested structures and ground objects
         return;
       }
 
@@ -1551,7 +2533,25 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
   // ---------------------------------------------------------------------------
   base.case_health = computeCaseHealth(base);
 
-  return base;
+  const result = JSON.parse(JSON.stringify(base));
+
+  if (typeof (result as any).notice === 'string') {
+    try {
+      (result as any).notice = JSON.parse((result as any).notice);
+    } catch {
+      // Leave as-is if parsing fails
+    }
+  }
+
+  if (typeof (result as any).service_contact === 'string') {
+    try {
+      (result as any).service_contact = JSON.parse((result as any).service_contact);
+    } catch {
+      // Leave as-is if parsing fails
+    }
+  }
+
+  return result as CaseFacts;
 }
 
 /**
@@ -1615,93 +2615,83 @@ export function normalizeCaseFacts(
 // =============================================================================
 
 /**
- * Official Section 8 ground definitions
+ * Notice periods required for each Section 8 ground (in days)
+ *
+ * Legal basis: Housing Act 1988, Section 8(4) and Schedule 2
+ *
+ * 2 weeks (14 days): Grounds 3, 4, 7A, 7B, 8, 10, 11, 12, 13, 14, 14ZA, 15, 17
+ * 2 months (60 days): Grounds 1, 2, 5, 6, 7, 9, 16
+ * Immediate (0 days): Ground 14 (serious anti-social behaviour), Ground 14A
+ *
+ * NOTE: Ground 14 can be served with immediate effect in cases of serious
+ * anti-social behaviour, but defaults to 14 days for standard nuisance.
  */
-const SECTION8_GROUND_DEFINITIONS: Record<number | string, {
-  code: number;
-  title: string;
-  mandatory: boolean;
-  legal_basis: string;
-  full_text: string;
-}> = {
-  1: {
-    code: 1,
-    title: 'Landlord previously occupied as only or principal home',
-    mandatory: true,
-    legal_basis: 'Housing Act 1988, Schedule 2, Ground 1',
-    full_text: 'Not later than the beginning of the tenancy, the landlord gave notice that possession might be recovered on this ground; and at some time before the beginning of the tenancy, the landlord (or one of joint landlords) occupied the dwelling-house as his only or principal home.',
-  },
-  2: {
-    code: 2,
-    title: 'Mortgage lender requires possession',
-    mandatory: true,
-    legal_basis: 'Housing Act 1988, Schedule 2, Ground 2',
-    full_text: 'The dwelling-house is subject to a mortgage granted before the beginning of the tenancy and the mortgagee is entitled to exercise a power of sale and requires possession for the purpose of disposing of the dwelling-house.',
-  },
-  8: {
-    code: 8,
-    title: 'Serious rent arrears (at least 8 weeks or 2 months)',
-    mandatory: true,
-    legal_basis: 'Housing Act 1988, Schedule 2, Ground 8',
-    full_text: 'At the date of the service of the notice and at the date of the hearing, at least eight weeks\' rent is unpaid if the rent is payable weekly or fortnightly, at least two months\' rent is unpaid if the rent is payable monthly, at least one quarter\'s rent is more than three months in arrears if the rent is payable quarterly, or at least three months\' rent is more than three months in arrears if the rent is payable yearly.',
-  },
-  10: {
-    code: 10,
-    title: 'Some rent arrears (unpaid at notice and hearing)',
-    mandatory: false,
-    legal_basis: 'Housing Act 1988, Schedule 2, Ground 10',
-    full_text: 'Some rent lawfully due from the tenant is unpaid on the date on which proceedings for possession are begun and was in arrears at the date of service of the notice.',
-  },
-  11: {
-    code: 11,
-    title: 'Persistent delay in paying rent',
-    mandatory: false,
-    legal_basis: 'Housing Act 1988, Schedule 2, Ground 11',
-    full_text: 'Whether or not any rent is in arrears on the date on which proceedings for possession are begun, the tenant has persistently delayed paying rent which has become lawfully due.',
-  },
-  12: {
-    code: 12,
-    title: 'Breach of tenancy obligation',
-    mandatory: false,
-    legal_basis: 'Housing Act 1988, Schedule 2, Ground 12',
-    full_text: 'Any obligation of the tenancy (other than one related to the payment of rent) has been broken or not performed.',
-  },
-  13: {
-    code: 13,
-    title: 'Deterioration of dwelling',
-    mandatory: false,
-    legal_basis: 'Housing Act 1988, Schedule 2, Ground 13',
-    full_text: 'The condition of the dwelling-house or any of the common parts has deteriorated owing to acts of waste by, or the neglect or default of, the tenant or any other person residing in the dwelling-house.',
-  },
-  14: {
-    code: 14,
-    title: 'Nuisance or annoyance to neighbours',
-    mandatory: false,  // Note: Ground 14 is discretionary, NOT mandatory
-    legal_basis: 'Housing Act 1988, Schedule 2, Ground 14',
-    full_text: 'The tenant or a person residing in or visiting the dwelling-house has been guilty of conduct causing or likely to cause a nuisance or annoyance to a person residing, visiting or otherwise engaging in a lawful activity in the locality, or has been convicted of using the dwelling-house or allowing it to be used for immoral or illegal purposes, or an arrestable offence committed in, or in the locality of, the dwelling-house.',
-  },
-  '14A': {
-    code: 14,
-    title: 'Domestic violence',
-    mandatory: false,
-    legal_basis: 'Housing Act 1988, Schedule 2, Ground 14A',
-    full_text: 'The dwelling-house was occupied by a married couple or a couple living together as husband and wife and one or both of the partners is a tenant of the dwelling-house, and the partner who is not a tenant has left because of violence or threats of violence by the other partner.',
-  },
-  15: {
-    code: 15,
-    title: 'Deterioration of furniture',
-    mandatory: false,
-    legal_basis: 'Housing Act 1988, Schedule 2, Ground 15',
-    full_text: 'The condition of any furniture provided for use under the tenancy has deteriorated owing to ill-treatment by the tenant or any other person residing in the dwelling-house.',
-  },
-  17: {
-    code: 17,
-    title: 'False statement induced grant of tenancy',
-    mandatory: false,
-    legal_basis: 'Housing Act 1988, Schedule 2, Ground 17',
-    full_text: 'The tenancy was granted on the basis of a false statement knowingly or recklessly made by the tenant or a person acting at the tenant\'s instigation.',
-  },
+const GROUND_NOTICE_PERIODS: Record<number | string, number> = {
+  1: 60,    // 2 months - landlord previously occupied
+  2: 60,    // 2 months - mortgage lender requires possession
+  3: 14,    // 2 weeks - holiday let
+  4: 14,    // 2 weeks - educational institution let
+  5: 60,    // 2 months - minister of religion
+  6: 60,    // 2 months - demolition/reconstruction
+  7: 60,    // 2 months - death of periodic tenant
+  '7A': 14, // 2 weeks - abandonment (fixed term)
+  '7B': 14, // 2 weeks - abandonment (periodic)
+  8: 14,    // 2 weeks - serious rent arrears (8 weeks/2 months)
+  9: 60,    // 2 months - suitable alternative accommodation
+  10: 14,   // 2 weeks - some rent arrears
+  11: 14,   // 2 weeks - persistent delay in paying rent
+  12: 14,   // 2 weeks - breach of tenancy obligation
+  13: 14,   // 2 weeks - deterioration of dwelling
+  14: 14,   // 2 weeks (default) - nuisance/annoyance (can be immediate for serious ASB)
+  '14ZA': 14, // 2 weeks - riot conviction
+  '14A': 0,   // Immediate - domestic violence
+  15: 14,   // 2 weeks - deterioration of furniture
+  16: 60,   // 2 months - former employee
+  17: 14,   // 2 weeks - false statement
 };
+
+/**
+ * Calculate the required notice period based on selected grounds
+ * Returns the MAXIMUM notice period required across all selected grounds
+ *
+ * @param selectedGrounds - Array of ground codes (e.g., ['8', '10', '11'])
+ * @returns Notice period in days (defaults to 14 if no grounds specified)
+ */
+function calculateRequiredNoticePeriod(selectedGrounds: (string | number)[]): number {
+  if (!selectedGrounds || selectedGrounds.length === 0) {
+    return 14; // Default for Section 8 when no specific grounds
+  }
+
+  let maxPeriod = 0;
+
+  for (const ground of selectedGrounds) {
+    // Normalize ground code
+    let groundKey: string | number = ground;
+    if (typeof ground === 'string') {
+      const match = ground.match(/ground[_\s-]*([0-9]+[ab]?)/i);
+      if (match) {
+        groundKey = match[1].toUpperCase();
+      } else {
+        const numMatch = ground.match(/^([0-9]+[ab]?)$/i);
+        if (numMatch) {
+          groundKey = numMatch[1].toUpperCase();
+        }
+      }
+    }
+
+    // Try numeric key first, then string key
+    const numericKey = typeof groundKey === 'string' ? parseInt(groundKey, 10) : groundKey;
+    const period = GROUND_NOTICE_PERIODS[numericKey] ?? GROUND_NOTICE_PERIODS[groundKey] ?? 14;
+
+    if (period > maxPeriod) {
+      maxPeriod = period;
+    }
+  }
+
+  return maxPeriod;
+}
+
+// SECTION8_GROUND_DEFINITIONS is now imported from '@/lib/grounds/section8-ground-definitions'
 
 /**
  * Build grounds array from wizard facts with proper structure for Form 3 compliance
@@ -1718,109 +2708,288 @@ function buildGroundsArray(wizard: WizardFacts, templateData: Record<string, any
     return [];
   }
 
+  const groundParticulars = getWizardValue(wizard, 'ground_particulars');
+  const rentAmount = templateData.rent_amount || 0;
+  const rentFreq = templateData.rent_frequency || 'monthly';
+  const arrearsItems = templateData.arrears_items || [];
+
+  const scheduleData: ArrearsScheduleData = templateData.arrears_schedule_data || getArrearsScheduleData({
+    arrears_items: arrearsItems,
+    total_arrears: templateData.total_arrears,
+    rent_amount: rentAmount,
+    rent_frequency: rentFreq,
+    rent_due_day: templateData.rent_due_day,
+    include_schedule: true,
+  });
+
+  const ground8Threshold = getGround8Threshold(rentAmount, rentFreq);
+  const ground8Eligible = isGround8Eligible({
+    arrearsTotal: scheduleData.arrears_total,
+    rentAmount,
+    rentFrequency: rentFreq,
+  });
+
+  const formatCurrency = (value: any): string | null => {
+    if (value === null || value === undefined) return null;
+    const num = typeof value === 'number' ? value : parseFloat(value);
+    if (Number.isNaN(num)) return null;
+    return `£${num.toFixed(2)}`;
+  };
+
+  const formatMultiline = (value: any): string | null => {
+    if (!value) return null;
+    if (typeof value === 'string') {
+      return value.trim().replace(/\n/g, '<br>');
+    }
+    if (Array.isArray(value)) {
+      return value.map(v => (typeof v === 'string' ? v : String(v))).join('<br>');
+    }
+    if (typeof value === 'object') {
+      const maybeValue = (value as any).text || (value as any).summary || (value as any).details;
+      if (maybeValue) return formatMultiline(maybeValue);
+    }
+    return String(value);
+  };
+
+  const normalizeGroundCode = (input: string | number): string | null => {
+    if (typeof input === 'number') return String(input);
+    if (!input) return null;
+    const trimmed = input.trim();
+    const explicitMatch = trimmed.match(/ground[_\s-]*([0-9]+a?)/i);
+    if (explicitMatch) return explicitMatch[1].toUpperCase();
+    const numericOnly = trimmed.match(/^([0-9]+a?)$/i);
+    if (numericOnly) return numericOnly[1].toUpperCase();
+    const looseMatch = trimmed.match(/([0-9]+a?)/i);
+    return looseMatch ? looseMatch[1].toUpperCase() : null;
+  };
+
+  const pickParticularEntry = (code: string | number) => {
+    if (!groundParticulars || typeof groundParticulars !== 'object' || Array.isArray(groundParticulars)) return null;
+    const normalized = normalizeGroundCode(code)?.toLowerCase();
+    const possibleKeys = [
+      normalized ? `ground_${normalized}` : null,
+      normalized,
+      typeof code === 'string' ? code : null,
+    ].filter(Boolean) as string[];
+
+    for (const key of possibleKeys) {
+      if ((groundParticulars as any)[key]) {
+        return (groundParticulars as any)[key];
+      }
+    }
+    return null;
+  };
+
+  const renderParticulars = (
+    groundDef: Section8GroundDefinition | undefined,
+    groundCode: string | number | null,
+  ) => {
+    const particularsEntry = pickParticularEntry(groundCode || '');
+    const defaultNarrative =
+      getWizardValue(wizard, 'section8_other_grounds_narrative') ||
+      getWizardValue(wizard, 'section8_grounds_narrative') ||
+      (typeof groundParticulars === 'string' ? groundParticulars : null);
+
+    const facts: string[] = [];
+
+    const arrearsAmount =
+      particularsEntry?.total_amount_owed ??
+      particularsEntry?.arrears_amount ??
+      (groundParticulars as any)?.total_amount_owed ??
+      templateData.arrears_at_notice_date ??
+      templateData.total_arrears;
+    const arrearsPeriod =
+      particularsEntry?.period_of_arrears ??
+      particularsEntry?.arrears_period ??
+      (groundParticulars && typeof groundParticulars === 'object'
+        ? (groundParticulars as any).period_of_arrears
+        : null) ??
+      (groundParticulars && typeof groundParticulars === 'object'
+        ? (groundParticulars as any).arrears_period
+        : null) ??
+      (templateData.arrears_duration_months !== null && templateData.arrears_duration_months !== undefined
+        ? `${templateData.arrears_duration_months} month period`
+        : null);
+
+    const factualSummary =
+      particularsEntry?.factual_summary ||
+      particularsEntry?.summary ||
+      particularsEntry?.details ||
+      particularsEntry?.particulars ||
+      particularsEntry?.narrative ||
+      defaultNarrative;
+
+    if (arrearsAmount !== null && arrearsAmount !== undefined && groundDef && [8, 10, 11].includes(groundDef.code)) {
+      const formattedAmount = formatCurrency(arrearsAmount) || arrearsAmount;
+      facts.push(`<strong>Total amount owed:</strong> ${formattedAmount}`);
+    }
+
+    if (arrearsPeriod) {
+      facts.push(`<strong>Period of arrears:</strong> ${arrearsPeriod}`);
+    }
+
+    if (factualSummary) {
+      facts.push(`<strong>Factual summary:</strong> ${formatMultiline(factualSummary)}`);
+    }
+
+    const evidenceText =
+      particularsEntry?.evidence ||
+      particularsEntry?.evidence_available ||
+      particularsEntry?.supporting_evidence ||
+      (groundParticulars && typeof groundParticulars === 'object' ? (groundParticulars as any).evidence : null);
+
+    const rendered = facts.filter(Boolean).join('<br>');
+
+    return {
+      particulars: rendered || formatMultiline(defaultNarrative) || '',
+      evidence: evidenceText ? formatMultiline(evidenceText) : null,
+    };
+  };
+
   const groundsList = Array.isArray(selectedGrounds) ? selectedGrounds : [selectedGrounds];
 
-  return groundsList.map((groundStr: string) => {
-    // Parse ground number from string like "Ground 8 - Serious rent arrears"
-    const match = groundStr.match(/ground\s*([0-9]+a?)/i);
-    const groundNumStr = match ? match[1].toUpperCase() : '';
-    const groundNum = groundNumStr === '14A' ? '14A' : parseInt(groundNumStr);
+  const filteredGrounds = groundsList.filter((groundStr: string) => {
+    const groundNumStr = normalizeGroundCode(groundStr) || '';
+    if (groundNumStr === '8') {
+      return ground8Eligible;
+    }
+    return true;
+  });
 
-    // Look up ground definition
-    const groundDef = SECTION8_GROUND_DEFINITIONS[groundNum];
+  return filteredGrounds.map((groundStr: string) => {
+    const groundNumStr = normalizeGroundCode(groundStr) || '';
+    const groundKey = groundNumStr === '14A' ? '14A' : parseInt(groundNumStr, 10);
+    const groundDef = SECTION8_GROUND_DEFINITIONS[groundKey] || SECTION8_GROUND_DEFINITIONS[groundNumStr];
 
     if (!groundDef) {
       console.warn(`[buildGroundsArray] Unknown ground: ${groundStr}`);
       return {
-        code: groundNumStr,
+        code: groundNumStr || groundStr,
         mandatory: false,
         title: groundStr,
         legal_basis: 'Housing Act 1988, Schedule 2',
         full_text: '',
+        statutory_text: '',
         explanation: '',
         particulars: '',
+        type: 'DISCRETIONARY',
+        type_label: 'Discretionary',
       };
     }
 
     // Build explanation and particulars based on ground type
     let explanation = '';
-    let particulars = '';
+    const particularLines: string[] = [];
 
-    if (groundNum === 8) {
-      // Ground 8: Serious rent arrears
-      const arrears = templateData.arrears_at_notice_date || templateData.total_arrears || 0;
-      const rentAmount = templateData.rent_amount || 0;
-      const rentFreq = templateData.rent_frequency || 'monthly';
+    if (groundDef.code === 8 || groundDef.code === 10 || groundDef.code === 11) {
+      // USE CANONICAL ARREARS DATA from arrears-schedule-mapper
+      // This ensures Notice figures match the Rent Schedule exactly
+      // Use computed total from schedule (or legacy total as fallback)
+      const arrears = scheduleData.arrears_total;
+      const arrearsInMonths = scheduleData.arrears_in_months;
 
-      // Calculate threshold
-      let threshold = 0;
-      let thresholdDescription = '';
-      if (rentFreq === 'weekly') {
-        threshold = rentAmount * 8;
-        thresholdDescription = '8 weeks';
-      } else if (rentFreq === 'fortnightly') {
-        threshold = rentAmount * 4; // 8 weeks = 4 fortnights
-        thresholdDescription = '8 weeks (4 fortnightly payments)';
-      } else if (rentFreq === 'monthly') {
-        threshold = rentAmount * 2;
-        thresholdDescription = '2 months';
-      } else if (rentFreq === 'quarterly') {
-        threshold = rentAmount * 1;
-        thresholdDescription = '1 quarter';
-      }
+      if (groundDef.code === 8) {
+        // Ground 8 - Serious Rent Arrears (MANDATORY)
+        const threshold = ground8Threshold.amount;
+        const thresholdDescription = ground8Threshold.description;
 
-      // Only include Ground 8 explanation if threshold is met
-      if (arrears >= threshold) {
-        explanation = `The tenant currently owes £${arrears.toFixed(2)} in rent arrears. The rent is £${rentAmount} payable ${rentFreq}. At the date of service of this notice, the arrears amount to ${thresholdDescription} of rent or more. This satisfies the threshold for Ground 8 under Schedule 2 of the Housing Act 1988 (as amended).`;
-        particulars = `Rent arrears at date of notice: £${arrears.toFixed(2)}\nRent amount: £${rentAmount} (${rentFreq})\nThreshold for Ground 8: £${threshold.toFixed(2)} (${thresholdDescription})\n\nGround 8 is a MANDATORY ground. If the arrears still meet the threshold at the date of the hearing, the court MUST grant possession.`;
+        if (ground8Eligible) {
+          explanation = `The tenant currently owes £${arrears.toFixed(2)} in rent arrears. The rent is £${rentAmount.toFixed(2)} payable ${rentFreq}. At the date of service of this notice, the arrears amount to ${thresholdDescription} of rent or more. This satisfies the threshold for Ground 8 under Schedule 2 of the Housing Act 1988 (as amended).`;
+
+          // Build period-by-period breakdown from schedule (to match Rent Schedule)
+          particularLines.push(`<strong>Rent arrears of £${arrears.toFixed(2)} are outstanding</strong> (approximately ${arrearsInMonths.toFixed(1)} months' rent):`);
+          particularLines.push('');
+
+          // Add period-by-period breakdown from canonical schedule data
+          const periodsWithArrears = scheduleData.arrears_schedule.filter((p) => p.arrears > 0);
+          if (periodsWithArrears.length > 0) {
+            for (const entry of periodsWithArrears) {
+              // Format period with en-dash to match Rent Schedule format
+              const periodParts = entry.period.split(' to ');
+              const periodLabel = periodParts.length === 2
+                ? `${periodParts[0]} – ${periodParts[1]}`
+                : entry.period;
+              particularLines.push(`• ${periodLabel}: £${entry.arrears.toFixed(2)} outstanding (due: £${entry.amount_due.toFixed(2)}, paid: £${entry.amount_paid.toFixed(2)})`);
+            }
+            particularLines.push('');
+          }
+
+          particularLines.push(`<strong>Total arrears: £${arrears.toFixed(2)}</strong>`);
+          particularLines.push(`Threshold for Ground 8: £${threshold.toFixed(2)} (${thresholdDescription})`);
+          particularLines.push('Ground 8 is a MANDATORY ground. If the arrears still meet the threshold at the date of the hearing, the court MUST grant possession.');
+          particularLines.push('A detailed schedule of arrears is attached.');
+        }
       } else {
-        explanation = `WARNING: The current arrears of £${arrears.toFixed(2)} do not meet the Ground 8 threshold of ${thresholdDescription} (£${threshold.toFixed(2)}). Ground 8 cannot be relied upon unless the arrears increase before the hearing.`;
-        particulars = `Current arrears: £${arrears.toFixed(2)}\nRequired threshold: £${threshold.toFixed(2)} (${thresholdDescription})\n\nGround 8 is NOT satisfied at this time.`;
-      }
-    } else if (groundNum === 10 || groundNum === 11) {
-      // Grounds 10/11: Other arrears grounds
-      const arrears = templateData.total_arrears || 0;
-      explanation = `The tenant owes £${arrears.toFixed(2)} in rent arrears.`;
-      particulars = getWizardValue(wizard, 'section8_other_grounds_narrative') ||
-                   getWizardValue(wizard, 'section8_grounds_narrative') ||
-                   `Rent arrears outstanding: £${arrears.toFixed(2)}`;
+        // Ground 10 or 11 - Rent Arrears (DISCRETIONARY)
+        explanation = `The tenant owes £${arrears.toFixed(2)} in rent arrears (approximately ${arrearsInMonths.toFixed(1)} months' rent).`;
 
-      if (groundNum === 10) {
-        particulars += `\n\nGround 10 is a DISCRETIONARY ground. The court will consider all circumstances when deciding whether to grant possession.`;
-      } else {
-        particulars += `\n\nGround 11 is a DISCRETIONARY ground. The court will consider the pattern of late payments when deciding whether to grant possession.`;
+        // Build period-by-period breakdown from schedule
+        particularLines.push(`<strong>Rent arrears of £${arrears.toFixed(2)} are outstanding</strong>:`);
+        particularLines.push('');
+
+        const periodsWithArrears = scheduleData.arrears_schedule.filter((p) => p.arrears > 0);
+        if (periodsWithArrears.length > 0) {
+          for (const entry of periodsWithArrears) {
+            const periodParts = entry.period.split(' to ');
+            const periodLabel = periodParts.length === 2
+              ? `${periodParts[0]} – ${periodParts[1]}`
+              : entry.period;
+            particularLines.push(`• ${periodLabel}: £${entry.arrears.toFixed(2)} outstanding (due: £${entry.amount_due.toFixed(2)}, paid: £${entry.amount_paid.toFixed(2)})`);
+          }
+          particularLines.push('');
+        }
+
+        particularLines.push(`<strong>Total arrears: £${arrears.toFixed(2)}</strong>`);
+        particularLines.push(
+          groundDef.code === 10
+            ? 'Ground 10 is a DISCRETIONARY ground. The court will consider all circumstances when deciding whether to grant possession.'
+            : 'Ground 11 is a DISCRETIONARY ground. The court will consider the pattern of late payments when deciding whether to grant possession.'
+        );
+        particularLines.push('A detailed schedule of arrears is attached.');
       }
-    } else if (groundNum === 12) {
-      // Ground 12: Breach of tenancy
-      explanation = getWizardValue(wizard, 'section8_other_grounds_narrative') ||
-                   getWizardValue(wizard, 'section8_grounds_narrative') ||
-                   'The tenant has breached one or more terms of the tenancy agreement.';
-      particulars = explanation + '\n\nGround 12 is a DISCRETIONARY ground. The court will consider the nature and severity of the breach.';
-    } else if (groundNum === 13 || groundNum === 15) {
-      // Grounds 13/15: Property damage
-      explanation = getWizardValue(wizard, 'section8_other_grounds_narrative') ||
-                   getWizardValue(wizard, 'section8_grounds_narrative') ||
-                   'The condition of the property has deteriorated.';
-      particulars = explanation + `\n\nGround ${groundNum} is a DISCRETIONARY ground. The court will assess the extent of deterioration.`;
-    } else if (groundNum === 14 || groundNumStr === '14A') {
-      // Grounds 14/14A: Nuisance/ASB
-      explanation = getWizardValue(wizard, 'section8_other_grounds_narrative') ||
-                   getWizardValue(wizard, 'section8_grounds_narrative') ||
-                   'The tenant or persons at the property have caused nuisance or annoyance.';
-      particulars = explanation + `\n\nGround ${groundNumStr} is a DISCRETIONARY ground. The court will consider evidence of nuisance or anti-social behaviour.`;
-    } else if (groundNum === 17) {
-      // Ground 17: False statement
-      explanation = getWizardValue(wizard, 'section8_other_grounds_narrative') ||
-                   getWizardValue(wizard, 'section8_grounds_narrative') ||
-                   'The tenancy was granted based on a false statement.';
-      particulars = explanation + '\n\nGround 17 is a DISCRETIONARY ground. The court will consider whether the false statement was material to the grant of the tenancy.';
+    } else if (groundDef.code === 12) {
+      explanation =
+        getWizardValue(wizard, 'section8_other_grounds_narrative') ||
+        getWizardValue(wizard, 'section8_grounds_narrative') ||
+        'The tenant has breached one or more terms of the tenancy agreement.';
+      particularLines.push(explanation);
+      particularLines.push('Ground 12 is a DISCRETIONARY ground. The court will consider the nature and severity of the breach.');
+    } else if (groundDef.code === 13 || groundDef.code === 15) {
+      explanation =
+        getWizardValue(wizard, 'section8_other_grounds_narrative') ||
+        getWizardValue(wizard, 'section8_grounds_narrative') ||
+        'The condition of the property has deteriorated.';
+      particularLines.push(explanation);
+      particularLines.push(`Ground ${groundDef.code} is a DISCRETIONARY ground. The court will assess the extent of deterioration.`);
+    } else if (groundDef.code === 14 || groundNumStr === '14A') {
+      explanation =
+        getWizardValue(wizard, 'section8_other_grounds_narrative') ||
+        getWizardValue(wizard, 'section8_grounds_narrative') ||
+        'The tenant or persons at the property have caused nuisance or annoyance.';
+      particularLines.push(explanation);
+      particularLines.push(`Ground ${groundNumStr} is a DISCRETIONARY ground. The court will consider evidence of nuisance or anti-social behaviour.`);
+    } else if (groundDef.code === 17) {
+      explanation =
+        getWizardValue(wizard, 'section8_other_grounds_narrative') ||
+        getWizardValue(wizard, 'section8_grounds_narrative') ||
+        'The tenancy was granted based on a false statement.';
+      particularLines.push(explanation);
+      particularLines.push('Ground 17 is a DISCRETIONARY ground. The court will consider whether the false statement was material to the grant of the tenancy.');
     } else {
-      // Other grounds
-      explanation = getWizardValue(wizard, 'section8_other_grounds_narrative') ||
-                   getWizardValue(wizard, 'section8_grounds_narrative') ||
-                   '';
-      particulars = explanation;
+      explanation =
+        getWizardValue(wizard, 'section8_other_grounds_narrative') ||
+        getWizardValue(wizard, 'section8_grounds_narrative') ||
+        '';
     }
+
+    const { particulars: userParticulars, evidence } = renderParticulars(groundDef, groundNumStr || groundStr);
+    const combinedParticulars = [
+      ...particularLines.filter(Boolean),
+      userParticulars,
+    ]
+      .filter(Boolean)
+      .map(p => formatMultiline(p) || '')
+      .join('<br>');
 
     return {
       code: groundDef.code,
@@ -1829,9 +2998,13 @@ function buildGroundsArray(wizard: WizardFacts, templateData: Record<string, any
       title: groundDef.title,
       legal_basis: groundDef.legal_basis,
       full_text: groundDef.full_text,
+      statutory_text: groundDef.full_text, // Template expects statutory_text
       explanation,
-      particulars,
+      particulars: combinedParticulars,
+      evidence,
       type: groundDef.mandatory ? 'MANDATORY' : 'DISCRETIONARY',
+      type_label: groundDef.mandatory ? 'Mandatory' : 'Discretionary',
+      display_heading: `Ground ${groundDef.code} – ${groundDef.title}`,
     };
   });
 }
@@ -1934,13 +3107,15 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
         'landlord.city',
       ])
     );
-    const landlordPostcode = extractString(
+    const landlordPostcodeRaw = extractString(
       getFirstValue(wizard, [
         'landlord_address_postcode',
         'landlord_postcode',
         'landlord.postcode',
       ])
     );
+    // Normalize postcode to uppercase for display consistency
+    const landlordPostcode = landlordPostcodeRaw?.toUpperCase() || null;
 
     // Concatenate landlord address
     const landlordAddressParts = [
@@ -1986,6 +3161,32 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
       'tenant_2_name',
       'tenant2_name',
       'tenant_secondary_name',
+      'parties.tenants.1.name', // From DefendantSection joint defendant
+    ])
+  );
+
+  // Joint defendant flag and address fields
+  templateData.has_joint_defendants = (wizard as any).has_joint_defendants === true ||
+    Boolean(templateData.tenant_2_name);
+
+  templateData.tenant_2_address_line1 = extractString(
+    getFirstValue(wizard, [
+      'tenant_2_address_line1',
+      'parties.tenants.1.address_line1',
+    ])
+  );
+
+  templateData.tenant_2_address_line2 = extractString(
+    getFirstValue(wizard, [
+      'tenant_2_address_line2',
+      'parties.tenants.1.address_line2',
+    ])
+  );
+
+  templateData.tenant_2_postcode = extractString(
+    getFirstValue(wizard, [
+      'tenant_2_postcode',
+      'parties.tenants.1.postcode',
     ])
   );
 
@@ -2017,13 +3218,15 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
       'property.city',
     ])
   );
-  const propertyPostcode = extractString(
+  const propertyPostcodeRaw = extractString(
     getFirstValue(wizard, [
       'property_address_postcode',
       'property_postcode',
       'property.postcode',
     ])
   );
+  // Normalize postcode to uppercase for display consistency
+  const propertyPostcode = propertyPostcodeRaw?.toUpperCase() || null;
 
   // Concatenate property address
   const propertyAddressParts = [
@@ -2042,12 +3245,19 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
 
   // =============================================================================
   // TENANCY/CONTRACT DATES
+  // FIX: Added nested paths for tenancy.*, section21.* variants
   // =============================================================================
   templateData.tenancy_start_date = extractString(
     getFirstValue(wizard, [
       'tenancy_start_date',
       'contract_start_date', // Wales
       'start_date',
+      // Nested tenancy.* paths
+      'tenancy.start_date',
+      'tenancy.tenancy_start_date',
+      // Nested section21.* paths
+      'section21.tenancy_start_date',
+      'section21.start_date',
     ])
   );
 
@@ -2056,15 +3266,66 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
     getFirstValue(wizard, [
       'contract_start_date',
       'tenancy_start_date', // Fallback
+      'tenancy.start_date',
+      'tenancy.contract_start_date',
     ])
   );
 
-  templateData.fixed_term = coerceBoolean(
-    getFirstValue(wizard, ['is_fixed_term', 'fixed_term', 'tenancy_fixed_term'])
-  );
+  // Resolve fixed_term from explicit fields or infer from tenancy_type
+  // FIX: Added nested paths for tenancy.*, section21.* variants
+  const explicitFixedTerm = getFirstValue(wizard, [
+    'is_fixed_term',
+    'fixed_term',
+    'tenancy_fixed_term',
+    'tenancy.fixed_term',
+    'tenancy.is_fixed_term',
+    'section21.fixed_term',
+    'section21.is_fixed_term',
+  ]);
+  if (explicitFixedTerm !== null && explicitFixedTerm !== undefined) {
+    templateData.fixed_term = coerceBoolean(explicitFixedTerm);
+  } else {
+    // Infer fixed_term from tenancy_type if not explicitly set
+    const tenancyType = extractString(getFirstValue(wizard, [
+      'tenancy_type',
+      'tenancy.tenancy_type',
+      'case_facts.tenancy.tenancy_type',
+    ]));
+    if (tenancyType) {
+      const lowerType = tenancyType.toLowerCase();
+      // Check for common fixed term indicators
+      if (
+        lowerType.includes('fixed term') ||
+        lowerType.includes('fixed-term') ||
+        lowerType === 'ast_fixed' ||
+        lowerType === 'fixed_term' ||
+        lowerType === 'fixed'
+      ) {
+        templateData.fixed_term = true;
+      } else {
+        templateData.fixed_term = null;
+      }
+    } else {
+      templateData.fixed_term = null;
+    }
+  }
+
+  // Also store is_fixed_term alias for templates that use it
+  templateData.is_fixed_term = templateData.fixed_term;
 
   templateData.fixed_term_end_date = extractString(
-    getFirstValue(wizard, ['fixed_term_end_date', 'tenancy_end_date'])
+    getFirstValue(wizard, [
+      'case_facts.tenancy.end_date',
+      'tenancy_end_date',
+      'fixed_term_end_date',
+      'tenancy.fixed_term_end_date',
+      'tenancy.end_date',
+      'case_facts.tenancy.fixed_term_end_date',
+      // Section 21 specific nested paths
+      'section21.fixed_term_end_date',
+      'section21.tenancy_end_date',
+      'section21.end_date',
+    ])
   );
 
   templateData.periodic_tenancy_start = extractString(
@@ -2103,30 +3364,18 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
   );
 
   // =============================================================================
-  // NOTICE DATES
+  // NOTICE DATES - Using canonical resolvers to ensure user-entered dates are used
   // =============================================================================
-  templateData.service_date = extractString(
-    getFirstValue(wizard, [
-      'notice_service_date',
-      'service_date',
-      'notice_date', // Scotland
-    ])
-  );
+  // Use resolveNoticeServiceDate to ensure we find dates stored in nested paths
+  // (e.g., notice_service.notice_date from maps_to config)
+  const canonicalServiceDate = resolveNoticeServiceDate(wizard);
+  templateData.service_date = canonicalServiceDate;
 
-  templateData.notice_date = extractString(
-    getFirstValue(wizard, [
-      'notice_date',
-      'notice_service_date',
-      'service_date',
-    ])
-  );
+  // notice_date should be the same as service_date for consistency
+  templateData.notice_date = canonicalServiceDate;
 
-  templateData.expiry_date = extractString(
-    getFirstValue(wizard, [
-      'notice_expiry_date',
-      'expiry_date',
-    ])
-  );
+  // Use resolveNoticeExpiryDate for expiry dates
+  templateData.expiry_date = resolveNoticeExpiryDate(wizard);
 
   // Scotland-specific
   templateData.earliest_leaving_date = extractString(
@@ -2138,16 +3387,99 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
   const noticePeriodDays = getWizardValue(wizard, 'notice_period_days');
   templateData.notice_period_days = noticePeriodDays !== null ? Number(noticePeriodDays) || null : null;
 
+
   // =============================================================================
-  // NOTICE SERVICE
+  // NOTICE SERVICE - Check nested paths from maps_to
   // =============================================================================
   templateData.notice_service_method = extractString(
-    getFirstValue(wizard, ['notice_service_method', 'service_method'])
+    getFirstValue(wizard, [
+      'notice_service.service_method',  // England/Wales maps_to path
+      'notice_service_method',
+      'service_method',
+    ])
   );
+  // Also expose as service_method for template convenience
+  templateData.service_method = templateData.notice_service_method;
 
   templateData.notice_served_by = extractString(
-    getFirstValue(wizard, ['notice_served_by', 'served_by'])
+    getFirstValue(wizard, [
+      'notice_service.served_by',  // England/Wales maps_to path
+      'notice_served_by',
+      'served_by',
+    ])
   );
+
+  // =============================================================================
+  // SERVING CAPACITY (COMPLIANCE-CRITICAL)
+  // Maps who is serving the notice to template checkbox flags
+  // =============================================================================
+  // Extract serving capacity from various possible paths
+  // Priority: explicit serving_capacity field > served_by text field
+  const rawServingCapacity = extractString(
+    getFirstValue(wizard, [
+      'notice_service.serving_capacity',  // England MQS maps_to path (primary)
+      'serving_capacity',                  // Direct flat key
+      'notice_capacity',
+      'landlord_capacity',
+      'notice_service.served_by',         // Fall back to served_by if capacity not explicit
+      'notice_served_by',
+      'served_by',
+    ])
+  );
+
+  // Normalize serving capacity to canonical enum
+  // Possible values: 'landlord', 'joint_landlords', 'agent'
+  let servingCapacity: 'landlord' | 'joint_landlords' | 'agent' | null = null;
+
+  if (rawServingCapacity) {
+    const normalized = rawServingCapacity.toLowerCase().trim();
+
+    // Check for agent variants
+    if (
+      normalized.includes('agent') ||
+      normalized.includes('solicitor') ||
+      normalized.includes('representative') ||
+      normalized.includes('letting agent') ||
+      normalized.includes('property manager')
+    ) {
+      servingCapacity = 'agent';
+    }
+    // Check for joint landlords variants
+    else if (
+      normalized.includes('joint landlord') ||
+      normalized.includes('joint licensor') ||
+      normalized.includes('both landlord') ||
+      normalized.includes('co-landlord') ||
+      normalized === 'joint' ||
+      normalized === 'joint_landlords'
+    ) {
+      servingCapacity = 'joint_landlords';
+    }
+    // Default to landlord for various landlord variants
+    else if (
+      normalized.includes('landlord') ||
+      normalized.includes('licensor') ||
+      normalized.includes('owner') ||
+      normalized === 'self' ||
+      normalized === 'myself' ||
+      normalized === 'i will'
+    ) {
+      servingCapacity = 'landlord';
+    }
+    // If none match but value provided, default to landlord
+    else if (normalized.length > 0) {
+      servingCapacity = 'landlord';
+    }
+  }
+
+  // Set canonical serving_capacity
+  templateData.serving_capacity = servingCapacity;
+
+  // Generate boolean flags for template checkbox ticking
+  // These are what the templates use to tick the correct checkbox
+  templateData.is_landlord_serving = servingCapacity === 'landlord';
+  templateData.is_joint_landlords_serving = servingCapacity === 'joint_landlords';
+  templateData.is_agent_serving = servingCapacity === 'agent';
 
   // =============================================================================
   // DEPOSIT & COMPLIANCE
@@ -2199,44 +3531,252 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
     }
   }
 
+  // =============================================================================
+  // SECTION 21 COMPLIANCE FIELDS (CRITICAL FOR S21 VALIDITY)
+  // IMPORTANT: Wizard stores these as *_served but templates expect *_given/*_provided
+  // We check ALL variants to ensure YES values are correctly mapped
+  // FIX: Added nested paths for section21.*, notice_service.*, compliance.* variants
+  // =============================================================================
   templateData.prescribed_info_given = coerceBoolean(
-    getWizardValue(wizard, 'prescribed_info_given')
+    getFirstValue(wizard, [
+      'prescribed_info_given',
+      'prescribed_info_served',  // Section21ComplianceSection uses this
+      'prescribed_info_provided',
+      // Nested section21.* paths
+      'section21.prescribed_info_given',
+      'section21.prescribed_info_served',
+      'section21.prescribed_info_provided',
+      // Nested compliance.* paths
+      'compliance.prescribed_info_given',
+      'compliance.prescribed_info_served',
+      // Nested notice_service.* paths
+      'notice_service.prescribed_info_given',
+    ])
   );
 
   templateData.gas_certificate_provided = coerceBoolean(
-    getFirstValue(wizard, ['gas_certificate_provided', 'gas_safety_cert_provided'])
+    getFirstValue(wizard, [
+      'gas_certificate_provided',
+      'gas_safety_cert_provided',
+      'gas_safety_cert_served',  // Section21ComplianceSection uses this
+      'gas_cert_provided',
+      'gas_cert_served',
+      // Nested section21.* paths
+      'section21.gas_certificate_provided',
+      'section21.gas_safety_cert_provided',
+      'section21.gas_safety_cert_served',
+      'section21.gas_cert_provided',
+      // Nested compliance.* paths
+      'compliance.gas_certificate_provided',
+      'compliance.gas_cert_provided',
+    ])
   );
 
   templateData.gas_safety_cert_provided = coerceBoolean(
-    getFirstValue(wizard, ['gas_safety_cert_provided', 'gas_certificate_provided'])
+    getFirstValue(wizard, [
+      'gas_safety_cert_provided',
+      'gas_safety_cert_served',  // Section21ComplianceSection uses this
+      'gas_certificate_provided',
+      // Nested section21.* paths
+      'section21.gas_safety_cert_provided',
+      'section21.gas_safety_cert_served',
+      'section21.gas_certificate_provided',
+    ])
   );
 
   // Alias for templates that use gas_cert_provided
   templateData.gas_cert_provided = templateData.gas_certificate_provided || templateData.gas_safety_cert_provided;
 
   templateData.how_to_rent_provided = coerceBoolean(
-    getFirstValue(wizard, ['how_to_rent_provided', 'how_to_rent_given'])
+    getFirstValue(wizard, [
+      'how_to_rent_provided',
+      'how_to_rent_given',
+      'how_to_rent_served',  // Section21ComplianceSection uses this
+      // Nested section21.* paths
+      'section21.how_to_rent_provided',
+      'section21.how_to_rent_given',
+      'section21.how_to_rent_served',
+      // Nested compliance.* paths
+      'compliance.how_to_rent_provided',
+      'compliance.how_to_rent_given',
+    ])
   );
 
   templateData.how_to_rent_given = coerceBoolean(
-    getFirstValue(wizard, ['how_to_rent_given', 'how_to_rent_provided'])
+    getFirstValue(wizard, [
+      'how_to_rent_given',
+      'how_to_rent_provided',
+      'how_to_rent_served',  // Section21ComplianceSection uses this
+      // Nested section21.* paths
+      'section21.how_to_rent_given',
+      'section21.how_to_rent_provided',
+      'section21.how_to_rent_served',
+      // Nested compliance.* paths
+      'compliance.how_to_rent_given',
+      'compliance.how_to_rent_provided',
+    ])
   );
 
   templateData.epc_provided = coerceBoolean(
-    getWizardValue(wizard, 'epc_provided')
+    getFirstValue(wizard, [
+      'epc_provided',
+      'epc_served',  // Section21ComplianceSection uses this
+      // Nested section21.* paths
+      'section21.epc_provided',
+      'section21.epc_served',
+      // Nested compliance.* paths
+      'compliance.epc_provided',
+      'compliance.epc_served',
+    ])
   );
 
   templateData.epc_rating = extractString(
-    getWizardValue(wizard, 'epc_rating')
+    getFirstValue(wizard, [
+      'epc_rating',
+      'section21.epc_rating',
+      'compliance.epc_rating',
+    ])
   );
 
-  templateData.hmo_license_required = coerceBoolean(
-    getWizardValue(wizard, 'hmo_license_required')
-  );
+  // =============================================================================
+  // PROPERTY LICENSING (HMO/SELECTIVE)
+  // FIX: Check ALL wizard path variations including property_licensing_required
+  // CRITICAL: Wizard stores licensing_required as a SELECT value, NOT a boolean:
+  //   - 'not_required' → licensing NOT required (false)
+  //   - 'hmo_mandatory', 'hmo_additional', 'selective' → licensing IS required (true)
+  // Also normalize string labels like "No licensing required" → false
+  // =============================================================================
+  const rawLicensingRequired = getFirstValue(wizard, [
+    'hmo_license_required',
+    'licensing_required',
+    'property_licensing_required',  // Common wizard field name
+    // Nested section21.* paths
+    'section21.hmo_license_required',
+    'section21.licensing_required',
+    'section21.property_licensing_required',
+    // Nested property.* paths
+    'property.licensing_required',
+    'property.hmo_license_required',
+    // Nested compliance.* paths
+    'compliance.hmo_license_required',
+    'compliance.licensing_required',
+    'compliance.property_licensing_required',
+  ]);
+
+  // Handle wizard SELECT values and string labels
+  if (rawLicensingRequired !== null && rawLicensingRequired !== undefined) {
+    if (typeof rawLicensingRequired === 'string') {
+      const normalized = rawLicensingRequired.toLowerCase().trim();
+      // 'not_required' or label variations = false (no licensing needed)
+      if (normalized === 'not_required' ||
+          normalized === 'no licensing required' ||
+          normalized === 'not applicable' ||
+          normalized === 'n/a' ||
+          normalized === 'none' ||
+          normalized === 'no' ||
+          normalized === 'false') {
+        templateData.hmo_license_required = false;
+      }
+      // Any other non-empty string value = true (licensing required)
+      else if (normalized === 'hmo_mandatory' ||
+               normalized === 'hmo_additional' ||
+               normalized === 'selective' ||
+               normalized === 'required' ||
+               normalized === 'yes' ||
+               normalized === 'true') {
+        templateData.hmo_license_required = true;
+      }
+      // Unknown string - coerce normally
+      else {
+        templateData.hmo_license_required = coerceBoolean(rawLicensingRequired);
+      }
+    } else {
+      // Boolean or other type - coerce normally
+      templateData.hmo_license_required = coerceBoolean(rawLicensingRequired);
+    }
+  } else {
+    templateData.hmo_license_required = null;
+  }
 
   templateData.hmo_license_valid = coerceBoolean(
-    getWizardValue(wizard, 'hmo_license_valid')
+    getFirstValue(wizard, [
+      'hmo_license_valid',
+      'property_licensed',
+      // Nested section21.* paths
+      'section21.hmo_license_valid',
+      'section21.property_licensed',
+      // Nested compliance.* paths
+      'compliance.hmo_license_valid',
+      'compliance.property_licensed',
+    ])
   );
+
+  // Additional licensing aliases for templates
+  templateData.licensing_required = templateData.hmo_license_required;
+  templateData.property_licensed = templateData.hmo_license_valid;
+
+  // =============================================================================
+  // RETALIATORY EVICTION CHECK
+  // FIX: Map wizard answers to template fields for retaliatory eviction status
+  // CRITICAL: The wizard field is `no_retaliatory_notice` (from Section21ComplianceSection)
+  // Question: "Is this notice being served more than 6 months after any repair complaint?"
+  // If answer is TRUE → no retaliatory eviction concerns → COMPLIANT
+  // =============================================================================
+
+  // Check if there was a repair complaint within 6 months
+  // If explicitly false → means NO complaint → set no_repair_complaint = true
+  const repairComplaintWithin6Months = coerceBoolean(
+    getFirstValue(wizard, [
+      'repair_complaint_within_6_months',
+      'section21.repair_complaint_within_6_months',
+      'compliance.repair_complaint_within_6_months',
+    ])
+  );
+
+  // Check for explicit "retaliatory eviction clear" confirmation
+  // CRITICAL: `no_retaliatory_notice` is the PRIMARY wizard field from Section21ComplianceSection
+  // The question is: "Is this notice being served more than 6 months after any repair complaint?"
+  // If TRUE → means > 6 months since complaint → retaliatory eviction defense won't apply → COMPLIANT
+  const retaliatoryEvictionClear = coerceBoolean(
+    getFirstValue(wizard, [
+      'no_retaliatory_notice',           // PRIMARY: Section21ComplianceSection wizard field
+      'retaliatory_eviction_clear',
+      'no_retaliatory_eviction',
+      'no_repair_complaint',
+      // Nested section21.* paths
+      'section21.no_retaliatory_notice', // Nested variant of primary field
+      'section21.retaliatory_eviction_clear',
+      'section21.no_retaliatory_eviction',
+      'section21.no_repair_complaint',
+      // Nested compliance.* paths
+      'compliance.no_retaliatory_notice',
+      'compliance.retaliatory_eviction_clear',
+      'compliance.no_repair_complaint',
+    ])
+  );
+
+  // Check if repair complaints have been addressed
+  const repairComplaintAddressed = coerceBoolean(
+    getFirstValue(wizard, [
+      'repair_complaint_addressed',
+      'repairs_addressed',
+      'section21.repair_complaint_addressed',
+      'section21.repairs_addressed',
+      'compliance.repair_complaint_addressed',
+    ])
+  );
+
+  // Logic: if repair_complaint_within_6_months is explicitly FALSE, it means no complaint
+  // If retaliatoryEvictionClear is TRUE, it means user confirmed no concerns
+  if (repairComplaintWithin6Months === false || retaliatoryEvictionClear === true) {
+    templateData.no_repair_complaint = true;
+    templateData.retaliatory_eviction_clear = true;
+  } else {
+    templateData.no_repair_complaint = retaliatoryEvictionClear ?? false;
+    templateData.retaliatory_eviction_clear = retaliatoryEvictionClear ?? false;
+  }
+
+  templateData.repair_complaint_addressed = repairComplaintAddressed ?? false;
 
   // =============================================================================
   // WALES-SPECIFIC COMPLIANCE
@@ -2250,11 +3790,207 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
   );
 
   // =============================================================================
+  // WALES-SPECIFIC COMPLIANCE FIELDS
+  // =============================================================================
+  // These are required for Wales compliance checklist templates
+  templateData.rent_smart_wales_number = extractString(
+    getFirstValue(wizard, ['rent_smart_wales_number', 'rsw_number', 'rsw_registration_number'])
+  );
+
+  templateData.written_statement_provided = coerceBoolean(
+    getFirstValue(wizard, ['written_statement_provided', 'written_statement_given', 'occupation_contract_provided'])
+  );
+
+  templateData.written_statement_date = extractString(
+    getFirstValue(wizard, ['written_statement_date', 'written_statement_provided_date', 'occupation_contract_date'])
+  );
+
+  templateData.electrical_cert_provided = coerceBoolean(
+    getFirstValue(wizard, [
+      'electrical_cert_provided',
+      'eicr_provided',
+      'eicr_certificate_provided',
+      'electrical_safety_cert_provided',
+      'compliance.eicr_provided',
+    ])
+  );
+
+  // =============================================================================
+  // WALES COMPLIANCE SCHEMA FIELDS (pre-service checklist)
+  // These map directly from WizardFacts as stored by WalesComplianceSection
+  // =============================================================================
+
+  // Prescribed info - template uses prescribed_info_served, wizard may use either
+  templateData.prescribed_info_served = coerceBoolean(
+    getFirstValue(wizard, [
+      'prescribed_info_served',
+      'prescribed_info_given',
+      'prescribed_info_provided',
+      'compliance.prescribed_info_served',
+    ])
+  );
+
+  // Gas supply and safety
+  templateData.gas_supply_present = coerceBoolean(
+    getFirstValue(wizard, [
+      'gas_supply_present',
+      'has_gas_supply',
+      'gas_supply',
+      'property_has_gas',
+    ])
+  );
+
+  templateData.gas_safety_certificate_valid = coerceBoolean(
+    getFirstValue(wizard, [
+      'gas_safety_certificate_valid',
+      'gas_safety_cert_valid',
+      'gas_safety_cert_provided',
+      'gas_cert_provided',
+      'gas_safety_cert_served',
+      'compliance.gas_safety_cert_provided',
+    ])
+  );
+
+  // EICR - template uses eicr_valid
+  templateData.eicr_valid = coerceBoolean(
+    getFirstValue(wizard, [
+      'eicr_valid',
+      'eicr_provided',
+      'eicr_certificate_valid',
+      'electrical_cert_provided',
+      'electrical_safety_cert_provided',
+      'compliance.eicr_provided',
+    ])
+  );
+
+  // EPC
+  templateData.epc_available = coerceBoolean(
+    getFirstValue(wizard, [
+      'epc_available',
+      'epc_provided',
+      'epc_valid',
+      'compliance.epc_provided',
+    ])
+  );
+
+  // Smoke alarms - schema uses smoke_alarms_working
+  templateData.smoke_alarms_working = coerceBoolean(
+    getFirstValue(wizard, [
+      'smoke_alarms_working',
+      'smoke_alarms_installed',
+      'smoke_alarms_tested',
+      'smoke_alarm_installed',
+      'compliance.smoke_alarms_working',
+    ])
+  );
+  // Aliases for template compatibility
+  templateData.smoke_alarms_installed = templateData.smoke_alarms_working;
+  templateData.smoke_alarms_tested = templateData.smoke_alarms_working;
+
+  // Solid fuel appliance and CO alarms
+  templateData.solid_fuel_appliance_present = coerceBoolean(
+    getFirstValue(wizard, [
+      'solid_fuel_appliance_present',
+      'has_solid_fuel_appliance',
+      'co_alarm_required',
+    ])
+  );
+  // Alias for template compatibility
+  templateData.co_alarm_required = templateData.solid_fuel_appliance_present;
+
+  templateData.co_alarms_working = coerceBoolean(
+    getFirstValue(wizard, [
+      'co_alarms_working',
+      'co_alarm_installed',
+      'co_alarm_working',
+      'co_detector_installed',
+      'compliance.co_alarms_working',
+    ])
+  );
+  // Alias for template compatibility
+  templateData.co_alarm_installed = templateData.co_alarms_working;
+
+  // Fitness for habitation
+  templateData.property_fit_for_habitation = coerceBoolean(
+    getFirstValue(wizard, [
+      'property_fit_for_habitation',
+      'property_fitness_confirmed',
+      'dwelling_fit_for_habitation',
+      'fitness_for_habitation',
+    ])
+  );
+
+  // Eviction safeguards
+  templateData.retaliatory_eviction_complaint = coerceBoolean(
+    getFirstValue(wizard, [
+      'retaliatory_eviction_complaint',
+      'repair_complaint_within_6_months',
+      'recent_repair_complaint',
+    ])
+  );
+
+  templateData.local_authority_investigation = coerceBoolean(
+    getFirstValue(wizard, [
+      'local_authority_investigation',
+      'la_investigation_ongoing',
+      'council_investigation',
+    ])
+  );
+
+  // Wales fault grounds and evidence
+  const walesFaultGrounds = getWizardValue(wizard, 'wales_fault_grounds');
+  if (Array.isArray(walesFaultGrounds)) {
+    templateData.wales_fault_grounds = walesFaultGrounds;
+    // Build display string for template
+    if (walesFaultGrounds.length > 0) {
+      templateData.selected_grounds_display = walesFaultGrounds
+        .map((g: string) => {
+          // Convert ground value to human-readable label
+          const labels: Record<string, string> = {
+            'rent_arrears_serious': 'Section 157 - Serious Rent Arrears',
+            'rent_arrears_other': 'Section 159 - Rent Arrears (Other)',
+            'breach_of_contract': 'Section 159 - Breach of Occupation Contract',
+            'anti_social_behaviour': 'Section 161 - Anti-Social Behaviour',
+            'domestic_abuse': 'Section 159 - Domestic Abuse Perpetrator',
+            'false_statement': 'Section 159 - False Statement',
+            'estate_management': 'Section 160 - Estate Management',
+          };
+          return labels[g] || g;
+        })
+        .join(', ');
+    }
+  } else if (walesFaultGrounds && typeof walesFaultGrounds === 'string') {
+    templateData.wales_fault_grounds = [walesFaultGrounds];
+    templateData.selected_grounds_display = walesFaultGrounds;
+  }
+
+  templateData.evidence_exists = coerceBoolean(
+    getFirstValue(wizard, [
+      'evidence_exists',
+      'evidence_available',
+      'has_evidence',
+      'evidence_confirmed',
+    ])
+  );
+
+  // User declaration
+  templateData.user_declaration = coerceBoolean(
+    getFirstValue(wizard, [
+      'user_declaration',
+      'declaration_confirmed',
+      'compliance_declaration',
+    ])
+  );
+
+  // =============================================================================
   // ROUTE & GROUNDS
   // =============================================================================
   templateData.selected_notice_route = extractString(
     getFirstValue(wizard, ['selected_notice_route', 'eviction_route', 'route_intent'])
   );
+
+  // Preserve raw particulars map for downstream templates
+  templateData.ground_particulars = getWizardValue(wizard, 'ground_particulars');
 
   // Section 8 grounds
   const section8Grounds = getWizardValue(wizard, 'section8_grounds');
@@ -2272,11 +4008,16 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
   // =============================================================================
   // ARREARS DATA
   // =============================================================================
-  const totalArrears = getFirstValue(wizard, ['total_arrears', 'rent_arrears_amount']);
-  templateData.total_arrears = totalArrears !== null ? Number(totalArrears) || null : null;
+  const sharedArrearsAmount = extractSharedArrearsAmount(wizard);
+  const totalArrearsRaw = getFirstValue(wizard, ['total_arrears', 'rent_arrears_amount']);
+  const parsedTotalArrears = parseCurrencyAmount(totalArrearsRaw);
+  const normalizedTotalArrears = parsedTotalArrears ?? sharedArrearsAmount;
+  templateData.total_arrears = normalizedTotalArrears !== null ? normalizedTotalArrears : null;
 
   const arrearsAtNoticeDate = getWizardValue(wizard, 'arrears_at_notice_date');
-  templateData.arrears_at_notice_date = arrearsAtNoticeDate !== null ? Number(arrearsAtNoticeDate) || null : null;
+  const parsedArrearsAtNotice = parseCurrencyAmount(arrearsAtNoticeDate);
+  templateData.arrears_at_notice_date =
+    parsedArrearsAtNotice ?? normalizedTotalArrears ?? null;
 
   const arrearsDurationMonths = getWizardValue(wizard, 'arrears_duration_months');
   templateData.arrears_duration_months = arrearsDurationMonths !== null ? Number(arrearsDurationMonths) || null : null;
@@ -2288,6 +4029,50 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
   const lastPaymentAmount = getWizardValue(wizard, 'last_payment_amount');
   templateData.last_payment_amount = lastPaymentAmount !== null ? Number(lastPaymentAmount) || null : null;
 
+  // Extract arrears_items (canonical arrears schedule data)
+  // This is the SINGLE SOURCE OF TRUTH for arrears - used by both Rent Schedule and Notice
+  const arrearsItemsRaw = getFirstValue(wizard, [
+    'case_facts.issues.rent_arrears.arrears_items',
+    'arrears.items',
+    'arrears_items',
+  ]);
+  let arrearsItems: ArrearsItem[] = [];
+  if (Array.isArray(arrearsItemsRaw)) {
+    arrearsItems = arrearsItemsRaw as ArrearsItem[];
+  } else if (
+    arrearsItemsRaw &&
+    typeof arrearsItemsRaw === 'object' &&
+    Array.isArray((arrearsItemsRaw as any).arrears_items)
+  ) {
+    arrearsItems = (arrearsItemsRaw as any).arrears_items;
+  }
+  templateData.arrears_items = arrearsItems;
+
+  // =============================================================================
+  // CANONICAL ARREARS (NOTICE-ONLY)
+  // =============================================================================
+  const hasArrearsInputs =
+    (Array.isArray(templateData.arrears_items) && templateData.arrears_items.length > 0) ||
+    (templateData.total_arrears ?? 0) > 0;
+
+  if (hasArrearsInputs) {
+    const canonicalArrears = computeEvictionArrears({
+      arrears_items: templateData.arrears_items,
+      total_arrears: templateData.total_arrears,
+      rent_amount: templateData.rent_amount || 0,
+      rent_frequency: templateData.rent_frequency || 'monthly',
+      rent_due_day: templateData.payment_date,
+      schedule_end_date: templateData.notice_date || templateData.service_date || null,
+    });
+
+    templateData.arrears_items = canonicalArrears.items;
+    templateData.total_arrears = canonicalArrears.total;
+    templateData.arrears_at_notice_date =
+      canonicalArrears.arrearsAtNoticeDate ?? templateData.arrears_at_notice_date;
+    templateData.arrears_duration_months = canonicalArrears.arrearsInMonths;
+    templateData.arrears_schedule_data = canonicalArrears.scheduleData;
+  }
+
   // =============================================================================
   // ASB & BREACH DETAILS
   // =============================================================================
@@ -2296,7 +4081,7 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
   );
 
   templateData.breach_description = extractString(
-    getFirstValue(wizard, ['breach_description', 'section8_other_grounds_narrative'])
+    getFirstValue(wizard, ['breach_description', 'breach_details', 'section8_other_grounds_narrative'])
   );
 
   templateData.section8_grounds_narrative = extractString(
@@ -2328,19 +4113,133 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
 
   // =============================================================================
   // DATES: Ensure notice_date, service_date, earliest_possession_date are always set
+  // IMPORTANT: Only default to today if user has not entered a service date.
+  // The canonical resolvers above have already checked all possible paths.
   // =============================================================================
   if (!templateData.notice_date && !templateData.service_date) {
-    // Default to today if no date provided
-    templateData.notice_date = new Date().toISOString().split('T')[0];
-    templateData.service_date = templateData.notice_date;
+    // No user-entered date found - default to today as a fallback
+    // This ensures templates always have a date to work with
+    const todayISO = new Date().toISOString().split('T')[0];
+    templateData.notice_date = todayISO;
+    templateData.service_date = todayISO;
   }
 
-  // Calculate earliest_possession_date if not provided
+  // =============================================================================
+  // SECTION 21 EXPIRY DATE CALCULATION
+  // =============================================================================
+  // For Section 21 (no-fault eviction), we use the dedicated calculator which
+  // implements: 2-month minimum notice, 4-month bar, fixed term constraints,
+  // break clause handling, and rent period alignment for periodic tenancies.
+  // This is different from Section 8 which uses ground-based notice periods.
+  // =============================================================================
+  const isSection21Route = templateData.selected_notice_route === 'section_21';
+
+  if (isSection21Route && !templateData.expiry_date && templateData.service_date && templateData.tenancy_start_date) {
+    try {
+      const s21Params = {
+        service_date: templateData.service_date,
+        tenancy_start_date: templateData.tenancy_start_date,
+        fixed_term: templateData.fixed_term === true,
+        fixed_term_end_date: templateData.fixed_term_end_date || undefined,
+        has_break_clause: templateData.has_break_clause === true,
+        break_clause_date: templateData.break_clause_date || undefined,
+        rent_period: (templateData.rent_frequency || 'monthly') as 'weekly' | 'fortnightly' | 'monthly' | 'quarterly' | 'yearly',
+        periodic_tenancy_start: templateData.periodic_tenancy_start || undefined,
+      };
+
+      const s21ExpiryResult = calculateSection21ExpiryDate(s21Params);
+
+      // Set the calculated expiry date
+      templateData.expiry_date = s21ExpiryResult.earliest_valid_date;
+      templateData.earliest_possession_date = s21ExpiryResult.earliest_valid_date;
+      templateData.notice_period_days = s21ExpiryResult.notice_period_days;
+      templateData.notice_period_months = 2; // S21 always 2 months minimum
+      templateData.notice_period_description = '2 months';
+      templateData.s21_expiry_explanation = s21ExpiryResult.explanation;
+      templateData.s21_expiry_warnings = s21ExpiryResult.warnings;
+
+      console.log(`[mapNoticeOnlyFacts] Section 21 expiry calculated: ${s21ExpiryResult.earliest_valid_date} (${s21ExpiryResult.notice_period_days} days)`);
+      console.log(`[mapNoticeOnlyFacts] Section 21 explanation: ${s21ExpiryResult.explanation}`);
+    } catch (error) {
+      // Log but don't fail - allow fallback to manual entry or default
+      console.warn('[mapNoticeOnlyFacts] Section 21 expiry calculation failed:', error);
+    }
+  }
+
+  // =============================================================================
+  // WALES SECTION 173 EXPIRY DATE CALCULATION
+  // =============================================================================
+  // Section 173 (Renting Homes (Wales) Act 2016) requires 6 months minimum notice.
+  // This is HARD-LOCKED - we do not support the 2-month regime (RHW17).
+  // Expiry date = service_date + 6 calendar months (using addCalendarMonths for legal correctness)
+  // =============================================================================
+  const isWalesSection173Route =
+    templateData.selected_notice_route === 'section_173' ||
+    templateData.selected_notice_route === 'wales_section_173';
+
+  if (isWalesSection173Route && templateData.service_date) {
+    // Use addCalendarMonths for legal correctness (e.g., Jan 31 + 6 months = Jul 31)
+    const addCalendarMonths = (dateStr: string, months: number): string => {
+      const date = new Date(dateStr + 'T00:00:00Z');
+      const originalDay = date.getUTCDate();
+      date.setUTCMonth(date.getUTCMonth() + months);
+      // Handle end-of-month edge cases
+      if (date.getUTCDate() !== originalDay) {
+        date.setUTCDate(0); // Last day of previous month
+      }
+      return date.toISOString().split('T')[0];
+    };
+
+    const SECTION_173_LOCKED_NOTICE_MONTHS = 6;
+    const section173ExpiryDate = addCalendarMonths(templateData.service_date, SECTION_173_LOCKED_NOTICE_MONTHS);
+
+    // Calculate days for logging
+    const serviceDateMs = new Date(templateData.service_date).getTime();
+    const expiryDateMs = new Date(section173ExpiryDate).getTime();
+    const noticePeriodDays = Math.ceil((expiryDateMs - serviceDateMs) / (1000 * 60 * 60 * 24));
+
+    // Set the calculated expiry date
+    templateData.expiry_date = section173ExpiryDate;
+    templateData.earliest_possession_date = section173ExpiryDate;
+    templateData.notice_period_days = noticePeriodDays;
+    templateData.notice_period_months = SECTION_173_LOCKED_NOTICE_MONTHS;
+    templateData.notice_period_description = 'six months';
+
+    console.log(`[mapNoticeOnlyFacts] Wales Section 173 expiry calculated: ${section173ExpiryDate} (${noticePeriodDays} days, 6 months)`);
+  }
+
+  // Calculate earliest_possession_date if not provided (SECTION 8 FALLBACK)
+  // IMPORTANT: Notice period depends on selected grounds!
+  // Most grounds require 2 weeks (14 days); some require 2 months (60 days)
+  // NOTE: This block only runs if Section 21 calculation above didn't set earliest_possession_date
   if (!templateData.earliest_possession_date && templateData.service_date) {
-    const noticePeriodDays = templateData.notice_period_days || 14;
+    // Get selected grounds to calculate required notice period
+    const selectedGrounds = getFirstValue(wizard, [
+      'case_facts.issues.section8_grounds.selected_grounds',
+      'section8_grounds',
+      'section8_grounds_selection',
+      'selected_grounds',
+    ]);
+
+    const groundsList = Array.isArray(selectedGrounds) ? selectedGrounds : (selectedGrounds ? [selectedGrounds] : []);
+
+    // Calculate notice period based on grounds (use max of all selected grounds)
+    const calculatedNoticePeriod = calculateRequiredNoticePeriod(groundsList);
+
+    // Use explicitly provided notice_period_days if available, otherwise use calculated
+    const noticePeriodDays = templateData.notice_period_days || calculatedNoticePeriod;
+
+    // Store the calculated notice period for templates and validation
+    templateData.notice_period_days = noticePeriodDays;
+    templateData.notice_period_weeks = Math.ceil(noticePeriodDays / 7);
+    templateData.notice_period_months = noticePeriodDays >= 60 ? 2 : 0;
+    templateData.notice_period_description = noticePeriodDays >= 60 ? '2 months' : '2 weeks';
+
     const serviceDate = new Date(templateData.service_date);
     const earliestDate = new Date(serviceDate.getTime() + noticePeriodDays * 24 * 60 * 60 * 1000);
     templateData.earliest_possession_date = earliestDate.toISOString().split('T')[0];
+
+    console.log(`[mapNoticeOnlyFacts] Notice period calculated: ${noticePeriodDays} days (${templateData.notice_period_description}) based on grounds: ${groundsList.join(', ')}`);
   }
 
   // =============================================================================
@@ -2354,6 +4253,17 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
     city: propertyCity,
     postcode: propertyPostcode,
     address: templateData.property_address,
+    // full_address alias for Wales compliance_checklist.hbs
+    full_address: templateData.property_address,
+  };
+
+  // Templates expect nested landlord object (Wales compliance checklist uses landlord.full_name)
+  templateData.landlord = {
+    full_name: templateData.landlord_full_name,
+    name_2: templateData.landlord_2_name,
+    address: templateData.landlord_address,
+    phone: templateData.landlord_phone,
+    email: templateData.landlord_email,
   };
 
   // Templates expect nested tenant object
@@ -2382,6 +4292,7 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
 
   // Templates expect nested compliance object
   templateData.compliance = {
+    // Common compliance fields
     gas_cert_provided: templateData.gas_certificate_provided || templateData.gas_safety_cert_provided,
     gas_cert_expiry: null, // Can be added if we have this data
     epc_provided: templateData.epc_provided,
@@ -2389,11 +4300,67 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
     how_to_rent_given: templateData.how_to_rent_given || templateData.how_to_rent_provided,
     hmo_license_required: templateData.hmo_license_required,
     hmo_license_valid: templateData.hmo_license_valid,
+    // Wales-specific compliance fields (Renting Homes (Wales) Act 2016)
+    rent_smart_wales_registered: templateData.rent_smart_wales_registered,
+    rent_smart_wales_number: templateData.rent_smart_wales_number,
+    written_statement_provided: templateData.written_statement_provided,
+    written_statement_date: templateData.written_statement_date,
+    electrical_cert_provided: templateData.electrical_cert_provided,
+  };
+
+  // Templates expect nested notice object (for Wales compliance_checklist.hbs route conditionals)
+  templateData.notice = {
+    route: templateData.selected_notice_route,
+    date: templateData.notice_date,
+    expiry_date: templateData.notice_expiry_date || templateData.earliest_possession_date,
   };
 
   // Templates expect notice_service_date and notice_expiry_date (in addition to service_date and expiry_date)
   templateData.notice_service_date = templateData.service_date || templateData.notice_date;
   templateData.notice_expiry_date = templateData.expiry_date || templateData.earliest_possession_date;
+
+  // Additional date aliases for template compatibility (COMPLIANCE-CRITICAL)
+  // Templates may use different variable names for the same date
+  templateData.intended_service_date = templateData.service_date || templateData.notice_date;
+  templateData.date_of_service = templateData.service_date || templateData.notice_date;
+  templateData.served_on = templateData.service_date || templateData.notice_date;
+
+  // =============================================================================
+  // FORMATTED DATES FOR PDF TEMPLATES (UK Legal Format: "15 January 2026")
+  // =============================================================================
+  // Service Instructions and Checklist templates expect *_formatted fields
+  templateData.service_date_formatted = formatUkLegalDate(templateData.service_date);
+  templateData.notice_date_formatted = formatUkLegalDate(templateData.notice_date);
+  templateData.earliest_possession_date_formatted = formatUkLegalDate(templateData.earliest_possession_date);
+  templateData.tenancy_start_date_formatted = formatUkLegalDate(templateData.tenancy_start_date);
+  templateData.notice_expiry_date_formatted = formatUkLegalDate(templateData.notice_expiry_date || templateData.earliest_possession_date);
+  templateData.expiry_date_formatted = formatUkLegalDate(templateData.expiry_date || templateData.earliest_possession_date);
+  templateData.fixed_term_end_date_formatted = formatUkLegalDate(templateData.fixed_term_end_date);
+
+  // =============================================================================
+  // SECTION 21 SPECIFIC DATE ALIASES
+  // =============================================================================
+  // S21 Service Instructions and Validity Checklist templates use display_possession_date_formatted
+  // This is the "possession date" that appears in the notice and tells tenant when to leave
+  // For S21 this is typically notice_expiry_date or earliest_possession_date
+  templateData.display_possession_date_formatted =
+    templateData.notice_expiry_date_formatted ||
+    templateData.earliest_possession_date_formatted ||
+    null;
+
+  // Also provide raw display_possession_date for templates that use format_date helper
+  templateData.display_possession_date =
+    templateData.notice_expiry_date ||
+    templateData.earliest_possession_date ||
+    null;
+
+  // =============================================================================
+  // GROUND DESCRIPTIONS FOR CHECKLISTS
+  // =============================================================================
+  // Checklist template expects ground_descriptions as a readable string
+  templateData.ground_descriptions = buildGroundDescriptions(templateData.grounds);
+  // Also provide has_mandatory_ground flag for conditional rendering
+  templateData.has_mandatory_ground = Array.isArray(templateData.grounds) && templateData.grounds.some((g: any) => g.mandatory);
 
   // Templates expect metadata.generated_at for generation timestamp
   const now = new Date();
@@ -2423,6 +4390,8 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
   // Also provide flat generation fields for backward compatibility
   templateData.generation_timestamp = now.toISOString();
   templateData.generation_date = now.toISOString().split('T')[0];
+  // Templates also use generated_date (without underscore prefix) - add as alias
+  templateData.generated_date = formatUkLegalDate(templateData.generation_date);
 
   console.log('[mapNoticeOnlyFacts] Mapped Notice Only template data');
   console.log('[mapNoticeOnlyFacts] Landlord:', templateData.landlord_full_name);
@@ -2434,6 +4403,7 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
   console.log('[mapNoticeOnlyFacts] Grounds:', templateData.grounds.length);
   console.log('[mapNoticeOnlyFacts] Dates - notice:', templateData.notice_date, 'service:', templateData.service_date, 'earliest:', templateData.earliest_possession_date);
   console.log('[mapNoticeOnlyFacts] Deposit - amount:', templateData.deposit_amount, 'protected:', templateData.deposit_protected, 'scheme:', templateData.deposit_scheme);
+  console.log('[mapNoticeOnlyFacts] Serving capacity:', templateData.serving_capacity, '- landlord:', templateData.is_landlord_serving, 'joint:', templateData.is_joint_landlords_serving, 'agent:', templateData.is_agent_serving);
 
   // PACK DOCUMENT DEBUG - Log what pack templates will receive
   console.log('[mapNoticeOnlyFacts] === PACK DOCUMENT DATA ===');
@@ -2445,6 +4415,12 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
   console.log('[mapNoticeOnlyFacts] notice_service_date:', templateData.notice_service_date);
   console.log('[mapNoticeOnlyFacts] notice_expiry_date:', templateData.notice_expiry_date);
   console.log('[mapNoticeOnlyFacts] jurisdiction_display:', templateData.jurisdiction_display);
+  // Formatted date fields (for Service Instructions and Checklist PDFs)
+  console.log('[mapNoticeOnlyFacts] service_date_formatted:', templateData.service_date_formatted);
+  console.log('[mapNoticeOnlyFacts] earliest_possession_date_formatted:', templateData.earliest_possession_date_formatted);
+  console.log('[mapNoticeOnlyFacts] tenancy_start_date_formatted:', templateData.tenancy_start_date_formatted);
+  console.log('[mapNoticeOnlyFacts] ground_descriptions:', templateData.ground_descriptions);
+  console.log('[mapNoticeOnlyFacts] has_mandatory_ground:', templateData.has_mandatory_ground);
   console.log('[mapNoticeOnlyFacts] ===========================');
 
   return templateData;

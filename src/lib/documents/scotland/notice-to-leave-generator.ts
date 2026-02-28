@@ -77,6 +77,9 @@ export interface NoticeToLeaveData {
   // Grounds
   grounds: NoticeToLeaveGround[];
 
+  // Pre-action protocol (for Ground 1/12 with pre-action, allows 28-day notice)
+  pre_action_completed?: boolean;
+
   // Ground-specific flags
   ground_1_claimed?: boolean; // Rent arrears
   ground_2_claimed?: boolean; // Breach of tenancy
@@ -573,6 +576,7 @@ export async function generateNoticeToLeave(
   const dateParams: NoticeToLeaveDateParams = {
     service_date: noticeDate,
     grounds: data.grounds.map((g) => ({ number: g.number })),
+    pre_action_completed: data.pre_action_completed,
   };
 
   // If earliest_leaving_date is provided, validate it
@@ -611,9 +615,9 @@ export async function generateNoticeToLeave(
     is_preview: isPreview,
   };
 
-  // Generate from template
+  // Generate from template - use official HTML template (matches prescribed form)
   return generateDocument({
-    templatePath: 'uk/scotland/templates/eviction/notice_to_leave.hbs',
+    templatePath: 'uk/scotland/templates/eviction/notice_to_leave_official.hbs',
     data: enrichedData,
     isPreview,
     outputFormat,

@@ -27,8 +27,7 @@
       "Deposit protection certificate",
       "Gas safety certificate (if property has gas)",
       "Energy Performance Certificate (EPC)",
-      "Electrical Installation Condition Report (EICR) if required",
-      "Evidence of right to rent compliance"
+      "Electrical Installation Condition Report (EICR) if required"
     ]
   },
   "grounds": {
@@ -53,7 +52,10 @@
         "Unreasonable to evict given tenant's circumstances"
       ],
       "typical_success_rate": "70%",
-      "notes": "Cannot be used if landlord has already used this ground for the same property in the previous 5 years. Must actually put property on market within 3 months."
+      "notes": "Cannot be used if landlord has already used this ground for the same property in the previous 5 years. Must actually put property on market within 3 months.",
+      "number": 1,
+      "description": "The landlord intends to sell the let property within 3 months of the termination date specified in the notice.",
+      "legal_reference": "Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 1"
     },
     "ground_2": {
       "code": "Ground 2",
@@ -76,7 +78,10 @@
         "Unreasonable to evict"
       ],
       "typical_success_rate": "85%",
-      "notes": "Usually granted when property is being repossessed by mortgage lender."
+      "notes": "Usually granted when property is being repossessed by mortgage lender.",
+      "number": 2,
+      "description": "A lender who holds a standard security over the let property intends to sell it.",
+      "legal_reference": "Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 2"
     },
     "ground_3": {
       "code": "Ground 3",
@@ -101,7 +106,10 @@
         "Unreasonable to evict"
       ],
       "typical_success_rate": "65%",
-      "notes": "Must be substantial refurbishment that genuinely requires vacant possession. Cosmetic works insufficient."
+      "notes": "Must be substantial refurbishment that genuinely requires vacant possession. Cosmetic works insufficient.",
+      "number": 3,
+      "description": "The landlord intends to refurbish the let property and cannot reasonably do so while tenant occupies it.",
+      "legal_reference": "Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 3"
     },
     "ground_4": {
       "code": "Ground 4",
@@ -124,7 +132,10 @@
         "Unreasonable to evict given tenant's circumstances"
       ],
       "typical_success_rate": "75%",
-      "notes": "Cannot be used if landlord has already used this ground for the same property in previous 5 years."
+      "notes": "Cannot be used if landlord has already used this ground for the same property in previous 5 years.",
+      "number": 4,
+      "description": "The landlord intends to occupy the let property as their only or principal home.",
+      "legal_reference": "Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 4"
     },
     "ground_5": {
       "code": "Ground 5",
@@ -147,7 +158,110 @@
         "Unreasonable to evict"
       ],
       "typical_success_rate": "70%",
-      "notes": "Family member includes spouse, civil partner, parent, child, sibling, grandparent, grandchild."
+      "notes": "Family member includes spouse, civil partner, parent, child, sibling, grandparent, grandchild.",
+      "number": 5,
+      "description": "A member of the landlord's family intends to occupy the let property as their only or principal home.",
+      "legal_reference": "Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 5"
+    },
+    "ground_6": {
+      "code": "Ground 6",
+      "title": "Change of Use - Non-Residential",
+      "shortDescription": "The landlord intends to use the let property for a non-residential purpose.",
+      "fullText": "The landlord intends to use the let property for a purpose other than providing a home. The Tribunal may make an eviction order on this ground only if it is satisfied that it is reasonable to issue an eviction order on account of those facts.",
+      "statute": "Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Part 1, Ground 6",
+      "notice_required": true,
+      "notice_period_days": 84,
+      "tribunal_decision": "Discretionary - tribunal must be satisfied it is reasonable to evict",
+      "required_evidence": [
+        "Plans showing intended non-residential use",
+        "Planning permission or change-of-use application (if required)",
+        "Timeline for conversion works"
+      ],
+      "common_defences": [
+        "No genuine intention to change use",
+        "Change of use could occur with tenant in occupation",
+        "Unreasonable to evict given tenant's circumstances"
+      ],
+      "typical_success_rate": "65%",
+      "notes": "84-day notice period. Requires credible plan to take property out of residential use.",
+      "number": 6,
+      "description": "The landlord intends to use the let property for a non-residential purpose.",
+      "legal_reference": "Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 6"
+    },
+    "ground_7": {
+      "code": "Ground 7",
+      "title": "Religious Worker Accommodation",
+      "shortDescription": "The property is required for use by a religious worker.",
+      "fullText": "The let property is held for use for the purpose of a minister or full-time lay missionary of a religious denomination, and is required for that purpose. The Tribunal may make an eviction order on this ground only if it is satisfied that it is reasonable to issue an eviction order on account of those facts.",
+      "statute": "Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Part 1, Ground 7",
+      "notice_required": true,
+      "notice_period_days": 84,
+      "tribunal_decision": "Discretionary - tribunal must be satisfied it is reasonable to evict",
+      "required_evidence": [
+        "Evidence property is held for religious worker use",
+        "Statement of need from the religious body",
+        "Timeline showing when the property is required"
+      ],
+      "common_defences": [
+        "Property not genuinely required for religious worker",
+        "Alternative accommodation is available",
+        "Unreasonable to evict given tenant's circumstances"
+      ],
+      "typical_success_rate": "60%",
+      "notes": "84-day notice period. Must show genuine requirement for a minister or missionary.",
+      "number": 7,
+      "description": "The property is required for use by a religious worker.",
+      "legal_reference": "Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 7"
+    },
+    "ground_8": {
+      "code": "Ground 8",
+      "title": "No Longer Employee",
+      "shortDescription": "Tenant is no longer an employee of the landlord and the tenancy was linked to employment.",
+      "fullText": "The tenant is no longer, or never became, an employee of the landlord and the tenancy was granted in connection with that employment. The Tribunal may make an eviction order on this ground only if it is satisfied that it is reasonable to issue an eviction order on account of those facts.",
+      "statute": "Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Part 1, Ground 8",
+      "notice_required": true,
+      "notice_period_days": 84,
+      "tribunal_decision": "Discretionary - tribunal must be satisfied it is reasonable to evict",
+      "required_evidence": [
+        "Employment contract linking housing to employment",
+        "Proof employment has ended or was not taken up",
+        "Correspondence confirming end of employment"
+      ],
+      "common_defences": [
+        "Employment still ongoing",
+        "Housing not genuinely tied to employment",
+        "Unreasonable to evict"
+      ],
+      "typical_success_rate": "70%",
+      "notes": "84-day notice period. Often used for tied accommodation when employment ends.",
+      "number": 8,
+      "description": "Tenant is no longer an employee of the landlord and the tenancy was linked to employment.",
+      "legal_reference": "Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 8"
+    },
+    "ground_9": {
+      "code": "Ground 9",
+      "title": "No Longer Requires Supported Accommodation",
+      "shortDescription": "The tenant no longer needs the supported accommodation provided at the let property.",
+      "fullText": "The tenant has been provided with supported accommodation and no longer requires that support. The Tribunal may make an eviction order on this ground only if it is satisfied that it is reasonable to issue an eviction order on account of those facts.",
+      "statute": "Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Part 2, Ground 9",
+      "notice_required": true,
+      "notice_period_days": 28,
+      "tribunal_decision": "Discretionary - tribunal must be satisfied it is reasonable to evict",
+      "required_evidence": [
+        "Evidence of original support needs",
+        "Assessment showing support is no longer required",
+        "Care/support provider statement"
+      ],
+      "common_defences": [
+        "Support is still required",
+        "No suitable alternative accommodation",
+        "Unreasonable to evict"
+      ],
+      "typical_success_rate": "65%",
+      "notes": "28-day notice period. Often used by supported accommodation providers when support ends.",
+      "number": 9,
+      "description": "The tenant no longer needs the supported accommodation provided at the let property.",
+      "legal_reference": "Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 9"
     },
     "ground_10": {
       "code": "Ground 10",
@@ -172,7 +286,36 @@
         "Unreasonable to evict"
       ],
       "typical_success_rate": "60%",
-      "notes": "Shorter 28-day notice period. Breach must be material. Minor breaches unlikely to succeed."
+      "notes": "Shorter 28-day notice period. Breach must be material. Minor breaches unlikely to succeed.",
+      "number": 10,
+      "description": "The tenant has breached a term of the tenancy (other than rent payment).",
+      "legal_reference": "Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 10"
+    },
+    "ground_11": {
+      "code": "Ground 11",
+      "title": "Tenant Not Occupying Let Property",
+      "shortDescription": "The tenant is no longer occupying the let property as their home.",
+      "fullText": "The tenant is not occupying the let property as the tenant's home. The Tribunal may make an eviction order on this ground only if it is satisfied that it is reasonable to issue an eviction order on account of those facts.",
+      "statute": "Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Part 3, Ground 11",
+      "notice_required": true,
+      "notice_period_days": 28,
+      "tribunal_decision": "Discretionary - tribunal must be satisfied it is reasonable to evict",
+      "required_evidence": [
+        "Inspection records showing property not occupied",
+        "Utility usage data indicating vacancy",
+        "Neighbor statements about non-occupation",
+        "Correspondence with tenant about absence"
+      ],
+      "common_defences": [
+        "Tenant is occupying or has valid reason for temporary absence",
+        "Insufficient evidence of non-occupation",
+        "Unreasonable to evict"
+      ],
+      "typical_success_rate": "65%",
+      "notes": "28-day notice period. Often relies on circumstantial evidence of vacancy.",
+      "number": 11,
+      "description": "The tenant is no longer occupying the let property as their home.",
+      "legal_reference": "Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 11"
     },
     "ground_12": {
       "code": "Ground 12",
@@ -195,7 +338,10 @@
         "Unreasonable to evict despite conviction"
       ],
       "typical_success_rate": "85%",
-      "notes": "28-day notice period. Must be actual criminal conviction."
+      "notes": "28-day notice period. Must be actual criminal conviction.",
+      "number": 12,
+      "description": "The tenant has been convicted of using the let property, or allowing it to be used, for immoral or illegal purposes.",
+      "legal_reference": "Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 12"
     },
     "ground_13": {
       "code": "Ground 13",
@@ -221,7 +367,10 @@
         "Unreasonable to evict"
       ],
       "typical_success_rate": "80%",
-      "notes": "28-day notice period. 'Relevant antisocial behaviour' includes causing alarm, distress, nuisance, or annoyance."
+      "notes": "28-day notice period. 'Relevant antisocial behaviour' includes causing alarm, distress, nuisance, or annoyance.",
+      "number": 13,
+      "description": "The tenant has engaged in antisocial behaviour.",
+      "legal_reference": "Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 13"
     },
     "ground_14": {
       "code": "Ground 14",
@@ -246,7 +395,85 @@
         "Unreasonable to evict"
       ],
       "typical_success_rate": "65%",
-      "notes": "28-day notice period. Must show both association and antisocial behaviour."
+      "notes": "28-day notice period. Must show both association and antisocial behaviour.",
+      "number": 14,
+      "description": "The tenant associates in the let property with a person who has engaged in antisocial behaviour.",
+      "legal_reference": "Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 14"
+    },
+    "ground_15": {
+      "code": "Ground 15",
+      "title": "Landlord Registration / Fit and Proper",
+      "shortDescription": "The landlord is not registered or has ceased to be registered.",
+      "fullText": "The landlord is not, or has ceased to be, registered by the local council or is no longer regarded as fit and proper. The Tribunal may make an eviction order on this ground only if it is satisfied that it is reasonable to issue an eviction order on account of those facts.",
+      "statute": "Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Part 4, Ground 15",
+      "notice_required": true,
+      "notice_period_days": 28,
+      "tribunal_decision": "Discretionary - tribunal must be satisfied it is reasonable to evict",
+      "required_evidence": [
+        "Local authority notice of refusal or removal from landlord register",
+        "Correspondence confirming landlord not fit and proper",
+        "Details of appeals (if any)"
+      ],
+      "common_defences": [
+        "Registration remains valid",
+        "Appeal pending against deregistration",
+        "Unreasonable to evict given tenant's circumstances"
+      ],
+      "typical_success_rate": "70%",
+      "notes": "28-day notice period. Tied to landlord registration compliance.",
+      "number": 15,
+      "description": "The landlord is not registered or has ceased to be registered.",
+      "legal_reference": "Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 15"
+    },
+    "ground_16": {
+      "code": "Ground 16",
+      "title": "HMO Licence Revoked or Refused",
+      "shortDescription": "The HMO licence for the property has been revoked or an application has been refused.",
+      "fullText": "The HMO licence relating to the let property has been revoked by the local council or an application for an HMO licence has been refused. The Tribunal may make an eviction order on this ground only if it is satisfied that it is reasonable to issue an eviction order on account of those facts.",
+      "statute": "Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Part 4, Ground 16",
+      "notice_required": true,
+      "notice_period_days": 28,
+      "tribunal_decision": "Discretionary - tribunal must be satisfied it is reasonable to evict",
+      "required_evidence": [
+        "Local authority notice revoking or refusing HMO licence",
+        "Reasons for revocation or refusal",
+        "Any appeal documentation"
+      ],
+      "common_defences": [
+        "Licence still valid or reinstated",
+        "Appeal pending",
+        "Unreasonable to evict while compliance steps underway"
+      ],
+      "typical_success_rate": "65%",
+      "notes": "28-day notice period. Applies where HMO licence cannot be lawfully maintained.",
+      "number": 16,
+      "description": "The HMO licence for the property has been revoked or an application has been refused.",
+      "legal_reference": "Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 16"
+    },
+    "ground_17": {
+      "code": "Ground 17",
+      "title": "Overcrowding Statutory Notice",
+      "shortDescription": "An overcrowding statutory notice has been served on the landlord or tenant.",
+      "fullText": "An overcrowding statutory notice has been served in respect of the let property. The Tribunal may make an eviction order on this ground only if it is satisfied that it is reasonable to issue an eviction order on account of those facts.",
+      "statute": "Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Part 4, Ground 17",
+      "notice_required": true,
+      "notice_period_days": 28,
+      "tribunal_decision": "Discretionary - tribunal must be satisfied it is reasonable to evict",
+      "required_evidence": [
+        "Copy of overcrowding statutory notice",
+        "Details of occupancy levels",
+        "Local authority correspondence"
+      ],
+      "common_defences": [
+        "Notice withdrawn or complied with",
+        "Occupancy within permitted limits",
+        "Unreasonable to evict"
+      ],
+      "typical_success_rate": "60%",
+      "notes": "28-day notice period. Used to address statutory overcrowding notices.",
+      "number": 17,
+      "description": "An overcrowding statutory notice has been served on the landlord or tenant.",
+      "legal_reference": "Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 17"
     },
     "ground_18": {
       "code": "Ground 18",
@@ -272,13 +499,20 @@
         "Unreasonable to evict given circumstances"
       ],
       "typical_success_rate": "75%",
-      "notes": "28-day notice period. Must be continuous arrears for 3 months. Tribunal will consider tenant's circumstances and whether eviction is reasonable."
+      "notes": "28-day notice period. Must be continuous arrears for 3 months. Tribunal will consider tenant's circumstances and whether eviction is reasonable.",
+      "number": 18,
+      "description": "The tenant has been in rent arrears for 3 or more consecutive months.",
+      "legal_reference": "Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 18"
     }
   },
   "compliance_requirements": {
     "deposit_protection": {
       "required": true,
-      "schemes": ["SafeDeposits Scotland", "Letting Protection Service Scotland", "MyDeposits Scotland"],
+      "schemes": [
+        "SafeDeposits Scotland",
+        "Letting Protection Service Scotland",
+        "MyDeposits Scotland"
+      ],
       "timeframe": "30 working days from receiving deposit",
       "penalty": "Up to 3 times deposit amount",
       "notes": "Must protect deposit in approved scheme and provide prescribed information"
@@ -293,7 +527,10 @@
     "epc": {
       "required": true,
       "minimum_rating": "E",
-      "exemptions": ["Listed buildings", "Buildings in conservation areas (with local authority consent)"],
+      "exemptions": [
+        "Listed buildings",
+        "Buildings in conservation areas (with local authority consent)"
+      ],
       "penalty": "£1,000 fine",
       "notes": "Must be provided before marketing property"
     },

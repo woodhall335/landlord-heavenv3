@@ -7,7 +7,7 @@
 <h2>Tenancy background</h2>
 <p>
   The Defendant occupies the above property under an assured shorthold tenancy that commenced on
-  {{tenancy_start_date}}. Rent is {{currency rent_amount}} per {{rent_frequency}}, payable in advance on
+  {{tenancy_start_date}}. Rent is {{currency rent_amount}} {{rent_frequency}}, payable in advance on
   the {{payment_day}} of each period.
 </p>
 
@@ -36,12 +36,14 @@
 </ul>
 {{/if}}
 
+{{#if claim_interest}}
 <h2>Interest</h2>
 <p>
   The Claimant claims interest pursuant to section 69 County Courts Act 1984 at {{interest_rate}}% per annum
   from {{interest_start_date}} to {{generation_date}}, calculated at {{currency interest_to_date}}, and continuing at
   {{currency daily_interest}} per day until judgment or earlier payment.
 </p>
+{{/if}}
 
 <h2>Relief sought</h2>
 <ol>
@@ -50,12 +52,15 @@
   {{#if solicitor_costs}}
   <li>Fixed legal costs of {{currency solicitor_costs}}</li>
   {{/if}}
+  {{#if claim_interest}}
   <li>Interest under section 69 CCA 1984</li>
+  {{/if}}
 </ol>
 
 <h2>Statement of truth</h2>
 <p>
   I believe that the facts stated in these particulars of claim are true.
 </p>
-<p>Signed: {{signatory_name}}</p>
-<p>Dated: {{signature_date}}</p>
+<p>Signed: _________________________ ({{signatory_name}})</p>
+<p>Dated: _________________________ {{#if signature_date}}({{signature_date}}){{else}}(To be signed and dated before filing){{/if}}</p>
+<p><em><strong>Important:</strong> This document must be signed and dated by the claimant or their legal representative before filing with the court.</em></p>

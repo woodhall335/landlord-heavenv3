@@ -1,23 +1,28 @@
 import { Metadata } from 'next';
+import { getCanonicalUrl } from '@/lib/seo';
 
 export const metadata: Metadata = {
-  title: 'Free Section 21 Notice Generator | Landlord Heaven',
+  title: 'Free Section 21 Notice Generator | Create Form 6A Online',
   description:
-    'Generate a free Section 21 notice template for England & Wales. Get a court-ready version with legal validation for £14.99. Free landlord tool.',
+    'Generate a free Section 21 notice (Form 6A) for England. Our generator creates a valid no-fault eviction notice with correct notice periods. Download as PDF instantly.',
   keywords: [
     'free section 21 notice generator',
-    'section 21 template',
-    'eviction notice UK',
-    'section 21 form',
-    'landlord tools',
-    'free eviction notice',
-    'section 21 notice England Wales',
+    'section 21 generator',
+    'form 6a generator',
+    'create section 21 notice',
+    'section 21 notice free',
+    'eviction notice generator',
+    'no fault eviction notice',
   ],
   openGraph: {
     title: 'Free Section 21 Notice Generator | Landlord Heaven',
     description:
-      'Generate a free Section 21 notice template. Upgrade for court-ready version.',
+      'Create a valid Section 21 notice (Form 6A) in minutes. Free generator for England landlords.',
     type: 'website',
+    url: getCanonicalUrl('/tools/free-section-21-notice-generator'),
+  },
+  alternates: {
+    canonical: getCanonicalUrl('/tools/free-section-21-notice-generator'),
   },
 };
 
@@ -37,7 +42,7 @@ export default function FreeSection21Layout({
             '@type': 'HowTo',
             name: 'How to Generate a Section 21 Notice',
             description:
-              'Generate a Section 21 notice template for ending an assured shorthold tenancy in England & Wales',
+              'Generate a Section 21 notice template for ending an assured shorthold tenancy in England',
             estimatedCost: {
               '@type': 'MonetaryAmount',
               currency: 'GBP',

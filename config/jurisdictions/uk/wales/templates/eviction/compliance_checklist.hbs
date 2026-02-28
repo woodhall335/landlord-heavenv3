@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Pre-Service Compliance Checklist - Wales</title>
+  <style>
+    /* ===== HARMONIZED DESIGN - Matches checklist_fault_based.hbs ===== */
+    body { font-family: Arial, sans-serif; font-size: 11pt; line-height: 1.5; color: #333; }
+    .header { text-align: center; border-bottom: 2px solid #1a1a1a; padding-bottom: 15px; margin-bottom: 20px; }
+    h1 { color: #1a1a1a; margin-bottom: 5px; font-size: 18pt; font-weight: 600; }
+    h2 { color: #1a1a1a; font-size: 14pt; margin-top: 25px; border-bottom: 1px solid #ddd; padding-bottom: 5px; font-weight: 600; }
+    .subtitle { color: #555; font-size: 12pt; }
+    .case-info { background: #f5f5f5; padding: 15px; margin-bottom: 20px; }
+    .case-info p { margin: 5px 0; }
+    .checklist-section { margin: 20px 0; }
+    .check-item { display: flex; align-items: flex-start; margin: 10px 0; padding: 10px; background: #fafafa; border-left: 4px solid #ddd; }
+    .check-item.critical { border-left-color: #1a1a1a; background: #f5f5f5; }
+    .check-item.pass { border-left-color: #28a745; }
+    .check-item.fail { border-left-color: #dc3545; }
+    .check-item.warning { border-left-color: #f59e0b; background: #fffbeb; }
+    .checkbox { width: 20px; height: 20px; border: 2px solid #333; margin-right: 15px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+    .checkbox.checked { background: #28a745; color: white; border-color: #28a745; }
+    .checkbox.failed { background: #dc3545; color: white; border-color: #dc3545; }
+    .check-content { flex: 1; }
+    .check-title { font-weight: bold; }
+    .check-detail { font-size: 10pt; color: #666; margin-top: 5px; }
+    .critical-warning { background: #f5f5f5; border: 2px solid #1a1a1a; padding: 15px; margin: 20px 0; }
+    .critical-warning strong { color: #1a1a1a; }
+    .info-box { background: #f0f9ff; border: 1px solid #0c5460; padding: 15px; margin: 15px 0; }
+    .footer { margin-top: 30px; text-align: center; font-size: 10pt; color: #777; border-top: 1px solid #ddd; padding-top: 15px; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>PRE-SERVICE COMPLIANCE CHECKLIST</h1>
+    <p class="subtitle">Wales - Renting Homes (Wales) Act 2016</p>
+  </div>
+
+  <div class="case-info">
+    <p><strong>Property:</strong> {{property.full_address}}</p>
+    <p><strong>Landlord:</strong> {{landlord.full_name}}</p>
+    <p><strong>Contract-Holder:</strong> {{tenant.full_name}}</p>
+    <p><strong>Notice Type:</strong> {{#if (or (eq notice.route 'wales_section_173') (eq notice.route 'section_173'))}}Section 173 (No-Fault){{else}}Fault-Based{{/if}}</p>
+    <p><strong>Date:</strong> {{generated_date}}</p>
+  </div>
+
+  <div class="critical-warning">
+    <strong>⚠️ CRITICAL - WALES REQUIREMENTS</strong>
+    <p>The Renting Homes (Wales) Act 2016 applies to all occupation contracts in Wales. You MUST ensure compliance with Welsh-specific requirements before serving any notice.</p>
+  </div>
+
+  <h2>1. Rent Smart Wales (CRITICAL)</h2>
+  <div class="checklist-section">
+    <div class="check-item critical">
+      <div class="checkbox {{#if compliance.rent_smart_wales_registered}}checked{{else}}failed{{/if}}">
+        {{#if compliance.rent_smart_wales_registered}}✓{{else}}✗{{/if}}
+      </div>
+      <div class="check-content">
+        <div class="check-title">Registered with Rent Smart Wales</div>
+        <div class="check-detail">
+          {{#if compliance.rent_smart_wales_registered}}
+            Registration confirmed. Number: {{compliance.rent_smart_wales_number}}
+          {{else}}
+            You are NOT registered with Rent Smart Wales. You CANNOT serve a valid eviction notice without registration. Register immediately at rentsmartswales.gov.wales
+          {{/if}}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2>2. Written Statement</h2>
+  <div class="checklist-section">
+    <div class="check-item">
+      <div class="checkbox {{#if compliance.written_statement_provided}}checked{{/if}}">
+        {{#if compliance.written_statement_provided}}✓{{/if}}
+      </div>
+      <div class="check-content">
+        <div class="check-title">Written Statement Provided</div>
+        <div class="check-detail">The written statement of the occupation contract must be provided to the contract-holder within 14 days of occupation commencing.</div>
+      </div>
+    </div>
+  </div>
+
+  <h2>3. Deposit Protection</h2>
+  <div class="checklist-section">
+    {{#if deposit.taken}}
+    <div class="check-item">
+      <div class="checkbox {{#if deposit.protected}}checked{{else}}failed{{/if}}">
+        {{#if deposit.protected}}✓{{else}}✗{{/if}}
+      </div>
+      <div class="check-content">
+        <div class="check-title">Deposit Protected</div>
+        <div class="check-detail">
+          {{#if deposit.protected}}
+            Deposit of £{{deposit.amount}} protected with {{deposit.scheme_name}}.
+          {{else}}
+            Deposit has NOT been protected. {{#if (or (eq notice.route 'wales_section_173') (eq notice.route 'section_173'))}}You must protect it before serving a Section 173 notice.{{else}}You should protect it to avoid deposit-related defences.{{/if}}
+          {{/if}}
+        </div>
+      </div>
+    </div>
+    <div class="check-item">
+      <div class="checkbox {{#if deposit.prescribed_info_given}}checked{{/if}}">
+        {{#if deposit.prescribed_info_given}}✓{{/if}}
+      </div>
+      <div class="check-content">
+        <div class="check-title">Prescribed Information Provided</div>
+        <div class="check-detail">The prescribed information about the deposit protection must be given to the contract-holder within 30 days.</div>
+      </div>
+    </div>
+    {{else}}
+    <div class="check-item">
+      <div class="checkbox checked">✓</div>
+      <div class="check-content">
+        <div class="check-title">No Deposit Taken</div>
+        <div class="check-detail">No deposit was taken for this occupation contract.</div>
+      </div>
+    </div>
+    {{/if}}
+  </div>
+
+  <h2>4. Safety Certificates</h2>
+  <div class="checklist-section">
+    <div class="check-item">
+      <div class="checkbox {{#if compliance.gas_cert_provided}}checked{{/if}}">
+        {{#if compliance.gas_cert_provided}}✓{{/if}}
+      </div>
+      <div class="check-content">
+        <div class="check-title">Gas Safety Certificate</div>
+        <div class="check-detail">A valid gas safety certificate must be provided annually and a copy given to the contract-holder.</div>
+      </div>
+    </div>
+    <div class="check-item">
+      <div class="checkbox {{#if compliance.electrical_cert_provided}}checked{{/if}}">
+        {{#if compliance.electrical_cert_provided}}✓{{/if}}
+      </div>
+      <div class="check-content">
+        <div class="check-title">Electrical Installation Condition Report (EICR)</div>
+        <div class="check-detail">An EICR is required and must be valid (within 5 years).</div>
+      </div>
+    </div>
+    <div class="check-item">
+      <div class="checkbox {{#if compliance.epc_provided}}checked{{/if}}">
+        {{#if compliance.epc_provided}}✓{{/if}}
+      </div>
+      <div class="check-content">
+        <div class="check-title">Energy Performance Certificate (EPC)</div>
+        <div class="check-detail">A valid EPC must be available. Property must have minimum rating of E (unless exempt).</div>
+      </div>
+    </div>
+  </div>
+
+  <h2>5. Section 173 Timing (if applicable)</h2>
+  {{#if (or (eq notice.route 'wales_section_173') (eq notice.route 'section_173'))}}
+  <div class="checklist-section">
+    <div class="check-item">
+      <div class="checkbox">☐</div>
+      <div class="check-content">
+        <div class="check-title">Contract at least 6 months old</div>
+        <div class="check-detail">A Section 173 notice cannot be served during the first 6 months of the occupation contract.</div>
+      </div>
+    </div>
+    <div class="check-item">
+      <div class="checkbox">☐</div>
+      <div class="check-content">
+        <div class="check-title">Notice period at least 6 months</div>
+        <div class="check-detail">The minimum notice period for a Section 173 notice is 6 months.</div>
+      </div>
+    </div>
+  </div>
+  {{else}}
+  <div class="info-box">
+    <p>Section 173 timing requirements do not apply to fault-based notices. The notice period depends on the specific ground being relied upon.</p>
+  </div>
+  {{/if}}
+
+  <h2>Declaration</h2>
+  <div class="checklist-section">
+    <p>I confirm that I have verified each of the above requirements and that to the best of my knowledge, I am in compliance with the Renting Homes (Wales) Act 2016 and all associated regulations.</p>
+    <br>
+    <p><strong>Signed:</strong> ________________________________</p>
+    <p><strong>Print Name:</strong> {{landlord.full_name}}</p>
+    <p><strong>Date:</strong> ________________________________</p>
+  </div>
+
+  <div class="info-box">
+    <strong>Remember:</strong>
+    <ul>
+      <li>Keep copies of all compliance documents to bring to court</li>
+      <li>Use the correct Welsh prescribed notice form (RHW series)</li>
+      <li>Document how and when you serve the notice</li>
+      <li>If in doubt, seek legal advice before proceeding</li>
+    </ul>
+  </div>
+
+  <div class="footer">
+    <p>Generated by Landlord Heaven | www.landlordheaven.co.uk</p>
+    <p>This checklist is for guidance only and does not constitute legal advice.</p>
+  </div>
+</body>
+</html>

@@ -1,127 +1,335 @@
+{{!--
+  ============================================================================
+  NOTICE TO LEAVE - SERVICE AND VALIDITY CHECKLIST
+  Private Housing (Tenancies) (Scotland) Act 2016
+  ============================================================================
+  Harmonized design system matching England/Wales checklist templates
+--}}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Notice to Leave - Service and Validity Checklist</title>
   <style>
+    {{{print_css}}}
+
+    /* ===== @PAGE OVERRIDE - MATCH FORM MARGINS ===== */
+    @page {
+      size: A4;
+      margin: 10mm;
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      line-height: 1.6;
-      padding: 40px;
-      color: #333;
+      padding: 0;
+      margin: 0 auto;
     }
-    h1 {
+
+    /* ===== KEEP-TOGETHER UTILITIES ===== */
+    .keep-together {
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+    }
+
+    .details-section h2,
+    .numbered-badge {
+      page-break-after: avoid !important;
+      break-after: avoid-page !important;
+    }
+
+    /* ===== HARMONIZED DOCUMENT STYLES ===== */
+
+    .doc-header {
+      text-align: center;
+      margin-bottom: 1.5em;
+      padding-bottom: 1em;
+      border-bottom: 2px solid #1a1a1a;
+    }
+
+    .doc-header h1 {
+      font-size: 14pt;
+      font-weight: 600;
+      margin: 0 0 0.5em 0;
+      line-height: 1.3;
       color: #1a1a1a;
-      border-bottom: 3px solid #10b981;
-      padding-bottom: 10px;
-      margin-bottom: 20px;
     }
-    h2 {
-      color: #10b981;
-      margin-top: 30px;
-      margin-bottom: 15px;
-    }
-    h3 {
-      color: #1a1a1a;
-      margin-top: 20px;
-      margin-bottom: 10px;
-    }
-    .section {
-      margin: 25px 0;
-    }
-    .info-box {
-      background: #d1fae5;
-      border-left: 4px solid #10b981;
-      padding: 15px;
-      margin: 20px 0;
-    }
-    .warning {
-      background: #fef3c7;
-      border-left: 4px solid #f59e0b;
-      padding: 15px;
-      margin: 20px 0;
-    }
-    .critical {
-      background: #fee2e2;
-      border-left: 4px solid #dc2626;
-      padding: 15px;
-      margin: 20px 0;
-      font-weight: bold;
-    }
-    .checklist {
-      background: #f9fafb;
-      border: 1px solid #e5e7eb;
-      padding: 20px;
-      border-radius: 5px;
-      margin: 20px 0;
-    }
-    .checkbox {
+
+    .doc-badge {
       display: inline-block;
-      width: 18px;
-      height: 18px;
-      border: 2px solid #333;
-      margin-right: 10px;
-      vertical-align: middle;
+      background: #10b981;
+      color: white;
+      padding: 0.3em 0.8em;
+      font-size: 10pt;
+      font-weight: 600;
+      letter-spacing: 0.5px;
     }
-    ul {
-      margin-left: 20px;
+
+    .purpose-box {
+      border: 2px solid #1a1a1a;
+      padding: 1em;
+      margin: 1.5em 0;
+      background: #fafafa;
+    }
+
+    .purpose-box p {
+      font-size: 10pt;
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    h2 {
+      page-break-after: avoid;
+    }
+
+    .details-section {
+      margin: 1.5em 0;
+    }
+
+    .details-section h2 {
+      font-size: 12pt;
+      font-weight: 600;
+      margin: 0 0 1em 0;
+      padding-bottom: 0.5em;
+      border-bottom: 2px solid #1a1a1a;
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+    }
+
+    .details-section h2 .num {
+      background: #10b981;
+      color: white;
+      width: 1.5em;
+      height: 1.5em;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10pt;
+    }
+
+    .details-grid {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 0.5em 1em;
+      font-size: 10pt;
+    }
+
+    .details-grid dt {
+      font-weight: 600;
+      color: #444;
+    }
+
+    .details-grid dd {
+      margin: 0;
+      color: #1a1a1a;
+      padding-bottom: 0.5em;
+      border-bottom: 1px solid #eee;
+    }
+
+    .checklist-box {
+      border: 1px solid #1a1a1a;
+      margin: 1.5em 0;
+      page-break-inside: avoid;
+    }
+
+    .checklist-box h3 {
+      font-size: 11pt;
+      font-weight: 700;
+      margin: 0;
+      padding: 0.6em 0.8em;
+      background: #1a1a1a;
+      color: white;
+    }
+
+    .checklist-box .content {
+      padding: 1em;
+      background: #fff;
+    }
+
+    .checklist-box p {
+      font-size: 10pt;
+      margin: 0 0 0.75em 0;
+      font-weight: 500;
+    }
+
+    .checklist-box ul {
+      margin: 0;
+      padding: 0;
       list-style: none;
     }
-    li {
-      margin: 12px 0;
+
+    .checklist-box li {
+      font-size: 10pt;
+      line-height: 1.6;
+      margin: 0.6em 0;
+      padding-left: 2em;
+      position: relative;
     }
-    .field-label {
-      font-weight: bold;
-      color: #1a1a1a;
+
+    .checklist-box li .checkbox {
+      position: absolute;
+      left: 0;
+      top: 0.15em;
+      width: 14px;
+      height: 14px;
+      border: 1.5px solid #1a1a1a;
+      background: white;
     }
-    footer {
-      margin-top: 50px;
-      padding-top: 20px;
-      border-top: 2px solid #e5e7eb;
-      font-size: 0.9em;
-      color: #6b7280;
+
+    .checklist-box li ul {
+      margin-top: 0.5em;
+      padding-left: 0;
+    }
+
+    .checklist-box li li {
+      padding-left: 1.5em;
+      margin: 0.3em 0;
+      font-size: 9pt;
+      color: #555;
+    }
+
+    .checklist-box li li::before {
+      content: "•";
+      position: absolute;
+      left: 0.5em;
+    }
+
+    .checklist-box li li .checkbox {
+      display: none;
+    }
+
+    .alert-box {
+      padding: 1em;
+      margin: 1.5em 0;
+      border-left: 4px solid;
+      page-break-inside: avoid;
+    }
+
+    .alert-box.warning {
+      background: #fffbeb;
+      border-color: #f59e0b;
+    }
+
+    .alert-box.critical {
+      background: #fef2f2;
+      border-color: #dc2626;
+    }
+
+    .alert-box.info {
+      background: #ecfdf5;
+      border-color: #10b981;
+    }
+
+    .alert-box h4 {
+      font-size: 10pt;
+      font-weight: 700;
+      margin: 0 0 0.5em 0;
+    }
+
+    .alert-box p {
+      font-size: 10pt;
+      line-height: 1.5;
+      margin: 0.3em 0;
+    }
+
+    .alert-box ul {
+      margin: 0.5em 0 0 0;
+      padding-left: 1.5em;
+      font-size: 10pt;
+    }
+
+    .alert-box li {
+      margin: 0.3em 0;
+    }
+
+    .doc-footer {
+      margin-top: 2em;
+      padding-top: 1em;
+      border-top: 2px solid #1a1a1a;
+      font-size: 9pt;
+      color: #666;
+    }
+
+    .doc-footer p {
+      margin: 0.3em 0;
+    }
+
+    .checklist {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    .checklist-section {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    @media print {
+      .checklist-box,
+      .alert-box {
+        page-break-inside: avoid;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>Notice to Leave - Service and Validity Checklist</h1>
 
-  <div class="info-box">
-    <strong>Purpose:</strong> Use this checklist to verify your Notice to Leave was served correctly under the Private Housing (Tenancies) (Scotland) Act 2016. Keep this checklist with your evidence file for First-tier Tribunal proceedings.
-  </div>
+<!-- Document Header -->
+<div class="doc-header">
+  <h1>Service and Validity Checklist</h1>
+  <span class="doc-badge">Notice to Leave (Scotland)</span>
+</div>
 
-  <div class="section">
-    <h2>Notice Details</h2>
-    <p><span class="field-label">Landlord:</span> {{landlord_full_name}}</p>
+<!-- Purpose -->
+<div class="purpose-box">
+  <p><strong>Purpose:</strong> Use this checklist to verify your Notice to Leave was served correctly under the Private Housing (Tenancies) (Scotland) Act 2016. Keep this checklist with your evidence file for First-tier Tribunal proceedings.</p>
+</div>
+
+<!-- Notice Details -->
+<div class="details-section">
+  <h2><span class="num">1</span> Notice Details</h2>
+  <dl class="details-grid">
+    <dt>Landlord:</dt>
+    <dd>{{landlord_full_name}}</dd>
     {{#if landlord_address}}
-    <p><span class="field-label">Landlord Address:</span> {{landlord_address}}</p>
+    <dt>Landlord Address:</dt>
+    <dd>{{landlord_address}}</dd>
     {{/if}}
-    <p><span class="field-label">Tenant:</span> {{tenant_full_name}}</p>
-    <p><span class="field-label">Property Address:</span> {{property_address}}</p>
-    <p><span class="field-label">Tenancy Start Date:</span> {{tenancy_start_date_formatted}}</p>
-    <p><span class="field-label">Notice Date:</span> {{notice_date_formatted}}</p>
-    <p><span class="field-label">Earliest Leave Date:</span> {{earliest_leaving_date_formatted}}</p>
-    <p><span class="field-label">Notice Period:</span> {{notice_period_days}} days</p>
+    <dt>Tenant:</dt>
+    <dd>{{tenant_full_name}}</dd>
+    <dt>Property Address:</dt>
+    <dd>{{property_address}}</dd>
+    <dt>Tenancy Start Date:</dt>
+    <dd>{{tenancy_start_date_formatted}}</dd>
+    <dt>Notice Date:</dt>
+    <dd>{{notice_date_formatted}}</dd>
+    <dt>Earliest Leave Date:</dt>
+    <dd>{{earliest_leaving_date_formatted}}</dd>
+    <dt>Notice Period:</dt>
+    <dd>{{notice_period_days}} days</dd>
     {{#if grounds}}
-    <p><span class="field-label">Eviction Ground(s):</span>
-      {{#each grounds}}
-        Ground {{this.number}}{{#unless @last}}, {{/unless}}
-      {{/each}}
-    </p>
+    <dt>Eviction Ground(s):</dt>
+    <dd>{{#each grounds}}Ground {{this.number}}{{#unless @last}}, {{/unless}}{{/each}}</dd>
     {{/if}}
-  </div>
+  </dl>
+</div>
 
-  <div class="section">
-    <h2>Service Evidence Checklist</h2>
-    <div class="checklist">
-      <p><strong>Confirm you have collected and retained the following evidence of service:</strong></p>
+<!-- Service Evidence -->
+<div class="details-section">
+  <h2><span class="num">2</span> Service Evidence Checklist</h2>
+
+  <div class="checklist-box">
+    <h3>Evidence of Service</h3>
+    <div class="content">
+      <p>Confirm you have collected and retained the following evidence of service:</p>
       <ul>
         <li><span class="checkbox"></span> Original signed Notice to Leave</li>
         <li><span class="checkbox"></span> Copy of the notice served to tenant</li>
         <li><span class="checkbox"></span> Date and time of service recorded</li>
         <li><span class="checkbox"></span> Method of service documented (hand delivery / first class post / recorded delivery / sheriff officer)</li>
         <li><span class="checkbox"></span> Proof of service:
-          <ul style="margin-left: 30px; margin-top: 8px;">
+          <ul>
             <li>If hand delivered: Photo of letterbox with notice visible, witness statement</li>
             <li>If posted: Proof of postage receipt (Royal Mail certificate of posting)</li>
             <li>If recorded delivery: Tracking number and delivery confirmation</li>
@@ -132,25 +340,31 @@
         <li><span class="checkbox"></span> Any correspondence from tenant acknowledging receipt</li>
       </ul>
     </div>
-
-    <div class="warning">
-      <strong>Keep All Evidence:</strong> The First-tier Tribunal will require clear proof of service. Without it, your eviction application will be rejected.
-    </div>
   </div>
 
-  <div class="section">
-    <h2>Validity Requirements (Private Housing (Tenancies) (Scotland) Act 2016)</h2>
-    <div class="checklist">
-      <p><strong>Verify your Notice to Leave meets these validity requirements:</strong></p>
+  <div class="alert-box warning">
+    <h4>⚠️ Keep All Evidence</h4>
+    <p>The First-tier Tribunal will require clear proof of service. Without it, your eviction application will be rejected.</p>
+  </div>
+</div>
+
+<!-- Validity Requirements -->
+<div class="details-section">
+  <h2><span class="num">3</span> Validity Requirements</h2>
+
+  <div class="checklist-box">
+    <h3>Notice Validity (Private Housing (Tenancies) (Scotland) Act 2016)</h3>
+    <div class="content">
+      <p>Verify your Notice to Leave meets these validity requirements:</p>
       <ul>
         <li><span class="checkbox"></span> Notice is in writing on prescribed form or substantially similar</li>
         <li><span class="checkbox"></span> All mandatory fields completed (landlord name/address, tenant name, property address)</li>
         <li><span class="checkbox"></span> Eviction ground(s) clearly stated from Schedule 3 of the Act</li>
         <li><span class="checkbox"></span> Sufficient particulars provided for each ground</li>
         <li><span class="checkbox"></span> Minimum notice period met:
-          <ul style="margin-left: 30px; margin-top: 8px;">
-            <li>Ground 1 (rent arrears 3+ months): 84 days (12 weeks)</li>
-            <li>Ground 2-8: 28 days minimum</li>
+          <ul>
+            <li><strong>84 days (12 weeks) minimum:</strong> Ground 1 (rent arrears 3+ months)</li>
+            <li><strong>28 days minimum:</strong> Grounds 2-8</li>
             {{#if ground_1_claimed}}
             <li><strong>You claimed Ground 1 - minimum 84 days required</strong></li>
             {{/if}}
@@ -161,27 +375,31 @@
         <li><span class="checkbox"></span> Tenancy type is Private Residential Tenancy (PRT)</li>
       </ul>
     </div>
-
-    {{#if ground_1_claimed}}
-    <div class="critical">
-      ⚠️ <strong>GROUND 1 (RENT ARREARS) PRE-ACTION REQUIREMENTS:</strong>
-      <p>Before serving a Notice to Leave for Ground 1, you MUST have completed these pre-action requirements:</p>
-      <ul style="margin-top: 10px;">
-        <li><span class="checkbox"></span> Provided clear written information to tenant about rent arrears</li>
-        <li><span class="checkbox"></span> Made reasonable efforts to discuss arrears and reach agreement</li>
-        <li><span class="checkbox"></span> Provided information about sources of debt advice and financial assistance</li>
-        <li><span class="checkbox"></span> Given tenant reasonable time to access advice and assistance</li>
-        <li><span class="checkbox"></span> Considered tenant's circumstances and ability to pay</li>
-      </ul>
-      <p style="margin-top: 10px;"><strong>Evidence Required:</strong> Copies of all correspondence, records of phone calls/meetings, proof of debt advice signposting</p>
-    </div>
-    {{/if}}
   </div>
 
-  <div class="section">
-    <h2>After Service</h2>
-    <div class="checklist">
-      <p><strong>Post-service actions:</strong></p>
+  {{#if ground_1_claimed}}
+  <div class="alert-box critical">
+    <h4>⚠️ GROUND 1 (RENT ARREARS) PRE-ACTION REQUIREMENTS</h4>
+    <p>Before serving a Notice to Leave for Ground 1, you MUST have completed these pre-action requirements:</p>
+    <ul>
+      <li><span class="checkbox"></span> Provided clear written information to tenant about rent arrears</li>
+      <li><span class="checkbox"></span> Made reasonable efforts to discuss arrears and reach agreement</li>
+      <li><span class="checkbox"></span> Provided information about sources of debt advice and financial assistance</li>
+      <li><span class="checkbox"></span> Given tenant reasonable time to access advice and assistance</li>
+      <li><span class="checkbox"></span> Considered tenant's circumstances and ability to pay</li>
+    </ul>
+    <p><strong>Evidence Required:</strong> Copies of all correspondence, records of phone calls/meetings, proof of debt advice signposting</p>
+  </div>
+  {{/if}}
+</div>
+
+<!-- After Service -->
+<div class="details-section">
+  <h2><span class="num">4</span> After Service</h2>
+
+  <div class="checklist-box">
+    <h3>Post-Service Actions</h3>
+    <div class="content">
       <ul>
         <li><span class="checkbox"></span> Wait until leave date has passed: <strong>{{earliest_leaving_date_formatted}}</strong></li>
         <li><span class="checkbox"></span> Do not change locks or remove tenant belongings (illegal eviction)</li>
@@ -192,18 +410,22 @@
         <li><span class="checkbox"></span> Keep proof of service readily accessible for tribunal proceedings</li>
       </ul>
     </div>
-
-    <div class="warning">
-      <strong>Important:</strong> Scotland uses the tribunal system for evictions. You must apply to the First-tier Tribunal for Housing and Property Chamber. Only the tribunal can grant an eviction order.
-    </div>
   </div>
 
-  <footer>
-    <p><strong>Legal Basis:</strong> Private Housing (Tenancies) (Scotland) Act 2016</p>
-    <p><strong>Tribunal:</strong> First-tier Tribunal for Scotland Housing and Property Chamber</p>
-    <p><strong>Pre-Action Requirements:</strong> Pre-Action Requirements (Notices to Leave) (Coronavirus) (Scotland) Regulations 2020</p>
-    <p><strong>Generated:</strong> {{generated_date}}</p>
-    <p><strong>Landlord Heaven Notice Only Pack</strong> | Scotland</p>
-  </footer>
+  <div class="alert-box info">
+    <h4>📋 Scotland Tribunal Process</h4>
+    <p>Scotland uses the tribunal system for evictions. You must apply to the First-tier Tribunal for Housing and Property Chamber. Only the tribunal can grant an eviction order.</p>
+  </div>
+</div>
+
+<!-- Footer -->
+<div class="doc-footer">
+  <p><strong>Legal Basis:</strong> Private Housing (Tenancies) (Scotland) Act 2016</p>
+  <p><strong>Tribunal:</strong> First-tier Tribunal for Scotland Housing and Property Chamber</p>
+  <p><strong>Pre-Action Requirements:</strong> Pre-Action Requirements (Notices to Leave) (Coronavirus) (Scotland) Regulations 2020</p>
+  <p><strong>Generated:</strong> {{generated_date}}</p>
+  <p><strong>Landlord Heaven Notice Only Pack</strong> | Scotland</p>
+</div>
+
 </body>
 </html>

@@ -32,16 +32,19 @@ fault_based_sections:
     legal_reference: "Renting Homes (Wales) Act 2016, s.157"
 
   section_159:
-    period_days: 30
-    description: "Some rent arrears (less than 2 months)"
+    period_days: 56
+    description: "Discretionary grounds (Schedule 9) - includes breach, ASB, arrears under threshold"
     legal_reference: "Renting Homes (Wales) Act 2016, s.159"
+    notes: "8 weeks (56 days) for ALL discretionary grounds under Section 159"
 
-  section_161:
-    period_days: 14
-    description: "Anti-social behaviour (serious)"
+  # NOTE: Section 161 is "Proceedings where notice is not required" - NOT a ground for possession
+  # This section has been corrected. Section 161 deals with immediate applications without notice
+  # for serious ASB/prohibited conduct under Section 55 RHW16
+  section_161_proceedings:
+    period_days: 0
+    description: "Proceedings where notice is not required (Section 55 prohibited conduct)"
     legal_reference: "Renting Homes (Wales) Act 2016, s.161"
+    notes: "This is NOT a ground - it allows immediate court application for Section 55 conduct"
 
-  section_162:
-    period_days: 30
-    description: "Breach of occupation contract"
-    legal_reference: "Renting Homes (Wales) Act 2016, s.162"
+  # Section 162 removed - breach of occupation contract is under Section 159, Ground 12+
+  # Consolidated into Section 159 discretionary grounds above

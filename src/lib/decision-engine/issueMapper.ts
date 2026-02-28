@@ -1,0 +1,138 @@
+/**
+ * Decision Engine Issue Mapper
+ *
+ * Converts decision engine BlockingIssue objects to ValidationIssue format
+ * with affected_question_id from MQS mapping.
+ *
+ * This ensures decision engine issues are consistent with requirements engine issues.
+ */
+
+import type { BlockingIssue } from './index';
+import type { ValidationIssue } from '../jurisdictions/requirementsValidator';
+import { getFlowMapping, type FlowMapping } from '../mqs/mapping.generated';
+import type { Jurisdiction, Product } from '../jurisdictions/capabilities/matrix';
+
+/**
+ * Maps decision engine issue codes to the fact keys they validate
+ * NOTE: Uses CANONICAL keys that match MQS wizard questions, plus legacy fallbacks
+ */
+const ISSUE_CODE_TO_FACT_KEYS: Record<string, string[]> = {
+  // England/Wales Section 21
+  // Use canonical keys FIRST, then legacy fallbacks for MQS lookup
+  deposit_not_protected: ['deposit_protected', 'deposit_protected_scheme'],
+  prescribed_info_not_given: ['prescribed_info_given', 'prescribed_info_provided'],
+  gas_safety_not_provided: ['gas_certificate_provided', 'gas_safety_cert_provided', 'gas_safety_certificate'],
+  how_to_rent_not_provided: ['how_to_rent_provided', 'how_to_rent_given', 'how_to_rent_guide_provided'],
+  epc_not_provided: ['epc_provided', 'epc_certificate_provided'],
+  hmo_not_licensed: ['property_licensing_status', 'property_licensing', 'hmo_license_valid'],
+
+  // Deposit cap (Tenant Fees Act 2019 - England & Wales)
+  deposit_exceeds_cap: ['deposit_reduced_to_legal_cap_confirmed', 'deposit_amount', 'rent_amount'],
+
+  // Retaliatory eviction (Deregulation Act 2015 - England)
+  retaliatory_eviction: ['recent_repair_complaints', 'repair_complaints', 'tenant_complained'],
+
+  // Wales Section 173
+  contract_type_incompatible: ['wales_contract_category', 'contract_category'],
+  rent_smart_not_registered: ['rent_smart_wales_registered'],
+
+  // Scotland Notice to Leave
+  pre_action_not_met: ['pre_action_contact', 'pre_action_confirmed'],
+
+  // General/unknown
+  ni_not_supported: [],
+};
+
+/**
+ * Direct mapping from issue codes to question IDs (fallback when MQS lookup fails)
+ * This ensures deep-linking works even if MQS mapping is incomplete
+ * NOTE: Question IDs must match those defined in config/mqs/notice_only/england.yaml
+ */
+const ISSUE_CODE_TO_QUESTION_ID: Record<string, string> = {
+  // England/Wales Section 21
+  deposit_not_protected: 'deposit_protected_scheme',
+  prescribed_info_not_given: 'prescribed_info_given',
+  gas_safety_not_provided: 'gas_safety_certificate',
+  how_to_rent_not_provided: 'how_to_rent_provided',
+  epc_not_provided: 'epc_provided',
+  hmo_not_licensed: 'property_licensing',
+
+  // Deposit cap - link to deposit_amount question where user enters the amount
+  deposit_exceeds_cap: 'deposit_amount',
+
+  // Retaliatory eviction
+  retaliatory_eviction: 'recent_repair_complaints_s21',
+
+  // Wales Section 173
+  contract_type_incompatible: 'wales_contract_category',
+  rent_smart_not_registered: 'rent_smart_wales_registered',
+
+  // Scotland Notice to Leave
+  pre_action_not_met: 'pre_action_contact',
+
+  // Northern Ireland
+  ni_not_supported: 'jurisdiction',
+};
+
+export interface DecisionIssueMapperContext {
+  jurisdiction: Jurisdiction;
+  product: Product;
+  route: string;
+}
+
+/**
+ * Convert decision engine BlockingIssue to ValidationIssue with affected_question_id
+ */
+export function mapDecisionIssueToValidationIssue(
+  issue: BlockingIssue,
+  context: DecisionIssueMapperContext
+): ValidationIssue {
+  const { jurisdiction, product, route } = context;
+
+  // Get fact keys for this issue code
+  const factKeys = ISSUE_CODE_TO_FACT_KEYS[issue.issue] || [];
+
+  // Get MQS mapping for this flow
+  const mapping = getFlowMapping(jurisdiction, product, route);
+
+  // Find affected_question_id from first fact key
+  let affectedQuestionId: string | undefined;
+  const alternateQuestionIds: string[] = [];
+
+  for (const factKey of factKeys) {
+    const questionIds = mapping?.factKeyToQuestionIds[factKey] || [];
+    if (questionIds.length > 0) {
+      if (!affectedQuestionId) {
+        affectedQuestionId = questionIds[0];
+      }
+      alternateQuestionIds.push(...questionIds.slice(1));
+    }
+  }
+
+  // Fallback to direct mapping if MQS lookup failed
+  if (!affectedQuestionId) {
+    affectedQuestionId = ISSUE_CODE_TO_QUESTION_ID[issue.issue];
+  }
+
+  // Convert to ValidationIssue format
+  return {
+    code: issue.issue.toUpperCase(), // DEPOSIT_NOT_PROTECTED
+    severity: issue.severity === 'blocking' ? 'blocking' : 'warning',
+    fields: factKeys,
+    affected_question_id: affectedQuestionId,
+    alternate_question_ids: alternateQuestionIds.length > 0 ? alternateQuestionIds : undefined,
+    user_fix_hint: issue.action_required || issue.description,
+    description: issue.description,
+    legal_basis: issue.legal_basis,
+  };
+}
+
+/**
+ * Convert all decision engine blocking issues to ValidationIssue format
+ */
+export function mapDecisionIssuesToValidationIssues(
+  blockingIssues: BlockingIssue[],
+  context: DecisionIssueMapperContext
+): ValidationIssue[] {
+  return blockingIssues.map(issue => mapDecisionIssueToValidationIssue(issue, context));
+}

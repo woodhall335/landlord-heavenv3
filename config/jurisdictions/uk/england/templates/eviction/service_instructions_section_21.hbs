@@ -1,155 +1,458 @@
+{{!--
+  ============================================================================
+  SERVICE INSTRUCTIONS - SECTION 21 NOTICE
+  Housing Act 1988, Section 21
+  ============================================================================
+  Harmonized design system matching Form 6A and Form 3 templates
+--}}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Service Instructions - Section 21 Notice</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      line-height: 1.6;
-      padding: 40px;
-      color: #333;
+    {{{print_css}}}
+
+    /* ===== @PAGE OVERRIDE - NARROW MARGINS ===== */
+    /* Override print.css defaults to match Form 6A narrow margins */
+    @page {
+      size: A4;
+      margin: 10mm;
     }
-    h1 {
+
+    /* Zero out body padding since @page handles margins */
+    html, body {
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Keep sections together on same page */
+    .keep-together {
+      break-inside: avoid !important;
+      page-break-inside: avoid !important;
+    }
+
+    /* ===== HARMONIZED DOCUMENT STYLES ===== */
+    
+    /* Document Header */
+    .doc-header {
+      text-align: center;
+      margin-bottom: 1.5em;
+      padding-bottom: 1em;
+      border-bottom: 2px solid #1a1a1a;
+    }
+    
+    .doc-header h1 {
+      font-size: 14pt;
+      font-weight: 600;
+      margin: 0 0 0.5em 0;
+      line-height: 1.3;
       color: #1a1a1a;
-      border-bottom: 3px solid #2563eb;
-      padding-bottom: 10px;
-      margin-bottom: 20px;
     }
-    h2 {
-      color: #2563eb;
-      margin-top: 30px;
-      margin-bottom: 15px;
+    
+    .doc-badge {
+      display: inline-block;
+      background: #1a1a1a;
+      color: white;
+      padding: 0.3em 0.8em;
+      font-size: 10pt;
+      font-weight: 600;
+      letter-spacing: 0.5px;
     }
-    h3 {
+
+    /* Notice Details Box */
+    .notice-details {
+      border: 2px solid #1a1a1a;
+      padding: 1em;
+      margin: 1.5em 0;
+      background: #fafafa;
+    }
+    
+    .notice-details-grid {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 0.4em 1em;
+      font-size: 10pt;
+    }
+    
+    .notice-details-grid dt {
+      font-weight: 600;
+      color: #444;
+    }
+    
+    .notice-details-grid dd {
+      margin: 0;
       color: #1a1a1a;
-      margin-top: 20px;
-      margin-bottom: 10px;
     }
-    .section {
-      margin: 30px 0;
+
+    /* Alert Boxes */
+    .alert-box {
+      padding: 1em;
+      margin: 1.5em 0;
+      border-left: 4px solid;
+      page-break-inside: avoid;
     }
-    .warning {
-      background: #fef3c7;
-      border-left: 4px solid #f59e0b;
-      padding: 15px;
-      margin: 20px 0;
+    
+    .alert-box.critical {
+      background: #fef2f2;
+      border-color: #dc2626;
     }
-    .critical {
-      background: #fee2e2;
-      border-left: 4px solid #dc2626;
-      padding: 15px;
-      margin: 20px 0;
-      font-weight: bold;
+    
+    .alert-box.warning {
+      background: #fffbeb;
+      border-color: #f59e0b;
     }
-    .success {
-      background: #d1fae5;
-      border-left: 4px solid #10b981;
-      padding: 15px;
-      margin: 20px 0;
+    
+    .alert-box.success {
+      background: #f0fdf4;
+      border-color: #22c55e;
     }
-    ul {
-      margin-left: 20px;
+    
+    .alert-box.info {
+      background: #f8f8f8;
+      border-color: #1a1a1a;
     }
-    li {
-      margin: 10px 0;
+    
+    .alert-box h4 {
+      font-size: 10pt;
+      font-weight: 700;
+      margin: 0 0 0.5em 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
     }
-    .checklist {
-      background: #f3f4f6;
-      padding: 15px;
-      border-radius: 5px;
-      margin: 15px 0;
+    
+    .alert-box p, .alert-box li {
+      font-size: 10pt;
+      line-height: 1.5;
+      margin: 0.3em 0;
     }
-    .evidence-item {
+    
+    .alert-box ul {
+      margin: 0.5em 0;
+      padding-left: 1.25em;
+    }
+
+    /* Section Headers */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75em;
+      margin: 2em 0 1em 0;
+      padding-bottom: 0.5em;
+      border-bottom: 2px solid #1a1a1a;
+    }
+    
+    .section-header .num {
+      background: #1a1a1a;
+      color: white;
+      width: 1.75em;
+      height: 1.75em;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 11pt;
+      flex-shrink: 0;
+    }
+    
+    .section-header h2 {
+      font-size: 12pt;
+      font-weight: 600;
+      margin: 0;
+      color: #1a1a1a;
+    }
+
+    /* Method Blocks */
+    .method-block {
+      margin: 1.25em 0;
+      border: 1px solid #ddd;
       background: #fff;
-      border: 1px solid #e5e7eb;
-      padding: 10px;
-      margin: 10px 0;
-      border-radius: 3px;
     }
-    footer {
-      margin-top: 50px;
-      padding-top: 20px;
-      border-top: 2px solid #e5e7eb;
-      font-size: 0.9em;
-      color: #6b7280;
+    
+    .method-block-header {
+      padding: 0.6em 0.8em;
+      background: #f5f5f5;
+      border-bottom: 1px solid #ddd;
+      font-size: 11pt;
+      font-weight: 600;
+    }
+    
+    .method-block-header.recommended {
+      background: #1a1a1a;
+      color: white;
+    }
+    
+    .method-block-header.not-recommended {
+      background: #fef2f2;
+      color: #dc2626;
+    }
+    
+    .method-block-content {
+      padding: 0.8em;
+    }
+    
+    .method-block-content ul {
+      margin: 0;
+      padding-left: 1.25em;
+    }
+    
+    .method-block-content li {
+      font-size: 10pt;
+      line-height: 1.6;
+      margin: 0.4em 0;
+    }
+
+    /* Checklist Box */
+    .checklist-box {
+      border: 1px solid #1a1a1a;
+      margin: 1.5em 0;
+      page-break-inside: avoid;
+    }
+    
+    .checklist-box h3 {
+      font-size: 11pt;
+      font-weight: 700;
+      margin: 0;
+      padding: 0.6em 0.8em;
+      background: #1a1a1a;
+      color: white;
+    }
+    
+    .checklist-box .content {
+      padding: 1em;
+      background: #fff;
+    }
+    
+    .checklist-box ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    
+    .checklist-box li {
+      font-size: 10pt;
+      line-height: 1.6;
+      margin: 0.5em 0;
+      padding-left: 1.75em;
+      position: relative;
+    }
+    
+    .checklist-box li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #1a1a1a;
+      font-weight: 700;
+    }
+
+    /* Template Box */
+    .template-box {
+      margin: 1em 0;
+      border: 1px dashed #999;
+      background: #fafafa;
+    }
+    
+    .template-box-header {
+      padding: 0.5em 0.75em;
+      background: #f0f0f0;
+      border-bottom: 1px dashed #999;
+      font-size: 10pt;
+      font-weight: 600;
+    }
+    
+    .template-box-content {
+      padding: 0.75em;
+      font-size: 10pt;
+      line-height: 1.6;
+      white-space: pre-line;
+    }
+
+    /* Mistakes List */
+    .mistakes-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    
+    .mistakes-list li {
+      font-size: 10pt;
+      line-height: 1.6;
+      margin: 0.5em 0;
+      padding-left: 1.75em;
+      position: relative;
+    }
+    
+    .mistakes-list li::before {
+      content: "✗";
+      position: absolute;
+      left: 0;
+      color: #dc2626;
+      font-weight: 700;
+    }
+
+    /* Legal Basis */
+    .legal-basis {
+      margin: 1.5em 0;
+      padding: 1em;
+      background: #f5f5f5;
+      border-left: 3px solid #1a1a1a;
+    }
+    
+    .legal-basis p {
+      font-size: 10pt;
+      margin: 0.3em 0;
+    }
+
+    /* Footer */
+    .doc-footer {
+      margin-top: 2em;
+      padding-top: 1em;
+      border-top: 2px solid #1a1a1a;
+      font-size: 9pt;
+      color: #666;
+    }
+    
+    .doc-footer p {
+      margin: 0.3em 0;
+    }
+
+    @media print {
+      .method-block,
+      .checklist-box,
+      .alert-box {
+        page-break-inside: avoid;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>Service Instructions for Section 21 Notice</h1>
 
-  <div class="section">
-    <p><strong>Property:</strong> {{property_address}}</p>
-    <p><strong>Tenant:</strong> {{tenant_full_name}}{{#if tenant_2_name}}, {{tenant_2_name}}{{/if}}</p>
-    <p><strong>Notice Type:</strong> Section 21</p>
-    <p><strong>Service Date:</strong> {{service_date_formatted}}</p>
-    <p><strong>Expiry Date:</strong> {{earliest_possession_date_formatted}}</p>
-  </div>
+<!-- Document Header -->
+<div class="doc-header">
+  <h1>Service Instructions</h1>
+  <span class="doc-badge">Section 21 Notice</span>
+</div>
 
-  <div class="critical">
-    ⚠️ <strong>CRITICAL:</strong> You must serve this notice correctly or it will be invalid. Incorrect service is the most common reason for court rejection. Section 21 notices have strict compliance requirements.
-  </div>
+<!-- Notice Details -->
+<div class="notice-details">
+  <dl class="notice-details-grid">
+    <dt>Property:</dt>
+    <dd>{{property_address}}</dd>
+    <dt>Tenant:</dt>
+    <dd>{{tenant_full_name}}{{#if tenant_2_name}}, {{tenant_2_name}}{{/if}}</dd>
+    <dt>Notice Type:</dt>
+    <dd>Section 21</dd>
+    <dt>Service Date:</dt>
+    <dd>{{service_date_formatted}}</dd>
+    <dt>Possession Date:</dt>
+    <dd>{{display_possession_date_formatted}}</dd>
+  </dl>
+</div>
 
-  <div class="section">
-    <h2>Before You Serve - Compliance Requirements</h2>
-    <p>Section 21 notices can be invalidated if you haven't met all compliance requirements. Check that you have:</p>
+<!-- Critical Warning -->
+<div class="alert-box critical">
+  <h4>⚠️ CRITICAL</h4>
+  <p>You must serve this notice correctly or it will be invalid. Incorrect service is the most common reason for court rejection. Section 21 notices have strict compliance requirements.</p>
+</div>
+
+<!-- Pre-Service Compliance -->
+<div class="section-header">
+  <span class="num">1</span>
+  <h2>Before You Serve - Compliance Requirements</h2>
+</div>
+
+<p style="font-size: 10pt; line-height: 1.5;">Section 21 notices can be invalidated if you haven't met all compliance requirements. Check that you have:</p>
+
+<div class="checklist-box">
+  <h3>Pre-Service Compliance Checklist</h3>
+  <div class="content">
     <ul>
-      <li>✓ Protected the deposit in an approved scheme (if deposit taken)</li>
-      <li>✓ Given prescribed information to tenant within 30 days</li>
-      <li>✓ Provided How to Rent guide</li>
-      <li>✓ Provided valid Gas Safety Certificate (if applicable)</li>
-      <li>✓ Provided Energy Performance Certificate (EPC)</li>
-      <li>✓ Complied with licensing requirements (if applicable)</li>
+      <li>Protected the deposit in an approved scheme (if deposit taken)</li>
+      <li>Given prescribed information to tenant within 30 days</li>
+      <li>Provided How to Rent guide</li>
+      <li>Provided valid Gas Safety Certificate (if applicable)</li>
+      <li>Provided Energy Performance Certificate (EPC)</li>
+      <li>Complied with licensing requirements (if applicable)</li>
     </ul>
-    <div class="warning">
-      ⚠️ <strong>Deposit Protection:</strong> If you haven't protected the deposit properly, you cannot serve a valid Section 21 notice until you comply with deposit protection requirements AND pay compensation to the tenant (1-3 times the deposit amount).
-    </div>
   </div>
+</div>
 
-  <div class="section">
-    <h2>How to Serve This Notice</h2>
-    <p>Under the Housing Act 1988, you have several options for serving the notice. Choose the method that gives you the best evidence of service.</p>
+<div class="alert-box warning">
+  <h4>⚠️ Deposit Protection</h4>
+  <p>If you haven't protected the deposit properly, you cannot serve a valid Section 21 notice until you comply with deposit protection requirements AND pay compensation to the tenant (1-3 times the deposit amount).</p>
+</div>
 
-    <h3>✅ RECOMMENDED METHOD: Hand Delivery</h3>
+<!-- How to Serve -->
+<div class="section-header">
+  <span class="num">2</span>
+  <h2>How to Serve This Notice</h2>
+</div>
+
+<p style="font-size: 10pt; line-height: 1.5;">Under the Housing Act 1988, you have several options for serving the notice. Choose the method that gives you the best evidence of service.</p>
+
+<!-- Recommended Method -->
+<div class="method-block">
+  <div class="method-block-header recommended">✅ RECOMMENDED: Hand Delivery</div>
+  <div class="method-block-content">
     <ul>
       <li><strong>Hand-deliver through the letterbox</strong> at the property</li>
       <li><strong>Date:</strong> Deliver on or after {{service_date_formatted}}</li>
       <li><strong>Witness:</strong> Take a witness with you who can confirm delivery</li>
-      <li><strong>Evidence:</strong> Take a photo of the letterbox with the notice visible (or being pushed through)</li>
+      <li><strong>Evidence:</strong> Take a photo of the letterbox with the notice visible</li>
       <li><strong>Time:</strong> Note the exact time of delivery</li>
       <li><strong>Witness Statement:</strong> Get your witness to sign a statement confirming what they saw</li>
     </ul>
+  </div>
+</div>
 
-    <div class="success">
-      ✓ <strong>Why this is best:</strong> Clear evidence of when and where the notice was delivered. If the tenant denies receiving it, you have photographic proof and witness testimony.
-    </div>
+<div class="alert-box success">
+  <h4>✓ Why This is Best</h4>
+  <p>Clear evidence of when and where the notice was delivered. If the tenant denies receiving it, you have photographic proof and witness testimony.</p>
+</div>
 
-    <h3>Alternative Method 1: First Class Post</h3>
+<!-- Alternative Method 1 -->
+<div class="method-block">
+  <div class="method-block-header">Alternative: First Class Post</div>
+  <div class="method-block-content">
     <ul>
       <li><strong>Send via Royal Mail First Class</strong> post</li>
       <li><strong>Keep proof of postage receipt</strong> (Royal Mail will provide this when you post)</li>
       <li><strong>Deemed served:</strong> Notice is deemed served 2 days after posting (excluding Sundays and bank holidays)</li>
       <li><strong>Safety margin:</strong> Add 2-3 extra days to your notice period if using this method</li>
     </ul>
+  </div>
+</div>
 
-    <div class="warning">
-      ⚠️ <strong>Note:</strong> First class post is legally acceptable, but provides less certainty than hand delivery. The tenant can claim they never received it, and you'll only have proof of posting, not receipt.
-    </div>
+<div class="alert-box warning">
+  <h4>⚠️ Note</h4>
+  <p>First class post is legally acceptable, but provides less certainty than hand delivery. The tenant can claim they never received it, and you'll only have proof of posting, not receipt.</p>
+</div>
 
-    <h3>Alternative Method 2: Recorded Delivery</h3>
+<!-- Alternative Method 2 -->
+<div class="method-block">
+  <div class="method-block-header">Alternative: Recorded Delivery</div>
+  <div class="method-block-content">
     <ul>
       <li><strong>Send via Royal Mail Recorded Delivery</strong></li>
       <li><strong>Tracking:</strong> You'll receive a tracking number</li>
       <li><strong>Proof of delivery:</strong> Royal Mail provides proof when it's delivered</li>
       <li><strong>Signature required:</strong> Someone must sign for it</li>
     </ul>
+  </div>
+</div>
 
-    <div class="warning">
-      ⚠️ <strong>Risk:</strong> If the tenant refuses to sign or doesn't answer the door, the notice may not be deemed served. Use this method only if you're confident the tenant will accept it.
-    </div>
+<div class="alert-box warning">
+  <h4>⚠️ Risk</h4>
+  <p>If the tenant refuses to sign or doesn't answer the door, the notice may not be deemed served. Use this method only if you're confident the tenant will accept it.</p>
+</div>
 
-    <h3>❌ NOT RECOMMENDED: Email or Text</h3>
+<!-- Not Recommended -->
+<div class="method-block">
+  <div class="method-block-header not-recommended">✗ NOT RECOMMENDED: Email or Text</div>
+  <div class="method-block-content">
     <ul>
       <li><strong>Do NOT email or text the notice</strong> unless your tenancy agreement specifically allows electronic service</li>
       <li>Most tenancy agreements do NOT allow electronic service</li>
@@ -157,93 +460,126 @@
       <li>You'll waste time and money and have to start again</li>
     </ul>
   </div>
+</div>
 
-  <div class="section">
-    <h2>Evidence You Must Keep</h2>
-    <p>If you go to court, you must <strong>prove you served the notice correctly</strong>. The court will ask for evidence. Keep the following:</p>
+<!-- Evidence Section -->
+<div class="section-header">
+  <span class="num">3</span>
+  <h2>Evidence You Must Keep</h2>
+</div>
 
-    <div class="checklist">
-      <h3>Service Evidence Checklist:</h3>
-      <ul>
-        <li>✓ Photo of notice being delivered (letterbox shot with notice visible)</li>
-        <li>✓ Witness statement (name, address, what they saw, signature)</li>
-        <li>✓ Proof of postage (if posted)</li>
-        <li>✓ Recorded delivery receipt (if used)</li>
-        <li>✓ Copy of the notice you served (this exact document)</li>
-        <li>✓ Date and time of service (written down immediately)</li>
-        <li>✓ Any correspondence with tenant acknowledging receipt</li>
-      </ul>
-    </div>
+<p style="font-size: 10pt; line-height: 1.5;">If you go to court, you must <strong>prove you served the notice correctly</strong>. The court will ask for evidence. Keep the following:</p>
 
-    <div class="evidence-item">
-      <strong>Witness Statement Template:</strong>
-      <p style="margin-top: 10px;">"I, [Witness Name], of [Witness Address], confirm that on [Date] at [Time], I witnessed [Your Name] hand-deliver a notice through the letterbox at [Property Address]. The notice was fully inserted into the letterbox and dropped inside the property. [Signature] [Date]"</p>
-    </div>
-  </div>
-
-  <div class="section">
-    <h2>What Happens After Service?</h2>
-
-    <h3>Waiting Period</h3>
-    <p>After serving the notice, you must wait until the expiry date: <strong>{{earliest_possession_date_formatted}}</strong></p>
-
+<div class="checklist-box">
+  <h3>Service Evidence Checklist</h3>
+  <div class="content">
     <ul>
-      <li>The tenant does NOT have to leave immediately</li>
-      <li>They have until the expiry date to leave voluntarily</li>
-      <li>During this period, they should continue paying rent</li>
-      <li>You cannot change the locks or force them out (this is illegal)</li>
-    </ul>
-
-    <h3>If They Leave Voluntarily</h3>
-    <p>If the tenant leaves before or on the expiry date:</p>
-    <ul>
-      <li>✓ Great! You've avoided court proceedings</li>
-      <li>✓ Do a final inspection with them present (if possible)</li>
-      <li>✓ Complete the check-out inventory</li>
-      <li>✓ Return their deposit within 10 days (if protected)</li>
-      <li>✓ Settle any disputes about deductions</li>
-    </ul>
-
-    <h3>If They Don't Leave</h3>
-    <p>If the tenant is still in the property after <strong>{{earliest_possession_date_formatted}}</strong>:</p>
-    <ul>
-      <li><strong>DO NOT</strong> change the locks (illegal eviction - you could face criminal charges)</li>
-      <li><strong>DO NOT</strong> remove their belongings (illegal)</li>
-      <li><strong>DO NOT</strong> harass them or cut off utilities (illegal)</li>
-      <li><strong>DO</strong> apply to court for a possession order</li>
-    </ul>
-
-    <div class="warning">
-      ⚠️ <strong>Court Application:</strong> You can use either Form N5 (standard possession claim) or Form N5B (accelerated procedure). N5B is faster if the tenant doesn't dispute, but requires complete compliance with all Section 21 requirements. If you purchased the Complete Pack, these forms are included. Otherwise, you'll need to upgrade or obtain them separately.
-    </div>
-  </div>
-
-  <div class="section">
-    <h2>Common Mistakes to Avoid</h2>
-    <ul>
-      <li>❌ Not protecting the deposit before serving the notice</li>
-      <li>❌ Serving before providing How to Rent guide</li>
-      <li>❌ Getting the expiry date wrong (must be at least 2 months and aligned with rent period)</li>
-      <li>❌ Not keeping evidence of service</li>
-      <li>❌ Serving by email when the tenancy doesn't allow it</li>
-      <li>❌ Changing locks before getting a court order (illegal eviction)</li>
-      <li>❌ Missing compliance requirements (gas cert, EPC, How to Rent, licensing)</li>
-      <li>❌ Serving within first 4 months of tenancy (only applies to new ASTs from October 2015)</li>
+      <li>Photo of notice being delivered (letterbox shot with notice visible)</li>
+      <li>Witness statement (name, address, what they saw, signature)</li>
+      <li>Proof of postage (if posted)</li>
+      <li>Recorded delivery receipt (if used)</li>
+      <li>Copy of the notice you served (this exact document)</li>
+      <li>Date and time of service (written down immediately)</li>
+      <li>Any correspondence with tenant acknowledging receipt</li>
     </ul>
   </div>
+</div>
 
-  <div class="section">
+<div class="template-box">
+  <div class="template-box-header">Witness Statement Template</div>
+  <div class="template-box-content">"I, [Witness Name], of [Witness Address], confirm that on [Date] at [Time], I witnessed [Your Name] hand-deliver a notice through the letterbox at [Property Address]. The notice was fully inserted into the letterbox and dropped inside the property.
+
+Signed: _______________________________
+
+Date: _______________________________"</div>
+</div>
+
+<!-- What Happens After Service -->
+<div class="section-header">
+  <span class="num">4</span>
+  <h2>What Happens After Service</h2>
+</div>
+
+<h3 style="font-size: 11pt; margin-top: 1em;">Waiting Period</h3>
+<p style="font-size: 10pt; line-height: 1.5;">After serving the notice, you must wait until the date in section 2 of the notice: <strong>{{display_possession_date_formatted}}</strong></p>
+
+<ul style="font-size: 10pt; line-height: 1.6;">
+  <li>The tenant does NOT have to leave immediately</li>
+  <li>They have until the expiry date to leave voluntarily</li>
+  <li>During this period, they should continue paying rent</li>
+  <li>You cannot change the locks or force them out (this is illegal)</li>
+</ul>
+
+<h3 style="font-size: 11pt; margin-top: 1.25em;">If They Leave Voluntarily</h3>
+<div class="checklist-box">
+  <h3>Voluntary Departure Checklist</h3>
+  <div class="content">
+    <ul>
+      <li>Great! You've avoided court proceedings</li>
+      <li>Do a final inspection with them present (if possible)</li>
+      <li>Complete the check-out inventory</li>
+      <li>Return their deposit within 10 days (if protected)</li>
+      <li>Settle any disputes about deductions</li>
+    </ul>
+  </div>
+</div>
+
+<h3 style="font-size: 11pt; margin-top: 1.25em;">If They Don't Leave</h3>
+<p style="font-size: 10pt; line-height: 1.5;">If the tenant is still in the property after <strong>{{display_possession_date_formatted}}</strong>:</p>
+
+<div class="alert-box critical">
+  <h4>⚠️ Do NOT</h4>
+  <ul>
+    <li>Change the locks (illegal eviction - you could face criminal charges)</li>
+    <li>Remove their belongings (illegal)</li>
+    <li>Harass them or cut off utilities (illegal)</li>
+  </ul>
+  <p style="margin-top: 0.75em;"><strong>DO</strong> apply to court for a possession order.</p>
+</div>
+
+<div class="alert-box info">
+  <h4>Court Application</h4>
+  <p>You can use either Form N5 (standard possession claim) or Form N5B (accelerated procedure). N5B is faster if the tenant doesn't dispute, but requires complete compliance with all Section 21 requirements. If you purchased the Complete Pack, these forms are included. Otherwise, you'll need to upgrade or obtain them separately.</p>
+</div>
+
+<!-- Common Mistakes -->
+<div class="section-header">
+  <span class="num">5</span>
+  <h2>Common Mistakes to Avoid</h2>
+</div>
+
+<ul class="mistakes-list">
+  <li>Not protecting the deposit before serving the notice</li>
+  <li>Serving before providing How to Rent guide</li>
+  <li>Getting the expiry date wrong (must be at least 2 months and aligned with rent period)</li>
+  <li>Not keeping evidence of service</li>
+  <li>Serving by email when the tenancy doesn't allow it</li>
+  <li>Changing locks before getting a court order (illegal eviction)</li>
+  <li>Missing compliance requirements (gas cert, EPC, How to Rent, licensing)</li>
+  <li>Serving within first 4 months of tenancy (only applies to new ASTs from October 2015)</li>
+</ul>
+
+<!-- Legal Basis -->
+<div class="keep-together">
+  <div class="section-header">
+    <span class="num">6</span>
     <h2>Legal Basis</h2>
+  </div>
+
+  <div class="legal-basis">
     <p><strong>Service Requirements:</strong> Housing Act 1988, Section 21</p>
     <p><strong>Proof of Service:</strong> Civil Procedure Rules, Part 6</p>
     <p><strong>Illegal Eviction:</strong> Protection from Eviction Act 1977</p>
     <p><strong>Deposit Protection:</strong> Housing Act 2004, Sections 213-215</p>
   </div>
+</div>
 
-  <footer>
-    <p><strong>Important:</strong> This is guidance only and does not constitute legal advice. If you're unsure about any step, consult a solicitor or legal advisor.</p>
-    <p><strong>Generated:</strong> {{generated_date}}</p>
-    <p><strong>Landlord Heaven Notice Only Pack</strong> | England</p>
-  </footer>
+<!-- Footer -->
+<div class="doc-footer">
+  <p><strong>Important:</strong> This is guidance only and does not constitute legal advice. If you're unsure about any step, consult a solicitor or legal advisor.</p>
+  <p><strong>Generated:</strong> {{generated_date}}</p>
+  <p><strong>Landlord Heaven Notice Only Pack</strong> | England</p>
+</div>
+
 </body>
 </html>

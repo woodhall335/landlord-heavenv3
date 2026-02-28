@@ -1,0 +1,97 @@
+{{!--
+  ============================================================================
+  SCHEDULE 4: INVENTORY AND CONDITION
+  Furniture, contents, and condition report reference
+
+  USAGE:
+  {{> schedule_inventory}}
+  ============================================================================
+--}}
+
+{{#*inline "schedule_inventory"}}
+<section class="schedule" id="schedule-4">
+  <div class="schedule-header">
+    <h2>Schedule 4</h2>
+    <div class="schedule-title">Inventory and Condition</div>
+  </div>
+
+  {{#if inventory_attached}}
+  <p>A detailed inventory and schedule of condition is attached to this Agreement or provided separately. The inventory forms part of this Agreement and records the contents and condition of the Property at the start of the tenancy.</p>
+  {{else}}
+  <p>{{#if inventory_provided}}An inventory will be provided to the Tenant at or before the start of the tenancy.{{else}}The Tenant should prepare their own photographic record of the Property's condition at the start of the tenancy.{{/if}}</p>
+  {{/if}}
+
+  <h3>Part A: Condition at Start of Tenancy</h3>
+  <p>The Tenant acknowledges that the Property has been inspected and accepts it in its current condition subject to any defects noted in the inventory or reported to the Landlord within 7 days of the start of the tenancy.</p>
+
+  {{#if decoration_condition}}
+  <table class="data-table">
+    <tr>
+      <td class="label">Decoration Condition</td>
+      <td class="value">{{decoration_condition}}</td>
+    </tr>
+  </table>
+  {{/if}}
+
+  {{#if inventory_items}}
+  <h3>Part B: Contents List</h3>
+  <p>The following items are provided by the Landlord for use by the Tenant:</p>
+  <p>{{inventory_items}}</p>
+  {{/if}}
+
+  {{#if white_goods_included}}
+  <h3>Part C: White Goods and Appliances</h3>
+  <table class="data-table">
+    <tr>
+      <th>Appliance</th>
+      <th>Included</th>
+    </tr>
+    {{#each white_goods_included}}
+    <tr>
+      <td>{{this}}</td>
+      <td>Yes</td>
+    </tr>
+    {{/each}}
+  </table>
+  {{/if}}
+
+  <h3>Part D: Keys and Access</h3>
+  <table class="data-table">
+    {{#if number_of_front_door_keys}}
+    <tr>
+      <td class="label">Front Door Keys</td>
+      <td class="value">{{number_of_front_door_keys}}</td>
+    </tr>
+    {{/if}}
+    {{#if number_of_back_door_keys}}
+    <tr>
+      <td class="label">Back Door Keys</td>
+      <td class="value">{{number_of_back_door_keys}}</td>
+    </tr>
+    {{/if}}
+    {{#if number_of_window_keys}}
+    <tr>
+      <td class="label">Window Keys</td>
+      <td class="value">{{number_of_window_keys}}</td>
+    </tr>
+    {{/if}}
+    {{#if access_cards_fobs}}
+    <tr>
+      <td class="label">Access Cards/Fobs</td>
+      <td class="value">{{access_cards_fobs}}</td>
+    </tr>
+    {{/if}}
+    {{#if number_of_mailbox_keys}}
+    <tr>
+      <td class="label">Mailbox Keys</td>
+      <td class="value">{{number_of_mailbox_keys}}</td>
+    </tr>
+    {{/if}}
+  </table>
+  <p>All keys, fobs, and access devices must be returned at the end of the tenancy. {{#if key_replacement_cost}}The cost of replacing lost keys is £{{key_replacement_cost}} per key.{{else}}The cost of replacing lost keys will be charged to the Tenant.{{/if}}</p>
+
+  <h3>Part E: Condition at End of Tenancy</h3>
+  <p>At the end of the tenancy, the Tenant must return the Property in the same condition as at the start (allowing for fair wear and tear), with all items listed in the inventory present and in good condition.</p>
+  <p>A check-out inspection will be conducted at the end of the tenancy. The Tenant should be present at this inspection where possible. Any discrepancies between the check-in and check-out inventories may result in deductions from the Deposit.</p>
+</section>
+{{/inline}}

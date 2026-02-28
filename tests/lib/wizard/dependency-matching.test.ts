@@ -26,12 +26,12 @@ describe('Dependency Matching: Array vs Scalar', () => {
       version: '1.0.0',
       questions: [
         {
-          id: 'eviction_route_intent',
+          id: 'selected_notice_route',
           section: 'Route',
           question: 'Which route?',
           inputType: 'multi_select',
           options: ['section_8', 'section_21'],
-          maps_to: ['eviction_route_intent'],
+          maps_to: ['selected_notice_route'],
         },
         {
           id: 'section8_grounds',
@@ -40,7 +40,7 @@ describe('Dependency Matching: Array vs Scalar', () => {
           inputType: 'multi_select',
           options: ['Ground 8', 'Ground 10'],
           dependsOn: {
-            questionId: 'eviction_route_intent',
+            questionId: 'selected_notice_route',
             value: 'section_8', // Scalar dependency
           },
           routes: ['section_8'],
@@ -50,7 +50,7 @@ describe('Dependency Matching: Array vs Scalar', () => {
     };
 
     const facts = {
-      eviction_route_intent: ['section_8'], // Array answer from multi-select
+      selected_notice_route: ['section_8'], // Array answer from multi-select
     };
 
     const question = mqs.questions.find((q) => q.id === 'section8_grounds')!;
@@ -199,15 +199,16 @@ describe('Dependency Matching: Array vs Scalar', () => {
       throw new Error('Failed to load notice_only MQS for england');
     }
 
-    const section8GroundsQuestion = mqs.questions.find((q) => q.id === 'section8_grounds');
+    // After migration: section8_grounds is now section8_grounds_selection (maps_to section8_grounds)
+    const section8GroundsQuestion = mqs.questions.find((q) => q.id === 'section8_grounds_selection');
 
     if (!section8GroundsQuestion) {
-      throw new Error('section8_grounds question not found in MQS');
+      throw new Error('section8_grounds_selection question not found in MQS');
     }
 
     // Simulate user selecting Section 8 route (multi-select answer)
     const facts = {
-      eviction_route_intent: ['section_8'],
+      selected_notice_route: ['section_8'], // Updated to match current MQS
     };
 
     const result = questionIsApplicable(mqs, section8GroundsQuestion, facts);
@@ -226,15 +227,16 @@ describe('Dependency Matching: Array vs Scalar', () => {
       throw new Error('Failed to load notice_only MQS for england');
     }
 
-    const section8GroundsQuestion = mqs.questions.find((q) => q.id === 'section8_grounds');
+    // After migration: section8_grounds is now section8_grounds_selection
+    const section8GroundsQuestion = mqs.questions.find((q) => q.id === 'section8_grounds_selection');
 
     if (!section8GroundsQuestion) {
-      throw new Error('section8_grounds question not found in MQS');
+      throw new Error('section8_grounds_selection question not found in MQS');
     }
 
     // User selecting both routes
     const facts = {
-      eviction_route_intent: ['section_8', 'section_21'],
+      selected_notice_route: ['section_8', 'section_21'], // Updated to match current MQS
     };
 
     const result = questionIsApplicable(mqs, section8GroundsQuestion, facts);
@@ -253,19 +255,131 @@ describe('Dependency Matching: Array vs Scalar', () => {
       throw new Error('Failed to load notice_only MQS for england');
     }
 
-    const section8GroundsQuestion = mqs.questions.find((q) => q.id === 'section8_grounds');
+    // After migration: section8_grounds is now section8_grounds_selection
+    const section8GroundsQuestion = mqs.questions.find((q) => q.id === 'section8_grounds_selection');
 
     if (!section8GroundsQuestion) {
-      throw new Error('section8_grounds question not found in MQS');
+      throw new Error('section8_grounds_selection question not found in MQS');
     }
 
     const facts = {
-      eviction_route_intent: ['section_21'], // Only Section 21
+      selected_notice_route: ['section_21'], // Only Section 21, updated to match current MQS
     };
 
     const result = questionIsApplicable(mqs, section8GroundsQuestion, facts);
 
     // Should be false: ["section_21"] does not include "section_8"
+    expect(result).toBe(false);
+  });
+});
+
+/**
+ * Tests for prescribed_info_given conditional visibility
+ *
+ * The prescribed_info_given question should ONLY be shown when:
+ * - deposit_taken == true AND deposit_protected_scheme == true
+ *
+ * This ensures the prescribed information question is only asked
+ * when the deposit was actually protected in an approved scheme.
+ */
+describe('prescribed_info_given allOf dependency', () => {
+  it('should NOT show prescribed_info_given when deposit_protected_scheme=false (even with deposit_taken=true)', () => {
+    const mqs = loadMQS('notice_only', 'england');
+
+    if (!mqs) {
+      throw new Error('Failed to load notice_only MQS for england');
+    }
+
+    const prescribedInfoQuestion = mqs.questions.find((q) => q.id === 'prescribed_info_given');
+
+    if (!prescribedInfoQuestion) {
+      throw new Error('prescribed_info_given question not found in MQS');
+    }
+
+    // Deposit taken but NOT protected - prescribed_info_given should NOT show
+    const facts = {
+      deposit_taken: true,
+      deposit_protected: false, // This is the mapped value from deposit_protected_scheme
+    };
+
+    const result = questionIsApplicable(mqs, prescribedInfoQuestion, facts);
+
+    // Should be false: deposit_protected_scheme=false means question should be hidden
+    expect(result).toBe(false);
+  });
+
+  it('should show prescribed_info_given when deposit_taken=true AND deposit_protected_scheme=true', () => {
+    const mqs = loadMQS('notice_only', 'england');
+
+    if (!mqs) {
+      throw new Error('Failed to load notice_only MQS for england');
+    }
+
+    const prescribedInfoQuestion = mqs.questions.find((q) => q.id === 'prescribed_info_given');
+
+    if (!prescribedInfoQuestion) {
+      throw new Error('prescribed_info_given question not found in MQS');
+    }
+
+    // Both conditions met - prescribed_info_given SHOULD show
+    const facts = {
+      deposit_taken: true,
+      deposit_protected: true, // This is the mapped value from deposit_protected_scheme
+    };
+
+    const result = questionIsApplicable(mqs, prescribedInfoQuestion, facts);
+
+    // Should be true: both allOf conditions are satisfied
+    expect(result).toBe(true);
+  });
+
+  it('should NOT show prescribed_info_given when deposit_taken=false', () => {
+    const mqs = loadMQS('notice_only', 'england');
+
+    if (!mqs) {
+      throw new Error('Failed to load notice_only MQS for england');
+    }
+
+    const prescribedInfoQuestion = mqs.questions.find((q) => q.id === 'prescribed_info_given');
+
+    if (!prescribedInfoQuestion) {
+      throw new Error('prescribed_info_given question not found in MQS');
+    }
+
+    // No deposit taken - prescribed_info_given should NOT show
+    const facts = {
+      deposit_taken: false,
+      deposit_protected: true, // Even if somehow true, deposit_taken=false should hide it
+    };
+
+    const result = questionIsApplicable(mqs, prescribedInfoQuestion, facts);
+
+    // Should be false: deposit_taken=false fails the first allOf condition
+    expect(result).toBe(false);
+  });
+
+  it('should NOT show prescribed_info_given when neither deposit_taken nor deposit_protected_scheme are true', () => {
+    const mqs = loadMQS('notice_only', 'england');
+
+    if (!mqs) {
+      throw new Error('Failed to load notice_only MQS for england');
+    }
+
+    const prescribedInfoQuestion = mqs.questions.find((q) => q.id === 'prescribed_info_given');
+
+    if (!prescribedInfoQuestion) {
+      throw new Error('prescribed_info_given question not found in MQS');
+    }
+
+    // Both false - prescribed_info_given should NOT show
+    const facts = {
+      deposit_taken: false,
+      deposit_protected: false,
+    };
+
+    const result = questionIsApplicable(mqs, prescribedInfoQuestion, facts);
+
+    // Should be false: neither allOf condition is satisfied
     expect(result).toBe(false);
   });
 });

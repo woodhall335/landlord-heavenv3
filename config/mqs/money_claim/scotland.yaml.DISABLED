@@ -1,0 +1,1101 @@
+__meta:
+  version: "1.0.0"
+  effective_from: "2025-11-01"
+  last_updated: "2025-12-08"
+  legal_review_date: "2025-10-30"
+  jurisdiction: "scotland"
+  product: "money_claim"
+
+# Audit Notes (2025-12-03)
+# - Confirmed unique IDs and valid dependsOn references.
+# - maps_to keys match WizardFacts for Scottish money claims and generators.
+# - Upload steps present for arrears schedule, tenancy agreement, rent schedule, bank statements, and damage evidence.
+
+id: money_claim_scotland_v1
+product: money_claim
+jurisdiction: scotland
+version: "1.0.0"
+
+questions:
+  # ================================
+  # 1. PURSUER (CLAIMANT)
+  # ================================
+  - id: pursuer_full_name
+    section: claimant
+    question: "Pursuer full name"
+    type: text
+    required: true
+    suggestion_prompt: "Use the landlord's legal name as it should appear on the Simple Procedure claim."
+    maps_to:
+      - landlord_name
+    conditions: []
+
+  - id: pursuer_secondary_name
+    section: claimant
+    question: "Second pursuer (if joint landlord)"
+    type: text
+    required: false
+    suggestion_prompt: "Include any joint landlord who will also be named on the claim."
+    maps_to:
+      - landlord_co_claimant
+    conditions: []
+
+  - id: pursuer_email
+    section: claimant
+    question: "Contact email"
+    type: text
+    required: true
+    suggestion_prompt: "Provide an email for court correspondence and settlement discussions."
+    maps_to:
+      - landlord_email
+    conditions: []
+
+  - id: pursuer_phone
+    section: claimant
+    question: "Contact phone"
+    type: text
+    required: true
+    suggestion_prompt: "Use a daytime number that the Sheriff Court can contact."
+    maps_to:
+      - landlord_phone
+    conditions: []
+
+  - id: pursuer_address
+    section: claimant
+    question: "Pursuer address"
+    type: address
+    required: true
+    suggestion_prompt: "Address for service and display on Simple Procedure Form 3A."
+    maps_to:
+      - landlord_address_line1
+      - landlord_address_line2
+      - landlord_city
+      - landlord_postcode
+    conditions: []
+
+  - id: claimant_reference
+    section: claimant
+    question: "Reference to show on the claim (optional)"
+    type: text
+    required: false
+    suggestion_prompt: "Internal reference to help you track this case."
+    maps_to:
+      - claimant_reference
+    conditions: []
+
+  # ================================
+  # 2. DEFENDER (RESPONDENT)
+  # ================================
+  - id: defender_full_name
+    section: defendant
+    question: "Defender full name"
+    type: text
+    required: true
+    suggestion_prompt: "Use the tenant's legal name exactly as in the tenancy agreement."
+    maps_to:
+      - defendant_name_1
+    conditions: []
+
+  - id: defender_secondary_name
+    section: defendant
+    question: "Second defender (if joint tenant)"
+    type: text
+    required: false
+    suggestion_prompt: "Include any joint tenant who is also liable for the arrears."
+    maps_to:
+      - defendant_name_2
+    conditions: []
+
+  - id: defender_contact
+    section: defendant
+    question: "Defender contact details (email/phone if known)"
+    type: text
+    required: false
+    suggestion_prompt: "Add any contact details used for payment discussions (email, phone)."
+    maps_to:
+      - defendant_email
+      - defendant_phone
+    conditions: []
+
+  # ================================
+  # 3. PROPERTY
+  # ================================
+  - id: property_address
+    section: property
+    question: "Rented property address"
+    type: address
+    required: true
+    suggestion_prompt: "Full address of the let property for the claim form and statement of claim."
+    maps_to:
+      - property_address_line1
+      - property_address_line2
+      - property_city
+      - property_postcode
+      - property_country
+    conditions: []
+
+  # ================================
+  # 4. TENANCY DETAILS
+  # ================================
+  - id: tenancy_start_date
+    section: tenancy
+    question: "Tenancy start date"
+    type: date
+    required: true
+    suggestion_prompt: "Use the date the lease began as shown in the tenancy agreement."
+    maps_to:
+      - tenancy_start_date
+    conditions: []
+
+  - id: tenancy_end_date
+    section: tenancy
+    question: "If the tenancy ended, what was the end date?"
+    type: date
+    required: false
+    suggestion_prompt: "Provide the end date if the lease has ended; leave blank if it is ongoing."
+    maps_to:
+      - tenancy_end_date
+    conditions: []
+
+  - id: rent_amount
+    section: tenancy
+    question: "Rent amount per period"
+    type: currency
+    required: true
+    suggestion_prompt: "State the contractual rent per period (weekly or monthly)."
+    maps_to:
+      - rent_amount
+    conditions: []
+
+  - id: rent_frequency
+    section: tenancy
+    question: "Rent frequency"
+    type: select
+    required: true
+    options:
+      - weekly
+      - fortnightly
+      - monthly
+      - quarterly
+    suggestion_prompt: "Select how often the rent falls due under the lease."
+    maps_to:
+      - rent_frequency
+    conditions: []
+
+  - id: rent_due_day
+    section: tenancy
+    question: "Payment day each period"
+    type: text
+    required: false
+    suggestion_prompt: "Provide the usual due day (for example, 1st of the month)."
+    maps_to:
+      - rent_due_day
+    conditions: []
+
+  - id: payment_day
+    section: tenancy
+    question: "Usual rent payment day of the week"
+    type: text
+    required: false
+    suggestion_prompt: "If rent is weekly or fortnightly, add the weekday the tenant normally pays."
+    maps_to:
+      - money_claim_payment_day
+    conditions: []
+
+  # ================================
+  # 5. COURT JURISDICTION & SEAT
+  # ================================
+  - id: sheriffdom
+    section: court_selection
+    question: "Which Sheriff Court has jurisdiction?"
+    type: text
+    required: true
+    suggestion_prompt: "Name the Sheriffdom and court closest to the property (for example, Edinburgh Sheriff Court)."
+    maps_to:
+      - court_name
+      - sheriffdom
+    conditions: []
+
+  - id: sheriff_court
+    section: court_selection
+    question: "Which specific Sheriff Court will you use?"
+    type: text
+    required: false
+    suggestion_prompt: "Confirm the exact Sheriff Court where you intend to lodge the claim."
+    maps_to:
+      - court_name
+    conditions: []
+
+  - id: court_jurisdiction_confirmed
+    section: court_selection
+    question: "Is the property within this court's area?"
+    type: yes_no
+    required: false
+    suggestion_prompt: "Confirm that this court has territorial jurisdiction to hear the case."
+    maps_to:
+      - court_jurisdiction_confirmed
+    conditions: []
+
+  # ================================
+  # 6. CLAIM SCOPE & AMOUNTS
+  # ================================
+  - id: basis_of_claim
+    section: arrears
+    question: "What are you claiming for?"
+    type: multi-select
+    required: true
+    options:
+      - rent_arrears
+      - property_damage
+      - other_costs
+    suggestion_prompt: "Choose every head of claim to include in the Simple Procedure statement of claim."
+    maps_to:
+      - basis_of_claim
+    conditions: []
+
+  - id: arrears_total
+    section: arrears
+    question: "Total rent arrears"
+    type: currency
+    required: true
+    suggestion_prompt: "Total unpaid rent up to today; used for interest and fee banding."
+    maps_to:
+      - total_arrears
+      - claim_amount_rent
+    conditions: []
+
+  - id: arrears_schedule_upload
+    section: arrears
+    question: "Upload rent schedule or ledger"
+    type: upload
+    required: true
+    suggestion_prompt: "Upload the rent ledger so we can build the arrears schedule (required for the Simple Procedure pack)."
+    maps_to:
+      - rent_schedule_uploaded
+      - arrears_items
+    conditions: []
+
+  # ================================
+  # 7. DAMAGES & OTHER SUMS
+  # ================================
+  - id: claim_damages
+    section: damages
+    question: "Are you claiming for property damage?"
+    type: yes_no
+    required: true
+    suggestion_prompt: "Include any repair or replacement costs beyond fair wear and tear."
+    maps_to:
+      - damage_claim
+    conditions: []
+
+  - id: damage_items_description
+    section: damages
+    question: "Damage items and amounts"
+    type: longtext
+    required: false
+    suggestion_prompt: "List each damage item and its cost (for example, broken door £180, repaint £240)."
+    maps_to:
+      - damage_items
+    conditions:
+      - depends_on: claim_damages
+        value: yes
+
+  - id: damage_total
+    section: damages
+    question: "Total claimed for damage"
+    type: currency
+    required: false
+    suggestion_prompt: "Sum of all repair or replacement invoices."
+    maps_to:
+      - claim_amount_other
+    conditions:
+      - depends_on: claim_damages
+        value: yes
+
+  - id: other_charges
+    section: damages
+    question: "Any additional charges (utilities, cleaning, admin)?"
+    type: longtext
+    required: false
+    suggestion_prompt: "List any other sums owed with amounts so they appear in the statement of claim."
+    maps_to:
+      - other_charges
+    conditions: []
+
+  # ================================
+  # 8. INTEREST
+  # ================================
+  - id: charge_interest
+    section: interest
+    question: "Apply statutory interest (default 8%)?"
+    type: yes_no
+    required: true
+    suggestion_prompt: "Simple Procedure usually allows 8% simple interest unless another rate applies."
+    maps_to:
+      - charge_interest
+    conditions: []
+
+  - id: interest_start_date
+    section: interest
+    question: "Interest start date"
+    type: date
+    required: false
+    suggestion_prompt: "Usually the first missed rent date; needed for interest workings."
+    maps_to:
+      - interest_start_date
+    conditions:
+      - depends_on: charge_interest
+        value: yes
+
+  - id: interest_rate
+    section: interest
+    question: "Interest rate"
+    type: text
+    required: false
+    suggestion_prompt: "Confirm the interest rate (default 8%) you wish to apply."
+    maps_to:
+      - interest_rate
+    conditions:
+      - depends_on: charge_interest
+        value: yes
+
+  # ================================
+  # 9. PRE-ACTION STEPS (RULE 3.1)
+  # ================================
+  - id: attempts_to_resolve
+    section: particulars
+    question: "What steps have you taken to resolve this before court?"
+    type: longtext
+    required: true
+    suggestion_prompt: "Describe reminder letters, payment plans offered, and responses; this supports compliance with Simple Procedure Rule 3.1."
+    maps_to:
+      - attempts_to_resolve
+    conditions: []
+
+  - id: demand_letter_date
+    section: pre_action
+    question: "Date of first demand letter"
+    type: date
+    required: false
+    suggestion_prompt: "Provide the date you first demanded payment in writing."
+    maps_to:
+      - demand_letter_date
+    conditions: []
+
+  - id: second_demand_date
+    section: pre_action
+    question: "Date of follow-up demand (if any)"
+    type: date
+    required: false
+    suggestion_prompt: "If you sent a second chaser before court, add the date here."
+    maps_to:
+      - second_demand_date
+    conditions: []
+
+  - id: pre_action_first_method
+    section: pre_action
+    question: "How was the first demand served?"
+    type: multi-select
+    required: false
+    options:
+      - email
+      - post
+      - hand_delivered
+    suggestion_prompt: "Confirm the service method for the first written demand."
+    maps_to:
+      - lba_method
+    conditions: []
+
+  - id: pre_action_response_deadline
+    section: pre_action
+    question: "What response deadline did you give?"
+    type: date
+    required: false
+    suggestion_prompt: "Simple Procedure pre-action letters usually allow at least 14 days."
+    maps_to:
+      - lba_response_deadline
+    conditions: []
+
+  - id: pre_action_docs_sent
+    section: pre_action
+    question: "Did you include any reply or financial forms?"
+    type: multi-select
+    required: false
+    options:
+      - reply_form
+      - financial_statement
+      - information_sheet
+    suggestion_prompt: "Confirm if you enclosed a reply form, information sheet or income details form."
+    maps_to:
+      - pap_documents_sent
+    conditions: []
+
+  - id: pre_action_second_method
+    section: pre_action
+    question: "How was the follow-up demand served?"
+    type: multi-select
+    required: false
+    options:
+      - email
+      - post
+      - hand_delivered
+    suggestion_prompt: "Confirm the service method for any follow-up written demand."
+    maps_to:
+      - lba_second_method
+    conditions: []
+
+  - id: pre_action_reply_received
+    section: pre_action
+    question: "Did the defender reply to the demands?"
+    type: yes_no
+    required: false
+    suggestion_prompt: "State whether any response or payment proposal was received."
+    maps_to:
+      - tenant_responded
+    conditions: []
+
+  - id: pre_action_reply_details
+    section: pre_action
+    question: "What was the reply or outcome?"
+    type: longtext
+    required: false
+    suggestion_prompt: "Summarise any reply, payment plan or dispute raised by the defender."
+    maps_to:
+      - tenant_response_details
+    conditions:
+      - depends_on: pre_action_reply_received
+        value: yes
+
+  - id: pre_action_letter_14day
+    section: pre_action
+    question: "Did your pre-action letter give at least 14 days to respond?"
+    type: yes_no
+    required: false
+    suggestion_prompt: "Confirm compliance with Simple Procedure Rule 3.1 on response time."
+    maps_to:
+      - pre_action_deadline_confirmation
+    conditions: []
+
+  # ================================
+  # 10. PARTICULARS / STATEMENT OF CLAIM
+  # ================================
+  - id: particulars_of_claim
+    section: particulars
+    question: "Narrative of the claim"
+    type: longtext
+    required: true
+    suggestion_prompt: "Explain the tenancy terms, arrears timeline, any damage and the total you are seeking."
+    maps_to:
+      - particulars_of_claim
+    conditions: []
+
+  - id: evidence_summary
+    section: particulars
+    question: "Key evidence you will rely on"
+    type: longtext
+    required: true
+    suggestion_prompt: "Summarise the documents you will attach (tenancy agreement, ledger, letters, photos, invoices)."
+    maps_to:
+      - evidence_summary
+    conditions: []
+
+  # ================================
+  # 11. EVIDENCE (UPLOADS & PROOF)
+  # ================================
+  - id: upload_tenancy_agreement
+    section: evidence
+    question: "Upload the signed tenancy agreement"
+    type: upload
+    required: true
+    suggestion_prompt: "Attach the full signed agreement to evidence the rent terms and parties."
+    maps_to:
+      - tenancy_agreement_uploaded
+    conditions: []
+
+  - id: upload_rent_schedule
+    section: evidence
+    question: "Upload rent ledger or arrears schedule"
+    type: upload
+    required: true
+    suggestion_prompt: "Required for the arrears schedule in the Simple Procedure pack."
+    maps_to:
+      - rent_schedule_uploaded
+    conditions: []
+
+  - id: upload_bank_statements
+    section: evidence
+    question: "Upload bank statements showing missed rent"
+    type: upload
+    required: false
+    suggestion_prompt: "Attach statements or screenshots to corroborate the non-payment."
+    maps_to:
+      - bank_statements_uploaded
+    conditions: []
+
+  - id: upload_damage_evidence
+    section: evidence
+    question: "Upload photos/quotes for any damage"
+    type: upload
+    required: false
+    suggestion_prompt: "Provide photos, inventory check-out and contractor quotes for the damage claim."
+    maps_to:
+      - other_evidence_uploaded
+    conditions:
+      - depends_on: claim_damages
+        value: yes
+
+  - id: arrears_schedule_confirm
+    section: evidence
+    question: "Do you have a rent schedule or arrears breakdown ready?"
+    type: yes_no
+    required: true
+    suggestion_prompt: "Confirm you can provide a clear rent ledger or schedule to the court."
+    maps_to:
+      - arrears_schedule_confirmed
+    conditions: []
+
+  - id: evidence_types_available
+    section: evidence
+    question: "Which supporting evidence can you provide?"
+    type: multi-select
+    required: false
+    options:
+      - tenancy_agreement
+      - arrears_ledger
+      - inspection_report
+      - photos_or_videos
+      - invoices_or_receipts
+      - correspondence
+    suggestion_prompt: "Select all evidence you can include with the claim pack."
+    maps_to:
+      - evidence_types_available
+    conditions: []
+
+  - id: pre_action_letter_served
+    section: evidence
+    question: "Did you serve the pre-action letter and forms?"
+    type: yes_no
+    required: false
+    suggestion_prompt: "Confirm that the pre-action pack was delivered to the defender."
+    maps_to:
+      - pap_documents_served
+    conditions: []
+
+  - id: pre_action_service_method
+    section: evidence
+    question: "How were the pre-action documents served?"
+    type: multi-select
+    required: false
+    options:
+      - email
+      - post
+      - hand_delivered
+    suggestion_prompt: "Select each method used to serve the pre-action pack."
+    maps_to:
+      - pap_service_method
+    conditions:
+      - depends_on: pre_action_letter_served
+        value: yes
+
+  - id: pre_action_service_proof
+    section: evidence
+    question: "What proof of service do you have?"
+    type: longtext
+    required: false
+    suggestion_prompt: "For example, certificate of posting, email read receipt or a hand-delivery note."
+    maps_to:
+      - pap_service_proof
+    conditions:
+      - depends_on: pre_action_letter_served
+        value: yes
+
+  # ================================
+  # 12. LODGING & FEE SUPPORT
+  # ================================
+  - id: lodging_method
+    section: court_selection
+    question: "How will you lodge the Simple Procedure claim?"
+    type: select
+    required: false
+    options:
+      - civil_online
+      - paper_form
+    suggestion_prompt: "Choose Civil Online or paper Form 3A for lodging the claim."
+    maps_to:
+      - lodging_method
+    conditions: []
+
+  - id: help_with_fees_needed
+    section: court_selection
+    question: "Do you need help with the court fee?"
+    type: yes_no
+    required: false
+    suggestion_prompt: "Select yes if you might be eligible for fee remission or exemption."
+    maps_to:
+      - help_with_fees_needed
+    conditions: []
+
+  # ================================
+  # 13. ENFORCEMENT INTENT (GUIDANCE)
+  # ================================
+  - id: enforcement_preferences
+    section: enforcement
+    question: "If decree is granted, how do you plan to enforce it?"
+    type: multi-select
+    required: false
+    options:
+      - earnings_arrestment
+      - bank_arrestment
+      - attachment
+      - inhibition
+      - not_sure
+    suggestion_prompt: "Select any enforcement routes you would like guidance on after decree."
+    maps_to:
+      - enforcement_preferences
+    conditions: []
+
+  - id: enforcement_notes
+    section: enforcement
+    question: "Anything else about enforcement preferences?"
+    type: longtext
+    required: false
+    suggestion_prompt: "Add context, such as employer details or known assets for enforcement."
+    maps_to:
+      - enforcement_notes
+    conditions: []
+
+  # ================================
+  # 14. SIGNATORY DETAILS
+  # ================================
+  - id: signatory_name
+    section: particulars
+    question: "Who will sign the Simple Procedure statement of truth?"
+    type: text
+    required: true
+    suggestion_prompt: "Use the name that will sign the claim (landlord or solicitor)."
+    maps_to:
+      - signatory_name
+    conditions: []
+
+  - id: signature_date
+    section: particulars
+    question: "Signature date"
+    type: date
+    required: false
+    suggestion_prompt: "Leave blank to auto-fill today's date or set a planned lodging date."
+    maps_to:
+      - signature_date
+    conditions: []
+
+  # ================================
+  # 15. RISK INDICATORS
+  # ================================
+  - id: defender_disputes_claim
+    section: risk_assessment
+    question: "Has the defender disputed any amount claimed?"
+    type: yes_no
+    required: true
+    suggestion_prompt: "Indicate if the defender has challenged any part of the claim."
+    maps_to:
+      - risk.defender_disputes_claim
+    conditions: []
+
+  - id: dispute_details
+    section: risk_assessment
+    question: "What has been disputed?"
+    type: longtext
+    required: false
+    suggestion_prompt: "Describe what the defender has challenged (e.g., damage pre-existing, arrears calculation wrong)."
+    maps_to:
+      - risk.dispute_details
+    conditions:
+      - depends_on: defender_disputes_claim
+        value: yes
+
+  - id: deposit_dispute_pending
+    section: risk_assessment
+    question: "Is there a pending deposit dispute?"
+    type: yes_no
+    required: true
+    suggestion_prompt: "Indicate if there is an active tenancy deposit dispute that may affect the claim."
+    maps_to:
+      - risk.deposit_dispute_pending
+    conditions: []
+
+  - id: deposit_dispute_amount
+    section: risk_assessment
+    question: "Amount in deposit dispute (£)"
+    type: currency
+    required: false
+    suggestion_prompt: "Enter the amount currently in dispute with the deposit scheme."
+    maps_to:
+      - risk.deposit_dispute_amount
+    conditions:
+      - depends_on: deposit_dispute_pending
+        value: yes
+
+  - id: defender_counterclaim_likely
+    section: risk_assessment
+    question: "Is the defender likely to counter-claim?"
+    type: yes_no
+    required: true
+    suggestion_prompt: "Indicate if the defender may raise a counter-claim (e.g., for disrepair, deposit return)."
+    maps_to:
+      - risk.defender_counterclaim_likely
+    conditions: []
+
+  - id: counterclaim_grounds
+    section: risk_assessment
+    question: "Likely counter-claim grounds"
+    type: multi-select
+    required: false
+    options:
+      - disrepair_claims
+      - deposit_not_protected
+      - harassment_or_illegal_eviction
+      - overcharging
+      - deductions_already_made
+    suggestion_prompt: "Select all grounds the defender might use for a counter-claim."
+    maps_to:
+      - risk.counterclaim_grounds
+    conditions:
+      - depends_on: defender_counterclaim_likely
+        value: yes
+
+  - id: payment_plan_offered
+    section: risk_assessment
+    question: "Was a payment plan offered to the defender?"
+    type: yes_no
+    required: true
+    suggestion_prompt: "Indicate if you offered the defender an opportunity to pay in instalments."
+    maps_to:
+      - risk.payment_plan_offered
+    conditions: []
+
+  - id: payment_plan_response
+    section: risk_assessment
+    question: "Defender's response to payment plan"
+    type: select
+    required: false
+    options:
+      - accepted_and_kept
+      - accepted_but_defaulted
+      - rejected
+      - no_response
+    suggestion_prompt: "Describe how the defender responded to the payment plan offer."
+    maps_to:
+      - risk.payment_plan_response
+    conditions:
+      - depends_on: payment_plan_offered
+        value: yes
+
+  - id: defender_vulnerability_known
+    section: risk_assessment
+    question: "Are you aware of any vulnerability factors?"
+    type: yes_no
+    required: false
+    suggestion_prompt: "Sheriffs may consider vulnerability (mental health, disability, children) when making orders."
+    maps_to:
+      - risk.defender_vulnerability_known
+    conditions: []
+
+  - id: vulnerability_details
+    section: risk_assessment
+    question: "Known vulnerability factors"
+    type: longtext
+    required: false
+    suggestion_prompt: "Briefly describe any known vulnerabilities for the court's awareness."
+    maps_to:
+      - risk.vulnerability_details
+    conditions:
+      - depends_on: defender_vulnerability_known
+        value: yes
+
+  # ================================
+  # 16. COMMUNICATION TIMELINE
+  # ================================
+  - id: first_arrears_notice_date
+    section: communication_timeline
+    question: "When did you first notify defender of arrears?"
+    type: date
+    required: true
+    suggestion_prompt: "Provide the date you first informed the tenant that rent was overdue."
+    maps_to:
+      - communication.first_arrears_notice_date
+    conditions: []
+
+  - id: first_notice_method
+    section: communication_timeline
+    question: "Method of first notification"
+    type: select
+    required: true
+    options:
+      - email
+      - letter_posted
+      - letter_hand_delivered
+      - text_message
+      - phone_call
+      - in_person
+    suggestion_prompt: "Select how you first notified the defender of the arrears."
+    maps_to:
+      - communication.first_notice_method
+    conditions: []
+
+  - id: subsequent_reminders_count
+    section: communication_timeline
+    question: "How many reminder letters/emails sent?"
+    type: text
+    required: false
+    suggestion_prompt: "Enter the number of follow-up reminders sent before taking court action."
+    maps_to:
+      - communication.subsequent_reminders_sent
+    conditions: []
+
+  - id: final_demand_date
+    section: communication_timeline
+    question: "Date of final demand before court action"
+    type: date
+    required: false
+    suggestion_prompt: "Provide the date of your final written demand for payment."
+    maps_to:
+      - communication.final_demand_date
+    conditions: []
+
+  - id: defender_acknowledged_debt
+    section: communication_timeline
+    question: "Has the defender acknowledged the debt?"
+    type: yes_no
+    required: false
+    suggestion_prompt: "A written acknowledgment may restart the prescription period."
+    maps_to:
+      - communication.defender_acknowledged_debt
+    conditions: []
+
+  - id: acknowledgment_date
+    section: communication_timeline
+    question: "Date of acknowledgment"
+    type: date
+    required: false
+    suggestion_prompt: "Provide the date the defender acknowledged the debt in writing."
+    maps_to:
+      - communication.acknowledgment_date
+    conditions:
+      - depends_on: defender_acknowledged_debt
+        value: yes
+
+  - id: defender_made_partial_payment
+    section: communication_timeline
+    question: "Has the defender made any partial payments?"
+    type: yes_no
+    required: false
+    suggestion_prompt: "Partial payments can constitute acknowledgment of the debt."
+    maps_to:
+      - communication.defender_made_partial_payment
+    conditions: []
+
+  - id: last_partial_payment_date
+    section: communication_timeline
+    question: "Date of last partial payment"
+    type: date
+    required: false
+    suggestion_prompt: "Provide the date of the most recent partial payment received."
+    maps_to:
+      - communication.last_partial_payment_date
+    conditions:
+      - depends_on: defender_made_partial_payment
+        value: yes
+
+  - id: last_partial_payment_amount
+    section: communication_timeline
+    question: "Amount of last partial payment (£)"
+    type: currency
+    required: false
+    suggestion_prompt: "Enter the amount of the most recent partial payment."
+    maps_to:
+      - communication.last_partial_payment_amount
+    conditions:
+      - depends_on: defender_made_partial_payment
+        value: yes
+
+  # ================================
+  # 17. EVIDENCE DESCRIPTIONS
+  # ================================
+  - id: tenancy_type
+    section: evidence_descriptions
+    question: "Type of tenancy agreement"
+    type: select
+    required: true
+    options:
+      - private_residential_tenancy
+      - short_assured_tenancy
+      - assured_tenancy
+      - other
+    suggestion_prompt: "Select the type of tenancy that governs this let."
+    maps_to:
+      - evidence.tenancy_type
+    conditions: []
+
+  - id: tenancy_written_or_verbal
+    section: evidence_descriptions
+    question: "Written or verbal agreement?"
+    type: select
+    required: true
+    options:
+      - written_and_signed
+      - written_but_unsigned
+      - verbal_only
+    suggestion_prompt: "Confirm whether the tenancy agreement was in writing and signed."
+    maps_to:
+      - evidence.tenancy_written_or_verbal
+    conditions: []
+
+  - id: rent_clause_description
+    section: evidence_descriptions
+    question: "Describe the rent payment terms"
+    type: longtext
+    required: false
+    suggestion_prompt: "E.g., £1,200 per month payable on 1st of each month by standing order."
+    maps_to:
+      - evidence.rent_clause_description
+    conditions: []
+
+  - id: arrears_calculation_method
+    section: evidence_descriptions
+    question: "How have you calculated the arrears?"
+    type: select
+    required: true
+    options:
+      - rent_ledger_spreadsheet
+      - bank_statements
+      - letting_agent_records
+      - manual_calculation
+    suggestion_prompt: "Select the method used to calculate the total arrears."
+    maps_to:
+      - evidence.arrears_calculation_method
+    conditions: []
+
+  - id: arrears_ledger_available
+    section: evidence_descriptions
+    question: "Do you have a rent ledger available?"
+    type: yes_no
+    required: true
+    suggestion_prompt: "Confirm you can provide a rent ledger or schedule showing missed payments."
+    maps_to:
+      - evidence.arrears_ledger_available
+    conditions: []
+
+  - id: arrears_period_description
+    section: evidence_descriptions
+    question: "Describe the arrears period"
+    type: longtext
+    required: true
+    suggestion_prompt: "E.g., Tenant stopped paying in March 2025, no payments since except £200 in May."
+    maps_to:
+      - evidence.arrears_period_description
+    conditions: []
+
+  - id: bank_statements_available
+    section: evidence_descriptions
+    question: "Do you have bank statements showing non-payment?"
+    type: yes_no
+    required: false
+    suggestion_prompt: "Bank statements can corroborate the rent ledger."
+    maps_to:
+      - evidence.bank_statements_available
+    conditions: []
+
+  - id: inventory_checkout_available
+    section: evidence_descriptions
+    question: "Do you have an inventory/check-out report?"
+    type: yes_no
+    required: false
+    suggestion_prompt: "An inventory report helps evidence the condition at start and end of tenancy."
+    maps_to:
+      - evidence.inventory_checkout_available
+    conditions:
+      - depends_on: claim_damages
+        value: yes
+
+  - id: damage_photos_available
+    section: evidence_descriptions
+    question: "Do you have dated photos of damage?"
+    type: yes_no
+    required: false
+    suggestion_prompt: "Dated photographs help prove the damage and when it was discovered."
+    maps_to:
+      - evidence.damage_photos_available
+    conditions:
+      - depends_on: claim_damages
+        value: yes
+
+  - id: damage_photos_description
+    section: evidence_descriptions
+    question: "Describe the photos you have"
+    type: longtext
+    required: false
+    suggestion_prompt: "E.g., Photos taken 15/06/2025 showing holes in bedroom wall, stained carpets in living room."
+    maps_to:
+      - evidence.damage_photos_description
+    conditions:
+      - depends_on: damage_photos_available
+        value: yes
+
+  - id: repair_quotes_description
+    section: evidence_descriptions
+    question: "Describe repair quotes obtained"
+    type: longtext
+    required: false
+    suggestion_prompt: "E.g., ABC Builders quoted £450 for wall repairs, Carpet Co quoted £800 for carpet replacement."
+    maps_to:
+      - evidence.repair_quotes_description
+    conditions:
+      - depends_on: claim_damages
+        value: yes
+
+  - id: before_photos_available
+    section: evidence_descriptions
+    question: "Do you have 'before' photos (check-in condition)?"
+    type: yes_no
+    required: false
+    suggestion_prompt: "Check-in photos establish baseline condition for damage claims."
+    maps_to:
+      - evidence.before_photos_available
+    conditions:
+      - depends_on: claim_damages
+        value: yes
+
+  - id: correspondence_preserved
+    section: evidence_descriptions
+    question: "Have you preserved copies of all correspondence?"
+    type: yes_no
+    required: true
+    suggestion_prompt: "Confirm you have copies of all written communications about the debt."
+    maps_to:
+      - evidence.correspondence_preserved
+    conditions: []
+
+  - id: correspondence_format
+    section: evidence_descriptions
+    question: "Format of correspondence"
+    type: multi-select
+    required: false
+    options:
+      - emails
+      - letters
+      - text_messages
+      - whatsapp_messaging
+      - letting_agent_portal
+    suggestion_prompt: "Select all formats used for communications about the debt."
+    maps_to:
+      - evidence.correspondence_format
+    conditions: []
+
+  - id: key_correspondence_summary
+    section: evidence_descriptions
+    question: "Summarise key correspondence"
+    type: longtext
+    required: false
+    suggestion_prompt: "E.g., Sent arrears letter 01/03/2025, defender replied promising to pay 15/03, no payment received, sent final demand 01/04/2025."
+    maps_to:
+      - evidence.key_correspondence_summary
+    conditions: []

@@ -1,0 +1,563 @@
+{{!--
+  ============================================================================
+  ENGLAND - FORM 6A (SECTION 21 NOTICE REQUIRING POSSESSION)
+  Housing Act 1988, Section 21 - Prescribed Form
+  ============================================================================
+
+  Based on official Form 6A from:
+  https://www.gov.uk/government/publications/section-8-and-section-21-notices
+
+  Source reference: config/jurisdictions/uk/_official_form_sources/england/form6a_section21.odt
+
+  IMPORTANT:
+  - This template matches the exact prescribed form wording
+  - No legal promises or guarantees
+  - Variable names match mapNoticeOnlyFacts() output
+  - Users can edit the HTML after payment; HTML is stored and later rendered to PDF
+  - Uses shared Print Design System from config/jurisdictions/_shared/print/
+--}}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Form 6A - Section 21 Notice Requiring Possession</title>
+  <style>
+    {{{print_css}}}
+
+    /* ===== ENHANCED FORM 6A STYLES ===== */
+    
+    /* Form Header */
+    .form-header {
+      text-align: center;
+      margin-bottom: 1.5em;
+      padding-bottom: 1em;
+      border-bottom: 2px solid #1a1a1a;
+    }
+    
+    .form-header h1 {
+      font-size: 14pt;
+      font-weight: 600;
+      margin: 0 0 0.75em 0;
+      line-height: 1.3;
+      color: #1a1a1a;
+    }
+    
+    .form-reference {
+      display: flex;
+      justify-content: center;
+      gap: 2em;
+      flex-wrap: wrap;
+    }
+    
+    .form-number {
+      display: inline-block;
+      background: #1a1a1a;
+      color: white;
+      padding: 0.3em 0.8em;
+      font-size: 11pt;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+    
+    .form-statute {
+      font-size: 10pt;
+      color: #444;
+      font-style: italic;
+      align-self: center;
+    }
+
+    /* Info Box for Tenant */
+    .tenant-info-box {
+      border: 2px solid #1a1a1a;
+      padding: 1.25em;
+      margin: 1.5em 0;
+      background: #fafafa;
+    }
+    
+    .tenant-info-box h3 {
+      font-size: 11pt;
+      font-weight: 700;
+      margin: 0 0 0.75em 0;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 0.5em;
+    }
+    
+    .tenant-info-box p {
+      font-size: 10pt;
+      line-height: 1.5;
+      margin: 0.6em 0;
+    }
+    
+    .tenant-info-box .helpline {
+      background: #fff;
+      border-left: 3px solid #1a1a1a;
+      padding: 0.5em 0.75em;
+      margin-top: 1em;
+    }
+    
+    .tenant-info-box .link {
+      color: #0066cc;
+      word-break: break-all;
+      font-size: 9pt;
+    }
+
+    /* Numbered Sections */
+    .numbered-section {
+      margin: 1.5em 0;
+      padding-left: 2.5em;
+      position: relative;
+    }
+    
+    .section-number {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1.75em;
+      height: 1.75em;
+      background: #1a1a1a;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 11pt;
+    }
+    
+    .section-label {
+      font-size: 10pt;
+      color: #444;
+      margin-bottom: 0.3em;
+    }
+    
+    .section-value {
+      font-size: 11pt;
+      font-weight: 500;
+      color: #1a1a1a;
+      padding: 0.4em 0;
+      border-bottom: 1px solid #ddd;
+      min-height: 1.5em;
+    }
+    
+    .section-value.address {
+      white-space: pre-line;
+      line-height: 1.6;
+    }
+    
+    .section-text {
+      font-size: 10pt;
+      line-height: 1.5;
+      color: #333;
+    }
+    
+    .section-text.legal-notice {
+      margin-top: 1em;
+      padding: 0.75em;
+      background: #f5f5f5;
+      border-left: 3px solid #666;
+    }
+
+    /* Signature Block */
+    .signature-section {
+      margin: 2em 0;
+      padding: 1.25em;
+      border: 1px solid #ccc;
+      background: #fafafa;
+    }
+    
+    .signature-section h4 {
+      font-size: 10pt;
+      font-weight: 600;
+      margin: 0 0 0.5em 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+    }
+    
+    .signature-section h4 .num {
+      background: #1a1a1a;
+      color: white;
+      width: 1.5em;
+      height: 1.5em;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10pt;
+    }
+    
+    .signature-instruction {
+      font-size: 9pt;
+      font-style: italic;
+      color: #666;
+      margin-bottom: 1.25em;
+      padding-bottom: 0.75em;
+      border-bottom: 1px dashed #ccc;
+    }
+    
+    .signature-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5em;
+    }
+    
+    .signatory-block {
+      padding: 1em;
+      background: white;
+      border: 1px solid #e0e0e0;
+    }
+    
+    .signatory-block.primary {
+      border-color: #1a1a1a;
+    }
+    
+    .signatory-block p {
+      margin: 0.75em 0;
+      font-size: 10pt;
+    }
+    
+    .signatory-block label {
+      font-weight: 600;
+      color: #444;
+      display: block;
+      font-size: 9pt;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      margin-bottom: 0.25em;
+    }
+    
+    .signatory-block .value {
+      font-size: 10pt;
+      color: #1a1a1a;
+      min-height: 1.25em;
+      padding: 0.25em 0;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    .signatory-block .value.address {
+      white-space: pre-line;
+      line-height: 1.5;
+      min-height: 3em;
+    }
+    
+    .signature-line {
+      border-bottom: 1px solid #1a1a1a;
+      min-height: 2em;
+      margin-top: 0.5em;
+    }
+    
+    .capacity-section {
+      margin-top: 1.25em;
+      padding-top: 1em;
+      border-top: 1px solid #ddd;
+    }
+    
+    .capacity-section p {
+      font-weight: 600;
+      font-size: 10pt;
+      margin-bottom: 0.5em;
+    }
+    
+    .capacity-options {
+      display: flex;
+      gap: 1.5em;
+      flex-wrap: wrap;
+    }
+    
+    .capacity-option {
+      display: flex;
+      align-items: center;
+      gap: 0.4em;
+      font-size: 10pt;
+    }
+    
+    .checkbox-box {
+      width: 14px;
+      height: 14px;
+      border: 1.5px solid #1a1a1a;
+      display: inline-block;
+      background: white;
+    }
+    
+    .date-field {
+      margin-top: 1.25em;
+      display: flex;
+      align-items: center;
+      gap: 0.75em;
+    }
+    
+    .date-field label {
+      font-weight: 600;
+      font-size: 10pt;
+    }
+    
+    .date-field .value {
+      font-size: 11pt;
+      font-weight: 500;
+      padding: 0.25em 0.5em;
+      border-bottom: 1px solid #1a1a1a;
+      min-width: 10em;
+    }
+
+    /* Guidance Sections */
+    .guidance-box {
+      margin: 2em 0;
+      page-break-inside: avoid;
+    }
+    
+    .guidance-box h3 {
+      font-size: 11pt;
+      font-weight: 700;
+      margin: 0;
+      padding: 0.6em 0.8em;
+      background: #1a1a1a;
+      color: white;
+    }
+    
+    .guidance-box .content {
+      border: 1px solid #1a1a1a;
+      border-top: none;
+      padding: 1em;
+      background: #fff;
+    }
+    
+    .guidance-box p {
+      font-size: 10pt;
+      line-height: 1.5;
+      margin: 0.5em 0;
+    }
+    
+    .guidance-box ul {
+      margin: 0.75em 0;
+      padding-left: 1.5em;
+    }
+    
+    .guidance-box li {
+      font-size: 10pt;
+      line-height: 1.6;
+      margin: 0.4em 0;
+    }
+    
+    .guidance-box li strong {
+      color: #1a1a1a;
+    }
+    
+    .guidance-box .important {
+      background: #f8f8f8;
+      padding: 0.6em 0.8em;
+      border-left: 3px solid #1a1a1a;
+      margin: 0.75em 0;
+    }
+
+    /* Utility */
+    .page-break {
+      page-break-before: always;
+    }
+    
+    .no-print {
+      display: none;
+    }
+    
+    @media print {
+      .guidance-box {
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Form Header -->
+<div class="form-header">
+  <h1>Notice Requiring Possession of a Property in England<br>Let on an Assured Shorthold Tenancy</h1>
+  <div class="form-reference">
+    <span class="form-number">Form 6A</span>
+    <span class="form-statute">Housing Act 1988, Section 21(1) and (4) (as amended)</span>
+  </div>
+</div>
+
+<!-- Information for Tenant -->
+<div class="tenant-info-box">
+  <h3>Information for the Tenant</h3>
+  
+  <p>This notice tells you that your landlord requires possession of your home. <strong>You should read it carefully and seek advice about your circumstances as quickly as possible.</strong></p>
+
+  <p>You are entitled to at least two months' notice before being required to give up possession of your home. In some circumstances a longer notice period may be required.</p>
+
+  <p>If you do not leave your home by the date given in section 2, your landlord may apply to the court for an order under Section 21(1) or (4) of the Housing Act 1988 requiring you to give up possession.</p>
+
+  <p>If you are worried about this notice, and what you should do about it, take it immediately to <strong>Citizens Advice, a housing advice centre, a law centre or a solicitor.</strong></p>
+
+  <p>If you are a debtor and you are in a 'breathing space', you should inform your debt advisor.</p>
+
+  <p>If you believe you are at risk of homelessness as a result of receiving this notice, you should contact your local authority for support.</p>
+
+  <div class="helpline">
+    <p><strong>Free independent advice:</strong> Shelterline <strong>0808 800 4444</strong><br>
+    <span class="link">https://www.shelter.org.uk/</span></p>
+    <p style="margin-top: 0.5em;"><strong>Further information:</strong><br>
+    <span class="link">https://www.gov.uk/government/publications/understanding-the-possession-action-process-guidance-for-landlords-and-tenants</span></p>
+  </div>
+</div>
+
+<!-- Section 1: Tenant Name -->
+<div class="numbered-section">
+  <span class="section-number">1</span>
+  <p class="section-label">To:</p>
+  <p class="section-value">
+    {{#if tenant_full_name}}
+      {{tenant_full_name}}
+    {{else}}
+      <em style="color: #888;">(insert full name(s) of tenant(s))</em>
+    {{/if}}
+  </p>
+</div>
+
+<!-- Section 2: Possession Date and Property -->
+<div class="numbered-section">
+  <span class="section-number">2</span>
+  <p class="section-label">You are required to leave the below address after:</p>
+  <p class="section-value" style="font-size: 12pt; font-weight: 700;">
+    {{#if notice_expiry_date}}
+      {{format_date notice_expiry_date 'long'}}
+    {{else if earliest_possession_date}}
+      {{format_date earliest_possession_date 'long'}}
+    {{else}}
+      <em style="color: #888; font-weight: normal;">(insert calendar date)</em>
+    {{/if}}
+  </p>
+
+  <p class="section-text" style="margin-top: 1em;">If you do not leave, your landlord may apply to the court for an order under Section 21(1) or (4) of the Housing Act 1988 requiring you to give up possession of:</p>
+  
+  <p class="section-value address">{{#if property_address}}{{{property_address}}}{{else}}<em style="color: #888;">(insert address of the property)</em>{{/if}}</p>
+</div>
+
+<!-- Section 3: Court Application Timeframe -->
+<div class="numbered-section">
+  <span class="section-number">3</span>
+  <p class="section-text legal-notice">If your landlord does not apply to the court within a given timeframe this notice will lapse. If you are entitled to more than 2 months' notice your landlord can rely on this notice to apply to the court during the period of <strong>4 months</strong> commencing from the date specified in section 2 above. In all other cases, your landlord can rely on this notice to apply to the court during the period of <strong>6 months</strong> commencing from the date this notice is given to you.</p>
+</div>
+
+<!-- Section 4: Landlord Details and Signature -->
+<div class="signature-section">
+  <h4><span class="num">4</span> Name and address of landlord or landlord's agent</h4>
+  <p class="signature-instruction">To be completed in full by the landlord, or, in the case of joint landlords, at least one of the joint landlords, or by someone authorised to give notice on the landlord's behalf.</p>
+
+  <div class="signature-grid">
+    <!-- Primary Signatory -->
+    <div class="signatory-block primary">
+      <div>
+        <label>Signed</label>
+        <div class="signature-line"></div>
+      </div>
+      
+      <div style="margin-top: 1em;">
+        <label>Name</label>
+        <p class="value">{{#if landlord_full_name}}{{landlord_full_name}}{{/if}}</p>
+      </div>
+      
+      <div style="margin-top: 0.75em;">
+        <label>Address</label>
+        <p class="value address">{{#if landlord_address}}{{{landlord_address}}}{{/if}}</p>
+      </div>
+      
+      <div style="margin-top: 0.75em;">
+        <label>Telephone</label>
+        <p class="value">{{#if landlord_phone}}{{landlord_phone}}{{/if}}</p>
+      </div>
+    </div>
+
+    <!-- Secondary Signatory (for joint landlords) -->
+    <div class="signatory-block">
+      <div>
+        <label>Signed</label>
+        <div class="signature-line"></div>
+      </div>
+      
+      <div style="margin-top: 1em;">
+        <label>Name</label>
+        <p class="value"></p>
+      </div>
+      
+      <div style="margin-top: 0.75em;">
+        <label>Address</label>
+        <p class="value address"></p>
+      </div>
+      
+      <div style="margin-top: 0.75em;">
+        <label>Telephone</label>
+        <p class="value"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Capacity and Date -->
+  <div class="capacity-section">
+    <p>Capacity (please tick):</p>
+    <div class="capacity-options">
+      <span class="capacity-option"><span class="checkbox-box"></span> Landlord</span>
+      <span class="capacity-option"><span class="checkbox-box"></span> Joint landlord(s)</span>
+      <span class="capacity-option"><span class="checkbox-box"></span> Landlord's agent</span>
+    </div>
+    
+    <div class="date-field">
+      <label>Date:</label>
+      <span class="value">
+        {{#if service_date}}
+          {{format_date service_date 'long'}}
+        {{else if notice_service_date}}
+          {{format_date notice_service_date 'long'}}
+        {{/if}}
+      </span>
+    </div>
+  </div>
+</div>
+
+<!-- Service Instructions -->
+<div class="guidance-box">
+  <h3>Service Instructions</h3>
+  <div class="content">
+    <p>This notice must be properly served on the tenant(s) named in section 1. You may serve this notice by:</p>
+    <ul>
+      <li><strong>Hand delivery:</strong> Delivering the notice to the tenant personally</li>
+      <li><strong>Leaving at the property:</strong> Leaving the notice at the property in a place where it is likely to come to the tenant's attention</li>
+      <li><strong>First class post:</strong> Posting it by first class post to the tenant's last known address (allow for postal delivery time)</li>
+      <li><strong>Email or other electronic means:</strong> Only if the tenancy agreement specifically permits service by email and you have prior written agreement from the tenant</li>
+    </ul>
+    <div class="important">
+      <p><strong>Record keeping:</strong> Keep proof of service (e.g., photograph of hand delivery, postal receipt, copy of email). If proceedings are started, you may need to provide evidence of when and how the notice was served.</p>
+      <p style="margin-top: 0.5em;"><strong>Important:</strong> The date in section 4 should be the date you serve the notice, not a future date.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Validity Checklist -->
+<div class="guidance-box">
+  <h3>Service and Validity Checklist</h3>
+  <div class="content">
+    <p>Before serving this notice, ensure you have satisfied all of the following requirements:</p>
+    <ul>
+      <li>The tenancy is an assured shorthold tenancy under the Housing Act 1988</li>
+      <li>All details in sections 1-4 are complete and accurate</li>
+      <li>The notice period given (section 2) is at least two months (or longer if required by your circumstances)</li>
+      <li>At least four months have passed since the start of the tenancy (unless a valid Section 21 notice was served before the tenancy began)</li>
+      <li>Any fixed term has ended, or will end before the date given in section 2</li>
+      <li>Any deposit taken has been protected in a government-approved scheme within 30 days of receipt, and prescribed information has been provided to the tenant</li>
+      <li>Required documents have been provided: Gas Safety Certificate (if applicable), Energy Performance Certificate, and How to Rent guide</li>
+      <li>Any required property license has been obtained</li>
+      <li>No tenant improvement notice, emergency remedial action notice, or similar enforcement action is in effect</li>
+      <li>No prohibited fees have been charged</li>
+      <li>The notice is signed and dated</li>
+    </ul>
+    <div class="important">
+      <p><strong>After serving this notice:</strong> You may apply to court for a possession order once the date in section 2 has passed, but you must do so within the time limits specified in section 3 or the notice will lapse.</p>
+      <p style="margin-top: 0.5em;"><strong>Seeking advice:</strong> If you are unsure about any aspect of this notice or the possession process, seek independent legal advice.</p>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

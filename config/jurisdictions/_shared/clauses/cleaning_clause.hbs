@@ -1,0 +1,88 @@
+{{!--
+  ============================================================================
+  END OF TENANCY CLEANING CLAUSE
+  Tenant Fees Act 2019 Compliant
+
+  LEGAL NOTES:
+  - Under the Tenant Fees Act 2019, landlords CANNOT require tenants to:
+    * Use a specific professional cleaning company
+    * Provide receipts for professional cleaning
+    * Pay for professional cleaning as a condition of tenancy
+  - Landlords CAN require the property to be returned to a "professional standard"
+  - Deposit deductions for cleaning must be evidenced and proportionate
+
+  USAGE:
+  {{> cleaning_clause}}
+  ============================================================================
+--}}
+
+{{#*inline "cleaning_clause"}}
+<div class="subsection">
+  <div class="subsection-title">End of Tenancy Cleaning</div>
+
+  <div class="clause">
+    <span class="clause-number">{{clause_prefix}}.1</span>
+    <strong>Cleaning Standard Required:</strong> At the end of the tenancy, the Tenant must return the Property in a clean and tidy condition, to the same standard as it was at the start of the tenancy (allowing for fair wear and tear). This includes:
+    <ul>
+      <li>All rooms cleaned, including floors, windows (interior), and surfaces</li>
+      <li>Kitchen appliances cleaned inside and out (oven, hob, fridge, freezer, washing machine, dishwasher)</li>
+      <li>Bathroom fixtures cleaned and free from limescale</li>
+      <li>Carpets vacuumed and free from stains (professional cleaning may help achieve this standard)</li>
+      <li>All rubbish removed and bins emptied</li>
+      {{#if has_garden}}<li>Garden left in a tidy and maintained condition</li>{{/if}}
+    </ul>
+  </div>
+
+  <div class="clause">
+    <span class="clause-number">{{clause_prefix}}.2</span>
+    <strong>Professional Cleaning:</strong> The Tenant is not required to use a professional cleaning service. However, the Property must be returned to a professional standard of cleanliness. If the Tenant chooses to clean the Property themselves, they are responsible for ensuring it meets the required standard.
+  </div>
+
+  <div class="clause">
+    <span class="clause-number">{{clause_prefix}}.3</span>
+    <strong>Cleaning Evidence:</strong> Photographic evidence of the Property's condition at the start and end of the tenancy (from the inventory/check-in and check-out reports) will be used to assess whether the cleaning standard has been met.
+  </div>
+
+  <div class="legal-notice">
+    <div class="legal-notice-title">Deposit Deductions for Cleaning</div>
+    <p>
+      If the Property is not returned to an acceptable standard of cleanliness, the Landlord may propose a deduction from the deposit to cover the reasonable cost of cleaning required to restore the Property to the check-in condition (allowing for fair wear and tear).
+    </p>
+    <p style="margin-top: 10px;">
+      Any proposed deduction must be:
+    </p>
+    <ul>
+      <li>Evidenced with photographs and/or an independent inventory report</li>
+      <li>Reasonable and proportionate to the cleaning actually required</li>
+      <li>Subject to the tenancy deposit scheme's alternative dispute resolution (ADR) process if disputed</li>
+    </ul>
+    <p style="margin-top: 10px;">
+      <strong>Tenant Fees Act 2019 Compliance:</strong> This Agreement does not require the Tenant to use any particular cleaning company or provide receipts for cleaning services. The requirement is only that the Property is returned clean.
+    </p>
+  </div>
+
+  <div class="explainer-box">
+    <div class="explainer-title">Practical Advice</div>
+    <p>
+      Professional end-of-tenancy cleaning typically costs between {{#if cleaning_cost_estimate}}{{cleaning_cost_estimate}}{{else}}£80-250{{/if}} depending on property size.
+      While not mandatory, many tenants find professional cleaning helpful to ensure they meet the required standard and protect their deposit.
+      Keeping the Property clean throughout the tenancy makes end-of-tenancy cleaning easier.
+    </p>
+  </div>
+</div>
+{{/inline}}
+
+{{!--
+  ============================================================================
+  SIMPLIFIED CLEANING CLAUSE (Markdown format for Scotland/NI)
+  ============================================================================
+--}}
+{{#*inline "cleaning_clause_markdown"}}
+### End of Tenancy Cleaning
+
+The Tenant must return the Property in a clean and tidy condition, to the same standard as at the start of the tenancy (allowing for fair wear and tear).
+
+**Cleaning Standard:** The Tenant is not required to use a professional cleaning company. However, the Property must be returned to a professional standard of cleanliness.
+
+**Deposit Deductions:** If the Property is not returned clean, the Landlord may propose a reasonable deduction from the deposit to cover necessary cleaning costs. Any deduction must be evidenced (photographs, inventory reports) and is subject to the deposit scheme's dispute resolution process.
+{{/inline}}

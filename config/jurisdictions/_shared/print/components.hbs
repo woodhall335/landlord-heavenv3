@@ -1,0 +1,243 @@
+{{!--
+  ============================================================================
+  LANDLORD HEAVEN - PRINT DESIGN SYSTEM COMPONENTS
+  Reusable Handlebars partials for Notice Only PDFs
+  ============================================================================
+
+  USAGE:
+  1. Register these partials in generator.ts using registerPrintPartials()
+  2. Use in templates via {{> partial_name param1=value1 param2=value2}}
+
+  AVAILABLE PARTIALS:
+  - print_head: Standard <head> with print.css
+  - field: Label + value field with dotted underline
+  - multiline_field: Label + larger text area field
+  - section: Wrapper for logical section
+  - info_box: Boxed information section
+  - ground_block: Ground/reason block with left border
+  - signature_line: Signature line with label
+
+  IMPORTANT:
+  - Partials do NOT alter legal wording - they only provide layout wrappers
+  - All text content comes from template variables
+--}}
+
+{{!--
+  ============================================================================
+  PARTIAL: print_head
+  Standard <head> block with print.css embedded
+  ============================================================================
+
+  Usage: {{> print_head title="Form 3 - Section 8 Notice"}}
+--}}
+{{#*inline "print_head"}}
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{title}}</title>
+  <style>
+    {{{print_css}}}
+  </style>
+</head>
+{{/inline}}
+
+{{!--
+  ============================================================================
+  PARTIAL: field
+  Label + value field with dotted underline
+  ============================================================================
+
+  Usage:
+    {{> field label="Name:" value=tenant_full_name placeholder="(insert name)"}}
+--}}
+{{#*inline "field"}}
+<div class="field-group">
+  {{#if label}}
+    <p class="field-label">{{label}}</p>
+  {{/if}}
+  <p class="field-value">
+    {{#if value}}
+      {{{value}}}
+    {{else if placeholder}}
+      <em>{{placeholder}}</em>
+    {{else}}
+      <span style="display: block; min-height: 1.5em;"></span>
+    {{/if}}
+  </p>
+</div>
+{{/inline}}
+
+{{!--
+  ============================================================================
+  PARTIAL: multiline_field
+  Label + larger text area for particulars, evidence, etc.
+  ============================================================================
+
+  Usage:
+    {{> multiline_field label="Particulars:" value=ground_particulars minHeight="3em"}}
+--}}
+{{#*inline "multiline_field"}}
+<div class="field-group">
+  {{#if label}}
+    <p class="field-label">{{label}}</p>
+  {{/if}}
+  <div class="multiline-field" style="{{#if minHeight}}min-height: {{minHeight}};{{/if}}">
+    {{#if value}}
+      {{{value}}}
+    {{else if placeholder}}
+      <em>{{placeholder}}</em>
+    {{else}}
+      &nbsp;
+    {{/if}}
+  </div>
+</div>
+{{/inline}}
+
+{{!--
+  ============================================================================
+  PARTIAL: section
+  Wrapper for logical section (prevents page break inside)
+  ============================================================================
+
+  Usage:
+    {{#> section}}
+      <p>Content here...</p>
+    {{/section}}
+
+  Or with class:
+    {{#> section class="avoid-break"}}
+      <p>Content here...</p>
+    {{/section}}
+--}}
+{{#*inline "section"}}
+<div class="section {{class}}">
+  {{> @partial-block}}
+</div>
+{{/inline}}
+
+{{!--
+  ============================================================================
+  PARTIAL: info_box
+  Boxed information section (e.g., "Information for the Tenant")
+  ============================================================================
+
+  Usage:
+    {{#> info_box title="INFORMATION FOR THE TENANT"}}
+      <p>Content here...</p>
+    {{/info_box}}
+--}}
+{{#*inline "info_box"}}
+<div class="info-box">
+  {{#if title}}
+    <h3>{{title}}</h3>
+  {{/if}}
+  {{> @partial-block}}
+</div>
+{{/inline}}
+
+{{!--
+  ============================================================================
+  PARTIAL: ground_block
+  Ground/reason block with left border (for Section 8, Scotland grounds, etc.)
+  ============================================================================
+
+  Usage:
+    {{#> ground_block groundCode="8" groundTitle="Rent Arrears"}}
+      <p>Particulars: ...</p>
+    {{/ground_block}}
+--}}
+{{#*inline "ground_block"}}
+<div class="ground-block">
+  {{#if groundCode}}
+    <p><strong>Ground {{groundCode}}{{#if groundTitle}}: {{groundTitle}}{{/if}}</strong></p>
+  {{/if}}
+  {{> @partial-block}}
+</div>
+{{/inline}}
+
+{{!--
+  ============================================================================
+  PARTIAL: scotland_ground_block
+  Scotland-specific ground block with full border
+  ============================================================================
+
+  Usage:
+    {{#> scotland_ground_block groundNumber="1" groundTitle="Landlord intends to sell"}}
+      <p>Evidence: ...</p>
+    {{/scotland_ground_block}}
+--}}
+{{#*inline "scotland_ground_block"}}
+<div class="scotland-ground-block">
+  {{#if groundNumber}}
+    <p><strong>Ground {{groundNumber}}{{#if groundTitle}}: {{groundTitle}}{{/if}}</strong></p>
+  {{/if}}
+  {{> @partial-block}}
+</div>
+{{/inline}}
+
+{{!--
+  ============================================================================
+  PARTIAL: signature_line
+  Signature line with underline
+  ============================================================================
+
+  Usage:
+    {{> signature_line label="Signed:" spacing="1em"}}
+--}}
+{{#*inline "signature_line"}}
+<p style="{{#if spacing}}margin-top: {{spacing}};{{/if}}">
+  <strong>{{#if label}}{{label}}{{else}}Signed:{{/if}}</strong> _________________________________________________
+</p>
+{{/inline}}
+
+{{!--
+  ============================================================================
+  PARTIAL: part_label
+  Wales RHW form part labels (Part A, Part B, etc.)
+  ============================================================================
+
+  Usage:
+    {{> part_label text="Part A: Landlord"}}
+--}}
+{{#*inline "part_label"}}
+<p class="part-label">{{text}}</p>
+{{/inline}}
+
+{{!--
+  ============================================================================
+  PARTIAL: guidance_section
+  Wrapper for guidance sections (typically at end of notice)
+  ============================================================================
+
+  Usage:
+    {{#> guidance_section title="Service Instructions"}}
+      <p>Guidance content...</p>
+    {{/guidance_section}}
+--}}
+{{#*inline "guidance_section"}}
+<div class="guidance-section">
+  {{#if title}}
+    <h2>{{title}}</h2>
+  {{/if}}
+  {{> @partial-block}}
+</div>
+{{/inline}}
+
+{{!--
+  ============================================================================
+  PARTIAL: checkbox
+  Checkbox square for forms
+  ============================================================================
+
+  Usage:
+    {{> checkbox}} landlord / licensor
+--}}
+{{#*inline "checkbox"}}
+<span class="checkbox"></span>
+{{/inline}}
+
+{{!--
+  ============================================================================
+  END OF COMPONENTS
+  ============================================================================
+--}}

@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout Procedure & End of Tenancy Checklist</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 20mm;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 11pt;
+      line-height: 1.6;
+      color: #1a202c;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 3px solid #2c5282;
+    }
+
+    .document-title {
+      font-size: 24pt;
+      font-weight: 700;
+      color: #2c5282;
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+
+    .subtitle {
+      font-size: 12pt;
+      color: #4a5568;
+      margin-top: 8px;
+    }
+
+    .section {
+      margin: 25px 0;
+      page-break-inside: avoid;
+    }
+
+    .section-title {
+      font-size: 14pt;
+      font-weight: 700;
+      color: #2c5282;
+      margin-bottom: 15px;
+      padding: 10px 15px;
+      background: linear-gradient(135deg, #e6f2ff 0%, #cce5ff 100%);
+      border-left: 4px solid #2c5282;
+    }
+
+    .checklist {
+      list-style: none;
+      margin: 15px 0;
+    }
+
+    .checklist li {
+      padding: 10px 0;
+      padding-left: 35px;
+      position: relative;
+      border-bottom: 1px solid #e2e8f0;
+      line-height: 1.8;
+    }
+
+    .checklist li:before {
+      content: "□";
+      position: absolute;
+      left: 0;
+      font-size: 16pt;
+      color: #2c5282;
+      font-weight: bold;
+    }
+
+    .checklist li:last-child {
+      border-bottom: none;
+    }
+
+    .info-box {
+      background: #f0fff4;
+      border-left: 4px solid #38a169;
+      padding: 15px;
+      margin: 15px 0;
+      border-radius: 4px;
+    }
+
+    .warning-box {
+      background: #fff5f5;
+      border-left: 4px solid #e53e3e;
+      padding: 15px;
+      margin: 15px 0;
+      border-radius: 4px;
+    }
+
+    .cost-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+    }
+
+    .cost-table th {
+      background: #2c5282;
+      color: white;
+      padding: 10px;
+      text-align: left;
+      font-size: 10pt;
+    }
+
+    .cost-table td {
+      padding: 10px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .cost-table tr:nth-child(even) {
+      background-color: #f7fafc;
+    }
+
+    h3 {
+      color: #2c5282;
+      margin: 20px 0 10px 0;
+      font-size: 12pt;
+    }
+
+    .timeline {
+      background: #e6f2ff;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+
+    .timeline-item {
+      margin: 15px 0;
+      padding-left: 30px;
+      position: relative;
+    }
+
+    .timeline-item:before {
+      content: "●";
+      position: absolute;
+      left: 0;
+      color: #2c5282;
+      font-size: 16pt;
+    }
+
+    .footer {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 2px solid #e2e8f0;
+      font-size: 9pt;
+      color: #718096;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="document-title">
+      Checkout Procedure &<br/>End of Tenancy Checklist
+    </div>
+    <div class="subtitle">Your Guide to a Smooth Move-Out</div>
+    <div class="subtitle">{{property_address}}</div>
+    <div class="subtitle" style="margin-top: 15px; font-style: italic;">
+      Private Tenancy Agreement (Northern Ireland) | Private Tenancies Act (NI) 2022
+    </div>
+  </div>
+
+  <div class="warning-box">
+    <strong>IMPORTANT: Notice Requirements (Northern Ireland)</strong>
+    <ul style="margin-top: 10px; margin-left: 20px; line-height: 1.8;">
+      <li><strong>Tenant's Notice:</strong> At least 4 weeks' written notice (or as per your agreement)</li>
+      <li><strong>Key Return:</strong> {{key_return_deadline}}</li>
+      <li><strong>Deposit Return:</strong> {{deposit_return_timeline}} (if no disputes)</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Move-Out Timeline</div>
+
+    <div class="timeline">
+      <div class="timeline-item">
+        <strong>4 Weeks Before:</strong> Give written notice to landlord, book professional cleaners if needed, contact utility companies
+      </div>
+      <div class="timeline-item">
+        <strong>2 Weeks Before:</strong> Start deep cleaning, arrange forwarding mail, update address with banks/DVLA, book checkout inspection
+      </div>
+      <div class="timeline-item">
+        <strong>1 Week Before:</strong> Complete all cleaning, arrange final meter readings, pack belongings, fix any minor damages
+      </div>
+      <div class="timeline-item">
+        <strong>Final Day:</strong> Final clean, checkout inspection, return all keys, take final photos
+      </div>
+      <div class="timeline-item">
+        <strong>After Move-Out:</strong> Provide forwarding address, await deposit return
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Cleaning Requirements</div>
+
+    <div class="info-box">
+      <strong>Cleaning Standard Required:</strong>
+      {{#if professional_cleaning_standard}}
+      Professional cleaning standard required - the property must be returned in the same immaculate condition as when you moved in.
+      {{else}}
+      The property should be clean and tidy, in the same condition as at the start of your tenancy (allowing for fair wear and tear).
+      {{/if}}
+    </div>
+
+    <h3>Kitchen Cleaning Checklist</h3>
+    <ul class="checklist">
+      <li>Oven professionally cleaned (inside, racks, door, glass){{#if oven_cleaning_required}} - PROFESSIONAL CLEAN REQUIRED{{/if}}</li>
+      <li>Hob, extractor hood, and splashbacks cleaned and degreased</li>
+      <li>Microwave cleaned inside and out</li>
+      <li>Fridge/freezer defrosted, cleaned, and dried (leave doors open)</li>
+      <li>Dishwasher cleaned (run empty cycle, clean filter and seals)</li>
+      <li>All cupboards and drawers wiped inside and out</li>
+      <li>Worktops cleaned and disinfected</li>
+      <li>Sink, taps, and drain cleaned (no limescale)</li>
+      <li>Tiles and grout cleaned</li>
+      <li>Floor cleaned (swept, mopped, corners/edges)</li>
+      <li>Skirting boards and door frames wiped</li>
+      <li>Light fittings and switches cleaned</li>
+      <li>Bin cleaned or replaced if damaged</li>
+    </ul>
+
+    <h3>Bathroom Cleaning Checklist</h3>
+    <ul class="checklist">
+      <li>Toilet cleaned and descaled (bowl, seat, cistern, base)</li>
+      <li>Bath cleaned and descaled (no limescale or soap scum)</li>
+      <li>Shower cleaned (screen, tray, tiles, grout, head)</li>
+      <li>Sink and taps cleaned and descaled</li>
+      <li>Tiles and grout cleaned (no mould or discoloration)</li>
+      <li>Mirror and cabinets cleaned</li>
+      <li>Extractor fan cleaned</li>
+      <li>Floor cleaned (including behind toilet)</li>
+      <li>Skirting boards wiped</li>
+    </ul>
+
+    <h3>Living Areas & Bedrooms Cleaning Checklist</h3>
+    <ul class="checklist">
+      <li>Carpets vacuumed{{#if carpet_cleaning_required}} and PROFESSIONALLY CLEANED{{/if}}</li>
+      <li>Hard floors swept and mopped</li>
+      <li>All surfaces dusted (shelves, windowsills, radiators)</li>
+      <li>Windows cleaned inside (glass and frames)</li>
+      <li>Curtains/blinds dusted or cleaned</li>
+      <li>Doors and door frames wiped</li>
+      <li>Skirting boards wiped clean</li>
+      <li>Light fittings and lampshades dusted</li>
+      <li>Wardrobes wiped inside and out (empty)</li>
+      <li>Radiators dusted and wiped</li>
+      <li>Marks removed from walls (blu-tack, scuffs)</li>
+    </ul>
+
+    <h3>General Areas</h3>
+    <ul class="checklist">
+      <li>Hallways and stairs cleaned and vacuumed</li>
+      <li>Front door cleaned inside and out</li>
+      <li>All rubbish removed from property</li>
+      <li>No personal belongings left behind</li>
+    </ul>
+
+    {{#if has_garden}}
+    <h3>Garden/Outdoor Areas</h3>
+    <ul class="checklist">
+      <li>Lawn mowed and edged ({{garden_condition_required}})</li>
+      <li>Weeds removed from lawn and borders</li>
+      <li>Pathways swept and clear</li>
+      <li>Garden furniture cleaned (if provided)</li>
+      <li>Shed/garage cleared and swept</li>
+      <li>All personal items removed from garden</li>
+      <li>Bins emptied and cleaned</li>
+    </ul>
+    {{/if}}
+  </div>
+
+  {{#if cleaning_cost_estimates}}
+  <div class="section">
+    <div class="section-title">Professional Cleaning Costs (Reference)</div>
+
+    <div class="info-box">
+      If you choose to hire professional cleaners instead of cleaning yourself, typical costs are approximately <strong>£{{cleaning_cost_estimates}}</strong>. Ensure you use reputable cleaners and get a receipt.
+    </div>
+
+    <table class="cost-table">
+      <tr>
+        <th>Service</th>
+        <th>Typical Cost</th>
+      </tr>
+      <tr>
+        <td>End of Tenancy Clean ({{number_of_bedrooms}} bed)</td>
+        <td>£150 - £300</td>
+      </tr>
+      {{#if carpet_cleaning_required}}
+      <tr>
+        <td>Professional Carpet Clean</td>
+        <td>£80 - £150</td>
+      </tr>
+      {{/if}}
+      {{#if oven_cleaning_required}}
+      <tr>
+        <td>Professional Oven Clean</td>
+        <td>£60 - £90</td>
+      </tr>
+      {{/if}}
+      <tr>
+        <td>Window Cleaning (exterior)</td>
+        <td>£40 - £80</td>
+      </tr>
+    </table>
+
+    <p style="margin-top: 15px;">
+      <strong>Note:</strong> If the property is not cleaned to the required standard, cleaning costs may be deducted from your deposit.
+    </p>
+  </div>
+  {{/if}}
+
+  <div class="section">
+    <div class="section-title">Repairs & Maintenance</div>
+
+    <ul class="checklist">
+      <li>Check for any damage you've caused and arrange repairs</li>
+      <li>Fill any picture hook holes and touch up paint if needed</li>
+      <li>Replace any broken or missing items (light bulbs, batteries in smoke alarms)</li>
+      <li>Ensure all appliances are working</li>
+      <li>Report any issues to landlord promptly</li>
+      <li>Return property in same condition as move-in (fair wear and tear excepted)</li>
+    </ul>
+
+    <div class="warning-box">
+      <strong>Fair Wear and Tear vs. Damage</strong><br/>
+      You are NOT responsible for normal wear and tear (e.g., minor scuffs, faded paint from sunlight), but you ARE responsible for damage caused by misuse or neglect (e.g., carpet stains, broken fixtures, holes in walls).
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Administrative Tasks</div>
+
+    <ul class="checklist">
+      <li>Give landlord written notice as per your tenancy agreement</li>
+      <li>Book joint checkout inspection</li>
+      <li>Arrange final meter readings (Gas: {{meter_reading_gas}}, Electric: {{meter_reading_electric}})</li>
+      <li>Contact utility companies to close accounts or transfer</li>
+      <li>Inform Land & Property Services of move-out date (rates)</li>
+      <li>Update your address with:
+        <ul style="margin-left: 30px; margin-top: 5px;">
+          <li>Bank and credit cards</li>
+          <li>DVA NI (driving license and vehicle registration)</li>
+          <li>Electoral Office NI</li>
+          <li>Doctor, dentist, and other services</li>
+          <li>Employer and HMRC</li>
+          <li>Subscriptions and deliveries</li>
+        </ul>
+      </li>
+      <li>Arrange mail forwarding with Royal Mail</li>
+      <li>Provide forwarding address to landlord{{#if forwarding_address_required}} - REQUIRED{{/if}}</li>
+      <li>Cancel internet and other services</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Keys & Access</div>
+
+    <div class="warning-box">
+      <strong>ALL KEYS MUST BE RETURNED BY: {{key_return_deadline}}</strong>
+    </div>
+
+    <p style="margin: 15px 0;">You must return ALL keys and access devices listed on your Key Schedule:</p>
+
+    <ul class="checklist">
+      {{#if number_of_front_door_keys}}
+      <li>Front door keys: {{number_of_front_door_keys}} keys</li>
+      {{/if}}
+      {{#if number_of_back_door_keys}}
+      <li>Back door keys: {{number_of_back_door_keys}} keys</li>
+      {{/if}}
+      {{#if number_of_window_keys}}
+      <li>Window keys: {{number_of_window_keys}} keys</li>
+      {{/if}}
+      {{#if number_of_mailbox_keys}}
+      <li>Mailbox keys: {{number_of_mailbox_keys}} keys</li>
+      {{/if}}
+      {{#if access_cards_fobs}}
+      <li>Access cards/fobs: {{access_cards_fobs}} items</li>
+      {{/if}}
+      {{#if other_keys_notes}}
+      <li>Other keys/access: {{other_keys_notes}}</li>
+      {{/if}}
+    </ul>
+
+    <div class="info-box">
+      <strong>Key Return Details:</strong><br/>
+      • Deadline: {{key_return_deadline}}<br/>
+      • Missing keys will be charged at £{{key_replacement_cost}} per key (£{{multiply key_replacement_cost 2}} for access cards/fobs)<br/>
+      • Get a receipt when returning keys<br/>
+      • Take photos of keys being returned
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Checkout Inspection</div>
+
+    {{#if checkout_inspection_required}}
+    <div class="info-box">
+      <strong>Joint Checkout Inspection REQUIRED</strong><br/>
+      A joint inspection with the landlord or agent must take place. This will compare the property's condition against the move-in report.
+    </div>
+    {{/if}}
+
+    <ul class="checklist">
+      <li>Book inspection appointment with landlord</li>
+      <li>Be present during inspection if possible</li>
+      <li>Take your own photos and videos of property condition</li>
+      <li>Note any pre-existing damage from move-in report</li>
+      <li>Provide meter readings to landlord</li>
+      <li>Discuss any concerns or disputes</li>
+      <li>Sign checkout report and keep a copy</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Deposit Return (Northern Ireland)</div>
+
+    <div class="info-box">
+      <strong>Timeline:</strong> {{deposit_return_timeline}}<br/>
+      <strong>Protected with:</strong> {{deposit_scheme_name}}<br/>
+      <strong>Amount:</strong> £{{deposit_amount}}
+    </div>
+
+    <p style="margin: 15px 0;">Your deposit will be returned according to the following process:</p>
+
+    <ul class="checklist">
+      <li>Landlord has 10 working days to agree deposit return or propose deductions</li>
+      <li>If both parties agree, deposit is returned promptly</li>
+      <li>If disputed, case goes to deposit scheme adjudication</li>
+      <li>Provide bank details for deposit refund</li>
+      <li>Ensure forwarding address is up to date</li>
+    </ul>
+
+    <h3>NI Deposit Schemes</h3>
+    <ul class="checklist">
+      <li>Tenancy Deposit Scheme NI (TDS NI)</li>
+      <li>mydeposits NI</li>
+    </ul>
+
+    <h3>Common Deductions You Can Avoid:</h3>
+    <ul class="checklist">
+      <li>Professional cleaning costs (clean thoroughly yourself)</li>
+      <li>Carpet cleaning ({{#if carpet_cleaning_required}}get professional clean{{else}}vacuum thoroughly{{/if}})</li>
+      <li>Oven cleaning ({{#if oven_cleaning_required}}get professional clean{{else}}deep clean yourself{{/if}})</li>
+      <li>Key replacement (return all keys on time)</li>
+      <li>Garden maintenance (leave in same condition as move-in)</li>
+      <li>Damage repairs (fix before moving out)</li>
+      <li>Unpaid rent or bills (settle all accounts)</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Final Checklist - Day of Move-Out</div>
+
+    <ul class="checklist">
+      <li>Property completely empty of your belongings</li>
+      <li>All rooms cleaned to required standard</li>
+      <li>All keys collected and ready to return</li>
+      <li>Final meter readings taken and recorded</li>
+      <li>All windows and doors locked</li>
+      <li>Heating set appropriately (winter: on low, summer: off)</li>
+      <li>All lights turned off</li>
+      <li>No valuables left behind</li>
+      <li>Final photos/video walkthrough taken</li>
+      <li>Forwarding address provided to landlord</li>
+      <li>Mail redirection set up</li>
+      <li>Checkout inspection completed</li>
+      <li>All keys handed over and receipt obtained</li>
+    </ul>
+  </div>
+
+  <div class="footer">
+    <p><strong>Questions about move-out?</strong></p>
+    <p>Contact: {{landlord_full_name}} | Phone: {{landlord_phone}} | Email: {{landlord_email}}</p>
+    <p style="margin-top: 10px;">This Checkout Procedure forms part of your Private Tenancy Agreement</p>
+    <p>Private Tenancies Act (Northern Ireland) 2022</p>
+    <p>Following this checklist will help ensure a smooth move-out and full deposit return</p>
+  </div>
+</body>
+</html>

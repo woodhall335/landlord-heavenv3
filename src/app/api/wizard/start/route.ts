@@ -9,6 +9,7 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { createServerSupabaseClient, getServerUser } from '@/lib/supabase/server';
+import { createSupabaseAdminClient, logSupabaseAdminDiagnostics } from '@/lib/supabase/admin';
 import { createEmptyWizardFacts } from '@/lib/case-facts/schema';
 import { getOrCreateWizardFacts } from '@/lib/case-facts/store';
 import {
@@ -22,6 +23,7 @@ import { applyDocumentIntelligence } from '@/lib/wizard/document-intel';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
+export const runtime = 'nodejs';
 
 const startWizardSchema = z.object({
   product: z.enum([
@@ -36,6 +38,12 @@ const startWizardSchema = z.object({
   ]),
   jurisdiction: z.enum(['england', 'wales', 'scotland', 'northern-ireland']),
   case_id: z.string().uuid().optional(),
+  // Used by standalone validators (e.g., /tools/validators/section-21) to set the notice route
+  // so runLegalValidator knows which validator to apply
+  validator_key: z.string().optional(),
+  // Additional metadata from validator pages
+  case_type: z.enum(['eviction', 'money_claim', 'tenancy_agreement']).optional(),
+  product_variant: z.string().optional(),
 });
 
 type StartProduct =
@@ -113,6 +121,7 @@ function loadMQSOrError(product: ProductType, jurisdiction: string): MasterQuest
 
 export async function POST(request: Request) {
   try {
+    logSupabaseAdminDiagnostics({ route: '/api/wizard/start', writesUsingAdmin: true });
     const user = await getServerUser().catch(() => null);
     const body = await request.json();
     const validationResult = startWizardSchema.safeParse(body);
@@ -124,7 +133,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const { product, jurisdiction, case_id } = validationResult.data;
+    const { product, jurisdiction, case_id, validator_key, product_variant } = validationResult.data;
     const resolvedCaseType = productToCaseType(product as StartProduct);
     const normalizedProduct = normalizeProduct(product as StartProduct);
     const effectiveJurisdiction = resolveJurisdiction(product as StartProduct, jurisdiction);
@@ -145,41 +154,79 @@ export async function POST(request: Request) {
     if (effectiveJurisdiction === 'northern-ireland' && resolvedCaseType !== 'tenancy_agreement') {
       return NextResponse.json(
         {
+          code: 'NI_EVICTION_MONEY_CLAIM_NOT_SUPPORTED',
           error: 'NI_EVICTION_MONEY_CLAIM_NOT_SUPPORTED',
-          message:
-            'Northern Ireland eviction and money claim workflows are not yet supported. ' +
-            'We currently only support tenancy agreements for Northern Ireland. ' +
-            'Full NI support is planned for V2 (Q2 2026).',
+          user_message:
+            'Northern Ireland: tenancy agreements only (eviction notices planned).',
           supported: {
             'northern-ireland': ['tenancy_agreement'],
             england: ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
-            wales: ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
-            scotland: ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
+            wales: ['notice_only', 'tenancy_agreement'],
+            scotland: ['notice_only', 'tenancy_agreement'],
           },
+          blocking_issues: [],
+          warnings: [],
+        },
+        { status: 422 },
+      );
+    }
+
+    // Wales and Scotland gating: complete_pack and money_claim not available
+    // Due to different legal frameworks, eviction packs and money claims are England-only
+    // Wales/Scotland users should use notice_only or tenancy_agreement
+    if (
+      (effectiveJurisdiction === 'wales' || effectiveJurisdiction === 'scotland') &&
+      (normalizedProduct === 'complete_pack' || normalizedProduct === 'money_claim')
+    ) {
+      return NextResponse.json(
+        {
+          code: 'PRODUCT_NOT_AVAILABLE_IN_REGION',
+          error: 'PRODUCT_NOT_AVAILABLE_IN_REGION',
+          user_message:
+            'Product not available in your region; use Notice Only instead. ' +
+            `The ${normalizedProduct === 'complete_pack' ? 'Eviction Pack' : 'Money Claim'} is only available for England. ` +
+            `For ${effectiveJurisdiction === 'wales' ? 'Wales' : 'Scotland'}, we offer the Notice Only pack (£34.99) ` +
+            'and Tenancy Agreements.',
+          supported: {
+            'northern-ireland': ['tenancy_agreement'],
+            england: ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
+            wales: ['notice_only', 'tenancy_agreement'],
+            scotland: ['notice_only', 'tenancy_agreement'],
+          },
+          redirect_to: `/wizard?product=notice_only&jurisdiction=${effectiveJurisdiction}`,
+          blocking_issues: [],
+          warnings: [],
         },
         { status: 400 },
       );
     }
 
-    // Create properly typed Supabase client
+    // Create properly typed Supabase client for user-scoped queries
     const supabase = await createServerSupabaseClient();
+
+    // Admin client bypasses RLS - used for creating cases for anonymous users
+    // The regular client would be blocked by RLS policies when user_id is null
+    const adminSupabase = createSupabaseAdminClient();
 
     let caseRecord: any = null;
 
     // ------------------------------------------------
     // 1. Resume existing case if case_id supplied
+    //    RLS policies handle access control
     // ------------------------------------------------
     if (case_id) {
-      let query = supabase.from('cases').select('*').eq('id', case_id);
-      if (user) {
-        query = query.eq('user_id', user.id);
-      } else {
-        query = query.is('user_id', null);
-      }
+      const { data, error } = await supabase
+        .from('cases')
+        .select('*')
+        .eq('id', case_id)
+        .single();
 
-      const { data, error } = await query.single();
       if (error || !data) {
-        return NextResponse.json({ error: 'Case not found' }, { status: 404 });
+        const { handleCaseFetchError } = await import('@/lib/api/error-handling');
+        const errorResponse = handleCaseFetchError(error, data, 'wizard/start', case_id);
+        if (errorResponse) {
+          return errorResponse;
+        }
       }
 
       // Type assertion: we know data exists after the null check
@@ -209,15 +256,23 @@ export async function POST(request: Request) {
           product: normalizedProduct as string | null,
           original_product: product as string | null,
           ...(tierLabel ? { product_tier: tierLabel as string | null } : {}),
+          // Store validator_key so we can track which validator was used
+          ...(validator_key ? { validator_key: validator_key as string | null } : {}),
+          ...(product_variant ? { product_variant: product_variant as string | null } : {}),
         },
         // IMPORTANT: root-level product_tier so MQS version questions see it as answered
         ...(tierLabel ? { product_tier: tierLabel } : {}),
         // These help downstream normalization / analysis before property questions are answered
         property_country: effectiveJurisdiction,
         jurisdiction: effectiveJurisdiction,
+        // CRITICAL: Set selected_notice_route from validator_key so runLegalValidator
+        // knows which validator to apply (e.g., "section_21" → validateSection21Notice)
+        ...(validator_key ? { selected_notice_route: validator_key } : {}),
       };
 
-      const { data, error } = await supabase
+      // Use admin client to bypass RLS for anonymous case creation
+      // This is safe because we control all the data being inserted
+      const { data, error } = await adminSupabase
         .from('cases')
         .insert({
           user_id: user ? user.id : null,
@@ -241,7 +296,8 @@ export async function POST(request: Request) {
     // ------------------------------------------------
     // 3. Ensure case_facts row exists and load facts
     // ------------------------------------------------
-    let facts = await getOrCreateWizardFacts(supabase, caseRecord.id);
+    // Use admin client for case_facts operations to support anonymous users
+    let facts = await getOrCreateWizardFacts(adminSupabase, caseRecord.id);
 
     // For newly created cases, mirror meta + country into case_facts.facts
     if (!case_id) {
@@ -250,6 +306,8 @@ export async function POST(request: Request) {
         product: normalizedProduct as string | null,
         original_product: product as string | null,
         ...(tierLabel ? { product_tier: tierLabel as string | null } : {}),
+        ...(validator_key ? { validator_key: validator_key as string | null } : {}),
+        ...(product_variant ? { product_variant: product_variant as string | null } : {}),
       };
 
       const updatedFacts: any = {
@@ -258,9 +316,12 @@ export async function POST(request: Request) {
         ...(tierLabel ? { product_tier: tierLabel } : {}),
         property_country: facts.property_country ?? effectiveJurisdiction,
         jurisdiction: facts.jurisdiction ?? effectiveJurisdiction,
+        // Ensure selected_notice_route is set for validators
+        ...(validator_key && !facts.selected_notice_route ? { selected_notice_route: validator_key } : {}),
       };
 
-      const { error: updateError } = await supabase
+      // Use admin client for case_facts update to support anonymous users
+      const { error: updateError } = await adminSupabase
         .from('case_facts')
         .update({ facts: updatedFacts as any })
         .eq('case_id', caseRecord.id);
@@ -290,12 +351,33 @@ export async function POST(request: Request) {
     const nextQuestion = getNextMQSQuestion(mqs, hydratedFacts);
     const isComplete = !nextQuestion;
 
+    // ------------------------------------------------
+    // 6. Include persisted Smart Review data for complete_pack/eviction_pack (England only)
+    // ------------------------------------------------
+    // Smart Review results survive refresh via __smart_review in case_facts
+    let smart_review = null;
+    // Note: eviction_pack is a legacy alias that might appear in persisted data
+    if (
+      (normalizedProduct === 'complete_pack' || (normalizedProduct as string) === 'eviction_pack') &&
+      effectiveJurisdiction === 'england' &&
+      facts.__smart_review
+    ) {
+      smart_review = {
+        warnings: facts.__smart_review.warnings || [],
+        summary: facts.__smart_review.summary || null,
+        ranAt: facts.__smart_review.ranAt || null,
+        limitsApplied: facts.__smart_review.limitsApplied || null,
+      };
+    }
+
     return NextResponse.json({
       case_id: caseRecord.id,
       product,
       jurisdiction: effectiveJurisdiction,
       next_question: nextQuestion || null,
       is_complete: isComplete,
+      // Include persisted Smart Review data if available
+      smart_review,
     });
   } catch (error: any) {
     console.error('Start wizard error:', error);

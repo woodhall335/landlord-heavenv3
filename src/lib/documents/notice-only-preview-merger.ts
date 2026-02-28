@@ -1,11 +1,16 @@
 /**
  * Notice Only Pack Preview Merger
  *
- * Merges all Notice Only documents into a single watermarked PDF for preview.
+ * Merges all Notice Only documents into a single PDF for preview.
  * Used to show users exactly what they're purchasing before payment.
+ *
+ * NOTE: Watermarks have been removed as part of the simplified UX change.
+ * See docs/pdf-watermark-audit.md for details.
  */
 
-import { PDFDocument, rgb, StandardFonts, degrees } from 'pdf-lib';
+import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
+import type { CanonicalJurisdiction } from '../types/jurisdiction';
+import { toWinAnsiSafeText } from './pdf-safe-text';
 
 // ============================================================================
 // TYPES
@@ -13,14 +18,15 @@ import { PDFDocument, rgb, StandardFonts, degrees } from 'pdf-lib';
 
 export interface NoticeOnlyDocument {
   title: string;
-  category: 'notice' | 'guidance' | 'checklist';
+  category: 'notice' | 'guidance' | 'checklist' | 'schedule';
   pdf?: Buffer;
   html?: string;
 }
 
 export interface NoticeOnlyPreviewOptions {
-  jurisdiction: 'england' | 'wales' | 'scotland' | 'england-wales';
+  jurisdiction: Extract<CanonicalJurisdiction, 'england' | 'wales' | 'scotland'>;
   notice_type?: 'section_8' | 'section_21' | 'notice_to_leave' | 'wales_section_173' | 'wales_fault_based';
+  /** @deprecated Watermarks have been removed from all PDFs */
   watermarkText?: string;
   includeTableOfContents?: boolean;
 }
@@ -82,62 +88,47 @@ export async function generateNoticeOnlyPreview(
     }
   }
 
-  // Add watermark to EVERY page
-  const watermarkText = options.watermarkText || 'PREVIEW - Complete Purchase to Download';
-  console.log('[NOTICE-PREVIEW] Adding watermarks to', mergedPdf.getPageCount(), 'pages');
+  // ====================================================================================
+  // WATERMARKS REMOVED - Simplified UX Change
+  // ====================================================================================
+  // All watermarks have been removed from preview PDFs as part of the simplified
+  // notice-only validation UX. Server-side validation at /api/wizard/generate
+  // remains the hard stop for compliance.
+  // See docs/pdf-watermark-audit.md for details on the removal.
+  // ====================================================================================
+  console.log('[NOTICE-PREVIEW] Watermarks disabled - generating clean preview');
 
   const pages = mergedPdf.getPages();
 
+  // Calculate page numbering
+  // When TOC is included, it occupies exactly 1 page at the start and doesn't get numbered
+  const tocPageCount = options.includeTableOfContents ? 1 : 0;
+  const totalContentPages = pages.length - tocPageCount;
+
+  // Add page numbers to content pages only (not TOC)
+  // Page numbers are 1-indexed and only count content pages
   for (let i = 0; i < pages.length; i++) {
     const page = pages[i];
-    const { width, height } = page.getSize();
+    const { width } = page.getSize();
 
-    // Add diagonal watermark in center - reduced size and opacity to prevent overlap with content
-    // Position carefully to avoid text blocks
-    page.drawText(watermarkText, {
-      x: width / 2 - 180,
-      y: height / 2 - 50, // Shift down slightly to avoid header areas
-      size: 36, // Reduced from 48 to be less intrusive
-      font: font,
-      color: rgb(0.88, 0.88, 0.88), // Lighter gray
-      rotate: degrees(45),
-      opacity: 0.15, // Reduced from 0.3 for less interference
-    });
+    // Skip TOC pages (they don't get page numbers)
+    if (i < tocPageCount) {
+      continue;
+    }
 
-    // Add header watermark band (non-overlapping)
-    page.drawText('PREVIEW - NOT FOR COURT USE', {
-      x: width / 2 - 120,
-      y: height - 15,
-      size: 11,
-      font: regularFont,
-      color: rgb(0.75, 0.75, 0.75),
-      opacity: 0.6,
-    });
+    // Calculate 1-indexed content page number
+    const contentPageNumber = i - tocPageCount + 1;
 
-    // Add small footer watermark
-    page.drawText('PREVIEW ONLY', {
-      x: 20,
+    page.drawText(`Page ${contentPageNumber} of ${totalContentPages}`, {
+      x: width - 100,
       y: 20,
       size: 10,
       font: regularFont,
-      color: rgb(0.7, 0.7, 0.7),
-      opacity: 0.5,
+      color: rgb(0.5, 0.5, 0.5),
     });
-
-    // Add page numbers (except TOC)
-    if (i > 0 || !options.includeTableOfContents) {
-      const pageNum = options.includeTableOfContents ? i : i + 1;
-      page.drawText(`Page ${pageNum} of ${pages.length}`, {
-        x: width - 100,
-        y: 20,
-        size: 10,
-        font: regularFont,
-        color: rgb(0.5, 0.5, 0.5),
-      });
-    }
   }
 
-  console.log('[NOTICE-PREVIEW] Watermarked', pages.length, 'pages');
+  console.log('[NOTICE-PREVIEW] Added page numbers to', totalContentPages, 'content pages (TOC pages:', tocPageCount, ', total pages:', pages.length, ')');
 
   // Save and return
   const pdfBytes = await mergedPdf.save();
@@ -178,13 +169,6 @@ async function addTableOfContents(
     jurisdictionLabel = 'Wales';
   } else if (options.jurisdiction === 'scotland') {
     jurisdictionLabel = 'Scotland';
-  } else if (options.jurisdiction === 'england-wales' || options.jurisdiction === 'england') {
-    // For england-wales, check notice_type to determine actual jurisdiction
-    if (options.notice_type === 'wales_section_173' || options.notice_type === 'wales_fault_based') {
-      jurisdictionLabel = 'Wales';
-    } else {
-      jurisdictionLabel = 'England';
-    }
   }
 
   tocPage.drawText(`Jurisdiction: ${jurisdictionLabel}`, {
@@ -249,7 +233,8 @@ async function addTableOfContents(
       return;
     }
 
-    tocPage.drawText(`${idx + 1}. ${doc.title}`, {
+    // Sanitize document title to prevent WinAnsi encoding errors
+    tocPage.drawText(toWinAnsiSafeText(`${idx + 1}. ${doc.title}`), {
       x: 60,
       y: yPos,
       size: 12,
@@ -319,7 +304,7 @@ async function addTableOfContents(
   });
   yPos -= 20;
 
-  tocPage.drawText('Complete purchase (£29.99) to download full unredacted documents.', {
+  tocPage.drawText('Complete purchase (£34.99) to download full unredacted documents.', {
     x: 50,
     y: yPos,
     size: 11,

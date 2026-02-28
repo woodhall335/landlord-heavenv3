@@ -1,0 +1,65 @@
+<h1>Particulars of Claim</h1>
+
+<p><strong>Claimant:</strong> {{landlord_full_name}}</p>
+<p><strong>Defendant (Contract-Holder):</strong> {{tenant_full_name}}</p>
+<p><strong>Property:</strong> {{property_address}}</p>
+
+<h2>Occupation Contract Background</h2>
+<p>
+  The Defendant occupies the above property under an occupation contract governed by the Renting Homes (Wales) Act 2016
+  that commenced on {{tenancy_start_date}}. Rent is {{currency rent_amount}} {{rent_frequency}}, payable in advance on
+  the {{payment_day}} of each period.
+</p>
+
+<h2>Rent arrears</h2>
+<p>
+  The Defendant has failed to pay rent as it fell due. As at {{generation_date}}, the arrears total is
+  {{currency arrears_total}}. A detailed schedule is attached and marked "Schedule of arrears".
+</p>
+
+<h2>Property damage and other sums</h2>
+{{#if damage_items.length}}
+<p>The Defendant caused damage beyond fair wear and tear. The Claimant seeks:</p>
+<ul>
+  {{#each damage_items}}
+  <li>{{description}} – {{currency amount}}</li>
+  {{/each}}
+</ul>
+{{/if}}
+
+{{#if other_charges.length}}
+<p>Additional recoverable sums:</p>
+<ul>
+  {{#each other_charges}}
+  <li>{{description}} – {{currency amount}}</li>
+  {{/each}}
+</ul>
+{{/if}}
+
+{{#if claim_interest}}
+<h2>Interest</h2>
+<p>
+  The Claimant claims interest pursuant to section 69 County Courts Act 1984 at {{interest_rate}}% per annum
+  from {{interest_start_date}} to {{generation_date}}, calculated at {{currency interest_to_date}}, and continuing at
+  {{currency daily_interest}} per day until judgment or earlier payment.
+</p>
+{{/if}}
+
+<h2>Relief sought</h2>
+<ol>
+  <li>Arrears, damages and other sums totalling {{currency total_claim_amount}}</li>
+  <li>Court fee of {{currency court_fee}}</li>
+  {{#if solicitor_costs}}
+  <li>Fixed legal costs of {{currency solicitor_costs}}</li>
+  {{/if}}
+  {{#if claim_interest}}
+  <li>Interest under section 69 CCA 1984</li>
+  {{/if}}
+</ol>
+
+<h2>Statement of truth</h2>
+<p>
+  I believe that the facts stated in these particulars of claim are true.
+</p>
+<p>Signed: {{signatory_name}}</p>
+<p>Dated: {{signature_date}}</p>
