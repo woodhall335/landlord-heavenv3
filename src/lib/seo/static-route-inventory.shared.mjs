@@ -1,7 +1,11 @@
 import fs from 'node:fs/promises';
+import fsSync from 'node:fs';
 import path from 'node:path';
 
-const DEFAULT_APP_DIR = path.join(process.cwd(), 'src', 'app');
+const APP_DIR_CANDIDATES = [
+  path.join(process.cwd(), 'src', 'app'),
+  path.join(process.cwd(), 'app'),
+];
 
 const isDynamicSegment = (segment) => /^\[.*\]$/.test(segment);
 const isRouteGroup = (segment) => /^\(.*\)$/.test(segment);
@@ -47,8 +51,21 @@ export function routePathFromPageFile(appDir, absFilePath) {
   return normalizedSegments.length ? `/${normalizedSegments.join('/')}` : '/';
 }
 
-export async function discoverStaticPageRoutes(appDir = DEFAULT_APP_DIR) {
-  const files = await walk(appDir);
+export function resolveAppDir(appDir) {
+  if (appDir) {
+    return fsSync.existsSync(appDir) ? appDir : null;
+  }
+
+  return APP_DIR_CANDIDATES.find((candidate) => fsSync.existsSync(candidate)) ?? null;
+}
+
+export async function discoverStaticPageRoutes(appDir) {
+  const resolvedAppDir = resolveAppDir(appDir);
+  if (!resolvedAppDir) {
+    return [];
+  }
+
+  const files = await walk(resolvedAppDir);
   const routes = new Set();
 
   for (const filePath of files) {
@@ -56,7 +73,7 @@ export async function discoverStaticPageRoutes(appDir = DEFAULT_APP_DIR) {
       continue;
     }
 
-    const routePath = routePathFromPageFile(appDir, filePath);
+    const routePath = routePathFromPageFile(resolvedAppDir, filePath);
     if (routePath) {
       routes.add(routePath);
     }

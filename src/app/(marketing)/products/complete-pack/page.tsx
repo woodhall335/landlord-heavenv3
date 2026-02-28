@@ -24,6 +24,7 @@ import {
   WhatsIncludedInteractive,
 } from "@/components/value-proposition";
 import { getCompletePackPreviewData } from "@/lib/previews/completePackPreviews";
+import { Section21ComplianceTimingPanel } from '@/components/products/Section21ComplianceTimingPanel';
 
 // Get price from single source of truth
 const product = PRODUCTS.complete_pack;
@@ -103,6 +104,16 @@ export default async function CompleteEvictionPackPage() {
       {/* Hero Section */}
       <UniversalHero {...completePackHeroConfig} showTrustPositioningBar />
 
+
+
+
+      <section className="py-10 md:py-14">
+        <Container>
+          <div className="mx-auto max-w-6xl">
+            <Section21ComplianceTimingPanel />
+          </div>
+        </Container>
+      </section>
 
       <section className="py-10 md:py-14">
         <Container>

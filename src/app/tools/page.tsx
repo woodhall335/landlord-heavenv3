@@ -6,6 +6,7 @@ import { getCanonicalUrl } from '@/lib/seo';
 import { StandardHero } from '@/components/marketing/StandardHero';
 import { CommercialWizardLinks } from '@/components/seo/CommercialWizardLinks';
 import { analyzeContent } from '@/lib/seo/commercial-linking';
+import { Section21ComplianceTimingPanel } from '@/components/products/Section21ComplianceTimingPanel';
 
 export const metadata: Metadata = {
   title: 'Free Landlord Tools UK | Calculators, Generators & Checkers',
@@ -100,6 +101,15 @@ export default function ToolsHubPage() {
               maxLinks={4}
               utmSource="tools_hub"
             />
+          </div>
+        </Container>
+      </section>
+
+
+      <section className="py-10 md:py-14 bg-white">
+        <Container>
+          <div className="mx-auto max-w-6xl">
+            <Section21ComplianceTimingPanel />
           </div>
         </Container>
       </section>
