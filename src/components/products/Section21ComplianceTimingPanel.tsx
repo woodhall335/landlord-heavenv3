@@ -3,10 +3,10 @@
 import Image from 'next/image';
 import Section21PrecheckPanel from '@/components/precheck/Section21PrecheckPanel';
 
-export default function Section21ComplianceTimingPanel() {
+export function Section21ComplianceTimingPanel() {
   return (
     <div className="space-y-6 md:space-y-8">
-      <div className="grid grid-cols-1 items-center gap-8 md:grid-cols-2">
+      <div className="grid grid-cols-1 items-start gap-8 md:grid-cols-2">
         <div className="rounded-2xl border border-[#7c3aed]/15 bg-gradient-to-br from-[#f7f2ff] via-white to-[#f3e8ff] p-6 shadow-[0_16px_45px_-26px_rgba(76,29,149,0.45)] md:p-8">
           <Image
             src="/images/section21_compliance.webp"
@@ -61,3 +61,6 @@ export default function Section21ComplianceTimingPanel() {
     </div>
   );
 }
+
+
+export default Section21ComplianceTimingPanel;

@@ -12,6 +12,7 @@ import { IntentProductCTA } from '@/components/seo/IntentProductCTA';
 import { evictionNoticeTemplateFAQs } from '@/data/faqs';
 import { EvictionNoticeBundlePreviewSection } from '@/components/seo/EvictionNoticeBundlePreviewSection';
 import { getNoticeOnlyPreviewData } from '@/lib/previews/noticeOnlyPreviews';
+import { Section21ComplianceTimingPanel } from '@/components/products/Section21ComplianceTimingPanel';
 import { CheckCircle, ArrowRight, AlertTriangle, Scale, FileText, Landmark, Info } from 'lucide-react';
 
 export const metadata: Metadata = {
@@ -82,6 +83,15 @@ export default async function EvictionNoticeTemplatePage() {
           showTrustPositioningBar
           hideMedia
         />
+
+
+        <section className="py-10 md:py-14">
+          <div className="container mx-auto px-4">
+            <div className="mx-auto max-w-6xl">
+              <Section21ComplianceTimingPanel />
+            </div>
+          </div>
+        </section>
 
         <section className="py-10 md:py-14">
           <div className="container mx-auto px-4">
