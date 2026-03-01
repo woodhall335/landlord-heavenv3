@@ -80,7 +80,7 @@ export default function PricingPage() {
 
         {/* Comparison Table - Desktop */}
         <div className="hidden lg:block overflow-x-auto mb-12">
-          <table className="w-full bg-white shadow-lg rounded-lg overflow-hidden">
+          <table className="w-full table-fixed bg-white shadow-lg rounded-lg overflow-hidden">
             <thead>
               <tr className="bg-gray-100">
                 <th className="text-left p-6 font-semibold text-charcoal">Feature</th>
@@ -255,6 +255,56 @@ export default function PricingPage() {
               </tr>
 
             </tbody>
+            <tfoot>
+              <tr className="border-t bg-white align-middle">
+                <td className="p-4 text-sm font-semibold text-charcoal">Get started</td>
+                <td className="p-4 align-middle">
+                  <Link
+                    href="/wizard?product=notice_only&src=pricing&topic=eviction"
+                    className="hero-btn-primary flex w-full min-h-[52px] items-center justify-center px-3 py-3 text-center text-[13px] leading-snug [overflow-wrap:anywhere] sm:min-h-[56px] sm:px-3 sm:py-3 sm:text-sm"
+                    aria-label="Start notice wizard"
+                  >
+                    Start Notice Bundle Wizard →
+                  </Link>
+                </td>
+                <td className="p-4 align-middle">
+                  <Link
+                    href="/wizard?product=complete_pack&src=pricing&topic=eviction"
+                    className="hero-btn-primary flex w-full min-h-[52px] items-center justify-center px-3 py-3 text-center text-[13px] leading-snug [overflow-wrap:anywhere] sm:min-h-[56px] sm:px-3 sm:py-3 sm:text-sm"
+                    aria-label="Start eviction pack wizard"
+                  >
+                    Start England Complete Pack Wizard →
+                  </Link>
+                </td>
+                <td className="p-4 align-middle">
+                  <Link
+                    href="/wizard?product=money_claim&src=pricing&topic=arrears"
+                    className="hero-btn-primary flex w-full min-h-[52px] items-center justify-center px-3 py-3 text-center text-[13px] leading-snug [overflow-wrap:anywhere] sm:min-h-[56px] sm:px-3 sm:py-3 sm:text-sm"
+                    aria-label="Start money claim wizard"
+                  >
+                    Start England Money Claim Wizard →
+                  </Link>
+                </td>
+                <td className="p-4 align-middle">
+                  <Link
+                    href="/wizard?product=ast_standard&src=pricing&topic=tenancy"
+                    className="hero-btn-primary flex w-full min-h-[52px] items-center justify-center px-3 py-3 text-center text-[13px] leading-snug [overflow-wrap:anywhere] sm:min-h-[56px] sm:px-3 sm:py-3 sm:text-sm"
+                    aria-label="Create standard tenancy agreement"
+                  >
+                    Create Tenancy Agreement →
+                  </Link>
+                </td>
+                <td className="p-4 align-middle">
+                  <Link
+                    href="/wizard?product=ast_premium&src=pricing&topic=tenancy"
+                    className="hero-btn-primary flex w-full min-h-[52px] items-center justify-center px-3 py-3 text-center text-[13px] leading-snug [overflow-wrap:anywhere] sm:min-h-[56px] sm:px-3 sm:py-3 sm:text-sm"
+                    aria-label="Create premium tenancy agreement"
+                  >
+                    Create Tenancy Agreement →
+                  </Link>
+                </td>
+              </tr>
+            </tfoot>
           </table>
 
         </div>
@@ -361,46 +411,6 @@ export default function PricingPage() {
 
           {/* HMO Pro removed - parked for later review */}
         </div>
-
-
-          <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 px-4">
-            <Link
-              href="/wizard?product=notice_only&src=pricing&topic=eviction"
-              className="hero-btn-primary w-full min-h-[130px] sm:min-h-[150px] flex items-center justify-center text-center text-sm leading-snug px-6 py-6 whitespace-normal [overflow-wrap:anywhere]"
-              aria-label="Start notice wizard"
-            >
-              Start Notice Bundle Wizard →
-            </Link>
-            <Link
-              href="/wizard?product=complete_pack&src=pricing&topic=eviction"
-              className="hero-btn-primary w-full min-h-[130px] sm:min-h-[150px] flex items-center justify-center text-center text-sm leading-snug px-6 py-6 whitespace-normal [overflow-wrap:anywhere]"
-              aria-label="Start eviction pack wizard"
-            >
-              Start England Complete Pack Wizard →
-            </Link>
-            <Link
-              href="/wizard?product=money_claim&src=pricing&topic=arrears"
-              className="hero-btn-primary w-full min-h-[130px] sm:min-h-[150px] flex items-center justify-center text-center text-sm leading-snug px-6 py-6 whitespace-normal [overflow-wrap:anywhere]"
-              aria-label="Start money claim wizard"
-            >
-              Start England Money Claim Wizard →
-            </Link>
-            <Link
-              href="/wizard?product=ast_standard&src=pricing&topic=tenancy"
-              className="hero-btn-primary w-full min-h-[130px] sm:min-h-[150px] flex items-center justify-center text-center text-sm leading-snug px-6 py-6 whitespace-normal [overflow-wrap:anywhere]"
-              aria-label="Create standard tenancy agreement"
-            >
-              Create Tenancy Agreement →
-            </Link>
-            <Link
-              href="/wizard?product=ast_premium&src=pricing&topic=tenancy"
-              className="hero-btn-primary w-full min-h-[130px] sm:min-h-[150px] flex items-center justify-center text-center text-sm leading-snug px-6 py-6 whitespace-normal [overflow-wrap:anywhere]"
-              aria-label="Create premium tenancy agreement"
-            >
-              Create Tenancy Agreement →
-            </Link>
-          </div>
-
       </Container>
 
 
