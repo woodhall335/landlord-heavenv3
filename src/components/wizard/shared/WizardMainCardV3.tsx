@@ -14,12 +14,12 @@ export function WizardMainCardV3({ sectionTitle, sectionDescription, stepIconPat
   return (
     <main className="min-w-0 flex-1 lg:max-w-[860px]">
       {banner}
-      <div className="overflow-hidden rounded-xl border border-violet-200 bg-white shadow-[0_8px_22px_rgba(31,41,55,0.08)]">
-        <div className="p-6 md:p-7">
+      <div className="flex min-h-0 flex-col rounded-xl border border-violet-200 bg-white shadow-[0_8px_22px_rgba(31,41,55,0.08)]">
+        <div className="min-h-0 flex-1 p-6 md:p-7">
           <StepHeaderV3 title={sectionTitle} description={sectionDescription} iconPath={stepIconPath} />
           {children}
         </div>
-        <div className="min-h-[76px] bg-violet-50/30">
+        <div className="shrink-0">
           {navigation}
         </div>
       </div>

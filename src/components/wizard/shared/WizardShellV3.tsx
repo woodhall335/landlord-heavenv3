@@ -28,7 +28,10 @@ interface WizardShellV3Props {
   banner?: React.ReactNode;
   sidebar?: React.ReactNode;
   children: React.ReactNode;
-  navigation: React.ReactNode;
+  navigation?: React.ReactNode;
+  navigationLeft?: React.ReactNode;
+  navigationCenter?: React.ReactNode;
+  navigationRight?: React.ReactNode;
   product: WizardProduct;
   jurisdiction: WizardJurisdiction;
   currentStepId?: string;
@@ -46,6 +49,9 @@ export function WizardShellV3({
   sidebar,
   children,
   navigation,
+  navigationLeft,
+  navigationCenter,
+  navigationRight,
   product,
   jurisdiction,
   currentStepId,
@@ -65,13 +71,13 @@ export function WizardShellV3({
         />
       </div>
 
-      <div className="mx-auto flex max-w-[1240px] flex-col gap-6 px-4 pb-8 md:flex-col lg:flex-row lg:items-start">
+      <div className="mx-auto flex max-w-[1240px] flex-col gap-6 px-4 pb-12 md:flex-col lg:flex-row lg:items-start">
         <WizardMainCardV3
           sectionTitle={sectionTitle}
           sectionDescription={sectionDescription}
           stepIconPath={resolveStepIconPath(currentMeta)}
           banner={banner}
-          navigation={<WizardFooterNavV3>{navigation}</WizardFooterNavV3>}
+          navigation={navigation ? <WizardFooterNavV3>{navigation}</WizardFooterNavV3> : <WizardFooterNavV3 leftSlot={navigationLeft} centerSlot={navigationCenter} rightSlot={navigationRight} />}
         >
           {children}
         </WizardMainCardV3>

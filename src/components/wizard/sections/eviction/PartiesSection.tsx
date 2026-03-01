@@ -18,6 +18,7 @@
 import React from 'react';
 import type { WizardFacts } from '@/lib/case-facts/schema';
 import { ValidatedInput } from '@/components/wizard/ValidatedField';
+import { InlineSectionHeaderV3 } from '@/components/wizard/shared/InlineSectionHeaderV3';
 
 interface PartiesSectionProps {
   facts: WizardFacts;
@@ -39,9 +40,9 @@ export const PartiesSection: React.FC<PartiesSectionProps> = ({
     <div className="space-y-8">
       {/* Landlord Details */}
       <div className="space-y-4">
-        <h3 className="text-lg font-medium text-gray-900 border-b pb-2">
-          Landlord Details
-        </h3>
+        <div className="border-b pb-2">
+          <InlineSectionHeaderV3 title="Landlord Details" iconSlug="landlord" />
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="md:col-span-2">
@@ -149,9 +150,9 @@ export const PartiesSection: React.FC<PartiesSectionProps> = ({
 
       {/* Tenant Details */}
       <div className="space-y-4">
-        <h3 className="text-lg font-medium text-gray-900 border-b pb-2">
-          Tenant Details
-        </h3>
+        <div className="border-b pb-2">
+          <InlineSectionHeaderV3 title="Tenant Details" iconSlug="tenants" />
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="md:col-span-2">

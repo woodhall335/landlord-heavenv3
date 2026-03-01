@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { InlineSectionHeaderV3 } from '@/components/wizard/shared/InlineSectionHeaderV3';
 
 interface SectionProps {
   facts: any;
@@ -206,9 +207,7 @@ export const ClaimantSection: React.FC<SectionProps> = ({ facts, onUpdate }) => 
 
       {/* Postal address */}
       <div className="space-y-3 rounded-md border border-gray-200 bg-gray-50 p-3">
-        <h3 className="text-sm font-medium text-charcoal">
-          Claimant postal address
-        </h3>
+        <InlineSectionHeaderV3 title="Claimant postal address" iconSlug="claimant" />
         <p className="text-xs text-gray-600">
           This is the address that will appear on the court papers. If you use a
           managing agent or solicitor for service, we&apos;ll collect that later.
