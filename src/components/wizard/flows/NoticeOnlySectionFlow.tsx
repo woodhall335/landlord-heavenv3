@@ -39,7 +39,8 @@ import { useRouter } from 'next/navigation';
 import { RiCheckLine, RiErrorWarningLine, RiArrowRightSLine } from 'react-icons/ri';
 
 import { AskHeavenPanel } from '@/components/wizard/AskHeavenPanel';
-import { WizardShellSwitch } from '@/components/wizard/shared/WizardShellSwitch';
+import { WizardFlowShell } from '@/components/wizard/shared/WizardFlowShell';
+import { WizardShellV3 } from '@/components/wizard/shared/WizardShellV3';
 import { isWizardThemeV2 } from '@/components/wizard/shared/theme';
 import { isWizardUiV3Enabled } from '@/components/wizard/shared/flags';
 
@@ -1199,8 +1200,10 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
     );
   }
 
+  const ShellComponent: React.ComponentType<any> = isWizardUiV3Enabled ? WizardShellV3 : WizardFlowShell;
+
   return (
-    <WizardShellSwitch
+    <ShellComponent
       title={jurisdiction === 'scotland' ? 'Scotland Notice to Leave' : `${jurisdiction === 'england' ? 'England' : 'Wales'} Eviction Notice`}
       completedCount={completedCount}
       totalCount={visibleSections.length}
@@ -1215,7 +1218,6 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
       }))}
       sectionTitle={currentSection?.label ?? ''}
       sectionDescription={currentSection?.description}
-      enabled={isWizardUiV3Enabled}
       product="notice_only"
       jurisdiction={jurisdiction}
       currentStepId={currentSection?.id}
@@ -1325,7 +1327,7 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
       )}
 
       {renderSection()}
-    </WizardShellSwitch>
+    </ShellComponent>
   );
 };
 

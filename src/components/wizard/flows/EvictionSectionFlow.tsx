@@ -38,7 +38,8 @@
 
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { WizardShellSwitch } from '@/components/wizard/shared/WizardShellSwitch';
+import { WizardFlowShell } from '@/components/wizard/shared/WizardFlowShell';
+import { WizardShellV3 } from '@/components/wizard/shared/WizardShellV3';
 import { isWizardThemeV2 } from '@/components/wizard/shared/theme';
 import { isWizardUiV3Enabled } from '@/components/wizard/shared/flags';
 
@@ -785,8 +786,10 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
     );
   }
 
+  const ShellComponent: React.ComponentType<any> = isWizardUiV3Enabled ? WizardShellV3 : WizardFlowShell;
+
   return (
-    <WizardShellSwitch
+    <ShellComponent
       title={
         jurisdiction === 'scotland'
           ? 'Scotland Eviction Pack'
@@ -807,7 +810,6 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
       }))}
       sectionTitle={currentSection?.label ?? ''}
       sectionDescription={currentSection?.description}
-      enabled={isWizardUiV3Enabled}
       product="complete_pack"
       jurisdiction={jurisdiction}
       currentStepId={currentSection?.id}
@@ -928,7 +930,7 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
                   />
                 </div>
               )}
-    </WizardShellSwitch>
+    </ShellComponent>
   );
 };
 

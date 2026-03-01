@@ -24,15 +24,6 @@ export type StepMetadata = {
 
 export type StepKey = `${WizardProduct}.${WizardJurisdiction}.${string}`;
 
-export const PANEL_ICON_SLUGS = {
-  askHeaven: 'ask-heaven',
-  whatYouNeed: 'what-you-need',
-  warning: 'warning',
-  success: 'success',
-} as const;
-
-export type PanelIconSlug = (typeof PANEL_ICON_SLUGS)[keyof typeof PANEL_ICON_SLUGS];
-
 export const WIZARD_V3_PALETTE = {
   primary: '#6D28D9',
   primaryHover: '#5B21B6',
@@ -199,10 +190,6 @@ export function resolvePanelIconPath(meta?: StepMetadata): string | undefined {
   return getWizardIconPathBySlug(meta?.panelIconSlug);
 }
 
-export function getPanelIconPath(kind: keyof typeof PANEL_ICON_SLUGS): string | undefined {
-  return getWizardIconPathBySlug(PANEL_ICON_SLUGS[kind]);
-}
-
 export function isSupportedJurisdictionForProduct(
   product: WizardProduct,
   jurisdiction: WizardJurisdiction
@@ -237,3 +224,10 @@ export function countMetadataKeysByProductJurisdiction(): Record<string, Record<
     {}
   );
 }
+
+export const PANEL_ICON_SLUGS = {
+  askHeaven: 'ask-heaven',
+  whatYouNeed: 'what-you-need',
+  warning: 'warning',
+  success: 'success',
+} as const;
