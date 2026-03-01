@@ -39,8 +39,9 @@ import { useRouter } from 'next/navigation';
 import { RiCheckLine, RiErrorWarningLine, RiArrowRightSLine } from 'react-icons/ri';
 
 import { AskHeavenPanel } from '@/components/wizard/AskHeavenPanel';
-import { WizardFlowShell } from '@/components/wizard/shared/WizardFlowShell';
+import { WizardShellSwitch } from '@/components/wizard/shared/WizardShellSwitch';
 import { isWizardThemeV2 } from '@/components/wizard/shared/theme';
+import { isWizardUiV3Enabled } from '@/components/wizard/shared/flags';
 
 // Reuse section components from eviction flow
 import { CaseBasicsSection } from '../sections/eviction/CaseBasicsSection';
@@ -1199,7 +1200,7 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
   }
 
   return (
-    <WizardFlowShell
+    <WizardShellSwitch
       title={jurisdiction === 'scotland' ? 'Scotland Notice to Leave' : `${jurisdiction === 'england' ? 'England' : 'Wales'} Eviction Notice`}
       completedCount={completedCount}
       totalCount={visibleSections.length}
@@ -1214,6 +1215,10 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
       }))}
       sectionTitle={currentSection?.label ?? ''}
       sectionDescription={currentSection?.description}
+      enabled={isWizardUiV3Enabled}
+      product="notice_only"
+      jurisdiction={jurisdiction}
+      currentStepId={currentSection?.id}
       banner={error ? (
         <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
           <div className="flex items-center justify-between">
@@ -1320,7 +1325,7 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
       )}
 
       {renderSection()}
-    </WizardFlowShell>
+    </WizardShellSwitch>
   );
 };
 

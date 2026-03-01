@@ -38,8 +38,9 @@
 
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { WizardFlowShell } from '@/components/wizard/shared/WizardFlowShell';
+import { WizardShellSwitch } from '@/components/wizard/shared/WizardShellSwitch';
 import { isWizardThemeV2 } from '@/components/wizard/shared/theme';
+import { isWizardUiV3Enabled } from '@/components/wizard/shared/flags';
 
 import { AskHeavenPanel } from '@/components/wizard/AskHeavenPanel';
 import { SmartReviewPanel } from '@/components/wizard/SmartReviewPanel';
@@ -785,7 +786,7 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
   }
 
   return (
-    <WizardFlowShell
+    <WizardShellSwitch
       title={
         jurisdiction === 'scotland'
           ? 'Scotland Eviction Pack'
@@ -806,6 +807,10 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
       }))}
       sectionTitle={currentSection?.label ?? ''}
       sectionDescription={currentSection?.description}
+      enabled={isWizardUiV3Enabled}
+      product="complete_pack"
+      jurisdiction={jurisdiction}
+      currentStepId={currentSection?.id}
       banner={error ? (
         <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
               <div className="flex items-center justify-between">
@@ -923,7 +928,7 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
                   />
                 </div>
               )}
-    </WizardFlowShell>
+    </WizardShellSwitch>
   );
 };
 

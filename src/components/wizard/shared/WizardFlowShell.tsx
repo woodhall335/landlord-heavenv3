@@ -5,7 +5,7 @@ import { RiCheckLine, RiErrorWarningLine } from 'react-icons/ri';
 import { clsx } from 'clsx';
 import { isWizardThemeV2 } from './theme';
 
-interface WizardTab {
+export interface WizardTab {
   id: string;
   label: string;
   isCurrent: boolean;
@@ -14,7 +14,7 @@ interface WizardTab {
   onClick: () => void;
 }
 
-interface WizardFlowShellProps {
+export interface WizardFlowShellProps {
   title: string;
   completedCount: number;
   totalCount: number;
