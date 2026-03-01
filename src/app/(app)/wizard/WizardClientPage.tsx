@@ -131,7 +131,7 @@ const documentOptions: DocumentOption[] = [
     title: 'Complete Eviction Pack',
     description: 'England-only case bundle with N5 / N5B / N119 routes, witness statement draft, and filing guide',
     icon: '⚖️',
-    price: '£59.99',
+    price: '£99.99',
     regionBadge: 'England only',
   },
   {
@@ -139,7 +139,7 @@ const documentOptions: DocumentOption[] = [
     title: 'Money Claims',
     description: 'England-only money claim bundle for rent arrears and tenancy debts (County Court / MCOL-ready)',
     icon: '💰',
-    price: '£44.99',
+    price: '£69.99',
     regionBadge: 'England only',
   },
   {

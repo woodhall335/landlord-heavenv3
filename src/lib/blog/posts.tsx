@@ -526,7 +526,7 @@ export const blogPosts: BlogPost[] = [
               href="/products/complete-pack"
               className="inline-flex items-center bg-gray-100 hover:bg-gray-200 text-gray-900 font-medium py-3 px-6 rounded-lg transition-colors"
             >
-              Complete Eviction Pack — £59.99
+              Complete Eviction Pack — £99.99
             </Link>
           </div>
         </div>
@@ -610,7 +610,7 @@ export const blogPosts: BlogPost[] = [
           <li><Link href="/products/notice-only" className="text-primary hover:underline">
             Generate Court-Ready Section 21 Notice — £34.99</Link></li>
           <li><Link href="/products/complete-pack" className="text-primary hover:underline">
-            Complete Eviction Pack (notices + court forms) — £59.99</Link></li>
+            Complete Eviction Pack (notices + court forms) — £99.99</Link></li>
           <li><Link href="/blog/what-is-section-21-notice" className="text-primary hover:underline">
             Complete Section 21 Guide</Link></li>
           <li><Link href="/blog/section-21-vs-section-8" className="text-primary hover:underline">
@@ -7784,7 +7784,7 @@ export const blogPosts: BlogPost[] = [
               href="/products/complete-pack"
               className="inline-flex items-center bg-gray-100 hover:bg-gray-200 text-gray-900 font-medium py-3 px-6 rounded-lg transition-colors"
             >
-              Complete Eviction Pack — £59.99
+              Complete Eviction Pack — £99.99
             </Link>
           </div>
         </div>
@@ -8193,7 +8193,7 @@ export const blogPosts: BlogPost[] = [
             href="/products/complete-pack"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
-            Get Complete Eviction Pack — £59.99
+            Get Complete Eviction Pack — £99.99
           </Link>
         </div>
       </>
@@ -8581,7 +8581,7 @@ export const blogPosts: BlogPost[] = [
             href="/products/complete-pack"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
-            Get Complete Eviction Pack — £59.99
+            Get Complete Eviction Pack — £99.99
           </Link>
         </div>
       </>
@@ -9011,7 +9011,7 @@ export const blogPosts: BlogPost[] = [
             href="/products/complete-pack"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
-            Get Complete Eviction Pack — £59.99
+            Get Complete Eviction Pack — £99.99
           </Link>
         </div>
       </>
@@ -37785,7 +37785,7 @@ export const blogPosts: BlogPost[] = [
             href="/wizard?product=money_claim&src=blog_lba"
             className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors"
           >
-            Start Your Money Claim — £44.99
+            Start Your Money Claim — £69.99
           </Link>
         </div>
 
@@ -38017,7 +38017,7 @@ export const blogPosts: BlogPost[] = [
             href="/wizard?product=money_claim&src=blog_ccj"
             className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors"
           >
-            Start Your Claim — £44.99
+            Start Your Claim — £69.99
           </Link>
         </div>
 
@@ -38228,7 +38228,7 @@ export const blogPosts: BlogPost[] = [
             href="/wizard?product=money_claim&src=blog_interest"
             className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors"
           >
-            Start Your Claim — £44.99
+            Start Your Claim — £69.99
           </Link>
         </div>
 
@@ -38433,7 +38433,7 @@ export const blogPosts: BlogPost[] = [
             href="/wizard?product=money_claim&src=blog_mcol_timeline"
             className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors"
           >
-            Start Your Claim — £44.99
+            Start Your Claim — £69.99
           </Link>
         </div>
 
@@ -38649,7 +38649,7 @@ export const blogPosts: BlogPost[] = [
             href="/wizard?product=money_claim&reason=guarantor&src=blog_guarantor"
             className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors"
           >
-            Start Guarantor Claim — £44.99
+            Start Guarantor Claim — £69.99
           </Link>
         </div>
 
@@ -38863,7 +38863,7 @@ export const blogPosts: BlogPost[] = [
             href="/wizard?product=money_claim&reason=cleaning&src=blog_cleaning"
             className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors"
           >
-            Start Your Claim — £44.99
+            Start Your Claim — £69.99
           </Link>
         </div>
 
@@ -39092,7 +39092,7 @@ export const blogPosts: BlogPost[] = [
             href="/wizard?product=money_claim&reason=damage&src=blog_wear_tear"
             className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors"
           >
-            Start Your Claim — £44.99
+            Start Your Claim — £69.99
           </Link>
         </div>
 
@@ -39275,7 +39275,7 @@ export const blogPosts: BlogPost[] = [
             href="/wizard?product=money_claim&src=blog_payment_plan"
             className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors"
           >
-            Start Court Claim — £44.99
+            Start Court Claim — £69.99
           </Link>
         </div>
 
@@ -39500,7 +39500,7 @@ export const blogPosts: BlogPost[] = [
             href="/wizard?product=money_claim&src=blog_small_claims"
             className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors"
           >
-            Start Your Claim — £44.99
+            Start Your Claim — £69.99
           </Link>
         </div>
 
@@ -39735,7 +39735,7 @@ export const blogPosts: BlogPost[] = [
             href="/wizard?product=money_claim&src=blog_wont_pay"
             className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors"
           >
-            Start Your Claim — £44.99
+            Start Your Claim — £69.99
           </Link>
         </div>
 
