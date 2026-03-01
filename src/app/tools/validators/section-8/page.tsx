@@ -693,7 +693,7 @@ export default function Section8ValidatorPage() {
                   href={wizardLinkCompletePack}
                   className="inline-flex items-center px-4 py-2 border border-purple-600 text-purple-700 rounded-lg hover:bg-purple-50 transition-colors"
                 >
-                  Complete Eviction Pack - £59.99
+                  Complete Eviction Pack - £99.99
                 </Link>
               </div>
             </div>

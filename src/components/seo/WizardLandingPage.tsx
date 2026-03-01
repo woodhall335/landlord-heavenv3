@@ -41,11 +41,11 @@ export function WizardLandingPage({ content, structuredDataUrl, showAskHeavenWid
   const showHeroPrice = !isCompletePackEnglandPage && !isMoneyClaimPage;
 
   const heroCtaLabel = isCompletePackEnglandPage
-    ? 'Start & Preview Complete Pack — £59.99'
+    ? 'Start & Preview Complete Pack — £99.99'
     : isNoticeOnlyPage
       ? 'Generate My Notice — £34.99'
       : isMoneyClaimPage
-        ? 'Start My Case Bundle — £44.99'
+        ? 'Start My Case Bundle — £69.99'
         : 'Start My Case Bundle';
 
   const heroHelperCopy = isCompletePackEnglandPage
@@ -283,7 +283,7 @@ export function WizardLandingPage({ content, structuredDataUrl, showAskHeavenWid
                 <span className="flex items-center gap-2 whitespace-nowrap">✓ Preview before paying</span>
                 <span className="flex items-center gap-2 whitespace-nowrap">✓ Unlimited regenerations</span>
                 <span className="flex items-center gap-2 whitespace-nowrap">✓ Stored 12+ months</span>
-                <span className="flex items-center gap-2 whitespace-nowrap">✓ One-time £59.99</span>
+                <span className="flex items-center gap-2 whitespace-nowrap">✓ One-time £99.99</span>
               </div>
             ) : (
               <p className="mt-4 text-sm text-gray-600">

@@ -80,7 +80,7 @@ export default function PricingPage() {
 
         {/* Comparison Table - Desktop */}
         <div className="hidden lg:block overflow-x-auto mb-12">
-          <table className="w-full bg-white shadow-lg rounded-lg overflow-hidden">
+          <table className="w-full table-fixed bg-white shadow-lg rounded-lg overflow-hidden">
             <thead>
               <tr className="bg-gray-100">
                 <th className="text-left p-6 font-semibold text-charcoal">Feature</th>
@@ -91,13 +91,13 @@ export default function PricingPage() {
                 </th>
                 <th className="text-center p-6">
                   <div className="font-semibold text-charcoal mb-2">Complete Pack</div>
-                  <div className="text-2xl font-bold text-primary mb-1">£59.99</div>
+                  <div className="text-2xl font-bold text-primary mb-1">£99.99</div>
                   <div className="text-xs text-amber-600 font-medium">England only</div>
                   <div className="text-sm text-gray-600">One-time</div>
                 </th>
                 <th className="text-center p-6">
                   <div className="font-semibold text-charcoal mb-2">Money Claims</div>
-                  <div className="text-2xl font-bold text-primary mb-1">£44.99</div>
+                  <div className="text-2xl font-bold text-primary mb-1">£69.99</div>
                   <div className="text-xs text-amber-600 font-medium">England only</div>
                   <div className="text-sm text-gray-600">One-time</div>
                 </th>
@@ -254,56 +254,59 @@ export default function PricingPage() {
                 <td className="text-center p-6 text-xs text-gray-700">HMOs & complex</td>
               </tr>
 
-              <tr className="border-t">
-                <td className="p-6"></td>
-                <td className="text-center p-6">
+            </tbody>
+            <tfoot>
+              <tr className="border-t bg-white align-middle">
+                <td className="p-4 text-sm font-semibold text-charcoal">Get started</td>
+                <td className="p-4 align-middle">
                   <Link
                     href="/wizard?product=notice_only&src=pricing&topic=eviction"
-                    className="hero-btn-primary text-sm px-4 py-2"
+                    className="hero-btn-primary flex w-full min-h-[52px] items-center justify-center px-3 py-3 text-center text-[13px] leading-snug [overflow-wrap:anywhere] sm:min-h-[56px] sm:px-3 sm:py-3 sm:text-sm"
                     aria-label="Start notice wizard"
                   >
                     Start Notice Bundle Wizard →
                   </Link>
                 </td>
-                <td className="text-center p-6">
+                <td className="p-4 align-middle">
                   <Link
                     href="/wizard?product=complete_pack&src=pricing&topic=eviction"
-                    className="hero-btn-primary text-sm px-4 py-2"
+                    className="hero-btn-primary flex w-full min-h-[52px] items-center justify-center px-3 py-3 text-center text-[13px] leading-snug [overflow-wrap:anywhere] sm:min-h-[56px] sm:px-3 sm:py-3 sm:text-sm"
                     aria-label="Start eviction pack wizard"
                   >
                     Start England Complete Pack Wizard →
                   </Link>
                 </td>
-                <td className="text-center p-6">
+                <td className="p-4 align-middle">
                   <Link
                     href="/wizard?product=money_claim&src=pricing&topic=arrears"
-                    className="hero-btn-primary text-sm px-4 py-2"
+                    className="hero-btn-primary flex w-full min-h-[52px] items-center justify-center px-3 py-3 text-center text-[13px] leading-snug [overflow-wrap:anywhere] sm:min-h-[56px] sm:px-3 sm:py-3 sm:text-sm"
                     aria-label="Start money claim wizard"
                   >
                     Start England Money Claim Wizard →
                   </Link>
                 </td>
-                <td className="text-center p-6">
+                <td className="p-4 align-middle">
                   <Link
                     href="/wizard?product=ast_standard&src=pricing&topic=tenancy"
-                    className="hero-btn-primary text-sm px-4 py-2"
+                    className="hero-btn-primary flex w-full min-h-[52px] items-center justify-center px-3 py-3 text-center text-[13px] leading-snug [overflow-wrap:anywhere] sm:min-h-[56px] sm:px-3 sm:py-3 sm:text-sm"
                     aria-label="Create standard tenancy agreement"
                   >
                     Create Tenancy Agreement →
                   </Link>
                 </td>
-                <td className="text-center p-6">
+                <td className="p-4 align-middle">
                   <Link
                     href="/wizard?product=ast_premium&src=pricing&topic=tenancy"
-                    className="hero-btn-primary text-sm px-4 py-2"
+                    className="hero-btn-primary flex w-full min-h-[52px] items-center justify-center px-3 py-3 text-center text-[13px] leading-snug [overflow-wrap:anywhere] sm:min-h-[56px] sm:px-3 sm:py-3 sm:text-sm"
                     aria-label="Create premium tenancy agreement"
                   >
                     Create Tenancy Agreement →
                   </Link>
                 </td>
               </tr>
-            </tbody>
+            </tfoot>
           </table>
+
         </div>
 
         {/* Mobile Cards */}
@@ -330,7 +333,7 @@ export default function PricingPage() {
           {/* Complete Eviction Pack */}
           <div className="bg-white rounded-lg border-2 border-gray-200 p-6">
             <h3 className="text-2xl font-bold text-charcoal mb-2">Complete Pack</h3>
-            <div className="text-3xl font-bold text-primary mb-2">£59.99 <span className="text-sm text-gray-600">one-time</span></div>
+            <div className="text-3xl font-bold text-primary mb-2">£99.99 <span className="text-sm text-gray-600">one-time</span></div>
             <div className="text-xs text-amber-600 font-medium mb-4">England only</div>
             <ul className="space-y-2 mb-6 text-sm">
               <li>✅ Section 8/21 Notice</li>
@@ -350,7 +353,7 @@ export default function PricingPage() {
           {/* Money Claims */}
           <div className="bg-white rounded-lg border-2 border-gray-200 p-6">
             <h3 className="text-2xl font-bold text-charcoal mb-2">Money Claims</h3>
-            <div className="text-3xl font-bold text-primary mb-2">£44.99 <span className="text-sm text-gray-600">one-time</span></div>
+            <div className="text-3xl font-bold text-primary mb-2">£69.99 <span className="text-sm text-gray-600">one-time</span></div>
             <div className="text-xs text-amber-600 font-medium mb-4">England only</div>
             <ul className="space-y-2 mb-6 text-sm">
               <li>✅ Money Claim Forms</li>
@@ -408,7 +411,6 @@ export default function PricingPage() {
 
           {/* HMO Pro removed - parked for later review */}
         </div>
-
       </Container>
 
 

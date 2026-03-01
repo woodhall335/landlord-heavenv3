@@ -149,7 +149,7 @@ export function CostComparison() {
             />
             <PriceAnchor
               product="Complete Eviction Packs Including Court Docs"
-              ourPrice="£59.99"
+              ourPrice="£99.99"
               solicitorPrice="£1,500-2,500"
               savings="£1,300+"
               href="/products/complete-pack"
@@ -158,7 +158,7 @@ export function CostComparison() {
             />
             <PriceAnchor
               product="Claim Unpaid Rent and Damages"
-              ourPrice="£44.99"
+              ourPrice="£69.99"
               solicitorPrice="£800-1200"
               savings="£650+"
               href="/products/money-claim"

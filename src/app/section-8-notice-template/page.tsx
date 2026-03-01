@@ -84,7 +84,7 @@ export default function Section8NoticeTemplatePage() {
       offers: {
         '@type': 'AggregateOffer',
         lowPrice: '0',
-        highPrice: '59.99',
+        highPrice: '99.99',
         priceCurrency: 'GBP',
         offerCount: '2',
       },
@@ -440,7 +440,7 @@ export default function Section8NoticeTemplatePage() {
                   </div>
                   <div className="text-center mb-6">
                     <span className="text-sm font-medium text-primary uppercase tracking-wide">Complete Pack</span>
-                    <div className="text-4xl font-bold text-gray-900 mt-2">£59.99</div>
+                    <div className="text-4xl font-bold text-gray-900 mt-2">£99.99</div>
                   </div>
                   <ul className="space-y-4 mb-8">
                     <li className="flex items-start gap-3">
@@ -850,7 +850,7 @@ export default function Section8NoticeTemplatePage() {
                   href={wizardLinkCompletePack}
                   className="hero-btn-secondary inline-flex items-center justify-center gap-2"
                 >
-                  Get Complete Pack — £59.99
+                  Get Complete Pack — £99.99
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               </div>

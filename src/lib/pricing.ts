@@ -8,8 +8,8 @@
  *
  * Regional Pricing (January 2026 - Updated):
  * - Notice Only: £34.99 (England, Wales, Scotland)
- * - Eviction Pack: £59.99 (England only)
- * - Money Claim: £44.99 (England only)
+ * - Eviction Pack: £99.99 (England only)
+ * - Money Claim: £69.99 (England only)
  * - Tenancy Agreement: £14.99 (all UK regions) - Standardised
  * - Premium TA (HMO): £24.99 (all UK regions)
  */
@@ -28,11 +28,11 @@ export const REGIONAL_PRICING = {
     // Not available in Northern Ireland
   },
   complete_pack: {
-    england: 59.99,
+    england: 99.99,
     // Wales, Scotland, NI not available
   },
   money_claim: {
-    england: 44.99,
+    england: 69.99,
     // Wales, Scotland, NI not available
   },
   tenancy_agreement: {
@@ -86,8 +86,8 @@ export const PRICING = {
   // Eviction Products (One-Time)
   // NOTE: These prices must match src/lib/pricing/products.ts (source of truth for UI)
   NOTICE_ONLY: 34.99,
-  COMPLETE_EVICTION_PACK: 59.99,
-  MONEY_CLAIM_PACK: 44.99,
+  COMPLETE_EVICTION_PACK: 99.99,
+  MONEY_CLAIM_PACK: 69.99,
 
   // Tenancy Products (One-Time)
   STANDARD_AST: 14.99,

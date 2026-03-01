@@ -362,7 +362,7 @@ export default function AstTemplateEnglandPage() {
               <Link href="/products/money-claim" className="bg-green-50 p-5 rounded-lg hover:shadow-md transition-shadow">
                 <h3 className="font-semibold text-gray-900 mb-1">Money Claims</h3>
                 <p className="text-sm text-gray-600 mb-2">Recover rent arrears and property damage through the courts.</p>
-                <span className="text-green-600 font-medium">From £44.99</span>
+                <span className="text-green-600 font-medium">From £69.99</span>
               </Link>
               <Link href="/ask-heaven" className="bg-blue-50 p-5 rounded-lg hover:shadow-md transition-shadow">
                 <h3 className="font-semibold text-gray-900 mb-1">Ask Heaven</h3>
