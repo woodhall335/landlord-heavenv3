@@ -3,6 +3,7 @@
 'use client';
 
 import React from 'react';
+import { InlineSectionHeaderV3 } from '@/components/wizard/shared/InlineSectionHeaderV3';
 
 type Jurisdiction = 'england' | 'wales' | 'scotland';
 
@@ -92,6 +93,7 @@ export const TenancySection: React.FC<SectionProps> = ({
 
       {/* Full property address */}
       <div className="space-y-3">
+        <InlineSectionHeaderV3 title="Property address" iconSlug="property" />
         <div className="space-y-1">
           <label className="text-sm font-medium text-charcoal">
             Property address line 1 <span className="text-red-500">*</span>
@@ -175,7 +177,9 @@ export const TenancySection: React.FC<SectionProps> = ({
       </div>
 
       {/* Rent basics */}
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="space-y-3">
+        <InlineSectionHeaderV3 title="Rent details" iconSlug="rent" />
+        <div className="grid gap-4 md:grid-cols-2">
         <div className="space-y-1">
           <label className="text-sm font-medium text-charcoal">
             Rent amount (£) <span className="text-red-500">*</span>
@@ -211,6 +215,7 @@ export const TenancySection: React.FC<SectionProps> = ({
             <option value="monthly">Monthly</option>
             <option value="quarterly">Quarterly</option>
           </select>
+        </div>
         </div>
       </div>
 

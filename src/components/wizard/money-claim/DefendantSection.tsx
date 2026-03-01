@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { RiUserAddLine, RiUserLine } from 'react-icons/ri';
+import { InlineSectionHeaderV3 } from '@/components/wizard/shared/InlineSectionHeaderV3';
 
 interface SectionProps {
   facts: any;
@@ -91,7 +92,7 @@ export const DefendantSection: React.FC<SectionProps> = ({ facts, onUpdate }) =>
       <div className="rounded-lg border border-gray-200 bg-white p-4 space-y-4">
         <div className="flex items-center gap-2">
           <RiUserLine className="w-5 h-5 text-gray-600" />
-          <h3 className="font-semibold text-charcoal">Defendant 1 (Primary)</h3>
+          <InlineSectionHeaderV3 title="Defendant 1 (Primary)" iconSlug="defendant" />
         </div>
 
         <div className="space-y-1">
@@ -207,7 +208,7 @@ export const DefendantSection: React.FC<SectionProps> = ({ facts, onUpdate }) =>
         <div className="rounded-lg border border-purple-200 bg-white p-4 space-y-4">
           <div className="flex items-center gap-2">
             <RiUserLine className="w-5 h-5 text-purple-600" />
-            <h3 className="font-semibold text-purple-900">Defendant 2 (Joint Tenant)</h3>
+            <InlineSectionHeaderV3 title="Defendant 2 (Joint Tenant)" iconSlug="defendant" />
           </div>
 
           <div className="space-y-1">

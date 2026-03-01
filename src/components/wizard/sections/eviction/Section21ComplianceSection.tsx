@@ -59,6 +59,7 @@ import { validateComplianceTiming } from '@/lib/documents/court-ready-validator'
 import { formatLocalDateLong } from '@/lib/utils';
 import { validatePrescribedInfoDate, validateGasCertificateDates, formatDate as formatValidationDate } from '@/lib/validators/s21-court-pack';
 import { InlineValidationMessage } from '@/components/ui/InlineValidationMessage';
+import { InlineSectionHeaderV3 } from '@/components/wizard/shared/InlineSectionHeaderV3';
 
 // ============================================================================
 // INLINE DATE WARNING COMPONENT
@@ -340,7 +341,7 @@ If it was not provided before occupation, a Section 21 notice is likely to be in
 
       {/* Deposit Questions */}
       <div className="space-y-4">
-        <h3 className="text-lg font-medium text-gray-900 border-b pb-2">Deposit Protection</h3>
+        <div className="border-b pb-2"><InlineSectionHeaderV3 title="Deposit Protection" iconSlug="deposit-protection" /></div>
 
         <ValidatedYesNoToggle
           id="deposit_taken"
@@ -468,7 +469,7 @@ If it was not provided before occupation, a Section 21 notice is likely to be in
 
       {/* Gas Safety */}
       <div className="space-y-4">
-        <h3 className="text-lg font-medium text-gray-900 border-b pb-2">Gas Safety</h3>
+        <div className="border-b pb-2"><InlineSectionHeaderV3 title="Gas Safety" iconSlug="gas-safety" /></div>
 
         <ValidatedYesNoToggle
           id="has_gas_appliances"
@@ -606,7 +607,7 @@ If it was not provided before occupation, a Section 21 notice is likely to be in
 
       {/* EPC */}
       <div className="space-y-4">
-        <h3 className="text-lg font-medium text-gray-900 border-b pb-2">Energy Performance Certificate</h3>
+        <div className="border-b pb-2"><InlineSectionHeaderV3 title="Energy Performance Certificate" iconSlug="epc" /></div>
 
         <ValidatedYesNoToggle
           id="epc_served"
@@ -640,7 +641,7 @@ If it was not provided before occupation, a Section 21 notice is likely to be in
 
       {/* How to Rent */}
       <div className="space-y-4">
-        <h3 className="text-lg font-medium text-gray-900 border-b pb-2">How to Rent Guide</h3>
+        <div className="border-b pb-2"><InlineSectionHeaderV3 title="How to Rent Guide" iconSlug="how-to-rent" /></div>
 
         <ValidatedYesNoToggle
           id="how_to_rent_served"
