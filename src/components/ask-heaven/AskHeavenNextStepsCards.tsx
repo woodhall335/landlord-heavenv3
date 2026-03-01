@@ -38,7 +38,7 @@ export function AskHeavenNextStepsCards({ jurisdiction = 'england', className }:
     },
     {
       title: 'Complete Eviction Pack',
-      price: '£59.99',
+      price: '£99.99',
       detail: '(England)',
       description: "Best if you're going to court and want a full, court-ready eviction bundle.",
       ctaText: 'Prepare your eviction case',
@@ -48,7 +48,7 @@ export function AskHeavenNextStepsCards({ jurisdiction = 'england', className }:
     },
     {
       title: 'Money Claims Pack',
-      price: '£44.99',
+      price: '£69.99',
       description: 'Best for claiming back rent arrears, damage costs, or unpaid invoices.',
       ctaText: 'Prepare a money claim',
       href: productLinks.moneyClaim.href,

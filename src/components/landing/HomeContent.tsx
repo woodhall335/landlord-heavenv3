@@ -149,14 +149,14 @@ export default function HomeContent() {
               href="/products/complete-pack"
               title="Complete Eviction Pack"
               description="Full bundle from notice to possession order with court forms and guidance."
-              price="£59.99"
+              price="£99.99"
               icon={<RiScales3Line className="w-7 h-7" />}
             />
             <ProductCard
               href="/products/money-claim"
               title="Money Claim Pack"
               description="Rent arrears claims with evidence checklists and particulars of claim."
-              price="£44.99"
+              price="£69.99"
               icon={<RiMoneyPoundCircleLine className="w-7 h-7" />}
             />
             <ProductCard
