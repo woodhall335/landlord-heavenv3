@@ -33,7 +33,9 @@ import { useRouter } from 'next/navigation';
 import { getCaseFacts, saveCaseFacts } from '@/lib/wizard/facts-client';
 import { AskHeavenPanel } from '@/components/wizard/AskHeavenPanel';
 import { WizardFlowShell } from '@/components/wizard/shared/WizardFlowShell';
+import { WizardShellV3 } from '@/components/wizard/shared/WizardShellV3';
 import { isWizardThemeV2 } from '@/components/wizard/shared/theme';
+import { isWizardUiV3Enabled } from '@/components/wizard/shared/flags';
 import { AskHeavenInlineEnhancer } from '@/components/wizard/AskHeavenInlineEnhancer';
 
 // Analytics and attribution
@@ -644,8 +646,10 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
     );
   }
 
+  const ShellComponent: React.ComponentType<any> = isWizardUiV3Enabled ? WizardShellV3 : WizardFlowShell;
+
   return (
-    <WizardFlowShell
+    <ShellComponent
       title={`${jurisdictionLabel} Pack`}
       completedCount={completedCount}
       totalCount={visibleSections.length}
@@ -662,6 +666,9 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
       }))}
       sectionTitle={currentSection?.label ?? ''}
       sectionDescription={currentSection?.description}
+      product={product}
+      jurisdiction={jurisdiction}
+      currentStepId={currentSection?.id}
       banner={
         <>
           {highlightedSections.length > 0 && (
@@ -769,7 +776,7 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
       )}
 
       {renderSection()}
-    </WizardFlowShell>
+    </ShellComponent>
   );
 };
 

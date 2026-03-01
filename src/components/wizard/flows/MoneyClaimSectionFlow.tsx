@@ -25,7 +25,9 @@ import { useRouter } from 'next/navigation';
 import { getCaseFacts, saveCaseFacts } from '@/lib/wizard/facts-client';
 import { AskHeavenPanel } from '@/components/wizard/AskHeavenPanel';
 import { WizardFlowShell } from '@/components/wizard/shared/WizardFlowShell';
+import { WizardShellV3 } from '@/components/wizard/shared/WizardShellV3';
 import { isWizardThemeV2 } from '@/components/wizard/shared/theme';
+import { isWizardUiV3Enabled } from '@/components/wizard/shared/flags';
 import { SmartReviewPanel } from '@/components/wizard/SmartReviewPanel';
 import type { SmartReviewWarningItem, SmartReviewSummary } from '@/components/wizard/SmartReviewPanel';
 
@@ -746,8 +748,10 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
     );
   }
 
+  const ShellComponent: React.ComponentType<any> = isWizardUiV3Enabled ? WizardShellV3 : WizardFlowShell;
+
   return (
-    <WizardFlowShell
+    <ShellComponent
       title={`${jurisdictionLabel} Pack`}
       completedCount={completedCount}
       totalCount={visibleSections.length}
@@ -764,6 +768,9 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
       }))}
       sectionTitle={currentSection?.label ?? ''}
       sectionDescription={currentSection?.description}
+      product="money_claim"
+      jurisdiction={jurisdiction}
+      currentStepId={currentSection?.id}
       banner={error ? (
         <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
           <div className="flex items-center justify-between">
@@ -873,7 +880,7 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
             />
           </div>
         )}
-    </WizardFlowShell>
+    </ShellComponent>
   );
 };
 
