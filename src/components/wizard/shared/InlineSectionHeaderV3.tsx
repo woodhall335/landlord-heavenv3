@@ -16,7 +16,7 @@ export function InlineSectionHeaderV3({ title, subtitle, iconSlug, right }: Inli
     <div className="flex items-start justify-between gap-3">
       <div className="min-w-0">
         <div className="flex items-center gap-2">
-          {iconPath ? <Image src={iconPath} alt="" width={22} height={22} sizes="22px" className="object-contain" /> : null}
+          {iconPath ? <Image src={iconPath} alt="" width={36} height={36} sizes="36px" className="h-9 w-9 object-contain" /> : null}
           <h3 className="text-lg font-medium text-gray-900">{title}</h3>
         </div>
         {subtitle ? <p className="mt-1 text-sm text-gray-600">{subtitle}</p> : null}
