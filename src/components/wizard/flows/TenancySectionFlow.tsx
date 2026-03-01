@@ -37,6 +37,7 @@ import { WizardShellV3 } from '@/components/wizard/shared/WizardShellV3';
 import { isWizardThemeV2 } from '@/components/wizard/shared/theme';
 import { isWizardUiV3Enabled } from '@/components/wizard/shared/flags';
 import { AskHeavenInlineEnhancer } from '@/components/wizard/AskHeavenInlineEnhancer';
+import { InlineSectionHeaderV3 } from '@/components/wizard/shared/InlineSectionHeaderV3';
 
 // Analytics and attribution
 import {
@@ -1427,7 +1428,7 @@ const RentSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-medium text-gray-900 mb-4">Rent Schedule</h3>
+        <InlineSectionHeaderV3 title="Rent Schedule" iconSlug="rent" />
         <p className="text-sm text-gray-500 mb-4">
           We include this in the rent clause and summary schedule.
         </p>
@@ -1509,7 +1510,7 @@ const DepositSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction 
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-medium text-gray-900 mb-4">Deposit and Protection</h3>
+        <InlineSectionHeaderV3 title="Deposit and Protection" iconSlug="deposit" />
         <p className="text-sm text-gray-500 mb-4">
           {isScotland
             ? 'Scottish deposits must be protected within 30 WORKING days. Maximum deposit is 2 months rent.'
@@ -1734,7 +1735,7 @@ const TermsSection: React.FC<SectionProps> = ({ facts, onUpdate, caseId, jurisdi
     <div className="space-y-6">
       {/* Property Rules */}
       <div>
-        <h3 className="text-lg font-medium text-gray-900 mb-4">House Rules</h3>
+        <InlineSectionHeaderV3 title="House Rules" iconSlug="terms" />
         <p className="text-sm text-gray-500 mb-4">
           Pets, smoking and subletting policies.
         </p>
@@ -1842,7 +1843,7 @@ const TermsSection: React.FC<SectionProps> = ({ facts, onUpdate, caseId, jurisdi
 
       {/* Inventory & Condition */}
       <div className="border-t border-gray-200 pt-6">
-        <h3 className="text-lg font-medium text-gray-900 mb-4">Inventory and Cleaning</h3>
+        <InlineSectionHeaderV3 title="Inventory and Cleaning" iconSlug="inventory" />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <YesNoField
             label="Will you attach an inventory schedule?"
