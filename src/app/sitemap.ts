@@ -13,12 +13,6 @@
  * false freshness signals to Google.
  */
 
-// ✅ Force Next to treat /sitemap.xml as dynamic so Supabase fetches don't trigger
-// "Dynamic server usage... couldn't be rendered statically" during build.
-export const runtime = 'nodejs';
-export const dynamic = 'force-dynamic';
-export const revalidate = 3600;
-
 import { MetadataRoute } from 'next';
 import { blogPosts } from '@/lib/blog/posts';
 import { SITE_ORIGIN } from '@/lib/seo';
@@ -28,6 +22,12 @@ import { getPostRegion } from '@/lib/blog/categories';
 import { getBlogSeoConfig } from '@/lib/blog/seo';
 import { discoverStaticPageRoutes } from '@/lib/seo/static-route-inventory';
 import sitemapAllowlist from '../../scripts/seo-sitemap-allowlist.json';
+
+// Force this metadata route to run dynamically (avoids static render + fetch cache issues).
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+// Revalidate hourly (keeps things stable, avoids “revalidate: 0” noise / static warnings).
+export const revalidate = 3600;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Use a stable date for pages that don't change frequently
@@ -142,9 +142,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Tenancy Agreement SEO Landing Pages - England (Jan 2026)
     { path: '/fixed-term-periodic-tenancy-england', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/renew-tenancy-agreement-england', priority: 0.8, changeFrequency: 'weekly' as const },
-    // Tenancy Agreement SEO Landing Pages - Scotland (Jan 2026)
-    // Tenancy Agreement SEO Landing Pages - Wales (Jan 2026)
-    // Tenancy Agreement SEO Landing Pages - Northern Ireland (Jan 2026)
     // High-Intent SEO Landing Pages (Jan 2026)
     { path: '/form-6a-section-21', priority: 0.9, changeFrequency: 'weekly' as const },
     { path: '/no-fault-eviction', priority: 0.85, changeFrequency: 'weekly' as const },
@@ -216,9 +213,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Blog pages with explicit lastModified dates
   const blogPostPages: MetadataRoute.Sitemap = blogPosts.flatMap((post) => {
     const seoConfig = getBlogSeoConfig(post, getPostRegion(post.slug));
-    if (!seoConfig.isIndexable) {
-      return [];
-    }
+    if (!seoConfig.isIndexable) return [];
     return [
       {
         url: `${SITE_ORIGIN}/blog/${post.slug}`,
@@ -229,19 +224,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ];
   });
 
-  // ==========================================================================
   // Ask Heaven Q&A Pages
-  // ==========================================================================
-  // Include all canonical approved questions.
-  // See /docs/ask-heaven-seo.md for the review workflow.
-  //
-  // Future scaling: When question count exceeds 1000, consider splitting
-  // into a sitemap index with separate files per topic/jurisdiction.
-  // ==========================================================================
   let askHeavenPages: MetadataRoute.Sitemap = [];
   try {
-    // Use the admin repository so sitemap generation does not depend on request cookies.
-    // This avoids DynamicServerError noise during static generation.
     const questionRepository = createSupabaseAdminQuestionRepository();
     const sitemapQuestions = await questionRepository.getForSitemap();
 
@@ -254,7 +239,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         priority: 0.7,
       }));
   } catch (error) {
-    // Log but don't fail sitemap generation if question repo is unavailable
     console.warn('[Sitemap] Failed to load Ask Heaven questions:', error);
   }
 
@@ -273,7 +257,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const excludedPrefixes = ['/admin', '/api', '/auth', '/checkout', '/dashboard', '/wizard', '/success'];
   const noindexPaths = ['/tenancy-agreements/england-wales', '/refunds'];
 
-  // Sitemap policy: curated + auto-discovered static routes.
   // Keep intentional static exclusions here for any indexable route we explicitly want omitted.
   const intentionalStaticRouteExclusions = new Set<string>(sitemapAllowlist.intentionallyExcludedRoutes);
 
@@ -296,10 +279,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: page.changeFrequency,
       priority: page.priority,
     };
-    // Only add lastModified for pages that should have it
-    if (page.hasDate) {
-      entry.lastModified = STABLE_PRODUCT_DATE;
-    }
+
+    if (page.hasDate) entry.lastModified = STABLE_PRODUCT_DATE;
     if (page.path === '/') {
       entry.images = [`${SITE_ORIGIN}/images/mascots/landlord-heaven-owl-tenancy-tools.png`];
     }
@@ -317,10 +298,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     staticPageRoutes = await discoverStaticPageRoutes();
   } catch {
-    // Do not fail sitemap generation if route discovery cannot read filesystem
-    // in constrained runtime environments (e.g. standalone production builds).
     console.info('[Sitemap] Skipping static route auto-discovery in this runtime.');
   }
+
   const coveredPaths = new Set([...marketingPages, ...datedPages].map((page) => page.path));
 
   const autoDiscoveredStaticEntries: MetadataRoute.Sitemap = staticPageRoutes
@@ -334,11 +314,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const dedupedByPath = new Map<string, MetadataRoute.Sitemap[number]>();
 
-  for (const entry of [...marketingEntries, ...datedEntries, ...autoDiscoveredStaticEntries, ...blogPostPages, ...askHeavenPages]) {
+  for (const entry of [
+    ...marketingEntries,
+    ...datedEntries,
+    ...autoDiscoveredStaticEntries,
+    ...blogPostPages,
+    ...askHeavenPages,
+  ]) {
     const pathname = new URL(entry.url).pathname;
-    if (!isIndexablePath(pathname) || dedupedByPath.has(pathname)) {
-      continue;
-    }
+    if (!isIndexablePath(pathname) || dedupedByPath.has(pathname)) continue;
     dedupedByPath.set(pathname, entry);
   }
 
