@@ -1,6 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "installCommand": "corepack enable && pnpm install --no-frozen-lockfile",
+  "installCommand": "corepack enable && pnpm install --no-frozen-lockfile --prod=false",
+  "buildCommand": "pnpm run build",
   "functions": {
     "src/app/api/notice-only/preview/*/route.ts": {
       "memory": 1024,
