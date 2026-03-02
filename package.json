@@ -50,8 +50,8 @@
     "audit:positioning": "node --disable-warning=DEP0180 scripts/run-positioning-audit.mjs",
     "audit:positioning:strict": "node --disable-warning=DEP0180 scripts/run-positioning-audit.mjs --strict",
     "audit:positioning:warn-only": "node --disable-warning=DEP0180 scripts/run-positioning-audit.mjs --warn-only",
-    "blog:recommend": "node scripts/blog-autofill-recommendations.mjs",
-    "blog:recommend:strict": "node scripts/blog-autofill-recommendations.mjs --strict"
+    "blog:audit": "node scripts/audit-blog.mjs",
+    "blog:audit:strict": "node scripts/audit-blog.mjs --strict"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.70.1",
