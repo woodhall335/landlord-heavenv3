@@ -23,6 +23,9 @@
     },
     "src/app/api/cron/legal-change-check/route.ts": {
       "maxDuration": 300
+    },
+    "src/app/api/seo/cron/daily/route.ts": {
+      "maxDuration": 300
     }
   },
   "crons": [
