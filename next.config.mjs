@@ -1,4 +1,10 @@
 /** @type {import('next').NextConfig} */
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const nextConfig = {
   /* config options here */
   reactCompiler: true,
@@ -56,7 +62,7 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: '/\$',
+        source: '/\\$',
         destination: '/',
         permanent: true,
       },
@@ -379,30 +385,21 @@ const nextConfig = {
   allowedDevOrigins: ['localhost:5000', 'localhost:3000'],
   // Exclude PDF libraries from webpack bundling (they have native dependencies)
   // NOTE: @sparticuz/chromium must NOT be in this list - it needs to be bundled for Vercel
-  serverExternalPackages: [
-    'pdfjs-dist',
-    'pdf-parse',
-    'canvas',
-    'puppeteer-core',
-    'puppeteer',
-  ],
+  serverExternalPackages: ['pdfjs-dist', 'pdf-parse', 'canvas', 'puppeteer-core', 'puppeteer'],
   experimental: {
     serverActions: {
       // Restrict to production domain and localhost for development
-      allowedOrigins: [
-        'localhost:5000',
-        'localhost:3000',
-        'landlordheaven.co.uk',
-        'www.landlordheaven.co.uk',
-      ],
+      allowedOrigins: ['localhost:5000', 'localhost:3000', 'landlordheaven.co.uk', 'www.landlordheaven.co.uk'],
     },
   },
   webpack: (config) => {
-    // Ensure `@/` imports always resolve to `src/` in all build environments.
+    // Ensure `@/` imports always resolve to `src/` in all build environments,
+    // but allow `@/config/*` to resolve to the repo-root `config/` directory.
     config.resolve = config.resolve || {};
     config.resolve.alias = {
       ...(config.resolve.alias || {}),
-      '@': new URL('./src', import.meta.url).pathname,
+      '@/config': path.resolve(__dirname, 'config'),
+      '@': path.resolve(__dirname, 'src'),
     };
 
     // Suppress handlebars require.extensions warning (harmless)
