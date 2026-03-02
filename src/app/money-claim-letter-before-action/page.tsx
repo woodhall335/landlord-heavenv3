@@ -18,7 +18,7 @@ import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { moneyClaimGuides, moneyClaimForms, moneyClaimFormLinks, productLinks } from '@/lib/seo/internal-links';
 
 export const metadata: Metadata = {
-  title: 'Letter Before Action for Landlords 2026 | Pre-Action Protocol Compliance',
+  title: 'Landlord Letter Before Action 2026 | Pre-Action Compliance',
   description:
     'Solicitor-grade guidance to prepare a compliant Letter Before Action for tenant debt claims, with Pre-Action Protocol requirements.',
   keywords: [
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     'tenant debt letter',
   ],
   openGraph: {
-    title: 'Letter Before Action for Landlords 2026 | Pre-Action Protocol Compliance',
+    title: 'Landlord Letter Before Action 2026 | Pre-Action Compliance',
     description:
       'Complete guide to Letter Before Action for landlord money claims against tenants.',
     type: 'article',

@@ -45,7 +45,7 @@ const wizardLinkPremium = buildWizardLink({
 });
 
 export const metadata: Metadata = {
-  title: 'Tenancy Agreement Template Northern Ireland | NI Landlord Template 2026',
+  title: 'Northern Ireland Tenancy Agreement Template 2026',
   description:
     'Download a tenancy agreement template for Northern Ireland. Compliant with the Private Tenancies Act 2022. Court-ready documents.',
   keywords: [

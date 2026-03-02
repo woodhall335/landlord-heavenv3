@@ -55,7 +55,7 @@ const noticeOnlyLink = buildWizardLink({
 });
 
 export const metadata: Metadata = {
-  title: 'Eviction Process Scotland | Notice to Leave & Tribunal | Landlord Heaven',
+  title: 'Scotland Eviction Process | Notice to Leave & Tribunal',
   description:
     'Complete guide to evicting a tenant in Scotland. Notice to Leave, 18 eviction grounds, First-tier Tribunal process. Get court-ready documents from £34.99.',
   keywords: [
@@ -69,7 +69,7 @@ export const metadata: Metadata = {
     'landlord eviction scotland',
   ],
   openGraph: {
-    title: 'Eviction Process Scotland | Notice to Leave & Tribunal | Landlord Heaven',
+    title: 'Scotland Eviction Process | Notice to Leave & Tribunal',
     description:
       'Complete guide to evicting a tenant in Scotland. Notice to Leave, eviction grounds, and tribunal process.',
     type: 'article',

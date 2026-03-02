@@ -17,7 +17,7 @@ const wizardLinkStandard = buildWizardLink({
 });
 
 export const metadata: Metadata = {
-  title: 'Free Tenancy Agreement Template UK: Compliance Risks & Better Alternatives',
+  title: 'Free UK Tenancy Agreement Template: Risks & Alternatives',
   description: 'Compare basic starter tenancy templates with solicitor-grade, compliance-checked tenancy agreements and understand the legal risks before you let.',
   keywords: [
     'free tenancy agreement template',

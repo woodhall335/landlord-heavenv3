@@ -99,8 +99,7 @@ export function generateMetadata(config: SEOMetadataConfig): Metadata {
     keywords = []
   } = config;
 
-  // Don't add site name suffix to title - layout template already adds "| Landlord Heaven"
-  // But still use full title for OG/Twitter which don't inherit template
+  // Keep social titles branded even when page title is concise for SERP limits.
   const fullTitleForSocial = title.includes(SITE_NAME) ? title : `${title} | ${SITE_NAME}`;
   const url = getCanonicalUrl(path);
 
@@ -279,10 +278,9 @@ export function auditMetadata(config: SEOMetadataConfig): SEOAuditResult {
  */
 export const defaultMetadata: Metadata = {
   title: {
-    default: "Landlord Heaven - Court-Ready Eviction Case Bundles for UK Landlords",
-    template: "%s | Landlord Heaven"
+    default: "Court-Ready UK Landlord Documents | Landlord Heaven",
   },
-  description: "Reduce possession failure risk with court-ready notices and jurisdiction-specific case bundles in minutes. Reduce possession failure risk with statutory-grounded preparation. Section 21 ends May 2026 - act now. UK-wide coverage.",
+  description: "Create court-ready UK landlord notices and tenancy documents in minutes.",
   keywords: [
     "section 21 notice",
     "section 8 notice",

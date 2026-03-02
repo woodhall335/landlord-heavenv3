@@ -11,10 +11,10 @@ import { StructuredData, websiteSchema } from '@/lib/seo/structured-data';
 export const metadata: Metadata = {
   title: {
     absolute:
-      'Solicitor-Grade Landlord Documents | Eviction Notices, Tenancy Agreements & Money Claims | Landlord Heaven',
+      'Court-Ready Landlord Documents | Eviction, Tenancy & Money Claims',
   },
   description:
-    'Create legally validated landlord documents including eviction notices, tenancy agreements, and court-ready money claims. Start the correct legal route in minutes.',
+    'Create court-ready landlord notices, tenancy agreements, and money claim packs in minutes.',
   keywords: [
     'eviction notice UK',
     'section 8 notice',
@@ -27,18 +27,18 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title:
-      'Solicitor-Grade Landlord Documents | Eviction Notices, Tenancy Agreements & Money Claims',
+      'Court-Ready Landlord Documents | Eviction, Tenancy & Money Claims',
     description:
-      'Create legally validated landlord documents including eviction notices, tenancy agreements, and court-ready money claims. Start the correct legal route in minutes.',
+      'Create court-ready landlord notices, tenancy agreements, and money claim packs in minutes.',
     type: 'website',
     url: 'https://landlordheaven.co.uk',
   },
   twitter: {
     card: 'summary_large_image',
     title:
-      'Solicitor-Grade Landlord Documents | Eviction Notices, Tenancy Agreements & Money Claims',
+      'Court-Ready Landlord Documents | Eviction, Tenancy & Money Claims',
     description:
-      'Create legally validated landlord documents including eviction notices, tenancy agreements, and court-ready money claims. Start the correct legal route in minutes.',
+      'Create court-ready landlord notices, tenancy agreements, and money claim packs in minutes.',
   },
   alternates: {
     canonical: 'https://landlordheaven.co.uk',

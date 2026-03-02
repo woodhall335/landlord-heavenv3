@@ -10,7 +10,7 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 
 export const metadata: Metadata = {
-  title: 'Renting Homes Wales Written Statement 2026 | Legal Requirements Explained',
+  title: 'Wales Written Statement 2026 | Legal Requirements',
   description: 'Written statement requirements under the Renting Homes (Wales) Act 2016. 14-day deadline, required content, and compliant template from £14.99.',
   keywords: [
     'renting homes Wales written statement',
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     canonical: getCanonicalUrl('/renting-homes-wales-written-statement'),
   },
   openGraph: {
-    title: 'Renting Homes Wales Written Statement 2026 | Legal Requirements Explained',
+    title: 'Wales Written Statement 2026 | Legal Requirements',
     description: 'Understand written statement requirements under the Renting Homes (Wales) Act 2016. Compliant template from £14.99.',
     type: 'article',
     url: getCanonicalUrl('/renting-homes-wales-written-statement'),

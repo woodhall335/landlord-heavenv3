@@ -72,10 +72,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       ? ` (${formatJurisdiction(question.jurisdictions[0])})`
       : '';
 
-  const title = `${question.question}${jurisdictionSuffix} | Ask Heaven`;
+  const rawTitle = `${question.question}${jurisdictionSuffix} | Ask Heaven`;
+  const title = truncateMetaTitle(rawTitle, 70);
 
-  // Build description (max 160 chars)
-  const description = truncate(question.summary, 155);
+  // Build description (25-160 chars)
+  const description = normalizeMetaDescription(question.summary);
 
   return {
     title,
@@ -230,6 +231,22 @@ export default async function AskHeavenQuestionPage({ params }: PageProps) {
 // =============================================================================
 // Helper Functions
 // =============================================================================
+
+
+function truncateMetaTitle(text: string, maxLength: number): string {
+  if (text.length <= maxLength) return text;
+
+  const trimmed = text.slice(0, maxLength);
+  const lastSpace = trimmed.lastIndexOf(' ');
+  return (lastSpace > 20 ? trimmed.slice(0, lastSpace) : trimmed).trim();
+}
+
+function normalizeMetaDescription(text: string): string {
+  const normalized = text.replace(/\s+/g, ' ').trim();
+  if (normalized.length <= 160 && normalized.length >= 25) return normalized;
+  if (normalized.length > 160) return truncate(normalized, 157);
+  return `${normalized} Ask Heaven provides landlord guidance for UK tenancy issues.`.slice(0, 160);
+}
 
 function truncate(text: string, maxLength: number): string {
   if (text.length <= maxLength) return text;

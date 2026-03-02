@@ -43,7 +43,7 @@ const wizardLinkNoticeOnly = buildWizardLink({
 
 export const metadata: Metadata = {
   title: 'Section 8 Notice Template | Form 3 Download for Landlords',
-  description: 'Section 8 notice template with Form 3 structure, grounds guidance, and timelines. Download free or build a court-ready notice for rent arrears and other breaches.',
+  description: 'Section 8 Form 3 template with grounds guidance and timelines. Download free or build a court-ready notice.',
   keywords: [
     'section 8 notice',
     'section 8 notice template',
