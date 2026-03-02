@@ -17,7 +17,7 @@ import { MetadataRoute } from 'next';
 import { blogPosts } from '@/lib/blog/posts';
 import { SITE_ORIGIN } from '@/lib/seo';
 import { freeTools, validatorToolRoutes } from '@/lib/tools/tools';
-import { getQuestionRepository } from '@/lib/ask-heaven/questions';
+import { getSupabaseQuestionRepository } from '@/lib/ask-heaven/questions';
 import { getPostRegion } from '@/lib/blog/categories';
 import { getBlogSeoConfig } from '@/lib/blog/seo';
 import { discoverStaticPageRoutes } from '@/lib/seo/static-route-inventory';
@@ -239,7 +239,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // ==========================================================================
   let askHeavenPages: MetadataRoute.Sitemap = [];
   try {
-    const questionRepository = getQuestionRepository();
+    const questionRepository = await getSupabaseQuestionRepository();
     const sitemapQuestions = await questionRepository.getForSitemap();
 
     askHeavenPages = sitemapQuestions
