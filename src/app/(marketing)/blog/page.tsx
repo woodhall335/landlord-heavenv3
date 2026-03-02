@@ -15,8 +15,8 @@ import { getCanonicalUrl } from '@/lib/seo';
 import { PRODUCTS } from '@/lib/pricing/products';
 
 export const metadata: Metadata = {
-  title: 'Landlord Guides & Reform-Aware Legal Resources',
-  description: 'Expert guides for UK landlords on evictions, Section 21, Section 8, tenancy law, rent arrears, and property management. Reform-aware legal guidance from property experts.',
+  title: 'UK Landlord Guides: Eviction, Tenancy & Rent Arrears',
+  description: 'Expert UK landlord guides on evictions, tenancy law, rent arrears, and compliance updates.',
   keywords: [
     'landlord guides',
     'eviction guide uk',
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     'property management tips',
   ],
   openGraph: {
-    title: 'Landlord Guides & Reform-Aware Legal Resources | Landlord Heaven',
+    title: 'UK Landlord Guides: Eviction, Tenancy & Rent Arrears | Landlord Heaven',
     description: 'Expert guides for UK landlords on evictions, tenancy law, and property management.',
     type: 'website',
     url: getCanonicalUrl('/blog'),

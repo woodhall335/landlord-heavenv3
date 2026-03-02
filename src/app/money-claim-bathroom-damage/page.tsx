@@ -19,7 +19,7 @@ import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { moneyClaimGuides, productLinks } from '@/lib/seo/internal-links';
 
 export const metadata: Metadata = {
-  title: 'Claim for Bathroom Damage from Tenant 2026 | Mould, Limescale & Fixtures',
+  title: 'Claim Bathroom Damage from Tenant | Mould, Limescale & Fixtures',
   description:
     'Recover costs for bathroom damage, mould from tenant neglect, limescale damage, and broken fixtures. Evidence requirements and court claim process.',
   keywords: [
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     'bathroom mould claim',
   ],
   openGraph: {
-    title: 'Claim for Bathroom Damage from Tenant 2026 | Mould, Limescale & Fixtures',
+    title: 'Claim Bathroom Damage from Tenant | Mould, Limescale & Fixtures',
     description:
       'Landlord guide to recovering bathroom damage costs from tenants through MCOL.',
     type: 'article',

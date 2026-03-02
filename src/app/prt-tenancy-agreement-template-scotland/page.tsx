@@ -49,7 +49,7 @@ const wizardLinkPremium = buildWizardLink({
 });
 
 export const metadata: Metadata = {
-  title: 'PRT Tenancy Agreement Template Scotland 2026 | Download & Create Online',
+  title: 'Scotland PRT Agreement Template 2026 | Create Online',
   description:
     'Download a legally valid PRT tenancy agreement template for Scotland. Compliant with the Private Housing (Tenancies) (Scotland) Act 2016. Tribunal-ready.',
   keywords: [

@@ -47,7 +47,7 @@ const completePackLink = buildWizardLink({
 
 
 export const metadata: Metadata = {
-  title: 'Apply for Possession Order | Landlord Court Forms N5B N5 | Landlord Heaven',
+  title: 'Apply for Possession Order | N5B and N5 Forms',
   description:
     'How to apply for a possession order in England. Step-by-step guide to Form N5B (accelerated) and Form N5 (standard). Court fees, timelines, and what to expect.',
   keywords: [

@@ -50,7 +50,7 @@ const wizardLinkPremium = buildWizardLink({
 });
 
 export const metadata: Metadata = {
-  title: 'Update PRT Tenancy Agreement Scotland | Change Tenants, Rent & Terms 2026',
+  title: 'Update Scotland PRT Agreement | Tenant, Rent & Term Changes',
   description:
     'Learn how to update a PRT tenancy agreement in Scotland. Change rent, add or remove tenants, and vary terms legally under the 2016 Act.',
   keywords: [

@@ -57,7 +57,7 @@ const noticeOnlyLink = buildWizardLink({
 });
 
 export const metadata: Metadata = {
-  title: 'Section 21 Expired What Next? | Tenant Ignored Notice | Landlord Heaven',
+  title: 'Section 21 Expired: What Next If Tenant Stays?',
   description:
     'Section 21 expired but tenant won\'t leave? Next steps: possession order, accelerated procedure, and bailiff enforcement.',
   keywords: [
@@ -71,7 +71,7 @@ export const metadata: Metadata = {
     'section 21 court action',
   ],
   openGraph: {
-    title: 'Section 21 Expired What Next? | Tenant Ignored Notice | Landlord Heaven',
+    title: 'Section 21 Expired: What Next If Tenant Stays?',
     description:
       'Your Section 21 notice has expired but your tenant has not left. Learn the next steps for court action.',
     type: 'article',
