@@ -35,6 +35,9 @@ importers:
       '@supabase/supabase-js':
         specifier: ^2.84.0
         version: 2.89.0
+      '@tailwindcss/postcss':
+        specifier: ^4
+        version: 4.1.18
       '@tailwindcss/typography':
         specifier: ^0.5.19
         version: 0.5.19(tailwindcss@4.1.18)
@@ -110,6 +113,9 @@ importers:
       tailwind-merge:
         specifier: ^3.4.0
         version: 3.4.0
+      tailwindcss:
+        specifier: ^4
+        version: 4.1.18
       unpdf:
         specifier: ^1.4.0
         version: 1.4.0(@napi-rs/canvas@0.1.80)
@@ -117,9 +123,6 @@ importers:
         specifier: ^3.25.76
         version: 3.25.76
     devDependencies:
-      '@tailwindcss/postcss':
-        specifier: ^4
-        version: 4.1.18
       '@testing-library/jest-dom':
         specifier: ^6.9.1
         version: 6.9.1
@@ -159,9 +162,6 @@ importers:
       jsdom:
         specifier: ^26.0.0
         version: 26.1.0(canvas@3.2.0)
-      tailwindcss:
-        specifier: ^4
-        version: 4.1.18
       ts-node:
         specifier: ^10.9.2
         version: 10.9.2(@types/node@20.19.27)(typescript@5.9.3)
