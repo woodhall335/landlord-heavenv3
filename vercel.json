@@ -12,15 +12,6 @@
     "src/app/api/documents/thumbnail/*/route.ts": {
       "maxDuration": 30
     },
-    "src/app/api/money-claim/preview/*/route.ts": {
-      "maxDuration": 60
-    },
-    "src/app/api/money-claim/pack/*/route.ts": {
-      "maxDuration": 60
-    },
-    "src/app/api/tenancy-agreement/thumbnail/*/route.ts": {
-      "maxDuration": 30
-    },
     "src/app/api/webhooks/stripe/route.ts": {
       "maxDuration": 60
     },
