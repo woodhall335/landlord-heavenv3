@@ -13,6 +13,12 @@
  * false freshness signals to Google.
  */
 
+// ✅ Force Next to treat /sitemap.xml as dynamic so Supabase fetches don't trigger
+// "Dynamic server usage... couldn't be rendered statically" during build.
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
+
 import { MetadataRoute } from 'next';
 import { blogPosts } from '@/lib/blog/posts';
 import { SITE_ORIGIN } from '@/lib/seo';
@@ -156,9 +162,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/fixed-term-tenancy-agreement-template', priority: 0.8, changeFrequency: 'weekly' as const },
   ];
 
-  const extraIndexablePages = [
-    { path: '/apply-possession-order-landlord', priority: 0.8, changeFrequency: 'weekly' as const },
-  ];
+  const extraIndexablePages = [{ path: '/apply-possession-order-landlord', priority: 0.8, changeFrequency: 'weekly' as const }];
 
   const pillarPages = [
     { path: '/eviction-process-england', priority: 0.85, changeFrequency: 'weekly' as const },
@@ -208,9 +212,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     });
 
   const toolPages = toolPagesList;
-
-  // Auth entry points excluded - these pages are noindex
-  // /auth/login and /auth/signup are not in sitemap
 
   // Blog pages with explicit lastModified dates
   const blogPostPages: MetadataRoute.Sitemap = blogPosts.flatMap((post) => {
@@ -333,13 +334,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const dedupedByPath = new Map<string, MetadataRoute.Sitemap[number]>();
 
-  for (const entry of [
-    ...marketingEntries,
-    ...datedEntries,
-    ...autoDiscoveredStaticEntries,
-    ...blogPostPages,
-    ...askHeavenPages,
-  ]) {
+  for (const entry of [...marketingEntries, ...datedEntries, ...autoDiscoveredStaticEntries, ...blogPostPages, ...askHeavenPages]) {
     const pathname = new URL(entry.url).pathname;
     if (!isIndexablePath(pathname) || dedupedByPath.has(pathname)) {
       continue;
