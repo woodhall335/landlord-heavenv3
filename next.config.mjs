@@ -398,6 +398,13 @@ const nextConfig = {
     },
   },
   webpack: (config) => {
+    // Ensure `@/` imports always resolve to `src/` in all build environments.
+    config.resolve = config.resolve || {};
+    config.resolve.alias = {
+      ...(config.resolve.alias || {}),
+      '@': new URL('./src', import.meta.url).pathname,
+    };
+
     // Suppress handlebars require.extensions warning (harmless)
     config.ignoreWarnings = [
       ...(config.ignoreWarnings || []),
