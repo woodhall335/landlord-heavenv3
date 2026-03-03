@@ -19,9 +19,10 @@ interface RelatedGuide {
 interface RelatedGuidesCarouselProps {
   guides: RelatedGuide[];
   postSlug?: string;
+  category?: string;
 }
 
-export function RelatedGuidesCarousel({ guides, postSlug }: RelatedGuidesCarouselProps) {
+export function RelatedGuidesCarousel({ guides, postSlug, category }: RelatedGuidesCarouselProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const handleScroll = (direction: 'left' | 'right') => {
@@ -30,10 +31,11 @@ export function RelatedGuidesCarousel({ guides, postSlug }: RelatedGuidesCarouse
       return;
     }
 
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const scrollAmount = container.clientWidth * 0.8;
     container.scrollBy({
       left: direction === 'left' ? -scrollAmount : scrollAmount,
-      behavior: 'smooth',
+      behavior: prefersReducedMotion ? 'auto' : 'smooth',
     });
   };
 
@@ -44,9 +46,9 @@ export function RelatedGuidesCarousel({ guides, postSlug }: RelatedGuidesCarouse
   return (
     <section className="bg-gray-50 py-12 lg:py-16">
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between mb-8">
+        <div className="mb-8 flex items-center justify-between">
           <h2 className="text-2xl font-bold text-gray-900">Related Guides</h2>
-          <div className="hidden md:flex items-center gap-2">
+          <div className="hidden items-center gap-2 md:flex">
             <button
               type="button"
               onClick={() => handleScroll('left')}
@@ -69,15 +71,9 @@ export function RelatedGuidesCarousel({ guides, postSlug }: RelatedGuidesCarouse
         <div className="relative">
           <div className="pointer-events-none absolute left-0 top-0 hidden h-full w-12 bg-gradient-to-r from-gray-50 to-transparent md:block" />
           <div className="pointer-events-none absolute right-0 top-0 hidden h-full w-12 bg-gradient-to-l from-gray-50 to-transparent md:block" />
-          <div
-            ref={scrollContainerRef}
-            className="flex gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-2"
-          >
+          <div ref={scrollContainerRef} className="flex gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-2">
             {guides.map((guide) => (
-              <div
-                key={guide.slug}
-                className="snap-start min-w-[280px] sm:min-w-[320px] lg:min-w-[360px]"
-              >
+              <div key={guide.slug} className="snap-start min-w-[280px] sm:min-w-[320px] lg:min-w-[360px]">
                 <BlogCard
                   slug={guide.slug}
                   title={guide.title}
@@ -87,7 +83,15 @@ export function RelatedGuidesCarousel({ guides, postSlug }: RelatedGuidesCarouse
                   category={guide.category}
                   heroImage={guide.heroImage}
                   heroImageAlt={guide.heroImageAlt}
-                  onClick={() => trackEvent('click_related_post', { from: postSlug ?? 'blog', target: guide.slug })}
+                  onClick={() =>
+                    trackEvent('click_related_post', {
+                      slug: postSlug ?? 'blog',
+                      category: category ?? 'unknown',
+                      productHref: null,
+                      placement: 'related',
+                      target: guide.slug,
+                    })
+                  }
                 />
               </div>
             ))}

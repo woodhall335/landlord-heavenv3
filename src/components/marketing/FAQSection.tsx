@@ -249,9 +249,35 @@ export function FAQInline({
   className?: string;
 }) {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
+  const buttonRefs = useRef<Array<HTMLButtonElement | null>>([]);
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>, index: number) => {
+    if (!faqs.length) return;
+
+    let targetIndex: number | null = null;
+    switch (event.key) {
+      case 'ArrowDown':
+        targetIndex = (index + 1) % faqs.length;
+        break;
+      case 'ArrowUp':
+        targetIndex = (index - 1 + faqs.length) % faqs.length;
+        break;
+      case 'Home':
+        targetIndex = 0;
+        break;
+      case 'End':
+        targetIndex = faqs.length - 1;
+        break;
+      default:
+        return;
+    }
+
+    event.preventDefault();
+    buttonRefs.current[targetIndex]?.focus();
+  };
 
   return (
-    <div className={clsx("bg-gray-50 rounded-2xl p-6 md:p-8", className)}>
+    <div className={clsx('bg-gray-50 rounded-2xl p-6 md:p-8', className)}>
       {faqs.map((faq, index) => (
         <FAQAccordionItem
           key={index}
@@ -259,6 +285,10 @@ export function FAQInline({
           index={index}
           isOpen={openIndex === index}
           onToggle={() => setOpenIndex(openIndex === index ? null : index)}
+          buttonRef={(el) => {
+            buttonRefs.current[index] = el;
+          }}
+          onKeyDown={(event) => handleKeyDown(event, index)}
         />
       ))}
     </div>
