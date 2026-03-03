@@ -25,15 +25,15 @@ export function ImagePlaceholder({
   const isSvg = src.toLowerCase().endsWith('.svg');
 
   return (
-    <figure className={`my-8 ${className}`}>
-      <div className={`relative ${aspectClasses[aspectRatio]} w-full rounded-xl border border-slate-200 bg-white`}>
+    <figure className={`my-8 w-full max-w-full overflow-hidden ${className}`}>
+      <div className={`relative ${aspectClasses[aspectRatio]} w-full max-w-full overflow-hidden rounded-xl border border-slate-200 bg-white`}>
         {/* If image exists, show it */}
         {src && !src.includes('placeholder') ? (
           <Image
             src={src}
             alt={alt}
             fill
-            className={isSvg ? 'object-contain p-2 sm:p-3' : 'object-cover'}
+            className={isSvg ? 'object-contain p-2 sm:p-3' : 'object-cover object-center'}
             sizes="(min-width: 1024px) 760px, 100vw"
             priority={priority}
           />

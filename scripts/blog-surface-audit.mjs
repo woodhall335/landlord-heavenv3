@@ -5,6 +5,12 @@ const articleSource = fs.readFileSync(articlePath, 'utf8');
 
 const stickyMounts = (articleSource.match(/<BlogStickySlots/g) || []).length;
 const hasToc = articleSource.includes('<TableOfContents items={post.tableOfContents} />');
+const hasOverflowHardening =
+  articleSource.includes('overflow-x-hidden [overflow-wrap:anywhere]') &&
+  articleSource.includes('prose-a:break-words') &&
+  articleSource.includes('prose-pre:overflow-x-auto') &&
+  articleSource.includes('[&_table]:overflow-x-auto');
+
 
 const relatedPath = 'src/components/blog/RelatedGuidesCarousel.tsx';
 const relatedSource = fs.readFileSync(relatedPath, 'utf8');
@@ -27,6 +33,7 @@ const report = {
   stickyMounts,
   stickyPass: stickyMounts === 2,
   hasToc,
+  hasOverflowHardening,
   hasRelatedTracking,
   hasSaasPanel,
   svgRefs,
@@ -34,6 +41,6 @@ const report = {
 
 console.log('[blog-audit]', JSON.stringify(report, null, 2));
 
-if (!report.stickyPass || !hasToc || !hasRelatedTracking || !hasSaasPanel || svgRefs.length > 0) {
+if (!report.stickyPass || !hasToc || !hasOverflowHardening || !hasRelatedTracking || !hasSaasPanel || svgRefs.length > 0) {
   process.exitCode = 1;
 }
