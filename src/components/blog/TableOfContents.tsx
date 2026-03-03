@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useId, useState } from 'react';
-import { List } from 'lucide-react';
+import { ChevronDown, List } from 'lucide-react';
 
 interface TOCItem {
   id: string;
@@ -15,54 +15,81 @@ interface TableOfContentsProps {
 
 export function TableOfContents({ items }: TableOfContentsProps) {
   const [activeId, setActiveId] = useState<string>('');
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const panelId = useId();
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveId(entry.target.id);
-          }
-        });
-      },
-      { rootMargin: '-100px 0px -80% 0px' },
-    );
+    if (!items.length) return;
 
-    items.forEach((item) => {
-      const element = document.getElementById(item.id);
-      if (element) observer.observe(element);
-    });
+    const targets = items
+      .map((item) => document.getElementById(item.id))
+      .filter((element): element is HTMLElement => Boolean(element));
 
-    return () => observer.disconnect();
+    if (!targets.length) return;
+
+    const updateActiveHeading = () => {
+      const threshold = 160;
+      let current = targets[0]?.id ?? '';
+
+      for (const target of targets) {
+        if (target.getBoundingClientRect().top <= threshold) {
+          current = target.id;
+        }
+      }
+
+      setActiveId(current);
+    };
+
+    let ticking = false;
+    const onScrollOrResize = () => {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(() => {
+        updateActiveHeading();
+        ticking = false;
+      });
+    };
+
+    updateActiveHeading();
+    window.addEventListener('scroll', onScrollOrResize, { passive: true });
+    window.addEventListener('resize', onScrollOrResize);
+
+    return () => {
+      window.removeEventListener('scroll', onScrollOrResize);
+      window.removeEventListener('resize', onScrollOrResize);
+    };
   }, [items]);
 
   if (items.length === 0) return null;
 
   return (
-    <nav aria-label="In this article" className="rounded-2xl border border-[#e9dcff] bg-white p-6">
+    <nav aria-label="In this article" className="rounded-2xl border border-[#e7d9ff] bg-[#f8f1ff] p-4 md:p-5">
       <button
         type="button"
         aria-expanded={isOpen}
         aria-controls={panelId}
         onClick={() => setIsOpen((prev) => !prev)}
-        className="mb-4 flex w-full items-center justify-between gap-2 font-semibold text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#692ed4] focus-visible:ring-offset-2"
+        className="mb-3 flex w-full items-center justify-between gap-2 rounded-lg px-2 py-1 text-left font-semibold text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#692ed4] focus-visible:ring-offset-2"
       >
         <span className="flex items-center gap-2">
-          <List className="h-5 w-5" />
+          <List className="h-4 w-4 text-[#692ed4]" />
           <span>In this article</span>
         </span>
-        <span aria-hidden="true" className="text-xs text-gray-500">{isOpen ? 'Hide' : 'Show'}</span>
+        <span className="inline-flex items-center gap-1 text-xs text-gray-600">
+          <span>{isOpen ? 'Hide' : 'Show'}</span>
+          <ChevronDown className={`h-4 w-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+        </span>
       </button>
 
-      <ul id={panelId} className={`space-y-2 ${isOpen ? 'block' : 'hidden'}`}>
+      <ul id={panelId} className={`space-y-1.5 ${isOpen ? 'block' : 'hidden lg:block'}`}>
         {items.map((item) => (
           <li key={item.id}>
             <a
               href={`#${item.id}`}
-              className={`block text-sm transition-colors ${item.level === 3 ? 'pl-4' : ''} ${
-                activeId === item.id ? 'font-semibold text-[#692ed4]' : 'text-gray-600 hover:text-[#692ed4]'
+              className={`block rounded-md border-l-2 py-2 pr-2 text-sm transition-colors ${item.level === 3 ? 'pl-5' : 'pl-3'} ${
+                activeId === item.id
+                  ? 'border-[#692ed4] bg-white/80 font-semibold text-[#692ed4]'
+                  : 'border-transparent text-gray-700 hover:bg-white/70 hover:text-[#692ed4]'
               }`}
               onClick={(e) => {
                 e.preventDefault();

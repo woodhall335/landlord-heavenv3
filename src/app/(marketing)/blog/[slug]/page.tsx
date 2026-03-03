@@ -28,6 +28,7 @@ import Image from 'next/image';
 import { BlogReadingProgress } from '@/components/blog/BlogReadingProgress';
 import { BlogInlineProductCard } from '@/components/blog/BlogInlineProductCard';
 import { BlogBackToTop } from '@/components/blog/BlogBackToTop';
+import { BlogStickySlots } from '@/components/blog/BlogStickySlots';
 import { getBlogImagesForPost, getBlogImagesForPostThumb } from '@/lib/blog/image-manifest';
 import { getBlogSeoConfig } from '@/lib/blog/seo';
 import { BLOG_PRODUCT_ROUTES, getBlogProductCta } from '@/lib/blog/product-cta-map';
@@ -697,14 +698,14 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
 
             <div className="max-w-4xl">
               {/* Category & Meta */}
-              <div className="flex flex-wrap items-center gap-3 text-sm mb-6">
-                <span className="bg-primary text-white px-3 py-1 rounded-full font-medium">
+              <div className="mb-5 flex flex-wrap items-center gap-2.5 text-sm">
+                <span className="rounded-full bg-[#692ed4] px-3 py-1 font-medium text-white">
                   {post.category}
                 </span>
                 {regionConfig && (
                   <Link
                     href={`/blog/${postRegion}`}
-                    className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full font-medium hover:bg-gray-200 transition-colors"
+                    className="rounded-full border border-[#e3d3ff] bg-white px-3 py-1 font-medium text-gray-700 transition-colors hover:border-[#692ed4] hover:text-[#692ed4] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#692ed4] focus-visible:ring-offset-2"
                   >
                     {regionConfig.name}
                   </Link>
@@ -720,7 +721,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
                 {post.updatedDate && post.updatedDate !== post.date && (
                   <span className="flex items-center gap-1.5 text-green-600 font-medium">
                     <RefreshCw className="w-4 h-4" />
-                    Updated {new Date(post.updatedDate).toLocaleDateString('en-GB', {
+                    Updated: {new Date(post.updatedDate).toLocaleDateString('en-GB', {
                       day: 'numeric',
                       month: 'short',
                       year: 'numeric'
@@ -733,12 +734,17 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
                 </span>
               </div>
 
+              <div className="mb-6 flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-wide">
+                <span className="rounded-full border border-[#e3d3ff] bg-[#f8f1ff] px-3 py-1 text-[#692ed4]">Court-ready guidance</span>
+                <span className="rounded-full bg-slate-100 px-3 py-1 text-slate-600">{post.author.role}</span>
+              </div>
+
               {/* Reviewer badge if available */}
               {post.reviewer && (
                 <div className="flex items-center gap-2 mb-4 text-sm">
                   <CheckCircle className="w-4 h-4 text-green-600" />
                   <span className="text-gray-600">
-                    Reviewed by <span className="font-medium text-gray-900">{post.reviewer.name}</span>
+                    Reviewed: <span className="font-medium text-gray-900">{post.reviewer.name}</span>
                     {post.reviewer.role && <span className="text-gray-500"> ({post.reviewer.role})</span>}
                   </span>
                 </div>
@@ -750,7 +756,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
               </h1>
 
               {/* Description */}
-              <p className="text-xl text-gray-600 mb-8">
+              <p className="mb-8 max-w-3xl text-lg leading-8 text-gray-600 lg:text-xl">
                 {seoConfig.heroIntro}
               </p>
 
@@ -858,6 +864,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
             <aside className="hidden lg:block" aria-label="Article navigation">
               <div className="sticky top-24 space-y-6">
                 <TableOfContents items={post.tableOfContents} />
+                <BlogStickySlots cta={productCta} postSlug={slug} category={post.category} showDesktop showMobile={false} />
                 <AskHeavenWidget
                   variant="compact"
                   source="blog"
@@ -869,6 +876,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
               </div>
             </aside>
           </div>
+          <BlogStickySlots cta={productCta} postSlug={slug} category={post.category} showDesktop={false} showMobile />
           <BlogBackToTop />
         </div>
 
