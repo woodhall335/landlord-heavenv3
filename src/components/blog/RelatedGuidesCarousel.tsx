@@ -44,7 +44,7 @@ export function RelatedGuidesCarousel({ guides, postSlug, category }: RelatedGui
   }
 
   return (
-    <section className="bg-gray-50 py-12 lg:py-16">
+    <section className="border-y border-[#eadfff] bg-[#f8f1ff]/70 py-14 lg:py-20">
       <div className="container mx-auto px-4">
         <div className="mb-8 flex items-center justify-between">
           <h2 className="text-2xl font-bold text-gray-900">Related Guides</h2>
@@ -53,7 +53,7 @@ export function RelatedGuidesCarousel({ guides, postSlug, category }: RelatedGui
               type="button"
               onClick={() => handleScroll('left')}
               aria-label="Scroll related guides left"
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-600 shadow-sm transition hover:text-primary"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[#deccff] bg-white text-gray-600 shadow-sm transition hover:border-[#692ed4] hover:text-[#692ed4] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#692ed4] focus-visible:ring-offset-2"
             >
               <ChevronLeft className="h-5 w-5" />
             </button>
@@ -61,7 +61,7 @@ export function RelatedGuidesCarousel({ guides, postSlug, category }: RelatedGui
               type="button"
               onClick={() => handleScroll('right')}
               aria-label="Scroll related guides right"
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-600 shadow-sm transition hover:text-primary"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[#deccff] bg-white text-gray-600 shadow-sm transition hover:border-[#692ed4] hover:text-[#692ed4] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#692ed4] focus-visible:ring-offset-2"
             >
               <ChevronRight className="h-5 w-5" />
             </button>
@@ -69,8 +69,8 @@ export function RelatedGuidesCarousel({ guides, postSlug, category }: RelatedGui
         </div>
 
         <div className="relative">
-          <div className="pointer-events-none absolute left-0 top-0 hidden h-full w-12 bg-gradient-to-r from-gray-50 to-transparent md:block" />
-          <div className="pointer-events-none absolute right-0 top-0 hidden h-full w-12 bg-gradient-to-l from-gray-50 to-transparent md:block" />
+          <div className="pointer-events-none absolute left-0 top-0 hidden h-full w-12 bg-gradient-to-r from-[#f8f1ff] to-transparent md:block" />
+          <div className="pointer-events-none absolute right-0 top-0 hidden h-full w-12 bg-gradient-to-l from-[#f8f1ff] to-transparent md:block" />
           <div ref={scrollContainerRef} className="flex gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-2">
             {guides.map((guide) => (
               <div key={guide.slug} className="snap-start min-w-[280px] sm:min-w-[320px] lg:min-w-[360px]">

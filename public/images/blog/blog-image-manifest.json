@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-03T10:48:53.786Z",
+  "generatedAt": "2026-03-03T13:44:22.706Z",
   "heroes": [
     {
       "templateKey": "compliance-certificate",
@@ -260,14 +260,79 @@
     {
       "file": "lh-blog-placeholder-v1.webp",
       "path": "public/images/blog/placeholders/lh-blog-placeholder-v1.webp"
+    },
+    {
+      "file": "lh-blog-placeholder-v2-og.webp",
+      "path": "public/images/blog/placeholders/lh-blog-placeholder-v2-og.webp"
+    },
+    {
+      "file": "lh-blog-placeholder-v2.webp",
+      "path": "public/images/blog/placeholders/lh-blog-placeholder-v2.webp"
+    },
+    {
+      "file": "lh-blog-placeholder-v3-og.webp",
+      "path": "public/images/blog/placeholders/lh-blog-placeholder-v3-og.webp"
+    },
+    {
+      "file": "lh-blog-placeholder-v3.webp",
+      "path": "public/images/blog/placeholders/lh-blog-placeholder-v3.webp"
+    },
+    {
+      "file": "lh-blog-placeholder-v4-og.webp",
+      "path": "public/images/blog/placeholders/lh-blog-placeholder-v4-og.webp"
+    },
+    {
+      "file": "lh-blog-placeholder-v4.webp",
+      "path": "public/images/blog/placeholders/lh-blog-placeholder-v4.webp"
+    },
+    {
+      "file": "lh-blog-placeholder-v5-og.webp",
+      "path": "public/images/blog/placeholders/lh-blog-placeholder-v5-og.webp"
+    },
+    {
+      "file": "lh-blog-placeholder-v5.webp",
+      "path": "public/images/blog/placeholders/lh-blog-placeholder-v5.webp"
+    },
+    {
+      "file": "lh-blog-placeholder-v6-og.webp",
+      "path": "public/images/blog/placeholders/lh-blog-placeholder-v6-og.webp"
+    },
+    {
+      "file": "lh-blog-placeholder-v6.webp",
+      "path": "public/images/blog/placeholders/lh-blog-placeholder-v6.webp"
+    },
+    {
+      "file": "lh-blog-placeholder-v7-og.webp",
+      "path": "public/images/blog/placeholders/lh-blog-placeholder-v7-og.webp"
+    },
+    {
+      "file": "lh-blog-placeholder-v7.webp",
+      "path": "public/images/blog/placeholders/lh-blog-placeholder-v7.webp"
+    },
+    {
+      "file": "lh-blog-placeholder-v8-og.webp",
+      "path": "public/images/blog/placeholders/lh-blog-placeholder-v8-og.webp"
+    },
+    {
+      "file": "lh-blog-placeholder-v8.webp",
+      "path": "public/images/blog/placeholders/lh-blog-placeholder-v8.webp"
+    },
+    {
+      "file": "lh-blog-placeholder-v9-og.webp",
+      "path": "public/images/blog/placeholders/lh-blog-placeholder-v9-og.webp"
+    },
+    {
+      "file": "lh-blog-placeholder-v9.webp",
+      "path": "public/images/blog/placeholders/lh-blog-placeholder-v9.webp"
     }
   ],
   "warnings": [],
   "summary": {
     "heroCount": 24,
     "ogCount": 24,
-    "placeholderCount": 4,
-    "warningCount": 0,
-    "missingPairs": 0
+    "placeholderCount": 20,
+    "placeholderVariantCount": 9,
+    "placeholderOgVariantCount": 9,
+    "warningCount": 0
   }
 }
