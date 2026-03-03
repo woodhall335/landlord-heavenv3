@@ -32,6 +32,7 @@ import { BlogInlineProductCard } from '@/components/blog/BlogInlineProductCard';
 import { BlogBackToTop } from '@/components/blog/BlogBackToTop';
 import { getBlogImagesForPost } from '@/lib/blog/image-manifest';
 import { getBlogSeoConfig } from '@/lib/blog/seo';
+import { BLOG_PRODUCT_ROUTES, getBlogProductCta } from '@/lib/blog/product-cta-map';
 import type { StageEstimate } from '@/lib/journey/state';
 
 interface BlogPageProps {
@@ -463,6 +464,7 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
 
   const postRegion = getPostRegion(slug);
   const seoConfig = getBlogSeoConfig(post, postRegion);
+  const manifestImages = getBlogImagesForPost(post.title, post.targetKeyword);
   // Use canonicalSlug if this post points to another as the canonical version
   const canonicalUrl = getCanonicalUrl(seoConfig.canonicalPath);
 
@@ -485,7 +487,7 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
       tags: post.tags,
       images: [
         {
-          url: post.heroImage || '/og-image.png',
+          url: manifestImages.og || '/og-image.png',
           width: 1200,
           height: 630,
           alt: post.heroImageAlt,
@@ -543,6 +545,10 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
   // Analyze post for commercial linking (automated CTAs to core product pages)
   const seoConfig = getBlogSeoConfig(post, postRegion);
   const manifestImages = getBlogImagesForPost(post.title, post.targetKeyword);
+  const productCta = getBlogProductCta(post);
+  const sanitizedFaqs = (post.faqs ?? [])
+    .filter((faq) => faq.question.trim().length > 0 && faq.answer.trim().length > 0)
+    .filter((faq, index, arr) => arr.findIndex((candidate) => candidate.question.trim().toLowerCase() === faq.question.trim().toLowerCase()) === index);
 
   const articleSchema = {
     '@context': 'https://schema.org',
@@ -627,10 +633,10 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
   };
 
   // FAQ Schema for rich snippets (only if post has FAQs)
-  const faqSchema = post.faqs && post.faqs.length >= 3 ? {
+  const faqSchema = sanitizedFaqs.length >= 3 ? {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
-    mainEntity: post.faqs.map(faq => ({
+    mainEntity: sanitizedFaqs.map((faq) => ({
       '@type': 'Question',
       name: faq.question,
       acceptedAnswer: {
@@ -749,7 +755,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-center sm:text-left">
                 <span className="font-semibold">Section 21 ends 1 May 2026 —</span>
                 <Section21Countdown variant="compact" className="text-white font-bold" />
-                <Link href="/products/notice-only" className="text-white underline hover:no-underline font-medium">
+                <Link href={BLOG_PRODUCT_ROUTES.noticeOnly} className="text-white underline hover:no-underline font-medium">
                   Serve Your Notice Now
                 </Link>
               </div>
@@ -783,21 +789,17 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
                 />
               </div>
 
-              <BlogLeadMagnetCard postSlug={slug} />
-              <BlogInlineProductCard
-                href={seoConfig.primaryCommercialLink.href}
-                label={seoConfig.primaryCommercialLink.anchorText}
-                postSlug={slug}
-              />
+              <BlogLeadMagnetCard postSlug={slug} category={post.category} />
+              <BlogInlineProductCard cta={productCta} postSlug={slug} category={post.category} />
 
               <div className="prose prose-lg max-w-none prose-headings:scroll-mt-24 prose-headings:font-bold prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-6 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-4 prose-p:text-gray-700 prose-p:leading-relaxed prose-li:text-gray-700 prose-a:text-[#692ed4] prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900 prose-table:border-collapse prose-th:bg-gray-100 prose-th:p-3 prose-th:text-left prose-td:p-3 prose-td:border-b">
                 {post.content}
               </div>
 
-              {post.faqs && post.faqs.length > 0 && (
+              {sanitizedFaqs.length > 0 && (
                 <section className="mt-12 pt-8 border-t border-gray-200" aria-label="Frequently asked questions">
                   <h2 className="text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
-                  <FAQInline faqs={post.faqs} />
+                  <FAQInline faqs={sanitizedFaqs} />
                 </section>
               )}
 
@@ -835,12 +837,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
             <aside className="hidden lg:block">
               <div className="sticky top-24 space-y-6">
                 <TableOfContents items={post.tableOfContents} />
-                <BlogStickySlots
-                  ctaHref={seoConfig.primaryCommercialLink.href}
-                  ctaLabel="Start Notice Wizard"
-                  postSlug={slug}
-                  showMobile={false}
-                />
+                <BlogStickySlots cta={productCta} postSlug={slug} category={post.category} showMobile={false} />
                 <AskHeavenWidget
                   variant="compact"
                   source="blog"
@@ -852,12 +849,12 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
               </div>
             </aside>
           </div>
-          <BlogStickySlots ctaHref={seoConfig.primaryCommercialLink.href} ctaLabel="Start Notice Wizard" postSlug={slug} showDesktop={false} />
+          <BlogStickySlots cta={productCta} postSlug={slug} category={post.category} showDesktop={false} />
           <BlogBackToTop />
         </div>
 
         {/* Related Posts */}
-        {relatedGuides.length > 0 && <RelatedGuidesCarousel guides={relatedGuides} postSlug={slug} />}
+        {relatedGuides.length > 0 && <RelatedGuidesCarousel guides={relatedGuides} postSlug={slug} category={post.category} />}
       </article>
     </>
   );
