@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useId, useState } from 'react';
 import { List } from 'lucide-react';
 
 interface TOCItem {
@@ -15,6 +15,8 @@ interface TableOfContentsProps {
 
 export function TableOfContents({ items }: TableOfContentsProps) {
   const [activeId, setActiveId] = useState<string>('');
+  const [isOpen, setIsOpen] = useState(true);
+  const panelId = useId();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -25,7 +27,7 @@ export function TableOfContents({ items }: TableOfContentsProps) {
           }
         });
       },
-      { rootMargin: '-100px 0px -80% 0px' }
+      { rootMargin: '-100px 0px -80% 0px' },
     );
 
     items.forEach((item) => {
@@ -40,27 +42,32 @@ export function TableOfContents({ items }: TableOfContentsProps) {
 
   return (
     <nav aria-label="In this article" className="rounded-2xl border border-[#e9dcff] bg-white p-6">
-      <div className="flex items-center gap-2 text-gray-900 font-semibold mb-4">
-        <List className="w-5 h-5" />
-        <span>In this article</span>
-      </div>
-      <ul className="space-y-2">
+      <button
+        type="button"
+        aria-expanded={isOpen}
+        aria-controls={panelId}
+        onClick={() => setIsOpen((prev) => !prev)}
+        className="mb-4 flex w-full items-center justify-between gap-2 font-semibold text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#692ed4] focus-visible:ring-offset-2"
+      >
+        <span className="flex items-center gap-2">
+          <List className="h-5 w-5" />
+          <span>In this article</span>
+        </span>
+        <span aria-hidden="true" className="text-xs text-gray-500">{isOpen ? 'Hide' : 'Show'}</span>
+      </button>
+
+      <ul id={panelId} className={`space-y-2 ${isOpen ? 'block' : 'hidden'}`}>
         {items.map((item) => (
           <li key={item.id}>
             <a
               href={`#${item.id}`}
-              className={`block text-sm transition-colors ${
-                item.level === 3 ? 'pl-4' : ''
-              } ${
-                activeId === item.id
-                  ? 'text-[#692ed4] font-semibold'
-                  : 'text-gray-600 hover:text-[#692ed4]'
+              className={`block text-sm transition-colors ${item.level === 3 ? 'pl-4' : ''} ${
+                activeId === item.id ? 'font-semibold text-[#692ed4]' : 'text-gray-600 hover:text-[#692ed4]'
               }`}
               onClick={(e) => {
                 e.preventDefault();
-                document.getElementById(item.id)?.scrollIntoView({
-                  behavior: 'smooth',
-                });
+                const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                document.getElementById(item.id)?.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth' });
               }}
             >
               {item.title}

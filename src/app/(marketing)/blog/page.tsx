@@ -10,9 +10,10 @@ import { BLOG_CATEGORIES, getPostCountsByRegion, BlogRegion } from '@/lib/blog/c
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { blogHeroConfig } from '@/components/landing/heroConfigs';
-import { Zap, ShieldCheck, Globe, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { getCanonicalUrl } from '@/lib/seo';
 import { PRODUCTS } from '@/lib/pricing/products';
+import { getBlogImagesForPost } from '@/lib/blog/image-manifest';
 
 export const metadata: Metadata = {
   title: 'UK Landlord Guides: Eviction, Tenancy & Rent Arrears',
@@ -60,22 +61,27 @@ export default function BlogPage() {
   };
 
   const featuredPost = blogPosts[0];
+  const featuredPostImages = getBlogImagesForPost(featuredPost.title, featuredPost.targetKeyword);
   const remainingPosts = blogPosts.slice(1);
 
   // Extract unique categories sorted alphabetically
   const categories = [...new Set(blogPosts.map((post) => post.category))].sort();
 
   // Prepare posts data for client component (without JSX content)
-  const postsForFilter = remainingPosts.map((post) => ({
-    slug: post.slug,
-    title: post.title,
-    description: post.description,
-    date: post.date,
-    readTime: post.readTime,
-    category: post.category,
-    heroImage: post.heroImage,
-    heroImageAlt: post.heroImageAlt,
-  }));
+  const postsForFilter = remainingPosts.map((post) => {
+    const manifestImages = getBlogImagesForPost(post.title, post.targetKeyword);
+
+    return {
+      slug: post.slug,
+      title: post.title,
+      description: post.description,
+      date: post.date,
+      readTime: post.readTime,
+      category: post.category,
+      heroImage: manifestImages.hero,
+      heroImageAlt: post.heroImageAlt,
+    };
+  });
 
   return (
     <>
@@ -152,7 +158,7 @@ export default function BlogPage() {
         </section>
 
         {/* Featured Post */}
-        <section className="py-12 lg:py-16">
+        <section className="bg-[#f8f1ff]/70 py-12 lg:py-16">
           <div className="container mx-auto px-4">
             <h2 className="text-2xl font-bold text-gray-900 mb-8">Featured Guide</h2>
             <BlogCard
@@ -162,7 +168,7 @@ export default function BlogPage() {
               date={featuredPost.date}
               readTime={featuredPost.readTime}
               category={featuredPost.category}
-              heroImage={featuredPost.heroImage}
+              heroImage={featuredPostImages.hero}
               heroImageAlt={featuredPost.heroImageAlt}
               featured
             />
@@ -171,9 +177,10 @@ export default function BlogPage() {
 
         {/* All Guides with Search & Filter */}
         {remainingPosts.length > 0 && (
-          <section className="py-12 lg:py-16 bg-gray-50">
+          <section className="py-12 lg:py-16 bg-white">
             <div className="container mx-auto px-4">
-              <h2 className="text-2xl font-bold text-gray-900 mb-8">All Guides</h2>
+              <h2 className="mb-2 text-2xl font-bold text-gray-900">All Guides</h2>
+              <p className="mb-8 max-w-2xl text-gray-600">Browse practical, court-focused guides designed to help you pick the right product path faster.</p>
               <BlogFilteredList posts={postsForFilter} categories={categories} />
             </div>
           </section>
@@ -209,15 +216,15 @@ export default function BlogPage() {
               {/* Trust indicators */}
               <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-gray-500">
                 <span className="flex items-center gap-2">
-                  <Zap className="w-5 h-5 text-primary" />
+                  <Image src="/images/wizard-icons/50-success.png" alt="Ready to file" width={20} height={20} className="h-5 w-5" />
                   Ready to file
                 </span>
                 <span className="flex items-center gap-2">
-                  <ShieldCheck className="w-5 h-5 text-primary" />
+                  <Image src="/images/wizard-icons/05-compliance.png" alt="Court-ready" width={20} height={20} className="h-5 w-5" />
                   Court-ready guarantee
                 </span>
                 <span className="flex items-center gap-2">
-                  <Globe className="w-5 h-5 text-primary" />
+                  <Image src="/images/wizard-icons/46-premium.png" alt="All UK jurisdictions" width={20} height={20} className="h-5 w-5" />
                   All UK jurisdictions
                 </span>
               </div>

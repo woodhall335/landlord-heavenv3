@@ -46,7 +46,7 @@ export function BlogFilteredList({ posts, categories }: BlogFilteredListProps) {
   const hasActiveFilters = searchQuery !== '' || selectedCategory !== '';
 
   return (
-    <div>
+    <div className="rounded-3xl border border-[#ebe3fb] bg-[#f8f1ff]/40 p-5 md:p-6">
       {/* Search and Filter Bar */}
       <div className="mb-8 space-y-4">
         <div className="flex flex-col sm:flex-row gap-4">
@@ -58,7 +58,7 @@ export function BlogFilteredList({ posts, categories }: BlogFilteredListProps) {
               placeholder="Search guides..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
+              className="w-full rounded-xl border border-[#dfd2f8] bg-white py-3 pl-10 pr-4 transition-colors focus:border-[#692ed4] focus:outline-none focus:ring-2 focus:ring-[#692ed4]/20"
             />
             {searchQuery && (
               <button
@@ -76,7 +76,7 @@ export function BlogFilteredList({ posts, categories }: BlogFilteredListProps) {
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors appearance-none bg-white cursor-pointer"
+              className="w-full cursor-pointer appearance-none rounded-xl border border-[#dfd2f8] bg-white py-3 pl-10 pr-4 transition-colors focus:border-[#692ed4] focus:outline-none focus:ring-2 focus:ring-[#692ed4]/20"
             >
               <option value="">All Categories</option>
               {categories.map((category) => (
@@ -114,7 +114,7 @@ export function BlogFilteredList({ posts, categories }: BlogFilteredListProps) {
 
       {/* Results Grid */}
       {filteredPosts.length > 0 ? (
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {filteredPosts.map((post) => (
             <BlogCard
               key={post.slug}

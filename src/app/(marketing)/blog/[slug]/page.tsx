@@ -26,12 +26,11 @@ import { FAQInline } from '@/components/seo/FAQSection';
 import { landingPageLinks, productLinks, guideLinks } from '@/lib/seo/internal-links';
 import Image from 'next/image';
 import { BlogReadingProgress } from '@/components/blog/BlogReadingProgress';
-import { BlogStickySlots } from '@/components/blog/BlogStickySlots';
-import { BlogLeadMagnetCard } from '@/components/blog/BlogLeadMagnetCard';
 import { BlogInlineProductCard } from '@/components/blog/BlogInlineProductCard';
 import { BlogBackToTop } from '@/components/blog/BlogBackToTop';
 import { getBlogImagesForPost } from '@/lib/blog/image-manifest';
 import { getBlogSeoConfig } from '@/lib/blog/seo';
+import { BLOG_PRODUCT_ROUTES, getBlogProductCta } from '@/lib/blog/product-cta-map';
 import type { StageEstimate } from '@/lib/journey/state';
 
 interface BlogPageProps {
@@ -463,6 +462,7 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
 
   const postRegion = getPostRegion(slug);
   const seoConfig = getBlogSeoConfig(post, postRegion);
+  const manifestImages = getBlogImagesForPost(post.title, post.targetKeyword);
   // Use canonicalSlug if this post points to another as the canonical version
   const canonicalUrl = getCanonicalUrl(seoConfig.canonicalPath);
 
@@ -485,7 +485,7 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
       tags: post.tags,
       images: [
         {
-          url: post.heroImage || '/og-image.png',
+          url: manifestImages.og || '/og-image.png',
           width: 1200,
           height: 630,
           alt: post.heroImageAlt,
@@ -543,6 +543,10 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
   // Analyze post for commercial linking (automated CTAs to core product pages)
   const seoConfig = getBlogSeoConfig(post, postRegion);
   const manifestImages = getBlogImagesForPost(post.title, post.targetKeyword);
+  const productCta = getBlogProductCta(post);
+  const sanitizedFaqs = (post.faqs ?? [])
+    .filter((faq) => faq.question.trim().length > 0 && faq.answer.trim().length > 0)
+    .filter((faq, index, arr) => arr.findIndex((candidate) => candidate.question.trim().toLowerCase() === faq.question.trim().toLowerCase()) === index);
 
   const articleSchema = {
     '@context': 'https://schema.org',
@@ -627,10 +631,10 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
   };
 
   // FAQ Schema for rich snippets (only if post has FAQs)
-  const faqSchema = post.faqs && post.faqs.length >= 3 ? {
+  const faqSchema = sanitizedFaqs.length >= 3 ? {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
-    mainEntity: post.faqs.map(faq => ({
+    mainEntity: sanitizedFaqs.map((faq) => ({
       '@type': 'Question',
       name: faq.question,
       acceptedAnswer: {
@@ -749,7 +753,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-center sm:text-left">
                 <span className="font-semibold">Section 21 ends 1 May 2026 —</span>
                 <Section21Countdown variant="compact" className="text-white font-bold" />
-                <Link href="/products/notice-only" className="text-white underline hover:no-underline font-medium">
+                <Link href={BLOG_PRODUCT_ROUTES.noticeOnly} className="text-white underline hover:no-underline font-medium">
                   Serve Your Notice Now
                 </Link>
               </div>
@@ -760,44 +764,39 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
         {/* Content */}
         <div className="container mx-auto px-4 py-12 lg:py-16">
           <BlogReadingProgress />
-          <div className="grid lg:grid-cols-[minmax(0,780px)_300px] gap-12 justify-center">
+          <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,760px)_300px] lg:gap-12 lg:justify-center">
             {/* Main Content */}
-            <div className="max-w-[780px] pb-20 lg:pb-0">
+            <div className="max-w-[760px] pb-20 lg:pb-0">
               <AuthorBox
                 name={post.author.name}
                 role={post.author.role}
                 image={post.author.image}
               />
 
-              <section className="my-5 rounded-xl border border-[#e9dcff] bg-[#f8f1ff] p-4 text-sm text-slate-700">
+              <section className="my-6 rounded-2xl border border-[#e9dcff] bg-[#f8f1ff] p-4 text-sm leading-6 text-slate-700">
                 This guidance is informational and not legal advice. Consult a qualified legal professional for your case.
               </section>
 
-              <div className="relative mb-8 overflow-hidden rounded-2xl border border-slate-200 bg-slate-50">
+              <div className="relative mb-10 overflow-hidden rounded-3xl border border-[#e8ddfb] bg-[#f8f1ff]">
                 <Image
                   src={manifestImages.hero || post.heroImage}
                   alt={post.heroImageAlt}
                   width={1200}
                   height={675}
-                  className="h-auto w-full object-cover"
+                  className="h-auto w-full object-cover object-center"
                 />
               </div>
 
-              <BlogLeadMagnetCard postSlug={slug} />
-              <BlogInlineProductCard
-                href={seoConfig.primaryCommercialLink.href}
-                label={seoConfig.primaryCommercialLink.anchorText}
-                postSlug={slug}
-              />
+              <BlogInlineProductCard cta={productCta} postSlug={slug} category={post.category} />
 
-              <div className="prose prose-lg max-w-none prose-headings:scroll-mt-24 prose-headings:font-bold prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-6 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-4 prose-p:text-gray-700 prose-p:leading-relaxed prose-li:text-gray-700 prose-a:text-[#692ed4] prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900 prose-table:border-collapse prose-th:bg-gray-100 prose-th:p-3 prose-th:text-left prose-td:p-3 prose-td:border-b">
+              <div className="prose prose-lg max-w-none prose-headings:scroll-mt-24 prose-headings:font-bold prose-headings:text-slate-900 prose-h2:mt-14 prose-h2:mb-5 prose-h2:text-3xl prose-h3:mt-10 prose-h3:mb-4 prose-h3:text-2xl prose-p:my-5 prose-p:leading-8 prose-p:text-slate-700 prose-li:my-1.5 prose-li:text-slate-700 prose-blockquote:rounded-r-xl prose-blockquote:border-l-4 prose-blockquote:border-[#692ed4] prose-blockquote:bg-[#f8f1ff] prose-blockquote:px-6 prose-blockquote:py-3 prose-blockquote:text-slate-700 prose-a:text-[#692ed4] prose-a:no-underline hover:prose-a:underline prose-strong:text-slate-900 prose-img:my-8 prose-img:h-auto prose-img:w-full prose-img:max-w-full prose-img:rounded-xl prose-img:border prose-img:border-slate-200 prose-img:bg-white prose-table:border-collapse prose-th:bg-[#f8f1ff] prose-th:p-3 prose-th:text-left prose-td:p-3 prose-td:border-b prose-hr:border-[#e9dcff]">
                 {post.content}
               </div>
 
-              {post.faqs && post.faqs.length > 0 && (
-                <section className="mt-12 pt-8 border-t border-gray-200" aria-label="Frequently asked questions">
+              {sanitizedFaqs.length > 0 && (
+                <section className="mt-14 rounded-2xl border border-[#e9dcff] bg-[#f8f1ff] p-6" aria-label="Frequently asked questions">
                   <h2 className="text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
-                  <FAQInline faqs={post.faqs} />
+                  <FAQInline faqs={sanitizedFaqs} />
                 </section>
               )}
 
@@ -816,7 +815,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
                 />
               </div>
 
-              <div className="flex items-center justify-between py-8 border-t border-gray-100 mt-12">
+              <div className="mt-14 flex items-center justify-between border-t border-gray-100 py-8">
                 <Link
                   href="/blog"
                   className="inline-flex items-center text-gray-600 hover:text-primary transition-colors"
@@ -835,12 +834,6 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
             <aside className="hidden lg:block">
               <div className="sticky top-24 space-y-6">
                 <TableOfContents items={post.tableOfContents} />
-                <BlogStickySlots
-                  ctaHref={seoConfig.primaryCommercialLink.href}
-                  ctaLabel="Start Notice Wizard"
-                  postSlug={slug}
-                  showMobile={false}
-                />
                 <AskHeavenWidget
                   variant="compact"
                   source="blog"
@@ -852,12 +845,11 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
               </div>
             </aside>
           </div>
-          <BlogStickySlots ctaHref={seoConfig.primaryCommercialLink.href} ctaLabel="Start Notice Wizard" postSlug={slug} showDesktop={false} />
           <BlogBackToTop />
         </div>
 
         {/* Related Posts */}
-        {relatedGuides.length > 0 && <RelatedGuidesCarousel guides={relatedGuides} postSlug={slug} />}
+        {relatedGuides.length > 0 && <RelatedGuidesCarousel guides={relatedGuides} postSlug={slug} category={post.category} />}
       </article>
     </>
   );

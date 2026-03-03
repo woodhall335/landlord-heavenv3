@@ -22,17 +22,19 @@ export function ImagePlaceholder({
     inline: 'aspect-[16/10]',
     square: 'aspect-square',
   };
+  const isSvg = src.toLowerCase().endsWith('.svg');
 
   return (
     <figure className={`my-8 ${className}`}>
-      <div className={`relative ${aspectClasses[aspectRatio]} w-full overflow-hidden rounded-xl bg-gray-100`}>
+      <div className={`relative ${aspectClasses[aspectRatio]} w-full rounded-xl border border-slate-200 bg-white`}>
         {/* If image exists, show it */}
         {src && !src.includes('placeholder') ? (
           <Image
             src={src}
             alt={alt}
             fill
-            className="object-cover"
+            className={isSvg ? 'object-contain p-2 sm:p-3' : 'object-cover'}
+            sizes="(min-width: 1024px) 760px, 100vw"
             priority={priority}
           />
         ) : (
