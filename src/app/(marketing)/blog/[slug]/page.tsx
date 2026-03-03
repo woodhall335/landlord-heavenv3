@@ -33,6 +33,7 @@ import { getBlogImagesForPost, getBlogImagesForPostThumb } from '@/lib/blog/imag
 import { getBlogSeoConfig } from '@/lib/blog/seo';
 import { BLOG_PRODUCT_ROUTES, getBlogProductCta } from '@/lib/blog/product-cta-map';
 import type { StageEstimate } from '@/lib/journey/state';
+import type { CSSProperties } from 'react';
 
 interface BlogPageProps {
   params: Promise<{ slug: string }>;
@@ -118,6 +119,7 @@ function getComplianceTopicForPost(slug: string): { topic: AskHeavenTopic; promp
 }
 
 const MAX_RELATED_GUIDES = 12;
+const BLOG_STICKY_TOP_OFFSET = '7rem';
 
 
 function inferBlogStageHint(post: BlogPost): StageEstimate {
@@ -677,7 +679,10 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
       <StructuredData data={breadcrumbSchema} />
       {faqSchema && <StructuredData data={faqSchema} />}
 
-      <article className="min-h-screen overflow-x-clip">
+      <article
+        className="min-h-screen"
+        style={{ '--lh-sticky-top': BLOG_STICKY_TOP_OFFSET } as CSSProperties}
+      >
         {/* Hero Section - matches homepage pastel gradient */}
         <header id="blog-hero" className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-8 pb-10 md:pt-12 md:pb-14">
           <div className="container mx-auto px-4">
@@ -823,7 +828,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
 
               <BlogInlineProductCard cta={productCta} postSlug={slug} category={post.category} />
 
-              <div className="prose prose-lg max-w-none overflow-x-hidden [overflow-wrap:anywhere] prose-headings:scroll-mt-24 prose-headings:font-bold prose-headings:text-slate-900 prose-h2:mt-12 prose-h2:mb-5 prose-h2:text-3xl prose-h3:mt-9 prose-h3:mb-4 prose-h3:text-2xl prose-p:my-5 prose-p:leading-8 prose-p:text-slate-700 prose-ul:my-5 prose-ol:my-5 prose-li:my-2 prose-li:text-slate-700 prose-blockquote:rounded-r-xl prose-blockquote:border-l-4 prose-blockquote:border-[#692ed4] prose-blockquote:bg-[#f8f1ff] prose-blockquote:px-6 prose-blockquote:py-4 prose-blockquote:text-slate-700 prose-a:break-words prose-a:text-[#692ed4] prose-a:no-underline hover:prose-a:underline prose-strong:text-slate-900 prose-img:my-8 prose-img:h-auto prose-img:w-full prose-img:max-w-full prose-img:rounded-xl prose-img:border prose-img:border-slate-200 prose-img:bg-white prose-figure:my-8 prose-video:my-8 prose-video:h-auto prose-video:w-full prose-video:max-w-full prose-table:my-8 prose-table:w-full prose-table:text-sm prose-table:[&_th]:bg-[#f8f1ff] prose-table:[&_th]:p-3 prose-table:[&_th]:text-left prose-table:[&_td]:border-b prose-table:[&_td]:p-3 prose-hr:my-10 prose-hr:border-[#e9dcff] prose-pre:max-w-full prose-pre:overflow-x-auto [&_svg]:max-w-full [&_svg]:h-auto [&_svg]:object-contain [&_svg]:overflow-visible [&_table]:block [&_table]:max-w-full [&_table]:overflow-x-auto [&_table]:whitespace-nowrap md:[&_table]:table md:[&_table]:whitespace-normal [&_img]:max-w-full [&_img]:h-auto [&_pre]:max-w-full [&_pre]:overflow-x-auto">
+              <div className="prose prose-lg max-w-none overflow-x-clip [overflow-wrap:anywhere] prose-headings:scroll-mt-24 prose-headings:font-bold prose-headings:text-slate-900 prose-h2:mt-12 prose-h2:mb-5 prose-h2:text-3xl prose-h3:mt-9 prose-h3:mb-4 prose-h3:text-2xl prose-p:my-5 prose-p:leading-8 prose-p:text-slate-700 prose-ul:my-5 prose-ol:my-5 prose-li:my-2 prose-li:text-slate-700 prose-blockquote:rounded-r-xl prose-blockquote:border-l-4 prose-blockquote:border-[#692ed4] prose-blockquote:bg-[#f8f1ff] prose-blockquote:px-6 prose-blockquote:py-4 prose-blockquote:text-slate-700 prose-a:break-words prose-a:text-[#692ed4] prose-a:no-underline hover:prose-a:underline prose-strong:text-slate-900 prose-img:my-8 prose-img:h-auto prose-img:w-full prose-img:max-w-full prose-img:rounded-xl prose-img:border prose-img:border-slate-200 prose-img:bg-white prose-figure:my-8 prose-video:my-8 prose-video:h-auto prose-video:w-full prose-video:max-w-full prose-table:my-8 prose-table:w-full prose-table:text-sm prose-table:[&_th]:bg-[#f8f1ff] prose-table:[&_th]:p-3 prose-table:[&_th]:text-left prose-table:[&_td]:border-b prose-table:[&_td]:p-3 prose-hr:my-10 prose-hr:border-[#e9dcff] prose-pre:max-w-full prose-pre:overflow-x-auto [&_svg]:max-w-full [&_svg]:h-auto [&_svg]:object-contain [&_svg]:overflow-visible [&_table]:block [&_table]:max-w-full [&_table]:overflow-x-auto [&_table]:whitespace-nowrap md:[&_table]:table md:[&_table]:whitespace-normal [&_img]:max-w-full [&_img]:h-auto [&_pre]:max-w-full [&_pre]:overflow-x-auto">
                 {post.content}
               </div>
 
@@ -866,7 +871,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
 
             {/* Sidebar */}
             <aside className="hidden min-w-0 lg:block lg:self-start" aria-label="Article navigation">
-              <div className="sticky top-28 space-y-6">
+              <div className="sticky top-[var(--lh-sticky-top)] space-y-6">
                 <TableOfContents items={post.tableOfContents} />
                 <BlogStickySlots cta={productCta} postSlug={slug} category={post.category} showDesktop showMobile={false} />
                 <AskHeavenWidget

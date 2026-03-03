@@ -8,13 +8,19 @@ const hasToc = articleSource.includes('<TableOfContents items={post.tableOfConte
 const hasDesktopStickySidebar =
   articleSource.includes('aria-label="Article navigation"') &&
   articleSource.includes('hidden min-w-0 lg:block lg:self-start') &&
-  articleSource.includes('sticky top-28 space-y-6');
+  articleSource.includes('sticky top-[var(--lh-sticky-top)] space-y-6');
 const hasOverflowHardening =
-  articleSource.includes('overflow-x-hidden [overflow-wrap:anywhere]') &&
+  articleSource.includes('overflow-x-clip [overflow-wrap:anywhere]') &&
   articleSource.includes('prose-a:break-words') &&
   articleSource.includes('prose-pre:overflow-x-auto') &&
   articleSource.includes('[&_table]:overflow-x-auto');
 
+
+
+const articleHasStickyCssVar = articleSource.includes("'--lh-sticky-top'") || articleSource.includes('"--lh-sticky-top"');
+const stickyGridMatch = articleSource.match(/<div className="([^"]*lg:grid-cols-\[minmax\(0,760px\)_300px\][^"]*)">/);
+const stickyGridClasses = stickyGridMatch?.[1] || '';
+const stickyGridHasBreakingOverflow = /(overflow-hidden|overflow-x-hidden|overflow-x-clip|overflow-auto|overflow-scroll)/.test(stickyGridClasses);
 
 const relatedPath = 'src/components/blog/RelatedGuidesCarousel.tsx';
 const relatedSource = fs.readFileSync(relatedPath, 'utf8');
@@ -44,6 +50,10 @@ const report = {
   stickyMounts,
   stickyPass: stickyMounts === 2,
   hasDesktopStickySidebar,
+
+  articleHasStickyCssVar,
+  stickyGridClasses,
+  stickyGridHasBreakingOverflow,
   hasToc,
   hasOverflowHardening,
   hasRelatedTracking,
@@ -57,6 +67,8 @@ console.log('[blog-audit]', JSON.stringify(report, null, 2));
 if (
   !report.stickyPass ||
   !hasDesktopStickySidebar ||
+  !articleHasStickyCssVar ||
+  stickyGridHasBreakingOverflow ||
   !hasToc ||
   !hasOverflowHardening ||
   !hasRelatedTracking ||
