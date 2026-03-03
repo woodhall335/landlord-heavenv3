@@ -29,6 +29,8 @@ import { BlogReadingProgress } from '@/components/blog/BlogReadingProgress';
 import { BlogInlineProductCard } from '@/components/blog/BlogInlineProductCard';
 import { BlogBackToTop } from '@/components/blog/BlogBackToTop';
 import { BlogStickySlots } from '@/components/blog/BlogStickySlots';
+import { BlogProse } from '@/components/blog/BlogProse';
+import { LegalDisclaimer } from '@/components/blog/BlogCallout';
 import { getBlogImagesForPost, getBlogImagesForPostThumb } from '@/lib/blog/image-manifest';
 import { getBlogSeoConfig } from '@/lib/blog/seo';
 import { BLOG_PRODUCT_ROUTES, getBlogProductCta } from '@/lib/blog/product-cta-map';
@@ -810,9 +812,9 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
                 image={post.author.image}
               />
 
-              <section className="my-8 rounded-2xl border border-[#e9dcff] bg-[#f8f1ff] px-5 py-4 text-sm leading-6 text-slate-700">
+              <LegalDisclaimer>
                 This guidance is informational and not legal advice. Consult a qualified legal professional for your case.
-              </section>
+              </LegalDisclaimer>
 
               <div className="relative mb-10 overflow-hidden rounded-3xl border border-[#e8ddfb] bg-[#f8f1ff] p-2 shadow-[0_10px_30px_rgba(105,46,212,0.08)]">
                 <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl bg-white">
@@ -828,9 +830,9 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
 
               <BlogInlineProductCard cta={productCta} postSlug={slug} category={post.category} />
 
-              <div className="prose prose-lg max-w-none overflow-x-clip [overflow-wrap:anywhere] prose-headings:scroll-mt-24 prose-headings:font-bold prose-headings:text-slate-900 prose-h2:mt-12 prose-h2:mb-5 prose-h2:text-3xl prose-h3:mt-9 prose-h3:mb-4 prose-h3:text-2xl prose-p:my-5 prose-p:leading-8 prose-p:text-slate-700 prose-ul:my-5 prose-ol:my-5 prose-li:my-2 prose-li:text-slate-700 prose-blockquote:rounded-r-xl prose-blockquote:border-l-4 prose-blockquote:border-[#692ed4] prose-blockquote:bg-[#f8f1ff] prose-blockquote:px-6 prose-blockquote:py-4 prose-blockquote:text-slate-700 prose-a:break-words prose-a:text-[#692ed4] prose-a:no-underline hover:prose-a:underline prose-strong:text-slate-900 prose-img:my-8 prose-img:h-auto prose-img:w-full prose-img:max-w-full prose-img:rounded-xl prose-img:border prose-img:border-slate-200 prose-img:bg-white prose-figure:my-8 prose-video:my-8 prose-video:h-auto prose-video:w-full prose-video:max-w-full prose-table:my-8 prose-table:w-full prose-table:text-sm prose-table:[&_th]:bg-[#f8f1ff] prose-table:[&_th]:p-3 prose-table:[&_th]:text-left prose-table:[&_td]:border-b prose-table:[&_td]:p-3 prose-hr:my-10 prose-hr:border-[#e9dcff] prose-pre:max-w-full prose-pre:overflow-x-auto [&_svg]:max-w-full [&_svg]:h-auto [&_svg]:object-contain [&_svg]:overflow-visible [&_table]:block [&_table]:max-w-full [&_table]:overflow-x-auto [&_table]:whitespace-nowrap md:[&_table]:table md:[&_table]:whitespace-normal [&_img]:max-w-full [&_img]:h-auto [&_pre]:max-w-full [&_pre]:overflow-x-auto">
+              <BlogProse>
                 {post.content}
-              </div>
+              </BlogProse>
 
               {sanitizedFaqs.length > 0 && (
                 <section className="mt-14 rounded-2xl border border-[#e9dcff] bg-[#f8f1ff] p-6" aria-label="Frequently asked questions">
@@ -857,12 +859,12 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
               <div className="mt-14 flex items-center justify-between border-t border-gray-100 py-8">
                 <Link
                   href="/blog"
-                  className="inline-flex items-center text-gray-600 hover:text-primary transition-colors"
+                  className="inline-flex items-center text-gray-600 transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#692ed4] focus-visible:ring-offset-2"
                 >
                   <ChevronLeft className="w-4 h-4 mr-1" />
                   Back to all guides
                 </Link>
-                <button className="inline-flex items-center gap-2 text-gray-600 hover:text-primary transition-colors">
+                <button className="inline-flex items-center gap-2 text-gray-600 transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#692ed4] focus-visible:ring-offset-2">
                   <Share2 className="w-4 h-4" />
                   Share
                 </button>
