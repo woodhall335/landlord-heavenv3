@@ -568,6 +568,8 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
     category: post.category,
     tags: post.tags,
   });
+  const heroSrc = manifestImages.hero || post.heroImage;
+  const heroIsSvg = heroSrc.toLowerCase().endsWith('.svg');
   const productCta = getBlogProductCta(post);
   const sanitizedFaqs = (post.faqs ?? [])
     .filter((faq) => faq.question.trim().length > 0 && faq.answer.trim().length > 0)
@@ -675,12 +677,12 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
       <StructuredData data={breadcrumbSchema} />
       {faqSchema && <StructuredData data={faqSchema} />}
 
-      <article className="min-h-screen">
+      <article className="min-h-screen overflow-x-clip">
         {/* Hero Section - matches homepage pastel gradient */}
-        <header id="blog-hero" className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-20">
+        <header id="blog-hero" className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-8 pb-10 md:pt-12 md:pb-14">
           <div className="container mx-auto px-4">
             {/* Breadcrumb */}
-            <nav className="flex items-center gap-2 text-sm text-gray-500 mb-8 flex-wrap">
+            <nav className="mb-4 flex flex-wrap items-center gap-1.5 text-xs text-gray-500 sm:text-sm">
               <Link href="/" className="hover:text-primary transition-colors">Home</Link>
               <span>/</span>
               <Link href="/blog" className="hover:text-primary transition-colors">Landlord Guides</Link>
@@ -698,7 +700,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
 
             <div className="max-w-4xl">
               {/* Category & Meta */}
-              <div className="mb-5 flex flex-wrap items-center gap-2.5 text-sm">
+              <div className="mb-4 flex flex-wrap items-center gap-2 text-sm">
                 <span className="rounded-full bg-[#692ed4] px-3 py-1 font-medium text-white">
                   {post.category}
                 </span>
@@ -734,14 +736,14 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
                 </span>
               </div>
 
-              <div className="mb-6 flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-wide">
+              <div className="mb-4 flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-wide">
                 <span className="rounded-full border border-[#e3d3ff] bg-[#f8f1ff] px-3 py-1 text-[#692ed4]">Court-ready guidance</span>
                 <span className="rounded-full bg-slate-100 px-3 py-1 text-slate-600">{post.author.role}</span>
               </div>
 
               {/* Reviewer badge if available */}
               {post.reviewer && (
-                <div className="flex items-center gap-2 mb-4 text-sm">
+                <div className="mb-3 flex items-center gap-2 text-sm">
                   <CheckCircle className="w-4 h-4 text-green-600" />
                   <span className="text-gray-600">
                     Reviewed: <span className="font-medium text-gray-900">{post.reviewer.name}</span>
@@ -751,12 +753,12 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
               )}
 
               {/* Title */}
-              <h1 className="text-3xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+              <h1 className="mb-4 text-3xl font-bold leading-tight text-gray-900 lg:text-5xl">
                 {seoConfig.metaTitle}
               </h1>
 
               {/* Description */}
-              <p className="mb-8 max-w-3xl text-lg leading-8 text-gray-600 lg:text-xl">
+              <p className="mb-6 max-w-3xl text-base leading-7 text-gray-600 sm:text-lg sm:leading-8 lg:text-xl">
                 {seoConfig.heroIntro}
               </p>
 
@@ -792,11 +794,11 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
         )}
 
         {/* Content */}
-        <div className="container mx-auto px-4 py-14 lg:py-20">
+        <div className="container mx-auto px-4 py-10 lg:py-14">
           <BlogReadingProgress />
           <div className="grid items-start gap-12 lg:grid-cols-[minmax(0,760px)_300px] lg:gap-14 lg:justify-center">
             {/* Main Content */}
-            <div className="max-w-[760px] pb-20 lg:pb-0">
+            <div className="min-w-0 max-w-[760px] pb-20 lg:pb-0">
               <AuthorBox
                 name={post.author.name}
                 role={post.author.role}
@@ -807,19 +809,21 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
                 This guidance is informational and not legal advice. Consult a qualified legal professional for your case.
               </section>
 
-              <div className="relative mb-12 rounded-3xl border border-[#e8ddfb] bg-[#f8f1ff] p-2">
-                <Image
-                  src={manifestImages.hero || post.heroImage}
-                  alt={post.heroImageAlt}
-                  width={1200}
-                  height={675}
-                  className="h-auto w-full rounded-2xl object-cover object-center"
-                />
+              <div className="relative mb-10 overflow-hidden rounded-3xl border border-[#e8ddfb] bg-[#f8f1ff] p-2 shadow-[0_10px_30px_rgba(105,46,212,0.08)]">
+                <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl bg-white">
+                  <Image
+                    src={heroSrc}
+                    alt={post.heroImageAlt}
+                    fill
+                    sizes="(min-width: 1024px) 760px, 100vw"
+                    className={heroIsSvg ? 'object-contain p-2 sm:p-3' : 'object-cover object-center'}
+                  />
+                </div>
               </div>
 
               <BlogInlineProductCard cta={productCta} postSlug={slug} category={post.category} />
 
-              <div className="prose prose-lg max-w-none prose-headings:scroll-mt-24 prose-headings:font-bold prose-headings:text-slate-900 prose-h2:mt-16 prose-h2:mb-6 prose-h2:text-3xl prose-h3:mt-11 prose-h3:mb-5 prose-h3:text-2xl prose-p:my-6 prose-p:leading-8 prose-p:text-slate-700 prose-ul:my-6 prose-ol:my-6 prose-li:my-2 prose-li:text-slate-700 prose-blockquote:rounded-r-xl prose-blockquote:border-l-4 prose-blockquote:border-[#692ed4] prose-blockquote:bg-[#f8f1ff] prose-blockquote:px-6 prose-blockquote:py-4 prose-blockquote:text-slate-700 prose-a:text-[#692ed4] prose-a:no-underline hover:prose-a:underline prose-strong:text-slate-900 prose-img:my-10 prose-img:h-auto prose-img:w-full prose-img:max-w-full prose-img:rounded-xl prose-img:border prose-img:border-slate-200 prose-img:bg-white prose-figure:my-10 prose-video:my-8 prose-video:h-auto prose-video:w-full prose-video:max-w-full prose-table:my-8 prose-table:w-full prose-table:text-sm prose-table:[&_th]:bg-[#f8f1ff] prose-table:[&_th]:p-3 prose-table:[&_th]:text-left prose-table:[&_td]:border-b prose-table:[&_td]:p-3 prose-hr:my-12 prose-hr:border-[#e9dcff] [&_svg]:max-w-full [&_svg]:h-auto [&_svg]:object-contain [&_svg]:overflow-visible [&_table]:block [&_table]:w-full [&_table]:overflow-x-auto [&_table]:whitespace-nowrap md:[&_table]:table md:[&_table]:whitespace-normal [&_img]:max-w-full [&_img]:h-auto">
+              <div className="prose prose-lg max-w-none overflow-x-hidden [overflow-wrap:anywhere] prose-headings:scroll-mt-24 prose-headings:font-bold prose-headings:text-slate-900 prose-h2:mt-12 prose-h2:mb-5 prose-h2:text-3xl prose-h3:mt-9 prose-h3:mb-4 prose-h3:text-2xl prose-p:my-5 prose-p:leading-8 prose-p:text-slate-700 prose-ul:my-5 prose-ol:my-5 prose-li:my-2 prose-li:text-slate-700 prose-blockquote:rounded-r-xl prose-blockquote:border-l-4 prose-blockquote:border-[#692ed4] prose-blockquote:bg-[#f8f1ff] prose-blockquote:px-6 prose-blockquote:py-4 prose-blockquote:text-slate-700 prose-a:break-words prose-a:text-[#692ed4] prose-a:no-underline hover:prose-a:underline prose-strong:text-slate-900 prose-img:my-8 prose-img:h-auto prose-img:w-full prose-img:max-w-full prose-img:rounded-xl prose-img:border prose-img:border-slate-200 prose-img:bg-white prose-figure:my-8 prose-video:my-8 prose-video:h-auto prose-video:w-full prose-video:max-w-full prose-table:my-8 prose-table:w-full prose-table:text-sm prose-table:[&_th]:bg-[#f8f1ff] prose-table:[&_th]:p-3 prose-table:[&_th]:text-left prose-table:[&_td]:border-b prose-table:[&_td]:p-3 prose-hr:my-10 prose-hr:border-[#e9dcff] prose-pre:max-w-full prose-pre:overflow-x-auto [&_svg]:max-w-full [&_svg]:h-auto [&_svg]:object-contain [&_svg]:overflow-visible [&_table]:block [&_table]:max-w-full [&_table]:overflow-x-auto [&_table]:whitespace-nowrap md:[&_table]:table md:[&_table]:whitespace-normal [&_img]:max-w-full [&_img]:h-auto [&_pre]:max-w-full [&_pre]:overflow-x-auto">
                 {post.content}
               </div>
 
