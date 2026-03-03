@@ -865,8 +865,8 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
             </div>
 
             {/* Sidebar */}
-            <aside className="hidden lg:block" aria-label="Article navigation">
-              <div className="sticky top-24 space-y-6">
+            <aside className="hidden min-w-0 lg:block lg:self-start" aria-label="Article navigation">
+              <div className="sticky top-28 space-y-6">
                 <TableOfContents items={post.tableOfContents} />
                 <BlogStickySlots cta={productCta} postSlug={slug} category={post.category} showDesktop showMobile={false} />
                 <AskHeavenWidget
