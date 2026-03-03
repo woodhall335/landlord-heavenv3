@@ -53,7 +53,8 @@
     "blog:recommend": "node scripts/blog-autofill-recommendations.mjs",
     "blog:recommend:strict": "node scripts/blog-autofill-recommendations.mjs --strict",
     "blog:images": "node scripts/blog-image-manifest.mjs",
-    "blog:cta-smoke": "node --loader ts-node/esm scripts/blog-cta-smoke.mjs"
+    "blog:cta-smoke": "node --loader ts-node/esm scripts/blog-cta-smoke.mjs",
+    "blog:images:distribution": "node scripts/blog-image-distribution.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.70.1",

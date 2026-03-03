@@ -61,7 +61,13 @@ export default function BlogPage() {
   };
 
   const featuredPost = blogPosts[0];
-  const featuredPostImages = getBlogImagesForPost(featuredPost.title, featuredPost.targetKeyword);
+  const featuredPostImages = getBlogImagesForPost({
+    slug: featuredPost.slug,
+    title: featuredPost.title,
+    targetKeyword: featuredPost.targetKeyword,
+    category: featuredPost.category,
+    tags: featuredPost.tags,
+  });
   const remainingPosts = blogPosts.slice(1);
 
   // Extract unique categories sorted alphabetically
@@ -69,7 +75,13 @@ export default function BlogPage() {
 
   // Prepare posts data for client component (without JSX content)
   const postsForFilter = remainingPosts.map((post) => {
-    const manifestImages = getBlogImagesForPost(post.title, post.targetKeyword);
+    const manifestImages = getBlogImagesForPost({
+      slug: post.slug,
+      title: post.title,
+      targetKeyword: post.targetKeyword,
+      category: post.category,
+      tags: post.tags,
+    });
 
     return {
       slug: post.slug,

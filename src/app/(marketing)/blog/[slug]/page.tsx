@@ -28,7 +28,7 @@ import Image from 'next/image';
 import { BlogReadingProgress } from '@/components/blog/BlogReadingProgress';
 import { BlogInlineProductCard } from '@/components/blog/BlogInlineProductCard';
 import { BlogBackToTop } from '@/components/blog/BlogBackToTop';
-import { getBlogImagesForPost } from '@/lib/blog/image-manifest';
+import { getBlogImagesForPost, getBlogImagesForPostThumb } from '@/lib/blog/image-manifest';
 import { getBlogSeoConfig } from '@/lib/blog/seo';
 import { BLOG_PRODUCT_ROUTES, getBlogProductCta } from '@/lib/blog/product-cta-map';
 import type { StageEstimate } from '@/lib/journey/state';
@@ -401,7 +401,13 @@ const getRelatedGuides = (post: BlogPost) => {
     date: candidate.date,
     readTime: candidate.readTime,
     category: candidate.category,
-    heroImage: candidate.heroImage,
+    heroImage: getBlogImagesForPostThumb({
+      slug: candidate.slug,
+      title: candidate.title,
+      targetKeyword: candidate.targetKeyword,
+      category: candidate.category,
+      tags: candidate.tags,
+    }).hero,
     heroImageAlt: candidate.heroImageAlt,
   }));
 };
@@ -462,7 +468,13 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
 
   const postRegion = getPostRegion(slug);
   const seoConfig = getBlogSeoConfig(post, postRegion);
-  const manifestImages = getBlogImagesForPost(post.title, post.targetKeyword);
+  const manifestImages = getBlogImagesForPost({
+    slug: post.slug,
+    title: post.title,
+    targetKeyword: post.targetKeyword,
+    category: post.category,
+    tags: post.tags,
+  });
   // Use canonicalSlug if this post points to another as the canonical version
   const canonicalUrl = getCanonicalUrl(seoConfig.canonicalPath);
 
@@ -519,7 +531,13 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
       date: post.date,
       readTime: post.readTime,
       category: post.category,
-      heroImage: post.heroImage,
+      heroImage: getBlogImagesForPostThumb({
+        slug: post.slug,
+        title: post.title,
+        targetKeyword: post.targetKeyword,
+        category: post.category,
+        tags: post.tags,
+      }).hero,
       heroImageAlt: post.heroImageAlt,
     }));
 
@@ -542,7 +560,13 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
 
   // Analyze post for commercial linking (automated CTAs to core product pages)
   const seoConfig = getBlogSeoConfig(post, postRegion);
-  const manifestImages = getBlogImagesForPost(post.title, post.targetKeyword);
+  const manifestImages = getBlogImagesForPost({
+    slug: post.slug,
+    title: post.title,
+    targetKeyword: post.targetKeyword,
+    category: post.category,
+    tags: post.tags,
+  });
   const productCta = getBlogProductCta(post);
   const sanitizedFaqs = (post.faqs ?? [])
     .filter((faq) => faq.question.trim().length > 0 && faq.answer.trim().length > 0)
@@ -762,9 +786,9 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
         )}
 
         {/* Content */}
-        <div className="container mx-auto px-4 py-12 lg:py-16">
+        <div className="container mx-auto px-4 py-14 lg:py-20">
           <BlogReadingProgress />
-          <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,760px)_300px] lg:gap-12 lg:justify-center">
+          <div className="grid items-start gap-12 lg:grid-cols-[minmax(0,760px)_300px] lg:gap-14 lg:justify-center">
             {/* Main Content */}
             <div className="max-w-[760px] pb-20 lg:pb-0">
               <AuthorBox
@@ -773,23 +797,23 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
                 image={post.author.image}
               />
 
-              <section className="my-6 rounded-2xl border border-[#e9dcff] bg-[#f8f1ff] p-4 text-sm leading-6 text-slate-700">
+              <section className="my-8 rounded-2xl border border-[#e9dcff] bg-[#f8f1ff] px-5 py-4 text-sm leading-6 text-slate-700">
                 This guidance is informational and not legal advice. Consult a qualified legal professional for your case.
               </section>
 
-              <div className="relative mb-10 overflow-hidden rounded-3xl border border-[#e8ddfb] bg-[#f8f1ff]">
+              <div className="relative mb-12 rounded-3xl border border-[#e8ddfb] bg-[#f8f1ff] p-2">
                 <Image
                   src={manifestImages.hero || post.heroImage}
                   alt={post.heroImageAlt}
                   width={1200}
                   height={675}
-                  className="h-auto w-full object-cover object-center"
+                  className="h-auto w-full rounded-2xl object-cover object-center"
                 />
               </div>
 
               <BlogInlineProductCard cta={productCta} postSlug={slug} category={post.category} />
 
-              <div className="prose prose-lg max-w-none prose-headings:scroll-mt-24 prose-headings:font-bold prose-headings:text-slate-900 prose-h2:mt-14 prose-h2:mb-5 prose-h2:text-3xl prose-h3:mt-10 prose-h3:mb-4 prose-h3:text-2xl prose-p:my-5 prose-p:leading-8 prose-p:text-slate-700 prose-li:my-1.5 prose-li:text-slate-700 prose-blockquote:rounded-r-xl prose-blockquote:border-l-4 prose-blockquote:border-[#692ed4] prose-blockquote:bg-[#f8f1ff] prose-blockquote:px-6 prose-blockquote:py-3 prose-blockquote:text-slate-700 prose-a:text-[#692ed4] prose-a:no-underline hover:prose-a:underline prose-strong:text-slate-900 prose-img:my-8 prose-img:h-auto prose-img:w-full prose-img:max-w-full prose-img:rounded-xl prose-img:border prose-img:border-slate-200 prose-img:bg-white prose-table:border-collapse prose-th:bg-[#f8f1ff] prose-th:p-3 prose-th:text-left prose-td:p-3 prose-td:border-b prose-hr:border-[#e9dcff]">
+              <div className="prose prose-lg max-w-none prose-headings:scroll-mt-24 prose-headings:font-bold prose-headings:text-slate-900 prose-h2:mt-16 prose-h2:mb-6 prose-h2:text-3xl prose-h3:mt-11 prose-h3:mb-5 prose-h3:text-2xl prose-p:my-6 prose-p:leading-8 prose-p:text-slate-700 prose-ul:my-6 prose-ol:my-6 prose-li:my-2 prose-li:text-slate-700 prose-blockquote:rounded-r-xl prose-blockquote:border-l-4 prose-blockquote:border-[#692ed4] prose-blockquote:bg-[#f8f1ff] prose-blockquote:px-6 prose-blockquote:py-4 prose-blockquote:text-slate-700 prose-a:text-[#692ed4] prose-a:no-underline hover:prose-a:underline prose-strong:text-slate-900 prose-img:my-10 prose-img:h-auto prose-img:w-full prose-img:max-w-full prose-img:rounded-xl prose-img:border prose-img:border-slate-200 prose-img:bg-white prose-figure:my-10 prose-video:my-8 prose-video:h-auto prose-video:w-full prose-video:max-w-full prose-table:my-8 prose-table:w-full prose-table:text-sm prose-table:[&_th]:bg-[#f8f1ff] prose-table:[&_th]:p-3 prose-table:[&_th]:text-left prose-table:[&_td]:border-b prose-table:[&_td]:p-3 prose-hr:my-12 prose-hr:border-[#e9dcff] [&_svg]:max-w-full [&_svg]:h-auto [&_svg]:object-contain [&_svg]:overflow-visible [&_table]:block [&_table]:w-full [&_table]:overflow-x-auto [&_table]:whitespace-nowrap md:[&_table]:table md:[&_table]:whitespace-normal [&_img]:max-w-full [&_img]:h-auto">
                 {post.content}
               </div>
 
@@ -831,7 +855,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
             </div>
 
             {/* Sidebar */}
-            <aside className="hidden lg:block">
+            <aside className="hidden lg:block" aria-label="Article navigation">
               <div className="sticky top-24 space-y-6">
                 <TableOfContents items={post.tableOfContents} />
                 <AskHeavenWidget
