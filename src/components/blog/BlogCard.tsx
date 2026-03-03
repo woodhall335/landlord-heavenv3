@@ -19,7 +19,6 @@ export function BlogCard({
   slug,
   title,
   description,
-  date,
   readTime,
   category,
   heroImage,
@@ -29,57 +28,34 @@ export function BlogCard({
 }: BlogCardProps) {
   if (featured) {
     return (
-      <article className="group relative bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300">
-        <Link href={`/blog/${slug}`} className="block" onClick={onClick}>
+      <article className="group relative overflow-hidden rounded-3xl border border-[#e8ddfb] bg-white shadow-[0_10px_30px_rgba(105,46,212,0.08)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_40px_rgba(105,46,212,0.14)]">
+        <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[#692ed4] via-[#8f5be6] to-[#b798f2]" />
+        <Link href={`/blog/${slug}`} className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#692ed4] focus-visible:ring-offset-2" onClick={onClick}>
           <div className="grid md:grid-cols-2 gap-0">
-            {/* Image */}
-            <div className="relative aspect-[16/10] md:aspect-auto bg-gradient-to-br from-primary/5 to-primary/10">
-              {heroImage && !heroImage.includes('placeholder') ? (
-                <Image
-                  src={heroImage}
-                  alt={heroImageAlt}
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-              ) : (
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
-                      <svg className="w-10 h-10 text-primary/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                      </svg>
-                    </div>
-                    <span className="text-sm text-primary/50">{heroImageAlt}</span>
-                  </div>
-                </div>
-              )}
-              <div className="absolute top-4 left-4">
-                <span className="bg-primary text-white px-3 py-1 rounded-full text-xs font-semibold">
-                  Featured
-                </span>
-              </div>
+            <div className="relative aspect-[16/9] border-b border-[#ede4ff] bg-[#f8f1ff] md:aspect-auto md:border-b-0 md:border-r">
+              <Image
+                src={heroImage}
+                alt={heroImageAlt}
+                fill
+                sizes="(min-width: 1024px) 520px, 100vw"
+                className="object-cover object-center transition-transform duration-300 group-hover:scale-[1.03]"
+              />
+              <div className="absolute left-4 top-4 rounded-full bg-[#692ed4] px-3 py-1 text-xs font-semibold text-white">Featured</div>
             </div>
 
-            {/* Content */}
-            <div className="p-6 md:p-8 flex flex-col justify-center">
-              <div className="flex items-center gap-3 text-sm text-gray-500 mb-3">
-                <span className="bg-primary/10 text-primary px-2.5 py-1 rounded-full text-xs font-medium">
-                  {category}
-                </span>
+            <div className="flex flex-col justify-center p-6 md:p-8">
+              <div className="mb-3 flex items-center gap-3 text-sm text-slate-500">
+                <span className="rounded-full bg-[#f8f1ff] px-3 py-1 text-xs font-semibold text-[#692ed4]">{category}</span>
                 <span className="flex items-center gap-1">
-                  <Clock className="w-3.5 h-3.5" />
+                  <Clock className="h-3.5 w-3.5" />
                   {readTime}
                 </span>
               </div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors">
-                {title}
-              </h2>
-              <p className="text-gray-600 mb-4 line-clamp-2">
-                {description}
-              </p>
-              <div className="flex items-center text-primary font-medium">
+              <h2 className="mb-3 line-clamp-2 text-2xl font-bold text-slate-900 transition-colors group-hover:text-[#692ed4]">{title}</h2>
+              <p className="mb-4 line-clamp-3 text-slate-600">{description}</p>
+              <div className="inline-flex items-center font-semibold text-[#692ed4]">
                 Read Guide
-                <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
               </div>
             </div>
           </div>
@@ -89,44 +65,37 @@ export function BlogCard({
   }
 
   return (
-    <article className="group bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-all duration-300">
-      <Link href={`/blog/${slug}`} className="block" onClick={onClick}>
-        {/* Image */}
-        <div className="relative aspect-[16/10] bg-gradient-to-br from-primary/5 to-primary/10">
-          {heroImage && !heroImage.includes('placeholder') ? (
-            <Image
-              src={heroImage}
-              alt={heroImageAlt}
-              fill
-              className="object-cover group-hover:scale-105 transition-transform duration-300"
-            />
-          ) : (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <svg className="w-12 h-12 text-primary/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
-            </div>
-          )}
+    <article className="group h-full overflow-hidden rounded-2xl border border-[#ebe3fb] bg-white shadow-[0_6px_24px_rgba(15,23,42,0.06)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#d8c3fb] hover:shadow-[0_12px_30px_rgba(105,46,212,0.14)]">
+      <Link
+        href={`/blog/${slug}`}
+        className="flex h-full flex-col focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#692ed4] focus-visible:ring-offset-2"
+        onClick={onClick}
+      >
+        <div className="relative aspect-[16/9] border-b border-[#efe6ff] bg-[#f8f1ff]">
+          <Image
+            src={heroImage}
+            alt={heroImageAlt}
+            fill
+            sizes="(min-width: 1280px) 360px, (min-width: 768px) 50vw, 100vw"
+            className="object-cover object-center transition-transform duration-300 group-hover:scale-[1.03]"
+          />
         </div>
 
-        {/* Content */}
-        <div className="p-5">
-          <div className="flex items-center gap-2 text-sm text-gray-500 mb-3">
-            <span className="bg-primary/10 text-primary px-2 py-0.5 rounded text-xs font-medium">
-              {category}
-            </span>
+        <div className="flex flex-1 flex-col p-5">
+          <div className="mb-3 flex items-center gap-2 text-sm text-slate-500">
+            <span className="rounded-full bg-[#f8f1ff] px-2.5 py-1 text-xs font-semibold text-[#692ed4]">{category}</span>
             <span>•</span>
             <span className="flex items-center gap-1">
-              <Clock className="w-3 h-3" />
+              <Clock className="h-3.5 w-3.5" />
               {readTime}
             </span>
           </div>
-          <h2 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-primary transition-colors line-clamp-2">
-            {title}
-          </h2>
-          <p className="text-gray-600 text-sm line-clamp-2">
-            {description}
-          </p>
+          <h2 className="mb-2 line-clamp-2 text-lg font-semibold text-slate-900 transition-colors group-hover:text-[#692ed4]">{title}</h2>
+          <p className="line-clamp-3 text-sm leading-6 text-slate-600">{description}</p>
+          <div className="mt-4 inline-flex items-center text-sm font-semibold text-[#692ed4]">
+            Read guide
+            <ArrowRight className="ml-1.5 h-4 w-4 transition-transform group-hover:translate-x-1" />
+          </div>
         </div>
       </Link>
     </article>
