@@ -3,6 +3,7 @@
 import { useRef } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { BlogCard } from '@/components/blog/BlogCard';
+import { trackEvent } from '@/lib/analytics';
 
 interface RelatedGuide {
   slug: string;
@@ -17,9 +18,10 @@ interface RelatedGuide {
 
 interface RelatedGuidesCarouselProps {
   guides: RelatedGuide[];
+  postSlug?: string;
 }
 
-export function RelatedGuidesCarousel({ guides }: RelatedGuidesCarouselProps) {
+export function RelatedGuidesCarousel({ guides, postSlug }: RelatedGuidesCarouselProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const handleScroll = (direction: 'left' | 'right') => {
@@ -85,6 +87,7 @@ export function RelatedGuidesCarousel({ guides }: RelatedGuidesCarouselProps) {
                   category={guide.category}
                   heroImage={guide.heroImage}
                   heroImageAlt={guide.heroImageAlt}
+                  onClick={() => trackEvent('click_related_post', { from: postSlug ?? 'blog', target: guide.slug })}
                 />
               </div>
             ))}

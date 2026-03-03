@@ -4,9 +4,7 @@ import { notFound } from 'next/navigation';
 import { StructuredData } from '@/lib/seo/structured-data';
 import { TableOfContents } from '@/components/blog/TableOfContents';
 import { AuthorBox } from '@/components/blog/AuthorBox';
-import { BlogCTA } from '@/components/blog/BlogCTA';
 import { RelatedGuidesCarousel } from '@/components/blog/RelatedGuidesCarousel';
-import { NextSteps } from '@/components/blog/NextSteps';
 import { Sources } from '@/components/blog/Sources';
 import { CategoryPage } from '@/components/blog/CategoryPage';
 import { Section21Countdown } from '@/components/ui/Section21Countdown';
@@ -25,11 +23,15 @@ import { getCanonicalUrl, SITE_ORIGIN } from '@/lib/seo';
 import { AskHeavenWidget } from '@/components/ask-heaven/AskHeavenWidget';
 import type { AskHeavenTopic } from '@/lib/ask-heaven/buildAskHeavenLink';
 import { FAQInline } from '@/components/seo/FAQSection';
-import { NextLegalSteps } from '@/components/seo/NextLegalSteps';
 import { landingPageLinks, productLinks, guideLinks } from '@/lib/seo/internal-links';
-import { CommercialWizardLinks } from '@/components/seo/CommercialWizardLinks';
+import Image from 'next/image';
+import { BlogReadingProgress } from '@/components/blog/BlogReadingProgress';
+import { BlogStickySlots } from '@/components/blog/BlogStickySlots';
+import { BlogLeadMagnetCard } from '@/components/blog/BlogLeadMagnetCard';
+import { BlogInlineProductCard } from '@/components/blog/BlogInlineProductCard';
+import { BlogBackToTop } from '@/components/blog/BlogBackToTop';
+import { getBlogImagesForPost } from '@/lib/blog/image-manifest';
 import { getBlogSeoConfig } from '@/lib/blog/seo';
-import { NextStepWidget } from '@/components/journey/NextStepWidget';
 import type { StageEstimate } from '@/lib/journey/state';
 
 interface BlogPageProps {
@@ -540,14 +542,14 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
 
   // Analyze post for commercial linking (automated CTAs to core product pages)
   const seoConfig = getBlogSeoConfig(post, postRegion);
-  const commercialLinkingResult = seoConfig.commercialResult;
+  const manifestImages = getBlogImagesForPost(post.title, post.targetKeyword);
 
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: seoConfig.metaTitle,
     description: seoConfig.metaDescription,
-    image: post.heroImage || `${SITE_ORIGIN}/og-image.png`,
+    image: `${SITE_ORIGIN}${manifestImages.og || post.heroImage || '/og-image.png'}`,
     datePublished: post.date,
     dateModified: post.updatedDate || post.date,
     author: {
@@ -579,8 +581,6 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
     }),
   };
 
-  const legalSteps = buildNextLegalSteps(post, postRegion);
-  const stageHint = inferBlogStageHint(post);
 
   // Build breadcrumb items - include category if post belongs to a region
   const breadcrumbItems = [
@@ -648,7 +648,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
 
       <article className="min-h-screen">
         {/* Hero Section - matches homepage pastel gradient */}
-        <header className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-20">
+        <header id="blog-hero" className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-20">
           <div className="container mx-auto px-4">
             {/* Breadcrumb */}
             <nav className="flex items-center gap-2 text-sm text-gray-500 mb-8 flex-wrap">
@@ -759,88 +759,52 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
 
         {/* Content */}
         <div className="container mx-auto px-4 py-12 lg:py-16">
-          <div className="grid lg:grid-cols-[1fr_300px] gap-12">
+          <BlogReadingProgress />
+          <div className="grid lg:grid-cols-[minmax(0,780px)_300px] gap-12 justify-center">
             {/* Main Content */}
-            <div className="max-w-3xl">
-              {/* Author */}
+            <div className="max-w-[780px] pb-20 lg:pb-0">
               <AuthorBox
                 name={post.author.name}
                 role={post.author.role}
                 image={post.author.image}
               />
 
-              <section className="my-8 rounded-2xl border border-purple-200 bg-purple-50 p-6">
-                <h2 className="text-lg font-semibold text-gray-900">Start with the right landlord pack</h2>
-                <p className="text-sm text-gray-700 mt-2">
-                  {seoConfig.primaryCommercialLink.description ??
-                    `Take the next step for ${seoConfig.jurisdictionLabel} landlords with a compliant pack.`}
-                </p>
-                <Link
-                  href={seoConfig.primaryCommercialLink.href}
-                  className="inline-flex items-center mt-4 text-primary font-semibold hover:underline"
-                >
-                  {seoConfig.primaryCommercialLink.anchorText.includes(seoConfig.jurisdictionLabel)
-                    ? seoConfig.primaryCommercialLink.anchorText
-                    : `${seoConfig.primaryCommercialLink.anchorText} for ${seoConfig.jurisdictionLabel}`}
-                </Link>
-                <div className="mt-4 flex flex-wrap gap-3 text-sm text-gray-700">
-                  {seoConfig.supportingLinks.map((link) => (
-                    <Link key={link.href} href={link.href} className="text-primary hover:underline">
-                      {link.label}
-                    </Link>
-                  ))}
-                </div>
+              <section className="my-5 rounded-xl border border-[#e9dcff] bg-[#f8f1ff] p-4 text-sm text-slate-700">
+                This guidance is informational and not legal advice. Consult a qualified legal professional for your case.
               </section>
 
-              {/* Commercial Wizard Links - Automated CTAs based on content analysis */}
-              <CommercialWizardLinks
-                result={commercialLinkingResult}
-                variant="inline"
-                maxLinks={2}
-                utmSource="blog_post"
+              <div className="relative mb-8 overflow-hidden rounded-2xl border border-slate-200 bg-slate-50">
+                <Image
+                  src={manifestImages.hero || post.heroImage}
+                  alt={post.heroImageAlt}
+                  width={1200}
+                  height={675}
+                  className="h-auto w-full object-cover"
+                />
+              </div>
+
+              <BlogLeadMagnetCard postSlug={slug} />
+              <BlogInlineProductCard
+                href={seoConfig.primaryCommercialLink.href}
+                label={seoConfig.primaryCommercialLink.anchorText}
+                postSlug={slug}
               />
 
-              <NextStepWidget stageHint={stageHint} location="blog_mid_article" />
-
-              {/* Article Content */}
-              <div className="prose prose-lg max-w-none prose-headings:scroll-mt-24 prose-headings:font-bold prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-6 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-4 prose-p:text-gray-600 prose-p:leading-relaxed prose-li:text-gray-600 prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900 prose-table:border-collapse prose-th:bg-gray-100 prose-th:p-3 prose-th:text-left prose-td:p-3 prose-td:border-b">
+              <div className="prose prose-lg max-w-none prose-headings:scroll-mt-24 prose-headings:font-bold prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-6 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-4 prose-p:text-gray-700 prose-p:leading-relaxed prose-li:text-gray-700 prose-a:text-[#692ed4] prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900 prose-table:border-collapse prose-th:bg-gray-100 prose-th:p-3 prose-th:text-left prose-td:p-3 prose-td:border-b">
                 {post.content}
               </div>
 
-              {/* FAQ Section */}
               {post.faqs && post.faqs.length > 0 && (
-                <section className="mt-12 pt-8 border-t border-gray-200">
+                <section className="mt-12 pt-8 border-t border-gray-200" aria-label="Frequently asked questions">
                   <h2 className="text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
                   <FAQInline faqs={post.faqs} />
                 </section>
               )}
 
-              {/* Sources Section */}
               {post.sources && post.sources.length > 0 && (
                 <Sources sources={post.sources} />
               )}
 
-              {/* Next Steps CTA */}
-              {legalSteps && (
-                <div className="mt-12">
-                  <NextLegalSteps
-                    heading="Next legal steps for landlords"
-                    jurisdictionLabel={legalSteps.jurisdictionLabel}
-                    scenarioLabel={legalSteps.scenarioLabel}
-                    primaryCTA={legalSteps.primaryCTA}
-                    secondaryCTA={legalSteps.secondaryCTA}
-                    relatedLinks={legalSteps.relatedLinks}
-                  />
-                </div>
-              )}
-              <NextStepWidget stageHint={stageHint} location="blog_end" />
-
-              <NextSteps slug={slug} category={post.category} tags={post.tags} />
-
-              {/* Bottom CTA */}
-              <BlogCTA variant="default" />
-
-              {/* Ask Heaven Widget (mobile-visible) */}
               <div className="mt-8 lg:hidden">
                 <AskHeavenWidget
                   variant="card"
@@ -852,7 +816,6 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
                 />
               </div>
 
-              {/* Share */}
               <div className="flex items-center justify-between py-8 border-t border-gray-100 mt-12">
                 <Link
                   href="/blog"
@@ -870,19 +833,14 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
 
             {/* Sidebar */}
             <aside className="hidden lg:block">
-              <div className="sticky top-24 space-y-8">
-                {/* Table of Contents */}
+              <div className="sticky top-24 space-y-6">
                 <TableOfContents items={post.tableOfContents} />
-
-                {/* Sidebar Commercial Links - Dynamic based on content analysis */}
-                <CommercialWizardLinks
-                  result={commercialLinkingResult}
-                  variant="sidebar"
-                  maxLinks={3}
-                  utmSource="blog_sidebar"
+                <BlogStickySlots
+                  ctaHref={seoConfig.primaryCommercialLink.href}
+                  ctaLabel="Start Notice Wizard"
+                  postSlug={slug}
+                  showMobile={false}
                 />
-
-                {/* Ask Heaven Widget */}
                 <AskHeavenWidget
                   variant="compact"
                   source="blog"
@@ -894,10 +852,12 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
               </div>
             </aside>
           </div>
+          <BlogStickySlots ctaHref={seoConfig.primaryCommercialLink.href} ctaLabel="Start Notice Wizard" postSlug={slug} showDesktop={false} />
+          <BlogBackToTop />
         </div>
 
         {/* Related Posts */}
-        {relatedGuides.length > 0 && <RelatedGuidesCarousel guides={relatedGuides} />}
+        {relatedGuides.length > 0 && <RelatedGuidesCarousel guides={relatedGuides} postSlug={slug} />}
       </article>
     </>
   );

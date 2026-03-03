@@ -39,10 +39,10 @@ export function TableOfContents({ items }: TableOfContentsProps) {
   if (items.length === 0) return null;
 
   return (
-    <nav className="bg-gray-50 rounded-xl p-6 sticky top-24">
+    <nav aria-label="In this article" className="rounded-2xl border border-[#e9dcff] bg-white p-6">
       <div className="flex items-center gap-2 text-gray-900 font-semibold mb-4">
         <List className="w-5 h-5" />
-        <span>Table of Contents</span>
+        <span>In this article</span>
       </div>
       <ul className="space-y-2">
         {items.map((item) => (
@@ -53,8 +53,8 @@ export function TableOfContents({ items }: TableOfContentsProps) {
                 item.level === 3 ? 'pl-4' : ''
               } ${
                 activeId === item.id
-                  ? 'text-primary font-medium'
-                  : 'text-gray-600 hover:text-primary'
+                  ? 'text-[#692ed4] font-semibold'
+                  : 'text-gray-600 hover:text-[#692ed4]'
               }`}
               onClick={(e) => {
                 e.preventDefault();
