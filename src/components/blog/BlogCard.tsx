@@ -12,6 +12,7 @@ interface BlogCardProps {
   heroImage: string;
   heroImageAlt: string;
   featured?: boolean;
+  onClick?: () => void;
 }
 
 export function BlogCard({
@@ -24,11 +25,12 @@ export function BlogCard({
   heroImage,
   heroImageAlt,
   featured = false,
+  onClick,
 }: BlogCardProps) {
   if (featured) {
     return (
       <article className="group relative bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300">
-        <Link href={`/blog/${slug}`} className="block">
+        <Link href={`/blog/${slug}`} className="block" onClick={onClick}>
           <div className="grid md:grid-cols-2 gap-0">
             {/* Image */}
             <div className="relative aspect-[16/10] md:aspect-auto bg-gradient-to-br from-primary/5 to-primary/10">
@@ -88,7 +90,7 @@ export function BlogCard({
 
   return (
     <article className="group bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-all duration-300">
-      <Link href={`/blog/${slug}`} className="block">
+      <Link href={`/blog/${slug}`} className="block" onClick={onClick}>
         {/* Image */}
         <div className="relative aspect-[16/10] bg-gradient-to-br from-primary/5 to-primary/10">
           {heroImage && !heroImage.includes('placeholder') ? (
