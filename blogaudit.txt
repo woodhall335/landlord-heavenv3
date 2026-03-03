@@ -1,0 +1,4182 @@
+{
+  "generatedAt": "2026-03-02T20:07:05.726Z",
+  "strictMode": true,
+  "source": "src/lib/blog/posts.tsx",
+  "summary": {
+    "totalPosts": 111,
+    "criticalCount": 0,
+    "warningCount": 198
+  },
+  "topOffenders": [
+    {
+      "slug": "uk-property-maintenance-obligations",
+      "title": "UK Property Maintenance Obligations - Complete Landlord Guide 2026",
+      "issueCount": 3,
+      "criticalCount": 0,
+      "warningCount": 3
+    },
+    {
+      "slug": "uk-end-of-tenancy-guide",
+      "title": "UK End of Tenancy Guide - Complete Process for Landlords 2026",
+      "issueCount": 3,
+      "criticalCount": 0,
+      "warningCount": 3
+    },
+    {
+      "slug": "uk-property-inspections-guide",
+      "title": "UK Property Inspections - Complete Landlord Guide 2026",
+      "issueCount": 3,
+      "criticalCount": 0,
+      "warningCount": 3
+    },
+    {
+      "slug": "uk-landlord-software-tools-guide",
+      "title": "UK Landlord Software & Tools - Complete Guide 2026",
+      "issueCount": 3,
+      "criticalCount": 0,
+      "warningCount": 3
+    },
+    {
+      "slug": "england-assured-shorthold-tenancy-guide",
+      "title": "Assured Shorthold Tenancy (AST) Guide - England 2026",
+      "issueCount": 2,
+      "criticalCount": 0,
+      "warningCount": 2
+    },
+    {
+      "slug": "england-section-8-ground-8",
+      "title": "Section 8 Ground 8 Explained: Mandatory Rent Arrears Eviction (2026)",
+      "issueCount": 2,
+      "criticalCount": 0,
+      "warningCount": 2
+    },
+    {
+      "slug": "england-accelerated-possession",
+      "title": "Accelerated Possession Procedure England - Complete Guide 2026",
+      "issueCount": 2,
+      "criticalCount": 0,
+      "warningCount": 2
+    },
+    {
+      "slug": "england-section-8-ground-10-11",
+      "title": "Section 8 Ground 10 & 11 Explained: Discretionary Rent Arrears Eviction (England)",
+      "issueCount": 2,
+      "criticalCount": 0,
+      "warningCount": 2
+    },
+    {
+      "slug": "england-section-8-ground-14",
+      "title": "Section 8 Ground 14 Explained: Antisocial Behaviour Eviction (England)",
+      "issueCount": 2,
+      "criticalCount": 0,
+      "warningCount": 2
+    },
+    {
+      "slug": "england-bailiff-eviction",
+      "title": "Bailiff Eviction Day - What to Expect (England Guide 2026)",
+      "issueCount": 2,
+      "criticalCount": 0,
+      "warningCount": 2
+    }
+  ],
+  "posts": [
+    {
+      "slug": "renters-reform-bill-what-landlords-need-to-know",
+      "title": "What the Renters (Reform) Bill 2023 Means for Section 21 in England",
+      "category": "Legal Updates",
+      "date": "2026-01-02",
+      "updatedDate": "2026-01-02",
+      "description": "The biggest change to landlord rights in 35 years is here. Learn what the Renters Reform Bill means for your properties, why you must act now, and how to protect your investments.",
+      "metaDescription": "Complete guide to the Renters Reform Bill 2025. Section 21 ends May 2026. Learn the changes, new grounds, and why landlords must start eviction proceedings now.",
+      "metaDescriptionLength": 160,
+      "readTime": "15 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/renters-reform-bill.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Renters Reform Bill 2025 - Complete Guide for UK Landlords",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "what-is-section-21-notice",
+      "title": "Section 21 Notice Explained: Complete Guide for UK Landlords (2026)",
+      "category": "Eviction Guides",
+      "date": "2026-01-02",
+      "updatedDate": "2026-01-02",
+      "description": "Everything you need to know about Section 21 no-fault eviction notices, including how to serve one correctly before the 2026 ban takes effect.",
+      "metaDescription": "Learn what a Section 21 notice is, how to serve one correctly, and why you must act before the May 2026 ban. Complete guide for UK landlords.",
+      "metaDescriptionLength": 141,
+      "readTime": "10 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/section-21.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Section 21 Notice Explained - Complete Guide for UK Landlords",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "section-21-vs-section-8",
+      "title": "Section 21 vs Section 8 Explained: Which Eviction Notice Should You Use? (2026)",
+      "category": "Eviction Guides",
+      "date": "2026-01-02",
+      "updatedDate": "2026-01-02",
+      "description": "Compare Section 21 and Section 8 eviction notices. Learn when to use each type, the key differences, and which is best for your situation.",
+      "metaDescription": "Section 21 vs Section 8 explained. Compare notice periods, costs, and success rates to choose the right eviction notice for UK landlords in 2026.",
+      "metaDescriptionLength": 145,
+      "readTime": "12 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/section-21-vs-8.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Section 21 vs Section 8 Comparison Guide for UK Landlords",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "how-to-serve-eviction-notice",
+      "title": "How to Serve an Eviction Notice in the UK: Step-by-Step Guide (2026)",
+      "category": "Eviction Guides",
+      "date": "2026-01-02",
+      "updatedDate": "2026-01-02",
+      "description": "Learn exactly how to serve an eviction notice correctly. Avoid common mistakes that invalidate notices and delay possession by months.",
+      "metaDescription": "Step-by-step guide to serving eviction notices in the UK. Learn valid delivery methods, timing rules, and proof requirements for 2026.",
+      "metaDescriptionLength": 134,
+      "readTime": "11 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/serve-notice.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "How to Serve an Eviction Notice - Complete Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "how-long-does-eviction-take-uk",
+      "title": "How Long Does Eviction Take in the UK? Complete Timeline (2026)",
+      "category": "Eviction Guides",
+      "date": "2026-01-02",
+      "updatedDate": "2026-01-02",
+      "description": "Realistic eviction timelines for UK landlords. Learn how long Section 21 and Section 8 evictions take from notice to possession.",
+      "metaDescription": "UK eviction timeline explained: Section 21 takes 4-6 months, Section 8 varies by ground. Get realistic timeframes for 2026.",
+      "metaDescriptionLength": 123,
+      "readTime": "9 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/eviction-timeline.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "UK Eviction Timeline - How Long Does It Take",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "rent-arrears-eviction-guide",
+      "title": "Rent Arrears Eviction: Complete Guide for UK Landlords (2026)",
+      "category": "Eviction Guides",
+      "date": "2026-01-02",
+      "updatedDate": "2026-01-02",
+      "description": "How to evict a tenant for rent arrears in the UK. Step-by-step process for recovering possession and unpaid rent using Section 8 Ground 8.",
+      "metaDescription": "Complete guide to evicting tenants for rent arrears in the UK. Learn about Section 8 Ground 8, timelines, and recovering unpaid rent.",
+      "metaDescriptionLength": 133,
+      "readTime": "11 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/rent-arrears.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Rent Arrears Eviction Guide for UK Landlords",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "england-assured-shorthold-tenancy-guide",
+      "title": "Assured Shorthold Tenancy (AST) Guide - England 2026",
+      "category": "Tenancy Agreements",
+      "date": "2026-01-03",
+      "updatedDate": "2026-01-03",
+      "description": "Complete guide to Assured Shorthold Tenancies in England. Learn the legal requirements, landlord obligations, tenant rights, and how the Renters Rights Act 2025 changes everything.",
+      "metaDescription": "Complete AST guide for England 2026. Legal requirements, landlord obligations, deposit rules, and Renters Rights Act changes. Create compliant tenancy agreements.",
+      "metaDescriptionLength": 162,
+      "readTime": "12 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/ast-england.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Assured Shorthold Tenancy Guide England 2026",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "meta-description-length",
+          "message": "metaDescription target length is 120-160 characters."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "england-section-21-process",
+      "title": "Section 21 Eviction Process Explained (England, 2026)",
+      "category": "Eviction Guides",
+      "date": "2026-01-03",
+      "updatedDate": "2026-01-03",
+      "description": "Step-by-step guide to the Section 21 eviction process in England. Learn the requirements, timeline, court procedures, and why you must act before May 2026 when Section 21 is abolished.",
+      "metaDescription": "Complete Section 21 eviction process guide for England. Step-by-step instructions, timeline, court forms, and deadline warning. Section 21 ends May 2026.",
+      "metaDescriptionLength": 153,
+      "readTime": "14 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/section-21-process.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Section 21 Eviction Process England 2026",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "england-section-8-process",
+      "title": "Section 8 Eviction Process Explained (England, 2026)",
+      "category": "Eviction Guides",
+      "date": "2026-01-03",
+      "updatedDate": "2026-01-03",
+      "description": "Complete guide to Section 8 eviction in England. Learn all 17 grounds for possession, notice periods, court procedures, and when to use Section 8 instead of Section 21.",
+      "metaDescription": "Section 8 eviction guide for England 2026. All grounds explained, notice periods, court process, and step-by-step instructions. Essential after Section 21 ends.",
+      "metaDescriptionLength": 160,
+      "readTime": "15 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/section-8-process.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Section 8 Eviction Process England 2026",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "england-section-8-ground-8",
+      "title": "Section 8 Ground 8 Explained: Mandatory Rent Arrears Eviction (2026)",
+      "category": "Eviction Guides",
+      "date": "2026-01-03",
+      "updatedDate": "2026-01-03",
+      "description": "Complete guide to Section 8 Ground 8 for rent arrears eviction in England. Learn the 2-month threshold, how to prove arrears, court procedures, and common tenant defences.",
+      "metaDescription": "Section 8 Ground 8 rent arrears eviction guide. Mandatory possession for 2+ months arrears. Step-by-step process, evidence requirements, and tenant defences explained.",
+      "metaDescriptionLength": 167,
+      "readTime": "13 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/ground-8.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Section 8 Ground 8 Rent Arrears Eviction",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "meta-description-length",
+          "message": "metaDescription target length is 120-160 characters."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "england-accelerated-possession",
+      "title": "Accelerated Possession Procedure England - Complete Guide 2026",
+      "category": "Eviction",
+      "date": "2026-01-03",
+      "updatedDate": "2026-01-03",
+      "description": "The accelerated possession procedure offers landlords a faster route to eviction through Section 21. Learn eligibility, forms, timelines, and when to use this streamlined court process.",
+      "metaDescription": "Accelerated possession procedure explained for England landlords 2026. Faster Section 21 evictions without court hearings. Learn the process, forms, and timelines.",
+      "metaDescriptionLength": 163,
+      "readTime": "12 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/accelerated-possession.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Accelerated Possession Procedure - England Landlord Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "meta-description-length",
+          "message": "metaDescription target length is 120-160 characters."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "england-standard-possession",
+      "title": "Standard Possession Procedure England - When You Need It (2026 Guide)",
+      "category": "Eviction",
+      "date": "2026-01-03",
+      "updatedDate": "2026-01-03",
+      "description": "The standard possession procedure is required for Section 8 evictions and when claiming rent arrears. Learn the full court process, hearing preparation, and realistic timelines.",
+      "metaDescription": "Standard possession procedure England explained. Required for Section 8 claims and rent arrears recovery. Court hearings, forms, timelines, and expert tips.",
+      "metaDescriptionLength": 156,
+      "readTime": "13 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/standard-possession.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Standard Possession Procedure - England Court Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "england-section-8-ground-10-11",
+      "title": "Section 8 Ground 10 & 11 Explained: Discretionary Rent Arrears Eviction (England)",
+      "category": "Eviction Grounds",
+      "date": "2026-01-03",
+      "updatedDate": "2026-01-03",
+      "description": "Grounds 10 and 11 are discretionary rent arrears grounds. Learn when to use them, how they differ from Ground 8, and how to convince the court possession is reasonable.",
+      "metaDescription": "Section 8 Ground 10 and 11 explained for England landlords. Discretionary rent arrears eviction when Ground 8 fails. Court considerations and success strategies.",
+      "metaDescriptionLength": 161,
+      "readTime": "12 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/ground-10-11.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Section 8 Ground 10 and 11 - Discretionary Rent Arrears",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "meta-description-length",
+          "message": "metaDescription target length is 120-160 characters."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "england-section-8-ground-14",
+      "title": "Section 8 Ground 14 Explained: Antisocial Behaviour Eviction (England)",
+      "category": "Eviction Grounds",
+      "date": "2026-01-03",
+      "updatedDate": "2026-01-03",
+      "description": "Ground 14 allows eviction for antisocial behaviour, nuisance, or illegal activities. Learn what qualifies as ASB, evidence requirements, and the court process.",
+      "metaDescription": "Section 8 Ground 14 antisocial behaviour eviction guide. What counts as ASB, how to gather evidence, notice periods, and court requirements for England landlords.",
+      "metaDescriptionLength": 162,
+      "readTime": "13 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/ground-14-asb.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Section 8 Ground 14 - Antisocial Behaviour Eviction",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "meta-description-length",
+          "message": "metaDescription target length is 120-160 characters."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "england-section-8-ground-17",
+      "title": "Section 8 Ground 17 Explained: False Statement by Tenant (England)",
+      "category": "Eviction Grounds",
+      "date": "2026-01-03",
+      "updatedDate": "2026-01-03",
+      "description": "Ground 17 allows eviction when a tenant obtained the tenancy through false statements. Learn what qualifies, how to prove fraud, and the court process.",
+      "metaDescription": "Section 8 Ground 17 false statement eviction. Evict tenants who lied to get the tenancy. What counts as fraud, evidence needed, and landlord guide for England.",
+      "metaDescriptionLength": 159,
+      "readTime": "11 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/ground-17.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Section 8 Ground 17 - False Statement by Tenant",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "england-section-8-ground-1",
+      "title": "Section 8 Ground 1 Explained: Landlord Returning to Property (England)",
+      "category": "Eviction Grounds",
+      "date": "2026-01-03",
+      "updatedDate": "2026-01-03",
+      "description": "Ground 1 lets landlords recover their property to live in it themselves. Learn the prior notice requirement, when this ground applies, and how to use it correctly.",
+      "metaDescription": "Section 8 Ground 1 explained. Recover your property to live in it as your home. Prior notice requirements, eligibility, and step-by-step England landlord guide.",
+      "metaDescriptionLength": 160,
+      "readTime": "11 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/ground-1.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Section 8 Ground 1 - Landlord Returning to Property",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "england-section-8-ground-2",
+      "title": "Section 8 Ground 2 Explained: Mortgage Lender Repossession (England)",
+      "category": "Eviction Grounds",
+      "date": "2026-01-03",
+      "updatedDate": "2026-01-03",
+      "description": "Ground 2 allows mortgage lenders to recover a property from tenants when the landlord defaults. Learn how this ground works and what it means for landlords and tenants.",
+      "metaDescription": "Section 8 Ground 2 mortgage lender repossession explained. What happens when landlords default on mortgages. Guide for England landlords and affected tenants.",
+      "metaDescriptionLength": 158,
+      "readTime": "10 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/ground-2.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Section 8 Ground 2 - Mortgage Lender Repossession",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "england-section-8-ground-7",
+      "title": "Section 8 Ground 7 Explained: Death of Tenant (England)",
+      "category": "Eviction Grounds",
+      "date": "2026-01-03",
+      "updatedDate": "2026-01-03",
+      "description": "Ground 7 allows possession when the original tenant has died and proceedings are brought within 12 months. Learn succession rights, timing, and the court process.",
+      "metaDescription": "Section 8 Ground 7 death of tenant explained. Regain possession after a tenant dies. Succession rights, 12-month time limit, and step-by-step guide for England.",
+      "metaDescriptionLength": 160,
+      "readTime": "10 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/ground-7.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Section 8 Ground 7 - Death of Tenant",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "england-section-8-ground-12",
+      "title": "Section 8 Ground 12 Explained: Breach of Tenancy Terms (2026)",
+      "category": "Eviction Grounds",
+      "date": "2026-01-03",
+      "updatedDate": "2026-01-03",
+      "description": "Ground 12 allows eviction when tenants breach any obligation of the tenancy agreement. Learn what counts as a breach, evidence requirements, and how to use this discretionary ground.",
+      "metaDescription": "Section 8 Ground 12 explained. Evict tenants for breach of tenancy terms in England. Evidence needed, notice periods, and step-by-step court process guide.",
+      "metaDescriptionLength": 155,
+      "readTime": "12 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/ground-12.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Section 8 Ground 12 - Breach of Tenancy Terms",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "england-possession-hearing",
+      "title": "What Happens at a Possession Hearing - England Guide 2026",
+      "category": "Eviction Process",
+      "date": "2026-01-03",
+      "updatedDate": "2026-01-03",
+      "description": "Nervous about your possession hearing? Learn exactly what happens in court, how to prepare, what documents to bring, and what judges look for when deciding eviction cases.",
+      "metaDescription": "Possession hearing guide for landlords. What to expect at court, how to prepare, documents needed, and tips for success. England county court eviction process.",
+      "metaDescriptionLength": 159,
+      "readTime": "14 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/possession-hearing.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Possession Hearing - What to Expect in Court",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "england-bailiff-eviction",
+      "title": "Bailiff Eviction Day - What to Expect (England Guide 2026)",
+      "category": "Eviction Process",
+      "date": "2026-01-03",
+      "updatedDate": "2026-01-03",
+      "description": "The final step in eviction: bailiff enforcement. Learn what happens on eviction day, your rights and responsibilities, what bailiffs can and cannot do, and how to prepare.",
+      "metaDescription": "Bailiff eviction day explained. What happens when bailiffs enforce possession, your responsibilities as landlord, changing locks, tenant belongings. England guide.",
+      "metaDescriptionLength": 163,
+      "readTime": "13 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/bailiff-eviction.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Bailiff Eviction Day - What to Expect",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "meta-description-length",
+          "message": "metaDescription target length is 120-160 characters."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "england-county-court-forms",
+      "title": "County Court Eviction Forms Explained - N5, N5B, N119 (England 2026)",
+      "category": "Eviction Process",
+      "date": "2026-01-03",
+      "updatedDate": "2026-01-03",
+      "description": "Confused by eviction court forms? This guide explains N5, N5B, N119, N325 and other key forms you need for possession proceedings in England.",
+      "metaDescription": "County court eviction forms explained. N5, N5B, N119, N325 forms for landlord possession claims. Which form to use and how to complete them correctly.",
+      "metaDescriptionLength": 150,
+      "readTime": "14 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/court-forms.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "County Court Eviction Forms - N5, N5B, N119",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "england-deposit-protection",
+      "title": "Deposit Protection England - Schemes Compared 2026",
+      "category": "Compliance",
+      "date": "2026-01-03",
+      "updatedDate": "2026-01-03",
+      "description": "Everything landlords need to know about tenancy deposit protection in England. Compare TDS, DPS, and MyDeposits schemes, learn the rules, and avoid costly penalties.",
+      "metaDescription": "Tenancy deposit protection England 2026. Compare DPS, TDS, MyDeposits schemes. Rules, deadlines, penalties for non-compliance. Complete landlord guide.",
+      "metaDescriptionLength": 151,
+      "readTime": "13 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/deposit-protection.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Deposit Protection Schemes England",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "england-hmo-licensing",
+      "title": "HMO Licensing England - Complete Guide 2026",
+      "category": "Compliance",
+      "date": "2026-01-03",
+      "updatedDate": "2026-01-03",
+      "description": "Does your property need an HMO licence? This guide explains mandatory and additional licensing schemes, how to apply, conditions, and penalties for non-compliance.",
+      "metaDescription": "HMO licensing England 2026. Mandatory licensing rules, additional licensing schemes, how to apply, costs, conditions, and penalties. Complete landlord guide.",
+      "metaDescriptionLength": 157,
+      "readTime": "14 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/hmo-licensing.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "HMO Licensing England Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "england-money-claim-online",
+      "title": "Money Claim Online (MCOL) - England & Wales Guide 2026",
+      "category": "Money Claims",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Complete guide to using Money Claim Online to recover rent arrears. Learn the MCOL process, fees, timescales, and how to enforce your judgment against tenants.",
+      "metaDescription": "Use Money Claim Online to recover rent arrears from tenants. Complete MCOL guide for landlords covering claims, fees, and enforcement in 2026.",
+      "metaDescriptionLength": 142,
+      "readTime": "14 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/mcol.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Money Claim Online Guide for Landlords",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "england-particulars-of-claim",
+      "title": "How to Write Particulars of Claim - Rent Arrears (England 2026)",
+      "category": "Money Claims",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Learn how to write effective particulars of claim for rent arrears cases. Step-by-step guide with examples for County Court money claims against tenants.",
+      "metaDescription": "Write effective particulars of claim for rent arrears. Step-by-step guide with examples for County Court money claims against tenants in England.",
+      "metaDescriptionLength": 145,
+      "readTime": "12 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/particulars.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "How to Write Particulars of Claim",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "scotland-private-residential-tenancy",
+      "title": "Private Residential Tenancy (PRT) Guide - Scotland 2026",
+      "category": "Scottish Law",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Complete guide to Scotland Private Residential Tenancy. Learn about PRT rules, tenant rights, landlord obligations, rent increases, and how PRTs differ from ASTs.",
+      "metaDescription": "Scotland Private Residential Tenancy (PRT) guide for landlords. Learn PRT rules, notice periods, rent increases, and eviction grounds in 2026.",
+      "metaDescriptionLength": 142,
+      "readTime": "15 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/prt.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Private Residential Tenancy Scotland Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "scotland-eviction-process",
+      "title": "Scotland Eviction Process Explained - Landlord Guide 2026",
+      "category": "Scottish Law",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Complete guide to the Scotland eviction process for landlords. Learn about Notice to Leave, First-tier Tribunal applications, eviction orders, and enforcement.",
+      "metaDescription": "Scotland eviction process guide for landlords. Learn Notice to Leave, Tribunal applications, eviction orders, and enforcement steps in 2026.",
+      "metaDescriptionLength": 140,
+      "readTime": "16 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/scotland-eviction.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Scotland Eviction Process Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "scotland-notice-to-leave",
+      "title": "Scotland Notice to Leave - Complete Guide 2026",
+      "category": "Scottish Law",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Complete guide to serving a Notice to Leave in Scotland. Learn notice periods, prescribed form requirements, service methods, and common mistakes to avoid.",
+      "metaDescription": "How to serve a Notice to Leave in Scotland. Guide to notice periods, prescribed forms, service methods, and requirements for PRT evictions.",
+      "metaDescriptionLength": 139,
+      "readTime": "13 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/notice-leave.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Scotland Notice to Leave Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "scotland-first-tier-tribunal",
+      "title": "Scotland First-tier Tribunal - Landlord Guide 2026",
+      "category": "Scottish Law",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Complete guide to the First-tier Tribunal (Housing and Property Chamber) in Scotland. Learn how to apply for eviction orders, what to expect at hearings, and how to prepare.",
+      "metaDescription": "First-tier Tribunal Scotland guide for landlords. Learn how to apply for eviction orders, prepare for hearings, and navigate the Tribunal process.",
+      "metaDescriptionLength": 146,
+      "readTime": "14 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/tribunal.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Scotland First-tier Tribunal Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "scotland-eviction-ground-12",
+      "title": "Scotland Ground 12 - Rent Arrears Eviction Guide 2026",
+      "category": "Scottish Law",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Complete guide to Ground 12 rent arrears eviction in Scotland. Learn when Ground 12 is mandatory vs discretionary, notice requirements, and Tribunal process.",
+      "metaDescription": "Scotland Ground 12 rent arrears eviction guide. Learn mandatory vs discretionary grounds, notice periods, and Tribunal process for 2026.",
+      "metaDescriptionLength": 136,
+      "readTime": "14 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/ground-12-scotland.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Scotland Ground 12 Rent Arrears Eviction",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "scotland-eviction-ground-1",
+      "title": "Scotland Ground 1 - Landlord Selling Property Guide 2026",
+      "category": "Scottish Law",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Complete guide to Ground 1 eviction in Scotland when selling your rental property. Learn requirements, notice periods, and how to prove genuine intention to sell.",
+      "metaDescription": "Scotland Ground 1 eviction guide for landlords selling their property. Learn notice periods, evidence requirements, and Tribunal process for 2026.",
+      "metaDescriptionLength": 146,
+      "readTime": "12 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/ground-1.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Scotland Ground 1 Landlord Selling Property",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "scotland-eviction-ground-4",
+      "title": "Scotland Ground 4 - Landlord Moving In Guide 2026",
+      "category": "Scottish Law",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Complete guide to Ground 4 eviction in Scotland when you or family want to live in the property. Learn requirements, qualifying family members, and Tribunal process.",
+      "metaDescription": "Scotland Ground 4 eviction guide when landlord or family needs to move in. Learn requirements, notice periods, and Tribunal process for 2026.",
+      "metaDescriptionLength": 141,
+      "readTime": "12 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/ground-4.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Scotland Ground 4 Landlord Moving In",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "scotland-eviction-ground-11",
+      "title": "Scotland Ground 11 - Breach of Tenancy Agreement Guide 2026",
+      "category": "Scottish Law",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Complete guide to Ground 11 eviction in Scotland for breach of tenancy agreement. Learn what constitutes a breach, evidence required, and Tribunal considerations.",
+      "metaDescription": "Scotland Ground 11 eviction guide for breach of tenancy. Learn what constitutes breach, evidence needed, and Tribunal process for 2026.",
+      "metaDescriptionLength": 135,
+      "readTime": "13 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/ground-11.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Scotland Ground 11 Breach of Tenancy",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "scotland-eviction-ground-3",
+      "title": "Scotland Ground 3 - Property Refurbishment Guide 2026",
+      "category": "Scottish Law",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Complete guide to Ground 3 eviction in Scotland for property refurbishment. Learn requirements, evidence needed, and how to prove genuine refurbishment plans.",
+      "metaDescription": "Scotland Ground 3 eviction guide for property refurbishment. Learn requirements, evidence, and Tribunal process for landlords in 2026.",
+      "metaDescriptionLength": 134,
+      "readTime": "11 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/ground-3.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Scotland Ground 3 - Landlord Refurbishment Eviction",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "scotland-eviction-ground-14",
+      "title": "Scotland Ground 14 - Antisocial Behaviour Eviction Guide 2026",
+      "category": "Scottish Law",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Complete guide to Ground 14 eviction in Scotland for antisocial behaviour. Learn what constitutes antisocial behaviour, evidence required, and Tribunal process.",
+      "metaDescription": "Scotland Ground 14 antisocial behaviour eviction guide. Learn evidence requirements, Tribunal process, and tips for landlords in 2026.",
+      "metaDescriptionLength": 134,
+      "readTime": "14 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/ground-14.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Scotland Ground 14 - Antisocial Behaviour Eviction",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "scotland-eviction-ground-6",
+      "title": "Scotland Ground 6 - Non-Residential Purpose Eviction Guide 2026",
+      "category": "Scottish Law",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Complete guide to Ground 6 eviction in Scotland when the landlord intends to use the property for a non-residential purpose. Learn requirements, evidence needed, and Tribunal process.",
+      "metaDescription": "Scotland Ground 6 non-residential purpose eviction guide. Learn requirements, evidence, and Tribunal process for landlords in 2026.",
+      "metaDescriptionLength": 131,
+      "readTime": "12 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/ground-6.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Scotland Ground 6 - Non-Residential Purpose Eviction",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "scotland-eviction-ground-7",
+      "title": "Scotland Ground 7 - Property Demolition Eviction Guide 2026",
+      "category": "Scottish Law",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Complete guide to Ground 7 eviction in Scotland when the landlord intends to demolish the property. Learn requirements, evidence needed, and Tribunal process.",
+      "metaDescription": "Scotland Ground 7 demolition eviction guide. Learn requirements, evidence, and Tribunal process for Scottish landlords in 2026.",
+      "metaDescriptionLength": 127,
+      "readTime": "11 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/ground-7.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Scotland Ground 7 - Property Demolition Eviction",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "scotland-eviction-ground-13",
+      "title": "Scotland Ground 13 - Criminal Behaviour Eviction Guide 2026",
+      "category": "Scottish Law",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Complete guide to Ground 13 eviction in Scotland for tenant criminal behaviour. Learn what convictions qualify, evidence requirements, and Tribunal process.",
+      "metaDescription": "Scotland Ground 13 criminal behaviour eviction guide. Learn qualifying convictions, evidence needs, and Tribunal process for landlords 2026.",
+      "metaDescriptionLength": 140,
+      "readTime": "14 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/ground-13.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Scotland Ground 13 - Criminal Behaviour Eviction",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "scotland-eviction-ground-15",
+      "title": "Scotland Ground 15 - Antisocial Association Eviction Guide 2026",
+      "category": "Scottish Law",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Complete guide to Ground 15 eviction in Scotland when the tenant associates with someone who has behaved antisocially. Learn requirements and Tribunal process.",
+      "metaDescription": "Scotland Ground 15 antisocial association eviction guide. Requirements, evidence, and Tribunal process for Scottish landlords 2026.",
+      "metaDescriptionLength": 131,
+      "readTime": "12 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/ground-15.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Scotland Ground 15 - Antisocial Association Eviction",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "scotland-simple-procedure",
+      "title": "Simple Procedure Scotland - Recovering Rent Arrears Guide 2026",
+      "category": "Scottish Law",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Complete guide to using Simple Procedure in Scotland to recover rent arrears from tenants. Learn court fees, forms, and the step-by-step process.",
+      "metaDescription": "Scotland Simple Procedure guide for landlords. Recover rent arrears up to £5,000 through the Sheriff Court. Step-by-step process 2026.",
+      "metaDescriptionLength": 134,
+      "readTime": "13 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/simple-procedure.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Scotland Simple Procedure - Rent Recovery",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "scotland-deposit-protection",
+      "title": "Deposit Protection Scotland - Tenancy Deposit Schemes Guide 2026",
+      "category": "Scottish Law",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Complete guide to deposit protection in Scotland. Learn which schemes to use, deadlines, penalties for non-compliance, and how to handle deposit disputes.",
+      "metaDescription": "Scotland deposit protection guide for landlords. Tenancy deposit schemes, deadlines, penalties and disputes explained for 2026.",
+      "metaDescriptionLength": 127,
+      "readTime": "14 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/deposit-protection.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Scotland Deposit Protection Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "scotland-landlord-registration",
+      "title": "Landlord Registration Scotland - Complete Requirements Guide 2026",
+      "category": "Scottish Law",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Complete guide to landlord registration in Scotland. Learn registration requirements, fees, renewal process, and penalties for non-compliance.",
+      "metaDescription": "Scotland landlord registration guide. Requirements, fees, renewal process and penalties for Scottish landlords explained for 2026.",
+      "metaDescriptionLength": 130,
+      "readTime": "12 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/landlord-registration.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Scotland Landlord Registration Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "scotland-hmo-licensing",
+      "title": "HMO Licensing Scotland - Complete Guide 2026",
+      "category": "Scottish Law",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Complete guide to HMO licensing in Scotland. Learn when you need a licence, application process, conditions, fees, and penalties for non-compliance.",
+      "metaDescription": "Scotland HMO licensing guide for landlords. When you need a licence, fees, conditions, and penalties explained for 2026.",
+      "metaDescriptionLength": 120,
+      "readTime": "15 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/hmo-licensing.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Scotland HMO Licensing Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "scotland-repairing-standard",
+      "title": "Scottish Repairing Standard - Landlord Obligations Guide 2026",
+      "category": "Scottish Law",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Complete guide to the Repairing Standard in Scotland. Learn what landlords must provide, how to comply, and what happens if you breach the standard.",
+      "metaDescription": "Scotland Repairing Standard guide for landlords. Property condition obligations, compliance requirements, and enforcement explained 2026.",
+      "metaDescriptionLength": 137,
+      "readTime": "13 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/repairing-standard.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Scotland Repairing Standard Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "wales-standard-occupation-contract",
+      "title": "Standard Occupation Contract Wales - Complete Landlord Guide 2026",
+      "category": "Welsh Law",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Comprehensive guide to Standard Occupation Contracts under the Renting Homes (Wales) Act 2016. Understand your legal obligations as a Welsh landlord.",
+      "metaDescription": "Complete guide to Standard Occupation Contracts in Wales. Learn contract requirements, landlord obligations, and compliance under the Renting Homes Act 2016.",
+      "metaDescriptionLength": 157,
+      "readTime": "14 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/wales-contract.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Wales Standard Occupation Contract Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "wales-renting-homes-act",
+      "title": "Renting Homes (Wales) Act 2016 - Complete Landlord Guide",
+      "category": "Welsh Law",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Everything landlords need to know about the Renting Homes (Wales) Act 2016. Key changes, compliance requirements, and practical guidance for Welsh landlords.",
+      "metaDescription": "Complete guide to the Renting Homes (Wales) Act 2016 for landlords. Understand key changes, compliance requirements, and how to stay legal in Wales.",
+      "metaDescriptionLength": 148,
+      "readTime": "15 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/wales-renting-act.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Renting Homes Wales Act 2016 Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "wales-eviction-process",
+      "title": "Wales Eviction Process Explained - Landlord Guide 2026",
+      "category": "Welsh Law",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Step-by-step guide to evicting tenants in Wales under the Renting Homes Act. Learn about Section 173, Section 181, notice periods, and court procedures.",
+      "metaDescription": "Complete guide to the Wales eviction process under the Renting Homes Act. Section 173 and 181 notices, court procedures, and landlord requirements.",
+      "metaDescriptionLength": 147,
+      "readTime": "16 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/wales-eviction.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Wales Eviction Process Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "wales-deposit-protection",
+      "title": "Deposit Protection Wales - Complete Landlord Guide 2026",
+      "category": "Welsh Law",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Complete guide to protecting tenancy deposits in Wales. Learn about approved schemes, prescribed information, and compliance requirements under Welsh law.",
+      "metaDescription": "Complete guide to deposit protection in Wales. Approved schemes, prescribed information requirements, and compliance under the Renting Homes Act.",
+      "metaDescriptionLength": 145,
+      "readTime": "12 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/wales-deposit.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Wales Deposit Protection Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "rent-smart-wales",
+      "title": "Rent Smart Wales - Complete Registration Guide 2026",
+      "category": "Welsh Law",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Everything landlords need to know about Rent Smart Wales registration and licensing. Learn requirements, fees, exemptions, and how to register.",
+      "metaDescription": "Complete guide to Rent Smart Wales registration for landlords. Registration requirements, fees, licensing, and compliance guidance.",
+      "metaDescriptionLength": 131,
+      "readTime": "13 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/rent-smart-wales.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Rent Smart Wales Registration Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "wales-hmo-licensing",
+      "title": "HMO Licensing Wales - Complete Landlord Guide 2026",
+      "category": "Welsh Law",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Complete guide to HMO licensing in Wales. Learn about mandatory licensing, additional licensing schemes, standards, and compliance requirements.",
+      "metaDescription": "Complete guide to HMO licensing in Wales. Mandatory and additional licensing, standards, safety requirements, and how to apply.",
+      "metaDescriptionLength": 127,
+      "readTime": "14 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/wales-hmo.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Wales HMO Licensing Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "wales-fitness-human-habitation",
+      "title": "Fitness for Human Habitation Wales - Complete Guide 2026",
+      "category": "Welsh Law",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Complete guide to fitness for human habitation requirements in Wales. Learn about the 29 matters, landlord obligations, and tenant rights under Welsh law.",
+      "metaDescription": "Guide to fitness for human habitation requirements in Wales. 29 matters, landlord obligations, and compliance under the Renting Homes Act.",
+      "metaDescriptionLength": 138,
+      "readTime": "13 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/wales-fitness.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Wales Fitness for Human Habitation Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "wales-possession-grounds",
+      "title": "Wales Possession Grounds - Complete Guide to Eviction Reasons 2026",
+      "category": "Welsh Law",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Complete guide to all possession grounds under the Renting Homes (Wales) Act. Learn about mandatory and discretionary grounds for eviction in Wales.",
+      "metaDescription": "Complete guide to possession grounds in Wales. Mandatory and discretionary grounds, notice periods, and requirements under the Renting Homes Act.",
+      "metaDescriptionLength": 145,
+      "readTime": "15 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/wales-grounds.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Wales Possession Grounds Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "wales-landlord-obligations-checklist",
+      "title": "Wales Landlord Obligations - Complete Checklist 2026",
+      "category": "Welsh Law",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Complete checklist of landlord obligations in Wales. Covers Rent Smart Wales, safety requirements, occupation contracts, and ongoing duties.",
+      "metaDescription": "Complete checklist of Wales landlord obligations. Safety certificates, Rent Smart Wales, occupation contracts, and compliance requirements.",
+      "metaDescriptionLength": 139,
+      "readTime": "11 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/wales-checklist.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Wales Landlord Obligations Checklist",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "wales-rent-increases",
+      "title": "Rent Increases Wales - Complete Landlord Guide 2026",
+      "category": "Welsh Law",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Complete guide to increasing rent in Wales under the Renting Homes Act. Learn about notice periods, frequency limits, and tenant rights.",
+      "metaDescription": "Guide to rent increases in Wales. Notice periods, frequency limits, and procedures under the Renting Homes (Wales) Act 2016.",
+      "metaDescriptionLength": 124,
+      "readTime": "11 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/wales-rent.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Wales Rent Increases Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "wales-abandoned-property",
+      "title": "Abandoned Property Wales - What Landlords Can Do 2026",
+      "category": "Welsh Law",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Guide for Welsh landlords dealing with abandoned properties. Learn about the abandonment process under the Renting Homes Act and recovering possession.",
+      "metaDescription": "Guide to handling abandoned property in Wales. Abandonment procedures, warning notices, and possession recovery under the Renting Homes Act.",
+      "metaDescriptionLength": 140,
+      "readTime": "10 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/wales-abandoned.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Wales Abandoned Property Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "wales-joint-tenancies",
+      "title": "Joint Occupation Contracts Wales - Complete Guide 2026",
+      "category": "Welsh Law",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Guide to joint occupation contracts in Wales. Learn about joint and several liability, adding/removing tenants, and what happens when one leaves.",
+      "metaDescription": "Complete guide to joint occupation contracts in Wales. Joint liability, adding tenants, succession, and managing joint tenancies.",
+      "metaDescriptionLength": 129,
+      "readTime": "12 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/wales-joint.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Wales Joint Occupation Contracts Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "wales-gas-electrical-safety",
+      "title": "Gas & Electrical Safety Wales - Landlord Requirements 2026",
+      "category": "Welsh Law",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Complete guide to gas and electrical safety requirements for landlords in Wales under the Renting Homes (Wales) Act 2016. Certificates, testing intervals, and compliance.",
+      "metaDescription": "Wales landlord gas & electrical safety guide 2026. EICR requirements, gas safety certificates, testing intervals, and compliance under Renting Homes Act.",
+      "metaDescriptionLength": 153,
+      "readTime": "13 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/wales-safety.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Wales Gas and Electrical Safety Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "wales-epc-requirements",
+      "title": "EPC Requirements Wales - Landlord Energy Efficiency Guide 2026",
+      "category": "Welsh Law",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Complete guide to Energy Performance Certificate requirements for landlords in Wales. MEES regulations, minimum ratings, exemptions, and compliance guidance.",
+      "metaDescription": "Wales landlord EPC requirements 2026. Minimum E rating, MEES regulations, exemptions, and energy efficiency compliance for Welsh rental properties.",
+      "metaDescriptionLength": 147,
+      "readTime": "12 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/wales-epc.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Wales EPC Requirements Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "wales-anti-social-behaviour-possession",
+      "title": "Anti-Social Behaviour Eviction Wales - Possession Grounds Guide 2026",
+      "category": "Welsh Law",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Complete guide to using anti-social behaviour grounds for possession in Wales. Evidence requirements, procedures, and obtaining possession orders under Welsh law.",
+      "metaDescription": "Wales anti-social behaviour eviction guide 2026. Possession grounds, evidence requirements, procedures, and court process for ASB under Welsh law.",
+      "metaDescriptionLength": 146,
+      "readTime": "14 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/wales-asb.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Wales Anti-Social Behaviour Eviction Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "wales-notice-periods-landlords",
+      "title": "Wales Notice Periods - Complete Landlord Reference Guide 2026",
+      "category": "Welsh Law",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Complete reference guide to all notice periods for landlords in Wales. Section 173, Section 186, and other notices under the Renting Homes (Wales) Act 2016.",
+      "metaDescription": "Wales landlord notice periods 2026. Section 173, Section 186, and all required notices under Renting Homes Act. Complete quick reference guide.",
+      "metaDescriptionLength": 143,
+      "readTime": "11 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/wales-notices.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Wales Notice Periods Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "wales-contract-holder-rights",
+      "title": "Contract-Holder Rights Wales - What Landlords Must Know 2026",
+      "category": "Welsh Law",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Understanding contract-holder rights under Welsh law. Landlord obligations, tenant protections, and avoiding disputes under the Renting Homes (Wales) Act.",
+      "metaDescription": "Wales contract-holder rights 2026. Tenant protections landlords must understand, legal obligations, and how to avoid disputes under Welsh law.",
+      "metaDescriptionLength": 142,
+      "readTime": "13 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/wales-rights.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Wales Contract-Holder Rights Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "wales-residential-property-tribunal",
+      "title": "Residential Property Tribunal Wales - Landlord Guide 2026",
+      "category": "Welsh Law",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Complete guide to the Residential Property Tribunal Wales. When to use it, procedures, costs, and what landlords should expect from tribunal hearings.",
+      "metaDescription": "Wales Residential Property Tribunal guide 2026. Applications, procedures, costs, and what landlords should expect from RPT Wales hearings.",
+      "metaDescriptionLength": 138,
+      "readTime": "12 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/wales-tribunal.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Wales Residential Property Tribunal Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "northern-ireland-private-tenancies-order",
+      "title": "Private Tenancies Order NI - Complete Landlord Guide 2026",
+      "category": "Northern Ireland Law",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Complete guide to the Private Tenancies (Northern Ireland) Order 2006. Landlord obligations, tenant rights, and compliance requirements for NI landlords.",
+      "metaDescription": "Northern Ireland Private Tenancies Order guide 2026. NI landlord obligations, tenant rights, and legal compliance requirements for rental properties.",
+      "metaDescriptionLength": 149,
+      "readTime": "14 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/ni-tenancies.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Northern Ireland Private Tenancies Order Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "northern-ireland-landlord-registration",
+      "title": "NI Landlord Registration - Complete Guide 2026",
+      "category": "Northern Ireland Law",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "How to register as a landlord in Northern Ireland. Registration requirements, fees, renewal process, and consequences of non-registration.",
+      "metaDescription": "Northern Ireland landlord registration guide 2026. How to register, fees, renewal requirements, and penalties for non-registration.",
+      "metaDescriptionLength": 131,
+      "readTime": "11 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/ni-registration.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Northern Ireland Landlord Registration Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "northern-ireland-deposit-protection",
+      "title": "NI Tenancy Deposit Protection - Complete Guide 2026",
+      "category": "Northern Ireland Law",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "How to protect tenancy deposits in Northern Ireland. Deposit scheme requirements, protection deadlines, and returning deposits at end of tenancy.",
+      "metaDescription": "Northern Ireland deposit protection guide 2026. NI deposit scheme requirements, protection deadlines, prescribed information, and dispute resolution.",
+      "metaDescriptionLength": 149,
+      "readTime": "12 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/ni-deposit.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Northern Ireland Deposit Protection Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "northern-ireland-eviction-process",
+      "title": "NI Eviction Process - Complete Landlord Guide 2026",
+      "category": "Northern Ireland Law",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Step-by-step guide to evicting tenants in Northern Ireland. Notice requirements, court process, and regaining possession under NI law.",
+      "metaDescription": "Northern Ireland eviction guide 2026. Notice to quit requirements, court process, grounds for possession, and regaining possession in NI.",
+      "metaDescriptionLength": 137,
+      "readTime": "13 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/ni-eviction.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Northern Ireland Eviction Process Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "uk-landlord-insurance-guide",
+      "title": "Landlord Insurance UK - Complete Coverage Guide 2026",
+      "category": "UK-Wide",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Everything you need to know about landlord insurance in the UK. Types of cover, what to look for, and protecting your rental investment.",
+      "metaDescription": "UK landlord insurance guide 2026. Buildings, contents, rent guarantee, legal expenses, and liability cover for rental properties.",
+      "metaDescriptionLength": 129,
+      "readTime": "14 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/uk-insurance.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "UK Landlord Insurance Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "uk-landlord-tax-guide",
+      "title": "Landlord Tax UK - Complete Guide 2026",
+      "category": "UK-Wide",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Everything landlords need to know about tax in the UK. Income tax, allowable expenses, capital gains, and tax-efficient structures.",
+      "metaDescription": "UK landlord tax guide 2026. Income tax on rental profits, allowable expenses, mortgage interest relief, capital gains, and tax planning tips.",
+      "metaDescriptionLength": 141,
+      "readTime": "15 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/uk-tax.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "UK Landlord Tax Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "uk-gas-safety-landlords",
+      "title": "UK Gas Safety for Landlords - Complete Compliance Guide 2026",
+      "category": "Safety Compliance",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Essential guide to gas safety requirements for UK landlords. Learn about Gas Safety Certificates, CP12 records, annual checks, and legal obligations.",
+      "metaDescription": "UK landlord gas safety guide 2026. Gas Safety Certificates, CP12 requirements, annual checks, Gas Safe Register engineers, and compliance obligations.",
+      "metaDescriptionLength": 150,
+      "readTime": "14 min read",
+      "author": {
+        "name": "Landlord Heaven Safety Team",
+        "role": "Property Safety Specialists"
+      },
+      "heroImage": "/images/blog/gas-safety.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "UK Gas Safety Requirements for Landlords",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "uk-fire-safety-landlords",
+      "title": "UK Fire Safety for Landlords - Complete Compliance Guide 2026",
+      "category": "Safety Compliance",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Essential fire safety guide for UK landlords. Learn about smoke alarms, carbon monoxide detectors, fire doors, furniture regulations, and HMO requirements.",
+      "metaDescription": "UK landlord fire safety guide 2026. Smoke alarm rules, CO detectors, fire doors, furniture regulations, HMO requirements, and compliance explained.",
+      "metaDescriptionLength": 147,
+      "readTime": "15 min read",
+      "author": {
+        "name": "Landlord Heaven Safety Team",
+        "role": "Property Safety Specialists"
+      },
+      "heroImage": "/images/blog/fire-safety.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "UK Fire Safety Requirements for Landlords",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "uk-tenant-referencing-guide",
+      "title": "UK Tenant Referencing - Complete Landlord Guide 2026",
+      "category": "Tenant Management",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Comprehensive guide to tenant referencing for UK landlords. Learn about credit checks, employment verification, landlord references, and choosing referencing services.",
+      "metaDescription": "UK tenant referencing guide 2026. Credit checks, employment verification, landlord references, referencing services, and best practices for landlords.",
+      "metaDescriptionLength": 150,
+      "readTime": "13 min read",
+      "author": {
+        "name": "Landlord Heaven Team",
+        "role": "Property Management Specialists"
+      },
+      "heroImage": "/images/blog/tenant-referencing.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "UK Tenant Referencing Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "uk-right-to-rent-checks",
+      "title": "UK Right to Rent Checks - Landlord Compliance Guide 2026",
+      "category": "Legal Compliance",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Complete guide to Right to Rent checks for UK landlords. Learn about document verification, follow-up checks, digital verification, and avoiding discrimination.",
+      "metaDescription": "UK Right to Rent guide 2026. Document checks, digital verification, follow-up requirements, penalties, and discrimination avoidance for landlords.",
+      "metaDescriptionLength": 146,
+      "readTime": "14 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/right-to-rent.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "UK Right to Rent Checks Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "uk-deposit-protection-guide",
+      "title": "UK Deposit Protection - Complete Landlord Guide 2026",
+      "category": "Legal Compliance",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Essential guide to tenant deposit protection for UK landlords. Learn about government-approved schemes, prescribed information, deadlines, and dispute resolution.",
+      "metaDescription": "UK deposit protection guide 2026. Government schemes, prescribed information, 30-day deadlines, dispute resolution, and penalties explained for landlords.",
+      "metaDescriptionLength": 154,
+      "readTime": "14 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/deposit-protection.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "UK Deposit Protection Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "uk-rent-arrears-guide",
+      "title": "UK Rent Arrears - Landlord Recovery Guide 2026",
+      "category": "Property Management",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Comprehensive guide to handling rent arrears for UK landlords. Learn about communication strategies, legal options, Section 8 notices, and debt recovery.",
+      "metaDescription": "UK rent arrears guide 2026. Communication strategies, Section 8 notices, Ground 8, 10, 11, debt recovery, and eviction process explained for landlords.",
+      "metaDescriptionLength": 151,
+      "readTime": "15 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/rent-arrears.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "UK Rent Arrears Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "uk-tenancy-agreements-guide",
+      "title": "UK Tenancy Agreements - Complete Landlord Guide 2026",
+      "category": "Legal Compliance",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Essential guide to tenancy agreements for UK landlords. Learn about AST terms, clauses, legal requirements, and how to create enforceable contracts.",
+      "metaDescription": "UK tenancy agreement guide 2026. AST essentials, key clauses, legal requirements, break clauses, and creating enforceable contracts explained.",
+      "metaDescriptionLength": 142,
+      "readTime": "14 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/tenancy-agreement.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "UK Tenancy Agreement Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "uk-property-maintenance-obligations",
+      "title": "UK Property Maintenance Obligations - Complete Landlord Guide 2026",
+      "category": "Property Management",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Comprehensive guide to landlord property maintenance obligations across the UK. Understand your legal responsibilities for repairs, safety, and property standards.",
+      "metaDescription": "UK landlord maintenance obligations 2026. Complete guide to repair responsibilities, safety requirements, response times, and compliance across England, Wales, Scotland & NI.",
+      "metaDescriptionLength": 174,
+      "readTime": "15 min read",
+      "author": {
+        "name": "Landlord Heaven Property Team",
+        "role": "Property Management Specialists"
+      },
+      "heroImage": "/images/blog/maintenance.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "UK Property Maintenance Obligations Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "meta-description-length",
+          "message": "metaDescription target length is 120-160 characters."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "uk-end-of-tenancy-guide",
+      "title": "UK End of Tenancy Guide - Complete Process for Landlords 2026",
+      "category": "Property Management",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Complete guide to managing end of tenancy in the UK. From notice periods to deposit returns, inspections to checkout procedures.",
+      "metaDescription": "UK end of tenancy guide for landlords 2026. Complete process for notices, inspections, checkout procedures, deposit deductions, and handover across all UK regions.",
+      "metaDescriptionLength": 163,
+      "readTime": "16 min read",
+      "author": {
+        "name": "Landlord Heaven Property Team",
+        "role": "Property Management Specialists"
+      },
+      "heroImage": "/images/blog/end-tenancy.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "UK End of Tenancy Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "meta-description-length",
+          "message": "metaDescription target length is 120-160 characters."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "uk-property-inspections-guide",
+      "title": "UK Property Inspections - Complete Landlord Guide 2026",
+      "category": "Property Management",
+      "date": "2026-01-03",
+      "updatedDate": "",
+      "description": "Essential guide to conducting property inspections as a UK landlord. Learn about legal requirements, best practices, and inspection procedures.",
+      "metaDescription": "UK property inspections guide for landlords 2026. Legal requirements, notice periods, inspection checklists, and best practices for England, Wales, Scotland & NI.",
+      "metaDescriptionLength": 162,
+      "readTime": "14 min read",
+      "author": {
+        "name": "Landlord Heaven Property Team",
+        "role": "Property Management Specialists"
+      },
+      "heroImage": "/images/blog/inspections.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "UK Property Inspections Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "meta-description-length",
+          "message": "metaDescription target length is 120-160 characters."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "uk-landlord-tenant-communication",
+      "title": "UK Landlord-Tenant Communication - Best Practice Guide 2026",
+      "category": "Property Management",
+      "date": "2026-01-04",
+      "updatedDate": "",
+      "description": "Essential guide to effective landlord-tenant communication. Build better relationships, handle issues professionally, and maintain legal compliance.",
+      "metaDescription": "UK landlord-tenant communication guide 2026. Best practices for professional communication, handling disputes, notice requirements, and building relationships.",
+      "metaDescriptionLength": 159,
+      "readTime": "13 min read",
+      "author": {
+        "name": "Landlord Heaven Property Team",
+        "role": "Property Management Specialists"
+      },
+      "heroImage": "/images/blog/communication.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "UK Landlord-Tenant Communication Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "uk-buy-to-let-investment-guide",
+      "title": "UK Buy-to-Let Investment - Complete Guide 2026",
+      "category": "Property Investment",
+      "date": "2026-01-04",
+      "updatedDate": "",
+      "description": "Comprehensive guide to buy-to-let property investment in the UK. Understand financing, yields, costs, and strategies for building a property portfolio.",
+      "metaDescription": "UK buy-to-let investment guide 2026. Property selection, financing options, yield calculations, costs analysis, and portfolio building strategies.",
+      "metaDescriptionLength": 146,
+      "readTime": "18 min read",
+      "author": {
+        "name": "Landlord Heaven Investment Team",
+        "role": "Property Investment Specialists"
+      },
+      "heroImage": "/images/blog/investment.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "UK Buy-to-Let Investment Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "uk-money-claims-online-guide",
+      "title": "UK Money Claims Online - Complete Landlord Guide 2026",
+      "category": "Legal Compliance",
+      "date": "2026-01-04",
+      "updatedDate": "",
+      "description": "Comprehensive guide to using Money Claims Online for UK landlords. Recover unpaid rent and damages through the courts efficiently.",
+      "metaDescription": "UK Money Claims Online guide for landlords 2026. Step-by-step process for claiming unpaid rent, court fees, enforcement options, and success tips.",
+      "metaDescriptionLength": 146,
+      "readTime": "16 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/money-claims.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "UK Money Claims Online Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "uk-landlord-software-tools-guide",
+      "title": "UK Landlord Software & Tools - Complete Guide 2026",
+      "category": "Property Management",
+      "date": "2026-01-04",
+      "updatedDate": "",
+      "description": "Comprehensive guide to property management software and tools for UK landlords. Streamline your landlord business with the right technology.",
+      "metaDescription": "UK landlord software guide 2026. Property management tools, accounting software, tenant apps, inventory systems, and technology for efficient landlord operations.",
+      "metaDescriptionLength": 162,
+      "readTime": "14 min read",
+      "author": {
+        "name": "Landlord Heaven Tech Team",
+        "role": "Property Technology Specialists"
+      },
+      "heroImage": "/images/blog/software.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "UK Landlord Software Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "meta-description-length",
+          "message": "metaDescription target length is 120-160 characters."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "uk-property-inventory-guide",
+      "title": "UK Property Inventory - Complete Landlord Guide 2026",
+      "category": "Property Management",
+      "date": "2026-01-04",
+      "updatedDate": "",
+      "description": "Essential guide to property inventories for UK landlords. Protect your deposit claims with thorough documentation at check-in and checkout.",
+      "metaDescription": "UK property inventory guide for landlords 2026. Creating inventories, photography tips, check-in procedures, checkout comparisons, and deposit protection.",
+      "metaDescriptionLength": 154,
+      "readTime": "15 min read",
+      "author": {
+        "name": "Landlord Heaven Property Team",
+        "role": "Property Management Specialists"
+      },
+      "heroImage": "/images/blog/inventory.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "UK Property Inventory Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "uk-rent-collection-methods-guide",
+      "title": "UK Rent Collection Methods - Complete Landlord Guide 2026",
+      "category": "Property Management",
+      "date": "2026-01-04",
+      "updatedDate": "",
+      "description": "Comprehensive guide to rent collection methods for UK landlords. Optimize your payment processes for reliable income and efficient administration.",
+      "metaDescription": "UK rent collection guide for landlords 2026. Payment methods, standing orders, direct debits, online platforms, and best practices for reliable rent collection.",
+      "metaDescriptionLength": 160,
+      "readTime": "13 min read",
+      "author": {
+        "name": "Landlord Heaven Finance Team",
+        "role": "Property Finance Specialists"
+      },
+      "heroImage": "/images/blog/rent-collection.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "UK Rent Collection Methods Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "uk-epc-requirements-guide",
+      "title": "UK EPC Requirements - Complete Landlord Guide 2026",
+      "category": "Legal Compliance",
+      "date": "2026-01-04",
+      "updatedDate": "",
+      "description": "Essential guide to Energy Performance Certificates for UK landlords. Understand current requirements, upcoming changes, and how to improve your property rating.",
+      "metaDescription": "UK EPC requirements for landlords 2026. MEES regulations, minimum ratings, exemptions, improvement options, and upcoming changes to energy efficiency rules.",
+      "metaDescriptionLength": 156,
+      "readTime": "16 min read",
+      "author": {
+        "name": "Landlord Heaven Compliance Team",
+        "role": "Property Compliance Specialists"
+      },
+      "heroImage": "/images/blog/epc.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "UK EPC Requirements Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "uk-landlord-licensing-guide",
+      "title": "UK Landlord Licensing - Complete Guide 2026",
+      "category": "Legal Compliance",
+      "date": "2026-01-04",
+      "updatedDate": "",
+      "description": "Essential guide to landlord licensing schemes across the UK. Understand mandatory, selective, and additional licensing requirements for rental properties.",
+      "metaDescription": "UK landlord licensing guide 2026. HMO licensing, selective licensing, additional licensing, Scotland registration, and local authority scheme requirements.",
+      "metaDescriptionLength": 155,
+      "readTime": "17 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/licensing.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "UK Landlord Licensing Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "uk-guarantor-agreements-guide",
+      "title": "UK Guarantor Agreements - Complete Landlord Guide 2026",
+      "category": "Legal",
+      "date": "2026-01-04",
+      "updatedDate": "",
+      "description": "Comprehensive guide to guarantor agreements for UK landlords. Learn when to require guarantors, legal requirements, drafting agreements, and enforcing guarantor obligations.",
+      "metaDescription": "UK guarantor agreements guide 2026. When to require guarantors, legal drafting tips, and enforcement advice for landlords across England, Scotland, Wales & NI.",
+      "metaDescriptionLength": 159,
+      "readTime": "14 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/guarantor.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "UK Guarantor Agreements Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "uk-letting-agent-selection-guide",
+      "title": "UK Letting Agent Selection - Complete Landlord Guide 2026",
+      "category": "Property Management",
+      "date": "2026-01-04",
+      "updatedDate": "",
+      "description": "Comprehensive guide to choosing letting agents in the UK. Compare full management vs let-only services, understand fees, and find the right agent for your property.",
+      "metaDescription": "UK letting agent selection guide 2026. Compare services, fees, and find the best letting agent for your rental property across England, Scotland, Wales & NI.",
+      "metaDescriptionLength": 157,
+      "readTime": "15 min read",
+      "author": {
+        "name": "Landlord Heaven Team",
+        "role": "Property Management Specialists"
+      },
+      "heroImage": "/images/blog/letting-agent.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "UK Letting Agent Selection Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "uk-void-period-management-guide",
+      "title": "UK Void Period Management - Complete Landlord Guide 2026",
+      "category": "Property Management",
+      "date": "2026-01-04",
+      "updatedDate": "",
+      "description": "Comprehensive guide to minimising void periods for UK landlords. Strategies to reduce empty property time, market effectively, and maintain rental income.",
+      "metaDescription": "UK void period management guide 2026. Minimise empty property time, reduce lost rent, and find tenants faster with expert strategies for UK landlords.",
+      "metaDescriptionLength": 150,
+      "readTime": "13 min read",
+      "author": {
+        "name": "Landlord Heaven Team",
+        "role": "Property Management Specialists"
+      },
+      "heroImage": "/images/blog/void-period.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "UK Void Period Management Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "uk-property-marketing-guide",
+      "title": "UK Property Marketing - Complete Landlord Guide 2026",
+      "category": "Property Management",
+      "date": "2026-01-04",
+      "updatedDate": "",
+      "description": "Comprehensive guide to marketing rental properties in the UK. Learn photography tips, listing strategies, pricing tactics, and how to attract quality tenants faster.",
+      "metaDescription": "UK property marketing guide for landlords 2026. Photography tips, listing strategies, and proven tactics to find quality tenants faster.",
+      "metaDescriptionLength": 136,
+      "readTime": "14 min read",
+      "author": {
+        "name": "Landlord Heaven Team",
+        "role": "Property Management Specialists"
+      },
+      "heroImage": "/images/blog/property-marketing.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "UK Property Marketing Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "uk-tenant-move-in-checklist-guide",
+      "title": "UK Tenant Move-In Checklist - Complete Landlord Guide 2026",
+      "category": "Property Management",
+      "date": "2026-01-04",
+      "updatedDate": "",
+      "description": "Comprehensive move-in checklist for UK landlords. Essential steps, documentation, and best practices for a smooth tenant handover process.",
+      "metaDescription": "UK tenant move-in checklist for landlords 2026. Essential documentation, key handover tips, and best practices for starting tenancies right.",
+      "metaDescriptionLength": 140,
+      "readTime": "12 min read",
+      "author": {
+        "name": "Landlord Heaven Team",
+        "role": "Property Management Specialists"
+      },
+      "heroImage": "/images/blog/move-in.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "UK Tenant Move-In Checklist",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "uk-landlord-associations-guide",
+      "title": "UK Landlord Associations - Complete Membership Guide 2026",
+      "category": "Resources",
+      "date": "2026-01-04",
+      "updatedDate": "",
+      "description": "Comprehensive guide to UK landlord associations and membership organisations. Compare benefits, costs, and find the right association for your needs.",
+      "metaDescription": "UK landlord associations guide 2026. Compare NRLA, RLA benefits, membership costs, and discover how associations can support your landlord business.",
+      "metaDescriptionLength": 148,
+      "readTime": "11 min read",
+      "author": {
+        "name": "Landlord Heaven Team",
+        "role": "Property Industry Specialists"
+      },
+      "heroImage": "/images/blog/landlord-associations.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "UK Landlord Associations Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "uk-tenant-retention-guide",
+      "title": "UK Tenant Retention - Complete Landlord Guide 2026",
+      "category": "Property Management",
+      "date": "2026-01-04",
+      "updatedDate": "",
+      "description": "Comprehensive guide to retaining quality tenants in UK rental properties. Strategies, communication tips, and best practices for reducing tenant turnover.",
+      "metaDescription": "UK tenant retention guide for landlords 2026. Proven strategies to keep quality tenants, reduce turnover, and maintain consistent rental income.",
+      "metaDescriptionLength": 144,
+      "readTime": "12 min read",
+      "author": {
+        "name": "Landlord Heaven Team",
+        "role": "Property Management Specialists"
+      },
+      "heroImage": "/images/blog/tenant-retention.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "UK Tenant Retention Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "uk-right-to-rent-guide",
+      "title": "UK Right to Rent Checks - Complete Landlord Guide 2026",
+      "category": "Legal",
+      "date": "2026-01-04",
+      "updatedDate": "",
+      "description": "Comprehensive guide to Right to Rent checks for UK landlords. Legal requirements, document verification, and avoiding civil penalties.",
+      "metaDescription": "UK Right to Rent guide 2026. Complete landlord guide to immigration checks, document verification, and avoiding civil penalties in England.",
+      "metaDescriptionLength": 139,
+      "readTime": "13 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/right-to-rent.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "UK Right to Rent Checks Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "uk-smoke-co-alarm-regulations-guide",
+      "title": "UK Smoke & CO Alarm Regulations - Complete Landlord Guide 2026",
+      "category": "Compliance",
+      "date": "2026-01-04",
+      "updatedDate": "",
+      "description": "Comprehensive guide to smoke and carbon monoxide alarm requirements for UK landlords. Legal obligations, installation rules, and compliance tips.",
+      "metaDescription": "UK smoke and CO alarm regulations for landlords 2026. Complete guide to legal requirements, testing obligations, and compliance across UK nations.",
+      "metaDescriptionLength": 146,
+      "readTime": "11 min read",
+      "author": {
+        "name": "Landlord Heaven Compliance Team",
+        "role": "Safety Compliance Specialists"
+      },
+      "heroImage": "/images/blog/smoke-alarm.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "UK Smoke and CO Alarm Regulations Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "uk-electrical-safety-guide",
+      "title": "UK Electrical Safety Standards - Complete Landlord Guide 2026",
+      "category": "Compliance",
+      "date": "2026-01-04",
+      "updatedDate": "",
+      "description": "Comprehensive guide to electrical safety requirements for UK landlords. EICR obligations, testing schedules, and compliance requirements explained.",
+      "metaDescription": "UK electrical safety guide for landlords 2026. EICR requirements, testing obligations, and compliance tips for rental properties.",
+      "metaDescriptionLength": 129,
+      "readTime": "12 min read",
+      "author": {
+        "name": "Landlord Heaven Compliance Team",
+        "role": "Safety Compliance Specialists"
+      },
+      "heroImage": "/images/blog/electrical-safety.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "UK Electrical Safety Standards Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "uk-furnished-unfurnished-letting-guide",
+      "title": "UK Furnished vs Unfurnished Letting - Complete Landlord Guide 2026",
+      "category": "Property Management",
+      "date": "2026-01-04",
+      "updatedDate": "",
+      "description": "Comprehensive guide comparing furnished and unfurnished rentals for UK landlords. Pros, cons, tax implications, and choosing the right approach.",
+      "metaDescription": "UK furnished vs unfurnished letting guide 2026. Compare options, understand tax implications, and choose the right approach for your rental property.",
+      "metaDescriptionLength": 149,
+      "readTime": "11 min read",
+      "author": {
+        "name": "Landlord Heaven Team",
+        "role": "Property Management Specialists"
+      },
+      "heroImage": "/images/blog/furnished.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "UK Furnished vs Unfurnished Letting Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "uk-hmo-management-guide",
+      "title": "UK HMO Management - Complete Landlord Guide 2026",
+      "category": "Property Management",
+      "date": "2026-01-04",
+      "updatedDate": "",
+      "description": "Comprehensive guide to managing Houses in Multiple Occupation in the UK. Licensing, safety requirements, and operational best practices for HMO landlords.",
+      "metaDescription": "UK HMO management guide 2026. Licensing requirements, safety obligations, and best practices for managing Houses in Multiple Occupation.",
+      "metaDescriptionLength": 136,
+      "readTime": "14 min read",
+      "author": {
+        "name": "Landlord Heaven Team",
+        "role": "Property Management Specialists"
+      },
+      "heroImage": "/images/blog/hmo.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "UK HMO Management Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "uk-student-letting-guide",
+      "title": "UK Student Letting Guide - Complete Landlord Handbook 2026",
+      "category": "Landlord Guides",
+      "date": "2026-01-04",
+      "updatedDate": "",
+      "description": "Comprehensive guide to student letting in the UK. Learn about the student rental market, term-time tenancies, guarantor requirements, and maximising returns from student properties.",
+      "metaDescription": "UK student letting guide 2026. Student rental market, term-time tenancies, guarantor requirements, and maximising returns from student accommodation.",
+      "metaDescriptionLength": 149,
+      "readTime": "14 min read",
+      "author": {
+        "name": "Landlord Heaven Team",
+        "role": "Property Investment Specialists"
+      },
+      "heroImage": "/images/blog/student-letting.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "UK Student Letting Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "uk-holiday-let-regulations-guide",
+      "title": "UK Holiday Let Regulations - Complete Landlord Guide 2026",
+      "category": "Landlord Guides",
+      "date": "2026-01-04",
+      "updatedDate": "",
+      "description": "Comprehensive guide to holiday let regulations in the UK. Learn about planning permission, licensing requirements, tax rules, and compliance for short-term rental properties.",
+      "metaDescription": "UK holiday let regulations 2026. Planning permission, licensing, tax rules, and compliance requirements for short-term rental properties.",
+      "metaDescriptionLength": 137,
+      "readTime": "15 min read",
+      "author": {
+        "name": "Landlord Heaven Team",
+        "role": "Property Investment Specialists"
+      },
+      "heroImage": "/images/blog/holiday-let.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "UK Holiday Let Regulations Guide",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "updated-date-empty",
+          "message": "updatedDate is an empty string."
+        },
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "how-to-write-letter-before-action-unpaid-rent",
+      "title": "How to Write a Letter Before Action for Unpaid Rent (2026 Template)",
+      "category": "Money Claims",
+      "date": "2026-01-15",
+      "updatedDate": "2026-01-15",
+      "description": "Step-by-step guide to writing a Pre-Action Protocol compliant Letter Before Action for tenant debt. Free template and examples for landlords.",
+      "metaDescription": "Write a compliant Letter Before Action for unpaid rent. Free template, examples, and step-by-step guide for UK landlords pursuing tenant debt through court.",
+      "metaDescriptionLength": 156,
+      "readTime": "8 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/letter-before-action.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Letter Before Action Template for Landlords",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "what-is-county-court-judgment-landlords",
+      "title": "What is a County Court Judgment (CCJ)? Guide for Landlords 2026",
+      "category": "Money Claims",
+      "date": "2026-01-15",
+      "updatedDate": "2026-01-15",
+      "description": "Understanding CCJs for landlords: what they are, how to get one against a tenant, and how to enforce payment. Complete UK guide.",
+      "metaDescription": "Learn what a County Court Judgment means for landlords. How to obtain a CCJ against tenants who owe money, enforcement options, and what happens next.",
+      "metaDescriptionLength": 150,
+      "readTime": "7 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/ccj-guide.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "County Court Judgment Guide for Landlords",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "calculating-interest-tenant-debt",
+      "title": "Calculating Interest on Tenant Debt: Landlord Guide 2026",
+      "category": "Money Claims",
+      "date": "2026-01-15",
+      "updatedDate": "2026-01-15",
+      "description": "How to calculate and claim statutory interest on money tenants owe you. 8% interest rate, calculation examples, and court claim guidance.",
+      "metaDescription": "Learn how to calculate interest on tenant debt for court claims. Statutory 8% rate, calculation method, examples, and how to include in your money claim.",
+      "metaDescriptionLength": 153,
+      "readTime": "6 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/interest-calculation.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Calculating Interest on Tenant Debt",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "how-long-does-money-claim-online-take",
+      "title": "How Long Does Money Claim Online Take? MCOL Timeline 2026",
+      "category": "Money Claims",
+      "date": "2026-01-15",
+      "updatedDate": "2026-01-15",
+      "description": "Realistic timelines for Money Claim Online from start to CCJ. How long each stage takes and what affects the speed of your claim.",
+      "metaDescription": "How long does MCOL take? Realistic timelines for Money Claim Online from submission to CCJ. Undefended vs defended claims, enforcement timeframes.",
+      "metaDescriptionLength": 146,
+      "readTime": "6 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/mcol-timeline.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Money Claim Online Timeline",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "when-to-use-guarantor-clause-tenancy",
+      "title": "When to Use a Guarantor Clause in Your Tenancy Agreement 2026",
+      "category": "Money Claims",
+      "date": "2026-01-15",
+      "updatedDate": "2026-01-15",
+      "description": "Should you require a guarantor? When guarantor clauses protect landlords, how to enforce them, and claiming from guarantors when tenants default.",
+      "metaDescription": "When should landlords require a guarantor? Guide to guarantor clauses, enforcement, and claiming from guarantors when tenants don\\'t pay rent.",
+      "metaDescriptionLength": 142,
+      "readTime": "7 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/guarantor-clause.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Guarantor Clause in Tenancy Agreements",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "recovering-cleaning-costs-from-tenants",
+      "title": "Recovering Cleaning Costs from Tenants: Landlord Guide 2026",
+      "category": "Money Claims",
+      "date": "2026-01-15",
+      "updatedDate": "2026-01-15",
+      "description": "How to recover cleaning costs when the deposit doesn\\'t cover it. Evidence requirements, reasonable charges, and court claims for cleaning.",
+      "metaDescription": "Recover cleaning costs from tenants when deposit falls short. What\\'s reasonable, evidence needed, and how to make a court claim for cleaning costs.",
+      "metaDescriptionLength": 148,
+      "readTime": "7 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/cleaning-costs.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Recovering Cleaning Costs from Tenants",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "fair-wear-tear-vs-tenant-damage",
+      "title": "Fair Wear and Tear vs Tenant Damage: Landlord Guide 2026",
+      "category": "Money Claims",
+      "date": "2026-01-15",
+      "updatedDate": "2026-01-15",
+      "description": "Understanding the difference between fair wear and tear and tenant damage. What you can and cannot claim for, with examples.",
+      "metaDescription": "What\\'s fair wear and tear vs damage? Guide for landlords on what you can claim from tenants and deposits, with real examples and evidence tips.",
+      "metaDescriptionLength": 144,
+      "readTime": "8 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/wear-tear-damage.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Fair Wear and Tear vs Tenant Damage",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "should-you-accept-payment-plan-from-tenant",
+      "title": "Should You Accept a Payment Plan from a Tenant? 2026 Guide",
+      "category": "Money Claims",
+      "date": "2026-01-15",
+      "updatedDate": "2026-01-15",
+      "description": "When to accept a tenant\\'s payment plan offer vs pursuing court action. Pros, cons, and what makes a payment plan worth accepting.",
+      "metaDescription": "Should landlords accept tenant payment plans? When to accept, when to reject, and how to assess if an offer is reasonable. Practical guidance.",
+      "metaDescriptionLength": 142,
+      "readTime": "6 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/payment-plan.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Accepting Payment Plans from Tenants",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "small-claims-court-tips-landlords",
+      "title": "Small Claims Court Tips for Landlords: How to Win 2026",
+      "category": "Money Claims",
+      "date": "2026-01-15",
+      "updatedDate": "2026-01-15",
+      "description": "Practical tips for landlords attending small claims court hearings. How to prepare, what to expect, and how to present your case effectively.",
+      "metaDescription": "Small claims court tips for landlords. How to prepare for a hearing, present evidence, and win your case against a tenant. Practical UK guide.",
+      "metaDescriptionLength": 142,
+      "readTime": "8 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/small-claims-tips.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "Small Claims Court Tips for Landlords",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    },
+    {
+      "slug": "what-to-do-when-tenant-wont-pay",
+      "title": "What to Do When a Tenant Won\\'t Pay: Complete Action Plan 2026",
+      "category": "Money Claims",
+      "date": "2026-01-15",
+      "updatedDate": "2026-01-15",
+      "description": "Step-by-step guide for landlords when tenants refuse to pay rent or other debts. From first contact to court action and enforcement.",
+      "metaDescription": "Tenant won\\'t pay rent? Complete action plan for UK landlords covering communication, legal letters, court claims, and enforcement options.",
+      "metaDescriptionLength": 139,
+      "readTime": "9 min read",
+      "author": {
+        "name": "Landlord Heaven Legal Team",
+        "role": "Property Law Specialists"
+      },
+      "heroImage": "/images/blog/tenant-wont-pay.svg",
+      "heroImageExists": true,
+      "heroImageAlt": "What to Do When Tenant Won\\'t Pay",
+      "faq": {
+        "present": false,
+        "count": 0
+      },
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "faq-not-present",
+          "message": "FAQ not present."
+        }
+      ],
+      "recommendations": {
+        "heroPlaceholder": "",
+        "heroImageAlt": ""
+      }
+    }
+  ]
+}
