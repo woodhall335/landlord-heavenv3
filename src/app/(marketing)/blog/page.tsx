@@ -104,6 +104,17 @@ export default function BlogPage() {
         {/* Hero Section */}
         <UniversalHero {...blogHeroConfig} />
 
+
+        <section className="border-b border-[#ede2ff] bg-[#f8f1ff]/70 py-10 lg:py-14">
+          <div className="container mx-auto px-4">
+            <div className="max-w-3xl">
+              <p className="mb-3 inline-flex rounded-full border border-[#e3d3ff] bg-white px-3 py-1 text-xs font-semibold uppercase tracking-wide text-[#692ed4]">LandlordHeaven Blog</p>
+              <h1 className="text-3xl font-bold tracking-tight text-slate-900 lg:text-4xl">Court-ready landlord guidance with product-led next steps</h1>
+              <p className="mt-4 text-lg text-slate-600">Scan practical UK landlord guides by jurisdiction, then move straight into the correct LandlordHeaven workflow.</p>
+            </div>
+          </div>
+        </section>
+
         {/* Urgency Banner */}
         <section className="bg-primary py-6">
           <div className="container mx-auto px-4">
@@ -123,7 +134,7 @@ export default function BlogPage() {
         </section>
 
         {/* Browse by Region */}
-        <section className="py-12 lg:py-16 bg-white border-b border-gray-100">
+        <section className="border-b border-gray-100 bg-white py-12 lg:py-16">
           <div className="container mx-auto px-4">
             <h2 className="text-2xl font-bold text-gray-900 mb-4 text-center">
               Browse Guides by Jurisdiction
@@ -189,7 +200,7 @@ export default function BlogPage() {
 
         {/* All Guides with Search & Filter */}
         {remainingPosts.length > 0 && (
-          <section className="py-12 lg:py-16 bg-white">
+          <section className="bg-white py-12 lg:py-16">
             <div className="container mx-auto px-4">
               <h2 className="mb-2 text-2xl font-bold text-gray-900">All Guides</h2>
               <p className="mb-8 max-w-2xl text-gray-600">Browse practical, court-focused guides designed to help you pick the right product path faster.</p>

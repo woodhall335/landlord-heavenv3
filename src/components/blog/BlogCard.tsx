@@ -40,6 +40,7 @@ export function BlogCard({
                 sizes="(min-width: 1024px) 520px, 100vw"
                 className="object-cover object-center transition-transform duration-300 group-hover:scale-[1.03]"
               />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent" />
               <div className="absolute left-4 top-4 rounded-full bg-[#692ed4] px-3 py-1 text-xs font-semibold text-white">Featured</div>
             </div>
 
@@ -79,6 +80,7 @@ export function BlogCard({
             sizes="(min-width: 1280px) 360px, (min-width: 768px) 50vw, 100vw"
             className="object-cover object-center transition-transform duration-300 group-hover:scale-[1.03]"
           />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
         </div>
 
         <div className="flex flex-1 flex-col p-5">

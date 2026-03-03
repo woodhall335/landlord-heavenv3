@@ -46,9 +46,9 @@ export function BlogFilteredList({ posts, categories }: BlogFilteredListProps) {
   const hasActiveFilters = searchQuery !== '' || selectedCategory !== '';
 
   return (
-    <div className="rounded-3xl border border-[#ebe3fb] bg-[#f8f1ff]/40 p-5 md:p-6">
+    <div className="rounded-3xl border border-[#e5d7ff] bg-[#f8f1ff] p-5 shadow-[0_12px_35px_rgba(105,46,212,0.08)] md:p-6">
       {/* Search and Filter Bar */}
-      <div className="mb-8 space-y-4">
+      <div className="mb-8 space-y-4 rounded-2xl border border-[#e8ddfb] bg-white p-4 md:p-5">
         <div className="flex flex-col sm:flex-row gap-4">
           {/* Search Input */}
           <div className="relative flex-1">
@@ -58,12 +58,12 @@ export function BlogFilteredList({ posts, categories }: BlogFilteredListProps) {
               placeholder="Search guides..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-xl border border-[#dfd2f8] bg-white py-3 pl-10 pr-4 transition-colors focus:border-[#692ed4] focus:outline-none focus:ring-2 focus:ring-[#692ed4]/20"
+              className="w-full rounded-xl border border-[#dfd2f8] bg-white py-3 pl-10 pr-4 transition-colors focus:border-[#692ed4] focus:outline-none focus:ring-2 focus:ring-[#692ed4] focus:ring-offset-1"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#692ed4] focus-visible:ring-offset-1 rounded"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -76,7 +76,7 @@ export function BlogFilteredList({ posts, categories }: BlogFilteredListProps) {
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="w-full cursor-pointer appearance-none rounded-xl border border-[#dfd2f8] bg-white py-3 pl-10 pr-4 transition-colors focus:border-[#692ed4] focus:outline-none focus:ring-2 focus:ring-[#692ed4]/20"
+              className="w-full cursor-pointer appearance-none rounded-xl border border-[#dfd2f8] bg-white py-3 pl-10 pr-4 transition-colors focus:border-[#692ed4] focus:outline-none focus:ring-2 focus:ring-[#692ed4] focus:ring-offset-1"
             >
               <option value="">All Categories</option>
               {categories.map((category) => (
@@ -103,7 +103,7 @@ export function BlogFilteredList({ posts, categories }: BlogFilteredListProps) {
           {hasActiveFilters && (
             <button
               onClick={clearFilters}
-              className="text-sm text-primary hover:text-primary/80 font-medium flex items-center gap-1"
+              className="inline-flex items-center gap-1 rounded-full bg-[#f8f1ff] px-3 py-1.5 text-sm font-medium text-[#692ed4] hover:bg-[#efe1ff] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#692ed4] focus-visible:ring-offset-2"
             >
               <X className="w-4 h-4" />
               Clear filters
