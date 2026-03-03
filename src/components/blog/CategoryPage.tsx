@@ -90,10 +90,10 @@ export function CategoryPage({ region, posts }: CategoryPageProps) {
 
       <main>
         {/* Hero Section - matches homepage pastel gradient */}
-        <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-20">
+        <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-6 pb-10 md:pt-8 md:pb-12">
           <div className="container mx-auto px-4">
             {/* Breadcrumb */}
-            <nav className="flex items-center gap-2 text-sm text-gray-500 mb-8">
+            <nav className="mb-5 flex items-center gap-2 text-sm text-gray-500">
               <Link href="/" className="hover:text-primary transition-colors">Home</Link>
               <span>/</span>
               <Link href="/blog" className="hover:text-primary transition-colors">Landlord Guides</Link>
@@ -101,8 +101,8 @@ export function CategoryPage({ region, posts }: CategoryPageProps) {
               <span className="text-gray-900">{config.name}</span>
             </nav>
 
-            <div className="max-w-3xl mx-auto text-center">
-              <div className="flex items-center justify-center gap-3 mb-6">
+            <div className="mx-auto max-w-3xl text-center">
+              <div className="mb-5 flex items-center justify-center gap-3">
                 <Image
                   src={config.flag}
                   alt={config.name}
@@ -116,11 +116,11 @@ export function CategoryPage({ region, posts }: CategoryPageProps) {
                 </div>
               </div>
 
-              <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+              <h1 className="mb-4 text-4xl font-bold text-gray-900 lg:text-5xl">
                 {config.title}
               </h1>
 
-              <p className="text-xl text-gray-600 mb-8">
+              <p className="mb-6 text-xl text-gray-600">
                 {config.description}
               </p>
 

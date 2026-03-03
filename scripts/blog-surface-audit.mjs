@@ -5,6 +5,10 @@ const articleSource = fs.readFileSync(articlePath, 'utf8');
 
 const stickyMounts = (articleSource.match(/<BlogStickySlots/g) || []).length;
 const hasToc = articleSource.includes('<TableOfContents items={post.tableOfContents} />');
+const hasDesktopStickySidebar =
+  articleSource.includes('aria-label="Article navigation"') &&
+  articleSource.includes('hidden min-w-0 lg:block lg:self-start') &&
+  articleSource.includes('sticky top-28 space-y-6');
 const hasOverflowHardening =
   articleSource.includes('overflow-x-hidden [overflow-wrap:anywhere]') &&
   articleSource.includes('prose-a:break-words') &&
@@ -20,6 +24,13 @@ const indexPath = 'src/app/(marketing)/blog/page.tsx';
 const indexSource = fs.readFileSync(indexPath, 'utf8');
 const hasSaasPanel = indexSource.includes('Court-ready landlord guidance with product-led next steps');
 
+const categoryPath = 'src/components/blog/CategoryPage.tsx';
+const categorySource = fs.readFileSync(categoryPath, 'utf8');
+const hasCompactCategoryHeroSpacing =
+  categorySource.includes('pt-6 pb-10 md:pt-8 md:pb-12') &&
+  categorySource.includes('mb-5 flex items-center gap-2 text-sm text-gray-500') &&
+  categorySource.includes('mb-4 text-4xl font-bold text-gray-900 lg:text-5xl');
+
 const blogComponentFiles = ['BlogCard.tsx', 'RelatedGuidesCarousel.tsx', 'BlogFilteredList.tsx'];
 const svgRefs = [];
 for (const file of blogComponentFiles) {
@@ -32,15 +43,26 @@ for (const file of blogComponentFiles) {
 const report = {
   stickyMounts,
   stickyPass: stickyMounts === 2,
+  hasDesktopStickySidebar,
   hasToc,
   hasOverflowHardening,
   hasRelatedTracking,
   hasSaasPanel,
+  hasCompactCategoryHeroSpacing,
   svgRefs,
 };
 
 console.log('[blog-audit]', JSON.stringify(report, null, 2));
 
-if (!report.stickyPass || !hasToc || !hasOverflowHardening || !hasRelatedTracking || !hasSaasPanel || svgRefs.length > 0) {
+if (
+  !report.stickyPass ||
+  !hasDesktopStickySidebar ||
+  !hasToc ||
+  !hasOverflowHardening ||
+  !hasRelatedTracking ||
+  !hasSaasPanel ||
+  !hasCompactCategoryHeroSpacing ||
+  svgRefs.length > 0
+) {
   process.exitCode = 1;
 }
