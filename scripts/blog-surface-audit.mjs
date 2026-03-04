@@ -35,13 +35,13 @@ const stickyInnerTag = articleSource.match(/<(?:aside|div)\s+[^>]*data-blog-stic
 const stickyContainerClasses = stickyInnerTag?.[0].match(/className="([^"]+)"/)?.[1] || '';
 const stickyContainerHasTopVar = stickyContainerClasses.includes('top-[var(--lh-sticky-top)]');
 const stickyContainerHasStickyPosition = stickyContainerClasses.includes('sticky');
-const stickyContainerHasMaxHeight = stickyContainerClasses.includes('max-h-[calc(100vh-var(--lh-sticky-top)-1rem)]');
-const stickyContainerHasOverflowYAuto = stickyContainerClasses.includes('overflow-y-auto');
+const stickyContainerHasMaxHeight = /\bmax-h-/.test(stickyContainerClasses);
+const stickyContainerHasOverflowYAuto = /\boverflow-y-auto\b/.test(stickyContainerClasses);
 const stickyContainerHasNoInnerScroll = !stickyContainerHasMaxHeight && !stickyContainerHasOverflowYAuto;
 
 const tocPanelTag = tocSource.match(/<ul\s+[^>]*data-blog-toc-panel[^>]*>/);
 const tocPanelClasses = tocPanelTag?.[0].match(/className={`([^`]+)`}/)?.[1] || tocPanelTag?.[0].match(/className="([^"]+)"/)?.[1] || '';
-const tocPanelHasMaxHeightCalc = /\bmax-h-\[calc\(100vh-[^\]]+\)\]/.test(tocPanelClasses);
+const tocPanelHasMaxHeightCalc = /\bmax-h-/.test(tocPanelClasses);
 const tocPanelHasOverflowYAuto = /\boverflow-y-auto\b/.test(tocPanelClasses);
 
 const guardImportPresent = articleSource.includes("from '@/components/blog/BlogArticleStickyGuard'");
@@ -132,7 +132,12 @@ for (const file of sidebarFilesToAudit) {
 
 const innerScrollPatterns = [
   { token: 'overflow-y-auto', regex: /\boverflow-y-auto\b/ },
-  { token: 'max-h-[calc(100vh-...)]', regex: /\bmax-h-\[calc\(100vh-[^\]]+\)\]/ },
+  { token: 'overflow-y-scroll', regex: /\boverflow-y-scroll\b/ },
+  { token: 'overflow-auto', regex: /\boverflow-auto\b/ },
+  { token: 'overflow-scroll', regex: /\boverflow-scroll\b/ },
+  { token: 'max-h-[calc(100vh-', regex: /\bmax-h-\[calc\(100vh-[^\]]*\]/ },
+  { token: 'max-h-screen', regex: /(?<![\w-])max-h-screen(?![\w-])/ },
+  { token: 'h-screen', regex: /(?<![\w-])h-screen(?![\w-])/ },
 ];
 
 for (const pattern of innerScrollPatterns) {
