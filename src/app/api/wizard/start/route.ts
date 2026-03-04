@@ -8,9 +8,15 @@
 
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { createServerSupabaseClient, getServerUser } from '@/lib/supabase/server';
-import { createSupabaseAdminClient, logSupabaseAdminDiagnostics } from '@/lib/supabase/admin';
-import { assertCaseReadAccess } from '@/lib/auth/case-access';
+import { getServerUser } from '@/lib/supabase/server';
+import {
+  createSupabaseAdminClient,
+  logSupabaseAdminDiagnostics,
+} from '@/lib/supabase/admin';
+import {
+  assertCaseReadAccess,
+  getSessionTokenFromRequest,
+} from '@/lib/auth/case-access';
 import { createEmptyWizardFacts } from '@/lib/case-facts/schema';
 import { getOrCreateWizardFacts } from '@/lib/case-facts/store';
 import {
@@ -25,11 +31,6 @@ import { applyDocumentIntelligence } from '@/lib/wizard/document-intel';
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 export const runtime = 'nodejs';
-
-function getSessionTokenFromRequest(request: Request): string | null {
-  const token = request.headers.get('x-session-token');
-  return token && token.trim() ? token.trim() : null;
-}
 
 const startWizardSchema = z.object({
   product: z.enum([
@@ -87,12 +88,14 @@ const resolveProductTier = (
 ): string | null => {
   switch (product) {
     case 'ast_standard':
-      if (jurisdiction === 'scotland') return 'Standard Scottish Private Residential Tenancy';
+      if (jurisdiction === 'scotland')
+        return 'Standard Scottish Private Residential Tenancy';
       if (jurisdiction === 'northern-ireland') return 'Standard NI Private Tenancy';
       return 'Standard AST';
 
     case 'ast_premium':
-      if (jurisdiction === 'scotland') return 'Premium Scottish Private Residential Tenancy';
+      if (jurisdiction === 'scotland')
+        return 'Premium Scottish Private Residential Tenancy';
       if (jurisdiction === 'northern-ireland') return 'Premium NI Private Tenancy';
       return 'Premium AST';
 
@@ -121,13 +124,13 @@ function resolveJurisdiction(product: StartProduct, requested: string): string {
 }
 
 function loadMQSOrError(product: ProductType, jurisdiction: string): MasterQuestionSet | null {
-  const mqs = loadMQS(product, jurisdiction);
-  return mqs;
+  return loadMQS(product, jurisdiction);
 }
 
 export async function POST(request: Request) {
   try {
     logSupabaseAdminDiagnostics({ route: '/api/wizard/start', writesUsingAdmin: true });
+
     const user = await getServerUser().catch(() => null);
     const body = await request.json();
     const validationResult = startWizardSchema.safeParse(body);
@@ -139,7 +142,9 @@ export async function POST(request: Request) {
       );
     }
 
-    const { product, jurisdiction, case_id, validator_key, product_variant } = validationResult.data;
+    const { product, jurisdiction, case_id, validator_key, product_variant } =
+      validationResult.data;
+
     const resolvedCaseType = productToCaseType(product as StartProduct);
     const normalizedProduct = normalizeProduct(product as StartProduct);
     const effectiveJurisdiction = resolveJurisdiction(product as StartProduct, jurisdiction);
@@ -155,15 +160,12 @@ export async function POST(request: Request) {
     }
 
     // Northern Ireland gating: only tenancy agreements are supported
-    // Evictions and money claims are blocked until legal review complete
-    // See docs/NI_EVICTION_STATUS.md for full details
     if (effectiveJurisdiction === 'northern-ireland' && resolvedCaseType !== 'tenancy_agreement') {
       return NextResponse.json(
         {
           code: 'NI_EVICTION_MONEY_CLAIM_NOT_SUPPORTED',
           error: 'NI_EVICTION_MONEY_CLAIM_NOT_SUPPORTED',
-          user_message:
-            'Northern Ireland: tenancy agreements only (eviction notices planned).',
+          user_message: 'Northern Ireland: tenancy agreements only (eviction notices planned).',
           supported: {
             'northern-ireland': ['tenancy_agreement'],
             england: ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
@@ -178,8 +180,6 @@ export async function POST(request: Request) {
     }
 
     // Wales and Scotland gating: complete_pack and money_claim not available
-    // Due to different legal frameworks, eviction packs and money claims are England-only
-    // Wales/Scotland users should use notice_only or tenancy_agreement
     if (
       (effectiveJurisdiction === 'wales' || effectiveJurisdiction === 'scotland') &&
       (normalizedProduct === 'complete_pack' || normalizedProduct === 'money_claim')
@@ -190,7 +190,9 @@ export async function POST(request: Request) {
           error: 'PRODUCT_NOT_AVAILABLE_IN_REGION',
           user_message:
             'Product not available in your region; use Notice Only instead. ' +
-            `The ${normalizedProduct === 'complete_pack' ? 'Eviction Pack' : 'Money Claim'} is only available for England. ` +
+            `The ${
+              normalizedProduct === 'complete_pack' ? 'Eviction Pack' : 'Money Claim'
+            } is only available for England. ` +
             `For ${effectiveJurisdiction === 'wales' ? 'Wales' : 'Scotland'}, we offer the Notice Only pack (£34.99) ` +
             'and Tenancy Agreements.',
           supported: {
@@ -207,14 +209,10 @@ export async function POST(request: Request) {
       );
     }
 
-    // Create properly typed Supabase client for user-scoped queries
-    const supabase = await createServerSupabaseClient();
-
-    // Admin client bypasses RLS - used for creating cases for anonymous users
-    // The regular client would be blocked by RLS policies when user_id is null
+    // Admin client bypasses RLS - used for creating/resuming cases for anonymous users
     const adminSupabase = createSupabaseAdminClient();
 
-    let caseRecord: any = null;
+    let caseRecord: { id: string } | null = null;
     const requestSessionToken = getSessionTokenFromRequest(request);
 
     // ------------------------------------------------
@@ -230,12 +228,9 @@ export async function POST(request: Request) {
       if (error || !data) {
         const { handleCaseFetchError } = await import('@/lib/api/error-handling');
         const errorResponse = handleCaseFetchError(error, data, 'wizard/start', case_id);
-        if (errorResponse) {
-          return errorResponse;
-        }
+        if (errorResponse) return errorResponse;
       }
 
-      // Type assertion: we know data exists after the null check
       const caseData = data as {
         id: string;
         user_id: string | null;
@@ -247,22 +242,20 @@ export async function POST(request: Request) {
       const accessError = assertCaseReadAccess({ request, user, caseRow: caseData });
       if (accessError) return accessError;
 
-      if (
-        caseData.case_type !== resolvedCaseType ||
-        caseData.jurisdiction !== effectiveJurisdiction
-      ) {
+      if (caseData.case_type !== resolvedCaseType || caseData.jurisdiction !== effectiveJurisdiction) {
         return NextResponse.json(
           { error: 'Case does not match requested product or jurisdiction' },
           { status: 400 },
         );
       }
 
-      caseRecord = caseData;
+      caseRecord = { id: caseData.id };
     } else {
       // ------------------------------------------------
       // 2. Create new case
       // ------------------------------------------------
       if (!user && !requestSessionToken) {
+        // Anti-enumeration: behave like "not found" for anonymous without capability token
         return NextResponse.json({ error: 'Case not found' }, { status: 404 });
       }
 
@@ -275,22 +268,16 @@ export async function POST(request: Request) {
           product: normalizedProduct as string | null,
           original_product: product as string | null,
           ...(tierLabel ? { product_tier: tierLabel as string | null } : {}),
-          // Store validator_key so we can track which validator was used
           ...(validator_key ? { validator_key: validator_key as string | null } : {}),
           ...(product_variant ? { product_variant: product_variant as string | null } : {}),
         },
         // IMPORTANT: root-level product_tier so MQS version questions see it as answered
         ...(tierLabel ? { product_tier: tierLabel } : {}),
-        // These help downstream normalization / analysis before property questions are answered
         property_country: effectiveJurisdiction,
         jurisdiction: effectiveJurisdiction,
-        // CRITICAL: Set selected_notice_route from validator_key so runLegalValidator
-        // knows which validator to apply (e.g., "section_21" → validateSection21Notice)
         ...(validator_key ? { selected_notice_route: validator_key } : {}),
       };
 
-      // Use admin client to bypass RLS for anonymous case creation
-      // This is safe because we control all the data being inserted
       const { data, error } = await adminSupabase
         .from('cases')
         .insert({
@@ -300,9 +287,9 @@ export async function POST(request: Request) {
           jurisdiction: effectiveJurisdiction,
           status: 'in_progress',
           wizard_progress: 0,
-          collected_facts: initialFacts as any, // Supabase types collected_facts as Json
+          collected_facts: initialFacts as any,
         } as any)
-        .select()
+        .select('id')
         .single();
 
       if (error || !data) {
@@ -310,7 +297,7 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: 'Failed to create case' }, { status: 500 });
       }
 
-      caseRecord = data;
+      caseRecord = data as { id: string };
     }
 
     // ------------------------------------------------
@@ -336,11 +323,11 @@ export async function POST(request: Request) {
         ...(tierLabel ? { product_tier: tierLabel } : {}),
         property_country: facts.property_country ?? effectiveJurisdiction,
         jurisdiction: facts.jurisdiction ?? effectiveJurisdiction,
-        // Ensure selected_notice_route is set for validators
-        ...(validator_key && !facts.selected_notice_route ? { selected_notice_route: validator_key } : {}),
+        ...(validator_key && !facts.selected_notice_route
+          ? { selected_notice_route: validator_key }
+          : {}),
       };
 
-      // Use admin client for case_facts update to support anonymous users
       const { error: updateError } = await adminSupabase
         .from('case_facts')
         .update({ facts: updatedFacts as any })
@@ -374,19 +361,17 @@ export async function POST(request: Request) {
     // ------------------------------------------------
     // 6. Include persisted Smart Review data for complete_pack/eviction_pack (England only)
     // ------------------------------------------------
-    // Smart Review results survive refresh via __smart_review in case_facts
     let smart_review = null;
-    // Note: eviction_pack is a legacy alias that might appear in persisted data
     if (
       (normalizedProduct === 'complete_pack' || (normalizedProduct as string) === 'eviction_pack') &&
       effectiveJurisdiction === 'england' &&
-      facts.__smart_review
+      (facts as any).__smart_review
     ) {
       smart_review = {
-        warnings: facts.__smart_review.warnings || [],
-        summary: facts.__smart_review.summary || null,
-        ranAt: facts.__smart_review.ranAt || null,
-        limitsApplied: facts.__smart_review.limitsApplied || null,
+        warnings: (facts as any).__smart_review.warnings || [],
+        summary: (facts as any).__smart_review.summary || null,
+        ranAt: (facts as any).__smart_review.ranAt || null,
+        limitsApplied: (facts as any).__smart_review.limitsApplied || null,
       };
     }
 
@@ -396,7 +381,6 @@ export async function POST(request: Request) {
       jurisdiction: effectiveJurisdiction,
       next_question: nextQuestion || null,
       is_complete: isComplete,
-      // Include persisted Smart Review data if available
       smart_review,
     });
   } catch (error: any) {
