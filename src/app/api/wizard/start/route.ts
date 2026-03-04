@@ -10,6 +10,7 @@ import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { createServerSupabaseClient, getServerUser } from '@/lib/supabase/server';
 import { createSupabaseAdminClient, logSupabaseAdminDiagnostics } from '@/lib/supabase/admin';
+import { assertCaseReadAccess } from '@/lib/auth/case-access';
 import { createEmptyWizardFacts } from '@/lib/case-facts/schema';
 import { getOrCreateWizardFacts } from '@/lib/case-facts/store';
 import {
@@ -218,12 +219,11 @@ export async function POST(request: Request) {
 
     // ------------------------------------------------
     // 1. Resume existing case if case_id supplied
-    //    RLS policies handle access control
     // ------------------------------------------------
     if (case_id) {
-      const { data, error } = await supabase
+      const { data, error } = await adminSupabase
         .from('cases')
-        .select('*')
+        .select('id,user_id,session_token,case_type,jurisdiction')
         .eq('id', case_id)
         .single();
 
@@ -236,7 +236,16 @@ export async function POST(request: Request) {
       }
 
       // Type assertion: we know data exists after the null check
-      const caseData = data as { id: string; case_type: string; jurisdiction: string };
+      const caseData = data as {
+        id: string;
+        user_id: string | null;
+        session_token: string | null;
+        case_type: string;
+        jurisdiction: string;
+      };
+
+      const accessError = assertCaseReadAccess({ request, user, caseRow: caseData });
+      if (accessError) return accessError;
 
       if (
         caseData.case_type !== resolvedCaseType ||
