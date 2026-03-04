@@ -681,10 +681,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
       <StructuredData data={breadcrumbSchema} />
       {faqSchema && <StructuredData data={faqSchema} />}
 
-      <article
-        className="min-h-screen overflow-x-clip"
-        style={{ '--lh-sticky-top': BLOG_STICKY_TOP_OFFSET } as CSSProperties}
-      >
+      <article className="min-h-screen" style={{ '--lh-sticky-top': BLOG_STICKY_TOP_OFFSET } as CSSProperties}>
         {/* Hero Section - matches homepage pastel gradient */}
         <header id="blog-hero" className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-6 pb-8 md:pt-8 md:pb-10">
           <div className="container mx-auto px-4">
@@ -814,7 +811,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
           </div>
           <div className="grid items-start gap-12 lg:grid-cols-[minmax(0,760px)_300px] lg:gap-14 lg:justify-center">
             {/* Main Content */}
-            <div className="min-w-0 max-w-[760px] pb-20 lg:pb-0">
+            <div className="min-w-0 max-w-[760px] overflow-x-clip pb-20 lg:pb-0">
               <AuthorBox
                 name={post.author.name}
                 role={post.author.role}
