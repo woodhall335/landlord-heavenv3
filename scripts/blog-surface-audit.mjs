@@ -35,6 +35,11 @@ const stickyContainerHasMaxHeight = stickyContainerClasses.includes('max-h-[calc
 const stickyContainerHasOverflowYAuto = stickyContainerClasses.includes('overflow-y-auto');
 const stickyContainerHasNoInnerScroll = !stickyContainerHasMaxHeight && !stickyContainerHasOverflowYAuto;
 
+const tocPanelTag = tocSource.match(/<ul\s+[^>]*data-blog-toc-panel[^>]*>/);
+const tocPanelClasses = tocPanelTag?.[0].match(/className={`([^`]+)`}/)?.[1] || tocPanelTag?.[0].match(/className="([^"]+)"/)?.[1] || '';
+const tocPanelHasMaxHeightCalc = /\bmax-h-\[calc\(100vh-[^\]]+\)\]/.test(tocPanelClasses);
+const tocPanelHasOverflowYAuto = /\boverflow-y-auto\b/.test(tocPanelClasses);
+
 const guardImportPresent = articleSource.includes("from '@/components/blog/BlogArticleStickyGuard'");
 const guardUsagePresent = articleSource.includes('<BlogArticleStickyGuard />');
 
@@ -79,6 +84,22 @@ const stickyBreakerPatterns = [
 ];
 
 const stickyOffenders = [];
+const innerScrollOffenders = [];
+
+const innerScrollPatterns = [
+  { token: 'overflow-y-auto', regex: /\boverflow-y-auto\b/ },
+  { token: 'max-h-[calc(100vh-...)]', regex: /\bmax-h-\[calc\(100vh-[^\]]+\)\]/ },
+];
+
+for (const pattern of innerScrollPatterns) {
+  if (pattern.regex.test(stickyContainerClasses)) {
+    innerScrollOffenders.push({ target: 'sticky inner container', token: pattern.token, classValue: stickyContainerClasses });
+  }
+  if (pattern.regex.test(tocPanelClasses)) {
+    innerScrollOffenders.push({ target: 'toc panel', token: pattern.token, classValue: tocPanelClasses });
+  }
+}
+
 for (const target of ancestryTokens) {
   const classMatch = articleSource.match(target.regex);
   const classValue = target.label === 'sticky inner' ? stickyContainerClasses : classMatch?.[1] || '';
@@ -123,6 +144,10 @@ const report = {
   stickyContainerHasMaxHeight,
   stickyContainerHasOverflowYAuto,
   stickyContainerHasNoInnerScroll,
+  tocPanelClasses,
+  tocPanelHasMaxHeightCalc,
+  tocPanelHasOverflowYAuto,
+  innerScrollOffenders,
   guardImportPresent,
   guardUsagePresent,
   hasSidebarOrderExactOnce,
@@ -135,6 +160,16 @@ const report = {
 };
 
 console.log('[blog-audit]', JSON.stringify(report, null, 2));
+
+
+if (innerScrollOffenders.length > 0) {
+  const offenderTokens = [...new Set(innerScrollOffenders.map((offender) => offender.token))];
+  console.error(`[blog-audit:inner-scroll-offenders] Found forbidden inner-scroll class tokens: ${offenderTokens.join(', ')}`);
+  for (const offender of innerScrollOffenders) {
+    console.error(`- ${offender.target} :: ${offender.token}`);
+    console.error(`  className="${offender.classValue}"`);
+  }
+}
 
 if (stickyOffenders.length > 0) {
   const offenderTokens = [...new Set(stickyOffenders.map((offender) => offender.token))];
@@ -155,6 +190,9 @@ if (
   !stickyContainerHasTopVar ||
   !stickyContainerHasStickyPosition ||
   !stickyContainerHasNoInnerScroll ||
+  tocPanelHasMaxHeightCalc ||
+  tocPanelHasOverflowYAuto ||
+  innerScrollOffenders.length > 0 ||
   !guardImportPresent ||
   !guardUsagePresent ||
   !hasSidebarOrderExactOnce ||
