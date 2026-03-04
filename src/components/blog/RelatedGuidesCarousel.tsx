@@ -45,7 +45,7 @@ export function RelatedGuidesCarousel({ guides, postSlug, category }: RelatedGui
 
   return (
     <section className="overflow-x-clip border-y border-[#eadfff] bg-[#f8f1ff]/70 py-12 lg:py-16">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto min-w-0 px-4">
         <div className="mb-8 flex items-center justify-between">
           <h2 className="text-2xl font-bold text-gray-900">Related Guides</h2>
           <div className="hidden items-center gap-2 md:flex">
@@ -68,12 +68,12 @@ export function RelatedGuidesCarousel({ guides, postSlug, category }: RelatedGui
           </div>
         </div>
 
-        <div className="relative">
+        <div className="relative min-w-0">
           <div className="pointer-events-none absolute left-0 top-0 hidden h-full w-12 bg-gradient-to-r from-[#f8f1ff] to-transparent md:block" />
           <div className="pointer-events-none absolute right-0 top-0 hidden h-full w-12 bg-gradient-to-l from-[#f8f1ff] to-transparent md:block" />
-          <div ref={scrollContainerRef} className="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-2 sm:gap-6">
+          <div ref={scrollContainerRef} className="flex min-w-0 gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-2 sm:gap-6">
             {guides.map((guide) => (
-              <div key={guide.slug} className="w-[min(88vw,360px)] shrink-0 snap-start sm:w-[320px] lg:w-[360px]">
+              <div key={guide.slug} className="min-w-0 w-[min(88vw,360px)] max-w-full shrink-0 snap-start sm:w-[320px] lg:w-[360px]">
                 <BlogCard
                   slug={guide.slug}
                   title={guide.title}

@@ -832,9 +832,9 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
               </BlogProse>
 
               {sanitizedFaqs.length > 0 && (
-                <section className="mt-14 rounded-2xl border border-[#e9dcff] bg-[#f8f1ff] p-6" aria-label="Frequently asked questions">
+                <section className="mt-14 rounded-2xl border border-[#e9dcff] bg-[#f8f1ff] p-6 shadow-sm" aria-label="Frequently asked questions">
                   <h2 className="text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
-                  <FAQInline faqs={sanitizedFaqs} />
+                  <FAQInline faqs={sanitizedFaqs} className="rounded-2xl border border-[#e7d9ff] bg-white p-5 md:p-6" />
                 </section>
               )}
 

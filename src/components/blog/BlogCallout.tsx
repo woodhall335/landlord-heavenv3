@@ -27,7 +27,7 @@ export function BlogCallout({
   children,
 }: BlogCalloutProps) {
   return (
-    <section className={`my-7 rounded-2xl border px-5 py-4 leading-6 ${variantStyles[variant]} ${className}`.trim()}>
+    <section className={`my-7 rounded-2xl border px-5 py-4 leading-6 shadow-sm ${variantStyles[variant]} ${className}`.trim()}>
       <div className="flex items-start gap-3">
         {iconSrc ? (
           <Image

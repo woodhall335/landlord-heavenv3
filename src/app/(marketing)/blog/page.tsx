@@ -109,7 +109,7 @@ export default function BlogPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-3xl">
               <p className="mb-3 inline-flex rounded-full border border-[#e3d3ff] bg-white px-3 py-1 text-xs font-semibold uppercase tracking-wide text-[#692ed4]">LandlordHeaven Blog</p>
-              <h1 className="text-3xl font-bold tracking-tight text-slate-900 lg:text-4xl">Court-ready landlord guidance with product-led next steps</h1>
+              <h1 className="text-3xl font-bold tracking-tight text-slate-900 lg:text-4xl">Court Ready Landlord Guidance</h1>
               <p className="mt-4 text-lg text-slate-600">Scan practical UK landlord guides by jurisdiction, then move straight into the correct LandlordHeaven workflow.</p>
             </div>
           </div>

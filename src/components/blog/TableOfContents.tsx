@@ -28,7 +28,8 @@ export function TableOfContents({ items }: TableOfContentsProps) {
     if (!targets.length) return;
 
     const updateActiveHeading = () => {
-      const threshold = 160;
+      const stickyOffset = Number.parseInt(getComputedStyle(document.documentElement).getPropertyValue('--lh-sticky-top'), 10);
+      const threshold = Number.isFinite(stickyOffset) ? stickyOffset + 20 : 160;
       let current = targets[0]?.id ?? '';
 
       for (const target of targets) {
@@ -63,13 +64,13 @@ export function TableOfContents({ items }: TableOfContentsProps) {
   if (items.length === 0) return null;
 
   return (
-    <nav aria-label="In this article" className="rounded-2xl border border-[#e7d9ff] bg-[#f8f1ff] p-4 md:p-5">
+    <nav aria-label="In this article" className="rounded-2xl border border-[#e7d9ff] bg-[#f8f1ff] p-4 shadow-sm md:p-5">
       <button
         type="button"
         aria-expanded={isOpen}
         aria-controls={panelId}
         onClick={() => setIsOpen((prev) => !prev)}
-        className="mb-3 flex w-full items-center justify-between gap-2 rounded-lg px-2 py-1 text-left font-semibold text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#692ed4] focus-visible:ring-offset-2"
+        className="mb-3 flex w-full items-center justify-between gap-2 rounded-lg border border-[#e5d8fb] bg-white/80 px-2 py-2 text-left font-semibold text-gray-900 transition hover:border-[#d7c2fb] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#692ed4] focus-visible:ring-offset-2 lg:cursor-default lg:border-transparent lg:bg-transparent lg:px-0 lg:py-1"
       >
         <span className="flex items-center gap-2">
           <List className="h-4 w-4 text-[#692ed4]" />
@@ -81,7 +82,7 @@ export function TableOfContents({ items }: TableOfContentsProps) {
         </span>
       </button>
 
-      <ul id={panelId} className={`space-y-1.5 ${isOpen ? 'block' : 'hidden lg:block'}`}>
+      <ul id={panelId} className={`space-y-1.5 overflow-hidden transition-all ${isOpen ? 'block' : 'hidden lg:block'}`}>
         {items.map((item) => (
           <li key={item.id}>
             <a
@@ -94,7 +95,7 @@ export function TableOfContents({ items }: TableOfContentsProps) {
               onClick={(e) => {
                 e.preventDefault();
                 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-                document.getElementById(item.id)?.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+                document.getElementById(item.id)?.scrollIntoView({ block: 'start', behavior: prefersReducedMotion ? 'auto' : 'smooth' });
               }}
             >
               {item.title}

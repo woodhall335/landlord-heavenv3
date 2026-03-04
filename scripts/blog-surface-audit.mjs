@@ -14,8 +14,10 @@ const blogProseSource = fs.existsSync(blogProsePath) ? fs.readFileSync(blogProse
 const hasOverflowHardening =
   blogProseSource.includes('overflow-x-clip [overflow-wrap:anywhere]') &&
   blogProseSource.includes('prose-a:break-words') &&
+  blogProseSource.includes('prose-li:[overflow-wrap:anywhere]') &&
   blogProseSource.includes('prose-pre:overflow-x-auto') &&
-  blogProseSource.includes('[&_table]:overflow-x-auto');
+  blogProseSource.includes('wrapScrollableContent') &&
+  blogProseSource.includes('overflow-x-auto rounded-2xl border border-[#e7d9ff] bg-white/90');
 const articleHasStickyCssVar = articleSource.includes("'--lh-sticky-top'") || articleSource.includes('"--lh-sticky-top"');
 const hasBlogProseWrapper = articleSource.includes('<BlogProse>') && articleSource.includes("from '@/components/blog/BlogProse'");
 
@@ -31,13 +33,18 @@ const relatedPath = 'src/components/blog/RelatedGuidesCarousel.tsx';
 const relatedSource = fs.readFileSync(relatedPath, 'utf8');
 const hasRelatedTracking = relatedSource.includes("trackEvent('click_related_post'");
 const relatedUsesBlogCard = relatedSource.includes('<BlogCard') || relatedSource.includes('<BlogCardCompact');
+const relatedHasOverflowGuards =
+  relatedSource.includes('container mx-auto min-w-0 px-4') &&
+  relatedSource.includes('relative min-w-0') &&
+  relatedSource.includes('flex min-w-0 gap-4 overflow-x-auto') &&
+  relatedSource.includes('min-w-0 w-[min(88vw,360px)] max-w-full');
 
 const articleUsesManifestThumbs =
   articleSource.includes('heroImage: getBlogImagesForPostThumb({') && articleSource.includes('const relatedGuides = getRelatedGuides(post);');
 
 const indexPath = 'src/app/(marketing)/blog/page.tsx';
 const indexSource = fs.readFileSync(indexPath, 'utf8');
-const hasSaasPanel = indexSource.includes('Court-ready landlord guidance with product-led next steps');
+const hasUpdatedBlogTitle = indexSource.includes('Court Ready Landlord Guidance');
 
 const categoryPath = 'src/components/blog/CategoryPage.tsx';
 const categorySource = fs.readFileSync(categoryPath, 'utf8');
@@ -46,6 +53,14 @@ const hasCompactCategoryHeroSpacing =
   categorySource.includes('md:pt-8') &&
   categorySource.includes('mb-5 flex items-center gap-2 text-sm') &&
   categorySource.includes('mb-4 text-4xl font-bold');
+
+const hasWrappedTablesAndPre =
+  blogProseSource.includes("if (typeof element.type === 'string' && element.type === 'table')") &&
+  blogProseSource.includes("if (typeof element.type === 'string' && element.type === 'pre')");
+
+const hasTocStickyAndHeadingOffsets =
+  articleSource.includes('sticky top-[var(--lh-sticky-top)]') &&
+  blogProseSource.includes('prose-headings:scroll-mt-[var(--lh-sticky-top)]');
 
 const calloutPath = 'src/components/blog/BlogCallout.tsx';
 const calloutExists = fs.existsSync(calloutPath);
@@ -73,9 +88,12 @@ const report = {
   hasOverflowHardening,
   hasRelatedTracking,
   relatedUsesBlogCard,
+  relatedHasOverflowGuards,
   articleUsesManifestThumbs,
-  hasSaasPanel,
+  hasUpdatedBlogTitle,
   hasCompactCategoryHeroSpacing,
+  hasWrappedTablesAndPre,
+  hasTocStickyAndHeadingOffsets,
   calloutExists,
   calloutReferenced,
   svgRefs,
@@ -98,9 +116,12 @@ if (
   !hasOverflowHardening ||
   !hasRelatedTracking ||
   !relatedUsesBlogCard ||
+  !relatedHasOverflowGuards ||
   !articleUsesManifestThumbs ||
-  !hasSaasPanel ||
+  !hasUpdatedBlogTitle ||
   !hasCompactCategoryHeroSpacing ||
+  !hasWrappedTablesAndPre ||
+  !hasTocStickyAndHeadingOffsets ||
   svgRefs.length > 0
 ) {
   process.exitCode = 1;
