@@ -104,7 +104,7 @@ export const noticeOnlyHeroConfig: HeroConfig = {
   title: 'Dont Risk an Invalid',
   highlightTitle: 'Eviction Notice',
   subtitle:
-    'Jurisdiction-specific notices for England, Wales & Scotland — compliance-checked and reform-aware. Preview every document before purchase.',
+    'Jurisdiction specific eviction notices for England (section 21, Section 8), Wales Section 173 and RHW, Scotland Notice to Quit — Court Ready Guidance & Validation, dont risk an invalid or generic notice.',
   primaryCta: {
     label: 'Generate my eviction notice →',
     href: '/wizard?product=notice_only&src=product_page&topic=eviction',
@@ -122,7 +122,7 @@ export const completePackHeroConfig: HeroConfig = {
   mediaSrc: '/images/eviction_packs.webp',
   trustText: 'Court-ready • Updated for current housing law • England-only',
   title: 'Court Ready & Validated',
-  highlightTitle: 'Eviction Pack',
+  highlightTitle: 'Complete Eviction Pack',
   subtitle:
     'Section 21/8 notice routes plus N5 / N5B / N119, witness statement drafting, evidence checklist, and filing guide. Preview before purchase.',
   primaryCta: {
