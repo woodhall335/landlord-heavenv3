@@ -682,32 +682,32 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
       {faqSchema && <StructuredData data={faqSchema} />}
 
       <article
-        className="min-h-screen"
+        className="min-h-screen overflow-x-clip"
         style={{ '--lh-sticky-top': BLOG_STICKY_TOP_OFFSET } as CSSProperties}
       >
         {/* Hero Section - matches homepage pastel gradient */}
-        <header id="blog-hero" className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-8 pb-10 md:pt-12 md:pb-14">
+        <header id="blog-hero" className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-6 pb-8 md:pt-8 md:pb-10">
           <div className="container mx-auto px-4">
             {/* Breadcrumb */}
-            <nav className="mb-4 flex flex-wrap items-center gap-1.5 text-xs text-gray-500 sm:text-sm">
-              <Link href="/" className="hover:text-primary transition-colors">Home</Link>
+            <nav className="mb-3 flex flex-wrap items-center gap-1.5 text-xs text-slate-500 sm:text-sm">
+              <Link href="/" className="text-slate-600 transition-colors hover:text-[#692ed4]">Home</Link>
               <span>/</span>
-              <Link href="/blog" className="hover:text-primary transition-colors">Landlord Guides</Link>
+              <Link href="/blog" className="text-slate-600 transition-colors hover:text-[#692ed4]">Landlord Guides</Link>
               {regionConfig && (
                 <>
                   <span>/</span>
-                  <Link href={`/blog/${postRegion}`} className="hover:text-primary transition-colors">
+                  <Link href={`/blog/${postRegion}`} className="text-slate-600 transition-colors hover:text-[#692ed4]">
                     {regionConfig.name}
                   </Link>
                 </>
               )}
               <span>/</span>
-              <span className="text-gray-900 truncate max-w-[200px]">{seoConfig.metaTitle}</span>
+              <span className="max-w-[220px] truncate text-slate-900">{seoConfig.metaTitle}</span>
             </nav>
 
             <div className="max-w-4xl">
               {/* Category & Meta */}
-              <div className="mb-4 flex flex-wrap items-center gap-2 text-sm">
+              <div className="mb-3 flex flex-wrap items-center gap-2 text-sm">
                 <span className="rounded-full bg-[#692ed4] px-3 py-1 font-medium text-white">
                   {post.category}
                 </span>
@@ -743,14 +743,14 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
                 </span>
               </div>
 
-              <div className="mb-4 flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-wide">
+              <div className="mb-3 flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-wide">
                 <span className="rounded-full border border-[#e3d3ff] bg-[#f8f1ff] px-3 py-1 text-[#692ed4]">Court-ready guidance</span>
                 <span className="rounded-full bg-slate-100 px-3 py-1 text-slate-600">{post.author.role}</span>
               </div>
 
               {/* Reviewer badge if available */}
               {post.reviewer && (
-                <div className="mb-3 flex items-center gap-2 text-sm">
+                <div className="mb-2 flex items-center gap-2 text-sm">
                   <CheckCircle className="w-4 h-4 text-green-600" />
                   <span className="text-gray-600">
                     Reviewed: <span className="font-medium text-gray-900">{post.reviewer.name}</span>
@@ -760,12 +760,12 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
               )}
 
               {/* Title */}
-              <h1 className="mb-4 text-3xl font-bold leading-tight text-gray-900 lg:text-5xl">
+              <h1 className="mb-3 text-balance break-words text-3xl font-bold leading-tight text-slate-900 sm:text-4xl lg:text-5xl">
                 {seoConfig.metaTitle}
               </h1>
 
               {/* Description */}
-              <p className="mb-6 max-w-3xl text-base leading-7 text-gray-600 sm:text-lg sm:leading-8 lg:text-xl">
+              <p className="mb-5 max-w-3xl line-clamp-4 text-base leading-7 text-slate-600 md:line-clamp-3 sm:text-lg sm:leading-8">
                 {seoConfig.heroIntro}
               </p>
 
@@ -801,8 +801,17 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
         )}
 
         {/* Content */}
-        <div className="container mx-auto px-4 py-10 lg:py-14">
+        <div className="container mx-auto px-4 py-8 lg:py-12">
           <BlogReadingProgress />
+          <div className="blog-full-bleed-hero-wrapper relative mb-8 aspect-[16/9] w-full overflow-hidden rounded-3xl border border-[#e8ddfb] bg-[#f8f1ff] shadow-[0_10px_30px_rgba(105,46,212,0.08)] lg:mb-10">
+            <Image
+              src={heroSrc}
+              alt={post.heroImageAlt}
+              fill
+              sizes="(min-width: 1280px) 1120px, 100vw"
+              className={heroIsSvg ? 'object-contain p-2 sm:p-3' : 'object-cover object-center'}
+            />
+          </div>
           <div className="grid items-start gap-12 lg:grid-cols-[minmax(0,760px)_300px] lg:gap-14 lg:justify-center">
             {/* Main Content */}
             <div className="min-w-0 max-w-[760px] pb-20 lg:pb-0">
@@ -815,18 +824,6 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
               <LegalDisclaimer>
                 This guidance is informational and not legal advice. Consult a qualified legal professional for your case.
               </LegalDisclaimer>
-
-              <div className="relative mb-10 overflow-hidden rounded-3xl border border-[#e8ddfb] bg-[#f8f1ff] p-2 shadow-[0_10px_30px_rgba(105,46,212,0.08)]">
-                <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl bg-white">
-                  <Image
-                    src={heroSrc}
-                    alt={post.heroImageAlt}
-                    fill
-                    sizes="(min-width: 1024px) 760px, 100vw"
-                    className={heroIsSvg ? 'object-contain p-2 sm:p-3' : 'object-cover object-center'}
-                  />
-                </div>
-              </div>
 
               <BlogInlineProductCard cta={productCta} postSlug={slug} category={post.category} />
 
@@ -854,7 +851,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
                   title={complianceTopic?.title ?? 'Have a landlord question?'}
                   utm_campaign={slug}
                 />
-              </div>
+                </div>
 
               <div className="mt-14 flex items-center justify-between border-t border-gray-100 py-8">
                 <Link
@@ -873,17 +870,19 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
 
             {/* Sidebar */}
             <aside className="hidden min-w-0 lg:block lg:self-start" aria-label="Article navigation">
-              <div className="sticky top-[var(--lh-sticky-top)] space-y-6">
+              <div className="sticky top-[var(--lh-sticky-top)] space-y-4">
                 <TableOfContents items={post.tableOfContents} />
                 <BlogStickySlots cta={productCta} postSlug={slug} category={post.category} showDesktop showMobile={false} />
-                <AskHeavenWidget
-                  variant="compact"
-                  source="blog"
-                  topic={complianceTopic?.topic ?? 'general'}
-                  prompt={complianceTopic?.prompt}
-                  title={complianceTopic?.title ?? 'Have a landlord question?'}
-                  utm_campaign={slug}
-                />
+                <div className="rounded-2xl border border-[#e7d9ff] bg-[#f8f1ff] p-3 shadow-sm">
+                  <AskHeavenWidget
+                    variant="compact"
+                    source="blog"
+                    topic={complianceTopic?.topic ?? 'general'}
+                    prompt={complianceTopic?.prompt}
+                    title={complianceTopic?.title ?? 'Have a landlord question?'}
+                    utm_campaign={slug}
+                  />
+                </div>
               </div>
             </aside>
           </div>

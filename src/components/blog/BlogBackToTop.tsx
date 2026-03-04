@@ -36,7 +36,7 @@ export function BlogBackToTop() {
         const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
       }}
-      className="fixed bottom-24 right-4 z-30 rounded-full border border-[#e9dcff] bg-white px-3 py-2 text-sm font-medium text-[#692ed4] shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#692ed4] focus-visible:ring-offset-2"
+      className="fixed right-4 z-30 rounded-full border border-[#e9dcff] bg-white px-3 py-2 text-sm font-medium text-[#692ed4] shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#692ed4] focus-visible:ring-offset-2 bottom-[calc(env(safe-area-inset-bottom)+6.5rem)] lg:bottom-8"
     >
       Back to top
     </button>

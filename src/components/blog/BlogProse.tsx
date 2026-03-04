@@ -7,7 +7,7 @@ const blogProseClassName = [
   'prose-h3:mt-8 prose-h3:mb-3 prose-h3:text-2xl',
   'prose-h4:mt-6 prose-h4:mb-2',
   'prose-p:my-4 prose-p:leading-relaxed prose-p:text-slate-700',
-  'prose-ul:my-4 prose-ol:my-4 prose-li:my-1 prose-li:text-slate-700',
+  'prose-ul:my-4 prose-ol:my-4 prose-li:my-1 prose-li:break-words prose-li:text-slate-700',
   'prose-a:break-words prose-a:font-medium prose-a:text-[#692ed4] prose-a:decoration-[#cdb1f7] prose-a:decoration-2 prose-a:underline-offset-4 hover:prose-a:text-[#5922bc] hover:prose-a:decoration-[#692ed4]',
   'prose-a:focus-visible:rounded-sm prose-a:focus-visible:outline-none prose-a:focus-visible:ring-2 prose-a:focus-visible:ring-[#692ed4] prose-a:focus-visible:ring-offset-2',
   'prose-strong:text-slate-900',
