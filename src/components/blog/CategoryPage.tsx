@@ -94,11 +94,11 @@ export function CategoryPage({ region, posts }: CategoryPageProps) {
           <div className="container mx-auto px-4">
             {/* Breadcrumb */}
             <nav className="mb-5 flex items-center gap-2 text-sm text-gray-500">
-              <Link href="/" className="hover:text-primary transition-colors">Home</Link>
+              <Link href="/" className="text-slate-600 transition-colors hover:text-[#692ed4]">Home</Link>
               <span>/</span>
-              <Link href="/blog" className="hover:text-primary transition-colors">Landlord Guides</Link>
+              <Link href="/blog" className="text-slate-600 transition-colors hover:text-[#692ed4]">Landlord Guides</Link>
               <span>/</span>
-              <span className="text-gray-900">{config.name}</span>
+              <span className="text-slate-900">{config.name}</span>
             </nav>
 
             <div className="mx-auto max-w-3xl text-center">

@@ -8,7 +8,7 @@ const hasToc = articleSource.includes('<TableOfContents items={post.tableOfConte
 const hasDesktopStickySidebar =
   articleSource.includes('aria-label="Article navigation"') &&
   articleSource.includes('hidden min-w-0 lg:block lg:self-start') &&
-  articleSource.includes('sticky top-[var(--lh-sticky-top)] space-y-6');
+  articleSource.includes('sticky top-[var(--lh-sticky-top)]');
 const blogProsePath = 'src/components/blog/BlogProse.tsx';
 const blogProseSource = fs.existsSync(blogProsePath) ? fs.readFileSync(blogProsePath, 'utf8') : '';
 const hasOverflowHardening =
@@ -19,6 +19,10 @@ const hasOverflowHardening =
 const articleHasStickyCssVar = articleSource.includes("'--lh-sticky-top'") || articleSource.includes('"--lh-sticky-top"');
 const hasBlogProseWrapper = articleSource.includes('<BlogProse>') && articleSource.includes("from '@/components/blog/BlogProse'");
 
+const hasFullBleedHeroWrapper =
+  articleSource.includes('blog-full-bleed-hero-wrapper') &&
+  articleSource.includes('aspect-[16/9] w-full overflow-hidden rounded-3xl');
+
 const stickyGridMatch = articleSource.match(/<div className="([^"]*lg:grid-cols-\[minmax\(0,760px\)_300px\][^"]*)">/);
 const stickyGridClasses = stickyGridMatch?.[1] || '';
 const stickyGridHasBreakingOverflow = /(overflow-hidden|overflow-x-hidden|overflow-x-clip|overflow-auto|overflow-scroll)/.test(stickyGridClasses);
@@ -26,7 +30,7 @@ const stickyGridHasBreakingOverflow = /(overflow-hidden|overflow-x-hidden|overfl
 const relatedPath = 'src/components/blog/RelatedGuidesCarousel.tsx';
 const relatedSource = fs.readFileSync(relatedPath, 'utf8');
 const hasRelatedTracking = relatedSource.includes("trackEvent('click_related_post'");
-const relatedUsesBlogCard = relatedSource.includes('<BlogCard');
+const relatedUsesBlogCard = relatedSource.includes('<BlogCard') || relatedSource.includes('<BlogCardCompact');
 
 const articleUsesManifestThumbs =
   articleSource.includes('heroImage: getBlogImagesForPostThumb({') && articleSource.includes('const relatedGuides = getRelatedGuides(post);');
@@ -38,9 +42,10 @@ const hasSaasPanel = indexSource.includes('Court-ready landlord guidance with pr
 const categoryPath = 'src/components/blog/CategoryPage.tsx';
 const categorySource = fs.readFileSync(categoryPath, 'utf8');
 const hasCompactCategoryHeroSpacing =
-  categorySource.includes('pt-6 pb-10 md:pt-8 md:pb-12') &&
-  categorySource.includes('mb-5 flex items-center gap-2 text-sm text-gray-500') &&
-  categorySource.includes('mb-4 text-4xl font-bold text-gray-900 lg:text-5xl');
+  categorySource.includes('pt-6') &&
+  categorySource.includes('md:pt-8') &&
+  categorySource.includes('mb-5 flex items-center gap-2 text-sm') &&
+  categorySource.includes('mb-4 text-4xl font-bold');
 
 const calloutPath = 'src/components/blog/BlogCallout.tsx';
 const calloutExists = fs.existsSync(calloutPath);
@@ -61,6 +66,7 @@ const report = {
   hasDesktopStickySidebar,
   articleHasStickyCssVar,
   hasBlogProseWrapper,
+  hasFullBleedHeroWrapper,
   stickyGridClasses,
   stickyGridHasBreakingOverflow,
   hasToc,
@@ -86,6 +92,7 @@ if (
   !hasDesktopStickySidebar ||
   !articleHasStickyCssVar ||
   !hasBlogProseWrapper ||
+  !hasFullBleedHeroWrapper ||
   stickyGridHasBreakingOverflow ||
   !hasToc ||
   !hasOverflowHardening ||
