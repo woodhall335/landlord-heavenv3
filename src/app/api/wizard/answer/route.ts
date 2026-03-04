@@ -9,6 +9,7 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { createSupabaseAdminClient, logSupabaseAdminDiagnostics } from '@/lib/supabase/admin';
+import { createServerSupabaseClient } from '@/lib/supabase/server';
 import {
   loadMQS,
   getNextMQSQuestion,
@@ -45,6 +46,7 @@ import {
   inferTenancySkuFromTierLabel,
   type TenancyJurisdiction,
 } from '@/lib/tenancy/product-tier';
+import { assertCaseWriteAccess } from '@/lib/auth/case-access';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -587,6 +589,9 @@ export async function POST(request: Request) {
 
     // Admin client bypasses RLS - used for case operations for anonymous users
     const adminSupabase = createSupabaseAdminClient();
+    const supabase = await createServerSupabaseClient();
+    const { data: authData } = await supabase.auth.getUser();
+    const user = authData.user;
 
     // ---------------------------------------
     // 1. Load case - use admin client to support anonymous users
@@ -622,7 +627,14 @@ export async function POST(request: Request) {
       jurisdiction: string;
       case_type: string;
       collected_facts: any;
+      user_id: string | null;
+      session_token?: string | null;
     };
+
+    const accessError = assertCaseWriteAccess({ request, user, caseRow });
+    if (accessError) {
+      return accessError;
+    }
 
     const collectedFacts = (caseRow.collected_facts as Record<string, any>) || {};
     let canonicalJurisdiction =
@@ -1432,8 +1444,7 @@ export async function POST(request: Request) {
 
     // Audit log for paid cases (non-blocking, fire-and-forget)
     // Get user from supabase session for audit
-    const { data: userData } = await adminSupabase.auth.getUser();
-    const auditUserId = userData?.user?.id || null;
+    const auditUserId = user?.id || null;
     logMutation({
       caseId: case_id,
       userId: auditUserId,

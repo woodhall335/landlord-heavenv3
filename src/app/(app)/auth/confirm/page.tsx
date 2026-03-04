@@ -16,6 +16,7 @@ import { Button } from '@/components/ui/Button';
 import { StandardHero } from '@/components/marketing/StandardHero';
 import { RiCheckLine, RiErrorWarningLine } from 'react-icons/ri';
 import { getSupabaseBrowserClient } from '@/lib/supabase/client';
+import { safeInternalRedirect } from '@/lib/security/redirects';
 
 type ConfirmState = 'loading' | 'success' | 'error';
 
@@ -107,7 +108,7 @@ async function getRedirectUrl(): Promise<string> {
         localStorage.removeItem('auth_redirect');
         // Return the redirect URL or fall back to dashboard
         if (parsed.url) {
-          return parsed.url;
+          return safeInternalRedirect(parsed.url);
         }
       }
       localStorage.removeItem('auth_redirect');

@@ -25,6 +25,11 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 export const runtime = 'nodejs';
 
+function getSessionTokenFromRequest(request: Request): string | null {
+  const token = request.headers.get('x-session-token');
+  return token && token.trim() ? token.trim() : null;
+}
+
 const startWizardSchema = z.object({
   product: z.enum([
     'notice_only',
@@ -209,6 +214,7 @@ export async function POST(request: Request) {
     const adminSupabase = createSupabaseAdminClient();
 
     let caseRecord: any = null;
+    const requestSessionToken = getSessionTokenFromRequest(request);
 
     // ------------------------------------------------
     // 1. Resume existing case if case_id supplied
@@ -247,6 +253,10 @@ export async function POST(request: Request) {
       // ------------------------------------------------
       // 2. Create new case
       // ------------------------------------------------
+      if (!user && !requestSessionToken) {
+        return NextResponse.json({ error: 'Case not found' }, { status: 404 });
+      }
+
       const emptyFacts = createEmptyWizardFacts();
 
       // Pre-populate meta + country on the *flat* wizard facts
@@ -276,6 +286,7 @@ export async function POST(request: Request) {
         .from('cases')
         .insert({
           user_id: user ? user.id : null,
+          ...(user ? {} : { session_token: requestSessionToken }),
           case_type: resolvedCaseType,
           jurisdiction: effectiveJurisdiction,
           status: 'in_progress',

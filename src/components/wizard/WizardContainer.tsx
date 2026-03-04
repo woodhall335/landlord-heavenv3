@@ -22,6 +22,7 @@ import {
 } from './index';
 import { GuidanceTips } from './GuidanceTips';
 import type { WizardQuestion as BaseWizardQuestion } from '@/lib/ai/fact-finder';
+import { getSessionTokenHeaders } from '@/lib/session-token';
 
 // Extend the base WizardQuestion type with optional fields that come from MQS/backend
 type WizardQuestion = BaseWizardQuestion & {
@@ -245,7 +246,10 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
       try {
         const response = await fetch('/api/wizard/answer', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            ...getSessionTokenHeaders(),
+          },
           body: JSON.stringify({
             case_id: caseId,
             question_id: questionId,

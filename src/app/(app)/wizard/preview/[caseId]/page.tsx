@@ -30,6 +30,7 @@ import { Loader2, Scale, CheckCircle, Download, Shield, Clock, FileText, List } 
 import { trackWizardPreviewViewed, trackCheckoutStarted, trackBeginCheckout } from '@/lib/analytics';
 import { getSupabaseBrowserClient } from '@/lib/supabase/client';
 import { getCheckoutRedirectUrls, type CheckoutProduct } from '@/lib/payments/redirects';
+import { getSessionTokenHeaders } from '@/lib/session-token';
 import { getCheckoutAttribution } from '@/lib/wizard/wizardAttribution';
 import {
   getIncludedSummary,
@@ -977,7 +978,7 @@ export default function WizardPreviewPage() {
     try {
       const response = await fetch('/api/wizard/answer', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...getSessionTokenHeaders() },
         body: JSON.stringify({
           case_id: caseId,
           question_id: 'selected_notice_route',

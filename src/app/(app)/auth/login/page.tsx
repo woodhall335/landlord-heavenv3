@@ -13,8 +13,8 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
-import { getSupabaseBrowserClient } from '@/lib/supabase/client';
 import { AuthHeroShell } from '@/components/auth/AuthHeroShell';
+import { safeInternalRedirect } from '@/lib/security/redirects';
 
 interface UserProfile {
   is_admin?: boolean;
@@ -88,6 +88,7 @@ function LoginContent() {
 
   // Get redirect and case_id from URL params
   const redirectUrl = searchParams.get('redirect');
+  const safeRedirectUrl = safeInternalRedirect(redirectUrl);
   const caseId = searchParams.get('case_id');
 
   const [email, setEmail] = useState('');
@@ -99,12 +100,12 @@ function LoginContent() {
   useEffect(() => {
     if (redirectUrl || caseId) {
       localStorage.setItem('auth_redirect', JSON.stringify({
-        url: redirectUrl || null,
+        url: safeRedirectUrl || null,
         caseId: caseId || null,
         timestamp: Date.now(),
       }));
     }
-  }, [redirectUrl, caseId]);
+  }, [redirectUrl, safeRedirectUrl, caseId]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -112,20 +113,18 @@ function LoginContent() {
     setIsLoading(true);
 
     try {
-      // Use the browser Supabase client for login
-      // This ensures the session is properly stored in cookies
-      const supabase = getSupabaseBrowserClient();
-      const { data, error: authError } = await supabase.auth.signInWithPassword({
-        email,
-        password,
+      const loginResponse = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
       });
 
-      if (authError) {
-        setError(authError.message || 'Invalid email or password');
+      const loginData = await loginResponse.json().catch(() => ({}));
+      if (!loginResponse.ok) {
+        setError(loginData.error || 'Invalid email or password');
         return;
       }
 
-      if (data.session) {
         // Session is now stored - refresh to update server-side layout (header)
         router.refresh();
 
@@ -133,7 +132,7 @@ function LoginContent() {
         claimOrphanCases();
 
         // Check for redirect info from URL params or localStorage
-        let targetUrl = redirectUrl;
+        let targetUrl = safeRedirectUrl;
         let targetCaseId = caseId;
 
         if (!targetUrl && !targetCaseId) {
@@ -144,7 +143,7 @@ function LoginContent() {
               const parsed = JSON.parse(stored);
               // Only use if less than 1 hour old
               if (parsed.timestamp && Date.now() - parsed.timestamp < 3600000) {
-                targetUrl = parsed.url;
+                targetUrl = safeInternalRedirect(parsed.url);
                 targetCaseId = parsed.caseId;
               }
               localStorage.removeItem('auth_redirect');
@@ -161,14 +160,11 @@ function LoginContent() {
 
         // Redirect to target URL or dashboard
         if (targetUrl) {
-          router.push(targetUrl);
+          router.push(safeInternalRedirect(targetUrl));
         } else {
           const dashboardUrl = await getDashboardUrl();
           router.push(dashboardUrl);
         }
-      } else {
-        setError('Login failed - no session returned');
-      }
     } catch {
       setError('Something went wrong. Please try again.');
     } finally {
@@ -244,7 +240,7 @@ function LoginContent() {
         <p className="text-center text-sm text-gray-600">
           Don't have an account?{' '}
           <Link
-            href={`/auth/signup${redirectUrl ? `?redirect=${encodeURIComponent(redirectUrl)}` : ''}${caseId ? `${redirectUrl ? '&' : '?'}case_id=${caseId}` : ''}`}
+            href={`/auth/signup${safeRedirectUrl ? `?redirect=${encodeURIComponent(safeRedirectUrl)}` : ''}${caseId ? `${safeRedirectUrl ? '&' : '?'}case_id=${caseId}` : ''}`}
             className="font-medium text-primary hover:text-primary-dark"
           >
             Sign up

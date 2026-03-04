@@ -19,6 +19,7 @@ import {
   inferTenancySkuFromFacts,
   type TenancyJurisdiction,
 } from '@/lib/tenancy/product-tier';
+import { assertCaseWriteAccess, getSessionTokenFromRequest } from '@/lib/auth/case-access';
 
 export const runtime = 'nodejs';
 
@@ -97,6 +98,7 @@ export async function POST(request: NextRequest) {
       return mutationCheck.errorResponse;
     }
 
+    const requestSessionToken = getSessionTokenFromRequest(request);
     const supabase = await createServerSupabaseClient();
 
     // Admin client bypasses RLS - used for creating cases/case_facts for anonymous users
@@ -108,7 +110,7 @@ export async function POST(request: NextRequest) {
     // First, check if the case exists using admin client to support anonymous users
     const { data: existingCase, error: fetchError } = await adminSupabase
       .from('cases')
-      .select('id, user_id, collected_facts, jurisdiction')
+      .select('id, user_id, session_token, collected_facts, jurisdiction')
       .eq('id', case_id)
       .single();
 
@@ -118,6 +120,17 @@ export async function POST(request: NextRequest) {
         { error: 'Failed to fetch case' },
         { status: 500 }
       );
+    }
+
+    if (existingCase) {
+      const accessError = assertCaseWriteAccess({
+        request,
+        user,
+        caseRow: existingCase as { user_id: string | null; session_token?: string | null },
+      });
+      if (accessError) {
+        return accessError;
+      }
     }
 
     const paymentStatus = await getCasePaymentStatus(case_id);
@@ -263,6 +276,10 @@ export async function POST(request: NextRequest) {
       const jurisdiction = meta.jurisdiction || 'england';
       const caseType = meta.case_type || 'money_claim';
 
+      if (!user && !requestSessionToken) {
+        return NextResponse.json({ error: 'Case not found' }, { status: 404 });
+      }
+
       // Allow anonymous case creation (user_id can be null for "try before you buy")
       // Use admin client to bypass RLS for anonymous users
       const { error: insertError } = await adminSupabase
@@ -270,6 +287,7 @@ export async function POST(request: NextRequest) {
         .insert({
           id: case_id,
           user_id: user?.id || null, // Allow null for anonymous users
+          ...(user ? {} : { session_token: requestSessionToken }),
           case_type: caseType,
           jurisdiction: jurisdiction,
           collected_facts: mergedFacts,

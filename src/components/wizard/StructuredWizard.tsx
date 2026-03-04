@@ -17,6 +17,7 @@ import { SmartReviewPanel } from '@/components/wizard/SmartReviewPanel';
 import { UploadField, type EvidenceFileSummary } from '@/components/wizard/fields/UploadField';
 import { formatGroundTitle, getGroundTypeBadgeClasses, type GroundMetadata } from '@/lib/grounds/format-ground-title';
 import { apiUrl } from '@/lib/api';
+import { getSessionTokenHeaders } from '@/lib/session-token';
 import { validateStepInline, type InlineGuidance } from '@/lib/validation/noticeOnlyInlineValidator';
 import { extractWizardUxIssues, type InlineWarning } from '@/lib/validation/noticeOnlyWizardUxIssues';
 import type { CanonicalJurisdiction } from '@/lib/types/jurisdiction';
@@ -1476,7 +1477,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
       // Save answer to backend
       const response = await fetch(apiUrl('/api/wizard/answer'), {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...getSessionTokenHeaders() },
         body: JSON.stringify({
           case_id: caseId,
           question_id: currentQuestion.id,
@@ -1818,7 +1819,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
       // Persist the route change to backend
       const response = await fetch(apiUrl('/api/wizard/answer'), {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...getSessionTokenHeaders() },
         body: JSON.stringify({
           case_id: caseId,
           question_id: 'selected_notice_route',
