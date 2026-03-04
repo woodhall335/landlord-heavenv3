@@ -88,9 +88,9 @@ export function CategoryPage({ region, posts }: CategoryPageProps) {
       <StructuredData data={breadcrumbSchema} />
       <StructuredData data={collectionSchema} />
 
-      <main>
+      <main className="overflow-x-clip">
         {/* Hero Section - matches homepage pastel gradient */}
-        <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-6 pb-10 md:pt-8 md:pb-12">
+        <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-5 pb-8 md:pt-7 md:pb-10">
           <div className="container mx-auto px-4">
             {/* Breadcrumb */}
             <nav className="mb-5 flex items-center gap-2 text-sm text-gray-500">
@@ -164,7 +164,7 @@ export function CategoryPage({ region, posts }: CategoryPageProps) {
         )}
 
         {/* Related Topics */}
-        <section className="py-8 bg-gray-50 border-b border-gray-100">
+        <section className="border-b border-gray-100 bg-gray-50 py-6">
           <div className="container mx-auto px-4">
             <div className="flex flex-wrap items-center justify-center gap-3">
               <span className="text-sm text-gray-600 font-medium">Related topics:</span>
@@ -180,7 +180,7 @@ export function CategoryPage({ region, posts }: CategoryPageProps) {
           </div>
         </section>
 
-        <section className="py-8">
+        <section className="py-6">
           <div className="container mx-auto px-4">
             <NextStepWidget location="blog_category_mid" />
           </div>
@@ -188,7 +188,7 @@ export function CategoryPage({ region, posts }: CategoryPageProps) {
 
         {/* Featured Post */}
         {featuredPost && (
-          <section className="py-12 lg:py-16">
+          <section className="py-10 lg:py-14">
             <div className="container mx-auto px-4">
               <h2 className="text-2xl font-bold text-gray-900 mb-8">Featured {config.name} Guide</h2>
               <BlogCard
@@ -208,7 +208,7 @@ export function CategoryPage({ region, posts }: CategoryPageProps) {
 
         {/* All Guides */}
         {remainingPosts.length > 0 && (
-          <section className="py-12 lg:py-16 bg-gray-50">
+          <section className="bg-gray-50 py-10 lg:py-14">
             <div className="container mx-auto px-4">
               <h2 className="text-2xl font-bold text-gray-900 mb-8">All {config.name} Guides</h2>
               <BlogFilteredList posts={remainingPosts} categories={categories} />
@@ -217,7 +217,7 @@ export function CategoryPage({ region, posts }: CategoryPageProps) {
         )}
 
         {/* Cross-Link to Other Regions */}
-        <section className="py-12 lg:py-16">
+        <section className="py-10 lg:py-14">
           <div className="container mx-auto px-4">
             <h2 className="text-2xl font-bold text-gray-900 mb-4 text-center">
               Browse Other Jurisdictions

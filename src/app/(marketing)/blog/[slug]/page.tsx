@@ -32,7 +32,6 @@ import { BlogBackToTop } from '@/components/blog/BlogBackToTop';
 import { BlogStickySlots } from '@/components/blog/BlogStickySlots';
 import { BlogProse } from '@/components/blog/BlogProse';
 import { BlogArticleStickyGuard } from '@/components/blog/BlogArticleStickyGuard';
-import { LegalDisclaimer } from '@/components/blog/BlogCallout';
 import { getBlogImagesForPost, getBlogImagesForPostThumb } from '@/lib/blog/image-manifest';
 import { getBlogSeoConfig } from '@/lib/blog/seo';
 import { BLOG_PRODUCT_ROUTES, getBlogProductCta } from '@/lib/blog/product-cta-map';
@@ -575,7 +574,6 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
     tags: post.tags,
   });
   const heroSrc = manifestImages.hero || post.heroImage;
-  const heroIsSvg = heroSrc.toLowerCase().endsWith('.svg');
   const productCta = getBlogProductCta(post);
   const sanitizedFaqs = (post.faqs ?? [])
     .filter((faq) => faq.question.trim().length > 0 && faq.answer.trim().length > 0)
@@ -686,7 +684,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
       <article className="min-h-screen" style={{ '--lh-sticky-top': BLOG_STICKY_TOP_OFFSET } as CSSProperties}>
         <BlogArticleStickyGuard />
         {/* Hero Section - matches homepage pastel gradient */}
-        <header id="blog-hero" className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-4 pb-7 md:pt-6 md:pb-9">
+        <header id="blog-hero" className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-3 pb-6 md:pt-5 md:pb-8">
           <div className="container mx-auto px-4">
             {/* Breadcrumb */}
             <nav className="mb-3 flex flex-wrap items-center gap-1.5 text-xs text-slate-500 sm:text-sm">
@@ -801,7 +799,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
         )}
 
         {/* Content */}
-        <div className="container mx-auto px-4 py-8 lg:py-10">
+        <div className="container mx-auto min-w-0 px-4 py-7 lg:py-9">
           <BlogReadingProgress />
           <div className="blog-full-bleed-hero-wrapper relative mb-8 aspect-[16/9] w-full overflow-hidden rounded-3xl border border-[#e8ddfb] bg-[#f8f1ff] shadow-[0_10px_30px_rgba(105,46,212,0.08)] lg:mb-10">
             <Image
@@ -809,10 +807,10 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
               alt={post.heroImageAlt}
               fill
               sizes="(min-width: 1280px) 1120px, 100vw"
-              className={heroIsSvg ? 'object-contain p-2 sm:p-3' : 'object-cover object-center'}
+              className="object-cover object-center"
             />
           </div>
-          <div className="grid items-start gap-12 lg:grid-cols-[minmax(0,760px)_300px] lg:gap-14 lg:justify-center">
+          <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,760px)_300px] lg:gap-12 lg:justify-center">
             {/* Main Content */}
             <div className="min-w-0 max-w-[760px] overflow-x-clip pb-20 lg:pb-0">
               <AuthorBox
@@ -821,10 +819,6 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
                 image={post.author.image}
               />
 
-              <LegalDisclaimer>
-                This guidance is informational and not legal advice. Consult a qualified legal professional for your case.
-              </LegalDisclaimer>
-
               <BlogInlineProductCard cta={productCta} postSlug={slug} category={post.category} />
 
               <BlogProse>
@@ -832,7 +826,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
               </BlogProse>
 
               {sanitizedFaqs.length > 0 && (
-                <section className="mt-14 rounded-2xl border border-[#e9dcff] bg-[#f8f1ff] p-6 shadow-sm" aria-label="Frequently asked questions">
+                <section className="mt-12 rounded-2xl border border-[#e9dcff] bg-[#f8f1ff] p-5 shadow-sm md:p-6" aria-label="Frequently asked questions">
                   <h2 className="text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
                   <FAQInline faqs={sanitizedFaqs} className="rounded-2xl border border-[#e7d9ff] bg-white p-5 md:p-6" />
                 </section>
@@ -853,7 +847,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
                 />
                 </div>
 
-              <div className="mt-14 flex items-center justify-between border-t border-gray-100 py-8">
+              <div className="mt-12 flex items-center justify-between border-t border-gray-100 py-7">
                 <Link
                   href="/blog"
                   className="inline-flex items-center text-gray-600 transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#692ed4] focus-visible:ring-offset-2"

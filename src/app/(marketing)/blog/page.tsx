@@ -100,12 +100,12 @@ export default function BlogPage() {
       <HeaderConfig mode="autoOnScroll" />
       <StructuredData data={blogSchema} />
 
-      <main>
+      <main className="overflow-x-clip">
         {/* Hero Section */}
         <UniversalHero {...blogHeroConfig} />
 
 
-        <section className="border-b border-[#ede2ff] bg-[#f8f1ff]/70 py-10 lg:py-14">
+        <section className="border-b border-[#ede2ff] bg-[#f8f1ff]/70 py-8 lg:py-11">
           <div className="container mx-auto px-4">
             <div className="max-w-3xl">
               <p className="mb-3 inline-flex rounded-full border border-[#e3d3ff] bg-white px-3 py-1 text-xs font-semibold uppercase tracking-wide text-[#692ed4]">LandlordHeaven Blog</p>
@@ -134,7 +134,7 @@ export default function BlogPage() {
         </section>
 
         {/* Browse by Region */}
-        <section className="border-b border-gray-100 bg-white py-12 lg:py-16">
+        <section className="border-b border-gray-100 bg-white py-10 lg:py-14">
           <div className="container mx-auto px-4">
             <h2 className="text-2xl font-bold text-gray-900 mb-4 text-center">
               Browse Guides by Jurisdiction
@@ -181,7 +181,7 @@ export default function BlogPage() {
         </section>
 
         {/* Featured Post */}
-        <section className="bg-[#f8f1ff]/70 py-12 lg:py-16">
+        <section className="bg-[#f8f1ff]/70 py-10 lg:py-14">
           <div className="container mx-auto px-4">
             <h2 className="text-2xl font-bold text-gray-900 mb-8">Featured Guide</h2>
             <BlogCard
@@ -200,7 +200,7 @@ export default function BlogPage() {
 
         {/* All Guides with Search & Filter */}
         {remainingPosts.length > 0 && (
-          <section className="bg-white py-12 lg:py-16">
+          <section className="bg-white py-10 lg:py-14">
             <div className="container mx-auto px-4">
               <h2 className="mb-2 text-2xl font-bold text-gray-900">All Guides</h2>
               <p className="mb-8 max-w-2xl text-gray-600">Browse practical, court-focused guides designed to help you pick the right product path faster.</p>
