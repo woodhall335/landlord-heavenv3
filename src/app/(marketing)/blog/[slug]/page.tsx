@@ -21,6 +21,7 @@ import {
 import { Calendar, Clock, Tag, ChevronLeft, Share2, RefreshCw, CheckCircle } from 'lucide-react';
 import { getCanonicalUrl, SITE_ORIGIN } from '@/lib/seo';
 import { AskHeavenWidget } from '@/components/ask-heaven/AskHeavenWidget';
+import { BlogAskHeavenPanel } from '@/components/blog/BlogAskHeavenPanel';
 import type { AskHeavenTopic } from '@/lib/ask-heaven/buildAskHeavenLink';
 import { FAQInline } from '@/components/seo/FAQSection';
 import { landingPageLinks, productLinks, guideLinks } from '@/lib/seo/internal-links';
@@ -685,7 +686,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
       <article className="min-h-screen" style={{ '--lh-sticky-top': BLOG_STICKY_TOP_OFFSET } as CSSProperties}>
         <BlogArticleStickyGuard />
         {/* Hero Section - matches homepage pastel gradient */}
-        <header id="blog-hero" className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-6 pb-8 md:pt-8 md:pb-10">
+        <header id="blog-hero" className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-4 pb-7 md:pt-6 md:pb-9">
           <div className="container mx-auto px-4">
             {/* Breadcrumb */}
             <nav className="mb-3 flex flex-wrap items-center gap-1.5 text-xs text-slate-500 sm:text-sm">
@@ -800,7 +801,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
         )}
 
         {/* Content */}
-        <div className="container mx-auto px-4 py-8 lg:py-12">
+        <div className="container mx-auto px-4 py-8 lg:py-10">
           <BlogReadingProgress />
           <div className="blog-full-bleed-hero-wrapper relative mb-8 aspect-[16/9] w-full overflow-hidden rounded-3xl border border-[#e8ddfb] bg-[#f8f1ff] shadow-[0_10px_30px_rgba(105,46,212,0.08)] lg:mb-10">
             <Image
@@ -869,22 +870,22 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
 
             {/* Sidebar */}
             <aside className="hidden min-w-0 lg:block lg:self-start" aria-label="Article navigation" data-blog-sidebar>
-              <div
-                data-blog-sticky-inner
-                className="sticky top-[var(--lh-sticky-top)] max-h-[calc(100vh-var(--lh-sticky-top)-1rem)] space-y-4 overflow-y-auto pr-1"
-              >
-                <TableOfContents items={post.tableOfContents} />
-                <BlogStickySlots cta={productCta} postSlug={slug} category={post.category} showDesktop showMobile={false} />
-                <div className="rounded-2xl border border-[#e7d9ff] bg-[#f8f1ff] p-3 shadow-sm">
-                  <AskHeavenWidget
-                    variant="compact"
-                    source="blog"
+              <div className="relative">
+                <div
+                  data-blog-sticky-inner
+                  className="sticky top-[var(--lh-sticky-top)] max-h-[calc(100vh-var(--lh-sticky-top)-1rem)] space-y-4 overflow-y-auto rounded-2xl pr-1"
+                >
+                  <TableOfContents items={post.tableOfContents} />
+                  <BlogStickySlots cta={productCta} postSlug={slug} category={post.category} showDesktop showMobile={false} />
+                  <BlogAskHeavenPanel
                     topic={complianceTopic?.topic ?? 'general'}
                     prompt={complianceTopic?.prompt}
                     title={complianceTopic?.title ?? 'Have a landlord question?'}
-                    utm_campaign={slug}
+                    slug={slug}
                   />
                 </div>
+                <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-5 rounded-t-2xl bg-gradient-to-b from-[#f8f1ff] to-transparent" />
+                <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-5 rounded-b-2xl bg-gradient-to-t from-[#f8f1ff] to-transparent" />
               </div>
             </aside>
           </div>
