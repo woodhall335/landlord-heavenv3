@@ -77,7 +77,7 @@ export function BlogStickySlots({ cta, postSlug, category, showDesktop = true, s
       {showDesktop && (
         <div
           data-blog-sticky-slot="desktop"
-          className={`hidden lg:block rounded-2xl border border-[#e5d7ff] bg-[#f8f1ff] p-5 shadow-[0_12px_30px_rgba(105,46,212,0.12)] transition-all duration-200 ${showSticky ? 'opacity-100 translate-y-0' : 'pointer-events-none opacity-0 -translate-y-2'}`}
+          className={`hidden lg:block rounded-2xl border border-[#e4d4ff] bg-[#f8f1ff] p-5 shadow-sm transition-all duration-200 ${showSticky ? 'translate-y-0 opacity-100' : 'pointer-events-none -translate-y-2 opacity-0'}`}
         >
           <p className="text-xs font-semibold uppercase tracking-wide text-[#692ed4]">Ready to generate your notice?</p>
           <ul className="mt-3 space-y-2 text-sm text-slate-700">
@@ -91,7 +91,7 @@ export function BlogStickySlots({ cta, postSlug, category, showDesktop = true, s
           <Link
             href={cta.primaryProductHref}
             onClick={() => onClick('desktop_sticky')}
-            className="mt-4 inline-flex w-full items-center justify-center rounded-lg bg-[#692ed4] px-4 py-3 font-semibold text-white hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#692ed4] focus-visible:ring-offset-2"
+            className="mt-4 inline-flex w-full items-center justify-center rounded-lg bg-[#692ed4] px-4 py-3 font-semibold text-white hover:bg-[#5f27c3] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#692ed4] focus-visible:ring-offset-2"
           >
             Generate Notice →
           </Link>
