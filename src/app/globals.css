@@ -53,6 +53,13 @@ body {
   overflow-x: clip;
 }
 
+
+html.blog-article-sticky-safe,
+body.blog-article-sticky-safe {
+  overflow-x: visible;
+}
+
+
 /* Light mode only - no dark mode for production SaaS */
 body {
   background: var(--background);

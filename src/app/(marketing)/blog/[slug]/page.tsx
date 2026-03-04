@@ -30,6 +30,7 @@ import { BlogInlineProductCard } from '@/components/blog/BlogInlineProductCard';
 import { BlogBackToTop } from '@/components/blog/BlogBackToTop';
 import { BlogStickySlots } from '@/components/blog/BlogStickySlots';
 import { BlogProse } from '@/components/blog/BlogProse';
+import { BlogArticleStickyGuard } from '@/components/blog/BlogArticleStickyGuard';
 import { LegalDisclaimer } from '@/components/blog/BlogCallout';
 import { getBlogImagesForPost, getBlogImagesForPostThumb } from '@/lib/blog/image-manifest';
 import { getBlogSeoConfig } from '@/lib/blog/seo';
@@ -682,6 +683,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
       {faqSchema && <StructuredData data={faqSchema} />}
 
       <article className="min-h-screen" style={{ '--lh-sticky-top': BLOG_STICKY_TOP_OFFSET } as CSSProperties}>
+        <BlogArticleStickyGuard />
         {/* Hero Section - matches homepage pastel gradient */}
         <header id="blog-hero" className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-6 pb-8 md:pt-8 md:pb-10">
           <div className="container mx-auto px-4">
@@ -866,8 +868,11 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
             </div>
 
             {/* Sidebar */}
-            <aside className="hidden min-w-0 lg:block lg:self-start" aria-label="Article navigation">
-              <div className="sticky top-[var(--lh-sticky-top)] space-y-4">
+            <aside className="hidden min-w-0 lg:block lg:self-start" aria-label="Article navigation" data-blog-sidebar>
+              <div
+                data-blog-sticky-inner
+                className="sticky top-[var(--lh-sticky-top)] max-h-[calc(100vh-var(--lh-sticky-top)-1rem)] space-y-4 overflow-y-auto pr-1"
+              >
                 <TableOfContents items={post.tableOfContents} />
                 <BlogStickySlots cta={productCta} postSlug={slug} category={post.category} showDesktop showMobile={false} />
                 <div className="rounded-2xl border border-[#e7d9ff] bg-[#f8f1ff] p-3 shadow-sm">
