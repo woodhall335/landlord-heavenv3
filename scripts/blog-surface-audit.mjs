@@ -4,6 +4,10 @@ const articlePath = 'src/app/(marketing)/blog/[slug]/page.tsx';
 const articleSource = fs.readFileSync(articlePath, 'utf8');
 const tocPath = 'src/components/blog/TableOfContents.tsx';
 const tocSource = fs.readFileSync(tocPath, 'utf8');
+const stickySlotsPath = 'src/components/blog/BlogStickySlots.tsx';
+const stickySlotsSource = fs.readFileSync(stickySlotsPath, 'utf8');
+const askHeavenPath = 'src/components/blog/BlogAskHeavenPanel.tsx';
+const askHeavenSource = fs.readFileSync(askHeavenPath, 'utf8');
 
 const stickyMounts = (articleSource.match(/<BlogStickySlots/g) || []).length;
 const hasToc = articleSource.includes('<TableOfContents items={post.tableOfContents} />');
@@ -85,6 +89,46 @@ const stickyBreakerPatterns = [
 
 const stickyOffenders = [];
 const innerScrollOffenders = [];
+const forbiddenSidebarTokenOffenders = [];
+
+const sidebarFilesToAudit = [
+  { path: articlePath, source: articleSource, section: 'article template' },
+  { path: tocPath, source: tocSource, section: 'table of contents' },
+  { path: stickySlotsPath, source: stickySlotsSource, section: 'sticky cta slot' },
+  { path: askHeavenPath, source: askHeavenSource, section: 'ask heaven panel' },
+];
+
+const forbiddenSidebarTokens = [
+  { token: 'overflow-y-auto', regex: /overflow-y-auto/g },
+  { token: 'overflow-y-scroll', regex: /overflow-y-scroll/g },
+  { token: 'max-h-[calc(100vh-', regex: /max-h-\[calc\(100vh-/g },
+  { token: 'max-h-screen', regex: /(?<![\w-])max-h-screen(?![\w-])/g },
+  { token: 'h-screen', regex: /(?<![\w-])h-screen(?![\w-])/g },
+];
+
+function getLineNumber(source, index) {
+  let line = 1;
+  for (let i = 0; i < index; i += 1) {
+    if (source[i] === '\n') line += 1;
+  }
+  return line;
+}
+
+for (const file of sidebarFilesToAudit) {
+  for (const pattern of forbiddenSidebarTokens) {
+    const matches = file.source.matchAll(pattern.regex);
+    for (const match of matches) {
+      const index = match.index ?? 0;
+      const line = getLineNumber(file.source, index);
+      forbiddenSidebarTokenOffenders.push({
+        file: file.path,
+        section: file.section,
+        token: pattern.token,
+        line,
+      });
+    }
+  }
+}
 
 const innerScrollPatterns = [
   { token: 'overflow-y-auto', regex: /\boverflow-y-auto\b/ },
@@ -157,6 +201,7 @@ const report = {
   hasRelatedTracking,
   relatedUsesBlogCard,
   hasTocStickyAndHeadingOffsets,
+  forbiddenSidebarTokenOffenders,
 };
 
 console.log('[blog-audit]', JSON.stringify(report, null, 2));
@@ -168,6 +213,16 @@ if (innerScrollOffenders.length > 0) {
   for (const offender of innerScrollOffenders) {
     console.error(`- ${offender.target} :: ${offender.token}`);
     console.error(`  className="${offender.classValue}"`);
+  }
+}
+
+if (forbiddenSidebarTokenOffenders.length > 0) {
+  const offenderTokens = [...new Set(forbiddenSidebarTokenOffenders.map((offender) => offender.token))];
+  console.error(
+    `[blog-audit:forbidden-sidebar-scroll] Found forbidden sidebar token(s): ${offenderTokens.join(', ')}`,
+  );
+  for (const offender of forbiddenSidebarTokenOffenders) {
+    console.error(`- ${offender.file}:${offender.line} (${offender.section}) -> ${offender.token}`);
   }
 }
 
@@ -193,6 +248,7 @@ if (
   tocPanelHasMaxHeightCalc ||
   tocPanelHasOverflowYAuto ||
   innerScrollOffenders.length > 0 ||
+  forbiddenSidebarTokenOffenders.length > 0 ||
   !guardImportPresent ||
   !guardUsagePresent ||
   !hasSidebarOrderExactOnce ||
