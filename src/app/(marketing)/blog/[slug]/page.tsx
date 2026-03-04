@@ -875,7 +875,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
               data-blog-sidebar
               data-blog-sticky-inner
             >
-              <div className="space-y-4">
+              <div className="space-y-3">
                 <TableOfContents items={post.tableOfContents} />
                 <BlogStickySlots cta={productCta} postSlug={slug} category={post.category} showDesktop showMobile={false} />
                 <BlogAskHeavenPanel
