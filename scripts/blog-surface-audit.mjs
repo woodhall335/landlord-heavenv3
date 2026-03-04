@@ -9,8 +9,7 @@ const stickyMounts = (articleSource.match(/<BlogStickySlots/g) || []).length;
 const hasToc = articleSource.includes('<TableOfContents items={post.tableOfContents} />');
 const hasDesktopStickySidebar =
   articleSource.includes('aria-label="Article navigation"') &&
-  articleSource.includes('hidden min-w-0 lg:block lg:self-start') &&
-  articleSource.includes('sticky top-[var(--lh-sticky-top)]');
+  articleSource.includes('hidden min-w-0 lg:sticky lg:top-[var(--lh-sticky-top)] lg:block lg:self-start');
 
 const blogProsePath = 'src/components/blog/BlogProse.tsx';
 const blogProseSource = fs.existsSync(blogProsePath) ? fs.readFileSync(blogProsePath, 'utf8') : '';
@@ -28,17 +27,18 @@ const hasFullBleedHeroWrapper =
   articleSource.includes('blog-full-bleed-hero-wrapper') &&
   articleSource.includes('aspect-[16/9] w-full overflow-hidden rounded-3xl');
 
-const stickyInnerLine = articleSource.match(/<div\s+[^>]*data-blog-sticky-inner[^>]*className="([^"]+)"/);
-const stickyContainerClasses = stickyInnerLine?.[1] || '';
+const stickyInnerTag = articleSource.match(/<(?:aside|div)\s+[^>]*data-blog-sticky-inner[^>]*>/);
+const stickyContainerClasses = stickyInnerTag?.[0].match(/className="([^"]+)"/)?.[1] || '';
 const stickyContainerHasTopVar = stickyContainerClasses.includes('top-[var(--lh-sticky-top)]');
 const stickyContainerHasStickyPosition = stickyContainerClasses.includes('sticky');
 const stickyContainerHasMaxHeight = stickyContainerClasses.includes('max-h-[calc(100vh-var(--lh-sticky-top)-1rem)]');
 const stickyContainerHasOverflowYAuto = stickyContainerClasses.includes('overflow-y-auto');
+const stickyContainerHasNoInnerScroll = !stickyContainerHasMaxHeight && !stickyContainerHasOverflowYAuto;
 
 const guardImportPresent = articleSource.includes("from '@/components/blog/BlogArticleStickyGuard'");
 const guardUsagePresent = articleSource.includes('<BlogArticleStickyGuard />');
 
-const sidebarMatch = articleSource.match(/<aside className="hidden min-w-0 lg:block lg:self-start"[\s\S]*?<\/aside>/);
+const sidebarMatch = articleSource.match(/<aside\s+[^>]*aria-label="Article navigation"[^>]*>[\s\S]*?<\/aside>/);
 const sidebarSource = sidebarMatch?.[0] || '';
 const tocSidebarCount = (sidebarSource.match(/<TableOfContents items=\{post\.tableOfContents\} \/>/g) || []).length;
 const ctaSidebarCount = (sidebarSource.match(/<BlogStickySlots/g) || []).length;
@@ -54,7 +54,7 @@ const ancestryTokens = [
   { label: 'article root', regex: /<article\s+className="([^"]*)"/ },
   { label: 'grid wrapper', regex: /<div className="([^"]*lg:grid-cols-\[minmax\(0,760px\)_300px\][^"]*)">/ },
   { label: 'sidebar aside', regex: /<aside className="([^"]*)" aria-label="Article navigation"/ },
-  { label: 'sticky inner', regex: /<div\s+[^>]*data-blog-sticky-inner[^>]*className="([^"]*)"/ },
+  { label: 'sticky inner', regex: /<(?:aside|div)\s+[^>]*data-blog-sticky-inner[^>]*>/ },
 ];
 
 const stickyBreakerPatterns = [
@@ -78,18 +78,13 @@ const stickyBreakerPatterns = [
   { token: 'contain', regex: /\bcontain(?:-|\b)/ },
 ];
 
-const allowedStickyInnerBreakers = new Set(['overflow-y-auto']);
-
 const stickyOffenders = [];
 for (const target of ancestryTokens) {
   const classMatch = articleSource.match(target.regex);
-  const classValue = classMatch?.[1] || '';
+  const classValue = target.label === 'sticky inner' ? stickyContainerClasses : classMatch?.[1] || '';
 
   for (const breaker of stickyBreakerPatterns) {
     if (breaker.regex.test(classValue)) {
-      if (target.label === 'sticky inner' && allowedStickyInnerBreakers.has(breaker.token)) {
-        continue;
-      }
       stickyOffenders.push({
         file: articlePath,
         target: target.label,
@@ -106,7 +101,7 @@ const hasRelatedTracking = relatedSource.includes("trackEvent('click_related_pos
 const relatedUsesBlogCard = relatedSource.includes('<BlogCard') || relatedSource.includes('<BlogCardCompact');
 
 const hasTocStickyAndHeadingOffsets =
-  articleSource.includes('sticky top-[var(--lh-sticky-top)]') &&
+  articleSource.includes('top-[var(--lh-sticky-top)]') &&
   blogProseSource.includes('prose-headings:scroll-mt-[var(--lh-sticky-top)]');
 
 const hasTocAccordionAria =
@@ -127,6 +122,7 @@ const report = {
   stickyContainerHasStickyPosition,
   stickyContainerHasMaxHeight,
   stickyContainerHasOverflowYAuto,
+  stickyContainerHasNoInnerScroll,
   guardImportPresent,
   guardUsagePresent,
   hasSidebarOrderExactOnce,
@@ -141,7 +137,8 @@ const report = {
 console.log('[blog-audit]', JSON.stringify(report, null, 2));
 
 if (stickyOffenders.length > 0) {
-  console.error('[blog-audit:sticky-offenders] Found sticky-breaking class tokens in sidebar ancestry:');
+  const offenderTokens = [...new Set(stickyOffenders.map((offender) => offender.token))];
+  console.error(`[blog-audit:sticky-offenders] Found sticky-breaking class tokens in sidebar ancestry: ${offenderTokens.join(', ')}`);
   for (const offender of stickyOffenders) {
     console.error(`- ${offender.file} :: ${offender.target} :: ${offender.token}`);
     console.error(`  className="${offender.classValue}"`);
@@ -157,8 +154,7 @@ if (
   !hasToc ||
   !stickyContainerHasTopVar ||
   !stickyContainerHasStickyPosition ||
-  !stickyContainerHasMaxHeight ||
-  !stickyContainerHasOverflowYAuto ||
+  !stickyContainerHasNoInnerScroll ||
   !guardImportPresent ||
   !guardUsagePresent ||
   !hasSidebarOrderExactOnce ||
