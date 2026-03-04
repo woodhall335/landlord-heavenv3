@@ -101,8 +101,8 @@ export const noticeOnlyHeroConfig: HeroConfig = {
   mediaSrc: '/images/notice_bundles.webp',
   trustText:
     'Court-ready • Updated for current housing law • England, Wales & Scotland',
-  title: 'Eviction Notice',
-  highlightTitle: 'Documents',
+  title: 'Evict A Tenant',
+  highlightTitle: 'Legally',
   subtitle:
     'Jurisdiction-specific notices for England, Wales & Scotland — compliance-checked and reform-aware. Preview every document before purchase.',
   primaryCta: {
@@ -121,8 +121,8 @@ export const completePackHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
   mediaSrc: '/images/eviction_packs.webp',
   trustText: 'Court-ready • Updated for current housing law • England-only',
-  title: 'Complete',
-  highlightTitle: 'Court Bundle',
+  title: 'Landlord Court Ready',
+  highlightTitle: 'Eviction Pack',
   subtitle:
     'Section 21/8 notice routes plus N5 / N5B / N119, witness statement drafting, evidence checklist, and filing guide. Preview before purchase.',
   primaryCta: {
@@ -141,8 +141,8 @@ export const moneyClaimHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
   mediaSrc: '/images/money_claims.webp',
   trustText: 'Court-ready • Updated for current housing law • England-only',
-  title: 'Money Claim',
-  highlightTitle: 'Documents',
+  title: 'Claim Unpaid Rent',
+  highlightTitle: 'Court Ready',
   subtitle:
     'For recovering unpaid rent or tenancy-related debt through the County Court (England). You answer guided questions. We structure your claim clearly for filing.',
   primaryCta: {
