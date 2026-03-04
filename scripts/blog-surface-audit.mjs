@@ -9,6 +9,7 @@ const hasDesktopStickySidebar =
   articleSource.includes('aria-label="Article navigation"') &&
   articleSource.includes('hidden min-w-0 lg:block lg:self-start') &&
   articleSource.includes('sticky top-[var(--lh-sticky-top)]');
+const stickyBreakingPattern = /(overflow-hidden|overflow-x-hidden|overflow-x-clip|overflow-auto|overflow-scroll|overflow-y-auto|overflow-y-scroll|contain(?:-[^\s"]+)?|transform|filter|perspective)/;
 const blogProsePath = 'src/components/blog/BlogProse.tsx';
 const blogProseSource = fs.existsSync(blogProsePath) ? fs.readFileSync(blogProsePath, 'utf8') : '';
 const hasOverflowHardening =
@@ -27,7 +28,21 @@ const hasFullBleedHeroWrapper =
 
 const stickyGridMatch = articleSource.match(/<div className="([^"]*lg:grid-cols-\[minmax\(0,760px\)_300px\][^"]*)">/);
 const stickyGridClasses = stickyGridMatch?.[1] || '';
-const stickyGridHasBreakingOverflow = /(overflow-hidden|overflow-x-hidden|overflow-x-clip|overflow-auto|overflow-scroll)/.test(stickyGridClasses);
+const stickyGridHasBreakingOverflow = stickyBreakingPattern.test(stickyGridClasses);
+
+const articleMatch = articleSource.match(/<article\s+className="([^"]*)"/);
+const articleClasses = articleMatch?.[1] || '';
+const articleHasStickyBreakingClass = stickyBreakingPattern.test(articleClasses);
+
+const stickyAsideMatch = articleSource.match(/<aside className="([^"]*)" aria-label="Article navigation">/);
+const stickyAsideClasses = stickyAsideMatch?.[1] || '';
+const stickyAsideHasBreakingClass = stickyBreakingPattern.test(stickyAsideClasses);
+
+const stickyContainerMatch = articleSource.match(/<div className="([^"]*sticky top-\[var\(--lh-sticky-top\)\][^"]*)">/);
+const stickyContainerClasses = stickyContainerMatch?.[1] || '';
+const stickyContainerHasBreakingClass = stickyBreakingPattern.test(
+  stickyContainerClasses.replace(/\bsticky\b/g, ''),
+);
 
 const relatedPath = 'src/components/blog/RelatedGuidesCarousel.tsx';
 const relatedSource = fs.readFileSync(relatedPath, 'utf8');
@@ -84,6 +99,12 @@ const report = {
   hasFullBleedHeroWrapper,
   stickyGridClasses,
   stickyGridHasBreakingOverflow,
+  articleClasses,
+  articleHasStickyBreakingClass,
+  stickyAsideClasses,
+  stickyAsideHasBreakingClass,
+  stickyContainerClasses,
+  stickyContainerHasBreakingClass,
   hasToc,
   hasOverflowHardening,
   hasRelatedTracking,
@@ -112,6 +133,9 @@ if (
   !hasBlogProseWrapper ||
   !hasFullBleedHeroWrapper ||
   stickyGridHasBreakingOverflow ||
+  articleHasStickyBreakingClass ||
+  stickyAsideHasBreakingClass ||
+  stickyContainerHasBreakingClass ||
   !hasToc ||
   !hasOverflowHardening ||
   !hasRelatedTracking ||
