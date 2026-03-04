@@ -77,8 +77,8 @@ export const astHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
   mediaSrc: '/images/tenancy_agreements.webp',
   trustText: 'Court-ready • Updated for current housing law • UK-wide coverage',
-  title: 'Jurisdiction-Specific',
-  highlightTitle: 'Tenancy Agreement',
+  title: 'Legally Compliant',
+  highlightTitle: 'Tenancy Agreements',
   subtitle: astSubtitle,
   primaryCta: {
     label: 'Generate my tenancy agreement →',
@@ -101,8 +101,8 @@ export const noticeOnlyHeroConfig: HeroConfig = {
   mediaSrc: '/images/notice_bundles.webp',
   trustText:
     'Court-ready • Updated for current housing law • England, Wales & Scotland',
-  title: 'Evict A Tenant',
-  highlightTitle: 'Legally',
+  title: 'Dont Risk an Invalid',
+  highlightTitle: 'Eviction Notice',
   subtitle:
     'Jurisdiction-specific notices for England, Wales & Scotland — compliance-checked and reform-aware. Preview every document before purchase.',
   primaryCta: {
@@ -121,7 +121,7 @@ export const completePackHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
   mediaSrc: '/images/eviction_packs.webp',
   trustText: 'Court-ready • Updated for current housing law • England-only',
-  title: 'Landlord Court Ready',
+  title: 'Court Ready & Validated',
   highlightTitle: 'Eviction Pack',
   subtitle:
     'Section 21/8 notice routes plus N5 / N5B / N119, witness statement drafting, evidence checklist, and filing guide. Preview before purchase.',
