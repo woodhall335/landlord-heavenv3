@@ -869,23 +869,21 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
             </div>
 
             {/* Sidebar */}
-            <aside className="hidden min-w-0 lg:block lg:self-start" aria-label="Article navigation" data-blog-sidebar>
-              <div className="relative">
-                <div
-                  data-blog-sticky-inner
-                  className="sticky top-[var(--lh-sticky-top)] max-h-[calc(100vh-var(--lh-sticky-top)-1rem)] space-y-4 overflow-y-auto rounded-2xl pr-1"
-                >
-                  <TableOfContents items={post.tableOfContents} />
-                  <BlogStickySlots cta={productCta} postSlug={slug} category={post.category} showDesktop showMobile={false} />
-                  <BlogAskHeavenPanel
-                    topic={complianceTopic?.topic ?? 'general'}
-                    prompt={complianceTopic?.prompt}
-                    title={complianceTopic?.title ?? 'Have a landlord question?'}
-                    slug={slug}
-                  />
-                </div>
-                <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-5 rounded-t-2xl bg-gradient-to-b from-[#f8f1ff] to-transparent" />
-                <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-5 rounded-b-2xl bg-gradient-to-t from-[#f8f1ff] to-transparent" />
+            <aside
+              className="hidden min-w-0 lg:sticky lg:top-[var(--lh-sticky-top)] lg:block lg:self-start"
+              aria-label="Article navigation"
+              data-blog-sidebar
+              data-blog-sticky-inner
+            >
+              <div className="space-y-4">
+                <TableOfContents items={post.tableOfContents} />
+                <BlogStickySlots cta={productCta} postSlug={slug} category={post.category} showDesktop showMobile={false} />
+                <BlogAskHeavenPanel
+                  topic={complianceTopic?.topic ?? 'general'}
+                  prompt={complianceTopic?.prompt}
+                  title={complianceTopic?.title ?? 'Have a landlord question?'}
+                  slug={slug}
+                />
               </div>
             </aside>
           </div>
