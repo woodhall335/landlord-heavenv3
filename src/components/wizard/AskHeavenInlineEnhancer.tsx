@@ -24,6 +24,7 @@
 
 import React, { useState, useCallback } from 'react';
 import { RiSparklingLine, RiLoader4Line, RiCheckboxCircleLine, RiErrorWarningLine } from 'react-icons/ri';
+import { getSessionTokenHeaders } from '@/lib/session-token';
 
 export type ApiMode = 'mqs' | 'generic' | 'auto';
 
@@ -147,7 +148,7 @@ export const AskHeavenInlineEnhancer: React.FC<AskHeavenInlineEnhancerProps> = (
         // MQS mode: use /api/wizard/answer with enhance_only
         response = await fetch('/api/wizard/answer', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', ...getSessionTokenHeaders() },
           body: JSON.stringify({
             case_id: caseId,
             question_id: questionId,

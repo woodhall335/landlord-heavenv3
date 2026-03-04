@@ -1,4 +1,5 @@
 // src/lib/wizard/facts-client.ts
+import { getSessionTokenHeaders } from '@/lib/session-token';
 
 /**
  * Lightweight client helpers for loading / saving wizard facts
@@ -24,6 +25,7 @@ export async function getCaseFacts(caseId: string): Promise<any> {
   try {
     const res = await fetch(`/api/wizard/case/${encodeURIComponent(caseId)}`, {
       method: 'GET',
+      headers: getSessionTokenHeaders(),
       credentials: 'include', // send cookies / session to Next API route
     });
 
@@ -86,6 +88,7 @@ export async function saveCaseFacts(
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        ...getSessionTokenHeaders(),
       },
       credentials: 'include',
       body: JSON.stringify({

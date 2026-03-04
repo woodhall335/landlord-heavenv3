@@ -14,6 +14,7 @@ import Link from 'next/link';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { AuthHeroShell } from '@/components/auth/AuthHeroShell';
+import { safeInternalRedirect } from '@/lib/security/redirects';
 
 function SignupContent() {
   const router = useRouter();
@@ -21,6 +22,7 @@ function SignupContent() {
 
   // Get redirect and case_id from URL params (passed from preview page)
   const redirectUrl = searchParams.get('redirect');
+  const safeRedirectUrl = safeInternalRedirect(redirectUrl);
   const caseId = searchParams.get('case_id');
 
   const [formData, setFormData] = useState({
@@ -38,12 +40,12 @@ function SignupContent() {
   useEffect(() => {
     if (redirectUrl || caseId) {
       localStorage.setItem('auth_redirect', JSON.stringify({
-        url: redirectUrl || null,
+        url: safeRedirectUrl || null,
         caseId: caseId || null,
         timestamp: Date.now(),
       }));
     }
-  }, [redirectUrl, caseId]);
+  }, [redirectUrl, safeRedirectUrl, caseId]);
 
   const handleChange = (field: string, value: string) => {
     setFormData({ ...formData, [field]: value });
@@ -86,8 +88,11 @@ function SignupContent() {
       const data = await response.json();
 
       if (response.ok && data.success) {
-        // Show success message
-        router.push('/auth/verify-email?email=' + encodeURIComponent(formData.email));
+        if (safeRedirectUrl) {
+          router.push(safeRedirectUrl);
+        } else {
+          router.push('/dashboard');
+        }
       } else {
         setError(data.error || 'Failed to create account');
       }
@@ -204,7 +209,7 @@ function SignupContent() {
         <p className="text-center text-sm text-gray-600">
           Already have an account?{' '}
           <Link
-            href={`/auth/login${redirectUrl ? `?redirect=${encodeURIComponent(redirectUrl)}` : ''}${caseId ? `${redirectUrl ? '&' : '?'}case_id=${caseId}` : ''}`}
+            href={`/auth/login${safeRedirectUrl ? `?redirect=${encodeURIComponent(safeRedirectUrl)}` : ''}${caseId ? `${safeRedirectUrl ? '&' : '?'}case_id=${caseId}` : ''}`}
             className="font-medium text-primary hover:text-primary-dark"
           >
             Log in

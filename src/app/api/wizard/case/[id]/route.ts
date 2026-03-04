@@ -9,11 +9,12 @@
 import { createAdminClient, getServerUser } from '@/lib/supabase/server';
 import { NextResponse, NextRequest } from 'next/server';
 import { getCasePaymentStatus } from '@/lib/payments/entitlement';
+import { assertCaseReadAccess } from '@/lib/auth/case-access';
 
 type RouteParams = { id: string };
 
 export async function GET(
-  _request: NextRequest,
+  request: NextRequest,
   context: { params: Promise<RouteParams> }
 ) {
   try {
@@ -41,19 +42,11 @@ export async function GET(
     const caseRecord = caseData as {
       id: string;
       user_id: string | null;
+      session_token?: string | null;
       [key: string]: unknown;
     };
-
-    // Manual access control: user can access if:
-    // 1. They own the case (user_id matches)
-    // 2. The case is anonymous (user_id is null) - anyone can access
-    const isOwner = user && caseRecord.user_id === user.id;
-    const isAnonymousCase = caseRecord.user_id === null;
-
-    if (!isOwner && !isAnonymousCase) {
-      console.error('Access denied to case:', { caseId, userId: user?.id, caseUserId: caseRecord.user_id });
-      return NextResponse.json({ error: 'Case not found' }, { status: 404 });
-    }
+    const accessError = assertCaseReadAccess({ request, user, caseRow: caseRecord });
+    if (accessError) return accessError;
 
     const paymentStatus = await getCasePaymentStatus(caseId);
     const purchasedProduct = paymentStatus.latestOrder?.product_type || null;

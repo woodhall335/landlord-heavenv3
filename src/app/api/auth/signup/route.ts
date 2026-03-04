@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
     if (authError) {
       logger.error('Signup auth error', { error: authError.message });
       return NextResponse.json(
-        { error: authError.message },
+        { error: 'Unable to create account. Please try again.' },
         { status: 400 }
       );
     }
@@ -120,7 +120,7 @@ export async function POST(request: NextRequest) {
           email: authData.user.email,
           full_name,
         },
-        message: 'Account created successfully. Please check your email to verify your account.',
+        message: 'Account created successfully.',
       },
       { status: 201 }
     );

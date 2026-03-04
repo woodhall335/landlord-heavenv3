@@ -216,8 +216,6 @@ export async function POST(request: Request) {
     const {
       product_type,
       case_id,
-      success_url,
-      cancel_url,
       // Attribution fields
       landing_path,
       utm_source,
@@ -720,7 +718,7 @@ export async function POST(request: Request) {
 
     // Create Stripe checkout session using price_data from products.ts (source of truth)
     // This ensures UI price and Stripe charge match exactly
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL ||
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_APP_URL ||
       (process.env.NODE_ENV === 'production'
         ? 'https://landlordheaven.co.uk'
         : 'http://localhost:5000');
@@ -765,8 +763,8 @@ export async function POST(request: Request) {
           first_touch_at: first_touch_at || '',
           ga_client_id: ga_client_id || '',
         },
-        success_url: success_url || `${baseUrl}/dashboard?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: cancel_url || `${baseUrl}/dashboard`,
+        success_url: `${baseUrl}/dashboard?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${baseUrl}/dashboard`,
         allow_promotion_codes: true,
       },
       stripeOptions

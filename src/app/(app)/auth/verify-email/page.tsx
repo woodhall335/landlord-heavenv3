@@ -53,7 +53,7 @@ function VerifyEmailContent() {
               <ol className="text-sm text-blue-900 space-y-1 list-decimal list-inside">
                 <li>Check your inbox (and spam folder)</li>
                 <li>Click the verification link in the email</li>
-                <li>You'll be redirected to the dashboard</li>
+                <li>If email confirmation is disabled, you can log in immediately</li>
               </ol>
             </div>
 

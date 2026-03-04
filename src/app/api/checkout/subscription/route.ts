@@ -53,7 +53,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const { tier, success_url, cancel_url } = validationResult.data;
+    const { tier } = validationResult.data;
 
     if (!HMO_PRO_TIERS) {
       return NextResponse.json(HMO_PRO_DISABLED_RESPONSE, { status: 403 });
@@ -99,7 +99,7 @@ export async function POST(request: Request) {
 
     // Create Stripe checkout session for subscription
     // Use NEXT_PUBLIC_APP_URL in production, fallback to localhost only in development
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL ||
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_APP_URL ||
       (process.env.NODE_ENV === 'production'
         ? 'https://landlordheaven.co.uk'
         : 'http://localhost:5000');
@@ -124,8 +124,8 @@ export async function POST(request: Request) {
         user_id: user.id,
         tier,
       },
-      success_url: success_url || `${baseUrl}/dashboard/hmo?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: cancel_url || `${baseUrl}/dashboard/hmo`,
+      success_url: `${baseUrl}/dashboard/hmo?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${baseUrl}/dashboard/hmo`,
     });
 
     return NextResponse.json(

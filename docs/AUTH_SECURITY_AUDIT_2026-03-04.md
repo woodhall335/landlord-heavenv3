@@ -253,3 +253,38 @@ const session = await stripe.checkout.sessions.create({
 - `rg -n "stripe\.checkout\.sessions\.create\(" src`
 - `nl -ba ...` on each cited file to extract exact snippets.
 
+
+---
+
+## Status (implemented)
+
+- ✅ `fix(session-token): persist capability token for anonymous cases/documents`
+  - Anonymous case creation paths now persist `session_token` from `x-session-token`.
+  - Anonymous document persistence writes `documents.session_token` from request header.
+- ✅ `fix(wizard): enforce ownership/capability token on wizard read/write`
+  - Added shared access helper and applied to wizard read/write routes.
+  - Client wizard calls now send `x-session-token` headers.
+  - Added auth/capability unit tests.
+- ✅ `fix(auth): prevent open redirects in signup/login/confirm/callback`
+  - Added internal redirect sanitizer and applied to auth pages + callback.
+- ✅ `fix(checkout): restrict Stripe success/cancel redirect URLs`
+  - Checkout endpoints now always use canonical first-party dashboard URLs.
+- ✅ `fix(auth): route login through rate-limited backend`
+  - Login page now routes credentials through `/api/auth/login`.
+- ✅ `fix(auth): update signup flow for confirm-email-off and reduce friction`
+  - Signup flow no longer routes users to `/auth/verify-email` by default.
+- ✅ `docs: update auth security audit status`
+  - This status section + checklist added.
+
+### Manual verification checklist
+
+1. Anonymous preview journey:
+   - Start wizard anonymously, confirm requests include `x-session-token`, and case mutations/reads work only with matching token.
+2. Auth redirect safety:
+   - Attempt `?redirect=https://evil.test` and confirm post-auth navigation falls back to `/dashboard`.
+3. Login rate limiting:
+   - Confirm login is performed via `POST /api/auth/login` and repeated failures trigger backend limiter.
+4. Checkout redirect safety:
+   - Attempt client `success_url/cancel_url` override and verify Stripe session uses canonical dashboard URLs.
+5. Signup flow (confirm-email off):
+   - Complete signup and confirm no forced `/auth/verify-email` step.

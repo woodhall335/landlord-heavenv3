@@ -55,6 +55,11 @@ import { normalizeRoute } from '@/lib/wizard/route-normalizer';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 
+function getSessionTokenFromRequest(request: Request): string | null {
+  const token = request.headers.get('x-session-token');
+  return token && token.trim() ? token.trim() : null;
+}
+
 /**
  * Structured 422 logging helper
  * Logs detailed information about blocked document generation for debugging
@@ -520,6 +525,7 @@ function prepareGuidanceDocumentData(
 
 export async function POST(request: Request) {
   try {
+    const requestSessionToken = getSessionTokenFromRequest(request);
     const body = await request.json();
 
     // Validate input
@@ -565,6 +571,10 @@ export async function POST(request: Request) {
       collected_facts?: any;
       recommended_route?: string | null;
     };
+
+    if (!caseRow.user_id && !requestSessionToken) {
+      return NextResponse.json({ error: 'Case not found', code: 'CASE_NOT_FOUND' }, { status: 404 });
+    }
 
     // Load WizardFacts (source of truth) + fallback to collected_facts if present
     const wizardFactsFromStore = await getOrCreateWizardFacts(supabase, case_id);
@@ -1646,6 +1656,7 @@ export async function POST(request: Request) {
     // This prevents 23505 duplicate key errors on idx_documents_case_type_preview_unique
     const documentData = {
       user_id: caseRow.user_id,
+      ...(caseRow.user_id ? {} : { session_token: requestSessionToken }),
       case_id,
       document_type,
       document_title: documentTitle,
