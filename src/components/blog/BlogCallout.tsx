@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { PropsWithChildren } from 'react';
 
-type BlogCalloutVariant = 'legal' | 'info' | 'warning' | 'quote';
+type BlogCalloutVariant = 'info' | 'warning' | 'quote';
 
 interface BlogCalloutProps extends PropsWithChildren {
   title?: string;
@@ -12,7 +12,6 @@ interface BlogCalloutProps extends PropsWithChildren {
 }
 
 const variantStyles: Record<BlogCalloutVariant, string> = {
-  legal: 'border-[#d9c2ff] bg-[#f8f1ff] text-slate-700',
   info: 'border-[#dfcdfd] bg-[#f8f1ff] text-slate-700',
   warning: 'border-[#b286ff] bg-[#f8f1ff] text-slate-800',
   quote: 'border-[#c7a5ff] bg-[#f8f1ff] text-slate-700 italic',
@@ -45,14 +44,6 @@ export function BlogCallout({
         </div>
       </div>
     </section>
-  );
-}
-
-export function LegalDisclaimer({ children }: PropsWithChildren) {
-  return (
-    <BlogCallout variant="legal" title="Legal disclaimer" iconSrc="/images/wizard-icons/05-compliance.png" iconAlt="Compliance icon">
-      {children}
-    </BlogCallout>
   );
 }
 

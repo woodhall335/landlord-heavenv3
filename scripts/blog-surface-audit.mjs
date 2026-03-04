@@ -8,6 +8,14 @@ const stickySlotsPath = 'src/components/blog/BlogStickySlots.tsx';
 const stickySlotsSource = fs.readFileSync(stickySlotsPath, 'utf8');
 const askHeavenPath = 'src/components/blog/BlogAskHeavenPanel.tsx';
 const askHeavenSource = fs.readFileSync(askHeavenPath, 'utf8');
+const blogIndexPath = 'src/app/(marketing)/blog/page.tsx';
+const blogIndexSource = fs.readFileSync(blogIndexPath, 'utf8');
+const categoryPath = 'src/components/blog/CategoryPage.tsx';
+const categorySource = fs.readFileSync(categoryPath, 'utf8');
+const relatedPath = 'src/components/blog/RelatedGuidesCarousel.tsx';
+const relatedSource = fs.readFileSync(relatedPath, 'utf8');
+const blogCardPath = 'src/components/blog/BlogCard.tsx';
+const blogCardSource = fs.readFileSync(blogCardPath, 'utf8');
 
 const stickyMounts = (articleSource.match(/<BlogStickySlots/g) || []).length;
 const hasToc = articleSource.includes('<TableOfContents items={post.tableOfContents} />');
@@ -90,6 +98,7 @@ const stickyBreakerPatterns = [
 const stickyOffenders = [];
 const innerScrollOffenders = [];
 const forbiddenSidebarTokenOffenders = [];
+const genericOffenders = [];
 
 const sidebarFilesToAudit = [
   { path: articlePath, source: articleSource, section: 'article template' },
@@ -120,12 +129,7 @@ for (const file of sidebarFilesToAudit) {
     for (const match of matches) {
       const index = match.index ?? 0;
       const line = getLineNumber(file.source, index);
-      forbiddenSidebarTokenOffenders.push({
-        file: file.path,
-        section: file.section,
-        token: pattern.token,
-        line,
-      });
+      forbiddenSidebarTokenOffenders.push({ file: file.path, section: file.section, token: pattern.token, line });
     }
   }
 }
@@ -156,19 +160,11 @@ for (const target of ancestryTokens) {
 
   for (const breaker of stickyBreakerPatterns) {
     if (breaker.regex.test(classValue)) {
-      stickyOffenders.push({
-        file: articlePath,
-        section: target.label,
-        token: breaker.token,
-        classValue,
-        line,
-      });
+      stickyOffenders.push({ file: articlePath, section: target.label, token: breaker.token, classValue, line });
     }
   }
 }
 
-const relatedPath = 'src/components/blog/RelatedGuidesCarousel.tsx';
-const relatedSource = fs.readFileSync(relatedPath, 'utf8');
 const hasRelatedTracking = relatedSource.includes("trackEvent('click_related_post'");
 const relatedUsesBlogCard = relatedSource.includes('<BlogCard') || relatedSource.includes('<BlogCardCompact');
 
@@ -180,6 +176,54 @@ const hasTocAccordionAria =
   tocSource.includes('aria-expanded={isOpen}') &&
   tocSource.includes('aria-controls={panelId}') &&
   tocSource.includes('id={panelId}');
+
+const hasCompactArticleHeader = articleSource.includes('pt-3 pb-6 md:pt-5 md:pb-8');
+const hasCompactIndexHeader = blogIndexSource.includes('py-8 lg:py-11');
+const hasCompactCategoryHeader = categorySource.includes('pt-5 pb-8 md:pt-7 md:pb-10');
+const hasIndexHeroTitle = blogIndexSource.includes('Court Ready Landlord Guidance');
+const hasMinWidthContainment =
+  articleSource.includes('min-w-0') &&
+  relatedSource.includes('min-w-0') &&
+  blogProseSource.includes('max-w-full') &&
+  (blogIndexSource.includes('overflow-x-clip') || categorySource.includes('overflow-x-clip'));
+
+const cardSvgOffenders = [];
+const cardThumbSources = [
+  { path: blogIndexPath, source: blogIndexSource },
+  { path: articlePath, source: articleSource },
+  { path: categoryPath, source: categorySource },
+  { path: relatedPath, source: relatedSource },
+  { path: blogCardPath, source: blogCardSource },
+];
+
+for (const file of cardThumbSources) {
+  const matches = file.source.matchAll(/heroImage[^\n]*\.svg|\.endsWith\('\.svg'\)|\.endsWith\("\.svg"\)/g);
+  for (const match of matches) {
+    const index = match.index ?? 0;
+    cardSvgOffenders.push({ file: file.path, token: match[0], line: getLineNumber(file.source, index) });
+  }
+}
+
+const legalDisclaimerPatterns = [
+  /LegalDisclaimer/g,
+  /legal disclaimer/gi,
+  /variant="legal"/g,
+];
+const legalDisclaimerOffenders = [];
+const legalDisclaimerFiles = [
+  { path: articlePath, source: articleSource },
+  { path: 'src/components/blog/BlogCallout.tsx', source: fs.readFileSync('src/components/blog/BlogCallout.tsx', 'utf8') },
+];
+
+for (const file of legalDisclaimerFiles) {
+  for (const pattern of legalDisclaimerPatterns) {
+    const matches = file.source.matchAll(pattern);
+    for (const match of matches) {
+      const index = match.index ?? 0;
+      legalDisclaimerOffenders.push({ file: file.path, token: match[0], line: getLineNumber(file.source, index) });
+    }
+  }
+}
 
 const report = {
   stickyMounts,
@@ -209,39 +253,55 @@ const report = {
   relatedUsesBlogCard,
   hasTocStickyAndHeadingOffsets,
   forbiddenSidebarTokenOffenders,
+  hasCompactArticleHeader,
+  hasCompactIndexHeader,
+  hasCompactCategoryHeader,
+  hasIndexHeroTitle,
+  hasMinWidthContainment,
+  cardSvgOffenders,
+  legalDisclaimerOffenders,
+  genericOffenders,
 };
 
 console.log('[blog-audit]', JSON.stringify(report, null, 2));
 
-
-if (innerScrollOffenders.length > 0) {
-  const offenderTokens = [...new Set(innerScrollOffenders.map((offender) => offender.token))];
-  console.error(`[blog-audit:inner-scroll-offenders] Found forbidden inner-scroll class tokens: ${offenderTokens.join(', ')}`);
-  for (const offender of innerScrollOffenders) {
-    console.error(`- ${offender.target} :: ${offender.token}`);
-    console.error(`  className="${offender.classValue}"`);
+function printOffenders(label, offenders, formatter) {
+  if (offenders.length === 0) return;
+  console.error(label);
+  for (const offender of offenders) {
+    console.error(formatter(offender));
   }
 }
 
-if (forbiddenSidebarTokenOffenders.length > 0) {
-  const offenderTokens = [...new Set(forbiddenSidebarTokenOffenders.map((offender) => offender.token))];
-  console.error(
-    `[blog-audit:forbidden-sidebar-scroll] Found forbidden sidebar token(s): ${offenderTokens.join(', ')}`,
-  );
-  for (const offender of forbiddenSidebarTokenOffenders) {
-    console.error(`- ${offender.file}:${offender.line} (${offender.section}) -> ${offender.token}`);
-  }
-}
+printOffenders(
+  '[blog-audit:inner-scroll-offenders] Found forbidden inner-scroll class tokens.',
+  innerScrollOffenders,
+  (offender) => `- ${offender.target} -> ${offender.token}\n  className="${offender.classValue}"`,
+);
 
-if (stickyOffenders.length > 0) {
-  const offenderTokens = [...new Set(stickyOffenders.map((offender) => offender.token))];
-  console.error(`[blog-audit:sticky-offenders] Found sticky-breaking class tokens in sidebar ancestry: ${offenderTokens.join(', ')}`);
-  for (const offender of stickyOffenders) {
-    const lineSuffix = offender.line ? `:${offender.line}` : '';
-    console.error(`- ${offender.file}${lineSuffix} (${offender.section}) -> ${offender.token}`);
-    console.error(`  className="${offender.classValue}"`);
-  }
-}
+printOffenders(
+  '[blog-audit:forbidden-sidebar-scroll] Found forbidden sidebar token(s).',
+  forbiddenSidebarTokenOffenders,
+  (offender) => `- ${offender.file}:${offender.line} (${offender.section}) -> ${offender.token}`,
+);
+
+printOffenders(
+  '[blog-audit:sticky-offenders] Found sticky-breaking class tokens in sidebar ancestry.',
+  stickyOffenders,
+  (offender) => `- ${offender.file}${offender.line ? `:${offender.line}` : ''} (${offender.section}) -> ${offender.token}\n  className="${offender.classValue}"`,
+);
+
+printOffenders(
+  '[blog-audit:svg-thumb-offenders] Found forbidden .svg thumbnail tokens in blog surfaces.',
+  cardSvgOffenders,
+  (offender) => `- ${offender.file}:${offender.line} -> ${offender.token}`,
+);
+
+printOffenders(
+  '[blog-audit:legal-disclaimer-offenders] Legal disclaimer tokens found on blog article surfaces.',
+  legalDisclaimerOffenders,
+  (offender) => `- ${offender.file}:${offender.line} -> ${offender.token}`,
+);
 
 if (
   !report.stickyPass ||
@@ -265,7 +325,15 @@ if (
   !hasOverflowHardening ||
   !hasRelatedTracking ||
   !relatedUsesBlogCard ||
-  !hasTocStickyAndHeadingOffsets
+  !hasTocStickyAndHeadingOffsets ||
+  !hasCompactArticleHeader ||
+  !hasCompactIndexHeader ||
+  !hasCompactCategoryHeader ||
+  !hasIndexHeroTitle ||
+  !hasMinWidthContainment ||
+  cardSvgOffenders.length > 0 ||
+  legalDisclaimerOffenders.length > 0 ||
+  genericOffenders.length > 0
 ) {
   process.exitCode = 1;
 }
