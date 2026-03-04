@@ -147,14 +147,16 @@ for (const pattern of innerScrollPatterns) {
 for (const target of ancestryTokens) {
   const classMatch = articleSource.match(target.regex);
   const classValue = target.label === 'sticky inner' ? stickyContainerClasses : classMatch?.[1] || '';
+  const line = classMatch?.index ? getLineNumber(articleSource, classMatch.index) : null;
 
   for (const breaker of stickyBreakerPatterns) {
     if (breaker.regex.test(classValue)) {
       stickyOffenders.push({
         file: articlePath,
-        target: target.label,
+        section: target.label,
         token: breaker.token,
         classValue,
+        line,
       });
     }
   }
@@ -230,7 +232,8 @@ if (stickyOffenders.length > 0) {
   const offenderTokens = [...new Set(stickyOffenders.map((offender) => offender.token))];
   console.error(`[blog-audit:sticky-offenders] Found sticky-breaking class tokens in sidebar ancestry: ${offenderTokens.join(', ')}`);
   for (const offender of stickyOffenders) {
-    console.error(`- ${offender.file} :: ${offender.target} :: ${offender.token}`);
+    const lineSuffix = offender.line ? `:${offender.line}` : '';
+    console.error(`- ${offender.file}${lineSuffix} (${offender.section}) -> ${offender.token}`);
     console.error(`  className="${offender.classValue}"`);
   }
 }
