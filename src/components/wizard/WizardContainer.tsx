@@ -346,7 +346,10 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
       try {
         const response = await fetch('/api/wizard/analyze', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            ...getSessionTokenHeaders(),
+          },
           body: JSON.stringify({ case_id: currentCaseId }),
         });
 
@@ -385,7 +388,10 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
         // Call fact-finder to get next question
         const response = await fetch('/api/wizard/next-question', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            ...getSessionTokenHeaders(),
+          },
           body: JSON.stringify({
             case_id: currentCaseId,
             case_type: caseType,
@@ -471,7 +477,10 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
 
         const response = await fetch('/api/wizard/start', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            ...getSessionTokenHeaders(),
+          },
           body: JSON.stringify({ product: derivedProduct, jurisdiction }),
         });
 

@@ -79,11 +79,8 @@ export function clearSessionToken(): void {
  * Used when making requests for anonymous cases/documents
  */
 export function getSessionTokenHeaders(): Record<string, string> {
-  const token = getSessionToken();
-  if (token) {
-    return { 'x-session-token': token };
-  }
-  return {};
+  const token = getOrCreateSessionToken();
+  return { 'x-session-token': token };
 }
 
 /**
