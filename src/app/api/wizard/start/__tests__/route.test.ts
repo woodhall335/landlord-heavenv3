@@ -22,7 +22,7 @@ vi.mock('@/lib/supabase/admin', () => ({
       })),
       insert: vi.fn(() => ({
         select: vi.fn(() => ({
-          single: vi.fn(async () => ({ data: null, error: null })),
+          single: vi.fn(async () => ({ data: { id: '22222222-2222-2222-2222-222222222222' }, error: null })),
         })),
       })),
     })),
@@ -88,6 +88,39 @@ describe('POST /api/wizard/start anonymous resume', () => {
         product: 'notice_only',
         jurisdiction: 'england',
         case_id: '11111111-1111-1111-1111-111111111111',
+      }),
+    });
+
+    const response = await POST(request);
+    expect(response.status).toBe(404);
+  });
+
+  it('creates anonymous case with token', async () => {
+    const request = new Request('http://localhost/api/wizard/start', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        'x-session-token': 'good-token',
+      },
+      body: JSON.stringify({
+        product: 'notice_only',
+        jurisdiction: 'england',
+      }),
+    });
+
+    const response = await POST(request);
+    expect(response.status).toBe(200);
+  });
+
+  it('blocks anonymous case creation without token', async () => {
+    const request = new Request('http://localhost/api/wizard/start', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        product: 'notice_only',
+        jurisdiction: 'england',
       }),
     });
 

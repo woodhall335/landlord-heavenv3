@@ -20,6 +20,7 @@ import {
   trackValidatorView,
   trackValidatorReportRequested,
 } from '@/lib/analytics';
+import { getSessionTokenHeaders } from '@/lib/session-token';
 import { ToolUpsellCard, type ToolUpsellCardProps } from '@/components/tools/ToolUpsellCard';
 
 export interface ValidatorCTA {
@@ -140,7 +141,10 @@ export function ValidatorPage({
       try {
         const response = await fetch('/api/wizard/start', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            ...getSessionTokenHeaders(),
+          },
           body: JSON.stringify({
             jurisdiction: effectiveJurisdiction,
             case_type: caseType,

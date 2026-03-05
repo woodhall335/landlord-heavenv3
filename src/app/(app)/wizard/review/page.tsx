@@ -19,6 +19,7 @@ import {
 import { SmartReviewPanel } from '@/components/wizard/SmartReviewPanel';
 import { trackWizardReviewViewWithAttribution, markWizardCompleted } from '@/lib/analytics';
 import { getWizardAttribution } from '@/lib/wizard/wizardAttribution';
+import { getSessionTokenHeaders } from '@/lib/session-token';
 
 // Scotland utilities
 import {
@@ -127,7 +128,7 @@ function ReviewPageInner() {
       try {
         const response = await fetch(`/api/wizard/analyze`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', ...getSessionTokenHeaders() },
           body: JSON.stringify({ case_id: caseId }),
         });
 

@@ -23,6 +23,7 @@ import {
   markWizardStarted,
   extractAttributionFromUrl,
 } from '@/lib/wizard/wizardAttribution';
+import { getSessionTokenHeaders } from '@/lib/session-token';
 
 // Feature flags: Use new section-based flows
 // Set to true to enable the redesigned wizards, false to use legacy StructuredWizard
@@ -225,7 +226,10 @@ function WizardFlowContent() {
 
       const response = await fetch('/api/wizard/start', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...getSessionTokenHeaders(),
+        },
         body: JSON.stringify({ product: startProduct, jurisdiction }),
       });
 
