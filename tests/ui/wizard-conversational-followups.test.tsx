@@ -9,6 +9,7 @@ describe('Conversational wizard follow-up handling', () => {
 
   beforeEach(() => {
     fetchMock.mockReset();
+    localStorage.clear();
 
     fetchMock.mockImplementation(async (url: string) => {
       if (url.includes('/api/wizard/start')) {
@@ -103,4 +104,78 @@ describe('Conversational wizard follow-up handling', () => {
 
     expect(answerCalls.length).toBe(1);
   });
+
+  it('sends x-session-token on start, next-question, answer, and analyze requests', async () => {
+    fetchMock.mockReset();
+
+    fetchMock.mockImplementation(async (url: string) => {
+      if (url.includes('/api/wizard/start')) {
+        return new Response(
+          JSON.stringify({
+            case_id: 'case-token-check',
+            next_question: {
+              id: 'q1',
+              question: 'Was rent paid?',
+              input_type: 'yes_no',
+            },
+          }),
+          { status: 200 },
+        );
+      }
+
+      if (url.includes('/api/wizard/answer')) {
+        return new Response(JSON.stringify({ answer_saved: true }), { status: 200 });
+      }
+
+      if (url.includes('/api/wizard/next-question')) {
+        return new Response(JSON.stringify({ is_complete: true }), { status: 200 });
+      }
+
+      if (url.includes('/api/wizard/analyze')) {
+        return new Response(JSON.stringify({ success: true, analysis: {} }), { status: 200 });
+      }
+
+      return new Response('{}', { status: 404 });
+    });
+
+    const onComplete = vi.fn();
+
+    render(
+      <WizardContainer
+        caseType="eviction"
+        jurisdiction="england"
+        onComplete={onComplete}
+      />,
+    );
+
+    const yesButton = await screen.findByRole('button', { name: /^yes$/i });
+    fireEvent.click(yesButton);
+    fireEvent.click(await screen.findByRole('button', { name: /continue/i }));
+
+    await waitFor(() =>
+      expect(
+        fetchMock.mock.calls.some(
+          ([callUrl]) => typeof callUrl === 'string' && callUrl.includes('/api/wizard/analyze'),
+        ),
+      ).toBe(true),
+    );
+
+    const wizardCalls = fetchMock.mock.calls.filter(([callUrl]) =>
+      typeof callUrl === 'string' &&
+      ['/api/wizard/start', '/api/wizard/next-question', '/api/wizard/answer', '/api/wizard/analyze'].some((path) =>
+        callUrl.includes(path),
+      ),
+    );
+
+    expect(wizardCalls.length).toBeGreaterThanOrEqual(4);
+
+    const sessionTokens = wizardCalls.map(([, options]) => {
+      const headers = (options as RequestInit | undefined)?.headers as Record<string, string> | undefined;
+      return headers?.['x-session-token'];
+    });
+
+    expect(sessionTokens.every(Boolean)).toBe(true);
+    expect(new Set(sessionTokens).size).toBe(1);
+  });
+
 });
