@@ -14,17 +14,26 @@ export function GuidancePanelV3({ metadata, askHeaven }: GuidancePanelV3Props) {
   return (
     <div className="space-y-4">
       <div>
-        <InlineSectionHeaderV3 title="Ask Heaven" iconSlug="ask-heaven" />
+        <InlineSectionHeaderV3 title="Ask Heaven" iconSlug="ask-heaven" titleClassName="text-white" />
         <AskHeavenCardV3>{askHeaven}</AskHeavenCardV3>
       </div>
       <div>
-        <InlineSectionHeaderV3 title={metadata?.checklistTitle ?? "What you'll need"} iconSlug="what-you-need" />
+        <InlineSectionHeaderV3
+          title={metadata?.checklistTitle ?? "What you'll need"}
+          iconSlug="what-you-need"
+          titleClassName="text-white"
+        />
         <NeedsChecklistV3 title={metadata?.checklistTitle} items={metadata?.checklistItems} />
       </div>
       <div>
-        <InlineSectionHeaderV3 title="Why this matters" iconSlug="warning" />
+        <InlineSectionHeaderV3
+          title="Why this matters"
+          iconSlug="warning"
+          titleClassName="text-white"
+        />
         <WhyThisMattersV3 title={metadata?.whyThisMatters?.title} body={metadata?.whyThisMatters?.body} />
       </div>
     </div>
   );
 }
+

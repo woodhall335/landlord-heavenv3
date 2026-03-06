@@ -1,12 +1,17 @@
 'use client';
 
 import React from 'react';
-import { WizardHeaderV3 } from './WizardHeaderV3';
-import { WizardStepperV3 } from './WizardStepperV3';
 import { WizardMainCardV3 } from './WizardMainCardV3';
 import { GuidancePanelV3 } from './GuidancePanelV3';
 import { WizardFooterNavV3 } from './WizardFooterNavV3';
-import { getStepMetadata, resolveStepIconPath, type StepMetadata, type WizardJurisdiction, type WizardProduct } from './stepMetadata';
+import { WizardTopBarV3 } from './WizardTopBarV3';
+import {
+  getStepMetadata,
+  resolveStepIconPath,
+  type StepMetadata,
+  type WizardJurisdiction,
+  type WizardProduct,
+} from './stepMetadata';
 
 interface WizardTab {
   id: string;
@@ -38,10 +43,6 @@ interface WizardShellV3Props {
 }
 
 export function WizardShellV3({
-  title,
-  completedCount,
-  totalCount,
-  progress,
   tabs,
   sectionTitle,
   sectionDescription,
@@ -60,37 +61,63 @@ export function WizardShellV3({
     ? getStepMetadata(product, jurisdiction, currentStepId)
     : undefined;
 
+  const currentTabIndex = tabs.findIndex((tab) => tab.isCurrent);
+  const activeStepIndex = currentTabIndex >= 0 ? currentTabIndex : 0;
+
   return (
-    <div className="min-h-[calc(100vh-80px)] bg-gradient-to-b from-violet-100/55 via-violet-50/35 to-[#FAFAFC] pt-20 pb-28">
-      <WizardHeaderV3 title={title} completedCount={completedCount} totalCount={totalCount} progress={progress} />
+    <div
+      className="relative min-h-screen"
+      style={{
+        backgroundColor: '#150733',
+        backgroundImage:
+          "linear-gradient(180deg, rgba(0,0,0,0.38) 0%, rgba(10,5,28,0.52) 45%, rgba(30,12,72,0.64) 100%), url('/images/bg.webp')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center top',
+      }}
+    >
+      <WizardTopBarV3
+        tabs={tabs}
+        getStepMetadataForId={(stepId) => getStepMetadata(product, jurisdiction, stepId)}
+      />
 
-      <div className="mx-auto max-w-[1240px] px-4 py-6">
-        <WizardStepperV3
-          tabs={tabs}
-          getStepMetadataForId={(stepId) => getStepMetadata(product, jurisdiction, stepId)}
-        />
-      </div>
+      <div style={{ height: "calc(80px + var(--s21-banner-height) + 64px)" }} aria-hidden="true" />
 
-      <div className="mx-auto grid max-w-[1240px] grid-cols-1 items-stretch gap-6 px-4 pb-12 lg:grid-cols-[minmax(0,1fr)_340px]">
+      <div className="mx-auto grid max-w-[1240px] grid-cols-1 items-stretch gap-6 px-4 pb-12 pt-4 lg:grid-cols-[minmax(0,1fr)_340px]">
         <WizardMainCardV3
           sectionTitle={sectionTitle}
           sectionDescription={sectionDescription}
           stepIconPath={resolveStepIconPath(currentMeta)}
+          stepNumber={activeStepIndex + 1}
+          totalSteps={tabs.length}
           banner={banner}
-          navigation={navigation ? <WizardFooterNavV3>{navigation}</WizardFooterNavV3> : <WizardFooterNavV3 leftSlot={navigationLeft} centerSlot={navigationCenter} rightSlot={navigationRight} />}
+          navigation={
+            navigation ? (
+              <WizardFooterNavV3>{navigation}</WizardFooterNavV3>
+            ) : (
+              <WizardFooterNavV3
+                leftSlot={navigationLeft}
+                centerSlot={navigationCenter}
+                rightSlot={navigationRight}
+              />
+            )
+          }
         >
-          {/* Render only the current step content; do not mount non-active steps in V3. */}
           {children}
         </WizardMainCardV3>
 
         <aside className="w-full min-h-0 shrink-0 lg:self-start lg:w-[340px]">
-          <div className="lg:sticky lg:top-6">
+          <div className="lg:sticky lg:top-[152px]">
             <GuidancePanelV3 metadata={currentMeta} askHeaven={sidebar} />
           </div>
         </aside>
+      </div>
+
+      <div className="mx-auto max-w-[1240px] px-4 pb-8 text-center text-sm text-violet-100/80">
+        This service provides document preparation assistance. It does not provide legal advice.
       </div>
     </div>
   );
 }
 
 export default WizardShellV3;
+

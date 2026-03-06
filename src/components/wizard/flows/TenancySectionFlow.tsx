@@ -34,7 +34,6 @@ import { getCaseFacts, saveCaseFacts } from '@/lib/wizard/facts-client';
 import { AskHeavenPanel } from '@/components/wizard/AskHeavenPanel';
 import { WizardFlowShell } from '@/components/wizard/shared/WizardFlowShell';
 import { WizardShellV3 } from '@/components/wizard/shared/WizardShellV3';
-import { isWizardThemeV2 } from '@/components/wizard/shared/theme';
 import { isWizardUiV3Enabled } from '@/components/wizard/shared/flags';
 import { AskHeavenInlineEnhancer } from '@/components/wizard/AskHeavenInlineEnhancer';
 import { InlineSectionHeaderV3 } from '@/components/wizard/shared/InlineSectionHeaderV3';
@@ -53,7 +52,7 @@ import {
 } from '@/lib/tenancy/product-tier';
 
 // Premium recommendation
-import { detectPremiumRecommendation, type PremiumRecommendationResult } from '@/lib/utils/premium-recommendation';
+import { detectPremiumRecommendation } from '@/lib/utils/premium-recommendation';
 import { PremiumRecommendationBanner } from '@/components/tenancy/PremiumRecommendationBanner';
 import { ClauseDiffPreview } from '@/components/tenancy/ClauseDiffPreview';
 import { validateTenancyRequiredFacts } from '@/lib/validation/tenancy-details-validator';
@@ -703,35 +702,33 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
           currentQuestionId={undefined}
         />
       )}
-      navigation={(
+            navigation={(
         <>
           <button
             onClick={handleBack}
             disabled={currentSectionIndex === 0}
             className={`
-              px-4 py-2 text-sm font-medium rounded-md transition-colors
+              px-4 py-2 text-sm font-medium rounded-xl border transition-colors
               ${currentSectionIndex === 0
-                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                : isWizardThemeV2
-                ? 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
-                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}
+                ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
+                : 'bg-white text-violet-900 border-violet-200 hover:bg-violet-50'}
             `}
           >
-            ← Back
+            Back
           </button>
 
-          <div className="flex flex-wrap items-center justify-end gap-2">
-            {saving && <span className="text-sm text-gray-500 whitespace-nowrap">Auto-saving…</span>}
+          <div className="flex items-center justify-end gap-2">
+            {saving && <span className="text-sm text-gray-500 whitespace-nowrap">Auto-saving...</span>}
 
             {currentSection?.id === 'review' ? (
               <button
                 onClick={handleComplete}
                 disabled={currentBlockers.length > 0}
                 className={`
-                  px-6 py-2 text-sm font-medium rounded-md transition-colors
+                  px-7 py-2.5 text-sm font-semibold rounded-xl transition-all
                   ${currentBlockers.length > 0
-                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                    : 'bg-violet-600 text-white hover:bg-violet-700'}
+                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed shadow-none'
+                    : 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white hover:from-violet-700 hover:to-fuchsia-700 shadow-[0_6px_16px_rgba(109,40,217,0.28)]'}
                 `}
               >
                 Generate Case Bundle
@@ -741,13 +738,13 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
                 onClick={handleNext}
                 disabled={currentSectionIndex === visibleSections.length - 1}
                 className={`
-                  px-6 py-2 text-sm font-medium rounded-md transition-colors
+                  px-7 py-2.5 text-sm font-semibold rounded-xl transition-all
                   ${currentSectionIndex === visibleSections.length - 1
-                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                    : 'bg-violet-600 text-white hover:bg-violet-700'}
+                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed shadow-none'
+                    : 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white hover:from-violet-700 hover:to-fuchsia-700 shadow-[0_6px_16px_rgba(109,40,217,0.28)]'}
                 `}
               >
-                Next →
+                Continue
               </button>
             )}
           </div>
@@ -2143,9 +2140,9 @@ const ReviewSection: React.FC<SectionProps> = ({ facts }) => {
       )}
 
       {allComplete && (
-        <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-          <h4 className="font-medium text-green-800 mb-2">Ready to Generate</h4>
-          <p className="text-sm text-green-700">
+        <div className={isWizardUiV3Enabled ? "bg-violet-50 border border-violet-200 rounded-lg p-4" : "bg-green-50 border border-green-200 rounded-lg p-4"}>
+          <h4 className={isWizardUiV3Enabled ? "font-medium text-violet-900 mb-2" : "font-medium text-green-800 mb-2"}>Ready to Generate</h4>
+          <p className={isWizardUiV3Enabled ? "text-sm text-violet-700" : "text-sm text-green-700"}>
             All sections are complete. Click "Generate Case Bundle" to create your tenancy agreement.
           </p>
         </div>
@@ -2331,3 +2328,5 @@ const YesNoField: React.FC<FieldProps> = ({
 );
 
 export default TenancySectionFlow;
+
+

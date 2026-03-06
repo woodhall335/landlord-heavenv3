@@ -659,9 +659,11 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
           // Old cases may have notice_already_served=true saved. We need to unset it so the
           // generate-only flow works correctly. The value is no longer used for Scotland notice_only.
           if (jurisdiction === 'scotland') {
-            const { notice_already_served, notice_served_date, ...restFacts } = migratedFacts as Record<string, any>;
+            const scotlandFacts = { ...(migratedFacts as Record<string, any>) };
+            delete scotlandFacts.notice_already_served;
+            delete scotlandFacts.notice_served_date;
             // Remove already-served related fields - they no longer apply to Scotland notice_only
-            migratedFacts = restFacts as typeof migratedFacts;
+            migratedFacts = scotlandFacts as typeof migratedFacts;
           }
 
           setFacts((prev) => ({
@@ -946,6 +948,7 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
   const allComplete = visibleSections
     .filter((s) => s.id !== 'review')
     .every((s) => s.isComplete(facts, jurisdiction));
+  const useVioletTone = isWizardUiV3Enabled || isWizardThemeV2;
 
   // Get overall blockers
   const getAllBlockers = useCallback(() => {
@@ -960,12 +963,6 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
   // Render section content
   const renderSection = () => {
     if (!currentSection) return null;
-
-    const sectionProps = {
-      facts,
-      jurisdiction,
-      onUpdate: handleUpdate,
-    };
 
     const isWales = jurisdiction === 'wales';
     const isScotland = jurisdiction === 'scotland';
@@ -1086,7 +1083,7 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
                   >
                     <div className="flex items-center gap-3">
                       {complete && !hasBlocker ? (
-                        <RiCheckLine className={isWizardThemeV2 ? "w-5 h-5 text-violet-600" : "w-5 h-5 text-green-500"} />
+                        <RiCheckLine className={useVioletTone ? "w-5 h-5 text-violet-600" : "w-5 h-5 text-green-500"} />
                       ) : hasBlocker ? (
                         <RiErrorWarningLine className="w-5 h-5 text-red-500" />
                       ) : (
@@ -1125,9 +1122,9 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
 
         {/* Ready to generate */}
         {allComplete && overallBlockers.length === 0 && (
-          <div className={isWizardThemeV2 ? "p-4 bg-violet-50 border border-violet-200 rounded-lg" : "p-4 bg-green-50 border border-green-200 rounded-lg"}>
-            <h3 className={isWizardThemeV2 ? "text-sm font-medium text-violet-900 mb-2" : "text-sm font-medium text-green-800 mb-2"}>Ready to Generate</h3>
-            <p className={isWizardThemeV2 ? "text-sm text-violet-700" : "text-sm text-green-700"}>
+          <div className={useVioletTone ? "p-4 bg-violet-50 border border-violet-200 rounded-lg" : "p-4 bg-green-50 border border-green-200 rounded-lg"}>
+            <h3 className={useVioletTone ? "text-sm font-medium text-violet-900 mb-2" : "text-sm font-medium text-green-800 mb-2"}>Ready to Generate</h3>
+            <p className={useVioletTone ? "text-sm text-violet-700" : "text-sm text-green-700"}>
               All sections are complete. Click the button below to generate your notice.
             </p>
           </div>
@@ -1245,39 +1242,33 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
           currentQuestionId={currentQuestionId}
         />
       )}
-      navigation={(
+            navigation={(
         <>
           <button
             onClick={handleBack}
             disabled={currentSectionIndex === 0}
             className={`
-              px-4 py-2 text-sm font-medium rounded-md transition-colors
-              ${
-                currentSectionIndex === 0
-                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                  : isWizardThemeV2
-                  ? 'bg-white text-violet-900 border border-violet-200 hover:bg-violet-50'
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-              }
+              px-4 py-2 text-sm font-medium rounded-xl border transition-colors
+              ${currentSectionIndex === 0
+                ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
+                : 'bg-white text-violet-900 border-violet-200 hover:bg-violet-50'}
             `}
           >
-            ← Back
+            Back
           </button>
 
-          <div className="flex flex-wrap items-center justify-end gap-2 min-w-[220px]">
-            {saving && <span className="text-sm text-gray-500 whitespace-nowrap">Auto-saving…</span>}
+          <div className="flex items-center justify-end gap-2 min-w-[220px]">
+            {saving && <span className="text-sm text-gray-500 whitespace-nowrap">Auto-saving...</span>}
 
             {currentSection?.id === 'review' ? (
               <button
                 onClick={handleGenerateNotice}
                 disabled={!allComplete || getAllBlockers().length > 0 || generating}
                 className={`
-                  px-6 py-2 text-sm font-medium rounded-md transition-colors min-w-[146px]
-                  ${
-                    !allComplete || getAllBlockers().length > 0 || generating
-                      ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                      : 'bg-violet-600 text-white hover:bg-violet-700 shadow-sm'
-                  }
+                  px-7 py-2.5 text-sm font-semibold rounded-xl transition-all min-w-[160px]
+                  ${!allComplete || getAllBlockers().length > 0 || generating
+                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed shadow-none'
+                    : 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white hover:from-violet-700 hover:to-fuchsia-700 shadow-[0_6px_16px_rgba(109,40,217,0.28)]'}
                 `}
               >
                 {generating ? 'Generating...' : 'Generate Notice'}
@@ -1287,15 +1278,13 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
                 onClick={handleNext}
                 disabled={currentSectionIndex === visibleSections.length - 1}
                 className={`
-                  px-6 py-2 text-sm font-medium rounded-md transition-colors min-w-[112px]
-                  ${
-                    currentSectionIndex === visibleSections.length - 1
-                      ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                      : 'bg-violet-600 text-white hover:bg-violet-700 shadow-sm'
-                  }
+                  px-7 py-2.5 text-sm font-semibold rounded-xl transition-all min-w-[128px]
+                  ${currentSectionIndex === visibleSections.length - 1
+                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed shadow-none'
+                    : 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white hover:from-violet-700 hover:to-fuchsia-700 shadow-[0_6px_16px_rgba(109,40,217,0.28)]'}
                 `}
               >
-                Next →
+                Continue
               </button>
             )}
           </div>
@@ -1332,3 +1321,5 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
 };
 
 export default NoticeOnlySectionFlow;
+
+

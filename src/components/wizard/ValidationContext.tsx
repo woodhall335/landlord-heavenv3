@@ -95,6 +95,17 @@ export const ValidationProvider: React.FC<ValidationProviderProps> = ({ children
 
   const setFieldError = useCallback((fieldId: string, error: ValidationError) => {
     setErrors((prev) => {
+      const existing = prev.get(fieldId);
+      const unchanged =
+        existing?.field === error.field &&
+        existing?.message === error.message &&
+        existing?.severity === error.severity &&
+        existing?.section === error.section;
+
+      if (unchanged) {
+        return prev;
+      }
+
       const next = new Map(prev);
       next.set(fieldId, error);
       return next;
@@ -103,6 +114,10 @@ export const ValidationProvider: React.FC<ValidationProviderProps> = ({ children
 
   const clearFieldError = useCallback((fieldId: string) => {
     setErrors((prev) => {
+      if (!prev.has(fieldId)) {
+        return prev;
+      }
+
       const next = new Map(prev);
       next.delete(fieldId);
       return next;
@@ -111,18 +126,20 @@ export const ValidationProvider: React.FC<ValidationProviderProps> = ({ children
 
   const clearSectionErrors = useCallback((sectionId: string) => {
     setErrors((prev) => {
+      let changed = false;
       const next = new Map(prev);
       for (const [key, error] of next) {
         if (error.section === sectionId) {
+          changed = true;
           next.delete(key);
         }
       }
-      return next;
+      return changed ? next : prev;
     });
   }, []);
 
   const clearAllErrors = useCallback(() => {
-    setErrors(new Map());
+    setErrors((prev) => (prev.size === 0 ? prev : new Map()));
   }, []);
 
   const hasErrors = useMemo(
@@ -236,3 +253,4 @@ export function useFieldValidation(
 }
 
 export default ValidationContext;
+

@@ -9,7 +9,7 @@ import { usePathname } from 'next/navigation';
 const STORAGE_KEY = 's21_banner_dismissed';
 const DISMISS_DURATION = 7 * 24 * 60 * 60 * 1000; // 7 days in ms
 
-const EXCLUDED_PATHS = ['/checkout', '/auth', '/dashboard', '/wizard/preview'];
+const EXCLUDED_PATHS = ['/checkout', '/auth', '/dashboard', '/wizard/flow', '/wizard/review', '/wizard/preview'];
 
 export function Section21HeaderBanner() {
   const [isVisible, setIsVisible] = useState(false);
@@ -89,3 +89,4 @@ export function Section21HeaderBanner() {
     </div>
   );
 }
+

@@ -1,7 +1,6 @@
 import React from 'react';
-import Image from 'next/image';
-import { RiCheckLine, RiErrorWarningLine, RiImageLine } from 'react-icons/ri';
-import { resolveStepIconPath, type StepMetadata } from './stepMetadata';
+import { RiCheckLine, RiErrorWarningLine } from 'react-icons/ri';
+import { type StepMetadata } from './stepMetadata';
 
 interface WizardStepperTab {
   id: string;
@@ -15,44 +14,93 @@ interface WizardStepperTab {
 interface WizardStepperV3Props {
   tabs: WizardStepperTab[];
   getStepMetadataForId: (stepId: string) => StepMetadata | undefined;
+  variant?: 'surface' | 'header';
 }
 
-export function WizardStepperV3({ tabs, getStepMetadataForId }: WizardStepperV3Props) {
+export function WizardStepperV3({ tabs, variant = 'surface' }: WizardStepperV3Props) {
+  const isHeader = variant === 'header';
+
   return (
-    <div className="overflow-x-auto pb-3">
-      <div className="flex min-w-max gap-3">
-        {tabs.map((tab) => {
-          const iconPath = resolveStepIconPath(getStepMetadataForId(tab.id));
+    <div className="overflow-x-auto pb-1">
+      <ol className="flex min-w-max items-center">
+        {tabs.map((tab, index) => {
+          const isCurrent = tab.isCurrent;
+          const hasIssue = Boolean(tab.hasIssue);
+          const isComplete = Boolean(tab.isComplete);
+
+          const connectorClass = isHeader
+            ? isComplete || isCurrent
+              ? 'bg-violet-300'
+              : hasIssue
+              ? 'bg-rose-300/80'
+              : 'bg-white/25'
+            : isComplete || isCurrent
+            ? 'bg-violet-400'
+            : hasIssue
+            ? 'bg-rose-300'
+            : 'bg-violet-200';
+
           return (
-            <button
-              key={tab.id}
-              onClick={tab.onClick}
-              className={`flex min-w-[170px] items-center gap-3 rounded-xl border p-3 text-left transition ${
-                tab.isCurrent
-                  ? 'border-violet-500 bg-violet-50 ring-2 ring-violet-300/70'
-                  : 'border-violet-200 bg-white hover:bg-violet-50/50'
-              }`}
-            >
-              <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-violet-100">
-                {iconPath ? (
-                  <Image src={iconPath} alt="" fill sizes="(max-width: 768px) 48px, 64px" className="object-contain" />
-                ) : (
-                  <div className="flex h-full w-full items-center justify-center text-violet-700">
-                    <RiImageLine className="h-6 w-6" />
-                  </div>
-                )}
-              </div>
-              <div className="min-w-0">
-                <p className="truncate text-sm font-semibold text-violet-950">{tab.label}</p>
-                <div className="mt-1 flex items-center gap-1 text-xs text-violet-700">
-                  {tab.hasIssue ? <RiErrorWarningLine className="h-3.5 w-3.5" /> : tab.isComplete ? <RiCheckLine className="h-3.5 w-3.5" /> : null}
-                  {tab.hasIssue ? 'Needs attention' : tab.isComplete ? 'Complete' : 'In progress'}
-                </div>
-              </div>
-            </button>
+            <li key={tab.id} className="flex items-center">
+              <button
+                onClick={tab.onClick}
+                className={[
+                  'group inline-flex items-center gap-2 text-left transition focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-300',
+                  isHeader ? 'rounded-full px-2 py-1' : 'rounded-md px-1.5 py-1',
+                ].join(' ')}
+              >
+                <span
+                  className={[
+                    'inline-flex h-6 w-6 items-center justify-center rounded-full text-xs font-semibold transition',
+                    isCurrent
+                      ? 'bg-violet-500 text-white ring-2 ring-violet-200/70'
+                      : isComplete
+                      ? 'bg-emerald-500 text-white'
+                      : hasIssue
+                      ? 'bg-rose-500 text-white'
+                      : isHeader
+                      ? 'bg-white/25 text-white group-hover:bg-white/35'
+                      : 'bg-violet-100 text-violet-800 group-hover:bg-violet-200',
+                  ].join(' ')}
+                >
+                  {isComplete ? (
+                    <RiCheckLine className="h-4 w-4" />
+                  ) : hasIssue ? (
+                    <RiErrorWarningLine className="h-4 w-4" />
+                  ) : (
+                    index + 1
+                  )}
+                </span>
+                <span
+                  className={[
+                    'max-w-[156px] truncate font-medium',
+                    isHeader ? 'text-sm' : 'text-sm',
+                    isCurrent
+                      ? isHeader
+                        ? 'text-white'
+                        : 'text-violet-950'
+                      : hasIssue
+                      ? isHeader
+                        ? 'text-rose-100'
+                        : 'text-rose-900'
+                      : isHeader
+                      ? 'text-violet-100/90 group-hover:text-white'
+                      : 'text-violet-800 group-hover:text-violet-950',
+                  ].join(' ')}
+                >
+                  {tab.label}
+                </span>
+              </button>
+
+              {index < tabs.length - 1 ? (
+                <span className={`mx-2 h-px w-8 ${connectorClass}`} aria-hidden="true" />
+              ) : null}
+            </li>
           );
         })}
-      </div>
+      </ol>
     </div>
   );
 }
+
+export default WizardStepperV3;

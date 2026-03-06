@@ -10,8 +10,8 @@ interface StepHeaderV3Props {
 
 export function StepHeaderV3({ title, description, iconPath }: StepHeaderV3Props) {
   return (
-    <div className="mb-6 flex items-start gap-4 rounded-xl border border-violet-100 bg-violet-50/50 p-4">
-      <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg bg-white ring-1 ring-violet-100 md:h-[72px] md:w-[72px]">
+    <div className="mb-6 flex items-start gap-4 rounded-xl border border-violet-100 bg-violet-50/55 p-4">
+      <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg bg-white ring-1 ring-violet-200 md:h-[72px] md:w-[72px]">
         {iconPath ? (
           <Image src={iconPath} alt="" fill sizes="(max-width: 768px) 56px, 72px" className="object-contain" />
         ) : (
@@ -21,8 +21,8 @@ export function StepHeaderV3({ title, description, iconPath }: StepHeaderV3Props
         )}
       </div>
       <div>
-        <h2 className="text-xl font-semibold tracking-tight text-violet-950">{title}</h2>
-        {description ? <p className="mt-1 text-sm text-violet-700">{description}</p> : null}
+        <h2 className="text-2xl font-semibold tracking-tight text-violet-950">{title}</h2>
+        {description ? <p className="mt-1 text-sm text-violet-800">{description}</p> : null}
       </div>
     </div>
   );

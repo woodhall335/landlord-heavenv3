@@ -26,7 +26,6 @@ import { getCaseFacts, saveCaseFacts } from '@/lib/wizard/facts-client';
 import { AskHeavenPanel } from '@/components/wizard/AskHeavenPanel';
 import { WizardFlowShell } from '@/components/wizard/shared/WizardFlowShell';
 import { WizardShellV3 } from '@/components/wizard/shared/WizardShellV3';
-import { isWizardThemeV2 } from '@/components/wizard/shared/theme';
 import { isWizardUiV3Enabled } from '@/components/wizard/shared/flags';
 import { SmartReviewPanel } from '@/components/wizard/SmartReviewPanel';
 import type { SmartReviewWarningItem, SmartReviewSummary } from '@/components/wizard/SmartReviewPanel';
@@ -795,35 +794,33 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
           currentQuestionId={currentQuestionId}
         />
       )}
-      navigation={(
+            navigation={(
         <>
           <button
             onClick={handleBack}
             disabled={currentSectionIndex === 0}
             className={`
-              px-4 py-2 text-sm font-medium rounded-md transition-colors
+              px-4 py-2 text-sm font-medium rounded-xl border transition-colors
               ${currentSectionIndex === 0
-                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                : isWizardThemeV2
-                ? 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
-                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}
+                ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
+                : 'bg-white text-violet-900 border-violet-200 hover:bg-violet-50'}
             `}
           >
-            ← Back
+            Back
           </button>
 
-          <div className="flex flex-wrap items-center justify-end gap-2">
-            {saving && <span className="text-sm text-gray-500 whitespace-nowrap">Auto-saving…</span>}
+          <div className="flex items-center justify-end gap-2">
+            {saving && <span className="text-sm text-gray-500 whitespace-nowrap">Auto-saving...</span>}
 
             {currentSection?.id === 'review' ? (
               <button
                 onClick={handleComplete}
                 disabled={!caseValidation.valid}
                 className={`
-                  px-6 py-2 text-sm font-medium rounded-md transition-colors
+                  px-7 py-2.5 text-sm font-semibold rounded-xl transition-all
                   ${!caseValidation.valid
-                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                    : 'bg-violet-600 text-white hover:bg-violet-700'}
+                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed shadow-none'
+                    : 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white hover:from-violet-700 hover:to-fuchsia-700 shadow-[0_6px_16px_rgba(109,40,217,0.28)]'}
                 `}
               >
                 Generate Case Bundle
@@ -833,13 +830,13 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
                 onClick={handleNext}
                 disabled={currentSectionIndex === visibleSections.length - 1}
                 className={`
-                  px-6 py-2 text-sm font-medium rounded-md transition-colors
+                  px-7 py-2.5 text-sm font-semibold rounded-xl transition-all
                   ${currentSectionIndex === visibleSections.length - 1
-                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                    : 'bg-violet-600 text-white hover:bg-violet-700'}
+                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed shadow-none'
+                    : 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white hover:from-violet-700 hover:to-fuchsia-700 shadow-[0_6px_16px_rgba(109,40,217,0.28)]'}
                 `}
               >
-                Next →
+                Continue
               </button>
             )}
           </div>
@@ -885,3 +882,6 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
 };
 
 export default MoneyClaimSectionFlow;
+
+
+

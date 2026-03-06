@@ -1,8 +1,21 @@
+'use client';
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { buildAskHeavenLink } from "@/lib/ask-heaven/buildAskHeavenLink";
 
 export function Footer() {
+  const pathname = usePathname();
+
+  const isImmersiveWizardRoute =
+    pathname?.startsWith('/wizard/flow') ||
+    pathname?.startsWith('/wizard/review') ||
+    pathname?.startsWith('/wizard/preview');
+
+  if (isImmersiveWizardRoute) {
+    return null;
+  }
   const askHeavenLink = buildAskHeavenLink({ source: 'footer' });
   const currentYear = new Date().getFullYear();
 
@@ -243,3 +256,5 @@ export function Footer() {
     </footer>
   );
 }
+
+

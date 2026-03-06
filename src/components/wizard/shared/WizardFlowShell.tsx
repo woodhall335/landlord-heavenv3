@@ -42,99 +42,55 @@ export function WizardFlowShell({
   navigation,
 }: WizardFlowShellProps) {
   const completionLabel = `${completedCount} of ${totalCount} sections complete`;
+  const currentTabIndex = tabs.findIndex((tab) => tab.isCurrent);
+  const activeStep = currentTabIndex >= 0 ? currentTabIndex + 1 : 1;
 
   return (
-    <div
-      className={clsx(
-        'min-h-screen pt-20',
-        isWizardThemeV2
-          ? 'bg-gradient-to-b from-violet-100/55 via-violet-50/35 to-[#FAFAFC]'
-          : 'bg-gray-50'
-      )}
-    >
-      <header
-        className={clsx(
-          'border-b sticky top-20 z-10',
-          isWizardThemeV2
-            ? 'bg-white/90 backdrop-blur-md border-violet-200'
-            : 'bg-white border-gray-200'
-        )}
-      >
+    <div className={clsx('min-h-screen', isWizardThemeV2 ? 'bg-white' : 'bg-gray-50')}>
+      <header className={clsx('border-b sticky top-0 z-10 bg-white/95 backdrop-blur', isWizardThemeV2 ? 'border-violet-200' : 'border-gray-200')}>
         <div className={clsx('mx-auto px-4 py-4', isWizardThemeV2 ? 'max-w-[1240px]' : 'max-w-6xl')}>
-          <div className="flex items-center justify-between mb-3 gap-4">
-            <h1
-              className={clsx(
-                'font-semibold',
-                isWizardThemeV2 ? 'text-xl tracking-tight text-violet-950' : 'text-lg text-gray-900'
-              )}
-            >
+          <div className="mb-2.5 flex items-center justify-between">
+            <h1 className={clsx('font-semibold', isWizardThemeV2 ? 'text-xl tracking-tight text-violet-950' : 'text-lg text-gray-900')}>
               {title}
             </h1>
-          </div>
-
-          <div className="mb-2.5 flex items-center justify-between">
-            <p
-              className={clsx(
-                'text-[12px] font-semibold uppercase tracking-wide',
-                isWizardThemeV2 ? 'text-violet-700/90' : 'text-gray-500'
-              )}
-            >
-              Progress
-            </p>
             <p className={clsx('text-sm font-semibold', isWizardThemeV2 ? 'text-violet-900' : 'text-gray-700')}>
               {completionLabel}
             </p>
           </div>
 
-          <div
-            className={clsx(
-              'h-2 rounded-full overflow-hidden',
-              isWizardThemeV2 ? 'bg-violet-100 ring-1 ring-violet-200/70' : 'bg-gray-200'
-            )}
-          >
+          <div className={clsx('h-2 rounded-full overflow-hidden', isWizardThemeV2 ? 'bg-violet-100 ring-1 ring-violet-200/70' : 'bg-gray-200')}>
             <div
-              className={clsx(
-                'h-full transition-all duration-300',
-                isWizardThemeV2 ? 'bg-violet-600' : 'bg-[#7C3AED]'
-              )}
+              className={clsx('h-full transition-all duration-300', isWizardThemeV2 ? 'bg-gradient-to-r from-violet-600 to-fuchsia-600' : 'bg-[#7C3AED]')}
               style={{ width: `${progress}%` }}
             />
           </div>
 
           <div className="mt-4 overflow-x-auto pb-2">
-            <div className="flex gap-2 min-w-max">
-            {tabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={tab.onClick}
-                className={clsx(
-                  'px-4 py-2 text-sm font-medium rounded-full whitespace-nowrap transition-colors border shrink-0',
-                  tab.isCurrent
-                    ? isWizardThemeV2
-                      ? 'bg-violet-600 text-white border-violet-600 shadow-sm'
-                      : 'bg-[#7C3AED] text-white border-[#7C3AED]'
-                    : isWizardThemeV2
-                    ? 'bg-white text-violet-900 hover:bg-violet-50 border-violet-200 shadow-[inset_0_0_0_1px_rgba(139,92,246,0.08)]'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border-transparent',
-                  tab.hasIssue && !tab.isCurrent && (isWizardThemeV2 ? 'ring-2 ring-rose-300' : 'ring-2 ring-red-300')
-                )}
-              >
-                <span className="flex items-center gap-1.5">
-                  {tab.isComplete && !tab.hasIssue && (
-                    <RiCheckLine
-                      className={clsx('w-4 h-4', isWizardThemeV2 ? 'text-violet-500' : 'text-green-500')}
-                    />
-                  )}
-                  {tab.hasIssue && (
-                    <RiErrorWarningLine
-                      className={clsx('w-4 h-4', isWizardThemeV2 ? 'text-rose-600' : 'text-red-500')}
-                    />
-                  )}
-                  {tab.label}
-                </span>
-              </button>
-            ))}
-            </div>
+            <ol className="flex min-w-max items-center gap-2">
+              {tabs.map((tab, index) => (
+                <li key={tab.id} className="flex items-center gap-2">
+                  <button
+                    onClick={tab.onClick}
+                    className={clsx(
+                      'px-3 py-2 text-sm font-medium rounded-xl whitespace-nowrap transition-colors border shrink-0 flex items-center gap-2',
+                      tab.isCurrent
+                        ? 'bg-violet-50 text-violet-950 border-violet-500 ring-2 ring-violet-200'
+                        : 'bg-white text-violet-900 hover:bg-violet-50 border-violet-200',
+                      tab.hasIssue && !tab.isCurrent && 'ring-2 ring-rose-300 border-rose-300 text-rose-900'
+                    )}
+                  >
+                    <span className={clsx(
+                      'inline-flex h-5 w-5 items-center justify-center rounded-full text-xs font-semibold',
+                      tab.isCurrent ? 'bg-violet-600 text-white' : tab.isComplete ? 'bg-emerald-600 text-white' : tab.hasIssue ? 'bg-rose-600 text-white' : 'bg-violet-100 text-violet-800'
+                    )}>
+                      {tab.isComplete && !tab.hasIssue ? <RiCheckLine className="w-3.5 h-3.5" /> : tab.hasIssue ? <RiErrorWarningLine className="w-3.5 h-3.5" /> : index + 1}
+                    </span>
+                    {tab.label}
+                  </button>
+                  {index < tabs.length - 1 ? <span className="h-px w-4 bg-violet-200" aria-hidden="true" /> : null}
+                </li>
+              ))}
+            </ol>
           </div>
         </div>
       </header>
@@ -142,22 +98,13 @@ export function WizardFlowShell({
       <div className={clsx('mx-auto px-4 py-8 flex flex-col lg:flex-row gap-6', isWizardThemeV2 ? 'max-w-[1240px] items-start' : 'max-w-6xl')}>
         <main className={clsx('flex-1', isWizardThemeV2 ? 'lg:max-w-[860px]' : 'lg:max-w-4xl')}>
           {banner}
-          <div
-            className={clsx(
-              'border overflow-hidden',
-              isWizardThemeV2
-                ? 'bg-white rounded-xl border-violet-200 shadow-[0_8px_22px_rgba(31,41,55,0.08)]'
-                : 'bg-white rounded-xl shadow-sm border-gray-200'
-            )}
-          >
+          <div className={clsx('border overflow-hidden', isWizardThemeV2 ? 'bg-white rounded-2xl border-violet-200 shadow-[0_12px_28px_rgba(76,29,149,0.10)]' : 'bg-white rounded-xl shadow-sm border-gray-200')}>
             <div className="p-6 md:p-7">
+              <div className="mb-4 inline-flex rounded-full border border-violet-200 bg-violet-50 px-3 py-1 text-xs font-semibold text-violet-800">
+                Step {activeStep} of {tabs.length}
+              </div>
               <div className="mb-6">
-                <h2
-                  className={clsx(
-                    'text-xl font-semibold',
-                    isWizardThemeV2 ? 'tracking-tight text-violet-950' : 'text-gray-900'
-                  )}
-                >
+                <h2 className={clsx('text-xl font-semibold', isWizardThemeV2 ? 'tracking-tight text-violet-950' : 'text-gray-900')}>
                   {sectionTitle}
                 </h2>
                 {sectionDescription && (
@@ -169,12 +116,7 @@ export function WizardFlowShell({
               {children}
             </div>
 
-            <div
-              className={clsx(
-                'px-6 md:px-7 py-4 border-t flex items-center justify-between',
-                isWizardThemeV2 ? 'border-violet-100 bg-violet-50/30 min-h-[76px]' : 'border-gray-200 bg-white'
-              )}
-            >
+            <div className={clsx('px-6 md:px-7 py-4 border-t flex items-center justify-between', isWizardThemeV2 ? 'border-violet-100 bg-white min-h-[76px]' : 'border-gray-200 bg-white')}>
               {navigation}
             </div>
           </div>
@@ -182,7 +124,7 @@ export function WizardFlowShell({
 
         {sidebar && (
           <aside className="lg:w-[340px] shrink-0 self-start">
-            <div className="sticky top-40">{sidebar}</div>
+            <div className="sticky top-24">{sidebar}</div>
           </aside>
         )}
       </div>
@@ -191,3 +133,4 @@ export function WizardFlowShell({
 }
 
 export default WizardFlowShell;
+

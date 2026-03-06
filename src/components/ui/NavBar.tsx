@@ -45,6 +45,7 @@ const freeToolsLinks: NavItem[] = freeTools.map((tool) => ({
 export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBarProps) {
   const pathname = usePathname();
   const router = useRouter();
+  const isWizardFlowRoute = pathname?.startsWith('/wizard/flow') ?? false;
   const [open, setOpen] = useState(false);
   const [showFreeTools, setShowFreeTools] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
@@ -55,6 +56,11 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
   );
 
   useEffect(() => {
+    if (isWizardFlowRoute) {
+      setEffectiveHeaderState('transparent');
+      return;
+    }
+
     if (headerMode === 'solid') {
       setEffectiveHeaderState('solid');
       return;
@@ -75,7 +81,7 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
     return () => {
       window.removeEventListener('scroll', setFromScroll);
     };
-  }, [headerMode, scrollThreshold]);
+  }, [headerMode, scrollThreshold, isWizardFlowRoute]);
 
   useEffect(() => {
     setOpen(false);
@@ -128,7 +134,8 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
 
   const user = clientUser;
 
-  const isSolid = effectiveHeaderState === 'solid';
+  const useWizardDarkHeader = isWizardFlowRoute;
+  const isSolid = effectiveHeaderState === 'solid' && !useWizardDarkHeader;
   const textClass = isSolid ? 'text-[#111827]' : 'text-white';
   const secondaryTextClass = isSolid ? 'text-gray-700' : 'text-white';
   const hoverTextClass = isSolid ? 'hover:text-[#692ED4]' : 'hover:text-white hover:opacity-80 focus:text-white focus:opacity-80';
@@ -152,7 +159,11 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
     <header
       className={clsx(
         'site-header fixed left-0 right-0 z-50 transition-colors duration-200',
-        isSolid ? 'bg-white border-b border-[#E5EE7B]' : 'bg-transparent border-b border-transparent',
+        useWizardDarkHeader
+          ? 'bg-[rgba(20,8,48,0.84)] border-b border-white/15 backdrop-blur-md'
+          : isSolid
+            ? 'bg-white border-b border-[#E5EE7B]'
+            : 'bg-transparent border-b border-transparent',
       )}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-8">
@@ -338,3 +349,5 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
 }
 
 export default NavBar;
+
+

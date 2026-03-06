@@ -5,25 +5,39 @@ interface WizardMainCardV3Props {
   sectionTitle: string;
   sectionDescription?: string;
   stepIconPath?: string;
+  stepNumber?: number;
+  totalSteps?: number;
   banner?: React.ReactNode;
   children: React.ReactNode;
   navigation: React.ReactNode;
 }
 
-export function WizardMainCardV3({ sectionTitle, sectionDescription, stepIconPath, banner, children, navigation }: WizardMainCardV3Props) {
+export function WizardMainCardV3({
+  sectionTitle,
+  sectionDescription,
+  stepIconPath,
+  stepNumber,
+  totalSteps,
+  banner,
+  children,
+  navigation,
+}: WizardMainCardV3Props) {
   return (
     <main className="min-w-0 flex flex-1 flex-col lg:max-w-[860px]">
       {banner}
-      <div className="flex min-h-[min(720px,calc(100vh-260px))] flex-col rounded-xl border border-violet-200 bg-white p-6 shadow-[0_8px_22px_rgba(31,41,55,0.08)] md:p-7">
+      <div className="flex flex-col rounded-2xl border border-violet-200 bg-white p-6 shadow-[0_12px_28px_rgba(76,29,149,0.10)] md:p-7">
         <div className="shrink-0">
+          {stepNumber && totalSteps ? (
+            <div className="mb-4 inline-flex rounded-full border border-violet-200 bg-violet-50 px-3 py-1 text-xs font-semibold text-violet-800">
+              Step {stepNumber} of {totalSteps}
+            </div>
+          ) : null}
           <StepHeaderV3 title={sectionTitle} description={sectionDescription} iconPath={stepIconPath} />
         </div>
-        <div className="min-h-0 flex-1 overflow-visible">
-          {children}
-        </div>
-        <div className="mt-auto shrink-0">
-          {navigation}
-        </div>
+
+        <div className="min-h-0 overflow-visible">{children}</div>
+
+        <div className="mt-6 shrink-0">{navigation}</div>
       </div>
     </main>
   );

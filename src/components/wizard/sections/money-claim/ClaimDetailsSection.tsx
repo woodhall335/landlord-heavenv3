@@ -5,7 +5,7 @@
 'use client';
 
 import React, { useMemo, useEffect, useRef, useCallback } from 'react';
-import { RiInformationLine, RiArrowRightLine } from 'react-icons/ri';
+import { RiInformationLine, RiArrowRightLine, RiAlertLine, RiFileList3Line } from 'react-icons/ri';
 import { CourtFinderLink } from '@/components/wizard/shared/CourtFinderLink';
 import { trackMoneyClaimReasonsSelected } from '@/lib/analytics';
 
@@ -247,49 +247,58 @@ export const ClaimDetailsSection: React.FC<SectionProps> = ({
         )}
       </div>
 
-      {/* MAIN CHANGE: Checkbox-based claim reasons selector */}
+            {/* Claim reasons selector */}
       <div className="space-y-3">
-        <label className="text-sm font-medium text-charcoal">
+        <label className="text-sm font-semibold text-violet-950">
           What are you claiming for?
           <span className="text-red-500 ml-1">*</span>
         </label>
-        <p className="text-xs text-gray-500">
-          Select all that apply. We&apos;ll guide you through the relevant sections based on your selection.
+        <p className="text-xs text-violet-700">
+          Select all that apply. We will show only the relevant sections next.
         </p>
 
-        <div className="grid gap-2">
+        <div className="grid gap-3 md:grid-cols-2">
           {CLAIM_REASONS.map((reason) => {
             const isSelected = selectedReasons.has(reason.value);
             return (
-              <label
+              <button
                 key={reason.value}
+                type="button"
+                onClick={() => toggleClaimReason(reason.value)}
                 className={`
-                  flex cursor-pointer items-start gap-3 rounded-lg border p-4 transition-all
-                  ${isSelected
-                    ? 'border-[#7C3AED] bg-purple-50 ring-1 ring-[#7C3AED]'
-                    : 'border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50'}
+                  text-left rounded-xl border p-4 transition-all
+                  ${
+                    isSelected
+                      ? 'border-violet-500 bg-violet-50 ring-2 ring-violet-200'
+                      : 'border-violet-200 bg-white hover:border-violet-300 hover:bg-violet-50/50'
+                  }
                 `}
               >
-                <input
-                  type="checkbox"
-                  className="mt-0.5 h-5 w-5 rounded border-gray-300 text-[#7C3AED] focus:ring-[#7C3AED]"
-                  checked={isSelected}
-                  onChange={() => toggleClaimReason(reason.value)}
-                />
-                <div className="flex-1">
-                  <span className="font-medium text-gray-900">{reason.label}</span>
-                  {reason.description && (
-                    <p className="text-xs text-gray-500 mt-0.5">{reason.description}</p>
-                  )}
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="font-semibold text-violet-950">{reason.label}</p>
+                    {reason.description ? (
+                      <p className="mt-1 text-xs text-violet-700">{reason.description}</p>
+                    ) : null}
+                  </div>
+                  <span
+                    className={`inline-flex shrink-0 rounded-full px-2 py-1 text-[10px] font-semibold uppercase tracking-wide ${
+                      isSelected
+                        ? 'bg-violet-600 text-white'
+                        : 'bg-violet-100 text-violet-700'
+                    }`}
+                  >
+                    {isSelected ? 'Selected' : 'Select'}
+                  </span>
                 </div>
-              </label>
+              </button>
             );
           })}
         </div>
 
         {selectedReasons.size === 0 && (
-          <p className="text-xs text-amber-600 italic">
-            Please select at least one reason for your claim
+          <p className="text-xs text-amber-700 italic">
+            Please select at least one reason for your claim.
           </p>
         )}
       </div>
@@ -298,7 +307,7 @@ export const ClaimDetailsSection: React.FC<SectionProps> = ({
       {selectedReasons.has('unpaid_council_tax') && (
         <div className="rounded-lg border border-amber-200 bg-amber-50 p-4">
           <div className="flex items-start gap-3">
-            <span className="text-lg">⚠️</span>
+            <RiAlertLine className="h-5 w-5 text-amber-600" />
             <div>
               <p className="text-sm font-medium text-amber-800">Council Tax Claims</p>
               <p className="text-xs text-amber-700 mt-1">
@@ -315,7 +324,7 @@ export const ClaimDetailsSection: React.FC<SectionProps> = ({
       {selectedReasons.has('other_tenant_debt') && (
         <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
           <div className="flex items-start gap-3">
-            <span className="text-lg">📝</span>
+            <RiFileList3Line className="h-5 w-5 text-blue-600" />
             <div>
               <p className="text-sm font-medium text-blue-800">Other Tenant Debt</p>
               <p className="text-xs text-blue-700 mt-1">
@@ -367,3 +376,4 @@ export const ClaimDetailsSection: React.FC<SectionProps> = ({
     </div>
   );
 };
+

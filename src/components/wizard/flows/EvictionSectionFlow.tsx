@@ -40,7 +40,6 @@ import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import { useRouter } from 'next/navigation';
 import { WizardFlowShell } from '@/components/wizard/shared/WizardFlowShell';
 import { WizardShellV3 } from '@/components/wizard/shared/WizardShellV3';
-import { isWizardThemeV2 } from '@/components/wizard/shared/theme';
 import { isWizardUiV3Enabled } from '@/components/wizard/shared/flags';
 
 import { AskHeavenPanel } from '@/components/wizard/AskHeavenPanel';
@@ -65,7 +64,7 @@ import { ScotlandNoticeSection } from '../sections/eviction/ScotlandNoticeSectio
 import { ScotlandTribunalSection } from '../sections/eviction/ScotlandTribunalSection';
 
 // Scotland utilities
-import { validateSixMonthRule, getScotlandGroundByNumber } from '@/lib/scotland/grounds';
+import { validateSixMonthRule } from '@/lib/scotland/grounds';
 
 // Types and validation
 import type { WizardFacts } from '@/lib/case-facts/schema';
@@ -74,7 +73,7 @@ import { getCaseFacts, saveCaseFacts } from '@/lib/wizard/facts-client';
 
 // Analytics and attribution
 import { trackWizardStepCompleteWithAttribution } from '@/lib/analytics';
-import { getWizardAttribution, isStepCompleted, markStepCompleted } from '@/lib/wizard/wizardAttribution';
+import { getWizardAttribution, markStepCompleted } from '@/lib/wizard/wizardAttribution';
 
 // Validation context for live field validation
 import { ValidationProvider, useValidationContext } from '@/components/wizard/ValidationContext';
@@ -101,7 +100,6 @@ interface WizardSection {
 // Valid routes by jurisdiction
 const ENGLAND_ROUTES = ['section_8', 'section_21'] as const;
 const WALES_ROUTES = ['section_173', 'fault_based'] as const;
-const ALL_VALID_ROUTES = [...ENGLAND_ROUTES, ...WALES_ROUTES] as const;
 
 const ENGLAND_WALES_SECTIONS: WizardSection[] = [
   {
@@ -690,14 +688,6 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
   const renderSection = () => {
     if (!currentSection) return null;
 
-    const isScotland = jurisdiction === 'scotland';
-
-    const sectionProps = {
-      facts,
-      jurisdiction,
-      onUpdate: handleUpdate,
-    };
-
     // Type-narrowed props for England/Wales sections (jurisdiction is never 'scotland' for these cases)
     const englandWalesProps = {
       facts,
@@ -837,35 +827,33 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
           currentQuestionId={undefined}
         />
       )}
-      navigation={(
+            navigation={(
         <>
           <button
             onClick={handleBack}
             disabled={currentSectionIndex === 0}
             className={`
-              px-4 py-2 text-sm font-medium rounded-md transition-colors
+              px-4 py-2 text-sm font-medium rounded-xl border transition-colors
               ${currentSectionIndex === 0
-                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                : isWizardThemeV2
-                ? 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
-                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}
+                ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
+                : 'bg-white text-violet-900 border-violet-200 hover:bg-violet-50'}
             `}
           >
-            ← Back
+            Back
           </button>
 
-          <div className="flex flex-wrap items-center justify-end gap-2">
-            {saving && <span className="text-sm text-gray-500 whitespace-nowrap">Auto-saving…</span>}
+          <div className="flex items-center justify-end gap-2">
+            {saving && <span className="text-sm text-gray-500 whitespace-nowrap">Auto-saving...</span>}
 
             {currentSection?.id === 'review' ? (
               <button
                 onClick={handleComplete}
                 disabled={currentBlockers.length > 0 || hasErrors || uploadsInProgress}
                 className={`
-                  px-6 py-2 text-sm font-medium rounded-md transition-colors
+                  px-7 py-2.5 text-sm font-semibold rounded-xl transition-all
                   ${currentBlockers.length > 0 || hasErrors || uploadsInProgress
-                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                    : 'bg-violet-600 text-white hover:bg-violet-700'}
+                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed shadow-none'
+                    : 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white hover:from-violet-700 hover:to-fuchsia-700 shadow-[0_6px_16px_rgba(109,40,217,0.28)]'}
                 `}
               >
                 {uploadsInProgress ? 'Uploading...' : 'Generate Case Bundle'}
@@ -875,13 +863,13 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
                 onClick={handleNext}
                 disabled={currentSectionIndex === visibleSections.length - 1 || hasErrors || uploadsInProgress}
                 className={`
-                  px-6 py-2 text-sm font-medium rounded-md transition-colors
+                  px-7 py-2.5 text-sm font-semibold rounded-xl transition-all
                   ${currentSectionIndex === visibleSections.length - 1 || hasErrors || uploadsInProgress
-                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                    : 'bg-violet-600 text-white hover:bg-violet-700'}
+                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed shadow-none'
+                    : 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white hover:from-violet-700 hover:to-fuchsia-700 shadow-[0_6px_16px_rgba(109,40,217,0.28)]'}
                 `}
               >
-                {uploadsInProgress ? 'Uploading...' : 'Next →'}
+                {uploadsInProgress ? 'Uploading...' : 'Continue'}
               </button>
             )}
           </div>
@@ -947,3 +935,5 @@ export const EvictionSectionFlow: React.FC<EvictionSectionFlowProps> = (props) =
 };
 
 export default EvictionSectionFlow;
+
+

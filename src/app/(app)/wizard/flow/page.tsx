@@ -24,6 +24,7 @@ import {
   extractAttributionFromUrl,
 } from '@/lib/wizard/wizardAttribution';
 import { getSessionTokenHeaders } from '@/lib/session-token';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
 
 // Feature flags: Use new section-based flows
 // Set to true to enable the redesigned wizards, false to use legacy StructuredWizard
@@ -430,17 +431,21 @@ function WizardFlowContent() {
 
 export default function WizardFlowPage() {
   return (
-    <Suspense
-      fallback={
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="flex flex-col items-center gap-4">
-            <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-            <p className="text-gray-600">Loading wizard...</p>
+    <>
+      <HeaderConfig mode="transparent" />
+      <Suspense
+        fallback={
+          <div className="min-h-screen flex items-center justify-center">
+            <div className="flex flex-col items-center gap-4">
+              <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+              <p className="text-gray-600">Loading wizard...</p>
+            </div>
           </div>
-        </div>
-      }
-    >
-      <WizardFlowContent />
-    </Suspense>
+        }
+      >
+        <WizardFlowContent />
+      </Suspense>
+    </>
   );
 }
+
