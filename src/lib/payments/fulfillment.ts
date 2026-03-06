@@ -19,6 +19,7 @@ import {
 } from '@/lib/validation/section21-checkout-validator';
 import { safeUpdateOrderWithMetadata } from '@/lib/payments/safe-order-metadata';
 import { validateTenancyRequiredFacts } from '@/lib/validation/tenancy-details-validator';
+import { doesDocumentTypeMatch, toCanonicalDocumentKey } from '@/lib/documents/dashboard-document-display';
 
 // =============================================================================
 // TYPES
@@ -37,6 +38,7 @@ interface FulfillmentValidation {
   actualCount: number;
   expectedKeys: string[];
   actualTitles: string[];
+  actualCanonicalKeys: string[];
   missingKeys: string[];
 }
 
@@ -89,6 +91,23 @@ function getExpectedDocumentKeys(
   return packContents.map((item) => item.key);
 }
 
+export function computeMissingDocumentKeys(expectedKeys: string[], actualDocs: Array<{ document_type: string; document_title: string }>): { missingKeys: string[]; actualCanonicalKeys: string[] } {
+  const actualCanonicalKeys = actualDocs.flatMap((d) => {
+    const keys = new Set<string>();
+    const canonicalType = toCanonicalDocumentKey(d.document_type);
+    if (canonicalType) keys.add(canonicalType);
+    const canonicalTitle = toCanonicalDocumentKey(d.document_title);
+    if (canonicalTitle) keys.add(canonicalTitle);
+    return Array.from(keys);
+  });
+
+  const missingKeys = expectedKeys.filter((key) =>
+    !actualCanonicalKeys.some((actualKey) => doesDocumentTypeMatch(key, actualKey))
+  );
+
+  return { missingKeys, actualCanonicalKeys };
+}
+
 /**
  * Validate that all expected documents exist for a case.
  * Compares expected document keys from pack-contents against actual documents in database.
@@ -119,16 +138,14 @@ async function validateFulfillmentCompleteness(
       actualCount: 0,
       expectedKeys,
       actualTitles: [],
+      actualCanonicalKeys: [],
       missingKeys: expectedKeys,
     };
   }
 
   const actualTitles = (actualDocs || []).map((d) => d.document_title);
-  const actualKeys = (actualDocs || []).map((d) => d.document_type);
   const actualCount = actualDocs?.length || 0;
-
-  // Exact key-based completeness check: every expected key must exist in actual document_type values
-  const missingKeys = expectedKeys.filter((key) => !actualKeys.includes(key));
+  const { missingKeys, actualCanonicalKeys } = computeMissingDocumentKeys(expectedKeys, actualDocs || []);
   const isComplete = missingKeys.length === 0;
 
   return {
@@ -137,6 +154,7 @@ async function validateFulfillmentCompleteness(
     actualCount,
     expectedKeys,
     actualTitles,
+    actualCanonicalKeys,
     missingKeys,
   };
 }
@@ -161,8 +179,9 @@ function logFulfillmentValidation(
         `  Product: ${productType}\n` +
         `  Documents: ${validation.actualCount}/${validation.expectedCount}\n` +
         `  Missing keys: ${validation.missingKeys.join(', ') || 'unknown'}\n` +
-        `  Expected: ${validation.expectedKeys.join(', ')}\n` +
-        `  Actual: ${validation.actualTitles.join(', ')}`
+        `  Expected canonical keys: ${validation.expectedKeys.join(', ')}\n` +
+        `  Actual canonical keys: ${validation.actualCanonicalKeys.join(', ')}\n` +
+        `  Actual titles: ${validation.actualTitles.join(', ')}`
     );
   }
 }
