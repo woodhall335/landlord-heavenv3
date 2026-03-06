@@ -65,7 +65,7 @@ export async function GET() {
           .select('case_id, payment_status, fulfillment_status, created_at')
           .in('case_id', caseIds)
           .order('created_at', { ascending: false })
-      : { data: [], error: null };
+      : { data: [] };
 
     const { inProgress, completed } = deriveOverviewCounts(cases as any[], orders as any[]);
 
