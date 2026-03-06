@@ -7,6 +7,30 @@
 
 export type DashboardDocumentCategory = 'eviction' | 'money_claim' | 'tenancy_agreement' | 'other';
 
+const LEGACY_DOCUMENT_KEY_ALIASES: Record<string, string> = {
+  'section 8 notice': 'section8_notice',
+  'service instructions': 'service_instructions',
+  'service & validity checklist': 'service_checklist',
+  'service and validity checklist': 'service_checklist',
+  'pre-service compliance declaration': 'compliance_declaration',
+  'pre service compliance declaration': 'compliance_declaration',
+  'rent schedule / arrears statement': 'arrears_schedule',
+};
+
+function normalizeDocumentKey(value: string): string {
+  return value.trim().toLowerCase().replace(/\s+/g, ' ');
+}
+
+/**
+ * Normalize document keys to canonical keys used by pack-contents validation.
+ * Supports legacy rows where a human-readable title was persisted as document_type.
+ */
+export function toCanonicalDocumentKey(value: string | null | undefined): string {
+  if (!value) return '';
+  const normalized = normalizeDocumentKey(value);
+  return LEGACY_DOCUMENT_KEY_ALIASES[normalized] || normalized.replace(/[\s/-]+/g, '_').replace(/&/g, 'and');
+}
+
 /**
  * Group all AST agreement variants under tenancy_agreement UI category.
  */
@@ -82,14 +106,16 @@ export function getDashboardDocumentTitle(documentType: string): string {
  * Allows canonical ast_agreement key to match generated ast_agreement_* variants.
  */
 export function doesDocumentTypeMatch(expectedType: string, actualType: string): boolean {
-  if (expectedType === actualType) {
+  const canonicalExpected = toCanonicalDocumentKey(expectedType);
+  const canonicalActual = toCanonicalDocumentKey(actualType);
+
+  if (canonicalExpected === canonicalActual) {
     return true;
   }
 
-  if (expectedType === 'ast_agreement' && isTenancyAgreementVariant(actualType)) {
+  if (canonicalExpected === 'ast_agreement' && isTenancyAgreementVariant(canonicalActual)) {
     return true;
   }
 
   return false;
 }
-
