@@ -14,6 +14,7 @@ import Section21ComplianceTimingPanel from "@/components/products/Section21Compl
 import { getNoticeOnlyPreviewData } from "@/lib/previews/noticeOnlyPreviews";
 import { getCanonicalUrl } from "@/lib/seo";
 import { HowItWorksThreeStep } from "@/components/marketing/HowItWorksThreeStep";
+import { FunnelProcessSection } from "@/components/funnels";
 
 const product = PRODUCTS.notice_only;
 const price = product.displayPrice;
@@ -88,6 +89,8 @@ export default async function NoticeOnlyPage() {
       ])} />
 
       <UniversalHero {...noticeOnlyHeroConfig} showTrustPositioningBar />
+
+      <FunnelProcessSection product="notice_only" noticePreviews={previews} />
 
       <section className="py-10 md:py-14">
         <Container>
@@ -201,3 +204,4 @@ export default async function NoticeOnlyPage() {
     </div>
   );
 }
+

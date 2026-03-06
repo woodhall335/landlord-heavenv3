@@ -18,6 +18,7 @@ import {
 } from "@/components/value-proposition";
 import { getMoneyClaimPreviewData } from "@/lib/previews/moneyClaimPreviews";
 import { HowItWorksThreeStep } from "@/components/marketing/HowItWorksThreeStep";
+import { FunnelProcessSection } from "@/components/funnels";
 
 // Get price from single source of truth
 const product = PRODUCTS.money_claim;
@@ -104,6 +105,8 @@ export default async function MoneyClaimPage() {
 
       {/* Hero Section */}
       <UniversalHero {...moneyClaimHeroConfig} showTrustPositioningBar />
+
+      <FunnelProcessSection product="money_claim" moneyClaimPreviews={previews} />
 
 
       <WhatsIncludedInteractive product="money_claim" previews={previews} />
@@ -483,3 +486,4 @@ export default async function MoneyClaimPage() {
     </div>
   );
 }
+

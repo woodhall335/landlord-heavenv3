@@ -26,6 +26,7 @@ import {
 import { getCompletePackPreviewData } from "@/lib/previews/completePackPreviews";
 import { Section21ComplianceTimingPanel } from '@/components/products/Section21ComplianceTimingPanel';
 import { HowItWorksThreeStep } from "@/components/marketing/HowItWorksThreeStep";
+import { FunnelProcessSection } from "@/components/funnels";
 
 // Get price from single source of truth
 const product = PRODUCTS.complete_pack;
@@ -104,6 +105,8 @@ export default async function CompleteEvictionPackPage() {
 
       {/* Hero Section */}
       <UniversalHero {...completePackHeroConfig} showTrustPositioningBar />
+
+      <FunnelProcessSection product="complete_pack" completePackPreviews={previews} />
 
 
 
@@ -562,3 +565,4 @@ export default async function CompleteEvictionPackPage() {
     </div>
   );
 }
+
