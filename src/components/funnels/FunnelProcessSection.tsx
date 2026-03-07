@@ -1,6 +1,6 @@
-﻿'use client';
+'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, type PointerEvent } from 'react';
 import Image from 'next/image';
 import { Container } from '@/components/ui';
 import {
@@ -23,18 +23,19 @@ export type FunnelProcessSectionProps = {
 
 const DESKTOP_CARDS_PER_VIEW = 2;
 const CAROUSEL_AUTOSCROLL_MS = 4500;
+const CAROUSEL_PAUSE_AFTER_INTERACTION_MS = 9000;
 
 const CTA_BY_PRODUCT: Record<FunnelProduct, { label: string; href: string }> = {
   notice_only: {
-    label: 'Generate your notice now',
+    label: 'Generate my notice bundle \u2192',
     href: 'https://landlordheaven.co.uk/wizard?product=notice_only&src=product_page&topic=eviction',
   },
   complete_pack: {
-    label: 'Generate your complete eviction pack now',
+    label: 'Generate my complete pack \u2192',
     href: 'https://landlordheaven.co.uk/wizard?product=complete_pack&src=product_page&topic=eviction',
   },
   money_claim: {
-    label: 'Start your money claim now',
+    label: 'Start my money claim pack \u2192',
     href: 'https://landlordheaven.co.uk/wizard?product=money_claim&topic=debt&src=product_page',
   },
 };
@@ -66,32 +67,178 @@ const ROUTE_IMAGE_BY_ID: Record<string, { src: string; alt: string }> = {
   },
 };
 
+type StepImageMatcher = {
+  pattern: RegExp;
+  src: string;
+  alt: string;
+};
+
+const STEP_IMAGE_MATCHERS: StepImageMatcher[] = [
+  { pattern: /arrears_engagement/, src: '/images/whyitmatters/arrears_engagement.png', alt: 'Arrears engagement' },
+  { pattern: /case_summary/, src: '/images/whyitmatters/case_summary.png', alt: 'Case summary' },
+  { pattern: /compliance_declaration/, src: '/images/whyitmatters/compliance_declaration.png', alt: 'Compliance declaration' },
+  { pattern: /court_bundle_index/, src: '/images/whyitmatters/court_bundle_index.png', alt: 'Court bundle index' },
+  { pattern: /court_filing_guide/, src: '/images/whyitmatters/court_filing_guide.png', alt: 'Court filing guide' },
+  {
+    pattern: /defendant_information_sheet/,
+    src: '/images/whyitmatters/defendant_information_sheet.png',
+    alt: 'Defendant information sheet',
+  },
+  { pattern: /enforcement_guide/, src: '/images/whyitmatters/enforcement_guide.png', alt: 'Enforcement guide' },
+  { pattern: /evidence_checklist/, src: '/images/whyitmatters/evidence_checklist.png', alt: 'Evidence checklist' },
+  {
+    pattern: /financial_statement|financial_information/,
+    src: '/images/whyitmatters/financial_information.png',
+    alt: 'Financial information',
+  },
+  { pattern: /hearing_checklist/, src: '/images/whyitmatters/hearing_checklist.png', alt: 'Hearing checklist' },
+  {
+    pattern: /interest_calculation/,
+    src: '/images/whyitmatters/interest_calculation.png',
+    alt: 'Interest calculation',
+  },
+  { pattern: /letter_before_claim/, src: '/images/whyitmatters/letter_before_claim.png', alt: 'Letter before claim' },
+  { pattern: /particulars_of_claim/, src: '/images/whyitmatters/case_summary.png', alt: 'Particulars of claim' },
+  { pattern: /(^|_)n1(_|$)|form_n1/, src: '/images/whyitmatters/n1.png', alt: 'Form N1' },
+  { pattern: /(^|_)n119(_|$)/, src: '/images/whyitmatters/n119.png', alt: 'Form N119' },
+  { pattern: /(^|_)n5(_|$)/, src: '/images/whyitmatters/n5.png', alt: 'Form N5' },
+  { pattern: /(^|_)n5b(_|$)/, src: '/images/whyitmatters/n5b.png', alt: 'Form N5B' },
+  { pattern: /notice_to_leave/, src: '/images/whyitmatters/notice_to_leave.png', alt: 'Notice to Leave' },
+  {
+    pattern: /pre_service_compliance_checklist/,
+    src: '/images/whyitmatters/pre_service_compliance_checklist.png',
+    alt: 'Pre-service compliance checklist',
+  },
+  { pattern: /proof_of_service/, src: '/images/whyitmatters/proof_of_service.png', alt: 'Proof of service' },
+  {
+    pattern: /rent_arrears_schedule/,
+    src: '/images/whyitmatters/rent_arrears_schedule.png',
+    alt: 'Rent arrears schedule',
+  },
+  { pattern: /reply_form/, src: '/images/whyitmatters/reply_form.png', alt: 'Reply form' },
+  { pattern: /rhw23/, src: '/images/whyitmatters/rhw23_notice.png', alt: 'RHW23 notice' },
+  {
+    pattern: /schedule_of_arrears|rent_schedule/,
+    src: '/images/whyitmatters/schedule_of_arrears.png',
+    alt: 'Schedule of arrears',
+  },
+  { pattern: /section_173/, src: '/images/whyitmatters/section_173_notice.png', alt: 'Section 173 notice' },
+  {
+    pattern: /section_21|form_6a/,
+    src: '/images/whyitmatters/section_21_eviction_notice.png',
+    alt: 'Section 21 eviction notice',
+  },
+  {
+    pattern: /section_8|form_3/,
+    src: '/images/whyitmatters/section_8_eviction_notice.png',
+    alt: 'Section 8 eviction notice',
+  },
+  {
+    pattern: /service_instructions|serving_instructions/,
+    src: '/images/whyitmatters/service_instructions.png',
+    alt: 'Service instructions',
+  },
+  { pattern: /validity_checklist/, src: '/images/whyitmatters/validity_checklist.png', alt: 'Validity checklist' },
+  {
+    pattern: /witness_statement/,
+    src: '/images/whyitmatters/witness_statement.png',
+    alt: 'Witness statement',
+  },
+];
+
 const getRouteById = (routes: FunnelProcessRoute[], id: string) => routes.find((route) => route.id === id);
 
-const StepCard = ({ step, index }: { step: FunnelProcessStep; index: number }) => (
-  <article className="flex h-full flex-col rounded-2xl border border-[#E6DBFF] bg-white p-5 shadow-[0_10px_28px_rgba(76,29,149,0.08)]">
-    <div className="mb-3 inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#7C3AED] text-sm font-semibold text-white">
-      {index + 1}
-    </div>
-    <h4 className="text-lg font-semibold text-violet-950">{step.docTitle}</h4>
-    <dl className="mt-4 space-y-3 text-sm leading-6 text-gray-700">
-      <div>
-        <dt className="font-semibold text-violet-900">What it does</dt>
-        <dd>{step.whatItDoes}</dd>
+const normalizeText = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, '_');
+
+const getStepImage = (step: FunnelProcessStep, routeId: string) => {
+  const normalized = normalizeText(`${step.docKey} ${step.docTitle}`);
+
+  const match = STEP_IMAGE_MATCHERS.find((matcher) => matcher.pattern.test(normalized));
+  if (match) {
+    return { src: match.src, alt: match.alt };
+  }
+
+  if (normalized.includes('notice') || normalized.includes('eviction')) {
+    if (routeId === 'section21') {
+      return { src: '/images/whyitmatters/section_21_eviction_notice.png', alt: 'Section 21 eviction notice' };
+    }
+
+    if (routeId === 'section8') {
+      return { src: '/images/whyitmatters/section_8_eviction_notice.png', alt: 'Section 8 eviction notice' };
+    }
+
+    if (routeId === 'section173') {
+      return { src: '/images/whyitmatters/section_173_notice.png', alt: 'Section 173 notice' };
+    }
+
+    if (routeId === 'rhw23') {
+      return { src: '/images/whyitmatters/rhw23_notice.png', alt: 'RHW23 notice' };
+    }
+
+    if (routeId === 'notice-to-leave') {
+      return { src: '/images/whyitmatters/notice_to_leave.png', alt: 'Notice to Leave' };
+    }
+  }
+
+  return undefined;
+};
+
+const StepCard = ({
+  step,
+  index,
+  routeId,
+}: {
+  step: FunnelProcessStep;
+  index: number;
+  routeId: string;
+}) => {
+  const image = getStepImage(step, routeId);
+
+  return (
+    <article className="flex h-full flex-col rounded-2xl border border-[#E6DBFF] bg-white p-5 shadow-[0_10px_28px_rgba(76,29,149,0.08)]">
+      <div className="mb-3 inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#7C3AED] text-sm font-semibold text-white">
+        {index + 1}
       </div>
-      <div>
-        <dt className="font-semibold text-violet-900">Why this matters</dt>
-        <dd>{step.whyItMatters}</dd>
-      </div>
-      {step.whenUsed ? (
-        <div>
-          <dt className="font-semibold text-violet-900">Used at this stage</dt>
-          <dd>{step.whenUsed}</dd>
+      <h4 className="text-lg font-semibold text-violet-950">{step.docTitle}</h4>
+
+      <div className="mt-4 grid flex-1 grid-cols-2 gap-4">
+        <dl className="space-y-3 text-sm leading-6 text-gray-700">
+          <div>
+            <dt className="font-semibold text-violet-900">What it does</dt>
+            <dd>{step.whatItDoes}</dd>
+          </div>
+          <div>
+            <dt className="font-semibold text-violet-900">Why this matters</dt>
+            <dd>{step.whyItMatters}</dd>
+          </div>
+          {step.whenUsed ? (
+            <div>
+              <dt className="font-semibold text-violet-900">Used at this stage</dt>
+              <dd>{step.whenUsed}</dd>
+            </div>
+          ) : null}
+        </dl>
+
+        <div className="h-full overflow-hidden rounded-xl border border-[#E6DBFF] bg-violet-50/50">
+          {image ? (
+            <Image
+              src={image.src}
+              alt={image.alt}
+              width={640}
+              height={420}
+              className="h-full min-h-[190px] w-full bg-white p-2 object-contain"
+              loading="lazy"
+            />
+          ) : (
+            <div className="flex h-full min-h-[190px] items-center justify-center px-4 text-center text-xs font-medium text-violet-900/70">
+              Court-ready workflow document stage
+            </div>
+          )}
         </div>
-      ) : null}
-    </dl>
-  </article>
-);
+      </div>
+    </article>
+  );
+};
 
 export function FunnelProcessSection({
   product,
@@ -114,6 +261,11 @@ export function FunnelProcessSection({
   const cta = CTA_BY_PRODUCT[product];
   const [activeTabId, setActiveTabId] = useState(model.defaultTabId);
 
+  const desktopTrackRef = useRef<HTMLDivElement | null>(null);
+  const mobileTrackRef = useRef<HTMLDivElement | null>(null);
+  const pauseUntilRef = useRef(0);
+  const dragStateRef = useRef({ active: false, startX: 0, startScrollLeft: 0 });
+
   useEffect(() => {
     setActiveTabId(model.defaultTabId);
   }, [model.defaultTabId]);
@@ -124,7 +276,6 @@ export function FunnelProcessSection({
   );
 
   const [activeRouteId, setActiveRouteId] = useState('');
-  const [desktopStepIndex, setDesktopStepIndex] = useState(0);
 
   useEffect(() => {
     if (!activeTab) {
@@ -150,16 +301,35 @@ export function FunnelProcessSection({
     setActiveRouteId('');
   }, [activeTab, activeRouteId]);
 
-  useEffect(() => {
-    setDesktopStepIndex(0);
-  }, [activeRouteId]);
-
   const activeRoute = activeTab ? getRouteById(activeTab.routes, activeRouteId) : undefined;
   const steps = activeRoute?.steps ?? [];
 
-  const maxDesktopStepIndex = Math.max(0, steps.length - DESKTOP_CARDS_PER_VIEW);
-  const safeDesktopStepIndex = steps.length ? Math.min(desktopStepIndex, maxDesktopStepIndex) : 0;
   const canCycleDesktop = steps.length > DESKTOP_CARDS_PER_VIEW;
+
+  const scrollTrackTo = (track: HTMLDivElement, left: number, behavior: ScrollBehavior) => {
+    if (typeof track.scrollTo === 'function') {
+      track.scrollTo({ left, behavior });
+      return;
+    }
+    track.scrollLeft = left;
+  };
+
+  const pauseDesktopAutoscroll = () => {
+    pauseUntilRef.current = Date.now() + CAROUSEL_PAUSE_AFTER_INTERACTION_MS;
+  };
+
+  useEffect(() => {
+    const desktopTrack = desktopTrackRef.current;
+    const mobileTrack = mobileTrackRef.current;
+
+    if (desktopTrack) {
+      scrollTrackTo(desktopTrack, 0, 'auto');
+    }
+
+    if (mobileTrack) {
+      scrollTrackTo(mobileTrack, 0, 'auto');
+    }
+  }, [activeRoute?.id]);
 
   useEffect(() => {
     if (!canCycleDesktop) {
@@ -167,11 +337,67 @@ export function FunnelProcessSection({
     }
 
     const interval = window.setInterval(() => {
-      setDesktopStepIndex((prev) => (prev >= maxDesktopStepIndex ? 0 : prev + 1));
+      const desktopTrack = desktopTrackRef.current;
+      if (!desktopTrack) {
+        return;
+      }
+
+      if (Date.now() < pauseUntilRef.current) {
+        return;
+      }
+
+      const stepWidth = desktopTrack.clientWidth / DESKTOP_CARDS_PER_VIEW;
+      if (stepWidth <= 0) {
+        return;
+      }
+
+      const maxIndex = Math.max(0, steps.length - DESKTOP_CARDS_PER_VIEW);
+      const currentIndex = Math.round(desktopTrack.scrollLeft / stepWidth);
+      const nextIndex = currentIndex >= maxIndex ? 0 : currentIndex + 1;
+      scrollTrackTo(desktopTrack, nextIndex * stepWidth, 'smooth');
     }, CAROUSEL_AUTOSCROLL_MS);
 
     return () => window.clearInterval(interval);
-  }, [activeRoute?.id, canCycleDesktop, maxDesktopStepIndex]);
+  }, [activeRoute?.id, canCycleDesktop, steps.length]);
+
+  const handleDesktopPointerDown = (event: PointerEvent<HTMLDivElement>) => {
+    const desktopTrack = desktopTrackRef.current;
+    if (!desktopTrack) {
+      return;
+    }
+
+    dragStateRef.current = {
+      active: true,
+      startX: event.clientX,
+      startScrollLeft: desktopTrack.scrollLeft,
+    };
+
+    pauseDesktopAutoscroll();
+    desktopTrack.setPointerCapture(event.pointerId);
+  };
+
+  const handleDesktopPointerMove = (event: PointerEvent<HTMLDivElement>) => {
+    if (!dragStateRef.current.active) {
+      return;
+    }
+
+    const desktopTrack = desktopTrackRef.current;
+    if (!desktopTrack) {
+      return;
+    }
+
+    const deltaX = event.clientX - dragStateRef.current.startX;
+    desktopTrack.scrollLeft = dragStateRef.current.startScrollLeft - deltaX;
+  };
+
+  const handleDesktopPointerUp = (event: PointerEvent<HTMLDivElement>) => {
+    const desktopTrack = desktopTrackRef.current;
+    dragStateRef.current.active = false;
+
+    if (desktopTrack && desktopTrack.hasPointerCapture(event.pointerId)) {
+      desktopTrack.releasePointerCapture(event.pointerId);
+    }
+  };
 
   return (
     <section className={`bg-[#f7f2ff] py-12 md:py-16 ${className ?? ''}`}>
@@ -183,7 +409,7 @@ export function FunnelProcessSection({
           </div>
 
           <div className="mt-8 flex justify-center" role="tablist" aria-label="Funnel process tabs">
-            <div className="inline-flex flex-wrap items-center justify-center rounded-full border border-[#D9C6FF] bg-white p-1 shadow-sm">
+            <div className="pill-selector">
               {model.tabs.map((tab) => {
                 const isActive = tab.id === activeTab?.id;
                 return (
@@ -195,11 +421,7 @@ export function FunnelProcessSection({
                     aria-selected={isActive}
                     aria-controls={`funnel-panel-${tab.id}`}
                     onClick={() => setActiveTabId(tab.id)}
-                    className={`rounded-full px-4 py-2 text-sm font-semibold transition md:px-6 md:py-2.5 md:text-base ${
-                      isActive
-                        ? 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-[0_8px_20px_rgba(109,40,217,0.35)]'
-                        : 'text-violet-800 hover:bg-violet-50'
-                    }`}
+                    className={`pill-selector-btn ${isActive ? 'pill-selector-btn-active' : 'pill-selector-btn-inactive'}`}
                   >
                     {tab.label}
                   </button>
@@ -209,7 +431,12 @@ export function FunnelProcessSection({
           </div>
 
           {activeTab ? (
-            <div id={`funnel-panel-${activeTab.id}`} role="tabpanel" aria-labelledby={`funnel-tab-${activeTab.id}`} className="mt-8">
+            <div
+              id={`funnel-panel-${activeTab.id}`}
+              role="tabpanel"
+              aria-labelledby={`funnel-tab-${activeTab.id}`}
+              className="mt-8"
+            >
               <p className="text-center text-sm font-medium text-violet-900 md:text-base">{activeTab.description}</p>
 
               <div className="mt-6 grid gap-4 md:grid-cols-2">
@@ -255,29 +482,36 @@ export function FunnelProcessSection({
               {activeRoute ? (
                 <>
                   <div className="mt-8 hidden md:block">
-                    <div className="overflow-hidden">
-                      <div
-                        className="flex items-stretch transition-transform duration-700 ease-out will-change-transform"
-                        style={{ transform: `translateX(-${safeDesktopStepIndex * (100 / DESKTOP_CARDS_PER_VIEW)}%)` }}
-                      >
-                        {steps.map((step, index) => (
-                          <div key={step.id} className="h-full w-1/2 shrink-0 px-2">
-                            <StepCard step={step} index={index} />
-                          </div>
-                        ))}
-                      </div>
+                    <div
+                      ref={desktopTrackRef}
+                      className="-mx-1 flex cursor-grab select-none items-stretch snap-x snap-mandatory gap-0 overflow-x-scroll overscroll-x-contain no-scrollbar px-1 pb-2"
+                      aria-label="Desktop funnel process carousel"
+                      style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-x' }}
+                      onPointerDown={handleDesktopPointerDown}
+                      onPointerMove={handleDesktopPointerMove}
+                      onPointerUp={handleDesktopPointerUp}
+                      onPointerCancel={handleDesktopPointerUp}
+                      onMouseEnter={pauseDesktopAutoscroll}
+                      onWheel={pauseDesktopAutoscroll}
+                    >
+                      {steps.map((step, index) => (
+                        <div key={step.id} className="h-full w-1/2 shrink-0 snap-start px-2">
+                          <StepCard step={step} index={index} routeId={activeRoute.id} />
+                        </div>
+                      ))}
                     </div>
                   </div>
 
                   <div className="mt-8 md:hidden">
                     <div
-                      className="-mx-1 flex items-stretch snap-x snap-mandatory gap-4 overflow-x-scroll overscroll-x-contain px-1 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+                      ref={mobileTrackRef}
+                      className="-mx-1 flex items-stretch snap-x snap-mandatory gap-4 overflow-x-scroll overscroll-x-contain no-scrollbar px-1 pb-2"
                       aria-label="Funnel process documents carousel"
                       style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-x' }}
                     >
                       {steps.map((step, index) => (
                         <div key={step.id} className="h-full w-[86%] shrink-0 snap-start">
-                          <StepCard step={step} index={index} />
+                          <StepCard step={step} index={index} routeId={activeRoute.id} />
                         </div>
                       ))}
                     </div>
@@ -286,7 +520,7 @@ export function FunnelProcessSection({
                   <div className="mt-8 flex justify-center">
                     <a
                       href={cta.href}
-                      className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-600 px-6 py-3 text-sm font-semibold text-white shadow-[0_12px_26px_rgba(109,40,217,0.35)] transition hover:from-violet-500 hover:to-fuchsia-500 md:px-8 md:py-3.5 md:text-base"
+                      className="hero-btn-primary inline-flex items-center justify-center"
                     >
                       {cta.label}
                     </a>
@@ -300,3 +534,4 @@ export function FunnelProcessSection({
     </section>
   );
 }
+

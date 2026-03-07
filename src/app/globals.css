@@ -271,6 +271,75 @@ a[class*="text-white"]:not([class*="hover:"]):hover {
   transform: scale(0.98);
 }
 
+/* Shared pill selector style */
+.pill-selector {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  border: 1px solid #D9C6FF;
+  background: #ffffff;
+  padding: 0.25rem;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
+}
+
+.pill-selector-btn {
+  border-radius: 9999px;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  color: #5b21b6;
+  white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+  .pill-selector-btn {
+    padding: 0.625rem 1.5rem;
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+}
+
+.pill-selector-btn-active {
+  background: linear-gradient(to right, #7C3AED, #C026D3);
+  color: #ffffff;
+  box-shadow: 0 8px 20px rgba(109, 40, 217, 0.35);
+}
+
+.pill-selector-btn-inactive {
+  color: #5b21b6;
+}
+
+.pill-selector-btn-inactive:hover {
+  background: #f5f3ff;
+}
+
+.pill-selector-btn:focus-visible {
+  outline: 2px solid #7C3AED;
+  outline-offset: 2px;
+}
+
+/* Hide scrollbars for intentional swipe/drag carousels */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none !important;
+  scrollbar-color: transparent transparent !important;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+  display: none !important;
+}
+
+.no-scrollbar::-webkit-scrollbar-track,
+.no-scrollbar::-webkit-scrollbar-thumb {
+  background: transparent !important;
+  border: 0 !important;
+}
 /* Header Navigation Link Hover - Accent purple (solid pages only) */
 body.page-header-solid header nav a:hover,
 body.page-header-solid header nav button:hover {

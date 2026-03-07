@@ -1,4 +1,4 @@
-﻿import type {
+import type {
   NoticeOnlyPreviewData,
   NoticeVariantKey,
   PreviewDoc,
@@ -514,7 +514,7 @@ export const buildFunnelProcessSectionModel = (input: BuildFunnelProcessSectionI
     return {
       heading: 'Understand Why Each Notice Document Matters',
       subheading:
-        'Each generated document has a specific legal role. Review what it does, why it matters, and when it is used before service.',
+        'This is not a template bundle. You get a fully validated, court-ready workflow that follows the correct legal framework, with every document placed in the right sequence as a practical alternative to solicitor drafting costs.',
       tabs: noticeOnlyTabs(input.noticePreviews),
       defaultTabId: 'england',
     };
@@ -524,7 +524,7 @@ export const buildFunnelProcessSectionModel = (input: BuildFunnelProcessSectionI
     return {
       heading: 'Understand Why Each Court Pack Document Matters',
       subheading:
-        'This section explains the purpose of each generated document across the notice and court stages so you can file with confidence.',
+        'Not generic templates. This complete workflow validates your route, aligns notice and court stages, and produces court-ready outputs under the correct legal framework as a strong alternative to high solicitor fees.',
       tabs: completePackTabs(input.completePackPreviews),
       defaultTabId: 'england',
     };
@@ -533,9 +533,10 @@ export const buildFunnelProcessSectionModel = (input: BuildFunnelProcessSectionI
   return {
     heading: 'Understand Why Each Money Claim Document Matters',
     subheading:
-      'Your generated debt-recovery documents each serve a different procedural function from pre-action through filing and enforcement.',
+      'Beyond templates, this is a fully validated debt-recovery workflow covering pre-action compliance, filing, and enforcement with court-ready documents built to the correct legal framework as an alternative to solicitor-led drafting.',
     tabs: moneyClaimTabs(input.moneyClaimPreviews),
     defaultTabId: 'england',
   };
 };
+
 

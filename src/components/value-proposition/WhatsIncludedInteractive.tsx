@@ -211,7 +211,7 @@ const PreviewImage = ({ src, alt, title, width, height, className }: PreviewImag
         }`}
       >
         <div className="space-y-2">
-          <p className="text-sm font-semibold text-[#7c3aed]">Preview coming soon</p>
+          <p className="text-sm font-semibold text-[#2f0d68]">Preview coming soon</p>
           <p className="text-xs text-[#7c3aed]/90">{title}</p>
           <p className="text-[11px] text-[#7c3aed]/70">{alt}</p>
         </div>
@@ -459,10 +459,10 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
           {showIntro ? (
             <>
             <div className="text-center mb-10">
-              <h2 className="text-3xl md:text-4xl font-bold text-charcoal">
+              <h2 className="text-3xl md:text-4xl font-bold text-[#2f0d68]">
                 {props.titleOverride ??
                   (isNoticeOnly
-                  ? 'What’s included in your eviction notice only bundle'
+                  ? 'Understand Why Each Notice Document Matters'
                   : isCompletePack
                     ? 'What’s included in your complete eviction pack'
                     : 'What’s included in your money claim pack')}
@@ -481,7 +481,7 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
 
           {isNoticeOnly ? (
             <div className="flex justify-center mb-10" role="tablist" aria-label="Jurisdiction">
-              <div className="inline-flex rounded-full border border-[#7c3aed]/20 bg-white p-1 shadow-sm">
+              <div className="pill-selector">
                 {jurisdictionOrder.map((jurisdiction) => {
                   const isActive = selectedJurisdiction === jurisdiction;
                   return (
@@ -491,10 +491,8 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
                       type="button"
                       aria-selected={isActive}
                       aria-controls={`jurisdiction-panel-${jurisdiction}`}
-                      className={`px-5 py-2 text-sm font-semibold rounded-full transition-all ${
-                        isActive
-                          ? 'bg-[#7c3aed] text-white shadow'
-                          : 'text-[#7c3aed] hover:bg-[#f3e8ff]'
+                      className={`pill-selector-btn ${
+                        isActive ? 'pill-selector-btn-active' : 'pill-selector-btn-inactive'
                       }`}
                       onClick={() => setSelectedJurisdiction(jurisdiction)}
                     >
@@ -521,7 +519,7 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
               <div className="order-2 md:order-1 space-y-6">
                 {isNoticeOnly || isCompletePack ? (
                   <div>
-                    <h3 className="text-lg font-semibold text-charcoal mb-3">
+                    <h3 className="text-lg font-semibold text-[#2f0d68] mb-3">
                       {isNoticeOnly ? 'Notice type' : 'Pack type'}
                     </h3>
                     <div className="grid gap-3">
@@ -533,7 +531,7 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
                             type="button"
                             className={`rounded-2xl border px-4 py-4 text-left transition-all ${
                               isActive
-                                ? 'border-[#7c3aed]/60 bg-[#f3e8ff] shadow-sm'
+                                ? 'border-[#7c3aed]/60 bg-[#f5f3ff] shadow-sm'
                                 : 'border-gray-200 bg-white hover:border-[#7c3aed]/40'
                             }`}
                             onClick={() => {
@@ -544,7 +542,7 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
                               }
                             }}
                           >
-                            <p className="font-semibold text-charcoal">{variant.label}</p>
+                            <p className="font-semibold text-[#2f0d68]">{variant.label}</p>
                             <p className="text-sm text-gray-600 mt-1">{variant.description}</p>
                           </button>
                         );
@@ -555,7 +553,7 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
 
                 <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
                   <div className="flex flex-wrap items-center justify-between gap-3">
-                    <h3 className="text-lg font-semibold text-charcoal">
+                    <h3 className="text-lg font-semibold text-[#2f0d68]">
                       {isNoticeOnly
                         ? `${jurisdictionConfig?.label ?? 'England'} — What you receive`
                         : 'England — What you receive'}
@@ -568,7 +566,7 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
                   <div className="mt-5 space-y-4">
                     {documentGroups.map((group) => (
                       <div key={group.title}>
-                        <p className="text-sm font-semibold text-[#7c3aed]">{group.title}</p>
+                        <p className="text-sm font-semibold text-[#2f0d68]">{group.title}</p>
                         <ul className="mt-2 space-y-2 text-sm text-gray-700">
                           {group.items.length ? (
                             group.items.map((item) => (
@@ -586,7 +584,7 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
                   </div>
                 </div>
 
-                <div className="rounded-2xl border border-[#7c3aed]/15 bg-[#f3e8ff] p-5">
+                <div className="rounded-2xl border border-[#7c3aed]/15 bg-[#f5f3ff] p-5">
                   <ul className="space-y-2 text-sm text-[#7c3aed]/90">
                     {differentiators.map((item) => (
                       <li key={item} className="flex items-center gap-2">
@@ -618,14 +616,14 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
                       }}
                     >
                       <div className="flex items-center justify-between gap-3">
-                      <p className="text-sm font-semibold text-[#7c3aed]">Active preview</p>
+                      <p className="text-sm font-semibold text-[#2f0d68]">Active preview</p>
                       <div className="flex items-center gap-2">
                         <button
                           type="button"
                           onClick={goPrev}
                           disabled={documents.length < 2}
                           aria-label="Previous preview"
-                          className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-transparent text-[#7c3aed] transition hover:border-[#7c3aed]/40 hover:bg-[#f3e8ff] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7c3aed] focus-visible:ring-offset-2 focus-visible:ring-offset-white disabled:text-gray-300 disabled:hover:border-transparent disabled:hover:bg-transparent"
+                          className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-transparent text-[#7c3aed] transition hover:border-[#7c3aed]/40 hover:bg-[#f5f3ff] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7c3aed] focus-visible:ring-offset-2 focus-visible:ring-offset-white disabled:text-gray-300 disabled:hover:border-transparent disabled:hover:bg-transparent"
                         >
                           <span aria-hidden="true">←</span>
                         </button>
@@ -634,13 +632,13 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
                           onClick={goNext}
                           disabled={documents.length < 2}
                           aria-label="Next preview"
-                          className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-transparent text-[#7c3aed] transition hover:border-[#7c3aed]/40 hover:bg-[#f3e8ff] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7c3aed] focus-visible:ring-offset-2 focus-visible:ring-offset-white disabled:text-gray-300 disabled:hover:border-transparent disabled:hover:bg-transparent"
+                          className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-transparent text-[#7c3aed] transition hover:border-[#7c3aed]/40 hover:bg-[#f5f3ff] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7c3aed] focus-visible:ring-offset-2 focus-visible:ring-offset-white disabled:text-gray-300 disabled:hover:border-transparent disabled:hover:bg-transparent"
                         >
                           <span aria-hidden="true">→</span>
                         </button>
                       </div>
                     </div>
-                    <h4 className="text-xl font-semibold text-charcoal">
+                    <h4 className="text-xl font-semibold text-[#2f0d68]">
                       {activeDoc?.title ?? 'Preview coming soon'}
                     </h4>
                     <div className="relative w-full overflow-hidden rounded-2xl border border-[#7c3aed]/15 bg-[#f3e8ff]">
@@ -656,7 +654,7 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
                       ) : (
                         <div className="flex min-h-[360px] items-center justify-center px-6 py-12 text-center">
                           <div className="space-y-2">
-                            <p className="text-sm font-semibold text-[#7c3aed]">Previews coming soon</p>
+                            <p className="text-sm font-semibold text-[#2f0d68]">Previews coming soon</p>
                             <p className="text-xs text-gray-600">
                               We&apos;re preparing watermarked previews for this notice type.
                             </p>
@@ -667,7 +665,7 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
                     </div>
                   ) : (
                     <div className="rounded-2xl border border-dashed border-gray-200 bg-gray-50 px-6 py-12 text-center">
-                      <p className="text-sm font-semibold text-charcoal">Previews unavailable in this environment</p>
+                      <p className="text-sm font-semibold text-[#2f0d68]">Previews unavailable in this environment</p>
                       <p className="mt-2 text-xs text-gray-600">
                         Preview image binaries are optional and were not found for this run.
                       </p>
@@ -677,7 +675,7 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
                   {hasDocuments ? (
                     <div className="mt-6">
                     <div className="flex items-center justify-between">
-                      <p className="text-sm font-semibold text-charcoal">Preview stack</p>
+                      <p className="text-sm font-semibold text-[#2f0d68]">Preview stack</p>
                       <span className="text-xs text-gray-500">Click a document to preview</span>
                     </div>
                     <div className="mt-4 overflow-visible">
@@ -707,7 +705,7 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
                               onClick={() => setSelectedDocKey(document.key)}
                               className={`absolute left-0 top-0 flex w-36 flex-col items-center gap-2 rounded-2xl border px-2 py-3 text-left shadow-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7c3aed] focus-visible:ring-offset-2 focus-visible:ring-offset-white sm:w-40 ${
                                 isActive
-                                  ? 'border-[#7c3aed]/60 bg-[#f3e8ff] shadow'
+                                  ? 'border-[#7c3aed]/60 bg-[#f5f3ff] shadow'
                                   : 'border-gray-200 bg-white hover:border-[#7c3aed]/40'
                               }`}
                               style={{
@@ -747,3 +745,7 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
     </section>
   );
 };
+
+
+
+

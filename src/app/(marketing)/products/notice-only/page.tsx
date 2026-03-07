@@ -103,7 +103,7 @@ export default async function NoticeOnlyPage() {
       <section className="py-10 md:py-14">
         <Container>
           <div className="mx-auto max-w-6xl overflow-hidden rounded-3xl border border-[#E6DBFF] bg-white shadow-[0_14px_36px_rgba(15,23,42,0.06)]">
-            <WhatsIncludedInteractive product="notice_only" defaultJurisdiction="england" previews={previews} />
+            <WhatsIncludedInteractive product="notice_only" defaultJurisdiction="england" previews={previews} titleOverride="Understand Why Each Notice Document Matters" />
           </div>
         </Container>
       </section>

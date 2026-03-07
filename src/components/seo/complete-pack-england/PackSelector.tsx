@@ -12,7 +12,7 @@ const options = [
 
 export function PackSelector({ selected, onSelect }: PackSelectorProps) {
   return (
-    <div className="inline-flex rounded-xl bg-gray-100 p-1" role="tablist" aria-label="Choose eviction pack type">
+    <div className="pill-selector" role="tablist" aria-label="Choose eviction pack type">
       {options.map((option) => (
         <button
           key={option.id}
@@ -27,9 +27,7 @@ export function PackSelector({ selected, onSelect }: PackSelectorProps) {
               onSelect(selected === 'section8' ? 'section21' : 'section8');
             }
           }}
-          className={`rounded-lg px-4 py-2 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
-            selected === option.id ? 'bg-white text-primary shadow-sm' : 'text-gray-600 hover:text-gray-900'
-          }`}
+          className={`pill-selector-btn ${selected === option.id ? 'pill-selector-btn-active' : 'pill-selector-btn-inactive'}`}
         >
           {option.label}
         </button>
