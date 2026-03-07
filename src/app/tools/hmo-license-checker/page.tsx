@@ -66,7 +66,7 @@ export default function HMOLicenseChecker() {
     {
       question: 'Do I need separate tenancy agreements for HMO tenants?',
       answer:
-        'You can use either individual agreements for each tenant or a single joint agreement for all tenants. Individual agreements give you more flexibility (tenants can move out independently) but require more administration. Joint agreements make all tenants jointly and severally liable for the rent, providing more security. Our paid HMO tenancy agreement product (from £14.99) includes both options with HMO-specific terms.',
+        'You can use either individual agreements for each tenant or a single joint agreement for all tenants. Individual agreements give you more flexibility (tenants can move out independently) but require more administration. Joint agreements make all tenants jointly and severally liable for the rent, providing more security. Our paid HMO tenancy agreement product (from £9.99) includes both options with HMO-specific terms.',
     },
   ];
 
@@ -701,3 +701,4 @@ export default function HMOLicenseChecker() {
     </div>
   );
 }
+

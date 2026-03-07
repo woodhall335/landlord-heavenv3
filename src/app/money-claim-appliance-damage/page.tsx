@@ -126,7 +126,7 @@ export default function MoneyClaimApplianceDamagePage() {
         <UniversalHero
           title="Money Claim for Appliance Damage"
           subtitle="Recover appliance damage losses with a legally validated, solicitor-grade, court-ready money claim workflow."
-          primaryCta={{ label: "Start now", href: "/wizard?product=money_claim&reason=property_damage&src=seo_money_claim_appliance_damage&topic=debt" }}
+          primaryCta={{ label: "Start now", href: "/products/money-claim?reason=property_damage&src=seo_money_claim_appliance_damage&topic=debt" }}
           showTrustPositioningBar
           hideMedia
         />
@@ -150,7 +150,7 @@ export default function MoneyClaimApplianceDamagePage() {
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
-                  href="/wizard?product=money_claim&reason=property_damage&src=seo_money_claim_appliance_damage&topic=debt"
+                  href="/products/money-claim?reason=property_damage&src=seo_money_claim_appliance_damage&topic=debt"
                   className="inline-flex items-center justify-center gap-2 bg-white text-slate-800 font-semibold py-4 px-8 rounded-xl hover:bg-slate-50 transition-colors"
                 >
                   Start Appliance Damage Claim
@@ -426,10 +426,10 @@ export default function MoneyClaimApplianceDamagePage() {
                 and guidance for recovering appliance damage costs.
               </p>
               <Link
-                href="/wizard?product=money_claim&reason=property_damage&src=seo_money_claim_appliance_damage&topic=debt"
+                href="/products/money-claim?reason=property_damage&src=seo_money_claim_appliance_damage&topic=debt"
                 className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
               >
-                Start Your Claim — £69.99
+                Start Your Claim — £45.99
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <p className="text-sm text-gray-500 mt-3">
@@ -475,3 +475,4 @@ export default function MoneyClaimApplianceDamagePage() {
     </>
   );
 }
+

@@ -41,11 +41,11 @@ export function WizardLandingPage({ content, structuredDataUrl, showAskHeavenWid
   const showHeroPrice = !isCompletePackEnglandPage && !isMoneyClaimPage;
 
   const heroCtaLabel = isCompletePackEnglandPage
-    ? 'Start & Preview Complete Pack — £99.99'
+    ? 'Start & Preview Complete Pack — £69.99'
     : isNoticeOnlyPage
-      ? 'Generate My Notice — £34.99'
+      ? 'Generate My Notice — £29.99'
       : isMoneyClaimPage
-        ? 'Start My Case Bundle — £69.99'
+        ? 'Start My Case Bundle — £45.99'
         : 'Start My Case Bundle';
 
   const heroHelperCopy = isCompletePackEnglandPage
@@ -283,11 +283,11 @@ export function WizardLandingPage({ content, structuredDataUrl, showAskHeavenWid
                 <span className="flex items-center gap-2 whitespace-nowrap">✓ Preview before paying</span>
                 <span className="flex items-center gap-2 whitespace-nowrap">✓ Unlimited regenerations</span>
                 <span className="flex items-center gap-2 whitespace-nowrap">✓ Stored 12+ months</span>
-                <span className="flex items-center gap-2 whitespace-nowrap">✓ One-time £99.99</span>
+                <span className="flex items-center gap-2 whitespace-nowrap">✓ One-time £69.99</span>
               </div>
             ) : (
               <p className="mt-4 text-sm text-gray-600">
-                One-time payment • Unlimited regenerations • No subscription
+                One-time payment â€¢ Unlimited regenerations â€¢ No subscription
               </p>
             )}
           </div>
@@ -617,10 +617,12 @@ function buildRelatedIntentProducts(product: string): IntentProduct[] {
  */
 function getJurisdictionFlag(jurisdiction: string): string {
   const flags: Record<string, string> = {
-    England: '🏴󠁧󠁢󠁥󠁮󠁧󠁿',
-    Wales: '🏴󠁧󠁢󠁷󠁬󠁳󠁿',
-    Scotland: '🏴󠁧󠁢󠁳󠁣󠁴󠁿',
-    'Northern Ireland': '🇬🇧',
+    England: 'ðŸ´ó §ó ¢ó ¥ó ®ó §ó ¿',
+    Wales: 'ðŸ´ó §ó ¢ó ·ó ¬ó ³ó ¿',
+    Scotland: 'ðŸ´ó §ó ¢ó ³ó £ó ´ó ¿',
+    'Northern Ireland': 'ðŸ‡¬ðŸ‡§',
   };
-  return flags[jurisdiction] || '🇬🇧';
+  return flags[jurisdiction] || 'ðŸ‡¬ðŸ‡§';
 }
+
+

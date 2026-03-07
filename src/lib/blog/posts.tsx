@@ -520,13 +520,13 @@ export const blogPosts: BlogPost[] = [
               href="/products/notice-only"
               className="inline-flex items-center bg-primary hover:bg-primary/90 text-white font-medium py-3 px-6 rounded-lg transition-colors"
             >
-              Get Section 21 Notice — £34.99
+              Get Section 21 Notice — £29.99
             </Link>
             <Link
               href="/products/complete-pack"
               className="inline-flex items-center bg-gray-100 hover:bg-gray-200 text-gray-900 font-medium py-3 px-6 rounded-lg transition-colors"
             >
-              Complete Eviction Pack — £99.99
+              Complete Eviction Pack — £69.99
             </Link>
           </div>
         </div>
@@ -608,9 +608,9 @@ export const blogPosts: BlogPost[] = [
 
         <ul>
           <li><Link href="/products/notice-only" className="text-primary hover:underline">
-            Generate Court-Ready Section 21 Notice — £34.99</Link></li>
+            Generate Court-Ready Section 21 Notice — £29.99</Link></li>
           <li><Link href="/products/complete-pack" className="text-primary hover:underline">
-            Complete Eviction Pack (notices + court forms) — £99.99</Link></li>
+            Complete Eviction Pack (notices + court forms) — £69.99</Link></li>
           <li><Link href="/blog/what-is-section-21-notice" className="text-primary hover:underline">
             Complete Section 21 Guide</Link></li>
           <li><Link href="/blog/section-21-vs-section-8" className="text-primary hover:underline">
@@ -908,7 +908,7 @@ export const blogPosts: BlogPost[] = [
           <li><Link href="/tools/free-section-21-notice-generator" className="text-primary hover:underline">
             Free Section 21 Generator</Link> — Preview version (not court-ready)</li>
           <li><Link href="/products/notice-only" className="text-primary hover:underline">
-            Court-Ready Section 21 Notice</Link> — Official Form 6A, £34.99</li>
+            Court-Ready Section 21 Notice</Link> — Official Form 6A, £29.99</li>
         </ul>
 
         <h3>Option 2: Download from Gov.uk</h3>
@@ -1615,7 +1615,7 @@ export const blogPosts: BlogPost[] = [
 
         <ul>
           <li><Link href="/products/notice-only" className="text-primary hover:underline">
-            Get Court-Ready Eviction Notice — £34.99</Link></li>
+            Get Court-Ready Eviction Notice — £29.99</Link></li>
           <li><Link href="/blog/what-is-section-21-notice" className="text-primary hover:underline">
             Complete Section 21 Guide</Link></li>
           <li><Link href="/blog/how-long-does-eviction-take-uk" className="text-primary hover:underline">
@@ -2292,7 +2292,7 @@ export const blogPosts: BlogPost[] = [
           <li><Link href="/tools/free-rent-demand-letter" className="text-primary hover:underline">
             Free Rent Demand Letter Generator</Link></li>
           <li><Link href="/products/notice-only" className="text-primary hover:underline">
-            Generate Section 8 Notice — £34.99</Link></li>
+            Generate Section 8 Notice — £29.99</Link></li>
           <li><Link href="/products/money-claim" className="text-primary hover:underline">
             Money Claim Document Pack</Link></li>
         </ul>
@@ -7778,13 +7778,13 @@ export const blogPosts: BlogPost[] = [
               href="/products/notice-only"
               className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
             >
-              Get Section 8 Notice — £34.99
+              Get Section 8 Notice — £29.99
             </Link>
             <Link
               href="/products/complete-pack"
               className="inline-flex items-center bg-gray-100 hover:bg-gray-200 text-gray-900 font-medium py-3 px-6 rounded-lg transition-colors"
             >
-              Complete Eviction Pack — £99.99
+              Complete Eviction Pack — £69.99
             </Link>
           </div>
         </div>
@@ -8193,7 +8193,7 @@ export const blogPosts: BlogPost[] = [
             href="/products/complete-pack"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
-            Get Complete Eviction Pack — £99.99
+            Get Complete Eviction Pack — £69.99
           </Link>
         </div>
       </>
@@ -8581,7 +8581,7 @@ export const blogPosts: BlogPost[] = [
             href="/products/complete-pack"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
-            Get Complete Eviction Pack — £99.99
+            Get Complete Eviction Pack — £69.99
           </Link>
         </div>
       </>
@@ -9011,7 +9011,7 @@ export const blogPosts: BlogPost[] = [
             href="/products/complete-pack"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
-            Get Complete Eviction Pack — £99.99
+            Get Complete Eviction Pack — £69.99
           </Link>
         </div>
       </>
@@ -9764,9 +9764,9 @@ export const blogPosts: BlogPost[] = [
           Minimum sleeping room sizes (per person):
         </p>
         <ul>
-          <li><strong>1 person (10+ years):</strong> 6.51 m²</li>
-          <li><strong>2 persons (10+ years):</strong> 10.22 m²</li>
-          <li><strong>1 child (under 10):</strong> 4.64 m²</li>
+          <li><strong>1 person (10+ years):</strong> 6.51 mÂ²</li>
+          <li><strong>2 persons (10+ years):</strong> 10.22 mÂ²</li>
+          <li><strong>1 child (under 10):</strong> 4.64 mÂ²</li>
         </ul>
 
         <h2 id="penalties" className="scroll-mt-24">Penalties for Non-Compliance</h2>
@@ -9873,7 +9873,7 @@ export const blogPosts: BlogPost[] = [
             certifications, manage tenancies, and ensure you&apos;re meeting all your legal obligations.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View All Products →
@@ -10699,7 +10699,7 @@ export const blogPosts: BlogPost[] = [
           <h4 className="font-semibold text-green-900">Calculating Interest</h4>
           <p className="text-green-800 mt-2">
             Interest at 8% per year = 0.022% per day.<br />
-            Example: £5,000 debt for 90 days = £5,000 × 0.00022 × 90 = £99 interest.<br />
+            Example: £5,000 debt for 90 days = £5,000 Ã— 0.00022 Ã— 90 = £99 interest.<br />
             State in your particulars: &quot;Interest at 8% per annum from [DATE] to [DATE] = £[AMOUNT], and continuing at £[DAILY RATE] per day until judgment.&quot;
           </p>
         </div>
@@ -11202,7 +11202,7 @@ export const blogPosts: BlogPost[] = [
             statutory terms.
           </p>
           <Link
-            href="/products/tenancy-agreement"
+            href="/products/ast"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Tenancy Agreement →
@@ -11537,7 +11537,7 @@ export const blogPosts: BlogPost[] = [
             navigate the Tribunal process.
           </p>
           <Link
-            href="/products/eviction-notice"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Eviction Products →
@@ -11792,7 +11792,7 @@ export const blogPosts: BlogPost[] = [
             step-by-step guidance.
           </p>
           <Link
-            href="/products/eviction-notice"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Notice Templates →
@@ -12057,7 +12057,7 @@ export const blogPosts: BlogPost[] = [
             First-tier Tribunal process in Scotland.
           </p>
           <Link
-            href="/products/eviction-notice"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Eviction Products →
@@ -12373,7 +12373,7 @@ export const blogPosts: BlogPost[] = [
             help you document everything you need for a successful Ground 12 eviction.
           </p>
           <Link
-            href="/products/rent-tracker"
+            href="/products/money-claim"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Rent Tracker →
@@ -12638,7 +12638,7 @@ export const blogPosts: BlogPost[] = [
             properties, including notice templates and Tribunal application support.
           </p>
           <Link
-            href="/products/eviction-notice"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Eviction Products →
@@ -12901,7 +12901,7 @@ export const blogPosts: BlogPost[] = [
             evictions in Scotland.
           </p>
           <Link
-            href="/products/eviction-notice"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Eviction Products →
@@ -13168,7 +13168,7 @@ export const blogPosts: BlogPost[] = [
             breaches and building a strong eviction case.
           </p>
           <Link
-            href="/products/eviction-notice"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Eviction Products →
@@ -13414,7 +13414,7 @@ export const blogPosts: BlogPost[] = [
             refurbishment projects that require tenant eviction.
           </p>
           <Link
-            href="/products/eviction-notice"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Eviction Products →
@@ -13694,7 +13694,7 @@ export const blogPosts: BlogPost[] = [
             and step-by-step guidance for antisocial behaviour cases.
           </p>
           <Link
-            href="/products/eviction-notice"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Eviction Products →
@@ -14027,7 +14027,7 @@ export const blogPosts: BlogPost[] = [
             convert residential property to other uses.
           </p>
           <Link
-            href="/products/eviction-notice"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Eviction Products →
@@ -14307,7 +14307,7 @@ export const blogPosts: BlogPost[] = [
             property development that requires tenant eviction.
           </p>
           <Link
-            href="/products/eviction-notice"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Eviction Products →
@@ -14584,7 +14584,7 @@ export const blogPosts: BlogPost[] = [
             serious tenant misconduct and criminal behaviour.
           </p>
           <Link
-            href="/products/eviction-notice"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Eviction Products →
@@ -14865,7 +14865,7 @@ export const blogPosts: BlogPost[] = [
             antisocial behaviour from tenants&apos; visitors and associates.
           </p>
           <Link
-            href="/products/eviction-notice"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Eviction Products →
@@ -15530,7 +15530,7 @@ export const blogPosts: BlogPost[] = [
             managing deposits and tenancy compliance.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View All Products →
@@ -15714,7 +15714,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <p>
-          Example: A single landlord with 3 properties pays £70 + (3 × £15) = £115.
+          Example: A single landlord with 3 properties pays £70 + (3 Ã— £15) = £115.
         </p>
 
         <ImagePlaceholder
@@ -15842,7 +15842,7 @@ export const blogPosts: BlogPost[] = [
             to ensure full compliance with registration and other requirements.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View All Products →
@@ -16100,8 +16100,8 @@ export const blogPosts: BlogPost[] = [
         <h3>Room Sizes</h3>
         <p>Minimum room sizes typically apply:</p>
         <ul>
-          <li>Single bedroom: Usually 6.5-7 m²</li>
-          <li>Double bedroom: Usually 10-11 m²</li>
+          <li>Single bedroom: Usually 6.5-7 mÂ²</li>
+          <li>Double bedroom: Usually 10-11 mÂ²</li>
           <li>Kitchen: Depends on occupants</li>
           <li>Living space: May be required</li>
         </ul>
@@ -16186,7 +16186,7 @@ export const blogPosts: BlogPost[] = [
             landlords in Scotland.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View All Products →
@@ -16457,7 +16457,7 @@ export const blogPosts: BlogPost[] = [
             Scottish landlords to meet the Repairing Standard.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View All Products →
@@ -16793,7 +16793,7 @@ export const blogPosts: BlogPost[] = [
             the Renting Homes (Wales) Act 2016.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Contract Templates →
@@ -17154,25 +17154,25 @@ export const blogPosts: BlogPost[] = [
         <div className="bg-gray-50 rounded-lg p-6 my-8">
           <h4 className="font-semibold text-gray-900 mb-4">Before Letting</h4>
           <ul className="space-y-2 text-gray-700">
-            <li>☐ Register with Rent Smart Wales</li>
-            <li>☐ Obtain Gas Safety Certificate</li>
-            <li>☐ Obtain EICR (electrical safety)</li>
-            <li>☐ Obtain EPC (minimum E rating)</li>
-            <li>☐ Install smoke alarms on each storey</li>
-            <li>☐ Install CO alarms where required</li>
-            <li>☐ Prepare written statement of occupation contract</li>
+            <li>â˜ Register with Rent Smart Wales</li>
+            <li>â˜ Obtain Gas Safety Certificate</li>
+            <li>â˜ Obtain EICR (electrical safety)</li>
+            <li>â˜ Obtain EPC (minimum E rating)</li>
+            <li>â˜ Install smoke alarms on each storey</li>
+            <li>â˜ Install CO alarms where required</li>
+            <li>â˜ Prepare written statement of occupation contract</li>
           </ul>
         </div>
 
         <div className="bg-gray-50 rounded-lg p-6 my-8">
           <h4 className="font-semibold text-gray-900 mb-4">At Start of Tenancy</h4>
           <ul className="space-y-2 text-gray-700">
-            <li>☐ Provide written statement within 14 days</li>
-            <li>☐ Provide copy of Gas Safety Certificate</li>
-            <li>☐ Provide copy of EPC</li>
-            <li>☐ Provide How to Rent Wales guide</li>
-            <li>☐ Protect deposit within 30 days</li>
-            <li>☐ Serve deposit prescribed information</li>
+            <li>â˜ Provide written statement within 14 days</li>
+            <li>â˜ Provide copy of Gas Safety Certificate</li>
+            <li>â˜ Provide copy of EPC</li>
+            <li>â˜ Provide How to Rent Wales guide</li>
+            <li>â˜ Protect deposit within 30 days</li>
+            <li>â˜ Serve deposit prescribed information</li>
           </ul>
         </div>
 
@@ -17183,7 +17183,7 @@ export const blogPosts: BlogPost[] = [
             including contract templates, checklists, and guidance.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Welsh Landlord Products →
@@ -17621,7 +17621,7 @@ export const blogPosts: BlogPost[] = [
             to help you navigate the possession process correctly.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Eviction Templates →
@@ -17921,7 +17921,7 @@ export const blogPosts: BlogPost[] = [
             protection guidance for Welsh landlords.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Landlord Templates →
@@ -18267,7 +18267,7 @@ export const blogPosts: BlogPost[] = [
             landlords to ensure you meet all Rent Smart Wales requirements.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Compliance Products →
@@ -18600,7 +18600,7 @@ export const blogPosts: BlogPost[] = [
             templates for Welsh HMO landlords.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View HMO Products →
@@ -18873,16 +18873,16 @@ export const blogPosts: BlogPost[] = [
         <div className="bg-gray-50 rounded-lg p-6 my-8">
           <h4 className="font-semibold text-gray-900 mb-4">Compliance Checklist</h4>
           <ul className="space-y-2 text-gray-700">
-            <li>☐ Check for and treat any damp or mould</li>
-            <li>☐ Ensure adequate heating and insulation</li>
-            <li>☐ Obtain valid Gas Safety Certificate</li>
-            <li>☐ Obtain Electrical Installation Condition Report</li>
-            <li>☐ Install smoke alarms on each storey</li>
-            <li>☐ Install CO alarms where required</li>
-            <li>☐ Check all windows and doors are secure</li>
-            <li>☐ Ensure water supply is safe and adequate</li>
-            <li>☐ Check for trip and fall hazards</li>
-            <li>☐ Verify kitchen and bathroom are hygienic</li>
+            <li>â˜ Check for and treat any damp or mould</li>
+            <li>â˜ Ensure adequate heating and insulation</li>
+            <li>â˜ Obtain valid Gas Safety Certificate</li>
+            <li>â˜ Obtain Electrical Installation Condition Report</li>
+            <li>â˜ Install smoke alarms on each storey</li>
+            <li>â˜ Install CO alarms where required</li>
+            <li>â˜ Check all windows and doors are secure</li>
+            <li>â˜ Ensure water supply is safe and adequate</li>
+            <li>â˜ Check for trip and fall hazards</li>
+            <li>â˜ Verify kitchen and bathroom are hygienic</li>
           </ul>
         </div>
 
@@ -18893,7 +18893,7 @@ export const blogPosts: BlogPost[] = [
             guides to help you meet Welsh fitness requirements.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Property Templates →
@@ -19187,7 +19187,7 @@ export const blogPosts: BlogPost[] = [
             guides for each possession ground.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Eviction Templates →
@@ -19289,35 +19289,35 @@ export const blogPosts: BlogPost[] = [
           <h4 className="font-semibold text-gray-900 mb-4">Pre-Letting Checklist</h4>
           <ul className="space-y-3 text-gray-700">
             <li className="flex items-start gap-3">
-              <span className="text-green-600 mt-1">☐</span>
+              <span className="text-green-600 mt-1">â˜</span>
               <span><strong>Rent Smart Wales Registration</strong> - Register and obtain licence if self-managing</span>
             </li>
             <li className="flex items-start gap-3">
-              <span className="text-green-600 mt-1">☐</span>
+              <span className="text-green-600 mt-1">â˜</span>
               <span><strong>Gas Safety Certificate</strong> - From a Gas Safe registered engineer</span>
             </li>
             <li className="flex items-start gap-3">
-              <span className="text-green-600 mt-1">☐</span>
+              <span className="text-green-600 mt-1">â˜</span>
               <span><strong>EICR</strong> - Electrical Installation Condition Report</span>
             </li>
             <li className="flex items-start gap-3">
-              <span className="text-green-600 mt-1">☐</span>
+              <span className="text-green-600 mt-1">â˜</span>
               <span><strong>EPC</strong> - Energy Performance Certificate (minimum rating E)</span>
             </li>
             <li className="flex items-start gap-3">
-              <span className="text-green-600 mt-1">☐</span>
+              <span className="text-green-600 mt-1">â˜</span>
               <span><strong>Smoke Alarms</strong> - On each storey, tested and working</span>
             </li>
             <li className="flex items-start gap-3">
-              <span className="text-green-600 mt-1">☐</span>
+              <span className="text-green-600 mt-1">â˜</span>
               <span><strong>CO Alarms</strong> - In rooms with solid fuel appliances or flues</span>
             </li>
             <li className="flex items-start gap-3">
-              <span className="text-green-600 mt-1">☐</span>
+              <span className="text-green-600 mt-1">â˜</span>
               <span><strong>Fitness Check</strong> - Property meets 29 matters of fitness</span>
             </li>
             <li className="flex items-start gap-3">
-              <span className="text-green-600 mt-1">☐</span>
+              <span className="text-green-600 mt-1">â˜</span>
               <span><strong>Written Statement</strong> - Prepare occupation contract</span>
             </li>
           </ul>
@@ -19336,35 +19336,35 @@ export const blogPosts: BlogPost[] = [
           <h4 className="font-semibold text-gray-900 mb-4">Move-In Checklist</h4>
           <ul className="space-y-3 text-gray-700">
             <li className="flex items-start gap-3">
-              <span className="text-green-600 mt-1">☐</span>
+              <span className="text-green-600 mt-1">â˜</span>
               <span><strong>Written Statement</strong> - Provide within 14 days of occupation</span>
             </li>
             <li className="flex items-start gap-3">
-              <span className="text-green-600 mt-1">☐</span>
+              <span className="text-green-600 mt-1">â˜</span>
               <span><strong>Gas Certificate Copy</strong> - Give to contract-holder</span>
             </li>
             <li className="flex items-start gap-3">
-              <span className="text-green-600 mt-1">☐</span>
+              <span className="text-green-600 mt-1">â˜</span>
               <span><strong>EPC Copy</strong> - Give to contract-holder</span>
             </li>
             <li className="flex items-start gap-3">
-              <span className="text-green-600 mt-1">☐</span>
+              <span className="text-green-600 mt-1">â˜</span>
               <span><strong>Protect Deposit</strong> - Within 30 days in approved scheme</span>
             </li>
             <li className="flex items-start gap-3">
-              <span className="text-green-600 mt-1">☐</span>
+              <span className="text-green-600 mt-1">â˜</span>
               <span><strong>Prescribed Information</strong> - Serve deposit details</span>
             </li>
             <li className="flex items-start gap-3">
-              <span className="text-green-600 mt-1">☐</span>
+              <span className="text-green-600 mt-1">â˜</span>
               <span><strong>Inventory</strong> - Complete and get signed</span>
             </li>
             <li className="flex items-start gap-3">
-              <span className="text-green-600 mt-1">☐</span>
+              <span className="text-green-600 mt-1">â˜</span>
               <span><strong>How to Rent Wales</strong> - Provide Welsh Government guide</span>
             </li>
             <li className="flex items-start gap-3">
-              <span className="text-green-600 mt-1">☐</span>
+              <span className="text-green-600 mt-1">â˜</span>
               <span><strong>Contact Details</strong> - Provide your address and contact info</span>
             </li>
           </ul>
@@ -19447,23 +19447,23 @@ export const blogPosts: BlogPost[] = [
           <h4 className="font-semibold text-gray-900 mb-4">End of Tenancy Checklist</h4>
           <ul className="space-y-3 text-gray-700">
             <li className="flex items-start gap-3">
-              <span className="text-green-600 mt-1">☐</span>
+              <span className="text-green-600 mt-1">â˜</span>
               <span><strong>Check-Out Inspection</strong> - Compare to inventory</span>
             </li>
             <li className="flex items-start gap-3">
-              <span className="text-green-600 mt-1">☐</span>
+              <span className="text-green-600 mt-1">â˜</span>
               <span><strong>Return Deposit</strong> - Within 10 days if no disputes</span>
             </li>
             <li className="flex items-start gap-3">
-              <span className="text-green-600 mt-1">☐</span>
+              <span className="text-green-600 mt-1">â˜</span>
               <span><strong>Final Meter Readings</strong> - Record and notify suppliers</span>
             </li>
             <li className="flex items-start gap-3">
-              <span className="text-green-600 mt-1">☐</span>
+              <span className="text-green-600 mt-1">â˜</span>
               <span><strong>Collect Keys</strong> - Get all keys back</span>
             </li>
             <li className="flex items-start gap-3">
-              <span className="text-green-600 mt-1">☐</span>
+              <span className="text-green-600 mt-1">â˜</span>
               <span><strong>Council Tax</strong> - Notify council of vacancy</span>
             </li>
           </ul>
@@ -19476,7 +19476,7 @@ export const blogPosts: BlogPost[] = [
             for Welsh landlords.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Checklist Templates →
@@ -19666,7 +19666,7 @@ export const blogPosts: BlogPost[] = [
             for landlords.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Notice Templates →
@@ -19862,7 +19862,7 @@ export const blogPosts: BlogPost[] = [
             for handling abandoned properties.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Notice Templates →
@@ -20068,7 +20068,7 @@ export const blogPosts: BlogPost[] = [
             joint occupation contracts in Wales.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Contract Templates →
@@ -20442,7 +20442,7 @@ export const blogPosts: BlogPost[] = [
             compliance checklists to help Welsh landlords stay compliant.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Compliance Tools →
@@ -20801,7 +20801,7 @@ export const blogPosts: BlogPost[] = [
             compliance documentation for Welsh landlords.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Compliance Tools →
@@ -21174,7 +21174,7 @@ export const blogPosts: BlogPost[] = [
             and warning letter templates for managing ASB situations.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View ASB Templates →
@@ -21566,7 +21566,7 @@ export const blogPosts: BlogPost[] = [
             including Section 173, Section 186, and possession ground notices.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Notice Templates →
@@ -21918,7 +21918,7 @@ export const blogPosts: BlogPost[] = [
             contract-holder rights while protecting your interests.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Landlord Resources →
@@ -22264,7 +22264,7 @@ export const blogPosts: BlogPost[] = [
             applications and evidence packs.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Legal Resources →
@@ -22569,7 +22569,7 @@ export const blogPosts: BlogPost[] = [
             <tbody className="bg-white divide-y divide-gray-200">
               <tr>
                 <td className="px-6 py-4">Heating</td>
-                <td className="px-6 py-4">Capable of heating main living room to 21°C</td>
+                <td className="px-6 py-4">Capable of heating main living room to 21Â°C</td>
               </tr>
               <tr>
                 <td className="px-6 py-4">Hot water</td>
@@ -22661,7 +22661,7 @@ export const blogPosts: BlogPost[] = [
             guidance.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View NI Templates →
@@ -22976,7 +22976,7 @@ export const blogPosts: BlogPost[] = [
             checklists.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View NI Starter Pack →
@@ -23267,7 +23267,7 @@ export const blogPosts: BlogPost[] = [
             reports, and prescribed information templates for NI landlords.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View NI Templates →
@@ -23573,7 +23573,7 @@ export const blogPosts: BlogPost[] = [
             guidance for Northern Ireland landlords.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View NI Templates →
@@ -23896,7 +23896,7 @@ export const blogPosts: BlogPost[] = [
             you have adequate cover for your rental properties.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Insurance Resources →
@@ -24213,7 +24213,7 @@ export const blogPosts: BlogPost[] = [
             and guidance on tax-efficient property ownership.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Tax Resources →
@@ -24306,7 +24306,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8">
-          <h4 className="font-semibold text-red-900 mb-2">⚠️ Critical Safety Warning</h4>
+          <h4 className="font-semibold text-red-900 mb-2">âš ï¸ Critical Safety Warning</h4>
           <p className="text-red-800">
             Gas safety failures can be fatal. Carbon monoxide is odorless and kills approximately
             50 people annually in the UK. Legal compliance is the minimum - prioritize tenant safety.
@@ -24609,7 +24609,7 @@ export const blogPosts: BlogPost[] = [
             digital copies securely, and send automatic reminders before checks are due.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             Manage Gas Safety Records →
@@ -24912,7 +24912,7 @@ export const blogPosts: BlogPost[] = [
         </div>
 
         <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8">
-          <h4 className="font-semibold text-red-900 mb-2">⚠️ C1 and C2 Codes</h4>
+          <h4 className="font-semibold text-red-900 mb-2">âš ï¸ C1 and C2 Codes</h4>
           <p className="text-red-800">
             If your EICR contains any C1 or C2 codes, the overall result will be "Unsatisfactory"
             and you must complete remedial work within 28 days (or less if the report specifies).
@@ -25023,7 +25023,7 @@ export const blogPosts: BlogPost[] = [
             and receive reminders before your next inspection is due.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             Manage EICR Records →
@@ -25115,7 +25115,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8">
-          <h4 className="font-semibold text-red-900 mb-2">⚠️ 2022 Regulation Changes</h4>
+          <h4 className="font-semibold text-red-900 mb-2">âš ï¸ 2022 Regulation Changes</h4>
           <p className="text-red-800">
             From 1 October 2022, landlords in England must ensure smoke alarms on every
             storey with living accommodation and carbon monoxide alarms in rooms with
@@ -25443,7 +25443,7 @@ export const blogPosts: BlogPost[] = [
             reminder systems to help you stay compliant with all fire safety requirements.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Fire Safety Tools →
@@ -25855,7 +25855,7 @@ export const blogPosts: BlogPost[] = [
             integration with leading referencing services to streamline your tenant vetting.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Referencing Tools →
@@ -26239,7 +26239,7 @@ export const blogPosts: BlogPost[] = [
             and follow-up reminder systems to ensure you stay compliant.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Compliance Tools →
@@ -26668,7 +26668,7 @@ export const blogPosts: BlogPost[] = [
             and management templates to help you meet all regulatory requirements.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View HMO Tools →
@@ -27049,7 +27049,7 @@ export const blogPosts: BlogPost[] = [
             templates, and compliance tracking to ensure you never miss a deadline.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Deposit Tools →
@@ -27423,7 +27423,7 @@ export const blogPosts: BlogPost[] = [
             guidance to help you manage rent collection and address arrears promptly.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Rent Management Tools →
@@ -27789,7 +27789,7 @@ export const blogPosts: BlogPost[] = [
             customizable clauses, and compliance checklists to protect your interests.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Agreement Templates →
@@ -28064,7 +28064,7 @@ export const blogPosts: BlogPost[] = [
             and documentation tools to help you stay compliant and organized.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Maintenance Tools →
@@ -28412,7 +28412,7 @@ export const blogPosts: BlogPost[] = [
             and letter templates to streamline your end of tenancy process.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Checkout Templates →
@@ -28745,7 +28745,7 @@ export const blogPosts: BlogPost[] = [
             templates, and photo documentation tools for professional property inspections.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Inspection Templates →
@@ -29074,7 +29074,7 @@ export const blogPosts: BlogPost[] = [
             stage of the tenancy, from welcome letters to deposit return communications.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Communication Templates →
@@ -29291,11 +29291,11 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <div className="bg-gray-100 p-4 rounded-lg my-4 font-mono">
-          Gross Yield = (Annual Rent ÷ Property Price) × 100
+          Gross Yield = (Annual Rent Ã· Property Price) Ã— 100
         </div>
 
         <p>
-          Example: £12,000 annual rent ÷ £200,000 property = 6% gross yield
+          Example: £12,000 annual rent Ã· £200,000 property = 6% gross yield
         </p>
 
         <h3>Net Yield</h3>
@@ -29305,11 +29305,11 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <div className="bg-gray-100 p-4 rounded-lg my-4 font-mono">
-          Net Yield = ((Annual Rent - Annual Costs) ÷ Property Price) × 100
+          Net Yield = ((Annual Rent - Annual Costs) Ã· Property Price) Ã— 100
         </div>
 
         <p>
-          Example: (£12,000 - £4,000 costs) ÷ £200,000 = 4% net yield
+          Example: (£12,000 - £4,000 costs) Ã· £200,000 = 4% net yield
         </p>
 
         <h3>Return on Investment (ROI)</h3>
@@ -29319,7 +29319,7 @@ export const blogPosts: BlogPost[] = [
         </p>
 
         <div className="bg-gray-100 p-4 rounded-lg my-4 font-mono">
-          ROI = (Annual Profit ÷ Cash Invested) × 100
+          ROI = (Annual Profit Ã· Cash Invested) Ã— 100
         </div>
 
         <ImagePlaceholder
@@ -29407,7 +29407,7 @@ export const blogPosts: BlogPost[] = [
             and investment comparison tools to help you make informed decisions.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Investment Tools →
@@ -29761,7 +29761,7 @@ export const blogPosts: BlogPost[] = [
             and guidance documents to help you recover money owed efficiently.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Debt Recovery Tools →
@@ -30032,7 +30032,7 @@ export const blogPosts: BlogPost[] = [
             that work alongside any software you choose to use.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Our Tools →
@@ -30340,7 +30340,7 @@ export const blogPosts: BlogPost[] = [
             and checkout comparison forms to protect your deposits.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Inventory Templates →
@@ -30609,7 +30609,7 @@ export const blogPosts: BlogPost[] = [
             and payment logging tools to keep your records organized.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Tracking Tools →
@@ -30937,7 +30937,7 @@ export const blogPosts: BlogPost[] = [
             calculators, and guidance on meeting current and future requirements.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View EPC Resources →
@@ -31255,7 +31255,7 @@ export const blogPosts: BlogPost[] = [
             guides, and document templates for various licensing schemes.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Licensing Resources →
@@ -31609,7 +31609,7 @@ export const blogPosts: BlogPost[] = [
             covering all essential clauses for maximum protection.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Legal Templates →
@@ -31998,7 +31998,7 @@ export const blogPosts: BlogPost[] = [
             and contract review guides to help you choose the right agent.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Comparison Tools →
@@ -32367,7 +32367,7 @@ export const blogPosts: BlogPost[] = [
             and marketing templates to minimise your empty property time.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Void Management Tools →
@@ -32775,7 +32775,7 @@ export const blogPosts: BlogPost[] = [
             management tools to streamline your property marketing.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Marketing Resources →
@@ -33136,7 +33136,7 @@ export const blogPosts: BlogPost[] = [
             templates, and handover forms for professional tenant onboarding.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Move-In Resources →
@@ -33498,7 +33498,7 @@ export const blogPosts: BlogPost[] = [
             including templates, guides, and tools to complement association membership.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Landlord Resources →
@@ -33847,7 +33847,7 @@ export const blogPosts: BlogPost[] = [
             examples, and retention strategy guides for successful landlording.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Retention Resources →
@@ -34207,7 +34207,7 @@ export const blogPosts: BlogPost[] = [
             guides, and record-keeping templates for compliant landlording.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Compliance Resources →
@@ -34539,7 +34539,7 @@ export const blogPosts: BlogPost[] = [
             compliance documentation templates for all safety requirements.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Safety Resources →
@@ -34874,7 +34874,7 @@ export const blogPosts: BlogPost[] = [
             and compliance documentation for electrical safety management.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Electrical Resources →
@@ -35196,7 +35196,7 @@ export const blogPosts: BlogPost[] = [
             and furnishing guides for landlords setting up rental properties.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View Furnishing Resources →
@@ -35538,7 +35538,7 @@ export const blogPosts: BlogPost[] = [
             and room tenancy agreement templates for professional HMO management.
           </p>
           <Link
-            href="/products"
+            href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             View HMO Resources →
@@ -37782,10 +37782,10 @@ export const blogPosts: BlogPost[] = [
             Particulars of Claim, and step-by-step guidance.
           </p>
           <Link
-            href="/wizard?product=money_claim&src=blog_lba"
+            href="/products/money-claim?src=blog_lba"
             className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors"
           >
-            Start Your Money Claim — £69.99
+            Start Your Money Claim — £45.99
           </Link>
         </div>
 
@@ -38014,10 +38014,10 @@ export const blogPosts: BlogPost[] = [
             Get professionally drafted court documents to claim what your tenant owes you.
           </p>
           <Link
-            href="/wizard?product=money_claim&src=blog_ccj"
+            href="/products/money-claim?src=blog_ccj"
             className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors"
           >
-            Start Your Claim — £69.99
+            Start Your Claim — £45.99
           </Link>
         </div>
 
@@ -38140,7 +38140,7 @@ export const blogPosts: BlogPost[] = [
 
         <div className="bg-gray-100 rounded-lg p-6 my-6 font-mono">
           <p className="text-center text-lg">
-            Interest = (Debt × 0.08 × Days) ÷ 365
+            Interest = (Debt Ã— 0.08 Ã— Days) Ã· 365
           </p>
         </div>
 
@@ -38163,7 +38163,7 @@ export const blogPosts: BlogPost[] = [
             Tenant owes £2,000 rent. Debt became due 180 days ago.
           </p>
           <p className="font-mono text-gray-600">
-            Interest = (£2,000 × 0.08 × 180) ÷ 365 = <strong>£78.90</strong>
+            Interest = (£2,000 Ã— 0.08 Ã— 180) Ã· 365 = <strong>£78.90</strong>
           </p>
         </div>
 
@@ -38173,10 +38173,10 @@ export const blogPosts: BlogPost[] = [
             Tenant owes £1,500 rent (due 120 days ago) + £800 damage (due 90 days ago).
           </p>
           <p className="font-mono text-gray-600 mb-2">
-            Rent interest = (£1,500 × 0.08 × 120) ÷ 365 = £39.45
+            Rent interest = (£1,500 Ã— 0.08 Ã— 120) Ã· 365 = £39.45
           </p>
           <p className="font-mono text-gray-600 mb-2">
-            Damage interest = (£800 × 0.08 × 90) ÷ 365 = £15.78
+            Damage interest = (£800 Ã— 0.08 Ã— 90) Ã· 365 = £15.78
           </p>
           <p className="font-mono text-gray-600">
             Total interest = <strong>£55.23</strong>
@@ -38189,7 +38189,7 @@ export const blogPosts: BlogPost[] = [
             Tenant owes £3,500. Debt became due 2 years (730 days) ago.
           </p>
           <p className="font-mono text-gray-600">
-            Interest = (£3,500 × 0.08 × 730) ÷ 365 = <strong>£560.00</strong>
+            Interest = (£3,500 Ã— 0.08 Ã— 730) Ã· 365 = <strong>£560.00</strong>
           </p>
         </div>
 
@@ -38225,10 +38225,10 @@ export const blogPosts: BlogPost[] = [
             court documents.
           </p>
           <Link
-            href="/wizard?product=money_claim&src=blog_interest"
+            href="/products/money-claim?src=blog_interest"
             className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors"
           >
-            Start Your Claim — £69.99
+            Start Your Claim — £45.99
           </Link>
         </div>
 
@@ -38430,10 +38430,10 @@ export const blogPosts: BlogPost[] = [
             in minutes—no waiting for solicitors.
           </p>
           <Link
-            href="/wizard?product=money_claim&src=blog_mcol_timeline"
+            href="/products/money-claim?src=blog_mcol_timeline"
             className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors"
           >
-            Start Your Claim — £69.99
+            Start Your Claim — £45.99
           </Link>
         </div>
 
@@ -38537,21 +38537,21 @@ export const blogPosts: BlogPost[] = [
           <div className="bg-amber-50 rounded-lg p-4 border border-amber-200">
             <h4 className="font-semibold text-amber-900 mb-2">Financial Risk Indicators</h4>
             <ul className="text-amber-800 text-sm space-y-1">
-              <li>• First-time renter with no history</li>
-              <li>• Student or young professional</li>
-              <li>• Low or irregular income</li>
-              <li>• Failed credit checks</li>
-              <li>• Self-employed with variable earnings</li>
+              <li>â€¢ First-time renter with no history</li>
+              <li>â€¢ Student or young professional</li>
+              <li>â€¢ Low or irregular income</li>
+              <li>â€¢ Failed credit checks</li>
+              <li>â€¢ Self-employed with variable earnings</li>
             </ul>
           </div>
           <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
             <h4 className="font-semibold text-blue-900 mb-2">Situational Factors</h4>
             <ul className="text-blue-800 text-sm space-y-1">
-              <li>• New to the country</li>
-              <li>• Recently changed jobs</li>
-              <li>• Rent is high relative to income</li>
-              <li>• Previous CCJs (but otherwise acceptable)</li>
-              <li>• Benefits recipient</li>
+              <li>â€¢ New to the country</li>
+              <li>â€¢ Recently changed jobs</li>
+              <li>â€¢ Rent is high relative to income</li>
+              <li>â€¢ Previous CCJs (but otherwise acceptable)</li>
+              <li>â€¢ Benefits recipient</li>
             </ul>
           </div>
         </div>
@@ -38646,10 +38646,10 @@ export const blogPosts: BlogPost[] = [
             Our Money Claim Pack includes documents for claiming from both tenants and guarantors.
           </p>
           <Link
-            href="/wizard?product=money_claim&reason=guarantor&src=blog_guarantor"
+            href="/products/money-claim?reason=guarantor&src=blog_guarantor"
             className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors"
           >
-            Start Guarantor Claim — £69.99
+            Start Guarantor Claim — £45.99
           </Link>
         </div>
 
@@ -38765,19 +38765,19 @@ export const blogPosts: BlogPost[] = [
             <div>
               <p className="font-medium text-gray-700">End of tenancy clean:</p>
               <ul className="text-gray-600">
-                <li>• 1-bed flat: £150-250</li>
-                <li>• 2-bed flat/house: £200-350</li>
-                <li>• 3-bed house: £300-450</li>
-                <li>• 4+ bed house: £400-600+</li>
+                <li>â€¢ 1-bed flat: £150-250</li>
+                <li>â€¢ 2-bed flat/house: £200-350</li>
+                <li>â€¢ 3-bed house: £300-450</li>
+                <li>â€¢ 4+ bed house: £400-600+</li>
               </ul>
             </div>
             <div>
               <p className="font-medium text-gray-700">Additional items:</p>
               <ul className="text-gray-600">
-                <li>• Oven deep clean: £40-80</li>
-                <li>• Carpet cleaning: £25-40 per room</li>
-                <li>• Window cleaning: £30-60</li>
-                <li>• Garden clearance: Variable</li>
+                <li>â€¢ Oven deep clean: £40-80</li>
+                <li>â€¢ Carpet cleaning: £25-40 per room</li>
+                <li>â€¢ Window cleaning: £30-60</li>
+                <li>â€¢ Garden clearance: Variable</li>
               </ul>
             </div>
           </div>
@@ -38860,10 +38860,10 @@ export const blogPosts: BlogPost[] = [
             Our Money Claim Pack covers cleaning cost claims with professionally drafted documents.
           </p>
           <Link
-            href="/wizard?product=money_claim&reason=cleaning&src=blog_cleaning"
+            href="/products/money-claim?reason=cleaning&src=blog_cleaning"
             className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors"
           >
-            Start Your Claim — £69.99
+            Start Your Claim — £45.99
           </Link>
         </div>
 
@@ -39025,10 +39025,10 @@ export const blogPosts: BlogPost[] = [
             Many deposit schemes use expected lifespans to assess claims. For example:
           </p>
           <ul className="text-gray-600 text-sm space-y-1">
-            <li>• Carpet: 8-10 years</li>
-            <li>• Interior paint: 3-5 years</li>
-            <li>• Appliances: 5-10 years depending on type</li>
-            <li>• Wooden flooring: 15-20 years</li>
+            <li>â€¢ Carpet: 8-10 years</li>
+            <li>â€¢ Interior paint: 3-5 years</li>
+            <li>â€¢ Appliances: 5-10 years depending on type</li>
+            <li>â€¢ Wooden flooring: 15-20 years</li>
           </ul>
           <p className="text-gray-700 mt-3">
             If the item was already 80% through its lifespan, you can only claim 20% of replacement
@@ -39050,7 +39050,7 @@ export const blogPosts: BlogPost[] = [
           </p>
           <div className="font-mono text-sm bg-gray-50 p-4 rounded">
             <p>Remaining lifespan: 6 years out of 10 = 60%</p>
-            <p>Claimable amount: £800 × 60% = <strong>£480</strong></p>
+            <p>Claimable amount: £800 Ã— 60% = <strong>£480</strong></p>
           </div>
           <p className="text-gray-500 text-sm mt-3">
             You cannot claim the full £800 because the carpet had already been used for 4 years.
@@ -39089,10 +39089,10 @@ export const blogPosts: BlogPost[] = [
             Our Money Claim Pack helps you calculate and claim damage costs properly.
           </p>
           <Link
-            href="/wizard?product=money_claim&reason=damage&src=blog_wear_tear"
+            href="/products/money-claim?reason=damage&src=blog_wear_tear"
             className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors"
           >
-            Start Your Claim — £69.99
+            Start Your Claim — £45.99
           </Link>
         </div>
 
@@ -39272,10 +39272,10 @@ export const blogPosts: BlogPost[] = [
             If the tenant has stopped paying, our Money Claim Pack helps you take the next step.
           </p>
           <Link
-            href="/wizard?product=money_claim&src=blog_payment_plan"
+            href="/products/money-claim?src=blog_payment_plan"
             className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors"
           >
-            Start Court Claim — £69.99
+            Start Court Claim — £45.99
           </Link>
         </div>
 
@@ -39463,12 +39463,12 @@ export const blogPosts: BlogPost[] = [
         <div className="bg-green-50 rounded-lg p-6 my-6 border border-green-200">
           <h3 className="font-semibold text-green-900 mb-2">Tips for Speaking</h3>
           <ul className="text-green-800 text-sm space-y-1">
-            <li>• Speak slowly and clearly</li>
-            <li>• Address the judge as &quot;Sir&quot; or &quot;Madam&quot; (or &quot;Judge&quot;)</li>
-            <li>• Stick to facts, not emotions</li>
-            <li>• Refer to page numbers in your bundle</li>
-            <li>• If you don&apos;t understand something, ask</li>
-            <li>• Stay calm even if the tenant says untrue things</li>
+            <li>â€¢ Speak slowly and clearly</li>
+            <li>â€¢ Address the judge as &quot;Sir&quot; or &quot;Madam&quot; (or &quot;Judge&quot;)</li>
+            <li>â€¢ Stick to facts, not emotions</li>
+            <li>â€¢ Refer to page numbers in your bundle</li>
+            <li>â€¢ If you don&apos;t understand something, ask</li>
+            <li>â€¢ Stay calm even if the tenant says untrue things</li>
           </ul>
         </div>
 
@@ -39497,10 +39497,10 @@ export const blogPosts: BlogPost[] = [
             out your case—essential for court.
           </p>
           <Link
-            href="/wizard?product=money_claim&src=blog_small_claims"
+            href="/products/money-claim?src=blog_small_claims"
             className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors"
           >
-            Start Your Claim — £69.99
+            Start Your Claim — £45.99
           </Link>
         </div>
 
@@ -39681,19 +39681,19 @@ export const blogPosts: BlogPost[] = [
           <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
             <h4 className="font-semibold text-blue-900 mb-2">Money Claim Online (MCOL)</h4>
             <ul className="text-blue-800 text-sm space-y-1">
-              <li>• Faster processing</li>
-              <li>• Slightly lower fees</li>
-              <li>• Online tracking</li>
-              <li>• Best for straightforward claims</li>
+              <li>â€¢ Faster processing</li>
+              <li>â€¢ Slightly lower fees</li>
+              <li>â€¢ Online tracking</li>
+              <li>â€¢ Best for straightforward claims</li>
             </ul>
           </div>
           <div className="bg-purple-50 rounded-lg p-4 border border-purple-200">
             <h4 className="font-semibold text-purple-900 mb-2">Paper Form N1</h4>
             <ul className="text-purple-800 text-sm space-y-1">
-              <li>• No character limits</li>
-              <li>• Attach documents</li>
-              <li>• Complex claims</li>
-              <li>• Prefer paper processes</li>
+              <li>â€¢ No character limits</li>
+              <li>â€¢ Attach documents</li>
+              <li>â€¢ Complex claims</li>
+              <li>â€¢ Prefer paper processes</li>
             </ul>
           </div>
         </div>
@@ -39732,10 +39732,10 @@ export const blogPosts: BlogPost[] = [
             Letter Before Action, Particulars of Claim, and step-by-step guidance.
           </p>
           <Link
-            href="/wizard?product=money_claim&src=blog_wont_pay"
+            href="/products/money-claim?src=blog_wont_pay"
             className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors"
           >
-            Start Your Claim — £69.99
+            Start Your Claim — £45.99
           </Link>
         </div>
 
@@ -39784,3 +39784,5 @@ export const blogPosts: BlogPost[] = [
 export function getBlogPost(slug: string): BlogPost | undefined {
   return blogPosts.find((post) => post.slug === slug);
 }
+
+

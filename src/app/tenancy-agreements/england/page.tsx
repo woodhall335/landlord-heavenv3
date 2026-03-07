@@ -1,16 +1,16 @@
-import type { Metadata } from 'next';
+﻿import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getCanonicalUrl } from '@/lib/seo/urls';
 
 const PRICE_VALID_UNTIL = '2026-12-31';
 
 export const metadata: Metadata = {
-  title: 'Assured Shorthold Tenancy Agreement (AST) England 2026 | From £14.99',
-  description: 'Create a legally compliant AST for England. Updated for 2026 with Housing Act 1988 and Tenant Fees Act 2019 compliance. From £14.99.',
+  title: 'Assured Shorthold Tenancy Agreement (AST) England 2026 | From £9.99',
+  description: 'Create a legally compliant AST for England. Updated for 2026 with Housing Act 1988 and Tenant Fees Act 2019 compliance. From £9.99.',
   keywords: 'AST, Assured Shorthold Tenancy, tenancy agreement England, AST agreement, residential tenancy UK, landlord forms, rental agreement, housing act 1988, tenant fees act 2019',
   openGraph: {
-    title: 'Assured Shorthold Tenancy Agreement (AST) England 2026 | From £14.99',
-    description: 'Create a legally compliant AST for England. Updated for 2026. Standard (£14.99) and Premium (£24.99) options.',
+    title: 'Assured Shorthold Tenancy Agreement (AST) England 2026 | From £9.99',
+    description: 'Create a legally compliant AST for England. Updated for 2026. Standard (£9.99) and Premium (£19.99) options.',
     type: 'website',
     url: getCanonicalUrl('/assured-shorthold-tenancy-agreement-template'),
   },
@@ -45,7 +45,7 @@ export default function EnglandASTPage() {
         name: 'What is the difference between Standard and Premium AST agreements?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'The Standard AST (£14.99) covers all legal essentials for a compliant tenancy. The Premium AST (£24.99) adds comprehensive inventory sections, exhaustive terms and conditions (13 detailed clauses), professional gradient styling, rights of change clauses, and enhanced legal compliance information boxes.',
+          text: 'The Standard AST (£9.99) covers all legal essentials for a compliant tenancy. The Premium AST (£19.99) adds comprehensive inventory sections, exhaustive terms and conditions (13 detailed clauses), professional gradient styling, rights of change clauses, and enhanced legal compliance information boxes.',
         },
       },
       {
@@ -101,7 +101,7 @@ export default function EnglandASTPage() {
       {
         '@type': 'Offer',
         name: 'Standard AST',
-        price: '14.99',
+        price: '9.99',
         priceCurrency: 'GBP',
         priceValidUntil: PRICE_VALID_UNTIL,
         availability: 'https://schema.org/InStock',
@@ -124,7 +124,7 @@ export default function EnglandASTPage() {
       {
         '@type': 'Offer',
         name: 'Premium AST',
-        price: '14.99',
+        price: '9.99',
         priceCurrency: 'GBP',
         priceValidUntil: PRICE_VALID_UNTIL,
         availability: 'https://schema.org/InStock',
@@ -217,13 +217,13 @@ export default function EnglandASTPage() {
                 href="/wizard?product=ast_standard&src=product_page&topic=tenancy&jurisdiction=england"
                 className="hero-btn-secondary"
               >
-                Create Standard AST - £14.99
+                Create Standard AST - £9.99
               </Link>
               <Link
                 href="/wizard?product=ast_premium&src=product_page&topic=tenancy&jurisdiction=england"
                 className="hero-btn-primary"
               >
-                Create Premium AST - £24.99
+                Create Premium AST - £19.99
               </Link>
             </div>
           </div>
@@ -315,13 +315,13 @@ export default function EnglandASTPage() {
             <div className="grid md:grid-cols-2 gap-6">
               <div className="bg-white rounded-xl shadow-lg p-8 border-2 border-gray-200">
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">Standard AST</h3>
-                <p className="text-4xl font-bold text-blue-600 mb-4">£14.99</p>
+                <p className="text-4xl font-bold text-blue-600 mb-4">£9.99</p>
                 <ul className="space-y-2 text-gray-700 mb-6">
-                  <li>✓ All legal essentials included</li>
-                  <li>✓ Housing Act 1988 compliant</li>
-                  <li>✓ Tenant Fees Act 2019 compliant</li>
-                  <li>✓ Deposit protection clause</li>
-                  <li>✓ Standard terms & conditions</li>
+                  <li>âœ“ All legal essentials included</li>
+                  <li>âœ“ Housing Act 1988 compliant</li>
+                  <li>âœ“ Tenant Fees Act 2019 compliant</li>
+                  <li>âœ“ Deposit protection clause</li>
+                  <li>âœ“ Standard terms & conditions</li>
                 </ul>
                 <Link
                   href="/wizard?product=ast_standard&src=product_page&topic=tenancy&jurisdiction=england"
@@ -336,15 +336,15 @@ export default function EnglandASTPage() {
                   RECOMMENDED
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">Premium AST</h3>
-                <p className="text-4xl font-bold text-primary mb-4">£14.99</p>
+                <p className="text-4xl font-bold text-primary mb-4">£19.99</p>
                 <ul className="space-y-2 text-gray-700 mb-6">
-                  <li>✓ Everything in Standard PLUS:</li>
-                  <li>✓ Comprehensive inventory section</li>
-                  <li>✓ 13 detailed terms & conditions</li>
-                  <li>✓ Professional gradient styling</li>
-                  <li>✓ Rights of change clauses</li>
-                  <li>✓ Enhanced legal compliance boxes</li>
-                  <li className="font-semibold text-primary">✓ Covers HMOs (Houses in Multiple Occupation)</li>
+                  <li>âœ“ Everything in Standard PLUS:</li>
+                  <li>âœ“ Comprehensive inventory section</li>
+                  <li>âœ“ 13 detailed terms & conditions</li>
+                  <li>âœ“ Professional gradient styling</li>
+                  <li>âœ“ Rights of change clauses</li>
+                  <li>âœ“ Enhanced legal compliance boxes</li>
+                  <li className="font-semibold text-primary">âœ“ Covers HMOs (Houses in Multiple Occupation)</li>
                 </ul>
                 <Link
                   href="/wizard?product=ast_premium&src=product_page&topic=tenancy&jurisdiction=england"
@@ -423,13 +423,13 @@ export default function EnglandASTPage() {
                 href="/wizard?product=ast_standard&src=product_page&topic=tenancy&jurisdiction=england"
                 className="hero-btn-secondary"
               >
-                Standard AST - £14.99
+                Standard AST - £9.99
               </Link>
               <Link
                 href="/wizard?product=ast_premium&src=product_page&topic=tenancy&jurisdiction=england"
                 className="hero-btn-primary"
               >
-                Premium AST - £14.99
+                Premium AST - £19.99
               </Link>
             </div>
             <p className="mt-6 text-sm opacity-75">
@@ -441,3 +441,6 @@ export default function EnglandASTPage() {
     </>
   );
 }
+
+
+

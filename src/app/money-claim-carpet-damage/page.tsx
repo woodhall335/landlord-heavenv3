@@ -126,7 +126,7 @@ export default function MoneyClaimCarpetDamagePage() {
         <UniversalHero
           title="Money Claim for Carpet Damage Costs"
           subtitle="Build a legally validated, solicitor-grade, compliance-checked and court-ready debt claim package."
-          primaryCta={{ label: "Start now", href: "/wizard?product=money_claim&topic=debt&src=seo_money_claim_carpet_damage" }}
+          primaryCta={{ label: "Start now", href: "/products/money-claim?topic=debt&src=seo_money_claim_carpet_damage" }}
           showTrustPositioningBar
           hideMedia
         />
@@ -150,7 +150,7 @@ export default function MoneyClaimCarpetDamagePage() {
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
-                  href="/wizard?product=money_claim&reason=property_damage&topic=debt&src=seo_money_claim_carpet_damage"
+                  href="/products/money-claim?reason=property_damage&topic=debt&src=seo_money_claim_carpet_damage"
                   className="inline-flex items-center justify-center gap-2 bg-white text-amber-800 font-semibold py-4 px-8 rounded-xl hover:bg-amber-50 transition-colors"
                 >
                   Start Carpet Damage Claim
@@ -450,10 +450,10 @@ export default function MoneyClaimCarpetDamagePage() {
 
               <div className="text-center">
                 <Link
-                  href="/wizard?product=money_claim&reason=property_damage&topic=debt&src=seo_money_claim_carpet_damage"
+                  href="/products/money-claim?reason=property_damage&topic=debt&src=seo_money_claim_carpet_damage"
                   className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
                 >
-                  Start Your Claim — £69.99
+                  Start Your Claim — £45.99
                   <ArrowRight className="w-5 h-5" />
                 </Link>
                 <p className="text-sm text-gray-500 mt-3">
@@ -500,3 +500,4 @@ export default function MoneyClaimCarpetDamagePage() {
     </>
   );
 }
+

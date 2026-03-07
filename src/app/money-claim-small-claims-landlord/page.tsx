@@ -128,7 +128,7 @@ export default function MoneyClaimSmallClaimsLandlordPage() {
         <UniversalHero
           title="Small Claims Guide for Landlords"
           subtitle="Build a legally validated, solicitor-grade, compliance-checked and court-ready debt claim package."
-          primaryCta={{ label: "Start now", href: "/wizard?product=money_claim&topic=debt&src=seo_money_claim_small_claims_landlord" }}
+          primaryCta={{ label: "Start now", href: "/products/money-claim?topic=debt&src=seo_money_claim_small_claims_landlord" }}
           showTrustPositioningBar
           hideMedia
         />
@@ -152,7 +152,7 @@ export default function MoneyClaimSmallClaimsLandlordPage() {
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
-                  href="/wizard?product=money_claim&topic=debt&src=seo_money_claim_small_claims_landlord"
+                  href="/products/money-claim?topic=debt&src=seo_money_claim_small_claims_landlord"
                   className="inline-flex items-center justify-center gap-2 bg-white text-emerald-800 font-semibold py-4 px-8 rounded-xl hover:bg-emerald-50 transition-colors"
                 >
                   Start Money Claim
@@ -432,10 +432,10 @@ export default function MoneyClaimSmallClaimsLandlordPage() {
                 Letter Before Action, Particulars of Claim, and step-by-step guidance.
               </p>
               <Link
-                href="/wizard?product=money_claim&topic=debt&src=seo_money_claim_small_claims_landlord"
+                href="/products/money-claim?topic=debt&src=seo_money_claim_small_claims_landlord"
                 className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
               >
-                Start Your Claim — £69.99
+                Start Your Claim — £45.99
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <p className="text-sm text-gray-500 mt-3">
@@ -502,3 +502,4 @@ export default function MoneyClaimSmallClaimsLandlordPage() {
     </>
   );
 }
+

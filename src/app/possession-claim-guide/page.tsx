@@ -430,7 +430,7 @@ export default function PossessionClaimGuidePage() {
 
               <div className="mt-6 text-center">
                 <p className="text-gray-600 text-sm">
-                  Plus our Complete Pack (£99.99) — <strong>save £850-1,550</strong> vs solicitor fees
+                  Plus our Complete Pack (£69.99) — <strong>save £850-1,550</strong> vs solicitor fees
                 </p>
                 <Link
                   href="/eviction-cost-uk"
@@ -479,3 +479,5 @@ export default function PossessionClaimGuidePage() {
     </>
   );
 }
+
+

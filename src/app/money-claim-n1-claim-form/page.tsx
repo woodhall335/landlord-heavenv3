@@ -125,7 +125,7 @@ export default function MoneyClaimN1ClaimFormPage() {
         <UniversalHero
           title="N1 Claim Form for Landlord Money Claims"
           subtitle="Build a legally validated, solicitor-grade, compliance-checked and court-ready debt claim package."
-          primaryCta={{ label: "Start now", href: "/wizard?product=money_claim&topic=debt&src=seo_money_claim_n1_claim_form" }}
+          primaryCta={{ label: "Start now", href: "/products/money-claim?topic=debt&src=seo_money_claim_n1_claim_form" }}
           showTrustPositioningBar
           hideMedia
         />
@@ -149,7 +149,7 @@ export default function MoneyClaimN1ClaimFormPage() {
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
-                  href="/wizard?product=money_claim&topic=debt&src=seo_money_claim_n1_claim_form"
+                  href="/products/money-claim?topic=debt&src=seo_money_claim_n1_claim_form"
                   className="inline-flex items-center justify-center gap-2 bg-white text-violet-800 font-semibold py-4 px-8 rounded-xl hover:bg-violet-50 transition-colors"
                 >
                   Generate Your Documents
@@ -433,10 +433,10 @@ export default function MoneyClaimN1ClaimFormPage() {
 
               <div className="text-center">
                 <Link
-                  href="/wizard?product=money_claim&topic=debt&src=seo_money_claim_n1_claim_form"
+                  href="/products/money-claim?topic=debt&src=seo_money_claim_n1_claim_form"
                   className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
                 >
-                  Generate Your Documents — £69.99
+                  Generate Your Documents — £45.99
                   <ArrowRight className="w-5 h-5" />
                 </Link>
                 <p className="text-sm text-gray-500 mt-3">
@@ -481,3 +481,4 @@ export default function MoneyClaimN1ClaimFormPage() {
     </>
   );
 }
+

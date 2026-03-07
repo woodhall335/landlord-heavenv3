@@ -1,4 +1,4 @@
-import { Metadata } from 'next';
+﻿import { Metadata } from 'next';
 import Link from 'next/link';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
@@ -117,7 +117,7 @@ export default function CountyCourtClaimFormGuidePage() {
           badgeIcon={<Scale className="w-4 h-4" />}
           title="County Court Claim Form Guide UK"
           subtitle={<>Not sure which <strong>county court claim form</strong> to use? This guide explains Form N1, N5, and N5B — so you file the right claim the first time.</>}
-          primaryCta={{ label: 'Create Eviction Notice — £39.99', href: wizardLinkNoticeOnly }}
+          primaryCta={{ label: 'Create Eviction Notice — £29.99', href: wizardLinkNoticeOnly }}
           secondaryCta={{ label: 'Need Possession Instead?', href: '/possession-claim-guide' }}
           variant="pastel"
         >
@@ -540,3 +540,6 @@ export default function CountyCourtClaimFormGuidePage() {
     </>
   );
 }
+
+
+

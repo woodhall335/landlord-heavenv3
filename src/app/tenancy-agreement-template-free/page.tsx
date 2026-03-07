@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+﻿import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getCanonicalUrl } from '@/lib/seo/urls';
 import { StructuredData, breadcrumbSchema, articleSchema } from '@/lib/seo/structured-data';
@@ -56,12 +56,12 @@ const faqs = [
     answer: 'Technically yes, but many Section 21 notices fail because of defects in the underlying tenancy agreement. Free starter documents often omit prescribed deposit information or contain clauses that inadvertently waive eviction rights. Our templates are specifically drafted to maintain Section 21 validity, with break clauses, deposit terms, and notice provisions that comply with Deregulation Act 2015 requirements.',
   },
   {
-    question: 'Why would I pay £14.99 when free starter documents exist?',
-    answer: 'Consider the cost of problems: a deposit dispute can cost £500-2,000 in adjudication time and potential losses; a failed Section 21 can add months to eviction and cost thousands in lost rent; unclear terms lead to expensive disputes. For £14.99, you get a template drafted for legal compliance, validated deposit terms, proper eviction pathway preservation, and clauses that actually protect you when things go wrong. The £14.99 pays for itself many times over.',
+    question: 'Why would I pay £9.99 when free starter documents exist?',
+    answer: 'Consider the cost of problems: a deposit dispute can cost £500-2,000 in adjudication time and potential losses; a failed Section 21 can add months to eviction and cost thousands in lost rent; unclear terms lead to expensive disputes. For £9.99, you get a template drafted for legal compliance, validated deposit terms, proper eviction pathway preservation, and clauses that actually protect you when things go wrong. The £9.99 pays for itself many times over.',
   },
   {
     question: 'Do free starter documents work for HMOs or multiple tenants?',
-    answer: 'Free starter documents rarely handle HMOs properly. Multi-tenant properties need specific clauses for: joint and several liability (so each tenant is responsible for full rent), shared area responsibilities, individual room allocation, separate deposit handling, and compliance with HMO licensing requirements. Our Premium AST (£24.99) includes all HMO-specific provisions.',
+    answer: 'Free starter documents rarely handle HMOs properly. Multi-tenant properties need specific clauses for: joint and several liability (so each tenant is responsible for full rent), shared area responsibilities, individual room allocation, separate deposit handling, and compliance with HMO licensing requirements. Our Premium AST (£19.99) includes all HMO-specific provisions.',
   },
   {
     question: 'What happens if my free starter document is out of date?',
@@ -81,7 +81,7 @@ const faqs = [
   },
   {
     question: 'Should I get a solicitor to review a free starter document instead?',
-    answer: 'A solicitor review typically costs £150-400 per agreement. They may recommend substantial changes that the free starter document didn\'t anticipate. For £14.99-14.99, our templates are already drafted to professional standards, validated against current legislation, and include all the clauses a solicitor would recommend. It\'s significantly more cost-effective.',
+    answer: 'A solicitor review typically costs £150-400 per agreement. They may recommend substantial changes that the free starter document didn\'t anticipate. For £9.99-19.99, our templates are already drafted to professional standards, validated against current legislation, and include all the clauses a solicitor would recommend. It\'s significantly more cost-effective.',
   },
   {
     question: 'Do free starter documents include inventory provisions?',
@@ -151,7 +151,7 @@ export default function TenancyAgreementTemplateFreeComparisonPage() {
             </h2>
             <p className="text-xl text-gray-700 mb-8 max-w-3xl mx-auto">
               Searching for a <strong>free tenancy agreement template</strong>? Understand what free options
-              actually offer, what they miss, and when investing £14.99 in a professional template
+              actually offer, what they miss, and when investing £9.99 in a professional template
               could save you thousands in disputes and failed evictions. If you are renting a room in your own home, use a <Link href="/lodger-agreement-template" className="text-primary hover:underline">lodger agreement template</Link> instead of an AST.
             </p>
           </div>
@@ -229,7 +229,7 @@ export default function TenancyAgreementTemplateFreeComparisonPage() {
                   <tr className="bg-gray-100 font-semibold">
                     <td className="px-6 py-4">Price</td>
                     <td className="px-6 py-4 text-center">£0 (+ hidden risks)</td>
-                    <td className="px-6 py-4 text-center bg-amber-100 text-amber-800">From £14.99</td>
+                    <td className="px-6 py-4 text-center bg-amber-100 text-amber-800">From £9.99</td>
                   </tr>
                 </tbody>
               </table>
@@ -273,7 +273,7 @@ export default function TenancyAgreementTemplateFreeComparisonPage() {
             <div className="mt-8 bg-green-50 p-6 rounded-xl border border-green-200">
               <h3 className="text-xl font-semibold text-green-900 mb-2">Professional AST Template</h3>
               <p className="text-green-800 mb-2">All compliance built-in, eviction pathway preserved</p>
-              <div className="text-3xl font-bold text-green-600">£14.99 - £14.99</div>
+              <div className="text-3xl font-bold text-green-600">£9.99 - £19.99</div>
               <p className="text-sm text-green-700 mt-2">One-time cost, peace of mind, legal protection</p>
             </div>
           </div>
@@ -317,7 +317,7 @@ export default function TenancyAgreementTemplateFreeComparisonPage() {
           pageType="tenancy"
           variant="section"
           jurisdiction="england"
-          title="Protect Your Investment for £14.99"
+          title="Protect Your Investment for £9.99"
           description="Get a professionally drafted AST that preserves your eviction rights and protects your deposit claims."
         />
 
@@ -384,3 +384,7 @@ export default function TenancyAgreementTemplateFreeComparisonPage() {
     </>
   );
 }
+
+
+
+

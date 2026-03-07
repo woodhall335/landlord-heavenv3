@@ -125,7 +125,7 @@ export default function MoneyClaimCouncilTaxPage() {
         <UniversalHero
           title="Money Claim for Unpaid Council Tax"
           subtitle="Build a legally validated, solicitor-grade, compliance-checked and court-ready debt claim package."
-          primaryCta={{ label: "Start now", href: "/wizard?product=money_claim&topic=debt&src=seo_money_claim_council_tax" }}
+          primaryCta={{ label: "Start now", href: "/products/money-claim?topic=debt&src=seo_money_claim_council_tax" }}
           showTrustPositioningBar
           hideMedia
         />
@@ -149,7 +149,7 @@ export default function MoneyClaimCouncilTaxPage() {
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
-                  href="/wizard?product=money_claim&reason=unpaid_council_tax&topic=debt&src=seo_money_claim_council_tax"
+                  href="/products/money-claim?reason=unpaid_council_tax&topic=debt&src=seo_money_claim_council_tax"
                   className="inline-flex items-center justify-center gap-2 bg-white text-indigo-800 font-semibold py-4 px-8 rounded-xl hover:bg-indigo-50 transition-colors"
                 >
                   Start Council Tax Claim
@@ -352,10 +352,10 @@ export default function MoneyClaimCouncilTaxPage() {
                 and guidance for recovering council tax costs.
               </p>
               <Link
-                href="/wizard?product=money_claim&reason=unpaid_council_tax&topic=debt&src=seo_money_claim_council_tax"
+                href="/products/money-claim?reason=unpaid_council_tax&topic=debt&src=seo_money_claim_council_tax"
                 className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
               >
-                Start Your Claim — £69.99
+                Start Your Claim — £45.99
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <p className="text-sm text-gray-500 mt-3">
@@ -401,3 +401,4 @@ export default function MoneyClaimCouncilTaxPage() {
     </>
   );
 }
+

@@ -33,7 +33,7 @@ export default function Home() {
           <div className="max-w-4xl mx-auto text-center">
             {/* Trust Badge - Matches AST "Professional Tenancies" badge exactly */}
             <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-              <span className="text-sm font-semibold text-primary">☁️ Trusted by 10,000+ UK Landlords</span>
+              <span className="text-sm font-semibold text-primary">â˜ï¸ Trusted by 10,000+ UK Landlords</span>
             </div>
 
             {/* Main Headline - Value-focused */}
@@ -60,7 +60,7 @@ export default function Home() {
 
             {/* Trust Indicators */}
             <p className="mt-4 text-sm text-gray-600">
-              Instant download • Court-ready format • All UK jurisdictions • No legal experience needed
+              Instant download â€¢ Court-ready format â€¢ All UK jurisdictions â€¢ No legal experience needed
             </p>
           </div>
         </Container>
@@ -129,7 +129,7 @@ export default function Home() {
               <Link href="/wizard" className="hero-btn-primary">
                 Start Your Documents Now →
               </Link>
-              <p className="mt-4 text-sm text-gray-600">Free to start • Pay only when you're ready</p>
+              <p className="mt-4 text-sm text-gray-600">Free to start â€¢ Pay only when you're ready</p>
             </div>
           </div>
         </Container>
@@ -159,7 +159,7 @@ export default function Home() {
               href="/products/notice-only"
               title="Eviction Notices"
               description="Section 8, Section 21, and devolved equivalents with service instructions."
-              price="£34.99"
+              price="£29.99"
               solicitorPrice="£200-300"
               icon={<RiFileTextLine className="w-7 h-7" />}
             />
@@ -167,7 +167,7 @@ export default function Home() {
               href="/products/complete-pack"
               title="Complete Eviction Pack"
               description="Full bundle from notice to possession order with court forms and guidance."
-              price="£99.99"
+              price="£45.99"
               solicitorPrice="£1,500-2,500"
               icon={<RiScales3Line className="w-7 h-7" />}
               popular
@@ -176,7 +176,7 @@ export default function Home() {
               href="/products/money-claim"
               title="Money Claim Pack"
               description="Rent arrears claims with evidence checklists and particulars of claim."
-              price="£69.99"
+              price="£45.99"
               solicitorPrice="£400-600"
               icon={<RiMoneyPoundCircleLine className="w-7 h-7" />}
             />
@@ -184,7 +184,7 @@ export default function Home() {
               href="/products/ast"
               title="Tenancy Agreements"
               description="Compliant ASTs with optional clauses for HMOs and students."
-              price="From £14.99"
+              price="From £9.99"
               solicitorPrice="£150-400"
               icon={<RiClipboardLine className="w-7 h-7" />}
             />
@@ -282,7 +282,7 @@ export default function Home() {
           },
           {
             question: "What's included in each pack?",
-            answer: "Notice Only (£34.99): The appropriate eviction notice for your situation plus service instructions. Complete Pack (£99.99): Everything from notice through to court claim forms, witness statements, and filing guidance. Money Claim (£69.99): Pre-action letters, claim forms, evidence templates, and enforcement guidance."
+            answer: "Notice Only (£29.99): The appropriate eviction notice for your situation plus service instructions. Complete Pack (£69.99): Everything from notice through to court claim forms, witness statements, and filing guidance. Money Claim (£45.99): Pre-action letters, claim forms, evidence templates, and enforcement guidance."
           },
         ]}
         showContactCTA={true}
@@ -316,7 +316,7 @@ export default function Home() {
 
             {/* Final trust indicators */}
             <p className="mt-4 text-sm text-gray-600">
-              Court-ready documents • Expert guidance • 12+ months secure storage
+              Court-ready documents â€¢ Expert guidance â€¢ 12+ months secure storage
             </p>
           </div>
         </Container>
@@ -438,3 +438,5 @@ function JurisdictionCard({
     </div>
   );
 }
+
+

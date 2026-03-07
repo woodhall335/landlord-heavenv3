@@ -117,25 +117,25 @@ export default function HowToEvictTenantPage() {
                   href="#england"
                   className="px-4 py-2 bg-gray-100 hover:bg-primary hover:text-white rounded-lg text-sm font-medium transition-colors"
                 >
-                  🏴󠁧󠁢󠁥󠁮󠁧󠁿 England
+                  ðŸ´ó §ó ¢ó ¥ó ®ó §ó ¿ England
                 </a>
                 <a
                   href="#wales"
                   className="px-4 py-2 bg-gray-100 hover:bg-red-600 hover:text-white rounded-lg text-sm font-medium transition-colors"
                 >
-                  🏴󠁧󠁢󠁷󠁬󠁳󠁿 Wales
+                  ðŸ´ó §ó ¢ó ·ó ¬ó ³ó ¿ Wales
                 </a>
                 <a
                   href="#scotland"
                   className="px-4 py-2 bg-gray-100 hover:bg-blue-600 hover:text-white rounded-lg text-sm font-medium transition-colors"
                 >
-                  🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland
+                  ðŸ´ó §ó ¢ó ³ó £ó ´ó ¿ Scotland
                 </a>
                 <a
                   href="#northern-ireland"
                   className="px-4 py-2 bg-gray-100 hover:bg-green-600 hover:text-white rounded-lg text-sm font-medium transition-colors"
                 >
-                  🇬🇧 Northern Ireland
+                  ðŸ‡¬ðŸ‡§ Northern Ireland
                 </a>
               </div>
             </div>
@@ -162,7 +162,7 @@ export default function HowToEvictTenantPage() {
               {/* Ask Heaven callout */}
               <div className="bg-purple-50 border border-purple-200 rounded-xl p-5 mb-8">
                 <div className="flex items-start gap-3 mb-4">
-                  <span className="text-2xl">☁️</span>
+                  <span className="text-2xl">â˜ï¸</span>
                   <div>
                     <p className="font-semibold text-gray-900 mb-1">
                       Not sure which eviction route to use?
@@ -262,7 +262,7 @@ export default function HowToEvictTenantPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <div className="flex items-center gap-3 mb-6">
-                <span className="text-4xl">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span>
+                <span className="text-4xl">ðŸ´ó §ó ¢ó ¥ó ®ó §ó ¿</span>
                 <h2 className="text-3xl font-bold text-gray-900">Evicting a Tenant in England</h2>
               </div>
 
@@ -378,14 +378,14 @@ export default function HowToEvictTenantPage() {
                     className="inline-flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary/90"
                   >
                     <FileText className="w-4 h-4" />
-                    Notice Only — £34.99
+                    Notice Only — £29.99
                   </Link>
                   <Link
                     href="/products/complete-pack"
                     className="inline-flex items-center gap-2 bg-gray-900 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-800"
                   >
                     <FileText className="w-4 h-4" />
-                    Complete Pack — £99.99
+                    Complete Pack — £69.99
                   </Link>
                 </div>
               </div>
@@ -398,7 +398,7 @@ export default function HowToEvictTenantPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <div className="flex items-center gap-3 mb-6">
-                <span className="text-4xl">🏴󠁧󠁢󠁷󠁬󠁳󠁿</span>
+                <span className="text-4xl">ðŸ´ó §ó ¢ó ·ó ¬ó ³ó ¿</span>
                 <h2 className="text-3xl font-bold text-gray-900">Evicting a Tenant in Wales</h2>
               </div>
 
@@ -477,7 +477,7 @@ export default function HowToEvictTenantPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <div className="flex items-center gap-3 mb-6">
-                <span className="text-4xl">🏴󠁧󠁢󠁳󠁣󠁴󠁿</span>
+                <span className="text-4xl">ðŸ´ó §ó ¢ó ³ó £ó ´ó ¿</span>
                 <h2 className="text-3xl font-bold text-gray-900">Evicting a Tenant in Scotland</h2>
               </div>
 
@@ -560,7 +560,7 @@ export default function HowToEvictTenantPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <div className="flex items-center gap-3 mb-6">
-                <span className="text-4xl">🇬🇧</span>
+                <span className="text-4xl">ðŸ‡¬ðŸ‡§</span>
                 <h2 className="text-3xl font-bold text-gray-900">
                   Evicting a Tenant in Northern Ireland
                 </h2>
@@ -684,13 +684,13 @@ export default function HowToEvictTenantPage() {
                   href="/products/notice-only"
                   className="inline-flex items-center justify-center gap-2 bg-white text-primary font-semibold py-4 px-8 rounded-xl hover:bg-gray-100 transition-colors"
                 >
-                  Notice Only — £34.99
+                  Notice Only — £29.99
                 </Link>
                 <Link
                   href="/products/complete-pack"
                   className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold py-4 px-8 rounded-xl transition-colors border border-white/30"
                 >
-                  Complete Pack — £99.99
+                  Complete Pack — £69.99
                 </Link>
               </div>
             </div>
@@ -704,11 +704,11 @@ export default function HowToEvictTenantPage() {
                 jurisdictionLabel="UK eviction routes"
                 scenarioLabel="tenant eviction"
                 primaryCTA={{
-                  label: 'Generate eviction notice — £34.99',
+                  label: 'Generate eviction notice — £29.99',
                   href: productLinks.noticeOnly.href,
                 }}
                 secondaryCTA={{
-                  label: 'Complete eviction pack — £99.99',
+                  label: 'Complete eviction pack — £69.99',
                   href: productLinks.completePack.href,
                 }}
                 relatedLinks={[
@@ -749,3 +749,5 @@ export default function HowToEvictTenantPage() {
     </>
   );
 }
+
+

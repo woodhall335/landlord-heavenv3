@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
 import Image from 'next/image';
@@ -16,6 +16,20 @@ interface BlogStickySlotsProps {
 }
 
 const ACTIVE_SLOTS = { desktop: 0, mobile: 0 };
+
+function getStickyHeading(cta: ProductCtaConfig): string {
+  switch (cta.iconKey) {
+    case 'money-claim':
+      return 'Ready to start your claim?';
+    case 'ast':
+      return 'Ready to create your agreement?';
+    case 'complete-pack':
+      return 'Ready to start your complete pack?';
+    case 'notice':
+    default:
+      return 'Ready to generate your notice?';
+  }
+}
 
 export function BlogStickySlots({ cta, postSlug, category, showDesktop = true, showMobile = true }: BlogStickySlotsProps) {
   const [showSticky, setShowSticky] = useState(false);
@@ -72,6 +86,8 @@ export function BlogStickySlots({ cta, postSlug, category, showDesktop = true, s
     window.sessionStorage.setItem(`blog_sticky_dismissed_${postSlug}`, '1');
   };
 
+  const stickyHeading = getStickyHeading(cta);
+
   return (
     <>
       {showDesktop && (
@@ -79,7 +95,7 @@ export function BlogStickySlots({ cta, postSlug, category, showDesktop = true, s
           data-blog-sticky-slot="desktop"
           className={`hidden lg:block rounded-2xl border border-[#e4d4ff] bg-[#f8f1ff] p-5 shadow-sm transition-all duration-200 ${showSticky ? 'translate-y-0 opacity-100' : 'pointer-events-none -translate-y-2 opacity-0'}`}
         >
-          <p className="text-xs font-semibold uppercase tracking-wide text-[#692ed4]">Ready to generate your notice?</p>
+          <p className="text-xs font-semibold uppercase tracking-wide text-[#692ed4]">{stickyHeading}</p>
           <ul className="mt-3 space-y-2 text-sm text-slate-700">
             {cta.bullets.slice(0, 3).map((bullet) => (
               <li key={bullet} className="flex items-start gap-2">
@@ -93,7 +109,7 @@ export function BlogStickySlots({ cta, postSlug, category, showDesktop = true, s
             onClick={() => onClick('desktop_sticky')}
             className="mt-4 inline-flex w-full items-center justify-center rounded-lg bg-[#692ed4] px-4 py-3 font-semibold text-white hover:bg-[#5f27c3] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#692ed4] focus-visible:ring-offset-2"
           >
-            Generate Notice →
+            {cta.ctaLabel}
           </Link>
         </div>
       )}
@@ -104,7 +120,7 @@ export function BlogStickySlots({ cta, postSlug, category, showDesktop = true, s
           className={`lg:hidden fixed inset-x-0 bottom-0 z-40 border-t border-[#e5d7ff] bg-white/95 px-4 pb-[max(12px,env(safe-area-inset-bottom))] pt-3 shadow-[0_-8px_24px_rgba(15,23,42,0.12)] backdrop-blur transition-transform duration-200 ${showSticky && !mobileDismissed && !sessionDismissed ? 'translate-y-0' : 'translate-y-full'}`}
         >
           <div className="mb-2 flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wide text-[#692ed4]">Court-ready workflow</span>
+            <span className="text-xs font-semibold uppercase tracking-wide text-[#692ed4]">Next legal step</span>
             <button
               type="button"
               aria-label="Dismiss sticky call to action"
@@ -119,7 +135,7 @@ export function BlogStickySlots({ cta, postSlug, category, showDesktop = true, s
             onClick={() => onClick('mobile_bar')}
             className="inline-flex w-full items-center justify-center rounded-lg bg-[#692ed4] px-4 py-3 font-semibold text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#692ed4] focus-visible:ring-offset-2"
           >
-            Generate Notice →
+            {cta.ctaLabel}
           </Link>
         </div>
       )}

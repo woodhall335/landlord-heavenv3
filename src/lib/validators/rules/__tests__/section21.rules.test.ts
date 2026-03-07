@@ -637,7 +637,7 @@ describe('Section 21 Rules', () => {
           SECTION21_RULES,
           createContext({
             deposit_taken: createFact(true),
-            deposit_amount: createFact(1499.99),
+            deposit_amount: createFact(1445.99),
             rent_amount: createFact(300),
             rent_frequency: createFact('weekly'),
           })
@@ -777,3 +777,4 @@ describe('Section 21 Rules', () => {
     });
   });
 });
+

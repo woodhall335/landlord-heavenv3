@@ -84,7 +84,7 @@ export default function Section8NoticeTemplatePage() {
       offers: {
         '@type': 'AggregateOffer',
         lowPrice: '0',
-        highPrice: '99.99',
+        highPrice: '69.99',
         priceCurrency: 'GBP',
         offerCount: '2',
       },
@@ -370,7 +370,7 @@ export default function Section8NoticeTemplatePage() {
                   href={wizardLinkNoticeOnly}
                   className="inline-flex items-center gap-2 text-primary font-medium hover:underline"
                 >
-                  Get both notices for £34.99
+                  Get both notices for £29.99
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
@@ -440,7 +440,7 @@ export default function Section8NoticeTemplatePage() {
                   </div>
                   <div className="text-center mb-6">
                     <span className="text-sm font-medium text-primary uppercase tracking-wide">Complete Pack</span>
-                    <div className="text-4xl font-bold text-gray-900 mt-2">£99.99</div>
+                    <div className="text-4xl font-bold text-gray-900 mt-2">£69.99</div>
                   </div>
                   <ul className="space-y-4 mb-8">
                     <li className="flex items-start gap-3">
@@ -482,7 +482,7 @@ export default function Section8NoticeTemplatePage() {
                 <p className="text-gray-600">
                   Just need the notice? Get{' '}
                   <Link href={wizardLinkNoticeOnly} className="text-primary font-medium hover:underline">
-                    Notice Only for £34.99
+                    Notice Only for £29.99
                   </Link>
                   {' '}(Section 8 + Section 21 included)
                 </p>
@@ -850,7 +850,7 @@ export default function Section8NoticeTemplatePage() {
                   href={wizardLinkCompletePack}
                   className="hero-btn-secondary inline-flex items-center justify-center gap-2"
                 >
-                  Get Complete Pack — £99.99
+                  Get Complete Pack — £69.99
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               </div>
@@ -889,7 +889,7 @@ export default function Section8NoticeTemplatePage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <div className="flex items-center gap-4">
-                <span className="text-4xl">☁️</span>
+                <span className="text-4xl">â˜ï¸</span>
                 <div>
                   <p className="font-semibold text-gray-900 mb-1">
                     Not sure which eviction ground applies to your situation?
@@ -930,3 +930,5 @@ export default function Section8NoticeTemplatePage() {
     </>
   );
 }
+
+

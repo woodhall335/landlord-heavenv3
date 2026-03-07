@@ -463,7 +463,7 @@ export default function CaseDetailPage() {
 
       // Get product info from case type
       const productName = getCaseTypeLabel(caseDetails.case_type);
-      const amount = orderStatus.total_amount || 34.99;
+      const amount = orderStatus.total_amount || 29.99;
       const currency = orderStatus.currency || 'GBP';
 
       // Get attribution data from session/local storage

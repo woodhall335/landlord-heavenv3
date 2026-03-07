@@ -654,7 +654,7 @@ export function getProductMeta(product: string): ProductMeta {
   const products: Record<string, ProductMeta> = {
     'notice_only': {
       name: 'Notice Only Pack',
-      price: '£34.99',
+      price: '£29.99',
       originalPrice: '£150+',
       savings: 'Save £100+ vs solicitors',
       features: [
@@ -667,7 +667,7 @@ export function getProductMeta(product: string): ProductMeta {
     },
     'complete_pack': {
       name: 'Complete Eviction Pack',
-      price: '£99.99',
+      price: '£69.99',
       originalPrice: '£2,500+',
       savings: 'Save £2,300+ vs solicitors',
       features: [
@@ -681,7 +681,7 @@ export function getProductMeta(product: string): ProductMeta {
     },
     'money_claim': {
       name: 'Money Claim Pack',
-      price: '£69.99',
+      price: '£45.99',
       originalPrice: '£3,000+',
       savings: 'Save £2,900+ vs solicitors',
       features: [
@@ -697,7 +697,7 @@ export function getProductMeta(product: string): ProductMeta {
     },
     'sc_money_claim': {
       name: 'Simple Procedure Pack',
-      price: '£69.99',
+      price: '£45.99',
       originalPrice: '£3,000+',
       savings: 'Save £2,850+ vs solicitors',
       features: [
@@ -713,7 +713,7 @@ export function getProductMeta(product: string): ProductMeta {
     // STANDARD TENANCY AGREEMENT - Base product (agreement only)
     'ast_standard': {
       name: 'Tenancy Agreement',
-      price: '£14.99',
+      price: '£9.99',
       originalPrice: '£100+',
       savings: 'Save £85+ vs solicitors',
       features: [
@@ -725,7 +725,7 @@ export function getProductMeta(product: string): ProductMeta {
     },
     'tenancy_agreement': {
       name: 'Tenancy Agreement',
-      price: '£14.99',
+      price: '£9.99',
       originalPrice: '£100+',
       savings: 'Save £85+ vs solicitors',
       features: [
@@ -738,7 +738,7 @@ export function getProductMeta(product: string): ProductMeta {
     // PREMIUM HMO TENANCY AGREEMENT - HMO-specific clauses
     'ast_premium': {
       name: 'HMO Tenancy Agreement',
-      price: '£24.99',
+      price: '£19.99',
       originalPrice: '£200+',
       savings: 'Save £175+ vs solicitors',
       features: [
@@ -753,3 +753,4 @@ export function getProductMeta(product: string): ProductMeta {
 
   return products[product] || products['notice_only'];
 }
+

@@ -127,7 +127,7 @@ export default function MoneyClaimAbandonedGoodsPage() {
         <UniversalHero
           title="Money Claim for Abandoned Goods Costs"
           subtitle="Recover abandoned goods and clearance costs using a legally validated, court-ready money claim route."
-          primaryCta={{ label: "Start now", href: "/wizard?product=money_claim&reason=cleaning&src=seo_money_claim_abandoned_goods&topic=debt" }}
+          primaryCta={{ label: "Start now", href: "/products/money-claim?reason=cleaning&src=seo_money_claim_abandoned_goods&topic=debt" }}
           showTrustPositioningBar
           hideMedia
         />
@@ -151,7 +151,7 @@ export default function MoneyClaimAbandonedGoodsPage() {
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
-                  href="/wizard?product=money_claim&reason=cleaning&src=seo_money_claim_abandoned_goods&topic=debt"
+                  href="/products/money-claim?reason=cleaning&src=seo_money_claim_abandoned_goods&topic=debt"
                   className="inline-flex items-center justify-center gap-2 bg-white text-violet-800 font-semibold py-4 px-8 rounded-xl hover:bg-violet-50 transition-colors"
                 >
                   Start Abandoned Goods Claim
@@ -519,10 +519,10 @@ export default function MoneyClaimAbandonedGoodsPage() {
                 and guidance for recovering clearance costs.
               </p>
               <Link
-                href="/wizard?product=money_claim&reason=cleaning&src=seo_money_claim_abandoned_goods&topic=debt"
+                href="/products/money-claim?reason=cleaning&src=seo_money_claim_abandoned_goods&topic=debt"
                 className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
               >
-                Start Your Claim — £69.99
+                Start Your Claim — £45.99
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <p className="text-sm text-gray-500 mt-3">
@@ -568,3 +568,4 @@ export default function MoneyClaimAbandonedGoodsPage() {
     </>
   );
 }
+

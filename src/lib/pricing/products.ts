@@ -1,4 +1,4 @@
-// src/lib/pricing/products.ts
+﻿// src/lib/pricing/products.ts
 // Single source of truth for display pricing, labels, descriptions, and wizard hrefs
 
 /**
@@ -8,11 +8,11 @@
  * Update ONLY here when prices change. All landing pages reference these values.
  */
 export const SEO_PRICES = {
-  evictionNotice: { amount: 34.99, display: '£34.99' },
-  evictionBundle: { amount: 99.99, display: '£99.99' },
-  moneyClaim: { amount: 69.99, display: '£69.99' },
-  tenancyStandard: { amount: 14.99, display: '£14.99' },
-  tenancyPremium: { amount: 24.99, display: '£24.99' },
+  evictionNotice: { amount: 29.99, display: '£29.99' },
+  evictionBundle: { amount: 69.99, display: '£69.99' },
+  moneyClaim: { amount: 45.99, display: '£45.99' },
+  tenancyStandard: { amount: 9.99, display: '£9.99' },
+  tenancyPremium: { amount: 19.99, display: '£19.99' },
 } as const;
 
 /**
@@ -60,7 +60,7 @@ export interface ProductConfig {
   label: string;
   shortLabel: string;
   description: string;
-  /** Numeric price in GBP (e.g., 34.99) */
+  /** Numeric price in GBP (e.g., 29.99) */
   price: number;
   displayPrice: string;
   priceNote?: string;
@@ -259,21 +259,3 @@ export function getProductLandingHref(
 
   return landingRoute;
 }
-
-/**
- * Check if a href is a wizard entry link (should be migrated to clean landing route)
- */
-export function isWizardEntryLink(href: string): boolean {
-  return href.startsWith('/wizard?product=');
-}
-
-/**
- * Map of product SKUs that have dedicated SEO landing pages
- */
-export const PRODUCTS_WITH_SEO_LANDING_PAGES = new Set<ProductSku>([
-  'notice_only',
-  'complete_pack',
-  'money_claim',
-  'ast_standard',
-  'ast_premium',
-]);

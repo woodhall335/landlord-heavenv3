@@ -95,7 +95,7 @@ export default function ScotlandEvictionNoticesPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto text-center">
               <div className="flex items-center justify-center gap-2 mb-6">
-                <span className="text-5xl">🏴󠁧󠁢󠁳󠁣󠁴󠁿</span>
+                <span className="text-5xl">ðŸ´ó §ó ¢ó ³ó £ó ´ó ¿</span>
               </div>
 
               <h2 className="text-4xl lg:text-5xl font-bold mb-6">
@@ -125,7 +125,7 @@ export default function ScotlandEvictionNoticesPage() {
                   href={wizardHref}
                   className="inline-flex items-center justify-center gap-2 bg-white text-blue-800 font-semibold py-4 px-8 rounded-xl hover:bg-blue-50 transition-colors"
                 >
-                  Get Scotland Notice — £34.99
+                  Get Scotland Notice — £29.99
                   <ArrowRight className="w-5 h-5" />
                 </Link>
                 <Link
@@ -156,10 +156,10 @@ export default function ScotlandEvictionNoticesPage() {
                         Aspect
                       </th>
                       <th className="px-6 py-4 text-left font-semibold text-gray-900">
-                        🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland
+                        ðŸ´ó §ó ¢ó ³ó £ó ´ó ¿ Scotland
                       </th>
                       <th className="px-6 py-4 text-left font-semibold text-gray-900">
-                        🏴󠁧󠁢󠁥󠁮󠁧󠁿 England
+                        ðŸ´ó §ó ¢ó ¥ó ®ó §ó ¿ England
                       </th>
                     </tr>
                   </thead>
@@ -658,13 +658,13 @@ export default function ScotlandEvictionNoticesPage() {
                   href="/products/notice-only"
                   className="inline-flex items-center justify-center gap-2 bg-white text-blue-700 font-semibold py-4 px-8 rounded-xl hover:bg-blue-50 transition-colors"
                 >
-                  Get Scotland Notice — £34.99
+                  Get Scotland Notice — £29.99
                 </Link>
                 <Link
                   href="/products/complete-pack"
                   className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold py-4 px-8 rounded-xl transition-colors border border-white/30"
                 >
-                  Complete Pack — £99.99
+                  Complete Pack — £69.99
                 </Link>
               </div>
             </div>
@@ -695,11 +695,11 @@ export default function ScotlandEvictionNoticesPage() {
                 jurisdictionLabel="Scotland eviction notices"
                 scenarioLabel="Notice to Leave + Tribunal process"
                 primaryCTA={{
-                  label: 'Generate Notice to Leave — £34.99',
+                  label: 'Generate Notice to Leave — £29.99',
                   href: productLinks.noticeOnly.href,
                 }}
                 secondaryCTA={{
-                  label: 'Complete eviction pack — £99.99',
+                  label: 'Complete eviction pack — £69.99',
                   href: productLinks.completePack.href,
                 }}
                 relatedLinks={[
@@ -741,3 +741,5 @@ export default function ScotlandEvictionNoticesPage() {
     </>
   );
 }
+
+

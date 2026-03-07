@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+﻿import type { Metadata } from 'next';
 import Link from 'next/link';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { getCanonicalUrl } from '@/lib/seo/urls';
@@ -6,12 +6,12 @@ import { getCanonicalUrl } from '@/lib/seo/urls';
 const PRICE_VALID_UNTIL = '2026-12-31';
 
 export const metadata: Metadata = {
-  title: 'Occupation Contract Wales 2026 | From £14.99',
-  description: 'Create a legally compliant Occupation Contract for Wales under the Renting Homes (Wales) Act 2016. Updated for 2026. From £14.99.',
+  title: 'Occupation Contract Wales 2026 | From £9.99',
+  description: 'Create a legally compliant Occupation Contract for Wales under the Renting Homes (Wales) Act 2016. Updated for 2026. From £9.99.',
   keywords: 'occupation contract Wales, renting homes Wales act 2016, Welsh tenancy agreement, standard occupation contract, secure occupation contract, Wales landlord, Welsh rental agreement',
   openGraph: {
-    title: 'Occupation Contract Wales 2026 | From £14.99',
-    description: 'Create a legally compliant Occupation Contract for Wales. Updated for 2026. Standard (£14.99) and Premium (£24.99) options.',
+    title: 'Occupation Contract Wales 2026 | From £9.99',
+    description: 'Create a legally compliant Occupation Contract for Wales. Updated for 2026. Standard (£9.99) and Premium (£19.99) options.',
     type: 'website',
     url: getCanonicalUrl('/wales-tenancy-agreement-template'),
   },
@@ -86,7 +86,7 @@ export default function WalesOccupationContractPage() {
       {
         '@type': 'Offer',
         name: 'Standard Occupation Contract',
-        price: '14.99',
+        price: '9.99',
         priceCurrency: 'GBP',
         priceValidUntil: PRICE_VALID_UNTIL,
         availability: 'https://schema.org/InStock',
@@ -109,7 +109,7 @@ export default function WalesOccupationContractPage() {
       {
         '@type': 'Offer',
         name: 'Premium Occupation Contract',
-        price: '14.99',
+        price: '9.99',
         priceCurrency: 'GBP',
         priceValidUntil: PRICE_VALID_UNTIL,
         availability: 'https://schema.org/InStock',
@@ -205,13 +205,13 @@ export default function WalesOccupationContractPage() {
                 href="/wizard?product=ast_standard&src=product_page&topic=tenancy&jurisdiction=wales"
                 className="hero-btn-secondary"
               >
-                Create Standard Contract - £14.99
+                Create Standard Contract - £9.99
               </Link>
               <Link
                 href="/wizard?product=ast_premium&src=product_page&topic=tenancy&jurisdiction=wales"
                 className="hero-btn-primary"
               >
-                Create Premium Contract - £24.99
+                Create Premium Contract - £19.99
               </Link>
             </div>
           </div>
@@ -342,13 +342,13 @@ export default function WalesOccupationContractPage() {
             <div className="grid md:grid-cols-2 gap-6">
               <div className="bg-white rounded-xl shadow-lg p-8 border-2 border-gray-200">
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">Standard Contract</h3>
-                <p className="text-4xl font-bold text-red-600 mb-4">£14.99</p>
+                <p className="text-4xl font-bold text-red-600 mb-4">£9.99</p>
                 <ul className="space-y-2 text-gray-700 mb-6">
-                  <li>✓ Renting Homes Act 2016 compliant</li>
-                  <li>✓ Written statement included</li>
-                  <li>✓ Fundamental and supplementary terms</li>
-                  <li>✓ Deposit protection clause</li>
-                  <li>✓ Fitness for habitation terms</li>
+                  <li>âœ“ Renting Homes Act 2016 compliant</li>
+                  <li>âœ“ Written statement included</li>
+                  <li>âœ“ Fundamental and supplementary terms</li>
+                  <li>âœ“ Deposit protection clause</li>
+                  <li>âœ“ Fitness for habitation terms</li>
                 </ul>
                 <Link
                   href="/wizard?product=ast_standard&src=product_page&topic=tenancy&jurisdiction=wales"
@@ -363,14 +363,14 @@ export default function WalesOccupationContractPage() {
                   RECOMMENDED
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">Premium Contract</h3>
-                <p className="text-4xl font-bold text-primary mb-4">£14.99</p>
+                <p className="text-4xl font-bold text-primary mb-4">£19.99</p>
                 <ul className="space-y-2 text-gray-700 mb-6">
-                  <li>✓ Everything in Standard PLUS:</li>
-                  <li>✓ Comprehensive inventory section</li>
-                  <li>✓ Additional supplementary terms</li>
-                  <li>✓ Professional formatting</li>
-                  <li>✓ Enhanced compliance information</li>
-                  <li className="font-semibold text-primary">✓ Covers HMOs (Houses in Multiple Occupation)</li>
+                  <li>âœ“ Everything in Standard PLUS:</li>
+                  <li>âœ“ Comprehensive inventory section</li>
+                  <li>âœ“ Additional supplementary terms</li>
+                  <li>âœ“ Professional formatting</li>
+                  <li>âœ“ Enhanced compliance information</li>
+                  <li className="font-semibold text-primary">âœ“ Covers HMOs (Houses in Multiple Occupation)</li>
                 </ul>
                 <Link
                   href="/wizard?product=ast_premium&src=product_page&topic=tenancy&jurisdiction=wales"
@@ -475,13 +475,13 @@ export default function WalesOccupationContractPage() {
                 href="/wizard?product=ast_standard&src=product_page&topic=tenancy&jurisdiction=wales"
                 className="bg-white text-red-600 px-8 py-4 rounded-lg font-semibold hover:bg-red-50 transition-colors text-lg shadow-lg"
               >
-                Standard Contract - £14.99
+                Standard Contract - £9.99
               </Link>
               <Link
                 href="/wizard?product=ast_premium&src=product_page&topic=tenancy&jurisdiction=wales"
                 className="bg-yellow-400 text-gray-900 px-8 py-4 rounded-lg font-semibold hover:bg-yellow-300 transition-colors text-lg shadow-lg"
               >
-                Premium Contract - £14.99
+                Premium Contract - £19.99
               </Link>
             </div>
             <p className="mt-6 text-sm opacity-75">
@@ -493,3 +493,6 @@ export default function WalesOccupationContractPage() {
     </>
   );
 }
+
+
+

@@ -74,7 +74,7 @@ export default function MoneyClaimCleaningCostsPage() {
         <UniversalHero
           title="Money Claim for Cleaning Costs"
           subtitle="Build a legally validated, solicitor-grade, compliance-checked and court-ready debt claim package."
-          primaryCta={{ label: "Start now", href: "/wizard?product=money_claim&topic=debt&src=seo_money_claim_cleaning_costs" }}
+          primaryCta={{ label: "Start now", href: "/products/money-claim?topic=debt&src=seo_money_claim_cleaning_costs" }}
           showTrustPositioningBar
           hideMedia
         />
@@ -98,7 +98,7 @@ export default function MoneyClaimCleaningCostsPage() {
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
-                  href="/wizard?product=money_claim&reason=cleaning&topic=debt&src=seo_money_claim_cleaning_costs"
+                  href="/products/money-claim?reason=cleaning&topic=debt&src=seo_money_claim_cleaning_costs"
                   className="inline-flex items-center justify-center gap-2 bg-white text-teal-800 font-semibold py-4 px-8 rounded-xl hover:bg-teal-50 transition-colors"
                 >
                   Start Cleaning Costs Claim
@@ -526,7 +526,7 @@ export default function MoneyClaimCleaningCostsPage() {
                   costs builder, and step-by-step guidance for cleaning and rubbish removal claims.
                 </p>
                 <Link
-                  href="/wizard?product=money_claim&reason=cleaning&topic=debt&src=seo_money_claim_cleaning_costs"
+                  href="/products/money-claim?reason=cleaning&topic=debt&src=seo_money_claim_cleaning_costs"
                   className="inline-flex items-center gap-2 bg-teal-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-teal-700"
                 >
                   <FileText className="w-4 h-4" />
@@ -550,7 +550,7 @@ export default function MoneyClaimCleaningCostsPage() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
-                  href="/wizard?product=money_claim&reason=cleaning&topic=debt&src=seo_money_claim_cleaning_costs"
+                  href="/products/money-claim?reason=cleaning&topic=debt&src=seo_money_claim_cleaning_costs"
                   className="inline-flex items-center justify-center gap-2 bg-white text-teal-700 font-semibold py-4 px-8 rounded-xl hover:bg-teal-50 transition-colors"
                 >
                   Start Cleaning Costs Claim
@@ -576,7 +576,7 @@ export default function MoneyClaimCleaningCostsPage() {
                 scenarioLabel="recovering cleaning and rubbish removal costs"
                 primaryCTA={{
                   label: 'Start cleaning costs claim',
-                  href: '/wizard?product=money_claim&reason=cleaning&topic=debt&src=seo_money_claim_cleaning_costs',
+                  href: '/products/money-claim?reason=cleaning&topic=debt&src=seo_money_claim_cleaning_costs',
                 }}
                 secondaryCTA={{
                   label: 'View Money Claim Pack',

@@ -31,6 +31,7 @@ import { BlogInlineProductCard } from '@/components/blog/BlogInlineProductCard';
 import { BlogBackToTop } from '@/components/blog/BlogBackToTop';
 import { BlogStickySlots } from '@/components/blog/BlogStickySlots';
 import { BlogProse } from '@/components/blog/BlogProse';
+import { BlogCtaProvider } from '@/components/blog/BlogCtaContext';
 import { BlogArticleStickyGuard } from '@/components/blog/BlogArticleStickyGuard';
 import { getBlogImagesForPost, getBlogImagesForPostThumb } from '@/lib/blog/image-manifest';
 import { getBlogSeoConfig } from '@/lib/blog/seo';
@@ -821,9 +822,11 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
 
               <BlogInlineProductCard cta={productCta} postSlug={slug} category={post.category} />
 
-              <BlogProse>
-                {post.content}
-              </BlogProse>
+              <BlogCtaProvider value={{ cta: productCta, postSlug: slug, category: post.category }}>
+                <BlogProse>
+                  {post.content}
+                </BlogProse>
+              </BlogCtaProvider>
 
               {sanitizedFaqs.length > 0 && (
                 <section className="mt-12 rounded-2xl border border-[#e9dcff] bg-[#f8f1ff] p-5 shadow-sm md:p-6" aria-label="Frequently asked questions">

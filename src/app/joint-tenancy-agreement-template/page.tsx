@@ -146,13 +146,13 @@ export default function JointTenancyAgreementTemplatePage() {
                 href="/wizard?product=ast_standard&topic=tenancy&src=seo_joint_tenancy_agreement_template&jurisdiction=england"
                 className="inline-flex items-center gap-2 bg-white border-2 border-indigo-600 text-indigo-600 px-6 py-3 rounded-lg font-semibold hover:bg-indigo-50 transition-colors"
               >
-                Standard AST — £14.99
+                Standard AST — £9.99
               </Link>
               <Link
                 href="/wizard?product=ast_premium&topic=tenancy&src=seo_joint_tenancy_agreement_template&jurisdiction=england"
                 className="inline-flex items-center gap-2 bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors"
               >
-                Premium AST — £24.99
+                Premium AST — £19.99
               </Link>
             </div>
             <p className="mt-4 text-sm text-gray-500">Supports 2+ tenants • Joint liability included • Instant PDF</p>
@@ -325,7 +325,7 @@ export default function JointTenancyAgreementTemplatePage() {
                   Both partners should be named on the agreement. This ensures both have tenancy rights
                   and both are liable for rent. If they separate, neither can unilaterally claim the property.
                 </p>
-                <p className="text-sm text-indigo-600">Recommended: Standard AST (£14.99)</p>
+                <p className="text-sm text-indigo-600">Recommended: Standard AST (£9.99)</p>
               </div>
               <div className="bg-white p-6 rounded-xl shadow-sm">
                 <h3 className="text-lg font-semibold text-gray-900 mb-3">Friends Sharing a Flat</h3>
@@ -333,7 +333,7 @@ export default function JointTenancyAgreementTemplatePage() {
                   Joint tenancy works well for friends who know and trust each other. Joint liability
                   means they&apos;ll sort out rent collection between themselves.
                 </p>
-                <p className="text-sm text-indigo-600">Recommended: Standard AST (£14.99) for 2-4 friends</p>
+                <p className="text-sm text-indigo-600">Recommended: Standard AST (£9.99) for 2-4 friends</p>
               </div>
               <div className="bg-white p-6 rounded-xl shadow-sm">
                 <h3 className="text-lg font-semibold text-gray-900 mb-3">House Share (5+ tenants)</h3>
@@ -341,7 +341,7 @@ export default function JointTenancyAgreementTemplatePage() {
                   May be classified as an HMO requiring a licence. Premium AST includes HMO provisions
                   and shared area clauses. Consider individual agreements for high-turnover properties.
                 </p>
-                <p className="text-sm text-indigo-600">Recommended: Premium AST (£24.99)</p>
+                <p className="text-sm text-indigo-600">Recommended: Premium AST (£19.99)</p>
               </div>
               <div className="bg-white p-6 rounded-xl shadow-sm">
                 <h3 className="text-lg font-semibold text-gray-900 mb-3">Family Members</h3>
@@ -349,7 +349,7 @@ export default function JointTenancyAgreementTemplatePage() {
                   Adult family members renting together should all be named. This gives everyone
                   equal rights and responsibilities rather than one person having all the liability.
                 </p>
-                <p className="text-sm text-indigo-600">Recommended: Standard AST (£14.99)</p>
+                <p className="text-sm text-indigo-600">Recommended: Standard AST (£9.99)</p>
               </div>
             </div>
           </div>
@@ -365,11 +365,11 @@ export default function JointTenancyAgreementTemplatePage() {
             </p>
             <div className="grid md:grid-cols-2 gap-4">
               <Link href="/products/notice-only" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                <h3 className="font-semibold text-gray-900">Eviction Notices — £34.99</h3>
+                <h3 className="font-semibold text-gray-900">Eviction Notices — £29.99</h3>
                 <p className="text-sm text-gray-600">Section 21 or Section 8 to end the entire joint tenancy</p>
               </Link>
               <Link href="/products/money-claim" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                <h3 className="font-semibold text-gray-900">Money Claims — £69.99</h3>
+                <h3 className="font-semibold text-gray-900">Money Claims — £45.99</h3>
                 <p className="text-sm text-gray-600">Recover rent arrears from any or all joint tenants</p>
               </Link>
             </div>
@@ -400,3 +400,4 @@ export default function JointTenancyAgreementTemplatePage() {
     </>
   );
 }
+

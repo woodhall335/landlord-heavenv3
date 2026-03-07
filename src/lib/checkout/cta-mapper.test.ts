@@ -138,7 +138,7 @@ describe('getWizardCta', () => {
 
       // When status is 'invalid', complete_pack is primary
       expect(result.primary.productKey).toBe('complete_pack');
-      expect(result.primary.price).toBe(99.99);
+      expect(result.primary.price).toBe(PRODUCTS.complete_pack.price);
     });
 
     it('includes correct label for CTA buttons', () => {
@@ -155,3 +155,4 @@ describe('getWizardCta', () => {
     });
   });
 });
+

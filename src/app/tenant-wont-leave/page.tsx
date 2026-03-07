@@ -94,7 +94,7 @@ export default function TenantWontLeavePage() {
           badgeIcon={<Scale className="w-4 h-4" />}
           title="Tenant Won't Leave After Notice?"
           subtitle={<>Your tenant ignoring your eviction notice is frustrating — but you <strong>must follow the legal process</strong>. Here&apos;s exactly what to do next.</>}
-          primaryCta={{ label: 'Get Court-Ready Notice — £34.99', href: wizardLinkNoticeOnly }}
+          primaryCta={{ label: 'Get Court-Ready Notice — £29.99', href: wizardLinkNoticeOnly }}
           secondaryCta={{ label: 'Go to Possession Claim Guide', href: '/possession-claim-guide' }}
           variant="pastel"
         >
@@ -473,3 +473,4 @@ export default function TenantWontLeavePage() {
     </>
   );
 }
+

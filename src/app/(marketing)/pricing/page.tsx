@@ -86,29 +86,29 @@ export default function PricingPage() {
                 <th className="text-left p-6 font-semibold text-charcoal">Feature</th>
                 <th className="text-center p-6">
                   <div className="font-semibold text-charcoal mb-2">Notices</div>
-                  <div className="text-2xl font-bold text-primary mb-1">£34.99</div>
+                  <div className="text-2xl font-bold text-primary mb-1">£29.99</div>
                   <div className="text-sm text-gray-600">One-time</div>
                 </th>
                 <th className="text-center p-6">
                   <div className="font-semibold text-charcoal mb-2">Complete Pack</div>
-                  <div className="text-2xl font-bold text-primary mb-1">£99.99</div>
-                  <div className="text-xs text-amber-600 font-medium">England only</div>
-                  <div className="text-sm text-gray-600">One-time</div>
-                </th>
-                <th className="text-center p-6">
-                  <div className="font-semibold text-charcoal mb-2">Money Claims</div>
                   <div className="text-2xl font-bold text-primary mb-1">£69.99</div>
                   <div className="text-xs text-amber-600 font-medium">England only</div>
                   <div className="text-sm text-gray-600">One-time</div>
                 </th>
                 <th className="text-center p-6">
+                  <div className="font-semibold text-charcoal mb-2">Money Claims</div>
+                  <div className="text-2xl font-bold text-primary mb-1">£45.99</div>
+                  <div className="text-xs text-amber-600 font-medium">England only</div>
+                  <div className="text-sm text-gray-600">One-time</div>
+                </th>
+                <th className="text-center p-6">
                   <div className="font-semibold text-charcoal mb-2">Standard AST</div>
-                  <div className="text-2xl font-bold text-primary mb-1">£14.99</div>
+                  <div className="text-2xl font-bold text-primary mb-1">£9.99</div>
                   <div className="text-sm text-gray-600">One-time</div>
                 </th>
                 <th className="text-center p-6">
                   <div className="font-semibold text-charcoal mb-2">Premium AST</div>
-                  <div className="text-2xl font-bold text-primary mb-1">£24.99</div>
+                  <div className="text-2xl font-bold text-primary mb-1">£19.99</div>
                   <div className="text-sm text-gray-600">One-time</div>
                 </th>
                 {/* HMO Pro column removed - parked for later review */}
@@ -314,7 +314,7 @@ export default function PricingPage() {
           {/* Notices */}
           <div className="bg-white rounded-lg border-2 border-gray-200 p-6">
             <h3 className="text-2xl font-bold text-charcoal mb-2">Notices</h3>
-            <div className="text-3xl font-bold text-primary mb-4">£34.99 <span className="text-sm text-gray-600">one-time</span></div>
+            <div className="text-3xl font-bold text-primary mb-4">£29.99 <span className="text-sm text-gray-600">one-time</span></div>
             <ul className="space-y-2 mb-6 text-sm">
               <li>✅ Section 8/21 Notice</li>
               <li>✅ England/Wales/Scotland notices</li>
@@ -333,7 +333,7 @@ export default function PricingPage() {
           {/* Complete Eviction Pack */}
           <div className="bg-white rounded-lg border-2 border-gray-200 p-6">
             <h3 className="text-2xl font-bold text-charcoal mb-2">Complete Pack</h3>
-            <div className="text-3xl font-bold text-primary mb-2">£99.99 <span className="text-sm text-gray-600">one-time</span></div>
+            <div className="text-3xl font-bold text-primary mb-2">£69.99 <span className="text-sm text-gray-600">one-time</span></div>
             <div className="text-xs text-amber-600 font-medium mb-4">England only</div>
             <ul className="space-y-2 mb-6 text-sm">
               <li>✅ Section 8/21 Notice</li>
@@ -353,7 +353,7 @@ export default function PricingPage() {
           {/* Money Claims */}
           <div className="bg-white rounded-lg border-2 border-gray-200 p-6">
             <h3 className="text-2xl font-bold text-charcoal mb-2">Money Claims</h3>
-            <div className="text-3xl font-bold text-primary mb-2">£69.99 <span className="text-sm text-gray-600">one-time</span></div>
+            <div className="text-3xl font-bold text-primary mb-2">£45.99 <span className="text-sm text-gray-600">one-time</span></div>
             <div className="text-xs text-amber-600 font-medium mb-4">England only</div>
             <ul className="space-y-2 mb-6 text-sm">
               <li>✅ Money Claim Forms</li>
@@ -373,7 +373,7 @@ export default function PricingPage() {
           {/* Standard AST */}
           <div className="bg-white rounded-lg border-2 border-gray-200 p-6">
             <h3 className="text-2xl font-bold text-charcoal mb-2">Standard AST</h3>
-            <div className="text-3xl font-bold text-primary mb-4">£14.99 <span className="text-sm text-gray-600">one-time</span></div>
+            <div className="text-3xl font-bold text-primary mb-4">£9.99 <span className="text-sm text-gray-600">one-time</span></div>
             <ul className="space-y-2 mb-6 text-sm">
               <li>✅ AST/PRT/NI Agreement</li>
               <li>✅ Core Clauses</li>
@@ -392,7 +392,7 @@ export default function PricingPage() {
           {/* Premium AST */}
           <div className="bg-white rounded-lg border-2 border-gray-200 p-6">
             <h3 className="text-2xl font-bold text-charcoal mb-2">Premium AST</h3>
-            <div className="text-3xl font-bold text-primary mb-4">£24.99 <span className="text-sm text-gray-600">one-time</span></div>
+            <div className="text-3xl font-bold text-primary mb-4">£19.99 <span className="text-sm text-gray-600">one-time</span></div>
             <ul className="space-y-2 mb-6 text-sm">
               <li>✅ Everything in Standard</li>
               <li>✅ HMO Clauses</li>
@@ -420,7 +420,7 @@ export default function PricingPage() {
           <table className="w-full text-sm">
             <thead><tr className="border-b"><th className="text-left py-2">Metric</th><th className="text-center">Solicitor</th><th className="text-center">Landlord Heaven</th></tr></thead>
             <tbody>
-              <tr className="border-b"><td className="py-2">Cost</td><td className="text-center">£300–£2,500</td><td className="text-center">£49–£199</td></tr>
+              <tr className="border-b"><td className="py-2">Cost</td><td className="text-center">£300–£2,500</td><td className="text-center">£9.99–£69.99</td></tr>
               <tr className="border-b"><td className="py-2">Time</td><td className="text-center">3–5 days</td><td className="text-center">10 minutes</td></tr>
               <tr className="border-b"><td className="py-2">Complete Case File</td><td className="text-center">❌ Often staged</td><td className="text-center">✅ Yes</td></tr>
               <tr className="border-b"><td className="py-2">Jurisdiction-Specific</td><td className="text-center">✅</td><td className="text-center">✅</td></tr>
@@ -509,3 +509,4 @@ export default function PricingPage() {
     </div>
   );
 }
+

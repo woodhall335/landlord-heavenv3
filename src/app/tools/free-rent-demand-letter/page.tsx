@@ -31,7 +31,7 @@ const faqs = [
   {
     question: 'What if the tenant ignores the demand letter?',
     answer:
-      "If the tenant doesn't respond or pay by the deadline, you have several options: (1) Serve a Section 8 notice seeking possession based on rent arrears grounds 8, 10, or 11. (2) Start a money claim through the courts to recover the debt (without seeking possession). (3) Continue to pursue payment informally while considering your options. Our Complete Eviction Pack (£99.99) includes Section 8 notices with compliance checks.",
+      "If the tenant doesn't respond or pay by the deadline, you have several options: (1) Serve a Section 8 notice seeking possession based on rent arrears grounds 8, 10, or 11. (2) Start a money claim through the courts to recover the debt (without seeking possession). (3) Continue to pursue payment informally while considering your options. Our Complete Eviction Pack (£69.99) includes Section 8 notices with compliance checks.",
   },
   {
     question: 'Can I charge interest on rent arrears?',
@@ -64,7 +64,7 @@ export default function RentDemandLetterGenerator() {
     toolName: 'Free Rent Demand Letter Generator',
     toolType: 'generator' as const,
     productName: 'Money Claim Pack',
-    ctaLabel: 'Upgrade to court-ready pack — £69.99',
+    ctaLabel: 'Upgrade to court-ready pack — £45.99',
     ctaHref: '/products/money-claim',
     jurisdiction: 'uk',
     freeIncludes: [
@@ -390,7 +390,7 @@ export default function RentDemandLetterGenerator() {
       // Save and download
 const pdfBytes = await pdfDoc.save();
 
-// ✅ Make a "real" Uint8Array backed by a normal ArrayBuffer (not SharedArrayBuffer/ArrayBufferLike)
+// âœ… Make a "real" Uint8Array backed by a normal ArrayBuffer (not SharedArrayBuffer/ArrayBufferLike)
 const safeBytes = new Uint8Array(pdfBytes);
 
 const blob = new Blob([safeBytes], { type: 'application/pdf' });
@@ -481,7 +481,7 @@ URL.revokeObjectURL(url);
         primaryCta={{ label: 'Start Free Generator →', href: '#generator' }}
         secondaryCta={{ label: 'Get Court-Ready Version →', href: '/products/notice-only?product=demand_letter' }}
       >
-        <p className="mt-4 text-sm text-white/90">Instant download • Basic template • Upgrade for legal compliance • Need examples? See our <Link href="/rent-arrears-letter-template" className="underline font-semibold">rent arrears letter template guide</Link></p>
+        <p className="mt-4 text-sm text-white/90">Instant download â€¢ Basic template â€¢ Upgrade for legal compliance â€¢ Need examples? See our <Link href="/rent-arrears-letter-template" className="underline font-semibold">rent arrears letter template guide</Link></p>
       </UniversalHero>
 
       {/* Legal Disclaimer Banner */}
@@ -801,7 +801,7 @@ URL.revokeObjectURL(url);
               </li>
             </ul>
             <p className="text-primary-700 font-semibold mt-4">
-              💡 Tip: Always keep proof of service (recorded delivery receipt, email confirmation, or
+              ðŸ’¡ Tip: Always keep proof of service (recorded delivery receipt, email confirmation, or
               witness statement if hand-delivered). This evidence may be crucial in court.
             </p>
           </div>
@@ -852,7 +852,7 @@ URL.revokeObjectURL(url);
             </div>
 
             <p className="text-warning-700 font-semibold mt-4">
-              ⚠️ Important: Always keep copies of the demand letter and proof of service. You may
+              âš ï¸ Important: Always keep copies of the demand letter and proof of service. You may
               need these as evidence if you proceed to Section 8 notice or money claim proceedings.
             </p>
           </div>
@@ -896,3 +896,5 @@ URL.revokeObjectURL(url);
     </div>
   );
 }
+
+

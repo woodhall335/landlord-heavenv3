@@ -72,7 +72,7 @@ export default function WalesEvictionNoticesPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto text-center">
               <div className="flex items-center justify-center gap-2 mb-6">
-                <span className="text-5xl">🏴󠁧󠁢󠁷󠁬󠁳󠁿</span>
+                <span className="text-5xl">ðŸ´ó §ó ¢ó ·ó ¬ó ³ó ¿</span>
               </div>
 
               <h2 className="text-4xl lg:text-5xl font-bold mb-6">
@@ -101,7 +101,7 @@ export default function WalesEvictionNoticesPage() {
                   href={wizardHref}
                   className="inline-flex items-center justify-center gap-2 bg-white text-red-800 font-semibold py-4 px-8 rounded-xl hover:bg-red-50 transition-colors"
                 >
-                  Get Wales Notice — £34.99
+                  Get Wales Notice — £29.99
                   <ArrowRight className="w-5 h-5" />
                 </Link>
                 <Link
@@ -132,10 +132,10 @@ export default function WalesEvictionNoticesPage() {
                         Aspect
                       </th>
                       <th className="px-6 py-4 text-left font-semibold text-gray-900">
-                        🏴󠁧󠁢󠁷󠁬󠁳󠁿 Wales
+                        ðŸ´ó §ó ¢ó ·ó ¬ó ³ó ¿ Wales
                       </th>
                       <th className="px-6 py-4 text-left font-semibold text-gray-900">
-                        🏴󠁧󠁢󠁥󠁮󠁧󠁿 England
+                        ðŸ´ó §ó ¢ó ¥ó ®ó §ó ¿ England
                       </th>
                     </tr>
                   </thead>
@@ -509,13 +509,13 @@ export default function WalesEvictionNoticesPage() {
                   href="/products/notice-only"
                   className="inline-flex items-center justify-center gap-2 bg-white text-red-700 font-semibold py-4 px-8 rounded-xl hover:bg-red-50 transition-colors"
                 >
-                  Get Wales Notice — £34.99
+                  Get Wales Notice — £29.99
                 </Link>
                 <Link
                   href="/products/complete-pack"
                   className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold py-4 px-8 rounded-xl transition-colors border border-white/30"
                 >
-                  Complete Pack — £99.99
+                  Complete Pack — £69.99
                 </Link>
               </div>
             </div>
@@ -546,11 +546,11 @@ export default function WalesEvictionNoticesPage() {
                 jurisdictionLabel="Wales eviction notices"
                 scenarioLabel="Renting Homes Act possession"
                 primaryCTA={{
-                  label: 'Generate Wales notice — £34.99',
+                  label: 'Generate Wales notice — £29.99',
                   href: productLinks.noticeOnly.href,
                 }}
                 secondaryCTA={{
-                  label: 'Complete eviction pack — £99.99',
+                  label: 'Complete eviction pack — £69.99',
                   href: productLinks.completePack.href,
                 }}
                 relatedLinks={[
@@ -591,3 +591,5 @@ export default function WalesEvictionNoticesPage() {
     </>
   );
 }
+
+

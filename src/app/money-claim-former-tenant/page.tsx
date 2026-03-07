@@ -125,7 +125,7 @@ export default function MoneyClaimFormerTenantPage() {
         <UniversalHero
           title="Money Claim Against a Former Tenant"
           subtitle="Build a legally validated, solicitor-grade, compliance-checked and court-ready debt claim package."
-          primaryCta={{ label: "Start now", href: "/wizard?product=money_claim&topic=debt&src=seo_money_claim_former_tenant" }}
+          primaryCta={{ label: "Start now", href: "/products/money-claim?topic=debt&src=seo_money_claim_former_tenant" }}
           showTrustPositioningBar
           hideMedia
         />
@@ -149,7 +149,7 @@ export default function MoneyClaimFormerTenantPage() {
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
-                  href="/wizard?product=money_claim&reason=rent_arrears&topic=debt&src=seo_money_claim_former_tenant"
+                  href="/products/money-claim?reason=rent_arrears&topic=debt&src=seo_money_claim_former_tenant"
                   className="inline-flex items-center justify-center gap-2 bg-white text-gray-800 font-semibold py-4 px-8 rounded-xl hover:bg-gray-50 transition-colors"
                 >
                   Start Former Tenant Claim
@@ -348,10 +348,10 @@ export default function MoneyClaimFormerTenantPage() {
                 former tenants, plus guidance on tracing and enforcement.
               </p>
               <Link
-                href="/wizard?product=money_claim&reason=rent_arrears&topic=debt&src=seo_money_claim_former_tenant"
+                href="/products/money-claim?reason=rent_arrears&topic=debt&src=seo_money_claim_former_tenant"
                 className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
               >
-                Start Your Claim — £69.99
+                Start Your Claim — £45.99
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <p className="text-sm text-gray-500 mt-3">
@@ -397,3 +397,4 @@ export default function MoneyClaimFormerTenantPage() {
     </>
   );
 }
+

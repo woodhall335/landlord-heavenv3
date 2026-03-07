@@ -98,13 +98,13 @@ export default function AssuredShortholdTenancyAgreementTemplatePage() {
                 href="/wizard?product=ast_standard&src=seo_assured_shorthold_tenancy_agreement_template&topic=tenancy&jurisdiction=england"
                 className="inline-flex items-center gap-2 bg-white border-2 border-blue-600 text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors"
               >
-                Standard AST — £14.99
+                Standard AST — £9.99
               </Link>
               <Link
                 href="/wizard?product=ast_premium&src=seo_assured_shorthold_tenancy_agreement_template&topic=tenancy&jurisdiction=england"
                 className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
               >
-                Premium AST — £24.99
+                Premium AST — £19.99
               </Link>
             </div>
             <p className="mt-3 text-sm text-gray-600">
@@ -114,7 +114,7 @@ export default function AssuredShortholdTenancyAgreementTemplatePage() {
               </Link>
               .
             </p>
-            <p className="mt-4 text-sm text-gray-500">Instant PDF download • No subscription • Legally binding</p>
+            <p className="mt-4 text-sm text-gray-500">Instant PDF download â€¢ No subscription â€¢ Legally binding</p>
           </div>
         </section>
 
@@ -269,15 +269,15 @@ export default function AssuredShortholdTenancyAgreementTemplatePage() {
             </p>
             <div className="grid md:grid-cols-2 gap-4">
               <Link href="/products/notice-only" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                <h3 className="font-semibold text-gray-900">Eviction Notice Pack — £34.99</h3>
+                <h3 className="font-semibold text-gray-900">Eviction Notice Pack — £29.99</h3>
                 <p className="text-sm text-gray-600">Section 21 or Section 8 notices when you need to regain possession</p>
               </Link>
               <Link href="/products/complete-pack" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                <h3 className="font-semibold text-gray-900">Complete Eviction Pack — £99.99</h3>
+                <h3 className="font-semibold text-gray-900">Complete Eviction Pack — £69.99</h3>
                 <p className="text-sm text-gray-600">Full eviction package including court forms and witness statements</p>
               </Link>
               <Link href="/products/money-claim" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                <h3 className="font-semibold text-gray-900">Money Claim Pack — £69.99</h3>
+                <h3 className="font-semibold text-gray-900">Money Claim Pack — £45.99</h3>
                 <p className="text-sm text-gray-600">Recover rent arrears, property damage, and other tenant debts</p>
               </Link>
               <Link href="/ask-heaven" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
@@ -321,3 +321,5 @@ export default function AssuredShortholdTenancyAgreementTemplatePage() {
     </>
   );
 }
+
+

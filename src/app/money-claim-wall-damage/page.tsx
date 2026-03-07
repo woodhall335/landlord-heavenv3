@@ -106,7 +106,7 @@ export default function MoneyClaimWallDamagePage() {
     trustText: 'Solicitor-grade • Compliance-checked • Court-ready',
     primaryCta: {
       label: 'Start Money Claim →',
-      href: '/wizard?product=money_claim&topic=debt&src=seo_money_claim_wall_damage',
+      href: '/products/money-claim?topic=debt&src=seo_money_claim_wall_damage',
     },
     secondaryCta: {
       label: 'View Money Claim Pack →',
@@ -162,7 +162,7 @@ export default function MoneyClaimWallDamagePage() {
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
-                  href="/wizard?product=money_claim&topic=debt&src=seo_money_claim_wall_damage&reason=property_damage"
+                  href="/products/money-claim?topic=debt&src=seo_money_claim_wall_damage&reason=property_damage"
                   className="inline-flex items-center justify-center gap-2 bg-white text-rose-800 font-semibold py-4 px-8 rounded-xl hover:bg-rose-50 transition-colors"
                 >
                   Start Wall Damage Claim
@@ -451,10 +451,10 @@ export default function MoneyClaimWallDamagePage() {
                 and guidance for recovering repair costs.
               </p>
               <Link
-                href="/wizard?product=money_claim&topic=debt&src=seo_money_claim_wall_damage&reason=property_damage"
+                href="/products/money-claim?topic=debt&src=seo_money_claim_wall_damage&reason=property_damage"
                 className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
               >
-                Start Your Claim — £69.99
+                Start Your Claim — £45.99
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <p className="text-sm text-gray-500 mt-3">
@@ -500,3 +500,4 @@ export default function MoneyClaimWallDamagePage() {
     </>
   );
 }
+

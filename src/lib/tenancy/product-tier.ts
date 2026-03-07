@@ -66,14 +66,14 @@ export function isPremiumTierLabel(tierLabel?: string | null): boolean {
  */
 export const TENANCY_PRICING = {
   ast_standard: {
-    price: 14.99,
-    displayPrice: '£14.99',
+    price: 9.99,
+    displayPrice: '£9.99',
     originalPrice: '£100+',
     savings: 'Save £85+ vs solicitors',
   },
   ast_premium: {
-    price: 24.99,
-    displayPrice: '£24.99',
+    price: 19.99,
+    displayPrice: '£19.99',
     originalPrice: '£200+',
     savings: 'Save £175+ vs solicitors',
   },
@@ -166,3 +166,4 @@ export function detectInventoryData(facts: Record<string, any> | null | undefine
     facts.inventory_provided
   );
 }
+

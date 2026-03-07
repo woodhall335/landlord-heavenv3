@@ -63,7 +63,7 @@ const moneyClaimLink = buildWizardLink({
 export const metadata: Metadata = {
   title: 'Section 8 Rent Arrears Eviction | Ground 8, 10, 11 | Landlord Heaven',
   description:
-    'Evict a tenant for rent arrears using Section 8. Ground 8 mandatory eviction for 2+ months arrears. 2-week notice. From £34.99.',
+    'Evict a tenant for rent arrears using Section 8. Ground 8 mandatory eviction for 2+ months arrears. 2-week notice. From £29.99.',
   keywords: [
     'section 8 rent arrears eviction',
     'ground 8 eviction process',
@@ -796,3 +796,4 @@ export default function Section8RentArrearsEvictionPage() {
     </>
   );
 }
+

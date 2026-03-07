@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+﻿import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getCanonicalUrl } from '@/lib/seo/urls';
 import { StructuredData, breadcrumbSchema, articleSchema } from '@/lib/seo/structured-data';
@@ -149,13 +149,13 @@ export default function WalesTenancyAgreementTemplatePage() {
                 href="/wizard?product=ast_standard&src=seo_wales_tenancy_agreement_template&topic=tenancy&jurisdiction=wales"
                 className="inline-flex items-center gap-2 bg-white border-2 border-red-600 text-red-600 px-6 py-3 rounded-lg font-semibold hover:bg-red-50 transition-colors"
               >
-                Standard Contract — £14.99
+                Standard Contract — £9.99
               </Link>
               <Link
                 href="/wizard?product=ast_premium&src=seo_wales_tenancy_agreement_template&topic=tenancy&jurisdiction=wales"
                 className="inline-flex items-center gap-2 bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors"
               >
-                Premium Contract — £24.99
+                Premium Contract — £19.99
               </Link>
             </div>
             <p className="mt-3 text-sm text-gray-600">
@@ -251,7 +251,7 @@ export default function WalesTenancyAgreementTemplatePage() {
             <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">What&apos;s Included in Your Wales Agreement</h2>
             <div className="grid md:grid-cols-2 gap-6">
               <div className="p-6 rounded-xl border border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Standard Contract (£14.99)</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Standard Contract (£9.99)</h3>
                 <ul className="space-y-2 text-gray-600">
                   <li className="flex items-start gap-2">
                     <svg className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
@@ -279,7 +279,7 @@ export default function WalesTenancyAgreementTemplatePage() {
                 <div className="inline-block bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-xs font-bold mb-3">
                   RECOMMENDED
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Premium Contract (£24.99)</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Premium Contract (£19.99)</h3>
                 <ul className="space-y-2 text-gray-600">
                   <li className="flex items-start gap-2">
                     <svg className="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
@@ -328,12 +328,12 @@ export default function WalesTenancyAgreementTemplatePage() {
               <Link href="/products/notice-only" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
                 <h3 className="font-semibold text-gray-900">Welsh Eviction Notices</h3>
                 <p className="text-sm text-gray-600 mb-2">Section 173 & 181 notices</p>
-                <span className="text-red-600 font-medium">£34.99</span>
+                <span className="text-red-600 font-medium">£29.99</span>
               </Link>
-              <Link href="/products/money-claim" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                <h3 className="font-semibold text-gray-900">Welsh Money Claims</h3>
-                <p className="text-sm text-gray-600 mb-2">Recover rent & damage</p>
-                <span className="text-red-600 font-medium">£69.99</span>
+              <Link href="/products/ast" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+                <h3 className="font-semibold text-gray-900">Premium Occupation Contract</h3>
+                <p className="text-sm text-gray-600 mb-2">Extra clauses for HMOs and complex lets</p>
+                <span className="text-red-600 font-medium">£19.99</span>
               </Link>
               <Link href="/ask-heaven" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
                 <h3 className="font-semibold text-gray-900">Ask Heaven for Wales</h3>
@@ -368,3 +368,5 @@ export default function WalesTenancyAgreementTemplatePage() {
     </>
   );
 }
+
+

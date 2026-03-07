@@ -108,7 +108,7 @@ export default function SixMonthTenancyAgreementPage() {
           badgeIcon={<Calendar className="w-4 h-4" />}
           title="6 Month Tenancy Agreement Template"
           subtitle={<>Need a <strong>short-term tenancy agreement</strong>? Get a legally compliant 6-month AST template for England and Wales — with clear terms for both landlord and tenant.</>}
-          primaryCta={{ label: 'Get AST Template — £14.99', href: wizardLinkAST }}
+          primaryCta={{ label: 'Get AST Template — £9.99', href: wizardLinkAST }}
           secondaryCta={{ label: 'View 12-Month Option', href: '/assured-shorthold-tenancy-agreement-template' }}
           variant="pastel"
         >
@@ -483,3 +483,4 @@ export default function SixMonthTenancyAgreementPage() {
     </>
   );
 }
+

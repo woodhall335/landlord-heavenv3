@@ -126,7 +126,7 @@ export default function MoneyClaimOnlineMCOLPage() {
       'Recover unpaid rent and tenancy debt with a court-ready pack. Clear particulars, interest calculation, and a step-by-step filing guide — built for MCOL.',
     primaryCta: {
       label: 'Prepare my MCOL claim pack →',
-      href: '/wizard?product=money_claim&topic=debt&src=seo_money_claim_online_mcol',
+      href: '/products/money-claim?topic=debt&src=seo_money_claim_online_mcol',
     },
     secondaryCta: {
       label: 'View Money Claim Pack →',
@@ -307,7 +307,7 @@ export default function MoneyClaimOnlineMCOLPage() {
 
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                   <Link
-                    href="/wizard?product=money_claim&topic=debt&src=seo_money_claim_online_mcol"
+                    href="/products/money-claim?topic=debt&src=seo_money_claim_online_mcol"
                     className="hero-btn-primary"
                   >
                     Prepare my claim pack →
@@ -420,10 +420,10 @@ export default function MoneyClaimOnlineMCOLPage() {
 
               <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
                 <Link
-                  href="/wizard?product=money_claim&topic=debt&src=seo_money_claim_online_mcol"
+                  href="/products/money-claim?topic=debt&src=seo_money_claim_online_mcol"
                   className="hero-btn-primary"
                 >
-                  Prepare my claim — £69.99 →
+                  Prepare my claim — £45.99 →
                 </Link>
                 <p className="text-sm text-gray-600">
                   Court fees are extra (paid directly to MCOL). You can usually claim them back.
@@ -479,7 +479,7 @@ export default function MoneyClaimOnlineMCOLPage() {
 
               <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
                 <Link
-                  href="/wizard?product=money_claim&topic=debt&src=seo_money_claim_online_mcol"
+                  href="/products/money-claim?topic=debt&src=seo_money_claim_online_mcol"
                   className="hero-btn-primary"
                 >
                   Prepare my MCOL claim pack →
@@ -518,3 +518,4 @@ export default function MoneyClaimOnlineMCOLPage() {
     </>
   );
 }
+

@@ -598,10 +598,10 @@ export default function Section8ValidatorPage() {
                       Use <strong>Section 8</strong> if:
                     </p>
                     <ul className="text-sm text-gray-700 mt-1 space-y-1">
-                      <li>• Tenant owes 2+ months rent (Ground 8 = faster, 2 weeks notice)</li>
-                      <li>• There is serious anti-social behaviour or property damage</li>
-                      <li>• You need possession after May 2026 (Section 21 ends)</li>
-                      <li>• You have clear evidence to prove your grounds in court</li>
+                      <li>â€¢ Tenant owes 2+ months rent (Ground 8 = faster, 2 weeks notice)</li>
+                      <li>â€¢ There is serious anti-social behaviour or property damage</li>
+                      <li>â€¢ You need possession after May 2026 (Section 21 ends)</li>
+                      <li>â€¢ You have clear evidence to prove your grounds in court</li>
                     </ul>
                   </div>
                 </div>
@@ -612,10 +612,10 @@ export default function Section8ValidatorPage() {
                       Use <strong>Section 21</strong> if:
                     </p>
                     <ul className="text-sm text-gray-700 mt-1 space-y-1">
-                      <li>• No specific breach — you simply want possession</li>
-                      <li>• You want to avoid proving grounds in court</li>
-                      <li>• You&apos;re selling the property or moving back in</li>
-                      <li>• You&apos;re serving before 1 May 2026 deadline</li>
+                      <li>â€¢ No specific breach — you simply want possession</li>
+                      <li>â€¢ You want to avoid proving grounds in court</li>
+                      <li>â€¢ You&apos;re selling the property or moving back in</li>
+                      <li>â€¢ You&apos;re serving before 1 May 2026 deadline</li>
                     </ul>
                   </div>
                 </div>
@@ -626,9 +626,9 @@ export default function Section8ValidatorPage() {
                       Use <strong>both together</strong> if:
                     </p>
                     <ul className="text-sm text-gray-700 mt-1 space-y-1">
-                      <li>• You want maximum flexibility (&quot;belt and braces&quot;)</li>
-                      <li>• Rent arrears exist but might drop below threshold</li>
-                      <li>• You want the faster Section 8 route with Section 21 backup</li>
+                      <li>â€¢ You want maximum flexibility (&quot;belt and braces&quot;)</li>
+                      <li>â€¢ Rent arrears exist but might drop below threshold</li>
+                      <li>â€¢ You want the faster Section 8 route with Section 21 backup</li>
                     </ul>
                   </div>
                 </div>
@@ -687,13 +687,13 @@ export default function Section8ValidatorPage() {
                   href={wizardLinkNoticeOnly}
                   className="inline-flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
                 >
-                  Notice Only Pack - £34.99
+                  Notice Only Pack - £29.99
                 </Link>
                 <Link
                   href={wizardLinkCompletePack}
                   className="inline-flex items-center px-4 py-2 border border-purple-600 text-purple-700 rounded-lg hover:bg-purple-50 transition-colors"
                 >
-                  Complete Eviction Pack - £99.99
+                  Complete Eviction Pack - £69.99
                 </Link>
               </div>
             </div>
@@ -736,3 +736,5 @@ export default function Section8ValidatorPage() {
     </>
   );
 }
+
+
