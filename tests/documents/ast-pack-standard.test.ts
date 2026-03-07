@@ -74,8 +74,10 @@ describe('AST pack - Standard', () => {
     const generated = await generateStandardAST(astData, true);
 
     expect(generated.pdf).toBeInstanceOf(Buffer);
-    expect(generated.html).toContain('CERTIFICATE OF CURATION');
-    expect(generated.html).toContain('Legal Validity Summary');
+    // Certificate of Curation and Legal Validity Summary removed as of Jan 2026 restructure
+    // Instead verify core tenancy agreement content is present
+    expect(generated.html).toContain('Alice Landlord');
+    expect(generated.html).toContain('Bob Tenant');
     expect(generated.html).not.toContain('HMO & Shared Facilities');
   }, 20000);
 });

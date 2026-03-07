@@ -1,0 +1,223 @@
+/**
+ * Requirements Validator
+ *
+ * Converts requirements from the requirements engine into UI-safe structured issues.
+ * Ensures all required facts are either collected via MQS or derived.
+ */
+
+import { getRequirements, ValidationContext, RequirementsResult, ValidationStage } from './requirements';
+import { getFlowMapping } from '../mqs/mapping.generated';
+import type { Jurisdiction, Product } from './capabilities/matrix';
+
+/**
+ * Field name aliases - maps common/alternate field names to canonical names.
+ * This allows tests and older wizard flows to use variant field names
+ * while the requirements engine uses canonical names.
+ *
+ * Note: Primary normalization happens in validateFlow.ts via normalizeTenancyFacts().
+ * These aliases provide additional fallback for edge cases.
+ */
+const FIELD_ALIASES: Record<string, string[]> = {
+  // Address field aliases: canonical -> [alternates]
+  landlord_address_line1: ['landlord_address', 'landlord_service_address_line1'],
+  landlord_address_town: ['landlord_city', 'landlord_town', 'landlord_service_address_town'],
+  landlord_address_postcode: ['landlord_postcode', 'landlord_service_address_postcode'],
+  property_address_line1: ['property_address'],
+  property_address_town: ['property_city', 'property_town'],
+  property_address_postcode: ['property_postcode'],
+  // Section 21 compliance field aliases
+  prescribed_info_given: ['prescribed_info_served', 'prescribed_info_provided', 'prescribed_information_given'],
+  deposit_protected: ['deposit_protected_scheme', 'deposit_is_protected'],
+  gas_safety_cert_date: ['gas_cert_date', 'gas_certificate_date'],
+  notice_expiry_date: ['expiry_date', 'notice_expiry'],
+  // Tenancy agreement field aliases (TenancySectionFlow → legal schema)
+  rent_frequency: ['rent_period'],
+  payment_date: ['rent_due_day'],
+  fixed_term_end_date: ['tenancy_end_date'],
+  fixed_term: ['is_fixed_term'],
+  tenancy_type: [],  // Derived from is_fixed_term in normalizeTenancyFacts
+};
+
+/**
+ * Check if a fact is provided under its canonical name OR any of its aliases.
+ */
+function isFactProvided(facts: Record<string, unknown>, canonicalKey: string): boolean {
+  // Check canonical key first
+  const canonicalValue = facts[canonicalKey];
+  if (canonicalValue !== undefined && canonicalValue !== null && canonicalValue !== '') {
+    return true;
+  }
+
+  // Check aliases
+  const aliases = FIELD_ALIASES[canonicalKey];
+  if (aliases) {
+    for (const alias of aliases) {
+      const aliasValue = facts[alias];
+      if (aliasValue !== undefined && aliasValue !== null && aliasValue !== '') {
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
+
+export interface ValidationIssue {
+  code: string;
+  severity: 'blocking' | 'warning';
+  fields: string[];
+  affected_question_id?: string;
+  alternate_question_ids?: string[];
+  user_fix_hint: string;
+  internal_reason?: string;
+  description?: string;
+  legal_basis?: string;
+}
+
+export interface ValidationOutput {
+  blocking_issues: ValidationIssue[];
+  warnings: ValidationIssue[];
+  missing_required_facts: string[];
+  status: 'ok' | 'unsupported' | 'misconfigured' | 'invalid';
+}
+
+export function validateRequirements(ctx: ValidationContext): ValidationOutput {
+  const requirements = getRequirements(ctx);
+
+  // Handle fail-closed states
+  if (requirements.status === 'unsupported') {
+    return {
+      status: 'unsupported',
+      blocking_issues: [{
+        code: 'FLOW_NOT_SUPPORTED',
+        severity: 'blocking',
+        fields: [],
+        user_fix_hint: requirements.statusReason || `This flow is not supported: ${ctx.jurisdiction}/${ctx.product}`,
+      }],
+      warnings: [],
+      missing_required_facts: [],
+    };
+  }
+
+  if (requirements.status === 'misconfigured') {
+    return {
+      status: 'misconfigured',
+      blocking_issues: [{
+        code: 'FLOW_MISCONFIGURED',
+        severity: 'blocking',
+        fields: [],
+        user_fix_hint: requirements.statusReason || `This flow is misconfigured and unavailable`,
+      }],
+      warnings: [],
+      missing_required_facts: [],
+    };
+  }
+
+  // Get MQS mapping for this flow
+  const mapping = getFlowMapping(
+    ctx.jurisdiction as Jurisdiction,
+    ctx.product as Product,
+    ctx.route
+  );
+
+  const blocking_issues: ValidationIssue[] = [];
+  const warnings: ValidationIssue[] = [];
+  const missing_required_facts: string[] = [];
+
+  // Check required facts (using alias-aware lookup)
+  for (const factKey of requirements.requiredNow) {
+    // Skip if fact is provided (checking canonical name and aliases)
+    if (isFactProvided(ctx.facts, factKey)) {
+      continue;
+    }
+
+    // Skip if fact is derived (computed/optional)
+    if (requirements.derived.has(factKey)) {
+      continue;
+    }
+
+    missing_required_facts.push(factKey);
+
+    // Try to find MQS question ID for this fact
+    const questionIds = mapping?.factKeyToQuestionIds[factKey] || [];
+    const affectedQuestionId = questionIds[0];
+    const alternateQuestionIds = questionIds.length > 1 ? questionIds.slice(1) : undefined;
+
+    // Create blocking issue
+    blocking_issues.push({
+      code: 'REQUIRED_FACT_MISSING',
+      severity: 'blocking',
+      fields: [factKey],
+      affected_question_id: affectedQuestionId,
+      alternate_question_ids: alternateQuestionIds,
+      user_fix_hint: affectedQuestionId
+        ? `Please answer the question "${affectedQuestionId}" to provide ${factKey}`
+        : `Required information missing: ${factKey}`,
+      internal_reason: `Missing required fact: ${factKey} at stage ${ctx.stage}`,
+    });
+  }
+
+  // Check warned facts (using alias-aware lookup)
+  for (const factKey of requirements.warnNow) {
+    // Skip if fact is provided (checking canonical name and aliases)
+    if (isFactProvided(ctx.facts, factKey)) {
+      continue;
+    }
+
+    // Skip if fact is derived
+    if (requirements.derived.has(factKey)) {
+      continue;
+    }
+
+    // Try to find MQS question ID for this fact
+    const questionIds = mapping?.factKeyToQuestionIds[factKey] || [];
+    const affectedQuestionId = questionIds[0];
+    const alternateQuestionIds = questionIds.length > 1 ? questionIds.slice(1) : undefined;
+
+    // Create warning issue
+    warnings.push({
+      code: 'RECOMMENDED_FACT_MISSING',
+      severity: 'warning',
+      fields: [factKey],
+      affected_question_id: affectedQuestionId,
+      alternate_question_ids: alternateQuestionIds,
+      user_fix_hint: affectedQuestionId
+        ? `Consider answering "${affectedQuestionId}" to provide ${factKey}`
+        : `Recommended information: ${factKey}`,
+      internal_reason: `Warned fact: ${factKey} at stage ${ctx.stage}`,
+    });
+  }
+
+  return {
+    status: blocking_issues.length > 0 ? 'invalid' : 'ok',
+    blocking_issues,
+    warnings,
+    missing_required_facts,
+  };
+}
+
+/**
+ * Helper: Create standardized 422 error payload from validation output
+ */
+export function create422Payload(validation: ValidationOutput) {
+  return {
+    code: validation.status === 'unsupported' ? 'FLOW_NOT_SUPPORTED' :
+          validation.status === 'misconfigured' ? 'FLOW_MISCONFIGURED' :
+          'VALIDATION_FAILED',
+    error: validation.blocking_issues[0]?.user_fix_hint || 'Validation failed',
+    user_message: validation.blocking_issues.map(i => i.user_fix_hint).join('; '),
+    blocking_issues: validation.blocking_issues.map(issue => ({
+      code: issue.code,
+      fields: issue.fields,
+      affected_question_id: issue.affected_question_id,
+      alternate_question_ids: issue.alternate_question_ids,
+      user_fix_hint: issue.user_fix_hint,
+    })),
+    warnings: validation.warnings.map(issue => ({
+      code: issue.code,
+      fields: issue.fields,
+      affected_question_id: issue.affected_question_id,
+      user_fix_hint: issue.user_fix_hint,
+    })),
+  };
+}

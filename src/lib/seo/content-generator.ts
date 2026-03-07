@@ -12,19 +12,42 @@
 import OpenAI from 'openai';
 import Anthropic from '@anthropic-ai/sdk';
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+let openaiClient: OpenAI | null = null;
+let anthropicClient: Anthropic | null = null;
 
-const anthropic = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
-});
+function getOpenAIClient(): OpenAI {
+  if (openaiClient) {
+    return openaiClient;
+  }
+
+  const apiKey = process.env.OPENAI_API_KEY;
+  if (!apiKey) {
+    throw new Error('OPENAI_API_KEY is required to generate SEO content with OpenAI');
+  }
+
+  openaiClient = new OpenAI({ apiKey });
+  return openaiClient;
+}
+
+function getAnthropicClient(): Anthropic {
+  if (anthropicClient) {
+    return anthropicClient;
+  }
+
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) {
+    throw new Error('ANTHROPIC_API_KEY is required to generate SEO content with Claude');
+  }
+
+  anthropicClient = new Anthropic({ apiKey });
+  return anthropicClient;
+}
 
 export interface ContentGenerationParams {
   contentType: 'location' | 'topic' | 'service' | 'guide';
   targetKeyword: string;
   location?: string;
-  jurisdiction?: 'england-wales' | 'scotland' | 'northern-ireland';
+  jurisdiction?: 'england' | 'wales' | 'scotland' | 'northern-ireland';
   wordCount?: number;
   model?: 'gpt-4o-mini' | 'claude-sonnet';
   includeSchema?: boolean;
@@ -53,7 +76,7 @@ export async function generateSEOContent(
     contentType,
     targetKeyword,
     location,
-    jurisdiction = 'england-wales',
+    jurisdiction = 'england',
     wordCount = 1500,
     model = 'gpt-4o-mini',
     includeSchema = true,
@@ -166,7 +189,7 @@ Begin now:`;
  * Generate content using OpenAI GPT-4o-mini
  */
 async function generateWithOpenAI(prompt: string, targetWords: number): Promise<string> {
-  const completion = await openai.chat.completions.create({
+  const completion = await getOpenAIClient().chat.completions.create({
     model: 'gpt-4o-mini',
     messages: [
       {
@@ -189,7 +212,7 @@ async function generateWithOpenAI(prompt: string, targetWords: number): Promise<
  * Generate content using Claude Sonnet
  */
 async function generateWithClaude(prompt: string, targetWords: number): Promise<string> {
-  const message = await anthropic.messages.create({
+  const message = await getAnthropicClient().messages.create({
     model: 'claude-sonnet-4-20250514',
     max_tokens: Math.min(targetWords * 2, 4000),
     messages: [
@@ -399,9 +422,13 @@ function generateSchemaMarkup(params: {
  */
 function getJurisdictionInfo(jurisdiction: string): { name: string; legalSystem: string } {
   const jurisdictions = {
-    'england-wales': {
-      name: 'England & Wales',
+    'england': {
+      name: 'England',
       legalSystem: 'Housing Act 1988, Section 8, Section 21',
+    },
+    'wales': {
+      name: 'Wales',
+      legalSystem: 'Renting Homes (Wales) Act 2016',
     },
     'scotland': {
       name: 'Scotland',
@@ -413,7 +440,7 @@ function getJurisdictionInfo(jurisdiction: string): { name: string; legalSystem:
     },
   };
 
-  return jurisdictions[jurisdiction as keyof typeof jurisdictions] || jurisdictions['england-wales'];
+  return jurisdictions[jurisdiction as keyof typeof jurisdictions] || jurisdictions['england'];
 }
 
 /**

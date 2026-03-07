@@ -13,9 +13,12 @@
  * - Simple Procedure Claim Form (Form 3A): Money claims up to £5,000
  */
 
-import { PDFDocument, PDFForm } from 'pdf-lib';
+import { PDFDocument, PDFForm, PDFName, PDFDict, PDFBool } from 'pdf-lib';
 import fs from 'fs/promises';
 import path from 'path';
+
+const OFFICIAL_FORMS_ROOT = path.join(process.cwd(), 'public', 'official-forms');
+const SCOTLAND_FORM_OUTPUT_ROOT = path.join(process.cwd(), '.tmp', 'official-form-output');
 
 export interface ScotlandCaseData {
   // Landlord details
@@ -123,6 +126,8 @@ export interface ScotlandMoneyClaimData {
 
 /**
  * Load an official PDF form
+ * Note: Some official forms may be encrypted (copy-protected but fillable).
+ * We use ignoreEncryption to load them for form filling purposes.
  */
 async function loadOfficialForm(formName: string): Promise<PDFDocument> {
   const formPath = path.join(process.cwd(), 'public', 'official-forms', 'scotland', formName);
@@ -130,11 +135,31 @@ async function loadOfficialForm(formName: string): Promise<PDFDocument> {
   try {
     const pdfBytes = await fs.readFile(formPath);
     const byteSource = pdfBytes instanceof Uint8Array ? pdfBytes : new Uint8Array(pdfBytes as any);
-    const pdfDoc = await PDFDocument.load(byteSource);
+    // Some official forms are encrypted (copy-protected but still fillable)
+    // ignoreEncryption allows us to load and fill them
+    const pdfDoc = await PDFDocument.load(byteSource, { ignoreEncryption: true });
     return pdfDoc;
   } catch (error) {
     throw new Error(`Failed to load official form "${formName}". Make sure the PDF exists in /public/official-forms/scotland/. Error: ${error}`);
   }
+}
+
+/**
+ * Sanitize text for PDF WinAnsi encoding.
+ * Replaces or removes characters that cannot be encoded in WinAnsi.
+ */
+function sanitizeForPdf(text: string): string {
+  // Replace common problematic Unicode characters with ASCII equivalents
+  return text
+    .replace(/[\u2018\u2019\u201A\u2039\u203A]/g, "'")  // Smart quotes → straight
+    .replace(/[\u201C\u201D\u201E]/g, '"')              // Smart double quotes
+    .replace(/[\u2013\u2014]/g, '-')                     // En/em dashes
+    .replace(/[\u2026]/g, '...')                         // Ellipsis
+    .replace(/[\u2022]/g, '-')                           // Bullet
+    .replace(/[\u2713\u2714]/g, 'X')                     // Checkmarks → X
+    .replace(/[\u00A0]/g, ' ')                           // Non-breaking space
+    .replace(/[\u02DA\u00B0]/g, ' degrees')              // Ring above / degree → text
+    .replace(/[^\x00-\xFF]/g, '');                       // Remove other non-Latin1 chars
 }
 
 /**
@@ -145,7 +170,12 @@ function fillTextField(form: PDFForm, fieldName: string, value: string | undefin
 
   try {
     const field = form.getTextField(fieldName);
-    field.setText(value);
+    // Sanitize text to ensure WinAnsi compatibility
+    const sanitized = sanitizeForPdf(value);
+    // Clear the field first to remove any problematic existing content
+    field.setText('');
+    // Then set the sanitized value
+    field.setText(sanitized);
   } catch (error) {
     console.warn(`Field "${fieldName}" not found in form, skipping: ${error}`);
   }
@@ -278,54 +308,48 @@ export async function fillNoticeToLeave(data: ScotlandCaseData): Promise<Uint8Ar
  * Official form: /public/official-forms/scotland/form_e_eviction.pdf
  * Source: https://www.housingandpropertychamber.scot/
  *
- * FIELD MAPPING (Form E → CaseFacts):
- * ====================================
- * Section 1: Applicant (Landlord) Details
- *   - Applicant Name                → parties.landlord.name
- *   - Applicant Address             → parties.landlord.address_line1 + city + postcode
- *   - Applicant Postcode            → parties.landlord.postcode
- *   - Applicant Telephone           → parties.landlord.phone
- *   - Applicant Email               → parties.landlord.email
- *   - Landlord Registration Number  → landlord_registration_number
+ * OFFICIAL FORM FIELD MAPPING (31 fields total):
+ * ==============================================
+ * Checkboxes (Application Type - Section 1):
+ *   - Check Box13: Rule 65 (Assured/Short Assured 1989-2017)
+ *   - Check Box14: Rule 66 (Short Assured termination)
+ *   - Check Box15: Rule 77 (Regulated Tenancy pre-1989)
+ *   - Check Box16: Rule 79 (Occupier termination pre-1989)
+ *   - Check Box17: Rule 109 (PRT post-Dec 2017) ← Most common
  *
- * Section 2: Respondent (Tenant) Details
- *   - Respondent Name               → parties.tenants[0].name
- *   - Respondent 2 Name             → parties.tenants[1].name
+ * Text Fields - Section 2 (Applicant/Landlord Details):
+ *   - 1: Company/organisation name
+ *   - 2: Title (Mr, Mrs, etc.)
+ *   - 3: First name
+ *   - 4: Last name
+ *   - 5: Contact address (line 1)
+ *   - 6: Contact address (line 2)
+ *   - 7: Contact address (line 3)
+ *   - TEL: Contact telephone number
+ *   - eml: Contact email address
+ *   - 8: Landlord registration number
  *
- * Section 3: Property Details
- *   - Property Address              → property.address_line1 + city
- *   - Property Postcode             → property.postcode
+ * Text Fields - Section 3 (Representative Details):
+ *   - 9: Company/organisation name
+ *   - 10: Title
+ *   - 11: First name
+ *   - 12: Last name
+ *   - 13: Contact address (line 1)
+ *   - 14: Contact address (line 2)
+ *   - 15: Contact address (line 3)
+ *   - P: Profession
  *
- * Section 4: Tenancy Details
- *   - Tenancy Start Date            → tenancy.start_date
- *   - Rent Amount                   → tenancy.rent_amount
- *   - Rent Payment Frequency        → tenancy.rent_frequency
+ * Text Fields - Section 4 (Tenant/Occupier Details):
+ *   - 16: Company/organisation name
+ *   - 17: Title
+ *   - 18: First name
+ *   - 19: Last name
+ *   - 20: Property address
+ *   - OTHER: Contact address if different
  *
- * Section 5: Notice to Leave Details
- *   - Notice to Leave Served Date   → notice.notice_date
- *   - Notice to Leave Expiry Date   → notice.expiry_date (leaving_date)
- *   - Copy of Notice to Leave attached → evidence checkbox
- *
- * Section 6: Grounds for Eviction
- *   - Ground 1-18 checkboxes        → issues.grounds (Scotland grounds)
- *
- * Section 7: Supporting Evidence
- *   - Tenancy agreement attached    → evidence.tenancy_agreement_uploaded
- *   - Copy of Notice attached       → evidence checkbox
- *   - Proof of service attached     → evidence checkbox
- *   - Deposit protection cert       → evidence checkbox
- *   - Deposit Scheme                → tenancy.deposit_scheme_name
- *   - Deposit Reference             → deposit_reference
- *
- * Section 8: Other Information
- *   - Additional Information        → issues.grounds[].particulars (concatenated)
- *
- * Section 9: Declaration
- *   - Applicant Signature           → parties.landlord.name
- *   - Signature Date                → today's date
- *
- * NOTE: All form fields are filled using fillTextField() and checkBox() helpers
- * which gracefully handle missing fields in the PDF.
+ * Text Areas:
+ *   - grounds: Section 5 - Possession/Eviction Grounds
+ *   - reqd attach: Section 6 - Required Documents list
  */
 export async function fillFormE(data: ScotlandCaseData): Promise<Uint8Array> {
   console.log('📄 Filling Form E (Tribunal Application for Eviction Order)...');
@@ -333,91 +357,101 @@ export async function fillFormE(data: ScotlandCaseData): Promise<Uint8Array> {
   const pdfDoc = await loadOfficialForm('form_e_eviction.pdf');
   const form = pdfDoc.getForm();
 
-  // Section 1: Applicant (Landlord) Details
-  fillTextField(form, 'Applicant Name', data.landlord_full_name);
-  fillTextField(form, 'Applicant Address', data.landlord_address);
-  fillTextField(form, 'Applicant Postcode', data.landlord_postcode);
-  fillTextField(form, 'Applicant Telephone', data.landlord_phone);
-  fillTextField(form, 'Applicant Email', data.landlord_email);
+  // =========================================================================
+  // Section 1: Application Type
+  // For PRT tenancies (post 1 Dec 2017), use Rule 109
+  // =========================================================================
+  const tenancyStartDate = data.tenancy_start_date ? new Date(data.tenancy_start_date) : null;
+  const prtCutoff = new Date('2017-12-01');
 
-  // Landlord registration
-  if (data.landlord_registration_number) {
-    fillTextField(form, 'Landlord Registration Number', data.landlord_registration_number);
+  if (tenancyStartDate && tenancyStartDate >= prtCutoff) {
+    // Rule 109 - Private Residential Tenancy (most common)
+    checkBox(form, 'Check Box17', true);
+  } else if (tenancyStartDate && tenancyStartDate >= new Date('1989-01-02')) {
+    // Rule 65 - Assured/Short Assured Tenancy (1989-2017)
+    checkBox(form, 'Check Box13', true);
   }
 
-  // Section 2: Respondent (Tenant) Details
-  fillTextField(form, 'Respondent Name', data.tenant_full_name);
+  // =========================================================================
+  // Section 2: Applicant (Landlord) Details
+  // =========================================================================
+  // Split landlord name into parts
+  const landlordNameParts = data.landlord_full_name?.split(' ') || [];
+  const landlordFirstName = landlordNameParts.slice(0, -1).join(' ') || data.landlord_full_name;
+  const landlordLastName = landlordNameParts.slice(-1)[0] || '';
+
+  fillTextField(form, '1', ''); // Company/organisation name (blank for individual)
+  fillTextField(form, '2', ''); // Title - leave blank or could parse from name
+  fillTextField(form, '3', landlordFirstName);
+  fillTextField(form, '4', landlordLastName);
+
+  // Split address into lines
+  const landlordAddressParts = data.landlord_address?.split(',').map(s => s.trim()) || [];
+  fillTextField(form, '5', landlordAddressParts[0] || data.landlord_address || '');
+  fillTextField(form, '6', landlordAddressParts[1] || '');
+  fillTextField(form, '7', landlordAddressParts.slice(2).join(', ') || '');
+
+  fillTextField(form, 'TEL', data.landlord_phone || '');
+  fillTextField(form, 'eml', data.landlord_email || '');
+  fillTextField(form, '8', data.landlord_registration_number || '');
+
+  // =========================================================================
+  // Section 3: Representative Details (leave blank if self-representing)
+  // =========================================================================
+  // Fields 9-15, P are for representative - typically left blank
+
+  // =========================================================================
+  // Section 4: Tenant/Occupier Details
+  // =========================================================================
+  const tenantNameParts = data.tenant_full_name?.split(' ') || [];
+  const tenantFirstName = tenantNameParts.slice(0, -1).join(' ') || data.tenant_full_name;
+  const tenantLastName = tenantNameParts.slice(-1)[0] || '';
+
+  fillTextField(form, '16', ''); // Company/organisation name
+  fillTextField(form, '17', ''); // Title
+  fillTextField(form, '18', tenantFirstName);
+  fillTextField(form, '19', tenantLastName);
+  fillTextField(form, '20', data.property_address || '');
+
+  // If there's a second tenant, add to OTHER field
   if (data.tenant_2_name) {
-    fillTextField(form, 'Respondent 2 Name', data.tenant_2_name);
+    fillTextField(form, 'OTHER', `Second tenant: ${data.tenant_2_name}`);
   }
 
-  // Section 3: Property Details
-  fillTextField(form, 'Property Address', data.property_address);
-  fillTextField(form, 'Property Postcode', data.property_postcode);
+  // =========================================================================
+  // Section 5: Possession/Eviction Grounds
+  // =========================================================================
+  const groundsText = data.grounds.map(g => {
+    const groundNum = g.code.replace('Ground ', '');
+    return `Ground ${groundNum} - ${g.title}\n\nParticulars:\n${g.particulars}${g.evidence ? `\n\nEvidence: ${g.evidence}` : ''}`;
+  }).join('\n\n---\n\n');
 
-  // Section 4: Tenancy Details
-  const tenancyDate = splitDate(data.tenancy_start_date);
-  if (tenancyDate) {
-    fillTextField(form, 'Tenancy Start Date', `${tenancyDate.day}/${tenancyDate.month}/${tenancyDate.year}`);
-  }
+  fillTextField(form, 'grounds', groundsText);
 
-  fillTextField(form, 'Rent Amount', `£${data.rent_amount}`);
-  fillTextField(form, 'Rent Payment Frequency', data.rent_frequency);
-
-  // Section 5: Notice to Leave Details
-  const noticeDate = splitDate(data.notice_date);
-  if (noticeDate) {
-    fillTextField(form, 'Notice to Leave Served Date', `${noticeDate.day}/${noticeDate.month}/${noticeDate.year}`);
-  }
-
-  // Deposit scheme details
-  if (data.deposit_scheme || data.deposit_scheme_name) {
-    fillTextField(form, 'Deposit Scheme', data.deposit_scheme_name || data.deposit_scheme);
-  }
-  fillTextField(form, 'Deposit Reference', data.deposit_reference);
-
-  const leavingDate = splitDate(data.leaving_date);
-  if (leavingDate) {
-    fillTextField(form, 'Notice to Leave Expiry Date', `${leavingDate.day}/${leavingDate.month}/${leavingDate.year}`);
-  }
-
-  // Attach copy of Notice to Leave
-  checkBox(form, 'Copy of Notice to Leave attached', true);
-
-  // Section 6: Grounds for Eviction
-  data.grounds.forEach((ground) => {
-    const groundNumber = ground.code.replace('Ground ', '');
-    checkBox(form, `Ground ${groundNumber} claimed`, true);
-  });
-
-  // Section 7: Supporting Evidence
-  checkBox(form, 'Tenancy agreement attached', true);
-  checkBox(form, 'Copy of Notice to Leave attached', true);
-  checkBox(form, 'Proof of service attached', true);
+  // =========================================================================
+  // Section 6: Required Documents
+  // NOTE: Use ASCII-safe bullet characters (- ) instead of Unicode (✓) for PDF compatibility
+  // =========================================================================
+  const requiredDocs = [
+    '- Copy of Notice to Leave',
+    '- Proof of service of Notice to Leave',
+    '- Copy of tenancy agreement',
+  ];
 
   if (data.deposit_amount) {
-    checkBox(form, 'Deposit protection certificate attached', true);
-    fillTextField(form, 'Deposit Scheme', data.deposit_scheme || '');
-    fillTextField(form, 'Deposit Reference', data.deposit_reference || '');
+    requiredDocs.push('- Deposit protection certificate');
+    requiredDocs.push(`  Scheme: ${data.deposit_scheme_name || data.deposit_scheme || 'N/A'}`);
+    requiredDocs.push(`  Reference: ${data.deposit_reference || 'N/A'}`);
   }
 
-  // Section 8: Other Information
-  // Build summary of grounds
-  const groundsSummary = data.grounds.map(g =>
-    `${g.code}: ${g.title}\n${g.particulars}`
-  ).join('\n\n');
-
-  fillTextField(form, 'Additional Information', groundsSummary);
-
-  // Section 9: Declaration
-  checkBox(form, 'I confirm the information is correct', true);
-  fillTextField(form, 'Applicant Signature', data.landlord_full_name);
-
-  const today = new Date().toISOString().split('T')[0];
-  const signatureDate = splitDate(today);
-  if (signatureDate) {
-    fillTextField(form, 'Signature Date', `${signatureDate.day}/${signatureDate.month}/${signatureDate.year}`);
+  // Add ground-specific documents
+  const hasRentArrears = data.grounds.some(g => g.code === 'Ground 1');
+  if (hasRentArrears) {
+    requiredDocs.push('- Rent statement showing arrears');
+    requiredDocs.push('- Evidence of pre-action requirements compliance');
   }
+
+  fillTextField(form, 'reqd attach', requiredDocs.join('\n'));
 
   const pdfBytes = await pdfDoc.save();
   console.log('✅ Form E filled successfully');
@@ -430,13 +464,13 @@ export async function fillFormE(data: ScotlandCaseData): Promise<Uint8Array> {
  *
  * Scottish Courts and Tribunals Service form for money claims up to £5,000
  *
- * Official form: /public/official-forms/scotland/simple_procedure_claim_form.pdf
+ * Official form: /public/official-forms/scotland/form-3a.pdf
  * Source: https://www.scotcourts.gov.uk/taking-action/simple-procedure
  */
 export async function fillSimpleProcedureClaim(data: ScotlandMoneyClaimData): Promise<Uint8Array> {
   console.log('📄 Filling Simple Procedure Claim Form (Form 3A)...');
 
-  const pdfDoc = await loadOfficialForm('simple_procedure_claim_form.pdf');
+  const pdfDoc = await loadOfficialForm('form-3a.pdf');
   const form = pdfDoc.getForm();
 
   // Court details
@@ -543,7 +577,18 @@ export async function fillSimpleProcedureClaim(data: ScotlandMoneyClaimData): Pr
     fillTextField(form, 'Text24', sigDate.year);
   }
 
-  const pdfBytes = await pdfDoc.save();
+  // Set needAppearances flag to let PDF viewer generate appearances on-the-fly
+  // This avoids encoding issues with problematic characters in existing form content
+  const acroFormRef = pdfDoc.catalog.get(PDFName.of('AcroForm'));
+  if (acroFormRef) {
+    const acroForm = pdfDoc.catalog.lookup(acroFormRef as PDFName);
+    if (acroForm instanceof PDFDict) {
+      acroForm.set(PDFName.of('NeedAppearances'), PDFBool.True);
+    }
+  }
+
+  // Save without updating appearances (use updateFieldAppearances: false)
+  const pdfBytes = await pdfDoc.save({ updateFieldAppearances: false });
   console.log('✅ Simple Procedure Claim Form filled successfully');
 
   return pdfBytes;
@@ -558,11 +603,296 @@ function formatCurrency(amount: number | undefined): string {
 }
 
 /**
+ * Data interface for Simple Procedure Response Form (Form 4A)
+ */
+export interface ScotlandSimpleProcedureResponseData {
+  // Case details
+  sheriff_court: string;
+  claimant_name: string;
+  case_reference_number?: string;
+
+  // Respondent details (Section A)
+  is_individual: boolean; // true = individual, false = company
+  respondent_first_name?: string;
+  respondent_middle_name?: string;
+  respondent_surname?: string;
+  respondent_trading_name?: string;
+  company_name?: string;
+  company_registration_number?: string;
+  company_trading_name?: string;
+
+  // Contact details (Section A4)
+  respondent_address: string;
+  respondent_city: string;
+  respondent_postcode: string;
+  respondent_email?: string;
+  contact_preference: 'online' | 'post' | 'email';
+
+  // Representation (Section B)
+  representation_type: 'self' | 'solicitor' | 'non_solicitor';
+  representative_first_name?: string;
+  representative_surname?: string;
+  representative_organisation?: string;
+  representative_address?: string;
+  representative_city?: string;
+  representative_postcode?: string;
+  representative_email?: string;
+  contact_through_representative?: boolean;
+  representative_contact_preference?: 'online' | 'post' | 'email';
+
+  // Response type (Section C)
+  response_type: 'admit_settle' | 'dispute' | 'admit_time_to_pay';
+
+  // Response details (Section D)
+  background_to_claim?: string; // D1
+  steps_to_settle?: string; // D2
+  has_additional_respondents?: boolean; // D3
+  additional_respondents?: Array<{
+    name: string;
+    address: string;
+    reason: string;
+  }>;
+  court_serve_additional_respondents?: boolean; // D5
+}
+
+/**
+ * Fill Simple Procedure Response Form (Form 4A)
+ *
+ * Scottish Courts and Tribunals Service form for responding to Simple Procedure claims
+ *
+ * Official form: /public/official-forms/scotland/simple_procedure_response_form.pdf
+ * Source: https://www.scotcourts.gov.uk/taking-action/simple-procedure
+ *
+ * OFFICIAL FORM FIELD MAPPING (46 fields total):
+ * ==============================================
+ * Header Fields:
+ *   - Text1: Sheriff Court name
+ *   - Text2: Claimant name (header)
+ *   - 4A_Respondent: Respondent name (header)
+ *   - 4A_CaseReferenceNumber: Case reference
+ *
+ * Section A - About You:
+ *   - 4A_A1_RadioGroup: Individual vs Company
+ *   - 4A_A2_Name: First name
+ *   - 4A_A2_MiddleName: Middle name
+ *   - 4A_A2_Surname: Surname
+ *   - 4A_A2_TradingName: Trading name
+ *   - 4A_A4_Address: Address
+ *   - 4A_A4_City: City
+ *   - 4A_A4_Postcode: Postcode
+ *   - 4A_A4_Email: Email
+ *   - 4A_A5_RadioGroup: Contact preference (online/post/email)
+ *
+ * Section B - Representation:
+ *   - 4A_B1_RadioGroup: Representation type
+ *   - 4A_B2_Name: Rep first name
+ *   - 4A_B2_Surname: Rep surname
+ *   - 4A_B2_OrganisationName: Rep organisation
+ *   - 4A_B3_Address: Rep address
+ *   - 4A_B3_City: Rep city
+ *   - 4A_B3_Postcode: Rep postcode
+ *   - 4A_B3_Email: Rep email
+ *   - 4A_B4_RadioGroup: Contact through rep (yes/no)
+ *   - 4A_B5_RadioGroup: Rep contact preference
+ *
+ * Section C - Response Type:
+ *   - 4A_C_RadioGroup: Response type (C1/C2/C3)
+ *
+ * Section D - Response Details:
+ *   - 4A_D1: Background to claim
+ *   - 4A_D2: Steps to settle
+ *   - 4A_D3_RadioGroup: Additional respondents (yes/no)
+ *   - Text3-Text8: Additional respondent details
+ *   - 4A_D5_RadioGroup: Court serve (yes/no)
+ */
+export async function fillSimpleProcedureResponse(data: ScotlandSimpleProcedureResponseData): Promise<Uint8Array> {
+  console.log('📄 Filling Simple Procedure Response Form (Form 4A)...');
+
+  const pdfDoc = await loadOfficialForm('simple_procedure_response_form.pdf');
+  const form = pdfDoc.getForm();
+
+  // =========================================================================
+  // Header Fields
+  // =========================================================================
+  fillTextField(form, 'Text1', data.sheriff_court || '');
+  fillTextField(form, 'Text2', data.claimant_name || '');
+
+  // Construct respondent name for header
+  const respondentFullName = data.is_individual
+    ? `${data.respondent_first_name || ''} ${data.respondent_surname || ''}`.trim()
+    : data.company_name || '';
+  fillTextField(form, '4A_Respondent', respondentFullName);
+  fillTextField(form, '4A_CaseReferenceNumber', data.case_reference_number || '');
+
+  // =========================================================================
+  // Section A - About You
+  // =========================================================================
+  // A1: Individual or Company
+  try {
+    const a1Radio = form.getRadioGroup('4A_A1_RadioGroup');
+    const options = a1Radio.getOptions();
+    if (options.length >= 2) {
+      a1Radio.select(data.is_individual ? options[0] : options[1]);
+    }
+  } catch (e) {
+    console.warn('Could not set A1 radio group');
+  }
+
+  // A2: Individual details
+  if (data.is_individual) {
+    fillTextField(form, '4A_A2_Name', data.respondent_first_name || '');
+    fillTextField(form, '4A_A2_MiddleName', data.respondent_middle_name || '');
+    fillTextField(form, '4A_A2_Surname', data.respondent_surname || '');
+    fillTextField(form, '4A_A2_TradingName', data.respondent_trading_name || '');
+  }
+
+  // A4: Contact details
+  fillTextField(form, '4A_A4_Address', data.respondent_address || '');
+  fillTextField(form, '4A_A4_City', data.respondent_city || '');
+  fillTextField(form, '4A_A4_Postcode', data.respondent_postcode || '');
+  fillTextField(form, '4A_A4_Email', data.respondent_email || '');
+
+  // A5: Contact preference
+  try {
+    const a5Radio = form.getRadioGroup('4A_A5_RadioGroup');
+    const options = a5Radio.getOptions();
+    const prefIndex = data.contact_preference === 'online' ? 0 : data.contact_preference === 'post' ? 1 : 2;
+    if (options.length > prefIndex) {
+      a5Radio.select(options[prefIndex]);
+    }
+  } catch (e) {
+    console.warn('Could not set A5 radio group');
+  }
+
+  // =========================================================================
+  // Section B - Representation
+  // =========================================================================
+  // B1: Representation type
+  try {
+    const b1Radio = form.getRadioGroup('4A_B1_RadioGroup');
+    const options = b1Radio.getOptions();
+    const repIndex = data.representation_type === 'self' ? 0 : data.representation_type === 'solicitor' ? 1 : 2;
+    if (options.length > repIndex) {
+      b1Radio.select(options[repIndex]);
+    }
+  } catch (e) {
+    console.warn('Could not set B1 radio group');
+  }
+
+  // B2 & B3: Representative details (if applicable)
+  if (data.representation_type !== 'self') {
+    fillTextField(form, '4A_B2_Name', data.representative_first_name || '');
+    fillTextField(form, '4A_B2_Surname', data.representative_surname || '');
+    fillTextField(form, '4A_B2_OrganisationName', data.representative_organisation || '');
+    fillTextField(form, '4A_B3_Address', data.representative_address || '');
+    fillTextField(form, '4A_B3_City', data.representative_city || '');
+    fillTextField(form, '4A_B3_Postcode', data.representative_postcode || '');
+    fillTextField(form, '4A_B3_Email', data.representative_email || '');
+
+    // B4: Contact through representative
+    try {
+      const b4Radio = form.getRadioGroup('4A_B4_RadioGroup');
+      const options = b4Radio.getOptions();
+      if (options.length >= 2) {
+        b4Radio.select(data.contact_through_representative ? options[0] : options[1]);
+      }
+    } catch (e) {
+      console.warn('Could not set B4 radio group');
+    }
+
+    // B5: Representative contact preference
+    if (data.representative_contact_preference) {
+      try {
+        const b5Radio = form.getRadioGroup('4A_B5_RadioGroup');
+        const options = b5Radio.getOptions();
+        const prefIndex = data.representative_contact_preference === 'online' ? 0 :
+                         data.representative_contact_preference === 'post' ? 1 : 2;
+        if (options.length > prefIndex) {
+          b5Radio.select(options[prefIndex]);
+        }
+      } catch (e) {
+        console.warn('Could not set B5 radio group');
+      }
+    }
+  }
+
+  // =========================================================================
+  // Section C - Response Type
+  // =========================================================================
+  try {
+    const cRadio = form.getRadioGroup('4A_C_RadioGroup');
+    const options = cRadio.getOptions();
+    const respIndex = data.response_type === 'admit_settle' ? 0 :
+                     data.response_type === 'dispute' ? 1 : 2;
+    if (options.length > respIndex) {
+      cRadio.select(options[respIndex]);
+    }
+  } catch (e) {
+    console.warn('Could not set C radio group');
+  }
+
+  // =========================================================================
+  // Section D - Response Details
+  // =========================================================================
+  // D1: Background to claim
+  fillTextField(form, '4A_D1', data.background_to_claim || '');
+
+  // D2: Steps to settle
+  fillTextField(form, '4A_D2', data.steps_to_settle || '');
+
+  // D3: Additional respondents
+  try {
+    const d3Radio = form.getRadioGroup('4A_D3_RadioGroup');
+    const options = d3Radio.getOptions();
+    if (options.length >= 2) {
+      d3Radio.select(data.has_additional_respondents ? options[0] : options[1]);
+    }
+  } catch (e) {
+    console.warn('Could not set D3 radio group');
+  }
+
+  // D4: Additional respondent details (Text3-Text8)
+  if (data.additional_respondents && data.additional_respondents.length > 0) {
+    const additionalRespondentText = data.additional_respondents.map((r, i) =>
+      `${i + 1}. Name: ${r.name}\nAddress: ${r.address}\nReason: ${r.reason}`
+    ).join('\n\n');
+
+    // Try to fill in the text fields for additional respondents
+    fillTextField(form, 'Text3', data.additional_respondents[0]?.name || '');
+    fillTextField(form, 'Text4', data.additional_respondents[0]?.address || '');
+    fillTextField(form, 'Text5', data.additional_respondents[0]?.reason || '');
+    if (data.additional_respondents.length > 1) {
+      fillTextField(form, 'Text6', data.additional_respondents[1]?.name || '');
+      fillTextField(form, 'Text7', data.additional_respondents[1]?.address || '');
+      fillTextField(form, 'Text8', data.additional_respondents[1]?.reason || '');
+    }
+  }
+
+  // D5: Court serve additional respondents
+  if (data.has_additional_respondents) {
+    try {
+      const d5Radio = form.getRadioGroup('4A_D5_RadioGroup');
+      const options = d5Radio.getOptions();
+      if (options.length >= 2) {
+        d5Radio.select(data.court_serve_additional_respondents ? options[0] : options[1]);
+      }
+    } catch (e) {
+      console.warn('Could not set D5 radio group');
+    }
+  }
+
+  const pdfBytes = await pdfDoc.save();
+  console.log('✅ Simple Procedure Response Form filled successfully');
+
+  return pdfBytes;
+}
+
+/**
  * Main entry point - fill any Scotland official form
  */
 export async function fillScotlandOfficialForm(
-  formType: 'notice_to_leave' | 'form_e' | 'simple_procedure_claim',
-  data: ScotlandCaseData | ScotlandMoneyClaimData
+  formType: 'notice_to_leave' | 'form_e' | 'simple_procedure_claim' | 'simple_procedure_response',
+  data: ScotlandCaseData | ScotlandMoneyClaimData | ScotlandSimpleProcedureResponseData
 ): Promise<Uint8Array> {
   console.log(`\n🏴󠁧󠁢󠁳󠁣󠁴󠁿  Filling Scotland official form: ${formType.toUpperCase()}`);
   console.log('=' .repeat(60));
@@ -574,15 +904,38 @@ export async function fillScotlandOfficialForm(
       return await fillFormE(data as ScotlandCaseData);
     case 'simple_procedure_claim':
       return await fillSimpleProcedureClaim(data as ScotlandMoneyClaimData);
+    case 'simple_procedure_response':
+      return await fillSimpleProcedureResponse(data as ScotlandSimpleProcedureResponseData);
     default:
       throw new Error(`Unknown Scotland form type: ${formType}`);
+  }
+}
+
+function assertNotInOfficialFormsDir(targetPath: string) {
+  const normalizedTarget = path.resolve(targetPath);
+  const normalizedRoot = path.resolve(OFFICIAL_FORMS_ROOT);
+
+  if (normalizedTarget === normalizedRoot || normalizedTarget.startsWith(`${normalizedRoot}${path.sep}`)) {
+    throw new Error(
+      `Refusing to write generated output inside public/official-forms. Use a tmp path such as ${path.join(
+        SCOTLAND_FORM_OUTPUT_ROOT,
+        '<filename>.pdf',
+      )}.`,
+    );
   }
 }
 
 /**
  * Save filled form to file (for testing)
  */
-export async function saveFilledForm(pdfBytes: Uint8Array, outputPath: string): Promise<void> {
-  await fs.writeFile(outputPath, pdfBytes);
-  console.log(`💾 Saved filled form to: ${outputPath}`);
+export async function saveFilledForm(pdfBytes: Uint8Array, outputPath?: string): Promise<void> {
+  const targetPath = outputPath ?? path.join(SCOTLAND_FORM_OUTPUT_ROOT, `filled-scotland-form-${Date.now()}.pdf`);
+  assertNotInOfficialFormsDir(targetPath);
+
+  const resolvedTarget = path.resolve(targetPath);
+  const dir = path.dirname(resolvedTarget);
+  await fs.mkdir(dir, { recursive: true });
+  await fs.writeFile(resolvedTarget, pdfBytes);
+  console.log(`💾 Saved filled form to: ${resolvedTarget}`);
+  console.log(`📁 Note: official form outputs are restricted to tmp/test directories (not public/official-forms).`);
 }

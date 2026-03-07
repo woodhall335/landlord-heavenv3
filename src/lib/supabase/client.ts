@@ -16,6 +16,19 @@ export function createClient() {
   const config = getSupabaseConfigForBrowserRuntime();
   if (!config) {
     warnSupabaseNotConfiguredOnce();
+
+    const e2eEnabled = process.env.NEXT_PUBLIC_E2E_MODE === 'true' || process.env.E2E_MODE === 'true';
+    if (e2eEnabled) {
+      // E2E mode: provide a minimal anonymous auth stub so client pages remain renderable.
+      return {
+        auth: {
+          getUser: async () => ({ data: { user: null }, error: null }),
+          getSession: async () => ({ data: { session: null }, error: null }),
+          onAuthStateChange: () => ({ data: { subscription: { unsubscribe() {} } } }),
+        },
+      } as any;
+    }
+
     throw new Error('Supabase not configured');
   }
 

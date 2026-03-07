@@ -1,0 +1,338 @@
+{
+  "generatedAt": "2026-03-03T13:44:22.706Z",
+  "heroes": [
+    {
+      "templateKey": "compliance-certificate",
+      "file": "lh-blog-compliance-certificate-v1.webp",
+      "path": "public/images/blog/heroes/lh-blog-compliance-certificate-v1.webp"
+    },
+    {
+      "templateKey": "court-process",
+      "file": "lh-blog-court-process-v1.webp",
+      "path": "public/images/blog/heroes/lh-blog-court-process-v1.webp"
+    },
+    {
+      "templateKey": "eviction-timeline",
+      "file": "lh-blog-eviction-timeline-v1.webp",
+      "path": "public/images/blog/heroes/lh-blog-eviction-timeline-v1.webp"
+    },
+    {
+      "templateKey": "format-calculator",
+      "file": "lh-blog-format-calculator-v1.webp",
+      "path": "public/images/blog/heroes/lh-blog-format-calculator-v1.webp"
+    },
+    {
+      "templateKey": "format-checklist",
+      "file": "lh-blog-format-checklist-v1.webp",
+      "path": "public/images/blog/heroes/lh-blog-format-checklist-v1.webp"
+    },
+    {
+      "templateKey": "format-comparison",
+      "file": "lh-blog-format-comparison-v1.webp",
+      "path": "public/images/blog/heroes/lh-blog-format-comparison-v1.webp"
+    },
+    {
+      "templateKey": "format-step-by-step",
+      "file": "lh-blog-format-step-by-step-v1.webp",
+      "path": "public/images/blog/heroes/lh-blog-format-step-by-step-v1.webp"
+    },
+    {
+      "templateKey": "forms-paperwork",
+      "file": "lh-blog-forms-paperwork-v1.webp",
+      "path": "public/images/blog/heroes/lh-blog-forms-paperwork-v1.webp"
+    },
+    {
+      "templateKey": "law-reform",
+      "file": "lh-blog-law-reform-v1.webp",
+      "path": "public/images/blog/heroes/lh-blog-law-reform-v1.webp"
+    },
+    {
+      "templateKey": "money-claim",
+      "file": "lh-blog-money-claim-v1.webp",
+      "path": "public/images/blog/heroes/lh-blog-money-claim-v1.webp"
+    },
+    {
+      "templateKey": "product-ast-builder",
+      "file": "lh-blog-product-ast-builder-v1.webp",
+      "path": "public/images/blog/heroes/lh-blog-product-ast-builder-v1.webp"
+    },
+    {
+      "templateKey": "product-complete-pack",
+      "file": "lh-blog-product-complete-pack-v1.webp",
+      "path": "public/images/blog/heroes/lh-blog-product-complete-pack-v1.webp"
+    },
+    {
+      "templateKey": "product-money-claim",
+      "file": "lh-blog-product-money-claim-v1.webp",
+      "path": "public/images/blog/heroes/lh-blog-product-money-claim-v1.webp"
+    },
+    {
+      "templateKey": "product-notice-wizard",
+      "file": "lh-blog-product-notice-wizard-v1.webp",
+      "path": "public/images/blog/heroes/lh-blog-product-notice-wizard-v1.webp"
+    },
+    {
+      "templateKey": "region-ni",
+      "file": "lh-blog-region-ni-v1.webp",
+      "path": "public/images/blog/heroes/lh-blog-region-ni-v1.webp"
+    },
+    {
+      "templateKey": "region-scotland",
+      "file": "lh-blog-region-scotland-v1.webp",
+      "path": "public/images/blog/heroes/lh-blog-region-scotland-v1.webp"
+    },
+    {
+      "templateKey": "region-wales",
+      "file": "lh-blog-region-wales-v1.webp",
+      "path": "public/images/blog/heroes/lh-blog-region-wales-v1.webp"
+    },
+    {
+      "templateKey": "rent-arrears",
+      "file": "lh-blog-rent-arrears-v1.webp",
+      "path": "public/images/blog/heroes/lh-blog-rent-arrears-v1.webp"
+    },
+    {
+      "templateKey": "safety-electrical",
+      "file": "lh-blog-safety-electrical-v1.webp",
+      "path": "public/images/blog/heroes/lh-blog-safety-electrical-v1.webp"
+    },
+    {
+      "templateKey": "safety-fire",
+      "file": "lh-blog-safety-fire-v1.webp",
+      "path": "public/images/blog/heroes/lh-blog-safety-fire-v1.webp"
+    },
+    {
+      "templateKey": "safety-gas",
+      "file": "lh-blog-safety-gas-v1.webp",
+      "path": "public/images/blog/heroes/lh-blog-safety-gas-v1.webp"
+    },
+    {
+      "templateKey": "section-21",
+      "file": "lh-blog-section-21-v1.webp",
+      "path": "public/images/blog/heroes/lh-blog-section-21-v1.webp"
+    },
+    {
+      "templateKey": "section-8",
+      "file": "lh-blog-section-8-v1.webp",
+      "path": "public/images/blog/heroes/lh-blog-section-8-v1.webp"
+    },
+    {
+      "templateKey": "tenancy-agreements",
+      "file": "lh-blog-tenancy-agreements-v1.webp",
+      "path": "public/images/blog/heroes/lh-blog-tenancy-agreements-v1.webp"
+    }
+  ],
+  "og": [
+    {
+      "templateKey": "compliance-certificate",
+      "file": "lh-blog-compliance-certificate-v1-og.webp",
+      "path": "public/images/blog/og/lh-blog-compliance-certificate-v1-og.webp"
+    },
+    {
+      "templateKey": "court-process",
+      "file": "lh-blog-court-process-v1-og.webp",
+      "path": "public/images/blog/og/lh-blog-court-process-v1-og.webp"
+    },
+    {
+      "templateKey": "eviction-timeline",
+      "file": "lh-blog-eviction-timeline-v1-og.webp",
+      "path": "public/images/blog/og/lh-blog-eviction-timeline-v1-og.webp"
+    },
+    {
+      "templateKey": "format-calculator",
+      "file": "lh-blog-format-calculator-v1-og.webp",
+      "path": "public/images/blog/og/lh-blog-format-calculator-v1-og.webp"
+    },
+    {
+      "templateKey": "format-checklist",
+      "file": "lh-blog-format-checklist-v1-og.webp",
+      "path": "public/images/blog/og/lh-blog-format-checklist-v1-og.webp"
+    },
+    {
+      "templateKey": "format-comparison",
+      "file": "lh-blog-format-comparison-v1-og.webp",
+      "path": "public/images/blog/og/lh-blog-format-comparison-v1-og.webp"
+    },
+    {
+      "templateKey": "format-step-by-step",
+      "file": "lh-blog-format-step-by-step-v1-og.webp",
+      "path": "public/images/blog/og/lh-blog-format-step-by-step-v1-og.webp"
+    },
+    {
+      "templateKey": "forms-paperwork",
+      "file": "lh-blog-forms-paperwork-v1-og.webp",
+      "path": "public/images/blog/og/lh-blog-forms-paperwork-v1-og.webp"
+    },
+    {
+      "templateKey": "law-reform",
+      "file": "lh-blog-law-reform-v1-og.webp",
+      "path": "public/images/blog/og/lh-blog-law-reform-v1-og.webp"
+    },
+    {
+      "templateKey": "money-claim",
+      "file": "lh-blog-money-claim-v1-og.webp",
+      "path": "public/images/blog/og/lh-blog-money-claim-v1-og.webp"
+    },
+    {
+      "templateKey": "product-ast-builder",
+      "file": "lh-blog-product-ast-builder-v1-og.webp",
+      "path": "public/images/blog/og/lh-blog-product-ast-builder-v1-og.webp"
+    },
+    {
+      "templateKey": "product-complete-pack",
+      "file": "lh-blog-product-complete-pack-v1-og.webp",
+      "path": "public/images/blog/og/lh-blog-product-complete-pack-v1-og.webp"
+    },
+    {
+      "templateKey": "product-money-claim",
+      "file": "lh-blog-product-money-claim-v1-og.webp",
+      "path": "public/images/blog/og/lh-blog-product-money-claim-v1-og.webp"
+    },
+    {
+      "templateKey": "product-notice-wizard",
+      "file": "lh-blog-product-notice-wizard-v1-og.webp",
+      "path": "public/images/blog/og/lh-blog-product-notice-wizard-v1-og.webp"
+    },
+    {
+      "templateKey": "region-ni",
+      "file": "lh-blog-region-ni-v1-og.webp",
+      "path": "public/images/blog/og/lh-blog-region-ni-v1-og.webp"
+    },
+    {
+      "templateKey": "region-scotland",
+      "file": "lh-blog-region-scotland-v1-og.webp",
+      "path": "public/images/blog/og/lh-blog-region-scotland-v1-og.webp"
+    },
+    {
+      "templateKey": "region-wales",
+      "file": "lh-blog-region-wales-v1-og.webp",
+      "path": "public/images/blog/og/lh-blog-region-wales-v1-og.webp"
+    },
+    {
+      "templateKey": "rent-arrears",
+      "file": "lh-blog-rent-arrears-v1-og.webp",
+      "path": "public/images/blog/og/lh-blog-rent-arrears-v1-og.webp"
+    },
+    {
+      "templateKey": "safety-electrical",
+      "file": "lh-blog-safety-electrical-v1-og.webp",
+      "path": "public/images/blog/og/lh-blog-safety-electrical-v1-og.webp"
+    },
+    {
+      "templateKey": "safety-fire",
+      "file": "lh-blog-safety-fire-v1-og.webp",
+      "path": "public/images/blog/og/lh-blog-safety-fire-v1-og.webp"
+    },
+    {
+      "templateKey": "safety-gas",
+      "file": "lh-blog-safety-gas-v1-og.webp",
+      "path": "public/images/blog/og/lh-blog-safety-gas-v1-og.webp"
+    },
+    {
+      "templateKey": "section-21",
+      "file": "lh-blog-section-21-v1-og.webp",
+      "path": "public/images/blog/og/lh-blog-section-21-v1-og.webp"
+    },
+    {
+      "templateKey": "section-8",
+      "file": "lh-blog-section-8-v1-og.webp",
+      "path": "public/images/blog/og/lh-blog-section-8-v1-og.webp"
+    },
+    {
+      "templateKey": "tenancy-agreements",
+      "file": "lh-blog-tenancy-agreements-v1-og.webp",
+      "path": "public/images/blog/og/lh-blog-tenancy-agreements-v1-og.webp"
+    }
+  ],
+  "placeholders": [
+    {
+      "file": "lh-blog-icon-fallback-v1-og.webp",
+      "path": "public/images/blog/placeholders/lh-blog-icon-fallback-v1-og.webp"
+    },
+    {
+      "file": "lh-blog-icon-fallback-v1.webp",
+      "path": "public/images/blog/placeholders/lh-blog-icon-fallback-v1.webp"
+    },
+    {
+      "file": "lh-blog-placeholder-v1-og.webp",
+      "path": "public/images/blog/placeholders/lh-blog-placeholder-v1-og.webp"
+    },
+    {
+      "file": "lh-blog-placeholder-v1.webp",
+      "path": "public/images/blog/placeholders/lh-blog-placeholder-v1.webp"
+    },
+    {
+      "file": "lh-blog-placeholder-v2-og.webp",
+      "path": "public/images/blog/placeholders/lh-blog-placeholder-v2-og.webp"
+    },
+    {
+      "file": "lh-blog-placeholder-v2.webp",
+      "path": "public/images/blog/placeholders/lh-blog-placeholder-v2.webp"
+    },
+    {
+      "file": "lh-blog-placeholder-v3-og.webp",
+      "path": "public/images/blog/placeholders/lh-blog-placeholder-v3-og.webp"
+    },
+    {
+      "file": "lh-blog-placeholder-v3.webp",
+      "path": "public/images/blog/placeholders/lh-blog-placeholder-v3.webp"
+    },
+    {
+      "file": "lh-blog-placeholder-v4-og.webp",
+      "path": "public/images/blog/placeholders/lh-blog-placeholder-v4-og.webp"
+    },
+    {
+      "file": "lh-blog-placeholder-v4.webp",
+      "path": "public/images/blog/placeholders/lh-blog-placeholder-v4.webp"
+    },
+    {
+      "file": "lh-blog-placeholder-v5-og.webp",
+      "path": "public/images/blog/placeholders/lh-blog-placeholder-v5-og.webp"
+    },
+    {
+      "file": "lh-blog-placeholder-v5.webp",
+      "path": "public/images/blog/placeholders/lh-blog-placeholder-v5.webp"
+    },
+    {
+      "file": "lh-blog-placeholder-v6-og.webp",
+      "path": "public/images/blog/placeholders/lh-blog-placeholder-v6-og.webp"
+    },
+    {
+      "file": "lh-blog-placeholder-v6.webp",
+      "path": "public/images/blog/placeholders/lh-blog-placeholder-v6.webp"
+    },
+    {
+      "file": "lh-blog-placeholder-v7-og.webp",
+      "path": "public/images/blog/placeholders/lh-blog-placeholder-v7-og.webp"
+    },
+    {
+      "file": "lh-blog-placeholder-v7.webp",
+      "path": "public/images/blog/placeholders/lh-blog-placeholder-v7.webp"
+    },
+    {
+      "file": "lh-blog-placeholder-v8-og.webp",
+      "path": "public/images/blog/placeholders/lh-blog-placeholder-v8-og.webp"
+    },
+    {
+      "file": "lh-blog-placeholder-v8.webp",
+      "path": "public/images/blog/placeholders/lh-blog-placeholder-v8.webp"
+    },
+    {
+      "file": "lh-blog-placeholder-v9-og.webp",
+      "path": "public/images/blog/placeholders/lh-blog-placeholder-v9-og.webp"
+    },
+    {
+      "file": "lh-blog-placeholder-v9.webp",
+      "path": "public/images/blog/placeholders/lh-blog-placeholder-v9.webp"
+    }
+  ],
+  "warnings": [],
+  "summary": {
+    "heroCount": 24,
+    "ogCount": 24,
+    "placeholderCount": 20,
+    "placeholderVariantCount": 9,
+    "placeholderOgVariantCount": 9,
+    "warningCount": 0
+  }
+}

@@ -1,0 +1,117 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F3F1FF"/>
+      <stop offset="100%" style="stop-color:#E9E5FF"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bgGrad)"/>
+
+  <!-- Main clipboard -->
+  <g transform="translate(250, 30)">
+    <rect x="0" y="30" width="300" height="400" rx="15" fill="white" stroke="#7C3AED" stroke-width="3"/>
+
+    <!-- Clip -->
+    <rect x="100" y="10" width="100" height="40" rx="8" fill="#7C3AED"/>
+    <rect x="120" y="20" width="60" height="25" rx="5" fill="#6D28D9"/>
+
+    <!-- Title -->
+    <text x="150" y="80" text-anchor="middle" fill="#7C3AED" font-size="18" font-weight="bold" font-family="Arial">PROPERTY INVENTORY</text>
+
+    <!-- Checklist items with room icons -->
+    <!-- Living Room -->
+    <g transform="translate(25, 100)">
+      <rect x="0" y="0" width="30" height="30" rx="6" fill="#7C3AED"/>
+      <path d="M8 15 L13 20 L23 10" stroke="white" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <text x="45" y="15" fill="#6D28D9" font-size="12" font-weight="bold" font-family="Arial">Living Room</text>
+      <text x="45" y="28" fill="#A78BFA" font-size="10" font-family="Arial">Sofa, TV, curtains</text>
+    </g>
+
+    <!-- Kitchen -->
+    <g transform="translate(25, 150)">
+      <rect x="0" y="0" width="30" height="30" rx="6" fill="#7C3AED"/>
+      <path d="M8 15 L13 20 L23 10" stroke="white" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <text x="45" y="15" fill="#6D28D9" font-size="12" font-weight="bold" font-family="Arial">Kitchen</text>
+      <text x="45" y="28" fill="#A78BFA" font-size="10" font-family="Arial">Appliances, utensils</text>
+    </g>
+
+    <!-- Bedroom 1 -->
+    <g transform="translate(25, 200)">
+      <rect x="0" y="0" width="30" height="30" rx="6" fill="#7C3AED"/>
+      <path d="M8 15 L13 20 L23 10" stroke="white" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <text x="45" y="15" fill="#6D28D9" font-size="12" font-weight="bold" font-family="Arial">Bedroom 1</text>
+      <text x="45" y="28" fill="#A78BFA" font-size="10" font-family="Arial">Bed, wardrobe, desk</text>
+    </g>
+
+    <!-- Bathroom -->
+    <g transform="translate(25, 250)">
+      <rect x="0" y="0" width="30" height="30" rx="6" fill="#7C3AED"/>
+      <path d="M8 15 L13 20 L23 10" stroke="white" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <text x="45" y="15" fill="#6D28D9" font-size="12" font-weight="bold" font-family="Arial">Bathroom</text>
+      <text x="45" y="28" fill="#A78BFA" font-size="10" font-family="Arial">Fixtures, towel rails</text>
+    </g>
+
+    <!-- Outdoor -->
+    <g transform="translate(25, 300)">
+      <rect x="0" y="0" width="30" height="30" rx="6" fill="none" stroke="#7C3AED" stroke-width="2"/>
+      <text x="45" y="15" fill="#6D28D9" font-size="12" font-weight="bold" font-family="Arial">Garden/Outdoor</text>
+      <text x="45" y="28" fill="#A78BFA" font-size="10" font-family="Arial">Shed, furniture</text>
+    </g>
+
+    <!-- Meters -->
+    <g transform="translate(25, 350)">
+      <rect x="0" y="0" width="30" height="30" rx="6" fill="none" stroke="#7C3AED" stroke-width="2"/>
+      <text x="45" y="15" fill="#6D28D9" font-size="12" font-weight="bold" font-family="Arial">Meter Readings</text>
+      <text x="45" y="28" fill="#A78BFA" font-size="10" font-family="Arial">Gas, Electric, Water</text>
+    </g>
+
+    <!-- Progress indicator -->
+    <g transform="translate(25, 395)">
+      <rect x="0" y="0" width="250" height="20" rx="10" fill="#F3F1FF"/>
+      <rect x="0" y="0" width="166" height="20" rx="10" fill="#7C3AED"/>
+      <text x="125" y="14" text-anchor="middle" fill="white" font-size="10" font-weight="bold" font-family="Arial">4/6 Complete</text>
+    </g>
+  </g>
+
+  <!-- Camera icon for photos -->
+  <g transform="translate(600, 100)">
+    <rect x="0" y="20" width="100" height="70" rx="10" fill="white" stroke="#7C3AED" stroke-width="3"/>
+    <rect x="35" y="5" width="30" height="20" rx="5" fill="#7C3AED"/>
+    <circle cx="50" cy="55" r="20" fill="none" stroke="#7C3AED" stroke-width="3"/>
+    <circle cx="50" cy="55" r="12" fill="#A78BFA"/>
+    <circle cx="80" cy="35" r="5" fill="#7C3AED"/>
+  </g>
+  <text x="650" y="205" text-anchor="middle" fill="#7C3AED" font-size="11" font-weight="bold" font-family="Arial">Photo Evidence</text>
+
+  <!-- Condition rating -->
+  <g transform="translate(590, 250)">
+    <rect x="0" y="0" width="120" height="100" rx="10" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <text x="60" y="25" text-anchor="middle" fill="#7C3AED" font-size="11" font-weight="bold" font-family="Arial">Condition</text>
+    <g transform="translate(15, 40)">
+      <circle cx="10" cy="10" r="8" fill="#7C3AED"/>
+      <circle cx="30" cy="10" r="8" fill="#7C3AED"/>
+      <circle cx="50" cy="10" r="8" fill="#7C3AED"/>
+      <circle cx="70" cy="10" r="8" fill="#7C3AED"/>
+      <circle cx="90" cy="10" r="8" fill="#A78BFA"/>
+    </g>
+    <text x="60" y="80" text-anchor="middle" fill="#A78BFA" font-size="10" font-family="Arial">Good</text>
+  </g>
+
+  <!-- Pencil decoration -->
+  <g transform="translate(80, 250) rotate(-15)">
+    <rect x="0" y="0" width="18" height="120" fill="#A78BFA"/>
+    <polygon points="0,120 9,145 18,120" fill="#6D28D9"/>
+    <rect x="0" y="0" width="18" height="20" fill="#6D28D9"/>
+    <rect x="3" y="120" width="12" height="5" fill="#F3F1FF"/>
+  </g>
+
+  <!-- Bottom info bar -->
+  <g transform="translate(100, 450)">
+    <rect x="0" y="0" width="600" height="40" rx="20" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <text x="300" y="26" text-anchor="middle" fill="#7C3AED" font-size="11" font-weight="bold" font-family="Arial">Document condition at check-in and check-out to protect deposit</text>
+  </g>
+
+  <!-- Decorative elements -->
+  <circle cx="50" cy="80" r="30" fill="#7C3AED" opacity="0.1"/>
+  <circle cx="750" cy="400" r="35" fill="#A78BFA" opacity="0.12"/>
+</svg>

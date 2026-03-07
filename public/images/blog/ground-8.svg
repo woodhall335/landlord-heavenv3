@@ -1,0 +1,104 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F3F1FF"/>
+      <stop offset="100%" style="stop-color:#E9E5FF"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bgGrad)"/>
+
+  <!-- Ground 8 badge -->
+  <g transform="translate(80, 80)">
+    <circle cx="80" cy="80" r="75" fill="white" stroke="#7C3AED" stroke-width="4"/>
+    <circle cx="80" cy="80" r="55" fill="#7C3AED"/>
+    <text x="80" y="70" text-anchor="middle" fill="white" font-size="14" font-weight="bold" font-family="Arial">GROUND</text>
+    <text x="80" y="100" text-anchor="middle" fill="white" font-size="36" font-weight="bold" font-family="Arial">8</text>
+    <rect x="30" y="170" width="100" height="30" rx="15" fill="#6D28D9"/>
+    <text x="80" y="190" text-anchor="middle" fill="white" font-size="11" font-weight="bold" font-family="Arial">MANDATORY</text>
+  </g>
+
+  <!-- Main explanation card -->
+  <g transform="translate(260, 60)">
+    <rect x="0" y="0" width="460" height="200" rx="15" fill="white" stroke="#7C3AED" stroke-width="3"/>
+
+    <rect x="0" y="0" width="460" height="55" rx="15" fill="#7C3AED"/>
+    <rect x="0" y="40" width="460" height="15" fill="#7C3AED"/>
+    <text x="230" y="38" text-anchor="middle" fill="white" font-size="16" font-weight="bold" font-family="Arial">SERIOUS RENT ARREARS</text>
+
+    <text x="25" y="85" fill="#6D28D9" font-size="12" font-weight="bold" font-family="Arial">What it means:</text>
+    <text x="25" y="105" fill="#6D28D9" font-size="11" font-family="Arial">Tenant has at least 2 months' rent arrears at both</text>
+    <text x="25" y="120" fill="#6D28D9" font-size="11" font-family="Arial">the time of serving notice AND at the court hearing.</text>
+
+    <text x="25" y="150" fill="#6D28D9" font-size="12" font-weight="bold" font-family="Arial">Key advantage:</text>
+    <text x="25" y="170" fill="#A78BFA" font-size="11" font-family="Arial">Mandatory ground - court MUST grant possession if</text>
+    <text x="25" y="185" fill="#A78BFA" font-size="11" font-family="Arial">requirements are met (unlike discretionary Ground 10)</text>
+  </g>
+
+  <!-- Rent arrears visualization -->
+  <g transform="translate(80, 280)">
+    <rect x="0" y="0" width="280" height="180" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <text x="140" y="25" text-anchor="middle" fill="#7C3AED" font-size="11" font-weight="bold" font-family="Arial">MINIMUM 2 MONTHS ARREARS</text>
+
+    <!-- Rent bars showing arrears -->
+    <g transform="translate(30, 45)">
+      <text x="0" y="15" fill="#6D28D9" font-size="9" font-family="Arial">Month 1</text>
+      <rect x="60" y="0" width="150" height="25" rx="5" fill="#F3F1FF" stroke="#7C3AED" stroke-width="1"/>
+      <rect x="60" y="0" width="0" height="25" rx="5" fill="#7C3AED"/>
+      <text x="135" y="17" text-anchor="middle" fill="#7C3AED" font-size="9" font-weight="bold">UNPAID</text>
+    </g>
+    <g transform="translate(30, 80)">
+      <text x="0" y="15" fill="#6D28D9" font-size="9" font-family="Arial">Month 2</text>
+      <rect x="60" y="0" width="150" height="25" rx="5" fill="#F3F1FF" stroke="#7C3AED" stroke-width="1"/>
+      <rect x="60" y="0" width="0" height="25" rx="5" fill="#7C3AED"/>
+      <text x="135" y="17" text-anchor="middle" fill="#7C3AED" font-size="9" font-weight="bold">UNPAID</text>
+    </g>
+
+    <!-- Warning icon -->
+    <g transform="translate(100, 125)">
+      <polygon points="40,0 80,60 0,60" fill="#6D28D9"/>
+      <text x="40" y="45" text-anchor="middle" fill="white" font-size="24" font-weight="bold">!</text>
+    </g>
+
+    <text x="140" y="170" text-anchor="middle" fill="#A78BFA" font-size="9" font-family="Arial">Total owed must equal 2+ months rent</text>
+  </g>
+
+  <!-- Two checkpoints -->
+  <g transform="translate(380, 280)">
+    <rect x="0" y="0" width="340" height="180" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <text x="170" y="25" text-anchor="middle" fill="#7C3AED" font-size="11" font-weight="bold" font-family="Arial">BOTH CONDITIONS MUST BE MET</text>
+
+    <!-- Timeline with two checkpoints -->
+    <g transform="translate(30, 50)">
+      <line x1="30" y1="40" x2="250" y2="40" stroke="#A78BFA" stroke-width="3"/>
+
+      <!-- First checkpoint -->
+      <circle cx="60" cy="40" r="25" fill="#7C3AED"/>
+      <text x="60" y="35" text-anchor="middle" fill="white" font-size="8" font-weight="bold">CHECK</text>
+      <text x="60" y="48" text-anchor="middle" fill="white" font-size="8" font-weight="bold">1</text>
+      <text x="60" y="80" text-anchor="middle" fill="#6D28D9" font-size="9" font-weight="bold" font-family="Arial">At Notice</text>
+      <text x="60" y="95" text-anchor="middle" fill="#A78BFA" font-size="8" font-family="Arial">2+ months</text>
+      <text x="60" y="107" text-anchor="middle" fill="#A78BFA" font-size="8" font-family="Arial">owed</text>
+
+      <!-- Arrow -->
+      <polygon points="140,35 155,40 140,45" fill="#7C3AED"/>
+
+      <!-- Second checkpoint -->
+      <circle cx="220" cy="40" r="25" fill="#6D28D9"/>
+      <text x="220" y="35" text-anchor="middle" fill="white" font-size="8" font-weight="bold">CHECK</text>
+      <text x="220" y="48" text-anchor="middle" fill="white" font-size="8" font-weight="bold">2</text>
+      <text x="220" y="80" text-anchor="middle" fill="#6D28D9" font-size="9" font-weight="bold" font-family="Arial">At Hearing</text>
+      <text x="220" y="95" text-anchor="middle" fill="#A78BFA" font-size="8" font-family="Arial">Still 2+</text>
+      <text x="220" y="107" text-anchor="middle" fill="#A78BFA" font-size="8" font-family="Arial">months owed</text>
+    </g>
+  </g>
+
+  <!-- Bottom note -->
+  <g transform="translate(80, 470)">
+    <rect x="0" y="0" width="640" height="25" rx="12" fill="#F3F1FF"/>
+    <text x="320" y="17" text-anchor="middle" fill="#7C3AED" font-size="10" font-weight="bold" font-family="Arial">If tenant pays down to less than 2 months before hearing, Ground 8 cannot be used</text>
+  </g>
+
+  <!-- Decorative elements -->
+  <circle cx="50" cy="50" r="25" fill="#7C3AED" opacity="0.1"/>
+  <circle cx="750" cy="450" r="30" fill="#A78BFA" opacity="0.12"/>
+</svg>

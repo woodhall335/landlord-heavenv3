@@ -13,7 +13,7 @@
 
 **Address:** {{property_address}}
 
-**Inspection Date:** {{inspection_date}}
+**Inspection Date:** {{format_date inspection_date 'long'}}
 **Inspection Time:** {{inspection_time}}
 **Inspection Type:** {{inspection_type}} {{!-- Check-in, Check-out, Mid-term --}}
 
@@ -32,17 +32,17 @@
 ### Electricity
 **Meter Number:** {{electricity_meter_number}}
 **Reading:** {{electricity_reading}}
-**Date/Time:** {{electricity_reading_date}}
+**Date/Time:** {{format_date electricity_reading_date 'long'}}
 
 ### Gas
 **Meter Number:** {{gas_meter_number}}
 **Reading:** {{gas_reading}}
-**Date/Time:** {{gas_reading_date}}
+**Date/Time:** {{format_date gas_reading_date 'long'}}
 
 ### Water (if metered)
 **Meter Number:** {{water_meter_number}}
 **Reading:** {{water_reading}}
-**Date/Time:** {{water_reading_date}}
+**Date/Time:** {{format_date water_reading_date 'long'}}
 
 ---
 
@@ -121,7 +121,7 @@ No specific issues noted.
 **Photo Reference:** {{photo_ref}}
 
 {{#if safety_check}}
-**Last Safety Check:** {{safety_check_date}}
+**Last Safety Check:** {{format_date safety_check_date 'long'}}
 **Next Check Due:** {{next_check_due}}
 {{/if}}
 
@@ -132,14 +132,14 @@ No specific issues noted.
 ## SAFETY CERTIFICATES
 
 ### Gas Safety Certificate
-**Date of Last Inspection:** {{gas_safety_date}}
+**Date of Last Inspection:** {{format_date gas_safety_date 'long'}}
 **Engineer Name:** {{gas_engineer_name}}
 **Engineer Registration:** {{gas_engineer_reg}}
 **Next Inspection Due:** {{gas_safety_next_due}}
 **Certificate Provided to Tenant:** {{gas_cert_provided}} {{!-- Yes/No --}}
 
 ### Electrical Installation Condition Report (EICR)
-**Date of Last Inspection:** {{eicr_date}}
+**Date of Last Inspection:** {{format_date eicr_date 'long'}}
 **Electrician Name:** {{electrician_name}}
 **Next Inspection Due:** {{eicr_next_due}}
 **Certificate Provided to Tenant:** {{eicr_provided}} {{!-- Yes/No --}}
@@ -271,7 +271,7 @@ The undersigned confirm that this inventory is an accurate record of the propert
 
 **Print Name:** {{landlord_name}}
 
-**Date:** {{signature_date}}
+**Date:** {{format_date signature_date 'long'}}
 
 ---
 
@@ -279,7 +279,7 @@ The undersigned confirm that this inventory is an accurate record of the propert
 
 **Print Name:** {{tenant_names}}
 
-**Date:** {{signature_date}}
+**Date:** {{format_date signature_date 'long'}}
 
 **Tenant Comments/Reservations:**
 
@@ -299,10 +299,10 @@ Both parties should retain a copy of this document for their records.
 
 ---
 
-**Next Inspection Due:** {{next_inspection_date}} {{!-- If mid-term inspections planned --}}
+**Next Inspection Due:** {{format_date next_inspection_date 'long'}} {{!-- If mid-term inspections planned --}}
 
 ---
 
-*Document generated on {{generation_date}} by Landlord Heaven - Legal Automation for UK Landlords*
+*Document generated on {{format_date generation_date 'long'}} by Landlord Heaven - Legal Automation for UK Landlords*
 
 **Inventory Reference:** {{inventory_reference}}

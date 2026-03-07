@@ -12,12 +12,16 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { createServerSupabaseClient, getServerUser } from '@/lib/supabase/server';
+import { createSupabaseAdminClient, logSupabaseAdminDiagnostics } from '@/lib/supabase/admin';
 import { getOrCreateWizardFacts } from '@/lib/case-facts/store';
 import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 import { runDecisionEngine } from '@/lib/decision-engine';
 import type { DecisionInput } from '@/lib/decision-engine';
 import { getLawProfile } from '@/lib/law-profile';
+import { deriveCanonicalJurisdiction, type CanonicalJurisdiction } from '@/lib/types/jurisdiction';
+import { validateFlow, create422Response } from '@/lib/validation/validateFlow';
+
+export const runtime = 'nodejs';
 
 const checkpointSchema = z.object({
   case_id: z.string().uuid(),
@@ -30,6 +34,7 @@ const checkpointSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
+    logSupabaseAdminDiagnostics({ route: '/api/wizard/checkpoint', writesUsingAdmin: true });
     const body = await request.json();
     const validation = checkpointSchema.safeParse(body);
 
@@ -41,24 +46,21 @@ export async function POST(request: NextRequest) {
           missingFields: ['case_id'],
           reason: 'case_id is required and must be a valid UUID',
         },
-        { status: 400 }
+        { status: 422 }
       );
     }
 
     const { case_id, facts: providedFacts, jurisdiction: providedJurisdiction, product: providedProduct, case_type: providedCaseType } = validation.data;
 
-    const user = await getServerUser().catch(() => null);
-    const supabase = await createServerSupabaseClient();
+    // Admin client bypasses RLS - used for case operations for anonymous users
+    const adminSupabase = createSupabaseAdminClient();
 
-    // Load case from database
-    let query = supabase.from('cases').select('*').eq('id', case_id);
-    if (user) {
-      query = query.eq('user_id', user.id);
-    } else {
-      query = query.is('user_id', null);
-    }
-
-    const { data: caseData, error: caseError } = await query.single();
+    // Load case from database using admin client to support anonymous users
+    const { data: caseData, error: caseError } = await adminSupabase
+      .from('cases')
+      .select('*')
+      .eq('id', case_id)
+      .single();
 
     if (caseError || !caseData) {
       return NextResponse.json(
@@ -82,7 +84,13 @@ export async function POST(request: NextRequest) {
     // Use case data from DB, falling back to provided values
     const jurisdiction = caseRow.jurisdiction || providedJurisdiction;
     const case_type = caseRow.case_type || providedCaseType;
-    const product = providedProduct || ((caseData as any).product) || (case_type === 'money_claim' ? 'money_claim' : case_type === 'tenancy_agreement' ? 'tenancy_agreement' : 'complete_pack');
+
+    // Read product from collected_facts.__meta where wizard stores it
+    const collectedFacts = (caseData as any).collected_facts || {};
+    const metaProduct = collectedFacts.__meta?.product || collectedFacts.__meta?.original_product;
+
+    // Priority: provided > meta from facts > case column > default based on case_type
+    const product = providedProduct || metaProduct || ((caseData as any).product) || (case_type === 'money_claim' ? 'money_claim' : case_type === 'tenancy_agreement' ? 'tenancy_agreement' : 'complete_pack');
 
     // Validate required fields
     if (!jurisdiction) {
@@ -93,25 +101,30 @@ export async function POST(request: NextRequest) {
           missingFields: ['jurisdiction'],
           reason: 'Cannot determine jurisdiction from case or request',
         },
-        { status: 400 }
+        { status: 422 }
       );
     }
 
-  if (!['england-wales', 'scotland', 'northern-ireland'].includes(jurisdiction)) {
+  const canonicalJurisdiction = deriveCanonicalJurisdiction(
+    jurisdiction,
+    providedFacts || (caseData as any)?.collected_facts || null,
+  );
+
+  if (!canonicalJurisdiction) {
     return NextResponse.json(
       {
         ok: false,
         error: 'Invalid jurisdiction',
         missingFields: [],
-        reason: `jurisdiction must be one of: england-wales, scotland, northern-ireland (got: ${jurisdiction})`,
+        reason: 'jurisdiction must be one of england, wales, scotland, or northern-ireland',
       },
-      { status: 400 }
+      { status: 422 }
     );
   }
 
   // Northern Ireland gating: only tenancy agreements are supported for V1
   if (
-    jurisdiction === 'northern-ireland' &&
+    canonicalJurisdiction === 'northern-ireland' &&
     case_type !== 'tenancy_agreement' &&
     product !== 'tenancy_agreement'
   ) {
@@ -122,14 +135,15 @@ export async function POST(request: NextRequest) {
         message:
           'Only tenancy agreements are available for Northern Ireland. Eviction and money claim workflows are not currently supported.',
         reason:
-          'We currently support tenancy agreements for Northern Ireland. For England & Wales and Scotland, we support evictions (notices and court packs) and money claims. Northern Ireland eviction and money claim support is planned for Q2 2026.',
+          'Northern Ireland: tenancy agreements only (eviction notices planned). England & Wales and Scotland support evictions (notices and court packs) and money claims where available.',
         supported: {
           'northern-ireland': ['tenancy_agreement'],
-          'england-wales': ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
+          england: ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
+          wales: ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
           scotland: ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
         },
       },
-      { status: 400 }
+      { status: 422 }
     );
   }
 
@@ -150,44 +164,85 @@ export async function POST(request: NextRequest) {
 
     // ADR-001 COMPLIANCE: Load WizardFacts from case_facts.facts (canonical source of truth)
     // Use providedFacts as fallback only for testing/stateless usage
-    const wizardFacts = providedFacts || await getOrCreateWizardFacts(supabase, case_id);
+    // Use admin client to support anonymous users
+    const wizardFacts = providedFacts || await getOrCreateWizardFacts(adminSupabase, case_id);
+
+    // ============================================================================
+    // UNIFIED VALIDATION VIA REQUIREMENTS ENGINE (CHECKPOINT STAGE)
+    // ============================================================================
+    // Determine route from wizard facts - check eviction_route (user's explicit selection) first
+    const selectedRoute = (wizardFacts as any).selected_notice_route ||
+                          (wizardFacts as any).eviction_route ||
+                          (wizardFacts as any).route_recommendation?.recommended_route ||
+                          (wizardFacts as any).selected_route ||
+                          (effectiveCaseType === 'eviction' ? 'section_8' : effectiveProduct);
+
+    console.log('[CHECKPOINT] Running unified validation via validateFlow');
+    const validationResult = validateFlow({
+      jurisdiction: canonicalJurisdiction as any,
+      product: effectiveProduct as any,
+      route: selectedRoute,
+      stage: 'checkpoint',
+      facts: wizardFacts,
+      caseId: case_id,
+    });
+
+    // If validation fails, return 422 LEGAL_BLOCK (checkpoint blocks on required facts)
+    if (!validationResult.ok) {
+      console.warn('[CHECKPOINT] Unified validation blocked checkpoint:', {
+        case_id,
+        product: effectiveProduct,
+        route: selectedRoute,
+      });
+      return NextResponse.json(create422Response(validationResult), { status: 422 });
+    }
 
     // Normalize WizardFacts to CaseFacts (domain model)
     // Missing fields will be null, which the decision engine handles gracefully
     const caseFacts = wizardFactsToCaseFacts(wizardFacts);
 
-    // Run decision engine with partial data
+    // Run decision engine for route recommendations
+    // NOTE: We use stage='generate' here (not 'checkpoint') because we want to show
+    // the user which routes will be available at the FINAL stage, including any
+    // compliance issues that would block at generate time. This provides complete
+    // route guidance even though we only block progression on checkpoint-required facts.
     const decisionInput: DecisionInput = {
-      jurisdiction: jurisdiction as 'england-wales' | 'scotland' | 'northern-ireland',
+      jurisdiction: canonicalJurisdiction as CanonicalJurisdiction,
       product: effectiveProduct as 'notice_only' | 'complete_pack' | 'money_claim',
       case_type: effectiveCaseType as 'eviction' | 'money_claim' | 'tenancy_agreement',
       facts: caseFacts,
+      stage: 'generate', // Show all compliance issues for complete route analysis
     };
 
     const decision = runDecisionEngine(decisionInput);
 
     // Get law profile for version tracking and legal metadata
-    const law_profile = getLawProfile(jurisdiction, effectiveCaseType);
+    const law_profile = getLawProfile(canonicalJurisdiction, effectiveCaseType);
 
     // ROUTE SELECTION LOGIC:
     // For notice_only product, route is automatically selected by the wizard (stored as selected_notice_route).
-    // For complete_pack, use decision engine recommendation.
+    // For complete_pack, respect user's explicit eviction_route selection, falling back to decision engine.
     const selectedNoticeRoute = (wizardFacts as any).selected_notice_route || null;
+    const userExplicitRoute = (wizardFacts as any).eviction_route || null;
 
     let finalRecommendedRoute: string | null = null;
 
     if (effectiveProduct === 'notice_only' && selectedNoticeRoute) {
       // For notice_only: Use the automatically selected route from wizard
       finalRecommendedRoute = selectedNoticeRoute;
+    } else if (userExplicitRoute) {
+      // For complete_pack: Respect user's explicit eviction_route selection from Case Basics
+      // This ensures that if the user selected Section 8, we don't override it with Section 21
+      finalRecommendedRoute = userExplicitRoute;
     } else {
-      // For complete_pack or when no route selected yet: Use decision engine recommendation
+      // Fallback to decision engine recommendation when no route selected yet
       finalRecommendedRoute =
         decision.recommended_routes.length > 0 ? decision.recommended_routes[0] : null;
     }
 
     if (finalRecommendedRoute) {
       try {
-        await supabase
+        await adminSupabase
           .from('cases')
           .update({
             recommended_route: finalRecommendedRoute,
@@ -224,9 +279,9 @@ export async function POST(request: NextRequest) {
       pre_action_requirements: decision.pre_action_requirements,
       summary: decision.analysis_summary,
       // Include minimal metadata for UI context
-      jurisdiction,
+      jurisdiction: canonicalJurisdiction,
       product: effectiveProduct,
-      completeness_hint: getCompletenessHint(caseFacts, jurisdiction),
+      completeness_hint: getCompletenessHint(caseFacts, canonicalJurisdiction),
       // Legal change framework metadata
       law_profile,
     };
@@ -267,7 +322,7 @@ function getCompletenessHint(
   ];
 
   // Add jurisdiction-specific critical fields
-  if (jurisdiction === 'england-wales') {
+  if (jurisdiction === 'england' || jurisdiction === 'wales') {
     criticalFields.push(
       { path: 'tenancy.deposit_protected', label: 'Deposit protection status' },
       { path: 'tenancy.deposit_amount', label: 'Deposit amount' }

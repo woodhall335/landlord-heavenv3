@@ -71,7 +71,7 @@ async function main() {
   console.log('Creating Scottish Simple Procedure placeholder PDFs...\n');
 
   await createPlaceholderPDF(
-    'simple_procedure_claim_form.pdf',
+    'form-3a.pdf',
     'Simple Procedure Claim Form (Form 3A)',
     'Official Scottish Courts and Tribunals Service form for initiating Simple Procedure claims (up to £5,000). This form is used for claims including rent arrears, damages, and other civil monetary disputes in the Sheriff Court.'
   );

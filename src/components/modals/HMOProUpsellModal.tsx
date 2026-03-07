@@ -1,13 +1,16 @@
 /**
  * HMO Pro Upsell Modal
  *
- * Displayed when wizard detects 3+ unrelated tenants (likely an HMO)
+ * PARKED: HMO Pro feature is parked for later review.
+ * This modal is disabled and will not display.
+ *
+ * Previously displayed when wizard detects 3+ unrelated tenants (likely an HMO)
  * Offers 7-day free trial of HMO Pro
  */
 
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, Button, Loading } from '@/components/ui';
 
 interface HMOProUpsellModalProps {
@@ -24,6 +27,13 @@ export const HMOProUpsellModal: React.FC<HMOProUpsellModalProps> = ({
   propertyAddress,
 }) => {
   const [loading, setLoading] = useState(false);
+
+  // PARKED: HMO Pro is disabled - immediately close modal if opened
+  useEffect(() => {
+    if (isOpen) {
+      onClose();
+    }
+  }, [isOpen, onClose]);
 
   const handleStartTrial = async () => {
     try {

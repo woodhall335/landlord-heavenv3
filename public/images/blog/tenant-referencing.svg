@@ -1,0 +1,127 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F3F1FF"/>
+      <stop offset="100%" style="stop-color:#E9E5FF"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bgGrad)"/>
+
+  <!-- Central person profile card -->
+  <g transform="translate(280, 60)">
+    <rect x="0" y="0" width="240" height="320" rx="15" fill="white" stroke="#7C3AED" stroke-width="3"/>
+
+    <!-- Profile header -->
+    <rect x="0" y="0" width="240" height="100" rx="15" fill="#7C3AED"/>
+    <rect x="0" y="85" width="240" height="15" fill="#7C3AED"/>
+
+    <!-- Avatar -->
+    <circle cx="120" cy="80" r="50" fill="white" stroke="#6D28D9" stroke-width="3"/>
+    <circle cx="120" cy="70" r="25" fill="#A78BFA"/>
+    <ellipse cx="120" cy="110" rx="30" ry="15" fill="#A78BFA"/>
+
+    <!-- Verification badge -->
+    <circle cx="160" cy="110" r="18" fill="#7C3AED" stroke="white" stroke-width="3"/>
+    <path d="M152 110 L157 115 L170 102" stroke="white" stroke-width="3" fill="none" stroke-linecap="round"/>
+
+    <!-- Profile details -->
+    <text x="120" y="165" text-anchor="middle" fill="#6D28D9" font-size="14" font-weight="bold" font-family="Arial">John Smith</text>
+    <text x="120" y="185" text-anchor="middle" fill="#A78BFA" font-size="11" font-family="Arial">Applicant</text>
+
+    <!-- Reference scores -->
+    <g transform="translate(20, 200)">
+      <rect x="0" y="0" width="200" height="25" rx="12" fill="#F3F1FF"/>
+      <rect x="0" y="0" width="180" height="25" rx="12" fill="#7C3AED"/>
+      <text x="100" y="17" text-anchor="middle" fill="white" font-size="10" font-weight="bold" font-family="Arial">Credit Score: 720</text>
+    </g>
+
+    <g transform="translate(20, 235)">
+      <rect x="0" y="0" width="200" height="25" rx="12" fill="#F3F1FF"/>
+      <rect x="0" y="0" width="160" height="25" rx="12" fill="#A78BFA"/>
+      <text x="100" y="17" text-anchor="middle" fill="white" font-size="10" font-weight="bold" font-family="Arial">Affordability: Pass</text>
+    </g>
+
+    <g transform="translate(20, 270)">
+      <rect x="0" y="0" width="200" height="25" rx="12" fill="#F3F1FF"/>
+      <rect x="0" y="0" width="200" height="25" rx="12" fill="#6D28D9"/>
+      <text x="100" y="17" text-anchor="middle" fill="white" font-size="10" font-weight="bold" font-family="Arial">References: Verified</text>
+    </g>
+  </g>
+
+  <!-- Left side - checks performed -->
+  <g transform="translate(50, 100)">
+    <rect x="0" y="0" width="180" height="280" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <text x="90" y="30" text-anchor="middle" fill="#7C3AED" font-size="12" font-weight="bold" font-family="Arial">CHECKS</text>
+
+    <!-- Check items -->
+    <g transform="translate(15, 50)">
+      <circle cx="15" cy="15" r="12" fill="#7C3AED"/>
+      <path d="M10 15 L13 18 L20 11" stroke="white" stroke-width="2" fill="none"/>
+      <text x="38" y="13" fill="#6D28D9" font-size="10" font-weight="bold" font-family="Arial">ID Verification</text>
+      <text x="38" y="25" fill="#A78BFA" font-size="8" font-family="Arial">Passport/DL verified</text>
+    </g>
+
+    <g transform="translate(15, 95)">
+      <circle cx="15" cy="15" r="12" fill="#7C3AED"/>
+      <path d="M10 15 L13 18 L20 11" stroke="white" stroke-width="2" fill="none"/>
+      <text x="38" y="13" fill="#6D28D9" font-size="10" font-weight="bold" font-family="Arial">Credit Check</text>
+      <text x="38" y="25" fill="#A78BFA" font-size="8" font-family="Arial">No CCJs/bankruptcies</text>
+    </g>
+
+    <g transform="translate(15, 140)">
+      <circle cx="15" cy="15" r="12" fill="#7C3AED"/>
+      <path d="M10 15 L13 18 L20 11" stroke="white" stroke-width="2" fill="none"/>
+      <text x="38" y="13" fill="#6D28D9" font-size="10" font-weight="bold" font-family="Arial">Employment</text>
+      <text x="38" y="25" fill="#A78BFA" font-size="8" font-family="Arial">Income confirmed</text>
+    </g>
+
+    <g transform="translate(15, 185)">
+      <circle cx="15" cy="15" r="12" fill="#7C3AED"/>
+      <path d="M10 15 L13 18 L20 11" stroke="white" stroke-width="2" fill="none"/>
+      <text x="38" y="13" fill="#6D28D9" font-size="10" font-weight="bold" font-family="Arial">Landlord Ref</text>
+      <text x="38" y="25" fill="#A78BFA" font-size="8" font-family="Arial">Previous positive</text>
+    </g>
+
+    <g transform="translate(15, 230)">
+      <circle cx="15" cy="15" r="12" fill="#7C3AED"/>
+      <path d="M10 15 L13 18 L20 11" stroke="white" stroke-width="2" fill="none"/>
+      <text x="38" y="13" fill="#6D28D9" font-size="10" font-weight="bold" font-family="Arial">Right to Rent</text>
+      <text x="38" y="25" fill="#A78BFA" font-size="8" font-family="Arial">UK resident verified</text>
+    </g>
+  </g>
+
+  <!-- Right side - recommendation -->
+  <g transform="translate(570, 100)">
+    <rect x="0" y="0" width="180" height="280" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <text x="90" y="30" text-anchor="middle" fill="#7C3AED" font-size="12" font-weight="bold" font-family="Arial">RESULT</text>
+
+    <!-- Big checkmark -->
+    <circle cx="90" cy="100" r="50" fill="#7C3AED"/>
+    <path d="M65 100 L82 117 L115 84" stroke="white" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <text x="90" y="175" text-anchor="middle" fill="#6D28D9" font-size="14" font-weight="bold" font-family="Arial">APPROVED</text>
+
+    <!-- Rating stars -->
+    <g transform="translate(30, 190)">
+      <polygon points="15,0 18,10 28,10 20,17 23,27 15,21 7,27 10,17 2,10 12,10" fill="#7C3AED"/>
+      <polygon points="45,0 48,10 58,10 50,17 53,27 45,21 37,27 40,17 32,10 42,10" fill="#7C3AED"/>
+      <polygon points="75,0 78,10 88,10 80,17 83,27 75,21 67,27 70,17 62,10 72,10" fill="#7C3AED"/>
+      <polygon points="105,0 108,10 118,10 110,17 113,27 105,21 97,27 100,17 92,10 102,10" fill="#7C3AED"/>
+      <polygon points="135,0 138,10 148,10 140,17 143,27 135,21 127,27 130,17 122,10 132,10" fill="#A78BFA"/>
+    </g>
+
+    <text x="90" y="245" text-anchor="middle" fill="#A78BFA" font-size="10" font-family="Arial">Low Risk Tenant</text>
+    <text x="90" y="265" text-anchor="middle" fill="#A78BFA" font-size="10" font-family="Arial">Recommended</text>
+  </g>
+
+  <!-- Bottom info bar -->
+  <g transform="translate(100, 420)">
+    <rect x="0" y="0" width="600" height="50" rx="25" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <text x="300" y="22" text-anchor="middle" fill="#7C3AED" font-size="12" font-weight="bold" font-family="Arial">Complete Tenant Screening in 24-48 Hours</text>
+    <text x="300" y="40" text-anchor="middle" fill="#A78BFA" font-size="10" font-family="Arial">Credit • Employment • References • Right to Rent</text>
+  </g>
+
+  <!-- Decorative elements -->
+  <circle cx="50" cy="50" r="25" fill="#7C3AED" opacity="0.1"/>
+  <circle cx="750" cy="450" r="30" fill="#A78BFA" opacity="0.12"/>
+</svg>

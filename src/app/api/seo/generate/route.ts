@@ -6,6 +6,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
+import { isAdmin } from '@/lib/auth';
 import { generateSEOContent } from '@/lib/seo/content-generator';
 import { z } from 'zod';
 
@@ -13,7 +14,7 @@ const GenerateSchema = z.object({
   contentType: z.enum(['location', 'topic', 'service', 'guide']),
   targetKeyword: z.string().min(3),
   location: z.string().optional(),
-  jurisdiction: z.enum(['england-wales', 'scotland', 'northern-ireland']).optional(),
+  jurisdiction: z.enum(['england', 'wales', 'scotland', 'northern-ireland']).optional(),
   wordCount: z.number().min(500).max(5000).optional(),
   model: z.enum(['gpt-4o-mini', 'claude-sonnet']).optional(),
   publishImmediately: z.boolean().optional(),
@@ -31,9 +32,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Verify admin
-    const adminIds = process.env.ADMIN_USER_IDS?.split(',') || [];
-    if (!adminIds.includes(user.id)) {
+    // Check if user is admin (with proper trimming of env var)
+    if (!isAdmin(user.id)) {
       return NextResponse.json({ error: 'Admin access required' }, { status: 403 });
     }
 
@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
       contentType: params.contentType,
       targetKeyword: params.targetKeyword,
       location: params.location,
-      jurisdiction: params.jurisdiction || 'england-wales',
+      jurisdiction: params.jurisdiction || 'england',
       wordCount: params.wordCount || 1500,
       model: params.model || 'gpt-4o-mini',
       includeSchema: true,
@@ -73,7 +73,7 @@ export async function POST(request: NextRequest) {
         target_keyword: params.targetKeyword,
         secondary_keywords: generatedContent.secondaryKeywords,
         location: params.location,
-        jurisdiction: params.jurisdiction || 'england-wales',
+        jurisdiction: params.jurisdiction || 'england',
         word_count: generatedContent.wordCount,
         readability_score: generatedContent.readabilityScore,
         ai_quality_score: generatedContent.qualityScore,

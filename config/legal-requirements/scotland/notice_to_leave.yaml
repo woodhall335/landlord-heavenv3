@@ -1,0 +1,23 @@
+requiredOfficialForms:
+  - public/official-forms/scotland/notice_to_leave.pdf
+optionalOfficialForms:
+  - public/official-forms/scotland/form_e_eviction.pdf
+requiredTextBlocks:
+  - id: notice_to_leave_block
+    description: "Notice to leave prescribed statements"
+    mustAppearIn: template
+    match: "Notice to Leave"
+    regex: false
+    minOccurrences: 0
+requiredPreconditions:
+  - id: ground_selection
+    requiredFactKeys: []
+    requiredQuestionIds: []
+    mustBeValidatedInFlow: true
+noticeRules:
+  requiredInputsFactKeys: []
+  minimumDays: 0
+  mustComputeExpiryDate: true
+  mustShowUserWarningIfInvalid: true
+legislationReferences:
+  - "Private Housing (Tenancies) (Scotland) Act 2016"

@@ -303,6 +303,16 @@ export interface PrivateTenancyData {
   landlord_address?: string;
   landlord_email?: string;
   landlord_phone?: string;
+
+  // Guarantor (Premium)
+  guarantor_name?: string;
+  guarantor_address?: string;
+  guarantor_email?: string;
+  guarantor_phone?: string;
+  guarantor_dob?: string;
+  guarantor_relationship?: string;
+  guarantor_required?: boolean;
+  joint_and_several_liability?: boolean;
 }
 
 // ============================================================================
@@ -364,7 +374,7 @@ export function validatePrivateTenancyData(data: PrivateTenancyData): Validation
   if (!data.first_payment_date) warnings.push('First payment date should be specified');
 
   // Deposit validation
-  if (!data.deposit_amount || data.deposit_amount < 0) {
+  if (data.deposit_amount === null || data.deposit_amount === undefined || data.deposit_amount < 0) {
     errors.push('Deposit amount is required (can be 0)');
   }
 

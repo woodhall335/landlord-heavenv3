@@ -1,0 +1,4332 @@
+{
+  "generatedAt": "2026-02-16T09:38:01.632Z",
+  "baseUrl": "http://localhost:5000",
+  "routesAudited": [
+    "/eviction-notice",
+    "/eviction-pack-england",
+    "/money-claim",
+    "/premium-tenancy-agreement",
+    "/products/ast",
+    "/products/complete-pack",
+    "/products/money-claim",
+    "/products/money-claim-pack",
+    "/products/notice-only",
+    "/tenancy-agreement",
+    "/tenancy-agreements/england",
+    "/tenancy-agreements/england-wales",
+    "/tenancy-agreements/northern-ireland",
+    "/tenancy-agreements/scotland",
+    "/tenancy-agreements/wales"
+  ],
+  "pages": [
+    {
+      "route": "/eviction-notice",
+      "url": "http://localhost:5000/eviction-notice",
+      "status": 200,
+      "finalUrl": "http://localhost:5000/eviction-notice",
+      "indexable": true,
+      "indexabilityReasons": [],
+      "canonical": "https://landlordheaven.co.uk/eviction-notice",
+      "robotsMeta": "index, follow",
+      "fetchError": null,
+      "jsonLd": {
+        "totalBlocks": 4,
+        "blocks": [
+          {
+            "index": 0,
+            "parseError": null,
+            "types": [
+              "Organization"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "Landlord Heaven",
+              "url": "https://landlordheaven.co.uk",
+              "logo": "https://landlordheaven.co.uk/logo.png",
+              "description": "UK-wide AI legal case preparation platform generating complete, jurisdiction-specific, compliance-checked eviction bundles ready to file.",
+              "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "GB",
+                "addressRegion": "England"
+              },
+              "contactPoint": [
+                {
+                  "@type": "ContactPoint",
+                  "telephone": "",
+                  "email": "support@landlordheaven.co.uk",
+                  "contactType": "customer support",
+                  "availableLanguage": [
+                    "en"
+                  ]
+                }
+              ],
+              "sameAs": [
+                "https://twitter.com/LandlordHeaven",
+                "https://www.linkedin.com/company/landlord-heaven"
+              ],
+              "areaServed": [
+                {
+                  "@type": "Country",
+                  "name": "United Kingdom"
+                }
+              ]
+            }
+          },
+          {
+            "index": 1,
+            "parseError": null,
+            "types": [
+              "Product"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "Product",
+              "name": "Eviction Notice Generator",
+              "description": "Generate procedurally correct eviction notices for England (Section 21, Section 8), Wales (Section 173/181 under Renting Homes Wales Act 2016), and Scotland (Notice to Leave). Correct notice type, statutory wording, and notice periods. Official forms included.",
+              "url": "https://landlordheaven.co.uk/eviction-notice",
+              "image": "https://landlordheaven.co.uk/og-image.png",
+              "brand": {
+                "@type": "Brand",
+                "name": "Landlord Heaven"
+              },
+              "offers": {
+                "@type": "Offer",
+                "price": "49.99",
+                "priceCurrency": "GBP",
+                "priceValidUntil": "2027-02-16",
+                "availability": "https://schema.org/InStock",
+                "url": "https://landlordheaven.co.uk/eviction-notice",
+                "seller": {
+                  "@type": "Organization",
+                  "name": "Landlord Heaven"
+                },
+                "shippingDetails": {
+                  "@type": "OfferShippingDetails",
+                  "shippingRate": {
+                    "@type": "MonetaryAmount",
+                    "value": "0",
+                    "currency": "GBP"
+                  },
+                  "shippingDestination": {
+                    "@type": "DefinedRegion",
+                    "addressCountry": "GB"
+                  },
+                  "deliveryTime": {
+                    "@type": "ShippingDeliveryTime",
+                    "handlingTime": {
+                      "@type": "QuantitativeValue",
+                      "minValue": "0",
+                      "maxValue": "0",
+                      "unitCode": "MIN"
+                    },
+                    "transitTime": {
+                      "@type": "QuantitativeValue",
+                      "minValue": "0",
+                      "maxValue": "0",
+                      "unitCode": "MIN"
+                    }
+                  }
+                },
+                "hasMerchantReturnPolicy": {
+                  "@type": "MerchantReturnPolicy",
+                  "applicableCountry": "GB",
+                  "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted"
+                }
+              },
+              "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": 4.8,
+                "reviewCount": "269"
+              }
+            }
+          },
+          {
+            "index": 2,
+            "parseError": null,
+            "types": [
+              "FAQPage"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              "mainEntity": [
+                {
+                  "@type": "Question",
+                  "name": "What eviction notices do you generate?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "We generate procedurally correct notices for three jurisdictions: England (Section 21 no-fault using Form 6A, Section 8 fault-based using Form 3), Wales (Section 173 no-fault and Section 181 fault-based under Renting Homes Wales Act 2016), and Scotland (Notice to Leave under the Private Housing (Tenancies) (Scotland) Act 2016)."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "What does \"procedurally correct\" mean?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "It means your notice uses the correct notice type, statutory wording, notice period, and prescribed form for your jurisdiction. We check: (1) Jurisdiction — correct notice type for your property location, (2) Grounds — required wording for each ground cited, (3) Notice period — calculated based on tenancy length, (4) Compliance — flags blockers like missing deposit protection. This is procedural validation, not legal advice."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Are these official government forms?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes. We use official prescribed forms: Form 6A for Section 21 (England), Form 3 for Section 8 (England), official RHW forms for Wales, and the prescribed Notice to Leave format for Scotland. These are the forms required by courts and tribunals."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "What compliance checks are performed?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "For England: deposit protection status, gas safety certificate, Energy Performance Certificate, How to Rent guide provision. For Wales: Rent Smart Wales registration. For Scotland: landlord registration, First-tier Tribunal jurisdiction. Issues are flagged before generation so you can address them first."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Why do incorrect notices fail?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Common reasons: wrong notice type for the tenancy, incorrect notice period, outdated form version, missing statutory wording, grounds not properly cited, or serving before compliance requirements are met. Our system prevents these errors by validating each element before generation."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Can I preview before paying?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes. You can preview all documents with a watermark before paying. Edit your answers and regenerate until satisfied."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "What if my notice is rejected by the court?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "If your notice is rejected due to an error in our document generation, we will regenerate it free. Court acceptance ultimately depends on your specific circumstances and evidence."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Do you provide legal advice?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "No. We provide document generation and procedural validation, not legal advice. Our AI assistant helps you understand the process but is not a solicitor. Consult a qualified solicitor for complex cases or if you anticipate a defence."
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "index": 3,
+            "parseError": null,
+            "types": [
+              "BreadcrumbList"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Home",
+                  "item": "https://landlordheaven.co.uk"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "Products",
+                  "item": "https://landlordheaven.co.uk/pricing"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 3,
+                  "name": "Eviction Notice Generator",
+                  "item": "https://landlordheaven.co.uk/eviction-notice"
+                }
+              ]
+            }
+          }
+        ],
+        "parseErrors": [],
+        "schemaTypesFound": [
+          "Organization",
+          "Product",
+          "FAQPage",
+          "BreadcrumbList"
+        ]
+      },
+      "productSchemas": [
+        {
+          "blockIndex": 1,
+          "object": {
+            "@context": "https://schema.org",
+            "@type": "Product",
+            "name": "Eviction Notice Generator",
+            "description": "Generate procedurally correct eviction notices for England (Section 21, Section 8), Wales (Section 173/181 under Renting Homes Wales Act 2016), and Scotland (Notice to Leave). Correct notice type, statutory wording, and notice periods. Official forms included.",
+            "url": "https://landlordheaven.co.uk/eviction-notice",
+            "image": "https://landlordheaven.co.uk/og-image.png",
+            "brand": {
+              "@type": "Brand",
+              "name": "Landlord Heaven"
+            },
+            "offers": {
+              "@type": "Offer",
+              "price": "49.99",
+              "priceCurrency": "GBP",
+              "priceValidUntil": "2027-02-16",
+              "availability": "https://schema.org/InStock",
+              "url": "https://landlordheaven.co.uk/eviction-notice",
+              "seller": {
+                "@type": "Organization",
+                "name": "Landlord Heaven"
+              },
+              "shippingDetails": {
+                "@type": "OfferShippingDetails",
+                "shippingRate": {
+                  "@type": "MonetaryAmount",
+                  "value": "0",
+                  "currency": "GBP"
+                },
+                "shippingDestination": {
+                  "@type": "DefinedRegion",
+                  "addressCountry": "GB"
+                },
+                "deliveryTime": {
+                  "@type": "ShippingDeliveryTime",
+                  "handlingTime": {
+                    "@type": "QuantitativeValue",
+                    "minValue": "0",
+                    "maxValue": "0",
+                    "unitCode": "MIN"
+                  },
+                  "transitTime": {
+                    "@type": "QuantitativeValue",
+                    "minValue": "0",
+                    "maxValue": "0",
+                    "unitCode": "MIN"
+                  }
+                }
+              },
+              "hasMerchantReturnPolicy": {
+                "@type": "MerchantReturnPolicy",
+                "applicableCountry": "GB",
+                "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted"
+              }
+            },
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "ratingValue": 4.8,
+              "reviewCount": "269"
+            }
+          },
+          "validation": {
+            "valid": true,
+            "issues": [],
+            "offersIsArray": false,
+            "offersCount": 1,
+            "offerResults": [
+              {
+                "valid": true,
+                "issues": [],
+                "price": "49.99",
+                "currency": "GBP",
+                "availability": "https://schema.org/InStock",
+                "offerUrl": "https://landlordheaven.co.uk/eviction-notice",
+                "offerType": [
+                  "Offer"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "conflictSchemas": [],
+      "result": {
+        "hasProductSchema": true,
+        "productSchemaValid": true,
+        "offerValid": true,
+        "offersIsArray": false,
+        "price": "49.99",
+        "currency": "GBP",
+        "availability": "https://schema.org/InStock",
+        "issues": []
+      }
+    },
+    {
+      "route": "/eviction-pack-england",
+      "url": "http://localhost:5000/eviction-pack-england",
+      "status": 200,
+      "finalUrl": "http://localhost:5000/eviction-pack-england",
+      "indexable": true,
+      "indexabilityReasons": [],
+      "canonical": "https://landlordheaven.co.uk/eviction-pack-england",
+      "robotsMeta": "index, follow",
+      "fetchError": null,
+      "jsonLd": {
+        "totalBlocks": 4,
+        "blocks": [
+          {
+            "index": 0,
+            "parseError": null,
+            "types": [
+              "Organization"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "Landlord Heaven",
+              "url": "https://landlordheaven.co.uk",
+              "logo": "https://landlordheaven.co.uk/logo.png",
+              "description": "UK-wide AI legal case preparation platform generating complete, jurisdiction-specific, compliance-checked eviction bundles ready to file.",
+              "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "GB",
+                "addressRegion": "England"
+              },
+              "contactPoint": [
+                {
+                  "@type": "ContactPoint",
+                  "telephone": "",
+                  "email": "support@landlordheaven.co.uk",
+                  "contactType": "customer support",
+                  "availableLanguage": [
+                    "en"
+                  ]
+                }
+              ],
+              "sameAs": [
+                "https://twitter.com/LandlordHeaven",
+                "https://www.linkedin.com/company/landlord-heaven"
+              ],
+              "areaServed": [
+                {
+                  "@type": "Country",
+                  "name": "United Kingdom"
+                }
+              ]
+            }
+          },
+          {
+            "index": 1,
+            "parseError": null,
+            "types": [
+              "Product"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "Product",
+              "name": "Complete Eviction Bundle – England Only",
+              "description": "End-to-end eviction paperwork for England: Section 21 notice + N5B, or Section 8 notice + N5 + N119 Particulars of Claim. We create the full court route — not just the notice. All forms mapped and validated.",
+              "url": "https://landlordheaven.co.uk/eviction-pack-england",
+              "image": "https://landlordheaven.co.uk/og-image.png",
+              "brand": {
+                "@type": "Brand",
+                "name": "Landlord Heaven"
+              },
+              "offers": {
+                "@type": "Offer",
+                "price": "199.99",
+                "priceCurrency": "GBP",
+                "priceValidUntil": "2027-02-16",
+                "availability": "https://schema.org/InStock",
+                "url": "https://landlordheaven.co.uk/eviction-pack-england",
+                "seller": {
+                  "@type": "Organization",
+                  "name": "Landlord Heaven"
+                },
+                "shippingDetails": {
+                  "@type": "OfferShippingDetails",
+                  "shippingRate": {
+                    "@type": "MonetaryAmount",
+                    "value": "0",
+                    "currency": "GBP"
+                  },
+                  "shippingDestination": {
+                    "@type": "DefinedRegion",
+                    "addressCountry": "GB"
+                  },
+                  "deliveryTime": {
+                    "@type": "ShippingDeliveryTime",
+                    "handlingTime": {
+                      "@type": "QuantitativeValue",
+                      "minValue": "0",
+                      "maxValue": "0",
+                      "unitCode": "MIN"
+                    },
+                    "transitTime": {
+                      "@type": "QuantitativeValue",
+                      "minValue": "0",
+                      "maxValue": "0",
+                      "unitCode": "MIN"
+                    }
+                  }
+                },
+                "hasMerchantReturnPolicy": {
+                  "@type": "MerchantReturnPolicy",
+                  "applicableCountry": "GB",
+                  "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted"
+                }
+              },
+              "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": 4.8,
+                "reviewCount": "269"
+              }
+            }
+          },
+          {
+            "index": 2,
+            "parseError": null,
+            "types": [
+              "FAQPage"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              "mainEntity": [
+                {
+                  "@type": "Question",
+                  "name": "What is the difference between Section 21 and Section 8 routes?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Section 21 (no-fault): 2 months notice, then N5B accelerated possession (no hearing if undefended). Section 8 (fault-based): Notice period varies by ground (14 days for rent arrears), then N5 + N119 for standard possession (hearing required). We map your situation to the correct route and generate the appropriate forms."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "What is the N119 Particulars of Claim?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "N119 is the statement of your case filed with the N5 claim form. It details: your grounds for possession, rent arrears history with dates and amounts, tenancy details, and breach specifics. This is where your case is actually made — a weak or missing N119 can sink an otherwise valid claim. We draft this for you."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Why do you emphasise the Particulars of Claim?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Many landlords serve a valid notice but then file an incomplete or poorly drafted court claim. The N119 Particulars of Claim is where you set out the facts that support your grounds. Courts expect itemised arrears, specific breach dates, and correct legal references. We create this document with your case details."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "What court forms are included?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "For Section 21: Form 6A notice + N5B accelerated possession claim. For Section 8: Form 3 notice + N5 claim for possession + N119 particulars of claim. All are official HMCTS forms, pre-filled with your case details."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Is this available for Wales or Scotland?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "No. This bundle is England only. Wales uses different forms under Renting Homes (Wales) Act 2016. Scotland uses First-tier Tribunal forms. For Wales/Scotland, use our Notice Only pack."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "How does this reduce rejected claims?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Rejected claims usually fail due to: incomplete forms, inconsistent information between documents, incorrect dates, or missing particulars. Our system validates all fields, ensures consistency between notice and claim, and generates Particulars of Claim in the correct legal format."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Can I preview before paying?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes. Preview all documents with watermark before paying. Edit and regenerate unlimited times until you are satisfied."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Do you provide legal advice?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "No. We provide document generation and procedural validation. For contested cases, potential defences, or enforcement strategy, consult a solicitor."
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "index": 3,
+            "parseError": null,
+            "types": [
+              "BreadcrumbList"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Home",
+                  "item": "https://landlordheaven.co.uk"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "Products",
+                  "item": "https://landlordheaven.co.uk/pricing"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 3,
+                  "name": "Complete Eviction Bundle – England Only",
+                  "item": "https://landlordheaven.co.uk/eviction-pack-england"
+                }
+              ]
+            }
+          }
+        ],
+        "parseErrors": [],
+        "schemaTypesFound": [
+          "Organization",
+          "Product",
+          "FAQPage",
+          "BreadcrumbList"
+        ]
+      },
+      "productSchemas": [
+        {
+          "blockIndex": 1,
+          "object": {
+            "@context": "https://schema.org",
+            "@type": "Product",
+            "name": "Complete Eviction Bundle – England Only",
+            "description": "End-to-end eviction paperwork for England: Section 21 notice + N5B, or Section 8 notice + N5 + N119 Particulars of Claim. We create the full court route — not just the notice. All forms mapped and validated.",
+            "url": "https://landlordheaven.co.uk/eviction-pack-england",
+            "image": "https://landlordheaven.co.uk/og-image.png",
+            "brand": {
+              "@type": "Brand",
+              "name": "Landlord Heaven"
+            },
+            "offers": {
+              "@type": "Offer",
+              "price": "199.99",
+              "priceCurrency": "GBP",
+              "priceValidUntil": "2027-02-16",
+              "availability": "https://schema.org/InStock",
+              "url": "https://landlordheaven.co.uk/eviction-pack-england",
+              "seller": {
+                "@type": "Organization",
+                "name": "Landlord Heaven"
+              },
+              "shippingDetails": {
+                "@type": "OfferShippingDetails",
+                "shippingRate": {
+                  "@type": "MonetaryAmount",
+                  "value": "0",
+                  "currency": "GBP"
+                },
+                "shippingDestination": {
+                  "@type": "DefinedRegion",
+                  "addressCountry": "GB"
+                },
+                "deliveryTime": {
+                  "@type": "ShippingDeliveryTime",
+                  "handlingTime": {
+                    "@type": "QuantitativeValue",
+                    "minValue": "0",
+                    "maxValue": "0",
+                    "unitCode": "MIN"
+                  },
+                  "transitTime": {
+                    "@type": "QuantitativeValue",
+                    "minValue": "0",
+                    "maxValue": "0",
+                    "unitCode": "MIN"
+                  }
+                }
+              },
+              "hasMerchantReturnPolicy": {
+                "@type": "MerchantReturnPolicy",
+                "applicableCountry": "GB",
+                "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted"
+              }
+            },
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "ratingValue": 4.8,
+              "reviewCount": "269"
+            }
+          },
+          "validation": {
+            "valid": true,
+            "issues": [],
+            "offersIsArray": false,
+            "offersCount": 1,
+            "offerResults": [
+              {
+                "valid": true,
+                "issues": [],
+                "price": "199.99",
+                "currency": "GBP",
+                "availability": "https://schema.org/InStock",
+                "offerUrl": "https://landlordheaven.co.uk/eviction-pack-england",
+                "offerType": [
+                  "Offer"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "conflictSchemas": [],
+      "result": {
+        "hasProductSchema": true,
+        "productSchemaValid": true,
+        "offerValid": true,
+        "offersIsArray": false,
+        "price": "199.99",
+        "currency": "GBP",
+        "availability": "https://schema.org/InStock",
+        "issues": []
+      }
+    },
+    {
+      "route": "/money-claim",
+      "url": "http://localhost:5000/money-claim",
+      "status": 200,
+      "finalUrl": "http://localhost:5000/money-claim",
+      "indexable": true,
+      "indexabilityReasons": [],
+      "canonical": "https://landlordheaven.co.uk/money-claim",
+      "robotsMeta": "index, follow",
+      "fetchError": null,
+      "jsonLd": {
+        "totalBlocks": 4,
+        "blocks": [
+          {
+            "index": 0,
+            "parseError": null,
+            "types": [
+              "Organization"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "Landlord Heaven",
+              "url": "https://landlordheaven.co.uk",
+              "logo": "https://landlordheaven.co.uk/logo.png",
+              "description": "UK-wide AI legal case preparation platform generating complete, jurisdiction-specific, compliance-checked eviction bundles ready to file.",
+              "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "GB",
+                "addressRegion": "England"
+              },
+              "contactPoint": [
+                {
+                  "@type": "ContactPoint",
+                  "telephone": "",
+                  "email": "support@landlordheaven.co.uk",
+                  "contactType": "customer support",
+                  "availableLanguage": [
+                    "en"
+                  ]
+                }
+              ],
+              "sameAs": [
+                "https://twitter.com/LandlordHeaven",
+                "https://www.linkedin.com/company/landlord-heaven"
+              ],
+              "areaServed": [
+                {
+                  "@type": "Country",
+                  "name": "United Kingdom"
+                }
+              ]
+            }
+          },
+          {
+            "index": 1,
+            "parseError": null,
+            "types": [
+              "Product"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "Product",
+              "name": "Money Claim Pack — England Only",
+              "description": "Generate Form N1 claim form for rent arrears, property damage, cleaning costs, and contractual sums. England only. Automatic interest calculation with daily rate. Figures consistent across all documents. County court filing guide included.",
+              "url": "https://landlordheaven.co.uk/money-claim",
+              "image": "https://landlordheaven.co.uk/og-image.png",
+              "brand": {
+                "@type": "Brand",
+                "name": "Landlord Heaven"
+              },
+              "offers": {
+                "@type": "Offer",
+                "price": "99.99",
+                "priceCurrency": "GBP",
+                "priceValidUntil": "2027-02-16",
+                "availability": "https://schema.org/InStock",
+                "url": "https://landlordheaven.co.uk/money-claim",
+                "seller": {
+                  "@type": "Organization",
+                  "name": "Landlord Heaven"
+                },
+                "shippingDetails": {
+                  "@type": "OfferShippingDetails",
+                  "shippingRate": {
+                    "@type": "MonetaryAmount",
+                    "value": "0",
+                    "currency": "GBP"
+                  },
+                  "shippingDestination": {
+                    "@type": "DefinedRegion",
+                    "addressCountry": "GB"
+                  },
+                  "deliveryTime": {
+                    "@type": "ShippingDeliveryTime",
+                    "handlingTime": {
+                      "@type": "QuantitativeValue",
+                      "minValue": "0",
+                      "maxValue": "0",
+                      "unitCode": "MIN"
+                    },
+                    "transitTime": {
+                      "@type": "QuantitativeValue",
+                      "minValue": "0",
+                      "maxValue": "0",
+                      "unitCode": "MIN"
+                    }
+                  }
+                },
+                "hasMerchantReturnPolicy": {
+                  "@type": "MerchantReturnPolicy",
+                  "applicableCountry": "GB",
+                  "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted"
+                }
+              },
+              "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": 4.8,
+                "reviewCount": "269"
+              }
+            }
+          },
+          {
+            "index": 2,
+            "parseError": null,
+            "types": [
+              "FAQPage"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              "mainEntity": [
+                {
+                  "@type": "Question",
+                  "name": "What is Form N1?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Form N1 is the official county court claim form for money claims in England. It is the form you file to start legal proceedings to recover debts — including rent arrears, property damage costs, cleaning costs, and other sums owed by tenants under the tenancy agreement."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "What can I claim for?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "You can claim for: rent arrears (itemised by month), property damage (carpets, walls, appliances, garden), professional cleaning costs, unpaid utilities, rubbish removal, abandoned goods disposal, council tax, early termination costs, and any other contractual sums owed under the tenancy agreement."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "How is interest calculated?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Statutory interest is 8% per annum under the Late Payment of Commercial Debts (Interest) Act 1998 or county court rules. Our calculator works this out automatically from the correct start date for each item. For rent arrears: interest runs from each payment due date. For damage claims: from when you notified the tenant."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "What is the daily rate and why does it matter?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "The daily rate is the interest accruing each day after filing. Calculated as: (Principal × 8%) ÷ 365. For example: £5,000 debt accrues £1.10 per day. Courts expect the daily rate stated in your claim so they can calculate the final judgment amount. We include this in your N1."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Where do I file the claim?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "This pack is for England only. File paper forms at the County Court Money Claims Centre (CCMCC) in Salford, or submit electronically through the court portal. Our guide explains the filing process, court fees, and timelines for England county courts."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "What is PAP-DEBT?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "PAP-DEBT is the Pre-Action Protocol for Debt Claims. Before issuing court proceedings, you must send a compliant Letter Before Claim giving the debtor 30 days to respond. If you skip this step, the court may refuse costs even if you win. Our Letter Before Claim follows this protocol exactly."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Can I claim against a tenant who has left?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes. You have 6 years from when the debt arose to make a claim under the Limitation Act 1980. You will need the tenant's current address for court service. If you don't have it, tracing services can help."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "What happens after I win?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "If the tenant does not pay voluntarily after judgment, enforcement options include: County Court Bailiffs (warrant of control), High Court Enforcement Officers (for judgments over £600), Attachment of Earnings (deducted from wages), and Charging Orders (secured against property). Our enforcement guide covers all options."
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "index": 3,
+            "parseError": null,
+            "types": [
+              "BreadcrumbList"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Home",
+                  "item": "https://landlordheaven.co.uk"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "Products",
+                  "item": "https://landlordheaven.co.uk/pricing"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 3,
+                  "name": "Money Claim Pack — England Only",
+                  "item": "https://landlordheaven.co.uk/money-claim"
+                }
+              ]
+            }
+          }
+        ],
+        "parseErrors": [],
+        "schemaTypesFound": [
+          "Organization",
+          "Product",
+          "FAQPage",
+          "BreadcrumbList"
+        ]
+      },
+      "productSchemas": [
+        {
+          "blockIndex": 1,
+          "object": {
+            "@context": "https://schema.org",
+            "@type": "Product",
+            "name": "Money Claim Pack — England Only",
+            "description": "Generate Form N1 claim form for rent arrears, property damage, cleaning costs, and contractual sums. England only. Automatic interest calculation with daily rate. Figures consistent across all documents. County court filing guide included.",
+            "url": "https://landlordheaven.co.uk/money-claim",
+            "image": "https://landlordheaven.co.uk/og-image.png",
+            "brand": {
+              "@type": "Brand",
+              "name": "Landlord Heaven"
+            },
+            "offers": {
+              "@type": "Offer",
+              "price": "99.99",
+              "priceCurrency": "GBP",
+              "priceValidUntil": "2027-02-16",
+              "availability": "https://schema.org/InStock",
+              "url": "https://landlordheaven.co.uk/money-claim",
+              "seller": {
+                "@type": "Organization",
+                "name": "Landlord Heaven"
+              },
+              "shippingDetails": {
+                "@type": "OfferShippingDetails",
+                "shippingRate": {
+                  "@type": "MonetaryAmount",
+                  "value": "0",
+                  "currency": "GBP"
+                },
+                "shippingDestination": {
+                  "@type": "DefinedRegion",
+                  "addressCountry": "GB"
+                },
+                "deliveryTime": {
+                  "@type": "ShippingDeliveryTime",
+                  "handlingTime": {
+                    "@type": "QuantitativeValue",
+                    "minValue": "0",
+                    "maxValue": "0",
+                    "unitCode": "MIN"
+                  },
+                  "transitTime": {
+                    "@type": "QuantitativeValue",
+                    "minValue": "0",
+                    "maxValue": "0",
+                    "unitCode": "MIN"
+                  }
+                }
+              },
+              "hasMerchantReturnPolicy": {
+                "@type": "MerchantReturnPolicy",
+                "applicableCountry": "GB",
+                "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted"
+              }
+            },
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "ratingValue": 4.8,
+              "reviewCount": "269"
+            }
+          },
+          "validation": {
+            "valid": true,
+            "issues": [],
+            "offersIsArray": false,
+            "offersCount": 1,
+            "offerResults": [
+              {
+                "valid": true,
+                "issues": [],
+                "price": "99.99",
+                "currency": "GBP",
+                "availability": "https://schema.org/InStock",
+                "offerUrl": "https://landlordheaven.co.uk/money-claim",
+                "offerType": [
+                  "Offer"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "conflictSchemas": [],
+      "result": {
+        "hasProductSchema": true,
+        "productSchemaValid": true,
+        "offerValid": true,
+        "offersIsArray": false,
+        "price": "99.99",
+        "currency": "GBP",
+        "availability": "https://schema.org/InStock",
+        "issues": []
+      }
+    },
+    {
+      "route": "/premium-tenancy-agreement",
+      "url": "http://localhost:5000/premium-tenancy-agreement",
+      "status": 200,
+      "finalUrl": "http://localhost:5000/products/ast",
+      "indexable": false,
+      "indexabilityReasons": [
+        "canonical_points_elsewhere",
+        "redirect_to_other"
+      ],
+      "canonical": "https://landlordheaven.co.uk/products/ast",
+      "robotsMeta": "index, follow",
+      "fetchError": null,
+      "jsonLd": {
+        "totalBlocks": 4,
+        "blocks": [
+          {
+            "index": 0,
+            "parseError": null,
+            "types": [
+              "Organization"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "Landlord Heaven",
+              "url": "https://landlordheaven.co.uk",
+              "logo": "https://landlordheaven.co.uk/logo.png",
+              "description": "UK-wide AI legal case preparation platform generating complete, jurisdiction-specific, compliance-checked eviction bundles ready to file.",
+              "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "GB",
+                "addressRegion": "England"
+              },
+              "contactPoint": [
+                {
+                  "@type": "ContactPoint",
+                  "telephone": "",
+                  "email": "support@landlordheaven.co.uk",
+                  "contactType": "customer support",
+                  "availableLanguage": [
+                    "en"
+                  ]
+                }
+              ],
+              "sameAs": [
+                "https://twitter.com/LandlordHeaven",
+                "https://www.linkedin.com/company/landlord-heaven"
+              ],
+              "areaServed": [
+                {
+                  "@type": "Country",
+                  "name": "United Kingdom"
+                }
+              ]
+            }
+          },
+          {
+            "index": 1,
+            "parseError": null,
+            "types": [
+              "Product"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "Product",
+              "name": "Tenancy Agreements - AST, PRT, Occupation Contract, NI",
+              "description": "Legally compliant tenancy agreements for UK landlords. Covers Assured Shorthold Tenancies (England), Occupation Contracts (Wales), Private Residential Tenancies (Scotland), and Northern Ireland tenancies.",
+              "url": "https://landlordheaven.co.uk/products/ast",
+              "image": "https://landlordheaven.co.uk/og-image.png",
+              "brand": {
+                "@type": "Brand",
+                "name": "Landlord Heaven"
+              },
+              "offers": {
+                "@type": "Offer",
+                "price": "14.99",
+                "priceCurrency": "GBP",
+                "priceValidUntil": "2027-02-16",
+                "availability": "https://schema.org/InStock",
+                "url": "https://landlordheaven.co.uk/products/ast",
+                "seller": {
+                  "@type": "Organization",
+                  "name": "Landlord Heaven"
+                },
+                "shippingDetails": {
+                  "@type": "OfferShippingDetails",
+                  "shippingRate": {
+                    "@type": "MonetaryAmount",
+                    "value": "0",
+                    "currency": "GBP"
+                  },
+                  "shippingDestination": {
+                    "@type": "DefinedRegion",
+                    "addressCountry": "GB"
+                  },
+                  "deliveryTime": {
+                    "@type": "ShippingDeliveryTime",
+                    "handlingTime": {
+                      "@type": "QuantitativeValue",
+                      "minValue": "0",
+                      "maxValue": "0",
+                      "unitCode": "MIN"
+                    },
+                    "transitTime": {
+                      "@type": "QuantitativeValue",
+                      "minValue": "0",
+                      "maxValue": "0",
+                      "unitCode": "MIN"
+                    }
+                  }
+                },
+                "hasMerchantReturnPolicy": {
+                  "@type": "MerchantReturnPolicy",
+                  "applicableCountry": "GB",
+                  "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted"
+                }
+              },
+              "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": 4.8,
+                "reviewCount": "269"
+              }
+            }
+          },
+          {
+            "index": 2,
+            "parseError": null,
+            "types": [
+              "FAQPage"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              "mainEntity": [
+                {
+                  "@type": "Question",
+                  "name": "What's the difference between Standard and Premium?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Standard includes core tenancy clauses suitable for single households. Premium adds HMO-specific clauses (joint & several liability, shared facilities rules, tenant replacement), guarantor provisions, rent review mechanisms, and anti-subletting terms - ideal for multi-tenant properties, student lets, or professional landlords."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Which agreement type do I get for my region?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "The wizard generates the correct legal format automatically: AST (Assured Shorthold Tenancy) for England, Standard Occupation Contract for Wales, PRT (Private Residential Tenancy) for Scotland, and Private Tenancy for Northern Ireland. All comply with their respective housing legislation."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Do I need Premium for an HMO?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "If you're letting to 3+ unrelated tenants sharing facilities, Premium is recommended. It includes clauses commonly required under HMO licensing (Housing Act 2004 for England, equivalent legislation for other regions): joint & several liability, shared facilities rules, and terms aligned with licence conditions."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Can I preview before I pay?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes. You can preview your agreement with a watermark before paying. This lets you verify the clauses and property details are correct before committing."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "What if I need to make changes?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "You can edit your answers and regenerate instantly at no extra cost. Unlimited regenerations are included."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "How long are documents stored?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Documents are stored in your portal for at least 12 months. You can download and save them any time."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Is this legally valid?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes. Both Standard and Premium are legally valid tenancy agreements compliant with current housing legislation. However, for complex situations (commercial mixed-use, unusual property types), consult a solicitor."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "What about pets, break clauses, and guarantors?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Pets clauses and break clauses are included in both tiers. Guarantor clauses with clear liability terms are Premium-only, as they require more sophisticated legal drafting."
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "index": 3,
+            "parseError": null,
+            "types": [
+              "BreadcrumbList"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Home",
+                  "item": "https://landlordheaven.co.uk"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "Products",
+                  "item": "https://landlordheaven.co.uk/pricing"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 3,
+                  "name": "Tenancy Agreements",
+                  "item": "https://landlordheaven.co.uk/products/ast"
+                }
+              ]
+            }
+          }
+        ],
+        "parseErrors": [],
+        "schemaTypesFound": [
+          "Organization",
+          "Product",
+          "FAQPage",
+          "BreadcrumbList"
+        ]
+      },
+      "productSchemas": [
+        {
+          "blockIndex": 1,
+          "object": {
+            "@context": "https://schema.org",
+            "@type": "Product",
+            "name": "Tenancy Agreements - AST, PRT, Occupation Contract, NI",
+            "description": "Legally compliant tenancy agreements for UK landlords. Covers Assured Shorthold Tenancies (England), Occupation Contracts (Wales), Private Residential Tenancies (Scotland), and Northern Ireland tenancies.",
+            "url": "https://landlordheaven.co.uk/products/ast",
+            "image": "https://landlordheaven.co.uk/og-image.png",
+            "brand": {
+              "@type": "Brand",
+              "name": "Landlord Heaven"
+            },
+            "offers": {
+              "@type": "Offer",
+              "price": "14.99",
+              "priceCurrency": "GBP",
+              "priceValidUntil": "2027-02-16",
+              "availability": "https://schema.org/InStock",
+              "url": "https://landlordheaven.co.uk/products/ast",
+              "seller": {
+                "@type": "Organization",
+                "name": "Landlord Heaven"
+              },
+              "shippingDetails": {
+                "@type": "OfferShippingDetails",
+                "shippingRate": {
+                  "@type": "MonetaryAmount",
+                  "value": "0",
+                  "currency": "GBP"
+                },
+                "shippingDestination": {
+                  "@type": "DefinedRegion",
+                  "addressCountry": "GB"
+                },
+                "deliveryTime": {
+                  "@type": "ShippingDeliveryTime",
+                  "handlingTime": {
+                    "@type": "QuantitativeValue",
+                    "minValue": "0",
+                    "maxValue": "0",
+                    "unitCode": "MIN"
+                  },
+                  "transitTime": {
+                    "@type": "QuantitativeValue",
+                    "minValue": "0",
+                    "maxValue": "0",
+                    "unitCode": "MIN"
+                  }
+                }
+              },
+              "hasMerchantReturnPolicy": {
+                "@type": "MerchantReturnPolicy",
+                "applicableCountry": "GB",
+                "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted"
+              }
+            },
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "ratingValue": 4.8,
+              "reviewCount": "269"
+            }
+          },
+          "validation": {
+            "valid": true,
+            "issues": [],
+            "offersIsArray": false,
+            "offersCount": 1,
+            "offerResults": [
+              {
+                "valid": true,
+                "issues": [],
+                "price": "14.99",
+                "currency": "GBP",
+                "availability": "https://schema.org/InStock",
+                "offerUrl": "https://landlordheaven.co.uk/products/ast",
+                "offerType": [
+                  "Offer"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "conflictSchemas": [],
+      "result": {
+        "hasProductSchema": true,
+        "productSchemaValid": true,
+        "offerValid": true,
+        "offersIsArray": false,
+        "price": "14.99",
+        "currency": "GBP",
+        "availability": "https://schema.org/InStock",
+        "issues": [
+          "non_indexable:canonical_points_elsewhere",
+          "non_indexable:redirect_to_other"
+        ]
+      }
+    },
+    {
+      "route": "/products/ast",
+      "url": "http://localhost:5000/products/ast",
+      "status": 200,
+      "finalUrl": "http://localhost:5000/products/ast",
+      "indexable": true,
+      "indexabilityReasons": [],
+      "canonical": "https://landlordheaven.co.uk/products/ast",
+      "robotsMeta": "index, follow",
+      "fetchError": null,
+      "jsonLd": {
+        "totalBlocks": 4,
+        "blocks": [
+          {
+            "index": 0,
+            "parseError": null,
+            "types": [
+              "Organization"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "Landlord Heaven",
+              "url": "https://landlordheaven.co.uk",
+              "logo": "https://landlordheaven.co.uk/logo.png",
+              "description": "UK-wide AI legal case preparation platform generating complete, jurisdiction-specific, compliance-checked eviction bundles ready to file.",
+              "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "GB",
+                "addressRegion": "England"
+              },
+              "contactPoint": [
+                {
+                  "@type": "ContactPoint",
+                  "telephone": "",
+                  "email": "support@landlordheaven.co.uk",
+                  "contactType": "customer support",
+                  "availableLanguage": [
+                    "en"
+                  ]
+                }
+              ],
+              "sameAs": [
+                "https://twitter.com/LandlordHeaven",
+                "https://www.linkedin.com/company/landlord-heaven"
+              ],
+              "areaServed": [
+                {
+                  "@type": "Country",
+                  "name": "United Kingdom"
+                }
+              ]
+            }
+          },
+          {
+            "index": 1,
+            "parseError": null,
+            "types": [
+              "Product"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "Product",
+              "name": "Tenancy Agreements - AST, PRT, Occupation Contract, NI",
+              "description": "Legally compliant tenancy agreements for UK landlords. Covers Assured Shorthold Tenancies (England), Occupation Contracts (Wales), Private Residential Tenancies (Scotland), and Northern Ireland tenancies.",
+              "url": "https://landlordheaven.co.uk/products/ast",
+              "image": "https://landlordheaven.co.uk/og-image.png",
+              "brand": {
+                "@type": "Brand",
+                "name": "Landlord Heaven"
+              },
+              "offers": {
+                "@type": "Offer",
+                "price": "14.99",
+                "priceCurrency": "GBP",
+                "priceValidUntil": "2027-02-16",
+                "availability": "https://schema.org/InStock",
+                "url": "https://landlordheaven.co.uk/products/ast",
+                "seller": {
+                  "@type": "Organization",
+                  "name": "Landlord Heaven"
+                },
+                "shippingDetails": {
+                  "@type": "OfferShippingDetails",
+                  "shippingRate": {
+                    "@type": "MonetaryAmount",
+                    "value": "0",
+                    "currency": "GBP"
+                  },
+                  "shippingDestination": {
+                    "@type": "DefinedRegion",
+                    "addressCountry": "GB"
+                  },
+                  "deliveryTime": {
+                    "@type": "ShippingDeliveryTime",
+                    "handlingTime": {
+                      "@type": "QuantitativeValue",
+                      "minValue": "0",
+                      "maxValue": "0",
+                      "unitCode": "MIN"
+                    },
+                    "transitTime": {
+                      "@type": "QuantitativeValue",
+                      "minValue": "0",
+                      "maxValue": "0",
+                      "unitCode": "MIN"
+                    }
+                  }
+                },
+                "hasMerchantReturnPolicy": {
+                  "@type": "MerchantReturnPolicy",
+                  "applicableCountry": "GB",
+                  "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted"
+                }
+              },
+              "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": 4.8,
+                "reviewCount": "269"
+              }
+            }
+          },
+          {
+            "index": 2,
+            "parseError": null,
+            "types": [
+              "FAQPage"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              "mainEntity": [
+                {
+                  "@type": "Question",
+                  "name": "What's the difference between Standard and Premium?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Standard includes core tenancy clauses suitable for single households. Premium adds HMO-specific clauses (joint & several liability, shared facilities rules, tenant replacement), guarantor provisions, rent review mechanisms, and anti-subletting terms - ideal for multi-tenant properties, student lets, or professional landlords."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Which agreement type do I get for my region?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "The wizard generates the correct legal format automatically: AST (Assured Shorthold Tenancy) for England, Standard Occupation Contract for Wales, PRT (Private Residential Tenancy) for Scotland, and Private Tenancy for Northern Ireland. All comply with their respective housing legislation."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Do I need Premium for an HMO?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "If you're letting to 3+ unrelated tenants sharing facilities, Premium is recommended. It includes clauses commonly required under HMO licensing (Housing Act 2004 for England, equivalent legislation for other regions): joint & several liability, shared facilities rules, and terms aligned with licence conditions."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Can I preview before I pay?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes. You can preview your agreement with a watermark before paying. This lets you verify the clauses and property details are correct before committing."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "What if I need to make changes?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "You can edit your answers and regenerate instantly at no extra cost. Unlimited regenerations are included."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "How long are documents stored?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Documents are stored in your portal for at least 12 months. You can download and save them any time."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Is this legally valid?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes. Both Standard and Premium are legally valid tenancy agreements compliant with current housing legislation. However, for complex situations (commercial mixed-use, unusual property types), consult a solicitor."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "What about pets, break clauses, and guarantors?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Pets clauses and break clauses are included in both tiers. Guarantor clauses with clear liability terms are Premium-only, as they require more sophisticated legal drafting."
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "index": 3,
+            "parseError": null,
+            "types": [
+              "BreadcrumbList"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Home",
+                  "item": "https://landlordheaven.co.uk"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "Products",
+                  "item": "https://landlordheaven.co.uk/pricing"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 3,
+                  "name": "Tenancy Agreements",
+                  "item": "https://landlordheaven.co.uk/products/ast"
+                }
+              ]
+            }
+          }
+        ],
+        "parseErrors": [],
+        "schemaTypesFound": [
+          "Organization",
+          "Product",
+          "FAQPage",
+          "BreadcrumbList"
+        ]
+      },
+      "productSchemas": [
+        {
+          "blockIndex": 1,
+          "object": {
+            "@context": "https://schema.org",
+            "@type": "Product",
+            "name": "Tenancy Agreements - AST, PRT, Occupation Contract, NI",
+            "description": "Legally compliant tenancy agreements for UK landlords. Covers Assured Shorthold Tenancies (England), Occupation Contracts (Wales), Private Residential Tenancies (Scotland), and Northern Ireland tenancies.",
+            "url": "https://landlordheaven.co.uk/products/ast",
+            "image": "https://landlordheaven.co.uk/og-image.png",
+            "brand": {
+              "@type": "Brand",
+              "name": "Landlord Heaven"
+            },
+            "offers": {
+              "@type": "Offer",
+              "price": "14.99",
+              "priceCurrency": "GBP",
+              "priceValidUntil": "2027-02-16",
+              "availability": "https://schema.org/InStock",
+              "url": "https://landlordheaven.co.uk/products/ast",
+              "seller": {
+                "@type": "Organization",
+                "name": "Landlord Heaven"
+              },
+              "shippingDetails": {
+                "@type": "OfferShippingDetails",
+                "shippingRate": {
+                  "@type": "MonetaryAmount",
+                  "value": "0",
+                  "currency": "GBP"
+                },
+                "shippingDestination": {
+                  "@type": "DefinedRegion",
+                  "addressCountry": "GB"
+                },
+                "deliveryTime": {
+                  "@type": "ShippingDeliveryTime",
+                  "handlingTime": {
+                    "@type": "QuantitativeValue",
+                    "minValue": "0",
+                    "maxValue": "0",
+                    "unitCode": "MIN"
+                  },
+                  "transitTime": {
+                    "@type": "QuantitativeValue",
+                    "minValue": "0",
+                    "maxValue": "0",
+                    "unitCode": "MIN"
+                  }
+                }
+              },
+              "hasMerchantReturnPolicy": {
+                "@type": "MerchantReturnPolicy",
+                "applicableCountry": "GB",
+                "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted"
+              }
+            },
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "ratingValue": 4.8,
+              "reviewCount": "269"
+            }
+          },
+          "validation": {
+            "valid": true,
+            "issues": [],
+            "offersIsArray": false,
+            "offersCount": 1,
+            "offerResults": [
+              {
+                "valid": true,
+                "issues": [],
+                "price": "14.99",
+                "currency": "GBP",
+                "availability": "https://schema.org/InStock",
+                "offerUrl": "https://landlordheaven.co.uk/products/ast",
+                "offerType": [
+                  "Offer"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "conflictSchemas": [],
+      "result": {
+        "hasProductSchema": true,
+        "productSchemaValid": true,
+        "offerValid": true,
+        "offersIsArray": false,
+        "price": "14.99",
+        "currency": "GBP",
+        "availability": "https://schema.org/InStock",
+        "issues": []
+      }
+    },
+    {
+      "route": "/products/complete-pack",
+      "url": "http://localhost:5000/products/complete-pack",
+      "status": 200,
+      "finalUrl": "http://localhost:5000/products/complete-pack",
+      "indexable": true,
+      "indexabilityReasons": [],
+      "canonical": "https://landlordheaven.co.uk/products/complete-pack",
+      "robotsMeta": "index, follow",
+      "fetchError": null,
+      "jsonLd": {
+        "totalBlocks": 4,
+        "blocks": [
+          {
+            "index": 0,
+            "parseError": null,
+            "types": [
+              "Organization"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "Landlord Heaven",
+              "url": "https://landlordheaven.co.uk",
+              "logo": "https://landlordheaven.co.uk/logo.png",
+              "description": "UK-wide AI legal case preparation platform generating complete, jurisdiction-specific, compliance-checked eviction bundles ready to file.",
+              "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "GB",
+                "addressRegion": "England"
+              },
+              "contactPoint": [
+                {
+                  "@type": "ContactPoint",
+                  "telephone": "",
+                  "email": "support@landlordheaven.co.uk",
+                  "contactType": "customer support",
+                  "availableLanguage": [
+                    "en"
+                  ]
+                }
+              ],
+              "sameAs": [
+                "https://twitter.com/LandlordHeaven",
+                "https://www.linkedin.com/company/landlord-heaven"
+              ],
+              "areaServed": [
+                {
+                  "@type": "Country",
+                  "name": "United Kingdom"
+                }
+              ]
+            }
+          },
+          {
+            "index": 1,
+            "parseError": null,
+            "types": [
+              "Product"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "Product",
+              "name": "Complete Eviction Case Bundle",
+              "description": "Complete eviction bundle with all court forms from notice to possession order. Includes N5, N119 forms, AI-drafted witness statements, and step-by-step guidance.",
+              "url": "https://landlordheaven.co.uk/products/complete-pack",
+              "image": "https://landlordheaven.co.uk/og-image.png",
+              "brand": {
+                "@type": "Brand",
+                "name": "Landlord Heaven"
+              },
+              "offers": {
+                "@type": "Offer",
+                "price": "199.99",
+                "priceCurrency": "GBP",
+                "priceValidUntil": "2027-02-16",
+                "availability": "https://schema.org/InStock",
+                "url": "https://landlordheaven.co.uk/products/complete-pack",
+                "seller": {
+                  "@type": "Organization",
+                  "name": "Landlord Heaven"
+                },
+                "shippingDetails": {
+                  "@type": "OfferShippingDetails",
+                  "shippingRate": {
+                    "@type": "MonetaryAmount",
+                    "value": "0",
+                    "currency": "GBP"
+                  },
+                  "shippingDestination": {
+                    "@type": "DefinedRegion",
+                    "addressCountry": "GB"
+                  },
+                  "deliveryTime": {
+                    "@type": "ShippingDeliveryTime",
+                    "handlingTime": {
+                      "@type": "QuantitativeValue",
+                      "minValue": "0",
+                      "maxValue": "0",
+                      "unitCode": "MIN"
+                    },
+                    "transitTime": {
+                      "@type": "QuantitativeValue",
+                      "minValue": "0",
+                      "maxValue": "0",
+                      "unitCode": "MIN"
+                    }
+                  }
+                },
+                "hasMerchantReturnPolicy": {
+                  "@type": "MerchantReturnPolicy",
+                  "applicableCountry": "GB",
+                  "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted"
+                }
+              },
+              "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": 4.8,
+                "reviewCount": "269"
+              }
+            }
+          },
+          {
+            "index": 2,
+            "parseError": null,
+            "types": [
+              "FAQPage"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              "mainEntity": [
+                {
+                  "@type": "Question",
+                  "name": "What documents do I get?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "You receive an England-only case bundle: Section 21 or Section 8 notice, Service Instructions, Service & Validity Checklist, Court Forms (N5/N5B/N119 route as applicable), AI witness statement draft, Filing Guide, Evidence Checklist, and Proof of Service Certificate."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Can I preview before I pay?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes. You can preview all documents with a watermark before paying. This lets you verify everything is correct before committing."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "What if I need to make changes?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "You can edit your answers and regenerate your case bundle instantly at no extra cost. Unlimited regenerations are included."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Which jurisdictions do you support?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "England only. This pack includes Section 21/Section 8 notices plus N5, N119, N5B court forms for English courts."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Are these genuine official court forms?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes. We use official HMCTS forms (N5, N5B, N119) for England County Court routes. These are the same forms you'd download from government sources, populated with your case details."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "How long does the eviction process take?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Timelines vary by route and whether the claim is defended. We include England-specific filing and timeline guidance for Section 21 and Section 8 routes."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "How long are documents stored?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Documents are stored in your portal for at least 12 months. You can download and save them any time."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Do you provide legal advice?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "No. We provide document generation and guidance, not legal advice. Ask Heaven helps you understand the process but is not a solicitor and does not provide legal representation."
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "index": 3,
+            "parseError": null,
+            "types": [
+              "BreadcrumbList"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Home",
+                  "item": "https://landlordheaven.co.uk"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "Products",
+                  "item": "https://landlordheaven.co.uk/pricing"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 3,
+                  "name": "Complete Eviction Case Bundle",
+                  "item": "https://landlordheaven.co.uk/products/complete-pack"
+                }
+              ]
+            }
+          }
+        ],
+        "parseErrors": [],
+        "schemaTypesFound": [
+          "Organization",
+          "Product",
+          "FAQPage",
+          "BreadcrumbList"
+        ]
+      },
+      "productSchemas": [
+        {
+          "blockIndex": 1,
+          "object": {
+            "@context": "https://schema.org",
+            "@type": "Product",
+            "name": "Complete Eviction Case Bundle",
+            "description": "Complete eviction bundle with all court forms from notice to possession order. Includes N5, N119 forms, AI-drafted witness statements, and step-by-step guidance.",
+            "url": "https://landlordheaven.co.uk/products/complete-pack",
+            "image": "https://landlordheaven.co.uk/og-image.png",
+            "brand": {
+              "@type": "Brand",
+              "name": "Landlord Heaven"
+            },
+            "offers": {
+              "@type": "Offer",
+              "price": "199.99",
+              "priceCurrency": "GBP",
+              "priceValidUntil": "2027-02-16",
+              "availability": "https://schema.org/InStock",
+              "url": "https://landlordheaven.co.uk/products/complete-pack",
+              "seller": {
+                "@type": "Organization",
+                "name": "Landlord Heaven"
+              },
+              "shippingDetails": {
+                "@type": "OfferShippingDetails",
+                "shippingRate": {
+                  "@type": "MonetaryAmount",
+                  "value": "0",
+                  "currency": "GBP"
+                },
+                "shippingDestination": {
+                  "@type": "DefinedRegion",
+                  "addressCountry": "GB"
+                },
+                "deliveryTime": {
+                  "@type": "ShippingDeliveryTime",
+                  "handlingTime": {
+                    "@type": "QuantitativeValue",
+                    "minValue": "0",
+                    "maxValue": "0",
+                    "unitCode": "MIN"
+                  },
+                  "transitTime": {
+                    "@type": "QuantitativeValue",
+                    "minValue": "0",
+                    "maxValue": "0",
+                    "unitCode": "MIN"
+                  }
+                }
+              },
+              "hasMerchantReturnPolicy": {
+                "@type": "MerchantReturnPolicy",
+                "applicableCountry": "GB",
+                "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted"
+              }
+            },
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "ratingValue": 4.8,
+              "reviewCount": "269"
+            }
+          },
+          "validation": {
+            "valid": true,
+            "issues": [],
+            "offersIsArray": false,
+            "offersCount": 1,
+            "offerResults": [
+              {
+                "valid": true,
+                "issues": [],
+                "price": "199.99",
+                "currency": "GBP",
+                "availability": "https://schema.org/InStock",
+                "offerUrl": "https://landlordheaven.co.uk/products/complete-pack",
+                "offerType": [
+                  "Offer"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "conflictSchemas": [],
+      "result": {
+        "hasProductSchema": true,
+        "productSchemaValid": true,
+        "offerValid": true,
+        "offersIsArray": false,
+        "price": "199.99",
+        "currency": "GBP",
+        "availability": "https://schema.org/InStock",
+        "issues": []
+      }
+    },
+    {
+      "route": "/products/money-claim",
+      "url": "http://localhost:5000/products/money-claim",
+      "status": 200,
+      "finalUrl": "http://localhost:5000/products/money-claim",
+      "indexable": true,
+      "indexabilityReasons": [],
+      "canonical": "https://landlordheaven.co.uk/products/money-claim",
+      "robotsMeta": "index, follow",
+      "fetchError": null,
+      "jsonLd": {
+        "totalBlocks": 4,
+        "blocks": [
+          {
+            "index": 0,
+            "parseError": null,
+            "types": [
+              "Organization"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "Landlord Heaven",
+              "url": "https://landlordheaven.co.uk",
+              "logo": "https://landlordheaven.co.uk/logo.png",
+              "description": "UK-wide AI legal case preparation platform generating complete, jurisdiction-specific, compliance-checked eviction bundles ready to file.",
+              "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "GB",
+                "addressRegion": "England"
+              },
+              "contactPoint": [
+                {
+                  "@type": "ContactPoint",
+                  "telephone": "",
+                  "email": "support@landlordheaven.co.uk",
+                  "contactType": "customer support",
+                  "availableLanguage": [
+                    "en"
+                  ]
+                }
+              ],
+              "sameAs": [
+                "https://twitter.com/LandlordHeaven",
+                "https://www.linkedin.com/company/landlord-heaven"
+              ],
+              "areaServed": [
+                {
+                  "@type": "Country",
+                  "name": "United Kingdom"
+                }
+              ]
+            }
+          },
+          {
+            "index": 1,
+            "parseError": null,
+            "types": [
+              "Product"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "Product",
+              "name": "Money Claim Pack - Recover Rent Arrears",
+              "description": "Recover unpaid rent arrears through the County Court in England. Structured claim documents, PAP-DEBT support, N1 format, interest calculation, and filing guidance included.",
+              "url": "https://landlordheaven.co.uk/products/money-claim",
+              "image": "https://landlordheaven.co.uk/og-image.png",
+              "brand": {
+                "@type": "Brand",
+                "name": "Landlord Heaven"
+              },
+              "offers": {
+                "@type": "Offer",
+                "price": "99.99",
+                "priceCurrency": "GBP",
+                "priceValidUntil": "2027-02-16",
+                "availability": "https://schema.org/InStock",
+                "url": "https://landlordheaven.co.uk/products/money-claim",
+                "seller": {
+                  "@type": "Organization",
+                  "name": "Landlord Heaven"
+                },
+                "shippingDetails": {
+                  "@type": "OfferShippingDetails",
+                  "shippingRate": {
+                    "@type": "MonetaryAmount",
+                    "value": "0",
+                    "currency": "GBP"
+                  },
+                  "shippingDestination": {
+                    "@type": "DefinedRegion",
+                    "addressCountry": "GB"
+                  },
+                  "deliveryTime": {
+                    "@type": "ShippingDeliveryTime",
+                    "handlingTime": {
+                      "@type": "QuantitativeValue",
+                      "minValue": "0",
+                      "maxValue": "0",
+                      "unitCode": "MIN"
+                    },
+                    "transitTime": {
+                      "@type": "QuantitativeValue",
+                      "minValue": "0",
+                      "maxValue": "0",
+                      "unitCode": "MIN"
+                    }
+                  }
+                },
+                "hasMerchantReturnPolicy": {
+                  "@type": "MerchantReturnPolicy",
+                  "applicableCountry": "GB",
+                  "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted"
+                }
+              },
+              "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": 4.8,
+                "reviewCount": "269"
+              }
+            }
+          },
+          {
+            "index": 2,
+            "parseError": null,
+            "types": [
+              "FAQPage"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              "mainEntity": [
+                {
+                  "@type": "Question",
+                  "name": "What documents do I get?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "You receive 10 documents: Form N1 (Money Claim), Particulars of Claim, Schedule of Arrears, Interest Calculation (s.69 County Courts Act), Letter Before Claim (PAP-DEBT compliant), Defendant Information Sheet, Reply Form, Financial Statement, Court Filing Guide, and Enforcement Guide."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Can I claim for damage or cleaning after the tenant leaves?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes! You can claim for property damage, professional cleaning, rubbish removal, unpaid utilities, and other costs. You'll need evidence such as photos, invoices, and quotes. Select the relevant reasons in the wizard and itemise each cost in the Damages section."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Can I claim arrears if the tenant has already left?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes! You have 6 years from the date arrears became due to make a claim. You'll need the tenant's current address for court service."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Can I combine rent arrears with damage claims?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes! Our wizard lets you select multiple claim reasons. You can claim rent arrears, property damage, cleaning costs, unpaid utilities, and other tenant debts all in one claim."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Can I claim interest on the debt?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes! You can claim 8% statutory interest per year on debts. Our interest calculator works this out automatically for rent arrears. For damage claims, interest runs from when you notified the tenant of the amount owed."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "What happens if the tenant defends the claim?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "If the tenant submits a defence, the court will schedule a hearing. You'll need to attend and present your evidence."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "How do I collect the money after winning?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "After judgment, if the tenant doesn't pay voluntarily, you can use: Bailiffs, Attachment of Earnings (deduct from wages), or Charging Order (secure against their property). We include guides for all enforcement methods."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Which jurisdictions do you support?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "England only. This pack uses the N1 form and PAP-DEBT Letter Before Claim for English courts."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "How long are documents stored?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Documents are stored in your portal for at least 12 months. You can download and save them any time."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Do you provide legal advice?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "No. We provide document generation and guidance, not legal advice. Ask Heaven helps you understand the process but is not a solicitor and does not provide legal representation."
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "index": 3,
+            "parseError": null,
+            "types": [
+              "BreadcrumbList"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Home",
+                  "item": "https://landlordheaven.co.uk"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "Products",
+                  "item": "https://landlordheaven.co.uk/pricing"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 3,
+                  "name": "Money Claim Pack",
+                  "item": "https://landlordheaven.co.uk/products/money-claim"
+                }
+              ]
+            }
+          }
+        ],
+        "parseErrors": [],
+        "schemaTypesFound": [
+          "Organization",
+          "Product",
+          "FAQPage",
+          "BreadcrumbList"
+        ]
+      },
+      "productSchemas": [
+        {
+          "blockIndex": 1,
+          "object": {
+            "@context": "https://schema.org",
+            "@type": "Product",
+            "name": "Money Claim Pack - Recover Rent Arrears",
+            "description": "Recover unpaid rent arrears through the County Court in England. Structured claim documents, PAP-DEBT support, N1 format, interest calculation, and filing guidance included.",
+            "url": "https://landlordheaven.co.uk/products/money-claim",
+            "image": "https://landlordheaven.co.uk/og-image.png",
+            "brand": {
+              "@type": "Brand",
+              "name": "Landlord Heaven"
+            },
+            "offers": {
+              "@type": "Offer",
+              "price": "99.99",
+              "priceCurrency": "GBP",
+              "priceValidUntil": "2027-02-16",
+              "availability": "https://schema.org/InStock",
+              "url": "https://landlordheaven.co.uk/products/money-claim",
+              "seller": {
+                "@type": "Organization",
+                "name": "Landlord Heaven"
+              },
+              "shippingDetails": {
+                "@type": "OfferShippingDetails",
+                "shippingRate": {
+                  "@type": "MonetaryAmount",
+                  "value": "0",
+                  "currency": "GBP"
+                },
+                "shippingDestination": {
+                  "@type": "DefinedRegion",
+                  "addressCountry": "GB"
+                },
+                "deliveryTime": {
+                  "@type": "ShippingDeliveryTime",
+                  "handlingTime": {
+                    "@type": "QuantitativeValue",
+                    "minValue": "0",
+                    "maxValue": "0",
+                    "unitCode": "MIN"
+                  },
+                  "transitTime": {
+                    "@type": "QuantitativeValue",
+                    "minValue": "0",
+                    "maxValue": "0",
+                    "unitCode": "MIN"
+                  }
+                }
+              },
+              "hasMerchantReturnPolicy": {
+                "@type": "MerchantReturnPolicy",
+                "applicableCountry": "GB",
+                "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted"
+              }
+            },
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "ratingValue": 4.8,
+              "reviewCount": "269"
+            }
+          },
+          "validation": {
+            "valid": true,
+            "issues": [],
+            "offersIsArray": false,
+            "offersCount": 1,
+            "offerResults": [
+              {
+                "valid": true,
+                "issues": [],
+                "price": "99.99",
+                "currency": "GBP",
+                "availability": "https://schema.org/InStock",
+                "offerUrl": "https://landlordheaven.co.uk/products/money-claim",
+                "offerType": [
+                  "Offer"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "conflictSchemas": [],
+      "result": {
+        "hasProductSchema": true,
+        "productSchemaValid": true,
+        "offerValid": true,
+        "offersIsArray": false,
+        "price": "99.99",
+        "currency": "GBP",
+        "availability": "https://schema.org/InStock",
+        "issues": []
+      }
+    },
+    {
+      "route": "/products/money-claim-pack",
+      "url": "http://localhost:5000/products/money-claim-pack",
+      "status": 200,
+      "finalUrl": "http://localhost:5000/products/money-claim",
+      "indexable": false,
+      "indexabilityReasons": [
+        "canonical_points_elsewhere",
+        "redirect_to_other"
+      ],
+      "canonical": "https://landlordheaven.co.uk/products/money-claim",
+      "robotsMeta": "index, follow",
+      "fetchError": null,
+      "jsonLd": {
+        "totalBlocks": 4,
+        "blocks": [
+          {
+            "index": 0,
+            "parseError": null,
+            "types": [
+              "Organization"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "Landlord Heaven",
+              "url": "https://landlordheaven.co.uk",
+              "logo": "https://landlordheaven.co.uk/logo.png",
+              "description": "UK-wide AI legal case preparation platform generating complete, jurisdiction-specific, compliance-checked eviction bundles ready to file.",
+              "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "GB",
+                "addressRegion": "England"
+              },
+              "contactPoint": [
+                {
+                  "@type": "ContactPoint",
+                  "telephone": "",
+                  "email": "support@landlordheaven.co.uk",
+                  "contactType": "customer support",
+                  "availableLanguage": [
+                    "en"
+                  ]
+                }
+              ],
+              "sameAs": [
+                "https://twitter.com/LandlordHeaven",
+                "https://www.linkedin.com/company/landlord-heaven"
+              ],
+              "areaServed": [
+                {
+                  "@type": "Country",
+                  "name": "United Kingdom"
+                }
+              ]
+            }
+          },
+          {
+            "index": 1,
+            "parseError": null,
+            "types": [
+              "Product"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "Product",
+              "name": "Money Claim Pack - Recover Rent Arrears",
+              "description": "Recover unpaid rent arrears through the County Court in England. Structured claim documents, PAP-DEBT support, N1 format, interest calculation, and filing guidance included.",
+              "url": "https://landlordheaven.co.uk/products/money-claim",
+              "image": "https://landlordheaven.co.uk/og-image.png",
+              "brand": {
+                "@type": "Brand",
+                "name": "Landlord Heaven"
+              },
+              "offers": {
+                "@type": "Offer",
+                "price": "99.99",
+                "priceCurrency": "GBP",
+                "priceValidUntil": "2027-02-16",
+                "availability": "https://schema.org/InStock",
+                "url": "https://landlordheaven.co.uk/products/money-claim",
+                "seller": {
+                  "@type": "Organization",
+                  "name": "Landlord Heaven"
+                },
+                "shippingDetails": {
+                  "@type": "OfferShippingDetails",
+                  "shippingRate": {
+                    "@type": "MonetaryAmount",
+                    "value": "0",
+                    "currency": "GBP"
+                  },
+                  "shippingDestination": {
+                    "@type": "DefinedRegion",
+                    "addressCountry": "GB"
+                  },
+                  "deliveryTime": {
+                    "@type": "ShippingDeliveryTime",
+                    "handlingTime": {
+                      "@type": "QuantitativeValue",
+                      "minValue": "0",
+                      "maxValue": "0",
+                      "unitCode": "MIN"
+                    },
+                    "transitTime": {
+                      "@type": "QuantitativeValue",
+                      "minValue": "0",
+                      "maxValue": "0",
+                      "unitCode": "MIN"
+                    }
+                  }
+                },
+                "hasMerchantReturnPolicy": {
+                  "@type": "MerchantReturnPolicy",
+                  "applicableCountry": "GB",
+                  "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted"
+                }
+              },
+              "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": 4.8,
+                "reviewCount": "269"
+              }
+            }
+          },
+          {
+            "index": 2,
+            "parseError": null,
+            "types": [
+              "FAQPage"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              "mainEntity": [
+                {
+                  "@type": "Question",
+                  "name": "What documents do I get?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "You receive 10 documents: Form N1 (Money Claim), Particulars of Claim, Schedule of Arrears, Interest Calculation (s.69 County Courts Act), Letter Before Claim (PAP-DEBT compliant), Defendant Information Sheet, Reply Form, Financial Statement, Court Filing Guide, and Enforcement Guide."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Can I claim for damage or cleaning after the tenant leaves?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes! You can claim for property damage, professional cleaning, rubbish removal, unpaid utilities, and other costs. You'll need evidence such as photos, invoices, and quotes. Select the relevant reasons in the wizard and itemise each cost in the Damages section."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Can I claim arrears if the tenant has already left?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes! You have 6 years from the date arrears became due to make a claim. You'll need the tenant's current address for court service."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Can I combine rent arrears with damage claims?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes! Our wizard lets you select multiple claim reasons. You can claim rent arrears, property damage, cleaning costs, unpaid utilities, and other tenant debts all in one claim."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Can I claim interest on the debt?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes! You can claim 8% statutory interest per year on debts. Our interest calculator works this out automatically for rent arrears. For damage claims, interest runs from when you notified the tenant of the amount owed."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "What happens if the tenant defends the claim?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "If the tenant submits a defence, the court will schedule a hearing. You'll need to attend and present your evidence."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "How do I collect the money after winning?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "After judgment, if the tenant doesn't pay voluntarily, you can use: Bailiffs, Attachment of Earnings (deduct from wages), or Charging Order (secure against their property). We include guides for all enforcement methods."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Which jurisdictions do you support?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "England only. This pack uses the N1 form and PAP-DEBT Letter Before Claim for English courts."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "How long are documents stored?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Documents are stored in your portal for at least 12 months. You can download and save them any time."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Do you provide legal advice?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "No. We provide document generation and guidance, not legal advice. Ask Heaven helps you understand the process but is not a solicitor and does not provide legal representation."
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "index": 3,
+            "parseError": null,
+            "types": [
+              "BreadcrumbList"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Home",
+                  "item": "https://landlordheaven.co.uk"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "Products",
+                  "item": "https://landlordheaven.co.uk/pricing"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 3,
+                  "name": "Money Claim Pack",
+                  "item": "https://landlordheaven.co.uk/products/money-claim"
+                }
+              ]
+            }
+          }
+        ],
+        "parseErrors": [],
+        "schemaTypesFound": [
+          "Organization",
+          "Product",
+          "FAQPage",
+          "BreadcrumbList"
+        ]
+      },
+      "productSchemas": [
+        {
+          "blockIndex": 1,
+          "object": {
+            "@context": "https://schema.org",
+            "@type": "Product",
+            "name": "Money Claim Pack - Recover Rent Arrears",
+            "description": "Recover unpaid rent arrears through the County Court in England. Structured claim documents, PAP-DEBT support, N1 format, interest calculation, and filing guidance included.",
+            "url": "https://landlordheaven.co.uk/products/money-claim",
+            "image": "https://landlordheaven.co.uk/og-image.png",
+            "brand": {
+              "@type": "Brand",
+              "name": "Landlord Heaven"
+            },
+            "offers": {
+              "@type": "Offer",
+              "price": "99.99",
+              "priceCurrency": "GBP",
+              "priceValidUntil": "2027-02-16",
+              "availability": "https://schema.org/InStock",
+              "url": "https://landlordheaven.co.uk/products/money-claim",
+              "seller": {
+                "@type": "Organization",
+                "name": "Landlord Heaven"
+              },
+              "shippingDetails": {
+                "@type": "OfferShippingDetails",
+                "shippingRate": {
+                  "@type": "MonetaryAmount",
+                  "value": "0",
+                  "currency": "GBP"
+                },
+                "shippingDestination": {
+                  "@type": "DefinedRegion",
+                  "addressCountry": "GB"
+                },
+                "deliveryTime": {
+                  "@type": "ShippingDeliveryTime",
+                  "handlingTime": {
+                    "@type": "QuantitativeValue",
+                    "minValue": "0",
+                    "maxValue": "0",
+                    "unitCode": "MIN"
+                  },
+                  "transitTime": {
+                    "@type": "QuantitativeValue",
+                    "minValue": "0",
+                    "maxValue": "0",
+                    "unitCode": "MIN"
+                  }
+                }
+              },
+              "hasMerchantReturnPolicy": {
+                "@type": "MerchantReturnPolicy",
+                "applicableCountry": "GB",
+                "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted"
+              }
+            },
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "ratingValue": 4.8,
+              "reviewCount": "269"
+            }
+          },
+          "validation": {
+            "valid": true,
+            "issues": [],
+            "offersIsArray": false,
+            "offersCount": 1,
+            "offerResults": [
+              {
+                "valid": true,
+                "issues": [],
+                "price": "99.99",
+                "currency": "GBP",
+                "availability": "https://schema.org/InStock",
+                "offerUrl": "https://landlordheaven.co.uk/products/money-claim",
+                "offerType": [
+                  "Offer"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "conflictSchemas": [],
+      "result": {
+        "hasProductSchema": true,
+        "productSchemaValid": true,
+        "offerValid": true,
+        "offersIsArray": false,
+        "price": "99.99",
+        "currency": "GBP",
+        "availability": "https://schema.org/InStock",
+        "issues": [
+          "non_indexable:canonical_points_elsewhere",
+          "non_indexable:redirect_to_other"
+        ]
+      }
+    },
+    {
+      "route": "/products/notice-only",
+      "url": "http://localhost:5000/products/notice-only",
+      "status": 200,
+      "finalUrl": "http://localhost:5000/products/notice-only",
+      "indexable": true,
+      "indexabilityReasons": [],
+      "canonical": "https://landlordheaven.co.uk/products/notice-only",
+      "robotsMeta": "index, follow",
+      "fetchError": null,
+      "jsonLd": {
+        "totalBlocks": 4,
+        "blocks": [
+          {
+            "index": 0,
+            "parseError": null,
+            "types": [
+              "Organization"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "Landlord Heaven",
+              "url": "https://landlordheaven.co.uk",
+              "logo": "https://landlordheaven.co.uk/logo.png",
+              "description": "UK-wide AI legal case preparation platform generating complete, jurisdiction-specific, compliance-checked eviction bundles ready to file.",
+              "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "GB",
+                "addressRegion": "England"
+              },
+              "contactPoint": [
+                {
+                  "@type": "ContactPoint",
+                  "telephone": "",
+                  "email": "support@landlordheaven.co.uk",
+                  "contactType": "customer support",
+                  "availableLanguage": [
+                    "en"
+                  ]
+                }
+              ],
+              "sameAs": [
+                "https://twitter.com/LandlordHeaven",
+                "https://www.linkedin.com/company/landlord-heaven"
+              ],
+              "areaServed": [
+                {
+                  "@type": "Country",
+                  "name": "United Kingdom"
+                }
+              ]
+            }
+          },
+          {
+            "index": 1,
+            "parseError": null,
+            "types": [
+              "Product"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "Product",
+              "name": "AI-Validated Eviction Case Bundle",
+              "description": "Complete eviction case bundles for UK landlords: Section 21, Section 8, Section 173, and Notice to Leave workflows with statutory-grounded validation.",
+              "url": "https://landlordheaven.co.uk/products/notice-only",
+              "image": "https://landlordheaven.co.uk/og-image.png",
+              "brand": {
+                "@type": "Brand",
+                "name": "Landlord Heaven"
+              },
+              "offers": {
+                "@type": "Offer",
+                "price": "49.99",
+                "priceCurrency": "GBP",
+                "priceValidUntil": "2027-02-16",
+                "availability": "https://schema.org/InStock",
+                "url": "https://landlordheaven.co.uk/products/notice-only",
+                "seller": {
+                  "@type": "Organization",
+                  "name": "Landlord Heaven"
+                },
+                "shippingDetails": {
+                  "@type": "OfferShippingDetails",
+                  "shippingRate": {
+                    "@type": "MonetaryAmount",
+                    "value": "0",
+                    "currency": "GBP"
+                  },
+                  "shippingDestination": {
+                    "@type": "DefinedRegion",
+                    "addressCountry": "GB"
+                  },
+                  "deliveryTime": {
+                    "@type": "ShippingDeliveryTime",
+                    "handlingTime": {
+                      "@type": "QuantitativeValue",
+                      "minValue": "0",
+                      "maxValue": "0",
+                      "unitCode": "MIN"
+                    },
+                    "transitTime": {
+                      "@type": "QuantitativeValue",
+                      "minValue": "0",
+                      "maxValue": "0",
+                      "unitCode": "MIN"
+                    }
+                  }
+                },
+                "hasMerchantReturnPolicy": {
+                  "@type": "MerchantReturnPolicy",
+                  "applicableCountry": "GB",
+                  "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted"
+                }
+              },
+              "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": 4.8,
+                "reviewCount": "269"
+              }
+            }
+          },
+          {
+            "index": 2,
+            "parseError": null,
+            "types": [
+              "FAQPage"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              "mainEntity": [
+                {
+                  "@type": "Question",
+                  "name": "What documents do I get?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "You receive 3 documents: (1) Your eviction notice (Section 21, Section 8, Section 173, or Notice to Leave depending on jurisdiction), (2) Service Instructions explaining how to legally serve your notice, and (3) Service & Validity Checklist to verify compliance before serving."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Can I preview before I pay?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes. You can preview all 3 documents with a watermark before paying. This lets you verify everything is correct before committing."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "What if I need to make changes?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "You can edit your answers and regenerate your case bundle instantly at no extra cost. Unlimited regenerations are included."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Which jurisdictions do you support?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "England (Section 21/Section 8), Wales (Section 173/fault-based notices), and Scotland (Notice to Leave)."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Are these the official government forms?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes. We use official government forms: Form 6A for Section 21 (England), Form 3 for Section 8 (England), official RHW forms for Wales, and the prescribed Notice to Leave format for Scotland."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "What if my notice is invalid?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Our system checks common compliance blockers (deposit protection, gas safety, EPC, How to Rent) before generating your notice. If you change your case details, you can regenerate your bundle instantly. Court acceptance always depends on your facts, evidence, and service."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "How long are documents stored?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Documents are stored in your portal for at least 12 months. You can download and save them any time."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Do you provide legal advice?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "No. We provide document generation and guidance, not legal advice. Ask Heaven helps you understand the process but is not a solicitor and does not provide legal representation. Consult a qualified solicitor for complex cases."
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "index": 3,
+            "parseError": null,
+            "types": [
+              "BreadcrumbList"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Home",
+                  "item": "https://landlordheaven.co.uk"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "Products",
+                  "item": "https://landlordheaven.co.uk/pricing"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 3,
+                  "name": "Notice Only Pack",
+                  "item": "https://landlordheaven.co.uk/products/notice-only"
+                }
+              ]
+            }
+          }
+        ],
+        "parseErrors": [],
+        "schemaTypesFound": [
+          "Organization",
+          "Product",
+          "FAQPage",
+          "BreadcrumbList"
+        ]
+      },
+      "productSchemas": [
+        {
+          "blockIndex": 1,
+          "object": {
+            "@context": "https://schema.org",
+            "@type": "Product",
+            "name": "AI-Validated Eviction Case Bundle",
+            "description": "Complete eviction case bundles for UK landlords: Section 21, Section 8, Section 173, and Notice to Leave workflows with statutory-grounded validation.",
+            "url": "https://landlordheaven.co.uk/products/notice-only",
+            "image": "https://landlordheaven.co.uk/og-image.png",
+            "brand": {
+              "@type": "Brand",
+              "name": "Landlord Heaven"
+            },
+            "offers": {
+              "@type": "Offer",
+              "price": "49.99",
+              "priceCurrency": "GBP",
+              "priceValidUntil": "2027-02-16",
+              "availability": "https://schema.org/InStock",
+              "url": "https://landlordheaven.co.uk/products/notice-only",
+              "seller": {
+                "@type": "Organization",
+                "name": "Landlord Heaven"
+              },
+              "shippingDetails": {
+                "@type": "OfferShippingDetails",
+                "shippingRate": {
+                  "@type": "MonetaryAmount",
+                  "value": "0",
+                  "currency": "GBP"
+                },
+                "shippingDestination": {
+                  "@type": "DefinedRegion",
+                  "addressCountry": "GB"
+                },
+                "deliveryTime": {
+                  "@type": "ShippingDeliveryTime",
+                  "handlingTime": {
+                    "@type": "QuantitativeValue",
+                    "minValue": "0",
+                    "maxValue": "0",
+                    "unitCode": "MIN"
+                  },
+                  "transitTime": {
+                    "@type": "QuantitativeValue",
+                    "minValue": "0",
+                    "maxValue": "0",
+                    "unitCode": "MIN"
+                  }
+                }
+              },
+              "hasMerchantReturnPolicy": {
+                "@type": "MerchantReturnPolicy",
+                "applicableCountry": "GB",
+                "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted"
+              }
+            },
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "ratingValue": 4.8,
+              "reviewCount": "269"
+            }
+          },
+          "validation": {
+            "valid": true,
+            "issues": [],
+            "offersIsArray": false,
+            "offersCount": 1,
+            "offerResults": [
+              {
+                "valid": true,
+                "issues": [],
+                "price": "49.99",
+                "currency": "GBP",
+                "availability": "https://schema.org/InStock",
+                "offerUrl": "https://landlordheaven.co.uk/products/notice-only",
+                "offerType": [
+                  "Offer"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "conflictSchemas": [],
+      "result": {
+        "hasProductSchema": true,
+        "productSchemaValid": true,
+        "offerValid": true,
+        "offersIsArray": false,
+        "price": "49.99",
+        "currency": "GBP",
+        "availability": "https://schema.org/InStock",
+        "issues": []
+      }
+    },
+    {
+      "route": "/tenancy-agreement",
+      "url": "http://localhost:5000/tenancy-agreement",
+      "status": 200,
+      "finalUrl": "http://localhost:5000/assured-shorthold-tenancy-agreement-template",
+      "indexable": false,
+      "indexabilityReasons": [
+        "canonical_points_elsewhere",
+        "redirect_to_other"
+      ],
+      "canonical": "https://landlordheaven.co.uk/assured-shorthold-tenancy-agreement-template",
+      "robotsMeta": "index, follow",
+      "fetchError": null,
+      "jsonLd": {
+        "totalBlocks": 4,
+        "blocks": [
+          {
+            "index": 0,
+            "parseError": null,
+            "types": [
+              "Organization"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "Landlord Heaven",
+              "url": "https://landlordheaven.co.uk",
+              "logo": "https://landlordheaven.co.uk/logo.png",
+              "description": "UK-wide AI legal case preparation platform generating complete, jurisdiction-specific, compliance-checked eviction bundles ready to file.",
+              "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "GB",
+                "addressRegion": "England"
+              },
+              "contactPoint": [
+                {
+                  "@type": "ContactPoint",
+                  "telephone": "",
+                  "email": "support@landlordheaven.co.uk",
+                  "contactType": "customer support",
+                  "availableLanguage": [
+                    "en"
+                  ]
+                }
+              ],
+              "sameAs": [
+                "https://twitter.com/LandlordHeaven",
+                "https://www.linkedin.com/company/landlord-heaven"
+              ],
+              "areaServed": [
+                {
+                  "@type": "Country",
+                  "name": "United Kingdom"
+                }
+              ]
+            }
+          },
+          {
+            "index": 1,
+            "parseError": null,
+            "types": [
+              "Article"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "Article",
+              "headline": "Assured Shorthold Tenancy Agreement Template 2026",
+              "description": "Download a legally compliant AST template for England. Housing Act 1988 & Tenant Fees Act 2019 compliant.",
+              "image": "https://landlordheaven.co.uk/og-image.png",
+              "datePublished": "2026-01-01",
+              "dateModified": "2026-01-25",
+              "author": {
+                "@type": "Organization",
+                "name": "Landlord Heaven"
+              },
+              "publisher": {
+                "@type": "Organization",
+                "name": "Landlord Heaven",
+                "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://landlordheaven.co.uk/logo.png"
+                }
+              },
+              "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://landlordheaven.co.uk/assured-shorthold-tenancy-agreement-template"
+              }
+            }
+          },
+          {
+            "index": 2,
+            "parseError": null,
+            "types": [
+              "BreadcrumbList"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Home",
+                  "item": "https://landlordheaven.co.uk"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "Tenancy Agreement Packs",
+                  "item": "https://landlordheaven.co.uk/products/ast"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 3,
+                  "name": "Assured Shorthold Tenancy Agreement Template",
+                  "item": "https://landlordheaven.co.uk/assured-shorthold-tenancy-agreement-template"
+                }
+              ]
+            }
+          },
+          {
+            "index": 3,
+            "parseError": null,
+            "types": [
+              "FAQPage"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              "mainEntity": [
+                {
+                  "@type": "Question",
+                  "name": "Do I legally need a written tenancy agreement?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "No, a tenancy can be verbal. However, a written agreement protects both parties and is essential for deposit protection compliance. Without a written agreement, default statutory terms apply."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "What should be included in a tenancy agreement?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Essential terms include: names of landlord and tenant, property address, rent amount and payment date, deposit amount, tenancy start date and duration, and responsibilities for repairs and bills."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "What is the difference between a fixed term and periodic tenancy?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "A fixed term runs for a set period (e.g., 12 months) and cannot normally be ended early by either party. A periodic tenancy rolls on a weekly or monthly basis until ended by notice."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Can I use the same tenancy agreement for Scotland or Wales?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "No. Scotland uses Private Residential Tenancy agreements. Wales uses Occupation Contracts under the Renting Homes Act. An English AST template is not valid in these regions."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Can I add my own clauses to a tenancy agreement?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes, but unfair terms are not enforceable under consumer protection law. Clauses must be reasonable and clearly explained. Banning pets entirely, for example, may be considered unfair."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Does the tenant need to sign the tenancy agreement?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "For best practice, yes. Both landlord and tenant should sign and date the agreement, with each party keeping a copy. An unsigned agreement can still be valid but is harder to enforce."
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "parseErrors": [],
+        "schemaTypesFound": [
+          "Organization",
+          "Article",
+          "BreadcrumbList",
+          "FAQPage"
+        ]
+      },
+      "productSchemas": [],
+      "conflictSchemas": [],
+      "result": {
+        "hasProductSchema": false,
+        "productSchemaValid": false,
+        "offerValid": false,
+        "offersIsArray": null,
+        "price": null,
+        "currency": null,
+        "availability": null,
+        "issues": [
+          "missing_product_schema",
+          "non_indexable:canonical_points_elsewhere",
+          "non_indexable:redirect_to_other"
+        ]
+      }
+    },
+    {
+      "route": "/tenancy-agreements/england",
+      "url": "http://localhost:5000/tenancy-agreements/england",
+      "status": 200,
+      "finalUrl": "http://localhost:5000/assured-shorthold-tenancy-agreement-template",
+      "indexable": false,
+      "indexabilityReasons": [
+        "canonical_points_elsewhere",
+        "redirect_to_other"
+      ],
+      "canonical": "https://landlordheaven.co.uk/assured-shorthold-tenancy-agreement-template",
+      "robotsMeta": "index, follow",
+      "fetchError": null,
+      "jsonLd": {
+        "totalBlocks": 4,
+        "blocks": [
+          {
+            "index": 0,
+            "parseError": null,
+            "types": [
+              "Organization"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "Landlord Heaven",
+              "url": "https://landlordheaven.co.uk",
+              "logo": "https://landlordheaven.co.uk/logo.png",
+              "description": "UK-wide AI legal case preparation platform generating complete, jurisdiction-specific, compliance-checked eviction bundles ready to file.",
+              "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "GB",
+                "addressRegion": "England"
+              },
+              "contactPoint": [
+                {
+                  "@type": "ContactPoint",
+                  "telephone": "",
+                  "email": "support@landlordheaven.co.uk",
+                  "contactType": "customer support",
+                  "availableLanguage": [
+                    "en"
+                  ]
+                }
+              ],
+              "sameAs": [
+                "https://twitter.com/LandlordHeaven",
+                "https://www.linkedin.com/company/landlord-heaven"
+              ],
+              "areaServed": [
+                {
+                  "@type": "Country",
+                  "name": "United Kingdom"
+                }
+              ]
+            }
+          },
+          {
+            "index": 1,
+            "parseError": null,
+            "types": [
+              "Article"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "Article",
+              "headline": "Assured Shorthold Tenancy Agreement Template 2026",
+              "description": "Download a legally compliant AST template for England. Housing Act 1988 & Tenant Fees Act 2019 compliant.",
+              "image": "https://landlordheaven.co.uk/og-image.png",
+              "datePublished": "2026-01-01",
+              "dateModified": "2026-01-25",
+              "author": {
+                "@type": "Organization",
+                "name": "Landlord Heaven"
+              },
+              "publisher": {
+                "@type": "Organization",
+                "name": "Landlord Heaven",
+                "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://landlordheaven.co.uk/logo.png"
+                }
+              },
+              "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://landlordheaven.co.uk/assured-shorthold-tenancy-agreement-template"
+              }
+            }
+          },
+          {
+            "index": 2,
+            "parseError": null,
+            "types": [
+              "BreadcrumbList"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Home",
+                  "item": "https://landlordheaven.co.uk"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "Tenancy Agreement Packs",
+                  "item": "https://landlordheaven.co.uk/products/ast"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 3,
+                  "name": "Assured Shorthold Tenancy Agreement Template",
+                  "item": "https://landlordheaven.co.uk/assured-shorthold-tenancy-agreement-template"
+                }
+              ]
+            }
+          },
+          {
+            "index": 3,
+            "parseError": null,
+            "types": [
+              "FAQPage"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              "mainEntity": [
+                {
+                  "@type": "Question",
+                  "name": "Do I legally need a written tenancy agreement?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "No, a tenancy can be verbal. However, a written agreement protects both parties and is essential for deposit protection compliance. Without a written agreement, default statutory terms apply."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "What should be included in a tenancy agreement?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Essential terms include: names of landlord and tenant, property address, rent amount and payment date, deposit amount, tenancy start date and duration, and responsibilities for repairs and bills."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "What is the difference between a fixed term and periodic tenancy?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "A fixed term runs for a set period (e.g., 12 months) and cannot normally be ended early by either party. A periodic tenancy rolls on a weekly or monthly basis until ended by notice."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Can I use the same tenancy agreement for Scotland or Wales?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "No. Scotland uses Private Residential Tenancy agreements. Wales uses Occupation Contracts under the Renting Homes Act. An English AST template is not valid in these regions."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Can I add my own clauses to a tenancy agreement?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes, but unfair terms are not enforceable under consumer protection law. Clauses must be reasonable and clearly explained. Banning pets entirely, for example, may be considered unfair."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Does the tenant need to sign the tenancy agreement?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "For best practice, yes. Both landlord and tenant should sign and date the agreement, with each party keeping a copy. An unsigned agreement can still be valid but is harder to enforce."
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "parseErrors": [],
+        "schemaTypesFound": [
+          "Organization",
+          "Article",
+          "BreadcrumbList",
+          "FAQPage"
+        ]
+      },
+      "productSchemas": [],
+      "conflictSchemas": [],
+      "result": {
+        "hasProductSchema": false,
+        "productSchemaValid": false,
+        "offerValid": false,
+        "offersIsArray": null,
+        "price": null,
+        "currency": null,
+        "availability": null,
+        "issues": [
+          "missing_product_schema",
+          "non_indexable:canonical_points_elsewhere",
+          "non_indexable:redirect_to_other"
+        ]
+      }
+    },
+    {
+      "route": "/tenancy-agreements/england-wales",
+      "url": "http://localhost:5000/tenancy-agreements/england-wales",
+      "status": 200,
+      "finalUrl": "http://localhost:5000/tenancy-agreements/england-wales",
+      "indexable": false,
+      "indexabilityReasons": [
+        "noindex_meta"
+      ],
+      "canonical": null,
+      "robotsMeta": "noindex, follow",
+      "fetchError": null,
+      "jsonLd": {
+        "totalBlocks": 1,
+        "blocks": [
+          {
+            "index": 0,
+            "parseError": null,
+            "types": [
+              "Organization"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "Landlord Heaven",
+              "url": "https://landlordheaven.co.uk",
+              "logo": "https://landlordheaven.co.uk/logo.png",
+              "description": "UK-wide AI legal case preparation platform generating complete, jurisdiction-specific, compliance-checked eviction bundles ready to file.",
+              "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "GB",
+                "addressRegion": "England"
+              },
+              "contactPoint": [
+                {
+                  "@type": "ContactPoint",
+                  "telephone": "",
+                  "email": "support@landlordheaven.co.uk",
+                  "contactType": "customer support",
+                  "availableLanguage": [
+                    "en"
+                  ]
+                }
+              ],
+              "sameAs": [
+                "https://twitter.com/LandlordHeaven",
+                "https://www.linkedin.com/company/landlord-heaven"
+              ],
+              "areaServed": [
+                {
+                  "@type": "Country",
+                  "name": "United Kingdom"
+                }
+              ]
+            }
+          }
+        ],
+        "parseErrors": [],
+        "schemaTypesFound": [
+          "Organization"
+        ]
+      },
+      "productSchemas": [],
+      "conflictSchemas": [],
+      "result": {
+        "hasProductSchema": false,
+        "productSchemaValid": false,
+        "offerValid": false,
+        "offersIsArray": null,
+        "price": null,
+        "currency": null,
+        "availability": null,
+        "issues": [
+          "missing_product_schema",
+          "non_indexable:noindex_meta"
+        ]
+      }
+    },
+    {
+      "route": "/tenancy-agreements/northern-ireland",
+      "url": "http://localhost:5000/tenancy-agreements/northern-ireland",
+      "status": 200,
+      "finalUrl": "http://localhost:5000/northern-ireland-tenancy-agreement-template",
+      "indexable": false,
+      "indexabilityReasons": [
+        "canonical_points_elsewhere",
+        "redirect_to_other"
+      ],
+      "canonical": "https://landlordheaven.co.uk/northern-ireland-tenancy-agreement-template",
+      "robotsMeta": "index, follow",
+      "fetchError": null,
+      "jsonLd": {
+        "totalBlocks": 4,
+        "blocks": [
+          {
+            "index": 0,
+            "parseError": null,
+            "types": [
+              "Organization"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "Landlord Heaven",
+              "url": "https://landlordheaven.co.uk",
+              "logo": "https://landlordheaven.co.uk/logo.png",
+              "description": "UK-wide AI legal case preparation platform generating complete, jurisdiction-specific, compliance-checked eviction bundles ready to file.",
+              "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "GB",
+                "addressRegion": "England"
+              },
+              "contactPoint": [
+                {
+                  "@type": "ContactPoint",
+                  "telephone": "",
+                  "email": "support@landlordheaven.co.uk",
+                  "contactType": "customer support",
+                  "availableLanguage": [
+                    "en"
+                  ]
+                }
+              ],
+              "sameAs": [
+                "https://twitter.com/LandlordHeaven",
+                "https://www.linkedin.com/company/landlord-heaven"
+              ],
+              "areaServed": [
+                {
+                  "@type": "Country",
+                  "name": "United Kingdom"
+                }
+              ]
+            }
+          },
+          {
+            "index": 1,
+            "parseError": null,
+            "types": [
+              "Article"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "Article",
+              "headline": "Northern Ireland Tenancy Agreement Template 2026 | Private Tenancies Act Compliant",
+              "description": "Create a legally compliant Northern Ireland tenancy agreement template for 2026. Fully updated for the Private Tenancies Act (NI) 2022 with all prescribed terms.",
+              "image": "https://landlordheaven.co.uk/og-image.png",
+              "datePublished": "2024-01-15",
+              "dateModified": "2025-01-20",
+              "author": {
+                "@type": "Organization",
+                "name": "Landlord Heaven"
+              },
+              "publisher": {
+                "@type": "Organization",
+                "name": "Landlord Heaven",
+                "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://landlordheaven.co.uk/logo.png"
+                }
+              },
+              "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://landlordheaven.co.uk/northern-ireland-tenancy-agreement-template"
+              }
+            }
+          },
+          {
+            "index": 2,
+            "parseError": null,
+            "types": [
+              "FAQPage"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              "mainEntity": [
+                {
+                  "@type": "Question",
+                  "name": "What is a Private Tenancy Agreement in Northern Ireland?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "A Private Tenancy Agreement is a legally binding contract between a landlord and tenant for residential property in Northern Ireland. Since the Private Tenancies Act (Northern Ireland) 2022 came into force, all private tenancies must have a written tenancy agreement provided within 28 days of the tenancy starting. This agreement must include prescribed terms covering rent, deposit, property address, and the responsibilities of both parties."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Is a written tenancy agreement legally required in Northern Ireland?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes, since April 2023 under the Private Tenancies Act (NI) 2022, landlords must provide tenants with a written statement of tenancy terms within 28 days of the tenancy commencing. Failure to provide this document is a criminal offence and can result in a fixed penalty notice of £500 or prosecution with fines up to £2,500. The written statement must contain all prescribed information including rent amount, deposit details, and landlord contact information."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "What is the maximum deposit a landlord can take in Northern Ireland?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "In Northern Ireland, the maximum deposit a landlord can request is 2 months' rent. This deposit must be protected in a government-approved tenancy deposit scheme within 14 days of receiving it. Landlords must also provide tenants with prescribed information about the deposit protection within 28 days. Failure to protect the deposit or provide this information can result in penalties of up to 3 times the deposit amount."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "What notice period must a landlord give to end a tenancy in Northern Ireland?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Notice periods in Northern Ireland depend on how long the tenant has lived in the property: for tenancies under 12 months, 28 days' notice is required; for tenancies between 1-5 years, 56 days' notice is required; for tenancies over 5 years, 84 days' notice (12 weeks) is required. Landlords must use the correct statutory Notice to Quit form and can only end a tenancy for specific legal grounds set out in the Private Tenancies Act."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Do Northern Ireland tenancy agreements need an Energy Performance Certificate?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes, landlords in Northern Ireland must have a valid Energy Performance Certificate (EPC) with a minimum rating of E for their rental property. The EPC must be provided to tenants before they sign the tenancy agreement and a copy should be included with the tenancy documents. From 2025, minimum energy efficiency standards are expected to increase, so landlords should check current requirements."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Are Electrical Installation Condition Reports (EICR) required in Northern Ireland?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "From April 2025, landlords in Northern Ireland will be required to have a valid Electrical Installation Condition Report (EICR) for all new tenancies, with existing tenancies requiring compliance by April 2026. The EICR must be conducted by a qualified electrician and be valid for up to 5 years. This requirement aligns Northern Ireland with electrical safety standards already in place in England and Wales."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "How often can a landlord increase rent in Northern Ireland?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Under the Private Tenancies Act (NI) 2022, landlords can only increase rent once in any 12-month period. Landlords must give tenants at least 2 months' written notice of a rent increase. The increase must be fair and comparable to market rates for similar properties in the area. Tenants can challenge excessive rent increases through the Housing Rights Service or the courts."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "What prescribed information must be included in a Northern Ireland tenancy agreement?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "A Northern Ireland tenancy agreement must include: the full names and addresses of landlord and tenant; the property address; the rent amount and payment frequency; the deposit amount and which scheme protects it; the tenancy start date; repair responsibilities; rules about alterations, subletting, and pets; the landlord's contact details for emergencies; and information about the tenant's right to quiet enjoyment of the property."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Can a tenant in Northern Ireland end their tenancy early?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Tenants in Northern Ireland must give at least 4 weeks' written notice to end their tenancy, regardless of how long they have lived there. This is shorter than the notice landlords must give. If a tenant leaves before the end of a fixed term without an early termination clause, they may be liable for rent until the end of the fixed term or until a new tenant is found, whichever is sooner."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Does a landlord need to be registered in Northern Ireland?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes, all private landlords in Northern Ireland must register with the Landlord Registration Scheme operated by local councils. Landlords must register within one month of a tenancy starting. The registration fee is currently £70 and registration lasts for 3 years. Failure to register is a criminal offence with fines up to £2,500 and can prevent landlords from using the eviction process."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "What happens if a landlord doesn't provide a written tenancy agreement?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "If a landlord fails to provide a written statement of tenancy terms within 28 days, they commit a criminal offence under the Private Tenancies Act (NI) 2022. The tenant can report this to the council, which may issue a fixed penalty notice of £500 to the landlord. If prosecuted, landlords face fines up to £2,500. Additionally, non-compliance can prevent the landlord from serving a valid Notice to Quit."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Are there minimum property standards for rental homes in Northern Ireland?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes, all rental properties in Northern Ireland must meet the Fitness Standard set out in the Housing (Northern Ireland) Order 1992. Properties must be structurally stable, free from serious disrepair, have adequate facilities for cooking and washing, have a working heating system, and be free from damp. Environmental Health Officers can inspect properties and require landlords to make improvements."
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "index": 3,
+            "parseError": null,
+            "types": [
+              "BreadcrumbList"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Home",
+                  "item": "/"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "Tenancy Agreement Packs",
+                  "item": "/products/ast"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 3,
+                  "name": "NI Tenancy Agreement Template",
+                  "item": "/northern-ireland-tenancy-agreement-template"
+                }
+              ]
+            }
+          }
+        ],
+        "parseErrors": [],
+        "schemaTypesFound": [
+          "Organization",
+          "Article",
+          "FAQPage",
+          "BreadcrumbList"
+        ]
+      },
+      "productSchemas": [],
+      "conflictSchemas": [],
+      "result": {
+        "hasProductSchema": false,
+        "productSchemaValid": false,
+        "offerValid": false,
+        "offersIsArray": null,
+        "price": null,
+        "currency": null,
+        "availability": null,
+        "issues": [
+          "missing_product_schema",
+          "non_indexable:canonical_points_elsewhere",
+          "non_indexable:redirect_to_other"
+        ]
+      }
+    },
+    {
+      "route": "/tenancy-agreements/scotland",
+      "url": "http://localhost:5000/tenancy-agreements/scotland",
+      "status": 200,
+      "finalUrl": "http://localhost:5000/private-residential-tenancy-agreement-template",
+      "indexable": false,
+      "indexabilityReasons": [
+        "canonical_points_elsewhere",
+        "redirect_to_other"
+      ],
+      "canonical": "https://landlordheaven.co.uk/private-residential-tenancy-agreement-template",
+      "robotsMeta": "index, follow",
+      "fetchError": null,
+      "jsonLd": {
+        "totalBlocks": 4,
+        "blocks": [
+          {
+            "index": 0,
+            "parseError": null,
+            "types": [
+              "Organization"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "Landlord Heaven",
+              "url": "https://landlordheaven.co.uk",
+              "logo": "https://landlordheaven.co.uk/logo.png",
+              "description": "UK-wide AI legal case preparation platform generating complete, jurisdiction-specific, compliance-checked eviction bundles ready to file.",
+              "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "GB",
+                "addressRegion": "England"
+              },
+              "contactPoint": [
+                {
+                  "@type": "ContactPoint",
+                  "telephone": "",
+                  "email": "support@landlordheaven.co.uk",
+                  "contactType": "customer support",
+                  "availableLanguage": [
+                    "en"
+                  ]
+                }
+              ],
+              "sameAs": [
+                "https://twitter.com/LandlordHeaven",
+                "https://www.linkedin.com/company/landlord-heaven"
+              ],
+              "areaServed": [
+                {
+                  "@type": "Country",
+                  "name": "United Kingdom"
+                }
+              ]
+            }
+          },
+          {
+            "index": 1,
+            "parseError": null,
+            "types": [
+              "Article"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "Article",
+              "headline": "Private Residential Tenancy Agreement Template Scotland 2026",
+              "description": "Download a legally compliant PRT agreement for Scotland under the Private Housing (Tenancies) Act 2016.",
+              "image": "https://landlordheaven.co.uk/og-image.png",
+              "datePublished": "2026-01-01",
+              "dateModified": "2026-01-25",
+              "author": {
+                "@type": "Organization",
+                "name": "Landlord Heaven"
+              },
+              "publisher": {
+                "@type": "Organization",
+                "name": "Landlord Heaven",
+                "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://landlordheaven.co.uk/logo.png"
+                }
+              },
+              "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://landlordheaven.co.uk/private-residential-tenancy-agreement-template"
+              }
+            }
+          },
+          {
+            "index": 2,
+            "parseError": null,
+            "types": [
+              "FAQPage"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              "mainEntity": [
+                {
+                  "@type": "Question",
+                  "name": "What is a Private Residential Tenancy (PRT)?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "A Private Residential Tenancy (PRT) is the only type of residential tenancy agreement available for private lettings in Scotland since 1 December 2017. It replaced the previous Assured and Short Assured Tenancy systems. PRTs are governed by the Private Housing (Tenancies) (Scotland) Act 2016 and are always open-ended (no fixed term), giving tenants greater security of tenure while landlords retain grounds-based eviction rights."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Why is the PRT different from English ASTs?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "PRTs have fundamental differences from English ASTs: (1) All PRTs are open-ended with no fixed term - tenants can stay indefinitely, (2) No \"no-fault\" eviction - landlords must have one of 18 specific grounds, (3) Maximum deposit is 2 months rent (vs 5-6 weeks in England), (4) Landlord registration is mandatory (criminal offense if not registered), (5) Rent increases limited to once per year with 3 months notice, (6) Disputes go to First-tier Tribunal, not county court."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Can I set a fixed term for my Scottish tenancy?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "No. Under the Private Housing (Tenancies) (Scotland) Act 2016, all PRTs are open-ended by law. You cannot create a fixed-term tenancy. The tenancy continues until either the tenant gives 28 days notice to leave, or the landlord serves a valid notice using one of the 18 eviction grounds with the appropriate notice period (28-168 days depending on the ground)."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "What is the maximum deposit in Scotland?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "In Scotland, the maximum deposit is 2 months rent (much lower than England's 5-6 weeks). The deposit must be protected in one of the three approved schemes (SafeDeposits Scotland, MyDeposits Scotland, or Letting Protection Service Scotland) within 30 working days. Our wizard validates your deposit amount against this limit."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Do I need to register as a landlord in Scotland?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes, mandatory landlord registration is required in Scotland. You must register with your local council before letting any property. Failure to register is a criminal offense with fines up to £50,000 and potential rent repayment orders. Your landlord registration number must be included in the PRT agreement and in all property advertisements."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "What grounds can I use to evict a tenant under a PRT?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "The PRT system provides 18 eviction grounds including: landlord intends to sell, landlord or family member intends to live in property, substantial rent arrears (3+ months), repeated late payment, breach of tenancy, anti-social behaviour, property needed for religious purposes, and others. Each ground has specific evidence requirements and notice periods ranging from 28 to 168 days."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "How much notice must I give to evict in Scotland?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Notice periods vary by ground: 28 days for tenant conduct grounds (anti-social behaviour, breach), 84 days for most other grounds (landlord selling, moving in), and 168 days for some grounds if the tenant has lived there for 5+ years. For rent arrears, it's 28 days if 3+ months behind. These are minimum periods - you can give longer notice."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "What is the Repairing Standard in Scotland?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "The Repairing Standard is a set of legal requirements that Scottish landlords must meet, covering: wind and watertight structure, safe installations (gas, electrical, water), adequate heating, satisfactory fire safety, and carbon monoxide detectors. Tenants can apply to the First-tier Tribunal if standards aren't met. Our PRT template includes the required Repairing Standard obligations."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "How do rent increases work under a PRT?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Landlords can only increase rent once every 12 months with at least 3 months written notice using the prescribed form. Tenants can challenge \"unreasonable\" increases by applying to a Rent Officer. Rent Pressure Zones may cap increases in certain areas. Our template includes the proper rent review provisions for Scottish law."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "What happens if I need to evict but the tenant won't leave?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "If a tenant refuses to leave after proper notice, you must apply to the First-tier Tribunal for Scotland (Housing and Property Chamber) for an eviction order. You cannot use bailiffs or county court as in England. The Tribunal process typically takes 4-8 weeks. Our eviction products guide you through the Tribunal application."
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "index": 3,
+            "parseError": null,
+            "types": [
+              "BreadcrumbList"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Home",
+                  "item": "https://landlordheaven.co.uk"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "Tenancy Agreement Packs",
+                  "item": "https://landlordheaven.co.uk/products/ast"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 3,
+                  "name": "PRT Agreement Template",
+                  "item": "https://landlordheaven.co.uk/private-residential-tenancy-agreement-template"
+                }
+              ]
+            }
+          }
+        ],
+        "parseErrors": [],
+        "schemaTypesFound": [
+          "Organization",
+          "Article",
+          "FAQPage",
+          "BreadcrumbList"
+        ]
+      },
+      "productSchemas": [],
+      "conflictSchemas": [],
+      "result": {
+        "hasProductSchema": false,
+        "productSchemaValid": false,
+        "offerValid": false,
+        "offersIsArray": null,
+        "price": null,
+        "currency": null,
+        "availability": null,
+        "issues": [
+          "missing_product_schema",
+          "non_indexable:canonical_points_elsewhere",
+          "non_indexable:redirect_to_other"
+        ]
+      }
+    },
+    {
+      "route": "/tenancy-agreements/wales",
+      "url": "http://localhost:5000/tenancy-agreements/wales",
+      "status": 200,
+      "finalUrl": "http://localhost:5000/wales-tenancy-agreement-template",
+      "indexable": false,
+      "indexabilityReasons": [
+        "canonical_points_elsewhere",
+        "redirect_to_other"
+      ],
+      "canonical": "https://landlordheaven.co.uk/wales-tenancy-agreement-template",
+      "robotsMeta": "index, follow",
+      "fetchError": null,
+      "jsonLd": {
+        "totalBlocks": 4,
+        "blocks": [
+          {
+            "index": 0,
+            "parseError": null,
+            "types": [
+              "Organization"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "Landlord Heaven",
+              "url": "https://landlordheaven.co.uk",
+              "logo": "https://landlordheaven.co.uk/logo.png",
+              "description": "UK-wide AI legal case preparation platform generating complete, jurisdiction-specific, compliance-checked eviction bundles ready to file.",
+              "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "GB",
+                "addressRegion": "England"
+              },
+              "contactPoint": [
+                {
+                  "@type": "ContactPoint",
+                  "telephone": "",
+                  "email": "support@landlordheaven.co.uk",
+                  "contactType": "customer support",
+                  "availableLanguage": [
+                    "en"
+                  ]
+                }
+              ],
+              "sameAs": [
+                "https://twitter.com/LandlordHeaven",
+                "https://www.linkedin.com/company/landlord-heaven"
+              ],
+              "areaServed": [
+                {
+                  "@type": "Country",
+                  "name": "United Kingdom"
+                }
+              ]
+            }
+          },
+          {
+            "index": 1,
+            "parseError": null,
+            "types": [
+              "Article"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "Article",
+              "headline": "Wales Tenancy Agreement Template 2026",
+              "description": "Download a legally compliant tenancy agreement template for Wales (Occupation Contract).",
+              "image": "https://landlordheaven.co.uk/og-image.png",
+              "datePublished": "2026-01-01",
+              "dateModified": "2026-01-25",
+              "author": {
+                "@type": "Organization",
+                "name": "Landlord Heaven"
+              },
+              "publisher": {
+                "@type": "Organization",
+                "name": "Landlord Heaven",
+                "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://landlordheaven.co.uk/logo.png"
+                }
+              },
+              "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://landlordheaven.co.uk/wales-tenancy-agreement-template"
+              }
+            }
+          },
+          {
+            "index": 2,
+            "parseError": null,
+            "types": [
+              "FAQPage"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              "mainEntity": [
+                {
+                  "@type": "Question",
+                  "name": "What type of tenancy agreement do I need for Wales?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "For properties in Wales, you need an Occupation Contract under the Renting Homes (Wales) Act 2016. The old Assured Shorthold Tenancy (AST) system was replaced on 1 December 2022. Private landlords use Standard Occupation Contracts, which give similar possession rights to ASTs but with longer notice periods and stronger tenant protections."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Can I use an English AST for a property in Wales?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "No. ASTs are only valid for properties in England. Using an AST for a Welsh property would be legally non-compliant - it would be treated as a Standard Occupation Contract under Welsh law, but with potentially missing terms and compliance issues. Always use a Wales-specific Occupation Contract template."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "What makes Welsh tenancy law different from England?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Key differences include: (1) 6-month notice period for no-fault eviction vs 2 months in England, (2) Mandatory written statement within 14 days, (3) Stricter fitness for human habitation requirements covering 29 matters, (4) Joint tenants can leave individually without ending the whole contract, (5) Different terminology - tenants are \"contract-holders\"."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "How long is the minimum notice period in Wales?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "For Section 173 (no-fault) notices, landlords must give at least 6 months notice and cannot serve it during the first 6 months of occupation. This is significantly longer than England's 2-month Section 21 period. Section 181 breach notices have shorter periods depending on the grounds (14 days for serious rent arrears)."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Do I need to provide a written statement in Wales?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes, this is mandatory. Under the Renting Homes (Wales) Act, you must provide a written statement of the occupation contract within 14 days of the occupation date. If you don't, you cannot serve a Section 173 possession notice until you do. Our template serves as both the contract and the required written statement."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Are deposits still protected in Wales?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes. Deposits must be protected in one of the three authorised schemes (DPS, MyDeposits, or TDS) within 30 days. The same schemes operate in both England and Wales. Failure to protect a deposit affects your ability to serve possession notices and may result in compensation claims."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "What documents must I provide to tenants in Wales?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Before or at the start of occupation, you must provide: (1) Written statement of the occupation contract (within 14 days), (2) EPC, (3) Gas Safety Certificate (if applicable), (4) EICR electrical safety certificate, (5) Deposit protection prescribed information (within 30 days). Our wizard checks these requirements."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "What if my property is on the Wales-England border?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "The property's location determines which law applies. Properties in Wales (Welsh postcodes/local authority areas) use Occupation Contracts. Properties in England (English postcodes/local authority areas) use ASTs. If you're unsure, check which local authority the property falls under."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Can I charge tenant fees in Wales?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Wales follows similar fee ban rules to England. You cannot charge for most fees - only rent, deposits (capped), holding deposits, and charges for specific contract defaults. The Renting Homes (Fees etc.) (Wales) Act 2019 mirrors England's Tenant Fees Act 2019."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "What happens when the tenancy agreement ends in Wales?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "When a fixed-term Occupation Contract ends, it automatically becomes a periodic contract on a month-to-month basis with the same terms. You don't need to create a new agreement. To end the contract, either party must serve proper notice under Welsh law."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Is our tenancy agreement template bilingual (Welsh/English)?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Our template uses English with correct Welsh legal terminology. While there's no legal requirement for bilingual documents, contract-holders have the right to communicate in Welsh. If a contract-holder requests Welsh language documents, you should make reasonable efforts to accommodate this."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "How does this template help with eviction later?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Our Occupation Contract template includes all terms required for valid Section 173 and Section 181 notices. If you later need to evict, our eviction products use the same case data from your contract, ensuring consistency and compliance with Welsh eviction procedures."
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "index": 3,
+            "parseError": null,
+            "types": [
+              "BreadcrumbList"
+            ],
+            "parsed": {
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Home",
+                  "item": "https://landlordheaven.co.uk"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "Tenancy Agreement Packs",
+                  "item": "https://landlordheaven.co.uk/products/ast"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 3,
+                  "name": "Wales Tenancy Agreement",
+                  "item": "https://landlordheaven.co.uk/wales-tenancy-agreement-template"
+                }
+              ]
+            }
+          }
+        ],
+        "parseErrors": [],
+        "schemaTypesFound": [
+          "Organization",
+          "Article",
+          "FAQPage",
+          "BreadcrumbList"
+        ]
+      },
+      "productSchemas": [],
+      "conflictSchemas": [],
+      "result": {
+        "hasProductSchema": false,
+        "productSchemaValid": false,
+        "offerValid": false,
+        "offersIsArray": null,
+        "price": null,
+        "currency": null,
+        "availability": null,
+        "issues": [
+          "missing_product_schema",
+          "non_indexable:canonical_points_elsewhere",
+          "non_indexable:redirect_to_other"
+        ]
+      }
+    }
+  ]
+}

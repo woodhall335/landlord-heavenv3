@@ -11,8 +11,8 @@ import { z } from 'zod';
 import Stripe from 'stripe';
 import { HMO_PRO_DISABLED_RESPONSE, HMO_PRO_ENABLED } from '@/lib/feature-flags';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-11-17.clover',
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_placeholder', {
+  apiVersion: '2025-12-15.clover',
 });
 
 // HMO Pro subscription tiers (aligned with .env.example naming)
@@ -53,7 +53,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const { tier, success_url, cancel_url } = validationResult.data;
+    const { tier } = validationResult.data;
 
     if (!HMO_PRO_TIERS) {
       return NextResponse.json(HMO_PRO_DISABLED_RESPONSE, { status: 403 });
@@ -98,7 +98,11 @@ export async function POST(request: Request) {
     const tierDetails = HMO_PRO_TIERS[tier];
 
     // Create Stripe checkout session for subscription
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+    // Use NEXT_PUBLIC_APP_URL in production, fallback to localhost only in development
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_APP_URL ||
+      (process.env.NODE_ENV === 'production'
+        ? 'https://landlordheaven.co.uk'
+        : 'http://localhost:5000');
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       mode: 'subscription',
@@ -120,8 +124,8 @@ export async function POST(request: Request) {
         user_id: user.id,
         tier,
       },
-      success_url: success_url || `${baseUrl}/dashboard/hmo?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: cancel_url || `${baseUrl}/dashboard/hmo`,
+      success_url: `${baseUrl}/dashboard/hmo?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${baseUrl}/dashboard/hmo`,
     });
 
     return NextResponse.json(

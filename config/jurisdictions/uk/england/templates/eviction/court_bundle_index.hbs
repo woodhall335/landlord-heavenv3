@@ -1,0 +1,317 @@
+{{!--
+  ============================================================================
+  COURT BUNDLE INDEX
+  Section 8 Eviction Proceedings
+  ============================================================================
+  Index of all documents to be filed with the court for possession proceedings.
+--}}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Court Bundle Index</title>
+  <style>
+    {{{print_css}}}
+
+    @page {
+      size: A4;
+      margin: 15mm;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 10pt;
+      line-height: 1.5;
+      color: #1a1a1a;
+      padding: 0;
+      margin: 0 auto;
+    }
+
+    .bundle-header {
+      text-align: center;
+      margin-bottom: 2em;
+      padding-bottom: 1em;
+      border-bottom: 2px solid #1a1a1a;
+    }
+
+    .bundle-header h1 {
+      font-size: 16pt;
+      margin: 0 0 0.5em 0;
+    }
+
+    .bundle-header h2 {
+      font-size: 12pt;
+      font-weight: normal;
+      color: #555;
+      margin: 0;
+    }
+
+    .case-details {
+      background: #f8f9fa;
+      border: 1px solid #ddd;
+      padding: 1em;
+      margin-bottom: 2em;
+    }
+
+    .case-details-grid {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 0.5em 1em;
+    }
+
+    .case-details-grid dt {
+      font-weight: 600;
+    }
+
+    .case-details-grid dd {
+      margin: 0;
+    }
+
+    .index-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 2em;
+    }
+
+    .index-table th,
+    .index-table td {
+      padding: 8px 12px;
+      border: 1px solid #1a1a1a;
+      text-align: left;
+    }
+
+    .index-table th {
+      background: #1a1a1a;
+      color: white;
+      font-weight: 600;
+    }
+
+    .index-table tr:nth-child(even) td {
+      background: #f9fafb;
+    }
+
+    .tab-number {
+      font-weight: bold;
+      text-align: center;
+      width: 50px;
+    }
+
+    .page-ref {
+      text-align: center;
+      width: 80px;
+    }
+
+    .section-header td {
+      background: #e9ecef !important;
+      font-weight: 600;
+      padding-top: 12px;
+    }
+
+    .checkbox-col {
+      width: 30px;
+      text-align: center;
+    }
+
+    .checkbox {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 1px solid #1a1a1a;
+      background: white;
+    }
+
+    .notes-section {
+      border: 1px solid #ddd;
+      padding: 1em;
+      margin-top: 2em;
+    }
+
+    .notes-section h3 {
+      margin-top: 0;
+    }
+
+    .footer {
+      margin-top: 2em;
+      padding-top: 1em;
+      border-top: 1px solid #ddd;
+      font-size: 9pt;
+      color: #666;
+    }
+
+    @media print {
+      .index-table {
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Bundle Header -->
+<div class="bundle-header">
+  <h1>COURT BUNDLE INDEX</h1>
+  <h2>Claim for Possession of Residential Property</h2>
+</div>
+
+<!-- Case Details -->
+<div class="case-details">
+  <dl class="case-details-grid">
+    <dt>Case Number:</dt>
+    <dd><em>[To be assigned by court]</em></dd>
+    <dt>Claimant:</dt>
+    <dd>{{landlord_full_name}}</dd>
+    <dt>Defendant:</dt>
+    <dd>{{tenant_full_name}}{{#if tenant_2_name}}, {{tenant_2_name}}{{/if}}</dd>
+    <dt>Property:</dt>
+    <dd>{{property_address}}</dd>
+    <dt>Hearing Date:</dt>
+    <dd><em>[To be notified by court]</em></dd>
+    <dt>Bundle Prepared:</dt>
+    <dd>{{format_date generated_date "long"}}</dd>
+  </dl>
+</div>
+
+<!-- Bundle Index Table -->
+<table class="index-table">
+  <thead>
+    <tr>
+      <th class="checkbox-col">✓</th>
+      <th class="tab-number">Tab</th>
+      <th>Document</th>
+      <th>Description</th>
+      <th class="page-ref">Pages</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- Section A: Court Forms -->
+    <tr class="section-header">
+      <td colspan="5">A. COURT FORMS</td>
+    </tr>
+    <tr>
+      <td class="checkbox-col"><span class="checkbox"></span></td>
+      <td class="tab-number">A1</td>
+      <td>Form N5</td>
+      <td>Claim for Possession of Property</td>
+      <td class="page-ref"></td>
+    </tr>
+    <tr>
+      <td class="checkbox-col"><span class="checkbox"></span></td>
+      <td class="tab-number">A2</td>
+      <td>Form N119</td>
+      <td>Particulars of Claim for Possession</td>
+      <td class="page-ref"></td>
+    </tr>
+
+    <!-- Section B: Notices -->
+    <tr class="section-header">
+      <td colspan="5">B. NOTICES</td>
+    </tr>
+    <tr>
+      <td class="checkbox-col"><span class="checkbox"></span></td>
+      <td class="tab-number">B1</td>
+      <td>Section 8 Notice</td>
+      <td>Notice Seeking Possession (Form 3)</td>
+      <td class="page-ref"></td>
+    </tr>
+    <tr>
+      <td class="checkbox-col"><span class="checkbox"></span></td>
+      <td class="tab-number">B2</td>
+      <td>Proof of Service</td>
+      <td>Certificate of Service for Section 8 Notice</td>
+      <td class="page-ref"></td>
+    </tr>
+
+    <!-- Section C: Witness Evidence -->
+    <tr class="section-header">
+      <td colspan="5">C. WITNESS EVIDENCE</td>
+    </tr>
+    <tr>
+      <td class="checkbox-col"><span class="checkbox"></span></td>
+      <td class="tab-number">C1</td>
+      <td>Witness Statement</td>
+      <td>Witness Statement of {{landlord_full_name}}</td>
+      <td class="page-ref"></td>
+    </tr>
+
+    <!-- Section D: Arrears Documentation -->
+    <tr class="section-header">
+      <td colspan="5">D. ARREARS DOCUMENTATION</td>
+    </tr>
+    <tr>
+      <td class="checkbox-col"><span class="checkbox"></span></td>
+      <td class="tab-number">D1</td>
+      <td>Schedule of Arrears</td>
+      <td>Period-by-period breakdown of rent due and payments</td>
+      <td class="page-ref"></td>
+    </tr>
+    <tr>
+      <td class="checkbox-col"><span class="checkbox"></span></td>
+      <td class="tab-number">D2</td>
+      <td>Bank Statements</td>
+      <td>Evidence of payment history (if available)</td>
+      <td class="page-ref"></td>
+    </tr>
+
+    <!-- Section E: Tenancy Documentation -->
+    <tr class="section-header">
+      <td colspan="5">E. TENANCY DOCUMENTATION</td>
+    </tr>
+    <tr>
+      <td class="checkbox-col"><span class="checkbox"></span></td>
+      <td class="tab-number">E1</td>
+      <td>Tenancy Agreement</td>
+      <td>Original signed tenancy agreement</td>
+      <td class="page-ref"></td>
+    </tr>
+    <tr>
+      <td class="checkbox-col"><span class="checkbox"></span></td>
+      <td class="tab-number">E2</td>
+      <td>Deposit Certificate</td>
+      <td>Tenancy deposit protection certificate</td>
+      <td class="page-ref"></td>
+    </tr>
+
+    <!-- Section F: Correspondence -->
+    <tr class="section-header">
+      <td colspan="5">F. CORRESPONDENCE (if applicable)</td>
+    </tr>
+    <tr>
+      <td class="checkbox-col"><span class="checkbox"></span></td>
+      <td class="tab-number">F1</td>
+      <td>Pre-action Letters</td>
+      <td>Letters sent to tenant regarding arrears</td>
+      <td class="page-ref"></td>
+    </tr>
+    <tr>
+      <td class="checkbox-col"><span class="checkbox"></span></td>
+      <td class="tab-number">F2</td>
+      <td>Tenant Responses</td>
+      <td>Any responses received from tenant</td>
+      <td class="page-ref"></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Notes Section -->
+<div class="notes-section">
+  <h3>Bundle Preparation Notes</h3>
+  <ul>
+    <li>Number all pages consecutively throughout the bundle</li>
+    <li>Include this index at the front of the bundle</li>
+    <li>Prepare THREE copies: one for the court, one for the defendant, one for yourself</li>
+    <li>Bring the originals of all documents to the hearing</li>
+    <li>If you add or remove documents, update this index accordingly</li>
+    <li>File the bundle with the court at least 14 days before the hearing (check local court rules)</li>
+  </ul>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  <p><strong>Prepared by:</strong> {{landlord_full_name}}</p>
+  <p><strong>Date:</strong> {{format_date generated_date "long"}}</p>
+  <p>Generated by Landlord Heaven Court Pack</p>
+</div>
+
+</body>
+</html>

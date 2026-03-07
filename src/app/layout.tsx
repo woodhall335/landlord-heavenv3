@@ -1,23 +1,25 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import { Header, Footer } from "@/components/layout";
 import { tryGetServerUser } from "@/lib/supabase/server";
 import { defaultMetadata } from "@/lib/seo";
+import { SITE_ORIGIN } from "@/lib/seo/urls";
 import {
   organizationSchema,
-  websiteSchema,
-  softwareApplicationSchema,
-  localBusinessSchema
+  // softwareApplicationSchema removed from global injection - see SEO note below
 } from "@/lib/seo/structured-data";
+import { PopupProvider } from "@/components/providers/PopupProvider";
+import { TrackingPixels } from "@/components/analytics/TrackingPixels";
+import { Section21HeaderBanner } from "@/components/ui/Section21HeaderBanner";
+import { Analytics } from "@vercel/analytics/next";
+import { HeaderModeProvider } from "@/components/layout/HeaderModeContext";
+import { JourneyProvider } from "@/components/journey/JourneyProvider";
 
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-  display: "swap",
-});
 
-export const metadata: Metadata = defaultMetadata;
+export const metadata: Metadata = {
+  ...defaultMetadata,
+  metadataBase: new URL(SITE_ORIGIN),
+};
 
 export default async function RootLayout({
   children,
@@ -40,50 +42,47 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* Google Analytics 4 */}
-        {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
-          <>
-            <script
-              async
-              src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}`}
-            />
-            <script
-              dangerouslySetInnerHTML={{
-                __html: `
-                  window.dataLayer = window.dataLayer || [];
-                  function gtag(){dataLayer.push(arguments);}
-                  gtag('js', new Date());
-                  gtag('config', '${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}', {
-                    page_path: window.location.pathname,
-                  });
-                `,
-              }}
-            />
-          </>
-        )}
+        {/* DNS Prefetch for third-party domains (preconnect is too aggressive for lazy-loaded scripts) */}
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://connect.facebook.net" />
+        <link rel="dns-prefetch" href="https://www.facebook.com" />
 
-        {/* JSON-LD Structured Data for SEO */}
+        {/* JSON-LD Structured Data for SEO - Organization schema globally */}
+        {/*
+          SEO FIX (Jan 2026): SoftwareApplication schema REMOVED from global injection.
+
+          PROBLEM: Google was showing incorrect snippets on product pages:
+
+          ROOT CAUSE: Global SoftwareApplication schema was being combined with
+          Product schema on /products/* pages, causing Google to misclassify products
+          as "BusinessApplication" with wrong price (AggregateOffer lowPrice).
+
+          SOLUTION:
+          - Product pages use their own Product + Offer schema with correct prices
+          - SoftwareApplication schema should only be used on tool pages if intentionally desired
+          - Organization schema remains global (correct for all pages)
+
+          DO NOT re-add softwareApplicationSchema() here without SEO review.
+        */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema()) }}
         />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema()) }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareApplicationSchema()) }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema()) }}
-        />
       </head>
-      <body className={`${inter.variable} font-sans antialiased flex flex-col min-h-screen`}>
-        <Header user={headerUser} />
-        <main className="flex-1">{children}</main>
-        <Footer />
+      <body className="font-sans antialiased flex flex-col min-h-screen overflow-x-hidden">
+        <HeaderModeProvider>
+          <Section21HeaderBanner />
+          <PopupProvider>
+            <Header user={headerUser} />
+            <main className="flex-1">
+              {children}
+            </main>
+            <Footer />
+          </PopupProvider>
+        </HeaderModeProvider>
+        <TrackingPixels />
+        <JourneyProvider />
+        <Analytics />
       </body>
     </html>
   );

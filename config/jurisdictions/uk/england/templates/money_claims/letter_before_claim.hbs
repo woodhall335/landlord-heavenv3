@@ -1,5 +1,4 @@
 <h1>Letter Before Claim</h1>
-<p><em>This letter must be sent to the defendant before issuing court proceedings, in accordance with the Practice Direction on Pre-Action Conduct and the Pre-Action Protocol for Debt Claims.</em></p>
 
 <hr>
 
@@ -69,23 +68,27 @@ I am writing to you about the money you owe me in respect of the above property.
     <td align="right">{{currency other_total}}</td>
   </tr>
   {{/if}}
+  {{#if claim_interest}}
   <tr>
     <td><strong>Interest to date ({{interest_rate}}% per annum):</strong></td>
     <td align="right">{{currency interest_to_date}}</td>
   </tr>
+  {{/if}}
   <tr style="background-color: #f0f0f0;">
     <td><strong>TOTAL AMOUNT OWED:</strong></td>
     <td align="right"><strong>{{currency total_claim_amount}}</strong></td>
   </tr>
 </table>
 
+{{#if claim_interest}}
 <p><em>Interest continues to accrue at {{currency daily_interest}} per day until the debt is paid in full.</em></p>
+{{/if}}
 
 <h3>2. Breakdown of the Debt</h3>
 
 <h4>Rent Arrears</h4>
 <p>
-You occupy the property under an assured shorthold tenancy that commenced on {{tenancy_start_date}}. The agreed rent is {{currency rent_amount}} per {{rent_frequency}}, payable in advance.
+You occupy the property under an assured shorthold tenancy that commenced on {{tenancy_start_date}}. The agreed rent is {{currency rent_amount}} {{rent_frequency}}, payable in advance.
 </p>
 
 <p>
@@ -111,6 +114,7 @@ You have failed to pay rent as it fell due. The arrears have accumulated over mu
 </ul>
 {{/if}}
 
+{{#if claim_interest}}
 <h4>Interest</h4>
 <p>
 I am entitled to claim interest on the outstanding rent and costs pursuant to <strong>section 69 of the County Courts Act 1984</strong>. Interest is calculated at {{interest_rate}}% per annum from {{interest_start_date}} and continues to accrue at {{currency daily_interest}} per day until payment.
@@ -119,6 +123,7 @@ I am entitled to claim interest on the outstanding rent and costs pursuant to <s
 <p>
 The interest calculation to {{generation_date}} is {{currency interest_to_date}}. The full working is attached as <strong>Appendix 2</strong>.
 </p>
+{{/if}}
 
 <h3>3. What You Must Do Now</h3>
 
@@ -186,8 +191,8 @@ If you do not respond to this letter within 30 days, or if you do not make accep
 <ul>
   <li>The claim will be for the full amount owed ({{currency total_claim_amount}}) <strong>plus court fees and legal costs</strong>.</li>
   <li>You will have to pay a court fee of approximately {{currency court_fee}}.</li>
-  <li>If I instruct solicitors, you may also be liable for legal costs of {{currency solicitor_costs}} or more.</li>
-  <li>Interest will continue to accrue at {{currency daily_interest}} per day.</li>
+  {{#if solicitor_costs}}<li>If I instruct solicitors, you may also be liable for legal costs of {{currency solicitor_costs}} or more.</li>{{/if}}
+  {{#if claim_interest}}<li>Interest will continue to accrue at {{currency daily_interest}} per day.</li>{{/if}}
   <li>If judgment is entered against you, it will damage your credit rating for six years.</li>
   <li>I may enforce the judgment by sending bailiffs, applying for an attachment of earnings order, or placing a charging order on any property you own.</li>
 </ul>
@@ -205,7 +210,7 @@ If you do not respond to this letter within 30 days, or if you do not make accep
   <li>Reply Form</li>
   <li>Financial Statement Form</li>
   <li>Appendix 1: Schedule of Rent Arrears</li>
-  <li>Appendix 2: Interest Calculation</li>
+  {{#if claim_interest}}<li>Appendix 2: Interest Calculation</li>{{/if}}
 </ol>
 
 <h3>7. Your Rights</h3>

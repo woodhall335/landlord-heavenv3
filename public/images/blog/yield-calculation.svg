@@ -1,0 +1,125 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F3F1FF"/>
+      <stop offset="100%" style="stop-color:#E9E5FF"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bgGrad)"/>
+
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" fill="#7C3AED" font-size="22" font-weight="bold" font-family="Arial">RENTAL YIELD CALCULATION</text>
+  <text x="400" y="55" text-anchor="middle" fill="#6D28D9" font-size="11" font-family="Arial">Measure your property investment performance</text>
+
+  <!-- Calculator icon -->
+  <g transform="translate(60, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+
+    <!-- Calculator -->
+    <g transform="translate(45, 10)">
+      <rect x="0" y="0" width="110" height="95" rx="6" fill="#6D28D9"/>
+      <!-- Screen -->
+      <rect x="10" y="10" width="90" height="25" rx="3" fill="#1a1a2e"/>
+      <text x="95" y="28" text-anchor="end" fill="#22C55E" font-size="14" font-family="monospace">5.2%</text>
+      <!-- Buttons -->
+      <rect x="10" y="42" width="20" height="18" rx="2" fill="#7C3AED"/>
+      <rect x="35" y="42" width="20" height="18" rx="2" fill="#7C3AED"/>
+      <rect x="60" y="42" width="20" height="18" rx="2" fill="#7C3AED"/>
+      <rect x="85" y="42" width="15" height="18" rx="2" fill="#F59E0B"/>
+      <rect x="10" y="65" width="20" height="18" rx="2" fill="#7C3AED"/>
+      <rect x="35" y="65" width="20" height="18" rx="2" fill="#7C3AED"/>
+      <rect x="60" y="65" width="20" height="18" rx="2" fill="#7C3AED"/>
+      <rect x="85" y="65" width="15" height="18" rx="2" fill="#22C55E"/>
+    </g>
+
+    <text x="100" y="125" text-anchor="middle" fill="#7C3AED" font-size="11" font-weight="bold">YIELD</text>
+    <text x="100" y="143" text-anchor="middle" fill="#6D28D9" font-size="9">Your return on</text>
+    <text x="100" y="158" text-anchor="middle" fill="#6D28D9" font-size="9">investment</text>
+  </g>
+
+  <!-- Gross yield -->
+  <g transform="translate(280, 80)">
+    <rect x="0" y="0" width="240" height="175" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="240" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="240" height="12" fill="#7C3AED"/>
+    <text x="120" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">GROSS YIELD</text>
+
+    <g transform="translate(15, 45)">
+      <rect x="0" y="0" width="210" height="70" rx="6" fill="#F3F1FF"/>
+      <text x="105" y="25" text-anchor="middle" fill="#7C3AED" font-size="11" font-weight="bold">Annual Rent x 100</text>
+      <line x1="30" y1="35" x2="180" y2="35" stroke="#6D28D9" stroke-width="2"/>
+      <text x="105" y="55" text-anchor="middle" fill="#7C3AED" font-size="11" font-weight="bold">Property Value</text>
+    </g>
+
+    <g transform="translate(15, 125)">
+      <text x="0" y="15" fill="#6D28D9" font-size="9" font-weight="bold">Example:</text>
+    </g>
+    <g transform="translate(15, 143)">
+      <text x="0" y="15" fill="#6D28D9" font-size="9">(£12,000 x 100) / £250,000 = </text>
+      <text x="175" y="15" fill="#22C55E" font-size="10" font-weight="bold">4.8%</text>
+    </g>
+  </g>
+
+  <!-- Net yield -->
+  <g transform="translate(540, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#22C55E" stroke-width="2"/>
+    <rect x="0" y="0" width="200" height="32" rx="12" fill="#22C55E"/>
+    <rect x="0" y="20" width="200" height="12" fill="#22C55E"/>
+    <text x="100" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">NET YIELD</text>
+
+    <g transform="translate(15, 45)">
+      <rect x="0" y="0" width="170" height="70" rx="6" fill="#22C55E" opacity="0.1"/>
+      <text x="85" y="20" text-anchor="middle" fill="#22C55E" font-size="10" font-weight="bold">(Rent - Costs) x 100</text>
+      <line x1="25" y1="30" x2="145" y2="30" stroke="#6D28D9" stroke-width="2"/>
+      <text x="85" y="50" text-anchor="middle" fill="#22C55E" font-size="10" font-weight="bold">Property Value</text>
+    </g>
+
+    <g transform="translate(15, 125)">
+      <text x="0" y="15" fill="#6D28D9" font-size="9" font-weight="bold">More accurate!</text>
+    </g>
+    <g transform="translate(15, 143)">
+      <text x="0" y="15" fill="#6D28D9" font-size="8">Accounts for real costs</text>
+    </g>
+  </g>
+
+  <!-- Costs and benchmarks -->
+  <g transform="translate(60, 275)">
+    <rect x="0" y="0" width="680" height="170" rx="12" fill="white" stroke="#7C3AED" stroke-width="2"/>
+    <rect x="0" y="0" width="680" height="32" rx="12" fill="#7C3AED"/>
+    <rect x="0" y="20" width="680" height="12" fill="#7C3AED"/>
+    <text x="340" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">UNDERSTANDING YIELD</text>
+
+    <g transform="translate(20, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#F3F1FF"/>
+      <text x="100" y="20" text-anchor="middle" fill="#7C3AED" font-size="10" font-weight="bold">COSTS TO DEDUCT</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">• Management fees (8-12%)</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">• Insurance (~£200-400/yr)</text>
+      <text x="100" y="68" text-anchor="middle" fill="#6D28D9" font-size="8">• Maintenance (~10% rent)</text>
+      <text x="100" y="81" text-anchor="middle" fill="#6D28D9" font-size="8">• Void periods</text>
+      <text x="100" y="94" text-anchor="middle" fill="#7C3AED" font-size="8" font-weight="bold">Ground rent/service charge</text>
+    </g>
+
+    <g transform="translate(240, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#22C55E" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#22C55E" font-size="10" font-weight="bold">GOOD YIELDS</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">• London: 3-5% typical</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">• North: 6-8% achievable</text>
+      <text x="100" y="68" text-anchor="middle" fill="#6D28D9" font-size="8">• HMO: 8-12% possible</text>
+      <text x="100" y="81" text-anchor="middle" fill="#6D28D9" font-size="8">• National avg: ~5%</text>
+      <text x="100" y="94" text-anchor="middle" fill="#22C55E" font-size="8" font-weight="bold">Higher yield = higher risk</text>
+    </g>
+
+    <g transform="translate(460, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#F59E0B" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#F59E0B" font-size="10" font-weight="bold">TOTAL RETURN</text>
+      <text x="100" y="42" text-anchor="middle" fill="#6D28D9" font-size="8">Yield + Capital Growth</text>
+      <text x="100" y="55" text-anchor="middle" fill="#6D28D9" font-size="8">= Total Return</text>
+      <text x="100" y="72" text-anchor="middle" fill="#6D28D9" font-size="8">Low yield area might have</text>
+      <text x="100" y="85" text-anchor="middle" fill="#6D28D9" font-size="8">better capital growth</text>
+      <text x="100" y="98" text-anchor="middle" fill="#F59E0B" font-size="8" font-weight="bold">Consider both factors</text>
+    </g>
+  </g>
+
+  <circle cx="40" cy="40" r="20" fill="#7C3AED" opacity="0.1"/>
+  <circle cx="760" cy="460" r="25" fill="#A78BFA" opacity="0.12"/>
+</svg>

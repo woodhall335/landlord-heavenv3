@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { InlineSectionHeaderV3 } from '@/components/wizard/shared/InlineSectionHeaderV3';
 
 interface SectionProps {
   facts: any;
@@ -10,8 +11,27 @@ interface SectionProps {
 export const ClaimantSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
   const landlord = facts.parties?.landlord || {};
 
+  /**
+   * Updates landlord data in both nested (parties.landlord.*) and top-level keys.
+   * The validator expects top-level keys like landlord_full_name, landlord_address_line1, etc.
+   * We maintain both for backward compatibility and to ensure validation works correctly.
+   */
   const updateLandlord = (field: string, value: string) => {
-    onUpdate({
+    // Map nested fields to top-level validator keys
+    const topLevelKeyMap: Record<string, string> = {
+      name: 'landlord_full_name',
+      address_line1: 'landlord_address_line1',
+      address_line2: 'landlord_address_line2',
+      city: 'landlord_address_town',
+      postcode: 'landlord_address_postcode',
+      email: 'landlord_email',
+      phone: 'landlord_phone',
+      co_claimant: 'landlord_co_claimant',
+    };
+
+    const topLevelKey = topLevelKeyMap[field];
+
+    const updates: Record<string, any> = {
       parties: {
         ...(facts.parties || {}),
         landlord: {
@@ -19,7 +39,14 @@ export const ClaimantSection: React.FC<SectionProps> = ({ facts, onUpdate }) => 
           [field]: value,
         },
       },
-    });
+    };
+
+    // Also write to top-level key for validator compatibility
+    if (topLevelKey) {
+      updates[topLevelKey] = value;
+    }
+
+    onUpdate(updates);
   };
 
   const updateMoneyClaim = (field: string, value: any) => {
@@ -31,8 +58,41 @@ export const ClaimantSection: React.FC<SectionProps> = ({ facts, onUpdate }) => 
     });
   };
 
+  /**
+   * Updates landlord_is_company flag at both nested and top-level
+   */
+  const updateIsCompany = (isCompany: boolean) => {
+    onUpdate({
+      landlord_is_company: isCompany,
+      parties: {
+        ...(facts.parties || {}),
+        landlord: {
+          ...landlord,
+          is_company: isCompany,
+        },
+      },
+    });
+  };
+
+  /**
+   * Updates company name at both nested and top-level
+   */
+  const updateCompanyName = (name: string) => {
+    onUpdate({
+      company_name: name,
+      parties: {
+        ...(facts.parties || {}),
+        landlord: {
+          ...landlord,
+          company_name: name,
+        },
+      },
+    });
+  };
+
   const referenceValue =
     facts.money_claim?.reference ?? landlord.reference ?? '';
+  const isCompany = facts.landlord_is_company ?? landlord.is_company ?? false;
 
   return (
     <div className="space-y-4">
@@ -42,34 +102,83 @@ export const ClaimantSection: React.FC<SectionProps> = ({ facts, onUpdate }) => 
         defendant to see.
       </p>
 
-      {/* Names */}
-      <div className="grid gap-4 md:grid-cols-2">
-        <div className="space-y-1">
-          <label className="text-sm font-medium text-charcoal">
-            Claimant full name
-          </label>
-          <input
-            type="text"
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-            value={landlord.name || ''}
-            onChange={(e) => updateLandlord('name', e.target.value)}
-            placeholder="e.g. Jane Smith"
-          />
-        </div>
-
-        <div className="space-y-1">
-          <label className="text-sm font-medium text-charcoal">
-            Second claimant (if joint landlord)
-          </label>
-          <input
-            type="text"
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-            value={landlord.co_claimant || ''}
-            onChange={(e) => updateLandlord('co_claimant', e.target.value)}
-            placeholder="Leave blank if there is only one landlord"
-          />
+      {/* Company/Individual toggle */}
+      <div className="space-y-2">
+        <label className="text-sm font-medium text-charcoal">
+          Are you claiming as an individual or a company?
+        </label>
+        <div className="flex gap-3">
+          <button
+            type="button"
+            onClick={() => updateIsCompany(false)}
+            className={`rounded-md border px-4 py-2 text-sm font-medium transition-colors ${
+              !isCompany
+                ? 'border-[#7C3AED] bg-[#7C3AED]/5 text-[#7C3AED]'
+                : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+            }`}
+          >
+            Individual landlord
+          </button>
+          <button
+            type="button"
+            onClick={() => updateIsCompany(true)}
+            className={`rounded-md border px-4 py-2 text-sm font-medium transition-colors ${
+              isCompany
+                ? 'border-[#7C3AED] bg-[#7C3AED]/5 text-[#7C3AED]'
+                : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+            }`}
+          >
+            Company / Organisation
+          </button>
         </div>
       </div>
+
+      {/* Names - varies based on company or individual */}
+      {isCompany ? (
+        <div className="space-y-1">
+          <label className="text-sm font-medium text-charcoal">
+            Company / Organisation name <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="text"
+            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+            value={facts.company_name || landlord.company_name || ''}
+            onChange={(e) => updateCompanyName(e.target.value)}
+            placeholder="e.g. ABC Lettings Ltd"
+          />
+          <p className="text-xs text-gray-500">
+            Enter the full registered company name as it appears on Companies House.
+          </p>
+        </div>
+      ) : (
+        <div className="grid gap-4 md:grid-cols-2">
+          <div className="space-y-1">
+            <label className="text-sm font-medium text-charcoal">
+              Claimant full name <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+              value={landlord.name || facts.landlord_full_name || ''}
+              onChange={(e) => updateLandlord('name', e.target.value)}
+              placeholder="e.g. Jane Smith"
+            />
+          </div>
+
+          <div className="space-y-1">
+            <label className="text-sm font-medium text-charcoal">
+              Second claimant (if joint landlord)
+            </label>
+            <input
+              type="text"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+              value={landlord.co_claimant || facts.landlord_co_claimant || ''}
+              onChange={(e) => updateLandlord('co_claimant', e.target.value)}
+              placeholder="Leave blank if there is only one landlord"
+            />
+          </div>
+        </div>
+      )}
 
       {/* Contact details */}
       <div className="grid gap-4 md:grid-cols-2">
@@ -98,9 +207,7 @@ export const ClaimantSection: React.FC<SectionProps> = ({ facts, onUpdate }) => 
 
       {/* Postal address */}
       <div className="space-y-3 rounded-md border border-gray-200 bg-gray-50 p-3">
-        <h3 className="text-sm font-medium text-charcoal">
-          Claimant postal address
-        </h3>
+        <InlineSectionHeaderV3 title="Claimant postal address" iconSlug="claimant" />
         <p className="text-xs text-gray-600">
           This is the address that will appear on the court papers. If you use a
           managing agent or solicitor for service, we&apos;ll collect that later.
@@ -108,12 +215,12 @@ export const ClaimantSection: React.FC<SectionProps> = ({ facts, onUpdate }) => 
 
         <div className="space-y-1">
           <label className="text-xs font-medium text-charcoal">
-            Address line 1
+            Address line 1 <span className="text-red-500">*</span>
           </label>
           <input
             type="text"
             className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-            value={landlord.address_line1 || ''}
+            value={landlord.address_line1 || facts.landlord_address_line1 || ''}
             onChange={(e) => updateLandlord('address_line1', e.target.value)}
             placeholder="e.g. 10 High Street"
           />
@@ -126,7 +233,7 @@ export const ClaimantSection: React.FC<SectionProps> = ({ facts, onUpdate }) => 
           <input
             type="text"
             className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-            value={landlord.address_line2 || ''}
+            value={landlord.address_line2 || facts.landlord_address_line2 || ''}
             onChange={(e) => updateLandlord('address_line2', e.target.value)}
             placeholder="Building, estate or area"
           />
@@ -140,7 +247,7 @@ export const ClaimantSection: React.FC<SectionProps> = ({ facts, onUpdate }) => 
             <input
               type="text"
               className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-              value={landlord.city || ''}
+              value={landlord.city || facts.landlord_address_town || ''}
               onChange={(e) => updateLandlord('city', e.target.value)}
               placeholder="e.g. Manchester"
             />
@@ -148,12 +255,12 @@ export const ClaimantSection: React.FC<SectionProps> = ({ facts, onUpdate }) => 
 
           <div className="space-y-1">
             <label className="text-xs font-medium text-charcoal">
-              Postcode
+              Postcode <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
               className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-              value={landlord.postcode || ''}
+              value={landlord.postcode || facts.landlord_address_postcode || ''}
               onChange={(e) => updateLandlord('postcode', e.target.value)}
               placeholder="e.g. M1 2AB"
             />

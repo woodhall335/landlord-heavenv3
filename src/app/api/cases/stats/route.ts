@@ -7,6 +7,36 @@
 
 import { createServerSupabaseClient, requireServerAuth } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
+import { deriveDisplayStatus } from '@/lib/case-status';
+
+type CaseStatusRow = { id: string; status: string | null; wizard_progress?: number | null; wizard_completed_at?: string | null };
+type OrderStatusRow = { case_id: string; payment_status?: string | null; fulfillment_status?: string | null; created_at?: string | null };
+
+export function deriveOverviewCounts(cases: CaseStatusRow[], orders: OrderStatusRow[]) {
+  const latestOrderByCaseId = new Map<string, OrderStatusRow>();
+  for (const order of orders) {
+    if (!order.case_id || latestOrderByCaseId.has(order.case_id)) continue;
+    latestOrderByCaseId.set(order.case_id, order);
+  }
+
+  const displayStatuses = cases.map((caseRow) => {
+    const order = latestOrderByCaseId.get(caseRow.id);
+    return deriveDisplayStatus({
+      caseStatus: caseRow.status || null,
+      wizardProgress: caseRow.wizard_progress ?? null,
+      wizardCompletedAt: caseRow.wizard_completed_at ?? null,
+      paymentStatus: order?.payment_status || null,
+      fulfillmentStatus: order?.fulfillment_status || null,
+      hasFinalDocuments: order?.fulfillment_status === 'fulfilled',
+    }).status;
+  });
+
+  return {
+    inProgress: displayStatuses.filter((status) => status === 'in_progress' || status === 'paid_in_progress' || status === 'generating_documents').length,
+    completed: displayStatuses.filter((status) => status === 'completed' || status === 'documents_ready').length,
+  };
+}
+
 
 export async function GET() {
   try {
@@ -27,10 +57,20 @@ export async function GET() {
       );
     }
 
+    const caseIds = (cases || []).map((c) => (c as any).id);
+
+    const { data: orders } = caseIds.length > 0
+      ? await supabase
+          .from('orders')
+          .select('case_id, payment_status, fulfillment_status, created_at')
+          .in('case_id', caseIds)
+          .order('created_at', { ascending: false })
+      : { data: [] };
+
+    const { inProgress, completed } = deriveOverviewCounts(cases as any[], orders as any[]);
+
     // Calculate statistics
     const totalCases = cases?.length || 0;
-    const inProgress = cases?.filter((c) => (c as any).status === 'in_progress').length || 0;
-    const completed = cases?.filter((c) => (c as any).status === 'completed').length || 0;
     const archived = cases?.filter((c) => (c as any).status === 'archived').length || 0;
 
     // Case type breakdown
@@ -42,9 +82,11 @@ export async function GET() {
 
     // Jurisdiction breakdown
     const jurisdictionBreakdown = {
-      'england-wales': cases?.filter((c) => (c as any).jurisdiction === 'england-wales').length || 0,
+      england: cases?.filter((c) => (c as any).jurisdiction === 'england').length || 0,
+      wales: cases?.filter((c) => (c as any).jurisdiction === 'wales').length || 0,
       scotland: cases?.filter((c) => (c as any).jurisdiction === 'scotland').length || 0,
       'northern-ireland': cases?.filter((c) => (c as any).jurisdiction === 'northern-ireland').length || 0,
+      legacy_england_wales: cases?.filter((c) => (c as any).jurisdiction === 'england-wales').length || 0,
     };
 
     // Recommended routes (for eviction cases)

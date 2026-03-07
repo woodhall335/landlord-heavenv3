@@ -1,0 +1,313 @@
+{{!--
+  ============================================================================
+  HEARING CHECKLIST
+  Section 8 Possession Proceedings
+  ============================================================================
+  Checklist for landlords preparing for a possession hearing.
+--}}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hearing Checklist</title>
+  <style>
+    {{{print_css}}}
+
+    @page {
+      size: A4;
+      margin: 15mm;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 10pt;
+      line-height: 1.5;
+      color: #1a1a1a;
+      padding: 0;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 1.5em;
+      padding-bottom: 1em;
+      border-bottom: 2px solid #1a1a1a;
+    }
+
+    .header h1 {
+      font-size: 16pt;
+      margin: 0 0 0.3em 0;
+    }
+
+    .header h2 {
+      font-size: 11pt;
+      font-weight: normal;
+      color: #555;
+      margin: 0;
+    }
+
+    .case-summary {
+      background: #f8f9fa;
+      border: 1px solid #ddd;
+      padding: 1em;
+      margin-bottom: 1.5em;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5em 2em;
+    }
+
+    .case-summary dt {
+      font-weight: 600;
+    }
+
+    .case-summary dd {
+      margin: 0;
+    }
+
+    .section {
+      margin-bottom: 1.5em;
+    }
+
+    .section h3 {
+      background: #1a1a1a;
+      color: white;
+      padding: 0.5em 1em;
+      margin: 0 0 1em 0;
+      font-size: 11pt;
+    }
+
+    .checklist {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .checklist li {
+      padding: 0.6em 0;
+      padding-left: 2em;
+      border-bottom: 1px solid #eee;
+      position: relative;
+    }
+
+    .checklist li::before {
+      content: "☐";
+      position: absolute;
+      left: 0;
+      font-size: 14pt;
+    }
+
+    .checklist li.important {
+      background: #fff3cd;
+    }
+
+    .checklist li.important::before {
+      content: "⚠";
+    }
+
+    .notes {
+      font-size: 9pt;
+      color: #666;
+      margin-left: 2em;
+      margin-top: 0.3em;
+    }
+
+    .timeline-box {
+      background: #e7f3ff;
+      border-left: 4px solid #0066cc;
+      padding: 1em;
+      margin: 1.5em 0;
+    }
+
+    .timeline-box h4 {
+      margin: 0 0 0.5em 0;
+    }
+
+    .warning-box {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 1em;
+      margin: 1.5em 0;
+    }
+
+    .footer {
+      margin-top: 2em;
+      padding-top: 1em;
+      border-top: 1px solid #ddd;
+      font-size: 9pt;
+      color: #666;
+    }
+
+    @media print {
+      .section {
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <h1>HEARING CHECKLIST</h1>
+  <h2>
+    Section 8 Possession Proceedings{{#if (contains groundsReliedUpon "Ground 8")}} - Ground 8 (Rent Arrears){{/if}}
+  </h2>
+</div>
+
+<!-- Case Summary -->
+<dl class="case-summary">
+  <dt>Property:</dt>
+  <dd>{{property_address}}</dd>
+  <dt>Tenant:</dt>
+  <dd>{{tenant_full_name}}</dd>
+  <dt>Hearing Date:</dt>
+  <dd><em>[Enter when notified]</em></dd>
+  <dt>Court:</dt>
+  <dd>{{#if court_name}}{{court_name}}{{else}}<em>[Enter court name]</em>{{/if}}</dd>
+</dl>
+
+<!-- Before the Hearing -->
+<div class="section">
+  <h3>📋 BEFORE THE HEARING (14+ days before)</h3>
+  <ul class="checklist">
+    <li>
+      File court bundle with the court (at least 14 days before hearing)
+      <div class="notes">Include 3 copies: court, defendant, yourself</div>
+    </li>
+    <li>
+      Serve court bundle on the defendant
+      <div class="notes">Keep proof of service for the hearing</div>
+    </li>
+    <li>
+      Update Schedule of Arrears to current date
+      {{#if (contains groundsReliedUpon "Ground 8")}}
+      <div class="notes">Ground 8 requires arrears at BOTH notice date AND hearing date</div>
+      {{else}}
+      <div class="notes">Ensure the schedule reflects the latest arrears position</div>
+      {{/if}}
+    </li>
+    <li>
+      {{#if (contains groundsReliedUpon "Ground 8")}}
+      Confirm the arrears still meet Ground 8 threshold (2 months/8 weeks)
+      <div class="notes">If arrears have fallen below threshold, Ground 8 may fail</div>
+      {{else}}
+      Confirm rent arrears remain outstanding and are fully evidenced
+      <div class="notes">The court will consider reasonableness for discretionary grounds</div>
+      {{/if}}
+    </li>
+    <li class="important">
+      Check if tenant has filed a defence or made any payments
+      <div class="notes">Contact the court to check for filed documents</div>
+    </li>
+  </ul>
+</div>
+
+<!-- Day Before Hearing -->
+<div class="section">
+  <h3>📅 DAY BEFORE THE HEARING</h3>
+  <ul class="checklist">
+    <li>
+      Confirm hearing time and court location
+      <div class="notes">Check any emails from the court for last-minute changes</div>
+    </li>
+    <li>
+      Prepare final arrears figure (up to day before hearing)
+      <div class="notes">You'll need to tell the judge the exact current arrears</div>
+    </li>
+    <li>
+      Prepare a brief summary of your case (1-2 minutes speaking time)
+    </li>
+    <li>
+      Gather all original documents
+      <div class="notes">Court may ask to see originals, not just copies</div>
+    </li>
+    <li>
+      Plan your journey to arrive 30 minutes early
+    </li>
+  </ul>
+</div>
+
+<!-- Documents to Bring -->
+<div class="section">
+  <h3>📁 DOCUMENTS TO BRING</h3>
+  <ul class="checklist">
+    <li>Court bundle (your copy)</li>
+    <li>Original tenancy agreement</li>
+    <li>Original Section 8 Notice</li>
+    <li>Original Proof of Service certificate</li>
+    <li>Updated Schedule of Arrears (to hearing date)</li>
+    <li>Bank statements showing rent account</li>
+    <li>Any correspondence with the tenant</li>
+    <li>Photo ID (passport or driving licence)</li>
+    <li>Proof of ownership (if challenged)</li>
+  </ul>
+</div>
+
+<!-- At the Hearing -->
+<div class="section">
+  <h3>⚖️ AT THE HEARING</h3>
+  <ul class="checklist">
+    <li>Arrive 30 minutes before your slot</li>
+    <li>Check in with the court usher</li>
+    <li>Wait in the appropriate waiting area</li>
+    <li>Speak clearly and address the judge as "Sir" or "Madam"</li>
+    <li>
+      Be prepared to state the current arrears figure
+      <div class="notes">The judge will ask: "What are the arrears as of today?"</div>
+    </li>
+    <li class="important">
+      If tenant offers to pay or proposes a payment plan, be ready to respond
+      {{#if (contains groundsReliedUpon "Ground 8")}}
+      <div class="notes">Ground 8 is mandatory IF threshold met, but judge may adjourn</div>
+      {{else}}
+      <div class="notes">The judge may adjourn or make a suspended order</div>
+      {{/if}}
+    </li>
+  </ul>
+</div>
+
+{{#if (contains groundsReliedUpon "Ground 8")}}
+<!-- Ground 8 Specific -->
+<div class="timeline-box">
+  <h4>Ground 8 Key Points for the Hearing</h4>
+  <ul>
+    <li><strong>Threshold:</strong> At least 2 months' rent (or 8 weeks' for weekly tenancies) must be unpaid</li>
+    <li><strong>Both dates matter:</strong> Arrears must meet threshold at notice date AND hearing date</li>
+    <li><strong>Mandatory ground:</strong> If threshold is met, judge MUST grant possession order</li>
+    <li><strong>No discretion:</strong> Judge cannot refuse on grounds of reasonableness or hardship</li>
+    <li><strong>Payment before hearing:</strong> If arrears fall below threshold before hearing, Ground 8 fails</li>
+  </ul>
+</div>
+
+<!-- Warning -->
+<div class="warning-box">
+  <strong>⚠ Important Warning</strong>
+  <p>
+    If the tenant pays enough to bring arrears below the 2-month threshold before the hearing,
+    Ground 8 will fail. You should also rely on Ground 10 (discretionary arrears ground) as a backup.
+  </p>
+</div>
+{{/if}}
+
+<!-- After the Hearing -->
+<div class="section">
+  <h3>📝 AFTER THE HEARING</h3>
+  <ul class="checklist">
+    <li>Note down exactly what order the judge made</li>
+    <li>Request a sealed copy of the possession order</li>
+    <li>Note the date by which possession must be given</li>
+    <li>If tenant doesn't leave by date, apply for bailiff warrant</li>
+    <li>Keep all documents for at least 6 years</li>
+  </ul>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  <p>Generated by Landlord Heaven Court Pack</p>
+  <p>Date: {{format_date generated_date "long"}}</p>
+  <p><em>This checklist is for guidance only. Consider seeking legal advice for your specific situation.</em></p>
+</div>
+
+</body>
+</html>

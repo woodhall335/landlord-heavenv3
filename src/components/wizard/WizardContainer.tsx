@@ -22,6 +22,7 @@ import {
 } from './index';
 import { GuidanceTips } from './GuidanceTips';
 import type { WizardQuestion as BaseWizardQuestion } from '@/lib/ai/fact-finder';
+import { getSessionTokenHeaders } from '@/lib/session-token';
 
 // Extend the base WizardQuestion type with optional fields that come from MQS/backend
 type WizardQuestion = BaseWizardQuestion & {
@@ -161,11 +162,11 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
 
     switch (type) {
       case 'eviction':
-        return `👋 Hi! I'm here to help you create the right eviction documents for ${jurName}.\n\nI'll ask you some questions to understand your situation, then recommend the best legal route and generate court-ready documents.\n\nLet's get started...`;
+        return `👋 Hi! I'm here to help you create the right eviction documents for ${jurName}.\n\nI'll check your case against 20+ legal requirements before generating anything — if there's a compliance issue that could invalidate your notice, I'll catch it now, not when you're in court.\n\nLet's get started...`;
       case 'money_claim':
-        return `👋 Hi! I'm here to help you recover money owed by creating a money claim pack for ${jurName}.\n\nI'll gather the details of what you're owed, then prepare all the forms and guidance you need.\n\nLet's begin...`;
+        return `👋 Hi! I'm here to help you recover money owed by creating a money claim pack for ${jurName}.\n\nI'll verify your claim against Pre-Action Protocol requirements and calculate arrears precisely — the same checks a solicitor would perform.\n\nLet's begin...`;
       case 'tenancy_agreement':
-        return `👋 Hi! I'm here to help you create a professional tenancy agreement for ${jurName}.\n\nI'll ask about your property and tenancy terms, then generate a legally compliant agreement.\n\nShall we start?`;
+        return `👋 Hi! I'm here to help you create a professional tenancy agreement for ${jurName}.\n\nI'll ensure your agreement complies with ${jurName === 'Wales' ? 'Renting Homes (Wales) Act 2016' : jurName === 'Scotland' ? 'Private Housing (Tenancies) (Scotland) Act 2016' : 'Housing Act 1988'} requirements, including deposit caps and required clauses.\n\nShall we start?`;
       default:
         return "👋 Hi! Let's get started...";
     }
@@ -245,7 +246,10 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
       try {
         const response = await fetch('/api/wizard/answer', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            ...getSessionTokenHeaders(),
+          },
           body: JSON.stringify({
             case_id: caseId,
             question_id: questionId,
@@ -342,7 +346,10 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
       try {
         const response = await fetch('/api/wizard/analyze', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            ...getSessionTokenHeaders(),
+          },
           body: JSON.stringify({ case_id: currentCaseId }),
         });
 
@@ -381,7 +388,10 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
         // Call fact-finder to get next question
         const response = await fetch('/api/wizard/next-question', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            ...getSessionTokenHeaders(),
+          },
           body: JSON.stringify({
             case_id: currentCaseId,
             case_type: caseType,
@@ -467,7 +477,10 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
 
         const response = await fetch('/api/wizard/start', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            ...getSessionTokenHeaders(),
+          },
           body: JSON.stringify({ product: derivedProduct, jurisdiction }),
         });
 
@@ -614,6 +627,7 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
         );
 
       // "textarea" is a purely UI-level hint; we still treat it as a multi-line text input.
+      // Enable Ask Heaven inline enhancement for all textarea inputs.
       case 'textarea':
         return (
           <TextInput
@@ -623,6 +637,12 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
             required={currentQuestion.is_required}
             multiline
             rows={5}
+            askHeavenConfig={{
+              caseId: caseId || undefined,
+              questionId: currentQuestion.question_id ?? currentQuestion.id ?? 'unknown',
+              questionText: currentQuestion.question_text ?? currentQuestion.question,
+              apiMode: caseId ? 'mqs' : 'generic',
+            }}
           />
         );
 

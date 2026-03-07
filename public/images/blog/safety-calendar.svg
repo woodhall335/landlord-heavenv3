@@ -1,0 +1,138 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FEF3C7"/>
+      <stop offset="100%" style="stop-color:#FDE68A"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bgGrad)"/>
+
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" fill="#92400E" font-size="22" font-weight="bold" font-family="Arial">SAFETY COMPLIANCE CALENDAR</text>
+  <text x="400" y="55" text-anchor="middle" fill="#D97706" font-size="11" font-family="Arial">Annual schedule for landlord safety certificates</text>
+
+  <!-- Calendar icon -->
+  <g transform="translate(60, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#D97706" stroke-width="2"/>
+    <g transform="translate(25, 8)">
+      <!-- Calendar -->
+      <rect x="20" y="15" width="80" height="70" rx="6" fill="white" stroke="#92400E" stroke-width="2"/>
+      <rect x="20" y="15" width="80" height="22" rx="6" fill="#D97706"/>
+      <rect x="20" y="32" width="80" height="5" fill="#D97706"/>
+      <!-- Calendar hooks -->
+      <rect x="35" y="10" width="8" height="15" rx="2" fill="#92400E"/>
+      <rect x="77" y="10" width="8" height="15" rx="2" fill="#92400E"/>
+      <!-- Dates with checkmarks -->
+      <circle cx="35" cy="52" r="8" fill="#22C55E"/>
+      <path d="M31 52 L34 55 L39 49" stroke="white" stroke-width="2" fill="none"/>
+      <circle cx="60" cy="52" r="8" fill="#22C55E"/>
+      <path d="M56 52 L59 55 L64 49" stroke="white" stroke-width="2" fill="none"/>
+      <circle cx="85" cy="52" r="8" fill="#F59E0B"/>
+      <text x="85" y="56" text-anchor="middle" fill="white" font-size="12" font-weight="bold">!</text>
+      <circle cx="47" cy="72" r="8" fill="#22C55E"/>
+      <path d="M43 72 L46 75 L51 69" stroke="white" stroke-width="2" fill="none"/>
+      <circle cx="72" cy="72" r="8" fill="#DC2626"/>
+      <text x="72" y="76" text-anchor="middle" fill="white" font-size="12" font-weight="bold">!</text>
+    </g>
+    <text x="100" y="125" text-anchor="middle" fill="#92400E" font-size="11" font-weight="bold">CALENDAR</text>
+    <text x="100" y="143" text-anchor="middle" fill="#D97706" font-size="9">Safety</text>
+    <text x="100" y="158" text-anchor="middle" fill="#D97706" font-size="9">schedule</text>
+  </g>
+
+  <!-- Annual checks -->
+  <g transform="translate(280, 80)">
+    <rect x="0" y="0" width="240" height="175" rx="12" fill="white" stroke="#92400E" stroke-width="2"/>
+    <rect x="0" y="0" width="240" height="32" rx="12" fill="#92400E"/>
+    <rect x="0" y="20" width="240" height="12" fill="#92400E"/>
+    <text x="120" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">ANNUAL REQUIREMENTS</text>
+    <g transform="translate(15, 45)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#D97706"/>
+      <text x="7" y="11" text-anchor="middle" fill="white" font-size="8" font-weight="bold">12</text>
+      <text x="22" y="11" fill="#92400E" font-size="9">Gas safety certificate</text>
+    </g>
+    <g transform="translate(15, 68)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#D97706"/>
+      <text x="7" y="11" text-anchor="middle" fill="white" font-size="8" font-weight="bold">12</text>
+      <text x="22" y="11" fill="#92400E" font-size="9">Smoke alarm testing</text>
+    </g>
+    <g transform="translate(15, 91)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#92400E"/>
+      <text x="7" y="11" text-anchor="middle" fill="white" font-size="8" font-weight="bold">12</text>
+      <text x="22" y="11" fill="#92400E" font-size="9">CO alarm testing</text>
+    </g>
+    <g transform="translate(15, 114)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#92400E"/>
+      <text x="7" y="11" text-anchor="middle" fill="white" font-size="6" font-weight="bold">INS</text>
+      <text x="22" y="11" fill="#92400E" font-size="9">Insurance renewal</text>
+    </g>
+    <g transform="translate(15, 137)">
+      <text x="0" y="11" fill="#D97706" font-size="9" font-weight="bold">Set calendar reminders</text>
+    </g>
+  </g>
+
+  <!-- Multi-year checks -->
+  <g transform="translate(540, 80)">
+    <rect x="0" y="0" width="200" height="175" rx="12" fill="white" stroke="#3B82F6" stroke-width="2"/>
+    <rect x="0" y="0" width="200" height="32" rx="12" fill="#3B82F6"/>
+    <rect x="0" y="20" width="200" height="12" fill="#3B82F6"/>
+    <text x="100" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">PERIODIC CHECKS</text>
+    <g transform="translate(15, 48)">
+      <circle cx="7" cy="7" r="7" fill="#3B82F6"/>
+      <text x="7" y="10" text-anchor="middle" fill="white" font-size="8" font-weight="bold">5</text>
+      <text x="22" y="11" fill="#92400E" font-size="9">EICR (5 years)</text>
+    </g>
+    <g transform="translate(15, 71)">
+      <circle cx="7" cy="7" r="7" fill="#3B82F6"/>
+      <text x="7" y="10" text-anchor="middle" fill="white" font-size="8" font-weight="bold">5</text>
+      <text x="22" y="11" fill="#92400E" font-size="9">PAT testing (5 yrs)</text>
+    </g>
+    <g transform="translate(15, 94)">
+      <circle cx="7" cy="7" r="7" fill="#1E40AF"/>
+      <text x="7" y="10" text-anchor="middle" fill="white" font-size="8" font-weight="bold">10</text>
+      <text x="22" y="11" fill="#92400E" font-size="9">Smoke alarm replace</text>
+    </g>
+    <g transform="translate(15, 117)">
+      <circle cx="7" cy="7" r="7" fill="#1E40AF"/>
+      <text x="7" y="10" text-anchor="middle" fill="white" font-size="6" font-weight="bold">HMO</text>
+      <text x="22" y="11" fill="#92400E" font-size="9">Licence renewal</text>
+    </g>
+    <g transform="translate(15, 140)">
+      <text x="0" y="11" fill="#3B82F6" font-size="9" font-weight="bold">Track expiry dates</text>
+    </g>
+  </g>
+
+  <!-- Details section -->
+  <g transform="translate(60, 275)">
+    <rect x="0" y="0" width="680" height="170" rx="12" fill="white" stroke="#92400E" stroke-width="2"/>
+    <rect x="0" y="0" width="680" height="32" rx="12" fill="#92400E"/>
+    <rect x="0" y="20" width="680" height="12" fill="#92400E"/>
+    <text x="340" y="22" text-anchor="middle" fill="white" font-size="10" font-weight="bold">COMPLIANCE MANAGEMENT TIPS</text>
+    <g transform="translate(20, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#D97706" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#D97706" font-size="10" font-weight="bold">ORGANISATION</text>
+      <text x="100" y="42" text-anchor="middle" fill="#92400E" font-size="8">Central document folder</text>
+      <text x="100" y="55" text-anchor="middle" fill="#92400E" font-size="8">Digital calendar alerts</text>
+      <text x="100" y="75" text-anchor="middle" fill="#92400E" font-size="8">60-day advance reminders</text>
+      <text x="100" y="94" text-anchor="middle" fill="#D97706" font-size="8" font-weight="bold">Never miss a deadline</text>
+    </g>
+    <g transform="translate(240, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#22C55E" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#22C55E" font-size="10" font-weight="bold">BOOKING TIPS</text>
+      <text x="100" y="42" text-anchor="middle" fill="#92400E" font-size="8">Book 4 weeks in advance</text>
+      <text x="100" y="55" text-anchor="middle" fill="#92400E" font-size="8">Use approved contractors</text>
+      <text x="100" y="75" text-anchor="middle" fill="#92400E" font-size="8">Same engineer each year</text>
+      <text x="100" y="94" text-anchor="middle" fill="#22C55E" font-size="8" font-weight="bold">Build relationships</text>
+    </g>
+    <g transform="translate(460, 48)">
+      <rect x="0" y="0" width="200" height="105" rx="8" fill="#DC2626" opacity="0.1"/>
+      <text x="100" y="20" text-anchor="middle" fill="#DC2626" font-size="10" font-weight="bold">CONSEQUENCES</text>
+      <text x="100" y="42" text-anchor="middle" fill="#92400E" font-size="8">Fines up to £6,000</text>
+      <text x="100" y="55" text-anchor="middle" fill="#92400E" font-size="8">Can't use Section 21</text>
+      <text x="100" y="75" text-anchor="middle" fill="#92400E" font-size="8">Invalid insurance claims</text>
+      <text x="100" y="94" text-anchor="middle" fill="#DC2626" font-size="8" font-weight="bold">Prosecution risk</text>
+    </g>
+  </g>
+
+  <circle cx="40" cy="40" r="20" fill="#D97706" opacity="0.1"/>
+  <circle cx="760" cy="460" r="25" fill="#92400E" opacity="0.12"/>
+</svg>

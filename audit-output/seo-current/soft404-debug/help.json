@@ -1,0 +1,10 @@
+{
+  "url": "https://landlordheaven.co.uk/help",
+  "path": "/help",
+  "status": 200,
+  "htmlLength": 97152,
+  "first500": "<!DOCTYPE html><html lang=\"en\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" as=\"image\" imageSrcSet=\"/_next/image?url=%2Fheaderlogo2.png&amp;w=384&amp;q=75 1x, /_next/image?url=%2Fheaderlogo2.png&amp;w=640&amp;q=75 2x\"/><link rel=\"preload\" as=\"image\" imageSrcSet=\"/_next/image?url=%2Fimages%2Fherobg.png&amp;w=640&amp;q=75 640w, /_next/image?url=%2Fimages%2Fherobg.png&amp;w=750&amp;q=75 750w, /_next/image?url=%2Fimages%2Fherob",
+  "last500": "\\\"}],[\\\"$\\\",\\\"link\\\",\\\"33\\\",{\\\"rel\\\":\\\"icon\\\",\\\"href\\\":\\\"/favicon-32x32.png\\\",\\\"sizes\\\":\\\"32x32\\\",\\\"type\\\":\\\"image/png\\\"}],[\\\"$\\\",\\\"link\\\",\\\"34\\\",{\\\"rel\\\":\\\"icon\\\",\\\"href\\\":\\\"/favicon-16x16.png\\\",\\\"sizes\\\":\\\"16x16\\\",\\\"type\\\":\\\"image/png\\\"}],[\\\"$\\\",\\\"link\\\",\\\"35\\\",{\\\"rel\\\":\\\"icon\\\",\\\"href\\\":\\\"/favicon.ico\\\"}],[\\\"$\\\",\\\"link\\\",\\\"36\\\",{\\\"rel\\\":\\\"apple-touch-icon\\\",\\\"href\\\":\\\"/apple-touch-icon.png\\\",\\\"sizes\\\":\\\"180x180\\\",\\\"type\\\":\\\"image/png\\\"}],[\\\"$\\\",\\\"$L29\\\",\\\"37\\\",{}]]\\n\"])</script></body></html>",
+  "mainTextLength": 7832,
+  "mainTextWords": 1084
+}

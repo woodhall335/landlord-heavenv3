@@ -1,0 +1,33 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F5F3FF"/>
+      <stop offset="100%" style="stop-color:#EDE9FE"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bgGrad)"/>
+
+  <text x="400" y="40" text-anchor="middle" fill="#6D28D9" font-size="24" font-weight="bold" font-family="Arial">CCJ GUIDE</text>
+  <text x="400" y="62" text-anchor="middle" fill="#7C3AED" font-size="12" font-family="Arial">Understanding county court judgments</text>
+
+  <g transform="translate(140, 120)">
+    <rect x="0" y="0" width="520" height="260" rx="18" fill="#FFFFFF" stroke="#C4B5FD" stroke-width="2"/>
+    <rect x="0" y="0" width="520" height="50" rx="18" fill="#6D28D9"/>
+    <text x="260" y="32" text-anchor="middle" fill="white" font-size="16" font-weight="bold" font-family="Arial">JUDGMENT SUMMARY</text>
+
+    <g transform="translate(60, 90)" fill="#6D28D9" font-family="Arial" font-size="13">
+      <text x="0" y="0">• Default or defended judgment</text>
+      <text x="0" y="28">• 30-day payment window</text>
+      <text x="0" y="56">• Impacts credit record</text>
+      <text x="0" y="84">• Enforcement options</text>
+    </g>
+
+    <g transform="translate(340, 95)">
+      <rect x="0" y="0" width="130" height="140" rx="16" fill="#F5F3FF" stroke="#6D28D9" stroke-width="2"/>
+      <path d="M35 40 H95" stroke="#6D28D9" stroke-width="4" stroke-linecap="round"/>
+      <path d="M35 65 H95" stroke="#6D28D9" stroke-width="4" stroke-linecap="round"/>
+      <path d="M35 90 H80" stroke="#6D28D9" stroke-width="4" stroke-linecap="round"/>
+      <circle cx="95" cy="110" r="10" fill="#6D28D9" opacity="0.2"/>
+    </g>
+  </g>
+</svg>

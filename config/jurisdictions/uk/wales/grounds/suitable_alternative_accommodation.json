@@ -1,0 +1,28 @@
+{
+  "ground": "suitable_alternative_accommodation",
+  "type": "discretionary",
+  "category": "management",
+  "name": "Suitable Alternative Accommodation Available",
+  "short_description": "Alternative accommodation available for contract-holder",
+  "legal_basis": {
+    "act": "Renting Homes (Wales) Act 2016",
+    "section": "Section 159",
+    "statute_year": "2016"
+  },
+  "requirements": {
+    "availability": "Suitable alternative accommodation is or will be available when order takes effect",
+    "suitability": "Must be suitable in terms of size, location, facilities, and affordability"
+  },
+  "notice_period": {
+    "minimum_days": 56,
+    "reference": "Section 159 discretionary ground"
+  },
+  "evidence_required": [
+    "Details of alternative accommodation",
+    "Proof of suitability (size, cost, location)",
+    "Confirmation of availability timing"
+  ],
+  "success_factors": {
+    "considerations": ["Clear evidence accommodation meets statutory test", "Contract-holder circumstances"]
+  }
+}

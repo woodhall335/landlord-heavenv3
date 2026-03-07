@@ -1,0 +1,307 @@
+# Notice Only Validation Rules - Scotland
+# Tiered validation: blocker (cannot proceed) | warning (risk displayed) | suggestion (optional improvement)
+# All rules are deterministic and testable
+# Migrated 1:1 from evaluate-notice-compliance.ts and pre-generation-check.ts
+#
+# PARITY STATUS (Phase 4):
+# - NTL rule IDs aligned with TS codes: ntl_ground_required, ntl_mixed_grounds, ntl_pre_action, ntl_notice_period
+# - 100% parity for grounds required, pre-action, valid cases
+#
+# PHASE 13 CORRECTNESS IMPROVEMENTS:
+# - Rules marked with `requires_feature: phase13` are correctness improvements beyond legacy TS
+# - Enable with VALIDATION_PHASE13_ENABLED=true
+# - Phase 13 rules: ntl_landlord_not_registered, ntl_pre_action_letter_not_sent,
+#   ntl_pre_action_signposting_missing, ntl_ground_1_arrears_threshold, deposit_not_protected
+
+version: "1.0"
+jurisdiction: scotland
+product: notice_only
+last_updated: "2026-01-26"
+
+metadata:
+  effective_from: "2026-01-26"
+  source:
+    - "Private Housing (Tenancies) (Scotland) Act 2016"
+    - "Pre-Action Requirements Regulations"
+    - "evaluate-notice-compliance.ts"
+    - "pre-generation-check.ts"
+  notes: "Scotland Notice Only covers Notice to Leave under PRT Act 2016 Schedule 3 grounds."
+  parity_status: "Phase 4 complete - NTL 100% parity on core rules"
+
+# Route identifiers
+routes:
+  - notice_to_leave
+
+# =============================================================================
+# NOTICE TO LEAVE RULES
+# Private Housing (Tenancies) (Scotland) Act 2016
+# =============================================================================
+# NOTE: For notice_only parity with TS evaluateNoticeCompliance, only
+# ntl_ground_required, ntl_mixed_grounds, ntl_pre_action, and ntl_notice_period are validated.
+# Additional rules are commented but preserved for complete_pack or future use.
+
+notice_to_leave_rules:
+
+  # ---------------------------------------------------------------------------
+  # GROUNDS SELECTION (Schedule 3)
+  # TS Code: NTL-GROUND-REQUIRED
+  # ---------------------------------------------------------------------------
+
+  - id: ntl_ground_required
+    severity: blocker
+    applies_to: [notice_to_leave]
+    applies_when:
+      - condition: "!facts.scotland_ground_codes || (Array.isArray(facts.scotland_ground_codes) && facts.scotland_ground_codes.length === 0)"
+    message: "A valid Schedule 3 ground must be selected."
+    rationale: "PRT Act 2016 requires at least one ground from Schedule 3 to be specified."
+    field: eviction_grounds
+
+  # ---------------------------------------------------------------------------
+  # MIXED GROUNDS (when spec disallows)
+  # TS Code: NTL-MIXED-GROUNDS
+  # ---------------------------------------------------------------------------
+
+  - id: ntl_mixed_grounds
+    severity: blocker
+    applies_to: [notice_to_leave]
+    applies_when:
+      - condition: "Array.isArray(facts.scotland_ground_codes) && facts.scotland_ground_codes.length > 1 && computed.mixed_grounds_allowed === false"
+    message: "Mixed grounds require confirmed statutory notice period approach."
+    rationale: "Multiple grounds may have different notice periods; system requires clarification."
+    field: eviction_grounds
+
+  # ---------------------------------------------------------------------------
+  # PRE-ACTION REQUIREMENTS (Ground 1 - Rent Arrears)
+  # TS Code: NTL-PRE-ACTION
+  # ---------------------------------------------------------------------------
+
+  - id: ntl_pre_action
+    severity: blocker
+    applies_to: [notice_to_leave]
+    applies_when:
+      # Ground 1 selected but pre-action not confirmed
+      # TS checks: grounds.includes(1) && preActionConfirmed !== true
+      # where preActionConfirmed = wizardFacts?.issues?.rent_arrears?.pre_action_confirmed
+      - condition: "computed.has_ground_1 === true && facts.issues?.rent_arrears?.pre_action_confirmed !== true"
+    message: "Scottish rent arrears pre-action steps required for Ground 1."
+    rationale: "Pre-Action Requirements Regulations mandate specific steps before Ground 1 eviction."
+    field: pre_action_contact
+
+  # ---------------------------------------------------------------------------
+  # NOTICE PERIOD (28 or 84 days depending on ground)
+  # TS Code: NTL-NOTICE-PERIOD
+  # ---------------------------------------------------------------------------
+
+  - id: ntl_notice_period
+    severity: blocker
+    applies_to: [notice_to_leave]
+    applies_when:
+      # Expiry date is earlier than statutory minimum
+      - condition: "computed.ntl_notice_period_too_short === true"
+      # Calculation error
+      - condition: "computed.ntl_notice_period_calculation_error === true"
+    message: "Notice period issue - expiry date must meet the statutory 28/84 day period for selected grounds."
+    rationale: "Notice periods vary by ground: typically 28 days for mandatory, 84 days for discretionary."
+    field: notice_expiry
+
+  # ---------------------------------------------------------------------------
+  # PHASE 13 CORRECTNESS IMPROVEMENTS
+  # These rules improve legal accuracy beyond the legacy TS parity baseline.
+  # Enable with VALIDATION_PHASE13_ENABLED=true
+  # ---------------------------------------------------------------------------
+
+  - id: ntl_landlord_not_registered
+    severity: blocker
+    applies_to: [notice_to_leave]
+    requires_feature: phase13
+    applies_when:
+      - condition: "!facts.landlord_registration_number && !facts.landlord_reg_number"
+    message: "Scotland requires landlord registration number for Notice to Leave."
+    rationale: "Antisocial Behaviour etc. (Scotland) Act 2004 requires all landlords to be registered."
+    field: landlord_registration_number
+
+  - id: ntl_pre_action_letter_not_sent
+    severity: blocker
+    applies_to: [notice_to_leave]
+    requires_feature: phase13
+    applies_when:
+      - condition: "computed.has_ground_1 === true && facts.pre_action_letter_sent !== true && facts.issues?.rent_arrears?.pre_action_letter_sent !== true"
+    message: "Pre-action letter must be sent before Ground 1 Notice to Leave."
+    rationale: "Pre-Action Requirements Regulations require landlord to write to tenant giving 28 days notice."
+    field: pre_action_letter_sent
+
+  - id: ntl_pre_action_signposting_missing
+    severity: warning
+    applies_to: [notice_to_leave]
+    requires_feature: phase13
+    applies_when:
+      - condition: "computed.has_ground_1 === true && facts.pre_action_signposting !== true && facts.issues?.rent_arrears?.debt_advice_signposted !== true"
+    message: "Pre-action requirements include signposting tenant to debt advice services."
+    rationale: "Pre-Action Requirements Regulations require signposting; may be required for Tribunal application."
+    field: pre_action_signposting
+
+  - id: ntl_ground_1_arrears_threshold
+    severity: warning
+    applies_to: [notice_to_leave]
+    requires_feature: phase13
+    applies_when:
+      - condition: "computed.has_ground_1 === true && facts.total_arrears && computed.arrears_months < 3"
+    message: "Ground 1 typically requires 3 or more months arrears for tribunal to grant possession."
+    rationale: "While technically valid with any arrears, tribunals generally expect substantial arrears."
+    field: total_arrears
+
+# =============================================================================
+# COMMON RULES
+# =============================================================================
+# NOTE: For notice_only parity, common rules that TS doesn't check are commented out.
+
+common_rules:
+
+  # ---------------------------------------------------------------------------
+  # PARTY INFORMATION
+  # NOTE: TS doesn't validate these for notice_only, but kept active as they
+  # affect document generation and are needed for complete_pack.
+  # ---------------------------------------------------------------------------
+
+  - id: landlord_name_required
+    severity: blocker
+    applies_to: [notice_to_leave]
+    applies_when:
+      - condition: "!facts.landlord_full_name && !facts.landlord_name"
+    message: "Landlord name is required for document generation."
+    rationale: "The notice must identify the landlord serving it."
+    field: landlord_full_name
+
+  - id: tenant_name_required
+    severity: blocker
+    applies_to: [notice_to_leave]
+    applies_when:
+      - condition: "!facts.tenant_full_name && !facts.tenant_name"
+    message: "Tenant name is required for document generation."
+    rationale: "The notice must identify the tenant being served."
+    field: tenant_full_name
+
+  - id: property_address_required
+    severity: blocker
+    applies_to: [notice_to_leave]
+    applies_when:
+      - condition: "!facts.property_address_line1"
+    message: "Property address is required for document generation."
+    rationale: "The notice must identify the property."
+    field: property_address_line1
+
+  # ---------------------------------------------------------------------------
+  # TENANCY DATES
+  # ---------------------------------------------------------------------------
+
+  - id: tenancy_start_date_required
+    severity: blocker
+    applies_to: [notice_to_leave]
+    applies_when:
+      - condition: "!facts.tenancy_start_date"
+    message: "Tenancy start date is required."
+    rationale: "Tenancy start date is needed for validation."
+    field: tenancy_start_date
+
+  - id: tenancy_start_date_future
+    severity: blocker
+    applies_to: [notice_to_leave]
+    applies_when:
+      - condition: "facts.tenancy_start_date && computed.tenancy_start_in_future === true"
+    message: "Tenancy start date cannot be in the future."
+    rationale: "Cannot serve eviction notice for a tenancy that has not yet begun."
+    field: tenancy_start_date
+
+  # ---------------------------------------------------------------------------
+  # NOTICE SERVICE
+  # ---------------------------------------------------------------------------
+
+  - id: notice_service_date_required
+    severity: blocker
+    applies_to: [notice_to_leave]
+    applies_when:
+      - condition: "!facts.notice_service_date && !facts.notice_date && !computed.service_date"
+    message: "Notice date is required."
+    rationale: "Service date is needed to calculate expiry date."
+    field: notice_date
+
+  - id: notice_before_tenancy
+    severity: blocker
+    applies_to: [notice_to_leave]
+    applies_when:
+      - condition: "computed.notice_before_tenancy_start === true"
+    message: "Notice cannot be served before the tenancy started."
+    rationale: "Eviction notice must be served during the tenancy period."
+    field: notice_date
+
+  - id: expiry_before_service
+    severity: blocker
+    applies_to: [notice_to_leave]
+    applies_when:
+      - condition: "computed.expiry_before_service === true"
+    message: "Notice expiry date must be after notice date."
+    rationale: "The notice period runs from notice date to expiry."
+    field: notice_expiry
+
+  # ---------------------------------------------------------------------------
+  # DEPOSIT PROTECTION (Phase 13)
+  # ---------------------------------------------------------------------------
+
+  - id: ntl_deposit_not_protected
+    severity: blocker
+    applies_to: [notice_to_leave]
+    requires_feature: phase13
+    applies_when:
+      - condition: "facts.deposit_taken === true && facts.deposit_protected !== true"
+    message: "Deposit must be protected before serving Notice to Leave."
+    rationale: "Tenancy Deposit Schemes (Scotland) Regulations require protection within 30 working days."
+    field: deposit_protected
+
+# =============================================================================
+# VALIDATION SUMMARY CONFIG
+# =============================================================================
+
+summary:
+  blocker_prevents_generation: true
+  warning_shown_in_review: true
+  suggestion_shown_as_tips: true
+  group_by_section: true
+  sections:
+    - id: parties
+      label: "Party Details"
+      rules:
+        - landlord_name_required
+        - tenant_name_required
+        - property_address_required
+    - id: registration
+      label: "Landlord Registration"
+      rules:
+        - ntl_landlord_not_registered
+    - id: tenancy
+      label: "Tenancy Information"
+      rules:
+        - tenancy_start_date_required
+        - tenancy_start_date_future
+    - id: deposit
+      label: "Deposit Protection"
+      rules:
+        - ntl_deposit_not_protected
+    - id: grounds
+      label: "Grounds for Possession"
+      rules:
+        - ntl_ground_required
+        - ntl_mixed_grounds
+        - ntl_ground_1_arrears_threshold
+    - id: pre_action
+      label: "Pre-Action Requirements"
+      rules:
+        - ntl_pre_action
+        - ntl_pre_action_letter_not_sent
+        - ntl_pre_action_signposting_missing
+    - id: notice_service
+      label: "Notice Service"
+      rules:
+        - notice_service_date_required
+        - notice_before_tenancy
+        - expiry_before_service
+        - ntl_notice_period

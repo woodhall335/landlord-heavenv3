@@ -2,16 +2,16 @@
   "jurisdiction": "Wales",
   "statute": "Renting Homes (Wales) Act 2016",
   "last_updated": "2025-12-16",
-  "notes": "Wales uses the Renting Homes (Wales) Act 2016, which replaced the Housing Act 1988 for Wales. Contract holders (not tenants) and landlords use different terminology and grounds. This file requires legal verification against current Welsh statute.",
+  "notes": "Wales uses the Renting Homes (Wales) Act 2016. Contract holders (not tenants) and landlords use Welsh-specific terminology and grounds. This file requires legal verification against current Welsh statute.",
 
   "grounds": {
     "serious_rent_arrears": {
       "code": "Serious Rent Arrears",
-      "section": "Section 157 (Ground 8 equivalent)",
+      "section": "Section 157",
       "type": "mandatory",
       "title": "Serious Rent Arrears (Mandatory)",
       "description": "At least 2 months' rent unpaid at both the date of notice and date of hearing for monthly payments, or 8 weeks' rent for weekly payments.",
-      "legal_reference": "Renting Homes (Wales) Act 2016, Schedule 8, Ground 8",
+      "legal_reference": "Renting Homes (Wales) Act 2016, Section 157, Schedule 8",
       "notice_period_days": 14,
       "mandatory": true,
       "required_evidence": [
@@ -25,11 +25,11 @@
 
     "persistent_rent_arrears": {
       "code": "Persistent Rent Arrears",
-      "section": "Section 157 (Ground 8A equivalent)",
+      "section": "Section 157",
       "type": "mandatory",
       "title": "Persistent Rent Arrears (Mandatory)",
       "description": "Rent arrears equivalent to 2 months' rent (monthly tenancy) or 8 weeks' rent (weekly tenancy) have accrued at least three times in the past 3 years.",
-      "legal_reference": "Renting Homes (Wales) Act 2016, Schedule 8, Ground 8A",
+      "legal_reference": "Renting Homes (Wales) Act 2016, Section 157, Schedule 8",
       "notice_period_days": 14,
       "mandatory": true,
       "required_evidence": [
@@ -42,11 +42,11 @@
 
     "some_rent_arrears": {
       "code": "Some Rent Arrears",
-      "section": "Section 159 (Ground 10 equivalent)",
+      "section": "Section 159",
       "type": "discretionary",
       "title": "Some Rent Arrears (Discretionary)",
       "description": "Some rent is unpaid at the date of notice and at the date of hearing, but less than the serious arrears threshold.",
-      "legal_reference": "Renting Homes (Wales) Act 2016, Schedule 9, Ground 10",
+      "legal_reference": "Renting Homes (Wales) Act 2016, Section 159, Schedule 9",
       "notice_period_days": 56,
       "mandatory": false,
       "required_evidence": [
@@ -59,11 +59,11 @@
 
     "breach_of_contract": {
       "code": "Breach of Contract",
-      "section": "Section 159 (Ground 12 equivalent)",
+      "section": "Section 159",
       "type": "discretionary",
       "title": "Breach of Occupation Contract",
       "description": "The contract-holder has broken a term of the occupation contract (other than non-payment of rent).",
-      "legal_reference": "Renting Homes (Wales) Act 2016, Schedule 9, Ground 12",
+      "legal_reference": "Renting Homes (Wales) Act 2016, Section 159, Schedule 9",
       "notice_period_days": 56,
       "mandatory": false,
       "required_evidence": [
@@ -77,11 +77,11 @@
 
     "antisocial_behaviour": {
       "code": "Anti-Social Behaviour",
-      "section": "Section 159 (Ground 14 equivalent)",
+      "section": "Section 159",
       "type": "discretionary",
       "title": "Anti-Social Behaviour or Criminal Activity",
       "description": "The contract-holder or person residing in or visiting the property has engaged in conduct causing nuisance or annoyance, or has been convicted of certain criminal offences.",
-      "legal_reference": "Renting Homes (Wales) Act 2016, Schedule 9, Ground 14",
+      "legal_reference": "Renting Homes (Wales) Act 2016, Section 159, Schedule 9",
       "notice_period_days": 56,
       "mandatory": false,
       "required_evidence": [
@@ -96,11 +96,11 @@
 
     "property_deterioration": {
       "code": "Property Deterioration",
-      "section": "Section 159 (Ground 13 equivalent)",
+      "section": "Section 159",
       "type": "discretionary",
       "title": "Deterioration of Property",
       "description": "The condition of the dwelling has deteriorated due to acts of waste or neglect by the contract-holder or other occupiers.",
-      "legal_reference": "Renting Homes (Wales) Act 2016, Schedule 9, Ground 13",
+      "legal_reference": "Renting Homes (Wales) Act 2016, Section 159, Schedule 9",
       "notice_period_days": 56,
       "mandatory": false,
       "required_evidence": [
@@ -114,11 +114,11 @@
 
     "false_statement": {
       "code": "False Statement",
-      "section": "Section 159 (Ground 17 equivalent)",
+      "section": "Section 159",
       "type": "discretionary",
       "title": "False Statement Induced Grant of Contract",
       "description": "The contract was granted on the basis of a false statement made knowingly or recklessly by the contract-holder or someone acting at their instigation.",
-      "legal_reference": "Renting Homes (Wales) Act 2016, Schedule 9, Ground 17",
+      "legal_reference": "Renting Homes (Wales) Act 2016, Section 159, Schedule 9",
       "notice_period_days": 56,
       "mandatory": false,
       "required_evidence": [
@@ -132,11 +132,11 @@
 
     "suitable_alternative_accommodation": {
       "code": "Suitable Alternative Accommodation",
-      "section": "Section 159 (Ground 9 equivalent)",
+      "section": "Section 159",
       "type": "discretionary",
       "title": "Suitable Alternative Accommodation Available",
       "description": "Suitable alternative accommodation is or will be available to the contract-holder when the possession order takes effect.",
-      "legal_reference": "Renting Homes (Wales) Act 2016, Schedule 9, Ground 9",
+      "legal_reference": "Renting Homes (Wales) Act 2016, Section 159, Schedule 9",
       "notice_period_days": 56,
       "mandatory": false,
       "required_evidence": [
@@ -152,8 +152,8 @@
   "section_173_no_fault": {
     "description": "Section 173 notices are no-fault notices available after the fixed term ends. They do not require grounds to be specified, only proper notice period.",
     "legal_reference": "Renting Homes (Wales) Act 2016, Section 173",
-    "minimum_notice_period_days": 6,
-    "notes": "Section 173 replaced Section 21 in Wales. Unlike fault-based grounds above, no reason required. Notice period depends on occupation contract type and length of occupation. Standard contracts: 6 months minimum occupation before notice can be served, then 6 months' notice required. Cannot be used in first 6 months of occupation."
+    "minimum_notice_period_days": 182,
+    "notes": "Section 173 is the no-fault route in Wales. Unlike fault-based grounds above, no reason required. Notice period depends on occupation contract type and length of occupation. Standard contracts: 6 months minimum occupation before notice can be served, then 6 months' notice required. Cannot be used in first 6 months of occupation."
   },
 
   "verification_required": {
