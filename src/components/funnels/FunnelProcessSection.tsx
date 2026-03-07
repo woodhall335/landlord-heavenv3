@@ -1,6 +1,7 @@
 ﻿'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import Image from 'next/image';
 import { Container } from '@/components/ui';
 import {
   buildFunnelProcessSectionModel,
@@ -38,10 +39,37 @@ const CTA_BY_PRODUCT: Record<FunnelProduct, { label: string; href: string }> = {
   },
 };
 
+const ROUTE_IMAGE_BY_ID: Record<string, { src: string; alt: string }> = {
+  section8: {
+    src: '/images/faultbasedeviction.webp',
+    alt: 'Fault based eviction',
+  },
+  rhw23: {
+    src: '/images/faultbasedeviction.webp',
+    alt: 'Fault based eviction',
+  },
+  section21: {
+    src: '/images/nofaulteviction.webp',
+    alt: 'No fault eviction',
+  },
+  section173: {
+    src: '/images/nofaulteviction.webp',
+    alt: 'No fault eviction',
+  },
+  'notice-to-leave': {
+    src: '/images/nofaulteviction.webp',
+    alt: 'No fault eviction',
+  },
+  'money-claim-route': {
+    src: '/images/moneyclaims.webp',
+    alt: 'Money claims',
+  },
+};
+
 const getRouteById = (routes: FunnelProcessRoute[], id: string) => routes.find((route) => route.id === id);
 
 const StepCard = ({ step, index }: { step: FunnelProcessStep; index: number }) => (
-  <article className="rounded-2xl border border-[#E6DBFF] bg-white p-5 shadow-[0_10px_28px_rgba(76,29,149,0.08)]">
+  <article className="flex h-full flex-col rounded-2xl border border-[#E6DBFF] bg-white p-5 shadow-[0_10px_28px_rgba(76,29,149,0.08)]">
     <div className="mb-3 inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#7C3AED] text-sm font-semibold text-white">
       {index + 1}
     </div>
@@ -187,6 +215,8 @@ export function FunnelProcessSection({
               <div className="mt-6 grid gap-4 md:grid-cols-2">
                 {activeTab.routes.map((route) => {
                   const isSelected = route.id === activeRoute?.id;
+                  const routeImage = ROUTE_IMAGE_BY_ID[route.id];
+
                   return (
                     <button
                       key={route.id}
@@ -199,6 +229,19 @@ export function FunnelProcessSection({
                       }`}
                       aria-pressed={isSelected}
                     >
+                      {routeImage ? (
+                        <div className="mb-4 overflow-hidden rounded-xl border border-[#E6DBFF]">
+                          <Image
+                            src={routeImage.src}
+                            alt={routeImage.alt}
+                            width={720}
+                            height={288}
+                            className="h-32 w-full object-cover"
+                            loading="lazy"
+                          />
+                        </div>
+                      ) : null}
+
                       <h3 className="text-xl font-semibold text-violet-950">{route.label}</h3>
                       <p className="mt-2 text-sm leading-6 text-gray-700">{route.subtitle}</p>
                       <p className="mt-3 inline-flex rounded-full bg-violet-200/60 px-3 py-1 text-xs font-semibold text-violet-900">
@@ -214,11 +257,11 @@ export function FunnelProcessSection({
                   <div className="mt-8 hidden md:block">
                     <div className="overflow-hidden">
                       <div
-                        className="flex transition-transform duration-700 ease-out will-change-transform"
+                        className="flex items-stretch transition-transform duration-700 ease-out will-change-transform"
                         style={{ transform: `translateX(-${safeDesktopStepIndex * (100 / DESKTOP_CARDS_PER_VIEW)}%)` }}
                       >
                         {steps.map((step, index) => (
-                          <div key={step.id} className="w-1/2 shrink-0 px-2">
+                          <div key={step.id} className="h-full w-1/2 shrink-0 px-2">
                             <StepCard step={step} index={index} />
                           </div>
                         ))}
@@ -228,11 +271,12 @@ export function FunnelProcessSection({
 
                   <div className="mt-8 md:hidden">
                     <div
-                      className="-mx-1 flex snap-x snap-mandatory gap-4 overflow-x-auto px-1 pb-2 touch-pan-x [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+                      className="-mx-1 flex items-stretch snap-x snap-mandatory gap-4 overflow-x-scroll overscroll-x-contain px-1 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
                       aria-label="Funnel process documents carousel"
+                      style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-x' }}
                     >
                       {steps.map((step, index) => (
-                        <div key={step.id} className="w-[86%] shrink-0 snap-center">
+                        <div key={step.id} className="h-full w-[86%] shrink-0 snap-start">
                           <StepCard step={step} index={index} />
                         </div>
                       ))}
