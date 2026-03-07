@@ -108,14 +108,6 @@ export default async function NoticeOnlyPage() {
         </Container>
       </section>
 
-      <section className="bg-[#fcfaff] py-10">
-        <Container>
-          <div className="mx-auto max-w-4xl rounded-2xl border border-[#E6DBFF] bg-[#F3EEFF] px-6 py-5 text-center shadow-[0_10px_30px_rgba(105,46,212,0.08)]">
-            <p className="font-medium text-gray-700">These are example previews. Your bundle is generated specifically for your jurisdiction and tenancy details.</p>
-          </div>
-        </Container>
-      </section>
-
       <section className="py-16 md:py-20">
         <Container>
           <div className="max-w-4xl mx-auto rounded-3xl border border-[#E6DBFF] bg-white p-6 shadow-[0_12px_36px_rgba(15,23,42,0.06)] md:p-10">
@@ -204,4 +196,5 @@ export default async function NoticeOnlyPage() {
     </div>
   );
 }
+
 

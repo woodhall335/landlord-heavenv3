@@ -124,8 +124,6 @@ export default async function CompleteEvictionPackPage() {
         </Container>
       </section>
 
-      <section className="bg-[#fcfaff] py-10"><Container><div className="mx-auto max-w-4xl rounded-2xl border border-[#E6DBFF] bg-[#F3EEFF] px-6 py-5 text-center shadow-[0_10px_30px_rgba(105,46,212,0.08)]"><p className="text-center font-medium text-gray-700">These are example previews. Your bundle is generated specifically for your jurisdiction and tenancy details.</p></div></Container></section>
-
       {/* Why Landlord Heaven */}
       <section className="py-16 md:py-20">
         <Container>
@@ -465,4 +463,5 @@ export default async function CompleteEvictionPackPage() {
     </div>
   );
 }
+
 

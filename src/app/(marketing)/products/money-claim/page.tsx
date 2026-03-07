@@ -111,8 +111,6 @@ export default async function MoneyClaimPage() {
 
       <WhatsIncludedInteractive product="money_claim" previews={previews} />
 
-      <section className="py-8 bg-white"><Container><p className="text-center text-gray-700 font-medium">These are example previews. Your bundle is generated specifically for your jurisdiction and tenancy details.</p></Container></section>
-
       <section className="py-16 md:py-20 bg-white">
         <Container>
           <div className="max-w-4xl mx-auto text-center">
@@ -486,4 +484,5 @@ export default async function MoneyClaimPage() {
     </div>
   );
 }
+
 
