@@ -195,13 +195,13 @@ const StepCard = ({
   const image = getStepImage(step, routeId);
 
   return (
-    <article className="flex h-full flex-col rounded-2xl border border-[#E6DBFF] bg-white p-5 shadow-[0_10px_28px_rgba(76,29,149,0.08)]">
+    <article className="flex flex-col rounded-2xl border border-[#E6DBFF] bg-white p-5 shadow-[0_10px_28px_rgba(76,29,149,0.08)] md:h-full">
       <div className="mb-3 inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#7C3AED] text-sm font-semibold text-white">
         {index + 1}
       </div>
       <h4 className="text-lg font-semibold text-violet-950">{step.docTitle}</h4>
 
-      <div className="mt-4 grid flex-1 grid-cols-2 gap-4">
+      <div className="mt-4 grid flex-1 grid-cols-1 gap-4 md:grid-cols-2">
         <dl className="space-y-3 text-sm leading-6 text-gray-700">
           <div>
             <dt className="font-semibold text-violet-900">What it does</dt>
@@ -219,18 +219,19 @@ const StepCard = ({
           ) : null}
         </dl>
 
-        <div className="h-full overflow-hidden rounded-xl border border-[#E6DBFF] bg-violet-50/50">
+        <div className="self-start overflow-hidden rounded-xl border border-[#E6DBFF] bg-violet-50/50 md:h-full md:self-auto">
           {image ? (
             <Image
               src={image.src}
               alt={image.alt}
               width={640}
               height={420}
-              className="h-full min-h-[190px] w-full bg-white p-2 object-contain"
+              className="block h-auto w-full bg-white p-2 object-contain"
+              sizes="(max-width: 767px) 92vw, 40vw"
               loading="lazy"
             />
           ) : (
-            <div className="flex h-full min-h-[190px] items-center justify-center px-4 text-center text-xs font-medium text-violet-900/70">
+            <div className="flex min-h-[190px] items-center justify-center px-4 text-center text-xs font-medium text-violet-900/70 md:h-full">
               Court-ready workflow document stage
             </div>
           )}
@@ -505,12 +506,12 @@ export function FunnelProcessSection({
                   <div className="mt-8 md:hidden">
                     <div
                       ref={mobileTrackRef}
-                      className="-mx-1 flex items-stretch snap-x snap-mandatory gap-4 overflow-x-scroll overscroll-x-contain no-scrollbar px-1 pb-2"
+                      className="-mx-1 flex items-start snap-x snap-mandatory gap-4 overflow-x-scroll overscroll-x-contain no-scrollbar px-1 pb-2"
                       aria-label="Funnel process documents carousel"
-                      style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-x' }}
+                      style={{ WebkitOverflowScrolling: 'touch' }}
                     >
                       {steps.map((step, index) => (
-                        <div key={step.id} className="h-full w-[86%] shrink-0 snap-start">
+                        <div key={step.id} className="w-[86%] shrink-0 snap-start">
                           <StepCard step={step} index={index} routeId={activeRoute.id} />
                         </div>
                       ))}
