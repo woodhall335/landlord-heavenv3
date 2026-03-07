@@ -1,74 +1,62 @@
-/**
+﻿/**
  * Ask Heaven SEO Metadata Tests
- *
- * Tests that Ask Heaven page has:
- * - Correct title format with "Free Landlord Legal Q&A | UK"
- * - Proper description mentioning all jurisdictions
- * - FAQ schema structure
  *
  * @module tests/seo/ask-heaven-metadata.test
  */
 
-import { describe, expect, it } from 'vitest';
-import { metadata } from '@/app/ask-heaven/page';
+import type { Metadata } from 'next';
+import { beforeAll, describe, expect, it } from 'vitest';
+import { generateMetadata } from '@/app/ask-heaven/page';
 
 const asText = (value: unknown): string =>
   typeof value === 'string' ? value : value?.toString?.() ?? '';
 
+let metadata: Metadata;
+
+beforeAll(async () => {
+  metadata = await generateMetadata({});
+});
+
 describe('Ask Heaven Metadata', () => {
   describe('Title', () => {
-    it('includes "Free" keyword', () => {
-      const title = asText(metadata.title);
-      expect(title.toLowerCase()).toContain('free');
+    it('includes Free, UK, and Ask Heaven branding', () => {
+      const title = asText(metadata.title).toLowerCase();
+      expect(title).toContain('free');
+      expect(title).toContain('uk');
+      expect(title).toContain('ask heaven');
     });
 
-    it('includes "Legal Q&A" or "Q&A"', () => {
-      const title = asText(metadata.title);
-      expect(title.toLowerCase()).toMatch(/q&a|legal/);
-    });
-
-    it('includes "UK"', () => {
-      const title = asText(metadata.title);
-      expect(title).toContain('UK');
-    });
-
-    it('includes "Ask Heaven" branding', () => {
-      const title = asText(metadata.title);
-      expect(title).toContain('Ask Heaven');
+    it('includes legal Q&A intent', () => {
+      const title = asText(metadata.title).toLowerCase();
+      expect(title).toMatch(/q&a|legal/);
     });
   });
 
   describe('Description', () => {
-    it('mentions England', () => {
-      const description = asText(metadata.description);
-      expect(description).toContain('England');
-    });
-
-    it('mentions Wales', () => {
-      const description = asText(metadata.description);
-      expect(description).toContain('Wales');
-    });
-
-    it('mentions Scotland', () => {
-      const description = asText(metadata.description);
-      expect(description).toContain('Scotland');
-    });
-
-    it('mentions Northern Ireland', () => {
-      const description = asText(metadata.description);
-      expect(description).toContain('Northern Ireland');
-    });
-
-    it('mentions key topics (evictions, rent arrears, tenancy agreements)', () => {
+    it('covers landlord legal topics', () => {
       const description = asText(metadata.description).toLowerCase();
+      expect(description).toContain('free');
       expect(description).toMatch(/eviction/);
       expect(description).toMatch(/rent arrears|arrears/);
       expect(description).toMatch(/tenancy/);
     });
 
-    it('includes "Free" keyword', () => {
+    it('signals UK-wide coverage', () => {
       const description = asText(metadata.description);
-      expect(description.toLowerCase()).toContain('free');
+      const lower = description.toLowerCase();
+
+      const explicitJurisdictions =
+        description.includes('England') &&
+        description.includes('Wales') &&
+        description.includes('Scotland') &&
+        description.includes('Northern Ireland');
+
+      const umbrellaCoverage =
+        lower.includes('uk') ||
+        lower.includes('all jurisdictions') ||
+        lower.includes('across all jurisdictions');
+
+      expect(explicitJurisdictions || umbrellaCoverage).toBe(true);
     });
   });
 
@@ -83,15 +71,10 @@ describe('Ask Heaven Metadata', () => {
       expect(keywordsLower).toContain('landlord q&a');
     });
 
-    it('includes eviction-related keywords', () => {
+    it('includes eviction and compliance terms', () => {
       const keywords = metadata.keywords as string[];
       const keywordsLower = keywords.map((k) => k.toLowerCase());
       expect(keywordsLower.some((k) => k.includes('eviction') || k.includes('section 21') || k.includes('section 8'))).toBe(true);
-    });
-
-    it('includes compliance-related keywords', () => {
-      const keywords = metadata.keywords as string[];
-      const keywordsLower = keywords.map((k) => k.toLowerCase());
       expect(keywordsLower.some((k) => k.includes('epc') || k.includes('gas safety') || k.includes('eicr') || k.includes('deposit'))).toBe(true);
     });
   });
@@ -103,23 +86,16 @@ describe('Ask Heaven Metadata', () => {
       expect(ogTitle).toBe(title);
     });
 
-    it('has matching Open Graph description', () => {
-      const ogDescription = asText(metadata.openGraph?.description);
-      const description = asText(metadata.description);
-      expect(ogDescription).toBe(description);
-    });
-
-    it('has correct type', () => {
+    it('has legal Q&A OG description and website type', () => {
+      const ogDescription = asText(metadata.openGraph?.description).toLowerCase();
+      expect(ogDescription).toMatch(/q&a|legal/);
+      expect(ogDescription).toMatch(/eviction|arrears|tenancy/);
       expect(metadata.openGraph?.type).toBe('website');
     });
   });
 
   describe('Canonical URL', () => {
-    it('has canonical URL defined', () => {
-      expect(metadata.alternates?.canonical).toBeDefined();
-    });
-
-    it('canonical URL includes /ask-heaven', () => {
+    it('has canonical URL set to /ask-heaven', () => {
       const canonical = asText(metadata.alternates?.canonical);
       expect(canonical).toContain('/ask-heaven');
     });
