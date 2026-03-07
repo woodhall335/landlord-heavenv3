@@ -50,7 +50,7 @@ const faqs = [
   },
   {
     question: "How much do solicitors charge for the same services?",
-    answer: "Typical solicitor fees: Eviction notice ¬£200-300, Court claim preparation ¬£300-500, Money claim ¬£200-350, Tenancy agreement ¬£150-400, HMO compliance consultation ¬£500+ per year. You save ¬£200-400 per case using Landlord Heaven."
+    answer: "Typical solicitor fees: Eviction notice £200-300, Court claim preparation £300-500, Money claim £200-350, Tenancy agreement £150-400, HMO compliance consultation £500+ per year. You save £200-400 per case using Landlord Heaven."
   },
   {
     question: "Can I purchase additional products later?",
@@ -86,29 +86,29 @@ export default function PricingPage() {
                 <th className="text-left p-6 font-semibold text-charcoal">Feature</th>
                 <th className="text-center p-6">
                   <div className="font-semibold text-charcoal mb-2">Notices</div>
-                  <div className="text-2xl font-bold text-primary mb-1">¬£29.99</div>
+                  <div className="text-2xl font-bold text-primary mb-1">£29.99</div>
                   <div className="text-sm text-gray-600">One-time</div>
                 </th>
                 <th className="text-center p-6">
                   <div className="font-semibold text-charcoal mb-2">Complete Pack</div>
-                  <div className="text-2xl font-bold text-primary mb-1">¬£69.99</div>
+                  <div className="text-2xl font-bold text-primary mb-1">£69.99</div>
                   <div className="text-xs text-amber-600 font-medium">England only</div>
                   <div className="text-sm text-gray-600">One-time</div>
                 </th>
                 <th className="text-center p-6">
                   <div className="font-semibold text-charcoal mb-2">Money Claims</div>
-                  <div className="text-2xl font-bold text-primary mb-1">¬£45.99</div>
+                  <div className="text-2xl font-bold text-primary mb-1">£45.99</div>
                   <div className="text-xs text-amber-600 font-medium">England only</div>
                   <div className="text-sm text-gray-600">One-time</div>
                 </th>
                 <th className="text-center p-6">
                   <div className="font-semibold text-charcoal mb-2">Standard AST</div>
-                  <div className="text-2xl font-bold text-primary mb-1">¬£9.99</div>
+                  <div className="text-2xl font-bold text-primary mb-1">£9.99</div>
                   <div className="text-sm text-gray-600">One-time</div>
                 </th>
                 <th className="text-center p-6">
                   <div className="font-semibold text-charcoal mb-2">Premium AST</div>
-                  <div className="text-2xl font-bold text-primary mb-1">¬£19.99</div>
+                  <div className="text-2xl font-bold text-primary mb-1">£19.99</div>
                   <div className="text-sm text-gray-600">One-time</div>
                 </th>
                 {/* HMO Pro column removed - parked for later review */}
@@ -260,7 +260,7 @@ export default function PricingPage() {
                 <td className="p-4 text-sm font-semibold text-charcoal">Get started</td>
                 <td className="p-4 align-middle">
                   <Link
-                    href="/wizard?product=notice_only&src=pricing&topic=eviction"
+                    href="/products/notice-only?src=pricing&topic=eviction"
                     className="hero-btn-primary flex w-full min-h-[52px] items-center justify-center px-3 py-3 text-center text-[13px] leading-snug [overflow-wrap:anywhere] sm:min-h-[56px] sm:px-3 sm:py-3 sm:text-sm"
                     aria-label="Start notice wizard"
                   >
@@ -269,7 +269,7 @@ export default function PricingPage() {
                 </td>
                 <td className="p-4 align-middle">
                   <Link
-                    href="/wizard?product=complete_pack&src=pricing&topic=eviction"
+                    href="/products/complete-pack?src=pricing&topic=eviction"
                     className="hero-btn-primary flex w-full min-h-[52px] items-center justify-center px-3 py-3 text-center text-[13px] leading-snug [overflow-wrap:anywhere] sm:min-h-[56px] sm:px-3 sm:py-3 sm:text-sm"
                     aria-label="Start eviction pack wizard"
                   >
@@ -278,7 +278,7 @@ export default function PricingPage() {
                 </td>
                 <td className="p-4 align-middle">
                   <Link
-                    href="/wizard?product=money_claim&src=pricing&topic=arrears"
+                    href="/products/money-claim?src=pricing&topic=arrears"
                     className="hero-btn-primary flex w-full min-h-[52px] items-center justify-center px-3 py-3 text-center text-[13px] leading-snug [overflow-wrap:anywhere] sm:min-h-[56px] sm:px-3 sm:py-3 sm:text-sm"
                     aria-label="Start money claim wizard"
                   >
@@ -287,7 +287,7 @@ export default function PricingPage() {
                 </td>
                 <td className="p-4 align-middle">
                   <Link
-                    href="/wizard?product=ast_standard&src=pricing&topic=tenancy"
+                    href="/products/ast?src=pricing&topic=tenancy"
                     className="hero-btn-primary flex w-full min-h-[52px] items-center justify-center px-3 py-3 text-center text-[13px] leading-snug [overflow-wrap:anywhere] sm:min-h-[56px] sm:px-3 sm:py-3 sm:text-sm"
                     aria-label="Create standard tenancy agreement"
                   >
@@ -296,7 +296,7 @@ export default function PricingPage() {
                 </td>
                 <td className="p-4 align-middle">
                   <Link
-                    href="/wizard?product=ast_premium&src=pricing&topic=tenancy"
+                    href="/products/ast?src=pricing&topic=tenancy"
                     className="hero-btn-primary flex w-full min-h-[52px] items-center justify-center px-3 py-3 text-center text-[13px] leading-snug [overflow-wrap:anywhere] sm:min-h-[56px] sm:px-3 sm:py-3 sm:text-sm"
                     aria-label="Create premium tenancy agreement"
                   >
@@ -314,7 +314,7 @@ export default function PricingPage() {
           {/* Notices */}
           <div className="bg-white rounded-lg border-2 border-gray-200 p-6">
             <h3 className="text-2xl font-bold text-charcoal mb-2">Notices</h3>
-            <div className="text-3xl font-bold text-primary mb-4">¬£29.99 <span className="text-sm text-gray-600">one-time</span></div>
+            <div className="text-3xl font-bold text-primary mb-4">£29.99 <span className="text-sm text-gray-600">one-time</span></div>
             <ul className="space-y-2 mb-6 text-sm">
               <li>‚úÖ Section 8/21 Notice</li>
               <li>‚úÖ England/Wales/Scotland notices</li>
@@ -322,7 +322,7 @@ export default function PricingPage() {
               <li>‚úÖ 12-Month Storage</li>
             </ul>
             <Link
-              href="/wizard?product=notice_only&src=pricing&topic=eviction"
+              href="/products/notice-only?src=pricing&topic=eviction"
               className="hero-btn-primary block w-full text-center"
               aria-label="Start notice wizard"
             >
@@ -333,7 +333,7 @@ export default function PricingPage() {
           {/* Complete Eviction Pack */}
           <div className="bg-white rounded-lg border-2 border-gray-200 p-6">
             <h3 className="text-2xl font-bold text-charcoal mb-2">Complete Pack</h3>
-            <div className="text-3xl font-bold text-primary mb-2">¬£69.99 <span className="text-sm text-gray-600">one-time</span></div>
+            <div className="text-3xl font-bold text-primary mb-2">£69.99 <span className="text-sm text-gray-600">one-time</span></div>
             <div className="text-xs text-amber-600 font-medium mb-4">England only</div>
             <ul className="space-y-2 mb-6 text-sm">
               <li>‚úÖ Section 8/21 Notice</li>
@@ -342,7 +342,7 @@ export default function PricingPage() {
               <li>‚úÖ Full Eviction Bundle</li>
             </ul>
             <Link
-              href="/wizard?product=complete_pack&src=pricing&topic=eviction"
+              href="/products/complete-pack?src=pricing&topic=eviction"
               className="hero-btn-primary block w-full text-center"
               aria-label="Start eviction pack wizard"
             >
@@ -353,7 +353,7 @@ export default function PricingPage() {
           {/* Money Claims */}
           <div className="bg-white rounded-lg border-2 border-gray-200 p-6">
             <h3 className="text-2xl font-bold text-charcoal mb-2">Money Claims</h3>
-            <div className="text-3xl font-bold text-primary mb-2">¬£45.99 <span className="text-sm text-gray-600">one-time</span></div>
+            <div className="text-3xl font-bold text-primary mb-2">£45.99 <span className="text-sm text-gray-600">one-time</span></div>
             <div className="text-xs text-amber-600 font-medium mb-4">England only</div>
             <ul className="space-y-2 mb-6 text-sm">
               <li>‚úÖ Money Claim Forms</li>
@@ -362,7 +362,7 @@ export default function PricingPage() {
               <li>‚úÖ Enforcement Tools</li>
             </ul>
             <Link
-              href="/wizard?product=money_claim&src=pricing&topic=arrears"
+              href="/products/money-claim?src=pricing&topic=arrears"
               className="hero-btn-primary block w-full text-center"
               aria-label="Start money claim wizard"
             >
@@ -373,7 +373,7 @@ export default function PricingPage() {
           {/* Standard AST */}
           <div className="bg-white rounded-lg border-2 border-gray-200 p-6">
             <h3 className="text-2xl font-bold text-charcoal mb-2">Standard AST</h3>
-            <div className="text-3xl font-bold text-primary mb-4">¬£9.99 <span className="text-sm text-gray-600">one-time</span></div>
+            <div className="text-3xl font-bold text-primary mb-4">£9.99 <span className="text-sm text-gray-600">one-time</span></div>
             <ul className="space-y-2 mb-6 text-sm">
               <li>‚úÖ AST/PRT/NI Agreement</li>
               <li>‚úÖ Core Clauses</li>
@@ -381,7 +381,7 @@ export default function PricingPage() {
               <li>‚úÖ 12+ Month Storage</li>
             </ul>
             <Link
-              href="/wizard?product=ast_standard&src=pricing&topic=tenancy"
+              href="/products/ast?src=pricing&topic=tenancy"
               className="hero-btn-primary block w-full text-center"
               aria-label="Create standard tenancy agreement"
             >
@@ -392,7 +392,7 @@ export default function PricingPage() {
           {/* Premium AST */}
           <div className="bg-white rounded-lg border-2 border-gray-200 p-6">
             <h3 className="text-2xl font-bold text-charcoal mb-2">Premium AST</h3>
-            <div className="text-3xl font-bold text-primary mb-4">¬£19.99 <span className="text-sm text-gray-600">one-time</span></div>
+            <div className="text-3xl font-bold text-primary mb-4">£19.99 <span className="text-sm text-gray-600">one-time</span></div>
             <ul className="space-y-2 mb-6 text-sm">
               <li>‚úÖ Everything in Standard</li>
               <li>‚úÖ HMO Clauses</li>
@@ -401,7 +401,7 @@ export default function PricingPage() {
               <li>‚úÖ Advanced Protection</li>
             </ul>
             <Link
-              href="/wizard?product=ast_premium&src=pricing&topic=tenancy"
+              href="/products/ast?src=pricing&topic=tenancy"
               className="hero-btn-primary block w-full text-center"
               aria-label="Create premium tenancy agreement"
             >
@@ -420,7 +420,7 @@ export default function PricingPage() {
           <table className="w-full text-sm">
             <thead><tr className="border-b"><th className="text-left py-2">Metric</th><th className="text-center">Solicitor</th><th className="text-center">Landlord Heaven</th></tr></thead>
             <tbody>
-              <tr className="border-b"><td className="py-2">Cost</td><td className="text-center">¬£300‚Äì¬£2,500</td><td className="text-center">¬£9.99‚Äì¬£69.99</td></tr>
+              <tr className="border-b"><td className="py-2">Cost</td><td className="text-center">£300‚Äì£2,500</td><td className="text-center">£9.99‚Äì£69.99</td></tr>
               <tr className="border-b"><td className="py-2">Time</td><td className="text-center">3‚Äì5 days</td><td className="text-center">10 minutes</td></tr>
               <tr className="border-b"><td className="py-2">Complete Case File</td><td className="text-center">‚ùå Often staged</td><td className="text-center">‚úÖ Yes</td></tr>
               <tr className="border-b"><td className="py-2">Jurisdiction-Specific</td><td className="text-center">‚úÖ</td><td className="text-center">‚úÖ</td></tr>
@@ -461,13 +461,13 @@ export default function PricingPage() {
               <>
                 <p className="mb-2">Typical solicitor fees:</p>
                 <ul className="list-disc pl-5 space-y-1">
-                  <li>Eviction notice: ¬£200-300</li>
-                  <li>Court claim preparation: ¬£300-500</li>
-                  <li>Money claim: ¬£200-350</li>
-                  <li>Tenancy agreement: ¬£150-400</li>
-                  <li>HMO compliance consultation: ¬£500+ per year</li>
+                  <li>Eviction notice: £200-300</li>
+                  <li>Court claim preparation: £300-500</li>
+                  <li>Money claim: £200-350</li>
+                  <li>Tenancy agreement: £150-400</li>
+                  <li>HMO compliance consultation: £500+ per year</li>
                 </ul>
-                <p className="mt-2"><strong>You save ¬£200-400 per case</strong> using Landlord Heaven.</p>
+                <p className="mt-2"><strong>You save £200-400 per case</strong> using Landlord Heaven.</p>
               </>
             )
           },

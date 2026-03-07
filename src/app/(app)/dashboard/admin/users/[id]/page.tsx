@@ -214,7 +214,7 @@ export default function AdminUserDetailPage() {
             </div>
             <div className="border border-gray-200 rounded-lg p-4">
               <p className="text-sm text-gray-600 mb-1">Total revenue</p>
-              <p className="text-2xl font-bold text-charcoal">Â£{(metrics?.total_revenue ?? 0).toFixed(2)}</p>
+              <p className="text-2xl font-bold text-charcoal">£{(metrics?.total_revenue ?? 0).toFixed(2)}</p>
             </div>
           </div>
         </div>
@@ -243,7 +243,7 @@ export default function AdminUserDetailPage() {
                       <td className="p-4 text-sm text-gray-700 break-all">{order.id}</td>
                       <td className="p-4 text-sm text-gray-700">{formatDate(order.created_at)}</td>
                       <td className="p-4 text-sm text-gray-700 capitalize">{order.status || "-"}</td>
-                      <td className="p-4 text-sm text-gray-700">Â£{(order.amount || 0).toFixed(2)}</td>
+                      <td className="p-4 text-sm text-gray-700">£{(order.amount || 0).toFixed(2)}</td>
                     </tr>
                   ))}
                 </tbody>

@@ -152,7 +152,7 @@ export default function TenantsPage() {
           <Card padding="medium">
             <div className="text-sm text-gray-600 mb-1">Monthly Rent</div>
             <div className="text-3xl font-bold text-green-600">
-              Â£{getTotalRent().toLocaleString()}
+              £{getTotalRent().toLocaleString()}
             </div>
             <div className="text-xs text-gray-500 mt-1">from active tenants</div>
           </Card>
@@ -160,7 +160,7 @@ export default function TenantsPage() {
           <Card padding="medium">
             <div className="text-sm text-gray-600 mb-1">Total Deposits</div>
             <div className="text-3xl font-bold text-primary">
-              Â£{getTotalDeposits().toLocaleString()}
+              £{getTotalDeposits().toLocaleString()}
             </div>
             <div className="text-xs text-gray-500 mt-1">held for active tenants</div>
           </Card>
@@ -271,10 +271,10 @@ export default function TenantsPage() {
                           <span className="font-medium">Room:</span> {tenant.room_number}
                         </div>
                         <div>
-                          <span className="font-medium">Rent:</span> Â£{tenant.rent_amount}/month
+                          <span className="font-medium">Rent:</span> £{tenant.rent_amount}/month
                         </div>
                         <div>
-                          <span className="font-medium">Deposit:</span> Â£{tenant.deposit_amount}
+                          <span className="font-medium">Deposit:</span> £{tenant.deposit_amount}
                         </div>
                         <div>
                           <span className="font-medium">Lease:</span> {formatDate(tenant.lease_start)} -{' '}

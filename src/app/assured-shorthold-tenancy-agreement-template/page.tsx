@@ -62,7 +62,7 @@ export default function AssuredShortholdTenancyAgreementTemplatePage() {
         <UniversalHero
           title="Assured Shorthold Tenancy Agreement for England"
           subtitle="Create a legally validated, solicitor-grade AST that is compliance-checked for England and ready to sign."
-          primaryCta={{ label: "Start now", href: "/wizard?product=ast_standard&src=seo_assured_shorthold_tenancy_agreement_template&topic=tenancy&jurisdiction=england" }}
+          primaryCta={{ label: "Start now", href: "/products/ast?src=seo_assured_shorthold_tenancy_agreement_template&topic=tenancy&jurisdiction=england" }}
           showTrustPositioningBar
           hideMedia
         />
@@ -95,16 +95,16 @@ export default function AssuredShortholdTenancyAgreementTemplatePage() {
             </p>
             <div className="flex gap-4 justify-center flex-wrap">
               <Link
-                href="/wizard?product=ast_standard&src=seo_assured_shorthold_tenancy_agreement_template&topic=tenancy&jurisdiction=england"
+                href="/products/ast?src=seo_assured_shorthold_tenancy_agreement_template&topic=tenancy&jurisdiction=england"
                 className="inline-flex items-center gap-2 bg-white border-2 border-blue-600 text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors"
               >
-                Standard AST — £9.99
+                Standard AST — �9.99
               </Link>
               <Link
-                href="/wizard?product=ast_premium&src=seo_assured_shorthold_tenancy_agreement_template&topic=tenancy&jurisdiction=england"
+                href="/products/ast?src=seo_assured_shorthold_tenancy_agreement_template&topic=tenancy&jurisdiction=england"
                 className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
               >
-                Premium AST — £19.99
+                Premium AST — �19.99
               </Link>
             </div>
             <p className="mt-3 text-sm text-gray-600">
@@ -157,7 +157,7 @@ export default function AssuredShortholdTenancyAgreementTemplatePage() {
                 which creates the Assured Shorthold Tenancy (AST) framework. Key England-specific requirements include:
               </p>
               <ul className="space-y-2">
-                <li><strong>Deposit caps</strong> under the Tenant Fees Act 2019 (5 weeks for rent under £50,000/year)</li>
+                <li><strong>Deposit caps</strong> under the Tenant Fees Act 2019 (5 weeks for rent under �50,000/year)</li>
                 <li><strong>Deposit protection</strong> in a government-authorised scheme within 30 days</li>
                 <li><Link href="/how-to-rent-guide" className="text-primary hover:underline font-semibold">How to Rent guide</Link> must be provided before tenancy starts</li>
                 <li><strong>EPC, Gas Safety Certificate, and <Link href="/eicr-landlord-requirements" className="text-primary hover:underline">EICR</Link></strong> must be provided to tenants</li>
@@ -189,7 +189,7 @@ export default function AssuredShortholdTenancyAgreementTemplatePage() {
                 <h3 className="text-lg font-semibold text-gray-900 mb-3">Tenant Fees Act Validated</h3>
                 <p className="text-gray-700">
                   Our wizard automatically validates deposit amounts against Tenant Fees Act 2019 limits.
-                  If you enter a deposit exceeding 5 weeks&apos; rent (or 6 weeks for annual rent over £50,000),
+                  If you enter a deposit exceeding 5 weeks&apos; rent (or 6 weeks for annual rent over �50,000),
                   you&apos;ll be warned before generating the agreement.
                 </p>
               </div>
@@ -269,15 +269,15 @@ export default function AssuredShortholdTenancyAgreementTemplatePage() {
             </p>
             <div className="grid md:grid-cols-2 gap-4">
               <Link href="/products/notice-only" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                <h3 className="font-semibold text-gray-900">Eviction Notice Pack — £29.99</h3>
+                <h3 className="font-semibold text-gray-900">Eviction Notice Pack — �29.99</h3>
                 <p className="text-sm text-gray-600">Section 21 or Section 8 notices when you need to regain possession</p>
               </Link>
               <Link href="/products/complete-pack" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                <h3 className="font-semibold text-gray-900">Complete Eviction Pack — £69.99</h3>
+                <h3 className="font-semibold text-gray-900">Complete Eviction Pack — �69.99</h3>
                 <p className="text-sm text-gray-600">Full eviction package including court forms and witness statements</p>
               </Link>
               <Link href="/products/money-claim" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                <h3 className="font-semibold text-gray-900">Money Claim Pack — £45.99</h3>
+                <h3 className="font-semibold text-gray-900">Money Claim Pack — �45.99</h3>
                 <p className="text-sm text-gray-600">Recover rent arrears, property damage, and other tenant debts</p>
               </Link>
               <Link href="/ask-heaven" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">

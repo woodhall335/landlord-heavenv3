@@ -156,7 +156,7 @@ function ASTCheckoutButton({
       // New checkout session
       const checkoutUrl = data.session_url || data.checkout_url;
       if (checkoutUrl) {
-        const priceValue = parseFloat(price.replace(/[Â£,]/g, '')) || 0;
+        const priceValue = parseFloat(price.replace(/[£,]/g, '')) || 0;
         trackBeginCheckout(product, productName, priceValue);
         trackCheckoutStarted({ product });
         window.location.href = checkoutUrl;
@@ -1154,7 +1154,7 @@ export default function WizardPreviewPage() {
                       <div>
                         <p className="text-sm font-medium text-green-900">Solicitor comparison</p>
                         <p className="text-sm text-green-800 mt-1">
-                          A property solicitor typically charges <span className="font-semibold">Â£150â€“Â£400</span> for tenancy agreements.
+                          A property solicitor typically charges <span className="font-semibold">£150â€“£400</span> for tenancy agreements.
                         </p>
                         <p className="text-xs text-green-700 mt-2">
                           You pay: <span className="font-bold text-green-900">{productMeta.price}</span>

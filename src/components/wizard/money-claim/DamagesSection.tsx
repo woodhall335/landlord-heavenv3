@@ -221,7 +221,7 @@ export const DamagesSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisd
 
               <div className="space-y-1">
                 <label className="text-xs font-medium text-charcoal">
-                  Amount (Â£)
+                  Amount (£)
                 </label>
                 <input
                   type="number"
@@ -257,7 +257,7 @@ export const DamagesSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisd
                 Total damages & costs
               </span>
               <span className="text-lg font-semibold text-charcoal">
-                Â£{items.reduce((sum, item) => sum + (item.amount || 0), 0).toFixed(2)}
+                £{items.reduce((sum, item) => sum + (item.amount || 0), 0).toFixed(2)}
               </span>
             </div>
             <p className="text-xs text-gray-500 mt-1">

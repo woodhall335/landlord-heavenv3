@@ -489,10 +489,10 @@ export function ValidationReport({
                   Many landlords pursue both.
                 </p>
                 <a
-                  href="/wizard?product=money_claim&src=validator_arrears"
+                  href="/products/money-claim?src=validator_arrears"
                   className="inline-flex items-center gap-1 text-xs font-medium text-blue-700 hover:text-blue-900 mt-2"
                 >
-                  Get Money Claim Pack â€” Â£45.99 <RiArrowRightLine className="h-3 w-3" />
+                  Get Money Claim Pack â€” £45.99 <RiArrowRightLine className="h-3 w-3" />
                 </a>
               </div>
             </div>
@@ -519,7 +519,7 @@ export function ValidationReport({
                   className="inline-flex items-center gap-1 px-4 py-2 border border-purple-300 text-purple-700 rounded-lg text-sm font-medium hover:bg-purple-50 transition-colors"
                 >
                   {ctas.secondary.label}
-                  <span className="text-xs text-purple-500">(Â£{ctas.secondary.price.toFixed(2)})</span>
+                  <span className="text-xs text-purple-500">(£{ctas.secondary.price.toFixed(2)})</span>
                 </a>
               )}
               <a
@@ -528,7 +528,7 @@ export function ValidationReport({
                 className="inline-flex items-center gap-1 px-4 py-2 bg-purple-600 text-white rounded-lg text-sm font-medium hover:bg-purple-700 transition-colors"
               >
                 {ctas.primary.label}
-                <span className="text-xs text-purple-200">(Â£{ctas.primary.price.toFixed(2)})</span>
+                <span className="text-xs text-purple-200">(£{ctas.primary.price.toFixed(2)})</span>
                 <RiArrowRightLine className="h-4 w-4" />
               </a>
             </div>

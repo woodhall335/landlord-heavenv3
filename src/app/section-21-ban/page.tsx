@@ -61,7 +61,7 @@ const faqs = [
 ];
 
 export default function Section21BanPage() {
-  const wizardHref = '/wizard?product=notice_only&src=seo_section_21_ban&topic=eviction';
+  const wizardHref = '/products/notice-only?src=seo_section_21_ban&topic=eviction';
   const breadcrumbItems = [
     { name: 'Home', url: 'https://landlordheaven.co.uk' },
     { name: 'Section 21 Ban', url: 'https://landlordheaven.co.uk/section-21-ban' },
@@ -88,7 +88,7 @@ export default function Section21BanPage() {
           }}
           secondaryCta={{
             label: `Complete Eviction Pack — ${completePackPrice}`,
-            href: '/wizard?product=notice_only&src=seo_section_21_ban&topic=eviction',
+            href: '/products/notice-only?src=seo_section_21_ban&topic=eviction',
           }}
         />
 

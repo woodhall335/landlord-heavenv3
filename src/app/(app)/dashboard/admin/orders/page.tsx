@@ -127,7 +127,7 @@ export default function AdminOrdersPage() {
 
   async function handleIssueRefund(orderId: string, totalAmount: number) {
     const confirmed = confirm(
-      `Are you sure you want to issue a full refund of Â£${Number(totalAmount || 0).toFixed(2)}? This action cannot be undone.`
+      `Are you sure you want to issue a full refund of £${Number(totalAmount || 0).toFixed(2)}? This action cannot be undone.`
     );
 
     if (!confirmed) return;
@@ -376,7 +376,7 @@ export default function AdminOrdersPage() {
                     </td>
                     <td className="p-4">
                       <span className="text-sm font-semibold text-charcoal">
-                        Â£{Number(order.total_amount || 0).toFixed(2)}
+                        £{Number(order.total_amount || 0).toFixed(2)}
                       </span>
                     </td>
                     <td className="p-4">
@@ -468,7 +468,7 @@ export default function AdminOrdersPage() {
           <div className="bg-white rounded-lg border border-gray-200 p-6">
             <p className="text-sm text-gray-600 mb-1">Page Revenue</p>
             <p className="text-3xl font-bold text-success">
-              Â£
+              £
               {(
                 orders
                   .filter((o) => o.payment_status === "paid")

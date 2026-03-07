@@ -37,7 +37,7 @@ function getGuidanceForQuestion(
         return {
           title: 'ðŸ’¡ Example reasons',
           examples: [
-            'Tenant owes Â£2,400 in rent (3 months behind)',
+            'Tenant owes £2,400 in rent (3 months behind)',
             'Tenant has caused significant damage to the property',
             'Frequent noise complaints from neighbors - police called 3 times',
             'Fixed-term tenancy ended 2 months ago, tenant hasn\'t left',
@@ -51,9 +51,9 @@ function getGuidanceForQuestion(
         return {
           title: 'ðŸ’¡ How to calculate total arrears',
           examples: [
-            'Example 1: Rent Â£800/month, 3 months unpaid = Â£2,400',
-            'Example 2: Rent Â£200/week, 8 weeks unpaid = Â£1,600',
-            'Example 3: Some payments made - Jan Â£800, Feb Â£400, Mar Â£0 = Â£1,200 owed',
+            'Example 1: Rent £800/month, 3 months unpaid = £2,400',
+            'Example 2: Rent £200/week, 8 weeks unpaid = £1,600',
+            'Example 3: Some payments made - Jan £800, Feb £400, Mar £0 = £1,200 owed',
           ],
           tip: 'Only include unpaid rent, not damage or other costs'
         };
@@ -77,8 +77,8 @@ function getGuidanceForQuestion(
           return {
             title: 'ðŸ’¡ Example particulars for England & Wales',
             examples: [
-              'Ground 8: Rent arrears of Â£2,400. Rent is Â£800/month due on 1st. Last payment received 01/08/2024. No payments for Sept, Oct, Nov 2024. Arrears exceed 2 months at notice date.',
-              'Ground 10: Total arrears Â£1,600. Tenant paying sporadically - paid Â£400 in Sept instead of Â£800, Â£0 in Oct, Â£200 in Nov. Pattern of persistent delay.',
+              'Ground 8: Rent arrears of £2,400. Rent is £800/month due on 1st. Last payment received 01/08/2024. No payments for Sept, Oct, Nov 2024. Arrears exceed 2 months at notice date.',
+              'Ground 10: Total arrears £1,600. Tenant paying sporadically - paid £400 in Sept instead of £800, £0 in Oct, £200 in Nov. Pattern of persistent delay.',
               'Ground 12: Breach of tenancy clause 8.3 (no subletting). Tenant advertising room on SpareRoom.com since 15/10/2024. Screenshot evidence attached. Written warning sent 20/10/2024 ignored.',
               'Ground 14: Anti-social behaviour. Noise complaints from 3 neighbors (Flat 2, 4, 6) on 12/09, 19/09, 26/09. Police attended 26/09 - ref CR12345/24. Environmental Health involved.',
             ],
@@ -88,7 +88,7 @@ function getGuidanceForQuestion(
           return {
             title: 'ðŸ’¡ Example particulars for Scotland',
             examples: [
-              'Ground 12: Rent arrears Â£2,400 (3 months). Rent Â£800/month due 1st. Contacted tenant 05/09, 12/09, 20/09 (pre-action requirement met). Last payment 01/08/2024.',
+              'Ground 12: Rent arrears £2,400 (3 months). Rent £800/month due 1st. Contacted tenant 05/09, 12/09, 20/09 (pre-action requirement met). Last payment 01/08/2024.',
               'Ground 2: Criminal behaviour. Police called 15/10/2024, 22/10/2024, 29/10/2024 for domestic disturbances. Assault charge pending (case ref: SF12345/24). Neighbors in fear.',
               'Ground 4: Breach of tenancy terms - prohibited pets. Tenant keeping 2 large dogs despite clause 9.2 ban. Damage to carpets. Photos dated 10/11/2024. Warning letter 12/11/2024 ignored.',
             ],
@@ -131,8 +131,8 @@ function getGuidanceForQuestion(
         return {
           title: 'ðŸ’¡ Example claim breakdowns',
           examples: [
-            'Rent arrears: Â£2,400 (3 months Ã— Â£800)\nProperty damage: Â£850 (hole in wall Â£450, broken kitchen cupboard Â£400)\nCleaning: Â£200 (professional deep clean)\nTotal: Â£3,450',
-            'Unpaid rent: Â£1,200 (6 weeks Ã— Â£200/week)\nUtility bills left unpaid: Â£340 (gas Â£180, electric Â£160)\nLess deposit held: -Â£800\nTotal claim: Â£740',
+            'Rent arrears: £2,400 (3 months Ã— £800)\nProperty damage: £850 (hole in wall £450, broken kitchen cupboard £400)\nCleaning: £200 (professional deep clean)\nTotal: £3,450',
+            'Unpaid rent: £1,200 (6 weeks Ã— £200/week)\nUtility bills left unpaid: £340 (gas £180, electric £160)\nLess deposit held: -£800\nTotal claim: £740',
           ],
           tip: 'Break down into categories - makes claim stronger and clearer for court'
         };
@@ -141,9 +141,9 @@ function getGuidanceForQuestion(
         return {
           title: 'ðŸ’¡ Example damage descriptions (with costs)',
           examples: [
-            'Living room: Hole in wall (15cm diameter) - repair quote Â£450. Stained carpet - replacement quote Â£600',
-            'Kitchen: Broken cupboard door (Quote from ABC Kitchens Â£400). Damaged worktop (Â£350 repair). Photos taken at checkout 10/11/2024',
-            'Bathroom: Cracked toilet cistern (Plumber quote Â£180). Mold on ceiling due to lack of ventilation - cleaning quote Â£250',
+            'Living room: Hole in wall (15cm diameter) - repair quote £450. Stained carpet - replacement quote £600',
+            'Kitchen: Broken cupboard door (Quote from ABC Kitchens £400). Damaged worktop (£350 repair). Photos taken at checkout 10/11/2024',
+            'Bathroom: Cracked toilet cistern (Plumber quote £180). Mold on ceiling due to lack of ventilation - cleaning quote £250',
           ],
           tip: 'Get professional quotes/invoices where possible - much stronger evidence'
         };
@@ -153,8 +153,8 @@ function getGuidanceForQuestion(
         return {
           title: 'ðŸ’¡ Example arrears schedule',
           examples: [
-            'Sept 2024: Â£800 due, Â£0 paid, Balance: Â£800\nOct 2024: Â£800 due, Â£400 paid, Balance: Â£1,200\nNov 2024: Â£800 due, Â£0 paid, Balance: Â£2,000\nTotal owed: Â£2,000',
-            'Weeks 1-4 (Sept): Â£800 due (Â£200/week), Â£600 paid (partial), Â£200 short\nWeeks 5-8 (Oct): Â£800 due, Â£0 paid, Â£1,000 total arrears\nWeeks 9-12 (Nov): Â£800 due, Â£200 paid, Â£1,600 total',
+            'Sept 2024: £800 due, £0 paid, Balance: £800\nOct 2024: £800 due, £400 paid, Balance: £1,200\nNov 2024: £800 due, £0 paid, Balance: £2,000\nTotal owed: £2,000',
+            'Weeks 1-4 (Sept): £800 due (£200/week), £600 paid (partial), £200 short\nWeeks 5-8 (Oct): £800 due, £0 paid, £1,000 total arrears\nWeeks 9-12 (Nov): £800 due, £200 paid, £1,600 total',
           ],
           tip: 'Show each period separately - court needs to see the pattern of non-payment'
         };

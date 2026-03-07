@@ -49,7 +49,7 @@ export default function AboutPage() {
             <div className="prose prose-lg max-w-none text-gray-700">
               <p className="text-xl leading-relaxed mb-6">
                 Every year, thousands of UK landlords face the daunting task of evicting problem tenants or claiming
-                unpaid rent. They have two choices: pay solicitors Â£300-600, or spend hours researching complex legal
+                unpaid rent. They have two choices: pay solicitors £300-600, or spend hours researching complex legal
                 forms and risk getting it wrong.
               </p>
 
@@ -80,7 +80,7 @@ export default function AboutPage() {
                 </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-3">Too Expensive</h3>
                 <p className="text-gray-700">
-                  Solicitors charge Â£300-600 for eviction documents. For many landlords, this is unaffordable -
+                  Solicitors charge £300-600 for eviction documents. For many landlords, this is unaffordable -
                   especially when dealing with rent arrears.
                 </p>
               </div>
@@ -167,13 +167,13 @@ export default function AboutPage() {
                 </div>
                 <h3 className="text-2xl font-semibold text-charcoal mb-4">Fast & Affordable</h3>
                 <p className="text-gray-700 mb-4">
-                  Generate professional documents in 10-15 minutes for Â£9.99-Â£69.99. That's 95% cheaper than
+                  Generate professional documents in 10-15 minutes for £9.99-£69.99. That's 95% cheaper than
                   solicitors, delivered instantly.
                 </p>
                 <ul className="text-sm text-gray-700 space-y-2">
                   <li>âœ“ Average completion time: 12 minutes</li>
                   <li>âœ“ Instant PDF download</li>
-                  <li>âœ“ Save Â£200-400 vs solicitors</li>
+                  <li>âœ“ Save £200-400 vs solicitors</li>
                   <li>âœ“ Professionally curated documents</li>
                 </ul>
               </div>
@@ -291,7 +291,7 @@ export default function AboutPage() {
             <div className="bg-success/10 border-l-4 border-success p-6 rounded-r-lg mb-8">
               <h3 className="font-semibold text-charcoal mb-2">âœ… Eviction Notice Testimonial</h3>
               <blockquote className="text-gray-700 italic">
-                "Saved me Â£350 vs my solicitor. The Section 21 notice was accepted by court first time. Took 10 minutes
+                "Saved me £350 vs my solicitor. The Section 21 notice was accepted by court first time. Took 10 minutes
                 to generate. Absolutely brilliant service."
               </blockquote>
               <p className="text-sm text-gray-600 mt-2">- Manchester Landlord, 3 properties</p>
@@ -300,8 +300,8 @@ export default function AboutPage() {
             <div className="bg-success/10 border-l-4 border-success p-6 rounded-r-lg">
               <h3 className="font-semibold text-charcoal mb-2">âœ… HMO Compliance Testimonial</h3>
               <blockquote className="text-gray-700 italic">
-                "I manage 12 HMOs. HMO Pro has saved me from missing two license renewals (Â£30k+ fines avoided). Best
-                Â£30/month I spend."
+                "I manage 12 HMOs. HMO Pro has saved me from missing two license renewals (£30k+ fines avoided). Best
+                £30/month I spend."
               </blockquote>
               <p className="text-sm text-gray-600 mt-2">- Leeds Portfolio Landlord, 12 HMOs</p>
             </div>

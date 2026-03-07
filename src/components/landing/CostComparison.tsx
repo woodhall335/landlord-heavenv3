@@ -4,7 +4,7 @@
  * Shows "vs Solicitor" pricing comparison to anchor value proposition.
  *
  * Fixes Applied:
- * - Complete Pack solicitor price updated to Â£1,500-2,500
+ * - Complete Pack solicitor price updated to £1,500-2,500
  * - Added hover effects to price anchor cards
  * - Uses hero-btn-primary class for CTA
  * - Enhanced animations and transitions
@@ -60,7 +60,7 @@ export function CostComparison() {
                   Typical Solicitor
                 </div>
                 <div className="text-4xl md:text-5xl font-bold text-gray-400 line-through decoration-red-400 decoration-2">
-                  Â£300-2,500
+                  £300-2,500
                 </div>
                 <div className="text-gray-500 mt-1">depending on case</div>
               </div>
@@ -104,7 +104,7 @@ export function CostComparison() {
                   Landlord Heaven
                 </div>
                 <div className="text-4xl md:text-5xl font-bold text-gray-900">
-                  Â£29.99
+                  £29.99
                 </div>
                 <div className="text-gray-500 mt-1">for eviction notices</div>
               </div>
@@ -142,33 +142,33 @@ export function CostComparison() {
           <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4">
             <PriceAnchor
               product="Generate jurisdiction-specific eviction case files"
-              ourPrice="Â£29.99"
-              solicitorPrice="Â£200-300"
-              savings="Â£150+"
+              ourPrice="£29.99"
+              solicitorPrice="£200-300"
+              savings="£150+"
               href="/products/notice-only"
             />
             <PriceAnchor
               product="Complete Eviction Packs Including Court Docs"
-              ourPrice="Â£69.99"
-              solicitorPrice="Â£1,500-2,500"
-              savings="Â£1,300+"
+              ourPrice="£69.99"
+              solicitorPrice="£1,500-2,500"
+              savings="£1,300+"
               href="/products/complete-pack"
               highlighted
               badge="England only"
             />
             <PriceAnchor
               product="Claim Unpaid Rent and Damages"
-              ourPrice="Â£45.99"
-              solicitorPrice="Â£800-1200"
-              savings="Â£650+"
+              ourPrice="£45.99"
+              solicitorPrice="£800-1200"
+              savings="£650+"
               href="/products/money-claim"
               badge="England only"
             />
             <PriceAnchor
               product="Legally Compliant Tenancy Agreements"
-              ourPrice="Â£9.99"
-              solicitorPrice="Â£150-400"
-              savings="Â£135+"
+              ourPrice="£9.99"
+              solicitorPrice="£150-400"
+              savings="£135+"
               href="/products/ast"
             />
           </div>

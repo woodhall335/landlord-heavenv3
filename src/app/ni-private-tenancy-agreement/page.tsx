@@ -62,7 +62,7 @@ const faqs = [
   },
   {
     question: 'Do I need to register as a landlord in Northern Ireland?',
-    answer: 'Yes, all private landlords in Northern Ireland must register with their local council\'s Landlord Registration Scheme within one month of a tenancy starting. Registration costs £70 and lasts for 3 years. Your registration number must be included in the tenancy agreement. Unregistered landlords cannot legally evict tenants and face fines up to £2,500. You can check if a landlord is registered via the NI Direct landlord registration checker.'
+    answer: 'Yes, all private landlords in Northern Ireland must register with their local council\'s Landlord Registration Scheme within one month of a tenancy starting. Registration costs �70 and lasts for 3 years. Your registration number must be included in the tenancy agreement. Unregistered landlords cannot legally evict tenants and face fines up to �2,500. You can check if a landlord is registered via the NI Direct landlord registration checker.'
   },
   {
     question: 'What is the maximum deposit in Northern Ireland?',
@@ -125,7 +125,7 @@ export default function NIPrivateTenancyAgreementPage() {
         <UniversalHero
           title="Northern Ireland Private Tenancy Agreement"
           subtitle="Create a legally validated Northern Ireland tenancy agreement with solicitor-grade, compliance-checked wording."
-          primaryCta={{ label: "Start now", href: "/wizard?product=ast_standard&src=seo_ni_private_tenancy_agreement&topic=tenancy&jurisdiction=northern-ireland" }}
+          primaryCta={{ label: "Start now", href: "/products/ast?src=seo_ni_private_tenancy_agreement&topic=tenancy&jurisdiction=northern-ireland" }}
           showTrustPositioningBar
           hideMedia
         />
@@ -160,7 +160,7 @@ export default function NIPrivateTenancyAgreementPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
-                href="/wizard?product=ast_standard&src=seo_ni_private_tenancy_agreement&topic=tenancy&jurisdiction=northern-ireland"
+                href="/products/ast?src=seo_ni_private_tenancy_agreement&topic=tenancy&jurisdiction=northern-ireland"
                 className="inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold px-8 py-4 rounded-lg transition-colors"
               >
                 <RiFileTextLine className="w-5 h-5" />
@@ -372,15 +372,15 @@ export default function NIPrivateTenancyAgreementPage() {
                     <div>
                       <strong>Fixed Penalty Notices:</strong>
                       <ul className="mt-2 space-y-1 text-sm">
-                        <li>• No written agreement: £500</li>
-                        <li>• Unregistered landlord: £500</li>
-                        <li>• Deposit not protected: £500</li>
+                        <li>• No written agreement: �500</li>
+                        <li>• Unregistered landlord: �500</li>
+                        <li>• Deposit not protected: �500</li>
                       </ul>
                     </div>
                     <div>
                       <strong>Court Prosecution:</strong>
                       <ul className="mt-2 space-y-1 text-sm">
-                        <li>• Fines up to £2,500</li>
+                        <li>• Fines up to �2,500</li>
                         <li>• Criminal record</li>
                         <li>• Cannot evict tenants</li>
                       </ul>
@@ -446,7 +446,7 @@ export default function NIPrivateTenancyAgreementPage() {
               Private Tenancy Agreement for Northern Ireland in minutes.
             </p>
             <Link
-              href="/wizard?product=ast_standard&src=seo_ni_private_tenancy_agreement&topic=tenancy&jurisdiction=northern-ireland"
+              href="/products/ast?src=seo_ni_private_tenancy_agreement&topic=tenancy&jurisdiction=northern-ireland"
               className="inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold px-8 py-4 rounded-lg transition-colors"
             >
               <RiDownloadLine className="w-5 h-5" />

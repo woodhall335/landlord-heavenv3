@@ -126,7 +126,7 @@ export function CourtFeeEstimator({
             </p>
             {!withinMCOL && (
               <p className="text-xs text-amber-600 mt-1">
-                Claims over Â£100,000 require paper filing
+                Claims over £100,000 require paper filing
               </p>
             )}
           </div>

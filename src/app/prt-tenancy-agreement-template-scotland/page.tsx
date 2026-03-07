@@ -423,7 +423,7 @@ export default function PrtTenancyAgreementTemplateScotlandPage() {
                         Full names and addresses of the landlord and all tenants. For joint
                         tenancies, all tenants should be named. The landlord&apos;s registration
                         number must be included â€” letting property without registration is a
-                        criminal offence in Scotland with fines up to Â£50,000.
+                        criminal offence in Scotland with fines up to £50,000.
                       </p>
                     </div>
                   </div>
@@ -556,7 +556,7 @@ export default function PrtTenancyAgreementTemplateScotlandPage() {
                     <p className="text-gray-600 mb-4">
                       All private landlords in Scotland must be registered with the local council.
                       Your registration number should appear in your PRT agreement. Letting property
-                      without registration is a criminal offence with penalties up to Â£50,000.
+                      without registration is a criminal offence with penalties up to £50,000.
                     </p>
                     <div className="space-y-3">
                       <div className="flex items-start gap-2 text-gray-600">

@@ -333,7 +333,7 @@ export default function RentArrearsLetterTemplatePage() {
                     href={wizardLinkMoneyClaim}
                     className="inline-flex items-center gap-2 text-primary font-medium hover:underline"
                   >
-                    Get Money Claim Pack — £45.99
+                    Get Money Claim Pack — �45.99
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
@@ -371,7 +371,7 @@ export default function RentArrearsLetterTemplatePage() {
                     href={wizardLinkNoticeOnly}
                     className="inline-flex items-center gap-2 text-primary font-medium hover:underline"
                   >
-                    Get Eviction Notice — £29.99
+                    Get Eviction Notice — �29.99
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
@@ -397,7 +397,7 @@ export default function RentArrearsLetterTemplatePage() {
                 <div className="bg-gray-50 rounded-2xl p-8 border border-gray-200">
                   <div className="text-center mb-6">
                     <span className="text-sm font-medium text-gray-500 uppercase tracking-wide">Free Starter Document</span>
-                    <div className="text-4xl font-bold text-gray-900 mt-2">£0</div>
+                    <div className="text-4xl font-bold text-gray-900 mt-2">�0</div>
                   </div>
                   <ul className="space-y-4 mb-8">
                     <li className="flex items-start gap-3">
@@ -442,7 +442,7 @@ export default function RentArrearsLetterTemplatePage() {
                   </div>
                   <div className="text-center mb-6">
                     <span className="text-sm font-medium text-primary uppercase tracking-wide">Money Claim Pack</span>
-                    <div className="text-4xl font-bold text-gray-900 mt-2">£45.99</div>
+                    <div className="text-4xl font-bold text-gray-900 mt-2">�45.99</div>
                   </div>
                   <ul className="space-y-4 mb-8">
                     <li className="flex items-start gap-3">
@@ -901,7 +901,7 @@ export default function RentArrearsLetterTemplatePage() {
                   href={wizardLinkMoneyClaim}
                   className="hero-btn-secondary inline-flex items-center justify-center gap-2"
                 >
-                  Get Money Claim Pack — £45.99
+                  Get Money Claim Pack — �45.99
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               </div>

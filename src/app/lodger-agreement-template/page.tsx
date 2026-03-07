@@ -58,7 +58,7 @@ export default function LodgerAgreementPage() {
           badge="Landlord Guide"
           title="Lodger Agreement Template UK"
           subtitle="Lodger agreements for live-in landlords in the UK."
-          primaryCta={{ label: 'Create Lodger Agreement', href: '/wizard?product=tenancy_agreement&topic=tenancy&src=seo_lodger_agreement_template' }}
+          primaryCta={{ label: 'Create Lodger Agreement', href: '/products/ast?topic=tenancy&src=seo_lodger_agreement_template' }}
           align="center"
           showTrustPositioningBar
         />
@@ -131,7 +131,7 @@ export default function LodgerAgreementPage() {
 
                 <h2>Rent a Room Scheme</h2>
                 <p>
-                  The government&apos;s Rent a Room scheme lets you earn up to <strong>Â£7,500 per year</strong>{' '}
+                  The government&apos;s Rent a Room scheme lets you earn up to <strong>£7,500 per year</strong>{' '}
                   tax-free from letting a furnished room in your main home. This applies whether you
                   have one lodger or several.
                 </p>
@@ -139,7 +139,7 @@ export default function LodgerAgreementPage() {
                 <ul>
                   <li>The room must be in your main home (not a second property)</li>
                   <li>The room must be furnished</li>
-                  <li>If you earn over Â£7,500, you must declare it on your tax return</li>
+                  <li>If you earn over £7,500, you must declare it on your tax return</li>
                   <li>The scheme is automatic - you don&apos;t need to apply</li>
                 </ul>
 

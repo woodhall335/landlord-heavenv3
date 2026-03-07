@@ -168,12 +168,12 @@ export default function BillingPage() {
   }
 
   function getTierPrice(tier: string, propertyCount: number): string {
-    if (propertyCount <= 5) return "Â£19.99";
-    if (propertyCount <= 10) return "Â£24.99";
-    if (propertyCount <= 15) return "Â£29.99";
-    if (propertyCount <= 20) return "Â£34.99";
+    if (propertyCount <= 5) return "£19.99";
+    if (propertyCount <= 10) return "£24.99";
+    if (propertyCount <= 15) return "£29.99";
+    if (propertyCount <= 20) return "£34.99";
     const extraTiers = Math.ceil((propertyCount - 20) / 5);
-    return `Â£${(34.99 + extraTiers * 5).toFixed(2)}`;
+    return `£${(34.99 + extraTiers * 5).toFixed(2)}`;
   }
 
   function getProductName(productType: string): string {
@@ -259,7 +259,7 @@ export default function BillingPage() {
                         </td>
                         <td className="p-3 text-sm text-gray-700">{getProductName(order.product_type)}</td>
                         <td className="p-3 text-sm font-semibold text-charcoal">
-                          Â£{order.total_amount.toFixed(2)}
+                          £{order.total_amount.toFixed(2)}
                         </td>
                         <td className="p-3 text-sm">
                           <span

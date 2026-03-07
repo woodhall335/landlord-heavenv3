@@ -49,7 +49,7 @@ const faqs = [
   {
     question: 'What does it mean when a tenant "defends" a money claim?',
     answer:
-      'When a tenant defends, they formally dispute your claim by filing a defence with the court. This means the case will proceed to allocation (usually small claims track for under Â£10,000) and eventually a hearing where a judge decides.',
+      'When a tenant defends, they formally dispute your claim by filing a defence with the court. This means the case will proceed to allocation (usually small claims track for under £10,000) and eventually a hearing where a judge decides.',
   },
   {
     question: 'What are the most common tenant defences?',
@@ -420,7 +420,7 @@ export default function MoneyClaimTenantDefendsPage() {
                     <h3 className="font-bold text-gray-900 mb-2">Complete Allocation Questionnaire</h3>
                     <p className="text-gray-600 text-sm">
                       The court will send Form N180. Complete it honestly, stating
-                      the small claims track is appropriate if under Â£10,000.
+                      the small claims track is appropriate if under £10,000.
                     </p>
                   </div>
                 </div>
@@ -471,11 +471,11 @@ export default function MoneyClaimTenantDefendsPage() {
                 href="/products/money-claim?topic=debt&src=seo_money_claim_tenant_defends"
                 className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
               >
-                Start Your Claim â€” Â£45.99
+                Start Your Claim â€” £45.99
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <p className="text-sm text-gray-500 mt-3">
-                Court fees from Â£35 extra (based on claim amount)
+                Court fees from £35 extra (based on claim amount)
               </p>
             </div>
           </div>

@@ -87,9 +87,9 @@ const faqs = [
       'The Pre-Action Protocol says you should include either the standard Reply Form or an equivalent. This gives the debtor a clear way to respond. Our Money Claim Pack includes the appropriate forms.',
   },
   {
-    question: 'The tenant offered monthly payments - is Â£10/month reasonable?',
+    question: 'The tenant offered monthly payments - is £10/month reasonable?',
     answer:
-      'It depends on the debt size and their circumstances. Â£10/month for a Â£3,000 debt would take 25 years! Consider whether the offer is realistic given their stated income. You can negotiate or reject unreasonable offers.',
+      'It depends on the debt size and their circumstances. £10/month for a £3,000 debt would take 25 years! Consider whether the offer is realistic given their stated income. You can negotiate or reject unreasonable offers.',
   },
   {
     question: 'What happens to the financial statement if we go to court?',
@@ -425,11 +425,11 @@ export default function MoneyClaimPAPFinancialStatementPage() {
                 href="/products/money-claim?topic=debt&src=seo_money_claim_pap_financial_statement"
                 className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
               >
-                Start Your Claim â€” Â£45.99
+                Start Your Claim â€” £45.99
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <p className="text-sm text-gray-500 mt-3">
-                Court fees from Â£35 extra (based on claim amount)
+                Court fees from £35 extra (based on claim amount)
               </p>
             </div>
           </div>

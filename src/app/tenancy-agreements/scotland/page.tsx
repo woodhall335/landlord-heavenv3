@@ -47,7 +47,7 @@ export default function ScotlandPRTPage() {
         name: 'Do I need to register as a landlord in Scotland?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Yes. All landlords in Scotland must register with their local council before letting a property. You must provide your landlord registration number in the PRT agreement. Failure to register is a criminal offense with fines up to £50,000.',
+          text: 'Yes. All landlords in Scotland must register with their local council before letting a property. You must provide your landlord registration number in the PRT agreement. Failure to register is a criminal offense with fines up to �50,000.',
         },
       },
       {
@@ -204,16 +204,16 @@ export default function ScotlandPRTPage() {
             />
             <div className="flex gap-4 justify-center flex-wrap">
               <Link
-                href="/wizard?product=ast_standard&src=product_page&topic=tenancy&jurisdiction=scotland"
+                href="/products/ast?src=product_page&topic=tenancy&jurisdiction=scotland"
                 className="hero-btn-secondary"
               >
-                Create Standard PRT - £9.99
+                Create Standard PRT - �9.99
               </Link>
               <Link
-                href="/wizard?product=ast_premium&src=product_page&topic=tenancy&jurisdiction=scotland"
+                href="/products/ast?src=product_page&topic=tenancy&jurisdiction=scotland"
                 className="hero-btn-primary"
               >
-                Create Premium PRT - £19.99
+                Create Premium PRT - �19.99
               </Link>
             </div>
           </div>
@@ -316,7 +316,7 @@ export default function ScotlandPRTPage() {
                     </td>
                     <td className="border border-gray-300 px-4 py-3">
                       â€¢ Landlord registration scheme<br />
-                      â€¢ Criminal offense to let property without registration (up to £50,000 fine)<br />
+                      â€¢ Criminal offense to let property without registration (up to �50,000 fine)<br />
                       â€¢ Local authority powers to refuse or revoke registration
                     </td>
                   </tr>
@@ -454,7 +454,7 @@ export default function ScotlandPRTPage() {
 
             <div className="grid md:grid-cols-2 gap-6">
               <div className="bg-white rounded-lg shadow-md p-6 border-t-4 border-blue-600">
-                <div className="text-4xl mb-4">ðŸ´ó §ó ¢ó ³ó £ó ´ó ¿</div>
+                <div className="text-4xl mb-4">ðŸ´ó §ó ¢ó ³ó �ó ´ó ¿</div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">Scottish Legal Compliance</h3>
                 <p className="text-gray-700">
                   A written PRT complies with the Private Housing (Tenancies) (Scotland) Act 2016 and provides a clear framework under Scottish law, including specific eviction grounds and rent increase procedures.
@@ -562,11 +562,11 @@ export default function ScotlandPRTPage() {
             <div className="bg-red-50 border-l-4 border-red-600 p-6 mt-8">
               <h3 className="text-xl font-semibold text-red-900 mb-2">Landlord Registration is Mandatory</h3>
               <p className="text-gray-700 mb-3">
-                Before you can let property in Scotland, you <strong>must</strong> register with your local council as a landlord. Failure to register is a <strong>criminal offense</strong> with fines up to <strong>£50,000</strong>.
+                Before you can let property in Scotland, you <strong>must</strong> register with your local council as a landlord. Failure to register is a <strong>criminal offense</strong> with fines up to <strong>�50,000</strong>.
               </p>
               <ul className="list-disc list-inside text-gray-700 space-y-1">
                 <li>Register at least 4-6 weeks before your first tenancy starts</li>
-                <li>Application costs vary by council (typically £55-£88 for 3 years)</li>
+                <li>Application costs vary by council (typically �55-�88 for 3 years)</li>
                 <li>You'll receive a landlord registration number to include in your PRT</li>
                 <li>Register at: <a href="https://www.landlordregistrationscotland.gov.uk" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">landlordregistrationscotland.gov.uk</a></li>
               </ul>
@@ -722,7 +722,7 @@ export default function ScotlandPRTPage() {
 
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="bg-white/10 backdrop-blur rounded-lg p-6">
-                  <h4 className="text-xl font-bold mb-3">Standard PRT - £9.99</h4>
+                  <h4 className="text-xl font-bold mb-3">Standard PRT - �9.99</h4>
                   <ul className="space-y-2 text-sm">
                     <li>âœ“ All legal essentials for Scottish PRTs</li>
                     <li>âœ“ Compliant with PH(T)(S) Act 2016</li>
@@ -733,7 +733,7 @@ export default function ScotlandPRTPage() {
                     <li>âœ“ Clear, professional formatting</li>
                   </ul>
                   <Link
-                    href="/wizard?product=ast_standard&src=product_page&topic=tenancy&jurisdiction=scotland"
+                    href="/products/ast?src=product_page&topic=tenancy&jurisdiction=scotland"
                     className="mt-4 block text-center bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors"
                   >
                     Create Standard PRT
@@ -744,7 +744,7 @@ export default function ScotlandPRTPage() {
                   <div className="inline-block bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-xs font-bold mb-2">
                     RECOMMENDED
                   </div>
-                  <h4 className="text-xl font-bold mb-3">Premium PRT - £19.99</h4>
+                  <h4 className="text-xl font-bold mb-3">Premium PRT - �19.99</h4>
                   <ul className="space-y-2 text-sm">
                     <li>âœ“ Everything in Standard PLUS:</li>
                     <li>âœ“ Comprehensive inventory section with white goods grid</li>
@@ -758,7 +758,7 @@ export default function ScotlandPRTPage() {
                     <li className="font-semibold text-yellow-300">âœ“ Covers HMOs (Houses in Multiple Occupation)</li>
                   </ul>
                   <Link
-                    href="/wizard?product=ast_premium&src=product_page&topic=tenancy&jurisdiction=scotland"
+                    href="/products/ast?src=product_page&topic=tenancy&jurisdiction=scotland"
                     className="mt-4 block text-center bg-white text-purple-600 px-6 py-3 rounded-lg font-semibold hover:bg-purple-50 transition-colors"
                   >
                     Create Premium PRT
@@ -1047,11 +1047,11 @@ export default function ScotlandPRTPage() {
             },
             {
               question: "Do I need to register as a landlord in Scotland?",
-              answer: "Yes, it's mandatory. All landlords in Scotland must register with their local council before letting a property. You'll receive a landlord registration number which must be included in your PRT agreement. Failure to register is a criminal offense with fines up to £50,000. Register at least 4-6 weeks before your first tenancy starts at landlordregistrationscotland.gov.uk."
+              answer: "Yes, it's mandatory. All landlords in Scotland must register with their local council before letting a property. You'll receive a landlord registration number which must be included in your PRT agreement. Failure to register is a criminal offense with fines up to �50,000. Register at least 4-6 weeks before your first tenancy starts at landlordregistrationscotland.gov.uk."
             },
             {
               question: "What is the difference between Standard and Premium PRT agreements?",
-              answer: "The Standard PRT (£9.99) covers all legal essentials for Scottish tenancies, including open-ended structure, 18 grounds for possession, Repairing Standard obligations, and landlord registration. The Premium PRT (£19.99) adds: comprehensive inventory section with white goods grid, exhaustive terms and conditions (13 detailed clauses), professional gradient styling (Scotland blue theme), rights of change clauses, enhanced legal compliance information boxes, detailed Repairing Standard explanation, First-tier Tribunal guidance, and superior professional presentation."
+              answer: "The Standard PRT (�9.99) covers all legal essentials for Scottish tenancies, including open-ended structure, 18 grounds for possession, Repairing Standard obligations, and landlord registration. The Premium PRT (�19.99) adds: comprehensive inventory section with white goods grid, exhaustive terms and conditions (13 detailed clauses), professional gradient styling (Scotland blue theme), rights of change clauses, enhanced legal compliance information boxes, detailed Repairing Standard explanation, First-tier Tribunal guidance, and superior professional presentation."
             },
             {
               question: "What is the maximum deposit I can charge in Scotland?",
@@ -1126,16 +1126,16 @@ export default function ScotlandPRTPage() {
             </p>
             <div className="flex gap-6 justify-center flex-wrap">
               <Link
-                href="/wizard?product=ast_standard&src=product_page&topic=tenancy&jurisdiction=scotland"
+                href="/products/ast?src=product_page&topic=tenancy&jurisdiction=scotland"
                 className="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold hover:bg-blue-50 transition-colors text-lg shadow-lg"
               >
-                Standard PRT - £9.99
+                Standard PRT - �9.99
               </Link>
               <Link
-                href="/wizard?product=ast_premium&src=product_page&topic=tenancy&jurisdiction=scotland"
+                href="/products/ast?src=product_page&topic=tenancy&jurisdiction=scotland"
                 className="bg-yellow-400 text-gray-900 px-8 py-4 rounded-lg font-semibold hover:bg-yellow-300 transition-colors text-lg shadow-lg"
               >
-                Premium PRT - £19.99 ⭐
+                Premium PRT - �19.99 ⭐
               </Link>
             </div>
             <p className="mt-6 text-sm opacity-75">

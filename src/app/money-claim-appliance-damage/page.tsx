@@ -260,39 +260,39 @@ export default function MoneyClaimApplianceDamagePage() {
                       <tr>
                         <td className="px-4 py-2 text-gray-600">Washing machine</td>
                         <td className="px-4 py-2 text-gray-900">8-10 years</td>
-                        <td className="px-4 py-2 text-gray-900">Â£250 - Â£500</td>
+                        <td className="px-4 py-2 text-gray-900">£250 - £500</td>
                       </tr>
                       <tr className="bg-gray-50">
                         <td className="px-4 py-2 text-gray-600">Fridge/freezer</td>
                         <td className="px-4 py-2 text-gray-900">10-12 years</td>
-                        <td className="px-4 py-2 text-gray-900">Â£200 - Â£600</td>
+                        <td className="px-4 py-2 text-gray-900">£200 - £600</td>
                       </tr>
                       <tr>
                         <td className="px-4 py-2 text-gray-600">Electric oven</td>
                         <td className="px-4 py-2 text-gray-900">10-15 years</td>
-                        <td className="px-4 py-2 text-gray-900">Â£200 - Â£500</td>
+                        <td className="px-4 py-2 text-gray-900">£200 - £500</td>
                       </tr>
                       <tr className="bg-gray-50">
                         <td className="px-4 py-2 text-gray-600">Dishwasher</td>
                         <td className="px-4 py-2 text-gray-900">8-10 years</td>
-                        <td className="px-4 py-2 text-gray-900">Â£200 - Â£400</td>
+                        <td className="px-4 py-2 text-gray-900">£200 - £400</td>
                       </tr>
                       <tr>
                         <td className="px-4 py-2 text-gray-600">Electric hob</td>
                         <td className="px-4 py-2 text-gray-900">10-15 years</td>
-                        <td className="px-4 py-2 text-gray-900">Â£150 - Â£400</td>
+                        <td className="px-4 py-2 text-gray-900">£150 - £400</td>
                       </tr>
                       <tr className="bg-gray-50">
                         <td className="px-4 py-2 text-gray-600">Microwave</td>
                         <td className="px-4 py-2 text-gray-900">5-8 years</td>
-                        <td className="px-4 py-2 text-gray-900">Â£50 - Â£200</td>
+                        <td className="px-4 py-2 text-gray-900">£50 - £200</td>
                       </tr>
                     </tbody>
                   </table>
                 </div>
                 <p className="text-xs text-gray-500 mt-4">
                   Betterment example: A 5-year-old washing machine (10-year lifespan) has 50%
-                  remaining value. If replacement costs Â£400, maximum claim = Â£200.
+                  remaining value. If replacement costs £400, maximum claim = £200.
                 </p>
               </div>
 
@@ -429,11 +429,11 @@ export default function MoneyClaimApplianceDamagePage() {
                 href="/products/money-claim?reason=property_damage&src=seo_money_claim_appliance_damage&topic=debt"
                 className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
               >
-                Start Your Claim â€” Â£45.99
+                Start Your Claim â€” £45.99
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <p className="text-sm text-gray-500 mt-3">
-                Court fees from Â£35 extra (based on claim amount)
+                Court fees from £35 extra (based on claim amount)
               </p>
             </div>
           </div>

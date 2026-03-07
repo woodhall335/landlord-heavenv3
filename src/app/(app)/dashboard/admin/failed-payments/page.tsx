@@ -210,7 +210,7 @@ export default async function AdminFailedPaymentsPage({ searchParams }: AdminFai
                       </td>
                       <td className="p-4">
                         <span className="text-sm font-semibold text-charcoal">
-                          Â£{(payment.total_amount / 100).toFixed(2)}
+                          £{(payment.total_amount / 100).toFixed(2)}
                         </span>
                       </td>
                       <td className="p-4">
@@ -275,7 +275,7 @@ export default async function AdminFailedPaymentsPage({ searchParams }: AdminFai
           <div className="bg-white rounded-lg border border-gray-200 p-6">
             <p className="text-sm text-gray-600 mb-1">Lost Revenue</p>
             <p className="text-3xl font-bold text-red-600">
-              Â£
+              £
               {(
                 failedPayments.reduce((sum, p) => sum + p.total_amount, 0) / 100
               ).toFixed(2)}

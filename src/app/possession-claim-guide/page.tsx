@@ -70,7 +70,7 @@ const faqs = [
   },
   {
     question: 'How much does a possession claim cost?',
-    answer: 'The court fee is Â£355 for both standard (N5) and accelerated (N5B) possession claims. If you later need a bailiff warrant, that\'s an additional Â£130. Using a solicitor typically costs Â£1,000-2,000 on top of court fees.',
+    answer: 'The court fee is £355 for both standard (N5) and accelerated (N5B) possession claims. If you later need a bailiff warrant, that\'s an additional £130. Using a solicitor typically costs £1,000-2,000 on top of court fees.',
   },
   {
     question: 'How long does the possession claim process take?',
@@ -197,7 +197,7 @@ export default function PossessionClaimGuidePage() {
                     </li>
                     <li className="flex items-center gap-2 text-sm text-gray-600">
                       <CheckCircle className="w-4 h-4 text-green-500" />
-                      Court fee: Â£355
+                      Court fee: £355
                     </li>
                     <li className="flex items-center gap-2 text-sm text-gray-600">
                       <AlertTriangle className="w-4 h-4 text-amber-500" />
@@ -238,7 +238,7 @@ export default function PossessionClaimGuidePage() {
                     </li>
                     <li className="flex items-center gap-2 text-sm text-gray-600">
                       <PoundSterling className="w-4 h-4 text-primary" />
-                      Court fee: Â£355
+                      Court fee: £355
                     </li>
                     <li className="flex items-center gap-2 text-sm text-gray-600">
                       <CheckCircle className="w-4 h-4 text-green-500" />
@@ -302,7 +302,7 @@ export default function PossessionClaimGuidePage() {
                         You can file online via PCOL (Possession Claims Online) or by post.
                       </p>
                       <p className="text-sm text-gray-500">
-                        Court fee: Â£355 (payable on submission)
+                        Court fee: £355 (payable on submission)
                       </p>
                     </div>
                   </div>
@@ -410,19 +410,19 @@ export default function PossessionClaimGuidePage() {
                   <tbody className="divide-y divide-gray-200">
                     <tr>
                       <td className="p-4 text-gray-700">Possession claim (N5 or N5B)</td>
-                      <td className="p-4 text-right text-gray-700">Â£355</td>
+                      <td className="p-4 text-right text-gray-700">£355</td>
                     </tr>
                     <tr>
                       <td className="p-4 text-gray-700">County court bailiff warrant (N325)</td>
-                      <td className="p-4 text-right text-gray-700">Â£130</td>
+                      <td className="p-4 text-right text-gray-700">£130</td>
                     </tr>
                     <tr>
                       <td className="p-4 text-gray-700">High Court enforcement (optional)</td>
-                      <td className="p-4 text-right text-gray-700">Â£66+</td>
+                      <td className="p-4 text-right text-gray-700">£66+</td>
                     </tr>
                     <tr className="bg-primary/5">
                       <td className="p-4 font-semibold text-gray-900">Total (typical)</td>
-                      <td className="p-4 text-right font-semibold text-gray-900">Â£485-550</td>
+                      <td className="p-4 text-right font-semibold text-gray-900">£485-550</td>
                     </tr>
                   </tbody>
                 </table>
@@ -430,7 +430,7 @@ export default function PossessionClaimGuidePage() {
 
               <div className="mt-6 text-center">
                 <p className="text-gray-600 text-sm">
-                  Plus our Complete Pack (Â£69.99) â€” <strong>save Â£850-1,550</strong> vs solicitor fees
+                  Plus our Complete Pack (£69.99) â€” <strong>save £850-1,550</strong> vs solicitor fees
                 </p>
                 <Link
                   href="/eviction-cost-uk"

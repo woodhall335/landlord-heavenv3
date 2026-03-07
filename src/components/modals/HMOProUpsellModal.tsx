@@ -107,7 +107,7 @@ export const HMOProUpsellModal: React.FC<HMOProUpsellModalProps> = ({
                   <li>Enhanced fire safety requirements</li>
                   <li>Minimum room sizes and amenity standards</li>
                   <li>Regular safety inspections (gas, electric, fire)</li>
-                  <li>Potential fines up to £30,000 for non-compliance</li>
+                  <li>Potential fines up to �30,000 for non-compliance</li>
                 </ul>
               </div>
             </div>
@@ -179,7 +179,7 @@ export const HMOProUpsellModal: React.FC<HMOProUpsellModalProps> = ({
           <div className="text-center py-3 bg-white rounded-lg border-2 border-blue-300">
             <p className="text-2xl font-bold text-blue-600 mb-1">Start Your Free Trial</p>
             <p className="text-sm text-gray-600">
-              <strong>7 days free</strong>, then from £19.99/month • Cancel anytime
+              <strong>7 days free</strong>, then from �19.99/month • Cancel anytime
             </p>
           </div>
         </div>

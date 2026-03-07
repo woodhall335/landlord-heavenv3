@@ -146,7 +146,7 @@ export default function SueTenantUnpaidRentPage() {
                 <ul>
                   <li>
                     <strong>Online:</strong> Use <Link href="/money-claim-online-mcol" className="text-primary hover:underline">Money Claim Online (MCOL)</Link> for
-                    claims up to Â£100,000
+                    claims up to £100,000
                   </li>
                   <li>
                     <strong>Paper:</strong> Complete Form N1 and submit to the court
@@ -193,35 +193,35 @@ export default function SueTenantUnpaidRentPage() {
                   </thead>
                   <tbody>
                     <tr>
-                      <td className="border border-gray-300 px-4 py-2">Up to Â£300</td>
-                      <td className="border border-gray-300 px-4 py-2">Â£35</td>
+                      <td className="border border-gray-300 px-4 py-2">Up to £300</td>
+                      <td className="border border-gray-300 px-4 py-2">£35</td>
                     </tr>
                     <tr>
-                      <td className="border border-gray-300 px-4 py-2">Â£300.01 - Â£500</td>
-                      <td className="border border-gray-300 px-4 py-2">Â£50</td>
+                      <td className="border border-gray-300 px-4 py-2">£300.01 - £500</td>
+                      <td className="border border-gray-300 px-4 py-2">£50</td>
                     </tr>
                     <tr>
-                      <td className="border border-gray-300 px-4 py-2">Â£500.01 - Â£1,000</td>
-                      <td className="border border-gray-300 px-4 py-2">Â£70</td>
+                      <td className="border border-gray-300 px-4 py-2">£500.01 - £1,000</td>
+                      <td className="border border-gray-300 px-4 py-2">£70</td>
                     </tr>
                     <tr>
-                      <td className="border border-gray-300 px-4 py-2">Â£1,000.01 - Â£1,500</td>
-                      <td className="border border-gray-300 px-4 py-2">Â£105</td>
+                      <td className="border border-gray-300 px-4 py-2">£1,000.01 - £1,500</td>
+                      <td className="border border-gray-300 px-4 py-2">£105</td>
                     </tr>
                     <tr>
-                      <td className="border border-gray-300 px-4 py-2">Â£1,500.01 - Â£3,000</td>
-                      <td className="border border-gray-300 px-4 py-2">Â£115</td>
+                      <td className="border border-gray-300 px-4 py-2">£1,500.01 - £3,000</td>
+                      <td className="border border-gray-300 px-4 py-2">£115</td>
                     </tr>
                     <tr>
-                      <td className="border border-gray-300 px-4 py-2">Â£3,000.01 - Â£5,000</td>
-                      <td className="border border-gray-300 px-4 py-2">Â£205</td>
+                      <td className="border border-gray-300 px-4 py-2">£3,000.01 - £5,000</td>
+                      <td className="border border-gray-300 px-4 py-2">£205</td>
                     </tr>
                     <tr>
-                      <td className="border border-gray-300 px-4 py-2">Â£5,000.01 - Â£10,000</td>
-                      <td className="border border-gray-300 px-4 py-2">Â£455</td>
+                      <td className="border border-gray-300 px-4 py-2">£5,000.01 - £10,000</td>
+                      <td className="border border-gray-300 px-4 py-2">£455</td>
                     </tr>
                     <tr>
-                      <td className="border border-gray-300 px-4 py-2">Over Â£10,000</td>
+                      <td className="border border-gray-300 px-4 py-2">Over £10,000</td>
                       <td className="border border-gray-300 px-4 py-2">5% of claim</td>
                     </tr>
                   </tbody>
@@ -232,10 +232,10 @@ export default function SueTenantUnpaidRentPage() {
 
                 <h3>Enforcement Fees (if needed)</h3>
                 <ul>
-                  <li>Attachment of Earnings: Â£110</li>
-                  <li>Warrant of Control: Â£77-Â£110</li>
-                  <li>Third Party Debt Order: Â£110</li>
-                  <li>Charging Order: Â£110</li>
+                  <li>Attachment of Earnings: £110</li>
+                  <li>Warrant of Control: £77-£110</li>
+                  <li>Third Party Debt Order: £110</li>
+                  <li>Charging Order: £110</li>
                 </ul>
 
                 <h2>How Long Does It Take?</h2>

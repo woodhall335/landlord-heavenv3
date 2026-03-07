@@ -59,7 +59,7 @@ const completePackLink = buildWizardLink({
 export const metadata: Metadata = {
   title: 'Section 8 vs Section 21 | Which Notice to Use',
   description:
-    'Section 8 vs Section 21: which eviction notice should you use? Compare notice periods, court process, grounds, and costs. Get court-ready notices from Â£29.99.',
+    'Section 8 vs Section 21: which eviction notice should you use? Compare notice periods, court process, grounds, and costs. Get court-ready notices from £29.99.',
   keywords: [
     'section 8 vs section 21',
     'should i use section 8 or section 21',
@@ -263,8 +263,8 @@ export default function Section8VsSection21Page() {
                       </tr>
                       <tr className="bg-gray-50/50">
                         <td className="p-4 font-medium text-gray-900">Court fee</td>
-                        <td className="p-4 text-center font-bold text-gray-900">Â£355</td>
-                        <td className="p-4 text-center font-bold text-gray-900">Â£355</td>
+                        <td className="p-4 text-center font-bold text-gray-900">£355</td>
+                        <td className="p-4 text-center font-bold text-gray-900">£355</td>
                       </tr>
                       <tr>
                         <td className="p-4 font-medium text-gray-900">Typical total time</td>

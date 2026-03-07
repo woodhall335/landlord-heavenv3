@@ -2111,13 +2111,13 @@ const ReviewSection: React.FC<SectionProps> = ({ facts }) => {
         <div className="flex justify-between">
           <span className="text-sm text-gray-600">Rent</span>
           <span className="text-sm font-medium">
-            {facts.rent_amount ? `Â£${facts.rent_amount} per ${facts.rent_period}` : 'Not entered'}
+            {facts.rent_amount ? `£${facts.rent_amount} per ${facts.rent_period}` : 'Not entered'}
           </span>
         </div>
         <div className="flex justify-between">
           <span className="text-sm text-gray-600">Deposit</span>
           <span className="text-sm font-medium">
-            {facts.deposit_amount ? `Â£${facts.deposit_amount}` : 'Not entered'}
+            {facts.deposit_amount ? `£${facts.deposit_amount}` : 'Not entered'}
           </span>
         </div>
         <div className="flex justify-between">
@@ -2256,7 +2256,7 @@ const CurrencyField: React.FC<FieldProps> = ({
     </label>
     {helperText && <p className="text-sm text-gray-500 mb-2">{helperText}</p>}
     <div className="relative">
-      <span className="absolute left-3 top-3 text-gray-500">Â£</span>
+      <span className="absolute left-3 top-3 text-gray-500">£</span>
       <Input
         type="number"
         value={value || ''}

@@ -58,6 +58,13 @@ export interface BuildWizardLinkParams {
   utm_campaign?: string;
   /** Optional case ID for resuming */
   case_id?: string;
+  /**
+   * URL destination mode:
+   * - auto: product-first for top-funnel sources (SEO/blog/ask), wizard otherwise
+   * - product: force product page destination
+   * - wizard: force wizard destination
+   */
+  destination?: 'auto' | 'product' | 'wizard';
 }
 
 /**
@@ -68,13 +75,53 @@ export interface BuildWizardLinkParams {
  * // => '/wizard?product=notice_only&jurisdiction=england&src=template&topic=eviction'
  */
 export function buildWizardLink(params: BuildWizardLinkParams): string {
-  const { product, jurisdiction, src, topic, utm_source, utm_medium, utm_campaign, case_id } =
+  const {
+    product,
+    jurisdiction,
+    src,
+    topic,
+    utm_source,
+    utm_medium,
+    utm_campaign,
+    case_id,
+    destination = 'auto',
+  } =
     params;
+
+  const productHrefMap: Record<WizardProduct, string> = {
+    notice_only: '/products/notice-only',
+    complete_pack: '/products/complete-pack',
+    money_claim: '/products/money-claim',
+    ast_standard: '/products/ast',
+    ast_premium: '/products/ast',
+    tenancy_agreement: '/products/ast',
+  };
+
+  const topFunnelSources: WizardSource[] = [
+    'seo_landing',
+    'seo_eviction',
+    'seo_money_claim',
+    'seo_tenancy',
+    'blog',
+    'ask_heaven',
+    'template',
+    'validator',
+    'tool',
+    'guide',
+  ];
+
+  const isSeoSource = Boolean(src?.startsWith('seo_'));
+  const shouldUseProductDestination =
+    destination === 'product' ||
+    (destination === 'auto' &&
+      (Boolean(src && topFunnelSources.includes(src)) || isSeoSource));
 
   const searchParams = new URLSearchParams();
 
-  // Required
-  searchParams.set('product', product);
+  if (!shouldUseProductDestination) {
+    // Required for wizard destination
+    searchParams.set('product', product);
+  }
 
   // Optional params - only add if defined
   if (jurisdiction) {
@@ -97,6 +144,12 @@ export function buildWizardLink(params: BuildWizardLinkParams): string {
   }
   if (case_id) {
     searchParams.set('case_id', case_id);
+  }
+
+  if (shouldUseProductDestination) {
+    const productHref = productHrefMap[product];
+    const query = searchParams.toString();
+    return query ? `${productHref}?${query}` : productHref;
   }
 
   return `/wizard?${searchParams.toString()}`;

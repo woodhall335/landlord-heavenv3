@@ -297,7 +297,7 @@ export const ClaimDetailsSection: React.FC<SectionProps> = ({
           onChange={(e) =>
             updateMoneyClaim('other_amounts_summary', e.target.value)
           }
-          placeholder="For example: Â£450 to replace damaged flooring, Â£120 cleaning, Â£80 unpaid water bill..."
+          placeholder="For example: £450 to replace damaged flooring, £120 cleaning, £80 unpaid water bill..."
         />
 
         {/* Ask Heaven Inline Enhancer */}

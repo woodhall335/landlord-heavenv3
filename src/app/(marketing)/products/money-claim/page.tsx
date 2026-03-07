@@ -254,7 +254,7 @@ export default async function MoneyClaimPage() {
 
           <div className="mt-8 text-center">
             <Link
-              href="/wizard?product=money_claim&src=product_page"
+              href="/products/money-claim?src=product_page"
               className="hero-btn-primary"
             >
               Start Money Claim - {price} â†’
@@ -289,7 +289,7 @@ export default async function MoneyClaimPage() {
                   <li>â€¢ Tenant caused property damage needing repair</li>
                   <li>â€¢ You paid for professional cleaning or rubbish removal</li>
                   <li>â€¢ Tenant left unpaid utilities in your name</li>
-                  <li>â€¢ Claim is under Â£10,000</li>
+                  <li>â€¢ Claim is under £10,000</li>
                   <li>â€¢ You know where tenant lives/works</li>
                 </ul>
               </div>
@@ -342,39 +342,39 @@ export default async function MoneyClaimPage() {
                 </thead>
                 <tbody>
                   <tr>
-                    <td className="p-4 border text-gray-700">Up to Â£300</td>
-                    <td className="p-4 border text-gray-700">Â£25</td>
-                    <td className="p-4 border text-gray-700">Â£35</td>
+                    <td className="p-4 border text-gray-700">Up to £300</td>
+                    <td className="p-4 border text-gray-700">£25</td>
+                    <td className="p-4 border text-gray-700">£35</td>
                   </tr>
                   <tr className="bg-gray-50">
-                    <td className="p-4 border text-gray-700">Â£300.01 - Â£500</td>
-                    <td className="p-4 border text-gray-700">Â£35</td>
-                    <td className="p-4 border text-gray-700">Â£50</td>
+                    <td className="p-4 border text-gray-700">£300.01 - £500</td>
+                    <td className="p-4 border text-gray-700">£35</td>
+                    <td className="p-4 border text-gray-700">£50</td>
                   </tr>
                   <tr>
-                    <td className="p-4 border text-gray-700">Â£500.01 - Â£1,000</td>
-                    <td className="p-4 border text-gray-700">Â£60</td>
-                    <td className="p-4 border text-gray-700">Â£70</td>
+                    <td className="p-4 border text-gray-700">£500.01 - £1,000</td>
+                    <td className="p-4 border text-gray-700">£60</td>
+                    <td className="p-4 border text-gray-700">£70</td>
                   </tr>
                   <tr className="bg-gray-50">
-                    <td className="p-4 border text-gray-700">Â£1,000.01 - Â£1,500</td>
-                    <td className="p-4 border text-gray-700">Â£70</td>
-                    <td className="p-4 border text-gray-700">Â£80</td>
+                    <td className="p-4 border text-gray-700">£1,000.01 - £1,500</td>
+                    <td className="p-4 border text-gray-700">£70</td>
+                    <td className="p-4 border text-gray-700">£80</td>
                   </tr>
                   <tr>
-                    <td className="p-4 border text-gray-700">Â£1,500.01 - Â£3,000</td>
-                    <td className="p-4 border text-gray-700">Â£105</td>
-                    <td className="p-4 border text-gray-700">Â£115</td>
+                    <td className="p-4 border text-gray-700">£1,500.01 - £3,000</td>
+                    <td className="p-4 border text-gray-700">£105</td>
+                    <td className="p-4 border text-gray-700">£115</td>
                   </tr>
                   <tr className="bg-gray-50">
-                    <td className="p-4 border text-gray-700">Â£3,000.01 - Â£5,000</td>
-                    <td className="p-4 border text-gray-700">Â£185</td>
-                    <td className="p-4 border text-gray-700">Â£205</td>
+                    <td className="p-4 border text-gray-700">£3,000.01 - £5,000</td>
+                    <td className="p-4 border text-gray-700">£185</td>
+                    <td className="p-4 border text-gray-700">£205</td>
                   </tr>
                   <tr>
-                    <td className="p-4 border text-gray-700">Â£5,000.01 - Â£10,000</td>
-                    <td className="p-4 border text-gray-700">Â£410</td>
-                    <td className="p-4 border text-gray-700">Â£455</td>
+                    <td className="p-4 border text-gray-700">£5,000.01 - £10,000</td>
+                    <td className="p-4 border text-gray-700">£410</td>
+                    <td className="p-4 border text-gray-700">£455</td>
                   </tr>
                 </tbody>
               </table>
@@ -409,13 +409,13 @@ export default async function MoneyClaimPage() {
                   </p>
                   <div className="flex flex-col sm:flex-row gap-3">
                     <Link
-                      href="/wizard?product=notice_only&src=money_claim_crosssell"
+                      href="/products/notice-only?src=money_claim_crosssell"
                       className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-primary text-white font-semibold rounded-lg hover:bg-primary-dark transition-colors"
                     >
                       Get Notice Only â€” {PRODUCTS.notice_only.displayPrice}
                     </Link>
                     <Link
-                      href="/wizard?product=complete_pack&src=money_claim_crosssell"
+                      href="/products/complete-pack?src=money_claim_crosssell"
                       className="inline-flex items-center justify-center gap-2 px-5 py-2.5 border border-purple-300 text-primary font-medium rounded-lg hover:bg-purple-50 transition-colors"
                     >
                       Get Complete Pack â€” {PRODUCTS.complete_pack.displayPrice}
@@ -470,7 +470,7 @@ export default async function MoneyClaimPage() {
               Claim rent arrears, damage, cleaning costs and more. Preview before you pay.
             </p>
             <Link
-              href="/wizard?product=money_claim&src=product_page"
+              href="/products/money-claim?src=product_page"
               className="hero-btn-primary"
             >
               Start Money Claim - {price} â†’

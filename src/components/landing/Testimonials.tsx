@@ -29,7 +29,7 @@ const testimonials: Testimonial[] = [
     initials: "MR",
     avatarColor: "bg-primary",
     rating: 5,
-    highlight: "Saved Â£250+",
+    highlight: "Saved £250+",
     verified: true,
   },
   {
@@ -51,7 +51,7 @@ const testimonials: Testimonial[] = [
     initials: "DT",
     avatarColor: "bg-gray-600",
     rating: 5,
-    highlight: "Recovered Â£3,200",
+    highlight: "Recovered £3,200",
     verified: true,
   },
 ];

@@ -67,11 +67,11 @@ const faqs = [
   },
   {
     question: 'How do I apply for a warrant of possession?',
-    answer: 'Complete Form N325 (Request for Warrant of Possession of Land) and submit it to the same county court that issued your possession order. Pay the fee (Â£130) and wait for a bailiff appointment date, typically 4-6 weeks.',
+    answer: 'Complete Form N325 (Request for Warrant of Possession of Land) and submit it to the same county court that issued your possession order. Pay the fee (£130) and wait for a bailiff appointment date, typically 4-6 weeks.',
   },
   {
     question: 'How much does a warrant of possession cost?',
-    answer: 'County court bailiff warrant (Form N325) costs Â£130. If you transfer to High Court for faster enforcement, the writ fee is Â£66 plus enforcement officer fees (typically Â£300-600+ depending on complexity).',
+    answer: 'County court bailiff warrant (Form N325) costs £130. If you transfer to High Court for faster enforcement, the writ fee is £66 plus enforcement officer fees (typically £300-600+ depending on complexity).',
   },
   {
     question: 'How long does it take to get a bailiff appointment?',
@@ -183,7 +183,7 @@ export default function WarrantOfPossessionPage() {
                   <ul className="space-y-2 mb-6">
                     <li className="flex items-center gap-2 text-sm text-gray-600">
                       <PoundSterling className="w-4 h-4 text-green-500" />
-                      Cost: Â£130 court fee
+                      Cost: £130 court fee
                     </li>
                     <li className="flex items-center gap-2 text-sm text-gray-600">
                       <Clock className="w-4 h-4 text-amber-500" />
@@ -222,7 +222,7 @@ export default function WarrantOfPossessionPage() {
                   <ul className="space-y-2 mb-6">
                     <li className="flex items-center gap-2 text-sm text-gray-600">
                       <PoundSterling className="w-4 h-4 text-amber-500" />
-                      Cost: Â£66 + Â£300-600 HCEO fees
+                      Cost: £66 + £300-600 HCEO fees
                     </li>
                     <li className="flex items-center gap-2 text-sm text-gray-600">
                       <Clock className="w-4 h-4 text-green-500" />
@@ -333,7 +333,7 @@ export default function WarrantOfPossessionPage() {
                     <div>
                       <h3 className="font-bold text-gray-900 mb-2">Submit and Pay the Fee</h3>
                       <p className="text-gray-600">
-                        Submit Form N325 to the county court that issued your possession order. Pay the Â£130 fee.
+                        Submit Form N325 to the county court that issued your possession order. Pay the £130 fee.
                         You can do this online, by post, or in person.
                       </p>
                     </div>

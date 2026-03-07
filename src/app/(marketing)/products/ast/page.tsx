@@ -98,7 +98,7 @@ export default function ASTPage() {
       ],
       noteLabel: "HMO note:",
       note: "Properties with 5+ people from 2+ households require mandatory HMO licensing under Housing Act 2004.",
-      href: "/wizard?product=tenancy_agreement&jurisdiction=england",
+      href: "/products/ast?jurisdiction=england",
     },
     {
       flagSrc: "/gb-wls.svg",
@@ -113,7 +113,7 @@ export default function ASTPage() {
       ],
       noteLabel: "Note:",
       note: "Wales uses Occupation Contracts, not ASTs. Different eviction procedures apply.",
-      href: "/wizard?product=tenancy_agreement&jurisdiction=wales",
+      href: "/products/ast?jurisdiction=wales",
     },
     {
       flagSrc: "/gb-sct.svg",
@@ -128,7 +128,7 @@ export default function ASTPage() {
       ],
       noteLabel: "Key difference:",
       note: "PRTs are open-ended. Tenants can give 28 days' notice at any time.",
-      href: "/wizard?product=tenancy_agreement&jurisdiction=scotland",
+      href: "/products/ast?jurisdiction=scotland",
     },
     {
       flagSrc: "/gb-nir.svg",
@@ -143,7 +143,7 @@ export default function ASTPage() {
       ],
       noteLabel: "Note:",
       note: "Tenancy deposit protection and Energy Performance Certificates required.",
-      href: "/wizard?product=tenancy_agreement&jurisdiction=northern-ireland",
+      href: "/products/ast?jurisdiction=northern-ireland",
     },
   ];
 
@@ -238,7 +238,7 @@ export default function ASTPage() {
                 </div>
 
                 <Link
-                  href="/wizard?product=ast_standard&src=product_page&topic=tenancy"
+                  href="/products/ast?src=product_page&topic=tenancy"
                   className="mt-6 block w-full py-3 border-2 border-primary text-primary font-semibold rounded-lg text-center hover:bg-primary hover:text-white transition-colors"
                 >
                   Get Standard - {standardPrice}
@@ -308,7 +308,7 @@ export default function ASTPage() {
                 </div>
 
                 <Link
-                  href="/wizard?product=ast_premium&src=product_page&topic=tenancy"
+                  href="/products/ast?src=product_page&topic=tenancy"
                   className="mt-6 block w-full py-3 bg-primary text-white font-semibold rounded-lg text-center hover:bg-primary/90 transition-colors"
                 >
                   Get Premium - {premiumPrice}
@@ -544,13 +544,13 @@ export default function ASTPage() {
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
-                href="/wizard?product=ast_standard&src=product_page&topic=tenancy"
+                href="/products/ast?src=product_page&topic=tenancy"
                 className="hero-btn-primary"
               >
                 Standard - {standardPrice} →
               </Link>
               <Link
-                href="/wizard?product=ast_premium&src=product_page&topic=tenancy"
+                href="/products/ast?src=product_page&topic=tenancy"
                 className="hero-btn-secondary"
               >
                 Premium (HMO-Ready) - {premiumPrice} →

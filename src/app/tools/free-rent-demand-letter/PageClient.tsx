@@ -31,7 +31,7 @@ const faqs = [
   {
     question: 'What if the tenant ignores the demand letter?',
     answer:
-      "If the tenant doesn't respond or pay by the deadline, you have several options: (1) Serve a Section 8 notice seeking possession based on rent arrears grounds 8, 10, or 11. (2) Start a money claim through the courts to recover the debt (without seeking possession). (3) Continue to pursue payment informally while considering your options. Our Complete Eviction Pack (Â£69.99) includes Section 8 notices with compliance checks.",
+      "If the tenant doesn't respond or pay by the deadline, you have several options: (1) Serve a Section 8 notice seeking possession based on rent arrears grounds 8, 10, or 11. (2) Start a money claim through the courts to recover the debt (without seeking possession). (3) Continue to pursue payment informally while considering your options. Our Complete Eviction Pack (£69.99) includes Section 8 notices with compliance checks.",
   },
   {
     question: 'Can I charge interest on rent arrears?',
@@ -64,7 +64,7 @@ export default function RentDemandLetterGenerator() {
     toolName: 'Free Rent Demand Letter Generator',
     toolType: 'generator' as const,
     productName: 'Money Claim Pack',
-    ctaLabel: 'Upgrade to court-ready pack â€” Â£45.99',
+    ctaLabel: 'Upgrade to court-ready pack â€” £45.99',
     ctaHref: '/products/money-claim',
     jurisdiction: 'uk',
     freeIncludes: [
@@ -256,7 +256,7 @@ export default function RentDemandLetterGenerator() {
       });
       yPosition -= 20;
 
-      page.drawText(`Monthly Rent: Â£${formData.rentAmount || '[amount]'}`, {
+      page.drawText(`Monthly Rent: £${formData.rentAmount || '[amount]'}`, {
         x: 50,
         y: yPosition,
         size: 11,
@@ -274,7 +274,7 @@ export default function RentDemandLetterGenerator() {
       });
       yPosition -= 18;
 
-      page.drawText(`Total Outstanding: Â£${formData.amountOwed || '[amount]'}`, {
+      page.drawText(`Total Outstanding: £${formData.amountOwed || '[amount]'}`, {
         x: 50,
         y: yPosition,
         size: 11,
@@ -301,7 +301,7 @@ export default function RentDemandLetterGenerator() {
           })
         : '[Payment Deadline]';
 
-      const para2 = `You are required to pay the outstanding amount of Â£${formData.amountOwed || '[amount]'} by ${deadlineDate}.`;
+      const para2 = `You are required to pay the outstanding amount of £${formData.amountOwed || '[amount]'} by ${deadlineDate}.`;
       const para2Lines = wrapText(para2, width - 100);
 
       para2Lines.forEach((line) => {
@@ -624,7 +624,7 @@ URL.revokeObjectURL(url);
             htmlFor="rentAmount"
             className="block text-sm font-medium text-gray-700"
           >
-            Monthly Rent Amount (Â£) <span className="text-error-500">*</span>
+            Monthly Rent Amount (£) <span className="text-error-500">*</span>
           </label>
           <input
             type="number"
@@ -646,7 +646,7 @@ URL.revokeObjectURL(url);
             htmlFor="amountOwed"
             className="block text-sm font-medium text-gray-700"
           >
-            Total Amount Owed (Â£) <span className="text-error-500">*</span>
+            Total Amount Owed (£) <span className="text-error-500">*</span>
           </label>
           <input
             type="number"

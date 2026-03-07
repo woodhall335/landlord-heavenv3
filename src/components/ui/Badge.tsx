@@ -145,7 +145,7 @@ export interface PriceBadgeProps {
 
 export const PriceBadge: React.FC<PriceBadgeProps> = ({
   price,
-  currency = "Â£",
+  currency = "£",
   size = "medium",
 }) => {
   const formattedPrice = `${currency}${price.toFixed(2)}`;

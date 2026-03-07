@@ -119,7 +119,7 @@ export const Section8ArrearsSection: React.FC<Section8ArrearsSectionProps> = ({
       if (rentPaid > rentDue) {
         errors.push({
           index,
-          message: `Period ${index + 1}: Amount paid (Â£${rentPaid.toFixed(2)}) exceeds rent due (Â£${rentDue.toFixed(2)})`,
+          message: `Period ${index + 1}: Amount paid (£${rentPaid.toFixed(2)}) exceeds rent due (£${rentDue.toFixed(2)})`,
         });
       }
     });
@@ -371,7 +371,7 @@ export const Section8ArrearsSection: React.FC<Section8ArrearsSectionProps> = ({
             <div>
               <span className="text-gray-600">Total arrears:</span>
               <span className="ml-2 font-semibold text-red-600">
-                Â£{arrearsSummary.total_arrears.toFixed(2)}
+                £{arrearsSummary.total_arrears.toFixed(2)}
               </span>
             </div>
             <div>
@@ -433,7 +433,7 @@ const ParticularsWithAskHeaven: React.FC<ParticularsProps> = ({
   const generateSuggestion = useCallback(() => {
     if (!arrearsSummary || arrearsSummary.total_arrears === 0) return '';
 
-    let suggestion = `The tenant owes Â£${arrearsSummary.total_arrears.toFixed(2)} in rent arrears, `;
+    let suggestion = `The tenant owes £${arrearsSummary.total_arrears.toFixed(2)} in rent arrears, `;
     suggestion += `representing ${arrearsSummary.arrears_in_months.toFixed(1)} months of unpaid rent. `;
 
     if (arrearsSummary.periods_fully_unpaid > 0) {

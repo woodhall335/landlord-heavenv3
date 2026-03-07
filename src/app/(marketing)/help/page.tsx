@@ -99,7 +99,7 @@ export default function HelpPage() {
                         <li>Choose your product category (Notices, Money Claims, Tenancy Agreements, etc.) or click "Start Wizard"</li>
                         <li>Answer questions about your case (property, tenant, dates, grounds)</li>
                         <li>Review the generated document preview</li>
-                        <li>Complete payment (Â£29.99 - Â£69.99 depending on product)</li>
+                        <li>Complete payment (£29.99 - £69.99 depending on product)</li>
                         <li>Download your documents as PDF immediately</li>
                       </ol>
                       <p className="mt-3">The entire process takes 10-15 minutes.</p>
@@ -129,17 +129,17 @@ export default function HelpPage() {
                   answer: (
                     <ul className="space-y-3">
                       <li>
-                        <strong>Notices (Â£29.99):</strong> Just need an eviction notice (Section 8/21, Notice to
+                        <strong>Notices (£29.99):</strong> Just need an eviction notice (Section 8/21, Notice to
                         Leave). Tenant might leave voluntarily.
                       </li>
                       <li>
-                        <strong>Money Claims (Â£45.99):</strong> Tenant owes rent arrears. Includes claim forms, arrears schedules, and witness statements.
+                        <strong>Money Claims (£45.99):</strong> Tenant owes rent arrears. Includes claim forms, arrears schedules, and witness statements.
                       </li>
                       <li>
-                        <strong>Standard AST (Â£9.99):</strong> Simple tenancy agreement for standard lettings.
+                        <strong>Standard AST (£9.99):</strong> Simple tenancy agreement for standard lettings.
                       </li>
                       <li>
-                        <strong>Premium AST (Â£19.99):</strong> Advanced tenancy with HMO clauses, guarantors, rent
+                        <strong>Premium AST (£19.99):</strong> Advanced tenancy with HMO clauses, guarantors, rent
                         increases.
                       </li>
                       <li>
@@ -282,7 +282,7 @@ export default function HelpPage() {
                         to purchase separately for each.
                       </p>
                       <p className="mt-2">
-                        <strong>Exception:</strong> HMO Pro (Â£29.99/month) covers unlimited HMO properties.
+                        <strong>Exception:</strong> HMO Pro (£29.99/month) covers unlimited HMO properties.
                       </p>
                     </>
                   ),
@@ -493,11 +493,11 @@ export default function HelpPage() {
                   answer: (
                     <ul className="space-y-3">
                       <li>
-                        <strong>Free Trial:</strong> 7 days free, no payment required. Cancel before trial ends = Â£0
+                        <strong>Free Trial:</strong> 7 days free, no payment required. Cancel before trial ends = £0
                         charged
                       </li>
                       <li>
-                        <strong>After Trial:</strong> Â£29.99/month, billed on same day each month
+                        <strong>After Trial:</strong> £29.99/month, billed on same day each month
                       </li>
                       <li>
                         <strong>Cancellation:</strong> Cancel anytime from dashboard. No further billing. Keep access
@@ -516,11 +516,11 @@ export default function HelpPage() {
                     <>
                       <p>
                         <strong>Currently, no.</strong> Our prices are already significantly lower than solicitors (you save
-                        Â£200-400 per case).
+                        £200-400 per case).
                       </p>
                       <p className="mt-3">
                         <strong>Best value:</strong>
-                        <br />â€¢ HMO Pro (Â£29.99/month) covers unlimited compliance tracking
+                        <br />â€¢ HMO Pro (£29.99/month) covers unlimited compliance tracking
                         <br />â€¢ Volume discounts available for portfolio landlords
                       </p>
                       <p className="mt-3 text-sm text-gray-600">

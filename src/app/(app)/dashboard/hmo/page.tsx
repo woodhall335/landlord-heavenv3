@@ -392,7 +392,7 @@ export default function HMOProDashboardPage() {
 
           <Card padding="medium">
             <div className="text-sm text-gray-600 mb-1">Monthly Rent</div>
-            <div className="text-3xl font-bold text-charcoal">£{getTotalRent().toLocaleString()}</div>
+            <div className="text-3xl font-bold text-charcoal">�{getTotalRent().toLocaleString()}</div>
             <div className="text-xs text-gray-500 mt-1">from active tenants</div>
           </Card>
         </div>
@@ -488,7 +488,7 @@ export default function HMOProDashboardPage() {
                             {tenant.full_name}
                           </div>
                           <div className="text-sm text-gray-600">
-                            Room {tenant.room_number} • £{tenant.rent_amount}/month
+                            Room {tenant.room_number} • �{tenant.rent_amount}/month
                           </div>
                         </div>
                         <Badge variant={getTenantStatusColor(tenant.status)} size="small">

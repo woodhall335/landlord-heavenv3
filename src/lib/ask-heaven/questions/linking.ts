@@ -65,7 +65,7 @@ export const TOPIC_TO_PRODUCTS_MAP: Record<AskHeavenPrimaryTopic, ProductLinkCon
     {
       product: 'notice_only',
       name: 'Eviction Notice Generator',
-      href: 'https://landlordheaven.co.uk/wizard?product=notice_only&src=product_page&topic=eviction',
+      href: 'https://landlordheaven.co.uk/products/notice-only?src=product_page&topic=eviction',
       description: 'Generate Section 21, Section 8, or jurisdiction-specific notices',
       ctaText: 'Create Notice',
     },
@@ -81,7 +81,7 @@ export const TOPIC_TO_PRODUCTS_MAP: Record<AskHeavenPrimaryTopic, ProductLinkCon
     {
       product: 'notice_only',
       name: 'Section 8 Notice (Rent Arrears)',
-      href: 'https://landlordheaven.co.uk/wizard?product=notice_only&src=product_page&topic=eviction',
+      href: 'https://landlordheaven.co.uk/products/notice-only?src=product_page&topic=eviction',
       description: 'Serve notice for rent arrears under Ground 8, 10, or 11',
       ctaText: 'Create Notice',
     },
@@ -133,7 +133,7 @@ export const TOPIC_TO_PRODUCTS_MAP: Record<AskHeavenPrimaryTopic, ProductLinkCon
     {
       product: 'notice_only',
       name: 'Notice Generator',
-      href: 'https://landlordheaven.co.uk/wizard?product=notice_only&src=product_page&topic=eviction',
+      href: 'https://landlordheaven.co.uk/products/notice-only?src=product_page&topic=eviction',
       description: 'Generate notices with correct notice periods',
       ctaText: 'Create Notice',
     },

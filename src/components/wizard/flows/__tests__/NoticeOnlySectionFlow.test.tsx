@@ -1649,7 +1649,7 @@ describe('NoticeOnlySectionFlow - Scotland Compliance Section', () => {
 
       // EICR missing
       if (facts.eicr_served === false) {
-        warnings.push('Missing EICR can result in fines up to Â£5,000.');
+        warnings.push('Missing EICR can result in fines up to £5,000.');
       }
 
       // Repairing standard not met

@@ -226,9 +226,9 @@ export default function JointTenancyAgreementNorthernIrelandPage() {
                     </h3>
                     <p className="text-gray-600 mb-6">
                       Joint and several liability means each tenant is individually responsible for
-                      the entire rent, not just their portion. If the monthly rent is Â£1,000 and
-                      there are four tenants, each tenant is liable for the full Â£1,000, not just
-                      Â£250 each.
+                      the entire rent, not just their portion. If the monthly rent is £1,000 and
+                      there are four tenants, each tenant is liable for the full £1,000, not just
+                      £250 each.
                     </p>
 
                     <div className="grid md:grid-cols-2 gap-6">

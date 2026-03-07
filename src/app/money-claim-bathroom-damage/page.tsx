@@ -90,7 +90,7 @@ const faqs = [
   {
     question: 'How much can I claim for bathroom repairs?',
     answer:
-      'Typical costs: toilet replacement Â£100-250, sink replacement Â£100-300, professional mould treatment Â£150-400, tap replacement Â£80-200, re-grouting Â£100-250, shower screen replacement Â£200-500. Get professional quotes.',
+      'Typical costs: toilet replacement £100-250, sink replacement £100-300, professional mould treatment £150-400, tap replacement £80-200, re-grouting £100-250, shower screen replacement £200-500. Get professional quotes.',
   },
   {
     question: 'Should I use the deposit or court for bathroom claims?',
@@ -316,35 +316,35 @@ export default function MoneyClaimBathroomDamagePage() {
                   <tbody className="divide-y divide-gray-200">
                     <tr>
                       <td className="px-6 py-3 text-gray-600">Professional mould treatment</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">Â£150 - Â£400</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">£150 - £400</td>
                     </tr>
                     <tr className="bg-gray-50">
                       <td className="px-6 py-3 text-gray-600">Toilet replacement (supply + fit)</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">Â£150 - Â£300</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">£150 - £300</td>
                     </tr>
                     <tr>
                       <td className="px-6 py-3 text-gray-600">Pedestal sink replacement</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">Â£150 - Â£350</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">£150 - £350</td>
                     </tr>
                     <tr className="bg-gray-50">
                       <td className="px-6 py-3 text-gray-600">Mixer tap replacement</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">Â£100 - Â£250</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">£100 - £250</td>
                     </tr>
                     <tr>
                       <td className="px-6 py-3 text-gray-600">Shower screen replacement</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">Â£200 - Â£500</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">£200 - £500</td>
                     </tr>
                     <tr className="bg-gray-50">
                       <td className="px-6 py-3 text-gray-600">Re-grouting bathroom</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">Â£100 - Â£250</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">£100 - £250</td>
                     </tr>
                     <tr>
                       <td className="px-6 py-3 text-gray-600">Re-silicone bath/shower</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">Â£80 - Â£150</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">£80 - £150</td>
                     </tr>
                     <tr className="bg-gray-50">
                       <td className="px-6 py-3 text-gray-600">Drain unblocking (professional)</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">Â£80 - Â£200</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">£80 - £200</td>
                     </tr>
                   </tbody>
                 </table>
@@ -460,11 +460,11 @@ export default function MoneyClaimBathroomDamagePage() {
                 href="/products/money-claim?reason=property_damage&src=seo_money_claim_bathroom_damage&topic=debt"
                 className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
               >
-                Start Your Claim â€” Â£45.99
+                Start Your Claim â€” £45.99
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <p className="text-sm text-gray-500 mt-3">
-                Court fees from Â£35 extra (based on claim amount)
+                Court fees from £35 extra (based on claim amount)
               </p>
             </div>
           </div>

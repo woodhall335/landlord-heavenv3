@@ -55,7 +55,7 @@ export default function EICRPage() {
         <UniversalHero
           badge="Safety Compliance"
           title="EICR Landlord Requirements UK"
-          subtitle="The Electrical Safety Standards regulations require landlords in England to have electrical installations inspected every 5 years. Non-compliance can result in fines up to Â£30,000."
+          subtitle="The Electrical Safety Standards regulations require landlords in England to have electrical installations inspected every 5 years. Non-compliance can result in fines up to £30,000."
           primaryCta={{ label: "Create Section 21 Notice", href: noticeOnlyLink }}
         />
         {/* Hero Section */}
@@ -71,7 +71,7 @@ export default function EICRPage() {
               <p className="text-xl text-gray-600 mb-8">
                 The Electrical Safety Standards regulations require landlords in England to have
                 electrical installations inspected every 5 years. Non-compliance can result in
-                fines up to Â£30,000.
+                fines up to £30,000.
               </p>
             </div>
           </Container>
@@ -126,7 +126,7 @@ export default function EICRPage() {
                 <div className="bg-red-50 border border-red-200 rounded-lg p-4 my-6">
                   <p className="text-red-800 font-semibold mb-2">Penalty Warning</p>
                   <p className="text-red-700 text-sm">
-                    Failure to comply can result in fines of up to Â£30,000. Local authorities can
+                    Failure to comply can result in fines of up to £30,000. Local authorities can
                     also arrange their own inspections and charge you for the cost.
                   </p>
                 </div>
@@ -196,9 +196,9 @@ export default function EICRPage() {
                   EICR costs vary by property size and location. Typical prices:
                 </p>
                 <ul>
-                  <li>1-2 bedroom flat: Â£100-Â£150</li>
-                  <li>3-bedroom house: Â£150-Â£250</li>
-                  <li>Larger properties: Â£200-Â£350+</li>
+                  <li>1-2 bedroom flat: £100-£150</li>
+                  <li>3-bedroom house: £150-£250</li>
+                  <li>Larger properties: £200-£350+</li>
                 </ul>
                 <p>
                   Shop around, but prioritise using a properly qualified electrician over the

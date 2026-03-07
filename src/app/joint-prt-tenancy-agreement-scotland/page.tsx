@@ -220,8 +220,8 @@ export default function JointPrtTenancyAgreementScotlandPage() {
                     <p className="text-gray-600 mb-4">
                       Joint and several liability means each tenant is individually responsible for
                       the <strong>entire</strong> rent, not just their portion. If three tenants
-                      each pay Â£400 towards Â£1,200 rent and one stops paying, you can pursue any
-                      or all of the remaining tenants for the full Â£1,200 â€” not just the Â£800 they
+                      each pay £400 towards £1,200 rent and one stops paying, you can pursue any
+                      or all of the remaining tenants for the full £1,200 â€” not just the £800 they
                       were personally paying.
                     </p>
                     <div className="grid md:grid-cols-2 gap-4 mt-6">

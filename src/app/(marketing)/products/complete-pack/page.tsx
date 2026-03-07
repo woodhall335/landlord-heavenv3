@@ -149,7 +149,7 @@ export default async function CompleteEvictionPackPage() {
 
           <div className="mt-12 text-center">
             <Link
-              href="/wizard?product=complete_pack&src=product_page&topic=eviction"
+              href="/products/complete-pack?src=product_page&topic=eviction"
               className="hero-btn-primary"
             >
               Start Your Complete Pack →
@@ -356,7 +356,7 @@ export default async function CompleteEvictionPackPage() {
             <div className="mt-12 text-center">
               <p className="text-gray-600 mb-6">Need the full solution to take your case to court?</p>
               <Link
-                href="/wizard?product=complete_pack&src=product_page&topic=eviction"
+                href="/products/complete-pack?src=product_page&topic=eviction"
                 className="hero-btn-primary"
               >
                 Get Complete Eviction Case Bundle - {price} →
@@ -386,7 +386,7 @@ export default async function CompleteEvictionPackPage() {
                   </p>
                   <div className="flex flex-col sm:flex-row gap-3">
                     <Link
-                      href="/wizard?product=money_claim&src=complete_pack_crosssell"
+                      href="/products/money-claim?src=complete_pack_crosssell"
                       className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#692ED4] px-5 py-2.5 font-semibold text-white transition-colors hover:bg-[#5a21be]"
                     >
                       Get Money Claim Pack — {PRODUCTS.money_claim.displayPrice}
@@ -442,7 +442,7 @@ export default async function CompleteEvictionPackPage() {
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
-                href="/wizard?product=complete_pack&src=product_page&topic=eviction"
+                href="/products/complete-pack?src=product_page&topic=eviction"
                 className="hero-btn-primary"
               >
                 Get Complete Pack - {price} →

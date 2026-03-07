@@ -73,7 +73,7 @@ export const CurrencyInput: React.FC<CurrencyInputProps> = ({
     <div className="space-y-3">
       <div className="relative">
         <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg font-medium text-gray-600">
-          Â£
+          £
         </span>
         <input
           type="text"
@@ -116,10 +116,10 @@ export const CurrencyInput: React.FC<CurrencyInputProps> = ({
       {(min !== undefined || max !== undefined) && !isUnsure && (
         <p className="text-xs text-gray-500">
           {min !== undefined && max !== undefined
-            ? `Amount should be between Â£${min.toFixed(2)} and Â£${max.toFixed(2)}`
+            ? `Amount should be between £${min.toFixed(2)} and £${max.toFixed(2)}`
             : min !== undefined
-            ? `Minimum amount: Â£${min.toFixed(2)}`
-            : `Maximum amount: Â£${max?.toFixed(2)}`}
+            ? `Minimum amount: £${min.toFixed(2)}`
+            : `Maximum amount: £${max?.toFixed(2)}`}
         </p>
       )}
     </div>

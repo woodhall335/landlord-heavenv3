@@ -63,7 +63,7 @@ const moneyClaimLink = buildWizardLink({
 export const metadata: Metadata = {
   title: 'Section 8 Rent Arrears Eviction | Ground 8, 10, 11 | Landlord Heaven',
   description:
-    'Evict a tenant for rent arrears using Section 8. Ground 8 mandatory eviction for 2+ months arrears. 2-week notice. From Â£29.99.',
+    'Evict a tenant for rent arrears using Section 8. Ground 8 mandatory eviction for 2+ months arrears. 2-week notice. From £29.99.',
   keywords: [
     'section 8 rent arrears eviction',
     'ground 8 eviction process',
@@ -439,8 +439,8 @@ export default function Section8RentArrearsEvictionPage() {
                         <span className="text-xs font-bold text-white">3</span>
                       </div>
                       <span>
-                        <strong>Example:</strong> If rent is Â£1,000/month, the tenant must owe at
-                        least Â£2,000
+                        <strong>Example:</strong> If rent is £1,000/month, the tenant must owe at
+                        least £2,000
                       </span>
                     </li>
                   </ul>
@@ -482,7 +482,7 @@ export default function Section8RentArrearsEvictionPage() {
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>Pay court fee of Â£355</span>
+                      <span>Pay court fee of £355</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />

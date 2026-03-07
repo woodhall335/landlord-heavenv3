@@ -175,7 +175,7 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
   const formatAnswerForDisplay = (answer: any, inputType: string): string => {
     switch (inputType) {
       case 'currency':
-        return `Â£${Number(answer).toFixed(2)}`;
+        return `£${Number(answer).toFixed(2)}`;
       case 'date':
         return String(answer);
       case 'yes_no':

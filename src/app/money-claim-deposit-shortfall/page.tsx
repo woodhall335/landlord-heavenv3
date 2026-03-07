@@ -61,7 +61,7 @@ const faqs = [
   {
     question: 'How do I calculate the shortfall amount?',
     answer:
-      'Total damage costs (with betterment applied) minus deposit retained = shortfall. For example: Â£3,500 damage - Â£1,200 deposit = Â£2,300 shortfall. This Â£2,300 is what you claim through MCOL.',
+      'Total damage costs (with betterment applied) minus deposit retained = shortfall. For example: £3,500 damage - £1,200 deposit = £2,300 shortfall. This £2,300 is what you claim through MCOL.',
   },
   {
     question: 'Can the deposit scheme award more than the deposit?',
@@ -235,7 +235,7 @@ export default function MoneyClaimDepositShortfallPage() {
                   <ul className="space-y-2 text-sm text-gray-600">
                     <li className="flex items-center gap-2">
                       <Scale className="w-4 h-4 text-blue-500" />
-                      Court fees apply (from Â£35)
+                      Court fees apply (from £35)
                     </li>
                     <li className="flex items-center gap-2">
                       <Scale className="w-4 h-4 text-blue-500" />
@@ -262,23 +262,23 @@ export default function MoneyClaimDepositShortfallPage() {
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between py-2 border-b border-emerald-200">
                     <span className="text-gray-600">Total damage costs (with betterment)</span>
-                    <span className="font-semibold text-gray-900">Â£4,200</span>
+                    <span className="font-semibold text-gray-900">£4,200</span>
                   </div>
                   <div className="flex justify-between py-2 border-b border-emerald-200">
                     <span className="text-gray-600">Deposit held</span>
-                    <span className="font-semibold text-gray-900">Â£1,400</span>
+                    <span className="font-semibold text-gray-900">£1,400</span>
                   </div>
                   <div className="flex justify-between py-2 border-b border-emerald-200">
                     <span className="text-gray-600">Deposit awarded via scheme</span>
-                    <span className="font-semibold text-emerald-600">-Â£1,200</span>
+                    <span className="font-semibold text-emerald-600">-£1,200</span>
                   </div>
                   <div className="flex justify-between py-2 bg-blue-100 px-2 rounded">
                     <span className="text-gray-900 font-medium">Shortfall to claim in court</span>
-                    <span className="font-bold text-blue-700">Â£3,000</span>
+                    <span className="font-bold text-blue-700">£3,000</span>
                   </div>
                 </div>
                 <p className="text-xs text-gray-500 mt-4">
-                  Note: The Â£200 deposit not awarded by the scheme may have been disputed
+                  Note: The £200 deposit not awarded by the scheme may have been disputed
                   betterment. You can include this in your court claim if you disagree.
                 </p>
               </div>
@@ -428,7 +428,7 @@ export default function MoneyClaimDepositShortfallPage() {
                   <ul className="space-y-2 text-gray-700 text-sm">
                     <li className="flex items-start gap-2">
                       <ArrowRight className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" />
-                      Total claim far exceeds deposit (e.g., Â£10k damage, Â£1.4k deposit)
+                      Total claim far exceeds deposit (e.g., £10k damage, £1.4k deposit)
                     </li>
                     <li className="flex items-start gap-2">
                       <ArrowRight className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" />
@@ -486,11 +486,11 @@ export default function MoneyClaimDepositShortfallPage() {
                 href="/products/money-claim?reason=property_damage&topic=debt&src=seo_money_claim_deposit_shortfall"
                 className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
               >
-                Start Your Claim â€” Â£45.99
+                Start Your Claim â€” £45.99
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <p className="text-sm text-gray-500 mt-3">
-                Court fees from Â£35 extra (based on claim amount)
+                Court fees from £35 extra (based on claim amount)
               </p>
             </div>
           </div>

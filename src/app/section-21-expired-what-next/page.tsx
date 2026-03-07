@@ -394,7 +394,7 @@ export default function Section21ExpiredPage() {
                       <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
                       <div>
                         <strong className="text-gray-900">Same court fee</strong>
-                        <p className="text-sm">Â£355â€”same as standard possession claim</p>
+                        <p className="text-sm">£355â€”same as standard possession claim</p>
                       </div>
                     </li>
                   </ul>
@@ -472,7 +472,7 @@ export default function Section21ExpiredPage() {
                       <div className="flex items-center gap-4 text-sm">
                         <div className="bg-gray-50 rounded-lg px-4 py-2">
                           <span className="text-gray-600">Court fee:</span>
-                          <span className="font-bold text-gray-900 ml-1">Â£355</span>
+                          <span className="font-bold text-gray-900 ml-1">£355</span>
                         </div>
                       </div>
                     </div>
@@ -544,7 +544,7 @@ export default function Section21ExpiredPage() {
                       <div className="flex items-center gap-4 text-sm">
                         <div className="bg-gray-50 rounded-lg px-4 py-2">
                           <span className="text-gray-600">Warrant fee:</span>
-                          <span className="font-bold text-gray-900 ml-1">~Â£130</span>
+                          <span className="font-bold text-gray-900 ml-1">~£130</span>
                         </div>
                         <div className="bg-gray-50 rounded-lg px-4 py-2">
                           <span className="text-gray-600">Wait time:</span>
@@ -681,7 +681,7 @@ export default function Section21ExpiredPage() {
                     <div className="w-24 text-sm font-medium text-gray-500">Week 1-2</div>
                     <div className="flex-1">
                       <span className="font-medium text-gray-900">
-                        Complete and submit Form N5B to court, pay Â£355 fee
+                        Complete and submit Form N5B to court, pay £355 fee
                       </span>
                     </div>
                   </div>
@@ -726,7 +726,7 @@ export default function Section21ExpiredPage() {
                   </div>
                   <div>
                     <p className="text-sm text-gray-500">Total court costs</p>
-                    <p className="text-2xl font-bold text-primary">~Â£485</p>
+                    <p className="text-2xl font-bold text-primary">~£485</p>
                   </div>
                 </div>
               </div>

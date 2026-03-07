@@ -79,7 +79,7 @@ export default function MoneyClaimRentArrearsPage() {
                 </p>
                 <p>
                   In England, you can use <Link href="/money-claim-online-mcol" className="text-primary hover:underline">Money Claim Online (MCOL)</Link> to
-                  claim up to Â£100,000 in unpaid rent, damages, and other debts.
+                  claim up to £100,000 in unpaid rent, damages, and other debts.
                 </p>
 
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 my-6">
@@ -129,7 +129,7 @@ export default function MoneyClaimRentArrearsPage() {
 
                 <h3>Option A: Money Claim Online (MCOL)</h3>
                 <ul>
-                  <li>Best for claims up to Â£100,000</li>
+                  <li>Best for claims up to £100,000</li>
                   <li>Lower court fees than paper claims</li>
                   <li>Track progress online</li>
                   <li>Faster processing</li>
@@ -137,7 +137,7 @@ export default function MoneyClaimRentArrearsPage() {
 
                 <h3>Option B: Paper Claim (Form N1)</h3>
                 <ul>
-                  <li>Required for claims over Â£100,000</li>
+                  <li>Required for claims over £100,000</li>
                   <li>Submit to County Court Money Claims Centre</li>
                   <li>Same legal process, but slower</li>
                 </ul>
@@ -199,35 +199,35 @@ export default function MoneyClaimRentArrearsPage() {
                   </thead>
                   <tbody>
                     <tr>
-                      <td className="border border-gray-300 px-4 py-2">Up to Â£300</td>
-                      <td className="border border-gray-300 px-4 py-2">Â£35</td>
+                      <td className="border border-gray-300 px-4 py-2">Up to £300</td>
+                      <td className="border border-gray-300 px-4 py-2">£35</td>
                     </tr>
                     <tr>
-                      <td className="border border-gray-300 px-4 py-2">Â£300.01 to Â£500</td>
-                      <td className="border border-gray-300 px-4 py-2">Â£50</td>
+                      <td className="border border-gray-300 px-4 py-2">£300.01 to £500</td>
+                      <td className="border border-gray-300 px-4 py-2">£50</td>
                     </tr>
                     <tr>
-                      <td className="border border-gray-300 px-4 py-2">Â£500.01 to Â£1,000</td>
-                      <td className="border border-gray-300 px-4 py-2">Â£70</td>
+                      <td className="border border-gray-300 px-4 py-2">£500.01 to £1,000</td>
+                      <td className="border border-gray-300 px-4 py-2">£70</td>
                     </tr>
                     <tr>
-                      <td className="border border-gray-300 px-4 py-2">Â£1,000.01 to Â£1,500</td>
-                      <td className="border border-gray-300 px-4 py-2">Â£105</td>
+                      <td className="border border-gray-300 px-4 py-2">£1,000.01 to £1,500</td>
+                      <td className="border border-gray-300 px-4 py-2">£105</td>
                     </tr>
                     <tr>
-                      <td className="border border-gray-300 px-4 py-2">Â£1,500.01 to Â£3,000</td>
-                      <td className="border border-gray-300 px-4 py-2">Â£115</td>
+                      <td className="border border-gray-300 px-4 py-2">£1,500.01 to £3,000</td>
+                      <td className="border border-gray-300 px-4 py-2">£115</td>
                     </tr>
                     <tr>
-                      <td className="border border-gray-300 px-4 py-2">Â£3,000.01 to Â£5,000</td>
-                      <td className="border border-gray-300 px-4 py-2">Â£205</td>
+                      <td className="border border-gray-300 px-4 py-2">£3,000.01 to £5,000</td>
+                      <td className="border border-gray-300 px-4 py-2">£205</td>
                     </tr>
                     <tr>
-                      <td className="border border-gray-300 px-4 py-2">Â£5,000.01 to Â£10,000</td>
-                      <td className="border border-gray-300 px-4 py-2">Â£455</td>
+                      <td className="border border-gray-300 px-4 py-2">£5,000.01 to £10,000</td>
+                      <td className="border border-gray-300 px-4 py-2">£455</td>
                     </tr>
                     <tr>
-                      <td className="border border-gray-300 px-4 py-2">Over Â£10,000</td>
+                      <td className="border border-gray-300 px-4 py-2">Over £10,000</td>
                       <td className="border border-gray-300 px-4 py-2">5% of claim value</td>
                     </tr>
                   </tbody>

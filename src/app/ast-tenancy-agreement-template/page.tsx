@@ -294,7 +294,7 @@ export default function AstTenancyAgreementTemplatePage() {
               <div className="mt-8 bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg">
                 <p className="text-amber-900 text-sm">
                   <strong>Consider the cost:</strong> A professional template costs less than
-                  Â£25. A failed eviction due to an invalid agreement can cost thousands in lost
+                  £25. A failed eviction due to an invalid agreement can cost thousands in lost
                   rent, court fees, and legal expenses.
                 </p>
               </div>

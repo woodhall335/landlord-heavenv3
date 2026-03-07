@@ -19,7 +19,7 @@ import {
   AlertTriangle,
 } from 'lucide-react';
 
-const wizardLinkAST = '/wizard?product=tenancy_agreement&topic=tenancy&src=seo_6_month_tenancy_agreement_template';
+const wizardLinkAST = '/products/ast?topic=tenancy&src=seo_6_month_tenancy_agreement_template';
 
 export const metadata: Metadata = {
   title: '6 Month Tenancy Agreement Template UK 2026 — Short-Term AST',
@@ -108,7 +108,7 @@ export default function SixMonthTenancyAgreementPage() {
           badgeIcon={<Calendar className="w-4 h-4" />}
           title="6 Month Tenancy Agreement Template"
           subtitle={<>Need a <strong>short-term tenancy agreement</strong>? Get a legally compliant 6-month AST template for England and Wales — with clear terms for both landlord and tenant.</>}
-          primaryCta={{ label: 'Get AST Template — £9.99', href: wizardLinkAST }}
+          primaryCta={{ label: 'Get AST Template — �9.99', href: wizardLinkAST }}
           secondaryCta={{ label: 'View 12-Month Option', href: '/assured-shorthold-tenancy-agreement-template' }}
           variant="pastel"
         >
@@ -346,7 +346,7 @@ export default function SixMonthTenancyAgreementPage() {
               </p>
 
               <ul className="list-disc pl-6 text-gray-700 space-y-2 mb-6">
-                <li><strong>Deposit cap:</strong> Maximum 5 weeks&apos; rent (if annual rent under £50,000)</li>
+                <li><strong>Deposit cap:</strong> Maximum 5 weeks&apos; rent (if annual rent under �50,000)</li>
                 <li><strong>Deposit protection:</strong> Must be protected within 30 days of receipt</li>
                 <li><strong>Holding deposit:</strong> Maximum 1 week&apos;s rent, refundable if tenancy proceeds</li>
                 <li><strong>Rent in advance:</strong> Typically 1 month, though not legally capped</li>

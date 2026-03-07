@@ -69,7 +69,7 @@ const faqs = [
   {
     question: 'How much does it cost to submit an N1 form?',
     answer:
-      'Court fees depend on claim amount: up to Â£300 costs Â£35, Â£300.01-Â£500 costs Â£50, Â£500.01-Â£1,000 costs Â£70, Â£1,000.01-Â£1,500 costs Â£80, Â£1,500.01-Â£3,000 costs Â£115, Â£3,000.01-Â£5,000 costs Â£205, Â£5,000.01-Â£10,000 costs Â£455.',
+      'Court fees depend on claim amount: up to £300 costs £35, £300.01-£500 costs £50, £500.01-£1,000 costs £70, £1,000.01-£1,500 costs £80, £1,500.01-£3,000 costs £115, £3,000.01-£5,000 costs £205, £5,000.01-£10,000 costs £455.',
   },
   {
     question: 'Can I claim interest on the N1 form?',
@@ -436,11 +436,11 @@ export default function MoneyClaimN1ClaimFormPage() {
                   href="/products/money-claim?topic=debt&src=seo_money_claim_n1_claim_form"
                   className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
                 >
-                  Generate Your Documents â€” Â£45.99
+                  Generate Your Documents â€” £45.99
                   <ArrowRight className="w-5 h-5" />
                 </Link>
                 <p className="text-sm text-gray-500 mt-3">
-                  Court fees from Â£35 extra (paid to court separately)
+                  Court fees from £35 extra (paid to court separately)
                 </p>
               </div>
             </div>

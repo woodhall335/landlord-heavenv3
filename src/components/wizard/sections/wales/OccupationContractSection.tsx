@@ -227,11 +227,11 @@ export const OccupationContractSection: React.FC<OccupationContractSectionProps>
           {/* Rent amount */}
           <div className="space-y-2">
             <label htmlFor="rent_amount" className="block text-sm font-medium text-gray-700">
-              Rent amount (Â£)
+              Rent amount (£)
               <span className="text-red-500 ml-1">*</span>
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">Â£</span>
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">£</span>
               <input
                 id="rent_amount"
                 type="number"
@@ -292,7 +292,7 @@ export const OccupationContractSection: React.FC<OccupationContractSectionProps>
           <div className="p-3 bg-gray-50 border border-gray-200 rounded-lg">
             <p className="text-sm text-gray-700">
               <strong>Rent summary:</strong>{' '}
-              Â£{Number(facts.rent_amount).toFixed(2)} {facts.rent_frequency}
+              £{Number(facts.rent_amount).toFixed(2)} {facts.rent_frequency}
               {facts.rent_due_day && (
                 <span className="text-gray-500">
                   {' '}
@@ -302,7 +302,7 @@ export const OccupationContractSection: React.FC<OccupationContractSectionProps>
             </p>
             {facts.rent_frequency === 'monthly' && facts.rent_amount && (
               <p className="text-xs text-gray-500 mt-1">
-                Annual rent: Â£{(Number(facts.rent_amount) * 12).toLocaleString('en-GB', { minimumFractionDigits: 2 })}
+                Annual rent: £{(Number(facts.rent_amount) * 12).toLocaleString('en-GB', { minimumFractionDigits: 2 })}
               </p>
             )}
           </div>

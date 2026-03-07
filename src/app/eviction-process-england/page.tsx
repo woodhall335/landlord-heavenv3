@@ -54,7 +54,7 @@ const noticeOnlyLink = buildWizardLink({
 export const metadata: Metadata = {
   title: 'Eviction Process England | How to Evict a Tenant | Landlord Heaven',
   description:
-    'Guide to the eviction process in England. Legal steps, timelines, and costs for Section 21 and Section 8 evictions. From Â£29.99.',
+    'Guide to the eviction process in England. Legal steps, timelines, and costs for Section 21 and Section 8 evictions. From £29.99.',
   keywords: [
     'eviction process england',
     'how to evict tenant england',
@@ -68,7 +68,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Eviction Process England | How to Evict a Tenant | Landlord Heaven',
     description:
-      'Complete guide to the eviction process in England. Learn the legal steps, timelines, and costs. Get court-ready eviction documents from Â£29.99.',
+      'Complete guide to the eviction process in England. Learn the legal steps, timelines, and costs. Get court-ready eviction documents from £29.99.',
     type: 'article',
     url: getCanonicalUrl('/eviction-process-england'),
     siteName: 'Landlord Heaven',
@@ -454,12 +454,12 @@ export default function EvictionProcessEnglandPage() {
                       </h3>
                       <p className="text-gray-600 mb-4">
                         Submit your claim to the County Court covering the property address. The
-                        court fee is currently Â£355 for both accelerated and standard possession.
+                        court fee is currently £355 for both accelerated and standard possession.
                       </p>
                       <div className="bg-gray-50 rounded-lg p-4">
                         <div className="flex justify-between items-center">
                           <span className="text-gray-600">Possession claim fee</span>
-                          <span className="font-bold text-gray-900">Â£355</span>
+                          <span className="font-bold text-gray-900">£355</span>
                         </div>
                       </div>
                     </div>
@@ -541,7 +541,7 @@ export default function EvictionProcessEnglandPage() {
                       <div className="bg-gray-50 rounded-lg p-4">
                         <div className="flex justify-between items-center mb-2">
                           <span className="text-gray-600">Warrant fee</span>
-                          <span className="font-bold text-gray-900">~Â£130</span>
+                          <span className="font-bold text-gray-900">~£130</span>
                         </div>
                         <div className="flex justify-between items-center">
                           <span className="text-gray-600">Typical wait time</span>
@@ -729,8 +729,8 @@ export default function EvictionProcessEnglandPage() {
                       </tr>
                       <tr className="bg-gray-50/50">
                         <td className="p-4 font-medium text-gray-900">Court Claim Fee</td>
-                        <td className="p-4 text-gray-600">Â£355</td>
-                        <td className="p-4 text-gray-600">Â£355</td>
+                        <td className="p-4 text-gray-600">£355</td>
+                        <td className="p-4 text-gray-600">£355</td>
                       </tr>
                       <tr>
                         <td className="p-4 font-medium text-gray-900">Court Processing</td>
@@ -744,8 +744,8 @@ export default function EvictionProcessEnglandPage() {
                       </tr>
                       <tr>
                         <td className="p-4 font-medium text-gray-900">Warrant (if needed)</td>
-                        <td className="p-4 text-gray-600">Â£130 + 4-8 weeks</td>
-                        <td className="p-4 text-gray-600">Â£130 + 4-8 weeks</td>
+                        <td className="p-4 text-gray-600">£130 + 4-8 weeks</td>
+                        <td className="p-4 text-gray-600">£130 + 4-8 weeks</td>
                       </tr>
                       <tr className="bg-primary/5">
                         <td className="p-4 font-bold text-gray-900">Total Time (typical)</td>
@@ -754,8 +754,8 @@ export default function EvictionProcessEnglandPage() {
                       </tr>
                       <tr className="bg-primary/5">
                         <td className="p-4 font-bold text-gray-900">Total Cost (court only)</td>
-                        <td className="p-4 font-bold text-primary">~Â£485</td>
-                        <td className="p-4 font-bold text-primary">~Â£485</td>
+                        <td className="p-4 font-bold text-primary">~£485</td>
+                        <td className="p-4 font-bold text-primary">~£485</td>
                       </tr>
                     </tbody>
                   </table>
@@ -766,7 +766,7 @@ export default function EvictionProcessEnglandPage() {
                 <div className="bg-gray-50 rounded-xl p-4">
                   <PoundSterling className="w-6 h-6 text-primary mx-auto mb-2" />
                   <p className="text-sm text-gray-600">Solicitor (optional)</p>
-                  <p className="font-bold text-gray-900">Â£500 - Â£3,000</p>
+                  <p className="font-bold text-gray-900">£500 - £3,000</p>
                 </div>
                 <div className="bg-gray-50 rounded-xl p-4">
                   <FileText className="w-6 h-6 text-primary mx-auto mb-2" />

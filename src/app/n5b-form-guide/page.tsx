@@ -85,7 +85,7 @@ export default function N5BFormGuidePage() {
         <UniversalHero
           title="N5B Form Guide"
           subtitle="Use accelerated possession correctly after Section 21 service, with filing steps and evidence checks."
-          primaryCta={{ label: 'Get Complete Pack — £69.99', href: wizardLinkCompletePack }}
+          primaryCta={{ label: 'Get Complete Pack — �69.99', href: wizardLinkCompletePack }}
           secondaryCta={{ label: 'Need Section 21 First?', href: '/section-21-notice-template' }}
           showTrustPositioningBar
           hideMedia
@@ -97,7 +97,7 @@ export default function N5BFormGuidePage() {
           badgeIcon={<FileText className="w-4 h-4" />}
           title="N5B Form Guide — Accelerated Possession"
           subtitle={<>Form N5B is the <strong>fastest way to get a possession order</strong> after serving Section 21. No court hearing needed in most cases. If you also need to recover arrears, see our <Link href="/money-claim-online-mcol" className="text-primary hover:underline">Money Claim Online (MCOL) guide</Link>.</>}
-          primaryCTA={{ label: 'Get Complete Pack — £69.99', href: wizardLinkCompletePack }}
+          primaryCTA={{ label: 'Get Complete Pack — �69.99', href: wizardLinkCompletePack }}
           secondaryCTA={{ label: 'Need Section 21 First?', href: '/section-21-notice-template' }}
           variant="pastel"
         >
@@ -198,8 +198,8 @@ export default function N5BFormGuidePage() {
                     </tr>
                     <tr>
                       <td className="p-4 text-gray-700">Court fee</td>
-                      <td className="p-4 text-center text-gray-700">£355</td>
-                      <td className="p-4 text-center text-gray-700">£355</td>
+                      <td className="p-4 text-center text-gray-700">�355</td>
+                      <td className="p-4 text-center text-gray-700">�355</td>
                     </tr>
                     <tr>
                       <td className="p-4 text-gray-700">Written tenancy required?</td>

@@ -240,7 +240,7 @@ const ArrearsDetailsPanel: React.FC<ArrearsDetailsPanelProps> = ({
                 <div>
                   <span className="text-gray-600">Total arrears:</span>
                   <span className="ml-2 font-semibold text-red-600">
-                    Â£{arrearsSummary.total_arrears.toFixed(2)}
+                    £{arrearsSummary.total_arrears.toFixed(2)}
                   </span>
                 </div>
                 <div>
@@ -255,7 +255,7 @@ const ArrearsDetailsPanel: React.FC<ArrearsDetailsPanelProps> = ({
                     <div>
                       <span className="text-gray-600">Threshold required:</span>
                       <span className="ml-2 font-semibold">
-                        {thresholdResult.thresholdLabel} (Â£{thresholdResult.thresholdAmount.toFixed(2)})
+                        {thresholdResult.thresholdLabel} (£{thresholdResult.thresholdAmount.toFixed(2)})
                       </span>
                     </div>
                     <div>
@@ -286,8 +286,8 @@ const ArrearsDetailsPanel: React.FC<ArrearsDetailsPanelProps> = ({
                     thresholdResult.met ? 'text-green-700' : 'text-amber-700'
                   }`}>
                     {thresholdResult.met
-                      ? `Arrears of Â£${arrearsSummary.total_arrears.toFixed(2)} meet the statutory threshold for serious rent arrears under the Renting Homes (Wales) Act 2016.`
-                      : `Arrears of Â£${arrearsSummary.total_arrears.toFixed(2)} are below the Section 157 threshold. You may use Section 159 (some rent arrears) instead.`}
+                      ? `Arrears of £${arrearsSummary.total_arrears.toFixed(2)} meet the statutory threshold for serious rent arrears under the Renting Homes (Wales) Act 2016.`
+                      : `Arrears of £${arrearsSummary.total_arrears.toFixed(2)} are below the Section 157 threshold. You may use Section 159 (some rent arrears) instead.`}
                   </p>
                 </div>
               )}

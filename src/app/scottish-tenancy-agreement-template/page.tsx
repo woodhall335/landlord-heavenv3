@@ -50,7 +50,7 @@ const faqs = [
   },
   {
     question: 'Do I need to register as a landlord in Scotland?',
-    answer: 'Yes, landlord registration is mandatory in Scotland. You must register with your local council before advertising or letting any property. Your registration number must appear on all advertisements and in the tenancy agreement. Failure to register is a criminal offense with fines up to Â£50,000 and potential rent repayment orders.',
+    answer: 'Yes, landlord registration is mandatory in Scotland. You must register with your local council before advertising or letting any property. Your registration number must appear on all advertisements and in the tenancy agreement. Failure to register is a criminal offense with fines up to £50,000 and potential rent repayment orders.',
   },
   {
     question: 'What is the maximum deposit I can charge in Scotland?',
@@ -78,7 +78,7 @@ const faqs = [
   },
   {
     question: 'Does the template work for shared properties/HMOs?',
-    answer: 'Our Premium PRT (Â£19.99) includes HMO-specific provisions for properties with 3+ unrelated tenants. Scotland has its own HMO licensing requirements through local councils - you need both an HMO licence and landlord registration. The Premium template covers shared area responsibilities and room allocation.',
+    answer: 'Our Premium PRT (£19.99) includes HMO-specific provisions for properties with 3+ unrelated tenants. Scotland has its own HMO licensing requirements through local councils - you need both an HMO licence and landlord registration. The Premium template covers shared area responsibilities and room allocation.',
   },
   {
     question: 'What happens to existing Short Assured Tenancies?',
@@ -112,7 +112,7 @@ export default function ScottishTenancyAgreementTemplatePage() {
         <UniversalHero
           title="Scottish Tenancy Agreement"
           subtitle="Generate a legally validated Scottish tenancy agreement with solicitor-grade, compliance-checked PRT terms."
-          primaryCta={{ label: "Start now", href: "/wizard?product=ast_standard&topic=tenancy&src=seo_scottish_tenancy_agreement_template&jurisdiction=scotland" }}
+          primaryCta={{ label: "Start now", href: "/products/ast?topic=tenancy&src=seo_scottish_tenancy_agreement_template&jurisdiction=scotland" }}
           showTrustPositioningBar
           hideMedia
         />
@@ -146,16 +146,16 @@ export default function ScottishTenancyAgreementTemplatePage() {
             </p>
             <div className="flex gap-4 justify-center flex-wrap">
               <Link
-                href="/wizard?product=ast_standard&topic=tenancy&src=seo_scottish_tenancy_agreement_template&jurisdiction=scotland"
+                href="/products/ast?topic=tenancy&src=seo_scottish_tenancy_agreement_template&jurisdiction=scotland"
                 className="inline-flex items-center gap-2 bg-white border-2 border-blue-600 text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors"
               >
-                Standard PRT â€” Â£9.99
+                Standard PRT â€” £9.99
               </Link>
               <Link
-                href="/wizard?product=ast_premium&topic=tenancy&src=seo_scottish_tenancy_agreement_template&jurisdiction=scotland"
+                href="/products/ast?topic=tenancy&src=seo_scottish_tenancy_agreement_template&jurisdiction=scotland"
                 className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
               >
-                Premium PRT â€” Â£19.99
+                Premium PRT â€” £19.99
               </Link>
             </div>
             <p className="mt-4 text-sm text-gray-500">Private Housing (Tenancies) Act 2016 compliant â€¢ Instant PDF</p>
@@ -244,7 +244,7 @@ export default function ScottishTenancyAgreementTemplatePage() {
             <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">What&apos;s Included in Your Scottish Agreement</h2>
             <div className="grid md:grid-cols-2 gap-6">
               <div className="p-6 rounded-xl border border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Standard PRT (Â£9.99)</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Standard PRT (£9.99)</h3>
                 <ul className="space-y-2 text-gray-600">
                   <li className="flex items-start gap-2">
                     <svg className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
@@ -272,7 +272,7 @@ export default function ScottishTenancyAgreementTemplatePage() {
                 <div className="inline-block bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-xs font-bold mb-3">
                   RECOMMENDED
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Premium PRT (Â£19.99)</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Premium PRT (£19.99)</h3>
                 <ul className="space-y-2 text-gray-600">
                   <li className="flex items-start gap-2">
                     <svg className="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>

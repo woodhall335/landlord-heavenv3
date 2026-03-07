@@ -211,7 +211,7 @@ function NewTenantPageInner() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <Input
-                    label="Monthly Rent (Â£)"
+                    label="Monthly Rent (£)"
                     type="number"
                     value={rentAmount}
                     onChange={(e) => setRentAmount(e.target.value)}
@@ -222,7 +222,7 @@ function NewTenantPageInner() {
                   />
 
                   <Input
-                    label="Deposit Amount (Â£)"
+                    label="Deposit Amount (£)"
                     type="number"
                     value={depositAmount}
                     onChange={(e) => setDepositAmount(e.target.value)}

@@ -66,7 +66,7 @@ const faqs = [
   {
     question: 'How much can I claim for wall repairs?',
     answer:
-      'Typical costs include: filling and painting a small hole Â£30-50, larger hole repair Â£50-100, full wall replastering Â£150-400, door replacement Â£100-300 plus hanging. Get professional quotes for your specific damage.',
+      'Typical costs include: filling and painting a small hole £30-50, larger hole repair £50-100, full wall replastering £150-400, door replacement £100-300 plus hanging. Get professional quotes for your specific damage.',
   },
   {
     question: 'Can I claim if I need to repaint the whole room?',
@@ -295,35 +295,35 @@ export default function MoneyClaimWallDamagePage() {
                   <tbody className="divide-y divide-gray-200">
                     <tr>
                       <td className="px-6 py-3 text-gray-600">Small hole fill + paint (per hole)</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">Â£30 - Â£50</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">£30 - £50</td>
                     </tr>
                     <tr className="bg-gray-50">
                       <td className="px-6 py-3 text-gray-600">Large hole repair + match paint</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">Â£50 - Â£100</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">£50 - £100</td>
                     </tr>
                     <tr>
                       <td className="px-6 py-3 text-gray-600">Internal door replacement</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">Â£100 - Â£250</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">£100 - £250</td>
                     </tr>
                     <tr className="bg-gray-50">
                       <td className="px-6 py-3 text-gray-600">Door hanging (labour only)</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">Â£50 - Â£100</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">£50 - £100</td>
                     </tr>
                     <tr>
                       <td className="px-6 py-3 text-gray-600">Plaster repair (per sqm)</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">Â£40 - Â£80</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">£40 - £80</td>
                     </tr>
                     <tr className="bg-gray-50">
                       <td className="px-6 py-3 text-gray-600">Full room repaint (avg room)</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">Â£200 - Â£400</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">£200 - £400</td>
                     </tr>
                     <tr>
                       <td className="px-6 py-3 text-gray-600">Skirting board repair (per metre)</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">Â£15 - Â£30</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">£15 - £30</td>
                     </tr>
                     <tr className="bg-gray-50">
                       <td className="px-6 py-3 text-gray-600">Door lock replacement</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">Â£50 - Â£120</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">£50 - £120</td>
                     </tr>
                   </tbody>
                 </table>
@@ -454,11 +454,11 @@ export default function MoneyClaimWallDamagePage() {
                 href="/products/money-claim?topic=debt&src=seo_money_claim_wall_damage&reason=property_damage"
                 className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
               >
-                Start Your Claim â€” Â£45.99
+                Start Your Claim â€” £45.99
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <p className="text-sm text-gray-500 mt-3">
-                Court fees from Â£35 extra (based on claim amount)
+                Court fees from £35 extra (based on claim amount)
               </p>
             </div>
           </div>

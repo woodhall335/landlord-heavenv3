@@ -214,7 +214,7 @@ export default function ApplyPossessionOrderPage() {
                   <div className="space-y-3 mb-6">
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-gray-600">Court fee</span>
-                      <span className="font-bold text-gray-900">Â£355</span>
+                      <span className="font-bold text-gray-900">£355</span>
                     </div>
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-gray-600">Typical time</span>
@@ -284,7 +284,7 @@ export default function ApplyPossessionOrderPage() {
                   <div className="space-y-3 mb-6">
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-gray-600">Court fee</span>
-                      <span className="font-bold text-gray-900">Â£355</span>
+                      <span className="font-bold text-gray-900">£355</span>
                     </div>
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-gray-600">Typical time</span>
@@ -360,22 +360,22 @@ export default function ApplyPossessionOrderPage() {
                     <tbody className="divide-y divide-gray-100">
                       <tr>
                         <td className="p-4 font-medium text-gray-900">Possession claim (N5B or N5)</td>
-                        <td className="p-4 text-right font-bold text-gray-900">Â£355</td>
+                        <td className="p-4 text-right font-bold text-gray-900">£355</td>
                         <td className="p-4 text-gray-600 text-sm">Same fee for both routes</td>
                       </tr>
                       <tr className="bg-gray-50/50">
                         <td className="p-4 font-medium text-gray-900">Warrant of possession (N325)</td>
-                        <td className="p-4 text-right font-bold text-gray-900">Â£130</td>
+                        <td className="p-4 text-right font-bold text-gray-900">£130</td>
                         <td className="p-4 text-gray-600 text-sm">If tenant does not leave after order</td>
                       </tr>
                       <tr>
                         <td className="p-4 font-medium text-gray-900">High Court enforcement (optional)</td>
-                        <td className="p-4 text-right font-bold text-gray-900">Â£66+</td>
+                        <td className="p-4 text-right font-bold text-gray-900">£66+</td>
                         <td className="p-4 text-gray-600 text-sm">Faster than county court bailiffs</td>
                       </tr>
                       <tr className="bg-primary/5">
                         <td className="p-4 font-bold text-gray-900">Total (typical case)</td>
-                        <td className="p-4 text-right font-bold text-primary text-lg">Â£485</td>
+                        <td className="p-4 text-right font-bold text-primary text-lg">£485</td>
                         <td className="p-4 text-gray-600 text-sm">Claim + warrant</td>
                       </tr>
                     </tbody>
@@ -526,7 +526,7 @@ export default function ApplyPossessionOrderPage() {
                         Pay the Court Fee
                       </h3>
                       <p className="text-gray-600 mb-3">
-                        Pay Â£355 by card (online), cheque, or at the court counter.
+                        Pay £355 by card (online), cheque, or at the court counter.
                       </p>
                       <div className="flex items-center gap-2 text-sm text-gray-600">
                         <PoundSterling className="w-4 h-4" />
@@ -709,7 +709,7 @@ export default function ApplyPossessionOrderPage() {
                     <div className="grid sm:grid-cols-2 gap-4 mb-6">
                       <div className="bg-gray-50 rounded-lg p-4">
                         <span className="text-gray-600 text-sm block">Court fee</span>
-                        <span className="font-bold text-gray-900 text-lg">~Â£130</span>
+                        <span className="font-bold text-gray-900 text-lg">~£130</span>
                       </div>
                       <div className="bg-gray-50 rounded-lg p-4">
                         <span className="text-gray-600 text-sm block">Typical wait</span>

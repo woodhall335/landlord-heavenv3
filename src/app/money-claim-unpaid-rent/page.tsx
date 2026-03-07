@@ -306,7 +306,7 @@ export default function MoneyClaimUnpaidRentPage() {
                 <p>
                   <strong>Money Claim Online (MCOL)</strong> is the fastest and cheapest way
                   to make a money claim in England and Wales. You can claim amounts up to
-                  Â£100,000 entirely online. For claims up to Â£10,000, the process is handled
+                  £100,000 entirely online. For claims up to £10,000, the process is handled
                   through the small claims track.
                 </p>
               </div>
@@ -413,32 +413,32 @@ export default function MoneyClaimUnpaidRentPage() {
                   </thead>
                   <tbody className="divide-y divide-gray-200">
                     <tr>
-                      <td className="px-6 py-3 text-gray-600">Up to Â£300</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">Â£35</td>
+                      <td className="px-6 py-3 text-gray-600">Up to £300</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">£35</td>
                     </tr>
                     <tr className="bg-gray-50">
-                      <td className="px-6 py-3 text-gray-600">Â£300.01 - Â£500</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">Â£50</td>
+                      <td className="px-6 py-3 text-gray-600">£300.01 - £500</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">£50</td>
                     </tr>
                     <tr>
-                      <td className="px-6 py-3 text-gray-600">Â£500.01 - Â£1,000</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">Â£70</td>
+                      <td className="px-6 py-3 text-gray-600">£500.01 - £1,000</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">£70</td>
                     </tr>
                     <tr className="bg-gray-50">
-                      <td className="px-6 py-3 text-gray-600">Â£1,000.01 - Â£1,500</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">Â£80</td>
+                      <td className="px-6 py-3 text-gray-600">£1,000.01 - £1,500</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">£80</td>
                     </tr>
                     <tr>
-                      <td className="px-6 py-3 text-gray-600">Â£1,500.01 - Â£3,000</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">Â£115</td>
+                      <td className="px-6 py-3 text-gray-600">£1,500.01 - £3,000</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">£115</td>
                     </tr>
                     <tr className="bg-gray-50">
-                      <td className="px-6 py-3 text-gray-600">Â£3,000.01 - Â£5,000</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">Â£205</td>
+                      <td className="px-6 py-3 text-gray-600">£3,000.01 - £5,000</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">£205</td>
                     </tr>
                     <tr>
-                      <td className="px-6 py-3 text-gray-600">Â£5,000.01 - Â£10,000</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">Â£455</td>
+                      <td className="px-6 py-3 text-gray-600">£5,000.01 - £10,000</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">£455</td>
                     </tr>
                   </tbody>
                 </table>
@@ -455,7 +455,7 @@ export default function MoneyClaimUnpaidRentPage() {
                   className="inline-flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary/90"
                 >
                   <FileText className="w-4 h-4" />
-                  Get Money Claim Pack â€” Â£45.99
+                  Get Money Claim Pack â€” £45.99
                 </Link>
               </div>
             </div>
@@ -475,9 +475,9 @@ export default function MoneyClaimUnpaidRentPage() {
 
               <div className="prose prose-lg max-w-none mb-8">
                 <p>
-                  In Scotland, money claims up to Â£5,000 use the{' '}
+                  In Scotland, money claims up to £5,000 use the{' '}
                   <strong>Simple Procedure</strong> through the Sheriff Court. This is
-                  similar to England&apos;s small claims track. For claims over Â£5,000, you use
+                  similar to England&apos;s small claims track. For claims over £5,000, you use
                   Ordinary Cause procedure.
                 </p>
               </div>
@@ -541,27 +541,27 @@ export default function MoneyClaimUnpaidRentPage() {
                   </thead>
                   <tbody className="divide-y divide-gray-200">
                     <tr>
-                      <td className="px-6 py-3 text-gray-600">Up to Â£300</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">Â£19</td>
+                      <td className="px-6 py-3 text-gray-600">Up to £300</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">£19</td>
                     </tr>
                     <tr className="bg-gray-50">
-                      <td className="px-6 py-3 text-gray-600">Â£300.01 - Â£1,500</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">Â£77</td>
+                      <td className="px-6 py-3 text-gray-600">£300.01 - £1,500</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">£77</td>
                     </tr>
                     <tr>
-                      <td className="px-6 py-3 text-gray-600">Â£1,500.01 - Â£3,000</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">Â£87</td>
+                      <td className="px-6 py-3 text-gray-600">£1,500.01 - £3,000</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">£87</td>
                     </tr>
                     <tr className="bg-gray-50">
-                      <td className="px-6 py-3 text-gray-600">Â£3,000.01 - Â£5,000</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">Â£104</td>
+                      <td className="px-6 py-3 text-gray-600">£3,000.01 - £5,000</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">£104</td>
                     </tr>
                   </tbody>
                 </table>
               </div>
 
               <p className="text-sm text-gray-500">
-                For claims over Â£5,000, use Ordinary Cause procedure (higher fees apply).
+                For claims over £5,000, use Ordinary Cause procedure (higher fees apply).
                 Check Scottish Courts website for current fees.
               </p>
             </div>
@@ -581,7 +581,7 @@ export default function MoneyClaimUnpaidRentPage() {
 
               <div className="prose prose-lg max-w-none mb-8">
                 <p>
-                  In Northern Ireland, money claims up to Â£3,000 go through the{' '}
+                  In Northern Ireland, money claims up to £3,000 go through the{' '}
                   <strong>Small Claims Court</strong>. Larger claims use the County Court.
                   The process is similar to England but uses NI-specific forms and courts.
                 </p>
@@ -595,7 +595,7 @@ export default function MoneyClaimUnpaidRentPage() {
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-green-500 mt-1" />
                     <span>
-                      <strong>Small claims (up to Â£3,000):</strong> Simplified process through
+                      <strong>Small claims (up to £3,000):</strong> Simplified process through
                       the Small Claims Court
                     </span>
                   </li>
@@ -738,7 +738,7 @@ export default function MoneyClaimUnpaidRentPage() {
                   href="/products/money-claim"
                   className="inline-flex items-center justify-center gap-2 bg-white text-green-700 font-semibold py-4 px-8 rounded-xl hover:bg-green-50 transition-colors"
                 >
-                  Get Money Claim Pack â€” Â£45.99
+                  Get Money Claim Pack â€” £45.99
                 </Link>
                 <Link
                   href="/tools/rent-arrears-calculator"
@@ -762,7 +762,7 @@ export default function MoneyClaimUnpaidRentPage() {
                 jurisdictionLabel="UK money claims"
                 scenarioLabel="recovering rent arrears"
                 primaryCTA={{
-                  label: 'Start money claim pack â€” Â£45.99',
+                  label: 'Start money claim pack â€” £45.99',
                   href: productLinks.moneyClaim.href,
                 }}
                 secondaryCTA={{

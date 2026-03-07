@@ -750,7 +750,7 @@ export const ReviewSection: React.FC<SectionProps> = ({
             </h4>
             <p className="text-sm text-gray-600">
               Your Particulars of Claim and Letter Before Claim will be professionally
-              drafted by Ask Heaven, saving you Â£300-600 in solicitor fees.
+              drafted by Ask Heaven, saving you £300-600 in solicitor fees.
             </p>
           </div>
         </div>

@@ -60,7 +60,7 @@ const faqs = [
   {
     question: 'How do I calculate betterment for old carpets?',
     answer:
-      'Betterment reduces your claim based on carpet age. A carpet with a 10-year lifespan that was 8 years old has 2 years remaining value (20%). If replacement costs Â£500, you can claim Â£100 (20% of value). Courts expect betterment calculations.',
+      'Betterment reduces your claim based on carpet age. A carpet with a 10-year lifespan that was 8 years old has 2 years remaining value (20%). If replacement costs £500, you can claim £100 (20% of value). Courts expect betterment calculations.',
   },
   {
     question: 'What carpet damage can I claim for?',
@@ -280,8 +280,8 @@ export default function MoneyClaimCarpetDamagePage() {
                   </table>
                 </div>
                 <p className="text-xs text-gray-500 mt-4">
-                  Example: A Â£600 mid-range carpet that was 6 years old has 40% remaining lifespan.
-                  Maximum claim = Â£600 Ã— 40% = Â£240.
+                  Example: A £600 mid-range carpet that was 6 years old has 40% remaining lifespan.
+                  Maximum claim = £600 Ã— 40% = £240.
                 </p>
               </div>
 
@@ -422,27 +422,27 @@ export default function MoneyClaimCarpetDamagePage() {
                   <tbody className="divide-y divide-gray-200">
                     <tr>
                       <td className="px-6 py-3 text-gray-600">Professional deep clean (per room)</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">Â£25 - Â£60</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">£25 - £60</td>
                     </tr>
                     <tr className="bg-gray-50">
                       <td className="px-6 py-3 text-gray-600">Stain treatment (specialist)</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">Â£50 - Â£150</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">£50 - £150</td>
                     </tr>
                     <tr>
                       <td className="px-6 py-3 text-gray-600">Budget carpet + fitting (per sqm)</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">Â£15 - Â£25</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">£15 - £25</td>
                     </tr>
                     <tr className="bg-gray-50">
                       <td className="px-6 py-3 text-gray-600">Mid-range carpet + fitting (per sqm)</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">Â£25 - Â£45</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">£25 - £45</td>
                     </tr>
                     <tr>
                       <td className="px-6 py-3 text-gray-600">Underlay replacement (per sqm)</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">Â£3 - Â£8</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">£3 - £8</td>
                     </tr>
                     <tr className="bg-gray-50">
                       <td className="px-6 py-3 text-gray-600">Old carpet removal and disposal</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">Â£50 - Â£150</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">£50 - £150</td>
                     </tr>
                   </tbody>
                 </table>
@@ -453,11 +453,11 @@ export default function MoneyClaimCarpetDamagePage() {
                   href="/products/money-claim?reason=property_damage&topic=debt&src=seo_money_claim_carpet_damage"
                   className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
                 >
-                  Start Your Claim â€” Â£45.99
+                  Start Your Claim â€” £45.99
                   <ArrowRight className="w-5 h-5" />
                 </Link>
                 <p className="text-sm text-gray-500 mt-3">
-                  Court fees from Â£35 extra (based on claim amount)
+                  Court fees from £35 extra (based on claim amount)
                 </p>
               </div>
             </div>

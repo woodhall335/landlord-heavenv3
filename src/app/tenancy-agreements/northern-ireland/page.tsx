@@ -7,11 +7,11 @@ import { getCanonicalUrl } from '@/lib/seo/urls';
 const PRICE_VALID_UNTIL = '2026-12-31';
 
 export const metadata: Metadata = {
-  title: 'Private Tenancy Agreement Northern Ireland 2026 | From ¬£9.99',
-  description: 'Create a Private Tenancy Agreement for Northern Ireland. Updated for 2026 with Private Tenancies Act (NI) 2022. From ¬£9.99.',
+  title: 'Private Tenancy Agreement Northern Ireland 2026 | From £9.99',
+  description: 'Create a Private Tenancy Agreement for Northern Ireland. Updated for 2026 with Private Tenancies Act (NI) 2022. From £9.99.',
   keywords: 'Private Tenancy Northern Ireland, NI tenancy agreement, Private Tenancies Act 2022, Northern Ireland rental agreement, EICR 2025, landlord NI, rental property Northern Ireland',
   openGraph: {
-    title: 'Private Tenancy Agreement Northern Ireland 2026 | From ¬£9.99',
+    title: 'Private Tenancy Agreement Northern Ireland 2026 | From £9.99',
     description: 'Create a legally compliant Private Tenancy Agreement for NI. Updated for 2026 with 2025 EICR requirements and rent increase restrictions.',
     type: 'website',
     url: getCanonicalUrl('/northern-ireland-tenancy-agreement-template'),
@@ -201,16 +201,16 @@ export default function NorthernIrelandTenancyPage() {
             </div>
             <div className="flex gap-4 justify-center flex-wrap">
               <Link
-                href="/wizard?product=ast_standard&src=product_page&topic=tenancy&jurisdiction=northern-ireland"
+                href="/products/ast?src=product_page&topic=tenancy&jurisdiction=northern-ireland"
                 className="hero-btn-secondary"
               >
-                Create Standard - ¬£9.99
+                Create Standard - £9.99
               </Link>
               <Link
-                href="/wizard?product=ast_premium&src=product_page&topic=tenancy&jurisdiction=northern-ireland"
+                href="/products/ast?src=product_page&topic=tenancy&jurisdiction=northern-ireland"
                 className="hero-btn-primary"
               >
-                Create Premium - ¬£19.99
+                Create Premium - £19.99
               </Link>
             </div>
           </div>
@@ -751,7 +751,7 @@ export default function NorthernIrelandTenancyPage() {
 
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="bg-white/10 backdrop-blur rounded-lg p-6">
-                  <h4 className="text-xl font-bold mb-3">Standard - ¬£9.99</h4>
+                  <h4 className="text-xl font-bold mb-3">Standard - £9.99</h4>
                   <ul className="space-y-2 text-sm">
                     <li>‚úì All legal essentials for NI tenancies</li>
                     <li>‚úì 2025 legal updates (EICR, rent restrictions)</li>
@@ -761,7 +761,7 @@ export default function NorthernIrelandTenancyPage() {
                     <li>‚úì Clear, professional formatting</li>
                   </ul>
                   <Link
-                    href="/wizard?product=ast_standard&src=product_page&topic=tenancy&jurisdiction=northern-ireland"
+                    href="/products/ast?src=product_page&topic=tenancy&jurisdiction=northern-ireland"
                     className="mt-4 block text-center bg-white text-red-600 px-6 py-3 rounded-lg font-semibold hover:bg-red-50 transition-colors"
                   >
                     Create Standard
@@ -772,7 +772,7 @@ export default function NorthernIrelandTenancyPage() {
                   <div className="inline-block bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-xs font-bold mb-2">
                     RECOMMENDED
                   </div>
-                  <h4 className="text-xl font-bold mb-3">Premium - ¬£19.99</h4>
+                  <h4 className="text-xl font-bold mb-3">Premium - £19.99</h4>
                   <ul className="space-y-2 text-sm">
                     <li>‚úì Everything in Standard PLUS:</li>
                     <li>‚úì Comprehensive inventory section with white goods grid</li>
@@ -785,7 +785,7 @@ export default function NorthernIrelandTenancyPage() {
                     <li className="font-semibold text-yellow-300">‚úì Covers HMOs (Houses in Multiple Occupation)</li>
                   </ul>
                   <Link
-                    href="/wizard?product=ast_premium&src=product_page&topic=tenancy&jurisdiction=northern-ireland"
+                    href="/products/ast?src=product_page&topic=tenancy&jurisdiction=northern-ireland"
                     className="mt-4 block text-center bg-white text-purple-600 px-6 py-3 rounded-lg font-semibold hover:bg-purple-50 transition-colors"
                   >
                     Create Premium
@@ -999,7 +999,7 @@ export default function NorthernIrelandTenancyPage() {
             },
             {
               question: "What is the difference between Standard and Premium agreements?",
-              answer: "The Standard (¬£9.99) covers all legal essentials for NI tenancies, including 2025 updates, deposit protection, and length-based notice periods. The Premium (¬£19.99) adds: comprehensive inventory section with white goods grid, exhaustive terms and conditions (13 detailed clauses), professional gradient styling (NI red theme), enhanced 2025 legal compliance boxes, rights of change clauses, detailed repair obligations, and superior professional presentation."
+              answer: "The Standard (£9.99) covers all legal essentials for NI tenancies, including 2025 updates, deposit protection, and length-based notice periods. The Premium (£19.99) adds: comprehensive inventory section with white goods grid, exhaustive terms and conditions (13 detailed clauses), professional gradient styling (NI red theme), enhanced 2025 legal compliance boxes, rights of change clauses, detailed repair obligations, and superior professional presentation."
             },
             {
               question: "What is the maximum deposit I can charge in Northern Ireland?",
@@ -1074,16 +1074,16 @@ export default function NorthernIrelandTenancyPage() {
             </p>
             <div className="flex gap-6 justify-center flex-wrap">
               <Link
-                href="/wizard?product=ast_standard&src=product_page&topic=tenancy&jurisdiction=northern-ireland"
+                href="/products/ast?src=product_page&topic=tenancy&jurisdiction=northern-ireland"
                 className="bg-white text-red-600 px-8 py-4 rounded-lg font-semibold hover:bg-red-50 transition-colors text-lg shadow-lg"
               >
-                Standard - ¬£9.99
+                Standard - £9.99
               </Link>
               <Link
-                href="/wizard?product=ast_premium&src=product_page&topic=tenancy&jurisdiction=northern-ireland"
+                href="/products/ast?src=product_page&topic=tenancy&jurisdiction=northern-ireland"
                 className="bg-yellow-400 text-gray-900 px-8 py-4 rounded-lg font-semibold hover:bg-yellow-300 transition-colors text-lg shadow-lg"
               >
-                Premium - ¬£19.99 ‚≠ê
+                Premium - £19.99 ‚≠ê
               </Link>
             </div>
             <p className="mt-6 text-sm opacity-75">

@@ -7,7 +7,7 @@ import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/tenancy-agreements');
-const wizardHref = '/wizard?product=tenancy_agreement&src=seo_tenancy_agreements&topic=tenancy';
+const wizardHref = '/products/ast?src=seo_tenancy_agreements&topic=tenancy';
 
 export const metadata: Metadata = {
   title: 'Tenancy Agreements Hub | Solicitor-Grade Landlord Documents',

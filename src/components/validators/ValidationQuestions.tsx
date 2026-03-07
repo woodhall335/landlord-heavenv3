@@ -134,7 +134,7 @@ function QuestionInput({
     case 'currency':
       return (
         <div className="relative">
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">Â£</span>
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">£</span>
           <input
             type="number"
             step="0.01"

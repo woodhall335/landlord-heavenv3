@@ -320,19 +320,19 @@ export default function ClaimRentArrearsTenantPage() {
                       </p>
                       <div className="grid sm:grid-cols-2 gap-4 text-sm">
                         <div className="bg-gray-50 rounded-lg p-3">
-                          <span className="text-gray-600 block">Claim up to Â£300</span>
-                          <span className="font-bold text-gray-900">Â£35 fee</span>
+                          <span className="text-gray-600 block">Claim up to £300</span>
+                          <span className="font-bold text-gray-900">£35 fee</span>
                         </div>
                         <div className="bg-gray-50 rounded-lg p-3">
-                          <span className="text-gray-600 block">Claim Â£1,000-Â£1,500</span>
-                          <span className="font-bold text-gray-900">Â£185 fee</span>
+                          <span className="text-gray-600 block">Claim £1,000-£1,500</span>
+                          <span className="font-bold text-gray-900">£185 fee</span>
                         </div>
                         <div className="bg-gray-50 rounded-lg p-3">
-                          <span className="text-gray-600 block">Claim Â£5,000-Â£10,000</span>
-                          <span className="font-bold text-gray-900">Â£455 fee</span>
+                          <span className="text-gray-600 block">Claim £5,000-£10,000</span>
+                          <span className="font-bold text-gray-900">£455 fee</span>
                         </div>
                         <div className="bg-gray-50 rounded-lg p-3">
-                          <span className="text-gray-600 block">Claim Â£10,000+</span>
+                          <span className="text-gray-600 block">Claim £10,000+</span>
                           <span className="font-bold text-gray-900">5% of amount</span>
                         </div>
                       </div>
@@ -420,35 +420,35 @@ export default function ClaimRentArrearsTenantPage() {
                     </thead>
                     <tbody className="divide-y divide-gray-100">
                       <tr>
-                        <td className="p-4 text-gray-600">Up to Â£300</td>
-                        <td className="p-4 text-right font-bold text-gray-900">Â£35</td>
+                        <td className="p-4 text-gray-600">Up to £300</td>
+                        <td className="p-4 text-right font-bold text-gray-900">£35</td>
                       </tr>
                       <tr className="bg-gray-50/50">
-                        <td className="p-4 text-gray-600">Â£300.01 - Â£500</td>
-                        <td className="p-4 text-right font-bold text-gray-900">Â£70</td>
+                        <td className="p-4 text-gray-600">£300.01 - £500</td>
+                        <td className="p-4 text-right font-bold text-gray-900">£70</td>
                       </tr>
                       <tr>
-                        <td className="p-4 text-gray-600">Â£500.01 - Â£1,000</td>
-                        <td className="p-4 text-right font-bold text-gray-900">Â£105</td>
+                        <td className="p-4 text-gray-600">£500.01 - £1,000</td>
+                        <td className="p-4 text-right font-bold text-gray-900">£105</td>
                       </tr>
                       <tr className="bg-gray-50/50">
-                        <td className="p-4 text-gray-600">Â£1,000.01 - Â£1,500</td>
-                        <td className="p-4 text-right font-bold text-gray-900">Â£185</td>
+                        <td className="p-4 text-gray-600">£1,000.01 - £1,500</td>
+                        <td className="p-4 text-right font-bold text-gray-900">£185</td>
                       </tr>
                       <tr>
-                        <td className="p-4 text-gray-600">Â£1,500.01 - Â£3,000</td>
-                        <td className="p-4 text-right font-bold text-gray-900">Â£210</td>
+                        <td className="p-4 text-gray-600">£1,500.01 - £3,000</td>
+                        <td className="p-4 text-right font-bold text-gray-900">£210</td>
                       </tr>
                       <tr className="bg-gray-50/50">
-                        <td className="p-4 text-gray-600">Â£3,000.01 - Â£5,000</td>
-                        <td className="p-4 text-right font-bold text-gray-900">Â£255</td>
+                        <td className="p-4 text-gray-600">£3,000.01 - £5,000</td>
+                        <td className="p-4 text-right font-bold text-gray-900">£255</td>
                       </tr>
                       <tr>
-                        <td className="p-4 text-gray-600">Â£5,000.01 - Â£10,000</td>
-                        <td className="p-4 text-right font-bold text-gray-900">Â£455</td>
+                        <td className="p-4 text-gray-600">£5,000.01 - £10,000</td>
+                        <td className="p-4 text-right font-bold text-gray-900">£455</td>
                       </tr>
                       <tr className="bg-primary/5">
-                        <td className="p-4 text-gray-600">Â£10,000.01 - Â£100,000</td>
+                        <td className="p-4 text-gray-600">£10,000.01 - £100,000</td>
                         <td className="p-4 text-right font-bold text-primary">5% of amount</td>
                       </tr>
                     </tbody>

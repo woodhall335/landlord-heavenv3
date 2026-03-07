@@ -630,20 +630,20 @@ function MoneyClaimReviewContent({
           <div className="p-4 bg-gray-50 rounded-lg">
             <p className="text-sm text-gray-500 mb-1">Rent Arrears</p>
             <p className="text-2xl font-bold text-gray-900">
-              Â£{totalArrears.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
+              £{totalArrears.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
             </p>
           </div>
           <div className="p-4 bg-gray-50 rounded-lg">
             <p className="text-sm text-gray-500 mb-1">Damages</p>
             <p className="text-2xl font-bold text-gray-900">
-              Â£{damages.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
+              £{damages.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
             </p>
           </div>
           {claimInterest ? (
             <div className="p-4 bg-gray-50 rounded-lg">
               <p className="text-sm text-gray-500 mb-1">Interest ({interestRate}%)</p>
               <p className="text-2xl font-bold text-gray-900">
-                Â£{estimatedInterest.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
+                £{estimatedInterest.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
               </p>
               <p className="text-xs text-gray-400 mt-1">Estimated to date</p>
             </div>
@@ -656,7 +656,7 @@ function MoneyClaimReviewContent({
           <div className="p-4 bg-primary/10 rounded-lg border-2 border-primary">
             <p className="text-sm text-gray-500 mb-1">Total Claim</p>
             <p className="text-2xl font-bold text-primary">
-              Â£{totalClaim.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
+              £{totalClaim.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
             </p>
             <p className="text-xs text-gray-500 mt-1">Excluding court fees</p>
           </div>
@@ -2504,7 +2504,7 @@ function NoticeOnlyReviewContent({
         </ul>
         <div className="mt-4 pt-4 border-t">
           <p className="text-gray-600">
-            Price: <span className="font-semibold text-gray-900">Â£29.99</span>
+            Price: <span className="font-semibold text-gray-900">£29.99</span>
           </p>
         </div>
       </Card>
@@ -3056,7 +3056,7 @@ function TenancyReviewContent({
             <div className="p-4 bg-gray-50 rounded-lg">
               <p className="text-sm text-gray-500 mb-1">Rent</p>
               <p className="text-sm font-medium text-gray-900">
-                Â£{Number(rentAmount).toLocaleString('en-GB', { minimumFractionDigits: 2 })} {rentFrequency}
+                £{Number(rentAmount).toLocaleString('en-GB', { minimumFractionDigits: 2 })} {rentFrequency}
               </p>
             </div>
           )}
@@ -3064,7 +3064,7 @@ function TenancyReviewContent({
             <div className="p-4 bg-gray-50 rounded-lg">
               <p className="text-sm text-gray-500 mb-1">Deposit</p>
               <p className="text-sm font-medium text-gray-900">
-                Â£{Number(depositAmount).toLocaleString('en-GB', { minimumFractionDigits: 2 })}
+                £{Number(depositAmount).toLocaleString('en-GB', { minimumFractionDigits: 2 })}
               </p>
             </div>
           )}

@@ -405,11 +405,11 @@ export default function MoneyClaimUnpaidBillsPage() {
                 href="/products/money-claim?topic=debt&src=seo_money_claim_unpaid_bills&reason=unpaid_bills"
                 className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
               >
-                Start Your Claim — £45.99
+                Start Your Claim — �45.99
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <p className="text-sm text-gray-500 mt-3">
-                Court fees from £35 extra (based on claim amount)
+                Court fees from �35 extra (based on claim amount)
               </p>
             </div>
           </div>

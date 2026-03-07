@@ -139,7 +139,7 @@ const complianceTopics: ComplianceTopic[] = [
     id: 'right_to_rent',
     title: 'Right to Rent Checks',
     description:
-      'Landlords in England must verify that tenants have the right to rent in the UK before letting a property. Failure to check can result in civil penalties up to Â£20,000.',
+      'Landlords in England must verify that tenants have the right to rent in the UK before letting a property. Failure to check can result in civil penalties up to £20,000.',
     questions: [
       'Do I need to do right to rent checks and how?',
       'What documents are acceptable for right to rent?',
@@ -153,7 +153,7 @@ const complianceTopics: ComplianceTopic[] = [
       'Online checking service available for biometric residence permits/cards',
       'Keep copies of documents for duration of tenancy + 1 year',
       'Conduct follow-up checks for time-limited right to rent',
-      'Civil penalties up to Â£20,000 for non-compliance',
+      'Civil penalties up to £20,000 for non-compliance',
       'Avoid discrimination - check all prospective tenants equally',
       'Always check current guidance from the Home Office',
     ],
@@ -297,7 +297,7 @@ export default async function AskHeavenPage({
       <UniversalHero
         title="Ask Heaven: Legally Validated Landlord Q&A"
         subtitle="Get solicitor-grade, compliance-checked and court-ready guidance, then move straight into the right workflow."
-        primaryCta={{ label: 'Start Wizard', href: '/wizard?product=notice_only&topic=eviction&src=seo_ask_heaven' }}
+        primaryCta={{ label: 'Start Wizard', href: '/products/notice-only?topic=eviction&src=seo_ask_heaven' }}
         showTrustPositioningBar
         hideMedia
       />

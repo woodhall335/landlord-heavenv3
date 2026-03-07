@@ -234,7 +234,7 @@ export const UploadField: React.FC<UploadFieldProps> = ({
       case 'currency':
         return (
           <div className="relative mt-1">
-            <span className="absolute left-2 top-1/2 -translate-y-1/2 text-xs text-gray-500">Â£</span>
+            <span className="absolute left-2 top-1/2 -translate-y-1/2 text-xs text-gray-500">£</span>
             <input
               type="number"
               step="0.01"
@@ -881,14 +881,14 @@ export const UploadField: React.FC<UploadFieldProps> = ({
                         href={ctas.primary.href}
                         className="rounded bg-purple-600 px-3 py-2 text-xs font-medium text-white"
                       >
-                        {primaryLabel} (Â£{ctas.primary.price.toFixed(2)})
+                        {primaryLabel} (£{ctas.primary.price.toFixed(2)})
                       </a>
                       {ctas.secondary && (
                         <a
                           href={ctas.secondary.href}
                           className="rounded border border-purple-300 px-3 py-2 text-xs font-medium text-purple-700"
                         >
-                          {secondaryLabel} (Â£{ctas.secondary.price.toFixed(2)})
+                          {secondaryLabel} (£{ctas.secondary.price.toFixed(2)})
                         </a>
                       )}
                       {isInvalid && generatorLink && (
@@ -917,7 +917,7 @@ export const UploadField: React.FC<UploadFieldProps> = ({
                       <ToolUpsellCard
                         {...toolUpsell}
                         ctaHref={ctas.primary.href}
-                        ctaLabel={`Upgrade to court-ready pack â€” Â£${ctas.primary.price.toFixed(2)}`}
+                        ctaLabel={`Upgrade to court-ready pack â€” £${ctas.primary.price.toFixed(2)}`}
                       />
                     );
                   })()}

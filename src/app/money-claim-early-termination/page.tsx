@@ -250,19 +250,19 @@ export default function MoneyClaimEarlyTerminationPage() {
                   </div>
                   <div className="flex justify-between py-2 border-b border-gray-100">
                     <span className="text-gray-600">Void period until re-let: 6 weeks</span>
-                    <span className="font-semibold text-gray-900">Â£1,800</span>
+                    <span className="font-semibold text-gray-900">£1,800</span>
                   </div>
                   <div className="flex justify-between py-2 border-b border-gray-100">
                     <span className="text-gray-600">Letting agent re-letting fee</span>
-                    <span className="font-semibold text-gray-900">Â£600</span>
+                    <span className="font-semibold text-gray-900">£600</span>
                   </div>
                   <div className="flex justify-between py-2 border-b border-gray-100">
                     <span className="text-gray-600">Advertising and referencing</span>
-                    <span className="font-semibold text-gray-900">Â£150</span>
+                    <span className="font-semibold text-gray-900">£150</span>
                   </div>
                   <div className="flex justify-between py-2 bg-red-50 px-2 rounded">
                     <span className="text-gray-900 font-medium">Total claim</span>
-                    <span className="font-bold text-red-700">Â£2,550</span>
+                    <span className="font-bold text-red-700">£2,550</span>
                   </div>
                 </div>
                 <p className="text-xs text-gray-500 mt-4">
@@ -392,11 +392,11 @@ export default function MoneyClaimEarlyTerminationPage() {
                 href="/products/money-claim?reason=rent_arrears&topic=debt&src=seo_money_claim_early_termination"
                 className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
               >
-                Start Your Claim â€” Â£45.99
+                Start Your Claim â€” £45.99
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <p className="text-sm text-gray-500 mt-3">
-                Court fees from Â£35 extra (based on claim amount)
+                Court fees from £35 extra (based on claim amount)
               </p>
             </div>
           </div>

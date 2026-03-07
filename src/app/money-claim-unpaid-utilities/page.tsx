@@ -519,7 +519,7 @@ export default function MoneyClaimUnpaidUtilitiesPage() {
                     Scenario 2: Utilities Included in Rent
                   </h3>
                   <p className="text-gray-600 text-sm mb-3">
-                    Rent is stated as &quot;Â£X including bills&quot;. The tenant paid less than
+                    Rent is stated as &quot;£X including bills&quot;. The tenant paid less than
                     expected rent, or you want to claim the utility portion specifically.
                   </p>
                   <p className="text-gray-700 text-sm font-medium">

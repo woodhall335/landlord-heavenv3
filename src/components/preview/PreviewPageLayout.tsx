@@ -138,7 +138,7 @@ export function PreviewPageLayout({
       const checkoutUrl = data.session_url || data.checkout_url;
       if (checkoutUrl) {
         // Track checkout initiation in analytics (GA4 + FB Pixel)
-        const priceValue = parseFloat(price.replace(/[Â£,]/g, '')) || 0;
+        const priceValue = parseFloat(price.replace(/[£,]/g, '')) || 0;
         trackBeginCheckout(product, productName, priceValue);
 
         // Track checkout started (Vercel Analytics)
@@ -213,7 +213,7 @@ export function PreviewPageLayout({
                       <p className="text-sm text-green-800 mt-1">
                         A property solicitor typically charges{' '}
                         <span className="font-semibold">
-                          Â£{SOLICITOR_COSTS[product].low}â€“Â£{SOLICITOR_COSTS[product].high}
+                          £{SOLICITOR_COSTS[product].low}â€“£{SOLICITOR_COSTS[product].high}
                         </span>{' '}
                         for {SOLICITOR_COSTS[product].label}.
                       </p>

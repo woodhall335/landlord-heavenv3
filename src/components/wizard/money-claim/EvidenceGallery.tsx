@@ -46,7 +46,7 @@ const EVIDENCE_EXAMPLES: EvidenceExample[] = [
       description: 'Handwritten notes with approximate dates and rounded figures.',
       issues: [
         'No specific dates ("around March")',
-        'Rounded amounts ("about Â£500")',
+        'Rounded amounts ("about £500")',
         'No reference to bank records',
         'Missing periods or gaps',
         'Doesn\'t match stated rent amount',

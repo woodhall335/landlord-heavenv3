@@ -1,4 +1,4 @@
-ï»¿import type { Metadata } from 'next';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getCanonicalUrl } from '@/lib/seo/urls';
 import { StructuredData, breadcrumbSchema, articleSchema } from '@/lib/seo/structured-data';
@@ -54,7 +54,7 @@ const faqs = [
   },
   {
     question: 'Do I need to register as a landlord in Scotland?',
-    answer: 'Yes, mandatory landlord registration is required in Scotland. You must register with your local council before letting any property. Failure to register is a criminal offense with fines up to Â£50,000 and potential rent repayment orders. Your landlord registration number must be included in the PRT agreement and in all property advertisements.',
+    answer: 'Yes, mandatory landlord registration is required in Scotland. You must register with your local council before letting any property. Failure to register is a criminal offense with fines up to £50,000 and potential rent repayment orders. Your landlord registration number must be included in the PRT agreement and in all property advertisements.',
   },
   {
     question: 'What grounds can I use to evict a tenant under a PRT?',
@@ -104,7 +104,7 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
         <UniversalHero
           title="Private Residential Tenancy Agreement (Scotland)"
           subtitle="Create a legally validated, solicitor-grade PRT agreement that is compliance-checked for Scotland."
-          primaryCta={{ label: "Start now", href: "/wizard?product=ast_standard&src=seo_private_residential_tenancy_agreement_template&topic=tenancy&jurisdiction=scotland" }}
+          primaryCta={{ label: "Start now", href: "/products/ast?src=seo_private_residential_tenancy_agreement_template&topic=tenancy&jurisdiction=scotland" }}
           showTrustPositioningBar
           hideMedia
         />
@@ -138,16 +138,16 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
             </p>
             <div className="flex gap-4 justify-center flex-wrap">
               <Link
-                href="/wizard?product=ast_standard&src=seo_private_residential_tenancy_agreement_template&topic=tenancy&jurisdiction=scotland"
+                href="/products/ast?src=seo_private_residential_tenancy_agreement_template&topic=tenancy&jurisdiction=scotland"
                 className="inline-flex items-center gap-2 bg-white border-2 border-blue-600 text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors"
               >
-                Standard PRT â€” Â£9.99
+                Standard PRT — £9.99
               </Link>
               <Link
-                href="/wizard?product=ast_premium&src=seo_private_residential_tenancy_agreement_template&topic=tenancy&jurisdiction=scotland"
+                href="/products/ast?src=seo_private_residential_tenancy_agreement_template&topic=tenancy&jurisdiction=scotland"
                 className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
               >
-                Premium PRT â€” Â£19.99
+                Premium PRT — £19.99
               </Link>
             </div>
             <p className="mt-3 text-sm text-gray-600">
@@ -157,7 +157,7 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
               </Link>
               .
             </p>
-            <p className="mt-4 text-sm text-gray-500">Open-ended tenancy â€¢ Tribunal-ready â€¢ Instant PDF</p>
+            <p className="mt-4 text-sm text-gray-500">Open-ended tenancy • Tribunal-ready • Instant PDF</p>
           </div>
         </section>
 
@@ -216,7 +216,7 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
               </div>
               <div className="bg-white p-4 rounded-lg shadow-sm">
                 <h3 className="font-semibold text-gray-900 mb-2">Mandatory Registration</h3>
-                <p className="text-sm text-gray-600">Criminal offense to let without landlord registration - fines up to Â£50,000.</p>
+                <p className="text-sm text-gray-600">Criminal offense to let without landlord registration - fines up to £50,000.</p>
               </div>
               <div className="bg-white p-4 rounded-lg shadow-sm">
                 <h3 className="font-semibold text-gray-900 mb-2">First-tier Tribunal</h3>
@@ -232,7 +232,7 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
             <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">What&apos;s Included in Our PRT Template</h2>
             <div className="grid md:grid-cols-2 gap-6">
               <div className="bg-white p-6 rounded-xl shadow-sm">
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">Standard PRT (Â£9.99)</h3>
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">Standard PRT (£9.99)</h3>
                 <ul className="space-y-2 text-gray-700">
                   <li className="flex items-start gap-2">
                     <svg className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
@@ -260,7 +260,7 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                 <div className="inline-block bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-xs font-bold mb-2">
                   RECOMMENDED
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">Premium PRT (Â£19.99)</h3>
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">Premium PRT (£19.99)</h3>
                 <ul className="space-y-2 text-gray-700">
                   <li className="flex items-start gap-2">
                     <svg className="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
@@ -308,11 +308,11 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
             </p>
             <div className="grid md:grid-cols-2 gap-4">
               <Link href="/products/notice-only" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                <h3 className="font-semibold text-gray-900">Scotland Notice to Leave â€” Â£29.99</h3>
+                <h3 className="font-semibold text-gray-900">Scotland Notice to Leave — £29.99</h3>
                 <p className="text-sm text-gray-600">All 18 eviction grounds with correct notice periods</p>
               </Link>
               <Link href="/products/ast" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                <h3 className="font-semibold text-gray-900">Premium PRT â€” Â£19.99</h3>
+                <h3 className="font-semibold text-gray-900">Premium PRT — £19.99</h3>
                 <p className="text-sm text-gray-600">HMO-ready clauses and enhanced tenancy protections</p>
               </Link>
             </div>

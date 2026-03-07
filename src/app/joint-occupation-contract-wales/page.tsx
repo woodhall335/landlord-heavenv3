@@ -279,8 +279,8 @@ export default function JointOccupationContractWalesPage() {
                   <p className="text-gray-600 text-sm">
                     Joint and several liability means each contract-holder is individually
                     responsible for the entire rent amount, not just their share. If you have
-                    three contract-holders paying Â£1,500 total, each is liable for Â£1,500,
-                    not Â£500.
+                    three contract-holders paying £1,500 total, each is liable for £1,500,
+                    not £500.
                   </p>
                 </div>
 

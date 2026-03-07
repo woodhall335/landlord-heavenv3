@@ -121,7 +121,7 @@ export default async function NoticeOnlyPage() {
           <HowItWorksThreeStep />
 
           <div className="mt-12 text-center">
-            <Link href="/wizard?product=notice_only&src=product_page&topic=eviction" className="hero-btn-primary">Generate my notice bundle →</Link>
+            <Link href="/products/notice-only?src=product_page&topic=eviction" className="hero-btn-primary">Generate my notice bundle →</Link>
           </div>
         </Container>
       </section>
@@ -182,7 +182,7 @@ export default async function NoticeOnlyPage() {
             <h2 className="mb-4 text-3xl font-bold md:text-4xl">Ready to Generate Your Notice Bundle?</h2>
             <p className="mb-8 text-xl text-white/90">Jurisdiction-specific notices for England, Wales &amp; Scotland with compliance checks and watermarked previews before purchase.</p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              <Link href="/wizard?product=notice_only&src=product_page&topic=eviction" className="hero-btn-primary">Generate my notice bundle →</Link>
+              <Link href="/products/notice-only?src=product_page&topic=eviction" className="hero-btn-primary">Generate my notice bundle →</Link>
             </div>
             <ul className="mt-6 flex flex-col items-center gap-2 text-sm text-white/90 md:flex-row md:justify-center md:gap-6" aria-label="Purchase reassurance">
               <li>✓ Preview before paying</li>

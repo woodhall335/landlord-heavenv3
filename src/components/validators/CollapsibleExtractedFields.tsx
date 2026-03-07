@@ -266,7 +266,7 @@ export function CollapsibleExtractedFields({
                   label="Rent Arrears Stated"
                   value={
                     fields.rent_arrears_stated
-                      ? `Â£${fields.rent_arrears_stated}`
+                      ? `£${fields.rent_arrears_stated}`
                       : 'Not stated in notice'
                   }
                   valueClassName={
@@ -280,7 +280,7 @@ export function CollapsibleExtractedFields({
                   label="Rent Amount"
                   value={
                     fields.rent_amount
-                      ? `Â£${fields.rent_amount}`
+                      ? `£${fields.rent_amount}`
                       : 'Not stated in notice (confirm below)'
                   }
                   valueClassName={

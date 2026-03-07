@@ -58,7 +58,7 @@ const noticeOnlyLink = buildWizardLink({
 export const metadata: Metadata = {
   title: 'Eviction Process Wales | Section 173 & 178 | Landlord Heaven',
   description:
-    'Guide to evicting a tenant in Wales. Section 173 and Section 178 notices under the Renting Homes Act 2016. From Â£29.99.',
+    'Guide to evicting a tenant in Wales. Section 173 and Section 178 notices under the Renting Homes Act 2016. From £29.99.',
   keywords: [
     'eviction process wales landlord',
     'section 173 eviction',
@@ -487,7 +487,7 @@ export default function EvictionProcessWalesPage() {
                       </p>
                       <div className="bg-gray-50 rounded-lg p-3 inline-block">
                         <span className="text-gray-600 text-sm">Court fee: </span>
-                        <span className="font-bold text-gray-900">Â£355</span>
+                        <span className="font-bold text-gray-900">£355</span>
                       </div>
                     </div>
                   </div>
@@ -551,7 +551,7 @@ export default function EvictionProcessWalesPage() {
                     <h3 className="font-bold text-gray-900 mb-2">Money Claims in Wales</h3>
                     <p className="text-gray-600 text-sm mb-4">
                       Wales uses the County Court for money claims, the same as England. You can
-                      use Money Claim Online (MCOL) for claims under Â£100,000. However, our Money
+                      use Money Claim Online (MCOL) for claims under £100,000. However, our Money
                       Claim Pack is currently optimised for England&apos;s specific forms and
                       processes.
                     </p>

@@ -788,7 +788,7 @@ export default function AskHeavenChatShell({
               variant="light"
               todayLine={`Here is exactly what to do today: ask one focused landlord question, then move into your ${jurisdictionLabels[jurisdiction]} workflow.`}
               ctaHref="/products/notice-only"
-              ctaLabel="Start Notice Workflow - Â£29.99"
+              ctaLabel="Start Notice Workflow - £29.99"
               className="mt-4"
             />
           </div>

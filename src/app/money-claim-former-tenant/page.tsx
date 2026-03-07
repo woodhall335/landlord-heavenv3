@@ -54,7 +54,7 @@ const faqs = [
   {
     question: 'How do I find my former tenant\'s new address?',
     answer:
-      'Options include: Royal Mail forwarding address service, checking guarantor contact, tracing agents (from £50), social media search, credit reference agency checks (trade only), or asking the court for alternative service if all else fails.',
+      'Options include: Royal Mail forwarding address service, checking guarantor contact, tracing agents (from �50), social media search, credit reference agency checks (trade only), or asking the court for alternative service if all else fails.',
   },
   {
     question: 'What if I can\'t find the tenant at all?',
@@ -79,7 +79,7 @@ const faqs = [
   {
     question: 'What about professional tracing services?',
     answer:
-      'Tracing agents charge £50-200+ to locate people. They use credit records, electoral roll, and other databases. Worth considering for larger debts, but check the cost vs amount you\'re owed first.',
+      'Tracing agents charge �50-200+ to locate people. They use credit records, electoral roll, and other databases. Worth considering for larger debts, but check the cost vs amount you\'re owed first.',
   },
   {
     question: 'The former tenant has disappeared abroad - can I still claim?',
@@ -224,7 +224,7 @@ export default function MoneyClaimFormerTenantPage() {
                   <ul className="space-y-2 text-sm text-gray-600">
                     <li className="flex items-start gap-2">
                       <CheckCircle className="w-4 h-4 text-gray-500 mt-0.5 flex-shrink-0" />
-                      Tracing agents (£50-200) - use credit data
+                      Tracing agents (�50-200) - use credit data
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle className="w-4 h-4 text-gray-500 mt-0.5 flex-shrink-0" />
@@ -259,7 +259,7 @@ export default function MoneyClaimFormerTenantPage() {
                   <li>• Via their employer if known</li>
                 </ul>
                 <p className="text-xs text-gray-500 mt-3">
-                  Court fee for alternative service application is £53.
+                  Court fee for alternative service application is �53.
                 </p>
               </div>
 
@@ -301,7 +301,7 @@ export default function MoneyClaimFormerTenantPage() {
                 <div className="bg-green-50 rounded-xl p-6 border border-green-200">
                   <h3 className="font-bold text-gray-900 mb-3">Claim If:</h3>
                   <ul className="space-y-2 text-sm text-gray-700">
-                    <li>• Amount owed is significant (£500+)</li>
+                    <li>• Amount owed is significant (�500+)</li>
                     <li>• You have the tenant&apos;s new address</li>
                     <li>• Tenant is likely employed/has assets</li>
                     <li>• You have strong evidence</li>
@@ -313,7 +313,7 @@ export default function MoneyClaimFormerTenantPage() {
                 <div className="bg-red-50 rounded-xl p-6 border border-red-200">
                   <h3 className="font-bold text-gray-900 mb-3">Think Twice If:</h3>
                   <ul className="space-y-2 text-sm text-gray-700">
-                    <li>• Amount is small (under £300)</li>
+                    <li>• Amount is small (under �300)</li>
                     <li>• Tenant has disappeared completely</li>
                     <li>• Tenant is unemployed/has no assets</li>
                     <li>• Evidence is weak or missing</li>
@@ -351,11 +351,11 @@ export default function MoneyClaimFormerTenantPage() {
                 href="/products/money-claim?reason=rent_arrears&topic=debt&src=seo_money_claim_former_tenant"
                 className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
               >
-                Start Your Claim — £45.99
+                Start Your Claim — �45.99
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <p className="text-sm text-gray-500 mt-3">
-                Court fees from £35 extra (based on claim amount)
+                Court fees from �35 extra (based on claim amount)
               </p>
             </div>
           </div>

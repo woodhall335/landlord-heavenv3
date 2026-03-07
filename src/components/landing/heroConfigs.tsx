@@ -63,7 +63,7 @@ export const homeHeroConfig: HeroConfig = {
   },
   secondaryCta: {
     label: 'Recover unpaid rent →',
-    href: '/wizard?product=money_claim&topic=debt&src=seo_homepage',
+    href: '/products/money-claim?topic=debt&src=seo_homepage',
   },
   feature:
     'Legally validated landlord documents with compliance checks, filing guidance, and jurisdiction-specific outputs.',
@@ -82,11 +82,11 @@ export const astHeroConfig: HeroConfig = {
   subtitle: astSubtitle,
   primaryCta: {
     label: 'Generate my tenancy agreement →',
-    href: '/wizard?product=ast_standard&src=product_page&topic=tenancy',
+    href: '/products/ast?src=product_page&topic=tenancy',
   },
   secondaryCta: {
     label: `Premium (HMO-Ready) - ${astPremiumPrice} →`,
-    href: '/wizard?product=ast_premium&src=product_page&topic=tenancy',
+    href: '/products/ast?src=product_page&topic=tenancy',
   },
   feature:
     'AST (England), Occupation Contract (Wales), PRT (Scotland), and NI jurisdiction-specific agreements.',
@@ -107,7 +107,7 @@ export const noticeOnlyHeroConfig: HeroConfig = {
     'Jurisdiction specific eviction notices for England (section 21, Section 8), Wales Section 173 and RHW, Scotland Notice to Quit — Court Ready Guidance & Validation, dont risk an invalid or generic notice.',
   primaryCta: {
     label: 'Generate my eviction notice →',
-    href: '/wizard?product=notice_only&src=product_page&topic=eviction',
+    href: '/products/notice-only?src=product_page&topic=eviction',
   },
   feature:
     'Built against statutory frameworks with reform-aware validation and filing guidance.',
@@ -127,7 +127,7 @@ export const completePackHeroConfig: HeroConfig = {
     'Section 21/8 notice routes plus N5 / N5B / N119, witness statement drafting, evidence checklist, and filing guide. Preview before purchase.',
   primaryCta: {
     label: 'Start my England court bundle →',
-    href: '/wizard?product=complete_pack&src=product_page&topic=eviction',
+    href: '/products/complete-pack?src=product_page&topic=eviction',
   },
   feature:
     'Section 21/8 notice workflows, N5B claim path, evidence checklist, and filing instructions in one structured case file.',
@@ -147,7 +147,7 @@ export const moneyClaimHeroConfig: HeroConfig = {
     'For recovering unpaid rent or tenancy-related debt through the County Court (England). You answer guided questions. We structure your claim clearly for filing.',
   primaryCta: {
     label: 'Start my England money claim →',
-    href: '/wizard?product=money_claim&topic=debt&src=product_page',
+    href: '/products/money-claim?topic=debt&src=product_page',
   },
   feature:
     'N1 claim form, PAP-DEBT letter, interest calculation, and structured particulars of claim included.',

@@ -402,7 +402,7 @@ function formatComparisonValue(value: any): string {
   if (typeof value === 'number') {
     // Format as currency if looks like money
     if (value >= 100 && value < 100000) {
-      return `Â£${value.toLocaleString()}`;
+      return `£${value.toLocaleString()}`;
     }
     return value.toString();
   }

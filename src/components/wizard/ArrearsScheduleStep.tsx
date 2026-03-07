@@ -64,7 +64,7 @@ const PeriodRow: React.FC<PeriodRowProps> = ({ item, index, onStatusChange }) =>
         {formatDate(item.period_start)} - {formatDate(item.period_end)}
       </td>
       <td className="px-3 py-2 text-sm text-gray-700 text-right">
-        Â£{item.rent_due.toFixed(2)}
+        £{item.rent_due.toFixed(2)}
       </td>
       <td className="px-3 py-2">
         <div className="flex items-center gap-2">
@@ -92,7 +92,7 @@ const PeriodRow: React.FC<PeriodRowProps> = ({ item, index, onStatusChange }) =>
         </div>
       </td>
       <td className={`px-3 py-2 text-sm text-right font-medium ${amount_owed > 0 ? 'text-red-600' : 'text-green-600'}`}>
-        Â£{amount_owed.toFixed(2)}
+        £{amount_owed.toFixed(2)}
       </td>
       <td className="px-3 py-2 text-xs text-gray-500">
         {item.notes || (item.is_pro_rated ? `Pro-rated (${item.days_in_period} days)` : '')}
@@ -451,7 +451,7 @@ export const ArrearsScheduleStep: React.FC<ArrearsScheduleStepProps> = ({ facts,
                   if (proRatedItem) {
                     return (
                       <span className="block mt-2 text-xs">
-                        Final period: {proRatedItem.days_in_period} days Ã— daily rate = Â£{proRatedItem.rent_due.toFixed(2)}
+                        Final period: {proRatedItem.days_in_period} days Ã— daily rate = £{proRatedItem.rent_due.toFixed(2)}
                       </span>
                     );
                   }
@@ -529,7 +529,7 @@ export const ArrearsScheduleStep: React.FC<ArrearsScheduleStepProps> = ({ facts,
               <div className="flex justify-between items-center">
                 <span className="text-base font-semibold text-charcoal">Total Arrears:</span>
                 <span className="text-xl font-bold text-red-600">
-                  Â£{computed.total_arrears.toFixed(2)}
+                  £{computed.total_arrears.toFixed(2)}
                 </span>
               </div>
             </div>
@@ -545,7 +545,7 @@ export const ArrearsScheduleStep: React.FC<ArrearsScheduleStepProps> = ({ facts,
                   âœ“ Ground 18 Threshold Met
                 </p>
                 <p className="text-sm text-green-700 mt-1">
-                  Arrears of Â£{computed.total_arrears.toFixed(2)} ({computed.arrears_in_months.toFixed(2)} months) meet the Ground 18 threshold
+                  Arrears of £{computed.total_arrears.toFixed(2)} ({computed.arrears_in_months.toFixed(2)} months) meet the Ground 18 threshold
                   (minimum 3 consecutive rent periods required). The Tribunal will consider whether eviction is reasonable.
                 </p>
               </div>
@@ -555,7 +555,7 @@ export const ArrearsScheduleStep: React.FC<ArrearsScheduleStepProps> = ({ facts,
                   âš  Ground 18 Threshold Not Met
                 </p>
                 <p className="text-sm text-amber-700 mt-1">
-                  Arrears of Â£{computed.total_arrears.toFixed(2)} ({computed.arrears_in_months.toFixed(2)} months) do not meet the Ground 18 threshold
+                  Arrears of £{computed.total_arrears.toFixed(2)} ({computed.arrears_in_months.toFixed(2)} months) do not meet the Ground 18 threshold
                   (minimum 3 consecutive rent periods required). You may still proceed but evidence strength is reduced.
                 </p>
               </div>
@@ -569,13 +569,13 @@ export const ArrearsScheduleStep: React.FC<ArrearsScheduleStepProps> = ({ facts,
               <p className="text-sm text-green-700 mt-1">
                 {jurisdiction === 'wales' ? (
                   <>
-                    Arrears of Â£{computed.total_arrears.toFixed(2)} ({computed.arrears_in_months.toFixed(2)} months) meet the Section 157 threshold
+                    Arrears of £{computed.total_arrears.toFixed(2)} ({computed.arrears_in_months.toFixed(2)} months) meet the Section 157 threshold
                     for serious rent arrears under the Renting Homes (Wales) Act 2016.
                   </>
                 ) : (
                   <>
-                    Arrears of Â£{computed.total_arrears.toFixed(2)} ({computed.arrears_in_months.toFixed(2)} months) meet the Ground 8 threshold
-                    (minimum 2 months / Â£{(rentAmount * 2).toFixed(2)} required).
+                    Arrears of £{computed.total_arrears.toFixed(2)} ({computed.arrears_in_months.toFixed(2)} months) meet the Ground 8 threshold
+                    (minimum 2 months / £{(rentAmount * 2).toFixed(2)} required).
                   </>
                 )}
               </p>
@@ -588,13 +588,13 @@ export const ArrearsScheduleStep: React.FC<ArrearsScheduleStepProps> = ({ facts,
               <p className="text-sm text-amber-700 mt-1">
                 {jurisdiction === 'wales' ? (
                   <>
-                    Arrears of Â£{computed.total_arrears.toFixed(2)} ({computed.arrears_in_months.toFixed(2)} months) do not meet the Section 157 threshold
+                    Arrears of £{computed.total_arrears.toFixed(2)} ({computed.arrears_in_months.toFixed(2)} months) do not meet the Section 157 threshold
                     (minimum 2 months required). You can still use Section 159 for smaller arrears claims.
                   </>
                 ) : (
                   <>
-                    Arrears of Â£{computed.total_arrears.toFixed(2)} ({computed.arrears_in_months.toFixed(2)} months) do not meet the Ground 8 threshold
-                    (minimum 2 months / Â£{(rentAmount * 2).toFixed(2)} required). You can still use Grounds 10 or 11 for arrears claims.
+                    Arrears of £{computed.total_arrears.toFixed(2)} ({computed.arrears_in_months.toFixed(2)} months) do not meet the Ground 8 threshold
+                    (minimum 2 months / £{(rentAmount * 2).toFixed(2)} required). You can still use Grounds 10 or 11 for arrears claims.
                   </>
                 )}
               </p>

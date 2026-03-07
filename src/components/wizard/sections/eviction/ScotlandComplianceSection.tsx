@@ -141,7 +141,7 @@ export const ScotlandComplianceSection: React.FC<ScotlandComplianceSectionProps>
           label="Are you registered with your local council as a landlord?"
           required
           helperText="All private landlords in Scotland must be registered with their local council."
-          warningMessage="Unregistered landlords face fines up to Â£5,000. The tribunal may view this unfavourably."
+          warningMessage="Unregistered landlords face fines up to £5,000. The tribunal may view this unfavourably."
         />
 
         {facts.landlord_registered === true && (
@@ -182,11 +182,11 @@ export const ScotlandComplianceSection: React.FC<ScotlandComplianceSectionProps>
             {/* Deposit amount */}
             <div className="space-y-2">
               <label htmlFor="deposit_amount" className="block text-sm font-medium text-gray-700">
-                Deposit amount (Â£)
+                Deposit amount (£)
                 <span className="text-red-500 ml-1">*</span>
               </label>
               <div className="relative max-w-xs">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">Â£</span>
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">£</span>
                 <input
                   id="deposit_amount"
                   type="number"
@@ -299,7 +299,7 @@ export const ScotlandComplianceSection: React.FC<ScotlandComplianceSectionProps>
               label="Was the Gas Safety Certificate (CP12) provided to the tenant?"
               required
               helperText="A copy must be provided within 28 days of the annual inspection."
-              warningMessage="Missing gas safety certificate is a serious compliance issue (up to Â£5,000 fine)."
+              warningMessage="Missing gas safety certificate is a serious compliance issue (up to £5,000 fine)."
             />
           </div>
         )}
@@ -318,7 +318,7 @@ export const ScotlandComplianceSection: React.FC<ScotlandComplianceSectionProps>
           label="Was an EPC provided to the tenant?"
           required
           helperText="The property must have a valid EPC with a rating of E or above."
-          warningMessage="Missing EPC can result in fines up to Â£1,000."
+          warningMessage="Missing EPC can result in fines up to £1,000."
         />
       </div>
 
@@ -335,7 +335,7 @@ export const ScotlandComplianceSection: React.FC<ScotlandComplianceSectionProps>
           label="Was an Electrical Installation Condition Report (EICR) provided?"
           required
           helperText="Required for all private tenancies in Scotland. Must be renewed every 5 years."
-          warningMessage="Missing EICR can result in fines up to Â£5,000."
+          warningMessage="Missing EICR can result in fines up to £5,000."
         />
       </div>
 
@@ -394,7 +394,7 @@ export const ScotlandComplianceSection: React.FC<ScotlandComplianceSectionProps>
               onChange={(v) => onUpdate({ hmo_licensed: v })}
               label="Does the property have a valid HMO licence?"
               required
-              warningMessage="Operating an unlicensed HMO can result in fines up to Â£5,000."
+              warningMessage="Operating an unlicensed HMO can result in fines up to £5,000."
             />
           </div>
         )}

@@ -66,7 +66,7 @@ const evictionGrounds = [
   { ground: '18', description: 'Overcrowding statutory notice', notice: '28 days', type: 'Mandatory' },
 ];
 
-const wizardHref = '/wizard?product=notice_only&topic=eviction&src=seo_scotland_eviction_notices';
+const wizardHref = '/products/notice-only?topic=eviction&src=seo_scotland_eviction_notices';
 
 export default function ScotlandEvictionNoticesPage() {
   return (
@@ -95,7 +95,7 @@ export default function ScotlandEvictionNoticesPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto text-center">
               <div className="flex items-center justify-center gap-2 mb-6">
-                <span className="text-5xl">ðŸ´ó §ó ¢ó ³ó £ó ´ó ¿</span>
+                <span className="text-5xl">ðŸ´ó §ó ¢ó ³ó �ó ´ó ¿</span>
               </div>
 
               <h2 className="text-4xl lg:text-5xl font-bold mb-6">
@@ -125,7 +125,7 @@ export default function ScotlandEvictionNoticesPage() {
                   href={wizardHref}
                   className="inline-flex items-center justify-center gap-2 bg-white text-blue-800 font-semibold py-4 px-8 rounded-xl hover:bg-blue-50 transition-colors"
                 >
-                  Get Scotland Notice — £29.99
+                  Get Scotland Notice — �29.99
                   <ArrowRight className="w-5 h-5" />
                 </Link>
                 <Link
@@ -156,7 +156,7 @@ export default function ScotlandEvictionNoticesPage() {
                         Aspect
                       </th>
                       <th className="px-6 py-4 text-left font-semibold text-gray-900">
-                        ðŸ´ó §ó ¢ó ³ó £ó ´ó ¿ Scotland
+                        ðŸ´ó §ó ¢ó ³ó �ó ´ó ¿ Scotland
                       </th>
                       <th className="px-6 py-4 text-left font-semibold text-gray-900">
                         ðŸ´ó §ó ¢ó ¥ó ®ó §ó ¿ England
@@ -511,7 +511,7 @@ export default function ScotlandEvictionNoticesPage() {
                 <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
-                      <span className="text-red-600 font-bold text-lg">£</span>
+                      <span className="text-red-600 font-bold text-lg">�</span>
                     </div>
                     <h3 className="text-lg font-bold text-gray-900">Rent Arrears</h3>
                   </div>
@@ -658,13 +658,13 @@ export default function ScotlandEvictionNoticesPage() {
                   href="/products/notice-only"
                   className="inline-flex items-center justify-center gap-2 bg-white text-blue-700 font-semibold py-4 px-8 rounded-xl hover:bg-blue-50 transition-colors"
                 >
-                  Get Scotland Notice — £29.99
+                  Get Scotland Notice — �29.99
                 </Link>
                 <Link
                   href="/products/complete-pack"
                   className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold py-4 px-8 rounded-xl transition-colors border border-white/30"
                 >
-                  Complete Pack — £69.99
+                  Complete Pack — �69.99
                 </Link>
               </div>
             </div>
@@ -695,11 +695,11 @@ export default function ScotlandEvictionNoticesPage() {
                 jurisdictionLabel="Scotland eviction notices"
                 scenarioLabel="Notice to Leave + Tribunal process"
                 primaryCTA={{
-                  label: 'Generate Notice to Leave — £29.99',
+                  label: 'Generate Notice to Leave — �29.99',
                   href: productLinks.noticeOnly.href,
                 }}
                 secondaryCTA={{
-                  label: 'Complete eviction pack — £69.99',
+                  label: 'Complete eviction pack — �69.99',
                   href: productLinks.completePack.href,
                 }}
                 relatedLinks={[

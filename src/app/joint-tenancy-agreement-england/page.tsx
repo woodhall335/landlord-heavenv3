@@ -205,8 +205,8 @@ export default function JointTenancyAgreementEnglandPage() {
                     <h3 className="text-xl font-bold text-gray-900 mb-2">How It Works</h3>
                     <p className="text-gray-600">
                       Joint and several liability means each tenant is individually liable for
-                      the entire rent, not just their share. If the monthly rent is Â£1,500 and
-                      there are three tenants, you can claim the full Â£1,500 from any one of
+                      the entire rent, not just their share. If the monthly rent is £1,500 and
+                      there are three tenants, you can claim the full £1,500 from any one of
                       them if the others default.
                     </p>
                   </div>

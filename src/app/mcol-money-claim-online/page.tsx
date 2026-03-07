@@ -164,12 +164,12 @@ export default function MCOLPage() {
                 <h2>MCOL Limits</h2>
                 <p>MCOL can be used for claims:</p>
                 <ul>
-                  <li>Up to Â£100,000</li>
+                  <li>Up to £100,000</li>
                   <li>Against defendants with addresses in England or Wales</li>
                   <li>With a fixed amount (not unquantified damages)</li>
                 </ul>
                 <p>
-                  For claims over Â£10,000, consider whether the small claims track (simpler, no legal
+                  For claims over £10,000, consider whether the small claims track (simpler, no legal
                   costs recovery) or fast track/multi-track (more formal, potential costs recovery) is
                   appropriate.
                 </p>
@@ -181,7 +181,7 @@ export default function MCOLPage() {
                 </p>
                 <ul>
                   <li>
-                    <strong>High Court Enforcement:</strong> For debts over Â£600, transfer to High
+                    <strong>High Court Enforcement:</strong> For debts over £600, transfer to High
                     Court and use enforcement officers
                   </li>
                   <li>

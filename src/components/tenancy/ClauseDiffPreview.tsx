@@ -225,7 +225,7 @@ const getClauses = (jurisdiction: CanonicalJurisdiction): ClauseDefinition[] => 
       title: 'HMO Licensing Compliance',
       standardPreview: '[Not included in Standard agreement]',
       premiumClause: `The ${terms.tenant}s acknowledge that the Property [is/may be] licensed as a House in Multiple Occupation under the ${terms.hmoAct}. The ${terms.tenant}s agree:\n• Not to allow more than [X] persons to occupy the Property at any time\n• To comply with all fire safety requirements including not obstructing fire doors or exits\n• To test smoke and CO alarms weekly and report any faults immediately\n• Not to tamper with or disable any fire safety equipment\n• To allow the Landlord access for HMO compliance inspections with 24 hours' notice\n• That breach of HMO licence conditions may result in possession proceedings\nThe Landlord confirms that all required safety certificates are in place.`,
-      whyItMatters: `Ensures your ${terms.tenancy.toLowerCase()} terms don't conflict with your HMO licence conditions. Non-compliance can result in fines up to £30,000 and rent repayment orders.`,
+      whyItMatters: `Ensures your ${terms.tenancy.toLowerCase()} terms don't conflict with your HMO licence conditions. Non-compliance can result in fines up to �30,000 and rent repayment orders.`,
       legalBasis: `${terms.hmoAct} - mandatory licensing conditions`,
       isHMO: true,
       category: 'compliance' as const,

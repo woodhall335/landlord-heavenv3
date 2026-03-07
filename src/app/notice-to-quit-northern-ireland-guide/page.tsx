@@ -76,7 +76,7 @@ export default function NoticeToQuitNIGuidePage() {
         <UniversalHero
           title="Notice to Quit (Northern Ireland)"
           subtitle="Follow a legally validated, solicitor-grade and compliance-checked route for serving a Northern Ireland Notice to Quit."
-          primaryCta={{ label: "Start now", href: "/wizard?product=notice_only&src=seo_notice_to_quit_northern_ireland_guide&topic=eviction&jurisdiction=northern-ireland" }}
+          primaryCta={{ label: "Start now", href: "/products/notice-only?src=seo_notice_to_quit_northern_ireland_guide&topic=eviction&jurisdiction=northern-ireland" }}
           showTrustPositioningBar
           hideMedia
         />
@@ -111,7 +111,7 @@ export default function NoticeToQuitNIGuidePage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
-                href="/wizard?product=notice_only&src=seo_notice_to_quit_northern_ireland_guide&topic=eviction&jurisdiction=northern-ireland"
+                href="/products/notice-only?src=seo_notice_to_quit_northern_ireland_guide&topic=eviction&jurisdiction=northern-ireland"
                 className="inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold px-8 py-4 rounded-lg transition-colors"
               >
                 <RiFileTextLine className="w-5 h-5" />
@@ -205,7 +205,7 @@ export default function NoticeToQuitNIGuidePage() {
                 Create one now before attempting any eviction action.
               </p>
               <Link
-                href="/wizard?product=ast_standard&src=seo_notice_to_quit_northern_ireland_guide&topic=tenancy&jurisdiction=northern-ireland"
+                href="/products/ast?src=seo_notice_to_quit_northern_ireland_guide&topic=tenancy&jurisdiction=northern-ireland"
                 className="inline-flex items-center gap-2 text-emerald-700 font-medium hover:text-emerald-800"
               >
                 Create Tenancy Agreement First <RiArrowRightLine className="w-4 h-4" />
@@ -442,7 +442,7 @@ export default function NoticeToQuitNIGuidePage() {
               Our wizard ensures all prescribed terms are included for Northern Ireland.
             </p>
             <Link
-              href="/wizard?product=ast_standard&src=seo_notice_to_quit_northern_ireland_guide&topic=tenancy&jurisdiction=northern-ireland"
+              href="/products/ast?src=seo_notice_to_quit_northern_ireland_guide&topic=tenancy&jurisdiction=northern-ireland"
               className="inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold px-8 py-4 rounded-lg transition-colors"
             >
               <RiDownloadLine className="w-5 h-5" />

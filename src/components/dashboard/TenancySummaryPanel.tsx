@@ -75,7 +75,7 @@ function formatCurrency(amount: number | string | null | undefined): string {
   if (amount === null || amount === undefined || amount === '') return '-';
   const num = typeof amount === 'string' ? parseFloat(amount) : amount;
   if (isNaN(num)) return '-';
-  return `Â£${num.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  return `£${num.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 
 /**

@@ -166,7 +166,7 @@ export default function Section21NoticeTemplatePage() {
                 <div className="bg-gray-50 rounded-2xl p-8 border border-gray-200">
                   <div className="text-center mb-6">
                     <span className="text-sm font-medium text-gray-500 uppercase tracking-wide">Free Starter Document</span>
-                    <div className="text-4xl font-bold text-gray-900 mt-2">Â£0</div>
+                    <div className="text-4xl font-bold text-gray-900 mt-2">£0</div>
                   </div>
                   <ul className="space-y-4 mb-8">
                     <li className="flex items-start gap-3">
@@ -211,7 +211,7 @@ export default function Section21NoticeTemplatePage() {
                   </div>
                   <div className="text-center mb-6">
                     <span className="text-sm font-medium text-primary uppercase tracking-wide">Court-Ready</span>
-                    <div className="text-4xl font-bold text-gray-900 mt-2">Â£29.99</div>
+                    <div className="text-4xl font-bold text-gray-900 mt-2">£29.99</div>
                   </div>
                   <ul className="space-y-4 mb-8">
                     <li className="flex items-start gap-3">
@@ -251,8 +251,8 @@ export default function Section21NoticeTemplatePage() {
               {/* Savings callout */}
               <div className="mt-8 text-center">
                 <p className="text-gray-600">
-                  <span className="font-semibold text-green-600">Save Â£150-270</span> compared to
-                  solicitor fees (typically Â£180-300 for Section 21 notices)
+                  <span className="font-semibold text-green-600">Save £150-270</span> compared to
+                  solicitor fees (typically £180-300 for Section 21 notices)
                 </p>
               </div>
             </div>
@@ -704,7 +704,7 @@ export default function Section21NoticeTemplatePage() {
                   href={wizardLink}
                   className="hero-btn-secondary inline-flex items-center justify-center gap-2"
                 >
-                  Get Court-Ready â€” Â£29.99
+                  Get Court-Ready â€” £29.99
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               </div>

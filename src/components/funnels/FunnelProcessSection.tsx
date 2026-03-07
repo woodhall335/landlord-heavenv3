@@ -28,15 +28,15 @@ const CAROUSEL_PAUSE_AFTER_INTERACTION_MS = 9000;
 const CTA_BY_PRODUCT: Record<FunnelProduct, { label: string; href: string }> = {
   notice_only: {
     label: 'Generate my notice bundle \u2192',
-    href: 'https://landlordheaven.co.uk/wizard?product=notice_only&src=product_page&topic=eviction',
+    href: 'https://landlordheaven.co.uk/products/notice-only?src=product_page&topic=eviction',
   },
   complete_pack: {
     label: 'Generate my complete pack \u2192',
-    href: 'https://landlordheaven.co.uk/wizard?product=complete_pack&src=product_page&topic=eviction',
+    href: 'https://landlordheaven.co.uk/products/complete-pack?src=product_page&topic=eviction',
   },
   money_claim: {
     label: 'Start my money claim pack \u2192',
-    href: 'https://landlordheaven.co.uk/wizard?product=money_claim&topic=debt&src=product_page',
+    href: 'https://landlordheaven.co.uk/products/money-claim?topic=debt&src=product_page',
   },
 };
 

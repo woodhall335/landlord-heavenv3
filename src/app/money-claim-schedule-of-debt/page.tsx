@@ -188,31 +188,31 @@ export default function MoneyClaimScheduleOfDebtPage() {
                   <tbody>
                     <tr>
                       <td className="border border-gray-200 px-3 py-2">March 2025</td>
-                      <td className="border border-gray-200 px-3 py-2 text-right">Â£1,200.00</td>
-                      <td className="border border-gray-200 px-3 py-2 text-right">Â£1,200.00</td>
-                      <td className="border border-gray-200 px-3 py-2 text-right">Â£0.00</td>
+                      <td className="border border-gray-200 px-3 py-2 text-right">£1,200.00</td>
+                      <td className="border border-gray-200 px-3 py-2 text-right">£1,200.00</td>
+                      <td className="border border-gray-200 px-3 py-2 text-right">£0.00</td>
                     </tr>
                     <tr className="bg-gray-50">
                       <td className="border border-gray-200 px-3 py-2">April 2025</td>
-                      <td className="border border-gray-200 px-3 py-2 text-right">Â£1,200.00</td>
-                      <td className="border border-gray-200 px-3 py-2 text-right">Â£600.00</td>
-                      <td className="border border-gray-200 px-3 py-2 text-right">Â£600.00</td>
+                      <td className="border border-gray-200 px-3 py-2 text-right">£1,200.00</td>
+                      <td className="border border-gray-200 px-3 py-2 text-right">£600.00</td>
+                      <td className="border border-gray-200 px-3 py-2 text-right">£600.00</td>
                     </tr>
                     <tr>
                       <td className="border border-gray-200 px-3 py-2">May 2025</td>
-                      <td className="border border-gray-200 px-3 py-2 text-right">Â£1,200.00</td>
-                      <td className="border border-gray-200 px-3 py-2 text-right">Â£0.00</td>
-                      <td className="border border-gray-200 px-3 py-2 text-right">Â£1,800.00</td>
+                      <td className="border border-gray-200 px-3 py-2 text-right">£1,200.00</td>
+                      <td className="border border-gray-200 px-3 py-2 text-right">£0.00</td>
+                      <td className="border border-gray-200 px-3 py-2 text-right">£1,800.00</td>
                     </tr>
                     <tr className="bg-gray-50">
                       <td className="border border-gray-200 px-3 py-2">June 2025</td>
-                      <td className="border border-gray-200 px-3 py-2 text-right">Â£1,200.00</td>
-                      <td className="border border-gray-200 px-3 py-2 text-right">Â£0.00</td>
-                      <td className="border border-gray-200 px-3 py-2 text-right">Â£3,000.00</td>
+                      <td className="border border-gray-200 px-3 py-2 text-right">£1,200.00</td>
+                      <td className="border border-gray-200 px-3 py-2 text-right">£0.00</td>
+                      <td className="border border-gray-200 px-3 py-2 text-right">£3,000.00</td>
                     </tr>
                     <tr className="font-semibold">
                       <td className="border border-gray-200 px-3 py-2" colSpan={3}>Rent Arrears Total</td>
-                      <td className="border border-gray-200 px-3 py-2 text-right">Â£3,000.00</td>
+                      <td className="border border-gray-200 px-3 py-2 text-right">£3,000.00</td>
                     </tr>
                   </tbody>
                 </table>
@@ -230,16 +230,16 @@ export default function MoneyClaimScheduleOfDebtPage() {
                     <tr>
                       <td className="border border-gray-200 px-3 py-2">Carpet replacement (lounge)</td>
                       <td className="border border-gray-200 px-3 py-2">Invoice - Exhibit 3</td>
-                      <td className="border border-gray-200 px-3 py-2 text-right">Â£650.00</td>
+                      <td className="border border-gray-200 px-3 py-2 text-right">£650.00</td>
                     </tr>
                     <tr className="bg-gray-50">
                       <td className="border border-gray-200 px-3 py-2">Wall repair and repaint</td>
                       <td className="border border-gray-200 px-3 py-2">Invoice - Exhibit 4</td>
-                      <td className="border border-gray-200 px-3 py-2 text-right">Â£280.00</td>
+                      <td className="border border-gray-200 px-3 py-2 text-right">£280.00</td>
                     </tr>
                     <tr className="font-semibold">
                       <td className="border border-gray-200 px-3 py-2" colSpan={2}>Damage Total</td>
-                      <td className="border border-gray-200 px-3 py-2 text-right">Â£930.00</td>
+                      <td className="border border-gray-200 px-3 py-2 text-right">£930.00</td>
                     </tr>
                   </tbody>
                 </table>
@@ -249,19 +249,19 @@ export default function MoneyClaimScheduleOfDebtPage() {
                   <tbody>
                     <tr>
                       <td className="border border-gray-200 px-3 py-2">Rent Arrears</td>
-                      <td className="border border-gray-200 px-3 py-2 text-right">Â£3,000.00</td>
+                      <td className="border border-gray-200 px-3 py-2 text-right">£3,000.00</td>
                     </tr>
                     <tr className="bg-gray-50">
                       <td className="border border-gray-200 px-3 py-2">Damage Costs</td>
-                      <td className="border border-gray-200 px-3 py-2 text-right">Â£930.00</td>
+                      <td className="border border-gray-200 px-3 py-2 text-right">£930.00</td>
                     </tr>
                     <tr>
                       <td className="border border-gray-200 px-3 py-2">Interest (8% from due dates)</td>
-                      <td className="border border-gray-200 px-3 py-2 text-right">Â£142.50</td>
+                      <td className="border border-gray-200 px-3 py-2 text-right">£142.50</td>
                     </tr>
                     <tr className="font-bold bg-teal-50">
                       <td className="border border-gray-200 px-3 py-2">TOTAL CLAIMED</td>
-                      <td className="border border-gray-200 px-3 py-2 text-right">Â£4,072.50</td>
+                      <td className="border border-gray-200 px-3 py-2 text-right">£4,072.50</td>
                     </tr>
                   </tbody>
                 </table>
@@ -369,7 +369,7 @@ export default function MoneyClaimScheduleOfDebtPage() {
                 href="/products/money-claim?topic=debt&src=seo_money_claim_schedule_of_debt"
                 className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
               >
-                Generate Your Documents â€” Â£45.99
+                Generate Your Documents â€” £45.99
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <p className="text-sm text-gray-500 mt-3">

@@ -220,7 +220,7 @@ export default function AdminUsersPage() {
                     </td>
                     <td className="p-4">
                       <span className="font-semibold text-charcoal">
-                        Â£{(user.total_revenue || 0).toFixed(2)}
+                        £{(user.total_revenue || 0).toFixed(2)}
                       </span>
                     </td>
                     <td className="p-4">
@@ -291,7 +291,7 @@ export default function AdminUsersPage() {
           <div className="bg-white rounded-lg border border-gray-200 p-6">
             <p className="text-sm text-gray-600 mb-1">Total Revenue</p>
             <p className="text-3xl font-bold text-success">
-              Â£{users.reduce((sum, u) => sum + (u.total_revenue || 0), 0).toFixed(2)}
+              £{users.reduce((sum, u) => sum + (u.total_revenue || 0), 0).toFixed(2)}
             </p>
           </div>
         </div>

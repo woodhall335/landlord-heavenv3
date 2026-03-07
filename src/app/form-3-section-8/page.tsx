@@ -50,7 +50,7 @@ export default function Form3Section8Page() {
         <UniversalHero
           title="Form 3 Section 8 Notice for England"
           subtitle="Generate a legally validated, solicitor-grade, compliance-checked and court-ready Section 8 Form 3 workflow."
-          primaryCta={{ label: 'Start Section 8 Wizard', href: '/wizard?product=notice_only&src=seo_form_3_section_8&topic=eviction' }}
+          primaryCta={{ label: 'Start Section 8 Wizard', href: '/products/notice-only?src=seo_form_3_section_8&topic=eviction' }}
           showTrustPositioningBar
           hideMedia
         />
@@ -77,7 +77,7 @@ export default function Form3Section8Page() {
             <FunnelCta
               title="Serve Form 3 correctly from the start"
               subtitle="Use Notice Only for compliant drafting/serving, or upgrade to full eviction support."
-              primaryHref="/wizard?product=notice_only&src=seo_form_3_section_8&topic=eviction"
+              primaryHref="/products/notice-only?src=seo_form_3_section_8&topic=eviction"
               primaryText="Start Notice Only"
               primaryDataCta="notice-only"
               location="above-fold"

@@ -374,23 +374,23 @@ export default function MoneyClaimCleaningCostsPage() {
                     <ul className="space-y-3 text-gray-600">
                       <li className="flex justify-between">
                         <span>1-bed flat deep clean</span>
-                        <span className="font-medium">Â£150-200</span>
+                        <span className="font-medium">£150-200</span>
                       </li>
                       <li className="flex justify-between">
                         <span>2-bed flat/house deep clean</span>
-                        <span className="font-medium">Â£200-280</span>
+                        <span className="font-medium">£200-280</span>
                       </li>
                       <li className="flex justify-between">
                         <span>3-bed house deep clean</span>
-                        <span className="font-medium">Â£280-400</span>
+                        <span className="font-medium">£280-400</span>
                       </li>
                       <li className="flex justify-between">
                         <span>Oven clean (standalone)</span>
-                        <span className="font-medium">Â£40-80</span>
+                        <span className="font-medium">£40-80</span>
                       </li>
                       <li className="flex justify-between">
                         <span>Carpet clean per room</span>
-                        <span className="font-medium">Â£25-50</span>
+                        <span className="font-medium">£25-50</span>
                       </li>
                     </ul>
                   </div>
@@ -407,23 +407,23 @@ export default function MoneyClaimCleaningCostsPage() {
                     <ul className="space-y-3 text-gray-600">
                       <li className="flex justify-between">
                         <span>Mini skip (2-3 cubic yards)</span>
-                        <span className="font-medium">Â£150-200</span>
+                        <span className="font-medium">£150-200</span>
                       </li>
                       <li className="flex justify-between">
                         <span>Standard skip (6-8 yards)</span>
-                        <span className="font-medium">Â£250-350</span>
+                        <span className="font-medium">£250-350</span>
                       </li>
                       <li className="flex justify-between">
                         <span>Council bulky waste (3 items)</span>
-                        <span className="font-medium">Â£30-50</span>
+                        <span className="font-medium">£30-50</span>
                       </li>
                       <li className="flex justify-between">
                         <span>House clearance service</span>
-                        <span className="font-medium">Â£300-800</span>
+                        <span className="font-medium">£300-800</span>
                       </li>
                       <li className="flex justify-between">
                         <span>Garden clearance</span>
-                        <span className="font-medium">Â£150-400</span>
+                        <span className="font-medium">£150-400</span>
                       </li>
                     </ul>
                   </div>

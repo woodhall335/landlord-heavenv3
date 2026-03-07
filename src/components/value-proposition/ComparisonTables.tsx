@@ -31,13 +31,13 @@ interface ComparisonRow {
 
 export function VsSolicitorComparison({ product = 'notice_only' }: ComparisonTableProps) {
   const productConfig = PRODUCTS[product];
-  const price = productConfig?.displayPrice || 'Â£29.99';
+  const price = productConfig?.displayPrice || '£29.99';
 
   const rows: ComparisonRow[] = [
     {
       feature: 'Price',
       landlordHeaven: `${price} one-time`,
-      competitor: 'Typically Â£200-2,500+ (hourly fees)',
+      competitor: 'Typically £200-2,500+ (hourly fees)',
     },
     {
       feature: 'Speed',
@@ -136,7 +136,7 @@ export function VsSolicitorComparison({ product = 'notice_only' }: ComparisonTab
 
 export function VsFreeTemplateComparison({ product = 'notice_only' }: ComparisonTableProps) {
   const productConfig = PRODUCTS[product];
-  const price = productConfig?.displayPrice || 'Â£29.99';
+  const price = productConfig?.displayPrice || '£29.99';
 
   const rows: ComparisonRow[] = [
     {

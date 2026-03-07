@@ -57,7 +57,7 @@ const noticeOnlyLink = buildWizardLink({
 export const metadata: Metadata = {
   title: 'Scotland Eviction Process | Notice to Leave & Tribunal',
   description:
-    'Complete guide to evicting a tenant in Scotland. Notice to Leave, 18 eviction grounds, First-tier Tribunal process. Get court-ready documents from Â£29.99.',
+    'Complete guide to evicting a tenant in Scotland. Notice to Leave, 18 eviction grounds, First-tier Tribunal process. Get court-ready documents from £29.99.',
   keywords: [
     'eviction process scotland landlord',
     'eviction tribunal scotland',
@@ -607,16 +607,16 @@ export default function EvictionProcessScotlandPage() {
                     <p className="text-amber-800 text-sm mb-4">
                       Our Money Claim Pack is designed for England&apos;s County Court and MCOL
                       system. For Scotland, you will need to use the Sheriff Court Simple Procedure
-                      (claims under Â£5,000) or Ordinary Cause (claims Â£5,000-Â£100,000).
+                      (claims under £5,000) or Ordinary Cause (claims £5,000-£100,000).
                     </p>
                     <div className="grid sm:grid-cols-2 gap-4 text-sm">
                       <div className="bg-white rounded-lg p-3">
                         <span className="font-bold text-amber-900 block">Simple Procedure</span>
-                        <span className="text-amber-700">Claims under Â£5,000</span>
+                        <span className="text-amber-700">Claims under £5,000</span>
                       </div>
                       <div className="bg-white rounded-lg p-3">
                         <span className="font-bold text-amber-900 block">Ordinary Cause</span>
-                        <span className="text-amber-700">Claims Â£5,000 - Â£100,000</span>
+                        <span className="text-amber-700">Claims £5,000 - £100,000</span>
                       </div>
                     </div>
                   </div>

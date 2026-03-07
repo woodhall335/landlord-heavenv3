@@ -90,7 +90,7 @@ const faqSchema = {
       name: 'What happens if I operate an unlicensed HMO?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: "Operating an unlicensed HMO is a criminal offence. You can face unlimited fines (commonly Â£30,000+), rent repayment orders forcing you to repay up to 12 months' rent to your tenants, and you cannot serve Section 21 notices to end tenancies. You may also be prosecuted and end up with a criminal record.",
+        text: "Operating an unlicensed HMO is a criminal offence. You can face unlimited fines (commonly £30,000+), rent repayment orders forcing you to repay up to 12 months' rent to your tenants, and you cannot serve Section 21 notices to end tenancies. You may also be prosecuted and end up with a criminal record.",
       },
     },
     {
@@ -98,7 +98,7 @@ const faqSchema = {
       name: 'How much does an HMO license cost?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: "HMO license fees vary significantly by council, typically ranging from Â£500 to Â£1,500+ per property. The license usually lasts for 5 years. Contact your local council for exact fees. While this may seem expensive, it's far less than the penalties for operating without one.",
+        text: "HMO license fees vary significantly by council, typically ranging from £500 to £1,500+ per property. The license usually lasts for 5 years. Contact your local council for exact fees. While this may seem expensive, it's far less than the penalties for operating without one.",
       },
     },
     {

@@ -264,7 +264,7 @@ export default function PropertyDetailPage() {
               <Card padding="medium">
                 <div className="text-sm text-gray-600 mb-1">Monthly Rent</div>
                 <div className="text-2xl font-bold text-green-600">
-                  £{getTotalRent().toLocaleString()}
+                  �{getTotalRent().toLocaleString()}
                 </div>
                 <div className="text-xs text-gray-500">from active tenants</div>
               </Card>
@@ -302,7 +302,7 @@ export default function PropertyDetailPage() {
                         <div className="flex items-center gap-4 text-xs text-gray-500">
                           <span>Room {tenant.room_number}</span>
                           <span>•</span>
-                          <span>£{tenant.rent_amount}/month</span>
+                          <span>�{tenant.rent_amount}/month</span>
                           <span>•</span>
                           <span>
                             Lease: {formatDate(tenant.lease_start)} - {formatDate(tenant.lease_end)}

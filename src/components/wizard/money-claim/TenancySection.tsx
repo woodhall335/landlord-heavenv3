@@ -182,7 +182,7 @@ export const TenancySection: React.FC<SectionProps> = ({
         <div className="grid gap-4 md:grid-cols-2">
         <div className="space-y-1">
           <label className="text-sm font-medium text-charcoal">
-            Rent amount (Â£) <span className="text-red-500">*</span>
+            Rent amount (£) <span className="text-red-500">*</span>
           </label>
           <input
             type="number"

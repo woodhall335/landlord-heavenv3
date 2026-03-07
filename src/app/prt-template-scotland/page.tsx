@@ -1,4 +1,4 @@
-ï»¿import type { Metadata } from 'next';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getCanonicalUrl } from '@/lib/seo/urls';
 import { StructuredData, breadcrumbSchema, articleSchema } from '@/lib/seo/structured-data';
@@ -54,7 +54,7 @@ const faqs = [
   },
   {
     question: 'What is the landlord registration number?',
-    answer: 'In Scotland, all landlords must register with their local council before letting any property. When you register, you receive a unique landlord registration number that must be included in your PRT and all property advertisements. Failure to register is a criminal offense with fines up to Â£50,000. Our wizard requires this number before generating your PRT.',
+    answer: 'In Scotland, all landlords must register with their local council before letting any property. When you register, you receive a unique landlord registration number that must be included in your PRT and all property advertisements. Failure to register is a criminal offense with fines up to £50,000. Our wizard requires this number before generating your PRT.',
   },
   {
     question: 'Can I include additional terms in my PRT?',
@@ -82,7 +82,7 @@ const faqs = [
   },
   {
     question: 'Does the PRT template work for HMOs in Scotland?',
-    answer: 'Our Premium PRT (Â£19.99) includes HMO-specific provisions for properties with 3+ unrelated tenants. Scotland has its own HMO licensing requirements through local councils. You need both an HMO licence and landlord registration. The Premium template includes shared area responsibilities and room allocation terms.',
+    answer: 'Our Premium PRT (£19.99) includes HMO-specific provisions for properties with 3+ unrelated tenants. Scotland has its own HMO licensing requirements through local councils. You need both an HMO licence and landlord registration. The Premium template includes shared area responsibilities and room allocation terms.',
   },
 ];
 
@@ -112,7 +112,7 @@ export default function PrtTemplateScotlandPage() {
         <UniversalHero
           title="PRT Agreement Scotland"
           subtitle="Generate a legally validated PRT agreement with solicitor-grade drafting and Scotland compliance checks."
-          primaryCta={{ label: "Start now", href: "/wizard?product=ast_standard&src=seo_prt_template_scotland&topic=tenancy&jurisdiction=scotland" }}
+          primaryCta={{ label: "Start now", href: "/products/ast?src=seo_prt_template_scotland&topic=tenancy&jurisdiction=scotland" }}
           showTrustPositioningBar
           hideMedia
         />
@@ -146,19 +146,19 @@ export default function PrtTemplateScotlandPage() {
             </p>
             <div className="flex gap-4 justify-center flex-wrap">
               <Link
-                href="/wizard?product=ast_standard&src=seo_prt_template_scotland&topic=tenancy&jurisdiction=scotland"
+                href="/products/ast?src=seo_prt_template_scotland&topic=tenancy&jurisdiction=scotland"
                 className="inline-flex items-center gap-2 bg-white border-2 border-indigo-600 text-indigo-600 px-6 py-3 rounded-lg font-semibold hover:bg-indigo-50 transition-colors"
               >
-                Standard PRT â€” Â£9.99
+                Standard PRT — £9.99
               </Link>
               <Link
-                href="/wizard?product=ast_premium&src=seo_prt_template_scotland&topic=tenancy&jurisdiction=scotland"
+                href="/products/ast?src=seo_prt_template_scotland&topic=tenancy&jurisdiction=scotland"
                 className="inline-flex items-center gap-2 bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors"
               >
-                Premium PRT â€” Â£19.99
+                Premium PRT — £19.99
               </Link>
             </div>
-            <p className="mt-4 text-sm text-gray-500">10-minute wizard â€¢ Instant download â€¢ Tribunal-ready</p>
+            <p className="mt-4 text-sm text-gray-500">10-minute wizard • Instant download • Tribunal-ready</p>
           </div>
         </section>
 
@@ -220,7 +220,7 @@ export default function PrtTemplateScotlandPage() {
                 <p className="text-gray-600">
                   All Scottish landlords must register with their local council before letting.
                   Your registration number must appear on the PRT and all property adverts.
-                  Failure to register is a criminal offense with fines up to Â£50,000.
+                  Failure to register is a criminal offense with fines up to £50,000.
                 </p>
               </div>
             </div>
@@ -248,12 +248,12 @@ export default function PrtTemplateScotlandPage() {
               <Link href="/products/notice-only" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
                 <h3 className="font-semibold text-gray-900">Scottish Notice to Leave</h3>
                 <p className="text-sm text-gray-600 mb-2">All 18 grounds with correct notice periods</p>
-                <span className="text-indigo-600 font-medium">Â£29.99</span>
+                <span className="text-indigo-600 font-medium">£29.99</span>
               </Link>
               <Link href="/products/ast" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
                 <h3 className="font-semibold text-gray-900">Premium PRT</h3>
                 <p className="text-sm text-gray-600 mb-2">HMO-ready clauses and enhanced protections</p>
-                <span className="text-indigo-600 font-medium">Â£19.99</span>
+                <span className="text-indigo-600 font-medium">£19.99</span>
               </Link>
               <Link href="/ask-heaven" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
                 <h3 className="font-semibold text-gray-900">Ask Heaven for Scotland</h3>

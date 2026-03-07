@@ -497,7 +497,7 @@ export default function MoneyClaimPropertyDamagePage() {
                 <h4 className="font-bold text-amber-900 mb-2">Example Damage Calculation</h4>
                 <p className="text-amber-800 text-sm mb-4">
                   5-year-old carpet (expected 10-year lifespan) needs replacing due to burns and stains.
-                  New carpet cost: Â£800. Remaining life was 50%, so claim Â£400 (not Â£800).
+                  New carpet cost: £800. Remaining life was 50%, so claim £400 (not £800).
                 </p>
                 <p className="text-amber-800 text-sm">
                   Courts appreciate honest, fair calculations. Inflated claims damage credibility.

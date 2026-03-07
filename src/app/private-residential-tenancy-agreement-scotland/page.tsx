@@ -535,7 +535,7 @@ export default function PrivateResidentialTenancyAgreementScotlandPage() {
                     <p className="text-gray-600 mb-4">
                       All private landlords in Scotland must be registered with the local
                       council before letting property. Letting without registration is a
-                      criminal offence with penalties up to Â£50,000.
+                      criminal offence with penalties up to £50,000.
                     </p>
                     <div className="space-y-3">
                       <div className="flex items-start gap-2 text-gray-600">

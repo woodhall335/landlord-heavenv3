@@ -47,7 +47,7 @@ const complianceLinks = {
   }),
 };
 
-const wizardHref = '/wizard?product=notice_only&topic=eviction&src=seo_how_to_evict_tenant';
+const wizardHref = '/products/notice-only?topic=eviction&src=seo_how_to_evict_tenant';
 
 export const metadata: Metadata = {
   title: 'How to Evict a Tenant in 2026 (Landlord Guide)',
@@ -129,7 +129,7 @@ export default function HowToEvictTenantPage() {
                   href="#scotland"
                   className="px-4 py-2 bg-gray-100 hover:bg-blue-600 hover:text-white rounded-lg text-sm font-medium transition-colors"
                 >
-                  ðŸ´ó §ó ¢ó ³ó £ó ´ó ¿ Scotland
+                  ðŸ´ó §ó ¢ó ³ó �ó ´ó ¿ Scotland
                 </a>
                 <a
                   href="#northern-ireland"
@@ -378,14 +378,14 @@ export default function HowToEvictTenantPage() {
                     className="inline-flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary/90"
                   >
                     <FileText className="w-4 h-4" />
-                    Notice Only — £29.99
+                    Notice Only — �29.99
                   </Link>
                   <Link
                     href="/products/complete-pack"
                     className="inline-flex items-center gap-2 bg-gray-900 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-800"
                   >
                     <FileText className="w-4 h-4" />
-                    Complete Pack — £69.99
+                    Complete Pack — �69.99
                   </Link>
                 </div>
               </div>
@@ -477,7 +477,7 @@ export default function HowToEvictTenantPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <div className="flex items-center gap-3 mb-6">
-                <span className="text-4xl">ðŸ´ó §ó ¢ó ³ó £ó ´ó ¿</span>
+                <span className="text-4xl">ðŸ´ó §ó ¢ó ³ó �ó ´ó ¿</span>
                 <h2 className="text-3xl font-bold text-gray-900">Evicting a Tenant in Scotland</h2>
               </div>
 
@@ -684,13 +684,13 @@ export default function HowToEvictTenantPage() {
                   href="/products/notice-only"
                   className="inline-flex items-center justify-center gap-2 bg-white text-primary font-semibold py-4 px-8 rounded-xl hover:bg-gray-100 transition-colors"
                 >
-                  Notice Only — £29.99
+                  Notice Only — �29.99
                 </Link>
                 <Link
                   href="/products/complete-pack"
                   className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold py-4 px-8 rounded-xl transition-colors border border-white/30"
                 >
-                  Complete Pack — £69.99
+                  Complete Pack — �69.99
                 </Link>
               </div>
             </div>
@@ -704,11 +704,11 @@ export default function HowToEvictTenantPage() {
                 jurisdictionLabel="UK eviction routes"
                 scenarioLabel="tenant eviction"
                 primaryCTA={{
-                  label: 'Generate eviction notice — £29.99',
+                  label: 'Generate eviction notice — �29.99',
                   href: productLinks.noticeOnly.href,
                 }}
                 secondaryCTA={{
-                  label: 'Complete eviction pack — £69.99',
+                  label: 'Complete eviction pack — �69.99',
                   href: productLinks.completePack.href,
                 }}
                 relatedLinks={[

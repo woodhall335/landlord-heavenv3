@@ -970,14 +970,14 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     else if (rentFrequency === 'quarterly') annualRent = rentAmount * 4;
     else if (rentFrequency === 'yearly' || rentFrequency === 'annually') annualRent = rentAmount;
 
-    // Tenant Fees Act 2019: 5 weeks (or 6 weeks if annual rent > Â£50k)
+    // Tenant Fees Act 2019: 5 weeks (or 6 weeks if annual rent > £50k)
     const weeklyRent = annualRent / 52;
     const maxWeeks = annualRent > 50000 ? 6 : 5;
     const maxDeposit = weeklyRent * maxWeeks;
 
     if (depositAmount > maxDeposit) {
       setDepositWarning(
-        `Deposit entered: Â£${depositAmount.toFixed(2)}. Maximum allowed: Â£${maxDeposit.toFixed(2)} (${maxWeeks} weeks' rent at Â£${weeklyRent.toFixed(2)}/week). ` +
+        `Deposit entered: £${depositAmount.toFixed(2)}. Maximum allowed: £${maxDeposit.toFixed(2)} (${maxWeeks} weeks' rent at £${weeklyRent.toFixed(2)}/week). ` +
         `Per Tenant Fees Act 2019, deposits are capped at ${maxWeeks} weeks' rent. ` +
         `This does not block Section 8, but may block Section 21 if not resolved.`,
       );
@@ -2061,7 +2061,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
       case 'currency':
         return (
           <div className="relative">
-            <span className="absolute left-3 top-3 text-gray-500">Â£</span>
+            <span className="absolute left-3 top-3 text-gray-500">£</span>
             <Input
               type="number"
               value={value}
@@ -2172,10 +2172,10 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-green-900 mb-1">
-                        Total amount owed (Â£) <span className="text-red-500">*</span>
+                        Total amount owed (£) <span className="text-red-500">*</span>
                       </label>
                       <div className="relative">
-                        <span className="absolute left-3 top-3 text-gray-500">Â£</span>
+                        <span className="absolute left-3 top-3 text-gray-500">£</span>
                         <input
                           type="number"
                           value={prePopulatedArrears.amount}
@@ -2279,7 +2279,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                       <div className="mb-3 p-3 bg-green-50 border border-green-200 rounded-lg">
                         <p className="text-sm font-medium text-green-900 mb-1">Arrears Applied to This Ground:</p>
                         <p className="text-sm text-green-800">
-                          <strong>Amount owed:</strong> Â£{prePopulatedArrears.amount || '0'}
+                          <strong>Amount owed:</strong> £{prePopulatedArrears.amount || '0'}
                         </p>
                         <p className="text-sm text-green-800">
                           <strong>Period:</strong>{' '}
@@ -2522,7 +2522,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                     </select>
                   ) : field.inputType === 'currency' ? (
                     <div className="relative">
-                      <span className="absolute left-3 top-3 text-gray-500">Â£</span>
+                      <span className="absolute left-3 top-3 text-gray-500">£</span>
                       <Input
                         type="number"
                         value={fieldValue}
@@ -2957,7 +2957,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
               <p className="text-sm font-semibold text-blue-900 mb-1">ðŸ’¡ Did you know?</p>
               <p className="text-sm text-blue-800">
                 Ask Heaven-drafted witness statements typically save landlords{' '}
-                <span className="font-bold">Â£200-500</span> in solicitor fees while ensuring
+                <span className="font-bold">£200-500</span> in solicitor fees while ensuring
                 legal compliance.
               </p>
             </div>
@@ -4043,7 +4043,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                   {typeof summary.total_arrears === 'number' && (
                     <p>
                       <span className="font-medium">Arrears entered:</span>{' '}
-                      {summary.total_arrears > 0 ? `~Â£${summary.total_arrears}` : 'not yet provided'}
+                      {summary.total_arrears > 0 ? `~£${summary.total_arrears}` : 'not yet provided'}
                     </p>
                   )}
                   {summary.is_money_claim && (

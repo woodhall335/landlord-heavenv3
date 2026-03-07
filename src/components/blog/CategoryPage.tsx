@@ -33,7 +33,7 @@ export function CategoryPage({ region, posts }: CategoryPageProps) {
   const remainingPosts = posts.slice(1);
   const primaryGuidanceCta = region === 'northern-ireland'
     ? { href: '/products/ast', label: 'Start NI Tenancy Workflow' }
-    : { href: '/products/notice-only', label: 'Start Notice Workflow - Â£29.99' };
+    : { href: '/products/notice-only', label: 'Start Notice Workflow - £29.99' };
 
   // Generate structured data
   const breadcrumbSchema = {

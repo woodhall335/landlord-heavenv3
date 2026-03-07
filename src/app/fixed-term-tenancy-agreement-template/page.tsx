@@ -120,7 +120,7 @@ export default function FixedTermTenancyAgreementPage() {
           badgeIcon={<Calendar className="w-4 h-4" />}
           title="Fixed Term Tenancy Agreement Template"
           subtitle={<>Create a <strong>fixed term tenancy agreement</strong> for 6, 12, or 24 months. Set clear expectations with a legally compliant AST that protects both landlord and tenant.</>}
-          primaryCta={{ label: 'Get AST Template — £9.99', href: wizardLinkAST }}
+          primaryCta={{ label: 'Get AST Template — �9.99', href: wizardLinkAST }}
           secondaryCta={{ label: 'Compare Periodic Tenancy', href: '/rolling-tenancy-agreement' }}
         >
           {/* Trust Signals */}

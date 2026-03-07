@@ -54,7 +54,7 @@ const faqs = [
   },
   {
     question: 'Is a written tenancy agreement legally required in Northern Ireland?',
-    answer: 'Yes, since April 2023 under the Private Tenancies Act (NI) 2022, landlords must provide tenants with a written statement of tenancy terms within 28 days of the tenancy commencing. Failure to provide this document is a criminal offence and can result in a fixed penalty notice of Â£500 or prosecution with fines up to Â£2,500. The written statement must contain all prescribed information including rent amount, deposit details, and landlord contact information.'
+    answer: 'Yes, since April 2023 under the Private Tenancies Act (NI) 2022, landlords must provide tenants with a written statement of tenancy terms within 28 days of the tenancy commencing. Failure to provide this document is a criminal offence and can result in a fixed penalty notice of £500 or prosecution with fines up to £2,500. The written statement must contain all prescribed information including rent amount, deposit details, and landlord contact information.'
   },
   {
     question: 'What is the maximum deposit a landlord can take in Northern Ireland?',
@@ -86,11 +86,11 @@ const faqs = [
   },
   {
     question: 'Does a landlord need to be registered in Northern Ireland?',
-    answer: 'Yes, all private landlords in Northern Ireland must register with the Landlord Registration Scheme operated by local councils. Landlords must register within one month of a tenancy starting. The registration fee is currently Â£70 and registration lasts for 3 years. Failure to register is a criminal offence with fines up to Â£2,500 and can prevent landlords from using the eviction process.'
+    answer: 'Yes, all private landlords in Northern Ireland must register with the Landlord Registration Scheme operated by local councils. Landlords must register within one month of a tenancy starting. The registration fee is currently £70 and registration lasts for 3 years. Failure to register is a criminal offence with fines up to £2,500 and can prevent landlords from using the eviction process.'
   },
   {
     question: 'What happens if a landlord doesn\'t provide a written tenancy agreement?',
-    answer: 'If a landlord fails to provide a written statement of tenancy terms within 28 days, they commit a criminal offence under the Private Tenancies Act (NI) 2022. The tenant can report this to the council, which may issue a fixed penalty notice of Â£500 to the landlord. If prosecuted, landlords face fines up to Â£2,500. Additionally, non-compliance can prevent the landlord from serving a valid Notice to Quit.'
+    answer: 'If a landlord fails to provide a written statement of tenancy terms within 28 days, they commit a criminal offence under the Private Tenancies Act (NI) 2022. The tenant can report this to the council, which may issue a fixed penalty notice of £500 to the landlord. If prosecuted, landlords face fines up to £2,500. Additionally, non-compliance can prevent the landlord from serving a valid Notice to Quit.'
   },
   {
     question: 'Are there minimum property standards for rental homes in Northern Ireland?',
@@ -132,7 +132,7 @@ export default function NorthernIrelandTenancyAgreementTemplatePage() {
         <UniversalHero
           title="Northern Ireland Tenancy Agreement"
           subtitle="Generate a legally validated tenancy agreement for Northern Ireland that is compliance-checked and court-ready."
-          primaryCta={{ label: "Start now", href: "/wizard?product=ast_standard&src=seo_northern_ireland_tenancy_agreement_template&topic=tenancy&jurisdiction=northern-ireland" }}
+          primaryCta={{ label: "Start now", href: "/products/ast?src=seo_northern_ireland_tenancy_agreement_template&topic=tenancy&jurisdiction=northern-ireland" }}
           showTrustPositioningBar
           hideMedia
         />
@@ -164,7 +164,7 @@ export default function NorthernIrelandTenancyAgreementTemplatePage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
-                href="/wizard?product=ast_standard&src=seo_northern_ireland_tenancy_agreement_template&topic=tenancy&jurisdiction=northern-ireland"
+                href="/products/ast?src=seo_northern_ireland_tenancy_agreement_template&topic=tenancy&jurisdiction=northern-ireland"
                 className="inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold px-8 py-4 rounded-lg transition-colors"
               >
                 <RiFileTextLine className="w-5 h-5" />
@@ -234,8 +234,8 @@ export default function NorthernIrelandTenancyAgreementTemplatePage() {
               <h3 className="font-semibold text-red-900 mb-3">Criminal Offence Warning</h3>
               <p className="text-red-800">
                 Since April 2023, failing to provide a written tenancy agreement within 28 days is a criminal offence
-                under the Private Tenancies Act (NI) 2022. Landlords face fixed penalty notices of Â£500 or prosecution
-                with fines up to Â£2,500. Additionally, non-compliant landlords cannot serve valid eviction notices.
+                under the Private Tenancies Act (NI) 2022. Landlords face fixed penalty notices of £500 or prosecution
+                with fines up to £2,500. Additionally, non-compliant landlords cannot serve valid eviction notices.
               </p>
             </div>
             <div className="grid md:grid-cols-2 gap-6">
@@ -673,7 +673,7 @@ export default function NorthernIrelandTenancyAgreementTemplatePage() {
               Get a fully compliant Private Tenancy Agreement in under 5 minutes.
             </p>
             <Link
-              href="/wizard?product=ast_standard&src=seo_northern_ireland_tenancy_agreement_template&topic=tenancy&jurisdiction=northern-ireland"
+              href="/products/ast?src=seo_northern_ireland_tenancy_agreement_template&topic=tenancy&jurisdiction=northern-ireland"
               className="inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold px-8 py-4 rounded-lg transition-colors"
             >
               <RiDownloadLine className="w-5 h-5" />
