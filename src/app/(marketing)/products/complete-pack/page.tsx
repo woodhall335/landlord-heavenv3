@@ -3,10 +3,8 @@ import { Container } from "@/components/ui";
 import Link from "next/link";
 import Image from "next/image";
 import { RiCheckboxCircleLine, RiCloseLine, RiAlertLine } from "react-icons/ri";
-import {
-  ScrollText,
-  BadgePoundSterling,
-} from "lucide-react";
+import { BadgePoundSterling } from "lucide-react";
+
 import { UniversalHero } from "@/components/landing/UniversalHero";
 import { HeaderConfig } from "@/components/layout/HeaderConfig";
 import { completePackHeroConfig } from "@/components/landing/heroConfigs";
@@ -18,7 +16,6 @@ import { PRODUCTS } from "@/lib/pricing/products";
 import { FAQSection } from "@/components/seo/FAQSection";
 import {
   WhyLandlordHeaven,
-  JurisdictionAccordion,
   VsSolicitorComparison,
   VsFreeTemplateComparison,
   WhatsIncludedInteractive,
@@ -128,103 +125,6 @@ export default async function CompleteEvictionPackPage() {
       </section>
 
       <section className="bg-[#fcfaff] py-10"><Container><div className="mx-auto max-w-4xl rounded-2xl border border-[#E6DBFF] bg-[#F3EEFF] px-6 py-5 text-center shadow-[0_10px_30px_rgba(105,46,212,0.08)]"><p className="text-center font-medium text-gray-700">These are example previews. Your bundle is generated specifically for your jurisdiction and tenancy details.</p></div></Container></section>
-
-      <section className="py-16 md:py-20">
-        <Container>
-          <div className="max-w-4xl mx-auto rounded-3xl border border-[#E6DBFF] bg-white p-8 text-center shadow-[0_14px_36px_rgba(15,23,42,0.06)] md:p-10">
-            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4">
-              Eviction Pack Timeline & Costs
-            </h2>
-            <p className="text-gray-600 mb-12">
-              Plan your eviction steps, budget for court fees, and keep the process moving with the
-              correct documents from day one.
-            </p>
-            <div className="grid gap-6 text-left md:grid-cols-3">
-              <div className="rounded-2xl border border-[#E6DBFF] bg-[#F3EEFF] p-6 shadow-[0_12px_28px_rgba(105,46,212,0.08)]">
-                <h3 className="font-semibold text-gray-900 mb-3">Typical timeline</h3>
-                <ul className="space-y-2 text-sm text-gray-600">
-                  <li>Notice period: 2 weeks to 2 months.</li>
-                  <li>Court claim: 4–10 weeks to hearing/order.</li>
-                  <li>Bailiff stage (if needed): 2–6 weeks.</li>
-                </ul>
-              </div>
-              <div className="rounded-2xl border border-[#E6DBFF] bg-[#F3EEFF] p-6 shadow-[0_12px_28px_rgba(105,46,212,0.08)]">
-                <h3 className="font-semibold text-gray-900 mb-3">Costs to expect</h3>
-                <ul className="space-y-2 text-sm text-gray-600">
-                  <li>Court fees vary by claim route.</li>
-                  <li>Solicitor fees often run £1,500+.</li>
-                  <li>Pack keeps documents compliant to avoid re-filing.</li>
-                </ul>
-              </div>
-              <div className="rounded-2xl border border-[#E6DBFF] bg-[#F3EEFF] p-6 shadow-[0_12px_28px_rgba(105,46,212,0.08)]">
-                <h3 className="font-semibold text-gray-900 mb-3">Next legal steps</h3>
-                <p className="text-sm text-gray-600 mb-3">
-                  After the notice expires, file the correct court or tribunal claim promptly to
-                  prevent the notice from expiring.
-                </p>
-                <Link href="/how-to-evict-tenant" className="text-primary text-sm font-medium hover:underline">
-                  View the eviction process →
-                </Link>
-              </div>
-            </div>
-          </div>
-        </Container>
-      </section>
-
-      {/* Jurisdiction Accordion */}
-      <section className="py-10">
-        <Container>
-          <div className="max-w-4xl mx-auto rounded-3xl border border-[#E6DBFF] bg-white p-4 shadow-[0_12px_34px_rgba(15,23,42,0.06)] md:p-6">
-            <JurisdictionAccordion product="complete_pack" defaultExpanded={true} />
-          </div>
-        </Container>
-      </section>
-
-      {/* AI Witness Statement Feature */}
-      <section className="py-16 md:py-20 bg-[#F3EEFF]">
-        <Container>
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-12">
-              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-xl border border-[#E6DBFF] bg-white">
-                <ScrollText className="h-8 w-8 text-[#692ED4]" />
-              </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4">
-                AI Witness Statement (Included)
-              </h2>
-              <p className="text-xl text-gray-700">
-                Professional witness statement drafted by Ask Heaven
-              </p>
-            </div>
-
-            <div className="mx-auto max-w-xl rounded-2xl border border-[#E6DBFF] bg-white p-6 shadow-[0_14px_36px_rgba(105,46,212,0.12)]">
-              <p className="text-gray-700 mb-4">
-                Ask Heaven analyzes your case details and drafts a professional witness statement for court proceedings:
-              </p>
-              <ul className="space-y-2 text-sm text-gray-700">
-                <li className="flex items-start gap-2">
-                  <span className="font-bold text-[#692ED4]">✓</span>
-                  <span>Chronological timeline of events</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="font-bold text-[#692ED4]">✓</span>
-                  <span>Legal formatting and structure</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="font-bold text-[#692ED4]">✓</span>
-                  <span>Ground-specific evidence references</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="font-bold text-[#692ED4]">✓</span>
-                  <span>Ready for court submission</span>
-                </li>
-              </ul>
-              <p className="text-xs text-gray-500 mt-4 italic">
-                The witness statement is AI-drafted and should be reviewed before signing. You may wish to have a solicitor review it for complex cases.
-              </p>
-            </div>
-          </div>
-        </Container>
-      </section>
 
       {/* Why Landlord Heaven */}
       <section className="py-16 md:py-20">
