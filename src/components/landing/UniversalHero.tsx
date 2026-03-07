@@ -115,7 +115,7 @@ export function UniversalHero({
   showTrustPositioningBar = false,
   guidanceTodayLine,
   guidanceCta,
-  showActionGuidance = true,
+  showActionGuidance = false,
 }: UniversalHeroProps) {
   const mobileTitleParts = title.split('Legal Documents');
   const hasLegalDocumentsInTitle = mobileTitleParts.length > 1;
