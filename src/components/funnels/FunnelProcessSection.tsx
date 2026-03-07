@@ -202,7 +202,7 @@ const StepCard = ({
       <h4 className="text-lg font-semibold text-violet-950">{step.docTitle}</h4>
 
       <div className="mt-4 grid flex-1 grid-cols-1 gap-4 md:grid-cols-2">
-        <dl className="space-y-3 text-sm leading-6 text-gray-700">
+        <dl className="order-2 space-y-3 text-sm leading-6 text-gray-700 md:order-1">
           <div>
             <dt className="font-semibold text-violet-900">What it does</dt>
             <dd>{step.whatItDoes}</dd>
@@ -219,7 +219,7 @@ const StepCard = ({
           ) : null}
         </dl>
 
-        <div className="self-start overflow-hidden rounded-xl border border-[#E6DBFF] bg-violet-50/50 md:h-full md:self-auto">
+        <div className="order-1 self-start overflow-hidden rounded-xl border border-[#E6DBFF] bg-violet-50/50 md:order-2 md:h-full md:self-auto">
           {image ? (
             <Image
               src={image.src}
