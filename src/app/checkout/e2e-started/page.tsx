@@ -1,14 +1,3 @@
-﻿import type { Metadata } from 'next';
-
-export const metadata: Metadata = {
-  title: 'Checkout Started E2E',
-  description: 'Deterministic checkout start route for automated funnel auditing.',
-  robots: {
-    index: false,
-    follow: false,
-  },
-};
-
 export default async function E2EStartedPage({
   searchParams,
 }: {

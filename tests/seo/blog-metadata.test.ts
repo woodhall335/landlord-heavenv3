@@ -1,5 +1,5 @@
-﻿import { describe, expect, it } from 'vitest';
-import { generateMetadata } from '@/app/(marketing)/blog/[slug]/page';
+import { describe, expect, it } from 'vitest';
+import { generateMetadata } from '@/app/blog/[slug]/page';
 import { getCanonicalUrl } from '@/lib/seo';
 
 describe('blog metadata', () => {
@@ -16,4 +16,3 @@ describe('blog metadata', () => {
     expect(metadata.robots).toBe('index,follow');
   });
 });
-
