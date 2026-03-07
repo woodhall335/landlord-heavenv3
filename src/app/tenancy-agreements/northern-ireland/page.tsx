@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { ActionGuidance } from '@/components/funnels/ActionGuidance';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { getCanonicalUrl } from '@/lib/seo/urls';
 
@@ -186,6 +187,13 @@ export default function NorthernIrelandTenancyPage() {
             <p className="text-xl text-gray-700 mb-4">
               Create a legally compliant Private Tenancy Agreement for Northern Ireland in minutes. Fully updated for 2025 including mandatory EICR requirements, rent increase restrictions, and all current NI legislation.
             </p>
+            <ActionGuidance
+              variant="light"
+              todayLine="Here is exactly what to do today: generate your NI agreement with current EICR and notice-rule wording."
+              ctaHref="/products/ast"
+              ctaLabel="Start NI Tenancy Workflow"
+              className="mx-auto mb-6 max-w-3xl text-left"
+            />
             <div className="bg-amber-100 border-l-4 border-primary-600 p-4 mb-8 text-left">
               <p className="text-sm font-semibold text-primary-900">
                 ✨ <strong>2025 Updates Included:</strong> Mandatory EICR from 1 April 2025 • 12-month gap between rent increases • 3-month notice for rent increases • Length-based notice periods

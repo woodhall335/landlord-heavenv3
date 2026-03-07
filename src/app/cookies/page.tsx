@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Container, TealHero } from "@/components/ui";
 import Link from "next/link";
 import { Cookie, Lock, CreditCard, BarChart3, AlertTriangle } from "lucide-react";
+import { ActionGuidance } from "@/components/funnels/ActionGuidance";
 
 export const metadata: Metadata = {
   title: "Cookie Policy",
@@ -12,6 +13,14 @@ export default function CookiesPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <TealHero title="Cookie Policy" subtitle="How we use cookies to provide the best experience." eyebrow="Compliance" />
+      <Container size="medium" className="pt-8">
+        <ActionGuidance
+          variant="light"
+          todayLine="Here is exactly what to do today: set your cookie choices once, then continue with your landlord task."
+          ctaHref="/privacy"
+          ctaLabel="Review Privacy Policy"
+        />
+      </Container>
       <Container size="medium" className="py-12">
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 md:p-12">
           <p className="text-sm text-gray-500 mb-8">Last updated: November 22, 2025</p>

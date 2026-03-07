@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { ActionGuidance } from '@/components/funnels/ActionGuidance';
 
 export const metadata: Metadata = {
   title: 'Tenancy Agreements | England & Wales',
@@ -30,6 +31,13 @@ export default function EnglandWalesRedirectPage() {
           <p className="text-xl text-gray-700 mb-12">
             England and Wales now have different tenancy laws. Please select your property location to create the correct legal agreement.
           </p>
+          <ActionGuidance
+            variant="light"
+            todayLine="Here is exactly what to do today: choose your property jurisdiction first, then start the matching agreement flow."
+            ctaHref="/products/ast"
+            ctaLabel="Open Tenancy Agreement Workflows"
+            className="mx-auto mb-8 max-w-3xl text-left"
+          />
 
           <div className="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
             {/* England Card */}

@@ -1,5 +1,6 @@
-﻿import type { Metadata } from 'next';
+import type { Metadata } from 'next';
 import Link from 'next/link';
+import { ActionGuidance } from '@/components/funnels/ActionGuidance';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { getCanonicalUrl } from '@/lib/seo/urls';
 
@@ -197,6 +198,13 @@ export default function WalesOccupationContractPage() {
             <p className="text-xl text-gray-700 mb-4">
               Create a legally compliant Occupation Contract under the <strong>Renting Homes (Wales) Act 2016</strong>.
             </p>
+            <ActionGuidance
+              variant="light"
+              todayLine="Here is exactly what to do today: generate the correct Welsh occupation contract before you issue tenancy paperwork."
+              ctaHref="/products/ast"
+              ctaLabel="Start Wales Contract Workflow"
+              className="mx-auto mb-6 max-w-3xl text-left"
+            />
             <p className="text-lg text-gray-600 mb-8">
               Since December 2022, all new tenancies in Wales use Occupation Contracts, not ASTs.
             </p>

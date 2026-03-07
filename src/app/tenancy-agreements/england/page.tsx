@@ -1,5 +1,6 @@
-﻿import type { Metadata } from 'next';
+import type { Metadata } from 'next';
 import Link from 'next/link';
+import { ActionGuidance } from '@/components/funnels/ActionGuidance';
 import { getCanonicalUrl } from '@/lib/seo/urls';
 
 const PRICE_VALID_UNTIL = '2026-12-31';
@@ -212,6 +213,13 @@ export default function EnglandASTPage() {
             <p className="text-xl text-gray-700 mb-8">
               Create a legally compliant Assured Shorthold Tenancy Agreement in minutes. Fully compliant with the Housing Act 1988, Tenant Fees Act 2019, and all current England legislation.
             </p>
+            <ActionGuidance
+              variant="light"
+              todayLine="Here is exactly what to do today: choose your AST tier and generate your England agreement in one session."
+              ctaHref="/products/ast"
+              ctaLabel="Start AST Workflow"
+              className="mx-auto mb-8 max-w-3xl text-left"
+            />
             <div className="flex gap-4 justify-center flex-wrap">
               <Link
                 href="/wizard?product=ast_standard&src=product_page&topic=tenancy&jurisdiction=england"

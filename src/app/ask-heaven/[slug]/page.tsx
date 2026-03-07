@@ -35,6 +35,7 @@ import type { AskHeavenPrimaryTopic } from '@/lib/ask-heaven/questions/types';
 import type { Jurisdiction } from '@/lib/jurisdiction/types';
 import { NextStepWidget } from '@/components/journey/NextStepWidget';
 import { JourneyStageUpdater } from '@/components/journey/JourneyStageUpdater';
+import { ActionGuidance } from '@/components/funnels/ActionGuidance';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -127,6 +128,10 @@ export default async function AskHeavenQuestionPage({ params }: PageProps) {
   const recommendedProduct = chatTopic
     ? getRecommendedProduct(chatTopic, resolvedJurisdiction, intent ?? undefined)
     : null;
+  const recommendedProductHref = recommendedProduct
+    ? getProductPageHref(recommendedProduct.product)
+    : '/products/notice-only';
+  const recommendedProductLabel = recommendedProduct?.label ?? 'View guided product options';
 
   // Build breadcrumb items
   const breadcrumbItems = [
@@ -179,6 +184,18 @@ export default async function AskHeavenQuestionPage({ params }: PageProps) {
         topicHint={`${question.primary_topic} ${question.question}`}
         sourceId={`/ask-heaven/${slug}`}
       />
+      <div className="bg-[#f8f1ff] border-b border-[#e9dcff]">
+        <div className="container mx-auto px-4 py-5">
+          <div className="max-w-4xl mx-auto">
+            <ActionGuidance
+              variant="light"
+              todayLine="Here is exactly what to do today: solve this question with one guided legal workflow."
+              ctaHref={recommendedProductHref}
+              ctaLabel={recommendedProductLabel}
+            />
+          </div>
+        </div>
+      </div>
 
       <AskHeavenPageClient
         initialMessages={[
@@ -344,6 +361,21 @@ function resolveChatJurisdiction(jurisdiction: AskHeavenQuestion['jurisdictions'
     return 'england';
   }
   return jurisdiction;
+}
+
+function getProductPageHref(product: string): string {
+  switch (product) {
+    case 'notice_only':
+      return '/products/notice-only';
+    case 'complete_pack':
+      return '/products/complete-pack';
+    case 'money_claim':
+      return '/products/money-claim';
+    case 'tenancy_agreement':
+      return '/products/ast';
+    default:
+      return '/products/notice-only';
+  }
 }
 
 function mapPrimaryTopicToChatTopic(topic: AskHeavenPrimaryTopic): Topic | null {

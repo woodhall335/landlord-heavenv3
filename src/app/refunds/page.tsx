@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Container } from "@/components/ui";
 import Link from "next/link";
 import { FileText, XCircle, CheckCircle2, Mail } from "lucide-react";
+import { ActionGuidance } from "@/components/funnels/ActionGuidance";
 
 export const metadata: Metadata = {
   title: "Refund Policy",
@@ -22,6 +23,13 @@ export default function RefundsPage() {
             <p className="text-xl md:text-2xl mb-6 text-gray-600">
               Our refund policy for digital products and services
             </p>
+            <ActionGuidance
+              variant="light"
+              todayLine="Here is exactly what to do today: check eligibility first, then submit one complete support request."
+              ctaHref="/help#billing"
+              ctaLabel="Go To Billing Help"
+              className="mx-auto max-w-3xl text-left"
+            />
           </div>
         </Container>
       </section>

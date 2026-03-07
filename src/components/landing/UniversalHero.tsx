@@ -8,6 +8,7 @@ import { UsageTodayCounter } from '@/components/seo/UsageTodayCounter';
 import { TrustPositioningBar } from '@/components/marketing/TrustPositioningBar';
 import { getDynamicReviewCount, REVIEW_RATING } from '@/lib/reviews/reviewStats';
 import { clsx } from 'clsx';
+import { ActionGuidance } from '@/components/funnels/ActionGuidance';
 
 type HeroCta = {
   label: string;
@@ -50,6 +51,9 @@ export type UniversalHeroProps = {
   showUsageCounter?: boolean;
   backgroundImageSrc?: string;
   showTrustPositioningBar?: boolean;
+  guidanceTodayLine?: string;
+  guidanceCta?: HeroCta;
+  showActionGuidance?: boolean;
 };
 
 const warnedMessages = new Set<string>();
@@ -65,6 +69,20 @@ function warnOnce(message: string) {
 
   warnedMessages.add(message);
   console.warn(message);
+}
+
+function buildTodayLineFromCtaLabel(label: string): string {
+  const cleaned = label
+    .replace(/[>]/g, '')
+    .replace(/[→←↗↘]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  if (!cleaned) {
+    return 'Here is exactly what to do today: start your next step now.';
+  }
+
+  return 'Here is exactly what to do today: ' + cleaned + '.';
 }
 
 export function UniversalHero({
@@ -95,6 +113,9 @@ export function UniversalHero({
   showUsageCounter,
   backgroundImageSrc = '/images/bg.webp',
   showTrustPositioningBar = false,
+  guidanceTodayLine,
+  guidanceCta,
+  showActionGuidance = true,
 }: UniversalHeroProps) {
   const mobileTitleParts = title.split('Legal Documents');
   const hasLegalDocumentsInTitle = mobileTitleParts.length > 1;
@@ -110,6 +131,9 @@ export function UniversalHero({
   const shouldShowUsageCounter = showUsageCounter ?? Boolean(trustText);
   const isCenter = align === 'center';
   const shouldRenderMedia = !hideMedia && mediaSrc !== null;
+  const resolvedGuidanceCta = guidanceCta ?? primaryCta ?? null;
+  const resolvedTodayLine = guidanceTodayLine ?? (resolvedGuidanceCta ? buildTodayLineFromCtaLabel(resolvedGuidanceCta.label) : null);
+  const shouldRenderActionGuidance = showActionGuidance && Boolean(resolvedGuidanceCta && resolvedTodayLine);
 
   useEffect(() => {
     if (!isValidHeading) {
@@ -259,6 +283,15 @@ export function UniversalHero({
               >
                 {subtitle}
               </p>
+            )}
+
+            {shouldRenderActionGuidance && resolvedGuidanceCta && resolvedTodayLine && (
+              <ActionGuidance
+                todayLine={resolvedTodayLine}
+                ctaHref={resolvedGuidanceCta.href}
+                ctaLabel={resolvedGuidanceCta.label}
+                className={clsx(isCenter && 'mx-auto max-w-2xl text-left')}
+              />
             )}
 
             {(primaryCta || secondaryCta || actionsSlot) && (

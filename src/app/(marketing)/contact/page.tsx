@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { RiMailLine, RiTimeLine } from 'react-icons/ri';
 import { StructuredData, breadcrumbSchema, contactPageSchema } from "@/lib/seo";
+import { ActionGuidance } from "@/components/funnels/ActionGuidance";
 import {
   MessageCircle,
   Building2,
@@ -62,6 +63,13 @@ export default function ContactPage() {
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
               We're here to help. Choose the department that best matches your inquiry.
             </p>
+            <ActionGuidance
+              variant="light"
+              todayLine="Here is exactly what to do today: pick the right support route first so your issue is resolved faster."
+              ctaHref="/help"
+              ctaLabel="Open Help Center"
+              className="mx-auto mt-6 max-w-2xl text-left"
+            />
           </div>
         </Container>
       </section>

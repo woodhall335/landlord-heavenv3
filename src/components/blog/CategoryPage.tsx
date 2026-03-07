@@ -9,6 +9,7 @@ import { blogPosts } from '@/lib/blog/posts';
 import { FileText, MapPin, ArrowRight, Scale, Clock } from 'lucide-react';
 import { SITE_ORIGIN } from '@/lib/seo';
 import { NextStepWidget } from '@/components/journey/NextStepWidget';
+import { ActionGuidance } from '@/components/funnels/ActionGuidance';
 
 interface CategoryPageProps {
   region: BlogRegion;
@@ -30,6 +31,9 @@ export function CategoryPage({ region, posts }: CategoryPageProps) {
   const categories = [...new Set(posts.map((post) => post.category))].sort();
   const featuredPost = posts[0];
   const remainingPosts = posts.slice(1);
+  const primaryGuidanceCta = region === 'northern-ireland'
+    ? { href: '/products/ast', label: 'Start NI Tenancy Workflow' }
+    : { href: '/products/notice-only', label: 'Start Notice Workflow - £29.99' };
 
   // Generate structured data
   const breadcrumbSchema = {
@@ -123,6 +127,14 @@ export function CategoryPage({ region, posts }: CategoryPageProps) {
               <p className="mb-6 text-xl text-gray-600">
                 {config.description}
               </p>
+
+              <ActionGuidance
+                variant="light"
+                todayLine={`Here is exactly what to do today: use the ${config.name} guidance below, then take one guided product step.`}
+                ctaHref={primaryGuidanceCta.href}
+                ctaLabel={primaryGuidanceCta.label}
+                className="mx-auto mb-6 max-w-2xl text-left"
+              />
 
               {/* Quick Stats */}
               <div className="flex flex-wrap justify-center gap-6 text-sm text-gray-600">

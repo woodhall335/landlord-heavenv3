@@ -1,5 +1,6 @@
-﻿import type { Metadata } from 'next';
+import type { Metadata } from 'next';
 import Link from 'next/link';
+import { ActionGuidance } from '@/components/funnels/ActionGuidance';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { getCanonicalUrl } from '@/lib/seo/urls';
 
@@ -194,6 +195,13 @@ export default function ScotlandPRTPage() {
             <p className="text-xl text-gray-700 mb-8">
               Create a legally compliant Private Residential Tenancy agreement in minutes. Fully compliant with the Private Housing (Tenancies) (Scotland) Act 2016 and all current Scottish legislation.
             </p>
+            <ActionGuidance
+              variant="light"
+              todayLine="Here is exactly what to do today: set up your Scotland PRT correctly so you avoid tribunal issues later."
+              ctaHref="/products/ast"
+              ctaLabel="Start Scotland PRT Workflow"
+              className="mx-auto mb-8 max-w-3xl text-left"
+            />
             <div className="flex gap-4 justify-center flex-wrap">
               <Link
                 href="/wizard?product=ast_standard&src=product_page&topic=tenancy&jurisdiction=scotland"

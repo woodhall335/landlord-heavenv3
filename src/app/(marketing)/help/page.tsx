@@ -3,6 +3,7 @@ import { Container } from "@/components/ui";
 import Link from "next/link";
 import Image from "next/image";
 import { FAQInline } from "@/components/seo/FAQSection";
+import { ActionGuidance } from "@/components/funnels/ActionGuidance";
 
 export const metadata: Metadata = {
   title: "Help Center",
@@ -35,6 +36,13 @@ export default function HelpPage() {
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
               Find answers to common questions about our services, documents, and processes.
             </p>
+            <ActionGuidance
+              variant="light"
+              todayLine="Here is exactly what to do today: pick your issue type, then take one guided next step."
+              ctaHref="/tools"
+              ctaLabel="Open Free Landlord Tools"
+              className="mx-auto mt-6 max-w-2xl text-left"
+            />
           </div>
         </Container>
       </section>

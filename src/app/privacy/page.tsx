@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui";
+import { ActionGuidance } from "@/components/funnels/ActionGuidance";
 import { ShieldCheck, Database, CreditCard, Sparkles, Mail, Send } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -21,6 +22,13 @@ export default function PrivacyPage() {
             <p className="text-xl md:text-2xl mb-6 text-gray-600">
               How we collect, use, and protect your personal data
             </p>
+            <ActionGuidance
+              variant="light"
+              todayLine="Here is exactly what to do today: review your data rights, then contact us with one clear request."
+              ctaHref="/contact"
+              ctaLabel="Contact Privacy Team"
+              className="mx-auto max-w-3xl text-left"
+            />
           </div>
         </Container>
       </section>

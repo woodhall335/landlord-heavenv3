@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui";
+import { ActionGuidance } from "@/components/funnels/ActionGuidance";
 import { AlertTriangle } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -21,6 +22,13 @@ export default function TermsPage() {
             <p className="text-xl md:text-2xl mb-6 text-gray-600">
               Please read these terms carefully before using our services
             </p>
+            <ActionGuidance
+              variant="light"
+              todayLine="Here is exactly what to do today: review your obligations once, then continue with the correct workflow."
+              ctaHref="/products/notice-only"
+              ctaLabel="Start Guided Workflow"
+              className="mx-auto max-w-3xl text-left"
+            />
           </div>
         </Container>
       </section>

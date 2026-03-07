@@ -33,6 +33,7 @@ import { BlogStickySlots } from '@/components/blog/BlogStickySlots';
 import { BlogProse } from '@/components/blog/BlogProse';
 import { BlogCtaProvider } from '@/components/blog/BlogCtaContext';
 import { BlogArticleStickyGuard } from '@/components/blog/BlogArticleStickyGuard';
+import { ActionGuidance } from '@/components/funnels/ActionGuidance';
 import { getBlogImagesForPost, getBlogImagesForPostThumb } from '@/lib/blog/image-manifest';
 import { getBlogSeoConfig } from '@/lib/blog/seo';
 import { BLOG_PRODUCT_ROUTES, getBlogProductCta } from '@/lib/blog/product-cta-map';
@@ -125,6 +126,15 @@ function getComplianceTopicForPost(slug: string): { topic: AskHeavenTopic; promp
 const MAX_RELATED_GUIDES = 12;
 const BLOG_STICKY_TOP_OFFSET = '7rem';
 
+const buildTodayLine = (label: string): string => {
+  const cleaned = label
+    .replace(/[>]/g, '')
+    .replace(/->/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+  const nextStep = cleaned.length > 0 ? cleaned : 'start your next step now';
+  return `Here is exactly what to do today: ${nextStep}.`;
+};
 
 function inferBlogStageHint(post: BlogPost): StageEstimate {
   const haystack = `${post.title} ${post.targetKeyword} ${post.tags.join(' ')}`.toLowerCase();
@@ -767,6 +777,14 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
               <p className="mb-5 max-w-3xl line-clamp-4 text-base leading-7 text-slate-600 md:line-clamp-3 sm:text-lg sm:leading-8">
                 {seoConfig.heroIntro}
               </p>
+
+              <ActionGuidance
+                variant="light"
+                todayLine={buildTodayLine(productCta.ctaLabel)}
+                ctaHref={productCta.primaryProductHref}
+                ctaLabel={productCta.ctaLabel}
+                className="mb-5 max-w-3xl"
+              />
 
               {/* Tags */}
               <div className="flex flex-wrap gap-2">

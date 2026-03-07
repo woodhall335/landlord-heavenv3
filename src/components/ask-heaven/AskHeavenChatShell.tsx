@@ -45,6 +45,7 @@ import {
   type Topic,
 } from '@/lib/ask-heaven/topic-detection';
 import { NextBestActionCard } from '@/components/ask-heaven/NextBestActionCard';
+import { ActionGuidance } from '@/components/funnels/ActionGuidance';
 
 type ChatRole = 'user' | 'assistant';
 
@@ -783,6 +784,13 @@ export default function AskHeavenChatShell({
             <p className="mt-1 text-sm text-gray-600">
               {chatSubheading ?? "Free landlord assistant for England/Wales/Scotland/N. Ireland"}
             </p>
+            <ActionGuidance
+              variant="light"
+              todayLine={`Here is exactly what to do today: ask one focused landlord question, then move into your ${jurisdictionLabels[jurisdiction]} workflow.`}
+              ctaHref="/products/notice-only"
+              ctaLabel="Start Notice Workflow - £29.99"
+              className="mt-4"
+            />
           </div>
           {showReviewWarning && (
             <div className="bg-amber-50 border-b border-amber-200 px-6 py-3">
