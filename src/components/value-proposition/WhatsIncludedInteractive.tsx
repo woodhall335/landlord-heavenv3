@@ -299,9 +299,9 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
   }, [isPreviewModalOpen]);
 
   return (
-    <section className="py-12 md:py-14">
+    <section className="overflow-x-clip py-12 md:py-14">
       <Container>
-        <div className="mx-auto max-w-6xl rounded-3xl border border-[#E6DBFF] bg-gradient-to-b from-[#fcfaff] to-white p-5 shadow-[0_16px_44px_rgba(15,23,42,0.08)] md:p-8">
+        <div className="mx-auto w-full max-w-6xl rounded-3xl border border-[#E6DBFF] bg-gradient-to-b from-[#fcfaff] to-white p-4 shadow-[0_16px_44px_rgba(15,23,42,0.08)] sm:p-5 md:p-8">
           {showIntro ? (
             <div className="mx-auto mb-8 max-w-3xl text-center">
               <h2 className="text-3xl font-semibold tracking-tight text-[#2f0d68] md:text-4xl">{title}</h2>
@@ -309,8 +309,8 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
             </div>
           ) : null}
 
-          <div className="grid items-start gap-6 lg:grid-cols-[1.05fr_0.95fr]">
-            <div className="space-y-5 rounded-2xl border border-[#E9E2FF] bg-white p-4 md:p-6">
+          <div className="grid items-start gap-5 lg:grid-cols-[1.05fr_0.95fr] lg:gap-6">
+            <div className="min-w-0 space-y-5 rounded-2xl border border-[#E9E2FF] bg-white p-4 md:p-6">
               {isNoticeOnly ? (
                 <div>
                   <h3 className="text-sm font-semibold uppercase tracking-wide text-[#5b4b7a]">Jurisdiction</h3>
@@ -347,7 +347,7 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
                         <button
                           key={variant.key}
                           type="button"
-                          className={`rounded-xl border p-4 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7c3aed] focus-visible:ring-offset-2 ${
+                          className={`min-w-0 rounded-xl border p-4 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7c3aed] focus-visible:ring-offset-2 ${
                             isActive
                               ? 'border-[#7c3aed]/60 bg-[#f4efff] shadow-sm'
                               : 'border-gray-200 bg-white hover:border-[#7c3aed]/35'
@@ -361,8 +361,8 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
                             }
                           }}
                         >
-                          <p className="text-base font-semibold text-[#2f0d68]">{variant.label}</p>
-                          <p className="mt-1 text-sm text-gray-600">{variant.description}</p>
+                          <p className="text-base font-semibold text-[#2f0d68] break-words">{variant.label}</p>
+                          <p className="mt-1 text-sm text-gray-600 break-words">{variant.description}</p>
                         </button>
                       );
                     })}
@@ -371,9 +371,9 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
               ) : null}
 
               <div className="rounded-2xl border border-[#eee7ff] bg-[#fcfbff] p-4 md:p-5">
-                <div className="flex items-center justify-between gap-3">
-                  <h3 className="text-lg font-semibold text-[#2f0d68]">Documents included in your pack</h3>
-                  <span className="rounded-full bg-[#f3e8ff] px-3 py-1 text-xs font-semibold text-[#6f3dd6]">
+                <div className="flex flex-wrap items-start justify-between gap-2 sm:items-center sm:gap-3">
+                  <h3 className="min-w-0 text-lg font-semibold text-[#2f0d68]">Documents included in your pack</h3>
+                  <span className="max-w-full whitespace-normal break-words rounded-full bg-[#f3e8ff] px-3 py-1 text-xs font-semibold text-[#6f3dd6] sm:text-right">
                     {isNoticeOnly ? jurisdictionConfig?.legalNote : 'England only'}
                   </span>
                 </div>
@@ -386,7 +386,7 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
                         key={document.key}
                         type="button"
                         onClick={() => setSelectedDocKey(document.key)}
-                        className={`flex w-full items-start gap-3 rounded-xl border p-3 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7c3aed] focus-visible:ring-offset-2 ${
+                        className={`flex w-full min-w-0 items-start gap-3 rounded-xl border p-3 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7c3aed] focus-visible:ring-offset-2 ${
                           isActive
                             ? 'border-[#7c3aed]/55 bg-[#f4efff] shadow-sm'
                             : 'border-gray-200 bg-white hover:border-[#7c3aed]/35'
@@ -396,9 +396,9 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
                         <span className="mt-0.5 shrink-0 rounded-lg border border-[#e8ddff] bg-white p-2">
                           <Image src={document.icon} alt="" width={20} height={20} className="h-5 w-5" aria-hidden="true" />
                         </span>
-                        <span>
-                          <span className="block text-sm font-semibold text-[#2f0d68]">{document.title}</span>
-                          <span className="mt-1 block text-xs text-gray-600">{document.description}</span>
+                        <span className="min-w-0">
+                          <span className="block text-sm font-semibold text-[#2f0d68] break-words">{document.title}</span>
+                          <span className="mt-1 block text-xs text-gray-600 break-words">{document.description}</span>
                         </span>
                       </button>
                     );
@@ -412,7 +412,7 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
               </div>
             </div>
 
-            <div className="rounded-2xl border border-[#E9E2FF] bg-white p-4 shadow-sm md:p-6">
+            <div className="min-w-0 rounded-2xl border border-[#E9E2FF] bg-white p-4 shadow-sm md:p-6">
               <h3 className="text-lg font-semibold text-[#2f0d68]">Document Preview</h3>
               <p className="mt-1 text-sm text-gray-600">Click a document on the left to preview it here.</p>
 
@@ -448,7 +448,7 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
             </div>
           </div>
 
-          <div className="mt-6 rounded-2xl border border-[#E9E2FF] bg-white px-5 py-6 text-center md:px-8">
+          <div className="mt-6 min-w-0 rounded-2xl border border-[#E9E2FF] bg-white px-4 py-6 text-center sm:px-5 md:px-8">
             <h3 className="text-xl font-semibold text-[#2f0d68] md:text-2xl">Ready to start?</h3>
             <p className="mt-2 text-sm text-[#5b4b7a] md:text-base">Continue to the guided wizard and generate your pack.</p>
             <div className="mt-4">
