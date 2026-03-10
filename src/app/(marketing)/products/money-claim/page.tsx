@@ -109,7 +109,12 @@ export default async function MoneyClaimPage() {
       <FunnelProcessSection product="money_claim" moneyClaimPreviews={previews} />
 
 
-      <WhatsIncludedInteractive product="money_claim" previews={previews} />
+      <WhatsIncludedInteractive
+        product="money_claim"
+        previews={previews}
+        titleOverride="What's included in your money claim pack"
+        subtitleOverride="England-only pack. Preview every document before you buy."
+      />
 
       <section className="py-16 md:py-20 bg-white">
         <Container>

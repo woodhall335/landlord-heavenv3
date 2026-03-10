@@ -1,12 +1,13 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useState } from 'react';
 import { Container } from '@/components/ui';
 import type {
   JurisdictionKey,
   NoticeOnlyPreviewData,
   NoticeVariantKey,
+  PreviewDoc,
 } from '@/lib/previews/noticeOnlyPreviews';
 import type { CompletePackPreviewData, CompletePackVariantKey } from '@/lib/previews/completePackPreviews';
 import type { MoneyClaimPreviewData } from '@/lib/previews/moneyClaimPreviews';
@@ -55,13 +56,13 @@ const NOTICE_ONLY_CONFIG: Record<JurisdictionKey, JurisdictionConfig> = {
     noticeVariants: [
       {
         key: 'section21',
-        label: 'Section 21 (Form 6A) — no-fault eviction',
-        description: 'Court-ready no-fault possession notice for England.',
+        label: 'Section 21',
+        description: 'Form 6A no-fault possession notice.',
       },
       {
         key: 'section8',
-        label: 'Section 8 (Form 3) — grounds-based eviction',
-        description: 'Grounds-based possession notice for rent arrears / breach.',
+        label: 'Section 8',
+        description: 'Form 3 grounds-based possession notice.',
       },
     ],
   },
@@ -71,13 +72,13 @@ const NOTICE_ONLY_CONFIG: Record<JurisdictionKey, JurisdictionConfig> = {
     noticeVariants: [
       {
         key: 'section173',
-        label: 'Section 173 Notice — no-fault possession',
+        label: 'Section 173 Notice',
         description: 'No-fault possession notice for Wales.',
       },
       {
         key: 'rhw23',
         label: 'Fault-based Notice (RHW23)',
-        description: 'Fault-based notice for breach / arrears / ASB in Wales.',
+        description: 'Fault-based notice for breach, arrears, or ASB.',
       },
     ],
   },
@@ -87,109 +88,80 @@ const NOTICE_ONLY_CONFIG: Record<JurisdictionKey, JurisdictionConfig> = {
     noticeVariants: [
       {
         key: 'notice-to-leave',
-        label: 'Notice to Leave (PRT) — selected grounds',
-        description: 'Notice to Leave for Scotland private residential tenancies.',
+        label: 'Notice to Leave (PRT)',
+        description: 'Notice to Leave for private residential tenancies.',
       },
     ],
   },
 };
 
-const differentiators = [
-  'Preview before paying (watermarked)',
-  'Edit + regenerate instantly (unlimited)',
-  'Stored in your portal for at least 12 months',
-];
-
 const jurisdictionOrder: JurisdictionKey[] = ['england', 'wales', 'scotland'];
 
-type DocumentGroup = {
-  title: string;
-  items: string[];
-  emptyText?: string;
-};
-
-type VariantOption = {
-  key: string;
-  label: string;
-  description: string;
-};
-
-const COMPLETE_PACK_VARIANTS: VariantOption[] = [
-  {
-    key: 'section8',
-    label: 'Section 8 Eviction Pack',
-    description: 'Grounds-based eviction pack for rent arrears or breaches.',
-  },
+const COMPLETE_PACK_VARIANTS: NoticeVariant[] = [
   {
     key: 'section21',
-    label: 'Section 21 Eviction Pack',
-    description: 'No-fault eviction pack for England landlords.',
+    label: 'Section 21',
+    description: 'No-fault eviction route for England.',
+  },
+  {
+    key: 'section8',
+    label: 'Section 8',
+    description: 'Grounds-based eviction route for arrears or breach.',
   },
 ];
 
-const MONEY_CLAIM_GROUPS: DocumentGroup[] = [
-  {
-    title: 'Court Forms',
-    items: ['Claim form (N1 / MCOL-equivalent structure)'],
-  },
-  {
-    title: 'Court Documents',
-    items: ['Particulars of Claim', 'Schedule of Arrears', 'Interest Calculation (s.69 County Courts Act)'],
-  },
-  {
-    title: 'Pre-Action Protocol',
-    items: [
-      'Letter Before Claim (PAP-DEBT compliant)',
-      'Defendant Information Sheet',
-      'Reply Form',
-      'Financial Statement',
-    ],
-  },
-  {
-    title: 'Guidance',
-    items: ['Court Filing Guide (MCOL / paper)', 'Enforcement Guide'],
-  },
-];
-
-const buildCompletePackDocumentGroups = (variant: CompletePackVariantKey): DocumentGroup[] => {
-  const courtForms =
-    variant === 'section21'
-      ? ['Form N5B — Accelerated Possession']
-      : ['Form N5 — Claim for Possession', 'Form N119 — Particulars of Claim'];
-
-  return [
-    {
-      title: 'Notices (1)',
-      items: [
-        variant === 'section21'
-          ? 'Section 21 (Form 6A) — Court-ready eviction notice'
-          : 'Section 8 (Form 3) — Court-ready eviction notice',
-      ],
-    },
-    {
-      title: `Court Forms (${courtForms.length})`,
-      items: courtForms,
-    },
-    {
-      title: 'AI-Generated (1)',
-      items: ['AI Witness Statement'],
-    },
-    {
-      title: 'Guidance (3)',
-      items: ['Service Instructions', 'Service & Validity Checklist', 'Court Filing Guide'],
-    },
-    {
-      title: 'Evidence (2)',
-      items: ['Evidence Collection Checklist', 'Proof of Service Certificate'],
-    },
-  ];
+const getDefaultTitle = (product: WhatsIncludedInteractiveProps['product']) => {
+  if (product === 'notice_only') {
+    return "What's included in your notice";
+  }
+  if (product === 'complete_pack') {
+    return "What's included in your eviction pack";
+  }
+  return "What's included in your money claim pack";
 };
 
-const buildMoneyClaimDocumentGroups = (): DocumentGroup[] =>
-  MONEY_CLAIM_GROUPS.map((group) => ({
-    ...group,
-    title: `${group.title} (${group.items.length})`,
-  }));
+const getDefaultSubtitle = (product: WhatsIncludedInteractiveProps['product']) => {
+  if (product === 'notice_only') {
+    return 'Select your jurisdiction, then preview every document in the pack.';
+  }
+  if (product === 'complete_pack') {
+    return 'England-only pack. Choose Section 8 or Section 21, then preview every document.';
+  }
+  return 'England-only pack. Preview every document before you buy.';
+};
+
+const getDocumentDescription = (document: PreviewDoc) => {
+  const haystack = `${document.key} ${document.title}`.toLowerCase();
+  if (haystack.includes('service')) return 'How to serve your documents correctly.';
+  if (haystack.includes('validity') || haystack.includes('checklist')) return 'Checks to reduce avoidable compliance mistakes.';
+  if (haystack.includes('witness')) return 'AI-assisted draft witness statement for court.';
+  if (haystack.includes('enforcement')) return 'Next steps to enforce a successful judgment.';
+  if (haystack.includes('court-filing') || haystack.includes('filing')) return 'Step-by-step guide for filing your claim in court.';
+  if (haystack.includes('schedule') || haystack.includes('arrears')) return 'Clear rent arrears breakdown supporting your claim.';
+  if (haystack.includes('particulars')) return 'Detailed legal basis for your claim.';
+  if (haystack.includes('financial-statement')) return 'PAP-DEBT financial statement template.';
+  if (haystack.includes('reply-form')) return 'Tenant response form under the pre-action protocol.';
+  if (haystack.includes('information-sheet')) return 'Defendant information sheet for PAP-DEBT.';
+  if (haystack.includes('letter-before-claim')) return 'Pre-action letter template before issuing proceedings.';
+  if (haystack.includes('interest')) return 'Interest calculation worksheet for the court claim.';
+  if (haystack.includes('n1') || haystack.includes('claim-form')) return 'Core claim form template for issuing proceedings.';
+  if (haystack.includes('section') || haystack.includes('notice') || haystack.includes('form-6a') || haystack.includes('form-3')) {
+    return 'Primary legal notice generated from your case details.';
+  }
+  return 'Included document in your generated pack.';
+};
+
+const getDocumentIcon = (document: PreviewDoc) => {
+  const haystack = `${document.key} ${document.title}`.toLowerCase();
+  if (haystack.includes('service')) return '/images/wizard-icons/17-service-proof.png';
+  if (haystack.includes('validity') || haystack.includes('checklist')) return '/images/wizard-icons/05-compliance.png';
+  if (haystack.includes('witness') || haystack.includes('evidence')) return '/images/wizard-icons/38-evidence-pack.png';
+  if (haystack.includes('enforcement')) return '/images/wizard-icons/20-enforcement.png';
+  if (haystack.includes('court') || haystack.includes('n1') || haystack.includes('n5')) return '/images/wizard-icons/09-court.png';
+  if (haystack.includes('arrears') || haystack.includes('rent')) return '/images/wizard-icons/15-rent-arrears.png';
+  if (haystack.includes('financial')) return '/images/wizard-icons/37-payment-plan.png';
+  return '/images/wizard-icons/06-notice-details.png';
+};
 
 type PreviewImageProps = {
   src: string;
@@ -232,39 +204,11 @@ const PreviewImage = ({ src, alt, title, width, height, className }: PreviewImag
   );
 };
 
-const PreviewThumbnail = ({ src, alt, title, width, height, className }: PreviewImageProps) => {
-  const [hasError, setHasError] = useState(false);
-
-  if (hasError || !src) {
-    return (
-      <div
-        className={`flex h-full w-full items-center justify-center rounded-xl border border-dashed border-gray-200 bg-gray-50 px-2 text-center ${
-          className ?? ''
-        }`}
-      >
-        <p className="text-[11px] font-medium text-gray-500">Preview</p>
-      </div>
-    );
-  }
-
-  return (
-    <Image
-      src={src}
-      alt={alt}
-      width={width}
-      height={height}
-      className={className}
-      onError={() => setHasError(true)}
-      unoptimized
-    />
-  );
-};
-
 export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) => {
   const { product, previews } = props;
   const isNoticeOnly = product === 'notice_only';
-  const showIntro = props.showIntro ?? true;
   const isCompletePack = product === 'complete_pack';
+  const showIntro = props.showIntro ?? true;
   const initialJurisdiction = isNoticeOnly ? props.defaultJurisdiction ?? 'england' : 'england';
   const initialPackVariant = isCompletePack ? props.defaultVariant ?? 'section21' : 'section21';
 
@@ -296,447 +240,158 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
     : isCompletePack
       ? (previews as CompletePackPreviewData)[selectedPackVariant] ?? []
       : (previews as MoneyClaimPreviewData);
+
   const effectiveDocKey = documents.some((document) => document.key === selectedDocKey)
     ? selectedDocKey
     : documents[0]?.key ?? 'preview-placeholder';
   const activeDoc = documents.find((document) => document.key === effectiveDocKey) ?? documents[0];
-  const activeIndex = useMemo(() => {
-    if (!documents.length) {
-      return -1;
-    }
-    const index = documents.findIndex((document) => document.key === effectiveDocKey);
-    return index === -1 ? 0 : index;
-  }, [documents, effectiveDocKey]);
 
-  const goPrev = () => {
-    if (documents.length < 2 || activeIndex === -1) {
-      return;
-    }
-    const nextIndex = (activeIndex - 1 + documents.length) % documents.length;
-    setSelectedDocKey(documents[nextIndex].key);
-  };
+  const title = props.titleOverride ?? getDefaultTitle(product);
+  const subtitle = props.subtitleOverride ?? getDefaultSubtitle(product);
+  const showNoticeTypeSelector = isCompletePack || (isNoticeOnly && selectedJurisdiction === 'england');
 
-  const goNext = () => {
-    if (documents.length < 2 || activeIndex === -1) {
-      return;
-    }
-    const nextIndex = (activeIndex + 1) % documents.length;
-    setSelectedDocKey(documents[nextIndex].key);
-  };
-
-  const evictionNoticeDocuments = useMemo(() => {
-    if (!isNoticeOnly) {
-      return [];
-    }
-    const matchers = [
-      /section[-\s]?8/,
-      /section[-\s]?21/,
-      /section[-\s]?173/,
-      /rhw23/,
-      /notice[-\s]?to[-\s]?leave/,
-      /eviction[-\s]?notice/,
-      /form[-\s]?6a/,
-      /form[-\s]?3/,
-    ];
-
-    return documents.filter((document) => {
-      const haystack = `${document.title} ${document.key}`.toLowerCase();
-      return matchers.some((matcher) => matcher.test(haystack));
-    });
-  }, [documents, isNoticeOnly]);
-
-  const guidanceDocuments = useMemo(() => {
-    if (!isNoticeOnly) {
-      return [];
-    }
-    return documents.filter((document) => !evictionNoticeDocuments.some((notice) => notice.key === document.key));
-  }, [documents, evictionNoticeDocuments, isNoticeOnly]);
-
-  const documentGroups = useMemo<DocumentGroup[]>(() => {
-    if (isNoticeOnly) {
-      return [
-        {
-          title: 'Eviction Notices',
-          items: evictionNoticeDocuments.map((document) => document.title),
-          emptyText: 'Previews coming soon.',
-        },
-        {
-          title: 'Guidance Documents',
-          items: guidanceDocuments.map((document) => document.title),
-          emptyText: 'Previews coming soon.',
-        },
-      ];
-    }
-    if (isCompletePack) {
-      return buildCompletePackDocumentGroups(selectedPackVariant);
-    }
-    return buildMoneyClaimDocumentGroups();
-  }, [evictionNoticeDocuments, guidanceDocuments, isCompletePack, isNoticeOnly, selectedPackVariant]);
-
-  const orderedDocuments = useMemo(() => {
-    if (!activeDoc) {
-      return [];
-    }
-    const remaining = documents.filter((document) => document.key !== activeDoc.key);
-    return [activeDoc, ...remaining];
-  }, [activeDoc, documents]);
-
-  const maxVisibleDocuments = 10;
-  const visibleDocuments = orderedDocuments.slice(0, maxVisibleDocuments);
-  const extraDocumentCount = Math.max(0, orderedDocuments.length - visibleDocuments.length);
-  const hasDocuments = documents.length > 0;
-  const stackContainerRef = useRef<HTMLDivElement | null>(null);
-  const [stackWidth, setStackWidth] = useState(0);
-  const stackCardRef = useRef<HTMLButtonElement | null>(null);
-  const [stackCardSize, setStackCardSize] = useState({ width: 0, height: 0 });
-
-  useEffect(() => {
-    const container = stackContainerRef.current;
-    if (!container) {
-      return;
-    }
-
-    const updateMeasurements = () => {
-      setStackWidth(container.getBoundingClientRect().width);
-      if (stackCardRef.current) {
-        const rect = stackCardRef.current.getBoundingClientRect();
-        setStackCardSize({ width: rect.width, height: rect.height });
-      }
-    };
-
-    updateMeasurements();
-
-    if (typeof ResizeObserver === 'undefined') {
-      window.addEventListener('resize', updateMeasurements);
-      return () => window.removeEventListener('resize', updateMeasurements);
-    }
-
-    const observer = new ResizeObserver(updateMeasurements);
-    observer.observe(container);
-    if (stackCardRef.current) {
-      observer.observe(stackCardRef.current);
-    }
-    return () => observer.disconnect();
-  }, [visibleDocuments.length]);
-
-  const stackLayout = useMemo(() => {
-    const count = visibleDocuments.length;
-    if (!count) {
-      return {
-        count,
-        maxX: 0,
-        yStep: 0,
-        positions: [],
-      };
-    }
-
-    const cardWidth = stackCardSize.width || 0;
-    const maxX = Math.max(stackWidth - cardWidth, 0);
-    const yStep = count > 1 ? Math.min(12, maxX * 0.06) : 0;
-    const positions = visibleDocuments.map((_, index) => {
-      if (count === 1) {
-        return { x: 0, y: 0 };
-      }
-      const ratio = index / (count - 1);
-      return {
-        x: ratio * maxX,
-        y: index * yStep,
-      };
-    });
-
-    return {
-      count,
-      maxX,
-      yStep,
-      positions,
-    };
-  }, [stackCardSize.width, stackWidth, visibleDocuments]);
+  const documentEntries = documents.map((document) => ({
+    ...document,
+    description: getDocumentDescription(document),
+    icon: getDocumentIcon(document),
+  }));
 
   return (
-    <section className="py-16 md:py-20">
+    <section className="py-12 md:py-14">
       <Container>
-        <div className="max-w-6xl mx-auto">
+        <div className="mx-auto max-w-6xl rounded-3xl border border-[#E6DBFF] bg-gradient-to-b from-[#fcfaff] to-white p-5 shadow-[0_16px_44px_rgba(15,23,42,0.08)] md:p-8">
           {showIntro ? (
-            <>
-            <div className="text-center mb-10">
-              <h2 className="text-3xl md:text-4xl font-bold text-[#2f0d68]">
-                {props.titleOverride ??
-                  (isNoticeOnly
-                  ? 'Understand Why Each Notice Document Matters'
-                  : isCompletePack
-                    ? 'What’s included in your complete eviction pack'
-                    : 'What’s included in your money claim pack')}
-              </h2>
-              <p className="mt-3 text-gray-600">
-                {props.subtitleOverride ??
-                  (isNoticeOnly
-                  ? 'Select your jurisdiction, then preview every document in the pack.'
-                  : isCompletePack
-                    ? 'England-only pack. Choose Section 8 or Section 21, then preview every document.'
-                    : 'England-only pack. Preview every document before you buy.')}
-              </p>
-            </div>
-            </>
-          ) : null}
-
-          {isNoticeOnly ? (
-            <div className="flex justify-center mb-10" role="tablist" aria-label="Jurisdiction">
-              <div className="pill-selector">
-                {jurisdictionOrder.map((jurisdiction) => {
-                  const isActive = selectedJurisdiction === jurisdiction;
-                  return (
-                    <button
-                      key={jurisdiction}
-                      role="tab"
-                      type="button"
-                      aria-selected={isActive}
-                      aria-controls={`jurisdiction-panel-${jurisdiction}`}
-                      className={`pill-selector-btn ${
-                        isActive ? 'pill-selector-btn-active' : 'pill-selector-btn-inactive'
-                      }`}
-                      onClick={() => setSelectedJurisdiction(jurisdiction)}
-                    >
-                      {NOTICE_ONLY_CONFIG[jurisdiction].label}
-                    </button>
-                  );
-                })}
-              </div>
+            <div className="mx-auto mb-8 max-w-3xl text-center">
+              <h2 className="text-3xl font-semibold tracking-tight text-[#2f0d68] md:text-4xl">{title}</h2>
+              <p className="mt-3 text-base text-[#5b4b7a] md:text-lg">{subtitle}</p>
             </div>
           ) : null}
 
-          <div
-            role="tabpanel"
-            id={isNoticeOnly ? `jurisdiction-panel-${selectedJurisdiction}` : 'jurisdiction-panel-england'}
-            aria-label={
-              isNoticeOnly
-                ? `${jurisdictionConfig?.label ?? 'England'} notice pack details`
-                : isCompletePack
-                  ? 'England complete pack details'
-                  : 'England money claim pack details'
-            }
-          >
-            <div className="grid md:grid-cols-2 gap-10 items-start">
-              <div className="order-2 md:order-1 space-y-6">
-                {isNoticeOnly || isCompletePack ? (
-                  <div>
-                    <h3 className="text-lg font-semibold text-[#2f0d68] mb-3">
-                      {isNoticeOnly ? 'Notice type' : 'Pack type'}
-                    </h3>
-                    <div className="grid gap-3">
-                      {(isNoticeOnly ? noticeVariants : COMPLETE_PACK_VARIANTS).map((variant) => {
-                        const isActive = (isNoticeOnly ? effectiveNoticeVariant : selectedPackVariant) === variant.key;
-                        return (
-                          <button
-                            key={variant.key}
-                            type="button"
-                            className={`rounded-2xl border px-4 py-4 text-left transition-all ${
-                              isActive
-                                ? 'border-[#7c3aed]/60 bg-[#f5f3ff] shadow-sm'
-                                : 'border-gray-200 bg-white hover:border-[#7c3aed]/40'
-                            }`}
-                            onClick={() => {
-                              if (isNoticeOnly) {
-                                setSelectedNoticeVariant(variant.key as NoticeVariantKey);
-                              } else {
-                                setSelectedPackVariant(variant.key as CompletePackVariantKey);
-                              }
-                            }}
-                          >
-                            <p className="font-semibold text-[#2f0d68]">{variant.label}</p>
-                            <p className="text-sm text-gray-600 mt-1">{variant.description}</p>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                ) : null}
-
-                <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-                  <div className="flex flex-wrap items-center justify-between gap-3">
-                    <h3 className="text-lg font-semibold text-[#2f0d68]">
-                      {isNoticeOnly
-                        ? `${jurisdictionConfig?.label ?? 'England'} — What you receive`
-                        : 'England — What you receive'}
-                    </h3>
-                    <span className="inline-flex items-center rounded-full bg-[#f3e8ff] px-3 py-1 text-xs font-semibold text-[#7c3aed]">
-                      {isNoticeOnly ? jurisdictionConfig?.legalNote ?? 'England' : 'England only'}
-                    </span>
-                  </div>
-
-                  <div className="mt-5 space-y-4">
-                    {documentGroups.map((group) => (
-                      <div key={group.title}>
-                        <p className="text-sm font-semibold text-[#2f0d68]">{group.title}</p>
-                        <ul className="mt-2 space-y-2 text-sm text-gray-700">
-                          {group.items.length ? (
-                            group.items.map((item) => (
-                              <li key={item} className="flex items-start gap-2">
-                                <span className="mt-1 h-2 w-2 rounded-full bg-[#7c3aed]" />
-                                <span>{item}</span>
-                              </li>
-                            ))
-                          ) : (
-                            <li className="text-sm text-gray-500">{group.emptyText ?? 'Previews coming soon.'}</li>
-                          )}
-                        </ul>
-                      </div>
-                    ))}
+          <div className="grid items-start gap-6 lg:grid-cols-[1.05fr_0.95fr]">
+            <div className="space-y-5 rounded-2xl border border-[#E9E2FF] bg-white p-4 md:p-6">
+              {isNoticeOnly ? (
+                <div>
+                  <h3 className="text-sm font-semibold uppercase tracking-wide text-[#5b4b7a]">Jurisdiction</h3>
+                  <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-3">
+                    {jurisdictionOrder.map((jurisdiction) => {
+                      const isActive = selectedJurisdiction === jurisdiction;
+                      return (
+                        <button
+                          key={jurisdiction}
+                          type="button"
+                          className={`rounded-xl border px-4 py-3 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7c3aed] focus-visible:ring-offset-2 ${
+                            isActive
+                              ? 'border-[#7c3aed]/60 bg-[#f4efff] text-[#2f0d68]'
+                              : 'border-gray-200 bg-white text-gray-700 hover:border-[#7c3aed]/35'
+                          }`}
+                          aria-pressed={isActive}
+                          onClick={() => setSelectedJurisdiction(jurisdiction)}
+                        >
+                          {NOTICE_ONLY_CONFIG[jurisdiction].label}
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
+              ) : null}
 
-                <div className="rounded-2xl border border-[#7c3aed]/15 bg-[#f5f3ff] p-5">
-                  <ul className="space-y-2 text-sm text-[#7c3aed]/90">
-                    {differentiators.map((item) => (
-                      <li key={item} className="flex items-center gap-2">
-                        <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-[#7c3aed] text-white text-xs">
-                          ✓
-                        </span>
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
+              {showNoticeTypeSelector ? (
+                <div>
+                  <h3 className="text-sm font-semibold uppercase tracking-wide text-[#5b4b7a]">Notice type</h3>
+                  <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                    {(isNoticeOnly ? noticeVariants : COMPLETE_PACK_VARIANTS).map((variant) => {
+                      const isActive = (isNoticeOnly ? effectiveNoticeVariant : selectedPackVariant) === variant.key;
+                      return (
+                        <button
+                          key={variant.key}
+                          type="button"
+                          className={`rounded-xl border p-4 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7c3aed] focus-visible:ring-offset-2 ${
+                            isActive
+                              ? 'border-[#7c3aed]/60 bg-[#f4efff] shadow-sm'
+                              : 'border-gray-200 bg-white hover:border-[#7c3aed]/35'
+                          }`}
+                          aria-pressed={isActive}
+                          onClick={() => {
+                            if (isNoticeOnly) {
+                              setSelectedNoticeVariant(variant.key as NoticeVariantKey);
+                            } else {
+                              setSelectedPackVariant(variant.key as CompletePackVariantKey);
+                            }
+                          }}
+                        >
+                          <p className="text-base font-semibold text-[#2f0d68]">{variant.label}</p>
+                          <p className="mt-1 text-sm text-gray-600">{variant.description}</p>
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
+              ) : null}
 
-              <div className="order-1 md:order-2">
-                <div className="rounded-3xl border border-[#7c3aed]/15 bg-white p-6 shadow-lg">
-                  {hasDocuments ? (
-                    <div
-                      className="space-y-3 focus-visible:outline-none"
-                      tabIndex={0}
-                      onKeyDown={(event) => {
-                        if (event.key === 'ArrowLeft') {
-                          event.preventDefault();
-                          goPrev();
-                        }
-                        if (event.key === 'ArrowRight') {
-                          event.preventDefault();
-                          goNext();
-                        }
-                      }}
-                    >
-                      <div className="flex items-center justify-between gap-3">
-                      <p className="text-sm font-semibold text-[#2f0d68]">Active preview</p>
-                      <div className="flex items-center gap-2">
-                        <button
-                          type="button"
-                          onClick={goPrev}
-                          disabled={documents.length < 2}
-                          aria-label="Previous preview"
-                          className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-transparent text-[#7c3aed] transition hover:border-[#7c3aed]/40 hover:bg-[#f5f3ff] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7c3aed] focus-visible:ring-offset-2 focus-visible:ring-offset-white disabled:text-gray-300 disabled:hover:border-transparent disabled:hover:bg-transparent"
-                        >
-                          <span aria-hidden="true">←</span>
-                        </button>
-                        <button
-                          type="button"
-                          onClick={goNext}
-                          disabled={documents.length < 2}
-                          aria-label="Next preview"
-                          className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-transparent text-[#7c3aed] transition hover:border-[#7c3aed]/40 hover:bg-[#f5f3ff] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7c3aed] focus-visible:ring-offset-2 focus-visible:ring-offset-white disabled:text-gray-300 disabled:hover:border-transparent disabled:hover:bg-transparent"
-                        >
-                          <span aria-hidden="true">→</span>
-                        </button>
-                      </div>
-                    </div>
-                    <h4 className="text-xl font-semibold text-[#2f0d68]">
-                      {activeDoc?.title ?? 'Preview coming soon'}
-                    </h4>
-                    <div className="relative w-full overflow-hidden rounded-2xl border border-[#7c3aed]/15 bg-[#f3e8ff]">
-                      {activeDoc ? (
-                        <PreviewImage
-                          src={activeDoc.src}
-                          alt={activeDoc.alt}
-                          title={activeDoc.title}
-                          width={640}
-                          height={860}
-                          className="h-auto w-full object-cover"
-                        />
-                      ) : (
-                        <div className="flex min-h-[360px] items-center justify-center px-6 py-12 text-center">
-                          <div className="space-y-2">
-                            <p className="text-sm font-semibold text-[#2f0d68]">Previews coming soon</p>
-                            <p className="text-xs text-gray-600">
-                              We&apos;re preparing watermarked previews for this notice type.
-                            </p>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                    </div>
-                  ) : (
-                    <div className="rounded-2xl border border-dashed border-gray-200 bg-gray-50 px-6 py-12 text-center">
-                      <p className="text-sm font-semibold text-[#2f0d68]">Previews unavailable in this environment</p>
-                      <p className="mt-2 text-xs text-gray-600">
-                        Preview image binaries are optional and were not found for this run.
-                      </p>
-                    </div>
-                  )}
+              <div className="rounded-2xl border border-[#eee7ff] bg-[#fcfbff] p-4 md:p-5">
+                <div className="flex items-center justify-between gap-3">
+                  <h3 className="text-lg font-semibold text-[#2f0d68]">Documents included in your pack</h3>
+                  <span className="rounded-full bg-[#f3e8ff] px-3 py-1 text-xs font-semibold text-[#6f3dd6]">
+                    {isNoticeOnly ? jurisdictionConfig?.legalNote : 'England only'}
+                  </span>
+                </div>
 
-                  {hasDocuments ? (
-                    <div className="mt-6">
-                    <div className="flex items-center justify-between">
-                      <p className="text-sm font-semibold text-[#2f0d68]">Preview stack</p>
-                      <span className="text-xs text-gray-500">Click a document to preview</span>
-                    </div>
-                    <div className="mt-4 overflow-visible">
-                      <div
-                        className="relative min-h-[240px] sm:min-h-[260px] overflow-visible"
-                        ref={stackContainerRef}
-                        style={{
-                          minHeight: Math.max(
-                            240,
-                            stackCardSize.height + stackLayout.yStep * Math.max(stackLayout.count - 1, 0),
-                          ),
-                        }}
+                <div className="mt-4 space-y-3">
+                  {documentEntries.map((document) => {
+                    const isActive = effectiveDocKey === document.key;
+                    return (
+                      <button
+                        key={document.key}
+                        type="button"
+                        onClick={() => setSelectedDocKey(document.key)}
+                        className={`flex w-full items-start gap-3 rounded-xl border p-3 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7c3aed] focus-visible:ring-offset-2 ${
+                          isActive
+                            ? 'border-[#7c3aed]/55 bg-[#f4efff] shadow-sm'
+                            : 'border-gray-200 bg-white hover:border-[#7c3aed]/35'
+                        }`}
+                        aria-current={isActive ? 'true' : undefined}
                       >
-                        {visibleDocuments.map((document, index) => {
-                          const isActive = document.key === activeDoc?.key;
-                          const stackIndex = index;
-                          const position = stackLayout.positions[stackIndex] ?? { x: 0, y: 0 };
-                          const rotations = [0, -2, 1, -1, 2, -1, 1, -2, 1, -1];
-                          const scales = [1, 0.985, 0.97, 0.96, 0.95, 0.94, 0.94, 0.93, 0.93, 0.92];
-                          const rotate = rotations[stackIndex] ?? 0;
-                          const scale = scales[stackIndex] ?? 1;
-                          return (
-                            <button
-                              key={document.key}
-                              ref={index === 0 ? stackCardRef : null}
-                              type="button"
-                              onClick={() => setSelectedDocKey(document.key)}
-                              className={`absolute left-0 top-0 flex w-36 flex-col items-center gap-2 rounded-2xl border px-2 py-3 text-left shadow-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7c3aed] focus-visible:ring-offset-2 focus-visible:ring-offset-white sm:w-40 ${
-                                isActive
-                                  ? 'border-[#7c3aed]/60 bg-[#f5f3ff] shadow'
-                                  : 'border-gray-200 bg-white hover:border-[#7c3aed]/40'
-                              }`}
-                              style={{
-                                zIndex: visibleDocuments.length - index,
-                                transform: `translate(${position.x}px, ${position.y}px) rotate(${rotate}deg) scale(${scale})`,
-                              }}
-                            >
-                              <div className="w-full overflow-hidden rounded-xl border border-[#7c3aed]/15 bg-[#f3e8ff]">
-                                <PreviewThumbnail
-                                  src={document.src}
-                                  alt={document.alt}
-                                  title={document.title}
-                                  width={180}
-                                  height={240}
-                                  className="h-auto w-full object-cover"
-                                />
-                              </div>
-                              <span className="sr-only">{document.title}</span>
-                            </button>
-                          );
-                        })}
-                        {extraDocumentCount > 0 ? (
-                          <div className="absolute left-0 top-[190px] flex items-center gap-2 rounded-full border border-[#7c3aed]/30 bg-white px-3 py-1 text-xs font-semibold text-[#7c3aed] shadow-sm">
-                            +{extraDocumentCount} more
-                          </div>
-                        ) : null}
-                      </div>
+                        <span className="mt-0.5 shrink-0 rounded-lg border border-[#e8ddff] bg-white p-2">
+                          <Image src={document.icon} alt="" width={20} height={20} className="h-5 w-5" aria-hidden="true" />
+                        </span>
+                        <span>
+                          <span className="block text-sm font-semibold text-[#2f0d68]">{document.title}</span>
+                          <span className="mt-1 block text-xs text-gray-600">{document.description}</span>
+                        </span>
+                      </button>
+                    );
+                  })}
+                  {!documentEntries.length ? (
+                    <div className="rounded-xl border border-dashed border-gray-200 bg-white px-4 py-6 text-sm text-gray-500">
+                      Previews unavailable in this environment.
                     </div>
-                  </div>
                   ) : null}
                 </div>
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-[#E9E2FF] bg-white p-4 shadow-sm md:p-6">
+              <h3 className="text-lg font-semibold text-[#2f0d68]">Document Preview</h3>
+              <p className="mt-1 text-sm text-gray-600">Click a document on the left to preview it here.</p>
+
+              <div className="mt-4 overflow-hidden rounded-2xl border border-[#e8ddff] bg-[#f8f5ff]">
+                {activeDoc ? (
+                  <PreviewImage
+                    src={activeDoc.src}
+                    alt={activeDoc.alt}
+                    title={activeDoc.title}
+                    width={720}
+                    height={960}
+                    className="h-auto w-full object-cover"
+                  />
+                ) : (
+                  <div className="flex min-h-[360px] items-center justify-center px-6 py-12 text-center">
+                    <div className="space-y-2">
+                      <p className="text-sm font-semibold text-[#2f0d68]">Previews coming soon</p>
+                      <p className="text-xs text-gray-600">We&apos;re preparing watermarked previews for this pack.</p>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -745,7 +400,3 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
     </section>
   );
 };
-
-
-
-
