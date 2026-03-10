@@ -27,6 +27,7 @@ import { TrustPositioningBar } from '@/components/marketing/TrustPositioningBar'
 import { IntentProductCTA, RelatedProductsModule, type IntentProduct } from '@/components/seo/IntentProductCTA';
 import { CompletePackPreviewSection } from '@/components/seo/complete-pack-england/CompletePackPreviewSection';
 import type { WizardLandingContent, NoticeType, CourtForm, JurisdictionCoverage, WhyUseThisSection, LegalValidationExplainer } from '@/lib/seo/wizard-landing-content';
+import { PRODUCTS } from '@/lib/pricing/products';
 
 interface WizardLandingPageProps {
   content: WizardLandingContent;
@@ -41,11 +42,11 @@ export function WizardLandingPage({ content, structuredDataUrl, showAskHeavenWid
   const showHeroPrice = !isCompletePackEnglandPage && !isMoneyClaimPage;
 
   const heroCtaLabel = isCompletePackEnglandPage
-    ? 'Start & Preview Complete Pack — £69.99'
+    ? `Start & Preview Complete Pack — ${PRODUCTS.complete_pack.displayPrice}`
     : isNoticeOnlyPage
-      ? 'Generate My Notice — £29.99'
+      ? `Generate My Notice — ${PRODUCTS.notice_only.displayPrice}`
       : isMoneyClaimPage
-        ? 'Start My Case Bundle — £45.99'
+        ? `Start My Case Bundle — ${PRODUCTS.money_claim.displayPrice}`
         : 'Start My Case Bundle';
 
   const heroHelperCopy = isCompletePackEnglandPage
@@ -283,7 +284,7 @@ export function WizardLandingPage({ content, structuredDataUrl, showAskHeavenWid
                 <span className="flex items-center gap-2 whitespace-nowrap">✓ Preview before paying</span>
                 <span className="flex items-center gap-2 whitespace-nowrap">✓ Unlimited regenerations</span>
                 <span className="flex items-center gap-2 whitespace-nowrap">✓ Stored 12+ months</span>
-                <span className="flex items-center gap-2 whitespace-nowrap">✓ One-time £69.99</span>
+                <span className="flex items-center gap-2 whitespace-nowrap">✓ One-time {PRODUCTS.complete_pack.displayPrice}</span>
               </div>
             ) : (
               <p className="mt-4 text-sm text-gray-600">

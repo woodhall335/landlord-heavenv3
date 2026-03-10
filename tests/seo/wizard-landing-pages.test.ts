@@ -573,35 +573,35 @@ describe('Wizard Landing Pages - Value Proposition Requirements', () => {
 describe('Wizard Landing Pages - Pricing Accuracy', () => {
   it('should use correct price for Eviction Notice', () => {
     expect(noticeOnlyContent.price).toBe(SEO_PRICES.evictionNotice.display);
-    expect(noticeOnlyContent.price).toBe('£49.99');
+    expect(noticeOnlyContent.price).toBe('£19.99');
   });
 
   it('should use correct price for Eviction Bundle', () => {
     expect(completePackContent.price).toBe(SEO_PRICES.evictionBundle.display);
-    expect(completePackContent.price).toBe('£199.99');
+    expect(completePackContent.price).toBe('£49.99');
   });
 
   it('should use correct price for Money Claim', () => {
     expect(moneyClaimContent.price).toBe(SEO_PRICES.moneyClaim.display);
-    expect(moneyClaimContent.price).toBe('£99.99');
+    expect(moneyClaimContent.price).toBe('£34.99');
   });
 
   it('should use correct price for Standard Tenancy Agreement', () => {
     expect(astStandardContent.price).toBe(SEO_PRICES.tenancyStandard.display);
-    expect(astStandardContent.price).toBe('£14.99');
+    expect(astStandardContent.price).toBe('£9.99');
   });
 
   it('should use correct price for Premium Tenancy Agreement', () => {
     expect(astPremiumContent.price).toBe(SEO_PRICES.tenancyPremium.display);
-    expect(astPremiumContent.price).toBe('£24.99');
+    expect(astPremiumContent.price).toBe('£19.99');
   });
 
   it('should include price in title for all products', () => {
-    expect(noticeOnlyContent.title).toContain('£49.99');
-    expect(completePackContent.title).toContain('£199.99');
-    expect(moneyClaimContent.title).toContain('£99.99');
-    expect(astStandardContent.title).toContain('£14.99');
-    expect(astPremiumContent.title).toContain('£24.99');
+    expect(noticeOnlyContent.title).toContain('£19.99');
+    expect(completePackContent.title).toContain('£49.99');
+    expect(moneyClaimContent.title).toContain('£34.99');
+    expect(astStandardContent.title).toContain('£9.99');
+    expect(astPremiumContent.title).toContain('£19.99');
   });
 });
 
@@ -751,12 +751,11 @@ describe('Wizard Landing Pages - Price Regression Guard', () => {
   });
 
   it('should have exactly 5 allowed SEO prices', () => {
-    expect(ALLOWED_SEO_PRICES.size).toBe(5);
+    expect(ALLOWED_SEO_PRICES.size).toBe(4);
+    expect(ALLOWED_SEO_PRICES.has('£19.99')).toBe(true);
     expect(ALLOWED_SEO_PRICES.has('£49.99')).toBe(true);
-    expect(ALLOWED_SEO_PRICES.has('£199.99')).toBe(true);
-    expect(ALLOWED_SEO_PRICES.has('£99.99')).toBe(true);
-    expect(ALLOWED_SEO_PRICES.has('£14.99')).toBe(true);
-    expect(ALLOWED_SEO_PRICES.has('£24.99')).toBe(true);
+    expect(ALLOWED_SEO_PRICES.has('£34.99')).toBe(true);
+    expect(ALLOWED_SEO_PRICES.has('£9.99')).toBe(true);
   });
 });
 
