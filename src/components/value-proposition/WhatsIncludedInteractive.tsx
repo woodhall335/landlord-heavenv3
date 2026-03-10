@@ -1,7 +1,9 @@
 'use client';
 
 import Image from 'next/image';
-import { useState } from 'react';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { X } from 'lucide-react';
 import { Container } from '@/components/ui';
 import type {
   JurisdictionKey,
@@ -20,6 +22,8 @@ type WhatsIncludedInteractiveProps =
       titleOverride?: string;
       subtitleOverride?: string;
       showIntro?: boolean;
+      ctaHref?: string;
+      ctaLabel?: string;
     }
   | {
       product: 'complete_pack';
@@ -28,6 +32,8 @@ type WhatsIncludedInteractiveProps =
       titleOverride?: string;
       subtitleOverride?: string;
       showIntro?: boolean;
+      ctaHref?: string;
+      ctaLabel?: string;
     }
   | {
       product: 'money_claim';
@@ -35,6 +41,8 @@ type WhatsIncludedInteractiveProps =
       titleOverride?: string;
       subtitleOverride?: string;
       showIntro?: boolean;
+      ctaHref?: string;
+      ctaLabel?: string;
     };
 
 type NoticeVariant = {
@@ -216,6 +224,7 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
   const defaultNoticeVariantKey = NOTICE_ONLY_CONFIG[selectedJurisdiction].noticeVariants[0].key;
   const [selectedNoticeVariant, setSelectedNoticeVariant] = useState<NoticeVariantKey>(defaultNoticeVariantKey);
   const [selectedPackVariant, setSelectedPackVariant] = useState<CompletePackVariantKey>(initialPackVariant);
+  const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
   const [selectedDocKey, setSelectedDocKey] = useState<string>(() => {
     if (product === 'notice_only') {
       const noticePreviews = previews as NoticeOnlyPreviewData;
@@ -248,13 +257,46 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
 
   const title = props.titleOverride ?? getDefaultTitle(product);
   const subtitle = props.subtitleOverride ?? getDefaultSubtitle(product);
-  const showNoticeTypeSelector = isCompletePack || (isNoticeOnly && selectedJurisdiction === 'england');
+  const showNoticeTypeSelector = isCompletePack || (isNoticeOnly && selectedJurisdiction !== 'scotland');
+
+  const ctaDefaults = {
+    notice_only: {
+      href: 'https://landlordheaven.co.uk/wizard?product=notice_only&src=product_page&topic=evictio',
+      label: 'Generate my notice bundle →',
+    },
+    complete_pack: {
+      href: 'https://landlordheaven.co.uk/wizard?product=complete_pack&src=product_page&topic=eviction',
+      label: 'Start your complete pack →',
+    },
+    money_claim: {
+      href: 'https://landlordheaven.co.uk/wizard?product=money_claim&topic=debt&src=product_page',
+      label: 'Start my money claim pack →',
+    },
+  } as const;
+
+  const ctaHref = props.ctaHref ?? ctaDefaults[product].href;
+  const ctaLabel = props.ctaLabel ?? ctaDefaults[product].label;
 
   const documentEntries = documents.map((document) => ({
     ...document,
     description: getDocumentDescription(document),
     icon: getDocumentIcon(document),
   }));
+
+  useEffect(() => {
+    if (!isPreviewModalOpen) {
+      return;
+    }
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsPreviewModalOpen(false);
+      }
+    };
+
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [isPreviewModalOpen]);
 
   return (
     <section className="py-12 md:py-14">
@@ -374,7 +416,16 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
               <h3 className="text-lg font-semibold text-[#2f0d68]">Document Preview</h3>
               <p className="mt-1 text-sm text-gray-600">Click a document on the left to preview it here.</p>
 
-              <div className="mt-4 overflow-hidden rounded-2xl border border-[#e8ddff] bg-[#f8f5ff]">
+              <button
+                type="button"
+                className="mt-4 block w-full overflow-hidden rounded-2xl border border-[#e8ddff] bg-[#f8f5ff] text-left transition hover:border-[#cdb8ff] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7c3aed] focus-visible:ring-offset-2"
+                onClick={() => {
+                  if (activeDoc) {
+                    setIsPreviewModalOpen(true);
+                  }
+                }}
+                aria-label={activeDoc ? `Open larger preview for ${activeDoc.title}` : 'Document preview unavailable'}
+              >
                 {activeDoc ? (
                   <PreviewImage
                     src={activeDoc.src}
@@ -392,11 +443,60 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
                     </div>
                   </div>
                 )}
-              </div>
+              </button>
+              <p className="mt-2 text-xs text-[#5b4b7a]">Click the preview to enlarge.</p>
+            </div>
+          </div>
+
+          <div className="mt-6 rounded-2xl border border-[#E9E2FF] bg-white px-5 py-6 text-center md:px-8">
+            <h3 className="text-xl font-semibold text-[#2f0d68] md:text-2xl">Ready to start?</h3>
+            <p className="mt-2 text-sm text-[#5b4b7a] md:text-base">Continue to the guided wizard and generate your pack.</p>
+            <div className="mt-4">
+              <Link href={ctaHref} className="hero-btn-primary">
+                {ctaLabel}
+              </Link>
             </div>
           </div>
         </div>
       </Container>
+
+      {isPreviewModalOpen && activeDoc ? (
+        <div
+          className="fixed inset-0 z-[90] flex items-center justify-center bg-[#12072bcc]/90 p-3 backdrop-blur-sm md:p-6"
+          role="dialog"
+          aria-modal="true"
+          aria-label={`Large preview for ${activeDoc.title}`}
+          onClick={() => setIsPreviewModalOpen(false)}
+        >
+          <div
+            className="relative h-[92vh] w-full max-w-5xl overflow-auto rounded-2xl border border-[#cdb8ff] bg-[#f8f5ff] p-3 shadow-[0_20px_80px_rgba(0,0,0,0.45)] md:p-5"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button
+              type="button"
+              className="absolute right-3 top-3 z-10 rounded-full border border-[#dccbff] bg-white p-2 text-[#2f0d68] shadow-sm transition hover:bg-[#f6f1ff] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7c3aed]"
+              onClick={() => setIsPreviewModalOpen(false)}
+              aria-label="Close preview"
+            >
+              <X className="h-5 w-5" />
+            </button>
+            <div className="mb-4 pr-12">
+              <h4 className="text-base font-semibold text-[#2f0d68] md:text-lg">{activeDoc.title}</h4>
+              <p className="text-xs text-[#5b4b7a] md:text-sm">Press ESC or click outside to close.</p>
+            </div>
+            <div className="overflow-hidden rounded-xl border border-[#e8ddff] bg-white">
+              <PreviewImage
+                src={activeDoc.src}
+                alt={activeDoc.alt}
+                title={activeDoc.title}
+                width={1200}
+                height={1600}
+                className="h-auto w-full object-contain"
+              />
+            </div>
+          </div>
+        </div>
+      ) : null}
     </section>
   );
 };
