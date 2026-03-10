@@ -13,7 +13,6 @@ import { WhyLandlordHeaven, WhatsIncludedInteractive } from "@/components/value-
 import Section21ComplianceTimingPanel from "@/components/products/Section21ComplianceTimingPanel";
 import { getNoticeOnlyPreviewData } from "@/lib/previews/noticeOnlyPreviews";
 import { getCanonicalUrl } from "@/lib/seo";
-import { HowItWorksThreeStep } from "@/components/marketing/HowItWorksThreeStep";
 import { FunnelProcessSection } from "@/components/funnels";
 
 const product = PRODUCTS.notice_only;
@@ -95,24 +94,41 @@ export default async function NoticeOnlyPage() {
       <section className="bg-white border-y border-[#EDE2FF]">
         <Container>
           <nav className="flex flex-wrap items-center gap-3 py-4 text-sm" aria-label="Notice Only quick links">
-            <Link href="#how-to-evict-a-tenant" className="font-medium text-primary hover:underline">How to evict a tenant</Link>
-            <Link href="#section-21-vs-section-8" className="font-medium text-primary hover:underline">Section 21 vs Section 8</Link>
+            <Link href="#who-this-is-for" className="font-medium text-primary hover:underline">Who this is for</Link>
             <Link href="#whats-included" className="font-medium text-primary hover:underline">What's included</Link>
-            <Link href="#start-your-notice" className="font-medium text-primary hover:underline">Start your notice</Link>
+            <Link href="#how-it-works" className="font-medium text-primary hover:underline">How it works</Link>
+            <Link href="#start-your-pack" className="font-medium text-primary hover:underline">Start your pack</Link>
           </nav>
         </Container>
       </section>
 
-      <section id="how-to-evict-a-tenant" className="py-10 md:py-14">
+      <section id="who-this-is-for" className="scroll-mt-24 py-10 md:py-14">
         <Container>
-          <div className="mx-auto max-w-6xl">
+          <div className="mx-auto max-w-6xl rounded-3xl border border-[#E6DBFF] bg-white p-6 md:p-10">
+            <h2 className="text-3xl font-bold text-charcoal md:text-4xl">Who this is for</h2>
+            <p className="mt-4 text-lg text-gray-700">This pack is for landlords who need to start possession correctly without guessing paperwork.</p>
+            <ul className="mt-6 grid gap-3 text-gray-700 md:grid-cols-2">
+              <li>• Your tenant is not paying rent and you need to act now.</li>
+              <li>• Your tenant will not leave and you need the right first step.</li>
+              <li>• You are unsure whether Section 21 or Section 8 is right.</li>
+              <li>• You are worried about serving the wrong notice and losing time.</li>
+            </ul>
+            <p className="mt-6 text-gray-700">Serving the correct notice is what starts your eviction route. A mistake here can delay the whole case.</p>
+            <div className="mt-8">
+              <h3 className="mb-4 text-xl font-semibold text-charcoal">Need help choosing Section 21 vs Section 8?</h3>
+              <p className="mb-4 text-gray-700">Use this guidance panel to understand timelines and route differences before generating your notice.</p>
+            </div>
             <Section21ComplianceTimingPanel />
           </div>
         </Container>
       </section>
 
-      <section id="whats-included" className="py-10 md:py-14">
+      <section id="whats-included" className="scroll-mt-24 py-10 md:py-14">
         <Container>
+          <div className="mx-auto mb-6 max-w-6xl">
+            <h2 className="text-3xl font-bold text-charcoal md:text-4xl">What's included</h2>
+            <p className="mt-3 text-gray-700">You get a practical notice pack: the notice itself, service instructions, and a validity checklist so you can start the process with fewer mistakes.</p>
+          </div>
           <div className="mx-auto max-w-6xl overflow-hidden rounded-3xl border border-[#E6DBFF] bg-white shadow-[0_14px_36px_rgba(15,23,42,0.06)]">
             <WhatsIncludedInteractive
               product="notice_only"
@@ -125,20 +141,31 @@ export default async function NoticeOnlyPage() {
         </Container>
       </section>
 
-      <section id="start-your-notice" className="py-16 md:py-20">
+      <section id="how-it-works" className="scroll-mt-24 bg-[#F3EEFF] py-16 md:py-20">
         <Container>
-          <div className="max-w-4xl mx-auto rounded-3xl border border-[#E6DBFF] bg-white p-6 shadow-[0_12px_36px_rgba(15,23,42,0.06)] md:p-10">
-            <WhyLandlordHeaven variant="full" />
+          <div className="mx-auto max-w-5xl rounded-3xl border border-[#E6DBFF] bg-white p-6 md:p-10">
+            <h2 className="text-3xl font-bold text-charcoal md:text-4xl">How it works</h2>
+            <div className="mt-6 grid gap-4 md:grid-cols-3">
+              <div className="rounded-2xl bg-[#F3EEFF] p-5"><h3 className="font-semibold">1) Choose your notice route</h3><p className="mt-2 text-sm text-gray-700">Pick Section 21, Section 8, Wales, or Scotland based on your tenancy and issue.</p></div>
+              <div className="rounded-2xl bg-[#F3EEFF] p-5"><h3 className="font-semibold">2) Answer guided questions</h3><p className="mt-2 text-sm text-gray-700">We guide you through key facts and flag common compliance blockers before you generate.</p></div>
+              <div className="rounded-2xl bg-[#F3EEFF] p-5"><h3 className="font-semibold">3) Preview and generate your pack</h3><p className="mt-2 text-sm text-gray-700">Check your documents, then generate and serve your notice pack confidently.</p></div>
+            </div>
+            <div className="mt-8 text-center">
+              <Link href="/wizard?product=notice_only&src=product_page&topic=eviction" className="hero-btn-primary">Start your eviction notice →</Link>
+            </div>
           </div>
         </Container>
       </section>
 
-      <section className="bg-[#F3EEFF] py-16 md:py-20">
+      <section id="start-your-pack" className="scroll-mt-24 py-16 md:py-20">
         <Container>
-          <HowItWorksThreeStep />
-
-          <div className="mt-12 text-center">
-            <Link href="/wizard?product=notice_only&src=product_page&topic=eviction" className="hero-btn-primary">Start your eviction notice →</Link>
+          <div className="max-w-4xl mx-auto rounded-3xl border border-[#E6DBFF] bg-white p-6 shadow-[0_12px_36px_rgba(15,23,42,0.06)] md:p-10">
+            <h2 className="text-3xl font-bold text-charcoal md:text-4xl">Start your pack</h2>
+            <p className="mt-4 text-gray-700">If your tenant is not paying or refusing to leave, the next step is getting the right notice in place. This pack gives you the right starting documents so you can move forward now.</p>
+            <div className="mt-6"><WhyLandlordHeaven variant="full" /></div>
+            <div className="mt-8 text-center">
+              <Link href="/wizard?product=notice_only&src=product_page&topic=eviction" className="hero-btn-primary">Start your eviction notice →</Link>
+            </div>
           </div>
         </Container>
       </section>
@@ -213,4 +240,3 @@ export default async function NoticeOnlyPage() {
     </div>
   );
 }
-

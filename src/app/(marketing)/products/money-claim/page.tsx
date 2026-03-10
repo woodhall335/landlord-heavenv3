@@ -17,7 +17,6 @@ import {
   WhatsIncludedInteractive,
 } from "@/components/value-proposition";
 import { getMoneyClaimPreviewData } from "@/lib/previews/moneyClaimPreviews";
-import { HowItWorksThreeStep } from "@/components/marketing/HowItWorksThreeStep";
 import { FunnelProcessSection } from "@/components/funnels";
 
 // Get price from single source of truth
@@ -111,33 +110,40 @@ export default async function MoneyClaimPage() {
       <section className="bg-white border-y border-[#EDE2FF]">
         <Container>
           <nav className="flex flex-wrap items-center gap-3 py-4 text-sm" aria-label="Money claim quick links">
-            <Link href="#recover-unpaid-rent" className="font-medium text-primary hover:underline">Recover unpaid rent</Link>
+            <Link href="#who-this-is-for" className="font-medium text-primary hover:underline">Who this is for</Link>
             <Link href="#whats-included" className="font-medium text-primary hover:underline">What's included</Link>
-            <Link href="#when-to-use" className="font-medium text-primary hover:underline">Who this is for</Link>
-            <Link href="#start-your-claim" className="font-medium text-primary hover:underline">Start your claim</Link>
+            <Link href="#how-it-works" className="font-medium text-primary hover:underline">How it works</Link>
+            <Link href="#start-your-pack" className="font-medium text-primary hover:underline">Start your pack</Link>
           </nav>
         </Container>
       </section>
 
-      <section id="whats-included">
-      <WhatsIncludedInteractive
-        product="money_claim"
-        previews={previews}
-        titleOverride="What's included in your money claim pack"
-        subtitleOverride="England-only pack. Preview every document before you buy."
-      />
+      <section id="whats-included" className="scroll-mt-24 py-10 md:py-14">
+        <Container>
+          <div className="mx-auto mb-6 max-w-6xl">
+            <h2 className="text-3xl font-bold text-charcoal md:text-4xl">What's included</h2>
+            <p className="mt-3 text-gray-700">You get the core money claim documents to pursue unpaid rent and tenant debt properly, including the pre-action letter pack and court claim paperwork.</p>
+          </div>
+        </Container>
+        <WhatsIncludedInteractive
+          product="money_claim"
+          previews={previews}
+          titleOverride="What's included in your money claim pack"
+          subtitleOverride="England-only pack. Preview every document before you buy."
+        />
       </section>
 
-      <section id="recover-unpaid-rent" className="py-16 md:py-20 bg-white">
+      <section id="who-this-is-for" className="scroll-mt-24 py-16 md:py-20 bg-white">
         <Container>
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4">
-              Money Claim Timeline, Fees & Evidence
-            </h2>
-            <p className="text-gray-600 mb-12">
-              Prepare the right evidence, understand court fees, and keep your claim moving without
-              unnecessary delays.
-            </p>
+            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4">Who this is for</h2>
+            <p className="text-gray-600 mb-6">This pack is for landlords who are owed money and need a practical route to recover rent arrears or other tenant debt.</p>
+            <ul className="mb-10 grid gap-3 text-left text-gray-700 md:grid-cols-2">
+              <li>• Tenant owes rent and you need to recover arrears.</li>
+              <li>• You want to start a money claim with the right documents.</li>
+              <li>• You need a compliant Letter Before Claim before court action.</li>
+              <li>• You want a clear process instead of piecing forms together manually.</li>
+            </ul>
             <div className="grid md:grid-cols-3 gap-6 text-left">
               <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
                 <h3 className="font-semibold text-gray-900 mb-3">Typical timeline</h3>
@@ -265,17 +271,23 @@ export default async function MoneyClaimPage() {
       </section>
 
       {/* How It Works */}
-      <section className="py-16 md:py-20 bg-white">
+      <section id="how-it-works" className="scroll-mt-24 py-16 md:py-20 bg-white">
         <Container>
-          <HowItWorksThreeStep />
-
-          <div className="mt-8 text-center">
-            <Link
-              href="/wizard?product=money_claim&src=product_page"
-              className="hero-btn-primary"
-            >
-              Start Money Claim - {price} →
-            </Link>
+          <div className="mx-auto max-w-5xl rounded-3xl border border-[#E6DBFF] bg-[#F8F5FF] p-6 md:p-10">
+            <h2 className="text-3xl font-bold text-charcoal md:text-4xl">How it works</h2>
+            <div className="mt-6 grid gap-4 md:grid-cols-3">
+              <div className="rounded-2xl bg-white p-5"><h3 className="font-semibold">1) Choose what you are claiming</h3><p className="mt-2 text-sm text-gray-700">Select rent arrears, damage, cleaning, utilities, or combined debt reasons.</p></div>
+              <div className="rounded-2xl bg-white p-5"><h3 className="font-semibold">2) Add case facts and evidence</h3><p className="mt-2 text-sm text-gray-700">Enter tenancy details, debt breakdowns, and supporting evidence information.</p></div>
+              <div className="rounded-2xl bg-white p-5"><h3 className="font-semibold">3) Generate and issue your claim pack</h3><p className="mt-2 text-sm text-gray-700">Preview your documents, send the Letter Before Claim, then move into court filing.</p></div>
+            </div>
+            <div className="mt-8 text-center">
+              <Link
+                href="/wizard?product=money_claim&src=product_page"
+                className="hero-btn-primary"
+              >
+                Start Money Claim - {price} →
+              </Link>
+            </div>
           </div>
         </Container>
       </section>
@@ -479,7 +491,7 @@ export default async function MoneyClaimPage() {
       </section>
 
       {/* CTA */}
-      <section id="start-your-claim" className="py-16 md:py-20 bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50">
+      <section id="start-your-pack" className="scroll-mt-24 py-16 md:py-20 bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50">
         <Container>
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Ready to Recover What You&apos;re Owed?</h2>
