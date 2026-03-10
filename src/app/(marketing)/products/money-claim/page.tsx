@@ -108,15 +108,27 @@ export default async function MoneyClaimPage() {
 
       <FunnelProcessSection product="money_claim" moneyClaimPreviews={previews} />
 
+      <section className="bg-white border-y border-[#EDE2FF]">
+        <Container>
+          <nav className="flex flex-wrap items-center gap-3 py-4 text-sm" aria-label="Money claim quick links">
+            <Link href="#recover-unpaid-rent" className="font-medium text-primary hover:underline">Recover unpaid rent</Link>
+            <Link href="#whats-included" className="font-medium text-primary hover:underline">What's included</Link>
+            <Link href="#when-to-use" className="font-medium text-primary hover:underline">Who this is for</Link>
+            <Link href="#start-your-claim" className="font-medium text-primary hover:underline">Start your claim</Link>
+          </nav>
+        </Container>
+      </section>
 
+      <section id="whats-included">
       <WhatsIncludedInteractive
         product="money_claim"
         previews={previews}
         titleOverride="What's included in your money claim pack"
         subtitleOverride="England-only pack. Preview every document before you buy."
       />
+      </section>
 
-      <section className="py-16 md:py-20 bg-white">
+      <section id="recover-unpaid-rent" className="py-16 md:py-20 bg-white">
         <Container>
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4">
@@ -281,7 +293,7 @@ export default async function MoneyClaimPage() {
       </section>
 
       {/* When to Use */}
-      <section className="py-16 md:py-20 bg-white">
+      <section id="when-to-use" className="py-16 md:py-20 bg-white">
         <Container>
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-12 text-center">When to Use Money Claim Pack</h2>
@@ -467,12 +479,12 @@ export default async function MoneyClaimPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-16 md:py-20 bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50">
+      <section id="start-your-claim" className="py-16 md:py-20 bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50">
         <Container>
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Ready to Recover What You&apos;re Owed?</h2>
             <p className="text-xl mb-8 text-gray-600">
-              Claim rent arrears, damage, cleaning costs and more. Preview before you pay.
+              If your tenant is not paying rent, start your money claim now and generate the documents you need to recover unpaid rent and other tenancy debt.
             </p>
             <Link
               href="/wizard?product=money_claim&src=product_page"

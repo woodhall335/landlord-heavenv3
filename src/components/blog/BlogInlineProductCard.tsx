@@ -23,10 +23,10 @@ export function BlogInlineProductCard({ cta, postSlug, category }: BlogInlinePro
 
   return (
     <section className="my-10 rounded-3xl border border-[#e8ddfb] bg-[#f8f1ff] p-6 shadow-[0_10px_30px_rgba(105,46,212,0.08)]">
-      <p className="text-xs font-semibold uppercase tracking-wide text-[#692ed4]">Recommended next step</p>
+      <p className="text-xs font-semibold uppercase tracking-wide text-[#692ed4]">Problem → solution</p>
       <div className="mt-2 flex items-center gap-3">
         <Image src={iconSrc} alt="Product recommendation" width={28} height={28} className="h-7 w-7" />
-        <h3 className="text-xl font-bold text-slate-900">Need to take action now?</h3>
+        <h3 className="text-xl font-bold text-slate-900">Need to act on this now?</h3>
       </div>
       <ul className="mt-4 space-y-2 text-sm text-slate-700">
         {cta.bullets.map((bullet) => (

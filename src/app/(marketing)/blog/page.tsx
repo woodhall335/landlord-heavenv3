@@ -19,14 +19,15 @@ export const metadata: Metadata = {
   title: 'UK Landlord Guides: Eviction, Tenancy & Rent Arrears',
   description: 'Expert UK landlord guides on evictions, tenancy law, rent arrears, and compliance updates.',
   keywords: [
-    'landlord guides',
-    'eviction guide uk',
-    'section 21 guide',
-    'section 8 guide',
-    'landlord advice',
-    'tenancy law uk',
-    'rent arrears advice',
-    'property management tips',
+    'how to evict a tenant',
+    'eviction notice',
+    'section 21',
+    'section 8',
+    'section 21 notice',
+    'section 8 notice',
+    'money claim',
+    'recover rent arrears',
+    'landlord eviction process',
   ],
   openGraph: {
     title: 'UK Landlord Guides: Eviction, Tenancy & Rent Arrears | Landlord Heaven',
@@ -109,8 +110,8 @@ export default function BlogPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-3xl">
               <p className="mb-3 inline-flex rounded-full border border-[#e3d3ff] bg-white px-3 py-1 text-xs font-semibold uppercase tracking-wide text-[#692ed4]">LandlordHeaven Blog</p>
-              <h1 className="text-3xl font-bold tracking-tight text-slate-900 lg:text-4xl">Court Ready Landlord Guidance</h1>
-              <p className="mt-4 text-lg text-slate-600">Scan practical UK landlord guides by jurisdiction, then move straight into the correct LandlordHeaven workflow.</p>
+              <h1 className="text-3xl font-bold tracking-tight text-slate-900 lg:text-4xl">Landlord help that turns advice into action</h1>
+              <p className="mt-4 text-lg text-slate-600">Read the problem in plain English, understand your options, then jump straight to the right product flow: eviction notice, complete eviction pack, or money claim.</p>
             </div>
           </div>
         </section>
@@ -134,7 +135,7 @@ export default function BlogPage() {
         </section>
 
         {/* Browse by Region */}
-        <section className="border-b border-gray-100 bg-white py-10 lg:py-14">
+        <section id="blog-jurisdictions" className="border-b border-gray-100 bg-white py-10 lg:py-14">
           <div className="container mx-auto px-4">
             <h2 className="text-2xl font-bold text-gray-900 mb-4 text-center">
               Browse Guides by Jurisdiction
@@ -181,7 +182,7 @@ export default function BlogPage() {
         </section>
 
         {/* Featured Post */}
-        <section className="bg-[#f8f1ff]/70 py-10 lg:py-14">
+        <section id="featured-guide" className="bg-[#f8f1ff]/70 py-10 lg:py-14">
           <div className="container mx-auto px-4">
             <h2 className="text-2xl font-bold text-gray-900 mb-8">Featured Guide</h2>
             <BlogCard
@@ -214,11 +215,10 @@ export default function BlogPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto text-center">
               <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-                Need to Serve an Eviction Notice?
+                Need help choosing your next landlord step?
               </h2>
               <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-                Generate jurisdiction-specific, court-ready eviction case bundles in minutes.
-                <span className="font-semibold text-gray-800"> AI-powered compliance with statutory-grounded preparation across England, Wales, and Scotland.</span>
+                Start with the route that matches your problem: serve an eviction notice, use a complete eviction pack, or recover rent arrears with a money claim.
               </p>
 
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-8">

@@ -105,10 +105,18 @@ export default async function CompleteEvictionPackPage() {
 
       <FunnelProcessSection product="complete_pack" completePackPreviews={previews} />
 
+      <section className="bg-white border-y border-[#EDE2FF]">
+        <Container>
+          <nav className="flex flex-wrap items-center gap-3 py-4 text-sm" aria-label="Complete Pack quick links">
+            <Link href="#who-this-is-for" className="font-medium text-primary hover:underline">Who this is for</Link>
+            <Link href="#whats-included" className="font-medium text-primary hover:underline">What's included</Link>
+            <Link href="#how-it-works" className="font-medium text-primary hover:underline">How it works</Link>
+            <Link href="#start-your-pack" className="font-medium text-primary hover:underline">Start your pack</Link>
+          </nav>
+        </Container>
+      </section>
 
-
-
-      <section className="py-10 md:py-14">
+      <section id="who-this-is-for" className="py-10 md:py-14">
         <Container>
           <div className="mx-auto max-w-6xl">
             <Section21ComplianceTimingPanel />
@@ -116,7 +124,7 @@ export default async function CompleteEvictionPackPage() {
         </Container>
       </section>
 
-      <section className="py-10 md:py-14">
+      <section id="whats-included" className="py-10 md:py-14">
         <Container>
           <div className="mx-auto max-w-6xl overflow-hidden rounded-3xl border border-[#E6DBFF] bg-white shadow-[0_14px_36px_rgba(15,23,42,0.06)]">
             <WhatsIncludedInteractive
@@ -130,7 +138,7 @@ export default async function CompleteEvictionPackPage() {
       </section>
 
       {/* Why Landlord Heaven */}
-      <section className="py-16 md:py-20">
+      <section id="start-your-pack" className="py-16 md:py-20">
         <Container>
           <div className="mb-10 flex justify-center">
             <Image
@@ -148,7 +156,7 @@ export default async function CompleteEvictionPackPage() {
       </section>
 
       {/* How It Works */}
-      <section className="py-16 md:py-20 bg-[#F3EEFF]">
+      <section id="how-it-works" className="py-16 md:py-20 bg-[#F3EEFF]">
         <Container>
           <HowItWorksThreeStep />
 
@@ -441,16 +449,16 @@ export default async function CompleteEvictionPackPage() {
       <section className="py-16 md:py-20">
         <Container>
           <div className="mx-auto max-w-3xl rounded-3xl border border-[#E6DBFF] bg-gradient-to-br from-[#692ED4] via-[#7A3BE5] to-[#5a21be] p-8 text-center text-white shadow-[0_24px_60px_rgba(105,46,212,0.35)] md:p-12">
-            <h2 className="mb-4 text-3xl font-bold md:text-4xl">Ready to Start Your Eviction?</h2>
+            <h2 className="mb-4 text-3xl font-bold md:text-4xl">Ready to start your complete eviction pack?</h2>
             <p className="mb-8 text-xl text-white/90">
-              Preview before you pay. Edit and regenerate instantly. Stored in your portal.
+              If you need a complete eviction pack with Section 21 or Section 8 routes plus court-ready supporting documents, this is your fastest next step.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
                 href="/wizard?product=complete_pack&src=product_page&topic=eviction"
                 className="hero-btn-primary"
               >
-                Get Complete Pack - {price} →
+                Start your eviction pack - {price} →
               </Link>
               <Link
                 href="/products/notice-only"

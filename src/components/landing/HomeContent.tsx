@@ -69,18 +69,29 @@ export default function HomeContent() {
       <HeaderConfig mode="autoOnScroll" />
       <Hero />
 
+      <section className="bg-white border-b border-gray-100">
+        <Container>
+          <nav className="flex flex-wrap items-center gap-3 py-4 text-sm" aria-label="Homepage quick links">
+            <Link href="#evict-tenant" className="font-medium text-primary hover:underline">How to evict a tenant</Link>
+            <Link href="#section-21-vs-section-8" className="font-medium text-primary hover:underline">Section 21 vs Section 8</Link>
+            <Link href="#recover-rent-arrears" className="font-medium text-primary hover:underline">Recover rent arrears</Link>
+            <Link href="#choose-your-product" className="font-medium text-primary hover:underline">Choose your product</Link>
+          </nav>
+        </Container>
+      </section>
+
       {/* LEGAL DECISION GATEWAY (adds 3-lane routing without removing existing hero visuals) */}
-      <section className="py-10 bg-[#f7f7fb]">
+      <section id="evict-tenant" className="py-10 bg-[#f7f7fb]">
         <Container>
           <div className="rounded-[2rem] border border-[#ddddea] bg-[#f8f8fd] p-6 md:p-10 shadow-[0_2px_12px_rgba(15,23,42,0.04)]">
             <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">
-              Legal decision gateway
+              Landlord action gateway
             </p>
             <h2 className="mt-3 text-4xl md:text-5xl font-bold tracking-tight text-[#16163f]">
-              Choose the correct legal route
+              What do you need to do right now?
             </h2>
             <p className="mt-4 max-w-4xl text-1xl leading-relaxed text-[#3b3b4f]">
-              Start an eviction, recover unpaid rent, or create/update an agreement — all routed through the correct workflow.
+              Whether you need to evict a tenant, serve a Section 21 or Section 8 notice, or recover rent arrears with a money claim, choose the fastest route below.
             </p>
 
             <div className="mt-8 grid gap-4 md:grid-cols-3">
@@ -107,14 +118,14 @@ export default function HomeContent() {
       <TrustBar />
 
       {/* HOW IT WORKS */}
-      <section className="py-20 md:py-24 bg-gray-50">
+      <section id="section-21-vs-section-8" className="py-20 md:py-24 bg-gray-50">
         <Container>
           <HowItWorksThreeStep />
 
           <div className="max-w-5xl mx-auto">
             <div className="mt-14 text-center">
               <Link href="/wizard?product" className="hero-btn-primary">
-                Start Eviction Workflow →
+                Start your eviction notice →
               </Link>
               <p className="mt-4 text-sm text-gray-500">
                 Free to start • Pay only when you're ready
@@ -125,15 +136,14 @@ export default function HomeContent() {
       </section>
 
       {/* PRODUCTS */}
-      <section className="py-20 md:py-24 bg-[#f8f5ff]">
+      <section id="choose-your-product" className="py-20 md:py-24 bg-[#f8f5ff]">
         <Container>
           <div className="text-center mb-14">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Complete Eviction Preparation Across UK Jurisdictions
+              Landlord solutions built for action, not legal jargon
             </h2>
             <p className="text-xl text-[#59527a] max-w-3xl mx-auto">
-              From statutory notices to possession paperwork — AI-validated case
-              preparation without solicitor delays.
+              Get practical, step-by-step help to choose the right notice, prepare your documents, and move your case forward.
             </p>
           </div>
 
@@ -171,7 +181,7 @@ export default function HomeContent() {
       </section>
 
       {/* ASK HEAVEN */}
-      <section className="py-20 md:py-24 relative overflow-hidden">
+      <section id="recover-rent-arrears" className="py-20 md:py-24 relative overflow-hidden">
         {/* Gradient background matching Ask Heaven page */}
         <div className="absolute inset-0 bg-gradient-to-br from-violet-100 via-fuchsia-50 to-cyan-50 opacity-70" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-purple-200/30 via-transparent to-transparent" />
@@ -450,20 +460,15 @@ export default function HomeContent() {
         <Container>
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Ready to Generate Your Court-Ready File?
+              Ready to take the next step?
             </h2>
             <p className="text-xl text-gray-600 mb-8">
-              Generate a complete, compliance-checked eviction bundle aligned to
-              your jurisdiction.
-              <span className="font-semibold text-gray-800">
-                {" "}
-                Start in under 2 minutes.
-              </span>
+              Choose your path, answer guided questions, and generate the documents you need to act with confidence. <span className="font-semibold text-gray-800">Start in under 2 minutes.</span>
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-8">
               <Link href="/wizard?product" className="hero-btn-primary">
-                Start Eviction Workflow →
+                Start your eviction notice →
               </Link>
             </div>
 

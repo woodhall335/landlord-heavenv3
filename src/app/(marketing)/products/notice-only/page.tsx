@@ -92,7 +92,18 @@ export default async function NoticeOnlyPage() {
 
       <FunnelProcessSection product="notice_only" noticePreviews={previews} />
 
-      <section className="py-10 md:py-14">
+      <section className="bg-white border-y border-[#EDE2FF]">
+        <Container>
+          <nav className="flex flex-wrap items-center gap-3 py-4 text-sm" aria-label="Notice Only quick links">
+            <Link href="#how-to-evict-a-tenant" className="font-medium text-primary hover:underline">How to evict a tenant</Link>
+            <Link href="#section-21-vs-section-8" className="font-medium text-primary hover:underline">Section 21 vs Section 8</Link>
+            <Link href="#whats-included" className="font-medium text-primary hover:underline">What's included</Link>
+            <Link href="#start-your-notice" className="font-medium text-primary hover:underline">Start your notice</Link>
+          </nav>
+        </Container>
+      </section>
+
+      <section id="how-to-evict-a-tenant" className="py-10 md:py-14">
         <Container>
           <div className="mx-auto max-w-6xl">
             <Section21ComplianceTimingPanel />
@@ -100,21 +111,21 @@ export default async function NoticeOnlyPage() {
         </Container>
       </section>
 
-      <section className="py-10 md:py-14">
+      <section id="whats-included" className="py-10 md:py-14">
         <Container>
           <div className="mx-auto max-w-6xl overflow-hidden rounded-3xl border border-[#E6DBFF] bg-white shadow-[0_14px_36px_rgba(15,23,42,0.06)]">
             <WhatsIncludedInteractive
               product="notice_only"
               defaultJurisdiction="england"
               previews={previews}
-              titleOverride="What's included in your notice"
+              titleOverride="What's included in your eviction notice pack"
               subtitleOverride="Select your jurisdiction, then preview every document in the pack."
             />
           </div>
         </Container>
       </section>
 
-      <section className="py-16 md:py-20">
+      <section id="start-your-notice" className="py-16 md:py-20">
         <Container>
           <div className="max-w-4xl mx-auto rounded-3xl border border-[#E6DBFF] bg-white p-6 shadow-[0_12px_36px_rgba(15,23,42,0.06)] md:p-10">
             <WhyLandlordHeaven variant="full" />
@@ -127,12 +138,12 @@ export default async function NoticeOnlyPage() {
           <HowItWorksThreeStep />
 
           <div className="mt-12 text-center">
-            <Link href="/wizard?product=notice_only&src=product_page&topic=eviction" className="hero-btn-primary">Generate my notice bundle →</Link>
+            <Link href="/wizard?product=notice_only&src=product_page&topic=eviction" className="hero-btn-primary">Start your eviction notice →</Link>
           </div>
         </Container>
       </section>
 
-      <section className="py-16 md:py-20 bg-white">
+      <section id="section-21-vs-section-8" className="py-16 md:py-20 bg-white">
         <Container>
           <div className="max-w-6xl mx-auto">
             <div className="grid lg:grid-cols-2 gap-10 items-center">
@@ -185,10 +196,10 @@ export default async function NoticeOnlyPage() {
       <section className="py-16 md:py-20">
         <Container>
           <div className="mx-auto max-w-3xl rounded-3xl border border-[#E6DBFF] bg-gradient-to-br from-[#692ED4] via-[#7A3BE5] to-[#5a21be] p-8 text-center text-white shadow-[0_22px_60px_rgba(105,46,212,0.35)] md:p-12">
-            <h2 className="mb-4 text-3xl font-bold md:text-4xl">Ready to Generate Your Notice Bundle?</h2>
-            <p className="mb-8 text-xl text-white/90">Jurisdiction-specific notices for England, Wales &amp; Scotland with compliance checks and watermarked previews before purchase.</p>
+            <h2 className="mb-4 text-3xl font-bold md:text-4xl">Ready to serve your eviction notice?</h2>
+            <p className="mb-8 text-xl text-white/90">Use the correct notice seeking possession for your situation, preview your documents, and start the landlord eviction process with confidence.</p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              <Link href="/wizard?product=notice_only&src=product_page&topic=eviction" className="hero-btn-primary">Generate my notice bundle →</Link>
+              <Link href="/wizard?product=notice_only&src=product_page&topic=eviction" className="hero-btn-primary">Start your eviction notice →</Link>
             </div>
             <ul className="mt-6 flex flex-col items-center gap-2 text-sm text-white/90 md:flex-row md:justify-center md:gap-6" aria-label="Purchase reassurance">
               <li>✓ Preview before paying</li>
