@@ -15,6 +15,7 @@ import { Container } from "@/components/ui";
 import { Hero, TrustBar, Testimonials } from "@/components/landing";
 import { HeaderConfig } from "@/components/layout/HeaderConfig";
 import { HowItWorksThreeStep } from "@/components/marketing/HowItWorksThreeStep";
+import { PRODUCTS } from "@/lib/pricing/products";
 import {
   RiFileTextLine,
   RiScales3Line,
@@ -152,21 +153,21 @@ export default function HomeContent() {
               href="/products/notice-only"
               title="Eviction Notices"
               description="Section 8, Section 21, and devolved equivalents with service instructions."
-              price="£29.99"
+              price={PRODUCTS.notice_only.displayPrice}
               icon={<RiFileTextLine className="w-7 h-7" />}
             />
             <ProductCard
               href="/products/complete-pack"
               title="Complete Eviction Pack"
               description="Full bundle from notice to possession order with court forms and guidance."
-              price="£69.99"
+              price={PRODUCTS.complete_pack.displayPrice}
               icon={<RiScales3Line className="w-7 h-7" />}
             />
             <ProductCard
               href="/products/money-claim"
               title="Money Claim Pack"
               description="Rent arrears claims with evidence checklists and particulars of claim."
-              price="£45.99"
+              price={PRODUCTS.money_claim.displayPrice}
               icon={<RiMoneyPoundCircleLine className="w-7 h-7" />}
             />
             <ProductCard

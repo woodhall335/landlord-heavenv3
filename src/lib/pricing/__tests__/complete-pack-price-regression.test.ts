@@ -13,9 +13,9 @@ const CORE_PRICE_EXPECTATIONS: Record<
   Extract<ProductSku, 'notice_only' | 'complete_pack' | 'money_claim' | 'ast_standard' | 'ast_premium'>,
   { amount: number; display: string; pence: number }
 > = {
-  notice_only: { amount: 29.99, display: '£29.99', pence: 2999 },
-  complete_pack: { amount: 69.99, display: '£69.99', pence: 6999 },
-  money_claim: { amount: 45.99, display: '£45.99', pence: 4599 },
+  notice_only: { amount: 19.99, display: '£19.99', pence: 1999 },
+  complete_pack: { amount: 49.99, display: '£49.99', pence: 4999 },
+  money_claim: { amount: 34.99, display: '£34.99', pence: 3499 },
   ast_standard: { amount: 9.99, display: '£9.99', pence: 999 },
   ast_premium: { amount: 19.99, display: '£19.99', pence: 1999 },
 };

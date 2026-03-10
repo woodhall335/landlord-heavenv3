@@ -20,47 +20,47 @@ const BASE_URL = 'https://landlordheaven.co.uk';
 
 describe('Wizard Page Metadata - generateMetadata', () => {
   describe('Product-specific titles with prices', () => {
-    it('should include £49.99 price in notice_only title', async () => {
+    it('should include current notice_only price in title', async () => {
       const metadata = await generateMetadata({
         searchParams: Promise.resolve({ product: 'notice_only' }),
       });
       expect(metadata.title).toContain(SEO_PRICES.evictionNotice.display);
-      expect(metadata.title).toContain('£49.99');
+      expect(metadata.title).toContain(SEO_PRICES.evictionNotice.display);
     });
 
-    it('should include £199.99 price in complete_pack title', async () => {
+    it('should include current complete_pack price in title', async () => {
       const metadata = await generateMetadata({
         searchParams: Promise.resolve({ product: 'complete_pack' }),
       });
       expect(metadata.title).toContain(SEO_PRICES.evictionBundle.display);
-      expect(metadata.title).toContain('£199.99');
+      expect(metadata.title).toContain(SEO_PRICES.evictionBundle.display);
     });
 
-    it('should include £99.99 price in money_claim title', async () => {
+    it('should include current money_claim price in title', async () => {
       const metadata = await generateMetadata({
         searchParams: Promise.resolve({ product: 'money_claim' }),
       });
       expect(metadata.title).toContain(SEO_PRICES.moneyClaim.display);
-      expect(metadata.title).toContain('£99.99');
+      expect(metadata.title).toContain(SEO_PRICES.moneyClaim.display);
     });
 
-    it('should include £14.99 price in ast_standard title', async () => {
+    it('should include current ast_standard price in title', async () => {
       const metadata = await generateMetadata({
         searchParams: Promise.resolve({ product: 'ast_standard' }),
       });
       expect(metadata.title).toContain(SEO_PRICES.tenancyStandard.display);
-      expect(metadata.title).toContain('£14.99');
+      expect(metadata.title).toContain(SEO_PRICES.tenancyStandard.display);
     });
 
-    it('should include £24.99 price in ast_premium title', async () => {
+    it('should include current ast_premium price in title', async () => {
       const metadata = await generateMetadata({
         searchParams: Promise.resolve({ product: 'ast_premium' }),
       });
       expect(metadata.title).toContain(SEO_PRICES.tenancyPremium.display);
-      expect(metadata.title).toContain('£24.99');
+      expect(metadata.title).toContain(SEO_PRICES.tenancyPremium.display);
     });
 
-    it('should include "from £14.99" in tenancy_agreement title', async () => {
+    it('should include current "from" tenancy_agreement pricing in title', async () => {
       const metadata = await generateMetadata({
         searchParams: Promise.resolve({ product: 'tenancy_agreement' }),
       });

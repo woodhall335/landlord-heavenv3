@@ -8,9 +8,9 @@
  * Update ONLY here when prices change. All landing pages reference these values.
  */
 export const SEO_PRICES = {
-  evictionNotice: { amount: 29.99, display: '£29.99' },
-  evictionBundle: { amount: 69.99, display: '£69.99' },
-  moneyClaim: { amount: 45.99, display: '£45.99' },
+  evictionNotice: { amount: 19.99, display: '£19.99' },
+  evictionBundle: { amount: 49.99, display: '£49.99' },
+  moneyClaim: { amount: 34.99, display: '£34.99' },
   tenancyStandard: { amount: 9.99, display: '£9.99' },
   tenancyPremium: { amount: 19.99, display: '£19.99' },
 } as const;

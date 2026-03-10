@@ -51,6 +51,8 @@ export interface ArticleSchemaInput {
  * Use this on the homepage and footer
  */
 export function organizationSchema() {
+  const reviewCount = getDynamicReviewCount();
+
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
@@ -81,7 +83,12 @@ export function organizationSchema() {
         "@type": "Country",
         "name": "United Kingdom"
       }
-    ]
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": REVIEW_RATING,
+      "reviewCount": reviewCount.toString()
+    }
   };
 }
 
