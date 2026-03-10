@@ -22,7 +22,6 @@ import {
 } from "@/components/value-proposition";
 import { getCompletePackPreviewData } from "@/lib/previews/completePackPreviews";
 import { Section21ComplianceTimingPanel } from '@/components/products/Section21ComplianceTimingPanel';
-import { HowItWorksThreeStep } from "@/components/marketing/HowItWorksThreeStep";
 import { FunnelProcessSection } from "@/components/funnels";
 
 // Get price from single source of truth
@@ -116,16 +115,32 @@ export default async function CompleteEvictionPackPage() {
         </Container>
       </section>
 
-      <section id="who-this-is-for" className="py-10 md:py-14">
+      <section id="who-this-is-for" className="scroll-mt-24 py-10 md:py-14">
         <Container>
-          <div className="mx-auto max-w-6xl">
-            <Section21ComplianceTimingPanel />
+          <div className="mx-auto max-w-6xl rounded-3xl border border-[#E6DBFF] bg-white p-6 md:p-10">
+            <h2 className="text-3xl font-bold text-charcoal md:text-4xl">Who this is for</h2>
+            <p className="mt-4 text-lg text-gray-700">This is for landlords who need more than just a notice and want the key possession paperwork prepared together.</p>
+            <ul className="mt-6 grid gap-3 text-gray-700 md:grid-cols-2">
+              <li>• Your tenant is in arrears or refusing to leave and you need to move from notice toward court.</li>
+              <li>• You want Section 21 or Section 8 documents plus court forms in one workflow.</li>
+              <li>• You want stronger confidence with supporting paperwork and filing guidance.</li>
+              <li>• You want to reduce errors, avoid rework, and move faster.</li>
+            </ul>
+            <p className="mt-6 text-gray-700">This pack is built for landlords who want a fuller, practical eviction solution from first notice through court preparation.</p>
+            <div className="mt-8">
+              <h3 className="mb-4 text-xl font-semibold text-charcoal">Route timing and compliance still matter</h3>
+              <Section21ComplianceTimingPanel />
+            </div>
           </div>
         </Container>
       </section>
 
-      <section id="whats-included" className="py-10 md:py-14">
+      <section id="whats-included" className="scroll-mt-24 py-10 md:py-14">
         <Container>
+          <div className="mx-auto mb-6 max-w-6xl">
+            <h2 className="text-3xl font-bold text-charcoal md:text-4xl">What's included</h2>
+            <p className="mt-3 text-gray-700">You get a full England eviction document set: notice pack, court forms, witness statement support, and filing guidance so you can progress with fewer gaps.</p>
+          </div>
           <div className="mx-auto max-w-6xl overflow-hidden rounded-3xl border border-[#E6DBFF] bg-white shadow-[0_14px_36px_rgba(15,23,42,0.06)]">
             <WhatsIncludedInteractive
               product="complete_pack"
@@ -138,7 +153,7 @@ export default async function CompleteEvictionPackPage() {
       </section>
 
       {/* Why Landlord Heaven */}
-      <section id="start-your-pack" className="py-16 md:py-20">
+      <section id="start-your-pack" className="scroll-mt-24 py-16 md:py-20">
         <Container>
           <div className="mb-10 flex justify-center">
             <Image
@@ -150,15 +165,24 @@ export default async function CompleteEvictionPackPage() {
             />
           </div>
           <div className="max-w-4xl mx-auto rounded-3xl border border-[#E6DBFF] bg-white p-6 shadow-[0_14px_36px_rgba(15,23,42,0.06)] md:p-10">
-            <WhyLandlordHeaven variant="full" />
+            <h2 className="text-3xl font-bold text-charcoal md:text-4xl">Start your pack</h2>
+            <p className="mt-4 text-gray-700">If you need a fuller eviction solution, this is the practical next step. Generate the key documents in one flow and move from problem to action quickly.</p>
+            <div className="mt-6"><WhyLandlordHeaven variant="full" /></div>
           </div>
         </Container>
       </section>
 
       {/* How It Works */}
-      <section id="how-it-works" className="py-16 md:py-20 bg-[#F3EEFF]">
+      <section id="how-it-works" className="scroll-mt-24 py-16 md:py-20 bg-[#F3EEFF]">
         <Container>
-          <HowItWorksThreeStep />
+          <div className="mx-auto max-w-5xl rounded-3xl border border-[#E6DBFF] bg-white p-6 md:p-10">
+            <h2 className="text-3xl font-bold text-charcoal md:text-4xl">How it works</h2>
+            <div className="mt-6 grid gap-4 md:grid-cols-3">
+              <div className="rounded-2xl bg-[#F3EEFF] p-5"><h3 className="font-semibold">1) Choose Section 21 or Section 8 route</h3><p className="mt-2 text-sm text-gray-700">Tell us your case so the workflow follows the correct possession route.</p></div>
+              <div className="rounded-2xl bg-[#F3EEFF] p-5"><h3 className="font-semibold">2) Complete guided case details</h3><p className="mt-2 text-sm text-gray-700">Answer structured questions to generate notice, court forms, and supporting documents.</p></div>
+              <div className="rounded-2xl bg-[#F3EEFF] p-5"><h3 className="font-semibold">3) Preview, generate, and file</h3><p className="mt-2 text-sm text-gray-700">Check everything, download your pack, then use the filing guidance to keep moving.</p></div>
+            </div>
+          </div>
 
           <div className="mt-12 text-center">
             <Link
