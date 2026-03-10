@@ -43,22 +43,18 @@ const defaultHeroMedia = {
 export const homeHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
   trustText:
-    'Court-ready • Updated for current housing law • UK jurisdiction coverage',
-  title: 'Solicitor-Grade',
-  highlightTitle: 'Landlord Documents',
+    'Built for landlords • Updated for current housing law • UK jurisdiction coverage',
+  title: 'Tenant Not Paying or',
+  highlightTitle: 'Refusing to Leave?',
   subtitle: (
     <>
-      Generate legally validated eviction notices, tenancy agreements, and rent
-      recovery claims —
-      <span className="font-semibold">
-        {' '}
-        compliance-checked and ready to file
-      </span>
-      .
+      Use plain-English guidance to decide between a <strong>Section 21 notice</strong>,
+      <strong> Section 8 notice</strong>, or a <strong>money claim</strong> to recover rent arrears.
+      Start in minutes and generate the right documents for your next step.
     </>
   ),
   primaryCta: {
-    label: 'Start eviction workflow →',
+    label: 'See which notice you need →',
     href: '/wizard?product',
   },
   secondaryCta: {
@@ -101,12 +97,12 @@ export const noticeOnlyHeroConfig: HeroConfig = {
   mediaSrc: '/images/notice_bundles.webp',
   trustText:
     'Court-ready • Updated for current housing law • England, Wales & Scotland',
-  title: 'Dont Risk an Invalid',
+  title: 'Serve the Right',
   highlightTitle: 'Eviction Notice',
   subtitle:
-    'Jurisdiction specific eviction notices for England (section 21, Section 8), Wales Section 173 and RHW, Scotland Notice to Quit — Court Ready Guidance & Validation, dont risk an invalid or generic notice.',
+    'Need to evict a tenant in England, Wales, or Scotland? Get the correct possession notice with guided checks for Section 21 notice and Section 8 notice routes so you can act quickly and avoid preventable mistakes.',
   primaryCta: {
-    label: 'Generate my eviction notice →',
+    label: 'Start your eviction notice →',
     href: '/wizard?product=notice_only&src=product_page&topic=eviction',
   },
   feature:
@@ -121,12 +117,12 @@ export const completePackHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
   mediaSrc: '/images/eviction_packs.webp',
   trustText: 'Court-ready • Updated for current housing law • England-only',
-  title: 'Court Ready & Validated',
+  title: 'Need to Evict a Tenant',
   highlightTitle: 'Complete Eviction Pack',
   subtitle:
-    'Section 21/8 notice routes plus N5 / N5B / N119, witness statement drafting, evidence checklist, and filing guide. Preview before purchase.',
+    'From possession notice to court filing, this complete eviction pack gives landlords the full Section 21 / Section 8 route with supporting documents, court forms, and step-by-step guidance.',
   primaryCta: {
-    label: 'Start my England court bundle →',
+    label: 'Start your eviction pack →',
     href: '/wizard?product=complete_pack&src=product_page&topic=eviction',
   },
   feature:
@@ -141,12 +137,12 @@ export const moneyClaimHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
   mediaSrc: '/images/money_claims.webp',
   trustText: 'Court-ready • Updated for current housing law • England-only',
-  title: 'Claim Unpaid Rent',
-  highlightTitle: 'Court Ready',
+  title: 'Tenant Not Paying Rent?',
+  highlightTitle: 'Start a Money Claim',
   subtitle:
-    'For recovering unpaid rent or tenancy-related debt through the County Court (England). You answer guided questions. We structure your claim clearly for filing.',
+    'Recover rent arrears, unpaid bills, and property damage through a guided England money claim flow. Build your claim in plain English and download court-ready documents.',
   primaryCta: {
-    label: 'Start my England money claim →',
+    label: 'Start your money claim →',
     href: '/wizard?product=money_claim&topic=debt&src=product_page',
   },
   feature:

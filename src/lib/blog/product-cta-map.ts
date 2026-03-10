@@ -21,8 +21,8 @@ export interface ProductCtaConfig {
 const DEFAULT_CONFIG: ProductCtaConfig = {
   primaryProductHref: BLOG_PRODUCT_ROUTES.noticeOnly,
   secondaryProductHref: BLOG_PRODUCT_ROUTES.completePack,
-  ctaLabel: 'Start Notice Wizard',
-  bullets: ['Court-ready notice generation', 'Compliance checks for latest rules', 'Evidence-ready outputs'],
+  ctaLabel: 'Start your eviction notice',
+  bullets: ['Choose Section 21 or Section 8 with guided prompts', 'Build a valid eviction notice in plain English', 'Move from advice to action in minutes'],
   iconKey: 'notice',
   usedDefault: true,
 };
@@ -40,8 +40,8 @@ export function getBlogProductCta(post: Pick<BlogPost, 'slug' | 'category' | 'ta
     return {
       primaryProductHref: BLOG_PRODUCT_ROUTES.moneyClaim,
       secondaryProductHref: BLOG_PRODUCT_ROUTES.noticeOnly,
-      ctaLabel: 'Start Money Claim Pack',
-      bullets: ['Claim rent arrears with guided steps', 'Built-in evidence and court readiness prompts', 'Download-ready documents for filing'],
+      ctaLabel: 'Start your money claim',
+      bullets: ['Recover rent arrears with a guided money claim flow', 'Organise unpaid rent evidence and claim details', 'Generate court-ready documents for filing'],
       iconKey: 'money-claim',
       usedDefault: false,
     };
@@ -51,7 +51,7 @@ export function getBlogProductCta(post: Pick<BlogPost, 'slug' | 'category' | 'ta
     return {
       primaryProductHref: BLOG_PRODUCT_ROUTES.ast,
       secondaryProductHref: BLOG_PRODUCT_ROUTES.noticeOnly,
-      ctaLabel: 'Get the Tenancy Agreement Pack',
+      ctaLabel: 'Start tenancy agreement pack',
       bullets: ['Jurisdiction-aware tenancy clauses', 'Landlord and tenant details auto-filled', 'Ready-to-sign agreement outputs'],
       iconKey: 'ast',
       usedDefault: false,
@@ -62,7 +62,7 @@ export function getBlogProductCta(post: Pick<BlogPost, 'slug' | 'category' | 'ta
     return {
       primaryProductHref: BLOG_PRODUCT_ROUTES.completePack,
       secondaryProductHref: BLOG_PRODUCT_ROUTES.noticeOnly,
-      ctaLabel: 'Get the Complete Eviction Pack',
+      ctaLabel: 'Start your complete eviction pack',
       bullets: ['Notice, possession, and court flow in one place', 'Step-by-step process from notice to filing', 'Court-ready bundle outputs'],
       iconKey: 'complete-pack',
       usedDefault: false,

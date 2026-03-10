@@ -126,6 +126,14 @@ const MAX_RELATED_GUIDES = 12;
 const BLOG_STICKY_TOP_OFFSET = '7rem';
 
 
+const PRODUCT_LABELS: Record<(typeof BLOG_PRODUCT_ROUTES)[keyof typeof BLOG_PRODUCT_ROUTES], string> = {
+  [BLOG_PRODUCT_ROUTES.noticeOnly]: 'Start your eviction notice',
+  [BLOG_PRODUCT_ROUTES.completePack]: 'Start your complete eviction pack',
+  [BLOG_PRODUCT_ROUTES.moneyClaim]: 'Start your money claim',
+  [BLOG_PRODUCT_ROUTES.ast]: 'Start tenancy agreement pack',
+};
+
+
 function inferBlogStageHint(post: BlogPost): StageEstimate {
   const haystack = `${post.title} ${post.targetKeyword} ${post.tags.join(' ')}`.toLowerCase();
 
@@ -779,6 +787,23 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
                     {tag}
                   </span>
                 ))}
+              </div>
+
+              <div className="mt-5 rounded-2xl border border-[#e6dbff] bg-white/90 p-4 sm:p-5">
+                <p className="text-xs font-semibold uppercase tracking-wide text-[#692ed4]">Problem → education → solution → action</p>
+                <p className="mt-2 text-sm text-slate-700">
+                  If you are dealing with this right now, use this guide to understand your options quickly, then move straight into the right landlord workflow.
+                </p>
+                <div className="mt-3 flex flex-wrap items-center gap-2">
+                  <Link href={productCta.primaryProductHref} className="inline-flex rounded-lg bg-[#692ed4] px-4 py-2 text-sm font-semibold text-white hover:bg-[#5b24be]">
+                    {PRODUCT_LABELS[productCta.primaryProductHref]} →
+                  </Link>
+                  {productCta.secondaryProductHref && (
+                    <Link href={productCta.secondaryProductHref} className="inline-flex rounded-lg border border-[#cdb8f6] px-4 py-2 text-sm font-medium text-[#692ed4] hover:bg-[#f8f1ff]">
+                      See alternative route →
+                    </Link>
+                  )}
+                </div>
               </div>
             </div>
           </div>
