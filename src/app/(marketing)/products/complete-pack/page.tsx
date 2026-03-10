@@ -119,7 +119,12 @@ export default async function CompleteEvictionPackPage() {
       <section className="py-10 md:py-14">
         <Container>
           <div className="mx-auto max-w-6xl overflow-hidden rounded-3xl border border-[#E6DBFF] bg-white shadow-[0_14px_36px_rgba(15,23,42,0.06)]">
-            <WhatsIncludedInteractive product="complete_pack" previews={previews} />
+            <WhatsIncludedInteractive
+              product="complete_pack"
+              previews={previews}
+              titleOverride="What's included in your eviction pack"
+              subtitleOverride="England-only pack. Choose Section 8 or Section 21, then preview every document."
+            />
           </div>
         </Container>
       </section>
