@@ -169,6 +169,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/section-8-rent-arrears-eviction', priority: 0.85, changeFrequency: 'weekly' as const },
     { path: '/section-8-vs-section-21', priority: 0.85, changeFrequency: 'weekly' as const },
     { path: '/periodic-tenancy-agreement', priority: 0.85, changeFrequency: 'weekly' as const },
+    // Explicitly pin high-intent eviction funnel pages (do not rely on auto-discovery only)
+    { path: '/eviction-notice-england', priority: 0.85, changeFrequency: 'weekly' as const },
+    { path: '/how-to-evict-a-tenant-england', priority: 0.85, changeFrequency: 'weekly' as const },
+    { path: '/evict-tenant-not-paying-rent', priority: 0.85, changeFrequency: 'weekly' as const },
+    { path: '/tenant-refuses-to-leave-after-notice', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/section-21-notice-period', priority: 0.85, changeFrequency: 'weekly' as const },
+    { path: '/section-8-grounds-explained', priority: 0.85, changeFrequency: 'weekly' as const },
+    { path: '/possession-order-process', priority: 0.85, changeFrequency: 'weekly' as const },
+    { path: '/bailiff-eviction-process', priority: 0.85, changeFrequency: 'weekly' as const },
+    { path: '/claim-rent-arrears-tenant', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/how-to-sue-tenant-for-unpaid-rent', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/mcol-money-claim-online', priority: 0.8, changeFrequency: 'weekly' as const },
   ];
 
   // Tool pages - Free tools for SEO traffic
