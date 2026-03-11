@@ -6,6 +6,7 @@ import { TableOfContents } from '@/components/blog/TableOfContents';
 import { AuthorBox } from '@/components/blog/AuthorBox';
 import { RelatedGuidesCarousel } from '@/components/blog/RelatedGuidesCarousel';
 import { Sources } from '@/components/blog/Sources';
+import { BlogCard } from '@/components/blog/BlogCard';
 import { CategoryPage } from '@/components/blog/CategoryPage';
 import { Section21Countdown } from '@/components/ui/Section21Countdown';
 import { blogPosts, getBlogPost } from '@/lib/blog/posts';
@@ -36,6 +37,7 @@ import { BlogArticleStickyGuard } from '@/components/blog/BlogArticleStickyGuard
 import { getBlogImagesForPost, getBlogImagesForPostThumb } from '@/lib/blog/image-manifest';
 import { getBlogSeoConfig } from '@/lib/blog/seo';
 import { BLOG_PRODUCT_ROUTES, getBlogProductCta } from '@/lib/blog/product-cta-map';
+import { getPostsForTopicHub, getTopicHubConfig, getValidTopicHubs } from '@/lib/blog/topic-hubs';
 import type { StageEstimate } from '@/lib/journey/state';
 import type { CSSProperties } from 'react';
 
@@ -46,6 +48,10 @@ interface BlogPageProps {
 // Check if a slug is a valid category/region
 function isValidCategory(slug: string): slug is BlogRegion {
   return getValidRegions().includes(slug as BlogRegion);
+}
+
+function isValidTopicHub(slug: string): boolean {
+  return getValidTopicHubs().includes(slug as any);
 }
 
 // Map blog post slugs/tags to Ask Heaven topics for compliance posts
@@ -441,11 +447,15 @@ export async function generateStaticParams() {
     slug: region,
   }));
 
+  const topicHubParams = getValidTopicHubs().map((hub) => ({
+    slug: hub,
+  }));
+
   const postParams = blogPosts.map((post) => ({
     slug: post.slug,
   }));
 
-  return [...categoryParams, ...postParams];
+  return [...categoryParams, ...topicHubParams, ...postParams];
 }
 
 export async function generateMetadata({ params }: BlogPageProps): Promise<Metadata> {
@@ -481,6 +491,25 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
       },
     };
   }
+
+  const topicHub = getTopicHubConfig(slug);
+  if (topicHub) {
+    const canonicalUrl = getCanonicalUrl(`/blog/${slug}`);
+
+    return {
+      title: topicHub.title,
+      description: topicHub.metaDescription,
+      robots: 'index,follow',
+      alternates: { canonical: canonicalUrl },
+      openGraph: {
+        title: `${topicHub.title} | Landlord Heaven`,
+        description: topicHub.metaDescription,
+        type: 'website',
+        url: canonicalUrl,
+      },
+    };
+  }
+
 
   // Otherwise, it's a blog post
   const post = getBlogPost(slug);
@@ -565,6 +594,58 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
     }));
 
     return <CategoryPage region={slug} posts={postsForDisplay} />;
+  }
+
+  const topicHub = getTopicHubConfig(slug);
+  if (topicHub && isValidTopicHub(slug)) {
+    const posts = getPostsForTopicHub(blogPosts, topicHub.slug).slice(0, 36);
+    const postsForDisplay = posts.map((post) => ({
+      slug: post.slug,
+      title: post.title,
+      description: post.description,
+      date: post.date,
+      readTime: post.readTime,
+      category: post.category,
+      heroImage: getBlogImagesForPostThumb({
+        slug: post.slug,
+        title: post.title,
+        targetKeyword: post.targetKeyword,
+        category: post.category,
+        tags: post.tags,
+      }).hero,
+      heroImageAlt: post.heroImageAlt,
+    }));
+
+    return (
+      <main className="bg-white pb-16"> 
+        <section className="border-b border-[#ede2ff] bg-[#f8f1ff]/70 py-10 lg:py-14"> 
+          <div className="container mx-auto px-4"> 
+            <Link href="/blog" className="text-sm font-medium text-primary hover:underline"> 
+              ← Back to blog
+            </Link>
+            <h1 className="mt-3 text-3xl font-bold tracking-tight text-slate-900 lg:text-4xl">{topicHub.name}</h1>
+            <p className="mt-4 max-w-3xl text-slate-600">{topicHub.intro}</p>
+            <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3"> 
+              {topicHub.pillarLinks.map((link) => (
+                <Link key={link.href} href={link.href} className="rounded-xl border border-[#e3d3ff] bg-white px-4 py-3 text-sm font-semibold text-[#692ed4] hover:border-[#c6a2ff]"> 
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="container mx-auto px-4 py-10 lg:py-14"> 
+          <h2 className="text-2xl font-bold text-gray-900">Posts in this cluster</h2>
+          <p className="mb-8 mt-2 text-gray-600">{topicHub.description}</p>
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3"> 
+            {postsForDisplay.map((post) => (
+              <BlogCard key={post.slug} {...post} />
+            ))}
+          </div>
+        </section>
+      </main>
+    );
   }
 
   // Otherwise, it's a blog post
