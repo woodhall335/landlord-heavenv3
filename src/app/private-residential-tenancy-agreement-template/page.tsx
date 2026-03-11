@@ -308,7 +308,7 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
             </p>
             <div className="grid md:grid-cols-2 gap-4">
               <Link href="/products/notice-only" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                <h3 className="font-semibold text-gray-900">Scotland Notice to Leave — £29.99</h3>
+                <h3 className="font-semibold text-gray-900">Scotland Notice to Leave — £19.99</h3>
                 <p className="text-sm text-gray-600">All 18 eviction grounds with correct notice periods</p>
               </Link>
               <Link href="/products/ast" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">

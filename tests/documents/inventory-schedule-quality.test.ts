@@ -7,7 +7,7 @@
  * - Keys section is note-first (no separate Quantity column)
  * - Standard vs Premium tier differentiation is maintained
  *
- * These tests verify the £14.99 Standard and £24.99 Premium value propositions.
+ * These tests verify the £9.99 Standard and £19.99 Premium value propositions.
  */
 
 import { describe, expect, it, vi, beforeAll } from 'vitest';
@@ -403,9 +403,9 @@ describe('Standard vs Premium Tier Differentiation', () => {
         expect(results[jurisdiction].premium).toBe(expectedPremium);
       }
 
-      // Standard should have 3 documents (£14.99 value)
+      // Standard should have 3 documents (£9.99 value)
       expect(expectedStandard).toBe(3);
-      // Premium should have 3 documents (£24.99 value - HMO-specific agreement)
+      // Premium should have 3 documents (£19.99 value - HMO-specific agreement)
       expect(expectedPremium).toBe(3);
     }, 60000);
   });

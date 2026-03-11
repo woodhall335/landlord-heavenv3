@@ -122,8 +122,8 @@ export async function POST(request: NextRequest) {
     // Map tier to property limits for response
     const tierLimits: Record<string, { min: number; max: number; price: string }> = {
       'hmo_pro_1_5': { min: 1, max: 5, price: '£19.99' },
-      'hmo_pro_6_10': { min: 6, max: 10, price: '£24.99' },
-      'hmo_pro_11_15': { min: 11, max: 15, price: '£29.99' },
+      'hmo_pro_6_10': { min: 6, max: 10, price: '£19.99' },
+      'hmo_pro_11_15': { min: 11, max: 15, price: '£19.99' },
       'hmo_pro_16_20': { min: 16, max: 20, price: '£34.99' },
     };
 

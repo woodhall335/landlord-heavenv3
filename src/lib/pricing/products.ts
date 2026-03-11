@@ -60,7 +60,7 @@ export interface ProductConfig {
   label: string;
   shortLabel: string;
   description: string;
-  /** Numeric price in GBP (e.g., 29.99) */
+  /** Numeric price in GBP (e.g., 19.99) */
   price: number;
   displayPrice: string;
   priceNote?: string;

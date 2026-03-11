@@ -248,7 +248,7 @@ export default function PrtTemplateScotlandPage() {
               <Link href="/products/notice-only" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
                 <h3 className="font-semibold text-gray-900">Scottish Notice to Leave</h3>
                 <p className="text-sm text-gray-600 mb-2">All 18 grounds with correct notice periods</p>
-                <span className="text-indigo-600 font-medium">£29.99</span>
+                <span className="text-indigo-600 font-medium">£19.99</span>
               </Link>
               <Link href="/products/ast" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
                 <h3 className="font-semibold text-gray-900">Premium PRT</h3>

@@ -73,7 +73,7 @@ export default function RentArrearsCalculator() {
     toolName: 'Rent Arrears Calculator',
     toolType: 'calculator' as const,
     productName: 'Money Claim Pack',
-    ctaLabel: 'Upgrade to court-ready pack — £45.99',
+    ctaLabel: 'Upgrade to court-ready pack — £34.99',
     ctaHref: '/products/money-claim',
     jurisdiction: 'uk',
     freeIncludes: [

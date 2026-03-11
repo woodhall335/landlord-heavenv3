@@ -193,7 +193,7 @@ export async function POST(request: Request) {
             `The ${
               normalizedProduct === 'complete_pack' ? 'Eviction Pack' : 'Money Claim'
             } is only available for England. ` +
-            `For ${effectiveJurisdiction === 'wales' ? 'Wales' : 'Scotland'}, we offer the Notice Only pack (£29.99) ` +
+            `For ${effectiveJurisdiction === 'wales' ? 'Wales' : 'Scotland'}, we offer the Notice Only pack (£19.99) ` +
             'and Tenancy Agreements.',
           supported: {
             'northern-ireland': ['tenancy_agreement'],

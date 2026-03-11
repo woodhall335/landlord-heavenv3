@@ -114,7 +114,7 @@ describe('Measurement Protocol', () => {
       const result = await sendServerPurchaseEvent({
         clientId: '1234567890.1705226400',
         transactionId: 'order-123',
-        value: 29.99,
+        value: 19.99,
         currency: 'GBP',
       });
 
@@ -141,7 +141,7 @@ describe('Measurement Protocol', () => {
       await sendServerPurchaseEvent({
         clientId: '1234567890.1705226400',
         transactionId: 'order-123',
-        value: 29.99,
+        value: 19.99,
         currency: 'GBP',
         utm_source: 'google',
         utm_medium: 'cpc',
@@ -181,13 +181,13 @@ describe('Measurement Protocol', () => {
       await sendServerPurchaseEvent({
         clientId: '1234567890.1705226400',
         transactionId: 'order-abc-123',
-        value: 29.99,
+        value: 19.99,
         currency: 'GBP',
         items: [
           {
             item_id: 'complete_pack',
             item_name: 'Complete Eviction Pack',
-            price: 29.99,
+            price: 19.99,
             quantity: 1,
             item_category: 'legal_document',
           },
@@ -198,7 +198,7 @@ describe('Measurement Protocol', () => {
 
       expect(requestBody.events[0].name).toBe('purchase');
       expect(requestBody.events[0].params.transaction_id).toBe('order-abc-123');
-      expect(requestBody.events[0].params.value).toBe(29.99);
+      expect(requestBody.events[0].params.value).toBe(19.99);
       expect(requestBody.events[0].params.currency).toBe('GBP');
       expect(requestBody.events[0].params.items).toHaveLength(1);
       expect(requestBody.events[0].params.items[0].item_id).toBe('complete_pack');
@@ -217,7 +217,7 @@ describe('Measurement Protocol', () => {
       await sendServerPurchaseEvent({
         clientId: '9876543210.1705226400',
         transactionId: 'order-123',
-        value: 29.99,
+        value: 19.99,
         currency: 'GBP',
       });
 
@@ -239,7 +239,7 @@ describe('Measurement Protocol', () => {
       await sendServerPurchaseEvent({
         clientId: '1234567890.1705226400',
         transactionId: 'order-123',
-        value: 29.99,
+        value: 19.99,
         currency: 'GBP',
         userId: 'user-abc-123',
       });
@@ -262,7 +262,7 @@ describe('Measurement Protocol', () => {
       await sendServerPurchaseEvent({
         clientId: '1234567890.1705226400',
         transactionId: 'order-123',
-        value: 29.99,
+        value: 19.99,
         currency: 'GBP',
       });
 
@@ -282,7 +282,7 @@ describe('Measurement Protocol', () => {
       const result = await sendServerPurchaseEvent({
         clientId: '1234567890.1705226400',
         transactionId: 'order-123',
-        value: 29.99,
+        value: 19.99,
         currency: 'GBP',
       });
 
@@ -301,7 +301,7 @@ describe('Measurement Protocol', () => {
       const result = await sendServerPurchaseEvent({
         clientId: '1234567890.1705226400',
         transactionId: 'order-123',
-        value: 29.99,
+        value: 19.99,
         currency: 'GBP',
       });
 
@@ -323,7 +323,7 @@ describe('Measurement Protocol', () => {
       const result = await sendServerPurchaseEvent({
         clientId: '1234567890.1705226400',
         transactionId: 'order-123',
-        value: 29.99,
+        value: 19.99,
         currency: 'GBP',
       });
 
@@ -346,7 +346,7 @@ describe('Measurement Protocol', () => {
       const result = await sendServerPurchaseEventWithRetry({
         clientId: '1234567890.1705226400',
         transactionId: 'order-123',
-        value: 29.99,
+        value: 19.99,
         currency: 'GBP',
       });
 
@@ -369,7 +369,7 @@ describe('Measurement Protocol', () => {
       const result = await sendServerPurchaseEventWithRetry({
         clientId: '1234567890.1705226400',
         transactionId: 'order-123',
-        value: 29.99,
+        value: 19.99,
         currency: 'GBP',
       });
 
@@ -388,7 +388,7 @@ describe('Measurement Protocol', () => {
       const result = await sendServerPurchaseEventWithRetry({
         clientId: '1234567890.1705226400',
         transactionId: 'order-123',
-        value: 29.99,
+        value: 19.99,
         currency: 'GBP',
       });
 
@@ -408,7 +408,7 @@ describe('Measurement Protocol', () => {
         {
           clientId: '1234567890.1705226400',
           transactionId: 'order-123',
-          value: 29.99,
+          value: 19.99,
           currency: 'GBP',
         },
         2 // max 2 retries
@@ -435,7 +435,7 @@ describe('Measurement Protocol', () => {
         {
           clientId: '1234567890.1705226400',
           transactionId: 'order-123',
-          value: 29.99,
+          value: 19.99,
           currency: 'GBP',
         },
         true // debug mode
@@ -469,7 +469,7 @@ describe('Measurement Protocol', () => {
         {
           clientId: '1234567890.1705226400',
           transactionId: 'order-123',
-          value: 29.99,
+          value: 19.99,
           currency: 'GBP',
         },
         true
@@ -507,13 +507,13 @@ describe('GA4 purchase event payload structure', () => {
     await sendServerPurchaseEvent({
       clientId: '1234567890.1705226400',
       transactionId: 'order-123',
-      value: 29.99,
+      value: 19.99,
       currency: 'GBP',
       items: [
         {
           item_id: 'notice_only',
           item_name: 'Notice Only Pack',
-          price: 29.99,
+          price: 19.99,
           quantity: 1,
         },
       ],
@@ -555,7 +555,7 @@ describe('GA4 purchase event payload structure', () => {
     await sendServerPurchaseEvent({
       clientId: '1234567890.1705226400',
       transactionId: 'order-123',
-      value: 29.99,
+      value: 19.99,
       currency: 'GBP',
       // Only utm_source provided, others undefined
       utm_source: 'google',

@@ -69,7 +69,7 @@ export default function Section21NoticeTemplatePage() {
       offers: {
         '@type': 'AggregateOffer',
         lowPrice: '0',
-        highPrice: '29.99',
+        highPrice: '19.99',
         priceCurrency: 'GBP',
         offerCount: '2',
       },
@@ -211,7 +211,7 @@ export default function Section21NoticeTemplatePage() {
                   </div>
                   <div className="text-center mb-6">
                     <span className="text-sm font-medium text-primary uppercase tracking-wide">Court-Ready</span>
-                    <div className="text-4xl font-bold text-gray-900 mt-2">£29.99</div>
+                    <div className="text-4xl font-bold text-gray-900 mt-2">£19.99</div>
                   </div>
                   <ul className="space-y-4 mb-8">
                     <li className="flex items-start gap-3">
@@ -704,7 +704,7 @@ export default function Section21NoticeTemplatePage() {
                   href={wizardLink}
                   className="hero-btn-secondary inline-flex items-center justify-center gap-2"
                 >
-                  Get Court-Ready — £29.99
+                  Get Court-Ready — £19.99
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               </div>
