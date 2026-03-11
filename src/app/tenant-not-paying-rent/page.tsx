@@ -6,11 +6,7 @@ import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import {
   tenantNotPayingRentRelatedLinks,
-  productLinks,
-  toolLinks,
-  landingPageLinks,
 } from '@/lib/seo/internal-links';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { FAQSection } from '@/components/seo/FAQSection';
@@ -18,10 +14,8 @@ import { tenantNotPayingRentFAQs } from '@/data/faqs';
 import { NeedHelpChoosing, FunnelCta } from '@/components/funnels';
 import {
   CheckCircle,
-  AlertTriangle,
   Clock,
   ArrowRight,
-  Scale,
   FileText,
   PoundSterling,
   Shield,
@@ -29,20 +23,6 @@ import {
   Mail,
   Gavel,
 } from 'lucide-react';
-
-const wizardLinkNoticeOnly = buildWizardLink({
-  product: 'notice_only',
-  jurisdiction: 'england',
-  src: 'seo_tenant_not_paying_rent',
-  topic: 'eviction',
-});
-
-const wizardLinkMoneyClaim = buildWizardLink({
-  product: 'money_claim',
-  jurisdiction: 'england',
-  src: 'seo_tenant_not_paying_rent',
-  topic: 'debt',
-});
 
 const faqs = tenantNotPayingRentFAQs;
 
@@ -98,8 +78,8 @@ export default function TenantNotPayingRentPage() {
           badgeIcon={<PoundSterling className="w-4 h-4" />}
           title="Tenant Not Paying Rent?"
           subtitle={<>You have <strong>three main options</strong>: demand payment, evict for rent arrears, or claim the money through court. Here&apos;s how each works.</>}
-          primaryCta={{ label: 'Claim Unpaid Rent', href: wizardLinkMoneyClaim }}
-          secondaryCta={{ label: 'Start Eviction Notice', href: wizardLinkNoticeOnly }}
+          primaryCta={{ label: 'Claim Unpaid Rent', href: '/products/money-claim' }}
+          secondaryCta={{ label: 'Start Eviction Notice', href: '/products/notice-only' }}
           variant="pastel"
         >
           {/* Trust Signals */}
@@ -223,7 +203,7 @@ export default function TenantNotPayingRentPage() {
                     </li>
                   </ul>
                   <Link
-                    href={wizardLinkNoticeOnly}
+                    href="/products/notice-only"
                     className="inline-flex items-center gap-2 text-primary font-medium text-sm hover:underline"
                   >
                     Get Section 8 Notice — £19.99
@@ -256,7 +236,7 @@ export default function TenantNotPayingRentPage() {
                     </li>
                   </ul>
                   <Link
-                    href={wizardLinkMoneyClaim}
+                    href="/products/money-claim"
                     className="inline-flex items-center gap-2 text-primary font-medium text-sm hover:underline"
                   >
                     Start Money Claim — £34.99

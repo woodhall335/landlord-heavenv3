@@ -85,7 +85,8 @@ function FreeSection21ToolInner() {
         showReviewPill={false}
         showTrustPositioningBar
         showUsageCounter
-        primaryCta={{ label: 'Start now', href: '#generator' }}
+        primaryCta={{ label: 'Start Notice Only', href: '/products/notice-only' }}
+        secondaryCta={{ label: 'Try free preview tool', href: '#generator' }}
       />
 
 
