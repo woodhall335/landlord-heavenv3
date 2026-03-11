@@ -49,31 +49,112 @@ export const INTENT_PAGES: Record<string, IntentPageConfig> = {
     proofBullets: ['Checks common Section 21 compliance blockers first', 'Preview before paying', 'Unlimited regenerations if details change'],
     icon: '/images/wizard-icons/13-section-21.png',
     keyword: 'section 21 notice generator',
-    problemIntro: 'Section 21 looks simple until one missing compliance item ruins the notice. If your tenant stays put and your notice is invalid, you lose weeks and usually have to start again.',
-    intentDeepDive: 'This page is for landlords who already know they want the no-fault route and need to get it right first time. The practical challenge is not finding Form 6A; it is avoiding invalid timing, service, and compliance mistakes that push possession back by months.',
+    problemIntro: 'Section 21 looks simple until one missing compliance item ruins the notice. If your tenant stays put and your notice is invalid, you lose weeks and usually have to start again. The real risk is not just delay; it is compounding rent loss, avoidable legal spend, and repeating admin you thought you had already finished.',
+    intentDeepDive:
+      'This page is for landlords who already know they want the no-fault route and need to get it right first time. The practical challenge is not finding Form 6A; it is avoiding invalid timing, service, and compliance mistakes that push possession back by months. Strong Section 21 execution means confirming eligibility, documenting compliance history, calculating dates conservatively, and preserving service evidence that still makes sense when you reach court stage.',
     landlordScenarios: [
       'Your fixed term has ended, the tenant will not leave, and you want a clean no-fault route without a paperwork restart.',
       'You are unsure whether your compliance record is complete enough to serve safely right now.',
       'You need to act this week and want a guided workflow instead of editing generic templates manually.',
+      'You inherited tenancy admin from an agent and need to verify whether deposit and prescribed information records are actually court-ready.',
+      'You expect possession might go to paper-based accelerated possession and want your notice-stage chronology to be usable later, not rebuilt from scratch.',
+      'You are balancing arrears pressure with route safety and need confidence that a Section 21 route is still available before committing to service.',
     ],
-    mistakeRisks: ['Serving Form 6A with the wrong dates or notice period', 'Missing pre-conditions like deposit protection, EPC, gas safety, or How to Rent evidence', 'Serving before your tenancy timing allows it', 'No clear proof of service when you move to court'],
-    templateRisks: ['Generic template sites often use stale wording or old form versions', 'Most do not check whether Section 21 is even available for your case', 'You are usually left to calculate dates manually', 'No practical guidance on service evidence or next steps'],
-    solicitorPositioning: 'Solicitors are valuable for defended, unusual, or high-conflict possession cases. But for straightforward early-stage Form 6A drafting, many landlords want a faster and cheaper guided DIY route first.',
-    whyLandlordHeaven: ['You get route guidance, not just a blank document', 'The flow is built around landlord mistakes that commonly invalidate notices', 'You can fix details and regenerate instantly instead of paying again', 'The output is designed for practical next steps, not just download-and-guess'],
-    howItWorks: ['Answer case questions in plain English', 'The wizard validates route and notice details', 'Preview your notice pack before purchase', 'Download and follow included service guidance'],
-    included: ['Section 21 notice (Form 6A) generated from your case facts', 'Service instructions and proof prompts', 'Validity checklist to reduce avoidable errors', 'Downloadable pack stored in your account'],
-    compliance: ['Deposit protection and prescribed information checks', 'Gas safety, EPC, and How to Rent reminder checks', 'Timing and notice-period sanity checks', 'Service workflow reminders before court stage'],
+    mistakeRisks: [
+      'Serving Form 6A with the wrong dates or notice period',
+      'Missing pre-conditions like deposit protection, EPC, gas safety, or How to Rent evidence',
+      'Serving before your tenancy timing allows it',
+      'No clear proof of service when you move to court',
+      'Conflicting dates between tenancy records, notice records, and later witness statements',
+      'Using a fast but weak service method that is difficult to prove if challenged',
+      'Treating Section 21 as automatic when local restrictions or tenancy facts require extra checks',
+      'Not updating your file when circumstances change before notice expiry',
+    ],
+    templateRisks: [
+      'Generic template sites often use stale wording or old form versions',
+      'Most do not check whether Section 21 is even available for your case',
+      'You are usually left to calculate dates manually',
+      'No practical guidance on service evidence or next steps',
+      'Template downloads rarely connect notice stage to court continuity, so landlords discover gaps only after delay',
+      'Static downloads do not prompt you to reconcile tenancy history with compliance evidence before service',
+      'Most free templates stop at document generation and do not help you structure a usable chronology',
+      'You get little help identifying which mistakes are merely untidy versus genuinely claim-threatening',
+    ],
+    solicitorPositioning:
+      'Solicitors are valuable for defended, unusual, or high-conflict possession cases. But for straightforward early-stage Form 6A drafting, many landlords want a faster and cheaper guided DIY route first. The sensible approach is staged: use disciplined preparation for straightforward files, then escalate to legal advice where complexity, defence risk, or procedural uncertainty materially increases.',
+    whyLandlordHeaven: [
+      'You get route guidance, not just a blank document.',
+      'The flow is built around landlord mistakes that commonly invalidate notices.',
+      'You can fix details and regenerate instantly instead of paying again.',
+      'The output is designed for practical next steps, not just download-and-guess.',
+      'You can keep notice-stage facts aligned with likely court-stage requirements from day one.',
+      'The workflow encourages evidence discipline so your bundle is easier to defend if challenged.',
+      'You get practical prompts about what to verify before serving, not just what to type into a form.',
+      'Internal guidance links help you move to the correct next step instead of restarting research under pressure.',
+    ],
+    howItWorks: [
+      'Answer case questions in plain English and confirm core tenancy facts before drafting begins.',
+      'The wizard validates route eligibility, notice details, and common Section 21 blockers.',
+      'Review compliance and timeline prompts so your service plan is practical and provable.',
+      'Preview your notice pack before purchase and check whether dates and names align with your records.',
+      'Download documents and follow service guidance designed to preserve evidence quality.',
+      'If anything changes, update details and regenerate to keep your pack consistent with live case facts.',
+    ],
+    included: [
+      'Section 21 notice (Form 6A) generated from your case facts.',
+      'Service instructions and proof prompts tied to practical landlord workflows.',
+      'Validity checklist to reduce avoidable errors before service.',
+      'Downloadable pack stored in your account for continuity and re-use.',
+      'Guidance cues on chronology quality so notice-stage evidence remains useful at court stage.',
+      'Clear reminders of what this tool does and does not replace, so escalation decisions stay realistic.',
+    ],
+    compliance: [
+      'Deposit protection and prescribed information checks.',
+      'Gas safety, EPC, and How to Rent reminder checks.',
+      'Timing and notice-period sanity checks before output.',
+      'Service workflow reminders before court stage.',
+      'Route suitability prompts to reduce no-fault route mistakes in unsuitable cases.',
+      'Continuity reminders so notice dates and service notes map cleanly into later possession paperwork.',
+    ],
     comparisons: [
-      { point: 'Price', landlordHeaven: 'Low one-time DIY cost', alternative: 'Solicitor drafting usually costs far more' },
-      { point: 'Speed', landlordHeaven: 'Start now and generate quickly', alternative: 'Waiting on appointments and back-and-forth' },
-      { point: 'Guidance', landlordHeaven: 'Step-by-step route prompts', alternative: 'Generic template download with minimal support' },
+      { point: 'Price', landlordHeaven: 'Low one-time DIY cost with practical safeguards', alternative: 'Solicitor drafting usually costs far more for early-stage preparation' },
+      { point: 'Speed', landlordHeaven: 'Start now and generate quickly with structured prompts', alternative: 'Waiting on appointments and back-and-forth' },
+      { point: 'Guidance', landlordHeaven: 'Step-by-step route prompts and risk flags', alternative: 'Generic template download with minimal support' },
       { point: 'Error prevention', landlordHeaven: 'Built-in compliance and date checks', alternative: 'Manual edits increase invalid-notice risk' },
+      { point: 'Service readiness', landlordHeaven: 'Prompts for proof and chronology quality', alternative: 'Little help on evidence you need later' },
+      { point: 'Court continuity', landlordHeaven: 'Notice-stage outputs designed for later possession workflow', alternative: 'Higher risk of rework when moving to claim stage' },
     ],
     faqs: [
-      { question: 'Can a Section 21 notice be invalid?', answer: 'Yes. Wrong dates, wrong service, missing compliance pre-conditions, or the wrong route can all make a Section 21 notice unusable at court.' },
-      { question: 'Do I always need a solicitor for Section 21?', answer: 'Not always. For straightforward document preparation, many landlords use guided generation tools. Complex or defended cases may still need legal advice.' },
-      { question: 'Is Form 6A the correct form for Section 21?', answer: 'In England, yes. Section 21 notices must use Form 6A with the right details and timing for your tenancy.' },
-      { question: 'What if I spot a mistake after generating?', answer: 'Update your answers and regenerate so your pack stays consistent with your current case facts.' },
+      {
+        question: 'Can a Section 21 notice be invalid?',
+        answer:
+          'Yes. Wrong dates, wrong service, missing compliance pre-conditions, or route/timing mistakes can all make a Section 21 notice unusable at court. The practical impact is not only legal rejection; it is usually delay, extra rent loss, and repeat admin. Before service, check that tenancy facts, compliance records, and service method are consistent and provable.',
+      },
+      {
+        question: 'Do I always need a solicitor for Section 21?',
+        answer:
+          'Not always. For straightforward document preparation, many landlords use guided generation tools first. Complex or defended cases may still need legal advice, especially where facts are disputed, service is challenged, or technical issues increase risk. A staged approach is usually most efficient: prepare well, then escalate if complexity warrants it.',
+      },
+      {
+        question: 'Is Form 6A the correct form for Section 21?',
+        answer:
+          'In England, yes—Section 21 notices use Form 6A. But using the correct form alone is not enough. Courts also expect correct timing, route suitability, and reliable compliance/service evidence. Think of Form 6A as one part of a broader possession preparation workflow, not a complete strategy by itself.',
+      },
+      {
+        question: 'What if I spot a mistake after generating?',
+        answer:
+          'Update your answers and regenerate so your pack stays consistent with current case facts. Do not rely on manual edits that can introduce contradictions between dates, service records, and later court paperwork. Keeping one consistent source version reduces rework and makes your chronology easier to defend.',
+      },
+      {
+        question: 'What evidence should I organise before serving?',
+        answer:
+          'At minimum, keep a clear tenancy agreement copy, deposit and prescribed information records, compliance document evidence, and a service plan you can prove. Build a short chronology linking each key event to one supporting document. This makes later possession prep faster and reduces avoidable disputes about what happened and when.',
+      },
+      {
+        question: 'Can I use Section 21 if the tenant is in arrears?',
+        answer:
+          'Potentially, but route choice should still be strategic. Some landlords prefer Section 21 where eligibility is clear; others may use a Section 8 arrears route depending on objectives and evidence profile. The key is choosing a route you can support with consistent records, not just the route that seems quickest at first glance.',
+      },
     ],
     relatedLinks: [
       { href: '/section-8-notice-generator', label: 'Need a Section 8 notice instead?' },
@@ -82,6 +163,7 @@ export const INTENT_PAGES: Record<string, IntentPageConfig> = {
     ],
     finalCta: 'Start your Section 21 notice now',
   },
+
   'section-8-notice-generator': {
     slug: 'section-8-notice-generator',
     title: 'Section 8 Notice Generator | Form 3 for Rent Arrears',
