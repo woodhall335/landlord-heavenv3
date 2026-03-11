@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
-import { PillarPageShell } from '@/components/seo/PillarPageShell';
-import { PILLAR_PAGES, getPillarMetadata } from '@/lib/seo/pillar-pages-content';
+import { HighIntentPageShell } from '@/components/seo/HighIntentPageShell';
+import { PHASE5_PAGES, getPhase5Metadata } from '@/lib/seo/phase5-pages';
 
-const content = PILLAR_PAGES['section-21-notice-guide'];
+const content = PHASE5_PAGES['section-21-notice-guide'];
 
-export const metadata: Metadata = getPillarMetadata(content);
+export const metadata: Metadata = getPhase5Metadata(content);
 
 export default function Page() {
-  return <PillarPageShell {...content} />;
+  return <HighIntentPageShell {...content} />;
 }
