@@ -1,11 +1,10 @@
-import type { Metadata } from 'next';
-import { EvictionIntentLandingPage } from '@/components/seo/EvictionIntentLandingPage';
-import { INTENT_PAGES, getIntentPageMetadata } from '@/lib/seo/eviction-intent-pages';
+import { HighIntentPageShell } from '@/components/seo/HighIntentPageShell';
+import { PASS1_PAGES, getPass1Metadata } from '@/lib/seo/high-intent-pass1-pages';
 
-const config = INTENT_PAGES['tenant-stopped-paying-rent'];
+const page = PASS1_PAGES['tenant-stopped-paying-rent'];
 
-export const metadata: Metadata = getIntentPageMetadata(config);
+export const metadata = getPass1Metadata(page);
 
-export default function Page() {
-  return <EvictionIntentLandingPage config={config} />;
+export default function TenantStoppedPayingRentPage() {
+  return <HighIntentPageShell {...page} />;
 }
