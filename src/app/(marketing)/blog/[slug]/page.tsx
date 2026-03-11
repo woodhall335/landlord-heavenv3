@@ -133,6 +133,14 @@ const PRODUCT_LABELS: Record<(typeof BLOG_PRODUCT_ROUTES)[keyof typeof BLOG_PROD
   [BLOG_PRODUCT_ROUTES.ast]: 'Start tenancy agreement pack',
 };
 
+const CORE_EVICTION_GUIDES = [
+  { href: '/section-21-notice-guide', label: 'Section 21 notice guide' },
+  { href: '/section-8-notice-guide', label: 'Section 8 notice guide' },
+  { href: '/how-to-evict-a-tenant-uk', label: 'How to evict a tenant in the UK' },
+  { href: '/evict-tenant-not-paying-rent', label: 'Evicting a tenant not paying rent' },
+  { href: '/tenant-stopped-paying-rent', label: 'Tenant stopped paying rent playbook' },
+] as const;
+
 
 function inferBlogStageHint(post: BlogPost): StageEstimate {
   const haystack = `${post.title} ${post.targetKeyword} ${post.tags.join(' ')}`.toLowerCase();
@@ -852,6 +860,22 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
                   {post.content}
                 </BlogProse>
               </BlogCtaProvider>
+
+              <section className="mt-10 rounded-2xl border border-[#e9dcff] bg-[#f8f1ff] p-5 shadow-sm md:p-6" aria-label="Core eviction guides">
+                <h2 className="text-xl font-bold text-gray-900">Core eviction guides for next steps</h2>
+                <p className="mt-2 text-sm text-gray-700">
+                  Keep your case strategy connected with the core possession guides most landlords need during arrears and notice workflows.
+                </p>
+                <ul className="mt-4 space-y-2 text-sm">
+                  {CORE_EVICTION_GUIDES.map((guide) => (
+                    <li key={guide.href}>
+                      <Link href={guide.href} className="font-medium text-primary hover:underline">
+                        {guide.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </section>
 
               {sanitizedFaqs.length > 0 && (
                 <section className="mt-12 rounded-2xl border border-[#e9dcff] bg-[#f8f1ff] p-5 shadow-sm md:p-6" aria-label="Frequently asked questions">
