@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { Container } from '@/components/ui';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
-import { StructuredData, breadcrumbSchema, faqPageSchema } from '@/lib/seo/structured-data';
+import { StructuredData, breadcrumbSchema, faqPageSchema, articleSchema } from '@/lib/seo/structured-data';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import type { IntentPageConfig } from '@/lib/seo/eviction-intent-pages';
@@ -103,6 +103,14 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
     dateModified: `2026-03-01`,
   };
 
+  const articleStructuredData = articleSchema({
+    headline: config.h1,
+    description: config.description,
+    url: canonical,
+    datePublished: '2026-03-01',
+    dateModified: '2026-03-01',
+  });
+
   const serviceSchema = {
     '@context': 'https://schema.org',
     '@type': 'Service',
@@ -158,6 +166,7 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
       <HeaderConfig mode="autoOnScroll" />
       <StructuredData data={webPageSchema} />
       <StructuredData data={serviceSchema} />
+      <StructuredData data={articleStructuredData} />
       <StructuredData data={faqPageSchema(config.faqs)} />
       <StructuredData
         data={breadcrumbSchema([
