@@ -277,6 +277,120 @@ export default function SueTenantUnpaidRentPage() {
                   Many landlords wait until after eviction to issue the money claim, as the final
                   arrears amount is then known.
                 </p>
+                <h2>How to prepare evidence so a defence is easier to answer</h2>
+                <p>
+                  Tenants do not need a perfect defence to slow a weak claim. They only need to identify
+                  uncertainty in dates, calculations, or service history. Build your evidence as a clear
+                  timeline with one supporting document per key event: tenancy start, due dates, missed
+                  payments, warnings, protocol letter, and issue date.
+                </p>
+                <p>
+                  Keep your arrears schedule simple and auditable. Show each rent period, amount due,
+                  amount paid, date paid, and cumulative balance. If you claim interest, show method and
+                  dates used. If a payment was allocated to a specific month, record why. This level of
+                  transparency reduces challenges and helps the court follow your figures quickly.
+                </p>
+
+                <h2>Should you settle before hearing?</h2>
+                <p>
+                  Settlement can be commercially sensible where payment reliability is credible. A landlord
+                  objective is recovery, not necessarily hearing attendance. If a tenant offers staged repayment,
+                  assess affordability, speed of recovery, and default risk. A realistic consent arrangement may
+                  outperform a contested hearing, especially where enforcement would still be needed after judgment.
+                </p>
+                <p>
+                  If you settle, document terms clearly: total debt, payment schedule, trigger for default,
+                  and whether court action is paused or concluded. Ambiguous settlements often create a second
+                  dispute and additional cost.
+                </p>
+
+                <h2>Former tenant claims: practical tracing and service strategy</h2>
+                <p>
+                  Former tenant recovery is often an address problem more than a legal one. Before issue,
+                  gather all legitimate address and contact records from tenancy administration, guarantor paperwork,
+                  and recent communications. Where location is uncertain, tracing work should be proportionate and
+                  documented so you can justify service decisions later.
+                </p>
+                <p>
+                  Do not delay indefinitely waiting for perfect intelligence. Set a practical tracing window,
+                  record actions taken, and move forward on the best available service basis that complies with the rules.
+                  Recovery chances usually improve when action is prompt and records are still fresh.
+                </p>
+
+                <h2>Landlord checklist before pressing "issue claim"</h2>
+                <ul>
+                  <li>Pre-action protocol completed with response window and delivery proof.</li>
+                  <li>Arrears schedule reconciled to tenancy terms and payment records.</li>
+                  <li>Particulars drafted in clear chronology with contractual basis.</li>
+                  <li>Court fee budgeted and route suitability confirmed.</li>
+                  <li>Default judgment and defended-claim response plan prepared.</li>
+                  <li>Likely enforcement path considered based on debtor profile.</li>
+                </ul>
+                <p>
+                  When these six points are ready, your claim is usually faster, clearer, and less expensive
+                  to maintain. Most landlord delays come from issuing early with incomplete records and then
+                  rebuilding under pressure.
+                </p>
+                <h2>Hearing readiness for defended rent arrears claims</h2>
+                <p>
+                  If a claim moves toward hearing, focus on document usability. Judges and opposing parties need to follow your bundle quickly.
+                  Prepare a paginated chronology, a concise issues list, and a short witness narrative that mirrors the pleaded case. Do not introduce
+                  new allegations at the last minute unless essential. Late expansion can distract from your strongest points.
+                </p>
+                <p>
+                  Keep your presentation commercially realistic: what was due, what was unpaid, what communications occurred, and what remedy is sought.
+                  The landlord objective is a usable order that can be enforced, not a perfect narrative. Clarity, consistency, and proportionality remain
+                  your strongest advantages.
+                </p>
+
+                <h2>Post-judgment enforcement triage</h2>
+                <p>
+                  Enforcement should be chosen based on likely recoverability. If the debtor has regular employment, attachment of earnings may produce steady recovery.
+                  If you have bank intelligence, a third-party debt order may be effective. If the debtor has assets but low immediate liquidity, charging options
+                  can preserve longer-term value. Document why you chose each option; this improves decision quality and avoids repeated failed applications.
+                </p>
+                <p>
+                  In practice, many successful landlords review enforcement every 60-90 days and adjust strategy as new debtor information appears.
+                  Passive judgments collect poorly. Active, evidence-led enforcement planning tends to perform better.
+                </p>
+
+                <h2>What to do if the tenant counter-alleges disrepair or set-off</h2>
+                <p>
+                  One common defence pattern is a broad allegation that rent was withheld due to disrepair. The correct response is structured evidence,
+                  not escalation in tone. Separate each allegation and test it against inspection records, repair logs, contractor attendance, and communication history.
+                  If legitimate issues existed, show timeline, remedial action, and any agreed impact on rent.
+                </p>
+                <p>
+                  Courts usually respond better to measured, document-led responses than blanket denials. Where partial set-off may be realistic,
+                  evaluate settlement impact commercially instead of forcing every issue to hearing. A reduced but prompt recovery can outperform prolonged uncertainty.
+                </p>
+
+                <h2>Guarantor and joint tenant recovery strategy</h2>
+                <p>
+                  If liability sits with more than one party, plan service and pleading carefully from the start. Claims against joint tenants or guarantors
+                  need consistent contractual references and clear explanation of each party&apos;s liability. Ambiguity here can create avoidable procedural delay.
+                </p>
+                <p>
+                  Keep communication professional and parallel where appropriate. When one party engages and another does not, document both tracks.
+                  This helps if you later need judgment pathways that differ between defendants.
+                </p>
+
+                <h2>Cost control for landlords running repeat debt claims</h2>
+                <p>
+                  Landlords with recurring arrears issues should standardise their debt workflow. Use template chronologies, consistent arrears schedules,
+                  and a documented protocol sequence. Standardisation does not mean robotic drafting; it means less reinvention and fewer avoidable mistakes.
+                </p>
+                <p>
+                  Over a portfolio, these improvements matter commercially: faster issue readiness, fewer procedural errors, clearer negotiations,
+                  and more predictable enforcement decisions. The biggest savings often come from avoiding rework rather than reducing issue fees.
+                </p>
+
+                <h2>Final pre-issue decision test</h2>
+                <p>
+                  Before filing, ask four questions: is liability clear, is amount evidence-backed, is protocol complete, and is recovery path realistic?
+                  If any answer is weak, strengthen the file first. Issuing too early rarely creates leverage if the paperwork cannot withstand first response.
+                </p>
+
               </div>
             </div>
 
