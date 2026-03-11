@@ -143,11 +143,11 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
       {itemListSchema ? <StructuredData data={itemListSchema} /> : null}
 
       <UniversalHero
-        trustText="★★★★★ 4.8/5 · 511 reviews"
         title={config.h1}
         subtitle={config.heroSubheadline}
         primaryCta={{ label: config.heroCta, href: primaryHref }}
         secondaryCta={config.secondaryCta ? { label: config.secondaryCta.label, href: secondaryHref ?? '#' } : undefined}
+        showReviewPill
         showTrustPositioningBar
         mediaSrc={config.icon}
         mediaAlt={`${config.keyword} icon`}

@@ -43,7 +43,7 @@ const defaultHeroMedia = {
 export const homeHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
   trustText:
-    'Built for landlords • Updated for current housing law • Practical document guidance',
+    'Built for landlords • Updated for current housing law',
   title: 'Tenant Not Paying or',
   highlightTitle: 'Refusing to Leave?',
   subtitle: (
