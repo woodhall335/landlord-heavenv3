@@ -80,6 +80,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Long-tail landing pages - SEO targeted
   const landingPages = [
+    { path: '/how-to-evict-a-tenant-uk', priority: 0.95, changeFrequency: 'weekly' as const },
+    { path: '/section-21-notice-guide', priority: 0.95, changeFrequency: 'weekly' as const },
+    { path: '/section-8-notice-guide', priority: 0.95, changeFrequency: 'weekly' as const },
+    { path: '/rent-arrears-landlord-guide', priority: 0.95, changeFrequency: 'weekly' as const },
+    { path: '/eviction-process-england', priority: 0.95, changeFrequency: 'weekly' as const },
     { path: '/section-21-notice-template', priority: 0.9, changeFrequency: 'weekly' as const },
     { path: '/eviction-notice-template', priority: 0.9, changeFrequency: 'weekly' as const },
     { path: '/section-8-notice-template', priority: 0.8, changeFrequency: 'weekly' as const },

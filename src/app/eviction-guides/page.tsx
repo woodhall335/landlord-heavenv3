@@ -9,6 +9,14 @@ import { getCanonicalUrl } from '@/lib/seo';
 
 const canonical = getCanonicalUrl('/eviction-guides');
 
+const CORE_EVICTION_GUIDES = [
+  { href: '/how-to-evict-a-tenant-uk', label: 'How to Evict a Tenant in the UK' },
+  { href: '/section-21-notice-guide', label: 'Section 21 Notice Guide' },
+  { href: '/section-8-notice-guide', label: 'Section 8 Notice Guide' },
+  { href: '/rent-arrears-landlord-guide', label: 'Rent Arrears Landlord Guide' },
+  { href: '/eviction-process-england', label: 'Eviction Process England' },
+];
+
 export const metadata: Metadata = {
   title: 'Eviction Guides Hub for Landlords | Notices, Court Process, Arrears and Enforcement',
   description: 'Central hub for landlord eviction guides, organised by tenant problems, notices, court process, rent arrears, and possession enforcement.',
@@ -64,6 +72,18 @@ export default function EvictionGuidesPage() {
       <section className="py-12">
         <Container>
           <div className="mx-auto max-w-6xl space-y-8">
+
+            <article className="rounded-2xl border border-[#CAB6FF] bg-[#F8F4FF] p-6 md:p-8">
+              <h2 className="text-2xl font-semibold text-charcoal">Core Eviction Guides</h2>
+              <p className="mt-2 text-gray-700">Start with these pillar pages for route-level coverage, then drill into the supporting cluster pages below.</p>
+              <div className="mt-4 grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+                {CORE_EVICTION_GUIDES.map((guide) => (
+                  <Link key={guide.href} href={guide.href} className="rounded-xl border border-[#CDBBFF] bg-white p-4 text-primary font-medium hover:underline">
+                    {guide.label}
+                  </Link>
+                ))}
+              </div>
+            </article>
             {EVICTION_CLUSTERS.map((cluster) => (
               <article key={cluster.key} className="rounded-2xl border border-[#E6DBFF] bg-white p-6 md:p-8">
                 <h2 className="text-2xl font-semibold text-charcoal">{cluster.label}</h2>
