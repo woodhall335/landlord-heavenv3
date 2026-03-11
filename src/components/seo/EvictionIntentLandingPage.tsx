@@ -11,6 +11,33 @@ import { getWizardHref } from '@/lib/seo/eviction-intent-pages';
 
 const DEFAULT_UPDATED = 'March 2026';
 
+const LANDLORD_SCENARIO_IMAGE_MAP: Record<string, { src: string; alt: string }> = {
+  'Your fixed term has ended, the tenant will not leave, and you want a clean no-fault route without a paperwork restart.': {
+    src: '/images/1 Tenant Wont Leave.webp',
+    alt: 'Tenant refusing to leave after fixed term ended',
+  },
+  'You are unsure whether your compliance record is complete enough to serve safely right now.': {
+    src: '/images/2️ Unsure Compliance.webp',
+    alt: 'Landlord reviewing Section 21 compliance paperwork',
+  },
+  'You need to act this week and want a guided workflow instead of editing generic templates manually.': {
+    src: '/images/3️ Need to Act.webp',
+    alt: 'Landlord preparing urgent eviction notice this week',
+  },
+  'You inherited tenancy admin from an agent and need to verify whether deposit and prescribed information records are actually court-ready.': {
+    src: '/images/4️ Inherited Tenancy Admin.webp',
+    alt: 'Inherited tenancy admin records being checked for court readiness',
+  },
+  'You expect possession might go to paper-based accelerated possession and want your notice-stage chronology to be usable later, not rebuilt from scratch.': {
+    src: '/images/5️ Accelerated Possession.webp',
+    alt: 'Accelerated possession paperwork timeline prepared for court use',
+  },
+  'You are balancing arrears pressure with route safety and need confidence that a Section 21 route is still available before committing to service.': {
+    src: '/images/6️ Balancing Arrears Pressure.webp',
+    alt: 'Landlord balancing arrears pressure and Section 21 route safety',
+  },
+};
+
 function getHowToSchema(slug: string, canonical: string) {
   if (slug !== 'how-to-evict-a-tenant-england') {
     return null;
@@ -194,7 +221,17 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
               {config.landlordScenarios.map((scenario) => (
                 <article key={scenario} className="rounded-2xl border border-[#E6DBFF] bg-white p-5 text-sm text-gray-700">
                   <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-primary">Landlord scenario</p>
-                  {scenario}
+                  {LANDLORD_SCENARIO_IMAGE_MAP[scenario] ? (
+                    <Image
+                      src={LANDLORD_SCENARIO_IMAGE_MAP[scenario].src}
+                      alt={LANDLORD_SCENARIO_IMAGE_MAP[scenario].alt}
+                      width={400}
+                      height={260}
+                      className="scenario-image mb-4 mt-3 h-auto w-full rounded-lg"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 45vw, 400px"
+                    />
+                  ) : null}
+                  <p>{scenario}</p>
                 </article>
               ))}
             </div>
