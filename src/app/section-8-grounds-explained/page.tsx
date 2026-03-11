@@ -1,13 +1,11 @@
 import type { Metadata } from 'next';
 import { HighIntentPageShell } from '@/components/seo/HighIntentPageShell';
-import { INTENT_PAGES, getIntentPageMetadata } from '@/lib/seo/eviction-intent-pages';
-import { PASS1_LONGFORM_PAGES } from '@/lib/seo/pass1-longform-content';
+import { PHASE5_PAGES, getPhase5Metadata } from '@/lib/seo/phase5-pages';
 
-const config = INTENT_PAGES['section-8-grounds-explained'];
-const content = PASS1_LONGFORM_PAGES['section-8-grounds-explained'];
+const content = PHASE5_PAGES['section-8-grounds-explained'];
 
-export const metadata: Metadata = getIntentPageMetadata(config);
+export const metadata: Metadata = getPhase5Metadata(content);
 
-export default function Section8GroundsExplainedPage() {
+export default function Page() {
   return <HighIntentPageShell {...content} />;
 }

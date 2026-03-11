@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
@@ -26,6 +27,7 @@ interface HighIntentPageShellProps {
   sections: IntentSection[];
   relatedLinks: Array<{ label: string; href: string }>;
   faqs: FAQItem[];
+  diagrams?: Array<{ title: string; description: string; imageSrc: string; imageAlt: string }>;
 }
 
 export function HighIntentPageShell(props: HighIntentPageShellProps) {
@@ -54,6 +56,25 @@ export function HighIntentPageShell(props: HighIntentPageShellProps) {
           {props.heroBullets.map((bullet) => <li key={bullet}>✓ {bullet}</li>)}
         </ul>
       </UniversalHero>
+
+      {props.diagrams && props.diagrams.length > 0 ? (
+        <section className="py-8 bg-white border-b border-[#E6DBFF]">
+          <Container>
+            <div className="mx-auto max-w-5xl rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-6">
+              <h2 className="text-2xl font-semibold text-[#2a2161]">Eviction diagrams and process maps</h2>
+              <div className="mt-5 grid gap-4 md:grid-cols-3">
+                {props.diagrams.map((diagram) => (
+                  <article key={diagram.title} className="rounded-xl border border-[#E6DBFF] bg-white p-4">
+                    <Image src={diagram.imageSrc} alt={diagram.imageAlt} width={64} height={64} className="h-16 w-16" />
+                    <h3 className="mt-3 text-base font-semibold text-[#2a2161]">{diagram.title}</h3>
+                    <p className="mt-2 text-sm text-gray-700 leading-6">{diagram.description}</p>
+                  </article>
+                ))}
+              </div>
+            </div>
+          </Container>
+        </section>
+      ) : null}
 
       <section className="py-12 bg-white">
         <Container>

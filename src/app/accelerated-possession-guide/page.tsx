@@ -1,13 +1,11 @@
 import type { Metadata } from 'next';
 import { HighIntentPageShell } from '@/components/seo/HighIntentPageShell';
-import { INTENT_PAGES, getIntentPageMetadata } from '@/lib/seo/eviction-intent-pages';
-import { PASS1_LONGFORM_PAGES } from '@/lib/seo/pass1-longform-content';
+import { PHASE5_PAGES, getPhase5Metadata } from '@/lib/seo/phase5-pages';
 
-const config = INTENT_PAGES['accelerated-possession-guide'];
-const content = PASS1_LONGFORM_PAGES['accelerated-possession-guide'];
+const content = PHASE5_PAGES['accelerated-possession-guide'];
 
-export const metadata: Metadata = getIntentPageMetadata(config);
+export const metadata: Metadata = getPhase5Metadata(content);
 
-export default function AcceleratedPossessionGuidePage() {
+export default function Page() {
   return <HighIntentPageShell {...content} />;
 }

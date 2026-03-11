@@ -226,6 +226,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/evict-tenant-anti-social-behaviour', priority: 0.82, changeFrequency: 'weekly' as const },
     { path: '/eviction-court-hearing-guide', priority: 0.83, changeFrequency: 'weekly' as const },
     { path: '/possession-order-timeline', priority: 0.85, changeFrequency: 'weekly' as const },
+    // Phase 5 long-tail expansion pages
+    { path: '/can-a-landlord-evict-for-noise-complaints', priority: 0.8, changeFrequency: 'monthly' as const },
+    { path: '/can-a-landlord-evict-for-pets', priority: 0.8, changeFrequency: 'monthly' as const },
+    { path: '/can-you-evict-a-tenant-for-property-damage', priority: 0.8, changeFrequency: 'monthly' as const },
+    { path: '/what-happens-after-section-21', priority: 0.8, changeFrequency: 'monthly' as const },
+    { path: '/what-happens-after-section-8', priority: 0.8, changeFrequency: 'monthly' as const },
+    { path: '/how-long-does-bailiff-eviction-take', priority: 0.8, changeFrequency: 'monthly' as const },
+    { path: '/how-long-after-court-order-do-bailiffs-evict', priority: 0.8, changeFrequency: 'monthly' as const },
+    { path: '/tenant-ignores-section-21', priority: 0.8, changeFrequency: 'monthly' as const },
+    { path: '/tenant-ignores-section-8', priority: 0.8, changeFrequency: 'monthly' as const },
+    { path: '/how-to-speed-up-eviction-uk', priority: 0.8, changeFrequency: 'monthly' as const },
   ];
 
   // Tool pages - Free tools for SEO traffic
