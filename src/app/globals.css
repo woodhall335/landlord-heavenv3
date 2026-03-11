@@ -497,3 +497,12 @@ body.s21-banner-visible header.site-header {
 .animate-shimmer {
   animation: shimmer 2s infinite linear;
 }
+
+
+.scenario-image {
+  width: 100%;
+  height: auto;
+  max-width: 400px;
+  border-radius: 8px;
+  margin: 12px 0 16px 0;
+}
