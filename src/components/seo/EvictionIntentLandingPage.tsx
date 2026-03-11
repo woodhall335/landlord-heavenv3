@@ -306,6 +306,78 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
       <section className="py-14">
         <Container>
           <div className="mx-auto max-w-6xl rounded-3xl border border-[#E6DBFF] bg-white p-6 md:p-10">
+            <h2 className="text-3xl font-bold text-charcoal">Evidence quality checklist before issuing a claim</h2>
+            <p className="mt-4 text-gray-700">
+              Possession files rarely fail because landlords did nothing. They fail because the evidence trail is fragmented, dates do not align,
+              or key service facts are missing. Build your file as one coherent chronology from tenancy start through to notice service.
+              If every major event has a date and supporting document, your court-stage admin is much easier.
+            </p>
+            <div className="mt-6 grid gap-4 md:grid-cols-2">
+              <article className="rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-5">
+                <h3 className="text-lg font-semibold text-charcoal">Documents to check before filing</h3>
+                <ul className="mt-3 space-y-2 text-sm text-gray-700">
+                  <li>• Signed tenancy agreement plus any renewal/variation records.</li>
+                  <li>• Deposit protection evidence and prescribed information delivery records.</li>
+                  <li>• Compliance records (for example EPC, gas safety, and How to Rent where relevant).</li>
+                  <li>• Notice copy showing exact date, method, and recipient details.</li>
+                  <li>• Proof of service (certificate, posting evidence, hand-delivery witness notes, or tracked records).</li>
+                  <li>• Rent ledger or arrears schedule with clear running totals.</li>
+                </ul>
+              </article>
+              <article className="rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-5">
+                <h3 className="text-lg font-semibold text-charcoal">Mistakes that create avoidable delay</h3>
+                <ul className="mt-3 space-y-2 text-sm text-gray-700">
+                  <li>• Contradictory dates between notice, witness narrative, and court forms.</li>
+                  <li>• Missing proof that mandatory documents were served to the tenant.</li>
+                  <li>• Recalculating arrears late and submitting inconsistent debt totals.</li>
+                  <li>• Using screenshots without context, timestamp, or explanation in chronology.</li>
+                  <li>• Mixing template wording from different sources and creating route ambiguity.</li>
+                  <li>• Waiting until expiry day to assemble court paperwork.</li>
+                </ul>
+              </article>
+            </div>
+            <p className="mt-6 text-gray-700">
+              Practical workflow: draft your chronology first, then attach documents to each event. If you cannot explain one event in one sentence
+              with one supporting file, that point may be challenged later. Structured generation helps by keeping notice-stage facts and court-stage
+              facts aligned from the outset.
+            </p>
+          </div>
+        </Container>
+      </section>
+
+      <section className="py-14 bg-white">
+        <Container>
+          <div className="mx-auto max-w-6xl rounded-3xl border border-[#E6DBFF] bg-[#F8F4FF] p-6 md:p-10">
+            <h2 className="text-3xl font-bold text-charcoal">Cost and risk planning: what to do at each stage</h2>
+            <p className="mt-4 text-gray-700">
+              The wrong route is expensive, but so is weak preparation on the right route. Planning by stage helps you control delays,
+              preserve evidence, and avoid repeat filing costs.
+            </p>
+            <div className="mt-6 grid gap-4 md:grid-cols-3">
+              <div className="rounded-2xl border border-[#E6DBFF] bg-white p-5">
+                <h3 className="font-semibold text-charcoal">Before serving</h3>
+                <p className="mt-2 text-sm text-gray-700">Validate route eligibility, confirm compliance history, and choose a service method you can prove later.</p>
+              </div>
+              <div className="rounded-2xl border border-[#E6DBFF] bg-white p-5">
+                <h3 className="font-semibold text-charcoal">During notice period</h3>
+                <p className="mt-2 text-sm text-gray-700">Maintain communication logs, keep arrears schedules current, and prepare court documents before expiry.</p>
+              </div>
+              <div className="rounded-2xl border border-[#E6DBFF] bg-white p-5">
+                <h3 className="font-semibold text-charcoal">At court handoff</h3>
+                <p className="mt-2 text-sm text-gray-700">Submit one consistent narrative: tenancy facts, notice, service, chronology, and supporting evidence should all match.</p>
+              </div>
+            </div>
+            <p className="mt-6 text-gray-700">
+              Complex, defended, or unusual matters may still require legal advice. For straightforward landlord cases, the commercial goal is clear:
+              avoid invalid paperwork, avoid rework, and keep the possession route moving with evidence that stands up.
+            </p>
+          </div>
+        </Container>
+      </section>
+
+      <section className="py-14">
+        <Container>
+          <div className="mx-auto max-w-6xl rounded-3xl border border-[#E6DBFF] bg-white p-6 md:p-10">
             <h2 className="text-3xl font-bold text-charcoal">Common eviction mistakes landlords make</h2>
             <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               {commonMistakes.map((mistake) => (
