@@ -287,14 +287,17 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
           <div className="mx-auto max-w-6xl rounded-3xl border border-[#E6DBFF] bg-[#F8F4FF] p-6 md:p-10">
             <h2 className="text-3xl font-bold text-charcoal">Eviction timeline and common delay points</h2>
             <p className="mt-4 text-gray-700">For timing expectations, use the <Link href="/eviction-timeline-england" className="text-primary hover:underline">eviction timeline England guide</Link>. Court backlogs are outside your control, but notice validity and service quality are not.</p>
-            <ol className="mt-5 grid gap-4 md:grid-cols-5">
-              {['Serve notice', 'Wait notice period', 'Prepare claim pack', 'Court stage', 'Enforcement if needed'].map((step, idx) => (
-                <li key={step} className="rounded-2xl border border-[#E6DBFF] bg-white p-4 text-sm text-gray-700">
-                  <p className="font-semibold text-primary">{idx + 1}</p>
-                  <p className="mt-1">{step}</p>
-                </li>
-              ))}
-            </ol>
+            <div className="mt-6 overflow-hidden rounded-2xl border border-[#E6DBFF] bg-white">
+              <div className="relative h-[280px] w-full md:h-[460px] lg:h-[560px]">
+                <Image
+                  src="/images/eviction-timeline.webp"
+                  alt="Eviction timeline"
+                  fill
+                  className="object-contain object-center"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1280px) 80vw, 1200px"
+                />
+              </div>
+            </div>
           </div>
         </Container>
       </section>
