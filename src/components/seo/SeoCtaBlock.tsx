@@ -20,7 +20,7 @@ import { buildWizardLink, type WizardJurisdiction } from '@/lib/wizard/buildWiza
 import { trackLandingCtaClick } from '@/components/analytics/LandingPageTracker';
 import { TrustPositioningBar } from '@/components/marketing/TrustPositioningBar';
 
-export type SeoPageType = 'problem' | 'court' | 'money' | 'general' | 'tenancy';
+export type SeoPageType = 'problem' | 'court' | 'money' | 'general' | 'tenancy' | 'guide';
 
 export type SeoCtaVariant = 'hero' | 'section' | 'faq' | 'inline' | 'final';
 
@@ -101,6 +101,15 @@ const ctaConfig: Record<SeoPageType, {
     faqTitle: 'Need a Professional Tenancy Agreement?',
     faqDescription: 'Our tenancy agreements include all required clauses and comply with current legislation.',
     icon: FileText,
+  },
+  guide: {
+    primary: { label: 'Get Court-Ready Notice', product: 'notice_only' },
+    secondary: { label: 'Explore More Guides', href: '/blog' },
+    sectionTitle: 'Ready to Take the Next Step?',
+    sectionDescription: 'Generate court-ready eviction documents in minutes. Trusted by over 10,000 UK landlords.',
+    faqTitle: 'Need Help With Your Eviction?',
+    faqDescription: 'Our documents are designed for court acceptance and include serving instructions.',
+    icon: Shield,
   },
 };
 
