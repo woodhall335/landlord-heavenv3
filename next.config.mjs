@@ -31,11 +31,9 @@ const nextConfig = {
     return [
       // Legacy/old URLs that were indexed by search engines
 
-      {
-        source: '/section-21-vs-section-8',
-        destination: '/section-8-vs-section-21',
-        permanent: true,
-      },
+      // NOTE: /section-21-vs-section-8 is now an active SEO landing page route.
+      // Keep legacy /section-8-vs-section-21 page live separately, but do not
+      // redirect this slug so the intent cluster can be indexed distinctly.
       {
         source: '/tools/validators/money-claim',
         destination: '/products/money-claim',
