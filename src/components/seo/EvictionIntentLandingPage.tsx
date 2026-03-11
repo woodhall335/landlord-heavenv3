@@ -288,12 +288,12 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
             <h2 className="text-3xl font-bold text-charcoal">Eviction timeline and common delay points</h2>
             <p className="mt-4 text-gray-700">For timing expectations, use the <Link href="/eviction-timeline-england" className="text-primary hover:underline">eviction timeline England guide</Link>. Court backlogs are outside your control, but notice validity and service quality are not.</p>
             <div className="mt-6 overflow-hidden rounded-2xl border border-[#E6DBFF] bg-white">
-              <div className="relative h-[220px] w-full md:h-[320px] lg:h-[380px]">
+              <div className="relative h-[180px] w-full md:h-[240px] lg:h-[300px]">
                 <Image
                   src="/images/eviction-timeline.webp"
                   alt="Eviction timeline"
                   fill
-                  className="object-cover object-center"
+                  className="scale-[1.12] object-cover object-[center_85%] md:object-[center_82%] lg:object-[center_80%]"
                   sizes="(max-width: 768px) 100vw, (max-width: 1280px) 80vw, 1200px"
                 />
               </div>
