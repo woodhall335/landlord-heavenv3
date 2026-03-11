@@ -72,6 +72,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/eviction-notice', priority: 0.95, changeFrequency: 'weekly' as const },
     { path: '/eviction-pack-england', priority: 0.95, changeFrequency: 'weekly' as const },
     { path: '/money-claim', priority: 0.95, changeFrequency: 'weekly' as const },
+    { path: '/eviction-guides', priority: 0.9, changeFrequency: 'weekly' as const },
   ];
 
   // Tenancy agreement pages - individual jurisdiction pages

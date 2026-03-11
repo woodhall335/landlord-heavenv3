@@ -5,6 +5,7 @@ import { Container } from '@/components/ui/Container';
 import { FAQSection, type FAQItem } from '@/components/seo/FAQSection';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import { StructuredData, articleSchema, breadcrumbSchema, faqPageSchema } from '@/lib/seo/structured-data';
+import { EVICTION_ENTITIES, getAuthorityLinks } from '@/lib/seo/eviction-authority';
 
 export interface IntentSection {
   title: string;
@@ -29,6 +30,7 @@ interface HighIntentPageShellProps {
 
 export function HighIntentPageShell(props: HighIntentPageShellProps) {
   const canonical = `https://landlordheaven.co.uk/${props.slug}`;
+  const authorityLinks = getAuthorityLinks(props.slug);
 
   return (
     <div className="min-h-screen bg-[#fcfaff]">
@@ -36,7 +38,7 @@ export function HighIntentPageShell(props: HighIntentPageShellProps) {
       <HeaderConfig mode="autoOnScroll" />
       <StructuredData data={articleSchema({ headline: props.title, description: props.description, url: canonical, datePublished: '2026-03-01', dateModified: '2026-03-01' })} />
       <StructuredData data={faqPageSchema(props.faqs.filter((f): f is {question: string; answer: string} => typeof f.answer === 'string'))} />
-      <StructuredData data={breadcrumbSchema([{ name: 'Home', url: 'https://landlordheaven.co.uk' }, { name: props.heroTitle, url: canonical }])} />
+      <StructuredData data={breadcrumbSchema([{ name: 'Home', url: 'https://landlordheaven.co.uk' }, { name: 'Eviction guides', url: 'https://landlordheaven.co.uk/eviction-guides' }, { name: props.heroTitle, url: canonical }])} />
 
       <UniversalHero
         title={props.heroTitle}
@@ -72,6 +74,28 @@ export function HighIntentPageShell(props: HighIntentPageShellProps) {
           </div>
         </Container>
       </section>
+
+
+      {authorityLinks ? (
+        <section className="py-10 bg-white border-y border-[#E6DBFF]">
+          <Container>
+            <div className="mx-auto max-w-5xl rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-6">
+              <h2 className="text-2xl font-semibold text-[#2a2161]">Eviction process quick actions</h2>
+              <p className="mt-3 text-gray-700">Move from notice to possession claim with stronger internal pathways: canonical parent, supporting pages, tool support, and product action.</p>
+              <div className="mt-4 grid gap-3 md:grid-cols-2 text-sm">
+                <Link href={authorityLinks.parent} className="rounded-lg border border-[#E6DBFF] bg-white px-4 py-3 text-primary hover:bg-[#F8F4FF]">Canonical parent: {authorityLinks.parent}</Link>
+                {authorityLinks.supporting.map((href) => <Link key={href} href={href} className="rounded-lg border border-[#E6DBFF] bg-white px-4 py-3 text-primary hover:bg-[#F8F4FF]">Supporting page: {href}</Link>)}
+                <Link href={authorityLinks.tool} className="rounded-lg border border-[#E6DBFF] bg-white px-4 py-3 text-primary hover:bg-[#F8F4FF]">Tool page: {authorityLinks.tool}</Link>
+                <Link href={authorityLinks.product} className="rounded-lg border border-[#E6DBFF] bg-white px-4 py-3 text-primary hover:bg-[#F8F4FF]">Product page: {authorityLinks.product}</Link>
+              </div>
+              <h3 className="mt-6 text-lg font-semibold text-[#2a2161]">Core entities reinforced</h3>
+              <div className="mt-3 grid gap-2 md:grid-cols-3 text-sm text-gray-700">
+                {EVICTION_ENTITIES.map((entity) => <p key={entity} className="rounded-lg border border-[#E6DBFF] bg-white px-3 py-2">{entity}</p>)}
+              </div>
+            </div>
+          </Container>
+        </section>
+      ) : null}
 
       <section className="py-12">
         <Container>
