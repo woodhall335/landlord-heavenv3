@@ -19,6 +19,7 @@ import { SITE_ORIGIN } from '@/lib/seo';
 import { freeTools, validatorToolRoutes } from '@/lib/tools/tools';
 import { createSupabaseAdminQuestionRepository } from '@/lib/ask-heaven/questions';
 import { getPostRegion } from '@/lib/blog/categories';
+import { getValidTopicHubs } from '@/lib/blog/topic-hubs';
 import { getBlogSeoConfig } from '@/lib/blog/seo';
 import { discoverStaticPageRoutes } from '@/lib/seo/static-route-inventory';
 import sitemapAllowlist from '../../scripts/seo-sitemap-allowlist.json';
@@ -311,6 +312,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   // Pages that always get stable dates (products, tools, etc.)
+  const blogHubPages = getValidTopicHubs().map((slug) => ({
+    path: `/blog/${slug}`,
+    priority: 0.82,
+    changeFrequency: 'weekly' as const,
+  }));
+
   const datedPages = [
     ...productPages,
     ...wizardLandingPages,
@@ -320,6 +327,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...pillarPages,
     ...toolPages,
     { path: '/blog', priority: 0.9, changeFrequency: 'weekly' as const },
+    ...blogHubPages,
   ];
 
   const excludedPrefixes = ['/admin', '/api', '/auth', '/checkout', '/dashboard', '/wizard', '/success'];

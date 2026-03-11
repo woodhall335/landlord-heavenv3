@@ -14,6 +14,7 @@ import { ArrowRight } from 'lucide-react';
 import { getCanonicalUrl } from '@/lib/seo';
 import { PRODUCTS } from '@/lib/pricing/products';
 import { getBlogImagesForPost } from '@/lib/blog/image-manifest';
+import { BLOG_TOPIC_HUBS } from '@/lib/blog/topic-hubs';
 
 export const metadata: Metadata = {
   title: 'UK Landlord Guides: Eviction, Tenancy & Rent Arrears',
@@ -177,6 +178,24 @@ export default function BlogPage() {
                   </Link>
                 );
               })}
+            </div>
+          </div>
+        </section>
+
+
+        <section id="blog-topic-hubs" className="border-b border-gray-100 bg-white py-10 lg:py-14">
+          <div className="container mx-auto px-4">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4 text-center">Browse by Topic Cluster</h2>
+            <p className="text-gray-600 text-center mb-8 max-w-2xl mx-auto">
+              Follow the eviction authority pathways by topic: Section 21, Section 8, rent arrears, and jurisdiction-specific landlord guides.
+            </p>
+            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+              {Object.values(BLOG_TOPIC_HUBS).map((hub) => (
+                <Link key={hub.slug} href={`/blog/${hub.slug}`} className="rounded-xl border border-[#e3d3ff] bg-[#fdfaff] p-5 transition hover:border-[#c6a2ff] hover:shadow-sm">
+                  <p className="text-sm font-semibold text-[#692ed4]">{hub.name}</p>
+                  <p className="mt-2 text-sm text-slate-600">{hub.description}</p>
+                </Link>
+              ))}
             </div>
           </div>
         </section>

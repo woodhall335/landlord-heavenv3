@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { Children, cloneElement, isValidElement, PropsWithChildren, ReactElement, ReactNode } from 'react';
 
 const blogProseClassName = [
@@ -26,17 +27,56 @@ const blogProseClassName = [
   '[&_img]:max-w-full [&_img]:h-auto [&_pre]:max-w-full [&_pre]:overflow-x-auto',
 ].join(' ');
 
-function wrapScrollableContent(node: ReactNode): ReactNode {
+const CONTEXTUAL_LINKS = [
+  { href: '/section-8-notice-guide', anchor: 'Section 8 notice guide', pattern: /\b(section 8|ground 8|ground 10|ground 11|rent arrears eviction)\b/i },
+  { href: '/evict-tenant-not-paying-rent', anchor: 'evict tenant not paying rent guide', pattern: /\b(tenant not paying rent|evict tenant not paying rent|unpaid rent)\b/i },
+  { href: '/tenant-stopped-paying-rent', anchor: 'tenant stopped paying rent playbook', pattern: /\b(tenant stopped paying rent|missed rent payment|late rent)\b/i },
+  { href: '/section-21-notice-guide', anchor: 'Section 21 notice guide', pattern: /\b(section 21|form 6a|no-fault eviction|accelerated possession)\b/i },
+  { href: '/how-to-evict-a-tenant-uk', anchor: 'step-by-step UK eviction process', pattern: /\b(eviction process|possession process|possession hearing|eviction timeline|court hearing)\b/i },
+  { href: '/money-claim-unpaid-rent', anchor: 'money claim for unpaid rent', pattern: /\b(money claim|mcol|debt recovery|recover rent arrears|county court claim)\b/i },
+] as const;
+
+function linkTextNode(text: string, usedHrefs: Set<string>): ReactNode {
+  for (const link of CONTEXTUAL_LINKS) {
+    if (usedHrefs.has(link.href) || !link.pattern.test(text)) continue;
+    const match = text.match(link.pattern);
+    if (!match || match.index === undefined) continue;
+
+    const start = match.index;
+    const end = start + match[0].length;
+    usedHrefs.add(link.href);
+
+    return (
+      <>
+        {text.slice(0, start)}
+        <Link href={link.href}>{link.anchor}</Link>
+        {text.slice(end)}
+      </>
+    );
+  }
+
+  return text;
+}
+
+function wrapScrollableContent(node: ReactNode, usedHrefs: Set<string>, inAnchor = false): ReactNode {
+  if (typeof node === 'string' && !inAnchor) {
+    return linkTextNode(node, usedHrefs);
+  }
+
   if (!isValidElement<{ children?: ReactNode }>(node)) {
     return node;
   }
 
   const element = node as ReactElement<{ children?: ReactNode }>;
+  const tagName = typeof element.type === 'string' ? element.type : null;
+  const nextInAnchor = inAnchor || tagName === 'a';
   const wrappedChildren = element.props.children
-    ? Children.map(element.props.children, (child) => wrapScrollableContent(child))
+    ? Children.map(element.props.children, (child) =>
+        wrapScrollableContent(child, usedHrefs, nextInAnchor),
+      )
     : element.props.children;
 
-  if (typeof element.type === 'string' && element.type === 'table') {
+  if (tagName === 'table') {
     return (
       <div className="my-6 w-full max-w-full overflow-x-auto rounded-2xl border border-[#e7d9ff] bg-white/90">
         {cloneElement(element, { children: wrappedChildren })}
@@ -44,7 +84,7 @@ function wrapScrollableContent(node: ReactNode): ReactNode {
     );
   }
 
-  if (typeof element.type === 'string' && element.type === 'pre') {
+  if (tagName === 'pre') {
     return (
       <div className="my-6 w-full max-w-full overflow-x-auto">
         {cloneElement(element, { children: wrappedChildren })}
@@ -56,5 +96,6 @@ function wrapScrollableContent(node: ReactNode): ReactNode {
 }
 
 export function BlogProse({ children }: PropsWithChildren) {
-  return <div className={blogProseClassName}>{Children.map(children, (child) => wrapScrollableContent(child))}</div>;
+  const usedHrefs = new Set<string>();
+  return <div className={blogProseClassName}>{Children.map(children, (child) => wrapScrollableContent(child, usedHrefs))}</div>;
 }
