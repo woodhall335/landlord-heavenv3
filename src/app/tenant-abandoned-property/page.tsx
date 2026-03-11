@@ -1,11 +1,58 @@
 import type { Metadata } from 'next';
-import { EvictionIntentLandingPage } from '@/components/seo/EvictionIntentLandingPage';
+import Link from 'next/link';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
+import { Container } from '@/components/ui/Container';
+import { FAQSection } from '@/components/seo/FAQSection';
+import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
+import { StructuredData, articleSchema, breadcrumbSchema, faqPageSchema } from '@/lib/seo/structured-data';
 import { INTENT_PAGES, getIntentPageMetadata } from '@/lib/seo/eviction-intent-pages';
+import { getCanonicalUrl } from '@/lib/seo';
 
 const config = INTENT_PAGES['tenant-abandoned-property'];
-
 export const metadata: Metadata = getIntentPageMetadata(config);
+const canonical = getCanonicalUrl('/tenant-abandoned-property');
 
-export default function Page() {
-  return <EvictionIntentLandingPage config={config} />;
+const faqs = [
+  { question: 'Can I immediately change locks if I think the property is abandoned?', answer: 'Not safely as a default approach. Landlords should verify abandonment indicators, document checks, and follow a structured notice-and-contact workflow. Acting too quickly can create unlawful eviction allegations even where rent arrears and vacancy signs seem obvious.' },
+  { question: 'What evidence best proves abandonment?', answer: 'Use layered evidence: rent default chronology, communication attempts, witness observations, utility usage changes, inspection records, neighbour statements where appropriate, and dated photographs. No single item proves abandonment; courts look at a coherent overall picture.' },
+  { question: 'How should I handle belongings left behind?', answer: 'Treat goods lawfully and proportionately. Keep inventory records, store items securely where required, issue notices about collection and disposal, and maintain cost records. Disposal decisions should follow documented timelines rather than convenience.' },
+  { question: 'Should I still serve notice if the tenant appears to have gone?', answer: 'In most cases, yes. A formal route protects possession strategy and reduces challenge risk if the tenant reappears. Using compliant notice and service records is often the safest way to convert uncertainty into legal certainty.' },
+];
+
+export default function TenantAbandonedPropertyPage() {
+  return (
+    <div className="min-h-screen bg-[#fcfaff]">
+      <SeoLandingWrapper pagePath="/tenant-abandoned-property" pageTitle={config.title} pageType="guide" jurisdiction="england" />
+      <HeaderConfig mode="autoOnScroll" />
+      <StructuredData data={articleSchema({ headline: config.title, description: config.description, url: canonical, datePublished: '2026-03-01', dateModified: '2026-03-11' })} />
+      <StructuredData data={faqPageSchema(faqs)} />
+      <StructuredData data={breadcrumbSchema([{ name: 'Home', url: 'https://landlordheaven.co.uk' }, { name: 'Tenant abandoned property', url: canonical }])} />
+      <UniversalHero
+        title="Tenant Abandoned Property: Safe Re-entry and Legal Control Plan"
+        subtitle="When a tenant disappears, avoid unlawful-eviction risk with structured checks, evidence capture, notice sequencing, and lawful reoccupation steps."
+        primaryCta={{ label: 'Start Notice Only workflow', href: '/products/notice-only?src=abandoned_property_notice' }}
+        secondaryCta={{ label: 'Need full court continuity? Complete Pack', href: '/products/complete-pack?src=abandoned_property_complete' }}
+        mediaSrc="/images/wizard-icons/02-property-address.png"
+        mediaAlt="Abandoned property icon"
+        showReviewPill
+        showTrustPositioningBar
+      />
+
+      <section className="py-12 bg-white" data-page-body>
+        <Container>
+          <div className="mx-auto max-w-5xl space-y-8 text-gray-700 leading-7">
+            <article className="rounded-2xl border border-[#E6DBFF] bg-[#FCFAFF] p-6 md:p-8"><h2 className="text-2xl font-semibold text-[#2a2161]">Abandonment is a risk diagnosis, not a single event</h2><p>Many landlords treat abandonment as obvious: no contact, no rent, and a seemingly empty home. In practice, the legal risk sits in uncertainty. A tenant can be absent temporarily, in hospital, abroad, or simply non-responsive while still holding possession rights. That is why this page frames abandonment as a risk diagnosis with escalating evidence thresholds. Before taking possession actions, build a chronology covering rent failures, communication attempts, inspection findings, and third-party indicators. The objective is to convert assumptions into documented facts that can survive scrutiny.</p><p>Strong files avoid binary thinking. Instead of asking “abandoned or not,” ask “what can I prove today, what remains uncertain, and what lawful step reduces uncertainty without creating liability?” This approach improves legal safety and portfolio control. It also prevents expensive reversals where a landlord re-enters too early and later faces allegations of unlawful eviction, conversion of goods, or harassment. Methodical process is slower than panic action but dramatically safer over the full lifecycle.</p></article>
+            <article className="rounded-2xl border border-[#E6DBFF] bg-[#FCFAFF] p-6 md:p-8"><h2 className="text-2xl font-semibold text-[#2a2161]">Evidence stack for suspected abandonment</h2><p>Build an evidence stack in layers: financial, occupancy, communication, and physical condition. Financial evidence includes arrears timeline and payment cessation patterns. Occupancy indicators include reduced utility usage, post accumulation, and credible third-party observations. Communication evidence should show repeated multi-channel attempts with dates and outcomes. Physical condition records should be captured during lawful inspections, with photos and notes explaining what was seen and why it matters. Each layer adds context; none should be relied upon alone.</p><p>Courts and advisers prefer files where evidence is contemporaneous and neutral in tone. Avoid loaded assumptions. Record facts: “no response to SMS sent on date,” “meter reading unchanged,” “food spoilage visible during access under clause X.” Neutral records are harder to challenge. If doubt remains, continue lawful notice progression rather than improvising possession. Your evidence stack should support safe decision making at every stage, including if the tenant returns unexpectedly and disputes your actions.</p></article>
+            <article className="rounded-2xl border border-[#E6DBFF] bg-[#FCFAFF] p-6 md:p-8"><h2 className="text-2xl font-semibold text-[#2a2161]">Pre-entry decision framework</h2><p>Before any re-entry decision, run a formal checkpoint: tenancy status, notice status, risk exposure, and contingency plan. If contractual and statutory position is unclear, preserve route optionality with proper notices and documented service. If immediate property risk exists, use proportionate safeguarding actions and record reasons. Keep contractors briefed that attendance is for inspection/safety unless and until possession rights are clear.</p><p>A practical framework includes three outputs: proceed, pause, or escalate. Proceed means evidence and route support controlled action. Pause means uncertainty remains and more contact attempts are required. Escalate means legal complexity, vulnerability indicators, or dispute signals justify specialist review. This framework prevents inconsistent decisions across staff and creates an audit trail that supports reasonableness if challenged later.</p></article>
+            <article className="rounded-2xl border border-[#E6DBFF] bg-[#FCFAFF] p-6 md:p-8"><h2 className="text-2xl font-semibold text-[#2a2161]">Belongings left behind: lawful handling protocol</h2><p>Goods management often creates more liability than possession itself. Treat every item as potentially disputed property. Produce a room-by-room inventory, photo record, condition note, and storage decision log. Where storage is required, record location, access controls, and costs. Issue written notices about collection deadlines and intended disposal methods. Keep proof of delivery and copies of every communication.</p><p>Disposal should be a documented final step, not a convenience action. For valuable items, use clear valuation reasoning and preserve sale records if disposal proceeds. For low-value refuse, still keep photo evidence and rationale. This protocol protects against later claims that property was destroyed, retained unfairly, or sold without authority. It also improves operational handovers when multiple staff are involved.</p></article>
+            <article className="rounded-2xl border border-[#E6DBFF] bg-[#FCFAFF] p-6 md:p-8"><h2 className="text-2xl font-semibold text-[#2a2161]">Route separation from arrears-only pages</h2><p>This guide is intentionally separated from pure arrears intent. Arrears pages focus on payment default and threshold strategy. Abandonment pages focus on occupancy uncertainty, re-entry risk, and goods management. Even where arrears are significant, your primary legal risk may be unlawful re-entry, not debt evidence. Keeping these intents separate improves SEO clarity and landlord outcomes because users get workflow-specific advice rather than blended generic content.</p><p>Use internal links according to decision stage: if occupancy is uncertain, stay in abandonment workflow; if occupancy is clear and the tenant remains in place, move to arrears or breach pages. This separation prevents cannibalisation and ensures each page owns a distinct SERP intent with distinct next-step CTAs.</p></article>
+            <article className="rounded-2xl border border-[#E6DBFF] bg-[#FCFAFF] p-6 md:p-8"><h2 className="text-2xl font-semibold text-[#2a2161]">CTA route logic for abandonment cases</h2><p>Primary CTA points to Notice Only for landlords who have enough clarity to begin formal process quickly. Secondary CTA points to Complete Pack for users who expect contested progression or want end-to-end continuity. Neither route sends users directly to wizard flow from this page; both keep product-first navigation consistent with conversion strategy and intent mapping.</p><p>The best route depends on uncertainty level. High certainty with disciplined evidence can start with Notice Only. Mixed facts, repeated tenant reappearances, or multi-issue disputes usually justify Complete Pack to reduce handoff friction at court stage. Selecting route by case complexity is more effective than defaulting every user into one funnel.</p></article>
+            <article className="rounded-2xl border border-[#E6DBFF] bg-white p-6 md:p-8"><h2 className="text-2xl font-semibold text-[#2a2161]">Related decision guides</h2><div className="mt-4 grid gap-3 md:grid-cols-2"><Link href="/tenant-stopped-paying-rent" className="rounded-lg border border-[#E6DBFF] px-4 py-3 text-primary hover:bg-[#F8F4FF]">Tenant stopped paying rent: arrears-first workflow</Link><Link href="/tenant-refusing-access" className="rounded-lg border border-[#E6DBFF] px-4 py-3 text-primary hover:bg-[#F8F4FF]">Tenant refusing access: evidence for denied entry</Link><Link href="/eviction-timeline-uk" className="rounded-lg border border-[#E6DBFF] px-4 py-3 text-primary hover:bg-[#F8F4FF]">Eviction timeline UK: stage timings and bottlenecks</Link><Link href="/products/complete-pack?src=abandoned_property_internal" className="rounded-lg border border-[#E6DBFF] px-4 py-3 text-primary hover:bg-[#F8F4FF]">Complete Pack for contested possession continuity</Link></div></article>
+          </div>
+        </Container>
+      </section>
+      <FAQSection faqs={faqs} title="Tenant abandoned property FAQs" />
+    </div>
+  );
 }
