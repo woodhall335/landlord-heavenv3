@@ -2,12 +2,10 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { getCanonicalUrl } from '@/lib/seo/urls';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import {
   CheckCircle,
-  ArrowRight,
   Scale,
   FileText,
   PoundSterling,
@@ -20,13 +18,6 @@ import { NextLegalSteps } from '@/components/seo/NextLegalSteps';
 import { productLinks, landingPageLinks, toolLinks } from '@/lib/seo/internal-links';
 import { moneyClaimUnpaidRentFAQs } from '@/data/faqs';
 import { FunnelCta, CrossSellBar } from '@/components/funnels';
-
-const moneyClaimWizardLink = buildWizardLink({
-  product: 'money_claim',
-  jurisdiction: 'england',
-  src: 'seo_money_claim_unpaid_rent',
-  topic: 'debt',
-});
 
 export const metadata: Metadata = {
   title: 'Reclaim Rent from a Tenant | Solicitor-Style Money Claim Guide',
@@ -73,7 +64,7 @@ export default function MoneyClaimUnpaidRentPage() {
           badgeIcon={<PoundSterling className="w-4 h-4" />}
           title="Claim Unpaid Rent in the UK (Landlord Guide)"
           subtitle={<>Complete guide to recovering unpaid rent through <Link href="/money-claim-online-mcol" className="text-primary hover:underline font-semibold">Money Claim Online (MCOL)</Link> in England & Wales, <strong>Simple Procedure</strong> in Scotland, and court processes in Northern Ireland.</>}
-          primaryCta={{ label: 'Start Money Claim Wizard', href: moneyClaimWizardLink }}
+          primaryCta={{ label: 'Start Money Claim', href: '/products/money-claim' }}
           secondaryCta={{ label: 'Calculate Arrears + Interest', href: '/tools/rent-arrears-calculator' }}
           variant="pastel"
         >

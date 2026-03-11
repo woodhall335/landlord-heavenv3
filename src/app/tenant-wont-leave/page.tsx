@@ -5,7 +5,6 @@ import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { tenantWontLeaveRelatedLinks } from '@/lib/seo/internal-links';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
@@ -27,13 +26,6 @@ const PAGE_PATH = '/tenant-wont-leave';
 const PAGE_TITLE = "Tenant Won't Leave After Notice";
 const PAGE_TYPE = 'problem' as const;
 const faqs = tenantWontLeaveFAQs;
-
-const wizardLinkNoticeOnly = buildWizardLink({
-  product: 'notice_only',
-  jurisdiction: 'england',
-  src: 'seo_tenant_wont_leave',
-  topic: 'eviction',
-});
 
 export const metadata: Metadata = {
   title: 'Tenant Won\'t Leave After Notice? Solicitor-Style Next Steps',
@@ -94,7 +86,7 @@ export default function TenantWontLeavePage() {
           badgeIcon={<Scale className="w-4 h-4" />}
           title="Tenant Won't Leave After Notice?"
           subtitle={<>Your tenant ignoring your eviction notice is frustrating — but you <strong>must follow the legal process</strong>. Here&apos;s exactly what to do next.</>}
-          primaryCta={{ label: 'Get Court-Ready Notice — £19.99', href: wizardLinkNoticeOnly }}
+          primaryCta={{ label: 'Get Court-Ready Notice — £19.99', href: '/products/notice-only' }}
           secondaryCta={{ label: 'Go to Possession Claim Guide', href: '/possession-claim-guide' }}
           variant="pastel"
         >
@@ -327,7 +319,7 @@ export default function TenantWontLeavePage() {
             <div className="max-w-4xl mx-auto rounded-2xl border border-gray-200 bg-gray-50 p-6">
               <h2 className="text-xl font-bold text-gray-900 mb-3">What should you do next?</h2>
               <div className="grid sm:grid-cols-2 gap-3 text-sm">
-                <Link href={wizardLinkNoticeOnly} className="rounded-lg border border-gray-200 bg-white p-3 hover:border-primary transition-colors">
+                <Link href="/products/notice-only" className="rounded-lg border border-gray-200 bg-white p-3 hover:border-primary transition-colors">
                   Start a compliant eviction notice
                 </Link>
                 <Link href="/possession-claim-guide" className="rounded-lg border border-gray-200 bg-white p-3 hover:border-primary transition-colors">

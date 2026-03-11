@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
-import { EvictionIntentLandingPage } from '@/components/seo/EvictionIntentLandingPage';
-import { INTENT_PAGES, getIntentPageMetadata } from '@/lib/seo/eviction-intent-pages';
+import { HighIntentPageShell } from '@/components/seo/HighIntentPageShell';
+import { PASS2_LONGFORM_PAGES, getPass2Metadata } from '@/lib/seo/pass2-longform-content';
 
-const config = INTENT_PAGES['serve-section-21-notice'];
+const content = PASS2_LONGFORM_PAGES['serve-section-21-notice'];
 
-export const metadata: Metadata = getIntentPageMetadata(config);
+export const metadata: Metadata = getPass2Metadata(content);
 
 export default function Page() {
-  return <EvictionIntentLandingPage config={config} />;
+  return <HighIntentPageShell {...content} />;
 }
