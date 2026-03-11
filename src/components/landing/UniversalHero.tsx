@@ -108,6 +108,8 @@ export function UniversalHero({
   const isDecorativeMedia = mascotDecorativeOnDesktop || mascotDecorativeOnMobile;
   const shouldShowReviewPill = showReviewPill ?? Boolean(trustText);
   const shouldShowUsageCounter = showUsageCounter ?? Boolean(trustText);
+  const trustTextLooksLikeReview = Boolean(trustText && /(★|\breviews?\b|\/5\b|\brated\b)/i.test(trustText));
+  const showTrustDescriptor = Boolean(trustText) && !trustTextLooksLikeReview;
   const isCenter = align === 'center';
   const shouldRenderMedia = !hideMedia && mediaSrc !== null;
 
@@ -158,7 +160,7 @@ export function UniversalHero({
               </div>
             )}
 
-            {shouldShowReviewPill && trustText && (
+            {shouldShowReviewPill && (
               <p className={clsx('mb-3 flex w-full items-center gap-2 text-sm font-semibold text-white lg:hidden', isCenter ? 'justify-center text-center' : 'justify-start text-left')}>
                 <RiCheckLine className="h-5 w-5" aria-hidden="true" />
                 <span>Rated</span>
@@ -171,10 +173,10 @@ export function UniversalHero({
               </p>
             )}
 
-            {shouldShowReviewPill && trustText && (
+            {shouldShowReviewPill && (
               <p className={clsx('hidden w-full max-w-xl flex-wrap items-center gap-x-3 gap-y-1 rounded-full border border-white/80 bg-white/85 px-4 py-2 text-sm font-semibold shadow-sm backdrop-blur-sm lg:flex', isCenter ? 'mx-auto justify-center text-center' : 'justify-start text-left')}>
                 <RiShieldCheckFill className="h-5 w-5 text-[#7c3aed]" aria-hidden="true" />
-                <span>{trustText}</span>
+                {showTrustDescriptor ? <span>{trustText}</span> : null}
                 <span className="text-[#facc15]" aria-hidden="true">
                   ★★★★★
                 </span>

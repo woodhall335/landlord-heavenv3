@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { PRODUCTS } from '@/lib/pricing/products';
 import { cn } from '@/lib/utils';
 import { productLinks } from '@/lib/seo/internal-links';
 import { RiFileList3Line, RiScales3Line, RiMoneyPoundCircleLine, RiFileTextLine } from 'react-icons/ri';
@@ -28,7 +29,7 @@ export function AskHeavenNextStepsCards({ jurisdiction = 'england', className }:
   const cards: CardDefinition[] = [
     {
       title: 'Notice Only Pack',
-      price: '£29.99',
+      price: PRODUCTS.notice_only.displayPrice,
       description:
         'Best if you need to serve or check an eviction notice (Section 21, Section 8, Section 173, or Notice to Leave).',
       ctaText: 'Generate a compliant notice',
@@ -38,7 +39,7 @@ export function AskHeavenNextStepsCards({ jurisdiction = 'england', className }:
     },
     {
       title: 'Complete Eviction Pack',
-      price: '£45.99',
+      price: PRODUCTS.complete_pack.displayPrice,
       detail: '(England)',
       description: "Best if you're going to court and want a full, court-ready eviction bundle.",
       ctaText: 'Prepare your eviction case',
@@ -48,7 +49,7 @@ export function AskHeavenNextStepsCards({ jurisdiction = 'england', className }:
     },
     {
       title: 'Money Claims Pack',
-      price: '£45.99',
+      price: PRODUCTS.money_claim.displayPrice,
       description: 'Best for claiming back rent arrears, damage costs, or unpaid invoices.',
       ctaText: 'Prepare a money claim',
       href: productLinks.moneyClaim.href,

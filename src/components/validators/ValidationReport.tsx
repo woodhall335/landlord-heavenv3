@@ -26,6 +26,7 @@ import {
 } from 'react-icons/ri';
 import { getWizardCta, type Cta } from '@/lib/checkout/cta-mapper';
 import { trackValidatorCtaClick } from '@/lib/analytics';
+import { PRODUCTS } from '@/lib/pricing/products';
 
 interface ValidationIssue {
   code: string;
@@ -492,7 +493,7 @@ export function ValidationReport({
                   href="/wizard?product=money_claim&src=validator_arrears"
                   className="inline-flex items-center gap-1 text-xs font-medium text-blue-700 hover:text-blue-900 mt-2"
                 >
-                  Get Money Claim Pack — £45.99 <RiArrowRightLine className="h-3 w-3" />
+                  Get Money Claim Pack — {PRODUCTS.money_claim.displayPrice} <RiArrowRightLine className="h-3 w-3" />
                 </a>
               </div>
             </div>
