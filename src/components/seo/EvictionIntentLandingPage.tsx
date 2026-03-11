@@ -4,6 +4,7 @@ import { Container } from '@/components/ui';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { StructuredData, breadcrumbSchema, faqPageSchema, articleSchema } from '@/lib/seo/structured-data';
+import { EVICTION_ENTITIES, getAuthorityLinks } from '@/lib/seo/eviction-authority';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import type { IntentPageConfig } from '@/lib/seo/eviction-intent-pages';
@@ -93,6 +94,8 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
   const canonical = `https://landlordheaven.co.uk/${config.slug}`;
   const lastUpdated = config.lastUpdated ?? DEFAULT_UPDATED;
 
+  const authorityLinks = getAuthorityLinks(config.slug);
+
   const webPageSchema = {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
@@ -123,6 +126,10 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
 
   const howToSchema = getHowToSchema(config.slug, canonical);
   const itemListSchema = getItemListSchema(config.slug, canonical);
+  const conciseFaqs = config.faqs.map((faq) => ({
+    ...faq,
+    answer: faq.answer.split('. ')[0].trim().concat(faq.answer.endsWith('.') ? '' : '.'),
+  }));
 
   const tocItems = [
     { href: '#eviction-process-overview', label: 'Eviction process overview' },
@@ -167,7 +174,7 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
       <StructuredData data={webPageSchema} />
       <StructuredData data={serviceSchema} />
       <StructuredData data={articleStructuredData} />
-      <StructuredData data={faqPageSchema(config.faqs)} />
+      <StructuredData data={faqPageSchema(conciseFaqs)} />
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: 'https://landlordheaven.co.uk' },
@@ -216,6 +223,21 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
                 ))}
               </div>
             </div>
+          </div>
+        </Container>
+      </section>
+
+
+      <section className="py-12 bg-white border-y border-[#EDE2FF]">
+        <Container>
+          <div className="mx-auto max-w-6xl rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-6 md:p-8">
+            <h2 className="text-2xl font-bold text-charcoal">Quick answer: the safest next move</h2>
+            <p className="mt-3 text-gray-700">Start with the correct notice route, preserve service evidence, and prepare for a possession claim before deadlines hit. Landlords who align their Section 21 Notice or Section 8 Notice with a court-ready evidence timeline usually avoid expensive restarts.</p>
+            <ol className="mt-4 list-decimal space-y-2 pl-5 text-gray-700">
+              <li>Confirm whether your case is no-fault, breach-based, or rent arrears driven.</li>
+              <li>Serve the right notice and keep service proof usable for court.</li>
+              <li>Progress to possession claim paperwork only when chronology is consistent.</li>
+            </ol>
           </div>
         </Container>
       </section>
@@ -465,6 +487,62 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
               <Link href={primaryHref} className="hero-btn-primary">{config.heroCta}</Link>
               {secondaryHref ? <Link href={secondaryHref} className="hero-btn-secondary">{config.secondaryCta?.label}</Link> : null}
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      <section className="py-14 bg-white">
+        <Container>
+          <div className="mx-auto max-w-6xl grid gap-6 md:grid-cols-2">
+            <article className="rounded-3xl border border-[#E6DBFF] bg-[#F8F4FF] p-6">
+              <h2 className="text-2xl font-bold text-charcoal">Related eviction scenarios landlords face</h2>
+              <p className="mt-3 text-gray-700">Use these deeper guides when your eviction process escalates from notice to Possession Order, Warrant of Possession, and Bailiff Eviction stages.</p>
+              <ul className="mt-4 space-y-2 text-sm text-gray-700">
+                <li>• <Link href="/section-8-grounds-explained" className="text-primary hover:underline">Common Section 8 grounds</Link> for breach and Rent Arrears files.</li>
+                <li>• <Link href="/accelerated-possession-guide" className="text-primary hover:underline">Accelerated Possession</Link> pathway after valid Section 21 service.</li>
+                <li>• <Link href="/possession-order-process" className="text-primary hover:underline">When eviction escalates to court</Link> and possession claim filing.</li>
+              </ul>
+            </article>
+            <article className="rounded-3xl border border-[#E6DBFF] bg-white p-6">
+              <h2 className="text-2xl font-bold text-charcoal">What most landlords do next</h2>
+              <p className="mt-3 text-gray-700">If your tenant situation matches this scenario, most landlords take a staged route: valid notice first, then court continuity, then enforcement support.</p>
+              <div className="mt-4 space-y-2 text-sm">
+                <Link href="/products/notice-only" className="block rounded-xl border border-[#E6DBFF] px-4 py-3 text-primary hover:bg-[#F8F4FF]">Fastest route landlords usually take: start Notice Only</Link>
+                <Link href="/products/complete-pack" className="block rounded-xl border border-[#E6DBFF] px-4 py-3 text-primary hover:bg-[#F8F4FF]">Need court continuity? Move to Complete Pack</Link>
+                <Link href="/products/money-claim" className="block rounded-xl border border-[#E6DBFF] px-4 py-3 text-primary hover:bg-[#F8F4FF]">Recover rent arrears in parallel with Money Claim</Link>
+              </div>
+            </article>
+          </div>
+        </Container>
+      </section>
+
+      {authorityLinks ? (
+        <section className="py-12">
+          <Container>
+            <div className="mx-auto max-w-6xl rounded-2xl border border-[#E6DBFF] bg-white p-6 md:p-8">
+              <h2 className="text-2xl font-bold text-charcoal">Cluster authority links: {authorityLinks.clusterLabel}</h2>
+              <p className="mt-3 text-gray-700">Every guide links to its canonical parent, two supporting guides, one tool, and one product page to strengthen crawl paths and internal authority flow.</p>
+              <div className="mt-4 grid gap-3 md:grid-cols-2 lg:grid-cols-3 text-sm">
+                <Link href={authorityLinks.parent} className="rounded-xl border border-[#E6DBFF] bg-[#F8F4FF] p-3 text-primary hover:underline">Canonical parent: {authorityLinks.parent}</Link>
+                {authorityLinks.supporting.map((href) => (
+                  <Link key={href} href={href} className="rounded-xl border border-[#E6DBFF] bg-[#F8F4FF] p-3 text-primary hover:underline">Supporting page: {href}</Link>
+                ))}
+                <Link href={authorityLinks.tool} className="rounded-xl border border-[#E6DBFF] bg-[#F8F4FF] p-3 text-primary hover:underline">Tool page: {authorityLinks.tool}</Link>
+                <Link href={authorityLinks.product} className="rounded-xl border border-[#E6DBFF] bg-[#F8F4FF] p-3 text-primary hover:underline">Product page: {authorityLinks.product}</Link>
+              </div>
+            </div>
+          </Container>
+        </section>
+      ) : null}
+
+      <section className="py-10 bg-white">
+        <Container>
+          <div className="mx-auto max-w-6xl rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-6">
+            <h2 className="text-2xl font-bold text-charcoal">Entity map across this guide cluster</h2>
+            <p className="mt-3 text-gray-700">This page reinforces the core landlord entities used across high-intent pages, FAQs, and schema to improve topical consistency.</p>
+            <div className="mt-4 grid gap-2 md:grid-cols-3 text-sm text-gray-700">
+              {EVICTION_ENTITIES.map((entity) => <p key={entity} className="rounded-lg bg-white border border-[#E6DBFF] px-3 py-2">{entity}</p>)}
             </div>
           </div>
         </Container>
