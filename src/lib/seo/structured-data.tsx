@@ -361,9 +361,9 @@ export function softwareApplicationSchema() {
   const prices = [
     PRODUCTS.ast_standard.price,  // £9.99 (lowest)
     PRODUCTS.ast_premium.price,   // £19.99
-    PRODUCTS.notice_only.price,   // £29.99
-    PRODUCTS.money_claim.price,   // £45.99
-    PRODUCTS.complete_pack.price, // £69.99 (highest)
+    PRODUCTS.notice_only.price,   // £19.99
+    PRODUCTS.money_claim.price,   // £34.99
+    PRODUCTS.complete_pack.price, // £49.99 (highest)
   ];
   const lowPrice = Math.min(...prices).toFixed(2);
   const highPrice = Math.max(...prices).toFixed(2);

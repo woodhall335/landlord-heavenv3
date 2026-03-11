@@ -687,13 +687,13 @@ export default function Section8ValidatorPage() {
                   href={wizardLinkNoticeOnly}
                   className="inline-flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
                 >
-                  Notice Only Pack - £29.99
+                  Notice Only Pack - £19.99
                 </Link>
                 <Link
                   href={wizardLinkCompletePack}
                   className="inline-flex items-center px-4 py-2 border border-purple-600 text-purple-700 rounded-lg hover:bg-purple-50 transition-colors"
                 >
-                  Complete Eviction Pack - £69.99
+                  Complete Eviction Pack - £49.99
                 </Link>
               </div>
             </div>

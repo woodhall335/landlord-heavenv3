@@ -140,9 +140,9 @@ describe('Checkout Attribution', () => {
         case_id: mockCaseId,
         product_type: 'notice_only',
         product_name: 'Notice Only Pack',
-        amount: 29.99,
+        amount: 19.99,
         currency: 'GBP',
-        total_amount: 29.99,
+        total_amount: 19.99,
         payment_status: 'pending',
         fulfillment_status: 'pending',
         // Attribution fields
@@ -174,7 +174,7 @@ describe('Checkout Attribution', () => {
         case_id: mockCaseId,
         product_type: 'notice_only',
         product_name: 'Notice Only Pack',
-        amount: 29.99,
+        amount: 19.99,
         currency: 'GBP',
         // Attribution fields all null
         landing_path: null,

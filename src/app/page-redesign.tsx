@@ -159,7 +159,7 @@ export default function Home() {
               href="/products/notice-only"
               title="Eviction Notices"
               description="Section 8, Section 21, and devolved equivalents with service instructions."
-              price="£29.99"
+              price="£19.99"
               solicitorPrice="£200-300"
               icon={<RiFileTextLine className="w-7 h-7" />}
             />
@@ -167,7 +167,7 @@ export default function Home() {
               href="/products/complete-pack"
               title="Complete Eviction Pack"
               description="Full bundle from notice to possession order with court forms and guidance."
-              price="£45.99"
+              price="£34.99"
               solicitorPrice="£1,500-2,500"
               icon={<RiScales3Line className="w-7 h-7" />}
               popular
@@ -176,7 +176,7 @@ export default function Home() {
               href="/products/money-claim"
               title="Money Claim Pack"
               description="Rent arrears claims with evidence checklists and particulars of claim."
-              price="£45.99"
+              price="£34.99"
               solicitorPrice="£400-600"
               icon={<RiMoneyPoundCircleLine className="w-7 h-7" />}
             />
@@ -282,7 +282,7 @@ export default function Home() {
           },
           {
             question: "What's included in each pack?",
-            answer: "Notice Only (£29.99): The appropriate eviction notice for your situation plus service instructions. Complete Pack (£69.99): Everything from notice through to court claim forms, witness statements, and filing guidance. Money Claim (£45.99): Pre-action letters, claim forms, evidence templates, and enforcement guidance."
+            answer: "Notice Only (£19.99): The appropriate eviction notice for your situation plus service instructions. Complete Pack (£49.99): Everything from notice through to court claim forms, witness statements, and filing guidance. Money Claim (£34.99): Pre-action letters, claim forms, evidence templates, and enforcement guidance."
           },
         ]}
         showContactCTA={true}

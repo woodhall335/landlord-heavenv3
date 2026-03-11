@@ -258,15 +258,15 @@ function buildUpsell(product: string | null, facts: Record<string, any>) {
   if (product === 'notice_only') {
     return {
       product: 'eviction_pack',
-      price: 69.99,
-      reason: applyPricingMessage(69.99, 'Upgrade to the Complete Eviction Pack for court-ready documents'),
+      price: 49.99,
+      reason: applyPricingMessage(49.99, 'Upgrade to the Complete Eviction Pack for court-ready documents'),
     };
   }
   if (product === 'money_claim') {
     return {
       product: 'money_claim_pack',
-      price: 45.99,
-      reason: applyPricingMessage(45.99, 'Upgrade to the Money Claim Pack for court-ready filing'),
+      price: 34.99,
+      reason: applyPricingMessage(34.99, 'Upgrade to the Money Claim Pack for court-ready filing'),
     };
   }
   if (product === 'tenancy_agreement') {

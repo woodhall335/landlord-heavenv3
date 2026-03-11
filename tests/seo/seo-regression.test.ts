@@ -113,7 +113,7 @@ describe('SEO Regression Tests', () => {
       const schema = softwareApplicationSchema();
       const offers = schema.offers as { lowPrice: string; highPrice: string };
 
-      // Verify prices come from PRODUCTS (£9.99 - £199.99)
+      // Verify prices come from PRODUCTS (£9.99 - £49.99)
       expect(parseFloat(offers.lowPrice)).toBe(PRODUCTS.ast_standard.price);
       expect(parseFloat(offers.highPrice)).toBe(
         Math.max(PRODUCTS.complete_pack.price, PRODUCTS.money_claim.price)
@@ -129,7 +129,7 @@ describe('SEO Regression Tests', () => {
       );
       const content = fs.readFileSync(blogCTAPath, 'utf-8');
 
-      // Should NOT contain hardcoded prices like "£39.99" or "£199.99"
+      // Should NOT contain hardcoded prices like "£39.99" or "£49.99"
       // but SHOULD use PRODUCTS.notice_only.displayPrice etc.
       const hardcodedPricePattern = /["']£\d+\.\d{2}["']/g;
       const matches = content.match(hardcodedPricePattern);

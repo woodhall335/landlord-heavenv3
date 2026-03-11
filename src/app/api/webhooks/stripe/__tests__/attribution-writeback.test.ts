@@ -32,7 +32,7 @@ const createMockOrder = (existingAttribution: Record<string, string | null> = {}
   user_id: 'user-123',
   case_id: 'case-789',
   product_type: 'notice_only',
-  amount: 29.99,
+  amount: 19.99,
   payment_status: 'pending',
   fulfillment_status: 'pending',
   landing_path: existingAttribution.landing_path || null,
@@ -311,7 +311,7 @@ describe('Webhook Attribution Writeback', () => {
         case_id: 'case-789',
         product_type: 'notice_only',
         product_name: 'Notice Only Pack',
-        amount: 29.99,
+        amount: 19.99,
         currency: 'GBP',
         landing_path: '/how-to-evict-tenant',
         utm_source: 'google',
@@ -351,7 +351,7 @@ describe('Webhook Attribution Writeback', () => {
 
       expect(ga4PurchaseParams.clientId).toBe('1234567890.1705226400');
       expect(ga4PurchaseParams.transactionId).toBe('order-456');
-      expect(ga4PurchaseParams.value).toBe(29.99);
+      expect(ga4PurchaseParams.value).toBe(19.99);
       expect(ga4PurchaseParams.utm_source).toBe('google');
       expect(ga4PurchaseParams.utm_medium).toBe('cpc');
       expect(ga4PurchaseParams.utm_campaign).toBe('eviction_jan_2026');
@@ -374,7 +374,7 @@ describe('Webhook Attribution Writeback', () => {
       const order = {
         id: 'order-456',
         product_type: 'notice_only',
-        amount: 29.99,
+        amount: 19.99,
         currency: 'GBP',
         landing_path: null,
         utm_source: null,

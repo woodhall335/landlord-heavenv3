@@ -460,7 +460,7 @@ export default function MoneyClaimBathroomDamagePage() {
                 href="/products/money-claim?reason=property_damage&src=seo_money_claim_bathroom_damage&topic=debt"
                 className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
               >
-                Start Your Claim — £45.99
+                Start Your Claim — £34.99
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <p className="text-sm text-gray-500 mt-3">

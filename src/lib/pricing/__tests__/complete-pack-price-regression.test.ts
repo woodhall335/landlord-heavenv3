@@ -87,7 +87,7 @@ describe('Pricing regression checks', () => {
   it('has no stale pricing copy on user-facing paths', () => {
     const staleHits: string[] = [];
     const staleRules: Array<{ label: string; pattern: RegExp }> = [
-      { label: 'Complete Pack £45.99', pattern: /Complete(?: Eviction)? Pack[^\n£]{0,120}£45\.99/i },
+      { label: 'Complete Pack £34.99', pattern: /Complete(?: Eviction)? Pack[^\n£]{0,120}£45\.99/i },
       { label: 'Notice £39.99', pattern: /(Section\s*21|Section\s*8|Notice(?:\s+Only)?|Eviction Notice)[^\n£]{0,120}£39\.99/i },
       { label: 'Premium tenancy £9.99', pattern: /Premium\s+(?:AST|PRT|Contract)[^\n£]{0,120}£9\.99/i },
       { label: 'Tenancy range £9.99-£9.99', pattern: /£9\.99\s*-\s*£9\.99/i },

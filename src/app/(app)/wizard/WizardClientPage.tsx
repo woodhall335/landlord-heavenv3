@@ -124,14 +124,14 @@ const documentOptions: DocumentOption[] = [
     title: 'Eviction Notices',
     description: 'Jurisdiction-specific notice bundles: Section 21/8 (England), Section 173 (Wales), Notice to Leave (Scotland)',
     icon: '📄',
-    price: 'From £29.99',
+    price: 'From £19.99',
   },
   {
     type: 'complete_pack',
     title: 'Complete Eviction Pack',
     description: 'England-only case bundle with N5 / N5B / N119 routes, witness statement draft, and filing guide',
     icon: '⚖️',
-    price: '£69.99',
+    price: '£49.99',
     regionBadge: 'England only',
   },
   {
@@ -139,7 +139,7 @@ const documentOptions: DocumentOption[] = [
     title: 'Money Claims',
     description: 'England-only money claim bundle for rent arrears and tenancy debts (County Court / MCOL-ready)',
     icon: '💰',
-    price: '£45.99',
+    price: '£34.99',
     regionBadge: 'England only',
   },
   {
