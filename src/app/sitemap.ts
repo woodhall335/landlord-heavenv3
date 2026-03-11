@@ -181,6 +181,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/claim-rent-arrears-tenant', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/how-to-sue-tenant-for-unpaid-rent', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/mcol-money-claim-online', priority: 0.8, changeFrequency: 'weekly' as const },
+    // Explicitly pin all remaining eviction intent pages (no runtime auto-discovery dependency)
+    { path: '/section-21-notice-generator', priority: 0.9, changeFrequency: 'weekly' as const },
+    { path: '/section-8-notice-generator', priority: 0.9, changeFrequency: 'weekly' as const },
+    { path: '/section-21-vs-section-8', priority: 0.85, changeFrequency: 'weekly' as const },
+    { path: '/section-21-court-pack', priority: 0.85, changeFrequency: 'weekly' as const },
+    { path: '/section-8-court-pack', priority: 0.85, changeFrequency: 'weekly' as const },
+    { path: '/eviction-court-forms-england', priority: 0.85, changeFrequency: 'weekly' as const },
+    { path: '/complete-eviction-pack-england', priority: 0.9, changeFrequency: 'weekly' as const },
+    { path: '/section-21-checklist', priority: 0.85, changeFrequency: 'weekly' as const },
+    { path: '/n5b-possession-claim-form', priority: 0.85, changeFrequency: 'weekly' as const },
+    { path: '/n5-n119-possession-claim', priority: 0.85, changeFrequency: 'weekly' as const },
+    { path: '/eviction-timeline-england', priority: 0.85, changeFrequency: 'weekly' as const },
   ];
 
   // Tool pages - Free tools for SEO traffic
