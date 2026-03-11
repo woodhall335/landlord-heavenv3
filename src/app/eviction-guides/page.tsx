@@ -11,10 +11,42 @@ const canonical = getCanonicalUrl('/eviction-guides');
 
 const CORE_EVICTION_GUIDES = [
   { href: '/how-to-evict-a-tenant-uk', label: 'How to Evict a Tenant in the UK' },
+  { href: '/eviction-notice-england', label: 'Eviction Notice England' },
+  { href: '/eviction-process-england', label: 'Eviction Process England' },
+  { href: '/section-21-vs-section-8', label: 'Section 21 vs Section 8' },
+  { href: '/how-long-does-eviction-take', label: 'How Long Does Eviction Take' },
+];
+
+const LANDLORD_PROBLEMS = [
+  { href: '/tenant-not-paying-rent', label: 'Tenant Not Paying Rent' },
+  { href: '/tenant-refusing-access', label: 'Tenant Refusing Access' },
+  { href: '/tenant-anti-social-behaviour', label: 'Tenant Anti-Social Behaviour' },
+  { href: '/tenant-damaging-property', label: 'Tenant Damaging Property' },
+  { href: '/tenant-refuses-to-leave-after-notice', label: 'Tenant Refuses to Leave After Notice' },
+];
+
+const NOTICE_GUIDES = [
   { href: '/section-21-notice-guide', label: 'Section 21 Notice Guide' },
   { href: '/section-8-notice-guide', label: 'Section 8 Notice Guide' },
-  { href: '/rent-arrears-landlord-guide', label: 'Rent Arrears Landlord Guide' },
-  { href: '/eviction-process-england', label: 'Eviction Process England' },
+  { href: '/eviction-notice-template', label: 'Eviction Notice Template' },
+  { href: '/serve-section-21-notice', label: 'How to Serve Section 21 Notice' },
+  { href: '/serve-section-8-notice', label: 'How to Serve Section 8 Notice' },
+];
+
+const COURT_PROCESS = [
+  { href: '/eviction-court-forms-england', label: 'Eviction Court Forms England' },
+  { href: '/n5b-possession-claim-form', label: 'N5B Possession Claim Form' },
+  { href: '/possession-order-process', label: 'Possession Order Process' },
+  { href: '/warrant-of-possession-guide', label: 'Warrant of Possession Guide' },
+  { href: '/court-bailiff-eviction-guide', label: 'Court Bailiff Eviction Guide' },
+];
+
+const TOOLS = [
+  { href: '/tools/free-section-21-notice-generator', label: 'Free Section 21 Notice Generator' },
+  { href: '/tools/free-section-8-notice-generator', label: 'Free Section 8 Notice Generator' },
+  { href: '/tools/rent-arrears-calculator', label: 'Rent Arrears Calculator' },
+  { href: '/tools/free-rent-demand-letter', label: 'Free Rent Demand Letter Tool' },
+  { href: '/tools/validators/section-21', label: 'Section 21 Validity Checker' },
 ];
 
 export const metadata: Metadata = {
@@ -84,6 +116,55 @@ export default function EvictionGuidesPage() {
                 ))}
               </div>
             </article>
+
+            <article className="rounded-2xl border border-[#CAB6FF] bg-[#F8F4FF] p-6 md:p-8">
+              <h2 className="text-2xl font-semibold text-charcoal">Landlord problems</h2>
+              <p className="mt-2 text-gray-700">Find focused problem pages for common dispute triggers before they escalate into court delay.</p>
+              <div className="mt-4 grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+                {LANDLORD_PROBLEMS.map((guide) => (
+                  <Link key={guide.href} href={guide.href} className="rounded-xl border border-[#CDBBFF] bg-white p-4 text-primary font-medium hover:underline">
+                    {guide.label}
+                  </Link>
+                ))}
+              </div>
+            </article>
+
+            <article className="rounded-2xl border border-[#CAB6FF] bg-[#F8F4FF] p-6 md:p-8">
+              <h2 className="text-2xl font-semibold text-charcoal">Notice guides</h2>
+              <p className="mt-2 text-gray-700">Choose the right notice workflow and service method with practical route-specific guidance.</p>
+              <div className="mt-4 grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+                {NOTICE_GUIDES.map((guide) => (
+                  <Link key={guide.href} href={guide.href} className="rounded-xl border border-[#CDBBFF] bg-white p-4 text-primary font-medium hover:underline">
+                    {guide.label}
+                  </Link>
+                ))}
+              </div>
+            </article>
+
+            <article className="rounded-2xl border border-[#CAB6FF] bg-[#F8F4FF] p-6 md:p-8">
+              <h2 className="text-2xl font-semibold text-charcoal">Court process</h2>
+              <p className="mt-2 text-gray-700">Move from valid notice to claim, order, and enforcement using the key court-stage pages.</p>
+              <div className="mt-4 grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+                {COURT_PROCESS.map((guide) => (
+                  <Link key={guide.href} href={guide.href} className="rounded-xl border border-[#CDBBFF] bg-white p-4 text-primary font-medium hover:underline">
+                    {guide.label}
+                  </Link>
+                ))}
+              </div>
+            </article>
+
+            <article className="rounded-2xl border border-[#CAB6FF] bg-[#F8F4FF] p-6 md:p-8">
+              <h2 className="text-2xl font-semibold text-charcoal">Tools</h2>
+              <p className="mt-2 text-gray-700">Use free landlord tools to reduce drafting errors and improve notice-to-court continuity.</p>
+              <div className="mt-4 grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+                {TOOLS.map((guide) => (
+                  <Link key={guide.href} href={guide.href} className="rounded-xl border border-[#CDBBFF] bg-white p-4 text-primary font-medium hover:underline">
+                    {guide.label}
+                  </Link>
+                ))}
+              </div>
+            </article>
+
             {EVICTION_CLUSTERS.map((cluster) => (
               <article key={cluster.key} className="rounded-2xl border border-[#E6DBFF] bg-white p-6 md:p-8">
                 <h2 className="text-2xl font-semibold text-charcoal">{cluster.label}</h2>

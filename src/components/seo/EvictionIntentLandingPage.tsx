@@ -39,22 +39,19 @@ const LANDLORD_SCENARIO_IMAGE_MAP: Record<string, { src: string; alt: string }> 
   },
 };
 
-function getHowToSchema(slug: string, canonical: string) {
-  if (slug !== 'how-to-evict-a-tenant-england') {
-    return null;
-  }
-
+function getHowToSchema(config: IntentPageConfig, canonical: string) {
   return {
     '@context': 'https://schema.org',
     '@type': 'HowTo',
-    name: 'How to evict a tenant in England',
+    name: `${config.h1}: step-by-step landlord process`,
+    description: config.description,
     url: canonical,
     step: [
-      { '@type': 'HowToStep', name: 'Serve eviction notice' },
-      { '@type': 'HowToStep', name: 'Wait notice period' },
-      { '@type': 'HowToStep', name: 'File possession claim' },
-      { '@type': 'HowToStep', name: 'Court hearing or determination' },
-      { '@type': 'HowToStep', name: 'Enforcement if required' },
+      { '@type': 'HowToStep', name: 'Confirm route based on tenancy facts' },
+      { '@type': 'HowToStep', name: 'Serve the correct notice and preserve service proof' },
+      { '@type': 'HowToStep', name: 'Wait the lawful notice period and track tenant response' },
+      { '@type': 'HowToStep', name: 'Prepare and submit possession claim paperwork' },
+      { '@type': 'HowToStep', name: 'Move to enforcement if possession is still refused' },
     ],
   };
 }
@@ -124,7 +121,7 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
     url: canonical,
   };
 
-  const howToSchema = getHowToSchema(config.slug, canonical);
+  const howToSchema = getHowToSchema(config, canonical);
   const itemListSchema = getItemListSchema(config.slug, canonical);
   const conciseFaqs = config.faqs.map((faq) => ({
     ...faq,
@@ -231,12 +228,18 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
       <section className="py-12 bg-white border-y border-[#EDE2FF]">
         <Container>
           <div className="mx-auto max-w-6xl rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-6 md:p-8">
-            <h2 className="text-2xl font-bold text-charcoal">Quick answer: the safest next move</h2>
-            <p className="mt-3 text-gray-700">Start with the correct notice route, preserve service evidence, and prepare for a possession claim before deadlines hit. Landlords who align their Section 21 Notice or Section 8 Notice with a court-ready evidence timeline usually avoid expensive restarts.</p>
+            <h2 className="text-2xl font-bold text-charcoal">Quick answer</h2>
+            <p className="mt-3 text-sm font-semibold uppercase tracking-wide text-primary">Question</p>
+            <p className="mt-1 text-lg font-semibold text-charcoal">{`What is the fastest safe way for landlords to handle ${config.keyword}?`}</p>
+            <p className="mt-3 text-sm font-semibold uppercase tracking-wide text-primary">Short answer</p>
+            <p className="mt-1 text-gray-700">Landlords usually get better outcomes by confirming the right route first, serving a valid notice with provable service, and preparing court-ready chronology before deadlines. This reduces avoidable resets, protects evidence continuity, and keeps possession progression moving from notice through claim and enforcement when tenants still refuse to leave.</p>
+            <p className="mt-3 text-sm font-semibold uppercase tracking-wide text-primary">Numbered steps</p>
             <ol className="mt-4 list-decimal space-y-2 pl-5 text-gray-700">
               <li>Confirm whether your case is no-fault, breach-based, or rent arrears driven.</li>
               <li>Serve the right notice and keep service proof usable for court.</li>
+              <li>Wait for the notice period and log all tenant responses.</li>
               <li>Progress to possession claim paperwork only when chronology is consistent.</li>
+              <li>Use warrant or bailiff enforcement if the tenant still refuses to leave.</li>
             </ol>
           </div>
         </Container>
@@ -261,6 +264,9 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
                       className="scenario-image mb-4 mt-3 h-auto w-full rounded-lg"
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 45vw, 400px"
                     />
+                  ) : null}
+                  {LANDLORD_SCENARIO_IMAGE_MAP[scenario] ? (
+                    <p className="mt-2 text-xs text-gray-500">Illustration: {LANDLORD_SCENARIO_IMAGE_MAP[scenario].alt}.</p>
                   ) : null}
                   <p>{scenario}</p>
                 </article>
