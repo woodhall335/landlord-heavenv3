@@ -19,7 +19,6 @@ export const metadata: Metadata = {
 const canonical = 'https://landlordheaven.co.uk/how-to-evict-a-tenant-uk';
 
 const jumpLinks = [
-  { href: '#quick-answer', label: 'Quick answer' },
   { href: '#section-21-vs-section-8', label: 'Section 21 vs Section 8' },
   { href: '#step-by-step-eviction-process', label: 'Step-by-step eviction process' },
   { href: '#eviction-timeline-uk', label: 'Eviction timeline UK' },
@@ -39,26 +38,28 @@ const faqs: FAQItem[] = [
   },
   {
     question: 'How long does eviction take in the UK?',
-    answer: 'Most cases take around 3 to 6 months, but complex disputes, court listing times, and bailiff availability can extend the eviction timeline UK.',
+    answer:
+      'Most landlord cases take about 3 to 6 months from notice to enforcement. Straightforward claims can move faster, while defended cases, local court backlogs, and bailiff waiting times can add several weeks.',
   },
   {
     question: 'Can landlords evict tenants for rent arrears?',
-    answer: 'Yes. Rent arrears eviction UK cases are usually brought under section 8 eviction, supported by a clear arrears schedule and payment evidence.',
+    answer:
+      'Yes. Landlords usually use a section 8 eviction route for rent arrears and rely on clear evidence such as rent schedules, bank statements, and the tenancy agreement. Keep the arrears total updated right up to the hearing, because late or partial payments can affect which grounds apply.',
   },
   {
     question: 'Is Section 21 being abolished?',
     answer:
-      'Reforms have been proposed, but section 21 eviction is still currently in force in England until legislation changes are enacted.',
+      'The law has been proposed for reform, but section 21 eviction is still currently available in England unless and until new legislation is brought into force. Landlords should check the latest position before serving notice so they use the correct route.',
   },
   {
     question: 'What is a possession order UK landlords apply for?',
     answer:
-      'A possession order UK landlords apply for is a county court order setting the date the tenant must leave; if they do not, bailiff enforcement is required.',
+      'A possession order UK landlords apply for is a county court order that sets the date a tenant must leave the property. If the tenant stays after that date, the landlord must apply for enforcement and arrange a bailiff eviction UK appointment.',
   },
   {
     question: 'What makes an eviction notice UK invalid?',
     answer:
-      'Common reasons include the wrong form, invalid dates, missing compliance records, or no reliable proof that the notice was properly served.',
+      'Common issues include using the wrong form, giving the wrong notice dates, or failing to meet key compliance requirements. A notice can also fail if you cannot prove valid service, so keep clear evidence of when and how it was delivered.',
   },
 ];
 
@@ -97,7 +98,7 @@ export default function HowToEvictTenantUkPage() {
         showTrustPositioningBar
       >
         <p className="mt-6 text-sm text-white/90 md:text-base">
-          Understand the legal eviction process UK landlords follow, from choosing the right notice to applying for a possession order and, where needed, arranging bailiff enforcement.
+          Get practical, step-by-step support from route validation through document preparation, compliance checks, and jurisdiction-specific workflows, so you can move forward with confidence.
         </p>
       </UniversalHero>
 
@@ -162,14 +163,14 @@ export default function HowToEvictTenantUkPage() {
                     </tr>
                     <tr className="border-t border-[#E6DBFF] text-gray-700">
                       <td className="px-4 py-3">Section 8 eviction</td>
-                      <td className="px-4 py-3">Tenant breach, including rent arrears eviction UK cases</td>
+                      <td className="px-4 py-3">Tenant breach, including cases involving rent arrears</td>
                       <td className="px-4 py-3">Form 3, with notice period based on legal grounds</td>
                       <td className="px-4 py-3">Standard possession claim with hearing in most cases</td>
                     </tr>
                   </tbody>
                 </table>
               </div>
-              <p className="mt-4 text-gray-700 leading-7">In practice, the right route depends on your evidence and objective. If your paperwork is fully compliant and you only need possession, section 21 eviction can be more straightforward. If you need to rely on breach grounds such as rent arrears eviction UK cases, section 8 eviction is usually the stronger route.</p>
+              <p className="mt-4 text-gray-700 leading-7">Section 21 is usually used when you want possession at the right tenancy stage and your compliance paperwork is in order. Section 8 is usually used when you need to prove a breach, such as rent arrears, anti-social behaviour, or other tenancy failures. Choosing the right route early helps you avoid invalid notices, reduce delay, and prepare the correct court file from the start.</p>
             </article>
 
             <article id="step-by-step-eviction-process" className="rounded-2xl border border-[#E6DBFF] bg-[#FCFAFF] p-6 md:p-8">
@@ -194,13 +195,35 @@ export default function HowToEvictTenantUkPage() {
 
             <article id="eviction-timeline-uk" className="rounded-2xl border border-[#E6DBFF] bg-[#FCFAFF] p-6 md:p-8">
               <h2 className="text-2xl font-semibold text-[#2a2161]">Eviction Timeline UK</h2>
-              <ul className="mt-4 list-disc space-y-2 pl-5 text-gray-700">
-                <li>Notice period: 2 weeks to 2 months</li>
-                <li>Court processing: 6 to 10 weeks</li>
-                <li>Possession order: around 14 days</li>
-                <li>Bailiff enforcement: 2 to 6 weeks</li>
-              </ul>
-              <p className="mt-4 text-gray-700">Most cases take around 3 to 6 months, though local court delays can extend this.</p>
+              <div className="mt-4 overflow-x-auto rounded-xl border border-[#E6DBFF] bg-white">
+                <table className="w-full border-collapse text-sm">
+                  <thead className="bg-[#F8F4FF] text-[#2a2161]">
+                    <tr>
+                      <th className="px-4 py-3 text-left font-semibold">Stage</th>
+                      <th className="px-4 py-3 text-left font-semibold">Typical Time</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="border-t border-[#E6DBFF] text-gray-700">
+                      <td className="px-4 py-3">Notice period</td>
+                      <td className="px-4 py-3">2 weeks to 2 months</td>
+                    </tr>
+                    <tr className="border-t border-[#E6DBFF] text-gray-700">
+                      <td className="px-4 py-3">Court processing</td>
+                      <td className="px-4 py-3">6 to 10 weeks</td>
+                    </tr>
+                    <tr className="border-t border-[#E6DBFF] text-gray-700">
+                      <td className="px-4 py-3">Possession order</td>
+                      <td className="px-4 py-3">Around 14 days</td>
+                    </tr>
+                    <tr className="border-t border-[#E6DBFF] text-gray-700">
+                      <td className="px-4 py-3">Bailiff enforcement</td>
+                      <td className="px-4 py-3">2 to 6 weeks</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p className="mt-4 text-gray-700">Local court listing and bailiff availability can extend the overall eviction timeline UK.</p>
             </article>
 
             <article id="documents-landlords-should-prepare" className="rounded-2xl border border-[#E6DBFF] bg-[#FCFAFF] p-6 md:p-8">
@@ -258,15 +281,16 @@ export default function HowToEvictTenantUkPage() {
 
             <article id="rent-arrears-eviction-uk" className="rounded-2xl border border-[#E6DBFF] bg-[#FCFAFF] p-6 md:p-8">
               <h2 className="text-2xl font-semibold text-[#2a2161]">How to Evict a Tenant for Rent Arrears in the UK</h2>
-              <p className="mt-4 text-gray-700 leading-7">Landlords usually use section 8 eviction for rent arrears. Build a dated arrears schedule, align it with tenancy terms, and prepare bank and ledger evidence before the hearing.</p>
-              <p className="mt-4 text-gray-700 leading-7">For stronger possession order UK outcomes, present mandatory and discretionary grounds where appropriate and keep records current if partial payments are made.</p>
+              <p className="mt-4 text-gray-700 leading-7">Landlords usually rely on section 8 eviction when arrears are the main reason for possession. Start with a clear, dated arrears schedule and cross-check every figure against your tenancy terms and payment records.</p>
+              <p className="mt-4 text-gray-700 leading-7">Evidence quality matters. Courts expect reliable ledgers, bank statements, and a clean timeline showing what was due, what was paid, and what remains outstanding.</p>
+              <p className="mt-4 text-gray-700 leading-7">Update the arrears position right before the hearing, because partial payments can change the grounds available and affect the outcome of a rent arrears eviction UK claim.</p>
             </article>
 
             <article id="what-happens-after-possession-order" className="rounded-2xl border border-[#E6DBFF] bg-[#FCFAFF] p-6 md:p-8">
               <h2 className="text-2xl font-semibold text-[#2a2161]">What Happens After a Possession Order</h2>
-              <p className="mt-4 text-gray-700 leading-7">A possession order UK judgment normally gives a possession date by which the tenant must leave, often within 14 days unless the court allows longer due to hardship.</p>
-              <p className="mt-4 text-gray-700 leading-7">If the possession date passes and the tenant stays, landlords must apply for a warrant of possession so county court bailiffs (or an authorised High Court route where permitted) can enforce the order.</p>
-              <p className="mt-4 text-gray-700 leading-7">Enforcement appointments are not immediate in many areas. Bailiff eviction UK waiting times can add several weeks, which is why this step is a common source of delay in the wider eviction timeline UK.</p>
+              <p className="mt-4 text-gray-700 leading-7">A possession order UK judgment sets a possession date by which the tenant must leave. In many cases this is around 14 days, although the court can allow longer in limited hardship situations.</p>
+              <p className="mt-4 text-gray-700 leading-7">If the tenant remains after that date, the order does not enforce itself. Landlords must apply for enforcement, usually by requesting a warrant of possession for county court bailiffs (or an authorised High Court route where permitted).</p>
+              <p className="mt-4 text-gray-700 leading-7">Bailiff eviction UK appointments can take time in busy areas, so this stage often adds delay even after the court has granted possession.</p>
             </article>
           </div>
         </Container>
