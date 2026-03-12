@@ -38,6 +38,7 @@ import { getBlogImagesForPost, getBlogImagesForPostThumb } from '@/lib/blog/imag
 import { getBlogSeoConfig } from '@/lib/blog/seo';
 import { BLOG_PRODUCT_ROUTES, getBlogProductCta } from '@/lib/blog/product-cta-map';
 import { getPostsForTopicHub, getTopicHubConfig, getValidTopicHubs } from '@/lib/blog/topic-hubs';
+import { getImagePlaceholderBlocks, getIntentRoutedLinks, getTop30QuickAnswer, getTop30Rank, getTop30SupplementalFaqs, getUpgradedPostVariant, isTop30UpgradedPost } from '@/lib/blog/top30-upgrades';
 import type { StageEstimate } from '@/lib/journey/state';
 import type { CSSProperties } from 'react';
 
@@ -512,12 +513,13 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
 
 
   // Otherwise, it's a blog post
-  const post = getBlogPost(slug);
+  const basePost = getBlogPost(slug);
 
-  if (!post) {
+  if (!basePost) {
     return { title: 'Post Not Found' };
   }
 
+  const post = getUpgradedPostVariant(basePost);
   const postRegion = getPostRegion(slug);
   const seoConfig = getBlogSeoConfig(post, postRegion);
   const manifestImages = getBlogImagesForPost({
@@ -598,7 +600,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
 
   const topicHub = getTopicHubConfig(slug);
   if (topicHub && isValidTopicHub(slug)) {
-    const posts = getPostsForTopicHub(blogPosts, topicHub.slug).slice(0, 36);
+    const posts = getPostsForTopicHub(blogPosts, topicHub.slug).sort((a, b) => getTop30Rank(a.slug) - getTop30Rank(b.slug)).slice(0, 36);
     const postsForDisplay = posts.map((post) => ({
       slug: post.slug,
       title: post.title,
@@ -649,11 +651,13 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
   }
 
   // Otherwise, it's a blog post
-  const post = getBlogPost(slug);
+  const basePost = getBlogPost(slug);
 
-  if (!post) {
+  if (!basePost) {
     notFound();
   }
+
+  const post = getUpgradedPostVariant(basePost);
 
   const relatedGuides = getRelatedGuides(post);
   const complianceTopic = getComplianceTopicForPost(slug);
@@ -673,9 +677,14 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
   });
   const heroSrc = manifestImages.hero || post.heroImage;
   const productCta = getBlogProductCta(post);
-  const sanitizedFaqs = (post.faqs ?? [])
+  const resolvedFaqs = [...(post.faqs ?? []), ...getTop30SupplementalFaqs(post)];
+  const sanitizedFaqs = resolvedFaqs
     .filter((faq) => faq.question.trim().length > 0 && faq.answer.trim().length > 0)
     .filter((faq, index, arr) => arr.findIndex((candidate) => candidate.question.trim().toLowerCase() === faq.question.trim().toLowerCase()) === index);
+
+  const quickAnswer = getTop30QuickAnswer(post);
+  const intentLinks = getIntentRoutedLinks(post.slug);
+  const imagePlaceholders = getImagePlaceholderBlocks(post.slug);
 
   const articleSchema = {
     '@context': 'https://schema.org',
@@ -936,6 +945,33 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
 
               <BlogInlineProductCard cta={productCta} postSlug={slug} category={post.category} />
 
+              {quickAnswer && (
+                <section className="mt-8 rounded-2xl border border-[#e9dcff] bg-white p-5 shadow-sm md:p-6" aria-label="Quick answer">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-[#692ed4]">Quick answer</p>
+                  <h2 className="mt-2 text-xl font-bold text-gray-900">{quickAnswer.question}</h2>
+                  <p className="mt-3 text-sm text-gray-700">{quickAnswer.answer}</p>
+                  <ol className="mt-4 list-decimal space-y-2 pl-5 text-sm text-gray-700">
+                    {quickAnswer.steps.map((step) => (
+                      <li key={step}>{step}</li>
+                    ))}
+                  </ol>
+                </section>
+              )}
+
+              {isTop30UpgradedPost(post.slug) && (
+                <section className="mt-8 rounded-2xl border border-[#e9dcff] bg-[#f8f1ff] p-5 shadow-sm md:p-6" aria-label="Recommended next routes">
+                  <h2 className="text-xl font-bold text-gray-900">Choose your next legal step</h2>
+                  <p className="mt-2 text-sm text-gray-700">Use the route below that matches your case stage to avoid dead ends and procedural delays.</p>
+                  <ul className="mt-4 space-y-2 text-sm">
+                    {intentLinks.map((link) => (
+                      <li key={link.href}>
+                        <Link href={link.href} className="font-medium text-primary hover:underline">{link.label}</Link>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              )}
+
               <BlogCtaProvider value={{ cta: productCta, postSlug: slug, category: post.category }}>
                 <BlogProse>
                   {post.content}
@@ -957,6 +993,20 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
                   ))}
                 </ul>
               </section>
+
+              {imagePlaceholders.length > 0 && (
+                <section className="mt-12 rounded-2xl border border-dashed border-[#bba0ee] bg-white p-5 md:p-6" aria-label="Image and diagram placeholders">
+                  <h2 className="text-2xl font-bold text-gray-900">Visuals to insert in next content sprint</h2>
+                  <div className="mt-4 grid gap-4 md:grid-cols-3">
+                    {imagePlaceholders.map((block) => (
+                      <div key={block.title} className="rounded-xl border border-[#e9dcff] bg-[#faf7ff] p-4">
+                        <h3 className="font-semibold text-gray-900">{block.title}</h3>
+                        <p className="mt-2 text-sm text-gray-700">{block.description}</p>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+              )}
 
               {sanitizedFaqs.length > 0 && (
                 <section className="mt-12 rounded-2xl border border-[#e9dcff] bg-[#f8f1ff] p-5 shadow-sm md:p-6" aria-label="Frequently asked questions">

@@ -36,7 +36,7 @@ export const BLOG_TOPIC_HUBS: Record<BlogTopicHubSlug, BlogTopicHubConfig> = {
     description: 'Core eviction process content mapped to notice, court, and possession next steps.',
     metaDescription: 'UK eviction guides hub: Section 21, Section 8, court hearings, timelines, and possession process for landlords.',
     intro:
-      'Use this hub to move from general eviction guidance to the exact next step: notice drafting, court pack preparation, or possession claim execution.',
+      'Start with the upgraded core guides first, then move into notice drafting, court pack preparation, or possession claim execution using the linked pillar routes.',
     pillarLinks: [
       { href: '/how-to-evict-a-tenant-uk', label: 'How to evict a tenant in the UK' },
       { href: '/section-21-notice-guide', label: 'Section 21 notice guide' },
@@ -51,7 +51,7 @@ export const BLOG_TOPIC_HUBS: Record<BlogTopicHubSlug, BlogTopicHubConfig> = {
     description: 'Arrears recovery content for notice strategy, debt claim, and possession sequencing.',
     metaDescription: 'Rent arrears landlord hub: Section 8 arrears grounds, money claims, tenant stopped paying rent workflows, and recovery timelines.',
     intro:
-      'This cluster focuses on unpaid rent scenarios, from early arrears action and Section 8 route planning to money claim recovery after possession.',
+      'This cluster prioritises upgraded arrears posts first so landlords can move from missed rent triage to Section 8 and money-claim recovery in the right sequence.',
     pillarLinks: [
       { href: '/evict-tenant-not-paying-rent', label: 'Evict tenant not paying rent' },
       { href: '/tenant-stopped-paying-rent', label: 'Tenant stopped paying rent playbook' },
@@ -66,7 +66,7 @@ export const BLOG_TOPIC_HUBS: Record<BlogTopicHubSlug, BlogTopicHubConfig> = {
     description: 'No-fault possession guides covering validity, Form 6A, service, and court follow-on.',
     metaDescription: 'Section 21 landlord hub: Form 6A validity, notice periods, service proof, and accelerated possession guidance.',
     intro:
-      'Section 21 content is consolidated here so landlords can validate paperwork, timelines, and follow-on possession steps without missing compliance prerequisites.',
+      'Section 21 content is consolidated here with the highest-value upgraded posts surfaced first, helping landlords validate paperwork and move into court-ready next steps.',
     pillarLinks: [
       { href: '/section-21-notice-guide', label: 'Section 21 notice guide' },
       { href: '/section-21-validity-checklist', label: 'Section 21 validity checklist' },
@@ -81,7 +81,7 @@ export const BLOG_TOPIC_HUBS: Record<BlogTopicHubSlug, BlogTopicHubConfig> = {
     description: 'Grounds-based possession content including arrears, anti-social behaviour, and court preparation.',
     metaDescription: 'Section 8 landlord hub: grounds, Form 3, notice service, arrears possession, and contested hearing preparation.',
     intro:
-      'Section 8 is evidence-led. This hub groups grounds strategy, service mechanics, and court prep to help landlords run fewer-risk possession claims.',
+      'Section 8 is evidence-led. This hub now surfaces upgraded grounds and process guides first, then routes landlords into service, court prep, and arrears recovery.',
     pillarLinks: [
       { href: '/section-8-notice-guide', label: 'Section 8 notice guide' },
       { href: '/section-8-grounds-explained', label: 'Section 8 grounds explained' },
