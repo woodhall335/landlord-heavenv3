@@ -14,18 +14,6 @@ export default function HowToEvictTenantUkPage() {
   return (
     <main>
       <section>
-        <h1>Hero Fields</h1>
-        <p><strong>Hero Title:</strong> How to Evict a Tenant in the UK</p>
-        <p>
-          <strong>Hero Subtitle:</strong> A step-by-step landlord guide covering Section 21, Section 8, court possession orders, and bailiff enforcement.
-        </p>
-        <p>
-          <strong>Hero Summary:</strong> Learn how the eviction process works in England, what notices landlords must serve, and how long eviction typically takes.
-        </p>
-      </section>
-
-      <section>
-        <h2>Quick Answer</h2>
         <p>How to Evict a Tenant in the UK (Complete Landlord Guide)</p>
         <p>
           Evicting a tenant in the UK must follow a strict legal process. If landlords try to remove a tenant without following the correct steps, the eviction can be invalid or even illegal.
@@ -36,7 +24,10 @@ export default function HowToEvictTenantUkPage() {
         <p>
           Whether you are dealing with rent arrears, tenancy breaches, or ending a tenancy, understanding the eviction process helps you regain possession of your property while staying compliant with UK law.
         </p>
-        <p>Quick Answer: How to Evict a Tenant in the UK</p>
+      </section>
+
+      <section>
+        <h2>Quick Answer: How to Evict a Tenant in the UK</h2>
         <p>The legal eviction process in the UK normally involves five main stages.</p>
         <ol>
           <li>Confirm the tenancy type and eviction route.</li>
@@ -51,54 +42,54 @@ export default function HowToEvictTenantUkPage() {
       </section>
 
       <section>
-        <h2>In This Guide (jump links)</h2>
+        <h2>In This Guide</h2>
         <ul>
-          <li><a href="#comparison">Section 21 vs Section 8 Comparison</a></li>
-          <li><a href="#process">Step-by-Step Eviction Process</a></li>
-          <li><a href="#timeline">Eviction Timeline UK</a></li>
-          <li><a href="#documents">Documents Landlords Should Prepare</a></li>
-          <li><a href="#mistakes">Common Eviction Mistakes</a></li>
-          <li><a href="#arrears">How to Evict a Tenant for Rent Arrears</a></li>
-          <li><a href="#after-order">What Happens After a Possession Order</a></li>
+          <li><a href="#section-21-vs-section-8">Section 21 vs Section 8</a></li>
+          <li><a href="#eviction-process">Step-by-step eviction process</a></li>
+          <li><a href="#eviction-timeline-uk">Eviction timeline UK</a></li>
+          <li><a href="#documents-landlords-should-prepare">Documents landlords should prepare</a></li>
+          <li><a href="#common-eviction-mistakes">Common eviction mistakes</a></li>
+          <li><a href="#rent-arrears-eviction">How to evict a tenant for rent arrears in the UK</a></li>
+          <li><a href="#after-possession-order">What happens after a possession order</a></li>
           <li><a href="#faqs">FAQs</a></li>
-          <li><a href="#related-guides">Related Guides</a></li>
+          <li><a href="#related-guides">Related guides</a></li>
+          <li><a href="#final-next-steps">Final next steps</a></li>
         </ul>
       </section>
 
-      <section id="comparison">
-        <h2>Section 21 vs Section 8 Comparison</h2>
+      <section id="section-21-vs-section-8">
+        <h2>Section 21 vs Section 8</h2>
         <p>When learning how to evict a tenant in the UK, landlords normally choose between two legal routes.</p>
         <p>These are Section 21 eviction and Section 8 eviction.</p>
+
         <table>
           <thead>
             <tr>
               <th>Route</th>
-              <th>Use case</th>
-              <th>Notice</th>
-              <th>Court path</th>
+              <th>Best used when</th>
+              <th>Notice and form</th>
+              <th>Court route</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>Section 21 eviction</td>
-              <td>No-fault possession</td>
-              <td>At least two months notice (Form 6A)</td>
-              <td>Often accelerated possession</td>
+              <td>No-fault possession at or after the correct tenancy stage</td>
+              <td>At least two months notice using Form 6A</td>
+              <td>Usually accelerated possession order UK route (if valid)</td>
             </tr>
             <tr>
               <td>Section 8 eviction</td>
-              <td>Tenant breach (for example rent arrears eviction UK)</td>
-              <td>Depends on grounds (Ground 8 often 14 days)</td>
-              <td>Standard possession claim with hearing</td>
+              <td>Tenant breach, including rent arrears eviction UK cases</td>
+              <td>Form 3 with notice period based on legal grounds</td>
+              <td>Standard possession claim with hearing in most cases</td>
             </tr>
           </tbody>
         </table>
-        <p>[DIAGRAM: section 21 vs section 8 comparison]</p>
       </section>
 
-      <section id="process">
-        <h2>Step-by-Step Eviction Process</h2>
-        <p>Eviction Process UK: Step-by-Step Guide</p>
+      <section id="eviction-process">
+        <h2>Eviction Process UK: Step-by-Step Guide</h2>
         <p>Understanding the UK eviction process helps landlords avoid costly mistakes and regain possession faster.</p>
         <p>The correct process depends on the tenancy agreement and the reason for eviction.</p>
 
@@ -223,8 +214,8 @@ export default function HowToEvictTenantUkPage() {
         <p>These actions may be considered illegal eviction.</p>
       </section>
 
-      <section id="timeline">
-        <h2>Eviction Timeline UK</h2>
+      <section id="eviction-timeline-uk">
+        <h2>Eviction timeline UK</h2>
         <p>UK Eviction Timeline</p>
         <p>Typical eviction timelines:</p>
         <ul>
@@ -234,11 +225,14 @@ export default function HowToEvictTenantUkPage() {
           <li>Bailiff enforcement – 2 to 6 weeks</li>
         </ul>
         <p>Most eviction cases take around 3 to 6 months.</p>
-        <p>[DIAGRAM: eviction timeline infographic]</p>
+        <p>
+          How long does it take to evict a tenant UK-wide in practice? Delays are most often caused by paperwork errors,
+          re-served notices, and local court listing pressure.
+        </p>
       </section>
 
-      <section id="documents">
-        <h2>Documents Landlords Should Prepare</h2>
+      <section id="documents-landlords-should-prepare">
+        <h2>Documents landlords should prepare</h2>
         <p>Evidence Landlords Should Prepare</p>
         <ul>
           <li>Tenancy agreement</li>
@@ -251,18 +245,17 @@ export default function HowToEvictTenantUkPage() {
           <li>Communication records with the tenant</li>
         </ul>
 
-        <h3>Checklist Before Serving an Eviction Notice UK</h3>
+        <h3>Landlord checklist before serving an eviction notice UK</h3>
         <ul>
-          <li>Confirm tenancy type and dates</li>
-          <li>Confirm compliance documents were served</li>
-          <li>Verify notice form and notice period</li>
-          <li>Prepare a possession order UK evidence pack</li>
-          <li>Store proof of service and communications</li>
+          <li>Confirm the tenant names and property address match all documents.</li>
+          <li>Check the notice expiry date calculation twice before service.</li>
+          <li>Save a full evidence pack in date order for court submission.</li>
+          <li>Record service method and timing on the same day notice is served.</li>
         </ul>
       </section>
 
-      <section id="mistakes">
-        <h2>Common Eviction Mistakes</h2>
+      <section id="common-eviction-mistakes">
+        <h2>Common eviction mistakes</h2>
         <p>Common Eviction Mistakes</p>
         <ul>
           <li>Serving an invalid Section 21 notice</li>
@@ -273,29 +266,33 @@ export default function HowToEvictTenantUkPage() {
         </ul>
       </section>
 
-      <section id="arrears">
-        <h2>How to Evict a Tenant for Rent Arrears</h2>
+      <section id="rent-arrears-eviction">
+        <h2>How to evict a tenant for rent arrears in the UK</h2>
         <p>
-          For a rent arrears eviction UK case, landlords often use a section 8 eviction route and rely on rent schedules, statements, and dated communication records.
+          Landlords usually use section 8 eviction for a rent arrears eviction UK case, relying on clear rent schedules,
+          bank statements, and a dated arrears log that aligns with the tenancy agreement.
         </p>
         <p>
-          The strongest arrears cases usually include Ground 8 alongside other relevant grounds and a clear arrears chronology that can be presented at hearing.
+          If you are claiming serious arrears, prepare both mandatory and discretionary grounds where appropriate, and
+          present a precise arrears timeline at the possession hearing.
         </p>
-        <p>[DIAGRAM: rent arrears eviction evidence flow]</p>
       </section>
 
-      <section id="after-order">
-        <h2>What Happens After a Possession Order</h2>
+      <section id="after-possession-order">
+        <h2>What happens after a possession order</h2>
         <p>
-          After a possession order UK is granted, tenants are given a date to leave. If they remain in the property, landlords must apply for bailiff eviction UK enforcement.
+          After a possession order UK is granted, tenants are given a date to leave. If they remain in the property,
+          landlords must apply for bailiff eviction UK enforcement.
         </p>
         <p>
-          County Court Bailiffs or High Court Enforcement Officers then carry out the lawful eviction. This stage can add weeks to the overall eviction timeline UK.
+          County Court Bailiffs or High Court Enforcement Officers then carry out the lawful eviction. This stage can add
+          weeks to the overall eviction timeline UK.
         </p>
       </section>
 
       <section id="faqs">
         <h2>FAQs</h2>
+
         <h3>Can landlords evict tenants immediately in the UK?</h3>
         <p>No. Landlords must follow the legal eviction process beginning with a valid notice.</p>
 
@@ -308,17 +305,28 @@ export default function HowToEvictTenantUkPage() {
         <h3>Is Section 21 being abolished?</h3>
         <p>The UK government has proposed reforms under the Renters Reform Bill, but Section 21 is still currently available in England.</p>
 
-        <h3>What is the difference between an eviction notice UK and a possession order UK?</h3>
-        <p>An eviction notice UK starts the legal process, while a possession order UK is granted by the court if the tenant does not leave.</p>
+        <h3>What is a possession order UK?</h3>
+        <p>
+          A possession order is a court order that requires the tenant to leave by a set date. If they do not leave,
+          landlords must use authorised enforcement officers.
+        </p>
 
-        <h3>How long does it take to evict a tenant UK if bailiffs are needed?</h3>
-        <p>Where bailiff enforcement is required, timelines often extend beyond the initial court order period due to booking queues.</p>
+        <h3>Can I claim rent arrears and possession together?</h3>
+        <p>
+          Yes, many landlords use the standard possession claim route to seek both possession and a money judgment for
+          arrears.
+        </p>
+
+        <h3>What makes an eviction notice UK invalid?</h3>
+        <p>
+          Common issues include wrong forms, incorrect notice dates, compliance failures, and poor service evidence.
+        </p>
       </section>
 
       <section id="related-guides">
-        <h2>Related Guides</h2>
+        <h2>Related guides</h2>
         <ul>
-          <li><Link href="/section-21-notice-template">Section 21 notice template guide</Link></li>
+          <li><Link href="/section-21-notice-guide">Section 21 notice guide</Link></li>
           <li><Link href="/section-8-notice-template">Section 8 notice template guide</Link></li>
           <li><Link href="/eviction-process-england">Eviction process England</Link></li>
           <li><Link href="/eviction-timeline-uk">Eviction timeline UK</Link></li>
@@ -326,12 +334,34 @@ export default function HowToEvictTenantUkPage() {
         </ul>
       </section>
 
-      <section>
-        <h2>Final CTA</h2>
-        <p>[CTA]</p>
-        <p>Title: Start your eviction with the correct legal route</p>
-        <p>Description: Build the right notice, prepare your court documents, and follow a compliant step-by-step process from notice to enforcement.</p>
-        <p>Primary Button: Start Eviction Workflow</p>
+      <section id="final-next-steps">
+        <h2>Final next steps</h2>
+        <p>
+          If you need to start now, map your tenancy facts first, choose the correct route, and prepare a complete
+          evidence file before serving any eviction notice UK document.
+        </p>
+        <p>
+          A correct first step usually saves weeks in the overall eviction timeline UK and reduces the risk of court
+          rejection.
+        </p>
+
+        <h3>5 suggested internal links with anchor text</h3>
+        <ul>
+          <li>Section 21 notice validity checklist</li>
+          <li>How to serve a Section 8 notice correctly</li>
+          <li>Accelerated possession order UK explained</li>
+          <li>Rent arrears evidence bundle for court</li>
+          <li>Bailiff eviction UK: what landlords can expect</li>
+        </ul>
+
+        <h3>3 CTA suggestions</h3>
+        <ul>
+          <li>Start your eviction route check</li>
+          <li>Build your compliant eviction notice pack</li>
+          <li>Prepare your possession order UK evidence file</li>
+        </ul>
+
+        <p>Final word count: 2,030</p>
       </section>
     </main>
   );
