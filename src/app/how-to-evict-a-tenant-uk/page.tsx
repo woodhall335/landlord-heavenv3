@@ -20,7 +20,6 @@ const canonical = 'https://landlordheaven.co.uk/how-to-evict-a-tenant-uk';
 
 const jumpLinks = [
   { href: '#quick-answer', label: 'Quick answer' },
-  { href: '#in-this-guide', label: 'In this guide' },
   { href: '#section-21-vs-section-8', label: 'Section 21 vs Section 8' },
   { href: '#step-by-step-eviction-process', label: 'Step-by-step eviction process' },
   { href: '#eviction-timeline-uk', label: 'Eviction timeline UK' },
@@ -30,36 +29,36 @@ const jumpLinks = [
   { href: '#what-happens-after-possession-order', label: 'After a possession order' },
   { href: '#faqs', label: 'FAQs' },
   { href: '#related-guides', label: 'Related guides' },
-  { href: '#final-cta', label: 'Final next steps' },
+  { href: '#final-cta', label: 'Next steps for landlords' },
 ];
 
 const faqs: FAQItem[] = [
   {
     question: 'Can landlords evict tenants immediately in the UK?',
-    answer: 'No. Landlords must follow the legal eviction process beginning with a valid notice.',
+    answer: 'No. In almost all cases landlords must serve a valid notice first, then obtain a court possession order before enforcement can happen.',
   },
   {
     question: 'How long does eviction take in the UK?',
-    answer: 'Usually between 3 and 6 months depending on court delays, notice periods, and enforcement availability.',
+    answer: 'Most cases take around 3 to 6 months, but complex disputes, court listing times, and bailiff availability can extend the eviction timeline UK.',
   },
   {
     question: 'Can landlords evict tenants for rent arrears?',
-    answer: 'Yes. Rent arrears are one of the most common reasons for Section 8 eviction.',
+    answer: 'Yes. Rent arrears eviction UK cases are usually brought under section 8 eviction, supported by a clear arrears schedule and payment evidence.',
   },
   {
     question: 'Is Section 21 being abolished?',
     answer:
-      'The UK government has proposed reforms under the Renters Reform Bill, but Section 21 is still currently available in England.',
+      'Reforms have been proposed, but section 21 eviction is still currently in force in England until legislation changes are enacted.',
   },
   {
     question: 'What is a possession order UK landlords apply for?',
     answer:
-      'A possession order is a county court order requiring the tenant to leave by a stated date. If they remain, the landlord must request bailiff enforcement.',
+      'A possession order UK landlords apply for is a county court order setting the date the tenant must leave; if they do not, bailiff enforcement is required.',
   },
   {
     question: 'What makes an eviction notice UK invalid?',
     answer:
-      'Common issues include the wrong form, incorrect expiry date, missing compliance documents, or weak proof of service.',
+      'Common reasons include the wrong form, invalid dates, missing compliance records, or no reliable proof that the notice was properly served.',
   },
 ];
 
@@ -98,7 +97,7 @@ export default function HowToEvictTenantUkPage() {
         showTrustPositioningBar
       >
         <p className="mt-6 text-sm text-white/90 md:text-base">
-          Learn how the eviction process works in England, what notices landlords must serve, and how long eviction typically takes.
+          Understand the legal eviction process UK landlords follow, from choosing the right notice to applying for a possession order and, where needed, arranging bailiff enforcement.
         </p>
       </UniversalHero>
 
@@ -143,7 +142,7 @@ export default function HowToEvictTenantUkPage() {
           <div className="mx-auto max-w-5xl space-y-10">
             <article id="section-21-vs-section-8" className="rounded-2xl border border-[#E6DBFF] bg-[#FCFAFF] p-6 md:p-8">
               <h2 className="text-2xl font-semibold text-[#2a2161]">Section 21 vs Section 8</h2>
-              <p className="mt-4 text-gray-700 leading-7">When learning how to evict a tenant in the UK, landlords normally choose between Section 21 eviction and Section 8 eviction.</p>
+              <p className="mt-4 text-gray-700 leading-7">When learning how to evict a tenant in the UK, landlords normally choose between section 21 eviction and section 8 eviction.</p>
               <div className="mt-5 overflow-x-auto rounded-xl border border-[#E6DBFF] bg-white">
                 <table className="w-full border-collapse text-sm">
                   <thead className="bg-[#F8F4FF] text-[#2a2161]">
@@ -170,6 +169,7 @@ export default function HowToEvictTenantUkPage() {
                   </tbody>
                 </table>
               </div>
+              <p className="mt-4 text-gray-700 leading-7">In practice, the right route depends on your evidence and objective. If your paperwork is fully compliant and you only need possession, section 21 eviction can be more straightforward. If you need to rely on breach grounds such as rent arrears eviction UK cases, section 8 eviction is usually the stronger route.</p>
             </article>
 
             <article id="step-by-step-eviction-process" className="rounded-2xl border border-[#E6DBFF] bg-[#FCFAFF] p-6 md:p-8">
@@ -205,26 +205,54 @@ export default function HowToEvictTenantUkPage() {
 
             <article id="documents-landlords-should-prepare" className="rounded-2xl border border-[#E6DBFF] bg-[#FCFAFF] p-6 md:p-8">
               <h2 className="text-2xl font-semibold text-[#2a2161]">Documents Landlords Should Prepare</h2>
-              <ul className="mt-4 list-disc space-y-2 pl-5 text-gray-700">
-                <li>Tenancy agreement</li>
-                <li>Rent payment history</li>
-                <li>Deposit protection certificate</li>
-                <li>Gas safety certificate</li>
-                <li>EPC certificate</li>
-                <li>Copies of notices served</li>
-                <li>Proof of service</li>
-                <li>Communication records with the tenant</li>
+              <p className="mt-4 text-gray-700 leading-7">A complete document bundle is central to a smooth possession order UK claim. Courts expect landlords to show the tenancy terms, compliance history, and service evidence clearly and in date order.</p>
+              <h3 className="mt-5 text-lg font-semibold text-[#2a2161]">Tenancy and payment records</h3>
+              <ul className="mt-2 list-disc space-y-2 pl-5 text-gray-700">
+                <li>Signed tenancy agreement</li>
+                <li>Rent statement and payment history</li>
+                <li>Arrears schedule (for section 8 eviction)</li>
               </ul>
+              <p className="mt-3 text-gray-700 leading-7">These documents prove what was agreed, what has been paid, and whether grounds such as rent arrears are made out.</p>
+              <h3 className="mt-5 text-lg font-semibold text-[#2a2161]">Compliance and prescribed information</h3>
+              <ul className="mt-2 list-disc space-y-2 pl-5 text-gray-700">
+                <li>Deposit protection certificate and prescribed information record</li>
+                <li>Gas safety certificate(s)</li>
+                <li>EPC certificate</li>
+                <li>How to Rent guide service record (if applicable)</li>
+              </ul>
+              <p className="mt-3 text-gray-700 leading-7">These items are often checked first in section 21 eviction cases and can determine whether your notice is valid.</p>
+              <h3 className="mt-5 text-lg font-semibold text-[#2a2161]">Notice and service evidence</h3>
+              <ul className="mt-2 list-disc space-y-2 pl-5 text-gray-700">
+                <li>Copy of the eviction notice UK form served (Form 6A or Form 3)</li>
+                <li>Proof of service (certificate of posting, process server record, or accepted email trail)</li>
+                <li>Communication log with the tenant</li>
+              </ul>
+              <p className="mt-3 text-gray-700 leading-7">Service records reduce disputes about dates and help the court confirm your eviction timeline UK has been followed lawfully.</p>
             </article>
 
             <article id="common-eviction-mistakes" className="rounded-2xl border border-[#E6DBFF] bg-[#FCFAFF] p-6 md:p-8">
               <h2 className="text-2xl font-semibold text-[#2a2161]">Common Eviction Mistakes</h2>
-              <ul className="mt-4 list-disc space-y-2 pl-5 text-gray-700">
-                <li>Serving an invalid Section 21 notice</li>
-                <li>Incorrect notice dates</li>
-                <li>Weak rent arrears evidence</li>
-                <li>No proof of service</li>
-                <li>Illegal eviction attempts</li>
+              <ul className="mt-4 list-disc space-y-3 pl-5 text-gray-700">
+                <li>
+                  Serving an invalid section 21 notice.
+                  <span className="block">Using the wrong form version or serving too early can reset your case.</span>
+                </li>
+                <li>
+                  Miscalculating notice dates.
+                  <span className="block">An incorrect expiry date can make an eviction notice UK unenforceable.</span>
+                </li>
+                <li>
+                  Weak rent arrears evidence.
+                  <span className="block">For section 8 eviction, unclear ledgers and missing bank records can weaken possession claims.</span>
+                </li>
+                <li>
+                  No proof of service.
+                  <span className="block">If you cannot prove when and how notice was served, the court may dismiss the claim.</span>
+                </li>
+                <li>
+                  Attempting self-help eviction.
+                  <span className="block">Changing locks or removing belongings without a court order and enforcement is unlawful.</span>
+                </li>
               </ul>
             </article>
 
@@ -236,8 +264,9 @@ export default function HowToEvictTenantUkPage() {
 
             <article id="what-happens-after-possession-order" className="rounded-2xl border border-[#E6DBFF] bg-[#FCFAFF] p-6 md:p-8">
               <h2 className="text-2xl font-semibold text-[#2a2161]">What Happens After a Possession Order</h2>
-              <p className="mt-4 text-gray-700 leading-7">After the possession order date passes, landlords can apply for bailiff eviction UK enforcement if the tenant remains in occupation.</p>
-              <p className="mt-4 text-gray-700 leading-7">Only authorised enforcement officers can remove tenants lawfully. This stage often adds several weeks to the overall eviction timeline UK.</p>
+              <p className="mt-4 text-gray-700 leading-7">A possession order UK judgment normally gives a possession date by which the tenant must leave, often within 14 days unless the court allows longer due to hardship.</p>
+              <p className="mt-4 text-gray-700 leading-7">If the possession date passes and the tenant stays, landlords must apply for a warrant of possession so county court bailiffs (or an authorised High Court route where permitted) can enforce the order.</p>
+              <p className="mt-4 text-gray-700 leading-7">Enforcement appointments are not immediate in many areas. Bailiff eviction UK waiting times can add several weeks, which is why this step is a common source of delay in the wider eviction timeline UK.</p>
             </article>
           </div>
         </Container>
@@ -251,11 +280,12 @@ export default function HowToEvictTenantUkPage() {
         <Container>
           <div className="mx-auto max-w-5xl rounded-2xl border border-[#E6DBFF] bg-white p-6 md:p-8">
             <h2 className="text-2xl font-semibold text-[#2a2161]">Related Guides</h2>
+            <p className="mt-4 text-gray-700 leading-7">Use these guides to plan your next step based on your case type, whether you are preparing an eviction notice UK form, managing arrears evidence, or estimating likely timescales.</p>
             <div className="mt-4 grid gap-3 md:grid-cols-2">
-              <Link href="/section-21-notice-guide" className="rounded-lg border border-[#E6DBFF] px-4 py-3 text-primary hover:bg-[#F8F4FF]">Section 21 notice guide</Link>
-              <Link href="/section-8-notice-template" className="rounded-lg border border-[#E6DBFF] px-4 py-3 text-primary hover:bg-[#F8F4FF]">Section 8 notice template guide</Link>
-              <Link href="/eviction-process-england" className="rounded-lg border border-[#E6DBFF] px-4 py-3 text-primary hover:bg-[#F8F4FF]">Eviction process England</Link>
-              <Link href="/eviction-timeline-uk" className="rounded-lg border border-[#E6DBFF] px-4 py-3 text-primary hover:bg-[#F8F4FF]">Eviction timeline UK</Link>
+              <Link href="/section-21-notice-guide" className="rounded-lg border border-[#E6DBFF] px-4 py-3 text-primary hover:bg-[#F8F4FF]">Section 21 notice guide: rules, timing, and validity checks</Link>
+              <Link href="/section-8-notice-template" className="rounded-lg border border-[#E6DBFF] px-4 py-3 text-primary hover:bg-[#F8F4FF]">Section 8 notice guide: choosing grounds and evidence</Link>
+              <Link href="/eviction-process-england" className="rounded-lg border border-[#E6DBFF] px-4 py-3 text-primary hover:bg-[#F8F4FF]">Eviction process England: full court route explained</Link>
+              <Link href="/eviction-timeline-uk" className="rounded-lg border border-[#E6DBFF] px-4 py-3 text-primary hover:bg-[#F8F4FF]">Eviction timeline UK: realistic stage-by-stage expectations</Link>
             </div>
           </div>
         </Container>
@@ -264,9 +294,9 @@ export default function HowToEvictTenantUkPage() {
       <section id="final-cta" className="pb-14">
         <Container>
           <div className="mx-auto max-w-5xl rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-6 md:p-8">
-            <h2 className="text-2xl font-semibold text-[#2a2161]">Final CTA</h2>
-            <p className="mt-4 text-gray-700">If you need to start now, map tenancy facts first, choose the correct route, and prepare a complete evidence file before serving any eviction notice UK.</p>
-            <p className="mt-4 text-gray-700">A correct first step usually saves weeks across the eviction process UK and reduces rejection risk.</p>
+            <h2 className="text-2xl font-semibold text-[#2a2161]">Next Steps for Landlords</h2>
+            <p className="mt-4 text-gray-700">Before serving any eviction notice UK form, confirm your tenancy facts, compliance documents, and service method so your case starts on the strongest legal footing.</p>
+            <p className="mt-4 text-gray-700">A carefully prepared file can reduce avoidable delays, improve possession order UK outcomes, and keep your eviction process UK route compliant from notice through enforcement.</p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Link href="/products/complete-pack" className="rounded-lg bg-primary px-5 py-3 text-white hover:opacity-95">Start your eviction route check</Link>
               <Link href="/tools/validators" className="rounded-lg border border-[#E6DBFF] bg-white px-5 py-3 text-primary hover:bg-[#F8F4FF]">Validate your notice route</Link>
