@@ -180,15 +180,15 @@ export default function ClaimRentArrearsTenantPage() {
                   </p>
                   <ul className="space-y-2 text-sm text-gray-600">
                     <li className="flex items-start gap-2">
-                      <ArrowRight className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+                      <ArrowRight className="w-4 h-4 text-primary shrink-0 mt-0.5" />
                       Can pressure tenant to pay
                     </li>
                     <li className="flex items-start gap-2">
-                      <ArrowRight className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+                      <ArrowRight className="w-4 h-4 text-primary shrink-0 mt-0.5" />
                       May want to continue tenancy
                     </li>
                     <li className="flex items-start gap-2">
-                      <AlertTriangle className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" />
+                      <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
                       Consider Section 8 eviction instead
                     </li>
                   </ul>
@@ -213,15 +213,15 @@ export default function ClaimRentArrearsTenantPage() {
                   </p>
                   <ul className="space-y-2 text-sm text-gray-600">
                     <li className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+                      <CheckCircle className="w-4 h-4 text-primary shrink-0 mt-0.5" />
                       Claim up to 6 years after debt arose
                     </li>
                     <li className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+                      <CheckCircle className="w-4 h-4 text-primary shrink-0 mt-0.5" />
                       Add damage costs and cleaning
                     </li>
                     <li className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+                      <CheckCircle className="w-4 h-4 text-primary shrink-0 mt-0.5" />
                       Add 8% statutory interest
                     </li>
                   </ul>
@@ -246,7 +246,7 @@ export default function ClaimRentArrearsTenantPage() {
                 {/* Step 1 */}
                 <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
+                    <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center shrink-0">
                       <span className="text-lg font-bold text-white">1</span>
                     </div>
                     <div className="flex-1">
@@ -271,7 +271,7 @@ export default function ClaimRentArrearsTenantPage() {
                 {/* Step 2 */}
                 <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
+                    <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center shrink-0">
                       <span className="text-lg font-bold text-white">2</span>
                     </div>
                     <div className="flex-1">
@@ -306,7 +306,7 @@ export default function ClaimRentArrearsTenantPage() {
                 {/* Step 3 */}
                 <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
+                    <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center shrink-0">
                       <span className="text-lg font-bold text-white">3</span>
                     </div>
                     <div className="flex-1">
@@ -343,7 +343,7 @@ export default function ClaimRentArrearsTenantPage() {
                 {/* Step 4 */}
                 <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
+                    <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center shrink-0">
                       <span className="text-lg font-bold text-white">4</span>
                     </div>
                     <div className="flex-1">
@@ -375,7 +375,7 @@ export default function ClaimRentArrearsTenantPage() {
                 {/* Step 5 */}
                 <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
+                    <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center shrink-0">
                       <CheckCircle className="w-6 h-6 text-white" />
                     </div>
                     <div className="flex-1">
@@ -482,7 +482,7 @@ export default function ClaimRentArrearsTenantPage() {
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center shrink-0">
                       <Users className="w-5 h-5 text-primary" />
                     </div>
                     <div>
@@ -497,7 +497,7 @@ export default function ClaimRentArrearsTenantPage() {
 
                 <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center shrink-0">
                       <CreditCard className="w-5 h-5 text-primary" />
                     </div>
                     <div>
@@ -512,7 +512,7 @@ export default function ClaimRentArrearsTenantPage() {
 
                 <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center shrink-0">
                       <Building className="w-5 h-5 text-primary" />
                     </div>
                     <div>
@@ -527,7 +527,7 @@ export default function ClaimRentArrearsTenantPage() {
 
                 <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center shrink-0">
                       <PoundSterling className="w-5 h-5 text-primary" />
                     </div>
                     <div>
@@ -568,28 +568,28 @@ export default function ClaimRentArrearsTenantPage() {
 
               <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
                 <div className="flex items-start gap-4">
-                  <Shield className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
+                  <Shield className="w-6 h-6 text-primary shrink-0 mt-1" />
                   <div>
                     <h3 className="font-bold text-gray-900 mb-3">Guarantor Claims</h3>
                     <ul className="space-y-3 text-gray-600">
                       <li className="flex items-start gap-2">
-                        <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
+                        <CheckCircle className="w-4 h-4 text-green-500 shrink-0 mt-0.5" />
                         <span>
                           The guarantor is jointly and severally liable for rent arrears
                         </span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
+                        <CheckCircle className="w-4 h-4 text-green-500 shrink-0 mt-0.5" />
                         <span>
                           Send Letter Before Action to guarantor (as well as tenant if applicable)
                         </span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
+                        <CheckCircle className="w-4 h-4 text-green-500 shrink-0 mt-0.5" />
                         <span>Can claim from both but only recover the debt once</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <AlertTriangle className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" />
+                        <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
                         <span>
                           Check guarantor agreement covers the full tenancy period
                         </span>
