@@ -17,7 +17,7 @@ import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 const canonical = 'https://landlordheaven.co.uk/serve-section-8-notice';
 
 const section8WizardLink = buildWizardLink({
-  product: 'section8',
+  product: 'notice_only',
   jurisdiction: 'england',
   src: 'seo_serve_section_8_notice',
   topic: 'eviction',
@@ -112,7 +112,9 @@ export default function Page() {
       <StructuredData
         data={articleSchema({
           headline: 'How to Serve a Section 8 Notice',
-          description: metadata.description,
+          description:
+            metadata.description ??
+            'Practical landlord guide to serving a Section 8 notice in England.',
           url: canonical,
           datePublished: '2026-03-01',
           dateModified: '2026-03-13',
