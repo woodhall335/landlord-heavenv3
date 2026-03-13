@@ -534,7 +534,7 @@ export default function HelpPage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href={ASK_HEAVEN_CTA.href}
-                className="hero-btn-primary ask-heaven-cta-button"
+                className="hero-btn-primary hover:text-white"
               >
                 {ASK_HEAVEN_CTA.buttonLabel}
               </Link>

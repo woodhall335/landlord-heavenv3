@@ -1102,7 +1102,7 @@ export default function CaseDetailPage() {
                     Refresh Page
                   </Button>
                   <Link href={ASK_HEAVEN_CTA.href}>
-                    <Button variant="outline" className="ask-heaven-cta-button hover:text-white">
+                    <Button variant="outline" className="hover:text-white">
                       <RiCustomerService2Line className="w-4 h-4 mr-2" />
                       {ASK_HEAVEN_CTA.buttonLabel}
                     </Button>
@@ -1172,7 +1172,7 @@ export default function CaseDetailPage() {
                 </p>
                 <div className="mt-4 flex gap-3">
                   <Link href={ASK_HEAVEN_CTA.href}>
-                    <Button variant="primary" className="ask-heaven-cta-button hover:text-white">
+                    <Button variant="primary" className="hover:text-white">
                       <RiCustomerService2Line className="w-4 h-4 mr-2" />
                       {ASK_HEAVEN_CTA.buttonLabel}
                     </Button>
@@ -1201,7 +1201,7 @@ export default function CaseDetailPage() {
                     Retry Generation
                   </Button>
                   <Link href={ASK_HEAVEN_CTA.href}>
-                    <Button variant="outline" className="ask-heaven-cta-button hover:text-white">
+                    <Button variant="outline" className="hover:text-white">
                       <RiCustomerService2Line className="w-4 h-4 mr-2" />
                       {ASK_HEAVEN_CTA.buttonLabel}
                     </Button>
@@ -1271,7 +1271,7 @@ export default function CaseDetailPage() {
                     Retry Generation
                   </Button>
                   <Link href={ASK_HEAVEN_CTA.href}>
-                    <Button variant="outline" className="ask-heaven-cta-button hover:text-white">
+                    <Button variant="outline" className="hover:text-white">
                       <RiCustomerService2Line className="w-4 h-4 mr-2" />
                       {ASK_HEAVEN_CTA.buttonLabel}
                     </Button>
@@ -1322,7 +1322,7 @@ export default function CaseDetailPage() {
                     Refresh Page
                   </Button>
                   <Link href={ASK_HEAVEN_CTA.href}>
-                    <Button variant="outline" className="ask-heaven-cta-button hover:text-white">{ASK_HEAVEN_CTA.buttonLabel}</Button>
+                    <Button variant="outline" className="hover:text-white">{ASK_HEAVEN_CTA.buttonLabel}</Button>
                   </Link>
                 </div>
               </div>
