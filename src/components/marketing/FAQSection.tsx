@@ -13,6 +13,7 @@ import { Container } from "@/components/ui";
 import { clsx } from "clsx";
 import { ChevronDown, Headphones } from "lucide-react";
 import { TrustPositioningBar } from "@/components/marketing/TrustPositioningBar";
+import { ASK_HEAVEN_CTA } from "@/constants/askHeavenCta";
 
 export interface FAQItem {
   question: string;
@@ -217,15 +218,15 @@ export function FAQSection({
                     <Headphones className="w-6 h-6 text-primary" />
                   </div>
                   <div className="text-left">
-                    <div className="font-semibold text-gray-900">Still have questions?</div>
-                    <div className="text-sm text-gray-600">Our team is here to help.</div>
+                    <div className="font-semibold text-gray-900">{ASK_HEAVEN_CTA.heading}</div>
+                    <div className="text-sm text-gray-600">{ASK_HEAVEN_CTA.body}</div>
                   </div>
                 </div>
                 <Link
-                  href="/contact"
+                  href={ASK_HEAVEN_CTA.href}
                   className="bg-white text-primary font-semibold px-6 py-3 rounded-xl border-2 border-primary hover:bg-primary hover:text-white transition-all"
                 >
-                  Contact Support
+                  {ASK_HEAVEN_CTA.buttonLabel}
                 </Link>
               </div>
             </div>
