@@ -177,6 +177,11 @@ a[class*="text-white"]:not([class*="hover:"]):hover {
   transform: scale(0.98);
 }
 
+/* Keep Ask Heaven CTA button text readable on hover across global link rules */
+.ask-heaven-cta-button:hover {
+  color: #ffffff !important;
+}
+
 .hero-btn-pulse {
   display: inline-block;
   background-color: var(--primary);
