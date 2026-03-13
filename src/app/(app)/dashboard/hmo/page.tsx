@@ -14,6 +14,7 @@ import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { RiTimeLine, RiLockLine, RiCheckboxCircleLine, RiBookOpenLine, RiCustomerService2Line } from 'react-icons/ri';
+import { ASK_HEAVEN_CTA } from '@/constants/askHeavenCta';
 
 interface HMOProperty {
   id: string;
@@ -569,11 +570,11 @@ export default function HMOProDashboardPage() {
                   </div>
                   Help Center
                 </Link>
-                <Link href="/contact" className="flex items-center gap-3 text-gray-700 hover:text-primary">
+                <Link href={ASK_HEAVEN_CTA.href} className="flex items-center gap-3 text-gray-700 hover:text-primary">
                   <div className="w-8 h-8 bg-purple-100 rounded-xl flex items-center justify-center shrink-0">
                     <RiCustomerService2Line className="w-4 h-4 text-primary" />
                   </div>
-                  Contact Support
+                  {ASK_HEAVEN_CTA.buttonLabel}
                 </Link>
               </div>
             </Card>

@@ -16,6 +16,7 @@ import { Badge } from '@/components/ui/Badge';
 import { TealHero } from '@/components/ui';
 import { RiFileTextLine, RiBookOpenLine, RiCustomerService2Line, RiLoginBoxLine } from 'react-icons/ri';
 import { useAuthCheck } from '@/hooks/useAuthCheck';
+import { ASK_HEAVEN_CTA } from '@/constants/askHeavenCta';
 import type { OrderBySessionResponse } from '@/app/api/orders/by-session/route';
 
 interface Case {
@@ -339,11 +340,11 @@ export default function DashboardPage() {
                   </div>
                   Help Center
                 </Link>
-                <Link href="/contact" className="flex items-center gap-3 text-gray-700 hover:text-primary">
+                <Link href={ASK_HEAVEN_CTA.href} className="flex items-center gap-3 text-gray-700 hover:text-primary">
                   <div className="w-8 h-8 bg-purple-100 rounded-xl flex items-center justify-center shrink-0">
                     <RiCustomerService2Line className="w-4 h-4 text-primary" />
                   </div>
-                  Contact Support
+                  {ASK_HEAVEN_CTA.buttonLabel}
                 </Link>
               </div>
             </Card>

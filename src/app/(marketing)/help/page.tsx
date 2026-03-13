@@ -3,6 +3,7 @@ import { Container } from "@/components/ui";
 import Link from "next/link";
 import Image from "next/image";
 import { FAQInline } from "@/components/seo/FAQSection";
+import { ASK_HEAVEN_CTA } from "@/constants/askHeavenCta";
 
 export const metadata: Metadata = {
   title: "Help Center",
@@ -528,16 +529,14 @@ export default function HelpPage() {
 
           {/* Contact Section */}
           <section className="bg-primary-subtle border border-primary/20 rounded-lg p-8 text-center">
-            <h2 className="text-2xl font-bold text-charcoal mb-4">Still Need Help?</h2>
-            <p className="text-gray-700 mb-6">
-              Can't find the answer you're looking for? Our support team is here to help.
-            </p>
+            <h2 className="text-2xl font-bold text-charcoal mb-4">{ASK_HEAVEN_CTA.heading}</h2>
+            <p className="text-gray-700 mb-6">{ASK_HEAVEN_CTA.body}</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                href="/contact"
-                className="hero-btn-primary"
+                href={ASK_HEAVEN_CTA.href}
+                className="hero-btn-primary ask-heaven-cta-button"
               >
-                Contact Support
+                {ASK_HEAVEN_CTA.buttonLabel}
               </Link>
               <a
                 href="mailto:support@landlordheaven.co.uk"
@@ -555,4 +554,3 @@ export default function HelpPage() {
     </div>
   );
 }
-

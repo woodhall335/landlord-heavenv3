@@ -28,6 +28,7 @@ import { formatEditWindowEndDate } from '@/lib/payments/edit-window';
 import { deriveDisplayStatus } from '@/lib/case-status';
 import { validateUrlProduct, type CanonicalJurisdiction } from '@/lib/tenancy/product-normalization';
 import { doesDocumentTypeMatch, getDashboardDocumentTitle } from '@/lib/documents/dashboard-document-display';
+import { ASK_HEAVEN_CTA } from '@/constants/askHeavenCta';
 
 interface CaseDetails {
   id: string;
@@ -1100,10 +1101,10 @@ export default function CaseDetailPage() {
                     <RiRefreshLine className="w-4 h-4 mr-2" />
                     Refresh Page
                   </Button>
-                  <Link href="/contact">
-                    <Button variant="outline">
+                  <Link href={ASK_HEAVEN_CTA.href}>
+                    <Button variant="outline" className="ask-heaven-cta-button hover:text-white">
                       <RiCustomerService2Line className="w-4 h-4 mr-2" />
-                      Contact Support
+                      {ASK_HEAVEN_CTA.buttonLabel}
                     </Button>
                   </Link>
                 </div>
@@ -1170,10 +1171,10 @@ export default function CaseDetailPage() {
                   Case ID: <code className="bg-gray-100 px-2 py-1 rounded text-sm">{caseId}</code>
                 </p>
                 <div className="mt-4 flex gap-3">
-                  <Link href="/contact">
-                    <Button variant="primary">
+                  <Link href={ASK_HEAVEN_CTA.href}>
+                    <Button variant="primary" className="ask-heaven-cta-button hover:text-white">
                       <RiCustomerService2Line className="w-4 h-4 mr-2" />
-                      Contact Support
+                      {ASK_HEAVEN_CTA.buttonLabel}
                     </Button>
                   </Link>
                 </div>
@@ -1199,10 +1200,10 @@ export default function CaseDetailPage() {
                     <RiRefreshLine className="w-4 h-4 mr-2" />
                     Retry Generation
                   </Button>
-                  <Link href="/contact">
-                    <Button variant="outline">
+                  <Link href={ASK_HEAVEN_CTA.href}>
+                    <Button variant="outline" className="ask-heaven-cta-button hover:text-white">
                       <RiCustomerService2Line className="w-4 h-4 mr-2" />
-                      Contact Support
+                      {ASK_HEAVEN_CTA.buttonLabel}
                     </Button>
                   </Link>
                 </div>
@@ -1269,10 +1270,10 @@ export default function CaseDetailPage() {
                     <RiRefreshLine className="w-4 h-4 mr-2" />
                     Retry Generation
                   </Button>
-                  <Link href="/contact">
-                    <Button variant="outline">
+                  <Link href={ASK_HEAVEN_CTA.href}>
+                    <Button variant="outline" className="ask-heaven-cta-button hover:text-white">
                       <RiCustomerService2Line className="w-4 h-4 mr-2" />
-                      Contact Support
+                      {ASK_HEAVEN_CTA.buttonLabel}
                     </Button>
                   </Link>
                 </div>
@@ -1320,8 +1321,8 @@ export default function CaseDetailPage() {
                   <Button variant="outline" onClick={() => window.location.reload()}>
                     Refresh Page
                   </Button>
-                  <Link href="/contact">
-                    <Button variant="outline">Contact Support</Button>
+                  <Link href={ASK_HEAVEN_CTA.href}>
+                    <Button variant="outline" className="ask-heaven-cta-button hover:text-white">{ASK_HEAVEN_CTA.buttonLabel}</Button>
                   </Link>
                 </div>
               </div>
@@ -1540,13 +1541,13 @@ export default function CaseDetailPage() {
                   Help Center
                 </Link>
                 <Link
-                  href="/contact"
+                  href={ASK_HEAVEN_CTA.href}
                   className="flex items-center gap-3 text-gray-700 hover:text-primary"
                 >
                   <div className="w-8 h-8 bg-purple-100 rounded-xl flex items-center justify-center shrink-0">
                     <RiCustomerService2Line className="w-4 h-4 text-primary" />
                   </div>
-                  Contact Support
+                  {ASK_HEAVEN_CTA.buttonLabel}
                 </Link>
               </div>
             </Card>
