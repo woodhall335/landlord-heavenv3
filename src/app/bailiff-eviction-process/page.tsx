@@ -43,8 +43,8 @@ const jumpLinks = [
   { href: '#applying-for-enforcement', label: 'Applying for enforcement' },
   { href: '#what-happens-on-eviction-day', label: 'What happens on eviction day' },
   { href: '#after-the-bailiff-appointment', label: 'After the bailiff appointment' },
-  { href: '#bailiff-eviction-timeline', label: 'Timeline' },
-  { href: '#common-bailiff-eviction-mistakes', label: 'Common mistakes' },
+  { href: '#eviction-timeline', label: 'Eviction timeline' },
+  { href: '#common-delay-points', label: 'Common delay points' },
   { href: '#complete-pack-vs-notice-only', label: 'Complete Pack vs Notice Only' },
   { href: '#faqs', label: 'FAQs' },
   { href: '#final-cta', label: 'Next steps' },
@@ -187,8 +187,8 @@ export default function Page() {
         subtitle="Understand what happens after a possession order and how landlords move from court decision to lawful recovery of the property."
         primaryCta={{ label: 'Start Complete Eviction Pack', href: '/products/complete-pack' }}
         secondaryCta={{ label: 'Need notice help first?', href: '/products/notice-only' }}
-        mediaSrc="/images/wizard-icons/09-court.png"
-        mediaAlt="Bailiff eviction process guide icon"
+        mediaSrc="/images/wizard-icons/11-calendar-timeline.png"
+        mediaAlt="Bailiff eviction timeline guide icon"
         showReviewPill
         showTrustPositioningBar
       >
@@ -482,93 +482,131 @@ export default function Page() {
             </Card>
 
             <Card
-              id="bailiff-eviction-timeline"
-              title="Bailiff Eviction Timeline"
+              id="eviction-timeline"
+              title="Eviction Timeline and Bailiff Stage Timing"
             >
               <p className="mt-4 leading-7 text-gray-700">
-                The bailiff timeline depends on the earlier case history, court workload,
-                and enforcement availability. Landlords should therefore think of it as the
-                final stage in a chain rather than as one isolated appointment.
+                The bailiff stage should be understood as the final part of the wider
+                eviction timeline, not as a standalone event. By the time a landlord
+                reaches enforcement, the case has usually already moved through notice,
+                court claim, and possession order stages. That means the true timing
+                expectation should be based on the full eviction timeline in England rather
+                than on the bailiff appointment alone.
               </p>
 
               <p className="mt-4 leading-7 text-gray-700">
-                By the time a case reaches this stage, the landlord has already normally
-                moved through notice, claim issue, hearing, and possession order. Bailiff
-                enforcement is only relevant where the tenant has not left by the possession
-                date. That means the enforcement timeline sits on top of everything that
-                happened earlier.
+                In many cases, the overall process from notice to enforcement takes around
+                three to six months. Some cases finish sooner where the tenant leaves after
+                notice or shortly after the possession order. Others take longer where the
+                claim is defended, local court workloads are heavy, or bailiff listing
+                times are slow.
               </p>
 
-              <p className="mt-4 leading-7 text-gray-700">
-                A realistic sequence usually looks like this: notice stage, court claim,
-                hearing or paper decision, possession order, waiting through the possession
-                date, enforcement application, then the bailiff appointment itself. If the
-                landlord plans only for the final appointment and not for the stages before
-                it, the whole process tends to feel more chaotic than it needs to.
-              </p>
+              <div className="mt-6 overflow-x-auto rounded-xl border border-[#E6DBFF] bg-white">
+                <table className="w-full border-collapse text-sm">
+                  <thead className="bg-[#F8F4FF] text-[#2a2161]">
+                    <tr>
+                      <th className="px-4 py-3 text-left font-semibold">Stage</th>
+                      <th className="px-4 py-3 text-left font-semibold">Typical time</th>
+                      <th className="px-4 py-3 text-left font-semibold">What happens</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="border-t border-[#E6DBFF] text-gray-700">
+                      <td className="px-4 py-3 font-medium">Notice period</td>
+                      <td className="px-4 py-3">2 weeks – 2 months</td>
+                      <td className="px-4 py-3">
+                        Landlord serves the relevant notice and waits for expiry.
+                      </td>
+                    </tr>
+                    <tr className="border-t border-[#E6DBFF] text-gray-700">
+                      <td className="px-4 py-3 font-medium">Court processing</td>
+                      <td className="px-4 py-3">6 – 10 weeks</td>
+                      <td className="px-4 py-3">
+                        Possession claim is issued and considered by the court.
+                      </td>
+                    </tr>
+                    <tr className="border-t border-[#E6DBFF] text-gray-700">
+                      <td className="px-4 py-3 font-medium">Possession order</td>
+                      <td className="px-4 py-3">Around 14 days</td>
+                      <td className="px-4 py-3">
+                        Court sets a date for the tenant to leave the property.
+                      </td>
+                    </tr>
+                    <tr className="border-t border-[#E6DBFF] text-gray-700">
+                      <td className="px-4 py-3 font-medium">Bailiff enforcement</td>
+                      <td className="px-4 py-3">2 – 6 weeks</td>
+                      <td className="px-4 py-3">
+                        Authorised enforcement officers recover possession if needed.
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
 
               <p className="mt-4 leading-7 text-gray-700">
-                The biggest avoidable delays often come from weak stage control rather than
-                from the legal route itself. Where the notice was poor, the hearing file
-                was inconsistent, or the order terms were not tracked carefully,
-                enforcement can feel slower because the whole file has been harder to run
-                from the start.
+                For timing expectations, use the eviction timeline England guide as the
+                main reference point. Court backlogs and bailiff availability are outside
+                your control, but notice validity, service quality, chronology control, and
+                document readiness are not.
               </p>
             </Card>
 
             <Card
-              id="common-bailiff-eviction-mistakes"
-              title="Common Bailiff Eviction Mistakes"
+              id="common-delay-points"
+              title="Common Delay Points"
             >
               <p className="mt-4 leading-7 text-gray-700">
-                Most enforcement-stage mistakes come from one of two problems: landlords
-                either think the possession order has already solved everything, or they
-                treat eviction day as a purely practical event and forget that it is still
-                part of a legal workflow.
+                The biggest timing mistake landlords make is treating the bailiff stage as
+                though delay starts there. In reality, many late-stage delays are created
+                much earlier in the file. By the time a case reaches enforcement, weak
+                notice work, poor service records, and inconsistent court paperwork have
+                often already added weeks to the process.
               </p>
 
               <ul className="mt-4 list-disc space-y-3 pl-5 text-gray-700">
                 <li>
-                  <span className="font-medium">Assuming the possession order is the final step.</span>
+                  <span className="font-medium">Invalid notices or incorrect dates.</span>
                   <span className="block">
-                    A possession order answers the legal question, but the landlord still
-                    needs enforcement if the tenant remains.
+                    A defective notice can force the landlord to restart earlier stages,
+                    which then pushes enforcement back by weeks or months.
                   </span>
                 </li>
                 <li>
-                  <span className="font-medium">Failing to prepare for eviction day.</span>
+                  <span className="font-medium">Weak proof of service.</span>
                   <span className="block">
-                    Access, locksmiths, security, and immediate handover issues should be
-                    planned before the appointment.
+                    If service cannot be shown clearly, the court route may slow down
+                    before the landlord ever reaches the bailiff stage.
                   </span>
                 </li>
                 <li>
-                  <span className="font-medium">Weak file control between order and enforcement.</span>
+                  <span className="font-medium">Incomplete court paperwork.</span>
                   <span className="block">
-                    The landlord should know the exact order terms, dates, and status of
-                    the file before moving to the final stage.
+                    Inconsistent or poorly prepared claim files often create avoidable
+                    friction at hearing and post-order stage.
                   </span>
                 </li>
                 <li>
-                  <span className="font-medium">Thinking enforcement is just admin.</span>
+                  <span className="font-medium">Waiting too long to prepare for enforcement.</span>
                   <span className="block">
-                    Enforcement is a formal legal stage and should be treated with the same
-                    care as notice and court preparation.
+                    Landlords who only start planning after the possession date often lose
+                    momentum on the final handover.
                   </span>
                 </li>
                 <li>
-                  <span className="font-medium">Ignoring post-eviction recovery planning.</span>
+                  <span className="font-medium">Assuming court backlog can be controlled.</span>
                   <span className="block">
-                    Arrears, damage, condition, and belongings often still need attention
-                    after the bailiff stage has finished.
+                    Local listing pressure and bailiff demand are outside the landlord’s
+                    control, so the practical focus should be on file quality, service
+                    standards, and readiness.
                   </span>
                 </li>
               </ul>
 
               <p className="mt-4 leading-7 text-gray-700">
-                The safer mindset is to view bailiff eviction as the final controlled step
-                in one longer possession workflow. When the landlord builds the case that
-                way, enforcement tends to be less stressful and more predictable.
+                In practical terms, court backlogs are outside your control, but notice
+                validity and service quality are not. Landlords usually save more time by
+                preventing avoidable resets than by trying to rush the final stage.
               </p>
             </Card>
 
@@ -624,6 +662,11 @@ export default function Page() {
               Landlords who treat enforcement as part of one continuous legal workflow
               usually get more predictable outcomes than landlords who only start planning
               after the possession date has already passed.
+            </p>
+            <p className="mt-4 leading-7 text-gray-700">
+              For timing expectations, use the Eviction Timeline England guide as the main
+              planning reference, then treat the bailiff stage as the final enforcement
+              segment of that wider process.
             </p>
             <p className="mt-4 leading-7 text-gray-700">
               If your case has already moved into court, possession order, or enforcement
