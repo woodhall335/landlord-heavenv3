@@ -1,665 +1,583 @@
-import type { Metadata } from 'next';
-import type { ReactNode } from 'react';
-import Link from 'next/link';
-import { HeaderConfig } from '@/components/layout/HeaderConfig';
-import { UniversalHero } from '@/components/landing/UniversalHero';
-import { Container } from '@/components/ui/Container';
-import { FAQSection, type FAQItem } from '@/components/seo/FAQSection';
-import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
-import {
-  StructuredData,
-  articleSchema,
-  breadcrumbSchema,
-  faqPageSchema,
-} from '@/lib/seo/structured-data';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
+/**
+ * JSON-LD Structured Data Helpers
+ *
+ * Generate schema.org structured data for SEO.
+ */
 
-const canonical = 'https://landlordheaven.co.uk/serve-section-8-notice';
+import React from 'react';
+import { PRODUCTS } from '@/lib/pricing/products';
+import { getDynamicReviewCount, REVIEW_RATING } from '@/lib/reviews/reviewStats';
 
-const noticeOnlyWizardLink = buildWizardLink({
-  product: 'notice_only',
-  jurisdiction: 'england',
-  src: 'seo_serve_section_8_notice',
-  topic: 'eviction',
-});
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://landlordheaven.co.uk";
 
-const completePackWizardLink = buildWizardLink({
-  product: 'complete_pack',
-  jurisdiction: 'england',
-  src: 'seo_serve_section_8_notice',
-  topic: 'eviction',
-});
 
-export const metadata: Metadata = {
-  title:
-    'How to Serve a Section 8 Notice | Grounds-Based Eviction Guide for Landlords | LandlordHeaven',
-  description:
-    'A practical landlord guide to serving a Section 8 notice in England. Learn how grounds work, what evidence matters, how service is usually handled, and how to avoid notice-stage mistakes that weaken a possession claim.',
-  alternates: {
-    canonical,
-  },
-  openGraph: {
-    title:
-      'How to Serve a Section 8 Notice | Grounds-Based Eviction Guide for Landlords | LandlordHeaven',
-    description:
-      'Plain-English guidance for landlords on serving a Section 8 notice correctly, choosing grounds carefully, and preserving the evidence needed for court.',
-    url: canonical,
-    siteName: 'LandlordHeaven',
-    type: 'article',
-  },
+/**
+ * Get a date 1 year from now in ISO format (YYYY-MM-DD)
+ * Used for priceValidUntil in product offers
+ */
+function getDefaultPriceValidUntil(): string {
+  const date = new Date();
+  date.setFullYear(date.getFullYear() + 1);
+  return date.toISOString().split('T')[0];
+}
+
+export interface Product {
+  name: string;
+  description: string;
+  price: string;
+  currency?: string;
+  availability?: string;
+  url: string;
+  image?: string;
+  priceValidUntil?: string;
+}
+
+export interface FAQItem {
+  question: string;
+  answer: string | React.ReactNode;
+}
+
+export interface ArticleSchemaInput {
+  headline: string;
+  description: string;
+  url: string;
+  datePublished?: string;
+  dateModified?: string;
+  image?: string;
+}
+
+/**
+ * Organization structured data
+ * Use this on the homepage and footer
+ */
+export function organizationSchema() {
+  const reviewCount = getDynamicReviewCount();
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Landlord Heaven",
+    "url": SITE_URL,
+    "logo": `${SITE_URL}/logo.png`,
+    "description": "UK-wide AI legal case preparation platform generating complete, jurisdiction-specific, compliance-checked eviction bundles ready to file.",
+    "address": {
+      "@type": "PostalAddress",
+      "addressCountry": "GB",
+      "addressRegion": "England"
+    },
+    "contactPoint": [
+      {
+        "@type": "ContactPoint",
+        "telephone": "",
+        "email": "support@landlordheaven.co.uk",
+        "contactType": "customer support",
+        "availableLanguage": ["en"]
+      }
+    ],
+    "sameAs": [
+      "https://twitter.com/LandlordHeaven",
+      "https://www.linkedin.com/company/landlord-heaven"
+    ],
+    "areaServed": [
+      {
+        "@type": "Country",
+        "name": "United Kingdom"
+      }
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": REVIEW_RATING,
+      "reviewCount": reviewCount.toString()
+    }
+  };
+}
+
+/**
+ * Product structured data
+ * Use this on product pages
+ *
+ */
+export function productSchema(product: Product) {
+  const reviewCount = getDynamicReviewCount();
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": product.name,
+    "description": product.description,
+    "url": product.url,
+    "image": product.image || `${SITE_URL}/og-image.png`,
+    "brand": {
+      "@type": "Brand",
+      "name": "Landlord Heaven"
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": product.price,
+      "priceCurrency": product.currency || "GBP",
+      "priceValidUntil": product.priceValidUntil || getDefaultPriceValidUntil(),
+      "availability": product.availability || "https://schema.org/InStock",
+      "url": product.url,
+      "seller": {
+        "@type": "Organization",
+        "name": "Landlord Heaven"
+      },
+      "shippingDetails": {
+        "@type": "OfferShippingDetails",
+        "shippingRate": {
+          "@type": "MonetaryAmount",
+          "value": "0",
+          "currency": "GBP"
+        },
+        "shippingDestination": {
+          "@type": "DefinedRegion",
+          "addressCountry": "GB"
+        },
+        "deliveryTime": {
+          "@type": "ShippingDeliveryTime",
+          "handlingTime": {
+            "@type": "QuantitativeValue",
+            "minValue": "0",
+            "maxValue": "0",
+            "unitCode": "MIN"
+          },
+          "transitTime": {
+            "@type": "QuantitativeValue",
+            "minValue": "0",
+            "maxValue": "0",
+            "unitCode": "MIN"
+          }
+        }
+      },
+      "hasMerchantReturnPolicy": {
+        "@type": "MerchantReturnPolicy",
+        "applicableCountry": "GB",
+        "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted"
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": REVIEW_RATING,
+      "reviewCount": reviewCount.toString()
+    }
+  };
+}
+
+/**
+ * Service subscription product (for HMO Pro)
+ */
+export function subscriptionProductSchema(product: Product) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": product.name,
+    "description": product.description,
+    "url": product.url,
+    "image": product.image || `${SITE_URL}/og-image.png`,
+    "brand": {
+      "@type": "Brand",
+      "name": "Landlord Heaven"
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": product.price,
+      "priceCurrency": product.currency || "GBP",
+      "priceValidUntil": product.priceValidUntil || getDefaultPriceValidUntil(),
+      "availability": "https://schema.org/InStock",
+      "url": product.url,
+      "priceSpecification": {
+        "@type": "UnitPriceSpecification",
+        "price": product.price,
+        "priceCurrency": "GBP",
+        "referenceQuantity": {
+          "@type": "QuantitativeValue",
+          "value": "1",
+          "unitCode": "MON"
+        }
+      },
+      "seller": {
+        "@type": "Organization",
+        "name": "Landlord Heaven"
+      },
+      "shippingDetails": {
+        "@type": "OfferShippingDetails",
+        "shippingRate": {
+          "@type": "MonetaryAmount",
+          "value": "0",
+          "currency": "GBP"
+        },
+        "shippingDestination": {
+          "@type": "DefinedRegion",
+          "addressCountry": "GB"
+        },
+        "deliveryTime": {
+          "@type": "ShippingDeliveryTime",
+          "handlingTime": {
+            "@type": "QuantitativeValue",
+            "minValue": "0",
+            "maxValue": "0",
+            "unitCode": "MIN"
+          },
+          "transitTime": {
+            "@type": "QuantitativeValue",
+            "minValue": "0",
+            "maxValue": "0",
+            "unitCode": "MIN"
+          }
+        }
+      },
+      "hasMerchantReturnPolicy": {
+        "@type": "MerchantReturnPolicy",
+        "applicableCountry": "GB",
+        "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted"
+      }
+    }
+  };
+}
+
+/**
+ * FAQ Page structured data
+ * Use this on help pages
+ */
+export function faqPageSchema(faqs: FAQItem[]) {
+  const schemaFaqs = faqs.filter(
+    (faq): faq is { question: string; answer: string } =>
+      typeof faq.answer === 'string'
+  );
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": schemaFaqs.map(faq => ({
+      "@type": "Question",
+      "name": faq.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.answer
+      }
+    }))
+  };
+}
+
+/**
+ * WebSite structured data
+ * Use this on the homepage only (not globally)
+ */
+export function websiteSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Landlord Heaven",
+    "url": SITE_URL,
+    // SearchAction removed - no search page exists
+  };
+}
+
+/**
+ * Article structured data
+ * Use this on guides and long-form content pages
+ */
+export function articleSchema(input: ArticleSchemaInput) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": input.headline,
+    "description": input.description,
+    "image": input.image || `${SITE_URL}/og-image.png`,
+    "datePublished": input.datePublished,
+    "dateModified": input.dateModified || input.datePublished,
+    "author": {
+      "@type": "Organization",
+      "name": "Landlord Heaven"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Landlord Heaven",
+      "logo": {
+        "@type": "ImageObject",
+        "url": `${SITE_URL}/logo.png`
+      }
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": input.url
+    }
+  };
+}
+
+/**
+ * BreadcrumbList structured data
+ * Use this on deep pages to show navigation hierarchy
+ */
+export function breadcrumbSchema(items: Array<{ name: string; url: string }>) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": items.map((item, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "name": item.name,
+      "item": item.url
+    }))
+  };
+}
+
+/**
+ * LocalBusiness structured data
+ * For UK-based business
+ * Note: Not used globally - Organization schema is preferred for online businesses
+ */
+export function localBusinessSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Landlord Heaven",
+    "image": `${SITE_URL}/logo.png`,
+    "url": SITE_URL,
+    "email": "support@landlordheaven.co.uk",
+    "address": {
+      "@type": "PostalAddress",
+      "addressCountry": "GB"
+    },
+    // geo field removed - invalid without actual coordinates
+    "priceRange": "££"
+  };
+}
+
+/**
+ * SoftwareApplication structured data
+ * For the overall platform
+ *
+ * @deprecated DO NOT USE GLOBALLY - removed from layout.tsx in Jan 2026.
+ * This schema caused Google to show wrong snippets on product pages:
+ *
+ * Only use this on specific tool pages where SoftwareApplication classification
+ * is intentionally desired, NOT on product pages.
+ *
+ * Price range is derived from PRODUCTS to stay in sync with actual pricing.
+ */
+export function softwareApplicationSchema() {
+  // Calculate actual price range from products
+  const prices = [
+    PRODUCTS.ast_standard.price,  // £9.99 (lowest)
+    PRODUCTS.ast_premium.price,   // £19.99
+    PRODUCTS.notice_only.price,   // £19.99
+    PRODUCTS.money_claim.price,   // £34.99
+    PRODUCTS.complete_pack.price, // £49.99 (highest)
+  ];
+  const lowPrice = Math.min(...prices).toFixed(2);
+  const highPrice = Math.max(...prices).toFixed(2);
+
+  const reviewCount = getDynamicReviewCount();
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Landlord Heaven",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web",
+    "offers": {
+      "@type": "AggregateOffer",
+      "lowPrice": lowPrice,
+      "highPrice": highPrice,
+      "priceCurrency": "GBP"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": REVIEW_RATING,
+      "reviewCount": reviewCount.toString()
+    }
+  };
+}
+
+/**
+ * HowTo structured data interface
+ */
+export interface HowToStep {
+  name: string;
+  text: string;
+  url?: string;
+  image?: string;
+}
+
+export interface HowToSchemaInput {
+  name: string;
+  description: string;
+  url: string;
+  totalTime?: string; // ISO 8601 duration, e.g., "PT15M" for 15 minutes
+  estimatedCost?: {
+    currency: string;
+    value: string;
+  };
+  steps: HowToStep[];
+  image?: string;
+}
+
+/**
+ * HowTo structured data
+ *
+ * Use this for:
+ * - Process pages (MCOL steps, eviction process, etc.)
+ * - Tool pages (generators, validators)
+ * - Guides with step-by-step instructions
+ *
+ * IMPORTANT: Keep it conservative:
+ * - No fake or estimated times unless you have data
+ * - Steps should be genuinely helpful, not marketing
+ * - Do not add HowTo to pages that aren't actually step-by-step guides
+ */
+export function howToSchema(input: HowToSchemaInput) {
+  const schema: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": input.name,
+    "description": input.description,
+    "url": input.url,
+    "image": input.image || `${SITE_URL}/og-image.png`,
+    "step": input.steps.map((step, index) => ({
+      "@type": "HowToStep",
+      "position": index + 1,
+      "name": step.name,
+      "text": step.text,
+      ...(step.url && { "url": step.url }),
+      ...(step.image && { "image": step.image }),
+    })),
+  };
+
+  if (input.totalTime) {
+    schema.totalTime = input.totalTime;
+  }
+
+  if (input.estimatedCost) {
+    schema.estimatedCost = {
+      "@type": "MonetaryAmount",
+      "currency": input.estimatedCost.currency,
+      "value": input.estimatedCost.value,
+    };
+  }
+
+  return schema;
+}
+
+/**
+ * Pre-built HowTo schemas for common processes
+ */
+export const HOWTO_SCHEMAS = {
+  /** Section 21 eviction process (England) */
+  section21Process: howToSchema({
+    name: 'How to Serve a Section 21 Notice in England',
+    description: 'Complete step-by-step guide to serving a valid Section 21 no-fault eviction notice.',
+    url: `${SITE_URL}/section-21-notice-template`,
+    totalTime: 'PT15M',
+    steps: [
+      { name: 'Check eligibility requirements', text: 'Verify deposit protection, EPC, gas safety certificate, and How to Rent guide were provided.' },
+      { name: 'Generate Form 6A notice', text: 'Create a valid Section 21 notice using the official Form 6A template with correct details.' },
+      { name: 'Serve the notice correctly', text: 'Deliver the notice to the tenant by hand, first-class post, or leave at the property.' },
+      { name: 'Wait the notice period', text: 'Allow at least 2 months from service (or end of fixed term if later).' },
+      { name: 'Apply for possession if needed', text: 'If tenant hasn\'t left, apply to court using accelerated possession procedure (Form N5B).' },
+    ],
+  }),
+
+  /** MCOL claim process */
+  mcolProcess: howToSchema({
+    name: 'How to File a Money Claim Online (MCOL)',
+    description: 'Step-by-step guide to filing a county court money claim for unpaid rent or damages.',
+    url: `${SITE_URL}/money-claim-online-mcol`,
+    totalTime: 'PT30M',
+    estimatedCost: { currency: 'GBP', value: '35-455' },
+    steps: [
+      { name: 'Register for MCOL', text: 'Create an account on the government Money Claim Online website.' },
+      { name: 'Gather evidence', text: 'Compile tenancy agreement, rent statements, photos of damage, and calculate total owed.' },
+      { name: 'Enter defendant details', text: 'Fill in the tenant\'s full name and last known address.' },
+      { name: 'Write particulars of claim', text: 'Describe what the claim is for, when the debt arose, and the breakdown.' },
+      { name: 'Pay the court fee', text: 'Pay the fee based on claim amount (£35 for up to £300, up to £455 for up to £10,000).' },
+      { name: 'Submit and wait for response', text: 'Defendant has 14 days to respond. Request default judgment if they don\'t.' },
+    ],
+  }),
+
+  /** Rent demand letter process */
+  rentDemandProcess: howToSchema({
+    name: 'How to Write a Rent Demand Letter',
+    description: 'Step-by-step guide to writing an effective rent demand letter for arrears.',
+    url: `${SITE_URL}/tools/free-rent-demand-letter`,
+    totalTime: 'PT10M',
+    steps: [
+      { name: 'Gather arrears information', text: 'Calculate total rent owed and list missed payment dates.' },
+      { name: 'Use formal letter format', text: 'Include your address, tenant\'s address, date, and clear subject line.' },
+      { name: 'State the arrears clearly', text: 'List each missed payment with dates and amounts. State the total owed.' },
+      { name: 'Set a clear deadline', text: 'Give a reasonable deadline (typically 14 days) for payment.' },
+      { name: 'Explain consequences', text: 'State that you may take further action including eviction or court claim.' },
+      { name: 'Send and keep proof', text: 'Send by recorded delivery and keep a copy for evidence.' },
+    ],
+  }),
+
+  /** Section 8 notice process */
+  section8Process: howToSchema({
+    name: 'How to Serve a Section 8 Notice',
+    description: 'Step-by-step guide to serving a grounds-based Section 8 eviction notice.',
+    url: `${SITE_URL}/section-8-notice-template`,
+    totalTime: 'PT20M',
+    steps: [
+      { name: 'Identify valid grounds', text: 'Review the 18 Section 8 grounds and identify which apply to your situation.' },
+      { name: 'Gather evidence', text: 'Collect rent statements, warning letters, photos, or other supporting evidence.' },
+      { name: 'Complete Form 3 notice', text: 'Fill in the official Form 3 with property details and selected grounds.' },
+      { name: 'Serve the notice', text: 'Deliver to tenant by hand, post, or leave at property. Note the service date.' },
+      { name: 'Wait the notice period', text: 'Notice periods vary: 2 weeks for rent arrears (Ground 8), 2 months for most others.' },
+      { name: 'Apply for possession order', text: 'If tenant hasn\'t left, apply to court using Form N5 (not N5B for Section 8).' },
+    ],
+  }),
 };
 
-const jumpLinks = [
-  { href: '#quick-answer', label: 'Quick answer' },
-  { href: '#what-serving-a-section-8-really-means', label: 'What serving a Section 8 really means' },
-  { href: '#grounds-matter-first', label: 'Why the grounds matter first' },
-  { href: '#before-you-serve', label: 'Before you serve the notice' },
-  { href: '#how-section-8-service-usually-works', label: 'How Section 8 service usually works' },
-  { href: '#evidence-landlords-should-prepare', label: 'Evidence landlords should prepare' },
-  { href: '#ground-8-10-11-rent-arrears', label: 'Grounds 8, 10 and 11 for rent arrears' },
-  { href: '#when-landlords-get-into-trouble', label: 'When landlords get into trouble' },
-  { href: '#timeline-after-service', label: 'Timeline after service' },
-  { href: '#section-8-service-checklist', label: 'Section 8 service checklist' },
-  { href: '#notice-only-vs-complete-pack', label: 'Notice Only vs Complete Pack' },
-  { href: '#faqs', label: 'FAQs' },
-  { href: '#final-cta', label: 'Next steps' },
-] as const;
+/**
+ * AboutPage structured data
+ * Use this on the about page to help search engines understand the page purpose
+ */
+export function aboutPageSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "name": "About Landlord Heaven",
+    "description": "Learn about Landlord Heaven, the AI-powered platform helping UK landlords create legally compliant documents.",
+    "url": `${SITE_URL}/about`,
+    "mainEntity": organizationSchema(),
+  };
+}
 
-const faqs: FAQItem[] = [
-  {
-    question: 'How do landlords usually serve a Section 8 notice in England?',
-    answer:
-      'Landlords usually serve a Section 8 notice by selecting the correct grounds first, completing the prescribed Form 3 carefully, choosing a sensible service method, and keeping clear proof of what was served, when, and how.',
-  },
-  {
-    question: 'What is the biggest mistake when serving a Section 8 notice?',
-    answer:
-      'One of the biggest mistakes is focusing only on the notice form and not on the evidence behind the grounds. A correctly served notice can still lead to trouble later if the landlord cannot prove the alleged breach properly.',
-  },
-  {
-    question: 'Do I need proof of service for a Section 8 notice?',
-    answer:
-      'Yes. Landlords should keep proof of service for a Section 8 notice. Clear service evidence helps show when the notice was delivered and supports the later possession file if the tenant does not leave.',
-  },
-  {
-    question: 'What grounds are commonly used on a Section 8 notice?',
-    answer:
-      'For rent arrears, landlords commonly rely on Grounds 8, 10 and 11. Ground 8 is mandatory if the arrears threshold is met at service and at the hearing, while Grounds 10 and 11 are discretionary.',
-  },
-  {
-    question: 'Can a Section 8 notice fail because of bad evidence?',
-    answer:
-      'Yes. A Section 8 case often turns on evidence quality. Weak arrears schedules, missing records, unclear witness material, or poor service proof can all make the possession route harder.',
-  },
-  {
-    question: 'What happens after a Section 8 notice is served?',
-    answer:
-      'After service, the relevant notice period runs. If the tenant does not resolve the issue or leave, the landlord may need to move to the court possession stage and prove the grounds relied upon.',
-  },
-  {
-    question: 'Should I use Notice Only or Complete Pack for a Section 8 case?',
-    answer:
-      'Notice Only is usually the better fit where the main need is getting the notice stage handled properly. Complete Pack is usually stronger where the landlord wants broader route control, court preparation, and possession-stage support.',
-  },
-  {
-    question: 'Can I use Section 8 and Section 21 together?',
-    answer:
-      'In some England cases landlords serve both routes together where appropriate. But each route still has to stand on its own, with its own compliance, notice, and service logic.',
-  },
-];
+/**
+ * ContactPage structured data
+ * Use this on the contact page to help search engines understand contact options
+ */
+export function contactPageSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "name": "Contact Landlord Heaven",
+    "description": "Get in touch with Landlord Heaven for support with eviction notices, tenancy agreements, and money claims.",
+    "url": `${SITE_URL}/contact`,
+    "mainEntity": {
+      "@type": "Organization",
+      "name": "Landlord Heaven",
+      "url": SITE_URL,
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "email": "support@landlordheaven.co.uk",
+        "url": `${SITE_URL}/contact`,
+        "availableLanguage": "English",
+      },
+    },
+  };
+}
 
-function Card({
-  id,
-  title,
-  children,
-}: {
-  id?: string;
-  title: string;
-  children: ReactNode;
-}) {
+/**
+ * Utility function to render JSON-LD script tag
+ */
+export function StructuredData({ data }: { data: object }) {
   return (
-    <article
-      id={id}
-      className="scroll-mt-24 rounded-2xl border border-[#E6DBFF] bg-[#FCFAFF] p-6 md:p-8"
-    >
-      <h2 className="text-2xl font-semibold text-[#2a2161]">{title}</h2>
-      {children}
-    </article>
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+    />
   );
 }
 
-function CtaBand({
-  title,
-  body,
-  primaryHref,
-  primaryLabel,
-  secondaryHref,
-  secondaryLabel,
-}: {
-  title: string;
-  body: string;
-  primaryHref: string;
-  primaryLabel: string;
-  secondaryHref: string;
-  secondaryLabel: string;
-}) {
-  return (
-    <div className="rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-6 md:p-8">
-      <h3 className="text-xl font-semibold text-[#2a2161]">{title}</h3>
-      <p className="mt-3 leading-7 text-gray-700">{body}</p>
-      <div className="mt-5 flex flex-wrap gap-3">
-        <Link
-          href={primaryHref}
-          className="rounded-lg bg-primary px-5 py-3 text-white hover:opacity-95"
-        >
-          {primaryLabel}
-        </Link>
-        <Link
-          href={secondaryHref}
-          className="rounded-lg border border-[#E6DBFF] bg-white px-5 py-3 text-primary hover:bg-[#FCFAFF]"
-        >
-          {secondaryLabel}
-        </Link>
-      </div>
-    </div>
-  );
-}
-
-export default function Page() {
-  return (
-    <div className="min-h-screen bg-[#fcfaff]">
-      <SeoLandingWrapper
-        pagePath="/serve-section-8-notice"
-        pageTitle={metadata.title as string}
-        pageType="guide"
-        jurisdiction="england"
-      />
-
-      <HeaderConfig mode="autoOnScroll" />
-
-      <StructuredData
-        data={articleSchema({
-          headline: 'How to Serve a Section 8 Notice',
-          description: metadata.description as string,
-          url: canonical,
-          datePublished: '2026-03-01',
-          dateModified: '2026-03-13',
-        })}
-      />
-
-      <StructuredData
-        data={breadcrumbSchema([
-          { name: 'Home', url: 'https://landlordheaven.co.uk' },
-          { name: 'Eviction guides', url: 'https://landlordheaven.co.uk/eviction-guides' },
-          { name: 'Serve Section 8 Notice', url: canonical },
-        ])}
-      />
-
-      <StructuredData data={faqPageSchema(faqs)} />
-
-      <UniversalHero
-        title="How to Serve a Section 8 Notice"
-        subtitle="A practical landlord guide to choosing grounds carefully, serving the notice properly, and preparing the evidence needed for a stronger possession case."
-        primaryCta={{ label: 'Start Notice Only for Section 8', href: noticeOnlyWizardLink }}
-        secondaryCta={{ label: 'Need broader support? Complete Pack', href: completePackWizardLink }}
-        mediaSrc="/images/wizard-icons/14-section-8.png"
-        mediaAlt="Section 8 notice service guide icon"
-        showReviewPill
-        showTrustPositioningBar
-      >
-        <p className="mt-6 text-sm text-white/90 md:text-base">
-          This guide explains how landlords in England usually serve a Section 8 notice,
-          what should be checked before service, what evidence matters most, and why
-          the grounds behind the notice are often more important than the act of service itself.
-        </p>
-      </UniversalHero>
-
-      <section className="border-b border-[#E6DBFF] bg-white py-8">
-        <Container>
-          <nav
-            aria-labelledby="guide-links-heading"
-            className="mx-auto max-w-5xl rounded-2xl border border-[#E6DBFF] bg-white p-6"
-          >
-            <h2 id="guide-links-heading" className="text-2xl font-semibold text-[#2a2161]">
-              In This Guide
-            </h2>
-            <div className="mt-4 grid gap-3 md:grid-cols-2">
-              {jumpLinks.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  className="rounded-lg border border-[#E6DBFF] px-4 py-3 text-primary hover:bg-[#F8F4FF]"
-                >
-                  {link.label}
-                </a>
-              ))}
-            </div>
-          </nav>
-        </Container>
-      </section>
-
-      <section className="bg-white py-12">
-        <Container>
-          <div className="mx-auto max-w-5xl space-y-10">
-            <Card id="quick-answer" title="Quick Answer">
-              <p className="mt-4 leading-7 text-gray-700">
-                Serving a Section 8 notice is not just about filling in Form 3 and sending
-                it out. In practical terms, landlords usually need four things to line up at
-                the same time: the Section 8 route must actually fit the facts, the correct
-                grounds must be chosen, the notice itself must be completed properly, and
-                the evidence behind the grounds must still be strong enough if the case later
-                reaches court.
-              </p>
-
-              <p className="mt-4 leading-7 text-gray-700">
-                That is what makes Section 8 different from more procedural notice routes.
-                A landlord is not just proving that a notice was served. The landlord is also
-                preparing to prove that the tenant breached the tenancy in a way that supports
-                possession. So service matters, but evidence quality usually matters just as much.
-              </p>
-
-              <p className="mt-4 leading-7 text-gray-700">
-                The safest mindset is simple: prepare the Section 8 file as if a judge may later
-                need to understand the whole story from the papers alone. That means checking the
-                grounds carefully, using the correct notice period, preserving proof of service,
-                and keeping the evidence bundle clear from the start.
-              </p>
-
-              <p className="mt-4 leading-7 text-gray-700">
-                In practical terms, landlords usually get the best results when they treat Section 8
-                service as part of one wider possession file rather than as a one-off admin task.
-              </p>
-            </Card>
-
-            <Card
-              id="what-serving-a-section-8-really-means"
-              title="What Serving a Section 8 Really Means"
-            >
-              <p className="mt-4 leading-7 text-gray-700">
-                A Section 8 notice is the formal grounds-based possession route used by landlords
-                in England when the tenant has allegedly breached the tenancy agreement or where
-                another statutory ground applies. Unlike a no-fault route, Section 8 always depends
-                on reasons. The landlord has to identify the grounds, state them properly, and later
-                prove them if the tenant does not leave.
-              </p>
-
-              <p className="mt-4 leading-7 text-gray-700">
-                That means service is only one part of the job. A Section 8 file also has to show
-                that the chosen grounds fit the real facts, that the notice period matches the grounds
-                being used, and that the documentary record is good enough to support the case if a
-                possession hearing follows.
-              </p>
-
-              <p className="mt-4 leading-7 text-gray-700">
-                Good landlords therefore think about Section 8 in two layers. The first layer is
-                legal route control: which grounds are actually available, and are they strong enough?
-                The second layer is operational: how should the notice be prepared, served, and evidenced
-                so the file still makes sense later?
-              </p>
-
-              <p className="mt-4 leading-7 text-gray-700">
-                In practical terms, serving a Section 8 notice means starting a court-facing breach case,
-                not just delivering a document.
-              </p>
-            </Card>
-
-            <Card id="grounds-matter-first" title="Why the Grounds Matter First">
-              <p className="mt-4 leading-7 text-gray-700">
-                Most Section 8 delay comes from weak ground selection rather than weak delivery alone.
-                If the landlord picks the wrong grounds, overstates the problem, or fails to match the
-                ground to the evidence, the notice can become much harder to rely on later. This is why
-                service should never be treated as the first question. The first question is usually:
-                what exactly am I alleging, and can I prove it?
-              </p>
-
-              <p className="mt-4 leading-7 text-gray-700">
-                In rent arrears cases, landlords often rely on Grounds 8, 10 and 11 together because
-                they serve different purposes. In other files, the issue may be damage, anti-social
-                behaviour, or breach of tenancy terms. Each kind of case needs its own evidence logic.
-                A grounds-based notice is only as strong as the factual material supporting it.
-              </p>
-
-              <p className="mt-4 leading-7 text-gray-700">
-                This is also where realism matters. Some landlords are tempted to throw in every ground
-                that sounds available. That is not always the strongest route. The stronger approach is
-                usually the one where the chosen grounds fit the file cleanly and can be explained simply.
-              </p>
-
-              <p className="mt-4 leading-7 text-gray-700">
-                In practical terms, the notice usually works best when the grounds are narrow enough to
-                prove and broad enough to protect the landlord if one part of the case later weakens.
-              </p>
-            </Card>
-
-            <Card id="before-you-serve" title="Before You Serve the Notice">
-              <p className="mt-4 leading-7 text-gray-700">
-                Before a landlord serves Form 3, the first task is normally checking whether the Section 8
-                route is actually ready to use on the current facts. That means confirming the tenancy
-                details, checking the breach chronology, reviewing the evidence already available, and
-                making sure the notice period will be correct for the grounds being relied on.
-              </p>
-
-              <p className="mt-4 leading-7 text-gray-700">
-                In practical terms, landlords should also decide whether they are dealing with a simple
-                notice-stage file or a broader possession file that already needs fuller control. That
-                distinction often affects whether Notice Only is enough or whether the wider case would
-                benefit from broader route and court-stage support.
-              </p>
-
-              <ul className="mt-4 list-disc space-y-2 pl-5 text-gray-700">
-                <li>Confirm Section 8 is the right route on the current facts</li>
-                <li>Choose the correct grounds carefully</li>
-                <li>Check the notice period required for those grounds</li>
-                <li>Prepare the evidence before service happens</li>
-                <li>Use the prescribed Form 3 consistently with the rest of the file</li>
-                <li>Plan proof of service before delivery takes place</li>
-              </ul>
-
-              <p className="mt-4 leading-7 text-gray-700">
-                In practical terms, the easiest Section 8 cases to run later are usually the ones
-                prepared slowly enough to avoid basic ground, date, and evidence mistakes at the notice stage.
-              </p>
-            </Card>
-
-            <Card
-              id="how-section-8-service-usually-works"
-              title="How Section 8 Service Usually Works"
-            >
-              <p className="mt-4 leading-7 text-gray-700">
-                Once the grounds and evidence position are checked, landlords usually move to the service
-                stage by finalising Form 3, confirming the date logic, and choosing a service method that
-                fits the tenancy paperwork and leaves a clear trail. A convenient method is not always the
-                strongest method. The better service method is usually the one that creates the cleanest
-                record if later challenged.
-              </p>
-
-              <p className="mt-4 leading-7 text-gray-700">
-                Date control matters here as well. It is not enough to know that the notice was sent at
-                some point. The landlord should be able to explain what date was treated as service, why
-                that date was used, and how the later notice period was calculated from it. Date confusion
-                at this stage often creates avoidable trouble later.
-              </p>
-
-              <p className="mt-4 leading-7 text-gray-700">
-                Landlords also do best when they keep the final served version of the notice together with
-                the service proof and the key evidence supporting the grounds. That creates one cleaner
-                chronology for the later possession stage.
-              </p>
-
-              <p className="mt-4 leading-7 text-gray-700">
-                In practical terms, good Section 8 service is usually calm, dated, documented, and tied
-                closely to the wider evidence file.
-              </p>
-            </Card>
-
-            <Card
-              id="evidence-landlords-should-prepare"
-              title="Evidence Landlords Should Prepare"
-            >
-              <p className="mt-4 leading-7 text-gray-700">
-                Section 8 claims often succeed or fail on evidence quality. That is because the court is
-                not simply checking whether the notice exists. It is considering whether the alleged breach
-                is actually proved. So the strongest landlords usually build the evidence pack before service,
-                not after problems appear.
-              </p>
-
-              <p className="mt-4 leading-7 text-gray-700">
-                The exact evidence depends on the grounds used, but the logic is usually the same. The file
-                should show what happened, when it happened, how it breached the tenancy or statutory ground,
-                and what documents support that account.
-              </p>
-
-              <ul className="mt-4 list-disc space-y-2 pl-5 text-gray-700">
-                <li>Tenancy agreement and relevant clauses</li>
-                <li>Rent schedule and payment records where arrears are involved</li>
-                <li>Correspondence with the tenant about the issue</li>
-                <li>Photos, reports, or inspection notes where relevant</li>
-                <li>Witness statements or incident records for behaviour-based grounds</li>
-                <li>Proof of service for the notice itself</li>
-              </ul>
-
-              <p className="mt-4 leading-7 text-gray-700">
-                In practical terms, the better the evidence is organised before service, the less likely
-                the landlord is to need a rushed rebuild when the matter escalates to court.
-              </p>
-            </Card>
-
-            <CtaBand
-              title="Need the Section 8 notice stage handled properly before the file gets more expensive?"
-              body="Notice Only is usually the better fit where the main issue is getting the Section 8 notice prepared and served correctly now. Complete Pack is usually stronger where the wider possession file, court preparation, or later enforcement planning also needs to be managed carefully."
-              primaryHref={noticeOnlyWizardLink}
-              primaryLabel="Start Notice Only for Section 8"
-              secondaryHref={completePackWizardLink}
-              secondaryLabel="Need broader support? Complete Pack"
-            />
-
-            <Card
-              id="ground-8-10-11-rent-arrears"
-              title="Grounds 8, 10 and 11 for Rent Arrears"
-            >
-              <p className="mt-4 leading-7 text-gray-700">
-                In arrears cases, landlords often rely on Grounds 8, 10 and 11 together because each
-                one helps in a different way. Ground 8 is the best-known arrears ground because it is
-                mandatory if the threshold is met, but it is also vulnerable if the arrears drop before
-                the hearing. Grounds 10 and 11 are discretionary, so they do not create the same automatic
-                position, but they often provide useful backup if the tenant pays down some of the debt.
-              </p>
-
-              <p className="mt-4 leading-7 text-gray-700">
-                This is why clear arrears records matter so much. The landlord needs one clean rent schedule
-                showing what was due, what was paid, and what remained outstanding at the relevant points.
-                Without that, even a case that feels obvious can become harder to present.
-              </p>
-
-              <p className="mt-4 leading-7 text-gray-700">
-                In practical terms, landlords usually get a stronger arrears file by treating the rent
-                account as the centre of the claim and keeping the chronology disciplined from service
-                through to hearing.
-              </p>
-            </Card>
-
-            <Card
-              id="when-landlords-get-into-trouble"
-              title="When Landlords Get Into Trouble"
-            >
-              <p className="mt-4 leading-7 text-gray-700">
-                Most Section 8 problems do not begin with one dramatic error. They usually come from a
-                series of smaller decisions that weaken the file over time. A landlord may rush the notice,
-                rely on grounds that sounded broadly right but were not checked carefully, or assume the
-                court can sort out a messy evidence position later.
-              </p>
-
-              <ul className="mt-4 list-disc space-y-3 pl-5 text-gray-700">
-                <li>
-                  <span className="font-medium">Choosing weak or badly matched grounds.</span>
-                  <span className="block">
-                    The notice can become harder to rely on if the grounds do not fit the facts cleanly.
-                  </span>
-                </li>
-                <li>
-                  <span className="font-medium">Using the wrong notice period.</span>
-                  <span className="block">
-                    Notice-period errors often create avoidable delay and may weaken the route from the start.
-                  </span>
-                </li>
-                <li>
-                  <span className="font-medium">Serving the notice before the evidence is ready.</span>
-                  <span className="block">
-                    Section 8 is a proof-based route, so a weak evidence pack usually catches up later.
-                  </span>
-                </li>
-                <li>
-                  <span className="font-medium">Keeping poor service records.</span>
-                  <span className="block">
-                    Even with strong grounds, unclear service evidence can create extra dispute later.
-                  </span>
-                </li>
-                <li>
-                  <span className="font-medium">Relying on Ground 8 alone without thinking ahead.</span>
-                  <span className="block">
-                    If arrears drop below threshold by the hearing, the file may become more exposed.
-                  </span>
-                </li>
-              </ul>
-
-              <p className="mt-4 leading-7 text-gray-700">
-                In practical terms, landlords usually save more time by preventing notice-stage weakness
-                than by trying to move quickly on the day of service.
-              </p>
-            </Card>
-
-            <Card id="timeline-after-service" title="Timeline After Service">
-              <p className="mt-4 leading-7 text-gray-700">
-                Once a Section 8 notice has been served properly, the case moves into the notice-period
-                stage. At that point the landlord’s task is usually to keep the chronology updated,
-                preserve service proof, and continue building the evidence file so the later possession
-                stage is easier to manage if the tenant does not leave or the breach is not remedied.
-              </p>
-
-              <div className="mt-6 overflow-x-auto rounded-xl border border-[#E6DBFF] bg-white">
-                <table className="w-full border-collapse text-sm">
-                  <thead className="bg-[#F8F4FF] text-[#2a2161]">
-                    <tr>
-                      <th className="px-4 py-3 text-left font-semibold">Stage</th>
-                      <th className="px-4 py-3 text-left font-semibold">What usually happens</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr className="border-t border-[#E6DBFF] text-gray-700">
-                      <td className="px-4 py-3 font-medium">Notice served</td>
-                      <td className="px-4 py-3">
-                        Landlord serves Form 3 and locks the service evidence
-                      </td>
-                    </tr>
-                    <tr className="border-t border-[#E6DBFF] text-gray-700">
-                      <td className="px-4 py-3 font-medium">Notice period runs</td>
-                      <td className="px-4 py-3">
-                        Landlord tracks dates and keeps the evidence file current
-                      </td>
-                    </tr>
-                    <tr className="border-t border-[#E6DBFF] text-gray-700">
-                      <td className="px-4 py-3 font-medium">Issue resolves or continues</td>
-                      <td className="px-4 py-3">
-                        Tenant may pay, remedy, leave, or dispute the allegations
-                      </td>
-                    </tr>
-                    <tr className="border-t border-[#E6DBFF] text-gray-700">
-                      <td className="px-4 py-3 font-medium">Possession stage</td>
-                      <td className="px-4 py-3">
-                        Grounds, evidence, notice, and service proof become central in court
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-
-              <p className="mt-4 leading-7 text-gray-700">
-                In practical terms, good landlords use the period after service to strengthen the wider
-                possession file, not to ignore it until a hearing problem appears.
-              </p>
-            </Card>
-
-            <Card id="section-8-service-checklist" title="Section 8 Service Checklist">
-              <p className="mt-4 leading-7 text-gray-700">
-                The cleanest Section 8 files usually come from landlords who reduce the process to one
-                disciplined checklist rather than relying on memory. Grounds-based cases often look simple
-                at the start and then become much more technical later if the basics were skipped.
-              </p>
-
-              <ul className="mt-4 list-disc space-y-2 pl-5 text-gray-700">
-                <li>Check Section 8 is the right route on the facts</li>
-                <li>Choose the correct grounds carefully</li>
-                <li>Prepare the supporting evidence before service</li>
-                <li>Complete the final Form 3 consistently with the file</li>
-                <li>Use the correct notice period for the grounds relied on</li>
-                <li>Choose the service method deliberately, not casually</li>
-                <li>Keep proof showing what was served and how</li>
-                <li>Track the file after service so court preparation is easier later</li>
-              </ul>
-
-              <p className="mt-4 leading-7 text-gray-700">
-                In practical terms, the strongest checklist is the one that turns later court questions
-                into easy file answers.
-              </p>
-            </Card>
-
-            <Card
-              id="notice-only-vs-complete-pack"
-              title="Notice Only vs Complete Pack"
-            >
-              <p className="mt-4 leading-7 text-gray-700">
-                Landlords looking at Section 8 service are often deciding not just what to serve, but
-                what level of help the file now needs. Some cases are still basically notice-stage
-                cases. Others are already broader possession cases where the notice is only one part
-                of a bigger court-facing workflow.
-              </p>
-
-              <h3 className="mt-5 text-lg font-semibold text-[#2a2161]">Notice Only</h3>
-              <p className="mt-2 leading-7 text-gray-700">
-                Notice Only is usually the better fit where the landlord mainly needs the Section 8
-                notice prepared and served correctly now. It tends to suit cases where the route is
-                already clear and the main immediate risk is getting the notice stage wrong.
-              </p>
-
-              <h3 className="mt-5 text-lg font-semibold text-[#2a2161]">Complete Eviction Pack</h3>
-              <p className="mt-2 leading-7 text-gray-700">
-                Complete Pack is usually the stronger fit where the landlord wants broader support with
-                route control, court preparation, possession planning, and later enforcement readiness.
-                That tends to matter more where the tenancy history is messy, the evidence file needs
-                more control, or delay would be especially costly.
-              </p>
-
-              <p className="mt-4 leading-7 text-gray-700">
-                In practical terms, Notice Only fits cleaner first-step cases. Complete Pack fits
-                Section 8 files where the wider possession workflow also needs to be managed carefully.
-              </p>
-            </Card>
-          </div>
-        </Container>
-      </section>
-
-      <section id="faqs" className="py-2">
-        <FAQSection faqs={faqs} title="Serve Section 8 Notice FAQs" />
-      </section>
-
-      <section id="final-cta" className="bg-white pb-14 pt-6">
-        <Container>
-          <div className="mx-auto max-w-5xl rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-6 md:p-8">
-            <h2 className="text-2xl font-semibold text-[#2a2161]">Next Steps</h2>
-            <p className="mt-4 leading-7 text-gray-700">
-              Section 8 service usually works best when the landlord treats the notice as part of one
-              controlled possession file rather than as a one-off delivery event. That means checking
-              the grounds first, preparing the evidence early, locking the final notice version, and
-              preserving proof of service in a way that will still be usable later.
-            </p>
-            <p className="mt-4 leading-7 text-gray-700">
-              The strongest Section 8 cases are often not the fastest-looking ones on day one. They are
-              the ones least likely to weaken later because the grounds, notice period, evidence, and
-              service record all line up properly from the start.
-            </p>
-            <p className="mt-4 leading-7 text-gray-700">
-              If your main need is getting the Section 8 notice stage handled correctly, start with
-              Notice Only. If the wider possession file also needs route control and court-stage
-              preparation, start with Complete Pack.
-            </p>
-
-            <div className="mt-6 flex flex-wrap gap-3">
-              <Link
-                href={noticeOnlyWizardLink}
-                className="rounded-lg bg-primary px-5 py-3 text-white hover:opacity-95"
-              >
-                Start Notice Only for Section 8
-              </Link>
-              <Link
-                href={completePackWizardLink}
-                className="rounded-lg border border-[#E6DBFF] bg-white px-5 py-3 text-primary hover:bg-[#FCFAFF]"
-              >
-                Need broader support? Complete Pack
-              </Link>
-            </div>
-          </div>
-        </Container>
-      </section>
-    </div>
-  );
-}
