@@ -34,7 +34,10 @@ import {
 } from '@/lib/documents/compliance-timing-types';
 import crypto from 'crypto';
 import { validateTenancyRequiredFacts } from '@/lib/validation/tenancy-details-validator';
-import { PUBLIC_RESIDENTIAL_LETTING_PRODUCT_SKUS } from '@/lib/residential-letting/products';
+import {
+  PUBLIC_RESIDENTIAL_LETTING_PRODUCT_SKUS,
+  isPublicResidentialLettingProductSku,
+} from '@/lib/residential-letting/products';
 
 /**
  * Normalize display SKUs to payment SKUs for order storage
@@ -415,6 +418,26 @@ export async function POST(request: Request) {
         if ((product_type === 'money_claim' || product_type === 'sc_money_claim') && caseData.jurisdiction === 'northern-ireland') {
           return NextResponse.json(
             { error: 'Money claim packs are not available for Northern Ireland' },
+            { status: 400 }
+          );
+        }
+
+        if (
+          isPublicResidentialLettingProductSku(product_type) &&
+          caseData.jurisdiction !== 'england'
+        ) {
+          return NextResponse.json(
+            {
+              code: 'PRODUCT_NOT_AVAILABLE_IN_REGION',
+              error: 'PRODUCT_NOT_AVAILABLE_IN_REGION',
+              user_message:
+                'This standalone tenancy document is currently available for England only.',
+              supported: {
+                [product_type]: ['england'],
+                tenancy_agreement: ['england', 'wales', 'scotland', 'northern-ireland'],
+              },
+              redirect_to: '/products/ast',
+            },
             { status: 400 }
           );
         }
@@ -841,4 +864,3 @@ export async function POST(request: Request) {
     );
   }
 }
-

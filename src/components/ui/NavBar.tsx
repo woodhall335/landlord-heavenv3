@@ -10,6 +10,11 @@ import type { AuthChangeEvent, Session } from '@supabase/supabase-js';
 import { getSupabaseBrowserClient } from '@/lib/supabase/client';
 import { freeTools } from '@/lib/tools/tools';
 import type { HeaderMode } from '@/components/layout/HeaderModeContext';
+import {
+  PUBLIC_RESIDENTIAL_LETTING_PRODUCT_SKUS,
+  RESIDENTIAL_LETTING_PRODUCTS,
+  getResidentialLandingHref,
+} from '@/lib/residential-letting/products';
 
 interface NavItem {
   href: string;
@@ -33,8 +38,16 @@ const primaryLinks: NavItem[] = [
   { href: "/products/notice-only", label: "Notice Only" },
   { href: "/products/complete-pack", label: "Eviction Pack" },
   { href: "/products/money-claim", label: "Money Claims" },
-  { href: "/products/ast", label: "Tenancy Agreements" },
   { href: "/blog", label: "Landlord Guides" },
+];
+
+const tenancyAgreementLinks: NavItem[] = [
+  { href: '/products/ast', label: 'Tenancy Agreement' },
+  { href: '/premium-tenancy-agreement', label: 'Premium Tenancy Agreement' },
+  ...PUBLIC_RESIDENTIAL_LETTING_PRODUCT_SKUS.map((sku) => ({
+    href: getResidentialLandingHref(sku),
+    label: RESIDENTIAL_LETTING_PRODUCTS[sku].label,
+  })),
 ];
 
 const freeToolsLinks: NavItem[] = freeTools.map((tool) => ({
@@ -48,6 +61,7 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
   const isWizardFlowRoute = pathname?.startsWith('/wizard/flow') ?? false;
   const [open, setOpen] = useState(false);
   const [showFreeTools, setShowFreeTools] = useState(false);
+  const [showTenancyAgreements, setShowTenancyAgreements] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const [clientUser, setClientUser] = useState<NavBarUser | null>(serverUser || null);
@@ -136,6 +150,7 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
 
   const useWizardDarkHeader = isWizardFlowRoute;
   const isSolid = effectiveHeaderState === 'solid' && !useWizardDarkHeader;
+  const isTenancyMenuActive = tenancyAgreementLinks.some((item) => pathname === item.href);
   const textClass = isSolid ? 'text-[#111827]' : 'text-white';
   const secondaryTextClass = isSolid ? 'text-gray-700' : 'text-white';
   const hoverTextClass = isSolid ? 'hover:text-[#692ED4]' : 'hover:text-white hover:opacity-80 focus:text-white focus:opacity-80';
@@ -194,6 +209,38 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
               <div className="absolute left-0 top-full pt-2 w-56 z-50">
                 <div className="rounded-xl bg-white shadow-lg border border-gray-200 py-2">
                   {freeToolsLinks.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-[#692ED4] transition-colors"
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="relative" onMouseEnter={() => setShowTenancyAgreements(true)} onMouseLeave={() => setShowTenancyAgreements(false)}>
+            <Link
+              href="/products/ast"
+              className={clsx(
+                'text-sm font-semibold transition-colors relative py-2 flex items-center gap-1',
+                isTenancyMenuActive
+                  ? clsx(textClass, 'after:absolute after:bottom-[-4px] after:left-0 after:right-0 after:h-[2px] after:bg-[#73AEED]')
+                  : clsx(secondaryTextClass, hoverTextClass)
+              )}
+              aria-label="Tenancy agreements"
+            >
+              Tenancy Agreements
+              <RiArrowDownSLine className={clsx('h-4 w-4', isSolid ? 'text-[#692ED4]' : 'text-white')} />
+            </Link>
+
+            {showTenancyAgreements && (
+              <div className="absolute left-0 top-full pt-2 w-80 z-50">
+                <div className="rounded-xl bg-white shadow-lg border border-gray-200 py-2 max-h-[28rem] overflow-auto">
+                  {tenancyAgreementLinks.map((item) => (
                     <Link
                       key={item.href}
                       href={item.href}
@@ -331,6 +378,25 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
             </div>
 
             <div className={clsx('pt-4', isSolid ? 'border-t border-gray-200' : 'border-t border-white/20')}>
+              <div className={clsx('mb-2 text-xs font-bold uppercase', isSolid ? 'text-gray-500' : 'text-white/70')}>Tenancy Agreements</div>
+              {tenancyAgreementLinks.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={clsx(
+                    'block py-2 text-sm font-semibold',
+                    pathname === item.href
+                      ? (isSolid ? 'text-[#111827]' : 'text-white')
+                      : (isSolid ? 'text-charcoal hover:text-[#692ED4]' : 'text-white hover:text-white/80')
+                  )}
+                  onClick={() => setOpen(false)}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+
+            <div className={clsx('pt-4', isSolid ? 'border-t border-gray-200' : 'border-t border-white/20')}>
               <div className={clsx('mb-2 text-xs font-bold uppercase', isSolid ? 'text-gray-500' : 'text-white/70')}>Free Tools</div>
               <Link href="/tools" className={clsx('block py-2 text-sm font-semibold', isSolid ? 'text-charcoal hover:text-[#692ED4]' : 'text-white hover:text-white/80')} onClick={() => setOpen(false)}>
                 Free Tools Hub
@@ -349,5 +415,3 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
 }
 
 export default NavBar;
-
-
