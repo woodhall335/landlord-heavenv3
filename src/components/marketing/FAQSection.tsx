@@ -224,7 +224,7 @@ export function FAQSection({
                 </div>
                 <Link
                   href={ASK_HEAVEN_CTA.href}
-                  className="bg-white text-primary font-semibold px-6 py-3 rounded-xl border-2 border-primary hover:bg-primary hover:text-white transition-all"
+                  className="ask-heaven-cta-button bg-white text-primary font-semibold px-6 py-3 rounded-xl border-2 border-primary hover:bg-primary hover:text-white transition-all"
                 >
                   {ASK_HEAVEN_CTA.buttonLabel}
                 </Link>
