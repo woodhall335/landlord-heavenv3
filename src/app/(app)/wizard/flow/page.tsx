@@ -205,10 +205,11 @@ function WizardFlowContent() {
       } else if (type === 'tenancy_agreement') {
         // Tenancy flows: keep AST tiers if provided
         if (
-          rawProduct === 'ast_standard' ||
-          rawProduct === 'ast_premium' ||
-          rawProduct === 'tenancy_agreement' ||
-          isResidentialStandaloneTenancyProduct(rawProduct)
+          rawProduct &&
+          (rawProduct === 'ast_standard' ||
+            rawProduct === 'ast_premium' ||
+            rawProduct === 'tenancy_agreement' ||
+            isResidentialStandaloneTenancyProduct(rawProduct))
         ) {
           startProduct = rawProduct;
         } else {
@@ -390,7 +391,9 @@ function WizardFlowContent() {
         caseId={caseId}
         jurisdiction={jurisdiction as 'england' | 'wales' | 'scotland' | 'northern-ireland'}
         product={
-          normalizedProduct === 'ast_standard' || normalizedProduct === 'ast_premium' || isResidentialStandaloneProduct
+          normalizedProduct === 'ast_standard' ||
+          normalizedProduct === 'ast_premium' ||
+          isResidentialStandaloneTenancyProduct(normalizedProduct)
             ? normalizedProduct
             : 'tenancy_agreement'
         }
@@ -409,9 +412,7 @@ function WizardFlowContent() {
         jurisdiction={jurisdiction}
         product={
           type === 'tenancy_agreement'
-            ? (isResidentialStandaloneProduct
-              ? normalizedProduct || 'tenancy_agreement'
-              : (askHeavenProduct ?? 'tenancy_agreement'))
+            ? (askHeavenProduct ?? 'tenancy_agreement')
             : (askHeavenProduct ?? 'complete_pack')
         }
         initialQuestion={initialQuestion ?? undefined}
