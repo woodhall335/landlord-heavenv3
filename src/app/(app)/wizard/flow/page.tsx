@@ -205,10 +205,11 @@ function WizardFlowContent() {
       } else if (type === 'tenancy_agreement') {
         // Tenancy flows: keep AST tiers if provided
         if (
-          rawProduct === 'ast_standard' ||
-          rawProduct === 'ast_premium' ||
-          rawProduct === 'tenancy_agreement' ||
-          isResidentialStandaloneTenancyProduct(rawProduct)
+          rawProduct &&
+          (rawProduct === 'ast_standard' ||
+            rawProduct === 'ast_premium' ||
+            rawProduct === 'tenancy_agreement' ||
+            isResidentialStandaloneTenancyProduct(rawProduct))
         ) {
           startProduct = rawProduct;
         } else {
