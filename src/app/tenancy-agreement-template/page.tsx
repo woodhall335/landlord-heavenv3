@@ -386,7 +386,7 @@ export default function TenancyAgreementTemplatePage() {
                 <div className="bg-gray-50 rounded-2xl p-8 border border-gray-200">
                   <div className="text-center mb-6">
                     <span className="text-sm font-medium text-gray-500 uppercase tracking-wide">Standard</span>
-                    <div className="text-4xl font-bold text-gray-900 mt-2">£0</div>
+                    <div className="text-4xl font-bold text-gray-900 mt-2">£9.99</div>
                   </div>
                   <ul className="space-y-4 mb-8">
                     <li className="flex items-start gap-3">
