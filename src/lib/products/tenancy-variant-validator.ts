@@ -108,7 +108,7 @@ export const TENANCY_VARIANT_CONFIGS: Record<TenancyJurisdiction, JurisdictionVa
     premium: {
       jurisdiction: 'scotland',
       tier: 'premium',
-      templatePath: 'uk/scotland/templates/prt_agreement_hmo.hbs',
+      templatePath: 'uk/scotland/templates/prt_agreement_hmo_premium.hbs',
       documentKey: 'prt_agreement_hmo',
       documentTitle: 'HMO Private Residential Tenancy Agreement',
       mustHaveHMO: true,
@@ -129,7 +129,7 @@ export const TENANCY_VARIANT_CONFIGS: Record<TenancyJurisdiction, JurisdictionVa
     premium: {
       jurisdiction: 'northern-ireland',
       tier: 'premium',
-      templatePath: 'uk/northern-ireland/templates/private_tenancy_hmo.hbs',
+      templatePath: 'uk/northern-ireland/templates/private_tenancy_premium.hbs',
       documentKey: 'private_tenancy_agreement_hmo',
       documentTitle: 'HMO Private Tenancy Agreement',
       mustHaveHMO: true,

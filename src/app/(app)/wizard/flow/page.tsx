@@ -17,7 +17,6 @@ import { TenancySectionFlow } from '@/components/wizard/flows/TenancySectionFlow
 import type { ExtendedWizardQuestion } from '@/lib/wizard/types';
 import { trackWizardStartWithAttribution } from '@/lib/analytics';
 import {
-  getWizardAttribution,
   setWizardAttribution,
   hasWizardStarted,
   markWizardStarted,
@@ -25,7 +24,7 @@ import {
 } from '@/lib/wizard/wizardAttribution';
 import { getSessionTokenHeaders } from '@/lib/session-token';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
-import { isResidentialLettingProductSku } from '@/lib/residential-letting/products';
+import { isResidentialStandaloneTenancyProduct } from '@/lib/wizard/flow-routing';
 
 // Feature flags: Use new section-based flows
 // Set to true to enable the redesigned wizards, false to use legacy StructuredWizard
@@ -118,6 +117,7 @@ function WizardFlowContent() {
 
   // Normalize product for Ask Heaven / wizard - use effectiveProduct (order-aware)
   const normalizedProduct = effectiveProduct;
+  const isResidentialStandaloneProduct = isResidentialStandaloneTenancyProduct(normalizedProduct);
 
   // Derive a coarse product label for Ask Heaven (its Product union)
   const askHeavenProduct: AskHeavenProduct | null = (() => {
@@ -208,7 +208,7 @@ function WizardFlowContent() {
           rawProduct === 'ast_standard' ||
           rawProduct === 'ast_premium' ||
           rawProduct === 'tenancy_agreement' ||
-          isResidentialLettingProductSku(rawProduct)
+          isResidentialStandaloneTenancyProduct(rawProduct)
         ) {
           startProduct = rawProduct;
         } else {
@@ -377,11 +377,12 @@ function WizardFlowContent() {
     );
   }
 
-  // 🟪 NEW: For tenancy_agreement in England/Wales/Scotland/NI, use the redesigned section-based flow
+  // 🟪 NEW: For core tenancy_agreement in England/Wales/Scotland/NI, use the redesigned section-based flow
   // This provides a consistent tab-based UI matching MoneyClaimSectionFlow design.
   if (
     type === 'tenancy_agreement' &&
     USE_TENANCY_SECTION_FLOW &&
+    !isResidentialStandaloneProduct &&
     (jurisdiction === 'england' || jurisdiction === 'wales' || jurisdiction === 'scotland' || jurisdiction === 'northern-ireland')
   ) {
     return (
@@ -389,7 +390,7 @@ function WizardFlowContent() {
         caseId={caseId}
         jurisdiction={jurisdiction as 'england' | 'wales' | 'scotland' | 'northern-ireland'}
         product={
-          normalizedProduct === 'ast_standard' || normalizedProduct === 'ast_premium'
+          normalizedProduct === 'ast_standard' || normalizedProduct === 'ast_premium' || isResidentialStandaloneProduct
             ? normalizedProduct
             : 'tenancy_agreement'
         }
@@ -407,10 +408,11 @@ function WizardFlowContent() {
         caseType={type}
         jurisdiction={jurisdiction}
         product={
-          askHeavenProduct ??
-          (type === 'tenancy_agreement'
-            ? 'tenancy_agreement'
-            : 'complete_pack')
+          type === 'tenancy_agreement'
+            ? (isResidentialStandaloneProduct
+              ? normalizedProduct || 'tenancy_agreement'
+              : (askHeavenProduct ?? 'tenancy_agreement'))
+            : (askHeavenProduct ?? 'complete_pack')
         }
         initialQuestion={initialQuestion ?? undefined}
         onComplete={handleComplete}
@@ -450,4 +452,3 @@ export default function WizardFlowPage() {
     </>
   );
 }
-

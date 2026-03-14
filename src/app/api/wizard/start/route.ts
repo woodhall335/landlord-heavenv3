@@ -27,10 +27,17 @@ import {
   type ProductType,
 } from '@/lib/wizard/mqs-loader';
 import { applyDocumentIntelligence } from '@/lib/wizard/document-intel';
-import { PUBLIC_RESIDENTIAL_LETTING_PRODUCT_SKUS } from '@/lib/residential-letting/products';
+import {
+  PUBLIC_RESIDENTIAL_LETTING_PRODUCT_SKUS,
+  RESIDENTIAL_LETTING_PRODUCTS,
+} from '@/lib/residential-letting/products';
 
 const RESIDENTIAL_PRODUCTS = [...PUBLIC_RESIDENTIAL_LETTING_PRODUCT_SKUS] as const;
 type ResidentialProduct = (typeof RESIDENTIAL_PRODUCTS)[number];
+
+function isResidentialStandaloneProduct(product: string): product is ResidentialProduct {
+  return (RESIDENTIAL_PRODUCTS as readonly string[]).includes(product);
+}
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -124,7 +131,7 @@ const resolveProductTier = (
     case 'inventory_schedule_condition':
     case 'flatmate_agreement':
     case 'renewal_tenancy_agreement':
-      return 'Standard AST';
+      return RESIDENTIAL_LETTING_PRODUCTS[product as ResidentialProduct].label;
 
     default:
       // Generic tenancy_agreement product should still ask "which version?"
@@ -178,6 +185,28 @@ export async function POST(request: Request) {
     const resolvedCaseType = productToCaseType(product as StartProduct);
     const normalizedProduct = normalizeProduct(product as StartProduct);
     const effectiveJurisdiction = resolveJurisdiction(product as StartProduct, jurisdiction);
+
+    if (
+      isResidentialStandaloneProduct(product) &&
+      effectiveJurisdiction !== 'england'
+    ) {
+      return NextResponse.json(
+        {
+          code: 'PRODUCT_NOT_AVAILABLE_IN_REGION',
+          error: 'PRODUCT_NOT_AVAILABLE_IN_REGION',
+          user_message:
+            'This standalone tenancy document is currently available for England only. Please use the England flow or choose the main tenancy agreement product for your jurisdiction.',
+          supported: {
+            [product]: ['england'],
+            tenancy_agreement: ['england', 'wales', 'scotland', 'northern-ireland'],
+          },
+          redirect_to: '/products/ast',
+          blocking_issues: [],
+          warnings: [],
+        },
+        { status: 400 },
+      );
+    }
 
     // Tier label here is *jurisdiction-aware* (AST vs PRT vs NI tenancy wording)
     const tierLabel = resolveProductTier(
