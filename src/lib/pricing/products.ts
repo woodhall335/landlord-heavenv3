@@ -150,9 +150,9 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
   },
   ast_premium: {
     sku: 'ast_premium',
-    label: 'Premium Tenancy Agreement',
-    shortLabel: 'Premium AST',
-    description: 'Enhanced AST with additional clauses and protections',
+    label: 'Premium Tenancy Agreement (HMO-ready)',
+    shortLabel: 'Premium (HMO)',
+    description: 'Enhanced tenancy agreement with HMO/shared-living clauses and extra protections',
     price: SEO_PRICES.tenancyPremium.amount,
     displayPrice: SEO_PRICES.tenancyPremium.display,
     wizardHref: '/wizard?product=ast_premium',
