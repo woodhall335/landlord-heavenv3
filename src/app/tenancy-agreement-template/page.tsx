@@ -606,6 +606,7 @@ export default function TenancyAgreementTemplatePage() {
               answer: 'The minimum AST is 6 months, but 12 months is most common. Fixed terms give certainty to both parties. After the fixed term, the tenancy becomes periodic (rolling month-to-month) unless renewed.',
             },
           ]}
+          includeSchema={false}
           showContactCTA={false}
           variant="white"
         />
@@ -617,4 +618,3 @@ export default function TenancyAgreementTemplatePage() {
     </>
   );
 }
-
