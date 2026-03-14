@@ -25,6 +25,7 @@ import {
 } from '@/lib/wizard/wizardAttribution';
 import { getSessionTokenHeaders } from '@/lib/session-token';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { isResidentialLettingProductSku } from '@/lib/residential-letting/products';
 
 // Feature flags: Use new section-based flows
 // Set to true to enable the redesigned wizards, false to use legacy StructuredWizard
@@ -206,7 +207,8 @@ function WizardFlowContent() {
         if (
           rawProduct === 'ast_standard' ||
           rawProduct === 'ast_premium' ||
-          rawProduct === 'tenancy_agreement'
+          rawProduct === 'tenancy_agreement' ||
+          isResidentialLettingProductSku(rawProduct)
         ) {
           startProduct = rawProduct;
         } else {

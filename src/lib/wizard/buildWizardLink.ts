@@ -11,7 +11,18 @@ export type WizardProduct =
   | 'money_claim'
   | 'ast_standard'
   | 'ast_premium'
-  | 'tenancy_agreement';
+  | 'tenancy_agreement'
+  | 'guarantor_agreement'
+  | 'residential_sublet_agreement'
+  | 'lease_amendment'
+  | 'lease_assignment_agreement'
+  | 'rent_arrears_letter'
+  | 'repayment_plan_agreement'
+  | 'residential_tenancy_application'
+  | 'rental_inspection_report'
+  | 'inventory_schedule_condition'
+  | 'flatmate_agreement'
+  | 'renewal_tenancy_agreement';
 
 export type WizardJurisdiction = 'england' | 'wales' | 'scotland' | 'northern-ireland';
 
@@ -110,6 +121,24 @@ export function isProductSupportedInJurisdiction(
   product: WizardProduct,
   jurisdiction: WizardJurisdiction
 ): boolean {
+  const englandOnlyResidentialProducts: WizardProduct[] = [
+    'guarantor_agreement',
+    'residential_sublet_agreement',
+    'lease_amendment',
+    'lease_assignment_agreement',
+    'rent_arrears_letter',
+    'repayment_plan_agreement',
+    'residential_tenancy_application',
+    'rental_inspection_report',
+    'inventory_schedule_condition',
+    'flatmate_agreement',
+    'renewal_tenancy_agreement',
+  ];
+
+  if (englandOnlyResidentialProducts.includes(product)) {
+    return jurisdiction === 'england';
+  }
+
   if (jurisdiction === 'northern-ireland') {
     return product === 'tenancy_agreement' || product === 'ast_standard' || product === 'ast_premium';
   }
@@ -151,8 +180,23 @@ export function getUnsupportedProductMessage(
       ast_standard: 'Tenancy agreements',
       ast_premium: 'Premium tenancy agreements',
       tenancy_agreement: 'Tenancy agreements',
+      guarantor_agreement: 'Guarantor agreements',
+      residential_sublet_agreement: 'Residential sublet agreements',
+      lease_amendment: 'Lease amendments',
+      lease_assignment_agreement: 'Lease assignment agreements',
+      rent_arrears_letter: 'Rent arrears letters',
+      repayment_plan_agreement: 'Repayment plan agreements',
+      residential_tenancy_application: 'Residential tenancy applications',
+      rental_inspection_report: 'Rental inspection reports',
+      inventory_schedule_condition: 'Inventory schedules',
+      flatmate_agreement: 'Flatmate agreements',
+      renewal_tenancy_agreement: 'Renewal tenancy agreements',
     };
     return `${productNames[product]} are not currently available for Northern Ireland. We support tenancy agreements for Northern Ireland properties.`;
+  }
+
+  if (jurisdiction !== 'england') {
+    return 'This residential landlord document is currently available for England properties only.';
   }
 
   return null;

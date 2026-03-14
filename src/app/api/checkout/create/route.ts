@@ -15,16 +15,15 @@
  * - Uses Stripe idempotency keys to prevent duplicate charges
  */
 
-import { createServerSupabaseClient, createAdminClient, requireServerAuth } from '@/lib/supabase/server';
+import { createAdminClient, requireServerAuth } from '@/lib/supabase/server';
 import { ensureUserProfileExists } from '@/lib/supabase/ensure-user';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { stripe, PRICE_IDS, assertValidPriceId, StripePriceIdError } from '@/lib/stripe';
-import { PRODUCTS, type ProductSku } from '@/lib/pricing/products';
+import { PRODUCTS, type ProductSku, isValidProductSku } from '@/lib/pricing/products';
 import { logger } from '@/lib/logger';
 import {
   validateNoticeOnlyCase,
-  NoticeOnlyCaseValidationError,
 } from '@/lib/validation/notice-only-case-validator';
 import { validateSection21ForCheckout } from '@/lib/validation/section21-checkout-validator';
 import { validateComplianceTiming } from '@/lib/documents/court-ready-validator';
@@ -35,6 +34,7 @@ import {
 } from '@/lib/documents/compliance-timing-types';
 import crypto from 'crypto';
 import { validateTenancyRequiredFacts } from '@/lib/validation/tenancy-details-validator';
+import { PUBLIC_RESIDENTIAL_LETTING_PRODUCT_SKUS } from '@/lib/residential-letting/products';
 
 /**
  * Normalize display SKUs to payment SKUs for order storage
@@ -54,6 +54,12 @@ function normalizeToPaymentSku(productType: string): string {
   };
   return displayToPayment[productType] || productType;
 }
+
+const ADD_ON_ELIGIBLE_PRODUCTS = [
+  'ast_standard',
+  'ast_premium',
+  ...PUBLIC_RESIDENTIAL_LETTING_PRODUCT_SKUS,
+] as const;
 
 /**
  * Map product types to Stripe Price IDs
@@ -118,7 +124,9 @@ const createCheckoutSchema = z.object({
     'prt_standard', 'prt_premium',           // Scotland
     'occupation_standard', 'occupation_premium', // Wales
     'ni_standard', 'ni_premium',             // Northern Ireland
+    ...PUBLIC_RESIDENTIAL_LETTING_PRODUCT_SKUS,
   ]),
+  add_ons: z.array(z.string()).optional().default([]),
   case_id: z.string().uuid().optional(),
   success_url: z.string().url().optional(),
   cancel_url: z.string().url().optional(),
@@ -142,8 +150,14 @@ const createCheckoutSchema = z.object({
  * Generate a deterministic idempotency key for Stripe API calls.
  * This ensures the same checkout request produces the same Stripe session.
  */
-function generateIdempotencyKey(caseId: string, productType: string, userId: string): string {
-  const input = `checkout:${caseId}:${productType}:${userId}`;
+function generateIdempotencyKey(
+  caseId: string,
+  productType: string,
+  userId: string,
+  addOns: string[] = []
+): string {
+  const normalizedAddOns = [...addOns].sort().join(',');
+  const input = `checkout:${caseId}:${productType}:${normalizedAddOns}:${userId}`;
   return crypto.createHash('sha256').update(input).digest('hex').substring(0, 64);
 }
 
@@ -194,8 +208,6 @@ interface CheckoutNewResponse {
   order_id: string;
 }
 
-type CheckoutResponse = CheckoutAlreadyPaidResponse | CheckoutPendingResponse | CheckoutNewResponse;
-
 export async function POST(request: Request) {
   try {
     const user = await requireServerAuth();
@@ -215,6 +227,7 @@ export async function POST(request: Request) {
 
     const {
       product_type,
+      add_ons,
       case_id,
       // Attribution fields
       landing_path,
@@ -248,8 +261,16 @@ export async function POST(request: Request) {
       );
     }
 
-    const supabase = await createServerSupabaseClient();
     const adminSupabase = createAdminClient();
+
+    const normalizedProductType = normalizeToPaymentSku(product_type);
+    const normalizedAddOns = Array.from(
+      new Set(
+        (add_ons || [])
+          .map((sku) => normalizeToPaymentSku(sku))
+          .filter((sku) => sku !== normalizedProductType && isValidProductSku(sku))
+      )
+    ) as ProductSku[];
 
     // Get or create Stripe customer (use admin client to ensure we can read user data)
     const { data: userData } = await adminSupabase
@@ -278,43 +299,35 @@ export async function POST(request: Request) {
         .eq('id', user.id);
     }
 
-    // Get Stripe price ID for this product
     const priceId = PRODUCT_TO_PRICE_ID[product_type];
-    if (!priceId) {
-      logger.error('Missing Stripe price ID for product', { productType: product_type });
-      return NextResponse.json(
-        { error: 'Product configuration error. Please contact support.' },
-        { status: 500 }
-      );
-    }
-
-    // GUARDRAIL: Validate price ID format (reject prod_ IDs in price slot)
-    try {
-      assertValidPriceId(priceId, `${product_type} product`);
-    } catch (priceError) {
-      if (priceError instanceof StripePriceIdError) {
-        logger.error('Invalid Stripe price ID configuration', {
-          productType: product_type,
-          invalidId: priceError.invalidId,
-          expectedPrefix: priceError.expectedPrefix,
-          context: priceError.context,
-        });
-        return NextResponse.json(
-          { error: 'Payment configuration error. Please contact support.' },
-          { status: 500 }
-        );
+    if (priceId) {
+      try {
+        assertValidPriceId(priceId, `${product_type} product`);
+      } catch (priceError) {
+        if (priceError instanceof StripePriceIdError) {
+          logger.error('Invalid Stripe price ID configuration', {
+            productType: product_type,
+            invalidId: priceError.invalidId,
+            expectedPrefix: priceError.expectedPrefix,
+            context: priceError.context,
+          });
+          return NextResponse.json(
+            { error: 'Payment configuration error. Please contact support.' },
+            { status: 500 }
+          );
+        }
+        throw priceError;
       }
-      throw priceError;
     }
-
-    // Normalize display SKUs (prt_*, occupation_*, ni_*) to payment SKUs (ast_*)
-    // This ensures orders are stored with consistent payment SKUs
-    const normalizedProductType = normalizeToPaymentSku(product_type);
 
     // Get product details from source of truth (products.ts)
     // Map sc_money_claim to money_claim for product config lookup
     const productSku: ProductSku = normalizedProductType === 'sc_money_claim' ? 'sc_money_claim' : normalizedProductType as ProductSku;
     const product = PRODUCTS[productSku];
+    const addOnProducts = normalizedAddOns
+      .filter((sku) => (ADD_ON_ELIGIBLE_PRODUCTS as readonly string[]).includes(sku))
+      .map((sku) => PRODUCTS[sku]);
+    const totalAmount = product.price + addOnProducts.reduce((sum, item) => sum + item.price, 0);
 
     // If case_id provided, validate jurisdiction match and ownership
     if (case_id) {
@@ -528,7 +541,7 @@ export async function POST(request: Request) {
       // Use normalizedProductType to match stored orders (which use payment SKUs)
       const { data: existingOrders, error: orderQueryError } = await adminSupabase
         .from('orders')
-        .select('id, payment_status, stripe_session_id, stripe_checkout_url')
+        .select('id, payment_status, stripe_session_id, stripe_checkout_url, total_amount')
         .eq('case_id', case_id)
         .eq('product_type', normalizedProductType)
         .eq('user_id', user.id)
@@ -543,7 +556,9 @@ export async function POST(request: Request) {
         // Continue with checkout - don't block on query error
       } else if (existingOrders && existingOrders.length > 0) {
         // Check for PAID order first (highest priority)
-        const paidOrder = existingOrders.find(o => o.payment_status === 'paid');
+        const paidOrder = existingOrders.find(
+          (o) => o.payment_status === 'paid' && Number(o.total_amount || 0) === totalAmount
+        );
         if (paidOrder) {
           logger.info('Checkout blocked: already paid', {
             caseId: case_id,
@@ -563,8 +578,11 @@ export async function POST(request: Request) {
         }
 
         // Check for PENDING order with valid Stripe session
-        const pendingOrder = existingOrders.find(o =>
-          o.payment_status === 'pending' && o.stripe_session_id
+        const pendingOrder = existingOrders.find(
+          (o) =>
+            o.payment_status === 'pending' &&
+            o.stripe_session_id &&
+            Number(o.total_amount || 0) === totalAmount
         );
 
         if (pendingOrder && pendingOrder.stripe_session_id) {
@@ -626,7 +644,7 @@ export async function POST(request: Request) {
     // Generate idempotency key for Stripe API call (if case_id provided)
     // Use normalizedProductType for consistent idempotency keys
     const idempotencyKey = case_id
-      ? generateIdempotencyKey(case_id, normalizedProductType, user.id)
+      ? generateIdempotencyKey(case_id, normalizedProductType, user.id, normalizedAddOns)
       : undefined;
 
     // Create order record using admin client to avoid RLS issues
@@ -639,7 +657,7 @@ export async function POST(request: Request) {
         product_name: product.label,
         amount: product.price,
         currency: 'GBP',
-        total_amount: product.price,
+        total_amount: totalAmount,
         payment_status: 'pending',
         fulfillment_status: 'pending',
         // Attribution fields for revenue tracking (FIRST-TOUCH)
@@ -652,6 +670,10 @@ export async function POST(request: Request) {
         referrer: referrer || null,
         first_touch_at: first_touch_at || null,
         ga_client_id: ga_client_id || null,
+        metadata: {
+          add_ons: normalizedAddOns,
+          requested_product_type: product_type,
+        },
       };
 
     let { data: order, error: orderError } = await adminSupabase
@@ -670,18 +692,16 @@ export async function POST(request: Request) {
       });
 
       // Remove all attribution fields that might be missing from schema cache
-      const {
-        first_touch_at: _ignoredFirstTouch,
-        ga_client_id: _ignoredGaClientId,
-        landing_path: _ignoredLandingPath,
-        utm_source: _ignoredUtmSource,
-        utm_medium: _ignoredUtmMedium,
-        utm_campaign: _ignoredUtmCampaign,
-        utm_term: _ignoredUtmTerm,
-        utm_content: _ignoredUtmContent,
-        referrer: _ignoredReferrer,
-        ...fallbackPayload
-      } = orderPayload;
+      const fallbackPayload = { ...orderPayload } as Record<string, unknown>;
+      delete fallbackPayload.first_touch_at;
+      delete fallbackPayload.ga_client_id;
+      delete fallbackPayload.landing_path;
+      delete fallbackPayload.utm_source;
+      delete fallbackPayload.utm_medium;
+      delete fallbackPayload.utm_campaign;
+      delete fallbackPayload.utm_term;
+      delete fallbackPayload.utm_content;
+      delete fallbackPayload.referrer;
 
       const retryResult = await adminSupabase
         .from('orders')
@@ -726,9 +746,6 @@ export async function POST(request: Request) {
     // Use idempotency key if we have a case_id (prevents duplicate Stripe sessions)
     const stripeOptions = idempotencyKey ? { idempotencyKey } : undefined;
 
-    // Convert price from GBP (e.g., 34.99) to pence (9999) for Stripe
-    const unitAmountPence = Math.round(product.price * 100);
-
     const session = await stripe.checkout.sessions.create(
       {
         customer: customerId,
@@ -742,15 +759,27 @@ export async function POST(request: Request) {
                 name: product.label,
                 description: product.description,
               },
-              unit_amount: unitAmountPence,
+              unit_amount: Math.round(product.price * 100),
             },
             quantity: 1,
           },
+          ...addOnProducts.map((addOn) => ({
+            price_data: {
+              currency: 'gbp',
+              product_data: {
+                name: addOn.label,
+                description: addOn.description,
+              },
+              unit_amount: Math.round(addOn.price * 100),
+            },
+            quantity: 1,
+          })),
         ],
         metadata: {
           user_id: user.id,
           order_id: (order as any).id,
           product_type,
+          add_ons: normalizedAddOns.join(','),
           case_id: case_id || '',
           // Attribution for webhook processing (Stripe metadata max 500 chars per value)
           landing_path: (landing_path || '').substring(0, 500),

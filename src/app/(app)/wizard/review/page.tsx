@@ -73,6 +73,14 @@ import {
   validateUrlProduct,
   type CanonicalJurisdiction,
 } from '@/lib/tenancy/product-normalization';
+import {
+  isResidentialLettingProductSku,
+  RESIDENTIAL_LETTING_PRODUCTS,
+} from '@/lib/residential-letting/products';
+import {
+  getResidentialUpsellRecommendations,
+  type ResidentialUpsellRecommendation,
+} from '@/lib/residential-letting/recommendations';
 
 function ReviewPageInner() {
   const searchParams = useSearchParams();
@@ -90,6 +98,7 @@ function ReviewPageInner() {
   const [editWindowOpen, setEditWindowOpen] = useState(false);
   const [isLoadingPaymentStatus, setIsLoadingPaymentStatus] = useState(true); // Start true to prevent UI flash
   const [regenerationError, setRegenerationError] = useState<string | null>(null);
+  const [selectedAddOns, setSelectedAddOns] = useState<string[]>([]);
 
   // Compliance timing block error state (structured error from API)
   const [complianceTimingError, setComplianceTimingError] = useState<{
@@ -107,6 +116,11 @@ function ReviewPageInner() {
   const isMoneyClaimFlow = product === 'money_claim' || product === 'sc_money_claim' || caseType === 'money_claim';
   const isNoticeOnlyFlow = product === 'notice_only';
   const isTenancyFlow = product === 'tenancy_agreement' || product === 'ast_standard' || product === 'ast_premium' || caseType === 'tenancy_agreement';
+  const isResidentialStandaloneFlow = isResidentialLettingProductSku(product);
+  const tenancyFacts = analysis?.case_facts || {};
+  const residentialRecommendations = isTenancyFlow
+    ? getResidentialUpsellRecommendations(product, tenancyFacts)
+    : [];
 
   // Compute hasBlockingIssues safely (false when analysis is null)
   const hasBlockingIssues = analysis
@@ -349,8 +363,17 @@ function ReviewPageInner() {
     if (jurisdiction) {
       previewParams.set('jurisdiction', jurisdiction);
     }
+    if (selectedAddOns.length > 0) {
+      previewParams.set('add_ons', selectedAddOns.join(','));
+    }
     const queryString = previewParams.toString();
     router.push(`/wizard/preview/${caseId}${queryString ? `?${queryString}` : ''}`);
+  };
+
+  const toggleAddOn = (sku: string) => {
+    setSelectedAddOns((current) =>
+      current.includes(sku) ? current.filter((item) => item !== sku) : [...current, sku]
+    );
   };
 
   const readinessBadge = (() => {
@@ -420,11 +443,31 @@ function ReviewPageInner() {
 
   // Render Tenancy Agreement specific content
   if (isTenancyFlow) {
+    if (isResidentialStandaloneFlow) {
+      return <ResidentialLettingReviewContent
+        caseId={caseId}
+        analysis={analysis}
+        jurisdiction={jurisdiction}
+        product={product}
+        recommendations={residentialRecommendations}
+        selectedAddOns={selectedAddOns}
+        onToggleAddOn={toggleAddOn}
+        onEdit={handleEdit}
+        onProceed={handleProceed}
+        isPaid={isPaid}
+        isRegenerating={isRegenerating}
+        isLoadingPaymentStatus={isLoadingPaymentStatus}
+      />;
+    }
+
     return <TenancyReviewContent
       caseId={caseId}
       analysis={analysis}
       jurisdiction={jurisdiction}
       product={product}
+      recommendations={residentialRecommendations}
+      selectedAddOns={selectedAddOns}
+      onToggleAddOn={toggleAddOn}
       onEdit={handleEdit}
       onProceed={handleProceed}
       isPaid={isPaid}
@@ -2572,6 +2615,9 @@ interface TenancyReviewContentProps {
   analysis: any;
   jurisdiction: string;
   product: string;
+  recommendations: ResidentialUpsellRecommendation[];
+  selectedAddOns: string[];
+  onToggleAddOn: (sku: string) => void;
   onEdit: () => void;
   onProceed: () => void;
   isPaid?: boolean;
@@ -2850,6 +2896,9 @@ function TenancyReviewContent({
   analysis,
   jurisdiction,
   product,
+  recommendations,
+  selectedAddOns,
+  onToggleAddOn,
   onEdit,
   onProceed,
   isPaid,
@@ -3278,6 +3327,14 @@ function TenancyReviewContent({
         </div>
       </Card>
 
+      {recommendations.length > 0 && !isPaid && (
+        <RecommendationBasketCard
+          recommendations={recommendations}
+          selectedAddOns={selectedAddOns}
+          onToggleAddOn={onToggleAddOn}
+        />
+      )}
+
       {/* Action Buttons */}
       <div className="flex flex-col sm:flex-row gap-4 mt-4">
         <Button onClick={onEdit} variant="outline" className="flex-1">
@@ -3306,6 +3363,157 @@ function TenancyReviewContent({
           Your updated answers will be used to regenerate your documents.
         </p>
       )}
+    </div>
+  );
+}
+
+function RecommendationBasketCard({
+  recommendations,
+  selectedAddOns,
+  onToggleAddOn,
+}: {
+  recommendations: ResidentialUpsellRecommendation[];
+  selectedAddOns: string[];
+  onToggleAddOn: (sku: string) => void;
+}) {
+  return (
+    <Card className="p-6 border-blue-200 bg-blue-50">
+      <h2 className="text-lg font-semibold mb-4">Recommended add-ons</h2>
+      <div className="space-y-3">
+        {recommendations.map((recommendation) => {
+          const checked = selectedAddOns.includes(recommendation.sku);
+          return (
+            <label
+              key={recommendation.sku}
+              className="flex items-start gap-3 rounded-lg border border-blue-100 bg-white p-4 cursor-pointer"
+            >
+              <input
+                type="checkbox"
+                className="mt-1"
+                checked={checked}
+                onChange={() => onToggleAddOn(recommendation.sku)}
+              />
+              <div className="flex-1">
+                <div className="flex items-center justify-between gap-4">
+                  <p className="font-medium text-gray-900">{recommendation.label}</p>
+                  <span className="text-sm font-semibold text-primary">{recommendation.displayPrice}</span>
+                </div>
+                <p className="text-sm text-gray-600 mt-1">{recommendation.reason}</p>
+              </div>
+            </label>
+          );
+        })}
+      </div>
+    </Card>
+  );
+}
+
+interface ResidentialLettingReviewContentProps {
+  caseId: string;
+  analysis: any;
+  jurisdiction: string;
+  product: string;
+  recommendations: ResidentialUpsellRecommendation[];
+  selectedAddOns: string[];
+  onToggleAddOn: (sku: string) => void;
+  onEdit: () => void;
+  onProceed: () => void;
+  isPaid?: boolean;
+  isRegenerating?: boolean;
+  isLoadingPaymentStatus?: boolean;
+}
+
+function ResidentialLettingReviewContent({
+  analysis,
+  jurisdiction,
+  product,
+  recommendations,
+  selectedAddOns,
+  onToggleAddOn,
+  onEdit,
+  onProceed,
+  isPaid,
+  isRegenerating,
+  isLoadingPaymentStatus,
+}: ResidentialLettingReviewContentProps) {
+  const facts = analysis.case_facts || {};
+  const productMeta = RESIDENTIAL_LETTING_PRODUCTS[product as keyof typeof RESIDENTIAL_LETTING_PRODUCTS];
+
+  const people = Array.isArray(facts.tenants)
+    ? facts.tenants.map((tenant: any) => tenant.full_name).filter(Boolean)
+    : [];
+
+  const propertyAddress = [facts.property_address_line1, facts.property_address_town, facts.property_address_postcode]
+    .filter(Boolean)
+    .join(', ');
+
+  const headlineFacts = [
+    { label: 'Property', value: propertyAddress || 'Not specified' },
+    { label: 'Tenant / occupier', value: people.join(', ') || 'Not specified' },
+    { label: 'Rent', value: facts.rent_amount ? `£${facts.rent_amount}` : 'Not specified' },
+    { label: 'Start date', value: facts.tenancy_start_date || 'Not specified' },
+  ];
+
+  return (
+    <div className="space-y-6 max-w-4xl mx-auto p-6">
+      <div className="text-center pb-6 border-b">
+        <h1 className="text-3xl font-bold text-gray-900">{productMeta?.label || 'Residential Letting Document'} Review</h1>
+        <p className="text-gray-600 mt-2">
+          {jurisdiction === 'england' ? 'England' : jurisdiction} • {productMeta?.displayPrice || ''}
+        </p>
+      </div>
+
+      <Card className="p-6">
+        <h2 className="text-lg font-semibold mb-4">Document summary</h2>
+        <div className="grid md:grid-cols-2 gap-4">
+          {headlineFacts.map((item) => (
+            <div key={item.label} className="rounded-lg bg-gray-50 p-4">
+              <p className="text-sm text-gray-500 mb-1">{item.label}</p>
+              <p className="text-sm font-medium text-gray-900">{item.value}</p>
+            </div>
+          ))}
+        </div>
+        {facts.document_notes && (
+          <div className="mt-4 rounded-lg bg-blue-50 p-4">
+            <p className="text-sm text-gray-500 mb-1">Additional notes</p>
+            <p className="text-sm text-gray-800 whitespace-pre-wrap">{facts.document_notes}</p>
+          </div>
+        )}
+      </Card>
+
+      <Card className="p-6">
+        <h2 className="text-lg font-semibold mb-4">Included document</h2>
+        <div className="flex items-start gap-3">
+          <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mt-0.5" />
+          <div>
+            <p className="font-medium text-gray-900">{productMeta?.label}</p>
+            <p className="text-sm text-gray-600">{productMeta?.description}</p>
+          </div>
+        </div>
+      </Card>
+
+      {recommendations.length > 0 && !isPaid && (
+        <RecommendationBasketCard
+          recommendations={recommendations}
+          selectedAddOns={selectedAddOns}
+          onToggleAddOn={onToggleAddOn}
+        />
+      )}
+
+      <div className="flex flex-col sm:flex-row gap-4 mt-4">
+        <Button onClick={onEdit} variant="outline" className="flex-1">
+          Go back &amp; edit answers
+        </Button>
+        <Button onClick={onProceed} className="flex-1" disabled={isRegenerating || isLoadingPaymentStatus}>
+          {isLoadingPaymentStatus
+            ? 'Loading...'
+            : isRegenerating
+              ? 'Regenerating...'
+              : isPaid
+                ? 'Regenerate document'
+                : 'Proceed to payment & pack'}
+        </Button>
+      </div>
     </div>
   );
 }

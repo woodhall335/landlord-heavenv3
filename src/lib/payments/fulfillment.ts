@@ -5,21 +5,20 @@ import {
   mapCaseFactsToScotlandMoneyClaimCase,
 } from '@/lib/documents/money-claim-wizard-mapper';
 import { mapWizardToASTData } from '@/lib/documents/ast-wizard-mapper';
+import { generateResidentialLettingDocuments } from '@/lib/documents/residential-letting-generator';
 import { getPackContents } from '@/lib/products';
 import type { PackItem } from '@/lib/products';
-import { normalizeJurisdiction } from '@/lib/jurisdiction/normalize';
 import {
   resolveEffectiveJurisdiction,
   JurisdictionResolutionError,
 } from '@/lib/tenancy/jurisdiction';
-import {
-  validateSection21ForCheckout,
-  isSection21Case,
-  type Section21MissingConfirmation,
-} from '@/lib/validation/section21-checkout-validator';
 import { safeUpdateOrderWithMetadata } from '@/lib/payments/safe-order-metadata';
 import { validateTenancyRequiredFacts } from '@/lib/validation/tenancy-details-validator';
 import { doesDocumentTypeMatch, toCanonicalDocumentKey } from '@/lib/documents/dashboard-document-display';
+import {
+  isResidentialLettingProductSku,
+  type ResidentialLettingProductSku,
+} from '@/lib/residential-letting/products';
 
 // =============================================================================
 // TYPES
@@ -29,6 +28,7 @@ interface FulfillOrderInput {
   orderId: string;
   caseId: string;
   productType: string;
+  addOns?: string[];
   userId?: string | null;
 }
 
@@ -89,6 +89,21 @@ function getExpectedDocumentKeys(
   });
 
   return packContents.map((item) => item.key);
+}
+
+function getExpectedDocumentKeysForProducts(
+  productTypes: string[],
+  jurisdiction: string,
+  route?: string,
+  hasArrears?: boolean
+): string[] {
+  return Array.from(
+    new Set(
+      productTypes.flatMap((productType) =>
+        getExpectedDocumentKeys(productType, jurisdiction, route, hasArrears)
+      )
+    )
+  );
 }
 
 export function computeMissingDocumentKeys(expectedKeys: string[], actualDocs: Array<{ document_type: string; document_title: string }>): { missingKeys: string[]; actualCanonicalKeys: string[] } {
@@ -159,6 +174,50 @@ async function validateFulfillmentCompleteness(
   };
 }
 
+async function validateFulfillmentCompletenessForProducts(
+  supabase: ReturnType<typeof createAdminClient>,
+  caseId: string,
+  productTypes: string[],
+  jurisdiction: string,
+  route?: string,
+  hasArrears?: boolean
+): Promise<FulfillmentValidation> {
+  const expectedKeys = getExpectedDocumentKeysForProducts(productTypes, jurisdiction, route, hasArrears);
+
+  const { data: actualDocs, error } = await supabase
+    .from('documents')
+    .select('id, document_title, document_type, metadata')
+    .eq('case_id', caseId)
+    .eq('is_preview', false);
+
+  if (error) {
+    console.error('[fulfillment] Failed to fetch documents for validation:', error);
+    return {
+      isComplete: false,
+      expectedCount: expectedKeys.length,
+      actualCount: 0,
+      expectedKeys,
+      actualTitles: [],
+      actualCanonicalKeys: [],
+      missingKeys: expectedKeys,
+    };
+  }
+
+  const actualTitles = (actualDocs || []).map((d) => d.document_title);
+  const actualCount = actualDocs?.length || 0;
+  const { missingKeys, actualCanonicalKeys } = computeMissingDocumentKeys(expectedKeys, actualDocs || []);
+
+  return {
+    isComplete: missingKeys.length === 0,
+    expectedCount: expectedKeys.length,
+    actualCount,
+    expectedKeys,
+    actualTitles,
+    actualCanonicalKeys,
+    missingKeys,
+  };
+}
+
 /**
  * Log fulfillment validation result with detailed information.
  */
@@ -186,6 +245,192 @@ function logFulfillmentValidation(
   }
 }
 
+type PersistableGeneratedDocument = {
+  title: string;
+  description?: string;
+  document_type: string;
+  html?: string | null;
+  pdf?: Buffer;
+  file_name: string;
+};
+
+async function persistGeneratedDocuments(
+  supabase: ReturnType<typeof createAdminClient>,
+  params: {
+    caseId: string;
+    userId: string;
+    jurisdiction: string;
+    orderId: string;
+    productType: string;
+    documents: PersistableGeneratedDocument[];
+    metadata?: Record<string, unknown>;
+  }
+): Promise<number> {
+  const { caseId, userId, jurisdiction, orderId, productType, documents, metadata } = params;
+  let generatedDocsCount = 0;
+
+  for (const doc of documents) {
+    if (!doc.pdf) continue;
+
+    const fileName = `${userId}/${caseId}/${doc.file_name}`;
+    const { error: uploadError } = await supabase.storage
+      .from('documents')
+      .upload(fileName, doc.pdf, {
+        contentType: 'application/pdf',
+        upsert: true,
+      });
+
+    if (uploadError && !uploadError.message.includes('already exists')) {
+      throw uploadError;
+    }
+
+    const { data: publicUrlData } = supabase.storage.from('documents').getPublicUrl(fileName);
+
+    const { error: insertError } = await supabase.from('documents').upsert(
+      {
+        user_id: userId,
+        case_id: caseId,
+        document_type: doc.document_type,
+        document_title: doc.title,
+        jurisdiction,
+        html_content: doc.html || null,
+        pdf_url: publicUrlData.publicUrl,
+        is_preview: false,
+        qa_passed: true,
+        metadata: {
+          description: doc.description,
+          pack_type: productType,
+          order_id: orderId,
+          ...(metadata || {}),
+        },
+      },
+      { onConflict: 'case_id,document_type,is_preview' }
+    );
+
+    if (insertError) {
+      console.error(`[fulfillment] Failed to insert document "${doc.title}":`, insertError);
+    } else {
+      generatedDocsCount++;
+    }
+  }
+
+  return generatedDocsCount;
+}
+
+async function generateDocumentsForProduct(params: {
+  supabase: ReturnType<typeof createAdminClient>;
+  productType: string;
+  orderId: string;
+  caseId: string;
+  userId: string;
+  jurisdiction: string;
+  wizardFacts: Record<string, any>;
+  caseFacts: Record<string, any>;
+}): Promise<number> {
+  const { supabase, productType, orderId, caseId, userId, jurisdiction, wizardFacts, caseFacts } = params;
+
+  if (productType === 'notice_only' || productType === 'complete_pack') {
+    const { generateNoticeOnlyPack, generateCompleteEvictionPack } = await import(
+      '@/lib/documents/eviction-pack-generator'
+    );
+
+    const evictionPack =
+      productType === 'notice_only'
+        ? await generateNoticeOnlyPack(wizardFacts)
+        : await generateCompleteEvictionPack(wizardFacts);
+
+    return persistGeneratedDocuments(supabase, {
+      caseId,
+      userId,
+      jurisdiction,
+      orderId,
+      productType,
+      documents: evictionPack.documents,
+    });
+  }
+
+  if (productType === 'money_claim') {
+    const { generateMoneyClaimPack } = await import('@/lib/documents/money-claim-pack-generator');
+
+    const pack = await generateMoneyClaimPack({
+      ...mapCaseFactsToMoneyClaimCase(caseFacts as any),
+      case_id: caseId,
+    });
+
+    return persistGeneratedDocuments(supabase, {
+      caseId,
+      userId,
+      jurisdiction,
+      orderId,
+      productType,
+      documents: pack.documents,
+    });
+  }
+
+  if (productType === 'sc_money_claim') {
+    const { generateScotlandMoneyClaim } = await import(
+      '@/lib/documents/scotland-money-claim-pack-generator'
+    );
+
+    const pack = await generateScotlandMoneyClaim({
+      ...mapCaseFactsToScotlandMoneyClaimCase(caseFacts as any),
+      case_id: caseId,
+    });
+
+    return persistGeneratedDocuments(supabase, {
+      caseId,
+      userId,
+      jurisdiction,
+      orderId,
+      productType,
+      documents: pack.documents,
+    });
+  }
+
+  if (productType === 'ast_standard' || productType === 'ast_premium') {
+    const { generateStandardASTDocuments, generatePremiumASTDocuments } = await import(
+      '@/lib/documents/ast-generator'
+    );
+
+    const astData = mapWizardToASTData(wizardFacts as any, { canonicalJurisdiction: jurisdiction });
+    const astPack =
+      productType === 'ast_standard'
+        ? await generateStandardASTDocuments(astData, caseId)
+        : await generatePremiumASTDocuments(astData, caseId);
+
+    return persistGeneratedDocuments(supabase, {
+      caseId,
+      userId,
+      jurisdiction,
+      orderId,
+      productType,
+      documents: astPack.documents,
+      metadata: { tier: astPack.tier },
+    });
+  }
+
+  if (isResidentialLettingProductSku(productType)) {
+    const pack = await generateResidentialLettingDocuments(
+      productType as ResidentialLettingProductSku,
+      {
+        ...wizardFacts,
+        case_id: caseId,
+      }
+    );
+
+    return persistGeneratedDocuments(supabase, {
+      caseId,
+      userId,
+      jurisdiction,
+      orderId,
+      productType,
+      documents: pack.documents,
+    });
+  }
+
+  throw new Error(`Unsupported product type for fulfillment: ${productType}`);
+}
+
 // =============================================================================
 // MAIN FULFILLMENT FUNCTION
 // =============================================================================
@@ -194,9 +439,11 @@ export async function fulfillOrder({
   orderId,
   caseId,
   productType,
+  addOns = [],
   userId,
 }: FulfillOrderInput): Promise<FulfillmentResult> {
   const supabase = createAdminClient();
+  const fulfillmentProducts = Array.from(new Set([productType, ...addOns].filter(Boolean)));
 
   // First, get case data to determine jurisdiction and route
   const { data: caseData, error: caseError } = await supabase
@@ -296,10 +543,10 @@ export async function fulfillOrder({
   // VALIDATION: Check if fulfillment is already complete
   // This replaces the old "any doc exists" check with proper validation
   // ==========================================================================
-  const preValidation = await validateFulfillmentCompleteness(
+  const preValidation = await validateFulfillmentCompletenessForProducts(
     supabase,
     caseId,
-    productType,
+    fulfillmentProducts,
     jurisdiction,
     route,
     hasArrears
@@ -330,7 +577,7 @@ export async function fulfillOrder({
       })
       .eq('id', caseId);
 
-    logFulfillmentValidation(orderId, caseId, productType, preValidation);
+    logFulfillmentValidation(orderId, caseId, fulfillmentProducts.join(', '), preValidation);
 
     return {
       status: 'already_fulfilled',
@@ -365,7 +612,9 @@ export async function fulfillOrder({
     .update({ fulfillment_status: 'processing' })
     .eq('id', orderId);
 
-  const isTenancyAgreementProduct = productType === 'ast_standard' || productType === 'ast_premium';
+  const isTenancyAgreementProduct = fulfillmentProducts.some(
+    (sku) => sku === 'ast_standard' || sku === 'ast_premium'
+  );
   if (isTenancyAgreementProduct) {
     const tenancyValidation = validateTenancyRequiredFacts(wizardFacts as Record<string, unknown>, {
       jurisdiction: jurisdiction as any,
@@ -411,235 +660,32 @@ export async function fulfillOrder({
   }
 
   try {
-    if (productType === 'notice_only' || productType === 'complete_pack') {
-      const { generateNoticeOnlyPack, generateCompleteEvictionPack } = await import(
-        '@/lib/documents/eviction-pack-generator'
-      );
-
-      const evictionPack =
-        productType === 'notice_only'
-          ? await generateNoticeOnlyPack(wizardFacts)
-          : await generateCompleteEvictionPack(wizardFacts);
-
-      for (const doc of evictionPack.documents) {
-        if (!doc.pdf) continue;
-
-        const fileName = `${resolvedUserId}/${caseId}/${doc.file_name}`;
-        const { error: uploadError } = await supabase.storage
-          .from('documents')
-          .upload(fileName, doc.pdf, {
-            contentType: 'application/pdf',
-            upsert: true, // Allow overwrite for regeneration
-          });
-
-        if (uploadError && !uploadError.message.includes('already exists')) {
-          throw uploadError;
-        }
-
-        const { data: publicUrlData } = supabase.storage
-          .from('documents')
-          .getPublicUrl(fileName);
-
-        // Upsert document record using canonical document_type key
-        const { error: insertError } = await supabase.from('documents').upsert(
-          {
-            user_id: resolvedUserId,
-            case_id: caseId,
-            document_type: doc.document_type,
-            document_title: doc.title,
-            jurisdiction,
-            html_content: doc.html || null,
-            pdf_url: publicUrlData.publicUrl,
-            is_preview: false,
-            qa_passed: true,
-            metadata: { description: doc.description, pack_type: productType, order_id: orderId },
-          },
-          { onConflict: 'case_id,document_type,is_preview' }
-        );
-
-        if (insertError) {
-          console.error(`[fulfillment] Failed to insert document "${doc.title}":`, insertError);
-        } else {
-          generatedDocsCount++;
-        }
-      }
-    } else if (productType === 'money_claim') {
-      const { generateMoneyClaimPack } = await import('@/lib/documents/money-claim-pack-generator');
-
-      const pack = await generateMoneyClaimPack({
-        ...mapCaseFactsToMoneyClaimCase(caseFacts),
-        case_id: caseId,
+    for (const fulfillmentProduct of fulfillmentProducts) {
+      generatedDocsCount += await generateDocumentsForProduct({
+        supabase,
+        productType: fulfillmentProduct,
+        orderId,
+        caseId,
+        userId: resolvedUserId,
+        jurisdiction,
+        wizardFacts,
+        caseFacts,
       });
-
-      for (const doc of pack.documents) {
-        if (!doc.pdf) continue;
-
-        const fileName = `${resolvedUserId}/${caseId}/${doc.file_name}`;
-        const { error: uploadError } = await supabase.storage
-          .from('documents')
-          .upload(fileName, doc.pdf, {
-            contentType: 'application/pdf',
-            upsert: true,
-          });
-
-        if (uploadError && !uploadError.message.includes('already exists')) {
-          throw uploadError;
-        }
-
-        const { data: publicUrlData } = supabase.storage
-          .from('documents')
-          .getPublicUrl(fileName);
-
-        const { error: insertError } = await supabase.from('documents').upsert(
-          {
-            user_id: resolvedUserId,
-            case_id: caseId,
-            document_type: doc.document_type,
-            document_title: doc.title,
-            jurisdiction,
-            html_content: doc.html || null,
-            pdf_url: publicUrlData.publicUrl,
-            is_preview: false,
-            qa_passed: true,
-            metadata: { description: doc.description, pack_type: productType, order_id: orderId },
-          },
-          { onConflict: 'case_id,document_type,is_preview' }
-        );
-
-        if (insertError) {
-          console.error(`[fulfillment] Failed to insert document "${doc.title}":`, insertError);
-        } else {
-          generatedDocsCount++;
-        }
-      }
-    } else if (productType === 'sc_money_claim') {
-      const { generateScotlandMoneyClaim } = await import(
-        '@/lib/documents/scotland-money-claim-pack-generator'
-      );
-
-      const pack = await generateScotlandMoneyClaim({
-        ...mapCaseFactsToScotlandMoneyClaimCase(caseFacts),
-        case_id: caseId,
-      });
-
-      for (const doc of pack.documents) {
-        if (!doc.pdf) continue;
-
-        const fileName = `${resolvedUserId}/${caseId}/${doc.file_name}`;
-        const { error: uploadError } = await supabase.storage
-          .from('documents')
-          .upload(fileName, doc.pdf, {
-            contentType: 'application/pdf',
-            upsert: true,
-          });
-
-        if (uploadError && !uploadError.message.includes('already exists')) {
-          throw uploadError;
-        }
-
-        const { data: publicUrlData } = supabase.storage
-          .from('documents')
-          .getPublicUrl(fileName);
-
-        const { error: insertError } = await supabase.from('documents').upsert(
-          {
-            user_id: resolvedUserId,
-            case_id: caseId,
-            document_type: doc.document_type,
-            document_title: doc.title,
-            jurisdiction,
-            html_content: doc.html || null,
-            pdf_url: publicUrlData.publicUrl,
-            is_preview: false,
-            qa_passed: true,
-            metadata: { description: doc.description, pack_type: productType, order_id: orderId },
-          },
-          { onConflict: 'case_id,document_type,is_preview' }
-        );
-
-        if (insertError) {
-          console.error(`[fulfillment] Failed to insert document "${doc.title}":`, insertError);
-        } else {
-          generatedDocsCount++;
-        }
-      }
-    } else if (productType === 'ast_standard' || productType === 'ast_premium') {
-      const { generateStandardASTDocuments, generatePremiumASTDocuments } = await import(
-        '@/lib/documents/ast-generator'
-      );
-
-      // Convert WizardFacts to ASTData format (maps component addresses to full strings)
-      // CRITICAL: Pass the canonical jurisdiction to ensure Scotland cases get Scotland templates
-      const astData = mapWizardToASTData(wizardFacts as any, { canonicalJurisdiction: jurisdiction });
-
-      const astPack =
-        productType === 'ast_standard'
-          ? await generateStandardASTDocuments(astData, caseId)
-          : await generatePremiumASTDocuments(astData, caseId);
-
-      for (const doc of astPack.documents) {
-        if (!doc.pdf) continue;
-
-        const fileName = `${resolvedUserId}/${caseId}/${doc.file_name}`;
-        const { error: uploadError } = await supabase.storage
-          .from('documents')
-          .upload(fileName, doc.pdf, {
-            contentType: 'application/pdf',
-            upsert: true,
-          });
-
-        if (uploadError && !uploadError.message.includes('already exists')) {
-          throw uploadError;
-        }
-
-        const { data: publicUrlData } = supabase.storage
-          .from('documents')
-          .getPublicUrl(fileName);
-
-        const { error: insertError } = await supabase.from('documents').upsert(
-          {
-            user_id: resolvedUserId,
-            case_id: caseId,
-            document_type: doc.document_type,
-            document_title: doc.title,
-            jurisdiction,
-            html_content: doc.html || null,
-            pdf_url: publicUrlData.publicUrl,
-            is_preview: false,
-            qa_passed: true,
-            metadata: {
-              description: doc.description,
-              pack_type: productType,
-              order_id: orderId,
-              tier: astPack.tier,
-            },
-          },
-          { onConflict: 'case_id,document_type,is_preview' }
-        );
-
-        if (insertError) {
-          console.error(`[fulfillment] Failed to insert document "${doc.title}":`, insertError);
-        } else {
-          generatedDocsCount++;
-        }
-      }
-    } else {
-      throw new Error(`Unsupported product type for fulfillment: ${productType}`);
     }
 
     // ==========================================================================
     // POST-GENERATION VALIDATION: Verify all expected documents now exist
     // ==========================================================================
-    const postValidation = await validateFulfillmentCompleteness(
+    const postValidation = await validateFulfillmentCompletenessForProducts(
       supabase,
       caseId,
-      productType,
+      fulfillmentProducts,
       jurisdiction,
       route,
       hasArrears
     );
 
-    logFulfillmentValidation(orderId, caseId, productType, postValidation);
+    logFulfillmentValidation(orderId, caseId, fulfillmentProducts.join(', '), postValidation);
 
     if (postValidation.isComplete) {
       // All documents generated successfully - mark as fulfilled
@@ -655,6 +701,8 @@ export async function fulfillOrder({
           expected_documents: postValidation.expectedCount,
           generated_documents: generatedDocsCount,
           validation: 'complete',
+          products: fulfillmentProducts,
+          add_ons: addOns,
         }
       );
 
@@ -691,6 +739,8 @@ export async function fulfillOrder({
           validation: 'incomplete',
           missing_keys: postValidation.missingKeys,
           last_attempt: new Date().toISOString(),
+          products: fulfillmentProducts,
+          add_ons: addOns,
         }
       );
 

@@ -27,6 +27,10 @@ import {
   type ProductType,
 } from '@/lib/wizard/mqs-loader';
 import { applyDocumentIntelligence } from '@/lib/wizard/document-intel';
+import { PUBLIC_RESIDENTIAL_LETTING_PRODUCT_SKUS } from '@/lib/residential-letting/products';
+
+const RESIDENTIAL_PRODUCTS = [...PUBLIC_RESIDENTIAL_LETTING_PRODUCT_SKUS] as const;
+type ResidentialProduct = (typeof RESIDENTIAL_PRODUCTS)[number];
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -42,6 +46,7 @@ const startWizardSchema = z.object({
     'tenancy_agreement',
     'ast_standard',
     'ast_premium',
+    ...RESIDENTIAL_PRODUCTS,
   ]),
   jurisdiction: z.enum(['england', 'wales', 'scotland', 'northern-ireland']),
   case_id: z.string().uuid().optional(),
@@ -58,7 +63,8 @@ type StartProduct =
   | 'ast_standard'
   | 'ast_premium'
   | 'money_claim_england_wales'
-  | 'money_claim_scotland';
+  | 'money_claim_scotland'
+  | ResidentialProduct;
 
 const productToCaseType = (product: StartProduct) => {
   switch (product) {
@@ -72,6 +78,16 @@ const productToCaseType = (product: StartProduct) => {
     case 'tenancy_agreement':
     case 'ast_standard':
     case 'ast_premium':
+    case 'guarantor_agreement':
+    case 'residential_sublet_agreement':
+    case 'lease_amendment':
+    case 'lease_assignment_agreement':
+    case 'rent_arrears_letter':
+    case 'repayment_plan_agreement':
+    case 'rental_inspection_report':
+    case 'inventory_schedule_condition':
+    case 'flatmate_agreement':
+    case 'renewal_tenancy_agreement':
       return 'tenancy_agreement';
     default:
       return null;
@@ -98,6 +114,17 @@ const resolveProductTier = (
         return 'Premium Scottish Private Residential Tenancy';
       if (jurisdiction === 'northern-ireland') return 'Premium NI Private Tenancy';
       return 'Premium AST';
+    case 'guarantor_agreement':
+    case 'residential_sublet_agreement':
+    case 'lease_amendment':
+    case 'lease_assignment_agreement':
+    case 'rent_arrears_letter':
+    case 'repayment_plan_agreement':
+    case 'rental_inspection_report':
+    case 'inventory_schedule_condition':
+    case 'flatmate_agreement':
+    case 'renewal_tenancy_agreement':
+      return 'Standard AST';
 
     default:
       // Generic tenancy_agreement product should still ask "which version?"
@@ -108,6 +135,9 @@ const resolveProductTier = (
 // Normalize product to MQS product type
 const normalizeProduct = (product: StartProduct): ProductType => {
   if (product === 'ast_standard' || product === 'ast_premium') {
+    return 'tenancy_agreement';
+  }
+  if ((RESIDENTIAL_PRODUCTS as readonly string[]).includes(product)) {
     return 'tenancy_agreement';
   }
   if (product === 'money_claim_england_wales' || product === 'money_claim_scotland') {

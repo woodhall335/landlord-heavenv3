@@ -7,6 +7,12 @@ import { FAQSection } from "@/components/seo/FAQSection";
 import { StandardHero } from "@/components/marketing/StandardHero";
 import { HeaderConfig } from "@/components/layout/HeaderConfig";
 import { PRODUCTS } from "@/lib/pricing/products";
+import {
+  PUBLIC_RESIDENTIAL_LETTING_PRODUCT_SKUS,
+  RESIDENTIAL_LETTING_PRODUCTS,
+  getResidentialLandingHref,
+  getResidentialWizardHref,
+} from "@/lib/residential-letting/products";
 
 export const metadata: Metadata = generateMetadata({
   title: "Pricing - UK Eviction Case Bundle Comparison",
@@ -65,12 +71,27 @@ export default function PricingPage() {
   const moneyClaimPrice = PRODUCTS.money_claim.displayPrice;
   const standardAstPrice = PRODUCTS.ast_standard.displayPrice;
   const premiumAstPrice = PRODUCTS.ast_premium.displayPrice;
+  const residentialProducts = PUBLIC_RESIDENTIAL_LETTING_PRODUCT_SKUS.map((sku) => RESIDENTIAL_LETTING_PRODUCTS[sku]);
 
   return (
     <div className="min-h-screen bg-gray-50">
       <HeaderConfig mode="autoOnScroll" />
 
       {/* Structured Data for SEO */}
+      <StructuredData
+        data={{
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: faqs.map((faq) => ({
+            "@type": "Question",
+            name: faq.question,
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: faq.answer,
+            },
+          })),
+        }}
+      />
 
       {/* Hero Section */}
       <StandardHero
@@ -399,7 +420,7 @@ export default function PricingPage() {
           {/* Premium AST */}
           <div className="bg-white rounded-lg border-2 border-gray-200 p-6">
             <h3 className="text-2xl font-bold text-charcoal mb-2">Premium AST</h3>
-            <div className="text-3xl font-bold text-primary mb-4">{noticePrice} <span className="text-sm text-gray-600">one-time</span></div>
+            <div className="text-3xl font-bold text-primary mb-4">{premiumAstPrice} <span className="text-sm text-gray-600">one-time</span></div>
             <ul className="space-y-2 mb-6 text-sm">
               <li>✅ Everything in Standard</li>
               <li>✅ HMO Clauses</li>
@@ -417,6 +438,49 @@ export default function PricingPage() {
           </div>
 
           {/* HMO Pro removed - parked for later review */}
+        </div>
+      </Container>
+
+      <Container size="large" className="pb-12">
+        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+          <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+            <div>
+              <h2 className="text-2xl font-bold text-charcoal">Residential Landlord Documents</h2>
+              <p className="mt-2 max-w-3xl text-sm text-gray-600">
+                Each England-only residential add-on now has its own product page and wizard entry point. Use the product page for focused intent, then move into the shared residential wizard.
+              </p>
+            </div>
+            <p className="text-sm text-gray-500">Per-document pricing from {"\u00A39.99"} to {"\u00A312.99"}</p>
+          </div>
+
+          <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {residentialProducts.map((product) => (
+              <div key={product.sku} className="rounded-xl border border-gray-200 p-5">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <h3 className="text-lg font-semibold text-charcoal">{product.label}</h3>
+                    <p className="mt-2 text-sm text-gray-600">{product.description}</p>
+                  </div>
+                  <div className="whitespace-nowrap text-lg font-bold text-primary">{product.displayPrice}</div>
+                </div>
+
+                <div className="mt-4 flex flex-col gap-2 sm:flex-row">
+                  <Link
+                    href={getResidentialLandingHref(product.sku)}
+                    className="hero-btn-secondary flex-1 text-center"
+                  >
+                    View page
+                  </Link>
+                  <Link
+                    href={getResidentialWizardHref(product.sku)}
+                    className="hero-btn-primary flex-1 text-center"
+                  >
+                    Start wizard
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </Container>
 

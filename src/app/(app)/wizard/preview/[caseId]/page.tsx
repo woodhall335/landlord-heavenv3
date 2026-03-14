@@ -9,7 +9,7 @@
 
 import React, { useEffect, useMemo, useState } from 'react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
-import { Button, Card, Loading, ValidationErrors, type ValidationIssue } from '@/components/ui';
+import { Button, Card, ValidationErrors, type ValidationIssue } from '@/components/ui';
 import { useToast } from '@/components/ui/Toast';
 import { SignupModal } from '@/components/modals/SignupModal';
 import { PreviewPageLayout, DocumentInfo, MultiPageViewer } from '@/components/preview';
@@ -22,8 +22,6 @@ import {
 } from '@/lib/documents/document-configs';
 import {
   requiresRentSchedule,
-  computeIncludedGrounds,
-  validateNoticeOnlyCase,
 } from '@/lib/validation/notice-only-case-validator';
 import { hasWalesArrearsGroundSelected } from '@/lib/wales';
 import { Loader2, Scale, CheckCircle, Download, Shield, Clock, FileText, List } from 'lucide-react';
@@ -33,13 +31,21 @@ import { getCheckoutRedirectUrls, type CheckoutProduct } from '@/lib/payments/re
 import { getSessionTokenHeaders } from '@/lib/session-token';
 import { getCheckoutAttribution } from '@/lib/wizard/wizardAttribution';
 import {
-  getIncludedSummary,
   getInventoryBehaviour,
   COMPLIANCE_CHECKLIST_INFO,
   type TenancyJurisdiction,
   type TenancyTier,
 } from '@/lib/tenancy/included-features';
 import { detectInventoryData } from '@/lib/tenancy/product-tier';
+import {
+  isResidentialLettingProductSku,
+  type ResidentialLettingProductSku,
+} from '@/lib/residential-letting/products';
+import {
+  getResidentialDocumentList,
+  getResidentialProductMeta,
+} from '@/lib/residential-letting/document-config';
+import { PRODUCTS, isValidProductSku, type ProductSku } from '@/lib/pricing/products';
 
 interface CaseData {
   id: string;
@@ -67,12 +73,14 @@ function ASTCheckoutButton({
   productName,
   price,
   jurisdiction,
+  addOns = [],
 }: {
   caseId: string;
   product: string;
   productName: string;
   price: string;
   jurisdiction?: string;
+  addOns?: string[];
 }) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -121,6 +129,7 @@ function ASTCheckoutButton({
         body: JSON.stringify({
           product_type: product,
           case_id: caseId,
+          add_ons: addOns,
           success_url: successUrl,
           cancel_url: cancelUrl,
           ...attribution,
@@ -243,6 +252,14 @@ export default function WizardPreviewPage() {
   const { showToast } = useToast();
   const caseId = params.caseId as string;
   const e2eModeEnabled = useMemo(() => process.env.NEXT_PUBLIC_E2E_MODE === 'true' || process.env.E2E_MODE === 'true', []);
+  const selectedAddOns = useMemo(
+    () =>
+      (searchParams.get('add_ons') || '')
+        .split(',')
+        .map((value) => value.trim())
+        .filter(Boolean),
+    [searchParams]
+  );
 
   const [caseData, setCaseData] = useState<CaseData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -740,30 +757,7 @@ export default function WizardPreviewPage() {
     if (caseId) {
       void fetchCase();
     }
-  }, [caseId, showToast]);
-
-  // Helper to determine document type
-  const getDocumentType = (caseData: CaseData): string => {
-    if (caseData.case_type === 'eviction') {
-      const route = caseData.recommended_route;
-      if (route === 'section_21' || route === 'accelerated_possession') {
-        return 'section21_notice';
-      }
-      if (route === 'section_8') {
-        return 'section8_notice';
-      }
-      if (route === 'notice_to_leave') {
-        return 'notice_to_leave';
-      }
-    }
-    if (caseData.case_type === 'money_claim') {
-      return 'money_claim';
-    }
-    if (caseData.case_type === 'tenancy_agreement') {
-      return 'ast_standard';
-    }
-    return 'section8_notice';
-  };
+  }, [caseId, e2eModeEnabled, searchParams, showToast]);
 
   // Get documents based on product and case type, enriched with generated document IDs
   const getDocuments = (): DocumentInfo[] => {
@@ -828,14 +822,31 @@ export default function WizardPreviewPage() {
         baseDocuments = getASTDocuments(jurisdiction, 'premium', { hasInventoryData });
         break;
       default:
-        // Infer from case type
-        if (caseType === 'money_claim') {
+        if (isResidentialLettingProductSku(product)) {
+          baseDocuments = getResidentialDocumentList(product as ResidentialLettingProductSku);
+        } else if (caseType === 'money_claim') {
           baseDocuments = getMoneyClaimDocuments(jurisdiction);
         } else if (caseType === 'tenancy_agreement') {
           baseDocuments = getASTDocuments(jurisdiction, 'standard', { hasInventoryData });
         } else {
           baseDocuments = getNoticeOnlyDocuments(jurisdiction, noticeRoute);
         }
+    }
+
+    if (selectedAddOns.length > 0) {
+      const addOnDocuments = selectedAddOns.flatMap((sku) =>
+        isResidentialLettingProductSku(sku)
+          ? getResidentialDocumentList(sku as ResidentialLettingProductSku)
+          : []
+      );
+      const seenDocumentIds = new Set(baseDocuments.map((doc) => doc.id));
+
+      for (const addOnDocument of addOnDocuments) {
+        if (!seenDocumentIds.has(addOnDocument.id)) {
+          baseDocuments.push(addOnDocument);
+          seenDocumentIds.add(addOnDocument.id);
+        }
+      }
     }
 
     // Mapping from config document IDs to database document_type values
@@ -1093,12 +1104,31 @@ export default function WizardPreviewPage() {
   const documents = getDocuments();
   const product = getProduct();
   const productMeta = getProductMeta(product);
+  const resolvedProductMeta = isResidentialLettingProductSku(product)
+    ? getResidentialProductMeta(product as ResidentialLettingProductSku)
+    : productMeta;
+  const baseProductSku = isValidProductSku(product) ? (product as ProductSku) : null;
+  const addOnProducts = selectedAddOns
+    .filter((sku): sku is ProductSku => isValidProductSku(sku))
+    .map((sku) => PRODUCTS[sku]);
+  const selectionTotal =
+    baseProductSku
+      ? PRODUCTS[baseProductSku].price + addOnProducts.reduce((sum, item) => sum + item.price, 0)
+      : null;
+  const selectionPriceDisplay =
+    selectionTotal !== null ? `£${selectionTotal.toFixed(2)}` : resolvedProductMeta.price;
 
   // Dynamically add rent schedule feature if included in documents
   const hasRentSchedule = documents.some(doc => doc.id === 'arrears-schedule');
   const dynamicFeatures = hasRentSchedule
     ? [...productMeta.features, 'Rent schedule (arrears breakdown)']
     : productMeta.features;
+  const selectionFeatures = Array.from(
+    new Set([
+      ...(isResidentialLettingProductSku(product) ? resolvedProductMeta.features : dynamicFeatures),
+      ...addOnProducts.map((item) => `Add-on included: ${item.label}`),
+    ])
+  );
 
   // Determine if this is a tenancy agreement product (uses multi-page preview)
   const isTenancyAgreement = product === 'ast_standard' || product === 'ast_premium' || product === 'tenancy_agreement';
@@ -1114,7 +1144,7 @@ export default function WizardPreviewPage() {
           <div className="max-w-6xl mx-auto px-4">
             {/* Header */}
             <div className="text-center mb-8">
-              <h1 className="text-3xl md:text-4xl font-bold text-gray-900">{productMeta.name}</h1>
+              <h1 className="text-3xl md:text-4xl font-bold text-gray-900">{resolvedProductMeta.name}</h1>
               <p className="text-gray-600 mt-2 text-lg">
                 Full document preview with all pages
               </p>
@@ -1137,13 +1167,13 @@ export default function WizardPreviewPage() {
                 <div className="bg-white rounded-xl shadow-lg border-2 border-blue-100 p-6 sticky top-8">
                   {/* Price */}
                   <div className="text-center mb-6">
-                    {productMeta.originalPrice && (
-                      <p className="text-gray-400 line-through text-lg">{productMeta.originalPrice}</p>
+                    {resolvedProductMeta.originalPrice && (
+                      <p className="text-gray-400 line-through text-lg">{resolvedProductMeta.originalPrice}</p>
                     )}
-                    <p className="text-4xl font-bold text-gray-900">{productMeta.price}</p>
+                    <p className="text-4xl font-bold text-gray-900">{selectionPriceDisplay}</p>
                     <p className="text-gray-600 mt-1">One-time payment</p>
-                    {productMeta.savings && (
-                      <p className="text-green-600 font-medium mt-2">{productMeta.savings}</p>
+                    {resolvedProductMeta.savings && (
+                      <p className="text-green-600 font-medium mt-2">{resolvedProductMeta.savings}</p>
                     )}
                   </div>
 
@@ -1157,7 +1187,7 @@ export default function WizardPreviewPage() {
                           A property solicitor typically charges <span className="font-semibold">£150–£400</span> for tenancy agreements.
                         </p>
                         <p className="text-xs text-green-700 mt-2">
-                          You pay: <span className="font-bold text-green-900">{productMeta.price}</span>
+                          You pay: <span className="font-bold text-green-900">{selectionPriceDisplay}</span>
                         </p>
                       </div>
                     </div>
@@ -1167,9 +1197,10 @@ export default function WizardPreviewPage() {
                   <ASTCheckoutButton
                     caseId={caseId}
                     product={product}
-                    productName={productMeta.name}
-                    price={productMeta.price}
+                    productName={resolvedProductMeta.name}
+                    price={selectionPriceDisplay}
                     jurisdiction={caseData.jurisdiction}
+                    addOns={selectedAddOns}
                   />
 
                   {/* Trust Signals */}
@@ -1240,11 +1271,11 @@ export default function WizardPreviewPage() {
                   )}
 
                   {/* Features - for non-tenancy products */}
-                  {!isTenancyAgreement && dynamicFeatures && dynamicFeatures.length > 0 && (
+                  {!isTenancyAgreement && selectionFeatures.length > 0 && (
                     <div className="mt-6 pt-6 border-t">
                       <h3 className="font-semibold text-gray-800 mb-3">Includes:</h3>
                       <ul className="space-y-2">
-                        {dynamicFeatures.map((feature, i) => (
+                        {selectionFeatures.map((feature, i) => (
                           <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
                             <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
                             <span>{feature}</span>
@@ -1269,12 +1300,13 @@ export default function WizardPreviewPage() {
         <PreviewPageLayout
           caseId={caseId}
           product={product}
-          productName={productMeta.name}
-          price={productMeta.price}
-          originalPrice={productMeta.originalPrice}
-          savings={productMeta.savings}
+          productName={resolvedProductMeta.name}
+          price={selectionPriceDisplay}
+          originalPrice={resolvedProductMeta.originalPrice}
+          savings={resolvedProductMeta.savings}
           documents={documents}
-          features={dynamicFeatures}
+          features={selectionFeatures}
+          addOns={selectedAddOns}
         />
       )}
 

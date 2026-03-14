@@ -12,6 +12,7 @@ import Stripe from 'stripe';
 import { sendPurchaseConfirmation } from '@/lib/email/resend';
 import { logger } from '@/lib/logger';
 import { fulfillOrder } from '@/lib/payments/fulfillment';
+import { isValidProductSku } from '@/lib/pricing/products';
 import { getOrCreateWizardFacts, updateWizardFacts } from '@/lib/case-facts/store';
 import type { WizardFactsMeta } from '@/lib/case-facts/schema';
 import {
@@ -87,7 +88,7 @@ function logMissingOrder(details: {
 async function updateCaseEntitlements(
   supabase: ReturnType<typeof createAdminClient>,
   caseId: string,
-  purchasedProduct: string,
+  purchasedProducts: string[],
 ) {
   try {
     const currentFacts = await getOrCreateWizardFacts(supabase as any, caseId);
@@ -96,8 +97,9 @@ async function updateCaseEntitlements(
       ? currentMeta.entitlements
       : [];
     const entitlements = Array.from(
-      new Set([...currentEntitlements, purchasedProduct].filter(Boolean))
+      new Set([...currentEntitlements, ...purchasedProducts].filter(Boolean))
     );
+    const purchasedProduct = purchasedProducts[0] || null;
 
     await updateWizardFacts(
       supabase as any,
@@ -114,6 +116,13 @@ async function updateCaseEntitlements(
   } catch (error) {
     logger.warn('Failed to persist case entitlements', { caseId, error });
   }
+}
+
+function parseAddOnProducts(raw: string | null | undefined): string[] {
+  return (raw || '')
+    .split(',')
+    .map((value) => value.trim())
+    .filter((value) => value.length > 0 && isValidProductSku(value));
 }
 
 async function findOrderForCheckoutSession(
@@ -255,6 +264,7 @@ export async function POST(request: Request) {
         if (session.mode === 'payment') {
           const caseId = session.metadata?.case_id || null;
           const productType = session.metadata?.product_type || session.metadata?.product || null;
+          const addOnProducts = parseAddOnProducts(session.metadata?.add_ons);
           const userId = session.metadata?.user_id || null;
 
           // Extract attribution from Stripe metadata (Migration 012)
@@ -336,7 +346,7 @@ export async function POST(request: Request) {
             await updateCaseEntitlements(
               supabase,
               resolvedCaseId,
-              resolvedProductType,
+              [resolvedProductType, ...addOnProducts],
             );
 
             await supabase
@@ -349,6 +359,7 @@ export async function POST(request: Request) {
                 orderId: (order as any).id,
                 caseId: resolvedCaseId,
                 productType: resolvedProductType,
+                addOns: addOnProducts,
                 userId,
               });
               processingResult = fulfillment.status;

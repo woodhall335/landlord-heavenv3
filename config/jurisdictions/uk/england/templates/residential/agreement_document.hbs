@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{title}}</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 24mm 18mm 22mm;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 11pt;
+      line-height: 1.58;
+      color: #18181b;
+      background: #fff;
+    }
+
+    h1, h2, h3 {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      page-break-after: avoid;
+      color: #111827;
+    }
+
+    .cover {
+      border: 1.5pt solid #1f2937;
+      padding: 22pt 24pt;
+      margin-bottom: 20pt;
+    }
+
+    .cover-topline {
+      font-family: Arial, Helvetica, sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-size: 8.25pt;
+      color: #4b5563;
+      margin-bottom: 10pt;
+    }
+
+    .cover h1 {
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-size: 20pt;
+      line-height: 1.2;
+    }
+
+    .cover-subtitle {
+      margin-top: 8pt;
+      font-size: 11pt;
+      color: #374151;
+    }
+
+    .cover-intro {
+      margin-top: 14pt;
+      padding: 12pt 14pt;
+      border-left: 3pt solid #374151;
+      background: #f8fafc;
+      color: #1f2937;
+    }
+
+    .cover-meta {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16pt;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 9pt;
+    }
+
+    .cover-meta td {
+      border: 0.75pt solid #9ca3af;
+      padding: 8pt 10pt;
+      vertical-align: top;
+    }
+
+    .cover-meta .label {
+      width: 22%;
+      background: #f3f4f6;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #374151;
+    }
+
+    .section-title {
+      font-size: 12.5pt;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      border-bottom: 1pt solid #111827;
+      padding-bottom: 5pt;
+      margin: 18pt 0 12pt;
+    }
+
+    .opening {
+      margin-bottom: 14pt;
+      text-align: justify;
+    }
+
+    .parties-table,
+    .detail-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10pt 0 12pt;
+      font-size: 10pt;
+    }
+
+    .parties-table td,
+    .detail-table td {
+      border: 0.75pt solid #9ca3af;
+      padding: 8pt 9pt;
+      vertical-align: top;
+    }
+
+    .parties-table .role,
+    .detail-table .label {
+      width: 26%;
+      background: #f9fafb;
+      font-family: Arial, Helvetica, sans-serif;
+      font-weight: 700;
+      color: #1f2937;
+    }
+
+    .detail-table .label {
+      width: 30%;
+    }
+
+    .recitals {
+      margin: 0 0 8pt 0;
+      padding: 0;
+      list-style: none;
+      counter-reset: recital;
+    }
+
+    .recitals li {
+      margin: 0 0 7pt 0;
+      padding-left: 28pt;
+      position: relative;
+      text-align: justify;
+    }
+
+    .recitals li::before {
+      counter-increment: recital;
+      content: counter(recital, upper-alpha) ".";
+      position: absolute;
+      left: 0;
+      top: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      font-weight: 700;
+    }
+
+    .clause {
+      margin: 14pt 0 0;
+      page-break-inside: avoid;
+    }
+
+    .clause-heading {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 11.25pt;
+      font-weight: 700;
+      margin-bottom: 6pt;
+      color: #111827;
+    }
+
+    .clause-intro,
+    .clause p {
+      margin: 0 0 7pt 0;
+      text-align: justify;
+    }
+
+    .subpoints {
+      margin: 6pt 0 8pt 18pt;
+      padding: 0;
+    }
+
+    .subpoints li {
+      margin: 0 0 6pt 0;
+      text-align: justify;
+    }
+
+    .note-panel {
+      margin-top: 14pt;
+      padding: 11pt 13pt;
+      border: 0.75pt solid #9ca3af;
+      background: #f9fafb;
+    }
+
+    .execution {
+      margin-top: 24pt;
+      page-break-inside: avoid;
+    }
+
+    .execution-copy {
+      margin: 0 0 10pt 0;
+      text-align: justify;
+    }
+
+    .signatures {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14pt;
+    }
+
+    .signature-card {
+      border: 0.75pt solid #9ca3af;
+      padding: 12pt;
+      min-height: 122pt;
+      page-break-inside: avoid;
+    }
+
+    .signature-role {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 8.75pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #4b5563;
+    }
+
+    .signature-name {
+      margin-top: 5pt;
+      font-weight: 700;
+      color: #111827;
+    }
+
+    .signature-line {
+      margin-top: 34pt;
+      border-bottom: 1pt solid #1f2937;
+      height: 22pt;
+    }
+
+    .signature-meta {
+      margin-top: 8pt;
+      display: flex;
+      justify-content: space-between;
+      gap: 12pt;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 8.75pt;
+      color: #4b5563;
+    }
+
+    .footer {
+      margin-top: 18pt;
+      padding-top: 10pt;
+      border-top: 0.75pt solid #9ca3af;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 8.5pt;
+      color: #6b7280;
+      display: flex;
+      justify-content: space-between;
+      gap: 10pt;
+    }
+
+    @media print {
+      .section-title,
+      .clause-heading,
+      .signature-card {
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+  <section class="cover">
+    <div class="cover-topline">England Residential Lettings</div>
+    <h1>{{title}}</h1>
+    <div class="cover-subtitle">{{subtitle}}</div>
+    {{#if intro}}<div class="cover-intro">{{intro}}</div>{{/if}}
+
+    <table class="cover-meta">
+      <tr>
+        <td class="label">Date</td>
+        <td>{{format_date generated_on 'long'}}</td>
+        <td class="label">Reference</td>
+        <td>{{document_reference}}</td>
+      </tr>
+      <tr>
+        <td class="label">Property</td>
+        <td colspan="3">{{#if property_address}}{{property_address}}{{else}}Not stated{{/if}}</td>
+      </tr>
+      <tr>
+        <td class="label">Tenant(s)</td>
+        <td>{{#if tenant_names}}{{tenant_names}}{{else}}Not stated{{/if}}</td>
+        <td class="label">Term / dates</td>
+        <td>
+          {{#if tenancy_start_date}}{{format_date tenancy_start_date 'long'}}{{else}}Not stated{{/if}}
+          {{#if tenancy_end_date}} to {{format_date tenancy_end_date 'long'}}{{/if}}
+        </td>
+      </tr>
+      <tr>
+        <td class="label">Rent</td>
+        <td>{{#if rent_amount_display}}{{rent_amount_display}}{{else}}Not stated{{/if}}</td>
+        <td class="label">Deposit</td>
+        <td>{{#if deposit_amount_display}}{{deposit_amount_display}}{{else}}Not stated{{/if}}</td>
+      </tr>
+    </table>
+  </section>
+
+  <h2 class="section-title">Parties</h2>
+  <p class="opening">
+    This agreement is made on {{format_date generated_on 'long'}} between the Landlord and the other party or parties identified below in relation to the Property in England.
+  </p>
+
+  <table class="parties-table">
+    <tr>
+      <td class="role">Landlord</td>
+      <td>
+        <strong>{{landlord_name}}</strong><br>
+        {{#if landlord_address}}{{landlord_address}}<br>{{/if}}
+        {{#if landlord_email}}Email: {{landlord_email}}<br>{{/if}}
+        {{#if landlord_phone}}Phone: {{landlord_phone}}{{/if}}
+      </td>
+    </tr>
+    {{#each signature_parties}}
+      {{#unless (eq label "Landlord")}}
+        <tr>
+          <td class="role">{{label}}</td>
+          <td>{{name}}</td>
+        </tr>
+      {{/unless}}
+    {{/each}}
+  </table>
+
+  {{#if recitals.length}}
+    <h2 class="section-title">Background</h2>
+    <ol class="recitals">
+      {{#each recitals}}
+        <li>{{this}}</li>
+      {{/each}}
+    </ol>
+  {{/if}}
+
+  <h2 class="section-title">Operative Provisions</h2>
+  {{#each sections}}
+    <section class="clause">
+      <div class="clause-heading">{{add @index 1}}. {{heading}}</div>
+
+      {{#if intro}}<p class="clause-intro">{{intro}}</p>{{/if}}
+
+      {{#if rows}}
+        <table class="detail-table">
+          {{#each rows}}
+            <tr>
+              <td class="label">{{label}}</td>
+              <td>{{value}}</td>
+            </tr>
+          {{/each}}
+        </table>
+      {{/if}}
+
+      {{#if paragraphs}}
+        {{#each paragraphs}}
+          <p>{{this}}</p>
+        {{/each}}
+      {{/if}}
+
+      {{#if bullets}}
+        <ul class="subpoints">
+          {{#each bullets}}
+            <li>{{this}}</li>
+          {{/each}}
+        </ul>
+      {{/if}}
+    </section>
+  {{/each}}
+
+  {{#if notes}}
+    <div class="note-panel">
+      <strong>Additional notes</strong>
+      <p>{{notes}}</p>
+    </div>
+  {{/if}}
+
+  <section class="execution">
+    <h2 class="section-title">Execution</h2>
+    <p class="execution-copy">{{execution_statement}}</p>
+    <div class="signatures">
+      {{#each signature_parties}}
+        <div class="signature-card">
+          <div class="signature-role">{{label}}</div>
+          <div class="signature-name">{{name}}</div>
+          <div class="signature-line"></div>
+          <div class="signature-meta">
+            <span>Signature</span>
+            <span>Date</span>
+          </div>
+        </div>
+      {{/each}}
+    </div>
+  </section>
+
+  <div class="footer">
+    <span>Generated by Landlord Heaven</span>
+    <span>{{document_reference}}</span>
+  </div>
+</body>
+</html>

@@ -32,6 +32,7 @@ interface PreviewPageLayoutProps {
   documents: DocumentInfo[];
   features?: string[];
   savings?: string;
+  addOns?: string[];
 }
 
 /**
@@ -51,6 +52,7 @@ export function PreviewPageLayout({
   documents,
   features,
   savings,
+  addOns = [],
 }: PreviewPageLayoutProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -98,6 +100,7 @@ export function PreviewPageLayout({
         body: JSON.stringify({
           product_type: product,
           case_id: caseId,
+          add_ons: addOns,
           success_url: successUrl,
           cancel_url: cancelUrl,
           // Attribution fields for revenue tracking

@@ -44,6 +44,123 @@ export interface GetPackContentsArgs {
   hasInventoryData?: boolean;
 }
 
+function getEnglandResidentialLettingContents(product: string): PackItem[] {
+  switch (product) {
+    case 'guarantor_agreement':
+      return [
+        {
+          key: 'guarantor_agreement',
+          title: 'Guarantor Agreement',
+          description: 'Standalone deed of guarantee for a residential tenancy',
+          category: 'Other',
+          required: true,
+        },
+      ];
+    case 'residential_sublet_agreement':
+      return [
+        {
+          key: 'residential_sublet_agreement',
+          title: 'Residential Sublet Agreement',
+          description: 'Agreement between the tenant and subtenant',
+          category: 'Other',
+          required: true,
+        },
+      ];
+    case 'lease_amendment':
+      return [
+        {
+          key: 'lease_amendment',
+          title: 'Lease Amendment',
+          description: 'Written amendment to an existing tenancy agreement',
+          category: 'Other',
+          required: true,
+        },
+      ];
+    case 'lease_assignment_agreement':
+      return [
+        {
+          key: 'lease_assignment_agreement',
+          title: 'Lease Assignment Agreement',
+          description: 'Transfer of the tenancy from the outgoing tenant to the incoming tenant',
+          category: 'Other',
+          required: true,
+        },
+      ];
+    case 'rent_arrears_letter':
+      return [
+        {
+          key: 'rent_arrears_letter',
+          title: 'Rent Arrears Letter',
+          description: 'Formal rent arrears letter / letter before action',
+          category: 'Guidance',
+          required: true,
+        },
+      ];
+    case 'repayment_plan_agreement':
+      return [
+        {
+          key: 'repayment_plan_agreement',
+          title: 'Repayment Plan Agreement',
+          description: 'Agreement for repayment of rent arrears by instalments',
+          category: 'Other',
+          required: true,
+        },
+      ];
+    case 'residential_tenancy_application':
+      return [
+        {
+          key: 'residential_tenancy_application',
+          title: 'Residential Tenancy Application',
+          description: 'Applicant screening and tenancy application form',
+          category: 'Other',
+          required: true,
+        },
+      ];
+    case 'rental_inspection_report':
+      return [
+        {
+          key: 'rental_inspection_report',
+          title: 'Rental Inspection Report',
+          description: 'Property move-in or move-out inspection report',
+          category: 'Evidence',
+          required: true,
+        },
+      ];
+    case 'inventory_schedule_condition':
+      return [
+        {
+          key: 'inventory_schedule_condition',
+          title: 'Inventory & Schedule of Condition',
+          description: 'Standalone inventory and condition record',
+          category: 'Evidence',
+          required: true,
+        },
+      ];
+    case 'flatmate_agreement':
+      return [
+        {
+          key: 'flatmate_agreement',
+          title: 'Flatmate Agreement',
+          description: 'Shared living and bills agreement for occupiers',
+          category: 'Other',
+          required: true,
+        },
+      ];
+    case 'renewal_tenancy_agreement':
+      return [
+        {
+          key: 'renewal_tenancy_agreement',
+          title: 'Renewal Tenancy Agreement',
+          description: 'Renewal agreement for a continuing tenancy',
+          category: 'Other',
+          required: true,
+        },
+      ];
+    default:
+      return [];
+  }
+}
+
 // =============================================================================
 // ENGLAND PACK CONTENTS
 // =============================================================================
@@ -868,7 +985,7 @@ export function getPackContents(args: GetPackContentsArgs): PackItem[] {
       case 'ast_premium':
         return getEnglandASTContents('premium', hasInventoryData);
       default:
-        return [];
+        return getEnglandResidentialLettingContents(product);
     }
   }
 
@@ -953,6 +1070,10 @@ export function isProductSupported(product: string, jurisdiction: string): boole
 
   if (product === 'sc_money_claim') {
     return jur === 'scotland';
+  }
+
+  if (getEnglandResidentialLettingContents(product).length > 0) {
+    return jur === 'england';
   }
 
   return false;

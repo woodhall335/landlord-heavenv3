@@ -22,7 +22,18 @@ export type CheckoutProduct =
   | 'money_claim'
   | 'sc_money_claim'
   | 'ast_standard'
-  | 'ast_premium';
+  | 'ast_premium'
+  | 'guarantor_agreement'
+  | 'residential_sublet_agreement'
+  | 'lease_amendment'
+  | 'lease_assignment_agreement'
+  | 'rent_arrears_letter'
+  | 'repayment_plan_agreement'
+  | 'residential_tenancy_application'
+  | 'rental_inspection_report'
+  | 'inventory_schedule_condition'
+  | 'flatmate_agreement'
+  | 'renewal_tenancy_agreement';
 
 export interface CheckoutRedirectInput {
   product: CheckoutProduct;

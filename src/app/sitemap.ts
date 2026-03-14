@@ -22,6 +22,7 @@ import { getPostRegion } from '@/lib/blog/categories';
 import { getValidTopicHubs } from '@/lib/blog/topic-hubs';
 import { getBlogSeoConfig } from '@/lib/blog/seo';
 import { discoverStaticPageRoutes } from '@/lib/seo/static-route-inventory';
+import { getResidentialLandingSlugs } from '@/lib/seo/residential-product-landing-content';
 import sitemapAllowlist from '../../scripts/seo-sitemap-allowlist.json';
 
 // Force this metadata route to run dynamically (avoids static render + fetch cache issues).
@@ -74,6 +75,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/eviction-pack-england', priority: 0.95, changeFrequency: 'weekly' as const },
     { path: '/money-claim', priority: 0.95, changeFrequency: 'weekly' as const },
     { path: '/eviction-guides', priority: 0.9, changeFrequency: 'weekly' as const },
+    ...getResidentialLandingSlugs().map((slug) => ({
+      path: `/${slug}`,
+      priority: 0.82,
+      changeFrequency: 'weekly' as const,
+    })),
   ];
 
   // Tenancy agreement pages - individual jurisdiction pages

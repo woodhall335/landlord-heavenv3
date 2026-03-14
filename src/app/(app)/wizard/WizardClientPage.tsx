@@ -38,6 +38,10 @@ import {
   getWizardAttribution,
   resetCompletedSteps,
 } from '@/lib/wizard/wizardAttribution';
+import {
+  isResidentialLettingProductSku,
+  RESIDENTIAL_LETTING_PRODUCTS,
+} from '@/lib/residential-letting/products';
 
 // Product-specific hero content (jurisdiction-neutral)
 interface HeroContent {
@@ -89,6 +93,14 @@ function getHeroContent(product: string | null, jurisdiction: string | null): He
         eyebrow: 'Money Claim',
       };
     default:
+      if (product && isResidentialLettingProductSku(product)) {
+        const residentialProduct = RESIDENTIAL_LETTING_PRODUCTS[product];
+        return {
+          title: residentialProduct.label,
+          subtitle: 'England residential landlord document with a guided wizard and review step.',
+          eyebrow: 'Residential Letting',
+        };
+      }
       return {
         title: 'Legal Document Wizard',
         subtitle: 'Guided Document Creation for UK Landlords',
@@ -224,6 +236,17 @@ function mapProductToDocumentType(
     case 'ast_standard':
     case 'ast_premium':
     case 'tenancy_agreement':
+    case 'guarantor_agreement':
+    case 'residential_sublet_agreement':
+    case 'lease_amendment':
+    case 'lease_assignment_agreement':
+    case 'rent_arrears_letter':
+    case 'repayment_plan_agreement':
+    case 'residential_tenancy_application':
+    case 'rental_inspection_report':
+    case 'inventory_schedule_condition':
+    case 'flatmate_agreement':
+    case 'renewal_tenancy_agreement':
       return 'tenancy_agreement';
     default:
       return null;

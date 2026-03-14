@@ -775,6 +775,12 @@ export function isFullHtmlDocument(html: string): boolean {
   return false;
 }
 
+function normalizeCurrencySymbolsInHtml(html: string): string {
+  return html
+    .replace(/Â£/g, '&#163;')
+    .replace(/£/g, '&#163;');
+}
+
 /**
  * Safe text helper - converts objects to strings, prevents [object Object]
  */
@@ -897,6 +903,7 @@ export function compileTemplate(templateContent: string, data: Record<string, an
 
     const template = Handlebars.compile(templateContent);
     let html = template(safeData);
+    html = normalizeCurrencySymbolsInHtml(html);
 
     if (PDF_DEBUG) {
       console.log('[PDF_DEBUG] Compiled HTML first 300 chars:', html.substring(0, 300));
@@ -908,6 +915,7 @@ export function compileTemplate(templateContent: string, data: Record<string, an
     if (!isFullHtmlDocument(html)) {
       // Convert markdown to HTML for PDF rendering
       html = markdownToHtml(html);
+      html = normalizeCurrencySymbolsInHtml(html);
       if (PDF_DEBUG) {
         console.log('[PDF_DEBUG] Applied markdownToHtml (not a full HTML doc)');
       }
@@ -917,7 +925,7 @@ export function compileTemplate(templateContent: string, data: Record<string, an
       }
     }
 
-    return html;
+    return normalizeCurrencySymbolsInHtml(html);
   } catch (error: any) {
     throw new Error(`Failed to compile template: ${error.message}`);
   }
