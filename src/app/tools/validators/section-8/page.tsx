@@ -663,6 +663,7 @@ export default function Section8ValidatorPage() {
             <FAQSection
               title="Frequently Asked Questions"
               faqs={faqs}
+              includeSchema={false}
               showContactCTA={false}
               variant="white"
             />

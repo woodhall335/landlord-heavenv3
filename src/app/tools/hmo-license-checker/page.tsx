@@ -674,6 +674,7 @@ export default function HMOLicenseChecker() {
       <FAQSection
         title="Frequently Asked Questions"
         faqs={faqs}
+        includeSchema={false}
         showContactCTA={false}
         variant="white"
       />
@@ -701,4 +702,3 @@ export default function HMOLicenseChecker() {
     </div>
   );
 }
-
