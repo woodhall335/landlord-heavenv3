@@ -6,6 +6,8 @@ describe('isResidentialStandaloneTenancyProduct', () => {
   it('returns true for standalone residential letting products', () => {
     expect(isResidentialStandaloneTenancyProduct('rent_arrears_letter')).toBe(true);
     expect(isResidentialStandaloneTenancyProduct('guarantor_agreement')).toBe(true);
+    expect(isResidentialStandaloneTenancyProduct('residential_tenancy_application')).toBe(true);
+    expect(isResidentialStandaloneTenancyProduct('inventory_schedule_condition')).toBe(true);
   });
 
   it('returns false for core tenancy products', () => {

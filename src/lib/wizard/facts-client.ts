@@ -12,7 +12,25 @@ import { getSessionTokenHeaders } from '@/lib/session-token';
 type CaseType = 'eviction' | 'money_claim' | 'tenancy_agreement' | null;
 type Jurisdiction = 'england' | 'wales' | 'scotland' | 'northern-ireland' | null;
 // Product includes both core products and tenancy agreement tier variants
-type Product = 'notice_only' | 'complete_pack' | 'money_claim' | 'tenancy_agreement' | 'ast_standard' | 'ast_premium' | null;
+type Product =
+  | 'notice_only'
+  | 'complete_pack'
+  | 'money_claim'
+  | 'tenancy_agreement'
+  | 'ast_standard'
+  | 'ast_premium'
+  | 'guarantor_agreement'
+  | 'residential_sublet_agreement'
+  | 'lease_amendment'
+  | 'lease_assignment_agreement'
+  | 'rent_arrears_letter'
+  | 'repayment_plan_agreement'
+  | 'residential_tenancy_application'
+  | 'rental_inspection_report'
+  | 'inventory_schedule_condition'
+  | 'flatmate_agreement'
+  | 'renewal_tenancy_agreement'
+  | null;
 
 interface SaveFactsMeta {
   jurisdiction: Jurisdiction;
