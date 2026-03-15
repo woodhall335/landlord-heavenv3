@@ -378,8 +378,8 @@
 
   <!-- ===== COVER / TITLE ===== -->
   <div class="doc-header">
-    <h1>Assured Shorthold Tenancy Agreement</h1>
-    <div class="doc-subtitle">Housing Act 1988 (as amended)</div>
+    <h1>{{#if england_post_reform_regime}}Residential Tenancy Agreement{{else}}Assured Shorthold Tenancy Agreement{{/if}}</h1>
+    <div class="doc-subtitle">{{#if england_post_reform_regime}}England private rented sector tenancy{{else}}Housing Act 1988 (as amended){{/if}}</div>
     <div class="doc-subtitle">England</div>
     <div class="doc-date">Dated: <strong>{{formatUKDate agreement_date}}</strong></div>
   </div>
@@ -446,7 +446,7 @@
     <li><span class="defined-term">"Tenant"</span> means {{#each tenants}}{{this.full_name}}{{#unless @last}}, {{/unless}}{{/each}}{{#if multiple_tenants}} (jointly and severally){{/if}}.</li>
     {{#if guarantor_name}}<li><span class="defined-term">"Guarantor"</span> means {{guarantor_name}}.</li>{{/if}}
     <li><span class="defined-term">"Property"</span> means {{property_address}} as described in Schedule 1.</li>
-    <li><span class="defined-term">"Term"</span> means the {{#if is_fixed_term}}fixed term from {{formatUKDate tenancy_start_date}} to {{formatUKDate tenancy_end_date}}{{else}}periodic tenancy from {{formatUKDate tenancy_start_date}}{{/if}} and any continuation.</li>
+    <li><span class="defined-term">"Term"</span> means the {{#if england_post_reform_regime}}periodic tenancy from {{formatUKDate tenancy_start_date}}{{else}}{{#if is_fixed_term}}fixed term from {{formatUKDate tenancy_start_date}} to {{formatUKDate tenancy_end_date}}{{else}}periodic tenancy from {{formatUKDate tenancy_start_date}}{{/if}} and any continuation{{/if}}.</li>
     <li><span class="defined-term">"Rent"</span> means £{{rent_amount}} per {{rent_period}} as set out in Schedule 2.</li>
     <li><span class="defined-term">"Deposit"</span> means £{{deposit_amount}} held in {{deposit_scheme_name}} as set out in Schedule 2.</li>
     <li><span class="defined-term">"Scheme"</span> means the government-authorised deposit protection scheme.</li>
@@ -463,6 +463,12 @@
 
   <!-- ===== 4. THE TERM ===== -->
   <h2>4. The Term</h2>
+  {{#if england_post_reform_regime}}
+  <p class="clause"><span class="clause-num">4.1</span> The tenancy begins on <strong>{{formatUKDate tenancy_start_date}}</strong> as a periodic assured tenancy under the law in force in England at that date.</p>
+  <p class="clause"><span class="clause-num">4.2</span> The tenancy continues until brought to an end in accordance with statute and this Agreement.</p>
+  <p class="clause"><span class="clause-num">4.3</span> The Landlord may only recover possession or terminate the tenancy by following the statutory procedure in force from time to time and obtaining any court order required by law.</p>
+  <p class="clause"><span class="clause-num">4.4</span> The Tenant may end the tenancy by giving at least one month's written notice, or such longer notice as the law may require, expiring at the end of a rental period where applicable.</p>
+  {{else}}
   {{#if is_fixed_term}}
   <p class="clause"><span class="clause-num">4.1</span> The tenancy begins on <strong>{{formatUKDate tenancy_start_date}}</strong> and ends on <strong>{{formatUKDate tenancy_end_date}}</strong> (the "Fixed Term").</p>
   <p class="clause"><span class="clause-num">4.2</span> Upon expiry of the Fixed Term, unless either party serves notice, the tenancy continues as a statutory periodic tenancy on the same terms.</p>
@@ -472,6 +478,7 @@
   {{/if}}
   <p class="clause"><span class="clause-num">4.3</span> The Landlord may seek possession using Section 21 (no-fault, minimum 2 months' notice) or Section 8 (fault-based) of the Housing Act 1988.</p>
   <p class="clause"><span class="clause-num">4.4</span> The Tenant may end the tenancy by giving at least one month's written notice expiring on a rent due date.</p>
+  {{/if}}
 
   <!-- ===== 5. RENT ===== -->
   <h2>5. Rent</h2>
@@ -506,7 +513,7 @@
   <p class="clause"><span class="clause-num">8.2</span> <strong>Repairs:</strong> Keep the structure, exterior, and installations for water, gas, electricity, heating, and sanitation in repair and proper working order.</p>
   <p class="clause"><span class="clause-num">8.3</span> <strong>Safety:</strong> Ensure the Property has valid Gas Safety Certificate, Electrical Installation Condition Report, smoke and carbon monoxide alarms, and an Energy Performance Certificate rating of E or above.</p>
   <p class="clause"><span class="clause-num">8.4</span> <strong>Deposit:</strong> Protect the Deposit in a government-authorised scheme and provide prescribed information within 30 days.</p>
-  <p class="clause"><span class="clause-num">8.5</span> <strong>Documents:</strong> Provide the Tenant with the current How to Rent guide, EPC, Gas Safety Certificate, and EICR before the tenancy starts or as soon as reasonably practicable.</p>
+  <p class="clause"><span class="clause-num">8.5</span> <strong>Documents:</strong> Provide the Tenant with the documents and statutory information required for the tenancy regime applying at the start date, including the current How to Rent guide where legally relevant, the EPC, Gas Safety Certificate, and EICR before the tenancy starts or as soon as reasonably practicable.</p>
   <p class="clause"><span class="clause-num">8.6</span> <strong>Insurance:</strong> Maintain buildings insurance for the Property.</p>
   <p class="clause"><span class="clause-num">8.7</span> <strong>Right to Rent:</strong> The Landlord confirms that the required Right to Rent checks have been carried out in accordance with the Immigration Act 2014 before the Tenant occupies the Property. Nothing in this Agreement makes the Tenant responsible for the Landlord's compliance with Right to Rent requirements.</p>
 
@@ -651,7 +658,7 @@
     <h3>Mandatory Documents</h3>
     <p>The Landlord confirms the following have been or will be provided to the Tenant:</p>
     <ul>
-      <li>Current How to Rent guide (latest government version)</li>
+      <li>{{#if england_post_reform_regime}}Any England statutory tenant information required by law at the tenancy start date, including the current How to Rent guide where legally applicable{{else}}Current How to Rent guide (latest government version){{/if}}</li>
       <li>Energy Performance Certificate</li>
       <li>Gas Safety Certificate (annually)</li>
       <li>Electrical Installation Condition Report</li>
@@ -865,9 +872,9 @@
 
   <!-- ===== FOOTER ===== -->
   <div class="doc-footer">
-    <p>Assured Shorthold Tenancy Agreement &mdash; England</p>
+    <p>{{#if england_post_reform_regime}}Residential Tenancy Agreement &mdash; England{{else}}Assured Shorthold Tenancy Agreement &mdash; England{{/if}}</p>
     <p>Generated: {{formatUKDate current_date}} | Reference: {{#if case_id}}{{case_id}}{{else}}{{document_id}}{{/if}}</p>
-    <p>Compliant with Housing Act 1988, Deregulation Act 2015, Tenant Fees Act 2019, Immigration Act 2014</p>
+    <p>{{#if england_post_reform_regime}}Drafted for the England post-reform assured periodic tenancy regime, subject to the Housing Act 1988 as amended and other applicable law.{{else}}Compliant with Housing Act 1988, Deregulation Act 2015, Tenant Fees Act 2019, Immigration Act 2014{{/if}}</p>
   </div>
 
 </body>

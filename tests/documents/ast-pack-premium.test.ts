@@ -17,6 +17,7 @@ describe('AST pack - Premium', () => {
   it('renders premium-only content when flags are set', async () => {
     const wizardFacts = {
       product_tier: 'Premium AST',
+      jurisdiction: 'england',
       landlord_full_name: 'Priya Landlord',
       landlord_address: '10 Market Street, Bristol, BS1 1AA',
       landlord_address_line1: '10 Market Street',
@@ -94,7 +95,7 @@ describe('AST pack - Premium', () => {
     const astData = mapWizardToASTData(wizardFacts);
     const generated = await generatePremiumAST(astData, true);
 
-    expect(generated.html).toContain('HMO & Shared Facilities');
+    expect(generated.html).toContain('HMO &amp; Shared Facilities');
     expect(generated.html).toContain('Guarantor');
     expect(generated.html).toContain('Joint and Several Liability');
     // Certificate of Curation and Legal Validity Summary removed as of Jan 2026 restructure

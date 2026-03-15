@@ -612,7 +612,7 @@ export function verifyTemplate(
 export const TEMPLATE_PATHS: Record<ClauseJurisdiction, Record<ClauseTier, string>> = {
   england: {
     standard: 'config/jurisdictions/uk/england/templates/standard_ast_formatted.hbs',
-    premium: 'config/jurisdictions/uk/england/templates/ast_hmo.hbs',
+    premium: 'config/jurisdictions/uk/england/templates/premium_ast_formatted.hbs',
   },
   wales: {
     standard: 'config/jurisdictions/uk/wales/templates/standard_occupation_contract.hbs',

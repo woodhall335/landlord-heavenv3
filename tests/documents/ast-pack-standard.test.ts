@@ -17,6 +17,7 @@ describe('AST pack - Standard', () => {
   it('renders the standard AST pack with certificate and legal summary', async () => {
     const wizardFacts = {
       product_tier: 'Standard AST',
+      jurisdiction: 'england',
       landlord_full_name: 'Alice Landlord',
       landlord_address: '1 High Street, London, E1 1AA',
       landlord_address_line1: '1 High Street',
@@ -79,5 +80,41 @@ describe('AST pack - Standard', () => {
     expect(generated.html).toContain('Alice Landlord');
     expect(generated.html).toContain('Bob Tenant');
     expect(generated.html).not.toContain('HMO & Shared Facilities');
+  }, 20000);
+
+  it('renders post-1 May 2026 England starts as a non-AST periodic form', async () => {
+    const wizardFacts = {
+      product_tier: 'Standard AST',
+      jurisdiction: 'england',
+      landlord_full_name: 'Alice Landlord',
+      landlord_address: '1 High Street, London, E1 1AA',
+      landlord_email: 'alice@example.com',
+      landlord_phone: '07000000001',
+      property_address: '2 High Street, London, E1 2BB',
+      tenancy_start_date: '2026-05-01',
+      is_fixed_term: false,
+      rent_amount: 1200,
+      rent_period: 'month',
+      rent_due_day: '1st',
+      payment_method: 'Bank Transfer',
+      payment_details: 'Sort code 00-00-00 / Account 12345678',
+      deposit_amount: 1200,
+      deposit_scheme_name: 'DPS',
+      tenants: {
+        0: {
+          full_name: 'Bob Tenant',
+          dob: '1990-01-01',
+          email: 'bob@example.com',
+          phone: '07000000002',
+        },
+      },
+    } as any;
+
+    const astData = mapWizardToASTData(wizardFacts);
+    const generated = await generateStandardAST(astData, true);
+
+    expect(generated.html).toContain('Residential Tenancy Agreement');
+    expect(generated.html).toContain('1 May 2026');
+    expect(generated.html).not.toContain('Section 21 (no-fault');
   }, 20000);
 });

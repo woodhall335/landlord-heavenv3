@@ -789,6 +789,20 @@ describe('Northern Ireland Specific Notes', () => {
     }
   });
 
+  it('NI standard template should include a tenant information notice schedule', () => {
+    const template = loadTemplate(STANDARD_TEMPLATES['northern-ireland']);
+
+    expect(template).toContain('Tenant Information Notice');
+    expect(template).toContain('Statutory Information');
+  });
+
+  it('NI premium template should include a tenant information notice schedule', () => {
+    const template = loadTemplate(PREMIUM_TEMPLATES['northern-ireland']);
+
+    expect(template).toContain('Tenant Information Notice');
+    expect(template).toContain('Statutory Information');
+  });
+
   it('Non-NI templates should NOT contain NI-specific notes section', () => {
     const englandTemplate = loadTemplate(STANDARD_TEMPLATES.england);
     const walesTemplate = loadTemplate(STANDARD_TEMPLATES.wales);

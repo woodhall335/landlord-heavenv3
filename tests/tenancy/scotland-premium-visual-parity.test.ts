@@ -200,7 +200,7 @@ describe('How to Rent Guide - Scotland Exclusion', () => {
 describe('England "How to Rent" - Regression Tests', () => {
   it('England AST templates still reference "How to Rent" guide', () => {
     const englandHmo = readFileSync(
-      join(TEMPLATES_DIR, 'england/templates/ast_hmo.hbs'),
+      join(TEMPLATES_DIR, 'england/templates/premium_ast_formatted.hbs'),
       'utf-8'
     );
     expect(englandHmo.toLowerCase()).toContain('how to rent');

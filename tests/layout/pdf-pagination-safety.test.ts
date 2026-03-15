@@ -17,7 +17,7 @@ import * as path from 'path';
 const TENANCY_TEMPLATES = {
   england: {
     standard: 'uk/england/templates/standard_ast_formatted.hbs',
-    premium: 'uk/england/templates/ast_hmo.hbs',
+    premium: 'uk/england/templates/premium_ast_formatted.hbs',
   },
   wales: {
     standard: 'uk/wales/templates/standard_occupation_contract.hbs',

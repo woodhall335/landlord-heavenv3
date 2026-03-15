@@ -139,7 +139,7 @@ const JURISDICTION_CONFIGS: Record<TenancyJurisdiction, JurisdictionConfig> = {
     checklistDocumentType: 'pre_tenancy_checklist_england',
     templatePaths: {
       standard: 'uk/england/templates/standard_ast_formatted.hbs',
-      premium: 'uk/england/templates/ast_hmo.hbs', // HMO-specific template
+      premium: 'uk/england/templates/premium_ast_formatted.hbs', // HMO-specific premium template
       modelClauses: 'uk/england/templates/government_model_clauses.hbs',
       termsSchedule: 'shared/templates/terms_and_conditions.hbs',
       inventory: 'shared/templates/inventory_template.hbs', // Wizard-completed for premium
@@ -309,6 +309,30 @@ function buildEnglandTenancyReformWarning(
     'private rented sector assured tenancies in England into the assured periodic regime. This AST ' +
     'format should be used only where it remains legally appropriate for the tenancy facts and start date.'
   );
+}
+
+function isEnglandPostReformRegime(
+  jurisdiction: TenancyJurisdiction,
+  tenancyStartDate?: string
+): boolean {
+  if (jurisdiction !== 'england') return false;
+
+  const startDate = (tenancyStartDate || '').trim();
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(startDate)) return false;
+
+  return startDate >= ENGLAND_TENANCY_REFORM_CUTOVER;
+}
+
+function getRenderedAgreementTitle(
+  config: JurisdictionConfig,
+  jurisdiction: TenancyJurisdiction,
+  tenancyStartDate?: string
+): string {
+  if (isEnglandPostReformRegime(jurisdiction, tenancyStartDate)) {
+    return 'Residential Tenancy Agreement';
+  }
+
+  return config.agreementTitle;
 }
 
 // ============================================================================
@@ -754,18 +778,22 @@ export async function generateStandardAST(
 
   const generationTimestamp = new Date().toISOString();
   const documentId = `${jurisdiction.toUpperCase()}-STD-${Date.now()}`;
+  const englandPostReformRegime = isEnglandPostReformRegime(jurisdiction, data.tenancy_start_date);
+  const renderedAgreementTitle = getRenderedAgreementTitle(config, jurisdiction, data.tenancy_start_date);
 
   // Add metadata flags
   const enrichedData = {
     ...data,
     premium: false,
     is_hmo: false,
-    product_tier: data.product_tier || `Standard ${config.agreementTitle}`,
+    multiple_tenants: (data.number_of_tenants ?? data.tenants?.length ?? 0) > 1,
+    product_tier: data.product_tier || `Standard ${renderedAgreementTitle}`,
     generation_timestamp: data.generation_timestamp || generationTimestamp,
     document_id: data.document_id || documentId,
     jurisdiction_name: config.jurisdictionLabel,
     jurisdiction: jurisdiction,
     legal_framework: config.legalFramework,
+    england_post_reform_regime: englandPostReformRegime,
     england_reform_warning: buildEnglandTenancyReformWarning(jurisdiction, data.tenancy_start_date),
     // Flag for inventory: standard tier always uses blank inventory
     inventory_wizard_completed: false,
@@ -846,6 +874,8 @@ export async function generatePremiumAST(
 
   const generationTimestamp = new Date().toISOString();
   const documentId = `${jurisdiction.toUpperCase()}-HMO-${Date.now()}`;
+  const englandPostReformRegime = isEnglandPostReformRegime(jurisdiction, data.tenancy_start_date);
+  const renderedAgreementTitle = getRenderedAgreementTitle(config, jurisdiction, data.tenancy_start_date);
 
   // Use shared utility for consistent inventory detection across review/preview/generation
   const hasInventoryData = detectInventoryData(data as Record<string, any>);
@@ -855,12 +885,14 @@ export async function generatePremiumAST(
     ...data,
     premium: true,
     is_hmo: true,
-    product_tier: data.product_tier || `HMO ${config.agreementTitle}`,
+    multiple_tenants: (data.number_of_tenants ?? data.tenants?.length ?? 0) > 1,
+    product_tier: data.product_tier || `HMO ${renderedAgreementTitle}`,
     generation_timestamp: data.generation_timestamp || generationTimestamp,
     document_id: data.document_id || documentId,
     jurisdiction_name: config.jurisdictionLabel,
     jurisdiction: jurisdiction,
     legal_framework: config.legalFramework,
+    england_post_reform_regime: englandPostReformRegime,
     england_reform_warning: buildEnglandTenancyReformWarning(jurisdiction, data.tenancy_start_date),
     // Flag for inventory: premium tier uses wizard-completed if data exists
     inventory_wizard_completed: hasInventoryData,
@@ -1065,17 +1097,21 @@ export async function generateStandardASTDocuments(
 
   const generationTimestamp = new Date().toISOString();
   const documentId = `${jurisdiction.toUpperCase()}-STD-${Date.now()}`;
+  const englandPostReformRegime = isEnglandPostReformRegime(jurisdiction, data.tenancy_start_date);
+  const renderedAgreementTitle = getRenderedAgreementTitle(config, jurisdiction, data.tenancy_start_date);
 
   const enrichedData = {
     ...data,
     premium: false,
     is_hmo: false,
-    product_tier: data.product_tier || `Standard ${config.agreementTitle}`,
+    multiple_tenants: (data.number_of_tenants ?? data.tenants?.length ?? 0) > 1,
+    product_tier: data.product_tier || `Standard ${renderedAgreementTitle}`,
     generation_timestamp: generationTimestamp,
     document_id: documentId,
     jurisdiction_name: config.jurisdictionLabel,
     jurisdiction: jurisdiction,
     legal_framework: config.legalFramework,
+    england_post_reform_regime: englandPostReformRegime,
     england_reform_warning: buildEnglandTenancyReformWarning(jurisdiction, data.tenancy_start_date),
     current_date: new Date().toISOString().split('T')[0],
   };
@@ -1094,7 +1130,7 @@ export async function generateStandardASTDocuments(
       outputFormat: 'both',
     });
     documents.push({
-      title: config.agreementTitle,
+      title: renderedAgreementTitle,
       description: config.agreementDescription,
       category: 'agreement',
       document_type: config.agreementDocumentType, // jurisdiction-specific key
@@ -1167,7 +1203,7 @@ export async function generateStandardASTDocuments(
   // Required under PRT as part of prescribed information
   if (config.templatePaths.easyReadNotes && config.easyReadNotesDocumentType) {
     try {
-      const easyReadDoc = await generateDocument({
+    const easyReadDoc = await generateDocument({
         templatePath: config.templatePaths.easyReadNotes,
         data: {
           ...enrichedData,
@@ -1236,6 +1272,8 @@ export async function generatePremiumASTDocuments(
 
   const generationTimestamp = new Date().toISOString();
   const documentId = `${jurisdiction.toUpperCase()}-HMO-${Date.now()}`;
+  const englandPostReformRegime = isEnglandPostReformRegime(jurisdiction, data.tenancy_start_date);
+  const renderedAgreementTitle = getRenderedAgreementTitle(config, jurisdiction, data.tenancy_start_date);
 
   // Use shared utility for consistent inventory detection across review/preview/generation
   const hasInventoryData = detectInventoryData(data as Record<string, any>);
@@ -1244,12 +1282,14 @@ export async function generatePremiumASTDocuments(
     ...data,
     premium: true,
     is_hmo: true,
-    product_tier: `HMO ${config.agreementTitle}`,
+    multiple_tenants: (data.number_of_tenants ?? data.tenants?.length ?? 0) > 1,
+    product_tier: `HMO ${renderedAgreementTitle}`,
     generation_timestamp: generationTimestamp,
     document_id: documentId,
     jurisdiction_name: config.jurisdictionLabel,
     jurisdiction: jurisdiction,
     legal_framework: config.legalFramework,
+    england_post_reform_regime: englandPostReformRegime,
     england_reform_warning: buildEnglandTenancyReformWarning(jurisdiction, data.tenancy_start_date),
     current_date: new Date().toISOString().split('T')[0],
     // Flag for inventory template to know if wizard data is present
@@ -1276,7 +1316,7 @@ export async function generatePremiumASTDocuments(
     const hmoDocumentType = config.agreementDocumentType + '_hmo';
 
     documents.push({
-      title: `HMO ${config.agreementTitle}`,
+      title: `HMO ${renderedAgreementTitle}`,
       description: `Includes HMO-specific clauses for multi-occupancy properties. Compliant with ${config.legalFramework}.`,
       category: 'agreement',
       document_type: hmoDocumentType,

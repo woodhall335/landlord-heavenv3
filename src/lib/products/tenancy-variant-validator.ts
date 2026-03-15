@@ -66,7 +66,7 @@ export const TENANCY_VARIANT_CONFIGS: Record<TenancyJurisdiction, JurisdictionVa
     premium: {
       jurisdiction: 'england',
       tier: 'premium',
-      templatePath: 'uk/england/templates/ast_hmo.hbs',
+      templatePath: 'uk/england/templates/premium_ast_formatted.hbs',
       documentKey: 'ast_agreement_hmo',
       documentTitle: 'HMO Tenancy Agreement',
       mustHaveHMO: true,

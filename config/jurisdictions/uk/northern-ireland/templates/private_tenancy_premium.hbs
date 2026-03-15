@@ -1203,7 +1203,7 @@
 
   <!-- SCHEDULE 5: PRESCRIBED INFORMATION -->
   <div class="schedule">
-    <div class="schedule-title">Schedule 5 - Prescribed Information</div>
+    <div class="schedule-title">Schedule 5 - Statutory Information and Tenant Information Notice</div>
 
     <div class="subsection-title">Safety Certificates</div>
     <table class="data-table">
@@ -1266,7 +1266,18 @@
       </tr>
     </table>
 
-    <div class="subsection-title">Contact Information</div>
+    <div class="subsection-title">Core Tenancy Information</div>
+    <table class="data-table">
+      <tr><td class="label">Landlord</td><td class="value">{{landlord_full_name}}<br>{{landlord_address}}<br>{{landlord_email}} | {{landlord_phone}}</td></tr>
+      {{#if agent_name}}<tr><td class="label">Agent</td><td class="value">{{agent_name}}<br>{{agent_address}}<br>{{agent_email}} | {{agent_phone}}</td></tr>{{/if}}
+      <tr><td class="label">Property</td><td class="value">{{property_address}}</td></tr>
+      <tr><td class="label">Tenancy Start</td><td class="value">{{formatUKDate tenancy_start_date}}</td></tr>
+      <tr><td class="label">Rent</td><td class="value">&pound;{{rent_amount}} per {{rent_period}}, payable on the {{rent_due_day}} of each {{rent_period}}</td></tr>
+      <tr><td class="label">Deposit</td><td class="value">&pound;{{deposit_amount}}{{#if deposit_scheme}}{{else}}{{#if deposit_scheme_name}} protected with {{deposit_scheme_name}}{{/if}}{{/if}}{{#if deposit_scheme}} protected with {{deposit_scheme}}{{/if}}</td></tr>
+      <tr><td class="label">Notice to Quit</td><td class="value">Less than 1 year: 28 days; 1 to 10 years: 56 days; over 10 years: 84 days, subject to statute.</td></tr>
+    </table>
+
+    <div class="subsection-title">Management and Contact Information</div>
     <table class="data-table">
       <tr>
         <td class="label">Landlord Contact</td>
@@ -1290,7 +1301,22 @@
         <td class="value">{{repairs_reporting_method}}</td>
       </tr>
       {{/if}}
+      <tr>
+        <td class="label">Rates Liability</td>
+        <td class="value">{{#if council_tax_responsibility}}{{council_tax_responsibility}}{{else}}As allocated by Northern Ireland law and this Agreement{{/if}}</td>
+      </tr>
+      {{#if domestic_rates_registration_deadline}}
+      <tr>
+        <td class="label">Rates Registration Deadline</td>
+        <td class="value">{{domestic_rates_registration_deadline}}</td>
+      </tr>
+      {{/if}}
     </table>
+
+    <div class="legal-notice">
+      <div class="legal-notice-title">Tenant Information Notice</div>
+      <p>This Schedule is intended to capture the key tenancy information a Northern Ireland tenant should receive about the landlord or agent, the tenancy, rent, deposit protection, repairs reporting, and safety compliance. It supplements, and does not replace, any statutory tenancy information notice or rent book requirement that applies in the circumstances.</p>
+    </div>
 
     <div class="legal-notice">
       <div class="legal-notice-title">Tenant Rights - Northern Ireland</div>

@@ -40,7 +40,7 @@ const getWalesStandardTemplate = () => {
 const getEnglandHMOTemplate = () => {
   const templatePath = join(
     process.cwd(),
-    'config/jurisdictions/uk/england/templates/ast_hmo.hbs'
+    'config/jurisdictions/uk/england/templates/premium_ast_formatted.hbs'
   );
   return readFileSync(templatePath, 'utf-8');
 };
