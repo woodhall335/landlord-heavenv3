@@ -6,7 +6,7 @@ import {
 } from '@/lib/residential-letting/standalone-profiles';
 
 describe('standalone profiles', () => {
-  it('defines premium landing and review content for all public standalone products', () => {
+  it('defines landing and review content for all public standalone products', () => {
     const profiles = getPublicResidentialStandaloneProfiles();
 
     expect(profiles).toHaveLength(10);
@@ -16,8 +16,20 @@ describe('standalone profiles', () => {
       expect(profile.heroBullets.length).toBeGreaterThanOrEqual(3);
       expect(profile.reviewHighlights.length).toBeGreaterThanOrEqual(3);
       expect(profile.outputSections.length).toBeGreaterThanOrEqual(4);
-      expect(profile.faqs.length).toBeGreaterThanOrEqual(5);
-      expect(profile.documentPreviewAnatomy.length).toBeGreaterThanOrEqual(3);
+      expect(profile.trustModules.length).toBeGreaterThanOrEqual(3);
+      expect(profile.theme.accent).toBeTruthy();
+      expect(profile.landing.faqs.length).toBeGreaterThanOrEqual(5);
+      expect(profile.landing.documentPreviewAnatomy.length).toBeGreaterThanOrEqual(3);
+    });
+  });
+
+  it('keeps public landing copy free from premium-heavy wording', () => {
+    const profiles = getPublicResidentialStandaloneProfiles();
+
+    profiles.forEach((profile) => {
+      expect(profile.landing.title).not.toMatch(/\bpremium\b/i);
+      expect(profile.landing.h1).not.toMatch(/\bpremium\b/i);
+      expect(profile.landing.description).not.toMatch(/\bpremium\b/i);
     });
   });
 

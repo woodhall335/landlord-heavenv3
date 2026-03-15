@@ -5,6 +5,7 @@ import React, { Suspense, useEffect, useState, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
+import { StandaloneTrustModuleCard } from '@/components/residential-letting/StandaloneTrustModuleCard';
 import { CaseStrengthWidget } from '../components/CaseStrengthWidget';
 import {
   RiErrorWarningLine,
@@ -83,6 +84,7 @@ import {
   type ResidentialUpsellRecommendation,
 } from '@/lib/residential-letting/recommendations';
 import { getResidentialStandaloneProfile } from '@/lib/residential-letting/standalone-profiles';
+import { getResidentialStandaloneThemeVars } from '@/lib/residential-letting/standalone-theme';
 
 function ReviewPageInner() {
   const searchParams = useSearchParams();
@@ -446,7 +448,7 @@ function ReviewPageInner() {
   // Render Tenancy Agreement specific content
   if (isTenancyFlow) {
     if (isResidentialStandaloneFlow) {
-      return <PremiumResidentialLettingReviewContent
+      return <ResidentialStandaloneReviewContent
         caseId={caseId}
         analysis={analysis}
         jurisdiction={jurisdiction}
@@ -3541,7 +3543,7 @@ function ResidentialLettingReviewContent({
   );
 }
 
-function PremiumResidentialLettingReviewContent({
+function ResidentialStandaloneReviewContent({
   analysis,
   jurisdiction,
   product,
@@ -3559,6 +3561,7 @@ function PremiumResidentialLettingReviewContent({
   const profile = isResidentialLettingProductSku(product)
     ? getResidentialStandaloneProfile(product)
     : null;
+  const themeStyle = profile ? getResidentialStandaloneThemeVars(profile.theme) : undefined;
 
   const people = Array.isArray(facts.tenants)
     ? facts.tenants.map((tenant: any) => tenant.full_name).filter(Boolean)
@@ -3819,8 +3822,24 @@ function PremiumResidentialLettingReviewContent({
   ].filter(Boolean);
 
   return (
-    <div className="mx-auto max-w-6xl space-y-6 px-4 py-6 sm:px-6">
-      <div className="overflow-hidden rounded-[2rem] bg-gradient-to-br from-slate-950 via-slate-900 to-[#433324] text-white shadow-2xl">
+    <div
+      className="mx-auto max-w-6xl space-y-6 px-4 py-6 sm:px-6"
+      style={
+        profile
+          ? {
+              ...themeStyle,
+            }
+          : undefined
+      }
+    >
+      <div
+        className="overflow-hidden rounded-[2rem] text-white shadow-2xl"
+        style={{
+          backgroundImage: profile
+            ? 'linear-gradient(135deg, var(--standalone-hero-start), var(--standalone-hero-mid) 54%, var(--standalone-hero-end))'
+            : 'linear-gradient(to bottom right, rgb(2 6 23), rgb(15 23 42), rgb(67 51 36))',
+        }}
+      >
         <div className="grid gap-6 p-6 sm:p-8 lg:grid-cols-[120px,1fr,260px] lg:items-center">
           <div className="mx-auto rounded-[1.5rem] bg-white/8 p-4">
             {profile ? (
@@ -3867,7 +3886,7 @@ function PremiumResidentialLettingReviewContent({
               {jurisdiction === 'england' ? 'England only' : jurisdiction}
             </p>
             <p className="mt-2 text-sm text-white/75">
-              Premium guided output with structured schedules, cleaner sectioning, and
+              Guided document with structured schedules, cleaner sectioning, and
               execution-ready formatting.
             </p>
           </div>
@@ -3908,6 +3927,14 @@ function PremiumResidentialLettingReviewContent({
           </div>
         </Card>
       </div>
+
+      {profile?.trustModules?.length ? (
+        <div className="grid gap-4 lg:grid-cols-3">
+          {profile.trustModules.map((module) => (
+            <StandaloneTrustModuleCard key={module.title} module={module} />
+          ))}
+        </div>
+      ) : null}
 
       <Card className="p-6">
         <h2 className="text-lg font-semibold mb-4">Captured facts</h2>
@@ -3971,7 +3998,7 @@ function PremiumResidentialLettingReviewContent({
             : isRegenerating
               ? 'Regenerating...'
               : isPaid
-                ? 'Regenerate premium document'
+                ? 'Regenerate document'
                 : 'Proceed to payment & document'}
         </Button>
       </div>

@@ -1,24 +1,33 @@
 'use client';
 
 import Image from 'next/image';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { clsx } from 'clsx';
 
 import { Button, Input } from '@/components/ui';
+import { StandaloneTrustModuleCard } from '@/components/residential-letting/StandaloneTrustModuleCard';
 import { UploadField, type EvidenceFileSummary } from '@/components/wizard/fields/UploadField';
+import { WizardFooterNavV3 } from '@/components/wizard/shared/WizardFooterNavV3';
+import { WizardMainCardV3 } from '@/components/wizard/shared/WizardMainCardV3';
+import { WizardTopBarV3 } from '@/components/wizard/shared/WizardTopBarV3';
 import { getResidentialStandaloneProfile } from '@/lib/residential-letting/standalone-profiles';
+import { getResidentialStandaloneThemeVars } from '@/lib/residential-letting/standalone-theme';
 import { getCaseFacts, saveCaseFacts } from '@/lib/wizard/facts-client';
 import {
   calculateArrearsScheduleTotal,
-  getDefaultStandaloneRoomTemplates,
   getResidentialStandaloneCompletionErrors,
   getResidentialStandaloneFlowConfig,
   type ArrearsScheduleRow,
   type StandaloneFieldConfig,
   type StandaloneRepeaterColumnConfig,
   type StandaloneRoomRecord,
+  type StandaloneStepConfig,
 } from '@/lib/residential-letting/standalone-flow-config';
-import { RESIDENTIAL_LETTING_PRODUCTS, type ResidentialLettingProductSku } from '@/lib/residential-letting/products';
+import {
+  RESIDENTIAL_LETTING_PRODUCTS,
+  type ResidentialLettingProductSku,
+} from '@/lib/residential-letting/products';
 
 interface Props {
   caseId: string;
@@ -36,12 +45,14 @@ const EMPTY_ROW: ArrearsScheduleRow = {
   note: '',
 };
 
-function coerceScalarValue(fieldType: string, value: string | boolean) {
-  if (fieldType === 'number' || fieldType === 'currency') {
-    return value === '' ? '' : Number(value);
-  }
-  return value;
-}
+const FIELD_INPUT_CLASS =
+  'w-full rounded-2xl border-violet-200 bg-white text-slate-900 shadow-sm focus:border-violet-500 focus:ring-violet-200';
+
+const SELECT_CLASS =
+  'mt-2 w-full rounded-2xl border border-violet-200 bg-white px-4 py-3 text-sm text-slate-900 shadow-sm outline-none transition focus:border-violet-500 focus:ring-4 focus:ring-violet-100';
+
+const TEXTAREA_CLASS =
+  'mt-2 w-full rounded-2xl border border-violet-200 bg-white px-4 py-3 text-sm text-slate-900 shadow-sm outline-none transition focus:border-violet-500 focus:ring-4 focus:ring-violet-100';
 
 function createRoom(name: string): StandaloneRoomRecord {
   return {
@@ -52,34 +63,178 @@ function createRoom(name: string): StandaloneRoomRecord {
 }
 
 function createItemRow() {
-  return { item: '', condition: '', cleanliness: '', notes: '' };
+  return {
+    item: '',
+    condition: '',
+    cleanliness: '',
+    notes: '',
+  };
 }
 
 function createScheduleRow(field: StandaloneFieldConfig) {
   return { ...(field.emptyRow || {}) };
 }
 
-function PremiumPanel({
-  title,
-  items,
+function coerceScalarValue(fieldType: string, value: string | boolean) {
+  if (fieldType === 'number' || fieldType === 'currency') {
+    return value === '' ? '' : Number(value);
+  }
+
+  return value;
+}
+
+function isFactFilled(value: unknown): boolean {
+  if (typeof value === 'boolean') return value;
+  if (typeof value === 'number') return !Number.isNaN(value);
+  if (typeof value === 'string') return value.trim().length > 0;
+  if (Array.isArray(value)) return value.length > 0;
+  return value !== undefined && value !== null;
+}
+
+function getVisibleFields(step: StandaloneStepConfig, facts: Record<string, any>) {
+  return (step.fields || []).filter((field) => !field.visibleWhen || field.visibleWhen(facts));
+}
+
+function getStepCompletion(step: StandaloneStepConfig, facts: Record<string, any>) {
+  const visibleFields = getVisibleFields(step, facts);
+  const requiredFields = visibleFields.filter((field) => field.required);
+
+  if (requiredFields.length === 0) {
+    return {
+      completed: visibleFields.length > 0
+        ? visibleFields.filter((field) => isFactFilled(facts[field.id])).length
+        : 0,
+      total: visibleFields.length,
+      isComplete: true,
+    };
+  }
+
+  const completed = requiredFields.filter((field) => isFactFilled(facts[field.id])).length;
+
+  return {
+    completed,
+    total: requiredFields.length,
+    isComplete: completed === requiredFields.length,
+  };
+}
+
+function bootstrapLegacyRooms(loaded: Record<string, any>, key: 'inspection_rooms' | 'inventory_rooms') {
+  if (Array.isArray(loaded?.[key]) && loaded[key].length > 0) {
+    return loaded[key];
+  }
+
+  if (key === 'inspection_rooms' && typeof loaded?.room_list === 'string' && loaded.room_list.trim()) {
+    return loaded.room_list
+      .split(',')
+      .map((name: string) => createRoom(name.trim()))
+      .filter((room: StandaloneRoomRecord) => room.name);
+  }
+
+  if (
+    key === 'inventory_rooms' &&
+    typeof loaded?.inventory_room_items === 'string' &&
+    loaded.inventory_room_items.trim()
+  ) {
+    return [{ ...createRoom('General schedule'), notes: loaded.inventory_room_items }];
+  }
+
+  return loaded?.[key];
+}
+
+function SaveStateChip({
+  saveState,
+  saving,
+  uploading,
 }: {
-  title: string;
-  items: string[];
+  saveState: 'idle' | 'saving' | 'saved';
+  saving: boolean;
+  uploading: boolean;
 }) {
-  if (items.length === 0) return null;
+  const label = uploading
+    ? 'Uploading evidence'
+    : saving || saveState === 'saving'
+      ? 'Saving'
+      : saveState === 'saved'
+        ? 'Autosaved'
+        : 'Ready';
 
   return (
-    <div className="rounded-[1.75rem] border border-slate-200 bg-white p-5 shadow-sm">
-      <div className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">{title}</div>
-      <ul className="mt-4 space-y-3 text-sm text-slate-700">
-        {items.map((item) => (
-          <li key={item} className="flex items-start gap-3">
-            <span className="mt-1 h-2 w-2 rounded-full bg-slate-950" />
-            <span>{item}</span>
-          </li>
-        ))}
-      </ul>
+    <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-white/80">
+      <span
+        className={clsx(
+          'h-2 w-2 rounded-full',
+          uploading
+            ? 'bg-amber-300'
+            : saving || saveState === 'saving'
+              ? 'bg-sky-300'
+              : saveState === 'saved'
+                ? 'bg-emerald-300'
+                : 'bg-white/50'
+        )}
+      />
+      {label}
     </div>
+  );
+}
+
+function MobileSaveStateChip({
+  saveState,
+  saving,
+  uploading,
+}: {
+  saveState: 'idle' | 'saving' | 'saved';
+  saving: boolean;
+  uploading: boolean;
+}) {
+  const label = uploading
+    ? 'Uploading'
+    : saving || saveState === 'saving'
+      ? 'Saving'
+      : saveState === 'saved'
+        ? 'Saved'
+        : 'Ready';
+
+  return (
+    <span className="rounded-full border border-[var(--standalone-border)] bg-white/90 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-600">
+      {label}
+    </span>
+  );
+}
+
+function FieldChrome({
+  field,
+  children,
+  accent = false,
+}: {
+  field: StandaloneFieldConfig;
+  children: React.ReactNode;
+  accent?: boolean;
+}) {
+  return (
+    <section
+      className={clsx(
+        'standalone-premium-enter rounded-[1.75rem] border p-5 shadow-[0_18px_40px_rgba(15,23,42,0.06)]',
+        accent
+          ? 'border-[var(--standalone-border)] bg-[var(--standalone-soft)]/80'
+          : 'border-slate-200 bg-white'
+      )}
+    >
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div className="max-w-3xl">
+          <label className="text-sm font-semibold text-slate-950">{field.label}</label>
+          {field.required ? (
+            <span className="ml-2 rounded-full bg-slate-950 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-white">
+              Required
+            </span>
+          ) : null}
+          {field.helpText ? <p className="mt-2 text-sm leading-6 text-slate-600">{field.helpText}</p> : null}
+          {field.description ? (
+            <p className="mt-2 text-sm leading-6 text-slate-500">{field.description}</p>
+          ) : null}
+        </div>
+      </div>
+      <div className="mt-4">{children}</div>
+    </section>
   );
 }
 
@@ -93,7 +248,7 @@ function renderRepeaterInput(
       <select
         value={value || ''}
         onChange={(event) => onChange(event.target.value)}
-        className="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm"
+        className={SELECT_CLASS}
       >
         <option value="">Select</option>
         {(column.options || []).map((option) => (
@@ -111,17 +266,26 @@ function renderRepeaterInput(
         value={value || ''}
         onChange={(event) => onChange(event.target.value)}
         rows={3}
-        className="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm"
+        className={TEXTAREA_CLASS}
       />
     );
   }
 
   return (
     <Input
-      type={column.type === 'date' ? 'date' : column.type === 'number' || column.type === 'currency' ? 'number' : 'text'}
-      value={value || ''}
+      type={
+        column.type === 'date'
+          ? 'date'
+          : column.type === 'number' || column.type === 'currency'
+            ? 'number'
+            : 'text'
+      }
+      step={column.type === 'currency' ? '0.01' : undefined}
+      value={value ?? ''}
       placeholder={column.placeholder}
       onChange={(event) => onChange(coerceScalarValue(column.type, event.target.value))}
+      className={FIELD_INPUT_CLASS}
+      fullWidth
     />
   );
 }
@@ -130,7 +294,9 @@ export function ResidentialStandaloneSectionFlow({ caseId, jurisdiction, product
   const router = useRouter();
   const config = useMemo(() => getResidentialStandaloneFlowConfig(product), [product]);
   const profile = useMemo(() => getResidentialStandaloneProfile(product), [product]);
+  const themeStyle = useMemo(() => getResidentialStandaloneThemeVars(profile.theme), [profile.theme]);
   const productMeta = RESIDENTIAL_LETTING_PRODUCTS[product];
+
   const [facts, setFacts] = useState<Record<string, any>>({
     jurisdiction,
     property_country: jurisdiction,
@@ -138,27 +304,24 @@ export function ResidentialStandaloneSectionFlow({ caseId, jurisdiction, product
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [saveState, setSaveState] = useState<'idle' | 'saving' | 'saved'>('idle');
   const [uploading, setUploading] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
   const [errors, setErrors] = useState<string[]>([]);
+  const [customRoomNames, setCustomRoomNames] = useState<Record<string, string>>({});
+
+  const autosaveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const saveResetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const hasHydratedFactsRef = useRef(false);
 
   useEffect(() => {
     const load = async () => {
       const loaded = await getCaseFacts(caseId);
+
       const bootstrapFacts = {
         ...loaded,
-        inspection_rooms:
-          Array.isArray(loaded?.inspection_rooms) && loaded.inspection_rooms.length > 0
-            ? loaded.inspection_rooms
-            : typeof loaded?.room_list === 'string' && loaded.room_list.trim()
-              ? loaded.room_list.split(',').map((name: string) => createRoom(name.trim())).filter((room: StandaloneRoomRecord) => room.name)
-              : loaded?.inspection_rooms,
-        inventory_rooms:
-          Array.isArray(loaded?.inventory_rooms) && loaded.inventory_rooms.length > 0
-            ? loaded.inventory_rooms
-            : typeof loaded?.inventory_room_items === 'string' && loaded.inventory_room_items.trim()
-              ? [{ ...createRoom('General schedule'), notes: loaded.inventory_room_items }]
-              : loaded?.inventory_rooms,
+        inspection_rooms: bootstrapLegacyRooms(loaded || {}, 'inspection_rooms'),
+        inventory_rooms: bootstrapLegacyRooms(loaded || {}, 'inventory_rooms'),
       };
 
       setFacts((current) => ({
@@ -174,23 +337,94 @@ export function ResidentialStandaloneSectionFlow({ caseId, jurisdiction, product
       }));
       setLoading(false);
     };
+
     void load();
   }, [caseId, jurisdiction, product]);
 
+  useEffect(() => {
+    return () => {
+      if (autosaveTimeoutRef.current) clearTimeout(autosaveTimeoutRef.current);
+      if (saveResetTimeoutRef.current) clearTimeout(saveResetTimeoutRef.current);
+    };
+  }, []);
+
+  const persistFacts = async (nextFacts: Record<string, any>) => {
+    try {
+      await saveCaseFacts(caseId, nextFacts, {
+        jurisdiction,
+        caseType: 'tenancy_agreement',
+        product: product as any,
+      });
+      setSaveState('saved');
+      if (saveResetTimeoutRef.current) clearTimeout(saveResetTimeoutRef.current);
+      saveResetTimeoutRef.current = setTimeout(() => setSaveState('idle'), 1500);
+    } catch (error) {
+      console.error('Failed to save standalone wizard facts:', error);
+      setSaveState('idle');
+    }
+  };
+
+  const save = async (nextFacts = facts) => {
+    if (autosaveTimeoutRef.current) clearTimeout(autosaveTimeoutRef.current);
+    setSaving(true);
+    setSaveState('saving');
+    try {
+      await persistFacts(nextFacts);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  useEffect(() => {
+    if (loading || uploading) return;
+
+    if (!hasHydratedFactsRef.current) {
+      hasHydratedFactsRef.current = true;
+      return;
+    }
+
+    if (autosaveTimeoutRef.current) clearTimeout(autosaveTimeoutRef.current);
+    setSaveState('saving');
+    autosaveTimeoutRef.current = setTimeout(() => {
+      void persistFacts(facts);
+    }, 700);
+
+    return () => {
+      if (autosaveTimeoutRef.current) clearTimeout(autosaveTimeoutRef.current);
+    };
+  }, [facts, loading, uploading]);
+
   const step = config.steps[activeStep];
+  const visibleFields = useMemo(() => getVisibleFields(step, facts), [facts, step]);
+  const progress = Math.round(((activeStep + 1) / config.steps.length) * 100);
+  const stepCompletion = useMemo(
+    () => config.steps.map((configStep) => getStepCompletion(configStep, facts)),
+    [config.steps, facts]
+  );
+  const visibleTrustModules = profile.trustModules.slice(0, 3);
+  const tabs = useMemo(
+    () =>
+      config.steps.map((configStep, index) => ({
+        id: configStep.id,
+        label: configStep.title,
+        isCurrent: index === activeStep,
+        isComplete: stepCompletion[index]?.isComplete,
+        hasIssue: index === activeStep && errors.length > 0,
+        onClick: () => setActiveStep(index),
+      })),
+    [activeStep, config.steps, errors.length, stepCompletion]
+  );
 
   const updateFact = (key: string, value: any) => {
     setFacts((current) => ({ ...current, [key]: value }));
+    setErrors([]);
   };
 
-  const save = async () => {
-    setSaving(true);
-    await saveCaseFacts(caseId, facts, {
-      jurisdiction,
-      caseType: 'tenancy_agreement',
-      product: product as any,
-    });
-    setSaving(false);
+  const toggleMultiSelectValue = (fieldId: string, optionValue: string, checked: boolean) => {
+    const next = new Set(Array.isArray(facts[fieldId]) ? facts[fieldId] : []);
+    if (checked) next.add(optionValue);
+    else next.delete(optionValue);
+    updateFact(fieldId, Array.from(next));
   };
 
   const addScheduleRow = () => {
@@ -203,7 +437,8 @@ export function ResidentialStandaloneSectionFlow({ caseId, jurisdiction, product
     rows[index] = { ...rows[index], [key]: value };
 
     if (key === 'amount_due' || key === 'amount_paid') {
-      rows[index].amount_outstanding = Number(rows[index].amount_due || 0) - Number(rows[index].amount_paid || 0);
+      rows[index].amount_outstanding =
+        Number(rows[index].amount_due || 0) - Number(rows[index].amount_paid || 0);
     }
 
     updateFact('arrears_schedule_rows', rows);
@@ -236,8 +471,12 @@ export function ResidentialStandaloneSectionFlow({ caseId, jurisdiction, product
   };
 
   const addRoom = (field: StandaloneFieldConfig, name: string) => {
+    const trimmed = name.trim();
+    if (!trimmed) return;
     const rooms = [...((facts[field.id] || []) as StandaloneRoomRecord[])];
-    rooms.push(createRoom(name));
+    const exists = rooms.some((room) => room.name.toLowerCase() === trimmed.toLowerCase());
+    if (exists) return;
+    rooms.push(createRoom(trimmed));
     updateFact(field.id, rooms);
   };
 
@@ -261,7 +500,13 @@ export function ResidentialStandaloneSectionFlow({ caseId, jurisdiction, product
     updateFact(fieldId, rooms);
   };
 
-  const updateRoomItem = (fieldId: string, roomIndex: number, itemIndex: number, key: string, value: any) => {
+  const updateRoomItem = (
+    fieldId: string,
+    roomIndex: number,
+    itemIndex: number,
+    key: string,
+    value: any
+  ) => {
     const rooms = [...((facts[fieldId] || []) as StandaloneRoomRecord[])];
     const items = [...(rooms[roomIndex]?.items || [])];
     items[itemIndex] = { ...items[itemIndex], [key]: value };
@@ -280,6 +525,7 @@ export function ResidentialStandaloneSectionFlow({ caseId, jurisdiction, product
   const next = async () => {
     setErrors([]);
     await save();
+
     if (activeStep < config.steps.length - 1) {
       setActiveStep((current) => current + 1);
       return;
@@ -291,381 +537,1100 @@ export function ResidentialStandaloneSectionFlow({ caseId, jurisdiction, product
       return;
     }
 
-    router.push(`/wizard/review?case_id=${caseId}&product=${product}`);
+    router.push(`/wizard/review?case_id=${encodeURIComponent(caseId)}&product=${product}`);
   };
 
   const previous = () => {
     if (activeStep > 0) setActiveStep((current) => current - 1);
   };
 
-  if (loading) return <div className="p-8">Loading standalone {config.documentTitle} wizard...</div>;
+  const renderAdvisoryField = (field: StandaloneFieldConfig) => {
+    const toneClasses =
+      field.tone === 'warning'
+        ? 'border-amber-200 bg-amber-50 text-amber-950'
+        : field.tone === 'success'
+          ? 'border-emerald-200 bg-emerald-50 text-emerald-950'
+          : 'border-[var(--standalone-border)] bg-[var(--standalone-soft)] text-slate-900';
 
-  return (
-    <div className="mx-auto max-w-7xl px-4 pb-10 pt-[calc(var(--site-header-height)+var(--s21-banner-height)+1.5rem)] sm:px-6">
-      <div className="rounded-[2rem] bg-gradient-to-br from-slate-950 via-slate-900 to-[#3f3327] p-6 text-white shadow-2xl sm:p-8">
-        <div className="grid gap-6 lg:grid-cols-[140px,1fr,260px] lg:items-center">
-          <div className="mx-auto rounded-[1.75rem] bg-white/8 p-4">
-            <Image src={profile.icon} alt="" width={120} height={120} className="h-24 w-24 object-contain" />
-          </div>
-          <div>
-            <div className="text-xs font-semibold uppercase tracking-[0.26em] text-white/60">{profile.eyebrow}</div>
-            <h1 className="mt-3 text-3xl font-semibold leading-tight">{config.documentTitle}</h1>
-            <p className="mt-3 max-w-3xl text-sm leading-7 text-white/80">{profile.heroSubtitle}</p>
-            <ul className="mt-4 grid gap-2 text-sm text-white/90 md:grid-cols-3">
-              {profile.heroBullets.map((item) => (
-                <li key={item}>- {item}</li>
-              ))}
-            </ul>
-          </div>
-          <div className="rounded-[1.75rem] border border-white/10 bg-white/6 p-5 text-sm">
-            <div className="font-semibold uppercase tracking-[0.22em] text-white/60">Premium Output</div>
-            <div className="mt-3 text-3xl font-semibold">{productMeta.displayPrice}</div>
-            <p className="mt-2 text-white/75">Step {activeStep + 1} of {config.steps.length}</p>
-            <p className="mt-2 text-white/75">England only</p>
-          </div>
+    return (
+      <section className={clsx('rounded-[1.75rem] border p-5 shadow-sm', toneClasses)}>
+        <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+          Drafting notes
         </div>
-      </div>
+        <h3 className="mt-2 text-lg font-semibold text-current">{field.label}</h3>
+        {field.items?.length ? (
+          <ul className="mt-4 space-y-3 text-sm leading-6">
+            {field.items.map((item) => (
+              <li key={item} className="flex items-start gap-3">
+                <span className="mt-2 h-2 w-2 rounded-full bg-current/70" />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        ) : null}
+      </section>
+    );
+  };
 
-      <div className="mt-8 grid gap-8 lg:grid-cols-[240px,1fr,280px]">
-        <aside className="space-y-4">
-          <div className="rounded-[1.75rem] border border-slate-200 bg-white p-4 shadow-sm">
-            <div className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">Progress</div>
-            <div className="mt-4 space-y-3">
-              {config.steps.map((configStep, index) => {
-                const iconPath = profile.stepIcons[configStep.id] || profile.icon;
-                const isActive = index === activeStep;
-                const isComplete = index < activeStep;
+  const renderRepeaterField = (field: StandaloneFieldConfig) => {
+    const rows = (facts[field.id] || []) as Record<string, any>[];
+
+    return (
+      <FieldChrome field={field} accent>
+        <div className="space-y-4">
+          {rows.length === 0 ? (
+            <div className="rounded-[1.35rem] border border-dashed border-slate-300 bg-white/80 px-4 py-5 text-sm text-slate-600">
+              No rows added yet.
+            </div>
+          ) : null}
+
+          {rows.map((row, rowIndex) => (
+            <div key={`${field.id}-${rowIndex}`} className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm">
+              <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+                <div className="text-sm font-semibold text-slate-950">Row {rowIndex + 1}</div>
+                <button
+                  type="button"
+                  onClick={() => removeRepeaterRow(field.id, rowIndex)}
+                  className="rounded-full border border-slate-200 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-slate-600 transition hover:border-slate-300 hover:text-slate-900"
+                >
+                  Remove row
+                </button>
+              </div>
+
+              <div className="grid gap-4 md:grid-cols-2">
+                {(field.columns || []).map((column) => (
+                  <div key={`${field.id}-${rowIndex}-${column.id}`}>
+                    <div className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
+                      {column.label}
+                    </div>
+                    {renderRepeaterInput(column, row[column.id], (value) =>
+                      updateRepeaterRow(field.id, rowIndex, column.id, value)
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+
+          <button
+            type="button"
+            onClick={() => addRepeaterRow(field)}
+            className="standalone-premium-hover-lift rounded-[1.25rem] border border-[var(--standalone-border)] bg-white px-4 py-3 text-sm font-semibold text-slate-900 shadow-sm transition hover:border-slate-400"
+          >
+            {field.addLabel || 'Add row'}
+          </button>
+        </div>
+      </FieldChrome>
+    );
+  };
+
+  const renderRoomBuilderField = (field: StandaloneFieldConfig) => {
+    const rooms = ((facts[field.id] || []) as StandaloneRoomRecord[]).map((room) => ({
+      ...room,
+      items: Array.isArray(room.items) ? room.items : [],
+    }));
+    const roomTemplates = field.roomTemplates || [];
+    const draftValue = customRoomNames[field.id] || '';
+
+    return (
+      <FieldChrome field={field} accent>
+        <div className="space-y-5">
+          <div className="rounded-[1.5rem] border border-[var(--standalone-border)] bg-white/85 p-4 shadow-sm">
+            <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+              Suggested rooms
+            </div>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {roomTemplates.map((template) => {
+                const exists = rooms.some((room) => room.name.toLowerCase() === template.toLowerCase());
                 return (
                   <button
-                    key={configStep.id}
+                    key={`${field.id}-${template}`}
                     type="button"
-                    onClick={() => setActiveStep(index)}
-                    className={`flex w-full items-center gap-3 rounded-2xl px-3 py-3 text-left transition ${
-                      isActive
-                        ? 'bg-slate-950 text-white'
-                        : isComplete
-                          ? 'bg-slate-100 text-slate-950'
-                          : 'bg-[#f7f4ec] text-slate-700'
-                    }`}
+                    disabled={exists}
+                    onClick={() => addRoom(field, template)}
+                    className={clsx(
+                      'rounded-full border px-3 py-2 text-xs font-semibold uppercase tracking-[0.14em] transition',
+                      exists
+                        ? 'cursor-not-allowed border-slate-200 bg-slate-100 text-slate-400'
+                        : 'border-[var(--standalone-border)] bg-[var(--standalone-soft)] text-slate-700 hover:border-slate-400 hover:text-slate-950'
+                    )}
                   >
-                    <Image src={iconPath} alt="" width={42} height={42} className="h-10 w-10 rounded-xl object-contain" />
-                    <div className="min-w-0">
-                      <div className="text-xs uppercase tracking-[0.2em] opacity-70">Step {index + 1}</div>
-                      <div className="truncate text-sm font-semibold">{configStep.title}</div>
-                    </div>
+                    {exists ? `${template} added` : `Add ${template}`}
                   </button>
                 );
               })}
             </div>
           </div>
-        </aside>
 
-        <main className="space-y-5">
-          {(config.warnings.length > 0 || profile.cautionBanner) && (
-            <div className="rounded-[1.75rem] border border-amber-200 bg-amber-50 p-5 text-sm text-amber-950 shadow-sm">
-              {profile.cautionBanner ? <div className="font-semibold">{profile.cautionBanner.title}</div> : null}
-              {profile.cautionBanner ? <p className="mt-2 leading-6">{profile.cautionBanner.body}</p> : null}
-              {config.warnings.map((warning) => (
-                <div key={warning} className="mt-2">- {warning}</div>
-              ))}
+          <div className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm">
+            <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+              Custom room
             </div>
-          )}
+            <div className="mt-3 flex flex-col gap-3 sm:flex-row">
+              <Input
+                value={draftValue}
+                onChange={(event) =>
+                  setCustomRoomNames((current) => ({ ...current, [field.id]: event.target.value }))
+                }
+                placeholder="e.g. Conservatory, loft room, rear garden"
+                className={FIELD_INPUT_CLASS}
+                fullWidth
+              />
+              <button
+                type="button"
+                onClick={() => {
+                  addRoom(field, draftValue);
+                  setCustomRoomNames((current) => ({ ...current, [field.id]: '' }));
+                }}
+                className="rounded-[1.2rem] bg-[var(--standalone-accent)] px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:opacity-95"
+              >
+                Add custom room
+              </button>
+            </div>
+          </div>
 
-          <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
-            <div className="flex items-start justify-between gap-4 border-b border-slate-100 pb-5">
-              <div>
-                <h2 className="text-2xl font-semibold text-slate-950">{step.title}</h2>
-                <p className="mt-2 text-sm leading-7 text-slate-600">{step.description}</p>
+          {rooms.length === 0 ? (
+            <div className="rounded-[1.5rem] border border-dashed border-slate-300 bg-white/70 px-5 py-8 text-center text-sm text-slate-600">
+              Add at least one room so the final document can build structured room sections.
+            </div>
+          ) : null}
+
+          <div className="space-y-4">
+            {rooms.map((room, roomIndex) => {
+              const inventoryMode = field.roomMode === 'inventory';
+
+              return (
+                <section
+                  key={room.id || `${field.id}-${roomIndex}`}
+                  className="standalone-premium-enter rounded-[1.75rem] border border-slate-200 bg-white p-5 shadow-[0_18px_40px_rgba(15,23,42,0.06)]"
+                >
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <div className="rounded-[1rem] bg-[var(--standalone-soft)] p-3">
+                        <Image
+                          src={profile.stepIcons.rooms || profile.icon}
+                          alt=""
+                          width={38}
+                          height={38}
+                          className="h-9 w-9 object-contain"
+                        />
+                      </div>
+                      <div>
+                        <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+                          Room {roomIndex + 1}
+                        </div>
+                        <div className="text-base font-semibold text-slate-950">{room.name || 'Untitled room'}</div>
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => removeRoom(field.id, roomIndex)}
+                      className="rounded-full border border-slate-200 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-slate-600 transition hover:border-slate-300 hover:text-slate-900"
+                    >
+                      Remove room
+                    </button>
+                  </div>
+
+                  <div className="mt-5 grid gap-4 md:grid-cols-2">
+                    <div>
+                      <div className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
+                        Room name
+                      </div>
+                      <Input
+                        value={room.name || ''}
+                        onChange={(event) => updateRoom(field.id, roomIndex, 'name', event.target.value)}
+                        className={FIELD_INPUT_CLASS}
+                        fullWidth
+                      />
+                    </div>
+
+                    <div>
+                      <div className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
+                        Condition summary
+                      </div>
+                      <Input
+                        value={room.condition || ''}
+                        onChange={(event) => updateRoom(field.id, roomIndex, 'condition', event.target.value)}
+                        placeholder={inventoryMode ? 'Overall condition' : 'Overall condition / presentation'}
+                        className={FIELD_INPUT_CLASS}
+                        fullWidth
+                      />
+                    </div>
+
+                    {inventoryMode ? (
+                      <div>
+                        <div className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
+                          Cleanliness
+                        </div>
+                        <Input
+                          value={room.cleanliness || ''}
+                          onChange={(event) =>
+                            updateRoom(field.id, roomIndex, 'cleanliness', event.target.value)
+                          }
+                          placeholder="e.g. Professionally cleaned"
+                          className={FIELD_INPUT_CLASS}
+                          fullWidth
+                        />
+                      </div>
+                    ) : (
+                      <div>
+                        <div className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
+                          Fixtures and fittings
+                        </div>
+                        <Input
+                          value={room.fixtures || ''}
+                          onChange={(event) => updateRoom(field.id, roomIndex, 'fixtures', event.target.value)}
+                          placeholder="Key fixtures or fittings inspected"
+                          className={FIELD_INPUT_CLASS}
+                          fullWidth
+                        />
+                      </div>
+                    )}
+
+                    {!inventoryMode ? (
+                      <div>
+                        <div className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
+                          Photo or evidence reference
+                        </div>
+                        <Input
+                          value={room.photo_reference || ''}
+                          onChange={(event) =>
+                            updateRoom(field.id, roomIndex, 'photo_reference', event.target.value)
+                          }
+                          placeholder="e.g. Photos 11-16"
+                          className={FIELD_INPUT_CLASS}
+                          fullWidth
+                        />
+                      </div>
+                    ) : null}
+                  </div>
+
+                  <div className="mt-4 grid gap-4 md:grid-cols-2">
+                    {!inventoryMode ? (
+                      <>
+                        <div>
+                          <div className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
+                            Defects or issues
+                          </div>
+                          <textarea
+                            rows={4}
+                            value={room.defects || ''}
+                            onChange={(event) => updateRoom(field.id, roomIndex, 'defects', event.target.value)}
+                            className={TEXTAREA_CLASS}
+                          />
+                        </div>
+                        <div>
+                          <div className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
+                            Follow-up actions
+                          </div>
+                          <textarea
+                            rows={4}
+                            value={room.actions || ''}
+                            onChange={(event) => updateRoom(field.id, roomIndex, 'actions', event.target.value)}
+                            className={TEXTAREA_CLASS}
+                          />
+                        </div>
+                      </>
+                    ) : null}
+
+                    <div>
+                      <div className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
+                        {inventoryMode ? 'Room notes' : 'Additional notes'}
+                      </div>
+                      <textarea
+                        rows={4}
+                        value={room.notes || ''}
+                        onChange={(event) => updateRoom(field.id, roomIndex, 'notes', event.target.value)}
+                        className={TEXTAREA_CLASS}
+                      />
+                    </div>
+
+                    <div>
+                      <div className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
+                        {inventoryMode ? 'Evidence reference' : 'Occupier comments'}
+                      </div>
+                      <textarea
+                        rows={4}
+                        value={inventoryMode ? room.photo_reference || '' : room.tenant_comments || ''}
+                        onChange={(event) =>
+                          updateRoom(
+                            field.id,
+                            roomIndex,
+                            inventoryMode ? 'photo_reference' : 'tenant_comments',
+                            event.target.value
+                          )
+                        }
+                        className={TEXTAREA_CLASS}
+                      />
+                    </div>
+                  </div>
+
+                  {inventoryMode ? (
+                    <div className="mt-5 rounded-[1.5rem] border border-[var(--standalone-border)] bg-[var(--standalone-soft)]/70 p-4">
+                      <div className="flex flex-wrap items-center justify-between gap-3">
+                        <div>
+                          <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                            Item rows
+                          </div>
+                          <div className="mt-1 text-sm text-slate-600">
+                            Build the item-level condition schedule for this room.
+                          </div>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => addRoomItem(field.id, roomIndex)}
+                          className="rounded-[1.1rem] bg-[var(--standalone-accent)] px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:opacity-95"
+                        >
+                          Add item row
+                        </button>
+                      </div>
+
+                      <div className="mt-4 space-y-3">
+                        {(room.items || []).length === 0 ? (
+                          <div className="rounded-[1.2rem] border border-dashed border-slate-300 bg-white/80 px-4 py-5 text-sm text-slate-600">
+                            No item rows added yet.
+                          </div>
+                        ) : null}
+
+                        {(room.items || []).map((item, itemIndex) => (
+                          <div
+                            key={`${room.id}-item-${itemIndex}`}
+                            className="rounded-[1.3rem] border border-slate-200 bg-white p-4 shadow-sm"
+                          >
+                            <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+                              <div className="text-sm font-semibold text-slate-950">Item {itemIndex + 1}</div>
+                              <button
+                                type="button"
+                                onClick={() => removeRoomItem(field.id, roomIndex, itemIndex)}
+                                className="rounded-full border border-slate-200 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-slate-600 transition hover:border-slate-300 hover:text-slate-900"
+                              >
+                                Remove item
+                              </button>
+                            </div>
+
+                            <div className="grid gap-4 md:grid-cols-2">
+                              <div>
+                                <div className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
+                                  Item
+                                </div>
+                                <Input
+                                  value={item.item || ''}
+                                  onChange={(event) =>
+                                    updateRoomItem(field.id, roomIndex, itemIndex, 'item', event.target.value)
+                                  }
+                                  className={FIELD_INPUT_CLASS}
+                                  fullWidth
+                                />
+                              </div>
+                              <div>
+                                <div className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
+                                  Condition
+                                </div>
+                                <Input
+                                  value={item.condition || ''}
+                                  onChange={(event) =>
+                                    updateRoomItem(
+                                      field.id,
+                                      roomIndex,
+                                      itemIndex,
+                                      'condition',
+                                      event.target.value
+                                    )
+                                  }
+                                  className={FIELD_INPUT_CLASS}
+                                  fullWidth
+                                />
+                              </div>
+                              <div>
+                                <div className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
+                                  Cleanliness
+                                </div>
+                                <Input
+                                  value={item.cleanliness || ''}
+                                  onChange={(event) =>
+                                    updateRoomItem(
+                                      field.id,
+                                      roomIndex,
+                                      itemIndex,
+                                      'cleanliness',
+                                      event.target.value
+                                    )
+                                  }
+                                  className={FIELD_INPUT_CLASS}
+                                  fullWidth
+                                />
+                              </div>
+                              <div>
+                                <div className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
+                                  Notes
+                                </div>
+                                <textarea
+                                  rows={3}
+                                  value={item.notes || ''}
+                                  onChange={(event) =>
+                                    updateRoomItem(field.id, roomIndex, itemIndex, 'notes', event.target.value)
+                                  }
+                                  className={TEXTAREA_CLASS}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ) : null}
+                </section>
+              );
+            })}
+          </div>
+        </div>
+      </FieldChrome>
+    );
+  };
+
+  const renderArrearsSchedulePanel = () => {
+    const rows = (facts.arrears_schedule_rows || []) as ArrearsScheduleRow[];
+
+    return (
+      <section className="standalone-premium-enter rounded-[1.85rem] border border-[var(--standalone-border)] bg-[var(--standalone-soft)]/80 p-5 shadow-[0_18px_40px_rgba(15,23,42,0.06)]">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+              Attached arrears schedule
+            </div>
+            <h3 className="mt-1 text-lg font-semibold text-slate-950">Detailed arrears chronology</h3>
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
+              Build the schedule row by row so the letter pack can show missed periods, payments received,
+              and the resulting outstanding balance clearly.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={addScheduleRow}
+            className="rounded-[1.2rem] bg-[var(--standalone-accent)] px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:opacity-95"
+          >
+            Add arrears row
+          </button>
+        </div>
+
+        <div className="mt-5 space-y-4">
+          {rows.length === 0 ? (
+            <div className="rounded-[1.35rem] border border-dashed border-slate-300 bg-white/80 px-5 py-6 text-sm text-slate-600">
+              No arrears rows added yet.
+            </div>
+          ) : null}
+
+          {rows.map((row, index) => (
+            <div key={`arrears-row-${index}`} className="rounded-[1.45rem] border border-slate-200 bg-white p-4 shadow-sm">
+              <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+                <div className="text-sm font-semibold text-slate-950">Row {index + 1}</div>
+                <button
+                  type="button"
+                  onClick={() => removeScheduleRow(index)}
+                  className="rounded-full border border-slate-200 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-slate-600 transition hover:border-slate-300 hover:text-slate-900"
+                >
+                  Remove row
+                </button>
               </div>
-              <Image
-                src={profile.stepIcons[step.id] || profile.icon}
-                alt=""
-                width={60}
-                height={60}
-                className="hidden h-14 w-14 rounded-2xl object-contain sm:block"
+
+              <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+                <div>
+                  <div className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Due date</div>
+                  <Input
+                    type="date"
+                    value={row.due_date || ''}
+                    onChange={(event) => updateScheduleRow(index, 'due_date', event.target.value)}
+                    className={FIELD_INPUT_CLASS}
+                    fullWidth
+                  />
+                </div>
+                <div>
+                  <div className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Period covered</div>
+                  <Input
+                    value={row.period_covered || ''}
+                    onChange={(event) => updateScheduleRow(index, 'period_covered', event.target.value)}
+                    className={FIELD_INPUT_CLASS}
+                    fullWidth
+                  />
+                </div>
+                <div>
+                  <div className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Amount due</div>
+                  <Input
+                    type="number"
+                    step="0.01"
+                    value={row.amount_due ?? ''}
+                    onChange={(event) => updateScheduleRow(index, 'amount_due', Number(event.target.value))}
+                    className={FIELD_INPUT_CLASS}
+                    fullWidth
+                  />
+                </div>
+                <div>
+                  <div className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Amount paid</div>
+                  <Input
+                    type="number"
+                    step="0.01"
+                    value={row.amount_paid ?? ''}
+                    onChange={(event) => updateScheduleRow(index, 'amount_paid', Number(event.target.value))}
+                    className={FIELD_INPUT_CLASS}
+                    fullWidth
+                  />
+                </div>
+                <div>
+                  <div className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Outstanding</div>
+                  <Input
+                    type="number"
+                    step="0.01"
+                    value={row.amount_outstanding ?? ''}
+                    onChange={(event) =>
+                      updateScheduleRow(index, 'amount_outstanding', Number(event.target.value))
+                    }
+                    className={FIELD_INPUT_CLASS}
+                    fullWidth
+                  />
+                </div>
+                <div>
+                  <div className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
+                    Payment received date
+                  </div>
+                  <Input
+                    type="date"
+                    value={row.payment_received_date || ''}
+                    onChange={(event) =>
+                      updateScheduleRow(index, 'payment_received_date', event.target.value)
+                    }
+                    className={FIELD_INPUT_CLASS}
+                    fullWidth
+                  />
+                </div>
+                <div className="md:col-span-2 xl:col-span-2">
+                  <div className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Note</div>
+                  <Input
+                    value={row.note || ''}
+                    onChange={(event) => updateScheduleRow(index, 'note', event.target.value)}
+                    className={FIELD_INPUT_CLASS}
+                    fullWidth
+                  />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-4 rounded-[1.3rem] border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 shadow-sm">
+          Calculated arrears total: GBP {Number(facts.arrears_total || 0).toFixed(2)}
+        </div>
+      </section>
+    );
+  };
+
+  const renderField = (field: StandaloneFieldConfig) => {
+    if (field.type === 'advisory') {
+      return renderAdvisoryField(field);
+    }
+
+    if (field.type === 'repeater') {
+      return renderRepeaterField(field);
+    }
+
+    if (field.type === 'room_builder') {
+      return renderRoomBuilderField(field);
+    }
+
+    if (field.type === 'upload') {
+      return (
+        <FieldChrome field={field} accent>
+          <UploadField
+            caseId={caseId}
+            questionId={field.id}
+            jurisdiction={jurisdiction}
+            label={undefined}
+            description={undefined}
+            evidenceCategory={field.evidenceCategory}
+            required={field.required}
+            value={(facts[field.id] || []) as EvidenceFileSummary[]}
+            onChange={(files) => updateFact(field.id, files)}
+            onUploadingChange={setUploading}
+            hideEmailActions
+          />
+        </FieldChrome>
+      );
+    }
+
+    if (field.type === 'checkbox') {
+      return (
+        <section className="rounded-[1.65rem] border border-slate-200 bg-white p-5 shadow-sm">
+          <label className="flex cursor-pointer items-start gap-4">
+            <input
+              type="checkbox"
+              checked={Boolean(facts[field.id])}
+              onChange={(event) => updateFact(field.id, event.target.checked)}
+              className="mt-1 h-5 w-5 rounded border-slate-300 text-slate-950 focus:ring-slate-300"
+            />
+            <div>
+              <div className="text-sm font-semibold text-slate-950">
+                {field.label}
+                {field.required ? (
+                  <span className="ml-2 rounded-full bg-slate-950 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-white">
+                    Required
+                  </span>
+                ) : null}
+              </div>
+              {field.helpText ? <p className="mt-2 text-sm leading-6 text-slate-600">{field.helpText}</p> : null}
+            </div>
+          </label>
+        </section>
+      );
+    }
+
+    if (field.type === 'radio') {
+      return (
+        <FieldChrome field={field}>
+          <div className="grid gap-3 md:grid-cols-2">
+            {(field.options || []).map((option) => {
+              const selected = facts[field.id] === option.value;
+              return (
+                <button
+                  key={option.value}
+                  type="button"
+                  onClick={() => updateFact(field.id, option.value)}
+                  className={clsx(
+                    'standalone-premium-hover-lift rounded-[1.3rem] border px-4 py-4 text-left transition',
+                    selected
+                      ? 'border-slate-950 bg-[var(--standalone-accent-strong)] text-white shadow-sm'
+                      : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'
+                  )}
+                >
+                  <div className="text-sm font-semibold">{option.label}</div>
+                </button>
+              );
+            })}
+          </div>
+        </FieldChrome>
+      );
+    }
+
+    if (field.type === 'multiselect') {
+      const selectedValues = new Set(Array.isArray(facts[field.id]) ? facts[field.id] : []);
+
+      return (
+        <FieldChrome field={field}>
+          <div className="grid gap-3 md:grid-cols-2">
+            {(field.options || []).map((option) => {
+              const selected = selectedValues.has(option.value);
+              return (
+                <label
+                  key={option.value}
+                  className={clsx(
+                    'flex cursor-pointer items-start gap-3 rounded-[1.3rem] border px-4 py-4 transition',
+                    selected
+                      ? 'border-slate-950 bg-[var(--standalone-soft)] text-slate-950'
+                      : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'
+                  )}
+                >
+                  <input
+                    type="checkbox"
+                    checked={selected}
+                    onChange={(event) => toggleMultiSelectValue(field.id, option.value, event.target.checked)}
+                    className="mt-1 h-5 w-5 rounded border-slate-300 text-slate-950 focus:ring-slate-300"
+                  />
+                  <span className="text-sm font-medium">{option.label}</span>
+                </label>
+              );
+            })}
+          </div>
+        </FieldChrome>
+      );
+    }
+
+    if (field.type === 'select') {
+      return (
+        <FieldChrome field={field}>
+          <select
+            value={facts[field.id] || ''}
+            onChange={(event) => updateFact(field.id, event.target.value)}
+            className={SELECT_CLASS}
+          >
+            <option value="">Select</option>
+            {(field.options || []).map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </FieldChrome>
+      );
+    }
+
+    if (field.type === 'textarea') {
+      return (
+        <FieldChrome field={field}>
+          <textarea
+            rows={5}
+            value={facts[field.id] || ''}
+            onChange={(event) => updateFact(field.id, event.target.value)}
+            placeholder={field.placeholder}
+            className={TEXTAREA_CLASS}
+          />
+        </FieldChrome>
+      );
+    }
+
+    return (
+      <FieldChrome field={field}>
+        <Input
+          type={field.type === 'date' ? 'date' : field.type === 'number' || field.type === 'currency' ? 'number' : 'text'}
+          step={field.type === 'currency' ? '0.01' : undefined}
+          value={facts[field.id] ?? ''}
+          placeholder={field.placeholder}
+          onChange={(event) => updateFact(field.id, coerceScalarValue(field.type, event.target.value))}
+          className={FIELD_INPUT_CLASS}
+          fullWidth
+        />
+      </FieldChrome>
+    );
+  };
+
+  const ctaLabel = uploading
+    ? 'Uploading...'
+    : activeStep === config.steps.length - 1
+      ? 'Review document'
+      : 'Save & continue';
+
+  const heroBanner = (
+    <section className="overflow-hidden rounded-2xl border border-violet-200/50 bg-[rgba(20,8,48,0.88)] text-white shadow-[0_18px_40px_rgba(20,8,48,0.28)]">
+      <div className="grid gap-6 p-6 sm:p-7 lg:grid-cols-[96px,minmax(0,1fr),220px] lg:items-center">
+        <div className="mx-auto rounded-2xl border border-white/10 bg-white/10 p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]">
+          <Image src={profile.icon} alt="" width={72} height={72} className="h-[72px] w-[72px] object-contain" />
+        </div>
+        <div>
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="rounded-full border border-violet-300/40 bg-violet-500/20 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-violet-50">
+              {profile.eyebrow}
+            </span>
+            <span className="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-white/75">
+              England only
+            </span>
+            <SaveStateChip saveState={saveState} saving={saving} uploading={uploading} />
+          </div>
+
+          <h1 className="mt-4 text-3xl font-semibold leading-tight text-white sm:text-[2.35rem]">
+            {profile.heroTitle}
+          </h1>
+          <p className="mt-3 max-w-3xl text-sm leading-7 text-violet-100/85 sm:text-[15px]">
+            {profile.heroSubtitle}
+          </p>
+
+          <div className="mt-5 grid gap-3 md:grid-cols-3">
+            {profile.heroBullets.slice(0, 3).map((bullet) => (
+              <div
+                key={bullet}
+                className="rounded-2xl border border-white/10 bg-white/8 px-4 py-3 text-sm leading-6 text-violet-50/90"
+              >
+                {bullet}
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="rounded-2xl border border-white/10 bg-white/8 p-5">
+          <div className="text-xs font-semibold uppercase tracking-[0.22em] text-violet-100/60">
+            Document summary
+          </div>
+          <div className="mt-3 text-3xl font-semibold">{productMeta.displayPrice}</div>
+          <div className="mt-1 text-sm text-violet-100/75">One-time payment after review</div>
+          <div className="mt-4 h-2 overflow-hidden rounded-full bg-white/10">
+            <div
+              className="h-full rounded-full bg-violet-300 transition-all duration-300"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+          <div className="mt-3 flex items-center justify-between text-sm text-violet-100/75">
+            <span>{progress}% complete</span>
+            <span>Step {activeStep + 1} of {config.steps.length}</span>
+          </div>
+          <div className="mt-5 space-y-3">
+            {profile.outputSections.slice(0, 4).map((section) => (
+              <div key={section} className="flex items-start gap-3 text-sm text-violet-50/85">
+                <span className="mt-2 h-2 w-2 rounded-full bg-violet-300" />
+                <span>{section}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+
+  if (loading) {
+    return (
+      <div
+        className="min-h-screen"
+        style={{
+          ...themeStyle,
+          backgroundColor: '#150733',
+          backgroundImage:
+            "linear-gradient(180deg, rgba(0,0,0,0.38) 0%, rgba(10,5,28,0.52) 45%, rgba(30,12,72,0.64) 100%), url('/images/bg.webp')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center top',
+        }}
+      >
+        <div className="mx-auto flex min-h-screen max-w-4xl items-center justify-center px-4">
+          <div className="w-full max-w-xl rounded-2xl border border-violet-200/40 bg-white/95 p-8 text-center shadow-[0_24px_60px_rgba(20,8,48,0.22)] backdrop-blur">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-violet-50">
+              <Image src={profile.icon} alt="" width={44} height={44} className="h-11 w-11 object-contain" />
+            </div>
+            <h1 className="mt-5 text-2xl font-semibold text-violet-950">
+              Preparing your {config.documentTitle} wizard
+            </h1>
+            <p className="mt-3 text-sm leading-7 text-slate-600">
+              We are loading the structured sections, saved facts, and England-only drafting flow for
+              this document.
+            </p>
+            <div className="mx-auto mt-6 h-2 w-full max-w-xs overflow-hidden rounded-full bg-violet-100">
+              <div className="h-full w-2/3 rounded-full bg-violet-500" />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className="min-h-screen pb-28 lg:pb-14"
+      style={{
+        ...themeStyle,
+        backgroundColor: '#150733',
+        backgroundImage:
+          "linear-gradient(180deg, rgba(0,0,0,0.38) 0%, rgba(10,5,28,0.52) 45%, rgba(30,12,72,0.64) 100%), url('/images/bg.webp')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center top',
+      }}
+    >
+      <WizardTopBarV3 tabs={tabs} getStepMetadataForId={() => undefined} />
+      <div
+        style={{
+          height:
+            'calc(var(--site-header-height) + var(--s21-banner-height) + var(--wizard-topbar-height))',
+        }}
+        aria-hidden="true"
+      />
+
+      <div className="mx-auto grid max-w-[1240px] grid-cols-1 items-start gap-6 px-4 pb-10 pt-4 lg:grid-cols-[minmax(0,1fr)_340px]">
+        <WizardMainCardV3
+          sectionTitle={step.title}
+          sectionDescription={step.description}
+          stepIconPath={profile.stepIcons[step.id] || profile.icon}
+          stepNumber={activeStep + 1}
+          totalSteps={config.steps.length}
+          banner={heroBanner}
+          navigation={
+            <div className="hidden lg:block">
+              <WizardFooterNavV3
+                leftSlot={
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    onClick={previous}
+                    disabled={activeStep === 0 || saving || uploading}
+                    className="!rounded-xl !border !border-violet-200 !bg-white !px-6 !py-3 !text-violet-950 !shadow-sm"
+                  >
+                    Back
+                  </Button>
+                }
+                centerSlot={
+                  <span>
+                    {stepCompletion[activeStep].completed}/{stepCompletion[activeStep].total || 0} required answered
+                  </span>
+                }
+                rightSlot={
+                  <Button
+                    type="button"
+                    onClick={next}
+                    disabled={saving || uploading}
+                    className="!rounded-xl !border-0 !bg-violet-600 !px-6 !py-3 !text-white !shadow-sm hover:!bg-violet-700"
+                  >
+                    {ctaLabel}
+                  </Button>
+                }
               />
             </div>
-
-            <div className="mt-6 space-y-5">
-              {(step.fields || []).map((field) => {
-                if (field.visibleWhen && !field.visibleWhen(facts)) return null;
-                const value = facts[field.id];
-
-                if (field.type === 'advisory') {
-                  return (
-                    <div key={field.id} className="rounded-[1.5rem] border border-sky-200 bg-sky-50 p-5">
-                      <div className="text-sm font-semibold text-slate-950">{field.label}</div>
-                      <ul className="mt-3 space-y-2 text-sm text-slate-700">
-                        {(field.items || []).map((item) => (
-                          <li key={item}>- {item}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  );
-                }
-
-                if (field.type === 'select') {
-                  return (
-                    <label key={field.id} className="block text-sm">
-                      <div className="font-medium text-slate-900">{field.label}{field.required ? ' *' : ''}</div>
-                      <select
-                        value={value || ''}
-                        onChange={(event) => updateFact(field.id, event.target.value)}
-                        className="mt-2 w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5"
-                      >
-                        <option value="">Select</option>
-                        {(field.options || []).map((option) => (
-                          <option key={option.value} value={option.value}>{option.label}</option>
-                        ))}
-                      </select>
-                    </label>
-                  );
-                }
-
-                if (field.type === 'radio') {
-                  return (
-                    <div key={field.id}>
-                      <div className="font-medium text-slate-900">{field.label}{field.required ? ' *' : ''}</div>
-                      <div className="mt-2 grid gap-3 sm:grid-cols-3">
-                        {(field.options || []).map((option) => (
-                          <button
-                            key={option.value}
-                            type="button"
-                            onClick={() => updateFact(field.id, option.value)}
-                            className={`rounded-2xl border px-4 py-3 text-left text-sm ${
-                              value === option.value ? 'border-slate-950 bg-slate-950 text-white' : 'border-slate-200 bg-white text-slate-700'
-                            }`}
-                          >
-                            {option.label}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  );
-                }
-
-                if (field.type === 'multiselect') {
-                  const selected = Array.isArray(value) ? value : [];
-                  return (
-                    <div key={field.id}>
-                      <div className="font-medium text-slate-900">{field.label}</div>
-                      <div className="mt-2 grid gap-3 sm:grid-cols-2">
-                        {(field.options || []).map((option) => {
-                          const checked = selected.includes(option.value);
-                          return (
-                            <label key={option.value} className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700">
-                              <input
-                                type="checkbox"
-                                checked={checked}
-                                onChange={() => {
-                                  updateFact(
-                                    field.id,
-                                    checked ? selected.filter((item) => item !== option.value) : [...selected, option.value]
-                                  );
-                                }}
-                              />
-                              {option.label}
-                            </label>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  );
-                }
-
-                if (field.type === 'textarea') {
-                  return (
-                    <label key={field.id} className="block text-sm">
-                      <div className="font-medium text-slate-900">{field.label}{field.required ? ' *' : ''}</div>
-                      <textarea
-                        value={value || ''}
-                        onChange={(event) => updateFact(field.id, event.target.value)}
-                        className="mt-2 w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5"
-                        rows={4}
-                      />
-                      {field.helpText ? <p className="mt-1 text-xs text-slate-500">{field.helpText}</p> : null}
-                    </label>
-                  );
-                }
-
-                if (field.type === 'checkbox') {
-                  return (
-                    <label key={field.id} className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-[#f7f4ec] px-4 py-3 text-sm text-slate-800">
-                      <input type="checkbox" checked={Boolean(value)} onChange={(event) => updateFact(field.id, event.target.checked)} />
-                      {field.label}{field.required ? ' *' : ''}
-                    </label>
-                  );
-                }
-
-                if (field.type === 'upload') {
-                  return (
-                    <div key={field.id} className="rounded-[1.5rem] border border-slate-200 bg-[#faf9f5] p-4">
-                      <UploadField
-                        caseId={caseId}
-                        questionId={field.id}
-                        label={field.label}
-                        description={field.helpText}
-                        evidenceCategory={field.evidenceCategory}
-                        value={(value || []) as EvidenceFileSummary[]}
-                        onChange={(files) => updateFact(field.id, files)}
-                        onUploadingChange={setUploading}
-                        hideEmailActions
-                      />
-                    </div>
-                  );
-                }
-
-                if (field.type === 'repeater') {
-                  const rows = Array.isArray(value) ? value : [];
-                  return (
-                    <div key={field.id} className="rounded-[1.5rem] border border-slate-200 bg-[#faf9f5] p-5">
-                      <div className="font-medium text-slate-900">{field.label}{field.required ? ' *' : ''}</div>
-                      <div className="mt-4 space-y-4">
-                        {rows.map((row, index) => (
-                          <div key={`${field.id}-${index}`} className="rounded-2xl border border-slate-200 bg-white p-4">
-                            <div className="grid gap-4 md:grid-cols-2">
-                              {(field.columns || []).map((column) => (
-                                <label key={column.id} className="block text-sm">
-                                  <div className="font-medium text-slate-800">{column.label}{column.required ? ' *' : ''}</div>
-                                  {renderRepeaterInput(column, row?.[column.id], (nextValue) => updateRepeaterRow(field.id, index, column.id, nextValue))}
-                                </label>
-                              ))}
-                            </div>
-                            <Button type="button" variant="secondary" className="mt-4" onClick={() => removeRepeaterRow(field.id, index)}>
-                              Remove row
-                            </Button>
-                          </div>
-                        ))}
-                      </div>
-                      <Button type="button" variant="secondary" className="mt-4" onClick={() => addRepeaterRow(field)}>
-                        {field.addLabel || 'Add row'}
-                      </Button>
-                    </div>
-                  );
-                }
-
-                if (field.type === 'room_builder') {
-                  const rooms = Array.isArray(value) ? (value as StandaloneRoomRecord[]) : [];
-                  const templates = field.roomTemplates || getDefaultStandaloneRoomTemplates(field.roomMode || 'inspection');
-                  return (
-                    <div key={field.id} className="rounded-[1.5rem] border border-slate-200 bg-[#faf9f5] p-5">
-                      <div className="font-medium text-slate-900">{field.label}{field.required ? ' *' : ''}</div>
-                      <p className="mt-1 text-xs text-slate-500">Add standard rooms, custom rooms, and structured condition or inventory details.</p>
-                      <div className="mt-4 flex flex-wrap gap-2">
-                        {templates.map((template) => (
-                          <Button key={template} type="button" variant="secondary" onClick={() => addRoom(field, template)}>
-                            Add {template}
-                          </Button>
-                        ))}
-                        <Button type="button" variant="secondary" onClick={() => addRoom(field, `Custom room ${rooms.length + 1}`)}>
-                          Add custom room
-                        </Button>
-                      </div>
-                      <div className="mt-5 space-y-5">
-                        {rooms.map((room, roomIndex) => (
-                          <div key={room.id} className="rounded-[1.5rem] border border-slate-200 bg-white p-5">
-                            <div className="flex items-center justify-between gap-3">
-                              <Input value={room.name} onChange={(event) => updateRoom(field.id, roomIndex, 'name', event.target.value)} />
-                              <Button type="button" variant="secondary" onClick={() => removeRoom(field.id, roomIndex)}>
-                                Remove room
-                              </Button>
-                            </div>
-                            <div className="mt-4 grid gap-4 md:grid-cols-2">
-                              <label className="block text-sm"><div className="font-medium text-slate-800">Condition summary</div><textarea value={room.condition || ''} onChange={(event) => updateRoom(field.id, roomIndex, 'condition', event.target.value)} rows={3} className="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2" /></label>
-                              <label className="block text-sm"><div className="font-medium text-slate-800">Cleanliness / presentation</div><textarea value={room.cleanliness || ''} onChange={(event) => updateRoom(field.id, roomIndex, 'cleanliness', event.target.value)} rows={3} className="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2" /></label>
-                              <label className="block text-sm"><div className="font-medium text-slate-800">Fixtures, fittings, walls, floors</div><textarea value={room.fixtures || ''} onChange={(event) => updateRoom(field.id, roomIndex, 'fixtures', event.target.value)} rows={3} className="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2" /></label>
-                              <label className="block text-sm"><div className="font-medium text-slate-800">Defects or maintenance issues</div><textarea value={room.defects || ''} onChange={(event) => updateRoom(field.id, roomIndex, 'defects', event.target.value)} rows={3} className="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2" /></label>
-                              <label className="block text-sm"><div className="font-medium text-slate-800">Follow-up or action note</div><textarea value={room.actions || ''} onChange={(event) => updateRoom(field.id, roomIndex, 'actions', event.target.value)} rows={3} className="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2" /></label>
-                              <label className="block text-sm"><div className="font-medium text-slate-800">Tenant comments / room note</div><textarea value={room.tenant_comments || ''} onChange={(event) => updateRoom(field.id, roomIndex, 'tenant_comments', event.target.value)} rows={3} className="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2" /></label>
-                              <label className="block text-sm md:col-span-2"><div className="font-medium text-slate-800">Photo reference</div><Input value={room.photo_reference || ''} onChange={(event) => updateRoom(field.id, roomIndex, 'photo_reference', event.target.value)} placeholder="e.g. IMG-001 to IMG-008" /></label>
-                            </div>
-                            <div className="mt-5 rounded-[1.25rem] border border-slate-200 bg-[#faf9f5] p-4">
-                              <div className="font-medium text-slate-900">Room items</div>
-                              <div className="mt-3 space-y-3">
-                                {(room.items || []).map((item, itemIndex) => (
-                                  <div key={`${room.id}-item-${itemIndex}`} className="rounded-xl border border-slate-200 bg-white p-4">
-                                    <div className="grid gap-3 md:grid-cols-2">
-                                      <Input value={item.item || ''} placeholder="Item" onChange={(event) => updateRoomItem(field.id, roomIndex, itemIndex, 'item', event.target.value)} />
-                                      <Input value={item.condition || ''} placeholder="Condition" onChange={(event) => updateRoomItem(field.id, roomIndex, itemIndex, 'condition', event.target.value)} />
-                                      <Input value={item.cleanliness || ''} placeholder="Cleanliness" onChange={(event) => updateRoomItem(field.id, roomIndex, itemIndex, 'cleanliness', event.target.value)} />
-                                      <Input value={item.notes || ''} placeholder="Notes" onChange={(event) => updateRoomItem(field.id, roomIndex, itemIndex, 'notes', event.target.value)} />
-                                    </div>
-                                    <Button type="button" variant="secondary" className="mt-3" onClick={() => removeRoomItem(field.id, roomIndex, itemIndex)}>
-                                      Remove item
-                                    </Button>
-                                  </div>
-                                ))}
-                              </div>
-                              <Button type="button" variant="secondary" className="mt-3" onClick={() => addRoomItem(field.id, roomIndex)}>
-                                Add room item
-                              </Button>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  );
-                }
-
-                return (
-                  <label key={field.id} className="block text-sm">
-                    <div className="font-medium text-slate-900">{field.label}{field.required ? ' *' : ''}</div>
-                    <Input
-                      type={field.type === 'number' || field.type === 'currency' ? 'number' : field.type === 'date' ? 'date' : 'text'}
-                      value={value || ''}
-                      placeholder={field.placeholder}
-                      onChange={(event) => updateFact(field.id, coerceScalarValue(field.type, event.target.value))}
-                    />
-                    {field.helpText ? <p className="mt-1 text-xs text-slate-500">{field.helpText}</p> : null}
-                  </label>
-                );
-              })}
-
-              {product === 'rent_arrears_letter' && facts.arrears_mode === 'detailed_schedule' && (
-                <div className="rounded-[1.5rem] border border-indigo-200 bg-indigo-50 p-5">
-                  <div className="text-sm font-semibold text-slate-900">Detailed arrears schedule</div>
-                  <div className="mt-4 space-y-4">
-                    {((facts.arrears_schedule_rows || []) as ArrearsScheduleRow[]).map((row, index) => (
-                      <div className="rounded-2xl border border-indigo-200 bg-white p-4" key={`arrears-row-${index}`}>
-                        <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-4">
-                          <Input type="date" value={row.due_date || ''} onChange={(e) => updateScheduleRow(index, 'due_date', e.target.value)} />
-                          <Input value={row.period_covered || ''} onChange={(e) => updateScheduleRow(index, 'period_covered', e.target.value)} placeholder="Period" />
-                          <Input type="number" value={String(row.amount_due ?? 0)} onChange={(e) => updateScheduleRow(index, 'amount_due', Number(e.target.value))} />
-                          <Input type="number" value={String(row.amount_paid ?? 0)} onChange={(e) => updateScheduleRow(index, 'amount_paid', Number(e.target.value))} />
-                          <Input type="number" value={String(row.amount_outstanding ?? 0)} onChange={(e) => updateScheduleRow(index, 'amount_outstanding', Number(e.target.value))} />
-                          <Input type="date" value={row.payment_received_date || ''} onChange={(e) => updateScheduleRow(index, 'payment_received_date', e.target.value)} />
-                          <Input value={row.note || ''} onChange={(e) => updateScheduleRow(index, 'note', e.target.value)} placeholder="Note" />
-                        </div>
-                        <Button type="button" variant="secondary" className="mt-3" onClick={() => removeScheduleRow(index)}>Remove arrears row</Button>
+          }
+        >
+          <div className="space-y-6">
+            <div className="rounded-2xl border border-violet-100 bg-violet-50/60 p-4">
+              <div className="flex flex-wrap items-start justify-between gap-4">
+                <div>
+                  <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-violet-700">
+                    This step covers
+                  </div>
+                  <div className="mt-3 grid gap-3 md:grid-cols-2">
+                    {profile.outputSections.slice(0, 4).map((section) => (
+                      <div key={section} className="flex items-start gap-3 rounded-xl bg-white px-4 py-3 text-sm text-slate-700 shadow-sm">
+                        <span className="mt-1.5 h-2 w-2 rounded-full bg-violet-500" />
+                        <span>{section}</span>
                       </div>
                     ))}
                   </div>
-                  <Button type="button" variant="secondary" className="mt-4" onClick={addScheduleRow}>Add arrears row</Button>
-                  <div className="mt-3 text-sm text-slate-700">Calculated arrears total: GBP {Number(facts.arrears_total || 0).toFixed(2)}</div>
                 </div>
-              )}
+                <div className="rounded-xl border border-violet-200 bg-white px-4 py-3 text-sm text-slate-700 shadow-sm">
+                  <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-violet-700">
+                    Completion
+                  </div>
+                  <div className="mt-1 text-lg font-semibold text-violet-950">
+                    {stepCompletion[activeStep].completed}/{stepCompletion[activeStep].total || 0}
+                  </div>
+                  <div className="text-xs text-slate-500">Required fields on this step</div>
+                </div>
+              </div>
             </div>
-          </div>
 
-          {errors.length > 0 && (
-            <div className="rounded-[1.75rem] border border-rose-200 bg-rose-50 p-5 text-sm text-rose-800 shadow-sm">
-              {errors.map((error) => <div key={error}>- {error}</div>)}
+            {profile.cautionBanner ? (
+              <div
+                className={clsx(
+                  'rounded-2xl border p-5 shadow-sm',
+                  profile.cautionBanner.tone === 'warning'
+                    ? 'border-amber-200 bg-amber-50 text-amber-950'
+                    : 'border-sky-200 bg-sky-50 text-sky-950'
+                )}
+              >
+                <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-current/70">
+                  {profile.cautionBanner.title}
+                </div>
+                <p className="mt-2 text-sm leading-7">{profile.cautionBanner.body}</p>
+              </div>
+            ) : null}
+
+            <div className="grid gap-4 lg:hidden">
+              {visibleTrustModules.map((module) => (
+                <StandaloneTrustModuleCard key={module.title} module={module} compact />
+              ))}
             </div>
-          )}
 
-          <div className="flex items-center justify-between">
-            <Button type="button" variant="secondary" onClick={previous} disabled={activeStep === 0 || saving || uploading}>Back</Button>
-            <Button type="button" onClick={next} disabled={saving || uploading}>
-              {uploading ? 'Uploading...' : activeStep === config.steps.length - 1 ? 'Review premium document' : 'Save & continue'}
-            </Button>
+            <section className="space-y-4">
+              {visibleFields.map((field) => (
+                <div key={field.id}>{renderField(field)}</div>
+              ))}
+            </section>
+
+            {product === 'rent_arrears_letter' && facts.arrears_mode === 'detailed_schedule'
+              ? renderArrearsSchedulePanel()
+              : null}
+
+            {errors.length > 0 ? (
+              <div className="rounded-2xl border border-rose-200 bg-rose-50/95 p-5 text-sm text-rose-800 shadow-[0_18px_45px_rgba(225,29,72,0.08)]">
+                {errors.map((error) => (
+                  <div key={error} className="flex items-start gap-3">
+                    <span className="mt-1.5 h-2 w-2 rounded-full bg-rose-500" />
+                    <span>{error}</span>
+                  </div>
+                ))}
+              </div>
+            ) : null}
           </div>
-        </main>
+        </WizardMainCardV3>
 
-        <aside className="space-y-4">
-          <PremiumPanel title="What Gets Drafted" items={profile.outputSections} />
-          <PremiumPanel title="Why This Beats A Blank Template" items={profile.heroBullets} />
-          <PremiumPanel title="Review Highlights" items={profile.reviewHighlights} />
+        <aside className="w-full min-h-0 shrink-0 lg:self-start lg:w-[340px]">
+          <div className="space-y-4 lg:sticky lg:top-[calc(var(--site-header-height)+var(--s21-banner-height)+var(--wizard-topbar-height)+8px)]">
+            <div className="rounded-2xl border border-violet-200 bg-white p-5 shadow-[0_12px_28px_rgba(76,29,149,0.10)]">
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-violet-700">
+                    Progress
+                  </p>
+                  <p className="mt-1 text-sm font-semibold text-violet-950">{progress}% complete</p>
+                </div>
+                <MobileSaveStateChip saveState={saveState} saving={saving} uploading={uploading} />
+              </div>
+
+              <div className="mt-4 h-2 overflow-hidden rounded-full bg-violet-100">
+                <div
+                  className="h-full rounded-full bg-violet-500 transition-all duration-300"
+                  style={{ width: `${progress}%` }}
+                />
+              </div>
+
+              <div className="mt-4 space-y-3">
+                {config.steps.map((configStep, index) => {
+                  const iconPath = profile.stepIcons[configStep.id] || profile.icon;
+                  const isActive = index === activeStep;
+                  const isComplete = stepCompletion[index]?.isComplete;
+
+                  return (
+                    <button
+                      key={configStep.id}
+                      type="button"
+                      onClick={() => setActiveStep(index)}
+                      className={clsx(
+                        'flex w-full items-center gap-3 rounded-xl border px-3 py-3 text-left shadow-sm transition',
+                        isActive
+                          ? 'border-violet-500 bg-violet-600 text-white'
+                          : isComplete
+                            ? 'border-violet-200 bg-violet-50 text-violet-950'
+                            : 'border-violet-100 bg-white text-slate-700 hover:border-violet-300'
+                      )}
+                    >
+                      <div className="rounded-xl bg-white p-2 shadow-sm">
+                        <Image src={iconPath} alt="" width={40} height={40} className="h-9 w-9 object-contain" />
+                      </div>
+                      <div className="min-w-0">
+                        <div className={clsx('text-[11px] uppercase tracking-[0.2em]', isActive ? 'text-violet-100' : 'text-slate-500')}>
+                          Step {index + 1}
+                        </div>
+                        <div className="truncate text-sm font-semibold">{configStep.title}</div>
+                        <div className={clsx('mt-1 text-xs', isActive ? 'text-violet-100/80' : 'text-slate-500')}>
+                          {stepCompletion[index].completed}/{stepCompletion[index].total || 0} required answered
+                        </div>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {config.warnings.length > 0 ? (
+              <div className="rounded-2xl border border-amber-200 bg-amber-50 p-5 shadow-sm">
+                <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-amber-800">
+                  Legal caution
+                </div>
+                <ul className="mt-3 space-y-3 text-sm leading-6 text-amber-950">
+                  {config.warnings.map((warning) => (
+                    <li key={warning} className="flex items-start gap-3">
+                      <span className="mt-2 h-2 w-2 rounded-full bg-amber-500" />
+                      <span>{warning}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
+
+            {profile.trustModules.map((module) => (
+              <StandaloneTrustModuleCard key={module.title} module={module} />
+            ))}
+          </div>
         </aside>
+      </div>
+
+      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-violet-200 bg-white/95 px-4 py-3 shadow-[0_-16px_30px_rgba(20,8,48,0.12)] backdrop-blur lg:hidden">
+        <div className="mx-auto flex max-w-[1240px] items-center gap-3">
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={previous}
+            disabled={activeStep === 0 || saving || uploading}
+            className="flex-1 !rounded-xl !border !border-violet-200 !bg-white !px-4 !py-3 !text-violet-950 !shadow-sm"
+          >
+            Back
+          </Button>
+          <Button
+            type="button"
+            onClick={next}
+            disabled={saving || uploading}
+            className="flex-[1.3] !rounded-xl !border-0 !bg-violet-600 !px-4 !py-3 !text-white !shadow-sm hover:!bg-violet-700"
+          >
+            {ctaLabel}
+          </Button>
+        </div>
       </div>
     </div>
   );

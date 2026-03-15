@@ -24,6 +24,25 @@ export interface ResidentialCautionBanner {
   tone: 'warning' | 'info';
 }
 
+export interface ResidentialStandaloneVisualTheme {
+  page: string;
+  pageGlow: string;
+  surface: string;
+  soft: string;
+  border: string;
+  accent: string;
+  accentStrong: string;
+  heroStart: string;
+  heroMid: string;
+  heroEnd: string;
+}
+
+export interface ResidentialStandaloneTrustModule {
+  title: string;
+  icon: string;
+  items: string[];
+}
+
 export interface ResidentialStandaloneProfile {
   product: ResidentialLettingProductSku;
   icon: string;
@@ -37,6 +56,8 @@ export interface ResidentialStandaloneProfile {
   outputSections: string[];
   cautionBanner?: ResidentialCautionBanner;
   stepIcons: Record<string, string>;
+  theme: ResidentialStandaloneVisualTheme;
+  trustModules: ResidentialStandaloneTrustModule[];
   landing: {
     title: string;
     description: string;
@@ -54,6 +75,14 @@ export interface ResidentialStandaloneProfile {
     faqs: ResidentialFaq[];
   };
 }
+
+type ResidentialStandaloneProfileSeed = Omit<
+  ResidentialStandaloneProfile,
+  'theme' | 'trustModules'
+> & {
+  theme?: ResidentialStandaloneVisualTheme;
+  trustModules?: ResidentialStandaloneTrustModule[];
+};
 
 const icon = (filename: string) => getWizardIconPathByFilename(filename) || `/images/wizard-icons/${filename}`;
 
@@ -77,7 +106,7 @@ function buildCommonFaqs(productLabel: string): ResidentialFaq[] {
   ];
 }
 
-const profiles: Record<ResidentialLettingProductSku, ResidentialStandaloneProfile> = {
+const profiles: Record<ResidentialLettingProductSku, ResidentialStandaloneProfileSeed> = {
   guarantor_agreement: {
     product: 'guarantor_agreement',
     icon: icon('46-premium.png'),
@@ -1165,14 +1194,205 @@ const profiles: Record<ResidentialLettingProductSku, ResidentialStandaloneProfil
   },
 };
 
-export const RESIDENTIAL_STANDALONE_PROFILES = profiles;
+type StandaloneProfileFamily = 'agreement' | 'evidence' | 'arrears';
+
+const EVIDENCE_PRODUCTS = new Set<ResidentialLettingProductSku>([
+  'rental_inspection_report',
+  'inventory_schedule_condition',
+]);
+
+const ARREARS_PRODUCTS = new Set<ResidentialLettingProductSku>([
+  'rent_arrears_letter',
+  'repayment_plan_agreement',
+]);
+
+const FAMILY_THEMES: Record<StandaloneProfileFamily, ResidentialStandaloneVisualTheme> = {
+  agreement: {
+    page: '#f8f7fc',
+    pageGlow: '#ede9fe',
+    surface: '#ffffff',
+    soft: '#f5f3ff',
+    border: '#ddd6fe',
+    accent: '#7c3aed',
+    accentStrong: '#4c1d95',
+    heroStart: '#150733',
+    heroMid: '#24104d',
+    heroEnd: '#5b21b6',
+  },
+  evidence: {
+    page: '#f8f7fc',
+    pageGlow: '#ede9fe',
+    surface: '#ffffff',
+    soft: '#f5f3ff',
+    border: '#ddd6fe',
+    accent: '#7c3aed',
+    accentStrong: '#4c1d95',
+    heroStart: '#150733',
+    heroMid: '#24104d',
+    heroEnd: '#6d28d9',
+  },
+  arrears: {
+    page: '#f8f7fc',
+    pageGlow: '#ede9fe',
+    surface: '#ffffff',
+    soft: '#f5f3ff',
+    border: '#ddd6fe',
+    accent: '#7c3aed',
+    accentStrong: '#4c1d95',
+    heroStart: '#150733',
+    heroMid: '#24104d',
+    heroEnd: '#7c3aed',
+  },
+};
+
+function getProfileFamily(product: ResidentialLettingProductSku): StandaloneProfileFamily {
+  if (EVIDENCE_PRODUCTS.has(product)) return 'evidence';
+  if (ARREARS_PRODUCTS.has(product)) return 'arrears';
+  return 'agreement';
+}
+
+function buildDefaultTrustModules(
+  profile: ResidentialStandaloneProfileSeed
+): ResidentialStandaloneTrustModule[] {
+  const isEvidenceHeavy = EVIDENCE_PRODUCTS.has(profile.product);
+  const draftingTitle = isEvidenceHeavy ? 'What gets recorded' : 'What gets drafted';
+  const secondTitle = isEvidenceHeavy
+    ? 'What evidence is captured'
+    : 'Why landlords use this';
+
+  const beforePaymentItems = [
+    'Check names, dates, addresses, and reference details before payment.',
+    isEvidenceHeavy
+      ? 'Make sure uploads and room labels are clear enough to reference in the appendix.'
+      : 'Review schedules, clause wording, and commercial terms for accuracy.',
+    profile.cautionBanner
+      ? profile.cautionBanner.title
+      : 'Make sure execution details match how the final document will be signed or used.',
+  ];
+
+  return [
+    {
+      title: draftingTitle,
+      icon: isEvidenceHeavy ? icon('45-inventory.png') : icon('18-forms-bundle.png'),
+      items: profile.outputSections.slice(0, 4),
+    },
+    {
+      title: secondTitle,
+      icon: isEvidenceHeavy ? icon('38-evidence-pack.png') : icon('46-premium.png'),
+      items: (isEvidenceHeavy ? profile.reviewHighlights : profile.heroBullets).slice(0, 3),
+    },
+    {
+      title: 'Preview anatomy',
+      icon: icon('12-summary-cards.png'),
+      items: profile.landing.documentPreviewAnatomy.slice(0, 3),
+    },
+    {
+      title: 'What to double-check before payment',
+      icon: icon('49-warning.png'),
+      items: beforePaymentItems,
+    },
+  ];
+}
+
+const COPY_EXEMPT_KEYS = new Set(['product', 'icon', 'reviewIcon', 'stepIcons', 'theme', 'href']);
+
+const COPY_REPLACEMENTS: Array<[RegExp, string]> = [
+  [/\|\s*Premium\s+/g, '| '],
+  [/^Premium\s+/g, ''],
+  [/\bCreate a premium\b/gi, 'Create a guided'],
+  [/\bWorld-class\b/gi, 'Clear'],
+  [/\bflagship\b/gi, 'detailed'],
+  [/\bpremium summary page\b/gi, 'Summary page'],
+  [/\bpremium cover summary\b/gi, 'Summary page'],
+  [/\bpremium document summary\b/gi, 'document summary'],
+  [/\bpremium document\b/gi, 'document'],
+  [/\bpremium wizard\b/gi, 'guided wizard'],
+  [/\bpremium flow\b/gi, 'wizard'],
+  [/\bpremium inspection flow\b/gi, 'inspection wizard'],
+  [/\bpremium inventory flow\b/gi, 'inventory wizard'],
+  [/\bpremium amendment flow\b/gi, 'wizard'],
+  [/\bpremium flatmate flow\b/gi, 'wizard'],
+  [/\bpremium baseline inventory\b/gi, 'detailed baseline inventory'],
+  [/\bpremium inspection product\b/gi, 'detailed inspection product'],
+  [/\bpremium baseline inventory product\b/gi, 'detailed baseline inventory product'],
+  [/\bpremium tenancy agreement\b/gi, 'tenancy agreement'],
+  [/\bmore premium\b/gi, 'clearer'],
+  [/\bfeels deliberate and premium\b/gi, 'reads clearly and covers the key details'],
+  [/\bfeels premium\b/gi, 'reads clearly'],
+  [/\bA guided England\b/g, 'An England'],
+  [/\bReview a polished\b/gi, 'Review a clear'],
+  [/\bguided England rent arrears letter\b/gi, 'England rent arrears letter'],
+  [/\bguided England repayment plan agreement\b/gi, 'England repayment plan agreement'],
+  [/\bguided England rental inspection report\b/gi, 'England rental inspection report'],
+  [/\bguided England inventory and schedule of condition\b/gi, 'England inventory and schedule of condition'],
+  [/\bguided England flatmate agreement\b/gi, 'England flatmate agreement'],
+  [/\bguided England renewal tenancy agreement\b/gi, 'England renewal tenancy agreement'],
+  [/\bguided England lease assignment agreement\b/gi, 'England lease assignment agreement'],
+  [/\bguided England lease amendment\b/gi, 'England lease amendment'],
+  [/\bguided England residential sublet agreement\b/gi, 'England residential sublet agreement'],
+  [/\bguided England residential tenancy application\b/gi, 'England residential tenancy application'],
+  [/\bguided England residential guarantor agreement\b/gi, 'England residential guarantor agreement'],
+  [/\bThe wizard wizard\b/gi, 'The wizard'],
+];
+
+function cleanStandaloneCopy(text: string) {
+  return COPY_REPLACEMENTS.reduce(
+    (current, [pattern, replacement]) => current.replace(pattern, replacement),
+    text
+  )
+    .replace(/\s{2,}/g, ' ')
+    .replace(/\s+([.,])/g, '$1')
+    .trim();
+}
+
+function rewriteStandaloneCopy<T>(value: T, key?: string): T {
+  if (key && COPY_EXEMPT_KEYS.has(key)) {
+    return value;
+  }
+
+  if (typeof value === 'string') {
+    return cleanStandaloneCopy(value) as T;
+  }
+
+  if (Array.isArray(value)) {
+    return value.map((item) => rewriteStandaloneCopy(item)) as T;
+  }
+
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(
+      Object.entries(value as Record<string, unknown>).map(([childKey, childValue]) => [
+        childKey,
+        rewriteStandaloneCopy(childValue, childKey),
+      ])
+    ) as T;
+  }
+
+  return value;
+}
+
+function materializeProfile(
+  profile: ResidentialStandaloneProfileSeed
+): ResidentialStandaloneProfile {
+  return rewriteStandaloneCopy({
+    ...profile,
+    theme: profile.theme ?? FAMILY_THEMES[getProfileFamily(profile.product)],
+    trustModules: profile.trustModules ?? buildDefaultTrustModules(profile),
+  });
+}
+
+export const RESIDENTIAL_STANDALONE_PROFILES = Object.fromEntries(
+  Object.entries(profiles).map(([sku, profile]) => [
+    sku,
+    materializeProfile(profile as ResidentialStandaloneProfileSeed),
+  ])
+) as Record<ResidentialLettingProductSku, ResidentialStandaloneProfile>;
 
 export function getResidentialStandaloneProfile(product: ResidentialLettingProductSku) {
-  return profiles[product];
+  return RESIDENTIAL_STANDALONE_PROFILES[product];
 }
 
 export function getPublicResidentialStandaloneProfiles() {
   return PUBLIC_RESIDENTIAL_LETTING_PRODUCT_SKUS.map(
-    (sku) => profiles[sku as PublicResidentialLettingProductSku]
+    (sku) => RESIDENTIAL_STANDALONE_PROFILES[sku as PublicResidentialLettingProductSku]
   );
 }

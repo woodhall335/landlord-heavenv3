@@ -5,6 +5,7 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { TrustPositioningBar } from '@/components/marketing/TrustPositioningBar';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { StandaloneTrustModuleCard } from '@/components/residential-letting/StandaloneTrustModuleCard';
 import { Container } from '@/components/ui/Container';
 import { StructuredData, breadcrumbSchema, productSchema } from '@/lib/seo/structured-data';
 import {
@@ -12,7 +13,12 @@ import {
   getResidentialWizardEntry,
   type ResidentialLandingContent,
 } from '@/lib/seo/residential-product-landing-content';
-import { RESIDENTIAL_LETTING_PRODUCTS } from '@/lib/residential-letting/products';
+import {
+  isResidentialLettingProductSku,
+  RESIDENTIAL_LETTING_PRODUCTS,
+} from '@/lib/residential-letting/products';
+import { getResidentialStandaloneProfile } from '@/lib/residential-letting/standalone-profiles';
+import { getResidentialStandaloneThemeVars } from '@/lib/residential-letting/standalone-theme';
 import { ArrowRight, CheckCircle2, FileText, Link2, ShieldCheck, Sparkles } from 'lucide-react';
 
 interface ResidentialProductLandingPageProps {
@@ -52,11 +58,28 @@ export function ResidentialProductLandingPage({
   canonicalUrl,
 }: ResidentialProductLandingPageProps) {
   const product = RESIDENTIAL_LETTING_PRODUCTS[content.product];
+  const standaloneProfile = isResidentialLettingProductSku(content.product)
+    ? getResidentialStandaloneProfile(content.product)
+    : null;
+  const themeStyle = standaloneProfile
+    ? getResidentialStandaloneThemeVars(standaloneProfile.theme)
+    : undefined;
   const relatedLinks = getResidentialRelatedLinks(content.product);
   const wizardHref = getResidentialWizardEntry(content.product);
 
   return (
-    <div className="min-h-screen bg-[#f7f4ec]">
+    <div
+      className="min-h-screen bg-[#f7f4ec]"
+      style={
+        standaloneProfile
+          ? {
+              ...themeStyle,
+              backgroundImage:
+                'radial-gradient(circle at top, var(--standalone-page-glow), transparent 22%), linear-gradient(180deg, var(--standalone-page), #f7f4ec 62%, #ffffff 100%)',
+            }
+          : undefined
+      }
+    >
       <StructuredData
         data={productSchema({
           name: content.h1,
@@ -90,7 +113,12 @@ export function ResidentialProductLandingPage({
         <div className="mx-auto mt-8 max-w-5xl rounded-[2rem] border border-white/15 bg-white/10 p-6 backdrop-blur">
           <div className="grid gap-6 lg:grid-cols-[180px,1fr] lg:items-center">
             <div className="flex justify-center">
-              <div className="rounded-[2rem] bg-white/10 p-4">
+              <div
+                className="rounded-[2rem] p-4"
+                style={{
+                  background: standaloneProfile ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.1)',
+                }}
+              >
                 <Image src={content.icon} alt="" width={160} height={160} className="h-32 w-32 object-contain" />
               </div>
             </div>
@@ -107,7 +135,7 @@ export function ResidentialProductLandingPage({
               </div>
               <div>
                 <div className="text-left text-sm font-semibold uppercase tracking-[0.24em] text-white/70">
-                  Preview Anatomy
+                  Document Layout
                 </div>
                 <ul className="mt-3 space-y-2 text-left text-white/90">
                   {content.documentPreviewAnatomy.slice(0, 3).map((item) => (
@@ -139,7 +167,7 @@ export function ResidentialProductLandingPage({
       <section className="py-16">
         <Container>
           <div className="mx-auto max-w-5xl rounded-[2rem] border border-slate-200 bg-white p-8 shadow-sm">
-            <h2 className="text-3xl font-bold text-slate-950">Why Landlords Use This Instead Of A Blank Template</h2>
+            <h2 className="text-3xl font-bold text-slate-950">Why Landlords Choose This Instead Of A Blank Template</h2>
             <p className="mt-4 text-lg leading-8 text-slate-700">{content.overview}</p>
             <div className="mt-8 grid gap-6 md:grid-cols-2">
               <SectionList
@@ -161,18 +189,36 @@ export function ResidentialProductLandingPage({
         <Container>
           <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-2">
             <SectionList
-              title="What The Premium Output Includes"
+              title="What The Final Document Includes"
               items={content.includedHighlights}
               icon={<ShieldCheck className="h-6 w-6 text-slate-900" />}
             />
             <SectionList
-              title="Document Preview Anatomy"
+              title="How The Document Is Laid Out"
               items={content.documentPreviewAnatomy}
               icon={<FileText className="h-6 w-6 text-slate-900" />}
             />
           </div>
         </Container>
       </section>
+
+      {standaloneProfile ? (
+        <section className="py-16">
+          <Container>
+            <div className="mx-auto max-w-6xl">
+              <div className="mb-8 flex items-center gap-3">
+                <Sparkles className="h-6 w-6 text-slate-900" />
+                <h2 className="text-2xl font-bold text-slate-950">What You Can Review Before Payment</h2>
+              </div>
+              <div className="grid gap-4 lg:grid-cols-3">
+                {standaloneProfile.trustModules.map((module) => (
+                  <StandaloneTrustModuleCard key={module.title} module={module} />
+                ))}
+              </div>
+            </div>
+          </Container>
+        </section>
+      ) : null}
 
       <section className="bg-[#f7f4ec] py-16">
         <Container>
@@ -235,7 +281,7 @@ export function ResidentialProductLandingPage({
           <div className="mx-auto max-w-3xl text-center">
             <h2 className="text-3xl font-bold">Start The Guided Wizard</h2>
             <p className="mt-4 text-lg text-white/80">
-              Collect the facts once, review the premium document summary, and only add related landlord paperwork when it actually fits the case.
+              Answer the questions once, review the document summary, and only add related landlord paperwork if it actually fits the case.
             </p>
             <div className="mt-8">
               <Link href={wizardHref} className="hero-btn-primary">
