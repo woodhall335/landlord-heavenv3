@@ -309,17 +309,27 @@ const SECTIONS: WizardSection[] = [
               facts.reception_room_condition ||
               facts.kitchen_condition ||
               facts.bedroom_one_condition ||
-              facts.bathroom_condition
+              facts.bathroom_condition ||
+              facts.entrance_hall_inventory_items ||
+              facts.reception_room_inventory_items ||
+              facts.kitchen_inventory_items
             )
           );
         case 'inventory_schedule_condition':
-          return Boolean(
-            facts.inspection_date ||
-            facts.property_layout_notes ||
-            facts.room_condition_summary ||
-            facts.utility_meter_readings ||
-            facts.keys_provided_summary ||
-            facts.document_notes
+          return (
+            Boolean(facts.inspection_date) &&
+            Boolean(
+              facts.property_layout_notes ||
+              facts.room_condition_summary ||
+              facts.utility_meter_readings ||
+              facts.keys_provided_summary ||
+              facts.entrance_hall_inventory_items ||
+              facts.reception_room_inventory_items ||
+              facts.kitchen_inventory_items ||
+              facts.bedroom_one_inventory_items ||
+              facts.bathroom_inventory_items ||
+              facts.document_notes
+            )
           );
         case 'lease_amendment':
           return (
@@ -2395,6 +2405,12 @@ const ResidentialDocumentDetailsSection: React.FC<SectionProps> = ({ facts, onUp
               onChange={(v) => onUpdate({ inspector_name: v })}
             />
             <TextField
+              label="Inspection time"
+              value={facts.inspection_time}
+              onChange={(v) => onUpdate({ inspection_time: v })}
+              placeholder="10:30 am"
+            />
+            <TextField
               label="Occupier or representative present"
               value={facts.inspection_attended_by}
               onChange={(v) => onUpdate({ inspection_attended_by: v })}
@@ -2457,6 +2473,12 @@ const ResidentialDocumentDetailsSection: React.FC<SectionProps> = ({ facts, onUp
               value={facts.meter_reading_water}
               onChange={(v) => onUpdate({ meter_reading_water: v })}
             />
+            <TextField
+              label="Meter serial numbers"
+              value={facts.meter_serial_numbers}
+              onChange={(v) => onUpdate({ meter_serial_numbers: v })}
+              placeholder="Gas G12345, Electric E98765, Water W456"
+            />
           </div>
           <TextareaField
             label="Safety checks and compliance observations"
@@ -2518,11 +2540,66 @@ const ResidentialDocumentDetailsSection: React.FC<SectionProps> = ({ facts, onUp
               onChange={(v) => onUpdate({ fixtures_fittings_condition: v })}
             />
           </div>
+          <div className="rounded-lg border border-slate-200 bg-white p-4">
+            <p className="text-sm text-slate-700 mb-3">
+              Itemised inventory entries make the report more useful in deposit and condition disputes.
+              Use one line per item. Optional format: <code>Item | Condition | Notes</code>.
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <TextareaField
+                label="Entrance hall itemised inventory"
+                value={facts.entrance_hall_inventory_items}
+                onChange={(v) => onUpdate({ entrance_hall_inventory_items: v })}
+                helperText="Example: Console table | Good | Minor scuff to leg"
+              />
+              <TextareaField
+                label="Reception / living areas itemised inventory"
+                value={facts.reception_room_inventory_items}
+                onChange={(v) => onUpdate({ reception_room_inventory_items: v })}
+              />
+              <TextareaField
+                label="Kitchen itemised inventory"
+                value={facts.kitchen_inventory_items}
+                onChange={(v) => onUpdate({ kitchen_inventory_items: v })}
+              />
+              <TextareaField
+                label="Bedroom 1 itemised inventory"
+                value={facts.bedroom_one_inventory_items}
+                onChange={(v) => onUpdate({ bedroom_one_inventory_items: v })}
+              />
+              <TextareaField
+                label="Bedroom 2 / additional bedrooms itemised inventory"
+                value={facts.bedroom_two_inventory_items}
+                onChange={(v) => onUpdate({ bedroom_two_inventory_items: v })}
+              />
+              <TextareaField
+                label="Bathroom / WC itemised inventory"
+                value={facts.bathroom_inventory_items}
+                onChange={(v) => onUpdate({ bathroom_inventory_items: v })}
+              />
+              <TextareaField
+                label="External areas itemised inventory"
+                value={facts.external_areas_inventory_items}
+                onChange={(v) => onUpdate({ external_areas_inventory_items: v })}
+              />
+              <TextareaField
+                label="Fixtures and fittings itemised inventory"
+                value={facts.fixtures_fittings_inventory_items}
+                onChange={(v) => onUpdate({ fixtures_fittings_inventory_items: v })}
+              />
+            </div>
+          </div>
           <TextareaField
             label="Defects, damage, missing items, and action points"
             value={facts.defects_action_items}
             onChange={(v) => onUpdate({ defects_action_items: v })}
             helperText="List defects, repairs, missing items, cleaning issues, or matters to monitor."
+          />
+          <TextareaField
+            label="Documents, manuals, and handover notes"
+            value={facts.document_handover_notes}
+            onChange={(v) => onUpdate({ document_handover_notes: v })}
+            helperText="Record certificates, manuals, remote controls, appliance guides, bin collection notes, or similar handover items."
           />
           <TextareaField
             label="Occupier comments / signature notes"

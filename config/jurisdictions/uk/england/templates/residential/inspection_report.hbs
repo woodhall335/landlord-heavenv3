@@ -172,7 +172,7 @@
       </tr>
       <tr>
         <td class="label">Inspector / landlord</td>
-        <td>{{#if landlord_name}}{{landlord_name}}{{else}}Not stated{{/if}}</td>
+        <td>{{#if inspector_name}}{{inspector_name}}{{else}}{{#if landlord_name}}{{landlord_name}}{{else}}Not stated{{/if}}{{/if}}</td>
         <td class="label">Reference</td>
         <td>{{document_reference}}</td>
       </tr>

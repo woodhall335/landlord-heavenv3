@@ -163,16 +163,16 @@ export const RESIDENTIAL_LANDING_CONTENT: Record<
   rent_arrears_letter: {
     slug: RESIDENTIAL_LETTING_PRODUCTS.rent_arrears_letter.slug,
     product: 'rent_arrears_letter',
-    title: 'Rent Arrears Letter England | Letter Before Action for Landlords',
+    title: 'Rent Arrears Letter England | Formal Arrears Demand for Landlords',
     description:
-      'Create a rent arrears letter or letter before action for an England residential tenancy using the guided wizard.',
+      'Create a formal rent arrears escalation letter for an England residential tenancy using the guided wizard.',
     h1: 'Rent Arrears Letter',
     subheading:
-      'Use the wizard to pull together the landlord, tenant, property, arrears amount, and deadlines in a formal arrears demand.',
+      'Use the wizard to pull together the landlord, tenant, property, arrears amount, and deadlines in a formal arrears demand without overstating protocol status.',
     overview:
-      'This is the strongest fit where the landlord wants a structured written arrears demand before moving further into repayment or court recovery.',
+      'This is the strongest fit where the landlord wants a structured written arrears demand before moving further into repayment or court recovery. A full Pre-Action Protocol debt letter should be handled as a more structured product with annexes and reply forms.',
     whatYouGet: [
-      'Formal arrears letter / letter before action PDF',
+      'Formal arrears demand PDF',
       'Arrears, deadline, and property context structured through the wizard',
       'Upsell path to a repayment plan or existing money-claim product where the facts justify it',
     ],
@@ -303,14 +303,14 @@ export const RESIDENTIAL_LANDING_CONTENT: Record<
   renewal_tenancy_agreement: {
     slug: RESIDENTIAL_LETTING_PRODUCTS.renewal_tenancy_agreement.slug,
     product: 'renewal_tenancy_agreement',
-    title: 'Renewal Tenancy Agreement England | Fixed-Term Renewal for Landlords',
+    title: 'Renewal Tenancy Agreement England | Legacy Fixed-Term Renewal for Landlords',
     description:
-      'Create an England renewal tenancy agreement with the guided landlord wizard.',
+      'Create an England renewal tenancy agreement for legacy or specialist renewal situations with the guided landlord wizard.',
     h1: 'Renewal Tenancy Agreement',
     subheading:
-      'Use the wizard when the tenancy is continuing and you want a new fixed term or refreshed tenancy document rather than a simple amendment.',
+      'Use the wizard when the tenancy is continuing and you want a legacy-style fixed term or refreshed tenancy document rather than a simple amendment.',
     overview:
-      'This is for renewal situations where the existing tenancy is being rolled forward on new dates, and possibly with an updated rent or refreshed terms.',
+      'This is for renewal situations where the existing tenancy is being rolled forward on new dates, and possibly with an updated rent or refreshed terms. England landlords should check whether a renewal document remains appropriate for the tenancy date in light of the post-1 May 2026 tenancy reforms.',
     whatYouGet: [
       'Standalone renewal tenancy agreement PDF',
       'Current and renewed term dates captured in one flow',
@@ -322,9 +322,9 @@ export const RESIDENTIAL_LANDING_CONTENT: Record<
       'Natural feeder from your existing tenancy and renewal-intent landing pages',
     ],
     bestFor: [
-      'Landlords issuing a new fixed term to an existing tenant',
+      'Landlords issuing a new fixed term to an existing tenant in a legacy or specialist scenario',
       'Renewals with date and rent changes',
-      'Existing tenancy pages targeting renewal intent',
+      'Existing tenancy pages targeting renewal intent where a simple amendment is not enough',
     ],
     faqs: buildCommonFaqs('Renewal Tenancy Agreement'),
   },

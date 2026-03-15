@@ -131,6 +131,47 @@ describe('generateResidentialLettingDocuments', () => {
     expect(html).toContain('28 days');
   });
 
+  test('renders defined terms in standalone agreement products', async () => {
+    const pack = await generateResidentialLettingDocuments(
+      'lease_assignment_agreement',
+      {
+        ...baseFacts,
+        outgoing_tenant_name: 'Alice Tenant',
+        incoming_tenant_name: 'Ben Incoming',
+        assignment_effective_date: '2026-04-01',
+      },
+      { outputFormat: 'html' }
+    );
+
+    const html = pack.documents[0].html;
+
+    expect(html).toContain('Defined Terms');
+    expect(html).toContain('Outgoing Tenant');
+    expect(html).toContain('Incoming Tenant');
+    expect(html).toContain('Assignment Date');
+  });
+
+  test('builds itemised inventory rooms from wizard notes when structured inventory is absent', async () => {
+    const pack = await generateResidentialLettingDocuments(
+      'inventory_schedule_condition',
+      {
+        ...baseFacts,
+        inspection_date: '2026-01-01',
+        entrance_hall_inventory_items: 'Coat hooks | Good | Four chrome hooks\nConsole table | Fair | Light mark to top',
+        kitchen_inventory_items: 'Oven | Good | Clean and working\nFridge freezer | Good | Minor scratch to side panel',
+        kitchen_condition: 'White goods present and photographed at check-in.',
+      },
+      { outputFormat: 'html' }
+    );
+
+    const html = pack.documents[0].html;
+
+    expect(html).toContain('Entrance hall / landing');
+    expect(html).toContain('Console table');
+    expect(html).toContain('Fridge freezer');
+    expect(html).toContain('Overall room condition');
+  });
+
   test('renders a final-warning arrears letter without false PAP compliance wording', async () => {
     const pack = await generateResidentialLettingDocuments(
       'rent_arrears_letter',

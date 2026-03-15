@@ -364,7 +364,33 @@
   <p class="small-text">Complete the following for each room. Add additional sheets if required.</p>
 
   {{!-- Check if wizard-completed inventory data exists --}}
-  {{#if inventory.rooms}}
+  {{#if custom_inventory_rooms.length}}
+    {{!-- WIZARD-COMPLETED INVENTORY FROM STANDALONE FLOW --}}
+    {{#each custom_inventory_rooms}}
+    <div class="room-section">
+      <h4 class="room-title">{{this.name}}</h4>
+      <table class="room-inventory">
+        <tr>
+          <th style="width: 30%">Item</th>
+          <th class="condition-cell">Condition</th>
+          <th class="notes-cell">Notes / Description</th>
+        </tr>
+        {{#each this.items}}
+        <tr>
+          <td>{{this.name}}</td>
+          <td class="condition-cell">{{#if this.condition}}<span class="completed-value">{{this.condition}}</span>{{else}}__________{{/if}}</td>
+          <td class="notes-cell">{{#if this.notes}}{{this.notes}}{{else}}&nbsp;{{/if}}</td>
+        </tr>
+        {{/each}}
+        <tr>
+          <td>Other: ______________</td>
+          <td class="condition-cell">__________</td>
+          <td class="notes-cell">_________________________</td>
+        </tr>
+      </table>
+    </div>
+    {{/each}}
+  {{else if inventory.rooms}}
     {{!-- WIZARD-COMPLETED INVENTORY --}}
     {{#each inventory.rooms}}
     <div class="room-section">

@@ -359,6 +359,18 @@
     </ol>
   {{/if}}
 
+  {{#if defined_terms.length}}
+    <h2 class="section-title">Defined Terms</h2>
+    <table class="detail-table">
+      {{#each defined_terms}}
+        <tr>
+          <td class="label">{{term}}</td>
+          <td>{{meaning}}</td>
+        </tr>
+      {{/each}}
+    </table>
+  {{/if}}
+
   <h2 class="section-title">Operative Provisions</h2>
   {{#each sections}}
     <section class="clause">

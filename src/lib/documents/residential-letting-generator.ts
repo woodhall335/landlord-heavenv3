@@ -59,6 +59,11 @@ interface TemplateParty {
   phone?: string;
 }
 
+interface TemplateDefinedTerm {
+  term: string;
+  meaning: string;
+}
+
 interface TemplateConfig {
   title: string;
   subtitle: string;
@@ -181,6 +186,114 @@ function splitEntries(value: unknown): string[] {
 function buildLabeledObservation(label: string, value: unknown): string | undefined {
   const text = toText(value);
   return text ? `${label}: ${text}` : undefined;
+}
+
+function cleanDefinedTerms(
+  items: Array<{ term: string; meaning: unknown }>
+): TemplateDefinedTerm[] | undefined {
+  const cleaned = items
+    .map((item) => ({
+      term: toText(item.term),
+      meaning: formatIsoDateText(item.meaning),
+    }))
+    .filter((item) => item.term && item.meaning);
+
+  return cleaned.length > 0 ? cleaned : undefined;
+}
+
+function parseInventoryItemLines(value: unknown): Array<{
+  name: string;
+  condition?: string;
+  notes?: string;
+}> {
+  const text = toText(value);
+  if (!text) return [];
+
+  return text
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .map((line) => {
+      const parts = line.split('|').map((part) => part.trim());
+      const [name, second, ...rest] = parts;
+      if (!name) return null;
+
+      if (rest.length > 0) {
+        return {
+          name,
+          condition: second || undefined,
+          notes: rest.join(' | ') || undefined,
+        };
+      }
+
+      return second
+        ? { name, notes: second }
+        : { name };
+    })
+    .filter((item): item is { name: string; condition?: string; notes?: string } => Boolean(item));
+}
+
+function buildInventoryRoomData(
+  name: string,
+  itemLines: unknown,
+  conditionSummary?: unknown
+) {
+  const items = parseInventoryItemLines(itemLines);
+  const summary = toText(conditionSummary);
+
+  if (summary) {
+    items.push({
+      name: 'Overall room condition',
+      notes: summary,
+    });
+  }
+
+  return items.length > 0 ? { name, items } : undefined;
+}
+
+function buildStandaloneInventoryRooms(facts: Record<string, any>) {
+  return [
+    buildInventoryRoomData(
+      'Entrance hall / landing',
+      facts.entrance_hall_inventory_items,
+      facts.entrance_hall_condition
+    ),
+    buildInventoryRoomData(
+      'Reception / living areas',
+      facts.reception_room_inventory_items,
+      facts.reception_room_condition
+    ),
+    buildInventoryRoomData(
+      'Kitchen and appliances',
+      facts.kitchen_inventory_items,
+      facts.kitchen_condition
+    ),
+    buildInventoryRoomData(
+      'Bedroom 1',
+      facts.bedroom_one_inventory_items,
+      facts.bedroom_one_condition
+    ),
+    buildInventoryRoomData(
+      'Bedroom 2 / additional bedrooms',
+      facts.bedroom_two_inventory_items,
+      facts.bedroom_two_condition
+    ),
+    buildInventoryRoomData(
+      'Bathroom / WC',
+      facts.bathroom_inventory_items,
+      facts.bathroom_condition
+    ),
+    buildInventoryRoomData(
+      'External areas / garden / bins',
+      facts.external_areas_inventory_items,
+      facts.external_areas_condition
+    ),
+    buildInventoryRoomData(
+      'Fixtures, fittings, windows, and flooring',
+      facts.fixtures_fittings_inventory_items,
+      facts.fixtures_fittings_condition
+    ),
+  ].filter(Boolean);
 }
 
 function cleanRows(rows: Array<{ label: string; value: unknown }>): TemplateRow[] | undefined {
@@ -1241,6 +1354,71 @@ function getTemplateSections(
   }
 }
 
+function buildDefinedTerms(
+  product: ResidentialLettingProductSku,
+  shared: SharedResidentialData
+): TemplateDefinedTerm[] | undefined {
+  const facts = shared.facts;
+  const landlord = shared.landlord_name || 'the Landlord';
+  const tenant = shared.tenant_primary_name || shared.tenant_names || 'the Tenant';
+
+  switch (product) {
+    case 'guarantor_agreement':
+      return cleanDefinedTerms([
+        {
+          term: 'Tenancy',
+          meaning:
+            'the residential tenancy of the Property identified in this deed together with any continuation, periodic continuation, or renewal expressly covered by it',
+        },
+        { term: 'Guarantor', meaning: firstNonEmpty(facts.guarantor_name, 'the guarantor named in this deed') },
+        { term: 'Tenant Obligations', meaning: 'the obligations of the Tenant under the tenancy including rent, damage, and other sums properly due' },
+      ]);
+    case 'residential_sublet_agreement':
+      return cleanDefinedTerms([
+        { term: 'Head Tenancy', meaning: 'the existing tenancy under which the Head Tenant occupies the Property' },
+        { term: 'Subtenancy', meaning: 'the subletting arrangement created by this agreement out of the Head Tenancy' },
+        { term: 'Subtenant', meaning: firstNonEmpty(facts.subtenant_name, 'the subtenant identified in this agreement') },
+      ]);
+    case 'lease_amendment':
+      return cleanDefinedTerms([
+        { term: 'Existing Tenancy', meaning: 'the earlier tenancy agreement between the parties for the Property' },
+        { term: 'Amendment Effective Date', meaning: firstNonEmpty(facts.amendment_effective_date, shared.current_date) },
+        { term: 'Amended Clauses', meaning: 'only the clauses expressly varied by this document, with all other terms remaining in force' },
+      ]);
+    case 'lease_assignment_agreement':
+      return cleanDefinedTerms([
+        { term: 'Existing Tenancy', meaning: 'the tenancy of the Property immediately before the assignment date' },
+        { term: 'Outgoing Tenant', meaning: firstNonEmpty(facts.outgoing_tenant_name, 'the tenant transferring their interest') },
+        { term: 'Incoming Tenant', meaning: firstNonEmpty(facts.incoming_tenant_name, 'the tenant taking the assigned interest') },
+        { term: 'Assignment Date', meaning: firstNonEmpty(facts.assignment_date, facts.assignment_effective_date, shared.current_date) },
+      ]);
+    case 'repayment_plan_agreement':
+      return cleanDefinedTerms([
+        { term: 'Arrears', meaning: 'the unpaid rent and any other sums stated in this agreement as outstanding under the tenancy' },
+        { term: 'Instalment', meaning: 'each repayment due on the dates and in the amounts recorded in this agreement' },
+        { term: 'Tenancy', meaning: `the tenancy of ${shared.property_address || 'the Property'} under which the arrears arose` },
+      ]);
+    case 'flatmate_agreement':
+      return cleanDefinedTerms([
+        { term: 'Shared Home', meaning: `the dwelling at ${shared.property_address || 'the Property'} occupied by the parties to this agreement` },
+        { term: 'Occupiers', meaning: firstNonEmpty(shared.tenant_names, tenant) },
+        { term: 'House Rules', meaning: 'the conduct, cleaning, guest, noise, and contribution arrangements recorded in this agreement' },
+      ]);
+    case 'renewal_tenancy_agreement':
+      return cleanDefinedTerms([
+        { term: 'Existing Tenancy', meaning: 'the earlier tenancy agreement for the Property that this renewal supplements' },
+        { term: 'Renewal Start Date', meaning: firstNonEmpty(facts.renewal_start_date, shared.current_date) },
+        { term: 'Renewed Rent', meaning: firstNonEmpty(formatMoney(facts.renewal_rent_amount), facts.renewal_rent_amount, formatMoney(shared.rent_amount), shared.rent_amount) },
+      ]);
+    default:
+      return cleanDefinedTerms([
+        { term: 'Property', meaning: firstNonEmpty(shared.property_address, 'the property identified in this document') },
+        { term: 'Landlord', meaning: landlord },
+        { term: 'Tenant', meaning: tenant },
+      ]);
+  }
+}
+
 function buildDocumentReference(
   product: ResidentialLettingProductSku,
   shared: SharedResidentialData
@@ -1294,10 +1472,12 @@ function buildTemplateData(
     tenancy_end_date: shared.tenancy_end_date,
     inspection_date: firstNonEmpty(shared.facts.inspection_date, effectiveDate),
     inspection_type: shared.facts.inspection_type,
+    inspector_name: firstNonEmpty(shared.facts.inspector_name, shared.landlord_name),
     sections,
     notes: buildCommonNote(product, shared),
     parties,
     signature_parties: signatureParties,
+    defined_terms: buildDefinedTerms(product, shared),
     document_reference: documentReference,
     recitals: config.recitals || [],
     execution_statement:
@@ -1618,6 +1798,7 @@ export async function generateResidentialLettingDocuments(
   let document: ResidentialGeneratedDocument;
 
   if (product === 'inventory_schedule_condition') {
+    const standaloneInventoryRooms = buildStandaloneInventoryRooms(shared.facts);
     const inventoryData = {
       current_date: shared.current_date,
       property_address: shared.property_address,
@@ -1635,7 +1816,11 @@ export async function generateResidentialLettingDocuments(
       number_of_mailbox_keys: shared.facts.number_of_mailbox_keys,
       access_cards_fobs: firstNonEmpty(shared.facts.access_cards_fobs, shared.facts.keys_provided_summary),
       key_replacement_cost: shared.facts.key_replacement_cost,
-      inventory: shared.facts.inventory,
+      custom_inventory_rooms: standaloneInventoryRooms,
+      inventory:
+        standaloneInventoryRooms.length > 0
+          ? { rooms: standaloneInventoryRooms }
+          : shared.facts.inventory || null,
       inventory_schedule_notes: [
         buildLabeledObservation('Property layout', shared.facts.property_layout_notes),
         buildLabeledObservation('General condition', shared.facts.room_condition_summary),
@@ -1643,7 +1828,11 @@ export async function generateResidentialLettingDocuments(
         buildLabeledObservation('Defects / action points', shared.facts.defects_action_items),
         buildLabeledObservation('Keys summary', shared.facts.keys_provided_summary),
         buildLabeledObservation('Combined utility readings', shared.facts.utility_meter_readings),
+        buildLabeledObservation('Meter serial numbers', shared.facts.meter_serial_numbers),
         buildLabeledObservation('Safety observations', shared.facts.safety_checks_summary),
+        buildLabeledObservation('Photo / evidence reference', shared.facts.photo_schedule_reference),
+        buildLabeledObservation('Documents and manuals handed over', shared.facts.document_handover_notes),
+        buildLabeledObservation('Tenant comments', shared.facts.tenant_comments),
         toText(shared.document_notes),
       ]
         .filter(Boolean)

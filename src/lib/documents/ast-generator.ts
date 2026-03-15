@@ -80,6 +80,8 @@ export function assertTierHMOConsistency(tier: TenancyTier, isHMO: boolean): voi
 
 export type TenancyJurisdiction = 'england' | 'wales' | 'scotland' | 'northern-ireland';
 
+const ENGLAND_TENANCY_REFORM_CUTOVER = '2026-05-01';
+
 /**
  * Jurisdiction-specific configuration for tenancy agreements
  */
@@ -290,6 +292,23 @@ function detectJurisdiction(data: ASTData): TenancyJurisdiction {
  */
 export function getJurisdictionConfig(jurisdiction: TenancyJurisdiction): JurisdictionConfig {
   return JURISDICTION_CONFIGS[jurisdiction];
+}
+
+function buildEnglandTenancyReformWarning(
+  jurisdiction: TenancyJurisdiction,
+  tenancyStartDate?: string
+): string | undefined {
+  if (jurisdiction !== 'england') return undefined;
+
+  const startDate = (tenancyStartDate || '').trim();
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(startDate)) return undefined;
+  if (startDate < ENGLAND_TENANCY_REFORM_CUTOVER) return undefined;
+
+  return (
+    'Warning: from 1 May 2026 the Renters\' Rights Act 2025 reforms move most new and existing ' +
+    'private rented sector assured tenancies in England into the assured periodic regime. This AST ' +
+    'format should be used only where it remains legally appropriate for the tenancy facts and start date.'
+  );
 }
 
 // ============================================================================
@@ -747,6 +766,7 @@ export async function generateStandardAST(
     jurisdiction_name: config.jurisdictionLabel,
     jurisdiction: jurisdiction,
     legal_framework: config.legalFramework,
+    england_reform_warning: buildEnglandTenancyReformWarning(jurisdiction, data.tenancy_start_date),
     // Flag for inventory: standard tier always uses blank inventory
     inventory_wizard_completed: false,
     current_date: new Date().toLocaleDateString('en-GB', {
@@ -841,6 +861,7 @@ export async function generatePremiumAST(
     jurisdiction_name: config.jurisdictionLabel,
     jurisdiction: jurisdiction,
     legal_framework: config.legalFramework,
+    england_reform_warning: buildEnglandTenancyReformWarning(jurisdiction, data.tenancy_start_date),
     // Flag for inventory: premium tier uses wizard-completed if data exists
     inventory_wizard_completed: hasInventoryData,
     current_date: new Date().toLocaleDateString('en-GB', {
@@ -1055,6 +1076,7 @@ export async function generateStandardASTDocuments(
     jurisdiction_name: config.jurisdictionLabel,
     jurisdiction: jurisdiction,
     legal_framework: config.legalFramework,
+    england_reform_warning: buildEnglandTenancyReformWarning(jurisdiction, data.tenancy_start_date),
     current_date: new Date().toISOString().split('T')[0],
   };
 
@@ -1228,6 +1250,7 @@ export async function generatePremiumASTDocuments(
     jurisdiction_name: config.jurisdictionLabel,
     jurisdiction: jurisdiction,
     legal_framework: config.legalFramework,
+    england_reform_warning: buildEnglandTenancyReformWarning(jurisdiction, data.tenancy_start_date),
     current_date: new Date().toISOString().split('T')[0],
     // Flag for inventory template to know if wizard data is present
     inventory_wizard_completed: hasInventoryData,
