@@ -14,6 +14,7 @@ import { MoneyClaimSectionFlow } from '@/components/wizard/flows/MoneyClaimSecti
 import { EvictionSectionFlow } from '@/components/wizard/flows/EvictionSectionFlow';
 import { NoticeOnlySectionFlow } from '@/components/wizard/flows/NoticeOnlySectionFlow';
 import { TenancySectionFlow } from '@/components/wizard/flows/TenancySectionFlow';
+import { ResidentialStandaloneSectionFlow } from '@/components/wizard/flows/ResidentialStandaloneSectionFlow';
 import type { ExtendedWizardQuestion } from '@/lib/wizard/types';
 import { trackWizardStartWithAttribution } from '@/lib/analytics';
 import {
@@ -45,7 +46,6 @@ type TenancyFlowProduct =
   | 'ast_premium'
   | ResidentialLettingProductSku;
 
-
 const TENANCY_FIELD_TO_SECTION: Record<string, string> = {
   deposit_amount: 'deposit',
   tenancy_start_date: 'tenancy',
@@ -54,7 +54,6 @@ const TENANCY_FIELD_TO_SECTION: Record<string, string> = {
   landlord_full_name: 'landlord',
   tenants: 'tenants',
 };
-
 
 function WizardFlowContent() {
   const searchParams = useSearchParams();
@@ -320,7 +319,9 @@ function WizardFlowContent() {
 
     // For tenancy agreements, go to review page for validation and obligations reminder
     if (type === 'tenancy_agreement') {
-      const productParam = askHeavenProduct ?? 'ast_standard';
+      const productParam = isResidentialStandaloneProduct
+        ? normalizedProduct ?? 'tenancy_agreement'
+        : askHeavenProduct ?? 'ast_standard';
       router.push(`/wizard/review?case_id=${completedCaseId}&product=${productParam}`);
       return;
     }
@@ -395,12 +396,31 @@ function WizardFlowContent() {
     );
   }
 
+  if (
+    type === 'tenancy_agreement' &&
+    USE_TENANCY_SECTION_FLOW &&
+    isResidentialStandaloneProduct &&
+    jurisdiction === 'england' &&
+    normalizedProduct
+  ) {
+    return (
+      <ResidentialStandaloneSectionFlow
+        caseId={caseId}
+        jurisdiction="england"
+        product={normalizedProduct as ResidentialLettingProductSku}
+      />
+    );
+  }
+
   // 🟪 NEW: For core tenancy_agreement in England/Wales/Scotland/NI, use the redesigned section-based flow
   // This provides a consistent tab-based UI matching MoneyClaimSectionFlow design.
   if (
     type === 'tenancy_agreement' &&
     USE_TENANCY_SECTION_FLOW &&
-    (jurisdiction === 'england' || jurisdiction === 'wales' || jurisdiction === 'scotland' || jurisdiction === 'northern-ireland')
+    (jurisdiction === 'england' ||
+      jurisdiction === 'wales' ||
+      jurisdiction === 'scotland' ||
+      jurisdiction === 'northern-ireland')
   ) {
     return (
       <TenancySectionFlow
@@ -423,7 +443,7 @@ function WizardFlowContent() {
         product={
           type === 'tenancy_agreement'
             ? (askHeavenProduct ?? 'tenancy_agreement')
-            : (askHeavenProduct ?? 'complete_pack')
+            : (askHeavenProduct === 'notice_only' ? 'notice_only' : 'complete_pack')
         }
         initialQuestion={initialQuestion ?? undefined}
         onComplete={handleComplete}
@@ -447,7 +467,7 @@ function WizardFlowContent() {
 export default function WizardFlowPage() {
   return (
     <>
-      <HeaderConfig mode="transparent" />
+      <HeaderConfig mode="solid" />
       <Suspense
         fallback={
           <div className="min-h-screen flex items-center justify-center">

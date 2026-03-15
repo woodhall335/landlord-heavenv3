@@ -80,7 +80,7 @@ export function WizardShellV3({
         getStepMetadataForId={(stepId) => getStepMetadata(product, jurisdiction, stepId)}
       />
 
-      <div style={{ height: "calc(80px + var(--s21-banner-height) + 64px)" }} aria-hidden="true" />
+      <div style={{ height: "calc(var(--site-header-height) + var(--s21-banner-height) + var(--wizard-topbar-height))" }} aria-hidden="true" />
 
       <div className="mx-auto grid max-w-[1240px] grid-cols-1 items-stretch gap-6 px-4 pb-12 pt-4 lg:grid-cols-[minmax(0,1fr)_340px]">
         <WizardMainCardV3
@@ -106,7 +106,7 @@ export function WizardShellV3({
         </WizardMainCardV3>
 
         <aside className="w-full min-h-0 shrink-0 lg:self-start lg:w-[340px]">
-          <div className="lg:sticky lg:top-[152px]">
+          <div className="lg:sticky lg:top-[calc(var(--site-header-height)+var(--s21-banner-height)+var(--wizard-topbar-height)+8px)]">
             <GuidancePanelV3 metadata={currentMeta} askHeaven={sidebar} />
           </div>
         </aside>

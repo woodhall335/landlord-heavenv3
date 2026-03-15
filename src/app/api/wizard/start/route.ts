@@ -28,11 +28,11 @@ import {
 } from '@/lib/wizard/mqs-loader';
 import { applyDocumentIntelligence } from '@/lib/wizard/document-intel';
 import {
-  PUBLIC_RESIDENTIAL_LETTING_PRODUCT_SKUS,
+  RESIDENTIAL_LETTING_PRODUCT_SKUS,
   RESIDENTIAL_LETTING_PRODUCTS,
 } from '@/lib/residential-letting/products';
 
-const RESIDENTIAL_PRODUCTS = [...PUBLIC_RESIDENTIAL_LETTING_PRODUCT_SKUS] as const;
+const RESIDENTIAL_PRODUCTS = [...RESIDENTIAL_LETTING_PRODUCT_SKUS] as const;
 type ResidentialProduct = (typeof RESIDENTIAL_PRODUCTS)[number];
 
 function isResidentialStandaloneProduct(product: string): product is ResidentialProduct {
@@ -91,6 +91,7 @@ const productToCaseType = (product: StartProduct) => {
     case 'lease_assignment_agreement':
     case 'rent_arrears_letter':
     case 'repayment_plan_agreement':
+    case 'residential_tenancy_application':
     case 'rental_inspection_report':
     case 'inventory_schedule_condition':
     case 'flatmate_agreement':
@@ -127,6 +128,7 @@ const resolveProductTier = (
     case 'lease_assignment_agreement':
     case 'rent_arrears_letter':
     case 'repayment_plan_agreement':
+    case 'residential_tenancy_application':
     case 'rental_inspection_report':
     case 'inventory_schedule_condition':
     case 'flatmate_agreement':

@@ -447,6 +447,8 @@ div.ask-heaven-panel,
    ============================================= */
 
 :root {
+  --site-header-height: 80px;
+  --wizard-topbar-height: 64px;
   --s21-banner-height: 0px;
 }
 
@@ -474,7 +476,7 @@ header.site-header {
 
 /* Body padding behavior by page header mode */
 body.page-header-solid {
-  padding-top: calc(80px + var(--s21-banner-height));
+  padding-top: calc(var(--site-header-height) + var(--s21-banner-height));
 }
 
 body.page-header-overlay {
