@@ -83,6 +83,8 @@
       font-family: Arial, Helvetica, sans-serif;
       font-weight: 700;
       color: #1f2937;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
     }
 
     .section {
@@ -131,7 +133,7 @@
 
     .signature-grid {
       display: grid;
-      grid-template-columns: 1fr 170pt;
+      grid-template-columns: 1fr 1fr;
       gap: 16pt;
       margin-top: 16pt;
     }
@@ -171,14 +173,14 @@
       <tr>
         <td class="label">Property</td>
         <td>{{#if property_address}}{{property_address}}{{else}}Not stated{{/if}}</td>
-        <td class="label">Date</td>
-        <td>{{format_date generated_on 'long'}}</td>
+        <td class="label">Application date</td>
+        <td>{{formatUKDate generated_on}}</td>
       </tr>
       <tr>
         <td class="label">Expected rent</td>
         <td>{{#if rent_amount_display}}{{rent_amount_display}}{{else}}Not stated{{/if}}</td>
         <td class="label">Requested start</td>
-        <td>{{#if tenancy_start_date}}{{format_date tenancy_start_date 'long'}}{{else}}Not stated{{/if}}</td>
+        <td>{{#if tenancy_start_date}}{{formatUKDate tenancy_start_date}}{{else}}Not stated{{/if}}</td>
       </tr>
     </table>
   </section>
@@ -224,10 +226,13 @@
   <section class="declaration">
     <h3>Applicant Declaration and Authority</h3>
     <p>
-      I confirm that the information provided in this application is true and complete to the best of my knowledge. I understand that the Landlord may rely on this information when deciding whether to grant a tenancy and whether further checks or a guarantor requirement are appropriate.
+      I confirm that the information provided in this application is true, accurate, and complete to the best of my knowledge and belief. I understand that the Landlord or letting agent may rely on this information when deciding whether to offer a tenancy or request a guarantor.
     </p>
     <p>
-      I authorise the Landlord or their agent to use the information supplied for tenancy assessment, referencing, affordability review, and related pre-tenancy administration.
+      I authorise the Landlord, any instructed letting agent, and any third-party referencing provider to verify identity, address history, affordability, landlord references, employment, income, credit status, and right to rent information for the purposes of tenancy assessment, fraud prevention, and associated record keeping.
+    </p>
+    <p>
+      I understand that deliberately false or misleading information may result in the application being declined or, if discovered later, may be relied on in connection with tenancy enforcement or recovery proceedings where relevant.
     </p>
 
     <div class="signature-grid">

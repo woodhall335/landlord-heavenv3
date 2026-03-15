@@ -276,15 +276,16 @@
   <!-- ===== DOCUMENT HEADER ===== -->
   <div class="doc-header">
     <h1>Inventory &amp; Schedule of Condition</h1>
-    <p class="doc-subtitle">Property Contents and Condition Record</p>
+    <p class="doc-subtitle">Property Contents and Condition Record for England Residential Tenancies</p>
     {{#if property_address}}
     <div class="property-address">{{property_address}}</div>
     {{/if}}
   </div>
 
   <div class="instructions">
-    <p><strong>Instructions:</strong> This inventory records the contents and condition of the property at the start of the tenancy. Both landlord (or agent) and tenant should complete and sign this document at move-in. Take photographs to supplement this written record.</p>
-    <p>This document will be used for comparison at the end of the tenancy when assessing any deposit deductions.</p>
+    <p><strong>Instructions:</strong> This inventory should be checked carefully against the property, contents, fixtures, fittings, and photographs at the inspection. The landlord (or agent) and tenant should sign and date it and keep copies with the tenancy records.</p>
+    <p>The tenant should review the document promptly and return any written comments or corrections as soon as reasonably practicable, ideally within 7 calendar days of check-in or receipt.</p>
+    <p>This document may later be used as evidential material when considering condition, cleanliness, missing items, damage, fair wear and tear, and any proposed deposit deductions.</p>
   </div>
 
   <!-- ===== PART A: PROPERTY INFORMATION ===== -->
@@ -303,8 +304,8 @@
       <td class="value">{{#if tenant_names}}{{tenant_names}}{{else}}<span class="blank-line">&nbsp;</span>{{/if}}</td>
     </tr>
     <tr>
-      <td class="label">Date of Inventory</td>
-      <td class="value">{{#if tenancy_start_date}}{{formatUKDate tenancy_start_date}}{{else}}______ / ______ / ______{{/if}}</td>
+      <td class="label">Inspection / Inventory Date</td>
+      <td class="value">{{#if inspection_date}}{{formatUKDate inspection_date}}{{else}}{{#if tenancy_start_date}}{{formatUKDate tenancy_start_date}}{{else}}______ / ______ / ______{{/if}}{{/if}}</td>
     </tr>
     <tr>
       <td class="label">Inspection Clerk</td>
@@ -609,7 +610,7 @@
 
   <!-- ===== PART F: SIGNATURES ===== -->
   <h2 class="page-break-before">Part F: Signatures</h2>
-  <p>By signing below, both parties confirm that this inventory has been inspected and agreed as an accurate record of the property's condition at the start of the tenancy.</p>
+  <p>By signing below, the parties confirm that this inventory has been inspected and is intended to record the condition and contents of the property at the relevant inspection date, subject to any written comments attached or sent shortly afterwards.</p>
 
   <table class="signature-table" style="margin-top: 16pt;">
     <tr>
@@ -654,11 +655,11 @@
 
   <!-- ===== FOOTER ===== -->
   <div class="inventory-footer">
-    <p><strong>Important:</strong> Any discrepancies not noted in writing within 7 days of the tenancy start date will be deemed accepted by the Tenant. This inventory will be used for comparison at the end of the tenancy when assessing any deposit deductions.</p>
+    <p><strong>Important:</strong> The tenant should notify the landlord or agent promptly in writing of any discrepancy, omission, or comment so the tenancy file can be updated. This inventory should be read together with the tenancy agreement, photographs, meter records, and any later check-out report.</p>
   </div>
 
   <p class="small-text" style="margin-top: 12pt; text-align: center;">
-    Generated on {{#if current_date}}{{formatUKDate current_date}}{{else}}{{formatUKDate (now)}}{{/if}} | Document ID: INV-{{#if case_id}}{{case_id}}{{else}}{{timestamp}}{{/if}}
+    Generated on {{#if current_date}}{{formatUKDate current_date}}{{else}}Not stated{{/if}} | Document ID: INV-{{#if case_id}}{{case_id}}{{else}}{{timestamp}}{{/if}}
   </p>
 
 </body>

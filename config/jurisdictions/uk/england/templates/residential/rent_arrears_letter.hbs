@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{title}}</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 22mm 18mm;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 10.75pt;
+      line-height: 1.58;
+      color: #18181b;
+      background: #fff;
+    }
+
+    h1, h2 {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: #111827;
+      page-break-after: avoid;
+    }
+
+    .header {
+      border: 1.5pt solid #1f2937;
+      padding: 18pt 20pt;
+      margin-bottom: 18pt;
+    }
+
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-size: 8pt;
+      color: #4b5563;
+      margin-bottom: 8pt;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    h1 {
+      font-size: 19pt;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .subtitle {
+      margin-top: 7pt;
+      color: #374151;
+    }
+
+    .address-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18pt;
+      margin: 18pt 0;
+    }
+
+    .address-box {
+      border: 0.75pt solid #9ca3af;
+      padding: 10pt 12pt;
+      min-height: 92pt;
+    }
+
+    .address-label {
+      font-family: Arial, Helvetica, sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 8.5pt;
+      font-weight: 700;
+      color: #4b5563;
+      margin-bottom: 6pt;
+    }
+
+    .meta-table,
+    .detail-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10pt 0 14pt;
+      font-size: 10pt;
+    }
+
+    .meta-table td,
+    .detail-table td {
+      border: 0.75pt solid #9ca3af;
+      padding: 8pt 9pt;
+      vertical-align: top;
+    }
+
+    .meta-table .label,
+    .detail-table .label {
+      width: 30%;
+      background: #f9fafb;
+      font-family: Arial, Helvetica, sans-serif;
+      font-weight: 700;
+      color: #1f2937;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    p {
+      margin: 0 0 8pt 0;
+      text-align: justify;
+    }
+
+    .section {
+      margin-top: 16pt;
+      page-break-inside: avoid;
+    }
+
+    .section h2 {
+      font-size: 12pt;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      border-bottom: 1pt solid #111827;
+      padding-bottom: 4pt;
+      margin-bottom: 9pt;
+    }
+
+    ul {
+      margin: 6pt 0 8pt 18pt;
+      padding: 0;
+    }
+
+    li {
+      margin-bottom: 6pt;
+      text-align: justify;
+    }
+
+    .deadline-panel,
+    .note-panel {
+      margin-top: 14pt;
+      padding: 11pt 13pt;
+      border: 0.75pt solid #9ca3af;
+      background: #f9fafb;
+      page-break-inside: avoid;
+    }
+
+    .deadline-panel {
+      border-color: #92400e;
+      background: #fff7ed;
+      color: #7c2d12;
+    }
+
+    .signature-block {
+      margin-top: 24pt;
+      page-break-inside: avoid;
+    }
+
+    .signature-line {
+      margin-top: 32pt;
+      border-bottom: 1pt solid #1f2937;
+      height: 20pt;
+      width: 240pt;
+    }
+
+    .footer {
+      margin-top: 20pt;
+      padding-top: 10pt;
+      border-top: 0.75pt solid #9ca3af;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 8.5pt;
+      color: #6b7280;
+      display: flex;
+      justify-content: space-between;
+      gap: 10pt;
+    }
+  </style>
+</head>
+<body>
+  <section class="header">
+    <div class="eyebrow">England Residential Lettings</div>
+    <h1>{{title}}</h1>
+    <div class="subtitle">{{subtitle}}</div>
+
+    <table class="meta-table">
+      <tr>
+        <td class="label">Letter date</td>
+        <td>{{formatUKDate letter_date}}</td>
+        <td class="label">Reference</td>
+        <td>{{document_reference}}</td>
+      </tr>
+      <tr>
+        <td class="label">Letter type</td>
+        <td>{{letter_type_label}}</td>
+        <td class="label">Property</td>
+        <td>{{#if property_address}}{{property_address}}{{else}}Not stated{{/if}}</td>
+      </tr>
+    </table>
+  </section>
+
+  <section class="address-grid">
+    <div class="address-box">
+      <div class="address-label">From</div>
+      <div><strong>{{landlord_name}}</strong></div>
+      {{#if landlord_address}}<div>{{landlord_address}}</div>{{/if}}
+      {{#if landlord_email}}<div>Email: {{landlord_email}}</div>{{/if}}
+      {{#if landlord_phone}}<div>Telephone: {{landlord_phone}}</div>{{/if}}
+    </div>
+    <div class="address-box">
+      <div class="address-label">To</div>
+      <div><strong>{{tenant_name}}</strong></div>
+      {{#if tenant_address}}<div>{{tenant_address}}</div>{{/if}}
+    </div>
+  </section>
+
+  <p>Dear {{tenant_name}},</p>
+
+  {{#each opening_paragraphs}}
+    <p>{{this}}</p>
+  {{/each}}
+
+  <section class="section">
+    <h2>Arrears Summary</h2>
+    <table class="detail-table">
+      {{#each arrears_rows}}
+        <tr>
+          <td class="label">{{label}}</td>
+          <td>{{value}}</td>
+        </tr>
+      {{/each}}
+    </table>
+  </section>
+
+  <section class="section">
+    <h2>Payment Instructions</h2>
+    <table class="detail-table">
+      {{#each payment_instruction_rows}}
+        <tr>
+          <td class="label">{{label}}</td>
+          <td>{{value}}</td>
+        </tr>
+      {{/each}}
+    </table>
+    {{#each payment_request_paragraphs}}
+      <p>{{this}}</p>
+    {{/each}}
+  </section>
+
+  <div class="deadline-panel">
+    <strong>Required action</strong><br>
+    Payment requested by: {{formatUKDate payment_deadline}}<br>
+    Written response requested by: {{formatUKDate response_deadline}}
+  </div>
+
+  <section class="section">
+    <h2>Next Steps</h2>
+    <ul>
+      {{#each next_steps}}
+        <li>{{this}}</li>
+      {{/each}}
+    </ul>
+  </section>
+
+  <div class="note-panel">
+    <strong>Protocol note</strong>
+    <p>{{protocol_note}}</p>
+  </div>
+
+  <section class="section">
+    <h2>Important Points</h2>
+    <ul>
+      {{#each advice_points}}
+        <li>{{this}}</li>
+      {{/each}}
+    </ul>
+  </section>
+
+  {{#each closing_paragraphs}}
+    <p>{{this}}</p>
+  {{/each}}
+
+  <p>Yours faithfully,</p>
+
+  <section class="signature-block">
+    <div>{{landlord_name}}</div>
+    <div class="signature-line"></div>
+    <div>For and on behalf of the Landlord</div>
+  </section>
+
+  <div class="footer">
+    <span>Generated by Landlord Heaven</span>
+    <span>{{document_reference}}</span>
+  </div>
+</body>
+</html>

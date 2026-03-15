@@ -83,6 +83,8 @@
       font-family: Arial, Helvetica, sans-serif;
       font-weight: 700;
       color: #1f2937;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
     }
 
     .section {
@@ -166,7 +168,7 @@
         <td class="label">Property</td>
         <td>{{#if property_address}}{{property_address}}{{else}}Not stated{{/if}}</td>
         <td class="label">Inspection date</td>
-        <td>{{#if inspection_date}}{{format_date inspection_date 'long'}}{{else}}Not stated{{/if}}</td>
+        <td>{{#if inspection_date}}{{formatUKDate inspection_date}}{{else}}Not stated{{/if}}</td>
       </tr>
       <tr>
         <td class="label">Inspector / landlord</td>
@@ -179,8 +181,8 @@
         <td>{{#if tenant_names}}{{tenant_names}}{{else}}Not stated{{/if}}</td>
         <td class="label">Tenancy dates</td>
         <td>
-          {{#if tenancy_start_date}}{{format_date tenancy_start_date 'long'}}{{else}}Not stated{{/if}}
-          {{#if tenancy_end_date}} to {{format_date tenancy_end_date 'long'}}{{/if}}
+          {{#if tenancy_start_date}}{{formatUKDate tenancy_start_date}}{{else}}Not stated{{/if}}
+          {{#if tenancy_end_date}} to {{formatUKDate tenancy_end_date}}{{/if}}
         </td>
       </tr>
     </table>
@@ -225,9 +227,12 @@
   {{/if}}
 
   <section class="certification">
-    <h3>Certification</h3>
+    <h3>Certification and Acknowledgement</h3>
     <p>
-      This report is intended to record the condition of the Property, the layout and areas inspected, meter readings, keys, room-by-room observations, and any material defects or follow-up points noted on the stated inspection date. It should be checked promptly and retained with inventories, photographs, certificates, and other tenancy records.
+      This report is intended to create a dated evidential record of the visible condition of the Property, together with keys, meter readings, cleanliness, safety observations, defects, and follow-up items noted at the inspection. It should be retained with the tenancy agreement, inventory, photographs, certificates, and later comparison evidence.
+    </p>
+    <p>
+      Any occupier attending the inspection should add written comments promptly if they disagree with any material point recorded here.
     </p>
 
     <div class="signature-grid">

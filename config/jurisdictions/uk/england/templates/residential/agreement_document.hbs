@@ -64,25 +64,32 @@
       border-left: 3pt solid #374151;
       background: #f8fafc;
       color: #1f2937;
+      text-align: justify;
     }
 
-    .cover-meta {
+    .cover-meta,
+    .parties-table,
+    .detail-table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 16pt;
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 9pt;
+      margin-top: 14pt;
+      font-size: 10pt;
     }
 
-    .cover-meta td {
+    .cover-meta td,
+    .parties-table td,
+    .detail-table td {
       border: 0.75pt solid #9ca3af;
       padding: 8pt 10pt;
       vertical-align: top;
     }
 
-    .cover-meta .label {
-      width: 22%;
+    .cover-meta .label,
+    .parties-table .role,
+    .detail-table .label {
+      width: 28%;
       background: #f3f4f6;
+      font-family: Arial, Helvetica, sans-serif;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
@@ -98,37 +105,21 @@
       margin: 18pt 0 12pt;
     }
 
-    .opening {
-      margin-bottom: 14pt;
+    .opening,
+    .clause p,
+    .clause-intro,
+    .execution-copy {
+      margin: 0 0 8pt 0;
       text-align: justify;
     }
 
-    .parties-table,
-    .detail-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 10pt 0 12pt;
-      font-size: 10pt;
-    }
-
-    .parties-table td,
-    .detail-table td {
-      border: 0.75pt solid #9ca3af;
-      padding: 8pt 9pt;
-      vertical-align: top;
-    }
-
-    .parties-table .role,
-    .detail-table .label {
-      width: 26%;
-      background: #f9fafb;
-      font-family: Arial, Helvetica, sans-serif;
+    .party-name {
       font-weight: 700;
-      color: #1f2937;
+      color: #111827;
     }
 
-    .detail-table .label {
-      width: 30%;
+    .party-detail {
+      margin-top: 3pt;
     }
 
     .recitals {
@@ -168,12 +159,6 @@
       color: #111827;
     }
 
-    .clause-intro,
-    .clause p {
-      margin: 0 0 7pt 0;
-      text-align: justify;
-    }
-
     .subpoints {
       margin: 6pt 0 8pt 18pt;
       padding: 0;
@@ -191,14 +176,24 @@
       background: #f9fafb;
     }
 
-    .execution {
-      margin-top: 24pt;
+    .note-panel p {
+      margin: 6pt 0 0;
+      white-space: pre-line;
+      text-align: justify;
+    }
+
+    .deed-warning {
+      margin-top: 12pt;
+      padding: 10pt 12pt;
+      border: 0.75pt solid #92400e;
+      background: #fff7ed;
+      color: #7c2d12;
       page-break-inside: avoid;
     }
 
-    .execution-copy {
-      margin: 0 0 10pt 0;
-      text-align: justify;
+    .execution {
+      margin-top: 24pt;
+      page-break-inside: avoid;
     }
 
     .signatures {
@@ -210,7 +205,7 @@
     .signature-card {
       border: 0.75pt solid #9ca3af;
       padding: 12pt;
-      min-height: 122pt;
+      min-height: 176pt;
       page-break-inside: avoid;
     }
 
@@ -230,19 +225,41 @@
     }
 
     .signature-line {
-      margin-top: 34pt;
+      margin-top: 28pt;
       border-bottom: 1pt solid #1f2937;
-      height: 22pt;
+      height: 18pt;
     }
 
     .signature-meta {
       margin-top: 8pt;
-      display: flex;
-      justify-content: space-between;
-      gap: 12pt;
       font-family: Arial, Helvetica, sans-serif;
       font-size: 8.75pt;
       color: #4b5563;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12pt;
+    }
+
+    .witness-block {
+      margin-top: 14pt;
+      padding-top: 10pt;
+      border-top: 0.75pt dashed #9ca3af;
+    }
+
+    .witness-label {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 8.5pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #4b5563;
+    }
+
+    .witness-note {
+      margin-top: 6pt;
+      font-size: 8.9pt;
+      color: #374151;
+      text-align: justify;
     }
 
     .footer {
@@ -268,17 +285,25 @@
 </head>
 <body>
   <section class="cover">
-    <div class="cover-topline">England Residential Lettings</div>
+    <div class="cover-topline">
+      {{#if execution_as_deed}}Executed as a deed{{else}}England residential document{{/if}}
+    </div>
     <h1>{{title}}</h1>
     <div class="cover-subtitle">{{subtitle}}</div>
     {{#if intro}}<div class="cover-intro">{{intro}}</div>{{/if}}
 
     <table class="cover-meta">
       <tr>
-        <td class="label">Date</td>
-        <td>{{format_date generated_on 'long'}}</td>
+        <td class="label">Document date</td>
+        <td>{{formatUKDate document_date}}</td>
         <td class="label">Reference</td>
         <td>{{document_reference}}</td>
+      </tr>
+      <tr>
+        <td class="label">Effective date</td>
+        <td>{{#if effective_date}}{{formatUKDate effective_date}}{{else}}Not stated{{/if}}</td>
+        <td class="label">Nature</td>
+        <td>{{#if nature_of_document}}{{nature_of_document}}{{else}}Residential agreement{{/if}}</td>
       </tr>
       <tr>
         <td class="label">Property</td>
@@ -289,8 +314,8 @@
         <td>{{#if tenant_names}}{{tenant_names}}{{else}}Not stated{{/if}}</td>
         <td class="label">Term / dates</td>
         <td>
-          {{#if tenancy_start_date}}{{format_date tenancy_start_date 'long'}}{{else}}Not stated{{/if}}
-          {{#if tenancy_end_date}} to {{format_date tenancy_end_date 'long'}}{{/if}}
+          {{#if tenancy_start_date}}{{formatUKDate tenancy_start_date}}{{else}}Not stated{{/if}}
+          {{#if tenancy_end_date}} to {{formatUKDate tenancy_end_date}}{{/if}}
         </td>
       </tr>
       <tr>
@@ -304,26 +329,24 @@
 
   <h2 class="section-title">Parties</h2>
   <p class="opening">
-    This agreement is made on {{format_date generated_on 'long'}} between the Landlord and the other party or parties identified below in relation to the Property in England.
+    {{#if execution_as_deed}}
+      This deed is made on {{formatUKDate document_date}} by the parties identified below in relation to the Property in England.
+    {{else}}
+      This agreement is made on {{formatUKDate document_date}} by the parties identified below in relation to the Property in England.
+    {{/if}}
   </p>
 
   <table class="parties-table">
-    <tr>
-      <td class="role">Landlord</td>
-      <td>
-        <strong>{{landlord_name}}</strong><br>
-        {{#if landlord_address}}{{landlord_address}}<br>{{/if}}
-        {{#if landlord_email}}Email: {{landlord_email}}<br>{{/if}}
-        {{#if landlord_phone}}Phone: {{landlord_phone}}{{/if}}
-      </td>
-    </tr>
-    {{#each signature_parties}}
-      {{#unless (eq label "Landlord")}}
-        <tr>
-          <td class="role">{{label}}</td>
-          <td>{{name}}</td>
-        </tr>
-      {{/unless}}
+    {{#each parties}}
+      <tr>
+        <td class="role">{{label}}</td>
+        <td>
+          <div class="party-name">{{name}}</div>
+          {{#if address}}<div class="party-detail">{{address}}</div>{{/if}}
+          {{#if email}}<div class="party-detail">Email: {{email}}</div>{{/if}}
+          {{#if phone}}<div class="party-detail">Telephone: {{phone}}</div>{{/if}}
+        </td>
+      </tr>
     {{/each}}
   </table>
 
@@ -377,6 +400,13 @@
     </div>
   {{/if}}
 
+  {{#if deed_warning}}
+    <div class="deed-warning">
+      <strong>Execution reminder</strong><br>
+      {{deed_warning}}
+    </div>
+  {{/if}}
+
   <section class="execution">
     <h2 class="section-title">Execution</h2>
     <p class="execution-copy">{{execution_statement}}</p>
@@ -390,6 +420,23 @@
             <span>Signature</span>
             <span>Date</span>
           </div>
+
+          {{#if witnessRequired}}
+            <div class="witness-block">
+              <div class="witness-label">Witness</div>
+              <div class="signature-line"></div>
+              <div class="signature-meta">
+                <span>Witness signature</span>
+                <span>Date</span>
+              </div>
+              <div class="signature-line"></div>
+              <div class="signature-meta">
+                <span>Witness name</span>
+                <span>Witness address</span>
+              </div>
+              {{#if witnessNote}}<div class="witness-note">{{witnessNote}}</div>{{/if}}
+            </div>
+          {{/if}}
         </div>
       {{/each}}
     </div>

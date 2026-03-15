@@ -292,7 +292,12 @@ const SECTIONS: WizardSection[] = [
         case 'guarantor_agreement':
           return Boolean(facts.guarantor_name) && Boolean(facts.guarantor_address);
         case 'residential_tenancy_application':
-          return Boolean(facts.applicant_employment_status) && Boolean(facts.applicant_annual_income);
+          return (
+            Boolean(facts.applicant_employment_status) &&
+            Boolean(facts.applicant_annual_income) &&
+            Boolean(facts.current_landlord_name || facts.applicant_reference_name) &&
+            Boolean(facts.current_landlord_contact || facts.applicant_reference_contact)
+          );
         case 'rental_inspection_report':
           return (
             Boolean(facts.inspection_date) &&
@@ -308,21 +313,57 @@ const SECTIONS: WizardSection[] = [
             )
           );
         case 'inventory_schedule_condition':
-          return Boolean(facts.inventory_attached);
+          return Boolean(
+            facts.inspection_date ||
+            facts.property_layout_notes ||
+            facts.room_condition_summary ||
+            facts.utility_meter_readings ||
+            facts.keys_provided_summary ||
+            facts.document_notes
+          );
         case 'lease_amendment':
-          return Boolean(facts.original_agreement_date) && Boolean(facts.amendment_effective_date);
+          return (
+            Boolean(facts.original_agreement_date) &&
+            Boolean(facts.amendment_effective_date) &&
+            Boolean(facts.amended_clauses_reference || facts.amendment_summary || facts.replacement_clause_text)
+          );
         case 'residential_sublet_agreement':
-          return Boolean(facts.subtenant_name) && Boolean(facts.sublet_start_date);
+          return (
+            Boolean(facts.subtenant_name) &&
+            Boolean(facts.sublet_start_date) &&
+            Boolean(facts.landlord_consent_obtained !== undefined)
+          );
         case 'lease_assignment_agreement':
-          return Boolean(facts.outgoing_tenant_name) && Boolean(facts.incoming_tenant_name);
+          return (
+            Boolean(facts.outgoing_tenant_name) &&
+            Boolean(facts.incoming_tenant_name) &&
+            Boolean(facts.assignment_effective_date)
+          );
         case 'flatmate_agreement':
-          return Boolean(facts.house_rules_summary) && Boolean(facts.bill_split_summary);
+          return (
+            Boolean(facts.house_rules_summary) &&
+            Boolean(facts.bill_split_summary) &&
+            Boolean(facts.notice_period_between_flatmates || facts.exit_arrangements)
+          );
         case 'renewal_tenancy_agreement':
-          return Boolean(facts.original_agreement_date) && Boolean(facts.renewal_start_date);
+          return (
+            Boolean(facts.original_agreement_date) &&
+            Boolean(facts.renewal_start_date) &&
+            Boolean(facts.renewal_rent_amount || facts.amendment_summary || facts.renewal_compliance_notes)
+          );
         case 'rent_arrears_letter':
-          return Boolean(facts.arrears_amount) && Boolean(facts.final_deadline);
+          return (
+            Boolean(facts.arrears_amount) &&
+            Boolean(facts.final_deadline) &&
+            Boolean(facts.arrears_periods_missed || facts.arrears_schedule_attached_reference)
+          );
         case 'repayment_plan_agreement':
-          return Boolean(facts.arrears_amount) && Boolean(facts.repayment_amount);
+          return (
+            Boolean(facts.arrears_amount) &&
+            Boolean(facts.repayment_amount) &&
+            Boolean(facts.repayment_frequency) &&
+            Boolean(facts.repayment_start_date)
+          );
         default:
           return true;
       }
@@ -2228,31 +2269,99 @@ const ResidentialDocumentDetailsSection: React.FC<SectionProps> = ({ facts, onUp
             onChange={(v) => onUpdate({ guarantor_phone: v })}
             type="tel"
           />
+          <CurrencyField
+            label={`Optional liability cap (${GBP_SYMBOL})`}
+            value={facts.guarantee_cap_amount}
+            onChange={(v) => onUpdate({ guarantee_cap_amount: v })}
+            helperText="Leave blank if the guarantee is intended to be unlimited."
+          />
+          <TextField
+            label="Guarantee commencement date"
+            value={facts.guarantee_commencement_date}
+            onChange={(v) => onUpdate({ guarantee_commencement_date: v })}
+            type="date"
+          />
+          <YesNoField
+            label="Should liability continue after renewal or variation?"
+            value={facts.guarantee_continues_after_renewal}
+            onChange={(v) => onUpdate({ guarantee_continues_after_renewal: v })}
+          />
         </div>
       )}
 
       {residentialProduct === 'residential_tenancy_application' && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <TextField
-            label="Desired move-in date"
-            value={facts.desired_move_in_date}
-            onChange={(v) => onUpdate({ desired_move_in_date: v })}
-            type="date"
+        <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <TextField
+              label="Applicant date of birth"
+              value={facts.applicant_date_of_birth}
+              onChange={(v) => onUpdate({ applicant_date_of_birth: v })}
+              type="date"
+            />
+            <TextField
+              label="Desired move-in date"
+              value={facts.desired_move_in_date}
+              onChange={(v) => onUpdate({ desired_move_in_date: v })}
+              type="date"
+            />
+            <NumberField
+              label="How many adults will occupy?"
+              value={facts.applicant_occupants}
+              onChange={(v) => onUpdate({ applicant_occupants: v })}
+            />
+            <NumberField
+              label="How many children?"
+              value={facts.children_count}
+              onChange={(v) => onUpdate({ children_count: v })}
+            />
+            <YesNoField
+              label="Any pets?"
+              value={facts.applicant_has_pets}
+              onChange={(v) => onUpdate({ applicant_has_pets: v })}
+            />
+            <YesNoField
+              label="Smoking household?"
+              value={facts.applicant_smoker}
+              onChange={(v) => onUpdate({ applicant_smoker: v })}
+            />
+            <TextField
+              label="Current landlord / agent"
+              value={facts.current_landlord_name}
+              onChange={(v) => onUpdate({ current_landlord_name: v })}
+              required
+            />
+            <TextField
+              label="Current landlord contact details"
+              value={facts.current_landlord_contact}
+              onChange={(v) => onUpdate({ current_landlord_contact: v })}
+              required
+            />
+            <CurrencyField
+              label={`Current rent (${GBP_SYMBOL})`}
+              value={facts.current_rent_amount}
+              onChange={(v) => onUpdate({ current_rent_amount: v })}
+            />
+            <TextField
+              label="Length of occupation"
+              value={facts.length_of_occupation}
+              onChange={(v) => onUpdate({ length_of_occupation: v })}
+              placeholder="18 months"
+            />
+          </div>
+          <TextareaField
+            label="Reason for moving"
+            value={facts.reason_for_moving}
+            onChange={(v) => onUpdate({ reason_for_moving: v })}
           />
-          <NumberField
-            label="How many adults will occupy?"
-            value={facts.applicant_occupants}
-            onChange={(v) => onUpdate({ applicant_occupants: v })}
+          <TextareaField
+            label="Additional income, maintenance, guarantor support, or benefits"
+            value={facts.additional_income_details}
+            onChange={(v) => onUpdate({ additional_income_details: v })}
           />
-          <YesNoField
-            label="Any pets?"
-            value={facts.applicant_has_pets}
-            onChange={(v) => onUpdate({ applicant_has_pets: v })}
-          />
-          <YesNoField
-            label="Smoking household?"
-            value={facts.applicant_smoker}
-            onChange={(v) => onUpdate({ applicant_smoker: v })}
+          <TextareaField
+            label="Adverse credit, CCJ, IVA, or insolvency details"
+            value={facts.adverse_credit_details}
+            onChange={(v) => onUpdate({ adverse_credit_details: v })}
           />
         </div>
       )}
@@ -2333,6 +2442,21 @@ const ResidentialDocumentDetailsSection: React.FC<SectionProps> = ({ facts, onUp
               value={facts.alarm_test_summary}
               onChange={(v) => onUpdate({ alarm_test_summary: v })}
             />
+            <TextField
+              label="Gas meter"
+              value={facts.meter_reading_gas}
+              onChange={(v) => onUpdate({ meter_reading_gas: v })}
+            />
+            <TextField
+              label="Electric meter"
+              value={facts.meter_reading_electric}
+              onChange={(v) => onUpdate({ meter_reading_electric: v })}
+            />
+            <TextField
+              label="Water meter"
+              value={facts.meter_reading_water}
+              onChange={(v) => onUpdate({ meter_reading_water: v })}
+            />
           </div>
           <TextareaField
             label="Safety checks and compliance observations"
@@ -2409,7 +2533,8 @@ const ResidentialDocumentDetailsSection: React.FC<SectionProps> = ({ facts, onUp
       )}
 
       {(residentialProduct === 'lease_amendment' || residentialProduct === 'renewal_tenancy_agreement') && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <TextField
             label="Original agreement date"
             value={facts.original_agreement_date}
@@ -2454,12 +2579,57 @@ const ResidentialDocumentDetailsSection: React.FC<SectionProps> = ({ facts, onUp
             />
           </div>
         </div>
+        {residentialProduct === 'lease_amendment' ? (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <TextField
+                label="Clause / schedule reference being amended"
+                value={facts.amended_clauses_reference}
+                onChange={(v) => onUpdate({ amended_clauses_reference: v })}
+                required
+              />
+              <TextField
+                label="Amendment title"
+                value={facts.amendment_title}
+                onChange={(v) => onUpdate({ amendment_title: v })}
+              />
+            </div>
+            <TextareaField
+              label="Replacement clause wording"
+              value={facts.replacement_clause_text}
+              onChange={(v) => onUpdate({ replacement_clause_text: v })}
+              helperText="Set out the precise wording that should replace the existing clause if needed."
+            />
+          </>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <TextField
+              label="Current tenancy end date"
+              value={facts.current_tenancy_end_date}
+              onChange={(v) => onUpdate({ current_tenancy_end_date: v })}
+              type="date"
+            />
+            <TextareaField
+              label="Renewal compliance notes"
+              value={facts.renewal_compliance_notes}
+              onChange={(v) => onUpdate({ renewal_compliance_notes: v })}
+              helperText="Record any deposit, prescribed information, licensing, or right to rent checks to revisit on renewal."
+            />
+          </div>
+        )}
+        </div>
       )}
 
       {(residentialProduct === 'residential_sublet_agreement' || residentialProduct === 'lease_assignment_agreement') && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {residentialProduct === 'residential_sublet_agreement' ? (
             <>
+              <TextField
+                label="Head tenant name"
+                value={facts.head_tenant_name}
+                onChange={(v) => onUpdate({ head_tenant_name: v })}
+              />
               <TextField
                 label="Subtenant name"
                 value={facts.subtenant_name}
@@ -2484,6 +2654,27 @@ const ResidentialDocumentDetailsSection: React.FC<SectionProps> = ({ facts, onUp
                 value={facts.landlord_consent_obtained}
                 onChange={(v) => onUpdate({ landlord_consent_obtained: v })}
               />
+              <TextField
+                label="Landlord consent reference"
+                value={facts.landlord_consent_reference}
+                onChange={(v) => onUpdate({ landlord_consent_reference: v })}
+              />
+              <TextField
+                label="Landlord consent date"
+                value={facts.landlord_consent_date}
+                onChange={(v) => onUpdate({ landlord_consent_date: v })}
+                type="date"
+              />
+              <CurrencyField
+                label={`Sublet rent (${GBP_SYMBOL})`}
+                value={facts.sublet_rent}
+                onChange={(v) => onUpdate({ sublet_rent: v })}
+              />
+              <CurrencyField
+                label={`Sublet deposit (${GBP_SYMBOL})`}
+                value={facts.sublet_deposit}
+                onChange={(v) => onUpdate({ sublet_deposit: v })}
+              />
             </>
           ) : (
             <>
@@ -2504,26 +2695,76 @@ const ResidentialDocumentDetailsSection: React.FC<SectionProps> = ({ facts, onUp
                 value={facts.assignment_effective_date}
                 onChange={(v) => onUpdate({ assignment_effective_date: v })}
                 type="date"
+                required
               />
               <YesNoField
                 label="Landlord consent obtained?"
                 value={facts.landlord_consent_obtained}
                 onChange={(v) => onUpdate({ landlord_consent_obtained: v })}
               />
+              <TextField
+                label="Landlord consent reference"
+                value={facts.landlord_consent_reference}
+                onChange={(v) => onUpdate({ landlord_consent_reference: v })}
+              />
+              <TextField
+                label="Landlord consent date"
+                value={facts.landlord_consent_date}
+                onChange={(v) => onUpdate({ landlord_consent_date: v })}
+                type="date"
+              />
+              <YesNoField
+                label="Release outgoing tenant after assignment?"
+                value={facts.release_outgoing_tenant}
+                onChange={(v) => onUpdate({ release_outgoing_tenant: v })}
+              />
             </>
           )}
-          <div className="md:col-span-2">
+          </div>
+          {residentialProduct === 'residential_sublet_agreement' ? (
             <TextareaField
-              label="Additional details"
+              label="Head tenancy, permitted use, bills, and house rules"
               value={facts.transfer_terms_summary}
               onChange={(v) => onUpdate({ transfer_terms_summary: v })}
+              helperText="Record any head tenancy restrictions, permitted use, bills arrangements, and house rules that should bind the subtenant."
             />
-          </div>
+          ) : (
+            <>
+              <TextareaField
+                label="Deposit treatment"
+                value={facts.deposit_treatment}
+                onChange={(v) => onUpdate({ deposit_treatment: v })}
+                helperText="Explain whether the deposit is transferred, repaid and replaced, or dealt with outside this agreement."
+              />
+              <TextareaField
+                label="Apportionments, handover, and additional terms"
+                value={facts.transfer_terms_summary}
+                onChange={(v) => onUpdate({ transfer_terms_summary: v })}
+                helperText="Record any rent or utility apportionment, key handover, and other practical assignment terms."
+              />
+            </>
+          )}
         </div>
       )}
 
       {residentialProduct === 'flatmate_agreement' && (
         <div className="space-y-4">
+          <TextField
+            label="Occupier names"
+            value={facts.flatmate_names}
+            onChange={(v) => onUpdate({ flatmate_names: v })}
+            placeholder="Alex Brown, Jordan Smith"
+          />
+          <TextField
+            label="Room allocation"
+            value={facts.room_allocation}
+            onChange={(v) => onUpdate({ room_allocation: v })}
+          />
+          <TextareaField
+            label="How is rent split?"
+            value={facts.flatmate_rent_split}
+            onChange={(v) => onUpdate({ flatmate_rent_split: v })}
+          />
           <TextareaField
             label="How are bills split?"
             value={facts.bill_split_summary}
@@ -2536,11 +2777,49 @@ const ResidentialDocumentDetailsSection: React.FC<SectionProps> = ({ facts, onUp
             onChange={(v) => onUpdate({ house_rules_summary: v })}
             required
           />
+          <TextareaField
+            label="Cleaning schedule"
+            value={facts.cleaning_schedule}
+            onChange={(v) => onUpdate({ cleaning_schedule: v })}
+          />
+          <TextareaField
+            label="Guest rules"
+            value={facts.guest_rules}
+            onChange={(v) => onUpdate({ guest_rules: v })}
+          />
+          <TextField
+            label="Quiet hours"
+            value={facts.quiet_hours}
+            onChange={(v) => onUpdate({ quiet_hours: v })}
+            placeholder="10:00pm to 7:00am"
+          />
+          <TextareaField
+            label="Dispute resolution process"
+            value={facts.dispute_resolution}
+            onChange={(v) => onUpdate({ dispute_resolution: v })}
+          />
+          <TextField
+            label="Notice period between flatmates"
+            value={facts.notice_period_between_flatmates}
+            onChange={(v) => onUpdate({ notice_period_between_flatmates: v })}
+            placeholder="28 days"
+          />
+          <TextareaField
+            label="Exit and replacement occupier arrangements"
+            value={facts.exit_arrangements}
+            onChange={(v) => onUpdate({ exit_arrangements: v })}
+          />
+          <TextareaField
+            label="Replacement occupier process"
+            value={facts.replacement_occupier_process}
+            onChange={(v) => onUpdate({ replacement_occupier_process: v })}
+          />
         </div>
       )}
 
       {(residentialProduct === 'rent_arrears_letter' || residentialProduct === 'repayment_plan_agreement') && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <NumberField
             label="Current arrears (£)"
             value={facts.arrears_amount}
@@ -2553,8 +2832,38 @@ const ResidentialDocumentDetailsSection: React.FC<SectionProps> = ({ facts, onUp
             onChange={(v) => onUpdate({ arrears_date: v })}
             type="date"
           />
+          <TextareaField
+            label="Missed rent periods"
+            value={facts.arrears_periods_missed}
+            onChange={(v) => onUpdate({ arrears_periods_missed: v })}
+            placeholder="January 2026, February 2026"
+            required={residentialProduct === 'rent_arrears_letter'}
+          />
+          <TextField
+            label="Arrears schedule reference"
+            value={facts.arrears_schedule_attached_reference}
+            onChange={(v) => onUpdate({ arrears_schedule_attached_reference: v })}
+            placeholder="Ledger attached at Schedule 1"
+          />
+          <TextField
+            label="Payment method"
+            value={facts.payment_method}
+            onChange={(v) => onUpdate({ payment_method: v })}
+            placeholder="Bank transfer"
+          />
+          <TextField
+            label="Payment reference to quote"
+            value={facts.payment_reference_override}
+            onChange={(v) => onUpdate({ payment_reference_override: v })}
+          />
           {residentialProduct === 'rent_arrears_letter' ? (
             <>
+              <SelectField
+                label="Letter type"
+                value={facts.arrears_letter_type}
+                onChange={(v) => onUpdate({ arrears_letter_type: v })}
+                options={['Arrears reminder', 'Final warning']}
+              />
               <TextField
                 label="Final deadline"
                 value={facts.final_deadline}
@@ -2581,16 +2890,44 @@ const ResidentialDocumentDetailsSection: React.FC<SectionProps> = ({ facts, onUp
                 label="Repayment frequency"
                 value={facts.repayment_frequency}
                 onChange={(v) => onUpdate({ repayment_frequency: v })}
-                options={['Weekly', 'Monthly']}
+                options={['Weekly', 'Fortnightly', 'Monthly']}
+                required
               />
               <TextField
                 label="First repayment date"
                 value={facts.repayment_start_date}
                 onChange={(v) => onUpdate({ repayment_start_date: v })}
                 type="date"
+                required
+              />
+              <TextField
+                label="Plan end date / final deadline"
+                value={facts.repayment_end_date}
+                onChange={(v) => onUpdate({ repayment_end_date: v })}
+                type="date"
+              />
+              <NumberField
+                label="Default grace period (days)"
+                value={facts.default_grace_days}
+                onChange={(v) => onUpdate({ default_grace_days: v })}
               />
             </>
           )}
+        </div>
+        <TextareaField
+          label="Payment instructions"
+          value={facts.payment_details}
+          onChange={(v) => onUpdate({ payment_details: v })}
+          helperText="Record bank details, portal instructions, or where payment should be sent."
+        />
+        {residentialProduct === 'repayment_plan_agreement' && (
+          <TextareaField
+            label="Default consequences"
+            value={facts.default_consequences}
+            onChange={(v) => onUpdate({ default_consequences: v })}
+            helperText="Explain what should happen if an instalment or ongoing rent payment is missed."
+          />
+        )}
         </div>
       )}
 

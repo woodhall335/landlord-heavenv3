@@ -25,6 +25,10 @@ import {
 import { getSessionTokenHeaders } from '@/lib/session-token';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { isResidentialStandaloneTenancyProduct } from '@/lib/wizard/flow-routing';
+import {
+  isResidentialLettingProductSku,
+  type ResidentialLettingProductSku,
+} from '@/lib/residential-letting/products';
 
 // Feature flags: Use new section-based flows
 // Set to true to enable the redesigned wizards, false to use legacy StructuredWizard
@@ -35,6 +39,11 @@ const USE_TENANCY_SECTION_FLOW = true;
 type CaseType = 'eviction' | 'money_claim' | 'tenancy_agreement';
 type Jurisdiction = 'england' | 'wales' | 'scotland' | 'northern-ireland' | null;
 type AskHeavenProduct = 'notice_only' | 'complete_pack' | 'money_claim' | 'tenancy_agreement';
+type TenancyFlowProduct =
+  | 'tenancy_agreement'
+  | 'ast_standard'
+  | 'ast_premium'
+  | ResidentialLettingProductSku;
 
 
 const TENANCY_FIELD_TO_SECTION: Record<string, string> = {
@@ -118,6 +127,14 @@ function WizardFlowContent() {
   // Normalize product for Ask Heaven / wizard - use effectiveProduct (order-aware)
   const normalizedProduct = effectiveProduct;
   const isResidentialStandaloneProduct = isResidentialStandaloneTenancyProduct(normalizedProduct);
+  const tenancyFlowProduct: TenancyFlowProduct =
+    normalizedProduct === 'ast_standard' ||
+    normalizedProduct === 'ast_premium' ||
+    normalizedProduct === 'tenancy_agreement'
+      ? normalizedProduct
+      : isResidentialLettingProductSku(normalizedProduct)
+        ? normalizedProduct
+        : 'tenancy_agreement';
 
   // Derive a coarse product label for Ask Heaven (its Product union)
   const askHeavenProduct: AskHeavenProduct | null = (() => {
@@ -383,18 +400,13 @@ function WizardFlowContent() {
   if (
     type === 'tenancy_agreement' &&
     USE_TENANCY_SECTION_FLOW &&
-    !isResidentialStandaloneProduct &&
     (jurisdiction === 'england' || jurisdiction === 'wales' || jurisdiction === 'scotland' || jurisdiction === 'northern-ireland')
   ) {
     return (
       <TenancySectionFlow
         caseId={caseId}
         jurisdiction={jurisdiction as 'england' | 'wales' | 'scotland' | 'northern-ireland'}
-        product={
-          normalizedProduct === 'ast_standard' || normalizedProduct === 'ast_premium' || isResidentialStandaloneProduct
-            ? normalizedProduct
-            : 'tenancy_agreement'
-        }
+        product={tenancyFlowProduct}
         highlightedSections={highlightedTenancySections}
       />
     );
@@ -410,9 +422,7 @@ function WizardFlowContent() {
         jurisdiction={jurisdiction}
         product={
           type === 'tenancy_agreement'
-            ? (isResidentialStandaloneProduct
-              ? normalizedProduct || 'tenancy_agreement'
-              : (askHeavenProduct ?? 'tenancy_agreement'))
+            ? (askHeavenProduct ?? 'tenancy_agreement')
             : (askHeavenProduct ?? 'complete_pack')
         }
         initialQuestion={initialQuestion ?? undefined}
