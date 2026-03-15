@@ -455,7 +455,7 @@ function WizardFlowContent() {
 export default function WizardFlowPage() {
   return (
     <>
-      <HeaderConfig mode="transparent" />
+      <HeaderConfig mode="solid" />
       <Suspense
         fallback={
           <div className="min-h-screen flex items-center justify-center">
