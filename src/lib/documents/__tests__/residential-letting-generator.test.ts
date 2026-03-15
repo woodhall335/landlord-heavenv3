@@ -214,4 +214,198 @@ describe('generateResidentialLettingDocuments', () => {
     expect(html).toContain('Renters&#x27; Rights Act 2025 reforms');
     expect(html).toContain('1 May 2026');
   });
+
+  test('renders amendment matrix rows for structured lease amendments', async () => {
+    const pack = await generateResidentialLettingDocuments(
+      'lease_amendment',
+      {
+        ...baseFacts,
+        original_agreement_date: '2025-12-20',
+        amendment_effective_date: '2026-04-01',
+        amendment_title: 'Rent and pet clause update',
+        amendment_rows: [
+          {
+            clause_reference: 'Clause 3.1',
+            current_wording_summary: 'Rent is £1,500 pcm',
+            replacement_wording: 'Rent increases to £1,650 pcm',
+            effective_date: '2026-04-01',
+          },
+        ],
+      },
+      { outputFormat: 'html' }
+    );
+
+    const html = pack.documents[0].html;
+
+    expect(html).toContain('Clause Amendment Matrix');
+    expect(html).toContain('Clause 3.1');
+    expect(html).toContain('Rent increases to £1,650 pcm');
+  });
+
+  test('renders structured inspection rooms and evidence appendix entries', async () => {
+    const pack = await generateResidentialLettingDocuments(
+      'rental_inspection_report',
+      {
+        ...baseFacts,
+        inspection_date: '2026-03-12',
+        inspection_type: 'Periodic inspection',
+        inspector_name: 'Ian Inspector',
+        inspection_rooms: [
+          {
+            name: 'Kitchen',
+            condition: 'Units intact with light wear.',
+            cleanliness: 'Clean and presentable.',
+            fixtures: 'Worktops, sink, extractor, and splashback inspected.',
+            defects: 'Sealant beginning to fail near sink.',
+            actions: 'Arrange reseal within 14 days.',
+            tenant_comments: 'Tenant confirmed issue already reported.',
+            photo_reference: 'IMG-001 to IMG-004',
+            items: [
+              {
+                item: 'Oven',
+                condition: 'Good',
+                cleanliness: 'Clean',
+                notes: 'Operational at inspection.',
+              },
+            ],
+          },
+        ],
+        follow_up_items: [
+          {
+            issue: 'Sink sealant',
+            action_required: 'Reseal sink edge',
+            target_date: '2026-03-26',
+          },
+        ],
+        inspection_evidence_files: [
+          {
+            id: 'e1',
+            documentId: 'doc1',
+            fileName: 'kitchen-overview.jpg',
+            category: 'photo',
+            uploadedAt: '2026-03-12',
+          },
+        ],
+      },
+      { outputFormat: 'html' }
+    );
+
+    const html = pack.documents[0].html;
+
+    expect(html).toContain('Room-by-Room Record');
+    expect(html).toContain('Kitchen');
+    expect(html).toContain('Arrange reseal within 14 days.');
+    expect(html).toContain('Evidence Appendix');
+    expect(html).toContain('kitchen-overview.jpg');
+  });
+
+  test('renders structured inventory rooms with cleanliness and evidence appendix', async () => {
+    const pack = await generateResidentialLettingDocuments(
+      'inventory_schedule_condition',
+      {
+        ...baseFacts,
+        inventory_date: '2026-01-01',
+        inventory_rooms: [
+          {
+            name: 'Bedroom 1',
+            condition: 'Generally good with minor wear.',
+            cleanliness: 'Professionally cleaned.',
+            photo_reference: 'BED-01 to BED-03',
+            items: [
+              {
+                item: 'Double bed frame',
+                condition: 'Good',
+                cleanliness: 'Clean',
+                notes: 'Minor scuff to footboard.',
+              },
+            ],
+          },
+        ],
+        inventory_evidence_files: [
+          {
+            id: 'e2',
+            documentId: 'doc2',
+            fileName: 'bedroom-checkin.jpg',
+            category: 'photo',
+            uploadedAt: '2026-01-01',
+          },
+        ],
+      },
+      { outputFormat: 'html' }
+    );
+
+    const html = pack.documents[0].html;
+
+    expect(html).toContain('Bedroom 1');
+    expect(html).toContain('Professionally cleaned.');
+    expect(html).toContain('Double bed frame');
+    expect(html).toContain('bedroom-checkin.jpg');
+  });
+
+  test('renders repayment instalment tables from the premium standalone wizard', async () => {
+    const pack = await generateResidentialLettingDocuments(
+      'repayment_plan_agreement',
+      {
+        ...baseFacts,
+        tenant_full_name: 'Alice Tenant',
+        arrears_total: 2400,
+        arrears_as_at_date: '2026-03-10',
+        instalment_amount: 400,
+        repayment_start_date: '2026-03-20',
+        instalment_frequency: 'monthly',
+        repayment_schedule_rows: [
+          {
+            due_date: '2026-03-20',
+            amount: 400,
+            running_balance: 2000,
+            note: 'First agreed instalment',
+          },
+        ],
+        default_consequence: 'Landlord may cancel the plan if instalments are missed.',
+      },
+      { outputFormat: 'html' }
+    );
+
+    const html = pack.documents[0].html;
+
+    expect(html).toContain('Instalment Schedule');
+    expect(html).toContain('First agreed instalment');
+    expect(html).toContain('£2,000.00');
+  });
+
+  test('renders attached arrears schedules when detailed arrears rows are provided', async () => {
+    const pack = await generateResidentialLettingDocuments(
+      'rent_arrears_letter',
+      {
+        ...baseFacts,
+        sender_name: 'Jane Landlord',
+        sender_service_address: '3 Owner Road, London, SW1A 2BB',
+        tenant_full_name: 'Alice Tenant',
+        tenant_last_known_address: '12 Example Street, London, SW1A 1AA',
+        arrears_total: 2400,
+        arrears_as_at_date: '2026-03-10',
+        final_deadline: '2026-03-24',
+        letter_type: 'final_warning',
+        payment_instructions: 'Pay by bank transfer quoting property postcode.',
+        arrears_schedule_rows: [
+          {
+            due_date: '2026-02-01',
+            period_covered: 'February 2026',
+            amount_due: 1200,
+            amount_paid: 0,
+            amount_outstanding: 1200,
+            payment_received_date: '',
+            note: 'Unpaid',
+          },
+        ],
+      },
+      { outputFormat: 'html' }
+    );
+
+    const html = pack.documents[0].html;
+
+    expect(html).toContain('Attached Arrears Schedule');
+    expect(html).toContain('February 2026');
+    expect(html).toContain('£1,200.00');
+  });
 });

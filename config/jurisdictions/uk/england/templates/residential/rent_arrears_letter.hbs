@@ -229,6 +229,34 @@
     </table>
   </section>
 
+  {{#if detailed_arrears_rows.length}}
+    <section class="section">
+      <h2>Attached Arrears Schedule</h2>
+      <table class="detail-table">
+        <tr>
+          <td class="label">Due date</td>
+          <td class="label">Period</td>
+          <td class="label">Due</td>
+          <td class="label">Paid</td>
+          <td class="label">Outstanding</td>
+          <td class="label">Payment date</td>
+          <td class="label">Note</td>
+        </tr>
+        {{#each detailed_arrears_rows}}
+          <tr>
+            <td>{{due_date}}</td>
+            <td>{{period_covered}}</td>
+            <td>{{amount_due}}</td>
+            <td>{{amount_paid}}</td>
+            <td>{{amount_outstanding}}</td>
+            <td>{{payment_received_date}}</td>
+            <td>{{note}}</td>
+          </tr>
+        {{/each}}
+      </table>
+    </section>
+  {{/if}}
+
   <section class="section">
     <h2>Payment Instructions</h2>
     <table class="detail-table">

@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import React, { Suspense, useEffect, useState, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
@@ -81,6 +82,7 @@ import {
   getResidentialUpsellRecommendations,
   type ResidentialUpsellRecommendation,
 } from '@/lib/residential-letting/recommendations';
+import { getResidentialStandaloneProfile } from '@/lib/residential-letting/standalone-profiles';
 
 function ReviewPageInner() {
   const searchParams = useSearchParams();
@@ -444,7 +446,7 @@ function ReviewPageInner() {
   // Render Tenancy Agreement specific content
   if (isTenancyFlow) {
     if (isResidentialStandaloneFlow) {
-      return <ResidentialLettingReviewContent
+      return <PremiumResidentialLettingReviewContent
         caseId={caseId}
         analysis={analysis}
         jurisdiction={jurisdiction}
@@ -3533,6 +3535,444 @@ function ResidentialLettingReviewContent({
               : isPaid
                 ? 'Regenerate document'
                 : 'Proceed to payment & pack'}
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+function PremiumResidentialLettingReviewContent({
+  analysis,
+  jurisdiction,
+  product,
+  recommendations,
+  selectedAddOns,
+  onToggleAddOn,
+  onEdit,
+  onProceed,
+  isPaid,
+  isRegenerating,
+  isLoadingPaymentStatus,
+}: ResidentialLettingReviewContentProps) {
+  const facts = analysis.case_facts || {};
+  const productMeta = RESIDENTIAL_LETTING_PRODUCTS[product as keyof typeof RESIDENTIAL_LETTING_PRODUCTS];
+  const profile = isResidentialLettingProductSku(product)
+    ? getResidentialStandaloneProfile(product)
+    : null;
+
+  const people = Array.isArray(facts.tenants)
+    ? facts.tenants.map((tenant: any) => tenant.full_name).filter(Boolean)
+    : [];
+
+  const propertyAddress = [
+    facts.property_address_line1,
+    facts.property_address_town,
+    facts.property_address_postcode,
+  ]
+    .filter(Boolean)
+    .join(', ');
+
+  const formatMoney = (value: unknown) => {
+    const numeric = Number(value);
+    if (!Number.isFinite(numeric) || numeric <= 0) return 'Not specified';
+    return `£${numeric.toLocaleString('en-GB', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })}`;
+  };
+
+  const formatDate = (value: unknown) => {
+    if (!value) return 'Not specified';
+    const text = String(value);
+    const parsed = new Date(text);
+    if (Number.isNaN(parsed.getTime())) return text;
+    return parsed.toLocaleDateString('en-GB', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    });
+  };
+
+  const readText = (...values: unknown[]) => {
+    for (const value of values) {
+      const text = typeof value === 'string' ? value.trim() : value ? String(value).trim() : '';
+      if (text) return text;
+    }
+    return 'Not specified';
+  };
+
+  const inspectionRooms = Array.isArray(facts.inspection_rooms) ? facts.inspection_rooms : [];
+  const inventoryRooms = Array.isArray(facts.inventory_rooms) ? facts.inventory_rooms : [];
+  const inspectionUploads = Array.isArray(facts.inspection_evidence_files)
+    ? facts.inspection_evidence_files
+    : [];
+  const inventoryUploads = Array.isArray(facts.inventory_evidence_files)
+    ? facts.inventory_evidence_files
+    : [];
+  const roomCount = inspectionRooms.length || inventoryRooms.length;
+  const uploadCount = inspectionUploads.length || inventoryUploads.length;
+  const totalInventoryItems = inventoryRooms.reduce(
+    (total: number, room: any) => total + (Array.isArray(room.items) ? room.items.length : 0),
+    0
+  );
+  const scheduleCount =
+    (Array.isArray(facts.amendment_rows) ? facts.amendment_rows.length : 0) +
+    (Array.isArray(facts.assignment_apportionment_rows)
+      ? facts.assignment_apportionment_rows.length
+      : 0) +
+    (Array.isArray(facts.repayment_schedule_rows) ? facts.repayment_schedule_rows.length : 0) +
+    (Array.isArray(facts.changed_terms_schedule) ? facts.changed_terms_schedule.length : 0) +
+    (Array.isArray(facts.follow_up_items) ? facts.follow_up_items.length : 0) +
+    (Array.isArray(facts.arrears_schedule_rows) ? facts.arrears_schedule_rows.length : 0);
+
+  const headlineFacts = (() => {
+    switch (product) {
+      case 'guarantor_agreement':
+        return [
+          { label: 'Property', value: propertyAddress || 'Not specified' },
+          { label: 'Tenant', value: people.join(', ') || readText(facts.tenant_full_name) },
+          { label: 'Guarantor', value: readText(facts.guarantor_name, facts.guarantor_full_name) },
+          {
+            label: 'Liability cap',
+            value: facts.guarantee_cap_amount
+              ? formatMoney(facts.guarantee_cap_amount)
+              : 'Full liability wording',
+          },
+        ];
+      case 'residential_sublet_agreement':
+        return [
+          { label: 'Head tenant', value: readText(facts.head_tenant_name, people.join(', ')) },
+          { label: 'Subtenant', value: readText(facts.subtenant_name) },
+          {
+            label: 'Consent status',
+            value: readText(facts.landlord_consent_status, facts.landlord_consent),
+          },
+          {
+            label: 'Sublet rent',
+            value: facts.sublet_rent || facts.sublet_rent_amount
+              ? formatMoney(facts.sublet_rent || facts.sublet_rent_amount)
+              : formatMoney(facts.rent_amount),
+          },
+        ];
+      case 'lease_amendment':
+        return [
+          { label: 'Original tenancy date', value: formatDate(facts.original_agreement_date) },
+          { label: 'Effective date', value: formatDate(facts.amendment_effective_date) },
+          { label: 'Amendment title', value: readText(facts.amendment_title) },
+          {
+            label: 'Clause rows',
+            value: String(Array.isArray(facts.amendment_rows) ? facts.amendment_rows.length : 0),
+          },
+        ];
+      case 'lease_assignment_agreement':
+        return [
+          {
+            label: 'Outgoing tenant',
+            value: readText(facts.outgoing_tenant_name, people.join(', ')),
+          },
+          { label: 'Incoming tenant', value: readText(facts.incoming_tenant_name) },
+          {
+            label: 'Assignment date',
+            value: formatDate(facts.assignment_date || facts.assignment_effective_date),
+          },
+          {
+            label: 'Release after assignment',
+            value:
+              facts.release_outgoing_tenant === true || facts.outgoing_tenant_release === 'full_release'
+                ? 'Yes'
+                : facts.release_outgoing_tenant === false || facts.outgoing_tenant_release === 'no_release'
+                  ? 'No'
+                  : facts.outgoing_tenant_release === 'partial_release'
+                    ? 'Partial release'
+                    : 'Not specified',
+          },
+        ];
+      case 'rent_arrears_letter':
+        return [
+          { label: 'Tenant', value: people.join(', ') || readText(facts.tenant_full_name) },
+          {
+            label: 'Arrears amount',
+            value: facts.arrears_amount ? formatMoney(facts.arrears_amount) : 'Not specified',
+          },
+          { label: 'Deadline', value: formatDate(facts.final_deadline || facts.response_deadline) },
+          {
+            label: 'Schedule rows',
+            value: String(
+              Array.isArray(facts.arrears_schedule_rows) ? facts.arrears_schedule_rows.length : 0
+            ),
+          },
+        ];
+      case 'repayment_plan_agreement':
+        return [
+          { label: 'Tenant', value: people.join(', ') || readText(facts.tenant_full_name) },
+          {
+            label: 'Arrears total',
+            value: formatMoney(facts.arrears_total || facts.arrears_amount),
+          },
+          { label: 'Instalment', value: formatMoney(facts.instalment_amount) },
+          {
+            label: 'Schedule rows',
+            value: String(
+              Array.isArray(facts.repayment_schedule_rows)
+                ? facts.repayment_schedule_rows.length
+                : 0
+            ),
+          },
+        ];
+      case 'rental_inspection_report':
+        return [
+          { label: 'Inspection type', value: readText(facts.inspection_type) },
+          { label: 'Inspection date', value: formatDate(facts.inspection_date) },
+          {
+            label: 'Inspector',
+            value: readText(facts.inspector_name, facts.agent_name, facts.landlord_full_name),
+          },
+          { label: 'Rooms captured', value: String(roomCount) },
+        ];
+      case 'inventory_schedule_condition':
+        return [
+          { label: 'Inventory date', value: formatDate(facts.inventory_date || facts.inspection_date) },
+          { label: 'Landlord', value: readText(facts.landlord_full_name) },
+          { label: 'Tenant', value: people.join(', ') || readText(facts.tenant_full_name) },
+          { label: 'Rooms captured', value: String(roomCount) },
+        ];
+      case 'flatmate_agreement':
+        return [
+          { label: 'Occupiers', value: readText(facts.flatmate_names, people.join(', ')) },
+          {
+            label: 'Start date',
+            value: formatDate(facts.arrangement_start_date || facts.tenancy_start_date),
+          },
+          { label: 'Rent split', value: readText(facts.rent_split, facts.rent_split_summary, facts.flatmate_rent_split) },
+          { label: 'Bills split', value: readText(facts.bills_split, facts.bill_split_summary) },
+        ];
+      case 'renewal_tenancy_agreement':
+        return [
+          { label: 'Renewal start', value: formatDate(facts.renewal_start_date) },
+          { label: 'Renewal end', value: formatDate(facts.renewal_end_date) },
+          {
+            label: 'Renewed rent',
+            value: formatMoney(facts.new_rent_amount || facts.renewal_rent_amount),
+          },
+          {
+            label: 'Changed terms',
+            value: String(
+              Array.isArray(facts.changed_terms_schedule) ? facts.changed_terms_schedule.length : 0
+            ),
+          },
+        ];
+      default:
+        return [
+          { label: 'Property', value: propertyAddress || 'Not specified' },
+          { label: 'Tenant / occupier', value: people.join(', ') || 'Not specified' },
+          {
+            label: 'Rent',
+            value: facts.rent_amount ? formatMoney(facts.rent_amount) : 'Not specified',
+          },
+          { label: 'Start date', value: formatDate(facts.tenancy_start_date) },
+        ];
+    }
+  })();
+
+  const fitReasons = (() => {
+    switch (product) {
+      case 'rental_inspection_report':
+        return [
+          `${roomCount} room${roomCount === 1 ? '' : 's'} captured for room-by-room reporting.`,
+          `${uploadCount} evidence upload${uploadCount === 1 ? '' : 's'} ready to be referenced in the appendix.`,
+          `${Array.isArray(facts.follow_up_items) ? facts.follow_up_items.length : 0} follow-up action item${Array.isArray(facts.follow_up_items) && facts.follow_up_items.length === 1 ? '' : 's'} prepared for the report.`,
+        ];
+      case 'inventory_schedule_condition':
+        return [
+          `${roomCount} room${roomCount === 1 ? '' : 's'} captured for the inventory baseline.`,
+          `${totalInventoryItems} item row${totalInventoryItems === 1 ? '' : 's'} prepared across the property.`,
+          `${uploadCount} evidence upload${uploadCount === 1 ? '' : 's'} can be referenced against room notes.`,
+        ];
+      case 'lease_amendment':
+        return [
+          `${Array.isArray(facts.amendment_rows) ? facts.amendment_rows.length : 0} clause amendment row${Array.isArray(facts.amendment_rows) && facts.amendment_rows.length === 1 ? '' : 's'} will render in the amendment matrix.`,
+          `Effective date set for ${formatDate(facts.amendment_effective_date)}.`,
+          'The output preserves the original tenancy and only varies the listed provisions.',
+        ];
+      case 'repayment_plan_agreement':
+        return [
+          `${Array.isArray(facts.repayment_schedule_rows) ? facts.repayment_schedule_rows.length : 0} instalment row${Array.isArray(facts.repayment_schedule_rows) && facts.repayment_schedule_rows.length === 1 ? '' : 's'} will appear in the repayment schedule.`,
+          `Arrears acknowledged at ${formatMoney(facts.arrears_total || facts.arrears_amount)}.`,
+          'Payment method, default wording, and reservation-of-rights language are included in the agreement.',
+        ];
+      case 'renewal_tenancy_agreement':
+        return [
+          `Renewal start date captured as ${formatDate(facts.renewal_start_date)}.`,
+          `${Array.isArray(facts.changed_terms_schedule) ? facts.changed_terms_schedule.length : 0} changed term row${Array.isArray(facts.changed_terms_schedule) && facts.changed_terms_schedule.length === 1 ? '' : 's'} will appear in the change schedule.`,
+          'Compliance notes and suitability warnings are carried into the final document.',
+        ];
+      default:
+        return profile?.reviewHighlights || [];
+    }
+  })().filter(Boolean);
+
+  const evidenceSummary = [
+    uploadCount > 0 ? `${uploadCount} upload${uploadCount === 1 ? '' : 's'} attached` : '',
+    facts.photo_schedule_reference ? `Photo reference: ${facts.photo_schedule_reference}` : '',
+    facts.tenant_comments ? 'Tenant comments will be carried into the final pack.' : '',
+    facts.inspector_certification ? 'Inspector certification text has been captured.' : '',
+  ].filter(Boolean);
+
+  return (
+    <div className="mx-auto max-w-6xl space-y-6 px-4 py-6 sm:px-6">
+      <div className="overflow-hidden rounded-[2rem] bg-gradient-to-br from-slate-950 via-slate-900 to-[#433324] text-white shadow-2xl">
+        <div className="grid gap-6 p-6 sm:p-8 lg:grid-cols-[120px,1fr,260px] lg:items-center">
+          <div className="mx-auto rounded-[1.5rem] bg-white/8 p-4">
+            {profile ? (
+              <Image
+                src={profile.reviewIcon || profile.icon}
+                alt=""
+                width={96}
+                height={96}
+                className="h-24 w-24 object-contain"
+              />
+            ) : null}
+          </div>
+          <div>
+            <div className="text-xs font-semibold uppercase tracking-[0.26em] text-white/60">
+              {profile?.eyebrow || 'England residential wizard'}
+            </div>
+            <h1 className="mt-3 text-3xl font-semibold tracking-tight">
+              {profile?.heroTitle || productMeta?.label || 'Residential Letting Document'}
+            </h1>
+            <p className="mt-3 max-w-3xl text-sm leading-7 text-white/80">
+              {profile?.heroSubtitle || productMeta?.description}
+            </p>
+            <div className="mt-5 grid gap-3 sm:grid-cols-3">
+              <div className="rounded-2xl border border-white/10 bg-white/6 px-4 py-3">
+                <div className="text-xs uppercase tracking-[0.18em] text-white/60">Rooms</div>
+                <div className="mt-1 text-2xl font-semibold">{roomCount}</div>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-white/6 px-4 py-3">
+                <div className="text-xs uppercase tracking-[0.18em] text-white/60">Evidence</div>
+                <div className="mt-1 text-2xl font-semibold">{uploadCount}</div>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-white/6 px-4 py-3">
+                <div className="text-xs uppercase tracking-[0.18em] text-white/60">Schedules</div>
+                <div className="mt-1 text-2xl font-semibold">{scheduleCount}</div>
+              </div>
+            </div>
+          </div>
+          <div className="rounded-[1.5rem] border border-white/10 bg-white/6 p-5">
+            <div className="text-xs font-semibold uppercase tracking-[0.24em] text-white/60">
+              One-Time Price
+            </div>
+            <div className="mt-3 text-3xl font-semibold">{productMeta?.displayPrice || ''}</div>
+            <p className="mt-2 text-sm text-white/75">
+              {jurisdiction === 'england' ? 'England only' : jurisdiction}
+            </p>
+            <p className="mt-2 text-sm text-white/75">
+              Premium guided output with structured schedules, cleaner sectioning, and
+              execution-ready formatting.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {profile?.cautionBanner ? (
+        <Card className="border-amber-200 bg-amber-50 p-6">
+          <h2 className="text-sm font-semibold uppercase tracking-[0.2em] text-amber-900">
+            {profile.cautionBanner.title}
+          </h2>
+          <p className="mt-3 text-sm leading-7 text-amber-900">{profile.cautionBanner.body}</p>
+        </Card>
+      ) : null}
+
+      <div className="grid gap-6 lg:grid-cols-[1.15fr,0.85fr]">
+        <Card className="p-6">
+          <h2 className="text-lg font-semibold mb-4">Why this fits your answers</h2>
+          <div className="space-y-3">
+            {fitReasons.map((item) => (
+              <div key={item} className="flex items-start gap-3 rounded-2xl bg-slate-50 px-4 py-3">
+                <RiCheckboxCircleLine className="mt-0.5 h-5 w-5 text-[#7C3AED]" />
+                <p className="text-sm text-slate-700">{item}</p>
+              </div>
+            ))}
+          </div>
+        </Card>
+
+        <Card className="p-6">
+          <h2 className="text-lg font-semibold mb-4">Included sections</h2>
+          <div className="space-y-3">
+            {(profile?.outputSections || [productMeta?.label || 'Document']).map((item) => (
+              <div key={item} className="flex items-start gap-3 rounded-2xl bg-[#f7f4ec] px-4 py-3">
+                <RiFileList3Line className="mt-0.5 h-5 w-5 text-slate-900" />
+                <p className="text-sm text-slate-700">{item}</p>
+              </div>
+            ))}
+          </div>
+        </Card>
+      </div>
+
+      <Card className="p-6">
+        <h2 className="text-lg font-semibold mb-4">Captured facts</h2>
+        <div className="grid gap-4 md:grid-cols-2">
+          {headlineFacts.map((item) => (
+            <div key={item.label} className="rounded-2xl bg-slate-50 p-4">
+              <p className="text-sm text-slate-500 mb-1">{item.label}</p>
+              <p className="text-sm font-medium text-slate-900">{item.value}</p>
+            </div>
+          ))}
+        </div>
+        {facts.document_notes && (
+          <div className="mt-4 rounded-2xl bg-blue-50 p-4">
+            <p className="text-sm text-slate-500 mb-1">Additional notes</p>
+            <p className="text-sm text-slate-800 whitespace-pre-wrap">{facts.document_notes}</p>
+          </div>
+        )}
+      </Card>
+
+      {(evidenceSummary.length > 0 || uploadCount > 0) && (
+        <Card className="p-6">
+          <h2 className="text-lg font-semibold mb-4">Evidence and appendix readiness</h2>
+          <div className="grid gap-3 md:grid-cols-2">
+            {evidenceSummary.map((item) => (
+              <div
+                key={item}
+                className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700"
+              >
+                {item}
+              </div>
+            ))}
+            {uploadCount === 0 ? (
+              <div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-600">
+                No uploads attached yet. The document still generates, but evidence-heavy
+                outputs look stronger with supporting photos or files.
+              </div>
+            ) : null}
+          </div>
+        </Card>
+      )}
+
+      {recommendations.length > 0 && !isPaid && (
+        <RecommendationBasketCard
+          recommendations={recommendations}
+          selectedAddOns={selectedAddOns}
+          onToggleAddOn={onToggleAddOn}
+        />
+      )}
+
+      <div className="flex flex-col sm:flex-row gap-4 mt-4">
+        <Button onClick={onEdit} variant="outline" className="flex-1">
+          Go back &amp; edit answers
+        </Button>
+        <Button
+          onClick={onProceed}
+          className="flex-1"
+          disabled={isRegenerating || isLoadingPaymentStatus}
+        >
+          {isLoadingPaymentStatus
+            ? 'Loading...'
+            : isRegenerating
+              ? 'Regenerating...'
+              : isPaid
+                ? 'Regenerate premium document'
+                : 'Proceed to payment & document'}
         </Button>
       </div>
     </div>

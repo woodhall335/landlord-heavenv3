@@ -389,6 +389,23 @@
         </table>
       {{/if}}
 
+      {{#if table}}
+        <table class="detail-table">
+          <tr>
+            {{#each table.columns}}
+              <td class="label">{{this}}</td>
+            {{/each}}
+          </tr>
+          {{#each table.rows}}
+            <tr>
+              {{#each this}}
+                <td>{{this}}</td>
+              {{/each}}
+            </tr>
+          {{/each}}
+        </table>
+      {{/if}}
+
       {{#if paragraphs}}
         {{#each paragraphs}}
           <p>{{this}}</p>

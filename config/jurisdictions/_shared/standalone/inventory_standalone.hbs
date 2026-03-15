@@ -288,6 +288,18 @@
     <p>This document may later be used as evidential material when considering condition, cleanliness, missing items, damage, fair wear and tear, and any proposed deposit deductions.</p>
   </div>
 
+  {{#if document_facts_rows.length}}
+  <h2>Document Facts</h2>
+  <table class="data-table">
+    {{#each document_facts_rows}}
+    <tr>
+      <td class="label">{{label}}</td>
+      <td class="value">{{value}}</td>
+    </tr>
+    {{/each}}
+  </table>
+  {{/if}}
+
   <!-- ===== PART A: PROPERTY INFORMATION ===== -->
   <h2>Part A: Property Information</h2>
   <table class="data-table">
@@ -364,7 +376,45 @@
   <p class="small-text">Complete the following for each room. Add additional sheets if required.</p>
 
   {{!-- Check if wizard-completed inventory data exists --}}
-  {{#if custom_inventory_rooms.length}}
+  {{#if structured_inventory_rooms.length}}
+    {{#each structured_inventory_rooms}}
+    <div class="room-section">
+      <h4 class="room-title">{{this.name}}</h4>
+      {{#if this.summary_rows.length}}
+      <table class="data-table">
+        {{#each this.summary_rows}}
+        <tr>
+          <td class="label">{{label}}</td>
+          <td class="value">{{value}}</td>
+        </tr>
+        {{/each}}
+      </table>
+      {{/if}}
+      <table class="room-inventory">
+        <tr>
+          <th style="width: 28%">Item</th>
+          <th class="condition-cell">Condition</th>
+          <th class="condition-cell">Cleanliness</th>
+          <th class="notes-cell">Notes / Description</th>
+        </tr>
+        {{#each this.item_rows}}
+        <tr>
+          <td>{{this.item}}</td>
+          <td class="condition-cell">{{#if this.condition}}<span class="completed-value">{{this.condition}}</span>{{else}}__________{{/if}}</td>
+          <td class="condition-cell">{{#if this.cleanliness}}{{this.cleanliness}}{{else}}__________{{/if}}</td>
+          <td class="notes-cell">{{#if this.notes}}{{this.notes}}{{else}}&nbsp;{{/if}}</td>
+        </tr>
+        {{/each}}
+        <tr>
+          <td>Other: ______________</td>
+          <td class="condition-cell">__________</td>
+          <td class="condition-cell">__________</td>
+          <td class="notes-cell">_________________________</td>
+        </tr>
+      </table>
+    </div>
+    {{/each}}
+  {{else if custom_inventory_rooms.length}}
     {{!-- WIZARD-COMPLETED INVENTORY FROM STANDALONE FLOW --}}
     {{#each custom_inventory_rooms}}
     <div class="room-section">
@@ -627,6 +677,17 @@
   </table>
   <p class="small-text">All keys, fobs, and access devices must be returned at the end of the tenancy. {{#if key_replacement_cost}}The cost of replacing lost keys is £{{key_replacement_cost}} per key.{{else}}The cost of replacing lost keys will be charged at the current replacement cost.{{/if}}</p>
 
+  {{#if inventory_key_rows.length}}
+  <table class="data-table">
+    {{#each inventory_key_rows}}
+    <tr>
+      <td class="label">{{label}}</td>
+      <td class="value">{{value}}</td>
+    </tr>
+    {{/each}}
+  </table>
+  {{/if}}
+
   <!-- ===== PART E: GENERAL NOTES ===== -->
   <h2>Part E: General Notes and Observations</h2>
   <div style="min-height: 80px; border: 1pt solid #ccc; padding: 10pt; margin-bottom: 12pt;">
@@ -634,8 +695,39 @@
     {{#if inventory_schedule_notes}}<p>{{inventory_schedule_notes}}</p>{{else}}<p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>{{/if}}
   </div>
 
+  {{#if inventory_general_rows.length}}
+  <table class="data-table">
+    {{#each inventory_general_rows}}
+    <tr>
+      <td class="label">{{label}}</td>
+      <td class="value">{{value}}</td>
+    </tr>
+    {{/each}}
+  </table>
+  {{/if}}
+
+  {{#if inventory_evidence_appendix.length}}
+  <h2>Part F: Evidence Appendix</h2>
+  <table class="data-table">
+    <tr>
+      <th style="width: 15%">Reference</th>
+      <th style="width: 45%">File</th>
+      <th style="width: 20%">Category</th>
+      <th style="width: 20%">Uploaded</th>
+    </tr>
+    {{#each inventory_evidence_appendix}}
+    <tr>
+      <td>{{reference}}</td>
+      <td>{{file_name}}</td>
+      <td>{{category}}</td>
+      <td>{{uploaded_at}}</td>
+    </tr>
+    {{/each}}
+  </table>
+  {{/if}}
+
   <!-- ===== PART F: SIGNATURES ===== -->
-  <h2 class="page-break-before">Part F: Signatures</h2>
+  <h2 class="page-break-before">Part G: Signatures</h2>
   <p>By signing below, the parties confirm that this inventory has been inspected and is intended to record the condition and contents of the property at the relevant inspection date, subject to any written comments attached or sent shortly afterwards.</p>
 
   <table class="signature-table" style="margin-top: 16pt;">

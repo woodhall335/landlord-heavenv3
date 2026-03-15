@@ -26,7 +26,7 @@ import {
   trackWizardStartWithAttribution,
   trackWizardIncompatibleChoice,
 } from '@/lib/analytics';
-import type { WizardJurisdiction, WizardSource, WizardTopic } from '@/lib/wizard/buildWizardLink';
+import type { WizardJurisdiction, WizardProduct, WizardSource, WizardTopic } from '@/lib/wizard/buildWizardLink';
 import {
   isProductSupportedInJurisdiction,
   getUnsupportedProductMessage,
@@ -42,6 +42,7 @@ import {
   isResidentialLettingProductSku,
   RESIDENTIAL_LETTING_PRODUCTS,
 } from '@/lib/residential-letting/products';
+import { getResidentialStandaloneProfile } from '@/lib/residential-letting/standalone-profiles';
 
 // Product-specific hero content (jurisdiction-neutral)
 interface HeroContent {
@@ -95,10 +96,11 @@ function getHeroContent(product: string | null, jurisdiction: string | null): He
     default:
       if (product && isResidentialLettingProductSku(product)) {
         const residentialProduct = RESIDENTIAL_LETTING_PRODUCTS[product];
+        const profile = getResidentialStandaloneProfile(product);
         return {
-          title: residentialProduct.label,
-          subtitle: 'England residential landlord document with a guided wizard and review step.',
-          eyebrow: 'Residential Letting',
+          title: profile.heroTitle,
+          subtitle: profile.heroSubtitle,
+          eyebrow: profile.eyebrow || residentialProduct.label,
         };
       }
       return {
@@ -273,6 +275,32 @@ function isValidJurisdiction(value: string | null): value is WizardJurisdiction 
   return value === 'england' || value === 'wales' || value === 'scotland' || value === 'northern-ireland';
 }
 
+function getEffectiveWizardProduct(
+  product: string | null,
+  documentType: DocumentOption['type'] | null
+): WizardProduct | null {
+  if (!documentType) return null;
+
+  if (product && mapProductToDocumentType(product) === documentType) {
+    if (
+      product === 'notice_only' ||
+      product === 'complete_pack' ||
+      product === 'money_claim' ||
+      product === 'ast_standard' ||
+      product === 'ast_premium' ||
+      product === 'tenancy_agreement'
+    ) {
+      return product;
+    }
+
+    if (isResidentialLettingProductSku(product)) {
+      return product;
+    }
+  }
+
+  return documentType;
+}
+
 /**
  * NOTE:
  * useSearchParams() must be rendered under a <Suspense> boundary in Next 15/16
@@ -305,12 +333,16 @@ function WizardPageInner() {
   const preselectedJurisdiction = useMemo(() => {
     if (!isValidJurisdiction(jurisdictionParam)) return null;
     const docType = preselectedDocument?.type ?? null;
+    const effectiveProduct = getEffectiveWizardProduct(productParam, docType);
     // Check compatibility
     if (docType && !isJurisdictionEnabled(jurisdictionParam, docType)) {
       return null; // Don't preselect if incompatible
     }
+    if (effectiveProduct && !isProductSupportedInJurisdiction(effectiveProduct, jurisdictionParam)) {
+      return null;
+    }
     return allJurisdictions.find((j) => j.value === jurisdictionParam) ?? null;
-  }, [jurisdictionParam, preselectedDocument]);
+  }, [jurisdictionParam, preselectedDocument, productParam]);
 
   // Show incompatibility warning if URL params are incompatible
   const incompatibilityMessage = useMemo(() => {
@@ -397,15 +429,38 @@ function WizardPageInner() {
   // Get product-specific hero content
   const heroContent = getHeroContent(productParam, jurisdictionParam);
 
+  const effectiveWizardProduct = useMemo(
+    () => getEffectiveWizardProduct(productParam, selectedDocument?.type ?? null),
+    [productParam, selectedDocument]
+  );
+
   // Filter jurisdictions to only show those available for the selected document type
   const availableJurisdictions = useMemo(() => {
-    if (!selectedDocument) {
-      return allJurisdictions;
+    return allJurisdictions.filter((jur) => {
+      const documentEnabled = !selectedDocument || isJurisdictionEnabled(jur.value, selectedDocument.type);
+      const productEnabled = !effectiveWizardProduct || isProductSupportedInJurisdiction(effectiveWizardProduct, jur.value);
+      return documentEnabled && productEnabled;
+    });
+  }, [effectiveWizardProduct, selectedDocument]);
+
+  const isJurisdictionLocked = availableJurisdictions.length === 1;
+
+  useEffect(() => {
+    if (availableJurisdictions.length === 1) {
+      const [onlyJurisdiction] = availableJurisdictions;
+      setSelectedJurisdiction((current) =>
+        current?.value === onlyJurisdiction.value ? current : onlyJurisdiction
+      );
+      return;
     }
-    return allJurisdictions.filter((jur) =>
-      isJurisdictionEnabled(jur.value, selectedDocument.type)
-    );
-  }, [selectedDocument]);
+
+    if (
+      selectedJurisdiction &&
+      !availableJurisdictions.some((jur) => jur.value === selectedJurisdiction.value)
+    ) {
+      setSelectedJurisdiction(null);
+    }
+  }, [availableJurisdictions, selectedJurisdiction]);
 
   // Handle Start My Case Bundle button - scroll to the appropriate section based on current step
   const handleStartNowClick = () => {
@@ -622,7 +677,9 @@ function WizardPageInner() {
               Where is the property located?
             </h2>
             <p className="text-center text-gray-600 mb-8">
-              Different rules apply in each jurisdiction
+              {isJurisdictionLocked
+                ? 'This wizard is currently available for England properties only.'
+                : 'Different rules apply in each jurisdiction'}
             </p>
 
             <div className="space-y-4">

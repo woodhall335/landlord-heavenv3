@@ -43,10 +43,16 @@ interface TemplateRow {
   value: string;
 }
 
+interface TemplateTable {
+  columns: string[];
+  rows: string[][];
+}
+
 interface TemplateSection {
   heading: string;
   intro?: string;
   rows?: TemplateRow[];
+  table?: TemplateTable;
   bullets?: string[];
   paragraphs?: string[];
 }
@@ -109,6 +115,15 @@ interface RentArrearsLetterTemplateData {
   response_deadline: string;
   payment_request_paragraphs: string[];
   next_steps: string[];
+  detailed_arrears_rows: Array<{
+    due_date: string;
+    period_covered: string;
+    amount_due: string;
+    amount_paid: string;
+    amount_outstanding: string;
+    payment_received_date: string;
+    note: string;
+  }>;
   protocol_note: string;
   advice_points: string[];
   closing_paragraphs: string[];
@@ -296,11 +311,153 @@ function buildStandaloneInventoryRooms(facts: Record<string, any>) {
   ].filter(Boolean);
 }
 
+function buildStructuredInspectionRooms(facts: Record<string, any>) {
+  const rooms = Array.isArray(facts.inspection_rooms) ? facts.inspection_rooms : [];
+
+  if (rooms.length === 0) {
+    const fallbackBullets = cleanList([
+      buildLabeledObservation(
+        'General summary',
+        facts.room_condition_summary || facts.condition_summary || facts.room_condition_notes
+      ),
+      buildLabeledObservation('Entrance hall / landing', facts.entrance_hall_condition),
+      buildLabeledObservation('Reception / living areas', facts.reception_room_condition),
+      buildLabeledObservation('Kitchen and appliances', facts.kitchen_condition),
+      buildLabeledObservation('Bedroom 1', facts.bedroom_one_condition),
+      buildLabeledObservation('Bedroom 2 / additional bedrooms', facts.bedroom_two_condition),
+      buildLabeledObservation('Bathroom / WC', facts.bathroom_condition),
+      buildLabeledObservation('External areas / garden / bins', facts.external_areas_condition),
+      buildLabeledObservation('Fixtures, fittings, windows, and flooring', facts.fixtures_fittings_condition),
+    ]);
+
+    return fallbackBullets
+      ? [
+          {
+            name: 'Inspection observations',
+            summary_rows: [] as TemplateRow[],
+            observation_bullets: fallbackBullets,
+            item_rows: [] as Array<Record<string, string>>,
+            photo_reference: toText(facts.photo_schedule_reference),
+          },
+        ]
+      : [];
+  }
+
+  return rooms.map((room: any) => ({
+    name: readRoomName(room),
+    summary_rows:
+      cleanRows([
+        { label: 'Condition summary', value: room.condition },
+        { label: 'Cleanliness / presentation', value: room.cleanliness },
+        { label: 'Fixtures, fittings, walls and floors', value: room.fixtures },
+        { label: 'Defects or maintenance issues', value: room.defects },
+        { label: 'Follow-up or action note', value: room.actions },
+        { label: 'Tenant comments', value: room.tenant_comments },
+      ]) || [],
+    observation_bullets: cleanList(room.observations || []) || [],
+    item_rows: (Array.isArray(room.items) ? room.items : [])
+      .map((item: any) => ({
+        item: toText(item.item || item.name),
+        condition: toText(item.condition),
+        cleanliness: toText(item.cleanliness),
+        notes: toText(item.notes),
+      }))
+      .filter((item: Record<string, string>) => item.item || item.condition || item.cleanliness || item.notes),
+    photo_reference: toText(room.photo_reference),
+  }));
+}
+
+function buildStructuredInventoryRooms(facts: Record<string, any>) {
+  const rooms = Array.isArray(facts.inventory_rooms) ? facts.inventory_rooms : [];
+
+  if (rooms.length === 0) {
+    return buildStandaloneInventoryRooms(facts).map((room: any) => ({
+      name: toText(room.name),
+      summary_rows: [] as TemplateRow[],
+      item_rows: (Array.isArray(room.items) ? room.items : [])
+        .map((item: any) => ({
+          item: toText(item.name || item.item),
+          condition: toText(item.condition),
+          cleanliness: '',
+          notes: toText(item.notes),
+        }))
+        .filter((item: Record<string, string>) => item.item || item.condition || item.notes),
+      photo_reference: '',
+    }));
+  }
+
+  return rooms.map((room: any) => ({
+    name: readRoomName(room),
+    summary_rows:
+      cleanRows([
+        { label: 'Condition summary', value: room.condition },
+        { label: 'Cleanliness / presentation', value: room.cleanliness },
+        { label: 'Room notes', value: room.notes },
+        { label: 'Photo reference', value: room.photo_reference },
+      ]) || [],
+    item_rows: (Array.isArray(room.items) ? room.items : [])
+      .map((item: any) => ({
+        item: toText(item.item || item.name),
+        condition: toText(item.condition),
+        cleanliness: toText(item.cleanliness),
+        notes: toText(item.notes),
+      }))
+      .filter((item: Record<string, string>) => item.item || item.condition || item.cleanliness || item.notes),
+    photo_reference: toText(room.photo_reference),
+  }));
+}
+
+function readRoomName(room: Record<string, any>) {
+  return toText(room.name) || 'Room';
+}
+
+function buildEvidenceAppendix(value: unknown, roomLabel = '') {
+  if (!Array.isArray(value)) return [];
+
+  return value
+    .map((file: any, index) => ({
+      reference: `E${index + 1}`,
+      room: roomLabel,
+      file_name: toText(file.fileName || file.file_name || file.name) || 'Uploaded evidence',
+      category: toText(file.category || file.label),
+      uploaded_at: formatIsoDateText(file.uploadedAt || file.uploaded_at),
+    }))
+    .filter((entry) => entry.file_name);
+}
+
+function buildRepeaterTableRows(
+  rows: unknown,
+  _columns: string[],
+  selectors: Array<(row: Record<string, any>) => unknown>
+) {
+  if (!Array.isArray(rows)) return [];
+
+  return rows.map((row) => selectors.map((selector) => selector(row as Record<string, any>)));
+}
+
 function cleanRows(rows: Array<{ label: string; value: unknown }>): TemplateRow[] | undefined {
   const cleaned = rows
     .map((row) => ({ label: row.label, value: formatIsoDateText(row.value) }))
     .filter((row) => row.value.length > 0);
   return cleaned.length > 0 ? cleaned : undefined;
+}
+
+function cleanTable(columns: string[], rows: Array<Array<unknown>>): TemplateTable | undefined {
+  const cleanedColumns = columns.map(toText).filter(Boolean);
+  if (cleanedColumns.length === 0) return undefined;
+
+  const cleanedRows = rows
+    .map((row) =>
+      cleanedColumns.map((_, index) => formatIsoDateText(row[index]))
+    )
+    .filter((row) => row.some((cell) => cell.length > 0));
+
+  return cleanedRows.length > 0
+    ? {
+        columns: cleanedColumns,
+        rows: cleanedRows,
+      }
+    : undefined;
 }
 
 function cleanList(items: Array<unknown>): string[] | undefined {
@@ -316,6 +473,10 @@ function createSection(params: {
   heading: string;
   intro?: string;
   rows?: Array<{ label: string; value: unknown }>;
+  table?: {
+    columns: string[];
+    rows: Array<Array<unknown>>;
+  };
   bullets?: Array<unknown>;
   paragraphs?: Array<unknown>;
 }): TemplateSection {
@@ -327,10 +488,12 @@ function createSection(params: {
   if (intro) section.intro = intro;
 
   const rows = params.rows ? cleanRows(params.rows) : undefined;
+  const table = params.table ? cleanTable(params.table.columns, params.table.rows) : undefined;
   const bullets = params.bullets ? cleanList(params.bullets) : undefined;
   const paragraphs = params.paragraphs ? cleanList(params.paragraphs) : undefined;
 
   if (rows) section.rows = rows;
+  if (table) section.table = table;
   if (bullets) section.bullets = bullets;
   if (paragraphs) section.paragraphs = paragraphs;
 
@@ -389,10 +552,14 @@ function normalizeResidentialFacts(rawFacts: Record<string, any>): Record<string
   return {
     ...rawFacts,
     tenants,
-    applicant_name: firstNonEmpty(rawFacts.applicant_name, primaryTenant.full_name, rawFacts.tenant_1_name),
-    applicant_email: firstNonEmpty(rawFacts.applicant_email, rawFacts.tenant_email, primaryTenant.email),
-    applicant_phone: firstNonEmpty(rawFacts.applicant_phone, rawFacts.tenant_phone, primaryTenant.phone),
-    current_address: firstNonEmpty(rawFacts.current_address, primaryTenant.address),
+    landlord_full_name: firstNonEmpty(rawFacts.landlord_full_name, rawFacts.sender_name, rawFacts.landlord_name),
+    landlord_address: firstNonEmpty(rawFacts.landlord_address, rawFacts.sender_service_address),
+    tenant_names: firstNonEmpty(rawFacts.tenant_names, rawFacts.tenant_full_name),
+    applicant_name: firstNonEmpty(rawFacts.applicant_name, rawFacts.applicant_full_name, primaryTenant.full_name, rawFacts.tenant_1_name),
+    applicant_email: firstNonEmpty(rawFacts.applicant_email, rawFacts.email, rawFacts.tenant_email, primaryTenant.email),
+    applicant_phone: firstNonEmpty(rawFacts.applicant_phone, rawFacts.phone, rawFacts.tenant_phone, primaryTenant.phone),
+    applicant_date_of_birth: firstNonEmpty(rawFacts.applicant_date_of_birth, rawFacts.date_of_birth),
+    current_address: firstNonEmpty(rawFacts.current_address, rawFacts.tenant_last_known_address, primaryTenant.address),
     employment_status: firstNonEmpty(rawFacts.employment_status, rawFacts.applicant_employment_status),
     employer_name: firstNonEmpty(rawFacts.employer_name, rawFacts.applicant_employer_name),
     job_title: firstNonEmpty(rawFacts.job_title, rawFacts.applicant_job_title),
@@ -413,6 +580,7 @@ function normalizeResidentialFacts(rawFacts: Record<string, any>): Record<string
     ),
     landlord_consent_status: firstNonEmpty(
       rawFacts.landlord_consent_status,
+      rawFacts.consent_status,
       rawFacts.landlord_consent,
       rawFacts.landlord_consent_obtained === true
         ? 'Written consent obtained'
@@ -423,6 +591,7 @@ function normalizeResidentialFacts(rawFacts: Record<string, any>): Record<string
     assignment_date: firstNonEmpty(rawFacts.assignment_date, rawFacts.assignment_effective_date),
     assignment_scope: firstNonEmpty(rawFacts.assignment_scope, rawFacts.transfer_terms_summary),
     assignment_notes: firstNonEmpty(rawFacts.assignment_notes, rawFacts.transfer_terms_summary),
+    release_outgoing_tenant: firstNonEmpty(rawFacts.release_outgoing_tenant, rawFacts.outgoing_tenant_release),
     amendment_scope: firstNonEmpty(
       rawFacts.amendment_scope,
       rawFacts.amended_clauses_reference,
@@ -430,20 +599,32 @@ function normalizeResidentialFacts(rawFacts: Record<string, any>): Record<string
     ),
     changed_terms_summary: firstNonEmpty(rawFacts.changed_terms_summary, rawFacts.amendment_summary),
     renewal_terms_summary: firstNonEmpty(rawFacts.renewal_terms_summary, rawFacts.amendment_summary),
+    renewal_rent_amount: firstNonEmpty(rawFacts.renewal_rent_amount, rawFacts.new_rent_amount),
     bills_split: firstNonEmpty(rawFacts.bills_split, rawFacts.bill_split_summary),
-    rent_split: firstNonEmpty(rawFacts.rent_split, rawFacts.flatmate_rent_split),
+    rent_split: firstNonEmpty(rawFacts.rent_split, rawFacts.rent_split_summary, rawFacts.flatmate_rent_split),
     house_rules: firstNonEmpty(rawFacts.house_rules, rawFacts.house_rules_summary),
     initial_payment_date: firstNonEmpty(rawFacts.initial_payment_date, rawFacts.repayment_start_date),
     instalment_amount: firstNonEmpty(rawFacts.instalment_amount, rawFacts.repayment_amount),
+    repayment_frequency: firstNonEmpty(rawFacts.repayment_frequency, rawFacts.instalment_frequency),
+    arrears_amount: firstNonEmpty(rawFacts.arrears_amount, rawFacts.arrears_total),
+    guarantor_name: firstNonEmpty(rawFacts.guarantor_name, rawFacts.guarantor_full_name),
     letter_type: firstNonEmpty(rawFacts.letter_type, rawFacts.arrears_letter_type),
     missed_rent_periods: firstNonEmpty(rawFacts.missed_rent_periods, rawFacts.arrears_periods_missed),
+    arrears_date: firstNonEmpty(rawFacts.arrears_date, rawFacts.arrears_as_at_date),
+    payment_details: firstNonEmpty(rawFacts.payment_details, rawFacts.payment_instructions),
+    default_consequences: firstNonEmpty(rawFacts.default_consequences, rawFacts.default_consequence),
+    default_grace_days: firstNonEmpty(rawFacts.default_grace_days, rawFacts.grace_period_days),
     arrears_schedule_reference: firstNonEmpty(
       rawFacts.arrears_schedule_reference,
       rawFacts.arrears_schedule_attached_reference
     ),
     flatmate_names: firstNonEmpty(rawFacts.flatmate_names, getTenantNames(rawFacts)),
-    sublet_deposit: firstNonEmpty(rawFacts.sublet_deposit, rawFacts.deposit_amount),
-    sublet_rent: firstNonEmpty(rawFacts.sublet_rent, rawFacts.rent_amount),
+    sublet_deposit: firstNonEmpty(rawFacts.sublet_deposit, rawFacts.sublet_deposit_amount, rawFacts.deposit_amount),
+    sublet_rent: firstNonEmpty(rawFacts.sublet_rent, rawFacts.sublet_rent_amount, rawFacts.rent_amount),
+    original_agreement_date: firstNonEmpty(rawFacts.original_agreement_date, rawFacts.head_tenancy_start_date),
+    current_tenancy_end_date: firstNonEmpty(rawFacts.current_tenancy_end_date, rawFacts.current_term_end_date),
+    tenancy_start_date: firstNonEmpty(rawFacts.tenancy_start_date, rawFacts.proposed_move_in_date),
+    rent_amount: firstNonEmpty(rawFacts.rent_amount, rawFacts.current_rent_amount, rawFacts.proposed_rent, rawFacts.head_tenancy_rent),
   };
 }
 
@@ -456,7 +637,7 @@ function buildSharedData(rawFacts: Record<string, any>): SharedResidentialData {
   return {
     current_date: firstNonEmpty(facts.current_date, new Date().toISOString().slice(0, 10)),
     property_address: propertyAddress,
-    landlord_name: firstNonEmpty(facts.landlord_full_name, facts.landlord_name),
+    landlord_name: firstNonEmpty(facts.landlord_full_name, facts.sender_name, facts.landlord_name),
     landlord_address:
       facts.landlord_address ||
       joinAddress(
@@ -470,7 +651,7 @@ function buildSharedData(rawFacts: Record<string, any>): SharedResidentialData {
     tenant_primary_name: getPrimaryTenantName(facts),
     rent_amount: facts.rent_amount || facts.monthly_rent || facts.sublet_rent || '',
     deposit_amount: facts.deposit_amount || facts.sublet_deposit || '',
-    tenancy_start_date: facts.tenancy_start_date || '',
+    tenancy_start_date: facts.tenancy_start_date || facts.inventory_date || '',
     tenancy_end_date: facts.tenancy_end_date || '',
     document_notes: facts.document_notes || '',
     facts,
@@ -979,6 +1160,24 @@ function getTemplateSections(
           bullets: splitEntries(facts.additional_terms),
         }),
         createSection({
+          heading: 'Clause Amendment Matrix',
+          intro:
+            'The following clause-by-clause schedule forms part of this amendment and should be read with the original tenancy wording.',
+          table: {
+            columns: ['Clause reference', 'Current wording summary', 'Replacement wording', 'Effective date'],
+            rows: buildRepeaterTableRows(
+              facts.amendment_rows,
+              ['Clause reference', 'Current wording summary', 'Replacement wording', 'Effective date'],
+              [
+                (row) => row.clause_reference,
+                (row) => row.current_wording_summary || row.current_position,
+                (row) => row.replacement_wording || row.replacement_text,
+                (row) => row.effective_date || facts.amendment_effective_date,
+              ]
+            ),
+          },
+        }),
+        createSection({
           heading: 'Continuing Effect of Original Agreement',
           paragraphs: [
             'Except as expressly amended by this document, all terms of the original tenancy agreement remain unchanged and in full force and effect.',
@@ -1029,9 +1228,11 @@ function getTemplateSections(
         createSection({
           heading: 'Release of Outgoing Tenant',
           paragraphs: [
-            yesNoText(facts.release_outgoing_tenant) === 'Yes'
+            facts.release_outgoing_tenant === 'full_release'
               ? 'The Landlord releases the Outgoing Tenant from tenant obligations falling due after the assignment date, but not from liabilities already accrued before that date.'
-              : 'Unless the Landlord expressly releases the Outgoing Tenant in this clause, the Outgoing Tenant remains liable for any liabilities that remain enforceable against them under the tenancy and general law.',
+              : facts.release_outgoing_tenant === 'partial_release'
+                ? 'The Outgoing Tenant is released only to the limited extent stated in this agreement. Any liabilities not expressly released remain enforceable.'
+                : 'Unless the Landlord expressly releases the Outgoing Tenant in this clause, the Outgoing Tenant remains liable for any liabilities that remain enforceable against them under the tenancy and general law.',
           ],
         }),
         createSection({
@@ -1044,6 +1245,21 @@ function getTemplateSections(
           bullets: [
             'Any deposit arrangements must be handled in accordance with the requirements of the relevant tenancy deposit scheme and any prescribed information obligations.',
           ],
+        }),
+        createSection({
+          heading: 'Apportionment Schedule',
+          table: {
+            columns: ['Item', 'Amount', 'Note'],
+            rows: buildRepeaterTableRows(
+              facts.assignment_apportionment_rows,
+              ['Item', 'Amount', 'Note'],
+              [
+                (row) => row.item,
+                (row) => formatMoney(row.amount),
+                (row) => row.note,
+              ]
+            ),
+          },
         }),
         createSection({
           heading: 'Records and Governing Law',
@@ -1063,7 +1279,7 @@ function getTemplateSections(
             { label: 'Email', value: facts.applicant_email },
             { label: 'Telephone', value: facts.applicant_phone },
             { label: 'Current address', value: facts.current_address },
-            { label: 'Desired move-in date', value: facts.desired_move_in_date },
+            { label: 'Desired move-in date', value: firstNonEmpty(facts.desired_move_in_date, facts.proposed_move_in_date) },
             { label: 'Property applied for', value: shared.property_address },
           ],
         }),
@@ -1145,19 +1361,10 @@ function getTemplateSections(
         }),
         createSection({
           heading: 'Room-by-Room Observations',
-          bullets: [
-            buildLabeledObservation(
-              'General summary',
-              facts.room_condition_summary || facts.condition_summary || facts.room_condition_notes
-            ),
-            buildLabeledObservation('Entrance hall / landing', facts.entrance_hall_condition),
-            buildLabeledObservation('Reception / living areas', facts.reception_room_condition),
-            buildLabeledObservation('Kitchen and appliances', facts.kitchen_condition),
-            buildLabeledObservation('Bedroom 1', facts.bedroom_one_condition),
-            buildLabeledObservation('Bedroom 2 / additional bedrooms', facts.bedroom_two_condition),
-            buildLabeledObservation('Bathroom / WC', facts.bathroom_condition),
-            buildLabeledObservation('External areas / garden / bins', facts.external_areas_condition),
-            buildLabeledObservation('Fixtures, fittings, windows, and flooring', facts.fixtures_fittings_condition),
+          paragraphs: [
+            Array.isArray(facts.inspection_rooms) && facts.inspection_rooms.length > 0
+              ? `Detailed room-by-room sections are attached below for ${facts.inspection_rooms.length} room(s) or area(s), including observations, item notes, and any linked photo references.`
+              : 'Detailed room-by-room observations are set out below together with any item-level notes or photo references captured during the inspection.',
           ],
         }),
         createSection({
@@ -1168,6 +1375,22 @@ function getTemplateSections(
             toText(facts.tenant_comments),
             'Any photographs, videos, inventories, signed attendance notes, safety certificates, and follow-up correspondence should be retained with this report as part of the landlord evidence record.',
           ],
+        }),
+        createSection({
+          heading: 'Follow-Up Action Schedule',
+          table: {
+            columns: ['Issue / area', 'Action required', 'Owner', 'Target date'],
+            rows: buildRepeaterTableRows(
+              facts.follow_up_items,
+              ['Issue / area', 'Action required', 'Owner', 'Target date'],
+              [
+                (row) => row.issue || row.room,
+                (row) => row.action_required || row.action,
+                (row) => row.owner,
+                (row) => row.target_date,
+              ]
+            ),
+          },
         }),
         createSection({
           heading: 'Use of Report and Governing Law',
@@ -1268,6 +1491,21 @@ function getTemplateSections(
           bullets: splitEntries(facts.additional_terms),
         }),
         createSection({
+          heading: 'Changed Terms Schedule',
+          table: {
+            columns: ['Clause / topic', 'Previous position', 'New wording / updated term'],
+            rows: buildRepeaterTableRows(
+              facts.changed_terms_schedule,
+              ['Clause / topic', 'Previous position', 'New wording / updated term'],
+              [
+                (row) => row.topic || row.clause_reference,
+                (row) => row.previous_position || row.current_position,
+                (row) => row.new_position,
+              ]
+            ),
+          },
+        }),
+        createSection({
           heading: 'Deposit and Compliance',
           rows: [
             { label: 'Deposit amount', value: depositDisplay },
@@ -1312,6 +1550,22 @@ function getTemplateSections(
             { label: 'Final settlement date', value: firstNonEmpty(facts.final_deadline, facts.repayment_end_date) },
             { label: 'Payment method', value: facts.payment_method },
           ],
+        }),
+        createSection({
+          heading: 'Instalment Schedule',
+          table: {
+            columns: ['Due date', 'Instalment amount', 'Running balance', 'Note'],
+            rows: buildRepeaterTableRows(
+              facts.repayment_schedule_rows,
+              ['Due date', 'Instalment amount', 'Running balance', 'Note'],
+              [
+                (row) => row.due_date,
+                (row) => formatMoney(row.amount),
+                (row) => formatMoney(row.running_balance || row.balance_after_payment),
+                (row) => row.note,
+              ]
+            ),
+          },
         }),
         createSection({
           heading: 'Ongoing Rent and Application of Payments',
@@ -1442,6 +1696,21 @@ function buildTemplateData(
   const documentReference = buildDocumentReference(product, shared);
   const parties = getPartyDetails(product, shared);
   const signatureParties = getSignatureParties(product, shared, config);
+  const inspectionRooms =
+    product === 'rental_inspection_report' ? buildStructuredInspectionRooms(shared.facts) : [];
+  const evidenceAppendix =
+    product === 'rental_inspection_report'
+      ? buildEvidenceAppendix(shared.facts.inspection_evidence_files)
+      : [];
+  const documentFactsRows =
+    cleanRows([
+      { label: 'Property', value: shared.property_address },
+      { label: 'Parties', value: firstNonEmpty(shared.tenant_names, getCounterpartyName(product, shared)) },
+      { label: 'Reference', value: documentReference },
+      { label: 'Generated on', value: shared.current_date },
+      { label: 'Purpose', value: config.subtitle },
+      { label: 'Prepared using guided responses', value: 'Yes' },
+    ]) || [];
 
   return {
     title: config.title,
@@ -1486,6 +1755,9 @@ function buildTemplateData(
     execution_as_deed: config.executionAsDeed === true,
     deed_warning: toText(config.deedWarning),
     case_id: toText(shared.facts.case_id),
+    document_facts_rows: documentFactsRows,
+    inspection_rooms: inspectionRooms,
+    evidence_appendix: evidenceAppendix,
     facts: shared.facts,
   };
 }
@@ -1507,6 +1779,21 @@ function buildRentArrearsLetterData(
     facts.bank_details,
     facts.landlord_bank_details
   );
+  const detailedArrearsRows = Array.isArray(facts.arrears_schedule_rows)
+    ? facts.arrears_schedule_rows
+        .map((row: Record<string, any>) => ({
+          due_date: formatIsoDateText(row.due_date),
+          period_covered: toText(row.period_covered),
+          amount_due: formatMoney(row.amount_due),
+          amount_paid: formatMoney(row.amount_paid),
+          amount_outstanding: formatMoney(row.amount_outstanding),
+          payment_received_date: formatIsoDateText(row.payment_received_date),
+          note: toText(row.note),
+        }))
+        .filter((row) =>
+          Object.values(row).some((value) => toText(value).length > 0)
+        )
+    : [];
 
   const openingParagraphs = isFinalWarning
     ? [
@@ -1572,6 +1859,7 @@ function buildRentArrearsLetterData(
     response_deadline: responseDeadline,
     payment_request_paragraphs: paymentRequestParagraphs,
     next_steps: nextSteps,
+    detailed_arrears_rows: detailedArrearsRows,
     protocol_note: protocolNote,
     advice_points: [
       'If you believe the arrears figure is incorrect, respond in writing promptly with your reasons and any supporting payment evidence.',
@@ -1798,14 +2086,17 @@ export async function generateResidentialLettingDocuments(
   let document: ResidentialGeneratedDocument;
 
   if (product === 'inventory_schedule_condition') {
+    const structuredInventoryRooms = buildStructuredInventoryRooms(shared.facts);
     const standaloneInventoryRooms = buildStandaloneInventoryRooms(shared.facts);
+    const inventoryEvidenceAppendix = buildEvidenceAppendix(shared.facts.inventory_evidence_files);
     const inventoryData = {
       current_date: shared.current_date,
       property_address: shared.property_address,
       landlord_name: shared.landlord_name,
       tenant_names: shared.tenant_names,
       tenancy_start_date: firstNonEmpty(shared.tenancy_start_date, shared.facts.inspection_date),
-      inspection_date: shared.facts.inspection_date,
+      inspection_date: firstNonEmpty(shared.facts.inventory_date, shared.facts.inspection_date),
+      inventory_date: firstNonEmpty(shared.facts.inventory_date, shared.facts.inspection_date),
       agent_name: firstNonEmpty(shared.facts.inspector_name, shared.facts.agent_name),
       meter_reading_gas: shared.facts.meter_reading_gas,
       meter_reading_electric: shared.facts.meter_reading_electric,
@@ -1816,7 +2107,33 @@ export async function generateResidentialLettingDocuments(
       number_of_mailbox_keys: shared.facts.number_of_mailbox_keys,
       access_cards_fobs: firstNonEmpty(shared.facts.access_cards_fobs, shared.facts.keys_provided_summary),
       key_replacement_cost: shared.facts.key_replacement_cost,
+      document_facts_rows:
+        cleanRows([
+          { label: 'Property', value: shared.property_address },
+          { label: 'Landlord / agent', value: shared.landlord_name },
+          { label: 'Tenant(s)', value: shared.tenant_names },
+          { label: 'Inventory date', value: firstNonEmpty(shared.facts.inventory_date, shared.facts.inspection_date) },
+          { label: 'Prepared using guided responses', value: 'Yes' },
+        ]) || [],
+      inventory_key_rows:
+        cleanRows([
+          { label: 'Front door keys', value: shared.facts.number_of_front_door_keys },
+          { label: 'Back door keys', value: shared.facts.number_of_back_door_keys },
+          { label: 'Window keys', value: shared.facts.number_of_window_keys },
+          { label: 'Mailbox keys', value: shared.facts.number_of_mailbox_keys },
+          { label: 'Access cards / fobs', value: firstNonEmpty(shared.facts.access_cards_fobs, shared.facts.keys_provided_summary) },
+        ]) || [],
+      inventory_general_rows:
+        cleanRows([
+          { label: 'Furnished status', value: shared.facts.furnished_status },
+          { label: 'Manuals / documents handed over', value: shared.facts.document_handover_notes },
+          { label: 'Safety observations', value: shared.facts.safety_checks_summary },
+          { label: 'Tenant comments', value: shared.facts.tenant_comments },
+          { label: 'Photo schedule reference', value: shared.facts.photo_schedule_reference },
+        ]) || [],
+      inventory_evidence_appendix: inventoryEvidenceAppendix,
       custom_inventory_rooms: standaloneInventoryRooms,
+      structured_inventory_rooms: structuredInventoryRooms,
       inventory:
         standaloneInventoryRooms.length > 0
           ? { rooms: standaloneInventoryRooms }

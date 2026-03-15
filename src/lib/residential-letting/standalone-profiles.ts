@@ -1,0 +1,1178 @@
+import { getWizardIconPathByFilename } from '@/components/wizard/shared/wizardIconManifest';
+import {
+  PUBLIC_RESIDENTIAL_LETTING_PRODUCT_SKUS,
+  type ResidentialLettingProductSku,
+} from '@/lib/residential-letting/products';
+
+type PublicResidentialLettingProductSku =
+  (typeof PUBLIC_RESIDENTIAL_LETTING_PRODUCT_SKUS)[number];
+
+export interface ResidentialLandingLink {
+  label: string;
+  href: string;
+  description: string;
+}
+
+export interface ResidentialFaq {
+  question: string;
+  answer: string;
+}
+
+export interface ResidentialCautionBanner {
+  title: string;
+  body: string;
+  tone: 'warning' | 'info';
+}
+
+export interface ResidentialStandaloneProfile {
+  product: ResidentialLettingProductSku;
+  icon: string;
+  reviewIcon: string;
+  eyebrow: string;
+  heroTitle: string;
+  heroSubtitle: string;
+  heroBullets: string[];
+  reviewHighlights: string[];
+  reviewSummaryLabels: string[];
+  outputSections: string[];
+  cautionBanner?: ResidentialCautionBanner;
+  stepIcons: Record<string, string>;
+  landing: {
+    title: string;
+    description: string;
+    h1: string;
+    subheading: string;
+    overview: string;
+    whyUseThis: string[];
+    howWizardWorks: string[];
+    whoThisIsFor: string[];
+    notFor: string[];
+    legalExplainer: string;
+    includedHighlights: string[];
+    documentPreviewAnatomy: string[];
+    internalLinks: ResidentialLandingLink[];
+    faqs: ResidentialFaq[];
+  };
+}
+
+const icon = (filename: string) => getWizardIconPathByFilename(filename) || `/images/wizard-icons/${filename}`;
+
+function buildCommonFaqs(productLabel: string): ResidentialFaq[] {
+  return [
+    {
+      question: `Is this ${productLabel} for England only?`,
+      answer:
+        'Yes. These standalone residential products are currently drafted and wizard-scoped for England residential lettings.',
+    },
+    {
+      question: 'Can I review before paying?',
+      answer:
+        'Yes. The wizard takes you through a guided review step with a locked summary before checkout.',
+    },
+    {
+      question: 'Will this feel more complete than a blank template?',
+      answer:
+        'Yes. The wizard is designed to collect deal-specific facts, schedules, evidence references, and practical wording that a blank form usually leaves to the user.',
+    },
+  ];
+}
+
+const profiles: Record<ResidentialLettingProductSku, ResidentialStandaloneProfile> = {
+  guarantor_agreement: {
+    product: 'guarantor_agreement',
+    icon: icon('46-premium.png'),
+    reviewIcon: icon('12-summary-cards.png'),
+    eyebrow: 'Guarantor Deed',
+    heroTitle: 'Build a guarantor agreement that reads like a deliberate legal instrument.',
+    heroSubtitle:
+      'Capture liability scope, tenancy economics, cap mechanics, survival wording, and deed execution details in one guided England-only flow.',
+    heroBullets: [
+      'Deed-style summary before the clauses',
+      'Clear liability scope, cap, and survival wording',
+      'Execution details designed for witness-ready signing',
+    ],
+    reviewHighlights: [
+      'World-class cover summary with liability scope',
+      'Deed-style execution wording',
+      'Continuing guarantee and release language',
+    ],
+    reviewSummaryLabels: ['Landlord', 'Tenant', 'Guarantor', 'Scope', 'Cap'],
+    outputSections: [
+      'Definitions and tenancy background',
+      'Guarantor covenant',
+      'Nature of liability',
+      'Continuing guarantee and release',
+      'Execution as deed',
+    ],
+    stepIcons: {
+      suitability: icon('49-warning.png'),
+      property_details: icon('03-property.png'),
+      landlord: icon('39-landlord.png'),
+      tenant: icon('40-tenants.png'),
+      guarantor: icon('02-parties.png'),
+      tenancy_reference: icon('04-tenancy.png'),
+      scope: icon('44-terms.png'),
+      execution: icon('10-signing.png'),
+    },
+    landing: {
+      title: 'Guarantor Agreement England | Premium Residential Tenancy Guarantor Deed',
+      description:
+        'Create a premium England residential guarantor agreement with deed execution wording, liability scope options, and guided landlord drafting.',
+      h1: 'Premium Guarantor Agreement for England Landlords',
+      subheading:
+        'A guided guarantor deed with stronger liability framing, cleaner execution wording, and a proper summary of the tenancy it supports.',
+      overview:
+        'Use this when you need a third party to stand behind a tenant on an England residential tenancy. The wizard structures the tenancy, liability scope, cap, and execution details so the finished document feels deliberate and premium.',
+      whyUseThis: [
+        'Adds a guarantor risk summary before the legal wording',
+        'Captures deed-style execution details instead of leaving them vague',
+        'Separates rent-only guarantees from wider obligation guarantees cleanly',
+      ],
+      howWizardWorks: [
+        'Collect the property, landlord, tenant, and guarantor details',
+        'Choose liability scope, costs, cap, and continuation settings',
+        'Review a polished deed-style document summary before checkout',
+      ],
+      whoThisIsFor: [
+        'Student lets, first-time renters, and affordability-edge cases',
+        'Landlords who want a guarantor instrument that looks considered, not generic',
+        'Cases where execution and witness detail matters',
+      ],
+      notFor: [
+        'Scotland, Wales, or Northern Ireland',
+        'Cases where no guarantor is actually required',
+        'Situations needing bespoke corporate security or more specialist drafting',
+      ],
+      legalExplainer:
+        'This product is positioned as an England residential guarantor deed, not a casual promise note. The wizard is designed to keep scope, cap, and renewal or variation survival transparent.',
+      includedHighlights: [
+        'Premium summary page',
+        'Defined tenancy reference details',
+        'Liability cap and continuing guarantee wording',
+        'Execution and witness guidance',
+      ],
+      documentPreviewAnatomy: [
+        'Cover summary with tenancy and liability snapshot',
+        'Operative clauses for covenant, liability, and release',
+        'Execution page designed for deed-style signing',
+      ],
+      internalLinks: [
+        {
+          label: 'Premium tenancy agreement',
+          href: '/premium-tenancy-agreement',
+          description: 'Pair the guarantor deed with a fuller tenancy pack.',
+        },
+      ],
+      faqs: [
+        ...buildCommonFaqs('Guarantor Agreement'),
+        {
+          question: 'Can I cap the guarantor liability?',
+          answer:
+            'Yes. The wizard includes a cap option so the finished document can show whether liability is limited or uncapped.',
+        },
+        {
+          question: 'Does this cover renewals automatically?',
+          answer:
+            'Only if you choose wording that makes continuation after renewal or variation clear. The flow is designed to make that choice explicit.',
+        },
+      ],
+    },
+  },
+  residential_sublet_agreement: {
+    product: 'residential_sublet_agreement',
+    icon: icon('44-terms.png'),
+    reviewIcon: icon('12-summary-cards.png'),
+    eyebrow: 'Sublet Control',
+    heroTitle: 'Document the sublet with the head tenancy and consent position up front.',
+    heroSubtitle:
+      'Build a sublet agreement that shows who holds the main tenancy, what space is sublet, how rent and utilities are handled, and what happens if the superior tenancy ends.',
+    heroBullets: [
+      'Superior tenancy summary built into the output',
+      'Shared-space, keys, and use rules captured clearly',
+      'Landlord consent status surfaced before the clauses',
+    ],
+    reviewHighlights: [
+      'Head-tenancy summary page',
+      'Rent and use schedule',
+      'Termination wording tied to the superior tenancy',
+    ],
+    reviewSummaryLabels: ['Head tenant', 'Subtenant', 'Consent', 'Sublet rent'],
+    outputSections: [
+      'Head tenancy and consent',
+      'Grant of subtenancy',
+      'Rent, deposit, and utilities',
+      'Subtenant obligations and house rules',
+      'Consequences of head tenancy ending',
+    ],
+    stepIcons: {
+      suitability: icon('49-warning.png'),
+      property_details: icon('03-property.png'),
+      parties: icon('02-parties.png'),
+      head_tenancy: icon('04-tenancy.png'),
+      sublet_term: icon('44-terms.png'),
+    },
+    landing: {
+      title: 'Residential Sublet Agreement England | Premium Subletting Agreement',
+      description:
+        'Create a premium England residential sublet agreement with landlord consent context, occupation scope, and guided schedule drafting.',
+      h1: 'Premium Residential Sublet Agreement',
+      subheading:
+        'A cleaner sublet workflow for England cases where the head tenancy, consent position, and practical occupation rules all need recording properly.',
+      overview:
+        'This product is for sublets, not assignments. The wizard turns the superior tenancy context, landlord consent position, and subletting terms into a more controlled finished document.',
+      whyUseThis: [
+        'Surfaces the superior tenancy and consent position early',
+        'Captures the practical occupation deal, not just names and dates',
+        'Gives the finished document cleaner rent, use, and termination structure',
+      ],
+      howWizardWorks: [
+        'Confirm that the case is a sublet rather than an assignment',
+        'Capture the head tenancy, landlord consent, and parties',
+        'Set rent, deposit, utilities, and occupation rules before review',
+      ],
+      whoThisIsFor: [
+        'Head tenants subletting all or part of the property',
+        'Landlords or agents who want the sublet recorded cleanly',
+        'Shared occupation cases where the superior tenancy still matters',
+      ],
+      notFor: [
+        'True assignment or replacement-tenant cases',
+        'Cases with no right or consent to sublet where specialist advice is needed',
+        'Jurisdictions outside England',
+      ],
+      legalExplainer:
+        'The flow is designed to keep the head tenancy visible. It does not pretend subletting transfers the head tenant liability to the landlord.',
+      includedHighlights: [
+        'Superior tenancy summary table',
+        'Rent and use schedule',
+        'House-rules and shared-space wording',
+        'Termination wording tied to head tenancy risk',
+      ],
+      documentPreviewAnatomy: [
+        'Front summary showing head tenancy and consent status',
+        'Commercial terms for the sublet',
+        'Controlled occupation and termination clauses',
+      ],
+      internalLinks: [
+        {
+          label: 'Flatmate agreement',
+          href: '/flatmate-agreement-england',
+          description: 'Use this when the facts are really shared living, not a true sublet.',
+        },
+      ],
+      faqs: [
+        ...buildCommonFaqs('Residential Sublet Agreement'),
+        {
+          question: 'Does this solve landlord consent by itself?',
+          answer:
+            'No. The wizard can record the consent position and any reference details, but it does not manufacture consent where it is still missing.',
+        },
+        {
+          question: 'Can I show which rooms are exclusive or shared?',
+          answer:
+            'Yes. The premium flow is designed to record what is sublet, what remains shared, and how the arrangement works in practice.',
+        },
+      ],
+    },
+  },
+  lease_amendment: {
+    product: 'lease_amendment',
+    icon: icon('44-terms.png'),
+    reviewIcon: icon('12-summary-cards.png'),
+    eyebrow: 'Variation Deed',
+    heroTitle: 'Turn amendments into a clean clause-by-clause variation record.',
+    heroSubtitle:
+      'Capture the original tenancy, the clause references being changed, replacement wording, and the effective date in a format that reads like a formal addendum.',
+    heroBullets: [
+      'Amendment matrix instead of one big textarea',
+      'Clear distinction between changed and unchanged terms',
+      'Premium cover summary that references the original tenancy',
+    ],
+    reviewHighlights: [
+      'Clause-by-clause amendment table',
+      'Original tenancy summary page',
+      'All-other-terms-remain wording',
+    ],
+    reviewSummaryLabels: ['Landlord', 'Tenant', 'Original date', 'Effective date'],
+    outputSections: [
+      'Existing tenancy summary',
+      'Amendment matrix',
+      'Effect of the variation',
+      'All other terms remain unchanged',
+      'Execution',
+    ],
+    stepIcons: {
+      suitability: icon('49-warning.png'),
+      property_details: icon('03-property.png'),
+      parties: icon('02-parties.png'),
+      reference: icon('04-tenancy.png'),
+      categories: icon('44-terms.png'),
+      effective: icon('10-signing.png'),
+    },
+    landing: {
+      title: 'Lease Amendment England | Premium Tenancy Variation Agreement',
+      description:
+        'Create a premium England lease amendment with clause-by-clause change capture, effective date control, and formal variation drafting.',
+      h1: 'Premium Lease Amendment',
+      subheading:
+        'For focused tenancy changes where the original agreement stays in place but the wording needs to be updated properly.',
+      overview:
+        'This is built for targeted variations rather than whole new terms. The wizard is designed to make each amendment legible and to keep the original tenancy visible.',
+      whyUseThis: [
+        'Uses a structured amendment matrix rather than a vague summary note',
+        'Protects clarity around what remains unchanged',
+        'Produces a more formal variation-style output',
+      ],
+      howWizardWorks: [
+        'Identify the original tenancy and parties',
+        'List the clauses or subjects being changed',
+        'Review the replacement wording and effective date before checkout',
+      ],
+      whoThisIsFor: [
+        'Mid-tenancy rent, pet, or practical rule changes',
+        'Landlords who want a clear written variation record',
+        'Cases where a full renewal is unnecessary',
+      ],
+      notFor: [
+        'Brand new tenancy terms for a fresh period',
+        'Cases where assignment or subletting is the true issue',
+        'Loose informal arrangements with no original document to reference',
+      ],
+      legalExplainer:
+        'The product is framed as a targeted variation, not a replacement tenancy. That distinction is preserved through the summary page and operative wording.',
+      includedHighlights: [
+        'Original agreement reference summary',
+        'Amendment matrix',
+        'Continuation wording for non-varied terms',
+        'Formal signature page',
+      ],
+      documentPreviewAnatomy: [
+        'Front page identifying the agreement being varied',
+        'Clause-by-clause schedule of changes',
+        'Execution page to keep with the original tenancy file',
+      ],
+      internalLinks: [
+        {
+          label: 'Renewal tenancy agreement',
+          href: '/renewal-tenancy-agreement-england',
+          description: 'Use renewal instead where a new term is actually intended.',
+        },
+      ],
+      faqs: [
+        ...buildCommonFaqs('Lease Amendment'),
+        {
+          question: 'Can I amend more than one issue at once?',
+          answer:
+            'Yes. The premium amendment flow is designed to record multiple changes in a structured way so the output remains readable.',
+        },
+        {
+          question: 'When should I use a renewal instead?',
+          answer:
+            'Use renewal where you are issuing a fresh term rather than changing selected clauses within the existing tenancy.',
+        },
+      ],
+    },
+  },
+  lease_assignment_agreement: {
+    product: 'lease_assignment_agreement',
+    icon: icon('02-parties.png'),
+    reviewIcon: icon('12-summary-cards.png'),
+    eyebrow: 'Transfer Summary',
+    heroTitle: 'Document the transfer with outgoing, incoming, and landlord positions all visible.',
+    heroSubtitle:
+      'Build an assignment agreement that tracks consent, release, deposit treatment, apportionments, and handover details instead of leaving transfer mechanics implied.',
+    heroBullets: [
+      'Assignment summary page before the clauses',
+      'Release, deposit, and handover details surfaced clearly',
+      'Designed to distinguish assignment from sublet cleanly',
+    ],
+    reviewHighlights: [
+      'Assignment summary page',
+      'Incoming covenant and release wording',
+      'Deposit and handover schedule',
+    ],
+    reviewSummaryLabels: ['Landlord', 'Outgoing tenant', 'Incoming tenant', 'Assignment date'],
+    outputSections: [
+      'Original tenancy and consent',
+      'Assignment',
+      'Incoming tenant covenant',
+      'Release of outgoing tenant',
+      'Deposit and handover schedule',
+    ],
+    stepIcons: {
+      suitability: icon('49-warning.png'),
+      property_details: icon('03-property.png'),
+      landlord: icon('39-landlord.png'),
+      tenants: icon('40-tenants.png'),
+      reference: icon('04-tenancy.png'),
+      assignment: icon('44-terms.png'),
+    },
+    landing: {
+      title: 'Lease Assignment Agreement England | Premium Tenancy Transfer Agreement',
+      description:
+        'Create a premium England lease assignment agreement with structured consent, release, deposit, and handover capture.',
+      h1: 'Premium Lease Assignment Agreement',
+      subheading:
+        'A cleaner transfer workflow for tenant replacement cases where consent, release, and handover details all need recording properly.',
+      overview:
+        'This product is built for assignment, not subletting. The wizard creates a clearer transfer record with outgoing and incoming tenant details, consent position, and handover mechanics.',
+      whyUseThis: [
+        'Produces a transfer summary page before the legal clauses',
+        'Captures practical mechanics like keys, deposit treatment, and apportionments',
+        'Makes the outgoing release position much clearer than a generic form',
+      ],
+      howWizardWorks: [
+        'Confirm the case is an assignment and record landlord consent status',
+        'Capture outgoing and incoming tenant details',
+        'Set the assignment date, release logic, and handover details before review',
+      ],
+      whoThisIsFor: [
+        'Tenant replacement scenarios',
+        'Shared homes where one occupier exits and another enters formally',
+        'Landlords who want a more complete transfer record',
+      ],
+      notFor: [
+        'Subletting cases where the original tenant remains in place',
+        'Simple clause changes that should be handled by amendment',
+        'Jurisdictions outside England',
+      ],
+      legalExplainer:
+        'The wizard is designed to keep assignment separate from subletting and to preserve the landlord consent and release questions that matter in practice.',
+      includedHighlights: [
+        'Assignment summary page',
+        'Consent and release details',
+        'Deposit and handover schedule',
+        'Formal execution block',
+      ],
+      documentPreviewAnatomy: [
+        'Front page identifying the transfer',
+        'Operative clauses for assignment and covenant',
+        'Practical schedule for deposit, keys, and apportionments',
+      ],
+      internalLinks: [
+        {
+          label: 'Residential sublet agreement',
+          href: '/residential-sublet-agreement-england',
+          description: 'Use this instead where the tenancy is not actually being assigned.',
+        },
+      ],
+      faqs: [
+        ...buildCommonFaqs('Lease Assignment Agreement'),
+        {
+          question: 'Can the wizard show whether the outgoing tenant is released?',
+          answer:
+            'Yes. The review and final output can surface whether release is intended and the extent of that release.',
+        },
+        {
+          question: 'Does this handle deposit treatment too?',
+          answer:
+            'Yes. The premium flow captures deposit treatment notes and handover context so the finished document reads more completely.',
+        },
+      ],
+    },
+  },
+  rent_arrears_letter: {
+    product: 'rent_arrears_letter',
+    icon: icon('15-rent-arrears.png'),
+    reviewIcon: icon('30-arrears-ledger.png'),
+    eyebrow: 'Formal Demand',
+    heroTitle: 'Produce a professional arrears demand with a clearer chronology and payment route.',
+    heroSubtitle:
+      'Capture the arrears story, payment instructions, deadline, and follow-up context so the finished letter feels controlled, commercial, and proportionate.',
+    heroBullets: [
+      'Cover letter plus arrears schedule structure',
+      'Payment and response routes surfaced clearly',
+      'Protocol-safe positioning without overclaiming PAP status',
+    ],
+    reviewHighlights: [
+      'Professional cover-letter format',
+      'Chronology-aware arrears summary',
+      'Commercially useful next-step wording',
+    ],
+    reviewSummaryLabels: ['Sender', 'Tenant', 'Arrears mode', 'Deadline'],
+    outputSections: [
+      'Cover letter',
+      'Arrears summary table',
+      'Payment instructions',
+      'Deadline panel',
+      'Protocol note and next steps',
+    ],
+    cautionBanner: {
+      title: 'Positioning guardrail',
+      body:
+        'This product is positioned as a professional arrears demand or final warning, not as a full Pre-Action Protocol Letter of Claim with reply forms and annexes.',
+      tone: 'warning',
+    },
+    stepIcons: {
+      suitability: icon('49-warning.png'),
+      property_details: icon('03-property.png'),
+      sender: icon('39-landlord.png'),
+      tenant: icon('40-tenants.png'),
+      tenancy: icon('04-tenancy.png'),
+      mode: icon('30-arrears-ledger.png'),
+      history: icon('11-calendar-timeline.png'),
+      demand: icon('15-rent-arrears.png'),
+    },
+    landing: {
+      title: 'Rent Arrears Letter England | Premium Formal Arrears Demand',
+      description:
+        'Create a premium England rent arrears letter with arrears chronology, payment instructions, and controlled final-warning wording.',
+      h1: 'Premium Rent Arrears Letter',
+      subheading:
+        'A guided arrears demand flow for England landlords who want a more professional letter pack with better chronology, clearer payment instructions, and stronger review.',
+      overview:
+        'Use this for a formal arrears demand or final warning. The wizard is designed to keep the figures, chronology, and payment route organised without over-positioning the product as a full PAP debt letter.',
+      whyUseThis: [
+        'Builds a cleaner arrears summary and payment route',
+        'Lets you switch between simple total and detailed schedule modes',
+        'Produces a more disciplined landlord debt letter',
+      ],
+      howWizardWorks: [
+        'Set the letter type and tenancy context',
+        'Capture the arrears figures and communication history',
+        'Review the demand, deadline, and next-step wording before checkout',
+      ],
+      whoThisIsFor: [
+        'Landlords chasing unpaid rent from current or former tenants',
+        'Cases needing a professional written demand before escalation',
+        'Users who may later move into repayment-plan or money-claim flows',
+      ],
+      notFor: [
+        'A full PAP debt letter with annexes and reply forms',
+        'Cases where the figures are not yet stable or documented',
+        'Jurisdictions outside England',
+      ],
+      legalExplainer:
+        'The product is deliberately positioned as a formal arrears demand or final warning. It does not promise full debt-protocol compliance by itself.',
+      includedHighlights: [
+        'Professional cover letter structure',
+        'Arrears summary table',
+        'Payment instruction block',
+        'Deadline and next-step language',
+      ],
+      documentPreviewAnatomy: [
+        'Front letter panel with reference and letter type',
+        'Arrears and payment tables',
+        'Deadline block and protocol-safe note',
+      ],
+      internalLinks: [
+        {
+          label: 'Repayment plan agreement',
+          href: '/repayment-plan-agreement-england',
+          description: 'Use this when the tenant is engaging and a signed plan becomes realistic.',
+        },
+      ],
+      faqs: [
+        ...buildCommonFaqs('Rent Arrears Letter'),
+        {
+          question: 'Can I include a detailed arrears schedule?',
+          answer:
+            'Yes. The premium flow supports a detailed arrears schedule mode so the finished letter can show the missed periods more clearly.',
+        },
+        {
+          question: 'Is this the same as a PAP Letter of Claim?',
+          answer:
+            'No. The product is deliberately positioned as an arrears demand or final warning and does not claim to replace a full protocol-compliant debt letter.',
+        },
+      ],
+    },
+  },
+  repayment_plan_agreement: {
+    product: 'repayment_plan_agreement',
+    icon: icon('37-payment-plan.png'),
+    reviewIcon: icon('12-summary-cards.png'),
+    eyebrow: 'Arrears Recovery',
+    heroTitle: 'Turn the arrears discussion into a monitored repayment schedule.',
+    heroSubtitle:
+      'Capture instalments, allocation logic, ongoing rent treatment, default triggers, and contact or payment details in a format that reads like a practical landlord repayment instrument.',
+    heroBullets: [
+      'Running instalment schedule built into the output',
+      'Default and reservation-of-rights wording surfaced clearly',
+      'Designed to sit alongside arrears evidence and later escalation if needed',
+    ],
+    reviewHighlights: [
+      'Running repayment schedule',
+      'Default and grace period wording',
+      'Signature-ready acknowledgment section',
+    ],
+    reviewSummaryLabels: ['Landlord', 'Tenant', 'Arrears total', 'Instalment', 'Frequency'],
+    outputSections: [
+      'Arrears acknowledgement',
+      'Repayment schedule',
+      'Ongoing rent and allocation logic',
+      'Default and reservation of rights',
+      'Execution',
+    ],
+    stepIcons: {
+      suitability: icon('49-warning.png'),
+      property_details: icon('03-property.png'),
+      parties: icon('02-parties.png'),
+      background: icon('15-rent-arrears.png'),
+      structure: icon('37-payment-plan.png'),
+      default: icon('49-warning.png'),
+    },
+    landing: {
+      title: 'Repayment Plan Agreement England | Premium Rent Arrears Repayment Plan',
+      description:
+        'Create a premium England repayment plan agreement with instalment scheduling, default logic, and signature-ready arrears wording.',
+      h1: 'Premium Repayment Plan Agreement',
+      subheading:
+        'A guided arrears-recovery workflow for recording instalments, payment channels, ongoing rent treatment, and what happens if the plan is missed.',
+      overview:
+        'Use this where arrears are being addressed by agreement rather than immediate escalation. The wizard creates a more disciplined repayment document with schedule and default logic built in.',
+      whyUseThis: [
+        'Turns instalment promises into a structured schedule',
+        'Clarifies the relationship between ongoing rent and arrears repayments',
+        'Produces a cleaner signed record if the plan later breaks down',
+      ],
+      howWizardWorks: [
+        'Capture the arrears background and parties',
+        'Set instalment structure, start date, and payment route',
+        'Review the default wording and schedule before checkout',
+      ],
+      whoThisIsFor: [
+        'Arrears cases where the tenant is engaging',
+        'Landlords who want a signed repayment record',
+        'Cases that may later need escalation if the plan is broken',
+      ],
+      notFor: [
+        'Situations where no repayment plan is actually agreed',
+        'Jurisdictions outside England',
+        'Cases needing immediate PAP debt escalation instead of agreement drafting',
+      ],
+      legalExplainer:
+        'The product is framed as a practical repayment agreement with reservation-of-rights wording. It is not a waiver of the landlord rights unless the document expressly says so.',
+      includedHighlights: [
+        'Arrears acknowledgement summary',
+        'Repayment schedule table',
+        'Default and grace-period wording',
+        'Signature-ready finish',
+      ],
+      documentPreviewAnatomy: [
+        'Cover summary with arrears and instalment snapshot',
+        'Repayment table with dates and amounts',
+        'Default and rights wording',
+      ],
+      internalLinks: [
+        {
+          label: 'Rent arrears letter',
+          href: '/rent-arrears-letter-england',
+          description: 'Use this first when the matter is still at formal demand stage.',
+        },
+      ],
+      faqs: [
+        ...buildCommonFaqs('Repayment Plan Agreement'),
+        {
+          question: 'Can I show what happens if an instalment is missed?',
+          answer:
+            'Yes. The premium flow is designed to capture grace period and default consequences so the document reads more completely.',
+        },
+        {
+          question: 'Can I show that normal rent still continues?',
+          answer:
+            'Yes. The wizard includes that distinction so the agreement can show whether ongoing rent is separate from the arrears instalments.',
+        },
+      ],
+    },
+  },
+  residential_tenancy_application: {
+    product: 'residential_tenancy_application',
+    icon: icon('01-case-basics.png'),
+    reviewIcon: icon('12-summary-cards.png'),
+    eyebrow: 'Application Intake',
+    heroTitle: 'Collect a fuller applicant record before the tenancy is offered.',
+    heroSubtitle:
+      'Capture applicant identity, accommodation history, income, occupancy, and referencing permissions in a more premium pre-tenancy application format.',
+    heroBullets: [
+      'Applicant summary before declarations',
+      'Referencing and disclosure fields captured in one place',
+      'Better pre-tenancy intake than a thin lead form',
+    ],
+    reviewHighlights: [
+      'Applicant summary table',
+      'Affordability and references section',
+      'Signed declaration block',
+    ],
+    reviewSummaryLabels: ['Applicant', 'Move-in date', 'Proposed rent', 'Employment'],
+    outputSections: [
+      'Applicant identity',
+      'Employment and income',
+      'Current accommodation and references',
+      'Occupancy and disclosures',
+      'Declaration',
+    ],
+    stepIcons: {
+      consent: icon('49-warning.png'),
+      property_details: icon('03-property.png'),
+      applicant: icon('27-claimant.png'),
+      employment: icon('41-rent.png'),
+      occupancy: icon('40-tenants.png'),
+    },
+    landing: {
+      title: 'Residential Tenancy Application England | Premium Tenant Application Form',
+      description:
+        'Create a premium England residential tenancy application with applicant, income, occupancy, and referencing capture.',
+      h1: 'Premium Residential Tenancy Application',
+      subheading:
+        'A cleaner pre-tenancy intake form that feels closer to a real landlord application pack than a basic enquiry form.',
+      overview:
+        'Use this to gather a fuller applicant record before you issue the tenancy. The wizard keeps identity, affordability, occupancy, and declarations in one structured application file.',
+      whyUseThis: [
+        'Captures more than a simple lead form',
+        'Produces a cleaner record for referencing and decision-making',
+        'Packages declarations and checks consent professionally',
+      ],
+      howWizardWorks: [
+        'Confirm consent for checks',
+        'Capture applicant, employment, and occupancy details',
+        'Review the application summary before checkout',
+      ],
+      whoThisIsFor: [
+        'Landlords collecting pre-tenancy information',
+        'Cases needing a more complete applicant record',
+        'Users who may later pair the result with a guarantor agreement',
+      ],
+      notFor: [
+        'A tenancy agreement itself',
+        'Cases where the applicant is already accepted and no intake is needed',
+        'Jurisdictions outside England',
+      ],
+      legalExplainer:
+        'This product is positioned as a referencing and application intake document, not as a tenancy or holding-deposit agreement.',
+      includedHighlights: [
+        'Applicant summary page',
+        'Income and accommodation sections',
+        'Declaration and checks authority',
+      ],
+      documentPreviewAnatomy: [
+        'Front summary',
+        'Affordability and history sections',
+        'Declaration page',
+      ],
+      internalLinks: [
+        {
+          label: 'Guarantor agreement',
+          href: '/guarantor-agreement-england',
+          description: 'Add this if the application points toward a guarantor requirement.',
+        },
+      ],
+      faqs: buildCommonFaqs('Residential Tenancy Application'),
+    },
+  },
+  rental_inspection_report: {
+    product: 'rental_inspection_report',
+    icon: icon('08-evidence.png'),
+    reviewIcon: icon('38-evidence-pack.png'),
+    eyebrow: 'Evidence-Grade Inspection',
+    heroTitle: 'Produce a flagship inspection report with rooms, issues, uploads, and sign-off.',
+    heroSubtitle:
+      'Build a premium England inspection report with structured room sections, utilities, keys, safety observations, action items, occupier comments, and evidence references.',
+    heroBullets: [
+      'Room builder with custom rooms and issue tracking',
+      'Upload-backed evidence appendix and photo references',
+      'Inspection cover page, sign-off, and follow-up log',
+    ],
+    reviewHighlights: [
+      'Inspection cover summary',
+      'Room-by-room findings with action log',
+      'Numbered evidence appendix',
+    ],
+    reviewSummaryLabels: ['Inspection type', 'Date', 'Inspector', 'Rooms', 'Uploads'],
+    outputSections: [
+      'Inspection cover page',
+      'Inspection particulars',
+      'Utilities, keys, and safety',
+      'Room-by-room findings',
+      'Issues and follow-up',
+      'Evidence appendix',
+      'Certification and acknowledgment',
+    ],
+    stepIcons: {
+      inspection_type: icon('11-calendar-timeline.png'),
+      property_details: icon('03-property.png'),
+      inspection: icon('39-landlord.png'),
+      rooms: icon('45-inventory.png'),
+      utilities: icon('05-compliance.png'),
+      evidence: icon('08-evidence.png'),
+      signoff: icon('10-signing.png'),
+    },
+    landing: {
+      title: 'Rental Inspection Report England | Premium Move-In, Interim, and Move-Out Report',
+      description:
+        'Create a premium England rental inspection report with room builder, uploads, issues log, meter readings, and sign-off-ready output.',
+      h1: 'Premium Rental Inspection Report',
+      subheading:
+        'A flagship evidence-grade inspection flow for England landlords who want custom rooms, issue tracking, uploads, and a more professional final report.',
+      overview:
+        'This is built to be the premium inspection product in the residential standalone range. The wizard collects the facts that make inspection reports useful later: rooms, issues, keys, meters, safety notes, comments, and supporting evidence references.',
+      whyUseThis: [
+        'Lets you build the report room by room',
+        'Supports evidence uploads and structured follow-up items',
+        'Produces a far more polished inspection output than a basic checklist',
+      ],
+      howWizardWorks: [
+        'Choose the inspection type and capture who attended',
+        'Build the room list, issues, utilities, and evidence set',
+        'Review the inspection pack summary before checkout',
+      ],
+      whoThisIsFor: [
+        'Move-in, interim, and move-out inspections',
+        'Landlords wanting a better evidence trail for condition issues',
+        'Cases that may later feed into inventory or dispute work',
+      ],
+      notFor: [
+        'Informal quick notes with no need for a structured report',
+        'Jurisdictions outside England',
+        'Users expecting full embedded photo galleries or live e-signing in this version',
+      ],
+      legalExplainer:
+        'The report is positioned as a dated evidence-grade tenancy-management record. It is designed to sit alongside photographs, inventories, and later comparison evidence.',
+      includedHighlights: [
+        'Inspection cover page',
+        'Structured room builder output',
+        'Keys, utilities, and safety tables',
+        'Follow-up log and evidence appendix',
+      ],
+      documentPreviewAnatomy: [
+        'Front cover with property, purpose, and attendees',
+        'Detailed room sections with issues and comments',
+        'Evidence appendix and sign-off page',
+      ],
+      internalLinks: [
+        {
+          label: 'Inventory & schedule of condition',
+          href: '/inventory-schedule-of-condition-england',
+          description: 'Pair the inspection report with a stronger check-in inventory baseline.',
+        },
+      ],
+      faqs: [
+        ...buildCommonFaqs('Rental Inspection Report'),
+        {
+          question: 'Can I create custom rooms?',
+          answer:
+            'Yes. The upgraded inspection flow is designed to let you select standard rooms and add custom ones where the property needs them.',
+        },
+        {
+          question: 'Can I attach evidence references?',
+          answer:
+            'Yes. The premium inspection flow supports evidence uploads and references so the final report can list supporting files in an appendix.',
+        },
+      ],
+    },
+  },
+  inventory_schedule_condition: {
+    product: 'inventory_schedule_condition',
+    icon: icon('45-inventory.png'),
+    reviewIcon: icon('38-evidence-pack.png'),
+    eyebrow: 'Check-In Baseline',
+    heroTitle: 'Build a stronger inventory baseline with rooms, item rows, keys, and evidence.',
+    heroSubtitle:
+      'Create a premium inventory and schedule of condition with room builder, structured item rows, keys by type, meter readings, handover notes, uploads, and tenant acknowledgment.',
+    heroBullets: [
+      'Room-by-room item structure instead of one big notes field',
+      'Keys, manuals, meters, and handover captured clearly',
+      'Evidence appendix and acknowledgment area built in',
+    ],
+    reviewHighlights: [
+      'Premium summary page',
+      'Structured room inventory tables',
+      'Evidence appendix and acknowledgment area',
+    ],
+    reviewSummaryLabels: ['Inventory date', 'Landlord', 'Tenant', 'Rooms', 'Uploads'],
+    outputSections: [
+      'Inventory summary page',
+      'Meters and utilities',
+      'Room-by-room inventory',
+      'Keys and access devices',
+      'Notes, comments, and amendments',
+      'Evidence appendix',
+      'Acknowledgment',
+    ],
+    stepIcons: {
+      suitability: icon('49-warning.png'),
+      property_details: icon('03-property.png'),
+      parties: icon('02-parties.png'),
+      overview: icon('45-inventory.png'),
+      rooms: icon('45-inventory.png'),
+      utilities: icon('05-compliance.png'),
+      evidence: icon('08-evidence.png'),
+      signoff: icon('10-signing.png'),
+    },
+    landing: {
+      title: 'Inventory and Schedule of Condition England | Premium Landlord Inventory',
+      description:
+        'Create a premium England inventory and schedule of condition with room builder, item rows, uploads, key schedules, and tenant acknowledgment.',
+      h1: 'Premium Inventory & Schedule of Condition',
+      subheading:
+        'A flagship check-in baseline for England landlords who want room-by-room item capture, handover detail, uploads, and stronger final evidence.',
+      overview:
+        'This is built to be the premium baseline inventory product in the residential standalone range. The wizard is designed to collect the room, item, handover, and evidence detail that makes later comparison more credible.',
+      whyUseThis: [
+        'Supports structured room and item capture',
+        'Captures keys, manuals, readings, and handover notes in one workflow',
+        'Produces a more polished inventory pack than a blank template can',
+      ],
+      howWizardWorks: [
+        'Capture the property, parties, and inventory context',
+        'Build the room and item schedule with utilities and evidence',
+        'Review the inventory pack summary before checkout',
+      ],
+      whoThisIsFor: [
+        'Move-in baseline inventories',
+        'Landlords wanting a stronger deposit-dispute evidence trail',
+        'Cases where keys, handover, and condition all need recording together',
+      ],
+      notFor: [
+        'Users who only need a blank checklist',
+        'Jurisdictions outside England',
+        'Full side-by-side check-in vs check-out comparison mode in this version',
+      ],
+      legalExplainer:
+        'The product is framed as a structured schedule of condition and handover record. The wizard is designed to strengthen the baseline evidence without overreaching into unfair deemed-acceptance wording.',
+      includedHighlights: [
+        'Inventory summary page',
+        'Room-by-room item tables',
+        'Keys, documents, and meter schedules',
+        'Evidence appendix and acknowledgment area',
+      ],
+      documentPreviewAnatomy: [
+        'Front page with property, parties, and inventory date',
+        'Detailed room inventory tables',
+        'Appendix and acknowledgment finish',
+      ],
+      internalLinks: [
+        {
+          label: 'Rental inspection report',
+          href: '/rental-inspection-report-england',
+          description: 'Pair it with an inspection report for an even stronger evidence file.',
+        },
+      ],
+      faqs: [
+        ...buildCommonFaqs('Inventory & Schedule of Condition'),
+        {
+          question: 'Can I itemise rooms properly now?',
+          answer:
+            'Yes. The premium inventory flow is designed around room and item capture so the final document can read as a fuller inventory rather than a broad note sheet.',
+        },
+        {
+          question: 'Can I include keys, manuals, and photos?',
+          answer:
+            'Yes. The premium flow is designed to capture keys, handover notes, and evidence references so the final document feels more complete.',
+        },
+      ],
+    },
+  },
+  flatmate_agreement: {
+    product: 'flatmate_agreement',
+    icon: icon('43-bills.png'),
+    reviewIcon: icon('12-summary-cards.png'),
+    eyebrow: 'Household Rules',
+    heroTitle: 'Turn shared living expectations into a cleaner household agreement.',
+    heroSubtitle:
+      'Capture occupiers, room allocation, rent and bills split, chores, guests, quiet hours, replacement occupier rules, and move-out expectations in a more structured shared-living document.',
+    heroBullets: [
+      'Household summary before the rules',
+      'Rent, bills, chores, and guest rules in clear schedules',
+      'Move-out and replacement occupier mechanics included',
+    ],
+    reviewHighlights: [
+      'Household structure summary',
+      'Rent and bills schedules',
+      'House-rules appendix and exit section',
+    ],
+    reviewSummaryLabels: ['Occupiers', 'Room allocation', 'Rent split', 'Notice'],
+    outputSections: [
+      'Status of arrangement',
+      'Household structure and contributions',
+      'House-rules appendix',
+      'Dispute and communication process',
+      'Exit and replacement arrangements',
+    ],
+    stepIcons: {
+      suitability: icon('49-warning.png'),
+      property_details: icon('03-property.png'),
+      flatmates: icon('40-tenants.png'),
+      allocation: icon('45-inventory.png'),
+      split: icon('43-bills.png'),
+      rules: icon('44-terms.png'),
+    },
+    landing: {
+      title: 'Flatmate Agreement England | Premium Shared Living Agreement',
+      description:
+        'Create a premium England flatmate agreement with room allocation, rent and bills schedules, chores, guest rules, and exit arrangements.',
+      h1: 'Premium Flatmate Agreement',
+      subheading:
+        'A more practical shared-household document for occupiers who need room allocation, payment expectations, rules, and move-out process recorded clearly.',
+      overview:
+        'This product is for internal shared-living arrangements, not landlord-facing tenancy transfer. The wizard creates a more useful household agreement with structured rules and contribution schedules.',
+      whyUseThis: [
+        'Captures the practical shared-living deal in more detail',
+        'Separates room, bills, rules, and exit questions clearly',
+        'Produces a more premium internal agreement than a generic note',
+      ],
+      howWizardWorks: [
+        'Confirm the arrangement is shared occupation',
+        'Capture occupiers, rooms, costs, and house rules',
+        'Review the household summary and exit mechanics before checkout',
+      ],
+      whoThisIsFor: [
+        'Shared homes with multiple occupiers',
+        'Sublet-adjacent cases that are really flat-sharing arrangements',
+        'Households wanting a cleaner practical agreement',
+      ],
+      notFor: [
+        'A substitute for landlord consent or tenancy assignment',
+        'Full sublet or assignment cases',
+        'Jurisdictions outside England',
+      ],
+      legalExplainer:
+        'The product is positioned as an internal occupier-sharing agreement. It does not pretend to create a new landlord-facing tenancy by itself.',
+      includedHighlights: [
+        'Household structure summary',
+        'Rent and bills schedules',
+        'House-rules appendix',
+        'Exit and replacement wording',
+      ],
+      documentPreviewAnatomy: [
+        'Front summary of the household arrangement',
+        'Contribution and rule sections',
+        'Exit and replacement appendix',
+      ],
+      internalLinks: [
+        {
+          label: 'Residential sublet agreement',
+          href: '/residential-sublet-agreement-england',
+          description: 'Use this instead where the facts point to a true sublet.',
+        },
+      ],
+      faqs: [
+        ...buildCommonFaqs('Flatmate Agreement'),
+        {
+          question: 'Can I show chores, guests, and quiet hours?',
+          answer:
+            'Yes. The premium flatmate flow is designed to capture day-to-day household rules alongside payment and notice arrangements.',
+        },
+        {
+          question: 'Does this replace the landlord tenancy agreement?',
+          answer:
+            'No. It is positioned as an internal occupier-sharing agreement, not a landlord-facing tenancy contract.',
+        },
+      ],
+    },
+  },
+  renewal_tenancy_agreement: {
+    product: 'renewal_tenancy_agreement',
+    icon: icon('11-calendar-timeline.png'),
+    reviewIcon: icon('12-summary-cards.png'),
+    eyebrow: 'Legacy Renewal',
+    heroTitle: 'Use renewal only where a new term is still the right path.',
+    heroSubtitle:
+      'Capture the earlier tenancy, current term end, renewal start, changed terms, and compliance notes in a more controlled renewal document with a visible suitability warning.',
+    heroBullets: [
+      'Renewal summary page with changed terms schedule',
+      'Legacy-use warning kept visible where needed',
+      'Designed to distinguish renewal from amendment cleanly',
+    ],
+    reviewHighlights: [
+      'Renewal summary page',
+      'Changed-terms schedule',
+      'Suitability warning and compliance notes',
+    ],
+    reviewSummaryLabels: ['Landlord', 'Tenant', 'Renewal start', 'Renewed rent'],
+    outputSections: [
+      'Existing tenancy summary',
+      'Renewed term',
+      'Terms continuing and terms changed',
+      'Compliance and deposit notes',
+      'Suitability warning',
+    ],
+    cautionBanner: {
+      title: 'Renewal suitability warning',
+      body:
+        'For England assured tenancies, a fixed-term renewal starting on or after 1 May 2026 may be inappropriate or legally sensitive. The current warning behavior remains in place in the flow and final output.',
+      tone: 'warning',
+    },
+    stepIcons: {
+      suitability: icon('49-warning.png'),
+      property_details: icon('03-property.png'),
+      parties: icon('02-parties.png'),
+      existing: icon('04-tenancy.png'),
+      renewal: icon('11-calendar-timeline.png'),
+    },
+    landing: {
+      title: 'Renewal Tenancy Agreement England | Premium Legacy Renewal Agreement',
+      description:
+        'Create a premium England renewal tenancy agreement for legacy or specialist renewal cases with changed-term scheduling and visible suitability warnings.',
+      h1: 'Premium Renewal Tenancy Agreement',
+      subheading:
+        'A guided renewal workflow for legacy or specialist England cases where a new term is still intended and the changed terms need recording cleanly.',
+      overview:
+        'This product is legally sensitive after 1 May 2026 for many England assured tenancies. The wizard keeps that warning visible while helping the user document earlier tenancy details, renewed dates, rent, and changed terms more clearly.',
+      whyUseThis: [
+        'Makes the changed terms visible on a separate summary page',
+        'Keeps suitability warnings front and center',
+        'Creates a more disciplined renewal record than a basic reissue',
+      ],
+      howWizardWorks: [
+        'Confirm the case is a renewal rather than an amendment',
+        'Capture the earlier tenancy and renewed term',
+        'Review changed terms and warning copy before checkout',
+      ],
+      whoThisIsFor: [
+        'Legacy or specialist England renewal situations',
+        'Landlords needing a clearer changed-terms schedule',
+        'Cases where a new term is genuinely intended',
+      ],
+      notFor: [
+        'Straightforward clause changes that should use amendment',
+        'Users ignoring the post-1 May 2026 warning position',
+        'Jurisdictions outside England',
+      ],
+      legalExplainer:
+        'The wizard keeps the current renewal warning aligned with the live product behavior. It does not suppress the post-1 May 2026 suitability concern.',
+      includedHighlights: [
+        'Existing tenancy summary page',
+        'Renewal term and rent schedule',
+        'Changed terms table',
+        'Compliance and warning notes',
+      ],
+      documentPreviewAnatomy: [
+        'Front page identifying the earlier tenancy and renewed term',
+        'Changed-terms schedule',
+        'Warning and compliance notes',
+      ],
+      internalLinks: [
+        {
+          label: 'Lease amendment',
+          href: '/lease-amendment-england',
+          description: 'Use this instead where you are only changing selected terms.',
+        },
+      ],
+      faqs: [
+        ...buildCommonFaqs('Renewal Tenancy Agreement'),
+        {
+          question: 'Will the warning about post-1 May 2026 use still appear?',
+          answer:
+            'Yes. The current renewal warning behavior remains aligned with the live product position and is not being removed.',
+        },
+        {
+          question: 'When should I use amendment instead?',
+          answer:
+            'Use amendment where you are changing selected terms within the existing tenancy rather than issuing a fresh term.',
+        },
+      ],
+    },
+  },
+};
+
+export const RESIDENTIAL_STANDALONE_PROFILES = profiles;
+
+export function getResidentialStandaloneProfile(product: ResidentialLettingProductSku) {
+  return profiles[product];
+}
+
+export function getPublicResidentialStandaloneProfiles() {
+  return PUBLIC_RESIDENTIAL_LETTING_PRODUCT_SKUS.map(
+    (sku) => profiles[sku as PublicResidentialLettingProductSku]
+  );
+}

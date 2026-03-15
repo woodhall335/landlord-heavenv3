@@ -52,4 +52,40 @@ describe('residential standalone flow config', () => {
     expect(errors.some((error) => error.includes('Missing required fact: sender_name'))).toBe(true);
     expect(errors.some((error) => error.includes('Add at least one arrears schedule row'))).toBe(true);
   });
+
+  it('uses premium field blocks for inspection, inventory, and schedule-led products', () => {
+    const inspection = getResidentialStandaloneFlowConfig('rental_inspection_report');
+    const inventory = getResidentialStandaloneFlowConfig('inventory_schedule_condition');
+    const amendment = getResidentialStandaloneFlowConfig('lease_amendment');
+
+    expect(
+      inspection.steps.some((step) => step.fields?.some((field) => field.type === 'room_builder'))
+    ).toBe(true);
+    expect(
+      inspection.steps.some((step) => step.fields?.some((field) => field.type === 'upload'))
+    ).toBe(true);
+    expect(
+      inventory.steps.some((step) => step.fields?.some((field) => field.type === 'room_builder'))
+    ).toBe(true);
+    expect(
+      amendment.steps.some((step) => step.fields?.some((field) => field.type === 'repeater'))
+    ).toBe(true);
+  });
+
+  it('blocks renewal review after 1 May 2026 until the warning is acknowledged', () => {
+    const errors = getResidentialStandaloneCompletionErrors('renewal_tenancy_agreement', {
+      jurisdiction: 'england',
+      property_address_line1: '12 Example Street',
+      landlord_full_name: 'Jane Landlord',
+      tenant_full_name: 'Alice Tenant',
+      original_agreement_date: '2025-05-01',
+      renewal_start_date: '2026-05-01',
+      renewal_term_length: '12 months',
+      new_rent_amount: 1650,
+    });
+
+    expect(
+      errors.some((error) => error.includes('post-1 May 2026 renewal suitability warning'))
+    ).toBe(true);
+  });
 });
