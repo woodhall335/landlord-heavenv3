@@ -124,7 +124,7 @@ export function ResidentialStandaloneSectionFlow({ caseId, jurisdiction, product
   if (loading) return <div className="p-8">Loading standalone {config.documentTitle} wizard…</div>;
 
   return (
-    <div className="max-w-5xl mx-auto p-6 space-y-4">
+    <div className="max-w-5xl mx-auto p-6 pt-[calc(var(--site-header-height)+var(--s21-banner-height)+1rem)] pb-8 space-y-4">
       <div>
         <h1 className="text-2xl font-semibold">{config.documentTitle}</h1>
         <p className="text-sm text-gray-600">Step {activeStep + 1} of {config.steps.length}: {step.title}</p>
