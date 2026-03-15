@@ -176,8 +176,16 @@ function getTenancyValidationBlockers(facts: Record<string, unknown>, jurisdicti
     blockers.push(`Missing required tenancy facts: ${validation.missing_fields.join(', ')}`);
   }
 
-  if (validation.invalid_fields.length > 0) {
-    blockers.push(`Invalid tenancy facts: ${validation.invalid_fields.join(', ')}`);
+  const invalidFields = [...validation.invalid_fields];
+  if (jurisdiction === 'england' && invalidFields.includes('is_fixed_term')) {
+    blockers.push(
+      'England tenancies starting on or after 1 May 2026 should not be set up as a new fixed-term AST. Switch this tenancy to the post-reform periodic structure.'
+    );
+  }
+
+  const genericInvalidFields = invalidFields.filter((field) => field !== 'is_fixed_term');
+  if (genericInvalidFields.length > 0) {
+    blockers.push(`Invalid tenancy facts: ${genericInvalidFields.join(', ')}`);
   }
 
   return blockers;

@@ -85,6 +85,20 @@ describe('validateTenancyRequiredFacts', () => {
     );
   });
 
+  it('blocks new England fixed-term AST structures starting on or after 1 May 2026', () => {
+    const result = validateTenancyRequiredFacts({
+      ...completeFacts,
+      tenancy_start_date: '2026-05-02',
+      is_fixed_term: true,
+      tenancy_end_date: '2027-05-01',
+      term_length: '12 months',
+    }, { jurisdiction: 'england' });
+
+    expect(result.invalid_fields).toContain('is_fixed_term');
+    expect(result.missing_fields).not.toContain('tenancy_end_date');
+    expect(result.missing_fields).not.toContain('term_length');
+  });
+
   it('does not require fixed-term fields for Scotland PRT', () => {
     const result = validateTenancyRequiredFacts({
       ...completeFacts,

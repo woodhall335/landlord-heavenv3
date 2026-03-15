@@ -5,7 +5,8 @@
  * including WebP format, cache invalidation, concurrency, and security.
  */
 
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import crypto from 'crypto';
+import { describe, it, expect, vi } from 'vitest';
 
 // Mock Supabase client
 vi.mock('@/lib/supabase/server', () => ({
@@ -48,28 +49,14 @@ vi.mock('@/lib/supabase/server', () => ({
   tryGetServerUser: vi.fn(),
 }));
 
-// Mock document generator
-vi.mock('@/lib/documents/generator', () => ({
-  generateDocument: vi.fn().mockResolvedValue({
-    html: '<html><body><h1>Test Document</h1><p>Content here...</p></body></html>',
-  }),
-}));
-
-// Mock AST generator config
+// Mock AST generator
 vi.mock('@/lib/documents/ast-generator', () => ({
-  getJurisdictionConfig: vi.fn(() => ({
-    jurisdictionLabel: 'England',
-    legalFramework: 'Housing Act 1988',
-    templatePaths: {
-      standard: 'config/jurisdictions/uk/england/templates/standard_ast.hbs',
-      premium: 'config/jurisdictions/uk/england/templates/premium_ast.hbs',
-    },
-  })),
-}));
-
-// Mock jurisdiction derivation
-vi.mock('@/lib/types/jurisdiction', () => ({
-  deriveCanonicalJurisdiction: vi.fn(() => 'england'),
+  generateStandardAST: vi.fn().mockResolvedValue({
+    html: '<html><body><h1>Test Standard AST</h1></body></html>',
+  }),
+  generatePremiumAST: vi.fn().mockResolvedValue({
+    html: '<html><body><h1>Test Premium AST</h1></body></html>',
+  }),
 }));
 
 describe('Preview Generator', () => {

@@ -1,5 +1,7 @@
 import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 
+const ENGLAND_TENANCY_REFORM_CUTOVER = '2026-05-01';
+
 export const REQUIRED_TENANCY_FIELDS = [
   'landlord_full_name',
   'landlord_address_line1',
@@ -32,6 +34,10 @@ function isBlankString(value: unknown): boolean {
 function hasValidDate(value: unknown): boolean {
   if (typeof value !== 'string' || value.trim().length === 0) return false;
   return !Number.isNaN(new Date(value).getTime());
+}
+
+function isIsoDate(value: unknown): value is string {
+  return typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value.trim());
 }
 
 function toFiniteNumber(value: unknown): number | null {
@@ -116,7 +122,14 @@ export function validateTenancyRequiredFacts(
       ? wizardFacts.is_fixed_term
       : caseFacts.tenancy.fixed_term;
 
-  if (jurisdiction !== 'scotland' && isFixedTerm === true) {
+  const englandPostReformStart =
+    jurisdiction === 'england' &&
+    isIsoDate(startDate) &&
+    startDate >= ENGLAND_TENANCY_REFORM_CUTOVER;
+
+  if (englandPostReformStart && isFixedTerm === true) {
+    invalid.add('is_fixed_term');
+  } else if (jurisdiction !== 'scotland' && isFixedTerm === true) {
     const endDate = (wizardFacts.tenancy_end_date as string | undefined) || caseFacts.tenancy.end_date;
     if (!hasValidDate(endDate)) {
       if (isBlankString(endDate)) {

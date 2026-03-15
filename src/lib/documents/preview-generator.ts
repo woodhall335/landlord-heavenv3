@@ -15,9 +15,14 @@
  */
 
 import { createAdminClient } from '@/lib/supabase/server';
-import { generateDocument } from '@/lib/documents/generator';
-import { getJurisdictionConfig, type TenancyJurisdiction } from './ast-generator';
-import { deriveCanonicalJurisdiction } from '@/lib/types/jurisdiction';
+import {
+  generatePremiumAST,
+  generateStandardAST,
+  type TenancyJurisdiction,
+} from './ast-generator';
+import { mapWizardToASTData } from './ast-wizard-mapper';
+import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
+import { resolveEffectiveJurisdiction } from '@/lib/tenancy/jurisdiction';
 import crypto from 'crypto';
 
 // Force Node.js runtime - Puppeteer cannot run on Edge
@@ -618,40 +623,6 @@ export async function cleanupOldPreviews(): Promise<{ deleted: number; errors: n
 }
 
 // ============================================================================
-// TEMPLATE DATA HELPERS
-// ============================================================================
-
-/**
- * Format currency value in UK pounds
- */
-function formatCurrency(value: number | string | undefined): string {
-  if (value === undefined || value === null) return '£0.00';
-  const num = typeof value === 'string' ? parseFloat(value) : value;
-  if (isNaN(num)) return '£0.00';
-  return `£${num.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-}
-
-/**
- * Format date in UK legal format
- */
-function formatUKDate(dateString: string | undefined): string {
-  if (!dateString) return '';
-  try {
-    const date = new Date(dateString);
-    const day = date.getDate();
-    const months = [
-      'January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December',
-    ];
-    const month = months[date.getMonth()];
-    const year = date.getFullYear();
-    return `${day} ${month} ${year}`;
-  } catch {
-    return dateString;
-  }
-}
-
-// ============================================================================
 // MAIN PREVIEW GENERATION
 // ============================================================================
 
@@ -719,124 +690,33 @@ export async function generateTenancyPreview(
         return cached.manifest;
       }
 
-      const jurisdiction = deriveCanonicalJurisdiction(
-        caseRow.jurisdiction,
-        facts
-      ) as TenancyJurisdiction;
+      const caseFacts = wizardFactsToCaseFacts(facts as any);
+      const jurisdiction = resolveEffectiveJurisdiction({
+        caseData: {
+          jurisdiction: caseRow.jurisdiction,
+          property_location: caseRow.property_location,
+        },
+        wizardFacts: facts as any,
+        caseFacts,
+        isPurchased: false,
+        context: `preview:${caseId}:${product}`,
+      }).jurisdiction as TenancyJurisdiction;
 
-      if (!jurisdiction) {
-        return {
-          status: 'error',
-          caseId,
-          product,
-          jurisdiction: 'unknown',
-          error: 'Invalid jurisdiction',
-        };
-      }
-
-      // Get jurisdiction configuration
-      const config = getJurisdictionConfig(jurisdiction);
-      const templatePath =
-        tier === 'premium' ? config.templatePaths.premium : config.templatePaths.standard;
-
-      // Build template data
-      const templateData = {
-        premium: tier === 'premium',
-        is_hmo: tier === 'premium',
-        jurisdiction,
-        jurisdiction_name: config.jurisdictionLabel,
-        legal_framework: config.legalFramework,
-        document_id: `PREVIEW-${jurisdiction.toUpperCase()}-${Date.now()}`,
-        generation_timestamp: new Date().toISOString(),
-        current_date: new Date().toISOString().split('T')[0],
-        current_year: new Date().getFullYear(),
-        agreement_date: formatUKDate(
-          facts.agreement_date || facts.tenancy_start_date || new Date().toISOString().split('T')[0]
-        ),
-        landlord_full_name: facts.landlord_full_name || facts.landlord_name || 'PREVIEW LANDLORD',
-        landlord_address:
-          facts.landlord_address ||
-          facts.landlord_address_line1 ||
-          '123 Preview Street, London, EC1A 1BB',
-        landlord_address_line1: facts.landlord_address_line1 || '',
-        landlord_address_town: facts.landlord_address_town || '',
-        landlord_address_postcode: facts.landlord_address_postcode || '',
-        landlord_email: facts.landlord_email || 'landlord@example.com',
-        landlord_phone: facts.landlord_phone || '07700 000000',
-        tenants: facts.tenants || [
-          { full_name: 'PREVIEW TENANT', email: 'tenant@example.com', phone: '07700 111111', dob: '' },
-        ],
-        number_of_tenants: facts.number_of_tenants || facts.tenants?.length || 1,
-        property_address: facts.property_address || '456 Preview Road, London, SW1A 1AA',
-        property_address_line1: facts.property_address_line1 || '',
-        property_address_town: facts.property_address_town || '',
-        property_address_postcode: facts.property_address_postcode || '',
-        property_type: facts.property_type || 'House',
-        number_of_bedrooms: facts.number_of_bedrooms || '3',
-        furnished_status: facts.furnished_status || 'unfurnished',
-        tenancy_start_date: formatUKDate(
-          facts.tenancy_start_date || new Date().toISOString().split('T')[0]
-        ),
-        is_fixed_term: facts.is_fixed_term !== false,
-        tenancy_end_date: formatUKDate(facts.tenancy_end_date || ''),
-        term_length: facts.term_length || '12 months',
-        rent_period: facts.rent_period || 'month',
-        rent_amount: facts.rent_amount || 1500,
-        rent_amount_formatted: formatCurrency(facts.rent_amount || 1500),
-        rent_due_day: facts.rent_due_day || '1st',
-        payment_method: facts.payment_method || 'Bank Transfer',
-        deposit_amount: facts.deposit_amount || 1731,
-        deposit_amount_formatted: formatCurrency(facts.deposit_amount || 1731),
-        deposit_scheme_name: facts.deposit_scheme_name || 'DPS',
-        gas_safety_certificate: facts.gas_safety_certificate !== false,
-        electrical_safety_certificate: facts.electrical_safety_certificate !== false,
-        epc_rating: facts.epc_rating || 'C',
-        smoke_alarms_fitted: facts.smoke_alarms_fitted !== false,
-        carbon_monoxide_alarms: facts.carbon_monoxide_alarms !== false,
-        pets_allowed: facts.pets_allowed || false,
-        smoking_allowed: facts.smoking_allowed || false,
-        has_garden: facts.has_garden || false,
-        ...(jurisdiction === 'wales'
-          ? {
-              contract_holder_full_name:
-                facts.tenants?.[0]?.full_name || 'PREVIEW CONTRACT HOLDER',
-              dwelling_address: facts.property_address || '456 Preview Road, Cardiff, CF1 1AA',
-            }
-          : {}),
-        ...(jurisdiction === 'scotland'
-          ? {
-              landlord_registration_number:
-                facts.landlord_registration_number || 'PREVIEW-REG-12345',
-            }
-          : {}),
-        ...(tier === 'premium'
-          ? {
-              is_hmo: true,
-              has_shared_facilities: true,
-              number_of_sharers: facts.number_of_sharers || 4,
-              hmo_licence_number: facts.hmo_licence_number || 'HMO-PREVIEW-001',
-              hmo_licence_expiry: formatUKDate(facts.hmo_licence_expiry || ''),
-              communal_areas:
-                facts.communal_areas || 'Kitchen, bathroom, and living room are shared.',
-              joint_and_several_liability: true,
-            }
-          : {}),
-      };
-
-      // Generate HTML from template
-      const doc = await generateDocument({
-        templatePath,
-        data: templateData,
-        isPreview: true,
-        outputFormat: 'html',
+      const astData = mapWizardToASTData(facts as any, {
+        canonicalJurisdiction: jurisdiction,
       });
+
+      const doc =
+        tier === 'premium'
+          ? await generatePremiumAST(astData, true)
+          : await generateStandardAST(astData, true);
 
       // Create personalized watermark with server-side salt
       const userHash = hashUserIdentifier(userId, userEmail);
       const watermarkText = createWatermarkText(caseId, userHash);
 
       // Generate multi-page images (WebP by default)
-      const { pages, pageCount } = await generateMultiPageImages(doc.html, watermarkText);
+      const { pages, pageCount } = await generateMultiPageImages(doc.html || '', watermarkText);
 
       console.log(`[Preview] Generated ${pageCount} pages for case ${caseId}`);
 

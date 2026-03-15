@@ -89,6 +89,37 @@ function ASTCheckoutButton({
   const router = useRouter();
   const e2eModeEnabled = useMemo(() => process.env.NEXT_PUBLIC_E2E_MODE === 'true' || process.env.E2E_MODE === 'true', []);
 
+  const formatTenancyFieldLabel = (field: string) => {
+    const labels: Record<string, string> = {
+      landlord_full_name: 'Landlord full name',
+      landlord_address_line1: 'Landlord service address',
+      landlord_email: 'Landlord email',
+      landlord_phone: 'Landlord phone',
+      property_address_line1: 'Property address',
+      property_address_town: 'Property town or city',
+      property_address_postcode: 'Property postcode',
+      tenancy_start_date: 'Tenancy start date',
+      tenancy_end_date: 'Tenancy end date',
+      term_length: 'Term length',
+      rent_amount: 'Rent amount',
+      rent_due_day: 'Rent due day',
+      payment_method: 'Payment method',
+      payment_details: 'Payment instructions',
+      deposit_amount: 'Deposit amount',
+      agreement_date: 'Agreement date',
+      landlord_registration_number: 'Landlord registration number',
+      tenants: 'Tenant details',
+      is_fixed_term: 'Fixed-term AST selection for a new England tenancy starting on or after 1 May 2026',
+    };
+
+    if (labels[field]) return labels[field];
+    return field
+      .replace(/\[(\d+)\]/g, ' $1 ')
+      .replace(/[._]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+  };
+
   const handleCheckout = async () => {
     setIsLoading(true);
     setError(null);
@@ -204,7 +235,7 @@ function ASTCheckoutButton({
                 <p className="text-sm font-medium text-red-800">Missing required sections:</p>
                 <ul className="mt-2 list-disc pl-5 text-sm text-red-700">
                   {missingFields.map((field) => (
-                    <li key={field}>{field}</li>
+                    <li key={field}>{formatTenancyFieldLabel(field)}</li>
                   ))}
                 </ul>
               </div>

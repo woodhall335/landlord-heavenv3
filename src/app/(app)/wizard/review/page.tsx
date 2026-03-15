@@ -2715,6 +2715,27 @@ function buildTenancyValidation(facts: any, jurisdiction: string) {
     });
   }
 
+  const tenancyStartDate = typeof facts.tenancy_start_date === 'string'
+    ? facts.tenancy_start_date
+    : typeof facts.start_date === 'string'
+      ? facts.start_date
+      : '';
+  const englandPostReformStart =
+    jurisdiction === 'england' &&
+    /^\d{4}-\d{2}-\d{2}$/.test(tenancyStartDate) &&
+    tenancyStartDate >= '2026-05-01';
+
+  if (
+    englandPostReformStart &&
+    (facts.fixed_term_tenancy === true || facts.tenancy_type === 'fixed_term' || facts.is_fixed_term === true)
+  ) {
+    blockers.push({
+      title: 'England post-reform tenancy structure',
+      message:
+        'For England tenancies starting on or after 1 May 2026, this product should not be set up as a new fixed-term AST. Edit the tenancy details and switch to the post-reform periodic structure.',
+    });
+  }
+
   // 6. Deposit protection warning (England/Wales only)
   if ((jurisdiction === 'england' || jurisdiction === 'wales') && facts.deposit_amount && facts.deposit_amount > 0) {
     if (!facts.deposit_protected) {

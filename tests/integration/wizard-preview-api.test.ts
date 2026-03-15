@@ -7,8 +7,12 @@
  * Run with: npm test -- tests/integration/wizard-preview-api.test.ts
  */
 
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { generateDocument } from '@/lib/documents/generator';
+import { beforeEach, describe, it, expect, vi } from 'vitest';
+
+const { generateStandardASTMock, generatePremiumASTMock } = vi.hoisted(() => ({
+  generateStandardASTMock: vi.fn(),
+  generatePremiumASTMock: vi.fn(),
+}));
 
 // Mock Supabase for integration tests (can be swapped with real client for E2E)
 const mockCase = {
@@ -78,24 +82,9 @@ vi.mock('@/lib/supabase/server', () => ({
   }),
 }));
 
-// Mock the document generator to return realistic HTML
-vi.mock('@/lib/documents/generator', () => ({
-  generateDocument: vi.fn(),
-}));
-
 vi.mock('@/lib/documents/ast-generator', () => ({
-  getJurisdictionConfig: vi.fn(() => ({
-    jurisdictionLabel: 'England',
-    legalFramework: 'Housing Act 1988',
-    templatePaths: {
-      standard: 'config/jurisdictions/uk/england/templates/standard_ast.hbs',
-      premium: 'config/jurisdictions/uk/england/templates/premium_ast.hbs',
-    },
-  })),
-}));
-
-vi.mock('@/lib/types/jurisdiction', () => ({
-  deriveCanonicalJurisdiction: vi.fn(() => 'england'),
+  generateStandardAST: generateStandardASTMock,
+  generatePremiumAST: generatePremiumASTMock,
 }));
 
 // Skip Puppeteer in tests - mock the image generation
@@ -113,8 +102,8 @@ vi.mock('puppeteer-core', () => ({
   },
 }));
 
-beforeEach(() => {
-  vi.mocked(generateDocument).mockResolvedValue({
+beforeEach(async () => {
+  generateStandardASTMock.mockResolvedValue({
     html: `
       <!DOCTYPE html>
       <html>
@@ -127,12 +116,27 @@ beforeEach(() => {
         <p>Tenant: Integration Test Tenant</p>
         <h2>2. Property</h2>
         <p>456 Property Lane, Manchester, M1 1AB</p>
-        <!-- More content would make this multi-page -->
         ${Array(50).fill('<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>').join('\n')}
       </body>
       </html>
     `,
   });
+
+  generatePremiumASTMock.mockResolvedValue({
+    html: `
+      <!DOCTYPE html>
+      <html>
+      <head><title>Premium AST Agreement</title></head>
+      <body>
+        <h1>Premium Assured Shorthold Tenancy Agreement</h1>
+        ${Array(50).fill('<p>Premium tenancy content.</p>').join('\n')}
+      </body>
+      </html>
+    `,
+  });
+
+  const { clearAllPreviewCaches } = await import('@/lib/documents/preview-generator');
+  clearAllPreviewCaches();
 });
 
 describe('Wizard Preview API Integration', () => {
