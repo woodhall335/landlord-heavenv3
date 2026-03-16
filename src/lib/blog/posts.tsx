@@ -9898,6 +9898,10 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
+    reviewer: {
+      name: 'Landlord Heaven Legal Review',
+      role: 'Reviewed for landlord debt recovery workflow',
+    },
     heroImage: '/images/blog/mcol.svg',
     heroImageAlt: 'Money Claim Online Guide for Landlords',
     showUrgencyBanner: false,
@@ -9915,6 +9919,23 @@ export const blogPosts: BlogPost[] = [
       { id: 'mcol-faq', title: 'MCOL FAQ', level: 2 },
     ],
     relatedPosts: ['england-particulars-of-claim', 'england-section-8-ground-8', 'england-section-8-ground-10-11'],
+    sources: [
+      {
+        title: 'Make a court claim for money',
+        url: 'https://www.gov.uk/make-court-claim-for-money',
+        type: 'government',
+      },
+      {
+        title: 'Pre-Action Protocol for Debt Claims',
+        url: 'https://www.justice.gov.uk/courts/procedure-rules/civil/protocol/prot_debt',
+        type: 'official',
+      },
+      {
+        title: 'County Courts Act 1984, section 69',
+        url: 'https://www.legislation.gov.uk/ukpga/1984/28/section/69',
+        type: 'legislation',
+      },
+    ],
     content: (
       <>
         <p className="lead">
@@ -10376,6 +10397,10 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
+    reviewer: {
+      name: 'Landlord Heaven Legal Review',
+      role: 'Reviewed for landlord debt recovery workflow',
+    },
     heroImage: '/images/blog/particulars.svg',
     heroImageAlt: 'How to Write Particulars of Claim',
     showUrgencyBanner: false,
@@ -10392,6 +10417,23 @@ export const blogPosts: BlogPost[] = [
       { id: 'particulars-faq', title: 'Particulars of Claim FAQ', level: 2 },
     ],
     relatedPosts: ['england-money-claim-online', 'england-section-8-ground-8', 'england-section-8-ground-10-11'],
+    sources: [
+      {
+        title: 'Practice Direction 16 - Statements of Case',
+        url: 'https://www.justice.gov.uk/courts/procedure-rules/civil/rules/part16/pd_part16',
+        type: 'official',
+      },
+      {
+        title: 'Form N1: Claim form (CPR Part 7)',
+        url: 'https://www.gov.uk/government/publications/form-n1-claim-form-cpr-part-7',
+        type: 'government',
+      },
+      {
+        title: 'County Courts Act 1984, section 69',
+        url: 'https://www.legislation.gov.uk/ukpga/1984/28/section/69',
+        type: 'legislation',
+      },
+    ],
     content: (
       <>
         <p className="lead">
@@ -29475,6 +29517,10 @@ export const blogPosts: BlogPost[] = [
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
+    reviewer: {
+      name: 'Landlord Heaven Legal Review',
+      role: 'Reviewed for landlord debt recovery workflow',
+    },
     heroImage: '/images/blog/money-claims.svg',
     heroImageAlt: 'UK Money Claims Online Guide',
     showUrgencyBanner: false,
@@ -29489,6 +29535,23 @@ export const blogPosts: BlogPost[] = [
       { id: 'mcol-faq', title: 'Money Claims FAQ', level: 2 },
     ],
     relatedPosts: ['uk-rent-arrears-guide', 'uk-deposit-protection-guide', 'uk-tenancy-agreements-guide'],
+    sources: [
+      {
+        title: 'Make a court claim for money',
+        url: 'https://www.gov.uk/make-court-claim-for-money',
+        type: 'government',
+      },
+      {
+        title: 'Pre-Action Protocol for Debt Claims',
+        url: 'https://www.justice.gov.uk/courts/procedure-rules/civil/protocol/prot_debt',
+        type: 'official',
+      },
+      {
+        title: 'County Courts Act 1984, section 69',
+        url: 'https://www.legislation.gov.uk/ukpga/1984/28/section/69',
+        type: 'legislation',
+      },
+    ],
     content: (
       <>
         <p className="lead">

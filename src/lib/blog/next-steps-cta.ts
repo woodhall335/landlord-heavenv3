@@ -20,7 +20,7 @@ export interface NextStepsCTA {
   priority: number;
 }
 
-const SPRINT1_NEXT_STEPS_OVERRIDES: Record<string, NextStepsCTA[]> = {
+const CURATED_NEXT_STEPS_OVERRIDES: Record<string, NextStepsCTA[]> = {
   'england-county-court-forms': [
     {
       href: '/eviction-court-forms-england',
@@ -103,6 +103,57 @@ const SPRINT1_NEXT_STEPS_OVERRIDES: Record<string, NextStepsCTA[]> = {
     {
       href: '/products/complete-pack',
       label: 'Complete Eviction Pack',
+      priority: 3,
+    },
+  ],
+  'england-money-claim-online': [
+    {
+      href: '/money-claim-online-mcol',
+      label: 'Money Claim Online MCOL Guide',
+      priority: 1,
+    },
+    {
+      href: '/money-claim-unpaid-rent',
+      label: 'Claim Unpaid Rent',
+      priority: 2,
+    },
+    {
+      href: '/products/money-claim',
+      label: 'Money Claim Pack',
+      priority: 3,
+    },
+  ],
+  'england-particulars-of-claim': [
+    {
+      href: '/money-claim-n1-claim-form',
+      label: 'N1 Claim Form Guide',
+      priority: 1,
+    },
+    {
+      href: '/money-claim-schedule-of-debt',
+      label: 'Schedule of Debt Guide',
+      priority: 2,
+    },
+    {
+      href: '/products/money-claim',
+      label: 'Money Claim Pack',
+      priority: 3,
+    },
+  ],
+  'uk-money-claims-online-guide': [
+    {
+      href: '/money-claim-online-mcol',
+      label: 'Money Claim Online MCOL Guide',
+      priority: 1,
+    },
+    {
+      href: '/money-claim-small-claims-landlord',
+      label: 'Small Claims Court for Landlords',
+      priority: 2,
+    },
+    {
+      href: '/products/money-claim',
+      label: 'Money Claim Pack',
       priority: 3,
     },
   ],
@@ -254,9 +305,9 @@ export function getNextStepsCTAs(input: NextStepsCTAInput): NextStepsCTA[] {
   const lowerSlug = slug.toLowerCase();
   const lowerCategory = category.toLowerCase();
 
-  const sprint1Override = SPRINT1_NEXT_STEPS_OVERRIDES[lowerSlug];
-  if (sprint1Override) {
-    return finalizeNextSteps(sprint1Override);
+  const curatedOverride = CURATED_NEXT_STEPS_OVERRIDES[lowerSlug];
+  if (curatedOverride) {
+    return finalizeNextSteps(curatedOverride);
   }
 
   // Jurisdiction detection for gating England-only CTAs

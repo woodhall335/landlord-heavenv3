@@ -46,7 +46,7 @@ const jumpLinks = [
   { href: '#when-the-file-is-strong', label: 'When the file is strong enough to pursue' },
   { href: '#timeline-after-the-tenant-leaves', label: 'Timeline after the tenant leaves' },
   { href: '#common-mistakes', label: 'Common mistakes landlords make' },
-  { href: '#notice-only-vs-complete-pack', label: 'Notice Only vs Complete Pack' },
+  { href: '#money-claim-vs-complete-pack', label: 'Money Claim vs Complete Pack' },
   { href: '#faqs', label: 'FAQs' },
   { href: '#final-cta', label: 'Next steps' },
 ] as const;
@@ -186,8 +186,8 @@ export default function Page() {
       <UniversalHero
         title="Tenant Left Without Paying Rent"
         subtitle="A practical landlord guide to understanding the arrears position and deciding what to do once a tenant leaves owing rent."
-        primaryCta={{ label: 'Start Complete Eviction Pack', href: '/products/complete-pack' }}
-        secondaryCta={{ label: 'Need Notice Only first?', href: '/products/notice-only' }}
+        primaryCta={{ label: 'Start Money Claim Pack', href: '/products/money-claim' }}
+        secondaryCta={{ label: 'Need Complete Pack instead?', href: '/products/complete-pack' }}
         mediaSrc="/images/wizard-icons/11-calendar-timeline.png"
         mediaAlt="Tenant leaving owing rent landlord guide icon"
         showReviewPill
@@ -428,12 +428,12 @@ export default function Page() {
             </Card>
 
             <CtaBand
-              title="Already beyond the first notice stage and now looking at the wider file?"
-              body="Complete Pack is usually the stronger fit where the tenant has already left, the arrears file needs cleaning up properly, or the case has moved beyond basic notice questions into broader route control, evidence handling, and recovery planning. Notice Only is generally the better fit where the main need is still the initial formal notice step in an earlier-stage arrears case."
-              primaryHref="/products/complete-pack"
-              primaryLabel="Start Complete Eviction Pack"
-              secondaryHref="/products/notice-only"
-              secondaryLabel="Need Notice Only First?"
+              title="Ready to turn the final balance into a debt-recovery file?"
+              body="Money Claim Pack is usually the stronger fit once the tenant has already gone and the main task is proving the arrears clearly enough to pursue recovery. Complete Pack is the better secondary route where the wider possession background, evidence continuity, or eviction-stage context still needs active support."
+              primaryHref="/products/money-claim"
+              primaryLabel="Start Money Claim Pack"
+              secondaryHref="/products/complete-pack"
+              secondaryLabel="Need Complete Pack instead?"
             />
 
             <Card
@@ -664,38 +664,38 @@ export default function Page() {
             </Card>
 
             <Card
-              id="notice-only-vs-complete-pack"
-              title="Notice Only vs Complete Pack"
+              id="money-claim-vs-complete-pack"
+              title="Money Claim Pack vs Complete Pack"
             >
               <p className="mt-4 leading-7 text-gray-700">
                 Landlords reading about a tenant leaving without paying rent are often no
                 longer dealing with the simplest early-stage arrears problem. In many
-                cases, the main issue is now wider file control: confirming the final
-                balance, checking what evidence is strong enough, and deciding how the case
-                should be handled from here.
+                cases, the main issue is now proving the final balance clearly, deciding
+                whether recovery is worth pursuing, and turning the tenancy records into a
+                debt-focused file.
+              </p>
+
+              <h3 className="mt-5 text-lg font-semibold text-[#2a2161]">Money Claim Pack</h3>
+              <p className="mt-2 leading-7 text-gray-700">
+                Money Claim Pack is usually the stronger fit where the tenant has already
+                left and the landlord now needs a debt-recovery workflow. It is better
+                aligned to arrears schedules, letters before action, particulars, and the
+                core steps that support a county court money claim.
               </p>
 
               <h3 className="mt-5 text-lg font-semibold text-[#2a2161]">Complete Eviction Pack</h3>
               <p className="mt-2 leading-7 text-gray-700">
-                Complete Pack is usually the stronger fit where the file has moved beyond
-                basic notice questions and now needs broader support around route handling,
-                document quality, possession-stage background, or later recovery planning.
-                It tends to suit landlords who want one cleaner overall route note rather
-                than a narrow first-step answer only.
-              </p>
-
-              <h3 className="mt-5 text-lg font-semibold text-[#2a2161]">Notice Only</h3>
-              <p className="mt-2 leading-7 text-gray-700">
-                Notice Only is usually the better fit where the landlord is still earlier
-                in the sequence and mainly needs the initial formal notice stage handled
-                correctly. It can still be right in some arrears cases, but it is usually
-                less aligned to a file that has already reached the point where the tenant
-                has gone and the wider evidence position now matters more.
+                Complete Pack is the better secondary route where the wider possession
+                history, evidence continuity, or eviction-stage strategy still matters to
+                the landlord's overall position. It is useful when the debt issue sits
+                alongside unfinished route questions rather than replacing them.
               </p>
 
               <p className="mt-4 leading-7 text-gray-700">
-                In practical terms, the later the stage and the more important the full
-                arrears file becomes, the more likely Complete Pack is the better fit.
+                In practical terms, once the tenant has gone and the main question is how
+                to recover the balance, Money Claim Pack is usually the better first
+                route. Complete Pack remains the backup route where the wider case still
+                needs eviction-led support.
               </p>
             </Card>
           </div>
@@ -727,24 +727,24 @@ export default function Page() {
               balance is legally and commercially worthwhile.
             </p>
             <p className="mt-4 leading-7 text-gray-700">
-              If the case has already moved beyond the earliest notice stage and now needs
-              broader help with the wider file, start with Complete Eviction Pack. If your
-              main need is still the first formal notice stage in an earlier arrears case,
-              start with Notice Only first.
+              If the tenant has already gone and your next job is turning the final
+              balance into a clean claim, start with Money Claim Pack. If you still need
+              broader possession-route continuity or eviction support around the wider
+              file, use Complete Pack as the secondary route.
             </p>
 
             <div className="mt-6 flex flex-wrap gap-3">
               <Link
-                href="/products/complete-pack"
+                href="/products/money-claim"
                 className="rounded-lg bg-primary px-5 py-3 text-white hover:opacity-95"
               >
-                Start Complete Eviction Pack
+                Start Money Claim Pack
               </Link>
               <Link
-                href="/products/notice-only"
+                href="/products/complete-pack"
                 className="rounded-lg border border-[#E6DBFF] bg-white px-5 py-3 text-primary hover:bg-[#FCFAFF]"
               >
-                Need Notice Only First?
+                Need Complete Pack instead?
               </Link>
             </div>
           </div>

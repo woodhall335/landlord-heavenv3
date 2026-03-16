@@ -44,7 +44,7 @@ const jumpLinks = [
   { href: '#how-landlords-usually-approach-recovery', label: 'How landlords usually approach recovery' },
   { href: '#recovery-timeline', label: 'Recovery timeline' },
   { href: '#common-delay-points', label: 'Common delay points' },
-  { href: '#notice-only-vs-complete-pack', label: 'Notice Only vs Complete Pack' },
+  { href: '#money-claim-vs-complete-pack', label: 'Money Claim vs Complete Pack' },
   { href: '#faqs', label: 'FAQs' },
   { href: '#final-cta', label: 'Next steps' },
 ] as const;
@@ -86,9 +86,9 @@ const faqs: FAQItem[] = [
       'It varies, and landlords should think in stages rather than assume one fixed timescale. File clean-up, final balance confirmation, and later recovery steps can all affect the timeline.',
   },
   {
-    question: 'Should I use Notice Only or Complete Pack?',
+    question: 'Should I use Money Claim Pack or Complete Pack?',
     answer:
-      'Notice Only is usually the better fit where the main need is still at the earlier formal notice stage. Complete Pack is usually stronger where the case has already moved through possession and now needs broader route control and document handling.',
+      'Money Claim Pack is usually the better fit where possession is already complete and the main task is converting arrears records into a debt-recovery file. Complete Pack is usually stronger where the landlord still needs wider possession-route continuity, evidence control, or court-stage support.',
   },
 ];
 
@@ -184,8 +184,8 @@ export default function Page() {
       <UniversalHero
         title="Recover Rent Arrears After Eviction"
         subtitle="A practical landlord guide to what happens to the debt after possession is back and how to approach recovery with a cleaner file."
-        primaryCta={{ label: 'Start Complete Eviction Pack', href: '/products/complete-pack' }}
-        secondaryCta={{ label: 'Need Notice Only first?', href: '/products/notice-only' }}
+        primaryCta={{ label: 'Start Money Claim Pack', href: '/products/money-claim' }}
+        secondaryCta={{ label: 'Need Complete Pack instead?', href: '/products/complete-pack' }}
         mediaSrc="/images/wizard-icons/11-calendar-timeline.png"
         mediaAlt="Post-eviction rent arrears recovery timeline guide icon"
         showReviewPill
@@ -377,12 +377,12 @@ export default function Page() {
             </Card>
 
             <CtaBand
-              title="Already beyond notice stage and thinking about the wider file?"
-              body="Complete Pack is usually the stronger fit where the case has already moved through possession work and now needs broader control over evidence, court-stage handling, or post-eviction document quality. Notice Only is generally better where the main need is still the initial formal notice step."
-              primaryHref="/products/complete-pack"
-              primaryLabel="Start Complete Eviction Pack"
-              secondaryHref="/products/notice-only"
-              secondaryLabel="Need Notice Only First?"
+              title="Ready to turn the arrears file into a county court claim?"
+              body="Money Claim Pack is usually the stronger fit once possession is finished and the main task is the debt file itself: schedule of arrears, letter before action, particulars, and a cleaner MCOL-ready route. Complete Pack is the better secondary route where you still need broader possession-stage continuity or eviction support around the same file."
+              primaryHref="/products/money-claim"
+              primaryLabel="Start Money Claim Pack"
+              secondaryHref="/products/complete-pack"
+              secondaryLabel="Need Complete Pack instead?"
             />
 
             <Card
@@ -586,38 +586,37 @@ export default function Page() {
             </Card>
 
             <Card
-              id="notice-only-vs-complete-pack"
-              title="Notice Only vs Complete Pack"
+              id="money-claim-vs-complete-pack"
+              title="Money Claim Pack vs Complete Pack"
             >
               <p className="mt-4 leading-7 text-gray-700">
                 Landlords reading about recovering arrears after eviction are usually no
-                longer at the first simple stage of the case. In most situations, the main
-                issue is broader route control, document handling, and how the file now
-                works after possession has already been recovered.
+                longer at the first simple notice stage of the case. In most situations,
+                the main issue is now how to turn the possession history into a clean
+                debt-recovery file and decide whether the arrears are worth pursuing.
+              </p>
+
+              <h3 className="mt-5 text-lg font-semibold text-[#2a2161]">Money Claim Pack</h3>
+              <p className="mt-2 leading-7 text-gray-700">
+                Money Claim Pack is usually the stronger fit where possession is already
+                complete and the landlord now needs a debt-focused workflow. It is better
+                aligned to schedules of debt, letters before action, particulars, and the
+                practical steps that support a county court money claim.
               </p>
 
               <h3 className="mt-5 text-lg font-semibold text-[#2a2161]">Complete Eviction Pack</h3>
               <p className="mt-2 leading-7 text-gray-700">
-                Complete Pack is usually the stronger fit where the case has already moved
-                through possession work and now needs broader control over evidence,
-                court-stage history, and the quality of the post-eviction file. It tends
-                to suit landlords who want one cleaner route note from earlier stages
-                through to later recovery decisions.
-              </p>
-
-              <h3 className="mt-5 text-lg font-semibold text-[#2a2161]">Notice Only</h3>
-              <p className="mt-2 leading-7 text-gray-700">
-                Notice Only is generally better where the landlord is still earlier in the
-                sequence and mainly needs the first formal notice stage handled properly.
-                It can still be the right starting point in earlier arrears files, but it
-                is usually less aligned to a case already focused on post-possession debt
-                questions.
+                Complete Pack is the better secondary route where the landlord still needs
+                broader continuity across the possession route, evidence handling, or
+                court-stage context that sits behind the arrears claim. It is less
+                debt-specific than Money Claim Pack, but stronger when the wider eviction file
+                still needs active support.
               </p>
 
               <p className="mt-4 leading-7 text-gray-700">
-                In practical terms, the later the case stage and the more important the
-                wider file quality becomes, the more likely Complete Pack is the better
-                fit.
+                In practical terms, once possession is back and the main question is the
+                debt, Money Claim Pack is usually the better first route. Complete Pack
+                remains useful where the wider possession file still needs work.
               </p>
             </Card>
           </div>
@@ -644,23 +643,23 @@ export default function Page() {
               finished, but the debt still needs its own structured approach.
             </p>
             <p className="mt-4 leading-7 text-gray-700">
-              If your case has already moved through possession and now needs broader help
-              with the wider file, start with Complete Eviction Pack. If your main need is
-              still the first formal notice stage in an earlier arrears case, start with
-              Notice Only first.
+              If possession is already complete and your next job is turning the arrears
+              records into a clean claim, start with Money Claim Pack. If you still need
+              broader possession-route continuity or eviction support around the same
+              case, use Complete Pack as the secondary route.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Link
-                href="/products/complete-pack"
+                href="/products/money-claim"
                 className="rounded-lg bg-primary px-5 py-3 text-white hover:opacity-95"
               >
-                Start Complete Eviction Pack
+                Start Money Claim Pack
               </Link>
               <Link
-                href="/products/notice-only"
+                href="/products/complete-pack"
                 className="rounded-lg border border-[#E6DBFF] bg-white px-5 py-3 text-primary hover:bg-[#FCFAFF]"
               >
-                Need Notice Only First?
+                Need Complete Pack instead?
               </Link>
             </div>
           </div>

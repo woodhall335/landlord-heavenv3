@@ -146,6 +146,30 @@ describe('Blog page next steps rollout', () => {
         { label: 'Complete Eviction Pack', href: '/products/complete-pack' },
       ],
     ],
+    [
+      'england-money-claim-online',
+      [
+        { label: 'Money Claim Online MCOL Guide', href: '/money-claim-online-mcol' },
+        { label: 'Claim Unpaid Rent', href: '/money-claim-unpaid-rent' },
+        { label: 'Money Claim Pack', href: '/products/money-claim' },
+      ],
+    ],
+    [
+      'england-particulars-of-claim',
+      [
+        { label: 'N1 Claim Form Guide', href: '/money-claim-n1-claim-form' },
+        { label: 'Schedule of Debt Guide', href: '/money-claim-schedule-of-debt' },
+        { label: 'Money Claim Pack', href: '/products/money-claim' },
+      ],
+    ],
+    [
+      'uk-money-claims-online-guide',
+      [
+        { label: 'Money Claim Online MCOL Guide', href: '/money-claim-online-mcol' },
+        { label: 'Small Claims Court for Landlords', href: '/money-claim-small-claims-landlord' },
+        { label: 'Money Claim Pack', href: '/products/money-claim' },
+      ],
+    ],
   ])('renders the next-steps block with sprint links for %s', async (slug, links) => {
     await renderBlogPage(slug);
 
@@ -159,5 +183,19 @@ describe('Blog page next steps rollout', () => {
       const link = screen.getByRole('link', { name: new RegExp(label, 'i') });
       expect(link).toHaveAttribute('href', href);
     });
+  });
+
+  it.each([
+    ['england-money-claim-online', 'Make a court claim for money'],
+    ['england-particulars-of-claim', 'Practice Direction 16 - Statements of Case'],
+    ['uk-money-claims-online-guide', 'Pre-Action Protocol for Debt Claims'],
+  ])('renders reviewer and source citations for %s', async (slug, sourceTitle) => {
+    await renderBlogPage(slug);
+
+    expect(screen.getByText(/Reviewed:/i)).toBeInTheDocument();
+    expect(screen.getByText('Official Sources & References')).toBeInTheDocument();
+
+    const sourceLink = screen.getByRole('link', { name: new RegExp(sourceTitle, 'i') });
+    expect(sourceLink).toBeInTheDocument();
   });
 });

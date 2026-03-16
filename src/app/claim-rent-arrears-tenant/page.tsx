@@ -50,7 +50,7 @@ const moneyClaimLink = buildWizardLink({
 });
 
 const completePackLink = buildWizardLink({
-  product: 'notice_only',
+  product: 'complete_pack',
   jurisdiction: 'england',
   src: 'seo_claim_rent_arrears_tenant',
   topic: 'eviction',
