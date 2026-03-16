@@ -20,6 +20,94 @@ export interface NextStepsCTA {
   priority: number;
 }
 
+const SPRINT1_NEXT_STEPS_OVERRIDES: Record<string, NextStepsCTA[]> = {
+  'england-county-court-forms': [
+    {
+      href: '/eviction-court-forms-england',
+      label: 'Eviction Court Forms England',
+      priority: 1,
+    },
+    {
+      href: '/n5b-form-guide',
+      label: 'N5B Form Guide',
+      priority: 2,
+    },
+    {
+      href: '/products/complete-pack',
+      label: 'Complete Eviction Pack',
+      priority: 3,
+    },
+  ],
+  'england-bailiff-eviction': [
+    {
+      href: '/warrant-of-possession-guide',
+      label: 'Warrant of Possession Guide',
+      priority: 1,
+    },
+    {
+      href: '/court-bailiff-eviction-guide',
+      label: 'Court Bailiff Eviction Guide',
+      priority: 2,
+    },
+    {
+      href: '/products/complete-pack',
+      label: 'Complete Eviction Pack',
+      priority: 3,
+    },
+  ],
+  'england-possession-hearing': [
+    {
+      href: '/eviction-court-forms-england',
+      label: 'Eviction Court Forms England',
+      priority: 1,
+    },
+    {
+      href: '/court-possession-order-guide',
+      label: 'Court Possession Order Guide',
+      priority: 2,
+    },
+    {
+      href: '/products/complete-pack',
+      label: 'Complete Eviction Pack',
+      priority: 3,
+    },
+  ],
+  'how-to-serve-eviction-notice': [
+    {
+      href: '/serve-section-21-notice',
+      label: 'Serve Section 21 Notice',
+      priority: 1,
+    },
+    {
+      href: '/serve-section-8-notice',
+      label: 'Serve Section 8 Notice',
+      priority: 2,
+    },
+    {
+      href: '/products/notice-only',
+      label: 'Notice Only Bundle',
+      priority: 3,
+    },
+  ],
+  'how-long-does-eviction-take-uk': [
+    {
+      href: '/eviction-timeline-england',
+      label: 'Eviction Timeline England',
+      priority: 1,
+    },
+    {
+      href: '/possession-order-timeline',
+      label: 'Possession Order Timeline',
+      priority: 2,
+    },
+    {
+      href: '/products/complete-pack',
+      label: 'Complete Eviction Pack',
+      priority: 3,
+    },
+  ],
+};
+
 const PRODUCT_HREFS = new Set([
   '/products/notice-only',
   '/products/complete-pack',
@@ -121,6 +209,37 @@ export function isNonEnglandSlug(slug: string): boolean {
   return isScotland || isWales || isNI;
 }
 
+function finalizeNextSteps(steps: NextStepsCTA[]): NextStepsCTA[] {
+  const uniqueSteps = steps
+    .slice()
+    .sort((a, b) => a.priority - b.priority)
+    .filter(
+      (step, index, arr) => arr.findIndex((candidate) => candidate.href === step.href) === index
+    );
+
+  const productSteps = uniqueSteps.filter((step) => PRODUCT_HREFS.has(step.href));
+  const nonProductSteps = uniqueSteps.filter((step) => !PRODUCT_HREFS.has(step.href));
+
+  const fallbackProduct: NextStepsCTA = {
+    href: '/products/ast',
+    label: 'Tenancy Agreement Pack',
+    priority: 99,
+  };
+
+  const primaryProduct = productSteps[0] ?? fallbackProduct;
+  const finalSteps: NextStepsCTA[] = [];
+
+  if (nonProductSteps[0]) {
+    finalSteps.push(nonProductSteps[0]);
+  }
+  if (nonProductSteps[1]) {
+    finalSteps.push(nonProductSteps[1]);
+  }
+  finalSteps.push(primaryProduct);
+
+  return finalSteps.slice(0, 3);
+}
+
 /**
  * Pure function to generate CTAs for a blog post
  * This is the same logic used in the NextSteps React component
@@ -134,6 +253,11 @@ export function getNextStepsCTAs(input: NextStepsCTAInput): NextStepsCTA[] {
   const lowerTags = tags.map((t) => t.toLowerCase());
   const lowerSlug = slug.toLowerCase();
   const lowerCategory = category.toLowerCase();
+
+  const sprint1Override = SPRINT1_NEXT_STEPS_OVERRIDES[lowerSlug];
+  if (sprint1Override) {
+    return finalizeNextSteps(sprint1Override);
+  }
 
   // Jurisdiction detection for gating England-only CTAs
   const isScotland = lowerSlug.startsWith('scotland-');
@@ -534,33 +658,7 @@ export function getNextStepsCTAs(input: NextStepsCTAInput): NextStepsCTA[] {
     });
   }
 
-  const uniqueSteps = steps
-    .sort((a, b) => a.priority - b.priority)
-    .filter(
-      (step, index, arr) => arr.findIndex((s) => s.href === step.href) === index
-    );
-
-  const productSteps = uniqueSteps.filter((step) => PRODUCT_HREFS.has(step.href));
-  const nonProductSteps = uniqueSteps.filter((step) => !PRODUCT_HREFS.has(step.href));
-
-  const fallbackProduct: NextStepsCTA = {
-    href: '/products/ast',
-    label: 'Tenancy Agreement Pack',
-    priority: 99,
-  };
-
-  const primaryProduct = productSteps[0] ?? fallbackProduct;
-
-  const finalSteps: NextStepsCTA[] = [];
-  if (nonProductSteps[0]) {
-    finalSteps.push(nonProductSteps[0]);
-  }
-  if (nonProductSteps[1]) {
-    finalSteps.push(nonProductSteps[1]);
-  }
-  finalSteps.push(primaryProduct);
-
-  return finalSteps.slice(0, 3);
+  return finalizeNextSteps(steps);
 }
 
 /**

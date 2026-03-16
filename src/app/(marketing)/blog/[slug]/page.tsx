@@ -34,6 +34,7 @@ import { BlogStickySlots } from '@/components/blog/BlogStickySlots';
 import { BlogProse } from '@/components/blog/BlogProse';
 import { BlogCtaProvider } from '@/components/blog/BlogCtaContext';
 import { BlogArticleStickyGuard } from '@/components/blog/BlogArticleStickyGuard';
+import { NextSteps } from '@/components/blog/NextSteps';
 import { getBlogImagesForPost, getBlogImagesForPostThumb } from '@/lib/blog/image-manifest';
 import { getBlogSeoConfig } from '@/lib/blog/seo';
 import { BLOG_PRODUCT_ROUTES, getBlogProductCta } from '@/lib/blog/product-cta-map';
@@ -977,6 +978,8 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
                   {post.content}
                 </BlogProse>
               </BlogCtaProvider>
+
+              <NextSteps slug={post.slug} category={post.category} tags={post.tags} />
 
               <section className="mt-10 rounded-2xl border border-[#e9dcff] bg-[#f8f1ff] p-5 shadow-sm md:p-6" aria-label="Core eviction guides">
                 <h2 className="text-xl font-bold text-gray-900">Core eviction guides for next steps</h2>
