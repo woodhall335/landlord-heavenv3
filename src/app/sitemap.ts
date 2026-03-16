@@ -51,6 +51,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/', priority: 1.0, changeFrequency: 'weekly' as const, hasDate: true },
     { path: '/pricing', priority: 0.9, changeFrequency: 'weekly' as const, hasDate: true },
     { path: '/about', priority: 0.7, changeFrequency: 'monthly' as const, hasDate: true },
+    { path: '/landlord-documents-england', priority: 0.78, changeFrequency: 'weekly' as const, hasDate: true },
     { path: '/contact', priority: 0.6, changeFrequency: 'monthly' as const, hasDate: false },
     { path: '/help', priority: 0.7, changeFrequency: 'monthly' as const, hasDate: true },
     // Legal pages rarely change - omit lastModified to avoid false freshness signals

@@ -15,7 +15,7 @@ import { FAQSection } from '@/components/seo/FAQSection';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
-import { moneyClaimGuides, productLinks, toolLinks } from '@/lib/seo/internal-links';
+import { moneyClaimGuides, productLinks, residentialDocumentLinks } from '@/lib/seo/internal-links';
 
 export const metadata: Metadata = {
   title: 'Claim Against Tenant Guarantor 2026 | Sue Guarantor for Rent Arrears',
@@ -405,6 +405,7 @@ export default function MoneyClaimGuarantorPage() {
               </h2>
               <RelatedLinks
                 links={[
+                  residentialDocumentLinks.guarantorAgreement,
                   moneyClaimGuides.unpaidRent,
                   moneyClaimGuides.formerTenant,
                   moneyClaimGuides.ccjEnforcement,

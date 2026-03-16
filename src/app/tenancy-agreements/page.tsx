@@ -5,6 +5,7 @@ import { UniversalHero } from '@/components/landing/UniversalHero';
 import { Container } from '@/components/ui/Container';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
+import { residentialDocumentLinks } from '@/lib/seo/internal-links';
 
 const canonicalUrl = getCanonicalUrl('/tenancy-agreements');
 const wizardHref = '/wizard?product=tenancy_agreement&src=seo_tenancy_agreements&topic=tenancy';
@@ -66,6 +67,24 @@ export default function TenancyAgreementsHubPage() {
                 </Link>
                 <Link href="/eviction-notice-uk" className="rounded-lg border border-gray-200 bg-white p-3 hover:border-primary transition-colors">
                   Check eviction notice routes before enforcement
+                </Link>
+              </div>
+            </section>
+
+            <section className="rounded-2xl border border-gray-200 bg-white p-6">
+              <h2 className="text-xl font-bold text-gray-900 mb-3">Other England landlord documents</h2>
+              <div className="grid sm:grid-cols-2 gap-3 text-sm">
+                <Link href={residentialDocumentLinks.documentsHub.href} className="rounded-lg border border-gray-200 bg-gray-50 p-3 hover:border-primary transition-colors">
+                  Browse the England landlord documents hub
+                </Link>
+                <Link href={residentialDocumentLinks.leaseAmendment.href} className="rounded-lg border border-gray-200 bg-gray-50 p-3 hover:border-primary transition-colors">
+                  Amend selected tenancy clauses
+                </Link>
+                <Link href={residentialDocumentLinks.guarantorAgreement.href} className="rounded-lg border border-gray-200 bg-gray-50 p-3 hover:border-primary transition-colors">
+                  Add a separate guarantor agreement
+                </Link>
+                <Link href={residentialDocumentLinks.inventoryScheduleCondition.href} className="rounded-lg border border-gray-200 bg-gray-50 p-3 hover:border-primary transition-colors">
+                  Create an inventory or schedule of condition
                 </Link>
               </div>
             </section>

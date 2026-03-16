@@ -1332,6 +1332,7 @@ const COPY_REPLACEMENTS: Array<[RegExp, string]> = [
   [/\bguided England residential sublet agreement\b/gi, 'England residential sublet agreement'],
   [/\bguided England residential tenancy application\b/gi, 'England residential tenancy application'],
   [/\bguided England residential guarantor agreement\b/gi, 'England residential guarantor agreement'],
+  [/\bCreate a England\b/g, 'Create an England'],
   [/\bThe wizard wizard\b/gi, 'The wizard'],
 ];
 

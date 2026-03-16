@@ -187,6 +187,86 @@ export const landingPageLinks = {
   },
 };
 
+export const residentialDocumentLinks = {
+  documentsHub: {
+    href: '/landlord-documents-england',
+    title: 'England landlord documents',
+    description: 'Browse agreement, arrears, inspection, and inventory document pages.',
+    icon: 'document' as const,
+    type: 'page' as const,
+  },
+  guarantorAgreement: {
+    href: '/guarantor-agreement-england',
+    title: 'Guarantor Agreement England',
+    description: 'Builder and guide for tenant guarantor deeds.',
+    icon: 'document' as const,
+    type: 'page' as const,
+  },
+  leaseAmendment: {
+    href: '/lease-amendment-england',
+    title: 'Lease Amendment England',
+    description: 'Change selected tenancy terms without rewriting the whole agreement.',
+    icon: 'document' as const,
+    type: 'page' as const,
+  },
+  leaseAssignmentAgreement: {
+    href: '/lease-assignment-agreement-england',
+    title: 'Lease Assignment Agreement England',
+    description: 'Document tenant replacement, consent, handover, and deposit treatment.',
+    icon: 'document' as const,
+    type: 'page' as const,
+  },
+  residentialSubletAgreement: {
+    href: '/residential-sublet-agreement-england',
+    title: 'Residential Sublet Agreement England',
+    description: 'Record a sublet with the head tenancy and consent position clearly.',
+    icon: 'document' as const,
+    type: 'page' as const,
+  },
+  rentArrearsLetter: {
+    href: '/rent-arrears-letter-england',
+    title: 'Rent Arrears Letter England',
+    description: 'Formal arrears demand and final warning document page.',
+    icon: 'document' as const,
+    type: 'page' as const,
+  },
+  repaymentPlanAgreement: {
+    href: '/repayment-plan-agreement-england',
+    title: 'Repayment Plan Agreement England',
+    description: 'Record arrears instalments, running balance, and default terms.',
+    icon: 'document' as const,
+    type: 'page' as const,
+  },
+  rentalInspectionReport: {
+    href: '/rental-inspection-report-england',
+    title: 'Rental Inspection Report England',
+    description: 'Build a dated property inspection report with room-by-room observations.',
+    icon: 'document' as const,
+    type: 'page' as const,
+  },
+  inventoryScheduleCondition: {
+    href: '/inventory-schedule-of-condition-england',
+    title: 'Inventory and Schedule of Condition England',
+    description: 'Create a baseline check-in inventory and condition record.',
+    icon: 'document' as const,
+    type: 'page' as const,
+  },
+  flatmateAgreement: {
+    href: '/flatmate-agreement-england',
+    title: 'Flatmate Agreement England',
+    description: 'Document room allocation, bills, and house rules between occupiers.',
+    icon: 'document' as const,
+    type: 'page' as const,
+  },
+  renewalTenancyAgreement: {
+    href: '/renewal-tenancy-agreement-england',
+    title: 'Renewal Tenancy Agreement England',
+    description: 'Builder for narrower England renewal cases with changed-term scheduling.',
+    icon: 'document' as const,
+    type: 'page' as const,
+  },
+};
+
 // New guide pages for SEO authority
 export const guideLinks = {
   howToEvictTenant: {
@@ -761,6 +841,8 @@ export const moneyClaimRentLinks = [
   moneyClaimGuides.breakClause,
   toolLinks.rentArrearsCalculator,
   toolLinks.rentDemandLetter,
+  residentialDocumentLinks.rentArrearsLetter,
+  residentialDocumentLinks.repaymentPlanAgreement,
   moneyClaimBlogs.interestCalculation,
 ];
 
@@ -1182,6 +1264,9 @@ export const renewUpdateEnglandRelatedLinks = [
   tenancySeoEnglandPages.astMain,
   tenancySeoEnglandPages.astTemplate,
   tenancySeoEnglandPages.fixedTermPeriodic,
+  residentialDocumentLinks.renewalTenancyAgreement,
+  residentialDocumentLinks.leaseAmendment,
+  residentialDocumentLinks.documentsHub,
   landingPageLinks.section21Template,
   guideLinks.howToEvictTenant,
   askHeavenLink,
