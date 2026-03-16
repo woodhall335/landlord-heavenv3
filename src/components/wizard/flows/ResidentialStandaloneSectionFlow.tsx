@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation';
 import { clsx } from 'clsx';
 
 import { Button, Input } from '@/components/ui';
-import { StandaloneTrustModuleCard } from '@/components/residential-letting/StandaloneTrustModuleCard';
 import { UploadField, type EvidenceFileSummary } from '@/components/wizard/fields/UploadField';
 import { WizardFooterNavV3 } from '@/components/wizard/shared/WizardFooterNavV3';
 import { WizardMainCardV3 } from '@/components/wizard/shared/WizardMainCardV3';
@@ -25,7 +24,6 @@ import {
   type StandaloneStepConfig,
 } from '@/lib/residential-letting/standalone-flow-config';
 import {
-  RESIDENTIAL_LETTING_PRODUCTS,
   type ResidentialLettingProductSku,
 } from '@/lib/residential-letting/products';
 
@@ -141,66 +139,6 @@ function bootstrapLegacyRooms(loaded: Record<string, any>, key: 'inspection_room
   return loaded?.[key];
 }
 
-function SaveStateChip({
-  saveState,
-  saving,
-  uploading,
-}: {
-  saveState: 'idle' | 'saving' | 'saved';
-  saving: boolean;
-  uploading: boolean;
-}) {
-  const label = uploading
-    ? 'Uploading evidence'
-    : saving || saveState === 'saving'
-      ? 'Saving'
-      : saveState === 'saved'
-        ? 'Autosaved'
-        : 'Ready';
-
-  return (
-    <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-white/80">
-      <span
-        className={clsx(
-          'h-2 w-2 rounded-full',
-          uploading
-            ? 'bg-amber-300'
-            : saving || saveState === 'saving'
-              ? 'bg-sky-300'
-              : saveState === 'saved'
-                ? 'bg-emerald-300'
-                : 'bg-white/50'
-        )}
-      />
-      {label}
-    </div>
-  );
-}
-
-function MobileSaveStateChip({
-  saveState,
-  saving,
-  uploading,
-}: {
-  saveState: 'idle' | 'saving' | 'saved';
-  saving: boolean;
-  uploading: boolean;
-}) {
-  const label = uploading
-    ? 'Uploading'
-    : saving || saveState === 'saving'
-      ? 'Saving'
-      : saveState === 'saved'
-        ? 'Saved'
-        : 'Ready';
-
-  return (
-    <span className="rounded-full border border-[var(--standalone-border)] bg-white/90 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-600">
-      {label}
-    </span>
-  );
-}
-
 function FieldChrome({
   field,
   children,
@@ -295,7 +233,6 @@ export function ResidentialStandaloneSectionFlow({ caseId, jurisdiction, product
   const config = useMemo(() => getResidentialStandaloneFlowConfig(product), [product]);
   const profile = useMemo(() => getResidentialStandaloneProfile(product), [product]);
   const themeStyle = useMemo(() => getResidentialStandaloneThemeVars(profile.theme), [profile.theme]);
-  const productMeta = RESIDENTIAL_LETTING_PRODUCTS[product];
 
   const [facts, setFacts] = useState<Record<string, any>>({
     jurisdiction,
@@ -396,12 +333,10 @@ export function ResidentialStandaloneSectionFlow({ caseId, jurisdiction, product
 
   const step = config.steps[activeStep];
   const visibleFields = useMemo(() => getVisibleFields(step, facts), [facts, step]);
-  const progress = Math.round(((activeStep + 1) / config.steps.length) * 100);
   const stepCompletion = useMemo(
     () => config.steps.map((configStep) => getStepCompletion(configStep, facts)),
     [config.steps, facts]
   );
-  const visibleTrustModules = profile.trustModules.slice(0, 3);
   const tabs = useMemo(
     () =>
       config.steps.map((configStep, index) => ({
@@ -1297,70 +1232,6 @@ export function ResidentialStandaloneSectionFlow({ caseId, jurisdiction, product
       ? 'Review document'
       : 'Save & continue';
 
-  const heroBanner = (
-    <section className="overflow-hidden rounded-2xl border border-violet-200/50 bg-[rgba(20,8,48,0.88)] text-white shadow-[0_18px_40px_rgba(20,8,48,0.28)]">
-      <div className="grid gap-6 p-6 sm:p-7 lg:grid-cols-[96px,minmax(0,1fr),220px] lg:items-center">
-        <div className="mx-auto rounded-2xl border border-white/10 bg-white/10 p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]">
-          <Image src={profile.icon} alt="" width={72} height={72} className="h-[72px] w-[72px] object-contain" />
-        </div>
-        <div>
-          <div className="flex flex-wrap items-center gap-3">
-            <span className="rounded-full border border-violet-300/40 bg-violet-500/20 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-violet-50">
-              {profile.eyebrow}
-            </span>
-            <span className="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-white/75">
-              England only
-            </span>
-            <SaveStateChip saveState={saveState} saving={saving} uploading={uploading} />
-          </div>
-
-          <h1 className="mt-4 text-3xl font-semibold leading-tight text-white sm:text-[2.35rem]">
-            {profile.heroTitle}
-          </h1>
-          <p className="mt-3 max-w-3xl text-sm leading-7 text-violet-100/85 sm:text-[15px]">
-            {profile.heroSubtitle}
-          </p>
-
-          <div className="mt-5 grid gap-3 md:grid-cols-3">
-            {profile.heroBullets.slice(0, 3).map((bullet) => (
-              <div
-                key={bullet}
-                className="rounded-2xl border border-white/10 bg-white/8 px-4 py-3 text-sm leading-6 text-violet-50/90"
-              >
-                {bullet}
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="rounded-2xl border border-white/10 bg-white/8 p-5">
-          <div className="text-xs font-semibold uppercase tracking-[0.22em] text-violet-100/60">
-            Document summary
-          </div>
-          <div className="mt-3 text-3xl font-semibold">{productMeta.displayPrice}</div>
-          <div className="mt-1 text-sm text-violet-100/75">One-time payment after review</div>
-          <div className="mt-4 h-2 overflow-hidden rounded-full bg-white/10">
-            <div
-              className="h-full rounded-full bg-violet-300 transition-all duration-300"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
-          <div className="mt-3 flex items-center justify-between text-sm text-violet-100/75">
-            <span>{progress}% complete</span>
-            <span>Step {activeStep + 1} of {config.steps.length}</span>
-          </div>
-          <div className="mt-5 space-y-3">
-            {profile.outputSections.slice(0, 4).map((section) => (
-              <div key={section} className="flex items-start gap-3 text-sm text-violet-50/85">
-                <span className="mt-2 h-2 w-2 rounded-full bg-violet-300" />
-                <span>{section}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-
   if (loading) {
     return (
       <div
@@ -1416,14 +1287,13 @@ export function ResidentialStandaloneSectionFlow({ caseId, jurisdiction, product
         aria-hidden="true"
       />
 
-      <div className="mx-auto grid max-w-[1240px] grid-cols-1 items-start gap-6 px-4 pb-10 pt-4 lg:grid-cols-[minmax(0,1fr)_340px]">
+      <div className="mx-auto max-w-[920px] px-4 pb-10 pt-4">
         <WizardMainCardV3
           sectionTitle={step.title}
           sectionDescription={step.description}
           stepIconPath={profile.stepIcons[step.id] || profile.icon}
           stepNumber={activeStep + 1}
           totalSteps={config.steps.length}
-          banner={heroBanner}
           navigation={
             <div className="hidden lg:block">
               <WizardFooterNavV3
@@ -1458,33 +1328,6 @@ export function ResidentialStandaloneSectionFlow({ caseId, jurisdiction, product
           }
         >
           <div className="space-y-6">
-            <div className="rounded-2xl border border-violet-100 bg-violet-50/60 p-4">
-              <div className="flex flex-wrap items-start justify-between gap-4">
-                <div>
-                  <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-violet-700">
-                    This step covers
-                  </div>
-                  <div className="mt-3 grid gap-3 md:grid-cols-2">
-                    {profile.outputSections.slice(0, 4).map((section) => (
-                      <div key={section} className="flex items-start gap-3 rounded-xl bg-white px-4 py-3 text-sm text-slate-700 shadow-sm">
-                        <span className="mt-1.5 h-2 w-2 rounded-full bg-violet-500" />
-                        <span>{section}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <div className="rounded-xl border border-violet-200 bg-white px-4 py-3 text-sm text-slate-700 shadow-sm">
-                  <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-violet-700">
-                    Completion
-                  </div>
-                  <div className="mt-1 text-lg font-semibold text-violet-950">
-                    {stepCompletion[activeStep].completed}/{stepCompletion[activeStep].total || 0}
-                  </div>
-                  <div className="text-xs text-slate-500">Required fields on this step</div>
-                </div>
-              </div>
-            </div>
-
             {profile.cautionBanner ? (
               <div
                 className={clsx(
@@ -1500,12 +1343,6 @@ export function ResidentialStandaloneSectionFlow({ caseId, jurisdiction, product
                 <p className="mt-2 text-sm leading-7">{profile.cautionBanner.body}</p>
               </div>
             ) : null}
-
-            <div className="grid gap-4 lg:hidden">
-              {visibleTrustModules.map((module) => (
-                <StandaloneTrustModuleCard key={module.title} module={module} compact />
-              ))}
-            </div>
 
             <section className="space-y-4">
               {visibleFields.map((field) => (
@@ -1529,86 +1366,6 @@ export function ResidentialStandaloneSectionFlow({ caseId, jurisdiction, product
             ) : null}
           </div>
         </WizardMainCardV3>
-
-        <aside className="w-full min-h-0 shrink-0 lg:self-start lg:w-[340px]">
-          <div className="space-y-4 lg:sticky lg:top-[calc(var(--site-header-height)+var(--s21-banner-height)+var(--wizard-topbar-height)+8px)]">
-            <div className="rounded-2xl border border-violet-200 bg-white p-5 shadow-[0_12px_28px_rgba(76,29,149,0.10)]">
-              <div className="flex items-center justify-between gap-3">
-                <div>
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-violet-700">
-                    Progress
-                  </p>
-                  <p className="mt-1 text-sm font-semibold text-violet-950">{progress}% complete</p>
-                </div>
-                <MobileSaveStateChip saveState={saveState} saving={saving} uploading={uploading} />
-              </div>
-
-              <div className="mt-4 h-2 overflow-hidden rounded-full bg-violet-100">
-                <div
-                  className="h-full rounded-full bg-violet-500 transition-all duration-300"
-                  style={{ width: `${progress}%` }}
-                />
-              </div>
-
-              <div className="mt-4 space-y-3">
-                {config.steps.map((configStep, index) => {
-                  const iconPath = profile.stepIcons[configStep.id] || profile.icon;
-                  const isActive = index === activeStep;
-                  const isComplete = stepCompletion[index]?.isComplete;
-
-                  return (
-                    <button
-                      key={configStep.id}
-                      type="button"
-                      onClick={() => setActiveStep(index)}
-                      className={clsx(
-                        'flex w-full items-center gap-3 rounded-xl border px-3 py-3 text-left shadow-sm transition',
-                        isActive
-                          ? 'border-violet-500 bg-violet-600 text-white'
-                          : isComplete
-                            ? 'border-violet-200 bg-violet-50 text-violet-950'
-                            : 'border-violet-100 bg-white text-slate-700 hover:border-violet-300'
-                      )}
-                    >
-                      <div className="rounded-xl bg-white p-2 shadow-sm">
-                        <Image src={iconPath} alt="" width={40} height={40} className="h-9 w-9 object-contain" />
-                      </div>
-                      <div className="min-w-0">
-                        <div className={clsx('text-[11px] uppercase tracking-[0.2em]', isActive ? 'text-violet-100' : 'text-slate-500')}>
-                          Step {index + 1}
-                        </div>
-                        <div className="truncate text-sm font-semibold">{configStep.title}</div>
-                        <div className={clsx('mt-1 text-xs', isActive ? 'text-violet-100/80' : 'text-slate-500')}>
-                          {stepCompletion[index].completed}/{stepCompletion[index].total || 0} required answered
-                        </div>
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {config.warnings.length > 0 ? (
-              <div className="rounded-2xl border border-amber-200 bg-amber-50 p-5 shadow-sm">
-                <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-amber-800">
-                  Legal caution
-                </div>
-                <ul className="mt-3 space-y-3 text-sm leading-6 text-amber-950">
-                  {config.warnings.map((warning) => (
-                    <li key={warning} className="flex items-start gap-3">
-                      <span className="mt-2 h-2 w-2 rounded-full bg-amber-500" />
-                      <span>{warning}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ) : null}
-
-            {profile.trustModules.map((module) => (
-              <StandaloneTrustModuleCard key={module.title} module={module} />
-            ))}
-          </div>
-        </aside>
       </div>
 
       <div className="fixed inset-x-0 bottom-0 z-30 border-t border-violet-200 bg-white/95 px-4 py-3 shadow-[0_-16px_30px_rgba(20,8,48,0.12)] backdrop-blur lg:hidden">

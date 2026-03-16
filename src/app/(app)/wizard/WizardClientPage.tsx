@@ -19,7 +19,6 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { Button, Container } from '@/components/ui';
 import { UniversalHero } from '@/components/landing/UniversalHero';
-import { StandaloneTrustModuleCard } from '@/components/residential-letting/StandaloneTrustModuleCard';
 import { clsx } from 'clsx';
 import { RiArrowDownLine, RiArrowLeftLine, RiCheckLine, RiAlertLine } from 'react-icons/ri';
 import {
@@ -835,14 +834,6 @@ function WizardPageInner() {
                 </button>
               ))}
             </div>
-
-            {standaloneProfile ? (
-              <div className="mt-8 grid gap-4 lg:grid-cols-3">
-                {standaloneProfile.trustModules.map((module) => (
-                  <StandaloneTrustModuleCard key={module.title} module={module} />
-                ))}
-              </div>
-            ) : null}
 
             {/* Start Button */}
             {selectedJurisdiction && (

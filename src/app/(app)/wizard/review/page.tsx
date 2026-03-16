@@ -1,11 +1,9 @@
 'use client';
 
-import Image from 'next/image';
 import React, { Suspense, useEffect, useState, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
-import { StandaloneTrustModuleCard } from '@/components/residential-letting/StandaloneTrustModuleCard';
 import { CaseStrengthWidget } from '../components/CaseStrengthWidget';
 import {
   RiErrorWarningLine,
@@ -3832,66 +3830,41 @@ function ResidentialStandaloneReviewContent({
           : undefined
       }
     >
-      <div
-        className="overflow-hidden rounded-[2rem] text-white shadow-2xl"
-        style={{
-          backgroundImage: profile
-            ? 'linear-gradient(135deg, var(--standalone-hero-start), var(--standalone-hero-mid) 54%, var(--standalone-hero-end))'
-            : 'linear-gradient(to bottom right, rgb(2 6 23), rgb(15 23 42), rgb(67 51 36))',
-        }}
-      >
-        <div className="grid gap-6 p-6 sm:p-8 lg:grid-cols-[120px,1fr,260px] lg:items-center">
-          <div className="mx-auto rounded-[1.5rem] bg-white/8 p-4">
-            {profile ? (
-              <Image
-                src={profile.reviewIcon || profile.icon}
-                alt=""
-                width={96}
-                height={96}
-                className="h-24 w-24 object-contain"
-              />
-            ) : null}
-          </div>
+      <Card className="border-violet-200 p-6 shadow-[0_12px_28px_rgba(76,29,149,0.10)]">
+        <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <div className="text-xs font-semibold uppercase tracking-[0.26em] text-white/60">
-              {profile?.eyebrow || 'England residential wizard'}
+            <div className="text-xs font-semibold uppercase tracking-[0.24em] text-violet-700">
+              {productMeta?.label || 'Residential letting document'}
             </div>
-            <h1 className="mt-3 text-3xl font-semibold tracking-tight">
-              {profile?.heroTitle || productMeta?.label || 'Residential Letting Document'}
+            <h1 className="mt-3 text-2xl font-semibold text-violet-950">
+              Review your answers before payment
             </h1>
-            <p className="mt-3 max-w-3xl text-sm leading-7 text-white/80">
-              {profile?.heroSubtitle || productMeta?.description}
+            <p className="mt-2 text-sm leading-7 text-slate-600">
+              Check the key facts, supporting evidence, and included sections below.
             </p>
-            <div className="mt-5 grid gap-3 sm:grid-cols-3">
-              <div className="rounded-2xl border border-white/10 bg-white/6 px-4 py-3">
-                <div className="text-xs uppercase tracking-[0.18em] text-white/60">Rooms</div>
-                <div className="mt-1 text-2xl font-semibold">{roomCount}</div>
-              </div>
-              <div className="rounded-2xl border border-white/10 bg-white/6 px-4 py-3">
-                <div className="text-xs uppercase tracking-[0.18em] text-white/60">Evidence</div>
-                <div className="mt-1 text-2xl font-semibold">{uploadCount}</div>
-              </div>
-              <div className="rounded-2xl border border-white/10 bg-white/6 px-4 py-3">
-                <div className="text-xs uppercase tracking-[0.18em] text-white/60">Schedules</div>
-                <div className="mt-1 text-2xl font-semibold">{scheduleCount}</div>
-              </div>
-            </div>
           </div>
-          <div className="rounded-[1.5rem] border border-white/10 bg-white/6 p-5">
-            <div className="text-xs font-semibold uppercase tracking-[0.24em] text-white/60">
-              One-Time Price
-            </div>
-            <div className="mt-3 text-3xl font-semibold">{productMeta?.displayPrice || ''}</div>
-            <p className="mt-2 text-sm text-white/75">
+          <div className="rounded-2xl border border-violet-200 bg-violet-50 px-4 py-3 text-sm text-slate-700">
+            <div className="text-xs font-semibold uppercase tracking-[0.22em] text-violet-700">
               {jurisdiction === 'england' ? 'England only' : jurisdiction}
-            </p>
-            <p className="mt-2 text-sm text-white/75">
-              Guided document with structured schedules, cleaner sectioning, and
-              execution-ready formatting.
-            </p>
+            </div>
+            <div className="mt-1 text-2xl font-semibold text-violet-950">{productMeta?.displayPrice || ''}</div>
           </div>
         </div>
-      </div>
+        <div className="mt-5 grid gap-3 sm:grid-cols-3">
+          <div className="rounded-2xl border border-violet-100 bg-violet-50/60 px-4 py-3">
+            <div className="text-xs uppercase tracking-[0.18em] text-violet-700">Rooms</div>
+            <div className="mt-1 text-2xl font-semibold text-violet-950">{roomCount}</div>
+          </div>
+          <div className="rounded-2xl border border-violet-100 bg-violet-50/60 px-4 py-3">
+            <div className="text-xs uppercase tracking-[0.18em] text-violet-700">Evidence</div>
+            <div className="mt-1 text-2xl font-semibold text-violet-950">{uploadCount}</div>
+          </div>
+          <div className="rounded-2xl border border-violet-100 bg-violet-50/60 px-4 py-3">
+            <div className="text-xs uppercase tracking-[0.18em] text-violet-700">Schedules</div>
+            <div className="mt-1 text-2xl font-semibold text-violet-950">{scheduleCount}</div>
+          </div>
+        </div>
+      </Card>
 
       {profile?.cautionBanner ? (
         <Card className="border-amber-200 bg-amber-50 p-6">
@@ -3927,14 +3900,6 @@ function ResidentialStandaloneReviewContent({
           </div>
         </Card>
       </div>
-
-      {profile?.trustModules?.length ? (
-        <div className="grid gap-4 lg:grid-cols-3">
-          {profile.trustModules.map((module) => (
-            <StandaloneTrustModuleCard key={module.title} module={module} />
-          ))}
-        </div>
-      ) : null}
 
       <Card className="p-6">
         <h2 className="text-lg font-semibold mb-4">Captured facts</h2>
