@@ -7,19 +7,20 @@ import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 import {
   RESIDENTIAL_LETTING_PRODUCTS,
-  type ResidentialLettingProductSku,
 } from '@/lib/residential-letting/products';
 import {
   RESIDENTIAL_LANDING_CONTENT,
   getResidentialWizardEntry,
 } from '@/lib/seo/residential-product-landing-content';
 
+type ResidentialLandingProductSku = keyof typeof RESIDENTIAL_LANDING_CONTENT;
+
 const canonicalUrl = getCanonicalUrl('/landlord-documents-england');
 
 const DOCUMENT_GROUPS: Array<{
   title: string;
   description: string;
-  products: ResidentialLettingProductSku[];
+  products: ResidentialLandingProductSku[];
 }> = [
   {
     title: 'Agreements and variations',
