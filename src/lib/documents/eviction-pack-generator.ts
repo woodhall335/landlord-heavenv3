@@ -2122,7 +2122,7 @@ export async function generateCompleteEvictionPack(
         outputFormat: 'both',
         // Add debug stamp for PDF tracing
         debugStamp: {
-          generatoroame: 'eviction-pack-generator.ts',
+          generatorName: 'eviction-pack-generator.ts',
           caseId: caseId,
           additionalTemplates: [],
         },
