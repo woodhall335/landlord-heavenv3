@@ -253,7 +253,9 @@ export default function HomeContent() {
                     onClick={() => setAskQuestion(item.prompt)}
                     className="group p-4 bg-white rounded-2xl border border-gray-200 hover:border-primary/30 hover:shadow-lg text-left transition-all duration-200"
                   >
-                    <span className="text-2xl mb-2 block">{item.icon}</span>
+                    <span className="mb-3 inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                      {getAskHeavenPromptIcon(item.label)}
+                    </span>
                     <p className="font-semibold text-gray-900 group-hover:text-primary transition-colors">
                       {item.label}
                     </p>
@@ -574,6 +576,19 @@ function WhyLandlordsUseSection() {
       </Container>
     </section>
   );
+}
+
+function getAskHeavenPromptIcon(label: string) {
+  switch (label) {
+    case "Eviction notice help":
+      return <RiFileTextLine className="h-5 w-5" />;
+    case "Rent arrears recovery":
+      return <RiMoneyPoundCircleLine className="h-5 w-5" />;
+    case "Deposit protection rules":
+      return <RiShieldCheckLine className="h-5 w-5" />;
+    default:
+      return <RiFlashlightLine className="h-5 w-5" />;
+  }
 }
 
 
