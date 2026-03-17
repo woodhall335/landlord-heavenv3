@@ -15,12 +15,9 @@ import { Container } from "@/components/ui";
 import { Hero, TrustBar, Testimonials } from "@/components/landing";
 import { HeaderConfig } from "@/components/layout/HeaderConfig";
 import { HowItWorksThreeStep } from "@/components/marketing/HowItWorksThreeStep";
-import { PRODUCTS, TENANCY_AGREEMENT_FROM_PRICE } from "@/lib/pricing/products";
 import {
   RiFileTextLine,
-  RiScales3Line,
   RiMoneyPoundCircleLine,
-  RiClipboardLine,
   RiCheckLine,
   RiArrowRightLine,
   RiShieldCheckLine,
@@ -76,7 +73,7 @@ export default function HomeContent() {
             <Link href="#evict-tenant" className="font-medium text-primary hover:underline">How to evict a tenant</Link>
             <Link href="#section-21-vs-section-8" className="font-medium text-primary hover:underline">Section 21 vs Section 8</Link>
             <Link href="#recover-rent-arrears" className="font-medium text-primary hover:underline">Recover rent arrears</Link>
-            <Link href="#choose-your-product" className="font-medium text-primary hover:underline">Choose your product</Link>
+            <Link href="#landlord-eviction-help" className="font-medium text-primary hover:underline">Section 21 and Section 8 help</Link>
           </nav>
         </Container>
       </section>
@@ -132,51 +129,6 @@ export default function HomeContent() {
                 Free to start â€¢ Pay only when you're ready
               </p>
             </div>
-          </div>
-        </Container>
-      </section>
-
-      {/* PRODUCTS */}
-      <section id="choose-your-product" className="py-20 md:py-24 bg-[#f8f5ff]">
-        <Container>
-          <div className="text-center mb-14">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Landlord solutions built for action, not legal jargon
-            </h2>
-            <p className="text-xl text-[#59527a] max-w-3xl mx-auto">
-              Get practical, step-by-step help to choose the right notice, prepare your documents, and move your case forward.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-            <ProductCard
-              href="/products/notice-only"
-              title="Eviction Notices"
-              description="Section 8, Section 21, and devolved equivalents with service instructions."
-              price={PRODUCTS.notice_only.displayPrice}
-              icon={<RiFileTextLine className="w-7 h-7" />}
-            />
-            <ProductCard
-              href="/products/complete-pack"
-              title="Complete Eviction Pack"
-              description="Full bundle from notice to possession order with court forms and guidance."
-              price={PRODUCTS.complete_pack.displayPrice}
-              icon={<RiScales3Line className="w-7 h-7" />}
-            />
-            <ProductCard
-              href="/products/money-claim"
-              title="Money Claim Pack"
-              description="Rent arrears claims with evidence checklists and particulars of claim."
-              price={PRODUCTS.money_claim.displayPrice}
-              icon={<RiMoneyPoundCircleLine className="w-7 h-7" />}
-            />
-            <ProductCard
-              href="/products/ast"
-              title="Tenancy Agreements"
-              description="Compliant ASTs with optional clauses for HMOs and students."
-              price={TENANCY_AGREEMENT_FROM_PRICE}
-              icon={<RiClipboardLine className="w-7 h-7" />}
-            />
           </div>
         </Container>
       </section>
@@ -331,42 +283,45 @@ export default function HomeContent() {
       </section>
 
       {/* BUILT FOR CHANGING HOUSING LAW */}
-      <section className="py-20 md:py-24 bg-gray-50">
+      <section id="landlord-eviction-help" className="py-20 md:py-24 bg-gray-50">
         <Container>
           <div className="max-w-6xl mx-auto">
             <div className="grid md:grid-cols-2 gap-10 md:gap-14 items-center">
               <div>
                 <div className="inline-block bg-primary/10 rounded-full px-4 py-2 mb-4">
                   <span className="text-sm font-semibold text-primary">
-                    Built for Changing Housing Law
+                    Section 21 and Section 8 eviction help for landlords under pressure
                   </span>
                 </div>
                 <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                  Statutory-change aware legal automation
+                  Landlord eviction support when rent arrears, delay, and notice mistakes put the case at risk
                 </h2>
                 <p className="text-lg text-gray-600">
-                  UK eviction law is evolving. From the Renting Homes (Wales)
-                  Act to the Renters' Rights Act implementation in England,
-                  Landlord Heaven is continuously updated to reflect UK housing
-                  law changes.
+                  If your tenant has stopped paying rent, ignored warnings, or
+                  left you unsure whether to use a Section 21 eviction or Section 8
+                  eviction route, you need clear landlord help fast. Landlord
+                  Heaven is built to support stressed landlords with current
+                  Section 21 notice rules, Section 8 grounds for possession,
+                  rent arrears evidence, and jurisdiction-specific eviction
+                  documents that reflect changing housing law.
                 </p>
 
                 <ul className="mt-8 space-y-3 text-gray-700">
                   <li className="flex items-start gap-3">
                     <RiCheckLine className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                    <span>Reflect current statutory requirements</span>
+                    <span>Stay aligned with current Section 21 notice requirements and Section 8 eviction grounds</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <RiCheckLine className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                    <span>Monitor legal updates and reform trajectory</span>
+                    <span>Support landlords dealing with rent arrears, tenant breach, anti-social behaviour, and possession delays</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <RiCheckLine className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                    <span>Generate jurisdiction-specific bundles</span>
+                    <span>Generate Section 21 and Section 8 eviction documents with jurisdiction-specific guidance</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <RiCheckLine className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                    <span>Adapt as housing legislation evolves</span>
+                    <span>Reduce expensive landlord mistakes that can delay possession claims or force a notice to be served again</span>
                   </li>
                 </ul>
               </div>
@@ -374,7 +329,7 @@ export default function HomeContent() {
               <div className="flex justify-center md:justify-end">
                 <Image
                   src="/images/Statutory-change.webp"
-                  alt="Statutory-change aware legal automation"
+                  alt="Section 21 and Section 8 eviction support for landlords"
                   width={720}
                   height={720}
                   className="w-full max-w-[520px] h-auto object-contain"
@@ -530,45 +485,6 @@ export default function HomeContent() {
   );
 }
 
-/* ============================================================
-   LOCAL COMPONENTS
-   ============================================================ */
-
-function ProductCard({
-  href,
-  title,
-  description,
-  price,
-  icon,
-}: {
-  href: string;
-  title: string;
-  description: string;
-  price: string;
-  icon: React.ReactNode;
-}) {
-  return (
-    <Link href={href} className="product-card-wrapper group relative cursor-pointer">
-      <div className="product-card-inner bg-white rounded-3xl p-8 h-full transition-all duration-300 border border-[#e4dcff] shadow-md group-hover:shadow-2xl group-hover:-translate-y-1 flex flex-col">
-        <div className="w-14 h-14 bg-purple-100 rounded-2xl flex items-center justify-center mb-6 text-primary">
-          {icon}
-        </div>
-
-        <h3 className="text-2xl font-bold text-[#1d1948] mb-3 leading-tight group-hover:text-primary transition-colors">
-          {title}
-        </h3>
-        <p className="text-[#5d5a78] mb-5 text-lg leading-relaxed">{description}</p>
-
-        <div className="mt-auto">
-          <span className="block text-primary font-bold text-[2rem] mb-6">{price}</span>
-          <span className="block text-center bg-gradient-to-r from-[#6f2ae3] to-[#8f46ff] text-white font-semibold rounded-2xl py-3.5 text-xl shadow-lg shadow-violet-300/40">
-            Get Started
-          </span>
-        </div>
-      </div>
-    </Link>
-  );
-}
 
 function JurisdictionCard({
   flag,
