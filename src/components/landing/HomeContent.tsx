@@ -12,7 +12,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Container } from "@/components/ui";
-import { Hero, TrustBar, Testimonials } from "@/components/landing";
+import { Hero, TrustBar } from "@/components/landing";
 import { HeaderConfig } from "@/components/layout/HeaderConfig";
 import { HowItWorksThreeStep } from "@/components/marketing/HowItWorksThreeStep";
 import {
@@ -31,11 +31,12 @@ import {
 } from "react-icons/ri";
 
 const SEO_SRC = "seo_homepage";
+const evictionWizardHref = `/wizard?product=notice_only&topic=eviction&src=${SEO_SRC}`;
 
 const primaryPaths = [
   {
     label: "Start Eviction",
-    href: `/wizard?product=notice_only&topic=eviction&src=${SEO_SRC}`,
+    href: evictionWizardHref,
     icon: RiHome6Line,
   },
   {
@@ -122,11 +123,19 @@ export default function HomeContent() {
 
           <div className="max-w-5xl mx-auto">
             <div className="mt-14 text-center">
-              <Link href="/wizard?product" className="hero-btn-primary">
+              <span className="hidden">
+              <Link href={evictionWizardHref} className="hero-btn-primary">
                 Start your eviction notice â†’
               </Link>
               <p className="mt-4 text-sm text-gray-500">
                 Free to start â€¢ Pay only when you're ready
+              </p>
+              </span>
+              <Link href={evictionWizardHref} className="hero-btn-primary">
+                Start your eviction notice &rarr;
+              </Link>
+              <p className="mt-4 text-sm text-gray-500">
+                Free to start &bull; Pay only when you're ready
               </p>
             </div>
           </div>
@@ -340,8 +349,8 @@ export default function HomeContent() {
         </Container>
       </section>
 
-      {/* TESTIMONIALS */}
-      <Testimonials />
+      {/* WHY LANDLORDS USE LANDLORD HEAVEN */}
+      <WhyLandlordsUseSection />
 
       {/* UK COVERAGE */}
       <section className="py-20 md:py-24 bg-white">
@@ -423,8 +432,13 @@ export default function HomeContent() {
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-8">
-              <Link href="/wizard?product" className="hero-btn-primary">
+              <span className="hidden">
+              <Link href={evictionWizardHref} className="hero-btn-primary">
                 Start your eviction notice â†’
+              </Link>
+              </span>
+              <Link href={evictionWizardHref} className="hero-btn-primary">
+                Start your eviction notice &rarr;
               </Link>
             </div>
 
@@ -482,6 +496,83 @@ export default function HomeContent() {
         </Container>
       </section>
     </div>
+  );
+}
+
+function WhyLandlordsUseSection() {
+  return (
+    <section className="py-20 md:py-24 bg-[#f7f7fb]">
+      <Container>
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12 md:mb-14">
+            <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-5 py-2.5 mb-5">
+              <RiShieldCheckLine className="w-4 h-4 text-primary" />
+              <span className="text-sm font-semibold text-primary">
+                Why landlords use Landlord Heaven when the case is getting stressful
+              </span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-[#0f172a] mb-5">
+              When rent arrears rise or a notice mistake could cost you weeks, you need a clearer path
+            </h2>
+            <p className="text-xl text-gray-600 max-w-4xl mx-auto">
+              Landlord Heaven helps UK landlords work out whether a Section 21 or Section 8 eviction
+              notice is the better route, avoid invalid notice errors that delay possession, and generate
+              court-ready documents without getting buried in legal jargon.
+            </p>
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-3 max-w-6xl mx-auto">
+            <div className="rounded-3xl border border-[#e2e2f0] bg-white p-8 shadow-[0_4px_14px_rgba(15,23,42,0.05)] transition hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(15,23,42,0.08)]">
+              <div className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                <RiFlashlightLine className="h-7 w-7" />
+              </div>
+              <h3 className="text-2xl font-bold text-[#18184d] mb-3">
+                Know whether Section 21 or Section 8 fits your case fast
+              </h3>
+              <p className="text-lg leading-relaxed text-[#4b4b63]">
+                If a tenant has stopped paying rent, breached the tenancy, or left you unsure which eviction
+                notice to serve, Landlord Heaven helps you move quickly without losing time on the wrong route.
+              </p>
+            </div>
+
+            <div className="rounded-3xl border border-[#e2e2f0] bg-white p-8 shadow-[0_4px_14px_rgba(15,23,42,0.05)] transition hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(15,23,42,0.08)]">
+              <div className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                <RiShieldCheckLine className="h-7 w-7" />
+              </div>
+              <h3 className="text-2xl font-bold text-[#18184d] mb-3">
+                Avoid invalid notices and expensive possession delays
+              </h3>
+              <p className="text-lg leading-relaxed text-[#4b4b63]">
+                Follow a practical workflow built around Section 21 notice rules, Section 8 grounds,
+                service steps, and the common landlord mistakes that force a notice to be served again.
+              </p>
+            </div>
+
+            <div className="rounded-3xl border border-[#e2e2f0] bg-white p-8 shadow-[0_4px_14px_rgba(15,23,42,0.05)] transition hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(15,23,42,0.08)]">
+              <div className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                <RiGlobalLine className="h-7 w-7" />
+              </div>
+              <h3 className="text-2xl font-bold text-[#18184d] mb-3">
+                Generate court-ready landlord documents for the right UK jurisdiction
+              </h3>
+              <p className="text-lg leading-relaxed text-[#4b4b63]">
+                Build eviction notices, rent arrears documents, and supporting paperwork with guidance that
+                reflects the rules for England, Wales, Scotland, and Northern Ireland.
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-12 text-center">
+            <Link href={evictionWizardHref} className="hero-btn-primary">
+              Start your eviction notice &rarr;
+            </Link>
+            <p className="mt-4 text-sm text-gray-500">
+              Start with the right eviction route before notice mistakes slow the case down
+            </p>
+          </div>
+        </div>
+      </Container>
+    </section>
   );
 }
 
