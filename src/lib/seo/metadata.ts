@@ -462,9 +462,7 @@ export function auditMetadata(config: SEOMetadataConfig): SEOAuditResult {
  * Default metadata for the site
  */
 export const defaultMetadata: Metadata = {
-  title: {
-    default: "Court-Ready UK Landlord Documents | Landlord Heaven",
-  },
+  title: "Court-Ready UK Landlord Documents | Landlord Heaven",
   description:
     "Create court-ready Section 21 notices, Section 8 notices, money claim packs, and tenancy agreements for UK landlords in minutes.",
   keywords: [
