@@ -1642,8 +1642,8 @@ export async function generateCompleteEvictionPack(
         // Calculate Ground 8 threshold
         const ground8ThresholdAmount = rentAmount * 2; // 2 months' rent for Ground 8
         const arrearsAtScheduleDate = arrearsData.arrears_total;
-        const arrearsAtooticeDate = canonicalArrears?.arrearsAtooticeDate ?? arrearsAtScheduleDate;
-        const meetsThresholdAtootice = arrearsAtooticeDate >= ground8ThresholdAmount;
+        const arrearsAtNoticeDate = canonicalArrears?.arrearsAtNoticeDate ?? arrearsAtScheduleDate;
+        const meetsThresholdAtNotice = arrearsAtNoticeDate >= ground8ThresholdAmount;
         const meetsThresholdAtSchedule = arrearsAtScheduleDate >= ground8ThresholdAmount;
 
         // Format rent frequency for display
@@ -1686,12 +1686,12 @@ export async function generateCompleteEvictionPack(
             rent_amount: rentAmount,
             tenancy_start_date: evictionCase.tenancy_start_date,
             // Arrears at key dates
-            arrears_at_notice_date: arrearsAtooticeDate,
+            arrears_at_notice_date: arrearsAtNoticeDate,
             arrears_at_schedule_date: arrearsAtScheduleDate,
             // Ground 8 threshold data
             ground8_threshold: ground8ThresholdAmount,
             ground8_threshold_description: '2 months\' rent',
-            meets_threshold_at_notice: meetsThresholdAtootice,
+            meets_threshold_at_notice: meetsThresholdAtNotice,
             meets_threshold_at_schedule: meetsThresholdAtSchedule,
             rent_frequency: rentFrequencyLabel,
             // Add generation date (legacy alias)
@@ -1808,12 +1808,12 @@ export async function generateCompleteEvictionPack(
               total_arrears: canonicalArrears.total,
               arrears_months: canonicalArrears.arrearsInMonths,
             },
-            arrears_at_notice_date: canonicalArrears.arrearsAtooticeDate,
-            arrearsAtooticeDate: canonicalArrears.arrearsAtooticeDate,
+            arrears_at_notice_date: canonicalArrears.arrearsAtNoticeDate,
+            arrearsAtNoticeDate: canonicalArrears.arrearsAtNoticeDate,
           }
           : {}),
         // Ensure arrears at notice date is passed explicitly
-        arrears_at_notice_date: canonicalArrears?.arrearsAtooticeDate ?? evictionCase.arrears_at_notice_date,
+        arrears_at_notice_date: canonicalArrears?.arrearsAtNoticeDate ?? evictionCase.arrears_at_notice_date,
       });
       witnessStatementContent = buildWitnessStatementSections(sectionsInput);
       witnessStatementTemplatePath = `uk/${jurisdiction}/templates/eviction/witness-statement.hbs`;
