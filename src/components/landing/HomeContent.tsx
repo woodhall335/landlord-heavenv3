@@ -478,14 +478,14 @@ export default function HomeContent() {
                 >
                   Bundle overview
                 </Link>
-                {" â€¢ "}
+                {" • "}
                 <Link
                   href="/tools/free-section-8-notice-generator"
                   className="text-primary hover:underline font-medium"
                 >
                   Generator
                 </Link>
-                {" â€¢ "}
+                {" • "}
                 <Link
                   href="/tools/validators/section-8"
                   className="text-primary hover:underline font-medium"

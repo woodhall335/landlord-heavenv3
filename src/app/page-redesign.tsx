@@ -8,7 +8,7 @@
  * - Hero badge matches AST page "Professional Tenancies" badge
  * - Hero buttons use hero-btn-primary/secondary from globals.css
  * - Final CTA uses pastel gradient matching pricing page
- * - Complete Pack solicitor price updated to ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£1,500-2,500
+ * - Complete Pack solicitor price updated to £1,500-2,500
  * - Enhanced hover effects on all cards
  */
 
@@ -33,7 +33,7 @@ export default function Home() {
           <div className="max-w-4xl mx-auto text-center">
             {/* Trust Badge - Matches AST "Professional Tenancies" badge exactly */}
             <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-              <span className="text-sm font-semibold text-primary">ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¹ÃƒÆ’Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚ÂÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¯ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â Trusted by 10,000+ UK Landlords</span>
+              <span className="text-sm font-semibold text-primary">☁️ Trusted by 10,000+ UK Landlords</span>
             </div>
 
             {/* Main Headline - Value-focused */}
@@ -44,14 +44,14 @@ export default function Home() {
 
             {/* Subheadline - Benefit + differentiation */}
             <p className="text-xl md:text-2xl mb-8 text-gray-600 max-w-2xl mx-auto">
-              Reduce possession failure risk with guided notices, court forms, and tenancy agreements ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â
+              Reduce possession failure risk with guided notices, court forms, and tenancy agreements —
               <span className="font-semibold text-gray-800"> statutory-grounded preparation for court filing</span>.
             </p>
 
             {/* CTA Buttons - Uses hero-btn-primary/secondary from globals.css */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link href="/wizard" className="hero-btn-primary">
-                Generate Your Documents ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢
+                Generate Your Documents →
               </Link>
               <Link href="/pricing" className="hero-btn-secondary">
                 View Pricing
@@ -60,7 +60,7 @@ export default function Home() {
 
             {/* Trust Indicators */}
             <p className="mt-4 text-sm text-gray-600">
-              Instant download ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ Court-ready format ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ All UK jurisdictions ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ No legal experience needed
+              Instant download • Court-ready format • All UK jurisdictions • No legal experience needed
             </p>
           </div>
         </Container>
@@ -92,7 +92,7 @@ export default function Home() {
               Get Your Documents in Minutes
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Our guided wizard makes creating professional court-ready case bundles easy ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â
+              Our guided wizard makes creating professional court-ready case bundles easy —
               no legal experience required.
             </p>
           </div>
@@ -127,9 +127,9 @@ export default function Home() {
 
             <div className="mt-14 text-center">
               <Link href="/wizard" className="hero-btn-primary">
-                Start Your Documents Now ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢
+                Start Your Documents Now →
               </Link>
-              <p className="mt-4 text-sm text-gray-600">Free to start ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ Pay only when you're ready</p>
+              <p className="mt-4 text-sm text-gray-600">Free to start • Pay only when you're ready</p>
             </div>
           </div>
         </Container>
@@ -138,7 +138,7 @@ export default function Home() {
       {/* ============================================================
           PRODUCTS
           Purpose: Clear product offerings with pricing
-          Updated: Complete Pack solicitor price = ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£1,500-2,500
+          Updated: Complete Pack solicitor price = £1,500-2,500
           ============================================================ */}
       <section className="py-20 md:py-24 bg-white">
         <Container>
@@ -150,7 +150,7 @@ export default function Home() {
               Everything You Need to Manage Tenancies
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              From serving notices to recovering rent ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â professional documents at a fraction of solicitor costs.
+              From serving notices to recovering rent — professional documents at a fraction of solicitor costs.
             </p>
           </div>
 
@@ -160,7 +160,7 @@ export default function Home() {
               title="Eviction Notices"
               description="Section 8, Section 21, and devolved equivalents with service instructions."
               price="£29.99"
-              solicitorPrice="ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£200-300"
+              solicitorPrice="£200-300"
               icon={<RiFileTextLine className="w-7 h-7" />}
             />
             <ProductCard
@@ -168,7 +168,7 @@ export default function Home() {
               title="Complete Eviction Pack"
               description="Full bundle from notice to possession order with court forms and guidance."
               price="£59.99"
-              solicitorPrice="ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£1,500-2,500"
+              solicitorPrice="£1,500-2,500"
               icon={<RiScales3Line className="w-7 h-7" />}
               popular
             />
@@ -177,7 +177,7 @@ export default function Home() {
               title="Money Claim Pack"
               description="Rent arrears claims with evidence checklists and particulars of claim."
               price="£59.99"
-              solicitorPrice="ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£400-600"
+              solicitorPrice="£400-600"
               icon={<RiMoneyPoundCircleLine className="w-7 h-7" />}
             />
             <ProductCard
@@ -185,7 +185,7 @@ export default function Home() {
               title="Tenancy Agreements"
               description="Compliant ASTs with optional clauses for HMOs and students."
               price="From £14.99"
-              solicitorPrice="ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£150-400"
+              solicitorPrice="£150-400"
               icon={<RiClipboardLine className="w-7 h-7" />}
             />
           </div>
@@ -307,7 +307,7 @@ export default function Home() {
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link href="/wizard" className="hero-btn-primary">
-                Generate Your Documents ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢
+                Generate Your Documents →
               </Link>
               <Link href="/ask-heaven" className="hero-btn-secondary">
                 Ask Heaven a Question
@@ -316,7 +316,7 @@ export default function Home() {
 
             {/* Final trust indicators */}
             <p className="mt-4 text-sm text-gray-600">
-              Court-ready documents ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ Expert guidance ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ 12+ months secure storage
+              Court-ready documents • Expert guidance • 12+ months secure storage
             </p>
           </div>
         </Container>
@@ -399,7 +399,7 @@ function ProductCard({
           <div className="flex items-center justify-between">
             <span className="text-xs text-green-600 font-semibold">vs solicitor</span>
             <span className="text-primary font-medium opacity-0 group-hover:opacity-100 transition-opacity">
-              Learn more ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢
+              Learn more →
             </span>
           </div>
         </div>

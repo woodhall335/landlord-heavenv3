@@ -107,8 +107,8 @@ export default function SixMonthTenancyAgreementPage() {
           badge="England & Wales"
           badgeIcon={<Calendar className="w-4 h-4" />}
           title="6 Month Tenancy Agreement Template"
-          subtitle={<>Need a <strong>short-term tenancy agreement</strong>? Get a legally compliant 6-month AST template for England and Wales â€” with clear terms for both landlord and tenant.</>}
-          primaryCta={{ label: 'Get AST Template â€” Â£14.99', href: wizardLinkAST }}
+          subtitle={<>Need a <strong>short-term tenancy agreement</strong>? Get a legally compliant 6-month AST template for England and Wales — with clear terms for both landlord and tenant.</>}
+          primaryCta={{ label: 'Get AST Template — £14.99', href: wizardLinkAST }}
           secondaryCta={{ label: 'View 12-Month Option', href: '/assured-shorthold-tenancy-agreement-template' }}
           variant="pastel"
         >
@@ -152,24 +152,24 @@ export default function SixMonthTenancyAgreementPage() {
                   </div>
                   <ul className="text-sm text-gray-700 space-y-3">
                     <li className="flex items-start gap-2">
-                      <span className="text-green-600 mt-0.5">â€¢</span>
-                      <span><strong>New tenants</strong> â€” Test the relationship before committing to longer</span>
+                      <span className="text-green-600 mt-0.5">•</span>
+                      <span><strong>New tenants</strong> — Test the relationship before committing to longer</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-green-600 mt-0.5">â€¢</span>
-                      <span><strong>Uncertain plans</strong> â€” You may need the property back soon</span>
+                      <span className="text-green-600 mt-0.5">•</span>
+                      <span><strong>Uncertain plans</strong> — You may need the property back soon</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-green-600 mt-0.5">â€¢</span>
-                      <span><strong>Corporate lets</strong> â€” Employees on short assignments</span>
+                      <span className="text-green-600 mt-0.5">•</span>
+                      <span><strong>Corporate lets</strong> — Employees on short assignments</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-green-600 mt-0.5">â€¢</span>
-                      <span><strong>Property sales</strong> â€” Keeping options open while marketing</span>
+                      <span className="text-green-600 mt-0.5">•</span>
+                      <span><strong>Property sales</strong> — Keeping options open while marketing</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-green-600 mt-0.5">â€¢</span>
-                      <span><strong>Rent reviews</strong> â€” Flexibility to adjust rent sooner</span>
+                      <span className="text-green-600 mt-0.5">•</span>
+                      <span><strong>Rent reviews</strong> — Flexibility to adjust rent sooner</span>
                     </li>
                   </ul>
                 </div>
@@ -181,24 +181,24 @@ export default function SixMonthTenancyAgreementPage() {
                   </div>
                   <ul className="text-sm text-gray-700 space-y-3">
                     <li className="flex items-start gap-2">
-                      <span className="text-red-600 mt-0.5">â€¢</span>
-                      <span><strong>You want stability</strong> â€” 12 months reduces turnover costs</span>
+                      <span className="text-red-600 mt-0.5">•</span>
+                      <span><strong>You want stability</strong> — 12 months reduces turnover costs</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-red-600 mt-0.5">â€¢</span>
-                      <span><strong>Good tenant found</strong> â€” Lock them in longer</span>
+                      <span className="text-red-600 mt-0.5">•</span>
+                      <span><strong>Good tenant found</strong> — Lock them in longer</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-red-600 mt-0.5">â€¢</span>
-                      <span><strong>Family tenants</strong> â€” They often prefer longer terms</span>
+                      <span className="text-red-600 mt-0.5">•</span>
+                      <span><strong>Family tenants</strong> — They often prefer longer terms</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-red-600 mt-0.5">â€¢</span>
-                      <span><strong>Mortgage conditions</strong> â€” Some lenders require 6+ months minimum</span>
+                      <span className="text-red-600 mt-0.5">•</span>
+                      <span><strong>Mortgage conditions</strong> — Some lenders require 6+ months minimum</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-red-600 mt-0.5">â€¢</span>
-                      <span><strong>Void periods</strong> â€” More frequent re-letting means more costs</span>
+                      <span className="text-red-600 mt-0.5">•</span>
+                      <span><strong>Void periods</strong> — More frequent re-letting means more costs</span>
                     </li>
                   </ul>
                 </div>
@@ -223,7 +223,7 @@ export default function SixMonthTenancyAgreementPage() {
 
               <p className="text-gray-700 mb-6">
                 While there&apos;s no legal minimum tenancy length in England and Wales, six months has become
-                a common standard because it aligns with the Section 21 notice restrictions â€” you cannot serve
+                a common standard because it aligns with the Section 21 notice restrictions — you cannot serve
                 a Section 21 notice that expires within the first four months of an AST.
               </p>
 
@@ -242,12 +242,12 @@ export default function SixMonthTenancyAgreementPage() {
                     Before Tenancy Starts
                   </h4>
                   <ul className="text-sm text-gray-700 space-y-1">
-                    <li>â€¢ Protect deposit within 30 days</li>
-                    <li>â€¢ Provide prescribed information</li>
-                    <li>â€¢ Give valid EPC certificate</li>
-                    <li>â€¢ Give gas safety certificate</li>
-                    <li>â€¢ Provide How to Rent guide</li>
-                    <li>â€¢ Ensure EICR is valid</li>
+                    <li>• Protect deposit within 30 days</li>
+                    <li>• Provide prescribed information</li>
+                    <li>• Give valid EPC certificate</li>
+                    <li>• Give gas safety certificate</li>
+                    <li>• Provide How to Rent guide</li>
+                    <li>• Ensure EICR is valid</li>
                   </ul>
                 </div>
                 <div className="bg-white rounded-lg p-4 border border-gray-200">
@@ -256,12 +256,12 @@ export default function SixMonthTenancyAgreementPage() {
                     Agreement Must Include
                   </h4>
                   <ul className="text-sm text-gray-700 space-y-1">
-                    <li>â€¢ Names of all parties</li>
-                    <li>â€¢ Property address</li>
-                    <li>â€¢ Start date and term length</li>
-                    <li>â€¢ Rent amount and due dates</li>
-                    <li>â€¢ Deposit amount and scheme</li>
-                    <li>â€¢ Landlord&apos;s contact details</li>
+                    <li>• Names of all parties</li>
+                    <li>• Property address</li>
+                    <li>• Start date and term length</li>
+                    <li>• Rent amount and due dates</li>
+                    <li>• Deposit amount and scheme</li>
+                    <li>• Landlord&apos;s contact details</li>
                   </ul>
                 </div>
               </div>
@@ -346,7 +346,7 @@ export default function SixMonthTenancyAgreementPage() {
               </p>
 
               <ul className="list-disc pl-6 text-gray-700 space-y-2 mb-6">
-                <li><strong>Deposit cap:</strong> Maximum 5 weeks&apos; rent (if annual rent under Â£50,000)</li>
+                <li><strong>Deposit cap:</strong> Maximum 5 weeks&apos; rent (if annual rent under £50,000)</li>
                 <li><strong>Deposit protection:</strong> Must be protected within 30 days of receipt</li>
                 <li><strong>Holding deposit:</strong> Maximum 1 week&apos;s rent, refundable if tenancy proceeds</li>
                 <li><strong>Rent in advance:</strong> Typically 1 month, though not legally capped</li>

@@ -46,12 +46,12 @@ const faqs = [
   {
     question: 'Can I claim interest on rent arrears?',
     answer:
-      "Yes. You can claim statutory interest at 8% per annum under the Late Payment of Commercial Debts (Interest) Act 1998. Interest runs from each payment's due date until it's paid or judgment is entered. You must state your intention to claim interest in your pre-action letter. Some tenancy agreements include contractual interest clausesâ€”check yours carefully.",
+      "Yes. You can claim statutory interest at 8% per annum under the Late Payment of Commercial Debts (Interest) Act 1998. Interest runs from each payment's due date until it's paid or judgment is entered. You must state your intention to claim interest in your pre-action letter. Some tenancy agreements include contractual interest clauses—check yours carefully.",
   },
   {
     question: 'What if my tenant disputes the arrears amount?',
     answer:
-      "Request a detailed breakdown from the tenant showing which payments they believe they've made. Check your records carefullyâ€”mistakes happen. If there's a genuine dispute, consider mediation before court. If the tenant simply refuses to pay without valid reason, proceed with your money claim and let the court decide. Keep all communication professional and documented.",
+      "Request a detailed breakdown from the tenant showing which payments they believe they've made. Check your records carefully—mistakes happen. If there's a genuine dispute, consider mediation before court. If the tenant simply refuses to pay without valid reason, proceed with your money claim and let the court decide. Keep all communication professional and documented.",
   },
   {
     question: 'Should I serve a Section 8 notice or file a money claim?',
@@ -73,7 +73,7 @@ export default function RentArrearsCalculator() {
     toolName: 'Rent Arrears Calculator',
     toolType: 'calculator' as const,
     productName: 'Money Claim Pack',
-    ctaLabel: 'Upgrade to court-ready pack â€” Â£59.99',
+    ctaLabel: 'Upgrade to court-ready pack — £59.99',
     ctaHref: '/products/money-claim',
     jurisdiction: 'uk',
     freeIncludes: [
@@ -109,7 +109,7 @@ export default function RentArrearsCalculator() {
           Math.floor((today.getTime() - dueDate.getTime()) / (1000 * 60 * 60 * 24)),
         );
 
-        // Calculate simple interest: Principal Ã— Rate Ã— Time
+        // Calculate simple interest: Principal × Rate × Time
         // Interest only applies to outstanding amounts that are overdue
         const interest = outstanding > 0 && daysOutstanding > 0
           ? outstanding * 0.08 * (daysOutstanding / 365)
@@ -175,7 +175,7 @@ export default function RentArrearsCalculator() {
   }, [arrearsBand, monthsInArrearsBand, stageHint, totals.totalOutstanding]);
 
   // Calculate interest using 8% per annum simple interest from earliest unpaid due date
-  // Formula: Principal Ã— Annual Rate Ã— (Days Outstanding Ã· 365)
+  // Formula: Principal × Annual Rate × (Days Outstanding ÷ 365)
   const calculateEnhancedInterest = () => {
     if (totals.totalOutstanding <= 0) return { interest: 0, daysOutstanding: 0, fromDate: '' };
 
@@ -211,7 +211,7 @@ export default function RentArrearsCalculator() {
     const annualRate = 0.08;
     const dailyRate = annualRate / 365;
 
-    // Interest = Principal Ã— Daily Rate Ã— Days
+    // Interest = Principal × Daily Rate × Days
     const interest = totals.totalOutstanding * dailyRate * daysOutstanding;
 
     return {
@@ -296,7 +296,7 @@ export default function RentArrearsCalculator() {
       y -= 40;
 
       // Monthly rent
-      page.drawText(`Monthly Rent: Â£${rentAmount}`, {
+      page.drawText(`Monthly Rent: £${rentAmount}`, {
         x: 50,
         y,
         size: 12,
@@ -324,7 +324,7 @@ export default function RentArrearsCalculator() {
 
         if (outstanding > 0) {
           const dueDate = item.dueDate ? new Date(item.dueDate + 'T00:00:00').toLocaleDateString('en-GB') : 'N/A';
-          const line = `${dueDate}: Â£${outstanding.toFixed(2)} outstanding`;
+          const line = `${dueDate}: £${outstanding.toFixed(2)} outstanding`;
           page.drawText(line, {
             x: 70,
             y,
@@ -355,7 +355,7 @@ export default function RentArrearsCalculator() {
 
       y -= 25;
 
-      page.drawText(`Total Arrears: Â£${totals.totalOutstanding.toFixed(2)}`, {
+      page.drawText(`Total Arrears: £${totals.totalOutstanding.toFixed(2)}`, {
         x: 70,
         y,
         size: 12,
@@ -366,7 +366,7 @@ export default function RentArrearsCalculator() {
       y -= 20;
 
       if (estimatedInterest > 0) {
-        page.drawText(`Interest (8% p.a. for ${daysOutstanding} days): Â£${estimatedInterest.toFixed(2)}`, {
+        page.drawText(`Interest (8% p.a. for ${daysOutstanding} days): £${estimatedInterest.toFixed(2)}`, {
           x: 70,
           y,
           size: 11,
@@ -376,7 +376,7 @@ export default function RentArrearsCalculator() {
 
         y -= 20;
 
-        page.drawText(`TOTAL CLAIM: Â£${(totals.totalOutstanding + estimatedInterest).toFixed(2)}`, {
+        page.drawText(`TOTAL CLAIM: £${(totals.totalOutstanding + estimatedInterest).toFixed(2)}`, {
           x: 70,
           y,
           size: 14,
@@ -405,7 +405,7 @@ export default function RentArrearsCalculator() {
           color: rgb(0.4, 0.4, 0.4),
         });
       } else {
-        page.drawText(`TOTAL CLAIM: Â£${totals.totalOutstanding.toFixed(2)}`, {
+        page.drawText(`TOTAL CLAIM: £${totals.totalOutstanding.toFixed(2)}`, {
           x: 70,
           y,
           size: 14,
@@ -461,10 +461,10 @@ link.href = url;
         showReviewPill={false}
         showTrustPositioningBar
         showUsageCounter
-        primaryCta={{ label: 'Start Free Calculator â†’', href: '#calculator' }}
-        secondaryCta={{ label: 'Upgrade to Money Claim Pack â†’', href: '/products/money-claim' }}
+        primaryCta={{ label: 'Start Free Calculator →', href: '#calculator' }}
+        secondaryCta={{ label: 'Upgrade to Money Claim Pack →', href: '/products/money-claim' }}
       >
-        <p className="mt-4 text-sm text-white/90">Instant calculation â€¢ Professional summary â€¢ Upgrade for court claims</p>
+        <p className="mt-4 text-sm text-white/90">Instant calculation • Professional summary • Upgrade for court claims</p>
       </UniversalHero>
 
       <Container className="py-12 space-y-8">
@@ -516,7 +516,7 @@ link.href = url;
                   />
                 </div>
                 <div>
-                  <label className="text-sm text-gray-600 font-medium">Rent due (Â£)</label>
+                  <label className="text-sm text-gray-600 font-medium">Rent due (£)</label>
                   <Input
                     type="number"
                     value={item.dueAmount}
@@ -527,7 +527,7 @@ link.href = url;
                   />
                 </div>
                 <div>
-                  <label className="text-sm text-gray-600 font-medium">Paid (Â£)</label>
+                  <label className="text-sm text-gray-600 font-medium">Paid (£)</label>
                   <Input
                     type="number"
                     value={item.paidAmount}
@@ -575,15 +575,15 @@ link.href = url;
             <div className="grid md:grid-cols-3 gap-4">
               <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
                 <p className="text-sm text-gray-600">Total rent due</p>
-                <p className="text-2xl font-bold text-charcoal mt-1">Â£{totals.totalDue.toFixed(2)}</p>
+                <p className="text-2xl font-bold text-charcoal mt-1">£{totals.totalDue.toFixed(2)}</p>
               </div>
               <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
                 <p className="text-sm text-gray-600">Total paid</p>
-                <p className="text-2xl font-bold text-charcoal mt-1">Â£{totals.totalPaid.toFixed(2)}</p>
+                <p className="text-2xl font-bold text-charcoal mt-1">£{totals.totalPaid.toFixed(2)}</p>
               </div>
               <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
                 <p className="text-sm text-gray-600">Outstanding arrears</p>
-                <p className="text-2xl font-bold text-red-600 mt-1">Â£{totals.totalOutstanding.toFixed(2)}</p>
+                <p className="text-2xl font-bold text-red-600 mt-1">£{totals.totalOutstanding.toFixed(2)}</p>
               </div>
             </div>
 
@@ -594,12 +594,12 @@ link.href = url;
                     Estimated Interest (8% p.a.)
                   </span>
                   <span className="text-xl font-bold text-warning-700">
-                    Â£{estimatedInterest.toFixed(2)}
+                    £{estimatedInterest.toFixed(2)}
                   </span>
                 </div>
                 <div className="space-y-2 text-xs text-gray-700">
                   <p>
-                    <strong>Calculation:</strong> Â£{totals.totalOutstanding.toFixed(2)} Ã— 8% Ã— ({daysOutstanding} days Ã· 365) = Â£{estimatedInterest.toFixed(2)}
+                    <strong>Calculation:</strong> £{totals.totalOutstanding.toFixed(2)} × 8% × ({daysOutstanding} days ÷ 365) = £{estimatedInterest.toFixed(2)}
                   </p>
                   <p>
                     <strong>From:</strong> {interestFromDate ? new Date(interestFromDate + 'T00:00:00').toLocaleDateString('en-GB') : 'N/A'} to {new Date().toLocaleDateString('en-GB')} ({daysOutstanding} days)
@@ -649,7 +649,7 @@ link.href = url;
               <h3 className="font-semibold text-gray-900 mb-2">1. Keep Accurate Records</h3>
               <p>
                 Maintain a detailed rent ledger showing every payment due and received. Include dates, amounts, and payment methods.
-                Bank statements alone are not enoughâ€”courts prefer a clear schedule showing the running balance.
+                Bank statements alone are not enough—courts prefer a clear schedule showing the running balance.
               </p>
             </div>
             <div>

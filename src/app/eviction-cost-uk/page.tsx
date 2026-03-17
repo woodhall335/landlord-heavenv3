@@ -60,15 +60,15 @@ export const metadata: Metadata = {
 const faqs = [
   {
     question: 'How much does it cost to evict a tenant in the UK?',
-    answer: 'Total eviction costs typically range from Ãƒâ€šÃ‚Â£500 to Ãƒâ€šÃ‚Â£3,000+. DIY route: ~Ãƒâ€šÃ‚Â£500-700 (court fees + bailiff). With solicitor: Ãƒâ€šÃ‚Â£1,500-3,000+. Using our Complete Pack: ~Ãƒâ€šÃ‚Â£700 total (Ãƒâ€šÃ‚Â£200 pack + Ãƒâ€šÃ‚Â£485 court fees).',
+    answer: 'Total eviction costs typically range from £500 to £3,000+. DIY route: ~£500-700 (court fees + bailiff). With solicitor: £1,500-3,000+. Using our Complete Pack: ~£700 total (£200 pack + £485 court fees).',
   },
   {
     question: 'What are the court fees for eviction?',
-    answer: 'Court fees are Ãƒâ€šÃ‚Â£355 for a possession claim (N5 or N5B) and Ãƒâ€šÃ‚Â£130 for a bailiff warrant if needed. These fees are set by the government and apply whether you use a solicitor or do it yourself.',
+    answer: 'Court fees are £355 for a possession claim (N5 or N5B) and £130 for a bailiff warrant if needed. These fees are set by the government and apply whether you use a solicitor or do it yourself.',
   },
   {
     question: 'Is it cheaper to use Section 21 or Section 8?',
-    answer: 'Court fees are the same (Ãƒâ€šÃ‚Â£355). Section 21 accelerated possession (N5B) is often simpler and doesn\'t require a hearing, potentially saving time. Section 8 may require a hearing but can be faster with only 2 weeks notice for some grounds.',
+    answer: 'Court fees are the same (£355). Section 21 accelerated possession (N5B) is often simpler and doesn\'t require a hearing, potentially saving time. Section 8 may require a hearing but can be faster with only 2 weeks notice for some grounds.',
   },
   {
     question: 'Can I recover eviction costs from the tenant?',
@@ -76,19 +76,19 @@ const faqs = [
   },
   {
     question: 'How much do eviction solicitors charge?',
-    answer: 'Solicitor fees for a straightforward eviction typically range from Ãƒâ€šÃ‚Â£1,000 to Ãƒâ€šÃ‚Â£2,500+ depending on complexity. Contested cases or those requiring multiple hearings can cost significantly more.',
+    answer: 'Solicitor fees for a straightforward eviction typically range from £1,000 to £2,500+ depending on complexity. Contested cases or those requiring multiple hearings can cost significantly more.',
   },
   {
     question: 'What is the cheapest way to evict a tenant?',
-    answer: 'The most affordable route is DIY using our document packs. Notice Only Pack (Ãƒâ€šÃ‚Â£29.99) for serving notice, or Complete Pack (Ãƒâ€šÃ‚Â£79.99) for full eviction including court forms. Add court fees (Ãƒâ€šÃ‚Â£355-485) for total cost of ~Ãƒâ€šÃ‚Â£500-640.',
+    answer: 'The most affordable route is DIY using our document packs. Notice Only Pack (£29.99) for serving notice, or Complete Pack (£79.99) for full eviction including court forms. Add court fees (£355-485) for total cost of ~£500-640.',
   },
   {
     question: 'Are there any hidden costs in eviction?',
-    answer: 'Watch for: storage costs if tenant leaves belongings, changeover costs (locks, cleaning, repairs), lost rent during vacancy, and potential property damage. Budget an extra Ãƒâ€šÃ‚Â£500-1,000 for these contingencies.',
+    answer: 'Watch for: storage costs if tenant leaves belongings, changeover costs (locks, cleaning, repairs), lost rent during vacancy, and potential property damage. Budget an extra £500-1,000 for these contingencies.',
   },
   {
     question: 'How long does eviction take and does time = cost?',
-    answer: 'Yes, time is money in eviction. Every month the process takes is a month of lost rent (or reduced rent if tenant isn\'t paying). A 4-month eviction could cost Ãƒâ€šÃ‚Â£4,000+ in lost rent alone on a Ãƒâ€šÃ‚Â£1,000/month property.',
+    answer: 'Yes, time is money in eviction. Every month the process takes is a month of lost rent (or reduced rent if tenant isn\'t paying). A 4-month eviction could cost £4,000+ in lost rent alone on a £1,000/month property.',
   },
 ];
 
@@ -126,8 +126,8 @@ export default function EvictionCostUkPage() {
           badge="2026 Prices"
           badgeIcon={<PoundSterling className="w-4 h-4" />}
           title="How Much Does Eviction Cost UK?"
-          subtitle={<>Budget between <strong>Ãƒâ€šÃ‚Â£500 and Ãƒâ€šÃ‚Â£3,000+</strong> depending on your approach. Here&apos;s the full breakdown with full statutory process cost breakdown.</>}
-          primaryCTA={{ label: 'Save Ãƒâ€šÃ‚Â£1,000+ ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â DIY Pack from Ãƒâ€šÃ‚Â£29.99', href: wizardLinkNoticeOnly }}
+          subtitle={<>Budget between <strong>£500 and £3,000+</strong> depending on your approach. Here&apos;s the full breakdown with full statutory process cost breakdown.</>}
+          primaryCTA={{ label: 'Save £1,000+ — DIY Pack from £29.99', href: wizardLinkNoticeOnly }}
           secondaryCTA={{ label: 'See Complete Pack', href: '/products/complete-pack' }}
           variant="pastel"
         >
@@ -163,7 +163,7 @@ export default function EvictionCostUkPage() {
                 Eviction Cost Summary
               </h2>
               <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                Three ways to evict ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â here&apos;s what each costs in total.
+                Three ways to evict — here&apos;s what each costs in total.
               </p>
 
               <div className="grid md:grid-cols-3 gap-6">
@@ -171,20 +171,20 @@ export default function EvictionCostUkPage() {
                 <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
                   <div className="text-center mb-4">
                     <span className="text-sm font-medium text-gray-500 uppercase tracking-wide">DIY Notice Only</span>
-                    <div className="text-3xl font-bold text-gray-900 mt-2">~Ãƒâ€šÃ‚Â£500</div>
+                    <div className="text-3xl font-bold text-gray-900 mt-2">~£500</div>
                   </div>
                   <ul className="space-y-3 mb-6">
                     <li className="flex items-center justify-between text-sm">
                       <span className="text-gray-600">Notice Pack</span>
-                      <span className="font-medium">Ãƒâ€šÃ‚Â£29.99</span>
+                      <span className="font-medium">£29.99</span>
                     </li>
                     <li className="flex items-center justify-between text-sm">
                       <span className="text-gray-600">Court fee (N5B)</span>
-                      <span className="font-medium">Ãƒâ€šÃ‚Â£355</span>
+                      <span className="font-medium">£355</span>
                     </li>
                     <li className="flex items-center justify-between text-sm">
                       <span className="text-gray-600">Bailiff (if needed)</span>
-                      <span className="font-medium">Ãƒâ€šÃ‚Â£130</span>
+                      <span className="font-medium">£130</span>
                     </li>
                   </ul>
                   <p className="text-xs text-gray-500 text-center">
@@ -201,20 +201,20 @@ export default function EvictionCostUkPage() {
                   </div>
                   <div className="text-center mb-4">
                     <span className="text-sm font-medium text-primary uppercase tracking-wide">DIY Complete</span>
-                    <div className="text-3xl font-bold text-gray-900 mt-2">~Ãƒâ€šÃ‚Â£700</div>
+                    <div className="text-3xl font-bold text-gray-900 mt-2">~£700</div>
                   </div>
                   <ul className="space-y-3 mb-6">
                     <li className="flex items-center justify-between text-sm">
                       <span className="text-gray-600">Complete Pack</span>
-                      <span className="font-medium">Ãƒâ€šÃ‚Â£79.99</span>
+                      <span className="font-medium">£79.99</span>
                     </li>
                     <li className="flex items-center justify-between text-sm">
                       <span className="text-gray-600">Court fee</span>
-                      <span className="font-medium">Ãƒâ€šÃ‚Â£355</span>
+                      <span className="font-medium">£355</span>
                     </li>
                     <li className="flex items-center justify-between text-sm">
                       <span className="text-gray-600">Bailiff (if needed)</span>
-                      <span className="font-medium">Ãƒâ€šÃ‚Â£130</span>
+                      <span className="font-medium">£130</span>
                     </li>
                   </ul>
                   <p className="text-xs text-gray-500 text-center">
@@ -226,20 +226,20 @@ export default function EvictionCostUkPage() {
                 <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
                   <div className="text-center mb-4">
                     <span className="text-sm font-medium text-gray-500 uppercase tracking-wide">With Solicitor</span>
-                    <div className="text-3xl font-bold text-gray-900 mt-2">Ãƒâ€šÃ‚Â£2,000+</div>
+                    <div className="text-3xl font-bold text-gray-900 mt-2">£2,000+</div>
                   </div>
                   <ul className="space-y-3 mb-6">
                     <li className="flex items-center justify-between text-sm">
                       <span className="text-gray-600">Solicitor fees</span>
-                      <span className="font-medium">Ãƒâ€šÃ‚Â£1,000-2,500</span>
+                      <span className="font-medium">£1,000-2,500</span>
                     </li>
                     <li className="flex items-center justify-between text-sm">
                       <span className="text-gray-600">Court fee</span>
-                      <span className="font-medium">Ãƒâ€šÃ‚Â£355</span>
+                      <span className="font-medium">£355</span>
                     </li>
                     <li className="flex items-center justify-between text-sm">
                       <span className="text-gray-600">Bailiff (if needed)</span>
-                      <span className="font-medium">Ãƒâ€šÃ‚Â£130</span>
+                      <span className="font-medium">£130</span>
                     </li>
                   </ul>
                   <p className="text-xs text-gray-500 text-center">
@@ -250,7 +250,7 @@ export default function EvictionCostUkPage() {
 
               <div className="mt-8 bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg">
                 <p className="text-green-900">
-                  <strong>Save Ãƒâ€šÃ‚Â£1,000-1,500</strong> by using our DIY packs instead of a solicitor.
+                  <strong>Save £1,000-1,500</strong> by using our DIY packs instead of a solicitor.
                   Same court-ready documents, fraction of the cost.
                 </p>
               </div>
@@ -281,23 +281,23 @@ export default function EvictionCostUkPage() {
                   <tbody className="divide-y divide-gray-200">
                     <tr>
                       <td className="px-6 py-4 text-gray-700">Possession claim (N5 or N5B)</td>
-                      <td className="px-6 py-4 text-right font-medium">Ãƒâ€šÃ‚Â£355</td>
+                      <td className="px-6 py-4 text-right font-medium">£355</td>
                     </tr>
                     <tr>
                       <td className="px-6 py-4 text-gray-700">County court bailiff warrant (N325)</td>
-                      <td className="px-6 py-4 text-right font-medium">Ãƒâ€šÃ‚Â£130</td>
+                      <td className="px-6 py-4 text-right font-medium">£130</td>
                     </tr>
                     <tr>
                       <td className="px-6 py-4 text-gray-700">High Court enforcement writ (N293A)</td>
-                      <td className="px-6 py-4 text-right font-medium">Ãƒâ€šÃ‚Â£66</td>
+                      <td className="px-6 py-4 text-right font-medium">£66</td>
                     </tr>
                     <tr>
                       <td className="px-6 py-4 text-gray-700">High Court enforcement officer</td>
-                      <td className="px-6 py-4 text-right font-medium">~Ãƒâ€šÃ‚Â£300-600</td>
+                      <td className="px-6 py-4 text-right font-medium">~£300-600</td>
                     </tr>
                     <tr className="bg-gray-50">
                       <td className="px-6 py-4 font-semibold text-gray-900">Total court fees (typical)</td>
-                      <td className="px-6 py-4 text-right font-semibold text-gray-900">Ãƒâ€šÃ‚Â£485-550</td>
+                      <td className="px-6 py-4 text-right font-semibold text-gray-900">£485-550</td>
                     </tr>
                   </tbody>
                 </table>
@@ -319,7 +319,7 @@ export default function EvictionCostUkPage() {
                         <br />
                         <span className="text-sm text-gray-500">Section 21 + Section 8 notices</span>
                       </td>
-                      <td className="px-6 py-4 text-right font-medium text-green-700">Ãƒâ€šÃ‚Â£29.99</td>
+                      <td className="px-6 py-4 text-right font-medium text-green-700">£29.99</td>
                     </tr>
                     <tr className="bg-green-50">
                       <td className="px-6 py-4 text-gray-700">
@@ -327,7 +327,7 @@ export default function EvictionCostUkPage() {
                         <br />
                         <span className="text-sm text-gray-500">Notices + all court forms + witness statements</span>
                       </td>
-                      <td className="px-6 py-4 text-right font-medium text-green-700">Ãƒâ€šÃ‚Â£79.99</td>
+                      <td className="px-6 py-4 text-right font-medium text-green-700">£79.99</td>
                     </tr>
                     <tr>
                       <td className="px-6 py-4 text-gray-700">
@@ -335,7 +335,7 @@ export default function EvictionCostUkPage() {
                         <br />
                         <span className="text-sm text-gray-500">Serving eviction notice</span>
                       </td>
-                      <td className="px-6 py-4 text-right font-medium">Ãƒâ€šÃ‚Â£200-500</td>
+                      <td className="px-6 py-4 text-right font-medium">£200-500</td>
                     </tr>
                     <tr>
                       <td className="px-6 py-4 text-gray-700">
@@ -343,7 +343,7 @@ export default function EvictionCostUkPage() {
                         <br />
                         <span className="text-sm text-gray-500">Notice through to possession order</span>
                       </td>
-                      <td className="px-6 py-4 text-right font-medium">Ãƒâ€šÃ‚Â£1,000-2,500</td>
+                      <td className="px-6 py-4 text-right font-medium">£1,000-2,500</td>
                     </tr>
                     <tr>
                       <td className="px-6 py-4 text-gray-700">
@@ -351,7 +351,7 @@ export default function EvictionCostUkPage() {
                         <br />
                         <span className="text-sm text-gray-500">Defended case with multiple hearings</span>
                       </td>
-                      <td className="px-6 py-4 text-right font-medium">Ãƒâ€šÃ‚Â£2,500-5,000+</td>
+                      <td className="px-6 py-4 text-right font-medium">£2,500-5,000+</td>
                     </tr>
                   </tbody>
                 </table>
@@ -369,19 +369,19 @@ export default function EvictionCostUkPage() {
                   <tbody className="divide-y divide-gray-200">
                     <tr>
                       <td className="px-6 py-4 text-gray-700">Process server (notice delivery)</td>
-                      <td className="px-6 py-4 text-right font-medium">Ãƒâ€šÃ‚Â£50-150</td>
+                      <td className="px-6 py-4 text-right font-medium">£50-150</td>
                     </tr>
                     <tr>
                       <td className="px-6 py-4 text-gray-700">Storage of tenant belongings</td>
-                      <td className="px-6 py-4 text-right font-medium">Ãƒâ€šÃ‚Â£100-500</td>
+                      <td className="px-6 py-4 text-right font-medium">£100-500</td>
                     </tr>
                     <tr>
                       <td className="px-6 py-4 text-gray-700">Lock changes</td>
-                      <td className="px-6 py-4 text-right font-medium">Ãƒâ€šÃ‚Â£80-200</td>
+                      <td className="px-6 py-4 text-right font-medium">£80-200</td>
                     </tr>
                     <tr>
                       <td className="px-6 py-4 text-gray-700">Professional cleaning</td>
-                      <td className="px-6 py-4 text-right font-medium">Ãƒâ€šÃ‚Â£150-400</td>
+                      <td className="px-6 py-4 text-right font-medium">£150-400</td>
                     </tr>
                     <tr>
                       <td className="px-6 py-4 text-gray-700">Property repairs/damage</td>
@@ -402,8 +402,8 @@ export default function EvictionCostUkPage() {
                 pageType="general"
                 variant="section"
                 jurisdiction="england"
-                title="Keep Costs Low ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â Use Our DIY Packs"
-                description="Court-ready documents at a fraction of solicitor costs. Notice Only from Ãƒâ€šÃ‚Â£29.99, Complete Pack Ãƒâ€šÃ‚Â£79.99."
+                title="Keep Costs Low — Use Our DIY Packs"
+                description="Court-ready documents at a fraction of solicitor costs. Notice Only from £29.99, Complete Pack £79.99."
               />
             </div>
           </div>
@@ -417,29 +417,29 @@ export default function EvictionCostUkPage() {
                 The Hidden Cost: Lost Rent
               </h2>
               <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                The biggest eviction cost isn&apos;t court fees ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â it&apos;s the rent you lose while waiting.
+                The biggest eviction cost isn&apos;t court fees — it&apos;s the rent you lose while waiting.
               </p>
 
               <div className="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm">
                 <div className="grid md:grid-cols-2 gap-8 items-center">
                   <div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-4">Example: Ãƒâ€šÃ‚Â£1,000/month rent</h3>
+                    <h3 className="text-xl font-bold text-gray-900 mb-4">Example: £1,000/month rent</h3>
                     <ul className="space-y-3">
                       <li className="flex items-center justify-between">
                         <span className="text-gray-600">2 months notice period</span>
-                        <span className="font-medium text-red-600">-Ãƒâ€šÃ‚Â£2,000</span>
+                        <span className="font-medium text-red-600">-£2,000</span>
                       </li>
                       <li className="flex items-center justify-between">
                         <span className="text-gray-600">2 months court process</span>
-                        <span className="font-medium text-red-600">-Ãƒâ€šÃ‚Â£2,000</span>
+                        <span className="font-medium text-red-600">-£2,000</span>
                       </li>
                       <li className="flex items-center justify-between">
                         <span className="text-gray-600">1 month bailiff wait</span>
-                        <span className="font-medium text-red-600">-Ãƒâ€šÃ‚Â£1,000</span>
+                        <span className="font-medium text-red-600">-£1,000</span>
                       </li>
                       <li className="flex items-center justify-between border-t pt-3 mt-3">
                         <span className="font-semibold text-gray-900">Total lost rent (5 months)</span>
-                        <span className="font-bold text-red-600">-Ãƒâ€šÃ‚Â£5,000</span>
+                        <span className="font-bold text-red-600">-£5,000</span>
                       </li>
                     </ul>
                   </div>
@@ -477,14 +477,14 @@ export default function EvictionCostUkPage() {
                       Alternative: Just Want Your Money Back?
                     </h2>
                     <p className="text-gray-600 mb-4">
-                      If your tenant has already left but still owes rent, you don&apos;t need to evict ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â
+                      If your tenant has already left but still owes rent, you don&apos;t need to evict —
                       you need a <strong>Money Claim</strong>. Court claim costs are often lower than eviction,
-                      and you can claim up to Ãƒâ€šÃ‚Â£100,000 through Money Claim Online.
+                      and you can claim up to £100,000 through Money Claim Online.
                     </p>
                     <div className="grid sm:grid-cols-2 gap-3 mb-6 text-sm text-gray-700">
                       <div className="flex items-center gap-2">
                         <CheckCircle className="w-4 h-4 text-green-500" />
-                        <span>Court fees from Ãƒâ€šÃ‚Â£35 (claims up to Ãƒâ€šÃ‚Â£300)</span>
+                        <span>Court fees from £35 (claims up to £300)</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <CheckCircle className="w-4 h-4 text-green-500" />
@@ -505,7 +505,7 @@ export default function EvictionCostUkPage() {
                         className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors"
                       >
                         <Gavel className="w-5 h-5" />
-                        Get Money Claim Pack ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â Ãƒâ€šÃ‚Â£59.99
+                        Get Money Claim Pack — £59.99
                       </Link>
                       <Link
                         href="/money-claim-unpaid-rent"
@@ -534,7 +534,7 @@ export default function EvictionCostUkPage() {
                 variant="final"
                 jurisdiction="england"
                 title="Start Your Eviction for Less"
-                description="Court-ready documents from Ãƒâ€šÃ‚Â£29.99. Save over Ãƒâ€šÃ‚Â£1,000 compared to solicitor fees."
+                description="Court-ready documents from £29.99. Save over £1,000 compared to solicitor fees."
               />
 
               <SeoDisclaimer className="max-w-4xl mx-auto" />

@@ -140,7 +140,7 @@ export default function MoneyClaimEarlyTerminationPage() {
               </div>
 
               <h2 className="text-4xl lg:text-5xl font-bold mb-6">
-                Claim for Early Termination â€” Tenant Left Before Fixed Term Ended
+                Claim for Early Termination — Tenant Left Before Fixed Term Ended
               </h2>
 
               <p className="text-xl text-red-100 mb-8 max-w-2xl mx-auto">
@@ -227,12 +227,12 @@ export default function MoneyClaimEarlyTerminationPage() {
                     Limitations:
                   </h3>
                   <ul className="space-y-2 text-gray-700 text-sm">
-                    <li>â€¢ Cannot claim rent after new tenant moves in</li>
-                    <li>â€¢ Cannot claim if you didn&apos;t try to re-let</li>
-                    <li>â€¢ Limited if break clause was used correctly</li>
-                    <li>â€¢ May be reduced if property issues caused departure</li>
-                    <li>â€¢ Cannot claim excessive void if you refused tenants</li>
-                    <li>â€¢ General wear refreshing not claimable</li>
+                    <li>• Cannot claim rent after new tenant moves in</li>
+                    <li>• Cannot claim if you didn&apos;t try to re-let</li>
+                    <li>• Limited if break clause was used correctly</li>
+                    <li>• May be reduced if property issues caused departure</li>
+                    <li>• Cannot claim excessive void if you refused tenants</li>
+                    <li>• General wear refreshing not claimable</li>
                   </ul>
                 </div>
               </div>
@@ -250,19 +250,19 @@ export default function MoneyClaimEarlyTerminationPage() {
                   </div>
                   <div className="flex justify-between py-2 border-b border-gray-100">
                     <span className="text-gray-600">Void period until re-let: 6 weeks</span>
-                    <span className="font-semibold text-gray-900">Â£1,800</span>
+                    <span className="font-semibold text-gray-900">£1,800</span>
                   </div>
                   <div className="flex justify-between py-2 border-b border-gray-100">
                     <span className="text-gray-600">Letting agent re-letting fee</span>
-                    <span className="font-semibold text-gray-900">Â£600</span>
+                    <span className="font-semibold text-gray-900">£600</span>
                   </div>
                   <div className="flex justify-between py-2 border-b border-gray-100">
                     <span className="text-gray-600">Advertising and referencing</span>
-                    <span className="font-semibold text-gray-900">Â£150</span>
+                    <span className="font-semibold text-gray-900">£150</span>
                   </div>
                   <div className="flex justify-between py-2 bg-red-50 px-2 rounded">
                     <span className="text-gray-900 font-medium">Total claim</span>
-                    <span className="font-bold text-red-700">Â£2,550</span>
+                    <span className="font-bold text-red-700">£2,550</span>
                   </div>
                 </div>
                 <p className="text-xs text-gray-500 mt-4">
@@ -273,7 +273,7 @@ export default function MoneyClaimEarlyTerminationPage() {
               {/* Ask Heaven callout */}
               <div className="bg-purple-50 border border-purple-200 rounded-xl p-4">
                 <div className="flex items-start gap-3">
-                  <span className="text-2xl">â˜ï¸</span>
+                  <span className="text-2xl">☁️</span>
                   <div>
                     <p className="font-semibold text-gray-900 mb-1">
                       Unsure what you can claim for early leaving?
@@ -307,11 +307,11 @@ export default function MoneyClaimEarlyTerminationPage() {
                   </div>
                   <h3 className="font-bold text-gray-900 mb-3">Tenancy Documents</h3>
                   <ul className="space-y-2 text-sm text-gray-600">
-                    <li>â€¢ Tenancy agreement (fixed term dates)</li>
-                    <li>â€¢ Break clause terms (if any)</li>
-                    <li>â€¢ Evidence tenant left (keys, correspondence)</li>
-                    <li>â€¢ Date tenant vacated</li>
-                    <li>â€¢ New tenancy agreement (start date)</li>
+                    <li>• Tenancy agreement (fixed term dates)</li>
+                    <li>• Break clause terms (if any)</li>
+                    <li>• Evidence tenant left (keys, correspondence)</li>
+                    <li>• Date tenant vacated</li>
+                    <li>• New tenancy agreement (start date)</li>
                   </ul>
                 </div>
 
@@ -321,11 +321,11 @@ export default function MoneyClaimEarlyTerminationPage() {
                   </div>
                   <h3 className="font-bold text-gray-900 mb-3">Mitigation Evidence</h3>
                   <ul className="space-y-2 text-sm text-gray-600">
-                    <li>â€¢ Marketing listings (Rightmove, etc.)</li>
-                    <li>â€¢ Viewing records</li>
-                    <li>â€¢ Agent correspondence</li>
-                    <li>â€¢ Re-letting invoices</li>
-                    <li>â€¢ Timeline of re-letting efforts</li>
+                    <li>• Marketing listings (Rightmove, etc.)</li>
+                    <li>• Viewing records</li>
+                    <li>• Agent correspondence</li>
+                    <li>• Re-letting invoices</li>
+                    <li>• Timeline of re-letting efforts</li>
                   </ul>
                 </div>
               </div>
@@ -392,11 +392,11 @@ export default function MoneyClaimEarlyTerminationPage() {
                 href="/products/money-claim?reason=rent_arrears&topic=debt&src=seo_money_claim_early_termination"
                 className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
               >
-                Start Your Claim â€” Â£59.99
+                Start Your Claim — £59.99
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <p className="text-sm text-gray-500 mt-3">
-                Court fees from Â£35 extra (based on claim amount)
+                Court fees from £35 extra (based on claim amount)
               </p>
             </div>
           </div>

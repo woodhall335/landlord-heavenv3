@@ -99,7 +99,7 @@ export const PRICING = {
     TIER_2: { properties: '6-10', price: 24.99, label: '6-10 HMOs' },
     TIER_3: { properties: '11-15', price: 29.99, label: '11-15 HMOs' },
     TIER_4: { properties: '16-20', price: 34.99, label: '16-20 HMOs' },
-    // Formula: +Â£5 per 5 HMOs after tier 4
+    // Formula: +£5 per 5 HMOs after tier 4
     BASE_PRICE: 19.99,
     INCREMENT_PER_5_PROPERTIES: 5.00,
   },
@@ -132,10 +132,10 @@ export function getHMOProTier(propertyCount: number): string {
 }
 
 /**
- * Format price for display (Â£XX.XX)
+ * Format price for display (£XX.XX)
  */
 export function formatPrice(price: number): string {
-  return `Â£${price.toFixed(2)}`;
+  return `£${price.toFixed(2)}`;
 }
 
 /**

@@ -273,7 +273,7 @@ export default function Section8NoticeTemplatePage() {
                     <li>Ground 8/10/11: 2 weeks for serious arrears.</li>
                     <li>Most other grounds: 2 months.</li>
                     <li>Notice valid for 12 months after service.</li>
-                    <li>Typical possession timeline: 3Ã¢â‚¬â€œ6 months.</li>
+                    <li>Typical possession timeline: 3–6 months.</li>
                   </ul>
                 </div>
 
@@ -299,7 +299,7 @@ export default function Section8NoticeTemplatePage() {
                     href="/how-to-evict-tenant"
                     className="text-primary text-sm font-medium hover:underline inline-flex mt-3"
                   >
-                    See the full eviction process Ã¢â€ â€™
+                    See the full eviction process →
                   </Link>
                 </div>
               </div>
@@ -370,7 +370,7 @@ export default function Section8NoticeTemplatePage() {
                   href={wizardLinkNoticeOnly}
                   className="inline-flex items-center gap-2 text-primary font-medium hover:underline"
                 >
-                  Get both notices for Ã‚Â£29.99
+                  Get both notices for £29.99
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
@@ -395,7 +395,7 @@ export default function Section8NoticeTemplatePage() {
                 <div className="bg-gray-50 rounded-2xl p-8 border border-gray-200">
                   <div className="text-center mb-6">
                     <span className="text-sm font-medium text-gray-500 uppercase tracking-wide">Free Starter Document</span>
-                    <div className="text-4xl font-bold text-gray-900 mt-2">Ã‚Â£0</div>
+                    <div className="text-4xl font-bold text-gray-900 mt-2">£0</div>
                   </div>
                   <ul className="space-y-4 mb-8">
                     <li className="flex items-start gap-3">
@@ -440,7 +440,7 @@ export default function Section8NoticeTemplatePage() {
                   </div>
                   <div className="text-center mb-6">
                     <span className="text-sm font-medium text-primary uppercase tracking-wide">Complete Pack</span>
-                    <div className="text-4xl font-bold text-gray-900 mt-2">Ã‚Â£79.99</div>
+                    <div className="text-4xl font-bold text-gray-900 mt-2">£79.99</div>
                   </div>
                   <ul className="space-y-4 mb-8">
                     <li className="flex items-start gap-3">
@@ -482,7 +482,7 @@ export default function Section8NoticeTemplatePage() {
                 <p className="text-gray-600">
                   Just need the notice? Get{' '}
                   <Link href={wizardLinkNoticeOnly} className="text-primary font-medium hover:underline">
-                    Notice Only for Ã‚Â£29.99
+                    Notice Only for £29.99
                   </Link>
                   {' '}(Section 8 + Section 21 included)
                 </p>
@@ -594,7 +594,7 @@ export default function Section8NoticeTemplatePage() {
               <p>A Section 8 notice is a possession notice used in England when a landlord relies on specific legal grounds, such as rent arrears or breach of tenancy terms. It is served on Form 3 and must state the grounds and notice period clearly to support court action.</p>
 
               <h2>Section 8 Notice Rent Arrears</h2>
-              <p>For rent arrears, landlords commonly use Grounds 8, 10, and 11 on a Section 8 notice. Ground 8 is mandatory when arrears meet the required level at service and hearing, while Grounds 10 and 11 are discretionary and depend on the courtÃ¢â‚¬â„¢s assessment of reasonableness.</p>
+              <p>For rent arrears, landlords commonly use Grounds 8, 10, and 11 on a Section 8 notice. Ground 8 is mandatory when arrears meet the required level at service and hearing, while Grounds 10 and 11 are discretionary and depend on the court’s assessment of reasonableness.</p>
 
               <h2>Section 8 Form 3 Template</h2>
               <p>A Section 8 Form 3 template should include accurate party details, property address, selected grounds, arrears figures, and the correct notice period. Errors in ground selection or dates can undermine possession claims, so landlords should cross-check the tenancy file before serving.</p>
@@ -850,7 +850,7 @@ export default function Section8NoticeTemplatePage() {
                   href={wizardLinkCompletePack}
                   className="hero-btn-secondary inline-flex items-center justify-center gap-2"
                 >
-                  Get Complete Pack Ã¢â‚¬â€ Ã‚Â£79.99
+                  Get Complete Pack — £79.99
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               </div>
@@ -866,7 +866,7 @@ export default function Section8NoticeTemplatePage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <div className="flex items-center gap-4">
-                <span className="text-4xl">Ã¢Å“â€¦</span>
+                <span className="text-4xl">✅</span>
                 <div>
                   <p className="font-semibold text-gray-900 mb-1">
                     Already have a Section 8 notice?
@@ -889,7 +889,7 @@ export default function Section8NoticeTemplatePage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <div className="flex items-center gap-4">
-                <span className="text-4xl">ÃƒÂ¢Ã‹Å“Ã‚ÂÃƒÂ¯Ã‚Â¸Ã‚Â</span>
+                <span className="text-4xl">☁️</span>
                 <div>
                   <p className="font-semibold text-gray-900 mb-1">
                     Not sure which eviction ground applies to your situation?

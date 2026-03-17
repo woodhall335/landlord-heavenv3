@@ -10,19 +10,19 @@ import type { CaseIntelligence, ConsistencyReport } from '@/lib/case-intel';
 /**
  * Shared system persona for all Ask Heaven modes (wizard + chat).
  * Behaves like a cautious, high-end UK housing solicitor but
- * does NOT create a solicitorÃ¢â‚¬â€œclient relationship or give
+ * does NOT create a solicitor–client relationship or give
  * personalised legal advice.
  */
 export const ASK_HEAVEN_BASE_SYSTEM_PROMPT = `
 You are "Ask Heaven", an ultra-specialised UK landlord & housing law assistant.
 
-Think and communicate like a cautious, Ã‚Â£500/hour senior solicitor who:
+Think and communicate like a cautious, £500/hour senior solicitor who:
 - Practices ONLY in UK residential landlord/tenant law.
 - Handles eviction notices, possession claims, rent arrears, money claims,
   tenancy agreements (AST/PRT/NI), HMO and licensing, safety & compliance.
 
 CRITICAL SCOPE & SAFETY RULES:
-- You are NOT the user's lawyer and do NOT create a solicitorÃ¢â‚¬â€œclient relationship.
+- You are NOT the user's lawyer and do NOT create a solicitor–client relationship.
 - You do NOT give personalised legal advice (no "you should definitely do X").
 - You MUST stay within UK landlord/tenant/property law.
 - If the question is outside landlord/tenant/property law
@@ -126,7 +126,7 @@ export async function enhanceAnswer(
     return null;
   }
 
-  // Normalise input type Ã¢â‚¬â€œ some MQS may use inputType, some input_type
+  // Normalise input type – some MQS may use inputType, some input_type
   const inputType: string =
     (question as any).inputType ??
     (question as any).input_type ??
@@ -137,10 +137,10 @@ export async function enhanceAnswer(
 
   const hasSuggestionPrompt = !!suggestionPrompt;
 
-  // Ã¢Å“â€¦ Only allow Ask Heaven on clearly free-text questions
+  // ✅ Only allow Ask Heaven on clearly free-text questions
   const FREE_TEXT_TYPES = new Set(['textarea', 'text', 'longtext']);
 
-  // If it's not a free-text input, we bail out Ã¢â‚¬â€œ EVEN if it has suggestion_prompt
+  // If it's not a free-text input, we bail out – EVEN if it has suggestion_prompt
   if (!FREE_TEXT_TYPES.has(inputType)) {
     return null;
   }
@@ -173,14 +173,14 @@ Your job in this mode:
 - Suggest evidence that would typically support this answer.
 
 ADDITIONAL HARD RULES FOR THIS MODE:
-Ã¢ÂÅ’ NEVER introduce new legal rules or thresholds.
-Ã¢ÂÅ’ NEVER contradict the decision engine outputs provided.
-Ã¢ÂÅ’ NEVER recommend a legal route ("you should choose X" or "try Section Y").
-Ã¢ÂÅ’ NEVER give personalised legal strategy ("definitely issue a claim now").
-Ã¢Å“â€¦ ONLY clarify user-provided facts and highlight missing details.
-Ã¢Å“â€¦ ONLY explain what the decision engine already determined.
-Ã¢Å“â€¦ ONLY structure text into court-appropriate language.
-Ã¢Å“â€¦ The decision engine is the SINGLE SOURCE OF TRUTH for legal rules.
+❌ NEVER introduce new legal rules or thresholds.
+❌ NEVER contradict the decision engine outputs provided.
+❌ NEVER recommend a legal route ("you should choose X" or "try Section Y").
+❌ NEVER give personalised legal strategy ("definitely issue a claim now").
+✅ ONLY clarify user-provided facts and highlight missing details.
+✅ ONLY explain what the decision engine already determined.
+✅ ONLY structure text into court-appropriate language.
+✅ The decision engine is the SINGLE SOURCE OF TRUTH for legal rules.
 
 Case context:
 ${caseMetadata}Jurisdiction: ${jurisdiction}
@@ -403,7 +403,7 @@ export function getRegionalProductGuidance(jurisdiction: string, product?: strin
     const notAvailableInNI = ['notice_only', ...englandOnlyProducts];
 
     if (normalizedJurisdiction === 'northern-ireland' && notAvailableInNI.includes(product)) {
-      return `Ã¢Å¡Â Ã¯Â¸Â ${product} is not available in Northern Ireland. Only Tenancy Agreement is available for this jurisdiction.`;
+      return `⚠️ ${product} is not available in Northern Ireland. Only Tenancy Agreement is available for this jurisdiction.`;
     }
 
     if ((normalizedJurisdiction === 'wales' || normalizedJurisdiction === 'scotland') && englandOnlyProducts.includes(product)) {
@@ -411,7 +411,7 @@ export function getRegionalProductGuidance(jurisdiction: string, product?: strin
       const alternative = product === 'money_claim'
         ? 'Consider using Notice Only (£29.99) for rent arrears eviction notices instead.'
         : 'Consider using Notice Only (£29.99) for eviction notices instead.';
-      return `Ã¢Å¡Â Ã¯Â¸Â ${product} is only available in England, not ${regionName}. ${alternative}`;
+      return `⚠️ ${product} is only available in England, not ${regionName}. ${alternative}`;
     }
   }
 
@@ -482,7 +482,7 @@ function buildDecisionEngineContext(decision: DecisionOutput): string {
       context += `  - ${routeLabel}: ${description}\n`;
     }
     context +=
-      '\nÃ¢Å¡Â Ã¯Â¸Â  When describing blocked routes, state the facts but NEVER recommend alternative routes.\n';
+      '\n⚠️  When describing blocked routes, state the facts but NEVER recommend alternative routes.\n';
   }
 
   // Recommended grounds

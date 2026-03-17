@@ -37,7 +37,7 @@ export function VsSolicitorComparison({ product = 'notice_only' }: ComparisonTab
     {
       feature: 'Price',
       landlordHeaven: `${price} one-time`,
-      competitor: 'Typically Â£200-2,500+ (hourly fees)',
+      competitor: 'Typically £200-2,500+ (hourly fees)',
     },
     {
       feature: 'Speed',
@@ -234,7 +234,7 @@ export function VsFreeTemplateComparison({ product = 'notice_only' }: Comparison
         <p className="text-sm text-gray-700">
           <strong>Why pay?</strong> Free templates often use outdated forms, wrong jurisdiction
           rules, and leave you guessing on dates and service methods. Invalid notices waste time and
-          money â€” getting it right the first time is worth far more than{' '}
+          money — getting it right the first time is worth far more than{' '}
           <span className="font-semibold text-primary">{price}</span>.
         </p>
       </div>

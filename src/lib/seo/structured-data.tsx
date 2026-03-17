@@ -340,7 +340,7 @@ export function localBusinessSchema() {
       "addressCountry": "GB"
     },
     // geo field removed - invalid without actual coordinates
-    "priceRange": "ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£"
+    "priceRange": "££"
   };
 }
 
@@ -490,7 +490,7 @@ export const HOWTO_SCHEMAS = {
       { name: 'Gather evidence', text: 'Compile tenancy agreement, rent statements, photos of damage, and calculate total owed.' },
       { name: 'Enter defendant details', text: 'Fill in the tenant\'s full name and last known address.' },
       { name: 'Write particulars of claim', text: 'Describe what the claim is for, when the debt arose, and the breakdown.' },
-      { name: 'Pay the court fee', text: 'Pay the fee based on claim amount (ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£35 for up to ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£300, up to ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£455 for up to ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£10,000).' },
+      { name: 'Pay the court fee', text: 'Pay the fee based on claim amount (£35 for up to £300, up to £455 for up to £10,000).' },
       { name: 'Submit and wait for response', text: 'Defendant has 14 days to respond. Request default judgment if they don\'t.' },
     ],
   }),

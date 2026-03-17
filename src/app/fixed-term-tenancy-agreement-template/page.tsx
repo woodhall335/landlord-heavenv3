@@ -120,7 +120,7 @@ export default function FixedTermTenancyAgreementPage() {
           badgeIcon={<Calendar className="w-4 h-4" />}
           title="Fixed Term Tenancy Agreement Template"
           subtitle={<>Create a <strong>fixed term tenancy agreement</strong> for 6, 12, or 24 months. Set clear expectations with a legally compliant AST that protects both landlord and tenant.</>}
-          primaryCta={{ label: 'Get AST Template â€” Â£14.99', href: wizardLinkAST }}
+          primaryCta={{ label: 'Get AST Template — £14.99', href: wizardLinkAST }}
           secondaryCta={{ label: 'Compare Periodic Tenancy', href: '/rolling-tenancy-agreement' }}
         >
           {/* Trust Signals */}
@@ -230,9 +230,9 @@ export default function FixedTermTenancyAgreementPage() {
                   <div className="text-3xl font-bold text-primary mb-2">6 Months</div>
                   <p className="text-sm text-gray-600 mb-4">Short-term flexibility</p>
                   <ul className="text-xs text-gray-500 space-y-1">
-                    <li>â€¢ New tenant trial period</li>
-                    <li>â€¢ Uncertain future plans</li>
-                    <li>â€¢ Corporate relocations</li>
+                    <li>• New tenant trial period</li>
+                    <li>• Uncertain future plans</li>
+                    <li>• Corporate relocations</li>
                   </ul>
                   <div className="mt-4 text-primary text-sm font-medium flex items-center gap-1">
                     View template <ArrowRight className="w-4 h-4" />
@@ -248,9 +248,9 @@ export default function FixedTermTenancyAgreementPage() {
                   <div className="text-3xl font-bold text-primary mb-2">12 Months</div>
                   <p className="text-sm text-gray-600 mb-4">Industry standard</p>
                   <ul className="text-xs text-gray-500 space-y-1">
-                    <li>â€¢ Best balance of stability</li>
-                    <li>â€¢ Annual rent review cycle</li>
-                    <li>â€¢ Preferred by most tenants</li>
+                    <li>• Best balance of stability</li>
+                    <li>• Annual rent review cycle</li>
+                    <li>• Preferred by most tenants</li>
                   </ul>
                   <Link href={wizardLinkAST} className="mt-4 text-primary text-sm font-medium flex items-center gap-1">
                     Get template <ArrowRight className="w-4 h-4" />
@@ -261,9 +261,9 @@ export default function FixedTermTenancyAgreementPage() {
                   <div className="text-3xl font-bold text-gray-700 mb-2">24 Months</div>
                   <p className="text-sm text-gray-600 mb-4">Long-term stability</p>
                   <ul className="text-xs text-gray-500 space-y-1">
-                    <li>â€¢ Settled families</li>
-                    <li>â€¢ Reduced turnover costs</li>
-                    <li>â€¢ Reliable rental income</li>
+                    <li>• Settled families</li>
+                    <li>• Reduced turnover costs</li>
+                    <li>• Reliable rental income</li>
                   </ul>
                   <Link href={wizardLinkAST} className="mt-4 text-gray-600 text-sm font-medium flex items-center gap-1">
                     Get template <ArrowRight className="w-4 h-4" />
@@ -333,7 +333,7 @@ export default function FixedTermTenancyAgreementPage() {
                     <h4 className="font-semibold text-gray-900">End of Fixed Term</h4>
                     <p className="text-sm text-gray-600">
                       Options: sign a new fixed term, let it become periodic (rolling), or end the tenancy.
-                      No automatic termination â€” action must be taken to end.
+                      No automatic termination — action must be taken to end.
                     </p>
                   </div>
                 </div>
@@ -433,9 +433,9 @@ export default function FixedTermTenancyAgreementPage() {
                     To Continue the Tenancy
                   </h4>
                   <ul className="text-sm text-green-800 space-y-2">
-                    <li>â€¢ <strong>New fixed term:</strong> Sign a renewal agreement</li>
-                    <li>â€¢ <strong>Go periodic:</strong> Do nothing â€” it rolls automatically</li>
-                    <li>â€¢ <strong>Adjust rent:</strong> Agree new terms with a fresh agreement</li>
+                    <li>• <strong>New fixed term:</strong> Sign a renewal agreement</li>
+                    <li>• <strong>Go periodic:</strong> Do nothing — it rolls automatically</li>
+                    <li>• <strong>Adjust rent:</strong> Agree new terms with a fresh agreement</li>
                   </ul>
                 </div>
 
@@ -445,9 +445,9 @@ export default function FixedTermTenancyAgreementPage() {
                     To End the Tenancy
                   </h4>
                   <ul className="text-sm text-red-800 space-y-2">
-                    <li>â€¢ <strong>Landlord:</strong> Serve Section 21 to expire on/after end date</li>
-                    <li>â€¢ <strong>Tenant:</strong> Give 1 month notice to end on the last day</li>
-                    <li>â€¢ <strong>Mutual:</strong> Agree in writing to surrender</li>
+                    <li>• <strong>Landlord:</strong> Serve Section 21 to expire on/after end date</li>
+                    <li>• <strong>Tenant:</strong> Give 1 month notice to end on the last day</li>
+                    <li>• <strong>Mutual:</strong> Agree in writing to surrender</li>
                   </ul>
                 </div>
               </div>

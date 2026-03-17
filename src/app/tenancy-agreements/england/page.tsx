@@ -317,11 +317,11 @@ export default function EnglandASTPage() {
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">Standard AST</h3>
                 <p className="text-4xl font-bold text-blue-600 mb-4">£14.99</p>
                 <ul className="space-y-2 text-gray-700 mb-6">
-                  <li>âœ“ All legal essentials included</li>
-                  <li>âœ“ Housing Act 1988 compliant</li>
-                  <li>âœ“ Tenant Fees Act 2019 compliant</li>
-                  <li>âœ“ Deposit protection clause</li>
-                  <li>âœ“ Standard terms & conditions</li>
+                  <li>✓ All legal essentials included</li>
+                  <li>✓ Housing Act 1988 compliant</li>
+                  <li>✓ Tenant Fees Act 2019 compliant</li>
+                  <li>✓ Deposit protection clause</li>
+                  <li>✓ Standard terms & conditions</li>
                 </ul>
                 <Link
                   href="/wizard?product=ast_standard&src=product_page&topic=tenancy&jurisdiction=england"
@@ -338,13 +338,13 @@ export default function EnglandASTPage() {
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">Premium AST</h3>
                 <p className="text-4xl font-bold text-primary mb-4">£24.99</p>
                 <ul className="space-y-2 text-gray-700 mb-6">
-                  <li>âœ“ Everything in Standard PLUS:</li>
-                  <li>âœ“ Comprehensive inventory section</li>
-                  <li>âœ“ 13 detailed terms & conditions</li>
-                  <li>âœ“ Professional gradient styling</li>
-                  <li>âœ“ Rights of change clauses</li>
-                  <li>âœ“ Enhanced legal compliance boxes</li>
-                  <li className="font-semibold text-primary">âœ“ Covers HMOs (Houses in Multiple Occupation)</li>
+                  <li>✓ Everything in Standard PLUS:</li>
+                  <li>✓ Comprehensive inventory section</li>
+                  <li>✓ 13 detailed terms & conditions</li>
+                  <li>✓ Professional gradient styling</li>
+                  <li>✓ Rights of change clauses</li>
+                  <li>✓ Enhanced legal compliance boxes</li>
+                  <li className="font-semibold text-primary">✓ Covers HMOs (Houses in Multiple Occupation)</li>
                 </ul>
                 <Link
                   href="/wizard?product=ast_premium&src=product_page&topic=tenancy&jurisdiction=england"

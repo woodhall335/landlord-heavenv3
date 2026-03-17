@@ -59,7 +59,7 @@ const completePackLink = buildWizardLink({
 export const metadata: Metadata = {
   title: 'Section 8 vs Section 21 | Which Notice to Use',
   description:
-    'Section 8 vs Section 21: which eviction notice should you use? Compare notice periods, court process, grounds, and costs. Get court-ready notices from Â£29.99.',
+    'Section 8 vs Section 21: which eviction notice should you use? Compare notice periods, court process, grounds, and costs. Get court-ready notices from £29.99.',
   keywords: [
     'section 8 vs section 21',
     'should i use section 8 or section 21',
@@ -125,7 +125,7 @@ export default function Section8VsSection21Page() {
         <UniversalHero
           title="Section 8 vs Section 21"
           subtitle="Compare notice routes, timing, and evidence requirements so you choose the right eviction notice first time."
-          primaryCta={{ label: `Start Notice Pack â€” ${PRODUCTS.notice_only.displayPrice}`, href: noticeOnlyLink }}
+          primaryCta={{ label: `Start Notice Pack — ${PRODUCTS.notice_only.displayPrice}`, href: noticeOnlyLink }}
           secondaryCta={{ label: 'Need Court Forms Too?', href: completePackLink }}
           showTrustPositioningBar
           hideMedia
@@ -142,9 +142,9 @@ export default function Section8VsSection21Page() {
               <span className="text-primary">Which Should You Use?</span>
             </>
           }
-          subtitle={<>The two main eviction notices in England have different uses, notice periods, and court processes. Here is how to choose the right one â€” then use our <Link href="/section-8-notice-template" className="text-primary hover:underline">Section 8 notice template</Link> or <Link href="/section-21-notice-template" className="text-primary hover:underline">Section 21 notice template</Link> to draft the right form.</>}
+          subtitle={<>The two main eviction notices in England have different uses, notice periods, and court processes. Here is how to choose the right one — then use our <Link href="/section-8-notice-template" className="text-primary hover:underline">Section 8 notice template</Link> or <Link href="/section-21-notice-template" className="text-primary hover:underline">Section 21 notice template</Link> to draft the right form.</>}
           primaryCTA={{
-            label: `Get Both Notices â€” ${PRODUCTS.notice_only.displayPrice}`,
+            label: `Get Both Notices — ${PRODUCTS.notice_only.displayPrice}`,
             href: noticeOnlyLink,
           }}
           secondaryCTA={{
@@ -240,7 +240,7 @@ export default function Section8VsSection21Page() {
                       </tr>
                       <tr>
                         <td className="p-4 font-medium text-gray-900">Mandatory grounds</td>
-                        <td className="p-4 text-center text-gray-600">â€”</td>
+                        <td className="p-4 text-center text-gray-600">—</td>
                         <td className="p-4 text-center text-gray-600">
                           Yes (e.g., Ground 8)
                         </td>
@@ -263,8 +263,8 @@ export default function Section8VsSection21Page() {
                       </tr>
                       <tr className="bg-gray-50/50">
                         <td className="p-4 font-medium text-gray-900">Court fee</td>
-                        <td className="p-4 text-center font-bold text-gray-900">Â£355</td>
-                        <td className="p-4 text-center font-bold text-gray-900">Â£355</td>
+                        <td className="p-4 text-center font-bold text-gray-900">£355</td>
+                        <td className="p-4 text-center font-bold text-gray-900">£355</td>
                       </tr>
                       <tr>
                         <td className="p-4 font-medium text-gray-900">Typical total time</td>
@@ -349,9 +349,9 @@ export default function Section8VsSection21Page() {
                       Advantages
                     </h4>
                     <ul className="text-sm text-green-800 space-y-1">
-                      <li>â€¢ No hearing required (accelerated procedure)</li>
-                      <li>â€¢ No need to prove a ground</li>
-                      <li>â€¢ Straightforward if compliant</li>
+                      <li>• No hearing required (accelerated procedure)</li>
+                      <li>• No need to prove a ground</li>
+                      <li>• Straightforward if compliant</li>
                     </ul>
                   </div>
                 </div>
@@ -413,9 +413,9 @@ export default function Section8VsSection21Page() {
                       Advantages
                     </h4>
                     <ul className="text-sm text-blue-800 space-y-1">
-                      <li>â€¢ Shorter notice (2 weeks for rent arrears)</li>
-                      <li>â€¢ Mandatory grounds (court must grant)</li>
-                      <li>â€¢ Survives Section 21 abolition</li>
+                      <li>• Shorter notice (2 weeks for rent arrears)</li>
+                      <li>• Mandatory grounds (court must grant)</li>
+                      <li>• Survives Section 21 abolition</li>
                     </ul>
                   </div>
                 </div>
@@ -432,7 +432,7 @@ export default function Section8VsSection21Page() {
                 Can You Serve Both Notices Together?
               </h2>
               <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                Yesâ€”and many landlords do. Serving both gives you maximum protection.
+                Yes—and many landlords do. Serving both gives you maximum protection.
               </p>
 
               <div className="bg-primary/5 rounded-2xl p-8 border border-primary/20">
@@ -579,7 +579,7 @@ export default function Section8VsSection21Page() {
                 Is Section 21 Being Abolished?
               </h2>
               <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                Yesâ€”the Renters Reform Bill will abolish Section 21 in England, likely from late
+                Yes—the Renters Reform Bill will abolish Section 21 in England, likely from late
                 2026.
               </p>
 

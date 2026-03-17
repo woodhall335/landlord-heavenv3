@@ -70,7 +70,7 @@ const faqs = [
   {
     question: 'How much can I claim for garden restoration?',
     answer:
-      'Typical costs include: lawn restoration Â£100-400, hedge trimming Â£50-200, general clearance Â£100-300, fence repair Â£100-500 per panel, and decking repair Â£200-1000. Get professional quotes to support your claim.',
+      'Typical costs include: lawn restoration £100-400, hedge trimming £50-200, general clearance £100-300, fence repair £100-500 per panel, and decking repair £200-1000. Get professional quotes to support your claim.',
   },
   {
     question: 'Can I claim for dead plants and shrubs?',
@@ -231,13 +231,13 @@ export default function MoneyClaimGardenDamagePage() {
                     What You Cannot Claim
                   </h3>
                   <ul className="space-y-2 text-gray-700 text-sm">
-                    <li>â€¢ Seasonal changes (autumn leaves, dormant plants)</li>
-                    <li>â€¢ Normal wear on lawn from regular use</li>
-                    <li>â€¢ Improvements beyond original condition</li>
-                    <li>â€¢ Damage from wildlife or weather</li>
-                    <li>â€¢ Garden maintenance if not in tenancy agreement</li>
-                    <li>â€¢ Pre-existing issues not documented at check-in</li>
-                    <li>â€¢ Plants that were already in poor condition</li>
+                    <li>• Seasonal changes (autumn leaves, dormant plants)</li>
+                    <li>• Normal wear on lawn from regular use</li>
+                    <li>• Improvements beyond original condition</li>
+                    <li>• Damage from wildlife or weather</li>
+                    <li>• Garden maintenance if not in tenancy agreement</li>
+                    <li>• Pre-existing issues not documented at check-in</li>
+                    <li>• Plants that were already in poor condition</li>
                   </ul>
                 </div>
               </div>
@@ -245,7 +245,7 @@ export default function MoneyClaimGardenDamagePage() {
               {/* Ask Heaven callout */}
               <div className="bg-purple-50 border border-purple-200 rounded-xl p-4 mb-8">
                 <div className="flex items-start gap-3">
-                  <span className="text-2xl">â˜ï¸</span>
+                  <span className="text-2xl">☁️</span>
                   <div>
                     <p className="font-semibold text-gray-900 mb-1">
                       Unsure what garden costs you can claim?
@@ -285,10 +285,10 @@ export default function MoneyClaimGardenDamagePage() {
                   </div>
                   <h3 className="font-bold text-gray-900 mb-3">Photographic Evidence</h3>
                   <ul className="space-y-2 text-sm text-gray-600">
-                    <li>â€¢ Check-in garden photos (dated)</li>
-                    <li>â€¢ Check-out photos showing damage</li>
-                    <li>â€¢ Overview shots of whole garden</li>
-                    <li>â€¢ Close-ups of specific damage</li>
+                    <li>• Check-in garden photos (dated)</li>
+                    <li>• Check-out photos showing damage</li>
+                    <li>• Overview shots of whole garden</li>
+                    <li>• Close-ups of specific damage</li>
                   </ul>
                 </div>
 
@@ -298,10 +298,10 @@ export default function MoneyClaimGardenDamagePage() {
                   </div>
                   <h3 className="font-bold text-gray-900 mb-3">Documentation</h3>
                   <ul className="space-y-2 text-sm text-gray-600">
-                    <li>â€¢ Tenancy agreement with garden clause</li>
-                    <li>â€¢ Check-in inventory report</li>
-                    <li>â€¢ Check-out inspection report</li>
-                    <li>â€¢ Any maintenance correspondence</li>
+                    <li>• Tenancy agreement with garden clause</li>
+                    <li>• Check-in inventory report</li>
+                    <li>• Check-out inspection report</li>
+                    <li>• Any maintenance correspondence</li>
                   </ul>
                 </div>
 
@@ -311,10 +311,10 @@ export default function MoneyClaimGardenDamagePage() {
                   </div>
                   <h3 className="font-bold text-gray-900 mb-3">Cost Evidence</h3>
                   <ul className="space-y-2 text-sm text-gray-600">
-                    <li>â€¢ Professional gardener quotes (2-3)</li>
-                    <li>â€¢ Restoration invoices</li>
-                    <li>â€¢ Receipts for replacement plants</li>
-                    <li>â€¢ Fence/decking repair costs</li>
+                    <li>• Professional gardener quotes (2-3)</li>
+                    <li>• Restoration invoices</li>
+                    <li>• Receipts for replacement plants</li>
+                    <li>• Fence/decking repair costs</li>
                   </ul>
                 </div>
               </div>
@@ -389,31 +389,31 @@ export default function MoneyClaimGardenDamagePage() {
                   <tbody className="divide-y divide-gray-200">
                     <tr>
                       <td className="px-6 py-3 text-gray-600">Lawn restoration (scarify, seed, feed)</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">Â£150 - Â£400</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">£150 - £400</td>
                     </tr>
                     <tr className="bg-gray-50">
                       <td className="px-6 py-3 text-gray-600">Hedge trimming (per metre)</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">Â£5 - Â£15</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">£5 - £15</td>
                     </tr>
                     <tr>
                       <td className="px-6 py-3 text-gray-600">Garden clearance (small garden)</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">Â£100 - Â£300</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">£100 - £300</td>
                     </tr>
                     <tr className="bg-gray-50">
                       <td className="px-6 py-3 text-gray-600">Fence panel replacement</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">Â£100 - Â£200</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">£100 - £200</td>
                     </tr>
                     <tr>
                       <td className="px-6 py-3 text-gray-600">Decking repair or replacement</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">Â£200 - Â£1,000+</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">£200 - £1,000+</td>
                     </tr>
                     <tr className="bg-gray-50">
                       <td className="px-6 py-3 text-gray-600">Plant replacement and planting</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">Â£50 - Â£500</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">£50 - £500</td>
                     </tr>
                     <tr>
                       <td className="px-6 py-3 text-gray-600">Skip hire for garden waste</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">Â£150 - Â£300</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">£150 - £300</td>
                     </tr>
                   </tbody>
                 </table>
@@ -492,11 +492,11 @@ export default function MoneyClaimGardenDamagePage() {
                   href="/products/money-claim?reason=property_damage&topic=debt&src=seo_money_claim_garden_damage"
                   className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
                 >
-                  Start Your Claim â€” Â£59.99
+                  Start Your Claim — £59.99
                   <ArrowRight className="w-5 h-5" />
                 </Link>
                 <p className="text-sm text-gray-500 mt-3">
-                  Court fees from Â£35 extra (based on claim amount)
+                  Court fees from £35 extra (based on claim amount)
                 </p>
               </div>
             </div>

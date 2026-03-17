@@ -98,7 +98,7 @@ export function AskHeavenNextStepsCards({ jurisdiction = 'england', className }:
                 {card.icon}
               </div>
               <h3 className="text-lg font-semibold leading-tight text-gray-900">
-                {card.title} <span className="font-medium text-gray-700">â€” {card.price}</span>{' '}
+                {card.title} <span className="font-medium text-gray-700">— {card.price}</span>{' '}
                 {card.detail && <span className="text-gray-600">{card.detail}</span>}
               </h3>
             </div>
@@ -112,7 +112,7 @@ export function AskHeavenNextStepsCards({ jurisdiction = 'england', className }:
                 aria-hidden="true"
                 className="inline-block transition-transform duration-300 group-hover:translate-x-1"
               >
-                â†’
+                →
               </span>
               {card.ctaText}
               <span

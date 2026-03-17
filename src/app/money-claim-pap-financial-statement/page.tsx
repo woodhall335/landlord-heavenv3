@@ -87,9 +87,9 @@ const faqs = [
       'The Pre-Action Protocol says you should include either the standard Reply Form or an equivalent. This gives the debtor a clear way to respond. Our Money Claim Pack includes the appropriate forms.',
   },
   {
-    question: 'The tenant offered monthly payments - is Â£10/month reasonable?',
+    question: 'The tenant offered monthly payments - is £10/month reasonable?',
     answer:
-      'It depends on the debt size and their circumstances. Â£10/month for a Â£3,000 debt would take 25 years! Consider whether the offer is realistic given their stated income. You can negotiate or reject unreasonable offers.',
+      'It depends on the debt size and their circumstances. £10/month for a £3,000 debt would take 25 years! Consider whether the offer is realistic given their stated income. You can negotiate or reject unreasonable offers.',
   },
   {
     question: 'What happens to the financial statement if we go to court?',
@@ -195,11 +195,11 @@ export default function MoneyClaimPAPFinancialStatementPage() {
                     Allows the debtor to:
                   </p>
                   <ul className="space-y-1 text-sm text-gray-600">
-                    <li>â€¢ Admit the debt in full</li>
-                    <li>â€¢ Deny the debt in full</li>
-                    <li>â€¢ Admit part of the debt</li>
-                    <li>â€¢ Propose a payment plan</li>
-                    <li>â€¢ Request more time for advice</li>
+                    <li>• Admit the debt in full</li>
+                    <li>• Deny the debt in full</li>
+                    <li>• Admit part of the debt</li>
+                    <li>• Propose a payment plan</li>
+                    <li>• Request more time for advice</li>
                   </ul>
                 </div>
 
@@ -212,11 +212,11 @@ export default function MoneyClaimPAPFinancialStatementPage() {
                     Shows the debtor&apos;s:
                   </p>
                   <ul className="space-y-1 text-sm text-gray-600">
-                    <li>â€¢ Income (wages, benefits, other)</li>
-                    <li>â€¢ Essential expenses</li>
-                    <li>â€¢ Other debts and commitments</li>
-                    <li>â€¢ Available income for repayments</li>
-                    <li>â€¢ Proposed payment amount</li>
+                    <li>• Income (wages, benefits, other)</li>
+                    <li>• Essential expenses</li>
+                    <li>• Other debts and commitments</li>
+                    <li>• Available income for repayments</li>
+                    <li>• Proposed payment amount</li>
                   </ul>
                 </div>
               </div>
@@ -258,9 +258,9 @@ export default function MoneyClaimPAPFinancialStatementPage() {
                       <div className="bg-white rounded-lg p-4 border border-green-200 text-sm">
                         <p className="font-medium text-gray-700 mb-2">What to do:</p>
                         <ul className="text-gray-600 space-y-1">
-                          <li>â€¢ If they pay in full: matter resolved</li>
-                          <li>â€¢ If they propose payment plan: consider if acceptable</li>
-                          <li>â€¢ If no payment/plan forthcoming: proceed to court</li>
+                          <li>• If they pay in full: matter resolved</li>
+                          <li>• If they propose payment plan: consider if acceptable</li>
+                          <li>• If no payment/plan forthcoming: proceed to court</li>
                         </ul>
                       </div>
                     </div>
@@ -281,10 +281,10 @@ export default function MoneyClaimPAPFinancialStatementPage() {
                       <div className="bg-white rounded-lg p-4 border border-amber-200 text-sm">
                         <p className="font-medium text-gray-700 mb-2">What to do:</p>
                         <ul className="text-gray-600 space-y-1">
-                          <li>â€¢ Review what they dispute and why</li>
-                          <li>â€¢ Consider if their points have merit</li>
-                          <li>â€¢ Negotiate if appropriate</li>
-                          <li>â€¢ Proceed to court for disputed amounts if needed</li>
+                          <li>• Review what they dispute and why</li>
+                          <li>• Consider if their points have merit</li>
+                          <li>• Negotiate if appropriate</li>
+                          <li>• Proceed to court for disputed amounts if needed</li>
                         </ul>
                       </div>
                     </div>
@@ -295,7 +295,7 @@ export default function MoneyClaimPAPFinancialStatementPage() {
                 <div className="bg-red-50 rounded-xl p-6 border border-red-200">
                   <div className="flex items-start gap-4">
                     <div className="w-10 h-10 bg-red-600 text-white rounded-full flex items-center justify-center flex-shrink-0">
-                      <span className="text-white font-bold">âœ•</span>
+                      <span className="text-white font-bold">✕</span>
                     </div>
                     <div className="flex-1">
                       <h3 className="font-bold text-gray-900 mb-2">Tenant Denies Debt Entirely</h3>
@@ -305,10 +305,10 @@ export default function MoneyClaimPAPFinancialStatementPage() {
                       <div className="bg-white rounded-lg p-4 border border-red-200 text-sm">
                         <p className="font-medium text-gray-700 mb-2">What to do:</p>
                         <ul className="text-gray-600 space-y-1">
-                          <li>â€¢ Review their reasons for denial</li>
-                          <li>â€¢ Check if your evidence addresses their points</li>
-                          <li>â€¢ Proceed to court - you&apos;ll need to prove your case</li>
-                          <li>â€¢ Prepare for a contested hearing</li>
+                          <li>• Review their reasons for denial</li>
+                          <li>• Check if your evidence addresses their points</li>
+                          <li>• Proceed to court - you&apos;ll need to prove your case</li>
+                          <li>• Prepare for a contested hearing</li>
                         </ul>
                       </div>
                     </div>
@@ -319,7 +319,7 @@ export default function MoneyClaimPAPFinancialStatementPage() {
                 <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
                   <div className="flex items-start gap-4">
                     <div className="w-10 h-10 bg-gray-600 text-white rounded-full flex items-center justify-center flex-shrink-0">
-                      <span className="text-white font-bold">â€”</span>
+                      <span className="text-white font-bold">—</span>
                     </div>
                     <div className="flex-1">
                       <h3 className="font-bold text-gray-900 mb-2">Tenant Doesn&apos;t Respond</h3>
@@ -329,10 +329,10 @@ export default function MoneyClaimPAPFinancialStatementPage() {
                       <div className="bg-white rounded-lg p-4 border border-gray-200 text-sm">
                         <p className="font-medium text-gray-700 mb-2">What to do:</p>
                         <ul className="text-gray-600 space-y-1">
-                          <li>â€¢ Wait until PAP period expires (14 days from receipt)</li>
-                          <li>â€¢ Then proceed to issue court claim</li>
-                          <li>â€¢ Keep proof you sent the LBA</li>
-                          <li>â€¢ If they don&apos;t respond to court claim either, request default judgment</li>
+                          <li>• Wait until PAP period expires (14 days from receipt)</li>
+                          <li>• Then proceed to issue court claim</li>
+                          <li>• Keep proof you sent the LBA</li>
+                          <li>• If they don&apos;t respond to court claim either, request default judgment</li>
                         </ul>
                       </div>
                     </div>
@@ -389,20 +389,20 @@ export default function MoneyClaimPAPFinancialStatementPage() {
                 <div className="bg-green-50 rounded-xl p-6 border border-green-200">
                   <h3 className="font-bold text-gray-900 mb-3">Consider Accepting If:</h3>
                   <ul className="space-y-2 text-sm text-gray-600">
-                    <li>â€¢ Payments would clear debt in 1-3 years</li>
-                    <li>â€¢ Financial statement shows genuine hardship</li>
-                    <li>â€¢ They have no assets to enforce against</li>
-                    <li>â€¢ Regular payments are better than nothing</li>
+                    <li>• Payments would clear debt in 1-3 years</li>
+                    <li>• Financial statement shows genuine hardship</li>
+                    <li>• They have no assets to enforce against</li>
+                    <li>• Regular payments are better than nothing</li>
                   </ul>
                 </div>
 
                 <div className="bg-red-50 rounded-xl p-6 border border-red-200">
                   <h3 className="font-bold text-gray-900 mb-3">Consider Rejecting If:</h3>
                   <ul className="space-y-2 text-sm text-gray-600">
-                    <li>â€¢ Debt would take 5+ years to clear</li>
-                    <li>â€¢ Financial statement seems incomplete</li>
-                    <li>â€¢ You know they have ability to pay more</li>
-                    <li>â€¢ They&apos;ve broken payment promises before</li>
+                    <li>• Debt would take 5+ years to clear</li>
+                    <li>• Financial statement seems incomplete</li>
+                    <li>• You know they have ability to pay more</li>
+                    <li>• They&apos;ve broken payment promises before</li>
                   </ul>
                 </div>
               </div>
@@ -425,11 +425,11 @@ export default function MoneyClaimPAPFinancialStatementPage() {
                 href="/products/money-claim?topic=debt&src=seo_money_claim_pap_financial_statement"
                 className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
               >
-                Start Your Claim â€” Â£59.99
+                Start Your Claim — £59.99
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <p className="text-sm text-gray-500 mt-3">
-                Court fees from Â£35 extra (based on claim amount)
+                Court fees from £35 extra (based on claim amount)
               </p>
             </div>
           </div>

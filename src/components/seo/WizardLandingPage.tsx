@@ -288,7 +288,7 @@ export function WizardLandingPage({ content, structuredDataUrl, showAskHeavenWid
               </div>
             ) : (
               <p className="mt-4 text-sm text-gray-600">
-                One-time payment â€¢ Unlimited regenerations â€¢ No subscription
+                One-time payment • Unlimited regenerations • No subscription
               </p>
             )}
           </div>
@@ -618,12 +618,12 @@ function buildRelatedIntentProducts(product: string): IntentProduct[] {
  */
 function getJurisdictionFlag(jurisdiction: string): string {
   const flags: Record<string, string> = {
-    England: 'ðŸ´ó §ó ¢ó ¥ó ®ó §ó ¿',
-    Wales: 'ðŸ´ó §ó ¢ó ·ó ¬ó ³ó ¿',
-    Scotland: 'ðŸ´ó §ó ¢ó ³ó £ó ´ó ¿',
-    'Northern Ireland': 'ðŸ‡¬ðŸ‡§',
+    England: '🏴󠁧󠁢󠁥󠁮󠁧󠁿',
+    Wales: '🏴󠁧󠁢󠁷󠁬󠁳󠁿',
+    Scotland: '🏴󠁧󠁢󠁳󠁣󠁴󠁿',
+    'Northern Ireland': '🇬🇧',
   };
-  return flags[jurisdiction] || 'ðŸ‡¬ðŸ‡§';
+  return flags[jurisdiction] || '🇬🇧';
 }
 
 

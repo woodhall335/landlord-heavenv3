@@ -54,7 +54,7 @@ const faqs = [
   },
   {
     question: 'Can I use your AST template for a furnished or unfurnished property?',
-    answer: 'Yes. Our AST template works for both furnished and unfurnished properties. The wizard asks about furnishing level and, for furnished properties, prompts you to include inventory details. The Premium AST (£24.99) includes comprehensive inventory sections where you can document all included items, their condition, and any existing damage ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â essential for deposit deduction evidence.',
+    answer: 'Yes. Our AST template works for both furnished and unfurnished properties. The wizard asks about furnishing level and, for furnished properties, prompts you to include inventory details. The Premium AST (£24.99) includes comprehensive inventory sections where you can document all included items, their condition, and any existing damage — essential for deposit deduction evidence.',
   },
   {
     question: 'Does the template include a break clause?',
@@ -70,7 +70,7 @@ const faqs = [
   },
   {
     question: 'Can multiple tenants sign the same AST?',
-    answer: 'Yes. Our template supports multiple tenants on a single AST, creating a joint tenancy. All named tenants become jointly and severally liable ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â meaning each tenant is responsible for the full rent, not just their share. This protects landlords if one tenant fails to pay. The wizard collects details for all tenants and generates signature blocks for each.',
+    answer: 'Yes. Our template supports multiple tenants on a single AST, creating a joint tenancy. All named tenants become jointly and severally liable — meaning each tenant is responsible for the full rent, not just their share. This protects landlords if one tenant fails to pay. The wizard collects details for all tenants and generates signature blocks for each.',
   },
   {
     question: 'Is the AST template accepted by deposit protection schemes?',
@@ -149,16 +149,16 @@ export default function AstTemplateEnglandPage() {
                 href="/wizard?product=ast_standard&src=seo_ast_template_england&topic=tenancy&jurisdiction=england"
                 className="inline-flex items-center gap-2 bg-white border-2 border-purple-600 text-purple-600 px-6 py-3 rounded-lg font-semibold hover:bg-purple-50 transition-colors"
               >
-                Standard AST â€” £14.99
+                Standard AST — £14.99
               </Link>
               <Link
                 href="/wizard?product=ast_premium&src=seo_ast_template_england&topic=tenancy&jurisdiction=england"
                 className="inline-flex items-center gap-2 bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors"
               >
-                Premium AST â€” £24.99
+                Premium AST — £24.99
               </Link>
             </div>
-            <p className="mt-4 text-sm text-gray-500">10-minute wizard ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ Instant download ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ Legally valid</p>
+            <p className="mt-4 text-sm text-gray-500">10-minute wizard • Instant download • Legally valid</p>
           </div>
         </section>
 
@@ -235,7 +235,7 @@ export default function AstTemplateEnglandPage() {
             <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">What&apos;s Included in Our AST Template</h2>
             <div className="grid md:grid-cols-2 gap-6">
               <div className="bg-white p-6 rounded-xl shadow-sm">
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">Standard AST â€” £14.99)</h3>
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">Standard AST — £14.99)</h3>
                 <ul className="space-y-2 text-gray-700">
                   <li className="flex items-start gap-2">
                     <svg className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>

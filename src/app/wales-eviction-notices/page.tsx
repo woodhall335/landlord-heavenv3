@@ -72,7 +72,7 @@ export default function WalesEvictionNoticesPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto text-center">
               <div className="flex items-center justify-center gap-2 mb-6">
-                <span className="text-5xl">ÃƒÂ°Ã…Â¸Ã‚ÂÃ‚Â´ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â§ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â¢ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â·ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â¬ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â³ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â¿</span>
+                <span className="text-5xl">🏴󠁧󠁢󠁷󠁬󠁳󠁿</span>
               </div>
 
               <h2 className="text-4xl lg:text-5xl font-bold mb-6">
@@ -101,7 +101,7 @@ export default function WalesEvictionNoticesPage() {
                   href={wizardHref}
                   className="inline-flex items-center justify-center gap-2 bg-white text-red-800 font-semibold py-4 px-8 rounded-xl hover:bg-red-50 transition-colors"
                 >
-                  Get Wales Notice Ã¢â‚¬â€ Ã‚Â£29.99
+                  Get Wales Notice — £29.99
                   <ArrowRight className="w-5 h-5" />
                 </Link>
                 <Link
@@ -132,10 +132,10 @@ export default function WalesEvictionNoticesPage() {
                         Aspect
                       </th>
                       <th className="px-6 py-4 text-left font-semibold text-gray-900">
-                        ÃƒÂ°Ã…Â¸Ã‚ÂÃ‚Â´ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â§ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â¢ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â·ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â¬ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â³ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â¿ Wales
+                        🏴󠁧󠁢󠁷󠁬󠁳󠁿 Wales
                       </th>
                       <th className="px-6 py-4 text-left font-semibold text-gray-900">
-                        ÃƒÂ°Ã…Â¸Ã‚ÂÃ‚Â´ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â§ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â¢ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â¥ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â®ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â§ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â¿ England
+                        🏴󠁧󠁢󠁥󠁮󠁧󠁿 England
                       </th>
                     </tr>
                   </thead>
@@ -487,7 +487,7 @@ export default function WalesEvictionNoticesPage() {
                     href="/how-to-evict-tenant"
                     className="text-primary text-sm font-medium hover:underline inline-flex mt-3"
                   >
-                    See UK eviction steps Ã¢â€ â€™
+                    See UK eviction steps →
                   </Link>
                 </div>
               </div>
@@ -509,13 +509,13 @@ export default function WalesEvictionNoticesPage() {
                   href="/products/notice-only"
                   className="inline-flex items-center justify-center gap-2 bg-white text-red-700 font-semibold py-4 px-8 rounded-xl hover:bg-red-50 transition-colors"
                 >
-                  Get Wales Notice Ã¢â‚¬â€ Ã‚Â£29.99
+                  Get Wales Notice — £29.99
                 </Link>
                 <Link
                   href="/products/complete-pack"
                   className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold py-4 px-8 rounded-xl transition-colors border border-white/30"
                 >
-                  Complete Pack Ã¢â‚¬â€ Ã‚Â£79.99
+                  Complete Pack — £79.99
                 </Link>
               </div>
             </div>
@@ -546,11 +546,11 @@ export default function WalesEvictionNoticesPage() {
                 jurisdictionLabel="Wales eviction notices"
                 scenarioLabel="Renting Homes Act possession"
                 primaryCTA={{
-                  label: 'Generate Wales notice Ã¢â‚¬â€ Ã‚Â£29.99',
+                  label: 'Generate Wales notice — £29.99',
                   href: productLinks.noticeOnly.href,
                 }}
                 secondaryCTA={{
-                  label: 'Complete eviction pack Ã¢â‚¬â€ Ã‚Â£79.99',
+                  label: 'Complete eviction pack — £79.99',
                   href: productLinks.completePack.href,
                 }}
                 relatedLinks={[

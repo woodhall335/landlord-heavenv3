@@ -95,7 +95,7 @@ export default function ScotlandEvictionNoticesPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto text-center">
               <div className="flex items-center justify-center gap-2 mb-6">
-                <span className="text-5xl">ÃƒÂ°Ã…Â¸Ã‚ÂÃ‚Â´ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â§ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â¢ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â³ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â£ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â´ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â¿</span>
+                <span className="text-5xl">🏴󠁧󠁢󠁳󠁣󠁴󠁿</span>
               </div>
 
               <h2 className="text-4xl lg:text-5xl font-bold mb-6">
@@ -125,7 +125,7 @@ export default function ScotlandEvictionNoticesPage() {
                   href={wizardHref}
                   className="inline-flex items-center justify-center gap-2 bg-white text-blue-800 font-semibold py-4 px-8 rounded-xl hover:bg-blue-50 transition-colors"
                 >
-                  Get Scotland Notice Ã¢â‚¬â€ Ã‚Â£29.99
+                  Get Scotland Notice — £29.99
                   <ArrowRight className="w-5 h-5" />
                 </Link>
                 <Link
@@ -156,10 +156,10 @@ export default function ScotlandEvictionNoticesPage() {
                         Aspect
                       </th>
                       <th className="px-6 py-4 text-left font-semibold text-gray-900">
-                        ÃƒÂ°Ã…Â¸Ã‚ÂÃ‚Â´ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â§ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â¢ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â³ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â£ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â´ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â¿ Scotland
+                        🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland
                       </th>
                       <th className="px-6 py-4 text-left font-semibold text-gray-900">
-                        ÃƒÂ°Ã…Â¸Ã‚ÂÃ‚Â´ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â§ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â¢ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â¥ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â®ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â§ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â¿ England
+                        🏴󠁧󠁢󠁥󠁮󠁧󠁿 England
                       </th>
                     </tr>
                   </thead>
@@ -511,7 +511,7 @@ export default function ScotlandEvictionNoticesPage() {
                 <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
-                      <span className="text-red-600 font-bold text-lg">Ã‚Â£</span>
+                      <span className="text-red-600 font-bold text-lg">£</span>
                     </div>
                     <h3 className="text-lg font-bold text-gray-900">Rent Arrears</h3>
                   </div>
@@ -636,7 +636,7 @@ export default function ScotlandEvictionNoticesPage() {
                     href="/private-residential-tenancy-agreement-template"
                     className="text-primary text-sm font-medium hover:underline inline-flex mt-3"
                   >
-                    Review Scotland PRT rules Ã¢â€ â€™
+                    Review Scotland PRT rules →
                   </Link>
                 </div>
               </div>
@@ -658,13 +658,13 @@ export default function ScotlandEvictionNoticesPage() {
                   href="/products/notice-only"
                   className="inline-flex items-center justify-center gap-2 bg-white text-blue-700 font-semibold py-4 px-8 rounded-xl hover:bg-blue-50 transition-colors"
                 >
-                  Get Scotland Notice Ã¢â‚¬â€ Ã‚Â£29.99
+                  Get Scotland Notice — £29.99
                 </Link>
                 <Link
                   href="/products/complete-pack"
                   className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold py-4 px-8 rounded-xl transition-colors border border-white/30"
                 >
-                  Complete Pack Ã¢â‚¬â€ Ã‚Â£79.99
+                  Complete Pack — £79.99
                 </Link>
               </div>
             </div>
@@ -695,11 +695,11 @@ export default function ScotlandEvictionNoticesPage() {
                 jurisdictionLabel="Scotland eviction notices"
                 scenarioLabel="Notice to Leave + Tribunal process"
                 primaryCTA={{
-                  label: 'Generate Notice to Leave Ã¢â‚¬â€ Ã‚Â£29.99',
+                  label: 'Generate Notice to Leave — £29.99',
                   href: productLinks.noticeOnly.href,
                 }}
                 secondaryCTA={{
-                  label: 'Complete eviction pack Ã¢â‚¬â€ Ã‚Â£79.99',
+                  label: 'Complete eviction pack — £79.99',
                   href: productLinks.completePack.href,
                 }}
                 relatedLinks={[

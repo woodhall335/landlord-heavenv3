@@ -275,11 +275,11 @@ export default function ScotlandPRTPage() {
                       Private Housing (Tenancies) (Scotland) Act 2016
                     </td>
                     <td className="border border-gray-300 px-4 py-3">
-                      â€¢ Establishes the PRT as the standard tenancy type<br />
-                      â€¢ Defines 18 grounds for ending a tenancy<br />
-                      â€¢ Caps deposits at 2 months' rent<br />
-                      â€¢ Regulates rent increases (once per year, 3 months' notice)<br />
-                      â€¢ Creates First-tier Tribunal for Housing and Property Chamber
+                      • Establishes the PRT as the standard tenancy type<br />
+                      • Defines 18 grounds for ending a tenancy<br />
+                      • Caps deposits at 2 months' rent<br />
+                      • Regulates rent increases (once per year, 3 months' notice)<br />
+                      • Creates First-tier Tribunal for Housing and Property Chamber
                     </td>
                   </tr>
                   <tr>
@@ -287,10 +287,10 @@ export default function ScotlandPRTPage() {
                       Housing (Scotland) Act 2006
                     </td>
                     <td className="border border-gray-300 px-4 py-3">
-                      â€¢ Establishes the Repairing Standard for private rented properties<br />
-                      â€¢ Requires landlord registration with local councils<br />
-                      â€¢ Tenancy deposit protection scheme requirements<br />
-                      â€¢ Houses in Multiple Occupation (HMO) licensing
+                      • Establishes the Repairing Standard for private rented properties<br />
+                      • Requires landlord registration with local councils<br />
+                      • Tenancy deposit protection scheme requirements<br />
+                      • Houses in Multiple Occupation (HMO) licensing
                     </td>
                   </tr>
                   <tr className="bg-gray-50">
@@ -298,8 +298,8 @@ export default function ScotlandPRTPage() {
                       Rent (Scotland) Act 1984
                     </td>
                     <td className="border border-gray-300 px-4 py-3">
-                      â€¢ Regulates protected and statutory tenancies (pre-1989)<br />
-                      â€¢ Defines regulated rent system (rarely applies to new tenancies)
+                      • Regulates protected and statutory tenancies (pre-1989)<br />
+                      • Defines regulated rent system (rarely applies to new tenancies)
                     </td>
                   </tr>
                   <tr>
@@ -307,9 +307,9 @@ export default function ScotlandPRTPage() {
                       Antisocial Behaviour etc. (Scotland) Act 2004
                     </td>
                     <td className="border border-gray-300 px-4 py-3">
-                      â€¢ Landlord registration scheme<br />
-                      â€¢ Criminal offense to let property without registration (up to £50,000 fine)<br />
-                      â€¢ Local authority powers to refuse or revoke registration
+                      • Landlord registration scheme<br />
+                      • Criminal offense to let property without registration (up to £50,000 fine)<br />
+                      • Local authority powers to refuse or revoke registration
                     </td>
                   </tr>
                   <tr className="bg-gray-50">
@@ -317,8 +317,8 @@ export default function ScotlandPRTPage() {
                       Gas Safety (Installation and Use) Regulations 1998
                     </td>
                     <td className="border border-gray-300 px-4 py-3">
-                      â€¢ Annual gas safety checks required for all gas appliances<br />
-                      â€¢ Gas Safety Certificate must be provided to tenants
+                      • Annual gas safety checks required for all gas appliances<br />
+                      • Gas Safety Certificate must be provided to tenants
                     </td>
                   </tr>
                   <tr>
@@ -326,9 +326,9 @@ export default function ScotlandPRTPage() {
                       Housing (Scotland) Act 1987
                     </td>
                     <td className="border border-gray-300 px-4 py-3">
-                      â€¢ Tolerable standard for housing<br />
-                      â€¢ Minimum property condition requirements<br />
-                      â€¢ Local authority enforcement powers
+                      • Tolerable standard for housing<br />
+                      • Minimum property condition requirements<br />
+                      • Local authority enforcement powers
                     </td>
                   </tr>
                   <tr className="bg-gray-50">
@@ -336,9 +336,9 @@ export default function ScotlandPRTPage() {
                       Energy Efficiency (Private Rented Property) (Scotland) Regulations 2020
                     </td>
                     <td className="border border-gray-300 px-4 py-3">
-                      â€¢ Minimum Energy Performance Certificate (EPC) rating of E<br />
-                      â€¢ Prohibition on letting properties below minimum standard (unless exempt)<br />
-                      â€¢ Valid EPC required before marketing property
+                      • Minimum Energy Performance Certificate (EPC) rating of E<br />
+                      • Prohibition on letting properties below minimum standard (unless exempt)<br />
+                      • Valid EPC required before marketing property
                     </td>
                   </tr>
                   <tr>
@@ -346,9 +346,9 @@ export default function ScotlandPRTPage() {
                       Electrical Equipment (Safety) Regulations 2016
                     </td>
                     <td className="border border-gray-300 px-4 py-3">
-                      â€¢ Electrical Installation Condition Report (EICR) required every 5 years<br />
-                      â€¢ All electrical appliances must be safe and tested<br />
-                      â€¢ Copy must be provided to tenants
+                      • Electrical Installation Condition Report (EICR) required every 5 years<br />
+                      • All electrical appliances must be safe and tested<br />
+                      • Copy must be provided to tenants
                     </td>
                   </tr>
                   <tr className="bg-gray-50">
@@ -356,9 +356,9 @@ export default function ScotlandPRTPage() {
                       Smoke and Carbon Monoxide Alarm (Scotland) Regulations 2015
                     </td>
                     <td className="border border-gray-300 px-4 py-3">
-                      â€¢ Working smoke alarms in living areas and hallways<br />
-                      â€¢ Carbon monoxide detectors in rooms with fixed combustion appliances<br />
-                      â€¢ Heat detector in every kitchen
+                      • Working smoke alarms in living areas and hallways<br />
+                      • Carbon monoxide detectors in rooms with fixed combustion appliances<br />
+                      • Heat detector in every kitchen
                     </td>
                   </tr>
                 </tbody>
@@ -446,7 +446,7 @@ export default function ScotlandPRTPage() {
 
             <div className="grid md:grid-cols-2 gap-6">
               <div className="bg-white rounded-lg shadow-md p-6 border-t-4 border-blue-600">
-                <div className="text-4xl mb-4">ðŸ´ó §ó ¢ó ³ó £ó ´ó ¿</div>
+                <div className="text-4xl mb-4">🏴󠁧󠁢󠁳󠁣󠁴󠁿</div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">Scottish Legal Compliance</h3>
                 <p className="text-gray-700">
                   A written PRT complies with the Private Housing (Tenancies) (Scotland) Act 2016 and provides a clear framework under Scottish law, including specific eviction grounds and rent increase procedures.
@@ -454,7 +454,7 @@ export default function ScotlandPRTPage() {
               </div>
 
               <div className="bg-white rounded-lg shadow-md p-6 border-t-4 border-green-600">
-                <div className="text-4xl mb-4">ðŸ”’</div>
+                <div className="text-4xl mb-4">🔒</div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">Tenant Security</h3>
                 <p className="text-gray-700">
                   Open-ended PRTs give tenants security of tenure without the stress of fixed-term renewals. Tenants can make the property their home without fear of sudden eviction, while retaining the flexibility to leave with 28 days' notice.
@@ -462,7 +462,7 @@ export default function ScotlandPRTPage() {
               </div>
 
               <div className="bg-white rounded-lg shadow-md p-6 border-t-4 border-purple-600">
-                <div className="text-4xl mb-4">âš–ï¸</div>
+                <div className="text-4xl mb-4">⚖️</div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">Clear Grounds for Possession</h3>
                 <p className="text-gray-700">
                   The PRT sets out 18 specific grounds that landlords can use to end a tenancy (e.g., rent arrears, breach, landlord moving in, selling property). This clarity protects both parties and reduces disputes.
@@ -470,7 +470,7 @@ export default function ScotlandPRTPage() {
               </div>
 
               <div className="bg-white rounded-lg shadow-md p-6 border-t-4 border-orange-600">
-                <div className="text-4xl mb-4">ðŸ’°</div>
+                <div className="text-4xl mb-4">💰</div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">Deposit Protection</h3>
                 <p className="text-gray-700">
                   PRTs include deposit protection requirements (maximum 2 months' rent) and deposits must be protected in an approved scheme within 30 working days. This protects tenants' money and ensures fair dispute resolution.
@@ -478,7 +478,7 @@ export default function ScotlandPRTPage() {
               </div>
 
               <div className="bg-white rounded-lg shadow-md p-6 border-t-4 border-red-600">
-                <div className="text-4xl mb-4">ðŸ </div>
+                <div className="text-4xl mb-4">🏠</div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">Repairing Standard Clarity</h3>
                 <p className="text-gray-700">
                   PRTs reference the Repairing Standard, which sets out landlords' legal obligations for property condition, structure, installations, and safety. Tenants have clear rights to request repairs via the First-tier Tribunal.
@@ -486,7 +486,7 @@ export default function ScotlandPRTPage() {
               </div>
 
               <div className="bg-white rounded-lg shadow-md p-6 border-t-4 border-indigo-600">
-                <div className="text-4xl mb-4">ðŸ“‹</div>
+                <div className="text-4xl mb-4">📋</div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">Professional Evidence</h3>
                 <p className="text-gray-700">
                   A comprehensive written PRT serves as evidence for the First-tier Tribunal, landlord registration, and mortgage lenders. It demonstrates professionalism and reduces the risk of disputes.
@@ -504,7 +504,7 @@ export default function ScotlandPRTPage() {
             <div className="space-y-8">
               <div className="flex items-start gap-4">
                 <div className="shrink-0 w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center text-3xl">
-                  ðŸ 
+                  🏠
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">Private Landlords in Scotland</h3>
@@ -516,7 +516,7 @@ export default function ScotlandPRTPage() {
 
               <div className="flex items-start gap-4">
                 <div className="shrink-0 w-16 h-16 bg-green-100 rounded-full flex items-center justify-center text-3xl">
-                  ðŸ¢
+                  🏢
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">Letting Agents and Property Managers</h3>
@@ -528,7 +528,7 @@ export default function ScotlandPRTPage() {
 
               <div className="flex items-start gap-4">
                 <div className="shrink-0 w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center text-3xl">
-                  ðŸ”‘
+                  🔑
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">First-Time Landlords in Scotland</h3>
@@ -540,7 +540,7 @@ export default function ScotlandPRTPage() {
 
               <div className="flex items-start gap-4">
                 <div className="shrink-0 w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center text-3xl">
-                  ðŸ’¼
+                  💼
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">Portfolio Landlords</h3>
@@ -716,13 +716,13 @@ export default function ScotlandPRTPage() {
                 <div className="bg-white/10 backdrop-blur rounded-lg p-6">
                   <h4 className="text-xl font-bold mb-3">Standard PRT - £14.99</h4>
                   <ul className="space-y-2 text-sm">
-                    <li>âœ“ All legal essentials for Scottish PRTs</li>
-                    <li>âœ“ Compliant with PH(T)(S) Act 2016</li>
-                    <li>âœ“ Open-ended tenancy structure</li>
-                    <li>âœ“ 18 grounds for possession included</li>
-                    <li>âœ“ Repairing Standard obligations</li>
-                    <li>âœ“ Landlord registration number section</li>
-                    <li>âœ“ Clear, professional formatting</li>
+                    <li>✓ All legal essentials for Scottish PRTs</li>
+                    <li>✓ Compliant with PH(T)(S) Act 2016</li>
+                    <li>✓ Open-ended tenancy structure</li>
+                    <li>✓ 18 grounds for possession included</li>
+                    <li>✓ Repairing Standard obligations</li>
+                    <li>✓ Landlord registration number section</li>
+                    <li>✓ Clear, professional formatting</li>
                   </ul>
                   <Link
                     href="/wizard?product=ast_standard&src=product_page&topic=tenancy&jurisdiction=scotland"
@@ -738,16 +738,16 @@ export default function ScotlandPRTPage() {
                   </div>
                   <h4 className="text-xl font-bold mb-3">Premium PRT - £24.99</h4>
                   <ul className="space-y-2 text-sm">
-                    <li>âœ“ Everything in Standard PLUS:</li>
-                    <li>âœ“ Comprehensive inventory section with white goods grid</li>
-                    <li>âœ“ Exhaustive terms & conditions (13 detailed clauses)</li>
-                    <li>âœ“ Professional gradient styling (Scotland blue theme)</li>
-                    <li>âœ“ Rights of change clauses for flexibility</li>
-                    <li>âœ“ Enhanced legal compliance information boxes</li>
-                    <li>âœ“ Detailed Repairing Standard explanation</li>
-                    <li>âœ“ First-tier Tribunal process guidance</li>
-                    <li>âœ“ Superior professional presentation</li>
-                    <li className="font-semibold text-yellow-300">âœ“ Covers HMOs (Houses in Multiple Occupation)</li>
+                    <li>✓ Everything in Standard PLUS:</li>
+                    <li>✓ Comprehensive inventory section with white goods grid</li>
+                    <li>✓ Exhaustive terms & conditions (13 detailed clauses)</li>
+                    <li>✓ Professional gradient styling (Scotland blue theme)</li>
+                    <li>✓ Rights of change clauses for flexibility</li>
+                    <li>✓ Enhanced legal compliance information boxes</li>
+                    <li>✓ Detailed Repairing Standard explanation</li>
+                    <li>✓ First-tier Tribunal process guidance</li>
+                    <li>✓ Superior professional presentation</li>
+                    <li className="font-semibold text-yellow-300">✓ Covers HMOs (Houses in Multiple Occupation)</li>
                   </ul>
                   <Link
                     href="/wizard?product=ast_premium&src=product_page&topic=tenancy&jurisdiction=scotland"
@@ -797,18 +797,18 @@ export default function ScotlandPRTPage() {
                   <tbody>
                     <tr className="bg-gray-50">
                       <td className="border border-gray-300 px-4 py-3">
-                        â€¢ Adults (18+) living in property<br />
-                        â€¢ Paying rent or contributing financially<br />
-                        â€¢ Named on the PRT agreement<br />
-                        â€¢ Legal protection under PH(T)(S) Act 2016<br />
-                        â€¢ Jointly liable for rent and obligations
+                        • Adults (18+) living in property<br />
+                        • Paying rent or contributing financially<br />
+                        • Named on the PRT agreement<br />
+                        • Legal protection under PH(T)(S) Act 2016<br />
+                        • Jointly liable for rent and obligations
                       </td>
                       <td className="border border-gray-300 px-4 py-3">
-                        â€¢ Children under 18<br />
-                        â€¢ Visiting family or friends (short-term)<br />
-                        â€¢ Not paying rent<br />
-                        â€¢ No legal tenancy rights<br />
-                        â€¢ Can be listed in PRT but don't sign
+                        • Children under 18<br />
+                        • Visiting family or friends (short-term)<br />
+                        • Not paying rent<br />
+                        • No legal tenancy rights<br />
+                        • Can be listed in PRT but don't sign
                       </td>
                     </tr>
                   </tbody>
@@ -864,9 +864,9 @@ export default function ScotlandPRTPage() {
                   <div className="border-l-4 border-green-600 pl-4">
                     <h4 className="font-semibold text-gray-900">Notice Requirements</h4>
                     <ul className="text-sm text-gray-700 space-y-1 mt-2">
-                      <li>â€¢ Must be in writing (email is acceptable)</li>
-                      <li>â€¢ Should specify the date tenant intends to leave</li>
-                      <li>â€¢ Notice period starts from day after notice is received</li>
+                      <li>• Must be in writing (email is acceptable)</li>
+                      <li>• Should specify the date tenant intends to leave</li>
+                      <li>• Notice period starts from day after notice is received</li>
                     </ul>
                   </div>
 
@@ -889,10 +889,10 @@ export default function ScotlandPRTPage() {
                   <div className="border-l-4 border-red-600 pl-4">
                     <h4 className="font-semibold text-gray-900">Common Grounds Include:</h4>
                     <ul className="text-sm text-gray-700 space-y-1 mt-2">
-                      <li>â€¢ <strong>Ground 1:</strong> Landlord intends to live in property (84 days notice)</li>
-                      <li>â€¢ <strong>Ground 4:</strong> Landlord intends to sell property (84 days notice)</li>
-                      <li>â€¢ <strong>Ground 8:</strong> Tenant has been in rent arrears for 3+ months (28 days notice)</li>
-                      <li>â€¢ <strong>Ground 12:</strong> Tenant breach of tenancy terms (28 days notice)</li>
+                      <li>• <strong>Ground 1:</strong> Landlord intends to live in property (84 days notice)</li>
+                      <li>• <strong>Ground 4:</strong> Landlord intends to sell property (84 days notice)</li>
+                      <li>• <strong>Ground 8:</strong> Tenant has been in rent arrears for 3+ months (28 days notice)</li>
+                      <li>• <strong>Ground 12:</strong> Tenant breach of tenancy terms (28 days notice)</li>
                     </ul>
                   </div>
 
@@ -909,7 +909,7 @@ export default function ScotlandPRTPage() {
 
                   <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mt-4">
                     <p className="text-sm text-amber-900 font-semibold">
-                      âš ï¸ Landlords cannot simply ask tenants to leave. You must have a valid ground, serve proper notice, and potentially apply to the Tribunal.
+                      ⚠️ Landlords cannot simply ask tenants to leave. You must have a valid ground, serve proper notice, and potentially apply to the Tribunal.
                     </p>
                   </div>
                 </div>
@@ -962,7 +962,7 @@ export default function ScotlandPRTPage() {
                   <li>Applying to the wrong forum.</li>
                 </ul>
                 <Link href="/scotland-eviction-notices" className="text-blue-600 hover:underline text-sm font-semibold inline-flex mt-3">
-                  See Notice to Leave guidance â†’
+                  See Notice to Leave guidance →
                 </Link>
               </div>
             </div>
@@ -981,7 +981,7 @@ export default function ScotlandPRTPage() {
                   Official notice from landlord to tenant to end a PRT, stating the ground(s) for ending the tenancy and the notice period.
                 </p>
                 <Link href="/products/notice-only" className="text-blue-600 hover:underline text-sm font-semibold">
-                  Learn More â†’
+                  Learn More →
                 </Link>
               </div>
 
@@ -1142,13 +1142,13 @@ export default function ScotlandPRTPage() {
             <h3 className="text-xl font-semibold text-gray-900 mb-4">Other UK Jurisdictions</h3>
             <div className="flex gap-6 flex-wrap">
               <Link href="/assured-shorthold-tenancy-agreement-template" className="text-blue-600 hover:underline font-semibold">
-                England AST Agreements â†’
+                England AST Agreements →
               </Link>
               <Link href="/wales-tenancy-agreement-template" className="text-blue-600 hover:underline font-semibold">
-                Wales Occupation Contract â†’
+                Wales Occupation Contract →
               </Link>
               <Link href="/northern-ireland-tenancy-agreement-template" className="text-blue-600 hover:underline font-semibold">
-                Northern Ireland Private Tenancy â†’
+                Northern Ireland Private Tenancy →
               </Link>
             </div>
           </div>

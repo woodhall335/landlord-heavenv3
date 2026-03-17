@@ -115,13 +115,13 @@ export default function TenantNotPayingRentPage() {
                 <div className="rounded-xl border border-gray-200 p-5 bg-gray-50">
                   <h3 className="font-semibold text-gray-900 mb-2">Tenant still in property</h3>
                   <p className="text-sm text-gray-700 mb-3">Use possession-focused support to serve Section 8 correctly and progress to court if needed.</p>
-                  <Link href="/products/complete-pack" className="text-primary font-medium hover:underline" data-cta="complete-pack" data-cta-location="above-fold">Go to complete-pack Ã¢â€ â€™</Link>
+                  <Link href="/products/complete-pack" className="text-primary font-medium hover:underline" data-cta="complete-pack" data-cta-location="above-fold">Go to complete-pack →</Link>
                   <p className="text-xs text-gray-500 mt-2">Also see <Link href="/section-8-notice-template" className="underline">Section 8 notice template</Link>.</p>
                 </div>
                 <div className="rounded-xl border border-gray-200 p-5 bg-gray-50">
                   <h3 className="font-semibold text-gray-900 mb-2">Tenant has left owing money</h3>
                   <p className="text-sm text-gray-700 mb-3">Focus on debt recovery with a money claim and evidence-ready arrears schedule.</p>
-                  <Link href="/products/money-claim" className="text-primary font-medium hover:underline" data-cta="money-claim" data-cta-location="above-fold">Go to money-claim Ã¢â€ â€™</Link>
+                  <Link href="/products/money-claim" className="text-primary font-medium hover:underline" data-cta="money-claim" data-cta-location="above-fold">Go to money-claim →</Link>
                 </div>
               </div>
             </div>
@@ -136,7 +136,7 @@ export default function TenantNotPayingRentPage() {
                 Your Three Options for Rent Arrears
               </h2>
               <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                Choose the right <Link href="/eviction-notice-uk" className="text-primary hover:underline">eviction notice for your region</Link> based on your circumstancesÃ¢â‚¬â€recovering the money, regaining the property, or both.
+                Choose the right <Link href="/eviction-notice-uk" className="text-primary hover:underline">eviction notice for your region</Link> based on your circumstances—recovering the money, regaining the property, or both.
               </p>
 
               <div className="grid md:grid-cols-3 gap-6">
@@ -206,7 +206,7 @@ export default function TenantNotPayingRentPage() {
                     href="/products/notice-only"
                     className="inline-flex items-center gap-2 text-primary font-medium text-sm hover:underline"
                   >
-                    Get Section 8 Notice Ã¢â‚¬â€ Ã‚Â£29.99
+                    Get Section 8 Notice — £29.99
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
@@ -239,7 +239,7 @@ export default function TenantNotPayingRentPage() {
                     href="/products/money-claim"
                     className="inline-flex items-center gap-2 text-primary font-medium text-sm hover:underline"
                   >
-                    Start Money Claim Ã¢â‚¬â€ Ã‚Â£59.99
+                    Start Money Claim — £59.99
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
@@ -314,7 +314,7 @@ export default function TenantNotPayingRentPage() {
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
-                        <h3 className="font-bold text-gray-900">Ground 8 Ã¢â‚¬â€ Mandatory</h3>
+                        <h3 className="font-bold text-gray-900">Ground 8 — Mandatory</h3>
                         <span className="text-xs font-semibold text-red-600 bg-red-100 px-2 py-1 rounded">
                           Court Must Grant
                         </span>
@@ -344,7 +344,7 @@ export default function TenantNotPayingRentPage() {
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
-                        <h3 className="font-bold text-gray-900">Ground 10 Ã¢â‚¬â€ Discretionary</h3>
+                        <h3 className="font-bold text-gray-900">Ground 10 — Discretionary</h3>
                         <span className="text-xs font-semibold text-amber-600 bg-amber-100 px-2 py-1 rounded">
                           Court May Grant
                         </span>
@@ -374,7 +374,7 @@ export default function TenantNotPayingRentPage() {
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
-                        <h3 className="font-bold text-gray-900">Ground 11 Ã¢â‚¬â€ Discretionary</h3>
+                        <h3 className="font-bold text-gray-900">Ground 11 — Discretionary</h3>
                         <span className="text-xs font-semibold text-amber-600 bg-amber-100 px-2 py-1 rounded">
                           Court May Grant
                         </span>
@@ -508,7 +508,7 @@ export default function TenantNotPayingRentPage() {
                         className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors"
                       >
                         <Gavel className="w-5 h-5" />
-                        Get Money Claim Pack Ã¢â‚¬â€ Ã‚Â£59.99
+                        Get Money Claim Pack — £59.99
                       </Link>
                       <Link
                         href="/money-claim-unpaid-rent"

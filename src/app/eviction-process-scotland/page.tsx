@@ -57,7 +57,7 @@ const noticeOnlyLink = buildWizardLink({
 export const metadata: Metadata = {
   title: 'Scotland Eviction Process | Notice to Leave & Tribunal',
   description:
-    'Complete guide to evicting a tenant in Scotland. Notice to Leave, 18 eviction grounds, First-tier Tribunal process. Get court-ready documents from Â£29.99.',
+    'Complete guide to evicting a tenant in Scotland. Notice to Leave, 18 eviction grounds, First-tier Tribunal process. Get court-ready documents from £29.99.',
   keywords: [
     'eviction process scotland landlord',
     'eviction tribunal scotland',
@@ -148,7 +148,7 @@ export default function EvictionProcessScotlandPage() {
                   <h2 className="font-bold text-blue-900 mb-1">Scotland Has Different Laws</h2>
                   <p className="text-blue-800 text-sm">
                     Scotland uses <strong>Notice to Leave</strong> and the{' '}
-                    <strong>First-tier Tribunal for Scotland (Housing)</strong>â€”not Section 21 or
+                    <strong>First-tier Tribunal for Scotland (Housing)</strong>—not Section 21 or
                     Section 8 which only apply in England. All private tenancies since December 2017
                     are Private Residential Tenancies (PRTs).
                   </p>
@@ -199,7 +199,7 @@ export default function EvictionProcessScotlandPage() {
                   </div>
                   <h3 className="font-bold text-gray-900 mb-2">First-tier Tribunal</h3>
                   <p className="text-gray-600 text-sm">
-                    If the tenant does not leave, apply to the First-tier Tribunal (Housing)â€”not
+                    If the tenant does not leave, apply to the First-tier Tribunal (Housing)—not
                     the county court like in England.
                   </p>
                 </div>
@@ -593,7 +593,7 @@ export default function EvictionProcessScotlandPage() {
                 Recovering Rent Arrears in Scotland
               </h2>
               <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                Scotland uses the Sheriff Court for money claimsâ€”not the County Court or MCOL used
+                Scotland uses the Sheriff Court for money claims—not the County Court or MCOL used
                 in England.
               </p>
 
@@ -607,16 +607,16 @@ export default function EvictionProcessScotlandPage() {
                     <p className="text-amber-800 text-sm mb-4">
                       Our Money Claim Pack is designed for England&apos;s County Court and MCOL
                       system. For Scotland, you will need to use the Sheriff Court Simple Procedure
-                      (claims under Â£5,000) or Ordinary Cause (claims Â£5,000-Â£100,000).
+                      (claims under £5,000) or Ordinary Cause (claims £5,000-£100,000).
                     </p>
                     <div className="grid sm:grid-cols-2 gap-4 text-sm">
                       <div className="bg-white rounded-lg p-3">
                         <span className="font-bold text-amber-900 block">Simple Procedure</span>
-                        <span className="text-amber-700">Claims under Â£5,000</span>
+                        <span className="text-amber-700">Claims under £5,000</span>
                       </div>
                       <div className="bg-white rounded-lg p-3">
                         <span className="font-bold text-amber-900 block">Ordinary Cause</span>
-                        <span className="text-amber-700">Claims Â£5,000 - Â£100,000</span>
+                        <span className="text-amber-700">Claims £5,000 - £100,000</span>
                       </div>
                     </div>
                   </div>

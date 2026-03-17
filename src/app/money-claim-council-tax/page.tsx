@@ -223,12 +223,12 @@ export default function MoneyClaimCouncilTaxPage() {
                     You CANNOT Claim If:
                   </h3>
                   <ul className="space-y-2 text-gray-700 text-sm">
-                    <li>â€¢ Council tax was in tenant&apos;s name (council claims)</li>
-                    <li>â€¢ Tenancy agreement says rent is &quot;inclusive&quot;</li>
-                    <li>â€¢ No clause making tenant liable</li>
-                    <li>â€¢ You haven&apos;t actually paid the council</li>
-                    <li>â€¢ Tenant was entitled to exemption (students)</li>
-                    <li>â€¢ The liability period doesn&apos;t match occupancy</li>
+                    <li>• Council tax was in tenant&apos;s name (council claims)</li>
+                    <li>• Tenancy agreement says rent is &quot;inclusive&quot;</li>
+                    <li>• No clause making tenant liable</li>
+                    <li>• You haven&apos;t actually paid the council</li>
+                    <li>• Tenant was entitled to exemption (students)</li>
+                    <li>• The liability period doesn&apos;t match occupancy</li>
                   </ul>
                 </div>
               </div>
@@ -236,7 +236,7 @@ export default function MoneyClaimCouncilTaxPage() {
               {/* Ask Heaven callout */}
               <div className="bg-purple-50 border border-purple-200 rounded-xl p-4">
                 <div className="flex items-start gap-3">
-                  <span className="text-2xl">â˜ï¸</span>
+                  <span className="text-2xl">☁️</span>
                   <div>
                     <p className="font-semibold text-gray-900 mb-1">
                       Not sure if your tenant is liable for council tax?
@@ -270,11 +270,11 @@ export default function MoneyClaimCouncilTaxPage() {
                   </div>
                   <h3 className="font-bold text-gray-900 mb-3">Essential Documents</h3>
                   <ul className="space-y-2 text-sm text-gray-600">
-                    <li>â€¢ Tenancy agreement (council tax clause)</li>
-                    <li>â€¢ Council tax bills in your name</li>
-                    <li>â€¢ Proof of payment to council</li>
-                    <li>â€¢ Tenancy start/end dates</li>
-                    <li>â€¢ Calculation of tenant&apos;s share</li>
+                    <li>• Tenancy agreement (council tax clause)</li>
+                    <li>• Council tax bills in your name</li>
+                    <li>• Proof of payment to council</li>
+                    <li>• Tenancy start/end dates</li>
+                    <li>• Calculation of tenant&apos;s share</li>
                   </ul>
                 </div>
 
@@ -284,11 +284,11 @@ export default function MoneyClaimCouncilTaxPage() {
                   </div>
                   <h3 className="font-bold text-gray-900 mb-3">Supporting Evidence</h3>
                   <ul className="space-y-2 text-sm text-gray-600">
-                    <li>â€¢ Correspondence requesting payment</li>
-                    <li>â€¢ Letter before action</li>
-                    <li>â€¢ Council confirmation of liability</li>
-                    <li>â€¢ Bank statements (payment proof)</li>
-                    <li>â€¢ Previous successful payments (if any)</li>
+                    <li>• Correspondence requesting payment</li>
+                    <li>• Letter before action</li>
+                    <li>• Council confirmation of liability</li>
+                    <li>• Bank statements (payment proof)</li>
+                    <li>• Previous successful payments (if any)</li>
                   </ul>
                 </div>
               </div>
@@ -355,11 +355,11 @@ export default function MoneyClaimCouncilTaxPage() {
                 href="/products/money-claim?reason=unpaid_council_tax&topic=debt&src=seo_money_claim_council_tax"
                 className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
               >
-                Start Your Claim â€” Â£59.99
+                Start Your Claim — £59.99
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <p className="text-sm text-gray-500 mt-3">
-                Court fees from Â£35 extra (based on claim amount)
+                Court fees from £35 extra (based on claim amount)
               </p>
             </div>
           </div>

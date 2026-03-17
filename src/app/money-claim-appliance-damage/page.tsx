@@ -60,7 +60,7 @@ const faqs = [
   {
     question: 'How do I calculate betterment for old appliances?',
     answer:
-      'Typical appliance lifespans: washing machines 8-10 years, ovens 10-15 years, fridges 10-12 years, dishwashers 8-10 years. A 6-year-old washing machine with 10-year lifespan has 40% remaining value. Claim = replacement cost Ã— 40%.',
+      'Typical appliance lifespans: washing machines 8-10 years, ovens 10-15 years, fridges 10-12 years, dishwashers 8-10 years. A 6-year-old washing machine with 10-year lifespan has 40% remaining value. Claim = replacement cost × 40%.',
   },
   {
     question: 'The appliance stopped working but there\'s no visible damage - can I claim?',
@@ -231,13 +231,13 @@ export default function MoneyClaimApplianceDamagePage() {
                     Not Claimable
                   </h3>
                   <ul className="space-y-2 text-gray-700 text-sm">
-                    <li>â€¢ Manufacturing defects or recalls</li>
-                    <li>â€¢ Age-related breakdown (end of lifespan)</li>
-                    <li>â€¢ Normal wear from everyday use</li>
-                    <li>â€¢ Electrical faults (unless from misuse)</li>
-                    <li>â€¢ Limescale in hard water areas (typically)</li>
-                    <li>â€¢ Damage not documented at check-out</li>
-                    <li>â€¢ Pre-existing issues not noted at check-in</li>
+                    <li>• Manufacturing defects or recalls</li>
+                    <li>• Age-related breakdown (end of lifespan)</li>
+                    <li>• Normal wear from everyday use</li>
+                    <li>• Electrical faults (unless from misuse)</li>
+                    <li>• Limescale in hard water areas (typically)</li>
+                    <li>• Damage not documented at check-out</li>
+                    <li>• Pre-existing issues not noted at check-in</li>
                   </ul>
                 </div>
               </div>
@@ -260,46 +260,46 @@ export default function MoneyClaimApplianceDamagePage() {
                       <tr>
                         <td className="px-4 py-2 text-gray-600">Washing machine</td>
                         <td className="px-4 py-2 text-gray-900">8-10 years</td>
-                        <td className="px-4 py-2 text-gray-900">Â£250 - Â£500</td>
+                        <td className="px-4 py-2 text-gray-900">£250 - £500</td>
                       </tr>
                       <tr className="bg-gray-50">
                         <td className="px-4 py-2 text-gray-600">Fridge/freezer</td>
                         <td className="px-4 py-2 text-gray-900">10-12 years</td>
-                        <td className="px-4 py-2 text-gray-900">Â£200 - Â£600</td>
+                        <td className="px-4 py-2 text-gray-900">£200 - £600</td>
                       </tr>
                       <tr>
                         <td className="px-4 py-2 text-gray-600">Electric oven</td>
                         <td className="px-4 py-2 text-gray-900">10-15 years</td>
-                        <td className="px-4 py-2 text-gray-900">Â£200 - Â£500</td>
+                        <td className="px-4 py-2 text-gray-900">£200 - £500</td>
                       </tr>
                       <tr className="bg-gray-50">
                         <td className="px-4 py-2 text-gray-600">Dishwasher</td>
                         <td className="px-4 py-2 text-gray-900">8-10 years</td>
-                        <td className="px-4 py-2 text-gray-900">Â£200 - Â£400</td>
+                        <td className="px-4 py-2 text-gray-900">£200 - £400</td>
                       </tr>
                       <tr>
                         <td className="px-4 py-2 text-gray-600">Electric hob</td>
                         <td className="px-4 py-2 text-gray-900">10-15 years</td>
-                        <td className="px-4 py-2 text-gray-900">Â£150 - Â£400</td>
+                        <td className="px-4 py-2 text-gray-900">£150 - £400</td>
                       </tr>
                       <tr className="bg-gray-50">
                         <td className="px-4 py-2 text-gray-600">Microwave</td>
                         <td className="px-4 py-2 text-gray-900">5-8 years</td>
-                        <td className="px-4 py-2 text-gray-900">Â£50 - Â£200</td>
+                        <td className="px-4 py-2 text-gray-900">£50 - £200</td>
                       </tr>
                     </tbody>
                   </table>
                 </div>
                 <p className="text-xs text-gray-500 mt-4">
                   Betterment example: A 5-year-old washing machine (10-year lifespan) has 50%
-                  remaining value. If replacement costs Â£400, maximum claim = Â£200.
+                  remaining value. If replacement costs £400, maximum claim = £200.
                 </p>
               </div>
 
               {/* Ask Heaven callout */}
               <div className="bg-purple-50 border border-purple-200 rounded-xl p-4">
                 <div className="flex items-start gap-3">
-                  <span className="text-2xl">â˜ï¸</span>
+                  <span className="text-2xl">☁️</span>
                   <div>
                     <p className="font-semibold text-gray-900 mb-1">
                       Unsure what caused your appliance damage?
@@ -333,10 +333,10 @@ export default function MoneyClaimApplianceDamagePage() {
                   </div>
                   <h3 className="font-bold text-gray-900 mb-3">Photo Evidence</h3>
                   <ul className="space-y-2 text-sm text-gray-600">
-                    <li>â€¢ Check-in photos of appliances</li>
-                    <li>â€¢ Check-out damage photos</li>
-                    <li>â€¢ Photos of missing parts</li>
-                    <li>â€¢ Damage close-ups</li>
+                    <li>• Check-in photos of appliances</li>
+                    <li>• Check-out damage photos</li>
+                    <li>• Photos of missing parts</li>
+                    <li>• Damage close-ups</li>
                   </ul>
                 </div>
 
@@ -346,10 +346,10 @@ export default function MoneyClaimApplianceDamagePage() {
                   </div>
                   <h3 className="font-bold text-gray-900 mb-3">Documentation</h3>
                   <ul className="space-y-2 text-sm text-gray-600">
-                    <li>â€¢ Check-in inventory (working order)</li>
-                    <li>â€¢ Original purchase receipts</li>
-                    <li>â€¢ Engineer&apos;s diagnosis report</li>
-                    <li>â€¢ Model and age information</li>
+                    <li>• Check-in inventory (working order)</li>
+                    <li>• Original purchase receipts</li>
+                    <li>• Engineer&apos;s diagnosis report</li>
+                    <li>• Model and age information</li>
                   </ul>
                 </div>
 
@@ -359,10 +359,10 @@ export default function MoneyClaimApplianceDamagePage() {
                   </div>
                   <h3 className="font-bold text-gray-900 mb-3">Cost Evidence</h3>
                   <ul className="space-y-2 text-sm text-gray-600">
-                    <li>â€¢ Repair quotes from engineers</li>
-                    <li>â€¢ Replacement quotes (like-for-like)</li>
-                    <li>â€¢ Spare parts costs</li>
-                    <li>â€¢ Betterment calculation</li>
+                    <li>• Repair quotes from engineers</li>
+                    <li>• Replacement quotes (like-for-like)</li>
+                    <li>• Spare parts costs</li>
+                    <li>• Betterment calculation</li>
                   </ul>
                 </div>
               </div>
@@ -429,11 +429,11 @@ export default function MoneyClaimApplianceDamagePage() {
                 href="/products/money-claim?reason=property_damage&src=seo_money_claim_appliance_damage&topic=debt"
                 className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
               >
-                Start Your Claim â€” Â£59.99
+                Start Your Claim — £59.99
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <p className="text-sm text-gray-500 mt-3">
-                Court fees from Â£35 extra (based on claim amount)
+                Court fees from £35 extra (based on claim amount)
               </p>
             </div>
           </div>

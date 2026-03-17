@@ -253,7 +253,7 @@ export default function MoneyClaimGuarantorPage() {
               {/* Ask Heaven callout */}
               <div className="bg-purple-50 border border-purple-200 rounded-xl p-4">
                 <div className="flex items-start gap-3">
-                  <span className="text-2xl">â˜ï¸</span>
+                  <span className="text-2xl">☁️</span>
                   <div>
                     <p className="font-semibold text-gray-900 mb-1">
                       Unsure if your guarantee is still valid?
@@ -287,11 +287,11 @@ export default function MoneyClaimGuarantorPage() {
                   </div>
                   <h3 className="font-bold text-gray-900 mb-3">Guarantee Documents</h3>
                   <ul className="space-y-2 text-sm text-gray-600">
-                    <li>â€¢ Signed guarantor agreement</li>
-                    <li>â€¢ Tenancy agreement (referenced)</li>
-                    <li>â€¢ Guarantor identification</li>
-                    <li>â€¢ Witness signatures (if applicable)</li>
-                    <li>â€¢ Any variations or extensions</li>
+                    <li>• Signed guarantor agreement</li>
+                    <li>• Tenancy agreement (referenced)</li>
+                    <li>• Guarantor identification</li>
+                    <li>• Witness signatures (if applicable)</li>
+                    <li>• Any variations or extensions</li>
                   </ul>
                 </div>
 
@@ -301,11 +301,11 @@ export default function MoneyClaimGuarantorPage() {
                   </div>
                   <h3 className="font-bold text-gray-900 mb-3">Debt Evidence</h3>
                   <ul className="space-y-2 text-sm text-gray-600">
-                    <li>â€¢ Rent arrears schedule</li>
-                    <li>â€¢ Damage assessment (if applicable)</li>
-                    <li>â€¢ Correspondence with tenant</li>
-                    <li>â€¢ Letter before action to guarantor</li>
-                    <li>â€¢ Interest calculation</li>
+                    <li>• Rent arrears schedule</li>
+                    <li>• Damage assessment (if applicable)</li>
+                    <li>• Correspondence with tenant</li>
+                    <li>• Letter before action to guarantor</li>
+                    <li>• Interest calculation</li>
                   </ul>
                 </div>
               </div>
@@ -372,11 +372,11 @@ export default function MoneyClaimGuarantorPage() {
                 href="/products/money-claim?reason=rent_arrears&topic=debt&src=seo_money_claim_guarantor"
                 className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
               >
-                Start Your Claim â€” Â£59.99
+                Start Your Claim — £59.99
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <p className="text-sm text-gray-500 mt-3">
-                Court fees from Â£35 extra (based on claim amount)
+                Court fees from £35 extra (based on claim amount)
               </p>
             </div>
           </div>

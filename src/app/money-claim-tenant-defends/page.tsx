@@ -49,7 +49,7 @@ const faqs = [
   {
     question: 'What does it mean when a tenant "defends" a money claim?',
     answer:
-      'When a tenant defends, they formally dispute your claim by filing a defence with the court. This means the case will proceed to allocation (usually small claims track for under Â£10,000) and eventually a hearing where a judge decides.',
+      'When a tenant defends, they formally dispute your claim by filing a defence with the court. This means the case will proceed to allocation (usually small claims track for under £10,000) and eventually a hearing where a judge decides.',
   },
   {
     question: 'What are the most common tenant defences?',
@@ -101,13 +101,13 @@ const faqs = [
 export default function MoneyClaimTenantDefendsPage() {
   const hero = {
     ...moneyClaimHeroConfig,
-    trustText: 'Solicitor-grade â€¢ Compliance-checked â€¢ Court-ready',
+    trustText: 'Solicitor-grade • Compliance-checked • Court-ready',
     primaryCta: {
-      label: 'Start Money Claim â†’',
+      label: 'Start Money Claim →',
       href: '/products/money-claim?topic=debt&src=seo_money_claim_tenant_defends',
     },
     secondaryCta: {
-      label: 'View Money Claim Pack â†’',
+      label: 'View Money Claim Pack →',
       href: '/products/money-claim',
     },
     title: 'Tenant Defended Your Money Claim?',
@@ -259,10 +259,10 @@ export default function MoneyClaimTenantDefendsPage() {
                       <div className="bg-green-50 rounded-lg p-4 border border-green-200">
                         <h4 className="font-semibold text-green-800 text-sm mb-2">Your response:</h4>
                         <ul className="text-sm text-green-700 space-y-1">
-                          <li>â€¢ Provide detailed inventory from start of tenancy</li>
-                          <li>â€¢ Show before/after photos with dates</li>
-                          <li>â€¢ Get professional assessment of damage cause</li>
-                          <li>â€¢ Compare tenancy length vs. extent of damage</li>
+                          <li>• Provide detailed inventory from start of tenancy</li>
+                          <li>• Show before/after photos with dates</li>
+                          <li>• Get professional assessment of damage cause</li>
+                          <li>• Compare tenancy length vs. extent of damage</li>
                         </ul>
                       </div>
                     </div>
@@ -285,10 +285,10 @@ export default function MoneyClaimTenantDefendsPage() {
                       <div className="bg-green-50 rounded-lg p-4 border border-green-200">
                         <h4 className="font-semibold text-green-800 text-sm mb-2">Your response:</h4>
                         <ul className="text-sm text-green-700 space-y-1">
-                          <li>â€¢ Provide complete rent ledger/statements</li>
-                          <li>â€¢ Show bank statements with no matching deposits</li>
-                          <li>â€¢ Ask them to prove payment with their bank records</li>
-                          <li>â€¢ Note: burden shifts to them if you show no record</li>
+                          <li>• Provide complete rent ledger/statements</li>
+                          <li>• Show bank statements with no matching deposits</li>
+                          <li>• Ask them to prove payment with their bank records</li>
+                          <li>• Note: burden shifts to them if you show no record</li>
                         </ul>
                       </div>
                     </div>
@@ -311,10 +311,10 @@ export default function MoneyClaimTenantDefendsPage() {
                       <div className="bg-green-50 rounded-lg p-4 border border-green-200">
                         <h4 className="font-semibold text-green-800 text-sm mb-2">Your response:</h4>
                         <ul className="text-sm text-green-700 space-y-1">
-                          <li>â€¢ Show repair request records and response times</li>
-                          <li>â€¢ Provide contractor invoices showing repairs done</li>
-                          <li>â€¢ Show correspondence about reported issues</li>
-                          <li>â€¢ Challenge if they never reported the problem</li>
+                          <li>• Show repair request records and response times</li>
+                          <li>• Provide contractor invoices showing repairs done</li>
+                          <li>• Show correspondence about reported issues</li>
+                          <li>• Challenge if they never reported the problem</li>
                         </ul>
                       </div>
                     </div>
@@ -337,10 +337,10 @@ export default function MoneyClaimTenantDefendsPage() {
                       <div className="bg-green-50 rounded-lg p-4 border border-green-200">
                         <h4 className="font-semibold text-green-800 text-sm mb-2">Your response:</h4>
                         <ul className="text-sm text-green-700 space-y-1">
-                          <li>â€¢ Provide deposit protection certificate</li>
-                          <li>â€¢ Show prescribed information was served</li>
-                          <li>â€¢ If issues exist, seek legal advice - penalties can be severe</li>
-                          <li>â€¢ Note: this doesn&apos;t excuse their debt to you</li>
+                          <li>• Provide deposit protection certificate</li>
+                          <li>• Show prescribed information was served</li>
+                          <li>• If issues exist, seek legal advice - penalties can be severe</li>
+                          <li>• Note: this doesn&apos;t excuse their debt to you</li>
                         </ul>
                       </div>
                     </div>
@@ -363,10 +363,10 @@ export default function MoneyClaimTenantDefendsPage() {
                       <div className="bg-green-50 rounded-lg p-4 border border-green-200">
                         <h4 className="font-semibold text-green-800 text-sm mb-2">Your response:</h4>
                         <ul className="text-sm text-green-700 space-y-1">
-                          <li>â€¢ Provide multiple quotes for repairs</li>
-                          <li>â€¢ Show actual invoices for work done</li>
-                          <li>â€¢ Compare to market rates in your area</li>
-                          <li>â€¢ Be prepared to negotiate on disputed amounts</li>
+                          <li>• Provide multiple quotes for repairs</li>
+                          <li>• Show actual invoices for work done</li>
+                          <li>• Compare to market rates in your area</li>
+                          <li>• Be prepared to negotiate on disputed amounts</li>
                         </ul>
                       </div>
                     </div>
@@ -420,7 +420,7 @@ export default function MoneyClaimTenantDefendsPage() {
                     <h3 className="font-bold text-gray-900 mb-2">Complete Allocation Questionnaire</h3>
                     <p className="text-gray-600 text-sm">
                       The court will send Form N180. Complete it honestly, stating
-                      the small claims track is appropriate if under Â£10,000.
+                      the small claims track is appropriate if under £10,000.
                     </p>
                   </div>
                 </div>
@@ -471,11 +471,11 @@ export default function MoneyClaimTenantDefendsPage() {
                 href="/products/money-claim?topic=debt&src=seo_money_claim_tenant_defends"
                 className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
               >
-                Start Your Claim â€” Â£59.99
+                Start Your Claim — £59.99
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <p className="text-sm text-gray-500 mt-3">
-                Court fees from Â£35 extra (based on claim amount)
+                Court fees from £35 extra (based on claim amount)
               </p>
             </div>
           </div>

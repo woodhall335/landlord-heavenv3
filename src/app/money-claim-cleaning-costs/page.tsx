@@ -217,18 +217,18 @@ export default function MoneyClaimCleaningCostsPage() {
                   What You Cannot Claim
                 </h3>
                 <ul className="space-y-2 text-gray-700 text-sm">
-                  <li>â€¢ Routine between-tenancy cleaning (normal turnover)</li>
-                  <li>â€¢ Cleaning to a higher standard than at check-in</li>
-                  <li>â€¢ Normal dust accumulation during the tenancy</li>
-                  <li>â€¢ Cleaning if no check-in inventory exists to prove original standard</li>
-                  <li>â€¢ Items you would clean anyway regardless of tenant</li>
+                  <li>• Routine between-tenancy cleaning (normal turnover)</li>
+                  <li>• Cleaning to a higher standard than at check-in</li>
+                  <li>• Normal dust accumulation during the tenancy</li>
+                  <li>• Cleaning if no check-in inventory exists to prove original standard</li>
+                  <li>• Items you would clean anyway regardless of tenant</li>
                 </ul>
               </div>
 
               {/* Ask Heaven callout */}
               <div className="bg-purple-50 border border-purple-200 rounded-xl p-4">
                 <div className="flex items-start gap-3">
-                  <span className="text-2xl">â˜ï¸</span>
+                  <span className="text-2xl">☁️</span>
                   <div>
                     <p className="font-semibold text-gray-900 mb-1">
                       Unsure if your cleaning costs are claimable?
@@ -268,10 +268,10 @@ export default function MoneyClaimCleaningCostsPage() {
                   </div>
                   <h3 className="font-bold text-gray-900 mb-3">Check-In Evidence</h3>
                   <ul className="space-y-2 text-sm text-gray-600">
-                    <li>â€¢ Inventory stating &quot;professionally cleaned&quot;</li>
-                    <li>â€¢ Photos of clean condition</li>
-                    <li>â€¢ Receipt from check-in clean</li>
-                    <li>â€¢ Tenant signed acknowledgment</li>
+                    <li>• Inventory stating &quot;professionally cleaned&quot;</li>
+                    <li>• Photos of clean condition</li>
+                    <li>• Receipt from check-in clean</li>
+                    <li>• Tenant signed acknowledgment</li>
                   </ul>
                 </div>
 
@@ -281,10 +281,10 @@ export default function MoneyClaimCleaningCostsPage() {
                   </div>
                   <h3 className="font-bold text-gray-900 mb-3">Check-Out Evidence</h3>
                   <ul className="space-y-2 text-sm text-gray-600">
-                    <li>â€¢ Photos showing mess/dirt</li>
-                    <li>â€¢ Video walkthrough</li>
-                    <li>â€¢ Check-out report detailing issues</li>
-                    <li>â€¢ Photos of rubbish left behind</li>
+                    <li>• Photos showing mess/dirt</li>
+                    <li>• Video walkthrough</li>
+                    <li>• Check-out report detailing issues</li>
+                    <li>• Photos of rubbish left behind</li>
                   </ul>
                 </div>
 
@@ -294,10 +294,10 @@ export default function MoneyClaimCleaningCostsPage() {
                   </div>
                   <h3 className="font-bold text-gray-900 mb-3">Cost Evidence</h3>
                   <ul className="space-y-2 text-sm text-gray-600">
-                    <li>â€¢ Professional cleaning invoice</li>
-                    <li>â€¢ Skip hire receipt</li>
-                    <li>â€¢ Waste collection receipts</li>
-                    <li>â€¢ Itemised breakdown of costs</li>
+                    <li>• Professional cleaning invoice</li>
+                    <li>• Skip hire receipt</li>
+                    <li>• Waste collection receipts</li>
+                    <li>• Itemised breakdown of costs</li>
                   </ul>
                 </div>
               </div>
@@ -374,23 +374,23 @@ export default function MoneyClaimCleaningCostsPage() {
                     <ul className="space-y-3 text-gray-600">
                       <li className="flex justify-between">
                         <span>1-bed flat deep clean</span>
-                        <span className="font-medium">Â£150-200</span>
+                        <span className="font-medium">£150-200</span>
                       </li>
                       <li className="flex justify-between">
                         <span>2-bed flat/house deep clean</span>
-                        <span className="font-medium">Â£200-280</span>
+                        <span className="font-medium">£200-280</span>
                       </li>
                       <li className="flex justify-between">
                         <span>3-bed house deep clean</span>
-                        <span className="font-medium">Â£280-400</span>
+                        <span className="font-medium">£280-400</span>
                       </li>
                       <li className="flex justify-between">
                         <span>Oven clean (standalone)</span>
-                        <span className="font-medium">Â£40-80</span>
+                        <span className="font-medium">£40-80</span>
                       </li>
                       <li className="flex justify-between">
                         <span>Carpet clean per room</span>
-                        <span className="font-medium">Â£25-50</span>
+                        <span className="font-medium">£25-50</span>
                       </li>
                     </ul>
                   </div>
@@ -407,23 +407,23 @@ export default function MoneyClaimCleaningCostsPage() {
                     <ul className="space-y-3 text-gray-600">
                       <li className="flex justify-between">
                         <span>Mini skip (2-3 cubic yards)</span>
-                        <span className="font-medium">Â£150-200</span>
+                        <span className="font-medium">£150-200</span>
                       </li>
                       <li className="flex justify-between">
                         <span>Standard skip (6-8 yards)</span>
-                        <span className="font-medium">Â£250-350</span>
+                        <span className="font-medium">£250-350</span>
                       </li>
                       <li className="flex justify-between">
                         <span>Council bulky waste (3 items)</span>
-                        <span className="font-medium">Â£30-50</span>
+                        <span className="font-medium">£30-50</span>
                       </li>
                       <li className="flex justify-between">
                         <span>House clearance service</span>
-                        <span className="font-medium">Â£300-800</span>
+                        <span className="font-medium">£300-800</span>
                       </li>
                       <li className="flex justify-between">
                         <span>Garden clearance</span>
-                        <span className="font-medium">Â£150-400</span>
+                        <span className="font-medium">£150-400</span>
                       </li>
                     </ul>
                   </div>

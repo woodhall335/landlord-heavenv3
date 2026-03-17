@@ -344,11 +344,11 @@ export default function WalesOccupationContractPage() {
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">Standard Contract</h3>
                 <p className="text-4xl font-bold text-red-600 mb-4">£14.99</p>
                 <ul className="space-y-2 text-gray-700 mb-6">
-                  <li>âœ“ Renting Homes Act 2016 compliant</li>
-                  <li>âœ“ Written statement included</li>
-                  <li>âœ“ Fundamental and supplementary terms</li>
-                  <li>âœ“ Deposit protection clause</li>
-                  <li>âœ“ Fitness for habitation terms</li>
+                  <li>✓ Renting Homes Act 2016 compliant</li>
+                  <li>✓ Written statement included</li>
+                  <li>✓ Fundamental and supplementary terms</li>
+                  <li>✓ Deposit protection clause</li>
+                  <li>✓ Fitness for habitation terms</li>
                 </ul>
                 <Link
                   href="/wizard?product=ast_standard&src=product_page&topic=tenancy&jurisdiction=wales"
@@ -365,12 +365,12 @@ export default function WalesOccupationContractPage() {
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">Premium Contract</h3>
                 <p className="text-4xl font-bold text-primary mb-4">£24.99</p>
                 <ul className="space-y-2 text-gray-700 mb-6">
-                  <li>âœ“ Everything in Standard PLUS:</li>
-                  <li>âœ“ Comprehensive inventory section</li>
-                  <li>âœ“ Additional supplementary terms</li>
-                  <li>âœ“ Professional formatting</li>
-                  <li>âœ“ Enhanced compliance information</li>
-                  <li className="font-semibold text-primary">âœ“ Covers HMOs (Houses in Multiple Occupation)</li>
+                  <li>✓ Everything in Standard PLUS:</li>
+                  <li>✓ Comprehensive inventory section</li>
+                  <li>✓ Additional supplementary terms</li>
+                  <li>✓ Professional formatting</li>
+                  <li>✓ Enhanced compliance information</li>
+                  <li className="font-semibold text-primary">✓ Covers HMOs (Houses in Multiple Occupation)</li>
                 </ul>
                 <Link
                   href="/wizard?product=ast_premium&src=product_page&topic=tenancy&jurisdiction=wales"

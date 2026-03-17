@@ -64,7 +64,7 @@ const faqs = [
   },
   {
     question: 'What are the risks of using a free generic tenancy agreement in NI?',
-    answer: 'The risks are severe: using a non-compliant template is a criminal offence with fines up to Â£2,500; you cannot serve a valid Notice to Quit without proper documentation; deposit deductions may be unenforceable; tenants can challenge unfair terms in court; and you may face civil claims for any losses caused by missing terms. The cost of getting it wrong far exceeds paying for a proper template.'
+    answer: 'The risks are severe: using a non-compliant template is a criminal offence with fines up to £2,500; you cannot serve a valid Notice to Quit without proper documentation; deposit deductions may be unenforceable; tenants can challenge unfair terms in court; and you may face civil claims for any losses caused by missing terms. The cost of getting it wrong far exceeds paying for a proper template.'
   },
   {
     question: 'Do I need different agreements for fixed-term vs periodic tenancies in NI?',
@@ -88,11 +88,11 @@ const faqs = [
   },
   {
     question: 'What happens if my tenancy agreement is missing prescribed terms?',
-    answer: 'If your tenancy agreement is missing prescribed terms, you commit a criminal offence under the Private Tenancies Act 2022. Consequences include: fixed penalty notice of Â£500; prosecution with fines up to Â£2,500; inability to serve valid Notice to Quit; potential deposit penalties of up to 3x the deposit amount; and civil liability for tenant losses. It\'s essential to get this right from the start.'
+    answer: 'If your tenancy agreement is missing prescribed terms, you commit a criminal offence under the Private Tenancies Act 2022. Consequences include: fixed penalty notice of £500; prosecution with fines up to £2,500; inability to serve valid Notice to Quit; potential deposit penalties of up to 3x the deposit amount; and civil liability for tenant losses. It\'s essential to get this right from the start.'
   },
   {
     question: 'Should I pay for a Northern Ireland tenancy agreement template?',
-    answer: 'Yes, paying for a properly drafted NI-specific template is strongly recommended. The cost (typically Â£10-50) is negligible compared to: Â£2,500+ in potential fines; months of delayed eviction; deposit penalty claims; or civil liability. Professional templates are regularly updated for law changes, include all prescribed terms, and may offer guidance or support. It\'s a business expense that protects your investment.'
+    answer: 'Yes, paying for a properly drafted NI-specific template is strongly recommended. The cost (typically £10-50) is negligible compared to: £2,500+ in potential fines; months of delayed eviction; deposit penalty claims; or civil liability. Professional templates are regularly updated for law changes, include all prescribed terms, and may offer guidance or support. It\'s a business expense that protects your investment.'
   },
   {
     question: 'Can a free starter document be updated for the Private Tenancies Act 2022?',
@@ -158,7 +158,7 @@ export default function NITenancyAgreementTemplateFreeComparisonPage() {
             </h2>
             <p className="text-xl text-amber-100 mb-8 max-w-2xl">
               Before you download that free Northern Ireland tenancy agreement, understand the legal risks.
-              Non-compliance with the Private Tenancies Act 2022 is a criminal offence with fines up to Â£2,500.
+              Non-compliance with the Private Tenancies Act 2022 is a criminal offence with fines up to £2,500.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
@@ -190,7 +190,7 @@ export default function NITenancyAgreementTemplateFreeComparisonPage() {
                 <p className="text-red-800 mt-2">
                   Under the Private Tenancies Act (NI) 2022, failing to provide a compliant written tenancy agreement
                   within 28 days is a <strong>criminal offence</strong>. Using an inadequate free starter document can result
-                  in fixed penalty notices (Â£500), prosecution (up to Â£2,500), and prevent you from ever evicting your tenant legally.
+                  in fixed penalty notices (£500), prosecution (up to £2,500), and prevent you from ever evicting your tenant legally.
                 </p>
               </div>
             </div>
@@ -224,19 +224,19 @@ export default function NITenancyAgreementTemplateFreeComparisonPage() {
                 <div className="bg-slate-700 rounded-lg p-4">
                   <h4 className="font-semibold text-amber-400 mb-2">England</h4>
                   <ul className="text-sm text-slate-300 space-y-1">
-                    <li>â€¢ Housing Act 1988</li>
-                    <li>â€¢ 5 weeks max deposit</li>
-                    <li>â€¢ No landlord registration</li>
-                    <li>â€¢ Model tenancy available</li>
+                    <li>• Housing Act 1988</li>
+                    <li>• 5 weeks max deposit</li>
+                    <li>• No landlord registration</li>
+                    <li>• Model tenancy available</li>
                   </ul>
                 </div>
                 <div className="bg-emerald-900 rounded-lg p-4">
                   <h4 className="font-semibold text-emerald-400 mb-2">Northern Ireland</h4>
                   <ul className="text-sm text-emerald-200 space-y-1">
-                    <li>â€¢ Private Tenancies Act 2022</li>
-                    <li>â€¢ 2 months max deposit</li>
-                    <li>â€¢ Mandatory registration</li>
-                    <li>â€¢ No official template</li>
+                    <li>• Private Tenancies Act 2022</li>
+                    <li>• 2 months max deposit</li>
+                    <li>• Mandatory registration</li>
+                    <li>• No official template</li>
                   </ul>
                 </div>
               </div>
@@ -365,11 +365,11 @@ export default function NITenancyAgreementTemplateFreeComparisonPage() {
                 <h3 className="font-semibold text-red-900 mb-4">Potential Costs of Non-Compliance</h3>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-2">
-                    <span className="font-semibold text-red-700 w-20">Â£500</span>
+                    <span className="font-semibold text-red-700 w-20">£500</span>
                     <span className="text-red-800">Fixed penalty notice</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="font-semibold text-red-700 w-20">Â£2,500</span>
+                    <span className="font-semibold text-red-700 w-20">£2,500</span>
                     <span className="text-red-800">Court prosecution fine</span>
                   </li>
                   <li className="flex items-start gap-2">
@@ -377,7 +377,7 @@ export default function NITenancyAgreementTemplateFreeComparisonPage() {
                     <span className="text-red-800">Protection failure penalty</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="font-semibold text-red-700 w-20">Â£1,000+</span>
+                    <span className="font-semibold text-red-700 w-20">£1,000+</span>
                     <span className="text-red-800">Failed eviction costs</span>
                   </li>
                   <li className="flex items-start gap-2">
@@ -388,7 +388,7 @@ export default function NITenancyAgreementTemplateFreeComparisonPage() {
                 <div className="mt-4 pt-4 border-t border-red-300">
                   <div className="flex justify-between">
                     <span className="font-semibold text-red-900">Potential total:</span>
-                    <span className="font-bold text-red-700">Â£5,000+</span>
+                    <span className="font-bold text-red-700">£5,000+</span>
                   </div>
                 </div>
               </div>
@@ -396,18 +396,18 @@ export default function NITenancyAgreementTemplateFreeComparisonPage() {
                 <h3 className="font-semibold text-emerald-900 mb-4">Cost of Getting It Right</h3>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-2">
-                    <span className="font-semibold text-emerald-700 w-20">Â£14.99</span>
+                    <span className="font-semibold text-emerald-700 w-20">£14.99</span>
                     <span className="text-emerald-800">Standard NI template</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="font-semibold text-emerald-700 w-20">Â£14.99</span>
+                    <span className="font-semibold text-emerald-700 w-20">£14.99</span>
                     <span className="text-emerald-800">Premium with extras</span>
                   </li>
                 </ul>
                 <div className="mt-8 pt-4 border-t border-emerald-300">
                   <div className="flex justify-between">
                     <span className="font-semibold text-emerald-900">One-time cost:</span>
-                    <span className="font-bold text-emerald-700">From Â£14.99</span>
+                    <span className="font-bold text-emerald-700">From £14.99</span>
                   </div>
                 </div>
                 <p className="text-sm text-emerald-700 mt-4">
@@ -500,7 +500,7 @@ export default function NITenancyAgreementTemplateFreeComparisonPage() {
               className="inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold px-8 py-4 rounded-lg transition-colors"
             >
               <RiDownloadLine className="w-5 h-5" />
-              Create Your Agreement - Â£14.99
+              Create Your Agreement - £14.99
               <RiArrowRightLine className="w-5 h-5" />
             </Link>
           </section>
