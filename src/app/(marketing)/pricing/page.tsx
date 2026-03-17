@@ -15,16 +15,17 @@ import {
 } from "@/lib/residential-letting/products";
 
 export const metadata: Metadata = generateMetadata({
-  title: "Pricing - UK Eviction Case Bundle Comparison",
-  description: "Compare solicitor workflows and Landlord Heaven AI-validated case preparation. Complete case bundles ready to file.",
+  title: "Pricing | UK Eviction and Landlord Document Packs",
+  description:
+    "Compare eviction notice, money claim, tenancy agreement, and complete pack pricing against typical solicitor costs for UK landlords.",
   path: "/pricing",
   keywords: [
     "landlord document pricing",
     "eviction notice cost",
     "tenancy agreement price",
-    "landlord eviction case bundles",
+    "money claim pack price",
     "section 21 notice price",
-    "complete eviction pack"
+    "complete eviction pack",
   ]
 });
 

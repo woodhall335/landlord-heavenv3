@@ -11,9 +11,48 @@ import {
   generateMetadataForPageType,
   validateMetadataConfig,
   auditMetadata,
+  auditMetadataText,
+  buildBrandedTitle,
   CORE_KEYWORDS,
   PRODUCT_KEYWORDS,
+  sanitizePageTitle,
+  SEO_KEYWORDS_RECOMMENDED_MAX,
 } from '../metadata';
+
+describe('metadata text normalization', () => {
+  it('should strip branded suffixes from page titles', () => {
+    expect(sanitizePageTitle('Section 21 Notice Guide | Landlord Heaven')).toBe(
+      'Section 21 Notice Guide'
+    );
+    expect(sanitizePageTitle('LandlordHeaven | Section 21 Notice Guide')).toBe(
+      'Section 21 Notice Guide'
+    );
+  });
+
+  it('should add the brand once for social titles', () => {
+    expect(buildBrandedTitle('Section 8 Notice Guide')).toBe(
+      'Section 8 Notice Guide | Landlord Heaven'
+    );
+    expect(buildBrandedTitle('Section 8 Notice Guide | Landlord Heaven')).toBe(
+      'Section 8 Notice Guide | Landlord Heaven'
+    );
+    expect(buildBrandedTitle('Section 8 Notice Guide | LandlordHeaven')).toBe(
+      'Section 8 Notice Guide | Landlord Heaven'
+    );
+  });
+
+  it('should flag duplicate site names and keyword targeting misses', () => {
+    const issues = auditMetadataText({
+      title: 'Section 21 Guide | Landlord Heaven | Landlord Heaven',
+      description:
+        'Practical landlord guidance with enough context to pass the metadata description length checks in this test.',
+      keywords: ['section 8 grounds'],
+    });
+
+    expect(issues.some((issue) => issue.code === 'duplicate_site_name')).toBe(true);
+    expect(issues.some((issue) => issue.code === 'keyword_targeting_miss')).toBe(true);
+  });
+});
 
 describe('generateMetadata', () => {
   describe('canonical URL', () => {
@@ -82,6 +121,23 @@ describe('generateMetadata', () => {
       });
 
       expect(metadata.keywords).toEqual(customKeywords);
+    });
+
+    it('should cap keyword lists at the recommended maximum', () => {
+      const metadata = generateMetadata({
+        title: 'Section 21 Notice Guide',
+        description:
+          'Complete Section 21 notice guidance for landlords with enough detail to satisfy the recommended description length.',
+        path: '/section-21-notice-guide',
+        keywords: Array.from(
+          { length: SEO_KEYWORDS_RECOMMENDED_MAX + 3 },
+          (_, index) => `keyword ${index}`
+        ),
+      });
+
+      expect((metadata.keywords as string[])).toHaveLength(
+        SEO_KEYWORDS_RECOMMENDED_MAX
+      );
     });
   });
 

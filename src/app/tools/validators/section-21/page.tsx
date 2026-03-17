@@ -9,7 +9,6 @@ import type { Metadata } from 'next';
 import { ValidatorPage } from '@/components/validators/ValidatorPage';
 import { Container } from '@/components/ui/Container';
 import Link from 'next/link';
-import { getCanonicalUrl } from '@/lib/seo/urls';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { PRODUCTS } from '@/lib/pricing/products';
@@ -19,6 +18,7 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { productLinks, toolLinks, landingPageLinks, blogLinks } from '@/lib/seo/internal-links';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { generateMetadata } from '@/lib/seo';
 
 // Pre-built wizard links for Section 21 validator page
 const wizardLinkNoticeOnly = buildWizardLink({
@@ -39,7 +39,7 @@ const upsellConfig = {
   toolName: 'Section 21 Notice Validator',
   toolType: 'validator' as const,
   productName: 'Notice Only Pack',
-  ctaLabel: `Upgrade to court-ready pack Ã¢â‚¬â€ ${PRODUCTS.notice_only.displayPrice}`,
+  ctaLabel: `Upgrade to court-ready pack - ${PRODUCTS.notice_only.displayPrice}`,
   ctaHref: wizardLinkNoticeOnly,
   jurisdiction: 'england',
   jurisdictionLabel: 'England only',
@@ -55,10 +55,11 @@ const upsellConfig = {
   ],
 };
 
-export const metadata: Metadata = {
-  title: 'Free Section 21 Validity Checker (England) Ã¢â‚¬â€œ Check My Notice',
+export const metadata: Metadata = generateMetadata({
+  title: 'Free Section 21 Validity Checker | England Form 6A',
   description:
-    'Free Section 21 checker for England. Upload your Form 6A for instant validation. Checks deposits, gas safety, EPC, and notice periods.',
+    'Free Section 21 checker for England. Upload your Form 6A for instant validation covering deposits, gas safety, EPC, and notice periods.',
+  path: '/tools/validators/section-21',
   keywords: [
     'section 21 validity checker',
     'section 21 notice checker',
@@ -68,19 +69,8 @@ export const metadata: Metadata = {
     'section 21 validity',
     'eviction notice check',
     'landlord notice validation',
-    'assured shorthold tenancy eviction',
   ],
-  openGraph: {
-    title: 'Free Section 21 Validity Checker (England) | Landlord Heaven',
-    description:
-      'Free online Section 21 notice checker for England landlords. Upload your Form 6A for instant validity verification.',
-    type: 'website',
-    url: getCanonicalUrl('/tools/validators/section-21'),
-  },
-  alternates: {
-    canonical: getCanonicalUrl('/tools/validators/section-21'),
-  },
-};
+});
 
 const faqSchema = {
   '@context': 'https://schema.org',

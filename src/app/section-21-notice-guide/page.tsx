@@ -11,25 +11,25 @@ import {
   breadcrumbSchema,
   faqPageSchema,
 } from '@/lib/seo/structured-data';
+import { generateMetadata } from '@/lib/seo';
 
 const canonical = 'https://landlordheaven.co.uk/section-21-notice-guide';
 
-export const metadata: Metadata = {
-  title: 'Section 21 Notice Guide | Rules, Validity, Timing and Next Steps | LandlordHeaven',
+export const metadata: Metadata = generateMetadata({
+  title: 'Section 21 Notice Guide | Validity, Timing & Next Steps',
   description:
-    'A complete Section 21 notice guide for landlords in England covering when to use Form 6A, notice periods, validity checks, common mistakes, court next steps, and when to choose notice-only or a complete eviction pack.',
-  alternates: {
-    canonical,
-  },
-  openGraph: {
-    title: 'Section 21 Notice Guide | Rules, Validity, Timing and Next Steps | LandlordHeaven',
-    description:
-      'Learn when and how to use a Section 21 notice, what makes it invalid, what documents landlords need, and what happens after notice expiry.',
-    url: canonical,
-    siteName: 'LandlordHeaven',
-    type: 'article',
-  },
-};
+    'Section 21 notice guide for landlords in England covering Form 6A, notice periods, validity checks, service, and possession next steps.',
+  path: '/section-21-notice-guide',
+  type: 'article',
+  keywords: [
+    'section 21 notice guide',
+    'form 6a',
+    'section 21 validity',
+    'section 21 notice periods',
+    'serve section 21 notice',
+    'accelerated possession',
+  ],
+});
 
 const jumpLinks = [
   { href: '#quick-answer', label: 'Quick answer' },

@@ -123,14 +123,14 @@ export default function HomeContent() {
 
           <div className="max-w-5xl mx-auto">
             <div className="mt-14 text-center">
-              <span className="hidden">
-              <Link href={evictionWizardHref} className="hero-btn-primary">
-                Start your eviction notice â†’
-              </Link>
-              <p className="mt-4 text-sm text-gray-500">
-                Free to start â€¢ Pay only when you're ready
-              </p>
-              </span>
+
+
+
+
+
+
+
+
               <Link href={evictionWizardHref} className="hero-btn-primary">
                 Start your eviction notice &rarr;
               </Link>
@@ -170,7 +170,7 @@ export default function HomeContent() {
                 Hi, how can I help you?
               </h2>
               <p className="text-gray-500 text-lg">
-                Free UK landlord advice â€” no sign-up required
+                Free UK landlord advice - no sign-up required
               </p>
             </div>
 
@@ -233,17 +233,17 @@ export default function HomeContent() {
                 {[
                   {
                     label: "Eviction notice help",
-                    icon: "ðŸ“„",
+
                     prompt: "How do I serve an eviction notice to my tenant?",
                   },
                   {
                     label: "Rent arrears recovery",
-                    icon: "ðŸ’·",
+
                     prompt: "How do I recover unpaid rent from a tenant?",
                   },
                   {
                     label: "Deposit protection rules",
-                    icon: "ðŸ›¡ï¸",
+
                     prompt: "What are the deposit protection requirements?",
                   },
                 ].map((item) => (
@@ -283,7 +283,7 @@ export default function HomeContent() {
               </div>
 
               <p className="mt-6 text-center text-xs text-gray-400">
-                For guidance only â€” not legal advice.{" "}
+                For guidance only, not legal advice.{" "}
                 <Link href="/terms" className="text-primary hover:underline">
                   Terms apply
                 </Link>
@@ -434,11 +434,11 @@ export default function HomeContent() {
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-8">
-              <span className="hidden">
-              <Link href={evictionWizardHref} className="hero-btn-primary">
-                Start your eviction notice â†’
-              </Link>
-              </span>
+
+
+
+
+
               <Link href={evictionWizardHref} className="hero-btn-primary">
                 Start your eviction notice &rarr;
               </Link>

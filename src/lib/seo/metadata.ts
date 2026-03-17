@@ -28,6 +28,14 @@ export interface SEOMetadataConfig {
   keywords?: string[];
 }
 
+export const SEO_TITLE_RECOMMENDED_MIN = 35;
+export const SEO_TITLE_RECOMMENDED_MAX = 60;
+export const SEO_DESCRIPTION_RECOMMENDED_MIN = 120;
+export const SEO_DESCRIPTION_RECOMMENDED_MAX = 160;
+export const SEO_KEYWORDS_RECOMMENDED_MAX = 8;
+
+const MOJIBAKE_PATTERN = /(?:Ã|Â|â|ðŸ|ï¸)/;
+
 /**
  * Core keywords that apply to most pages.
  * Used as fallback when page-specific keywords aren't provided.
@@ -82,8 +90,177 @@ export const PRODUCT_KEYWORDS = {
   ],
 };
 
-const SITE_NAME = "Landlord Heaven";
+export const SITE_NAME = "Landlord Heaven";
+const SITE_NAME_COMPACT = SITE_NAME.replace(/\s+/g, "");
 const DEFAULT_OG_IMAGE = `${SITE_ORIGIN}/og-image.png`;
+
+function normalizeWhitespace(value: string): string {
+  return value.replace(/\s+/g, " ").trim();
+}
+
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+export function sanitizePageTitle(title: string): string {
+  let normalized = normalizeWhitespace(title).replace(
+    new RegExp(escapeRegExp(SITE_NAME_COMPACT), "gi"),
+    SITE_NAME,
+  );
+  const siteNamePattern = `${escapeRegExp(SITE_NAME)}|${escapeRegExp(SITE_NAME_COMPACT)}`;
+
+  normalized = normalized.replace(new RegExp(`^(?:${siteNamePattern})\\s*[|:-]\\s*`, "i"), "");
+  normalized = normalized.replace(new RegExp(`\\s*[|:-]\\s*(?:${siteNamePattern})$`, "i"), "");
+
+  return normalizeWhitespace(normalized);
+}
+
+export function buildBrandedTitle(title: string): string {
+  const normalized = normalizeWhitespace(title).replace(
+    new RegExp(escapeRegExp(SITE_NAME_COMPACT), "gi"),
+    SITE_NAME,
+  );
+  return normalized.toLowerCase().includes(SITE_NAME.toLowerCase())
+    ? normalized
+    : `${normalized} | ${SITE_NAME}`;
+}
+
+export function normalizeKeywordList(keywords: string[] = []): string[] {
+  const seen = new Set<string>();
+  const normalized: string[] = [];
+
+  for (const keyword of keywords) {
+    const cleanKeyword = normalizeWhitespace(keyword);
+    if (!cleanKeyword) {
+      continue;
+    }
+
+    const dedupeKey = cleanKeyword.toLowerCase();
+    if (seen.has(dedupeKey)) {
+      continue;
+    }
+
+    seen.add(dedupeKey);
+    normalized.push(cleanKeyword);
+  }
+
+  return normalized;
+}
+
+export interface SEOTextIssue {
+  code: string;
+  level: "error" | "warning";
+  message: string;
+}
+
+export interface SEOTextAuditInput {
+  title?: string;
+  description?: string;
+  keywords?: string[];
+}
+
+export function auditMetadataText(input: SEOTextAuditInput): SEOTextIssue[] {
+  const issues: SEOTextIssue[] = [];
+  const title = input.title
+    ? normalizeWhitespace(input.title).replace(new RegExp(escapeRegExp(SITE_NAME_COMPACT), "gi"), SITE_NAME)
+    : "";
+  const description = input.description ? normalizeWhitespace(input.description) : "";
+  const keywords = normalizeKeywordList(input.keywords ?? []);
+
+  if (!title) {
+    issues.push({ code: "missing_title", level: "error", message: "Page title is missing." });
+  } else {
+    if (MOJIBAKE_PATTERN.test(title)) {
+      issues.push({ code: "title_mojibake", level: "error", message: "Page title contains corrupted encoding." });
+    }
+
+    const siteNameMatches = title.match(new RegExp(escapeRegExp(SITE_NAME), "gi")) ?? [];
+    if (siteNameMatches.length > 1) {
+      issues.push({
+        code: "duplicate_site_name",
+        level: "error",
+        message: "Page title repeats the site name more than once.",
+      });
+    }
+
+    if (title.length < SEO_TITLE_RECOMMENDED_MIN) {
+      issues.push({
+        code: "title_too_short",
+        level: "warning",
+        message: `Page title is short at ${title.length} characters. Target ${SEO_TITLE_RECOMMENDED_MIN}-${SEO_TITLE_RECOMMENDED_MAX}.`,
+      });
+    } else if (title.length > SEO_TITLE_RECOMMENDED_MAX) {
+      issues.push({
+        code: "title_too_long",
+        level: "warning",
+        message: `Page title is long at ${title.length} characters. Target ${SEO_TITLE_RECOMMENDED_MIN}-${SEO_TITLE_RECOMMENDED_MAX}.`,
+      });
+    }
+  }
+
+  if (!description) {
+    issues.push({ code: "missing_description", level: "error", message: "Meta description is missing." });
+  } else {
+    if (MOJIBAKE_PATTERN.test(description)) {
+      issues.push({
+        code: "description_mojibake",
+        level: "error",
+        message: "Meta description contains corrupted encoding.",
+      });
+    }
+
+    if (description.length < SEO_DESCRIPTION_RECOMMENDED_MIN) {
+      issues.push({
+        code: "description_too_short",
+        level: "warning",
+        message: `Meta description is short at ${description.length} characters. Target ${SEO_DESCRIPTION_RECOMMENDED_MIN}-${SEO_DESCRIPTION_RECOMMENDED_MAX}.`,
+      });
+    } else if (description.length > SEO_DESCRIPTION_RECOMMENDED_MAX) {
+      issues.push({
+        code: "description_too_long",
+        level: "warning",
+        message: `Meta description is long at ${description.length} characters. Target ${SEO_DESCRIPTION_RECOMMENDED_MIN}-${SEO_DESCRIPTION_RECOMMENDED_MAX}.`,
+      });
+    }
+  }
+
+  if (keywords.length === 0) {
+    issues.push({
+      code: "missing_keywords",
+      level: "warning",
+      message: "No page-specific keywords were provided.",
+    });
+  } else {
+    if (keywords.length > SEO_KEYWORDS_RECOMMENDED_MAX) {
+      issues.push({
+        code: "too_many_keywords",
+        level: "warning",
+        message: `Keyword list has ${keywords.length} entries. Target ${SEO_KEYWORDS_RECOMMENDED_MAX} or fewer focused phrases.`,
+      });
+    }
+
+    if (keywords.some((keyword) => MOJIBAKE_PATTERN.test(keyword))) {
+      issues.push({
+        code: "keywords_mojibake",
+        level: "error",
+        message: "Keyword list contains corrupted encoding.",
+      });
+    }
+
+    const targetingHaystack = `${title} ${description}`.toLowerCase();
+    const matchedKeywords = keywords.filter((keyword) => targetingHaystack.includes(keyword.toLowerCase()));
+
+    if (matchedKeywords.length === 0) {
+      issues.push({
+        code: "keyword_targeting_miss",
+        level: "warning",
+        message: "No keyword phrase appears in the page title or meta description.",
+      });
+    }
+  }
+
+  return issues;
+}
 
 /**
  * Generate comprehensive SEO metadata for a page
@@ -99,14 +276,16 @@ export function generateMetadata(config: SEOMetadataConfig): Metadata {
     keywords = []
   } = config;
 
-  // Keep social titles branded even when page title is concise for SERP limits.
-  const fullTitleForSocial = title.includes(SITE_NAME) ? title : `${title} | ${SITE_NAME}`;
+  const normalizedTitle = sanitizePageTitle(title);
+  const normalizedDescription = normalizeWhitespace(description);
+  const normalizedKeywords = normalizeKeywordList(keywords).slice(0, SEO_KEYWORDS_RECOMMENDED_MAX);
+  const fullTitleForSocial = buildBrandedTitle(normalizedTitle);
   const url = getCanonicalUrl(path);
 
   return {
-    title: title, // Layout template will add "| Landlord Heaven"
-    description,
-    keywords: keywords.length > 0 ? keywords : undefined,
+    title: normalizedTitle,
+    description: normalizedDescription,
+    keywords: normalizedKeywords.length > 0 ? normalizedKeywords : undefined,
     authors: [{ name: SITE_NAME }],
     creator: SITE_NAME,
     publisher: SITE_NAME,
@@ -118,7 +297,7 @@ export function generateMetadata(config: SEOMetadataConfig): Metadata {
     openGraph: {
       type,
       title: fullTitleForSocial,
-      description,
+      description: normalizedDescription,
       url,
       siteName: SITE_NAME,
       locale: 'en_GB',
@@ -127,7 +306,7 @@ export function generateMetadata(config: SEOMetadataConfig): Metadata {
           url: image,
           width: 1200,
           height: 630,
-          alt: title,
+          alt: normalizedTitle,
         }
       ],
     },
@@ -136,7 +315,7 @@ export function generateMetadata(config: SEOMetadataConfig): Metadata {
     twitter: {
       card: 'summary_large_image',
       title: fullTitleForSocial,
-      description,
+      description: normalizedDescription,
       images: [image],
       creator: '@LandlordHeaven',
       site: '@LandlordHeaven',
@@ -237,6 +416,12 @@ export function validateMetadataConfig(config: SEOMetadataConfig): string[] {
     issues.push('keywords not provided (will use defaults)');
   }
 
+  for (const issue of auditMetadataText(config)) {
+    if (issue.level === "error") {
+      issues.push(issue.message);
+    }
+  }
+
   return issues;
 }
 
@@ -279,24 +464,18 @@ export function auditMetadata(config: SEOMetadataConfig): SEOAuditResult {
 export const defaultMetadata: Metadata = {
   title: {
     default: "Court-Ready UK Landlord Documents | Landlord Heaven",
-    template: "%s | Landlord Heaven",
   },
-  description: "Create court-ready UK landlord notices and tenancy documents in minutes.",
+  description:
+    "Create court-ready Section 21 notices, Section 8 notices, money claim packs, and tenancy agreements for UK landlords in minutes.",
   keywords: [
     "section 21 notice",
     "section 8 notice",
     "eviction notice",
-    "section 21 ban 2026",
-    "tenancy agreement",
-    "landlord eviction case bundles",
-    "UK landlord",
     "rent arrears",
     "money claim",
+    "tenancy agreement",
     "possession order",
-    "HMO licence",
-    "AST",
-    "PRT Scotland",
-    "court-ready documents"
+    "UK landlord documents",
   ],
   authors: [{ name: "Landlord Heaven" }],
   creator: "Landlord Heaven",
@@ -323,22 +502,24 @@ export const defaultMetadata: Metadata = {
     locale: 'en_GB',
     url: SITE_ORIGIN,
     siteName: SITE_NAME,
-    title: "Landlord Heaven - Court-Ready Eviction Case Bundles for UK Landlords",
-    description: "Reduce possession failure risk with court-ready notices and jurisdiction-specific case bundles in minutes. Reduce possession failure risk with statutory-grounded preparation. Section 21 ends May 2026.",
+    title: "Court-Ready UK Landlord Documents | Landlord Heaven",
+    description:
+      "Create court-ready Section 21 notices, Section 8 notices, money claim packs, and tenancy agreements for UK landlords in minutes.",
     images: [
       {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: "Landlord Heaven - Court-Ready Eviction Case Bundles for UK Landlords",
+        alt: "Court-Ready UK Landlord Documents | Landlord Heaven",
         type: 'image/png',
       }
     ]
   },
   twitter: {
     card: 'summary_large_image',
-    title: "Landlord Heaven - Court-Ready Eviction Case Bundles for UK Landlords",
-    description: "Reduce possession failure risk with court-ready notices and statutory-grounded preparation. Section 21 ends May 2026.",
+    title: "Court-Ready UK Landlord Documents | Landlord Heaven",
+    description:
+      "Create court-ready Section 21 notices, Section 8 notices, money claim packs, and tenancy agreements for UK landlords in minutes.",
     images: ['/og-image.png'],
     creator: '@LandlordHeaven',
     site: '@LandlordHeaven',

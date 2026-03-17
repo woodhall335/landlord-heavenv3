@@ -1,7 +1,7 @@
 import type { FAQItem } from '@/components/seo/FAQSection';
 import type { IntentSection } from '@/components/seo/HighIntentPageShell';
 import type { Metadata } from 'next';
-import { getCanonicalUrl } from '@/lib/seo';
+import { generateMetadataForPageType } from './metadata';
 import type { HighIntentPageContent } from '@/lib/seo/high-intent-pass1-pages';
 
 interface PageSeed {
@@ -109,11 +109,11 @@ export const PASS2_LONGFORM_PAGES: Record<string, HighIntentPageContent> = Objec
 );
 
 export function getPass2Metadata(page: HighIntentPageContent): Metadata {
-  const canonical = getCanonicalUrl(`/${page.slug}`);
-  return {
+  return generateMetadataForPageType({
     title: page.title,
     description: page.description,
-    alternates: { canonical },
-    openGraph: { title: page.title, description: page.description, type: 'article', url: canonical },
-  };
+    path: `/${page.slug}`,
+    type: 'article',
+    pageType: 'guide',
+  });
 }

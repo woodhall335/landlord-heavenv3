@@ -12,8 +12,18 @@ export {
   defaultMetadata,
   CORE_KEYWORDS,
   PRODUCT_KEYWORDS,
+  SITE_NAME,
+  SEO_TITLE_RECOMMENDED_MIN,
+  SEO_TITLE_RECOMMENDED_MAX,
+  SEO_DESCRIPTION_RECOMMENDED_MIN,
+  SEO_DESCRIPTION_RECOMMENDED_MAX,
+  SEO_KEYWORDS_RECOMMENDED_MAX,
+  sanitizePageTitle,
+  buildBrandedTitle,
+  normalizeKeywordList,
+  auditMetadataText,
 } from './metadata';
-export type { SEOMetadataConfig, SEOPageType, SEOAuditResult } from './metadata';
+export type { SEOMetadataConfig, SEOPageType, SEOAuditResult, SEOTextIssue, SEOTextAuditInput } from './metadata';
 export { SITE_ORIGIN, getCanonicalUrl } from './urls';
 
 export {

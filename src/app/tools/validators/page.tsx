@@ -5,17 +5,17 @@
  */
 
 import Link from 'next/link';
-import { Metadata } from 'next';
 import { Container } from '@/components/ui/Container';
 import { RiFileCheckLine, RiAlertLine } from 'react-icons/ri';
-import { getCanonicalUrl } from '@/lib/seo';
+import { generateMetadata } from '@/lib/seo';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { HeaderConfig } from '@/components/layout';
 
-export const metadata: Metadata = {
-  title: 'Eviction Notice Validity Checker | Check Your Notice is Valid',
+export const metadata = generateMetadata({
+  title: 'Eviction Notice Checker | Section 21 and Section 8',
   description:
-    "Free eviction notice validity checker. Upload your Section 21 or Section 8 notice and we'll check it meets all legal requirements. Instant results with fix suggestions.",
+    "Free eviction notice checker for Section 21 and Section 8 notices. Upload your notice for instant validation, issue spotting, and fix suggestions.",
+  path: '/tools/validators',
   keywords: [
     'eviction notice checker',
     'section 21 validity checker',
@@ -25,17 +25,7 @@ export const metadata: Metadata = {
     'eviction notice validator',
     'landlord notice checker',
   ],
-  openGraph: {
-    title: 'Eviction Notice Validity Checker | Landlord Heaven',
-    description:
-      'Check if your eviction notice is legally valid. Free instant checker for Section 21 and Section 8.',
-    type: 'website',
-    url: getCanonicalUrl('/tools/validators'),
-  },
-  alternates: {
-    canonical: getCanonicalUrl('/tools/validators'),
-  },
-};
+});
 
 const validators = [
   {

@@ -3,7 +3,7 @@ import { Container } from "@/components/ui";
 import Link from "next/link";
 import Image from "next/image";
 import { RiMailLine, RiTimeLine } from 'react-icons/ri';
-import { StructuredData, breadcrumbSchema, contactPageSchema } from "@/lib/seo";
+import { generateMetadata, StructuredData, breadcrumbSchema, contactPageSchema } from "@/lib/seo";
 import {
   MessageCircle,
   Building2,
@@ -17,17 +17,20 @@ import {
   Phone
 } from "lucide-react";
 
-export const metadata: Metadata = {
-  title: 'Contact Landlord Heaven | Get Help With Your Documents',
+export const metadata: Metadata = generateMetadata({
+  title: 'Contact Landlord Heaven | Landlord Document Support',
   description:
-    "Contact the Landlord Heaven team. We're here to help with eviction notices, tenancy agreements, money claims and any questions about our landlord document services.",
-  openGraph: {
-    title: 'Contact Landlord Heaven',
-    description:
-      "Get in touch with our support team. We're here to help with your landlord documents.",
-    type: 'website',
-  },
-};
+    "Contact the Landlord Heaven team for help with Section 21 notices, Section 8 notices, tenancy agreements, money claims, and landlord document support.",
+  path: '/contact',
+  keywords: [
+    'contact landlord heaven',
+    'landlord document support',
+    'section 21 support',
+    'section 8 support',
+    'tenancy agreement support',
+    'money claim support',
+  ],
+});
 
 export default function ContactPage() {
   const breadcrumbs = [

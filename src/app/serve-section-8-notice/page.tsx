@@ -13,6 +13,7 @@ import {
   faqPageSchema,
 } from '@/lib/seo/structured-data';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
+import { generateMetadata } from '@/lib/seo';
 
 const canonical = 'https://landlordheaven.co.uk/serve-section-8-notice';
 
@@ -30,22 +31,21 @@ const completePackWizardLink = buildWizardLink({
   topic: 'eviction',
 });
 
-export const metadata: Metadata = {
-  title:
-    'How to Serve a Section 8 Notice | Grounds-Based Eviction Guide for Landlords | LandlordHeaven',
+export const metadata: Metadata = generateMetadata({
+  title: 'Serve a Section 8 Notice | Landlord Service Guide',
   description:
-    'A practical landlord guide to serving a Section 8 notice in England. Learn how grounds work, what evidence matters, how service is usually handled, and how to avoid notice-stage mistakes that weaken a possession claim.',
-  alternates: { canonical },
-  openGraph: {
-    title:
-      'How to Serve a Section 8 Notice | Grounds-Based Eviction Guide for Landlords | LandlordHeaven',
-    description:
-      'Plain-English guidance for landlords on serving a Section 8 notice correctly, choosing grounds carefully, and preserving the evidence needed for court.',
-    url: canonical,
-    siteName: 'LandlordHeaven',
-    type: 'article',
-  },
-};
+    'Learn how to serve a Section 8 notice in England, choose the right grounds, preserve evidence, and avoid notice-stage mistakes that weaken possession claims.',
+  path: '/serve-section-8-notice',
+  type: 'article',
+  keywords: [
+    'serve section 8 notice',
+    'section 8 service guide',
+    'form 3 service',
+    'section 8 grounds',
+    'section 8 evidence',
+    'section 8 rent arrears',
+  ],
+});
 
 const jumpLinks = [
   { href: '#quick-answer', label: 'Quick answer' },

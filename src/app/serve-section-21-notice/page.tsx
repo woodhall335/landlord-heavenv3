@@ -13,6 +13,7 @@ import {
   faqPageSchema,
 } from '@/lib/seo/structured-data';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
+import { generateMetadata } from '@/lib/seo';
 
 const canonical = 'https://landlordheaven.co.uk/serve-section-21-notice';
 
@@ -30,24 +31,21 @@ const completePackWizardLink = buildWizardLink({
   topic: 'eviction',
 });
 
-export const metadata: Metadata = {
-  title:
-    'How to Serve a Section 21 Notice | Landlord Guide to Valid Service in England | LandlordHeaven',
+export const metadata: Metadata = generateMetadata({
+  title: 'Serve a Section 21 Notice | Valid Service for Landlords',
   description:
-    'A practical landlord guide to serving a Section 21 notice in England. Learn when to serve Form 6A, how service works, what evidence matters, common mistakes, and how to avoid invalid notice service.',
-  alternates: {
-    canonical,
-  },
-  openGraph: {
-    title:
-      'How to Serve a Section 21 Notice | Landlord Guide to Valid Service in England | LandlordHeaven',
-    description:
-      'Plain-English guidance for landlords on serving a Section 21 notice correctly, preserving proof of service, and avoiding notice-stage mistakes that delay possession.',
-    url: canonical,
-    siteName: 'LandlordHeaven',
-    type: 'article',
-  },
-};
+    'Learn how to serve a Section 21 notice in England, preserve proof of service, avoid invalid notice mistakes, and protect the possession route.',
+  path: '/serve-section-21-notice',
+  type: 'article',
+  keywords: [
+    'serve section 21 notice',
+    'form 6a service',
+    'section 21 proof of service',
+    'section 21 valid service',
+    'section 21 notice',
+    'landlord service guide',
+  ],
+});
 
 const jumpLinks = [
   { href: '#quick-answer', label: 'Quick answer' },

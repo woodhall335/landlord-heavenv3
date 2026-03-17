@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { getCanonicalUrl } from '@/lib/seo';
+import { generateMetadataForPageType } from './metadata';
 
 export type IntentProduct = 'notice_only' | 'complete_pack';
 
@@ -2478,25 +2478,12 @@ export function getWizardHref(config: IntentPageConfig, product?: IntentProduct,
 }
 
 export function getIntentPageMetadata(config: IntentPageConfig): Metadata {
-  const canonical = getCanonicalUrl(`/${config.slug}`);
-  const imageUrl = getCanonicalUrl('/og-image.png');
-
-  return {
+  return generateMetadataForPageType({
     title: config.title,
     description: config.description,
-    alternates: { canonical },
-    openGraph: {
-      title: config.title,
-      description: config.description,
-      url: canonical,
-      type: 'website',
-      images: [{ url: imageUrl }],
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: config.title,
-      description: config.description,
-      images: [imageUrl],
-    },
-  };
+    path: `/${config.slug}`,
+    type: 'website',
+    keywords: [config.keyword],
+    pageType: 'seo_landing',
+  });
 }

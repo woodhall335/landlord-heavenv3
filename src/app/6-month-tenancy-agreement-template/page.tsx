@@ -22,7 +22,7 @@ import {
 const wizardLinkAST = '/wizard?product=tenancy_agreement&topic=tenancy&src=seo_6_month_tenancy_agreement_template';
 
 export const metadata: Metadata = {
-  title: '6 Month Tenancy Agreement Template UK 2026 â€” Short-Term AST',
+  title: '6 Month Tenancy Agreement Template UK 2026 - Short-Term AST',
   description: '6 month tenancy agreement guidance and compliant AST creation for UK landlords. Includes notice periods, break clauses, and renewal options.',
   keywords: [
     '6 month tenancy agreement',

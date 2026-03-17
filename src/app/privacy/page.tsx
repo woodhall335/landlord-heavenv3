@@ -1,11 +1,19 @@
-import type { Metadata } from "next";
 import { Container } from "@/components/ui";
+import { generateMetadata } from "@/lib/seo";
 import { ShieldCheck, Database, CreditCard, Sparkles, Mail, Send } from "lucide-react";
 
-export const metadata: Metadata = {
-  title: "Privacy Policy",
-  description: "How Landlord Heaven collects, uses, and protects your personal data. GDPR compliant.",
-};
+export const metadata = generateMetadata({
+  title: "Privacy Policy | Landlord Heaven Website",
+  description:
+    "Learn how Landlord Heaven collects, uses, stores, and protects personal data when UK landlords use our document platform and support services.",
+  path: "/privacy",
+  keywords: [
+    "privacy policy",
+    "landlord heaven privacy",
+    "personal data",
+    "GDPR",
+  ],
+});
 
 export default function PrivacyPage() {
   return (

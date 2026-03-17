@@ -1,12 +1,20 @@
-import type { Metadata } from "next";
 import { Container, TealHero } from "@/components/ui";
+import { generateMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { Cookie, Lock, CreditCard, BarChart3, AlertTriangle } from "lucide-react";
 
-export const metadata: Metadata = {
-  title: "Cookie Policy",
-  description: "How Landlord Heaven uses cookies to improve your experience. Manage your cookie preferences.",
-};
+export const metadata = generateMetadata({
+  title: "Cookie Policy | Landlord Heaven Website",
+  description:
+    "Learn how Landlord Heaven uses cookies, analytics, and preference storage on our website, plus how UK landlords can manage cookie choices.",
+  path: "/cookies",
+  keywords: [
+    "cookie policy",
+    "landlord heaven cookies",
+    "website cookies",
+    "cookie preferences",
+  ],
+});
 
 export default function CookiesPage() {
   return (

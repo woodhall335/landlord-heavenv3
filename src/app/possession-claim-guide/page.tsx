@@ -34,7 +34,7 @@ const wizardLinkCompletePack = buildWizardLink({
 });
 
 export const metadata: Metadata = {
-  title: 'Possession Claim Guide UK â€” How to Apply for Court Possession (2026)',
+  title: 'Possession Claim Guide UK - How to Apply for Court Possession (2026)',
   description: 'Complete guide to applying for a court possession order in England. Form N5, N5B, hearing process, and timelines explained for UK landlords.',
   keywords: [
     'possession claim',
@@ -52,7 +52,7 @@ export const metadata: Metadata = {
     canonical: 'https://landlordheaven.co.uk/possession-claim-guide',
   },
   openGraph: {
-    title: 'Possession Claim Guide UK â€” Court Process Explained | Landlord Heaven',
+    title: 'Possession Claim Guide UK - Court Process Explained | Landlord Heaven',
     description: 'Step-by-step guide to applying for court possession orders. Forms, fees, and timelines for UK landlords.',
     type: 'website',
     url: 'https://landlordheaven.co.uk/possession-claim-guide',

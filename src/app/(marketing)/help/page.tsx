@@ -4,12 +4,22 @@ import Link from "next/link";
 import Image from "next/image";
 import { FAQInline } from "@/components/seo/FAQSection";
 import { ASK_HEAVEN_CTA } from "@/constants/askHeavenCta";
+import { generateMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Help Center",
+export const metadata: Metadata = generateMetadata({
+  title: "Landlord Help Centre | Eviction, Arrears & Tenancy FAQs",
   description:
-    "Get help with Landlord Heaven. FAQs about eviction notices, tenancy agreements, court claims, and HMO compliance.",
-};
+    "Get help with Section 21 notices, Section 8 notices, rent arrears claims, tenancy agreements, billing, and common landlord document questions.",
+  path: "/help",
+  keywords: [
+    "landlord help centre",
+    "section 21 help",
+    "section 8 help",
+    "rent arrears help",
+    "tenancy agreement help",
+    "landlord document FAQs",
+  ],
+});
 
 export default function HelpPage() {
   return (

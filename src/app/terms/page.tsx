@@ -1,11 +1,19 @@
-import type { Metadata } from "next";
 import { Container } from "@/components/ui";
+import { generateMetadata } from "@/lib/seo";
 import { AlertTriangle } from "lucide-react";
 
-export const metadata: Metadata = {
-  title: "Terms & Conditions",
-  description: "Terms and conditions for using Landlord Heaven's legal document services.",
-};
+export const metadata = generateMetadata({
+  title: "Terms and Conditions | Landlord Heaven Services",
+  description:
+    "Read the terms and conditions for using Landlord Heaven's UK landlord document services, checkout, delivery, and permitted use of digital products.",
+  path: "/terms",
+  keywords: [
+    "landlord heaven terms",
+    "terms and conditions",
+    "digital product terms",
+    "landlord document services",
+  ],
+});
 
 export default function TermsPage() {
   return (

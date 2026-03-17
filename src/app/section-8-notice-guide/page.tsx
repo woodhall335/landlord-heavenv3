@@ -11,25 +11,25 @@ import {
   breadcrumbSchema,
   faqPageSchema,
 } from '@/lib/seo/structured-data';
+import { generateMetadata } from '@/lib/seo';
 
 const canonical = 'https://landlordheaven.co.uk/section-8-notice-guide';
 
-export const metadata: Metadata = {
-  title: 'Section 8 Notice Guide | Grounds, Timing, Rent Arrears and Next Steps | LandlordHeaven',
+export const metadata: Metadata = generateMetadata({
+  title: 'Section 8 Notice Guide | Grounds, Arrears & Next Steps',
   description:
-    'A complete Section 8 notice guide for landlords in England covering grounds for possession, notice periods, rent arrears, Form 3, evidence, court next steps, and when to choose Notice Only or the Complete Eviction Pack.',
-  alternates: {
-    canonical,
-  },
-  openGraph: {
-    title: 'Section 8 Notice Guide | Grounds, Timing, Rent Arrears and Next Steps | LandlordHeaven',
-    description:
-      'Learn when to use a Section 8 notice, which grounds landlords rely on, how notice periods work, what evidence courts expect, and what happens after notice expiry.',
-    url: canonical,
-    siteName: 'LandlordHeaven',
-    type: 'article',
-  },
-};
+    'Section 8 notice guide for landlords in England covering Form 3, grounds for possession, rent arrears, service, evidence, and court next steps.',
+  path: '/section-8-notice-guide',
+  type: 'article',
+  keywords: [
+    'section 8 notice guide',
+    'form 3',
+    'grounds for possession',
+    'section 8 rent arrears',
+    'serve section 8 notice',
+    'section 8 evidence',
+  ],
+});
 
 const jumpLinks = [
   { href: '#quick-answer', label: 'Quick answer' },

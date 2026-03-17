@@ -1,12 +1,20 @@
-import type { Metadata } from "next";
 import { Container } from "@/components/ui";
+import { generateMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { FileText, XCircle, CheckCircle2, Mail } from "lucide-react";
 
-export const metadata: Metadata = {
-  title: "Refund Policy",
-  description: "Learn about our refund policy for digital products and terms.",
-};
+export const metadata = generateMetadata({
+  title: "Refund Policy | Landlord Heaven Digital Products",
+  description:
+    "Read the refund policy for Landlord Heaven digital products, including document delivery, technical errors, duplicate charges, and eligibility limits.",
+  path: "/refunds",
+  keywords: [
+    "refund policy",
+    "digital product refunds",
+    "landlord heaven refunds",
+    "duplicate charges",
+  ],
+});
 
 export default function RefundsPage() {
   return (

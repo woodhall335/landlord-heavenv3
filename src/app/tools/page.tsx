@@ -1,37 +1,27 @@
-import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Container } from '@/components/ui';
 import { freeTools } from '@/lib/tools/tools';
-import { getCanonicalUrl } from '@/lib/seo';
+import { generateMetadata } from '@/lib/seo';
 import { StandardHero } from '@/components/marketing/StandardHero';
 import { CommercialWizardLinks } from '@/components/seo/CommercialWizardLinks';
 import { analyzeContent } from '@/lib/seo/commercial-linking';
 import { Section21ComplianceTimingPanel } from '@/components/products/Section21ComplianceTimingPanel';
 
-export const metadata: Metadata = {
-  title: 'Free Landlord Tools UK | Calculators, Generators & Checkers',
+export const metadata = generateMetadata({
+  title: 'Free Landlord Tools UK | Eviction, Arrears & HMO Checks',
   description:
-    'Free tools for UK landlords: rent arrears calculator, eviction notice generators, HMO checker, and notice validators.',
+    'Use free landlord tools for Section 21, Section 8, rent arrears, HMO licensing, notice checks, and landlord compliance workflows in the UK.',
+  path: '/tools',
   keywords: [
     'free landlord tools',
-    'landlord calculator UK',
-    'eviction notice generator',
-    'rent arrears calculator',
-    'HMO checker',
     'section 21 generator',
     'section 8 generator',
+    'rent arrears calculator',
+    'HMO checker',
+    'eviction notice checker',
+    'landlord compliance tools',
   ],
-  openGraph: {
-    title: 'Free Landlord Tools UK | Landlord Heaven',
-    description:
-      'Free calculators, generators and checkers for UK landlords. Section 21, Section 8, rent arrears and more.',
-    type: 'website',
-    url: getCanonicalUrl('/tools'),
-  },
-  alternates: {
-    canonical: getCanonicalUrl('/tools'),
-  },
-};
+});
 
 const featuredTools = freeTools.filter((tool) => tool.featured);
 const otherTools = freeTools.filter((tool) => !tool.featured);

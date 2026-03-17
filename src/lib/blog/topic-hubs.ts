@@ -31,10 +31,11 @@ const postText = (post: BlogPost): string =>
 export const BLOG_TOPIC_HUBS: Record<BlogTopicHubSlug, BlogTopicHubConfig> = {
   'eviction-guides': {
     slug: 'eviction-guides',
-    title: 'Eviction Guides Hub for UK Landlords',
+    title: 'Eviction Guides Hub | Section 21, Section 8 & Possession',
     name: 'Eviction Guides',
     description: 'Core eviction process content mapped to notice, court, and possession next steps.',
-    metaDescription: 'UK eviction guides hub: Section 21, Section 8, court hearings, timelines, and possession process for landlords.',
+    metaDescription:
+      'Explore eviction guides for UK landlords covering Section 21, Section 8, court hearings, possession timelines, and enforcement next steps.',
     intro:
       'Start with the upgraded core guides first, then move into notice drafting, court pack preparation, or possession claim execution using the linked pillar routes.',
     pillarLinks: [
@@ -46,10 +47,11 @@ export const BLOG_TOPIC_HUBS: Record<BlogTopicHubSlug, BlogTopicHubConfig> = {
   },
   'rent-arrears': {
     slug: 'rent-arrears',
-    title: 'Rent Arrears Guides for Landlords',
+    title: 'Rent Arrears Guides | Section 8, Claims & Recovery',
     name: 'Rent Arrears',
     description: 'Arrears recovery content for notice strategy, debt claim, and possession sequencing.',
-    metaDescription: 'Rent arrears landlord hub: Section 8 arrears grounds, money claims, tenant stopped paying rent workflows, and recovery timelines.',
+    metaDescription:
+      'Explore rent arrears guides for landlords covering Section 8 grounds, money claims, recovery strategy, evidence, and post-judgment enforcement.',
     intro:
       'This cluster prioritises upgraded arrears posts first so landlords can move from missed rent triage to Section 8 and money-claim recovery in the right sequence.',
     pillarLinks: [
@@ -61,10 +63,11 @@ export const BLOG_TOPIC_HUBS: Record<BlogTopicHubSlug, BlogTopicHubConfig> = {
   },
   'section-21': {
     slug: 'section-21',
-    title: 'Section 21 Guides and Process Hub',
+    title: 'Section 21 Guides | Notice, Validity & Possession',
     name: 'Section 21',
     description: 'No-fault possession guides covering validity, Form 6A, service, and court follow-on.',
-    metaDescription: 'Section 21 landlord hub: Form 6A validity, notice periods, service proof, and accelerated possession guidance.',
+    metaDescription:
+      'Explore Section 21 guides for landlords covering Form 6A validity, notice periods, service proof, accelerated possession, and common mistakes.',
     intro:
       'Section 21 content is consolidated here with the highest-value upgraded posts surfaced first, helping landlords validate paperwork and move into court-ready next steps.',
     pillarLinks: [
@@ -76,10 +79,11 @@ export const BLOG_TOPIC_HUBS: Record<BlogTopicHubSlug, BlogTopicHubConfig> = {
   },
   'section-8': {
     slug: 'section-8',
-    title: 'Section 8 Guides and Grounds Hub',
+    title: 'Section 8 Guides | Grounds, Form 3 & Arrears',
     name: 'Section 8',
     description: 'Grounds-based possession content including arrears, anti-social behaviour, and court preparation.',
-    metaDescription: 'Section 8 landlord hub: grounds, Form 3, notice service, arrears possession, and contested hearing preparation.',
+    metaDescription:
+      'Explore Section 8 guides for landlords covering Form 3, rent arrears grounds, service, evidence, hearings, and possession strategy.',
     intro:
       'Section 8 is evidence-led. This hub now surfaces upgraded grounds and process guides first, then routes landlords into service, court prep, and arrears recovery.',
     pillarLinks: [
@@ -91,10 +95,11 @@ export const BLOG_TOPIC_HUBS: Record<BlogTopicHubSlug, BlogTopicHubConfig> = {
   },
   'landlord-compliance': {
     slug: 'landlord-compliance',
-    title: 'Landlord Compliance Guides Hub',
+    title: 'Landlord Compliance Guides | Deposits, EPC & Safety',
     name: 'Landlord Compliance',
     description: 'Safety, documentation, and legal compliance explainers that support valid possession routes.',
-    metaDescription: 'Landlord compliance hub for gas safety, deposits, EPC, EICR, right to rent, and tenancy paperwork prerequisites.',
+    metaDescription:
+      'Explore landlord compliance guides covering gas safety, deposits, EPC, EICR, right to rent checks, and tenancy paperwork requirements.',
     intro:
       'Compliance gaps are a major reason eviction routes fail. Use these guides to close prerequisites before issuing notice or filing in court.',
     pillarLinks: [
@@ -106,10 +111,11 @@ export const BLOG_TOPIC_HUBS: Record<BlogTopicHubSlug, BlogTopicHubConfig> = {
   },
   'wales-landlord-guides': {
     slug: 'wales-landlord-guides',
-    title: 'Wales Landlord Guides Hub',
+    title: 'Wales Landlord Guides | Possession & Occupation Contracts',
     name: 'Wales Landlord Guides',
     description: 'Renting Homes (Wales) focused posts for possession, contracts, and compliance.',
-    metaDescription: 'Wales landlord guides hub: Renting Homes Act possession process, occupation contracts, and Rent Smart Wales compliance.',
+    metaDescription:
+      'Explore Wales landlord guides covering occupation contracts, the Renting Homes Act, possession process, and Rent Smart Wales compliance.',
     intro:
       'Browse Wales-specific landlord content built around the Renting Homes Act, Welsh notice routes, and tribunal-aware compliance steps.',
     pillarLinks: [
@@ -121,10 +127,11 @@ export const BLOG_TOPIC_HUBS: Record<BlogTopicHubSlug, BlogTopicHubConfig> = {
   },
   'scotland-landlord-guides': {
     slug: 'scotland-landlord-guides',
-    title: 'Scotland Landlord Guides Hub',
+    title: 'Scotland Landlord Guides | PRT, Notice to Leave & Tribunal',
     name: 'Scotland Landlord Guides',
     description: 'Scottish landlord guidance for PRT, Notice to Leave, and tribunal process.',
-    metaDescription: 'Scotland landlord guides hub: PRT tenancy rules, Notice to Leave, First-tier Tribunal timelines, and evidence preparation.',
+    metaDescription:
+      'Explore Scotland landlord guides covering PRT rules, Notice to Leave, tribunal timelines, evidence, and landlord compliance steps.',
     intro:
       'Find Scotland-specific guidance for PRT tenancies, Notice to Leave drafting, and First-tier Tribunal possession preparation.',
     pillarLinks: [
@@ -136,10 +143,11 @@ export const BLOG_TOPIC_HUBS: Record<BlogTopicHubSlug, BlogTopicHubConfig> = {
   },
   'northern-ireland-landlord-guides': {
     slug: 'northern-ireland-landlord-guides',
-    title: 'Northern Ireland Landlord Guides Hub',
+    title: 'Northern Ireland Landlord Guides | Tenancy & Possession',
     name: 'Northern Ireland Landlord Guides',
     description: 'Northern Ireland tenancy and possession guides for compliant landlord workflows.',
-    metaDescription: 'Northern Ireland landlord guides hub: private tenancy notices, deposit compliance, and possession process resources.',
+    metaDescription:
+      'Explore Northern Ireland landlord guides covering private tenancy notices, deposit compliance, possession procedure, and landlord obligations.',
     intro:
       'This hub gathers Northern Ireland landlord guidance for notice handling, tenancy compliance, and jurisdiction-specific possession steps.',
     pillarLinks: [

@@ -33,7 +33,7 @@ const wizardLinkAST = buildWizardLink({
 });
 
 export const metadata: Metadata = {
-  title: 'Fixed Term Tenancy Agreement UK 2026 â€” AST Template & Guide',
+  title: 'Fixed Term Tenancy Agreement UK 2026 - AST Template & Guide',
   description: 'Fixed term tenancy agreement template for UK landlords. 6, 12, and 24 month terms, break clauses, renewal, and end of term options.',
   keywords: [
     'fixed term tenancy agreement',
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
     canonical: 'https://landlordheaven.co.uk/fixed-term-tenancy-agreement-template',
   },
   openGraph: {
-    title: 'Fixed Term Tenancy Agreement UK 2026 | Landlord Heaven',
+  title: 'Fixed Term Tenancy Agreement UK 2026 - AST Template & Guide',
     description: 'Complete guide to fixed term tenancy agreements. Templates, break clauses, and end of term options.',
     type: 'website',
     url: 'https://landlordheaven.co.uk/fixed-term-tenancy-agreement-template',

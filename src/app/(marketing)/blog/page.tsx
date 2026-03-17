@@ -1,4 +1,3 @@
-import { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import { StructuredData } from '@/lib/seo/structured-data';
@@ -11,35 +10,27 @@ import { UniversalHero } from '@/components/landing/UniversalHero';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { blogHeroConfig } from '@/components/landing/heroConfigs';
 import { ArrowRight } from 'lucide-react';
-import { getCanonicalUrl } from '@/lib/seo';
+import { generateMetadata } from '@/lib/seo';
 import { PRODUCTS } from '@/lib/pricing/products';
 import { getBlogImagesForPost } from '@/lib/blog/image-manifest';
 import { BLOG_TOPIC_HUBS } from '@/lib/blog/topic-hubs';
 
-export const metadata: Metadata = {
-  title: 'UK Landlord Guides: Eviction, Tenancy & Rent Arrears',
-  description: 'Expert UK landlord guides on evictions, tenancy law, rent arrears, and compliance updates.',
+export const metadata = generateMetadata({
+  title: 'UK Landlord Guides | Eviction, Tenancy & Rent Arrears',
+  description:
+    'Read UK landlord guides on Section 21, Section 8, eviction notices, rent arrears, tenancy agreements, possession claims, and compliance updates.',
+  path: '/blog',
   keywords: [
     'how to evict a tenant',
     'eviction notice',
     'section 21',
     'section 8',
-    'section 21 notice',
-    'section 8 notice',
-    'money claim',
-    'recover rent arrears',
-    'landlord eviction process',
+    'rent arrears',
+    'tenancy agreement',
+    'possession claim',
+    'landlord compliance',
   ],
-  openGraph: {
-    title: 'UK Landlord Guides: Eviction, Tenancy & Rent Arrears | Landlord Heaven',
-    description: 'Expert guides for UK landlords on evictions, tenancy law, and property management.',
-    type: 'website',
-    url: getCanonicalUrl('/blog'),
-  },
-  alternates: {
-    canonical: getCanonicalUrl('/blog'),
-  },
-};
+});
 
 export default function BlogPage() {
   const blogSchema = {

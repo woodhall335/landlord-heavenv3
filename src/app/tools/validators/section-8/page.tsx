@@ -9,7 +9,6 @@ import type { Metadata } from 'next';
 import { ValidatorPage } from '@/components/validators/ValidatorPage';
 import { Container } from '@/components/ui/Container';
 import Link from 'next/link';
-import { getCanonicalUrl } from '@/lib/seo/urls';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { PRODUCTS } from '@/lib/pricing/products';
@@ -19,6 +18,7 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { productLinks, toolLinks, landingPageLinks } from '@/lib/seo/internal-links';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { generateMetadata } from '@/lib/seo';
 
 // Pre-built wizard links for Section 8 validator page
 const wizardLinkNoticeOnly = buildWizardLink({
@@ -39,7 +39,7 @@ const upsellConfig = {
   toolName: 'Section 8 Notice Validator',
   toolType: 'validator' as const,
   productName: 'Notice Only Pack',
-  ctaLabel: `Upgrade to court-ready pack Ã¢â‚¬â€ ${PRODUCTS.notice_only.displayPrice}`,
+  ctaLabel: `Upgrade to court-ready pack - ${PRODUCTS.notice_only.displayPrice}`,
   ctaHref: wizardLinkNoticeOnly,
   jurisdiction: 'england',
   jurisdictionLabel: 'England only',
@@ -55,10 +55,11 @@ const upsellConfig = {
   ],
 };
 
-export const metadata: Metadata = {
-  title: 'Free Section 8 Notice Checker (England) Ã¢â‚¬â€œ Check Your Grounds',
+export const metadata: Metadata = generateMetadata({
+  title: 'Free Section 8 Notice Checker | England Form 3',
   description:
-    'Free Section 8 checker for England. Upload your notice for instant validation. Checks Form 3, grounds for possession, and notice periods.',
+    'Free Section 8 checker for England. Upload your notice for instant validation covering Form 3, grounds for possession, and notice periods.',
+  path: '/tools/validators/section-8',
   keywords: [
     'section 8 notice checker',
     'section 8 grounds checker',
@@ -68,20 +69,8 @@ export const metadata: Metadata = {
     'grounds for possession',
     'eviction notice check',
     'ground 8 rent arrears',
-    'mandatory grounds eviction',
-    'discretionary grounds eviction',
   ],
-  openGraph: {
-    title: 'Free Section 8 Notice Checker (England) | Landlord Heaven',
-    description:
-      'Free online Section 8 notice checker for England landlords. Upload your notice for instant grounds and validity verification.',
-    type: 'website',
-    url: getCanonicalUrl('/tools/validators/section-8'),
-  },
-  alternates: {
-    canonical: getCanonicalUrl('/tools/validators/section-8'),
-  },
-};
+});
 
 const faqSchema = {
   '@context': 'https://schema.org',

@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { getCanonicalUrl } from '@/lib/seo';
+import { generateMetadataForPageType } from './metadata';
 import type { FAQItem } from '@/components/seo/FAQSection';
 import type { IntentSection } from '@/components/seo/HighIntentPageShell';
 
@@ -142,17 +142,12 @@ const seeds: Seed[] = [
 export const PHASE5_PAGES: Record<string, Phase5PageContent> = Object.fromEntries(seeds.map((seed) => [seed.slug, makePage(seed)]));
 
 export function getPhase5Metadata(page: Phase5PageContent): Metadata {
-  const canonical = getCanonicalUrl(`/${page.slug}`);
-  return {
+  return generateMetadataForPageType({
     title: page.title,
     description: page.description,
     keywords: page.keywords,
-    alternates: { canonical },
-    openGraph: {
-      title: page.title,
-      description: page.description,
-      type: 'article',
-      url: canonical,
-    },
-  };
+    path: `/${page.slug}`,
+    type: 'article',
+    pageType: 'guide',
+  });
 }

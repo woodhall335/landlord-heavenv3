@@ -18,9 +18,18 @@ import {
 } from "lucide-react";
 
 export const metadata: Metadata = generateMetadata({
-  title: "About Us - Mission & Story",
-  description: "Landlord Heaven delivers UK landlord legal infrastructure with jurisdiction-specific case bundles for evictions, tenancies, and HMO compliance.",
+  title: "About Landlord Heaven | UK Landlord Document Platform",
+  description:
+    "Learn how Landlord Heaven helps UK landlords create Section 21 notices, Section 8 notices, tenancy agreements, and court-ready possession documents faster.",
   path: "/about",
+  keywords: [
+    "about landlord heaven",
+    "UK landlord documents",
+    "section 21 notices",
+    "section 8 notices",
+    "tenancy agreements",
+    "possession documents",
+  ],
 });
 
 export default function AboutPage() {

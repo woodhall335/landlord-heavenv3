@@ -37,7 +37,7 @@ const wizardLinkCompletePack = buildWizardLink({
 const faqs = n5bFormFAQs;
 
 export const metadata: Metadata = {
-  title: 'N5B Form Guide UK â€” Accelerated Possession Procedure (2026)',
+  title: 'N5B Form Guide UK - Accelerated Possession Procedure (2026)',
   description: 'Complete guide to Form N5B for accelerated possession in England. When to use it, how to fill it in, and what to expect from the court process.',
   keywords: [
     'n5b form',
@@ -55,7 +55,7 @@ export const metadata: Metadata = {
     canonical: 'https://landlordheaven.co.uk/n5b-form-guide',
   },
   openGraph: {
-    title: 'N5B Form Guide UK â€” Accelerated Possession | Landlord Heaven',
+    title: 'N5B Form Guide UK - Accelerated Possession | Landlord Heaven',
     description: 'How to use Form N5B for accelerated possession after serving Section 21 notice. Step-by-step guide.',
     type: 'website',
     url: 'https://landlordheaven.co.uk/n5b-form-guide',

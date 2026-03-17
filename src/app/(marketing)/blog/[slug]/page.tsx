@@ -20,7 +20,13 @@ import {
   BlogRegion,
 } from '@/lib/blog/categories';
 import { Calendar, Clock, Tag, ChevronLeft, Share2, RefreshCw, CheckCircle } from 'lucide-react';
-import { getCanonicalUrl, SITE_ORIGIN } from '@/lib/seo';
+import {
+  buildBrandedTitle,
+  getCanonicalUrl,
+  normalizeKeywordList,
+  sanitizePageTitle,
+  SITE_ORIGIN,
+} from '@/lib/seo';
 import { AskHeavenWidget } from '@/components/ask-heaven/AskHeavenWidget';
 import { BlogAskHeavenPanel } from '@/components/blog/BlogAskHeavenPanel';
 import type { AskHeavenTopic } from '@/lib/ask-heaven/buildAskHeavenLink';
@@ -471,24 +477,27 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
     }
 
     const canonicalUrl = getCanonicalUrl(`/blog/${slug}`);
+    const pageTitle = sanitizePageTitle(config.title);
+    const socialTitle = buildBrandedTitle(pageTitle);
+    const keywords = normalizeKeywordList(config.relatedTopics).slice(0, 8);
 
     return {
-      title: config.title,
+      title: pageTitle,
       description: config.metaDescription,
-      keywords: config.relatedTopics,
+      keywords,
       robots: 'index,follow',
       alternates: {
         canonical: canonicalUrl,
       },
       openGraph: {
-        title: `${config.title} | Landlord Heaven`,
+        title: socialTitle,
         description: config.metaDescription,
         type: 'website',
         url: canonicalUrl,
       },
       twitter: {
         card: 'summary_large_image',
-        title: config.title,
+        title: socialTitle,
         description: config.metaDescription,
       },
     };
@@ -497,17 +506,26 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
   const topicHub = getTopicHubConfig(slug);
   if (topicHub) {
     const canonicalUrl = getCanonicalUrl(`/blog/${slug}`);
+    const pageTitle = sanitizePageTitle(topicHub.title);
+    const socialTitle = buildBrandedTitle(pageTitle);
+    const keywords = normalizeKeywordList([topicHub.name, pageTitle]).slice(0, 8);
 
     return {
-      title: topicHub.title,
+      title: pageTitle,
       description: topicHub.metaDescription,
+      keywords,
       robots: 'index,follow',
       alternates: { canonical: canonicalUrl },
       openGraph: {
-        title: `${topicHub.title} | Landlord Heaven`,
+        title: socialTitle,
         description: topicHub.metaDescription,
         type: 'website',
         url: canonicalUrl,
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: socialTitle,
+        description: topicHub.metaDescription,
       },
     };
   }
@@ -532,17 +550,20 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
   });
   // Use canonicalSlug if this post points to another as the canonical version
   const canonicalUrl = getCanonicalUrl(seoConfig.canonicalPath);
+  const pageTitle = sanitizePageTitle(seoConfig.metaTitle);
+  const socialTitle = buildBrandedTitle(pageTitle);
+  const keywords = normalizeKeywordList([post.targetKeyword, ...post.secondaryKeywords]).slice(0, 8);
 
   return {
-    title: seoConfig.metaTitle, // Layout template adds "| Landlord Heaven"
+    title: pageTitle,
     description: seoConfig.metaDescription,
-    keywords: [post.targetKeyword, ...post.secondaryKeywords],
+    keywords,
     robots: seoConfig.robots,
     alternates: {
       canonical: canonicalUrl,
     },
     openGraph: {
-      title: seoConfig.metaTitle,
+      title: socialTitle,
       description: seoConfig.metaDescription,
       type: 'article',
       url: canonicalUrl,
@@ -561,7 +582,7 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
     },
     twitter: {
       card: 'summary_large_image',
-      title: seoConfig.metaTitle,
+      title: socialTitle,
       description: seoConfig.metaDescription,
     },
   };
