@@ -89,7 +89,7 @@ export default function AssuredShortholdTenancyAgreementTemplatePage() {
             </h2>
             <p className="text-xl text-gray-700 mb-8 max-w-3xl mx-auto">
               Create a <strong>legally compliant AST</strong> for your England rental property in minutes.
-              Note: An AST is not suitable for lodgers — use a <Link href="/lodger-agreement-template" className="text-primary hover:underline">lodger agreement</Link> instead.
+              Note: An AST is not suitable for lodgers ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â use a <Link href="/lodger-agreement-template" className="text-primary hover:underline">lodger agreement</Link> instead.
               Our templates meet all Housing Act 1988 and Tenant Fees Act 2019 requirements,
               giving you a <strong>court-defensible tenancy agreement</strong> you can trust.
             </p>
@@ -98,13 +98,13 @@ export default function AssuredShortholdTenancyAgreementTemplatePage() {
                 href="/wizard?product=ast_standard&src=seo_assured_shorthold_tenancy_agreement_template&topic=tenancy&jurisdiction=england"
                 className="inline-flex items-center gap-2 bg-white border-2 border-blue-600 text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors"
               >
-                Standard AST — £9.99
+                Standard AST â€” £14.99
               </Link>
               <Link
                 href="/wizard?product=ast_premium&src=seo_assured_shorthold_tenancy_agreement_template&topic=tenancy&jurisdiction=england"
                 className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
               >
-                Premium AST — £19.99
+                Premium AST â€” £24.99
               </Link>
             </div>
             <p className="mt-3 text-sm text-gray-600">
@@ -114,7 +114,7 @@ export default function AssuredShortholdTenancyAgreementTemplatePage() {
               </Link>
               .
             </p>
-            <p className="mt-4 text-sm text-gray-500">Instant PDF download â€¢ No subscription â€¢ Legally binding</p>
+            <p className="mt-4 text-sm text-gray-500">Instant PDF download ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ No subscription ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ Legally binding</p>
           </div>
         </section>
 
@@ -157,14 +157,14 @@ export default function AssuredShortholdTenancyAgreementTemplatePage() {
                 which creates the Assured Shorthold Tenancy (AST) framework. Key England-specific requirements include:
               </p>
               <ul className="space-y-2">
-                <li><strong>Deposit caps</strong> under the Tenant Fees Act 2019 (5 weeks for rent under £50,000/year)</li>
+                <li><strong>Deposit caps</strong> under the Tenant Fees Act 2019 (5 weeks for rent under ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£50,000/year)</li>
                 <li><strong>Deposit protection</strong> in a government-authorised scheme within 30 days</li>
                 <li><Link href="/how-to-rent-guide" className="text-primary hover:underline font-semibold">How to Rent guide</Link> must be provided before tenancy starts</li>
                 <li><strong>EPC, Gas Safety Certificate, and <Link href="/eicr-landlord-requirements" className="text-primary hover:underline">EICR</Link></strong> must be provided to tenants</li>
                 <li><strong>Section 21</strong> (<Link href="/no-fault-eviction" className="text-primary hover:underline">no-fault eviction</Link>) and <strong>Section 8</strong> (grounds-based eviction) procedures</li>
               </ul>
               <p>
-                Wales now uses <strong>Occupation Contracts</strong> under the Renting Homes (Wales) Act 2016 —
+                Wales now uses <strong>Occupation Contracts</strong> under the Renting Homes (Wales) Act 2016 ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â
                 completely different from ASTs. Scotland uses <strong>Private Residential Tenancies (PRTs)</strong>.
                 Using the wrong type of agreement in these jurisdictions would be legally void.
               </p>
@@ -181,7 +181,7 @@ export default function AssuredShortholdTenancyAgreementTemplatePage() {
                 <h3 className="text-lg font-semibold text-gray-900 mb-3">Prescribed Information Compliant</h3>
                 <p className="text-gray-700">
                   Our templates include all prescribed deposit information required by the Housing Act 2004.
-                  This is essential for valid Section 21 notices — missing prescribed information is a common
+                  This is essential for valid Section 21 notices ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â missing prescribed information is a common
                   reason possession claims fail.
                 </p>
               </div>
@@ -189,7 +189,7 @@ export default function AssuredShortholdTenancyAgreementTemplatePage() {
                 <h3 className="text-lg font-semibold text-gray-900 mb-3">Tenant Fees Act Validated</h3>
                 <p className="text-gray-700">
                   Our wizard automatically validates deposit amounts against Tenant Fees Act 2019 limits.
-                  If you enter a deposit exceeding 5 weeks&apos; rent (or 6 weeks for annual rent over £50,000),
+                  If you enter a deposit exceeding 5 weeks&apos; rent (or 6 weeks for annual rent over ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£50,000),
                   you&apos;ll be warned before generating the agreement.
                 </p>
               </div>
@@ -231,7 +231,7 @@ export default function AssuredShortholdTenancyAgreementTemplatePage() {
               </div>
               <div className="border-l-4 border-blue-500 pl-4 py-2">
                 <h3 className="font-semibold text-gray-900">Garden and Exterior Maintenance</h3>
-                <p className="text-gray-600">Specifies tenant responsibilities for gardens, driveways, and exterior areas — often overlooked in basic templates.</p>
+                <p className="text-gray-600">Specifies tenant responsibilities for gardens, driveways, and exterior areas ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â often overlooked in basic templates.</p>
               </div>
               <div className="border-l-4 border-blue-500 pl-4 py-2">
                 <h3 className="font-semibold text-gray-900">Utility Transfer Obligations</h3>
@@ -269,19 +269,19 @@ export default function AssuredShortholdTenancyAgreementTemplatePage() {
             </p>
             <div className="grid md:grid-cols-2 gap-4">
               <Link href="/products/notice-only" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                <h3 className="font-semibold text-gray-900">Eviction Notice Pack — £19.99</h3>
+                <h3 className="font-semibold text-gray-900">Eviction Notice Pack â€” £29.99</h3>
                 <p className="text-sm text-gray-600">Section 21 or Section 8 notices when you need to regain possession</p>
               </Link>
               <Link href="/products/complete-pack" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                <h3 className="font-semibold text-gray-900">Complete Eviction Pack — £49.99</h3>
+                <h3 className="font-semibold text-gray-900">Complete Eviction Pack ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â £79.99</h3>
                 <p className="text-sm text-gray-600">Full eviction package including court forms and witness statements</p>
               </Link>
               <Link href="/products/money-claim" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                <h3 className="font-semibold text-gray-900">Money Claim Pack — £34.99</h3>
+                <h3 className="font-semibold text-gray-900">Money Claim Pack ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â £59.99</h3>
                 <p className="text-sm text-gray-600">Recover rent arrears, property damage, and other tenant debts</p>
               </Link>
               <Link href="/ask-heaven" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                <h3 className="font-semibold text-gray-900">Ask Heaven — Free</h3>
+                <h3 className="font-semibold text-gray-900">Ask Heaven ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â Free</h3>
                 <p className="text-sm text-gray-600">Get instant answers to your landlord questions</p>
               </Link>
             </div>

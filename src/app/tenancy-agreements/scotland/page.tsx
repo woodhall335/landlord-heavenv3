@@ -1,4 +1,4 @@
-﻿import type { Metadata } from 'next';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { getCanonicalUrl } from '@/lib/seo/urls';
@@ -86,7 +86,7 @@ export default function ScotlandPRTPage() {
       {
         '@type': 'Offer',
         name: 'Standard PRT',
-        price: '9.99',
+        price: '14.99',
         priceCurrency: 'GBP',
         priceValidUntil: PRICE_VALID_UNTIL,
         availability: 'https://schema.org/InStock',
@@ -109,7 +109,7 @@ export default function ScotlandPRTPage() {
       {
         '@type': 'Offer',
         name: 'Premium PRT',
-        price: '9.99',
+        price: '14.99',
         priceCurrency: 'GBP',
         priceValidUntil: PRICE_VALID_UNTIL,
         availability: 'https://schema.org/InStock',
@@ -199,13 +199,13 @@ export default function ScotlandPRTPage() {
                 href="/wizard?product=ast_standard&src=product_page&topic=tenancy&jurisdiction=scotland"
                 className="hero-btn-secondary"
               >
-                Create Standard PRT - £9.99
+                Create Standard PRT - £14.99
               </Link>
               <Link
                 href="/wizard?product=ast_premium&src=product_page&topic=tenancy&jurisdiction=scotland"
                 className="hero-btn-primary"
               >
-                Create Premium PRT - £19.99
+                Create Premium PRT - £24.99
               </Link>
             </div>
           </div>
@@ -714,7 +714,7 @@ export default function ScotlandPRTPage() {
 
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="bg-white/10 backdrop-blur rounded-lg p-6">
-                  <h4 className="text-xl font-bold mb-3">Standard PRT - £9.99</h4>
+                  <h4 className="text-xl font-bold mb-3">Standard PRT - £14.99</h4>
                   <ul className="space-y-2 text-sm">
                     <li>âœ“ All legal essentials for Scottish PRTs</li>
                     <li>âœ“ Compliant with PH(T)(S) Act 2016</li>
@@ -736,7 +736,7 @@ export default function ScotlandPRTPage() {
                   <div className="inline-block bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-xs font-bold mb-2">
                     RECOMMENDED
                   </div>
-                  <h4 className="text-xl font-bold mb-3">Premium PRT - £19.99</h4>
+                  <h4 className="text-xl font-bold mb-3">Premium PRT - £24.99</h4>
                   <ul className="space-y-2 text-sm">
                     <li>âœ“ Everything in Standard PLUS:</li>
                     <li>âœ“ Comprehensive inventory section with white goods grid</li>
@@ -1043,7 +1043,7 @@ export default function ScotlandPRTPage() {
             },
             {
               question: "What is the difference between Standard and Premium PRT agreements?",
-              answer: "The Standard PRT (£9.99) covers all legal essentials for Scottish tenancies, including open-ended structure, 18 grounds for possession, Repairing Standard obligations, and landlord registration. The Premium PRT (£19.99) adds: comprehensive inventory section with white goods grid, exhaustive terms and conditions (13 detailed clauses), professional gradient styling (Scotland blue theme), rights of change clauses, enhanced legal compliance information boxes, detailed Repairing Standard explanation, First-tier Tribunal guidance, and superior professional presentation."
+              answer: "The Standard PRT (£14.99) covers all legal essentials for Scottish tenancies, including open-ended structure, 18 grounds for possession, Repairing Standard obligations, and landlord registration. The Premium PRT (£24.99) adds: comprehensive inventory section with white goods grid, exhaustive terms and conditions (13 detailed clauses), professional gradient styling (Scotland blue theme), rights of change clauses, enhanced legal compliance information boxes, detailed Repairing Standard explanation, First-tier Tribunal guidance, and superior professional presentation."
             },
             {
               question: "What is the maximum deposit I can charge in Scotland?",
@@ -1121,13 +1121,13 @@ export default function ScotlandPRTPage() {
                 href="/wizard?product=ast_standard&src=product_page&topic=tenancy&jurisdiction=scotland"
                 className="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold hover:bg-blue-50 transition-colors text-lg shadow-lg"
               >
-                Standard PRT - £9.99
+                Standard PRT - £14.99
               </Link>
               <Link
                 href="/wizard?product=ast_premium&src=product_page&topic=tenancy&jurisdiction=scotland"
                 className="bg-yellow-400 text-gray-900 px-8 py-4 rounded-lg font-semibold hover:bg-yellow-300 transition-colors text-lg shadow-lg"
               >
-                Premium PRT - £19.99 ⭐
+                Premium PRT - £24.99 ⭐
               </Link>
             </div>
             <p className="mt-6 text-sm opacity-75">

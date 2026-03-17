@@ -19,7 +19,7 @@ describe('tenancy agreements metadata', () => {
 
     titles.forEach((title) => {
       expect(title).toContain('2026');
-      expect(title).toContain('£9.99');
+      expect(title).toContain('£14.99');
     });
 
     expect(asText(englandMetadata.title)).toContain('AST');

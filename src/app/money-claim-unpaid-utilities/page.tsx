@@ -105,13 +105,13 @@ const faqs = [
 export default function MoneyClaimUnpaidUtilitiesPage() {
   const hero = {
     ...moneyClaimHeroConfig,
-    trustText: 'Solicitor-grade • Compliance-checked • Court-ready',
+    trustText: 'Solicitor-grade â€¢ Compliance-checked â€¢ Court-ready',
     primaryCta: {
-      label: 'Start Money Claim →',
+      label: 'Start Money Claim â†’',
       href: '/products/money-claim?topic=debt&src=seo_money_claim_unpaid_utilities',
     },
     secondaryCta: {
-      label: 'View Money Claim Pack →',
+      label: 'View Money Claim Pack â†’',
       href: '/products/money-claim',
     },
     title: 'Recover Unpaid Utilities from Tenants',
@@ -208,11 +208,11 @@ export default function MoneyClaimUnpaidUtilitiesPage() {
                     Utilities in YOUR Name
                   </h3>
                   <ul className="space-y-2 text-gray-700 text-sm">
-                    <li>• You&apos;re liable to pay the supplier</li>
-                    <li>• Tenancy agreement should require tenant reimbursement</li>
-                    <li>• Take meter readings at check-in/check-out</li>
-                    <li>• Can claim unpaid amounts from tenant</li>
-                    <li>• Can use deposit for utility arrears</li>
+                    <li>â€¢ You&apos;re liable to pay the supplier</li>
+                    <li>â€¢ Tenancy agreement should require tenant reimbursement</li>
+                    <li>â€¢ Take meter readings at check-in/check-out</li>
+                    <li>â€¢ Can claim unpaid amounts from tenant</li>
+                    <li>â€¢ Can use deposit for utility arrears</li>
                   </ul>
                 </div>
 
@@ -222,11 +222,11 @@ export default function MoneyClaimUnpaidUtilitiesPage() {
                     Utilities in TENANT&apos;S Name
                   </h3>
                   <ul className="space-y-2 text-gray-700 text-sm">
-                    <li>• Tenant is directly liable to supplier</li>
-                    <li>• Debt is between tenant and utility company</li>
-                    <li>• You generally can&apos;t claim their bills</li>
-                    <li>• Exception: if you&apos;ve suffered loss due to breach</li>
-                    <li>• Utility company may contact you anyway</li>
+                    <li>â€¢ Tenant is directly liable to supplier</li>
+                    <li>â€¢ Debt is between tenant and utility company</li>
+                    <li>â€¢ You generally can&apos;t claim their bills</li>
+                    <li>â€¢ Exception: if you&apos;ve suffered loss due to breach</li>
+                    <li>â€¢ Utility company may contact you anyway</li>
                   </ul>
                 </div>
               </div>
@@ -268,7 +268,7 @@ export default function MoneyClaimUnpaidUtilitiesPage() {
               {/* Ask Heaven callout */}
               <div className="bg-purple-50 border border-purple-200 rounded-xl p-4">
                 <div className="flex items-start gap-3">
-                  <span className="text-2xl">☁️</span>
+                  <span className="text-2xl">â˜ï¸</span>
                   <div>
                     <p className="font-semibold text-gray-900 mb-1">
                       Confused about utility liability?
@@ -349,30 +349,30 @@ export default function MoneyClaimUnpaidUtilitiesPage() {
                 <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
                   <h3 className="font-bold text-gray-900 mb-3">Gas & Electric</h3>
                   <ul className="space-y-2 text-sm text-gray-600">
-                    <li>• Final bills showing amounts owed</li>
-                    <li>• Meter readings proving usage period</li>
-                    <li>• Payment history from supplier</li>
-                    <li>• Account statements</li>
+                    <li>â€¢ Final bills showing amounts owed</li>
+                    <li>â€¢ Meter readings proving usage period</li>
+                    <li>â€¢ Payment history from supplier</li>
+                    <li>â€¢ Account statements</li>
                   </ul>
                 </div>
 
                 <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
                   <h3 className="font-bold text-gray-900 mb-3">Water & Sewerage</h3>
                   <ul className="space-y-2 text-sm text-gray-600">
-                    <li>• Water company bills</li>
-                    <li>• Proof you&apos;ve paid (if applicable)</li>
-                    <li>• Account correspondence</li>
-                    <li>• Tenancy agreement clause</li>
+                    <li>â€¢ Water company bills</li>
+                    <li>â€¢ Proof you&apos;ve paid (if applicable)</li>
+                    <li>â€¢ Account correspondence</li>
+                    <li>â€¢ Tenancy agreement clause</li>
                   </ul>
                 </div>
 
                 <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
                   <h3 className="font-bold text-gray-900 mb-3">Broadband/Phone</h3>
                   <ul className="space-y-2 text-sm text-gray-600">
-                    <li>• Service contract in your name</li>
-                    <li>• Bills showing unpaid periods</li>
-                    <li>• Tenancy clause on responsibility</li>
-                    <li>• Your payment records</li>
+                    <li>â€¢ Service contract in your name</li>
+                    <li>â€¢ Bills showing unpaid periods</li>
+                    <li>â€¢ Tenancy clause on responsibility</li>
+                    <li>â€¢ Your payment records</li>
                   </ul>
                 </div>
               </div>
@@ -519,7 +519,7 @@ export default function MoneyClaimUnpaidUtilitiesPage() {
                     Scenario 2: Utilities Included in Rent
                   </h3>
                   <p className="text-gray-600 text-sm mb-3">
-                    Rent is stated as &quot;£X including bills&quot;. The tenant paid less than
+                    Rent is stated as &quot;Â£X including bills&quot;. The tenant paid less than
                     expected rent, or you want to claim the utility portion specifically.
                   </p>
                   <p className="text-gray-700 text-sm font-medium">

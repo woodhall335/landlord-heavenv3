@@ -66,7 +66,7 @@ const ADD_ON_ELIGIBLE_PRODUCTS = [
 
 /**
  * Map product types to Stripe Price IDs
- * Note: money_claim is £34.99, sc_money_claim (discontinued) shares the same Stripe price ID
+ * Note: money_claim is £59.99, sc_money_claim (discontinued) shares the same Stripe price ID
  * Jurisdiction-specific display SKUs (prt_*, occupation_*, ni_*) map to the same prices as ast_*
  */
 const PRODUCT_TO_PRICE_ID: Record<string, string> = {

@@ -197,13 +197,13 @@ export default function MoneyClaimPropertyDamagePage() {
                     You CAN claim for:
                   </h3>
                   <ul className="space-y-2 text-gray-700 text-sm">
-                    <li>• Holes, dents, or marks in walls beyond wear and tear</li>
-                    <li>• Broken or damaged fixtures (doors, windows, fittings)</li>
-                    <li>• Stained, burned, or torn carpets and flooring</li>
-                    <li>• Damaged or missing appliances/furniture</li>
-                    <li>• Garden damage or neglect requiring restoration</li>
-                    <li>• Damage from pets (if not permitted)</li>
-                    <li>• Mould damage from tenant neglect</li>
+                    <li>â€¢ Holes, dents, or marks in walls beyond wear and tear</li>
+                    <li>â€¢ Broken or damaged fixtures (doors, windows, fittings)</li>
+                    <li>â€¢ Stained, burned, or torn carpets and flooring</li>
+                    <li>â€¢ Damaged or missing appliances/furniture</li>
+                    <li>â€¢ Garden damage or neglect requiring restoration</li>
+                    <li>â€¢ Damage from pets (if not permitted)</li>
+                    <li>â€¢ Mould damage from tenant neglect</li>
                   </ul>
                 </div>
 
@@ -213,12 +213,12 @@ export default function MoneyClaimPropertyDamagePage() {
                     You CANNOT claim for:
                   </h3>
                   <ul className="space-y-2 text-gray-700 text-sm">
-                    <li>• Fair wear and tear (normal use deterioration)</li>
-                    <li>• Pre-existing damage not documented at check-in</li>
-                    <li>• Improvements over original condition (betterment)</li>
-                    <li>• Items at end of natural lifespan anyway</li>
-                    <li>• Your own maintenance failures</li>
-                    <li>• Damage covered by your landlord insurance</li>
+                    <li>â€¢ Fair wear and tear (normal use deterioration)</li>
+                    <li>â€¢ Pre-existing damage not documented at check-in</li>
+                    <li>â€¢ Improvements over original condition (betterment)</li>
+                    <li>â€¢ Items at end of natural lifespan anyway</li>
+                    <li>â€¢ Your own maintenance failures</li>
+                    <li>â€¢ Damage covered by your landlord insurance</li>
                   </ul>
                 </div>
               </div>
@@ -226,7 +226,7 @@ export default function MoneyClaimPropertyDamagePage() {
               {/* Ask Heaven callout */}
               <div className="bg-purple-50 border border-purple-200 rounded-xl p-4 mb-8">
                 <div className="flex items-start gap-3">
-                  <span className="text-2xl">☁️</span>
+                  <span className="text-2xl">â˜ï¸</span>
                   <div>
                     <p className="font-semibold text-gray-900 mb-1">
                       Not sure if your damage is claimable?
@@ -266,10 +266,10 @@ export default function MoneyClaimPropertyDamagePage() {
                   </div>
                   <h3 className="font-bold text-gray-900 mb-3">Photographic Evidence</h3>
                   <ul className="space-y-2 text-sm text-gray-600">
-                    <li>• Check-in photos (original condition)</li>
-                    <li>• Check-out photos (damaged condition)</li>
-                    <li>• Date-stamped comparison shots</li>
-                    <li>• Close-ups of specific damage</li>
+                    <li>â€¢ Check-in photos (original condition)</li>
+                    <li>â€¢ Check-out photos (damaged condition)</li>
+                    <li>â€¢ Date-stamped comparison shots</li>
+                    <li>â€¢ Close-ups of specific damage</li>
                   </ul>
                 </div>
 
@@ -279,10 +279,10 @@ export default function MoneyClaimPropertyDamagePage() {
                   </div>
                   <h3 className="font-bold text-gray-900 mb-3">Inventory Reports</h3>
                   <ul className="space-y-2 text-sm text-gray-600">
-                    <li>• Signed check-in inventory</li>
-                    <li>• Professional check-out report</li>
-                    <li>• Condition comparison schedule</li>
-                    <li>• Tenant acknowledgment (if any)</li>
+                    <li>â€¢ Signed check-in inventory</li>
+                    <li>â€¢ Professional check-out report</li>
+                    <li>â€¢ Condition comparison schedule</li>
+                    <li>â€¢ Tenant acknowledgment (if any)</li>
                   </ul>
                 </div>
 
@@ -292,10 +292,10 @@ export default function MoneyClaimPropertyDamagePage() {
                   </div>
                   <h3 className="font-bold text-gray-900 mb-3">Cost Evidence</h3>
                   <ul className="space-y-2 text-sm text-gray-600">
-                    <li>• Repair quotes (2-3 recommended)</li>
-                    <li>• Contractor invoices</li>
-                    <li>• Receipts for materials</li>
-                    <li>• Replacement cost evidence</li>
+                    <li>â€¢ Repair quotes (2-3 recommended)</li>
+                    <li>â€¢ Contractor invoices</li>
+                    <li>â€¢ Receipts for materials</li>
+                    <li>â€¢ Replacement cost evidence</li>
                   </ul>
                 </div>
               </div>
@@ -467,12 +467,12 @@ export default function MoneyClaimPropertyDamagePage() {
                     What You Can Include
                   </h3>
                   <ul className="space-y-2 text-gray-600 text-sm">
-                    <li>• Cost of repairs (quotes/invoices)</li>
-                    <li>• Replacement cost less depreciation</li>
-                    <li>• Professional cleaning if excessive</li>
-                    <li>• Re-decoration if damaged beyond wear</li>
-                    <li>• Statutory interest (8% from date due)</li>
-                    <li>• Court fees (if you win)</li>
+                    <li>â€¢ Cost of repairs (quotes/invoices)</li>
+                    <li>â€¢ Replacement cost less depreciation</li>
+                    <li>â€¢ Professional cleaning if excessive</li>
+                    <li>â€¢ Re-decoration if damaged beyond wear</li>
+                    <li>â€¢ Statutory interest (8% from date due)</li>
+                    <li>â€¢ Court fees (if you win)</li>
                   </ul>
                 </div>
 
@@ -486,9 +486,9 @@ export default function MoneyClaimPropertyDamagePage() {
                     improvement:
                   </p>
                   <ul className="space-y-2 text-gray-600 text-sm">
-                    <li>• 10-year carpet replaced? Claim partial cost</li>
-                    <li>• Old appliance upgraded? Deduct improvement</li>
-                    <li>• Document original age and condition</li>
+                    <li>â€¢ 10-year carpet replaced? Claim partial cost</li>
+                    <li>â€¢ Old appliance upgraded? Deduct improvement</li>
+                    <li>â€¢ Document original age and condition</li>
                   </ul>
                 </div>
               </div>
@@ -497,7 +497,7 @@ export default function MoneyClaimPropertyDamagePage() {
                 <h4 className="font-bold text-amber-900 mb-2">Example Damage Calculation</h4>
                 <p className="text-amber-800 text-sm mb-4">
                   5-year-old carpet (expected 10-year lifespan) needs replacing due to burns and stains.
-                  New carpet cost: £800. Remaining life was 50%, so claim £400 (not £800).
+                  New carpet cost: Â£800. Remaining life was 50%, so claim Â£400 (not Â£800).
                 </p>
                 <p className="text-amber-800 text-sm">
                   Courts appreciate honest, fair calculations. Inflated claims damage credibility.

@@ -11,6 +11,7 @@
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import type { CanonicalJurisdiction } from '../types/jurisdiction';
 import { toWinAnsiSafeText } from './pdf-safe-text';
+import { PRODUCTS } from '@/lib/pricing/products';
 
 // ============================================================================
 // TYPES
@@ -304,7 +305,7 @@ async function addTableOfContents(
   });
   yPos -= 20;
 
-  tocPage.drawText('Complete purchase (£19.99) to download full unredacted documents.', {
+  tocPage.drawText(`Complete purchase (${PRODUCTS.notice_only.displayPrice}) to download full unredacted documents.`, {
     x: 50,
     y: yPos,
     size: 11,

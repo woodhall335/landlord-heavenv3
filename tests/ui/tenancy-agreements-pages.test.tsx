@@ -68,12 +68,12 @@ describe('tenancy agreement pages', () => {
 
   it('routes tenancy agreement CTAs with jurisdiction parameters', () => {
     render(<EnglandPage />);
-    const englandCta = screen.getByRole('link', { name: /Create Standard AST - £9.99/i });
+    const englandCta = screen.getByRole('link', { name: /Create Standard AST - £14.99/i });
     expect(englandCta.getAttribute('href')).toContain('jurisdiction=england');
     cleanup();
 
     render(<WalesPage />);
-    const walesCta = screen.getByRole('link', { name: /Create Standard Contract - £9.99/i });
+    const walesCta = screen.getByRole('link', { name: /Create Standard Contract - £14.99/i });
     expect(walesCta.getAttribute('href')).toContain('jurisdiction=wales');
     cleanup();
 
@@ -85,7 +85,7 @@ describe('tenancy agreement pages', () => {
     cleanup();
 
     render(<NorthernIrelandPage />);
-    const niCta = screen.getByRole('link', { name: /Create Standard - £9.99/i });
+    const niCta = screen.getByRole('link', { name: /Create Standard - £14.99/i });
     expect(niCta.getAttribute('href')).toContain('jurisdiction=northern-ireland');
   });
 });

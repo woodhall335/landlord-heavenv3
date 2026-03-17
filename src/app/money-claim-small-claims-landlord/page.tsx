@@ -52,12 +52,12 @@ const faqs = [
   {
     question: 'What is the small claims track?',
     answer:
-      'The small claims track is the simplest court track for civil cases. It handles claims up to £10,000 (or £1,000 for personal injury). Rules are simpler, formal legal representation is discouraged, and even if you win, you usually can\'t claim legal costs from the other side.',
+      'The small claims track is the simplest court track for civil cases. It handles claims up to Â£10,000 (or Â£1,000 for personal injury). Rules are simpler, formal legal representation is discouraged, and even if you win, you usually can\'t claim legal costs from the other side.',
   },
   {
     question: 'What is the current small claims limit?',
     answer:
-      'The small claims limit is £10,000 for most claims. Claims above this go to the "fast track" (£10,000-£25,000) or "multi-track" (over £25,000), which have more formal procedures and allow recovery of legal costs.',
+      'The small claims limit is Â£10,000 for most claims. Claims above this go to the "fast track" (Â£10,000-Â£25,000) or "multi-track" (over Â£25,000), which have more formal procedures and allow recovery of legal costs.',
   },
   {
     question: 'Do I need a solicitor for small claims?',
@@ -97,7 +97,7 @@ const faqs = [
   {
     question: 'What costs can I recover in small claims?',
     answer:
-      'You can recover: court fees, reasonable travel costs to hearings (limited), and loss of earnings for attending (up to £95/day). You cannot usually recover solicitor fees or preparation costs in small claims.',
+      'You can recover: court fees, reasonable travel costs to hearings (limited), and loss of earnings for attending (up to Â£95/day). You cannot usually recover solicitor fees or preparation costs in small claims.',
   },
 ];
 
@@ -182,7 +182,7 @@ export default function MoneyClaimSmallClaimsLandlordPage() {
                 <p className="text-lg text-gray-600">
                   The small claims track is designed for simpler, lower-value disputes where
                   formal legal representation isn&apos;t necessary. For landlords recovering
-                  tenant debts up to £10,000, this is usually where your case will be heard
+                  tenant debts up to Â£10,000, this is usually where your case will be heard
                   if the tenant defends.
                 </p>
               </div>
@@ -192,7 +192,7 @@ export default function MoneyClaimSmallClaimsLandlordPage() {
                   <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
                     <PoundSterling className="w-8 h-8 text-emerald-600" />
                   </div>
-                  <h3 className="font-bold text-gray-900 mb-2">Up to £10,000</h3>
+                  <h3 className="font-bold text-gray-900 mb-2">Up to Â£10,000</h3>
                   <p className="text-sm text-gray-600">
                     Most landlord debt claims fall within the small claims limit
                   </p>
@@ -346,13 +346,13 @@ export default function MoneyClaimSmallClaimsLandlordPage() {
                   </div>
                   <h3 className="font-bold text-gray-900 mb-3">Documents to Bring</h3>
                   <ul className="space-y-2 text-sm text-gray-600">
-                    <li>• Tenancy agreement (original if possible)</li>
-                    <li>• Rent statements/bank records</li>
-                    <li>• Photos with dates (damage cases)</li>
-                    <li>• Invoices and receipts</li>
-                    <li>• All correspondence with tenant</li>
-                    <li>• Letter Before Action + proof of sending</li>
-                    <li>• Clear calculation of claim</li>
+                    <li>â€¢ Tenancy agreement (original if possible)</li>
+                    <li>â€¢ Rent statements/bank records</li>
+                    <li>â€¢ Photos with dates (damage cases)</li>
+                    <li>â€¢ Invoices and receipts</li>
+                    <li>â€¢ All correspondence with tenant</li>
+                    <li>â€¢ Letter Before Action + proof of sending</li>
+                    <li>â€¢ Clear calculation of claim</li>
                   </ul>
                 </div>
 
@@ -362,13 +362,13 @@ export default function MoneyClaimSmallClaimsLandlordPage() {
                   </div>
                   <h3 className="font-bold text-gray-900 mb-3">On the Day</h3>
                   <ul className="space-y-2 text-sm text-gray-600">
-                    <li>• Arrive 15-30 minutes early</li>
-                    <li>• Dress smartly (business casual)</li>
-                    <li>• Address judge as &quot;Sir&quot; or &quot;Madam&quot;</li>
-                    <li>• Speak clearly and stick to facts</li>
-                    <li>• Don&apos;t interrupt the other party</li>
-                    <li>• Answer questions directly</li>
-                    <li>• Stay calm even if provoked</li>
+                    <li>â€¢ Arrive 15-30 minutes early</li>
+                    <li>â€¢ Dress smartly (business casual)</li>
+                    <li>â€¢ Address judge as &quot;Sir&quot; or &quot;Madam&quot;</li>
+                    <li>â€¢ Speak clearly and stick to facts</li>
+                    <li>â€¢ Don&apos;t interrupt the other party</li>
+                    <li>â€¢ Answer questions directly</li>
+                    <li>â€¢ Stay calm even if provoked</li>
                   </ul>
                 </div>
               </div>
@@ -435,11 +435,11 @@ export default function MoneyClaimSmallClaimsLandlordPage() {
                 href="/products/money-claim?topic=debt&src=seo_money_claim_small_claims_landlord"
                 className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
               >
-                Start Your Claim — £34.99
+                Start Your Claim â€” Â£59.99
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <p className="text-sm text-gray-500 mt-3">
-                Court fees from £35 extra (based on claim amount)
+                Court fees from Â£35 extra (based on claim amount)
               </p>
             </div>
           </div>

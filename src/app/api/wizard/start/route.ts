@@ -31,6 +31,7 @@ import {
   RESIDENTIAL_LETTING_PRODUCT_SKUS,
   RESIDENTIAL_LETTING_PRODUCTS,
 } from '@/lib/residential-letting/products';
+import { PRODUCTS } from '@/lib/pricing/products';
 
 const RESIDENTIAL_PRODUCTS = [...RESIDENTIAL_LETTING_PRODUCT_SKUS] as const;
 type ResidentialProduct = (typeof RESIDENTIAL_PRODUCTS)[number];
@@ -254,7 +255,7 @@ export async function POST(request: Request) {
             `The ${
               normalizedProduct === 'complete_pack' ? 'Eviction Pack' : 'Money Claim'
             } is only available for England. ` +
-            `For ${effectiveJurisdiction === 'wales' ? 'Wales' : 'Scotland'}, we offer the Notice Only pack (£19.99) ` +
+            `For ${effectiveJurisdiction === 'wales' ? 'Wales' : 'Scotland'}, we offer the Notice Only pack (${PRODUCTS.notice_only.displayPrice}) ` +
             'and Tenancy Agreements.',
           supported: {
             'northern-ireland': ['tenancy_agreement'],

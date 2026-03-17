@@ -675,20 +675,20 @@ function MoneyClaimReviewContent({
           <div className="p-4 bg-gray-50 rounded-lg">
             <p className="text-sm text-gray-500 mb-1">Rent Arrears</p>
             <p className="text-2xl font-bold text-gray-900">
-              £{totalArrears.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
+              Ã‚Â£{totalArrears.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
             </p>
           </div>
           <div className="p-4 bg-gray-50 rounded-lg">
             <p className="text-sm text-gray-500 mb-1">Damages</p>
             <p className="text-2xl font-bold text-gray-900">
-              £{damages.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
+              Ã‚Â£{damages.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
             </p>
           </div>
           {claimInterest ? (
             <div className="p-4 bg-gray-50 rounded-lg">
               <p className="text-sm text-gray-500 mb-1">Interest ({interestRate}%)</p>
               <p className="text-2xl font-bold text-gray-900">
-                £{estimatedInterest.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
+                Ã‚Â£{estimatedInterest.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
               </p>
               <p className="text-xs text-gray-400 mt-1">Estimated to date</p>
             </div>
@@ -701,7 +701,7 @@ function MoneyClaimReviewContent({
           <div className="p-4 bg-primary/10 rounded-lg border-2 border-primary">
             <p className="text-sm text-gray-500 mb-1">Total Claim</p>
             <p className="text-2xl font-bold text-primary">
-              £{totalClaim.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
+              Ã‚Â£{totalClaim.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
             </p>
             <p className="text-xs text-gray-500 mt-1">Excluding court fees</p>
           </div>
@@ -741,7 +741,7 @@ function MoneyClaimReviewContent({
               <ul className="space-y-2">
                 {risks.map((risk: any, i: number) => (
                   <li key={i} className="text-sm text-amber-800">
-                    • {risk.message || risk.title}
+                    Ã¢â‚¬Â¢ {risk.message || risk.title}
                   </li>
                 ))}
               </ul>
@@ -894,7 +894,7 @@ function MoneyClaimReviewContent({
           <ul className="space-y-1">
             {positives.map((positive: string, i: number) => (
               <li key={i} className="text-sm text-green-800">
-                ✓ {positive}
+                Ã¢Å“â€œ {positive}
               </li>
             ))}
           </ul>
@@ -911,7 +911,7 @@ function MoneyClaimReviewContent({
                 <h3 className="text-sm font-medium text-amber-800 mb-2">Red flags</h3>
                 <ul className="space-y-1 text-sm text-amber-900">
                   {redFlags.map((item, i) => (
-                    <li key={i}>• {item}</li>
+                    <li key={i}>Ã¢â‚¬Â¢ {item}</li>
                   ))}
                 </ul>
               </div>
@@ -921,7 +921,7 @@ function MoneyClaimReviewContent({
                 <h3 className="text-sm font-medium text-red-800 mb-2">Compliance issues</h3>
                 <ul className="space-y-1 text-sm text-red-900">
                   {complianceIssues.map((item, i) => (
-                    <li key={i}>• {item}</li>
+                    <li key={i}>Ã¢â‚¬Â¢ {item}</li>
                   ))}
                 </ul>
               </div>
@@ -965,7 +965,7 @@ function MoneyClaimReviewContent({
               <ul className="space-y-1">
                 {warnings.map((warning: any, i: number) => (
                   <li key={i} className="text-sm text-yellow-800">
-                    • {warning.message || warning}
+                    Ã¢â‚¬Â¢ {warning.message || warning}
                   </li>
                 ))}
               </ul>
@@ -1504,7 +1504,7 @@ function EvictionReviewContent({
             </p>
             {(analysis.red_flags?.length > 0 || analysis.compliance_issues?.length > 0) && (
               <p className="text-sm text-amber-700 mt-2">
-                ⚠️ See &quot;Things to Fix or Improve&quot; below for compliance concerns.
+                Ã¢Å¡Â Ã¯Â¸Â See &quot;Things to Fix or Improve&quot; below for compliance concerns.
               </p>
             )}
           </div>
@@ -1522,7 +1522,7 @@ function EvictionReviewContent({
                 <h3 className="text-sm font-medium text-amber-800 mb-2">Red flags</h3>
                 <ul className="space-y-1 text-sm text-amber-900">
                   {redFlags.map((item, i) => (
-                    <li key={i}>• {item}</li>
+                    <li key={i}>Ã¢â‚¬Â¢ {item}</li>
                   ))}
                 </ul>
               </div>
@@ -1532,7 +1532,7 @@ function EvictionReviewContent({
                 <h3 className="text-sm font-medium text-red-800 mb-2">Compliance issues</h3>
                 <ul className="space-y-1 text-sm text-red-900">
                   {complianceIssues.map((item, i) => (
-                    <li key={i}>• {item}</li>
+                    <li key={i}>Ã¢â‚¬Â¢ {item}</li>
                   ))}
                 </ul>
               </div>
@@ -1576,7 +1576,7 @@ function EvictionReviewContent({
               <p className="text-xs text-gray-600">
                 {evidence.tenancy_agreement_uploaded
                   ? 'Marked as provided in your case facts.'
-                  : 'Not uploaded yet – strongly recommended so the judge can see the contract.'}
+                  : 'Not uploaded yet Ã¢â‚¬â€œ strongly recommended so the judge can see the contract.'}
               </p>
             </div>
           </div>
@@ -1592,7 +1592,7 @@ function EvictionReviewContent({
               <p className="text-xs text-gray-600">
                 {evidence.rent_schedule_uploaded
                   ? 'Arrears schedule recorded for the claim.'
-                  : 'Not uploaded yet – courts expect a clear chronology of missed payments.'}
+                  : 'Not uploaded yet Ã¢â‚¬â€œ courts expect a clear chronology of missed payments.'}
               </p>
             </div>
           </div>
@@ -1608,7 +1608,7 @@ function EvictionReviewContent({
               <p className="text-xs text-gray-600">
                 {evidence.bank_statements_uploaded
                   ? 'Supporting payment history has been flagged.'
-                  : 'Not flagged yet – optional, but helpful to prove what was paid or missed.'}
+                  : 'Not flagged yet Ã¢â‚¬â€œ optional, but helpful to prove what was paid or missed.'}
               </p>
             </div>
           </div>
@@ -1624,7 +1624,7 @@ function EvictionReviewContent({
               <p className="text-xs text-gray-600">
                 {evidence.other_evidence_uploaded
                   ? 'You have flagged additional documents (photos, quotes, correspondence, etc.).'
-                  : 'Not flagged yet – think about emails, texts, photos or reports that support your case.'}
+                  : 'Not flagged yet Ã¢â‚¬â€œ think about emails, texts, photos or reports that support your case.'}
               </p>
             </div>
           </div>
@@ -1719,7 +1719,7 @@ function EvictionReviewContent({
               <ul className="space-y-1">
                 {analysis.decision_engine.warnings.map((warning: string, i: number) => (
                   <li key={i} className="text-sm text-yellow-800">
-                    • {warning}
+                    Ã¢â‚¬Â¢ {warning}
                   </li>
                 ))}
               </ul>
@@ -1922,7 +1922,7 @@ function NoticeOnlyReviewContent({
       <div className="text-center pb-6 border-b">
         <h1 className="text-3xl font-bold text-gray-900">Notice Review</h1>
         <p className="text-gray-600 mt-2">
-          {jurisdictionLabel} • {recommendedRouteLabel}
+          {jurisdictionLabel} Ã¢â‚¬Â¢ {recommendedRouteLabel}
         </p>
         {isSection8 && includedGroundCodes.length > 0 && (
           <p className="text-sm text-gray-500 mt-1">
@@ -1972,7 +1972,7 @@ function NoticeOnlyReviewContent({
           <ul className="space-y-3">
             {blockingIssues.map((issue: any, index: number) => (
               <li key={index} className="flex items-start gap-3 bg-white p-4 rounded border border-red-100">
-                <span className="text-red-500 mt-0.5">✕</span>
+                <span className="text-red-500 mt-0.5">Ã¢Å“â€¢</span>
                 <div>
                   <p className="font-medium text-red-900">{issue.description || issue}</p>
                   {issue.action_required && (
@@ -2018,7 +2018,7 @@ function NoticeOnlyReviewContent({
               <div className="space-y-3 mb-4">
                 {s21Validation.blockers.map((blocker, index) => (
                   <div key={index} className="flex items-start gap-3 p-4 bg-white rounded border border-red-200">
-                    <span className="text-red-500 mt-0.5">✕</span>
+                    <span className="text-red-500 mt-0.5">Ã¢Å“â€¢</span>
                     <div className="flex-1">
                       <p className="font-medium text-red-900">{blocker.code.replace('S21_', '').replace(/_/g, ' ')}</p>
                       <p className="text-sm text-red-700 mt-1">{blocker.message}</p>
@@ -2074,11 +2074,11 @@ function NoticeOnlyReviewContent({
               ].map((item, index) => (
                 <div key={index} className="flex items-center gap-3">
                   {item.notApplicable ? (
-                    <span className="text-gray-400 text-xl">—</span>
+                    <span className="text-gray-400 text-xl">Ã¢â‚¬â€</span>
                   ) : item.passed ? (
-                    <span className="text-green-500 text-xl">✓</span>
+                    <span className="text-green-500 text-xl">Ã¢Å“â€œ</span>
                   ) : (
-                    <span className="text-red-500 text-xl">✕</span>
+                    <span className="text-red-500 text-xl">Ã¢Å“â€¢</span>
                   )}
                   <span className={
                     item.notApplicable
@@ -2101,7 +2101,7 @@ function NoticeOnlyReviewContent({
                 <ul className="space-y-2">
                   {s21Validation.warnings.map((warning, index) => (
                     <li key={index} className="text-sm text-amber-800">
-                      • {warning.message}
+                      Ã¢â‚¬Â¢ {warning.message}
                     </li>
                   ))}
                 </ul>
@@ -2394,7 +2394,7 @@ function NoticeOnlyReviewContent({
           <ul className="space-y-2">
             {complianceIssues.map((issue: string, index: number) => (
               <li key={index} className="flex items-start gap-2 text-blue-900">
-                <span>•</span>
+                <span>Ã¢â‚¬Â¢</span>
                 <span>{issue}</span>
               </li>
             ))}
@@ -2409,7 +2409,7 @@ function NoticeOnlyReviewContent({
           <ul className="space-y-2">
             {redFlags.map((flag: string, index: number) => (
               <li key={index} className="flex items-start gap-2 text-amber-900">
-                <span>•</span>
+                <span>Ã¢â‚¬Â¢</span>
                 <span>{flag}</span>
               </li>
             ))}
@@ -2424,7 +2424,7 @@ function NoticeOnlyReviewContent({
           <ul className="space-y-2">
             {warnings.map((warning: string, index: number) => (
               <li key={index} className="flex items-start gap-2 text-blue-900">
-                <span>•</span>
+                <span>Ã¢â‚¬Â¢</span>
                 <span>{warning}</span>
               </li>
             ))}
@@ -2549,7 +2549,7 @@ function NoticeOnlyReviewContent({
         </ul>
         <div className="mt-4 pt-4 border-t">
           <p className="text-gray-600">
-            Price: <span className="font-semibold text-gray-900">£19.99</span>
+            Price: <span className="font-semibold text-gray-900">£29.99</span>
           </p>
         </div>
       </Card>
@@ -2933,7 +2933,7 @@ function TenancyReviewContent({
   const obligations = getJurisdictionObligations(jurisdiction);
 
   // SINGLE SOURCE OF TRUTH: Resolve effective product using consistent priority order
-  // Priority: purchased_product → URL product param → inferred from facts → default to standard
+  // Priority: purchased_product Ã¢â€ â€™ URL product param Ã¢â€ â€™ inferred from facts Ã¢â€ â€™ default to standard
   const effectiveProduct = resolveEffectiveProduct({
     purchasedProduct: analysis.purchased_product,
     urlProduct: product,
@@ -3052,7 +3052,7 @@ function TenancyReviewContent({
       <div className="text-center pb-6 border-b">
         <h1 className="text-3xl font-bold text-gray-900">Tenancy Agreement Review</h1>
         <p className="text-gray-600 mt-2">
-          {jurisdictionLabel} • {terminology.agreementType}
+          {jurisdictionLabel} Ã¢â‚¬Â¢ {terminology.agreementType}
           {isPremium && <span className="ml-2 px-2 py-1 bg-purple-100 text-purple-800 rounded text-sm font-medium">Premium</span>}
         </p>
         <div className="mt-4">
@@ -3128,7 +3128,7 @@ function TenancyReviewContent({
             <div className="p-4 bg-gray-50 rounded-lg">
               <p className="text-sm text-gray-500 mb-1">Rent</p>
               <p className="text-sm font-medium text-gray-900">
-                £{Number(rentAmount).toLocaleString('en-GB', { minimumFractionDigits: 2 })} {rentFrequency}
+                Ã‚Â£{Number(rentAmount).toLocaleString('en-GB', { minimumFractionDigits: 2 })} {rentFrequency}
               </p>
             </div>
           )}
@@ -3136,7 +3136,7 @@ function TenancyReviewContent({
             <div className="p-4 bg-gray-50 rounded-lg">
               <p className="text-sm text-gray-500 mb-1">Deposit</p>
               <p className="text-sm font-medium text-gray-900">
-                £{Number(depositAmount).toLocaleString('en-GB', { minimumFractionDigits: 2 })}
+                Ã‚Â£{Number(depositAmount).toLocaleString('en-GB', { minimumFractionDigits: 2 })}
               </p>
             </div>
           )}
@@ -3281,7 +3281,7 @@ function TenancyReviewContent({
               <ul className="space-y-1">
                 {section.items.slice(0, 4).map((item, itemIndex) => (
                   <li key={itemIndex} className="text-sm text-blue-700 flex items-start gap-2">
-                    <span>•</span>
+                    <span>Ã¢â‚¬Â¢</span>
                     <span>{item}</span>
                   </li>
                 ))}
@@ -3473,7 +3473,7 @@ function ResidentialLettingReviewContent({
   const headlineFacts = [
     { label: 'Property', value: propertyAddress || 'Not specified' },
     { label: 'Tenant / occupier', value: people.join(', ') || 'Not specified' },
-    { label: 'Rent', value: facts.rent_amount ? `£${facts.rent_amount}` : 'Not specified' },
+    { label: 'Rent', value: facts.rent_amount ? `Ã‚Â£${facts.rent_amount}` : 'Not specified' },
     { label: 'Start date', value: facts.tenancy_start_date || 'Not specified' },
   ];
 
@@ -3482,7 +3482,7 @@ function ResidentialLettingReviewContent({
       <div className="text-center pb-6 border-b">
         <h1 className="text-3xl font-bold text-gray-900">{productMeta?.label || 'Residential Letting Document'} Review</h1>
         <p className="text-gray-600 mt-2">
-          {jurisdiction === 'england' ? 'England' : jurisdiction} • {productMeta?.displayPrice || ''}
+          {jurisdiction === 'england' ? 'England' : jurisdiction} Ã¢â‚¬Â¢ {productMeta?.displayPrice || ''}
         </p>
       </div>
 
@@ -3576,7 +3576,7 @@ function ResidentialStandaloneReviewContent({
   const formatMoney = (value: unknown) => {
     const numeric = Number(value);
     if (!Number.isFinite(numeric) || numeric <= 0) return 'Not specified';
-    return `£${numeric.toLocaleString('en-GB', {
+    return `Ã‚Â£${numeric.toLocaleString('en-GB', {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     })}`;

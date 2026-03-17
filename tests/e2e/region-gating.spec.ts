@@ -6,13 +6,13 @@
  *
  * Regional Product Availability Matrix (January 2026):
  *
- * | Product              | England | Wales | Scotland | Northern Ireland |
- * |----------------------|---------|-------|----------|------------------|
- * | Notice Only (£49.99) | ✅      | ✅    | ✅       | ❌               |
- * | Eviction Pack (£199) | ✅      | ❌    | ❌       | ❌               |
- * | Money Claim (£99.99) | ✅      | ❌    | ❌       | ❌               |
- * | Tenancy Agreement    | ✅      | ✅    | ✅       | ✅               |
- * | Premium TA (£24.99)  | ✅      | ✅    | ✅       | ✅               |
+ * | Product                | England | Wales | Scotland | Northern Ireland |
+ * |------------------------|---------|-------|----------|------------------|
+ * | Notice Only (£29.99)   | Yes     | Yes   | Yes      | No               |
+ * | Eviction Pack (£79.99) | Yes     | No    | No       | No               |
+ * | Money Claim (£59.99)   | Yes     | No    | No       | No               |
+ * | Standard TA (£14.99)   | Yes     | Yes   | Yes      | Yes              |
+ * | Premium TA (£24.99)    | Yes     | Yes   | Yes      | Yes              |
  *
  * @module tests/e2e/region-gating.spec
  */

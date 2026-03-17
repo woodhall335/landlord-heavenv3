@@ -37,7 +37,7 @@ const wizardLinkCompletePack = buildWizardLink({
 const faqs = n5bFormFAQs;
 
 export const metadata: Metadata = {
-  title: 'N5B Form Guide UK — Accelerated Possession Procedure (2026)',
+  title: 'N5B Form Guide UK â€” Accelerated Possession Procedure (2026)',
   description: 'Complete guide to Form N5B for accelerated possession in England. When to use it, how to fill it in, and what to expect from the court process.',
   keywords: [
     'n5b form',
@@ -55,7 +55,7 @@ export const metadata: Metadata = {
     canonical: 'https://landlordheaven.co.uk/n5b-form-guide',
   },
   openGraph: {
-    title: 'N5B Form Guide UK — Accelerated Possession | Landlord Heaven',
+    title: 'N5B Form Guide UK â€” Accelerated Possession | Landlord Heaven',
     description: 'How to use Form N5B for accelerated possession after serving Section 21 notice. Step-by-step guide.',
     type: 'website',
     url: 'https://landlordheaven.co.uk/n5b-form-guide',
@@ -85,7 +85,7 @@ export default function N5BFormGuidePage() {
         <UniversalHero
           title="N5B Form Guide"
           subtitle="Use accelerated possession correctly after Section 21 service, with filing steps and evidence checks."
-          primaryCta={{ label: 'Get Complete Pack — £49.99', href: wizardLinkCompletePack }}
+          primaryCta={{ label: 'Get Complete Pack â€” Â£79.99', href: wizardLinkCompletePack }}
           secondaryCta={{ label: 'Need Section 21 First?', href: '/section-21-notice-template' }}
           showTrustPositioningBar
           hideMedia
@@ -95,9 +95,9 @@ export default function N5BFormGuidePage() {
         <StandardHero
           badge="Section 21 Only"
           badgeIcon={<FileText className="w-4 h-4" />}
-          title="N5B Form Guide — Accelerated Possession"
+          title="N5B Form Guide â€” Accelerated Possession"
           subtitle={<>Form N5B is the <strong>fastest way to get a possession order</strong> after serving Section 21. No court hearing needed in most cases. If you also need to recover arrears, see our <Link href="/money-claim-online-mcol" className="text-primary hover:underline">Money Claim Online (MCOL) guide</Link>.</>}
-          primaryCTA={{ label: 'Get Complete Pack — £49.99', href: wizardLinkCompletePack }}
+          primaryCTA={{ label: 'Get Complete Pack â€” Â£79.99', href: wizardLinkCompletePack }}
           secondaryCTA={{ label: 'Need Section 21 First?', href: '/section-21-notice-template' }}
           variant="pastel"
         >
@@ -198,8 +198,8 @@ export default function N5BFormGuidePage() {
                     </tr>
                     <tr>
                       <td className="p-4 text-gray-700">Court fee</td>
-                      <td className="p-4 text-center text-gray-700">£355</td>
-                      <td className="p-4 text-center text-gray-700">£355</td>
+                      <td className="p-4 text-center text-gray-700">Â£355</td>
+                      <td className="p-4 text-center text-gray-700">Â£355</td>
                     </tr>
                     <tr>
                       <td className="p-4 text-gray-700">Written tenancy required?</td>
@@ -317,7 +317,7 @@ export default function N5BFormGuidePage() {
                       <h3 className="font-bold text-gray-900 mb-2">Statement of Truth</h3>
                       <p className="text-gray-600">
                         Sign the statement confirming all information is true. False statements can be
-                        contempt of court — ensure everything is accurate.
+                        contempt of court â€” ensure everything is accurate.
                       </p>
                     </div>
                   </div>

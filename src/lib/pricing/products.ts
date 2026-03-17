@@ -1,4 +1,4 @@
-﻿// src/lib/pricing/products.ts
+// src/lib/pricing/products.ts
 // Single source of truth for display pricing, labels, descriptions, and wizard hrefs
 
 /**
@@ -8,11 +8,11 @@
  * Update ONLY here when prices change. All landing pages reference these values.
  */
 export const SEO_PRICES = {
-  evictionNotice: { amount: 19.99, display: '£19.99' },
-  evictionBundle: { amount: 49.99, display: '£49.99' },
-  moneyClaim: { amount: 34.99, display: '£34.99' },
-  tenancyStandard: { amount: 9.99, display: '£9.99' },
-  tenancyPremium: { amount: 19.99, display: '£19.99' },
+  evictionNotice: { amount: 29.99, display: '£29.99' },
+  evictionBundle: { amount: 79.99, display: '£79.99' },
+  moneyClaim: { amount: 59.99, display: '£59.99' },
+  tenancyStandard: { amount: 14.99, display: '£14.99' },
+  tenancyPremium: { amount: 24.99, display: '£24.99' },
   residentialLettingStandard: { amount: 9.99, display: '£9.99' },
   residentialLettingPremium: { amount: 12.99, display: '£12.99' },
 } as const;
@@ -30,6 +30,9 @@ export const ALLOWED_SEO_PRICES = new Set([
   SEO_PRICES.residentialLettingStandard.display,
   SEO_PRICES.residentialLettingPremium.display,
 ]);
+
+export const TENANCY_AGREEMENT_PRICE_RANGE = `${SEO_PRICES.tenancyStandard.display} - ${SEO_PRICES.tenancyPremium.display}`;
+export const TENANCY_AGREEMENT_FROM_PRICE = `From ${SEO_PRICES.tenancyStandard.display}`;
 
 /**
  * SEO_LANDING_ROUTES - Clean canonical landing routes for products

@@ -2,7 +2,7 @@
  * Premium Tenancy Agreement Review Consistency Tests
  *
  * These tests ensure that the Premium AST product:
- * - Always shows the correct price (£19.99)
+ * - Always shows the correct price (£24.99)
  * - Review and preview pages are internally consistent
  * - Premium content justifies its price
  * - Inventory inclusion promises match actual generated documents
@@ -26,33 +26,33 @@ import {
 
 describe('Premium Tenancy Agreement Review Consistency', () => {
   describe('Price Consistency', () => {
-    it('ast_premium always shows £19.99', () => {
+    it('ast_premium always shows £24.99', () => {
       const pricing = getTenancyPricing('ast_premium');
-      expect(pricing.displayPrice).toBe('£19.99');
-      expect(pricing.price).toBe(19.99);
+      expect(pricing.displayPrice).toBe('£24.99');
+      expect(pricing.price).toBe(24.99);
     });
 
-    it('ast_standard always shows £9.99', () => {
+    it('ast_standard always shows £14.99', () => {
       const pricing = getTenancyPricing('ast_standard');
-      expect(pricing.displayPrice).toBe('£9.99');
-      expect(pricing.price).toBe(9.99);
+      expect(pricing.displayPrice).toBe('£14.99');
+      expect(pricing.price).toBe(14.99);
     });
 
     it('TENANCY_PRICING constants are correct', () => {
-      expect(TENANCY_PRICING.ast_premium.displayPrice).toBe('£19.99');
-      expect(TENANCY_PRICING.ast_standard.displayPrice).toBe('£9.99');
+      expect(TENANCY_PRICING.ast_premium.displayPrice).toBe('£24.99');
+      expect(TENANCY_PRICING.ast_standard.displayPrice).toBe('£14.99');
     });
 
     it('Premium pricing includes original price and savings', () => {
       const pricing = getTenancyPricing('ast_premium');
-      expect(pricing.originalPrice).toBe('£200+');
-      expect(pricing.savings).toBe('Save £175+ vs solicitors');
+      expect(pricing.originalPrice).toBe('Ãƒâ€šÂ£200+');
+      expect(pricing.savings).toBe('Save Ãƒâ€šÂ£175+ vs solicitors');
     });
 
     it('Standard pricing includes original price and savings', () => {
       const pricing = getTenancyPricing('ast_standard');
-      expect(pricing.originalPrice).toBe('£100+');
-      expect(pricing.savings).toBe('Save £85+ vs solicitors');
+      expect(pricing.originalPrice).toBe('Ãƒâ€šÂ£100+');
+      expect(pricing.savings).toBe('Save Ãƒâ€šÂ£85+ vs solicitors');
     });
   });
 
@@ -347,12 +347,12 @@ describe('Document Generation Consistency', () => {
 });
 
 describe('Regression: Premium Price Bug', () => {
-  it('REGRESSION: Premium price must NOT show £9.99', () => {
-    // This test prevents the bug where Premium showed £9.99 instead of £19.99
+  it('REGRESSION: Premium price must NOT show £14.99', () => {
+    // This test prevents the bug where Premium showed £14.99 instead of £24.99
     const premiumPricing = getTenancyPricing('ast_premium');
 
-    expect(premiumPricing.displayPrice).not.toBe('£9.99');
-    expect(premiumPricing.displayPrice).toBe('£19.99');
+    expect(premiumPricing.displayPrice).not.toBe('£14.99');
+    expect(premiumPricing.displayPrice).toBe('£24.99');
   });
 
   it('REGRESSION: Product resolution must correctly detect Premium', () => {
@@ -367,7 +367,7 @@ describe('Regression: Premium Price Bug', () => {
     expect(isPremiumSku(result)).toBe(true);
 
     const pricing = getTenancyPricing(result);
-    expect(pricing.displayPrice).toBe('£19.99');
+    expect(pricing.displayPrice).toBe('£24.99');
   });
 
   it('REGRESSION: Mixed signals should resolve correctly', () => {

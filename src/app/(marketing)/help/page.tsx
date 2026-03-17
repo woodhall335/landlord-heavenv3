@@ -48,28 +48,28 @@ export default function HelpPage() {
             href="#getting-started"
             className="bg-white rounded-lg border border-gray-200 p-6 text-center hover:border-primary hover:shadow-md transition-all"
           >
-            <div className="text-3xl mb-2">🚀</div>
+            <div className="text-3xl mb-2">ÃƒÂ°Ã…Â¸Ã…Â¡Ã¢â€šÂ¬</div>
             <h3 className="font-semibold text-charcoal">Getting Started</h3>
           </Link>
           <Link
             href="#documents"
             className="bg-white rounded-lg border border-gray-200 p-6 text-center hover:border-primary hover:shadow-md transition-all"
           >
-            <div className="text-3xl mb-2">📄</div>
+            <div className="text-3xl mb-2">ÃƒÂ°Ã…Â¸Ã¢â‚¬Å“Ã¢â‚¬Å¾</div>
             <h3 className="font-semibold text-charcoal">Documents</h3>
           </Link>
           <Link
             href="#legal"
             className="bg-white rounded-lg border border-gray-200 p-6 text-center hover:border-primary hover:shadow-md transition-all"
           >
-            <div className="text-3xl mb-2">⚖️</div>
+            <div className="text-3xl mb-2">ÃƒÂ¢Ã…Â¡Ã¢â‚¬â€œÃƒÂ¯Ã‚Â¸Ã‚Â</div>
             <h3 className="font-semibold text-charcoal">Legal Questions</h3>
           </Link>
           <Link
             href="#billing"
             className="bg-white rounded-lg border border-gray-200 p-6 text-center hover:border-primary hover:shadow-md transition-all"
           >
-            <div className="text-3xl mb-2">💳</div>
+            <div className="text-3xl mb-2">ÃƒÂ°Ã…Â¸Ã¢â‚¬â„¢Ã‚Â³</div>
             <h3 className="font-semibold text-charcoal">Billing & Refunds</h3>
           </Link>
         </div>
@@ -78,7 +78,7 @@ export default function HelpPage() {
           {/* Getting Started */}
           <section id="getting-started" className="mb-16">
             <h2 className="text-3xl font-bold text-charcoal mb-6 flex items-center gap-3">
-              <span className="text-4xl">🚀</span>
+              <span className="text-4xl">ÃƒÂ°Ã…Â¸Ã…Â¡Ã¢â€šÂ¬</span>
               Getting Started
             </h2>
 
@@ -92,7 +92,7 @@ export default function HelpPage() {
                         <li>Choose your product category (Notices, Money Claims, Tenancy Agreements, etc.) or click "Start Wizard"</li>
                         <li>Answer questions about your case (property, tenant, dates, grounds)</li>
                         <li>Review the generated document preview</li>
-                        <li>Complete payment (£19.99 - £49.99 depending on product)</li>
+                        <li>Complete payment (£14.99 - £79.99 depending on product)</li>
                         <li>Download your documents as PDF immediately</li>
                       </ol>
                       <p className="mt-3">The entire process takes 10-15 minutes.</p>
@@ -109,10 +109,10 @@ export default function HelpPage() {
                       </p>
                       <p className="mt-2">
                         Benefits of having an account:
-                        <br />• Access documents anytime from any device
-                        <br />• Re-download your case bundle if you lose it
-                        <br />• Track all your cases in one dashboard
-                        <br />• Regenerate your case bundle with updated information
+                        <br />ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ Access documents anytime from any device
+                        <br />ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ Re-download your case bundle if you lose it
+                        <br />ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ Track all your cases in one dashboard
+                        <br />ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ Regenerate your case bundle with updated information
                       </p>
                     </>
                   ),
@@ -122,17 +122,17 @@ export default function HelpPage() {
                   answer: (
                     <ul className="space-y-3">
                       <li>
-                        <strong>Notices (£19.99):</strong> Just need an eviction notice (Section 8/21, Notice to
+                        <strong>Notices (£29.99):</strong> Just need an eviction notice (Section 8/21, Notice to
                         Leave). Tenant might leave voluntarily.
                       </li>
                       <li>
-                        <strong>Money Claims (£34.99):</strong> Tenant owes rent arrears. Includes claim forms, arrears schedules, and witness statements.
+                        <strong>Money Claims (£59.99):</strong> Tenant owes rent arrears. Includes claim forms, arrears schedules, and witness statements.
                       </li>
                       <li>
-                        <strong>Standard AST (£9.99):</strong> Simple tenancy agreement for standard lettings.
+                        <strong>Standard AST (£14.99):</strong> Simple tenancy agreement for standard lettings.
                       </li>
                       <li>
-                        <strong>Premium AST (£19.99):</strong> Advanced tenancy with HMO clauses, guarantors, rent
+                        <strong>Premium AST (£24.99):</strong> Advanced tenancy with HMO clauses, guarantors, rent
                         increases.
                       </li>
                       <li>
@@ -142,7 +142,7 @@ export default function HelpPage() {
                           <Link href="/tools" className="text-primary hover:underline">
                             Browse free tools
                           </Link>
-                          <span className="mx-2 text-gray-400">•</span>
+                          <span className="mx-2 text-gray-400">ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢</span>
                           <Link href="/ask-heaven" className="text-primary hover:underline">
                             Ask Heaven guidance
                           </Link>
@@ -187,7 +187,7 @@ export default function HelpPage() {
           {/* Documents */}
           <section id="documents" className="mb-16">
             <h2 className="text-3xl font-bold text-charcoal mb-6 flex items-center gap-3">
-              <span className="text-4xl">📄</span>
+              <span className="text-4xl">ÃƒÂ°Ã…Â¸Ã¢â‚¬Å“Ã¢â‚¬Å¾</span>
               Documents & Downloads
             </h2>
 
@@ -257,7 +257,7 @@ export default function HelpPage() {
                   answer: (
                     <>
                       <p>
-                        Yes! Log into your account and go to Dashboard → Documents. All your purchased documents are listed
+                        Yes! Log into your account and go to Dashboard ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢ Documents. All your purchased documents are listed
                         there. Click "Download" to get a fresh copy.
                       </p>
                       <p className="mt-2">
@@ -287,7 +287,7 @@ export default function HelpPage() {
           {/* Legal Questions */}
           <section id="legal" className="mb-16">
             <h2 className="text-3xl font-bold text-charcoal mb-6 flex items-center gap-3">
-              <span className="text-4xl">⚖️</span>
+              <span className="text-4xl">ÃƒÂ¢Ã…Â¡Ã¢â‚¬â€œÃƒÂ¯Ã‚Â¸Ã‚Â</span>
               Legal Questions
             </h2>
 
@@ -303,10 +303,10 @@ export default function HelpPage() {
                       </p>
                       <p className="mt-3">
                         Our system analyzes your inputs and generates appropriate documents, but it cannot:
-                        <br />• Give legal opinions on your specific case
-                        <br />• Represent you in court
-                        <br />• Guarantee outcomes
-                        <br />• Provide strategic legal advice
+                        <br />ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ Give legal opinions on your specific case
+                        <br />ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ Represent you in court
+                        <br />ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ Guarantee outcomes
+                        <br />ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ Provide strategic legal advice
                       </p>
                       <p className="mt-3">
                         <strong>For legal advice, consult a qualified solicitor.</strong>
@@ -323,10 +323,10 @@ export default function HelpPage() {
                         valid. Our documents:
                       </p>
                       <ul className="mt-3 space-y-2">
-                        <li>✓ Use official government forms (Form 6A, AT6, N5, etc.)</li>
-                        <li>✓ Follow current legislation (Housing Act 1988, 2016 Scotland Act, etc.)</li>
-                        <li>✓ Include all required information and clauses</li>
-                        <li>✓ Are identical to what solicitors produce</li>
+                        <li>ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ Use official government forms (Form 6A, AT6, N5, etc.)</li>
+                        <li>ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ Follow current legislation (Housing Act 1988, 2016 Scotland Act, etc.)</li>
+                        <li>ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ Include all required information and clauses</li>
+                        <li>ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ Are identical to what solicitors produce</li>
                       </ul>
                       <p className="mt-3">
                         Thousands of landlords have successfully used our documents in UK courts and tribunals.
@@ -392,10 +392,10 @@ export default function HelpPage() {
                         straightforward if you:
                       </p>
                       <ul className="mt-3 space-y-2">
-                        <li>✓ Have proper documents (notice, claim forms, evidence)</li>
-                        <li>✓ Followed correct procedures (notice period, deposit protection, etc.)</li>
-                        <li>✓ Bring evidence bundle (tenancy agreement, rent statements, notice service proof)</li>
-                        <li>✓ Dress professionally and speak clearly</li>
+                        <li>ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ Have proper documents (notice, claim forms, evidence)</li>
+                        <li>ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ Followed correct procedures (notice period, deposit protection, etc.)</li>
+                        <li>ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ Bring evidence bundle (tenancy agreement, rent statements, notice service proof)</li>
+                        <li>ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ Dress professionally and speak clearly</li>
                       </ul>
                       <p className="mt-3">
                         All our legal proceeding products include hearing preparation guides. For complex cases (tenant disputes facts,
@@ -411,7 +411,7 @@ export default function HelpPage() {
           {/* Billing & Refunds */}
           <section id="billing" className="mb-16">
             <h2 className="text-3xl font-bold text-charcoal mb-6 flex items-center gap-3">
-              <span className="text-4xl">💳</span>
+              <span className="text-4xl">ÃƒÂ°Ã…Â¸Ã¢â‚¬â„¢Ã‚Â³</span>
               Billing & Refunds
             </h2>
 
@@ -423,10 +423,10 @@ export default function HelpPage() {
                     <>
                       <p>We accept all major payment methods via Stripe:</p>
                       <ul className="mt-3 space-y-1">
-                        <li>✓ Credit cards (Visa, Mastercard, Amex)</li>
-                        <li>✓ Debit cards (UK & international)</li>
-                        <li>✓ Apple Pay</li>
-                        <li>✓ Google Pay</li>
+                        <li>ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ Credit cards (Visa, Mastercard, Amex)</li>
+                        <li>ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ Debit cards (UK & international)</li>
+                        <li>ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ Apple Pay</li>
+                        <li>ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ Google Pay</li>
                       </ul>
                       <p className="mt-3 text-sm text-gray-600">
                         All payments are processed securely by Stripe. We never store your card details.
@@ -446,19 +446,19 @@ export default function HelpPage() {
                       </p>
                       <p className="mb-3">
                         <strong>Refunds only available for:</strong>
-                        <br />• Technical errors preventing document access
-                        <br />• Duplicate charges
-                        <br />• Unauthorized transactions
+                        <br />ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ Technical errors preventing document access
+                        <br />ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ Duplicate charges
+                        <br />ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ Unauthorized transactions
                       </p>
                       <p className="mb-3">
                         <strong>Not eligible for refund:</strong>
-                        <br />• One-time products after download
-                        <br />• HMO Pro (cancel anytime but no partial month refunds)
-                        <br />• User error in document generation
+                        <br />ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ One-time products after download
+                        <br />ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ HMO Pro (cancel anytime but no partial month refunds)
+                        <br />ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ User error in document generation
                       </p>
                       <p>
                         <Link href="/refunds" className="text-primary hover:underline">
-                          See full refund policy →
+                          See full refund policy ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢
                         </Link>
                       </p>
                     </>
@@ -470,9 +470,9 @@ export default function HelpPage() {
                     <>
                       <p>Email us at refunds@landlordheaven.co.uk with:</p>
                       <ul className="mt-3 space-y-1">
-                        <li>• Your email address (registered account)</li>
-                        <li>• Order number or product name</li>
-                        <li>• Brief reason (optional but helpful)</li>
+                        <li>ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ Your email address (registered account)</li>
+                        <li>ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ Order number or product name</li>
+                        <li>ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ Brief reason (optional but helpful)</li>
                       </ul>
                       <p className="mt-3">
                         We'll process your refund within 24 hours. Money returns to your original payment method in 5-7
@@ -486,7 +486,7 @@ export default function HelpPage() {
                   answer: (
                     <ul className="space-y-3">
                       <li>
-                        <strong>Free Trial:</strong> 7 days free, no payment required. Cancel before trial ends = £0
+                        <strong>Free Trial:</strong> 7 days free, no payment required. Cancel before trial ends = Ãƒâ€šÃ‚Â£0
                         charged
                       </li>
                       <li>
@@ -509,12 +509,12 @@ export default function HelpPage() {
                     <>
                       <p>
                         <strong>Currently, no.</strong> Our prices are already significantly lower than solicitors (you save
-                        £200-400 per case).
+                        Ãƒâ€šÃ‚Â£200-400 per case).
                       </p>
                       <p className="mt-3">
                         <strong>Best value:</strong>
-                        <br />• HMO Pro (£19.99/month) covers unlimited compliance tracking
-                        <br />• Volume discounts available for portfolio landlords
+                        <br />ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ HMO Pro (£19.99/month) covers unlimited compliance tracking
+                        <br />ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ Volume discounts available for portfolio landlords
                       </p>
                       <p className="mt-3 text-sm text-gray-600">
                         For portfolio landlords needing 10+ documents/month, contact us at sales@landlordheaven.co.uk for

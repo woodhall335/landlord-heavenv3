@@ -117,25 +117,25 @@ export default function HowToEvictTenantPage() {
                   href="#england"
                   className="px-4 py-2 bg-gray-100 hover:bg-primary hover:text-white rounded-lg text-sm font-medium transition-colors"
                 >
-                  ðŸ´ó §ó ¢ó ¥ó ®ó §ó ¿ England
+                  ÃƒÂ°Ã…Â¸Ã‚ÂÃ‚Â´ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â§ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â¢ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â¥ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â®ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â§ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â¿ England
                 </a>
                 <a
                   href="#wales"
                   className="px-4 py-2 bg-gray-100 hover:bg-red-600 hover:text-white rounded-lg text-sm font-medium transition-colors"
                 >
-                  ðŸ´ó §ó ¢ó ·ó ¬ó ³ó ¿ Wales
+                  ÃƒÂ°Ã…Â¸Ã‚ÂÃ‚Â´ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â§ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â¢ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â·ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â¬ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â³ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â¿ Wales
                 </a>
                 <a
                   href="#scotland"
                   className="px-4 py-2 bg-gray-100 hover:bg-blue-600 hover:text-white rounded-lg text-sm font-medium transition-colors"
                 >
-                  ðŸ´ó §ó ¢ó ³ó £ó ´ó ¿ Scotland
+                  ÃƒÂ°Ã…Â¸Ã‚ÂÃ‚Â´ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â§ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â¢ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â³ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â£ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â´ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â¿ Scotland
                 </a>
                 <a
                   href="#northern-ireland"
                   className="px-4 py-2 bg-gray-100 hover:bg-green-600 hover:text-white rounded-lg text-sm font-medium transition-colors"
                 >
-                  ðŸ‡¬ðŸ‡§ Northern Ireland
+                  ÃƒÂ°Ã…Â¸Ã¢â‚¬Â¡Ã‚Â¬ÃƒÂ°Ã…Â¸Ã¢â‚¬Â¡Ã‚Â§ Northern Ireland
                 </a>
               </div>
             </div>
@@ -162,7 +162,7 @@ export default function HowToEvictTenantPage() {
               {/* Ask Heaven callout */}
               <div className="bg-purple-50 border border-purple-200 rounded-xl p-5 mb-8">
                 <div className="flex items-start gap-3 mb-4">
-                  <span className="text-2xl">â˜ï¸</span>
+                  <span className="text-2xl">ÃƒÂ¢Ã‹Å“Ã‚ÂÃƒÂ¯Ã‚Â¸Ã‚Â</span>
                   <div>
                     <p className="font-semibold text-gray-900 mb-1">
                       Not sure which eviction route to use?
@@ -181,19 +181,19 @@ export default function HowToEvictTenantPage() {
                     href={complianceLinks.deposit}
                     className="text-xs bg-white border border-purple-200 hover:border-primary text-gray-700 hover:text-primary px-3 py-2 rounded-lg transition-colors text-center"
                   >
-                    Deposit rules for eviction →
+                    Deposit rules for eviction Ã¢â€ â€™
                   </Link>
                   <Link
                     href={complianceLinks.gasSafety}
                     className="text-xs bg-white border border-purple-200 hover:border-primary text-gray-700 hover:text-primary px-3 py-2 rounded-lg transition-colors text-center"
                   >
-                    Gas safety requirements →
+                    Gas safety requirements Ã¢â€ â€™
                   </Link>
                   <Link
                     href={complianceLinks.epc}
                     className="text-xs bg-white border border-purple-200 hover:border-primary text-gray-700 hover:text-primary px-3 py-2 rounded-lg transition-colors text-center"
                   >
-                    EPC requirements →
+                    EPC requirements Ã¢â€ â€™
                   </Link>
                 </div>
               </div>
@@ -262,7 +262,7 @@ export default function HowToEvictTenantPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <div className="flex items-center gap-3 mb-6">
-                <span className="text-4xl">ðŸ´ó §ó ¢ó ¥ó ®ó §ó ¿</span>
+                <span className="text-4xl">ÃƒÂ°Ã…Â¸Ã‚ÂÃ‚Â´ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â§ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â¢ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â¥ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â®ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â§ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â¿</span>
                 <h2 className="text-3xl font-bold text-gray-900">Evicting a Tenant in England</h2>
               </div>
 
@@ -310,13 +310,13 @@ export default function HowToEvictTenantPage() {
                       href="/section-21-notice-template"
                       className="text-primary hover:underline font-medium text-sm"
                     >
-                      Section 21 Template →
+                      Section 21 Template Ã¢â€ â€™
                     </Link>
                     <Link
                       href="/tools/validators/section-21"
                       className="text-primary hover:underline font-medium text-sm"
                     >
-                      Section 21 Checker →
+                      Section 21 Checker Ã¢â€ â€™
                     </Link>
                   </div>
                 </div>
@@ -358,13 +358,13 @@ export default function HowToEvictTenantPage() {
                       href="/section-8-notice-template"
                       className="text-primary hover:underline font-medium text-sm"
                     >
-                      Section 8 Template →
+                      Section 8 Template Ã¢â€ â€™
                     </Link>
                     <Link
                       href="/tools/validators/section-8"
                       className="text-primary hover:underline font-medium text-sm"
                     >
-                      Section 8 Checker →
+                      Section 8 Checker Ã¢â€ â€™
                     </Link>
                   </div>
                 </div>
@@ -378,14 +378,14 @@ export default function HowToEvictTenantPage() {
                     className="inline-flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary/90"
                   >
                     <FileText className="w-4 h-4" />
-                    Notice Only — £19.99
+                    Notice Only Ã¢â‚¬â€ Ã‚Â£29.99
                   </Link>
                   <Link
                     href="/products/complete-pack"
                     className="inline-flex items-center gap-2 bg-gray-900 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-800"
                   >
                     <FileText className="w-4 h-4" />
-                    Complete Pack — £49.99
+                    Complete Pack Ã¢â‚¬â€ Ã‚Â£79.99
                   </Link>
                 </div>
               </div>
@@ -398,7 +398,7 @@ export default function HowToEvictTenantPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <div className="flex items-center gap-3 mb-6">
-                <span className="text-4xl">ðŸ´ó §ó ¢ó ·ó ¬ó ³ó ¿</span>
+                <span className="text-4xl">ÃƒÂ°Ã…Â¸Ã‚ÂÃ‚Â´ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â§ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â¢ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â·ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â¬ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â³ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â¿</span>
                 <h2 className="text-3xl font-bold text-gray-900">Evicting a Tenant in Wales</h2>
               </div>
 
@@ -459,13 +459,13 @@ export default function HowToEvictTenantPage() {
                   href="/wales-eviction-notices"
                   className="inline-flex items-center gap-2 bg-red-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-red-700"
                 >
-                  Wales Eviction Guide →
+                  Wales Eviction Guide Ã¢â€ â€™
                 </Link>
                 <Link
                   href="/wales-tenancy-agreement-template"
                   className="inline-flex items-center gap-2 bg-white text-red-600 border border-red-600 px-6 py-3 rounded-lg font-medium hover:bg-red-50"
                 >
-                  Wales Occupation Contracts →
+                  Wales Occupation Contracts Ã¢â€ â€™
                 </Link>
               </div>
             </div>
@@ -477,7 +477,7 @@ export default function HowToEvictTenantPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <div className="flex items-center gap-3 mb-6">
-                <span className="text-4xl">ðŸ´ó §ó ¢ó ³ó £ó ´ó ¿</span>
+                <span className="text-4xl">ÃƒÂ°Ã…Â¸Ã‚ÂÃ‚Â´ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â§ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â¢ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â³ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â£ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â´ÃƒÂ³Ã‚Â Ã‚ÂÃ‚Â¿</span>
                 <h2 className="text-3xl font-bold text-gray-900">Evicting a Tenant in Scotland</h2>
               </div>
 
@@ -542,13 +542,13 @@ export default function HowToEvictTenantPage() {
                   href="/scotland-eviction-notices"
                   className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700"
                 >
-                  Scotland Eviction Guide →
+                  Scotland Eviction Guide Ã¢â€ â€™
                 </Link>
                 <Link
                   href="/private-residential-tenancy-agreement-template"
                   className="inline-flex items-center gap-2 bg-white text-blue-600 border border-blue-600 px-6 py-3 rounded-lg font-medium hover:bg-blue-50"
                 >
-                  Scotland PRT Agreements →
+                  Scotland PRT Agreements Ã¢â€ â€™
                 </Link>
               </div>
             </div>
@@ -560,7 +560,7 @@ export default function HowToEvictTenantPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <div className="flex items-center gap-3 mb-6">
-                <span className="text-4xl">ðŸ‡¬ðŸ‡§</span>
+                <span className="text-4xl">ÃƒÂ°Ã…Â¸Ã¢â‚¬Â¡Ã‚Â¬ÃƒÂ°Ã…Â¸Ã¢â‚¬Â¡Ã‚Â§</span>
                 <h2 className="text-3xl font-bold text-gray-900">
                   Evicting a Tenant in Northern Ireland
                 </h2>
@@ -611,7 +611,7 @@ export default function HowToEvictTenantPage() {
                 href="/northern-ireland-tenancy-agreement-template"
                 className="inline-flex items-center gap-2 bg-green-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-green-700"
               >
-                Northern Ireland Tenancy Agreements →
+                Northern Ireland Tenancy Agreements Ã¢â€ â€™
               </Link>
             </div>
           </div>
@@ -631,8 +631,8 @@ export default function HowToEvictTenantPage() {
                 <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
                   <h3 className="font-semibold text-gray-900 mb-3">Typical timelines</h3>
                   <ul className="space-y-2 text-sm text-gray-600">
-                    <li>England & Wales: 3–6 months.</li>
-                    <li>Scotland: 4–8 months.</li>
+                    <li>England & Wales: 3Ã¢â‚¬â€œ6 months.</li>
+                    <li>Scotland: 4Ã¢â‚¬â€œ8 months.</li>
                     <li>Contested cases take longer.</li>
                   </ul>
                 </div>
@@ -655,7 +655,7 @@ export default function HowToEvictTenantPage() {
                     href="/section-21-notice-template"
                     className="text-primary text-sm font-medium hover:underline inline-flex mt-3"
                   >
-                    Section 21 template →
+                    Section 21 template Ã¢â€ â€™
                   </Link>
                 </div>
               </div>
@@ -684,13 +684,13 @@ export default function HowToEvictTenantPage() {
                   href="/products/notice-only"
                   className="inline-flex items-center justify-center gap-2 bg-white text-primary font-semibold py-4 px-8 rounded-xl hover:bg-gray-100 transition-colors"
                 >
-                  Notice Only — £19.99
+                  Notice Only Ã¢â‚¬â€ Ã‚Â£29.99
                 </Link>
                 <Link
                   href="/products/complete-pack"
                   className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold py-4 px-8 rounded-xl transition-colors border border-white/30"
                 >
-                  Complete Pack — £49.99
+                  Complete Pack Ã¢â‚¬â€ Ã‚Â£79.99
                 </Link>
               </div>
             </div>
@@ -704,11 +704,11 @@ export default function HowToEvictTenantPage() {
                 jurisdictionLabel="UK eviction routes"
                 scenarioLabel="tenant eviction"
                 primaryCTA={{
-                  label: 'Generate eviction notice — £19.99',
+                  label: 'Generate eviction notice Ã¢â‚¬â€ Ã‚Â£29.99',
                   href: productLinks.noticeOnly.href,
                 }}
                 secondaryCTA={{
-                  label: 'Complete eviction pack — £49.99',
+                  label: 'Complete eviction pack Ã¢â‚¬â€ Ã‚Â£79.99',
                   href: productLinks.completePack.href,
                 }}
                 relatedLinks={[

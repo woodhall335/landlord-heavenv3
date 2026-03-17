@@ -109,9 +109,9 @@ describe('Document Config Consistency', () => {
 
 describe('Product Meta Pricing', () => {
   describe('ast_premium metadata', () => {
-    it('returns correct price of £19.99', () => {
+    it('returns correct price of £24.99', () => {
       const meta = getProductMeta('ast_premium');
-      expect(meta.price).toBe('£19.99');
+      expect(meta.price).toBe('£24.99');
     });
 
     it('returns HMO-specific name', () => {
@@ -122,7 +122,7 @@ describe('Product Meta Pricing', () => {
     it('includes original price for comparison', () => {
       const meta = getProductMeta('ast_premium');
       expect(meta.originalPrice).toBeDefined();
-      expect(meta.originalPrice).toContain('£200');
+      expect(meta.originalPrice).toContain('Ãƒâ€šÂ£200');
     });
 
     it('includes savings message', () => {
@@ -138,9 +138,9 @@ describe('Product Meta Pricing', () => {
   });
 
   describe('ast_standard metadata', () => {
-    it('returns correct price of £9.99', () => {
+    it('returns correct price of £14.99', () => {
       const meta = getProductMeta('ast_standard');
-      expect(meta.price).toBe('£9.99');
+      expect(meta.price).toBe('£14.99');
     });
 
     it('does NOT contain HMO in name', () => {
@@ -248,10 +248,10 @@ describe('Cross-Jurisdiction Consistency', () => {
 
 describe('REGRESSION: Previous Bug Scenarios', () => {
   describe('Bug: Premium review showed Standard price', () => {
-    it('getProductMeta(ast_premium) returns £19.99, not £9.99', () => {
+    it('getProductMeta(ast_premium) returns £24.99, not £14.99', () => {
       const meta = getProductMeta('ast_premium');
-      expect(meta.price).not.toBe('£9.99');
-      expect(meta.price).toBe('£19.99');
+      expect(meta.price).not.toBe('£14.99');
+      expect(meta.price).toBe('£24.99');
     });
   });
 

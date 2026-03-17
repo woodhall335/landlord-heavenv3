@@ -339,10 +339,10 @@ export default function MoneyClaimLetterBeforeActionPage() {
                   </div>
                   <h3 className="font-bold text-gray-900 mb-3">Best Practice: Recorded Delivery</h3>
                   <ul className="space-y-2 text-sm text-gray-600">
-                    <li>• Provides proof of delivery</li>
-                    <li>• Shows date received</li>
-                    <li>• Keep the certificate of posting</li>
-                    <li>• Allow 2 working days for delivery</li>
+                    <li>â€¢ Provides proof of delivery</li>
+                    <li>â€¢ Shows date received</li>
+                    <li>â€¢ Keep the certificate of posting</li>
+                    <li>â€¢ Allow 2 working days for delivery</li>
                   </ul>
                 </div>
 
@@ -352,10 +352,10 @@ export default function MoneyClaimLetterBeforeActionPage() {
                   </div>
                   <h3 className="font-bold text-gray-900 mb-3">Timeline After Sending</h3>
                   <ul className="space-y-2 text-sm text-gray-600">
-                    <li>• Day 0: Post the letter</li>
-                    <li>• Day 2: Deemed received (first class)</li>
-                    <li>• Day 2-16: Their 14-day response period</li>
-                    <li>• Day 17+: Can issue court claim</li>
+                    <li>â€¢ Day 0: Post the letter</li>
+                    <li>â€¢ Day 2: Deemed received (first class)</li>
+                    <li>â€¢ Day 2-16: Their 14-day response period</li>
+                    <li>â€¢ Day 17+: Can issue court claim</li>
                   </ul>
                 </div>
               </div>
@@ -390,7 +390,7 @@ export default function MoneyClaimLetterBeforeActionPage() {
                 href="/products/money-claim?topic=debt&src=seo_money_claim_letter_before_action"
                 className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
               >
-                Generate Your Documents — £34.99
+                Generate Your Documents â€” Â£59.99
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <p className="text-sm text-gray-500 mt-3">

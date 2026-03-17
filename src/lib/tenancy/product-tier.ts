@@ -1,3 +1,5 @@
+import { PRODUCTS } from '@/lib/pricing/products';
+
 export type TenancyJurisdiction = 'england' | 'wales' | 'scotland' | 'northern-ireland';
 
 export type TenancyProductSku = 'ast_standard' | 'ast_premium';
@@ -62,18 +64,18 @@ export function isPremiumTierLabel(tierLabel?: string | null): boolean {
 
 /**
  * Pricing constants for tenancy products
- * Single source of truth for all pricing displays
+ * Single source of truth for all tenancy pricing displays
  */
 export const TENANCY_PRICING = {
   ast_standard: {
-    price: 9.99,
-    displayPrice: '£9.99',
+    price: PRODUCTS.ast_standard.price,
+    displayPrice: PRODUCTS.ast_standard.displayPrice,
     originalPrice: '£100+',
     savings: 'Save £85+ vs solicitors',
   },
   ast_premium: {
-    price: 19.99,
-    displayPrice: '£19.99',
+    price: PRODUCTS.ast_premium.price,
+    displayPrice: PRODUCTS.ast_premium.displayPrice,
     originalPrice: '£200+',
     savings: 'Save £175+ vs solicitors',
   },
@@ -86,7 +88,7 @@ export const TENANCY_PRICING = {
  *
  * Priority order:
  * 1. purchased_product - if the user has already paid, this is authoritative
- * 2. urlProduct - the product param from the wizard URL
+ * 2. urlProduct - the product param from URL query string
  * 3. inferred from facts - detect tier from case_facts.product_tier or jurisdiction-specific tier fields
  *
  * @param params.purchasedProduct - Product SKU from a completed purchase
@@ -166,4 +168,3 @@ export function detectInventoryData(facts: Record<string, any> | null | undefine
     facts.inventory_provided
   );
 }
-

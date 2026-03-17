@@ -1,4 +1,4 @@
-﻿import fs from 'node:fs';
+import fs from 'node:fs';
 import path from 'node:path';
 
 import { PRICING, REGIONAL_PRICING } from '@/lib/pricing';
@@ -13,11 +13,11 @@ const CORE_PRICE_EXPECTATIONS: Record<
   Extract<ProductSku, 'notice_only' | 'complete_pack' | 'money_claim' | 'ast_standard' | 'ast_premium'>,
   { amount: number; display: string; pence: number }
 > = {
-  notice_only: { amount: 19.99, display: '£19.99', pence: 1999 },
-  complete_pack: { amount: 49.99, display: '£49.99', pence: 4999 },
-  money_claim: { amount: 34.99, display: '£34.99', pence: 3499 },
-  ast_standard: { amount: 9.99, display: '£9.99', pence: 999 },
-  ast_premium: { amount: 19.99, display: '£19.99', pence: 1999 },
+  notice_only: { amount: 29.99, display: '£29.99', pence: 2999 },
+  complete_pack: { amount: 79.99, display: '£79.99', pence: 7999 },
+  money_claim: { amount: 59.99, display: '£59.99', pence: 5999 },
+  ast_standard: { amount: 14.99, display: '£14.99', pence: 1499 },
+  ast_premium: { amount: 24.99, display: '£24.99', pence: 2499 },
 };
 
 function walkFiles(dirPath: string, out: string[] = []): string[] {
@@ -87,10 +87,11 @@ describe('Pricing regression checks', () => {
   it('has no stale pricing copy on user-facing paths', () => {
     const staleHits: string[] = [];
     const staleRules: Array<{ label: string; pattern: RegExp }> = [
-      { label: 'Complete Pack £34.99', pattern: /Complete(?: Eviction)? Pack[^\n£]{0,120}£45\.99/i },
-      { label: 'Notice £39.99', pattern: /(Section\s*21|Section\s*8|Notice(?:\s+Only)?|Eviction Notice)[^\n£]{0,120}£39\.99/i },
-      { label: 'Premium tenancy £9.99', pattern: /Premium\s+(?:AST|PRT|Contract)[^\n£]{0,120}£9\.99/i },
-      { label: 'Tenancy range £9.99-£9.99', pattern: /£9\.99\s*-\s*£9\.99/i },
+      { label: 'Notice Only £19.99', pattern: /(Section\s*21|Section\s*8|Notice(?:\s+Only)?|Eviction Notice)[^\n£]{0,120}£19\.99/i },
+      { label: 'Complete Pack £49.99', pattern: /Complete(?: Eviction)? Pack[^\n£]{0,120}£49\.99/i },
+      { label: 'Money Claim £34.99', pattern: /Money Claim(?:s)?[^\n£]{0,120}£34\.99/i },
+      { label: 'Standard tenancy £9.99', pattern: /Standard\s+(?:AST|PRT|Contract)[^\n£]{0,120}£9\.99/i },
+      { label: 'Premium tenancy £19.99', pattern: /Premium\s+(?:AST|PRT|Contract)[^\n£]{0,120}£19\.99/i },
     ];
 
     for (const relativeRoot of SCAN_ROOTS) {
@@ -115,4 +116,3 @@ describe('Pricing regression checks', () => {
     expect(staleHits).toEqual([]);
   });
 });
-

@@ -56,17 +56,17 @@ const faqs = [
   {
     question: 'What is a Warrant of Control?',
     answer:
-      'A Warrant of Control authorises county court bailiffs to visit the debtor\'s address and seize goods to sell. It\'s the most common enforcement method for debts under £5,000. The fee is currently £77 for claims up to £5,000.',
+      'A Warrant of Control authorises county court bailiffs to visit the debtor\'s address and seize goods to sell. It\'s the most common enforcement method for debts under Â£5,000. The fee is currently Â£77 for claims up to Â£5,000.',
   },
   {
     question: 'Should I use county court bailiffs or High Court enforcement?',
     answer:
-      'For debts over £600, you can transfer the judgment to High Court and use High Court Enforcement Officers (HCEOs). HCEOs are often more effective as they work on commission and can seize more types of goods. For debts under £600, you must use county court bailiffs.',
+      'For debts over Â£600, you can transfer the judgment to High Court and use High Court Enforcement Officers (HCEOs). HCEOs are often more effective as they work on commission and can seize more types of goods. For debts under Â£600, you must use county court bailiffs.',
   },
   {
     question: 'What is an Attachment of Earnings Order?',
     answer:
-      'An Attachment of Earnings Order instructs the debtor\'s employer to deduct money from their wages and pay you directly. It only works if the debtor is employed (not self-employed) and you know their employer. The court fee is £110.',
+      'An Attachment of Earnings Order instructs the debtor\'s employer to deduct money from their wages and pay you directly. It only works if the debtor is employed (not self-employed) and you know their employer. The court fee is Â£110.',
   },
   {
     question: 'What is a Charging Order?',
@@ -76,7 +76,7 @@ const faqs = [
   {
     question: 'Can I make the tenant bankrupt?',
     answer:
-      'If the debt is over £5,000, you can petition for the debtor\'s bankruptcy. This is a serious step with a £990 court fee plus deposit. It\'s mainly used as a threat or when the debtor has assets. Many debtors pay when faced with bankruptcy.',
+      'If the debt is over Â£5,000, you can petition for the debtor\'s bankruptcy. This is a serious step with a Â£990 court fee plus deposit. It\'s mainly used as a threat or when the debtor has assets. Many debtors pay when faced with bankruptcy.',
   },
   {
     question: 'What if the tenant has no money or assets?',
@@ -86,12 +86,12 @@ const faqs = [
   {
     question: 'How do I find out what assets the tenant has?',
     answer:
-      'You can apply for an "Order to Obtain Information" (previously called an oral examination). The debtor must attend court and answer questions about their finances under oath. The fee is £55.',
+      'You can apply for an "Order to Obtain Information" (previously called an oral examination). The debtor must attend court and answer questions about their finances under oath. The fee is Â£55.',
   },
   {
     question: 'What is a Third Party Debt Order?',
     answer:
-      'A Third Party Debt Order freezes and seizes money in the debtor\'s bank account. You need to know which bank they use. It\'s very effective if you can identify an account with funds. The fee is £110.',
+      'A Third Party Debt Order freezes and seizes money in the debtor\'s bank account. You need to know which bank they use. It\'s very effective if you can identify an account with funds. The fee is Â£110.',
   },
   {
     question: 'How long does a CCJ last?',
@@ -246,10 +246,10 @@ export default function MoneyClaimCCJEnforcementPage() {
                       </div>
                       <p className="text-gray-600 mb-3">
                         County court bailiffs visit the debtor and seize goods to sell at auction.
-                        Works for debts under £5,000.
+                        Works for debts under Â£5,000.
                       </p>
                       <div className="flex flex-wrap gap-4 text-sm">
-                        <span className="text-gray-500"><strong>Fee:</strong> £77</span>
+                        <span className="text-gray-500"><strong>Fee:</strong> Â£77</span>
                         <span className="text-gray-500"><strong>Best for:</strong> Debtors with valuable possessions</span>
                       </div>
                     </div>
@@ -274,8 +274,8 @@ export default function MoneyClaimCCJEnforcementPage() {
                         More powers than county court bailiffs.
                       </p>
                       <div className="flex flex-wrap gap-4 text-sm">
-                        <span className="text-gray-500"><strong>Fee:</strong> £71 transfer + HCEO fees</span>
-                        <span className="text-gray-500"><strong>Best for:</strong> Debts over £600</span>
+                        <span className="text-gray-500"><strong>Fee:</strong> Â£71 transfer + HCEO fees</span>
+                        <span className="text-gray-500"><strong>Best for:</strong> Debts over Â£600</span>
                       </div>
                     </div>
                   </div>
@@ -294,7 +294,7 @@ export default function MoneyClaimCCJEnforcementPage() {
                         Steady payments over time.
                       </p>
                       <div className="flex flex-wrap gap-4 text-sm">
-                        <span className="text-gray-500"><strong>Fee:</strong> £110</span>
+                        <span className="text-gray-500"><strong>Fee:</strong> Â£110</span>
                         <span className="text-gray-500"><strong>Best for:</strong> Employed debtors (not self-employed)</span>
                       </div>
                     </div>
@@ -314,7 +314,7 @@ export default function MoneyClaimCCJEnforcementPage() {
                         you know their bank.
                       </p>
                       <div className="flex flex-wrap gap-4 text-sm">
-                        <span className="text-gray-500"><strong>Fee:</strong> £110</span>
+                        <span className="text-gray-500"><strong>Fee:</strong> Â£110</span>
                         <span className="text-gray-500"><strong>Best for:</strong> Debtors with bank funds</span>
                       </div>
                     </div>
@@ -334,7 +334,7 @@ export default function MoneyClaimCCJEnforcementPage() {
                         they sell. Long-term security.
                       </p>
                       <div className="flex flex-wrap gap-4 text-sm">
-                        <span className="text-gray-500"><strong>Fee:</strong> £119</span>
+                        <span className="text-gray-500"><strong>Fee:</strong> Â£119</span>
                         <span className="text-gray-500"><strong>Best for:</strong> Property-owning debtors</span>
                       </div>
                     </div>
@@ -363,7 +363,7 @@ export default function MoneyClaimCCJEnforcementPage() {
                 <ul className="space-y-2 text-gray-600 text-sm">
                   <li className="flex items-center gap-2">
                     <CheckCircle className="w-4 h-4 text-green-500" />
-                    Court fee: £55
+                    Court fee: Â£55
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="w-4 h-4 text-green-500" />
@@ -382,7 +382,7 @@ export default function MoneyClaimCCJEnforcementPage() {
 
               <div className="bg-purple-50 border border-purple-200 rounded-xl p-4">
                 <div className="flex items-start gap-3">
-                  <span className="text-2xl">☁️</span>
+                  <span className="text-2xl">â˜ï¸</span>
                   <div>
                     <p className="font-semibold text-gray-900 mb-1">
                       Not sure which enforcement to use?
@@ -416,11 +416,11 @@ export default function MoneyClaimCCJEnforcementPage() {
                 href="/products/money-claim?topic=debt&src=seo_money_claim_ccj_enforcement"
                 className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
               >
-                Start Your Money Claim — £34.99
+                Start Your Money Claim â€” Â£59.99
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <p className="text-sm text-gray-500 mt-3">
-                Court fees from £35 extra (based on claim amount)
+                Court fees from Â£35 extra (based on claim amount)
               </p>
             </div>
           </div>

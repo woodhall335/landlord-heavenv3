@@ -1,17 +1,17 @@
-﻿/**
+import { SEO_PRICES } from '@/lib/pricing/products';
+
+/**
  * PRICING CONFIGURATION
  *
- * Single source of truth for all product pricing
- * Based on LANDLORD_HEAVEN_BLUEPRINT_v6.0.md
+ * Single source of truth for region-aware numeric pricing.
+ * Display pricing should come from src/lib/pricing/products.ts.
  *
- * DO NOT modify these without updating the blueprint
- *
- * Regional Pricing (January 2026 - Updated):
- * - Notice Only: £19.99 (England, Wales, Scotland)
- * - Eviction Pack: £49.99 (England only)
- * - Money Claim: £34.99 (England only)
- * - Tenancy Agreement: £9.99 (all UK regions) - Standardised
- * - Premium TA (HMO): £19.99 (all UK regions)
+ * Regional Pricing (March 2026 - Updated):
+ * - Notice Only: £29.99 (England, Wales, Scotland)
+ * - Eviction Pack: £79.99 (England only)
+ * - Money Claim: £59.99 (England only)
+ * - Tenancy Agreement: £14.99 (all UK regions) - Standardised
+ * - Premium TA (HMO): £24.99 (all UK regions)
  */
 
 export type Jurisdiction = 'england' | 'wales' | 'scotland' | 'northern_ireland';
@@ -22,30 +22,30 @@ export type Jurisdiction = 'england' | 'wales' | 'scotland' | 'northern_ireland'
  */
 export const REGIONAL_PRICING = {
   notice_only: {
-    england: 19.99,
-    wales: 19.99,
-    scotland: 19.99,
+    england: SEO_PRICES.evictionNotice.amount,
+    wales: SEO_PRICES.evictionNotice.amount,
+    scotland: SEO_PRICES.evictionNotice.amount,
     // Not available in Northern Ireland
   },
   complete_pack: {
-    england: 49.99,
+    england: SEO_PRICES.evictionBundle.amount,
     // Wales, Scotland, NI not available
   },
   money_claim: {
-    england: 34.99,
+    england: SEO_PRICES.moneyClaim.amount,
     // Wales, Scotland, NI not available
   },
   tenancy_agreement: {
-    england: 9.99,
-    wales: 9.99,
-    scotland: 9.99,
-    northern_ireland: 9.99,
+    england: SEO_PRICES.tenancyStandard.amount,
+    wales: SEO_PRICES.tenancyStandard.amount,
+    scotland: SEO_PRICES.tenancyStandard.amount,
+    northern_ireland: SEO_PRICES.tenancyStandard.amount,
   },
   tenancy_agreement_premium: {
-    england: 19.99,
-    wales: 19.99,
-    scotland: 19.99,
-    northern_ireland: 19.99,
+    england: SEO_PRICES.tenancyPremium.amount,
+    wales: SEO_PRICES.tenancyPremium.amount,
+    scotland: SEO_PRICES.tenancyPremium.amount,
+    northern_ireland: SEO_PRICES.tenancyPremium.amount,
   },
 } as const;
 
@@ -85,13 +85,13 @@ export function getRegionalPrice(
 export const PRICING = {
   // Eviction Products (One-Time)
   // NOTE: These prices must match src/lib/pricing/products.ts (source of truth for UI)
-  NOTICE_ONLY: 19.99,
-  COMPLETE_EVICTION_PACK: 49.99,
-  MONEY_CLAIM_PACK: 34.99,
+  NOTICE_ONLY: SEO_PRICES.evictionNotice.amount,
+  COMPLETE_EVICTION_PACK: SEO_PRICES.evictionBundle.amount,
+  MONEY_CLAIM_PACK: SEO_PRICES.moneyClaim.amount,
 
   // Tenancy Products (One-Time)
-  STANDARD_AST: 9.99,
-  PREMIUM_AST: 19.99,
+  STANDARD_AST: SEO_PRICES.tenancyStandard.amount,
+  PREMIUM_AST: SEO_PRICES.tenancyPremium.amount,
 
   // HMO Pro Membership (TIERED SUBSCRIPTION)
   HMO_PRO: {
@@ -99,7 +99,7 @@ export const PRICING = {
     TIER_2: { properties: '6-10', price: 24.99, label: '6-10 HMOs' },
     TIER_3: { properties: '11-15', price: 29.99, label: '11-15 HMOs' },
     TIER_4: { properties: '16-20', price: 34.99, label: '16-20 HMOs' },
-    // Formula: +£5 per 5 HMOs after tier 4
+    // Formula: +Â£5 per 5 HMOs after tier 4
     BASE_PRICE: 19.99,
     INCREMENT_PER_5_PROPERTIES: 5.00,
   },
@@ -132,10 +132,10 @@ export function getHMOProTier(propertyCount: number): string {
 }
 
 /**
- * Format price for display (£XX.XX)
+ * Format price for display (Â£XX.XX)
  */
 export function formatPrice(price: number): string {
-  return `£${price.toFixed(2)}`;
+  return `Â£${price.toFixed(2)}`;
 }
 
 /**

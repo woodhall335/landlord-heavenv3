@@ -10,6 +10,7 @@ import { ToolEmailGate } from '@/components/ui/ToolEmailGate';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { productLinks, toolLinks } from '@/lib/seo/internal-links';
+import { PRODUCTS } from '@/lib/pricing/products';
 import { ToolFunnelTracker } from '@/components/tools/ToolFunnelTracker';
 
 // Function to lookup council by postcode
@@ -66,7 +67,7 @@ export default function HMOLicenseChecker() {
     {
       question: 'Do I need separate tenancy agreements for HMO tenants?',
       answer:
-        'You can use either individual agreements for each tenant or a single joint agreement for all tenants. Individual agreements give you more flexibility (tenants can move out independently) but require more administration. Joint agreements make all tenants jointly and severally liable for the rent, providing more security. Our paid HMO tenancy agreement product (from £9.99) includes both options with HMO-specific terms.',
+        `You can use either individual agreements for each tenant or a single joint agreement for all tenants. Individual agreements give you more flexibility (tenants can move out independently) but require more administration. Joint agreements make all tenants jointly and severally liable for the rent, providing more security. Our paid HMO tenancy agreement product (from ${PRODUCTS.ast_standard.displayPrice}) includes both options with HMO-specific terms.`,
     },
   ];
 
@@ -242,9 +243,9 @@ export default function HMOLicenseChecker() {
 
       const hmoDefinition = [
         'A House in Multiple Occupation (HMO) is a property where:',
-        '• 3 or more tenants live together',
-        '• They form 2 or more separate households',
-        '• They share kitchen, bathroom, or toilet facilities',
+        'â€¢ 3 or more tenants live together',
+        'â€¢ They form 2 or more separate households',
+        'â€¢ They share kitchen, bathroom, or toilet facilities',
         '',
         'Standard Test: 5+ people, 2+ households = HMO license required',
         'Additional Test: Some councils require licensing for 3+ people',
@@ -317,10 +318,10 @@ export default function HMOLicenseChecker() {
       yPosition -= 20;
 
       const penalties = [
-        '• Unlimited fines (up to £30,000+)',
-        '• Rent repayment orders (up to 12 months rent)',
-        '• Cannot serve Section 21 notices',
-        '• Criminal prosecution possible',
+        'â€¢ Unlimited fines (up to Â£30,000+)',
+        'â€¢ Rent repayment orders (up to 12 months rent)',
+        'â€¢ Cannot serve Section 21 notices',
+        'â€¢ Criminal prosecution possible',
       ];
 
       penalties.forEach((line) => {
@@ -403,10 +404,10 @@ export default function HMOLicenseChecker() {
         showReviewPill={false}
         showTrustPositioningBar
         showUsageCounter
-        primaryCta={{ label: 'Start Free Checker →', href: '#checker' }}
-        secondaryCta={{ label: 'Get HMO Tenancy Agreement →', href: '/products/ast' }}
+        primaryCta={{ label: 'Start Free Checker â†’', href: '#checker' }}
+        secondaryCta={{ label: 'Get HMO Tenancy Agreement â†’', href: '/products/ast' }}
       >
-        <p className="mt-4 text-sm text-white/90">Instant assessment • HMO guidance • Upgrade for professional agreements</p>
+        <p className="mt-4 text-sm text-white/90">Instant assessment â€¢ HMO guidance â€¢ Upgrade for professional agreements</p>
       </UniversalHero>
 
       {/* Legal Disclaimer Banner */}
@@ -593,7 +594,7 @@ export default function HMOLicenseChecker() {
         {generated && (
           <div className="rounded-lg bg-success-50 border border-success-200 p-4">
             <p className="text-sm text-success-800 font-medium">
-              ✓ Assessment generated successfully! Your PDF has been downloaded.
+              âœ“ Assessment generated successfully! Your PDF has been downloaded.
             </p>
           </div>
         )}
@@ -618,10 +619,10 @@ export default function HMOLicenseChecker() {
               safety and management standards.
             </p>
             <p className="text-error-700 font-semibold">
-              ⚠️ Penalties for unlicensed HMOs can include:
+              âš ï¸ Penalties for unlicensed HMOs can include:
             </p>
             <ul className="list-disc list-inside space-y-1 ml-4">
-              <li>Unlimited fines (commonly £30,000 or more)</li>
+              <li>Unlimited fines (commonly Â£30,000 or more)</li>
               <li>Rent repayment orders forcing you to repay up to 12 months' rent</li>
               <li>Inability to serve Section 21 notices (no-fault evictions)</li>
               <li>Criminal prosecution and record</li>
@@ -659,7 +660,7 @@ export default function HMOLicenseChecker() {
             </p>
 
             <p className="mt-4 text-primary-700 font-semibold">
-              💡 Always check with your local council to confirm whether your property requires
+              ðŸ’¡ Always check with your local council to confirm whether your property requires
               licensing. Each council has different requirements and schemes.
             </p>
           </div>

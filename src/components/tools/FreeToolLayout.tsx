@@ -30,7 +30,7 @@ interface FreeToolLayoutProps {
  *   title="Free Section 21 Notice Generator"
  *   description="Generate a basic Section 21 notice template"
  *   paidVersion={{
- *     price: '£9.99',
+ *     price: '£14.99',
  *     features: ['Court-ready formatting', 'AI validation', ...],
  *     href: '/products/notice-only?product=section21'
  *   }}
@@ -147,7 +147,7 @@ export function FreeToolLayout({
               </Link>
 
               <p className="mt-4 text-center text-xs text-gray-600">
-                Instant download • Court-ready format
+                Instant download Ã¢â‚¬Â¢ Court-ready format
               </p>
             </div>
           </div>

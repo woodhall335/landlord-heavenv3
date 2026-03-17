@@ -42,7 +42,7 @@ const faqs = [
   },
   {
     question: 'What is joint and several liability and why does it matter?',
-    answer: 'Joint and several liability means each tenant is individually responsible for the FULL rent amount, not just their share. If one tenant leaves or stops paying, the remaining tenants must cover the entire rent between them. This clause is essential for landlord protection — without it, you could only pursue each tenant for their calculated share, making rent recovery much harder when one tenant defaults.',
+    answer: 'Joint and several liability means each tenant is individually responsible for the FULL rent amount, not just their share. If one tenant leaves or stops paying, the remaining tenants must cover the entire rent between them. This clause is essential for landlord protection ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â without it, you could only pursue each tenant for their calculated share, making rent recovery much harder when one tenant defaults.',
   },
   {
     question: 'How many tenants can be on a joint tenancy agreement?',
@@ -50,11 +50,11 @@ const faqs = [
   },
   {
     question: 'Can one joint tenant leave before the tenancy ends?',
-    answer: 'During a fixed term, tenants cannot unilaterally leave — they remain liable for rent even if they move out. After the fixed term (during a periodic tenancy), any single joint tenant can give notice to end the ENTIRE tenancy for ALL tenants. This is a key risk of joint tenancies that landlords and tenants should understand. The agreement continues if all remaining tenants agree to a new arrangement.',
+    answer: 'During a fixed term, tenants cannot unilaterally leave ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â they remain liable for rent even if they move out. After the fixed term (during a periodic tenancy), any single joint tenant can give notice to end the ENTIRE tenancy for ALL tenants. This is a key risk of joint tenancies that landlords and tenants should understand. The agreement continues if all remaining tenants agree to a new arrangement.',
   },
   {
     question: 'How is the deposit handled with multiple tenants?',
-    answer: 'For a joint tenancy, a single deposit is taken (subject to Tenant Fees Act limits: 5 weeks for rent under £50,000/year). The deposit is held for all tenants collectively. At tenancy end, any deductions apply against the total deposit. If tenants disagree about how to split returned deposit between themselves, that is a matter between them — not the landlord\'s concern.',
+    answer: 'For a joint tenancy, a single deposit is taken (subject to Tenant Fees Act limits: 5 weeks for rent under Ãƒâ€šÃ‚Â£50,000/year). The deposit is held for all tenants collectively. At tenancy end, any deductions apply against the total deposit. If tenants disagree about how to split returned deposit between themselves, that is a matter between them ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â not the landlord\'s concern.',
   },
   {
     question: 'What happens if joint tenants disagree about something?',
@@ -62,15 +62,15 @@ const faqs = [
   },
   {
     question: 'Is a joint tenancy agreement different from individual room agreements?',
-    answer: 'Yes, significantly. With a joint tenancy, all tenants share responsibility for the whole property. With individual room agreements (common in HMOs), each tenant has their own contract for their room and shared areas — they are only responsible for their own rent. Individual agreements give landlords more control but require more administration and proper HMO licensing.',
+    answer: 'Yes, significantly. With a joint tenancy, all tenants share responsibility for the whole property. With individual room agreements (common in HMOs), each tenant has their own contract for their room and shared areas ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â they are only responsible for their own rent. Individual agreements give landlords more control but require more administration and proper HMO licensing.',
   },
   {
     question: 'Can I add or remove a tenant during the tenancy?',
-    answer: 'Removing a tenant requires agreement from ALL parties (landlord and all tenants) and should be documented via a deed of surrender/assignment or a new tenancy agreement. Adding a tenant similarly requires a new or amended agreement. You cannot simply cross out or add names — the original agreement terms apply to original signatories.',
+    answer: 'Removing a tenant requires agreement from ALL parties (landlord and all tenants) and should be documented via a deed of surrender/assignment or a new tenancy agreement. Adding a tenant similarly requires a new or amended agreement. You cannot simply cross out or add names ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â the original agreement terms apply to original signatories.',
   },
   {
     question: 'How do I evict one tenant from a joint tenancy?',
-    answer: 'You cannot evict just one joint tenant — eviction notices apply to the entire tenancy. If one tenant is causing problems, your options are: (1) Wait for the tenancy to become periodic and accept notice from one of the other tenants to end the whole tenancy, then offer a new tenancy to the remaining tenants; (2) Serve notice on the whole tenancy and start fresh. The problematic tenant remains liable for their period of the tenancy.',
+    answer: 'You cannot evict just one joint tenant ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â eviction notices apply to the entire tenancy. If one tenant is causing problems, your options are: (1) Wait for the tenancy to become periodic and accept notice from one of the other tenants to end the whole tenancy, then offer a new tenancy to the remaining tenants; (2) Serve notice on the whole tenancy and start fresh. The problematic tenant remains liable for their period of the tenancy.',
   },
   {
     question: 'What if one joint tenant stops paying rent?',
@@ -78,7 +78,7 @@ const faqs = [
   },
   {
     question: 'Should couples use a joint tenancy agreement?',
-    answer: 'Generally yes. A joint tenancy ensures both partners have equal rights and both are responsible for rent. If only one partner is named, the other has no tenancy rights and could be asked to leave at any time. Joint tenancy also means if the relationship ends, neither can unilaterally claim the property — they must negotiate or involve the landlord in creating a new arrangement.',
+    answer: 'Generally yes. A joint tenancy ensures both partners have equal rights and both are responsible for rent. If only one partner is named, the other has no tenancy rights and could be asked to leave at any time. Joint tenancy also means if the relationship ends, neither can unilaterally claim the property ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â they must negotiate or involve the landlord in creating a new arrangement.',
   },
   {
     question: 'Do all joint tenants need to sign the agreement?',
@@ -146,16 +146,16 @@ export default function JointTenancyAgreementTemplatePage() {
                 href="/wizard?product=ast_standard&topic=tenancy&src=seo_joint_tenancy_agreement_template&jurisdiction=england"
                 className="inline-flex items-center gap-2 bg-white border-2 border-indigo-600 text-indigo-600 px-6 py-3 rounded-lg font-semibold hover:bg-indigo-50 transition-colors"
               >
-                Standard AST — £9.99
+                Standard AST â€” £14.99
               </Link>
               <Link
                 href="/wizard?product=ast_premium&topic=tenancy&src=seo_joint_tenancy_agreement_template&jurisdiction=england"
                 className="inline-flex items-center gap-2 bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors"
               >
-                Premium AST — £19.99
+                Premium AST â€” £24.99
               </Link>
             </div>
-            <p className="mt-4 text-sm text-gray-500">Supports 2+ tenants • Joint liability included • Instant PDF</p>
+            <p className="mt-4 text-sm text-gray-500">Supports 2+ tenants ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ Joint liability included ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ Instant PDF</p>
           </div>
         </section>
 
@@ -189,16 +189,16 @@ export default function JointTenancyAgreementTemplatePage() {
             <h2 className="text-3xl font-bold text-gray-900 mb-6">Why You Need a Proper Joint Tenancy Agreement</h2>
             <div className="prose prose-lg max-w-none text-gray-700">
               <p>
-                When renting to multiple tenants — whether couples, friends, or professional house-sharers — the
+                When renting to multiple tenants ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â whether couples, friends, or professional house-sharers ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â the
                 dynamics are fundamentally different from single-tenant lettings. Without proper provisions,
                 landlords face significant risks:
               </p>
               <div className="bg-red-50 border-l-4 border-red-500 p-4 my-6">
                 <h3 className="font-semibold text-red-900">The Rent Gap Problem</h3>
                 <p className="text-red-800">
-                  Without <strong>joint and several liability</strong>, if three tenants pay £500 each (£1,500 total)
-                  and one leaves, you can only pursue them for their £500 share. The remaining tenants aren&apos;t
-                  legally obligated to cover the gap, leaving you £500/month short.
+                  Without <strong>joint and several liability</strong>, if three tenants pay Ãƒâ€šÃ‚Â£500 each (Ãƒâ€šÃ‚Â£1,500 total)
+                  and one leaves, you can only pursue them for their Ãƒâ€šÃ‚Â£500 share. The remaining tenants aren&apos;t
+                  legally obligated to cover the gap, leaving you Ãƒâ€šÃ‚Â£500/month short.
                 </p>
               </div>
               <p>
@@ -325,7 +325,7 @@ export default function JointTenancyAgreementTemplatePage() {
                   Both partners should be named on the agreement. This ensures both have tenancy rights
                   and both are liable for rent. If they separate, neither can unilaterally claim the property.
                 </p>
-                <p className="text-sm text-indigo-600">Recommended: Standard AST (£9.99)</p>
+                <p className="text-sm text-indigo-600">Recommended: Standard AST â€” £14.99)</p>
               </div>
               <div className="bg-white p-6 rounded-xl shadow-sm">
                 <h3 className="text-lg font-semibold text-gray-900 mb-3">Friends Sharing a Flat</h3>
@@ -333,7 +333,7 @@ export default function JointTenancyAgreementTemplatePage() {
                   Joint tenancy works well for friends who know and trust each other. Joint liability
                   means they&apos;ll sort out rent collection between themselves.
                 </p>
-                <p className="text-sm text-indigo-600">Recommended: Standard AST (£9.99) for 2-4 friends</p>
+                <p className="text-sm text-indigo-600">Recommended: Standard AST â€” £14.99) for 2-4 friends</p>
               </div>
               <div className="bg-white p-6 rounded-xl shadow-sm">
                 <h3 className="text-lg font-semibold text-gray-900 mb-3">House Share (5+ tenants)</h3>
@@ -341,7 +341,7 @@ export default function JointTenancyAgreementTemplatePage() {
                   May be classified as an HMO requiring a licence. Premium AST includes HMO provisions
                   and shared area clauses. Consider individual agreements for high-turnover properties.
                 </p>
-                <p className="text-sm text-indigo-600">Recommended: Premium AST (£19.99)</p>
+                <p className="text-sm text-indigo-600">Recommended: Premium AST â€” £24.99)</p>
               </div>
               <div className="bg-white p-6 rounded-xl shadow-sm">
                 <h3 className="text-lg font-semibold text-gray-900 mb-3">Family Members</h3>
@@ -349,7 +349,7 @@ export default function JointTenancyAgreementTemplatePage() {
                   Adult family members renting together should all be named. This gives everyone
                   equal rights and responsibilities rather than one person having all the liability.
                 </p>
-                <p className="text-sm text-indigo-600">Recommended: Standard AST (£9.99)</p>
+                <p className="text-sm text-indigo-600">Recommended: Standard AST â€” £14.99)</p>
               </div>
             </div>
           </div>
@@ -365,11 +365,11 @@ export default function JointTenancyAgreementTemplatePage() {
             </p>
             <div className="grid md:grid-cols-2 gap-4">
               <Link href="/products/notice-only" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                <h3 className="font-semibold text-gray-900">Eviction Notices — £19.99</h3>
+                <h3 className="font-semibold text-gray-900">Eviction Notices â€” £29.99</h3>
                 <p className="text-sm text-gray-600">Section 21 or Section 8 to end the entire joint tenancy</p>
               </Link>
               <Link href="/products/money-claim" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                <h3 className="font-semibold text-gray-900">Money Claims — £34.99</h3>
+                <h3 className="font-semibold text-gray-900">Money Claims ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â £59.99</h3>
                 <p className="text-sm text-gray-600">Recover rent arrears from any or all joint tenants</p>
               </Link>
             </div>

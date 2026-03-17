@@ -340,7 +340,7 @@ export function localBusinessSchema() {
       "addressCountry": "GB"
     },
     // geo field removed - invalid without actual coordinates
-    "priceRange": "££"
+    "priceRange": "ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£"
   };
 }
 
@@ -359,11 +359,11 @@ export function localBusinessSchema() {
 export function softwareApplicationSchema() {
   // Calculate actual price range from products
   const prices = [
-    PRODUCTS.ast_standard.price,  // £9.99 (lowest)
-    PRODUCTS.ast_premium.price,   // £19.99
-    PRODUCTS.notice_only.price,   // £19.99
-    PRODUCTS.money_claim.price,   // £34.99
-    PRODUCTS.complete_pack.price, // £49.99 (highest)
+    PRODUCTS.ast_standard.price,  // £14.99 (lowest)
+    PRODUCTS.ast_premium.price,   // £24.99
+    PRODUCTS.notice_only.price,   // £29.99
+    PRODUCTS.money_claim.price,   // £59.99
+    PRODUCTS.complete_pack.price, // £79.99 (highest)
   ];
   const lowPrice = Math.min(...prices).toFixed(2);
   const highPrice = Math.max(...prices).toFixed(2);
@@ -490,7 +490,7 @@ export const HOWTO_SCHEMAS = {
       { name: 'Gather evidence', text: 'Compile tenancy agreement, rent statements, photos of damage, and calculate total owed.' },
       { name: 'Enter defendant details', text: 'Fill in the tenant\'s full name and last known address.' },
       { name: 'Write particulars of claim', text: 'Describe what the claim is for, when the debt arose, and the breakdown.' },
-      { name: 'Pay the court fee', text: 'Pay the fee based on claim amount (£35 for up to £300, up to £455 for up to £10,000).' },
+      { name: 'Pay the court fee', text: 'Pay the fee based on claim amount (ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£35 for up to ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£300, up to ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£455 for up to ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£10,000).' },
       { name: 'Submit and wait for response', text: 'Defendant has 14 days to respond. Request default judgment if they don\'t.' },
     ],
   }),

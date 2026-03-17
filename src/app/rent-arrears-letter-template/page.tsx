@@ -72,7 +72,7 @@ export default function RentArrearsLetterTemplatePage() {
       offers: {
         '@type': 'AggregateOffer',
         lowPrice: '0',
-        highPrice: '34.99',
+        highPrice: '59.99',
         priceCurrency: 'GBP',
         offerCount: '3',
       },
@@ -333,7 +333,7 @@ export default function RentArrearsLetterTemplatePage() {
                     href={wizardLinkMoneyClaim}
                     className="inline-flex items-center gap-2 text-primary font-medium hover:underline"
                   >
-                    Get Money Claim Pack — £34.99
+                    Get Money Claim Pack Ã¢â‚¬â€ Ã‚Â£59.99
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
@@ -371,7 +371,7 @@ export default function RentArrearsLetterTemplatePage() {
                     href={wizardLinkNoticeOnly}
                     className="inline-flex items-center gap-2 text-primary font-medium hover:underline"
                   >
-                    Get Eviction Notice — £19.99
+                    Get Eviction Notice Ã¢â‚¬â€ Ã‚Â£29.99
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
@@ -397,7 +397,7 @@ export default function RentArrearsLetterTemplatePage() {
                 <div className="bg-gray-50 rounded-2xl p-8 border border-gray-200">
                   <div className="text-center mb-6">
                     <span className="text-sm font-medium text-gray-500 uppercase tracking-wide">Free Starter Document</span>
-                    <div className="text-4xl font-bold text-gray-900 mt-2">£0</div>
+                    <div className="text-4xl font-bold text-gray-900 mt-2">Ã‚Â£0</div>
                   </div>
                   <ul className="space-y-4 mb-8">
                     <li className="flex items-start gap-3">
@@ -442,7 +442,7 @@ export default function RentArrearsLetterTemplatePage() {
                   </div>
                   <div className="text-center mb-6">
                     <span className="text-sm font-medium text-primary uppercase tracking-wide">Money Claim Pack</span>
-                    <div className="text-4xl font-bold text-gray-900 mt-2">£34.99</div>
+                    <div className="text-4xl font-bold text-gray-900 mt-2">Ã‚Â£59.99</div>
                   </div>
                   <ul className="space-y-4 mb-8">
                     <li className="flex items-start gap-3">
@@ -901,7 +901,7 @@ export default function RentArrearsLetterTemplatePage() {
                   href={wizardLinkMoneyClaim}
                   className="hero-btn-secondary inline-flex items-center justify-center gap-2"
                 >
-                  Get Money Claim Pack — £34.99
+                  Get Money Claim Pack Ã¢â‚¬â€ Ã‚Â£59.99
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               </div>
@@ -918,7 +918,7 @@ export default function RentArrearsLetterTemplatePage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <div className="flex items-center gap-4">
-                <span className="text-4xl">☁️</span>
+                <span className="text-4xl">Ã¢ËœÂÃ¯Â¸Â</span>
                 <div>
                   <p className="font-semibold text-gray-900 mb-1">
                     Questions about dealing with rent arrears?
@@ -928,7 +928,7 @@ export default function RentArrearsLetterTemplatePage() {
                     <Link href="/ask-heaven" className="text-primary font-medium hover:underline">
                       Ask Heaven landlord Q&amp;A tool
                     </Link>{' '}
-                    can help you understand your options — from payment plans to money claims and eviction.
+                    can help you understand your options Ã¢â‚¬â€ from payment plans to money claims and eviction.
                   </p>
                 </div>
               </div>

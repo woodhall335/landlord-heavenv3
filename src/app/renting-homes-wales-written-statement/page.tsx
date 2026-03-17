@@ -11,7 +11,7 @@ import { UniversalHero } from '@/components/landing/UniversalHero';
 
 export const metadata: Metadata = {
   title: 'Wales Written Statement 2026 | Legal Requirements',
-  description: 'Written statement requirements under the Renting Homes (Wales) Act 2016. 14-day deadline, required content, and compliant template from £9.99.',
+  description: 'Written statement requirements under the Renting Homes (Wales) Act 2016. 14-day deadline, required content, and compliant template from Â£14.99.',
   keywords: [
     'renting homes Wales written statement',
     'Wales written statement requirement',
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'Wales Written Statement 2026 | Legal Requirements',
-    description: 'Understand written statement requirements under the Renting Homes (Wales) Act 2016. Compliant template from £9.99.',
+    description: 'Understand written statement requirements under the Renting Homes (Wales) Act 2016. Compliant template from Â£14.99.',
     type: 'article',
     url: getCanonicalUrl('/renting-homes-wales-written-statement'),
   },
@@ -42,7 +42,7 @@ const faqs = [
   },
   {
     question: 'What is the 14-day deadline for the written statement?',
-    answer: 'Under Section 31 of the Renting Homes (Wales) Act 2016, landlords must provide the written statement within 14 days of the "occupation date" — the date the contract-holder is entitled to begin occupying the property. This is typically the tenancy start date. Providing the statement at signing (before occupation starts) is the safest approach and what our template enables.',
+    answer: 'Under Section 31 of the Renting Homes (Wales) Act 2016, landlords must provide the written statement within 14 days of the "occupation date" â€” the date the contract-holder is entitled to begin occupying the property. This is typically the tenancy start date. Providing the statement at signing (before occupation starts) is the safest approach and what our template enables.',
   },
   {
     question: 'What happens if I don\'t provide the written statement on time?',
@@ -149,7 +149,7 @@ export default function RentingHomesWalesWrittenStatementPage() {
                 href="/wizard?product=ast_standard&topic=tenancy&src=seo_renting_homes_wales_written_statement&jurisdiction=wales"
                 className="inline-flex items-center gap-2 bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors"
               >
-                Get Compliant Written Statement — £9.99
+                Get Compliant Written Statement â€” Â£14.99
               </Link>
             </div>
             <p className="mt-4 text-sm text-gray-500">Includes all fundamental & supplementary terms required by law</p>

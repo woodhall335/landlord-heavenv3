@@ -96,7 +96,7 @@ const faqs = [
   {
     question: 'How much does house clearance typically cost?',
     answer:
-      'Typical costs: small clearance (few items) £100-200, medium clearance (furniture + items) £300-500, full house clearance £500-1500+, skip hire £150-300. Get professional quotes documenting what was cleared.',
+      'Typical costs: small clearance (few items) Â£100-200, medium clearance (furniture + items) Â£300-500, full house clearance Â£500-1500+, skip hire Â£150-300. Get professional quotes documenting what was cleared.',
   },
 ];
 
@@ -363,27 +363,27 @@ export default function MoneyClaimAbandonedGoodsPage() {
                   <tbody className="divide-y divide-gray-200">
                     <tr>
                       <td className="px-6 py-3 text-gray-600">Mini skip hire (2-3 yards)</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">£150 - £200</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">Â£150 - Â£200</td>
                     </tr>
                     <tr className="bg-gray-50">
                       <td className="px-6 py-3 text-gray-600">Builder&apos;s skip (6-8 yards)</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">£250 - £350</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">Â£250 - Â£350</td>
                     </tr>
                     <tr>
                       <td className="px-6 py-3 text-gray-600">House clearance (1 bed flat)</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">£200 - £400</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">Â£200 - Â£400</td>
                     </tr>
                     <tr className="bg-gray-50">
                       <td className="px-6 py-3 text-gray-600">House clearance (3 bed house)</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">£500 - £1,200</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">Â£500 - Â£1,200</td>
                     </tr>
                     <tr>
                       <td className="px-6 py-3 text-gray-600">Single item removal (mattress, sofa)</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">£30 - £80</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">Â£30 - Â£80</td>
                     </tr>
                     <tr className="bg-gray-50">
                       <td className="px-6 py-3 text-gray-600">Storage facility (per week)</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">£15 - £50</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">Â£15 - Â£50</td>
                     </tr>
                   </tbody>
                 </table>
@@ -392,7 +392,7 @@ export default function MoneyClaimAbandonedGoodsPage() {
               {/* Ask Heaven callout */}
               <div className="bg-purple-50 border border-purple-200 rounded-xl p-4">
                 <div className="flex items-start gap-3">
-                  <span className="text-2xl">☁️</span>
+                  <span className="text-2xl">â˜ï¸</span>
                   <div>
                     <p className="font-semibold text-gray-900 mb-1">
                       Not sure about the legal process for abandoned goods?
@@ -426,10 +426,10 @@ export default function MoneyClaimAbandonedGoodsPage() {
                   </div>
                   <h3 className="font-bold text-gray-900 mb-3">Photo Evidence</h3>
                   <ul className="space-y-2 text-sm text-gray-600">
-                    <li>• Photos of all abandoned items</li>
-                    <li>• Location and condition shots</li>
-                    <li>• Photos before disposal</li>
-                    <li>• Photos after clearance</li>
+                    <li>â€¢ Photos of all abandoned items</li>
+                    <li>â€¢ Location and condition shots</li>
+                    <li>â€¢ Photos before disposal</li>
+                    <li>â€¢ Photos after clearance</li>
                   </ul>
                 </div>
 
@@ -439,10 +439,10 @@ export default function MoneyClaimAbandonedGoodsPage() {
                   </div>
                   <h3 className="font-bold text-gray-900 mb-3">Notice Records</h3>
                   <ul className="space-y-2 text-sm text-gray-600">
-                    <li>• Copy of notice sent</li>
-                    <li>• Recorded delivery proof</li>
-                    <li>• Itemised list of goods</li>
-                    <li>• Timeline of events</li>
+                    <li>â€¢ Copy of notice sent</li>
+                    <li>â€¢ Recorded delivery proof</li>
+                    <li>â€¢ Itemised list of goods</li>
+                    <li>â€¢ Timeline of events</li>
                   </ul>
                 </div>
 
@@ -452,10 +452,10 @@ export default function MoneyClaimAbandonedGoodsPage() {
                   </div>
                   <h3 className="font-bold text-gray-900 mb-3">Cost Evidence</h3>
                   <ul className="space-y-2 text-sm text-gray-600">
-                    <li>• Clearance company invoice</li>
-                    <li>• Skip hire receipt</li>
-                    <li>• Storage facility receipts</li>
-                    <li>• Time/mileage log (if DIY)</li>
+                    <li>â€¢ Clearance company invoice</li>
+                    <li>â€¢ Skip hire receipt</li>
+                    <li>â€¢ Storage facility receipts</li>
+                    <li>â€¢ Time/mileage log (if DIY)</li>
                   </ul>
                 </div>
               </div>
@@ -522,11 +522,11 @@ export default function MoneyClaimAbandonedGoodsPage() {
                 href="/products/money-claim?reason=cleaning&src=seo_money_claim_abandoned_goods&topic=debt"
                 className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
               >
-                Start Your Claim — £34.99
+                Start Your Claim â€” Â£59.99
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <p className="text-sm text-gray-500 mt-3">
-                Court fees from £35 extra (based on claim amount)
+                Court fees from Â£35 extra (based on claim amount)
               </p>
             </div>
           </div>

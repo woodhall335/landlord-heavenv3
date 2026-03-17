@@ -15,7 +15,7 @@ import { Container } from "@/components/ui";
 import { Hero, TrustBar, Testimonials } from "@/components/landing";
 import { HeaderConfig } from "@/components/layout/HeaderConfig";
 import { HowItWorksThreeStep } from "@/components/marketing/HowItWorksThreeStep";
-import { PRODUCTS } from "@/lib/pricing/products";
+import { PRODUCTS, TENANCY_AGREEMENT_FROM_PRICE } from "@/lib/pricing/products";
 import {
   RiFileTextLine,
   RiScales3Line,
@@ -126,10 +126,10 @@ export default function HomeContent() {
           <div className="max-w-5xl mx-auto">
             <div className="mt-14 text-center">
               <Link href="/wizard?product" className="hero-btn-primary">
-                Start your eviction notice →
+                Start your eviction notice â†’
               </Link>
               <p className="mt-4 text-sm text-gray-500">
-                Free to start • Pay only when you're ready
+                Free to start â€¢ Pay only when you're ready
               </p>
             </div>
           </div>
@@ -174,7 +174,7 @@ export default function HomeContent() {
               href="/products/ast"
               title="Tenancy Agreements"
               description="Compliant ASTs with optional clauses for HMOs and students."
-              price="From £9.99"
+              price={TENANCY_AGREEMENT_FROM_PRICE}
               icon={<RiClipboardLine className="w-7 h-7" />}
             />
           </div>
@@ -209,7 +209,7 @@ export default function HomeContent() {
                 Hi, how can I help you?
               </h2>
               <p className="text-gray-500 text-lg">
-                Free UK landlord advice — no sign-up required
+                Free UK landlord advice â€” no sign-up required
               </p>
             </div>
 
@@ -272,17 +272,17 @@ export default function HomeContent() {
                 {[
                   {
                     label: "Eviction notice help",
-                    icon: "📄",
+                    icon: "ðŸ“„",
                     prompt: "How do I serve an eviction notice to my tenant?",
                   },
                   {
                     label: "Rent arrears recovery",
-                    icon: "💷",
+                    icon: "ðŸ’·",
                     prompt: "How do I recover unpaid rent from a tenant?",
                   },
                   {
                     label: "Deposit protection rules",
-                    icon: "🛡️",
+                    icon: "ðŸ›¡ï¸",
                     prompt: "What are the deposit protection requirements?",
                   },
                 ].map((item) => (
@@ -320,7 +320,7 @@ export default function HomeContent() {
               </div>
 
               <p className="mt-6 text-center text-xs text-gray-400">
-                For guidance only — not legal advice.{" "}
+                For guidance only â€” not legal advice.{" "}
                 <Link href="/terms" className="text-primary hover:underline">
                   Terms apply
                 </Link>
@@ -469,7 +469,7 @@ export default function HomeContent() {
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-8">
               <Link href="/wizard?product" className="hero-btn-primary">
-                Start your eviction notice →
+                Start your eviction notice â†’
               </Link>
             </div>
 
@@ -507,14 +507,14 @@ export default function HomeContent() {
                 >
                   Bundle overview
                 </Link>
-                {" • "}
+                {" â€¢ "}
                 <Link
                   href="/tools/free-section-8-notice-generator"
                   className="text-primary hover:underline font-medium"
                 >
                   Generator
                 </Link>
-                {" • "}
+                {" â€¢ "}
                 <Link
                   href="/tools/validators/section-8"
                   className="text-primary hover:underline font-medium"

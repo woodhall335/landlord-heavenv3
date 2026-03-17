@@ -69,7 +69,7 @@ const faqs = [
   {
     question: 'How much does it cost to submit an N1 form?',
     answer:
-      'Court fees depend on claim amount: up to £300 costs £35, £300.01-£500 costs £50, £500.01-£1,000 costs £70, £1,000.01-£1,500 costs £80, £1,500.01-£3,000 costs £115, £3,000.01-£5,000 costs £205, £5,000.01-£10,000 costs £455.',
+      'Court fees depend on claim amount: up to Â£300 costs Â£35, Â£300.01-Â£500 costs Â£50, Â£500.01-Â£1,000 costs Â£70, Â£1,000.01-Â£1,500 costs Â£80, Â£1,500.01-Â£3,000 costs Â£115, Â£3,000.01-Â£5,000 costs Â£205, Â£5,000.01-Â£10,000 costs Â£455.',
   },
   {
     question: 'Can I claim interest on the N1 form?',
@@ -268,10 +268,10 @@ export default function MoneyClaimN1ClaimFormPage() {
                       <div className="bg-white rounded-lg p-4 border border-gray-200 text-sm">
                         <p className="font-medium text-gray-700 mb-2">Include:</p>
                         <ul className="text-gray-600 space-y-1">
-                          <li>• Your full name (as landlord/property owner)</li>
-                          <li>• Your address (can be business address)</li>
-                          <li>• Contact telephone number</li>
-                          <li>• Email address (optional but helpful)</li>
+                          <li>â€¢ Your full name (as landlord/property owner)</li>
+                          <li>â€¢ Your address (can be business address)</li>
+                          <li>â€¢ Contact telephone number</li>
+                          <li>â€¢ Email address (optional but helpful)</li>
                         </ul>
                       </div>
                     </div>
@@ -292,10 +292,10 @@ export default function MoneyClaimN1ClaimFormPage() {
                       <div className="bg-white rounded-lg p-4 border border-gray-200 text-sm">
                         <p className="font-medium text-gray-700 mb-2">Include:</p>
                         <ul className="text-gray-600 space-y-1">
-                          <li>• Tenant&apos;s full legal name (as on tenancy agreement)</li>
-                          <li>• Their current address (where they can be served)</li>
-                          <li>• If multiple tenants, list each as separate defendant</li>
-                          <li>• Check spelling matches tenancy agreement exactly</li>
+                          <li>â€¢ Tenant&apos;s full legal name (as on tenancy agreement)</li>
+                          <li>â€¢ Their current address (where they can be served)</li>
+                          <li>â€¢ If multiple tenants, list each as separate defendant</li>
+                          <li>â€¢ Check spelling matches tenancy agreement exactly</li>
                         </ul>
                       </div>
                     </div>
@@ -339,10 +339,10 @@ export default function MoneyClaimN1ClaimFormPage() {
                       <div className="bg-white rounded-lg p-4 border border-gray-200 text-sm">
                         <p className="font-medium text-gray-700 mb-2">Include in total:</p>
                         <ul className="text-gray-600 space-y-1">
-                          <li>• Principal debt (rent arrears, damage costs, etc.)</li>
-                          <li>• Interest (8% statutory rate)</li>
-                          <li>• Court fee (you can add this to your claim)</li>
-                          <li>• Tick appropriate box for claim value range</li>
+                          <li>â€¢ Principal debt (rent arrears, damage costs, etc.)</li>
+                          <li>â€¢ Interest (8% statutory rate)</li>
+                          <li>â€¢ Court fee (you can add this to your claim)</li>
+                          <li>â€¢ Tick appropriate box for claim value range</li>
                         </ul>
                       </div>
                     </div>
@@ -363,12 +363,12 @@ export default function MoneyClaimN1ClaimFormPage() {
                       <div className="bg-white rounded-lg p-4 border border-gray-200 text-sm mb-4">
                         <p className="font-medium text-gray-700 mb-2">Must include:</p>
                         <ul className="text-gray-600 space-y-1">
-                          <li>• The tenancy agreement (property, parties, dates)</li>
-                          <li>• What the tenant was required to do/pay</li>
-                          <li>• What they failed to do/pay</li>
-                          <li>• The breakdown of amounts claimed</li>
-                          <li>• Interest calculation</li>
-                          <li>• Statement of truth</li>
+                          <li>â€¢ The tenancy agreement (property, parties, dates)</li>
+                          <li>â€¢ What the tenant was required to do/pay</li>
+                          <li>â€¢ What they failed to do/pay</li>
+                          <li>â€¢ The breakdown of amounts claimed</li>
+                          <li>â€¢ Interest calculation</li>
+                          <li>â€¢ Statement of truth</li>
                         </ul>
                       </div>
                       <div className="bg-violet-50 rounded-lg p-4 border border-violet-200">
@@ -436,11 +436,11 @@ export default function MoneyClaimN1ClaimFormPage() {
                   href="/products/money-claim?topic=debt&src=seo_money_claim_n1_claim_form"
                   className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
                 >
-                  Generate Your Documents — £34.99
+                  Generate Your Documents â€” Â£59.99
                   <ArrowRight className="w-5 h-5" />
                 </Link>
                 <p className="text-sm text-gray-500 mt-3">
-                  Court fees from £35 extra (paid to court separately)
+                  Court fees from Â£35 extra (paid to court separately)
                 </p>
               </div>
             </div>

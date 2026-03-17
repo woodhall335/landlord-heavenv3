@@ -39,7 +39,7 @@ const upsellConfig = {
   toolName: 'Section 21 Notice Validator',
   toolType: 'validator' as const,
   productName: 'Notice Only Pack',
-  ctaLabel: `Upgrade to court-ready pack — ${PRODUCTS.notice_only.displayPrice}`,
+  ctaLabel: `Upgrade to court-ready pack Ã¢â‚¬â€ ${PRODUCTS.notice_only.displayPrice}`,
   ctaHref: wizardLinkNoticeOnly,
   jurisdiction: 'england',
   jurisdictionLabel: 'England only',
@@ -56,7 +56,7 @@ const upsellConfig = {
 };
 
 export const metadata: Metadata = {
-  title: 'Free Section 21 Validity Checker (England) – Check My Notice',
+  title: 'Free Section 21 Validity Checker (England) Ã¢â‚¬â€œ Check My Notice',
   description:
     'Free Section 21 checker for England. Upload your Form 6A for instant validation. Checks deposits, gas safety, EPC, and notice periods.',
   keywords: [
@@ -241,63 +241,63 @@ export default function Section21ValidatorPage() {
             </p>
             <div className="grid md:grid-cols-2 gap-3">
               <div className="flex items-start gap-2 text-sm">
-                <span className="text-primary font-bold">✓</span>
+                <span className="text-primary font-bold">Ã¢Å“â€œ</span>
                 <span className="text-gray-700">
-                  <strong>Form 6A</strong> — Using the prescribed form (not old-style letter)
+                  <strong>Form 6A</strong> Ã¢â‚¬â€ Using the prescribed form (not old-style letter)
                 </span>
               </div>
               <div className="flex items-start gap-2 text-sm">
-                <span className="text-primary font-bold">✓</span>
+                <span className="text-primary font-bold">Ã¢Å“â€œ</span>
                 <span className="text-gray-700">
-                  <strong>Deposit protected</strong> — In TDS, DPS, or MyDeposits scheme
+                  <strong>Deposit protected</strong> Ã¢â‚¬â€ In TDS, DPS, or MyDeposits scheme
                 </span>
               </div>
               <div className="flex items-start gap-2 text-sm">
-                <span className="text-primary font-bold">✓</span>
+                <span className="text-primary font-bold">Ã¢Å“â€œ</span>
                 <span className="text-gray-700">
-                  <strong>Prescribed information</strong> — Served within 30 days of deposit
+                  <strong>Prescribed information</strong> Ã¢â‚¬â€ Served within 30 days of deposit
                 </span>
               </div>
               <div className="flex items-start gap-2 text-sm">
-                <span className="text-primary font-bold">✓</span>
+                <span className="text-primary font-bold">Ã¢Å“â€œ</span>
                 <span className="text-gray-700">
-                  <strong>Gas Safety Certificate</strong> — Given before move-in (if gas appliances)
+                  <strong>Gas Safety Certificate</strong> Ã¢â‚¬â€ Given before move-in (if gas appliances)
                 </span>
               </div>
               <div className="flex items-start gap-2 text-sm">
-                <span className="text-primary font-bold">✓</span>
+                <span className="text-primary font-bold">Ã¢Å“â€œ</span>
                 <span className="text-gray-700">
-                  <strong>EPC served</strong> — Valid Energy Performance Certificate provided
+                  <strong>EPC served</strong> Ã¢â‚¬â€ Valid Energy Performance Certificate provided
                 </span>
               </div>
               <div className="flex items-start gap-2 text-sm">
-                <span className="text-primary font-bold">✓</span>
+                <span className="text-primary font-bold">Ã¢Å“â€œ</span>
                 <span className="text-gray-700">
-                  <strong>How to Rent guide</strong> — Current version given to tenant
+                  <strong>How to Rent guide</strong> Ã¢â‚¬â€ Current version given to tenant
                 </span>
               </div>
               <div className="flex items-start gap-2 text-sm">
-                <span className="text-primary font-bold">✓</span>
+                <span className="text-primary font-bold">Ã¢Å“â€œ</span>
                 <span className="text-gray-700">
-                  <strong>Property licensed</strong> — If selective/HMO licensing applies
+                  <strong>Property licensed</strong> Ã¢â‚¬â€ If selective/HMO licensing applies
                 </span>
               </div>
               <div className="flex items-start gap-2 text-sm">
-                <span className="text-primary font-bold">✓</span>
+                <span className="text-primary font-bold">Ã¢Å“â€œ</span>
                 <span className="text-gray-700">
-                  <strong>Notice period</strong> — At least 2 calendar months
+                  <strong>Notice period</strong> Ã¢â‚¬â€ At least 2 calendar months
                 </span>
               </div>
               <div className="flex items-start gap-2 text-sm">
-                <span className="text-primary font-bold">✓</span>
+                <span className="text-primary font-bold">Ã¢Å“â€œ</span>
                 <span className="text-gray-700">
-                  <strong>No retaliatory eviction</strong> — No council complaint in last 6 months
+                  <strong>No retaliatory eviction</strong> Ã¢â‚¬â€ No council complaint in last 6 months
                 </span>
               </div>
               <div className="flex items-start gap-2 text-sm">
-                <span className="text-primary font-bold">✓</span>
+                <span className="text-primary font-bold">Ã¢Å“â€œ</span>
                 <span className="text-gray-700">
-                  <strong>Service evidence</strong> — Proof of how notice was delivered
+                  <strong>Service evidence</strong> Ã¢â‚¬â€ Proof of how notice was delivered
                 </span>
               </div>
             </div>
@@ -486,12 +486,12 @@ export default function Section21ValidatorPage() {
               To get the most accurate validation results, have these documents ready:
             </p>
             <ul className="list-disc pl-6 text-gray-700 space-y-2 mb-6">
-              <li>Your Section 21 notice (Form 6A) — PDF or clear photo</li>
+              <li>Your Section 21 notice (Form 6A) Ã¢â‚¬â€ PDF or clear photo</li>
               <li>Tenancy start date and whether it&apos;s fixed-term or periodic</li>
               <li>Deposit protection certificate and prescribed information dates</li>
               <li>Date gas safety certificate was provided (if applicable)</li>
               <li>EPC date and rating</li>
-              <li>How to Rent guide — version and date given to tenant</li>
+              <li>How to Rent guide Ã¢â‚¬â€ version and date given to tenant</li>
               <li>Details of any local licensing schemes</li>
               <li>Service method (hand delivery, post, email)</li>
             </ul>
@@ -516,13 +516,13 @@ export default function Section21ValidatorPage() {
                   href={wizardLinkNoticeOnly}
                   className="inline-flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
                 >
-                  Notice Only Pack - £19.99
+                  Notice Only Pack - Ã‚Â£29.99
                 </Link>
                 <Link
                   href={wizardLinkCompletePack}
                   className="inline-flex items-center px-4 py-2 border border-purple-600 text-purple-700 rounded-lg hover:bg-purple-50 transition-colors"
                 >
-                  Complete Eviction Pack - £49.99
+                  Complete Eviction Pack - Ã‚Â£79.99
                 </Link>
               </div>
             </div>

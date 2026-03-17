@@ -49,7 +49,7 @@ export default function AboutPage() {
             <div className="prose prose-lg max-w-none text-gray-700">
               <p className="text-xl leading-relaxed mb-6">
                 Every year, thousands of UK landlords face the daunting task of evicting problem tenants or claiming
-                unpaid rent. They have two choices: pay solicitors £300-600, or spend hours researching complex legal
+                unpaid rent. They have two choices: pay solicitors Ãƒâ€šÃ‚Â£300-600, or spend hours researching complex legal
                 forms and risk getting it wrong.
               </p>
 
@@ -80,7 +80,7 @@ export default function AboutPage() {
                 </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-3">Too Expensive</h3>
                 <p className="text-gray-700">
-                  Solicitors charge £300-600 for eviction documents. For many landlords, this is unaffordable -
+                  Solicitors charge Ãƒâ€šÃ‚Â£300-600 for eviction documents. For many landlords, this is unaffordable -
                   especially when dealing with rent arrears.
                 </p>
               </div>
@@ -128,10 +128,10 @@ export default function AboutPage() {
                   and generates court-ready documents.
                 </p>
                 <ul className="text-sm text-gray-700 space-y-2">
-                  <li>✓ Analyzes 18 eviction grounds in seconds</li>
-                  <li>✓ Validates notice periods automatically</li>
-                  <li>✓ Checks deposit protection compliance</li>
-                  <li>✓ Suggests grounds based on your case</li>
+                  <li>ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ Analyzes 18 eviction grounds in seconds</li>
+                  <li>ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ Validates notice periods automatically</li>
+                  <li>ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ Checks deposit protection compliance</li>
+                  <li>ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ Suggests grounds based on your case</li>
                 </ul>
               </div>
 
@@ -167,14 +167,14 @@ export default function AboutPage() {
                 </div>
                 <h3 className="text-2xl font-semibold text-charcoal mb-4">Fast & Affordable</h3>
                 <p className="text-gray-700 mb-4">
-                  Generate professional documents in 10-15 minutes for £9.99-£49.99. That's 95% cheaper than
+                  Generate professional documents in 10-15 minutes for £14.99-£79.99. That's 95% cheaper than
                   solicitors, delivered instantly.
                 </p>
                 <ul className="text-sm text-gray-700 space-y-2">
-                  <li>✓ Average completion time: 12 minutes</li>
-                  <li>✓ Instant PDF download</li>
-                  <li>✓ Save £200-400 vs solicitors</li>
-                  <li>✓ Professionally curated documents</li>
+                  <li>ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ Average completion time: 12 minutes</li>
+                  <li>ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ Instant PDF download</li>
+                  <li>ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ Save Ãƒâ€šÃ‚Â£200-400 vs solicitors</li>
+                  <li>ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ Professionally curated documents</li>
                 </ul>
               </div>
 
@@ -188,10 +188,10 @@ export default function AboutPage() {
                   Thousands of successful cases.
                 </p>
                 <ul className="text-sm text-gray-700 space-y-2">
-                  <li>✓ Official Form 6A, N5, AT6 formats</li>
-                  <li>✓ Comply with latest legislation</li>
-                  <li>✓ Smart validation before generation</li>
-                  <li>✓ Accepted by all UK courts</li>
+                  <li>ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ Official Form 6A, N5, AT6 formats</li>
+                  <li>ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ Comply with latest legislation</li>
+                  <li>ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ Smart validation before generation</li>
+                  <li>ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ Accepted by all UK courts</li>
                 </ul>
               </div>
             </div>
@@ -289,19 +289,19 @@ export default function AboutPage() {
             </div>
 
             <div className="bg-success/10 border-l-4 border-success p-6 rounded-r-lg mb-8">
-              <h3 className="font-semibold text-charcoal mb-2">✅ Eviction Notice Testimonial</h3>
+              <h3 className="font-semibold text-charcoal mb-2">ÃƒÂ¢Ã…â€œÃ¢â‚¬Â¦ Eviction Notice Testimonial</h3>
               <blockquote className="text-gray-700 italic">
-                "Saved me £350 vs my solicitor. The Section 21 notice was accepted by court first time. Took 10 minutes
+                "Saved me Ãƒâ€šÃ‚Â£350 vs my solicitor. The Section 21 notice was accepted by court first time. Took 10 minutes
                 to generate. Absolutely brilliant service."
               </blockquote>
               <p className="text-sm text-gray-600 mt-2">- Manchester Landlord, 3 properties</p>
             </div>
 
             <div className="bg-success/10 border-l-4 border-success p-6 rounded-r-lg">
-              <h3 className="font-semibold text-charcoal mb-2">✅ HMO Compliance Testimonial</h3>
+              <h3 className="font-semibold text-charcoal mb-2">ÃƒÂ¢Ã…â€œÃ¢â‚¬Â¦ HMO Compliance Testimonial</h3>
               <blockquote className="text-gray-700 italic">
-                "I manage 12 HMOs. HMO Pro has saved me from missing two license renewals (£30k+ fines avoided). Best
-                £30/month I spend."
+                "I manage 12 HMOs. HMO Pro has saved me from missing two license renewals (Ãƒâ€šÃ‚Â£30k+ fines avoided). Best
+                Ãƒâ€šÃ‚Â£30/month I spend."
               </blockquote>
               <p className="text-sm text-gray-600 mt-2">- Leeds Portfolio Landlord, 12 HMOs</p>
             </div>
@@ -425,16 +425,16 @@ export default function AboutPage() {
                 href="/pricing"
                 className="hero-btn-primary"
               >
-                View Pricing →
+                View Pricing ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢
               </Link>
               <Link
                 href="/wizard?src=about"
                 className="hero-btn-secondary"
               >
-                Start Wizard →
+                Start Wizard ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢
               </Link>
             </div>
-            <p className="mt-4 text-sm text-gray-600">Court-ready case bundles • AI-powered • statutory-grounded preparation</p>
+            <p className="mt-4 text-sm text-gray-600">Court-ready case bundles ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ AI-powered ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ statutory-grounded preparation</p>
           </div>
         </Container>
       </section>

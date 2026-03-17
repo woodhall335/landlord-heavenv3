@@ -85,8 +85,8 @@ export default function TenantWontLeavePage() {
           badge="England Only"
           badgeIcon={<Scale className="w-4 h-4" />}
           title="Tenant Won't Leave After Notice?"
-          subtitle={<>Your tenant ignoring your eviction notice is frustrating — but you <strong>must follow the legal process</strong>. Here&apos;s exactly what to do next.</>}
-          primaryCta={{ label: 'Get Court-Ready Notice — £19.99', href: '/products/notice-only' }}
+          subtitle={<>Your tenant ignoring your eviction notice is frustrating â€” but you <strong>must follow the legal process</strong>. Here&apos;s exactly what to do next.</>}
+          primaryCta={{ label: 'Get Court-Ready Notice â€” Â£29.99', href: '/products/notice-only' }}
           secondaryCta={{ label: 'Go to Possession Claim Guide', href: '/possession-claim-guide' }}
           variant="pastel"
         >
@@ -129,7 +129,7 @@ export default function TenantWontLeavePage() {
                   <p className="text-red-800">
                     <strong>Illegal eviction</strong> is a criminal offence. You cannot change locks, remove belongings,
                     cut off utilities, or harass the tenant into leaving. Even if they owe rent or have damaged
-                    the property, you must use the court process. Penalties include fines up to £5,000 and
+                    the property, you must use the court process. Penalties include fines up to Â£5,000 and
                     potential imprisonment.
                   </p>
                 </div>
@@ -206,13 +206,13 @@ export default function TenantWontLeavePage() {
                       <div className="grid md:grid-cols-2 gap-4">
                         <div className="bg-gray-50 rounded-lg p-4">
                           <h4 className="font-semibold text-gray-900 mb-2">Section 21 (Accelerated)</h4>
-                          <p className="text-sm text-gray-600 mb-2">Form N5B — no hearing needed in most cases</p>
-                          <p className="text-sm text-gray-500">Court fee: £355</p>
+                          <p className="text-sm text-gray-600 mb-2">Form N5B â€” no hearing needed in most cases</p>
+                          <p className="text-sm text-gray-500">Court fee: Â£355</p>
                         </div>
                         <div className="bg-gray-50 rounded-lg p-4">
                           <h4 className="font-semibold text-gray-900 mb-2">Section 8 (Standard)</h4>
-                          <p className="text-sm text-gray-600 mb-2">Form N5 — requires court hearing</p>
-                          <p className="text-sm text-gray-500">Court fee: £355</p>
+                          <p className="text-sm text-gray-600 mb-2">Form N5 â€” requires court hearing</p>
+                          <p className="text-sm text-gray-500">Court fee: Â£355</p>
                         </div>
                       </div>
                       <div className="mt-4">
@@ -278,7 +278,7 @@ export default function TenantWontLeavePage() {
                         </li>
                         <li className="flex items-start gap-2">
                           <Gavel className="w-4 h-4 text-primary flex-shrink-0 mt-1" />
-                          Bailiff fee: £130 (county court) or £66+ (High Court)
+                          Bailiff fee: Â£130 (county court) or Â£66+ (High Court)
                         </li>
                       </ul>
                       <div className="mt-4">
@@ -344,7 +344,7 @@ export default function TenantWontLeavePage() {
                 Typical Eviction Timeline
               </h2>
               <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                From serving notice to bailiff enforcement — what to expect at each stage.
+                From serving notice to bailiff enforcement â€” what to expect at each stage.
               </p>
 
               <div className="relative">

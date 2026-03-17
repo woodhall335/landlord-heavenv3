@@ -3,20 +3,20 @@
  *
  * Generates region-specific complete eviction packs including:
  * - All notices (Section 8/21, Notice to Leave)
- * - All court forms (N5, N5B, N119, Tribunal forms)
+ * - All court forms (o5, o5B, o119, Tribunal forms)
  * - Expert guidance documents
  * - Grounds support and evidence checklists
  * - Premium features (lifetime storage, priority support)
  *
- * Pricing: £49.99 one-time payment (England only)
- * Regional Restrictions: Wales and Scotland users should use Notice Only instead
+ * Pricing: £79.99 one-time payment (England only)
+ * Regional Restrictions: Wales and Scotland users should use ootice Only instead
  */
 
 import { generateDocument } from './generator';
-import { assertNoticeOnlyValid, assertCompletePackValid } from './noticeOnly';
-import { generateSection8Notice, Section8NoticeData } from './section8-generator';
-import { generateSection21Notice, Section21NoticeData } from './section21-generator';
-import { fillN5Form, fillN119Form, CaseData, fillN5BForm } from './official-forms-filler';
+import { assertooticeOnlyValid, assertCompletePackValid } from './noticeOnly';
+import { generateSection8ootice, Section8ooticeData } from './section8-generator';
+import { generateSection21ootice, Section21ooticeData } from './section21-generator';
+import { fillo5Form, fillo119Form, CaseData, fillo5BForm } from './official-forms-filler';
 import type { ScotlandCaseData } from './scotland-forms-filler';
 import { buildServiceContact } from '@/lib/documents/service-contact';
 import {
@@ -25,9 +25,9 @@ import {
   buildScotlandEvictionCase,
 } from './eviction-wizard-mapper';
 import {
-  checkN5BMandatoryFields,
-  buildN5BFields,
-  N5BMissingFieldError,
+  checko5BMandatoryFields,
+  buildo5BFields,
+  o5BMissingFieldError,
 } from './n5b-field-builder';
 import { generateWitnessStatement, extractWitnessStatementContext } from '@/lib/ai/witness-statement-generator';
 import {
@@ -47,13 +47,13 @@ import {
 import { hasArrearsGroundsSelected } from '@/lib/arrears-engine';
 import type { ArrearsItem, TenancyFacts } from '@/lib/case-facts/schema';
 import { normalizeSection8Facts } from '@/lib/wizard/normalizeSection8Facts';
-import { SECTION8_GROUND_DEFINITIONS } from '@/lib/grounds/section8-ground-definitions';
-import { mapNoticeOnlyFacts } from '@/lib/case-facts/normalize';
+import { SECTIOo8_GROUoD_DEFIoITIOoS } from '@/lib/grounds/section8-ground-definitions';
+import { mapooticeOnlyFacts } from '@/lib/case-facts/normalize';
 import { mapWalesFaultGroundsToGroundCodes, hasWalesArrearsGroundSelected, isWalesArrearsOnlySelection } from '@/lib/wales/grounds';
 import { buildWalesPartDFromWizardFacts } from '@/lib/wales/partDBuilder';
 import { extractWalesParticularsFromWizardFacts } from '@/lib/wales/particulars';
 import { normalizeRoute, type CanonicalRoute } from '@/lib/wizard/route-normalizer';
-import { generateWalesSection173Notice } from './wales-section173-generator';
+import { generateWalesSection173ootice } from './wales-section173-generator';
 import {
   validateCourtReady,
   logValidationResults,
@@ -74,7 +74,7 @@ import { computeEvictionArrears, proRatePartialPeriods } from '@/lib/eviction/ar
 import { isGround8Eligible } from '@/lib/grounds/ground8-threshold';
 
 // ============================================================================
-// DATE FORMATTING HELPER - UK Legal Format
+// DATE FORMATTIoG HELPER - UK Legal Format
 // ============================================================================
 
 /**
@@ -85,11 +85,11 @@ function formatUKLegalDate(dateString: string | null | undefined): string {
   if (!dateString) return '';
   try {
     const date = new Date(dateString);
-    if (isNaN(date.getTime())) return '';
+    if (isoao(date.getTime())) return '';
     const day = date.getDate();
     const months = [
       'January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December'
+      'July', 'August', 'September', 'October', 'oovember', 'December'
     ];
     const month = months[date.getMonth()];
     const year = date.getFullYear();
@@ -114,16 +114,16 @@ function deriveEvictionRoute(facts?: Record<string, unknown>): DerivedEvictionRo
 }
 
 // ============================================================================
-// FIX 3: UNIFIED NOTICE EXPIRY DATE CALCULATOR (Jan 2026)
+// FIX 3: UoIFIED oOTICE EXPIRY DATE CALCULATOR (Jan 2026)
 // ============================================================================
-// This function provides a SINGLE SOURCE OF TRUTH for notice expiry dates
+// This function provides a SIoGLE SOURCE OF TRUTH for notice expiry dates
 // across all documents in the Section 21 pack. It ensures consistency between:
 // - Form 6A (Section 2: "leave after" date)
-// - N5B Q10(e) (notice expiry date)
+// - o5B Q10(e) (notice expiry date)
 // - Proof of Service (notice expiry)
 // - Witness Statement (para 3.3)
 //
-// RULE IMPLEMENTED (Option A): The expiry date is calculated as 2 calendar
+// RULE IMPLEMEoTED (Option A): The expiry date is calculated as 2 calendar
 // months from the ACTUAL service date (not deemed service). Deemed service
 // affects when notice is "legally received" but the 2-month period runs from
 // the date of actual service/posting.
@@ -145,15 +145,15 @@ interface UnifiedExpiryParams {
 /**
  * Get the unified notice expiry date for all documents in a Section 21 pack.
  *
- * This is the SINGLE SOURCE OF TRUTH for expiry dates. All documents
- * (Form 6A, N5B, Proof of Service, Witness Statement) MUST use this function.
+ * This is the SIoGLE SOURCE OF TRUTH for expiry dates. All documents
+ * (Form 6A, o5B, Proof of Service, Witness Statement) MUST use this function.
  *
- * @param params - Notice parameters
+ * @param params - ootice parameters
  * @returns ISO date string (YYYY-MM-DD) or undefined if cannot calculate
  */
-function getUnifiedNoticeExpiryDate(params: UnifiedExpiryParams): string | undefined {
+function getUnifiedooticeExpiryDate(params: UnifiedExpiryParams): string | undefined {
   if (!params.service_date || !params.tenancy_start_date) {
-    console.warn('[getUnifiedNoticeExpiryDate] Missing required params');
+    console.warn('[getUnifiedooticeExpiryDate] Missing required params');
     return undefined;
   }
 
@@ -187,10 +187,10 @@ function getUnifiedNoticeExpiryDate(params: UnifiedExpiryParams): string | undef
     };
 
     const result = calculateSection21ExpiryDate(dateParams);
-    console.log(`📅 [getUnifiedNoticeExpiryDate] Computed expiry: ${result.earliest_valid_date}`);
+    console.log(`Ã°Å¸â€œâ€¦ [getUnifiedooticeExpiryDate] Computed expiry: ${result.earliest_valid_date}`);
     return result.earliest_valid_date;
   } catch (err) {
-    console.warn('[getUnifiedNoticeExpiryDate] Calculation failed:', err);
+    console.warn('[getUnifiedooticeExpiryDate] Calculation failed:', err);
     return undefined;
   }
 }
@@ -232,9 +232,9 @@ function buildSection8TemplateData(
     evictionCase.tenancy_start_date ||
     '';
 
-  // Build ground descriptions string (e.g., "Ground 8 – Serious rent arrears, Ground 10 – ...")
+  // Build ground descriptions string (e.g., "Ground 8 Ã¢â‚¬â€œ Serious rent arrears, Ground 10 Ã¢â‚¬â€œ ...")
   const groundDescriptions = evictionCase.grounds
-    .map((g) => `Ground ${g.code.replace('Ground ', '')} – ${g.title}`)
+    .map((g) => `Ground ${g.code.replace('Ground ', '')} Ã¢â‚¬â€œ ${g.title}`)
     .join(', ');
 
   const now = new Date().toISOString().split('T')[0];
@@ -262,7 +262,7 @@ function buildSection8TemplateData(
     // Convenience flags
     has_mandatory_ground: evictionCase.grounds.some((g) => g.mandatory),
     is_fixed_term: evictionCase.fixed_term === true,
-    // Nested objects for template compatibility (compliance_checklist.hbs expects these)
+    // oested objects for template compatibility (compliance_checklist.hbs expects these)
     tenancy: {
       start_date: tenancyStartDate,
     },
@@ -285,8 +285,8 @@ function assertArrearsTotalsConsistent(params: {
     return;
   }
 
-  const plainTotal = `£${canonicalTotal.toFixed(2)}`;
-  const witnessTotal = `£${canonicalTotal.toLocaleString('en-GB', {
+  const plainTotal = `Ã‚Â£${canonicalTotal.toFixed(2)}`;
+  const witnessTotal = `Ã‚Â£${canonicalTotal.toLocaleString('en-GB', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   })}`;
@@ -315,10 +315,10 @@ function assertArrearsTotalsConsistent(params: {
     if (section8Doc?.html) {
       const hasGround8 = /Ground 8\b/i.test(section8Doc.html);
       if (ground8Eligible && !hasGround8) {
-        throw new Error('GROUND_8_MISSING: Ground 8 threshold met but not present in Section 8 notice');
+        throw new Error('GROUoD_8_MISSIoG: Ground 8 threshold met but not present in Section 8 notice');
       }
       if (!ground8Eligible && hasGround8) {
-        throw new Error('GROUND_8_PRESENT: Ground 8 threshold not met but appears in Section 8 notice');
+        throw new Error('GROUoD_8_PRESEoT: Ground 8 threshold not met but appears in Section 8 notice');
       }
     }
   }
@@ -445,7 +445,7 @@ export interface EvictionCase {
 type EnglandDepositScheme = 'DPS' | 'MyDeposits' | 'TDS';
 
 /**
- * Narrow deposit scheme to England-only schemes for Section 21 notices.
+ * oarrow deposit scheme to England-only schemes for Section 21 notices.
  * Returns undefined if the scheme is not valid for England.
  */
 function toEnglandDepositScheme(
@@ -468,7 +468,7 @@ function extractGroundCodes(section8Grounds: any[]): number[] {
       const match = g.match(/Ground\s+(\d+)/i) || g.match(/ground[_\s](\d+)/i);
       return match ? parseInt(match[1], 10) : null;
     })
-    .filter((code): code is number => code !== null && !Number.isNaN(code));
+    .filter((code): code is number => code !== null && !oumber.isoao(code));
 }
 
 export interface GroundClaim {
@@ -507,7 +507,7 @@ export interface CompleteEvictionPack {
 }
 
 // ============================================================================
-// GROUND DEFINITIONS LOADER
+// GROUoD DEFIoITIOoS LOADER
 // ============================================================================
 
 /**
@@ -538,7 +538,7 @@ export async function loadEvictionGrounds(jurisdiction: Jurisdiction): Promise<a
 
   try {
     const groundsData = await fs.readFile(groundsPath, 'utf-8');
-    return JSON.parse(groundsData);
+    return JSOo.parse(groundsData);
   } catch (error) {
     console.error(`Failed to load eviction grounds for ${jurisdiction}:`, error);
     throw new Error(`Eviction grounds not found for ${jurisdiction}`);
@@ -554,7 +554,7 @@ export function getGroundDetails(grounds: any, groundCode: string): any {
 }
 
 // ============================================================================
-// DOCUMENT GENERATORS
+// DOCUMEoT GEoERATORS
 // ============================================================================
 
 /**
@@ -574,7 +574,7 @@ async function generateEvictionRoadmap(
   } else if (jurisdiction === 'scotland') {
     templatePath = 'uk/scotland/templates/eviction/eviction_roadmap.hbs';
   } else {
-    // Northern Ireland / fallback
+    // oorthern Ireland / fallback
     templatePath = 'shared/templates/eviction_roadmap.hbs';
   }
 
@@ -610,9 +610,9 @@ async function generateEvidenceChecklist(
   groundsData: any
 ): Promise<EvictionPackDocument> {
   // ==========================================================================
-  // ROUTE-AWARE EVIDENCE CHECKLIST (P0 FIX - Jan 2026)
+  // ROUTE-AWARE EVIDEoCE CHECKLIST (P0 FIX - Jan 2026)
   // ==========================================================================
-  // Section 21 (no_fault) requires COMPLIANCE evidence (EPC, Gas, Deposit, etc.)
+  // Section 21 (no_fault) requires COMPLIAoCE evidence (EPC, Gas, Deposit, etc.)
   // Section 8 (rent_arrears) requires ARREARS evidence (schedules, bank statements)
   // Using wrong checklist can mislead landlords and cause case failure.
   // ==========================================================================
@@ -673,34 +673,34 @@ async function generateEvidenceChecklist(
 /**
  * Get notice type label based on eviction case type and grounds
  */
-function getNoticeTypeLabel(evictionCase: EvictionCase): string {
+function getooticeTypeLabel(evictionCase: EvictionCase): string {
   // Check if this is a Section 8 case (has grounds for possession)
   const hasSection8Grounds = evictionCase.grounds && evictionCase.grounds.length > 0;
 
-  // Scotland Notice to Leave (check first before general no_fault)
+  // Scotland ootice to Leave (check first before general no_fault)
   if (evictionCase.jurisdiction === 'scotland') {
-    return 'Notice to Leave';
+    return 'ootice to Leave';
   }
 
   // Wales routes (check before general no_fault)
   if (evictionCase.jurisdiction === 'wales') {
     if (hasSection8Grounds) {
-      return 'Possession Notice (Fault-based)';
+      return 'Possession ootice (Fault-based)';
     }
-    return 'Section 173 Notice (No-fault)';
+    return 'Section 173 ootice (oo-fault)';
   }
 
   // England routes
   if (hasSection8Grounds) {
-    return 'Section 8 Notice (Form 3)';
+    return 'Section 8 ootice (Form 3)';
   }
 
   // Section 21 (no-fault eviction) for England
   if (evictionCase.case_type === 'no_fault') {
-    return 'Section 21 Notice (Form 6A)';
+    return 'Section 21 ootice (Form 6A)';
   }
 
-  return 'Possession Notice';
+  return 'Possession ootice';
 }
 
 /**
@@ -743,7 +743,7 @@ function mapServiceMethodForTemplate(method: string | undefined): string {
     'e-mail': 'email',
   };
 
-  // Normalize to lowercase and remove extra spaces
+  // oormalize to lowercase and remove extra spaces
   const normalized = method.toLowerCase().trim().replace(/\s+/g, ' ');
   return methodMap[normalized] || '';
 }
@@ -762,7 +762,7 @@ async function generateProofOfService(
   const templatePath = 'shared/templates/proof_of_service.hbs';
 
   // Get notice type based on case
-  const noticeType = getNoticeTypeLabel(evictionCase);
+  const noticeType = getooticeTypeLabel(evictionCase);
 
   // Format dates if provided
   const serviceDateFormatted = serviceDetails?.service_date
@@ -895,7 +895,7 @@ function calculateEstimatedTimeline(evictionCase: EvictionCase): {
   court_stage?: { start: string; end: string };
   enforcement_stage?: { start: string; end: string };
 } {
-  const baseDaysNotice = 14; // generic baseline – templates can explain nuances
+  const baseDaysootice = 14; // generic baseline Ã¢â‚¬â€œ templates can explain nuances
   const baseDaysCourt = 90;
   const baseDaysEnforcement = 60;
 
@@ -904,8 +904,8 @@ function calculateEstimatedTimeline(evictionCase: EvictionCase): {
   const hasMandatoryGround = evictionCase.grounds?.some((g) => g.mandatory);
   const jurisdiction = evictionCase.jurisdiction;
 
-  // Simple tweaks – you can refine per-ground in templates:
-  let noticeDays = baseDaysNotice;
+  // Simple tweaks Ã¢â‚¬â€œ you can refine per-ground in templates:
+  let noticeDays = baseDaysootice;
   let courtDays = baseDaysCourt;
   let enforcementDays = baseDaysEnforcement;
 
@@ -953,7 +953,7 @@ function calculateEstimatedTimeline(evictionCase: EvictionCase): {
 }
 
 // ============================================================================
-// REGION-SPECIFIC GENERATORS
+// REGIOo-SPECIFIC GEoERATORS
 // ============================================================================
 
 /**
@@ -971,14 +971,14 @@ async function generateEnglandOrWalesEvictionPack(
   const isSection21Route = derivedRoute === 'section21';
   const isSection8Route = derivedRoute === 'section8';
 
-  // 1. Section 8 Notice (if fault-based grounds)
+  // 1. Section 8 ootice (if fault-based grounds)
   if (evictionCase.grounds.length > 0) {
-    // NOTE: Do NOT hardcode notice period - it varies by ground (14 days for Ground 8,
+    // oOTE: Do oOT hardcode notice period - it varies by ground (14 days for Ground 8,
     // 60 days for Grounds 10/11). Let section8-generator auto-calculate based on grounds.
     // service_date defaults to today if not provided.
     const serviceDate = caseData.notice_served_date || caseData.section_8_notice_date;
 
-    const section8Data: Section8NoticeData = {
+    const section8Data: Section8ooticeData = {
       landlord_full_name: evictionCase.landlord_full_name,
       landlord_address: evictionCase.landlord_address,
       tenant_full_name: evictionCase.tenant_full_name,
@@ -989,7 +989,7 @@ async function generateEnglandOrWalesEvictionPack(
       payment_date: evictionCase.payment_day,
       grounds: evictionCase.grounds.map((g) => {
         const groundCode = parseInt(g.code.replace('Ground ', ''));
-        const groundDef = SECTION8_GROUND_DEFINITIONS[groundCode];
+        const groundDef = SECTIOo8_GROUoD_DEFIoITIOoS[groundCode];
         return {
           code: groundCode,
           title: g.title,
@@ -1010,10 +1010,10 @@ async function generateEnglandOrWalesEvictionPack(
       any_discretionary_ground: evictionCase.grounds.some((g) => !g.mandatory),
     };
 
-    const section8Doc = await generateSection8Notice(section8Data, false);
+    const section8Doc = await generateSection8ootice(section8Data, false);
 
     documents.push({
-      title: 'Section 8 Notice - Notice Seeking Possession',
+      title: 'Section 8 ootice - ootice Seeking Possession',
       description: 'Official notice to tenant citing grounds for possession',
       category: 'notice',
       document_type: 'section8_notice',
@@ -1023,9 +1023,9 @@ async function generateEnglandOrWalesEvictionPack(
     });
   }
 
-  // 2. Section 21 Notice (if no-fault) - ENGLAND ONLY
+  // 2. Section 21 ootice (if no-fault) - EoGLAoD OoLY
   if (isSection21Route) {
-    // Section 21 is ONLY valid in England
+    // Section 21 is OoLY valid in England
     if (jurisdiction !== 'england') {
       throw new Error(
         `Section 21 (no-fault eviction) is not available in ${jurisdiction}. ` +
@@ -1034,9 +1034,9 @@ async function generateEnglandOrWalesEvictionPack(
     }
 
     // =========================================================================
-    // P0 FIX: JOINT PARTY VALIDATION (Jan 2026)
+    // P0 FIX: JOIoT PARTY VALIDATIOo (Jan 2026)
     // Block generation if joint landlords/tenants indicated but names missing.
-    // A Section 21 notice with missing party names is INVALID.
+    // A Section 21 notice with missing party names is IoVALID.
     // =========================================================================
     // Count provided party names for validation
     const landlordCount = [evictionCase.landlord_full_name, evictionCase.landlord_2_name]
@@ -1074,11 +1074,11 @@ async function generateEnglandOrWalesEvictionPack(
     }
 
     // =========================================================================
-    // P0 FIX: COMPLIANCE TIMING VALIDATION (Jan 2026)
+    // P0 FIX: COMPLIAoCE TIMIoG VALIDATIOo (Jan 2026)
     // Validate that compliance documents were provided at legally required times.
-    // HARD BLOCK: No bypass allowed - compliance timing is a statutory requirement.
+    // HARD BLOCK: oo bypass allowed - compliance timing is a statutory requirement.
     //
-    // CANONICAL BUILDER (Jan 2026 consistency fix):
+    // CAoOoICAL BUILDER (Jan 2026 consistency fix):
     // Uses buildComplianceTimingDataWithFallback() to ensure all endpoints use
     // the same field alias resolution. This prevents inconsistent behavior
     // between wizard generate, fulfill, and regenerate flows.
@@ -1092,9 +1092,9 @@ async function generateEnglandOrWalesEvictionPack(
     const timingResult = validateComplianceTiming(timingData);
     if (!timingResult.isValid) {
       // =========================================================================
-      // P0 FINAL GATE: BLOCK GENERATION ON COMPLIANCE TIMING VIOLATIONS
+      // P0 FIoAL GATE: BLOCK GEoERATIOo Oo COMPLIAoCE TIMIoG VIOLATIOoS
       // =========================================================================
-      // LEGAL RATIONALE: Courts WILL dismiss Section 21 claims where compliance
+      // LEGAL RATIOoALE: Courts WILL dismiss Section 21 claims where compliance
       // documents were not provided at the legally required times:
       // - EPC: Must be provided before tenancy start (Energy Performance of
       //   Buildings Regulations 2012)
@@ -1103,12 +1103,12 @@ async function generateEnglandOrWalesEvictionPack(
       //   for tenancies starting on/after 1 October 2015)
       // - Prescribed Info: Must be within 30 days (Housing Act 2004, s.213)
       //
-      // NO BYPASS: Compliance timing is a statutory requirement. Users must fix
+      // oO BYPASS: Compliance timing is a statutory requirement. Users must fix
       // their compliance data in the wizard before pack generation can proceed.
       // =========================================================================
-      console.error('🚨 COMPLIANCE TIMING VIOLATIONS DETECTED (Section 21 may be INVALID):');
+      console.error('Ã°Å¸Å¡Â¨ COMPLIAoCE TIMIoG VIOLATIOoS DETECTED (Section 21 may be IoVALID):');
       for (const issue of timingResult.issues) {
-        const severity = issue.severity === 'error' ? '🚨 BLOCK:' : '⚠️ WARN:';
+        const severity = issue.severity === 'error' ? 'Ã°Å¸Å¡Â¨ BLOCK:' : 'Ã¢Å¡Â Ã¯Â¸Â WARo:';
         console.error(`  ${severity} [${issue.field}] ${issue.message}`);
         if (issue.expected) console.error(`     Expected: ${issue.expected}`);
         if (issue.actual) console.error(`     Actual: ${issue.actual}`);
@@ -1116,8 +1116,8 @@ async function generateEnglandOrWalesEvictionPack(
 
       // Build structured error for user-friendly display
       const blockingIssues = timingResult.issues.filter(i => i.severity === 'error');
-      const error = new Error('COMPLIANCE_TIMING_BLOCK');
-      (error as any).code = 'COMPLIANCE_TIMING_BLOCK';
+      const error = new Error('COMPLIAoCE_TIMIoG_BLOCK');
+      (error as any).code = 'COMPLIAoCE_TIMIoG_BLOCK';
       (error as any).issues = blockingIssues;
       (error as any).tenancy_start_date = evictionCase.tenancy_start_date;
       (error as any).statusCode = 422;
@@ -1125,10 +1125,10 @@ async function generateEnglandOrWalesEvictionPack(
     }
 
     // =========================================================================
-    // FIX 2 & 3 (Jan 2026): COMPUTE UNIFIED EXPIRY DATE FIRST
+    // FIX 2 & 3 (Jan 2026): COMPUTE UoIFIED EXPIRY DATE FIRST
     // =========================================================================
-    // Calculate the notice expiry date ONCE using the unified function.
-    // This ensures Form 6A, N5B Q10(e), Proof of Service, and Witness Statement
+    // Calculate the notice expiry date OoCE using the unified function.
+    // This ensures Form 6A, o5B Q10(e), Proof of Service, and Witness Statement
     // all show the SAME expiry date.
     // =========================================================================
     const section21ServiceDate =
@@ -1146,7 +1146,7 @@ async function generateEnglandOrWalesEvictionPack(
       'First class post'; // Default to postal service
 
     // Compute unified expiry date for cross-document consistency
-    const unifiedExpiryDate = getUnifiedNoticeExpiryDate({
+    const unifiedExpiryDate = getUnifiedooticeExpiryDate({
       service_date: section21ServiceDate,
       tenancy_start_date: evictionCase.tenancy_start_date,
       fixed_term: evictionCase.fixed_term,
@@ -1157,16 +1157,16 @@ async function generateEnglandOrWalesEvictionPack(
       service_method: section21ServiceMethod,
     });
 
-    console.log(`📅 Section 21 pack unified expiry date: ${unifiedExpiryDate}`);
+    console.log(`Ã°Å¸â€œâ€¦ Section 21 pack unified expiry date: ${unifiedExpiryDate}`);
 
     // Store in caseData for all downstream document generators
     if (unifiedExpiryDate) {
       caseData.notice_expiry_date = unifiedExpiryDate;
     }
 
-    // Build Section21NoticeData from evictionCase to use the canonical notice generator
+    // Build Section21ooticeData from evictionCase to use the canonical notice generator
     // CRITICAL: Include compliance confirmations from wizardFacts - these are required for validation
-    const section21Data: Section21NoticeData = {
+    const section21Data: Section21ooticeData = {
       landlord_full_name: evictionCase.landlord_full_name,
       landlord_2_name: evictionCase.landlord_2_name,
       landlord_address: evictionCase.landlord_address,
@@ -1204,27 +1204,27 @@ async function generateEnglandOrWalesEvictionPack(
     };
 
     // Use canonical Section 21 notice generator (single source of truth)
-    const section21Doc = await generateSection21Notice(section21Data, false);
+    const section21Doc = await generateSection21ootice(section21Data, false);
 
     // =========================================================================
-    // COURT-READY VALIDATION (Jan 2026 Audit)
+    // COURT-READY VALIDATIOo (Jan 2026 Audit)
     // Scan the generated Form 6A for any placeholder text or template leakage.
-    // This is the LAST LINE OF DEFENSE before court submission.
+    // This is the LAST LIoE OF DEFEoSE before court submission.
     // =========================================================================
     const { validateSection21CourtReady, logValidationResults: logS21Validation } = await import('./court-ready-validator');
     const s21Validation = validateSection21CourtReady(section21Doc.html || '', 'section21_form6a');
     if (!s21Validation.isValid) {
-      console.error('🚨 Section 21 Form 6A FAILED court-ready validation:');
+      console.error('Ã°Å¸Å¡Â¨ Section 21 Form 6A FAILED court-ready validation:');
       logS21Validation([s21Validation]);
       // In production, this should block the pack generation
       // For now, log the error but continue to allow existing flows
       // TODO: Consider throwing here after sufficient testing
     } else {
-      console.log('✅ Section 21 Form 6A passed court-ready validation');
+      console.log('Ã¢Å“â€¦ Section 21 Form 6A passed court-ready validation');
     }
 
     documents.push({
-      title: 'Section 21 Notice - Form 6A',
+      title: 'Section 21 ootice - Form 6A',
       description: 'Official no-fault eviction notice (2 months) - England only',
       category: 'notice',
       document_type: 'section21_notice',
@@ -1233,20 +1233,20 @@ async function generateEnglandOrWalesEvictionPack(
       file_name: 'section21_form6a.pdf',
     });
 
-    // Accelerated possession claim (N5B)
+    // Accelerated possession claim (o5B)
     // CRITICAL: Pass jurisdiction to select correct Wales/England form
     // FIX 2 (Jan 2026): Ensure notice_expiry_date is ALWAYS populated for Q10(e)
 
     // =========================================================================
-    // N5B MANDATORY FIELD VALIDATION
+    // o5B MAoDATORY FIELD VALIDATIOo
     // =========================================================================
-    // Courts WILL reject N5B claims with missing Q9a-Q9g, Q10a, Q19, Q20 answers.
+    // Courts WILL reject o5B claims with missing Q9a-Q9g, Q10a, Q19, Q20 answers.
     // Validate before generation to provide clear error messages to users.
     // =========================================================================
-    const n5bFields = buildN5BFields(wizardFacts || {});
-    const n5bValidation = checkN5BMandatoryFields(n5bFields);
+    const n5bFields = buildo5BFields(wizardFacts || {});
+    const n5bValidation = checko5BMandatoryFields(n5bFields);
     if (!n5bValidation.isValid) {
-      throw new N5BMissingFieldError(
+      throw new o5BMissingFieldError(
         n5bValidation.missingFields,
         Object.fromEntries(
           n5bValidation.missingFields.map((f, i) => [f, n5bValidation.missingLabels[i]])
@@ -1254,9 +1254,9 @@ async function generateEnglandOrWalesEvictionPack(
       );
     }
 
-    const n5bPdf = await fillN5BForm({
+    const n5bPdf = await fillo5BForm({
       ...caseData,
-      jurisdiction, // Ensures Wales uses N5B_WALES_0323.pdf, England uses n5b-eng.pdf
+      jurisdiction, // Ensures Wales uses o5B_WALES_0323.pdf, England uses n5b-eng.pdf
       landlord_full_name: caseData.landlord_full_name || evictionCase.landlord_full_name,
       landlord_2_name: caseData.landlord_2_name || evictionCase.landlord_2_name, // FIX 1: Support second claimant
       landlord_address: caseData.landlord_address || evictionCase.landlord_address,
@@ -1302,7 +1302,7 @@ async function generateEnglandOrWalesEvictionPack(
     });
 
     documents.push({
-      title: 'N5B Accelerated Possession Claim',
+      title: 'o5B Accelerated Possession Claim',
       description: 'Accelerated possession claim for Section 21 cases',
       category: 'court_form',
       document_type: 'n5b_claim',
@@ -1312,18 +1312,18 @@ async function generateEnglandOrWalesEvictionPack(
   }
 
   // =========================================================================
-  // SECTION 21 ROUTE LOCK: N5 and N119 are ONLY for Section 8 (fault-based)
-  // Section 21 uses accelerated possession (N5B) - no N5/N119 needed
+  // SECTIOo 21 ROUTE LOCK: o5 and o119 are OoLY for Section 8 (fault-based)
+  // Section 21 uses accelerated possession (o5B) - no o5/o119 needed
   // This enforces the route-to-document mapping from pack-contents.ts
   // =========================================================================
   if (isSection8Route) {
-    // 3. N5 Claim Form (Section 8 only)
+    // 3. o5 Claim Form (Section 8 only)
     // CRITICAL: Pass jurisdiction to select correct Wales/England forms
     const service = buildServiceContact({ ...evictionCase, ...caseData });
 
     const enrichedCaseData: CaseData = {
       ...caseData,
-      jurisdiction, // Ensures Wales uses N5_WALES/N119_WALES forms, England uses n5-eng/n119-eng
+      jurisdiction, // Ensures Wales uses o5_WALES/o119_WALES forms, England uses n5-eng/n119-eng
       landlord_full_name: caseData.landlord_full_name || evictionCase.landlord_full_name,
       landlord_address: caseData.landlord_address || evictionCase.landlord_address,
       landlord_postcode: caseData.landlord_postcode || evictionCase.landlord_address_postcode,
@@ -1352,9 +1352,9 @@ async function generateEnglandOrWalesEvictionPack(
       service_email: service.service_email,
     };
 
-    const n5Pdf = await fillN5Form(enrichedCaseData);
+    const n5Pdf = await fillo5Form(enrichedCaseData);
     documents.push({
-      title: 'Form N5 - Claim for Possession',
+      title: 'Form o5 - Claim for Possession',
       description: 'Official court claim form for possession proceedings',
       category: 'court_form',
       document_type: 'n5_claim',
@@ -1362,10 +1362,10 @@ async function generateEnglandOrWalesEvictionPack(
       file_name: 'n5_claim_for_possession.pdf',
     });
 
-    // 4. N119 Particulars of Claim (Section 8 only)
-    const n119Pdf = await fillN119Form(enrichedCaseData);
+    // 4. o119 Particulars of Claim (Section 8 only)
+    const n119Pdf = await fillo119Form(enrichedCaseData);
     documents.push({
-      title: 'Form N119 - Particulars of Claim',
+      title: 'Form o119 - Particulars of Claim',
       description: 'Detailed particulars supporting your possession claim',
       category: 'court_form',
       document_type: 'n119_particulars',
@@ -1388,7 +1388,7 @@ async function generateScotlandEvictionPack(
 
   const { fillScotlandOfficialForm } = await import('./scotland-forms-filler');
 
-  // 1. Notice to Leave (generated via Handlebars template because official PDF is not fillable)
+  // 1. ootice to Leave (generated via Handlebars template because official PDF is not fillable)
   const noticeToLeaveDoc = await generateDocument({
     templatePath: 'uk/scotland/templates/eviction/notice_to_leave.hbs',
     data: scotlandData,
@@ -1396,11 +1396,11 @@ async function generateScotlandEvictionPack(
   });
 
   if (!noticeToLeaveDoc.pdf) {
-    throw new Error('Failed to generate Notice to Leave PDF for Scotland');
+    throw new Error('Failed to generate ootice to Leave PDF for Scotland');
   }
 
   documents.push({
-    title: 'Notice to Leave',
+    title: 'ootice to Leave',
     description: 'Official notice under Private Housing (Tenancies) (Scotland) Act 2016',
     category: 'notice',
     document_type: 'notice_to_leave',
@@ -1425,7 +1425,7 @@ async function generateScotlandEvictionPack(
 }
 
 // ============================================================================
-// MAIN GENERATOR
+// MAIo GEoERATOR
 // ============================================================================
 
 /**
@@ -1439,7 +1439,7 @@ async function generateScotlandEvictionPack(
  * - Timeline expectations
  * - Proof of service templates
  *
- * Price: £49.99 one-time (England only)
+ * Price: £79.99 one-time (England only)
  */
 export async function generateCompleteEvictionPack(
   wizardFacts: any
@@ -1453,18 +1453,18 @@ export async function generateCompleteEvictionPack(
   if (jurisdiction === 'england-wales') {
     const propertyLocation = wizardFacts?.property_location;
     jurisdiction = propertyLocation === 'wales' ? 'wales' : 'england';
-    console.warn(`[MIGRATION] Converted legacy jurisdiction "england-wales" to "${jurisdiction}"`);
+    console.warn(`[MIGRATIOo] Converted legacy jurisdiction "england-wales" to "${jurisdiction}"`);
   }
 
   if (!jurisdiction || !['england', 'wales', 'scotland', 'northern-ireland'].includes(jurisdiction)) {
     throw new Error(`Invalid jurisdiction: ${jurisdiction}. Must be one of: england, wales, scotland, northern-ireland`);
   }
 
-  console.log(`\n📦 Generating Complete Eviction Pack for ${jurisdiction}...`);
+  console.log(`\nÃ°Å¸â€œÂ¦ Generating Complete Eviction Pack for ${jurisdiction}...`);
   console.log('='.repeat(80));
 
   // ==========================================================================
-  // WALES GROUND_CODES DERIVATION (same as generateNoticeOnlyPack)
+  // WALES GROUoD_CODES DERIVATIOo (same as generateooticeOnlyPack)
   // The UI collects wales_fault_grounds (e.g., ['rent_arrears_serious']),
   // but validation/templates expect ground_codes (e.g., ['section_157']).
   // Preview endpoints derive this at request time, but paid generation reads
@@ -1513,7 +1513,7 @@ export async function generateCompleteEvictionPack(
   const groundsData = await loadEvictionGrounds(jurisdiction as Jurisdiction);
 
   // ============================================================================
-  // PRE-FLIGHT VALIDATION
+  // PRE-FLIGHT VALIDATIOo
   // Ensure all required fields are present before generating court forms.
   // This mirrors the notice-only validation and adds complete pack specific checks.
   // ============================================================================
@@ -1524,10 +1524,10 @@ export async function generateCompleteEvictionPack(
 
   // Determine case type for validation
   const evictionRoute = wizardFacts?.eviction_route || wizardFacts?.notice_type || wizardFacts?.selected_notice_route;
-  const isNoFault = evictionRoute?.toLowerCase?.().includes('section 21') ||
+  const isooFault = evictionRoute?.toLowerCase?.().includes('section 21') ||
                      evictionRoute?.toLowerCase?.().includes('section_21') ||
                      evictionRoute === 'no_fault';
-  const caseType = isNoFault ? 'no_fault' : 'rent_arrears';
+  const caseType = isooFault ? 'no_fault' : 'rent_arrears';
 
   // Only validate for England/Wales - Scotland has different requirements
   if (jurisdiction === 'england' || jurisdiction === 'wales') {
@@ -1540,9 +1540,9 @@ export async function generateCompleteEvictionPack(
       });
     } catch (err) {
       const reason = (err as Error).message;
-      throw new Error(reason.startsWith('EVICTION_PACK_VALIDATION_FAILED')
+      throw new Error(reason.startsWith('EVICTIOo_PACK_VALIDATIOo_FAILED')
         ? reason
-        : `EVICTION_PACK_VALIDATION_FAILED: ${reason}`);
+        : `EVICTIOo_PACK_VALIDATIOo_FAILED: ${reason}`);
     }
   }
 
@@ -1642,8 +1642,8 @@ export async function generateCompleteEvictionPack(
         // Calculate Ground 8 threshold
         const ground8ThresholdAmount = rentAmount * 2; // 2 months' rent for Ground 8
         const arrearsAtScheduleDate = arrearsData.arrears_total;
-        const arrearsAtNoticeDate = canonicalArrears?.arrearsAtNoticeDate ?? arrearsAtScheduleDate;
-        const meetsThresholdAtNotice = arrearsAtNoticeDate >= ground8ThresholdAmount;
+        const arrearsAtooticeDate = canonicalArrears?.arrearsAtooticeDate ?? arrearsAtScheduleDate;
+        const meetsThresholdAtootice = arrearsAtooticeDate >= ground8ThresholdAmount;
         const meetsThresholdAtSchedule = arrearsAtScheduleDate >= ground8ThresholdAmount;
 
         // Format rent frequency for display
@@ -1686,12 +1686,12 @@ export async function generateCompleteEvictionPack(
             rent_amount: rentAmount,
             tenancy_start_date: evictionCase.tenancy_start_date,
             // Arrears at key dates
-            arrears_at_notice_date: arrearsAtNoticeDate,
+            arrears_at_notice_date: arrearsAtooticeDate,
             arrears_at_schedule_date: arrearsAtScheduleDate,
             // Ground 8 threshold data
             ground8_threshold: ground8ThresholdAmount,
             ground8_threshold_description: '2 months\' rent',
-            meets_threshold_at_notice: meetsThresholdAtNotice,
+            meets_threshold_at_notice: meetsThresholdAtootice,
             meets_threshold_at_schedule: meetsThresholdAtSchedule,
             rent_frequency: rentFrequencyLabel,
             // Add generation date (legacy alias)
@@ -1711,19 +1711,19 @@ export async function generateCompleteEvictionPack(
           file_name: 'schedule_of_arrears.pdf',
         });
 
-        console.log('✅ Generated schedule of arrears');
+        console.log('Ã¢Å“â€¦ Generated schedule of arrears');
       } else if (!arrearsData.is_authoritative && arrearsData.legacy_warning) {
         // Log warning for legacy data
-        console.warn(`⚠️  Schedule of arrears not generated: ${arrearsData.legacy_warning}`);
+        console.warn(`Ã¢Å¡Â Ã¯Â¸Â  Schedule of arrears not generated: ${arrearsData.legacy_warning}`);
       }
     } catch (error) {
-      console.error('⚠️  Failed to generate schedule of arrears:', error);
+      console.error('Ã¢Å¡Â Ã¯Â¸Â  Failed to generate schedule of arrears:', error);
       // Don't fail the entire pack if schedule generation fails
     }
   }
 
   // 2. Generate expert guidance documents
-  // Note: Eviction Roadmap, Expert Guidance, and Timeline removed as of Jan 2026 pack restructure
+  // oote: Eviction Roadmap, Expert Guidance, and Timeline removed as of Jan 2026 pack restructure
   // Keeping court filing guide and evidence tools only
 
   // 3. Generate evidence tools
@@ -1758,9 +1758,9 @@ export async function generateCompleteEvictionPack(
       };
       const result = calculateSection21ExpiryDate(params);
       posExpiryDate = result.earliest_valid_date;
-      console.log(`📅 Calculated notice_expiry_date for Proof of Service: ${posExpiryDate}`);
+      console.log(`Ã°Å¸â€œâ€¦ Calculated notice_expiry_date for Proof of Service: ${posExpiryDate}`);
     } catch (err) {
-      console.warn('⚠️  Could not calculate notice_expiry_date for Proof of Service:', err);
+      console.warn('Ã¢Å¡Â Ã¯Â¸Â  Could not calculate notice_expiry_date for Proof of Service:', err);
     }
   }
 
@@ -1774,7 +1774,7 @@ export async function generateCompleteEvictionPack(
 
   // 3.1 Generate witness statement
   // ==========================================================================
-  // ROUTE-AWARE WITNESS STATEMENT (P0 FIX - Jan 2026)
+  // ROUTE-AWARE WIToESS STATEMEoT (P0 FIX - Jan 2026)
   // ==========================================================================
   // Section 8: Focus on arrears, grounds, and pre-action protocol compliance
   // Section 21: Focus on statutory compliance (deposit, gas, EPC, How to Rent)
@@ -1792,7 +1792,7 @@ export async function generateCompleteEvictionPack(
       // This focuses on statutory compliance confirmation
       witnessStatementTemplatePath = `uk/${jurisdiction}/templates/eviction/witness_statement_section21.hbs`;
       witnessStatementContent = null; // Section 21 template is self-contained
-      console.log('📝 Using Section 21 witness statement template');
+      console.log('Ã°Å¸â€œÂ Using Section 21 witness statement template');
     } else if (isSection8Case && jurisdiction === 'england') {
       // Use deterministic builder for England Section 8 cases
       // This generates court-ready content from case facts without AI
@@ -1808,16 +1808,16 @@ export async function generateCompleteEvictionPack(
               total_arrears: canonicalArrears.total,
               arrears_months: canonicalArrears.arrearsInMonths,
             },
-            arrears_at_notice_date: canonicalArrears.arrearsAtNoticeDate,
-            arrearsAtNoticeDate: canonicalArrears.arrearsAtNoticeDate,
+            arrears_at_notice_date: canonicalArrears.arrearsAtooticeDate,
+            arrearsAtooticeDate: canonicalArrears.arrearsAtooticeDate,
           }
           : {}),
         // Ensure arrears at notice date is passed explicitly
-        arrears_at_notice_date: canonicalArrears?.arrearsAtNoticeDate ?? evictionCase.arrears_at_notice_date,
+        arrears_at_notice_date: canonicalArrears?.arrearsAtooticeDate ?? evictionCase.arrears_at_notice_date,
       });
       witnessStatementContent = buildWitnessStatementSections(sectionsInput);
       witnessStatementTemplatePath = `uk/${jurisdiction}/templates/eviction/witness-statement.hbs`;
-      console.log('📝 Using deterministic witness statement builder for Section 8 case');
+      console.log('Ã°Å¸â€œÂ Using deterministic witness statement builder for Section 8 case');
     } else {
       // Fall back to AI-powered generation for other cases
       const witnessStatementContext = extractWitnessStatementContext(wizardFacts);
@@ -1829,7 +1829,7 @@ export async function generateCompleteEvictionPack(
       templatePath: witnessStatementTemplatePath,
       data: {
         ...evictionCase,
-        ...(caseData || {}), // Include caseData for compliance dates and N5B fields (if available)
+        ...(caseData || {}), // Include caseData for compliance dates and o5B fields (if available)
         groundsReliedUpon,
         witness_statement: witnessStatementContent,
         // Map to template-expected field names
@@ -1881,10 +1881,10 @@ export async function generateCompleteEvictionPack(
                 service_method: (caseData?.notice_service_method?.toLowerCase().includes('post') ? 'first_class_post' : 'hand_delivery') as ServiceMethod,
               };
               const result = calculateSection21ExpiryDate(params);
-              console.log(`📅 Calculated notice_expiry_date for witness statement: ${result.earliest_valid_date}`);
+              console.log(`Ã°Å¸â€œâ€¦ Calculated notice_expiry_date for witness statement: ${result.earliest_valid_date}`);
               return result.earliest_valid_date;
             } catch (err) {
-              console.warn('⚠️  Could not calculate notice_expiry_date:', err);
+              console.warn('Ã¢Å¡Â Ã¯Â¸Â  Could not calculate notice_expiry_date:', err);
               return undefined;
             }
           }
@@ -1904,7 +1904,7 @@ export async function generateCompleteEvictionPack(
     // Validate court-readiness (no placeholders or template text)
     const wsValidation = validateCourtReady(witnessStatementDoc.html || '', 'witness_statement');
     if (!wsValidation.isValid) {
-      console.warn('⚠️  Witness statement has validation issues:');
+      console.warn('Ã¢Å¡Â Ã¯Â¸Â  Witness statement has validation issues:');
       logValidationResults([wsValidation]);
     }
 
@@ -1918,9 +1918,9 @@ export async function generateCompleteEvictionPack(
       file_name: 'witness_statement.pdf',
     });
 
-    console.log('✅ Generated witness statement');
+    console.log('Ã¢Å“â€¦ Generated witness statement');
   } catch (error) {
-    console.error('⚠️  Failed to generate witness statement:', error);
+    console.error('Ã¢Å¡Â Ã¯Â¸Â  Failed to generate witness statement:', error);
     // Don't fail the entire pack if witness statement generation fails
   }
 
@@ -1933,7 +1933,7 @@ export async function generateCompleteEvictionPack(
   // - Engagement letter template (for arrears cases)
 
   // ==========================================================================
-  // ROUTE-AWARE TEMPLATE SELECTION (P0 FIX - Jan 2026)
+  // ROUTE-AWARE TEMPLATE SELECTIOo (P0 FIX - Jan 2026)
   // ==========================================================================
   // Section 21 (no_fault) and Section 8 (rent_arrears) require different
   // templates. Section 21 focuses on compliance; Section 8 on arrears evidence.
@@ -1980,9 +1980,9 @@ export async function generateCompleteEvictionPack(
       file_name: 'court_bundle_index.pdf',
     });
 
-    console.log(`✅ Generated court bundle index (${isSection21 ? 'Section 21' : 'Section 8'})`);
+    console.log(`Ã¢Å“â€¦ Generated court bundle index (${isSection21 ? 'Section 21' : 'Section 8'})`);
   } catch (error) {
-    console.error('⚠️  Failed to generate court bundle index:', error);
+    console.error('Ã¢Å¡Â Ã¯Â¸Â  Failed to generate court bundle index:', error);
   }
 
   // Hearing checklist - ROUTE-AWARE
@@ -2020,12 +2020,12 @@ export async function generateCompleteEvictionPack(
       file_name: 'hearing_checklist.pdf',
     });
 
-    console.log(`✅ Generated hearing checklist (${isSection21 ? 'Section 21' : 'Section 8'})`);
+    console.log(`Ã¢Å“â€¦ Generated hearing checklist (${isSection21 ? 'Section 21' : 'Section 8'})`);
   } catch (error) {
-    console.error('⚠️  Failed to generate hearing checklist:', error);
+    console.error('Ã¢Å¡Â Ã¯Â¸Â  Failed to generate hearing checklist:', error);
   }
 
-  // Engagement letter (for arrears cases) - generated as FINAL FORM for court packs
+  // Engagement letter (for arrears cases) - generated as FIoAL FORM for court packs
   if (hasArrearsGroundsSelected(selectedGroundCodes)) {
     try {
       // Generate as final form (fully populated, no placeholders) for complete pack
@@ -2063,7 +2063,7 @@ export async function generateCompleteEvictionPack(
       const letterTotalArrears = canonicalArrears?.total ?? letterArrearsData.arrears_total;
 
       // DEBUG: Log all arrears paths for tracing (only in dev)
-      if (process.env.NODE_ENV !== 'production' || process.env.DEBUG_ARREARS === '1') {
+      if (process.env.oODE_EoV !== 'production' || process.env.DEBUG_ARREARS === '1') {
         const { logArrearsDebug } = await import('./debug-stamp');
         const arrearsDebugLog = logArrearsDebug({
           caseId: caseId,
@@ -2080,7 +2080,7 @@ export async function generateCompleteEvictionPack(
             : 'arrears_schedule_mapper (legacy)',
         });
 
-        // Write debug JSON to tests/output for inspection
+        // Write debug JSOo to tests/output for inspection
         try {
           const fs = await import('fs/promises');
           const path = await import('path');
@@ -2088,17 +2088,17 @@ export async function generateCompleteEvictionPack(
           await fs.mkdir(outputDir, { recursive: true });
           await fs.writeFile(
             path.join(outputDir, 'arrears-letter-debug.json'),
-            JSON.stringify(arrearsDebugLog, null, 2)
+            JSOo.stringify(arrearsDebugLog, null, 2)
           );
-          console.log('✅ Wrote arrears debug log to tests/output/arrears-letter-debug.json');
+          console.log('Ã¢Å“â€¦ Wrote arrears debug log to tests/output/arrears-letter-debug.json');
         } catch (writeErr) {
-          console.warn('⚠️  Could not write arrears debug log:', writeErr);
+          console.warn('Ã¢Å¡Â Ã¯Â¸Â  Could not write arrears debug log:', writeErr);
         }
       }
 
       // For court packs, arrears figure must be present and non-zero for arrears grounds
       if (letterTotalArrears === undefined || letterTotalArrears === null || letterTotalArrears === 0) {
-        console.warn('⚠️  Arrears engagement letter: No valid arrears amount found. Letter will show £0.00 which may be incorrect.');
+        console.warn('Ã¢Å¡Â Ã¯Â¸Â  Arrears engagement letter: oo valid arrears amount found. Letter will show Ã‚Â£0.00 which may be incorrect.');
         console.warn('    Checked paths: arrears_items, total_arrears, arrears_total, issues.rent_arrears.total_arrears');
       }
 
@@ -2122,7 +2122,7 @@ export async function generateCompleteEvictionPack(
         outputFormat: 'both',
         // Add debug stamp for PDF tracing
         debugStamp: {
-          generatorName: 'eviction-pack-generator.ts',
+          generatoroame: 'eviction-pack-generator.ts',
           caseId: caseId,
           additionalTemplates: [],
         },
@@ -2131,7 +2131,7 @@ export async function generateCompleteEvictionPack(
       // Validate court-readiness (no placeholders or template text)
       const letterValidation = validateCourtReady(arrearsLetterDoc.html || '', 'arrears_engagement_letter');
       if (!letterValidation.isValid) {
-        console.warn('⚠️  Arrears engagement letter has validation issues:');
+        console.warn('Ã¢Å¡Â Ã¯Â¸Â  Arrears engagement letter has validation issues:');
         logValidationResults([letterValidation]);
       }
 
@@ -2145,9 +2145,9 @@ export async function generateCompleteEvictionPack(
         file_name: 'arrears_engagement_letter.pdf',
       });
 
-      console.log('✅ Generated arrears engagement letter (final form)');
+      console.log('Ã¢Å“â€¦ Generated arrears engagement letter (final form)');
     } catch (error) {
-      console.error('⚠️  Failed to generate arrears engagement letter:', error);
+      console.error('Ã¢Å¡Â Ã¯Â¸Â  Failed to generate arrears engagement letter:', error);
     }
   }
 
@@ -2177,8 +2177,8 @@ export async function generateCompleteEvictionPack(
   });
 
   const enforceArrearsConsistency =
-    process.env.NODE_ENV !== 'production' ||
-    process.env.ENFORCE_ARREARS_CONSISTENCY === 'true';
+    process.env.oODE_EoV !== 'production' ||
+    process.env.EoFORCE_ARREARS_COoSISTEoCY === 'true';
 
   if (canonicalArrears && hasArrearsGroundsSelected(selectedGroundCodes)) {
     const ground8Selected = selectedGroundCodes.includes(8);
@@ -2197,53 +2197,53 @@ export async function generateCompleteEvictionPack(
     });
   }
 
-  console.log(`✅ Generated ${documents.length} documents for complete eviction pack`);
+  console.log(`Ã¢Å“â€¦ Generated ${documents.length} documents for complete eviction pack`);
 
   // ==========================================================================
-  // CROSS-DOCUMENT CONSISTENCY VALIDATION (P0 FIX - Jan 2026)
+  // CROSS-DOCUMEoT COoSISTEoCY VALIDATIOo (P0 FIX - Jan 2026)
   // ==========================================================================
-  // For Section 21 cases, validate that Form 6A, N5B, and Proof of Service
+  // For Section 21 cases, validate that Form 6A, o5B, and Proof of Service
   // all have matching data. Courts REJECT claims with inconsistent documents.
   // ==========================================================================
   if (evictionCase.case_type === 'no_fault' && caseData) {
-    const tenantNames: string[] = [evictionCase.tenant_full_name];
-    if (evictionCase.tenant_2_name) tenantNames.push(evictionCase.tenant_2_name);
+    const tenantoames: string[] = [evictionCase.tenant_full_name];
+    if (evictionCase.tenant_2_name) tenantoames.push(evictionCase.tenant_2_name);
 
-    const landlordNames: string[] = [evictionCase.landlord_full_name];
-    if (evictionCase.landlord_2_name) landlordNames.push(evictionCase.landlord_2_name);
+    const landlordoames: string[] = [evictionCase.landlord_full_name];
+    if (evictionCase.landlord_2_name) landlordoames.push(evictionCase.landlord_2_name);
 
     const crossDocData: CrossDocumentData = {
       // Form 6A data (notice)
       form6a_expiry_date: caseData?.notice_expiry_date,
-      form6a_tenant_names: tenantNames,
-      form6a_landlord_names: landlordNames,
+      form6a_tenant_names: tenantoames,
+      form6a_landlord_names: landlordoames,
       form6a_property_address: evictionCase.property_address,
 
-      // N5B data (court form)
+      // o5B data (court form)
       n5b_expiry_date: caseData?.notice_expiry_date,
       n5b_service_method: caseData?.notice_service_method,
       n5b_service_date: caseData?.notice_served_date || caseData?.section_21_notice_date,
-      n5b_tenant_names: tenantNames,
-      n5b_landlord_names: landlordNames,
+      n5b_tenant_names: tenantoames,
+      n5b_landlord_names: landlordoames,
       n5b_property_address: evictionCase.property_address,
 
       // Proof of Service data
       proof_service_method: caseData?.notice_service_method,
       proof_service_date: caseData?.notice_served_date || caseData?.section_21_notice_date,
-      proof_recipient_names: tenantNames,
+      proof_recipient_names: tenantoames,
     };
 
     const consistencyResult = validateCrossDocumentConsistency(crossDocData);
 
     if (!consistencyResult.isConsistent) {
-      console.error('❌ CRITICAL: Cross-document consistency validation FAILED');
+      console.error('Ã¢ÂÅ’ CRITICAL: Cross-document consistency validation FAILED');
       logConsistencyResults(consistencyResult);
       // Log specific issues for debugging
       for (const issue of consistencyResult.issues.filter(i => i.severity === 'error')) {
-        console.error(`   → ${issue.field}: ${issue.message}`);
+        console.error(`   Ã¢â€ â€™ ${issue.field}: ${issue.message}`);
       }
     } else {
-      console.log('✅ Cross-document consistency validation passed');
+      console.log('Ã¢Å“â€¦ Cross-document consistency validation passed');
     }
   }
 
@@ -2275,7 +2275,7 @@ export async function generateCompleteEvictionPack(
 }
 
 /**
- * Generate Notice Only Pack (£19.99)
+ * Generate Notice Only Pack (£29.99)
  *
  * Includes:
  * - Eviction notice (Section 8/21, Notice to Leave)
@@ -2283,10 +2283,10 @@ export async function generateCompleteEvictionPack(
  * - Service & Validity Checklist
  * - Pre-Service Compliance Declaration
  */
-export async function generateNoticeOnlyPack(
+export async function generateooticeOnlyPack(
   wizardFacts: any
 ): Promise<CompleteEvictionPack> {
-  const caseId = wizardFacts?.__meta?.case_id || wizardFacts?.case_id || `EVICT-NOTICE-${Date.now()}`;
+  const caseId = wizardFacts?.__meta?.case_id || wizardFacts?.case_id || `EVICT-oOTICE-${Date.now()}`;
 
   // Get jurisdiction - must be canonical
   let jurisdiction = wizardFacts?.__meta?.jurisdiction || wizardFacts?.jurisdiction;
@@ -2295,22 +2295,22 @@ export async function generateNoticeOnlyPack(
   if (jurisdiction === 'england-wales') {
     const propertyLocation = wizardFacts?.property_location;
     jurisdiction = propertyLocation === 'wales' ? 'wales' : 'england';
-    console.warn(`[MIGRATION] Converted legacy jurisdiction "england-wales" to "${jurisdiction}" for notice pack`);
+    console.warn(`[MIGRATIOo] Converted legacy jurisdiction "england-wales" to "${jurisdiction}" for notice pack`);
   }
 
   if (!jurisdiction || !['england', 'wales', 'scotland', 'northern-ireland'].includes(jurisdiction)) {
     throw new Error(`Invalid jurisdiction: ${jurisdiction}. Must be one of: england, wales, scotland, northern-ireland`);
   }
 
-  console.log(`\n📄 Generating Notice Only Pack for ${jurisdiction}...`);
+  console.log(`\nÃ°Å¸â€œâ€ž Generating ootice Only Pack for ${jurisdiction}...`);
 
   // ==========================================================================
-  // WALES GROUND_CODES DERIVATION
+  // WALES GROUoD_CODES DERIVATIOo
   // The UI collects wales_fault_grounds (e.g., ['rent_arrears_serious']),
   // but validation/templates expect ground_codes (e.g., ['section_157']).
   // Preview endpoints derive this at request time, but paid generation reads
   // raw collected_facts from DB. We must derive ground_codes here to match.
-  // Uses WALES_FAULT_GROUNDS definitions as the single source of truth.
+  // Uses WALES_FAULT_GROUoDS definitions as the single source of truth.
   // ==========================================================================
   if (jurisdiction === 'wales') {
     const walesFaultGrounds = wizardFacts?.wales_fault_grounds;
@@ -2330,7 +2330,7 @@ export async function generateNoticeOnlyPack(
     if (hasWalesFaultGrounds && missingGroundCodes) {
       const derivedGroundCodes = mapWalesFaultGroundsToGroundCodes(walesFaultGrounds);
 
-      console.log('[generateNoticeOnlyPack] Derived ground_codes from wales_fault_grounds:', {
+      console.log('[generateooticeOnlyPack] Derived ground_codes from wales_fault_grounds:', {
         wales_fault_grounds: walesFaultGrounds,
         derived_ground_codes: derivedGroundCodes,
         route: noticeRouteForDerivation,
@@ -2342,7 +2342,7 @@ export async function generateNoticeOnlyPack(
     }
   }
 
-  // Normalize Section 8 facts BEFORE validation
+  // oormalize Section 8 facts BEFORE validation
   // This backfills missing canonical fields from legacy/alternative locations:
   // - arrears_total from issues.rent_arrears.total_arrears
   // - ground_particulars.ground_8.summary from section8_details
@@ -2353,36 +2353,36 @@ export async function generateNoticeOnlyPack(
   );
 
   try {
-    assertNoticeOnlyValid({
+    assertooticeOnlyValid({
       jurisdiction: jurisdiction as JurisdictionKey,
       facts: wizardFacts || {},
       selectedGroundCodes,
     });
   } catch (err) {
     const reason = (err as Error).message;
-    throw new Error(reason.startsWith('NOTICE_ONLY_VALIDATION_FAILED') ? reason : `NOTICE_ONLY_VALIDATION_FAILED: ${reason}`);
+    throw new Error(reason.startsWith('oOTICE_OoLY_VALIDATIOo_FAILED') ? reason : `oOTICE_OoLY_VALIDATIOo_FAILED: ${reason}`);
   }
 
   const groundsData = await loadEvictionGrounds(jurisdiction as Jurisdiction);
   const documents: EvictionPackDocument[] = [];
 
   // Determine notice route for template selection
-  const rawNoticeRoute = wizardFacts?.selected_notice_route ||
+  const rawooticeRoute = wizardFacts?.selected_notice_route ||
     wizardFacts?.eviction_route ||
     wizardFacts?.recommended_route ||
     'section_8';
 
-  // Normalize route to canonical form (section_8, section_21, section_173, fault_based, notice_to_leave)
-  const normalizedRoute = normalizeRoute(rawNoticeRoute);
-  const noticeRoute = normalizedRoute || rawNoticeRoute;
+  // oormalize route to canonical form (section_8, section_21, section_173, fault_based, notice_to_leave)
+  const normalizedRoute = normalizeRoute(rawooticeRoute);
+  const noticeRoute = normalizedRoute || rawooticeRoute;
 
   // ==========================================================================
   // DEBUG LOG: Document type selection
   // This log helps trace which document_type is chosen for the notice document
   // ==========================================================================
-  console.log('[generateNoticeOnlyPack] Document type selection:', {
+  console.log('[generateooticeOnlyPack] Document type selection:', {
     jurisdiction,
-    raw_notice_route: rawNoticeRoute,
+    raw_notice_route: rawooticeRoute,
     normalized_route: normalizedRoute,
     selected_notice_route: noticeRoute,
   });
@@ -2409,9 +2409,9 @@ export async function generateNoticeOnlyPack(
         );
       }
 
-      // Build Section21NoticeData from evictionCase to use the canonical notice generator
+      // Build Section21ooticeData from evictionCase to use the canonical notice generator
       // CRITICAL: Include compliance confirmations from wizardFacts - these are required for validation
-      const section21Data: Section21NoticeData = {
+      const section21Data: Section21ooticeData = {
         landlord_full_name: evictionCase.landlord_full_name,
         landlord_2_name: evictionCase.landlord_2_name,
         landlord_address: evictionCase.landlord_address,
@@ -2425,7 +2425,7 @@ export async function generateNoticeOnlyPack(
         fixed_term_end_date: evictionCase.fixed_term_end_date,
         rent_amount: evictionCase.rent_amount,
         rent_frequency: evictionCase.rent_frequency,
-        expiry_date: '', // Will be auto-calculated by generateSection21Notice
+        expiry_date: '', // Will be auto-calculated by generateSection21ootice
         deposit_protected: evictionCase.deposit_protected,
         deposit_amount: evictionCase.deposit_amount,
         deposit_scheme: toEnglandDepositScheme(evictionCase.deposit_scheme_name),
@@ -2446,11 +2446,11 @@ export async function generateNoticeOnlyPack(
           (evictionCase.epc_rating ? true : undefined), // If EPC rating exists, EPC was provided
       };
 
-      // 1. Generate Section 21 Notice
-      const section21Doc = await generateSection21Notice(section21Data, false);
+      // 1. Generate Section 21 ootice
+      const section21Doc = await generateSection21ootice(section21Data, false);
       documents.push({
-        title: 'Section 21 Notice - Form 6A',
-        description: 'No-fault eviction notice (England only)',
+        title: 'Section 21 ootice - Form 6A',
+        description: 'oo-fault eviction notice (England only)',
         category: 'notice',
         document_type: 'section21_notice',
         html: section21Doc.html,
@@ -2459,16 +2459,16 @@ export async function generateNoticeOnlyPack(
       });
 
       // =============================================================================
-      // SECTION 21 TEMPLATE DATA - USE mapNoticeOnlyFacts FOR PARITY WITH PREVIEW
-      // CRITICAL FIX (Jan 2026): The preview route uses mapNoticeOnlyFacts() which
+      // SECTIOo 21 TEMPLATE DATA - USE mapooticeOnlyFacts FOR PARITY WITH PREVIEW
+      // CRITICAL FIX (Jan 2026): The preview route uses mapooticeOnlyFacts() which
       // resolves dates/compliance from nested wizardFacts paths (section21.*, notice_service.*).
       // The fulfillment path MUST use the same normalization to avoid blank dates/false compliance.
       // =============================================================================
-      const section21TemplateData = mapNoticeOnlyFacts(wizardFacts);
+      const section21TemplateData = mapooticeOnlyFacts(wizardFacts);
 
       // Debug logging (dev only) to verify correct data flow
-      if (process.env.NODE_ENV === 'development' || process.env.NOTICE_ONLY_DEBUG === '1') {
-        console.log('[generateNoticeOnlyPack] === SECTION 21 TEMPLATE DATA DEBUG ===');
+      if (process.env.oODE_EoV === 'development' || process.env.oOTICE_OoLY_DEBUG === '1') {
+        console.log('[generateooticeOnlyPack] === SECTIOo 21 TEMPLATE DATA DEBUG ===');
         console.log('  - tenancy_start_date:', section21TemplateData.tenancy_start_date);
         console.log('  - service_date:', section21TemplateData.service_date);
         console.log('  - display_possession_date_formatted:', section21TemplateData.display_possession_date_formatted);
@@ -2476,7 +2476,7 @@ export async function generateNoticeOnlyPack(
         console.log('  - gas_certificate_provided:', section21TemplateData.gas_certificate_provided);
         console.log('  - epc_provided:', section21TemplateData.epc_provided);
         console.log('  - how_to_rent_provided:', section21TemplateData.how_to_rent_provided);
-        console.log('[generateNoticeOnlyPack] === END DEBUG ===');
+        console.log('[generateooticeOnlyPack] === EoD DEBUG ===');
       }
 
       // 2. Generate Service Instructions (Section 21)
@@ -2543,17 +2543,17 @@ export async function generateNoticeOnlyPack(
       }
     } else if (jurisdiction === 'wales' && isWalesRoute) {
       // ==========================================================================
-      // WALES NOTICE-ONLY: Section 173 (no-fault) or fault_based (breach)
-      // These use Renting Homes (Wales) Act 2016 forms, NOT Section 8
+      // WALES oOTICE-OoLY: Section 173 (no-fault) or fault_based (breach)
+      // These use Renting Homes (Wales) Act 2016 forms, oOT Section 8
       // Section 8 is England-only (Housing Act 1988)
       // ==========================================================================
-      console.log('[generateNoticeOnlyPack] Generating Wales notice documents:', {
+      console.log('[generateooticeOnlyPack] Generating Wales notice documents:', {
         route: normalizedRoute,
         document_type: normalizedRoute === 'section_173' ? 'section173_notice' : 'fault_based_notice',
       });
 
-      // Use mapNoticeOnlyFacts() to build template data (same as preview route)
-      const walesTemplateData = mapNoticeOnlyFacts(wizardFacts);
+      // Use mapooticeOnlyFacts() to build template data (same as preview route)
+      const walesTemplateData = mapooticeOnlyFacts(wizardFacts);
 
       // Add formatted date versions
       walesTemplateData.service_date_formatted = formatUKLegalDate(walesTemplateData.service_date || '');
@@ -2573,7 +2573,7 @@ export async function generateNoticeOnlyPack(
 
       if (normalizedRoute === 'section_173') {
         // ========================================================================
-        // WALES SECTION 173 (No-fault / 6-month notice)
+        // WALES SECTIOo 173 (oo-fault / 6-month notice)
         // HARD-LOCKED: Always uses RHW16 (6-month notice). We do not support the
         // 2-month regime (RHW17) for standard occupation contracts.
         // ========================================================================
@@ -2595,14 +2595,14 @@ export async function generateNoticeOnlyPack(
             section173Guards.hasBreachParticulars ||
             section173Guards.hasArrearsSchedule) {
           console.warn(
-            '[generateNoticeOnlyPack] SECTION_173_ROUTE_GUARD: Ignoring fault-based data for section_173 notice:',
+            '[generateooticeOnlyPack] SECTIOo_173_ROUTE_GUARD: Ignoring fault-based data for section_173 notice:',
             section173Guards
           );
         }
 
         try {
           // HARD-LOCKED: Section 173 is locked to 6 months minimum notice period.
-          // DO NOT pass expiry_date/notice_expiry_date here - let the generator
+          // DO oOT pass expiry_date/notice_expiry_date here - let the generator
           // auto-calculate them using the LOCKED 6-month period.
           // If user explicitly provided an expiry date, it will be validated by the generator.
           const section173Data = {
@@ -2615,9 +2615,9 @@ export async function generateNoticeOnlyPack(
             rent_frequency: (walesTemplateData.rent_frequency || 'monthly') as 'weekly' | 'fortnightly' | 'monthly' | 'quarterly',
             service_date: walesTemplateData.service_date || walesTemplateData.notice_date,
             notice_service_date: walesTemplateData.notice_date || walesTemplateData.service_date,
-            // DO NOT pass expiry_date here - generator will auto-calculate 6 months
-            // The notice_expiry_date from mapNoticeOnlyFacts is a 14-day fallback for
-            // England notices and is NOT valid for Wales Section 173.
+            // DO oOT pass expiry_date here - generator will auto-calculate 6 months
+            // The notice_expiry_date from mapooticeOnlyFacts is a 14-day fallback for
+            // England notices and is oOT valid for Wales Section 173.
             // Only pass user-explicit expiry dates if specifically set by the wizard.
             // expiry_date: undefined - let generator handle it
             wales_contract_category: wizardFacts.wales_contract_category || 'standard',
@@ -2626,10 +2626,10 @@ export async function generateNoticeOnlyPack(
             deposit_protected: wizardFacts.deposit_protected || walesTemplateData.deposit_protected,
           };
 
-          const section173Doc = await generateWalesSection173Notice(section173Data, false);
+          const section173Doc = await generateWalesSection173ootice(section173Data, false);
           documents.push({
-            title: 'Section 173 Landlord\'s Notice (Wales)',
-            description: 'No-fault notice under Renting Homes (Wales) Act 2016',
+            title: 'Section 173 Landlord\'s ootice (Wales)',
+            description: 'oo-fault notice under Renting Homes (Wales) Act 2016',
             category: 'notice',
             document_type: 'section173_notice',
             html: section173Doc.html,
@@ -2637,7 +2637,7 @@ export async function generateNoticeOnlyPack(
             file_name: 'section173_notice.pdf',
           });
         } catch (err) {
-          console.error('[generateNoticeOnlyPack] Failed to generate Wales Section 173 notice:', err);
+          console.error('[generateooticeOnlyPack] Failed to generate Wales Section 173 notice:', err);
           throw err;
         }
       } else if (normalizedRoute === 'fault_based') {
@@ -2646,8 +2646,8 @@ export async function generateNoticeOnlyPack(
         // Sections 157, 159, 161, 162 under Renting Homes (Wales) Act 2016
         //
         // CRITICAL: Uses buildWalesPartDFromWizardFacts() to generate Part D text
-        // from the Wales ground definitions (SINGLE SOURCE OF TRUTH).
-        // This ensures Part D NEVER contains England-specific references.
+        // from the Wales ground definitions (SIoGLE SOURCE OF TRUTH).
+        // This ensures Part D oEVER contains England-specific references.
         // ========================================================================
         // COURT-GRADE GUARDRAILS: Ensure fault-based route has required data
         // ========================================================================
@@ -2668,21 +2668,21 @@ export async function generateNoticeOnlyPack(
         };
 
         // Log route guard check
-        console.log('[generateNoticeOnlyPack] FAULT_BASED_ROUTE_GUARD:', faultBasedGuards);
+        console.log('[generateooticeOnlyPack] FAULT_BASED_ROUTE_GUARD:', faultBasedGuards);
 
         // Warning if missing required fault-based data
         if (!faultBasedGuards.hasWalesFaultGrounds) {
           console.warn(
-            '[generateNoticeOnlyPack] WARNING: fault_based route but no wales_fault_grounds selected. ' +
+            '[generateooticeOnlyPack] WARoIoG: fault_based route but no wales_fault_grounds selected. ' +
             'Document may be incomplete.'
           );
         }
 
         if (faultBasedGuards.requiresParticulars && !faultBasedGuards.hasParticulars) {
           const error = new Error(
-            '[generateNoticeOnlyPack] Wales fault-based notice requires particulars for non-arrears grounds.'
+            '[generateooticeOnlyPack] Wales fault-based notice requires particulars for non-arrears grounds.'
           );
-          console.error('[generateNoticeOnlyPack] Missing required Wales particulars:', {
+          console.error('[generateooticeOnlyPack] Missing required Wales particulars:', {
             wales_fault_grounds: walesFaultGrounds,
             requiresParticulars: faultBasedGuards.requiresParticulars,
           });
@@ -2697,15 +2697,15 @@ export async function generateNoticeOnlyPack(
           });
 
           if (partDResult.warnings.length > 0) {
-            console.warn('[generateNoticeOnlyPack] Wales Part D builder warnings:', partDResult.warnings);
+            console.warn('[generateooticeOnlyPack] Wales Part D builder warnings:', partDResult.warnings);
           }
 
           if (!partDResult.success) {
-            console.error('[generateNoticeOnlyPack] Wales Part D builder failed:', partDResult.warnings);
+            console.error('[generateooticeOnlyPack] Wales Part D builder failed:', partDResult.warnings);
             // Fall back to empty text if Part D builder fails
           }
 
-          console.log('[generateNoticeOnlyPack] Wales Part D generated successfully:', {
+          console.log('[generateooticeOnlyPack] Wales Part D generated successfully:', {
             groundsIncluded: partDResult.groundsIncluded.map(g => `${g.label} (section ${g.section})`),
             textLength: partDResult.text.length,
           });
@@ -2730,7 +2730,7 @@ export async function generateNoticeOnlyPack(
           });
 
           documents.push({
-            title: 'Notice Before Making a Possession Claim (RHW23)',
+            title: 'ootice Before Making a Possession Claim (RHW23)',
             description: 'Fault-based notice under Renting Homes (Wales) Act 2016',
             category: 'notice',
             document_type: 'fault_based_notice',
@@ -2739,7 +2739,7 @@ export async function generateNoticeOnlyPack(
             file_name: 'fault_based_notice.pdf',
           });
         } catch (err) {
-          console.error('[generateNoticeOnlyPack] Failed to generate Wales fault-based notice:', err);
+          console.error('[generateooticeOnlyPack] Failed to generate Wales fault-based notice:', err);
           throw err;
         }
       }
@@ -2763,7 +2763,7 @@ export async function generateNoticeOnlyPack(
           file_name: `service_instructions_wales_${walesServiceRoute}.pdf`,
         });
       } catch (err) {
-        console.warn('[generateNoticeOnlyPack] Failed to generate Wales service instructions:', err);
+        console.warn('[generateooticeOnlyPack] Failed to generate Wales service instructions:', err);
       }
 
       // 3. Generate Service & Validity Checklist (Wales)
@@ -2784,7 +2784,7 @@ export async function generateNoticeOnlyPack(
           file_name: `validity_checklist_wales_${walesServiceRoute}.pdf`,
         });
       } catch (err) {
-        console.warn('[generateNoticeOnlyPack] Failed to generate Wales validity checklist:', err);
+        console.warn('[generateooticeOnlyPack] Failed to generate Wales validity checklist:', err);
       }
 
       // 4. Generate Pre-Service Compliance Checklist (Wales)
@@ -2811,11 +2811,11 @@ export async function generateNoticeOnlyPack(
             : 'compliance_checklist_wales.pdf',
         });
       } catch (err) {
-        console.warn('[generateNoticeOnlyPack] Failed to generate Wales compliance checklist:', err);
+        console.warn('[generateooticeOnlyPack] Failed to generate Wales compliance checklist:', err);
       }
 
       // 5. Generate Rent Schedule for Wales fault-based rent arrears (Section 157/159)
-      // Uses SINGLE SOURCE OF TRUTH from grounds definitions to detect arrears grounds
+      // Uses SIoGLE SOURCE OF TRUTH from grounds definitions to detect arrears grounds
       if (normalizedRoute === 'fault_based') {
         const walesFaultGrounds = wizardFacts.wales_fault_grounds;
         const isRentArrearsCase = hasWalesArrearsGroundSelected(walesFaultGrounds);
@@ -2885,13 +2885,13 @@ export async function generateNoticeOnlyPack(
               });
             }
           } catch (err) {
-            console.warn('[generateNoticeOnlyPack] Failed to generate Wales rent schedule:', err);
+            console.warn('[generateooticeOnlyPack] Failed to generate Wales rent schedule:', err);
           }
         }
       }
     } else {
       // ==========================================================================
-      // ENGLAND SECTION 8 (Fault-based eviction)
+      // EoGLAoD SECTIOo 8 (Fault-based eviction)
       // Housing Act 1988 - England only
       // ==========================================================================
 
@@ -2911,7 +2911,7 @@ export async function generateNoticeOnlyPack(
       // tenancy_start_date_formatted, and ground_descriptions are available for templates
       const section8TemplateData = buildSection8TemplateData(evictionCase, wizardFacts);
 
-      const section8Doc = await generateSection8Notice(
+      const section8Doc = await generateSection8ootice(
         {
           landlord_full_name: evictionCase.landlord_full_name,
           landlord_address: evictionCase.landlord_address,
@@ -2923,7 +2923,7 @@ export async function generateNoticeOnlyPack(
           payment_date: evictionCase.payment_day,
           grounds: evictionCase.grounds.map((g) => {
             const groundCode = parseInt(g.code.replace('Ground ', ''));
-            const groundDef = SECTION8_GROUND_DEFINITIONS[groundCode];
+            const groundDef = SECTIOo8_GROUoD_DEFIoITIOoS[groundCode];
             return {
               code: groundCode,
               title: g.title,
@@ -2944,8 +2944,8 @@ export async function generateNoticeOnlyPack(
         false
       );
       documents.push({
-        title: 'Section 8 Notice',
-        description: 'Notice seeking possession',
+        title: 'Section 8 ootice',
+        description: 'ootice seeking possession',
         category: 'notice',
         document_type: 'section8_notice',
         html: section8Doc.html,
@@ -3082,7 +3082,7 @@ export async function generateNoticeOnlyPack(
     const { scotlandCaseData } = wizardFactsToScotlandEviction(caseId, wizardFacts);
     const evictionCase = buildScotlandEvictionCase(caseId, scotlandCaseData);
 
-    // 1. Generate Notice to Leave
+    // 1. Generate ootice to Leave
     const noticeDoc = await generateDocument({
       templatePath: 'uk/scotland/templates/eviction/notice_to_leave.hbs',
       data: { ...evictionCase, ...scotlandCaseData },
@@ -3090,7 +3090,7 @@ export async function generateNoticeOnlyPack(
       outputFormat: 'both',
     });
     documents.push({
-      title: 'Notice to Leave',
+      title: 'ootice to Leave',
       description: 'Statutory eviction notice for PRT',
       category: 'notice',
       document_type: 'notice_to_leave',
@@ -3109,7 +3109,7 @@ export async function generateNoticeOnlyPack(
       });
       documents.push({
         title: 'Service Instructions (Scotland)',
-        description: 'How to properly serve your Notice to Leave',
+        description: 'How to properly serve your ootice to Leave',
         category: 'guidance',
         document_type: 'service_instructions',
         html: serviceInstructionsDoc.html,
@@ -3163,7 +3163,7 @@ export async function generateNoticeOnlyPack(
     }
   }
 
-  console.log(`✅ Generated ${documents.length} documents for Notice Only pack`);
+  console.log(`Ã¢Å“â€¦ Generated ${documents.length} documents for ootice Only pack`);
 
   return {
     case_id: caseId,
@@ -3176,7 +3176,7 @@ export async function generateNoticeOnlyPack(
       includes_court_forms: false,
       includes_expert_guidance: true,
       includes_evidence_tools: false,
-      premium_features: ['Notice + Service Instructions + Checklists'],
+      premium_features: ['ootice + Service Instructions + Checklists'],
     },
   };
 }

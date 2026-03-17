@@ -1,11 +1,11 @@
 /**
  * Money Claim Price Guard Tests
  *
- * CRITICAL: These tests ensure Money Claim is consistently priced at £34.99
+ * CRITICAL: These tests ensure Money Claim is consistently priced at £59.99
  * and that no legacy £149.99 references remain in the codebase for money_claim.
  *
  * Added: January 2026
- * Reason: Price change from £149.99 to £34.99 for Money Claim (England only)
+ * Reason: Price change from £149.99 to £59.99 for Money Claim (England only)
  */
 
 import { describe, it, expect } from 'vitest';
@@ -13,29 +13,29 @@ import { PRICING, REGIONAL_PRICING, getRegionalPrice } from '@/lib/pricing';
 import { PRODUCTS, ASK_HEAVEN_RECOMMENDATION_MAP } from '@/lib/pricing/products';
 
 describe('Money Claim Price Guard Tests', () => {
-  describe('Source of Truth - £34.99', () => {
-    it('PRODUCTS.money_claim.price should be 34.99', () => {
-      expect(PRODUCTS.money_claim.price).toBe(34.99);
+  describe('Source of Truth - £59.99', () => {
+    it('PRODUCTS.money_claim.price should be 59.99', () => {
+      expect(PRODUCTS.money_claim.price).toBe(59.99);
     });
 
-    it('PRODUCTS.money_claim.displayPrice should be "£34.99"', () => {
-      expect(PRODUCTS.money_claim.displayPrice).toBe('£34.99');
+    it('PRODUCTS.money_claim.displayPrice should be "£59.99"', () => {
+      expect(PRODUCTS.money_claim.displayPrice).toBe('£59.99');
     });
 
-    it('PRICING.MONEY_CLAIM_PACK should be 34.99', () => {
-      expect(PRICING.MONEY_CLAIM_PACK).toBe(34.99);
+    it('PRICING.MONEY_CLAIM_PACK should be 59.99', () => {
+      expect(PRICING.MONEY_CLAIM_PACK).toBe(59.99);
     });
 
-    it('REGIONAL_PRICING.money_claim.england should be 34.99', () => {
-      expect(REGIONAL_PRICING.money_claim.england).toBe(34.99);
+    it('REGIONAL_PRICING.money_claim.england should be 59.99', () => {
+      expect(REGIONAL_PRICING.money_claim.england).toBe(59.99);
     });
 
-    it('getRegionalPrice(money_claim, england) should return 34.99', () => {
-      expect(getRegionalPrice('money_claim', 'england')).toBe(34.99);
+    it('getRegionalPrice(money_claim, england) should return 59.99', () => {
+      expect(getRegionalPrice('money_claim', 'england')).toBe(59.99);
     });
 
-    it('ASK_HEAVEN_RECOMMENDATION_MAP.money_claim.displayPrice should be "£34.99"', () => {
-      expect(ASK_HEAVEN_RECOMMENDATION_MAP.money_claim.displayPrice).toBe('£34.99');
+    it('ASK_HEAVEN_RECOMMENDATION_MAP.money_claim.displayPrice should be "£59.99"', () => {
+      expect(ASK_HEAVEN_RECOMMENDATION_MAP.money_claim.displayPrice).toBe('£59.99');
     });
   });
 
@@ -53,9 +53,9 @@ describe('Money Claim Price Guard Tests', () => {
       expect(PRODUCTS.money_claim.displayPrice).toBe(formattedPrice);
     });
 
-    it('price in pence should be 9999 (no float artifacts)', () => {
+    it('price in pence should be 5999 (no float artifacts)', () => {
       const priceInPence = Math.round(PRODUCTS.money_claim.price * 100);
-      expect(priceInPence).toBe(9999);
+      expect(priceInPence).toBe(5999);
     });
   });
 

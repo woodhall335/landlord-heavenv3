@@ -4,7 +4,7 @@
  * Shows "vs Solicitor" pricing comparison to anchor value proposition.
  *
  * Fixes Applied:
- * - Complete Pack solicitor price updated to £1,500-2,500
+ * - Complete Pack solicitor price updated to Â£1,500-2,500
  * - Added hover effects to price anchor cards
  * - Uses hero-btn-primary class for CTA
  * - Enhanced animations and transitions
@@ -12,7 +12,7 @@
 
 import Link from 'next/link';
 import { Container } from '@/components/ui';
-import { PRODUCTS } from '@/lib/pricing/products';
+import { PRODUCTS, TENANCY_AGREEMENT_FROM_PRICE } from '@/lib/pricing/products';
 import { RiCloseLine, RiCheckLine } from 'react-icons/ri';
 
 function ComparisonItem({
@@ -61,7 +61,7 @@ export function CostComparison() {
                   Typical Solicitor
                 </div>
                 <div className="text-4xl md:text-5xl font-bold text-gray-400 line-through decoration-red-400 decoration-2">
-                  £300-2,500
+                  Â£300-2,500
                 </div>
                 <div className="text-gray-500 mt-1">depending on case</div>
               </div>
@@ -74,7 +74,7 @@ export function CostComparison() {
                   <span className="font-medium">Book appointments</span> during work hours
                 </ComparisonItem>
                 <ComparisonItem positive={false}>
-                  <span className="font-medium">Limited availability</span> — closed evenings & weekends
+                  <span className="font-medium">Limited availability</span> â€” closed evenings & weekends
                 </ComparisonItem>
                 <ComparisonItem positive={false}>
                   <span className="font-medium">Extra fees</span> for revisions and changes
@@ -112,19 +112,19 @@ export function CostComparison() {
 
               <ul className="space-y-4">
                 <ComparisonItem positive={true}>
-                  <span className="font-medium">Ready to file</span> — get documents in minutes
+                  <span className="font-medium">Ready to file</span> â€” get documents in minutes
                 </ComparisonItem>
                 <ComparisonItem positive={true}>
-                  <span className="font-medium">No appointments</span> — generate your case bundle anytime
+                  <span className="font-medium">No appointments</span> â€” generate your case bundle anytime
                 </ComparisonItem>
                 <ComparisonItem positive={true}>
-                  <span className="font-medium">Available 24/7</span> — including evenings & weekends
+                  <span className="font-medium">Available 24/7</span> â€” including evenings & weekends
                 </ComparisonItem>
                 <ComparisonItem positive={true}>
                   <span className="font-medium">Unlimited edits</span> included at no extra cost
                 </ComparisonItem>
                 <ComparisonItem positive={true}>
-                  <span className="font-medium">All from home</span> — no travel required
+                  <span className="font-medium">All from home</span> â€” no travel required
                 </ComparisonItem>
               </ul>
 
@@ -133,7 +133,7 @@ export function CostComparison() {
                   href="/wizard"
                   className="hero-btn-primary block w-full text-center"
                 >
-                  Start Notice Bundle Wizard →
+                  Start Notice Bundle Wizard â†’
                 </Link>
               </div>
             </div>
@@ -144,15 +144,15 @@ export function CostComparison() {
             <PriceAnchor
               product="Generate jurisdiction-specific eviction case files"
               ourPrice={PRODUCTS.notice_only.displayPrice}
-              solicitorPrice="£200-300"
-              savings="£150+"
+              solicitorPrice="Â£200-300"
+              savings="Â£150+"
               href="/products/notice-only"
             />
             <PriceAnchor
               product="Complete Eviction Packs Including Court Docs"
               ourPrice={PRODUCTS.complete_pack.displayPrice}
-              solicitorPrice="£1,500-2,500"
-              savings="£1,300+"
+              solicitorPrice="Â£1,500-2,500"
+              savings="Â£1,300+"
               href="/products/complete-pack"
               highlighted
               badge="England only"
@@ -160,16 +160,16 @@ export function CostComparison() {
             <PriceAnchor
               product="Claim Unpaid Rent and Damages"
               ourPrice={PRODUCTS.money_claim.displayPrice}
-              solicitorPrice="£800-1200"
-              savings="£650+"
+              solicitorPrice="Â£800-1200"
+              savings="Â£650+"
               href="/products/money-claim"
               badge="England only"
             />
             <PriceAnchor
               product="Legally Compliant Tenancy Agreements"
-              ourPrice="£9.99"
-              solicitorPrice="£150-400"
-              savings="£135+"
+              ourPrice={TENANCY_AGREEMENT_FROM_PRICE.replace('From ', '')}
+              solicitorPrice="Â£150-400"
+              savings="Â£135+"
               href="/products/ast"
             />
           </div>

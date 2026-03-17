@@ -102,13 +102,13 @@ const faqs = [
 export default function MoneyClaimUnpaidBillsPage() {
   const hero = {
     ...moneyClaimHeroConfig,
-    trustText: 'Solicitor-grade • Compliance-checked • Court-ready',
+    trustText: 'Solicitor-grade â€¢ Compliance-checked â€¢ Court-ready',
     primaryCta: {
-      label: 'Start Money Claim →',
+      label: 'Start Money Claim â†’',
       href: '/products/money-claim?topic=debt&src=seo_money_claim_unpaid_bills',
     },
     secondaryCta: {
-      label: 'View Money Claim Pack →',
+      label: 'View Money Claim Pack â†’',
       href: '/products/money-claim',
     },
     title: 'Claim Unpaid Tenant Bills with Confidence',
@@ -284,20 +284,20 @@ export default function MoneyClaimUnpaidBillsPage() {
                 <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
                   <h3 className="font-bold text-gray-900 mb-3">Metered Properties</h3>
                   <ul className="space-y-2 text-sm text-gray-600">
-                    <li>• Get meter readings at start and end of tenancy</li>
-                    <li>• Request itemised bills for tenancy period</li>
-                    <li>• Clearly shows tenant&apos;s actual usage</li>
-                    <li>• Easier to prove amount owed</li>
+                    <li>â€¢ Get meter readings at start and end of tenancy</li>
+                    <li>â€¢ Request itemised bills for tenancy period</li>
+                    <li>â€¢ Clearly shows tenant&apos;s actual usage</li>
+                    <li>â€¢ Easier to prove amount owed</li>
                   </ul>
                 </div>
 
                 <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
                   <h3 className="font-bold text-gray-900 mb-3">Unmetered Properties</h3>
                   <ul className="space-y-2 text-sm text-gray-600">
-                    <li>• Fixed annual charge based on rateable value</li>
-                    <li>• Calculate tenant&apos;s share by days occupied</li>
-                    <li>• Get statement covering tenancy dates</li>
-                    <li>• May need to apportion annual bill</li>
+                    <li>â€¢ Fixed annual charge based on rateable value</li>
+                    <li>â€¢ Calculate tenant&apos;s share by days occupied</li>
+                    <li>â€¢ Get statement covering tenancy dates</li>
+                    <li>â€¢ May need to apportion annual bill</li>
                   </ul>
                 </div>
               </div>
@@ -320,11 +320,11 @@ export default function MoneyClaimUnpaidBillsPage() {
                   </div>
                   <h3 className="font-bold text-gray-900 mb-3">Essential Documents</h3>
                   <ul className="space-y-2 text-sm text-gray-600">
-                    <li>• Tenancy agreement (bill liability clauses)</li>
-                    <li>• Bills/statements for tenancy period</li>
-                    <li>• Proof you paid the bills</li>
-                    <li>• Tenancy start and end dates</li>
-                    <li>• Calculation of amounts owed</li>
+                    <li>â€¢ Tenancy agreement (bill liability clauses)</li>
+                    <li>â€¢ Bills/statements for tenancy period</li>
+                    <li>â€¢ Proof you paid the bills</li>
+                    <li>â€¢ Tenancy start and end dates</li>
+                    <li>â€¢ Calculation of amounts owed</li>
                   </ul>
                 </div>
 
@@ -334,11 +334,11 @@ export default function MoneyClaimUnpaidBillsPage() {
                   </div>
                   <h3 className="font-bold text-gray-900 mb-3">Supporting Evidence</h3>
                   <ul className="space-y-2 text-sm text-gray-600">
-                    <li>• Correspondence requesting payment</li>
-                    <li>• Letter before action sent</li>
-                    <li>• Meter readings (if applicable)</li>
-                    <li>• Bank statements showing payments</li>
-                    <li>• Provider correspondence/demands</li>
+                    <li>â€¢ Correspondence requesting payment</li>
+                    <li>â€¢ Letter before action sent</li>
+                    <li>â€¢ Meter readings (if applicable)</li>
+                    <li>â€¢ Bank statements showing payments</li>
+                    <li>â€¢ Provider correspondence/demands</li>
                   </ul>
                 </div>
               </div>
@@ -405,11 +405,11 @@ export default function MoneyClaimUnpaidBillsPage() {
                 href="/products/money-claim?topic=debt&src=seo_money_claim_unpaid_bills&reason=unpaid_bills"
                 className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
               >
-                Start Your Claim — £34.99
+                Start Your Claim â€” Â£59.99
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <p className="text-sm text-gray-500 mt-3">
-                Court fees from £35 extra (based on claim amount)
+                Court fees from Â£35 extra (based on claim amount)
               </p>
             </div>
           </div>

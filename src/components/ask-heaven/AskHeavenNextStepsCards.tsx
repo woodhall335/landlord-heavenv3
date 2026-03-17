@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { PRODUCTS } from '@/lib/pricing/products';
+import { PRODUCTS, TENANCY_AGREEMENT_FROM_PRICE } from '@/lib/pricing/products';
 import { cn } from '@/lib/utils';
 import { productLinks } from '@/lib/seo/internal-links';
 import { RiFileList3Line, RiScales3Line, RiMoneyPoundCircleLine, RiFileTextLine } from 'react-icons/ri';
@@ -58,7 +58,7 @@ export function AskHeavenNextStepsCards({ jurisdiction = 'england', className }:
     },
     {
       title: 'Tenancy Agreements',
-      price: 'from £9.99',
+      price: TENANCY_AGREEMENT_FROM_PRICE,
       description: 'Best for creating or updating a legally compliant tenancy agreement.',
       ctaText: 'Create a tenancy agreement',
       href: productLinks.tenancyAgreement.href,
@@ -98,7 +98,7 @@ export function AskHeavenNextStepsCards({ jurisdiction = 'england', className }:
                 {card.icon}
               </div>
               <h3 className="text-lg font-semibold leading-tight text-gray-900">
-                {card.title} <span className="font-medium text-gray-700">— {card.price}</span>{' '}
+                {card.title} <span className="font-medium text-gray-700">â€” {card.price}</span>{' '}
                 {card.detail && <span className="text-gray-600">{card.detail}</span>}
               </h3>
             </div>
@@ -112,7 +112,7 @@ export function AskHeavenNextStepsCards({ jurisdiction = 'england', className }:
                 aria-hidden="true"
                 className="inline-block transition-transform duration-300 group-hover:translate-x-1"
               >
-                →
+                â†’
               </span>
               {card.ctaText}
               <span

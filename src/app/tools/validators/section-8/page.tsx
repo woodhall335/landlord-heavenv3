@@ -39,7 +39,7 @@ const upsellConfig = {
   toolName: 'Section 8 Notice Validator',
   toolType: 'validator' as const,
   productName: 'Notice Only Pack',
-  ctaLabel: `Upgrade to court-ready pack — ${PRODUCTS.notice_only.displayPrice}`,
+  ctaLabel: `Upgrade to court-ready pack Ã¢â‚¬â€ ${PRODUCTS.notice_only.displayPrice}`,
   ctaHref: wizardLinkNoticeOnly,
   jurisdiction: 'england',
   jurisdictionLabel: 'England only',
@@ -56,7 +56,7 @@ const upsellConfig = {
 };
 
 export const metadata: Metadata = {
-  title: 'Free Section 8 Notice Checker (England) – Check Your Grounds',
+  title: 'Free Section 8 Notice Checker (England) Ã¢â‚¬â€œ Check Your Grounds',
   description:
     'Free Section 8 checker for England. Upload your notice for instant validation. Checks Form 3, grounds for possession, and notice periods.',
   keywords: [
@@ -242,51 +242,51 @@ export default function Section8ValidatorPage() {
             </p>
             <div className="grid md:grid-cols-2 gap-3">
               <div className="flex items-start gap-2 text-sm">
-                <span className="text-primary font-bold">✓</span>
+                <span className="text-primary font-bold">Ã¢Å“â€œ</span>
                 <span className="text-gray-700">
-                  <strong>Correct Form 3</strong> — Using the current prescribed form
+                  <strong>Correct Form 3</strong> Ã¢â‚¬â€ Using the current prescribed form
                 </span>
               </div>
               <div className="flex items-start gap-2 text-sm">
-                <span className="text-primary font-bold">✓</span>
+                <span className="text-primary font-bold">Ã¢Å“â€œ</span>
                 <span className="text-gray-700">
-                  <strong>Grounds stated correctly</strong> — Schedule 2 reference and wording
+                  <strong>Grounds stated correctly</strong> Ã¢â‚¬â€ Schedule 2 reference and wording
                 </span>
               </div>
               <div className="flex items-start gap-2 text-sm">
-                <span className="text-primary font-bold">✓</span>
+                <span className="text-primary font-bold">Ã¢Å“â€œ</span>
                 <span className="text-gray-700">
-                  <strong>Ground 8 threshold</strong> — 2+ months/8 weeks arrears at service
+                  <strong>Ground 8 threshold</strong> Ã¢â‚¬â€ 2+ months/8 weeks arrears at service
                 </span>
               </div>
               <div className="flex items-start gap-2 text-sm">
-                <span className="text-primary font-bold">✓</span>
+                <span className="text-primary font-bold">Ã¢Å“â€œ</span>
                 <span className="text-gray-700">
-                  <strong>Notice period correct</strong> — 2 weeks (Gr 8,10,11,14) or 2 months
+                  <strong>Notice period correct</strong> Ã¢â‚¬â€ 2 weeks (Gr 8,10,11,14) or 2 months
                 </span>
               </div>
               <div className="flex items-start gap-2 text-sm">
-                <span className="text-primary font-bold">✓</span>
+                <span className="text-primary font-bold">Ã¢Å“â€œ</span>
                 <span className="text-gray-700">
-                  <strong>Evidence gathered</strong> — Rent statements, photos, witness statements
+                  <strong>Evidence gathered</strong> Ã¢â‚¬â€ Rent statements, photos, witness statements
                 </span>
               </div>
               <div className="flex items-start gap-2 text-sm">
-                <span className="text-primary font-bold">✓</span>
+                <span className="text-primary font-bold">Ã¢Å“â€œ</span>
                 <span className="text-gray-700">
-                  <strong>Multiple grounds compatible</strong> — Notice periods don&apos;t conflict
+                  <strong>Multiple grounds compatible</strong> Ã¢â‚¬â€ Notice periods don&apos;t conflict
                 </span>
               </div>
               <div className="flex items-start gap-2 text-sm">
-                <span className="text-primary font-bold">✓</span>
+                <span className="text-primary font-bold">Ã¢Å“â€œ</span>
                 <span className="text-gray-700">
-                  <strong>Service evidence</strong> — Proof of delivery method
+                  <strong>Service evidence</strong> Ã¢â‚¬â€ Proof of delivery method
                 </span>
               </div>
               <div className="flex items-start gap-2 text-sm">
-                <span className="text-primary font-bold">✓</span>
+                <span className="text-primary font-bold">Ã¢Å“â€œ</span>
                 <span className="text-gray-700">
-                  <strong>Arrears maintained</strong> — For Ground 8, arrears at hearing too
+                  <strong>Arrears maintained</strong> Ã¢â‚¬â€ For Ground 8, arrears at hearing too
                 </span>
               </div>
             </div>
@@ -592,43 +592,43 @@ export default function Section8ValidatorPage() {
             <div className="bg-blue-50 rounded-lg p-6 mb-6">
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
-                  <span className="text-blue-600 font-bold text-lg">→</span>
+                  <span className="text-blue-600 font-bold text-lg">Ã¢â€ â€™</span>
                   <div>
                     <p className="text-gray-900 font-medium">
                       Use <strong>Section 8</strong> if:
                     </p>
                     <ul className="text-sm text-gray-700 mt-1 space-y-1">
-                      <li>â€¢ Tenant owes 2+ months rent (Ground 8 = faster, 2 weeks notice)</li>
-                      <li>â€¢ There is serious anti-social behaviour or property damage</li>
-                      <li>â€¢ You need possession after May 2026 (Section 21 ends)</li>
-                      <li>â€¢ You have clear evidence to prove your grounds in court</li>
+                      <li>ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ Tenant owes 2+ months rent (Ground 8 = faster, 2 weeks notice)</li>
+                      <li>ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ There is serious anti-social behaviour or property damage</li>
+                      <li>ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ You need possession after May 2026 (Section 21 ends)</li>
+                      <li>ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ You have clear evidence to prove your grounds in court</li>
                     </ul>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <span className="text-blue-600 font-bold text-lg">→</span>
+                  <span className="text-blue-600 font-bold text-lg">Ã¢â€ â€™</span>
                   <div>
                     <p className="text-gray-900 font-medium">
                       Use <strong>Section 21</strong> if:
                     </p>
                     <ul className="text-sm text-gray-700 mt-1 space-y-1">
-                      <li>â€¢ No specific breach — you simply want possession</li>
-                      <li>â€¢ You want to avoid proving grounds in court</li>
-                      <li>â€¢ You&apos;re selling the property or moving back in</li>
-                      <li>â€¢ You&apos;re serving before 1 May 2026 deadline</li>
+                      <li>ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ No specific breach Ã¢â‚¬â€ you simply want possession</li>
+                      <li>ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ You want to avoid proving grounds in court</li>
+                      <li>ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ You&apos;re selling the property or moving back in</li>
+                      <li>ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ You&apos;re serving before 1 May 2026 deadline</li>
                     </ul>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <span className="text-green-600 font-bold text-lg">→</span>
+                  <span className="text-green-600 font-bold text-lg">Ã¢â€ â€™</span>
                   <div>
                     <p className="text-gray-900 font-medium">
                       Use <strong>both together</strong> if:
                     </p>
                     <ul className="text-sm text-gray-700 mt-1 space-y-1">
-                      <li>â€¢ You want maximum flexibility (&quot;belt and braces&quot;)</li>
-                      <li>â€¢ Rent arrears exist but might drop below threshold</li>
-                      <li>â€¢ You want the faster Section 8 route with Section 21 backup</li>
+                      <li>ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ You want maximum flexibility (&quot;belt and braces&quot;)</li>
+                      <li>ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ Rent arrears exist but might drop below threshold</li>
+                      <li>ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ You want the faster Section 8 route with Section 21 backup</li>
                     </ul>
                   </div>
                 </div>
@@ -688,13 +688,13 @@ export default function Section8ValidatorPage() {
                   href={wizardLinkNoticeOnly}
                   className="inline-flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
                 >
-                  Notice Only Pack - £19.99
+                  Notice Only Pack - Ã‚Â£29.99
                 </Link>
                 <Link
                   href={wizardLinkCompletePack}
                   className="inline-flex items-center px-4 py-2 border border-purple-600 text-purple-700 rounded-lg hover:bg-purple-50 transition-colors"
                 >
-                  Complete Eviction Pack - £49.99
+                  Complete Eviction Pack - Ã‚Â£79.99
                 </Link>
               </div>
             </div>

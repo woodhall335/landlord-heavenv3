@@ -99,7 +99,7 @@ const faqs: FAQItem[] = [
   {
     question: 'Does a County Court Judgment guarantee payment?',
     answer:
-      'No. A CCJ confirms the debt, but it does not guarantee recovery by itself. If the tenant does not pay after judgment, landlords may need to choose an enforcement route based on the debtor’s income, bank position, or assets.',
+      'No. A CCJ confirms the debt, but it does not guarantee recovery by itself. If the tenant does not pay after judgment, landlords may need to choose an enforcement route based on the debtorâ€™s income, bank position, or assets.',
   },
   {
     question: 'Should I wait until the tenant leaves before making a rent arrears money claim?',
@@ -528,7 +528,7 @@ export default function Page() {
               </h3>
               <p className="mt-2 leading-7 text-gray-700">
                 If the tenant still does not pay, the landlord usually needs to choose an
-                enforcement route based on what is realistically known about the debtor’s
+                enforcement route based on what is realistically known about the debtorâ€™s
                 circumstances.
               </p>
 
@@ -549,7 +549,7 @@ export default function Page() {
               <p className="mt-4 leading-7 text-gray-700">
                 This is where clear drafting matters. If the Letter Before Claim, the
                 arrears schedule, and the court claim all tell the same story with the same
-                figures, the defence is usually easier to answer. If the landlord’s own
+                figures, the defence is usually easier to answer. If the landlordâ€™s own
                 papers contradict each other, the file becomes harder to manage.
               </p>
 
@@ -612,35 +612,35 @@ export default function Page() {
                   </thead>
                   <tbody>
                     <tr className="border-t border-[#E6DBFF] text-gray-700">
-                      <td className="px-4 py-3">Up to £300</td>
-                      <td className="px-4 py-3">£35</td>
+                      <td className="px-4 py-3">Up to Â£300</td>
+                      <td className="px-4 py-3">Â£35</td>
                     </tr>
                     <tr className="border-t border-[#E6DBFF] text-gray-700">
-                      <td className="px-4 py-3">£300.01 - £500</td>
-                      <td className="px-4 py-3">£50</td>
+                      <td className="px-4 py-3">Â£300.01 - Â£500</td>
+                      <td className="px-4 py-3">Â£50</td>
                     </tr>
                     <tr className="border-t border-[#E6DBFF] text-gray-700">
-                      <td className="px-4 py-3">£500.01 - £1,000</td>
-                      <td className="px-4 py-3">£70</td>
+                      <td className="px-4 py-3">Â£500.01 - Â£1,000</td>
+                      <td className="px-4 py-3">Â£70</td>
                     </tr>
                     <tr className="border-t border-[#E6DBFF] text-gray-700">
-                      <td className="px-4 py-3">£1,000.01 - £1,500</td>
-                      <td className="px-4 py-3">£105</td>
+                      <td className="px-4 py-3">Â£1,000.01 - Â£1,500</td>
+                      <td className="px-4 py-3">Â£105</td>
                     </tr>
                     <tr className="border-t border-[#E6DBFF] text-gray-700">
-                      <td className="px-4 py-3">£1,500.01 - £3,000</td>
-                      <td className="px-4 py-3">£115</td>
+                      <td className="px-4 py-3">Â£1,500.01 - Â£3,000</td>
+                      <td className="px-4 py-3">Â£115</td>
                     </tr>
                     <tr className="border-t border-[#E6DBFF] text-gray-700">
-                      <td className="px-4 py-3">£3,000.01 - £5,000</td>
-                      <td className="px-4 py-3">£205</td>
+                      <td className="px-4 py-3">Â£3,000.01 - Â£5,000</td>
+                      <td className="px-4 py-3">Â£205</td>
                     </tr>
                     <tr className="border-t border-[#E6DBFF] text-gray-700">
-                      <td className="px-4 py-3">£5,000.01 - £10,000</td>
-                      <td className="px-4 py-3">£455</td>
+                      <td className="px-4 py-3">Â£5,000.01 - Â£10,000</td>
+                      <td className="px-4 py-3">Â£455</td>
                     </tr>
                     <tr className="border-t border-[#E6DBFF] text-gray-700">
-                      <td className="px-4 py-3">Over £10,000</td>
+                      <td className="px-4 py-3">Over Â£10,000</td>
                       <td className="px-4 py-3">5% of claim</td>
                     </tr>
                   </tbody>

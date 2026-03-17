@@ -31,13 +31,13 @@ interface ComparisonRow {
 
 export function VsSolicitorComparison({ product = 'notice_only' }: ComparisonTableProps) {
   const productConfig = PRODUCTS[product];
-  const price = productConfig?.displayPrice || '£19.99';
+  const price = productConfig?.displayPrice || PRODUCTS.notice_only.displayPrice;
 
   const rows: ComparisonRow[] = [
     {
       feature: 'Price',
       landlordHeaven: `${price} one-time`,
-      competitor: 'Typically £200-2,500+ (hourly fees)',
+      competitor: 'Typically Â£200-2,500+ (hourly fees)',
     },
     {
       feature: 'Speed',
@@ -136,7 +136,7 @@ export function VsSolicitorComparison({ product = 'notice_only' }: ComparisonTab
 
 export function VsFreeTemplateComparison({ product = 'notice_only' }: ComparisonTableProps) {
   const productConfig = PRODUCTS[product];
-  const price = productConfig?.displayPrice || '£19.99';
+  const price = productConfig?.displayPrice || PRODUCTS.notice_only.displayPrice;
 
   const rows: ComparisonRow[] = [
     {
@@ -234,7 +234,7 @@ export function VsFreeTemplateComparison({ product = 'notice_only' }: Comparison
         <p className="text-sm text-gray-700">
           <strong>Why pay?</strong> Free templates often use outdated forms, wrong jurisdiction
           rules, and leave you guessing on dates and service methods. Invalid notices waste time and
-          money — getting it right the first time is worth far more than{' '}
+          money â€” getting it right the first time is worth far more than{' '}
           <span className="font-semibold text-primary">{price}</span>.
         </p>
       </div>
