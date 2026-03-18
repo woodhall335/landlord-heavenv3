@@ -22,6 +22,7 @@ interface EnglandTenancyPageProps {
   introBody: string[];
   highlights: string[];
   compliancePoints: string[];
+  keywordTargets?: string[];
   faqs?: EnglandTenancyFaq[];
 }
 
@@ -37,6 +38,7 @@ export function EnglandTenancyPage({
   introBody,
   highlights,
   compliancePoints,
+  keywordTargets: _keywordTargets,
   faqs = [],
 }: EnglandTenancyPageProps) {
   return (
