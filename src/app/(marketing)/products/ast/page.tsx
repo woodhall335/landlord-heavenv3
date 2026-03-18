@@ -111,7 +111,9 @@ const jurisdictions: JurisdictionCardData[] = [
       'A better fit than editing a generic UK tenancy template',
     ],
     href: '/wizard?product=ast_standard&jurisdiction=wales&src=product_page&topic=tenancy',
-    ctaLabel: 'Create Wales agreement',
+    ctaLabel: `Create Wales agreement - ${PRODUCTS.ast_standard.displayPrice}`,
+    secondaryHref: '/wizard?product=ast_premium&jurisdiction=wales&src=product_page&topic=tenancy',
+    secondaryLabel: `Create premium Wales agreement - ${PRODUCTS.ast_premium.displayPrice}`,
   },
   {
     name: 'Scotland',
@@ -126,7 +128,9 @@ const jurisdictions: JurisdictionCardData[] = [
       'No generic UK template guesswork',
     ],
     href: '/wizard?product=ast_standard&jurisdiction=scotland&src=product_page&topic=tenancy',
-    ctaLabel: 'Create Scotland agreement',
+    ctaLabel: `Create Scotland agreement - ${PRODUCTS.ast_standard.displayPrice}`,
+    secondaryHref: '/wizard?product=ast_premium&jurisdiction=scotland&src=product_page&topic=tenancy',
+    secondaryLabel: `Create premium Scotland agreement - ${PRODUCTS.ast_premium.displayPrice}`,
   },
   {
     name: 'Northern Ireland',
@@ -141,7 +145,9 @@ const jurisdictions: JurisdictionCardData[] = [
       'A cleaner option than adapting a generic form',
     ],
     href: '/wizard?product=ast_standard&jurisdiction=northern-ireland&src=product_page&topic=tenancy',
-    ctaLabel: 'Create Northern Ireland agreement',
+    ctaLabel: `Create Northern Ireland agreement - ${PRODUCTS.ast_standard.displayPrice}`,
+    secondaryHref: '/wizard?product=ast_premium&jurisdiction=northern-ireland&src=product_page&topic=tenancy',
+    secondaryLabel: `Create premium Northern Ireland agreement - ${PRODUCTS.ast_premium.displayPrice}`,
   },
 ];
 
@@ -306,7 +312,7 @@ function JurisdictionCard({
   secondaryLabel,
 }: JurisdictionCardData) {
   return (
-    <div className="rounded-[2rem] border border-[#E4E8F1] bg-white p-6 shadow-[0_10px_30px_rgba(15,23,42,0.06)]">
+    <div className="flex h-full flex-col rounded-[2rem] border border-[#E4E8F1] bg-white p-5 shadow-[0_10px_30px_rgba(15,23,42,0.06)] xl:p-6">
       <div className="flex items-center gap-3">
         <Image
           src={flag}
@@ -317,30 +323,30 @@ function JurisdictionCard({
         />
         <div>
           <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#5B56E8]">{name}</p>
-          <h3 className="text-2xl font-bold text-[#141B2D]">{agreementType}</h3>
+          <h3 className="text-xl font-bold text-[#141B2D] xl:text-2xl">{agreementType}</h3>
         </div>
       </div>
 
-      <p className="mt-4 text-base leading-7 text-[#465066]">{summary}</p>
+      <p className="mt-4 text-sm leading-7 text-[#465066] xl:text-base">{summary}</p>
 
-      <ul className="mt-6 space-y-3 rounded-2xl bg-[#F7F9FC] p-4">
+      <ul className="mt-6 flex-1 space-y-3 rounded-2xl bg-[#F7F9FC] p-4">
         {points.map((point) => (
-          <li key={point} className="flex items-start gap-3 text-[15px] text-[#1F2937]">
+          <li key={point} className="flex items-start gap-3 text-sm leading-6 text-[#1F2937]">
             <RiCheckboxCircleLine className="mt-0.5 h-5 w-5 shrink-0 text-[#5B56E8]" />
             <span>{point}</span>
           </li>
         ))}
       </ul>
 
-      <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-        <Link href={href} className="hero-btn-primary inline-flex items-center justify-center gap-2">
+      <div className="mt-6 flex flex-col gap-3">
+        <Link href={href} className="hero-btn-primary inline-flex items-center justify-center gap-2 text-center">
           {ctaLabel}
           <RiArrowRightLine className="h-4 w-4" />
         </Link>
         {secondaryHref && secondaryLabel ? (
           <Link
             href={secondaryHref}
-            className="inline-flex items-center justify-center rounded-xl border border-[#C9D4EA] px-4 py-3 text-sm font-semibold text-[#2A3550] transition hover:border-[#AAB9D8] hover:bg-[#F7F9FC]"
+            className="inline-flex items-center justify-center rounded-xl border border-[#C9D4EA] px-4 py-3 text-center text-sm font-semibold text-[#2A3550] transition hover:border-[#AAB9D8] hover:bg-[#F7F9FC]"
           >
             {secondaryLabel}
           </Link>
@@ -525,7 +531,7 @@ export default function ASTProductPage() {
             </p>
           </div>
 
-          <div className="grid gap-6 xl:grid-cols-2">
+          <div className="grid gap-6 lg:grid-cols-4">
             {jurisdictions.map((jurisdiction) => (
               <JurisdictionCard key={jurisdiction.name} {...jurisdiction} />
             ))}
