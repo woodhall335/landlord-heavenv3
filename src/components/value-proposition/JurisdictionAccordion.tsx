@@ -17,8 +17,8 @@
  * MONEY CLAIM:
  * - England: N1 + PAP-DEBT documents - ENGLAND ONLY
  *
- * AST:
- * - England: AST
+ * TENANCY AGREEMENTS:
+ * - England: Residential Tenancy Agreement
  * - Wales: Standard Occupation Contract
  * - Scotland: PRT
  * - Northern Ireland: Private Tenancy Agreement
@@ -209,11 +209,11 @@ function getJurisdictionInfo(product: ProductType): JurisdictionInfo[] {
           flag: '/gb-eng.svg',
           available: true,
           documents: [
-            'Assured Shorthold Tenancy Agreement (AST)',
-            'Standard: Core tenancy clauses, pets & break clauses if selected',
-            'Premium: + Joint & several liability, guarantor, rent review, anti-subletting, HMO clauses',
+            'Residential Tenancy Agreement',
+            'Standard: agreement, inventory schedule, compliance checklist, deposit protection certificate, and prescribed information pack',
+            'Premium: HMO and student-ready wording with enhanced shared-living and operational clauses',
           ],
-          notes: 'Housing Act 1988 compliant. Premium includes Housing Act 2004 HMO provisions.',
+          notes: 'England flow now uses Residential Tenancy Agreement wording with Renters’ Rights compliant public positioning.',
         },
         {
           name: 'Wales',

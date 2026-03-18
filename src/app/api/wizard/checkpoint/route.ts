@@ -122,25 +122,27 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // Northern Ireland gating: only tenancy agreements are supported for V1
+  // Northern Ireland gating: only tenancy agreement flows are supported for V1
   if (
     canonicalJurisdiction === 'northern-ireland' &&
     case_type !== 'tenancy_agreement' &&
-    product !== 'tenancy_agreement'
+    product !== 'tenancy_agreement' &&
+    product !== 'ast_standard' &&
+    product !== 'ast_premium'
   ) {
     return NextResponse.json(
       {
         ok: false,
         error: 'NI_EVICTION_MONEY_CLAIM_NOT_SUPPORTED',
         message:
-          'Only tenancy agreements are available for Northern Ireland. Eviction and money claim workflows are not currently supported.',
+          'Only tenancy agreement flows are available for Northern Ireland. Eviction and money claim workflows are not currently supported.',
         reason:
-          'Northern Ireland: tenancy agreements only (eviction notices planned). England & Wales and Scotland support evictions (notices and court packs) and money claims where available.',
+          'Northern Ireland: tenancy agreement flows only (eviction notices planned). England & Wales and Scotland support evictions (notices and court packs) and money claims where available.',
         supported: {
-          'northern-ireland': ['tenancy_agreement'],
-          england: ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
-          wales: ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
-          scotland: ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
+          'northern-ireland': ['ast_standard', 'ast_premium', 'tenancy_agreement'],
+          england: ['notice_only', 'complete_pack', 'money_claim', 'ast_standard', 'ast_premium', 'tenancy_agreement'],
+          wales: ['notice_only', 'complete_pack', 'money_claim', 'ast_standard', 'ast_premium', 'tenancy_agreement'],
+          scotland: ['notice_only', 'complete_pack', 'money_claim', 'ast_standard', 'ast_premium', 'tenancy_agreement'],
         },
       },
       { status: 422 }

@@ -56,6 +56,18 @@ describe('Tenancy Agreement Integration Layer', () => {
             expect(checklistItem?.required).toBe(true);
           });
 
+          if (jurisdiction === 'england') {
+            it(`should include deposit support docs in ${tier} pack for England`, () => {
+              const contents = getPackContents({
+                product: tier === 'premium' ? 'ast_premium' : 'ast_standard',
+                jurisdiction,
+              });
+
+              expect(contents.find(item => item.key === 'deposit_protection_certificate')).toBeDefined();
+              expect(contents.find(item => item.key === 'tenancy_deposit_information')).toBeDefined();
+            });
+          }
+
           it(`should show correct inventory type for ${tier}`, () => {
             // Without hasInventoryData context, premium shows "Ready to Complete"
             const contents = getPackContents({
@@ -121,6 +133,11 @@ describe('Tenancy Agreement Integration Layer', () => {
               d.id.includes('checklist') || d.title.toLowerCase().includes('checklist')
             );
             expect(hasChecklist).toBe(true);
+
+            if (jurisdiction === 'england') {
+              expect(documents.some(d => d.id === 'deposit-protection-certificate')).toBe(true);
+              expect(documents.some(d => d.id === 'prescribed-information-pack')).toBe(true);
+            }
           });
 
           it(`should show correct inventory type in ${tier} document config`, () => {
@@ -208,6 +225,16 @@ describe('Tenancy Agreement Integration Layer', () => {
             const contentsHasChecklist = contents.some(c => c.key.includes('checklist'));
             const docsHasChecklist = documents.some(d => d.id.includes('checklist'));
             expect(contentsHasChecklist).toBe(docsHasChecklist);
+
+            if (jurisdiction === 'england') {
+              const contentsHasDepositCertificate = contents.some(c => c.key === 'deposit_protection_certificate');
+              const docsHasDepositCertificate = documents.some(d => d.id === 'deposit-protection-certificate');
+              expect(contentsHasDepositCertificate).toBe(docsHasDepositCertificate);
+
+              const contentsHasPrescribedInfo = contents.some(c => c.key === 'tenancy_deposit_information');
+              const docsHasPrescribedInfo = documents.some(d => d.id === 'prescribed-information-pack');
+              expect(contentsHasPrescribedInfo).toBe(docsHasPrescribedInfo);
+            }
           });
 
           it(`should have consistent jurisdiction checklist naming for ${tier}`, () => {

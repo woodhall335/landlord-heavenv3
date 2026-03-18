@@ -1012,7 +1012,10 @@ export async function POST(request: Request) {
           }
 
           generatedDoc = await generateStandardAST(astData);
-          documentTitle = 'Assured Shorthold Tenancy Agreement - Standard';
+          documentTitle =
+            canonicalJurisdiction === 'england'
+              ? 'Residential Tenancy Agreement - Standard'
+              : 'Tenancy Agreement - Standard';
           break;
         }
 
@@ -1050,7 +1053,10 @@ export async function POST(request: Request) {
           }
 
           generatedDoc = await generatePremiumAST(astData);
-          documentTitle = 'Assured Shorthold Tenancy Agreement - Premium';
+          documentTitle =
+            canonicalJurisdiction === 'england'
+              ? 'Residential Tenancy Agreement - Premium'
+              : 'Tenancy Agreement - Premium';
           break;
         }
 

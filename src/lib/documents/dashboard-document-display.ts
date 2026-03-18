@@ -7,6 +7,16 @@
 
 export type DashboardDocumentCategory = 'eviction' | 'money_claim' | 'tenancy_agreement' | 'other';
 
+const TENANCY_SUPPORT_DOCUMENT_TYPES = new Set([
+  'inventory_schedule',
+  'pre_tenancy_checklist_england',
+  'pre_tenancy_checklist_wales',
+  'pre_tenancy_checklist_scotland',
+  'pre_tenancy_checklist_northern_ireland',
+  'deposit_protection_certificate',
+  'tenancy_deposit_information',
+]);
+
 const LEGACY_DOCUMENT_KEY_ALIASES: Record<string, string> = {
   'section 8 notice': 'section8_notice',
   'service instructions': 'service_instructions',
@@ -42,7 +52,7 @@ export function isTenancyAgreementVariant(documentType: string): boolean {
  * Map a raw document_type to a top-level category used by dashboard filters.
  */
 export function getDashboardDocumentCategory(documentType: string): DashboardDocumentCategory {
-  if (isTenancyAgreementVariant(documentType)) {
+  if (isTenancyAgreementVariant(documentType) || TENANCY_SUPPORT_DOCUMENT_TYPES.has(documentType)) {
     return 'tenancy_agreement';
   }
 
@@ -90,6 +100,8 @@ export function getDashboardDocumentTitle(documentType: string): string {
   const explicitTitles: Record<string, string> = {
     inventory_schedule: 'Inventory Schedule',
     inventory_schedule_condition: 'Inventory & Schedule of Condition',
+    deposit_protection_certificate: 'Deposit Protection Certificate',
+    tenancy_deposit_information: 'Prescribed Information Pack',
     pre_tenancy_checklist_england: 'Pre-Tenancy Checklist (England)',
     pre_tenancy_checklist_wales: 'Pre-Tenancy Checklist (Wales)',
     pre_tenancy_checklist_scotland: 'Pre-Tenancy Checklist (Scotland)',

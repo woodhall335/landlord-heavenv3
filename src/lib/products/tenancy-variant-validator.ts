@@ -59,7 +59,7 @@ export const TENANCY_VARIANT_CONFIGS: Record<TenancyJurisdiction, JurisdictionVa
       tier: 'standard',
       templatePath: 'uk/england/templates/standard_ast_formatted.hbs',
       documentKey: 'ast_agreement',
-      documentTitle: 'Assured Shorthold Tenancy Agreement',
+      documentTitle: 'Residential Tenancy Agreement',
       mustHaveHMO: false,
       mustNotHaveHMO: true,
     },
@@ -68,7 +68,7 @@ export const TENANCY_VARIANT_CONFIGS: Record<TenancyJurisdiction, JurisdictionVa
       tier: 'premium',
       templatePath: 'uk/england/templates/premium_ast_formatted.hbs',
       documentKey: 'ast_agreement_hmo',
-      documentTitle: 'HMO Tenancy Agreement',
+      documentTitle: 'Premium Residential Tenancy Agreement',
       mustHaveHMO: true,
       mustNotHaveHMO: false,
     },
@@ -402,8 +402,8 @@ export function validateFromFileSystem(configDir: string): ValidationResult {
  */
 export const EXPECTED_PACK_CONTENTS: Record<TenancyJurisdiction, Record<TenancyTier, { key: string; title: string }>> = {
   england: {
-    standard: { key: 'ast_agreement', title: 'Assured Shorthold Tenancy Agreement' },
-    premium: { key: 'ast_agreement_hmo', title: 'HMO Tenancy Agreement' },
+  standard: { key: 'ast_agreement', title: 'Residential Tenancy Agreement' },
+  premium: { key: 'ast_agreement_hmo', title: 'Premium Residential Tenancy Agreement' },
   },
   wales: {
     standard: { key: 'soc_agreement', title: 'Standard Occupation Contract' },
@@ -421,8 +421,8 @@ export const EXPECTED_PACK_CONTENTS: Record<TenancyJurisdiction, Record<TenancyT
 
 /**
  * Validate pack-contents alignment
- * Checks that getPackContents returns exactly 1 document per tier per jurisdiction
- * and that the document keys match TENANCY_VARIANT_CONFIGS
+ * Checks that getPackContents includes the correct primary agreement document
+ * per tier per jurisdiction, even when support documents are bundled alongside it.
  */
 export function validatePackContentsAlignment(
   getPackContents: (args: { product: string; jurisdiction: string }) => Array<{ key: string; title: string }>
@@ -435,30 +435,28 @@ export function validatePackContentsAlignment(
     for (const tier of ['standard', 'premium'] as const) {
       const product = tier === 'standard' ? 'ast_standard' : 'ast_premium';
       const items = getPackContents({ product, jurisdiction });
+      const expected = EXPECTED_PACK_CONTENTS[jurisdiction][tier];
+      const config = getVariantConfig(jurisdiction, tier);
+      const primaryAgreement = items.find((item) => item.key === expected.key);
 
-      // Must return exactly 1 document
-      if (items.length !== 1) {
+      if (!primaryAgreement) {
         errors.push(
-          `[${jurisdiction}/${tier}] pack-contents returns ${items.length} documents, expected exactly 1. ` +
-          `2-variants rule: each tier must have exactly 1 tenancy agreement document.`
+          `[${jurisdiction}/${tier}] pack-contents is missing the primary agreement document "${expected.key}".`
         );
         continue;
       }
 
-      // Document key must match config
-      const expected = EXPECTED_PACK_CONTENTS[jurisdiction][tier];
-      const config = getVariantConfig(jurisdiction, tier);
-
-      if (items[0].key !== expected.key) {
+      if (primaryAgreement.title !== expected.title) {
         errors.push(
-          `[${jurisdiction}/${tier}] pack-contents key mismatch: got "${items[0].key}", expected "${expected.key}"`
+          `[${jurisdiction}/${tier}] pack-contents title mismatch for "${expected.key}": ` +
+          `got "${primaryAgreement.title}", expected "${expected.title}"`
         );
       }
 
-      if (config && items[0].key !== config.documentKey) {
+      if (config && primaryAgreement.key !== config.documentKey) {
         errors.push(
           `[${jurisdiction}/${tier}] pack-contents/validator mismatch: ` +
-          `pack-contents returns "${items[0].key}", validator expects "${config.documentKey}"`
+          `pack-contents returns "${primaryAgreement.key}", validator expects "${config.documentKey}"`
         );
       }
     }
@@ -497,7 +495,7 @@ export interface AuditTableRow {
  * 2) Exactly 2 variants per jurisdiction (standard + premium)
  * 3) Standard templates contain NO forbidden HMO markers
  * 4) Premium templates contain ALL required HMO markers (minimum threshold)
- * 5) Pack-contents returns exactly 1 document per tier per jurisdiction
+ * 5) Pack-contents includes the correct primary agreement document per tier per jurisdiction
  * 6) Document keys are consistent across config, pack-contents, and generator
  *
  * @throws Error with detailed message if any invariant fails

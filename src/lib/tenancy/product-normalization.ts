@@ -101,8 +101,8 @@ export const PAYMENT_TO_DISPLAY_SKU: Record<CanonicalJurisdiction, Record<Tenanc
  */
 export const PRODUCT_DISPLAY_LABELS: Record<CanonicalJurisdiction, Record<ProductTier, string>> = {
   england: {
-    standard: 'Standard AST',
-    premium: 'Premium AST',
+    standard: 'Standard Residential Tenancy Agreement',
+    premium: 'Premium Residential Tenancy Agreement',
   },
   wales: {
     standard: 'Standard Occupation Contract',

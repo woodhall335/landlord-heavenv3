@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Wizard Selection Client Component
  *
  * Interactive entry point for the conversational wizard
@@ -72,20 +72,22 @@ function getHeroContent(product: string | null, jurisdiction: string | null): He
       };
     case 'ast_standard':
       return {
-        title: 'Standard Tenancy Agreement',
+        title: jurisdiction === 'england' ? 'Standard Residential Tenancy Agreement' : 'Standard Tenancy Agreement',
         subtitle: jurisdiction === 'scotland'
           ? 'Private Residential Tenancy (PRT) for Scotland'
           : jurisdiction === 'wales'
             ? 'Standard Occupation Contract for Wales'
             : jurisdiction === 'northern-ireland'
               ? 'Private Tenancy Agreement for NI'
-              : 'Create a Compliant Tenancy Agreement',
-        eyebrow: jurisdiction === 'scotland' ? 'PRT' : jurisdiction === 'wales' ? 'Occupation Contract' : 'Standard AST',
+        : "Renters' Rights compliant England Residential Tenancy Agreement",
+        eyebrow: jurisdiction === 'scotland' ? 'PRT' : jurisdiction === 'wales' ? 'Occupation Contract' : jurisdiction === 'england' ? 'Residential Agreement' : 'Tenancy Agreement',
       };
     case 'ast_premium':
       return {
-        title: 'Premium Tenancy Agreement',
-        subtitle: 'AST (England), Occupation Contract (Wales), PRT (Scotland), NI private tenancy with compliance checklist',
+        title: jurisdiction === 'england' ? 'Premium Residential Tenancy Agreement' : 'Premium Tenancy Agreement',
+        subtitle: jurisdiction === 'england'
+        ? "Renters' Rights compliant England residential tenancy agreement with HMO, student-ready, and premium compliance wording"
+          : 'Occupation Contract (Wales), PRT (Scotland), or NI private tenancy with compliance checklist',
         eyebrow: 'Premium',
       };
     case 'money_claim':
@@ -138,31 +140,31 @@ const documentOptions: DocumentOption[] = [
     type: 'notice_only',
     title: 'Eviction Notices',
     description: 'Jurisdiction-specific notice bundles: Section 21/8 (England), Section 173 (Wales), Notice to Leave (Scotland)',
-    icon: '📄',
-    price: 'From £14.99',
+    icon: 'ðŸ“„',
+    price: 'From Â£14.99',
   },
   {
     type: 'complete_pack',
     title: 'Complete Eviction Pack',
     description: 'England-only case bundle with N5 / N5B / N119 routes, witness statement draft, and filing guide',
-    icon: '⚖️',
-    price: '£79.99',
+    icon: 'âš–ï¸',
+    price: 'Â£79.99',
     regionBadge: 'England only',
   },
   {
     type: 'money_claim',
     title: 'Money Claims',
     description: 'England-only money claim bundle for rent arrears and tenancy debts (County Court / MCOL-ready)',
-    icon: '💰',
-    price: '£59.99',
+    icon: 'ðŸ’°',
+    price: 'Â£59.99',
     regionBadge: 'England only',
   },
   {
     type: 'tenancy_agreement',
     title: 'Tenancy Agreements',
-    description: 'AST (England), Occupation Contract (Wales), PRT (Scotland), or NI private tenancy agreement pack',
-    icon: '📝',
-    price: 'From £14.99',
+    description: 'Residential Tenancy Agreement (England), Occupation Contract (Wales), PRT (Scotland), or NI private tenancy agreement pack',
+    icon: 'ðŸ“',
+    price: 'From Â£14.99',
   },
 ];
 
@@ -867,4 +869,5 @@ export default function WizardClientPage() {
     </Suspense>
   );
 }
+
 

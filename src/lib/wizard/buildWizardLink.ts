@@ -115,7 +115,7 @@ export function buildWizardLink(params: BuildWizardLinkParams): string {
 
 /**
  * Check if a product is supported in a jurisdiction.
- * Northern Ireland only supports tenancy agreements.
+ * Northern Ireland only supports tenancy agreement flows.
  */
 export function isProductSupportedInJurisdiction(
   product: WizardProduct,
@@ -153,9 +153,9 @@ export function getFallbackProduct(
   jurisdiction: WizardJurisdiction
 ): WizardProduct {
   if (!isProductSupportedInJurisdiction(product, jurisdiction)) {
-    // Northern Ireland only supports tenancy agreements
+    // Northern Ireland only supports tenancy agreement flows
     if (jurisdiction === 'northern-ireland') {
-      return 'tenancy_agreement';
+      return 'ast_standard';
     }
   }
   return product;
@@ -192,7 +192,7 @@ export function getUnsupportedProductMessage(
       flatmate_agreement: 'Flatmate agreements',
       renewal_tenancy_agreement: 'Renewal tenancy agreements',
     };
-    return `${productNames[product]} are not currently available for Northern Ireland. We support tenancy agreements for Northern Ireland properties.`;
+      return `${productNames[product]} are not currently available for Northern Ireland. We support standard and premium tenancy agreement flows for Northern Ireland properties.`;
   }
 
   if (jurisdiction !== 'england') {

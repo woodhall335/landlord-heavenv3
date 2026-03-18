@@ -284,9 +284,9 @@ export function getASTTemplates(jurisdiction: string, tier: 'standard' | 'premiu
     templates.push({
       id: 'tenancy-agreement',
       templatePath: tier === 'premium' ? 'uk/england/templates/premium_ast.hbs' : 'uk/england/templates/standard_ast.hbs',
-      title: tier === 'premium' ? 'Premium AST Agreement' : 'Standard AST Agreement',
+      title: tier === 'premium' ? 'Premium Residential Tenancy Agreement' : 'Standard Residential Tenancy Agreement',
       type: 'agreement',
-      description: 'Assured Shorthold Tenancy Agreement',
+      description: 'Residential Tenancy Agreement',
       category: 'notice', // Using 'notice' for main docs
     });
   } else if (jurisdiction === 'wales') {
@@ -309,33 +309,42 @@ export function getASTTemplates(jurisdiction: string, tier: 'standard' | 'premiu
     });
   }
 
-  // Standard tier documents
-  templates.push(
-    {
-      id: 'government-model-clauses',
-      templatePath: 'uk/england/templates/government_model_clauses.hbs',
-      title: 'Government Model Clauses',
-      type: 'schedule',
-      description: 'Recommended clauses from official guidance',
-      category: 'guidance',
-    },
-    {
-      id: 'deposit-protection-cert',
-      templatePath: 'uk/england/templates/deposit_protection_certificate.hbs',
-      title: 'Deposit Protection Certificate',
-      type: 'certificate',
-      description: 'Template for recording deposit protection',
-      category: 'checklist',
-    },
-    {
-      id: 'legal-validity-summary',
-      templatePath: 'uk/england/templates/ast_legal_validity_summary.hbs',
-      title: 'Legal Validity Summary',
-      type: 'summary',
-      description: 'Summary of legal compliance',
-      category: 'guidance',
-    }
-  );
+  if (jurisdiction === 'england') {
+    templates.push(
+      {
+        id: 'government-model-clauses',
+        templatePath: 'uk/england/templates/government_model_clauses.hbs',
+        title: 'Government Model Clauses',
+        type: 'schedule',
+        description: 'Recommended clauses from official guidance',
+        category: 'guidance',
+      },
+      {
+        id: 'deposit-protection-cert',
+        templatePath: 'uk/england/templates/deposit_protection_certificate.hbs',
+        title: 'Deposit Protection Certificate',
+        type: 'certificate',
+        description: 'Template for recording deposit protection',
+        category: 'checklist',
+      },
+      {
+        id: 'tenancy-deposit-information',
+        templatePath: 'uk/england/templates/tenancy_deposit_information.hbs',
+        title: 'Prescribed Information Pack',
+        type: 'guidance',
+        description: 'Standalone prescribed information pack for tenancy deposit compliance',
+        category: 'guidance',
+      },
+      {
+        id: 'legal-validity-summary',
+        templatePath: 'uk/england/templates/ast_legal_validity_summary.hbs',
+        title: 'Legal Validity Summary',
+        type: 'summary',
+        description: 'Summary of legal compliance',
+        category: 'guidance',
+      }
+    );
+  }
 
   // Premium tier additional documents
   if (tier === 'premium') {

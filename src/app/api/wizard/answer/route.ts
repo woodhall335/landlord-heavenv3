@@ -134,8 +134,12 @@ function validateCriticalAnswer(
 
     // Critical field: AST tier (product selection)
     if (questionId === 'ast_tier' && caseType === 'tenancy_agreement') {
-      const schema = z.enum(['Standard AST', 'Premium AST'], {
-        message: 'AST tier must be "Standard AST" or "Premium AST"',
+      const schema = z.enum([
+        'Standard Residential Tenancy Agreement',
+        'Premium Residential Tenancy Agreement (HMO / student-ready)',
+      ], {
+        message:
+          'England tenancy tier must be "Standard Residential Tenancy Agreement" or "Premium Residential Tenancy Agreement (HMO / student-ready)"',
       });
       schema.parse(answer);
       return { ok: true };

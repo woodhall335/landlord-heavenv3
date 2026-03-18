@@ -157,7 +157,7 @@ export const PRODUCT_NAMES = {
   [PRODUCT_IDS.NOTICE_ONLY]: 'Notice Only',
   [PRODUCT_IDS.COMPLETE_PACK]: 'Complete Eviction Pack',
   [PRODUCT_IDS.MONEY_CLAIM]: 'Money Claim Pack',
-  [PRODUCT_IDS.AST_STANDARD]: 'Standard AST',
-  [PRODUCT_IDS.AST_PREMIUM]: 'Premium AST',
+  [PRODUCT_IDS.AST_STANDARD]: 'Standard Residential Tenancy Agreement',
+  [PRODUCT_IDS.AST_PREMIUM]: 'Premium Residential Tenancy Agreement',
   [PRODUCT_IDS.HMO_PRO]: 'HMO Pro',
 } as const;

@@ -380,14 +380,15 @@ function getEnglandMoneyClaimContents(): PackItem[] {
  * ENGLAND TENANCY AGREEMENT CONTENTS
  *
  * Product tiers:
- * - 'standard': Tenancy agreement with blank inventory template and compliance checklist
- * - 'premium': HMO-specific tenancy agreement with wizard-completed inventory and compliance checklist
+ * - 'standard': Tenancy agreement with blank inventory template, compliance checklist, and deposit-support docs
+ * - 'premium': HMO-specific tenancy agreement with wizard-completed inventory, compliance checklist, and deposit-support docs
  *
  * Legal Framework: Housing Act 1988, Deregulation Act 2015, Housing Act 2004 (HMO)
  *
  * INTEGRATION LAYER REQUIREMENTS:
  * - Inventory: Always included (blank for standard, wizard-completed for premium)
  * - Compliance Checklist: Always included (jurisdiction-specific, non-contractual guidance)
+ * - Deposit Support: England includes standalone deposit protection certificate and prescribed information pack
  * - Embedded Schedules: Property, Rent, Utilities, Inventory, House Rules
  */
 function getEnglandASTContents(tier: 'standard' | 'premium', hasInventoryData?: boolean): PackItem[] {
@@ -397,16 +398,16 @@ function getEnglandASTContents(tier: 'standard' | 'premium', hasInventoryData?: 
   if (tier === 'standard') {
     items.push({
       key: 'ast_agreement',
-      title: 'Assured Shorthold Tenancy Agreement',
-      description: 'Solicitor-grade tenancy agreement with all embedded schedules. Compliant with Housing Act 1988.',
+      title: 'Residential Tenancy Agreement',
+      description: 'Solicitor-grade England residential tenancy agreement with all embedded schedules. Updated for the Renters\' Rights Act 2025 flow.',
       category: 'Tenancy agreement',
       required: true,
     });
   } else {
     items.push({
       key: 'ast_agreement_hmo',
-      title: 'HMO Tenancy Agreement',
-      description: 'Includes HMO-specific clauses for multi-occupancy properties. Compliant with Housing Act 1988 & 2004.',
+      title: 'Premium Residential Tenancy Agreement',
+      description: 'Includes HMO-specific clauses for multi-occupancy properties. Updated for the England Residential Tenancy Agreement flow.',
       category: 'Tenancy agreement',
       required: true,
     });
@@ -442,6 +443,22 @@ function getEnglandASTContents(tier: 'standard' | 'premium', hasInventoryData?: 
     title: 'Pre-Tenancy Compliance Checklist (England)',
     description: 'Non-contractual guidance covering deposit protection, gas safety, EPC, EICR, How to Rent Guide, and Right to Rent requirements',
     category: 'Checklists',
+    required: true,
+  });
+
+  items.push({
+    key: 'deposit_protection_certificate',
+    title: 'Deposit Protection Certificate',
+    description: 'Standalone certificate confirming the tenancy deposit protection scheme details for the England tenancy pack',
+    category: 'Guidance',
+    required: true,
+  });
+
+  items.push({
+    key: 'tenancy_deposit_information',
+    title: 'Prescribed Information Pack',
+    description: 'Standalone tenancy deposit prescribed information pack for England deposit compliance',
+    category: 'Guidance',
     required: true,
   });
 

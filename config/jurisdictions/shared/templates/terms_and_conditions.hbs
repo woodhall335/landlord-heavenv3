@@ -10,21 +10,31 @@
   <h2>1. Document Generation Service</h2>
   <p>
     This tenancy agreement has been generated using Landlord Heaven's automated document generation service.
-    The document is based on information you provided through our guided wizard and complies with the laws of
-    <strong>{{jurisdiction_name}}</strong> as of <strong>{{format_date generation_date 'long'}}</strong>.
+    The document is based on information you provided through our guided wizard and is drafted for the
+    <strong>{{jurisdiction_name}}</strong> regime selected at the time of generation on
+    <strong>{{format_date generation_date 'long'}}</strong>.
   </p>
 
   <h2>2. Legal Compliance</h2>
   <p>
-    We take reasonable care to ensure our templates comply with current legislation. However, laws change regularly,
+    We take reasonable care to keep our templates updated for the supported workflow. However, laws change regularly,
     and you are responsible for:
   </p>
   <ul>
-    <li>Verifying the document meets current legal requirements</li>
+    <li>Verifying the document matches your current legal and factual position</li>
     <li>Ensuring all required certificates and documents are attached</li>
     <li>Seeking independent legal advice if required</li>
     <li>Complying with all landlord obligations under law</li>
   </ul>
+
+  {{#if_eq jurisdiction "england"}}
+  <h2>2A. England Renters' Rights Positioning</h2>
+  <p>
+    For England, Landlord Heaven positions this product as a <strong>Renters' Rights compliant Residential Tenancy Agreement</strong>
+    for the supported self-serve flow. That positioning applies to the England product path we currently support and does not replace the need
+    for independent legal advice on unusual facts, specialist tenancies, or later law changes.
+  </p>
+  {{/if_eq}}
 
   <h2>3. Accuracy of Information</h2>
   <p>

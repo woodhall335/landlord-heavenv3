@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Wizard Selection Page
  *
  * Server component that provides dynamic SEO metadata based on product parameter,
@@ -67,9 +67,9 @@ export const WIZARD_PRODUCT_SEO: Record<string, WizardProductSEO> = {
     canonicalRoute: SEO_LANDING_ROUTES.money_claim,
   },
   ast_standard: {
-    title: `Tenancy Agreement Wizard | AST, Occupation Contract, PRT | ${SEO_PRICES.tenancyStandard.display}`,
+    title: `Tenancy Agreement Wizard | Residential Agreement, Occupation Contract, PRT | ${SEO_PRICES.tenancyStandard.display}`,
     description:
-      'Generate a jurisdiction-specific tenancy agreement: AST (England), Standard Occupation Contract (Wales), PRT (Scotland), or Private Tenancy (Northern Ireland).',
+      'Generate a jurisdiction-specific tenancy agreement: Residential Tenancy Agreement (England), Standard Occupation Contract (Wales), PRT (Scotland), or Private Tenancy (Northern Ireland).',
     h1: 'Tenancy Agreement Wizard',
     canonicalRoute: SEO_LANDING_ROUTES.ast_standard,
   },
@@ -83,7 +83,7 @@ export const WIZARD_PRODUCT_SEO: Record<string, WizardProductSEO> = {
   tenancy_agreement: {
     title: `Tenancy Agreement Wizard | All UK Jurisdictions | from ${SEO_PRICES.tenancyStandard.display}`,
     description:
-      'Generate a compliant tenancy agreement for England (AST), Wales (Occupation Contract), Scotland (PRT), or Northern Ireland. Standard or Premium options.',
+      'Generate a compliant tenancy agreement for England (Residential Tenancy Agreement), Wales (Occupation Contract), Scotland (PRT), or Northern Ireland. Standard or Premium options.',
     h1: 'Tenancy Agreement Wizard',
     // Maps to standard tenancy agreement landing page
     canonicalRoute: SEO_LANDING_ROUTES.ast_standard,
@@ -178,3 +178,4 @@ export default function WizardPage() {
     </>
   );
 }
+

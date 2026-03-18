@@ -49,9 +49,9 @@ function getDocumentTypeName(caseType: string, product?: string): string {
       case 'money_claim':
         return 'Money Claim Pack';
       case 'ast_standard':
-        return 'Standard AST';
+        return 'Standard Residential Tenancy Agreement';
       case 'ast_premium':
-        return 'Premium AST';
+        return 'Premium Residential Tenancy Agreement';
       default:
         break;
     }

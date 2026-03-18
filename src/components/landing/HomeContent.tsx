@@ -46,7 +46,7 @@ const primaryPaths = [
   },
   {
     label: "Create Tenancy Agreement",
-    href: `/wizard?product=tenancy_agreement&topic=tenancy&src=${SEO_SRC}`,
+    href: `/wizard?product=ast_standard&topic=tenancy&src=${SEO_SRC}`,
     icon: RiFileTextLine,
   },
 ];
@@ -379,7 +379,7 @@ export default function HomeContent() {
               title="England"
               regionSlug="england"
               forms={[
-                "Assured Shorthold Tenancy",
+                "Residential Tenancy Agreement",
                 "Section 21 Notice",
                 "Section 8 Notice",
                 "County Court Forms",

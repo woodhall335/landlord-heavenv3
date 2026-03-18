@@ -180,9 +180,9 @@ function getTenancyCopy(jurisdiction: WizardJurisdiction): {
       };
     default:
       return {
-        title: 'Create a Tenancy Agreement',
-        description: 'Generate a compliant Assured Shorthold Tenancy',
-        buttonText: 'Start AST Wizard',
+        title: 'Create a Residential Tenancy Agreement',
+        description: "Generate a Renters' Rights compliant England Residential Tenancy Agreement",
+        buttonText: 'Start Agreement Wizard',
       };
   }
 }
@@ -282,7 +282,7 @@ export function NextBestActionCard({
               </p>
               <Link
                 href={buildWizardLink({
-                  product: 'tenancy_agreement',
+                  product: 'ast_standard',
                   jurisdiction: 'northern-ireland',
                   src: 'ask_heaven',
                   topic: 'tenancy',
@@ -291,7 +291,7 @@ export function NextBestActionCard({
                   utm_campaign: attribution?.utm_campaign,
                 })}
                 className="inline-flex items-center gap-1.5 mt-3 px-3 py-1.5 bg-amber-100 text-amber-800 text-xs font-medium rounded-lg hover:bg-amber-200 transition-colors"
-                onClick={() => onCtaClick?.('wizard', '/wizard?product=tenancy_agreement', 'NI Tenancy Agreement')}
+                onClick={() => onCtaClick?.('wizard', '/wizard?product=ast_standard&jurisdiction=northern-ireland', 'NI Tenancy Agreement')}
               >
                 Need a tenancy agreement instead?
                 <RiArrowRightLine className="h-3.5 w-3.5" />

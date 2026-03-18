@@ -74,10 +74,10 @@ export interface JurisdictionAgreementInfo {
  */
 export const JURISDICTION_AGREEMENT_INFO: Record<TenancyJurisdiction, JurisdictionAgreementInfo> = {
   england: {
-    agreementName: 'Assured Shorthold Tenancy Agreement',
-    agreementShortName: 'AST',
+    agreementName: 'Residential Tenancy Agreement',
+    agreementShortName: 'RTA',
     legalFramework: 'Housing Act 1988',
-    legalReference: 'Compliant with Housing Act 1988 & Deregulation Act 2015',
+    legalReference: 'Updated for the Renters\' Rights Act 2025 England tenancy flow',
   },
   wales: {
     agreementName: 'Standard Occupation Contract',

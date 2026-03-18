@@ -37,13 +37,18 @@ export async function POST(request: Request) {
       );
     }
 
-    // Northern Ireland: only tenancy_agreement is available
-    if (jurisdiction === 'northern-ireland' && product !== 'tenancy_agreement') {
+    // Northern Ireland: tenancy agreement flows only
+    if (
+      jurisdiction === 'northern-ireland' &&
+      product !== 'tenancy_agreement' &&
+      product !== 'ast_standard' &&
+      product !== 'ast_premium'
+    ) {
       return NextResponse.json(
         {
-          error: 'Only tenancy agreements are available for Northern Ireland.',
+          error: 'Only tenancy agreement flows are available for Northern Ireland.',
           code: 'PRODUCT_NOT_AVAILABLE_IN_REGION',
-          redirect_to: `/wizard?product=tenancy_agreement&jurisdiction=northern-ireland`,
+          redirect_to: `/wizard?product=ast_standard&jurisdiction=northern-ireland&src=product_page&topic=tenancy`,
         },
         { status: 400 }
       );

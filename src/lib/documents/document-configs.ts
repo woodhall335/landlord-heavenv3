@@ -492,12 +492,13 @@ export interface ASTDocumentOptions {
  * TENANCY AGREEMENT DOCUMENTS
  *
  * Product tiers:
- * - 'standard': Tenancy agreement with blank inventory template and compliance checklist
- * - 'premium': HMO-specific tenancy agreement with wizard-completed inventory and compliance checklist
+ * - 'standard': Tenancy agreement with blank inventory template, compliance checklist, and deposit-support docs
+ * - 'premium': HMO-specific tenancy agreement with wizard-completed inventory, compliance checklist, and deposit-support docs
  *
  * INTEGRATION LAYER REQUIREMENTS:
  * - Inventory: Always included (blank for standard, wizard-completed for premium)
  * - Compliance Checklist: Always included (jurisdiction-specific, non-contractual guidance)
+ * - Deposit Support: England includes standalone deposit protection certificate and prescribed information pack
  * - Embedded Schedules: Property, Rent, Utilities, Inventory, House Rules
  *
  * Jurisdiction handling:
@@ -518,12 +519,12 @@ export function getASTDocuments(
   const agreementNames: Record<string, { standard: { title: string; description: string }; hmo: { title: string; description: string } }> = {
     'england': {
       standard: {
-        title: 'Assured Shorthold Tenancy Agreement',
-        description: 'Solicitor-grade tenancy agreement with all embedded schedules. Compliant with Housing Act 1988.'
+        title: 'Residential Tenancy Agreement',
+        description: 'Solicitor-grade England residential tenancy agreement with all embedded schedules.'
       },
       hmo: {
-        title: 'HMO Tenancy Agreement',
-        description: 'Includes HMO-specific clauses for multi-occupancy properties. Compliant with Housing Act 1988 & 2004.'
+        title: 'Premium Residential Tenancy Agreement',
+        description: 'Includes HMO-specific clauses for multi-occupancy properties in the England residential tenancy flow.'
       }
     },
     'wales': {
@@ -636,6 +637,27 @@ export function getASTDocuments(
     category: 'Guidance',
   });
 
+  if (jurisdiction === 'england') {
+    documents.push(
+      {
+        id: 'deposit-protection-certificate',
+        title: 'Deposit Protection Certificate',
+        description: 'Standalone certificate covering the England tenancy deposit protection scheme details.',
+        icon: 'guidance',
+        pages: '3-4 pages',
+        category: 'Guidance',
+      },
+      {
+        id: 'prescribed-information-pack',
+        title: 'Prescribed Information Pack',
+        description: 'Standalone tenancy deposit prescribed information pack for England compliance and tenant service.',
+        icon: 'guidance',
+        pages: '4-6 pages',
+        category: 'Guidance',
+      }
+    );
+  }
+
   return documents;
 }
 
@@ -711,14 +733,16 @@ export function getProductMeta(product: string): ProductMeta {
         'Enforcement guide',
       ],
     },
-    // STANDARD TENANCY AGREEMENT - Base product (agreement only)
+    // STANDARD TENANCY AGREEMENT - agreement plus support pack
     'ast_standard': {
       name: 'Tenancy Agreement',
       price: PRODUCTS.ast_standard.displayPrice,
       originalPrice: '£100+',
       savings: 'Save £85+ vs solicitors',
       features: [
-        'Includes the tenancy agreement only',
+        'Residential tenancy agreement with embedded schedules',
+        'Jurisdiction-specific compliance checklist',
+        'England packs include deposit protection certificate and prescribed information pack',
         'Jurisdiction-compliant (England/Wales/Scotland/NI)',
         'Legally valid and court-ready',
         'Instant PDF download',
@@ -730,7 +754,9 @@ export function getProductMeta(product: string): ProductMeta {
       originalPrice: '£100+',
       savings: 'Save £85+ vs solicitors',
       features: [
-        'Includes the tenancy agreement only',
+        'Residential tenancy agreement with embedded schedules',
+        'Jurisdiction-specific compliance checklist',
+        'England packs include deposit protection certificate and prescribed information pack',
         'Jurisdiction-compliant (England/Wales/Scotland/NI)',
         'Legally valid and court-ready',
         'Instant PDF download',
@@ -744,6 +770,8 @@ export function getProductMeta(product: string): ProductMeta {
       savings: 'Save £175+ vs solicitors',
       features: [
         'Includes HMO-specific clauses for multi-occupancy properties',
+        'Jurisdiction-specific compliance checklist',
+        'England packs include deposit protection certificate and prescribed information pack',
         'Multiple occupants & joint liability clauses',
         'Shared facilities obligations',
         'Fire safety & licensing acknowledgement',

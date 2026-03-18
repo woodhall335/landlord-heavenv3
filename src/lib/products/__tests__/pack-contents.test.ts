@@ -246,21 +246,23 @@ describe('getPackContents', () => {
   // ===========================================================================
   // TENANCY AGREEMENT PRODUCTS
   // Both tiers include: Agreement, Inventory Schedule, Compliance Checklist
+  // England additionally includes the standalone deposit support documents
   // ===========================================================================
 
   describe('ast_standard product', () => {
-    it('returns agreement, inventory, and checklist for England', () => {
+    it('returns agreement, inventory, checklist, and deposit docs for England', () => {
       const args: GetPackContentsArgs = {
         product: 'ast_standard',
         jurisdiction: 'england',
       };
       const items = getPackContents(args);
 
-      // MUST have 3 documents: agreement, inventory, checklist
-      expect(items.length).toBe(3);
+      expect(items.length).toBe(5);
       expect(items.find(i => i.key === 'ast_agreement')).toBeDefined();
       expect(items.find(i => i.key === 'inventory_schedule')).toBeDefined();
       expect(items.find(i => i.key === 'pre_tenancy_checklist_england')).toBeDefined();
+      expect(items.find(i => i.key === 'deposit_protection_certificate')).toBeDefined();
+      expect(items.find(i => i.key === 'tenancy_deposit_information')).toBeDefined();
     });
 
     it('returns agreement, inventory, and checklist for Wales', () => {
@@ -315,17 +317,19 @@ describe('getPackContents', () => {
   });
 
   describe('ast_premium product', () => {
-    it('returns HMO agreement, inventory, and checklist for England', () => {
+    it('returns HMO agreement, inventory, checklist, and deposit docs for England', () => {
       const args: GetPackContentsArgs = {
         product: 'ast_premium',
         jurisdiction: 'england',
       };
       const items = getPackContents(args);
 
-      expect(items.length).toBe(3);
+      expect(items.length).toBe(5);
       expect(items.find(i => i.key === 'ast_agreement_hmo')).toBeDefined();
       expect(items.find(i => i.key === 'inventory_schedule')).toBeDefined();
       expect(items.find(i => i.key === 'pre_tenancy_checklist_england')).toBeDefined();
+      expect(items.find(i => i.key === 'deposit_protection_certificate')).toBeDefined();
+      expect(items.find(i => i.key === 'tenancy_deposit_information')).toBeDefined();
     });
 
     it('returns HMO agreement, inventory, and checklist for Wales', () => {
@@ -388,15 +392,22 @@ describe('getPackContents', () => {
       expect(inventory?.description).toContain('wizard-completed');
     });
 
-    it('both standard and premium have 3 documents each', () => {
+    it('England packs include deposit support docs while other jurisdictions stay on the core 3-doc bundle', () => {
       const jurisdictions = ['england', 'wales', 'scotland', 'northern-ireland'];
 
       for (const jur of jurisdictions) {
         const standardItems = getPackContents({ product: 'ast_standard', jurisdiction: jur });
         const premiumItems = getPackContents({ product: 'ast_premium', jurisdiction: jur });
 
-        expect(standardItems.length).toBe(3);
-        expect(premiumItems.length).toBe(3);
+        if (jur === 'england') {
+          expect(standardItems.length).toBe(5);
+          expect(premiumItems.length).toBe(5);
+          expect(standardItems.find(i => i.key === 'deposit_protection_certificate')).toBeDefined();
+          expect(premiumItems.find(i => i.key === 'tenancy_deposit_information')).toBeDefined();
+        } else {
+          expect(standardItems.length).toBe(3);
+          expect(premiumItems.length).toBe(3);
+        }
 
         // Both should have inventory_schedule
         expect(standardItems.find(i => i.key === 'inventory_schedule')).toBeDefined();

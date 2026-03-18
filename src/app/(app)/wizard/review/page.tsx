@@ -2734,7 +2734,7 @@ function buildTenancyValidation(facts: any, jurisdiction: string) {
     blockers.push({
       title: 'England post-reform tenancy structure',
       message:
-        'For England tenancies starting on or after 1 May 2026, this product should not be set up as a new fixed-term AST. Edit the tenancy details and switch to the post-reform periodic structure.',
+        'For England tenancies starting on or after 1 May 2026, this product should not be set up as a new fixed-term tenancy. Edit the tenancy details and switch to the post-reform periodic structure.',
     });
   }
 
@@ -2947,7 +2947,7 @@ function TenancyReviewContent({
 
   // Get jurisdiction-specific terminology
   const terminologyMap: Record<string, { agreementType: string; tenantLabel: string }> = {
-    england: { agreementType: 'Assured Shorthold Tenancy (AST)', tenantLabel: 'tenant' },
+    england: { agreementType: 'Residential Tenancy Agreement', tenantLabel: 'tenant' },
     wales: { agreementType: 'Occupation Contract', tenantLabel: 'contract holder' },
     scotland: { agreementType: 'Private Residential Tenancy (PRT)', tenantLabel: 'tenant' },
     'northern-ireland': { agreementType: 'Private Tenancy', tenantLabel: 'tenant' },

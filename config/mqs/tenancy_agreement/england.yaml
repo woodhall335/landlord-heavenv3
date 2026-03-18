@@ -1,6 +1,6 @@
-# config/mqs/tenancy_agreement/england.yaml
+﻿# config/mqs/tenancy_agreement/england.yaml
 #
-# ENGLAND-ONLY Assured Shorthold Tenancy (AST)
+# ENGLAND-ONLY Residential Tenancy Agreement
 # Split from england-wales.yaml as part of canonical jurisdiction implementation
 # Version 2.0.2 - England jurisdiction
 
@@ -15,7 +15,7 @@ __meta:
 # Audit Notes (2025-12-16)
 # - Split from england-wales.yaml to support canonical jurisdictions
 # - Removed Wales-specific content (Rent Smart Wales, Section 173 references)
-# - Retained England-specific content (Right to Rent, Section 21 compliance)
+# - Updated for Renters' Rights Act 2025 England tenancy wording
 
 id: tenancy_agreement_england_v2
 product: tenancy_agreement
@@ -29,20 +29,35 @@ questions:
     question: "Which tenancy agreement do you need?"
     inputType: select
     options:
-      - "Standard AST"
-      - "Premium AST"
-    helperText: "Standard covers simple lets. Premium adds guarantor, HMO, rent review and tighter controls."
+      - "Standard Residential Tenancy Agreement"
+      - "Premium Residential Tenancy Agreement (HMO / student-ready)"
+    helperText: "Standard covers straightforward England lets. Premium adds HMO, student, guarantor, rent review and tighter control clauses."
     validation:
       required: true
     maps_to:
       - product_tier
 
-  # 1. AST Suitability Check
+  # 1. England tenancy purpose
+  - id: england_tenancy_purpose
+    section: "Tenancy Type Check"
+    question: "What are you doing today?"
+    inputType: select
+    options:
+      - "new_agreement"
+      - "existing_written_tenancy"
+      - "existing_verbal_tenancy"
+    helperText: "Use the new agreement flow for a fresh England Residential Tenancy Agreement. Existing written tenancies usually auto-roll on 1 May 2026 and need transition information rather than a full replacement."
+    validation:
+      required: true
+    maps_to:
+      - england_tenancy_purpose
+
+  # 2. England tenancy suitability
   - id: ast_suitability
     section: "Tenancy Type Check"
-    question: "AST suitability check"
+    question: "England tenancy suitability check"
     inputType: group
-    helperText: "Basic checks to ensure this is a valid AST. For validation/warnings only."
+    helperText: "Basic checks to ensure this is suitable for the upgraded England residential tenancy flow."
     fields:
       - id: tenant_is_individual
         label: "Is the tenant an individual (not a company)?"
@@ -59,14 +74,14 @@ questions:
       - id: landlord_lives_at_property
         label: "Does the landlord live at the property?"
         inputType: yes_no
-        helperText: "If yes, this may not be an AST"
+        helperText: "If yes, this may be a lodger or licence arrangement instead."
         validation:
           required: true
         width: half
       - id: holiday_or_licence
         label: "Is this a holiday let or licence arrangement?"
         inputType: yes_no
-        helperText: "If yes, an AST may not be appropriate"
+        helperText: "If yes, a different agreement may be needed."
         validation:
           required: true
         width: half
@@ -198,7 +213,7 @@ questions:
     section: Landlord Details
     question: "Landlord contact details"
     inputType: group
-    helperText: "Used on the AST, certificates and notices."
+    helperText: "Used on the Residential Tenancy Agreement, checklist and notices."
     fields:
       - id: landlord_full_name
         label: "Full name"
@@ -262,7 +277,7 @@ questions:
     section: Landlord Details
     question: "Are you using a letting agent?"
     inputType: yes_no
-    helperText: "If yes, their details can appear on the AST for rent collection and management."
+    helperText: "If yes, their details can appear on the Residential Tenancy Agreement for rent collection and management."
     validation:
       required: true
     maps_to:
@@ -524,9 +539,9 @@ questions:
   # 4. Tenancy type & dates
   - id: tenancy_type_and_dates
     section: Tenancy
-    question: "Tenancy start and term"
+    question: "Tenancy start and structure"
     inputType: group
-    helperText: "We tailor the AST for fixed term vs periodic."
+    helperText: "New England self-serve agreements are created as upgraded assured periodic residential tenancies."
     fields:
       - id: tenancy_start_date
         label: "Start date"
@@ -534,36 +549,44 @@ questions:
         validation:
           required: true
         width: half
-      - id: is_fixed_term
-        label: "Is this a fixed term tenancy?"
-        inputType: yes_no
+      - id: tenant_notice_period
+        label: "Tenant notice period"
+        inputType: select
+        options:
+          - "2 months"
+          - "1 month"
+          - "6 weeks"
         validation:
           required: true
         width: half
-      - id: term_length
-        label: "Fixed term length"
+      - id: existing_written_tenancy_transition
+        label: "If this relates to an existing written tenancy, will you provide the transition information sheet when available?"
+        inputType: yes_no
+        dependsOn:
+          questionId: england_tenancy_purpose
+          value: "existing_written_tenancy"
+        width: full
+      - id: existing_verbal_tenancy_summary
+        label: "If this relates to an existing verbal tenancy, should we prepare a written summary of the key terms?"
+        inputType: yes_no
+        dependsOn:
+          questionId: england_tenancy_purpose
+          value: "existing_verbal_tenancy"
+        width: full
+      - id: tenancy_regime_confirmation
+        label: "England tenancy structure"
         inputType: select
         options:
-          - "6 months"
-          - "12 months"
-          - "18 months"
-          - "24 months"
-        dependsOn:
-          questionId: is_fixed_term
-          value: true
-        width: half
-      - id: tenancy_end_date
-        label: "End date (if fixed term)"
-        inputType: date
-        dependsOn:
-          questionId: is_fixed_term
-          value: true
-        width: half
+          - "Assured periodic residential tenancy"
+        validation:
+          required: true
+        width: full
     maps_to:
       - tenancy_start_date
-      - is_fixed_term
-      - term_length
-      - tenancy_end_date
+      - tenant_notice_period
+      - existing_written_tenancy_transition
+      - existing_verbal_tenancy_summary
+      - tenancy_regime_confirmation
 
   # 5. Rent & payment details
   - id: rent_details
@@ -681,7 +704,7 @@ questions:
         label: "Deposit amount"
         inputType: currency
         placeholder: "1400"
-        helperText: "⚠️ TENANT FEES ACT 2019: Maximum deposit is 5 weeks' rent (or 6 weeks if annual rent exceeds £50,000). Excess deposits are unlawful."
+        helperText: "âš ï¸ TENANT FEES ACT 2019: Maximum deposit is 5 weeks' rent (or 6 weeks if annual rent exceeds Â£50,000). Excess deposits are unlawful."
         validation:
           required: true
           min: 0
@@ -726,7 +749,7 @@ questions:
     section: Deposit
     question: "Prescribed information compliance"
     inputType: yes_no
-    helperText: "STATUTORY REQUIREMENT: You MUST serve prescribed information to the tenant within 30 days of receiving the deposit. Failure to comply invalidates Section 21 notices."
+    helperText: "STATUTORY REQUIREMENT: You must serve prescribed information to the tenant within 30 days of receiving the deposit. Keep evidence that this was done."
     validation:
       required: true
     maps_to:
@@ -736,7 +759,7 @@ questions:
     section: Deposit
     question: "When was/will prescribed information be served?"
     inputType: date
-    helperText: "CRITICAL: Must be within 30 days of receiving the deposit. This date is required to validate Section 21 eligibility."
+    helperText: "Must be within 30 days of receiving the deposit. Keep this date for compliance records."
     dependsOn:
       questionId: prescribed_information_served
       value: true
@@ -923,10 +946,10 @@ questions:
           required: true
         width: half
       - id: how_to_rent_guide_provided
-        label: "Latest 'How to Rent' guide given? (England only - required for valid S21)"
+        label: "Latest 'How to Rent' guide given? (England only)"
         inputType: yes_no
         defaultValue: false
-        helperText: "You MUST provide the latest government 'How to Rent' guide before or at the start of the tenancy. Failure to do so will invalidate any Section 21 notice."
+        helperText: "You should provide the latest government 'How to Rent' guide before or at the start of the tenancy and keep proof of delivery."
         validation:
           required: true
         width: half
@@ -1117,7 +1140,7 @@ questions:
     section: Rent Reviews
     question: "Rent increase provisions"
     inputType: group
-    helperText: "Premium AST can include index-linked or Section 13 reviews."
+    helperText: "Premium England agreements can include index-linked or Section 13-based rent review wording."
     fields:
       - id: rent_increase_clause
         label: "Include a rent increase clause?"
@@ -1153,44 +1176,6 @@ questions:
       - rent_increase_method
       - rent_increase_frequency
 
-  # 14. Additional terms
-  - id: break_clause
-    section: Additional Terms
-    question: "Include a break clause?"
-    inputType: yes_no
-    validation:
-      required: true
-    maps_to:
-      - break_clause
-
-  - id: break_clause_details
-    section: Additional Terms
-    question: "Break clause details"
-    inputType: group
-    dependsOn:
-      questionId: break_clause
-      value: true
-    fields:
-      - id: break_clause_months
-        label: "Can be exercised after"
-        inputType: select
-        options:
-          - "6 months"
-          - "9 months"
-          - "12 months"
-        width: half
-      - id: break_clause_notice_period
-        label: "Notice required"
-        inputType: select
-        options:
-          - "1 month"
-          - "2 months"
-          - "3 months"
-        width: half
-    maps_to:
-      - break_clause_months
-      - break_clause_notice_period
-
   - id: additional_terms
     section: Additional Terms
     question: "Any additional bespoke terms?"
@@ -1206,7 +1191,7 @@ questions:
     inputType: yes_no
     dependsOn:
       questionId: ast_tier
-      value: "Premium AST"
+      value: "Premium Residential Tenancy Agreement (HMO / student-ready)"
     validation:
       required: true
     maps_to:
@@ -1270,7 +1255,7 @@ questions:
     inputType: yes_no
     dependsOn:
       questionId: ast_tier
-      value: "Premium AST"
+      value: "Premium Residential Tenancy Agreement (HMO / student-ready)"
     helperText: "Recommended when there is more than one tenant."
     maps_to:
       - joint_and_several_liability
@@ -1281,8 +1266,8 @@ questions:
     inputType: group
     dependsOn:
       questionId: ast_tier
-      value: "Premium AST"
-    helperText: "Premium AST adds HMO-ready clauses."
+      value: "Premium Residential Tenancy Agreement (HMO / student-ready)"
+    helperText: "Premium England agreement adds HMO-ready clauses."
     fields:
       - id: is_hmo
         label: "Is the property an HMO or room-by-room let?"
@@ -1340,12 +1325,12 @@ questions:
     inputType: select
     dependsOn:
       questionId: ast_tier
-      value: "Premium AST"
+      value: "Premium Residential Tenancy Agreement (HMO / student-ready)"
     options:
       - "Required"
       - "Strongly recommended"
       - "Not required"
-    helperText: "Premium AST can mandate contents insurance."
+    helperText: "Premium England agreement can mandate contents insurance."
     maps_to:
       - tenant_insurance_required
 
@@ -1355,7 +1340,7 @@ questions:
     inputType: textarea
     dependsOn:
       questionId: ast_tier
-      value: "Premium AST"
+      value: "Premium Residential Tenancy Agreement (HMO / student-ready)"
     helperText: "Describe any detailed inventory or schedule you will attach."
     maps_to:
       - inventory_schedule_notes
@@ -1370,7 +1355,7 @@ questions:
     inputType: group
     dependsOn:
       questionId: ast_tier
-      value: "Premium AST"
+      value: "Premium Residential Tenancy Agreement (HMO / student-ready)"
     helperText: "Set terms for late rent payments (must comply with statutory limits)."
     fields:
       - id: late_payment_interest_applicable
@@ -1398,7 +1383,7 @@ questions:
           value: true
         width: half
       - id: late_payment_admin_fee
-        label: "Administrative fee (£)"
+        label: "Administrative fee (Â£)"
         inputType: number
         placeholder: "e.g., 50"
         helperText: "Fee for processing late payment (must be reasonable)"
@@ -1418,7 +1403,7 @@ questions:
     inputType: group
     dependsOn:
       questionId: ast_tier
-      value: "Premium AST"
+      value: "Premium Residential Tenancy Agreement (HMO / student-ready)"
     helperText: "Record all keys and access cards provided to tenant."
     fields:
       - id: number_of_front_door_keys
@@ -1449,7 +1434,7 @@ questions:
         placeholder: "e.g., 2"
         width: half
       - id: key_replacement_cost
-        label: "Key replacement cost (£ per key)"
+        label: "Key replacement cost (Â£ per key)"
         inputType: number
         placeholder: "e.g., 25"
         validation:
@@ -1475,7 +1460,7 @@ questions:
     inputType: group
     dependsOn:
       questionId: ast_tier
-      value: "Premium AST"
+      value: "Premium Residential Tenancy Agreement (HMO / student-ready)"
     helperText: "Define terms for contractors accessing property for repairs."
     fields:
       - id: contractor_access_notice_period
@@ -1519,7 +1504,7 @@ questions:
     inputType: group
     dependsOn:
       questionId: ast_tier
-      value: "Premium AST"
+      value: "Premium Residential Tenancy Agreement (HMO / student-ready)"
     helperText: "Essential emergency contact information and procedures."
     fields:
       - id: emergency_landlord_phone
@@ -1586,7 +1571,7 @@ questions:
     inputType: group
     dependsOn:
       questionId: ast_tier
-      value: "Premium AST"
+      value: "Premium Residential Tenancy Agreement (HMO / student-ready)"
     helperText: "Define regular maintenance responsibilities and schedule."
     fields:
       - id: boiler_service_frequency
@@ -1657,7 +1642,7 @@ questions:
     inputType: group
     dependsOn:
       questionId: ast_tier
-      value: "Premium AST"
+      value: "Premium Residential Tenancy Agreement (HMO / student-ready)"
     helperText: "Define garden maintenance responsibilities (if applicable)."
     fields:
       - id: lawn_mowing_frequency
@@ -1714,7 +1699,7 @@ questions:
     inputType: group
     dependsOn:
       questionId: ast_tier
-      value: "Premium AST"
+      value: "Premium Residential Tenancy Agreement (HMO / student-ready)"
     helperText: "Define pre-tenancy and move-in requirements."
     fields:
       - id: pre_tenancy_meeting_required
@@ -1775,7 +1760,7 @@ questions:
     inputType: group
     dependsOn:
       questionId: ast_tier
-      value: "Premium AST"
+      value: "Premium Residential Tenancy Agreement (HMO / student-ready)"
     helperText: "Define end-of-tenancy requirements and procedures."
     fields:
       - id: checkout_inspection_required
@@ -1854,7 +1839,7 @@ questions:
     inputType: group
     dependsOn:
       questionId: ast_tier
-      value: "Premium AST"
+      value: "Premium Residential Tenancy Agreement (HMO / student-ready)"
     helperText: "Define expected cleaning standards during and at end of tenancy."
     fields:
       - id: regular_cleaning_expectations
@@ -1883,7 +1868,7 @@ questions:
           required: true
         width: half
       - id: cleaning_cost_estimates
-        label: "Estimated professional cleaning costs (£)"
+        label: "Estimated professional cleaning costs (Â£)"
         inputType: number
         placeholder: "e.g., 250"
         helperText: "For tenant's reference if they choose professional cleaning"
@@ -1906,3 +1891,4 @@ questions:
     maps_to:
       - evidence.tenancy_agreement_uploaded
       - evidence.other_evidence_uploaded
+

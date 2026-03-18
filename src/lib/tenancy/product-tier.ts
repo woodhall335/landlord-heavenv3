@@ -28,7 +28,9 @@ export function getTenancyTierLabelForSku(
   if (jurisdiction === 'northern-ireland') {
     return sku === 'ast_premium' ? 'Premium NI Private Tenancy' : 'Standard NI Private Tenancy';
   }
-  return sku === 'ast_premium' ? 'Premium AST' : 'Standard AST';
+  return sku === 'ast_premium'
+    ? 'Premium Residential Tenancy Agreement (HMO / student-ready)'
+    : 'Standard Residential Tenancy Agreement';
 }
 
 export function inferTenancySkuFromTierLabel(

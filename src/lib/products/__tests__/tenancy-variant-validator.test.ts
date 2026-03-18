@@ -178,104 +178,85 @@ describe('B. Template Content Compliance', () => {
 // ============================================================================
 
 describe('C. Pack-Contents Alignment', () => {
-  describe('Standard product returns exactly 1 document', () => {
-    it('England ast_standard returns 1 document: ast_agreement', () => {
+  describe('Standard product includes the correct primary agreement', () => {
+    it('England ast_standard includes ast_agreement as the primary document', () => {
       const items = getPackContents({ product: 'ast_standard', jurisdiction: 'england' });
-      expect(items.length).toBe(1);
-      expect(items[0].key).toBe('ast_agreement');
-      expect(items[0].category).toBe('Tenancy agreement');
+      expect(items.some(item => item.key === 'ast_agreement')).toBe(true);
+      expect(items.find(item => item.key === 'ast_agreement')?.category).toBe('Tenancy agreement');
+      expect(items.find(item => item.key === 'deposit_protection_certificate')).toBeDefined();
+      expect(items.find(item => item.key === 'tenancy_deposit_information')).toBeDefined();
     });
 
-    it('Wales ast_standard returns 1 document: soc_agreement', () => {
+    it('Wales ast_standard includes soc_agreement as the primary document', () => {
       const items = getPackContents({ product: 'ast_standard', jurisdiction: 'wales' });
-      expect(items.length).toBe(1);
-      expect(items[0].key).toBe('soc_agreement');
-      expect(items[0].category).toBe('Tenancy agreement');
+      expect(items.some(item => item.key === 'soc_agreement')).toBe(true);
+      expect(items.find(item => item.key === 'soc_agreement')?.category).toBe('Tenancy agreement');
     });
 
-    it('Scotland ast_standard returns 1 document: prt_agreement', () => {
+    it('Scotland ast_standard includes prt_agreement as the primary document', () => {
       const items = getPackContents({ product: 'ast_standard', jurisdiction: 'scotland' });
-      expect(items.length).toBe(1);
-      expect(items[0].key).toBe('prt_agreement');
-      expect(items[0].category).toBe('Tenancy agreement');
+      expect(items.some(item => item.key === 'prt_agreement')).toBe(true);
+      expect(items.find(item => item.key === 'prt_agreement')?.category).toBe('Tenancy agreement');
     });
 
-    it('Northern Ireland ast_standard returns 1 document: private_tenancy_agreement', () => {
+    it('Northern Ireland ast_standard includes private_tenancy_agreement as the primary document', () => {
       const items = getPackContents({ product: 'ast_standard', jurisdiction: 'northern-ireland' });
-      expect(items.length).toBe(1);
-      expect(items[0].key).toBe('private_tenancy_agreement');
-      expect(items[0].category).toBe('Tenancy agreement');
+      expect(items.some(item => item.key === 'private_tenancy_agreement')).toBe(true);
+      expect(items.find(item => item.key === 'private_tenancy_agreement')?.category).toBe('Tenancy agreement');
     });
   });
 
-  describe('Premium product returns exactly 1 HMO document', () => {
-    it('England ast_premium returns 1 HMO document: ast_agreement_hmo', () => {
+  describe('Premium product includes the correct primary HMO agreement', () => {
+    it('England ast_premium includes ast_agreement_hmo as the primary document', () => {
       const items = getPackContents({ product: 'ast_premium', jurisdiction: 'england' });
-      expect(items.length).toBe(1);
-      expect(items[0].key).toBe('ast_agreement_hmo');
-      expect(items[0].category).toBe('Tenancy agreement');
-      expect(items[0].title.toLowerCase()).toContain('hmo');
+      const agreement = items.find(item => item.key === 'ast_agreement_hmo');
+      expect(agreement).toBeDefined();
+      expect(agreement?.category).toBe('Tenancy agreement');
+      expect(agreement?.title.toLowerCase()).toContain('premium');
+      expect(items.find(item => item.key === 'deposit_protection_certificate')).toBeDefined();
+      expect(items.find(item => item.key === 'tenancy_deposit_information')).toBeDefined();
     });
 
-    it('Wales ast_premium returns 1 HMO document: soc_agreement_hmo', () => {
+    it('Wales ast_premium includes soc_agreement_hmo as the primary document', () => {
       const items = getPackContents({ product: 'ast_premium', jurisdiction: 'wales' });
-      expect(items.length).toBe(1);
-      expect(items[0].key).toBe('soc_agreement_hmo');
-      expect(items[0].category).toBe('Tenancy agreement');
-      expect(items[0].title.toLowerCase()).toContain('hmo');
+      const agreement = items.find(item => item.key === 'soc_agreement_hmo');
+      expect(agreement).toBeDefined();
+      expect(agreement?.category).toBe('Tenancy agreement');
+      expect(agreement?.title.toLowerCase()).toContain('hmo');
     });
 
-    it('Scotland ast_premium returns 1 HMO document: prt_agreement_hmo', () => {
+    it('Scotland ast_premium includes prt_agreement_hmo as the primary document', () => {
       const items = getPackContents({ product: 'ast_premium', jurisdiction: 'scotland' });
-      expect(items.length).toBe(1);
-      expect(items[0].key).toBe('prt_agreement_hmo');
-      expect(items[0].category).toBe('Tenancy agreement');
-      expect(items[0].title.toLowerCase()).toContain('hmo');
+      const agreement = items.find(item => item.key === 'prt_agreement_hmo');
+      expect(agreement).toBeDefined();
+      expect(agreement?.category).toBe('Tenancy agreement');
+      expect(agreement?.title.toLowerCase()).toContain('hmo');
     });
 
-    it('Northern Ireland ast_premium returns 1 HMO document: private_tenancy_agreement_hmo', () => {
+    it('Northern Ireland ast_premium includes private_tenancy_agreement_hmo as the primary document', () => {
       const items = getPackContents({ product: 'ast_premium', jurisdiction: 'northern-ireland' });
-      expect(items.length).toBe(1);
-      expect(items[0].key).toBe('private_tenancy_agreement_hmo');
-      expect(items[0].category).toBe('Tenancy agreement');
-      expect(items[0].title.toLowerCase()).toContain('hmo');
+      const agreement = items.find(item => item.key === 'private_tenancy_agreement_hmo');
+      expect(agreement).toBeDefined();
+      expect(agreement?.category).toBe('Tenancy agreement');
+      expect(agreement?.title.toLowerCase()).toContain('hmo');
     });
   });
 
-  describe('No supporting documents in base product', () => {
+  describe('Supporting documents do not replace the primary agreement', () => {
     const jurisdictions: TenancyJurisdiction[] = ['england', 'wales', 'scotland', 'northern-ireland'];
 
-    it.each(jurisdictions)('%s standard has no guides, checklists, or annexes', (jurisdiction) => {
+    it.each(jurisdictions)('%s standard still includes exactly one main agreement document', (jurisdiction) => {
       const items = getPackContents({ product: 'ast_standard', jurisdiction });
-
-      // Should only have 1 item (the agreement itself)
-      expect(items.length).toBe(1);
-
-      // Should not have any guidance or checklist items
-      const hasSupporting = items.some(
-        (item) =>
-          item.category === 'Guidance' ||
-          item.category === 'Checklists' ||
-          item.key.includes('guide') ||
-          item.key.includes('checklist') ||
-          item.key.includes('schedule')
-      );
-      expect(hasSupporting).toBe(false);
+      const agreementItems = items.filter((item) => item.category === 'Tenancy agreement');
+      expect(agreementItems.length).toBeGreaterThanOrEqual(1);
+      expect(agreementItems.filter((item) => item.key.includes('agreement')).length).toBe(1);
     });
 
-    it.each(jurisdictions)('%s premium has no supporting documents (HMO agreement only)', (jurisdiction) => {
+    it.each(jurisdictions)('%s premium still includes exactly one main HMO agreement document', (jurisdiction) => {
       const items = getPackContents({ product: 'ast_premium', jurisdiction });
-
-      // Should only have 1 item (the HMO agreement itself)
-      expect(items.length).toBe(1);
-
-      // Should not have any guidance or checklist items
-      const hasSupporting = items.some(
-        (item) =>
-          item.category === 'Guidance' ||
-          item.category === 'Checklists'
-      );
-      expect(hasSupporting).toBe(false);
+      const agreementItems = items.filter((item) => item.category === 'Tenancy agreement');
+      expect(agreementItems.length).toBeGreaterThanOrEqual(1);
+      expect(agreementItems.filter((item) => item.key.includes('agreement')).length).toBe(1);
     });
   });
 });
@@ -506,12 +487,11 @@ describe('H. Pack-Contents Alignment', () => {
     }
   });
 
-  it('detects pack-contents returning wrong document count', () => {
+  it('allows supporting documents but detects when the primary agreement document is missing', () => {
     const badPackContents = (args: { product: string; jurisdiction: string }) => {
       if (args.jurisdiction === 'england') {
-        // Return 2 documents instead of 1
         return [
-          { key: 'ast_agreement', title: 'Agreement' },
+          { key: 'inventory_schedule', title: 'Inventory Schedule' },
           { key: 'extra_doc', title: 'Extra Document' },
         ];
       }
@@ -521,10 +501,10 @@ describe('H. Pack-Contents Alignment', () => {
     const result = validatePackContentsAlignment(badPackContents);
 
     expect(result.valid).toBe(false);
-    expect(result.errors.some(e => e.includes('returns 2 documents, expected exactly 1'))).toBe(true);
+    expect(result.errors.some(e => e.includes('missing the primary agreement document'))).toBe(true);
   });
 
-  it('detects pack-contents returning wrong document key', () => {
+  it('detects pack-contents returning the wrong primary document key', () => {
     const badPackContents = (args: { product: string; jurisdiction: string }) => {
       if (args.jurisdiction === 'wales' && args.product === 'ast_standard') {
         return [{ key: 'wrong_key', title: 'Wrong Document' }];
@@ -535,7 +515,7 @@ describe('H. Pack-Contents Alignment', () => {
     const result = validatePackContentsAlignment(badPackContents);
 
     expect(result.valid).toBe(false);
-    expect(result.errors.some(e => e.includes('key mismatch'))).toBe(true);
+    expect(result.errors.some(e => e.includes('missing the primary agreement document'))).toBe(true);
   });
 });
 

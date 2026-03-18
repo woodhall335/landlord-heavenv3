@@ -1,4 +1,4 @@
-{{!--
+﻿{{!--
   Premium England tenancy agreement template with clause markers for verifier parity.
 --}}
 
@@ -7,7 +7,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{#if england_post_reform_regime}}Premium England Residential Tenancy Agreement{{else}}Premium Assured Shorthold Tenancy Agreement{{/if}}</title>
+  <title>Premium England Residential Tenancy Agreement</title>
   <style>
     @page { size: A4; margin: 25mm 20mm 25mm 20mm; }
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -71,8 +71,8 @@
 </head>
 <body>
   <div class="doc-header">
-    <h1>{{#if england_post_reform_regime}}Residential Tenancy Agreement{{else}}Assured Shorthold Tenancy Agreement{{/if}}</h1>
-    <div class="doc-subtitle">{{#if england_post_reform_regime}}England private rented sector tenancy{{else}}Housing Act 1988 (as amended){{/if}}</div>
+    <h1>Residential Tenancy Agreement</h1>
+    <div class="doc-subtitle">England private rented sector tenancy</div>
     <div class="doc-subtitle">England</div>
     <div class="premium-badge">Premium Edition</div>
     <div class="doc-date">Dated: <strong>{{formatUKDate agreement_date}}</strong></div>
@@ -80,14 +80,14 @@
 
   {{#if england_reform_warning}}
   <div class="warning-box">
-    <div class="warning-title">England Tenancy Reform Warning</div>
+    <div class="warning-title">England Tenancy Position</div>
     <p>{{england_reform_warning}}</p>
   </div>
   {{/if}}
 
   <div class="legal-notice">
     <div class="legal-notice-title">About This Agreement</div>
-    <p>{{#if england_post_reform_regime}}This document is drafted for an England residential tenancy governed by the post-reform assured periodic regime and is intended to operate as a professionally drafted periodic tenancy agreement, subject always to the statutory position then in force.{{else}}This document creates an Assured Shorthold Tenancy for residential use in England and is drafted for premium landlord use, including shared occupation and HMO provisions where applicable.{{/if}}</p>
+    <p>This document is drafted for an England residential tenancy governed by the upgraded assured periodic regime, is intended to operate as a professionally drafted Residential Tenancy Agreement, and is not intended to create a new assured shorthold tenancy.</p>
   </div>
 
   <h2>1. Parties</h2>
@@ -128,11 +128,7 @@
     <li><span class="defined-term">"Deposit"</span> means the tenancy deposit of &pound;{{deposit_amount}}.</li>
     <li><span class="defined-term">"Inventory"</span> means any schedule of condition or inventory supplied at check-in.</li>
     <li><span class="defined-term">"Written Notice"</span> means notice in writing sent by hand, post, or email.</li>
-    {{#if england_post_reform_regime}}
     <li><span class="defined-term">"Term"</span> means the periodic tenancy commencing on {{formatUKDate tenancy_start_date}} and continuing until ended in accordance with statute and this Agreement.</li>
-    {{else}}
-    <li><span class="defined-term">"Term"</span> means the {{#if is_fixed_term}}fixed term from {{formatUKDate tenancy_start_date}} to {{formatUKDate tenancy_end_date}}{{else}}periodic tenancy from {{formatUKDate tenancy_start_date}}{{/if}} and any statutory continuation.</li>
-    {{/if}}
   </ul>
   <p>Words importing the singular include the plural. References to statute include statutory modification or replacement. Where there is more than one Tenant, each Tenant is liable for the whole of the Tenant covenants.</p>
 
@@ -140,16 +136,9 @@
   <h2>3. Letting and Term</h2>
   <p class="clause"><span class="clause-num">3.1</span> The Landlord lets the Property to the Tenant for use as a private residence only.</p>
   <p class="clause"><span class="clause-num">3.2</span> The Tenant is granted exclusive occupation of the Property, subject to the Landlord's rights of access contained in this Agreement and any rights affecting communal areas.</p>
-  {{#if england_post_reform_regime}}
-  <p class="clause"><span class="clause-num">3.3</span> The tenancy begins on <strong>{{formatUKDate tenancy_start_date}}</strong> as a periodic assured tenancy under the law in force in England at that date.</p>
+  <p class="clause"><span class="clause-num">3.3</span> The tenancy begins on <strong>{{formatUKDate tenancy_start_date}}</strong> as a periodic assured tenancy under the law in force in England at that date and is not intended to create a new assured shorthold tenancy.</p>
   <p class="clause"><span class="clause-num">3.4</span> The Landlord may only recover possession or terminate the tenancy by following the statutory procedure in force from time to time and obtaining any court order required by law.</p>
-  <p class="clause"><span class="clause-num">3.5</span> The Tenant may end the tenancy by giving not less than one month's written notice, or such longer notice as may be required by law, expiring at the end of a rental period where applicable.</p>
-  {{else}}
-  <p class="clause"><span class="clause-num">3.3</span> {{#if is_fixed_term}}The fixed term begins on <strong>{{formatUKDate tenancy_start_date}}</strong> and ends on <strong>{{formatUKDate tenancy_end_date}}</strong>.{{else}}The tenancy begins on <strong>{{formatUKDate tenancy_start_date}}</strong> as a periodic tenancy.{{/if}}</p>
-  <p class="clause"><span class="clause-num">3.4</span> {{#if is_fixed_term}}At the end of the fixed term the tenancy may continue as a statutory periodic tenancy unless lawfully ended.{{else}}The tenancy continues until lawfully ended.{{/if}}</p>
-  <p class="clause"><span class="clause-num">3.5</span> The Landlord may seek possession only by following the statutory routes available under the Housing Act 1988, including Section 8 and, where legally available, Section 21.</p>
-  <p class="clause"><span class="clause-num">3.6</span> The Tenant may end the tenancy by giving at least one month's written notice expiring on a rent day, unless statute permits otherwise.</p>
-  {{/if}}
+  <p class="clause"><span class="clause-num">3.5</span> The Tenant may end the tenancy by giving not less than two months' written notice, or any shorter agreed notice period stated in this Agreement where that is lawful, expiring at the end of a rental period where applicable.</p>
 
   <h2>4. Rent</h2>
   <p class="clause"><span class="clause-num">4.1</span> The Tenant shall pay the Rent of <strong>&pound;{{rent_amount}}</strong> per {{rent_period}} in advance on the <strong>{{rent_due_day}}</strong> of each {{rent_period}}.</p>
@@ -190,7 +179,7 @@
   <p class="clause"><span class="clause-num">7.1</span> Permit the Tenant quiet enjoyment of the Property without unlawful interruption.</p>
   <p class="clause"><span class="clause-num">7.2</span> Keep in repair the structure and exterior and the installations for water, gas, electricity, sanitation, space heating, and hot water, in accordance with section 11 of the Landlord and Tenant Act 1985 and any other applicable duty.</p>
   <p class="clause"><span class="clause-num">7.3</span> Comply with duties relating to gas safety, electrical safety, smoke alarms, carbon monoxide alarms, and deposit protection.</p>
-  <p class="clause"><span class="clause-num">7.4</span> Provide the Tenant with the information and documents required by law for the tenancy regime applying at the start date, including the current How to Rent guide where legally relevant, the EPC, Gas Safety Certificate, EICR where required, and deposit prescribed information.</p>
+  <p class="clause"><span class="clause-num">7.4</span> Provide the Tenant with the information and documents required by law for the tenancy regime applying at the start date, including the tenant notice period, rent increase route, landlord possession process, pets position, bills handling, the current How to Rent guide where legally relevant, the EPC, Gas Safety Certificate, EICR where required, and deposit prescribed information.</p>
   <p class="clause"><span class="clause-num">7.5</span> Carry out Right to Rent checks under the Immigration Act 2014 where required. Nothing in this Agreement makes the Tenant responsible for the Landlord's statutory compliance.</p>
 
   {{#if multiple_tenants}}
@@ -367,7 +356,7 @@
       <div class="schedule-title">Statutory Information and Contacts</div>
     </div>
     <table class="data-table">
-      <tr><td class="label">How to Rent Guide</td><td class="value">{{#if england_post_reform_regime}}Provide any England statutory tenant information required by law at the tenancy start date, including the current How to Rent guide if legally applicable.{{else}}Current version supplied {{#if how_to_rent_provision_date}}on {{formatUKDate how_to_rent_provision_date}}{{else}}TO BE COMPLETED BEFORE SIGNING{{/if}}.{{/if}}</td></tr>
+      <tr><td class="label">How to Rent Guide</td><td class="value">Provide any England statutory tenant information required by law at the tenancy start date, including the current How to Rent guide if legally applicable.</td></tr>
       <tr><td class="label">Right to Rent</td><td class="value">{{#if right_to_rent_check_date}}Checks completed on {{formatUKDate right_to_rent_check_date}}.{{else}}Checks to be completed before occupation where required under the Immigration Act 2014.{{/if}}</td></tr>
       <tr><td class="label">Repairs Reporting</td><td class="value">{{#if repairs_reporting_method}}{{repairs_reporting_method}}{{else}}Report repairs promptly to the Landlord or Agent in writing.{{/if}}</td></tr>
       <tr><td class="label">Emergency Contact</td><td class="value">{{#if emergency_contact}}{{emergency_contact}}{{else}}{{#if agent_name}}{{agent_phone}}{{else}}{{landlord_phone}}{{/if}}{{/if}}</td></tr>
@@ -376,9 +365,10 @@
   </section>
 
   <div class="footer-info">
-    <p><strong>{{#if england_post_reform_regime}}Premium England Residential Tenancy Agreement{{else}}Premium Assured Shorthold Tenancy Agreement{{/if}}</strong></p>
+    <p><strong>Premium England Residential Tenancy Agreement</strong></p>
     <p>Generated: {{formatUKDate current_date}} | Reference: {{#if case_id}}{{case_id}}{{else}}{{document_id}}{{/if}}</p>
-    <p>England residential landlord document drafted for professional use. The statutory regime applicable at the tenancy start date prevails over inconsistent contractual wording.</p>
+    <p>England residential landlord document drafted for professional use and updated for the Renters' Rights Act 2025 workflow. The statutory regime applicable at the tenancy start date prevails over inconsistent contractual wording.</p>
   </div>
 </body>
 </html>
+

@@ -61,12 +61,12 @@ export const PRODUCT_METADATA: Record<string, { name: string; type: string; cate
     category: 'money_claim',
   },
   [PRICE_IDS.STANDARD_AST]: {
-    name: 'Standard AST',
+    name: 'Standard Residential Tenancy Agreement',
     type: 'one_time',
     category: 'tenancy_agreement',
   },
   [PRICE_IDS.PREMIUM_AST]: {
-    name: 'Premium AST',
+    name: 'Premium Residential Tenancy Agreement',
     type: 'one_time',
     category: 'tenancy_agreement',
   },

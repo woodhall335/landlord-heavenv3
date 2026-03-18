@@ -245,6 +245,14 @@ export function mapWizardToASTData(
 
   // Convert flat WizardFacts to nested CaseFacts domain model
   const caseFacts = wizardFactsToCaseFacts(wizardFacts);
+  const resolvedJurisdiction =
+    options?.canonicalJurisdiction ||
+    caseFacts.meta.jurisdiction ||
+    caseFacts.property.country ||
+    getValueAtPath(wizardFacts, 'property_country') ||
+    getValueAtPath(wizardFacts, '__meta.jurisdiction') ||
+    undefined;
+  const englandUpgradeNow = resolvedJurisdiction === 'england';
 
   // Extract tenants (hybrid approach for fields not yet in CaseFacts)
   const tenants = normalizeTenants(caseFacts, wizardFacts);
@@ -316,9 +324,9 @@ export function mapWizardToASTData(
 
     // Tenancy - use CaseFacts where available
     tenancy_start_date: caseFacts.tenancy.start_date || '',
-    is_fixed_term: caseFacts.tenancy.fixed_term ?? false,
-    tenancy_end_date: caseFacts.tenancy.end_date ?? undefined,
-    term_length: getValueAtPath(wizardFacts, 'term_length'),
+    is_fixed_term: englandUpgradeNow ? false : (caseFacts.tenancy.fixed_term ?? false),
+    tenancy_end_date: englandUpgradeNow ? undefined : (caseFacts.tenancy.end_date ?? undefined),
+    term_length: englandUpgradeNow ? undefined : getValueAtPath(wizardFacts, 'term_length'),
 
     // Rent - use CaseFacts
     rent_amount: caseFacts.tenancy.rent_amount ?? 0,
@@ -417,14 +425,14 @@ export function mapWizardToASTData(
     emergency_contact: getValueAtPath(wizardFacts, 'emergency_contact'),
 
     // Clauses
-    break_clause: coerceBoolean(getValueAtPath(wizardFacts, 'break_clause')),
-    break_clause_months: getValueAtPath(wizardFacts, 'break_clause_months'),
-    break_clause_notice_period: getValueAtPath(wizardFacts, 'break_clause_notice_period'),
+    break_clause: englandUpgradeNow ? false : coerceBoolean(getValueAtPath(wizardFacts, 'break_clause')),
+    break_clause_months: englandUpgradeNow ? undefined : getValueAtPath(wizardFacts, 'break_clause_months'),
+    break_clause_notice_period: englandUpgradeNow ? undefined : getValueAtPath(wizardFacts, 'break_clause_notice_period'),
     subletting_allowed: getValueAtPath(wizardFacts, 'subletting_allowed'),
     rent_increase_clause: coerceBoolean(getValueAtPath(wizardFacts, 'rent_increase_clause')),
     rent_increase_method: getValueAtPath(wizardFacts, 'rent_increase_method'),
     rent_increase_frequency: getValueAtPath(wizardFacts, 'rent_increase_frequency'),
-    tenant_notice_period: getValueAtPath(wizardFacts, 'tenant_notice_period'),
+    tenant_notice_period: getValueAtPath(wizardFacts, 'tenant_notice_period') || (englandUpgradeNow ? '2 months' : undefined),
     additional_terms: getValueAtPath(wizardFacts, 'additional_terms'),
 
     // Insurance
@@ -525,15 +533,10 @@ export function mapWizardToASTData(
     // Jurisdiction - CRITICAL: Use canonical jurisdiction if provided (from fulfillment resolver)
     // This ensures Scotland cases ALWAYS get Scotland templates, never Wales/England.
     // Priority: canonicalJurisdiction > __meta.jurisdiction > property.country > property_country
-    jurisdiction: options?.canonicalJurisdiction ||
-                  caseFacts.meta.jurisdiction ||
-                  caseFacts.property.country ||
-                  getValueAtPath(wizardFacts, 'property_country') ||
-                  getValueAtPath(wizardFacts, '__meta.jurisdiction') ||
-                  undefined,
+    jurisdiction: resolvedJurisdiction,
     // Legacy boolean flags for template compatibility - derive from resolved jurisdiction
-    jurisdiction_england: (options?.canonicalJurisdiction || caseFacts.meta.jurisdiction || caseFacts.property.country || getValueAtPath(wizardFacts, 'property_country')) === 'england',
-    jurisdiction_wales: (options?.canonicalJurisdiction || caseFacts.meta.jurisdiction || caseFacts.property.country || getValueAtPath(wizardFacts, 'property_country')) === 'wales',
+    jurisdiction_england: resolvedJurisdiction === 'england',
+    jurisdiction_wales: resolvedJurisdiction === 'wales',
 
     // Meta
     joint_and_several_liability: jointLiability ?? tenants.length > 1,

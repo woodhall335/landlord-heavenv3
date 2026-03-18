@@ -197,8 +197,8 @@
     "product_tier": {
       "type": "enum",
       "values": [
-        "Standard AST",
-        "Premium AST"
+        "Standard Residential Tenancy Agreement",
+        "Premium Residential Tenancy Agreement (HMO / student-ready)"
       ],
       "required": true
     },
@@ -257,7 +257,7 @@
     },
     "is_fixed_term": {
       "type": "boolean",
-      "required": true
+      "required": false
     },
     "tenancy_end_date": {
       "type": "date",
@@ -345,7 +345,7 @@
     },
     "guarantor_name": {
       "type": "string",
-      "required_if": "product_tier == 'Premium AST' && guarantor_required == true"
+      "required_if": "product_tier == 'Premium Residential Tenancy Agreement (HMO / student-ready)' && guarantor_required == true"
     },
     "guarantor_required": {
       "type": "boolean",
@@ -353,7 +353,7 @@
     },
     "is_hmo": {
       "type": "boolean",
-      "required_if": "product_tier == 'Premium AST'"
+      "required_if": "product_tier == 'Premium Residential Tenancy Agreement (HMO / student-ready)'"
     },
     "number_of_sharers": {
       "type": "number",

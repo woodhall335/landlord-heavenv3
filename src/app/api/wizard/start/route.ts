@@ -116,13 +116,13 @@ const resolveProductTier = (
       if (jurisdiction === 'scotland')
         return 'Standard Scottish Private Residential Tenancy';
       if (jurisdiction === 'northern-ireland') return 'Standard NI Private Tenancy';
-      return 'Standard AST';
+      return 'Standard Residential Tenancy Agreement';
 
     case 'ast_premium':
       if (jurisdiction === 'scotland')
         return 'Premium Scottish Private Residential Tenancy';
       if (jurisdiction === 'northern-ireland') return 'Premium NI Private Tenancy';
-      return 'Premium AST';
+      return 'Premium Residential Tenancy Agreement (HMO / student-ready)';
     case 'guarantor_agreement':
     case 'residential_sublet_agreement':
     case 'lease_amendment':

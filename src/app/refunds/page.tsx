@@ -1,4 +1,4 @@
-import { Container } from "@/components/ui";
+﻿import { Container } from "@/components/ui";
 import { generateMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { FileText, XCircle, CheckCircle2, Mail } from "lucide-react";
@@ -64,7 +64,7 @@ export default function RefundsPage() {
             <ul className="list-disc pl-6 mb-4 text-gray-700 space-y-2">
               <li>
                 <strong>One-Time Products:</strong> Notice Only, Complete Eviction Pack, Money Claim Pack, Standard
-                AST, Premium AST - all documents are instantly delivered
+                Residential Tenancy Agreement, Premium Residential Tenancy Agreement - all documents are instantly delivered
               </li>
               <li>
                 <strong>HMO Pro Subscriptions:</strong> You can cancel anytime, but we don't refund partial months (see
@@ -129,12 +129,12 @@ export default function RefundsPage() {
                   <div>
                     <p className="font-semibold text-charcoal mb-1">Include These Details</p>
                     <p className="text-sm text-gray-700">
-                      • Your email address (registered account)
+                      â€¢ Your email address (registered account)
                       <br />
-                      • Order number or transaction ID
+                      â€¢ Order number or transaction ID
                       <br />
-                      • Description of the issue
-                      <br />• Screenshots if applicable
+                      â€¢ Description of the issue
+                      <br />â€¢ Screenshots if applicable
                     </p>
                   </div>
                 </div>
@@ -250,7 +250,7 @@ export default function RefundsPage() {
               Please contact us before filing a chargeback. Chargebacks:
             </p>
             <ul className="list-disc pl-6 mb-4 text-gray-700 space-y-2">
-              <li>Cost us significant fees (£15-30 per chargeback)</li>
+              <li>Cost us significant fees (Â£15-30 per chargeback)</li>
               <li>Take longer to process than directly contacting us</li>
               <li>May result in account suspension pending investigation</li>
               <li>Are only appropriate for unauthorized or fraudulent transactions</li>
@@ -306,3 +306,4 @@ export default function RefundsPage() {
     </div>
   );
 }
+

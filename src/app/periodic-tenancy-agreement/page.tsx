@@ -7,17 +7,17 @@ import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/periodic-tenancy-agreement');
-const wizardHref = '/wizard?product=tenancy_agreement&topic=tenancy&src=seo_periodic_tenancy_agreement';
+const wizardHref = '/wizard?product=ast_standard&jurisdiction=england&topic=tenancy&src=product_page';
 
 export const metadata: Metadata = {
-  title: 'Periodic Tenancy Agreement | Compliance-Checked Rolling Contract',
+  title: 'Periodic Tenancy Agreement | England Residential Tenancy Agreement',
   description:
-    'Create a legally validated, solicitor-grade, compliance-checked and court-ready periodic tenancy agreement for rolling tenancies.',
+    'Create an England Residential Tenancy Agreement for rolling and periodic letting arrangements with Renters’ Rights compliant positioning.',
   alternates: { canonical: canonicalUrl },
   openGraph: {
-    title: 'Periodic Tenancy Agreement | Compliance-Checked Rolling Contract',
+    title: 'Periodic Tenancy Agreement | England Residential Tenancy Agreement',
     description:
-      'Create a legally validated, solicitor-grade, compliance-checked and court-ready periodic tenancy agreement for rolling tenancies.',
+      'Create an England Residential Tenancy Agreement for rolling and periodic letting arrangements with Renters’ Rights compliant positioning.',
     url: canonicalUrl,
     type: 'website',
   },
@@ -35,8 +35,8 @@ export default function PeriodicTenancyPage() {
           ])}
         />
         <UniversalHero
-          title="Court-Ready Periodic Tenancy Agreement"
-          subtitle="Generate a legally validated, solicitor-grade and compliance-checked rolling tenancy agreement with the right clauses."
+          title="Periodic Residential Tenancy Agreement"
+          subtitle="Start the main England tenancy wizard for a Renters’ Rights compliant Residential Tenancy Agreement suited to rolling and periodic tenancy setups."
           primaryCta={{ label: 'Start Tenancy Wizard', href: wizardHref }}
           secondaryCta={{ label: 'Standard tenancy agreement', href: '/tenancy-agreement' }}
           showTrustPositioningBar

@@ -5,7 +5,7 @@
  * section-based flow with tab navigation (matching MoneyClaimSectionFlow design).
  *
  * Jurisdiction-aware terminology:
- * - England: Assured Shorthold Tenancy (AST) - Housing Act 1988
+ * - England: Residential Tenancy Agreement - upgraded assured periodic England flow
  * - Wales: Occupation Contract - Renting Homes (Wales) Act 2016
  * - Scotland: Private Residential Tenancy (PRT) - Private Housing (Tenancies) Act 2016
  * - Northern Ireland: Private Tenancy - Private Tenancies Act (Northern Ireland) 2022
@@ -81,7 +81,7 @@ interface TenancySectionFlowProps {
 /**
  * Jurisdiction-specific terminology for tenancy agreements
  *
- * - England: Assured Shorthold Tenancy (AST) - Housing Act 1988
+ * - England: Residential Tenancy Agreement - upgraded assured periodic England flow
  * - Wales: Occupation Contract - Renting Homes (Wales) Act 2016
  * - Scotland: Private Residential Tenancy (PRT) - Private Housing (Tenancies) Act 2016
  * - Northern Ireland: Private Tenancy - Private Tenancies Act (Northern Ireland) 2022
@@ -151,17 +151,17 @@ const getJurisdictionTerminology = (jurisdiction: Jurisdiction) => {
     case 'england':
     default:
       return {
-        agreementType: 'Assured Shorthold Tenancy',
-        standardTier: 'Standard AST',
-        premiumTier: 'Premium AST',
-        suitabilityTitle: 'AST Suitability Check',
-        suitabilityDescription: 'Basic checks to ensure this is a valid AST.',
-        standardDescription: 'Simple, straightforward tenancy agreement for most lets.',
-        premiumDescription: 'Advanced features: guarantor clauses, HMO support, rent reviews, detailed schedules.',
-        landlordWarning: 'If the landlord lives at the property, this may be a lodger arrangement rather than an AST.',
-        holidayWarning: 'Holiday lets and licence arrangements are not ASTs. Different rules apply.',
-        landlordHelperText: 'If yes, this may not be an AST',
-        holidayHelperText: 'If yes, an AST may not be appropriate',
+        agreementType: 'Residential Tenancy Agreement',
+        standardTier: 'Standard Residential Tenancy Agreement',
+        premiumTier: 'Premium Residential Tenancy Agreement (HMO / student-ready)',
+        suitabilityTitle: 'England tenancy suitability check',
+        suitabilityDescription: 'Basic checks to ensure this is suitable for the upgraded England residential tenancy flow.',
+        standardDescription: 'Renters’ Rights compliant England residential tenancy agreement for standard lets.',
+        premiumDescription: 'Premium England residential tenancy agreement with HMO, student, guarantor, and enhanced terms support.',
+        landlordWarning: 'If the landlord lives at the property, this may be a lodger arrangement rather than the main England residential tenancy flow.',
+        holidayWarning: 'Holiday lets and licence arrangements are outside the main England residential tenancy flow.',
+        landlordHelperText: 'If yes, this may not be the right England residential tenancy agreement',
+        holidayHelperText: 'If yes, a different agreement may be more appropriate',
         tenantLabel: 'tenant',
       };
   }
@@ -179,7 +179,7 @@ function getTenancyValidationBlockers(facts: Record<string, unknown>, jurisdicti
   const invalidFields = [...validation.invalid_fields];
   if (jurisdiction === 'england' && invalidFields.includes('is_fixed_term')) {
     blockers.push(
-      'England tenancies starting on or after 1 May 2026 should not be set up as a new fixed-term AST. Switch this tenancy to the post-reform periodic structure.'
+      'New England self-serve agreements should be generated as upgraded assured periodic residential tenancies, not fixed-term tenancy agreements.'
     );
   }
 
@@ -202,7 +202,7 @@ interface WizardSection {
   hasBlockers?: (facts: any) => string[];
   // Check if section has warnings
   hasWarnings?: (facts: any) => string[];
-  // Only show for premium AST
+      // Only show for premium England residential product
   premiumOnly?: boolean;
 }
 
@@ -406,7 +406,9 @@ const SECTIONS: WizardSection[] = [
     hasBlockers: (facts) => {
       const blockers: string[] = [];
       if (facts.how_to_rent_guide_provided === false && facts.__meta?.jurisdiction === 'england') {
-        blockers.push("'How to Rent' guide must be provided for valid Section 21 notices");
+        blockers.push(
+          "'How to Rent' guidance should be recorded for England pre-tenancy information compliance",
+        );
       }
       return blockers;
     },
@@ -728,7 +730,7 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
       case 'northern-ireland':
         return 'Northern Ireland Private Tenancy';
       default:
-        return 'England Assured Shorthold Tenancy';
+        return 'England Residential Tenancy Agreement';
     }
   }, [jurisdiction]);
 
@@ -1704,7 +1706,7 @@ const DepositSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction 
               <>
                 <strong>STATUTORY REQUIREMENT:</strong> You MUST serve prescribed information to the tenant
                 within 30 days of receiving the deposit. Failure to comply can result in compensation
-                of 1-3x the deposit amount and inability to serve valid Section 21 notices.
+                of 1-3x the deposit amount and other enforcement or possession risks.
               </>
             )}
           </p>
@@ -1848,7 +1850,7 @@ const ComplianceSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdicti
                 label="Latest 'How to Rent' guide given?"
                 value={facts.how_to_rent_guide_provided}
                 onChange={(v) => onUpdate({ how_to_rent_guide_provided: v })}
-                helperText="Required for valid Section 21 notices in England"
+                helperText="Record this for England pre-tenancy information and compliance tracking"
                 required
               />
             </div>

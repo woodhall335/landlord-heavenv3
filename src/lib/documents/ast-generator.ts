@@ -8,7 +8,7 @@
  * - Northern Ireland: Private Tenancy Agreement (Private Tenancies Act (NI) 2022)
  *
  * PRODUCT TIERS:
- * - Standard: Base product - includes ONLY the tenancy agreement document
+ * - Standard: Residential tenancy agreement pack with supporting compliance documents
  * - Premium: HMO-specific tenancy agreement with multi-occupancy clauses
  *
  * IMPORTANT: Each jurisdiction uses different terminology and legal frameworks.
@@ -80,8 +80,6 @@ export function assertTierHMOConsistency(tier: TenancyTier, isHMO: boolean): voi
 
 export type TenancyJurisdiction = 'england' | 'wales' | 'scotland' | 'northern-ireland';
 
-const ENGLAND_TENANCY_REFORM_CUTOVER = '2026-05-01';
-
 /**
  * Jurisdiction-specific configuration for tenancy agreements
  */
@@ -106,6 +104,8 @@ interface JurisdictionConfig {
     inventoryStandalone: string; // Standalone inventory PDF template
     complianceChecklist: string; // Jurisdiction-specific pre-tenancy checklist
     complianceChecklistStandalone: string; // Standalone checklist PDF template
+    depositProtectionCertificate?: string; // England standalone deposit certificate
+    tenancyDepositInformation?: string; // England standalone prescribed information pack
     keySchedule: string;
     maintenanceGuide: string;
     checkoutProcedure: string;
@@ -128,8 +128,8 @@ const JURISDICTION_CONFIGS: Record<TenancyJurisdiction, JurisdictionConfig> = {
   // Premium tier includes HMO-specific clauses aligned with Housing Act 2004
   england: {
     jurisdiction: 'england',
-    agreementTitle: 'Assured Shorthold Tenancy Agreement',
-    agreementDescription: 'Solicitor-grade tenancy agreement with embedded schedules. Compliant with Housing Act 1988.',
+    agreementTitle: 'Residential Tenancy Agreement',
+    agreementDescription: 'Solicitor-grade residential tenancy agreement with embedded schedules. Updated for the Renters\' Rights Act 2025 England regime.',
     agreementDocumentType: 'ast_agreement',
     modelClausesTitle: 'Government Model Clauses',
     modelClausesDescription: 'Recommended clauses from official government guidance',
@@ -147,6 +147,8 @@ const JURISDICTION_CONFIGS: Record<TenancyJurisdiction, JurisdictionConfig> = {
       inventoryStandalone: '_shared/standalone/inventory_standalone.hbs', // Standalone inventory PDF
       complianceChecklist: '_shared/compliance/pre_tenancy_checklist_england.hbs',
       complianceChecklistStandalone: '_shared/standalone/checklist_standalone.hbs', // Standalone checklist PDF
+      depositProtectionCertificate: 'uk/england/templates/deposit_protection_certificate.hbs',
+      tenancyDepositInformation: 'uk/england/templates/tenancy_deposit_information.hbs',
       keySchedule: 'uk/england/templates/premium/key_schedule.hbs',
       maintenanceGuide: 'uk/england/templates/premium/property_maintenance_guide.hbs',
       checkoutProcedure: 'uk/england/templates/premium/checkout_procedure.hbs',
@@ -302,12 +304,11 @@ function buildEnglandTenancyReformWarning(
 
   const startDate = (tenancyStartDate || '').trim();
   if (!/^\d{4}-\d{2}-\d{2}$/.test(startDate)) return undefined;
-  if (startDate < ENGLAND_TENANCY_REFORM_CUTOVER) return undefined;
 
   return (
-    'Warning: from 1 May 2026 the Renters\' Rights Act 2025 reforms move most new and existing ' +
-    'private rented sector assured tenancies in England into the assured periodic regime. This AST ' +
-    'format should be used only where it remains legally appropriate for the tenancy facts and start date.'
+    'This England agreement is drafted for the upgraded assured periodic private rented sector model ' +
+    'and is positioned as a Renters\' Rights compliant Residential Tenancy Agreement. It is intended for ' +
+    'new England self-serve agreements generated through the updated Landlord Heaven flow.'
   );
 }
 
@@ -315,12 +316,7 @@ function isEnglandPostReformRegime(
   jurisdiction: TenancyJurisdiction,
   tenancyStartDate?: string
 ): boolean {
-  if (jurisdiction !== 'england') return false;
-
-  const startDate = (tenancyStartDate || '').trim();
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(startDate)) return false;
-
-  return startDate >= ENGLAND_TENANCY_REFORM_CUTOVER;
+  return jurisdiction === 'england';
 }
 
 function getRenderedAgreementTitle(
@@ -333,6 +329,152 @@ function getRenderedAgreementTitle(
   }
 
   return config.agreementTitle;
+}
+
+type EnglandDepositSchemeName = 'DPS' | 'MyDeposits' | 'TDS';
+
+interface EnglandDepositSchemeDetails {
+  schemeName: EnglandDepositSchemeName;
+  schemeWebsite: string;
+}
+
+function getEnglandDepositSchemeDetails(
+  schemeName?: string
+): EnglandDepositSchemeDetails {
+  const normalized = (schemeName || '').toLowerCase();
+
+  if (normalized.includes('mydeposits')) {
+    return {
+      schemeName: 'MyDeposits',
+      schemeWebsite: 'https://www.mydeposits.co.uk/',
+    };
+  }
+
+  if (normalized.includes('tds')) {
+    return {
+      schemeName: 'TDS',
+      schemeWebsite: 'https://www.tenancydepositscheme.com/',
+    };
+  }
+
+  return {
+    schemeName: 'DPS',
+    schemeWebsite: 'https://www.depositprotection.com/',
+  };
+}
+
+function buildEnglandDepositSupportData(
+  data: ASTData,
+  enrichedData: Record<string, any>,
+  caseId: string
+): Record<string, any> {
+  const schemeDetails = getEnglandDepositSchemeDetails(data.deposit_scheme_name || data.deposit_scheme);
+  const schemeMode = `${data.deposit_scheme || ''} ${data.deposit_scheme_name || ''}`.toLowerCase();
+  const custodial = schemeMode.includes('custodial');
+  const insured = !custodial;
+  const depositReference = data.deposit_reference_number || 'See scheme confirmation';
+  const protectionDate =
+    data.deposit_protection_date ||
+    data.prescribed_information_date ||
+    data.deposit_paid_date ||
+    data.tenancy_start_date;
+
+  return {
+    ...enrichedData,
+    case_id: caseId,
+    timestamp: Date.now(),
+    agent_manages: Boolean(data.agent_name || data.agent_address || data.agent_email || data.agent_phone),
+    tenants: (data.tenants || []).map((tenant) => ({
+      ...tenant,
+      name: tenant.full_name,
+      address: (tenant as any).address || data.property_address,
+    })),
+    deposit_received_date: data.deposit_paid_date || data.tenancy_start_date || data.agreement_date,
+    scheme_name: schemeDetails.schemeName,
+    protection_date: protectionDate,
+    deposit_reference: depositReference,
+    protection_type: custodial ? 'Custodial' : 'Insured',
+    custodial,
+    insured,
+    deposit_holding_method: custodial
+      ? 'Custodial scheme - the deposit is held by the scheme'
+      : 'Insured scheme - the deposit is held by the landlord or agent and backed by the scheme',
+    scheme_address: 'See the deposit scheme website or membership confirmation for the current registered address.',
+    scheme_phone: 'See scheme website',
+    scheme_email: 'See scheme website',
+    scheme_website: schemeDetails.schemeWebsite,
+    scheme_registration: depositReference,
+    scheme_adr_name: `${schemeDetails.schemeName} ADR Service`,
+    scheme_adr_phone: 'See scheme website',
+    scheme_adr_email: 'See scheme website',
+    scheme_adr_website: schemeDetails.schemeWebsite,
+    scheme_dispute_phone: 'See scheme website',
+    scheme_dispute_email: 'See scheme website',
+    scheme_dispute_website: schemeDetails.schemeWebsite,
+    dispute_deadline: 'the deadline set by your deposit scheme',
+  };
+}
+
+async function appendEnglandDepositSupportDocuments(
+  documents: ASTPackDocument[],
+  config: JurisdictionConfig,
+  data: ASTData,
+  enrichedData: Record<string, any>,
+  caseId: string,
+  documentId: string
+): Promise<void> {
+  if (
+    config.jurisdiction !== 'england' ||
+    !config.templatePaths.depositProtectionCertificate ||
+    !config.templatePaths.tenancyDepositInformation
+  ) {
+    return;
+  }
+
+  const { generateDocument } = await import('./generator');
+  const depositData = buildEnglandDepositSupportData(data, enrichedData, caseId || documentId);
+
+  try {
+    const depositCertificateDoc = await generateDocument({
+      templatePath: config.templatePaths.depositProtectionCertificate,
+      data: depositData,
+      isPreview: false,
+      outputFormat: 'both',
+    });
+    documents.push({
+      title: 'Deposit Protection Certificate',
+      description: 'Standalone certificate confirming the tenancy deposit protection scheme details.',
+      category: 'guidance',
+      document_type: 'deposit_protection_certificate',
+      html: depositCertificateDoc.html,
+      pdf: depositCertificateDoc.pdf,
+      file_name: 'deposit_protection_certificate.pdf',
+    });
+  } catch (err) {
+    console.error('Failed to generate deposit protection certificate:', err);
+    console.warn('[AST Generator] Deposit protection certificate generation failed but continuing without it');
+  }
+
+  try {
+    const prescribedInformationDoc = await generateDocument({
+      templatePath: config.templatePaths.tenancyDepositInformation,
+      data: depositData,
+      isPreview: false,
+      outputFormat: 'both',
+    });
+    documents.push({
+      title: 'Prescribed Information Pack',
+      description: 'Standalone tenancy deposit prescribed information pack for England compliance.',
+      category: 'guidance',
+      document_type: 'tenancy_deposit_information',
+      html: prescribedInformationDoc.html,
+      pdf: prescribedInformationDoc.pdf,
+      file_name: 'prescribed_information_pack.pdf',
+    });
+  } catch (err) {
+    console.error('Failed to generate prescribed information pack:', err);
+    console.warn('[AST Generator] Prescribed information pack generation failed but continuing without it');
+  }
 }
 
 // ============================================================================
@@ -707,7 +849,7 @@ export function validateASTData(data: ASTData): string[] {
   if (!data.property_address) errors.push('property_address is required');
   if (!data.tenancy_start_date) errors.push('tenancy_start_date is required');
 
-  if (data.is_fixed_term) {
+  if (data.is_fixed_term && detectJurisdiction(data) !== 'england') {
     if (!data.tenancy_end_date) errors.push('tenancy_end_date required for fixed term');
     if (!data.term_length) errors.push('term_length required for fixed term');
   }
@@ -773,7 +915,16 @@ export async function generateStandardAST(
   }
 
   if (!data.tenant_notice_period) {
-    data.tenant_notice_period = '1 month';
+    data.tenant_notice_period = jurisdiction === 'england' ? '2 months' : '1 month';
+  }
+
+  if (jurisdiction === 'england') {
+    data.is_fixed_term = false;
+    data.tenancy_end_date = undefined;
+    data.term_length = undefined;
+    data.break_clause = false;
+    data.break_clause_months = undefined;
+    data.break_clause_notice_period = undefined;
   }
 
   const generationTimestamp = new Date().toISOString();
@@ -869,7 +1020,16 @@ export async function generatePremiumAST(
   }
 
   if (!data.tenant_notice_period) {
-    data.tenant_notice_period = '1 month';
+    data.tenant_notice_period = jurisdiction === 'england' ? '2 months' : '1 month';
+  }
+
+  if (jurisdiction === 'england') {
+    data.is_fixed_term = false;
+    data.tenancy_end_date = undefined;
+    data.term_length = undefined;
+    data.break_clause = false;
+    data.break_clause_months = undefined;
+    data.break_clause_notice_period = undefined;
   }
 
   const generationTimestamp = new Date().toISOString();
@@ -1073,8 +1233,8 @@ export interface ASTDocumentPack {
  * Generate Standard tenancy agreement as separate documents (unbundled)
  * Jurisdiction-aware: uses correct templates and document_type for each UK jurisdiction
  *
- * IMPORTANT: Base product includes ONLY the tenancy agreement document.
- * No guides, no notices, no annexes, no explanatory PDFs.
+ * IMPORTANT: Standard pack includes the main agreement plus inventory,
+ * compliance checklist, and England deposit-support documents where applicable.
  */
 export async function generateStandardASTDocuments(
   data: ASTData,
@@ -1093,7 +1253,15 @@ export async function generateStandardASTDocuments(
 
   // Set defaults
   if (!data.rent_period) data.rent_period = 'month';
-  if (!data.tenant_notice_period) data.tenant_notice_period = '1 month';
+  if (!data.tenant_notice_period) data.tenant_notice_period = jurisdiction === 'england' ? '2 months' : '1 month';
+  if (jurisdiction === 'england') {
+    data.is_fixed_term = false;
+    data.tenancy_end_date = undefined;
+    data.term_length = undefined;
+    data.break_clause = false;
+    data.break_clause_months = undefined;
+    data.break_clause_notice_period = undefined;
+  }
 
   const generationTimestamp = new Date().toISOString();
   const documentId = `${jurisdiction.toUpperCase()}-STD-${Date.now()}`;
@@ -1199,6 +1367,15 @@ export async function generateStandardASTDocuments(
     console.warn(`[AST Generator] Checklist generation failed but continuing without it`);
   }
 
+  await appendEnglandDepositSupportDocuments(
+    documents,
+    config,
+    data,
+    enrichedData,
+    caseId || documentId,
+    documentId
+  );
+
   // DOCUMENT 4 (Scotland only): Easy Read Notes
   // Required under PRT as part of prescribed information
   if (config.templatePaths.easyReadNotes && config.easyReadNotesDocumentType) {
@@ -1243,7 +1420,8 @@ export async function generateStandardASTDocuments(
  * Generate Premium HMO tenancy agreement as separate documents (unbundled)
  * Jurisdiction-aware: uses correct templates for each UK jurisdiction
  *
- * PREMIUM PRODUCT includes 3 documents:
+ * PREMIUM PRODUCT includes the HMO agreement, inventory, checklist,
+ * and England deposit-support documents where applicable:
  * 1. HMO-specific tenancy agreement (multi-occupancy clauses)
  * 2. Inventory & Schedule of Condition (wizard-completed if data available, blank otherwise)
  * 3. Pre-Tenancy Compliance Checklist (jurisdiction-specific)
@@ -1268,7 +1446,15 @@ export async function generatePremiumASTDocuments(
 
   // Set defaults
   if (!data.rent_period) data.rent_period = 'month';
-  if (!data.tenant_notice_period) data.tenant_notice_period = '1 month';
+  if (!data.tenant_notice_period) data.tenant_notice_period = jurisdiction === 'england' ? '2 months' : '1 month';
+  if (jurisdiction === 'england') {
+    data.is_fixed_term = false;
+    data.tenancy_end_date = undefined;
+    data.term_length = undefined;
+    data.break_clause = false;
+    data.break_clause_months = undefined;
+    data.break_clause_notice_period = undefined;
+  }
 
   const generationTimestamp = new Date().toISOString();
   const documentId = `${jurisdiction.toUpperCase()}-HMO-${Date.now()}`;
@@ -1388,6 +1574,15 @@ export async function generatePremiumASTDocuments(
     // Don't throw - checklist should never block generation
     console.warn(`[AST Generator] Checklist generation failed but continuing without it`);
   }
+
+  await appendEnglandDepositSupportDocuments(
+    documents,
+    config,
+    data,
+    enrichedData,
+    caseId || documentId,
+    documentId
+  );
 
   // DOCUMENT 4 (Scotland only): Easy Read Notes
   // Required under PRT as part of prescribed information

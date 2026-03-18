@@ -3100,14 +3100,14 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
       ? 'Northern Ireland Private Tenancy'
       : jurisdiction === 'wales'
       ? 'Occupation Contract (Wales)'
-      : 'Assured Shorthold Tenancy (AST)');
+      : 'England Residential Tenancy Agreement');
 
   const productLabel = (() => {
     switch (originalProduct) {
       case 'ast_standard':
-        return 'Standard AST';
+        return 'Standard Residential Tenancy Agreement';
       case 'ast_premium':
-        return 'Premium AST';
+        return 'Premium Residential Tenancy Agreement';
       default:
         return 'Tenancy agreement';
     }

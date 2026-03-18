@@ -8,17 +8,17 @@ import { getCanonicalUrl } from '@/lib/seo';
 import { residentialDocumentLinks } from '@/lib/seo/internal-links';
 
 const canonicalUrl = getCanonicalUrl('/tenancy-agreements');
-const wizardHref = '/wizard?product=tenancy_agreement&src=seo_tenancy_agreements&topic=tenancy';
+const wizardHref = '/wizard?product=ast_standard&src=product_page&topic=tenancy';
 
 export const metadata: Metadata = {
-  title: 'Tenancy Agreements Hub | Solicitor-Grade Landlord Documents',
+  title: 'Tenancy Agreements Hub | Renters Rights Compliant Residential Agreements',
   description:
-    'Explore tenancy agreement options and start a legally validated, solicitor-grade, compliance-checked and court-ready agreement wizard.',
+    'Explore tenancy agreement options and start the main Residential Tenancy Agreement wizard with Renters’ Rights compliant England positioning and jurisdiction-aware UK variants.',
   alternates: { canonical: canonicalUrl },
   openGraph: {
-    title: 'Tenancy Agreements Hub | Solicitor-Grade Landlord Documents',
+    title: 'Tenancy Agreements Hub | Renters Rights Compliant Residential Agreements',
     description:
-      'Explore tenancy agreement options and start a legally validated, solicitor-grade, compliance-checked and court-ready agreement wizard.',
+      'Explore tenancy agreement options and start the main Residential Tenancy Agreement wizard with Renters’ Rights compliant England positioning and jurisdiction-aware UK variants.',
     url: canonicalUrl,
     type: 'website',
   },
@@ -38,7 +38,7 @@ export default function TenancyAgreementsHubPage() {
 
         <UniversalHero
           title="Tenancy Agreements for UK Landlords"
-          subtitle="Choose your agreement route with legally validated, solicitor-grade, compliance-checked and court-ready drafting support."
+          subtitle="Choose the main tenancy wizard flow with Renters’ Rights compliant England Residential Tenancy Agreement wording and jurisdiction-specific UK variants."
           primaryCta={{ label: 'Start Tenancy Wizard', href: wizardHref }}
           showTrustPositioningBar
           hideMedia

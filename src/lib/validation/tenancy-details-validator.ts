@@ -1,7 +1,5 @@
 import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 
-const ENGLAND_TENANCY_REFORM_CUTOVER = '2026-05-01';
-
 export const REQUIRED_TENANCY_FIELDS = [
   'landlord_full_name',
   'landlord_address_line1',
@@ -122,10 +120,7 @@ export function validateTenancyRequiredFacts(
       ? wizardFacts.is_fixed_term
       : caseFacts.tenancy.fixed_term;
 
-  const englandPostReformStart =
-    jurisdiction === 'england' &&
-    isIsoDate(startDate) &&
-    startDate >= ENGLAND_TENANCY_REFORM_CUTOVER;
+  const englandPostReformStart = jurisdiction === 'england';
 
   if (englandPostReformStart && isFixedTerm === true) {
     invalid.add('is_fixed_term');
