@@ -186,7 +186,7 @@ export function UniversalHero({
               >
                 <RiCheckLine className="h-5 w-5" aria-hidden="true" />
                 <span>Rated</span>
-                <span className="text-[#7c3aed]" aria-hidden="true">
+                <span className="text-[#facc15]" aria-hidden="true">
                   {REVIEW_STARS}
                 </span>
                 <span>
@@ -204,7 +204,7 @@ export function UniversalHero({
               >
                 <RiShieldCheckFill className="h-5 w-5 text-[#7c3aed]" aria-hidden="true" />
                 {showTrustDescriptor ? <span>{trustText}</span> : null}
-                <span className="text-[#7c3aed]" aria-hidden="true">
+                <span className="text-[#facc15]" aria-hidden="true">
                   {REVIEW_STARS}
                 </span>
                 <span className="font-medium text-[#2b253d]">
