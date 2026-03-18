@@ -4,6 +4,8 @@
 > **Last Updated:** January 2026
 > **Purpose:** Generate high-quality, conversion-focused SEO landing pages for landlord eviction and rent recovery journeys.
 
+> **Note:** For broader public-page rewrites across product pages, tenancy pages, guides, and utility pages, use `docs/seo/sitewide-human-writer-seo-prompt-package.md`.
+
 ---
 
 You are Claude Code working in the Landlord Heaven codebase.
