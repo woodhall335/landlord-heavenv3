@@ -111,12 +111,14 @@ export function UniversalHero({
   const resolvedMediaAlt =
     mediaAlt ?? mascotAlt ?? 'Laptop showing legal workflow dashboard';
   const isDecorativeMedia = mascotDecorativeOnDesktop || mascotDecorativeOnMobile;
-  const shouldShowReviewPill = showReviewPill ?? Boolean(trustText);
+  const shouldShowReviewPill = showReviewPill ?? true;
   const shouldShowUsageCounter = showUsageCounter ?? Boolean(trustText);
+  const resolvedTrustText = trustText ?? 'Updated for current housing law';
   const trustTextLooksLikeReview = Boolean(
-    trustText && /(\*{3,}|\bstars?\b|\breviews?\b|\/5\b|\brated\b)/i.test(trustText)
+    resolvedTrustText &&
+      /(\*{3,}|\bstars?\b|\breviews?\b|\/5\b|\brated\b)/i.test(resolvedTrustText)
   );
-  const showTrustDescriptor = Boolean(trustText) && !trustTextLooksLikeReview;
+  const showTrustDescriptor = Boolean(resolvedTrustText) && !trustTextLooksLikeReview;
   const isCenter = align === 'center';
   const shouldRenderMedia = !hideMedia && mediaSrc !== null;
 
@@ -203,7 +205,7 @@ export function UniversalHero({
                 )}
               >
                 <RiShieldCheckFill className="h-5 w-5 text-[#7c3aed]" aria-hidden="true" />
-                {showTrustDescriptor ? <span>{trustText}</span> : null}
+                {showTrustDescriptor ? <span>{resolvedTrustText}</span> : null}
                 <span className="text-[#facc15]" aria-hidden="true">
                   {REVIEW_STARS}
                 </span>

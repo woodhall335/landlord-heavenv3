@@ -198,6 +198,7 @@ export function ResidentialProductLandingPage({
       <HeaderConfig mode="autoOnScroll" />
 
       <UniversalHero
+        trustText="England-only document - Updated for current housing law - Guided setup"
         title={content.h1}
         subtitle={content.subheading}
         align="center"

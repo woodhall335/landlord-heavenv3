@@ -45,6 +45,7 @@ export function EnglandTenancyPage({
     <main className="min-h-screen bg-[#FCFBF8]">
       <UniversalHero
         badge="England tenancy agreements"
+        trustText="Legally compliant - Updated for current housing law - England tenancy route"
         title={title}
         subtitle={subtitle}
         primaryCta={{ label: primaryCtaLabel, href: primaryCtaHref }}

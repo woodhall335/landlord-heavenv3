@@ -462,9 +462,9 @@ export default function ASTProductPage() {
       <div className="pointer-events-none absolute left-[18%] top-[95rem] h-56 w-56 rounded-full bg-[#ECE6FF] opacity-55 blur-3xl" />
 
       <UniversalHero
-        badge="UK-wide tenancy agreements"
         title="Create the right tenancy agreement for your UK property"
         subtitle="Build a renters' rights compliant tenancy agreement for England, or the correct jurisdiction-specific agreement for Wales, Scotland, or Northern Ireland. England now uses a Residential Tenancy Agreement updated for the Renters' Rights Act 2025, while the other UK nations continue on their own local frameworks."
+        trustText="Legally compliant - Updated for current housing law - England, Wales, Scotland & Northern Ireland"
         primaryCta={{
           label: `Create your tenancy agreement - ${PRODUCTS.ast_standard.displayPrice}`,
           href: standardWizardHref,

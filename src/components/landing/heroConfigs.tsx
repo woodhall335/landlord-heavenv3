@@ -72,7 +72,8 @@ export const homeHeroConfig: HeroConfig = {
 export const astHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
   mediaSrc: '/images/tenancy_agreements.webp',
-  trustText: "Renters' Rights compliant for England - Updated for current housing law - UK-wide coverage",
+  trustText:
+    'Legally compliant - Updated for current housing law - England, Wales, Scotland & Northern Ireland',
   title: 'Legally Compliant',
   highlightTitle: 'Tenancy Agreements',
   subtitle: astSubtitle,
