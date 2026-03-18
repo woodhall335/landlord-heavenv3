@@ -753,7 +753,7 @@ function WizardPageInner() {
                   size="large"
                   onClick={handleStart}
                 >
-                  Start Wizard ->
+                  Start Wizard {'->'}
                 </Button>
                 <p className="text-sm text-gray-600 mt-3">
                   {standaloneProfile
