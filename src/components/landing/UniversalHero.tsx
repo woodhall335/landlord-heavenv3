@@ -23,6 +23,7 @@ const MOBILE_MEDIA_WRAP_CLASSES =
 const SUBTITLE_CLASSES =
   'relative z-10 mt-4 px-0 py-0 text-lg leading-relaxed text-white/85 sm:max-w-[52ch] sm:text-xl';
 const CTA_WRAP_CLASSES = 'mt-6 flex w-full flex-col gap-3 sm:flex-row sm:items-center';
+const REVIEW_STARS = '\u2605\u2605\u2605\u2605\u2605';
 
 export type UniversalHeroProps = {
   variant?: 'pastel';
@@ -185,8 +186,8 @@ export function UniversalHero({
               >
                 <RiCheckLine className="h-5 w-5" aria-hidden="true" />
                 <span>Rated</span>
-                <span className="text-[#facc15]" aria-hidden="true">
-                  5 stars
+                <span className="text-[#7c3aed]" aria-hidden="true">
+                  {REVIEW_STARS}
                 </span>
                 <span>
                   {REVIEW_RATING}/5 | {reviewCount} reviews
@@ -203,8 +204,8 @@ export function UniversalHero({
               >
                 <RiShieldCheckFill className="h-5 w-5 text-[#7c3aed]" aria-hidden="true" />
                 {showTrustDescriptor ? <span>{trustText}</span> : null}
-                <span className="text-[#facc15]" aria-hidden="true">
-                  5 stars
+                <span className="text-[#7c3aed]" aria-hidden="true">
+                  {REVIEW_STARS}
                 </span>
                 <span className="font-medium text-[#2b253d]">
                   {REVIEW_RATING}/5 | {reviewCount} reviews
