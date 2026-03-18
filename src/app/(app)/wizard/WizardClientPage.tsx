@@ -43,7 +43,6 @@ import {
   RESIDENTIAL_LETTING_PRODUCTS,
 } from '@/lib/residential-letting/products';
 import { getResidentialStandaloneProfile } from '@/lib/residential-letting/standalone-profiles';
-import { getResidentialStandaloneThemeVars } from '@/lib/residential-letting/standalone-theme';
 
 // Product-specific hero content (jurisdiction-neutral)
 interface HeroContent {
@@ -435,11 +434,6 @@ function WizardPageInner() {
     () => (productParam && isResidentialLettingProductSku(productParam) ? getResidentialStandaloneProfile(productParam) : null),
     [productParam]
   );
-  const standaloneThemeStyle = useMemo(
-    () => (standaloneProfile ? getResidentialStandaloneThemeVars(standaloneProfile.theme) : undefined),
-    [standaloneProfile]
-  );
-
   const effectiveWizardProduct = useMemo(
     () => getEffectiveWizardProduct(productParam, selectedDocument?.type ?? null),
     [productParam, selectedDocument]
@@ -545,104 +539,42 @@ function WizardPageInner() {
   };
 
   return (
-    <div
-      className={clsx('min-h-screen', standaloneProfile ? 'pb-12' : 'bg-gray-50')}
-      style={
-        standaloneProfile
-          ? {
-              ...standaloneThemeStyle,
-              backgroundImage:
-                "linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(21,7,51,0.12) 18%, rgba(248,247,252,1) 38%), url('/images/bg.webp')",
-              backgroundSize: 'cover',
-              backgroundPosition: 'center top',
-            }
-          : undefined
-      }
-    >
-      {standaloneProfile ? (
-        <section className="px-4 pt-[calc(var(--site-header-height)+var(--s21-banner-height)+1.25rem)] sm:px-6 lg:px-8">
-          <div
-            className="mx-auto max-w-[1320px] overflow-hidden rounded-[2.3rem] border border-white/10 text-white shadow-[0_28px_80px_rgba(15,23,42,0.28)]"
-            style={{
-              backgroundImage:
-                'linear-gradient(135deg, var(--standalone-hero-start), var(--standalone-hero-mid) 54%, var(--standalone-hero-end))',
-            }}
+    <div className="min-h-screen bg-gray-50">
+      <UniversalHero
+        badge={standaloneProfile ? `${standaloneProfile.eyebrow} • England only` : heroContent.eyebrow}
+        title={standaloneProfile ? standaloneProfile.heroTitle : heroContent.title}
+        subtitle={standaloneProfile ? standaloneProfile.heroSubtitle : heroContent.subtitle}
+        align="center"
+        hideMedia
+        showReviewPill={false}
+        showUsageCounter={false}
+        backgroundImageSrc="/images/bg.webp"
+        feature={undefined}
+        actionsSlot={
+          <button
+            onClick={handleStartNowClick}
+            className="hero-btn-primary group inline-flex"
           >
-            <div className="grid gap-6 p-6 sm:p-8 lg:grid-cols-[140px,minmax(0,1fr),320px] lg:items-center">
-              <div className="mx-auto rounded-[1.75rem] border border-white/10 bg-white/10 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]">
-                <Image src={standaloneProfile.icon} alt="" width={120} height={120} className="h-24 w-24 object-contain" />
+            <span className="flex flex-col items-center justify-center gap-1">
+              <span>Start My Case Bundle</span>
+              <RiArrowDownLine className="mx-auto block h-5 w-5 animate-bounce-slow text-current transition-transform group-hover:translate-y-1" />
+            </span>
+          </button>
+        }
+      >
+        {standaloneProfile ? (
+          <div className="mt-6 grid gap-3 text-left sm:grid-cols-3">
+            {standaloneProfile.heroBullets.slice(0, 3).map((bullet) => (
+              <div
+                key={bullet}
+                className="rounded-2xl border border-white/20 bg-white/10 px-4 py-3 text-sm leading-6 text-white/88 backdrop-blur-sm"
+              >
+                {bullet}
               </div>
-              <div>
-                <div className="flex flex-wrap items-center gap-3">
-                  <span className="rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.22em] text-white/70">
-                    {standaloneProfile.eyebrow}
-                  </span>
-                  <span className="rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.22em] text-white/70">
-                    England only
-                  </span>
-                </div>
-                <h1 className="mt-4 text-3xl font-semibold leading-tight sm:text-[2.35rem]">
-                  {standaloneProfile.heroTitle}
-                </h1>
-                <p className="mt-3 max-w-3xl text-sm leading-7 text-white/82 sm:text-[15px]">
-                  {standaloneProfile.heroSubtitle}
-                </p>
-                <div className="mt-5 grid gap-3 sm:grid-cols-3">
-                  {standaloneProfile.heroBullets.slice(0, 3).map((bullet) => (
-                    <div
-                      key={bullet}
-                      className="rounded-[1.2rem] border border-white/10 bg-white/8 px-4 py-3 text-sm leading-6 text-white/85"
-                    >
-                      {bullet}
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div className="rounded-[1.7rem] border border-white/10 bg-white/8 p-5">
-                <div className="text-xs font-semibold uppercase tracking-[0.22em] text-white/60">
-                  Included sections
-                </div>
-                <div className="mt-4 space-y-3">
-                  {standaloneProfile.outputSections.slice(0, 4).map((section) => (
-                    <div key={section} className="flex items-start gap-3 text-sm text-white/82">
-                      <span className="mt-2 h-2 w-2 rounded-full bg-white/80" />
-                      <span>{section}</span>
-                    </div>
-                  ))}
-                </div>
-                <button
-                  onClick={handleStartNowClick}
-                  className="mt-6 w-full rounded-xl bg-white px-5 py-4 text-sm font-semibold text-violet-950 shadow-sm transition hover:bg-violet-50"
-                >
-                  Start the wizard
-                </button>
-              </div>
-            </div>
+            ))}
           </div>
-        </section>
-      ) : (
-        <UniversalHero
-          badge={heroContent.eyebrow}
-          title={heroContent.title}
-          subtitle={heroContent.subtitle}
-          align="center"
-          hideMedia
-          showReviewPill={false}
-          showUsageCounter={false}
-          backgroundImageSrc="/images/bg.webp"
-          actionsSlot={
-            <button
-              onClick={handleStartNowClick}
-              className="hero-btn-primary group inline-flex"
-            >
-              <span className="flex flex-col items-center justify-center gap-1">
-                <span>Start My Case Bundle</span>
-                <RiArrowDownLine className="mx-auto block h-5 w-5 animate-bounce-slow text-current transition-transform group-hover:translate-y-1" />
-              </span>
-            </button>
-          }
-        />
-      )}
+        ) : null}
+      </UniversalHero>
       <Container size="large" className="py-12">
         {/* Incompatibility Warning */}
         {showIncompatibilityWarning && incompatibilityMessage && dismissedMessage !== incompatibilityMessage && (
@@ -674,21 +606,13 @@ function WizardPageInner() {
             <div
               className={clsx(
                 'flex items-center gap-2',
-                step === 1
-                  ? standaloneProfile
-                    ? 'text-violet-900'
-                    : 'text-primary'
-                  : 'text-gray-400'
+                step === 1 ? 'text-primary' : 'text-gray-400'
               )}
             >
               <div
                 className={clsx(
                   'w-8 h-8 rounded-full flex items-center justify-center font-semibold',
-                  step === 1
-                    ? standaloneProfile
-                      ? 'bg-violet-600 text-white'
-                      : 'bg-primary text-white'
-                    : 'bg-gray-200'
+                  step === 1 ? 'bg-primary text-white' : 'bg-gray-200'
                 )}
               >
                 1
@@ -701,21 +625,13 @@ function WizardPageInner() {
             <div
               className={clsx(
                 'flex items-center gap-2',
-                step === 2
-                  ? standaloneProfile
-                    ? 'text-violet-900'
-                    : 'text-primary'
-                  : 'text-gray-400'
+                step === 2 ? 'text-primary' : 'text-gray-400'
               )}
             >
               <div
                 className={clsx(
                   'w-8 h-8 rounded-full flex items-center justify-center font-semibold',
-                  step === 2
-                    ? standaloneProfile
-                      ? 'bg-violet-600 text-white'
-                      : 'bg-primary text-white'
-                    : 'bg-gray-200'
+                  step === 2 ? 'bg-primary text-white' : 'bg-gray-200'
                 )}
               >
                 2
@@ -770,12 +686,9 @@ function WizardPageInner() {
           <div ref={locationSectionRef} className="max-w-2xl mx-auto">
             <button
               onClick={() => setStep(1)}
-              className={clsx(
-                'mb-6 flex items-center gap-2 transition-colors',
-                standaloneProfile ? 'text-violet-700 hover:text-violet-950' : 'text-gray-600 hover:text-primary'
-              )}
+              className="mb-6 flex items-center gap-2 text-gray-600 transition-colors hover:text-primary"
             >
-              <RiArrowLeftLine className={clsx('w-5 h-5', standaloneProfile ? 'text-violet-700' : 'text-[#7C3AED]')} />
+              <RiArrowLeftLine className="w-5 h-5 text-[#7C3AED]" />
               Back to document selection
             </button>
 
@@ -797,14 +710,9 @@ function WizardPageInner() {
                     'w-full p-6 rounded-xl border-2 transition-all duration-200 text-left',
                     'flex items-center gap-4',
                     selectedJurisdiction?.value === jur.value
-                      ? standaloneProfile
-                        ? 'border-violet-500 bg-violet-50 shadow-md'
-                        : 'border-primary bg-primary-subtle shadow-md'
-                      : standaloneProfile
-                        ? 'border-violet-200 bg-white hover:border-violet-400 hover:shadow-sm'
-                        : 'border-gray-300 bg-white hover:border-primary hover:shadow-sm'
+                      ? 'border-primary bg-primary-subtle shadow-md'
+                      : 'border-gray-300 bg-white hover:border-primary hover:shadow-sm'
                   )}
-                  style={standaloneProfile ? standaloneThemeStyle : undefined}
                 >
                   <div>
                     <Image
@@ -827,7 +735,7 @@ function WizardPageInner() {
                     <div
                       className={clsx(
                         'w-6 h-6 rounded-full flex items-center justify-center',
-                        standaloneProfile ? 'bg-violet-600' : 'bg-primary'
+                        'bg-primary'
                       )}
                     >
                       <RiCheckLine className="w-4 h-4 text-white" />
@@ -844,9 +752,8 @@ function WizardPageInner() {
                   variant="primary"
                   size="large"
                   onClick={handleStart}
-                  className={standaloneProfile ? '!rounded-xl !bg-violet-600 !text-white !px-8 hover:!bg-violet-700' : undefined}
                 >
-                  {standaloneProfile ? 'Start wizard ->' : 'Start Wizard ->'}
+                  Start Wizard ->
                 </Button>
                 <p className="text-sm text-gray-600 mt-3">
                   {standaloneProfile
