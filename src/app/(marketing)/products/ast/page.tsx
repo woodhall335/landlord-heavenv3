@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { RiArrowRightLine, RiCheckboxCircleLine } from 'react-icons/ri';
+import { RiCheckboxCircleLine } from 'react-icons/ri';
 import { FAQSection, type FAQItem } from '@/components/seo/FAQSection';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
@@ -13,6 +13,12 @@ import { PRODUCTS } from '@/lib/pricing/products';
 const canonicalUrl = getCanonicalUrl('/products/ast');
 const standardWizardHref = '/wizard?product=ast_standard&src=product_page&topic=tenancy';
 const premiumWizardHref = '/wizard?product=ast_premium&src=product_page&topic=tenancy';
+const PRIMARY_BUTTON_CLASS =
+  'hero-btn-primary inline-flex items-center justify-center text-center text-base font-semibold';
+const LIGHT_SECONDARY_BUTTON_CLASS =
+  'inline-flex items-center justify-center rounded-xl border border-[#D9D4EA] bg-white/85 px-4 py-3 text-center text-base font-semibold text-[#2A3550] transition hover:border-[#BDAFE8] hover:bg-white';
+const DARK_SECONDARY_BUTTON_CLASS =
+  'inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-base font-semibold text-white transition hover:border-white/40 hover:bg-white/15';
 
 type ProductCardData = {
   name: string;
@@ -366,10 +372,9 @@ function ProductCard({
       <div className="mt-8 border-t border-white/60 pt-6">
         <Link
           href={href}
-          className="hero-btn-primary inline-flex w-full items-center justify-center gap-2 text-center sm:w-auto"
+          className={`${PRIMARY_BUTTON_CLASS} w-full sm:w-auto`}
         >
           {ctaLabel}
-          <RiArrowRightLine className="h-4 w-4" />
         </Link>
       </div>
     </div>
@@ -424,15 +429,14 @@ function JurisdictionCard({
       <div className="mt-6 flex flex-col gap-3">
         <Link
           href={href}
-          className="hero-btn-primary inline-flex items-center justify-center gap-2 text-center"
+          className={PRIMARY_BUTTON_CLASS}
         >
           {ctaLabel}
-          <RiArrowRightLine className="h-4 w-4" />
         </Link>
         {secondaryHref && secondaryLabel ? (
           <Link
             href={secondaryHref}
-            className="inline-flex items-center justify-center rounded-xl border border-[#D9D4EA] bg-white/85 px-4 py-3 text-center text-sm font-semibold text-[#2A3550] transition hover:border-[#BDAFE8] hover:bg-white"
+            className={LIGHT_SECONDARY_BUTTON_CLASS}
           >
             {secondaryLabel}
           </Link>
@@ -560,14 +564,13 @@ export default function ASTProductPage() {
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                   <Link
                     href="/wizard?product=ast_standard&jurisdiction=england&src=product_page&topic=tenancy"
-                    className="hero-btn-primary inline-flex items-center gap-2"
+                    className={PRIMARY_BUTTON_CLASS}
                   >
                     Start England agreement
-                    <RiArrowRightLine className="h-4 w-4" />
                   </Link>
                   <Link
                     href="/wizard?product=ast_premium&jurisdiction=england&src=product_page&topic=tenancy"
-                    className="inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-sm font-semibold text-white transition hover:border-white/40 hover:bg-white/15"
+                    className={DARK_SECONDARY_BUTTON_CLASS}
                   >
                     Start premium England agreement
                   </Link>
@@ -651,10 +654,9 @@ export default function ASTProductPage() {
               <div className="mt-8">
                 <Link
                   href={standardWizardHref}
-                  className="hero-btn-primary inline-flex items-center gap-2"
+                  className={PRIMARY_BUTTON_CLASS}
                 >
                   Start your tenancy agreement
-                  <RiArrowRightLine className="h-4 w-4" />
                 </Link>
               </div>
             </div>
@@ -777,10 +779,9 @@ export default function ASTProductPage() {
             <div className="mt-8">
               <Link
                 href={standardWizardHref}
-                className="hero-btn-primary inline-flex items-center gap-2"
+                className={PRIMARY_BUTTON_CLASS}
               >
                 Create your tenancy agreement
-                <RiArrowRightLine className="h-4 w-4" />
               </Link>
             </div>
             <p className="mt-4 text-sm text-white/75">
