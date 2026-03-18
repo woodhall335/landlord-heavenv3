@@ -42,6 +42,11 @@ type FeaturePoint = {
   body: string;
 };
 
+type IncludedItem = {
+  title: string;
+  body: string;
+};
+
 type ComparisonRow = {
   label: string;
   landlordHeaven: string;
@@ -54,7 +59,7 @@ const productOptions: ProductCardData[] = [
     price: PRODUCTS.ast_standard.displayPrice,
     bestFor: 'Straightforward lets, single-household occupancies, and simpler tenancy setups.',
     description:
-      'Best for most standard residential lets where you want the right jurisdiction-specific agreement, a guided flow, and a cleaner experience than editing a generic template.',
+      'Best for most standard residential lets where you want the right agreement, the right jurisdiction, and a cleaner setup than editing a generic template yourself.',
     points: [
       'A strong fit for most straightforward residential tenancies',
       'Guided setup with preview before payment',
@@ -68,9 +73,10 @@ const productOptions: ProductCardData[] = [
   {
     name: 'Premium Residential Tenancy Agreement',
     price: PRODUCTS.ast_premium.displayPrice,
-    bestFor: 'HMOs, student lets, shared households, guarantor-backed lets, and more complex arrangements.',
+    bestFor:
+      'HMOs, student lets, shared households, guarantor-backed lets, and more complex arrangements.',
     description:
-      'Best for higher-complexity tenancies where broader clause coverage, stronger protection wording, and a more robust setup are likely to add value.',
+      'Best for higher-complexity tenancy setups where broader clause coverage and stronger wording are likely to give you a better fit.',
     points: [
       'Better suited to HMOs, student lets, and shared households',
       'Broader clause coverage for more complex arrangements',
@@ -149,7 +155,8 @@ const jurisdictions: JurisdictionCardData[] = [
     ],
     href: '/wizard?product=ast_standard&jurisdiction=northern-ireland&src=product_page&topic=tenancy',
     ctaLabel: `Create Northern Ireland agreement - ${PRODUCTS.ast_standard.displayPrice}`,
-    secondaryHref: '/wizard?product=ast_premium&jurisdiction=northern-ireland&src=product_page&topic=tenancy',
+    secondaryHref:
+      '/wizard?product=ast_premium&jurisdiction=northern-ireland&src=product_page&topic=tenancy',
     secondaryLabel: `Create premium Northern Ireland agreement - ${PRODUCTS.ast_premium.displayPrice}`,
   },
 ];
@@ -164,12 +171,39 @@ const featurePoints: FeaturePoint[] = [
     body: 'Answer structured questions instead of rewriting a generic tenancy template line by line.',
   },
   {
-    title: 'Preview, pay, and revisit later',
-    body: 'Preview before payment and keep your agreement stored in your Landlord Heaven account for future access.',
+    title: 'Preview before you pay',
+    body: 'See the document before payment so you know you are on the right track before you check out.',
   },
   {
     title: 'Choose the right level of cover',
     body: 'Pick Standard for simpler lets or Premium for HMOs, student lets, and more complex arrangements.',
+  },
+];
+
+const includedItems: IncludedItem[] = [
+  {
+    title: 'Property, landlord, and tenant details',
+    body: 'The agreement is built around the tenancy you are creating, with the core details needed to identify the parties and the property clearly.',
+  },
+  {
+    title: 'Rent, deposit, and payment terms',
+    body: 'Set out the key commercial terms of the tenancy, including rent structure, deposit information, and payment expectations.',
+  },
+  {
+    title: 'Core rights and responsibilities',
+    body: 'Cover the day-to-day obligations that matter in a tenancy, with wording shaped around the relevant UK jurisdiction.',
+  },
+  {
+    title: 'Jurisdiction-specific agreement structure',
+    body: 'Start with the right agreement type for England, Wales, Scotland, or Northern Ireland instead of adapting the wrong template.',
+  },
+  {
+    title: 'Premium cover for more complex lets',
+    body: 'Premium is designed for shared households, HMOs, student lets, and other arrangements where broader clause coverage is more appropriate.',
+  },
+  {
+    title: 'Preview and account storage',
+    body: 'Preview before payment, then keep the final agreement in your Landlord Heaven account for future access or regeneration.',
   },
 ];
 
@@ -180,13 +214,20 @@ const comparisonRows: ComparisonRow[] = [
     genericTemplate: 'Usually starts as a generic tenancy document with manual edits.',
   },
   {
+    label: 'What is included',
+    landlordHeaven: 'Guided setup, core tenancy terms, jurisdiction-specific structure, preview before payment, and account storage.',
+    genericTemplate: 'Usually just a blank file with little guidance on what to include or adapt.',
+  },
+  {
     label: 'England readiness',
-    landlordHeaven: 'England is presented as a Residential Tenancy Agreement updated for the Renters\' Rights Act 2025.',
+    landlordHeaven:
+      'England is presented as a Residential Tenancy Agreement updated for the Renters\' Rights Act 2025.',
     genericTemplate: 'Often still framed around outdated AST-era wording.',
   },
   {
     label: 'Setup experience',
-    landlordHeaven: 'Guided flow with clear questions, product choice, and preview before payment.',
+    landlordHeaven:
+      'Guided flow with clear questions, product choice, and preview before payment.',
     genericTemplate: 'Usually a blank file download that leaves structure and wording to you.',
   },
   {
@@ -197,6 +238,11 @@ const comparisonRows: ComparisonRow[] = [
 ];
 
 const faqs: FAQItem[] = [
+  {
+    question: 'What is included with the tenancy agreement?',
+    answer:
+      'Your tenancy agreement is generated through a guided setup and includes the core tenancy details, key commercial terms such as rent and deposit information, jurisdiction-specific wording, and the correct agreement structure for the property location. Premium is designed for more complex arrangements such as HMOs, student lets, and shared households. You also get preview before payment and account storage after purchase.',
+  },
   {
     question: 'Is this still an AST?',
     answer:
@@ -233,12 +279,13 @@ export const metadata: Metadata = {
   title:
     'Tenancy Agreements for UK Landlords | Residential Tenancy Agreement England | From £9.99',
   description:
-    'Create a jurisdiction-specific tenancy agreement for England, Wales, Scotland or Northern Ireland. England now uses a Residential Tenancy Agreement updated for the Renters\' Rights Act 2025.',
+    'Create a jurisdiction-specific tenancy agreement for England, Wales, Scotland or Northern Ireland. Includes guided setup, preview before payment, and account storage.',
   keywords: [
     'tenancy agreement',
     'residential tenancy agreement england',
     'renters rights compliant tenancy agreement',
     'uk tenancy agreement landlord',
+    'what is included in tenancy agreement',
     'tenancy agreement template 2026',
   ],
   alternates: { canonical: canonicalUrl },
@@ -325,7 +372,9 @@ function JurisdictionCard({
           />
         </div>
         <div>
-          <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#5B56E8]">{name}</p>
+          <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#5B56E8]">
+            {name}
+          </p>
           <h3 className="text-xl font-bold text-[#141B2D] xl:text-2xl">{agreementType}</h3>
         </div>
       </div>
@@ -375,7 +424,7 @@ export default function ASTProductPage() {
 
       <UniversalHero
         title="Create the right tenancy agreement in minutes"
-        subtitle="Generate a polished, jurisdiction-specific tenancy agreement for England, Wales, Scotland, or Northern Ireland. Start with the correct legal framework, follow a guided setup, preview before payment, and keep everything stored in your Landlord Heaven account."
+        subtitle="Generate a polished, jurisdiction-specific tenancy agreement for England, Wales, Scotland, or Northern Ireland. Follow a guided setup, preview before payment, and keep everything stored in your Landlord Heaven account."
         primaryCta={{
           label: `Create England agreement - ${PRODUCTS.ast_standard.displayPrice}`,
           href: '/wizard?product=ast_standard&jurisdiction=england&src=product_page&topic=tenancy',
@@ -442,6 +491,35 @@ export default function ASTProductPage() {
           </div>
         </section>
 
+        <section className="mb-16 rounded-[2rem] border border-[#E4E8F1] bg-white p-6 md:p-8">
+          <div className="max-w-4xl">
+            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#5B56E8]">
+              What&apos;s included
+            </p>
+            <h2 className="mt-2 text-4xl font-bold tracking-tight text-[#141B2D]">
+              Everything you need to create the agreement properly
+            </h2>
+            <p className="mt-4 text-lg leading-8 text-[#465066]">
+              This page should not feel vague. When you create a tenancy agreement with Landlord
+              Heaven, you are not just buying a blank template. You are building a document around
+              the tenancy itself, with the key terms, the right agreement structure, and a cleaner
+              guided process from start to finish.
+            </p>
+          </div>
+
+          <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {includedItems.map((item) => (
+              <div
+                key={item.title}
+                className="rounded-2xl border border-[#E4E8F1] bg-[#F8FBFF] p-5 shadow-[0_10px_24px_rgba(15,23,42,0.03)]"
+              >
+                <h3 className="text-lg font-semibold text-[#141B2D]">{item.title}</h3>
+                <p className="mt-3 text-sm leading-7 text-[#546075]">{item.body}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
         <section id="jurisdictions" className="mb-16">
           <div className="mb-8 text-center">
             <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#5B56E8]">
@@ -472,10 +550,10 @@ export default function ASTProductPage() {
               Standard for simpler lets. Premium for more complex arrangements.
             </h2>
             <p className="mt-4 text-lg leading-8 text-[#465066]">
-              Both products are jurisdiction specific and built to help you start with the right
-              agreement. Standard is the better fit for most straightforward residential lets.
-              Premium is better suited to HMOs, student lets, shared households, and tenancy setups
-              that need broader clause coverage.
+              Both products are built to help you start with the right agreement. Standard is the
+              better fit for most straightforward residential lets. Premium is better suited to
+              HMOs, student lets, shared households, and tenancy setups that need broader clause
+              coverage.
             </p>
           </div>
 
@@ -533,7 +611,10 @@ export default function ASTProductPage() {
                   'Faster guided setup',
                   'Preview before payment',
                 ].map((item) => (
-                  <li key={item} className="flex items-start gap-3 text-[15px] leading-7 text-[#E8EDFB]">
+                  <li
+                    key={item}
+                    className="flex items-start gap-3 text-[15px] leading-7 text-[#E8EDFB]"
+                  >
                     <RiCheckboxCircleLine className="mt-1 h-5 w-5 shrink-0 text-[#AFC4FF]" />
                     <span>{item}</span>
                   </li>
@@ -599,7 +680,7 @@ export default function ASTProductPage() {
 
       <FAQSection
         title="Tenancy agreement FAQs"
-        intro="Clear answers on England, UK-wide jurisdiction support, and choosing the right tenancy agreement route."
+        intro="Clear answers on what is included, UK-wide jurisdiction support, and choosing the right tenancy agreement route."
         faqs={faqs}
         showContactCTA={false}
         variant="white"
