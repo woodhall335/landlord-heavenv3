@@ -11,7 +11,19 @@ import { PRODUCTS } from '@/lib/pricing/products';
 
 const canonicalUrl = getCanonicalUrl('/products/ast');
 
-const regions = [
+type RegionCardData = {
+  name: string;
+  flag: string;
+  heading: string;
+  summary: string;
+  forms: string[];
+  href: string;
+  ctaLabel: string;
+  secondaryHref?: string;
+  secondaryLabel?: string;
+};
+
+const regions: RegionCardData[] = [
   {
     name: 'England',
     flag: '/gb-eng.svg',
@@ -74,7 +86,7 @@ const regions = [
     href: '/wizard?product=ast_standard&jurisdiction=northern-ireland&src=product_page&topic=tenancy',
     ctaLabel: 'Create NI agreement',
   },
-] as const;
+];
 
 const actionPoints = [
   {
