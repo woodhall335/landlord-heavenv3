@@ -16,9 +16,12 @@ type HeroCta = {
 
 // DO NOT MODIFY WITHOUT UPDATING TESTS: these classes define the mobile hero layout contract
 // that keeps subtitle readability, right-edge media bleed, and CTA placement stable across pages.
-const SECTION_WRAP_CLASSES = 'relative isolate overflow-visible pt-28 pb-10 sm:pt-32 sm:pb-12 lg:overflow-hidden lg:pt-36 lg:pb-16';
-const MOBILE_MEDIA_WRAP_CLASSES = 'relative z-0 float-right mr-[-20%] ml-4 mt-3 mb-5 w-[72%] max-w-[560px] pt-0 sm:w-[64%] lg:hidden';
-const SUBTITLE_CLASSES = 'relative z-10 mt-4 px-0 py-0 text-lg leading-relaxed text-white/85 sm:max-w-[52ch] sm:text-xl';
+const SECTION_WRAP_CLASSES =
+  'relative isolate overflow-visible pt-28 pb-10 sm:pt-32 sm:pb-12 lg:overflow-hidden lg:pt-36 lg:pb-16';
+const MOBILE_MEDIA_WRAP_CLASSES =
+  'relative z-0 float-right mr-[-20%] ml-4 mt-3 mb-5 w-[72%] max-w-[560px] pt-0 sm:w-[64%] lg:hidden';
+const SUBTITLE_CLASSES =
+  'relative z-10 mt-4 px-0 py-0 text-lg leading-relaxed text-white/85 sm:max-w-[52ch] sm:text-xl';
 const CTA_WRAP_CLASSES = 'mt-6 flex w-full flex-col gap-3 sm:flex-row sm:items-center';
 
 export type UniversalHeroProps = {
@@ -104,11 +107,14 @@ export function UniversalHero({
   const HeadingTag = isValidHeading ? headingAs : 'h1';
   const reviewCount = getDynamicReviewCount();
   const resolvedMediaSrc = mediaSrc ?? mascotSrc ?? '/images/laptop.webp';
-  const resolvedMediaAlt = mediaAlt ?? mascotAlt ?? 'Laptop showing legal workflow dashboard';
+  const resolvedMediaAlt =
+    mediaAlt ?? mascotAlt ?? 'Laptop showing legal workflow dashboard';
   const isDecorativeMedia = mascotDecorativeOnDesktop || mascotDecorativeOnMobile;
   const shouldShowReviewPill = showReviewPill ?? Boolean(trustText);
   const shouldShowUsageCounter = showUsageCounter ?? Boolean(trustText);
-  const trustTextLooksLikeReview = Boolean(trustText && /(★|\breviews?\b|\/5\b|\brated\b)/i.test(trustText));
+  const trustTextLooksLikeReview = Boolean(
+    trustText && /(\*{3,}|\bstars?\b|\breviews?\b|\/5\b|\brated\b)/i.test(trustText)
+  );
   const showTrustDescriptor = Boolean(trustText) && !trustTextLooksLikeReview;
   const isCenter = align === 'center';
   const shouldRenderMedia = !hideMedia && mediaSrc !== null;
@@ -128,11 +134,7 @@ export function UniversalHero({
   }, [ariaLabel, isDecorativeMedia, isValidHeading, resolvedMediaAlt]);
 
   return (
-    <section
-      className={SECTION_WRAP_CLASSES}
-      aria-label={ariaLabel}
-      id={id}
-    >
+    <section className={SECTION_WRAP_CLASSES} aria-label={ariaLabel} id={id}>
       <div className="pointer-events-none absolute inset-0 -z-20" aria-hidden="true">
         <Image
           src={backgroundImageSrc}
@@ -143,7 +145,10 @@ export function UniversalHero({
           className="object-cover object-center"
         />
       </div>
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-black/25 via-black/15 to-black/30" aria-hidden="true" />
+      <div
+        className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-black/25 via-black/15 to-black/30"
+        aria-hidden="true"
+      />
 
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <div
@@ -152,36 +157,57 @@ export function UniversalHero({
             shouldRenderMedia && 'lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]'
           )}
         >
-          <div className={clsx('relative z-10 w-full min-w-0', isCenter ? 'text-center lg:text-center' : 'text-left', hideMedia && 'max-w-3xl mx-auto')}>
+          <div
+            className={clsx(
+              'relative z-10 w-full min-w-0',
+              isCenter ? 'text-center lg:text-center' : 'text-left',
+              hideMedia && 'max-w-3xl mx-auto'
+            )}
+          >
             {badge && (
-              <div className={clsx('mb-4 inline-flex items-center gap-2 rounded-full border border-white/50 bg-white/20 px-4 py-2 text-sm font-semibold text-white backdrop-blur-sm', isCenter && 'mx-auto')}>
+              <div
+                className={clsx(
+                  'mb-4 inline-flex items-center gap-2 rounded-full border border-white/50 bg-white/20 px-4 py-2 text-sm font-semibold text-white backdrop-blur-sm',
+                  isCenter && 'mx-auto'
+                )}
+              >
                 {badgeIcon}
                 <span className="text-white">{badge}</span>
               </div>
             )}
 
             {shouldShowReviewPill && (
-              <p className={clsx('mb-3 flex w-full items-center gap-2 text-sm font-semibold text-white lg:hidden', isCenter ? 'justify-center text-center' : 'justify-start text-left')}>
+              <p
+                className={clsx(
+                  'mb-3 flex w-full items-center gap-2 text-sm font-semibold text-white lg:hidden',
+                  isCenter ? 'justify-center text-center' : 'justify-start text-left'
+                )}
+              >
                 <RiCheckLine className="h-5 w-5" aria-hidden="true" />
                 <span>Rated</span>
                 <span className="text-[#facc15]" aria-hidden="true">
-                  ★★★★★
+                  5 stars
                 </span>
                 <span>
-                  {REVIEW_RATING}/5 · {reviewCount} reviews
+                  {REVIEW_RATING}/5 | {reviewCount} reviews
                 </span>
               </p>
             )}
 
             {shouldShowReviewPill && (
-              <p className={clsx('hidden w-full max-w-xl flex-wrap items-center gap-x-3 gap-y-1 rounded-full border border-white/80 bg-white/85 px-4 py-2 text-sm font-semibold shadow-sm backdrop-blur-sm lg:flex', isCenter ? 'mx-auto justify-center text-center' : 'justify-start text-left')}>
+              <p
+                className={clsx(
+                  'hidden w-full max-w-xl flex-wrap items-center gap-x-3 gap-y-1 rounded-full border border-white/80 bg-white/85 px-4 py-2 text-sm font-semibold shadow-sm backdrop-blur-sm lg:flex',
+                  isCenter ? 'mx-auto justify-center text-center' : 'justify-start text-left'
+                )}
+              >
                 <RiShieldCheckFill className="h-5 w-5 text-[#7c3aed]" aria-hidden="true" />
                 {showTrustDescriptor ? <span>{trustText}</span> : null}
                 <span className="text-[#facc15]" aria-hidden="true">
-                  ★★★★★
+                  5 stars
                 </span>
                 <span className="font-medium text-[#2b253d]">
-                  {REVIEW_RATING}/5 · {reviewCount} reviews
+                  {REVIEW_RATING}/5 | {reviewCount} reviews
                 </span>
               </p>
             )}
@@ -253,18 +279,17 @@ export function UniversalHero({
             )}
 
             {subtitle && shouldRenderMedia && (
-              <p
-                className={clsx(
-                  SUBTITLE_CLASSES,
-                  isCenter && 'sm:mx-auto'
-                )}
-              >
-                {subtitle}
-              </p>
+              <p className={clsx(SUBTITLE_CLASSES, isCenter && 'sm:mx-auto')}>{subtitle}</p>
             )}
 
             {(primaryCta || secondaryCta || actionsSlot) && (
-              <div className={clsx(CTA_WRAP_CLASSES, shouldRenderMedia && 'clear-both lg:clear-none', isCenter && 'sm:justify-center')}>
+              <div
+                className={clsx(
+                  CTA_WRAP_CLASSES,
+                  shouldRenderMedia && 'clear-both lg:clear-none',
+                  isCenter && 'sm:justify-center'
+                )}
+              >
                 {primaryCta && (
                   <div className="w-full sm:w-auto">
                     <Link
@@ -278,7 +303,10 @@ export function UniversalHero({
                 )}
                 {secondaryCta && (
                   <div className="w-full sm:w-auto">
-                    <Link href={secondaryCta.href} className="hero-btn-secondary flex w-full justify-center text-center sm:w-auto">
+                    <Link
+                      href={secondaryCta.href}
+                      className="hero-btn-secondary flex w-full justify-center text-center sm:w-auto"
+                    >
                       {secondaryCta.label}
                     </Link>
                   </div>
@@ -295,10 +323,7 @@ export function UniversalHero({
             )}
 
             {showTrustPositioningBar ? (
-              <TrustPositioningBar
-                variant="compact"
-                className="mx-auto mt-6 max-w-5xl"
-              />
+              <TrustPositioningBar variant="compact" className="mx-auto mt-6 max-w-5xl" />
             ) : null}
 
             {children}

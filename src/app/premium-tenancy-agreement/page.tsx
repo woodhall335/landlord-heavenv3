@@ -5,12 +5,13 @@ import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/premium-tenancy-agreement');
-const wizardHref = '/wizard?product=ast_premium&jurisdiction=england&src=seo_premium_tenancy_agreement&topic=tenancy';
+const wizardHref =
+  '/wizard?product=ast_premium&jurisdiction=england&src=seo_premium_tenancy_agreement&topic=tenancy';
 
 export const metadata: Metadata = {
-  title: 'HMO Residential Tenancy Agreement England 2026 | Premium',
+  title: 'Premium Tenancy Agreement England | HMO and Student Lets',
   description:
-    'Create a premium England Residential Tenancy Agreement for HMOs, student lets, and shared houses. Updated for the Renters’ Rights Act 2025.',
+    "Create a premium England Residential Tenancy Agreement for HMOs, student lets, shared households, and guarantor-backed tenancies. Updated for the Renters' Rights Act 2025.",
   keywords: [
     'hmo residential tenancy agreement england',
     'student tenancy agreement england 2026',
@@ -19,9 +20,9 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: canonicalUrl },
   openGraph: {
-    title: 'HMO Residential Tenancy Agreement England 2026 | Premium',
+    title: 'Premium Tenancy Agreement England | HMO and Student Lets',
     description:
-      'Premium England Residential Tenancy Agreement with HMO, student-ready, and guarantor-support wording.',
+      'Premium England Residential Tenancy Agreement for HMOs, student lets, shared households, and guarantor-backed tenancies.',
     url: canonicalUrl,
     type: 'website',
   },
@@ -38,45 +39,49 @@ export default function PremiumTenancyAgreementPage() {
         ])}
       />
       <EnglandTenancyPage
-        title="Premium Residential Tenancy Agreement"
-        subtitle="Generate a premium England Residential Tenancy Agreement for HMOs, student-ready lets, guarantors, and stronger operational terms, updated for the Renters’ Rights Act 2025."
+        title="Premium Tenancy Agreement England"
+        subtitle="Choose the premium England Residential Tenancy Agreement when the let is more complex, with broader wording for HMOs, student properties, shared households, and guarantor-backed setups."
         primaryCtaLabel="Create premium agreement"
         primaryCtaHref={wizardHref}
         secondaryCtaLabel="View standard agreement"
         secondaryCtaHref="/tenancy-agreement"
-        introTitle="Premium England tenancy paperwork"
+        introTitle="Premium cover for more complex England lets"
         introBody={[
-          'This premium page targets landlords looking for an HMO residential tenancy agreement England can use now, with upgraded wording for shared living, student-ready use, and stronger landlord controls.',
-          'The premium flow stays on the new England Residential Tenancy Agreement model while adding enhanced wording for guarantors, property standards, and premium operational clauses.',
+          'This page is for landlords who need more than a basic tenancy agreement. It is the stronger fit where the property is an HMO, the tenants are sharers or students, or the arrangement needs broader wording from the outset.',
+          'The premium route stays on the same England Residential Tenancy Agreement model as the standard version, but adds more coverage for shared living, guarantors, and day-to-day management rules.',
         ]}
         highlights={[
-          'Premium England Residential Tenancy Agreement positioning instead of Premium AST branding',
-          'HMO, student-ready, guarantor, and shared-living clause support',
-          'Updated supporting checklist, acknowledgements, and terms to match the England tenancy upgrade',
-          'Wizard-led pack with inventory/checklist support for higher-control lets',
+          'Built for HMOs, student lets, and shared households',
+          'Broader wording for guarantors, joint tenants, and house rules',
+          'Guided setup with preview before payment',
+          'Saved in your account after purchase',
         ]}
         compliancePoints={[
-          'Updated for the Renters’ Rights Act 2025 England product position',
-          'Publicly framed as a Renters’ Rights compliant premium England tenancy flow',
-          'No live Section 21 or fixed-term AST positioning in the premium England path',
-          'Designed for shared houses, student accommodation setups, and advanced landlord use cases within the supported flow',
-        ]}
-        keywordTargets={[
-          'hmo residential tenancy agreement england',
-          'student tenancy agreement england 2026',
-          'premium tenancy agreement england',
-          'renters rights compliant tenancy agreement',
+          "Updated for the Renters' Rights Act 2025",
+          'Built on the England Residential Tenancy Agreement route',
+          'Not sold as a fixed-term AST product',
+          'Designed for more complex England tenancy setups',
         ]}
         faqs={[
           {
-            question: 'Who should use the premium England tenancy agreement?',
+            question: 'When should I choose Premium over Standard?',
             answer:
-              'Landlords with HMOs, shared houses, student-ready properties, guarantor-backed lets, or anyone who wants stronger clause coverage than the standard England agreement.',
+              'Choose Premium when the property or household is more complex, such as an HMO, student let, shared house, or any arrangement where you want broader wording from the start.',
           },
           {
-            question: 'Is the premium page also updated for Renters’ Rights?',
+            question: 'Do I need Premium for an HMO or student let?',
             answer:
-              'Yes. The premium England tenancy flow is positioned as part of the same updated Residential Tenancy Agreement model and public compliance wording.',
+              'In most cases, yes. Premium is usually the better fit for HMOs, student lets, and shared households because those setups tend to need broader wording and more operational detail.',
+          },
+          {
+            question: 'Is the premium route still updated for the new England system?',
+            answer:
+              "Yes. Premium sits on the same updated England Residential Tenancy Agreement route as the standard version. The difference is the level of wording and coverage, not the legal direction of the product.",
+          },
+          {
+            question: 'Can I still use Standard if the let is straightforward?',
+            answer:
+              'Yes. If the tenancy is relatively simple, the standard agreement is usually the more proportionate choice.',
           },
         ]}
       />

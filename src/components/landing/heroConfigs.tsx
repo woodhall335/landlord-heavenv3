@@ -25,7 +25,7 @@ const astPremiumPrice = PRODUCTS.ast_premium.displayPrice;
 const astSubtitle: ReactNode = (
   <>
     Generate a jurisdiction-specific tenancy agreement: Residential Tenancy Agreement (England),
-    Occupation Contract (Wales), PRT (Scotland), and NI private tenancy â€”
+    Occupation Contract (Wales), PRT (Scotland), and NI private tenancy -
     tailored to your jurisdiction and compliance requirements.
   </>
 );
@@ -43,7 +43,7 @@ const defaultHeroMedia = {
 export const homeHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
   trustText:
-    'Built for landlords â€¢ Updated for current housing law',
+    'Built for landlords - Updated for current housing law',
   title: 'Tenant Not Paying or',
   highlightTitle: 'Refusing to Leave?',
   subtitle: (
@@ -54,11 +54,11 @@ export const homeHeroConfig: HeroConfig = {
     </>
   ),
   primaryCta: {
-    label: 'See which notice you need â†’',
+    label: 'See which notice you need?',
     href: '/wizard?product',
   },
   secondaryCta: {
-    label: 'Recover unpaid rent â†’',
+    label: 'Recover unpaid rent?',
     href: '/wizard?product=money_claim&topic=debt&src=seo_homepage',
   },
   feature:
@@ -72,16 +72,16 @@ export const homeHeroConfig: HeroConfig = {
 export const astHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
   mediaSrc: '/images/tenancy_agreements.webp',
-  trustText: 'Renters’ Rights compliant for England â€¢ Updated for current housing law â€¢ UK-wide coverage',
+  trustText: "Renters' Rights compliant for England - Updated for current housing law - UK-wide coverage",
   title: 'Legally Compliant',
   highlightTitle: 'Tenancy Agreements',
   subtitle: astSubtitle,
   primaryCta: {
-    label: 'Generate my tenancy agreement â†’',
+    label: 'Generate my tenancy agreement',
     href: '/wizard?product=ast_standard&src=product_page&topic=tenancy',
   },
   secondaryCta: {
-    label: `Premium (HMO-Ready) - ${astPremiumPrice} â†’`,
+    label: `Premium (HMO-Ready) - ${astPremiumPrice}`,
     href: '/wizard?product=ast_premium&src=product_page&topic=tenancy',
   },
   feature:
@@ -96,13 +96,13 @@ export const noticeOnlyHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
   mediaSrc: '/images/notice_bundles.webp',
   trustText:
-    'Court-ready â€¢ Updated for current housing law â€¢ England, Wales & Scotland',
+    'Court-ready - Updated for current housing law - England, Wales & Scotland',
   title: 'Serve the Right',
   highlightTitle: 'Eviction Notice',
   subtitle:
     'Need to evict a tenant in England, Wales, or Scotland? Get the correct possession notice with guided checks for Section 21 notice and Section 8 notice routes so you can act quickly and avoid preventable mistakes.',
   primaryCta: {
-    label: 'Start your eviction notice â†’',
+    label: 'Start your eviction notice',
     href: '/wizard?product=notice_only&src=product_page&topic=eviction',
   },
   feature:
@@ -116,13 +116,13 @@ export const noticeOnlyHeroConfig: HeroConfig = {
 export const completePackHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
   mediaSrc: '/images/eviction_packs.webp',
-  trustText: 'Court-ready â€¢ Updated for current housing law â€¢ England-only',
+  trustText: 'Court-ready - Updated for current housing law - England-only',
   title: 'Need to Evict a Tenant',
   highlightTitle: 'Complete Eviction Pack',
   subtitle:
     'From possession notice to court filing, this complete eviction pack gives landlords the full Section 21 / Section 8 route with supporting documents, court forms, and step-by-step guidance.',
   primaryCta: {
-    label: 'Start your eviction pack â†’',
+    label: 'Start your eviction pack',
     href: '/wizard?product=complete_pack&src=product_page&topic=eviction',
   },
   feature:
@@ -136,13 +136,13 @@ export const completePackHeroConfig: HeroConfig = {
 export const moneyClaimHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
   mediaSrc: '/images/money_claims.webp',
-  trustText: 'Court-ready â€¢ Updated for current housing law â€¢ England-only',
+  trustText: 'Court-ready - Updated for current housing law - England-only',
   title: 'Tenant Not Paying Rent?',
   highlightTitle: 'Start a Money Claim',
   subtitle:
     'Recover rent arrears, unpaid bills, and property damage through a guided England money claim flow. Build your claim in plain English and download court-ready documents.',
   primaryCta: {
-    label: 'Start your money claim â†’',
+    label: 'Start your money claim',
     href: '/wizard?product=money_claim&topic=debt&src=product_page',
   },
   feature:
@@ -160,8 +160,8 @@ export const blogHeroConfig: HeroConfig = {
   highlightTitle: 'Built for Confident Decisions',
   subtitle:
     'Practical guidance on evictions, tenancy law, and landlord compliance across the UK.',
-  primaryCta: { label: 'Browse Guides â†’', href: '/blog' },
-  secondaryCta: { label: 'View Latest Posts â†’', href: '/blog?view=latest' },
+  primaryCta: { label: 'Browse Guides', href: '/blog' },
+  secondaryCta: { label: 'View Latest Posts', href: '/blog?view=latest' },
   feature: 'Step-by-step legal guidance updated for current UK regulations.',
 };
 

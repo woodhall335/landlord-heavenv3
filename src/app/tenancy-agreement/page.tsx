@@ -5,12 +5,13 @@ import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/tenancy-agreement');
-const wizardHref = '/wizard?product=ast_standard&jurisdiction=england&src=seo_tenancy_agreement&topic=tenancy';
+const wizardHref =
+  '/wizard?product=ast_standard&jurisdiction=england&src=seo_tenancy_agreement&topic=tenancy';
 
 export const metadata: Metadata = {
-  title: 'New Tenancy Agreement England 2026 | Renters’ Rights Compliant',
+  title: 'New Tenancy Agreement England | Residential Tenancy Agreement',
   description:
-    'Create a new tenancy agreement England landlords can use now: a Renters’ Rights compliant Residential Tenancy Agreement updated for the Renters’ Rights Act 2025.',
+    "Create a new tenancy agreement England landlords can use now through the Residential Tenancy Agreement route updated for the Renters' Rights Act 2025.",
   keywords: [
     'new tenancy agreement england',
     'renters rights compliant tenancy agreement',
@@ -20,9 +21,9 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: canonicalUrl },
   openGraph: {
-    title: 'New Tenancy Agreement England 2026 | Renters’ Rights Compliant',
+    title: 'New Tenancy Agreement England | Residential Tenancy Agreement',
     description:
-      'Generate a Renters’ Rights compliant England Residential Tenancy Agreement for new lets.',
+      'Create a new England Residential Tenancy Agreement for standard new lets through the updated England route.',
     url: canonicalUrl,
     type: 'website',
   },
@@ -40,50 +41,48 @@ export default function TenancyAgreementPage() {
       />
       <EnglandTenancyPage
         title="New Tenancy Agreement England"
-        subtitle="Create a Renters’ Rights compliant England Residential Tenancy Agreement updated for the Renters’ Rights Act 2025 and built for the upgraded assured periodic model."
+        subtitle="Create a new tenancy agreement for England through the Residential Tenancy Agreement route updated for the Renters' Rights Act 2025. This is the main entry point for standard new lets."
         primaryCtaLabel="Create standard agreement"
         primaryCtaHref={wizardHref}
         secondaryCtaLabel="View premium agreement"
         secondaryCtaHref="/premium-tenancy-agreement"
-        introTitle="England Residential Tenancy Agreement"
+        introTitle="New tenancy agreement for England"
         introBody={[
-          'Landlord Heaven now positions the England tenancy product as a Residential Tenancy Agreement rather than an AST-first workflow.',
-          'This page targets landlords searching for a new tenancy agreement England can use now, with wording, wizard prompts, and support documents updated for the Renters’ Rights Act 2025 transition.',
+          'If you need a new tenancy agreement for a property in England, this is the main Landlord Heaven route for a standard new let.',
+          'It uses the Residential Tenancy Agreement model rather than old AST-first sales wording, and it is designed for the current England tenancy system.',
         ]}
         highlights={[
-          'England Residential Tenancy Agreement wording instead of live AST sales copy',
-          'Updated tenant notice wording and landlord possession wording for the supported England flow',
-          'Wizard-led document generation with supporting checklist, acknowledgements, and terms',
-          'Jurisdiction-aware handling for Wales, Scotland, and Northern Ireland on the same product family',
+          'Main entry point for standard new England lets',
+          'Residential Tenancy Agreement wording for England',
+          'Guided setup with preview before payment',
+          'Saved in your account after purchase',
         ]}
         compliancePoints={[
-          'Positioned as Renters’ Rights compliant for the supported new England agreement flow',
-          'Updated for the Renters’ Rights Act 2025 public language and England terminology',
+          "Updated for the Renters' Rights Act 2025",
+          'Designed for the new England tenancy system',
+          'Not positioned as an assured shorthold tenancy for new agreements',
           'No live Section 21 positioning in the core England tenancy product path',
-          'Designed around the upgraded assured periodic England self-serve model',
-        ]}
-        keywordTargets={[
-          'new tenancy agreement england',
-          'renters rights compliant tenancy agreement',
-          'renters rights act tenancy agreement',
-          'new residential tenancy agreement',
-          'england tenancy agreement 2026',
         ]}
         faqs={[
           {
             question: 'Is this page for a new tenancy agreement in England?',
             answer:
-              'Yes. This page is the main entry point for new England tenancy agreements created through the updated Residential Tenancy Agreement flow.',
+              'Yes. This is the main Landlord Heaven page for a standard new tenancy agreement in England.',
           },
           {
-            question: 'Does Landlord Heaven still position this as an AST for England?',
+            question: 'Is this still an AST?',
             answer:
-              'No. The live England product is positioned as a Residential Tenancy Agreement updated for the Renters’ Rights Act 2025 flow, while AST pages are retained as legacy explainers for search demand.',
+              "No. For new England agreements, the live product is positioned as a Residential Tenancy Agreement updated for the Renters' Rights Act 2025 rather than an AST-first product.",
           },
           {
-            question: 'Can existing written tenancies use this page?',
+            question: 'What if I need a more complex England agreement?',
             answer:
-              'Existing written tenancies usually need transition information rather than a full replacement agreement. The updated wizard now signals that distinction earlier in the England flow.',
+              'If the property is an HMO, a student let, or a more complex shared setup, the premium route is usually the better fit because it gives you broader wording from the start.',
+          },
+          {
+            question: 'What if the property is not in England?',
+            answer:
+              'Landlord Heaven also has jurisdiction-specific routes for Wales, Scotland, and Northern Ireland. The agreement should always match where the property is located.',
           },
         ]}
       />

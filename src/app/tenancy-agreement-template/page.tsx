@@ -5,23 +5,25 @@ import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/tenancy-agreement-template');
-const wizardHref = '/wizard?product=ast_standard&jurisdiction=england&src=seo_tenancy_agreement_template&topic=tenancy';
+const wizardHref =
+  '/wizard?product=ast_standard&jurisdiction=england&src=seo_tenancy_agreement_template&topic=tenancy';
 
 export const metadata: Metadata = {
-  title: '2026 Tenancy Agreement Template | England Residential Tenancy Agreement',
+  title: 'Tenancy Agreement Template 2026 | England Residential Tenancy Agreement',
   description:
-    'Use our 2026 tenancy agreement template page to create an England Residential Tenancy Agreement updated for the Renters’ Rights Act 2025.',
+    "Start with our tenancy agreement template 2026 route for England and generate a Residential Tenancy Agreement updated for the Renters' Rights Act 2025.",
   keywords: [
     '2026 tenancy agreement',
     'tenancy agreement template 2026',
     'new tenancy agreement template england',
     'residential tenancy agreement england',
+    'renters rights bill tenancy agreement',
   ],
   alternates: { canonical: canonicalUrl },
   openGraph: {
-    title: '2026 Tenancy Agreement Template | England Residential Tenancy Agreement',
+    title: 'Tenancy Agreement Template 2026 | England Residential Tenancy Agreement',
     description:
-      'Create an updated England Residential Tenancy Agreement from our 2026 tenancy agreement template flow.',
+      'Create an updated England Residential Tenancy Agreement from our tenancy agreement template 2026 route.',
     url: canonicalUrl,
     type: 'website',
   },
@@ -39,32 +41,50 @@ export default function TenancyAgreementTemplatePage() {
       />
       <EnglandTenancyPage
         title="2026 Tenancy Agreement Template"
-        subtitle="Start from our updated template-led England flow and generate a Residential Tenancy Agreement positioned for the Renters’ Rights Act 2025 era."
+        subtitle="Start with our 2026 tenancy agreement template route for England and generate a Residential Tenancy Agreement updated for the Renters' Rights Act 2025. This page is for landlords who want an updated template, not an old AST download."
         primaryCtaLabel="Use 2026 template flow"
         primaryCtaHref={wizardHref}
         secondaryCtaLabel="View the main product"
         secondaryCtaHref="/tenancy-agreement"
-        introTitle="Template search intent, updated England product"
+        legacyNotice="If you searched for a 2026 tenancy agreement template, this page routes you into the live England product rather than a static download."
+        introTitle="Looking for a tenancy agreement template?"
         introBody={[
-          'This page targets landlords searching for a 2026 tenancy agreement or tenancy agreement template 2026, while directing them into the updated England Residential Tenancy Agreement flow.',
-          'The body copy uses Act terminology for legal clarity, but the page is optimised around the newer search demand for updated England tenancy agreement templates.',
+          'If you searched for a 2026 tenancy agreement template, this is the right starting point for a new England agreement.',
+          'Instead of downloading a static file and editing it yourself, you answer guided questions and generate the England Residential Tenancy Agreement that fits the let.',
         ]}
         highlights={[
-          '2026 tenancy agreement template positioning for England search demand',
-          'Residential Tenancy Agreement wording instead of live AST-first England copy',
-          'Updated wizard, supporting terms, and tenancy pack language',
-          'Built to feed landlords directly into the current England self-serve flow',
+          'Template-led route for landlords searching 2026 terms',
+          'England Residential Tenancy Agreement wording, not old AST-first sales copy',
+          'Guided setup with preview before payment',
+          'Saved in your account after purchase',
         ]}
         compliancePoints={[
-          'Updated for the Renters’ Rights Act 2025 England product position',
-          'Public page now frames England as a Residential Tenancy Agreement route',
-          'Designed to rank for 2026 and updated-template search intent',
+          "Updated for the Renters' Rights Act 2025",
+          'Designed for the new England tenancy system',
+          'Routes template search intent into the live England product',
+          'Uses current England terminology instead of old AST framing',
         ]}
-        keywordTargets={[
-          '2026 tenancy agreement',
-          'tenancy agreement template 2026',
-          'new tenancy agreement template england',
-          'residential tenancy agreement england',
+        faqs={[
+          {
+            question: 'Is this a downloadable blank template?',
+            answer:
+              'No. This page takes template-style search intent and routes it into the live England agreement builder. You answer guided questions and generate the document from there.',
+          },
+          {
+            question: 'Why does this page say Residential Tenancy Agreement instead of AST?',
+            answer:
+              "Because the live England route is now framed as a Residential Tenancy Agreement updated for the Renters' Rights Act 2025, rather than an AST-first product.",
+          },
+          {
+            question: "I searched for a Renters' Rights Bill tenancy agreement template. Is this the right page?",
+            answer:
+              "Yes. People still search using the Bill wording, but the law is now the Renters' Rights Act 2025. This page routes that search intent into the current England agreement flow.",
+          },
+          {
+            question: 'Can I use this page if the property is outside England?',
+            answer:
+              'Use the route that matches the property location. Landlord Heaven also has separate tenancy agreement routes for Wales, Scotland, and Northern Ireland.',
+          },
         ]}
       />
     </div>
