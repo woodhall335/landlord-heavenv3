@@ -267,7 +267,7 @@ export default function HelpPage() {
                   answer: (
                     <>
                       <p>
-                        Yes! Log into your account and go to Dashboard -> Documents. All your purchased documents are listed
+                        Yes! Log into your account and go to Dashboard {'→'} Documents. All your purchased documents are listed
                         there. Click "Download" to get a fresh copy.
                       </p>
                       <p className="mt-2">
@@ -468,7 +468,7 @@ export default function HelpPage() {
                       </p>
                       <p>
                         <Link href="/refunds" className="text-primary hover:underline">
-                          See full refund policy ->
+                          See full refund policy {'→'}
                         </Link>
                       </p>
                     </>
