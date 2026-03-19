@@ -20,7 +20,16 @@ import Image from 'next/image';
 import { Button, Container } from '@/components/ui';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { clsx } from 'clsx';
-import { RiArrowDownLine, RiArrowLeftLine, RiCheckLine, RiAlertLine } from 'react-icons/ri';
+import {
+  RiAlertLine,
+  RiArrowDownLine,
+  RiArrowLeftLine,
+  RiCheckLine,
+  RiFileCheckLine,
+  RiFileTextLine,
+  RiMoneyPoundCircleLine,
+  RiScales3Line,
+} from 'react-icons/ri';
 import { PRODUCTS } from '@/lib/pricing/products';
 import {
   trackWizardEntryViewWithAttribution,
@@ -118,7 +127,7 @@ interface DocumentOption {
   type: 'notice_only' | 'complete_pack' | 'money_claim' | 'tenancy_agreement';
   title: string;
   description: string;
-  icon: string;
+  icon: React.ComponentType<{ className?: string }>;
   price: string;
   regionBadge?: string;
 }
@@ -140,14 +149,14 @@ const documentOptions: DocumentOption[] = [
     type: 'notice_only',
     title: 'Eviction Notices',
     description: 'Jurisdiction-specific notice bundles: Section 21/8 (England), Section 173 (Wales), Notice to Leave (Scotland)',
-    icon: '\uD83D\uDCC4',
+    icon: RiFileTextLine,
     price: `From ${PRODUCTS.notice_only.displayPrice}`,
   },
   {
     type: 'complete_pack',
     title: 'Complete Eviction Pack',
     description: 'England-only case bundle with N5 / N5B / N119 routes, witness statement draft, and filing guide',
-    icon: '\u2696\uFE0F',
+    icon: RiScales3Line,
     price: PRODUCTS.complete_pack.displayPrice,
     regionBadge: 'England only',
   },
@@ -155,7 +164,7 @@ const documentOptions: DocumentOption[] = [
     type: 'money_claim',
     title: 'Money Claims',
     description: 'England-only money claim bundle for rent arrears and tenancy debts (County Court / MCOL-ready)',
-    icon: '\uD83D\uDCB0',
+    icon: RiMoneyPoundCircleLine,
     price: PRODUCTS.money_claim.displayPrice,
     regionBadge: 'England only',
   },
@@ -163,7 +172,7 @@ const documentOptions: DocumentOption[] = [
     type: 'tenancy_agreement',
     title: 'Tenancy Agreements',
     description: 'Residential Tenancy Agreement (England), Occupation Contract (Wales), PRT (Scotland), or NI private tenancy agreement pack',
-    icon: '\uD83D\uDCDD',
+    icon: RiFileCheckLine,
     price: `From ${PRODUCTS.ast_standard.displayPrice}`,
   },
 ];
@@ -651,33 +660,37 @@ function WizardPageInner() {
 
             {/* Filter products based on pre-selected jurisdiction (from URL param) */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {getAvailableDocumentOptions(selectedJurisdiction?.value ?? null).map((doc) => (
-                <button
-                  key={doc.type}
-                  onClick={() => handleDocumentSelect(doc)}
-                  className={clsx(
-                    'relative p-6 rounded-xl border-2 transition-all duration-200 text-left',
-                    'hover:shadow-lg hover:scale-105',
-                    selectedDocument?.type === doc.type
-                      ? 'border-primary bg-primary-subtle shadow-md'
-                      : 'border-gray-300 bg-white hover:border-primary'
-                  )}
-                >
-                  <div className="h-12 flex items-center mb-4">
-                    <span className="text-4xl">{doc.icon}</span>
-                  </div>
-                  <h3 className="text-xl font-semibold text-charcoal mb-2">{doc.title}</h3>
-                  <p className="text-sm text-gray-600 mb-4 min-h-12">{doc.description}</p>
-                  <div className="flex items-center gap-2">
-                    <span className="text-primary font-semibold">{doc.price}</span>
-                    {doc.regionBadge && (
-                      <span className="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">
-                        {doc.regionBadge}
-                      </span>
+              {getAvailableDocumentOptions(selectedJurisdiction?.value ?? null).map((doc) => {
+                const Icon = doc.icon;
+
+                return (
+                  <button
+                    key={doc.type}
+                    onClick={() => handleDocumentSelect(doc)}
+                    className={clsx(
+                      'relative rounded-2xl border-2 p-6 text-left transition-all duration-200',
+                      'hover:-translate-y-0.5 hover:shadow-lg',
+                      selectedDocument?.type === doc.type
+                        ? 'border-primary bg-primary-subtle shadow-md'
+                        : 'border-gray-300 bg-white hover:border-primary'
                     )}
-                  </div>
-                </button>
-              ))}
+                  >
+                    <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-[#E9DDFD] bg-[#F7F1FF] shadow-sm">
+                      <Icon className="h-7 w-7 text-[#7C3AED]" />
+                    </div>
+                    <h3 className="mb-2 text-xl font-semibold text-charcoal">{doc.title}</h3>
+                    <p className="mb-4 min-h-12 text-sm text-gray-600">{doc.description}</p>
+                    <div className="flex items-center gap-2">
+                      <span className="font-semibold text-primary">{doc.price}</span>
+                      {doc.regionBadge && (
+                        <span className="rounded-full bg-amber-100 px-2 py-0.5 text-xs text-amber-700">
+                          {doc.regionBadge}
+                        </span>
+                      )}
+                    </div>
+                  </button>
+                );
+              })}
             </div>
           </div>
         )}
