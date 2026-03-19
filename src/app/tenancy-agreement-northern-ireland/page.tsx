@@ -10,8 +10,6 @@ import { UniversalHero } from '@/components/landing/UniversalHero';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import { FAQSection } from '@/components/seo/FAQSection';
-import { niTenancyAgreementFAQs } from '@/data/faqs';
-import { PRODUCTS } from '@/lib/pricing/products';
 import {
   CheckCircle,
   Clock,
@@ -26,11 +24,28 @@ import {
   BadgeCheck,
   XCircle,
 } from 'lucide-react';
+import { PRODUCTS } from '@/lib/pricing/products';
 
 // Page constants for analytics
 const PAGE_PATH = '/tenancy-agreement-northern-ireland';
 const PAGE_TITLE = 'Tenancy Agreement Northern Ireland';
 const PAGE_TYPE = 'tenancy' as const;
+
+// Safe product pricing lookup using existing PRODUCTS object.
+// Adjust the fallback order if your repo uses different NI-specific keys.
+const productMap = PRODUCTS as Record<string, { displayPrice: string }>;
+
+const standardPrice =
+  productMap.tenancy_agreement_standard?.displayPrice ??
+  productMap.tenancy_agreement?.displayPrice ??
+  productMap.ast_standard?.displayPrice ??
+  '£14.99';
+
+const premiumPrice =
+  productMap.tenancy_agreement_premium?.displayPrice ??
+  productMap.tenancy_agreement_plus?.displayPrice ??
+  productMap.ast_premium?.displayPrice ??
+  '£24.99';
 
 const wizardLinkStandard = buildWizardLink({
   product: 'tenancy_agreement',
@@ -39,6 +54,8 @@ const wizardLinkStandard = buildWizardLink({
   topic: 'tenancy',
 });
 
+// If your repo has a dedicated NI premium product key, replace 'tenancy_agreement'
+// below with that exact key.
 const wizardLinkPremium = buildWizardLink({
   product: 'tenancy_agreement',
   jurisdiction: 'northern-ireland',
@@ -47,30 +64,71 @@ const wizardLinkPremium = buildWizardLink({
 });
 
 export const metadata: Metadata = {
-  title: 'Tenancy Agreement Northern Ireland | Create NI Tenancy Online',
+  title: 'Northern Ireland Tenancy Agreement 2026 | Create Online from £14.99',
   description:
-    'Create a legally valid tenancy agreement for Northern Ireland. Compliant with the Private Tenancies (NI) Order 2006 and Private Tenancies Act 2022.',
+    'Create a Northern Ireland tenancy agreement online. Written agreement wording for NI private tenancies, updated for current legislation, from £14.99.',
   keywords: [
     'tenancy agreement northern ireland',
-    'landlord tenancy agreement ni',
     'northern ireland tenancy agreement',
     'private tenancy agreement ni',
-    'ni landlord agreement',
-    'tenancy agreement template ni',
+    'ni tenancy agreement template',
+    'landlord tenancy agreement ni',
+    'northern ireland rental agreement',
+    'private tenancies act northern ireland',
     'create tenancy agreement northern ireland',
-    'private tenancies act 2022',
-    'ni rental agreement',
+    'written tenancy agreement ni',
+    'ni landlord agreement',
   ],
   alternates: {
     canonical: 'https://landlordheaven.co.uk/tenancy-agreement-northern-ireland',
   },
   openGraph: {
-    title: 'Tenancy Agreement Northern Ireland | Landlord Heaven',
+    title: 'Northern Ireland Tenancy Agreement 2026 | Create Online from £14.99',
     description:
-      'Create a legally valid tenancy agreement for Northern Ireland. Compliant with NI tenancy legislation.',
+      'Create a Northern Ireland tenancy agreement online with current NI-compliant wording and instant download.',
     type: 'website',
+    url: 'https://landlordheaven.co.uk/tenancy-agreement-northern-ireland',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Northern Ireland Tenancy Agreement 2026 | Create Online from £14.99',
+    description:
+      'Create a Northern Ireland tenancy agreement online with current NI-compliant wording and instant download.',
   },
 };
+
+const faqs = [
+  {
+    question: 'What type of tenancy agreement do I need in Northern Ireland?',
+    answer:
+      'For a private residential letting in Northern Ireland, you need a Northern Ireland-specific private tenancy agreement. You should not use an English AST, Scottish PRT or Welsh Occupation Contract template for a property in Northern Ireland.',
+  },
+  {
+    question: 'Do landlords have to provide a written tenancy agreement in Northern Ireland?',
+    answer:
+      'Yes. Northern Ireland landlords must provide a written tenancy agreement for a private tenancy. Using an up-to-date NI-specific template helps make sure the agreement contains the right information for the tenancy.',
+  },
+  {
+    question: 'Can I use an England tenancy agreement for a property in Northern Ireland?',
+    answer:
+      'No. Northern Ireland has its own tenancy legislation and notice framework. Using a template from another UK jurisdiction can create compliance problems and make enforcement harder later.',
+  },
+  {
+    question: 'What should a Northern Ireland tenancy agreement include?',
+    answer:
+      'It should clearly set out the landlord and tenant details, property address, rent, deposit terms, tenancy start date, payment terms, repair responsibilities, and the relevant Northern Ireland notice and tenancy wording.',
+  },
+  {
+    question: 'Does a Northern Ireland tenancy agreement need deposit wording?',
+    answer:
+      'Yes. If a deposit is taken, the agreement should deal with the deposit clearly and reflect Northern Ireland deposit protection requirements.',
+  },
+  {
+    question: 'Why is a valid NI tenancy agreement important?',
+    answer:
+      'A clear, jurisdiction-specific agreement helps reduce disputes, supports compliance, and gives landlords a stronger foundation if rent arrears, possession or other enforcement issues arise later.',
+  },
+];
 
 export default function TenancyAgreementNorthernIrelandPage() {
   const pageSchema = {
@@ -78,7 +136,7 @@ export default function TenancyAgreementNorthernIrelandPage() {
     '@type': 'WebPage',
     name: 'Tenancy Agreement Northern Ireland',
     description:
-      'Create a legally valid tenancy agreement for Northern Ireland. Compliant with the Private Tenancies (NI) Order 2006 and Private Tenancies Act 2022.',
+      'Create a Northern Ireland tenancy agreement online with wording designed for NI private tenancies.',
     url: 'https://landlordheaven.co.uk/tenancy-agreement-northern-ireland',
   };
 
@@ -97,7 +155,6 @@ export default function TenancyAgreementNorthernIrelandPage() {
         ])}
       />
 
-      {/* Analytics: Attribution + landing_view event */}
       <SeoLandingWrapper
         pagePath={PAGE_PATH}
         pageTitle={PAGE_TITLE}
@@ -105,144 +162,126 @@ export default function TenancyAgreementNorthernIrelandPage() {
         jurisdiction="northern-ireland"
       />
 
-      <main>
-        {/* Hero Section */}
+      <main className="text-gray-900">
         <UniversalHero
           badge="Northern Ireland Only"
           badgeIcon={<Scale className="w-4 h-4" />}
           title="Tenancy Agreement Northern Ireland"
           subtitle={
             <>
-              Create a <strong>legally valid</strong> tenancy agreement for Northern Ireland.
-              Compliant with the Private Tenancies (NI) Order 2006 and the Private Tenancies Act
-              (Northern Ireland) 2022.
+              Create a <strong>Northern Ireland tenancy agreement</strong> with wording designed for
+              <strong> NI private tenancies</strong>. Built for current NI landlord requirements,
+              with instant download from <strong>{standardPrice}</strong>.
             </>
           }
           primaryCta={{
-            label: `Create Tenancy Agreement — ${PRODUCTS.ast_standard.displayPrice}`,
+            label: `Create Standard Agreement — ${standardPrice}`,
             href: wizardLinkStandard,
           }}
           secondaryCta={{
-            label: 'Premium Agreement with Extra Protection',
+            label: `Create Premium Agreement — ${premiumPrice}`,
             href: wizardLinkPremium,
           }}
           variant="pastel"
         >
-          {/* Trust Signals */}
-          <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600 mt-4">
+          <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-700 mt-4">
             <span className="flex items-center gap-2">
               <CheckCircle className="w-4 h-4 text-green-500" />
-              2022 Act Compliant
+              Northern Ireland specific
             </span>
             <span className="flex items-center gap-2">
               <Shield className="w-4 h-4 text-green-500" />
-              Court-Ready Documentation
+              Written agreement wording included
             </span>
             <span className="flex items-center gap-2">
               <Clock className="w-4 h-4 text-green-500" />
-              Ready in Minutes
+              Ready in minutes
             </span>
           </div>
         </UniversalHero>
 
-        {/* Social Proof */}
         <section className="py-6 bg-gray-50 border-y border-gray-100">
           <div className="container mx-auto px-4">
             <SocialProofCounter variant="total" className="justify-center" />
           </div>
         </section>
 
-        {/* What is a NI Tenancy Agreement Section */}
         <section className="py-16 lg:py-20">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
+            <div className="max-w-5xl mx-auto bg-white rounded-2xl shadow-sm border border-gray-100 p-8 md:p-10">
               <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
-                What Is a Private Tenancy Agreement in Northern Ireland?
+                What is a private tenancy agreement in Northern Ireland?
               </h2>
-              <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                Understanding Northern Ireland&apos;s unique tenancy framework and legal requirements.
+              <p className="text-gray-600 text-center mb-10 max-w-3xl mx-auto">
+                Northern Ireland has its own tenancy framework, so landlords need an NI-specific agreement,
+                not a template borrowed from England, Scotland or Wales.
               </p>
 
-              <div className="prose prose-lg max-w-none text-gray-600">
+              <div className="space-y-5 text-gray-700 leading-relaxed">
                 <p>
-                  A <strong>private tenancy agreement</strong> in Northern Ireland is a legally binding
-                  contract between a landlord and tenant for the rental of residential property. Unlike
-                  England, Scotland, or Wales, Northern Ireland has its own distinct tenancy legislation
-                  governed primarily by the Private Tenancies (Northern Ireland) Order 2006 and the
-                  more recent Private Tenancies Act (Northern Ireland) 2022.
+                  A <strong>private tenancy agreement in Northern Ireland</strong> is the written contract
+                  between landlord and tenant for the letting of residential property in NI. It sets out
+                  the rent, deposit, tenancy dates, responsibilities, notice wording and the practical
+                  rules that apply during the tenancy.
                 </p>
+
                 <p>
-                  The 2022 Act introduced significant changes to landlord obligations, including a
-                  mandatory requirement to provide tenants with a written tenancy agreement within 28
-                  days of the tenancy starting. This written agreement must contain specific statutory
-                  information prescribed by regulations, making it essential that landlords use an
-                  up-to-date, compliant template.
+                  Northern Ireland does <strong>not</strong> use the same tenancy framework as England,
+                  Scotland or Wales. That means an English AST, Scottish PRT or Welsh Occupation Contract
+                  template is not the right document for an NI property.
                 </p>
+
                 <p>
-                  Northern Ireland tenancies are neither Assured Shorthold Tenancies (England), Private
-                  Residential Tenancies (Scotland), nor Occupation Contracts (Wales). Using a template
-                  from another UK jurisdiction will not comply with NI law and could leave you unable
-                  to enforce your rights or serve valid notices.
+                  A good NI tenancy agreement should be clear, practical and drafted for the Northern
+                  Ireland legal framework. It should also make the tenancy easier to manage if problems
+                  arise later, including rent arrears, deposit disputes or possession issues.
                 </p>
-                <p>Key features of NI private tenancies include:</p>
-                <ul>
-                  <li>
-                    <strong>Written agreement required:</strong> Must be provided within 28 days of
-                    tenancy start under the 2022 Act
-                  </li>
-                  <li>
-                    <strong>Deposit protection:</strong> Tenancy deposits must be protected in an
-                    approved NI scheme
-                  </li>
-                  <li>
-                    <strong>Notice to Quit:</strong> Different notice periods than the rest of the UK
-                  </li>
-                  <li>
-                    <strong>Separate legislation:</strong> NI tenancy law is distinct from England,
-                    Scotland, and Wales
-                  </li>
-                </ul>
+
+                <p>
+                  If you are a landlord letting a property in Belfast, Derry/Londonderry, Newry, Lisburn,
+                  Bangor or anywhere else in Northern Ireland, the safest route is to use a
+                  <strong> Northern Ireland-specific tenancy agreement</strong>.
+                </p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Warning Section */}
         <section className="py-12 bg-amber-50">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
+            <div className="max-w-5xl mx-auto">
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center flex-shrink-0">
                   <AlertTriangle className="w-6 h-6 text-amber-600" />
                 </div>
                 <div>
                   <h2 className="text-xl font-bold text-amber-900 mb-2">
-                    Do Not Use Templates from Other UK Jurisdictions
+                    Do not use templates from other UK jurisdictions
                   </h2>
                   <p className="text-amber-800 mb-4">
-                    Northern Ireland has separate tenancy legislation. Using an English AST, Scottish
-                    PRT, or Welsh Occupation Contract template will result in an invalid agreement that
-                    cannot be properly enforced.
+                    Northern Ireland tenancy law is separate. Using an England, Scotland or Wales
+                    template for an NI property can create the wrong notice wording, the wrong legal
+                    references and the wrong expectations for both landlord and tenant.
                   </p>
                   <div className="grid md:grid-cols-2 gap-4">
                     <div className="bg-white rounded-lg p-4 border border-amber-200">
                       <h3 className="font-semibold text-amber-900 mb-2">
-                        Problems with Wrong Templates
+                        Common problems with the wrong template
                       </h3>
                       <ul className="text-sm text-amber-800 space-y-1">
-                        <li>• Reference wrong legislation (Housing Act, 2016 Acts)</li>
-                        <li>• Include Section 21/Section 8 terms not valid in NI</li>
-                        <li>• Missing NI statutory requirements</li>
-                        <li>• Incorrect notice periods and procedures</li>
+                        <li>• References the wrong legislation</li>
+                        <li>• Uses England-only or Wales-only wording</li>
+                        <li>• Misses NI-specific tenancy points</li>
+                        <li>• Creates confusion around notices and enforcement</li>
                       </ul>
                     </div>
                     <div className="bg-white rounded-lg p-4 border border-amber-200">
-                      <h3 className="font-semibold text-amber-900 mb-2">Consequences</h3>
+                      <h3 className="font-semibold text-amber-900 mb-2">Why that matters</h3>
                       <ul className="text-sm text-amber-800 space-y-1">
-                        <li>• Notice to Quit may be invalid</li>
-                        <li>• Court may refuse possession order</li>
-                        <li>• Unable to recover arrears or damages</li>
-                        <li>• Non-compliance with 2022 Act requirements</li>
+                        <li>• More risk of disputes later</li>
+                        <li>• Harder to rely on the agreement if problems arise</li>
+                        <li>• Poorer foundation for possession or arrears action</li>
+                        <li>• Greater compliance risk for landlords</li>
                       </ul>
                     </div>
                   </div>
@@ -252,15 +291,14 @@ export default function TenancyAgreementNorthernIrelandPage() {
           </div>
         </section>
 
-        {/* How NI Differs Section */}
         <section className="py-16 lg:py-20 bg-gray-50">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
+            <div className="max-w-5xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
-                How NI Tenancy Law Differs from the Rest of the UK
+                How Northern Ireland differs from England
               </h2>
-              <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                Key differences between Northern Ireland and other UK jurisdictions.
+              <p className="text-gray-600 text-center mb-12 max-w-3xl mx-auto">
+                Landlords often search for an “AST template”, but Northern Ireland works differently.
               </p>
 
               <div className="overflow-x-auto">
@@ -269,51 +307,44 @@ export default function TenancyAgreementNorthernIrelandPage() {
                     <tr className="bg-gray-50">
                       <th className="text-left p-4 font-semibold text-gray-900">Feature</th>
                       <th className="text-left p-4 font-semibold text-gray-900">Northern Ireland</th>
-                      <th className="text-left p-4 font-semibold text-gray-900">England (AST)</th>
+                      <th className="text-left p-4 font-semibold text-gray-900">England</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100">
                     <tr>
-                      <td className="p-4 text-gray-600">Primary legislation</td>
-                      <td className="p-4 text-gray-900">
-                        Private Tenancies (NI) Order 2006 & 2022 Act
-                      </td>
-                      <td className="p-4 text-gray-900">Housing Act 1988</td>
+                      <td className="p-4 text-gray-700">Typical private tenancy document</td>
+                      <td className="p-4 text-gray-900">NI private tenancy agreement</td>
+                      <td className="p-4 text-gray-900">AST</td>
                     </tr>
                     <tr>
-                      <td className="p-4 text-gray-600">Written agreement</td>
+                      <td className="p-4 text-gray-700">Legal framework</td>
+                      <td className="p-4 text-gray-900">Northern Ireland specific</td>
+                      <td className="p-4 text-gray-900">England specific</td>
+                    </tr>
+                    <tr>
+                      <td className="p-4 text-gray-700">Notices and possession wording</td>
+                      <td className="p-4 text-gray-900">NI-specific notice structure</td>
+                      <td className="p-4 text-gray-900">England notice structure</td>
+                    </tr>
+                    <tr>
+                      <td className="p-4 text-gray-700">Deposit and compliance wording</td>
+                      <td className="p-4 text-gray-900">Needs NI wording</td>
+                      <td className="p-4 text-gray-900">Needs England wording</td>
+                    </tr>
+                    <tr>
+                      <td className="p-4 text-gray-700">Can you reuse the same template?</td>
                       <td className="p-4 text-gray-900">
                         <span className="flex items-center gap-2">
-                          <CheckCircle className="w-4 h-4 text-green-500" />
-                          Required within 28 days
+                          <XCircle className="w-4 h-4 text-amber-500" />
+                          No
                         </span>
                       </td>
                       <td className="p-4 text-gray-900">
                         <span className="flex items-center gap-2">
                           <XCircle className="w-4 h-4 text-amber-500" />
-                          Not legally required (but recommended)
+                          No
                         </span>
                       </td>
-                    </tr>
-                    <tr>
-                      <td className="p-4 text-gray-600">No-fault eviction</td>
-                      <td className="p-4 text-gray-900">Notice to Quit (varying periods)</td>
-                      <td className="p-4 text-gray-900">Section 21 notice (2 months)</td>
-                    </tr>
-                    <tr>
-                      <td className="p-4 text-gray-600">Grounds-based eviction</td>
-                      <td className="p-4 text-gray-900">Under NI Order/Act grounds</td>
-                      <td className="p-4 text-gray-900">Section 8 grounds</td>
-                    </tr>
-                    <tr>
-                      <td className="p-4 text-gray-600">Deposit protection deadline</td>
-                      <td className="p-4 text-gray-900">Within 28 days</td>
-                      <td className="p-4 text-gray-900">Within 30 days</td>
-                    </tr>
-                    <tr>
-                      <td className="p-4 text-gray-600">Enforcement body</td>
-                      <td className="p-4 text-gray-900">County Court NI</td>
-                      <td className="p-4 text-gray-900">County Court England</td>
                     </tr>
                   </tbody>
                 </table>
@@ -322,114 +353,37 @@ export default function TenancyAgreementNorthernIrelandPage() {
           </div>
         </section>
 
-        {/* Legal Requirements Section */}
         <section className="py-16 lg:py-20">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
+            <div className="max-w-5xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
-                Legal Requirements for NI Tenancy Agreements
+                What your NI tenancy agreement should include
               </h2>
-              <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                Your tenancy agreement must comply with Northern Ireland-specific legislation.
-              </p>
-
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
-                  <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4">
-                    <FileText className="w-6 h-6 text-primary" />
-                  </div>
-                  <h3 className="font-bold text-gray-900 mb-2">
-                    Private Tenancies (NI) Order 2006
-                  </h3>
-                  <p className="text-gray-600 text-sm">
-                    The foundational legislation for private tenancies in Northern Ireland. Establishes
-                    the legal framework for landlord-tenant relationships, notice requirements, and
-                    grounds for possession.
-                  </p>
-                </div>
-
-                <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
-                  <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4">
-                    <Shield className="w-6 h-6 text-primary" />
-                  </div>
-                  <h3 className="font-bold text-gray-900 mb-2">
-                    Private Tenancies Act (NI) 2022
-                  </h3>
-                  <p className="text-gray-600 text-sm">
-                    Introduced mandatory written agreements within 28 days, new notice periods, and
-                    enhanced tenant protections. All NI tenancy agreements must now comply with these
-                    requirements.
-                  </p>
-                </div>
-
-                <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
-                  <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4">
-                    <Scale className="w-6 h-6 text-primary" />
-                  </div>
-                  <h3 className="font-bold text-gray-900 mb-2">Tenancy Deposit Scheme NI</h3>
-                  <p className="text-gray-600 text-sm">
-                    All deposits taken for NI tenancies must be protected in an approved scheme within
-                    28 days. Prescribed information must be provided to the tenant. Non-compliance can
-                    result in penalties and affect your ability to recover possession.
-                  </p>
-                </div>
-
-                <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
-                  <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4">
-                    <Gavel className="w-6 h-6 text-primary" />
-                  </div>
-                  <h3 className="font-bold text-gray-900 mb-2">Consumer Rights</h3>
-                  <p className="text-gray-600 text-sm">
-                    Unfair contract terms are not enforceable under consumer protection law. Your
-                    tenancy agreement must contain fair, transparent terms that do not create
-                    significant imbalance between landlord and tenant.
-                  </p>
-                </div>
-              </div>
-
-              <div className="mt-8 bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg">
-                <p className="text-green-900 text-sm">
-                  <strong>Landlord Heaven NI agreements</strong> are drafted to comply with all current
-                  Northern Ireland legislation. They are regularly updated when laws change, ensuring
-                  you always have a compliant agreement.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* What to Include Section */}
-        <section className="py-16 lg:py-20 bg-gray-50">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
-                What Your NI Tenancy Agreement Must Include
-              </h2>
-              <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                Essential terms required by Northern Ireland legislation.
+              <p className="text-gray-600 text-center mb-12 max-w-3xl mx-auto">
+                A strong agreement should do more than fill in names and rent. It should clearly
+                set out the tenancy and reduce avoidable disputes later.
               </p>
 
               <div className="space-y-6">
                 <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                      <Users className="w-5 h-5 text-primary" />
+                    <div className="w-10 h-10 bg-red-50 rounded-full flex items-center justify-center flex-shrink-0">
+                      <Users className="w-5 h-5 text-red-600" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-gray-900 mb-2">Parties and Property Details</h3>
-                      <p className="text-gray-600 mb-3">
-                        The agreement must clearly identify the landlord (with contact address),
-                        all tenants by full legal name, and the complete property address including
-                        postcode.
+                      <h3 className="font-bold text-gray-900 mb-2">Parties and property details</h3>
+                      <p className="text-gray-700 mb-3">
+                        The agreement should clearly identify the landlord, tenant and property so
+                        there is no ambiguity about who is renting what.
                       </p>
-                      <ul className="grid md:grid-cols-2 gap-2 text-sm text-gray-600">
+                      <ul className="grid md:grid-cols-2 gap-2 text-sm text-gray-700">
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                          Landlord name and address
+                          Landlord details
                         </li>
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                          All tenant names
+                          Tenant details
                         </li>
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
@@ -437,7 +391,7 @@ export default function TenancyAgreementNorthernIrelandPage() {
                         </li>
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                          Agent details (if applicable)
+                          Agent details where relevant
                         </li>
                       </ul>
                     </div>
@@ -446,31 +400,31 @@ export default function TenancyAgreementNorthernIrelandPage() {
 
                 <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                      <FileText className="w-5 h-5 text-primary" />
+                    <div className="w-10 h-10 bg-red-50 rounded-full flex items-center justify-center flex-shrink-0">
+                      <FileText className="w-5 h-5 text-red-600" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-gray-900 mb-2">Rent and Payment Terms</h3>
-                      <p className="text-gray-600 mb-3">
-                        Clear specification of the rent amount, payment frequency, due date, and
-                        acceptable payment methods. Include provisions for rent review if appropriate.
+                      <h3 className="font-bold text-gray-900 mb-2">Rent and payment terms</h3>
+                      <p className="text-gray-700 mb-3">
+                        The rent section should be specific and easy to understand, covering the amount,
+                        due date and how payment should be made.
                       </p>
-                      <ul className="grid md:grid-cols-2 gap-2 text-sm text-gray-600">
+                      <ul className="grid md:grid-cols-2 gap-2 text-sm text-gray-700">
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                          Monthly rent amount
+                          Rent amount
                         </li>
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                          Payment due date
+                          Payment frequency
                         </li>
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                          Payment method
+                          Due date
                         </li>
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                          Rent review provisions
+                          Payment method wording
                         </li>
                       </ul>
                     </div>
@@ -479,66 +433,31 @@ export default function TenancyAgreementNorthernIrelandPage() {
 
                 <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                      <Shield className="w-5 h-5 text-primary" />
+                    <div className="w-10 h-10 bg-red-50 rounded-full flex items-center justify-center flex-shrink-0">
+                      <Shield className="w-5 h-5 text-red-600" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-gray-900 mb-2">Deposit Protection</h3>
-                      <p className="text-gray-600 mb-3">
-                        The deposit amount, which NI approved scheme it will be protected in, the
-                        deadline for protection (28 days), and conditions for return at tenancy end.
+                      <h3 className="font-bold text-gray-900 mb-2">Deposit wording</h3>
+                      <p className="text-gray-700 mb-3">
+                        If a deposit is taken, the agreement should deal with it clearly and support
+                        the landlord’s wider deposit compliance process.
                       </p>
-                      <ul className="grid md:grid-cols-2 gap-2 text-sm text-gray-600">
+                      <ul className="grid md:grid-cols-2 gap-2 text-sm text-gray-700">
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
                           Deposit amount
                         </li>
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                          Protection scheme name
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <CheckCircle className="w-4 h-4 text-green-500" />
-                          28-day protection deadline
+                          Deposit purpose
                         </li>
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
                           Return conditions
                         </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                      <Home className="w-5 h-5 text-primary" />
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-gray-900 mb-2">
-                        Tenancy Duration and Termination
-                      </h3>
-                      <p className="text-gray-600 mb-3">
-                        Whether fixed term or periodic, the start date, end date (if fixed), and
-                        crucially the correct NI notice periods for ending the tenancy.
-                      </p>
-                      <ul className="grid md:grid-cols-2 gap-2 text-sm text-gray-600">
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                          Tenancy start date
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <CheckCircle className="w-4 h-4 text-green-500" />
-                          Fixed term end date (if applicable)
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <CheckCircle className="w-4 h-4 text-green-500" />
-                          NI notice periods
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <CheckCircle className="w-4 h-4 text-green-500" />
-                          Notice to Quit requirements
+                          NI-specific wording
                         </li>
                       </ul>
                     </div>
@@ -547,44 +466,85 @@ export default function TenancyAgreementNorthernIrelandPage() {
 
                 <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                      <BadgeCheck className="w-5 h-5 text-primary" />
+                    <div className="w-10 h-10 bg-red-50 rounded-full flex items-center justify-center flex-shrink-0">
+                      <Home className="w-5 h-5 text-red-600" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-gray-900 mb-2">
-                        Responsibilities and Obligations
-                      </h3>
-                      <p className="text-gray-600 mb-3">
-                        Clear definition of landlord repair obligations, tenant responsibilities,
-                        utility bill arrangements, and property maintenance requirements.
+                      <h3 className="font-bold text-gray-900 mb-2">Tenancy term and ending the tenancy</h3>
+                      <p className="text-gray-700 mb-3">
+                        The agreement should explain when the tenancy starts, whether it is fixed-term
+                        or periodic, and how the tenancy can be brought to an end under the NI framework.
                       </p>
-                      <ul className="grid md:grid-cols-2 gap-2 text-sm text-gray-600">
+                      <ul className="grid md:grid-cols-2 gap-2 text-sm text-gray-700">
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                          Landlord repair obligations
+                          Start date
                         </li>
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                          Tenant responsibilities
+                          Fixed term wording if relevant
                         </li>
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                          Utility arrangements
+                          Notice wording
                         </li>
                         <li className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                          Garden and exterior maintenance
+                          NI-specific termination structure
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
+                  <div className="flex items-start gap-4">
+                    <div className="w-10 h-10 bg-red-50 rounded-full flex items-center justify-center flex-shrink-0">
+                      <BadgeCheck className="w-5 h-5 text-red-600" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-gray-900 mb-2">Repairs and responsibilities</h3>
+                      <p className="text-gray-700 mb-3">
+                        Good agreements define who is responsible for what during the tenancy, which
+                        can reduce avoidable arguments later.
+                      </p>
+                      <ul className="grid md:grid-cols-2 gap-2 text-sm text-gray-700">
+                        <li className="flex items-center gap-2">
+                          <CheckCircle className="w-4 h-4 text-green-500" />
+                          Landlord repair wording
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <CheckCircle className="w-4 h-4 text-green-500" />
+                          Tenant obligations
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <CheckCircle className="w-4 h-4 text-green-500" />
+                          Utilities and bills
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <CheckCircle className="w-4 h-4 text-green-500" />
+                          Upkeep and maintenance wording
                         </li>
                       </ul>
                     </div>
                   </div>
                 </div>
               </div>
+
+              <p className="mt-8 text-gray-700">
+                If you later need help with arrears recovery, see our guide to{' '}
+                <Link
+                  href="/money-claim-unpaid-rent"
+                  className="text-red-600 font-semibold hover:underline"
+                >
+                  recovering unpaid rent
+                </Link>
+                .
+              </p>
             </div>
           </div>
         </section>
 
-        {/* Mid-page CTA */}
         <section className="py-16 lg:py-20">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
@@ -594,69 +554,48 @@ export default function TenancyAgreementNorthernIrelandPage() {
                 pagePath={PAGE_PATH}
                 jurisdiction="northern-ireland"
                 title="Create Your NI Tenancy Agreement Now"
-                description="Compliant with the 2006 Order and 2022 Act. Includes all statutory requirements. Ready to use immediately."
+                description={`Northern Ireland specific wording, instant download, from ${standardPrice}.`}
               />
             </div>
           </div>
         </section>
 
-        {/* Notice to Quit Section */}
         <section className="py-16 lg:py-20 bg-gray-50">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
+            <div className="max-w-5xl mx-auto bg-white rounded-2xl shadow-sm border border-gray-100 p-8 md:p-10">
               <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
-                Notice to Quit in Northern Ireland
+                Notice wording and ending a tenancy in Northern Ireland
               </h2>
-              <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                Understanding the notice periods required to end a NI tenancy.
+              <p className="text-gray-600 text-center mb-10 max-w-3xl mx-auto">
+                Ending a tenancy in NI is not the same as ending one in England, so the agreement needs
+                the right jurisdiction-specific wording from the start.
               </p>
 
-              <div className="prose prose-lg max-w-none text-gray-600">
+              <div className="space-y-5 text-gray-700 leading-relaxed">
                 <p>
-                  To end a private tenancy in Northern Ireland, landlords must serve a valid Notice
-                  to Quit. The notice periods depend on the length of the tenancy and changed
-                  significantly under the Private Tenancies Act (NI) 2022.
+                  Northern Ireland landlords should not assume that England-style notice wording or
+                  possession language will work for an NI tenancy. The legal framework is different,
+                  which is why the underlying agreement should also be Northern Ireland specific.
                 </p>
 
-                <h3>Minimum Notice Periods</h3>
                 <p>
-                  The minimum notice period depends on how long the tenant has been in occupation:
-                </p>
-                <ul>
-                  <li>
-                    <strong>Less than 12 months:</strong> At least 4 weeks notice
-                  </li>
-                  <li>
-                    <strong>12 months or more:</strong> At least 8 weeks notice
-                  </li>
-                  <li>
-                    <strong>Certain grounds:</strong> Longer notice periods may apply under the 2022 Act
-                  </li>
-                </ul>
-
-                <h3>Grounds for Possession</h3>
-                <p>
-                  Unlike England&apos;s Section 21, Northern Ireland does not have a simple &quot;no-fault&quot;
-                  eviction route. Landlords must typically establish grounds for possession, which may
-                  include rent arrears, breach of tenancy terms, the landlord requiring the property for
-                  their own use, or intention to sell.
+                  When disputes arise, one of the first things that matters is whether the original
+                  tenancy agreement was properly structured for the property’s jurisdiction. A poor
+                  template can weaken the landlord’s position at exactly the wrong time.
                 </p>
 
-                <h3>Why a Valid Agreement Matters</h3>
                 <p>
-                  When you serve a Notice to Quit, the court will examine whether your tenancy agreement
-                  complies with NI law, whether you have met your obligations (including providing a
-                  written agreement within 28 days and protecting the deposit), and whether the notice
-                  itself is valid. A defective agreement can undermine your entire case.
+                  This is one of the main reasons to start with a proper NI tenancy agreement rather
+                  than a generic “UK rental agreement” downloaded from elsewhere.
                 </p>
               </div>
 
               <div className="mt-8">
                 <Link
                   href="/money-claim-unpaid-rent"
-                  className="inline-flex items-center gap-2 text-primary font-medium hover:underline"
+                  className="inline-flex items-center gap-2 text-red-600 font-medium hover:underline"
                 >
-                  Learn about recovering unpaid rent through the courts
+                  Learn about recovering unpaid rent
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
@@ -664,98 +603,87 @@ export default function TenancyAgreementNorthernIrelandPage() {
           </div>
         </section>
 
-        {/* Standard vs Premium Section */}
         <section className="py-16 lg:py-20">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
+            <div className="max-w-5xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
                 Standard vs Premium NI Tenancy Agreement
               </h2>
-              <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                Choose the level of protection that suits your letting situation.
+              <p className="text-gray-600 text-center mb-12 max-w-3xl mx-auto">
+                Choose the level of protection and detail that suits your letting situation.
               </p>
 
               <div className="grid md:grid-cols-2 gap-8">
-                <div className="bg-white rounded-2xl p-6 border-2 border-gray-200 shadow-sm">
+                <div className="bg-white rounded-2xl p-6 border-2 border-gray-200 shadow-sm text-gray-900">
                   <h3 className="text-xl font-bold text-gray-900 mb-2">Standard Agreement</h3>
-                  <p className="text-2xl font-bold text-primary mb-4">
-                    {PRODUCTS.ast_standard.displayPrice}
-                  </p>
-                  <p className="text-gray-600 mb-6">
-                    A complete, legally valid NI tenancy agreement with all essential clauses required
-                    for compliance.
+                  <p className="text-2xl font-bold text-red-600 mb-4">{standardPrice}</p>
+                  <p className="text-gray-700 mb-6">
+                    A complete NI tenancy agreement for many straightforward private lets.
                   </p>
                   <ul className="space-y-3 mb-6">
-                    <li className="flex items-start gap-2 text-gray-600">
+                    <li className="flex items-start gap-2 text-gray-700">
                       <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>2006 Order and 2022 Act compliant</span>
+                      <span>Northern Ireland specific wording</span>
                     </li>
-                    <li className="flex items-start gap-2 text-gray-600">
+                    <li className="flex items-start gap-2 text-gray-700">
                       <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>NI deposit protection clauses</span>
+                      <span>Rent and deposit clauses</span>
                     </li>
-                    <li className="flex items-start gap-2 text-gray-600">
+                    <li className="flex items-start gap-2 text-gray-700">
                       <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>Correct NI notice periods</span>
+                      <span>Tenancy term wording</span>
                     </li>
-                    <li className="flex items-start gap-2 text-gray-600">
+                    <li className="flex items-start gap-2 text-gray-700">
                       <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>Clear rent and payment terms</span>
+                      <span>Repair and responsibility terms</span>
                     </li>
-                    <li className="flex items-start gap-2 text-gray-600">
+                    <li className="flex items-start gap-2 text-gray-700">
                       <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>Repair responsibilities defined</span>
+                      <span>Clear written agreement format</span>
                     </li>
                   </ul>
                   <Link
                     href={wizardLinkStandard}
-                    className="block w-full text-center bg-primary text-white py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors"
+                    className="block w-full text-center bg-red-600 text-white py-3 rounded-lg font-medium hover:bg-red-700 transition-colors"
                   >
                     Create Standard Agreement
                   </Link>
                 </div>
 
-                <div className="bg-white rounded-2xl p-6 border-2 border-primary shadow-lg relative">
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-white text-sm px-3 py-1 rounded-full">
+                <div className="bg-white rounded-2xl p-6 border-2 border-red-200 shadow-lg relative text-gray-900">
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-red-600 text-white text-sm px-3 py-1 rounded-full">
                     Recommended
                   </div>
                   <h3 className="text-xl font-bold text-gray-900 mb-2">Premium Agreement</h3>
-                  <p className="text-2xl font-bold text-primary mb-4">
-                    {PRODUCTS.ast_premium.displayPrice}
-                  </p>
-                  <p className="text-gray-600 mb-6">
-                    Enhanced protection with additional clauses for complex situations and extra
-                    security.
+                  <p className="text-2xl font-bold text-red-700 mb-4">{premiumPrice}</p>
+                  <p className="text-gray-700 mb-6">
+                    More detailed protection for landlords who want broader coverage and extra clauses.
                   </p>
                   <ul className="space-y-3 mb-6">
-                    <li className="flex items-start gap-2 text-gray-600">
+                    <li className="flex items-start gap-2 text-gray-700">
                       <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
                       <span>Everything in Standard</span>
                     </li>
-                    <li className="flex items-start gap-2 text-gray-600">
+                    <li className="flex items-start gap-2 text-gray-700">
                       <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>Break clause options</span>
+                      <span>Added flexibility and extra clauses</span>
                     </li>
-                    <li className="flex items-start gap-2 text-gray-600">
+                    <li className="flex items-start gap-2 text-gray-700">
                       <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>Guarantor agreement included</span>
+                      <span>Better suited to more complex lettings</span>
                     </li>
-                    <li className="flex items-start gap-2 text-gray-600">
+                    <li className="flex items-start gap-2 text-gray-700">
                       <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>Pet policy clauses</span>
+                      <span>Useful where more detailed landlord controls are needed</span>
                     </li>
-                    <li className="flex items-start gap-2 text-gray-600">
+                    <li className="flex items-start gap-2 text-gray-700">
                       <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>Garden and parking terms</span>
-                    </li>
-                    <li className="flex items-start gap-2 text-gray-600">
-                      <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>Rent review mechanism</span>
+                      <span>Stronger drafting for real-world letting scenarios</span>
                     </li>
                   </ul>
                   <Link
                     href={wizardLinkPremium}
-                    className="block w-full text-center bg-primary text-white py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors"
+                    className="block w-full text-center bg-red-700 text-white py-3 rounded-lg font-medium hover:bg-red-800 transition-colors"
                   >
                     Create Premium Agreement
                   </Link>
@@ -765,15 +693,13 @@ export default function TenancyAgreementNorthernIrelandPage() {
           </div>
         </section>
 
-        {/* FAQ Section */}
         <FAQSection
-          faqs={niTenancyAgreementFAQs}
+          faqs={faqs}
           title="Northern Ireland Tenancy Agreement FAQ"
           showContactCTA={false}
           variant="gray"
         />
 
-        {/* Final CTA */}
         <section className="py-16 lg:py-20">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
@@ -783,7 +709,7 @@ export default function TenancyAgreementNorthernIrelandPage() {
                 pagePath={PAGE_PATH}
                 jurisdiction="northern-ireland"
                 title="Create Your NI Tenancy Agreement Today"
-                description="Legally valid. Court-ready. Compliant with NI legislation. Ready in minutes."
+                description={`Northern Ireland specific. Instant download. From ${standardPrice}.`}
               />
 
               <SeoDisclaimer className="max-w-4xl mx-auto" />
@@ -791,7 +717,6 @@ export default function TenancyAgreementNorthernIrelandPage() {
           </div>
         </section>
 
-        {/* Related Resources */}
         <section className="py-16 lg:py-20 bg-gray-50">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
