@@ -8,18 +8,13 @@ import {
 import { getCanonicalUrl } from '@/lib/seo/urls';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
-import {
-  possessionClaimRelatedLinks,
-  productLinks,
-  guideLinks,
-} from '@/lib/seo/internal-links';
+import { possessionClaimRelatedLinks } from '@/lib/seo/internal-links';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
-import { possessionOrderFAQs } from '@/data/faqs';
 import { FunnelCta } from '@/components/funnels';
 import { PRODUCTS } from '@/lib/pricing/products';
 import {
@@ -31,11 +26,8 @@ import {
   FileText,
   Shield,
   Gavel,
-  AlertCircle,
   PoundSterling,
-  XCircle,
   Users,
-  Building,
 } from 'lucide-react';
 
 const completePackLink = buildWizardLink({
@@ -45,11 +37,53 @@ const completePackLink = buildWizardLink({
   topic: 'eviction',
 });
 
+const faqs = [
+  {
+    question: 'How do I apply for a possession order as a landlord?',
+    answer:
+      'If your notice has expired and the tenant is still in the property, the next step is usually to apply to court for possession. The route depends on the type of notice you served and whether you are also claiming rent arrears.',
+  },
+  {
+    question: 'What is the difference between Form N5B and Form N5?',
+    answer:
+      'N5B is commonly associated with the accelerated possession route, usually where the landlord is relying on the notice route and not claiming rent arrears in the same claim. N5 is the standard possession route and is commonly used where a hearing is expected or where arrears or other grounds are involved.',
+  },
+  {
+    question: 'Do I always need a court hearing for a possession order?',
+    answer:
+      'Not always. Some possession routes are more document-based, while others are more likely to involve a hearing. Whether a hearing takes place depends on the route, the paperwork and whether the tenant defends the claim.',
+  },
+  {
+    question: 'How much does a possession claim cost?',
+    answer:
+      'Court fees can change, so landlords should check the current fee before filing. In addition to the issue fee, there can also be later enforcement costs if the tenant still does not leave after the possession order.',
+  },
+  {
+    question: 'What if the tenant still does not leave after the possession order?',
+    answer:
+      'If the tenant remains after the possession order date, the landlord will usually need to move to enforcement, often through a warrant or bailiff process. A possession order alone does not always mean immediate vacant possession on the day stated.',
+  },
+  {
+    question: 'Can I claim rent arrears at the same time as possession?',
+    answer:
+      'In some cases, yes. Whether you should do so depends on the notice route used, the facts of the case and the documents you want the court to consider.',
+  },
+  {
+    question: 'What is the biggest mistake landlords make when applying for possession?',
+    answer:
+      'The biggest mistake is issuing a possession claim with weak paperwork, an invalid notice, or the wrong court route. That can cause delay, extra cost and in some cases failure of the claim.',
+  },
+  {
+    question: 'Do I still need a warrant after I get possession?',
+    answer:
+      'Sometimes. If the tenant leaves in line with the order, enforcement may not be needed. If the tenant stays, landlords usually need to move on to the enforcement stage.',
+  },
+];
 
 export const metadata: Metadata = {
-  title: 'Apply for Possession Order | N5B and N5 Forms',
+  title: 'Apply for Possession Order | N5B, N5 and Court Process Explained',
   description:
-    'How to apply for a possession order in England. Step-by-step guide to Form N5B (accelerated) and Form N5 (standard). Court fees, timelines, and what to expect.',
+    'How to apply for a possession order in England. Learn the difference between N5B and N5, what documents landlords need, likely timelines, court fees and what happens after the order is granted.',
   keywords: [
     'apply for possession order landlord',
     'possession order landlord england',
@@ -59,11 +93,14 @@ export const metadata: Metadata = {
     'accelerated possession procedure',
     'court possession order',
     'landlord court forms',
+    'how to apply for possession order',
+    'possession claim after section 21',
+    'possession claim after section 8',
   ],
   openGraph: {
-    title: 'Apply for Possession Order | Landlord Court Forms | Landlord Heaven',
+    title: 'Apply for Possession Order | N5B, N5 and Court Process Explained',
     description:
-      'How to apply for a possession order in England. Step-by-step guide to Form N5B and N5.',
+      'How to apply for a possession order in England, including N5B and N5 routes, timelines, court fees and what happens after the order.',
     type: 'article',
     url: getCanonicalUrl('/apply-possession-order-landlord'),
     siteName: 'Landlord Heaven',
@@ -72,7 +109,8 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Apply for Possession Order | Landlord Heaven',
-    description: 'How to apply for a possession order in England.',
+    description:
+      'How to apply for a possession order in England, including N5B and N5 routes.',
   },
   alternates: {
     canonical: getCanonicalUrl('/apply-possession-order-landlord'),
@@ -94,12 +132,11 @@ export default function ApplyPossessionOrderPage() {
         jurisdiction="england"
       />
 
-      {/* Structured Data */}
       <StructuredData
         data={articleSchema({
           headline: 'How to Apply for a Possession Order: Landlord Guide 2026',
           description:
-            'Complete guide to applying for a possession order in England. Covers N5B accelerated procedure, N5 standard claim, court fees, and hearing process.',
+            'Complete guide to applying for a possession order in England. Covers N5B, N5, court fees, documents, timelines and what happens after the order is granted.',
           url: getCanonicalUrl('/apply-possession-order-landlord'),
           datePublished: '2026-01-30',
           dateModified: '2026-01-30',
@@ -113,13 +150,12 @@ export default function ApplyPossessionOrderPage() {
         ])}
       />
 
-      <main>
-        {/* Hero Section */}
+      <main className="text-gray-900">
         <UniversalHero
           badge="England"
           badgeIcon={<Gavel className="w-4 h-4" />}
           title="Apply for a Possession Order"
-          subtitle="Your eviction notice has expired but your tenant has not left. Here is how to apply to the court for a possession order using Form N5B or N5."
+          subtitle="Your notice has expired but the tenant is still in the property. Here is how England landlords move from notice stage to court possession using the correct claim route."
           primaryCta={{
             label: `Create Eviction Notice — ${PRODUCTS.notice_only.displayPrice}`,
             href: completePackLink,
@@ -130,18 +166,18 @@ export default function ApplyPossessionOrderPage() {
           }}
           variant="pastel"
         >
-          <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600 mt-4">
+          <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-700 mt-4">
             <span className="flex items-center gap-2">
               <FileText className="w-4 h-4 text-green-500" />
-              N5B & N5 Included
+              N5B and N5 routes explained
             </span>
             <span className="flex items-center gap-2">
               <Shield className="w-4 h-4 text-green-500" />
-              Witness Statements
+              Court-stage guidance
             </span>
             <span className="flex items-center gap-2">
               <CheckCircle className="w-4 h-4 text-green-500" />
-              Step-by-Step Guide
+              Clear next steps
             </span>
           </div>
         </UniversalHero>
@@ -165,92 +201,164 @@ export default function ApplyPossessionOrderPage() {
           </div>
         </section>
 
-        {/* Social Proof */}
         <section className="py-6 bg-gray-50 border-y border-gray-100">
           <div className="container mx-auto px-4">
             <SocialProofCounter variant="total" className="justify-center" />
           </div>
         </section>
 
-        {/* Types of Possession Claims */}
         <section className="py-16 lg:py-20">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
+            <div className="max-w-5xl mx-auto bg-white rounded-2xl border border-gray-100 shadow-sm p-8 md:p-10">
               <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
-                Types of Possession Claims
+                When do you apply for a possession order?
               </h2>
-              <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                There are two routes to court depending on which notice you served. Choose the
-                right one for your situation.
+              <p className="text-gray-600 text-center mb-10 max-w-3xl mx-auto">
+                A possession claim usually begins after the notice stage has ended and the tenant is
+                still in occupation.
+              </p>
+
+              <div className="space-y-5 text-gray-700 leading-relaxed">
+                <p>
+                  Serving notice does not usually give the landlord the property back automatically on
+                  the expiry date. If the tenant remains, the next step is often to apply to the court
+                  for a <strong>possession order</strong>.
+                </p>
+
+                <p>
+                  This is where many landlords get stuck. They have served notice, the tenant has not
+                  moved out, and they are unsure whether to use the accelerated route, the standard
+                  possession route, or whether they need to include rent arrears as well.
+                </p>
+
+                <p>
+                  The main practical questions are usually: was the notice valid, which possession
+                  claim route applies, what documents should go in the bundle, and what happens if the
+                  tenant still stays after the court order.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-16 lg:py-20 bg-gray-50">
+          <div className="container mx-auto px-4">
+            <div className="max-w-5xl mx-auto">
+              <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
+                Types of possession claims
+              </h2>
+              <p className="text-gray-600 text-center mb-12 max-w-3xl mx-auto">
+                There are two broad court routes landlords usually think about. The right one depends
+                on the notice used, whether arrears are included, and how the case is being framed.
               </p>
 
               <div className="grid md:grid-cols-2 gap-8">
-                {/* Accelerated (N5B) */}
-                <div className="bg-primary/5 rounded-2xl p-6 border-2 border-primary relative">
+                <div className="bg-red-50 rounded-2xl p-6 border-2 border-red-200 relative">
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <span className="bg-primary text-white text-xs font-bold px-3 py-1 rounded-full uppercase">
-                      Fastest Route
+                    <span className="bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase">
+                      Often simpler
                     </span>
                   </div>
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center">
-                      <span className="text-lg font-bold text-primary">N5B</span>
+                    <div className="w-14 h-14 bg-white rounded-xl flex items-center justify-center border border-red-200">
+                      <span className="text-lg font-bold text-red-600">N5B</span>
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold text-gray-900">Accelerated Procedure</h3>
-                      <span className="text-sm text-gray-500">Section 21 Only</span>
+                      <h3 className="text-xl font-bold text-gray-900">Accelerated route</h3>
+                      <span className="text-sm text-gray-500">Usually linked to the notice route</span>
                     </div>
                   </div>
 
-                  <p className="text-gray-600 mb-4">
-                    Paper-based process with no court hearing required. The judge reviews
-                    documents and issues an order if valid. See our{' '}
-                    <Link href="/n5b-form-guide" className="text-primary hover:underline">
-                      accelerated possession (N5B) guide
-                    </Link>
-                    .
+                  <p className="text-gray-700 mb-4">
+                    This route is commonly used where the landlord is relying on the notice route and
+                    is not asking the court to deal with rent arrears in the same claim.
                   </p>
 
                   <div className="space-y-3 mb-6">
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-600">Court fee</span>
-                      <span className="font-bold text-gray-900">£355</span>
+                      <span className="text-gray-600">Typical format</span>
+                      <span className="font-bold text-gray-900">More document-based</span>
                     </div>
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-600">Typical time</span>
-                      <span className="font-bold text-gray-900">4-8 weeks</span>
+                      <span className="text-gray-600">Arrears claim included</span>
+                      <span className="font-bold text-gray-900">Usually no</span>
                     </div>
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-gray-600">Hearing</span>
-                      <span className="font-bold text-green-600">Not required</span>
+                      <span className="font-bold text-green-600">Sometimes not needed</span>
                     </div>
                   </div>
 
-                  <h4 className="font-semibold text-gray-900 mb-2">Use when:</h4>
-                  <ul className="space-y-2 text-sm text-gray-600">
+                  <h4 className="font-semibold text-gray-900 mb-2">Usually considered when:</h4>
+                  <ul className="space-y-2 text-sm text-gray-700">
                     <li className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
-                      You served a valid Section 21 notice
+                      <CheckCircle className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" />
+                      The landlord is relying on the notice route
                     </li>
                     <li className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
-                      You are NOT claiming rent arrears
+                      <CheckCircle className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" />
+                      The case is mainly about possession rather than money
                     </li>
                     <li className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
-                      Tenancy is Assured Shorthold (AST)
+                      <CheckCircle className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" />
+                      The paperwork is clean and well-organised
                     </li>
                   </ul>
 
-                  <div className="mt-6 pt-4 border-t border-primary/20">
-                    <h4 className="font-semibold text-gray-900 mb-2">Forms needed:</h4>
-                    <ul className="text-sm text-gray-600 space-y-1">
-                      <li>• Form N5B (claim form)</li>
-                      <li>• Form N215 (certificate of service)</li>
-                      <li>• Copy of Section 21 notice</li>
-                      <li>• Copy of tenancy agreement</li>
-                    </ul>
+                  <div className="mt-6 pt-4 border-t border-red-200">
+                    <Link href="/n5b-form-guide" className="text-red-600 font-medium hover:underline inline-flex items-center gap-1">
+                      Read the N5B guide
+                      <ArrowRight className="w-4 h-4" />
+                    </Link>
                   </div>
+                </div>
+
+                <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-14 h-14 bg-gray-100 rounded-xl flex items-center justify-center">
+                      <span className="text-lg font-bold text-gray-700">N5</span>
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-gray-900">Standard possession route</h3>
+                      <span className="text-sm text-gray-500">Often used for grounds or arrears cases</span>
+                    </div>
+                  </div>
+
+                  <p className="text-gray-700 mb-4">
+                    This route is commonly used where the landlord is also pursuing arrears or relying
+                    on grounds-based possession, and it is more likely to involve a hearing.
+                  </p>
+
+                  <div className="space-y-3 mb-6">
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-gray-600">Typical format</span>
+                      <span className="font-bold text-gray-900">More hearing-based</span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-gray-600">Arrears claim included</span>
+                      <span className="font-bold text-gray-900">Often yes</span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-gray-600">Hearing</span>
+                      <span className="font-bold text-amber-600">More likely</span>
+                    </div>
+                  </div>
+
+                  <h4 className="font-semibold text-gray-900 mb-2">Usually considered when:</h4>
+                  <ul className="space-y-2 text-sm text-gray-700">
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
+                      Rent arrears or grounds are central to the case
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
+                      A fuller fact pattern needs to be presented
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
+                      The case is not suitable for the accelerated route
+                    </li>
+                  </ul>
                 </div>
 
                 <div className="md:col-span-2">
@@ -263,88 +371,96 @@ export default function ApplyPossessionOrderPage() {
                     location="mid"
                   />
                 </div>
-
-                {/* Standard (N5) */}
-                <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-14 h-14 bg-gray-100 rounded-xl flex items-center justify-center">
-                      <span className="text-lg font-bold text-gray-600">N5</span>
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-bold text-gray-900">Standard Procedure</h3>
-                      <span className="text-sm text-gray-500">Section 8 or With Money Claim</span>
-                    </div>
-                  </div>
-
-                  <p className="text-gray-600 mb-4">
-                    Requires a court hearing where both parties can attend. Use for Section 8 or
-                    when claiming rent arrears.
-                  </p>
-
-                  <div className="space-y-3 mb-6">
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-600">Court fee</span>
-                      <span className="font-bold text-gray-900">£355</span>
-                    </div>
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-600">Typical time</span>
-                      <span className="font-bold text-gray-900">6-12 weeks</span>
-                    </div>
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-600">Hearing</span>
-                      <span className="font-bold text-amber-600">Required</span>
-                    </div>
-                  </div>
-
-                  <h4 className="font-semibold text-gray-900 mb-2">Use when:</h4>
-                  <ul className="space-y-2 text-sm text-gray-600">
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
-                      You served a Section 8 notice
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
-                      You want to claim rent arrears too
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
-                      Accelerated procedure not available
-                    </li>
-                  </ul>
-
-                  <div className="mt-6 pt-4 border-t border-gray-100">
-                    <h4 className="font-semibold text-gray-900 mb-2">Forms needed:</h4>
-                    <ul className="text-sm text-gray-600 space-y-1">
-                      <li>• Form N5 (claim form)</li>
-                      <li>• Form N119 (particulars of claim)</li>
-                      <li>• Copy of eviction notice</li>
-                      <li>• Copy of tenancy agreement</li>
-                    </ul>
-                  </div>
-                </div>
               </div>
 
               <div className="mt-8 bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg">
                 <p className="text-blue-900 text-sm">
-                  <strong>Pro tip:</strong> If you served both Section 21 and Section 8 notices,
-                  you can use either route. N5B is faster if your Section 21 is valid and you do
-                  not need to claim rent.
+                  <strong>Practical point:</strong> landlords often focus too much on speed and not
+                  enough on route suitability. A faster-looking route is not helpful if the notice or
+                  paperwork does not support it.
                 </p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Court Fees */}
+        <section className="py-16 lg:py-20">
+          <div className="container mx-auto px-4">
+            <div className="max-w-5xl mx-auto">
+              <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
+                What documents landlords usually need
+              </h2>
+              <p className="text-gray-600 text-center mb-12 max-w-3xl mx-auto">
+                A possession claim is often won or lost on paperwork quality. Good filing starts with
+                a clean document bundle.
+              </p>
+
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+                  <h3 className="text-lg font-bold text-gray-900 mb-4">Core claim documents</h3>
+                  <ul className="space-y-3 text-gray-700 text-sm">
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
+                      <span>The tenancy agreement</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
+                      <span>The notice served on the tenant</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
+                      <span>Proof the notice was served</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
+                      <span>The relevant court claim form</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+                  <h3 className="text-lg font-bold text-gray-900 mb-4">Supporting material</h3>
+                  <ul className="space-y-3 text-gray-700 text-sm">
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
+                      <span>Rent schedule if arrears are relevant</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
+                      <span>Witness statement or supporting explanation if needed</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
+                      <span>Deposit and compliance paperwork where relevant</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
+                      <span>Any documents needed to support the route you are using</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="mt-8 bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg">
+                <p className="text-amber-900 text-sm">
+                  <strong>Most common problem:</strong> landlords often have the “right” route in mind
+                  but weak paperwork in practice. Missing service evidence or inconsistent dates can
+                  create avoidable delay.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <section className="py-16 lg:py-20 bg-gray-50">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
+            <div className="max-w-5xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
-                Court Fees and Costs
+                Court fees and practical costs
               </h2>
-              <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                Understanding the full cost of court action helps you plan. Here is a complete
-                breakdown.
+              <p className="text-gray-600 text-center mb-12 max-w-3xl mx-auto">
+                Court issue fees are only part of the picture. Landlords should also think about
+                later enforcement costs and the cost of delay.
               </p>
 
               <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
@@ -353,30 +469,25 @@ export default function ApplyPossessionOrderPage() {
                     <thead className="bg-gray-50">
                       <tr>
                         <th className="text-left p-4 font-semibold text-gray-900">Item</th>
-                        <th className="text-right p-4 font-semibold text-gray-900">Cost</th>
+                        <th className="text-right p-4 font-semibold text-gray-900">Typical cost signal</th>
                         <th className="text-left p-4 font-semibold text-gray-900">Notes</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100">
                       <tr>
-                        <td className="p-4 font-medium text-gray-900">Possession claim (N5B or N5)</td>
-                        <td className="p-4 text-right font-bold text-gray-900">£355</td>
-                        <td className="p-4 text-gray-600 text-sm">Same fee for both routes</td>
+                        <td className="p-4 font-medium text-gray-900">Possession claim issue fee</td>
+                        <td className="p-4 text-right font-bold text-gray-900">Check current fee</td>
+                        <td className="p-4 text-gray-600 text-sm">Court fees can change</td>
                       </tr>
                       <tr className="bg-gray-50/50">
-                        <td className="p-4 font-medium text-gray-900">Warrant of possession (N325)</td>
-                        <td className="p-4 text-right font-bold text-gray-900">£130</td>
-                        <td className="p-4 text-gray-600 text-sm">If tenant does not leave after order</td>
+                        <td className="p-4 font-medium text-gray-900">Enforcement stage</td>
+                        <td className="p-4 text-right font-bold text-gray-900">Additional cost likely</td>
+                        <td className="p-4 text-gray-600 text-sm">If tenant stays after the order</td>
                       </tr>
                       <tr>
-                        <td className="p-4 font-medium text-gray-900">High Court enforcement (optional)</td>
-                        <td className="p-4 text-right font-bold text-gray-900">£66+</td>
-                        <td className="p-4 text-gray-600 text-sm">Faster than county court bailiffs</td>
-                      </tr>
-                      <tr className="bg-primary/5">
-                        <td className="p-4 font-bold text-gray-900">Total (typical case)</td>
-                        <td className="p-4 text-right font-bold text-primary text-lg">£485</td>
-                        <td className="p-4 text-gray-600 text-sm">Claim + warrant</td>
+                        <td className="p-4 font-medium text-gray-900">Delay cost</td>
+                        <td className="p-4 text-right font-bold text-gray-900">Often overlooked</td>
+                        <td className="p-4 text-gray-600 text-sm">Lost rent, holdover and time costs</td>
                       </tr>
                     </tbody>
                   </table>
@@ -387,22 +498,22 @@ export default function ApplyPossessionOrderPage() {
                 <div className="bg-green-50 rounded-xl p-6 border border-green-200">
                   <h3 className="font-bold text-green-900 mb-3 flex items-center gap-2">
                     <CheckCircle className="w-5 h-5" />
-                    Fee Remission Available
+                    Check fees before filing
                   </h3>
                   <p className="text-green-800 text-sm">
-                    If you receive certain benefits or have low income, you may be eligible for
-                    reduced court fees. Apply using Form EX160.
+                    Filing fees and enforcement costs can change. Landlords should always confirm the
+                    current court fee at the point of issue.
                   </p>
                 </div>
 
                 <div className="bg-amber-50 rounded-xl p-6 border border-amber-200">
                   <h3 className="font-bold text-amber-900 mb-3 flex items-center gap-2">
                     <AlertTriangle className="w-5 h-5" />
-                    Fees Non-Refundable
+                    Weak claims cost more
                   </h3>
                   <p className="text-amber-800 text-sm">
-                    Court fees are not refunded if the tenant leaves before the hearing or if your
-                    claim fails. Ensure your notice is valid before applying.
+                    An invalid notice or poor document bundle can create extra delay and further cost,
+                    even before enforcement is needed.
                   </p>
                 </div>
               </div>
@@ -410,177 +521,107 @@ export default function ApplyPossessionOrderPage() {
           </div>
         </section>
 
-        {/* Step by Step */}
         <section className="py-16 lg:py-20">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
+            <div className="max-w-5xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
-                How to Apply: Step by Step
+                How to apply: step by step
               </h2>
-              <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                Follow these steps to submit your possession claim to the county court.
+              <p className="text-gray-600 text-center mb-12 max-w-3xl mx-auto">
+                Landlords generally follow a sequence: review the notice, choose the route, prepare
+                the bundle, issue the claim, then respond to whatever happens next.
               </p>
 
               <div className="space-y-6">
-                {/* Step 1 */}
                 <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
+                    <div className="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center flex-shrink-0">
                       <span className="text-lg font-bold text-white">1</span>
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-lg font-bold text-gray-900 mb-2">
-                        Gather Your Documents
-                      </h3>
-                      <p className="text-gray-600 mb-3">
-                        Before completing the forms, collect all required documents.
+                      <h3 className="text-lg font-bold text-gray-900 mb-2">Review the notice position</h3>
+                      <p className="text-gray-700">
+                        Before issuing a claim, check the notice, dates, service evidence and route
+                        assumptions. This is the stage where many problems can still be fixed before
+                        court papers go in.
                       </p>
-                      <ul className="grid sm:grid-cols-2 gap-2 text-sm text-gray-600">
-                        <li className="flex items-center gap-2">
-                          <CheckCircle className="w-4 h-4 text-green-500" />
-                          Original eviction notice
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <CheckCircle className="w-4 h-4 text-green-500" />
-                          Tenancy agreement
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <CheckCircle className="w-4 h-4 text-green-500" />
-                          Proof of service (certificate or recorded delivery)
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <CheckCircle className="w-4 h-4 text-green-500" />
-                          Deposit protection certificate
-                        </li>
-                      </ul>
                     </div>
                   </div>
                 </div>
 
-                {/* Step 2 */}
                 <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
+                    <div className="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center flex-shrink-0">
                       <span className="text-lg font-bold text-white">2</span>
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-lg font-bold text-gray-900 mb-2">
-                        Complete the Court Forms
-                      </h3>
-                      <p className="text-gray-600 mb-3">
-                        Fill in the appropriate forms accurately. Errors can delay your case.
+                      <h3 className="text-lg font-bold text-gray-900 mb-2">Choose the court route</h3>
+                      <p className="text-gray-700">
+                        Decide whether the case fits the more document-led route or the standard
+                        possession path. Arrears, grounds and the quality of the notice often drive
+                        that decision.
                       </p>
-                      <div className="grid sm:grid-cols-2 gap-4">
-                        <div className="bg-gray-50 rounded-lg p-3">
-                          <span className="font-bold text-gray-900">For Section 21:</span>
-                          <p className="text-sm text-gray-600 mt-1">Form N5B + Form N215</p>
-                        </div>
-                        <div className="bg-gray-50 rounded-lg p-3">
-                          <span className="font-bold text-gray-900">For Section 8:</span>
-                          <p className="text-sm text-gray-600 mt-1">Form N5 + Form N119</p>
-                        </div>
-                      </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Step 3 */}
                 <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
+                    <div className="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center flex-shrink-0">
                       <span className="text-lg font-bold text-white">3</span>
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-lg font-bold text-gray-900 mb-2">
-                        Submit to the Correct Court
-                      </h3>
-                      <p className="text-gray-600 mb-3">
-                        Send your claim to the County Court that covers the property address.
+                      <h3 className="text-lg font-bold text-gray-900 mb-2">Prepare the claim bundle</h3>
+                      <p className="text-gray-700">
+                        Gather the tenancy, notice, service evidence and supporting documents. Make
+                        sure the dates and facts match across the whole file.
                       </p>
-                      <div className="grid sm:grid-cols-2 gap-4">
-                        <div className="bg-gray-50 rounded-lg p-3">
-                          <span className="font-bold text-gray-900">Online:</span>
-                          <p className="text-sm text-gray-600 mt-1">
-                            Via Possession Claims Online (PCOL)
-                          </p>
-                        </div>
-                        <div className="bg-gray-50 rounded-lg p-3">
-                          <span className="font-bold text-gray-900">By post:</span>
-                          <p className="text-sm text-gray-600 mt-1">
-                            To the local county court
-                          </p>
-                        </div>
-                      </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Step 4 */}
                 <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
+                    <div className="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center flex-shrink-0">
                       <span className="text-lg font-bold text-white">4</span>
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-lg font-bold text-gray-900 mb-2">
-                        Pay the Court Fee
-                      </h3>
-                      <p className="text-gray-600 mb-3">
-                        Pay £355 by card (online), cheque, or at the court counter.
+                      <h3 className="text-lg font-bold text-gray-900 mb-2">Issue the claim</h3>
+                      <p className="text-gray-700">
+                        File the claim through the correct court route and pay the issue fee. Once the
+                        claim is served, the tenant has the opportunity to respond.
                       </p>
-                      <div className="flex items-center gap-2 text-sm text-gray-600">
-                        <PoundSterling className="w-4 h-4" />
-                        <span>Fee must be paid when submitting the claim</span>
-                      </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Step 5 */}
                 <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
+                    <div className="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center flex-shrink-0">
                       <span className="text-lg font-bold text-white">5</span>
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-lg font-bold text-gray-900 mb-2">
-                        Court Serves the Tenant
-                      </h3>
-                      <p className="text-gray-600 mb-3">
-                        The court sends your claim to the tenant, who has 14 days to respond.
+                      <h3 className="text-lg font-bold text-gray-900 mb-2">Deal with defence, hearing or review</h3>
+                      <p className="text-gray-700">
+                        Some claims move quickly on paperwork, while others involve a hearing or a
+                        defence. Good preparation before issue makes this stage much easier.
                       </p>
-                      <ul className="text-sm text-gray-600 space-y-2">
-                        <li className="flex items-center gap-2">
-                          <ArrowRight className="w-4 h-4 text-primary" />
-                          N5B: If no defence, judge reviews on paper
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <ArrowRight className="w-4 h-4 text-primary" />
-                          N5: Hearing date scheduled (6-12 weeks)
-                        </li>
-                      </ul>
                     </div>
                   </div>
                 </div>
 
-                {/* Step 6 */}
                 <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
                       <CheckCircle className="w-6 h-6 text-white" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-lg font-bold text-gray-900 mb-2">
-                        Possession Order Granted
-                      </h3>
-                      <p className="text-gray-600 mb-3">
-                        If successful, the court grants a possession order giving the tenant
-                        14-42 days to leave.
+                      <h3 className="text-lg font-bold text-gray-900 mb-2">Move to enforcement if needed</h3>
+                      <p className="text-gray-700">
+                        If the possession order is granted and the tenant still remains, landlords
+                        usually need to move on to the enforcement stage rather than trying to recover
+                        possession themselves.
                       </p>
-                      <div className="bg-green-50 rounded-lg p-3 text-sm text-green-800">
-                        <CheckCircle className="w-4 h-4 inline mr-1" />
-                        If tenant still refuses, apply for a warrant of possession (Form N325)
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -589,140 +630,119 @@ export default function ApplyPossessionOrderPage() {
           </div>
         </section>
 
-        {/* At the Hearing */}
         <section className="py-16 lg:py-20 bg-gray-50">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
+            <div className="max-w-5xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
-                What Happens at the Possession Hearing
+                What happens at the hearing or review stage?
               </h2>
-              <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                For standard possession claims (N5), you will need to attend a court hearing.
-                Here is what to expect.
+              <p className="text-gray-600 text-center mb-12 max-w-3xl mx-auto">
+                Not every claim looks the same once filed. Some are decided more on documents, while
+                others move into a more contested court process.
               </p>
 
               <div className="grid md:grid-cols-2 gap-8">
                 <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
                   <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                    <Users className="w-5 h-5 text-primary" />
-                    Before You Arrive
+                    <Users className="w-5 h-5 text-red-600" />
+                    What landlords should be ready for
                   </h3>
-                  <ul className="space-y-3 text-gray-600 text-sm">
+                  <ul className="space-y-3 text-gray-700 text-sm">
                     <li className="flex items-start gap-2">
                       <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>Bring all original documents</span>
+                      <span>Questions about the notice and service</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>Prepare a rent schedule if claiming arrears</span>
+                      <span>Questions about rent, arrears or breach where relevant</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>Arrive 30 minutes early</span>
+                      <span>The tenant raising a defence or asking for time</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span>Dress smartly (no suit required)</span>
+                      <span>The court focusing closely on the paperwork quality</span>
                     </li>
                   </ul>
                 </div>
 
                 <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
                   <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                    <Gavel className="w-5 h-5 text-primary" />
-                    During the Hearing
+                    <Gavel className="w-5 h-5 text-red-600" />
+                    Possible outcomes
                   </h3>
-                  <ul className="space-y-3 text-gray-600 text-sm">
+                  <ul className="space-y-3 text-gray-700 text-sm">
                     <li className="flex items-start gap-2">
-                      <ArrowRight className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
-                      <span>Typically 15-30 minutes</span>
+                      <ArrowRight className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" />
+                      <span>Possession order granted</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <ArrowRight className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
-                      <span>Judge asks about notice and grounds</span>
+                      <ArrowRight className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" />
+                      <span>Possession delayed or suspended on terms</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <ArrowRight className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
-                      <span>Tenant may offer to pay or request time</span>
+                      <ArrowRight className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" />
+                      <span>Further hearing or evidence direction</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <ArrowRight className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
-                      <span>You can represent yourself</span>
+                      <ArrowRight className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" />
+                      <span>Problems identified with the route or the paperwork</span>
                     </li>
                   </ul>
                 </div>
               </div>
 
               <div className="mt-8 bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
-                <h3 className="text-lg font-bold text-gray-900 mb-4">Possible Outcomes:</h3>
-                <div className="grid sm:grid-cols-3 gap-4">
-                  <div className="bg-green-50 rounded-lg p-4">
-                    <h4 className="font-bold text-green-900 mb-2">Outright Order</h4>
-                    <p className="text-sm text-green-700">
-                      Tenant must leave by specified date (14-42 days)
-                    </p>
-                  </div>
-                  <div className="bg-amber-50 rounded-lg p-4">
-                    <h4 className="font-bold text-amber-900 mb-2">Suspended Order</h4>
-                    <p className="text-sm text-amber-700">
-                      Tenant stays if they pay rent + arrears
-                    </p>
-                  </div>
-                  <div className="bg-blue-50 rounded-lg p-4">
-                    <h4 className="font-bold text-blue-900 mb-2">Postponed Order</h4>
-                    <p className="text-sm text-blue-700">
-                      Possession delayed on terms set by court
-                    </p>
-                  </div>
-                </div>
+                <h3 className="text-lg font-bold text-gray-900 mb-3">Main takeaway</h3>
+                <p className="text-gray-700">
+                  The court stage is not just about which form you used. It is about whether the whole
+                  claim makes sense on the documents and whether the landlord can support the route
+                  chosen with consistent evidence.
+                </p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* After the Order */}
         <section className="py-16 lg:py-20">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
+            <div className="max-w-5xl mx-auto bg-white rounded-2xl border border-gray-200 shadow-sm p-8 md:p-10">
               <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
-                After the Possession Order: What If Tenant Does Not Leave?
+                After the possession order: what if the tenant still does not leave?
               </h2>
-              <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                If the tenant does not vacate by the order date, you will need to apply for a
-                warrant of possession.
+              <p className="text-gray-600 text-center mb-10 max-w-3xl mx-auto">
+                A possession order does not always end the matter. If the tenant remains, enforcement
+                is usually the next stage.
               </p>
 
-              <div className="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm">
-                <div className="flex flex-col md:flex-row items-start gap-8">
-                  <div className="w-20 h-20 bg-primary/10 rounded-2xl flex items-center justify-center flex-shrink-0">
-                    <Gavel className="w-10 h-10 text-primary" />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="text-xl font-bold text-gray-900 mb-4">
-                      Warrant of Possession (Form N325)
-                    </h3>
-                    <p className="text-gray-600 mb-4">
-                      A warrant of possession authorises county court bailiffs to physically
-                      remove the tenant and their belongings from your property.
+              <div className="flex flex-col md:flex-row items-start gap-8">
+                <div className="w-20 h-20 bg-red-50 rounded-2xl flex items-center justify-center flex-shrink-0">
+                  <Gavel className="w-10 h-10 text-red-600" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-xl font-bold text-gray-900 mb-4">
+                    Enforcement and warrant stage
+                  </h3>
+                  <p className="text-gray-700 mb-4">
+                    If the tenant does not leave by the date in the possession order, landlords often
+                    need to move on to the enforcement stage. This is the point at which warrant or
+                    bailiff-related action becomes relevant.
+                  </p>
+
+                  <p className="text-gray-700 mb-4">
+                    This is also where many landlords realise that the possession order itself is not
+                    the very end of the road. The court may have given possession, but the property is
+                    not physically recovered until the tenant has actually left or enforcement has taken
+                    place.
+                  </p>
+
+                  <div className="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg">
+                    <p className="text-amber-900 text-sm">
+                      <strong>Important:</strong> even after obtaining a possession order, landlords
+                      should not try to remove the tenant themselves. If enforcement is needed, it
+                      normally has to happen through the proper court route.
                     </p>
-
-                    <div className="grid sm:grid-cols-2 gap-4 mb-6">
-                      <div className="bg-gray-50 rounded-lg p-4">
-                        <span className="text-gray-600 text-sm block">Court fee</span>
-                        <span className="font-bold text-gray-900 text-lg">~£130</span>
-                      </div>
-                      <div className="bg-gray-50 rounded-lg p-4">
-                        <span className="text-gray-600 text-sm block">Typical wait</span>
-                        <span className="font-bold text-gray-900 text-lg">4-8 weeks</span>
-                      </div>
-                    </div>
-
-                    <div className="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg">
-                      <p className="text-amber-900 text-sm">
-                        <strong>Important:</strong> You still cannot change locks yourself even
-                        with a possession order. Only bailiffs can legally remove the tenant.
-                      </p>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -730,9 +750,9 @@ export default function ApplyPossessionOrderPage() {
               <div className="mt-8 text-center">
                 <Link
                   href="/warrant-of-possession"
-                  className="text-primary font-medium hover:underline inline-flex items-center gap-1"
+                  className="text-red-600 font-medium hover:underline inline-flex items-center gap-1"
                 >
-                  Full Warrant of Possession Guide
+                  Full warrant of possession guide
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
@@ -740,7 +760,6 @@ export default function ApplyPossessionOrderPage() {
           </div>
         </section>
 
-        {/* Mid-page CTA */}
         <section className="py-16 lg:py-20 bg-gray-50">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
@@ -750,21 +769,19 @@ export default function ApplyPossessionOrderPage() {
                 jurisdiction="england"
                 pagePath="/apply-possession-order-landlord"
                 title="Get All Court Forms Ready to Submit"
-                description="N5B, N5, N119, N215, witness statements, and step-by-step instructions. Everything you need for your possession claim."
+                description="N5B, N5 and supporting documents, with clearer court-stage guidance and step-by-step instructions."
               />
             </div>
           </div>
         </section>
 
-        {/* FAQ Section */}
         <FAQSection
-          faqs={possessionOrderFAQs}
+          faqs={faqs}
           title="Possession Order: Frequently Asked Questions"
           showContactCTA={false}
           variant="white"
         />
 
-        {/* Final CTA */}
         <section className="py-16 lg:py-20 bg-gray-50">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
@@ -774,7 +791,7 @@ export default function ApplyPossessionOrderPage() {
                 jurisdiction="england"
                 pagePath="/apply-possession-order-landlord"
                 title="Get Your Possession Claim Documents"
-                description="Complete N5B/N5 forms, witness statements, and clear instructions. Trusted by over 10,000 UK landlords."
+                description="Move from expired notice to court possession with the right paperwork, clearer guidance and practical next steps."
               />
 
               <SeoDisclaimer className="max-w-4xl mx-auto" />
@@ -782,14 +799,10 @@ export default function ApplyPossessionOrderPage() {
           </div>
         </section>
 
-        {/* Related Resources */}
         <section className="py-16 lg:py-20">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
-              <RelatedLinks
-                title="Related Resources"
-                links={possessionClaimRelatedLinks}
-              />
+              <RelatedLinks title="Related Resources" links={possessionClaimRelatedLinks} />
             </div>
           </div>
         </section>
