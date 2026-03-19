@@ -21,6 +21,7 @@ import { Button, Container } from '@/components/ui';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { clsx } from 'clsx';
 import { RiArrowDownLine, RiArrowLeftLine, RiCheckLine, RiAlertLine } from 'react-icons/ri';
+import { PRODUCTS } from '@/lib/pricing/products';
 import {
   trackWizardEntryViewWithAttribution,
   trackWizardStartWithAttribution,
@@ -139,31 +140,31 @@ const documentOptions: DocumentOption[] = [
     type: 'notice_only',
     title: 'Eviction Notices',
     description: 'Jurisdiction-specific notice bundles: Section 21/8 (England), Section 173 (Wales), Notice to Leave (Scotland)',
-    icon: 'ðŸ“„',
-    price: 'From Â£14.99',
+    icon: '\uD83D\uDCC4',
+    price: `From ${PRODUCTS.notice_only.displayPrice}`,
   },
   {
     type: 'complete_pack',
     title: 'Complete Eviction Pack',
     description: 'England-only case bundle with N5 / N5B / N119 routes, witness statement draft, and filing guide',
-    icon: 'âš–ï¸',
-    price: 'Â£79.99',
+    icon: '\u2696\uFE0F',
+    price: PRODUCTS.complete_pack.displayPrice,
     regionBadge: 'England only',
   },
   {
     type: 'money_claim',
     title: 'Money Claims',
     description: 'England-only money claim bundle for rent arrears and tenancy debts (County Court / MCOL-ready)',
-    icon: 'ðŸ’°',
-    price: 'Â£59.99',
+    icon: '\uD83D\uDCB0',
+    price: PRODUCTS.money_claim.displayPrice,
     regionBadge: 'England only',
   },
   {
     type: 'tenancy_agreement',
     title: 'Tenancy Agreements',
     description: 'Residential Tenancy Agreement (England), Occupation Contract (Wales), PRT (Scotland), or NI private tenancy agreement pack',
-    icon: 'ðŸ“',
-    price: 'From Â£14.99',
+    icon: '\uD83D\uDCDD',
+    price: `From ${PRODUCTS.ast_standard.displayPrice}`,
   },
 ];
 
