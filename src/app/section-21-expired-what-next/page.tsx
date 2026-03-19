@@ -8,38 +8,23 @@ import {
 import { getCanonicalUrl } from '@/lib/seo/urls';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
-import {
-  evictionRelatedLinks,
-  productLinks,
-  toolLinks,
-  guideLinks,
-  possessionClaimRelatedLinks,
-} from '@/lib/seo/internal-links';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
-import { section21ExpiredFAQs } from '@/data/faqs';
 import { FunnelCta } from '@/components/funnels';
 import { PRODUCTS } from '@/lib/pricing/products';
 import {
   CheckCircle,
   AlertTriangle,
-  Clock,
   ArrowRight,
-  Scale,
   FileText,
   Shield,
   Gavel,
-  Calendar,
   AlertCircle,
-  ChevronRight,
-  Users,
   XCircle,
-  Timer,
-  MapPin,
 } from 'lucide-react';
 
 const completePackLink = buildWizardLink({
@@ -56,10 +41,53 @@ const noticeOnlyLink = buildWizardLink({
   topic: 'eviction',
 });
 
+const faqs = [
+  {
+    question: 'My Section 21 has expired and the tenant is still there. What do I do next?',
+    answer:
+      'If your Section 21 notice has expired and the tenant is still in occupation, the next step is usually the court possession stage. Landlords should normally check the notice is still usable, prepare the correct possession paperwork, and move into the court route rather than trying to remove the tenant themselves.',
+  },
+  {
+    question: 'Do I need to serve a new Section 21 if the tenant did not leave?',
+    answer:
+      'Not always. In many cases, landlords still have a window to start court proceedings after the expiry date on the notice. But that does not last forever, so it is important to check the dates carefully before assuming the original notice can still be used.',
+  },
+  {
+    question: 'Can I change the locks after Section 21 expires?',
+    answer:
+      'No. If the tenant is still in occupation, landlords should not change locks, remove belongings, cut off utilities or try to force a move-out. Possession normally still has to be recovered through the legal court and enforcement process.',
+  },
+  {
+    question: 'What court form is usually used after a Section 21 expires?',
+    answer:
+      'Where the case fits the accelerated possession route, landlords often look at Form N5B. But that route is not suitable for every case, especially where the landlord also wants the court to deal with rent arrears in the same claim.',
+  },
+  {
+    question: 'How long does it take after a Section 21 expires?',
+    answer:
+      'It can still take weeks or months after expiry, depending on the court, the paperwork, whether the tenant responds or defends the claim, and whether enforcement is later needed.',
+  },
+  {
+    question: 'What if the tenant defends the possession claim?',
+    answer:
+      'If the tenant raises a defence, the claim can become slower and more document-sensitive. Defences often focus on notice validity, service, deposit issues, or other compliance-related points.',
+  },
+  {
+    question: 'What if the tenant still will not leave after the possession order?',
+    answer:
+      'If the tenant remains after the possession order date, landlords usually need to move to enforcement rather than trying to recover possession personally.',
+  },
+  {
+    question: 'What is the biggest mistake after a Section 21 expires?',
+    answer:
+      'The biggest mistake is assuming the expiry date means the landlord can simply retake the property. The real risk is usually invalid paperwork, delay in starting the claim, or trying to take unlawful self-help steps instead of using the possession process properly.',
+  },
+];
+
 export const metadata: Metadata = {
-  title: 'Section 21 Expired: What Next If Tenant Stays?',
+  title: 'Section 21 Expired: What Next If Tenant Stays? | England Guide 2026',
   description:
-    'Section 21 expired but tenant won\'t leave? Next steps: possession order, accelerated procedure, and bailiff enforcement.',
+    "Section 21 expired but the tenant is still in the property? Learn what England landlords usually do next, including possession order steps, N5B route checks, likely delays and enforcement stage guidance.",
   keywords: [
     'section 21 expired what next',
     'tenant ignored section 21',
@@ -69,11 +97,14 @@ export const metadata: Metadata = {
     'tenant not leaving after section 21',
     'possession order section 21',
     'section 21 court action',
+    'section 21 expired tenant still in property',
+    'what happens after section 21 expires',
+    'section 21 notice expired tenant wont leave',
   ],
   openGraph: {
-    title: 'Section 21 Expired: What Next If Tenant Stays?',
+    title: 'Section 21 Expired: What Next If Tenant Stays? | England Guide 2026',
     description:
-      'Your Section 21 notice has expired but your tenant has not left. Learn the next steps for court action.',
+      'Your Section 21 notice has expired but the tenant has not left. Learn the next possession and enforcement steps for England landlords.',
     type: 'article',
     url: getCanonicalUrl('/section-21-expired-what-next'),
     siteName: 'Landlord Heaven',
@@ -81,8 +112,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Section 21 Expired What Next? | Landlord Heaven',
-    description: 'Your Section 21 notice has expired but your tenant has not left. Learn the next steps.',
+    title: 'Section 21 Expired: What Next If Tenant Stays?',
+    description:
+      'Your Section 21 notice has expired but the tenant has not left. Learn the next steps.',
   },
   alternates: {
     canonical: getCanonicalUrl('/section-21-expired-what-next'),
@@ -103,12 +135,11 @@ export default function Section21ExpiredPage() {
         jurisdiction="england"
       />
 
-      {/* Structured Data */}
       <StructuredData
         data={articleSchema({
           headline: 'Section 21 Expired: What to Do When Your Tenant Will Not Leave',
           description:
-            'Step-by-step guide to the next steps after your Section 21 notice expires. Accelerated possession, court forms, and bailiff enforcement explained.',
+            'Step-by-step guide to the next steps after a Section 21 notice expires, including possession claims, N5B route checks and enforcement.',
           url: getCanonicalUrl('/section-21-expired-what-next'),
           datePublished: '2026-01-30',
           dateModified: '2026-01-30',
@@ -123,12 +154,16 @@ export default function Section21ExpiredPage() {
         ])}
       />
 
-      <main>
+      <main className="text-gray-900">
         <HeaderConfig mode="autoOnScroll" />
+
         <UniversalHero
           title="Section 21 Expired: What to Do Next"
-          subtitle="Move from an expired Section 21 notice to the correct possession claim steps and enforcement route."
-          primaryCta={{ label: 'Continue with Eviction Wizard', href: completePackLink }}
+          subtitle="If your Section 21 notice has expired and the tenant is still in the property, the next step is usually the court possession route. Here is what England landlords should do next, what to avoid, and when the N5B route may be relevant."
+          primaryCta={{
+            label: `Continue with Eviction Wizard — ${PRODUCTS.complete_pack.displayPrice}`,
+            href: completePackLink,
+          }}
           secondaryCta={{ label: 'Jump to key steps', href: '#next-steps' }}
           showTrustPositioningBar
           hideMedia
@@ -139,13 +174,13 @@ export default function Section21ExpiredPage() {
             <div className="max-w-4xl mx-auto">
               <FunnelCta
                 title="Move to possession order support now"
-                subtitle="When a Section 21 expires, the next step is the court route. We can prepare the full pack for you."
+                subtitle="When a Section 21 expires, the next step is usually the court route. We can help you prepare the full pack."
                 primaryHref="/products/complete-pack"
-                primaryText="Get Complete Pack"
+                primaryText="Get complete pack"
                 primaryDataCta="complete-pack"
                 location="above-fold"
                 secondaryLinks={[
-                  { href: '/products/notice-only', text: 'Need to (re)serve notice first?', dataCta: 'notice-only' },
+                  { href: noticeOnlyLink, text: 'Need to (re)serve notice first?', dataCta: 'notice-only' },
                   { href: '/n5b-form-guide', text: 'Accelerated possession (N5B)' },
                 ]}
               />
@@ -153,59 +188,88 @@ export default function Section21ExpiredPage() {
           </div>
         </section>
 
-        {/* Social Proof */}
         <section className="py-6 bg-gray-50 border-y border-gray-100">
           <div className="container mx-auto px-4">
             <SocialProofCounter variant="total" className="justify-center" />
           </div>
         </section>
 
-        {/* Key Points Section */}
         <section className="py-16 lg:py-20">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
+            <div className="max-w-5xl mx-auto bg-white rounded-2xl border border-gray-100 shadow-sm p-8 md:p-10">
               <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
-                What Happens When Section 21 Expires
+                What happens when Section 21 expires?
               </h2>
-              <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                When your Section 21 notice period ends and the tenant is still in the property, you
-                enter the court phase. Understanding your options is crucial.
+              <p className="text-gray-600 text-center mb-10 max-w-3xl mx-auto">
+                When the expiry date on the notice passes and the tenant is still in occupation, the
+                matter usually moves from the notice stage to the court possession stage.
+              </p>
+
+              <div className="space-y-5 text-gray-700 leading-relaxed">
+                <p>
+                  This is one of the biggest areas of confusion for landlords. A Section 21 expiry
+                  date does <strong>not</strong> usually mean the landlord can simply take the property
+                  back. If the tenant remains, possession generally still has to be recovered through
+                  the proper legal route.
+                </p>
+
+                <p>
+                  In practical terms, the next questions are usually these: is the notice still usable,
+                  does the case fit the accelerated possession route, is the paperwork strong enough to
+                  file, and what happens if the tenant still does not leave after the possession order.
+                </p>
+
+                <p>
+                  That is why this page should not just say “apply to court.” The real issue is whether
+                  the landlord is moving into court with the right route, the right timing and the right
+                  supporting documents.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-16 lg:py-20 bg-gray-50">
+          <div className="container mx-auto px-4">
+            <div className="max-w-5xl mx-auto">
+              <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
+                Key points after a Section 21 expires
+              </h2>
+              <p className="text-gray-600 text-center mb-12 max-w-3xl mx-auto">
+                These are the points landlords usually need to understand before doing anything else.
               </p>
 
               <div className="grid md:grid-cols-3 gap-6 mb-8">
-                {/* Key Fact 1 */}
                 <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm text-center">
                   <div className="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                     <CheckCircle className="w-7 h-7 text-green-600" />
                   </div>
-                  <h3 className="font-bold text-gray-900 mb-2">Notice Still Valid</h3>
+                  <h3 className="font-bold text-gray-900 mb-2">The notice may still be usable</h3>
                   <p className="text-gray-600 text-sm">
-                    Your Section 21 remains valid for <strong>6 months after expiry</strong>. You do
-                    not need to serve a new notice.
+                    In many cases there is still a window to start the possession claim after expiry,
+                    but landlords should check the dates carefully.
                   </p>
                 </div>
 
-                {/* Key Fact 2 */}
                 <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm text-center">
-                  <div className="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Gavel className="w-7 h-7 text-primary" />
+                  <div className="w-14 h-14 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Gavel className="w-7 h-7 text-red-600" />
                   </div>
-                  <h3 className="font-bold text-gray-900 mb-2">Court Action Required</h3>
+                  <h3 className="font-bold text-gray-900 mb-2">Court action is usually required</h3>
                   <p className="text-gray-600 text-sm">
-                    You <strong>cannot</strong> change locks or remove the tenant. You must apply
-                    for a court possession order.
+                    If the tenant stays, landlords normally need to move to the court possession stage
+                    rather than trying to recover the property themselves.
                   </p>
                 </div>
 
-                {/* Key Fact 3 */}
                 <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm text-center">
                   <div className="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
                     <FileText className="w-7 h-7 text-blue-600" />
                   </div>
-                  <h3 className="font-bold text-gray-900 mb-2">Use Form N5B</h3>
+                  <h3 className="font-bold text-gray-900 mb-2">The N5B route may be relevant</h3>
                   <p className="text-gray-600 text-sm">
-                    The <strong>accelerated possession procedure</strong> (Form N5B) means no court
-                    hearing is needed.
+                    Where the case fits the accelerated possession route, landlords often consider N5B,
+                    but that route is not right for every case.
                   </p>
                 </div>
               </div>
@@ -214,11 +278,11 @@ export default function Section21ExpiredPage() {
                 <div className="flex items-start gap-3">
                   <AlertTriangle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="text-red-900 font-medium">Do Not Attempt to Evict Yourself</p>
+                    <p className="text-red-900 font-medium">Do not try to evict personally</p>
                     <p className="text-red-800 text-sm">
-                      Changing locks, cutting utilities, or removing belongings without a court
-                      order is <strong>illegal eviction</strong>—a criminal offence under the
-                      Protection from Eviction Act 1977. You could face prosecution and fines.
+                      If the tenant is still in occupation, landlords should not change locks, cut
+                      services, remove belongings or try to force a move-out outside the proper
+                      possession and enforcement process.
                     </p>
                   </div>
                 </div>
@@ -231,8 +295,8 @@ export default function Section21ExpiredPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <FunnelCta
-                title="Ready to file accelerated possession (N5B)?"
-                subtitle="Avoid delays by preparing the court bundle correctly from the start."
+                title="Ready to file accelerated possession?"
+                subtitle="Avoid delay by preparing the court bundle correctly from the start."
                 primaryHref="/products/complete-pack"
                 primaryText="Start complete eviction pack"
                 primaryDataCta="complete-pack"
@@ -243,159 +307,105 @@ export default function Section21ExpiredPage() {
           </div>
         </section>
 
-        {/* How Long is Notice Valid */}
         <section className="py-16 lg:py-20 bg-gray-50">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
+            <div className="max-w-5xl mx-auto bg-white rounded-2xl border border-gray-200 shadow-sm p-8 md:p-10">
               <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
-                How Long is Your Section 21 Valid After Expiry?
+                How long is your Section 21 usable after expiry?
               </h2>
-              <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                You have a window of time to start court proceedings. Missing this deadline means
-                you will need to serve a completely new notice.
+              <p className="text-gray-600 text-center mb-10 max-w-3xl mx-auto">
+                Landlords often assume they must immediately start again with a new notice. That is not
+                always the case, but timing still matters.
               </p>
 
-              <div className="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm">
-                <div className="flex flex-col md:flex-row items-center gap-8">
-                  <div className="w-32 h-32 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                    <div className="text-center">
-                      <span className="text-4xl font-bold text-primary">6</span>
-                      <p className="text-sm text-primary font-medium">Months</p>
-                    </div>
-                  </div>
-                  <div className="flex-1 text-center md:text-left">
-                    <h3 className="text-xl font-bold text-gray-900 mb-3">
-                      6-Month Window After Expiry
-                    </h3>
-                    <p className="text-gray-600 mb-4">
-                      A Section 21 notice remains valid for <strong>6 months</strong> from the
-                      possession date specified in the notice. You must start court proceedings
-                      (submit Form N5B) within this period.
-                    </p>
-                    <ul className="space-y-2 text-sm text-gray-600">
-                      <li className="flex items-center gap-2">
-                        <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
-                        No need to serve a new notice if within 6 months
-                      </li>
-                      <li className="flex items-center gap-2">
-                        <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
-                        Calculate from the date specified on the notice, not service date
-                      </li>
-                      <li className="flex items-center gap-2">
-                        <AlertTriangle className="w-4 h-4 text-amber-500 flex-shrink-0" />
-                        If 6 months pass, you must serve a new Section 21 and wait again
-                      </li>
-                    </ul>
-                  </div>
-                </div>
+              <div className="space-y-5 text-gray-700 leading-relaxed">
+                <p>
+                  In many cases, there is still a period after the expiry date during which the
+                  landlord can start possession proceedings based on the original notice. But that
+                  period does not last indefinitely.
+                </p>
+
+                <p>
+                  The key practical point is this: once the notice has expired and the tenant is still
+                  there, landlords should not simply wait and hope. Delay can create more risk,
+                  especially if the claim is not started within the usable window for the notice.
+                </p>
+
+                <p>
+                  If too much time passes, the landlord may need to start again with a fresh notice and
+                  a fresh waiting period, which can add significant delay to the case.
+                </p>
               </div>
 
               <div className="mt-8 bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg">
                 <p className="text-blue-900 text-sm">
-                  <strong>Example:</strong> Your Section 21 notice required the tenant to leave by 1
-                  March 2026. You have until 1 September 2026 to submit your N5B court claim. After
-                  that, you need a fresh notice.
+                  <strong>Practical takeaway:</strong> check the notice dates now, not later. Many
+                  landlord delays happen because the notice was still usable, but nobody moved the case
+                  forward in time.
                 </p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Accelerated Possession Procedure */}
         <section id="accelerated-procedure" className="py-16 lg:py-20">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
+            <div className="max-w-5xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
-                Accelerated Possession Procedure (Form N5B)
+                Accelerated possession procedure after Section 21
               </h2>
-              <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                For Section 21 evictions, you can use the accelerated procedure which is faster and
-                does not require a court hearing.
+              <p className="text-gray-600 text-center mb-12 max-w-3xl mx-auto">
+                Where the case fits, landlords often look at the accelerated possession route because it
+                can be more document-led than the standard court route.
               </p>
 
               <div className="grid md:grid-cols-2 gap-8">
-                {/* What You Need */}
                 <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
                   <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                    <FileText className="w-5 h-5 text-primary" />
-                    Forms Required
+                    <FileText className="w-5 h-5 text-red-600" />
+                    What landlords usually need
                   </h3>
-                  <ul className="space-y-3">
-                    <li className="flex items-start gap-3">
-                      <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <span className="text-sm font-bold text-primary">1</span>
-                      </div>
-                      <div>
-                        <strong className="text-gray-900">Form N5B</strong>
-                        <p className="text-sm text-gray-600">
-                          Claim for possession (accelerated procedure)
-                        </p>
-                      </div>
+                  <ul className="space-y-3 text-gray-700 text-sm">
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
+                      <span>The tenancy agreement</span>
                     </li>
-                    <li className="flex items-start gap-3">
-                      <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <span className="text-sm font-bold text-primary">2</span>
-                      </div>
-                      <div>
-                        <strong className="text-gray-900">Form N215</strong>
-                        <p className="text-sm text-gray-600">Certificate of service of the notice</p>
-                      </div>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
+                      <span>The notice relied on</span>
                     </li>
-                    <li className="flex items-start gap-3">
-                      <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <span className="text-sm font-bold text-primary">3</span>
-                      </div>
-                      <div>
-                        <strong className="text-gray-900">Copy of Section 21 Notice</strong>
-                        <p className="text-sm text-gray-600">The original Form 6A you served</p>
-                      </div>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
+                      <span>Proof of service or service evidence</span>
                     </li>
-                    <li className="flex items-start gap-3">
-                      <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <span className="text-sm font-bold text-primary">4</span>
-                      </div>
-                      <div>
-                        <strong className="text-gray-900">Copy of Tenancy Agreement</strong>
-                        <p className="text-sm text-gray-600">The current AST for the property</p>
-                      </div>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
+                      <span>The claim form and supporting papers for the route used</span>
                     </li>
                   </ul>
                 </div>
 
-                {/* Benefits */}
                 <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
                   <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                    <CheckCircle className="w-5 h-5 text-green-600" />
-                    Why Use N5B (Accelerated)?
+                    <Shield className="w-5 h-5 text-red-600" />
+                    Why landlords often prefer it
                   </h3>
-                  <ul className="space-y-3 text-gray-600">
-                    <li className="flex items-start gap-3">
-                      <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <div>
-                        <strong className="text-gray-900">No court hearing</strong>
-                        <p className="text-sm">Judge reviews on paper—you do not need to attend</p>
-                      </div>
+                  <ul className="space-y-3 text-gray-700 text-sm">
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
+                      <span>Often more document-led than the standard route</span>
                     </li>
-                    <li className="flex items-start gap-3">
-                      <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <div>
-                        <strong className="text-gray-900">Faster processing</strong>
-                        <p className="text-sm">Typically 4-8 weeks if undefended</p>
-                      </div>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
+                      <span>Can feel more straightforward in cleaner cases</span>
                     </li>
-                    <li className="flex items-start gap-3">
-                      <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <div>
-                        <strong className="text-gray-900">Lower stress</strong>
-                        <p className="text-sm">No need to prepare for or attend a hearing</p>
-                      </div>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
+                      <span>Usually focused on possession rather than combining everything into one claim</span>
                     </li>
-                    <li className="flex items-start gap-3">
-                      <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <div>
-                        <strong className="text-gray-900">Same court fee</strong>
-                        <p className="text-sm">£355—same as standard possession claim</p>
-                      </div>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
+                      <span>Often attractive where the landlord wants the quickest clean route possible</span>
                     </li>
                   </ul>
                 </div>
@@ -405,11 +415,11 @@ export default function Section21ExpiredPage() {
                 <div className="flex items-start gap-3">
                   <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="text-amber-900 font-medium">Limitation</p>
+                    <p className="text-amber-900 font-medium">Main limitation</p>
                     <p className="text-amber-800 text-sm">
-                      You <strong>cannot</strong> claim rent arrears using the accelerated
-                      procedure. To claim money owed, you need Form N5 (standard possession) or a
-                      separate money claim via MCOL.
+                      Landlords often choose the accelerated route when they mainly want possession.
+                      If the case is really about arrears or wider issues, the standard route may be
+                      more suitable.
                     </p>
                   </div>
                 </div>
@@ -418,139 +428,89 @@ export default function Section21ExpiredPage() {
           </div>
         </section>
 
-        {/* Step by Step Process */}
-        <section className="py-16 lg:py-20 bg-gray-50">
+        <section id="next-steps" className="py-16 lg:py-20 bg-gray-50">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
+            <div className="max-w-5xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
-                Next Steps: From Expired Notice to Possession
+                Next steps: from expired notice to possession
               </h2>
-              <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                Follow this process after your Section 21 notice expires and the tenant refuses to
-                leave.
+              <p className="text-gray-600 text-center mb-12 max-w-3xl mx-auto">
+                Once the tenant stays beyond the notice expiry date, landlords usually move through
+                these stages.
               </p>
 
               <div className="space-y-6">
-                {/* Step 1 */}
                 <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
+                    <div className="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center flex-shrink-0">
                       <span className="text-lg font-bold text-white">1</span>
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-lg font-bold text-gray-900 mb-2">
-                        Complete Court Forms (N5B + N215)
-                      </h3>
-                      <p className="text-gray-600 mb-3">
-                        Fill out Form N5B with property details, tenancy information, and when you
-                        served the Section 21. Complete Form N215 to certify you served the notice
-                        correctly.
+                      <h3 className="text-lg font-bold text-gray-900 mb-2">Review the notice and dates</h3>
+                      <p className="text-gray-700">
+                        Before doing anything else, confirm the notice is still usable and the dates,
+                        service evidence and supporting documents all line up.
                       </p>
-                      <div className="bg-gray-50 rounded-lg p-3 text-sm">
-                        <span className="font-medium text-gray-900">Included in our pack:</span>
-                        <span className="text-gray-600"> Pre-filled N5B, N215, and instructions</span>
-                      </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Step 2 */}
                 <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
+                    <div className="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center flex-shrink-0">
                       <span className="text-lg font-bold text-white">2</span>
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-lg font-bold text-gray-900 mb-2">
-                        Submit to County Court & Pay Fee
-                      </h3>
-                      <p className="text-gray-600 mb-3">
-                        Submit your claim to the County Court that covers the property location. You
-                        can submit online or by post. Include copies of your Section 21 notice and
-                        tenancy agreement.
+                      <h3 className="text-lg font-bold text-gray-900 mb-2">Choose the court route</h3>
+                      <p className="text-gray-700">
+                        Decide whether the accelerated route fits the case or whether the standard
+                        possession route is more appropriate.
                       </p>
-                      <div className="flex items-center gap-4 text-sm">
-                        <div className="bg-gray-50 rounded-lg px-4 py-2">
-                          <span className="text-gray-600">Court fee:</span>
-                          <span className="font-bold text-gray-900 ml-1">£355</span>
-                        </div>
-                      </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Step 3 */}
                 <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
+                    <div className="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center flex-shrink-0">
                       <span className="text-lg font-bold text-white">3</span>
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-lg font-bold text-gray-900 mb-2">
-                        Court Serves Tenant & Reviews
-                      </h3>
-                      <p className="text-gray-600 mb-3">
-                        The court sends papers to the tenant, who has 14 days to respond. If they do
-                        not defend, a judge reviews on paper. If defended, a hearing may be
-                        scheduled.
+                      <h3 className="text-lg font-bold text-gray-900 mb-2">Prepare the possession bundle</h3>
+                      <p className="text-gray-700">
+                        Gather the claim form, tenancy agreement, notice, service evidence and any
+                        supporting documents needed for the route used.
                       </p>
-                      <div className="flex items-center gap-4 text-sm">
-                        <div className="bg-gray-50 rounded-lg px-4 py-2">
-                          <span className="text-gray-600">Typical wait:</span>
-                          <span className="font-bold text-gray-900 ml-1">4-8 weeks</span>
-                        </div>
-                      </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Step 4 */}
                 <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
+                    <div className="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center flex-shrink-0">
                       <span className="text-lg font-bold text-white">4</span>
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-lg font-bold text-gray-900 mb-2">
-                        Possession Order Granted
-                      </h3>
-                      <p className="text-gray-600 mb-3">
-                        If successful, the court grants a possession order. This gives the tenant
-                        14-42 days to leave. The order is posted to both parties.
+                      <h3 className="text-lg font-bold text-gray-900 mb-2">Issue the claim</h3>
+                      <p className="text-gray-700">
+                        File the possession claim through the correct court route and pay the issue fee.
+                        The tenant then has the opportunity to respond.
                       </p>
-                      <div className="bg-green-50 rounded-lg p-3 text-sm text-green-800">
-                        <CheckCircle className="w-4 h-4 inline mr-1" />
-                        Most undefended Section 21 claims are successful
-                      </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Step 5 */}
                 <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
-                      <span className="text-lg font-bold text-white">5</span>
+                    <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
+                      <CheckCircle className="w-6 h-6 text-white" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-lg font-bold text-gray-900 mb-2">
-                        Warrant of Possession (If Still Refuses)
-                      </h3>
-                      <p className="text-gray-600 mb-3">
-                        If the tenant still does not leave after the order date, apply for a warrant
-                        of possession using Form N325. County court bailiffs will physically evict
-                        the tenant.
+                      <h3 className="text-lg font-bold text-gray-900 mb-2">Move to enforcement if needed</h3>
+                      <p className="text-gray-700">
+                        If possession is granted but the tenant still remains, the next stage is usually
+                        enforcement rather than personal action by the landlord.
                       </p>
-                      <div className="flex items-center gap-4 text-sm">
-                        <div className="bg-gray-50 rounded-lg px-4 py-2">
-                          <span className="text-gray-600">Warrant fee:</span>
-                          <span className="font-bold text-gray-900 ml-1">~£130</span>
-                        </div>
-                        <div className="bg-gray-50 rounded-lg px-4 py-2">
-                          <span className="text-gray-600">Wait time:</span>
-                          <span className="font-bold text-gray-900 ml-1">4-8 weeks</span>
-                        </div>
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -559,16 +519,15 @@ export default function Section21ExpiredPage() {
           </div>
         </section>
 
-        {/* What If Tenant Defends */}
         <section className="py-16 lg:py-20">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
+            <div className="max-w-5xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
-                What If the Tenant Defends the Claim?
+                What if the tenant defends the claim?
               </h2>
-              <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                Tenants can challenge a Section 21 possession claim. Here are the common defences
-                and how to handle them.
+              <p className="text-gray-600 text-center mb-12 max-w-3xl mx-auto">
+                A defence does not always mean the landlord loses, but it usually means the paperwork
+                and compliance position come under much closer scrutiny.
               </p>
 
               <div className="grid md:grid-cols-2 gap-6">
@@ -578,10 +537,10 @@ export default function Section21ExpiredPage() {
                       <AlertCircle className="w-5 h-5 text-amber-600" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-gray-900 mb-2">Deposit Issues</h3>
-                      <p className="text-gray-600 text-sm">
-                        Claims that deposit was not protected within 30 days or prescribed
-                        information was not provided. This can invalidate Section 21.
+                      <h3 className="font-bold text-gray-900 mb-2">Notice validity arguments</h3>
+                      <p className="text-gray-700 text-sm">
+                        Tenants may argue that the notice itself, the dates, or the service process
+                        were not correct.
                       </p>
                     </div>
                   </div>
@@ -593,10 +552,10 @@ export default function Section21ExpiredPage() {
                       <AlertCircle className="w-5 h-5 text-amber-600" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-gray-900 mb-2">Missing Documents</h3>
-                      <p className="text-gray-600 text-sm">
-                        Claims that EPC, gas safety certificate, or How to Rent guide were not
-                        provided. All three are required for a valid Section 21.
+                      <h3 className="font-bold text-gray-900 mb-2">Document and compliance issues</h3>
+                      <p className="text-gray-700 text-sm">
+                        Supporting documents, service evidence and route assumptions often become the
+                        main battleground in defended cases.
                       </p>
                     </div>
                   </div>
@@ -608,10 +567,10 @@ export default function Section21ExpiredPage() {
                       <AlertCircle className="w-5 h-5 text-amber-600" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-gray-900 mb-2">Retaliatory Eviction</h3>
-                      <p className="text-gray-600 text-sm">
-                        If tenant complained about conditions and the council served an improvement
-                        notice, Section 21 is blocked for 6 months.
+                      <h3 className="font-bold text-gray-900 mb-2">Requests for more time</h3>
+                      <p className="text-gray-700 text-sm">
+                        Even where the landlord is broadly right, tenants may still seek time or raise
+                        circumstances that affect the pace of the process.
                       </p>
                     </div>
                   </div>
@@ -623,31 +582,27 @@ export default function Section21ExpiredPage() {
                       <AlertCircle className="w-5 h-5 text-amber-600" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-gray-900 mb-2">Notice Validity</h3>
-                      <p className="text-gray-600 text-sm">
-                        Claims that notice was not in correct form (Form 6A), wrong dates, or not
-                        properly served. Check your original notice carefully.
+                      <h3 className="font-bold text-gray-900 mb-2">Route suitability issues</h3>
+                      <p className="text-gray-700 text-sm">
+                        A defence can expose that the accelerated route was not as clean a fit as the
+                        landlord first assumed.
                       </p>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="mt-8 bg-primary/5 rounded-xl p-6 border border-primary/20">
+              <div className="mt-8 bg-blue-50 rounded-xl p-6 border border-blue-200">
                 <div className="flex items-start gap-4">
-                  <Shield className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
+                  <Shield className="w-6 h-6 text-blue-600 flex-shrink-0 mt-1" />
                   <div>
                     <h4 className="font-semibold text-gray-900 mb-2">
-                      If Defended, the Court May Schedule a Hearing
+                      Best practical approach
                     </h4>
-                    <p className="text-gray-600 text-sm mb-3">
-                      If the tenant files a defence, the judge may schedule a hearing to consider
-                      both sides. You will need to provide evidence of compliance (deposit
-                      protection certificate, proof of EPC provision, etc.).
-                    </p>
-                    <p className="text-gray-600 text-sm">
-                      <strong>Pro tip:</strong> Keep copies of all documents you provided to the
-                      tenant, with dates. Email confirmations are useful evidence.
+                    <p className="text-gray-700 text-sm">
+                      Build the file as if the tenant might defend it. Clean service evidence,
+                      consistent dates and a properly organised document bundle matter more than most
+                      landlords expect.
                     </p>
                   </div>
                 </div>
@@ -656,85 +611,73 @@ export default function Section21ExpiredPage() {
           </div>
         </section>
 
-        {/* Timeline Summary */}
         <section className="py-16 lg:py-20 bg-gray-50">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
+            <div className="max-w-5xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
-                Expected Timeline After Notice Expires
+                Expected timeline after the notice expires
               </h2>
-              <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                Here is a realistic timeline for the court process after your Section 21 expires.
+              <p className="text-gray-600 text-center mb-12 max-w-3xl mx-auto">
+                Timing varies by court and case complexity, but landlords should expect the process to
+                continue for some time after the notice expiry date.
               </p>
 
               <div className="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm">
                 <div className="space-y-4">
                   <div className="flex items-center gap-4 pb-4 border-b border-gray-100">
-                    <div className="w-24 text-sm font-medium text-gray-500">Week 0</div>
+                    <div className="w-28 text-sm font-medium text-gray-500">Stage 1</div>
                     <div className="flex-1">
                       <span className="font-medium text-gray-900">
-                        Section 21 notice expires, tenant refuses to leave
+                        Notice expires and tenant remains in occupation
                       </span>
                     </div>
                   </div>
                   <div className="flex items-center gap-4 pb-4 border-b border-gray-100">
-                    <div className="w-24 text-sm font-medium text-gray-500">Week 1-2</div>
+                    <div className="w-28 text-sm font-medium text-gray-500">Stage 2</div>
                     <div className="flex-1">
                       <span className="font-medium text-gray-900">
-                        Complete and submit Form N5B to court, pay £355 fee
+                        Landlord checks dates, route and supporting documents
                       </span>
                     </div>
                   </div>
                   <div className="flex items-center gap-4 pb-4 border-b border-gray-100">
-                    <div className="w-24 text-sm font-medium text-gray-500">Week 3-4</div>
+                    <div className="w-28 text-sm font-medium text-gray-500">Stage 3</div>
                     <div className="flex-1">
                       <span className="font-medium text-gray-900">
-                        Court serves tenant, 14-day response period
+                        Possession claim issued and served
                       </span>
                     </div>
                   </div>
                   <div className="flex items-center gap-4 pb-4 border-b border-gray-100">
-                    <div className="w-24 text-sm font-medium text-gray-500">Week 5-8</div>
+                    <div className="w-28 text-sm font-medium text-gray-500">Stage 4</div>
                     <div className="flex-1">
                       <span className="font-medium text-gray-900">
-                        Judge reviews (if undefended), issues possession order
-                      </span>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-4 pb-4 border-b border-gray-100">
-                    <div className="w-24 text-sm font-medium text-gray-500">Week 8-10</div>
-                    <div className="flex-1">
-                      <span className="font-medium text-gray-900">
-                        Tenant has 14-42 days to vacate per order
+                        Court reviews papers or deals with defence / hearing issues
                       </span>
                     </div>
                   </div>
                   <div className="flex items-center gap-4 bg-amber-50 rounded-lg p-4 -mx-4">
-                    <div className="w-24 text-sm font-medium text-amber-700">Week 10-18</div>
+                    <div className="w-28 text-sm font-medium text-amber-700">Stage 5</div>
                     <div className="flex-1">
                       <span className="font-medium text-amber-900">
-                        If still refuses: Apply for warrant, bailiff eviction
+                        Possession order granted, then enforcement if tenant still stays
                       </span>
                     </div>
                   </div>
                 </div>
 
-                <div className="mt-6 pt-6 border-t border-gray-100 flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-gray-500">Total time (typical undefended case)</p>
-                    <p className="text-2xl font-bold text-primary">8-18 weeks</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-500">Total court costs</p>
-                    <p className="text-2xl font-bold text-primary">~£485</p>
-                  </div>
+                <div className="mt-6 pt-6 border-t border-gray-100">
+                  <p className="text-gray-700">
+                    <strong>Practical reality:</strong> even where the landlord has done things
+                    properly, the process can still take weeks or months after notice expiry. Delay is
+                    exactly why strong paperwork and prompt action matter.
+                  </p>
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Mid-page CTA */}
         <section className="py-16 lg:py-20">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
@@ -744,21 +687,19 @@ export default function Section21ExpiredPage() {
                 jurisdiction="england"
                 pagePath="/section-21-expired-what-next"
                 title="Get All Court Forms Ready to Submit"
-                description="N5B, N215, witness statements, and step-by-step instructions. Everything you need to apply for a possession order after your Section 21 expires."
+                description="N5B route support, supporting statements and clearer filing instructions for the possession stage after notice expiry."
               />
             </div>
           </div>
         </section>
 
-        {/* FAQ Section */}
         <FAQSection
-          faqs={section21ExpiredFAQs}
+          faqs={faqs}
           title="Section 21 Expired: Frequently Asked Questions"
           showContactCTA={false}
           variant="gray"
         />
 
-        {/* Final CTA */}
         <section className="py-16 lg:py-20">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
@@ -767,8 +708,8 @@ export default function Section21ExpiredPage() {
                 variant="final"
                 jurisdiction="england"
                 pagePath="/section-21-expired-what-next"
-                title="Ready to Apply for Possession?"
-                description="Get court-ready N5B forms, witness statements, and clear instructions. Trusted by over 10,000 UK landlords."
+                title="Ready to Move to Possession?"
+                description="Get the court-stage documents, route guidance and clearer next steps you need after your Section 21 expires."
               />
 
               <SeoDisclaimer className="max-w-4xl mx-auto" />
@@ -776,20 +717,12 @@ export default function Section21ExpiredPage() {
           </div>
         </section>
 
-        {/* Related Resources */}
         <section className="py-16 lg:py-20 bg-gray-50">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <RelatedLinks
                 title="Related Resources"
-                links={[
-                  guideLinks.howToEvictTenant,
-                  productLinks.completePack,
-                  guideLinks.n5bFormGuide,
-                  guideLinks.warrantOfPossession,
-                  toolLinks.section21Validator,
-                  guideLinks.evictionCostUk,
-                ]}
+                links={evictionRelatedLinks}
               />
             </div>
           </div>
