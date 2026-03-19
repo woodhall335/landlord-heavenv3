@@ -225,19 +225,33 @@ export default function Page() {
             aria-labelledby="guide-links-heading"
             className="mx-auto max-w-5xl rounded-2xl border border-[#E6DBFF] bg-white p-6"
           >
-            <h2 id="guide-links-heading" className="text-2xl font-semibold text-[#2a2161]">
-              In This Guide
-            </h2>
-            <div className="mt-4 grid gap-3 md:grid-cols-2">
-              {jumpLinks.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  className="rounded-lg border border-[#E6DBFF] px-4 py-3 text-primary hover:bg-[#F8F4FF]"
-                >
-                  {link.label}
-                </a>
-              ))}
+            <div className="flex flex-col gap-6 md:flex-row md:items-start">
+              <div className="mx-auto w-full max-w-[240px] shrink-0 md:mx-0">
+                <Image
+                  src="/images/section21-checklist.webp"
+                  alt="Section 21 checklist illustration"
+                  width={240}
+                  height={240}
+                  className="h-auto w-full rounded-xl"
+                />
+              </div>
+
+              <div className="flex-1">
+                <h2 id="guide-links-heading" className="text-2xl font-semibold text-[#2a2161]">
+                  In This Guide
+                </h2>
+                <div className="mt-4 grid gap-3 md:grid-cols-2">
+                  {jumpLinks.map((link) => (
+                    <a
+                      key={link.href}
+                      href={link.href}
+                      className="rounded-lg border border-[#E6DBFF] px-4 py-3 text-primary hover:bg-[#F8F4FF]"
+                    >
+                      {link.label}
+                    </a>
+                  ))}
+                </div>
+              </div>
             </div>
           </nav>
         </Container>
