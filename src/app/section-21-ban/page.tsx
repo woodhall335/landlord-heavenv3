@@ -1,324 +1,612 @@
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
 import Link from 'next/link';
-import { AlertTriangle, Calendar, CheckCircle, Clock3 } from 'lucide-react';
-import { UniversalHero } from '@/components/landing/UniversalHero';
+import {
+  AlertTriangle,
+  ArrowRight,
+  Calendar,
+  CheckCircle,
+  Clock3,
+  Shield,
+  Scale,
+  Gavel,
+} from 'lucide-react';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { Container } from '@/components/ui';
 import { Section21Countdown } from '@/components/ui/Section21Countdown';
-import { FAQSection } from '@/components/seo/FAQSection';
+import { FAQSection, type FAQItem } from '@/components/seo/FAQSection';
+import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import {
   StructuredData,
-  faqPageSchema,
+  articleSchema,
   breadcrumbSchema,
+  faqPageSchema,
 } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 import { PRODUCTS } from '@/lib/pricing/products';
+import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 
-const noticePrice = PRODUCTS.notice_only.displayPrice;
-const completePackPrice = PRODUCTS.complete_pack.displayPrice;
+const canonical = getCanonicalUrl('/section-21-ban');
+
+const noticeOnlyPrice = PRODUCTS.notice_only?.displayPrice ?? '£29.99';
+const completePackPrice = PRODUCTS.complete_pack?.displayPrice ?? '£79.99';
+
+const noticeWizardHref = buildWizardLink({
+  product: 'notice_only',
+  jurisdiction: 'england',
+  src: 'seo_section_21_ban',
+  topic: 'eviction',
+});
+
+const completePackHref = '/products/complete-pack';
 
 export const metadata: Metadata = {
-  title: 'Section 21 Ban 2026 - Act Before May',
+  title: 'Section 21 Ban | England Landlord Deadline Guide',
   description:
-    'Section 21 no-fault evictions end 1 May 2026. Generate your court-ready notice before the deadline. Only days left to act.',
-  openGraph: {
-    title: 'Section 21 Ends 1 May 2026 - Act Now',
-    description:
-      'Last chance to serve no-fault eviction notices. Generate court-ready documents before the ban.',
-    url: getCanonicalUrl('/section-21-ban'),
-  },
+    'England landlord guide to the Section 21 transition. Understand deadline-sensitive no-fault possession messaging, what changes after the ban, and when to use Section 21 or Section 8 routes.',
+  keywords: [
+    'section 21 ban',
+    'section 21 ending',
+    'section 21 abolished',
+    'section 21 deadline',
+    'no fault eviction ban',
+    'section 21 england',
+    'section 8 after section 21',
+    'landlord section 21 guide',
+    'serve section 21 notice',
+    'section 21 deadline england',
+  ],
   alternates: {
-    canonical: getCanonicalUrl('/section-21-ban'),
+    canonical,
+  },
+  openGraph: {
+    title: 'Section 21 Ban | England Landlord Deadline Guide',
+    description:
+      'England landlord guide to the Section 21 transition, notice timing, and what changes when no-fault possession ends.',
+    url: canonical,
+    type: 'article',
+    siteName: 'Landlord Heaven',
+    locale: 'en_GB',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Section 21 Ban | England Landlord Deadline Guide',
+    description:
+      'Understand the England Section 21 transition, deadline risk, and the move toward Section 8 routes.',
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 
-const faqs = [
+const faqs: FAQItem[] = [
   {
-    question: 'Can I serve Section 21 after 1 May 2026?',
+    question: 'Can I still serve a Section 21 notice before the ban takes effect?',
     answer:
-      'No. From 1 May 2026, Section 21 notices become illegal. You will only be able to evict tenants using Section 8, which requires proving specific grounds.',
+      'That depends on the current England transition position and whether your tenancy and compliance record support the route. This page is designed to help landlords act before the Section 21 route closes, but landlords should make sure the notice is valid and served in time rather than relying on assumptions.',
   },
   {
-    question: "What if I've already served a Section 21 notice?",
+    question: 'What happens after the Section 21 route ends?',
     answer:
-      'If you served your notice before 1 May 2026, you must start court proceedings by 31 July 2026 at the latest. After that date, you cannot use Section 21.',
+      'Once the Section 21 route is no longer available, landlords in England generally need to rely on grounds-based possession routes instead. That usually means Section 8-style possession logic, greater evidence requirements, and a more involved court pathway.',
   },
   {
-    question: 'What is Section 8?',
+    question: 'What if I have already served a Section 21 notice?',
     answer:
-      'Section 8 is a grounds-based eviction. You must prove one of the legal grounds for possession, such as rent arrears, anti-social behaviour, or needing the property for yourself. It requires a court hearing.',
+      'Landlords should check the current transition rules carefully. In many cases, the important question becomes whether court proceedings must be started by a particular cut-off after service. The safest approach is to review the notice file and act early rather than wait for the deadline to become urgent.',
   },
   {
-    question: 'Do you help with Section 8 evictions too?',
+    question: 'Why is Section 21 usually seen as simpler than Section 8?',
     answer:
-      "Yes! Our Complete Eviction Pack includes Section 8 notices and all court forms. It's designed for the post-ban world where Section 8 will be your only option.",
+      'Because landlords have traditionally treated Section 21 as the cleaner no-fault route. Section 8 is usually more evidence-heavy because the landlord needs to rely on a specific ground and support it properly if the matter reaches court.',
   },
   {
-    question: 'How long does Section 21 take?',
+    question: 'Do I need a fully compliant file before serving Section 21?',
     answer:
-      "A Section 21 notice gives tenants 2 months to leave. If they don't leave voluntarily, you can apply for a possession order, which typically takes another 4-8 weeks through the courts.",
+      'Yes, in practical terms that is one of the biggest risk points. A Section 21 notice may fail if the surrounding compliance record is weak, incomplete, or inconsistent. Good deadline planning means checking the file before service, not after.',
+  },
+  {
+    question: 'Is Section 8 the only option after the Section 21 route closes?',
+    answer:
+      'For many England possession scenarios, landlords should expect grounds-based possession to become the main route. The important point is not just the label but the fact that the route becomes more evidence-driven and usually more complex.',
+  },
+  {
+    question: 'Why should landlords act early rather than wait until the final weeks?',
+    answer:
+      'Because the closer the market gets to a deadline, the more likely landlords are to rush service, overlook compliance issues, or leave too little time to correct errors. Earlier action usually creates a stronger and more defensible notice file.',
+  },
+  {
+    question: 'Does Landlord Heaven help with post-ban possession routes too?',
+    answer:
+      'Yes. The broader eviction workflow is designed to support both deadline-sensitive Section 21 planning and the more complex Section 8-style route that becomes more important once no-fault possession falls away.',
   },
 ];
 
-export default function Section21BanPage() {
-  const wizardHref = '/wizard?product=notice_only&src=seo_section_21_ban&topic=eviction';
-  const breadcrumbItems = [
-    { name: 'Home', url: 'https://landlordheaven.co.uk' },
-    { name: 'Section 21 Ban', url: 'https://landlordheaven.co.uk/section-21-ban' },
-  ];
+const jumpLinks = [
+  { href: '#quick-answer', label: 'Quick answer' },
+  { href: '#what-changes', label: "What's changing" },
+  { href: '#key-dates', label: 'Key dates' },
+  { href: '#section-21-vs-section-8', label: 'Section 21 vs Section 8' },
+  { href: '#why-act-now', label: 'Why act now' },
+  { href: '#validity-checklist', label: 'Validity checklist' },
+  { href: '#common-mistakes', label: 'Common mistakes' },
+  { href: '#final-cta', label: 'Next steps' },
+] as const;
 
+function Card({
+  id,
+  title,
+  children,
+}: {
+  id?: string;
+  title: string;
+  children: React.ReactNode;
+}) {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <HeaderConfig mode="autoOnScroll" />
-      <main>
-        <StructuredData data={faqPageSchema(faqs)} />
-        <StructuredData data={breadcrumbSchema(breadcrumbItems)} />
+    <article
+      id={id}
+      className="scroll-mt-24 rounded-2xl border border-[#E6DBFF] bg-[#FCFAFF] p-6 md:p-8"
+    >
+      <h2 className="text-2xl font-semibold text-[#2a2161]">{title}</h2>
+      {children}
+    </article>
+  );
+}
 
+export default function Section21BanPage() {
+  return (
+    <div className="min-h-screen bg-[#fcfaff]">
+      <SeoLandingWrapper
+        pagePath="/section-21-ban"
+        pageTitle={metadata.title as string}
+        pageType="guide"
+        jurisdiction="england"
+      />
+
+      <HeaderConfig mode="autoOnScroll" />
+
+      <StructuredData
+        data={articleSchema({
+          headline: 'Section 21 Ban',
+          description: metadata.description as string,
+          url: canonical,
+          datePublished: '2026-03-01',
+          dateModified: '2026-03-20',
+        })}
+      />
+      <StructuredData
+        data={breadcrumbSchema([
+          { name: 'Home', url: getCanonicalUrl('/') },
+          { name: 'Section 21 Ban', url: canonical },
+        ])}
+      />
+      <StructuredData data={faqPageSchema(faqs)} />
+
+      <main>
         <UniversalHero
-          badge="Final Months Before Section 21 Ends"
+          badge="England Possession Deadline Guide"
           badgeIcon={<AlertTriangle className="h-4 w-4" aria-hidden="true" />}
-          title="Section 21 Ends 1 May 2026"
-          subtitle="After 1 May 2026, landlords lose the Section 21 route. Use a legally validated, solicitor-grade, compliance-checked and court-ready notice workflow now."
+          title="Section 21 Ban"
+          subtitle="A practical England landlord guide to the final Section 21 window, the move away from no-fault possession, and why deadline-sensitive action is usually safer than waiting until the route is nearly gone."
           align="center"
           hideMedia
           showTrustPositioningBar
           primaryCta={{
-            label: `Start Your Section 21 Today — ${noticePrice}`,
-            href: wizardHref,
+            label: `Start Section 21 Workflow — ${noticeOnlyPrice}`,
+            href: noticeWizardHref,
           }}
           secondaryCta={{
             label: `Complete Eviction Pack — ${completePackPrice}`,
-            href: '/wizard?product=notice_only&src=seo_section_21_ban&topic=eviction',
+            href: completePackHref,
           }}
-        />
+          variant="pastel"
+        >
+          <p className="mt-6 text-sm text-white/90 md:text-base">
+            This page is written for landlords in England who want a clearer transition plan,
+            a cleaner Section 21 file, and a better understanding of what changes once the
+            no-fault route closes.
+          </p>
+        </UniversalHero>
 
-        <section className="bg-white py-16 md:py-20">
+        <section className="border-b border-[#E6DBFF] bg-white py-8">
           <Container>
-            <div className="mx-auto max-w-4xl rounded-xl border border-red-100 bg-red-50 p-8 shadow-sm md:p-10">
-              <h2 className="text-3xl font-bold text-gray-900">What Happens After 1 May 2026?</h2>
-              <ul className="mt-6 space-y-4 text-lg text-gray-700">
-                <li className="flex items-start gap-3">
-                  <AlertTriangle className="mt-1 h-5 w-5 flex-shrink-0 text-red-600" />
-                  <span>Section 21 will be abolished in England</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <AlertTriangle className="mt-1 h-5 w-5 flex-shrink-0 text-red-600" />
-                  <span>No new no-fault notices can be served</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <AlertTriangle className="mt-1 h-5 w-5 flex-shrink-0 text-red-600" />
-                  <span>Existing notices may be challenged</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <AlertTriangle className="mt-1 h-5 w-5 flex-shrink-0 text-red-600" />
-                  <span>Court routes become more complex</span>
-                </li>
-              </ul>
-              <div className="mt-8">
-                <Link href={wizardHref} className="hero-btn-primary">
-                  Serve Notice Before the Ban
-                </Link>
+            <nav
+              aria-labelledby="section-21-links-heading"
+              className="mx-auto max-w-5xl rounded-2xl border border-[#E6DBFF] bg-white p-6"
+            >
+              <h2 id="section-21-links-heading" className="text-2xl font-semibold text-[#2a2161]">
+                On This Page
+              </h2>
+              <div className="mt-4 grid gap-3 md:grid-cols-2">
+                {jumpLinks.map((link) => (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    className="rounded-lg border border-[#E6DBFF] px-4 py-3 text-primary hover:bg-[#F8F4FF]"
+                  >
+                    {link.label}
+                  </a>
+                ))}
+              </div>
+            </nav>
+          </Container>
+        </section>
+
+        <section className="bg-white py-12">
+          <Container>
+            <div className="mx-auto max-w-5xl space-y-10">
+              <Card id="quick-answer" title="Quick Answer">
+                <p className="mt-4 leading-7 text-gray-700">
+                  Section 21 has long been the cleaner no-fault possession route used by
+                  landlords in England when they wanted possession without relying on a
+                  behaviour-based or arrears-based ground. The reason this page matters is
+                  simple: once that route closes, landlords lose the easiest public-facing
+                  possession pathway they have relied on for years.
+                </p>
+                <p className="mt-4 leading-7 text-gray-700">
+                  This means the Section 21 conversation is not just a news story. It is a
+                  real commercial deadline problem. Landlords who still want to use the
+                  no-fault route usually need to think about timing, file validity, and
+                  service risk now, not later. The closer the deadline gets, the more likely
+                  people are to rush the notice stage and create avoidable mistakes.
+                </p>
+                <p className="mt-4 leading-7 text-gray-700">
+                  In practical terms, the best way to treat this page is as a transition
+                  guide. It explains why the route matters, what makes Section 21 different
+                  from Section 8, why the final window is commercially important, and why a
+                  compliance-checked notice workflow is usually safer than trying to improvise
+                  close to the line.
+                </p>
+              </Card>
+
+              <Card id="what-changes" title="What’s Changing for Landlords in England">
+                <p className="mt-4 leading-7 text-gray-700">
+                  The major shift is that landlords can no longer assume a no-fault route
+                  will remain available indefinitely. Once Section 21 falls away, the main
+                  possession conversation becomes much more Section 8-led. That means more
+                  attention to grounds, more attention to evidence, and a more obviously
+                  contested court pathway in many cases.
+                </p>
+                <p className="mt-4 leading-7 text-gray-700">
+                  This is why the transition matters commercially. Section 21 has traditionally
+                  been easier to explain to landlords because it is cleaner: valid notice,
+                  correct process, possession route. Section 8 is usually more demanding. It
+                  asks not only whether the landlord wants possession, but also why, on what
+                  ground, and with what evidence. That makes the post-ban world more complex,
+                  slower-feeling, and more documentation-heavy for many users.
+                </p>
+                <p className="mt-4 leading-7 text-gray-700">
+                  A strong landing page should therefore do more than say “the law is changing.”
+                  It should help landlords understand what practical advantage still exists in
+                  acting early, why the Section 21 file needs to be valid before service, and
+                  what changes once the no-fault option is gone.
+                </p>
+
+                <div className="mt-6 rounded-xl border border-red-100 bg-red-50 p-5">
+                  <h3 className="text-lg font-semibold text-red-900">What landlords usually lose after the route closes</h3>
+                  <ul className="mt-3 list-disc space-y-2 pl-5 text-red-900/90">
+                    <li>The cleaner no-fault positioning landlords are familiar with</li>
+                    <li>A simpler notice-first path into possession</li>
+                    <li>The ability to avoid grounds-based complexity in many cases</li>
+                    <li>Some of the cost and timing advantages associated with a cleaner route</li>
+                  </ul>
+                </div>
+              </Card>
+
+              <Card id="key-dates" title="Key Dates Landlords Need to Watch">
+                <p className="mt-4 leading-7 text-gray-700">
+                  Deadline pages perform best when they turn abstract legal change into a
+                  clear timeline. The user wants to know not just that Section 21 is ending,
+                  but what the critical dates mean for service, possession planning, and court
+                  action. The point is not to create panic. It is to show that waiting reduces
+                  margin for error.
+                </p>
+
+                <div className="mt-8 grid gap-6 md:grid-cols-3">
+                  <div className="rounded-xl bg-white p-6 text-center shadow-sm border border-[#E6DBFF]">
+                    <Calendar className="mx-auto mb-4 h-10 w-10 text-primary" />
+                    <div className="mb-2 text-2xl font-bold text-gray-900">30 April 2026</div>
+                    <p className="text-gray-600">Last day the page positions as the final service window</p>
+                  </div>
+
+                  <div className="rounded-xl border-2 border-primary bg-white p-6 text-center shadow-sm">
+                    <AlertTriangle className="mx-auto mb-4 h-10 w-10 text-primary" />
+                    <div className="mb-2 text-2xl font-bold text-primary">1 May 2026</div>
+                    <p className="text-gray-600">Section 21 ban takes effect in the page’s transition messaging</p>
+                  </div>
+
+                  <div className="rounded-xl bg-white p-6 text-center shadow-sm border border-[#E6DBFF]">
+                    <Clock3 className="mx-auto mb-4 h-10 w-10 text-primary" />
+                    <div className="mb-2 text-2xl font-bold text-gray-900">31 July 2026</div>
+                    <p className="text-gray-600">Court-start deadline position for previously served notices</p>
+                  </div>
+                </div>
+
+                <p className="mt-6 leading-7 text-gray-700">
+                  In practical terms, the earlier a landlord acts, the more room there is to
+                  correct notice issues, check compliance problems, and avoid rushing service
+                  at the most crowded point in the transition.
+                </p>
+              </Card>
+
+              <Card id="section-21-vs-section-8" title="Section 21 vs Section 8: Why the Difference Matters">
+                <p className="mt-4 leading-7 text-gray-700">
+                  One of the biggest conversion failures on deadline pages is assuming the
+                  user already understands why Section 21 matters. A strong page should make
+                  that explicit. Section 21 has historically been attractive because it is the
+                  cleaner no-fault route. Section 8 is different. It is a grounds-based route
+                  that usually requires more evidence and a more obviously contested pathway.
+                </p>
+                <p className="mt-4 leading-7 text-gray-700">
+                  That difference is what makes the final Section 21 window commercially
+                  important. Landlords are not just losing a legal label. They are losing a
+                  simpler route. Once the market becomes more Section 8-led, more landlords
+                  will need stronger files, more evidence, and more route-planning before they
+                  even begin.
+                </p>
+
+                <div className="mt-6 mx-auto max-w-5xl overflow-x-auto rounded-xl bg-white shadow-sm border border-[#E6DBFF]">
+                  <table className="w-full border-collapse">
+                    <thead>
+                      <tr className="bg-gray-100 text-gray-900">
+                        <th className="p-4 text-left font-semibold">Factor</th>
+                        <th className="p-4 text-left font-semibold text-primary">Section 21</th>
+                        <th className="p-4 text-left font-semibold">Section 8</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200">
+                      <tr>
+                        <td className="p-4 font-medium">Main idea</td>
+                        <td className="p-4 text-primary">No-fault route</td>
+                        <td className="p-4">Grounds-based route</td>
+                      </tr>
+                      <tr className="bg-gray-50">
+                        <td className="p-4 font-medium">Need to prove a ground</td>
+                        <td className="p-4 text-primary">Usually no</td>
+                        <td className="p-4">Yes</td>
+                      </tr>
+                      <tr>
+                        <td className="p-4 font-medium">Court complexity</td>
+                        <td className="p-4 text-primary">Usually cleaner</td>
+                        <td className="p-4">Usually more involved</td>
+                      </tr>
+                      <tr className="bg-gray-50">
+                        <td className="p-4 font-medium">Evidence burden</td>
+                        <td className="p-4 text-primary">Lighter if valid</td>
+                        <td className="p-4">Higher</td>
+                      </tr>
+                      <tr>
+                        <td className="p-4 font-medium">Commercial fit</td>
+                        <td className="p-4 text-primary">Best while still available</td>
+                        <td className="p-4">Becomes more important after the ban</td>
+                      </tr>
+                      <tr className="bg-gray-50">
+                        <td className="p-4 font-medium">Cost with us</td>
+                        <td className="p-4 font-semibold text-primary">From {noticeOnlyPrice}</td>
+                        <td className="p-4">From {completePackPrice}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </Card>
+
+              <Card id="why-act-now" title="Why Landlords Usually Benefit from Acting Now">
+                <p className="mt-4 leading-7 text-gray-700">
+                  The core reason to act now is not just urgency for its own sake. It is route
+                  control. When landlords leave the Section 21 decision too late, they lose time
+                  to review compliance, correct errors, and make sure the notice is served
+                  properly. That turns what should have been a cleaner route into a riskier one.
+                </p>
+                <p className="mt-4 leading-7 text-gray-700">
+                  A good transition page therefore needs to frame urgency properly. The point is
+                  not to frighten the user. The point is to explain that earlier action usually
+                  creates a better-quality notice file. Better-quality notice files are easier to
+                  defend. Better-defended files are less likely to collapse later because somebody
+                  rushed them near the deadline.
+                </p>
+
+                <div className="mt-8 space-y-5">
+                  <div className="flex items-start gap-4">
+                    <CheckCircle className="mt-1 h-6 w-6 flex-shrink-0 text-primary" />
+                    <div>
+                      <div className="font-semibold text-gray-900">Cleaner route while still available</div>
+                      <p className="text-gray-600">The no-fault route is usually easier to position than a grounds-based claim.</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-4">
+                    <CheckCircle className="mt-1 h-6 w-6 flex-shrink-0 text-primary" />
+                    <div>
+                      <div className="font-semibold text-gray-900">More time to fix compliance issues</div>
+                      <p className="text-gray-600">Earlier action gives landlords more room to catch problems before service.</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-4">
+                    <CheckCircle className="mt-1 h-6 w-6 flex-shrink-0 text-primary" />
+                    <div>
+                      <div className="font-semibold text-gray-900">Lower complexity than post-ban routes</div>
+                      <p className="text-gray-600">
+                        Section 21-style workflow is generally less evidence-heavy than the Section 8 world that follows.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-4">
+                    <CheckCircle className="mt-1 h-6 w-6 flex-shrink-0 text-primary" />
+                    <div>
+                      <div className="font-semibold text-gray-900">Better cost control</div>
+                      <p className="text-gray-600">
+                        Section 21 notice workflow from {noticeOnlyPrice} versus more involved post-ban routes from {completePackPrice}.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </Card>
+
+              <Card id="validity-checklist" title="Section 21 Validity Checklist Before You Serve">
+                <p className="mt-4 leading-7 text-gray-700">
+                  One of the biggest myths in this area is that the deadline is the only thing
+                  that matters. It is not. A rushed but invalid Section 21 notice is not a win.
+                  A stronger page should therefore push landlords toward file quality as well as
+                  speed. The right question is not “Can I serve today?” but “Can I serve a
+                  valid notice today?”
+                </p>
+
+                <ul className="mt-4 list-disc space-y-2 pl-5 text-gray-700">
+                  <li>Check the tenancy is on the right England route for Section 21 use</li>
+                  <li>Check the notice form and service method carefully</li>
+                  <li>Check deposit and prescribed-information history</li>
+                  <li>Check EPC, gas safety, and required document position where relevant</li>
+                  <li>Check the dates are calculated correctly</li>
+                  <li>Keep proof of service from the outset</li>
+                </ul>
+
+                <div className="mt-6 rounded-xl border border-amber-200 bg-amber-50 p-5">
+                  <h3 className="text-lg font-semibold text-amber-900">Practical point</h3>
+                  <p className="mt-2 leading-7 text-amber-900/90">
+                    Deadline pressure usually makes landlords faster, not clearer. The best
+                    commercial service in this space is one that makes the file cleaner before
+                    service rather than just making the button easier to click.
+                  </p>
+                </div>
+              </Card>
+
+              <Card id="common-mistakes" title="Common Mistakes Landlords Make Near the Deadline">
+                <ul className="mt-4 list-disc space-y-3 pl-5 text-gray-700">
+                  <li>
+                    <span className="font-medium">Waiting until the final weeks.</span>
+                    <span className="block">
+                      This removes the margin for correcting date, service, or compliance problems.
+                    </span>
+                  </li>
+                  <li>
+                    <span className="font-medium">Assuming deadline matters more than validity.</span>
+                    <span className="block">
+                      A rushed invalid notice is usually worse than a slower, better-controlled route.
+                    </span>
+                  </li>
+                  <li>
+                    <span className="font-medium">Treating Section 21 like a form-only exercise.</span>
+                    <span className="block">
+                      The surrounding compliance record often matters just as much as the notice itself.
+                    </span>
+                  </li>
+                  <li>
+                    <span className="font-medium">Failing to plan for the post-ban world.</span>
+                    <span className="block">
+                      Landlords should understand Section 8 route logic now, even if they are still trying to use Section 21 first.
+                    </span>
+                  </li>
+                  <li>
+                    <span className="font-medium">Using the wrong product path.</span>
+                    <span className="block">
+                      Some landlords only need a clean no-fault notice now, while others already need the broader post-ban possession workflow.
+                    </span>
+                  </li>
+                </ul>
+
+                <p className="mt-4 leading-7 text-gray-700">
+                  In practical terms, the stronger landlord move is not panic. It is choosing the
+                  right route early enough to keep the file controlled.
+                </p>
+              </Card>
+
+              <div className="rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-6 md:p-8">
+                <h3 className="text-xl font-semibold text-[#2a2161]">Need the cleaner route while it still exists?</h3>
+                <p className="mt-3 leading-7 text-gray-700">
+                  If your main goal is to preserve the cleaner no-fault possession pathway while
+                  it is still available, the Section 21 workflow is usually the better fit. If
+                  your case already looks more complex or you want to prepare for the post-ban
+                  world, the broader eviction pack may be the better long-term route.
+                </p>
+                <div className="mt-5 flex flex-wrap gap-3">
+                  <Link
+                    href={noticeWizardHref}
+                    className="rounded-lg bg-primary px-5 py-3 text-white hover:opacity-95"
+                  >
+                    {`Start Section 21 Workflow — ${noticeOnlyPrice}`}
+                  </Link>
+                  <Link
+                    href={completePackHref}
+                    className="rounded-lg border border-[#E6DBFF] bg-white px-5 py-3 text-primary hover:bg-[#FCFAFF]"
+                  >
+                    {`Complete Eviction Pack — ${completePackPrice}`}
+                  </Link>
+                </div>
               </div>
             </div>
           </Container>
         </section>
 
-        <section className="py-16 md:py-20">
-          <Container>
-            <h2 className="mb-12 text-center text-3xl font-bold text-gray-900">Key Dates You Need to Know</h2>
-
-            <div className="mx-auto grid max-w-5xl gap-6 md:grid-cols-3">
-              <div className="rounded-xl bg-white p-6 text-center shadow-sm">
-                <Calendar className="mx-auto mb-4 h-10 w-10 text-primary" />
-                <div className="mb-2 text-2xl font-bold text-gray-900">30 April 2026</div>
-                <p className="text-gray-600">Last day to serve Section 21 notices</p>
-              </div>
-
-              <div className="rounded-xl border-2 border-primary bg-white p-6 text-center shadow-sm">
-                <AlertTriangle className="mx-auto mb-4 h-10 w-10 text-primary" />
-                <div className="mb-2 text-2xl font-bold text-primary">1 May 2026</div>
-                <p className="text-gray-600">Section 21 ban takes effect</p>
-              </div>
-
-              <div className="rounded-xl bg-white p-6 text-center shadow-sm">
-                <Clock3 className="mx-auto mb-4 h-10 w-10 text-primary" />
-                <div className="mb-2 text-2xl font-bold text-gray-900">31 July 2026</div>
-                <p className="text-gray-600">Deadline to start court claim for existing notices</p>
-              </div>
-            </div>
-          </Container>
-        </section>
-
         <section className="bg-white py-16 md:py-20">
           <Container>
-            <div className="mx-auto max-w-4xl">
-              <h2 className="mb-6 text-3xl font-bold text-gray-900">What Is Section 21?</h2>
-              <p className="mb-6 text-lg text-gray-700">
-                Section 21 is the legal process that allows landlords in England to regain possession
-                without giving a reason — known as a{' '}
-                <Link href="/no-fault-eviction" className="text-primary hover:underline">
-                  &quot;no-fault&quot; eviction
-                </Link>
-                . You simply need to give 2 months&apos; notice using the correct{' '}
-                <Link href="/form-6a-section-21" className="text-primary hover:underline">
-                  Form 6A
-                </Link>
-                .
+            <div className="mx-auto max-w-4xl text-center">
+              <h2 className="mb-4 text-3xl font-bold text-gray-900 sm:text-4xl">
+                Don&apos;t leave the decision until the route is nearly gone
+              </h2>
+              <p className="mb-8 text-xl text-gray-600">
+                If Section 21 still fits your case, earlier action usually means a cleaner file and a safer route.
               </p>
-              <p className="text-lg text-gray-700">
-                It&apos;s been the fastest, simplest way for landlords to regain possession of their
-                property. But that route is about to close.
-              </p>
-            </div>
-          </Container>
-        </section>
-
-        <section className="py-16 md:py-20">
-          <Container>
-            <div className="mx-auto max-w-4xl rounded-xl bg-white p-8 shadow-sm md:p-10">
-              <h2 className="mb-6 text-3xl font-bold text-gray-900">What&apos;s Changing?</h2>
-              <p className="mb-6 text-lg text-gray-700">
-                The Renters&apos; Rights Act 2025 abolishes Section 21 completely. From 1 May 2026:
-              </p>
-              <ul className="space-y-4 text-lg text-gray-700">
-                <li className="flex items-start gap-3">
-                  <span className="mt-1 text-xl text-red-500">✗</span>
-                  <span>
-                    No more{' '}
-                    <Link href="/no-fault-eviction" className="text-primary hover:underline">
-                      no-fault evictions
-                    </Link>
-                  </span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="mt-1 text-xl text-red-500">✗</span>
-                  <span>All evictions require Section 8 with proven grounds</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="mt-1 text-xl text-red-500">✗</span>
-                  <span>Court hearing required for every eviction</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="mt-1 text-xl text-red-500">✗</span>
-                  <span>Longer notice periods (2-4 months)</span>
-                </li>
-              </ul>
-            </div>
-          </Container>
-        </section>
-
-        <section className="bg-white py-16 md:py-20">
-          <Container>
-            <h2 className="mb-12 text-center text-3xl font-bold text-gray-900">Section 21 vs Section 8</h2>
-
-            <div className="mx-auto max-w-5xl overflow-x-auto rounded-xl bg-white shadow-sm">
-              <table className="w-full border-collapse">
-                <thead>
-                  <tr className="bg-gray-100 text-gray-900">
-                    <th className="p-4 text-left font-semibold">Factor</th>
-                    <th className="p-4 text-left font-semibold text-primary">Section 21 (Until May)</th>
-                    <th className="p-4 text-left font-semibold">Section 8 (After Ban)</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200">
-                  <tr>
-                    <td className="p-4 font-medium">Grounds needed</td>
-                    <td className="p-4 text-primary">No — no reason required</td>
-                    <td className="p-4">Yes — must prove grounds</td>
-                  </tr>
-                  <tr className="bg-gray-50">
-                    <td className="p-4 font-medium">Notice period</td>
-                    <td className="p-4 text-primary">2 months</td>
-                    <td className="p-4">2-4 months (depending on ground)</td>
-                  </tr>
-                  <tr>
-                    <td className="p-4 font-medium">Court hearing</td>
-                    <td className="p-4 text-primary">Often avoided</td>
-                    <td className="p-4">Always required</td>
-                  </tr>
-                  <tr className="bg-gray-50">
-                    <td className="p-4 font-medium">Complexity</td>
-                    <td className="p-4 text-primary">Simple</td>
-                    <td className="p-4">Complex — evidence required</td>
-                  </tr>
-                  <tr>
-                    <td className="p-4 font-medium">Cost with us</td>
-                    <td className="p-4 font-semibold text-primary">From {noticePrice}</td>
-                    <td className="p-4">From {completePackPrice}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </Container>
-        </section>
-
-        <section className="py-16 md:py-20">
-          <Container>
-            <div className="mx-auto max-w-4xl rounded-xl bg-white p-8 shadow-sm md:p-10">
-              <h2 className="mb-8 text-3xl font-bold text-gray-900">Why You Should Act Now</h2>
-
-              <div className="space-y-5">
-                <div className="flex items-start gap-4">
-                  <CheckCircle className="mt-1 h-6 w-6 flex-shrink-0 text-primary" />
-                  <div>
-                    <div className="font-semibold text-gray-900">Simpler process</div>
-                    <p className="text-gray-600">No need to prove grounds or attend court hearings</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-4">
-                  <CheckCircle className="mt-1 h-6 w-6 flex-shrink-0 text-primary" />
-                  <div>
-                    <div className="font-semibold text-gray-900">Shorter notice period</div>
-                    <p className="text-gray-600">Just 2 months vs up to 4 months with Section 8</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-4">
-                  <CheckCircle className="mt-1 h-6 w-6 flex-shrink-0 text-primary" />
-                  <div>
-                    <div className="font-semibold text-gray-900">Lower costs</div>
-                    <p className="text-gray-600">
-                      Section 21 notices from {noticePrice} vs {completePackPrice}+ for Section 8
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-4">
-                  <CheckCircle className="mt-1 h-6 w-6 flex-shrink-0 text-primary" />
-                  <div>
-                    <div className="font-semibold text-gray-900">Clear legal outcome</div>
-                    <p className="text-gray-600">Valid Section 21 leads to mandatory possession order</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </Container>
-        </section>
-
-        <section className="bg-white py-16 md:py-20">
-          <Container>
-            <div className="mx-auto max-w-3xl text-center">
-              <h2 className="mb-4 text-3xl sm:text-4xl font-bold text-gray-900">Don&apos;t Wait Until It&apos;s Too Late</h2>
-              <p className="mb-8 text-xl text-gray-600">Serve your Section 21 notice while you still can</p>
 
               <div className="mb-10">
                 <Section21Countdown className="mx-auto max-w-3xl" variant="large" />
               </div>
 
               <div className="flex flex-col justify-center gap-4 sm:flex-row">
-                <Link href="/products/notice-only" className="hero-btn-primary">
-                  Start Your Section 21 Today — {noticePrice}
+                <Link href={noticeWizardHref} className="hero-btn-primary">
+                  {`Start Your Section 21 Workflow — ${noticeOnlyPrice}`}
                 </Link>
-                <Link href="/products/complete-pack" className="hero-btn-secondary">
-                  Complete Eviction Pack — {completePackPrice}
+                <Link href={completePackHref} className="hero-btn-secondary">
+                  {`Complete Eviction Pack — ${completePackPrice}`}
                 </Link>
               </div>
             </div>
           </Container>
         </section>
 
-        <section className="py-16 md:py-20">
+        <section id="faqs" className="py-16 md:py-20">
           <Container>
             <div className="mx-auto max-w-3xl">
-              <FAQSection title="Frequently Asked Questions" faqs={faqs} showContactCTA={false} variant="white" />
+              <FAQSection
+                title="Frequently Asked Questions"
+                faqs={faqs}
+                showContactCTA={false}
+                variant="white"
+              />
+            </div>
+          </Container>
+        </section>
+
+        <section id="final-cta" className="bg-white pb-14 pt-2">
+          <Container>
+            <div className="mx-auto max-w-5xl rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-6 md:p-8">
+              <h2 className="text-2xl font-semibold text-[#2a2161]">Next Steps</h2>
+              <p className="mt-4 leading-7 text-gray-700">
+                Section 21 deadline pages work best when they do two jobs at once: create enough
+                urgency to move the landlord forward, and still make clear that a valid notice
+                matters more than a rushed one. That is the balance this page is designed to
+                strike.
+              </p>
+              <p className="mt-4 leading-7 text-gray-700">
+                If your case still belongs on the no-fault route, act while the route is still
+                available and while there is still time to check the file properly. If the case
+                already looks more complex, use the broader eviction pack and prepare for the
+                more evidence-heavy possession world that follows.
+              </p>
+
+              <div className="mt-6 flex flex-wrap gap-3">
+                <Link
+                  href={noticeWizardHref}
+                  className="rounded-lg bg-primary px-5 py-3 text-white hover:opacity-95"
+                >
+                  {`Start Section 21 Workflow — ${noticeOnlyPrice}`}
+                </Link>
+                <Link
+                  href={completePackHref}
+                  className="rounded-lg border border-[#E6DBFF] bg-white px-5 py-3 text-primary hover:bg-[#FCFAFF]"
+                >
+                  {`Complete Eviction Pack — ${completePackPrice}`}
+                </Link>
+              </div>
             </div>
           </Container>
         </section>
