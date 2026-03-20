@@ -20,7 +20,7 @@ import { buildWizardLink, type WizardJurisdiction } from '@/lib/wizard/buildWiza
 import { trackLandingCtaClick } from '@/components/analytics/LandingPageTracker';
 import { TrustPositioningBar } from '@/components/marketing/TrustPositioningBar';
 
-export type SeoPageType = 'problem' | 'court' | 'money' | 'general' | 'tenancy' | 'guide';
+export type SeoPageType = 'problem' | 'court' | 'money' | 'general' | 'tenancy' | 'guide' | 'notice';
 
 export type SeoCtaVariant = 'hero' | 'section' | 'faq' | 'inline' | 'final';
 
@@ -110,6 +110,15 @@ const ctaConfig: Record<SeoPageType, {
     faqTitle: 'Need Help With Your Eviction?',
     faqDescription: 'Our documents are designed for court acceptance and include serving instructions.',
     icon: Shield,
+  },
+  notice: {
+    primary: { label: 'Get Court-Ready Notice', product: 'notice_only' },
+    secondary: { label: 'View Complete Pack', href: '/products/complete-pack' },
+    sectionTitle: 'Ready to Serve Your Notice?',
+    sectionDescription: 'Generate a court-ready eviction notice with guided steps to reduce common errors.',
+    faqTitle: 'Need a Reliable Section 8 Notice?',
+    faqDescription: 'Our Notice Only Pack helps you produce a compliant notice and prepare it for service.',
+    icon: FileText,
   },
 };
 
