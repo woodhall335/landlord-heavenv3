@@ -13,25 +13,28 @@ import {
   faqPageSchema,
 } from '@/lib/seo/structured-data';
 
-const canonical =
-  'https://landlordheaven.co.uk/section-8-eviction-process';
+const canonical = 'https://landlordheaven.co.uk/section-8-eviction-process';
 
 export const metadata: Metadata = {
-  title:
-    'Section 8 Eviction Process | Step-by-Step Guide for Landlords | LandlordHeaven',
+  title: 'Section 8 Eviction Process 2026 | Step-by-Step Guide for Landlords',
   description:
-    'A plain-English Section 8 eviction process guide for landlords in England. Learn the notice stage, court claim stage, hearing preparation, timelines, common mistakes, and when to use Notice Only or the Complete Eviction Pack.',
+    'A practical Section 8 eviction process guide for landlords in England. Learn the notice stage, court claim stage, hearing preparation, timelines, common mistakes, and whether to use Notice Only or the Complete Eviction Pack.',
   alternates: {
     canonical,
   },
   openGraph: {
-    title:
-      'Section 8 Eviction Process | Step-by-Step Guide for Landlords | LandlordHeaven',
+    title: 'Section 8 Eviction Process 2026 | Step-by-Step Guide for Landlords',
     description:
       'Learn how the Section 8 eviction process works in England, from notice service to possession order and enforcement.',
     url: canonical,
     siteName: 'LandlordHeaven',
     type: 'article',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Section 8 Eviction Process 2026 | LandlordHeaven',
+    description:
+      'A practical guide to the Section 8 eviction process in England.',
   },
 };
 
@@ -44,6 +47,7 @@ const jumpLinks = [
   { href: '#hearing-stage', label: 'Hearing stage' },
   { href: '#section-8-timeline', label: 'Timeline' },
   { href: '#common-section-8-mistakes', label: 'Common mistakes' },
+  { href: '#evidence-landlords-need', label: 'Evidence landlords need' },
   { href: '#notice-only-vs-complete-pack', label: 'Notice Only vs Complete Pack' },
   { href: '#faqs', label: 'FAQs' },
   { href: '#final-cta', label: 'Next steps' },
@@ -53,27 +57,27 @@ const faqs: FAQItem[] = [
   {
     question: 'What is the Section 8 eviction process?',
     answer:
-      'The Section 8 eviction process is the route landlords in England use when they want possession based on a tenant breach, such as rent arrears, anti-social behaviour, or another tenancy breach.',
+      'The Section 8 eviction process is the route landlords in England use when they want possession based on a tenant breach, such as rent arrears, anti-social behaviour, property damage, or another tenancy breach.',
   },
   {
-    question: 'Does the Section 8 process always involve a hearing?',
+    question: 'Does the Section 8 process usually involve a hearing?',
     answer:
-      'Usually yes. Most Section 8 claims involve a hearing because the court needs to assess the grounds relied on, the evidence, and any response from the tenant.',
+      'Usually yes. Most Section 8 claims are more hearing-led than accelerated possession because the court often needs to assess the grounds relied on, the evidence, and any response from the tenant.',
   },
   {
     question: 'What notice is used for the Section 8 process?',
     answer:
-      'Landlords usually begin the Section 8 process by serving a Section 8 notice using Form 3 and citing the relevant legal grounds.',
+      'Landlords usually begin the Section 8 process by serving a Section 8 notice using Form 3 and citing the legal grounds they rely on.',
   },
   {
     question: 'Can landlords use more than one ground in a Section 8 notice?',
     answer:
-      'Yes. Landlords often rely on multiple grounds where the facts support them, especially in rent arrears cases where Grounds 8, 10, and 11 are commonly used together.',
+      'Yes. Landlords often rely on multiple grounds where the facts support them, especially in rent arrears cases where more than one ground can strengthen the route.',
   },
   {
     question: 'How long does the Section 8 eviction process take?',
     answer:
-      'The timeline varies depending on the grounds used, court availability, and whether the tenant defends the claim, but landlords should think in stages rather than assume one fixed timescale.',
+      'The timeline varies depending on the grounds used, court availability, hearing delay, and whether the tenant defends the claim. Landlords should think in stages rather than assume one fixed timescale.',
   },
   {
     question: 'What happens if the tenant stays after a Section 8 possession order?',
@@ -83,12 +87,12 @@ const faqs: FAQItem[] = [
   {
     question: 'What is the biggest mistake in the Section 8 process?',
     answer:
-      'One of the biggest mistakes is using the wrong grounds or relying on weak evidence, because Section 8 is a breach-based route that depends heavily on proof and hearing readiness.',
+      'One of the biggest mistakes is using the wrong grounds or relying on weak evidence. Section 8 is a breach-based route that depends heavily on proof, route choice, and hearing readiness.',
   },
   {
     question: 'Should I use Notice Only or the Complete Eviction Pack?',
     answer:
-      'Notice Only is often the better fit where your Section 8 route is already clear and you mainly need the notice done properly. The Complete Eviction Pack is usually stronger where you want broader support across notice, court preparation, and possession planning.',
+      'Notice Only is often the better fit where your Section 8 route is already clear and you mainly need the notice handled properly. The Complete Eviction Pack is usually better where you want broader support across notice, court preparation, and possession planning.',
   },
 ];
 
@@ -228,26 +232,26 @@ export default function Page() {
               <p className="mt-4 leading-7 text-gray-700">
                 The Section 8 eviction process is the route landlords in England use when
                 they want possession because the tenant has breached the tenancy agreement.
-                Instead of relying on a no-fault notice, the landlord relies on one or more
+                Instead of relying on a no-fault route, the landlord relies on one or more
                 legal grounds such as rent arrears, anti-social behaviour, property damage,
                 or another tenancy breach.
               </p>
               <p className="mt-4 leading-7 text-gray-700">
-                In simple terms, the process usually runs through four stages: serve the
-                Section 8 notice, issue the possession claim if the problem is not resolved,
-                attend the court hearing, and then move to enforcement if the tenant still
-                remains after the possession order.
+                In simple terms, the process usually runs through five stages: choose the
+                right grounds, serve the Section 8 notice, issue the possession claim if
+                the problem is not resolved, prepare for the hearing, and then move to
+                enforcement if the tenant still remains after the possession order.
               </p>
               <p className="mt-4 leading-7 text-gray-700">
-                What makes Section 8 different from the accelerated possession route is that
-                it is usually evidence-heavy and hearing-led. The court will normally want
-                to assess the grounds relied upon, the documents supporting them, and any
+                What makes Section 8 different from the accelerated route is that it is
+                usually more evidence-heavy and more hearing-led. The court will often want
+                to assess the grounds relied on, the documents supporting them, and any
                 response raised by the tenant. That means landlords do best when they treat
                 Section 8 as a structured case file rather than a one-form exercise.
               </p>
               <p className="mt-4 leading-7 text-gray-700">
-                The strongest Section 8 claims begin well before court. Good route choice,
-                a correct notice, clear service evidence, and a consistent chronology often
+                The strongest Section 8 cases begin before court. Good route choice, a
+                correct notice, clean service evidence, and a consistent chronology often
                 matter more than speed. In practice, the safest route is usually the one
                 least likely to fall apart once a judge looks closely at it.
               </p>
@@ -259,8 +263,8 @@ export default function Page() {
                 the property because the tenant has broken the tenancy agreement or because
                 a specific statutory ground for possession applies. It is a breach-based
                 route, which means the legal case depends on proving what happened rather
-                than simply showing that a tenancy has been brought to an end through a
-                no-fault process.
+                than simply showing that a tenancy has come to an end through a no-fault
+                process.
               </p>
               <p className="mt-4 leading-7 text-gray-700">
                 The route starts with a Section 8 notice, usually on Form 3, which sets out
@@ -271,15 +275,15 @@ export default function Page() {
               </p>
               <p className="mt-4 leading-7 text-gray-700">
                 This means the Section 8 process should be understood as a managed sequence:
-                notice, evidence development, claim issue, hearing preparation, and then
-                possession enforcement if needed. Landlords who skip the middle steps and
-                focus only on the notice often find that their case weakens later.
+                notice, evidence development, claim issue, hearing preparation, possession
+                order, and then enforcement if needed. Landlords who skip the middle stages
+                and focus only on the notice often discover that their case weakens later.
               </p>
               <p className="mt-4 leading-7 text-gray-700">
                 It is also important to distinguish between understanding Section 8 grounds
                 and understanding the Section 8 process. Grounds tell you why you may seek
                 possession. Process tells you how to move from that reason to a possession
-                order in a way that stands up in court. This page is about that workflow.
+                order in a way that stands up in court.
               </p>
             </Card>
 
@@ -289,15 +293,15 @@ export default function Page() {
                 can be linked to a recognised legal ground. The most common example is rent
                 arrears, but it is far from the only one. Section 8 can also be relevant
                 where there is persistent late payment, anti-social behaviour, damage,
-                breach of tenancy terms, false statements by the tenant, or other conduct
-                that gives the landlord a legal basis for possession.
+                breach of tenancy terms, false statements, or other conduct that gives the
+                landlord a legal basis for possession.
               </p>
               <p className="mt-4 leading-7 text-gray-700">
                 In practical terms, Section 8 is usually the better fit where the landlord
                 wants the possession route to reflect the actual problem. If the case is
                 really about arrears, nuisance, or serious breach, a route built around
-                those facts is often more natural than trying to frame the matter as a
-                no-fault possession case.
+                those facts is often more natural than trying to frame the matter through a
+                no-fault lens.
               </p>
               <p className="mt-4 leading-7 text-gray-700">
                 That said, landlords should not assume Section 8 is automatically stronger
@@ -332,10 +336,9 @@ export default function Page() {
               </p>
               <p className="mt-4 leading-7 text-gray-700">
                 In rent arrears cases, this is also the point where landlords should decide
-                whether to rely on multiple grounds. For example, Ground 8 may be the main
-                ground, but Grounds 10 and 11 are often added because they can still help
-                if the arrears position changes before the hearing. The broader lesson is
-                that a notice should not only reflect the facts on the day it is served. It
+                whether to rely on multiple grounds. A main ground may matter most, but
+                supporting grounds can still help if the facts shift before the hearing. A
+                strong notice should not only reflect the facts on the day it is served. It
                 should also be resilient enough to support the claim later.
               </p>
               <p className="mt-4 leading-7 text-gray-700">
@@ -346,7 +349,7 @@ export default function Page() {
                 as a routine admin task.
               </p>
               <ul className="mt-4 list-disc space-y-2 pl-5 text-gray-700">
-                <li>Choose the grounds that genuinely match the tenancy problem</li>
+                <li>Choose grounds that genuinely match the tenancy problem</li>
                 <li>Use the correct notice form and dates</li>
                 <li>Keep a clear arrears schedule or breach chronology</li>
                 <li>Preserve proof of service from day one</li>
@@ -543,6 +546,34 @@ export default function Page() {
                 clear hearing objective will usually outperform a stack of loosely related
                 documents created in stages.
               </p>
+            </Card>
+
+            <Card id="evidence-landlords-need" title="Evidence Landlords Usually Need">
+              <p className="mt-4 leading-7 text-gray-700">
+                Section 8 is only as strong as the evidence behind it. Landlords often know
+                exactly what the tenant has done wrong, but the court still needs that story
+                translated into reliable documents and a clear chronology.
+              </p>
+              <p className="mt-4 leading-7 text-gray-700">
+                In arrears cases, that usually means an up-to-date arrears schedule,
+                payment history, tenancy terms on rent, and a clean explanation of how the
+                balance has arisen. In behaviour or damage cases, it often means dated
+                complaints, inspection records, photographs, statements, logs, repair
+                invoices, correspondence, and anything else that links the conduct to the
+                ground relied on.
+              </p>
+              <p className="mt-4 leading-7 text-gray-700">
+                The point is not to create volume for the sake of it. The point is to make
+                the case easy to follow. A smaller, organised file usually performs better
+                than a large but chaotic one.
+              </p>
+              <ul className="mt-4 list-disc space-y-2 pl-5 text-gray-700">
+                <li>Tenancy agreement and key tenancy terms</li>
+                <li>Notice copy and proof of service</li>
+                <li>Arrears schedule where rent is involved</li>
+                <li>Complaint logs, statements, or inspection notes where behaviour is involved</li>
+                <li>One clear chronology tying the evidence together</li>
+              </ul>
             </Card>
 
             <Card

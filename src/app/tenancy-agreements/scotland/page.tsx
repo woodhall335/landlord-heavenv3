@@ -1,934 +1,457 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { RelatedLinks } from '@/components/seo/RelatedLinks';
+import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
+import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
+import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
+import {
+  StructuredData,
+  articleSchema,
+  breadcrumbSchema,
+} from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo/urls';
+import { tenancyAgreementScotlandLinks } from '@/lib/seo/internal-links';
+import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
+import { PRODUCTS } from '@/lib/pricing/products';
+import {
+  AlertTriangle,
+  ArrowRight,
+  BadgeCheck,
+  CheckCircle,
+  Clock,
+  FileText,
+  Gavel,
+  Home,
+  Scale,
+  Shield,
+  Users,
+  XCircle,
+} from 'lucide-react';
 
-const PRICE_VALID_UNTIL = '2026-12-31';
+const PAGE_PATH = '/private-residential-tenancy-agreement-template';
+const PAGE_TITLE = 'Private Residential Tenancy Agreement Scotland';
+const PAGE_TYPE = 'tenancy' as const;
+
+const canonicalUrl = getCanonicalUrl(PAGE_PATH);
+
+const standardPrice = PRODUCTS.ast_standard?.displayPrice ?? '£14.99';
+const premiumPrice = PRODUCTS.ast_premium?.displayPrice ?? '£24.99';
+
+const wizardLinkStandard = buildWizardLink({
+  product: 'ast_standard',
+  jurisdiction: 'scotland',
+  src: 'seo_private_residential_tenancy_agreement_template',
+  topic: 'tenancy',
+});
+
+const wizardLinkPremium = buildWizardLink({
+  product: 'ast_premium',
+  jurisdiction: 'scotland',
+  src: 'seo_private_residential_tenancy_agreement_template',
+  topic: 'tenancy',
+});
 
 export const metadata: Metadata = {
-  title: 'PRT Agreement 2026 for Landlords | Scotland Tenancy',
-  description: 'Scotland PRT agreement for landlords. Private residential tenancy updated for 2026 with full compliance. Start your agreement.',
-  keywords: 'PRT, Private Residential Tenancy, tenancy agreement Scotland, PRT agreement, Scottish tenancy, landlord registration Scotland, First-tier Tribunal, repairing standard, Housing Scotland Act 2006',
-  openGraph: {
-    title: 'PRT Agreement 2026 for Landlords | Scotland Tenancy',
-    description: 'Landlord-ready PRT agreement for Scotland with 2026 compliance and clear landlord obligations.',
-    type: 'website',
-    url: getCanonicalUrl('/private-residential-tenancy-agreement-template'),
-  },
+  title:
+    'Private Residential Tenancy Agreement Scotland | Create a PRT Online',
+  description:
+    'Create a Scotland Private Residential Tenancy agreement online. Compare standard and premium PRT routes, understand landlord registration, deposit limits, Repairing Standard duties, and choose the right agreement for your Scottish let.',
+  keywords: [
+    'private residential tenancy agreement',
+    'PRT agreement Scotland',
+    'private residential tenancy agreement Scotland',
+    'Scottish tenancy agreement',
+    'PRT template Scotland',
+    'Scotland tenancy agreement template',
+    'landlord agreement Scotland',
+    'joint PRT Scotland',
+    'HMO tenancy agreement Scotland',
+    'private residential tenancy template',
+    'Scottish landlord registration tenancy agreement',
+    'PRT agreement for landlords',
+  ],
   alternates: {
-    canonical: getCanonicalUrl('/private-residential-tenancy-agreement-template'),
+    canonical: canonicalUrl,
+  },
+  openGraph: {
+    title:
+      'Private Residential Tenancy Agreement Scotland | Create a PRT Online',
+    description:
+      'Create a Scotland PRT agreement with current Scottish wording, instant download, and clear guidance on registration, deposits, notice, and compliance.',
+    type: 'article',
+    url: canonicalUrl,
+    siteName: 'Landlord Heaven',
+    locale: 'en_GB',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title:
+      'Private Residential Tenancy Agreement Scotland | Create a PRT Online',
+    description:
+      'Create a Scotland PRT agreement online with current Scottish wording and instant download.',
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 
-export default function ScotlandPRTPage() {
-  const faqSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: [
-      {
-        '@type': 'Question',
-        name: 'Is a Private Residential Tenancy (PRT) agreement legally valid in Scotland?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Yes. Our PRT agreements are drafted to comply with the Private Housing (Tenancies) (Scotland) Act 2016, Housing (Scotland) Act 2006, and all current Scottish tenancy legislation. Both Standard and Premium versions are legally binding when properly executed.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'What is the difference between Standard and Premium PRT agreements?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'The Standard PRT covers all legal essentials for Scottish tenancies. The Premium PRT adds comprehensive inventory sections, exhaustive terms and conditions (13 detailed clauses), professional gradient styling, rights of change clauses, enhanced legal compliance information, and detailed Repairing Standard obligations.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'Do I need to register as a landlord in Scotland?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Yes. All landlords in Scotland must register with their local council before letting a property. You must provide your landlord registration number in the PRT agreement. Failure to register is a criminal offense with fines up to £50,000.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'What is the maximum deposit I can charge in Scotland?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'In Scotland, the maximum deposit is 2 months rent. Our wizard automatically validates your deposit amount to ensure compliance with Scottish law.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'Are PRTs fixed-term or open-ended?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'All PRTs in Scotland are open-ended (periodic) by law. There is no fixed end date. Either party can end the tenancy with proper notice: tenants need 28 days minimum, landlords need specific grounds and longer notice periods (28, 84, or 168 days depending on the ground).',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'How do I evict a tenant under a PRT?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Landlords must have one of 18 legal grounds for eviction (e.g., rent arrears, breach of tenancy, landlord intends to sell). You must serve the correct notice period (varies by ground) and apply to the First-tier Tribunal for Scotland if the tenant does not leave voluntarily.',
-        },
-      },
-    ],
-  };
+const faqs = [
+  {
+    question: 'What is a Private Residential Tenancy agreement in Scotland?',
+    answer:
+      'A Private Residential Tenancy, usually shortened to PRT, is the standard form of private residential tenancy used for new private lets in Scotland. It is the correct agreement for most Scottish private residential tenancies created since 1 December 2017.',
+  },
+  {
+    question: 'Can I use an English AST for a Scottish property?',
+    answer:
+      'No. Scotland has its own tenancy framework. English AST wording is not the correct public route for a Scottish property. A Scottish let should use a Scotland-specific PRT agreement.',
+  },
+  {
+    question: 'Are Scottish PRTs fixed term or open-ended?',
+    answer:
+      'PRTs are open-ended by law. They do not work like a classic fixed-term AST in England. The tenancy continues until the tenant leaves properly or the landlord relies on a valid statutory ground and follows the correct Scottish process.',
+  },
+  {
+    question: 'Do I need landlord registration in Scotland before letting?',
+    answer:
+      'Yes. Landlord registration is a core Scottish requirement for most private landlords. Your registration details should be handled properly as part of the wider letting setup, and the agreement should support a Scotland-specific compliance process rather than treating registration as an afterthought.',
+  },
+  {
+    question: 'What is the maximum tenancy deposit in Scotland?',
+    answer:
+      "The usual Scottish maximum is 2 months' rent. If a deposit is taken, it should be dealt with using the correct Scottish wording and within the wider deposit protection process.",
+  },
+  {
+    question: 'When should I choose the standard PRT instead of premium?',
+    answer:
+      'The standard route is usually the right starting point for a more straightforward Scottish let where the property and occupier setup are relatively simple and you want the main agreement workflow without broader premium drafting.',
+  },
+  {
+    question: 'When is the premium PRT the better option?',
+    answer:
+      'Premium is generally better for more complex Scottish lets, such as shared households, joint tenants, guarantor-backed arrangements, student or HMO-style occupation patterns, or situations where you want broader drafting and more operational detail from the outset.',
+  },
+  {
+    question: 'Can a Scottish landlord simply ask a tenant to leave at the end of a term?',
+    answer:
+      'No. Scotland does not follow the same term-end tenancy logic that many landlords associate with older English AST practice. PRTs are open-ended, and ending the tenancy is tied to the Scottish legal framework rather than a simple non-renewal assumption.',
+  },
+  {
+    question: 'Does this page cover Wales, England, or Northern Ireland?',
+    answer:
+      'No. This page is specifically for Scotland. England, Wales, and Northern Ireland each use different tenancy frameworks and should use their own jurisdiction-specific agreement pages.',
+  },
+  {
+    question: 'How quickly can I create a Scottish PRT online?',
+    answer:
+      'The online route is designed to be quick. For many landlords, the main work is entering the property, landlord, tenant, rent, deposit, and tenancy details correctly, then choosing whether standard or premium is the better fit for the tenancy.',
+  },
+];
 
-  const productSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'Product',
-    name: 'Private Residential Tenancy Agreement (PRT)',
-    description: 'Legally compliant PRT agreement for Scotland',
-    image: 'https://landlordheaven.co.uk/og-image.png',
-    offers: [
-      {
-        '@type': 'Offer',
-        name: 'Standard PRT',
-        price: '14.99',
-        priceCurrency: 'GBP',
-        priceValidUntil: PRICE_VALID_UNTIL,
-        availability: 'https://schema.org/InStock',
-        shippingDetails: {
-          '@type': 'OfferShippingDetails',
-          shippingRate: { '@type': 'MonetaryAmount', value: '0', currency: 'GBP' },
-          shippingDestination: { '@type': 'DefinedRegion', addressCountry: 'GB' },
-          deliveryTime: {
-            '@type': 'ShippingDeliveryTime',
-            handlingTime: { '@type': 'QuantitativeValue', minValue: '0', maxValue: '0', unitCode: 'MIN' },
-            transitTime: { '@type': 'QuantitativeValue', minValue: '0', maxValue: '0', unitCode: 'MIN' },
-          },
-        },
-        hasMerchantReturnPolicy: {
-          '@type': 'MerchantReturnPolicy',
-          applicableCountry: 'GB',
-          returnPolicyCategory: 'https://schema.org/MerchantReturnNotPermitted',
-        },
-      },
-      {
-        '@type': 'Offer',
-        name: 'Premium PRT',
-        price: '14.99',
-        priceCurrency: 'GBP',
-        priceValidUntil: PRICE_VALID_UNTIL,
-        availability: 'https://schema.org/InStock',
-        shippingDetails: {
-          '@type': 'OfferShippingDetails',
-          shippingRate: { '@type': 'MonetaryAmount', value: '0', currency: 'GBP' },
-          shippingDestination: { '@type': 'DefinedRegion', addressCountry: 'GB' },
-          deliveryTime: {
-            '@type': 'ShippingDeliveryTime',
-            handlingTime: { '@type': 'QuantitativeValue', minValue: '0', maxValue: '0', unitCode: 'MIN' },
-            transitTime: { '@type': 'QuantitativeValue', minValue: '0', maxValue: '0', unitCode: 'MIN' },
-          },
-        },
-        hasMerchantReturnPolicy: {
-          '@type': 'MerchantReturnPolicy',
-          applicableCountry: 'GB',
-          returnPolicyCategory: 'https://schema.org/MerchantReturnNotPermitted',
-        },
-      },
-    ],
-  };
-
-  const breadcrumbSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      {
-        '@type': 'ListItem',
-        position: 1,
-        name: 'Home',
-        item: getCanonicalUrl('/'),
-      },
-      {
-        '@type': 'ListItem',
-        position: 2,
-        name: 'Tenancy Agreements',
-        item: getCanonicalUrl('/products/ast'),
-      },
-      {
-        '@type': 'ListItem',
-        position: 3,
-        name: 'Scotland',
-        item: getCanonicalUrl('/private-residential-tenancy-agreement-template'),
-      },
-    ],
-  };
-
+export default function PrivateResidentialTenancyAgreementTemplatePage() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      <HeaderConfig mode="autoOnScroll" />
+
+      <StructuredData
+        data={articleSchema({
+          headline:
+            'Private Residential Tenancy Agreement Scotland | Create a PRT Online',
+          description:
+            'Create a Scotland PRT agreement online with current Scottish wording, landlord-focused guidance, and standard or premium options.',
+          url: canonicalUrl,
+          datePublished: '2026-01-01',
+          dateModified: '2026-03-20',
+        })}
       />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
+      <StructuredData
+        data={breadcrumbSchema([
+          { name: 'Home', url: getCanonicalUrl('/') },
+          { name: 'Tenancy Agreement Packs', url: getCanonicalUrl('/products/ast') },
+          { name: 'Private Residential Tenancy Agreement', url: canonicalUrl },
+        ])}
       />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+
+      <SeoLandingWrapper
+        pagePath={PAGE_PATH}
+        pageTitle={PAGE_TITLE}
+        pageType={PAGE_TYPE}
+        jurisdiction="scotland"
       />
 
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-20">
-        {/* Breadcrumb Navigation */}
-        <div className="container mx-auto px-4 py-4">
-          <nav className="text-sm text-gray-600">
-            <Link href="/" className="hover:text-blue-600">Home</Link>
-            <span className="mx-2">/</span>
-            <Link href="/products/ast" className="hover:text-blue-600">Tenancy Agreements</Link>
-            <span className="mx-2">/</span>
-            <span className="text-gray-900">Scotland</span>
-          </nav>
-        </div>
+      <main className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 text-gray-900">
+        <UniversalHero
+          badge="Scotland Only"
+          badgeIcon={<Scale className="w-4 h-4" />}
+          title="Private Residential Tenancy Agreement (PRT)"
+          subtitle={
+            <>
+              Create a <strong>Scotland-specific Private Residential Tenancy agreement</strong>{' '}
+              online. Compare <strong>standard</strong> and <strong>premium</strong>{' '}
+              PRT routes, understand key Scottish rules, and choose the right agreement
+              for a straightforward or more complex let.
+            </>
+          }
+          primaryCta={{
+            label: `Create Standard PRT — ${standardPrice}`,
+            href: wizardLinkStandard,
+          }}
+          secondaryCta={{
+            label: `Create Premium PRT — ${premiumPrice}`,
+            href: wizardLinkPremium,
+          }}
+          showTrustPositioningBar
+          variant="pastel"
+        >
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-6 text-sm text-gray-700">
+            <span className="flex items-center gap-2">
+              <CheckCircle className="w-4 h-4 text-green-500" />
+              Scotland-specific wording
+            </span>
+            <span className="flex items-center gap-2">
+              <Shield className="w-4 h-4 text-green-500" />
+              Built for PRT use
+            </span>
+            <span className="flex items-center gap-2">
+              <Clock className="w-4 h-4 text-green-500" />
+              Instant online creation
+            </span>
+          </div>
+        </UniversalHero>
 
-        {/* Hero Section */}
-        <section className="container mx-auto px-4 py-16">
-          <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-5xl font-bold text-gray-900 mb-6">
-              Private Residential Tenancy Agreement (PRT)
-              <span className="block text-3xl text-blue-600 mt-2">Scotland</span>
-            </h1>
-            <p className="text-xl text-gray-700 mb-8">
-              Create a legally compliant Private Residential Tenancy agreement in minutes. Fully compliant with the Private Housing (Tenancies) (Scotland) Act 2016 and all current Scottish legislation.
-            </p>
-            <div className="flex gap-4 justify-center flex-wrap">
-              <Link
-                href="/wizard?product=ast_standard&src=product_page&topic=tenancy&jurisdiction=scotland"
-                className="hero-btn-secondary"
-              >
-                Create Standard PRT - £14.99
-              </Link>
-              <Link
-                href="/wizard?product=ast_premium&src=product_page&topic=tenancy&jurisdiction=scotland"
-                className="hero-btn-primary"
-              >
-                Create Premium PRT - £24.99
-              </Link>
+        <section className="border-y border-gray-100 bg-white/80 py-6">
+          <div className="container mx-auto px-4">
+            <SocialProofCounter variant="total" className="justify-center" />
+          </div>
+        </section>
+
+        <section className="py-16 lg:py-20">
+          <div className="container mx-auto px-4">
+            <div className="mx-auto max-w-5xl rounded-2xl border border-gray-100 bg-white p-8 shadow-sm md:p-10">
+              <h2 className="mb-4 text-3xl font-bold text-gray-900">
+                Quick answer: what this page is for
+              </h2>
+              <div className="space-y-5 text-lg leading-relaxed text-gray-700">
+                <p>
+                  If you are letting residential property in Scotland and need the correct
+                  tenancy agreement for a new private let, this is the page you should start
+                  from. A <strong>Private Residential Tenancy agreement</strong>, or
+                  <strong> PRT</strong>, is the main Scottish tenancy agreement route for
+                  most new private residential lets. This page is designed to do more than
+                  say that in one line and drop you straight into a purchase button. Its
+                  job is to help you choose the right route for the tenancy you are actually
+                  creating.
+                </p>
+                <p>
+                  Many competing pages are too thin. They tell landlords that a PRT exists,
+                  repeat a few generic points about Scottish tenancy law, and then try to
+                  convert without helping the user decide whether they need a basic
+                  agreement, a more detailed agreement, or a different page altogether.
+                  That is not good enough for high-intent search traffic. Landlords landing
+                  here are often close to action. They may already have the property ready,
+                  the tenants lined up, and a move-in timeline in mind. What they need is
+                  a Scotland-only page that explains the agreement clearly, covers the
+                  practical points that matter, and then moves them into the correct flow.
+                </p>
+                <p>
+                  This page therefore focuses on five things. First, it explains what a PRT
+                  is and why Scotland needs a distinct agreement route. Second, it helps
+                  landlords understand why Scottish tenancy law should not be mixed up with
+                  English AST wording, Welsh occupation contracts, or Northern Ireland
+                  private tenancy language. Third, it explains when the standard PRT is
+                  likely to be enough and when premium drafting is the smarter commercial
+                  choice. Fourth, it covers the main legal and operational points landlords
+                  usually want to understand before starting. Finally, it gives a clean path
+                  into the live creation route.
+                </p>
+                <p>
+                  The result is a page that is both more search-ready and more conversion-ready
+                  than a generic “template” page. It does not rely on reckless overclaims.
+                  It does not blur jurisdictions. It does not treat a Scottish tenancy as
+                  though it works like an English AST with a different label on top. Instead,
+                  it gives landlords a clearer route into a Scottish PRT agreement built for
+                  how the tenancy is meant to operate in practice.
+                </p>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* What is a PRT Section */}
-        <section className="container mx-auto px-4 py-12">
-          <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8">
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">What is a Private Residential Tenancy (PRT)?</h2>
-            <div className="prose prose-lg max-w-none">
-              <p className="text-gray-700 leading-relaxed mb-4">
-                A <strong>Private Residential Tenancy (PRT)</strong> is the standard tenancy agreement for all new private residential lettings in Scotland since 1 December 2017. It replaced the previous Assured and Short Assured Tenancy regimes and is governed by the <strong>Private Housing (Tenancies) (Scotland) Act 2016</strong>.
+        <section className="bg-gray-50 py-16 lg:py-20">
+          <div className="container mx-auto px-4">
+            <div className="mx-auto max-w-5xl">
+              <h2 className="mb-4 text-center text-3xl font-bold text-gray-900">
+                What is a Private Residential Tenancy agreement?
+              </h2>
+              <p className="mx-auto mb-12 max-w-3xl text-center text-gray-600">
+                A Scottish PRT is not just a renamed AST. It sits inside a different legal
+                structure and should be treated as a distinct residential letting agreement.
               </p>
-              <p className="text-gray-700 leading-relaxed mb-4">
-                PRTs are <strong>open-ended</strong> (periodic) tenancies with no fixed end date, providing greater security for tenants while giving landlords clear legal grounds for ending a tenancy when necessary. The PRT sets out the terms of the tenancy, including rent amount, deposit details, tenant and landlord responsibilities, and procedures for rent increases and ending the tenancy.
-              </p>
-              <div className="bg-blue-50 border-l-4 border-blue-600 p-6 my-6">
-                <h3 className="text-xl font-semibold text-blue-900 mb-2">Key Features of PRTs</h3>
-                <ul className="list-disc list-inside text-gray-700 space-y-2">
-                  <li><strong>Open-ended:</strong> No fixed end date - continues until either party ends it with proper notice</li>
-                  <li><strong>Stronger tenant protection:</strong> Landlords need specific grounds to end tenancy</li>
-                  <li><strong>Regulated rent increases:</strong> Maximum one increase per year, with 3 months' notice</li>
-                  <li><strong>Deposit cap:</strong> Maximum 2 months' rent</li>
-                  <li><strong>First-tier Tribunal:</strong> Resolves disputes instead of courts</li>
-                  <li><strong>Repairing Standard:</strong> Specific legal obligations for landlords</li>
-                </ul>
-              </div>
-              <div className="bg-amber-50 border-l-4 border-amber-600 p-6 my-6">
-                <h3 className="text-xl font-semibold text-amber-900 mb-2">Alternative Names</h3>
-                <p className="text-gray-700">
-                  PRT agreements may also be referred to as:
-                </p>
-                <ul className="list-disc list-inside text-gray-700 mt-2 space-y-1">
-                  <li>Private Residential Tenancy Agreement</li>
-                  <li>PRT Contract</li>
-                  <li>Scottish Tenancy Agreement</li>
-                  <li>Residential Tenancy Agreement (Scotland)</li>
-                  <li>Open-ended Tenancy (Scotland)</li>
-                </ul>
-              </div>
-              <p className="text-gray-700 leading-relaxed">
-                If you had a tenancy that started before 1 December 2017, it may be an Assured or Short Assured Tenancy under the old system. These continue under their original terms but can be converted to PRTs by mutual agreement.
-              </p>
-            </div>
-          </div>
-        </section>
 
-        {/* Scotland Residential Tenancy Laws */}
-        <section className="container mx-auto px-4 py-12">
-          <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8">
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">Scotland Residential Tenancy Laws</h2>
-            <p className="text-gray-700 mb-6">
-              Private Residential Tenancies in Scotland are governed by comprehensive legislation that provides strong protections for both landlords and tenants. Understanding these laws is essential for creating a legally compliant tenancy agreement.
-            </p>
-
-            <div className="overflow-x-auto">
-              <table className="w-full border-collapse border border-gray-300">
-                <thead>
-                  <tr className="bg-blue-600 text-white">
-                    <th className="border border-gray-300 px-4 py-3 text-left">Legislation</th>
-                    <th className="border border-gray-300 px-4 py-3 text-left">Key Provisions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="bg-gray-50">
-                    <td className="border border-gray-300 px-4 py-3 font-semibold">
-                      Private Housing (Tenancies) (Scotland) Act 2016
-                    </td>
-                    <td className="border border-gray-300 px-4 py-3">
-                      • Establishes the PRT as the standard tenancy type<br />
-                      • Defines 18 grounds for ending a tenancy<br />
-                      • Caps deposits at 2 months' rent<br />
-                      • Regulates rent increases (once per year, 3 months' notice)<br />
-                      • Creates First-tier Tribunal for Housing and Property Chamber
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="border border-gray-300 px-4 py-3 font-semibold">
-                      Housing (Scotland) Act 2006
-                    </td>
-                    <td className="border border-gray-300 px-4 py-3">
-                      • Establishes the Repairing Standard for private rented properties<br />
-                      • Requires landlord registration with local councils<br />
-                      • Tenancy deposit protection scheme requirements<br />
-                      • Houses in Multiple Occupation (HMO) licensing
-                    </td>
-                  </tr>
-                  <tr className="bg-gray-50">
-                    <td className="border border-gray-300 px-4 py-3 font-semibold">
-                      Rent (Scotland) Act 1984
-                    </td>
-                    <td className="border border-gray-300 px-4 py-3">
-                      • Regulates protected and statutory tenancies (pre-1989)<br />
-                      • Defines regulated rent system (rarely applies to new tenancies)
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="border border-gray-300 px-4 py-3 font-semibold">
-                      Antisocial Behaviour etc. (Scotland) Act 2004
-                    </td>
-                    <td className="border border-gray-300 px-4 py-3">
-                      • Landlord registration scheme<br />
-                      • Criminal offense to let property without registration (up to £50,000 fine)<br />
-                      • Local authority powers to refuse or revoke registration
-                    </td>
-                  </tr>
-                  <tr className="bg-gray-50">
-                    <td className="border border-gray-300 px-4 py-3 font-semibold">
-                      Gas Safety (Installation and Use) Regulations 1998
-                    </td>
-                    <td className="border border-gray-300 px-4 py-3">
-                      • Annual gas safety checks required for all gas appliances<br />
-                      • Gas Safety Certificate must be provided to tenants
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="border border-gray-300 px-4 py-3 font-semibold">
-                      Housing (Scotland) Act 1987
-                    </td>
-                    <td className="border border-gray-300 px-4 py-3">
-                      • Tolerable standard for housing<br />
-                      • Minimum property condition requirements<br />
-                      • Local authority enforcement powers
-                    </td>
-                  </tr>
-                  <tr className="bg-gray-50">
-                    <td className="border border-gray-300 px-4 py-3 font-semibold">
-                      Energy Efficiency (Private Rented Property) (Scotland) Regulations 2020
-                    </td>
-                    <td className="border border-gray-300 px-4 py-3">
-                      • Minimum Energy Performance Certificate (EPC) rating of E<br />
-                      • Prohibition on letting properties below minimum standard (unless exempt)<br />
-                      • Valid EPC required before marketing property
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="border border-gray-300 px-4 py-3 font-semibold">
-                      Electrical Equipment (Safety) Regulations 2016
-                    </td>
-                    <td className="border border-gray-300 px-4 py-3">
-                      • Electrical Installation Condition Report (EICR) required every 5 years<br />
-                      • All electrical appliances must be safe and tested<br />
-                      • Copy must be provided to tenants
-                    </td>
-                  </tr>
-                  <tr className="bg-gray-50">
-                    <td className="border border-gray-300 px-4 py-3 font-semibold">
-                      Smoke and Carbon Monoxide Alarm (Scotland) Regulations 2015
-                    </td>
-                    <td className="border border-gray-300 px-4 py-3">
-                      • Working smoke alarms in living areas and hallways<br />
-                      • Carbon monoxide detectors in rooms with fixed combustion appliances<br />
-                      • Heat detector in every kitchen
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <div className="bg-blue-50 border-l-4 border-blue-600 p-6 mt-6">
-              <h3 className="text-xl font-semibold text-blue-900 mb-2">First-tier Tribunal for Housing and Property Chamber</h3>
-              <p className="text-gray-700">
-                The First-tier Tribunal replaced the courts as the main body for resolving disputes between landlords and tenants in Scotland. It handles rent increase applications, eviction applications, deposit disputes, repairs, and other tenancy matters. The Tribunal process is generally faster and less formal than court proceedings.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* Types of Tenancy Agreements */}
-        <section className="container mx-auto px-4 py-12">
-          <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8">
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">Types of Tenancy Agreements in Scotland</h2>
-
-            <div className="space-y-6">
-              <div className="border-l-4 border-blue-600 pl-6">
-                <h3 className="text-2xl font-semibold text-gray-900 mb-3">1. Private Residential Tenancy (PRT) - Current Standard</h3>
-                <p className="text-gray-700 mb-2">
-                  All new private residential tenancies created since 1 December 2017 are PRTs. They are open-ended with no fixed end date.
-                </p>
-                <ul className="list-disc list-inside text-gray-700 space-y-1 ml-4">
-                  <li><strong>Open-ended:</strong> Continues indefinitely until ended by landlord or tenant</li>
-                  <li><strong>Tenant security:</strong> Landlord needs one of 18 legal grounds to evict</li>
-                  <li><strong>Flexibility:</strong> Tenant can leave with minimum 28 days' notice</li>
-                  <li><strong>Protection:</strong> Caps on deposits and regulated rent increases</li>
-                </ul>
-              </div>
-
-              <div className="border-l-4 border-green-600 pl-6">
-                <h3 className="text-2xl font-semibold text-gray-900 mb-3">2. Short Assured Tenancy (SAT) - Legacy System</h3>
-                <p className="text-gray-700 mb-2">
-                  Created between 1989 and 1 December 2017. Cannot be created anymore, but existing SATs continue.
-                </p>
-                <ul className="list-disc list-inside text-gray-700 space-y-1 ml-4">
-                  <li><strong>Fixed-term:</strong> Typically 6 or 12 months with option to renew</li>
-                  <li><strong>Conversion:</strong> Can be converted to PRT by mutual agreement</li>
-                  <li><strong>Less protection:</strong> Easier for landlords to regain possession</li>
-                </ul>
-              </div>
-
-              <div className="border-l-4 border-purple-600 pl-6">
-                <h3 className="text-2xl font-semibold text-gray-900 mb-3">3. Assured Tenancy - Legacy System</h3>
-                <p className="text-gray-700 mb-2">
-                  Long-term tenancies created between 1989 and 1997 with very strong tenant protection. Rare today.
-                </p>
-                <ul className="list-disc list-inside text-gray-700 space-y-1 ml-4">
-                  <li><strong>High security:</strong> Very difficult for landlords to end tenancy</li>
-                  <li><strong>Succession rights:</strong> Can be passed to family members</li>
-                  <li><strong>Regulated rents:</strong> Rent increases subject to strict controls</li>
-                </ul>
-              </div>
-
-              <div className="border-l-4 border-orange-600 pl-6">
-                <h3 className="text-2xl font-semibold text-gray-900 mb-3">4. Joint Tenancy PRT</h3>
-                <p className="text-gray-700 mb-2">
-                  Multiple tenants share the same PRT agreement with joint and several liability.
-                </p>
-                <ul className="list-disc list-inside text-gray-700 space-y-1 ml-4">
-                  <li><strong>Joint liability:</strong> All tenants equally responsible for rent and obligations</li>
-                  <li><strong>Common use:</strong> House shares, couples, flatmates</li>
-                  <li><strong>Ending:</strong> Complex rules if one tenant wants to leave mid-tenancy</li>
-                </ul>
-              </div>
-
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mt-8">
-                <h3 className="text-xl font-semibold text-blue-900 mb-3">Why Are PRTs Open-Ended?</h3>
-                <p className="text-gray-700">
-                  The Scottish Government introduced open-ended PRTs to provide tenants with greater security and stability. Unlike fixed-term tenancies, tenants don't need to worry about being asked to leave when the initial term expires. However, tenants maintain flexibility with 28 days' minimum notice to leave, while landlords have clear legal grounds for ending tenancies when there's a legitimate reason (e.g., selling the property, moving in themselves, or tenant breach).
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Benefits of PRT Agreements */}
-        <section className="container mx-auto px-4 py-12 bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Benefits of a Written PRT Agreement</h2>
-
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="bg-white rounded-lg shadow-md p-6 border-t-4 border-blue-600">
-                <div className="text-4xl mb-4">🏴󠁧󠁢󠁳󠁣󠁴󠁿</div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">Scottish Legal Compliance</h3>
-                <p className="text-gray-700">
-                  A written PRT complies with the Private Housing (Tenancies) (Scotland) Act 2016 and provides a clear framework under Scottish law, including specific eviction grounds and rent increase procedures.
-                </p>
-              </div>
-
-              <div className="bg-white rounded-lg shadow-md p-6 border-t-4 border-green-600">
-                <div className="text-4xl mb-4">🔒</div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">Tenant Security</h3>
-                <p className="text-gray-700">
-                  Open-ended PRTs give tenants security of tenure without the stress of fixed-term renewals. Tenants can make the property their home without fear of sudden eviction, while retaining the flexibility to leave with 28 days' notice.
-                </p>
-              </div>
-
-              <div className="bg-white rounded-lg shadow-md p-6 border-t-4 border-purple-600">
-                <div className="text-4xl mb-4">⚖️</div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">Clear Grounds for Possession</h3>
-                <p className="text-gray-700">
-                  The PRT sets out 18 specific grounds that landlords can use to end a tenancy (e.g., rent arrears, breach, landlord moving in, selling property). This clarity protects both parties and reduces disputes.
-                </p>
-              </div>
-
-              <div className="bg-white rounded-lg shadow-md p-6 border-t-4 border-orange-600">
-                <div className="text-4xl mb-4">💰</div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">Deposit Protection</h3>
-                <p className="text-gray-700">
-                  PRTs include deposit protection requirements (maximum 2 months' rent) and deposits must be protected in an approved scheme within 30 working days. This protects tenants' money and ensures fair dispute resolution.
-                </p>
-              </div>
-
-              <div className="bg-white rounded-lg shadow-md p-6 border-t-4 border-red-600">
-                <div className="text-4xl mb-4">🏠</div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">Repairing Standard Clarity</h3>
-                <p className="text-gray-700">
-                  PRTs reference the Repairing Standard, which sets out landlords' legal obligations for property condition, structure, installations, and safety. Tenants have clear rights to request repairs via the First-tier Tribunal.
-                </p>
-              </div>
-
-              <div className="bg-white rounded-lg shadow-md p-6 border-t-4 border-indigo-600">
-                <div className="text-4xl mb-4">📋</div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">Professional Evidence</h3>
-                <p className="text-gray-700">
-                  A comprehensive written PRT serves as evidence for the First-tier Tribunal, landlord registration, and mortgage lenders. It demonstrates professionalism and reduces the risk of disputes.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Who Should Use a PRT */}
-        <section className="container mx-auto px-4 py-12">
-          <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8">
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">Who Should Use a PRT Agreement?</h2>
-
-            <div className="space-y-8">
-              <div className="flex items-start gap-4">
-                <div className="shrink-0 w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center text-3xl">
-                  🏠
+              <div className="grid gap-6 md:grid-cols-2">
+                <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+                  <h3 className="mb-3 text-xl font-semibold text-gray-900">
+                    The core idea
+                  </h3>
+                  <p className="leading-relaxed text-gray-700">
+                    A PRT is the standard form of private residential tenancy used for most
+                    new private lets in Scotland. It is the document that records the terms
+                    of occupation between landlord and tenant, including rent, deposit,
+                    occupation details, responsibilities, and the wider operating rules of
+                    the tenancy. In practice, it is the document landlords rely on to define
+                    the tenancy from day one, not just a formal piece of paper for the file.
+                  </p>
                 </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Private Landlords in Scotland</h3>
-                  <p className="text-gray-700">
-                    All landlords letting residential property in Scotland must use a PRT for new tenancies (since 1 December 2017). This includes buy-to-let investors, accidental landlords, and those renting out a second property. You must also be registered as a landlord with your local council.
+
+                <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+                  <h3 className="mb-3 text-xl font-semibold text-gray-900">
+                    Why it matters
+                  </h3>
+                  <p className="leading-relaxed text-gray-700">
+                    A good PRT agreement helps reduce uncertainty before problems arise. It
+                    gives the tenancy a clearer starting structure, sets expectations around
+                    occupation and payment, and supports a more professional landlord process.
+                    It does not eliminate every future dispute, but it does provide a stronger
+                    foundation than relying on a weak generic template or a document from the
+                    wrong UK jurisdiction.
+                  </p>
+                </div>
+
+                <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+                  <h3 className="mb-3 text-xl font-semibold text-gray-900">
+                    Open-ended, not AST-style
+                  </h3>
+                  <p className="leading-relaxed text-gray-700">
+                    One of the biggest practical differences for landlords is that Scottish
+                    PRTs are open-ended. This is a central feature of how the tenancy works
+                    in Scotland. The agreement therefore needs to reflect Scottish tenancy
+                    logic rather than borrowing the commercial style or assumptions of older
+                    English AST-led pages.
+                  </p>
+                </div>
+
+                <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+                  <h3 className="mb-3 text-xl font-semibold text-gray-900">
+                    Scotland-only route
+                  </h3>
+                  <p className="leading-relaxed text-gray-700">
+                    This page is specifically for Scottish private residential lets. If the
+                    property is in England, Wales, or Northern Ireland, the correct agreement
+                    route is different. Landlords should always choose the agreement page that
+                    matches the location of the property, not whichever template phrase happens
+                    to rank highest in a search result.
                   </p>
                 </div>
               </div>
 
-              <div className="flex items-start gap-4">
-                <div className="shrink-0 w-16 h-16 bg-green-100 rounded-full flex items-center justify-center text-3xl">
-                  🏢
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Letting Agents and Property Managers</h3>
-                  <p className="text-gray-700">
-                    Letting agents acting for landlords must use PRT agreements for all new Scottish lettings. Agents must also be registered with the Scottish Letting Agent Register and comply with the Letting Agent Code of Practice.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <div className="shrink-0 w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center text-3xl">
-                  🔑
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">First-Time Landlords in Scotland</h3>
-                  <p className="text-gray-700">
-                    New landlords benefit from our comprehensive wizard which guides you through Scottish-specific requirements including landlord registration, Repairing Standard, deposit caps, and First-tier Tribunal processes.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <div className="shrink-0 w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center text-3xl">
-                  💼
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Portfolio Landlords</h3>
-                  <p className="text-gray-700">
-                    Landlords with multiple Scottish properties need consistent, compliant PRT agreements. Our templates ensure all your tenancies meet current Scottish law and landlord registration requirements.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-red-50 border-l-4 border-red-600 p-6 mt-8">
-              <h3 className="text-xl font-semibold text-red-900 mb-2">Landlord Registration is Mandatory</h3>
-              <p className="text-gray-700 mb-3">
-                Before you can let property in Scotland, you <strong>must</strong> register with your local council as a landlord. Failure to register is a <strong>criminal offense</strong> with fines up to <strong>£50,000</strong>.
-              </p>
-              <ul className="list-disc list-inside text-gray-700 space-y-1">
-                <li>Register at least 4-6 weeks before your first tenancy starts</li>
-                <li>Application costs vary by council (typically £55-£88 for 3 years)</li>
-                <li>You'll receive a landlord registration number to include in your PRT</li>
-                <li>Register at: <a href="https://www.landlordregistrationscotland.gov.uk" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">landlordregistrationscotland.gov.uk</a></li>
-              </ul>
-            </div>
-
-            <div className="bg-amber-50 border-l-4 border-amber-600 p-6 mt-6">
-              <h3 className="text-xl font-semibold text-amber-900 mb-2">When NOT to Use a PRT</h3>
-              <p className="text-gray-700 mb-3">PRTs are NOT suitable for:</p>
-              <ul className="list-disc list-inside text-gray-700 space-y-1">
-                <li><strong>Lodgers:</strong> Use a Resident Landlord Agreement when you live in the same property</li>
-                <li><strong>Holiday Lets:</strong> Short-term holiday rentals are excluded from PRT requirements</li>
-                <li><strong>Social Housing:</strong> Council and housing association tenancies use Scottish Secure Tenancies</li>
-                <li><strong>Student Halls:</strong> Purpose-built student accommodation may be exempt</li>
-                <li><strong>Agricultural Tenancies:</strong> Use Agricultural Holdings legislation</li>
-              </ul>
-            </div>
-          </div>
-        </section>
-
-        {/* How to Write a PRT */}
-        <section className="container mx-auto px-4 py-12 bg-gray-50">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">How to Create a PRT Agreement</h2>
-
-            <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
-              <p className="text-gray-700 text-lg mb-6">
-                Our intelligent wizard guides you through creating a comprehensive PRT agreement in approximately 10-15 minutes. We ask 70+ questions to ensure your agreement complies with Scottish law and includes all required information.
-              </p>
-
-              <h3 className="text-2xl font-semibold text-gray-900 mb-4">Scotland-Specific Information You'll Provide:</h3>
-
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="space-y-4">
-                  <div className="flex items-start gap-3">
-                    <div className="shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">1</div>
-                    <div>
-                      <h4 className="font-semibold text-gray-900">Landlord Registration</h4>
-                      <p className="text-sm text-gray-600">Your landlord registration number from your local council (mandatory in Scotland)</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-3">
-                    <div className="shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">2</div>
-                    <div>
-                      <h4 className="font-semibold text-gray-900">Property Details</h4>
-                      <p className="text-sm text-gray-600">Full address, property type, bedrooms, furnished status, HMO licence (if applicable)</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-3">
-                    <div className="shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">3</div>
-                    <div>
-                      <h4 className="font-semibold text-gray-900">Deposit Information</h4>
-                      <p className="text-sm text-gray-600">Deposit amount (max 2 months' rent), chosen deposit scheme (SafeDeposits, MyDeposits, LPS Scotland)</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-3">
-                    <div className="shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">4</div>
-                    <div>
-                      <h4 className="font-semibold text-gray-900">Rent Details</h4>
-                      <p className="text-sm text-gray-600">Rent amount, payment frequency, first payment date, rent increase notice (if applicable)</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-3">
-                    <div className="shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">5</div>
-                    <div>
-                      <h4 className="font-semibold text-gray-900">Repairing Standard Compliance</h4>
-                      <p className="text-sm text-gray-600">Confirmation of structural soundness, weather-tight, safe installations, gas/electrical certificates</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-3">
-                    <div className="shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">6</div>
-                    <div>
-                      <h4 className="font-semibold text-gray-900">Tenancy Start Date</h4>
-                      <p className="text-sm text-gray-600">When the open-ended tenancy begins (no end date required for PRTs)</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-3">
-                    <div className="shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">7</div>
-                    <div>
-                      <h4 className="font-semibold text-gray-900">Utilities & Services</h4>
-                      <p className="text-sm text-gray-600">Who pays council tax, utilities, water charges, TV licence, internet</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  <div className="flex items-start gap-3">
-                    <div className="shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">8</div>
-                    <div>
-                      <h4 className="font-semibold text-gray-900">Landlord & Tenant Details</h4>
-                      <p className="text-sm text-gray-600">Full names, addresses, contact details for all parties (supports multiple tenants)</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-3">
-                    <div className="shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">9</div>
-                    <div>
-                      <h4 className="font-semibold text-gray-900">Safety Certificates</h4>
-                      <p className="text-sm text-gray-600">Gas safety (CP12), EICR (electrical), EPC rating, smoke/heat/CO alarm confirmation</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-3">
-                    <div className="shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">10</div>
-                    <div>
-                      <h4 className="font-semibold text-gray-900">Permitted Occupants</h4>
-                      <p className="text-sm text-gray-600">Pets policy, maximum occupants, children, overnight guests</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-3">
-                    <div className="shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">11</div>
-                    <div>
-                      <h4 className="font-semibold text-gray-900">Maintenance Responsibilities</h4>
-                      <p className="text-sm text-gray-600">Landlord's Repairing Standard duties, tenant's care obligations, garden maintenance, repairs process</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-3">
-                    <div className="shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">12</div>
-                    <div>
-                      <h4 className="font-semibold text-gray-900">Inventory & Condition</h4>
-                      <p className="text-sm text-gray-600">Property inventory, white goods included, decoration condition, professional cleaning</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-3">
-                    <div className="shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">13</div>
-                    <div>
-                      <h4 className="font-semibold text-gray-900">Insurance & Access</h4>
-                      <p className="text-sm text-gray-600">Landlord insurance, tenant insurance requirements, access notice periods, inspection frequency</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-3">
-                    <div className="shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">14</div>
-                    <div>
-                      <h4 className="font-semibold text-gray-900">Additional Terms</h4>
-                      <p className="text-sm text-gray-600">Subletting policy, communal areas, parking, recycling arrangements</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-primary text-white rounded-xl shadow-lg p-8">
-              <h3 className="text-2xl font-semibold mb-4">Two Options to Suit Your Needs</h3>
-
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="bg-white/10 backdrop-blur rounded-lg p-6">
-                  <h4 className="text-xl font-bold mb-3">Standard PRT - £14.99</h4>
-                  <ul className="space-y-2 text-sm">
-                    <li>✓ All legal essentials for Scottish PRTs</li>
-                    <li>✓ Compliant with PH(T)(S) Act 2016</li>
-                    <li>✓ Open-ended tenancy structure</li>
-                    <li>✓ 18 grounds for possession included</li>
-                    <li>✓ Repairing Standard obligations</li>
-                    <li>✓ Landlord registration number section</li>
-                    <li>✓ Clear, professional formatting</li>
-                  </ul>
-                  <Link
-                    href="/wizard?product=ast_standard&src=product_page&topic=tenancy&jurisdiction=scotland"
-                    className="mt-4 block text-center bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors"
-                  >
-                    Create Standard PRT
-                  </Link>
-                </div>
-
-                <div className="bg-white/10 backdrop-blur rounded-lg p-6 border-2 border-white/50">
-                  <div className="inline-block bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-xs font-bold mb-2">
-                    RECOMMENDED
-                  </div>
-                  <h4 className="text-xl font-bold mb-3">Premium PRT - £24.99</h4>
-                  <ul className="space-y-2 text-sm">
-                    <li>✓ Everything in Standard PLUS:</li>
-                    <li>✓ Comprehensive inventory section with white goods grid</li>
-                    <li>✓ Exhaustive terms & conditions (13 detailed clauses)</li>
-                    <li>✓ Professional gradient styling (Scotland blue theme)</li>
-                    <li>✓ Rights of change clauses for flexibility</li>
-                    <li>✓ Enhanced legal compliance information boxes</li>
-                    <li>✓ Detailed Repairing Standard explanation</li>
-                    <li>✓ First-tier Tribunal process guidance</li>
-                    <li>✓ Superior professional presentation</li>
-                    <li className="font-semibold text-yellow-300">✓ Covers HMOs (Houses in Multiple Occupation)</li>
-                  </ul>
-                  <Link
-                    href="/wizard?product=ast_premium&src=product_page&topic=tenancy&jurisdiction=scotland"
-                    className="mt-4 block text-center bg-white text-purple-600 px-6 py-3 rounded-lg font-semibold hover:bg-purple-50 transition-colors"
-                  >
-                    Create Premium PRT
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Do All Tenants Need to Be On It */}
-        <section className="container mx-auto px-4 py-12">
-          <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8">
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">Do All Tenants Need to Be on the PRT Agreement?</h2>
-
-            <div className="prose prose-lg max-w-none">
-              <p className="text-gray-700 leading-relaxed mb-6">
-                <strong>Yes.</strong> All adults (18+) who will be living in the property as tenants must be named on the PRT agreement and must sign it. This is required under Scottish tenancy law and protects both landlords and tenants.
-              </p>
-
-              <div className="bg-green-50 border-l-4 border-green-600 p-6 mb-6">
-                <h3 className="text-xl font-semibold text-green-900 mb-3">Joint and Several Liability in Scotland</h3>
-                <p className="text-gray-700 mb-3">
-                  When multiple tenants sign a PRT, they become <strong>jointly and severally liable</strong>. This means:
+              <div className="mt-8 rounded-2xl border border-blue-200 bg-blue-50 p-6">
+                <h3 className="mb-3 text-xl font-semibold text-blue-900">
+                  Alternative search terms landlords still use
+                </h3>
+                <p className="mb-3 leading-relaxed text-blue-900/90">
+                  Not every landlord searches for “Private Residential Tenancy agreement”
+                  first time. Common high-intent searches also include:
                 </p>
-                <ul className="list-disc list-inside text-gray-700 space-y-2">
-                  <li>Each tenant is individually responsible for the <strong>full rent</strong>, not just their share</li>
-                  <li>If one tenant doesn't pay, the others must cover it or face eviction proceedings</li>
-                  <li>All tenants are equally responsible for property damage and breach of tenancy terms</li>
-                  <li>The landlord can pursue any or all tenants for the full amount owed</li>
-                </ul>
+                <div className="grid gap-2 text-sm text-blue-900 md:grid-cols-2">
+                  <div>• PRT agreement Scotland</div>
+                  <div>• Scottish tenancy agreement template</div>
+                  <div>• Scotland landlord agreement</div>
+                  <div>• private tenancy agreement Scotland</div>
+                  <div>• Scotland rental agreement</div>
+                  <div>• joint tenancy agreement Scotland</div>
+                </div>
               </div>
+            </div>
+          </div>
+        </section>
 
-              <h3 className="text-2xl font-semibold text-gray-900 mb-4">Tenants vs. Permitted Occupants</h3>
+        <section className="py-16 lg:py-20">
+          <div className="container mx-auto px-4">
+            <div className="mx-auto max-w-5xl">
+              <h2 className="mb-4 text-center text-3xl font-bold text-gray-900">
+                Why Scotland needs a different tenancy agreement
+              </h2>
+              <p className="mx-auto mb-12 max-w-3xl text-center text-gray-600">
+                One of the biggest SEO and conversion mistakes in this category is treating
+                Scotland as if it is just another label on the same UK template.
+              </p>
 
-              <div className="overflow-x-auto mb-6">
-                <table className="w-full border-collapse border border-gray-300">
+              <div className="overflow-x-auto rounded-2xl border border-gray-200 bg-white shadow-sm">
+                <table className="w-full border-collapse">
                   <thead>
-                    <tr className="bg-blue-600 text-white">
-                      <th className="border border-gray-300 px-4 py-3 text-left">Tenants (Must Sign PRT)</th>
-                      <th className="border border-gray-300 px-4 py-3 text-left">Permitted Occupants (Don't Sign)</th>
+                    <tr className="bg-gray-50">
+                      <th className="p-4 text-left font-semibold text-gray-900">Point</th>
+                      <th className="p-4 text-left font-semibold text-gray-900">Scotland</th>
+                      <th className="p-4 text-left font-semibold text-gray-900">Common wrong carryover</th>
                     </tr>
                   </thead>
-                  <tbody>
-                    <tr className="bg-gray-50">
-                      <td className="border border-gray-300 px-4 py-3">
-                        • Adults (18+) living in property<br />
-                        • Paying rent or contributing financially<br />
-                        • Named on the PRT agreement<br />
-                        • Legal protection under PH(T)(S) Act 2016<br />
-                        • Jointly liable for rent and obligations
-                      </td>
-                      <td className="border border-gray-300 px-4 py-3">
-                        • Children under 18<br />
-                        • Visiting family or friends (short-term)<br />
-                        • Not paying rent<br />
-                        • No legal tenancy rights<br />
-                        • Can be listed in PRT but don't sign
-                      </td>
+                  <tbody className="divide-y divide-gray-100">
+                    <tr>
+                      <td className="p-4 text-gray-700">Main agreement type</td>
+                      <td className="p-4 text-gray-900">Private Residential Tenancy (PRT)</td>
+                      <td className="p-4 text-gray-700">AST or generic UK tenancy template wording</td>
+                    </tr>
+                    <tr>
+                      <td className="p-4 text-gray-700">Tenancy structure</td>
+                      <td className="p-4 text-gray-900">Open-ended private residential tenancy</td>
+                      <td className="p-4 text-gray-700">Fixed-term-first AST-style assumptions</td>
+                    </tr>
+                    <tr>
+                      <td className="p-4 text-gray-700">Ending the tenancy</td>
+                      <td className="p-4 text-gray-900">Scottish route tied to the correct legal framework</td>
+                      <td className="p-4 text-gray-700">England-style non-renewal logic</td>
+                    </tr>
+                    <tr>
+                      <td className="p-4 text-gray-700">Landlord obligations</td>
+                      <td className="p-4 text-gray-900">Scottish registration and compliance framing matter</td>
+                      <td className="p-4 text-gray-700">Missing or underplayed Scotland-specific obligations</td>
+                    </tr>
+                    <tr>
+                      <td className="p-4 text-gray-700">Deposit wording</td>
+                      <td className="p-4 text-gray-900">Scottish deposit limit and process context</td>
+                      <td className="p-4 text-gray-700">England-style cap or generic deposit wording</td>
+                    </tr>
+                    <tr>
+                      <td className="p-4 text-gray-700">Tribunal / enforcement context</td>
+                      <td className="p-4 text-gray-900">Scottish dispute framework</td>
+                      <td className="p-4 text-gray-700">County court assumptions copied from England pages</td>
                     </tr>
                   </tbody>
                 </table>
               </div>
 
-              <div className="bg-amber-50 border-l-4 border-amber-600 p-6 mb-6">
-                <h3 className="text-xl font-semibold text-amber-900 mb-3">What If One Tenant Wants to Leave?</h3>
-                <p className="text-gray-700 mb-3">
-                  This is complex in Scotland. Options include:
-                </p>
-                <ol className="list-decimal list-inside text-gray-700 space-y-2">
-                  <li><strong>Assignment:</strong> The leaving tenant can assign their interest to a new tenant (requires landlord consent)</li>
-                  <li><strong>End and Restart:</strong> All tenants end the PRT (with landlord agreement) and remaining tenants start a new PRT</li>
-                  <li><strong>Continue as Joint Tenancy:</strong> Leaving tenant remains liable unless formally released by landlord</li>
-                  <li><strong>Negotiate Release:</strong> Landlord agrees to release leaving tenant and continue with remaining tenants</li>
-                </ol>
-                <p className="text-gray-700 mt-3">
-                  <strong>Important:</strong> A tenant can't simply "remove themselves" from a joint PRT. All parties (landlord and all tenants) must agree to any changes.
-                </p>
-              </div>
-
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
-                <h3 className="text-xl font-semibold text-blue-900 mb-3">Our Wizard Handles Multiple Tenants</h3>
-                <p className="text-gray-700">
-                  Our wizard asks how many tenants will be living in the property and collects details for each one (names, contact information, etc.). The generated PRT automatically includes all tenant names and creates signature blocks for each tenant, ensuring compliance with Scottish law.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Ending a PRT */}
-        <section className="container mx-auto px-4 py-12 bg-gray-50">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold text-gray-900 mb-8">Changing or Ending a PRT Agreement</h2>
-
-            <div className="grid md:grid-cols-2 gap-8 mb-8">
-              <div className="bg-white rounded-xl shadow-lg p-8">
-                <h3 className="text-2xl font-semibold text-gray-900 mb-4">Tenant Ending a PRT</h3>
-                <p className="text-gray-700 mb-4">
-                  Tenants have flexibility to end a PRT with proper notice:
-                </p>
-
-                <div className="space-y-4">
-                  <div className="border-l-4 border-blue-600 pl-4">
-                    <h4 className="font-semibold text-gray-900">Minimum Notice Period</h4>
-                    <p className="text-sm text-gray-700">
-                      Tenants must give at least <strong>28 days' notice</strong> to the landlord to end the tenancy. The PRT agreement can specify a longer notice period (e.g., 2 months), but never less than 28 days.
-                    </p>
+              <div className="mt-8 grid gap-6 md:grid-cols-2">
+                <div className="rounded-2xl border border-amber-200 bg-amber-50 p-6">
+                  <div className="mb-3 flex items-center gap-3">
+                    <AlertTriangle className="w-5 h-5 text-amber-600" />
+                    <h3 className="text-xl font-semibold text-amber-900">
+                      Common mistake
+                    </h3>
                   </div>
-
-                  <div className="border-l-4 border-green-600 pl-4">
-                    <h4 className="font-semibold text-gray-900">Notice Requirements</h4>
-                    <ul className="text-sm text-gray-700 space-y-1 mt-2">
-                      <li>• Must be in writing (email is acceptable)</li>
-                      <li>• Should specify the date tenant intends to leave</li>
-                      <li>• Notice period starts from day after notice is received</li>
-                    </ul>
-                  </div>
-
-                  <div className="border-l-4 border-purple-600 pl-4">
-                    <h4 className="font-semibold text-gray-900">End of Tenancy</h4>
-                    <p className="text-sm text-gray-700">
-                      Tenant vacates property, returns keys, and landlord conducts final inspection. Deposit is returned (minus legitimate deductions) within agreed timeframe.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-xl shadow-lg p-8">
-                <h3 className="text-2xl font-semibold text-gray-900 mb-4">Landlord Ending a PRT</h3>
-                <p className="text-gray-700 mb-4">
-                  Landlords must have one of <strong>18 legal grounds</strong> to end a PRT:
-                </p>
-
-                <div className="space-y-4">
-                  <div className="border-l-4 border-red-600 pl-4">
-                    <h4 className="font-semibold text-gray-900">Common Grounds Include:</h4>
-                    <ul className="text-sm text-gray-700 space-y-1 mt-2">
-                      <li>• <strong>Ground 1:</strong> Landlord intends to live in property (84 days notice)</li>
-                      <li>• <strong>Ground 4:</strong> Landlord intends to sell property (84 days notice)</li>
-                      <li>• <strong>Ground 8:</strong> Tenant has been in rent arrears for 3+ months (28 days notice)</li>
-                      <li>• <strong>Ground 12:</strong> Tenant breach of tenancy terms (28 days notice)</li>
-                    </ul>
-                  </div>
-
-                  <div className="border-l-4 border-orange-600 pl-4">
-                    <h4 className="font-semibold text-gray-900">Eviction Process</h4>
-                    <ul className="text-sm text-gray-700 space-y-1 mt-2">
-                      <li>1. Serve Notice to Leave with valid ground(s)</li>
-                      <li>2. Wait for notice period to expire</li>
-                      <li>3. If tenant doesn't leave, apply to First-tier Tribunal</li>
-                      <li>4. Tribunal hearing and decision</li>
-                      <li>5. If granted, Tribunal issues eviction order</li>
-                    </ul>
-                  </div>
-
-                  <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mt-4">
-                    <p className="text-sm text-amber-900 font-semibold">
-                      ⚠️ Landlords cannot simply ask tenants to leave. You must have a valid ground, serve proper notice, and potentially apply to the Tribunal.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-primary text-white rounded-xl shadow-lg p-8">
-              <h3 className="text-2xl font-semibold mb-4">Making Changes to a PRT</h3>
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <h4 className="text-lg font-semibold mb-2">Minor Changes</h4>
-                  <p className="text-sm mb-3">
-                    For small changes (e.g., adding a pet, changing payment method), both parties can agree in writing to amend the PRT. Keep a signed copy of any amendments.
+                  <p className="leading-relaxed text-amber-900/90">
+                    Landlords often search broadly and land on an England-heavy page because
+                    it uses familiar tenancy language. That does not make it the right page
+                    for a Scottish property. Starting with the wrong agreement wording creates
+                    avoidable confusion before the tenancy has even begun.
                   </p>
                 </div>
-                <div>
-                  <h4 className="text-lg font-semibold mb-2">Rent Increases</h4>
-                  <p className="text-sm mb-3">
-                    Landlords can increase rent once per year with <strong>3 months' notice</strong> using the prescribed Rent Increase Notice form. Tenants can challenge increases via the First-tier Tribunal if they believe the new rent is unreasonable.
+
+                <div className="rounded-2xl border border-green-200 bg-green-50 p-6">
+                  <div className="mb-3 flex items-center gap-3">
+                    <BadgeCheck className="w-5 h-5 text-green-600" />
+                    <h3 className="text-xl font-semibold text-green-900">
+                      Better approach
+                    </h3>
+                  </div>
+                  <p className="leading-relaxed text-green-900/90">
+                    Start with a Scottish PRT page built specifically for Scottish private
+                    residential lettings. That gives you the right public framing, the right
+                    commercial choice between standard and premium, and a cleaner route into
+                    the actual agreement workflow.
                   </p>
                 </div>
               </div>
@@ -936,227 +459,589 @@ export default function ScotlandPRTPage() {
           </div>
         </section>
 
-        <section className="container mx-auto px-4 py-12">
-          <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8">
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">
-              PRT Notice Periods & Compliance Checklist
-            </h2>
-            <p className="text-gray-700 mb-8">
-              Landlords can only end a PRT with valid grounds and the correct notice length. This
-              checklist helps avoid tribunal delays or rejected notices.
-            </p>
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">Notice periods</h3>
-                <ul className="space-y-2 text-sm text-gray-600">
-                  <li>28 days for rent arrears and antisocial behaviour.</li>
-                  <li>84 days for most other landlord grounds.</li>
-                  <li>Ground and notice must be cited on the Notice to Leave.</li>
-                </ul>
+        <section className="bg-gray-50 py-16 lg:py-20">
+          <div className="container mx-auto px-4">
+            <div className="mx-auto max-w-5xl">
+              <h2 className="mb-4 text-center text-3xl font-bold text-gray-900">
+                Standard vs premium PRT: which route should you choose?
+              </h2>
+              <p className="mx-auto mb-12 max-w-3xl text-center text-gray-600">
+                Strong commercial pages do not just show two buttons. They help landlords
+                choose the right product path for the tenancy they are actually granting.
+              </p>
+
+              <div className="grid gap-8 md:grid-cols-2">
+                <div className="rounded-2xl border-2 border-gray-200 bg-white p-6 shadow-sm">
+                  <h3 className="mb-2 text-2xl font-bold text-gray-900">
+                    Standard PRT
+                  </h3>
+                  <p className="mb-4 text-2xl font-bold text-blue-600">
+                    {standardPrice}
+                  </p>
+                  <p className="mb-6 leading-relaxed text-gray-700">
+                    The standard route is usually the right starting point for a more
+                    straightforward Scottish private let where the property, household, and
+                    tenancy structure are relatively simple. It is designed for landlords who
+                    want a practical Scotland-specific agreement without paying for broader
+                    drafting that may not be necessary for the tenancy.
+                  </p>
+                  <ul className="mb-6 space-y-3 text-gray-700">
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="mt-0.5 w-5 h-5 flex-shrink-0 text-green-500" />
+                      <span>Good fit for many straightforward new Scottish lets</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="mt-0.5 w-5 h-5 flex-shrink-0 text-green-500" />
+                      <span>Clear route into the main PRT workflow</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="mt-0.5 w-5 h-5 flex-shrink-0 text-green-500" />
+                      <span>Scotland-specific wording rather than generic UK copy</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="mt-0.5 w-5 h-5 flex-shrink-0 text-green-500" />
+                      <span>Usually suitable where the household and occupation pattern are uncomplicated</span>
+                    </li>
+                  </ul>
+                  <Link
+                    href={wizardLinkStandard}
+                    className="block w-full rounded-lg bg-blue-600 py-3 text-center font-semibold text-white transition-colors hover:bg-blue-700"
+                  >
+                    Create Standard PRT
+                  </Link>
+                </div>
+
+                <div className="relative rounded-2xl border-2 border-blue-200 bg-white p-6 shadow-lg">
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-yellow-400 px-3 py-1 text-xs font-bold text-gray-900">
+                    RECOMMENDED FOR COMPLEX LETS
+                  </div>
+                  <h3 className="mb-2 text-2xl font-bold text-gray-900">
+                    Premium PRT
+                  </h3>
+                  <p className="mb-4 text-2xl font-bold text-blue-700">
+                    {premiumPrice}
+                  </p>
+                  <p className="mb-6 leading-relaxed text-gray-700">
+                    Premium is usually the better fit where the letting is more involved and
+                    you want broader wording from the outset. This often applies where there
+                    are multiple tenants, sharers, HMO-style occupation patterns, more
+                    operational rules, guarantor use, or simply a stronger preference for
+                    fuller drafting rather than the leaner standard route.
+                  </p>
+                  <ul className="mb-6 space-y-3 text-gray-700">
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="mt-0.5 w-5 h-5 flex-shrink-0 text-green-500" />
+                      <span>Better for more complex Scottish letting scenarios</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="mt-0.5 w-5 h-5 flex-shrink-0 text-green-500" />
+                      <span>Useful for joint tenant, sharer, student, or HMO-style setups</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="mt-0.5 w-5 h-5 flex-shrink-0 text-green-500" />
+                      <span>Broader drafting where more operational detail matters</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="mt-0.5 w-5 h-5 flex-shrink-0 text-green-500" />
+                      <span>Stronger choice where a basic route feels too light for the tenancy</span>
+                    </li>
+                  </ul>
+                  <Link
+                    href={wizardLinkPremium}
+                    className="block w-full rounded-lg bg-blue-700 py-3 text-center font-semibold text-white transition-colors hover:bg-blue-800"
+                  >
+                    Create Premium PRT
+                  </Link>
+                </div>
               </div>
-              <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">Common mistakes</h3>
-                <ul className="space-y-2 text-sm text-gray-600">
-                  <li>Incorrect ground or notice period.</li>
-                  <li>Missing landlord registration number.</li>
-                  <li>Applying to the wrong forum.</li>
-                </ul>
-                <Link href="/scotland-eviction-notices" className="text-blue-600 hover:underline text-sm font-semibold inline-flex mt-3">
-                  See Notice to Leave guidance →
+
+              <div className="mt-8 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+                <h3 className="mb-3 text-xl font-semibold text-gray-900">
+                  Practical rule of thumb
+                </h3>
+                <p className="leading-relaxed text-gray-700">
+                  If the let is relatively ordinary, start with standard. If you already know
+                  the tenancy will involve more occupier complexity, more house rules, more
+                  coordination, or more risk of misunderstanding if the drafting is thin,
+                  premium is often the better choice. That is not fear-based selling. It is
+                  simply matching the agreement route to the real tenancy you are about to run.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-16 lg:py-20">
+          <div className="container mx-auto px-4">
+            <div className="mx-auto max-w-5xl rounded-2xl border border-gray-100 bg-white p-8 shadow-sm md:p-10">
+              <h2 className="mb-6 text-3xl font-bold text-gray-900">
+                What landlords usually need to think about before creating a Scottish PRT
+              </h2>
+
+              <div className="grid gap-8 md:grid-cols-2">
+                <div>
+                  <h3 className="mb-4 text-xl font-semibold text-gray-900">
+                    Property and party details
+                  </h3>
+                  <p className="mb-4 leading-relaxed text-gray-700">
+                    A tenancy agreement is only as useful as the accuracy of the information
+                    entered into it. Landlords should expect to provide the property address,
+                    landlord details, tenant details, rent, deposit, and the tenancy start
+                    information in a way that matches the actual letting arrangement. This
+                    sounds basic, but many avoidable disputes begin with unclear names,
+                    partial addresses, missing occupier detail, or assumptions that somebody
+                    can simply be added informally later.
+                  </p>
+                  <p className="leading-relaxed text-gray-700">
+                    Where there are multiple adults living in the property, it is especially
+                    important to think clearly about who is a tenant, who is merely a
+                    permitted occupant, and whether the tenancy is genuinely straightforward
+                    enough for the standard route.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="mb-4 text-xl font-semibold text-gray-900">
+                    Rent, deposit, and payment structure
+                  </h3>
+                  <p className="mb-4 leading-relaxed text-gray-700">
+                    Scottish landlords also need the rent and deposit side of the tenancy to
+                    be set up properly from the start. That includes the amount, the payment
+                    frequency, and the wider handling of any deposit taken. A PRT page should
+                    not pretend these are minor admin points. They are central to how the
+                    tenancy is run and how the landlord’s position is documented.
+                  </p>
+                  <p className="leading-relaxed text-gray-700">
+                    Good agreement wording should support clarity around payment and occupation
+                    expectations without turning the page into a dense legal lecture. This is
+                    one reason stronger commercial pages outperform thin template pages: they
+                    explain why the details matter instead of assuming the user already knows.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="mb-4 text-xl font-semibold text-gray-900">
+                    Compliance and registration context
+                  </h3>
+                  <p className="mb-4 leading-relaxed text-gray-700">
+                    Scotland is not a jurisdiction where landlords should treat compliance
+                    as an afterthought. Registration, deposit handling, safety requirements,
+                    and property-condition obligations all form part of the real-world context
+                    in which the agreement will operate. The agreement itself does not replace
+                    those wider obligations, but it should sit inside a Scottish-compliant
+                    letting process rather than feeling disconnected from it.
+                  </p>
+                  <p className="leading-relaxed text-gray-700">
+                    That is why jurisdiction-specific wording matters so much. It helps the
+                    agreement fit the surrounding Scottish framework instead of borrowing
+                    assumptions from a different part of the UK.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="mb-4 text-xl font-semibold text-gray-900">
+                    Complexity of the household
+                  </h3>
+                  <p className="mb-4 leading-relaxed text-gray-700">
+                    Shared households, couples with changing occupancy plans, student lets,
+                    guarantor-backed arrangements, and HMO-style occupation patterns often
+                    need more thought before the landlord chooses a route. These scenarios are
+                    one of the main reasons premium drafting exists. The page should help users
+                    recognise that complexity early rather than leaving them to discover it
+                    after they have already committed to the leanest possible product.
+                  </p>
+                  <p className="leading-relaxed text-gray-700">
+                    In short, the document choice should reflect how the tenancy will actually
+                    operate, not just the cheapest visible button on the page.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="bg-gray-50 py-16 lg:py-20">
+          <div className="container mx-auto px-4">
+            <div className="mx-auto max-w-5xl">
+              <h2 className="mb-4 text-center text-3xl font-bold text-gray-900">
+                Scottish compliance points landlords should understand
+              </h2>
+              <p className="mx-auto mb-12 max-w-3xl text-center text-gray-600">
+                This page should help landlords understand the shape of the Scottish regime
+                without making reckless promises or pretending the agreement alone solves
+                every legal issue.
+              </p>
+
+              <div className="grid gap-6 md:grid-cols-3">
+                <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50">
+                    <Shield className="w-6 h-6 text-blue-600" />
+                  </div>
+                  <h3 className="mb-3 text-xl font-semibold text-gray-900">
+                    Landlord registration
+                  </h3>
+                  <p className="leading-relaxed text-gray-700">
+                    Scottish private landlords should treat registration as a central part of
+                    the letting setup. A good PRT route helps the agreement sit inside a more
+                    professional Scottish process rather than acting as though registration is
+                    a side note.
+                  </p>
+                </div>
+
+                <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50">
+                    <Home className="w-6 h-6 text-blue-600" />
+                  </div>
+                  <h3 className="mb-3 text-xl font-semibold text-gray-900">
+                    Repairing Standard context
+                  </h3>
+                  <p className="leading-relaxed text-gray-700">
+                    Property-condition duties matter in Scotland. Landlords looking for a PRT
+                    often also want confidence that the agreement route reflects the practical
+                    Scottish context around repair responsibilities and property standards.
+                  </p>
+                </div>
+
+                <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50">
+                    <FileText className="w-6 h-6 text-blue-600" />
+                  </div>
+                  <h3 className="mb-3 text-xl font-semibold text-gray-900">
+                    Deposit wording
+                  </h3>
+                  <p className="leading-relaxed text-gray-700">
+                    Deposit terms should be clear, proportionate, and Scottish in their
+                    framing. A page that gets this wrong usually reveals that the underlying
+                    document has been adapted too lightly from another jurisdiction.
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-8 rounded-2xl border border-red-200 bg-red-50 p-6">
+                <div className="mb-3 flex items-center gap-3">
+                  <XCircle className="w-5 h-5 text-red-600" />
+                  <h3 className="text-xl font-semibold text-red-900">
+                    What this page should not do
+                  </h3>
+                </div>
+                <p className="leading-relaxed text-red-900/90">
+                  It should not promise that a tenancy agreement makes every later possession,
+                  arrears, or tribunal issue easy. It should not blur Scotland into England.
+                  It should not mislead landlords into thinking a PRT works like an old-style
+                  AST with Scottish branding. Stronger legal-product pages win by being clearer,
+                  more useful, and more commercially honest than template-heavy competitors.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-16 lg:py-20">
+          <div className="container mx-auto px-4">
+            <div className="mx-auto max-w-5xl rounded-2xl border border-gray-100 bg-white p-8 shadow-sm md:p-10">
+              <h2 className="mb-6 text-3xl font-bold text-gray-900">
+                How the Scottish PRT process usually works
+              </h2>
+              <div className="grid gap-6 md:grid-cols-2">
+                <div className="rounded-xl border border-gray-200 bg-gray-50 p-5">
+                  <div className="mb-3 flex items-center gap-3">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-sm font-bold text-white">
+                      1
+                    </div>
+                    <h3 className="text-lg font-semibold text-gray-900">
+                      Confirm Scotland is the right jurisdiction
+                    </h3>
+                  </div>
+                  <p className="leading-relaxed text-gray-700">
+                    Start by making sure the property is in Scotland and that you need a
+                    Scottish private residential tenancy agreement rather than an England,
+                    Wales, or Northern Ireland route.
+                  </p>
+                </div>
+
+                <div className="rounded-xl border border-gray-200 bg-gray-50 p-5">
+                  <div className="mb-3 flex items-center gap-3">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-sm font-bold text-white">
+                      2
+                    </div>
+                    <h3 className="text-lg font-semibold text-gray-900">
+                      Decide between standard and premium
+                    </h3>
+                  </div>
+                  <p className="leading-relaxed text-gray-700">
+                    Think about the property, household, guarantors, sharers, operational
+                    detail, and whether the tenancy is genuinely straightforward or not.
+                  </p>
+                </div>
+
+                <div className="rounded-xl border border-gray-200 bg-gray-50 p-5">
+                  <div className="mb-3 flex items-center gap-3">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-sm font-bold text-white">
+                      3
+                    </div>
+                    <h3 className="text-lg font-semibold text-gray-900">
+                      Enter the tenancy details carefully
+                    </h3>
+                  </div>
+                  <p className="leading-relaxed text-gray-700">
+                    Property details, landlord details, tenant details, start date, rent,
+                    deposit, and the practical rules of occupation all need to reflect the
+                    real arrangement rather than assumptions or placeholders.
+                  </p>
+                </div>
+
+                <div className="rounded-xl border border-gray-200 bg-gray-50 p-5">
+                  <div className="mb-3 flex items-center gap-3">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-sm font-bold text-white">
+                      4
+                    </div>
+                    <h3 className="text-lg font-semibold text-gray-900">
+                      Review the wider Scottish setup
+                    </h3>
+                  </div>
+                  <p className="leading-relaxed text-gray-700">
+                    The agreement is one part of the wider landlord process. Registration,
+                    deposit handling, property condition, and safety obligations should all
+                    align with the tenancy from the start.
+                  </p>
+                </div>
+
+                <div className="rounded-xl border border-gray-200 bg-gray-50 p-5 md:col-span-2">
+                  <div className="mb-3 flex items-center gap-3">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-sm font-bold text-white">
+                      5
+                    </div>
+                    <h3 className="text-lg font-semibold text-gray-900">
+                      Use the right follow-on documents if problems arise later
+                    </h3>
+                  </div>
+                  <p className="leading-relaxed text-gray-700">
+                    A tenancy agreement is the starting document, not the only document a
+                    landlord may ever need. If issues arise later, such as non-payment,
+                    notice, or enforcement problems, landlords should move to the correct
+                    Scottish next-step documents rather than trying to force an agreement
+                    alone to do every job.
+                  </p>
+                  <Link
+                    href="/scotland-eviction-notices"
+                    className="mt-4 inline-flex items-center gap-2 font-medium text-blue-600 hover:underline"
+                  >
+                    See Scotland notice guidance
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="bg-gray-50 py-16 lg:py-20">
+          <div className="container mx-auto px-4">
+            <div className="mx-auto max-w-5xl">
+              <h2 className="mb-6 text-center text-3xl font-bold text-gray-900">
+                Common mistakes on Scottish tenancy agreement pages
+              </h2>
+
+              <div className="grid gap-6 md:grid-cols-2">
+                <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+                  <h3 className="mb-3 text-xl font-semibold text-gray-900">
+                    Treating Scotland like England with a different label
+                  </h3>
+                  <p className="leading-relaxed text-gray-700">
+                    This is one of the most common and damaging mistakes. The page may use the
+                    phrase “PRT” in the title, but the body copy still reads like an AST
+                    landing page. That weakens trust and can create the impression that the
+                    underlying document is also a light adaptation rather than a proper
+                    Scottish route.
+                  </p>
+                </div>
+
+                <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+                  <h3 className="mb-3 text-xl font-semibold text-gray-900">
+                    Overselling with brittle legal claims
+                  </h3>
+                  <p className="leading-relaxed text-gray-700">
+                    Pages in this category often overclaim. They present the agreement as if it
+                    guarantees a smooth tribunal outcome or solves every future landlord issue.
+                    Better copy stays commercially strong while remaining careful about what the
+                    agreement actually does.
+                  </p>
+                </div>
+
+                <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+                  <h3 className="mb-3 text-xl font-semibold text-gray-900">
+                    Hiding the real standard vs premium difference
+                  </h3>
+                  <p className="leading-relaxed text-gray-700">
+                    If the page does not explain who premium is for, the user assumes it is
+                    just a pricing ladder. A stronger page helps landlords self-select based on
+                    tenancy complexity, not just on whether one card has a nicer badge on it.
+                  </p>
+                </div>
+
+                <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+                  <h3 className="mb-3 text-xl font-semibold text-gray-900">
+                    Giving too little decision support
+                  </h3>
+                  <p className="leading-relaxed text-gray-700">
+                    High-intent visitors do not just want to know what a PRT stands for. They
+                    want to know whether they are on the right page, what route suits their
+                    letting, what the main Scottish differences are, and what to do next. Thin
+                    pages lose that traffic because they answer almost none of those questions.
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-8 rounded-2xl border border-purple-200 bg-purple-50 p-6">
+                <h3 className="mb-2 text-lg font-semibold text-purple-900">
+                  Have questions about your Scottish tenancy setup?
+                </h3>
+                <p className="mb-4 leading-relaxed text-purple-900/90">
+                  Every letting arrangement is different. If you are unsure whether your
+                  tenancy looks straightforward enough for standard or whether it belongs on
+                  the premium route, use Ask Heaven for free landlord Q&amp;A.
+                </p>
+                <Link
+                  href="/ask-heaven"
+                  className="inline-flex items-center gap-2 font-medium text-purple-700 hover:text-purple-900"
+                >
+                  Ask Heaven free Q&amp;A
+                  <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Related Documents */}
-        <section className="container mx-auto px-4 py-12">
-          <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8">
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">Related Documents for Scotland Tenancies</h2>
+        <section className="py-16 lg:py-20">
+          <div className="container mx-auto px-4">
+            <div className="mx-auto max-w-4xl">
+              <SeoCtaBlock
+                showTrustPositioningBar
+                pageType="tenancy"
+                variant="section"
+                pagePath={PAGE_PATH}
+                jurisdiction="scotland"
+                title="Create your Scottish PRT now"
+                description={`Choose the standard route for a straightforward let or premium for a more complex Scottish tenancy. Start from ${standardPrice}.`}
+              />
+            </div>
+          </div>
+        </section>
 
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
-                <h3 className="text-xl font-semibold text-blue-600 mb-2">Notice to Leave</h3>
-                <p className="text-gray-700 text-sm mb-3">
-                  Official notice from landlord to tenant to end a PRT, stating the ground(s) for ending the tenancy and the notice period.
+        <section className="bg-gray-50 py-16 lg:py-20">
+          <div className="container mx-auto px-4">
+            <div className="mx-auto max-w-5xl rounded-2xl border border-gray-200 bg-white p-8 shadow-sm md:p-10">
+              <h2 className="mb-6 text-3xl font-bold text-gray-900">
+                When not to use this page
+              </h2>
+              <div className="space-y-5 leading-relaxed text-gray-700">
+                <p>
+                  This page is for <strong>Scottish private residential tenancies</strong>.
+                  It is not the right landing page for every residential occupation scenario.
+                  If you are dealing with a different living arrangement, a different product
+                  page or agreement route may be more suitable.
                 </p>
-                <Link href="/products/notice-only" className="text-blue-600 hover:underline text-sm font-semibold">
-                  Learn More →
-                </Link>
-              </div>
-
-              <div className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
-                <h3 className="text-xl font-semibold text-blue-600 mb-2">Rent Increase Notice</h3>
-                <p className="text-gray-700 text-sm mb-3">
-                  Prescribed form to notify tenants of rent increase (3 months' notice required, maximum once per year).
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="rounded-xl border border-gray-200 bg-gray-50 p-5">
+                    <h3 className="mb-2 text-lg font-semibold text-gray-900">
+                      Not the right fit for
+                    </h3>
+                    <ul className="space-y-2 text-gray-700">
+                      <li>• Properties outside Scotland</li>
+                      <li>• Pages focused on England AST search intent</li>
+                      <li>• Welsh occupation contract use cases</li>
+                      <li>• Northern Ireland private tenancy pages</li>
+                      <li>• Lodger or resident-landlord arrangements where a different agreement is needed</li>
+                    </ul>
+                  </div>
+                  <div className="rounded-xl border border-gray-200 bg-gray-50 p-5">
+                    <h3 className="mb-2 text-lg font-semibold text-gray-900">
+                      Better next step
+                    </h3>
+                    <ul className="space-y-2 text-gray-700">
+                      <li>• Use the Scotland route if the property is in Scotland</li>
+                      <li>• Use a jurisdiction-specific page for England, Wales, or NI</li>
+                      <li>• Choose premium where the household or property is more complex</li>
+                      <li>• Use the correct follow-on notice or enforcement page if the tenancy problem is no longer “create an agreement”</li>
+                    </ul>
+                  </div>
+                </div>
+                <p>
+                  This kind of clarity helps the page rank better and convert better at the
+                  same time. The right SEO page is not always the broadest one. It is the page
+                  that answers the user’s actual next-step question most clearly.
                 </p>
-                <span className="text-gray-400 text-sm">Coming Soon</span>
-              </div>
-
-              <div className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
-                <h3 className="text-xl font-semibold text-blue-600 mb-2">Rental Inspection Report</h3>
-                <p className="text-gray-700 text-sm mb-3">
-                  Document property condition at start and end of tenancy for deposit protection and dispute resolution.
-                </p>
-                <span className="text-gray-400 text-sm">Coming Soon</span>
-              </div>
-
-              <div className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
-                <h3 className="text-xl font-semibold text-blue-600 mb-2">Repairing Standard Enforcement Application</h3>
-                <p className="text-gray-700 text-sm mb-3">
-                  Apply to First-tier Tribunal if landlord fails to meet Repairing Standard obligations.
-                </p>
-                <span className="text-gray-400 text-sm">Coming Soon</span>
-              </div>
-
-              <div className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
-                <h3 className="text-xl font-semibold text-blue-600 mb-2">Tenancy Application Form</h3>
-                <p className="text-gray-700 text-sm mb-3">
-                  Pre-tenancy form to collect tenant information and references before offering a PRT.
-                </p>
-                <span className="text-gray-400 text-sm">Coming Soon</span>
-              </div>
-
-              <div className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
-                <h3 className="text-xl font-semibold text-blue-600 mb-2">Fair Rent Application</h3>
-                <p className="text-gray-700 text-sm mb-3">
-                  Tenant application to First-tier Tribunal to challenge excessive rent increases.
-                </p>
-                <span className="text-gray-400 text-sm">Coming Soon</span>
               </div>
             </div>
           </div>
         </section>
 
-        {/* FAQ Section */}
         <FAQSection
+          title="Private Residential Tenancy agreement FAQ"
+          faqs={faqs}
           showTrustPositioningBar
-          title="Frequently Asked Questions"
-          faqs={[
-            {
-              question: "Is a Private Residential Tenancy (PRT) agreement legally valid in Scotland?",
-              answer: "Yes. Our PRT agreements are drafted to comply with the Private Housing (Tenancies) (Scotland) Act 2016, Housing (Scotland) Act 2006, and all current Scottish tenancy legislation. Both Standard and Premium versions are legally binding when properly executed by landlord and tenant(s)."
-            },
-            {
-              question: "Do I need to register as a landlord in Scotland?",
-              answer: "Yes, it's mandatory. All landlords in Scotland must register with their local council before letting a property. You'll receive a landlord registration number which must be included in your PRT agreement. Failure to register is a criminal offense with fines up to £50,000. Register at least 4-6 weeks before your first tenancy starts at landlordregistrationscotland.gov.uk."
-            },
-            {
-              question: "What is the difference between Standard and Premium PRT agreements?",
-              answer: "The Standard PRT (£14.99) covers all legal essentials for Scottish tenancies, including open-ended structure, 18 grounds for possession, Repairing Standard obligations, and landlord registration. The Premium PRT (£24.99) adds: comprehensive inventory section with white goods grid, exhaustive terms and conditions (13 detailed clauses), professional gradient styling (Scotland blue theme), rights of change clauses, enhanced legal compliance information boxes, detailed Repairing Standard explanation, First-tier Tribunal guidance, and superior professional presentation."
-            },
-            {
-              question: "What is the maximum deposit I can charge in Scotland?",
-              answer: "In Scotland, the maximum deposit is 2 months' rent. This is lower than England & Wales. Our wizard automatically validates your deposit amount to ensure compliance with Scottish law. You must also protect the deposit in an approved scheme (SafeDeposits Scotland, MyDeposits Scotland, or Letting Protection Service Scotland) within 30 working days."
-            },
-            {
-              question: "Are PRTs fixed-term or open-ended?",
-              answer: "All PRTs in Scotland are open-ended (periodic) by law. There is no fixed end date like England & Wales ASTs. The tenancy continues indefinitely until either party ends it with proper notice. This gives tenants greater security while landlords retain the ability to end tenancies with valid grounds (e.g., selling, moving in, rent arrears)."
-            },
-            {
-              question: "How do I evict a tenant under a PRT?",
-              answer: "Landlords must have one of 18 legal grounds for eviction. Common grounds include: landlord intends to live in property (84 days' notice), landlord intends to sell (84 days' notice), rent arrears of 3+ consecutive months (28 days' notice), breach of tenancy terms (28 days' notice). You must serve a Notice to Leave with the correct notice period. If the tenant doesn't leave voluntarily, you must apply to the First-tier Tribunal for Scotland for an eviction order."
-            },
-            {
-              question: "What is the Repairing Standard?",
-              answer: "The Repairing Standard is the minimum legal standard for the physical condition of private rented properties in Scotland. Landlords must ensure: property is wind and watertight with sound structure, all installations for water, gas, electricity, heating, and sanitation are safe and working, fixtures and appliances are in reasonable state of repair, common areas are safe, and RCDs are installed for electrical safety. If your landlord fails to meet the Repairing Standard, you can apply to the First-tier Tribunal for enforcement."
-            },
-            {
-              question: "Can I increase the rent during a PRT?",
-              answer: "Yes, but with restrictions. Landlords can increase rent once per year using the prescribed Rent Increase Notice form. You must give 3 months' notice. Tenants can challenge the increase via the First-tier Tribunal if they believe the new rent is unreasonable compared to similar properties. The Tribunal can reduce the increase or reject it entirely."
-            },
-            {
-              question: "Can tenants have pets?",
-              answer: "It's up to the landlord. Our wizard asks whether pets are allowed, what types, and how many. The Scottish Government encourages landlords to consider pet requests positively. If you allow pets, you can request a higher deposit (up to the 2 months' rent maximum) or require pet insurance. You cannot charge additional pet rent or pet fees beyond the deposit cap."
-            },
-            {
-              question: "Do I need an HMO licence?",
-              answer: "If you're letting to 3 or more unrelated tenants who share facilities (kitchen, bathroom), your property may be a House in Multiple Occupation (HMO) and require a licence from your local council. HMO licensing requirements vary by council. Check with your local authority before letting. Failure to licence an HMO is a criminal offense."
-            },
-            {
-              question: "How quickly can I get my PRT agreement?",
-              answer: "Immediately! Our wizard takes approximately 10-15 minutes to complete. Once you've answered all questions and paid, your professionally formatted PRT is generated instantly and available for download as a PDF. You can print it, email it to tenants, or use it digitally with e-signature services."
-            }
-          ]}
           showContactCTA={false}
           variant="gray"
         />
 
-        {/* Related Links */}
-        <section className="container mx-auto px-4 py-12">
-          <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8">
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">Related Links</h2>
-            <div className="grid md:grid-cols-2 gap-4">
-              <Link href="/private-residential-tenancy-agreement-template" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
-                PRT Agreement Template 2026
-              </Link>
-              <Link href="/prt-template-scotland" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
-                Scotland PRT Template
-              </Link>
-              <Link href="/scottish-tenancy-agreement-template" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
-                Scottish Tenancy Template Guide
-              </Link>
-              <Link href="/scotland-prt-model-agreement-guide" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
-                Model PRT Agreement Guide
-              </Link>
-              <Link href="/scotland-eviction-notices" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
-                Scotland eviction guide
-              </Link>
-              <Link href="/ask-heaven" className="block p-5 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
-                Ask Heaven (free landlord Q&amp;A)
-              </Link>
+        <section className="py-16 lg:py-20">
+          <div className="container mx-auto px-4">
+            <div className="mx-auto max-w-4xl">
+              <SeoCtaBlock
+                pageType="tenancy"
+                variant="final"
+                pagePath={PAGE_PATH}
+                jurisdiction="scotland"
+                title="Ready to create your Scotland PRT?"
+                description={`Choose the right Scottish tenancy agreement route and generate your document online from ${standardPrice}.`}
+              />
+              <SeoDisclaimer className="mx-auto max-w-4xl" />
             </div>
           </div>
         </section>
 
-        {/* Final CTA Section */}
-        <section className="container mx-auto px-4 py-16">
-          <div className="max-w-4xl mx-auto bg-primary rounded-2xl shadow-2xl p-12 text-center text-white">
-            <h2 className="text-4xl font-bold mb-4">Ready to Create Your PRT Agreement?</h2>
-            <p className="text-xl mb-8 opacity-90">
-              Join Scottish landlords who trust Landlord Heaven for legally compliant, professional tenancy agreements.
-            </p>
-            <div className="flex gap-6 justify-center flex-wrap">
-              <Link
-                href="/wizard?product=ast_standard&src=product_page&topic=tenancy&jurisdiction=scotland"
-                className="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold hover:bg-blue-50 transition-colors text-lg shadow-lg"
-              >
-                Standard PRT - £14.99
-              </Link>
-              <Link
-                href="/wizard?product=ast_premium&src=product_page&topic=tenancy&jurisdiction=scotland"
-                className="bg-yellow-400 text-gray-900 px-8 py-4 rounded-lg font-semibold hover:bg-yellow-300 transition-colors text-lg shadow-lg"
-              >
-                Premium PRT - £24.99 ⭐
-              </Link>
+        <section className="bg-gray-50 py-16 lg:py-20">
+          <div className="container mx-auto px-4">
+            <div className="mx-auto max-w-4xl">
+              <RelatedLinks
+                title="Related Scotland tenancy resources"
+                links={tenancyAgreementScotlandLinks}
+              />
             </div>
-            <p className="mt-6 text-sm opacity-75">
-              Instant download • Compliant with PH(T)(S) Act 2016 • No subscription required
-            </p>
           </div>
         </section>
 
-        {/* SEO Internal Links Section */}
-        <section className="container mx-auto px-4 py-8 border-t border-gray-200">
-          <div className="max-w-4xl mx-auto">
-            <h3 className="text-xl font-semibold text-gray-900 mb-4">Other UK Jurisdictions</h3>
-            <div className="flex gap-6 flex-wrap">
-              <Link href="/assured-shorthold-tenancy-agreement-template" className="text-blue-600 hover:underline font-semibold">
-                England AST Agreements →
-              </Link>
-              <Link href="/wales-tenancy-agreement-template" className="text-blue-600 hover:underline font-semibold">
-                Wales Occupation Contract →
-              </Link>
-              <Link href="/northern-ireland-tenancy-agreement-template" className="text-blue-600 hover:underline font-semibold">
-                Northern Ireland Private Tenancy →
-              </Link>
+        <section className="border-t border-gray-200 bg-white py-10">
+          <div className="container mx-auto px-4">
+            <div className="mx-auto max-w-4xl">
+              <h3 className="mb-4 text-xl font-semibold text-gray-900">
+                Other UK jurisdictions
+              </h3>
+              <div className="flex flex-wrap gap-6">
+                <Link
+                  href="/assured-shorthold-tenancy-agreement-template"
+                  className="font-semibold text-blue-600 hover:underline"
+                >
+                  England tenancy agreements →
+                </Link>
+                <Link
+                  href="/wales-tenancy-agreement-template"
+                  className="font-semibold text-blue-600 hover:underline"
+                >
+                  Wales occupation contracts →
+                </Link>
+                <Link
+                  href="/tenancy-agreement-northern-ireland"
+                  className="font-semibold text-blue-600 hover:underline"
+                >
+                  Northern Ireland tenancy agreements →
+                </Link>
+              </div>
             </div>
           </div>
         </section>
-      </div>
+      </main>
     </>
   );
 }
-
-
-

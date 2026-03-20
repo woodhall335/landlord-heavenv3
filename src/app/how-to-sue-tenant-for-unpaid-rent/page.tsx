@@ -26,7 +26,7 @@ const moneyClaimWizardLink = buildWizardLink({
 });
 
 export const metadata: Metadata = {
-  title: 'How to Sue a Tenant for Unpaid Rent | Solicitor-Style Landlord Guide',
+  title: 'How to Sue a Tenant for Unpaid Rent 2026 | Landlord Debt Claim Guide',
   description:
     'A practical guide for landlords in England on suing a tenant for unpaid rent. Learn the pre-action protocol, county court process, court fees, judgment, enforcement, and how to prepare a stronger arrears claim.',
   keywords: [
@@ -40,9 +40,12 @@ export const metadata: Metadata = {
     'small claims court tenant',
     'money claim against tenant',
     'CCJ for rent arrears',
+    'letter before claim rent arrears',
+    'county court claim unpaid rent',
+    'former tenant rent arrears claim',
   ],
   openGraph: {
-    title: 'How to Sue a Tenant for Unpaid Rent | Solicitor-Style Landlord Guide',
+    title: 'How to Sue a Tenant for Unpaid Rent 2026 | Landlord Debt Claim Guide',
     description:
       'A plain-English landlord guide to taking a tenant to court for unpaid rent in England, from Letter Before Claim through to enforcement.',
     type: 'article',
@@ -276,6 +279,13 @@ export default function SueTenantUnpaidRentPage() {
                 page is simple: suing for unpaid rent is usually a file-quality exercise
                 first and a court-filing exercise second.
               </p>
+
+              <p className="mt-4 leading-7 text-gray-700">
+                This is why high-performing landlords usually stabilise the debt file
+                before issuing anything. One correct figure, one reliable chronology, and
+                one properly handled pre-action trail will usually outperform a rushed
+                claim every time.
+              </p>
             </Card>
 
             <Card id="can-you-sue" title="Can You Sue a Tenant for Unpaid Rent?">
@@ -301,6 +311,14 @@ export default function SueTenantUnpaidRentPage() {
                 claim, and the likely chances of enforcement all affect whether the route
                 is worth taking. The best claims are usually the ones that are both legally
                 sound and practically prepared.
+              </p>
+
+              <p className="mt-4 leading-7 text-gray-700">
+                It is also common for landlords to confuse the possession route with the
+                debt route. Recovering the property and recovering the rent are related but
+                not identical exercises. This page is specifically about turning the unpaid
+                rent into a court debt claim, whether alongside or separate from any wider
+                possession strategy.
               </p>
             </Card>
 
@@ -453,6 +471,12 @@ export default function SueTenantUnpaidRentPage() {
                 choosing the route most likely to produce recovery, not the one that sounds
                 toughest.
               </p>
+
+              <p className="mt-4 leading-7 text-gray-700">
+                In practice, landlords who stay organised at each stage usually move faster
+                than landlords who try to improvise once deadlines start running. The
+                easier the claim is to understand on paper, the easier it is to advance.
+              </p>
             </Card>
 
             <Card id="what-you-need-to-prove" title="What You Need to Prove in a Rent Arrears Claim">
@@ -519,7 +543,7 @@ export default function SueTenantUnpaidRentPage() {
                     </tr>
                     <tr className="border-t border-[#E6DBFF] text-gray-700">
                       <td className="px-4 py-3">£1,000.01 - £1,500</td>
-                      <td className="px-4 py-3">£105</td>
+                      <td className="px-4 py-3">£80</td>
                     </tr>
                     <tr className="border-t border-[#E6DBFF] text-gray-700">
                       <td className="px-4 py-3">£1,500.01 - £3,000</td>
@@ -587,6 +611,12 @@ export default function SueTenantUnpaidRentPage() {
                 document-led: what is actually disputed, what can be proved, and what
                 outcome now makes sense?
               </p>
+
+              <p className="mt-4 leading-7 text-gray-700">
+                In practical terms, a defended claim is usually not a sign that the case
+                was wrong to bring. It is a sign that the papers now need to do even more
+                of the persuasive work.
+              </p>
             </Card>
 
             <Card id="former-tenant-claims" title="Suing a Former Tenant for Rent Arrears">
@@ -638,6 +668,11 @@ export default function SueTenantUnpaidRentPage() {
                 claim should not have been issued. It means the landlord should treat
                 judgment and enforcement as two separate stages with different practical
                 questions at each stage.
+              </p>
+
+              <p className="mt-4 leading-7 text-gray-700">
+                In practical terms, judgment proves the debt. Enforcement is what turns the
+                judgment into a realistic chance of recovery.
               </p>
             </Card>
 

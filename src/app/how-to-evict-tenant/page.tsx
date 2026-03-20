@@ -1,25 +1,43 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { getCanonicalUrl } from '@/lib/seo/urls';
-import { StructuredData, breadcrumbSchema, articleSchema } from '@/lib/seo/structured-data';
-import { buildAskHeavenLink } from '@/lib/ask-heaven/buildAskHeavenLink';
-import {
-  AlertTriangle,
-  CheckCircle,
-  Clock,
-  ArrowRight,
-  Scale,
-  FileText,
-  MapPin,
-} from 'lucide-react';
-import { FAQSection } from '@/components/seo/FAQSection';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
+import { FAQSection } from '@/components/seo/FAQSection';
 import { NextLegalSteps } from '@/components/seo/NextLegalSteps';
+import { getCanonicalUrl } from '@/lib/seo/urls';
+import {
+  StructuredData,
+  breadcrumbSchema,
+  articleSchema,
+} from '@/lib/seo/structured-data';
+import { buildAskHeavenLink } from '@/lib/ask-heaven/buildAskHeavenLink';
+import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { landingPageLinks, productLinks, guideLinks } from '@/lib/seo/internal-links';
 import { howToEvictTenantFAQs } from '@/data/faqs';
+import { PRODUCTS } from '@/lib/pricing/products';
+import {
+  AlertTriangle,
+  ArrowRight,
+  CheckCircle,
+  Clock,
+  FileText,
+  MapPin,
+  Scale,
+  Shield,
+  XCircle,
+} from 'lucide-react';
 
-// Pre-built Ask Heaven compliance links for eviction page
+const canonicalUrl = getCanonicalUrl('/how-to-evict-tenant');
+
+const wizardHref = buildWizardLink({
+  product: 'notice_only',
+  topic: 'eviction',
+  src: 'seo_how_to_evict_tenant',
+});
+
+const noticeOnlyPrice = PRODUCTS.notice_only?.displayPrice ?? '£29.99';
+const completePackPrice = PRODUCTS.complete_pack?.displayPrice ?? '£79.99';
+
 const complianceLinks = {
   deposit: buildAskHeavenLink({
     source: 'page_cta',
@@ -47,31 +65,57 @@ const complianceLinks = {
   }),
 };
 
-const wizardHref = '/wizard?product=notice_only&topic=eviction&src=seo_how_to_evict_tenant';
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: howToEvictTenantFAQs.map((faq) => ({
+    '@type': 'Question',
+    name: faq.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: faq.answer,
+    },
+  })),
+};
 
 export const metadata: Metadata = {
-  title: 'How to Evict a Tenant in 2026 (Landlord Guide)',
+  title: 'How to Evict a Tenant | UK Landlord Guide by Jurisdiction',
   description:
-    'Eviction guide for UK landlords. Clear steps, notice periods, and templates for England, Wales, Scotland & Northern Ireland.',
+    'Landlord guide to evicting a tenant in England, Wales, Scotland, or Northern Ireland. Compare notice routes, timelines, common mistakes, compliance checks, and the right next legal step.',
   keywords: [
     'how to evict a tenant',
     'evict tenant UK',
-    'eviction process UK',
     'landlord eviction guide',
+    'eviction process UK',
     'section 21 eviction',
     'section 8 eviction',
+    'wales eviction notice',
     'notice to leave scotland',
-    'renting homes wales act eviction',
+    'northern ireland notice to quit',
+    'eviction notice landlord',
+    'tenant eviction process',
   ],
   openGraph: {
-    title: 'How to Evict a Tenant in 2026 (Landlord Guide)',
+    title: 'How to Evict a Tenant | UK Landlord Guide by Jurisdiction',
     description:
-      'Landlord guide to legal eviction steps, timelines, and compliant notices across the UK.',
+      'Follow the correct eviction route for England, Wales, Scotland, or Northern Ireland and avoid common notice and compliance mistakes.',
     type: 'article',
-    url: getCanonicalUrl('/how-to-evict-tenant'),
+    url: canonicalUrl,
+    siteName: 'Landlord Heaven',
+    locale: 'en_GB',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'How to Evict a Tenant | UK Landlord Guide by Jurisdiction',
+    description:
+      'Compare eviction routes across England, Wales, Scotland, and Northern Ireland.',
   },
   alternates: {
-    canonical: getCanonicalUrl('/how-to-evict-tenant'),
+    canonical: canonicalUrl,
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 
@@ -82,310 +126,349 @@ export default function HowToEvictTenantPage() {
         data={articleSchema({
           headline: 'How to Evict a Tenant in the UK',
           description:
-            'Landlord guide to eviction steps, notice periods, court routes, and compliant documents across the UK.',
-          url: getCanonicalUrl('/how-to-evict-tenant'),
+            'Landlord guide to eviction steps, notice routes, court or tribunal process, and compliance checks across the UK.',
+          url: canonicalUrl,
         })}
       />
       <StructuredData
         data={breadcrumbSchema([
-          { name: 'Home', url: 'https://landlordheaven.co.uk' },
-          { name: 'How to Evict a Tenant', url: 'https://landlordheaven.co.uk/how-to-evict-tenant' },
+          { name: 'Home', url: getCanonicalUrl('/') },
+          { name: 'How to Evict a Tenant', url: canonicalUrl },
         ])}
       />
+      <StructuredData data={faqSchema} />
 
       <main className="min-h-screen bg-gray-50">
         <HeaderConfig mode="autoOnScroll" />
+
         <UniversalHero
-          title="How to Evict a Tenant in the UK (Landlord Guide)"
-          subtitle="Follow the jurisdiction-specific eviction process for England, Wales, Scotland, or Northern Ireland and start with a solicitor-grade notice workflow."
+          title="How to Evict a Tenant in the UK"
+          subtitle="Use this landlord guide to compare the eviction process in England, Wales, Scotland, and Northern Ireland, understand which notice route may apply, and avoid the mistakes that most often invalidate an eviction."
           primaryCta={{ label: 'Start Eviction Wizard', href: wizardHref }}
-          secondaryCta={{ label: 'Jump to jurisdiction steps', href: '#england' }}
+          secondaryCta={{ label: 'Jump to jurisdiction guide', href: '#jurisdiction-guide' }}
           showTrustPositioningBar
           hideMedia
-        />
+        >
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-6 text-sm text-gray-700">
+            <span className="flex items-center gap-2">
+              <Scale className="h-4 w-4 text-primary" />
+              Jurisdiction-specific guidance
+            </span>
+            <span className="flex items-center gap-2">
+              <Shield className="h-4 w-4 text-primary" />
+              Notice-first landlord workflow
+            </span>
+            <span className="flex items-center gap-2">
+              <Clock className="h-4 w-4 text-primary" />
+              Clear next legal steps
+            </span>
+          </div>
+        </UniversalHero>
 
-        {/* Quick Jump Navigation */}
-        <section className="py-8 bg-white border-b">
+        <section className="border-b bg-white py-8">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                <MapPin className="w-5 h-5 text-primary" />
-                Jump to your jurisdiction:
+            <div className="mx-auto max-w-5xl rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+              <h2 className="mb-4 text-lg font-semibold text-gray-900 flex items-center gap-2">
+                <MapPin className="h-5 w-5 text-primary" />
+                Jump to your jurisdiction
               </h2>
               <div className="flex flex-wrap gap-3">
                 <a
                   href="#england"
-                  className="px-4 py-2 bg-gray-100 hover:bg-primary hover:text-white rounded-lg text-sm font-medium transition-colors"
+                  className="rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium transition-colors hover:bg-primary hover:text-white"
                 >
-                  🏴󠁧󠁢󠁥󠁮󠁧󠁿 England
+                  England
                 </a>
                 <a
                   href="#wales"
-                  className="px-4 py-2 bg-gray-100 hover:bg-red-600 hover:text-white rounded-lg text-sm font-medium transition-colors"
+                  className="rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium transition-colors hover:bg-red-600 hover:text-white"
                 >
-                  🏴󠁧󠁢󠁷󠁬󠁳󠁿 Wales
+                  Wales
                 </a>
                 <a
                   href="#scotland"
-                  className="px-4 py-2 bg-gray-100 hover:bg-blue-600 hover:text-white rounded-lg text-sm font-medium transition-colors"
+                  className="rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium transition-colors hover:bg-blue-600 hover:text-white"
                 >
-                  🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland
+                  Scotland
                 </a>
                 <a
                   href="#northern-ireland"
-                  className="px-4 py-2 bg-gray-100 hover:bg-green-600 hover:text-white rounded-lg text-sm font-medium transition-colors"
+                  className="rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium transition-colors hover:bg-green-600 hover:text-white"
                 >
-                  🇬🇧 Northern Ireland
+                  Northern Ireland
                 </a>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Overview Section */}
         <section className="py-12 lg:py-16">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">
-                UK Eviction Process Overview
-              </h2>
-
-              <div className="prose prose-lg max-w-none mb-8">
-                <p>
-                  Evicting a tenant in the UK requires following strict legal procedures. The first step is
-                  understanding <Link href="/eviction-notice-uk" className="text-primary hover:underline">eviction notices in the UK</Link> and
-                  which type applies to your situation. The process varies significantly depending on which part of the UK your property
-                  is located in:
+            <div className="mx-auto max-w-5xl rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
+              <h2 className="text-3xl font-bold text-gray-900">Quick answer</h2>
+              <div className="mt-6 space-y-5 text-gray-700">
+                <p className="leading-7">
+                  Evicting a tenant in the UK is never a single universal process. The
+                  correct route depends first on <strong>where the property is located</strong>,
+                  then on <strong>why possession is being sought</strong>, and then on whether
+                  the landlord has handled the compliance and notice stage correctly before
+                  starting any court or tribunal application.
+                </p>
+                <p className="leading-7">
+                  The most common mistake landlords make is searching for “how to evict a
+                  tenant” and then following the first article they find as though the same
+                  steps apply everywhere. They do not. England, Wales, Scotland, and Northern
+                  Ireland each use different tenancy frameworks, different notice language,
+                  and different possession routes. England landlords may be comparing no-fault
+                  and grounds-based language. Wales landlords need to think in terms of
+                  occupation contracts. Scotland landlords need to work with Private
+                  Residential Tenancy rules and a Notice to Leave. Northern Ireland uses its
+                  own notice and possession framework again.
+                </p>
+                <p className="leading-7">
+                  This page is therefore a <strong>UK comparison and routing guide</strong>,
+                  not a one-size-fits-all legal article. Its purpose is to help landlords
+                  identify the right jurisdiction, understand the broad route that may apply,
+                  check the main validity points that often cause delay, and then move into
+                  the correct next document or guidance page. It is not designed to encourage
+                  risky shortcuts or informal removals. A lawful eviction starts with the
+                  correct notice strategy and ends, if necessary, with the correct court or
+                  tribunal enforcement route.
                 </p>
               </div>
 
-              {/* Ask Heaven callout */}
-              <div className="bg-purple-50 border border-purple-200 rounded-xl p-5 mb-8">
-                <div className="flex items-start gap-3 mb-4">
+              <div className="mt-8 rounded-2xl border border-purple-200 bg-purple-50 p-5">
+                <div className="flex items-start gap-3">
                   <span className="text-2xl">☁️</span>
                   <div>
                     <p className="font-semibold text-gray-900 mb-1">
-                      Not sure which eviction route to use?
+                      Not sure which eviction route applies?
                     </p>
                     <p className="text-sm text-gray-600">
-                      Our free{' '}
-                      <Link href={complianceLinks.compliance} className="text-primary font-medium hover:underline">
-                        Ask Heaven landlord Q&amp;A tool
+                      Use our free{' '}
+                      <Link
+                        href={complianceLinks.compliance}
+                        className="font-medium text-primary hover:underline"
+                      >
+                        Ask Heaven landlord Q&amp;A
                       </Link>{' '}
-                      can help you understand your options for England, Wales, Scotland, or Northern Ireland.
+                      tool for help with compliance, notice choice, and document checks.
                     </p>
                   </div>
                 </div>
-                <div className="grid sm:grid-cols-3 gap-2 ml-9">
+                <div className="mt-4 grid gap-2 sm:grid-cols-3">
                   <Link
                     href={complianceLinks.deposit}
-                    className="text-xs bg-white border border-purple-200 hover:border-primary text-gray-700 hover:text-primary px-3 py-2 rounded-lg transition-colors text-center"
+                    className="rounded-lg border border-purple-200 bg-white px-3 py-2 text-center text-xs text-gray-700 transition-colors hover:border-primary hover:text-primary"
                   >
                     Deposit rules for eviction →
                   </Link>
                   <Link
                     href={complianceLinks.gasSafety}
-                    className="text-xs bg-white border border-purple-200 hover:border-primary text-gray-700 hover:text-primary px-3 py-2 rounded-lg transition-colors text-center"
+                    className="rounded-lg border border-purple-200 bg-white px-3 py-2 text-center text-xs text-gray-700 transition-colors hover:border-primary hover:text-primary"
                   >
                     Gas safety requirements →
                   </Link>
                   <Link
                     href={complianceLinks.epc}
-                    className="text-xs bg-white border border-purple-200 hover:border-primary text-gray-700 hover:text-primary px-3 py-2 rounded-lg transition-colors text-center"
+                    className="rounded-lg border border-purple-200 bg-white px-3 py-2 text-center text-xs text-gray-700 transition-colors hover:border-primary hover:text-primary"
                   >
                     EPC requirements →
                   </Link>
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
 
-              <div className="grid md:grid-cols-2 gap-6 mb-12">
-                <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
-                  <h3 className="font-bold text-lg text-gray-900 mb-3 flex items-center gap-2">
-                    <Clock className="w-5 h-5 text-primary" />
-                    General Timeline
+        <section id="jurisdiction-guide" className="bg-white py-12 lg:py-16 border-y">
+          <div className="container mx-auto px-4">
+            <div className="mx-auto max-w-5xl">
+              <h2 className="text-3xl font-bold text-gray-900">
+                UK eviction process overview
+              </h2>
+              <p className="mt-4 max-w-4xl leading-7 text-gray-700">
+                A strong landlord guide needs to explain the structure before it explains the
+                detail. In most cases, the process looks broadly like this: identify the
+                correct jurisdiction and tenancy type, decide the correct notice route, check
+                whether your compliance and document history support that route, serve the
+                notice correctly, wait for the notice period to expire, and only then move to
+                the correct court or tribunal stage if the tenant does not leave voluntarily.
+              </p>
+
+              <div className="mt-8 grid gap-6 md:grid-cols-2">
+                <div className="rounded-xl border border-gray-200 bg-gray-50 p-6">
+                  <h3 className="mb-3 text-lg font-bold text-gray-900 flex items-center gap-2">
+                    <Clock className="h-5 w-5 text-primary" />
+                    Typical timeline shape
                   </h3>
-                  <ul className="space-y-2 text-gray-600">
-                    <li className="flex items-start gap-2">
-                      <span className="font-semibold text-gray-900">Notice period:</span>
-                      2 weeks to 6 months
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="font-semibold text-gray-900">Court process:</span>
-                      6-16 weeks
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="font-semibold text-gray-900">Bailiff enforcement:</span>
-                      4-8 weeks
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="font-semibold text-gray-900">Total:</span>
-                      3-8 months typical
-                    </li>
+                  <ul className="space-y-2 text-gray-700">
+                    <li>• Notice periods vary by jurisdiction and ground.</li>
+                    <li>• Court or tribunal time can add weeks or months.</li>
+                    <li>• Contested cases usually take longer than paper-only routes.</li>
+                    <li>• Enforcement adds more time if the tenant still does not leave.</li>
                   </ul>
                 </div>
 
-                <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
-                  <h3 className="font-bold text-lg text-gray-900 mb-3 flex items-center gap-2">
-                    <Scale className="w-5 h-5 text-primary" />
-                    Key Requirements
+                <div className="rounded-xl border border-gray-200 bg-gray-50 p-6">
+                  <h3 className="mb-3 text-lg font-bold text-gray-900 flex items-center gap-2">
+                    <Shield className="h-5 w-5 text-primary" />
+                    Validity issues that often matter
                   </h3>
-                  <ul className="space-y-2 text-gray-600">
-                    <li className="flex items-center gap-2">
-                      <CheckCircle className="w-4 h-4 text-green-500" />
-                      Valid tenancy agreement
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle className="w-4 h-4 text-green-500" />
-                      Deposit protected in approved scheme
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle className="w-4 h-4 text-green-500" />
-                      Gas safety certificate provided
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle className="w-4 h-4 text-green-500" />
-                      EPC provided before tenancy
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle className="w-4 h-4 text-green-500" />
-                      Correct notice served properly
-                    </li>
+                  <ul className="space-y-2 text-gray-700">
+                    <li>• Using the wrong notice for the jurisdiction.</li>
+                    <li>• Incorrect dates, service method, or notice wording.</li>
+                    <li>• Compliance failures that undermine the route.</li>
+                    <li>• Missing evidence for grounds-based possession.</li>
                   </ul>
+                </div>
+              </div>
+
+              <div className="mt-8 rounded-2xl border border-amber-200 bg-amber-50 p-6">
+                <div className="flex items-start gap-3">
+                  <AlertTriangle className="mt-0.5 h-5 w-5 text-amber-600" />
+                  <div>
+                    <h3 className="text-lg font-semibold text-amber-900">
+                      Important practical warning
+                    </h3>
+                    <p className="mt-2 leading-7 text-amber-900/90">
+                      This page is a routing and comparison guide. It should help you choose
+                      the correct next step, but it should not be read as permission to take
+                      shortcuts. Landlords should never try to remove tenants informally,
+                      change locks without the lawful process, or assume that a notice alone
+                      finishes the eviction. In many cases, lawful possession still requires
+                      a court or tribunal order and, if needed, enforcement.
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* England Section */}
-        <section id="england" className="py-12 lg:py-16 bg-white scroll-mt-20">
+        <section id="england" className="scroll-mt-24 bg-white py-12 lg:py-16">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
+            <div className="mx-auto max-w-5xl">
               <div className="flex items-center gap-3 mb-6">
-                <span className="text-4xl">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span>
-                <h2 className="text-3xl font-bold text-gray-900">Evicting a Tenant in England</h2>
+                <span className="text-4xl">🏴</span>
+                <h2 className="text-3xl font-bold text-gray-900">
+                  Evicting a tenant in England
+                </h2>
               </div>
 
-              <div className="bg-amber-50 border-l-4 border-amber-500 p-4 mb-8 rounded-r-lg">
-                <p className="text-amber-900 text-sm">
-                  <strong>Important:</strong> Section 21 "no-fault" eviction ends 1 May 2026
-                  under the Renters Rights Act 2025. After this date, you will need grounds
-                  for eviction (similar to Section 8).
+              <div className="rounded-xl border-l-4 border-amber-500 bg-amber-50 p-4 mb-8">
+                <p className="text-sm text-amber-900">
+                  <strong>England transition point:</strong> this is the part of the UK where
+                  landlords most often search for Section 21 and Section 8 routes. The wider
+                  legal and business messaging around no-fault possession is changing, so the
+                  safest public-facing approach is to treat Section 21 as transition-sensitive
+                  and to check the current route before serving notice rather than relying on
+                  old assumptions or outdated blog posts.
                 </p>
               </div>
 
-              <div className="space-y-8">
-                {/* Section 21 */}
-                <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+              <div className="space-y-6 text-gray-700">
+                <p className="leading-7">
+                  In England, landlords usually begin by asking whether they are looking at a
+                  route traditionally treated as no-fault possession or whether they need a
+                  grounds-based route. That distinction still drives a large amount of search
+                  traffic, but it is also where the most confusion happens. A page that is
+                  meant to convert well should not just list Section 21 and Section 8. It
+                  should explain what they are for, when they are used, and why compliance and
+                  service details matter so much before any possession claim is issued.
+                </p>
+                <p className="leading-7">
+                  Grounds-based possession remains important where the tenant is in rent
+                  arrears, in breach of the tenancy, or where the landlord has a route that
+                  depends on specific facts and evidence. No-fault language is still part of
+                  search behaviour, but landlords should be careful not to assume that older
+                  England eviction guidance remains current in every detail. The stronger
+                  commercial position is to route landlords into the correct notice workflow,
+                  check compliance, and then move into the right possession step with evidence
+                  rather than guesswork.
+                </p>
+              </div>
+
+              <div className="mt-8 grid gap-6 md:grid-cols-2">
+                <div className="rounded-xl border border-gray-200 bg-gray-50 p-6">
                   <h3 className="text-xl font-bold text-gray-900 mb-4">
-                    Section 21 Notice (No-Fault Eviction)
+                    Section 21-style no-fault route
                   </h3>
-                  <p className="text-gray-600 mb-4">
-                    Use Section 21 when you want to regain possession without giving a reason.
-                    Available until 30 April 2026.
+                  <p className="text-gray-700 leading-7 mb-4">
+                    This is the route many England landlords still search for when they want
+                    possession without relying on tenant fault. It is also the route most
+                    affected by changing reform language, so landlords should check current
+                    validity before acting rather than assuming old timelines still apply.
                   </p>
-                  <ul className="space-y-2 text-gray-600 mb-4">
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-green-500 mt-1" />
-                      <span>
-                        <strong>Notice period:</strong> Minimum 2 months
-                      </span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-green-500 mt-1" />
-                      <span>
-                        <strong>Form:</strong> Prescribed Form 6A
-                      </span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-green-500 mt-1" />
-                      <span>
-                        <strong>Court process:</strong> Accelerated possession (no hearing for
-                        uncontested)
-                      </span>
-                    </li>
+                  <ul className="space-y-2 text-gray-700 mb-4">
+                    <li>• Most sensitive to compliance and document-history mistakes.</li>
+                    <li>• Often used where the landlord wants possession without alleging breach.</li>
+                    <li>• Service, dates, and supporting compliance records matter heavily.</li>
                   </ul>
                   <div className="flex flex-wrap gap-3">
                     <Link
                       href="/section-21-notice-template"
-                      className="text-primary hover:underline font-medium text-sm"
+                      className="text-sm font-medium text-primary hover:underline"
                     >
-                      Section 21 Template →
+                      Section 21 template →
                     </Link>
                     <Link
                       href="/tools/validators/section-21"
-                      className="text-primary hover:underline font-medium text-sm"
+                      className="text-sm font-medium text-primary hover:underline"
                     >
-                      Section 21 Checker →
+                      Section 21 checker →
                     </Link>
                   </div>
                 </div>
 
-                {/* Section 8 */}
-                <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                <div className="rounded-xl border border-gray-200 bg-gray-50 p-6">
                   <h3 className="text-xl font-bold text-gray-900 mb-4">
-                    Section 8 Notice (Grounds-Based Eviction)
+                    Section 8 grounds-based route
                   </h3>
-                  <p className="text-gray-600 mb-4">
-                    Use Section 8 when you have specific grounds such as rent arrears,
-                    antisocial behaviour, or breach of tenancy. Will remain available after
-                    May 2026.
+                  <p className="text-gray-700 leading-7 mb-4">
+                    This is the main England route where the landlord relies on a specific
+                    ground, such as arrears, breach, or other behaviour-based reasons. The
+                    strength of the case depends not only on the notice but on the facts,
+                    evidence, and the ground being used.
                   </p>
-                  <ul className="space-y-2 text-gray-600 mb-4">
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-green-500 mt-1" />
-                      <span>
-                        <strong>Notice period:</strong> 2 weeks (serious arrears) to 2 months
-                      </span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-green-500 mt-1" />
-                      <span>
-                        <strong>Common grounds:</strong> Ground 8 (2+ months arrears), Ground 10
-                        (any arrears), Ground 12 (breach), Ground 14 (antisocial behaviour)
-                      </span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-green-500 mt-1" />
-                      <span>
-                        <strong>Court process:</strong> Standard possession claim (hearing
-                        required)
-                      </span>
-                    </li>
+                  <ul className="space-y-2 text-gray-700 mb-4">
+                    <li>• Common for arrears, breach, or anti-social behaviour cases.</li>
+                    <li>• Usually requires greater attention to evidence and pleadings.</li>
+                    <li>• The court route and hearing process may be more involved.</li>
                   </ul>
                   <div className="flex flex-wrap gap-3">
                     <Link
                       href="/section-8-notice-template"
-                      className="text-primary hover:underline font-medium text-sm"
+                      className="text-sm font-medium text-primary hover:underline"
                     >
-                      Section 8 Template →
+                      Section 8 template →
                     </Link>
                     <Link
                       href="/tools/validators/section-8"
-                      className="text-primary hover:underline font-medium text-sm"
+                      className="text-sm font-medium text-primary hover:underline"
                     >
-                      Section 8 Checker →
+                      Section 8 checker →
                     </Link>
                   </div>
                 </div>
               </div>
 
-              <div className="mt-8 p-6 bg-primary/5 rounded-xl border border-primary/20">
-                <h4 className="font-bold text-gray-900 mb-3">England Eviction Products</h4>
+              <div className="mt-8 rounded-2xl border border-primary/20 bg-primary/5 p-6">
+                <h4 className="font-bold text-gray-900 mb-3">England eviction products</h4>
                 <div className="flex flex-wrap gap-4">
                   <Link
-                    href="/products/notice-only"
-                    className="inline-flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary/90"
+                    href={productLinks.noticeOnly.href}
+                    className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary/90"
                   >
-                    <FileText className="w-4 h-4" />
-                    Notice Only — £29.99
+                    <FileText className="h-4 w-4" />
+                    Notice Only — {noticeOnlyPrice}
                   </Link>
                   <Link
-                    href="/products/complete-pack"
-                    className="inline-flex items-center gap-2 bg-gray-900 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-800"
+                    href={productLinks.completePack.href}
+                    className="inline-flex items-center gap-2 rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800"
                   >
-                    <FileText className="w-4 h-4" />
-                    Complete Pack — £79.99
+                    <FileText className="h-4 w-4" />
+                    Complete Pack — {completePackPrice}
                   </Link>
                 </div>
               </div>
@@ -393,322 +476,332 @@ export default function HowToEvictTenantPage() {
           </div>
         </section>
 
-        {/* Wales Section */}
-        <section id="wales" className="py-12 lg:py-16 bg-red-50 scroll-mt-20">
+        <section id="wales" className="scroll-mt-24 bg-red-50 py-12 lg:py-16">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
+            <div className="mx-auto max-w-5xl">
               <div className="flex items-center gap-3 mb-6">
-                <span className="text-4xl">🏴󠁧󠁢󠁷󠁬󠁳󠁿</span>
-                <h2 className="text-3xl font-bold text-gray-900">Evicting a Tenant in Wales</h2>
-              </div>
-
-              <div className="bg-red-100 border-l-4 border-red-600 p-4 mb-8 rounded-r-lg">
-                <p className="text-red-900 text-sm">
-                  <strong>Important:</strong> Wales uses the <strong>Renting Homes (Wales) Act 2016</strong>,
-                  not Section 21/Section 8. Since December 2022, "no-fault" eviction has been
-                  abolished in Wales. Different notices and procedures apply.
-                </p>
-              </div>
-
-              <div className="prose prose-lg max-w-none mb-8">
-                <p>
-                  In Wales, tenancy agreements are called <strong>occupation contracts</strong>.
-                  Landlords must follow the Renting Homes (Wales) Act 2016 procedures, which
-                  provide greater tenant protections than England.
-                </p>
-              </div>
-
-              <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm mb-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-4">
-                  Wales Eviction Process Overview
-                </h3>
-                <ul className="space-y-3 text-gray-600">
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-500 mt-1" />
-                    <span>
-                      <strong>Standard contracts:</strong> Generally require 6 months notice
-                      for landlord-initiated possession
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-500 mt-1" />
-                    <span>
-                      <strong>Serious rent arrears:</strong> Shorter notice periods may apply
-                      (consult current Welsh Government guidance)
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-500 mt-1" />
-                    <span>
-                      <strong>Breach of contract:</strong> Specific grounds and notice periods
-                      under Welsh law
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-500 mt-1" />
-                    <span>
-                      <strong>Court process:</strong> Apply to county court for possession
-                      order
-                    </span>
-                  </li>
-                </ul>
-              </div>
-
-              <div className="flex flex-wrap gap-4">
-                <Link
-                  href="/wales-eviction-notices"
-                  className="inline-flex items-center gap-2 bg-red-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-red-700"
-                >
-                  Wales Eviction Guide →
-                </Link>
-                <Link
-                  href="/wales-tenancy-agreement-template"
-                  className="inline-flex items-center gap-2 bg-white text-red-600 border border-red-600 px-6 py-3 rounded-lg font-medium hover:bg-red-50"
-                >
-                  Wales Occupation Contracts →
-                </Link>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Scotland Section */}
-        <section id="scotland" className="py-12 lg:py-16 bg-blue-50 scroll-mt-20">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              <div className="flex items-center gap-3 mb-6">
-                <span className="text-4xl">🏴󠁧󠁢󠁳󠁣󠁴󠁿</span>
-                <h2 className="text-3xl font-bold text-gray-900">Evicting a Tenant in Scotland</h2>
-              </div>
-
-              <div className="bg-blue-100 border-l-4 border-blue-600 p-4 mb-8 rounded-r-lg">
-                <p className="text-blue-900 text-sm">
-                  <strong>Important:</strong> Scotland uses <strong>Private Residential Tenancies (PRTs)</strong>
-                  and <strong>Notice to Leave</strong>, not Section 21/Section 8. Evictions are handled
-                  by the First-tier Tribunal for Scotland, not the courts.
-                </p>
-              </div>
-
-              <div className="prose prose-lg max-w-none mb-8">
-                <p>
-                  Since December 2017, all new private tenancies in Scotland are{' '}
-                  <strong>Private Residential Tenancies (PRTs)</strong>, which are open-ended
-                  (no fixed term). Landlords must have one of 18 legal eviction grounds and
-                  serve a <strong>Notice to Leave</strong>.
-                </p>
-              </div>
-
-              <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm mb-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-4">
-                  Scotland Notice to Leave Requirements
-                </h3>
-                <ul className="space-y-3 text-gray-600">
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-500 mt-1" />
-                    <span>
-                      <strong>Rent arrears (3+ months):</strong> 28 days notice (Ground 12)
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-500 mt-1" />
-                    <span>
-                      <strong>Landlord selling property:</strong> 84 days notice (Ground 1)
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-500 mt-1" />
-                    <span>
-                      <strong>Landlord moving in:</strong> 84 days notice (Ground 4)
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-500 mt-1" />
-                    <span>
-                      <strong>Antisocial behaviour:</strong> 28 days notice (Ground 14)
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-500 mt-1" />
-                    <span>
-                      <strong>Tribunal:</strong> If tenant does not leave, apply to First-tier
-                      Tribunal for Scotland (Housing and Property Chamber)
-                    </span>
-                  </li>
-                </ul>
-              </div>
-
-              <div className="flex flex-wrap gap-4">
-                <Link
-                  href="/scotland-eviction-notices"
-                  className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700"
-                >
-                  Scotland Eviction Guide →
-                </Link>
-                <Link
-                  href="/private-residential-tenancy-agreement-template"
-                  className="inline-flex items-center gap-2 bg-white text-blue-600 border border-blue-600 px-6 py-3 rounded-lg font-medium hover:bg-blue-50"
-                >
-                  Scotland PRT Agreements →
-                </Link>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Northern Ireland Section */}
-        <section id="northern-ireland" className="py-12 lg:py-16 bg-green-50 scroll-mt-20">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              <div className="flex items-center gap-3 mb-6">
-                <span className="text-4xl">🇬🇧</span>
+                <span className="text-4xl">🏴</span>
                 <h2 className="text-3xl font-bold text-gray-900">
-                  Evicting a Tenant in Northern Ireland
+                  Evicting a contract-holder in Wales
                 </h2>
               </div>
 
-              <div className="bg-green-100 border-l-4 border-green-600 p-4 mb-8 rounded-r-lg">
-                <p className="text-green-900 text-sm">
-                  <strong>Note:</strong> Northern Ireland has its own tenancy laws under the{' '}
-                  <strong>Private Tenancies Act (Northern Ireland) 2022</strong>. Different
-                  notice periods and procedures apply compared to England, Wales, and Scotland.
+              <div className="rounded-xl border-l-4 border-red-600 bg-red-100 p-4 mb-8">
+                <p className="text-sm text-red-900">
+                  <strong>Wales uses different terminology:</strong> in Wales, many landlords
+                  still search for “evicting a tenant”, but the page should use the proper
+                  Renting Homes terminology where possible. That means talking about
+                  <strong> occupation contracts</strong> and <strong>contract-holders</strong>,
+                  not lazily importing England’s Section 21 or Section 8 language.
                 </p>
               </div>
 
-              <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm mb-6">
+              <div className="space-y-6 text-gray-700">
+                <p className="leading-7">
+                  Wales requires a different mental model from England. The biggest risk on
+                  Wales pages is copying England possession language and changing only a few
+                  labels. That weakens trust and increases the risk of landlords taking the
+                  wrong first step. A proper Wales page should explain that the possession
+                  route depends on the structure of the occupation contract and the correct
+                  Welsh notice or breach-based route, not on simply asking whether the case is
+                  Section 21 or Section 8.
+                </p>
+                <p className="leading-7">
+                  In practical terms, Wales landlords should start by identifying the correct
+                  occupation contract position, then checking which possession route applies,
+                  then confirming the relevant notice period and service method. This is also
+                  one of the clearest examples of why a UK comparison page needs jurisdiction
+                  discipline. What sounds like a familiar “tenant eviction” question is often
+                  a very different legal question once the property turns out to be in Wales.
+                </p>
+              </div>
+
+              <div className="mt-8 rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
                 <h3 className="text-xl font-bold text-gray-900 mb-4">
-                  Northern Ireland Eviction Overview
+                  Wales eviction overview
                 </h3>
-                <ul className="space-y-3 text-gray-600">
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-500 mt-1" />
-                    <span>
-                      <strong>Notice to Quit:</strong> Required to end a tenancy
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-500 mt-1" />
-                    <span>
-                      <strong>Notice periods (2025):</strong> 28 days (under 1 year), 56 days
-                      (1-10 years), 84 days (10+ years)
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-500 mt-1" />
-                    <span>
-                      <strong>Court process:</strong> Apply to county court for possession
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-500 mt-1" />
-                    <span>
-                      <strong>Grounds:</strong> Various grounds under NI legislation
-                    </span>
-                  </li>
+                <ul className="space-y-3 text-gray-700">
+                  <li>• Use Welsh occupation contract terminology where appropriate.</li>
+                  <li>• Identify whether the route is no-fault style or breach-based under Welsh law.</li>
+                  <li>• Check the current required notice period for the specific route being used.</li>
+                  <li>• Do not rely on England Section 21 or Section 8 wording for Welsh properties.</li>
+                  <li>• If possession is still required after notice expires, court action may still be needed.</li>
                 </ul>
               </div>
 
-              <Link
-                href="/northern-ireland-tenancy-agreement-template"
-                className="inline-flex items-center gap-2 bg-green-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-green-700"
-              >
-                Northern Ireland Tenancy Agreements →
-              </Link>
+              <div className="mt-8 flex flex-wrap gap-4">
+                <Link
+                  href="/wales-eviction-notices"
+                  className="inline-flex items-center gap-2 rounded-lg bg-red-600 px-6 py-3 font-medium text-white hover:bg-red-700"
+                >
+                  Wales eviction guide →
+                </Link>
+                <Link
+                  href="/wales-tenancy-agreement-template"
+                  className="inline-flex items-center gap-2 rounded-lg border border-red-600 bg-white px-6 py-3 font-medium text-red-600 hover:bg-red-50"
+                >
+                  Wales occupation contracts →
+                </Link>
+              </div>
             </div>
           </div>
         </section>
 
-        <section className="py-16 bg-white">
+        <section id="scotland" className="scroll-mt-24 bg-blue-50 py-12 lg:py-16">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
+            <div className="mx-auto max-w-5xl">
+              <div className="flex items-center gap-3 mb-6">
+                <span className="text-4xl">🏴</span>
+                <h2 className="text-3xl font-bold text-gray-900">
+                  Evicting a tenant in Scotland
+                </h2>
+              </div>
+
+              <div className="rounded-xl border-l-4 border-blue-600 bg-blue-100 p-4 mb-8">
+                <p className="text-sm text-blue-900">
+                  <strong>Scotland uses its own route:</strong> for many private lets, the
+                  key concepts are <strong>Private Residential Tenancy (PRT)</strong> and
+                  <strong> Notice to Leave</strong>. Scotland is not an England-style Section
+                  21 or Section 8 jurisdiction, and possession disputes commonly move through
+                  the First-tier Tribunal rather than being treated like an ordinary England
+                  county court possession page.
+                </p>
+              </div>
+
+              <div className="space-y-6 text-gray-700">
+                <p className="leading-7">
+                  Scottish eviction guidance should not be written as though PRT is just an
+                  alternative label on the same system. It is a different tenancy structure
+                  with different possession terminology and different procedural expectations.
+                  That matters to landlords because the first mistake often happens long before
+                  the tribunal stage: they search broadly for a UK eviction process and end up
+                  following England assumptions that do not fit a Scottish private residential
+                  tenancy at all.
+                </p>
+                <p className="leading-7">
+                  In Scotland, the first practical question is usually what ground the
+                  landlord is relying on and what notice period applies to that ground under
+                  the Scottish framework. The next question is whether the Notice to Leave has
+                  been prepared and served properly. If the tenant does not leave, the case
+                  generally moves into the Scottish tribunal route rather than simply being
+                  treated like a standard England possession claim.
+                </p>
+              </div>
+
+              <div className="mt-8 rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+                <h3 className="text-xl font-bold text-gray-900 mb-4">
+                  Scotland eviction overview
+                </h3>
+                <ul className="space-y-3 text-gray-700">
+                  <li>• Identify the correct PRT ground for possession.</li>
+                  <li>• Use a Notice to Leave rather than England notice language.</li>
+                  <li>• Check the correct Scottish notice period for that ground.</li>
+                  <li>• Prepare for tribunal action if the tenant remains after notice expires.</li>
+                  <li>• Avoid copying England court-route assumptions onto a Scottish case.</li>
+                </ul>
+              </div>
+
+              <div className="mt-8 flex flex-wrap gap-4">
+                <Link
+                  href="/scotland-eviction-notices"
+                  className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-3 font-medium text-white hover:bg-blue-700"
+                >
+                  Scotland eviction guide →
+                </Link>
+                <Link
+                  href="/private-residential-tenancy-agreement-template"
+                  className="inline-flex items-center gap-2 rounded-lg border border-blue-600 bg-white px-6 py-3 font-medium text-blue-600 hover:bg-blue-50"
+                >
+                  Scotland PRT agreements →
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="northern-ireland" className="scroll-mt-24 bg-green-50 py-12 lg:py-16">
+          <div className="container mx-auto px-4">
+            <div className="mx-auto max-w-5xl">
+              <div className="flex items-center gap-3 mb-6">
+                <span className="text-4xl">🇬🇧</span>
+                <h2 className="text-3xl font-bold text-gray-900">
+                  Evicting a tenant in Northern Ireland
+                </h2>
+              </div>
+
+              <div className="rounded-xl border-l-4 border-green-600 bg-green-100 p-4 mb-8">
+                <p className="text-sm text-green-900">
+                  <strong>Northern Ireland is separate again:</strong> landlords should not
+                  assume that England, Wales, or Scotland routes carry over. NI has its own
+                  private tenancy framework, notice expectations, and possession process.
+                </p>
+              </div>
+
+              <div className="space-y-6 text-gray-700">
+                <p className="leading-7">
+                  Northern Ireland is often under-served by UK eviction content because many
+                  comparison pages mention it only briefly or treat it as a footnote to
+                  England guidance. That is not enough for a landlord making a live decision.
+                  The right first step is to identify the NI tenancy position, the correct
+                  notice route, and the appropriate timing and possession process for the
+                  property and case in question.
+                </p>
+                <p className="leading-7">
+                  Where an NI landlord needs possession, the key commercial value of this page
+                  is not pretending to be the final source of every detail. It is helping the
+                  user recognise that Northern Ireland needs its own route and moving them to
+                  the correct agreement or guidance page rather than leaving them on a generic
+                  UK article that is really about England.
+                </p>
+              </div>
+
+              <div className="mt-8 rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+                <h3 className="text-xl font-bold text-gray-900 mb-4">
+                  Northern Ireland eviction overview
+                </h3>
+                <ul className="space-y-3 text-gray-700">
+                  <li>• Use Northern Ireland tenancy language and notice route.</li>
+                  <li>• Check the correct notice period for the tenancy length and case type.</li>
+                  <li>• Make sure service and evidence are properly recorded.</li>
+                  <li>• Move to the NI court route if possession is still required after notice.</li>
+                </ul>
+              </div>
+
+              <div className="mt-8 flex flex-wrap gap-4">
+                <Link
+                  href="/northern-ireland-tenancy-agreement-template"
+                  className="inline-flex items-center gap-2 rounded-lg bg-green-600 px-6 py-3 font-medium text-white hover:bg-green-700"
+                >
+                  Northern Ireland tenancy agreements →
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="bg-white py-16">
+          <div className="container mx-auto px-4">
+            <div className="mx-auto max-w-5xl">
               <h2 className="text-3xl font-bold text-gray-900 mb-6">
-                Eviction Costs, Timelines & Validity Checklist
+                Eviction costs, timelines, and validity checklist
               </h2>
-              <p className="text-gray-600 mb-10">
-                The biggest delays come from missing documents or incorrect notice dates. Use this
-                checklist to keep your eviction on track.
+              <p className="max-w-4xl text-gray-700 leading-7 mb-10">
+                The biggest delay in landlord possession cases is often not the notice period
+                itself. It is the moment the landlord discovers the notice was served on the
+                wrong basis, the dates were wrong, the compliance record is incomplete, or the
+                evidence for the chosen route is thinner than expected. A strong eviction page
+                therefore needs to cover the “what now?” questions that landlords actually
+                care about, not just list a few notice names.
               </p>
-              <div className="grid md:grid-cols-3 gap-6">
-                <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
-                  <h3 className="font-semibold text-gray-900 mb-3">Typical timelines</h3>
-                  <ul className="space-y-2 text-sm text-gray-600">
-                    <li>England & Wales: 3–6 months.</li>
-                    <li>Scotland: 4–8 months.</li>
-                    <li>Contested cases take longer.</li>
+
+              <div className="grid gap-6 md:grid-cols-3">
+                <div className="rounded-xl border border-gray-200 bg-gray-50 p-6">
+                  <h3 className="font-semibold text-gray-900 mb-3">Typical timeline shape</h3>
+                  <ul className="space-y-2 text-sm text-gray-700">
+                    <li>• Notice period first.</li>
+                    <li>• Court or tribunal stage next if needed.</li>
+                    <li>• Enforcement adds more time if possession is still resisted.</li>
+                    <li>• Contested cases usually take longer.</li>
                   </ul>
                 </div>
-                <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+
+                <div className="rounded-xl border border-gray-200 bg-gray-50 p-6">
                   <h3 className="font-semibold text-gray-900 mb-3">Costs to plan for</h3>
-                  <ul className="space-y-2 text-sm text-gray-600">
-                    <li>Court or tribunal fees by route.</li>
-                    <li>Process server or witness costs.</li>
-                    <li>Bailiff/enforcement fees if needed.</li>
+                  <ul className="space-y-2 text-sm text-gray-700">
+                    <li>• Notice or document preparation.</li>
+                    <li>• Court or tribunal fees.</li>
+                    <li>• Service, witness, or evidence costs.</li>
+                    <li>• Enforcement costs if the case reaches that stage.</li>
                   </ul>
                 </div>
-                <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+
+                <div className="rounded-xl border border-gray-200 bg-gray-50 p-6">
                   <h3 className="font-semibold text-gray-900 mb-3">Validity checklist</h3>
-                  <ul className="space-y-2 text-sm text-gray-600">
-                    <li>Deposit protected and prescribed info served.</li>
-                    <li>EPC, gas safety, and guide served on time.</li>
-                    <li>Correct notice, dates, and service proof.</li>
+                  <ul className="space-y-2 text-sm text-gray-700">
+                    <li>• Correct jurisdiction and notice route.</li>
+                    <li>• Correct dates and service method.</li>
+                    <li>• Compliance record checked where relevant.</li>
+                    <li>• Evidence prepared for grounds-based cases.</li>
                   </ul>
                   <Link
                     href="/section-21-notice-template"
-                    className="text-primary text-sm font-medium hover:underline inline-flex mt-3"
+                    className="inline-flex mt-3 text-sm font-medium text-primary hover:underline"
                   >
                     Section 21 template →
                   </Link>
                 </div>
               </div>
-              <div className="mt-6 text-sm text-gray-600">
-                Need grounds-based eviction? Use a{' '}
-                <Link href="/section-8-notice-template" className="text-primary font-medium hover:underline">
+
+              <div className="mt-8 rounded-2xl border border-red-200 bg-red-50 p-6">
+                <div className="flex items-start gap-3">
+                  <XCircle className="mt-0.5 h-5 w-5 text-red-600" />
+                  <div>
+                    <h3 className="text-lg font-semibold text-red-900">
+                      Common landlord mistakes
+                    </h3>
+                    <ul className="mt-3 space-y-2 text-red-900/90">
+                      <li>• Using an England notice concept for a Welsh or Scottish property.</li>
+                      <li>• Assuming a notice guarantees possession without the next legal step.</li>
+                      <li>• Relying on old online timelines without checking current validity.</li>
+                      <li>• Choosing the wrong route for arrears, breach, or no-fault style possession.</li>
+                      <li>• Treating compliance history as an afterthought instead of a risk point.</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-8 text-sm text-gray-600">
+                Need a grounds-based England route? Use a{' '}
+                <Link
+                  href="/section-8-notice-template"
+                  className="font-medium text-primary hover:underline"
+                >
                   Section 8 notice template
                 </Link>{' '}
-                to support rent arrears or breach cases.
+                for arrears or breach-based cases.
               </div>
             </div>
           </div>
         </section>
 
-        {/* CTA Section */}
-        <section className="py-16 bg-gradient-to-br from-primary to-primary/80 text-white">
+        <section className="bg-gradient-to-br from-primary to-primary/80 py-16 text-white">
           <div className="container mx-auto px-4">
-            <div className="max-w-3xl mx-auto text-center">
-              <h2 className="text-3xl font-bold mb-6">Ready to Start Your Eviction?</h2>
+            <div className="mx-auto max-w-3xl text-center">
+              <h2 className="text-3xl font-bold mb-6">Ready to start your eviction route?</h2>
               <p className="text-xl text-white/90 mb-8">
-                Our document packs include everything you need for a legally compliant eviction
-                across England, Wales, and Scotland.
+                Start with the correct notice workflow, avoid common validity problems, and
+                move into the right possession route for your jurisdiction.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
-                  href="/products/notice-only"
-                  className="inline-flex items-center justify-center gap-2 bg-white text-primary font-semibold py-4 px-8 rounded-xl hover:bg-gray-100 transition-colors"
+                  href={productLinks.noticeOnly.href}
+                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-8 py-4 font-semibold text-primary hover:bg-gray-100"
                 >
-                  Notice Only — £29.99
+                  Notice Only — {noticeOnlyPrice}
                 </Link>
                 <Link
-                  href="/products/complete-pack"
-                  className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold py-4 px-8 rounded-xl transition-colors border border-white/30"
+                  href={productLinks.completePack.href}
+                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/30 bg-white/10 px-8 py-4 font-semibold text-white transition-colors hover:bg-white/20"
                 >
-                  Complete Pack — £79.99
+                  Complete Pack — {completePackPrice}
                 </Link>
               </div>
             </div>
           </div>
         </section>
 
-        <section className="py-12 bg-gray-50">
+        <section className="bg-gray-50 py-12">
           <div className="container mx-auto px-4">
             <div className="max-w-5xl mx-auto">
               <NextLegalSteps
                 jurisdictionLabel="UK eviction routes"
                 scenarioLabel="tenant eviction"
                 primaryCTA={{
-                  label: 'Generate eviction notice — £29.99',
+                  label: `Generate eviction notice — ${noticeOnlyPrice}`,
                   href: productLinks.noticeOnly.href,
                 }}
                 secondaryCTA={{
-                  label: 'Complete eviction pack — £79.99',
+                  label: `Complete eviction pack — ${completePackPrice}`,
                   href: productLinks.completePack.href,
                 }}
                 relatedLinks={[
@@ -725,12 +818,12 @@ export default function HowToEvictTenantPage() {
                   {
                     href: guideLinks.walesEviction.href,
                     title: guideLinks.walesEviction.title,
-                    description: 'Wales-specific Renting Homes Act notices.',
+                    description: 'Wales-specific occupation contract possession guidance.',
                   },
                   {
                     href: guideLinks.scotlandEviction.href,
                     title: guideLinks.scotlandEviction.title,
-                    description: 'Notice to Leave and PRT rules for Scotland.',
+                    description: 'Notice to Leave and PRT possession guidance for Scotland.',
                   },
                 ]}
               />
@@ -738,9 +831,8 @@ export default function HowToEvictTenantPage() {
           </div>
         </section>
 
-        {/* FAQ Section */}
         <FAQSection
-          title="Frequently Asked Questions"
+          title="Frequently asked questions"
           faqs={howToEvictTenantFAQs}
           showContactCTA={false}
           variant="white"
@@ -749,5 +841,3 @@ export default function HowToEvictTenantPage() {
     </>
   );
 }
-
-

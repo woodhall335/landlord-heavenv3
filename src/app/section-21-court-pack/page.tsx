@@ -33,25 +33,32 @@ const completePackWizardLink = buildWizardLink({
 
 export const metadata: Metadata = {
   title:
-    'Section 21 Court Pack | What Landlords Need for Possession After Notice | LandlordHeaven',
+    'Section 21 Court Pack 2026 | Court-Ready Possession File for Landlords | LandlordHeaven',
   description:
-    'A practical guide to the Section 21 court pack in England. Learn what documents landlords usually need after notice expires, what commonly causes delay, and how to prepare a cleaner possession file.',
+    'A practical guide to the Section 21 court pack in England. Learn what landlords usually need after notice expires, what causes delay, and why landlords with a valid notice should act promptly while Section 21 is being phased out.',
   alternates: {
     canonical,
   },
   openGraph: {
     title:
-      'Section 21 Court Pack | What Landlords Need for Possession After Notice | LandlordHeaven',
+      'Section 21 Court Pack 2026 | Court-Ready Possession File for Landlords | LandlordHeaven',
     description:
-      'Plain-English guidance for landlords on preparing a Section 21 court pack, including notice, compliance documents, service proof, and common court-stage delay points.',
+      'Plain-English guidance for landlords on preparing a Section 21 court pack, including notice, compliance documents, service proof, delay risks, and why prompt action matters while Section 21 is being phased out.',
     url: canonical,
     siteName: 'LandlordHeaven',
     type: 'article',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Section 21 Court Pack 2026 | LandlordHeaven',
+    description:
+      'What landlords usually need for possession after a Section 21 notice expires.',
   },
 };
 
 const jumpLinks = [
   { href: '#quick-answer', label: 'Quick answer' },
+  { href: '#section-21-changing-soon', label: 'Section 21 is changing soon' },
   { href: '#what-a-section-21-court-pack-is', label: 'What a Section 21 court pack is' },
   { href: '#when-landlords-usually-need-it', label: 'When landlords usually need it' },
   { href: '#what-usually-goes-in-the-pack', label: 'What usually goes in the pack' },
@@ -75,6 +82,11 @@ const faqs: FAQItem[] = [
     question: 'When do landlords need a Section 21 court pack?',
     answer:
       'Landlords usually need the court pack after the Section 21 notice has been served correctly, the notice period has expired, and the tenant has not left voluntarily.',
+  },
+  {
+    question: 'Why does it matter that Section 21 is being phased out?',
+    answer:
+      'It matters because landlords relying on a valid existing Section 21 notice should usually avoid delay. If Section 21 is being removed from the live possession landscape, landlords with an already-served notice typically have more reason to get the court-stage file organised promptly rather than waiting.',
   },
   {
     question: 'What is the biggest problem with a Section 21 court pack?',
@@ -258,9 +270,47 @@ export default function Page() {
               </p>
 
               <p className="mt-4 leading-7 text-gray-700">
+                There is also a strategic timing point now: Section 21 is expected to be phased
+                out under the Renters&apos; Rights reforms, so landlords who already hold a valid
+                Section 21 notice usually have a stronger reason to move promptly rather than
+                letting the file drift.
+              </p>
+
+              <p className="mt-4 leading-7 text-gray-700">
                 In practical terms, the best Section 21 court packs usually come from landlords
                 who use the notice period to audit the whole file, organise the supporting
                 records, and remove uncertainty before the case is pushed into the court stage.
+              </p>
+            </Card>
+
+            <Card
+              id="section-21-changing-soon"
+              title="Section 21 Is Changing Soon"
+            >
+              <p className="mt-4 leading-7 text-gray-700">
+                Landlords should now read any Section 21 court-pack decision in the context of
+                wider England tenancy reform. Section 21 is expected to be phased out under the
+                Renters&apos; Rights reforms, which means this route should be treated as a live
+                transitional process rather than a long-term certainty.
+              </p>
+
+              <p className="mt-4 leading-7 text-gray-700">
+                That does not mean every existing Section 21 file has suddenly become unusable.
+                It does mean landlords who already have a valid notice should usually think
+                carefully before delaying the court stage. If a valid route already exists,
+                waiting can create unnecessary risk.
+              </p>
+
+              <p className="mt-4 leading-7 text-gray-700">
+                In practical terms, this makes court-pack quality even more important. A landlord
+                with a valid Section 21 notice usually wants the possession file checked, cleaned,
+                and moved forward properly while the route is still available to them.
+              </p>
+
+              <p className="mt-4 leading-7 text-gray-700">
+                The commercial message is simple: if you are already on the Section 21 route, do
+                not treat the court pack as something to think about later. Treat it as the live
+                next stage now.
               </p>
             </Card>
 
@@ -306,6 +356,12 @@ export default function Page() {
                 notice period itself. That gives them time to check whether the compliance
                 records are actually present, whether the service proof is clear, and whether
                 the notice file is likely to survive later scrutiny.
+              </p>
+
+              <p className="mt-4 leading-7 text-gray-700">
+                That is even more important where landlords are conscious that Section 21 is not
+                a forever route. If you already have a valid notice in hand, it usually makes
+                sense to treat the court pack as a priority, not a future admin task.
               </p>
 
               <p className="mt-4 leading-7 text-gray-700">
@@ -504,6 +560,12 @@ export default function Page() {
               </p>
 
               <p className="mt-4 leading-7 text-gray-700">
+                There is also a wider strategic delay risk now. Where Section 21 is being phased
+                out, landlords who already have a valid route usually have more reason to avoid
+                drift and move the file forward while it is still live and usable.
+              </p>
+
+              <p className="mt-4 leading-7 text-gray-700">
                 In practical terms, landlords cannot control how busy the court system is, but
                 they can control whether the case enters that system with a cleaner pack.
               </p>
@@ -572,6 +634,11 @@ export default function Page() {
               The strongest possession outcomes usually come from landlords who do not wait
               until the court stage to discover what is missing. They use the notice period to
               audit the file and reduce avoidable delay before the case moves forward.
+            </p>
+            <p className="mt-4 leading-7 text-gray-700">
+              It also makes sense to be commercially realistic: if you already hold a valid
+              Section 21 notice, and Section 21 is being phased out, leaving the case to drift
+              is usually the wrong move.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Link

@@ -33,7 +33,7 @@ const completePackWizardLink = buildWizardLink({
 
 export const metadata: Metadata = {
   title:
-    'Section 8 Court Pack | What Landlords Need for a Stronger Possession File | LandlordHeaven',
+    'Section 8 Court Pack 2026 | Court-Ready Possession File for Landlords | LandlordHeaven',
   description:
     'A practical guide to the Section 8 court pack in England. Learn what documents landlords usually need, what evidence matters most, what causes court-stage delay, and how to prepare a cleaner possession file.',
   alternates: {
@@ -41,12 +41,18 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title:
-      'Section 8 Court Pack | What Landlords Need for a Stronger Possession File | LandlordHeaven',
+      'Section 8 Court Pack 2026 | Court-Ready Possession File for Landlords | LandlordHeaven',
     description:
       'Plain-English guidance for landlords on preparing a Section 8 court pack, including grounds, evidence, service proof, and common possession-stage delay points.',
     url: canonical,
     siteName: 'LandlordHeaven',
     type: 'article',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Section 8 Court Pack 2026 | LandlordHeaven',
+    description:
+      'What landlords usually need for a stronger Section 8 possession file.',
   },
 };
 
@@ -58,6 +64,7 @@ const jumpLinks = [
   { href: '#grounds-and-evidence', label: 'Grounds and evidence' },
   { href: '#rent-arrears-files', label: 'Rent arrears files' },
   { href: '#service-and-proof', label: 'Service and proof' },
+  { href: '#hearing-readiness', label: 'Hearing readiness' },
   { href: '#how-landlords-usually-prepare-the-file', label: 'How landlords usually prepare the file' },
   { href: '#common-court-pack-mistakes', label: 'Common court pack mistakes' },
   { href: '#eviction-timeline-and-delay-points', label: 'Eviction timeline and delay points' },
@@ -260,6 +267,13 @@ export default function Page() {
               </p>
 
               <p className="mt-4 leading-7 text-gray-700">
+                Section 8 also matters more strategically now because landlords cannot assume
+                the Section 21 route will remain the long-term default in England. As the
+                no-fault route is being phased out, many landlords will increasingly need
+                stronger breach-based files and better court-pack discipline.
+              </p>
+
+              <p className="mt-4 leading-7 text-gray-700">
                 In practical terms, the strongest Section 8 court packs usually come from
                 landlords who use the notice period to organise the evidence, confirm the
                 chronology, and make sure the grounds can actually be supported under pressure.
@@ -418,6 +432,30 @@ export default function Page() {
               <p className="mt-4 leading-7 text-gray-700">
                 In practical terms, the court pack is strongest where the evidence behind the
                 grounds and the service history behind the notice both tell the same clean story.
+              </p>
+            </Card>
+
+            <Card
+              id="hearing-readiness"
+              title="Hearing Readiness"
+            >
+              <p className="mt-4 leading-7 text-gray-700">
+                A Section 8 court pack should not only be good enough to issue a claim. It
+                should also be good enough to support the hearing stage. That means the file
+                should help the landlord explain the tenancy, the breach, the chosen grounds,
+                and the evidence supporting them in a way that a judge can follow quickly.
+              </p>
+
+              <p className="mt-4 leading-7 text-gray-700">
+                This is why hearing readiness starts earlier than many landlords think. If the
+                chronology is unclear, if the arrears figures are moving without explanation, or
+                if the supporting documents do not connect neatly to the grounds relied on, the
+                hearing can become more difficult than it should be.
+              </p>
+
+              <p className="mt-4 leading-7 text-gray-700">
+                In practical terms, the strongest court packs are usually the ones that already
+                read like a hearing file, not just a storage folder.
               </p>
             </Card>
 
@@ -602,6 +640,10 @@ export default function Page() {
               The strongest possession outcomes usually come from landlords who do not wait
               until the court stage to discover what is missing. They use the notice period to
               audit the evidence and reduce avoidable delay before the case moves forward.
+            </p>
+            <p className="mt-4 leading-7 text-gray-700">
+              That matters even more now because landlords should expect the Section 8 route to
+              become increasingly important as the Section 21 route is phased out.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Link

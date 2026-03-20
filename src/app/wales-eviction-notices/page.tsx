@@ -1,112 +1,215 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { getCanonicalUrl } from '@/lib/seo/urls';
-import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
-import {
-  AlertTriangle,
-  CheckCircle,
-  ArrowRight,
-  Scale,
-  Home,
-} from 'lucide-react';
-import { FAQSection } from '@/components/seo/FAQSection';
-import { NextLegalSteps } from '@/components/seo/NextLegalSteps';
-import { productLinks, askHeavenLink } from '@/lib/seo/internal-links';
-import { AskHeavenWidget } from '@/components/ask-heaven/AskHeavenWidget';
-import { walesEvictionFAQs } from '@/data/faqs';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
+import { FAQSection } from '@/components/seo/FAQSection';
+import { NextLegalSteps } from '@/components/seo/NextLegalSteps';
+import { AskHeavenWidget } from '@/components/ask-heaven/AskHeavenWidget';
+import { getCanonicalUrl } from '@/lib/seo/urls';
+import {
+  StructuredData,
+  breadcrumbSchema,
+  articleSchema,
+} from '@/lib/seo/structured-data';
+import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
+import { productLinks, askHeavenLink } from '@/lib/seo/internal-links';
+import { PRODUCTS } from '@/lib/pricing/products';
+import { walesEvictionFAQs } from '@/data/faqs';
+import {
+  AlertTriangle,
+  ArrowRight,
+  CheckCircle,
+  Home,
+  Scale,
+  Shield,
+  Clock,
+  FileText,
+  XCircle,
+} from 'lucide-react';
 
-export const metadata: Metadata = {
-  title: 'Wales Eviction Notice 2026 for Landlords | Renting Homes Act',
-  description:
-    'Welsh eviction notices for landlords. Notice periods, occupation contracts, and possession routes under the Renting Homes (Wales) Act.',
-  keywords: [
-    'eviction notice wales',
-    'renting homes wales act',
-    'wales landlord eviction',
-    'occupation contract wales',
-    'wales possession notice',
-    'evict tenant wales',
-    'landlord wales',
-    'contract holder wales',
-  ],
-  openGraph: {
-    title: 'Wales Eviction Notice 2026 for Landlords | Renting Homes Act',
-    description:
-      'Landlord guide to Welsh eviction notices, notice periods, and compliant possession steps under the Renting Homes (Wales) Act.',
-    type: 'article',
-    url: getCanonicalUrl('/wales-eviction-notices'),
-  },
-  alternates: {
-    canonical: getCanonicalUrl('/wales-eviction-notices'),
-  },
+const canonicalUrl = getCanonicalUrl('/wales-eviction-notices');
+
+const wizardHref = buildWizardLink({
+  product: 'notice_only',
+  topic: 'eviction',
+  jurisdiction: 'wales',
+  src: 'seo_wales_eviction_notices',
+});
+
+const noticeOnlyPrice = PRODUCTS.notice_only?.displayPrice ?? '£29.99';
+const completePackPrice = PRODUCTS.complete_pack?.displayPrice ?? '£79.99';
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: walesEvictionFAQs.map((faq) => ({
+    '@type': 'Question',
+    name: faq.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: faq.answer,
+    },
+  })),
 };
 
-const wizardHref = '/wizard?product=notice_only&topic=eviction&src=seo_wales_eviction_notices';
+export const metadata: Metadata = {
+  title: 'Wales Eviction Notices | Landlord Guide to Possession Routes',
+  description:
+    'Landlord guide to Wales eviction notices under the Renting Homes (Wales) Act. Understand occupation contracts, contract-holder terminology, notice routes, timelines, common mistakes, and the right next legal step.',
+  keywords: [
+    'wales eviction notice',
+    'eviction notice wales landlord',
+    'renting homes wales act possession',
+    'wales landlord eviction',
+    'occupation contract eviction wales',
+    'contract holder eviction wales',
+    'wales possession notice',
+    'section 173 notice wales',
+    'evict tenant wales',
+    'wales notice possession landlord',
+  ],
+  openGraph: {
+    title: 'Wales Eviction Notices | Landlord Guide to Possession Routes',
+    description:
+      'Compare Wales possession routes, notice logic, occupation contract terminology, and the steps landlords usually need before court action.',
+    type: 'article',
+    url: canonicalUrl,
+    siteName: 'Landlord Heaven',
+    locale: 'en_GB',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Wales Eviction Notices | Landlord Guide to Possession Routes',
+    description:
+      'Wales landlord guide to occupation contract possession notices and next legal steps.',
+  },
+  alternates: {
+    canonical: canonicalUrl,
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
 
 export default function WalesEvictionNoticesPage() {
   return (
     <>
       <StructuredData
+        data={articleSchema({
+          headline: 'Wales Eviction Notices | Landlord Guide to Possession Routes',
+          description:
+            'Landlord guide to Welsh eviction notices, occupation contracts, possession routes, and the main next steps under the Renting Homes (Wales) Act.',
+          url: canonicalUrl,
+        })}
+      />
+      <StructuredData
         data={breadcrumbSchema([
-          { name: 'Home', url: 'https://landlordheaven.co.uk' },
-          { name: 'How to Evict a Tenant', url: 'https://landlordheaven.co.uk/how-to-evict-tenant' },
-          { name: 'Wales Eviction Notices', url: 'https://landlordheaven.co.uk/wales-eviction-notices' },
+          { name: 'Home', url: getCanonicalUrl('/') },
+          { name: 'How to Evict a Tenant', url: getCanonicalUrl('/how-to-evict-tenant') },
+          { name: 'Wales Eviction Notices', url: canonicalUrl },
         ])}
       />
+      <StructuredData data={faqSchema} />
 
       <main className="min-h-screen bg-gray-50">
         <HeaderConfig mode="autoOnScroll" />
+
         <UniversalHero
           title="Wales Eviction Notices"
-          subtitle="Follow the Renting Homes (Wales) Act process with the right notice route, notice periods, and possession steps."
+          subtitle="Use this Wales landlord guide to understand occupation contract possession routes, contract-holder terminology, Welsh notice logic, and the right next step before court action."
           primaryCta={{ label: 'Start Wales Notice', href: wizardHref }}
-          secondaryCta={{ label: 'Wales Occupation Contracts', href: '/wales-tenancy-agreement-template' }}
+          secondaryCta={{
+            label: 'Wales Occupation Contracts',
+            href: '/wales-tenancy-agreement-template',
+          }}
           showTrustPositioningBar
           hideMedia
-        />
+        >
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-6 text-sm text-gray-700">
+            <span className="flex items-center gap-2">
+              <Scale className="h-4 w-4 text-red-600" />
+              Wales-specific wording
+            </span>
+            <span className="flex items-center gap-2">
+              <Shield className="h-4 w-4 text-red-600" />
+              Renting Homes Act framing
+            </span>
+            <span className="flex items-center gap-2">
+              <Clock className="h-4 w-4 text-red-600" />
+              Notice-first landlord workflow
+            </span>
+          </div>
+        </UniversalHero>
 
-        {/* Hero Section */}
-        <section className="bg-gradient-to-br from-red-900 to-red-800 text-white py-16 lg:py-24">
+        <section className="border-b bg-white py-8">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto text-center">
-              <div className="flex items-center justify-center gap-2 mb-6">
-                <span className="text-5xl">🏴󠁧󠁢󠁷󠁬󠁳󠁿</span>
+            <div className="mx-auto max-w-5xl rounded-2xl border border-red-100 bg-red-50 p-6">
+              <h2 className="text-2xl font-semibold text-gray-900">Quick answer</h2>
+              <div className="mt-4 space-y-4 text-gray-700">
+                <p className="leading-7">
+                  If your property is in Wales, do not start from England Section 21 or Section 8
+                  assumptions. Wales uses its own possession framework under the
+                  <strong> Renting Homes (Wales) Act</strong>, and a strong landlord page needs
+                  to use Welsh terminology properly: <strong>occupation contract</strong>,
+                  <strong> contract-holder</strong>, and the relevant Welsh notice route rather
+                  than lazy England carry-over language.
+                </p>
+                <p className="leading-7">
+                  This page is designed as a commercial decision guide for landlords who need to
+                  understand the Welsh route before they serve notice. It is not just a thin
+                  template page. It explains the key Wales-versus-England differences, what an
+                  occupation contract means for possession, how notice and court stages usually
+                  fit together, and the mistakes that most often undermine a Wales possession case.
+                </p>
+                <p className="leading-7">
+                  The practical point is simple: if the property is in Wales, you should start
+                  with Welsh possession logic, not retrofit an England process later.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="bg-gradient-to-br from-red-900 to-red-800 py-16 text-white lg:py-24">
+          <div className="container mx-auto px-4">
+            <div className="mx-auto max-w-4xl text-center">
+              <div className="mb-6 flex items-center justify-center gap-2">
+                <span className="text-5xl">🏴</span>
               </div>
 
-              <h2 className="text-4xl lg:text-5xl font-bold mb-6">
+              <h2 className="mb-6 text-4xl font-bold lg:text-5xl">
                 Wales Eviction Notices (Landlord Guide)
               </h2>
 
-              <p className="text-xl text-red-100 mb-8 max-w-2xl mx-auto">
-                Complete guide to the <strong>Renting Homes (Wales) Act 2016</strong>. How to
-                legally evict contract holders using Wales-specific notices and procedures.
+              <p className="mx-auto mb-8 max-w-2xl text-xl text-red-100">
+                Understand the Renting Homes (Wales) framework, use the correct Wales notice
+                route, and avoid the common errors that happen when landlords rely on England
+                possession wording for Welsh properties.
               </p>
 
-              {/* Important Notice */}
-              <div className="bg-red-950/50 border border-red-700 rounded-lg p-4 mb-8 text-left max-w-2xl mx-auto">
-                <p className="text-sm text-red-100 flex items-start gap-2">
-                  <AlertTriangle className="w-4 h-4 flex-shrink-0 mt-0.5 text-amber-400" />
+              <div className="mx-auto mb-8 max-w-2xl rounded-lg border border-red-700 bg-red-950/50 p-4 text-left">
+                <p className="flex items-start gap-2 text-sm text-red-100">
+                  <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0 text-amber-400" />
                   <span>
-                    <strong>Important:</strong> Section 21 and Section 8 notices do NOT apply
-                    in Wales. This page covers the Welsh-specific eviction process under the
-                    Renting Homes (Wales) Act 2016.
+                    <strong>Important:</strong> Section 21 and Section 8 are not the right public
+                    framing for a Wales possession page. This page is built around Welsh
+                    occupation contract terminology and Wales-specific possession logic.
                   </span>
                 </p>
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <div className="flex flex-col justify-center gap-4 sm:flex-row">
                 <Link
                   href={wizardHref}
-                  className="inline-flex items-center justify-center gap-2 bg-white text-red-800 font-semibold py-4 px-8 rounded-xl hover:bg-red-50 transition-colors"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-8 py-4 font-semibold text-red-800 transition-colors hover:bg-red-50"
                 >
-                  Get Wales Notice — £29.99
-                  <ArrowRight className="w-5 h-5" />
+                  Get Wales Notice — {noticeOnlyPrice}
+                  <ArrowRight className="h-5 w-5" />
                 </Link>
                 <Link
                   href="/wales-tenancy-agreement-template"
-                  className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold py-4 px-8 rounded-xl transition-colors border border-white/20"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/10 px-8 py-4 font-semibold text-white transition-colors hover:bg-white/20"
                 >
                   Wales Occupation Contracts
                 </Link>
@@ -115,150 +218,192 @@ export default function WalesEvictionNoticesPage() {
           </div>
         </section>
 
-
-        {/* Key Differences Section */}
         <section className="py-12 lg:py-16">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              <h2 className="text-3xl font-bold text-gray-900 mb-8">
-                Wales vs England: Key Differences
+            <div className="mx-auto max-w-5xl">
+              <h2 className="mb-6 text-3xl font-bold text-gray-900">
+                Why Wales possession pages need their own language
+              </h2>
+              <div className="space-y-5 text-gray-700">
+                <p className="leading-7">
+                  A lot of weak landlord content treats Wales as a lightly edited England page.
+                  That is one of the biggest quality failures in this category. The possession
+                  page might change a heading or two, but the body copy still talks like an AST
+                  article. That creates confusion for landlords and weakens trust immediately.
+                </p>
+                <p className="leading-7">
+                  A stronger Wales page needs to do three things properly. First, it should make
+                  clear that the agreement framework is based on <strong>occupation contracts</strong>,
+                  not ASTs. Second, it should talk about <strong>contract-holders</strong> where
+                  that is the proper Welsh term, while still capturing the search intent of users
+                  who type “evict tenant Wales” into Google. Third, it should explain that Wales
+                  possession routes and notice logic sit inside the Renting Homes framework rather
+                  than being treated as England notices with a Welsh flag added on top.
+                </p>
+                <p className="leading-7">
+                  That matters for both SEO and conversion. SEO improves because the page serves
+                  the actual Welsh search cluster more precisely. Conversion improves because the
+                  user lands on a page that sounds like it belongs to the jurisdiction they are
+                  dealing with, rather than a generic UK article with a few cosmetic edits.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="bg-white py-12 lg:py-16">
+          <div className="container mx-auto px-4">
+            <div className="mx-auto max-w-5xl">
+              <h2 className="mb-8 text-3xl font-bold text-gray-900">
+                Wales vs England: key differences
               </h2>
 
-              <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+              <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
                 <table className="w-full">
-                  <thead className="bg-gray-50 border-b">
+                  <thead className="border-b bg-gray-50">
                     <tr>
-                      <th className="px-6 py-4 text-left font-semibold text-gray-900">
-                        Aspect
-                      </th>
-                      <th className="px-6 py-4 text-left font-semibold text-gray-900">
-                        🏴󠁧󠁢󠁷󠁬󠁳󠁿 Wales
-                      </th>
-                      <th className="px-6 py-4 text-left font-semibold text-gray-900">
-                        🏴󠁧󠁢󠁥󠁮󠁧󠁿 England
-                      </th>
+                      <th className="px-6 py-4 text-left font-semibold text-gray-900">Aspect</th>
+                      <th className="px-6 py-4 text-left font-semibold text-gray-900">🏴 Wales</th>
+                      <th className="px-6 py-4 text-left font-semibold text-gray-900">🏴 England</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
                     <tr>
-                      <td className="px-6 py-4 font-medium text-gray-900">Legislation</td>
+                      <td className="px-6 py-4 font-medium text-gray-900">Main framework</td>
                       <td className="px-6 py-4 text-gray-600">
-                        Renting Homes (Wales) Act 2016
+                        Renting Homes (Wales) framework
                       </td>
-                      <td className="px-6 py-4 text-gray-600">Housing Act 1988</td>
+                      <td className="px-6 py-4 text-gray-600">England possession framework</td>
                     </tr>
                     <tr className="bg-gray-50">
-                      <td className="px-6 py-4 font-medium text-gray-900">Agreement type</td>
+                      <td className="px-6 py-4 font-medium text-gray-900">Agreement language</td>
                       <td className="px-6 py-4 text-gray-600">Occupation contract</td>
                       <td className="px-6 py-4 text-gray-600">
-                        Assured Shorthold Tenancy (AST)
+                        Assured shorthold tenancy / residential tenancy language
                       </td>
                     </tr>
                     <tr>
-                      <td className="px-6 py-4 font-medium text-gray-900">Tenant term</td>
-                      <td className="px-6 py-4 text-gray-600">Contract holder</td>
+                      <td className="px-6 py-4 font-medium text-gray-900">Occupier term</td>
+                      <td className="px-6 py-4 text-gray-600">Contract-holder</td>
                       <td className="px-6 py-4 text-gray-600">Tenant</td>
                     </tr>
                     <tr className="bg-gray-50">
-                      <td className="px-6 py-4 font-medium text-gray-900">No-fault eviction</td>
-                      <td className="px-6 py-4 text-red-600 font-medium">
-                        Abolished (Dec 2022)
+                      <td className="px-6 py-4 font-medium text-gray-900">Possession route wording</td>
+                      <td className="px-6 py-4 text-gray-600">
+                        Wales notice and possession route terminology
                       </td>
-                      <td className="px-6 py-4 text-amber-600 font-medium">
-                        Ends May 2026
+                      <td className="px-6 py-4 text-gray-600">
+                        Section 21 / Section 8 search language still common
                       </td>
                     </tr>
                     <tr>
-                      <td className="px-6 py-4 font-medium text-gray-900">Section 21</td>
-                      <td className="px-6 py-4 text-red-600 font-medium">Does NOT apply</td>
+                      <td className="px-6 py-4 font-medium text-gray-900">Common content mistake</td>
+                      <td className="px-6 py-4 text-red-600 font-medium">
+                        Importing England notice language by mistake
+                      </td>
                       <td className="px-6 py-4 text-gray-600">
-                        Until May 2026
+                        Treating reform-sensitive language too casually
                       </td>
                     </tr>
                     <tr className="bg-gray-50">
-                      <td className="px-6 py-4 font-medium text-gray-900">Section 8</td>
-                      <td className="px-6 py-4 text-red-600 font-medium">Does NOT apply</td>
-                      <td className="px-6 py-4 text-gray-600">Yes (grounds-based)</td>
-                    </tr>
-                    <tr>
-                      <td className="px-6 py-4 font-medium text-gray-900">
-                        Standard notice period
+                      <td className="px-6 py-4 font-medium text-gray-900">Court stage</td>
+                      <td className="px-6 py-4 text-gray-600">
+                        County court possession route after valid notice if needed
                       </td>
-                      <td className="px-6 py-4 text-gray-600">Generally 6 months</td>
-                      <td className="px-6 py-4 text-gray-600">2 months (Section 21)</td>
+                      <td className="px-6 py-4 text-gray-600">
+                        England possession route after valid notice if needed
+                      </td>
                     </tr>
                   </tbody>
                 </table>
               </div>
+
+              <div className="mt-8 rounded-2xl border border-amber-200 bg-amber-50 p-6">
+                <p className="leading-7 text-amber-900">
+                  <strong>Commercial takeaway:</strong> a Wales possession page should feel
+                  unmistakably Welsh in both terminology and route logic. That is what helps
+                  it compete against weaker “UK eviction” pages that blur the jurisdictions.
+                </p>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* Occupation Contracts Section */}
-        <section className="py-12 lg:py-16 bg-white">
+        <section className="bg-gray-50 py-12 lg:py-16">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">
-                Understanding Occupation Contracts
+            <div className="mx-auto max-w-5xl">
+              <h2 className="mb-6 text-3xl font-bold text-gray-900">
+                Understanding occupation contracts before you start possession
               </h2>
 
-              <div className="prose prose-lg max-w-none mb-8">
-                <p>
-                  Under the Renting Homes (Wales) Act 2016, all private rental agreements in
-                  Wales are called <strong>occupation contracts</strong>. There are two main
-                  types:
+              <div className="mb-8 space-y-5 text-gray-700">
+                <p className="leading-7">
+                  Under the Renting Homes framework, the contractual starting point matters. A
+                  possession page is stronger when it explains not just that Wales uses different
+                  wording, but why that wording affects the landlord’s next step. If the landlord
+                  starts with the wrong mental model, the possession process is more likely to go
+                  wrong before the notice is even served.
+                </p>
+                <p className="leading-7">
+                  That is why this page should not sound like a general “how to evict a tenant”
+                  blog post. It should sound like a Wales possession route guide. The user needs
+                  to understand what kind of occupation arrangement they are dealing with, what
+                  notice logic may apply, and whether the case is really about standard
+                  possession, breach, arrears, or another Wales-specific route.
                 </p>
               </div>
 
-              <div className="grid md:grid-cols-2 gap-6 mb-8">
-                <div className="bg-red-50 rounded-xl p-6 border border-red-200">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center">
-                      <Home className="w-5 h-5 text-white" />
+              <div className="grid gap-6 md:grid-cols-2">
+                <div className="rounded-xl border border-red-200 bg-red-50 p-6">
+                  <div className="mb-4 flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-red-600">
+                      <Home className="h-5 w-5 text-white" />
                     </div>
-                    <h3 className="text-xl font-bold text-gray-900">Standard Contract</h3>
+                    <h3 className="text-xl font-bold text-gray-900">Standard contract</h3>
                   </div>
-                  <p className="text-gray-600 mb-4">
-                    Used by private landlords and housing associations for most rentals.
+                  <p className="mb-4 text-gray-600">
+                    Common for private landlords and the main Wales route most private-sector
+                    users on this page will be dealing with.
                   </p>
                   <ul className="space-y-2 text-sm text-gray-600">
                     <li className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-green-500 mt-0.5" />
-                      Most common contract type
+                      <CheckCircle className="mt-0.5 h-4 w-4 text-green-500" />
+                      Most common private landlord contract type
                     </li>
                     <li className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-green-500 mt-0.5" />
-                      Fixed-term or periodic
+                      <CheckCircle className="mt-0.5 h-4 w-4 text-green-500" />
+                      Possession route depends on the Welsh contract position and notice logic
                     </li>
                     <li className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-green-500 mt-0.5" />
-                      Landlord possession rights apply
+                      <CheckCircle className="mt-0.5 h-4 w-4 text-green-500" />
+                      Better understood through Wales-specific guidance, not England templates
                     </li>
                   </ul>
                 </div>
 
-                <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 bg-gray-600 rounded-lg flex items-center justify-center">
-                      <Scale className="w-5 h-5 text-white" />
+                <div className="rounded-xl border border-gray-200 bg-white p-6">
+                  <div className="mb-4 flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-600">
+                      <Scale className="h-5 w-5 text-white" />
                     </div>
-                    <h3 className="text-xl font-bold text-gray-900">Secure Contract</h3>
+                    <h3 className="text-xl font-bold text-gray-900">Secure contract</h3>
                   </div>
-                  <p className="text-gray-600 mb-4">
-                    Used by local authorities (council housing). Greater tenant security.
+                  <p className="mb-4 text-gray-600">
+                    More commonly associated with local authority or social housing contexts and
+                    usually not the main private landlord route.
                   </p>
                   <ul className="space-y-2 text-sm text-gray-600">
                     <li className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-green-500 mt-0.5" />
-                      Council and social housing
+                      <CheckCircle className="mt-0.5 h-4 w-4 text-green-500" />
+                      Greater security features for the occupier
                     </li>
                     <li className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-green-500 mt-0.5" />
-                      Stronger tenant protections
+                      <CheckCircle className="mt-0.5 h-4 w-4 text-green-500" />
+                      Different practical context from many private landlord cases
                     </li>
                     <li className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-green-500 mt-0.5" />
-                      Limited landlord possession grounds
+                      <CheckCircle className="mt-0.5 h-4 w-4 text-green-500" />
+                      Still reinforces why Wales pages cannot be written like England AST pages
                     </li>
                   </ul>
                 </div>
@@ -267,121 +412,122 @@ export default function WalesEvictionNoticesPage() {
           </div>
         </section>
 
-        {/* Eviction Process Section */}
-        <section className="py-12 lg:py-16 bg-gray-50">
+        <section className="bg-white py-12 lg:py-16">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              <h2 className="text-3xl font-bold text-gray-900 mb-8">
-                Wales Eviction Process Overview
+            <div className="mx-auto max-w-5xl">
+              <h2 className="mb-8 text-3xl font-bold text-gray-900">
+                Wales possession process overview
               </h2>
+
+              <div className="mb-8 space-y-5 text-gray-700">
+                <p className="leading-7">
+                  The goal of this section is not to pretend every Wales possession case is
+                  identical. It is to give landlords a clearer route map. In most cases, the
+                  landlord first identifies the correct Welsh possession basis, then prepares
+                  and serves the right notice, waits for the notice period to expire, and only
+                  then moves to court if possession is still needed.
+                </p>
+                <p className="leading-7">
+                  That may sound obvious, but it is exactly where weaker pages fail. They jump
+                  from “serve notice” to “go to court” without helping the landlord understand
+                  what the notice is supposed to do, what evidence may matter, or how Wales
+                  terminology changes the analysis.
+                </p>
+              </div>
 
               <div className="space-y-6">
-                <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+                <div className="rounded-xl border border-gray-200 bg-gray-50 p-6 shadow-sm">
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0">
-                      <span className="text-red-600 font-bold">1</span>
+                    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-red-100">
+                      <span className="font-bold text-red-600">1</span>
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold text-gray-900 mb-2">
-                        Check Your Grounds
-                      </h3>
+                      <h3 className="mb-2 text-lg font-bold text-gray-900">Identify the correct Wales route</h3>
                       <p className="text-gray-600">
-                        The Renting Homes (Wales) Act requires landlords to have valid grounds
-                        for possession. Common grounds include serious rent arrears, breach of
-                        contract, or landlord needs to sell/occupy. Check current Welsh
-                        Government guidance for the full list of grounds.
+                        Start with the right Welsh possession logic. Work out whether the case is
+                        based on the main contract position, breach, arrears, or another route
+                        under the Wales framework rather than starting with an England mindset.
                       </p>
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+                <div className="rounded-xl border border-gray-200 bg-gray-50 p-6 shadow-sm">
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0">
-                      <span className="text-red-600 font-bold">2</span>
+                    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-red-100">
+                      <span className="font-bold text-red-600">2</span>
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold text-gray-900 mb-2">
-                        Serve the Correct Notice
-                      </h3>
+                      <h3 className="mb-2 text-lg font-bold text-gray-900">Prepare and serve the correct notice</h3>
                       <p className="text-gray-600">
-                        Serve the appropriate possession notice under Welsh law. Notice periods
-                        vary depending on the ground - typically 6 months for standard
-                        possession, but shorter periods may apply for serious rent arrears or
-                        breach. Use Wales-specific notice forms.
+                        Use the correct Wales notice route and make sure service, dates, and
+                        wording are handled properly. This is where many possession cases are
+                        weakened before they ever reach court.
                       </p>
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+                <div className="rounded-xl border border-gray-200 bg-gray-50 p-6 shadow-sm">
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0">
-                      <span className="text-red-600 font-bold">3</span>
+                    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-red-100">
+                      <span className="font-bold text-red-600">3</span>
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold text-gray-900 mb-2">
-                        Wait for Notice Period
-                      </h3>
+                      <h3 className="mb-2 text-lg font-bold text-gray-900">Allow the full notice period</h3>
                       <p className="text-gray-600">
-                        Allow the full notice period to expire. The contract holder may leave
-                        voluntarily during this time. Keep records of all communications.
+                        Let the notice period run fully. Keep evidence of service and relevant
+                        communications in case the matter proceeds further.
                       </p>
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+                <div className="rounded-xl border border-gray-200 bg-gray-50 p-6 shadow-sm">
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0">
-                      <span className="text-red-600 font-bold">4</span>
+                    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-red-100">
+                      <span className="font-bold text-red-600">4</span>
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold text-gray-900 mb-2">
-                        Apply to County Court
-                      </h3>
+                      <h3 className="mb-2 text-lg font-bold text-gray-900">Move to county court if needed</h3>
                       <p className="text-gray-600">
-                        If the contract holder does not leave after the notice period, apply
-                        to the county court for a possession order. You will need to complete
-                        the appropriate court forms and pay the court fee.
+                        If the contract-holder does not leave, court action may be required.
+                        Landlords should expect to support the case with the correct documents,
+                        evidence, and a properly handled notice history.
                       </p>
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+                <div className="rounded-xl border border-gray-200 bg-gray-50 p-6 shadow-sm">
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0">
-                      <span className="text-red-600 font-bold">5</span>
+                    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-red-100">
+                      <span className="font-bold text-red-600">5</span>
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold text-gray-900 mb-2">
-                        Attend Court Hearing
-                      </h3>
+                      <h3 className="mb-2 text-lg font-bold text-gray-900">Use enforcement properly</h3>
                       <p className="text-gray-600">
-                        Attend the possession hearing with evidence supporting your claim.
-                        If successful, the court will issue a possession order giving the
-                        contract holder a date to leave.
+                        If possession is granted but the occupier still remains, only the lawful
+                        enforcement route should be used. Never attempt informal removal.
                       </p>
                     </div>
                   </div>
                 </div>
+              </div>
 
-                <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0">
-                      <span className="text-red-600 font-bold">6</span>
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-bold text-gray-900 mb-2">
-                        Bailiff Enforcement (if needed)
-                      </h3>
-                      <p className="text-gray-600">
-                        If the contract holder still does not leave, apply for a warrant of
-                        possession. Only court bailiffs can legally remove occupants. Never
-                        attempt to remove contract holders yourself.
-                      </p>
-                    </div>
+              <div className="mt-8 rounded-2xl border border-red-200 bg-red-50 p-6">
+                <div className="flex items-start gap-3">
+                  <XCircle className="mt-0.5 h-5 w-5 text-red-600" />
+                  <div>
+                    <h3 className="text-lg font-semibold text-red-900">
+                      What this page should not encourage
+                    </h3>
+                    <p className="mt-2 leading-7 text-red-900/90">
+                      It should never sound like a landlord can just “tell the tenant to go” and
+                      treat the matter as finished. Wales possession is still a legal process, and
+                      landlords should not change locks, intimidate occupiers, or attempt
+                      self-help removal.
+                    </p>
                   </div>
                 </div>
               </div>
@@ -389,168 +535,188 @@ export default function WalesEvictionNoticesPage() {
           </div>
         </section>
 
-        {/* Notice Periods */}
-        <section className="py-12 lg:py-16 bg-white">
+        <section className="bg-gray-50 py-12 lg:py-16">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">
-                Notice Periods in Wales
-              </h2>
+            <div className="mx-auto max-w-5xl">
+              <h2 className="mb-6 text-3xl font-bold text-gray-900">Notice periods in Wales</h2>
 
-              <div className="bg-amber-50 border-l-4 border-amber-500 p-4 mb-8 rounded-r-lg">
-                <p className="text-amber-900 text-sm">
-                  <strong>Note:</strong> Notice periods under Welsh law can change. Always
-                  check the latest Welsh Government guidance or Shelter Cymru for current
-                  requirements.
+              <div className="mb-8 rounded-r-lg border-l-4 border-amber-500 bg-amber-50 p-4">
+                <p className="text-sm text-amber-900">
+                  <strong>Important:</strong> Wales notice timing and route detail should be
+                  checked carefully against the current Welsh position. This page should guide
+                  route choice, but landlords should not rely on a simplistic “one notice period
+                  fits all” assumption.
                 </p>
               </div>
 
-              <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+              <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
                 <table className="w-full">
-                  <thead className="bg-red-50 border-b">
+                  <thead className="border-b bg-red-50">
                     <tr>
                       <th className="px-6 py-4 text-left font-semibold text-gray-900">
-                        Ground/Reason
+                        Route or situation
                       </th>
                       <th className="px-6 py-4 text-left font-semibold text-gray-900">
-                        Typical Notice Period
+                        Practical point
                       </th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
                     <tr>
                       <td className="px-6 py-4 font-medium text-gray-900">
-                        Standard possession (no specific ground)
+                        Main possession route
                       </td>
-                      <td className="px-6 py-4 text-gray-600">6 months</td>
+                      <td className="px-6 py-4 text-gray-600">
+                        Often treated as longer-notice territory than familiar England no-fault
+                        assumptions.
+                      </td>
                     </tr>
                     <tr className="bg-gray-50">
                       <td className="px-6 py-4 font-medium text-gray-900">
-                        Serious rent arrears
+                        Serious arrears or breach scenarios
                       </td>
                       <td className="px-6 py-4 text-gray-600">
-                        Shorter period may apply (check current guidance)
+                        Different timing and route logic may apply depending on the Welsh ground
+                        or breach position.
                       </td>
                     </tr>
                     <tr>
                       <td className="px-6 py-4 font-medium text-gray-900">
-                        Breach of contract
+                        Anti-social behaviour or serious misconduct
                       </td>
                       <td className="px-6 py-4 text-gray-600">
-                        Depends on breach type (check current guidance)
+                        Landlords should assess whether a faster or different breach-led route
+                        is available under Welsh law.
                       </td>
                     </tr>
                     <tr className="bg-gray-50">
                       <td className="px-6 py-4 font-medium text-gray-900">
-                        Antisocial behaviour
+                        Court stage after notice
                       </td>
                       <td className="px-6 py-4 text-gray-600">
-                        May be expedited (check current guidance)
+                        The court still expects a valid notice foundation and proper evidence.
                       </td>
                     </tr>
                   </tbody>
                 </table>
               </div>
+
+              <p className="mt-6 text-sm leading-6 text-gray-600">
+                Better commercial wording on a Wales page focuses on the route and the logic, not
+                on pretending every Welsh possession case can be reduced to one fixed timeline.
+              </p>
             </div>
           </div>
         </section>
 
-        <section className="py-12 lg:py-16 bg-gray-50">
+        <section className="bg-white py-12 lg:py-16">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">
-                Wales Eviction Checklist & Common Mistakes
+            <div className="mx-auto max-w-5xl">
+              <h2 className="mb-6 text-3xl font-bold text-gray-900">
+                Wales eviction checklist and common mistakes
               </h2>
-              <p className="text-gray-600 mb-10">
-                Welsh possession cases are often delayed by missing documents or incorrect notice
-                wording. Use this checklist before you serve notice.
+              <p className="mb-10 max-w-4xl text-gray-600">
+                The most common reason landlords lose time is not that they chose to seek
+                possession. It is that they started the process with the wrong notice logic,
+                weak service evidence, or an England-based assumption that does not belong on a
+                Welsh file.
               </p>
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
-                  <h3 className="text-lg font-bold text-gray-900 mb-3">Validity checklist</h3>
+
+              <div className="grid gap-6 md:grid-cols-2">
+                <div className="rounded-xl border border-gray-200 bg-gray-50 p-6 shadow-sm">
+                  <h3 className="mb-3 text-lg font-bold text-gray-900">Validity checklist</h3>
                   <ul className="space-y-2 text-sm text-gray-600">
-                    <li>Correct occupation contract type and notice form.</li>
-                    <li>Deposit protected and information served.</li>
-                    <li>Landlord registration and required records.</li>
-                    <li>Accurate dates and service evidence.</li>
+                    <li>Correct occupation contract context identified.</li>
+                    <li>Correct Wales notice route chosen.</li>
+                    <li>Deposit and document history checked where relevant.</li>
+                    <li>Accurate dates and service evidence retained.</li>
+                    <li>Landlord records and supporting documents in order.</li>
                   </ul>
                 </div>
-                <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
-                  <h3 className="text-lg font-bold text-gray-900 mb-3">Common mistakes</h3>
+                <div className="rounded-xl border border-gray-200 bg-gray-50 p-6 shadow-sm">
+                  <h3 className="mb-3 text-lg font-bold text-gray-900">Common mistakes</h3>
                   <ul className="space-y-2 text-sm text-gray-600">
-                    <li>Using England Section 21/8 templates.</li>
-                    <li>Serving the wrong notice period.</li>
-                    <li>Missing proof of service.</li>
-                    <li>Skipping pre-action communication.</li>
+                    <li>Using England Section 21 or Section 8 language for Wales.</li>
+                    <li>Serving the wrong notice route for the actual Welsh scenario.</li>
+                    <li>Missing proof of service or poor date handling.</li>
+                    <li>Assuming a notice alone finishes the possession process.</li>
+                    <li>Failing to distinguish contract-holder terminology from England tenant wording.</li>
                   </ul>
                   <Link
                     href="/how-to-evict-tenant"
-                    className="text-primary text-sm font-medium hover:underline inline-flex mt-3"
+                    className="mt-3 inline-flex text-sm font-medium text-primary hover:underline"
                   >
-                    See UK eviction steps →
+                    See UK eviction guide →
                   </Link>
                 </div>
               </div>
+
+              <div className="mt-8 rounded-2xl border border-green-200 bg-green-50 p-6">
+                <h3 className="text-lg font-semibold text-green-900">What this means for conversion</h3>
+                <p className="mt-2 leading-7 text-green-900/90">
+                  A high-performing Wales page should help landlords self-identify the right route
+                  early. That improves user trust and reduces the risk of wrong-door purchases by
+                  users who really needed Welsh possession guidance rather than a generic UK notice page.
+                </p>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* CTA Section */}
-        <section className="py-16 bg-gradient-to-br from-red-700 to-red-600 text-white">
+        <section className="bg-gradient-to-br from-red-700 to-red-600 py-16 text-white">
           <div className="container mx-auto px-4">
-            <div className="max-w-3xl mx-auto text-center">
-              <h2 className="text-3xl font-bold mb-6">Need Help with Wales Eviction?</h2>
-              <p className="text-xl text-red-100 mb-8">
-                Our document packs include Wales-specific notices and guidance under the
-                Renting Homes (Wales) Act.
+            <div className="mx-auto max-w-3xl text-center">
+              <h2 className="mb-6 text-3xl font-bold">Need help with a Wales possession route?</h2>
+              <p className="mb-8 text-xl text-red-100">
+                Start with a Wales-specific notice workflow and move forward with clearer Renting
+                Homes Act positioning.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <div className="flex flex-col justify-center gap-4 sm:flex-row">
                 <Link
-                  href="/products/notice-only"
-                  className="inline-flex items-center justify-center gap-2 bg-white text-red-700 font-semibold py-4 px-8 rounded-xl hover:bg-red-50 transition-colors"
+                  href={productLinks.noticeOnly.href}
+                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-8 py-4 font-semibold text-red-700 transition-colors hover:bg-red-50"
                 >
-                  Get Wales Notice — £29.99
+                  Get Wales Notice — {noticeOnlyPrice}
                 </Link>
                 <Link
-                  href="/products/complete-pack"
-                  className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold py-4 px-8 rounded-xl transition-colors border border-white/30"
+                  href={productLinks.completePack.href}
+                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/30 bg-white/10 px-8 py-4 font-semibold text-white transition-colors hover:bg-white/20"
                 >
-                  Complete Pack — £79.99
+                  Complete Pack — {completePackPrice}
                 </Link>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Ask Heaven Section */}
-        <section className="py-12 bg-white">
+        <section className="bg-white py-12">
           <div className="container mx-auto px-4">
-            <div className="max-w-2xl mx-auto">
+            <div className="mx-auto max-w-2xl">
               <AskHeavenWidget
                 variant="banner"
                 source="page_cta"
                 topic="eviction"
                 jurisdiction="wales"
-                title="Not sure which Wales notice applies?"
-                description="Ask Heaven can help you understand occupation contracts, notice periods, and the Renting Homes Act possession process."
+                title="Not sure which Wales route applies?"
+                description="Ask Heaven can help you understand occupation contracts, notice logic, and the Renting Homes possession process."
                 utm_campaign="wales-eviction-notices"
               />
             </div>
           </div>
         </section>
 
-        <section className="py-12 bg-gray-50">
+        <section className="bg-gray-50 py-12">
           <div className="container mx-auto px-4">
-            <div className="max-w-5xl mx-auto">
+            <div className="mx-auto max-w-5xl">
               <NextLegalSteps
                 jurisdictionLabel="Wales eviction notices"
                 scenarioLabel="Renting Homes Act possession"
                 primaryCTA={{
-                  label: 'Generate Wales notice — £29.99',
+                  label: `Generate Wales notice — ${noticeOnlyPrice}`,
                   href: productLinks.noticeOnly.href,
                 }}
                 secondaryCTA={{
-                  label: 'Complete eviction pack — £79.99',
+                  label: `Complete eviction pack — ${completePackPrice}`,
                   href: productLinks.completePack.href,
                 }}
                 relatedLinks={[
@@ -562,17 +728,17 @@ export default function WalesEvictionNoticesPage() {
                   {
                     href: '/wales-tenancy-agreement-template',
                     title: 'Wales occupation contracts',
-                    description: 'Create compliant occupation contracts.',
+                    description: 'Create compliant occupation contracts for Welsh properties.',
                   },
                   {
                     href: '/blog/wales-eviction-process',
                     title: 'Wales eviction process',
-                    description: 'Step-by-step Section 173 / possession flow.',
+                    description: 'Wales possession route guide and next steps.',
                   },
                   {
                     href: '/money-claim-unpaid-rent',
                     title: 'Unpaid rent claim guide',
-                    description: 'Recover rent arrears through the courts.',
+                    description: 'Recover arrears through the courts where appropriate.',
                   },
                 ]}
               />
@@ -580,7 +746,6 @@ export default function WalesEvictionNoticesPage() {
           </div>
         </section>
 
-        {/* FAQ Section */}
         <FAQSection
           title="Wales Eviction FAQ"
           faqs={walesEvictionFAQs}
@@ -591,5 +756,3 @@ export default function WalesEvictionNoticesPage() {
     </>
   );
 }
-
-

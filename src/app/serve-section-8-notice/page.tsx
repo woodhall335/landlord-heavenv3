@@ -32,9 +32,9 @@ const completePackWizardLink = buildWizardLink({
 });
 
 export const metadata: Metadata = generateMetadata({
-  title: 'Serve a Section 8 Notice | Landlord Service Guide',
+  title: 'Serve a Section 8 Notice 2026 | England Landlord Guide',
   description:
-    'Learn how to serve a Section 8 notice in England, choose the right grounds, preserve evidence, and avoid notice-stage mistakes that weaken possession claims.',
+    'Learn how to serve a Section 8 notice in England, choose the right grounds, preserve service evidence, prepare arrears or breach records, and avoid notice-stage mistakes that weaken possession claims.',
   path: '/serve-section-8-notice',
   type: 'article',
   keywords: [
@@ -44,6 +44,10 @@ export const metadata: Metadata = generateMetadata({
     'section 8 grounds',
     'section 8 evidence',
     'section 8 rent arrears',
+    'how to serve section 8 notice',
+    'section 8 notice england',
+    'ground 8 10 11 rent arrears',
+    'section 8 notice proof of service',
   ],
 });
 
@@ -51,10 +55,11 @@ const jumpLinks = [
   { href: '#quick-answer', label: 'Quick answer' },
   { href: '#what-serving-a-section-8-really-means', label: 'What serving a Section 8 really means' },
   { href: '#grounds-matter-first', label: 'Why the grounds matter first' },
-  { href: '#before-you-serve', label: 'Before you serve the notice' },
+  { href: '#before-you-serve', label: 'Before you serve' },
   { href: '#how-section-8-service-usually-works', label: 'How Section 8 service usually works' },
   { href: '#evidence-landlords-should-prepare', label: 'Evidence landlords should prepare' },
   { href: '#ground-8-10-11-rent-arrears', label: 'Grounds 8, 10 and 11 for rent arrears' },
+  { href: '#service-methods-and-proof', label: 'Service methods and proof' },
   { href: '#when-landlords-get-into-trouble', label: 'When landlords get into trouble' },
   { href: '#timeline-after-service', label: 'Timeline after service' },
   { href: '#section-8-service-checklist', label: 'Section 8 service checklist' },
@@ -80,7 +85,7 @@ const faqs: FAQItem[] = [
       'Yes. Landlords should keep proof of service for a Section 8 notice. Clear service evidence helps show when the notice was delivered and supports the later possession file if the tenant does not leave.',
   },
   {
-    question: 'What grounds are commonly used on a Section 8 notice?',
+    question: 'What grounds are commonly used on a Section 8 notice for rent arrears?',
     answer:
       'For rent arrears, landlords commonly rely on Grounds 8, 10 and 11. Ground 8 is mandatory if the arrears threshold is met at service and at the hearing, while Grounds 10 and 11 are discretionary.',
   },
@@ -453,6 +458,27 @@ export default function Page() {
                 In practical terms, landlords usually get a stronger arrears file by treating the rent
                 account as the centre of the claim and keeping the chronology disciplined from service
                 through to hearing.
+              </p>
+            </Card>
+
+            <Card id="service-methods-and-proof" title="Service Methods and Proof">
+              <p className="mt-4 leading-7 text-gray-700">
+                One of the most overlooked parts of a Section 8 notice is the proof of service. Landlords
+                often focus on what the notice says, but later court disputes often focus on whether it
+                can be shown to have been served properly and on the date claimed.
+              </p>
+
+              <p className="mt-4 leading-7 text-gray-700">
+                The best service method is usually the one that fits the tenancy paperwork, can be explained
+                clearly later, and leaves a clean evidential trail. That may mean preserving delivery records,
+                certificates, photographs, covering correspondence, or other supporting material depending
+                on how the notice was served.
+              </p>
+
+              <p className="mt-4 leading-7 text-gray-700">
+                In practical terms, landlords should aim to keep one simple service file containing the final
+                notice, the date used for service, the method used, and the supporting proof that goes with it.
+                That makes later possession work much easier.
               </p>
             </Card>
 

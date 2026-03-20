@@ -8,12 +8,7 @@ import {
 import { getCanonicalUrl } from '@/lib/seo/urls';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
-import {
-  walesRelatedLinks,
-  productLinks,
-  guideLinks,
-  askHeavenLink,
-} from '@/lib/seo/internal-links';
+import { walesRelatedLinks } from '@/lib/seo/internal-links';
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
@@ -27,18 +22,16 @@ import {
   AlertTriangle,
   Clock,
   ArrowRight,
-  Scale,
   FileText,
-  Shield,
   Gavel,
   Calendar,
   AlertCircle,
   PoundSterling,
   XCircle,
-  MapPin,
   Home,
   MessageSquare,
-  Users,
+  Scale,
+  Shield,
 } from 'lucide-react';
 
 const completePackLink = buildWizardLink({
@@ -56,23 +49,27 @@ const noticeOnlyLink = buildWizardLink({
 });
 
 export const metadata: Metadata = {
-  title: 'Eviction Process Wales | Section 173 & 178 | Landlord Heaven',
+  title: 'Eviction Process Wales 2026 | Section 173, Breach Notices & Court Process',
   description:
-    'Guide to evicting a tenant in Wales. Section 173 and Section 178 notices under the Renting Homes Act 2016. From £29.99.',
+    'Complete guide to the eviction process in Wales for landlords. Learn Section 173 no-fault possession, breach-based eviction routes, written statement rules, court process, timelines, and what to do if the contract-holder will not leave.',
   keywords: [
-    'eviction process wales landlord',
-    'section 173 eviction',
-    'section 178 wales',
+    'eviction process wales',
+    'how to evict a tenant in wales',
+    'how to evict a contract-holder in wales',
+    'section 173 notice wales',
+    'section 178 notice wales',
+    'renting homes wales act eviction',
+    'occupation contract wales eviction',
+    'wales landlord possession process',
     'tenant not leaving after section 173',
-    'renting homes wales act',
+    'contract-holder not leaving wales',
     'wales eviction notice',
-    'occupation contract wales',
-    'contract holder eviction',
+    'written statement wales landlord',
   ],
   openGraph: {
-    title: 'Eviction Process Wales | Section 173 & 178 | Landlord Heaven',
+    title: 'Eviction Process Wales 2026 | Section 173, Breach Notices & Court Process',
     description:
-      'Complete guide to evicting a tenant in Wales. Section 173 and Section 178 notices explained.',
+      'Guide to evicting a contract-holder in Wales under the Renting Homes (Wales) Act. Section 173, breach routes, court process, timelines, and landlord next steps.',
     type: 'article',
     url: getCanonicalUrl('/eviction-process-wales'),
     siteName: 'Landlord Heaven',
@@ -81,7 +78,8 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Eviction Process Wales | Landlord Heaven',
-    description: 'Complete guide to evicting a tenant in Wales.',
+    description:
+      'Section 173, breach-based possession routes, court process, and timelines for Welsh landlords.',
   },
   alternates: {
     canonical: getCanonicalUrl('/eviction-process-wales'),
@@ -93,6 +91,19 @@ export const metadata: Metadata = {
 };
 
 export default function EvictionProcessWalesPage() {
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: evictionWalesFAQs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.answer,
+      },
+    })),
+  };
+
   return (
     <>
       <SeoLandingWrapper
@@ -102,15 +113,14 @@ export default function EvictionProcessWalesPage() {
         jurisdiction="wales"
       />
 
-      {/* Structured Data */}
       <StructuredData
         data={articleSchema({
-          headline: 'Eviction Process Wales: Section 173 & 178 Guide 2026',
+          headline: 'Eviction Process Wales: Section 173, Breach Notices and Court Process',
           description:
-            'Step-by-step guide to evicting a contract-holder in Wales under the Renting Homes Act 2016. Covers Section 173 and Section 178 notices.',
+            'Step-by-step guide to the landlord eviction process in Wales under the Renting Homes (Wales) Act. Covers Section 173, breach-based possession routes, written statement requirements, court process, and enforcement.',
           url: getCanonicalUrl('/eviction-process-wales'),
           datePublished: '2026-01-30',
-          dateModified: '2026-01-30',
+          dateModified: '2026-03-20',
         })}
       />
       <StructuredData
@@ -120,39 +130,51 @@ export default function EvictionProcessWalesPage() {
           { name: 'Eviction Process Wales', url: getCanonicalUrl('/eviction-process-wales') },
         ])}
       />
+      <StructuredData data={faqSchema} />
 
       <main>
         <HeaderConfig mode="autoOnScroll" />
+
         <UniversalHero
+          badge="Wales"
+          badgeIcon={<Scale className="w-4 h-4" />}
           title="Eviction Process Wales"
-          subtitle="Follow the legal Wales possession route from RHW notices to court action and enforcement."
-          primaryCta={{ label: 'Start Eviction Wizard', href: completePackLink }}
-          secondaryCta={{ label: 'Jump to key steps', href: '#timeline' }}
+          subtitle={`Understand how possession works in Wales under the Renting Homes (Wales) framework. Learn when landlords use Section 173, when breach-based possession may be more suitable, and how to move from notice to court without avoidable mistakes.`}
+          primaryCta={{
+            label: `Start Wales Eviction Pack — ${PRODUCTS.complete_pack.displayPrice}`,
+            href: completePackLink,
+          }}
+          secondaryCta={{
+            label: `Notice Only — ${PRODUCTS.notice_only.displayPrice}`,
+            href: noticeOnlyLink,
+          }}
           showTrustPositioningBar
           hideMedia
         />
 
-        {/* Social Proof */}
         <section className="py-6 bg-gray-50 border-y border-gray-100">
           <div className="container mx-auto px-4">
             <SocialProofCounter variant="total" className="justify-center" />
           </div>
         </section>
 
-        {/* Important Notice - Different Terminology */}
         <section className="py-8 bg-blue-50">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              <div className="flex items-start gap-4">
+            <div className="max-w-5xl mx-auto">
+              <div className="flex items-start gap-4 rounded-2xl border border-blue-200 bg-white p-6">
                 <AlertCircle className="w-6 h-6 text-blue-600 flex-shrink-0 mt-0.5" />
                 <div>
-                  <h2 className="font-bold text-blue-900 mb-1">Wales Has Different Terminology</h2>
-                  <p className="text-blue-800 text-sm">
-                    Wales uses <strong>Section 173</strong> (no-fault) and{' '}
-                    <strong>Section 178</strong> (breach) notices under the Renting Homes (Wales)
-                    Act 2016. <strong>Section 21 and Section 8 do NOT apply in Wales.</strong> The
-                    terminology is also different: tenants are &quot;contract-holders&quot; and
-                    tenancies are &quot;occupation contracts&quot;.
+                  <h2 className="font-bold text-blue-900 mb-2 text-lg">
+                    Wales uses a different possession system from England
+                  </h2>
+                  <p className="text-blue-800 text-sm leading-6">
+                    In Wales, the old AST-first language does not control the possession route.
+                    Landlords deal with <strong>occupation contracts</strong> and{' '}
+                    <strong>contract-holders</strong> under the Renting Homes framework.
+                    Section 21 and Section 8 are English terms. Welsh landlords usually focus on
+                    <strong> Section 173</strong> for no-fault possession and the relevant
+                    breach-based possession route where the contract-holder has broken the contract,
+                    built up arrears, or engaged in serious misconduct.
                   </p>
                 </div>
               </div>
@@ -160,51 +182,41 @@ export default function EvictionProcessWalesPage() {
           </div>
         </section>
 
-        {/* Terminology Guide */}
         <section className="py-16 lg:py-20">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
+            <div className="max-w-5xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
-                Wales Renting Homes Act: Key Terms
+                Wales eviction terminology landlords need to know
               </h2>
-              <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                The Renting Homes (Wales) Act 2016 introduced new terminology. Understanding these
-                terms is essential.
+              <p className="text-gray-600 text-center mb-12 max-w-3xl mx-auto">
+                One reason Welsh possession cases go wrong is that landlords use English language,
+                English assumptions, or English document logic in a Wales file. Start with the
+                correct terminology and the rest of the process is easier to control.
               </p>
 
               <div className="grid md:grid-cols-2 gap-6">
-                <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+                <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
                       <XCircle className="w-6 h-6 text-gray-400" />
                     </div>
-                    <span className="text-lg font-bold text-gray-400">Old Terms</span>
+                    <span className="text-lg font-bold text-gray-500">Older England-led language</span>
                   </div>
                   <ul className="space-y-3 text-gray-500">
-                    <li className="flex items-center gap-2">
-                      <span className="line-through">Tenant</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="line-through">Tenancy</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="line-through">Assured Shorthold Tenancy (AST)</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="line-through">Section 21</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="line-through">Section 8</span>
-                    </li>
+                    <li className="line-through">Tenant</li>
+                    <li className="line-through">Tenancy</li>
+                    <li className="line-through">Assured Shorthold Tenancy (AST)</li>
+                    <li className="line-through">Section 21</li>
+                    <li className="line-through">Section 8</li>
                   </ul>
                 </div>
 
-                <div className="bg-primary/5 rounded-xl p-6 border-2 border-primary">
+                <div className="bg-primary/5 rounded-2xl p-6 border-2 border-primary shadow-sm">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
                       <CheckCircle className="w-6 h-6 text-primary" />
                     </div>
-                    <span className="text-lg font-bold text-gray-900">Wales Terms</span>
+                    <span className="text-lg font-bold text-gray-900">Wales terminology</span>
                   </div>
                   <ul className="space-y-3 text-gray-700">
                     <li className="flex items-center gap-2">
@@ -221,33 +233,42 @@ export default function EvictionProcessWalesPage() {
                     </li>
                     <li className="flex items-center gap-2">
                       <ArrowRight className="w-4 h-4 text-primary" />
-                      <strong>Section 173 notice</strong> (no-fault)
+                      <strong>Section 173 notice</strong> for no-fault possession
                     </li>
                     <li className="flex items-center gap-2">
                       <ArrowRight className="w-4 h-4 text-primary" />
-                      <strong>Section 178 notice</strong> (breach)
+                      <strong>Breach-based possession notice</strong> for arrears or contract breach
                     </li>
                   </ul>
                 </div>
+              </div>
+
+              <div className="mt-8 prose prose-lg max-w-none text-gray-700">
+                <p>
+                  This matters for both SEO and legal accuracy. Landlords still search for “tenant
+                  eviction Wales” and “Section 21 Wales”, but the working legal route in Wales is
+                  different. A strong Welsh eviction page therefore needs to do two things at once:
+                  capture the search term the landlord uses and then quickly translate that into the
+                  correct Wales-specific framework.
+                </p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Section 173 vs 178 */}
         <section className="py-16 lg:py-20 bg-gray-50">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
+            <div className="max-w-5xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
-                Section 173 vs Section 178: Which to Use
+                Section 173 vs breach-based possession in Wales
               </h2>
-              <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                Wales has two main eviction notices. Choose based on your reason for ending the
-                occupation contract.
+              <p className="text-gray-600 text-center mb-12 max-w-3xl mx-auto">
+                Welsh landlords usually choose between a no-fault route and a breach-based route.
+                The right answer depends on why you want possession, how quickly you need to act,
+                and how strong your evidence file is.
               </p>
 
               <div className="grid md:grid-cols-2 gap-8">
-                {/* Section 173 */}
                 <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center">
@@ -255,123 +276,122 @@ export default function EvictionProcessWalesPage() {
                     </div>
                     <div>
                       <h3 className="text-xl font-bold text-gray-900">Section 173</h3>
-                      <span className="text-sm text-gray-500">No-Fault Eviction</span>
+                      <span className="text-sm text-gray-500">No-fault possession route</span>
                     </div>
                   </div>
 
                   <p className="text-gray-600 mb-4">
-                    End the occupation contract without giving a specific reason. Similar to
-                    England&apos;s Section 21 but with stricter requirements.
+                    This is the Wales no-fault route. It is often used where the landlord wants
+                    possession without proving tenant fault, but it comes with strict timing and
+                    compliance conditions.
                   </p>
 
                   <div className="space-y-3 mb-6">
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-600">Notice period</span>
-                      <span className="font-bold text-primary">6 months minimum</span>
+                      <span className="text-gray-600">Typical notice position</span>
+                      <span className="font-bold text-primary">Long notice route</span>
                     </div>
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-600">Court process</span>
-                      <span className="font-bold text-gray-900">County Court</span>
+                      <span className="text-gray-600">Best for</span>
+                      <span className="font-bold text-gray-900">No-fault possession planning</span>
                     </div>
                   </div>
 
-                  <h4 className="font-semibold text-gray-900 mb-2">Requirements:</h4>
+                  <h4 className="font-semibold text-gray-900 mb-2">Usually chosen where:</h4>
                   <ul className="space-y-2 text-sm text-gray-600">
                     <li className="flex items-start gap-2">
-                      <AlertTriangle className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" />
-                      Cannot serve in first 6 months of occupation
+                      <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
+                      You do not want to prove breach
                     </li>
                     <li className="flex items-start gap-2">
-                      <AlertTriangle className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" />
-                      Landlord must have owned property for 6+ months
+                      <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
+                      The written statement and compliance file are clean
                     </li>
                     <li className="flex items-start gap-2">
-                      <AlertTriangle className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" />
-                      Written statement must have been provided
+                      <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
+                      You are planning ahead rather than reacting to urgent arrears
                     </li>
                   </ul>
                 </div>
 
-                {/* Section 178 */}
                 <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-14 h-14 bg-red-100 rounded-xl flex items-center justify-center">
-                      <span className="text-lg font-bold text-red-600">178</span>
+                      <Gavel className="w-6 h-6 text-red-600" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold text-gray-900">Section 178</h3>
-                      <span className="text-sm text-gray-500">Breach/Fault-Based Eviction</span>
+                      <h3 className="text-xl font-bold text-gray-900">Breach-based route</h3>
+                      <span className="text-sm text-gray-500">Arrears, breach or misconduct</span>
                     </div>
                   </div>
 
                   <p className="text-gray-600 mb-4">
-                    End the occupation contract due to breach, rent arrears, or antisocial
-                    behaviour. Similar to England&apos;s Section 8.
+                    This is usually the more natural route where the contract-holder has failed to
+                    pay rent, broken the occupation contract, or caused serious problems.
                   </p>
 
                   <div className="space-y-3 mb-6">
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-600">Notice period</span>
-                      <span className="font-bold text-gray-900">1 month (standard)</span>
+                      <span className="text-gray-600">Typical use case</span>
+                      <span className="font-bold text-red-600">Arrears or breach</span>
                     </div>
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-600">Serious arrears</span>
-                      <span className="font-bold text-red-600">14 days</span>
+                      <span className="text-gray-600">Best for</span>
+                      <span className="font-bold text-gray-900">Evidence-led possession</span>
                     </div>
                   </div>
 
-                  <h4 className="font-semibold text-gray-900 mb-2">Grounds include:</h4>
+                  <h4 className="font-semibold text-gray-900 mb-2">Usually chosen where:</h4>
                   <ul className="space-y-2 text-sm text-gray-600">
                     <li className="flex items-start gap-2">
                       <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
-                      Rent arrears (2+ months for 14-day notice)
+                      Rent arrears are the real problem
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
-                      Breach of occupation contract
+                      The contract-holder has breached the contract
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
-                      Antisocial behaviour
+                      You can prove the facts with records and chronology
                     </li>
                   </ul>
                 </div>
               </div>
 
-              <div className="mt-8 bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg">
+              <div className="mt-8 bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl">
                 <p className="text-blue-900 text-sm">
-                  <strong>Pro tip:</strong> Section 178 is faster for rent arrears (14 days notice
-                  for 2+ months arrears) but Section 173 does not require you to prove a ground.
-                  Consider your circumstances carefully.
+                  <strong>Practical rule:</strong> if your main reason is unpaid rent or a broken
+                  occupation contract, the stronger Welsh route is often the breach-based one.
+                  If your main reason is simply that you want the property back and your compliance
+                  file is clean, Section 173 may be the more natural route.
                 </p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Section 173 Requirements in Detail */}
         <section className="py-16 lg:py-20">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
+            <div className="max-w-5xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
-                Section 173: Requirements in Detail
+                Section 173: the compliance points that matter most
               </h2>
-              <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                Section 173 has strict requirements. Missing any of these will invalidate your
-                notice.
+              <p className="text-gray-600 text-center mb-12 max-w-3xl mx-auto">
+                Welsh no-fault possession is not just about generating a notice. The wider file
+                has to be clean enough to support the route if the case goes to court.
               </p>
 
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                      <Calendar className="w-5 h-5 text-primary" />
-                    </div>
+                    <Calendar className="w-5 h-5 text-primary mt-1 flex-shrink-0" />
                     <div>
-                      <h3 className="font-bold text-gray-900 mb-2">6-Month Notice Period</h3>
+                      <h3 className="font-bold text-gray-900 mb-2">Timing rules</h3>
                       <p className="text-gray-600 text-sm">
-                        You must give at least 6 months&apos; notice. This is significantly longer
-                        than England&apos;s 2-month Section 21.
+                        Wales no-fault possession is more timing-sensitive than many landlords expect.
+                        You should check the occupation date, your notice window, and whether the
+                        route is actually available before serving anything.
                       </p>
                     </div>
                   </div>
@@ -379,14 +399,12 @@ export default function EvictionProcessWalesPage() {
 
                 <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                      <Clock className="w-5 h-5 text-primary" />
-                    </div>
+                    <FileText className="w-5 h-5 text-primary mt-1 flex-shrink-0" />
                     <div>
-                      <h3 className="font-bold text-gray-900 mb-2">6-Month Occupation Rule</h3>
+                      <h3 className="font-bold text-gray-900 mb-2">Written statement</h3>
                       <p className="text-gray-600 text-sm">
-                        You cannot serve a Section 173 notice in the first 6 months of the
-                        contract-holder&apos;s occupation.
+                        The written statement is central to the Wales occupation contract framework.
+                        If the written statement position is weak, the no-fault file often weakens too.
                       </p>
                     </div>
                   </div>
@@ -394,14 +412,13 @@ export default function EvictionProcessWalesPage() {
 
                 <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                      <Home className="w-5 h-5 text-primary" />
-                    </div>
+                    <Shield className="w-5 h-5 text-primary mt-1 flex-shrink-0" />
                     <div>
-                      <h3 className="font-bold text-gray-900 mb-2">6-Month Ownership Rule</h3>
+                      <h3 className="font-bold text-gray-900 mb-2">Document control</h3>
                       <p className="text-gray-600 text-sm">
-                        You must have been the landlord of the property for at least 6 months
-                        before serving the notice.
+                        The occupation contract, any variations, service records, and chronology
+                        should all tell one consistent story. Courts respond better to clean files
+                        than to large but messy bundles.
                       </p>
                     </div>
                   </div>
@@ -409,51 +426,44 @@ export default function EvictionProcessWalesPage() {
 
                 <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                      <FileText className="w-5 h-5 text-primary" />
-                    </div>
+                    <Clock className="w-5 h-5 text-primary mt-1 flex-shrink-0" />
                     <div>
-                      <h3 className="font-bold text-gray-900 mb-2">Written Statement Provided</h3>
+                      <h3 className="font-bold text-gray-900 mb-2">Planning ahead</h3>
                       <p className="text-gray-600 text-sm">
-                        The contract-holder must have been given a written statement of the
-                        occupation contract within 14 days of occupation.
+                        The Wales no-fault route often rewards landlords who plan earlier, not later.
+                        It is usually less forgiving than an “I’ll sort the paperwork at the end”
+                        approach.
                       </p>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="mt-8 bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg">
-                <div className="flex items-start gap-3">
-                  <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
-                  <div>
-                    <p className="text-amber-900 font-medium">Earliest Section 173 Timeline</p>
-                    <p className="text-amber-800 text-sm">
-                      Earliest you can serve: 6 months after occupation starts. Earliest the
-                      contract-holder must leave: 12 months after occupation starts (6 months
-                      occupation + 6 months notice).
-                    </p>
-                  </div>
-                </div>
+              <div className="mt-8 prose prose-lg max-w-none text-gray-700">
+                <p>
+                  That is one reason this page is structured around the process rather than just the
+                  form. Competitor pages often stop at “download a notice.” The stronger landlord page
+                  explains what makes that notice usable later. In Wales, that means written statement
+                  thinking, correct terminology, service discipline, and a possession file that still
+                  works under scrutiny.
+                </p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Court Process */}
-        <section className="py-16 lg:py-20 bg-gray-50">
+        <section className="py-16 lg:py-20 bg-gray-50" id="timeline">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
+            <div className="max-w-5xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
-                Court Process in Wales
+                Wales possession process: step by step
               </h2>
-              <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                If the contract-holder does not leave after the notice expires, apply to the
-                County Court for a possession order.
+              <p className="text-gray-600 text-center mb-12 max-w-3xl mx-auto">
+                If the contract-holder does not leave after the relevant notice route has been used,
+                the case usually moves through the county court and then to enforcement if necessary.
               </p>
 
               <div className="space-y-6">
-                {/* Step 1 */}
                 <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
@@ -461,17 +471,17 @@ export default function EvictionProcessWalesPage() {
                     </div>
                     <div className="flex-1">
                       <h3 className="text-lg font-bold text-gray-900 mb-2">
-                        Complete Possession Claim Forms
+                        Choose the correct Wales route
                       </h3>
                       <p className="text-gray-600">
-                        Use the appropriate forms for Wales. These are similar to England&apos;s
-                        forms but adapted for the Renting Homes Act.
+                        Start with the real reason for possession. If it is a no-fault recovery
+                        case, review Section 173 availability. If it is arrears or breach, build
+                        the breach-based route around evidence, not assumptions.
                       </p>
                     </div>
                   </div>
                 </div>
 
-                {/* Step 2 */}
                 <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
@@ -479,21 +489,17 @@ export default function EvictionProcessWalesPage() {
                     </div>
                     <div className="flex-1">
                       <h3 className="text-lg font-bold text-gray-900 mb-2">
-                        Submit to County Court & Pay Fee
+                        Serve the notice and preserve service proof
                       </h3>
-                      <p className="text-gray-600 mb-3">
-                        Submit your claim to the County Court covering the property. Court fees are
-                        the same as England.
+                      <p className="text-gray-600">
+                        Service quality matters. Keep the final served version, proof of when and
+                        how it was served, and a working chronology that links the notice to the
+                        occupation contract and the wider case.
                       </p>
-                      <div className="bg-gray-50 rounded-lg p-3 inline-block">
-                        <span className="text-gray-600 text-sm">Court fee: </span>
-                        <span className="font-bold text-gray-900">£355</span>
-                      </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Step 3 */}
                 <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
@@ -501,17 +507,38 @@ export default function EvictionProcessWalesPage() {
                     </div>
                     <div className="flex-1">
                       <h3 className="text-lg font-bold text-gray-900 mb-2">
-                        Court Hearing
+                        Issue the county court claim if the contract-holder stays
+                      </h3>
+                      <p className="text-gray-600 mb-3">
+                        If the notice expires and the contract-holder does not leave, the next
+                        stage is the county court possession claim.
+                      </p>
+                      <div className="inline-block rounded-lg bg-gray-50 px-4 py-2 text-sm">
+                        <span className="text-gray-600">Typical claim fee: </span>
+                        <span className="font-bold text-gray-900">£355</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
+                      <span className="text-lg font-bold text-white">4</span>
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-lg font-bold text-gray-900 mb-2">
+                        Attend court with a file that makes sense
                       </h3>
                       <p className="text-gray-600">
-                        The court schedules a hearing. Both parties can attend. The judge reviews
-                        whether the notice was valid and requirements met.
+                        The court will usually want the occupation contract, the notice relied on,
+                        the service record, and the chronology behind the case. In breach cases,
+                        it will also want the evidence supporting the alleged breach.
                       </p>
                     </div>
                   </div>
                 </div>
 
-                {/* Step 4 */}
                 <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
@@ -519,46 +546,63 @@ export default function EvictionProcessWalesPage() {
                     </div>
                     <div className="flex-1">
                       <h3 className="text-lg font-bold text-gray-900 mb-2">
-                        Possession Order Granted
+                        Possession order, then enforcement if needed
                       </h3>
                       <p className="text-gray-600">
-                        If successful, the court grants a possession order. If the contract-holder
-                        still refuses to leave, apply for a warrant of possession.
+                        If possession is ordered and the contract-holder still refuses to leave,
+                        enforcement is the next lawful step. Do not change locks or try to remove
+                        the occupier yourself.
                       </p>
                     </div>
                   </div>
                 </div>
               </div>
+
+              <div className="mt-8 bg-amber-50 border-l-4 border-amber-500 p-5 rounded-r-xl">
+                <p className="text-amber-900 text-sm">
+                  <strong>Important:</strong> illegal eviction rules still apply. Even if you are
+                  certain you are right, you must recover possession through the lawful Wales route.
+                </p>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* Rent Recovery */}
         <section className="py-16 lg:py-20">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
+            <div className="max-w-5xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
-                Recovering Rent Arrears in Wales
+                Wales rent arrears and money recovery
               </h2>
-              <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                Rent recovery in Wales uses the County Court, similar to England.
+              <p className="text-gray-600 text-center mb-12 max-w-3xl mx-auto">
+                Many Welsh landlord cases involve two separate questions: how to recover possession
+                and how to recover unpaid rent. These are related, but not always identical, routes.
               </p>
 
-              <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+              <div className="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm">
                 <div className="flex items-start gap-4">
                   <PoundSterling className="w-6 h-6 text-gray-400 flex-shrink-0 mt-1" />
                   <div>
-                    <h3 className="font-bold text-gray-900 mb-2">Money Claims in Wales</h3>
-                    <p className="text-gray-600 text-sm mb-4">
-                      Wales uses the County Court for money claims, the same as England. You can
-                      use Money Claim Online (MCOL) for claims under £100,000. However, our Money
-                      Claim Pack is currently optimised for England&apos;s specific forms and
-                      processes.
+                    <h3 className="text-xl font-bold text-gray-900 mb-3">
+                      Money claims in Wales
+                    </h3>
+                    <p className="text-gray-600 mb-4">
+                      Rent recovery is commonly handled through the county court money claim route.
+                      The landlord still needs one clean arrears figure, one good chronology, and
+                      one usable evidence pack. If the main issue is the debt rather than the
+                      property, that route may be the commercial priority.
                     </p>
-                    <div className="bg-amber-50 rounded-lg p-3 text-sm text-amber-800">
+                    <p className="text-gray-600 mb-4">
+                      If the contract-holder is still in occupation, the debt and possession strategy
+                      should be coordinated carefully so the file remains consistent. If they have
+                      already left, landlords often find it easier to calculate a final arrears
+                      balance and then pursue recovery separately.
+                    </p>
+                    <div className="bg-amber-50 rounded-lg p-4 text-sm text-amber-800">
                       <AlertTriangle className="w-4 h-4 inline mr-1" />
-                      Note: Our Money Claim Pack is currently for England only. Wales landlords can
-                      use MCOL directly with similar processes.
+                      Where the case is genuinely Wales-specific, review your debt-recovery and
+                      possession strategy together instead of assuming the same product route fits
+                      every file.
                     </div>
                   </div>
                 </div>
@@ -567,29 +611,28 @@ export default function EvictionProcessWalesPage() {
           </div>
         </section>
 
-        {/* Ask Heaven Callout */}
         <section className="py-16 lg:py-20 bg-gray-50">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              <div className="bg-purple-50 border border-purple-200 rounded-xl p-6">
+            <div className="max-w-5xl mx-auto">
+              <div className="bg-purple-50 border border-purple-200 rounded-2xl p-8">
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center flex-shrink-0">
                     <MessageSquare className="w-6 h-6 text-purple-600" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-purple-900 mb-2">
-                      Questions About Wales Eviction?
+                    <h3 className="text-xl font-semibold text-purple-900 mb-2">
+                      Questions about Welsh eviction law?
                     </h3>
                     <p className="text-purple-800 mb-4">
-                      The Renting Homes (Wales) Act 2016 is different from English law. Use our
-                      free Ask Heaven tool to get answers specific to Welsh law, Section 173, and
-                      Section 178.
+                      The Wales system is different enough that landlords often need a quick answer
+                      before choosing the route. Use Ask Heaven for free help with Section 173,
+                      arrears-led possession, notice timing, written statement issues, and next-step planning.
                     </p>
                     <Link
                       href="/ask-heaven"
                       className="inline-flex items-center text-purple-700 font-medium hover:text-purple-900"
                     >
-                      Ask Heaven Free Q&A
+                      Ask Heaven Free Q&amp;A
                       <ArrowRight className="w-4 h-4 ml-1" />
                     </Link>
                   </div>
@@ -599,7 +642,6 @@ export default function EvictionProcessWalesPage() {
           </div>
         </section>
 
-        {/* Mid-page CTA */}
         <section className="py-16 lg:py-20">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
@@ -608,14 +650,13 @@ export default function EvictionProcessWalesPage() {
                 variant="section"
                 jurisdiction="wales"
                 pagePath="/eviction-process-wales"
-                title="Get Your Wales Eviction Documents"
-                description="Section 173 and Section 178 notices, court forms, and step-by-step instructions for Welsh landlords. Renting Homes Act compliant."
+                title="Get your Wales eviction documents ready"
+                description="Occupation contract possession support for Welsh landlords, including Wales-specific notice routes, court-stage guidance, and next-step planning."
               />
             </div>
           </div>
         </section>
 
-        {/* FAQ Section */}
         <FAQSection
           faqs={evictionWalesFAQs}
           title="Wales Eviction: Frequently Asked Questions"
@@ -623,7 +664,6 @@ export default function EvictionProcessWalesPage() {
           variant="gray"
         />
 
-        {/* Final CTA */}
         <section className="py-16 lg:py-20">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
@@ -632,8 +672,8 @@ export default function EvictionProcessWalesPage() {
                 variant="final"
                 jurisdiction="wales"
                 pagePath="/eviction-process-wales"
-                title="Get Your Wales Eviction Pack"
-                description="Section 173 & 178 notices, court forms, and Renting Homes Act guidance. Designed for Welsh landlords."
+                title="Start your Wales eviction pack"
+                description="No-fault and breach-led Wales possession support, designed around occupation contracts, contract-holders, and the Welsh court route."
               />
 
               <SeoDisclaimer className="max-w-4xl mx-auto" />
@@ -641,7 +681,6 @@ export default function EvictionProcessWalesPage() {
           </div>
         </section>
 
-        {/* Related Resources */}
         <section className="py-16 lg:py-20 bg-gray-50">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
@@ -653,4 +692,3 @@ export default function EvictionProcessWalesPage() {
     </>
   );
 }
-
