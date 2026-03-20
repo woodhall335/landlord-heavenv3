@@ -14,6 +14,7 @@ import { UniversalHero } from '@/components/landing/UniversalHero';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
+import { evictionRelatedLinks } from '@/lib/seo/internal-links';
 import { FunnelCta } from '@/components/funnels';
 import { PRODUCTS } from '@/lib/pricing/products';
 import {
