@@ -144,7 +144,7 @@ export default async function EvictionNoticeTemplatePage() {
       <SeoLandingWrapper
         pagePath="/eviction-notice-template"
         pageTitle={metadata.title as string}
-        pageType="notice"
+        pageType="guide"
         jurisdiction="uk"
       />
 
