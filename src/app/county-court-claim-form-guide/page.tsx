@@ -8,11 +8,12 @@ import {
   guideLinks,
   toolLinks,
 } from '@/lib/seo/internal-links';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
+import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import {
   CheckCircle,
   FileText,
@@ -24,12 +25,9 @@ import {
   HelpCircle,
 } from 'lucide-react';
 
-const wizardLinkNoticeOnly = buildWizardLink({
-  product: 'notice_only',
-  jurisdiction: 'england',
-  src: 'seo_county_court_claim_form_guide',
-  topic: 'eviction',
-});
+const completePackProductHref = '/products/complete-pack';
+const moneyClaimProductHref = '/products/money-claim';
+const wizardLinkNoticeOnly = completePackProductHref;
 
 export const metadata: Metadata = {
   title: 'County Court Claim Form Guide UK 2026 — N1, N5, N5B Forms Explained',
@@ -103,6 +101,12 @@ export default function CountyCourtClaimFormGuidePage() {
   return (
     <>
       <HeaderConfig mode="autoOnScroll" />
+      <SeoLandingWrapper
+        pagePath="/county-court-claim-form-guide"
+        pageTitle="County Court Claim Form Guide UK"
+        pageType="court"
+        jurisdiction="uk"
+      />
       <StructuredData data={pageSchema} />
       <StructuredData data={breadcrumbSchema([
         { name: 'Home', url: 'https://landlordheaven.co.uk' },
@@ -118,7 +122,13 @@ export default function CountyCourtClaimFormGuidePage() {
           title="County Court Claim Form Guide UK"
           subtitle={<>Not sure which <strong>county court claim form</strong> to use? This guide explains Form N1, N5, and N5B — so you file the right claim the first time.</>}
           primaryCta={{ label: 'Create Eviction Notice — £29.99', href: wizardLinkNoticeOnly }}
-          secondaryCta={{ label: 'Need Possession Instead?', href: '/possession-claim-guide' }}
+          secondaryCta={{ label: 'Debt-only case? Start Money Claim', href: moneyClaimProductHref }}
+          {...{
+            primaryCta: {
+              label: 'Start Complete Eviction Pack',
+              href: completePackProductHref,
+            },
+          }}
           variant="pastel"
         >
           {/* Trust Signals */}
@@ -142,6 +152,14 @@ export default function CountyCourtClaimFormGuidePage() {
         <section className="py-6 bg-gray-50 border-y border-gray-100">
           <div className="container mx-auto px-4">
             <SocialProofCounter variant="total" className="justify-center" />
+          </div>
+        </section>
+
+        <section className="py-10 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <SeoPageContextPanel pathname="/county-court-claim-form-guide" />
+            </div>
           </div>
         </section>
 

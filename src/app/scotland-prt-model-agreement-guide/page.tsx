@@ -3,12 +3,18 @@ import Link from 'next/link';
 import { getCanonicalUrl } from '@/lib/seo/urls';
 import { StructuredData, breadcrumbSchema, articleSchema } from '@/lib/seo/structured-data';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
+import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { tenancyAgreementScotlandLinks } from '@/lib/seo/internal-links';
 import { FAQSection } from '@/components/seo/FAQSection';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
+
+const PAGE_PATH = '/scotland-prt-model-agreement-guide';
+const PAGE_TITLE = 'Scotland PRT Model Agreement Guide';
+const PAGE_TYPE = 'tenancy' as const;
+const astProductHref = '/products/ast';
 
 export const metadata: Metadata = {
   title: 'Scotland PRT Model Agreement Guide 2026 | Government Template vs Ours',
@@ -35,14 +41,6 @@ export const metadata: Metadata = {
     url: getCanonicalUrl('/scotland-prt-model-agreement-guide'),
   },
 };
-
-
-const wizardLinkPrt = buildWizardLink({
-  product: 'tenancy_agreement',
-  topic: 'tenancy',
-  jurisdiction: 'scotland',
-  src: 'seo_scotland_prt_model_agreement_guide',
-});
 
 const faqs = [
   {
@@ -115,6 +113,12 @@ export default function ScotlandPrtModelAgreementGuidePage() {
           { name: 'PRT Model Agreement Guide', url: 'https://landlordheaven.co.uk/scotland-prt-model-agreement-guide' },
         ])}
       />
+      <SeoLandingWrapper
+        pagePath={PAGE_PATH}
+        pageTitle={PAGE_TITLE}
+        pageType={PAGE_TYPE}
+        jurisdiction="scotland"
+      />
 
       <main className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-blue-50">
 
@@ -122,7 +126,7 @@ export default function ScotlandPrtModelAgreementGuidePage() {
           badge="Comparison Guide"
           title="Scotland PRT Model Agreement: What It Is and What It Lacks"
           subtitle="The Scottish Government publishes a free model PRT agreement. Learn what it covers, what it omits, and why many landlords use a solicitor-grade drafted alternative."
-          primaryCta={{ label: 'Build Your Scotland PRT Agreement', href: wizardLinkPrt }}
+          primaryCta={{ label: 'View tenancy agreement packs', href: astProductHref }}
         />
 
         {/* Breadcrumb */}
@@ -135,6 +139,12 @@ export default function ScotlandPrtModelAgreementGuidePage() {
             <span className="text-gray-900">PRT Model Agreement Guide</span>
           </nav>
         </div>
+
+        <section className="container mx-auto px-4 pb-6">
+          <div className="max-w-4xl mx-auto">
+            <SeoPageContextPanel pathname="/scotland-prt-model-agreement-guide" />
+          </div>
+        </section>
 
         {/* Hero */}
         <section className="container mx-auto px-4 py-12">

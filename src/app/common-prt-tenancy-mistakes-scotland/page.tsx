@@ -3,8 +3,8 @@ import Link from 'next/link';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { prtMistakesRelatedLinks } from '@/lib/seo/internal-links';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
@@ -35,19 +35,7 @@ const PAGE_PATH = '/common-prt-tenancy-mistakes-scotland';
 const PAGE_TITLE = 'Common PRT Tenancy Mistakes Scotland';
 const PAGE_TYPE = 'tenancy' as const;
 
-const wizardLinkStandard = buildWizardLink({
-  product: 'ast_standard',
-  jurisdiction: 'scotland',
-  src: 'seo_common_prt_tenancy_mistakes_scotland',
-  topic: 'tenancy',
-});
-
-const wizardLinkPremium = buildWizardLink({
-  product: 'ast_premium',
-  jurisdiction: 'scotland',
-  src: 'seo_common_prt_tenancy_mistakes_scotland',
-  topic: 'tenancy',
-});
+const astProductHref = '/products/ast';
 
 export const metadata: Metadata = {
   title: 'Common PRT Tenancy Mistakes Scotland | Landlord PRT Obligations 2026',
@@ -121,11 +109,11 @@ export default function CommonPrtTenancyMistakesScotlandPage() {
           }
           primaryCta={{
             label: `Create Compliant PRT — ${PRODUCTS.ast_standard.displayPrice}`,
-            href: wizardLinkStandard,
+            href: astProductHref,
           }}
           secondaryCta={{
             label: 'Premium Agreement with Extras',
-            href: wizardLinkPremium,
+            href: astProductHref,
           }}
           variant="pastel"
         >
@@ -150,6 +138,14 @@ export default function CommonPrtTenancyMistakesScotlandPage() {
         <section className="py-6 bg-gray-50 border-y border-gray-100">
           <div className="container mx-auto px-4">
             <SocialProofCounter variant="total" className="justify-center" />
+          </div>
+        </section>
+
+        <section className="py-10 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <SeoPageContextPanel pathname="/common-prt-tenancy-mistakes-scotland" />
+            </div>
           </div>
         </section>
 

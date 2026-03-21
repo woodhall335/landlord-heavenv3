@@ -4,6 +4,7 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { Container } from '@/components/ui/Container';
 import { FAQSection, type FAQItem } from '@/components/seo/FAQSection';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import {
   StructuredData,
@@ -185,10 +186,10 @@ export default function Page() {
       <UniversalHero
         title="Eviction Timeline UK"
         subtitle="A realistic breakdown of how long each stage of eviction usually takes for landlords."
-        primaryCta={{ label: 'Start Notice Only', href: '/products/notice-only' }}
+        primaryCta={{ label: 'Start Complete Eviction Pack', href: '/products/complete-pack' }}
         secondaryCta={{
-          label: 'Start Complete Eviction Pack',
-          href: '/products/complete-pack',
+          label: 'Still at notice stage? Start Notice Only',
+          href: '/products/notice-only',
         }}
         mediaSrc="/images/wizard-icons/11-calendar-timeline.png"
         mediaAlt="Eviction timeline UK icon"
@@ -222,6 +223,14 @@ export default function Page() {
               ))}
             </div>
           </nav>
+        </Container>
+      </section>
+
+      <section className="bg-white py-8">
+        <Container>
+          <div className="mx-auto max-w-5xl">
+            <SeoPageContextPanel pathname="/eviction-timeline-uk" className="border border-[#CAB6FF] bg-[#FBF8FF]" />
+          </div>
         </Container>
       </section>
 
@@ -341,10 +350,10 @@ export default function Page() {
             <CtaBand
               title="Need to generate your eviction notice now?"
               body="If you already know the correct route, start with Notice Only. If you want broader support across notice generation, route validation, and possession planning, use the Complete Eviction Pack."
-              primaryHref="/products/notice-only"
-              primaryLabel="Start Notice Only"
-              secondaryHref="/products/complete-pack"
-              secondaryLabel="Start Complete Eviction Pack"
+              primaryHref="/products/complete-pack"
+              primaryLabel="Start Complete Eviction Pack"
+              secondaryHref="/products/notice-only"
+              secondaryLabel="Still at notice stage? Start Notice Only"
             />
 
             <Card id="stage-1-notice-period" title="Stage 1: Notice Period">
@@ -617,16 +626,16 @@ export default function Page() {
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Link
-                href="/products/notice-only"
+                href="/products/complete-pack"
                 className="rounded-lg bg-primary px-5 py-3 text-white hover:opacity-95"
               >
-                Start Notice Only
+                Start Complete Eviction Pack
               </Link>
               <Link
-                href="/products/complete-pack"
+                href="/products/notice-only"
                 className="rounded-lg border border-[#E6DBFF] bg-white px-5 py-3 text-primary hover:bg-[#FCFAFF]"
               >
-                Start Complete Eviction Pack
+                Still at notice stage? Start Notice Only
               </Link>
             </div>
           </div>

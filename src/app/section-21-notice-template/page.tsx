@@ -4,10 +4,10 @@ import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { Section21Countdown } from '@/components/ui/Section21Countdown';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, toolLinks, blogLinks, landingPageLinks } from '@/lib/seo/internal-links';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { section21NoticeTemplateFAQs } from '@/data/faqs';
 import { FunnelCta } from '@/components/funnels';
 import { Section21ComplianceTimingPanel } from '@/components/products/Section21ComplianceTimingPanel';
@@ -24,13 +24,8 @@ import {
   PoundSterling
 } from 'lucide-react';
 
-// Pre-built wizard link for Section 21 template page
-const wizardLink = buildWizardLink({
-  product: 'notice_only',
-  jurisdiction: 'england',
-  src: 'seo_section_21_notice_template',
-  topic: 'eviction',
-});
+const noticeOnlyProductHref = '/products/notice-only';
+const completePackProductHref = '/products/complete-pack';
 
 
 
@@ -99,7 +94,7 @@ export default function Section21NoticeTemplatePage() {
         <UniversalHero
           title="Section 21 Notice Guide for Landlords"
           subtitle="Build a solicitor-grade Section 21 notice workflow with compliance checks before service."
-          primaryCta={{ label: 'Start Section 21 Wizard', href: wizardLink }}
+          primaryCta={{ label: 'Start Notice Only', href: noticeOnlyProductHref }}
           secondaryCta={{ label: 'Jump to key steps', href: '#checklist' }}
           showTrustPositioningBar
           hideMedia
@@ -108,15 +103,16 @@ export default function Section21NoticeTemplatePage() {
         <section className="py-8 bg-white">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
+              <SeoPageContextPanel pathname="/section-21-notice-template" className="mb-6" />
               <FunnelCta
                 title="Ready to serve a compliant Section 21 notice?"
                 subtitle="Start with Notice Only, or move straight to full possession support if you expect court action."
-                primaryHref="/products/notice-only"
+                primaryHref={noticeOnlyProductHref}
                 primaryText="Start Notice Only"
                 primaryDataCta="notice-only"
                 location="above-fold"
                 secondaryLinks={[
-                  { href: '/products/complete-pack', text: 'Need full eviction support?', dataCta: 'complete-pack' },
+                  { href: completePackProductHref, text: 'Need full eviction support?', dataCta: 'complete-pack' },
                 ]}
               />
             </div>
@@ -137,12 +133,12 @@ export default function Section21NoticeTemplatePage() {
               <FunnelCta
                 title="Got the steps? Generate a compliance-checked bundle with service guidance."
                 subtitle="Reduce rejection risk with a compliant notice flow and clear next steps if the tenant does not leave."
-                primaryHref="/products/notice-only"
+                primaryHref={noticeOnlyProductHref}
                 primaryText="Generate my notice"
                 primaryDataCta="notice-only"
                 location="mid"
                 secondaryLinks={[
-                  { href: '/products/complete-pack', text: 'Need full eviction support?', dataCta: 'complete-pack' },
+                  { href: completePackProductHref, text: 'Need full eviction support?', dataCta: 'complete-pack' },
                 ]}
               />
             </div>
@@ -240,7 +236,7 @@ export default function Section21NoticeTemplatePage() {
                     </li>
                   </ul>
                   <Link
-                    href={wizardLink}
+                    href={noticeOnlyProductHref}
                     className="hero-btn-primary block w-full text-center"
                   >
                     Get Court-Ready Notice
@@ -430,7 +426,7 @@ export default function Section21NoticeTemplatePage() {
               </p>
               <Section21Countdown variant="large" className="mb-8 [&_*]:text-white" />
               <Link
-                href={wizardLink}
+                href={noticeOnlyProductHref}
                 className="hero-btn-secondary inline-flex items-center gap-2"
               >
                 Serve Your Notice Before the Deadline
@@ -701,7 +697,7 @@ export default function Section21NoticeTemplatePage() {
                   Try Free Starter Document
                 </Link>
                 <Link
-                  href={wizardLink}
+                  href={noticeOnlyProductHref}
                   className="hero-btn-secondary inline-flex items-center justify-center gap-2"
                 >
                   Get Court-Ready — £29.99

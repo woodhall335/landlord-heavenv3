@@ -3,11 +3,18 @@ import Link from 'next/link';
 import { getCanonicalUrl } from '@/lib/seo/urls';
 import { StructuredData, breadcrumbSchema, articleSchema } from '@/lib/seo/structured-data';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
+import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { tenancyAgreementWalesLinks } from '@/lib/seo/internal-links';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
+
+const PAGE_PATH = '/renting-homes-wales-written-statement';
+const PAGE_TITLE = 'Renting Homes Wales Written Statement';
+const PAGE_TYPE = 'tenancy' as const;
+const astProductHref = '/products/ast';
 
 export const metadata: Metadata = {
   title: 'Wales Written Statement 2026 | Legal Requirements',
@@ -107,12 +114,18 @@ export default function RentingHomesWalesWrittenStatementPage() {
       />
 
       <HeaderConfig mode="autoOnScroll" />
+      <SeoLandingWrapper
+        pagePath={PAGE_PATH}
+        pageTitle={PAGE_TITLE}
+        pageType={PAGE_TYPE}
+        jurisdiction="wales"
+      />
 
       <main className="min-h-screen bg-gradient-to-br from-red-50 via-white to-amber-50">
         <UniversalHero
           title="Renting Homes Wales Written Statement"
           subtitle="Create a legally validated, solicitor-grade written statement that is compliance-checked for Wales."
-          primaryCta={{ label: "Start now", href: "/wizard?product=ast_standard&topic=tenancy&src=seo_renting_homes_wales_written_statement&jurisdiction=wales" }}
+          primaryCta={{ label: 'View tenancy agreement packs', href: astProductHref }}
           showTrustPositioningBar
           hideMedia
         />
@@ -126,6 +139,12 @@ export default function RentingHomesWalesWrittenStatementPage() {
             <span className="text-gray-900">Written Statement Wales</span>
           </nav>
         </div>
+
+        <section className="container mx-auto px-4 pb-6">
+          <div className="max-w-4xl mx-auto">
+            <SeoPageContextPanel pathname="/renting-homes-wales-written-statement" />
+          </div>
+        </section>
 
         {/* Hero Section */}
         <section className="container mx-auto px-4 py-12">
@@ -146,7 +165,7 @@ export default function RentingHomesWalesWrittenStatementPage() {
             </p>
             <div className="flex gap-4 justify-center flex-wrap">
               <Link
-                href="/wizard?product=ast_standard&topic=tenancy&src=seo_renting_homes_wales_written_statement&jurisdiction=wales"
+                href={astProductHref}
                 className="inline-flex items-center gap-2 bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors"
               >
                 Get Compliant Written Statement — £14.99

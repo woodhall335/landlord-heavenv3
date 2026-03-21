@@ -8,12 +8,12 @@ import {
 import { getCanonicalUrl } from '@/lib/seo/urls';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { evictionRelatedLinks } from '@/lib/seo/internal-links';
 import { FunnelCta } from '@/components/funnels';
 import { PRODUCTS } from '@/lib/pricing/products';
@@ -28,19 +28,8 @@ import {
   XCircle,
 } from 'lucide-react';
 
-const completePackLink = buildWizardLink({
-  product: 'complete_pack',
-  jurisdiction: 'england',
-  src: 'seo_section_21_expired_what_next',
-  topic: 'eviction',
-});
-
-const noticeOnlyLink = buildWizardLink({
-  product: 'notice_only',
-  jurisdiction: 'england',
-  src: 'seo_section_21_expired_what_next',
-  topic: 'eviction',
-});
+const completePackProductHref = '/products/complete-pack';
+const noticeOnlyProductHref = '/products/notice-only';
 
 const faqs = [
   {
@@ -162,8 +151,8 @@ export default function Section21ExpiredPage() {
           title="Section 21 Expired: What to Do Next"
           subtitle="If your Section 21 notice has expired and the tenant is still in the property, the next step is usually the court possession route. Here is what England landlords should do next, what to avoid, and when the N5B route may be relevant."
           primaryCta={{
-            label: `Continue with Eviction Wizard — ${PRODUCTS.complete_pack.displayPrice}`,
-            href: completePackLink,
+            label: `Start Complete Eviction Pack — ${PRODUCTS.complete_pack.displayPrice}`,
+            href: completePackProductHref,
           }}
           secondaryCta={{ label: 'Jump to key steps', href: '#next-steps' }}
           showTrustPositioningBar
@@ -173,15 +162,20 @@ export default function Section21ExpiredPage() {
         <section className="py-8 bg-white">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
+              <SeoPageContextPanel pathname="/section-21-expired-what-next" className="mb-6" />
               <FunnelCta
                 title="Move to possession order support now"
                 subtitle="When a Section 21 expires, the next step is usually the court route. We can help you prepare the full pack."
-                primaryHref="/products/complete-pack"
+                primaryHref={completePackProductHref}
                 primaryText="Get complete pack"
                 primaryDataCta="complete-pack"
                 location="above-fold"
                 secondaryLinks={[
-                  { href: noticeOnlyLink, text: 'Need to (re)serve notice first?', dataCta: 'notice-only' },
+                  {
+                    href: noticeOnlyProductHref,
+                    text: 'Need to (re)serve notice first?',
+                    dataCta: 'notice-only',
+                  },
                   { href: '/n5b-form-guide', text: 'Accelerated possession (N5B)' },
                 ]}
               />
@@ -732,3 +726,4 @@ export default function Section21ExpiredPage() {
     </>
   );
 }
+

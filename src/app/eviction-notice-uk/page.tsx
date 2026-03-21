@@ -6,7 +6,12 @@ import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
+import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { evictionNoticeUKFAQs } from '@/data/faqs';
+
+const canonicalUrl = getCanonicalUrl('/eviction-notice-template');
+const noticeOnlyProductHref = '/products/notice-only';
 
 export const metadata: Metadata = {
   title: 'Eviction Notice UK | Types and Service Rules for Landlords [2026]',
@@ -27,10 +32,10 @@ export const metadata: Metadata = {
     description:
       'Everything UK landlords need to know about eviction notices. Templates, guides and generators for all regions.',
     type: 'article',
-    url: getCanonicalUrl('/eviction-notice-uk'),
+    url: canonicalUrl,
   },
   alternates: {
-    canonical: getCanonicalUrl('/eviction-notice-uk'),
+    canonical: canonicalUrl,
   },
 };
 
@@ -39,11 +44,15 @@ const breadcrumbs = [
   { name: 'Eviction Notice UK', url: '/eviction-notice-uk' },
 ];
 
-const wizardHref = '/wizard?product=notice_only&topic=eviction&src=seo_eviction_notice_uk';
-
 export default function EvictionNoticeUKPage() {
   return (
     <>
+      <SeoLandingWrapper
+        pagePath="/eviction-notice-uk"
+        pageTitle={metadata.title as string}
+        pageType="guide"
+        jurisdiction="uk"
+      />
       <StructuredData data={breadcrumbSchema(breadcrumbs)} />
 
       <div className="min-h-screen bg-gray-50">
@@ -51,7 +60,7 @@ export default function EvictionNoticeUKPage() {
         <UniversalHero
           title="Eviction Notice UK: Jurisdiction-Correct Guide for Landlords"
           subtitle="Understand which notice applies in England, Wales, Scotland, or Northern Ireland and start a solicitor-grade workflow for your case."
-          primaryCta={{ label: 'Start Eviction Wizard', href: wizardHref }}
+          primaryCta={{ label: 'Start Notice Only', href: noticeOnlyProductHref }}
           secondaryCta={{ label: 'Compare notice routes', href: '#england' }}
           showTrustPositioningBar
           hideMedia
@@ -59,7 +68,10 @@ export default function EvictionNoticeUKPage() {
 
         {/* Region Selector */}
         <Container>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 -mt-8 mb-12">
+          <div className="mx-auto mb-8 max-w-4xl pt-8">
+            <SeoPageContextPanel pathname="/eviction-notice-uk" />
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
             <a
               href="#england"
               className="p-4 border rounded-lg bg-white hover:border-primary text-center transition-colors"
@@ -155,16 +167,16 @@ export default function EvictionNoticeUKPage() {
 
                 <div className="flex flex-wrap gap-4">
                   <Link
-                    href="/tools/free-section-21-notice-generator"
+                    href="/section-21-notice"
                     className="hero-btn-primary"
                   >
-                    Section 21 Generator
+                    Section 21 guide
                   </Link>
                   <Link
-                    href="/tools/free-section-8-notice-generator"
+                    href="/section-8-notice"
                     className="hero-btn-secondary"
                   >
-                    Section 8 Generator
+                    Section 8 guide
                   </Link>
                 </div>
               </div>
@@ -216,8 +228,14 @@ export default function EvictionNoticeUKPage() {
 
                 <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
                   <p className="text-sm text-amber-800">
-                    <strong>Note:</strong> Wales has different requirements than England. Our Wales
-                    eviction notice generator is coming soon.
+                    <strong>Note:</strong> Wales has different requirements than England. Use the{' '}
+                    <Link
+                      href="/wales-eviction-notice-template"
+                      className="font-medium underline hover:text-amber-900"
+                    >
+                      Wales eviction notice template guide
+                    </Link>{' '}
+                    before serving anything.
                   </p>
                 </div>
               </div>
@@ -253,7 +271,7 @@ export default function EvictionNoticeUKPage() {
                   </table>
                 </div>
 
-                <Link href="/products/notice-only?jurisdiction=scotland" className="hero-btn-primary">
+                <Link href={noticeOnlyProductHref} className="hero-btn-primary">
                   Scotland Notice Pack
                 </Link>
               </div>
@@ -272,8 +290,14 @@ export default function EvictionNoticeUKPage() {
 
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                   <p className="text-sm text-blue-800">
-                    <strong>Coming Soon:</strong> Northern Ireland eviction notice support is
-                    planned for 2026.
+                    <strong>Northern Ireland route:</strong> Start with the{' '}
+                    <Link
+                      href="/notice-to-quit-northern-ireland-guide"
+                      className="font-medium underline hover:text-blue-900"
+                    >
+                      Notice to Quit guide
+                    </Link>{' '}
+                    because the prerequisites and notice periods differ from England and Wales.
                   </p>
                 </div>
               </div>
@@ -302,7 +326,6 @@ export default function EvictionNoticeUKPage() {
             {/* FAQ Section */}
             <div className="mb-12">
               <FAQSection
-          showTrustPositioningBar
                 faqs={evictionNoticeUKFAQs}
                 title="UK Eviction Notice FAQ"
                 showContactCTA={false}
@@ -318,7 +341,7 @@ export default function EvictionNoticeUKPage() {
               <p className="text-gray-600 mb-6">
                 Generate a legally valid notice for your region in minutes.
               </p>
-              <Link href="/products/notice-only" className="hero-btn-primary">
+              <Link href={noticeOnlyProductHref} className="hero-btn-primary">
                 Get Notice Pack
               </Link>
             </div>

@@ -30,10 +30,16 @@ export type SeoCluster =
   | 'section-21-transition'
   | 'section-21-legacy'
   | 'tenancy-england'
+  | 'tenancy-wales'
+  | 'tenancy-scotland'
+  | 'tenancy-northern-ireland'
+  | 'notice-templates'
+  | 'legal-updates'
   | 'court-process'
   | 'tenant-problems'
   | 'regional-eviction'
-  | 'eviction-hub';
+  | 'eviction-hub'
+  | 'product-adjacent';
 
 export type SeoScenario =
   | 'default'
@@ -102,6 +108,9 @@ export const SEO_PILLAR_ROUTES = {
   section21BanUk: '/section-21-ban-uk',
   evictionGuides: '/eviction-guides',
   tenancyAgreementsEngland: '/tenancy-agreements/england',
+  tenancyAgreementsWales: '/wales-tenancy-agreement-template',
+  tenancyAgreementsScotland: '/private-residential-tenancy-agreement-template',
+  tenancyAgreementsNorthernIreland: '/northern-ireland-tenancy-agreement-template',
 } as const;
 
 const REVIEWED_DATE = '21 March 2026';
@@ -185,6 +194,60 @@ const anchorSets = {
     'Residential Tenancy Agreement builder',
     'tenancy agreement workflow for landlords',
   ],
+} as const;
+
+const regionalTenancyAnchors = {
+  wales: {
+    pillar: [
+      'Wales occupation contract guide',
+      'Wales tenancy agreement guide',
+      'Renting Homes Wales agreement route',
+    ],
+    supporting: [
+      'Wales written statement requirements',
+      'standard occupation contract wording',
+      'how Wales occupation contracts are framed',
+    ],
+    product: [
+      'Wales tenancy agreement generator',
+      'Wales occupation contract workflow',
+      'Renting Homes Wales contract builder',
+    ],
+  },
+  scotland: {
+    pillar: [
+      'Scotland PRT agreement guide',
+      'Private Residential Tenancy guide',
+      'Scotland tenancy agreement route',
+    ],
+    supporting: [
+      'Scottish PRT model agreement guide',
+      'PRT rules for landlords in Scotland',
+      'how Scotland tenancy wording works',
+    ],
+    product: [
+      'Scotland tenancy agreement generator',
+      'PRT agreement workflow',
+      'Scotland tenancy builder for landlords',
+    ],
+  },
+  'northern-ireland': {
+    pillar: [
+      'Northern Ireland tenancy agreement guide',
+      'NI private tenancy agreement route',
+      'Northern Ireland landlord agreement guide',
+    ],
+    supporting: [
+      'Northern Ireland tenancy agreement wording',
+      'NI private tenancy rules for landlords',
+      'Northern Ireland tenancy template guidance',
+    ],
+    product: [
+      'Northern Ireland tenancy agreement generator',
+      'NI tenancy workflow for landlords',
+      'Northern Ireland agreement builder',
+    ],
+  },
 } as const;
 
 function makeEntry(
@@ -441,6 +504,1043 @@ function regionalEntry(
     consolidationStatus: 'supporting_live',
   });
 }
+
+function regionalTenancyEntry(
+  pathname: string,
+  jurisdiction: Extract<SeoJurisdiction, 'wales' | 'scotland' | 'northern-ireland'>,
+  cluster: Extract<SeoCluster, 'tenancy-wales' | 'tenancy-scotland' | 'tenancy-northern-ireland'>,
+  primaryPillar: string,
+  supportingPage: string,
+  config: Partial<Omit<SeoPageTaxonomyEntry, 'pathname' | 'cluster' | 'primaryPillar' | 'supportingPage' | 'primaryProduct' | 'anchorVariants' | 'pageType' | 'pageRole' | 'jurisdiction' | 'section21TransitionEligible' | 'freshnessRequired' | 'consolidationStatus'>> &
+    Pick<SeoPageTaxonomyEntry, 'canonicalTarget'>
+): SeoPageTaxonomyEntry {
+  const anchors = regionalTenancyAnchors[jurisdiction];
+
+  return makeEntry(pathname, {
+    pageType: 'tenancy',
+    pageRole: 'supporting',
+    jurisdiction,
+    cluster,
+    primaryPillar,
+    supportingPage,
+    primaryProduct: SEO_PRODUCT_ROUTES.ast,
+    primaryProductByScenario: {
+      tenancy: SEO_PRODUCT_ROUTES.ast,
+      ...config.primaryProductByScenario,
+    },
+    canonicalTarget: config.canonicalTarget,
+    anchorVariants: {
+      pillar: [...anchors.pillar],
+      supporting: [...anchors.supporting],
+      product: [...anchors.product],
+    },
+    section21TransitionEligible: false,
+    freshnessRequired: false,
+    consolidationStatus: 'supporting_live',
+    ...config,
+  });
+}
+
+function section21TemplateEntry(
+  pathname: string,
+  supportingPage: string,
+  config: Partial<Omit<SeoPageTaxonomyEntry, 'pathname' | 'cluster' | 'primaryPillar' | 'supportingPage' | 'primaryProduct' | 'anchorVariants' | 'pageType' | 'pageRole' | 'jurisdiction' | 'section21TransitionEligible' | 'freshnessRequired' | 'consolidationStatus'>> &
+    Pick<SeoPageTaxonomyEntry, 'canonicalTarget'>
+): SeoPageTaxonomyEntry {
+  return makeEntry(pathname, {
+    pageType: 'notice',
+    pageRole: 'supporting',
+    jurisdiction: 'england',
+    cluster: 'notice-templates',
+    primaryPillar: SEO_PILLAR_ROUTES.section21BanUk,
+    supportingPage,
+    primaryProduct: SEO_PRODUCT_ROUTES.noticeOnly,
+    secondaryProduct: SEO_PRODUCT_ROUTES.completePack,
+    primaryProductByScenario: {
+      court: SEO_PRODUCT_ROUTES.completePack,
+      transition: SEO_PRODUCT_ROUTES.completePack,
+      ...config.primaryProductByScenario,
+    },
+    canonicalTarget: config.canonicalTarget,
+    anchorVariants: {
+      pillar: [...anchorSets.section21TransitionPillar],
+      supporting: [
+        'Section 21 validity checklist',
+        'what to do when a Section 21 expires',
+        'post-ban possession route for landlords',
+      ],
+      product: [...anchorSets.noticeOnlyProduct],
+    },
+    section21TransitionEligible: true,
+    freshnessRequired: false,
+    consolidationStatus: 'supporting_live',
+    ...config,
+  });
+}
+
+function section8TemplateEntry(
+  pathname: string,
+  supportingPage: string,
+  config: Partial<Omit<SeoPageTaxonomyEntry, 'pathname' | 'cluster' | 'primaryPillar' | 'supportingPage' | 'primaryProduct' | 'anchorVariants' | 'pageType' | 'pageRole' | 'jurisdiction' | 'section21TransitionEligible' | 'freshnessRequired' | 'consolidationStatus'>> &
+    Pick<SeoPageTaxonomyEntry, 'canonicalTarget'>
+): SeoPageTaxonomyEntry {
+  return makeEntry(pathname, {
+    pageType: 'notice',
+    pageRole: 'supporting',
+    jurisdiction: 'england',
+    cluster: 'notice-templates',
+    primaryPillar: SEO_PILLAR_ROUTES.section8Notice,
+    supportingPage,
+    primaryProduct: SEO_PRODUCT_ROUTES.noticeOnly,
+    secondaryProduct: SEO_PRODUCT_ROUTES.completePack,
+    primaryProductByScenario: {
+      court: SEO_PRODUCT_ROUTES.completePack,
+      ...config.primaryProductByScenario,
+    },
+    canonicalTarget: config.canonicalTarget,
+    anchorVariants: {
+      pillar: [...anchorSets.section8Pillar],
+      supporting: [
+        'Section 8 eviction process',
+        'grounds and hearing prep for Section 8',
+        'what happens after serving Section 8',
+      ],
+      product: [...anchorSets.section8NoticeProduct],
+    },
+    section21TransitionEligible: false,
+    freshnessRequired: false,
+    consolidationStatus: 'supporting_live',
+    ...config,
+  });
+}
+
+function genericNoticeEntry(
+  pathname: string,
+  supportingPage: string,
+  config: Partial<Omit<SeoPageTaxonomyEntry, 'pathname' | 'cluster' | 'primaryPillar' | 'supportingPage' | 'primaryProduct' | 'anchorVariants' | 'pageType' | 'pageRole' | 'jurisdiction' | 'section21TransitionEligible' | 'freshnessRequired' | 'consolidationStatus'>> &
+    Pick<SeoPageTaxonomyEntry, 'canonicalTarget'>
+): SeoPageTaxonomyEntry {
+  return makeEntry(pathname, {
+    pageType: 'notice',
+    pageRole: 'supporting',
+    jurisdiction: 'uk',
+    cluster: 'notice-templates',
+    primaryPillar: SEO_PILLAR_ROUTES.evictionProcessUk,
+    supportingPage,
+    primaryProduct: SEO_PRODUCT_ROUTES.noticeOnly,
+    secondaryProduct: SEO_PRODUCT_ROUTES.completePack,
+    primaryProductByScenario: {
+      notice: SEO_PRODUCT_ROUTES.noticeOnly,
+      court: SEO_PRODUCT_ROUTES.completePack,
+      ...config.primaryProductByScenario,
+    },
+    canonicalTarget: config.canonicalTarget,
+    anchorVariants: {
+      pillar: [...anchorSets.evictionProcessPillar],
+      supporting: [
+        'how to evict a tenant legally',
+        'eviction notice template guide',
+        'landlord notice route overview',
+      ],
+      product: [...anchorSets.noticeOnlyProduct],
+    },
+    section21TransitionEligible: false,
+    freshnessRequired: false,
+    consolidationStatus: 'supporting_live',
+    ...config,
+  });
+}
+
+function productAdjacentRedirectEntry(
+  pathname: string,
+  primaryPillar: string,
+  supportingPage: string,
+  primaryProduct: SeoProductRoute,
+  canonicalTarget: string,
+  config: Partial<
+    Omit<
+      SeoPageTaxonomyEntry,
+      | 'pathname'
+      | 'cluster'
+      | 'primaryPillar'
+      | 'supportingPage'
+      | 'primaryProduct'
+      | 'canonicalTarget'
+      | 'pageRole'
+      | 'jurisdiction'
+      | 'freshnessRequired'
+      | 'consolidationStatus'
+    >
+  > = {}
+): SeoPageTaxonomyEntry {
+  const productAnchors =
+    primaryProduct === SEO_PRODUCT_ROUTES.moneyClaim
+      ? anchorSets.moneyClaimProduct
+      : primaryProduct === SEO_PRODUCT_ROUTES.ast
+        ? anchorSets.tenancyProduct
+        : primaryProduct === SEO_PRODUCT_ROUTES.completePack
+          ? anchorSets.completePackProduct
+          : anchorSets.noticeOnlyProduct;
+
+  return makeEntry(pathname, {
+    pageType: 'guide',
+    pageRole: 'product-adjacent',
+    jurisdiction: 'england',
+    cluster: 'product-adjacent',
+    primaryPillar,
+    supportingPage,
+    primaryProduct,
+    canonicalTarget,
+    anchorVariants: {
+      pillar: [...anchorSets.howToEvictPillar],
+      supporting: [...anchorSets.evictionProcessPillar],
+      product: [...productAnchors],
+    },
+    section21TransitionEligible: false,
+    freshnessRequired: false,
+    consolidationStatus: 'candidate_redirect',
+    ...config,
+  });
+}
+
+const LONGTAIL_LIVE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
+  [SEO_PILLAR_ROUTES.tenancyAgreementsWales]: makeEntry(SEO_PILLAR_ROUTES.tenancyAgreementsWales, {
+    pageType: 'tenancy',
+    pageRole: 'pillar',
+    jurisdiction: 'wales',
+    cluster: 'tenancy-wales',
+    primaryPillar: SEO_PILLAR_ROUTES.tenancyAgreementsWales,
+    supportingPage: '/occupation-contract-template-wales',
+    primaryProduct: SEO_PRODUCT_ROUTES.ast,
+    canonicalTarget: SEO_PILLAR_ROUTES.tenancyAgreementsWales,
+    anchorVariants: {
+      pillar: [...regionalTenancyAnchors.wales.pillar],
+      supporting: [...regionalTenancyAnchors.wales.supporting],
+      product: [...regionalTenancyAnchors.wales.product],
+    },
+    section21TransitionEligible: false,
+    freshnessRequired: true,
+    consolidationStatus: 'canonical',
+  }),
+  [SEO_PILLAR_ROUTES.tenancyAgreementsScotland]: makeEntry(SEO_PILLAR_ROUTES.tenancyAgreementsScotland, {
+    pageType: 'tenancy',
+    pageRole: 'pillar',
+    jurisdiction: 'scotland',
+    cluster: 'tenancy-scotland',
+    primaryPillar: SEO_PILLAR_ROUTES.tenancyAgreementsScotland,
+    supportingPage: '/private-residential-tenancy-agreement-scotland',
+    primaryProduct: SEO_PRODUCT_ROUTES.ast,
+    canonicalTarget: SEO_PILLAR_ROUTES.tenancyAgreementsScotland,
+    anchorVariants: {
+      pillar: [...regionalTenancyAnchors.scotland.pillar],
+      supporting: [...regionalTenancyAnchors.scotland.supporting],
+      product: [...regionalTenancyAnchors.scotland.product],
+    },
+    section21TransitionEligible: false,
+    freshnessRequired: true,
+    consolidationStatus: 'canonical',
+  }),
+  [SEO_PILLAR_ROUTES.tenancyAgreementsNorthernIreland]: makeEntry(SEO_PILLAR_ROUTES.tenancyAgreementsNorthernIreland, {
+    pageType: 'tenancy',
+    pageRole: 'pillar',
+    jurisdiction: 'northern-ireland',
+    cluster: 'tenancy-northern-ireland',
+    primaryPillar: SEO_PILLAR_ROUTES.tenancyAgreementsNorthernIreland,
+    supportingPage: '/tenancy-agreement-northern-ireland',
+    primaryProduct: SEO_PRODUCT_ROUTES.ast,
+    canonicalTarget: SEO_PILLAR_ROUTES.tenancyAgreementsNorthernIreland,
+    anchorVariants: {
+      pillar: [...regionalTenancyAnchors['northern-ireland'].pillar],
+      supporting: [...regionalTenancyAnchors['northern-ireland'].supporting],
+      product: [...regionalTenancyAnchors['northern-ireland'].product],
+    },
+    section21TransitionEligible: false,
+    freshnessRequired: true,
+    consolidationStatus: 'canonical',
+  }),
+  '/evict-tenant-not-paying-rent': makeEntry('/evict-tenant-not-paying-rent', {
+    ...rentArrearsEntry('/evict-tenant-not-paying-rent', '/section-8-eviction-process', {
+      canonicalTarget: '/evict-tenant-not-paying-rent',
+    }),
+    pageType: 'problem',
+    primaryProduct: SEO_PRODUCT_ROUTES.noticeOnly,
+    secondaryProduct: SEO_PRODUCT_ROUTES.completePack,
+    anchorVariants: {
+      pillar: [...anchorSets.rentArrearsPillar],
+      supporting: [
+        'Section 8 eviction process',
+        'rent arrears possession route',
+        'what to do after missed rent escalates',
+      ],
+      product: [...anchorSets.noticeOnlyProduct],
+    },
+  }),
+  '/tenant-left-without-paying-rent': makeEntry('/tenant-left-without-paying-rent', {
+    ...rentArrearsEntry('/tenant-left-without-paying-rent', '/recover-rent-arrears-after-eviction', {
+      canonicalTarget: '/tenant-left-without-paying-rent',
+    }),
+    pageType: 'problem',
+    primaryProduct: SEO_PRODUCT_ROUTES.moneyClaim,
+    secondaryProduct: SEO_PRODUCT_ROUTES.completePack,
+    anchorVariants: {
+      pillar: [...anchorSets.rentArrearsPillar],
+      supporting: [
+        'recover rent arrears after eviction',
+        'post-eviction arrears recovery guide',
+        'claim unpaid rent after the tenant has gone',
+      ],
+      product: [...anchorSets.moneyClaimProduct],
+    },
+  }),
+  '/recover-rent-arrears-after-eviction': makeEntry('/recover-rent-arrears-after-eviction', {
+    ...rentArrearsEntry('/recover-rent-arrears-after-eviction', '/money-claim-unpaid-rent', {
+      canonicalTarget: '/recover-rent-arrears-after-eviction',
+    }),
+    primaryProduct: SEO_PRODUCT_ROUTES.moneyClaim,
+    secondaryProduct: SEO_PRODUCT_ROUTES.completePack,
+    anchorVariants: {
+      pillar: [...anchorSets.rentArrearsPillar],
+      supporting: [
+        'money claim for unpaid rent',
+        'landlord debt recovery after eviction',
+        'county court rent recovery guide',
+      ],
+      product: [...anchorSets.moneyClaimProduct],
+    },
+  }),
+  '/pre-action-protocol-debt': makeEntry('/pre-action-protocol-debt', {
+    pageType: 'money',
+    pageRole: 'bridge',
+    jurisdiction: 'england',
+    cluster: 'money-claim',
+    primaryPillar: SEO_PILLAR_ROUTES.tenantNotPayingRent,
+    supportingPage: '/money-claim-letter-before-action',
+    primaryProduct: SEO_PRODUCT_ROUTES.moneyClaim,
+    secondaryProduct: SEO_PRODUCT_ROUTES.completePack,
+    primaryProductByScenario: {
+      arrears: SEO_PRODUCT_ROUTES.moneyClaim,
+      court: SEO_PRODUCT_ROUTES.completePack,
+    },
+    canonicalTarget: '/pre-action-protocol-debt',
+    anchorVariants: {
+      pillar: [...anchorSets.rentArrearsPillar],
+      supporting: [
+        'letter before action for rent arrears',
+        'money claim pre-action steps',
+        'pre-action debt letter for landlords',
+      ],
+      product: [...anchorSets.moneyClaimProduct],
+    },
+    section21TransitionEligible: false,
+    freshnessRequired: true,
+    consolidationStatus: 'bridge_live',
+  }),
+  '/section-21-notice-template': makeEntry('/section-21-notice-template', {
+    ...section21TemplateEntry('/section-21-notice-template', '/section-21-validity-checklist', {
+      canonicalTarget: '/section-21-notice-template',
+    }),
+    pageRole: 'bridge',
+    freshnessRequired: true,
+    consolidationStatus: 'bridge_live',
+  }),
+  '/section-8-notice-template': makeEntry('/section-8-notice-template', {
+    ...section8TemplateEntry('/section-8-notice-template', '/section-8-eviction-process', {
+      canonicalTarget: '/section-8-notice-template',
+    }),
+    pageRole: 'bridge',
+    freshnessRequired: true,
+    consolidationStatus: 'bridge_live',
+  }),
+  '/section-21-expired-what-next': makeEntry('/section-21-expired-what-next', {
+    pageType: 'court',
+    pageRole: 'bridge',
+    jurisdiction: 'england',
+    cluster: 'section-21-transition',
+    primaryPillar: SEO_PILLAR_ROUTES.section21BanUk,
+    supportingPage: '/section-21-notice-template',
+    primaryProduct: SEO_PRODUCT_ROUTES.completePack,
+    secondaryProduct: SEO_PRODUCT_ROUTES.noticeOnly,
+    primaryProductByScenario: {
+      notice: SEO_PRODUCT_ROUTES.noticeOnly,
+      transition: SEO_PRODUCT_ROUTES.completePack,
+    },
+    canonicalTarget: '/section-21-expired-what-next',
+    anchorVariants: {
+      pillar: [...anchorSets.section21TransitionPillar],
+      supporting: [
+        'Section 21 notice template',
+        'Section 21 validity checklist',
+        'next steps after a Section 21 expires',
+      ],
+      product: [...anchorSets.completePackProduct],
+    },
+    section21TransitionEligible: true,
+    freshnessRequired: true,
+    consolidationStatus: 'bridge_live',
+  }),
+  '/possession-claim-guide': makeEntry('/possession-claim-guide', {
+    pageType: 'court',
+    pageRole: 'bridge',
+    jurisdiction: 'england',
+    cluster: 'court-process',
+    primaryPillar: SEO_PILLAR_ROUTES.evictionProcessUk,
+    supportingPage: '/n5b-possession-claim-guide',
+    primaryProduct: SEO_PRODUCT_ROUTES.completePack,
+    secondaryProduct: SEO_PRODUCT_ROUTES.noticeOnly,
+    primaryProductByScenario: {
+      notice: SEO_PRODUCT_ROUTES.noticeOnly,
+    },
+    canonicalTarget: '/possession-claim-guide',
+    anchorVariants: {
+      pillar: [...anchorSets.evictionProcessPillar],
+      supporting: [
+        'N5B possession claim guide',
+        'court possession order guide',
+        'possession claim paperwork guide',
+      ],
+      product: [...anchorSets.completePackProduct],
+    },
+    section21TransitionEligible: false,
+    freshnessRequired: true,
+    consolidationStatus: 'bridge_live',
+  }),
+  '/n5b-possession-claim-guide': makeEntry('/n5b-possession-claim-guide', {
+    pageType: 'court',
+    pageRole: 'bridge',
+    jurisdiction: 'england',
+    cluster: 'section-21-transition',
+    primaryPillar: SEO_PILLAR_ROUTES.section21BanUk,
+    supportingPage: '/section-21-expired-what-next',
+    primaryProduct: SEO_PRODUCT_ROUTES.completePack,
+    secondaryProduct: SEO_PRODUCT_ROUTES.noticeOnly,
+    primaryProductByScenario: {
+      notice: SEO_PRODUCT_ROUTES.noticeOnly,
+      transition: SEO_PRODUCT_ROUTES.completePack,
+    },
+    canonicalTarget: '/n5b-possession-claim-guide',
+    anchorVariants: {
+      pillar: [...anchorSets.section21TransitionPillar],
+      supporting: [
+        'what to do when a Section 21 expires',
+        'accelerated possession legacy route',
+        'Section 21 possession claim next steps',
+      ],
+      product: [...anchorSets.completePackProduct],
+    },
+    section21TransitionEligible: true,
+    freshnessRequired: true,
+    consolidationStatus: 'bridge_live',
+  }),
+  '/renting-homes-wales-written-statement': makeEntry('/renting-homes-wales-written-statement', {
+    ...regionalTenancyEntry('/renting-homes-wales-written-statement', 'wales', 'tenancy-wales', SEO_PILLAR_ROUTES.tenancyAgreementsWales, '/update-occupation-contract-wales', {
+      canonicalTarget: '/renting-homes-wales-written-statement',
+    }),
+    pageType: 'guide',
+    freshnessRequired: true,
+    anchorVariants: {
+      pillar: ['Wales tenancy agreement template', ...regionalTenancyAnchors.wales.pillar.slice(1)],
+      supporting: [
+        'updating a Wales occupation contract',
+        'how to change terms in a Wales occupation contract',
+        'occupation contract update guide for landlords',
+      ],
+      product: [
+        'Wales tenancy agreement packs',
+        ...regionalTenancyAnchors.wales.product.slice(1),
+      ],
+    },
+  }),
+  '/update-occupation-contract-wales': makeEntry('/update-occupation-contract-wales', {
+    ...regionalTenancyEntry('/update-occupation-contract-wales', 'wales', 'tenancy-wales', SEO_PILLAR_ROUTES.tenancyAgreementsWales, '/renting-homes-wales-written-statement', {
+      canonicalTarget: '/update-occupation-contract-wales',
+    }),
+    freshnessRequired: true,
+    anchorVariants: {
+      pillar: ['Wales occupation contract template', ...regionalTenancyAnchors.wales.pillar.slice(1)],
+      supporting: [
+        'Wales written statement requirements',
+        'what landlords must give contract-holders in Wales',
+        'written statement rules under Renting Homes Wales',
+      ],
+      product: [
+        'update your Wales tenancy agreement pack',
+        ...regionalTenancyAnchors.wales.product.slice(1),
+      ],
+    },
+  }),
+  '/joint-occupation-contract-wales': makeEntry('/joint-occupation-contract-wales', {
+    ...regionalTenancyEntry('/joint-occupation-contract-wales', 'wales', 'tenancy-wales', SEO_PILLAR_ROUTES.tenancyAgreementsWales, '/update-occupation-contract-wales', {
+      canonicalTarget: '/joint-occupation-contract-wales',
+    }),
+    freshnessRequired: true,
+    anchorVariants: {
+      pillar: ['Wales contract-holder agreement guide', ...regionalTenancyAnchors.wales.pillar.slice(1)],
+      supporting: [
+        'changing a Wales occupation contract',
+        'updating contract-holder terms in Wales',
+        'Wales occupation contract update guide',
+      ],
+      product: [
+        'joint Wales tenancy agreement packs',
+        ...regionalTenancyAnchors.wales.product.slice(1),
+      ],
+    },
+  }),
+  '/fixed-term-periodic-occupation-contract-wales': makeEntry('/fixed-term-periodic-occupation-contract-wales', {
+    ...regionalTenancyEntry('/fixed-term-periodic-occupation-contract-wales', 'wales', 'tenancy-wales', SEO_PILLAR_ROUTES.tenancyAgreementsWales, '/update-occupation-contract-wales', {
+      canonicalTarget: '/fixed-term-periodic-occupation-contract-wales',
+    }),
+    freshnessRequired: true,
+    anchorVariants: {
+      pillar: ['Wales tenancy agreement options', ...regionalTenancyAnchors.wales.pillar.slice(1)],
+      supporting: [
+        'updating a Wales occupation contract',
+        'how Wales fixed-term contracts change over time',
+        'occupation contract update route in Wales',
+      ],
+      product: [
+        'Wales occupation contract packs',
+        ...regionalTenancyAnchors.wales.product.slice(1),
+      ],
+    },
+  }),
+  '/scotland-prt-model-agreement-guide': makeEntry('/scotland-prt-model-agreement-guide', {
+    ...regionalTenancyEntry('/scotland-prt-model-agreement-guide', 'scotland', 'tenancy-scotland', SEO_PILLAR_ROUTES.tenancyAgreementsScotland, '/update-prt-tenancy-agreement-scotland', {
+      canonicalTarget: '/scotland-prt-model-agreement-guide',
+    }),
+    pageType: 'guide',
+    freshnessRequired: true,
+    anchorVariants: {
+      pillar: ['Scotland PRT agreement template', ...regionalTenancyAnchors.scotland.pillar.slice(1)],
+      supporting: [
+        'updating a Scotland PRT agreement',
+        'how to refresh PRT wording in Scotland',
+        'PRT update guidance for Scottish landlords',
+      ],
+      product: [
+        'Scotland PRT agreement packs',
+        ...regionalTenancyAnchors.scotland.product.slice(1),
+      ],
+    },
+  }),
+  '/update-prt-tenancy-agreement-scotland': makeEntry('/update-prt-tenancy-agreement-scotland', {
+    ...regionalTenancyEntry('/update-prt-tenancy-agreement-scotland', 'scotland', 'tenancy-scotland', SEO_PILLAR_ROUTES.tenancyAgreementsScotland, '/scotland-prt-model-agreement-guide', {
+      canonicalTarget: '/update-prt-tenancy-agreement-scotland',
+    }),
+    freshnessRequired: true,
+    anchorVariants: {
+      pillar: ['Scotland PRT agreement guide', ...regionalTenancyAnchors.scotland.pillar.slice(1)],
+      supporting: [
+        'Scottish PRT model agreement guide',
+        'government model agreement comparison',
+        'Scotland model tenancy wording guide',
+      ],
+      product: [
+        'update your Scotland PRT pack',
+        ...regionalTenancyAnchors.scotland.product.slice(1),
+      ],
+    },
+  }),
+  '/joint-prt-tenancy-agreement-scotland': makeEntry('/joint-prt-tenancy-agreement-scotland', {
+    ...regionalTenancyEntry('/joint-prt-tenancy-agreement-scotland', 'scotland', 'tenancy-scotland', SEO_PILLAR_ROUTES.tenancyAgreementsScotland, '/common-prt-tenancy-mistakes-scotland', {
+      canonicalTarget: '/joint-prt-tenancy-agreement-scotland',
+    }),
+    freshnessRequired: true,
+    anchorVariants: {
+      pillar: ['Scotland PRT agreement route', ...regionalTenancyAnchors.scotland.pillar.slice(1)],
+      supporting: [
+        'common PRT compliance mistakes in Scotland',
+        'Scottish landlord errors to avoid',
+        'PRT compliance pitfalls for joint lets',
+      ],
+      product: [
+        'joint Scotland tenancy agreement packs',
+        ...regionalTenancyAnchors.scotland.product.slice(1),
+      ],
+    },
+  }),
+  '/common-prt-tenancy-mistakes-scotland': makeEntry('/common-prt-tenancy-mistakes-scotland', {
+    ...regionalTenancyEntry('/common-prt-tenancy-mistakes-scotland', 'scotland', 'tenancy-scotland', SEO_PILLAR_ROUTES.tenancyAgreementsScotland, '/scotland-prt-model-agreement-guide', {
+      canonicalTarget: '/common-prt-tenancy-mistakes-scotland',
+    }),
+    pageType: 'guide',
+    freshnessRequired: true,
+    anchorVariants: {
+      pillar: ['Scotland tenancy agreement guide', ...regionalTenancyAnchors.scotland.pillar.slice(1)],
+      supporting: [
+        'Scottish PRT model agreement guide',
+        'PRT wording gaps landlords should fix',
+        'model agreement comparison for Scotland',
+      ],
+      product: [
+        'compliant Scotland tenancy agreement packs',
+        ...regionalTenancyAnchors.scotland.product.slice(1),
+      ],
+    },
+  }),
+  '/update-tenancy-agreement-northern-ireland': makeEntry('/update-tenancy-agreement-northern-ireland', {
+    ...regionalTenancyEntry('/update-tenancy-agreement-northern-ireland', 'northern-ireland', 'tenancy-northern-ireland', SEO_PILLAR_ROUTES.tenancyAgreementsNorthernIreland, '/fixed-term-tenancy-agreement-northern-ireland', {
+      canonicalTarget: '/update-tenancy-agreement-northern-ireland',
+    }),
+    freshnessRequired: true,
+    anchorVariants: {
+      pillar: ['Northern Ireland tenancy agreement guide', ...regionalTenancyAnchors['northern-ireland'].pillar.slice(1)],
+      supporting: [
+        'fixed-term tenancy agreements in Northern Ireland',
+        'when NI tenancy terms need updating',
+        'renewing or replacing an NI tenancy agreement',
+      ],
+      product: [
+        'Northern Ireland tenancy agreement packs',
+        ...regionalTenancyAnchors['northern-ireland'].product.slice(1),
+      ],
+    },
+  }),
+  '/joint-tenancy-agreement-northern-ireland': makeEntry('/joint-tenancy-agreement-northern-ireland', {
+    ...regionalTenancyEntry('/joint-tenancy-agreement-northern-ireland', 'northern-ireland', 'tenancy-northern-ireland', SEO_PILLAR_ROUTES.tenancyAgreementsNorthernIreland, '/update-tenancy-agreement-northern-ireland', {
+      canonicalTarget: '/joint-tenancy-agreement-northern-ireland',
+    }),
+    freshnessRequired: true,
+    anchorVariants: {
+      pillar: ['Northern Ireland private tenancy guide', ...regionalTenancyAnchors['northern-ireland'].pillar.slice(1)],
+      supporting: [
+        'updating a Northern Ireland tenancy agreement',
+        'changing named tenants in Northern Ireland',
+        'NI tenancy renewal and update guide',
+      ],
+      product: [
+        'joint Northern Ireland tenancy packs',
+        ...regionalTenancyAnchors['northern-ireland'].product.slice(1),
+      ],
+    },
+  }),
+  '/fixed-term-tenancy-agreement-northern-ireland': makeEntry('/fixed-term-tenancy-agreement-northern-ireland', {
+    ...regionalTenancyEntry('/fixed-term-tenancy-agreement-northern-ireland', 'northern-ireland', 'tenancy-northern-ireland', SEO_PILLAR_ROUTES.tenancyAgreementsNorthernIreland, '/update-tenancy-agreement-northern-ireland', {
+      canonicalTarget: '/fixed-term-tenancy-agreement-northern-ireland',
+    }),
+    freshnessRequired: true,
+    anchorVariants: {
+      pillar: ['Northern Ireland tenancy agreement options', ...regionalTenancyAnchors['northern-ireland'].pillar.slice(1)],
+      supporting: [
+        'updating a Northern Ireland tenancy agreement',
+        'how NI fixed terms roll into periodic tenancies',
+        'Northern Ireland tenancy update guide',
+      ],
+      product: [
+        'fixed-term Northern Ireland tenancy packs',
+        ...regionalTenancyAnchors['northern-ireland'].product.slice(1),
+      ],
+    },
+  }),
+  '/eviction-notice': makeEntry('/eviction-notice', {
+    ...genericNoticeEntry('/eviction-notice', SEO_PILLAR_ROUTES.howToEvictTenant, {
+      canonicalTarget: '/eviction-notice',
+    }),
+    pageRole: 'bridge',
+    supportingPage: SEO_PILLAR_ROUTES.howToEvictTenant,
+    freshnessRequired: true,
+    consolidationStatus: 'canonical',
+    anchorVariants: {
+      pillar: [...anchorSets.evictionProcessPillar],
+      supporting: [...anchorSets.howToEvictPillar],
+      product: [...anchorSets.noticeOnlyProduct],
+    },
+  }),
+  '/eviction-notice-template': makeEntry('/eviction-notice-template', {
+    ...genericNoticeEntry('/eviction-notice-template', SEO_PILLAR_ROUTES.howToEvictTenant, {
+      canonicalTarget: '/eviction-notice-template',
+    }),
+    pageRole: 'bridge',
+    freshnessRequired: true,
+    consolidationStatus: 'bridge_live',
+    anchorVariants: {
+      pillar: [...anchorSets.evictionProcessPillar],
+      supporting: [...anchorSets.howToEvictPillar],
+      product: [
+        'jurisdiction-specific eviction notice workflow',
+        ...anchorSets.noticeOnlyProduct.slice(1),
+      ],
+    },
+  }),
+  '/eviction-notice-england': makeEntry('/eviction-notice-england', {
+    pageType: 'notice',
+    pageRole: 'bridge',
+    jurisdiction: 'england',
+    cluster: 'section-21-transition',
+    primaryPillar: SEO_PILLAR_ROUTES.section21BanUk,
+    supportingPage: SEO_PILLAR_ROUTES.section21Notice,
+    primaryProduct: SEO_PRODUCT_ROUTES.noticeOnly,
+    secondaryProduct: SEO_PRODUCT_ROUTES.completePack,
+    primaryProductByScenario: {
+      notice: SEO_PRODUCT_ROUTES.noticeOnly,
+      court: SEO_PRODUCT_ROUTES.completePack,
+      transition: SEO_PRODUCT_ROUTES.completePack,
+    },
+    canonicalTarget: '/eviction-notice-england',
+    anchorVariants: {
+      pillar: [...anchorSets.section21TransitionPillar],
+      supporting: [
+        'Section 21 notice guide',
+        'England notice route explainer',
+        'when landlords still need legacy Section 21 context',
+      ],
+      product: [...anchorSets.noticeOnlyProduct],
+    },
+    section21TransitionEligible: true,
+    freshnessRequired: true,
+    consolidationStatus: 'bridge_live',
+  }),
+  '/section-21-notice-period': makeEntry('/section-21-notice-period', {
+    pageType: 'notice',
+    pageRole: 'bridge',
+    jurisdiction: 'england',
+    cluster: 'section-21-transition',
+    primaryPillar: SEO_PILLAR_ROUTES.section21BanUk,
+    supportingPage: SEO_PILLAR_ROUTES.section21Notice,
+    primaryProduct: SEO_PRODUCT_ROUTES.noticeOnly,
+    secondaryProduct: SEO_PRODUCT_ROUTES.completePack,
+    primaryProductByScenario: {
+      notice: SEO_PRODUCT_ROUTES.noticeOnly,
+      court: SEO_PRODUCT_ROUTES.completePack,
+      transition: SEO_PRODUCT_ROUTES.completePack,
+    },
+    canonicalTarget: '/section-21-notice-period',
+    anchorVariants: {
+      pillar: [...anchorSets.section21TransitionPillar],
+      supporting: [
+        'Section 21 notice guide',
+        'legacy Section 21 timing rules',
+        'when a Section 21 notice expires',
+      ],
+      product: [...anchorSets.noticeOnlyProduct],
+    },
+    section21TransitionEligible: true,
+    freshnessRequired: true,
+    consolidationStatus: 'bridge_live',
+  }),
+  '/section-8-vs-section-21': makeEntry('/section-8-vs-section-21', {
+    pageType: 'problem',
+    pageRole: 'bridge',
+    jurisdiction: 'england',
+    cluster: 'section-8',
+    primaryPillar: SEO_PILLAR_ROUTES.section8Notice,
+    supportingPage: SEO_PILLAR_ROUTES.section21BanUk,
+    primaryProduct: SEO_PRODUCT_ROUTES.noticeOnly,
+    secondaryProduct: SEO_PRODUCT_ROUTES.completePack,
+    primaryProductByScenario: {
+      notice: SEO_PRODUCT_ROUTES.noticeOnly,
+      court: SEO_PRODUCT_ROUTES.completePack,
+      transition: SEO_PRODUCT_ROUTES.completePack,
+    },
+    canonicalTarget: '/section-8-vs-section-21',
+    anchorVariants: {
+      pillar: [...anchorSets.section8Pillar],
+      supporting: [...anchorSets.section21TransitionPillar],
+      product: [...anchorSets.noticeOnlyProduct],
+    },
+    section21TransitionEligible: true,
+    freshnessRequired: true,
+    consolidationStatus: 'bridge_live',
+  }),
+  '/wales-eviction-notice-template': makeEntry('/wales-eviction-notice-template', {
+    pageType: 'notice',
+    pageRole: 'supporting',
+    jurisdiction: 'wales',
+    cluster: 'regional-eviction',
+    primaryPillar: SEO_PILLAR_ROUTES.evictionProcessUk,
+    supportingPage: SEO_PILLAR_ROUTES.howToEvictTenant,
+    primaryProduct: SEO_PRODUCT_ROUTES.noticeOnly,
+    secondaryProduct: SEO_PRODUCT_ROUTES.ast,
+    primaryProductByScenario: {
+      notice: SEO_PRODUCT_ROUTES.noticeOnly,
+      tenancy: SEO_PRODUCT_ROUTES.ast,
+    },
+    canonicalTarget: '/wales-eviction-notice-template',
+    anchorVariants: {
+      pillar: [...anchorSets.evictionProcessPillar],
+      supporting: [...anchorSets.howToEvictPillar],
+      product: [
+        'Wales possession notice workflow',
+        'Renting Homes notice drafting workflow',
+        'Wales notice route for landlords',
+      ],
+    },
+    section21TransitionEligible: false,
+    freshnessRequired: true,
+    consolidationStatus: 'supporting_live',
+  }),
+  '/notice-to-quit-northern-ireland-guide': makeEntry('/notice-to-quit-northern-ireland-guide', {
+    pageType: 'guide',
+    pageRole: 'supporting',
+    jurisdiction: 'northern-ireland',
+    cluster: 'regional-eviction',
+    primaryPillar: SEO_PILLAR_ROUTES.evictionProcessUk,
+    supportingPage: SEO_PILLAR_ROUTES.howToEvictTenant,
+    primaryProduct: SEO_PRODUCT_ROUTES.noticeOnly,
+    secondaryProduct: SEO_PRODUCT_ROUTES.ast,
+    primaryProductByScenario: {
+      notice: SEO_PRODUCT_ROUTES.noticeOnly,
+      tenancy: SEO_PRODUCT_ROUTES.ast,
+    },
+    canonicalTarget: '/notice-to-quit-northern-ireland-guide',
+    anchorVariants: {
+      pillar: [...anchorSets.evictionProcessPillar],
+      supporting: [...anchorSets.howToEvictPillar],
+      product: [
+        'Northern Ireland notice to quit workflow',
+        'NI notice drafting workflow for landlords',
+        'Northern Ireland notice route',
+      ],
+    },
+    section21TransitionEligible: false,
+    freshnessRequired: true,
+    consolidationStatus: 'supporting_live',
+  }),
+};
+
+const LONGTAIL_REDIRECT_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
+  '/eviction-notice-uk': makeEntry('/eviction-notice-uk', {
+    ...genericNoticeEntry('/eviction-notice-uk', '/eviction-notice-template', {
+      canonicalTarget: '/eviction-notice-template',
+    }),
+    pageType: 'guide',
+    freshnessRequired: true,
+    anchorVariants: {
+      pillar: [...anchorSets.evictionProcessPillar],
+      supporting: [
+        'eviction notice template UK',
+        'jurisdiction-specific notice template guide',
+        'UK notice route comparison',
+      ],
+      product: [...anchorSets.noticeOnlyProduct],
+    },
+    consolidationStatus: 'candidate_redirect',
+  }),
+  '/assured-shorthold-tenancy-agreement': makeEntry('/assured-shorthold-tenancy-agreement', {
+    ...tenancyEntry('/assured-shorthold-tenancy-agreement', '/assured-shorthold-tenancy-agreement-template', {
+      canonicalTarget: '/assured-shorthold-tenancy-agreement-template',
+    }),
+    consolidationStatus: 'candidate_redirect',
+  }),
+  '/ast-template-england': makeEntry('/ast-template-england', {
+    ...tenancyEntry('/ast-template-england', '/assured-shorthold-tenancy-agreement-template', {
+      canonicalTarget: '/assured-shorthold-tenancy-agreement-template',
+    }),
+    consolidationStatus: 'candidate_redirect',
+  }),
+  '/ast-tenancy-agreement-template': makeEntry('/ast-tenancy-agreement-template', {
+    ...tenancyEntry('/ast-tenancy-agreement-template', '/assured-shorthold-tenancy-agreement-template', {
+      canonicalTarget: '/assured-shorthold-tenancy-agreement-template',
+    }),
+    consolidationStatus: 'candidate_redirect',
+  }),
+  '/periodic-tenancy-agreement': makeEntry('/periodic-tenancy-agreement', {
+    ...tenancyEntry('/periodic-tenancy-agreement', '/rolling-tenancy-agreement', {
+      canonicalTarget: '/rolling-tenancy-agreement',
+    }),
+    consolidationStatus: 'candidate_redirect',
+  }),
+  '/tenancy-agreements/wales': makeEntry('/tenancy-agreements/wales', {
+    ...regionalTenancyEntry('/tenancy-agreements/wales', 'wales', 'tenancy-wales', SEO_PILLAR_ROUTES.tenancyAgreementsWales, '/occupation-contract-template-wales', {
+      canonicalTarget: SEO_PILLAR_ROUTES.tenancyAgreementsWales,
+    }),
+    consolidationStatus: 'candidate_redirect',
+  }),
+  '/standard-occupation-contract-wales': makeEntry('/standard-occupation-contract-wales', {
+    ...regionalTenancyEntry('/standard-occupation-contract-wales', 'wales', 'tenancy-wales', SEO_PILLAR_ROUTES.tenancyAgreementsWales, '/occupation-contract-template-wales', {
+      canonicalTarget: SEO_PILLAR_ROUTES.tenancyAgreementsWales,
+    }),
+    consolidationStatus: 'candidate_redirect',
+  }),
+  '/occupation-contract-template-wales': makeEntry('/occupation-contract-template-wales', {
+    ...regionalTenancyEntry('/occupation-contract-template-wales', 'wales', 'tenancy-wales', SEO_PILLAR_ROUTES.tenancyAgreementsWales, '/renting-homes-wales-written-statement', {
+      canonicalTarget: SEO_PILLAR_ROUTES.tenancyAgreementsWales,
+    }),
+    consolidationStatus: 'candidate_redirect',
+  }),
+  '/private-residential-tenancy-agreement-scotland': makeEntry('/private-residential-tenancy-agreement-scotland', {
+    ...regionalTenancyEntry('/private-residential-tenancy-agreement-scotland', 'scotland', 'tenancy-scotland', SEO_PILLAR_ROUTES.tenancyAgreementsScotland, '/scotland-prt-model-agreement-guide', {
+      canonicalTarget: SEO_PILLAR_ROUTES.tenancyAgreementsScotland,
+    }),
+    consolidationStatus: 'candidate_redirect',
+  }),
+  '/scottish-tenancy-agreement-template': makeEntry('/scottish-tenancy-agreement-template', {
+    ...regionalTenancyEntry('/scottish-tenancy-agreement-template', 'scotland', 'tenancy-scotland', SEO_PILLAR_ROUTES.tenancyAgreementsScotland, '/scotland-prt-model-agreement-guide', {
+      canonicalTarget: SEO_PILLAR_ROUTES.tenancyAgreementsScotland,
+    }),
+    consolidationStatus: 'candidate_redirect',
+  }),
+  '/prt-template-scotland': makeEntry('/prt-template-scotland', {
+    ...regionalTenancyEntry('/prt-template-scotland', 'scotland', 'tenancy-scotland', SEO_PILLAR_ROUTES.tenancyAgreementsScotland, '/scotland-prt-model-agreement-guide', {
+      canonicalTarget: SEO_PILLAR_ROUTES.tenancyAgreementsScotland,
+    }),
+    consolidationStatus: 'candidate_redirect',
+  }),
+  '/prt-tenancy-agreement-template-scotland': makeEntry('/prt-tenancy-agreement-template-scotland', {
+    ...regionalTenancyEntry('/prt-tenancy-agreement-template-scotland', 'scotland', 'tenancy-scotland', SEO_PILLAR_ROUTES.tenancyAgreementsScotland, '/scotland-prt-model-agreement-guide', {
+      canonicalTarget: SEO_PILLAR_ROUTES.tenancyAgreementsScotland,
+    }),
+    consolidationStatus: 'candidate_redirect',
+  }),
+  '/tenancy-agreement-northern-ireland': makeEntry('/tenancy-agreement-northern-ireland', {
+    ...regionalTenancyEntry('/tenancy-agreement-northern-ireland', 'northern-ireland', 'tenancy-northern-ireland', SEO_PILLAR_ROUTES.tenancyAgreementsNorthernIreland, '/tenancy-agreement-template-northern-ireland', {
+      canonicalTarget: SEO_PILLAR_ROUTES.tenancyAgreementsNorthernIreland,
+    }),
+    consolidationStatus: 'candidate_redirect',
+  }),
+  '/tenancy-agreement-template-northern-ireland': makeEntry('/tenancy-agreement-template-northern-ireland', {
+    ...regionalTenancyEntry('/tenancy-agreement-template-northern-ireland', 'northern-ireland', 'tenancy-northern-ireland', SEO_PILLAR_ROUTES.tenancyAgreementsNorthernIreland, '/tenancy-agreement-northern-ireland', {
+      canonicalTarget: SEO_PILLAR_ROUTES.tenancyAgreementsNorthernIreland,
+    }),
+    consolidationStatus: 'candidate_redirect',
+  }),
+  '/tenancy-agreements/northern-ireland': makeEntry('/tenancy-agreements/northern-ireland', {
+    ...regionalTenancyEntry('/tenancy-agreements/northern-ireland', 'northern-ireland', 'tenancy-northern-ireland', SEO_PILLAR_ROUTES.tenancyAgreementsNorthernIreland, '/tenancy-agreement-template-northern-ireland', {
+      canonicalTarget: SEO_PILLAR_ROUTES.tenancyAgreementsNorthernIreland,
+    }),
+    consolidationStatus: 'candidate_redirect',
+  }),
+  '/ni-private-tenancy-agreement': makeEntry('/ni-private-tenancy-agreement', {
+    ...regionalTenancyEntry('/ni-private-tenancy-agreement', 'northern-ireland', 'tenancy-northern-ireland', SEO_PILLAR_ROUTES.tenancyAgreementsNorthernIreland, '/tenancy-agreement-template-northern-ireland', {
+      canonicalTarget: SEO_PILLAR_ROUTES.tenancyAgreementsNorthernIreland,
+    }),
+    consolidationStatus: 'candidate_redirect',
+  }),
+  '/ni-tenancy-agreement-template-free': makeEntry('/ni-tenancy-agreement-template-free', {
+    ...regionalTenancyEntry('/ni-tenancy-agreement-template-free', 'northern-ireland', 'tenancy-northern-ireland', SEO_PILLAR_ROUTES.tenancyAgreementsNorthernIreland, '/tenancy-agreement-template-northern-ireland', {
+      canonicalTarget: SEO_PILLAR_ROUTES.tenancyAgreementsNorthernIreland,
+    }),
+    consolidationStatus: 'candidate_redirect',
+  }),
+  '/warrant-of-possession': makeEntry('/warrant-of-possession', {
+    ...processEntry('/warrant-of-possession', '/warrant-of-possession-guide', {
+      canonicalTarget: '/warrant-of-possession-guide',
+    }),
+    cluster: 'court-process',
+    consolidationStatus: 'candidate_redirect',
+  }),
+  '/n5b-form-guide': makeEntry('/n5b-form-guide', {
+    ...section21TemplateEntry('/n5b-form-guide', '/section-21-expired-what-next', {
+      canonicalTarget: '/n5b-possession-claim-guide',
+    }),
+    pageType: 'court',
+    pageRole: 'product-adjacent',
+    consolidationStatus: 'candidate_redirect',
+  }),
+  '/n5b-possession-claim-form': makeEntry('/n5b-possession-claim-form', {
+    ...section21TemplateEntry('/n5b-possession-claim-form', '/section-21-expired-what-next', {
+      canonicalTarget: '/n5b-possession-claim-guide',
+    }),
+    pageType: 'court',
+    pageRole: 'product-adjacent',
+    consolidationStatus: 'candidate_redirect',
+  }),
+  '/section-21-checklist': makeEntry('/section-21-checklist', {
+    ...section21TemplateEntry('/section-21-checklist', '/section-21-validity-checklist', {
+      canonicalTarget: '/section-21-validity-checklist',
+    }),
+    pageType: 'guide',
+    pageRole: 'product-adjacent',
+    consolidationStatus: 'candidate_redirect',
+  }),
+  '/form-6a-section-21': makeEntry('/form-6a-section-21', {
+    ...section21TemplateEntry('/form-6a-section-21', '/section-21-validity-checklist', {
+      canonicalTarget: '/section-21-notice-template',
+    }),
+    pageRole: 'product-adjacent',
+    consolidationStatus: 'candidate_redirect',
+  }),
+  '/form-3-section-8': makeEntry('/form-3-section-8', {
+    ...section8TemplateEntry('/form-3-section-8', '/section-8-eviction-process', {
+      canonicalTarget: '/section-8-notice-template',
+    }),
+    pageRole: 'product-adjacent',
+    consolidationStatus: 'candidate_redirect',
+  }),
+  '/section-21-court-pack': productAdjacentRedirectEntry(
+    '/section-21-court-pack',
+    SEO_PILLAR_ROUTES.section21BanUk,
+    '/section-21-expired-what-next',
+    SEO_PRODUCT_ROUTES.completePack,
+    SEO_PRODUCT_ROUTES.completePack,
+    {
+      pageType: 'court',
+      section21TransitionEligible: true,
+      anchorVariants: {
+        pillar: [...anchorSets.section21TransitionPillar],
+        supporting: [
+          'what to do when a Section 21 expires',
+          'Section 21 notice template',
+          'Section 21 possession next steps',
+        ],
+        product: [...anchorSets.completePackProduct],
+      },
+    }
+  ),
+  '/section-8-court-pack': productAdjacentRedirectEntry(
+    '/section-8-court-pack',
+    SEO_PILLAR_ROUTES.section8Notice,
+    '/section-8-eviction-process',
+    SEO_PRODUCT_ROUTES.completePack,
+    SEO_PRODUCT_ROUTES.completePack,
+    {
+      pageType: 'court',
+      anchorVariants: {
+        pillar: [...anchorSets.section8Pillar],
+        supporting: [
+          'Section 8 eviction process',
+          'Section 8 notice template',
+          'court route after serving Section 8',
+        ],
+        product: [...anchorSets.completePackProduct],
+      },
+    }
+  ),
+  '/section-8-rent-arrears-eviction': makeEntry('/section-8-rent-arrears-eviction', {
+    ...section8Entry('/section-8-rent-arrears-eviction', '/section-8-eviction-process', {
+      canonicalTarget: '/section-8-eviction-process',
+    }),
+    pageType: 'court',
+    primaryProduct: SEO_PRODUCT_ROUTES.completePack,
+    consolidationStatus: 'candidate_redirect',
+  }),
+  '/complete-eviction-pack-england': productAdjacentRedirectEntry(
+    '/complete-eviction-pack-england',
+    SEO_PILLAR_ROUTES.evictionProcessUk,
+    '/possession-claim-guide',
+    SEO_PRODUCT_ROUTES.completePack,
+    SEO_PRODUCT_ROUTES.completePack
+  ),
+  '/eviction-pack-england': productAdjacentRedirectEntry(
+    '/eviction-pack-england',
+    SEO_PILLAR_ROUTES.evictionProcessUk,
+    '/possession-claim-guide',
+    SEO_PRODUCT_ROUTES.completePack,
+    SEO_PRODUCT_ROUTES.completePack
+  ),
+  '/section-21-notice-generator': makeEntry('/section-21-notice-generator', {
+    ...section21TemplateEntry('/section-21-notice-generator', '/section-21-validity-checklist', {
+      canonicalTarget: '/section-21-notice-template',
+    }),
+    pageRole: 'product-adjacent',
+    consolidationStatus: 'candidate_redirect',
+  }),
+  '/section-8-notice-generator': makeEntry('/section-8-notice-generator', {
+    ...section8TemplateEntry('/section-8-notice-generator', '/section-8-eviction-process', {
+      canonicalTarget: '/section-8-notice-template',
+    }),
+    pageRole: 'product-adjacent',
+    consolidationStatus: 'candidate_redirect',
+  }),
+  '/no-fault-eviction': makeEntry('/no-fault-eviction', {
+    ...section21TemplateEntry('/no-fault-eviction', '/section-21-notice-template', {
+      canonicalTarget: SEO_PILLAR_ROUTES.section21BanUk,
+    }),
+    pageType: 'guide',
+    pageRole: 'product-adjacent',
+    consolidationStatus: 'candidate_redirect',
+  }),
+};
 
 export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
   [SEO_PILLAR_ROUTES.tenantNotPayingRent]: makeEntry(SEO_PILLAR_ROUTES.tenantNotPayingRent, {
@@ -1107,6 +2207,159 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
       product: [...anchorSets.completePackProduct],
     },
   }),
+  '/apply-possession-order-landlord': makeEntry('/apply-possession-order-landlord', {
+    ...processEntry('/apply-possession-order-landlord', '/possession-claim-guide', {
+      canonicalTarget: '/apply-possession-order-landlord',
+    }),
+    cluster: 'court-process',
+    supportingPage: '/possession-claim-guide',
+    anchorVariants: {
+      pillar: [...anchorSets.evictionProcessPillar],
+      supporting: [
+        'possession claim guide',
+        'how landlords apply for a possession order',
+        'court possession paperwork guide',
+      ],
+      product: [...anchorSets.completePackProduct],
+    },
+  }),
+  '/county-court-claim-form-guide': makeEntry('/county-court-claim-form-guide', {
+    ...processEntry('/county-court-claim-form-guide', '/possession-order-process', {
+      canonicalTarget: '/county-court-claim-form-guide',
+    }),
+    pageType: 'guide',
+    pageRole: 'bridge',
+    jurisdiction: 'uk',
+    cluster: 'court-process',
+    supportingPage: '/possession-order-process',
+    secondaryProduct: SEO_PRODUCT_ROUTES.moneyClaim,
+    primaryProductByScenario: {
+      court: SEO_PRODUCT_ROUTES.completePack,
+      notice: SEO_PRODUCT_ROUTES.noticeOnly,
+      arrears: SEO_PRODUCT_ROUTES.moneyClaim,
+    },
+    anchorVariants: {
+      pillar: [...anchorSets.evictionProcessPillar],
+      supporting: [
+        'possession order process',
+        'court-stage possession workflow',
+        'what happens after notice in court',
+      ],
+      product: [...anchorSets.completePackProduct],
+    },
+    freshnessRequired: true,
+    consolidationStatus: 'bridge_live',
+  }),
+  '/eviction-cost-uk': makeEntry('/eviction-cost-uk', {
+    ...processEntry('/eviction-cost-uk', SEO_PILLAR_ROUTES.tenantNotPayingRent, {
+      canonicalTarget: '/eviction-cost-uk',
+    }),
+    pageType: 'guide',
+    pageRole: 'bridge',
+    jurisdiction: 'uk',
+    cluster: 'court-process',
+    supportingPage: SEO_PILLAR_ROUTES.tenantNotPayingRent,
+    secondaryProduct: SEO_PRODUCT_ROUTES.moneyClaim,
+    primaryProductByScenario: {
+      court: SEO_PRODUCT_ROUTES.completePack,
+      notice: SEO_PRODUCT_ROUTES.noticeOnly,
+      arrears: SEO_PRODUCT_ROUTES.moneyClaim,
+    },
+    anchorVariants: {
+      pillar: [...anchorSets.evictionProcessPillar],
+      supporting: [...anchorSets.rentArrearsPillar],
+      product: [...anchorSets.completePackProduct],
+    },
+    freshnessRequired: true,
+    consolidationStatus: 'bridge_live',
+  }),
+  '/eviction-court-forms-england': makeEntry('/eviction-court-forms-england', {
+    ...processEntry('/eviction-court-forms-england', '/n5-n119-possession-claim', {
+      canonicalTarget: '/eviction-court-forms-england',
+    }),
+    pageRole: 'bridge',
+    cluster: 'court-process',
+    supportingPage: '/n5-n119-possession-claim',
+    primaryProductByScenario: {
+      court: SEO_PRODUCT_ROUTES.completePack,
+      notice: SEO_PRODUCT_ROUTES.noticeOnly,
+    },
+    anchorVariants: {
+      pillar: [...anchorSets.evictionProcessPillar],
+      supporting: [
+        'N5 and N119 possession claim guide',
+        'standard possession claim route',
+        'landlord court paperwork guide',
+      ],
+      product: [...anchorSets.completePackProduct],
+    },
+    freshnessRequired: true,
+    consolidationStatus: 'bridge_live',
+  }),
+  '/eviction-timeline-england': makeEntry('/eviction-timeline-england', {
+    ...processEntry('/eviction-timeline-england', SEO_PILLAR_ROUTES.howToEvictTenant, {
+      canonicalTarget: '/eviction-timeline-england',
+    }),
+    pageType: 'guide',
+    pageRole: 'bridge',
+    cluster: 'court-process',
+    primaryProduct: SEO_PRODUCT_ROUTES.completePack,
+    secondaryProduct: SEO_PRODUCT_ROUTES.noticeOnly,
+    supportingPage: SEO_PILLAR_ROUTES.howToEvictTenant,
+    primaryProductByScenario: {
+      court: SEO_PRODUCT_ROUTES.completePack,
+      notice: SEO_PRODUCT_ROUTES.noticeOnly,
+    },
+    anchorVariants: {
+      pillar: [...anchorSets.evictionProcessPillar],
+      supporting: [...anchorSets.howToEvictPillar],
+      product: [...anchorSets.completePackProduct],
+    },
+    freshnessRequired: true,
+    consolidationStatus: 'bridge_live',
+  }),
+  '/n5-n119-possession-claim': makeEntry('/n5-n119-possession-claim', {
+    ...processEntry('/n5-n119-possession-claim', SEO_PILLAR_ROUTES.section8Notice, {
+      canonicalTarget: '/n5-n119-possession-claim',
+    }),
+    pageRole: 'bridge',
+    cluster: 'court-process',
+    supportingPage: SEO_PILLAR_ROUTES.section8Notice,
+    primaryProductByScenario: {
+      court: SEO_PRODUCT_ROUTES.completePack,
+      notice: SEO_PRODUCT_ROUTES.noticeOnly,
+    },
+    anchorVariants: {
+      pillar: [...anchorSets.evictionProcessPillar],
+      supporting: [...anchorSets.section8Pillar],
+      product: [...anchorSets.completePackProduct],
+    },
+    freshnessRequired: true,
+    consolidationStatus: 'bridge_live',
+  }),
+  '/possession-order-process': makeEntry('/possession-order-process', {
+    ...processEntry('/possession-order-process', '/eviction-court-forms-england', {
+      canonicalTarget: '/possession-order-process',
+    }),
+    pageRole: 'bridge',
+    cluster: 'court-process',
+    supportingPage: '/eviction-court-forms-england',
+    primaryProductByScenario: {
+      court: SEO_PRODUCT_ROUTES.completePack,
+      notice: SEO_PRODUCT_ROUTES.noticeOnly,
+    },
+    anchorVariants: {
+      pillar: [...anchorSets.evictionProcessPillar],
+      supporting: [
+        'eviction court forms explained',
+        'court form route for landlords',
+        'possession claim paperwork guide',
+      ],
+      product: [...anchorSets.completePackProduct],
+    },
+    freshnessRequired: true,
+    consolidationStatus: 'bridge_live',
+  }),
   '/accelerated-possession-guide': makeEntry('/accelerated-possession-guide', {
     ...section21Entry('/accelerated-possession-guide', SEO_PILLAR_ROUTES.section21Notice, {
       canonicalTarget: '/accelerated-possession-guide',
@@ -1178,6 +2431,51 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
       ],
       product: [...anchorSets.completePackProduct],
     },
+  }),
+  '/court-bailiff-eviction-guide': makeEntry('/court-bailiff-eviction-guide', {
+    ...processEntry('/court-bailiff-eviction-guide', '/bailiff-eviction-process', {
+      canonicalTarget: '/bailiff-eviction-process',
+    }),
+    pageType: 'guide',
+    cluster: 'court-process',
+    supportingPage: '/bailiff-eviction-process',
+    anchorVariants: {
+      pillar: [...anchorSets.evictionProcessPillar],
+      supporting: [
+        'bailiff eviction process',
+        'county court enforcement stage',
+        'what happens after a possession order',
+      ],
+      product: [...anchorSets.completePackProduct],
+    },
+    freshnessRequired: true,
+    consolidationStatus: 'candidate_redirect',
+  }),
+  '/eviction-timeline-uk': makeEntry('/eviction-timeline-uk', {
+    ...processEntry('/eviction-timeline-uk', '/how-long-does-eviction-take', {
+      canonicalTarget: '/how-long-does-eviction-take',
+    }),
+    pageType: 'guide',
+    jurisdiction: 'uk',
+    cluster: 'court-process',
+    primaryProduct: SEO_PRODUCT_ROUTES.completePack,
+    secondaryProduct: SEO_PRODUCT_ROUTES.noticeOnly,
+    supportingPage: '/how-long-does-eviction-take',
+    primaryProductByScenario: {
+      court: SEO_PRODUCT_ROUTES.completePack,
+      notice: SEO_PRODUCT_ROUTES.noticeOnly,
+    },
+    anchorVariants: {
+      pillar: [...anchorSets.evictionProcessPillar],
+      supporting: [
+        'how long eviction takes',
+        'UK eviction timescale guide',
+        'landlord eviction timeline guide',
+      ],
+      product: [...anchorSets.completePackProduct],
+    },
+    freshnessRequired: true,
+    consolidationStatus: 'candidate_redirect',
   }),
   '/how-to-speed-up-eviction-uk': makeEntry('/how-to-speed-up-eviction-uk', {
     ...processEntry('/how-to-speed-up-eviction-uk', SEO_PILLAR_ROUTES.howToEvictTenant, {
@@ -1321,6 +2619,8 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
   '/scotland-eviction-notices': regionalEntry('/scotland-eviction-notices', 'scotland', SEO_PILLAR_ROUTES.evictionProcessUk),
   '/eviction-process-wales': regionalEntry('/eviction-process-wales', 'wales', SEO_PILLAR_ROUTES.evictionProcessUk),
   '/eviction-process-scotland': regionalEntry('/eviction-process-scotland', 'scotland', SEO_PILLAR_ROUTES.evictionProcessUk),
+  ...LONGTAIL_LIVE_TAXONOMY,
+  ...LONGTAIL_REDIRECT_TAXONOMY,
 };
 
 export function getSeoPageTaxonomy(pathname: string): SeoPageTaxonomyEntry | null {
@@ -1335,6 +2635,12 @@ export function getAllSeoPageTaxonomyEntries(): SeoPageTaxonomyEntry[] {
   return Object.values(SEO_PAGE_TAXONOMY);
 }
 
+export function getRetainedSeoPageTaxonomyEntries(): SeoPageTaxonomyEntry[] {
+  return getAllSeoPageTaxonomyEntries().filter(
+    (entry) => entry.consolidationStatus !== 'candidate_redirect'
+  );
+}
+
 export function getFreshnessPolicy(entry: SeoPageTaxonomyEntry): FreshnessPolicy | null {
   if (!entry.freshnessRequired) {
     return null;
@@ -1346,9 +2652,21 @@ export function getFreshnessPolicy(entry: SeoPageTaxonomyEntry): FreshnessPolicy
   if (entry.cluster === 'tenancy-england') {
     legalContextNote =
       'England tenancy pages should reflect the post-Renters Rights Act 2025 wording used for new agreements, the current Residential Tenancy Agreement positioning, and the wider shift away from older Section 21-led AST sales language.';
+  } else if (entry.cluster === 'tenancy-wales') {
+    legalContextNote =
+      'Wales tenancy pages should reflect the Renting Homes (Wales) Act 2016, occupation contract terminology, the written statement deadline, and the distinct Welsh possession notice framework.';
+  } else if (entry.cluster === 'tenancy-scotland') {
+    legalContextNote =
+      'Scotland tenancy pages should reflect the Private Housing (Tenancies) (Scotland) Act 2016, open-ended PRT rules, tribunal-led possession, and the current Scottish compliance framework.';
+  } else if (entry.cluster === 'tenancy-northern-ireland') {
+    legalContextNote =
+      'Northern Ireland tenancy pages should reflect the Private Tenancies Act (Northern Ireland) 2022, written statement requirements, deposit and notice rules, and the current NI compliance timetable.';
   } else if (entry.cluster === 'money-claim') {
     legalContextNote =
       'Debt recovery is separate from possession. Landlords should review the current pre-action protocol, keep a reconciled debt schedule, and make sure any county court claim matches the evidence file and the amount being claimed.';
+  } else if (entry.cluster === 'notice-templates') {
+    legalContextNote =
+      'Template-led notice pages should be read with the current statutory form version, route-specific validity checks, and the wider landlord workflow needed if the case moves into court.';
   } else if (entry.section21TransitionEligible) {
     legalContextNote =
       'Section 21 ended in England on 1 May 2026, and court proceedings on qualifying older Section 21 notices had to begin by 31 July 2026. Landlords now need a Section 8-led possession plan unless a transitional legacy route is clearly available.';
@@ -1409,6 +2727,40 @@ export function getCandidateRedirects(): Array<{ source: string; destination: st
       source: entry.pathname,
       destination: entry.canonicalTarget as string,
     }));
+}
+
+export function getRetainedSupportingPages(): string[] {
+  return getRetainedSeoPageTaxonomyEntries()
+    .filter((entry) => entry.pageRole === 'supporting' || entry.pageRole === 'bridge')
+    .map((entry) => entry.pathname)
+    .sort((left, right) => left.localeCompare(right));
+}
+
+export function getTopInternalLinkRecipients(
+  limit = 20
+): Array<{ pathname: string; inboundCount: number }> {
+  const counts = new Map<string, number>();
+
+  for (const entry of getRetainedSeoPageTaxonomyEntries()) {
+    const destinations = [entry.primaryPillar, entry.supportingPage].filter(
+      (destination) => destination && destination !== entry.pathname
+    );
+
+    for (const destination of destinations) {
+      counts.set(destination, (counts.get(destination) ?? 0) + 1);
+    }
+  }
+
+  return [...counts.entries()]
+    .map(([pathname, inboundCount]) => ({ pathname, inboundCount }))
+    .sort((left, right) => {
+      if (right.inboundCount !== left.inboundCount) {
+        return right.inboundCount - left.inboundCount;
+      }
+
+      return left.pathname.localeCompare(right.pathname);
+    })
+    .slice(0, limit);
 }
 
 export function getPhase3SitemapExclusions(): string[] {

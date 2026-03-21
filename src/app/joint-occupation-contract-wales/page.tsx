@@ -3,8 +3,8 @@ import Link from 'next/link';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { jointOccupationContractRelatedLinks } from '@/lib/seo/internal-links';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
@@ -30,19 +30,7 @@ const PAGE_PATH = '/joint-occupation-contract-wales';
 const PAGE_TITLE = 'Joint Occupation Contract Wales';
 const PAGE_TYPE = 'tenancy' as const;
 
-const wizardLinkStandard = buildWizardLink({
-  product: 'ast_standard',
-  jurisdiction: 'wales',
-  src: 'seo_joint_occupation_contract_wales',
-  topic: 'tenancy',
-});
-
-const wizardLinkPremium = buildWizardLink({
-  product: 'ast_premium',
-  jurisdiction: 'wales',
-  src: 'seo_joint_occupation_contract_wales',
-  topic: 'tenancy',
-});
+const astProductHref = '/products/ast';
 
 export const metadata: Metadata = {
   title: 'Joint Occupation Contract Wales | Multiple Contract-Holders',
@@ -121,11 +109,11 @@ export default function JointOccupationContractWalesPage() {
           }
           primaryCta={{
             label: `Create Joint Contract — ${PRODUCTS.ast_standard.displayPrice}`,
-            href: wizardLinkStandard,
+            href: astProductHref,
           }}
           secondaryCta={{
             label: 'Premium Contract with Extra Protection',
-            href: wizardLinkPremium,
+            href: astProductHref,
           }}
         >
           {/* Trust Signals */}
@@ -149,6 +137,14 @@ export default function JointOccupationContractWalesPage() {
         <section className="py-6 bg-gray-50 border-y border-gray-100">
           <div className="container mx-auto px-4">
             <SocialProofCounter variant="total" className="justify-center" />
+          </div>
+        </section>
+
+        <section className="py-10 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <SeoPageContextPanel pathname="/joint-occupation-contract-wales" />
+            </div>
           </div>
         </section>
 
@@ -537,7 +533,7 @@ export default function JointOccupationContractWalesPage() {
                     </li>
                   </ul>
                   <Link
-                    href={wizardLinkStandard}
+                    href={astProductHref}
                     className="block w-full text-center bg-primary text-white py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors"
                   >
                     Create Standard Contract
@@ -582,7 +578,7 @@ export default function JointOccupationContractWalesPage() {
                     </li>
                   </ul>
                   <Link
-                    href={wizardLinkPremium}
+                    href={astProductHref}
                     className="block w-full text-center bg-primary text-white py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors"
                   >
                     Create Premium Contract

@@ -6,12 +6,13 @@ import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import {
   evictionCostRelatedLinks,
 } from '@/lib/seo/internal-links';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { StandardHero } from '@/components/marketing/StandardHero';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
+import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import {
   CheckCircle,
   Clock,
@@ -23,12 +24,9 @@ import {
   Users,
 } from 'lucide-react';
 
-const wizardLinkNoticeOnly = buildWizardLink({
-  product: 'notice_only',
-  jurisdiction: 'england',
-  src: 'seo_eviction_cost_uk',
-  topic: 'eviction',
-});
+const completePackProductHref = '/products/complete-pack';
+const moneyClaimProductHref = '/products/money-claim';
+const wizardLinkNoticeOnly = completePackProductHref;
 
 
 export const metadata: Metadata = {
@@ -103,6 +101,12 @@ export default function EvictionCostUkPage() {
 
   return (
     <>
+      <SeoLandingWrapper
+        pagePath="/eviction-cost-uk"
+        pageTitle="Eviction Cost UK Guide"
+        pageType="general"
+        jurisdiction="uk"
+      />
       <StructuredData data={pageSchema} />
       <StructuredData data={breadcrumbSchema([
         { name: 'Home', url: 'https://landlordheaven.co.uk' },
@@ -115,8 +119,8 @@ export default function EvictionCostUkPage() {
         <UniversalHero
           title="Eviction Cost UK Guide"
           subtitle="Estimate realistic eviction costs across notice, court, and enforcement stages before you start."
-          primaryCta={{ label: 'Start Notice Workflow', href: wizardLinkNoticeOnly }}
-          secondaryCta={{ label: 'See Complete Pack', href: '/products/complete-pack' }}
+          primaryCta={{ label: 'Start Complete Eviction Pack', href: wizardLinkNoticeOnly }}
+          secondaryCta={{ label: 'Tenant already left? Start Money Claim', href: moneyClaimProductHref }}
           showTrustPositioningBar
           hideMedia
         />
@@ -128,7 +132,13 @@ export default function EvictionCostUkPage() {
           title="How Much Does Eviction Cost UK?"
           subtitle={<>Budget between <strong>£500 and £3,000+</strong> depending on your approach. Here&apos;s the full breakdown with full statutory process cost breakdown.</>}
           primaryCTA={{ label: 'Save £1,000+ — DIY Pack from £29.99', href: wizardLinkNoticeOnly }}
-          secondaryCTA={{ label: 'See Complete Pack', href: '/products/complete-pack' }}
+          secondaryCTA={{ label: 'Tenant already left? Start Money Claim', href: moneyClaimProductHref }}
+          {...{
+            primaryCTA: {
+              label: 'Start Complete Eviction Pack',
+              href: completePackProductHref,
+            },
+          }}
           variant="pastel"
         >
           {/* Trust Signals */}
@@ -152,6 +162,14 @@ export default function EvictionCostUkPage() {
         <section className="py-6 bg-gray-50 border-y border-gray-100">
           <div className="container mx-auto px-4">
             <SocialProofCounter variant="total" className="justify-center" />
+          </div>
+        </section>
+
+        <section className="py-10 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <SeoPageContextPanel pathname="/eviction-cost-uk" />
+            </div>
           </div>
         </section>
 

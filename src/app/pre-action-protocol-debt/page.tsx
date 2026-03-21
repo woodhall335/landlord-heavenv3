@@ -6,6 +6,7 @@ import { UniversalHero } from '@/components/landing/UniversalHero';
 import { getCanonicalUrl } from '@/lib/seo';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { preActionProtocolFAQs } from '@/data/faqs';
 
 export const metadata: Metadata = {
@@ -45,11 +46,11 @@ export default function PreActionProtocolPage() {
 
       <div className="min-h-screen bg-gray-50">
         {/* Hero Section */}
-                <UniversalHero
+        <UniversalHero
           badge="Landlord Guide"
           title="Pre-Action Protocol for Debt Claims"
           subtitle="Follow the correct pre-action debt process before issuing a county court claim."
-          primaryCta={{ label: 'Start Debt Recovery Wizard', href: '/products/money-claim?topic=debt&src=seo_pre_action_protocol_debt' }}
+          primaryCta={{ label: 'Start Money Claim Pack', href: '/products/money-claim' }}
           align="center"
           showTrustPositioningBar
         />
@@ -57,6 +58,7 @@ export default function PreActionProtocolPage() {
         {/* Main Content */}
         <Container>
           <div className="max-w-4xl mx-auto py-12">
+            <SeoPageContextPanel pathname="/pre-action-protocol-debt" className="mb-8" />
             <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm mb-12">
               <div className="prose prose-slate max-w-none">
                 <h2>What is the Pre-Action Protocol?</h2>

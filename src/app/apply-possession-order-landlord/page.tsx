@@ -9,11 +9,11 @@ import { getCanonicalUrl } from '@/lib/seo/urls';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { possessionClaimRelatedLinks } from '@/lib/seo/internal-links';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import { FunnelCta } from '@/components/funnels';
 import { PRODUCTS } from '@/lib/pricing/products';
@@ -30,12 +30,8 @@ import {
   Users,
 } from 'lucide-react';
 
-const completePackLink = buildWizardLink({
-  product: 'notice_only',
-  jurisdiction: 'england',
-  src: 'seo_apply_possession_order_landlord',
-  topic: 'eviction',
-});
+const completePackProductHref = '/products/complete-pack';
+const noticeOnlyProductHref = '/products/notice-only';
 
 const faqs = [
   {
@@ -157,12 +153,12 @@ export default function ApplyPossessionOrderPage() {
           title="Apply for a Possession Order"
           subtitle="Your notice has expired but the tenant is still in the property. Here is how England landlords move from notice stage to court possession using the correct claim route."
           primaryCta={{
-            label: `Create Eviction Notice — ${PRODUCTS.notice_only.displayPrice}`,
-            href: completePackLink,
+            label: `Start Complete Eviction Pack — ${PRODUCTS.complete_pack.displayPrice}`,
+            href: completePackProductHref,
           }}
           secondaryCta={{
-            label: 'Need the full court pack instead?',
-            href: '/products/complete-pack',
+            label: 'Need notice drafting instead?',
+            href: noticeOnlyProductHref,
           }}
           variant="pastel"
         >
@@ -185,15 +181,16 @@ export default function ApplyPossessionOrderPage() {
         <section className="py-8 bg-white">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
+              <SeoPageContextPanel pathname="/apply-possession-order-landlord" className="mb-6" />
               <FunnelCta
                 title="Apply for possession with full support"
                 subtitle="If your notice has expired, move straight to the court stage with the complete pack."
-                primaryHref="/products/complete-pack"
+                primaryHref={completePackProductHref}
                 primaryText="Start complete pack"
                 primaryDataCta="complete-pack"
                 location="above-fold"
                 secondaryLinks={[
-                  { href: '/products/notice-only', text: 'Only need notice drafting?', dataCta: 'notice-only' },
+                  { href: noticeOnlyProductHref, text: 'Only need notice drafting?', dataCta: 'notice-only' },
                   { href: '/n5b-form-guide', text: 'Accelerated possession (N5B)' },
                 ]}
               />
@@ -810,3 +807,5 @@ export default function ApplyPossessionOrderPage() {
     </>
   );
 }
+
+

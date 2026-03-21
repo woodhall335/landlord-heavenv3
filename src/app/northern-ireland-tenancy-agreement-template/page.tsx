@@ -16,10 +16,14 @@ import {
 import { StructuredData, breadcrumbSchema, articleSchema } from '@/lib/seo/structured-data';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
+import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import { tenancyAgreementNILinks } from '@/lib/seo/internal-links';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
+
+const astProductHref = '/products/ast';
 
 export const metadata: Metadata = {
   title: 'Northern Ireland Tenancy Agreement 2026 | Legally Validated',
@@ -109,6 +113,12 @@ const faqs = [
 export default function NorthernIrelandTenancyAgreementTemplatePage() {
   return (
     <>
+      <SeoLandingWrapper
+        pagePath="/northern-ireland-tenancy-agreement-template"
+        pageTitle="Northern Ireland Tenancy Agreement"
+        pageType="tenancy"
+        jurisdiction="northern-ireland"
+      />
       <StructuredData
         data={articleSchema({
           headline: 'Northern Ireland Tenancy Agreement Template (NI) | Private Tenancies Act Compliant',
@@ -132,7 +142,7 @@ export default function NorthernIrelandTenancyAgreementTemplatePage() {
         <UniversalHero
           title="Northern Ireland Tenancy Agreement"
           subtitle="Generate a legally validated tenancy agreement for Northern Ireland that is compliance-checked and court-ready."
-          primaryCta={{ label: "Start now", href: "/wizard?product=ast_standard&src=seo_northern_ireland_tenancy_agreement_template&topic=tenancy&jurisdiction=northern-ireland" }}
+          primaryCta={{ label: 'View tenancy agreement packs', href: astProductHref }}
           showTrustPositioningBar
           hideMedia
         />
@@ -149,6 +159,12 @@ export default function NorthernIrelandTenancyAgreementTemplatePage() {
           </div>
         </nav>
 
+        <section className="bg-white pb-4">
+          <div className="max-w-4xl mx-auto px-4">
+            <SeoPageContextPanel pathname="/northern-ireland-tenancy-agreement-template" />
+          </div>
+        </section>
+
         {/* Hero Section */}
         <section className="bg-gradient-to-br from-emerald-800 via-emerald-900 to-slate-900 text-white py-16">
           <div className="max-w-4xl mx-auto px-4">
@@ -164,7 +180,7 @@ export default function NorthernIrelandTenancyAgreementTemplatePage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
-                href="/wizard?product=ast_standard&src=seo_northern_ireland_tenancy_agreement_template&topic=tenancy&jurisdiction=northern-ireland"
+                href={astProductHref}
                 className="inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold px-8 py-4 rounded-lg transition-colors"
               >
                 <RiFileTextLine className="w-5 h-5" />
@@ -673,7 +689,7 @@ export default function NorthernIrelandTenancyAgreementTemplatePage() {
               Get a fully compliant Private Tenancy Agreement in under 5 minutes.
             </p>
             <Link
-              href="/wizard?product=ast_standard&src=seo_northern_ireland_tenancy_agreement_template&topic=tenancy&jurisdiction=northern-ireland"
+              href={astProductHref}
               className="inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold px-8 py-4 rounded-lg transition-colors"
             >
               <RiDownloadLine className="w-5 h-5" />

@@ -15,13 +15,13 @@ import {
   guideLinks,
   blogLinks,
 } from '@/lib/seo/internal-links';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { StandardHero } from '@/components/marketing/StandardHero';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { section8VsSection21FAQs } from '@/data/faqs';
 import { PRODUCTS } from '@/lib/pricing/products';
 import {
@@ -42,19 +42,8 @@ import {
   MessageSquare,
 } from 'lucide-react';
 
-const noticeOnlyLink = buildWizardLink({
-  product: 'notice_only',
-  jurisdiction: 'england',
-  src: 'seo_section_8_vs_section_21',
-  topic: 'eviction',
-});
-
-const completePackLink = buildWizardLink({
-  product: 'notice_only',
-  jurisdiction: 'england',
-  src: 'seo_section_8_vs_section_21',
-  topic: 'eviction',
-});
+const noticeOnlyProductHref = '/products/notice-only';
+const completePackProductHref = '/products/complete-pack';
 
 export const metadata: Metadata = {
   title: 'Section 8 vs Section 21 | Which Notice to Use',
@@ -125,8 +114,8 @@ export default function Section8VsSection21Page() {
         <UniversalHero
           title="Section 8 vs Section 21"
           subtitle="Compare notice routes, timing, and evidence requirements so you choose the right eviction notice first time."
-          primaryCta={{ label: `Start Notice Pack — ${PRODUCTS.notice_only.displayPrice}`, href: noticeOnlyLink }}
-          secondaryCta={{ label: 'Need Court Forms Too?', href: completePackLink }}
+          primaryCta={{ label: `Start Notice Pack — ${PRODUCTS.notice_only.displayPrice}`, href: noticeOnlyProductHref }}
+          secondaryCta={{ label: 'Need Court Forms Too?', href: completePackProductHref }}
           showTrustPositioningBar
           hideMedia
         />
@@ -145,11 +134,11 @@ export default function Section8VsSection21Page() {
           subtitle={<>The two main eviction notices in England have different uses, notice periods, and court processes. Here is how to choose the right one — then use our <Link href="/section-8-notice-template" className="text-primary hover:underline">Section 8 notice template</Link> or <Link href="/section-21-notice-template" className="text-primary hover:underline">Section 21 notice template</Link> to draft the right form.</>}
           primaryCTA={{
             label: `Get Both Notices — ${PRODUCTS.notice_only.displayPrice}`,
-            href: noticeOnlyLink,
+            href: noticeOnlyProductHref,
           }}
           secondaryCTA={{
             label: 'Need Court Forms Too?',
-            href: completePackLink,
+            href: completePackProductHref,
           }}
           variant="pastel"
         >
@@ -173,6 +162,14 @@ export default function Section8VsSection21Page() {
         <section className="py-6 bg-gray-50 border-y border-gray-100">
           <div className="container mx-auto px-4">
             <SocialProofCounter variant="total" className="justify-center" />
+          </div>
+        </section>
+
+        <section className="bg-white py-8">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <SeoPageContextPanel pathname="/section-8-vs-section-21" />
+            </div>
           </div>
         </section>
 

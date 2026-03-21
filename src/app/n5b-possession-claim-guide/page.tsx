@@ -7,6 +7,7 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { Container } from '@/components/ui/Container';
 import { FAQSection, type FAQItem } from '@/components/seo/FAQSection';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 
 import {
@@ -16,24 +17,11 @@ import {
   faqPageSchema,
 } from '@/lib/seo/structured-data';
 
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
-
 const canonical =
   'https://landlordheaven.co.uk/n5b-possession-claim-guide';
 
-const noticeWizardLink = buildWizardLink({
-  product: 'notice_only',
-  jurisdiction: 'england',
-  src: 'seo_n5b_possession_claim',
-  topic: 'eviction',
-});
-
-const completeWizardLink = buildWizardLink({
-  product: 'complete_pack',
-  jurisdiction: 'england',
-  src: 'seo_n5b_possession_claim',
-  topic: 'eviction',
-});
+const noticeOnlyProductHref = '/products/notice-only';
+const completePackProductHref = '/products/complete-pack';
 
 export const metadata: Metadata = {
   title:
@@ -107,7 +95,7 @@ export default function Page() {
       <SeoLandingWrapper
         pagePath="/n5b-possession-claim-guide"
         pageTitle="N5B Possession Claim Guide"
-        pageType="guide"
+        pageType="court"
         jurisdiction="england"
       />
 
@@ -139,11 +127,11 @@ export default function Page() {
         subtitle="A landlord guide explaining how the accelerated possession claim works after serving a Section 21 notice."
         primaryCta={{
           label: 'Start Complete Eviction Pack',
-          href: completeWizardLink,
+          href: completePackProductHref,
         }}
         secondaryCta={{
-          label: 'Serve Section 21 Notice',
-          href: noticeWizardLink,
+          label: 'Need notice drafting first?',
+          href: noticeOnlyProductHref,
         }}
         mediaSrc="/images/wizard-icons/07-review-finish.png"
         mediaAlt="N5B possession claim guide"
@@ -154,6 +142,9 @@ export default function Page() {
 
       <section className="border-b border-[#E6DBFF] bg-white py-8">
         <Container>
+          <div className="mx-auto mb-6 max-w-5xl">
+            <SeoPageContextPanel pathname="/n5b-possession-claim-guide" />
+          </div>
           <nav className="mx-auto max-w-5xl rounded-2xl border border-[#E6DBFF] bg-white p-6">
             <h2 className="text-2xl font-semibold text-[#2a2161]">
               In This Guide

@@ -6,7 +6,9 @@ import {
   getFreshnessPolicy,
   getPhase3SitemapExclusions,
   getPrimaryDestinationAboveFold,
+  getRetainedSeoPageTaxonomyEntries,
   getStickyPrimaryDestination,
+  getTopInternalLinkRecipients,
 } from '@/lib/seo/page-taxonomy';
 
 describe('SEO page taxonomy', () => {
@@ -87,11 +89,66 @@ describe('SEO page taxonomy', () => {
         { source: '/section-8-notice-guide', destination: '/section-8-notice' },
         { source: '/section-21-notice-guide', destination: '/section-21-notice' },
         { source: '/section-21-ban', destination: '/section-21-ban-uk' },
+        { source: '/court-bailiff-eviction-guide', destination: '/bailiff-eviction-process' },
+        { source: '/eviction-timeline-uk', destination: '/how-long-does-eviction-take' },
+        { source: '/eviction-notice-uk', destination: '/eviction-notice-template' },
       ])
     );
 
     for (const redirect of redirects) {
       expect(exclusions).toContain(redirect.source);
     }
+  });
+
+  it('covers the newly normalised long-tail live routes in the retained taxonomy set', () => {
+    const retainedRoutes = Array.from(
+      getRetainedSeoPageTaxonomyEntries().map((entry) => entry.pathname)
+    );
+
+    expect(retainedRoutes).toEqual(
+      expect.arrayContaining([
+        '/apply-possession-order-landlord',
+        '/section-21-expired-what-next',
+        '/section-21-notice-template',
+        '/section-8-notice-template',
+        '/possession-claim-guide',
+        '/n5b-possession-claim-guide',
+        '/wales-tenancy-agreement-template',
+        '/private-residential-tenancy-agreement-template',
+        '/northern-ireland-tenancy-agreement-template',
+        '/renting-homes-wales-written-statement',
+        '/scotland-prt-model-agreement-guide',
+        '/update-occupation-contract-wales',
+        '/joint-occupation-contract-wales',
+        '/fixed-term-periodic-occupation-contract-wales',
+        '/update-prt-tenancy-agreement-scotland',
+        '/joint-prt-tenancy-agreement-scotland',
+        '/common-prt-tenancy-mistakes-scotland',
+        '/update-tenancy-agreement-northern-ireland',
+        '/joint-tenancy-agreement-northern-ireland',
+        '/fixed-term-tenancy-agreement-northern-ireland',
+        '/county-court-claim-form-guide',
+        '/eviction-cost-uk',
+        '/eviction-court-forms-england',
+        '/eviction-timeline-england',
+        '/n5-n119-possession-claim',
+        '/possession-order-process',
+        '/eviction-notice',
+        '/eviction-notice-template',
+        '/eviction-notice-england',
+        '/notice-to-quit-northern-ireland-guide',
+        '/section-21-notice-period',
+        '/section-8-vs-section-21',
+        '/wales-eviction-notice-template',
+      ])
+    );
+  });
+
+  it('keeps the strategic money and transition hubs in the top internal-link recipient set', () => {
+    const topRecipients = getTopInternalLinkRecipients(20).map(({ pathname }) => pathname);
+
+    expect(topRecipients).toContain('/eviction-process-uk');
+    expect(topRecipients).toContain('/tenant-not-paying-rent');
+    expect(topRecipients).toContain('/section-21-ban-uk');
   });
 });

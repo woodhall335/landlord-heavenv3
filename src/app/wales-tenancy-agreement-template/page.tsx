@@ -4,10 +4,14 @@ import { getCanonicalUrl } from '@/lib/seo/urls';
 import { StructuredData, breadcrumbSchema, articleSchema } from '@/lib/seo/structured-data';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
+import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import { tenancyAgreementWalesLinks } from '@/lib/seo/internal-links';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
+
+const astProductHref = '/products/ast';
 
 export const metadata: Metadata = {
   title: 'Wales Tenancy Agreement 2026 | Legally Validated Occupation Contract',
@@ -89,6 +93,12 @@ const faqs = [
 export default function WalesTenancyAgreementTemplatePage() {
   return (
     <>
+      <SeoLandingWrapper
+        pagePath="/wales-tenancy-agreement-template"
+        pageTitle="Wales Tenancy Agreement"
+        pageType="tenancy"
+        jurisdiction="wales"
+      />
       <StructuredData
         data={articleSchema({
           headline: 'Wales Tenancy Agreement Template 2026',
@@ -112,7 +122,7 @@ export default function WalesTenancyAgreementTemplatePage() {
         <UniversalHero
           title="Wales Tenancy Agreement"
           subtitle="Create a legally validated Wales occupation contract with solicitor-grade and compliance-checked wording."
-          primaryCta={{ label: "Start now", href: "/wizard?product=ast_standard&src=seo_wales_tenancy_agreement_template&topic=tenancy&jurisdiction=wales" }}
+          primaryCta={{ label: 'View tenancy agreement packs', href: astProductHref }}
           showTrustPositioningBar
           hideMedia
         />
@@ -125,6 +135,12 @@ export default function WalesTenancyAgreementTemplatePage() {
             <span className="mx-2">/</span>
             <span className="text-gray-900">Wales Tenancy Agreement</span>
           </nav>
+        </div>
+
+        <div className="container mx-auto px-4 pb-4">
+          <div className="mx-auto max-w-4xl">
+            <SeoPageContextPanel pathname="/wales-tenancy-agreement-template" />
+          </div>
         </div>
 
         {/* Hero Section */}
@@ -146,13 +162,13 @@ export default function WalesTenancyAgreementTemplatePage() {
             </p>
             <div className="flex gap-4 justify-center flex-wrap">
               <Link
-                href="/wizard?product=ast_standard&src=seo_wales_tenancy_agreement_template&topic=tenancy&jurisdiction=wales"
+                href={astProductHref}
                 className="inline-flex items-center gap-2 bg-white border-2 border-red-600 text-red-600 px-6 py-3 rounded-lg font-semibold hover:bg-red-50 transition-colors"
               >
                 Standard Contract — £14.99
               </Link>
               <Link
-                href="/wizard?product=ast_premium&src=seo_wales_tenancy_agreement_template&topic=tenancy&jurisdiction=wales"
+                href={astProductHref}
                 className="inline-flex items-center gap-2 bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors"
               >
                 Premium Contract — £24.99

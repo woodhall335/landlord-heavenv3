@@ -3,8 +3,8 @@ import Link from 'next/link';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { niUpdateTenancyRelatedLinks } from '@/lib/seo/internal-links';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
@@ -31,19 +31,7 @@ const PAGE_PATH = '/update-tenancy-agreement-northern-ireland';
 const PAGE_TITLE = 'Update Tenancy Agreement Northern Ireland';
 const PAGE_TYPE = 'tenancy' as const;
 
-const wizardLinkStandard = buildWizardLink({
-  product: 'ast_standard',
-  jurisdiction: 'northern-ireland',
-  src: 'guide',
-  topic: 'tenancy',
-});
-
-const wizardLinkPremium = buildWizardLink({
-  product: 'ast_premium',
-  jurisdiction: 'northern-ireland',
-  src: 'guide',
-  topic: 'tenancy',
-});
+const astProductHref = '/products/ast';
 
 export const metadata: Metadata = {
   title: 'Update Tenancy Agreement Northern Ireland | Renew NI Tenancy',
@@ -118,11 +106,11 @@ export default function UpdateTenancyAgreementNorthernIrelandPage() {
           }
           primaryCta={{
             label: `Create New Agreement — ${PRODUCTS.ast_standard.displayPrice}`,
-            href: wizardLinkStandard,
+            href: astProductHref,
           }}
           secondaryCta={{
             label: 'Premium Agreement with Extras',
-            href: wizardLinkPremium,
+            href: astProductHref,
           }}
           variant="pastel"
         >
@@ -147,6 +135,14 @@ export default function UpdateTenancyAgreementNorthernIrelandPage() {
         <section className="py-6 bg-gray-50 border-y border-gray-100">
           <div className="container mx-auto px-4">
             <SocialProofCounter variant="total" className="justify-center" />
+          </div>
+        </section>
+
+        <section className="py-10 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <SeoPageContextPanel pathname="/update-tenancy-agreement-northern-ireland" />
+            </div>
           </div>
         </section>
 

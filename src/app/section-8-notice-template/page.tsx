@@ -34,32 +34,21 @@ import {
   blogLinks,
   landingPageLinks,
 } from '@/lib/seo/internal-links';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { section8NoticeTemplateFAQs } from '@/data/faqs';
 import { FunnelCta, CrossSellBar } from '@/components/funnels';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 
 const canonicalUrl = getCanonicalUrl('/section-8-notice-template');
 
 const completePackPrice = PRODUCTS.complete_pack?.displayPrice ?? '£79.99';
 const noticeOnlyPrice = PRODUCTS.notice_only?.displayPrice ?? '£29.99';
 
-const wizardLinkCompletePack = buildWizardLink({
-  product: 'complete_pack',
-  jurisdiction: 'england',
-  src: 'seo_section_8_notice_template',
-  topic: 'eviction',
-});
-
-const wizardLinkNoticeOnly = buildWizardLink({
-  product: 'notice_only',
-  jurisdiction: 'england',
-  src: 'seo_section_8_notice_template',
-  topic: 'eviction',
-});
+const completePackProductHref = '/products/complete-pack';
+const noticeOnlyProductHref = '/products/notice-only';
 
 export const metadata: Metadata = {
   title: 'Section 8 Notice Template | Form 3 Guide for Landlords in England',
@@ -193,8 +182,8 @@ export default function Section8NoticeTemplatePage() {
         <UniversalHero
           title="Section 8 Notice Template"
           subtitle="Learn how Section 8 Form 3 works, what a valid grounds-based notice should include, and when to use a court-ready Notice Only workflow instead of relying on a generic template."
-          primaryCta={{ label: `Start Notice Only — ${noticeOnlyPrice}`, href: wizardLinkNoticeOnly }}
-          secondaryCta={{ label: `Complete eviction path — ${completePackPrice}`, href: wizardLinkCompletePack }}
+          primaryCta={{ label: `Start Notice Only — ${noticeOnlyPrice}`, href: noticeOnlyProductHref }}
+          secondaryCta={{ label: `Complete eviction path — ${completePackPrice}`, href: completePackProductHref }}
           showTrustPositioningBar
           hideMedia
           variant="pastel"
@@ -202,6 +191,9 @@ export default function Section8NoticeTemplatePage() {
 
         <section className="border-b border-[#E6DBFF] bg-white py-8">
           <div className="container mx-auto px-4">
+            <div className="mx-auto mb-6 max-w-5xl">
+              <SeoPageContextPanel pathname="/section-8-notice-template" />
+            </div>
             <nav
               aria-labelledby="section-8-links-heading"
               className="mx-auto max-w-5xl rounded-2xl border border-[#E6DBFF] bg-white p-6"
@@ -709,7 +701,7 @@ export default function Section8NoticeTemplatePage() {
                   , not a bare template.
                 </p>
                 <Link
-                  href={wizardLinkNoticeOnly}
+                  href={noticeOnlyProductHref}
                   className="inline-flex items-center gap-2 text-primary font-medium hover:underline"
                 >
                   Build your Section 8 notice now
@@ -757,7 +749,7 @@ export default function Section8NoticeTemplatePage() {
                     </li>
                   </ul>
                   <Link
-                    href={wizardLinkNoticeOnly}
+                    href={noticeOnlyProductHref}
                     className="hero-btn-primary block w-full text-center"
                   >
                     Start Notice Only
@@ -784,7 +776,7 @@ export default function Section8NoticeTemplatePage() {
                     </li>
                   </ul>
                   <Link
-                    href={wizardLinkCompletePack}
+                    href={completePackProductHref}
                     className="hero-btn-secondary block w-full text-center"
                   >
                     Get Complete Pack
@@ -869,7 +861,7 @@ export default function Section8NoticeTemplatePage() {
                 important for England landlords. That makes getting the notice stage right even more valuable.
               </p>
               <Link
-                href={wizardLinkNoticeOnly}
+                href={noticeOnlyProductHref}
                 className="hero-btn-secondary inline-flex items-center gap-2"
               >
                 Build your Section 8 notice now
@@ -1194,14 +1186,14 @@ export default function Section8NoticeTemplatePage() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
-                  href={wizardLinkNoticeOnly}
+                  href={noticeOnlyProductHref}
                   className="hero-btn-secondary inline-flex items-center justify-center gap-2"
                 >
                   <FileText className="w-5 h-5" />
                   Notice Only — {noticeOnlyPrice}
                 </Link>
                 <Link
-                  href={wizardLinkCompletePack}
+                  href={completePackProductHref}
                   className="hero-btn-secondary inline-flex items-center justify-center gap-2"
                 >
                   Complete Pack — {completePackPrice}

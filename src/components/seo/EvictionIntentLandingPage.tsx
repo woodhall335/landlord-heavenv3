@@ -6,11 +6,50 @@ import { UniversalHero } from '@/components/landing/UniversalHero';
 import { StructuredData, breadcrumbSchema, faqPageSchema, articleSchema } from '@/lib/seo/structured-data';
 import { EVICTION_ENTITIES, getAuthorityLinks } from '@/lib/seo/eviction-authority';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import type { IntentPageConfig } from '@/lib/seo/eviction-intent-pages';
 import { getWizardHref } from '@/lib/seo/eviction-intent-pages';
+import {
+  getPrimaryDestinationAboveFold,
+  getSeoPageTaxonomyBySlug,
+} from '@/lib/seo/page-taxonomy';
 
 const DEFAULT_UPDATED = 'March 2026';
+const AREA_SERVED_BY_JURISDICTION = {
+  england: 'England',
+  wales: 'Wales',
+  scotland: 'Scotland',
+  'northern-ireland': 'Northern Ireland',
+  uk: 'UK',
+} as const;
+const PRODUCT_CTA_LABELS = {
+  '/products/notice-only': 'Start notice only',
+  '/products/complete-pack': 'Start complete eviction pack',
+  '/products/money-claim': 'Start money claim',
+  '/products/ast': 'Start tenancy agreement',
+} as const;
+
+function getProductCtaLabel(route: string) {
+  return PRODUCT_CTA_LABELS[route as keyof typeof PRODUCT_CTA_LABELS] ?? 'Start guided workflow';
+}
+
+function labelMatchesProduct(label: string, route: string) {
+  const normalized = label.toLowerCase();
+
+  switch (route) {
+    case '/products/notice-only':
+      return normalized.includes('notice');
+    case '/products/complete-pack':
+      return normalized.includes('complete') || normalized.includes('court pack');
+    case '/products/money-claim':
+      return normalized.includes('money');
+    case '/products/ast':
+      return normalized.includes('tenancy') || normalized.includes('agreement') || normalized.includes('contract');
+    default:
+      return false;
+  }
+}
 
 const LANDLORD_SCENARIO_IMAGE_MAP: Record<string, { src: string; alt: string }> = {
   'Your fixed term has ended, the tenant will not leave, and you want a clean no-fault route without a paperwork restart.': {
@@ -84,10 +123,46 @@ function getItemListSchema(slug: string, canonical: string) {
 }
 
 export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig }) {
-  const primaryHref = getWizardHref(config);
-  const secondaryHref = config.secondaryCta
-    ? getWizardHref(config, config.secondaryCta.product, config.secondaryCta.src)
+  const taxonomyEntry = getSeoPageTaxonomyBySlug(config.slug);
+  const configPrimaryProductRoute =
+    config.primaryProduct === 'notice_only' ? '/products/notice-only' : '/products/complete-pack';
+  const configSecondaryProductRoute = config.secondaryCta
+    ? config.secondaryCta.product === 'notice_only'
+      ? '/products/notice-only'
+      : '/products/complete-pack'
     : null;
+  const primaryHref = taxonomyEntry
+    ? getPrimaryDestinationAboveFold(taxonomyEntry)
+    : getWizardHref(config);
+  const heroSecondaryHref = taxonomyEntry
+    ? config.secondaryCta && taxonomyEntry.secondaryProduct
+      ? taxonomyEntry.secondaryProduct
+      : null
+    : config.secondaryCta
+      ? getWizardHref(config, config.secondaryCta.product, config.secondaryCta.src)
+      : null;
+  const secondaryActionHref = taxonomyEntry
+    ? heroSecondaryHref
+    : heroSecondaryHref ?? getWizardHref(config, 'complete_pack', `${config.primarySrc}_complete`);
+  const pageType = taxonomyEntry?.pageType ?? 'problem';
+  const jurisdiction = taxonomyEntry?.jurisdiction ?? 'england';
+  const primaryProductRoute = taxonomyEntry?.primaryProduct
+    ?? (config.primaryProduct === 'notice_only' ? '/products/notice-only' : '/products/complete-pack');
+  const primaryCtaLabel = taxonomyEntry && !labelMatchesProduct(config.heroCta, taxonomyEntry.primaryProduct)
+    ? getProductCtaLabel(taxonomyEntry.primaryProduct)
+    : config.heroCta;
+  const heroSecondaryLabel = heroSecondaryHref
+    ? taxonomyEntry
+      ? config.secondaryCta
+        && configSecondaryProductRoute === heroSecondaryHref
+        && labelMatchesProduct(config.secondaryCta.label, heroSecondaryHref)
+        ? config.secondaryCta.label
+        : getProductCtaLabel(heroSecondaryHref)
+      : config.secondaryCta?.label ?? null
+    : null;
+  const secondaryActionLabel = taxonomyEntry
+    ? heroSecondaryLabel
+    : config.secondaryCta?.label ?? 'Start your complete eviction pack';
   const canonical = `https://landlordheaven.co.uk/${config.slug}`;
   const lastUpdated = config.lastUpdated ?? DEFAULT_UPDATED;
 
@@ -114,9 +189,14 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
   const serviceSchema = {
     '@context': 'https://schema.org',
     '@type': 'Service',
-    name: config.primaryProduct === 'notice_only' ? 'Notice Only Eviction Workflow' : 'Complete Eviction Pack Workflow',
+    name:
+      primaryProductRoute === '/products/notice-only'
+        ? 'Notice Only Eviction Workflow'
+        : primaryProductRoute === '/products/money-claim'
+          ? 'Money Claim Workflow'
+          : 'Complete Eviction Pack Workflow',
     provider: { '@type': 'Organization', name: 'Landlord Heaven' },
-    areaServed: 'England',
+    areaServed: AREA_SERVED_BY_JURISDICTION[jurisdiction],
     serviceType: 'Landlord document generation and guided workflow',
     url: canonical,
   };
@@ -166,7 +246,12 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
 
   return (
     <div className="min-h-screen bg-[#fcfaff]">
-      <SeoLandingWrapper pagePath={`/${config.slug}`} pageTitle={config.title} pageType="problem" jurisdiction="england" />
+      <SeoLandingWrapper
+        pagePath={`/${config.slug}`}
+        pageTitle={config.title}
+        pageType={pageType}
+        jurisdiction={jurisdiction}
+      />
       <HeaderConfig mode="autoOnScroll" />
       <StructuredData data={webPageSchema} />
       <StructuredData data={serviceSchema} />
@@ -185,8 +270,12 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
       <UniversalHero
         title={config.h1}
         subtitle={config.heroSubheadline}
-        primaryCta={{ label: config.heroCta, href: primaryHref }}
-        secondaryCta={config.secondaryCta ? { label: config.secondaryCta.label, href: secondaryHref ?? '#' } : undefined}
+        primaryCta={{ label: primaryCtaLabel, href: primaryHref }}
+        secondaryCta={
+          heroSecondaryHref && heroSecondaryLabel
+            ? { label: heroSecondaryLabel, href: heroSecondaryHref }
+            : undefined
+        }
         showReviewPill
         showTrustPositioningBar
         mediaSrc={config.icon}
@@ -224,6 +313,18 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
         </Container>
       </section>
 
+      {taxonomyEntry ? (
+        <section className="bg-white py-8">
+          <Container>
+            <div className="mx-auto max-w-6xl">
+              <SeoPageContextPanel
+                pathname={`/${config.slug}`}
+                className="border border-[#CAB6FF] bg-[#FBF8FF]"
+              />
+            </div>
+          </Container>
+        </section>
+      ) : null}
 
       <section className="py-12 bg-white border-y border-[#EDE2FF]">
         <Container>
@@ -461,8 +562,12 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
               ))}
             </div>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Link href={primaryHref} className="hero-btn-primary">Start your eviction notice</Link>
-              <Link href={secondaryHref ?? getWizardHref(config, 'complete_pack', `${config.primarySrc}_complete`)} className="hero-btn-secondary">Start your complete eviction pack</Link>
+              <Link href={primaryHref} className="hero-btn-primary">{primaryCtaLabel}</Link>
+              {secondaryActionHref && secondaryActionLabel ? (
+                <Link href={secondaryActionHref} className="hero-btn-secondary">
+                  {secondaryActionLabel}
+                </Link>
+              ) : null}
             </div>
           </div>
         </Container>
@@ -489,10 +594,14 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
           <div className="mx-auto max-w-5xl rounded-3xl border border-[#E6DBFF] bg-gradient-to-br from-[#692ED4] via-[#7A3BE5] to-[#5a21be] p-8 text-white shadow-[0_22px_60px_rgba(105,46,212,0.32)] md:p-10">
             <p className="text-sm font-semibold uppercase tracking-wide text-white/80">Next step</p>
             <h2 className="mt-2 text-2xl font-bold md:text-3xl">Do not let avoidable paperwork errors add more lost rent</h2>
-            <p className="mt-3 text-white/90">A generic template can look cheap at the start, but if route, dates, or service are wrong you can lose months and restart. Use the guided wizard now and keep your case moving.</p>
+            <p className="mt-3 text-white/90">A generic template can look cheap at the start, but if route, dates, or service are wrong you can lose months and restart. Use the guided workflow now and keep your case moving.</p>
             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-              <Link href={primaryHref} className="hero-btn-primary">{config.heroCta}</Link>
-              {secondaryHref ? <Link href={secondaryHref} className="hero-btn-secondary">{config.secondaryCta?.label}</Link> : null}
+              <Link href={primaryHref} className="hero-btn-primary">{primaryCtaLabel}</Link>
+              {heroSecondaryHref && heroSecondaryLabel ? (
+                <Link href={heroSecondaryHref} className="hero-btn-secondary">
+                  {heroSecondaryLabel}
+                </Link>
+              ) : null}
             </div>
           </div>
         </Container>

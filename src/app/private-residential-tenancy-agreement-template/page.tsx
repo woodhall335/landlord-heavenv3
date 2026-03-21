@@ -4,10 +4,14 @@ import { getCanonicalUrl } from '@/lib/seo/urls';
 import { StructuredData, breadcrumbSchema, articleSchema } from '@/lib/seo/structured-data';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
+import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import { tenancyAgreementScotlandLinks } from '@/lib/seo/internal-links';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
+
+const astProductHref = '/products/ast';
 
 export const metadata: Metadata = {
   title: 'Private Residential Tenancy Agreement 2026 | Legally Validated PRT',
@@ -81,6 +85,12 @@ const faqs = [
 export default function PrivateResidentialTenancyAgreementTemplatePage() {
   return (
     <>
+      <SeoLandingWrapper
+        pagePath="/private-residential-tenancy-agreement-template"
+        pageTitle="Private Residential Tenancy Agreement (Scotland)"
+        pageType="tenancy"
+        jurisdiction="scotland"
+      />
       <StructuredData
         data={articleSchema({
           headline: 'Private Residential Tenancy Agreement Template Scotland 2026',
@@ -104,7 +114,7 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
         <UniversalHero
           title="Private Residential Tenancy Agreement (Scotland)"
           subtitle="Create a legally validated, solicitor-grade PRT agreement that is compliance-checked for Scotland."
-          primaryCta={{ label: "Start now", href: "/wizard?product=ast_standard&src=seo_private_residential_tenancy_agreement_template&topic=tenancy&jurisdiction=scotland" }}
+          primaryCta={{ label: 'View tenancy agreement packs', href: astProductHref }}
           showTrustPositioningBar
           hideMedia
         />
@@ -117,6 +127,12 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
             <span className="mx-2">/</span>
             <span className="text-gray-900">PRT Agreement Template</span>
           </nav>
+        </div>
+
+        <div className="container mx-auto px-4 pb-4">
+          <div className="mx-auto max-w-4xl">
+            <SeoPageContextPanel pathname="/private-residential-tenancy-agreement-template" />
+          </div>
         </div>
 
         {/* Hero Section */}
@@ -138,13 +154,13 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
             </p>
             <div className="flex gap-4 justify-center flex-wrap">
               <Link
-                href="/wizard?product=ast_standard&src=seo_private_residential_tenancy_agreement_template&topic=tenancy&jurisdiction=scotland"
+                href={astProductHref}
                 className="inline-flex items-center gap-2 bg-white border-2 border-blue-600 text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors"
               >
                 Standard PRT — £14.99
               </Link>
               <Link
-                href="/wizard?product=ast_premium&src=seo_private_residential_tenancy_agreement_template&topic=tenancy&jurisdiction=scotland"
+                href={astProductHref}
                 className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
               >
                 Premium PRT — £24.99

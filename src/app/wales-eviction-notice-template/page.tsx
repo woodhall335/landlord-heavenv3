@@ -3,13 +3,14 @@ import Link from 'next/link';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, guideLinks, askHeavenLink } from '@/lib/seo/internal-links';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { StandardHero } from '@/components/marketing/StandardHero';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { AskHeavenWidget } from '@/components/ask-heaven/AskHeavenWidget';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import {
   CheckCircle,
   FileText,
@@ -21,13 +22,7 @@ import {
   Scale,
 } from 'lucide-react';
 
-// Pre-built wizard link for Wales template page
-const wizardLink = buildWizardLink({
-  product: 'notice_only',
-  jurisdiction: 'wales',
-  src: 'seo_wales_eviction_notice_template',
-  topic: 'eviction',
-});
+const noticeOnlyProductHref = '/products/notice-only';
 
 export const metadata: Metadata = {
   title: 'Wales Eviction Notice Template 2026 | Renting Homes Act Landlords',
@@ -104,6 +99,12 @@ export default function WalesEvictionNoticeTemplatePage() {
 
   return (
     <>
+      <SeoLandingWrapper
+        pagePath="/wales-eviction-notice-template"
+        pageTitle={metadata.title as string}
+        pageType="notice"
+        jurisdiction="wales"
+      />
       <StructuredData data={pageSchema} />
       <StructuredData
         data={breadcrumbSchema([
@@ -121,7 +122,7 @@ export default function WalesEvictionNoticeTemplatePage() {
         <UniversalHero
           title="Wales Eviction Notice Guide"
           subtitle="Create Wales possession notices under the Renting Homes Act with the right route, notice periods, and evidence details."
-          primaryCta={{ label: 'Start Wales Notice', href: wizardLink }}
+          primaryCta={{ label: 'Start Wales Notice', href: noticeOnlyProductHref }}
           secondaryCta={{ label: 'Learn About Wales Eviction', href: '/wales-eviction-notices' }}
           showTrustPositioningBar
           hideMedia
@@ -139,7 +140,7 @@ export default function WalesEvictionNoticeTemplatePage() {
               landlords.
             </>
           }
-          primaryCTA={{ label: 'Get Wales Notice — £29.99', href: wizardLink }}
+          primaryCTA={{ label: 'Get Wales Notice — £29.99', href: noticeOnlyProductHref }}
           secondaryCTA={{ label: 'Learn About Wales Eviction', href: '/wales-eviction-notices' }}
           variant="pastel"
         >
@@ -184,6 +185,14 @@ export default function WalesEvictionNoticeTemplatePage() {
             </span>
           </div>
         </StandardHero>
+
+        <section className="bg-white py-8">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <SeoPageContextPanel pathname="/wales-eviction-notice-template" />
+            </div>
+          </div>
+        </section>
 
         {/* Key Differences from England */}
         <section className="py-16 lg:py-20 bg-gray-50">
@@ -392,7 +401,7 @@ export default function WalesEvictionNoticeTemplatePage() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
-                  href={wizardLink}
+                  href={noticeOnlyProductHref}
                   className="bg-white text-red-700 font-semibold py-3 px-6 rounded-lg hover:bg-red-50 transition-colors inline-flex items-center justify-center gap-2"
                 >
                   Get Wales Notice — £29.99

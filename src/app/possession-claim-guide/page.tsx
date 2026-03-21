@@ -9,9 +9,10 @@ import {
   guideLinks,
   landingPageLinks,
 } from '@/lib/seo/internal-links';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
+import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { FAQSection } from '@/components/seo/FAQSection';
 import {
@@ -26,12 +27,7 @@ import {
   PoundSterling,
 } from 'lucide-react';
 
-const wizardLinkCompletePack = buildWizardLink({
-  product: 'notice_only',
-  jurisdiction: 'england',
-  src: 'seo_possession_claim_guide',
-  topic: 'eviction',
-});
+const completePackProductHref = '/products/complete-pack';
 
 export const metadata: Metadata = {
   title: 'Possession Claim Guide UK - How to Apply for Court Possession (2026)',
@@ -105,6 +101,12 @@ export default function PossessionClaimGuidePage() {
 
   return (
     <>
+      <SeoLandingWrapper
+        pagePath="/possession-claim-guide"
+        pageTitle="Possession Claim Guide UK"
+        pageType="court"
+        jurisdiction="england"
+      />
       <StructuredData data={pageSchema} />
       <StructuredData data={breadcrumbSchema([
         { name: 'Home', url: 'https://landlordheaven.co.uk' },
@@ -117,11 +119,19 @@ export default function PossessionClaimGuidePage() {
         <UniversalHero
           title="Possession Claim Guide UK"
           subtitle="Prepare and file possession claim paperwork with solicitor-grade guidance for landlords."
-          primaryCta={{ label: 'Start Possession Wizard', href: wizardLinkCompletePack }}
+          primaryCta={{ label: 'Start Complete Eviction Pack', href: completePackProductHref }}
           secondaryCta={{ label: 'Jump to key steps', href: '#before-you-apply' }}
           showTrustPositioningBar
           hideMedia
         />
+
+        <section className="py-8 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <SeoPageContextPanel pathname="/possession-claim-guide" />
+            </div>
+          </div>
+        </section>
 
         {/* Social Proof */}
         <section className="py-6 bg-gray-50 border-y border-gray-100">
@@ -246,7 +256,7 @@ export default function PossessionClaimGuidePage() {
                     </li>
                   </ul>
                   <Link
-                    href={wizardLinkCompletePack}
+                    href={completePackProductHref}
                     className="inline-flex items-center gap-2 text-primary font-medium hover:underline"
                   >
                     Get N5 form in Complete Pack

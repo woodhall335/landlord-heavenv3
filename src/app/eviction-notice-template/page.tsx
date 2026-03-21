@@ -18,7 +18,6 @@ import {
 import { StructuredData, breadcrumbSchema, articleSchema, faqPageSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 import { PRODUCTS } from '@/lib/pricing/products';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { Section21Countdown } from '@/components/ui/Section21Countdown';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, toolLinks, blogLinks } from '@/lib/seo/internal-links';
@@ -31,17 +30,15 @@ import { EvictionNoticeBundlePreviewSection } from '@/components/seo/EvictionNot
 import { getNoticeOnlyPreviewData } from '@/lib/previews/noticeOnlyPreviews';
 import { Section21ComplianceTimingPanel } from '@/components/products/Section21ComplianceTimingPanel';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 
 const canonicalUrl = getCanonicalUrl('/eviction-notice-template');
 
 const noticeOnlyPrice = PRODUCTS.notice_only?.displayPrice ?? '£29.99';
 const completePackPrice = PRODUCTS.complete_pack?.displayPrice ?? '£79.99';
 
-const wizardHref = buildWizardLink({
-  product: 'notice_only',
-  topic: 'eviction',
-  src: 'seo_eviction_notice_template',
-});
+const noticeOnlyProductHref = '/products/notice-only';
+const completePackProductHref = '/products/complete-pack';
 
 export const metadata: Metadata = {
   title: 'Eviction Notice Template UK | Jurisdiction-Specific Landlord Notice Builder',
@@ -144,7 +141,7 @@ export default async function EvictionNoticeTemplatePage() {
       <SeoLandingWrapper
         pagePath="/eviction-notice-template"
         pageTitle={metadata.title as string}
-        pageType="guide"
+        pageType="notice"
         jurisdiction="uk"
       />
 
@@ -173,8 +170,8 @@ export default async function EvictionNoticeTemplatePage() {
           badge="Jurisdiction-Specific Notice Builder"
           title="Eviction Notice Template UK"
           subtitle="Generate the correct possession notice route for England, Wales, or Scotland with solicitor-grade, jurisdiction-specific workflow checks before service."
-          primaryCta={{ label: `Start Eviction Notice Wizard — ${noticeOnlyPrice}`, href: wizardHref }}
-          secondaryCta={{ label: `Need the full court bundle? — ${completePackPrice}`, href: '/products/complete-pack' }}
+          primaryCta={{ label: `Start Notice Only — ${noticeOnlyPrice}`, href: noticeOnlyProductHref }}
+          secondaryCta={{ label: `Need the full court bundle? — ${completePackPrice}`, href: completePackProductHref }}
           showTrustPositioningBar
           hideMedia
           variant="pastel"
@@ -188,6 +185,9 @@ export default async function EvictionNoticeTemplatePage() {
 
         <section className="border-b border-[#E6DBFF] bg-white py-8">
           <div className="container mx-auto px-4">
+            <div className="mx-auto mb-6 max-w-5xl">
+              <SeoPageContextPanel pathname="/eviction-notice-template" />
+            </div>
             <nav
               aria-labelledby="notice-guide-links-heading"
               className="mx-auto max-w-5xl rounded-2xl border border-[#E6DBFF] bg-white p-6"

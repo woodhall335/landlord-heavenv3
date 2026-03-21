@@ -3,8 +3,8 @@ import Link from 'next/link';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { jointPrtRelatedLinks } from '@/lib/seo/internal-links';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
@@ -34,19 +34,7 @@ const PAGE_PATH = '/joint-prt-tenancy-agreement-scotland';
 const PAGE_TITLE = 'Joint PRT Tenancy Agreement Scotland';
 const PAGE_TYPE = 'tenancy' as const;
 
-const wizardLinkStandard = buildWizardLink({
-  product: 'ast_standard',
-  jurisdiction: 'scotland',
-  src: 'seo_joint_prt_tenancy_agreement_scotland',
-  topic: 'tenancy',
-});
-
-const wizardLinkPremium = buildWizardLink({
-  product: 'ast_premium',
-  jurisdiction: 'scotland',
-  src: 'seo_joint_prt_tenancy_agreement_scotland',
-  topic: 'tenancy',
-});
+const astProductHref = '/products/ast';
 
 export const metadata: Metadata = {
   title: 'Joint PRT Tenancy Agreement Scotland | Multiple Tenants PRT 2026',
@@ -122,11 +110,11 @@ export default function JointPrtTenancyAgreementScotlandPage() {
           }
           primaryCta={{
             label: `Create Joint PRT — ${PRODUCTS.ast_standard.displayPrice}`,
-            href: wizardLinkStandard,
+            href: astProductHref,
           }}
           secondaryCta={{
             label: 'Premium Agreement with Extras',
-            href: wizardLinkPremium,
+            href: astProductHref,
           }}
         >
           {/* Trust Signals */}
@@ -150,6 +138,14 @@ export default function JointPrtTenancyAgreementScotlandPage() {
         <section className="py-6 bg-gray-50 border-y border-gray-100">
           <div className="container mx-auto px-4">
             <SocialProofCounter variant="total" className="justify-center" />
+          </div>
+        </section>
+
+        <section className="py-10 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <SeoPageContextPanel pathname="/joint-prt-tenancy-agreement-scotland" />
+            </div>
           </div>
         </section>
 

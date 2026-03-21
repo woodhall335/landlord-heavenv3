@@ -3,8 +3,8 @@ import Link from 'next/link';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { niFixedTermRelatedLinks } from '@/lib/seo/internal-links';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
@@ -30,19 +30,7 @@ const PAGE_PATH = '/fixed-term-tenancy-agreement-northern-ireland';
 const PAGE_TITLE = 'Fixed Term Tenancy Agreement Northern Ireland';
 const PAGE_TYPE = 'tenancy' as const;
 
-const wizardLinkStandard = buildWizardLink({
-  product: 'ast_standard',
-  jurisdiction: 'northern-ireland',
-  src: 'seo_fixed_term_tenancy_agreement_northern_ireland',
-  topic: 'tenancy',
-});
-
-const wizardLinkPremium = buildWizardLink({
-  product: 'ast_premium',
-  jurisdiction: 'northern-ireland',
-  src: 'seo_fixed_term_tenancy_agreement_northern_ireland',
-  topic: 'tenancy',
-});
+const astProductHref = '/products/ast';
 
 export const metadata: Metadata = {
   title: 'Fixed Term Tenancy Agreement Northern Ireland | NI Fixed Term Tenancy',
@@ -119,11 +107,11 @@ export default function FixedTermTenancyAgreementNorthernIrelandPage() {
           }
           primaryCta={{
             label: `Create Fixed Term Tenancy — ${PRODUCTS.ast_standard.displayPrice}`,
-            href: wizardLinkStandard,
+            href: astProductHref,
           }}
           secondaryCta={{
             label: 'Premium Agreement with Break Clause',
-            href: wizardLinkPremium,
+            href: astProductHref,
           }}
         >
           {/* Trust Signals */}
@@ -147,6 +135,14 @@ export default function FixedTermTenancyAgreementNorthernIrelandPage() {
         <section className="py-6 bg-gray-50 border-y border-gray-100">
           <div className="container mx-auto px-4">
             <SocialProofCounter variant="total" className="justify-center" />
+          </div>
+        </section>
+
+        <section className="py-10 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <SeoPageContextPanel pathname="/fixed-term-tenancy-agreement-northern-ireland" />
+            </div>
           </div>
         </section>
 
@@ -546,7 +542,7 @@ export default function FixedTermTenancyAgreementNorthernIrelandPage() {
 
               <div className="mt-8 text-center">
                 <Link
-                  href={wizardLinkPremium}
+                  href={astProductHref}
                   className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors"
                 >
                   Get Premium Agreement with Break Clause

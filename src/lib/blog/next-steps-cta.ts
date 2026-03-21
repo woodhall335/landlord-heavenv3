@@ -295,6 +295,129 @@ function finalizeNextSteps(steps: NextStepsCTA[]): NextStepsCTA[] {
   return finalSteps.slice(0, 3);
 }
 
+function getTenancyNextSteps(
+  jurisdiction: ReturnType<typeof detectJurisdiction>
+): [NextStepsCTA, NextStepsCTA, NextStepsCTA] {
+  switch (jurisdiction) {
+    case 'wales':
+      return [
+        {
+          href: SEO_PILLAR_ROUTES.tenancyAgreementsWales,
+          label: 'Wales Tenancy Agreement Guide',
+          priority: 1,
+        },
+        {
+          href: '/renting-homes-wales-written-statement',
+          label: 'Wales Written Statement Guide',
+          priority: 2,
+        },
+        {
+          href: SEO_PRODUCT_ROUTES.ast,
+          label: 'Tenancy Agreement Pack',
+          priority: 3,
+        },
+      ];
+    case 'scotland':
+      return [
+        {
+          href: SEO_PILLAR_ROUTES.tenancyAgreementsScotland,
+          label: 'Scotland PRT Agreement Guide',
+          priority: 1,
+        },
+        {
+          href: '/scotland-prt-model-agreement-guide',
+          label: 'Scotland PRT Model Agreement Guide',
+          priority: 2,
+        },
+        {
+          href: SEO_PRODUCT_ROUTES.ast,
+          label: 'Tenancy Agreement Pack',
+          priority: 3,
+        },
+      ];
+    case 'northern-ireland':
+      return [
+        {
+          href: SEO_PILLAR_ROUTES.tenancyAgreementsNorthernIreland,
+          label: 'Northern Ireland Tenancy Agreement Guide',
+          priority: 1,
+        },
+        {
+          href: '/tenancy-agreement-northern-ireland',
+          label: 'Northern Ireland Tenancy Agreement Template',
+          priority: 2,
+        },
+        {
+          href: SEO_PRODUCT_ROUTES.ast,
+          label: 'Tenancy Agreement Pack',
+          priority: 3,
+        },
+      ];
+    case 'uk-wide':
+      return [
+        {
+          href: '/tenancy-agreement-template',
+          label: 'UK Tenancy Agreement Guide',
+          priority: 1,
+        },
+        {
+          href: '/tenancy-agreement',
+          label: 'Residential Tenancy Agreement Guide',
+          priority: 2,
+        },
+        {
+          href: SEO_PRODUCT_ROUTES.ast,
+          label: 'Tenancy Agreement Pack',
+          priority: 3,
+        },
+      ];
+    case 'england':
+    default:
+      return [
+        {
+          href: '/tenancy-agreements/england',
+          label: 'England Tenancy Agreement Guide',
+          priority: 1,
+        },
+        {
+          href: '/assured-shorthold-tenancy-agreement-template',
+          label: 'England Tenancy Agreement Template',
+          priority: 2,
+        },
+        {
+          href: SEO_PRODUCT_ROUTES.ast,
+          label: 'Tenancy Agreement Pack',
+          priority: 3,
+        },
+      ];
+  }
+}
+
+function getNonEnglandArrearsStep(
+  jurisdiction: ReturnType<typeof detectJurisdiction>
+): NextStepsCTA {
+  switch (jurisdiction) {
+    case 'wales':
+      return {
+        href: '/wales-eviction-notices',
+        label: 'Wales Eviction Guide',
+        priority: 2,
+      };
+    case 'scotland':
+      return {
+        href: '/scotland-eviction-notices',
+        label: 'Scotland Eviction Guide',
+        priority: 2,
+      };
+    default:
+      return {
+        href: SEO_PILLAR_ROUTES.howToEvictTenant,
+        label: 'How to Evict a Tenant Guide',
+        priority: 2,
+      };
+  }
+}
+
 /**
  * Pure function to generate CTAs for a blog post
  * This is the same logic used in the NextSteps React component
@@ -308,6 +431,7 @@ export function getNextStepsCTAs(input: NextStepsCTAInput): NextStepsCTA[] {
   const lowerTags = tags.map((t) => t.toLowerCase());
   const lowerSlug = slug.toLowerCase();
   const lowerCategory = category.toLowerCase();
+  const jurisdiction = detectJurisdiction(lowerSlug);
 
   const curatedOverride = CURATED_NEXT_STEPS_OVERRIDES[lowerSlug];
   if (curatedOverride) {
@@ -323,6 +447,12 @@ export function getNextStepsCTAs(input: NextStepsCTAInput): NextStepsCTA[] {
     lowerSlug.startsWith('ni-') ||
     lowerSlug.includes('-ni-');
   const isNonEngland = isScotland || isWales || isNI;
+  const isTenancyRelatedContent =
+    lowerSlug.includes('tenancy-agreement') ||
+    lowerSlug.includes('ast') ||
+    lowerSlug.includes('occupation-contract') ||
+    lowerSlug.includes('prt') ||
+    lowerCategory.includes('tenancy');
 
   // Check for Section 21 related content (England only)
   // Gate: only show Section 21 CTAs for England content
@@ -389,50 +519,37 @@ export function getNextStepsCTAs(input: NextStepsCTAInput): NextStepsCTA[] {
       label: 'Tenant Not Paying Rent Guide',
       priority: 1,
     });
-    steps.push({
-      href: SEO_PILLAR_ROUTES.section8Notice,
-      label: 'Section 8 Notice for Rent Arrears',
-      priority: 2,
-    });
-    steps.push({
-      href: SEO_PRODUCT_ROUTES.moneyClaim,
-      label: 'Money Claim Pack',
-      priority: 3,
-    });
+    if (isNonEngland) {
+      steps.push(getNonEnglandArrearsStep(jurisdiction));
+      steps.push({
+        href: SEO_PRODUCT_ROUTES.noticeOnly,
+        label: 'Notice Only Bundle',
+        priority: 3,
+      });
+    } else {
+      steps.push({
+        href: SEO_PILLAR_ROUTES.section8Notice,
+        label: 'Section 8 Notice for Rent Arrears',
+        priority: 2,
+      });
+      steps.push({
+        href: SEO_PRODUCT_ROUTES.moneyClaim,
+        label: 'Money Claim Pack',
+        priority: 3,
+      });
+    }
   }
 
   // Check for tenancy agreement content
-  if (
-    lowerSlug.includes('tenancy-agreement') ||
-    lowerSlug.includes('ast') ||
-    lowerSlug.includes('occupation-contract') ||
-    lowerSlug.includes('prt') ||
-    lowerCategory.includes('tenancy')
-  ) {
-    steps.push({
-      href: SEO_PRODUCT_ROUTES.ast,
-      label: 'Tenancy Agreement Pack',
-      priority: 1,
-    });
-    steps.push({
-      href: '/assured-shorthold-tenancy-agreement-template',
-      label: 'Tenancy Agreement Template',
-      priority: 2,
-    });
-    steps.push({
-      href: buildAskHeavenLink({
-        source: 'blog',
-        topic: 'general',
-        prompt: 'What should a compliant tenancy agreement include?',
-        utm_campaign: slug,
-      }),
-      label: 'Ask About Tenancy Agreements',
-      priority: 3,
-    });
+  if (isTenancyRelatedContent) {
+    steps.push(...getTenancyNextSteps(jurisdiction));
   }
 
   // Check for Wales-specific content
-  if (lowerSlug.startsWith('wales-') || lowerSlug.includes('renting-homes')) {
+  if (
+    (lowerSlug.startsWith('wales-') || lowerSlug.includes('renting-homes')) &&
+    !isTenancyRelatedContent
+  ) {
     steps.push({
       href: '/wales-eviction-notices',
       label: 'Wales Eviction Guide',
@@ -459,7 +576,7 @@ export function getNextStepsCTAs(input: NextStepsCTAInput): NextStepsCTA[] {
   }
 
   // Check for Scotland-specific content
-  if (lowerSlug.startsWith('scotland-')) {
+  if (lowerSlug.startsWith('scotland-') && !isTenancyRelatedContent) {
     steps.push({
       href: '/scotland-eviction-notices',
       label: 'Scotland Eviction Guide',
@@ -644,7 +761,7 @@ export function getNextStepsCTAs(input: NextStepsCTAInput): NextStepsCTA[] {
   }
 
   // Check for Northern Ireland content
-  if (lowerSlug.startsWith('northern-ireland-')) {
+  if (lowerSlug.startsWith('northern-ireland-') && !isTenancyRelatedContent) {
     if (!steps.some((s) => s.href.includes('ask-heaven'))) {
       steps.push({
         href: buildAskHeavenLink({

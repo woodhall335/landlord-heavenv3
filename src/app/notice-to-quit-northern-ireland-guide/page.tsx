@@ -21,7 +21,12 @@ import { tenancyAgreementNILinks } from '@/lib/seo/internal-links';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
+import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { northernIrelandFAQs } from '@/data/faqs';
+
+const noticeOnlyProductHref = '/products/notice-only';
+const tenancyAgreementProductHref = '/products/ast';
 
 export const metadata: Metadata = {
   title: 'Notice to Quit Northern Ireland Guide 2026 | Landlord Eviction Process',
@@ -52,6 +57,12 @@ export const metadata: Metadata = {
 export default function NoticeToQuitNIGuidePage() {
   return (
     <>
+      <SeoLandingWrapper
+        pagePath="/notice-to-quit-northern-ireland-guide"
+        pageTitle={metadata.title as string}
+        pageType="guide"
+        jurisdiction="northern-ireland"
+      />
       <StructuredData
         data={articleSchema({
           headline: 'Notice to Quit Northern Ireland Guide 2026 | Landlord Eviction Process',
@@ -76,7 +87,7 @@ export default function NoticeToQuitNIGuidePage() {
         <UniversalHero
           title="Notice to Quit (Northern Ireland)"
           subtitle="Follow a legally validated, solicitor-grade and compliance-checked route for serving a Northern Ireland Notice to Quit."
-          primaryCta={{ label: "Start now", href: "/wizard?product=notice_only&src=seo_notice_to_quit_northern_ireland_guide&topic=eviction&jurisdiction=northern-ireland" }}
+          primaryCta={{ label: "Start now", href: noticeOnlyProductHref }}
           showTrustPositioningBar
           hideMedia
         />
@@ -95,6 +106,12 @@ export default function NoticeToQuitNIGuidePage() {
           </div>
         </nav>
 
+        <section className="bg-white py-8">
+          <div className="max-w-4xl mx-auto px-4">
+            <SeoPageContextPanel pathname="/notice-to-quit-northern-ireland-guide" />
+          </div>
+        </section>
+
         {/* Hero Section */}
         <section className="bg-gradient-to-br from-red-800 via-slate-900 to-slate-900 text-white py-16">
           <div className="max-w-4xl mx-auto px-4">
@@ -111,7 +128,7 @@ export default function NoticeToQuitNIGuidePage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
-                href="/wizard?product=notice_only&src=seo_notice_to_quit_northern_ireland_guide&topic=eviction&jurisdiction=northern-ireland"
+                href={noticeOnlyProductHref}
                 className="inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold px-8 py-4 rounded-lg transition-colors"
               >
                 <RiFileTextLine className="w-5 h-5" />
@@ -205,7 +222,7 @@ export default function NoticeToQuitNIGuidePage() {
                 Create one now before attempting any eviction action.
               </p>
               <Link
-                href="/wizard?product=ast_standard&src=seo_notice_to_quit_northern_ireland_guide&topic=tenancy&jurisdiction=northern-ireland"
+                href={tenancyAgreementProductHref}
                 className="inline-flex items-center gap-2 text-emerald-700 font-medium hover:text-emerald-800"
               >
                 Create Tenancy Agreement First <RiArrowRightLine className="w-4 h-4" />
@@ -439,10 +456,10 @@ export default function NoticeToQuitNIGuidePage() {
             </h2>
             <p className="text-emerald-100 mb-6 max-w-xl mx-auto">
               Before you can serve a valid Notice to Quit, you need a compliant tenancy agreement.
-              Our wizard ensures all prescribed terms are included for Northern Ireland.
+              Our tenancy workflow ensures all prescribed terms are included for Northern Ireland.
             </p>
             <Link
-              href="/wizard?product=ast_standard&src=seo_notice_to_quit_northern_ireland_guide&topic=tenancy&jurisdiction=northern-ireland"
+              href={tenancyAgreementProductHref}
               className="inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold px-8 py-4 rounded-lg transition-colors"
             >
               <RiDownloadLine className="w-5 h-5" />

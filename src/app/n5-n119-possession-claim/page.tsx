@@ -6,6 +6,7 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { Container } from '@/components/ui/Container';
 import { FAQSection, type FAQItem } from '@/components/seo/FAQSection';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import {
   StructuredData,
@@ -13,23 +14,10 @@ import {
   breadcrumbSchema,
   faqPageSchema,
 } from '@/lib/seo/structured-data';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 
 const canonical = 'https://landlordheaven.co.uk/n5-n119-possession-claim';
-
-const noticeOnlyWizardLink = buildWizardLink({
-  product: 'notice_only',
-  jurisdiction: 'england',
-  src: 'seo_n5_n119_possession_claim',
-  topic: 'eviction',
-});
-
-const completePackWizardLink = buildWizardLink({
-  product: 'complete_pack',
-  jurisdiction: 'england',
-  src: 'seo_n5_n119_possession_claim',
-  topic: 'eviction',
-});
+const noticeOnlyProductHref = '/products/notice-only';
+const completePackProductHref = '/products/complete-pack';
 
 export const metadata: Metadata = {
   title:
@@ -202,8 +190,8 @@ export default function Page() {
       <UniversalHero
         title="N5 and N119 Possession Claim Guide"
         subtitle="A practical landlord guide to the standard possession claim route, what evidence usually matters, and how to prepare a stronger court file."
-        primaryCta={{ label: 'Start Complete Pack', href: completePackWizardLink }}
-        secondaryCta={{ label: 'Still at notice stage? Notice Only', href: noticeOnlyWizardLink }}
+        primaryCta={{ label: 'Start Complete Pack', href: completePackProductHref }}
+        secondaryCta={{ label: 'Still at notice stage? Notice Only', href: noticeOnlyProductHref }}
         mediaSrc="/images/wizard-icons/07-review-finish.png"
         mediaAlt="N5 and N119 possession claim guide icon"
         showReviewPill
@@ -237,6 +225,14 @@ export default function Page() {
               ))}
             </div>
           </nav>
+        </Container>
+      </section>
+
+      <section className="bg-white py-8">
+        <Container>
+          <div className="mx-auto max-w-5xl">
+            <SeoPageContextPanel pathname="/n5-n119-possession-claim" className="border border-[#CAB6FF] bg-[#FBF8FF]" />
+          </div>
         </Container>
       </section>
 
@@ -461,9 +457,9 @@ export default function Page() {
             <CtaBand
               title="Already moving toward court and need the standard possession route controlled properly?"
               body="Complete Pack is usually the stronger fit where the notice stage has already happened and the case now needs broader claim, evidence, and hearing preparation. Notice Only is usually better where the main need is still preparing and serving the earlier notice correctly."
-              primaryHref={completePackWizardLink}
+              primaryHref={completePackProductHref}
               primaryLabel="Start Complete Pack"
-              secondaryHref={noticeOnlyWizardLink}
+              secondaryHref={noticeOnlyProductHref}
               secondaryLabel="Still at notice stage? Notice Only"
             />
 
@@ -586,13 +582,13 @@ export default function Page() {
 
             <div className="mt-6 flex flex-wrap gap-3">
               <Link
-                href={completePackWizardLink}
+                href={completePackProductHref}
                 className="rounded-lg bg-primary px-5 py-3 text-white hover:opacity-95"
               >
                 Start Complete Pack
               </Link>
               <Link
-                href={noticeOnlyWizardLink}
+                href={noticeOnlyProductHref}
                 className="rounded-lg border border-[#E6DBFF] bg-white px-5 py-3 text-primary hover:bg-[#FCFAFF]"
               >
                 Still at notice stage? Notice Only
