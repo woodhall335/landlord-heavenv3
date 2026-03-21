@@ -5,8 +5,7 @@ import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/renew-tenancy-agreement-england');
-const wizardHref =
-  '/wizard?product=ast_standard&jurisdiction=england&src=seo_renew_tenancy_agreement_england&topic=tenancy';
+const wizardHref = '/products/ast';
 
 export const metadata: Metadata = {
   title: 'Renew Tenancy Agreement England | Existing Tenancy Update Guide',
@@ -40,6 +39,7 @@ export default function RenewTenancyAgreementEnglandPage() {
         ])}
       />
       <EnglandTenancyPage
+        pagePath="/renew-tenancy-agreement-england"
         title="Renew Tenancy Agreement England"
         subtitle="Use this guide when you are updating England tenancy paperwork for an existing tenant, reviewing auto-rolling written tenancies, or deciding whether you need a fresh Residential Tenancy Agreement."
         primaryCtaLabel="Open England tenancy wizard"
@@ -89,3 +89,5 @@ export default function RenewTenancyAgreementEnglandPage() {
     </div>
   );
 }
+
+

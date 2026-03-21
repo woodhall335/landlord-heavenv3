@@ -5,6 +5,7 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { Container } from '@/components/ui/Container';
 import { FAQSection, type FAQItem } from '@/components/seo/FAQSection';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import {
   StructuredData,
@@ -12,23 +13,11 @@ import {
   breadcrumbSchema,
   faqPageSchema,
 } from '@/lib/seo/structured-data';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 
 const canonical = 'https://landlordheaven.co.uk/section-21-validity-checklist';
 
-const noticeOnlyWizardLink = buildWizardLink({
-  product: 'notice_only',
-  jurisdiction: 'england',
-  src: 'seo_section_21_validity_checklist',
-  topic: 'eviction',
-});
-
-const completePackWizardLink = buildWizardLink({
-  product: 'complete_pack',
-  jurisdiction: 'england',
-  src: 'seo_section_21_validity_checklist',
-  topic: 'eviction',
-});
+const noticeOnlyProductLink = '/products/notice-only';
+const completePackProductLink = '/products/complete-pack';
 
 export const metadata: Metadata = {
   title:
@@ -200,8 +189,8 @@ export default function Page() {
       <UniversalHero
         title="Section 21 Validity Checklist"
         subtitle="Audit your compliance file before service so you do not lose time, money, and possession momentum to an avoidable invalid notice."
-        primaryCta={{ label: 'Start Notice Only', href: noticeOnlyWizardLink }}
-        secondaryCta={{ label: 'Get full case continuity', href: completePackWizardLink }}
+        primaryCta={{ label: 'View post-ban possession support', href: completePackProductLink }}
+        secondaryCta={{ label: 'Read the Section 21 transition guide', href: '/section-21-ban-uk' }}
         mediaSrc="/images/wizard-icons/07-review-finish.png"
         mediaAlt="Section 21 validity checklist guide icon"
         showReviewPill
@@ -235,6 +224,14 @@ export default function Page() {
               ))}
             </div>
           </nav>
+        </Container>
+      </section>
+
+      <section className="bg-white py-8">
+        <Container>
+          <div className="mx-auto max-w-5xl">
+            <SeoPageContextPanel pathname="/section-21-validity-checklist" />
+          </div>
         </Container>
       </section>
 
@@ -443,10 +440,10 @@ export default function Page() {
             <CtaBand
               title="Need the Section 21 notice stage checked properly before you serve?"
               body="If your main issue is validating the Section 21 route and generating the notice correctly, Notice Only is usually the better fit. If the wider possession file, next-step planning, or route control also needs attention, Complete Pack is usually the stronger option."
-              primaryHref={noticeOnlyWizardLink}
-              primaryLabel="Start Notice Only"
-              secondaryHref={completePackWizardLink}
-              secondaryLabel="Get full case continuity"
+              primaryHref={completePackProductLink}
+              primaryLabel="View post-ban possession support"
+              secondaryHref={noticeOnlyProductLink}
+              secondaryLabel="Legacy notice route only"
             />
 
             <Card
@@ -649,16 +646,16 @@ export default function Page() {
 
             <div className="mt-6 flex flex-wrap gap-3">
               <Link
-                href={noticeOnlyWizardLink}
+                href={completePackProductLink}
                 className="rounded-lg bg-primary px-5 py-3 text-white hover:opacity-95"
               >
-                Start Notice Only
+                View post-ban possession support
               </Link>
               <Link
-                href={completePackWizardLink}
+                href={noticeOnlyProductLink}
                 className="rounded-lg border border-[#E6DBFF] bg-white px-5 py-3 text-primary hover:bg-[#FCFAFF]"
               >
-                Get full case continuity
+                Legacy notice route only
               </Link>
               <Link
                 href="/tools/validators/section-21"

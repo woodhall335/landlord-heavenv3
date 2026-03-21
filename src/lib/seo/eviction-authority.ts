@@ -39,12 +39,15 @@ export interface ClusterDefinition {
 function mapSeoClusterToAuthorityCluster(cluster: SeoCluster): EvictionCluster {
   switch (cluster) {
     case 'rent-arrears':
+    case 'money-claim':
       return 'rent-arrears';
     case 'section-8':
     case 'section-21-legacy':
       return 'eviction-notices';
     case 'section-21-transition':
       return 'section-21-transition';
+    case 'tenancy-england':
+      return 'possession-enforcement';
     case 'court-process':
     case 'eviction-process':
       return 'court-process';

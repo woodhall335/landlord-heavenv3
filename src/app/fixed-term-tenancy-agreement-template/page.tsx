@@ -5,7 +5,7 @@ import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/fixed-term-tenancy-agreement-template');
-const wizardHref = '/wizard?product=ast_standard&jurisdiction=england&src=seo_fixed_term_tenancy_agreement_template&topic=tenancy';
+const wizardHref = '/products/ast';
 
 export const metadata: Metadata = {
   title: 'Fixed Term Tenancy Agreement Template | Legacy England Explainer',
@@ -30,6 +30,7 @@ export default function FixedTermTenancyAgreementTemplatePage() {
         ])}
       />
       <EnglandTenancyPage
+        pagePath="/fixed-term-tenancy-agreement-template"
         title="Fixed Term Tenancy Agreement Template"
         subtitle="This is now a legacy England explainer page. The live self-serve England agreement path is positioned as an upgraded assured periodic Residential Tenancy Agreement."
         primaryCtaLabel="Start updated England agreement"
@@ -55,3 +56,5 @@ export default function FixedTermTenancyAgreementTemplatePage() {
     </div>
   );
 }
+
+

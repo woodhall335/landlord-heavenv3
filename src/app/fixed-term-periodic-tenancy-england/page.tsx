@@ -5,8 +5,7 @@ import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/fixed-term-periodic-tenancy-england');
-const wizardHref =
-  '/wizard?product=ast_standard&jurisdiction=england&src=seo_fixed_term_periodic_tenancy_england&topic=tenancy';
+const wizardHref = '/products/ast';
 
 export const metadata: Metadata = {
   title: 'Fixed Term vs Periodic Tenancy England | Legacy Structure Guide',
@@ -40,6 +39,7 @@ export default function FixedTermPeriodicTenancyEnglandPage() {
         ])}
       />
       <EnglandTenancyPage
+        pagePath="/fixed-term-periodic-tenancy-england"
         title="Fixed Term vs Periodic Tenancy England"
         subtitle="This England guide stays live for fixed-term and rolling-tenancy search demand, but the live Landlord Heaven product is now the updated Residential Tenancy Agreement flow."
         primaryCtaLabel="Start England agreement"
@@ -90,3 +90,5 @@ export default function FixedTermPeriodicTenancyEnglandPage() {
     </div>
   );
 }
+
+

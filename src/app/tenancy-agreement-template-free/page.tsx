@@ -5,8 +5,7 @@ import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/tenancy-agreement-template-free');
-const wizardHref =
-  '/wizard?product=ast_standard&jurisdiction=england&src=seo_tenancy_agreement_template_free&topic=tenancy';
+const wizardHref = '/products/ast';
 
 export const metadata: Metadata = {
   title: 'Free Tenancy Agreement Template | England Comparison Guide',
@@ -40,6 +39,7 @@ export default function TenancyAgreementTemplateFreePage() {
         ])}
       />
       <EnglandTenancyPage
+        pagePath="/tenancy-agreement-template-free"
         title="Free Tenancy Agreement Template"
         subtitle="Use this guide to compare free starter documents with the updated England Residential Tenancy Agreement flow before you rely on tenancy wording for a real let."
         primaryCtaLabel="Use the updated England flow"
@@ -89,3 +89,5 @@ export default function TenancyAgreementTemplateFreePage() {
     </div>
   );
 }
+
+

@@ -5,8 +5,7 @@ import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/premium-tenancy-agreement');
-const wizardHref =
-  '/wizard?product=ast_premium&jurisdiction=england&src=seo_premium_tenancy_agreement&topic=tenancy';
+const wizardHref = '/products/ast';
 
 export const metadata: Metadata = {
   title: 'Premium Tenancy Agreement England | HMO and Student Lets',
@@ -39,6 +38,7 @@ export default function PremiumTenancyAgreementPage() {
         ])}
       />
       <EnglandTenancyPage
+        pagePath="/premium-tenancy-agreement"
         title="Premium Tenancy Agreement England"
         subtitle="Choose the premium England Residential Tenancy Agreement when the let is more complex, with broader wording for HMOs, student properties, shared households, and guarantor-backed setups."
         primaryCtaLabel="Create premium agreement"
@@ -88,3 +88,5 @@ export default function PremiumTenancyAgreementPage() {
     </div>
   );
 }
+
+

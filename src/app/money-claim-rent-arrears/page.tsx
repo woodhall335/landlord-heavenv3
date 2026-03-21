@@ -7,7 +7,7 @@ import { FAQSection } from '@/components/seo/FAQSection';
 import { rentArrearsClaimFAQs } from '@/data/faqs';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 
 export const metadata: Metadata = {
   title: 'Claim Rent Arrears from Tenant | Solicitor-Style Money Claim Guide',
@@ -43,12 +43,7 @@ const breadcrumbs = [
 ];
 
 
-const moneyClaimWizardLink = buildWizardLink({
-  product: 'money_claim',
-  jurisdiction: 'england',
-  src: 'seo_money_claim_rent_arrears',
-  topic: 'debt',
-});
+const moneyClaimProductLink = '/products/money-claim';
 
 export default function MoneyClaimRentArrearsPage() {
   return (
@@ -61,10 +56,18 @@ export default function MoneyClaimRentArrearsPage() {
           badge="Rent Recovery"
           title="Claim Rent Arrears from Your Tenant"
           subtitle="A step-by-step guide for landlords in England to recover unpaid rent through the County Court. From pre-action letters to enforcement."
-          primaryCta={{ label: 'Start Money Claim Wizard', href: moneyClaimWizardLink }}
+          primaryCta={{ label: 'View Money Claim Pack', href: moneyClaimProductLink }}
           secondaryCta={{ label: 'Calculate Arrears', href: '/tools/rent-arrears-calculator' }}
           variant="pastel"
         />
+
+        <section className="bg-white py-8">
+          <Container>
+            <div className="mx-auto max-w-5xl">
+              <SeoPageContextPanel pathname="/money-claim-rent-arrears" />
+            </div>
+          </Container>
+        </section>
 
         {/* Main Content */}
         <Container>
@@ -235,7 +238,7 @@ export default function MoneyClaimRentArrearsPage() {
 
                 <h2>Can I Claim Rent Arrears and Evict at the Same Time?</h2>
                 <p>
-                  Yes, but they are separate court processes. The <Link href="/section-8-notice-template" className="text-primary hover:underline">Section 8 eviction</Link> (or
+                  Yes, but they are separate court processes. The <Link href="/section-8-notice" className="text-primary hover:underline">Section 8 notice route</Link> (or
                   Section 21) is for possession of the property. The money claim is for recovering
                   the debt.
                 </p>
@@ -282,7 +285,7 @@ export default function MoneyClaimRentArrearsPage() {
                 schedule of arrears, interest calculations, and step-by-step filing guidance.
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Link href="/products/money-claim" className="hero-btn-primary">
+                <Link href={moneyClaimProductLink} className="hero-btn-primary">
                   Get Money Claim Pack
                 </Link>
                 <Link href="/money-claim-online-mcol" className="hero-btn-secondary">
@@ -296,3 +299,5 @@ export default function MoneyClaimRentArrearsPage() {
     </>
   );
 }
+
+

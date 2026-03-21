@@ -3,11 +3,12 @@ import Link from 'next/link';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { Container } from '@/components/ui/Container';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/money-claim');
-const wizardHref = '/products/money-claim?topic=debt&src=seo_money_claim';
+const productHref = '/products/money-claim';
 
 export const metadata: Metadata = {
   title: 'Money Claim for Landlords | Recover Rent Arrears and Tenant Debt',
@@ -81,11 +82,17 @@ export default function MoneyClaimPage() {
         <UniversalHero
           title="Landlord Money Claim: Recover Rent Arrears and Tenant Debt"
           subtitle="Use a practical court-ready workflow from pre-action protocol to enforcement, with clear drafting and evidence standards that reduce delay risk."
-          primaryCta={{ label: 'Start Money Claim Wizard', href: wizardHref }}
+          primaryCta={{ label: 'View Money Claim Pack', href: productHref }}
           secondaryCta={{ label: 'See unpaid rent guide', href: '/money-claim-unpaid-rent' }}
           showTrustPositioningBar
           hideMedia
         />
+
+        <Container className="py-8">
+          <div className="mx-auto max-w-5xl">
+            <SeoPageContextPanel pathname="/money-claim" />
+          </div>
+        </Container>
 
         <Container className="py-12">
           <div className="mx-auto max-w-5xl space-y-10 text-gray-700">

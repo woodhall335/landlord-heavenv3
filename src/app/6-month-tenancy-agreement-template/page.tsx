@@ -5,7 +5,7 @@ import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/6-month-tenancy-agreement-template');
-const wizardHref = '/wizard?product=ast_standard&jurisdiction=england&src=seo_6_month_tenancy_agreement_template&topic=tenancy';
+const wizardHref = '/products/ast';
 
 export const metadata: Metadata = {
   title: '6 Month Tenancy Agreement Template | Legacy England Explainer',
@@ -30,6 +30,7 @@ export default function SixMonthTenancyAgreementTemplatePage() {
         ])}
       />
       <EnglandTenancyPage
+        pagePath="/6-month-tenancy-agreement-template"
         title="6 Month Tenancy Agreement Template"
         subtitle="This page remains live for search demand, but the current England tenancy product no longer positions a 6-month AST as the main self-serve route."
         primaryCtaLabel="Use updated England agreement"
@@ -55,3 +56,5 @@ export default function SixMonthTenancyAgreementTemplatePage() {
     </div>
   );
 }
+
+

@@ -6,6 +6,7 @@ import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import {
   StructuredData,
@@ -13,7 +14,6 @@ import {
   breadcrumbSchema,
 } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo/urls';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { PRODUCTS } from '@/lib/pricing/products';
 import { productLinks, guideLinks, askHeavenLink } from '@/lib/seo/internal-links';
 import {
@@ -37,19 +37,8 @@ const PAGE_TYPE = 'tenancy' as const;
 
 const canonicalUrl = getCanonicalUrl(PAGE_PATH);
 
-const wizardLinkStandard = buildWizardLink({
-  product: 'ast_standard',
-  jurisdiction: 'england',
-  src: 'seo_tenancy_agreements_england',
-  topic: 'tenancy',
-});
-
-const wizardLinkPremium = buildWizardLink({
-  product: 'ast_premium',
-  jurisdiction: 'england',
-  src: 'seo_tenancy_agreements_england',
-  topic: 'tenancy',
-});
+const wizardLinkStandard = '/products/ast';
+const wizardLinkPremium = '/premium-tenancy-agreement';
 
 const faqs = [
   {
@@ -222,6 +211,14 @@ export default function EnglandTenancyAgreementsPage() {
         <section className="border-y border-[#E6DBFF] bg-white py-6">
           <div className="container mx-auto px-4">
             <SocialProofCounter variant="total" className="justify-center" />
+          </div>
+        </section>
+
+        <section className="bg-white py-8">
+          <div className="container mx-auto px-4">
+            <div className="mx-auto max-w-5xl">
+              <SeoPageContextPanel pathname="/tenancy-agreements/england" />
+            </div>
           </div>
         </section>
 

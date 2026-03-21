@@ -5,6 +5,7 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { Container } from '@/components/ui/Container';
 import { FAQSection, type FAQItem } from '@/components/seo/FAQSection';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import {
   StructuredData,
@@ -12,24 +13,12 @@ import {
   breadcrumbSchema,
   faqPageSchema,
 } from '@/lib/seo/structured-data';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { generateMetadata } from '@/lib/seo';
 
 const canonical = 'https://landlordheaven.co.uk/serve-section-21-notice';
 
-const noticeOnlyWizardLink = buildWizardLink({
-  product: 'notice_only',
-  jurisdiction: 'england',
-  src: 'seo_serve_section_21_notice',
-  topic: 'eviction',
-});
-
-const completePackWizardLink = buildWizardLink({
-  product: 'complete_pack',
-  jurisdiction: 'england',
-  src: 'seo_serve_section_21_notice',
-  topic: 'eviction',
-});
+const noticeOnlyProductLink = '/products/notice-only';
+const completePackProductLink = '/products/complete-pack';
 
 export const metadata: Metadata = generateMetadata({
   title: 'Serve a Section 21 Notice | Valid Service for Landlords',
@@ -197,8 +186,8 @@ export default function Page() {
       <UniversalHero
         title="How to Serve a Section 21 Notice"
         subtitle="A practical landlord guide to valid service, proof of service, and avoiding notice-stage mistakes that later delay possession."
-        primaryCta={{ label: 'Start Notice Only for Section 21', href: noticeOnlyWizardLink }}
-        secondaryCta={{ label: 'Need broader support? Complete Pack', href: completePackWizardLink }}
+        primaryCta={{ label: 'View post-ban possession support', href: completePackProductLink }}
+        secondaryCta={{ label: 'Read the Section 21 transition guide', href: '/section-21-ban-uk' }}
         mediaSrc="/images/wizard-icons/13-section-21.png"
         mediaAlt="Section 21 notice service guide icon"
         showReviewPill
@@ -232,6 +221,14 @@ export default function Page() {
               ))}
             </div>
           </nav>
+        </Container>
+      </section>
+
+      <section className="bg-white py-8">
+        <Container>
+          <div className="mx-auto max-w-5xl">
+            <SeoPageContextPanel pathname="/serve-section-21-notice" />
+          </div>
         </Container>
       </section>
 
@@ -421,9 +418,9 @@ export default function Page() {
             <CtaBand
               title="Need the Section 21 notice stage handled properly before the file gets more expensive?"
               body="Notice Only is usually the better fit where the main issue is getting the Section 21 notice prepared and served correctly now. Complete Pack is usually stronger where the wider possession file, court preparation, or later enforcement planning also needs to be managed carefully."
-              primaryHref={noticeOnlyWizardLink}
-              primaryLabel="Start Notice Only for Section 21"
-              secondaryHref={completePackWizardLink}
+              primaryHref={completePackProductLink}
+              primaryLabel="View post-ban possession support"
+              secondaryHref={noticeOnlyProductLink}
               secondaryLabel="Need broader support? Complete Pack"
             />
 
@@ -666,16 +663,16 @@ export default function Page() {
 
             <div className="mt-6 flex flex-wrap gap-3">
               <Link
-                href={noticeOnlyWizardLink}
+                href={completePackProductLink}
                 className="rounded-lg bg-primary px-5 py-3 text-white hover:opacity-95"
               >
-                Start Notice Only for Section 21
+                View post-ban possession support
               </Link>
               <Link
-                href={completePackWizardLink}
+                href={noticeOnlyProductLink}
                 className="rounded-lg border border-[#E6DBFF] bg-white px-5 py-3 text-primary hover:bg-[#FCFAFF]"
               >
-                Need broader support? Complete Pack
+                Legacy notice route only
               </Link>
             </div>
           </div>

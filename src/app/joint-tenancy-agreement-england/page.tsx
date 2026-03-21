@@ -5,10 +5,8 @@ import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/joint-tenancy-agreement-england');
-const standardHref =
-  '/wizard?product=ast_standard&jurisdiction=england&src=seo_joint_tenancy_agreement_england&topic=tenancy';
-const premiumHref =
-  '/wizard?product=ast_premium&jurisdiction=england&src=seo_joint_tenancy_agreement_england&topic=tenancy';
+const standardHref = '/products/ast';
+const premiumHref = '/premium-tenancy-agreement';
 
 export const metadata: Metadata = {
   title: 'Joint Tenancy Agreement England | Updated Multiple Tenant Agreement',
@@ -42,6 +40,7 @@ export default function JointTenancyAgreementEnglandPage() {
         ])}
       />
       <EnglandTenancyPage
+        pagePath="/joint-tenancy-agreement-england"
         title="Joint Tenancy Agreement England"
         subtitle="Create England tenancy paperwork for couples, flatmates, and shared households with updated Residential Tenancy Agreement wording and multiple-tenant protection."
         primaryCtaLabel="Create standard joint agreement"
@@ -91,3 +90,5 @@ export default function JointTenancyAgreementEnglandPage() {
     </div>
   );
 }
+
+

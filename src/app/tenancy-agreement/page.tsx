@@ -5,8 +5,7 @@ import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/tenancy-agreement');
-const wizardHref =
-  '/wizard?product=ast_standard&jurisdiction=england&src=seo_tenancy_agreement&topic=tenancy';
+const wizardHref = '/products/ast';
 
 export const metadata: Metadata = {
   title: 'New Tenancy Agreement England | Residential Tenancy Agreement',
@@ -40,6 +39,7 @@ export default function TenancyAgreementPage() {
         ])}
       />
       <EnglandTenancyPage
+        pagePath="/tenancy-agreement"
         title="New Tenancy Agreement England"
         subtitle="Create a new tenancy agreement for England through the Residential Tenancy Agreement route updated for the Renters' Rights Act 2025. This is the main entry point for standard new lets."
         primaryCtaLabel="Create standard agreement"
@@ -89,3 +89,5 @@ export default function TenancyAgreementPage() {
     </div>
   );
 }
+
+

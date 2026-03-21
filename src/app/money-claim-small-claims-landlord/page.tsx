@@ -16,6 +16,7 @@ import {
 import { FAQSection } from '@/components/seo/FAQSection';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { FunnelCta, CrossSellBar } from '@/components/funnels';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { moneyClaimGuides, moneyClaimProcessLinks, productLinks } from '@/lib/seo/internal-links';
@@ -132,6 +133,13 @@ export default function MoneyClaimSmallClaimsLandlordPage() {
           showTrustPositioningBar
           hideMedia
         />
+        <section className="bg-white py-8">
+          <Container>
+            <div className="mx-auto max-w-5xl">
+              <SeoPageContextPanel pathname="/money-claim-small-claims-landlord" />
+            </div>
+          </Container>
+        </section>
         {/* Hero Section */}
         <section className="bg-gradient-to-br from-emerald-900 to-emerald-800 text-white py-16 lg:py-24">
           <div className="container mx-auto px-4">
@@ -502,4 +510,6 @@ export default function MoneyClaimSmallClaimsLandlordPage() {
     </>
   );
 }
+
+
 

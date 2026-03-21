@@ -5,7 +5,7 @@ import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/assured-shorthold-tenancy-agreement-template');
-const wizardHref = '/wizard?product=ast_standard&jurisdiction=england&src=seo_assured_shorthold_tenancy_agreement_template&topic=tenancy';
+const wizardHref = '/products/ast';
 
 export const metadata: Metadata = {
   title: 'Assured Shorthold Tenancy Agreement Template | Legacy AST Explainer',
@@ -38,6 +38,7 @@ export default function AssuredShortholdTenancyAgreementTemplatePage() {
         ])}
       />
       <EnglandTenancyPage
+        pagePath="/assured-shorthold-tenancy-agreement-template"
         title="Assured Shorthold Tenancy Agreement Template"
         subtitle="AST is now legacy search language for England. Use this explainer page to understand the terminology shift, then move into the updated Residential Tenancy Agreement flow."
         primaryCtaLabel="Use updated England agreement"
@@ -63,3 +64,5 @@ export default function AssuredShortholdTenancyAgreementTemplatePage() {
     </div>
   );
 }
+
+

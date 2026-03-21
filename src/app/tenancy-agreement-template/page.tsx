@@ -10,8 +10,7 @@ import {
 import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/tenancy-agreement-template');
-const wizardHref =
-  '/wizard?product=ast_standard&jurisdiction=england&src=seo_tenancy_agreement_template&topic=tenancy';
+const wizardHref = '/products/ast';
 const mainProductHref = '/products/ast';
 
 const faqs = [
@@ -145,6 +144,7 @@ export default function TenancyAgreementTemplatePage() {
       <StructuredData data={webPageSchema} />
 
       <EnglandTenancyPage
+        pagePath="/tenancy-agreement-template"
         title="2026 Tenancy Agreement Template"
         subtitle="Start with our England tenancy agreement template route if you searched for a 2026 template, an AST template, or a Renters’ Rights reform agreement. This page is built to capture template-style search intent, explain why guided generation is stronger than editing a static file, and direct landlords into both the live England workflow and the main tenancy agreement product at /products/ast."
         primaryCtaLabel="Use 2026 template flow"
@@ -211,3 +211,4 @@ export default function TenancyAgreementTemplatePage() {
     </div>
   );
 }
+

@@ -5,7 +5,7 @@ import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/renters-rights-bill-tenancy-agreement');
-const wizardHref = '/wizard?product=ast_standard&jurisdiction=england&src=seo_renters_rights_bill_tenancy_agreement&topic=tenancy';
+const wizardHref = '/products/ast';
 
 export const metadata: Metadata = {
   title: 'Renters Rights Bill Tenancy Agreement | Updated England Agreement',
@@ -37,6 +37,7 @@ export default function RentersRightsBillTenancyAgreementPage() {
         ])}
       />
       <EnglandTenancyPage
+        pagePath="/renters-rights-bill-tenancy-agreement"
         title="Renters Rights Bill Tenancy Agreement"
         subtitle="Landlords still search for the Bill phrasing, but the law is now the Renters’ Rights Act 2025. This page directs that search intent into the updated England Residential Tenancy Agreement flow."
         primaryCtaLabel="Start updated England agreement"
@@ -67,3 +68,5 @@ export default function RentersRightsBillTenancyAgreementPage() {
     </div>
   );
 }
+
+

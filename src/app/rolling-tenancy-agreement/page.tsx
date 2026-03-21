@@ -5,7 +5,7 @@ import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/rolling-tenancy-agreement');
-const wizardHref = '/wizard?product=ast_standard&jurisdiction=england&src=seo_rolling_tenancy_agreement&topic=tenancy';
+const wizardHref = '/products/ast';
 
 export const metadata: Metadata = {
   title: 'Rolling Tenancy Agreement England 2026 | Periodic Guide',
@@ -30,6 +30,7 @@ export default function RollingTenancyAgreementPage() {
         ])}
       />
       <EnglandTenancyPage
+        pagePath="/rolling-tenancy-agreement"
         title="Rolling Tenancy Agreement"
         subtitle="Periodic tenancies remain a strong search term. This page now supports that demand while aligning users with the updated England Residential Tenancy Agreement flow."
         primaryCtaLabel="Start England periodic agreement"
@@ -54,3 +55,5 @@ export default function RollingTenancyAgreementPage() {
     </div>
   );
 }
+
+

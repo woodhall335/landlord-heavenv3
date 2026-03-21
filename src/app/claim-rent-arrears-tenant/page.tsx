@@ -14,11 +14,11 @@ import {
   toolLinks,
   moneyClaimGuides,
 } from '@/lib/seo/internal-links';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import { claimRentArrearsFAQs } from '@/data/faqs';
 import { PRODUCTS } from '@/lib/pricing/products';
@@ -42,19 +42,8 @@ import {
   XCircle,
 } from 'lucide-react';
 
-const moneyClaimLink = buildWizardLink({
-  product: 'money_claim',
-  jurisdiction: 'england',
-  src: 'seo_claim_rent_arrears_tenant',
-  topic: 'debt',
-});
-
-const completePackLink = buildWizardLink({
-  product: 'complete_pack',
-  jurisdiction: 'england',
-  src: 'seo_claim_rent_arrears_tenant',
-  topic: 'eviction',
-});
+const moneyClaimLink = '/products/money-claim';
+const completePackLink = '/products/complete-pack';
 
 export const metadata: Metadata = {
   title: 'Claim Rent Arrears from Tenant | Solicitor-Style Money Claim Guide',
@@ -125,8 +114,8 @@ export default function ClaimRentArrearsTenantPage() {
             href: moneyClaimLink,
           }}
           secondaryCta={{
-            label: 'Also Need Eviction?',
-            href: completePackLink,
+            label: 'Read the arrears guide',
+            href: '/tenant-not-paying-rent',
           }}
           variant="pastel"
         >
@@ -145,6 +134,14 @@ export default function ClaimRentArrearsTenantPage() {
             </span>
           </div>
         </UniversalHero>
+
+        <section className="bg-white py-8">
+          <div className="container mx-auto px-4">
+            <div className="max-w-5xl mx-auto">
+              <SeoPageContextPanel pathname="/claim-rent-arrears-tenant" />
+            </div>
+          </div>
+        </section>
 
         {/* Social Proof */}
         <section className="py-6 bg-gray-50 border-y border-gray-100">

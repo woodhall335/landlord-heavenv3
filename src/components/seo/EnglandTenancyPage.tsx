@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { RiCheckboxCircleLine } from 'react-icons/ri';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { Container } from '@/components/ui/Container';
 
 interface EnglandTenancyFaq {
@@ -11,6 +12,7 @@ interface EnglandTenancyFaq {
 }
 
 interface EnglandTenancyPageProps {
+  pagePath?: string;
   title: string;
   subtitle: ReactNode;
   primaryCtaLabel: string;
@@ -19,7 +21,7 @@ interface EnglandTenancyPageProps {
   secondaryCtaHref?: string;
   legacyNotice?: string;
   introTitle: string;
-  introBody: string[];
+  introBody: ReactNode[];
   highlights: string[];
   compliancePoints: string[];
   keywordTargets?: string[];
@@ -27,6 +29,7 @@ interface EnglandTenancyPageProps {
 }
 
 export function EnglandTenancyPage({
+  pagePath,
   title,
   subtitle,
   primaryCtaLabel,
@@ -66,6 +69,7 @@ export function EnglandTenancyPage({
             <p className="mt-2 text-base leading-7">{legacyNotice}</p>
           </div>
         ) : null}
+        {pagePath ? <SeoPageContextPanel pathname={pagePath} className="mb-10" /> : null}
 
         <section className="mb-12 max-w-4xl">
           <h2 className="text-3xl font-bold tracking-tight text-[#141B2D] md:text-4xl">

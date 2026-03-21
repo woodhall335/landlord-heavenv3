@@ -6,6 +6,7 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { Container } from '@/components/ui/Container';
 import { FAQSection, type FAQItem } from '@/components/seo/FAQSection';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import {
   StructuredData,
@@ -13,23 +14,11 @@ import {
   breadcrumbSchema,
   faqPageSchema,
 } from '@/lib/seo/structured-data';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 
 const canonical = 'https://landlordheaven.co.uk/section-21-vs-section-8';
 
-const noticeOnlyWizardLink = buildWizardLink({
-  product: 'notice_only',
-  jurisdiction: 'england',
-  src: 'seo_section_21_vs_section_8',
-  topic: 'eviction',
-});
-
-const completePackWizardLink = buildWizardLink({
-  product: 'complete_pack',
-  jurisdiction: 'england',
-  src: 'seo_section_21_vs_section_8',
-  topic: 'eviction',
-});
+const noticeOnlyProductLink = '/products/notice-only';
+const completePackProductLink = '/products/complete-pack';
 
 export const metadata: Metadata = {
   title:
@@ -202,12 +191,12 @@ export default function Page() {
         title="Section 21 vs Section 8"
         subtitle="A practical landlord guide to understanding the difference between Section 21 and Section 8 and deciding which route fits the case best."
         primaryCta={{
-          label: 'Start Notice Only',
-          href: noticeOnlyWizardLink,
+          label: 'View post-ban possession support',
+          href: completePackProductLink,
         }}
         secondaryCta={{
-          label: 'Need full case continuity?',
-          href: completePackWizardLink,
+          label: 'Read the Section 21 transition guide',
+          href: '/section-21-ban-uk',
         }}
         mediaSrc="/images/wizard-icons/05-choice-decision.png"
         mediaAlt="Section 21 vs Section 8 eviction route comparison guide"
@@ -242,6 +231,14 @@ export default function Page() {
               ))}
             </div>
           </nav>
+        </Container>
+      </section>
+
+      <section className="bg-white py-8">
+        <Container>
+          <div className="mx-auto max-w-5xl">
+            <SeoPageContextPanel pathname="/section-21-vs-section-8" />
+          </div>
         </Container>
       </section>
 
@@ -442,10 +439,10 @@ export default function Page() {
             <CtaBand
               title="Need the route checked before you serve the wrong notice?"
               body="Notice Only is usually the better fit where the route is already broadly clear and the main need is getting the notice stage right. Complete Pack is usually stronger where the wider possession file, route choice, and later court continuity also need support."
-              primaryHref={noticeOnlyWizardLink}
-              primaryLabel="Start Notice Only"
-              secondaryHref={completePackWizardLink}
-              secondaryLabel="Need full case continuity?"
+              primaryHref={completePackProductLink}
+              primaryLabel="View post-ban possession support"
+              secondaryHref={noticeOnlyProductLink}
+              secondaryLabel="Legacy notice route only"
             />
 
             <Card id="evidence-compliance" title="Evidence and Compliance Considerations">
@@ -611,16 +608,16 @@ export default function Page() {
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Link
-                href={noticeOnlyWizardLink}
+                href={completePackProductLink}
                 className="rounded-lg bg-primary px-5 py-3 text-white hover:opacity-95"
               >
-                Start Notice Only
+                View post-ban possession support
               </Link>
               <Link
-                href={completePackWizardLink}
+                href={noticeOnlyProductLink}
                 className="rounded-lg border border-[#E6DBFF] bg-white px-5 py-3 text-primary hover:bg-[#FCFAFF]"
               >
-                Need full case continuity?
+                Legacy notice route only
               </Link>
             </div>
           </div>

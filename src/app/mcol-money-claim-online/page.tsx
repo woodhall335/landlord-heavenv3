@@ -7,14 +7,9 @@ import { FAQSection } from '@/components/seo/FAQSection';
 import { mcolFAQs } from '@/data/faqs';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 
-const moneyClaimWizardLink = buildWizardLink({
-  product: 'money_claim',
-  jurisdiction: 'england',
-  src: 'seo_mcol_money_claim_online',
-  topic: 'debt',
-});
+const moneyClaimProductLink = '/products/money-claim';
 
 export const metadata: Metadata = {
   title: 'MCOL Money Claim Online | Landlord Process Guide for Rent Arrears',
@@ -66,10 +61,18 @@ export default function MCOLPage() {
           badge="Debt Recovery"
           title="MCOL: Money Claim Online for Landlords"
           subtitle="Use the county court online route with the right pre-action records, drafting standards, and response strategy to recover rent arrears and tenant debt."
-          primaryCta={{ label: 'Start Money Claim Wizard', href: moneyClaimWizardLink }}
+          primaryCta={{ label: 'View Money Claim Pack', href: moneyClaimProductLink }}
           secondaryCta={{ label: 'Calculate Arrears', href: '/tools/rent-arrears-calculator' }}
           variant="pastel"
         />
+
+        <section className="bg-white py-8">
+          <Container>
+            <div className="max-w-4xl mx-auto">
+              <SeoPageContextPanel pathname="/mcol-money-claim-online" />
+            </div>
+          </Container>
+        </section>
 
         <Container>
           <div className="max-w-4xl mx-auto py-12 space-y-10">

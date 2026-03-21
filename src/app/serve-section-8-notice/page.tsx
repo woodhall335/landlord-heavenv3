@@ -5,6 +5,7 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { Container } from '@/components/ui/Container';
 import { FAQSection, type FAQItem } from '@/components/seo/FAQSection';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import {
   StructuredData,
@@ -12,24 +13,12 @@ import {
   breadcrumbSchema,
   faqPageSchema,
 } from '@/lib/seo/structured-data';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { generateMetadata } from '@/lib/seo';
 
 const canonical = 'https://landlordheaven.co.uk/serve-section-8-notice';
 
-const noticeOnlyWizardLink = buildWizardLink({
-  product: 'notice_only',
-  jurisdiction: 'england',
-  src: 'seo_serve_section_8_notice',
-  topic: 'eviction',
-});
-
-const completePackWizardLink = buildWizardLink({
-  product: 'complete_pack',
-  jurisdiction: 'england',
-  src: 'seo_serve_section_8_notice',
-  topic: 'eviction',
-});
+const noticeOnlyProductLink = '/products/notice-only';
+const completePackProductLink = '/products/complete-pack';
 
 export const metadata: Metadata = generateMetadata({
   title: 'Serve a Section 8 Notice 2026 | England Landlord Guide',
@@ -203,8 +192,8 @@ export default function Page() {
       <UniversalHero
         title="How to Serve a Section 8 Notice"
         subtitle="A practical landlord guide to choosing grounds carefully, serving the notice properly, and preparing the evidence needed for a stronger possession case."
-        primaryCta={{ label: 'Start Notice Only for Section 8', href: noticeOnlyWizardLink }}
-        secondaryCta={{ label: 'Need broader support? Complete Pack', href: completePackWizardLink }}
+        primaryCta={{ label: 'View Section 8 Notice Pack', href: noticeOnlyProductLink }}
+        secondaryCta={{ label: 'Read the Section 8 grounds guide', href: '/section-8-grounds-explained' }}
         mediaSrc="/images/wizard-icons/14-section-8.png"
         mediaAlt="Section 8 notice service guide icon"
         showReviewPill
@@ -238,6 +227,14 @@ export default function Page() {
               ))}
             </div>
           </nav>
+        </Container>
+      </section>
+
+      <section className="bg-white py-8">
+        <Container>
+          <div className="mx-auto max-w-5xl">
+            <SeoPageContextPanel pathname="/serve-section-8-notice" />
+          </div>
         </Container>
       </section>
 
@@ -430,9 +427,9 @@ export default function Page() {
             <CtaBand
               title="Need the Section 8 notice stage handled properly before the file gets more expensive?"
               body="Notice Only is usually the better fit where the main issue is getting the Section 8 notice prepared and served correctly now. Complete Pack is usually stronger where the wider possession file, court preparation, or later enforcement planning also needs to be managed carefully."
-              primaryHref={noticeOnlyWizardLink}
-              primaryLabel="Start Notice Only for Section 8"
-              secondaryHref={completePackWizardLink}
+              primaryHref={noticeOnlyProductLink}
+              primaryLabel="View Section 8 Notice Pack"
+              secondaryHref={completePackProductLink}
               secondaryLabel="Need broader support? Complete Pack"
             />
 
@@ -672,13 +669,13 @@ export default function Page() {
 
             <div className="mt-6 flex flex-wrap gap-3">
               <Link
-                href={noticeOnlyWizardLink}
+                href={noticeOnlyProductLink}
                 className="rounded-lg bg-primary px-5 py-3 text-white hover:opacity-95"
               >
-                Start Notice Only for Section 8
+                View Section 8 Notice Pack
               </Link>
               <Link
-                href={completePackWizardLink}
+                href={completePackProductLink}
                 className="rounded-lg border border-[#E6DBFF] bg-white px-5 py-3 text-primary hover:bg-[#FCFAFF]"
               >
                 Need broader support? Complete Pack

@@ -16,6 +16,7 @@ import { FAQSection } from '@/components/seo/FAQSection';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { moneyClaimHeroConfig } from '@/components/landing/heroConfigs';
 import { moneyClaimGuides, productLinks } from '@/lib/seo/internal-links';
 
@@ -141,6 +142,13 @@ export default function MoneyClaimWallDamagePage() {
         <HeaderConfig mode="autoOnScroll" />
 
         <UniversalHero {...hero} />
+        <section className="bg-white py-8">
+          <Container>
+            <div className="mx-auto max-w-5xl">
+              <SeoPageContextPanel pathname="/money-claim-wall-damage" />
+            </div>
+          </Container>
+        </section>
 
         {/* Hero Section */}
         <section className="bg-gradient-to-br from-rose-900 to-rose-800 text-white py-16 lg:py-24">
@@ -500,4 +508,6 @@ export default function MoneyClaimWallDamagePage() {
     </>
   );
 }
+
+
 

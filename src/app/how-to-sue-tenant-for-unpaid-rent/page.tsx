@@ -13,17 +13,12 @@ import { FAQSection, type FAQItem } from '@/components/seo/FAQSection';
 import { sueTenantUnpaidRentFAQs } from '@/data/faqs';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 
 const canonical = getCanonicalUrl('/how-to-sue-tenant-for-unpaid-rent');
 
-const moneyClaimWizardLink = buildWizardLink({
-  product: 'money_claim',
-  jurisdiction: 'england',
-  src: 'seo_how_to_sue_tenant_for_unpaid_rent',
-  topic: 'debt',
-});
+const moneyClaimProductLink = '/products/money-claim';
 
 export const metadata: Metadata = {
   title: 'How to Sue a Tenant for Unpaid Rent 2026 | Landlord Debt Claim Guide',
@@ -208,7 +203,7 @@ export default function SueTenantUnpaidRentPage() {
         badge="Legal Action"
         title="How to Sue a Tenant for Unpaid Rent"
         subtitle="A practical landlord guide for England on turning rent arrears into a county court money claim, with better preparation before issue and clearer thinking after judgment."
-        primaryCta={{ label: 'Start Money Claim Wizard', href: moneyClaimWizardLink }}
+        primaryCta={{ label: 'View Money Claim Pack', href: moneyClaimProductLink }}
         secondaryCta={{ label: "Calculate What You're Owed", href: '/tools/rent-arrears-calculator' }}
         variant="pastel"
         showTrustPositioningBar
@@ -219,6 +214,14 @@ export default function SueTenantUnpaidRentPage() {
           and why a clean arrears file matters more than rushing into a claim.
         </p>
       </UniversalHero>
+
+      <section className="bg-white py-8">
+        <Container>
+          <div className="mx-auto max-w-5xl">
+            <SeoPageContextPanel pathname="/how-to-sue-tenant-for-unpaid-rent" />
+          </div>
+        </Container>
+      </section>
 
       <section className="border-b border-[#E6DBFF] bg-white py-8">
         <Container>
@@ -409,8 +412,8 @@ export default function SueTenantUnpaidRentPage() {
             <CtaBand
               title="Need the debt claim route handled in a cleaner way?"
               body="If your main issue is unpaid rent and you want a structured route through pre-action, claim drafting, arrears schedules, and filing readiness, the Money Claim workflow is usually the right fit. It is especially useful where the tenant has already left or where the debt file now needs to stand on its own."
-              primaryHref={moneyClaimWizardLink}
-              primaryLabel="Start Money Claim Wizard"
+              primaryHref={moneyClaimProductLink}
+              primaryLabel="View Money Claim Pack"
               secondaryHref="/products/money-claim"
               secondaryLabel="View Money Claim Pack"
             />
@@ -777,10 +780,10 @@ export default function SueTenantUnpaidRentPage() {
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Link
-                href={moneyClaimWizardLink}
+                href={moneyClaimProductLink}
                 className="rounded-lg bg-primary px-5 py-3 text-white hover:opacity-95"
               >
-                Start Money Claim Wizard
+                View Money Claim Pack
               </Link>
               <Link
                 href="/products/money-claim"

@@ -5,6 +5,7 @@ import { StructuredData, breadcrumbSchema, articleSchema } from '@/lib/seo/struc
 import { Container } from '@/components/ui';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { moneyClaimHeroConfig } from '@/components/landing/heroConfigs';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
@@ -160,6 +161,13 @@ export default function MoneyClaimOnlineMCOLPage() {
 
         {/* Hero */}
         <UniversalHero {...hero} showTrustPositioningBar />
+        <section className="bg-white py-8">
+          <Container>
+            <div className="mx-auto max-w-5xl">
+              <SeoPageContextPanel pathname="/money-claim-online-mcol" />
+            </div>
+          </Container>
+        </section>
 
         {/* Conversion bar */}
         <section className="py-8">
@@ -518,4 +526,6 @@ export default function MoneyClaimOnlineMCOLPage() {
     </>
   );
 }
+
+
 

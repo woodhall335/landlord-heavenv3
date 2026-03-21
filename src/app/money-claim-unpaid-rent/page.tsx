@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import { FAQSection, type FAQItem } from '@/components/seo/FAQSection';
 import { getCanonicalUrl } from '@/lib/seo';
@@ -14,16 +15,9 @@ import {
   breadcrumbSchema,
   faqPageSchema,
 } from '@/lib/seo/structured-data';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
-
 const canonical = getCanonicalUrl('/money-claim-unpaid-rent');
 
-const moneyClaimWizardLink = buildWizardLink({
-  product: 'money_claim',
-  jurisdiction: 'england',
-  src: 'seo_money_claim_unpaid_rent',
-  topic: 'debt',
-});
+const moneyClaimProductLink = '/products/money-claim';
 
 const moneyClaimPrice = PRODUCTS.money_claim?.displayPrice ?? '£79.99';
 
@@ -222,7 +216,7 @@ export default function MoneyClaimUnpaidRentPage() {
         badge="Debt Recovery"
         title="Money Claim for Unpaid Rent"
         subtitle="A practical landlord guide to turning rent arrears into a court-ready debt claim with cleaner paperwork, stronger pre-action steps, and a more realistic plan for judgment and enforcement."
-        primaryCta={{ label: `Start Money Claim Wizard — ${moneyClaimPrice}`, href: moneyClaimWizardLink }}
+        primaryCta={{ label: `View Money Claim Pack - ${moneyClaimPrice}`, href: moneyClaimProductLink }}
         secondaryCta={{ label: "Calculate What You're Owed", href: '/tools/rent-arrears-calculator' }}
         variant="pastel"
         showTrustPositioningBar
@@ -232,6 +226,14 @@ export default function MoneyClaimUnpaidRentPage() {
           It explains why a clean arrears file matters more than rushing into court too early.
         </p>
       </UniversalHero>
+
+      <section className="bg-white py-8">
+        <Container>
+          <div className="mx-auto max-w-5xl">
+            <SeoPageContextPanel pathname="/money-claim-unpaid-rent" />
+          </div>
+        </Container>
+      </section>
 
       <section className="border-b border-[#E6DBFF] bg-white py-8">
         <Container>
@@ -433,8 +435,8 @@ export default function MoneyClaimUnpaidRentPage() {
             <CtaBand
               title="Need the debt route structured properly before you issue?"
               body="If your main problem is unpaid rent rather than possession, the Money Claim workflow is usually the better fit. It helps landlords turn arrears into a cleaner debt file with a Letter Before Claim, a clearer schedule, and a more controlled route into court."
-              primaryHref={moneyClaimWizardLink}
-              primaryLabel={`Start Money Claim Wizard — ${moneyClaimPrice}`}
+              primaryHref={moneyClaimProductLink}
+              primaryLabel={`View Money Claim Pack - ${moneyClaimPrice}`}
               secondaryHref="/products/money-claim"
               secondaryLabel="View Money Claim Pack"
             />
@@ -759,10 +761,10 @@ export default function MoneyClaimUnpaidRentPage() {
 
             <div className="mt-6 flex flex-wrap gap-3">
               <Link
-                href={moneyClaimWizardLink}
+                href={moneyClaimProductLink}
                 className="rounded-lg bg-primary px-5 py-3 text-white hover:opacity-95"
               >
-                {`Start Money Claim Wizard — ${moneyClaimPrice}`}
+                {`View Money Claim Pack - ${moneyClaimPrice}`}
               </Link>
               <Link
                 href="/products/money-claim"
@@ -783,3 +785,4 @@ export default function MoneyClaimUnpaidRentPage() {
     </div>
   );
 }
+

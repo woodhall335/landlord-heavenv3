@@ -14,6 +14,7 @@ import {
 import { FAQSection } from '@/components/seo/FAQSection';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { moneyClaimGuides, moneyClaimForms, moneyClaimFormLinks, productLinks } from '@/lib/seo/internal-links';
 
@@ -129,6 +130,13 @@ export default function MoneyClaimN1ClaimFormPage() {
           showTrustPositioningBar
           hideMedia
         />
+        <section className="bg-white py-8">
+          <Container>
+            <div className="mx-auto max-w-5xl">
+              <SeoPageContextPanel pathname="/money-claim-n1-claim-form" />
+            </div>
+          </Container>
+        </section>
         {/* Hero Section */}
         <section className="bg-gradient-to-br from-violet-900 to-violet-800 text-white py-16 lg:py-24">
           <div className="container mx-auto px-4">
@@ -481,4 +489,6 @@ export default function MoneyClaimN1ClaimFormPage() {
     </>
   );
 }
+
+
 
