@@ -10,6 +10,7 @@ import {
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { tenantNotPayingRentFAQs } from '@/data/faqs';
 import { NeedHelpChoosing, FunnelCta } from '@/components/funnels';
 import {
@@ -79,7 +80,7 @@ export default function TenantNotPayingRentPage() {
           title="Tenant Not Paying Rent?"
           subtitle={<>You have <strong>three main options</strong>: demand payment, evict for rent arrears, or claim the money through court. Here&apos;s how each works.</>}
           primaryCta={{ label: 'Claim Unpaid Rent', href: '/products/money-claim' }}
-          secondaryCta={{ label: 'Start Eviction Notice', href: '/products/notice-only' }}
+          secondaryCta={{ label: 'See Section 8 notice route', href: '/section-8-notice' }}
           variant="pastel"
         >
           {/* Trust Signals */}
@@ -113,18 +114,27 @@ export default function TenantNotPayingRentPage() {
 
               <div className="grid md:grid-cols-2 gap-4 mt-6">
                 <div className="rounded-xl border border-gray-200 p-5 bg-gray-50">
-                  <h3 className="font-semibold text-gray-900 mb-2">Tenant still in property</h3>
+                  <h3 className="font-semibold text-gray-900 mb-2">Tenant still in the property</h3>
                   <p className="text-sm text-gray-700 mb-3">Use possession-focused support to serve Section 8 correctly and progress to court if needed.</p>
-                  <Link href="/products/complete-pack" className="text-primary font-medium hover:underline" data-cta="complete-pack" data-cta-location="above-fold">Go to complete-pack →</Link>
-                  <p className="text-xs text-gray-500 mt-2">Also see <Link href="/section-8-notice-template" className="underline">Section 8 notice template</Link>.</p>
+                  <Link href="/section-8-notice" className="text-primary font-medium hover:underline" data-cta="section-8-notice-guide" data-cta-location="above-fold">See Section 8 notice guide -&gt;</Link>
+                  <p className="text-xs text-gray-500 mt-2">Also follow the <Link href="/eviction-process-uk" className="underline">eviction process in the UK</Link> if possession is the priority.</p>
                 </div>
                 <div className="rounded-xl border border-gray-200 p-5 bg-gray-50">
                   <h3 className="font-semibold text-gray-900 mb-2">Tenant has left owing money</h3>
                   <p className="text-sm text-gray-700 mb-3">Focus on debt recovery with a money claim and evidence-ready arrears schedule.</p>
-                  <Link href="/products/money-claim" className="text-primary font-medium hover:underline" data-cta="money-claim" data-cta-location="above-fold">Go to money-claim →</Link>
+                  <Link href="/products/money-claim" className="text-primary font-medium hover:underline" data-cta="money-claim" data-cta-location="above-fold">Go to money claim -&gt;</Link>
                 </div>
               </div>
             </div>
+          </div>
+        </section>
+
+        <section className="pb-10 bg-white">
+          <div className="container mx-auto px-4">
+            <SeoPageContextPanel
+              pathname="/tenant-not-paying-rent"
+              className="mx-auto max-w-4xl border border-green-200 bg-green-50"
+            />
           </div>
         </section>
 
@@ -136,7 +146,7 @@ export default function TenantNotPayingRentPage() {
                 Your Three Options for Rent Arrears
               </h2>
               <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                Choose the right <Link href="/eviction-notice-uk" className="text-primary hover:underline">eviction notice for your region</Link> based on your circumstances—recovering the money, regaining the property, or both.
+                Because <Link href="/section-21-ban-uk" className="text-primary hover:underline">Section 21 ended in England on 1 May 2026</Link>, most arrears cases now start with a <Link href="/section-8-notice" className="text-primary hover:underline">Section 8 notice for rent arrears</Link> and a clear <Link href="/eviction-process-uk" className="text-primary hover:underline">eviction process in the UK</Link>.
               </p>
 
               <div className="grid md:grid-cols-3 gap-6">
@@ -206,7 +216,7 @@ export default function TenantNotPayingRentPage() {
                     href="/products/notice-only"
                     className="inline-flex items-center gap-2 text-primary font-medium text-sm hover:underline"
                   >
-                    Get Section 8 Notice — £29.99
+                    Get Section 8 Notice - GBP29.99
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
@@ -239,7 +249,7 @@ export default function TenantNotPayingRentPage() {
                     href="/products/money-claim"
                     className="inline-flex items-center gap-2 text-primary font-medium text-sm hover:underline"
                   >
-                    Start Money Claim — £59.99
+                    Start Money Claim - GBP59.99
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
@@ -260,12 +270,12 @@ export default function TenantNotPayingRentPage() {
             <div className="max-w-4xl mx-auto">
               <FunnelCta
                 title="Need the quickest route for your exact scenario?"
-                subtitle="Choose full eviction support if possession is the priority, or money claim if recovery is the goal."
-                primaryHref="/products/complete-pack"
-                primaryText="Get full eviction support"
-                primaryDataCta="complete-pack"
+                subtitle="Start with the money claim route to recover arrears, or move into possession support if the tenant is still in the property."
+                primaryHref="/products/money-claim"
+                primaryText="Start money claim pack"
+                primaryDataCta="money-claim"
                 location="mid"
-                secondaryLinks={[{ href: '/products/money-claim', text: 'Recover money owed instead', dataCta: 'money-claim' }]}
+                secondaryLinks={[{ href: '/products/complete-pack', text: 'Need possession as well? Get full eviction support', dataCta: 'complete-pack' }]}
               />
             </div>
           </div>
@@ -276,11 +286,11 @@ export default function TenantNotPayingRentPage() {
             <div className="max-w-4xl mx-auto rounded-2xl border border-gray-200 bg-white p-6">
               <h2 className="text-xl font-bold text-gray-900 mb-3">Related actions for rent arrears cases</h2>
               <div className="grid sm:grid-cols-2 gap-3 text-sm">
-                <Link href="/section-8-rent-arrears-eviction" className="rounded-lg border border-gray-200 p-3 hover:border-primary transition-colors">
-                  Use Section 8 for arrears-based eviction
+                <Link href="/section-8-notice" className="rounded-lg border border-gray-200 p-3 hover:border-primary transition-colors">
+                  Use a Section 8 notice for rent arrears
                 </Link>
-                <Link href="/section-21-notice-template" className="rounded-lg border border-gray-200 p-3 hover:border-primary transition-colors">
-                  Use Section 21 for no-fault possession
+                <Link href="/section-21-ban-uk" className="rounded-lg border border-gray-200 p-3 hover:border-primary transition-colors">
+                  See what replaces Section 21 after 1 May 2026
                 </Link>
                 <Link href="/products/money-claim" className="rounded-lg border border-gray-200 p-3 hover:border-primary transition-colors">
                   Recover arrears with a money claim pack
@@ -314,7 +324,7 @@ export default function TenantNotPayingRentPage() {
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
-                        <h3 className="font-bold text-gray-900">Ground 8 — Mandatory</h3>
+                        <h3 className="font-bold text-gray-900">Ground 8 - Mandatory</h3>
                         <span className="text-xs font-semibold text-red-600 bg-red-100 px-2 py-1 rounded">
                           Court Must Grant
                         </span>
@@ -344,7 +354,7 @@ export default function TenantNotPayingRentPage() {
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
-                        <h3 className="font-bold text-gray-900">Ground 10 — Discretionary</h3>
+                        <h3 className="font-bold text-gray-900">Ground 10 - Discretionary</h3>
                         <span className="text-xs font-semibold text-amber-600 bg-amber-100 px-2 py-1 rounded">
                           Court May Grant
                         </span>
@@ -374,7 +384,7 @@ export default function TenantNotPayingRentPage() {
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
-                        <h3 className="font-bold text-gray-900">Ground 11 — Discretionary</h3>
+                        <h3 className="font-bold text-gray-900">Ground 11 - Discretionary</h3>
                         <span className="text-xs font-semibold text-amber-600 bg-amber-100 px-2 py-1 rounded">
                           Court May Grant
                         </span>
@@ -421,9 +431,10 @@ export default function TenantNotPayingRentPage() {
               <SeoCtaBlock
                 pageType="problem"
                 variant="section"
+                pagePath="/tenant-not-paying-rent"
                 jurisdiction="england"
-                title="Need to Evict AND Claim the Money?"
-                description="Our Complete Eviction Pack includes Section 8 notices with all rent arrears grounds, plus court forms if the tenant won't leave."
+                title="Need the right arrears route?"
+                description="Use the money claim route to recover arrears first, then move into the Section 8 possession path if the tenant is still in the property."
               />
             </div>
           </div>
@@ -508,7 +519,7 @@ export default function TenantNotPayingRentPage() {
                         className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors"
                       >
                         <Gavel className="w-5 h-5" />
-                        Get Money Claim Pack — £59.99
+                        Get Money Claim Pack - GBP59.99
                       </Link>
                       <Link
                         href="/money-claim-unpaid-rent"
@@ -540,9 +551,10 @@ export default function TenantNotPayingRentPage() {
               <SeoCtaBlock
                 pageType="problem"
                 variant="final"
+                pagePath="/tenant-not-paying-rent"
                 jurisdiction="england"
-                title="Get Your Rent Arrears Documents Now"
-                description="Section 8 notice with Ground 8, 10 & 11. AI compliance checking. Court-ready format."
+                title="Start with the strongest rent arrears route"
+                description="Recover unpaid rent with the primary money claim route, then use the Section 8 possession path when you still need the property back."
               />
 
               <SeoDisclaimer className="max-w-4xl mx-auto" />
@@ -565,4 +577,6 @@ export default function TenantNotPayingRentPage() {
     </>
   );
 }
+
+
 

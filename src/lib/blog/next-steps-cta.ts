@@ -7,6 +7,7 @@ import {
   buildAskHeavenLink,
   type AskHeavenTopic,
 } from '@/lib/ask-heaven/buildAskHeavenLink';
+import { SEO_PILLAR_ROUTES, SEO_PRODUCT_ROUTES } from '@/lib/seo/page-taxonomy';
 
 export interface NextStepsCTAInput {
   slug: string;
@@ -91,8 +92,8 @@ const CURATED_NEXT_STEPS_OVERRIDES: Record<string, NextStepsCTA[]> = {
   ],
   'how-long-does-eviction-take-uk': [
     {
-      href: '/eviction-timeline-england',
-      label: 'Eviction Timeline England',
+      href: SEO_PILLAR_ROUTES.evictionProcessUk,
+      label: 'Eviction Process UK Guide',
       priority: 1,
     },
     {
@@ -160,14 +161,17 @@ const CURATED_NEXT_STEPS_OVERRIDES: Record<string, NextStepsCTA[]> = {
 };
 
 const PRODUCT_HREFS = new Set([
-  '/products/notice-only',
-  '/products/complete-pack',
-  '/products/money-claim',
-  '/products/ast',
+  SEO_PRODUCT_ROUTES.noticeOnly,
+  SEO_PRODUCT_ROUTES.completePack,
+  SEO_PRODUCT_ROUTES.moneyClaim,
+  SEO_PRODUCT_ROUTES.ast,
 ]);
 
 // England-only URLs that should NEVER appear for Scotland/Wales/NI content
 export const ENGLAND_ONLY_URLS = [
+  SEO_PILLAR_ROUTES.section21BanUk,
+  SEO_PILLAR_ROUTES.section21Notice,
+  SEO_PILLAR_ROUTES.section8Notice,
   '/section-21-notice-template',
   '/section-8-notice-template',
   '/tools/validators/section-21',
@@ -272,7 +276,7 @@ function finalizeNextSteps(steps: NextStepsCTA[]): NextStepsCTA[] {
   const nonProductSteps = uniqueSteps.filter((step) => !PRODUCT_HREFS.has(step.href));
 
   const fallbackProduct: NextStepsCTA = {
-    href: '/products/ast',
+    href: SEO_PRODUCT_ROUTES.ast,
     label: 'Tenancy Agreement Pack',
     priority: 99,
   };
@@ -331,19 +335,19 @@ export function getNextStepsCTAs(input: NextStepsCTAInput): NextStepsCTA[] {
 
   if (isSection21Related) {
     steps.push({
-      href: '/section-21-notice-template',
-      label: 'Section 21 Notice Template',
+      href: SEO_PILLAR_ROUTES.section21BanUk,
+      label: 'Section 21 Ban UK Guide',
       priority: 1,
     });
     steps.push({
-      href: '/products/notice-only',
-      label: 'Notice Only Bundle',
-      priority: 3,
+      href: SEO_PILLAR_ROUTES.section21Notice,
+      label: 'Section 21 Notice Transition Guide',
+      priority: 2,
     });
     steps.push({
-      href: '/tools/validators/section-21',
-      label: 'Section 21 Validity Checker',
-      priority: 2,
+      href: SEO_PRODUCT_ROUTES.completePack,
+      label: 'Complete Eviction Pack',
+      priority: 3,
     });
   }
 
@@ -357,19 +361,19 @@ export function getNextStepsCTAs(input: NextStepsCTAInput): NextStepsCTA[] {
 
   if (isSection8Related) {
     steps.push({
-      href: '/section-8-notice-template',
-      label: 'Section 8 Notice Template',
+      href: SEO_PILLAR_ROUTES.section8Notice,
+      label: 'Section 8 Notice Guide',
       priority: 1,
     });
     steps.push({
-      href: '/products/complete-pack',
-      label: 'Complete Eviction Pack',
-      priority: 3,
+      href: '/section-8-grounds-explained',
+      label: 'Section 8 Grounds Explained',
+      priority: 2,
     });
     steps.push({
-      href: '/tools/validators/section-8',
-      label: 'Section 8 Grounds Checker',
-      priority: 2,
+      href: SEO_PRODUCT_ROUTES.noticeOnly,
+      label: 'Notice Only Bundle',
+      priority: 3,
     });
   }
 
@@ -381,14 +385,19 @@ export function getNextStepsCTAs(input: NextStepsCTAInput): NextStepsCTA[] {
     lowerTags.some((t) => t.includes('arrears'))
   ) {
     steps.push({
-      href: '/products/money-claim',
-      label: 'Money Claim Pack',
+      href: '/tenant-not-paying-rent',
+      label: 'Tenant Not Paying Rent Guide',
       priority: 1,
     });
     steps.push({
-      href: '/tools/rent-arrears-calculator',
-      label: 'Rent Arrears Calculator',
+      href: SEO_PILLAR_ROUTES.section8Notice,
+      label: 'Section 8 Notice for Rent Arrears',
       priority: 2,
+    });
+    steps.push({
+      href: SEO_PRODUCT_ROUTES.moneyClaim,
+      label: 'Money Claim Pack',
+      priority: 3,
     });
   }
 
@@ -401,7 +410,7 @@ export function getNextStepsCTAs(input: NextStepsCTAInput): NextStepsCTA[] {
     lowerCategory.includes('tenancy')
   ) {
     steps.push({
-      href: '/products/ast',
+      href: SEO_PRODUCT_ROUTES.ast,
       label: 'Tenancy Agreement Pack',
       priority: 1,
     });
@@ -442,7 +451,7 @@ export function getNextStepsCTAs(input: NextStepsCTAInput): NextStepsCTA[] {
     });
     if (!steps.some((s) => s.href.includes('notice-only'))) {
       steps.push({
-        href: '/products/notice-only',
+        href: SEO_PRODUCT_ROUTES.noticeOnly,
         label: 'Notice Only Bundle',
         priority: 3,
       });
@@ -469,7 +478,7 @@ export function getNextStepsCTAs(input: NextStepsCTAInput): NextStepsCTA[] {
     });
     if (!steps.some((s) => s.href.includes('notice-only'))) {
       steps.push({
-        href: '/products/notice-only',
+        href: SEO_PRODUCT_ROUTES.noticeOnly,
         label: 'Notice Only Bundle',
         priority: 3,
       });
@@ -483,11 +492,21 @@ export function getNextStepsCTAs(input: NextStepsCTAInput): NextStepsCTA[] {
     lowerSlug.includes('bailiff') ||
     lowerCategory.includes('eviction')
   ) {
-    if (!steps.some((s) => s.href.includes('complete-pack'))) {
+    if (!steps.some((s) => s.href === SEO_PRODUCT_ROUTES.completePack)) {
       steps.push({
-        href: '/products/complete-pack',
-        label: 'Complete Eviction Pack',
+        href: SEO_PILLAR_ROUTES.howToEvictTenant,
+        label: 'How to Evict a Tenant Guide',
         priority: 1,
+      });
+      steps.push({
+        href: SEO_PILLAR_ROUTES.evictionProcessUk,
+        label: 'Eviction Process UK Guide',
+        priority: 2,
+      });
+      steps.push({
+        href: SEO_PRODUCT_ROUTES.completePack,
+        label: 'Complete Eviction Pack',
+        priority: 3,
       });
     }
   }
@@ -640,7 +659,7 @@ export function getNextStepsCTAs(input: NextStepsCTAInput): NextStepsCTA[] {
     }
     if (!steps.some((s) => s.href.includes('ast'))) {
       steps.push({
-        href: '/products/ast',
+        href: SEO_PRODUCT_ROUTES.ast,
         label: 'Tenancy Agreement Pack',
         priority: 3,
       });
@@ -696,7 +715,7 @@ export function getNextStepsCTAs(input: NextStepsCTAInput): NextStepsCTA[] {
 
     if (!steps.some((s) => s.href.includes('ast'))) {
       steps.push({
-        href: '/products/ast',
+        href: SEO_PRODUCT_ROUTES.ast,
         label: 'Tenancy Agreement Pack',
         priority: 2,
       });

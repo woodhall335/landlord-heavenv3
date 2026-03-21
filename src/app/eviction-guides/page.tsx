@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { Container } from '@/components/ui';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { EVICTION_CLUSTERS } from '@/lib/seo/eviction-authority';
 import { getCanonicalUrl } from '@/lib/seo';
@@ -10,10 +11,12 @@ import { getCanonicalUrl } from '@/lib/seo';
 const canonical = getCanonicalUrl('/eviction-guides');
 
 const CORE_EVICTION_GUIDES = [
-  { href: '/how-to-evict-a-tenant-uk', label: 'How to Evict a Tenant in the UK' },
-  { href: '/eviction-notice-england', label: 'Eviction Notice England' },
-  { href: '/eviction-process-england', label: 'Eviction Process England' },
-  { href: '/section-21-vs-section-8', label: 'Section 21 vs Section 8' },
+  { href: '/how-to-evict-tenant', label: 'How to Evict a Tenant UK' },
+  { href: '/tenant-not-paying-rent', label: 'Tenant Not Paying Rent UK' },
+  { href: '/eviction-process-uk', label: 'Eviction Process UK' },
+  { href: '/section-8-notice', label: 'Section 8 Notice Guide' },
+  { href: '/section-21-ban-uk', label: 'Section 21 Ban UK Guide' },
+  { href: '/section-21-notice', label: 'Section 21 Notice Transition Guide' },
   { href: '/how-long-does-eviction-take', label: 'How Long Does Eviction Take' },
 ];
 
@@ -26,8 +29,9 @@ const LANDLORD_PROBLEMS = [
 ];
 
 const NOTICE_GUIDES = [
-  { href: '/section-21-notice-guide', label: 'Section 21 Notice Guide' },
-  { href: '/section-8-notice-guide', label: 'Section 8 Notice Guide' },
+  { href: '/section-21-ban-uk', label: 'Section 21 Ban UK Guide' },
+  { href: '/section-21-notice', label: 'Section 21 Notice Transition Guide' },
+  { href: '/section-8-notice', label: 'Section 8 Notice Guide' },
   { href: '/eviction-notice-template', label: 'Eviction Notice Template' },
   { href: '/serve-section-21-notice', label: 'How to Serve Section 21 Notice' },
   { href: '/serve-section-8-notice', label: 'How to Serve Section 8 Notice' },
@@ -96,8 +100,20 @@ export default function EvictionGuidesPage() {
         <Container>
           <div className="mx-auto max-w-6xl">
             <h1 className="text-4xl font-bold text-charcoal">Eviction guides hub</h1>
-            <p className="mt-4 text-gray-700">Use this index to navigate tenant problems, eviction notices, court process, rent arrears, and possession enforcement guides.</p>
+            <p className="mt-4 max-w-4xl text-gray-700">
+              Use this index to navigate tenant problems, eviction notices, court process, rent arrears, and possession enforcement guides.
+              Start with <Link href="/how-to-evict-tenant" className="text-primary hover:underline">how to evict a tenant legally</Link>, follow the <Link href="/eviction-process-uk" className="text-primary hover:underline">eviction process in the UK</Link>, and use the <Link href="/section-21-ban-uk" className="text-primary hover:underline">Section 21 ending in 2026 transition guide</Link> for the England post-ban route.
+            </p>
           </div>
+        </Container>
+      </section>
+
+      <section className="bg-white pb-10">
+        <Container>
+          <SeoPageContextPanel
+            pathname="/eviction-guides"
+            className="mx-auto max-w-6xl border border-[#CAB6FF] bg-[#F8F4FF]"
+          />
         </Container>
       </section>
 
@@ -171,7 +187,7 @@ export default function EvictionGuidesPage() {
                 <p className="mt-2 text-gray-700">{cluster.description}</p>
                 <div className="mt-4 grid gap-3 md:grid-cols-2 lg:grid-cols-3">
                   <Link href={cluster.parent} className="rounded-xl border border-[#E6DBFF] bg-[#F8F4FF] p-4 text-primary hover:underline">
-                    Canonical cluster page: {cluster.parent}
+                    Authority hub: {cluster.parent}
                   </Link>
                   {cluster.pages.map((page) => (
                     <Link key={page} href={page} className="rounded-xl border border-[#E6DBFF] bg-[#F8F4FF] p-4 text-primary hover:underline">

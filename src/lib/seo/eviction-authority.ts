@@ -1,3 +1,11 @@
+import {
+  SEO_PILLAR_ROUTES,
+  SEO_PRODUCT_ROUTES,
+  getAllSeoPageTaxonomyEntries,
+  getSeoPageTaxonomyBySlug,
+  type SeoCluster,
+} from '@/lib/seo/page-taxonomy';
+
 export const EVICTION_ENTITIES = [
   'Section 21 Notice',
   'Section 8 Notice',
@@ -15,7 +23,8 @@ export type EvictionCluster =
   | 'eviction-notices'
   | 'court-process'
   | 'rent-arrears'
-  | 'possession-enforcement';
+  | 'possession-enforcement'
+  | 'section-21-transition';
 
 export interface ClusterDefinition {
   key: EvictionCluster;
@@ -27,123 +36,122 @@ export interface ClusterDefinition {
   pages: string[];
 }
 
-export const EVICTION_CLUSTERS: ClusterDefinition[] = [
-  {
-    key: 'tenant-problems',
-    label: 'Tenant problems',
-    description: 'Landlord scenario pages covering behaviour, access, abandonment, and non-payment issues.',
-    parent: '/evict-tenant-not-paying-rent',
-    tool: '/tools/validators/section-8',
-    product: '/products/notice-only',
-    pages: [
-      '/tenant-stopped-paying-rent',
-      '/tenant-abandoned-property',
-      '/tenant-refusing-access',
-      '/tenant-refusing-inspection',
-      '/tenant-breach-of-tenancy',
-      '/tenant-subletting-without-permission',
-      '/tenant-anti-social-behaviour',
-      '/tenant-left-without-paying-rent',
-      '/tenant-refuses-to-leave-after-notice',
-      '/evict-tenant-for-damage',
-      '/evict-tenant-anti-social-behaviour',
-    ],
-  },
-  {
-    key: 'eviction-notices',
-    label: 'Eviction notices',
-    description: 'Notice drafting, validity, and route-selection guidance across Section 21 and Section 8.',
-    parent: '/eviction-notice-england',
-    tool: '/tools/validators/section-21',
-    product: '/products/notice-only',
-    pages: [
-      '/section-21-notice-generator',
-      '/section-8-notice-generator',
-      '/section-21-vs-section-8',
-      '/section-21-checklist',
-      '/section-21-notice-period',
-      '/section-21-validity-checklist',
-      '/serve-section-21-notice',
-      '/serve-section-8-notice',
-      '/notice-to-quit-guide',
-    ],
-  },
-  {
-    key: 'court-process',
-    label: 'Court process',
-    description: 'Possession claim, court forms, and hearing progression pages.',
-    parent: '/eviction-court-forms-england',
-    tool: '/tools/validators/section-8',
-    product: '/products/complete-pack',
-    pages: [
-      '/n5b-possession-claim-form',
-      '/n5-n119-possession-claim',
-      '/n5b-possession-claim-guide',
-      '/eviction-court-hearing-guide',
-      '/possession-order-process',
-      '/possession-order-timeline',
-      '/court-possession-order-guide',
-      '/section-21-court-pack',
-      '/section-8-court-pack',
-      '/complete-eviction-pack-england',
-    ],
-  },
-  {
-    key: 'rent-arrears',
-    label: 'Rent arrears',
-    description: 'Arrears-first eviction strategy and debt recovery pages.',
-    parent: '/rent-arrears-eviction-guide',
-    tool: '/tools/rent-arrears-calculator',
-    product: '/products/money-claim',
-    pages: [
-      '/section-8-rent-arrears-eviction',
-      '/evict-tenant-not-paying-rent',
-      '/rent-arrears-eviction-guide',
-      '/recover-rent-arrears-after-eviction',
-    ],
-  },
-  {
-    key: 'possession-enforcement',
-    label: 'Possession enforcement',
-    description: 'Timeline, accelerated possession, warrant, and bailiff execution pages.',
-    parent: '/eviction-timeline-england',
-    tool: '/tools/validators/section-21',
-    product: '/products/complete-pack',
-    pages: [
-      '/how-to-evict-a-tenant-england',
-      '/how-long-does-eviction-take',
-      '/eviction-timeline-england',
-      '/eviction-timeline-uk',
-      '/accelerated-possession-guide',
-      '/warrant-of-possession-guide',
-      '/bailiff-eviction-process',
-      '/court-bailiff-eviction-guide',
-      '/section-8-eviction-process',
-      '/section-8-grounds-explained',
-      '/landlord-eviction-checklist',
-    ],
-  },
-];
-
-export function getClusterForSlug(slug: string): ClusterDefinition | null {
-  const route = `/${slug}`;
-  return EVICTION_CLUSTERS.find((cluster) => cluster.pages.includes(route) || cluster.parent === route) ?? null;
+function mapSeoClusterToAuthorityCluster(cluster: SeoCluster): EvictionCluster {
+  switch (cluster) {
+    case 'rent-arrears':
+      return 'rent-arrears';
+    case 'section-8':
+    case 'section-21-legacy':
+      return 'eviction-notices';
+    case 'section-21-transition':
+      return 'section-21-transition';
+    case 'court-process':
+    case 'eviction-process':
+      return 'court-process';
+    case 'regional-eviction':
+    case 'eviction-hub':
+      return 'possession-enforcement';
+    case 'how-to-evict':
+    case 'tenant-problems':
+    default:
+      return 'tenant-problems';
+  }
 }
 
-export function getAuthorityLinks(slug: string) {
-  const cluster = getClusterForSlug(slug);
-  if (!cluster) {
+const CLUSTER_CONFIG: Record<
+  EvictionCluster,
+  Omit<ClusterDefinition, 'pages'>
+> = {
+  'tenant-problems': {
+    key: 'tenant-problems',
+    label: 'Tenant problems',
+    description: 'Scenario pages for non-payment, anti-social behaviour, damage, access disputes, and route choice.',
+    parent: SEO_PILLAR_ROUTES.howToEvictTenant,
+    tool: '/tools/validators/section-8',
+    product: SEO_PRODUCT_ROUTES.completePack,
+  },
+  'eviction-notices': {
+    key: 'eviction-notices',
+    label: 'Eviction notices',
+    description: 'Notice drafting, validity, service, and route-selection guidance for Section 8 and legacy Section 21 intent.',
+    parent: SEO_PILLAR_ROUTES.section8Notice,
+    tool: '/tools/validators/section-8',
+    product: SEO_PRODUCT_ROUTES.noticeOnly,
+  },
+  'court-process': {
+    key: 'court-process',
+    label: 'Court process',
+    description: 'Possession claim, hearing, order, timeline, and enforcement workflow pages.',
+    parent: SEO_PILLAR_ROUTES.evictionProcessUk,
+    tool: '/tools/validators/section-8',
+    product: SEO_PRODUCT_ROUTES.completePack,
+  },
+  'rent-arrears': {
+    key: 'rent-arrears',
+    label: 'Rent arrears',
+    description: 'Arrears-first landlord guides covering Section 8, recovery sequencing, and money claims.',
+    parent: SEO_PILLAR_ROUTES.tenantNotPayingRent,
+    tool: '/tools/rent-arrears-calculator',
+    product: SEO_PRODUCT_ROUTES.moneyClaim,
+  },
+  'possession-enforcement': {
+    key: 'possession-enforcement',
+    label: 'Possession and jurisdiction guides',
+    description: 'Regional eviction guidance, hub pages, and possession follow-on resources.',
+    parent: SEO_PILLAR_ROUTES.evictionGuides,
+    tool: '/tools/validators/section-21',
+    product: SEO_PRODUCT_ROUTES.completePack,
+  },
+  'section-21-transition': {
+    key: 'section-21-transition',
+    label: 'Section 21 transition',
+    description: 'Post-ban guidance explaining what replaces Section 21 and how landlords pivot to Section 8-led possession.',
+    parent: SEO_PILLAR_ROUTES.section21BanUk,
+    tool: SEO_PILLAR_ROUTES.section21Notice,
+    product: SEO_PRODUCT_ROUTES.completePack,
+  },
+};
+
+export const EVICTION_CLUSTERS: ClusterDefinition[] = Object.values(CLUSTER_CONFIG).map(
+  (config) => {
+    const pages = getAllSeoPageTaxonomyEntries()
+      .filter((entry) => mapSeoClusterToAuthorityCluster(entry.cluster) === config.key)
+      .map((entry) => entry.pathname)
+      .filter((pathname) => pathname !== config.parent);
+
+    return {
+      ...config,
+      pages,
+    };
+  }
+);
+
+export function getClusterForSlug(slug: string): ClusterDefinition | null {
+  const entry = getSeoPageTaxonomyBySlug(slug);
+  if (!entry) {
     return null;
   }
 
-  const route = `/${slug}`;
-  const siblings = cluster.pages.filter((page) => page !== route).slice(0, 2);
+  const clusterKey = mapSeoClusterToAuthorityCluster(entry.cluster);
+  return EVICTION_CLUSTERS.find((cluster) => cluster.key === clusterKey) ?? null;
+}
+
+export function getAuthorityLinks(slug: string) {
+  const entry = getSeoPageTaxonomyBySlug(slug);
+  const cluster = getClusterForSlug(slug);
+  if (!entry || !cluster) {
+    return null;
+  }
+
+  const supporting = [entry.supportingPage, ...cluster.pages]
+    .filter((page, index, pages) => page !== entry.pathname && pages.indexOf(page) === index)
+    .slice(0, 2);
 
   return {
     parent: cluster.parent,
-    supporting: siblings,
+    supporting,
     tool: cluster.tool,
-    product: cluster.product,
+    product: entry.primaryProduct,
     clusterLabel: cluster.label,
   };
 }

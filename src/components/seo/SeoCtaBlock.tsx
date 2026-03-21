@@ -1,28 +1,32 @@
 /**
  * SeoCtaBlock - Reusable CTA Component for SEO Landing Pages
  *
- * Provides consistent CTA patterns across all SEO pages with
- * contextual messaging based on page type.
- *
- * Page Types:
- * - problem: Tenant won't leave, not paying rent (Notice Only + Complete Pack)
- * - court: Possession claim, N5B, warrant (Complete Pack emphasis)
- * - money: Money claim related (Money Claim Pack emphasis)
- * - general: General eviction content (balanced CTAs)
+ * Provides consistent CTA patterns across SEO pages with
+ * product-first routing and taxonomy-aware primary destinations.
  */
 
 'use client';
 
 import Link from 'next/link';
 import { ArrowRight, Shield, Clock, FileText, Gavel, PoundSterling } from 'lucide-react';
-import { PRODUCTS } from '@/lib/pricing/products';
-import { buildWizardLink, type WizardJurisdiction } from '@/lib/wizard/buildWizardLink';
+import {
+  PRODUCTS,
+  TENANCY_AGREEMENT_FROM_PRICE,
+} from '@/lib/pricing/products';
+import {
+  SEO_PRODUCT_ROUTES,
+  getPrimaryDestinationAboveFold,
+  getSeoPageTaxonomy,
+  type SeoProductRoute,
+} from '@/lib/seo/page-taxonomy';
 import { trackLandingCtaClick } from '@/components/analytics/LandingPageTracker';
 import { TrustPositioningBar } from '@/components/marketing/TrustPositioningBar';
 
 export type SeoPageType = 'problem' | 'court' | 'money' | 'general' | 'tenancy' | 'guide' | 'notice';
-
 export type SeoCtaVariant = 'hero' | 'section' | 'faq' | 'inline' | 'final';
+export type SeoCtaJurisdiction = 'england' | 'wales' | 'scotland' | 'northern-ireland' | 'uk';
+
+type SeoProductKey = 'notice_only' | 'complete_pack' | 'money_claim' | 'ast';
 
 interface SeoCtaBlockProps {
   /** Type of SEO page - determines CTA emphasis */
@@ -39,24 +43,61 @@ interface SeoCtaBlockProps {
   title?: string;
   /** Custom description for section/final variants */
   description?: string;
-  /** Jurisdiction for wizard links */
-  jurisdiction?: WizardJurisdiction;
+  /** Jurisdiction for analytics/context */
+  jurisdiction?: SeoCtaJurisdiction;
   /** Additional CSS classes */
   className?: string;
   /** Optional trust positioning bar under CTA heading */
   showTrustPositioningBar?: boolean;
 }
 
-// Pre-configured CTA content by page type
-const ctaConfig: Record<SeoPageType, {
-  primary: { label: string; product: 'notice_only' | 'complete_pack' | 'money_claim' };
+const PRODUCT_ROUTE_BY_KEY: Record<SeoProductKey, SeoProductRoute> = {
+  notice_only: SEO_PRODUCT_ROUTES.noticeOnly,
+  complete_pack: SEO_PRODUCT_ROUTES.completePack,
+  money_claim: SEO_PRODUCT_ROUTES.moneyClaim,
+  ast: SEO_PRODUCT_ROUTES.ast,
+};
+
+const ROUTE_TO_PRODUCT_KEY: Record<SeoProductRoute, SeoProductKey> = {
+  [SEO_PRODUCT_ROUTES.noticeOnly]: 'notice_only',
+  [SEO_PRODUCT_ROUTES.completePack]: 'complete_pack',
+  [SEO_PRODUCT_ROUTES.moneyClaim]: 'money_claim',
+  [SEO_PRODUCT_ROUTES.ast]: 'ast',
+};
+
+const PRODUCT_LABEL_BY_KEY: Record<SeoProductKey, string> = {
+  notice_only: 'Get Court-Ready Notice',
+  complete_pack: 'Get Complete Eviction Pack',
+  money_claim: 'Start Money Claim',
+  ast: 'Create Your Agreement',
+};
+
+const PRODUCT_SHORT_LABEL_BY_KEY: Record<SeoProductKey, string> = {
+  notice_only: PRODUCTS.notice_only.shortLabel,
+  complete_pack: PRODUCTS.complete_pack.shortLabel,
+  money_claim: PRODUCTS.money_claim.shortLabel,
+  ast: 'Tenancy Agreement Pack',
+};
+
+const PRODUCT_PRICE_BY_KEY: Record<SeoProductKey, string> = {
+  notice_only: PRODUCTS.notice_only.displayPrice,
+  complete_pack: PRODUCTS.complete_pack.displayPrice,
+  money_claim: PRODUCTS.money_claim.displayPrice,
+  ast: TENANCY_AGREEMENT_FROM_PRICE,
+};
+
+type CtaConfigEntry = {
+  primary: { label: string; product: SeoProductKey };
   secondary: { label: string; href: string };
   sectionTitle: string;
   sectionDescription: string;
   faqTitle: string;
   faqDescription: string;
   icon: typeof Shield;
-}> = {
+};
+
+// Pre-configured CTA content by page type
+const ctaConfig: Record<SeoPageType, CtaConfigEntry> = {
   problem: {
     primary: { label: 'Get Court-Ready Notice', product: 'notice_only' },
     secondary: { label: 'View Complete Pack', href: '/products/complete-pack' },
@@ -94,7 +135,7 @@ const ctaConfig: Record<SeoPageType, {
     icon: Shield,
   },
   tenancy: {
-    primary: { label: 'Create Your Agreement', product: 'notice_only' },
+    primary: { label: 'Create Your Agreement', product: 'ast' },
     secondary: { label: 'View AST Products', href: '/products/ast' },
     sectionTitle: 'Ready to Create Your Tenancy Agreement?',
     sectionDescription: 'Generate a legally compliant tenancy agreement in minutes. All UK jurisdictions supported.',
@@ -122,44 +163,99 @@ const ctaConfig: Record<SeoPageType, {
   },
 };
 
-/**
- * Get wizard link for a product with optional jurisdiction
- */
-function getWizardLink(
-  product: 'notice_only' | 'complete_pack' | 'money_claim',
-  jurisdiction?: WizardJurisdiction
-): string {
-  return buildWizardLink({
-    product,
-    jurisdiction,
-    src: 'guide',
-    topic: product === 'money_claim' ? 'money_claim' : 'eviction',
-  });
+function getProductKeyFromRoute(route: SeoProductRoute): SeoProductKey {
+  return ROUTE_TO_PRODUCT_KEY[route];
+}
+
+function formatProductCta(label: string, productKey: SeoProductKey): string {
+  return `${label} - ${PRODUCT_PRICE_BY_KEY[productKey]}`;
+}
+
+function getMappedPrimaryProductKey(pageType: SeoPageType, pagePath?: string): SeoProductKey {
+  const entry = pagePath ? getSeoPageTaxonomy(pagePath) : null;
+  if (!entry) {
+    return ctaConfig[pageType].primary.product;
+  }
+
+  return getProductKeyFromRoute(getPrimaryDestinationAboveFold(entry));
+}
+
+function getPrimaryHref(pageType: SeoPageType, pagePath?: string): string {
+  const entry = pagePath ? getSeoPageTaxonomy(pagePath) : null;
+  if (!entry) {
+    return PRODUCT_ROUTE_BY_KEY[ctaConfig[pageType].primary.product];
+  }
+
+  return getPrimaryDestinationAboveFold(entry);
+}
+
+function getPrimaryLabel(pageType: SeoPageType, pagePath?: string): string {
+  const defaultLabel = ctaConfig[pageType].primary.label;
+  const defaultProduct = ctaConfig[pageType].primary.product;
+  const mappedProduct = getMappedPrimaryProductKey(pageType, pagePath);
+
+  if (!pagePath || mappedProduct === defaultProduct) {
+    return defaultLabel;
+  }
+
+  return PRODUCT_LABEL_BY_KEY[mappedProduct];
+}
+
+function getHeroSecondaryCta(
+  pageType: SeoPageType,
+  pagePath?: string,
+  secondaryText?: string
+): { label: string; href: string } {
+  const config = ctaConfig[pageType];
+  const entry = pagePath ? getSeoPageTaxonomy(pagePath) : null;
+
+  if (!entry) {
+    return { label: secondaryText || config.secondary.label, href: config.secondary.href };
+  }
+
+  if (entry.pageRole === 'bridge' && entry.secondaryProduct) {
+    const productKey = getProductKeyFromRoute(entry.secondaryProduct);
+    return {
+      label: secondaryText || formatProductCta(PRODUCT_SHORT_LABEL_BY_KEY[productKey], productKey),
+      href: entry.secondaryProduct,
+    };
+  }
+
+  return {
+    label: secondaryText || 'Read the supporting guide',
+    href: entry.supportingPage,
+  };
+}
+
+function getSectionSecondaryHref(pageType: SeoPageType, pagePath?: string): string {
+  const entry = pagePath ? getSeoPageTaxonomy(pagePath) : null;
+  if (entry?.pageRole === 'bridge' && entry.secondaryProduct) {
+    return entry.secondaryProduct;
+  }
+
+  return ctaConfig[pageType].secondary.href;
 }
 
 /**
  * Hero CTA - Used at the top of pages in StandardHero
- * Returns props to pass to StandardHero component
+ * Returns props to pass to hero components
  */
 export function getHeroCtaProps(
   pageType: SeoPageType,
-  jurisdiction?: WizardJurisdiction
+  pagePath?: string,
+  _jurisdiction?: SeoCtaJurisdiction
 ): {
   primaryCTA: { label: string; href: string };
   secondaryCTA: { label: string; href: string };
 } {
-  const config = ctaConfig[pageType];
-  const product = PRODUCTS[config.primary.product];
+  const primaryProduct = getMappedPrimaryProductKey(pageType, pagePath);
 
   return {
     primaryCTA: {
-      label: `${config.primary.label} — ${product.displayPrice}`,
-      href: getWizardLink(config.primary.product, jurisdiction),
+      label: formatProductCta(getPrimaryLabel(pageType, pagePath), primaryProduct),
+      href: getPrimaryHref(pageType, pagePath),
     },
-    secondaryCTA: {
-      label: config.secondary.label,
-      href: config.secondary.href,
-    },
+    secondaryCTA: getHeroSecondaryCta(pageType, pagePath),
   };
 }
 
@@ -176,14 +272,14 @@ export function SeoCtaBlock({
   secondaryText,
   title,
   description,
-  jurisdiction,
   className = '',
   showTrustPositioningBar = false,
 }: SeoCtaBlockProps) {
   const config = ctaConfig[pageType];
-  const product = PRODUCTS[config.primary.product];
-  const wizardHref = getWizardLink(config.primary.product, jurisdiction);
+  const primaryProductKey = getMappedPrimaryProductKey(pageType, pagePath);
+  const primaryHref = getPrimaryHref(pageType, pagePath);
   const Icon = config.icon;
+  const entry = pagePath ? getSeoPageTaxonomy(pagePath) : null;
 
   // Helper to track CTA clicks
   const handleCtaClick = (ctaText?: string) => {
@@ -194,11 +290,11 @@ export function SeoCtaBlock({
 
   // Inline variant - simple text link
   if (variant === 'inline') {
-    const ctaText = `${primaryText || config.primary.label} — ${product.displayPrice}`;
+    const ctaText = formatProductCta(primaryText || getPrimaryLabel(pageType, pagePath), primaryProductKey);
     return (
       <div className={`inline-flex items-center gap-2 ${className}`}>
         <Link
-          href={wizardHref}
+          href={primaryHref}
           className="text-primary font-medium hover:underline inline-flex items-center gap-1"
           onClick={() => handleCtaClick(ctaText)}
         >
@@ -211,7 +307,7 @@ export function SeoCtaBlock({
 
   // Section variant - mid-page CTA block
   if (variant === 'section') {
-    const ctaText = `${primaryText || config.primary.label} — ${product.displayPrice}`;
+    const ctaText = formatProductCta(primaryText || getPrimaryLabel(pageType, pagePath), primaryProductKey);
     return (
       <div className={`bg-primary/5 rounded-xl p-6 lg:p-8 border border-primary/20 ${className}`}>
         <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
@@ -231,7 +327,7 @@ export function SeoCtaBlock({
           </div>
           <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
             <Link
-              href={wizardHref}
+              href={primaryHref}
               className="hero-btn-primary text-center whitespace-nowrap"
               onClick={() => handleCtaClick(ctaText)}
             >
@@ -245,8 +341,17 @@ export function SeoCtaBlock({
 
   // FAQ variant - CTA after FAQ section
   if (variant === 'faq') {
-    const primaryCtaText = `${primaryText || config.primary.label} — ${product.displayPrice}`;
-    const secondaryCtaText = secondaryText || config.secondary.label;
+    const primaryCtaText = formatProductCta(primaryText || getPrimaryLabel(pageType, pagePath), primaryProductKey);
+    const secondaryHref = getSectionSecondaryHref(pageType, pagePath);
+    const secondaryCtaText =
+      secondaryText ||
+      (entry?.pageRole === 'bridge' && entry.secondaryProduct
+        ? formatProductCta(
+            PRODUCT_SHORT_LABEL_BY_KEY[getProductKeyFromRoute(entry.secondaryProduct)],
+            getProductKeyFromRoute(entry.secondaryProduct)
+          )
+        : config.secondary.label);
+
     return (
       <div className={`bg-gray-50 rounded-xl p-6 lg:p-8 mt-8 ${className}`}>
         <div className="flex items-start gap-4">
@@ -265,7 +370,7 @@ export function SeoCtaBlock({
             ) : null}
             <div className="flex flex-col sm:flex-row gap-3">
               <Link
-                href={wizardHref}
+                href={primaryHref}
                 className="inline-flex items-center gap-2 text-primary font-medium hover:underline"
                 onClick={() => handleCtaClick(primaryCtaText)}
               >
@@ -274,7 +379,7 @@ export function SeoCtaBlock({
               </Link>
               {secondaryText !== '' && (
                 <Link
-                  href={config.secondary.href}
+                  href={secondaryHref}
                   className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900"
                   onClick={() => handleCtaClick(secondaryCtaText)}
                 >
@@ -291,17 +396,16 @@ export function SeoCtaBlock({
 
   // Final variant - large gradient CTA block
   if (variant === 'final') {
-    const primaryCtaText = `${primaryText || config.primary.label} — ${product.displayPrice}`;
-    const secondaryProduct = pageType === 'money'
-      ? PRODUCTS.complete_pack
-      : pageType === 'court'
-        ? PRODUCTS.notice_only
-        : PRODUCTS.complete_pack;
-    const secondaryWizardHref = getWizardLink(
-      pageType === 'money' ? 'complete_pack' : pageType === 'court' ? 'notice_only' : 'complete_pack',
-      jurisdiction
-    );
-    const secondaryCtaText = `${secondaryText || secondaryProduct.shortLabel} — ${secondaryProduct.displayPrice}`;
+    const primaryCtaText = formatProductCta(primaryText || getPrimaryLabel(pageType, pagePath), primaryProductKey);
+    const secondaryProductKey =
+      pageType === 'money'
+        ? 'complete_pack'
+        : pageType === 'court'
+          ? 'notice_only'
+          : 'complete_pack';
+    const secondaryHref = PRODUCT_ROUTE_BY_KEY[secondaryProductKey];
+    const secondaryCtaText =
+      secondaryText || formatProductCta(PRODUCT_SHORT_LABEL_BY_KEY[secondaryProductKey], secondaryProductKey);
 
     return (
       <div className={`bg-gradient-to-br from-primary to-primary/90 rounded-3xl p-8 lg:p-12 text-white text-center ${className}`}>
@@ -316,7 +420,7 @@ export function SeoCtaBlock({
         ) : null}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
-            href={wizardHref}
+            href={primaryHref}
             className="hero-btn-secondary inline-flex items-center justify-center gap-2"
             onClick={() => handleCtaClick(primaryCtaText)}
           >
@@ -325,7 +429,7 @@ export function SeoCtaBlock({
           </Link>
           {pageType !== 'general' && (
             <Link
-              href={secondaryWizardHref}
+              href={secondaryHref}
               className="bg-white/10 hover:bg-white/20 text-white font-semibold py-3 px-6 rounded-lg transition-colors inline-flex items-center justify-center gap-2"
               onClick={() => handleCtaClick(secondaryCtaText)}
             >
@@ -335,35 +439,36 @@ export function SeoCtaBlock({
         </div>
         <p className="mt-8 text-white/70 text-sm">
           {pageType === 'money' ? (
-            <>MCOL-Ready Forms &bull; Evidence Checklist &bull; Court Instructions</>
+            <>MCOL-ready forms &bull; Evidence checklist &bull; Court instructions</>
           ) : pageType === 'court' ? (
-            <>All Court Forms Included &bull; Witness Statements &bull; Step-by-Step Guide</>
+            <>All court forms included &bull; Witness statements &bull; Step-by-step guide</>
           ) : (
-            <>Section 21 & 8 Included &bull; AI Compliance Check &bull; Designed for Court Acceptance</>
+            <>Section 21 and Section 8 included &bull; AI compliance check &bull; Designed for court acceptance</>
           )}
         </p>
       </div>
     );
   }
 
-  // Default/hero variant - simple buttons (use with StandardHero)
-  const heroPrimaryText = `${primaryText || config.primary.label} — ${product.displayPrice}`;
-  const heroSecondaryText = secondaryText || config.secondary.label;
+  // Default/hero variant - simple buttons
+  const heroPrimaryText = formatProductCta(primaryText || getPrimaryLabel(pageType, pagePath), primaryProductKey);
+  const heroSecondary = getHeroSecondaryCta(pageType, pagePath, secondaryText);
+
   return (
     <div className={`flex flex-col sm:flex-row gap-3 ${className}`}>
       <Link
-        href={wizardHref}
+        href={primaryHref}
         className="hero-btn-primary"
         onClick={() => handleCtaClick(heroPrimaryText)}
       >
         {heroPrimaryText}
       </Link>
       <Link
-        href={config.secondary.href}
+        href={heroSecondary.href}
         className="hero-btn-secondary"
-        onClick={() => handleCtaClick(heroSecondaryText)}
+        onClick={() => handleCtaClick(heroSecondary.label)}
       >
-        {heroSecondaryText}
+        {heroSecondary.label}
       </Link>
     </div>
   );

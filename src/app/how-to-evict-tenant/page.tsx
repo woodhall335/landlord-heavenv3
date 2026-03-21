@@ -4,6 +4,7 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { NextLegalSteps } from '@/components/seo/NextLegalSteps';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { getCanonicalUrl } from '@/lib/seo/urls';
 import {
   StructuredData,
@@ -11,8 +12,7 @@ import {
   articleSchema,
 } from '@/lib/seo/structured-data';
 import { buildAskHeavenLink } from '@/lib/ask-heaven/buildAskHeavenLink';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
-import { landingPageLinks, productLinks, guideLinks } from '@/lib/seo/internal-links';
+import { productLinks, guideLinks } from '@/lib/seo/internal-links';
 import { howToEvictTenantFAQs } from '@/data/faqs';
 import { PRODUCTS } from '@/lib/pricing/products';
 import {
@@ -29,14 +29,10 @@ import {
 
 const canonicalUrl = getCanonicalUrl('/how-to-evict-tenant');
 
-const wizardHref = buildWizardLink({
-  product: 'notice_only',
-  topic: 'eviction',
-  src: 'seo_how_to_evict_tenant',
-});
+const primaryProductHref = '/products/complete-pack';
 
-const noticeOnlyPrice = PRODUCTS.notice_only?.displayPrice ?? '£29.99';
-const completePackPrice = PRODUCTS.complete_pack?.displayPrice ?? '£79.99';
+const noticeOnlyPrice = PRODUCTS.notice_only?.displayPrice ?? 'GBP29.99';
+const completePackPrice = PRODUCTS.complete_pack?.displayPrice ?? 'GBP79.99';
 
 const complianceLinks = {
   deposit: buildAskHeavenLink({
@@ -144,7 +140,7 @@ export default function HowToEvictTenantPage() {
         <UniversalHero
           title="How to Evict a Tenant in the UK"
           subtitle="Use this landlord guide to compare the eviction process in England, Wales, Scotland, and Northern Ireland, understand which notice route may apply, and avoid the mistakes that most often invalidate an eviction."
-          primaryCta={{ label: 'Start Eviction Wizard', href: wizardHref }}
+          primaryCta={{ label: `Get Complete Pack - ${completePackPrice}`, href: primaryProductHref }}
           secondaryCta={{ label: 'Jump to jurisdiction guide', href: '#jurisdiction-guide' }}
           showTrustPositioningBar
           hideMedia
@@ -215,8 +211,8 @@ export default function HowToEvictTenantPage() {
                   starting any court or tribunal application.
                 </p>
                 <p className="leading-7">
-                  The most common mistake landlords make is searching for “how to evict a
-                  tenant” and then following the first article they find as though the same
+                  The most common mistake landlords make is searching for "how to evict a
+                  tenant" and then following the first article they find as though the same
                   steps apply everywhere. They do not. England, Wales, Scotland, and Northern
                   Ireland each use different tenancy frameworks, different notice language,
                   and different possession routes. England landlords may be comparing no-fault
@@ -239,7 +235,7 @@ export default function HowToEvictTenantPage() {
 
               <div className="mt-8 rounded-2xl border border-purple-200 bg-purple-50 p-5">
                 <div className="flex items-start gap-3">
-                  <span className="text-2xl">☁️</span>
+                  <span className="text-2xl">Info</span>
                   <div>
                     <p className="font-semibold text-gray-900 mb-1">
                       Not sure which eviction route applies?
@@ -261,23 +257,32 @@ export default function HowToEvictTenantPage() {
                     href={complianceLinks.deposit}
                     className="rounded-lg border border-purple-200 bg-white px-3 py-2 text-center text-xs text-gray-700 transition-colors hover:border-primary hover:text-primary"
                   >
-                    Deposit rules for eviction →
+                    Deposit rules for eviction ->
                   </Link>
                   <Link
                     href={complianceLinks.gasSafety}
                     className="rounded-lg border border-purple-200 bg-white px-3 py-2 text-center text-xs text-gray-700 transition-colors hover:border-primary hover:text-primary"
                   >
-                    Gas safety requirements →
+                    Gas safety requirements ->
                   </Link>
                   <Link
                     href={complianceLinks.epc}
                     className="rounded-lg border border-purple-200 bg-white px-3 py-2 text-center text-xs text-gray-700 transition-colors hover:border-primary hover:text-primary"
                   >
-                    EPC requirements →
+                    EPC requirements ->
                   </Link>
                 </div>
               </div>
             </div>
+          </div>
+        </section>
+
+        <section className="bg-white pb-4">
+          <div className="container mx-auto px-4">
+            <SeoPageContextPanel
+              pathname="/how-to-evict-tenant"
+              className="mx-auto max-w-5xl border border-purple-200 bg-purple-50"
+            />
           </div>
         </section>
 
@@ -303,10 +308,10 @@ export default function HowToEvictTenantPage() {
                     Typical timeline shape
                   </h3>
                   <ul className="space-y-2 text-gray-700">
-                    <li>• Notice periods vary by jurisdiction and ground.</li>
-                    <li>• Court or tribunal time can add weeks or months.</li>
-                    <li>• Contested cases usually take longer than paper-only routes.</li>
-                    <li>• Enforcement adds more time if the tenant still does not leave.</li>
+                    <li>- Notice periods vary by jurisdiction and ground.</li>
+                    <li>- Court or tribunal time can add weeks or months.</li>
+                    <li>- Contested cases usually take longer than paper-only routes.</li>
+                    <li>- Enforcement adds more time if the tenant still does not leave.</li>
                   </ul>
                 </div>
 
@@ -316,10 +321,10 @@ export default function HowToEvictTenantPage() {
                     Validity issues that often matter
                   </h3>
                   <ul className="space-y-2 text-gray-700">
-                    <li>• Using the wrong notice for the jurisdiction.</li>
-                    <li>• Incorrect dates, service method, or notice wording.</li>
-                    <li>• Compliance failures that undermine the route.</li>
-                    <li>• Missing evidence for grounds-based possession.</li>
+                    <li>- Using the wrong notice for the jurisdiction.</li>
+                    <li>- Incorrect dates, service method, or notice wording.</li>
+                    <li>- Compliance failures that undermine the route.</li>
+                    <li>- Missing evidence for grounds-based possession.</li>
                   </ul>
                 </div>
               </div>
@@ -401,22 +406,22 @@ export default function HowToEvictTenantPage() {
                     validity before acting rather than assuming old timelines still apply.
                   </p>
                   <ul className="space-y-2 text-gray-700 mb-4">
-                    <li>• Most sensitive to compliance and document-history mistakes.</li>
-                    <li>• Often used where the landlord wants possession without alleging breach.</li>
-                    <li>• Service, dates, and supporting compliance records matter heavily.</li>
+                    <li>- Most sensitive to compliance and document-history mistakes.</li>
+                    <li>- Often used where the landlord wants possession without alleging breach.</li>
+                    <li>- Service, dates, and supporting compliance records matter heavily.</li>
                   </ul>
                   <div className="flex flex-wrap gap-3">
                     <Link
-                      href="/section-21-notice-template"
+                      href="/section-21-ban-uk"
                       className="text-sm font-medium text-primary hover:underline"
                     >
-                      Section 21 template →
+                      Section 21 template ->
                     </Link>
                     <Link
-                      href="/tools/validators/section-21"
+                      href="/section-21-notice"
                       className="text-sm font-medium text-primary hover:underline"
                     >
-                      Section 21 checker →
+                      Section 21 checker ->
                     </Link>
                   </div>
                 </div>
@@ -432,22 +437,22 @@ export default function HowToEvictTenantPage() {
                     evidence, and the ground being used.
                   </p>
                   <ul className="space-y-2 text-gray-700 mb-4">
-                    <li>• Common for arrears, breach, or anti-social behaviour cases.</li>
-                    <li>• Usually requires greater attention to evidence and pleadings.</li>
-                    <li>• The court route and hearing process may be more involved.</li>
+                    <li>- Common for arrears, breach, or anti-social behaviour cases.</li>
+                    <li>- Usually requires greater attention to evidence and pleadings.</li>
+                    <li>- The court route and hearing process may be more involved.</li>
                   </ul>
                   <div className="flex flex-wrap gap-3">
                     <Link
-                      href="/section-8-notice-template"
+                      href="/section-8-notice"
                       className="text-sm font-medium text-primary hover:underline"
                     >
-                      Section 8 template →
+                      Section 8 template ->
                     </Link>
                     <Link
-                      href="/tools/validators/section-8"
+                      href="/section-8-notice"
                       className="text-sm font-medium text-primary hover:underline"
                     >
-                      Section 8 checker →
+                      Section 8 checker ->
                     </Link>
                   </div>
                 </div>
@@ -461,14 +466,14 @@ export default function HowToEvictTenantPage() {
                     className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary/90"
                   >
                     <FileText className="h-4 w-4" />
-                    Notice Only — {noticeOnlyPrice}
+                    Notice Only - {noticeOnlyPrice}
                   </Link>
                   <Link
                     href={productLinks.completePack.href}
                     className="inline-flex items-center gap-2 rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800"
                   >
                     <FileText className="h-4 w-4" />
-                    Complete Pack — {completePackPrice}
+                    Complete Pack - {completePackPrice}
                   </Link>
                 </div>
               </div>
@@ -489,10 +494,10 @@ export default function HowToEvictTenantPage() {
               <div className="rounded-xl border-l-4 border-red-600 bg-red-100 p-4 mb-8">
                 <p className="text-sm text-red-900">
                   <strong>Wales uses different terminology:</strong> in Wales, many landlords
-                  still search for “evicting a tenant”, but the page should use the proper
+                  still search for "evicting a tenant", but the page should use the proper
                   Renting Homes terminology where possible. That means talking about
                   <strong> occupation contracts</strong> and <strong>contract-holders</strong>,
-                  not lazily importing England’s Section 21 or Section 8 language.
+                  not lazily importing England's Section 21 or Section 8 language.
                 </p>
               </div>
 
@@ -511,7 +516,7 @@ export default function HowToEvictTenantPage() {
                   occupation contract position, then checking which possession route applies,
                   then confirming the relevant notice period and service method. This is also
                   one of the clearest examples of why a UK comparison page needs jurisdiction
-                  discipline. What sounds like a familiar “tenant eviction” question is often
+                  discipline. What sounds like a familiar "tenant eviction" question is often
                   a very different legal question once the property turns out to be in Wales.
                 </p>
               </div>
@@ -521,11 +526,11 @@ export default function HowToEvictTenantPage() {
                   Wales eviction overview
                 </h3>
                 <ul className="space-y-3 text-gray-700">
-                  <li>• Use Welsh occupation contract terminology where appropriate.</li>
-                  <li>• Identify whether the route is no-fault style or breach-based under Welsh law.</li>
-                  <li>• Check the current required notice period for the specific route being used.</li>
-                  <li>• Do not rely on England Section 21 or Section 8 wording for Welsh properties.</li>
-                  <li>• If possession is still required after notice expires, court action may still be needed.</li>
+                  <li>- Use Welsh occupation contract terminology where appropriate.</li>
+                  <li>- Identify whether the route is no-fault style or breach-based under Welsh law.</li>
+                  <li>- Check the current required notice period for the specific route being used.</li>
+                  <li>- Do not rely on England Section 21 or Section 8 wording for Welsh properties.</li>
+                  <li>- If possession is still required after notice expires, court action may still be needed.</li>
                 </ul>
               </div>
 
@@ -534,13 +539,13 @@ export default function HowToEvictTenantPage() {
                   href="/wales-eviction-notices"
                   className="inline-flex items-center gap-2 rounded-lg bg-red-600 px-6 py-3 font-medium text-white hover:bg-red-700"
                 >
-                  Wales eviction guide →
+                  Wales eviction guide ->
                 </Link>
                 <Link
                   href="/wales-tenancy-agreement-template"
                   className="inline-flex items-center gap-2 rounded-lg border border-red-600 bg-white px-6 py-3 font-medium text-red-600 hover:bg-red-50"
                 >
-                  Wales occupation contracts →
+                  Wales occupation contracts ->
                 </Link>
               </div>
             </div>
@@ -593,11 +598,11 @@ export default function HowToEvictTenantPage() {
                   Scotland eviction overview
                 </h3>
                 <ul className="space-y-3 text-gray-700">
-                  <li>• Identify the correct PRT ground for possession.</li>
-                  <li>• Use a Notice to Leave rather than England notice language.</li>
-                  <li>• Check the correct Scottish notice period for that ground.</li>
-                  <li>• Prepare for tribunal action if the tenant remains after notice expires.</li>
-                  <li>• Avoid copying England court-route assumptions onto a Scottish case.</li>
+                  <li>- Identify the correct PRT ground for possession.</li>
+                  <li>- Use a Notice to Leave rather than England notice language.</li>
+                  <li>- Check the correct Scottish notice period for that ground.</li>
+                  <li>- Prepare for tribunal action if the tenant remains after notice expires.</li>
+                  <li>- Avoid copying England court-route assumptions onto a Scottish case.</li>
                 </ul>
               </div>
 
@@ -606,13 +611,13 @@ export default function HowToEvictTenantPage() {
                   href="/scotland-eviction-notices"
                   className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-3 font-medium text-white hover:bg-blue-700"
                 >
-                  Scotland eviction guide →
+                  Scotland eviction guide ->
                 </Link>
                 <Link
                   href="/private-residential-tenancy-agreement-template"
                   className="inline-flex items-center gap-2 rounded-lg border border-blue-600 bg-white px-6 py-3 font-medium text-blue-600 hover:bg-blue-50"
                 >
-                  Scotland PRT agreements →
+                  Scotland PRT agreements ->
                 </Link>
               </div>
             </div>
@@ -660,10 +665,10 @@ export default function HowToEvictTenantPage() {
                   Northern Ireland eviction overview
                 </h3>
                 <ul className="space-y-3 text-gray-700">
-                  <li>• Use Northern Ireland tenancy language and notice route.</li>
-                  <li>• Check the correct notice period for the tenancy length and case type.</li>
-                  <li>• Make sure service and evidence are properly recorded.</li>
-                  <li>• Move to the NI court route if possession is still required after notice.</li>
+                  <li>- Use Northern Ireland tenancy language and notice route.</li>
+                  <li>- Check the correct notice period for the tenancy length and case type.</li>
+                  <li>- Make sure service and evidence are properly recorded.</li>
+                  <li>- Move to the NI court route if possession is still required after notice.</li>
                 </ul>
               </div>
 
@@ -672,7 +677,7 @@ export default function HowToEvictTenantPage() {
                   href="/northern-ireland-tenancy-agreement-template"
                   className="inline-flex items-center gap-2 rounded-lg bg-green-600 px-6 py-3 font-medium text-white hover:bg-green-700"
                 >
-                  Northern Ireland tenancy agreements →
+                  Northern Ireland tenancy agreements ->
                 </Link>
               </div>
             </div>
@@ -690,7 +695,7 @@ export default function HowToEvictTenantPage() {
                 itself. It is the moment the landlord discovers the notice was served on the
                 wrong basis, the dates were wrong, the compliance record is incomplete, or the
                 evidence for the chosen route is thinner than expected. A strong eviction page
-                therefore needs to cover the “what now?” questions that landlords actually
+                therefore needs to cover the "what now?" questions that landlords actually
                 care about, not just list a few notice names.
               </p>
 
@@ -698,36 +703,36 @@ export default function HowToEvictTenantPage() {
                 <div className="rounded-xl border border-gray-200 bg-gray-50 p-6">
                   <h3 className="font-semibold text-gray-900 mb-3">Typical timeline shape</h3>
                   <ul className="space-y-2 text-sm text-gray-700">
-                    <li>• Notice period first.</li>
-                    <li>• Court or tribunal stage next if needed.</li>
-                    <li>• Enforcement adds more time if possession is still resisted.</li>
-                    <li>• Contested cases usually take longer.</li>
+                    <li>- Notice period first.</li>
+                    <li>- Court or tribunal stage next if needed.</li>
+                    <li>- Enforcement adds more time if possession is still resisted.</li>
+                    <li>- Contested cases usually take longer.</li>
                   </ul>
                 </div>
 
                 <div className="rounded-xl border border-gray-200 bg-gray-50 p-6">
                   <h3 className="font-semibold text-gray-900 mb-3">Costs to plan for</h3>
                   <ul className="space-y-2 text-sm text-gray-700">
-                    <li>• Notice or document preparation.</li>
-                    <li>• Court or tribunal fees.</li>
-                    <li>• Service, witness, or evidence costs.</li>
-                    <li>• Enforcement costs if the case reaches that stage.</li>
+                    <li>- Notice or document preparation.</li>
+                    <li>- Court or tribunal fees.</li>
+                    <li>- Service, witness, or evidence costs.</li>
+                    <li>- Enforcement costs if the case reaches that stage.</li>
                   </ul>
                 </div>
 
                 <div className="rounded-xl border border-gray-200 bg-gray-50 p-6">
                   <h3 className="font-semibold text-gray-900 mb-3">Validity checklist</h3>
                   <ul className="space-y-2 text-sm text-gray-700">
-                    <li>• Correct jurisdiction and notice route.</li>
-                    <li>• Correct dates and service method.</li>
-                    <li>• Compliance record checked where relevant.</li>
-                    <li>• Evidence prepared for grounds-based cases.</li>
+                    <li>- Correct jurisdiction and notice route.</li>
+                    <li>- Correct dates and service method.</li>
+                    <li>- Compliance record checked where relevant.</li>
+                    <li>- Evidence prepared for grounds-based cases.</li>
                   </ul>
                   <Link
-                    href="/section-21-notice-template"
+                    href="/section-21-ban-uk"
                     className="inline-flex mt-3 text-sm font-medium text-primary hover:underline"
                   >
-                    Section 21 template →
+                    Section 21 template ->
                   </Link>
                 </div>
               </div>
@@ -740,11 +745,11 @@ export default function HowToEvictTenantPage() {
                       Common landlord mistakes
                     </h3>
                     <ul className="mt-3 space-y-2 text-red-900/90">
-                      <li>• Using an England notice concept for a Welsh or Scottish property.</li>
-                      <li>• Assuming a notice guarantees possession without the next legal step.</li>
-                      <li>• Relying on old online timelines without checking current validity.</li>
-                      <li>• Choosing the wrong route for arrears, breach, or no-fault style possession.</li>
-                      <li>• Treating compliance history as an afterthought instead of a risk point.</li>
+                      <li>- Using an England notice concept for a Welsh or Scottish property.</li>
+                      <li>- Assuming a notice guarantees possession without the next legal step.</li>
+                      <li>- Relying on old online timelines without checking current validity.</li>
+                      <li>- Choosing the wrong route for arrears, breach, or no-fault style possession.</li>
+                      <li>- Treating compliance history as an afterthought instead of a risk point.</li>
                     </ul>
                   </div>
                 </div>
@@ -753,7 +758,7 @@ export default function HowToEvictTenantPage() {
               <div className="mt-8 text-sm text-gray-600">
                 Need a grounds-based England route? Use a{' '}
                 <Link
-                  href="/section-8-notice-template"
+                  href="/section-8-notice"
                   className="font-medium text-primary hover:underline"
                 >
                   Section 8 notice template
@@ -777,13 +782,13 @@ export default function HowToEvictTenantPage() {
                   href={productLinks.noticeOnly.href}
                   className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-8 py-4 font-semibold text-primary hover:bg-gray-100"
                 >
-                  Notice Only — {noticeOnlyPrice}
+                  Notice Only - {noticeOnlyPrice}
                 </Link>
                 <Link
                   href={productLinks.completePack.href}
                   className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/30 bg-white/10 px-8 py-4 font-semibold text-white transition-colors hover:bg-white/20"
                 >
-                  Complete Pack — {completePackPrice}
+                  Complete Pack - {completePackPrice}
                 </Link>
               </div>
             </div>
@@ -797,23 +802,28 @@ export default function HowToEvictTenantPage() {
                 jurisdictionLabel="UK eviction routes"
                 scenarioLabel="tenant eviction"
                 primaryCTA={{
-                  label: `Generate eviction notice — ${noticeOnlyPrice}`,
-                  href: productLinks.noticeOnly.href,
+                  label: `Complete eviction pack - ${completePackPrice}`,
+                  href: productLinks.completePack.href,
                 }}
                 secondaryCTA={{
-                  label: `Complete eviction pack — ${completePackPrice}`,
-                  href: productLinks.completePack.href,
+                  label: `Notice only - ${noticeOnlyPrice}`,
+                  href: productLinks.noticeOnly.href,
                 }}
                 relatedLinks={[
                   {
-                    href: landingPageLinks.evictionTemplate.href,
-                    title: landingPageLinks.evictionTemplate.title,
-                    description: landingPageLinks.evictionTemplate.description,
+                    href: guideLinks.evictionProcessUk.href,
+                    title: guideLinks.evictionProcessUk.title,
+                    description: guideLinks.evictionProcessUk.description,
                   },
                   {
-                    href: landingPageLinks.section21Template.href,
-                    title: landingPageLinks.section21Template.title,
-                    description: landingPageLinks.section21Template.description,
+                    href: guideLinks.section21BanUk.href,
+                    title: guideLinks.section21BanUk.title,
+                    description: guideLinks.section21BanUk.description,
+                  },
+                  {
+                    href: guideLinks.section8Notice.href,
+                    title: guideLinks.section8Notice.title,
+                    description: guideLinks.section8Notice.description,
                   },
                   {
                     href: guideLinks.walesEviction.href,
@@ -841,3 +851,5 @@ export default function HowToEvictTenantPage() {
     </>
   );
 }
+
+

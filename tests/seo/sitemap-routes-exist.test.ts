@@ -118,6 +118,34 @@ describe('Sitemap Route Existence', () => {
     }
   });
 
+  it('should include the new SEO pillar routes', () => {
+    const pillarPages = [
+      '/tenant-not-paying-rent',
+      '/how-to-evict-tenant',
+      '/eviction-process-uk',
+      '/section-8-notice',
+      '/section-21-notice',
+      '/section-21-ban-uk',
+      '/eviction-guides',
+    ];
+
+    for (const page of pillarPages) {
+      expect(sitemapPaths, `Missing SEO pillar page: ${page}`).toContain(page);
+    }
+  });
+
+  it('should exclude Phase 3 legacy redirect candidates from the sitemap', () => {
+    const legacyPages = [
+      '/section-8-notice-guide',
+      '/section-21-notice-guide',
+      '/section-21-ban',
+    ];
+
+    for (const page of legacyPages) {
+      expect(sitemapPaths, `Legacy redirect candidate should not remain in sitemap: ${page}`).not.toContain(page);
+    }
+  });
+
   it('all Money Claim SEO pages should have corresponding routes', () => {
     const moneyClaimPaths = sitemapPaths.filter((p) => p.includes('money-claim'));
     const missingRoutes: string[] = [];

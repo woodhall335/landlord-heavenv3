@@ -1,8 +1,10 @@
 import Link from 'next/link';
+import type { ReactNode } from 'react';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { Container } from '@/components/ui/Container';
 import { FAQSection, type FAQItem } from '@/components/seo/FAQSection';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import { StructuredData, articleSchema, breadcrumbSchema, faqPageSchema } from '@/lib/seo/structured-data';
 
@@ -15,7 +17,7 @@ export interface PillarComparisonRow {
 
 export interface PillarSection {
   title: string;
-  paragraphs: string[];
+  paragraphs: ReactNode[];
   bullets?: string[];
 }
 
@@ -82,10 +84,11 @@ export function PillarPageShell(content: PillarPageContent) {
       <section className="py-12 bg-white">
         <Container>
           <div className="mx-auto max-w-5xl space-y-8">
+            <SeoPageContextPanel pathname={`/${content.slug}`} className="border border-[#CAB6FF] bg-[#FBF8FF]" />
             <article className="rounded-2xl border border-[#E6DBFF] bg-[#FCFAFF] p-6 md:p-8">
               <h2 className="text-2xl font-semibold text-[#2a2161]">Eviction route explanation</h2>
               <div className="mt-4 space-y-4 text-gray-700 leading-7">
-                {content.routeExplanation.map((paragraph) => <p key={paragraph.slice(0, 40)}>{paragraph}</p>)}
+                {content.routeExplanation.map((paragraph, index) => <p key={`route-${index}`}>{paragraph}</p>)}
               </div>
             </article>
 
@@ -143,7 +146,7 @@ export function PillarPageShell(content: PillarPageContent) {
               <article key={section.title} className="rounded-2xl border border-[#E6DBFF] bg-[#FCFAFF] p-6 md:p-8">
                 <h2 className="text-2xl font-semibold text-[#2a2161]">{section.title}</h2>
                 <div className="mt-4 space-y-4 text-gray-700 leading-7">
-                  {section.paragraphs.map((paragraph) => <p key={paragraph.slice(0, 48)}>{paragraph}</p>)}
+                  {section.paragraphs.map((paragraph, index) => <p key={`${section.title}-${index}`}>{paragraph}</p>)}
                 </div>
                 {section.bullets ? (
                   <ul className="mt-5 list-disc space-y-2 pl-5 text-gray-700">

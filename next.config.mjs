@@ -126,6 +126,21 @@ const nextConfig = {
         destination: '/joint-tenancy-agreement-template',
         permanent: true,
       },
+      {
+        source: '/section-8-notice-guide',
+        destination: '/section-8-notice',
+        permanent: true,
+      },
+      {
+        source: '/section-21-notice-guide',
+        destination: '/section-21-notice',
+        permanent: true,
+      },
+      {
+        source: '/section-21-ban',
+        destination: '/section-21-ban-uk',
+        permanent: true,
+      },
 
       // Money claim canonicalization
       {

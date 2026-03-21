@@ -39,9 +39,9 @@ export const BLOG_TOPIC_HUBS: Record<BlogTopicHubSlug, BlogTopicHubConfig> = {
     intro:
       'Start with the upgraded core guides first, then move into notice drafting, court pack preparation, or possession claim execution using the linked pillar routes.',
     pillarLinks: [
-      { href: '/how-to-evict-a-tenant-uk', label: 'How to evict a tenant in the UK' },
-      { href: '/section-21-notice-guide', label: 'Section 21 notice guide' },
-      { href: '/section-8-notice-guide', label: 'Section 8 notice guide' },
+      { href: '/how-to-evict-tenant', label: 'How to evict a tenant in the UK' },
+      { href: '/section-21-ban-uk', label: 'Section 21 ban guide for landlords' },
+      { href: '/section-8-notice', label: 'Section 8 notice guide' },
     ],
     matcher: (post) => includesAny(postText(post), ['evict', 'possession', 'bailiff', 'court', 'section 21', 'section 8']),
   },
@@ -55,8 +55,8 @@ export const BLOG_TOPIC_HUBS: Record<BlogTopicHubSlug, BlogTopicHubConfig> = {
     intro:
       'This cluster prioritises upgraded arrears posts first so landlords can move from missed rent triage to Section 8 and money-claim recovery in the right sequence.',
     pillarLinks: [
-      { href: '/evict-tenant-not-paying-rent', label: 'Evict tenant not paying rent' },
-      { href: '/tenant-stopped-paying-rent', label: 'Tenant stopped paying rent playbook' },
+      { href: '/tenant-not-paying-rent', label: 'Tenant not paying rent in the UK' },
+      { href: '/section-8-notice', label: 'Section 8 notice for rent arrears' },
       { href: '/money-claim-unpaid-rent', label: 'Money claim for unpaid rent guide' },
     ],
     matcher: (post) => includesAny(postText(post), ['arrears', 'unpaid rent', 'money claim', 'rent debt', 'tenant stopped paying']),
@@ -69,11 +69,11 @@ export const BLOG_TOPIC_HUBS: Record<BlogTopicHubSlug, BlogTopicHubConfig> = {
     metaDescription:
       'Explore Section 21 guides for landlords covering Form 6A validity, notice periods, service proof, accelerated possession, and common mistakes.',
     intro:
-      'Section 21 content is consolidated here with the highest-value upgraded posts surfaced first, helping landlords validate paperwork and move into court-ready next steps.',
+      'Section 21 transition content is consolidated here so landlords can understand what changed on 1 May 2026 in England, what replaces Section 21, and which route matters now.',
     pillarLinks: [
-      { href: '/section-21-notice-guide', label: 'Section 21 notice guide' },
+      { href: '/section-21-ban-uk', label: 'Section 21 ban UK guide' },
+      { href: '/section-21-notice', label: 'Section 21 notice transition guide' },
       { href: '/section-21-validity-checklist', label: 'Section 21 validity checklist' },
-      { href: '/serve-section-21-notice', label: 'How to serve a Section 21 notice' },
     ],
     matcher: (post) => includesAny(postText(post), ['section 21', 'form 6a', 'accelerated possession', 'no-fault']),
   },
@@ -87,7 +87,7 @@ export const BLOG_TOPIC_HUBS: Record<BlogTopicHubSlug, BlogTopicHubConfig> = {
     intro:
       'Section 8 is evidence-led. This hub now surfaces upgraded grounds and process guides first, then routes landlords into service, court prep, and arrears recovery.',
     pillarLinks: [
-      { href: '/section-8-notice-guide', label: 'Section 8 notice guide' },
+      { href: '/section-8-notice', label: 'Section 8 notice guide' },
       { href: '/section-8-grounds-explained', label: 'Section 8 grounds explained' },
       { href: '/serve-section-8-notice', label: 'How to serve a Section 8 notice' },
     ],
@@ -103,9 +103,9 @@ export const BLOG_TOPIC_HUBS: Record<BlogTopicHubSlug, BlogTopicHubConfig> = {
     intro:
       'Compliance gaps are a major reason eviction routes fail. Use these guides to close prerequisites before issuing notice or filing in court.',
     pillarLinks: [
-      { href: '/how-to-evict-a-tenant-uk', label: 'Eviction process overview' },
-      { href: '/section-21-notice-guide', label: 'Section 21 compliance dependencies' },
-      { href: '/section-8-notice-guide', label: 'Section 8 process requirements' },
+      { href: '/how-to-evict-tenant', label: 'Eviction process overview' },
+      { href: '/section-21-ban-uk', label: 'Section 21 transition and compliance dependencies' },
+      { href: '/section-8-notice', label: 'Section 8 process requirements' },
     ],
     matcher: (post) => includesAny(postText(post), ['compliance', 'gas safety', 'epc', 'eicr', 'deposit', 'right to rent', 'licensing']),
   },
@@ -121,7 +121,7 @@ export const BLOG_TOPIC_HUBS: Record<BlogTopicHubSlug, BlogTopicHubConfig> = {
     pillarLinks: [
       { href: '/wales-eviction-notices', label: 'Wales eviction notices guide' },
       { href: '/wales-tenancy-agreement-template', label: 'Wales tenancy agreement template' },
-      { href: '/how-to-evict-a-tenant-uk', label: 'UK eviction overview (compare jurisdictions)' },
+      { href: '/how-to-evict-tenant', label: 'UK eviction overview (compare jurisdictions)' },
     ],
     matcher: (post) => post.slug.startsWith('wales-'),
   },
@@ -137,7 +137,7 @@ export const BLOG_TOPIC_HUBS: Record<BlogTopicHubSlug, BlogTopicHubConfig> = {
     pillarLinks: [
       { href: '/scotland-eviction-notices', label: 'Scotland eviction notice guide' },
       { href: '/private-residential-tenancy-agreement-template', label: 'PRT agreement template' },
-      { href: '/how-to-evict-a-tenant-uk', label: 'UK eviction overview (compare jurisdictions)' },
+      { href: '/how-to-evict-tenant', label: 'UK eviction overview (compare jurisdictions)' },
     ],
     matcher: (post) => post.slug.startsWith('scotland-'),
   },
@@ -153,7 +153,7 @@ export const BLOG_TOPIC_HUBS: Record<BlogTopicHubSlug, BlogTopicHubConfig> = {
     pillarLinks: [
       { href: '/northern-ireland-eviction-notice', label: 'Northern Ireland eviction notice guide' },
       { href: '/northern-ireland-tenancy-agreement-template', label: 'NI tenancy agreement template' },
-      { href: '/how-to-evict-a-tenant-uk', label: 'UK eviction overview (compare jurisdictions)' },
+      { href: '/how-to-evict-tenant', label: 'UK eviction overview (compare jurisdictions)' },
     ],
     matcher: (post) => post.slug.startsWith('northern-ireland-'),
   },

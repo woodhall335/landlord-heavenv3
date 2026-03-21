@@ -276,6 +276,34 @@ export const guideLinks = {
     icon: 'legal' as const,
     type: 'guide' as const,
   },
+  evictionProcessUk: {
+    href: '/eviction-process-uk',
+    title: 'Eviction Process UK',
+    description: 'Step-by-step eviction process guide',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+  section8Notice: {
+    href: '/section-8-notice',
+    title: 'Section 8 Notice Guide',
+    description: 'Grounds-based possession notice guide',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+  section21Notice: {
+    href: '/section-21-notice',
+    title: 'Section 21 Notice Transition Guide',
+    description: 'Legacy Section 21 intent and next steps',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+  section21BanUk: {
+    href: '/section-21-ban-uk',
+    title: 'Section 21 Ban UK Guide',
+    description: 'What landlords do after Section 21 ends',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
   walesEviction: {
     href: '/wales-eviction-notices',
     title: 'Wales Eviction Guide',
@@ -726,19 +754,22 @@ export const rentArrearsWithAdviceLinks = [
 
 // SEO page related link groups (Q1/Q2 2026)
 export const tenantWontLeaveRelatedLinks = [
-  productLinks.noticeOnly,
+  guideLinks.howToEvictTenant,
+  guideLinks.evictionProcessUk,
   productLinks.completePack,
-  landingPageLinks.section21Template,
-  landingPageLinks.section8Template,
+  guideLinks.section21BanUk,
+  guideLinks.section8Notice,
   toolLinks.section21Generator,
   toolLinks.section8Generator,
   guideLinks.possessionClaimGuide,
 ];
 
 export const tenantNotPayingRentRelatedLinks = [
-  productLinks.noticeOnly,
-  productLinks.completePack,
+  guideLinks.tenantNotPayingRent,
+  guideLinks.section8Notice,
+  guideLinks.section21BanUk,
   productLinks.moneyClaim,
+  productLinks.completePack,
   landingPageLinks.section8Template,
   toolLinks.section8Generator,
   toolLinks.rentDemandLetter,
@@ -755,10 +786,11 @@ export const possessionClaimRelatedLinks = [
 ];
 
 export const evictionCostRelatedLinks = [
-  productLinks.noticeOnly,
-  productLinks.completePack,
-  productLinks.moneyClaim,
   guideLinks.howToEvictTenant,
+  guideLinks.evictionProcessUk,
+  guideLinks.section8Notice,
+  guideLinks.section21BanUk,
+  productLinks.moneyClaim,
   guideLinks.possessionClaimGuide,
   guideLinks.moneyClaimGuide,
   toolLinks.rentArrearsCalculator,

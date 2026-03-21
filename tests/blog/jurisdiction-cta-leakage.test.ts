@@ -61,11 +61,8 @@ describe('Jurisdiction CTA Leakage Prevention', () => {
       // Should have Scotland eviction guide
       expect(ctas.some((c) => c.href === '/scotland-eviction-notices')).toBe(true);
 
-      // Should NOT have Section 8 template
-      expect(ctas.some((c) => c.href === '/section-8-notice-template')).toBe(false);
-
-      // Should NOT have Section 8 validator
-      expect(ctas.some((c) => c.href === '/tools/validators/section-8')).toBe(false);
+      // Should NOT have England-only Section 8 pillar
+      expect(ctas.some((c) => c.href === '/section-8-notice')).toBe(false);
     });
 
     it('scotland-eviction-ground-12 (rent arrears) should have Scotland + money claim CTAs', () => {
@@ -80,8 +77,8 @@ describe('Jurisdiction CTA Leakage Prevention', () => {
       // Should have money claim (rent arrears related)
       expect(ctas.some((c) => c.href === '/products/money-claim')).toBe(true);
 
-      // Should NOT have Section 8 template
-      expect(ctas.some((c) => c.href === '/section-8-notice-template')).toBe(false);
+      // Should NOT have England-only Section 8 pillar
+      expect(ctas.some((c) => c.href === '/section-8-notice')).toBe(false);
     });
   });
 
@@ -111,11 +108,9 @@ describe('Jurisdiction CTA Leakage Prevention', () => {
       // Should have Wales eviction guide
       expect(ctas.some((c) => c.href === '/wales-eviction-notices')).toBe(true);
 
-      // Should NOT have Section 21 template
-      expect(ctas.some((c) => c.href === '/section-21-notice-template')).toBe(false);
-
-      // Should NOT have Section 21 validator
-      expect(ctas.some((c) => c.href === '/tools/validators/section-21')).toBe(false);
+      // Should NOT have England-only Section 21 transition pillars
+      expect(ctas.some((c) => c.href === '/section-21-ban-uk')).toBe(false);
+      expect(ctas.some((c) => c.href === '/section-21-notice')).toBe(false);
     });
   });
 
@@ -146,8 +141,9 @@ describe('Jurisdiction CTA Leakage Prevention', () => {
       const hasCompletePack = ctas.some((c) => c.href === '/products/complete-pack');
       expect(hasAskHeaven || hasCompletePack).toBe(true);
 
-      // Should NOT have Section 21 template
-      expect(ctas.some((c) => c.href === '/section-21-notice-template')).toBe(false);
+      // Should NOT have England-only Section 21 transition pillars
+      expect(ctas.some((c) => c.href === '/section-21-ban-uk')).toBe(false);
+      expect(ctas.some((c) => c.href === '/section-21-notice')).toBe(false);
     });
   });
 
@@ -158,11 +154,8 @@ describe('Jurisdiction CTA Leakage Prevention', () => {
         tags: ['Section 21', 'Eviction'],
       });
 
-      // Should have Section 21 template
-      expect(ctas.some((c) => c.href === '/section-21-notice-template')).toBe(true);
-
-      // Should have Section 21 validator
-      expect(ctas.some((c) => c.href === '/tools/validators/section-21')).toBe(true);
+      expect(ctas.some((c) => c.href === '/section-21-ban-uk')).toBe(true);
+      expect(ctas.some((c) => c.href === '/section-21-notice')).toBe(true);
     });
 
     it('england-section-8-ground-8 should include Section 8 CTAs', () => {
@@ -171,11 +164,8 @@ describe('Jurisdiction CTA Leakage Prevention', () => {
         tags: ['Section 8', 'Ground 8', 'Rent Arrears'],
       });
 
-      // Should have Section 8 template
-      expect(ctas.some((c) => c.href === '/section-8-notice-template')).toBe(true);
-
-      // Should have Section 8 validator
-      expect(ctas.some((c) => c.href === '/tools/validators/section-8')).toBe(true);
+      expect(ctas.some((c) => c.href === '/section-8-notice')).toBe(true);
+      expect(ctas.some((c) => c.href === '/section-8-grounds-explained')).toBe(true);
     });
 
     it('rent-arrears-eviction-guide (England) should include Section 8 CTAs', () => {
@@ -184,8 +174,8 @@ describe('Jurisdiction CTA Leakage Prevention', () => {
         tags: ['Rent Arrears', 'Section 8'],
       });
 
-      // Should have Section 8 template (via section-8 tag)
-      expect(ctas.some((c) => c.href === '/section-8-notice-template')).toBe(true);
+      expect(ctas.some((c) => c.href === '/tenant-not-paying-rent')).toBe(true);
+      expect(ctas.some((c) => c.href === '/section-8-notice')).toBe(true);
     });
 
     it('section-21-vs-section-8 should include both Section 21 and Section 8 CTAs', () => {
@@ -194,11 +184,8 @@ describe('Jurisdiction CTA Leakage Prevention', () => {
         tags: ['Section 21', 'Section 8', 'Eviction'],
       });
 
-      // Should have Section 21 template
-      expect(ctas.some((c) => c.href === '/section-21-notice-template')).toBe(true);
-
-      // Should have Section 8 template
-      expect(ctas.some((c) => c.href === '/section-8-notice-template')).toBe(true);
+      expect(ctas.some((c) => c.href === '/section-21-ban-uk')).toBe(true);
+      expect(ctas.some((c) => c.href === '/section-8-notice')).toBe(true);
     });
   });
 
@@ -253,7 +240,7 @@ describe('Jurisdiction CTA Leakage Prevention', () => {
       const ctas = getNextStepsCTAs({ slug: 'scotland-eviction-ground-12' });
 
       expect(hasEnglandOnlyCTAs(ctas)).toBe(false);
-      expect(ctas.some((c) => c.href === '/section-8-notice-template')).toBe(false);
+      expect(ctas.some((c) => c.href === '/section-8-notice')).toBe(false);
     });
 
     it('explicit section-8 tag should NOT add S8 CTAs to Scotland post', () => {
@@ -264,13 +251,14 @@ describe('Jurisdiction CTA Leakage Prevention', () => {
       });
 
       // Scotland slug should gate out Section 8 CTAs
-      expect(ctas.some((c) => c.href === '/section-8-notice-template')).toBe(false);
+      expect(ctas.some((c) => c.href === '/section-8-notice')).toBe(false);
     });
 
     it('slug with "no-fault" should NOT trigger Section 21 for Wales', () => {
       const ctas = getNextStepsCTAs({ slug: 'wales-no-fault-eviction-guide' });
 
-      expect(ctas.some((c) => c.href === '/section-21-notice-template')).toBe(false);
+      expect(ctas.some((c) => c.href === '/section-21-ban-uk')).toBe(false);
+      expect(ctas.some((c) => c.href === '/section-21-notice')).toBe(false);
     });
   });
 });

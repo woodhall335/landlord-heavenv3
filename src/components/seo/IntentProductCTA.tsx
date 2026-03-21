@@ -1,16 +1,15 @@
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
-import type { WizardSource, WizardTopic } from '@/lib/wizard/buildWizardLink';
 
 export type IntentProduct = 'notice_only' | 'money_claim' | 'complete_pack' | 'ast';
-export type IntentSource = WizardSource;
+export type IntentSource = string;
+export type IntentTopic = string;
 
 interface IntentProductCTAProps {
   intent: {
     product: IntentProduct;
     src: IntentSource;
-    topic?: WizardTopic;
+    topic?: IntentTopic;
   };
   label: string;
   className?: string;
@@ -24,40 +23,20 @@ const PRODUCT_FALLBACK_HREF: Record<IntentProduct, string> = {
   ast: '/products/ast',
 };
 
-const WIZARD_PRODUCT_MAP: Record<IntentProduct, 'notice_only' | 'money_claim' | 'complete_pack' | 'ast_standard'> = {
-  notice_only: 'notice_only',
-  money_claim: 'money_claim',
-  complete_pack: 'complete_pack',
-  ast: 'ast_standard',
-};
-
-const WIZARD_TOPIC_MAP: Record<IntentProduct, 'eviction' | 'money_claim' | 'tenancy'> = {
-  notice_only: 'eviction',
-  money_claim: 'money_claim',
-  complete_pack: 'eviction',
-  ast: 'tenancy',
-};
-
-const WIZARD_AVAILABLE: Record<IntentProduct, boolean> = {
-  notice_only: true,
-  money_claim: true,
-  complete_pack: true,
-  ast: true,
-};
-
-export function getIntentProductHref(intent: { product: IntentProduct; src: IntentSource; topic?: WizardTopic }): string {
-  if (WIZARD_AVAILABLE[intent.product]) {
-    return buildWizardLink({
-      product: WIZARD_PRODUCT_MAP[intent.product],
-      src: intent.src,
-      topic: intent.topic ?? WIZARD_TOPIC_MAP[intent.product],
-    });
-  }
-
+export function getIntentProductHref(intent: {
+  product: IntentProduct;
+  src: IntentSource;
+  topic?: IntentTopic;
+}): string {
   return PRODUCT_FALLBACK_HREF[intent.product];
 }
 
-export function IntentProductCTA({ intent, label, className, showArrow = true }: IntentProductCTAProps) {
+export function IntentProductCTA({
+  intent,
+  label,
+  className,
+  showArrow = true,
+}: IntentProductCTAProps) {
   return (
     <Link href={getIntentProductHref(intent)} className={className}>
       {label}
@@ -84,12 +63,12 @@ export function RelatedProductsModule({ products }: RelatedProductsModuleProps) 
     },
     complete_pack: {
       title: 'Complete Pack',
-      description: 'End-to-end eviction bundle with notice + possession claim documents.',
+      description: 'End-to-end eviction bundle with notice and possession claim documents.',
       href: PRODUCT_FALLBACK_HREF.complete_pack,
     },
     ast: {
       title: 'AST Tenancy Agreement',
-      description: 'Build compliant tenancy agreements for England, Wales, and Scotland.',
+      description: 'Build compliant tenancy agreements for England, Wales, Scotland, and Northern Ireland.',
       href: PRODUCT_FALLBACK_HREF.ast,
     },
   };
@@ -109,7 +88,7 @@ export function RelatedProductsModule({ products }: RelatedProductsModuleProps) 
               >
                 <h3 className="font-semibold text-gray-900 mb-2">{productMeta[product].title}</h3>
                 <p className="text-sm text-gray-600 mb-3">{productMeta[product].description}</p>
-                <span className="text-primary font-medium text-sm">View product →</span>
+                <span className="text-primary font-medium text-sm">View product -&gt;</span>
               </Link>
             ))}
           </div>

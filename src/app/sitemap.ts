@@ -23,6 +23,7 @@ import { getValidTopicHubs } from '@/lib/blog/topic-hubs';
 import { getBlogSeoConfig } from '@/lib/blog/seo';
 import { discoverStaticPageRoutes } from '@/lib/seo/static-route-inventory';
 import { getResidentialLandingSlugs } from '@/lib/seo/residential-product-landing-content';
+import { getPhase3SitemapExclusions } from '@/lib/seo/page-taxonomy';
 import sitemapAllowlist from '../../scripts/seo-sitemap-allowlist.json';
 
 // Force this metadata route to run dynamically (avoids static render + fetch cache issues).
@@ -35,6 +36,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Use a stable date for pages that don't change frequently
   // Update this quarterly when making significant site-wide changes
   const STABLE_PRODUCT_DATE = new Date('2026-01-01');
+  const phase3SitemapExclusions = new Set(getPhase3SitemapExclusions());
 
   // Explicit legacy routes that have been retired and should never reappear in sitemap.
   // These have previously generated 404 coverage issues in Google Search Console.
@@ -44,6 +46,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/tools/validators/tenancy-agreement',
     '/tenancy-agreements/premium',
     '/$',
+    ...phase3SitemapExclusions,
   ]);
 
   // Core marketing pages - dynamic pages get stable date, legal pages omit lastModified
@@ -93,6 +96,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/section-8-notice-guide', priority: 0.95, changeFrequency: 'weekly' as const },
     { path: '/rent-arrears-landlord-guide', priority: 0.95, changeFrequency: 'weekly' as const },
     { path: '/eviction-process-england', priority: 0.95, changeFrequency: 'weekly' as const },
+    { path: '/eviction-process-uk', priority: 0.95, changeFrequency: 'weekly' as const },
+    { path: '/section-8-notice', priority: 0.95, changeFrequency: 'weekly' as const },
+    { path: '/section-21-notice', priority: 0.95, changeFrequency: 'weekly' as const },
+    { path: '/section-21-ban-uk', priority: 0.95, changeFrequency: 'weekly' as const },
     { path: '/section-21-notice-template', priority: 0.9, changeFrequency: 'weekly' as const },
     { path: '/eviction-notice-template', priority: 0.9, changeFrequency: 'weekly' as const },
     { path: '/section-8-notice-template', priority: 0.8, changeFrequency: 'weekly' as const },
@@ -109,6 +116,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/wales-eviction-notices', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/scotland-eviction-notices', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/section-21-ban', priority: 0.85, changeFrequency: 'weekly' as const },
+    { path: '/section-21-ban-uk', priority: 0.9, changeFrequency: 'weekly' as const },
+    { path: '/section-21-notice', priority: 0.88, changeFrequency: 'weekly' as const },
+    { path: '/section-8-notice', priority: 0.9, changeFrequency: 'weekly' as const },
+    { path: '/eviction-process-uk', priority: 0.9, changeFrequency: 'weekly' as const },
     // Q2 2026 SEO pages
     { path: '/n5b-form-guide', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/warrant-of-possession', priority: 0.8, changeFrequency: 'weekly' as const },

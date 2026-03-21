@@ -1,10 +1,11 @@
 import type { BlogPost } from './types';
+import { SEO_PRODUCT_ROUTES } from '@/lib/seo/page-taxonomy';
 
 export const BLOG_PRODUCT_ROUTES = {
-  noticeOnly: '/products/notice-only',
-  completePack: '/products/complete-pack',
-  moneyClaim: '/products/money-claim',
-  ast: '/products/ast',
+  noticeOnly: SEO_PRODUCT_ROUTES.noticeOnly,
+  completePack: SEO_PRODUCT_ROUTES.completePack,
+  moneyClaim: SEO_PRODUCT_ROUTES.moneyClaim,
+  ast: SEO_PRODUCT_ROUTES.ast,
 } as const;
 
 type ProductHref = (typeof BLOG_PRODUCT_ROUTES)[keyof typeof BLOG_PRODUCT_ROUTES];
