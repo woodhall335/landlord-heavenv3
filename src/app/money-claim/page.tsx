@@ -285,7 +285,7 @@ export default function MoneyClaimPage() {
                 route-specific detail (MCOL process, unpaid rent depth guide, protocol requirements, and arrears tools).
               </p>
               <div className="mt-5 flex flex-wrap gap-3">
-                <Link href={wizardHref} className="hero-btn-primary">Start money claim workflow</Link>
+                <Link href={productHref} className="hero-btn-primary">Start money claim workflow</Link>
                 <Link href="/products/complete-pack" className="hero-btn-secondary">Tenant still in property? See complete eviction pack</Link>
               </div>
             </section>
