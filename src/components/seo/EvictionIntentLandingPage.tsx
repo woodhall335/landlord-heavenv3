@@ -9,7 +9,6 @@ import { FAQSection } from '@/components/seo/FAQSection';
 import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import type { IntentPageConfig } from '@/lib/seo/eviction-intent-pages';
-import { getWizardHref } from '@/lib/seo/eviction-intent-pages';
 import {
   getPrimaryDestinationAboveFold,
   getSeoPageTaxonomyBySlug,
@@ -133,17 +132,17 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
     : null;
   const primaryHref = taxonomyEntry
     ? getPrimaryDestinationAboveFold(taxonomyEntry)
-    : getWizardHref(config);
+    : configPrimaryProductRoute;
   const heroSecondaryHref = taxonomyEntry
     ? config.secondaryCta && taxonomyEntry.secondaryProduct
       ? taxonomyEntry.secondaryProduct
       : null
     : config.secondaryCta
-      ? getWizardHref(config, config.secondaryCta.product, config.secondaryCta.src)
+      ? configSecondaryProductRoute
       : null;
   const secondaryActionHref = taxonomyEntry
     ? heroSecondaryHref
-    : heroSecondaryHref ?? getWizardHref(config, 'complete_pack', `${config.primarySrc}_complete`);
+    : heroSecondaryHref ?? '/products/complete-pack';
   const pageType = taxonomyEntry?.pageType ?? 'problem';
   const jurisdiction = taxonomyEntry?.jurisdiction ?? 'england';
   const primaryProductRoute = taxonomyEntry?.primaryProduct
@@ -162,7 +161,7 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
     : null;
   const secondaryActionLabel = taxonomyEntry
     ? heroSecondaryLabel
-    : config.secondaryCta?.label ?? 'Start your complete eviction pack';
+    : config.secondaryCta?.label ?? getProductCtaLabel(secondaryActionHref);
   const canonical = `https://landlordheaven.co.uk/${config.slug}`;
   const lastUpdated = config.lastUpdated ?? DEFAULT_UPDATED;
 

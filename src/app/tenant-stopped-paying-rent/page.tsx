@@ -5,6 +5,7 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { Container } from '@/components/ui/Container';
 import { FAQSection, type FAQItem } from '@/components/seo/FAQSection';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import {
   StructuredData,
@@ -186,8 +187,6 @@ export default function Page() {
         ])}
       />
 
-      <StructuredData data={faqPageSchema(faqs)} />
-
       <UniversalHero
         title="Tenant Stopped Paying Rent"
         subtitle="A practical landlord playbook for arrears evidence, route selection, and possession planning without avoidable resets."
@@ -232,6 +231,7 @@ export default function Page() {
       <section className="bg-white py-12">
         <Container>
           <div className="mx-auto max-w-5xl space-y-10">
+            <SeoPageContextPanel pathname="/tenant-stopped-paying-rent" />
             <Card id="quick-answer" title="Quick Answer">
               <p className="mt-4 leading-7 text-gray-700">
                 When a tenant stops paying rent, landlords usually do best by treating the
@@ -271,6 +271,22 @@ export default function Page() {
                 main planning reference. Court backlogs are outside your control, but
                 notice validity, service quality, chronology control, and arrears schedule
                 accuracy are not.
+              </p>
+
+              <p className="mt-4 leading-7 text-gray-700">
+                To keep the file structured, start with{' '}
+                <Link href="/tenant-not-paying-rent" className="font-medium text-primary hover:underline">
+                  tenant not paying rent
+                </Link>{' '}
+                as the main arrears pillar, move into the{' '}
+                <Link href="/section-8-notice" className="font-medium text-primary hover:underline">
+                  Section 8 notice guide
+                </Link>{' '}
+                when the notice route is becoming clearer, and use{' '}
+                <Link href="/products/notice-only" className="font-medium text-primary hover:underline">
+                  Notice Only
+                </Link>{' '}
+                if the next practical step is generating the first arrears notice cleanly.
               </p>
             </Card>
 

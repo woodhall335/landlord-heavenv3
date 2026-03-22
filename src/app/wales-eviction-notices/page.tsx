@@ -4,6 +4,7 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { NextLegalSteps } from '@/components/seo/NextLegalSteps';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { AskHeavenWidget } from '@/components/ask-heaven/AskHeavenWidget';
 import { getCanonicalUrl } from '@/lib/seo/urls';
 import {
@@ -11,7 +12,6 @@ import {
   breadcrumbSchema,
   articleSchema,
 } from '@/lib/seo/structured-data';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { productLinks, askHeavenLink } from '@/lib/seo/internal-links';
 import { PRODUCTS } from '@/lib/pricing/products';
 import { walesEvictionFAQs } from '@/data/faqs';
@@ -29,28 +29,9 @@ import {
 
 const canonicalUrl = getCanonicalUrl('/wales-eviction-notices');
 
-const wizardHref = buildWizardLink({
-  product: 'notice_only',
-  topic: 'eviction',
-  jurisdiction: 'wales',
-  src: 'seo_wales_eviction_notices',
-});
-
-const noticeOnlyPrice = PRODUCTS.notice_only?.displayPrice ?? '£29.99';
-const completePackPrice = PRODUCTS.complete_pack?.displayPrice ?? '£79.99';
-
-const faqSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: walesEvictionFAQs.map((faq) => ({
-    '@type': 'Question',
-    name: faq.question,
-    acceptedAnswer: {
-      '@type': 'Answer',
-      text: faq.answer,
-    },
-  })),
-};
+const noticeOnlyHref = '/products/notice-only';
+const noticeOnlyPrice = PRODUCTS.notice_only?.displayPrice ?? 'ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£29.99';
+const completePackPrice = PRODUCTS.complete_pack?.displayPrice ?? 'ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£79.99';
 
 export const metadata: Metadata = {
   title: 'Wales Eviction Notices | Landlord Guide to Possession Routes',
@@ -110,15 +91,13 @@ export default function WalesEvictionNoticesPage() {
           { name: 'Wales Eviction Notices', url: canonicalUrl },
         ])}
       />
-      <StructuredData data={faqSchema} />
-
       <main className="min-h-screen bg-gray-50">
         <HeaderConfig mode="autoOnScroll" />
 
         <UniversalHero
           title="Wales Eviction Notices"
           subtitle="Use this Wales landlord guide to understand occupation contract possession routes, contract-holder terminology, Welsh notice logic, and the right next step before court action."
-          primaryCta={{ label: 'Start Wales Notice', href: wizardHref }}
+          primaryCta={{ label: 'Start Wales Notice', href: noticeOnlyHref }}
           secondaryCta={{
             label: 'Wales Occupation Contracts',
             href: '/wales-tenancy-agreement-template',
@@ -166,7 +145,29 @@ export default function WalesEvictionNoticesPage() {
                   The practical point is simple: if the property is in Wales, you should start
                   with Welsh possession logic, not retrofit an England process later.
                 </p>
+                <p className="leading-7">
+                  Use{' '}
+                  <Link href="/how-to-evict-tenant" className="font-medium text-primary hover:underline">
+                    how to evict a tenant
+                  </Link>{' '}
+                  for the main UK landlord workflow, compare stages in the{' '}
+                  <Link href="/eviction-process-uk" className="font-medium text-primary hover:underline">
+                    eviction process UK guide
+                  </Link>, and move into{' '}
+                  <Link href="/products/notice-only" className="font-medium text-primary hover:underline">
+                    Notice Only
+                  </Link>{' '}
+                  when you need the Welsh notice drafted correctly before court strategy is set.
+                </p>
               </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="bg-white py-8">
+          <div className="container mx-auto px-4">
+            <div className="mx-auto max-w-5xl">
+              <SeoPageContextPanel pathname="/wales-eviction-notices" />
             </div>
           </div>
         </section>
@@ -175,7 +176,7 @@ export default function WalesEvictionNoticesPage() {
           <div className="container mx-auto px-4">
             <div className="mx-auto max-w-4xl text-center">
               <div className="mb-6 flex items-center justify-center gap-2">
-                <span className="text-5xl">🏴</span>
+                <span className="text-5xl">ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸Ãƒâ€šÃ‚ÂÃƒâ€šÃ‚Â´</span>
               </div>
 
               <h2 className="mb-6 text-4xl font-bold lg:text-5xl">
@@ -201,10 +202,10 @@ export default function WalesEvictionNoticesPage() {
 
               <div className="flex flex-col justify-center gap-4 sm:flex-row">
                 <Link
-                  href={wizardHref}
+                  href={noticeOnlyHref}
                   className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-8 py-4 font-semibold text-red-800 transition-colors hover:bg-red-50"
                 >
-                  Get Wales Notice — {noticeOnlyPrice}
+                  Get Wales Notice - {noticeOnlyPrice}
                   <ArrowRight className="h-5 w-5" />
                 </Link>
                 <Link
@@ -236,7 +237,7 @@ export default function WalesEvictionNoticesPage() {
                   clear that the agreement framework is based on <strong>occupation contracts</strong>,
                   not ASTs. Second, it should talk about <strong>contract-holders</strong> where
                   that is the proper Welsh term, while still capturing the search intent of users
-                  who type “evict tenant Wales” into Google. Third, it should explain that Wales
+                  who type ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“evict tenant WalesÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â into Google. Third, it should explain that Wales
                   possession routes and notice logic sit inside the Renting Homes framework rather
                   than being treated as England notices with a Welsh flag added on top.
                 </p>
@@ -263,8 +264,8 @@ export default function WalesEvictionNoticesPage() {
                   <thead className="border-b bg-gray-50">
                     <tr>
                       <th className="px-6 py-4 text-left font-semibold text-gray-900">Aspect</th>
-                      <th className="px-6 py-4 text-left font-semibold text-gray-900">🏴 Wales</th>
-                      <th className="px-6 py-4 text-left font-semibold text-gray-900">🏴 England</th>
+                      <th className="px-6 py-4 text-left font-semibold text-gray-900">ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸Ãƒâ€šÃ‚ÂÃƒâ€šÃ‚Â´ Wales</th>
+                      <th className="px-6 py-4 text-left font-semibold text-gray-900">ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸Ãƒâ€šÃ‚ÂÃƒâ€šÃ‚Â´ England</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
@@ -322,7 +323,7 @@ export default function WalesEvictionNoticesPage() {
                 <p className="leading-7 text-amber-900">
                   <strong>Commercial takeaway:</strong> a Wales possession page should feel
                   unmistakably Welsh in both terminology and route logic. That is what helps
-                  it compete against weaker “UK eviction” pages that blur the jurisdictions.
+                  it compete against weaker ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“UK evictionÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â pages that blur the jurisdictions.
                 </p>
               </div>
             </div>
@@ -340,12 +341,12 @@ export default function WalesEvictionNoticesPage() {
                 <p className="leading-7">
                   Under the Renting Homes framework, the contractual starting point matters. A
                   possession page is stronger when it explains not just that Wales uses different
-                  wording, but why that wording affects the landlord’s next step. If the landlord
+                  wording, but why that wording affects the landlordÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢s next step. If the landlord
                   starts with the wrong mental model, the possession process is more likely to go
                   wrong before the notice is even served.
                 </p>
                 <p className="leading-7">
-                  That is why this page should not sound like a general “how to evict a tenant”
+                  That is why this page should not sound like a general ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“how to evict a tenantÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â
                   blog post. It should sound like a Wales possession route guide. The user needs
                   to understand what kind of occupation arrangement they are dealing with, what
                   notice logic may apply, and whether the case is really about standard
@@ -429,7 +430,7 @@ export default function WalesEvictionNoticesPage() {
                 </p>
                 <p className="leading-7">
                   That may sound obvious, but it is exactly where weaker pages fail. They jump
-                  from “serve notice” to “go to court” without helping the landlord understand
+                  from ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“serve noticeÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â to ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“go to courtÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â without helping the landlord understand
                   what the notice is supposed to do, what evidence may matter, or how Wales
                   terminology changes the analysis.
                 </p>
@@ -523,7 +524,7 @@ export default function WalesEvictionNoticesPage() {
                       What this page should not encourage
                     </h3>
                     <p className="mt-2 leading-7 text-red-900/90">
-                      It should never sound like a landlord can just “tell the tenant to go” and
+                      It should never sound like a landlord can just ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“tell the tenant to goÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â and
                       treat the matter as finished. Wales possession is still a legal process, and
                       landlords should not change locks, intimidate occupiers, or attempt
                       self-help removal.
@@ -544,8 +545,8 @@ export default function WalesEvictionNoticesPage() {
                 <p className="text-sm text-amber-900">
                   <strong>Important:</strong> Wales notice timing and route detail should be
                   checked carefully against the current Welsh position. This page should guide
-                  route choice, but landlords should not rely on a simplistic “one notice period
-                  fits all” assumption.
+                  route choice, but landlords should not rely on a simplistic ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“one notice period
+                  fits allÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â assumption.
                 </p>
               </div>
 
@@ -646,7 +647,7 @@ export default function WalesEvictionNoticesPage() {
                     href="/how-to-evict-tenant"
                     className="mt-3 inline-flex text-sm font-medium text-primary hover:underline"
                   >
-                    See UK eviction guide →
+                    See UK eviction guide ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢
                   </Link>
                 </div>
               </div>
@@ -676,13 +677,13 @@ export default function WalesEvictionNoticesPage() {
                   href={productLinks.noticeOnly.href}
                   className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-8 py-4 font-semibold text-red-700 transition-colors hover:bg-red-50"
                 >
-                  Get Wales Notice — {noticeOnlyPrice}
+                  Get Wales Notice ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â {noticeOnlyPrice}
                 </Link>
                 <Link
                   href={productLinks.completePack.href}
                   className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/30 bg-white/10 px-8 py-4 font-semibold text-white transition-colors hover:bg-white/20"
                 >
-                  Complete Pack — {completePackPrice}
+                  Complete Pack ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â {completePackPrice}
                 </Link>
               </div>
             </div>
@@ -712,11 +713,11 @@ export default function WalesEvictionNoticesPage() {
                 jurisdictionLabel="Wales eviction notices"
                 scenarioLabel="Renting Homes Act possession"
                 primaryCTA={{
-                  label: `Generate Wales notice — ${noticeOnlyPrice}`,
+                  label: `Generate Wales notice ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ${noticeOnlyPrice}`,
                   href: productLinks.noticeOnly.href,
                 }}
                 secondaryCTA={{
-                  label: `Complete eviction pack — ${completePackPrice}`,
+                  label: `Complete eviction pack ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ${completePackPrice}`,
                   href: productLinks.completePack.href,
                 }}
                 relatedLinks={[

@@ -4,10 +4,14 @@ import { Container } from '@/components/ui/Container';
 import { getCanonicalUrl } from '@/lib/seo';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { form3Section8FAQs } from '@/data/faqs';
 import { FunnelCta, CrossSellBar } from '@/components/funnels';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
+
+const noticeOnlyHref = '/products/notice-only';
 
 export const metadata: Metadata = {
   title: 'Form 3 Section 8 Notice | Download & Guide 2026',
@@ -43,6 +47,12 @@ const breadcrumbs = [
 export default function Form3Section8Page() {
   return (
     <>
+      <SeoLandingWrapper
+        pagePath="/form-3-section-8"
+        pageTitle={metadata.title as string}
+        pageType="guide"
+        jurisdiction="england"
+      />
       <HeaderConfig mode="autoOnScroll" />
       <StructuredData data={breadcrumbSchema(breadcrumbs)} />
 
@@ -50,7 +60,7 @@ export default function Form3Section8Page() {
         <UniversalHero
           title="Form 3 Section 8 Notice for England"
           subtitle="Generate a legally validated, solicitor-grade, compliance-checked and court-ready Section 8 Form 3 workflow."
-          primaryCta={{ label: 'Start Section 8 Wizard', href: '/wizard?product=notice_only&src=seo_form_3_section_8&topic=eviction' }}
+          primaryCta={{ label: 'Start Section 8 Notice', href: noticeOnlyHref }}
           showTrustPositioningBar
           hideMedia
         />
@@ -74,10 +84,28 @@ export default function Form3Section8Page() {
 
         <Container>
           <div className="-mt-8 mb-10">
+            <div className="mb-6 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+              <SeoPageContextPanel pathname="/form-3-section-8" />
+              <p className="mt-4 text-gray-700 leading-7">
+                The cleanest Section 8 starts usually begin by reviewing the{' '}
+                <Link href="/section-8-notice" className="font-medium text-primary hover:underline">
+                  Section 8 notice guide
+                </Link>
+                , follow the court sequencing in the{' '}
+                <Link href="/section-8-eviction-process" className="font-medium text-primary hover:underline">
+                  Section 8 eviction process
+                </Link>
+                , and begin from the{' '}
+                <Link href="/products/notice-only" className="font-medium text-primary hover:underline">
+                  Notice Only product page
+                </Link>{' '}
+                when the immediate need is getting Form 3 right.
+              </p>
+            </div>
             <FunnelCta
               title="Serve Form 3 correctly from the start"
               subtitle="Use Notice Only for compliant drafting/serving, or upgrade to full eviction support."
-              primaryHref="/wizard?product=notice_only&src=seo_form_3_section_8&topic=eviction"
+              primaryHref={noticeOnlyHref}
               primaryText="Start Notice Only"
               primaryDataCta="notice-only"
               location="above-fold"

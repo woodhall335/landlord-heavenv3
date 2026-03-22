@@ -3,8 +3,8 @@ import Link from 'next/link';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { n5bFormRelatedLinks } from '@/lib/seo/internal-links';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
@@ -21,12 +21,7 @@ import {
 } from 'lucide-react';
 import { PRODUCTS } from '@/lib/pricing/products';
 
-const wizardLinkCompletePack = buildWizardLink({
-  product: 'complete_pack',
-  jurisdiction: 'england',
-  src: 'seo_n5b_form_guide',
-  topic: 'eviction',
-});
+const completePackHref = '/products/complete-pack';
 
 const faqs = [
   {
@@ -138,7 +133,7 @@ export default function N5BFormGuidePage() {
           subtitle="Use the accelerated possession route correctly after the notice stage. This guide explains when landlords use Form N5B, when they should not, and what the court stage usually looks like."
           primaryCta={{
             label: `Get Complete Pack — ${PRODUCTS.complete_pack.displayPrice}`,
-            href: wizardLinkCompletePack,
+            href: completePackHref,
           }}
           secondaryCta={{
             label: 'Need Section 21 First?',
@@ -161,6 +156,14 @@ export default function N5BFormGuidePage() {
             </span>
           </div>
         </UniversalHero>
+
+        <section className="bg-white py-8">
+          <div className="container mx-auto px-4">
+            <div className="max-w-5xl mx-auto">
+              <SeoPageContextPanel pathname="/n5b-form-guide" />
+            </div>
+          </div>
+        </section>
 
         <section className="py-6 bg-gray-50 border-y border-gray-100">
           <div className="container mx-auto px-4">
@@ -217,6 +220,22 @@ export default function N5BFormGuidePage() {
                   That is why this page should not just tell landlords that N5B is “faster.” The real
                   issue is whether the accelerated route is actually suitable for the case in front of
                   you.
+                </p>
+
+                <p>
+                  If you are mapping the route from notice expiry to court, use the{' '}
+                  <Link href="/section-21-ban-uk" className="font-medium text-primary hover:underline">
+                    Section 21 transition guide
+                  </Link>
+                  , compare it with the{' '}
+                  <Link href="/n5b-possession-claim-guide" className="font-medium text-primary hover:underline">
+                    N5B possession claim guide
+                  </Link>
+                  , and then move into the{' '}
+                  <Link href={completePackHref} className="font-medium text-primary hover:underline">
+                    Complete Eviction Pack
+                  </Link>{' '}
+                  when the file is ready for court.
                 </p>
               </div>
             </div>

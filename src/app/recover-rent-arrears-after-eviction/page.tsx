@@ -180,8 +180,6 @@ export default function Page() {
         ])}
       />
 
-      <StructuredData data={faqPageSchema(faqs)} />
-
       <UniversalHero
         title="Recover Rent Arrears After Eviction"
         subtitle="A practical landlord guide to what happens to the debt after possession is back and how to approach recovery with a cleaner file."

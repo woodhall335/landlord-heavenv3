@@ -4,7 +4,6 @@ import { EnglandTenancyPage } from '@/components/seo/EnglandTenancyPage';
 import {
   StructuredData,
   breadcrumbSchema,
-  faqPageSchema,
   articleSchema,
 } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
@@ -140,7 +139,6 @@ export default function TenancyAgreementTemplatePage() {
           dateModified: '2026-03-20',
         })}
       />
-      <StructuredData data={faqPageSchema(faqs)} />
       <StructuredData data={webPageSchema} />
 
       <EnglandTenancyPage

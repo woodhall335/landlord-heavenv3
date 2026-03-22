@@ -4,7 +4,6 @@ import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { occupationContractTemplateRelatedLinks } from '@/lib/seo/internal-links';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
@@ -30,19 +29,7 @@ const PAGE_PATH = '/occupation-contract-template-wales';
 const PAGE_TITLE = 'Occupation Contract Template Wales';
 const PAGE_TYPE = 'tenancy' as const;
 
-const wizardLinkStandard = buildWizardLink({
-  product: 'ast_standard',
-  jurisdiction: 'wales',
-  src: 'seo_occupation_contract_template_wales',
-  topic: 'tenancy',
-});
-
-const wizardLinkPremium = buildWizardLink({
-  product: 'ast_premium',
-  jurisdiction: 'wales',
-  src: 'seo_occupation_contract_template_wales',
-  topic: 'tenancy',
-});
+const astProductHref = '/products/ast';
 
 export const metadata: Metadata = {
   title: 'Occupation Contract Template Wales | Welsh Written Statement Template',
@@ -120,12 +107,12 @@ export default function OccupationContractTemplateWalesPage() {
             </>
           }
           primaryCta={{
-            label: `Create Your Template — ${PRODUCTS.ast_standard.displayPrice}`,
-            href: wizardLinkStandard,
+            label: `Create Your Template â€” ${PRODUCTS.ast_standard.displayPrice}`,
+            href: astProductHref,
           }}
           secondaryCta={{
             label: 'Premium Template with Extra Clauses',
-            href: wizardLinkPremium,
+            href: astProductHref,
           }}
         >
           {/* Trust Signals */}
@@ -573,7 +560,7 @@ export default function OccupationContractTemplateWalesPage() {
                     </li>
                   </ul>
                   <Link
-                    href={wizardLinkStandard}
+                    href={astProductHref}
                     className="block w-full text-center bg-primary text-white py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors"
                   >
                     Get Standard Template
@@ -619,7 +606,7 @@ export default function OccupationContractTemplateWalesPage() {
                     </li>
                   </ul>
                   <Link
-                    href={wizardLinkPremium}
+                    href={astProductHref}
                     className="block w-full text-center bg-primary text-white py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors"
                   >
                     Get Premium Template
@@ -653,7 +640,7 @@ export default function OccupationContractTemplateWalesPage() {
                   In Wales, the person renting is a &quot;contract-holder&quot; not a
                   &quot;tenant&quot;. The agreement is an &quot;occupation contract&quot; not a
                   &quot;tenancy agreement&quot;. The property is a &quot;dwelling&quot; not
-                  &quot;the premises&quot;. These are not just cosmetic changes — they reflect
+                  &quot;the premises&quot;. These are not just cosmetic changes â€” they reflect
                   different legal concepts under Welsh law.
                 </p>
 
@@ -668,7 +655,7 @@ export default function OccupationContractTemplateWalesPage() {
                 <p>
                   While English ASTs do not require a specific format, Welsh landlords must
                   provide a written statement within 14 days containing all fundamental and
-                  supplementary terms. This is not optional — failure to provide it blocks
+                  supplementary terms. This is not optional â€” failure to provide it blocks
                   Section 173 notices.
                 </p>
 

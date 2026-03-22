@@ -4,8 +4,9 @@ import { Container } from '@/components/ui/Container';
 import { getCanonicalUrl } from '@/lib/seo';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { eicrFAQs } from '@/data/faqs';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 
@@ -33,12 +34,7 @@ export const metadata: Metadata = {
   },
 };
 
-const noticeOnlyLink = buildWizardLink({
-  product: 'notice_only',
-  jurisdiction: 'england',
-  src: 'seo_eicr_landlord_requirements',
-  topic: 'eviction',
-});
+const noticeOnlyProductHref = '/products/notice-only';
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
@@ -48,6 +44,12 @@ const breadcrumbs = [
 export default function EICRPage() {
   return (
     <>
+      <SeoLandingWrapper
+        pagePath="/eicr-landlord-requirements"
+        pageTitle={metadata.title as string}
+        pageType="guide"
+        jurisdiction="england"
+      />
       <HeaderConfig mode="autoOnScroll" />
       <StructuredData data={breadcrumbSchema(breadcrumbs)} />
 
@@ -56,7 +58,8 @@ export default function EICRPage() {
           badge="Safety Compliance"
           title="EICR Landlord Requirements UK"
           subtitle="The Electrical Safety Standards regulations require landlords in England to have electrical installations inspected every 5 years. Non-compliance can result in fines up to £30,000."
-          primaryCta={{ label: "Create Section 21 Notice", href: noticeOnlyLink }}
+          primaryCta={{ label: 'Start Notice Only', href: noticeOnlyProductHref }}
+          secondaryCta={{ label: 'Read the Section 21 guide', href: '/section-21-notice' }}
         />
         {/* Hero Section */}
         <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-20">
@@ -72,6 +75,29 @@ export default function EICRPage() {
                 The Electrical Safety Standards regulations require landlords in England to have
                 electrical installations inspected every 5 years. Non-compliance can result in
                 fines up to £30,000.
+              </p>
+            </div>
+          </Container>
+        </section>
+
+        <section className="border-y border-gray-200 bg-white py-8">
+          <Container>
+            <div className="mx-auto max-w-4xl space-y-6">
+              <SeoPageContextPanel pathname="/eicr-landlord-requirements" />
+              <p className="text-gray-700">
+                Treat this as part of the wider{' '}
+                <Link href="/section-21-ban-uk" className="font-medium text-primary hover:underline">
+                  Section 21 transition guide
+                </Link>
+                , then review the core{' '}
+                <Link href="/section-21-notice" className="font-medium text-primary hover:underline">
+                  Section 21 notice route
+                </Link>{' '}
+                before using the{' '}
+                <Link href={noticeOnlyProductHref} className="font-medium text-primary hover:underline">
+                  notice only product
+                </Link>{' '}
+                to draft paperwork once your compliance file is ready.
               </p>
             </div>
           </Container>
@@ -221,7 +247,6 @@ export default function EICRPage() {
             {/* FAQ Section */}
             <div className="mb-12">
               <FAQSection
-          showTrustPositioningBar
                 faqs={eicrFAQs}
                 title="EICR Frequently Asked Questions"
                 showContactCTA={false}
@@ -238,7 +263,7 @@ export default function EICRPage() {
                 Make sure you&apos;ve got your EICR sorted, then generate your notice.
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Link href={noticeOnlyLink} className="hero-btn-primary">
+                <Link href={noticeOnlyProductHref} className="hero-btn-primary">
                   Create Section 21 Notice
                 </Link>
                 <Link href="/tools/validators/section-21" className="hero-btn-secondary">

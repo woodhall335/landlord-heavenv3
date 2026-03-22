@@ -15,7 +15,7 @@ import {
   Mail,
   CalendarClock,
 } from 'lucide-react';
-import { StructuredData, breadcrumbSchema, articleSchema, faqPageSchema } from '@/lib/seo/structured-data';
+import { StructuredData, breadcrumbSchema, articleSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 import { PRODUCTS } from '@/lib/pricing/products';
 import { Section21Countdown } from '@/components/ui/Section21Countdown';
@@ -161,8 +161,6 @@ export default async function EvictionNoticeTemplatePage() {
           { name: 'Eviction Notice Template', url: canonicalUrl },
         ])}
       />
-      <StructuredData data={faqPageSchema(pageFaqs)} />
-
       <HeaderConfig mode="autoOnScroll" />
 
       <main>

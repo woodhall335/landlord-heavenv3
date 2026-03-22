@@ -6,6 +6,7 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { Container } from '@/components/ui/Container';
 import { FAQSection, type FAQItem } from '@/components/seo/FAQSection';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import {
   StructuredData,
@@ -13,23 +14,9 @@ import {
   breadcrumbSchema,
   faqPageSchema,
 } from '@/lib/seo/structured-data';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
-
 const canonical = 'https://landlordheaven.co.uk/section-21-court-pack';
-
-const noticeOnlyWizardLink = buildWizardLink({
-  product: 'notice_only',
-  jurisdiction: 'england',
-  src: 'seo_section_21_court_pack',
-  topic: 'eviction',
-});
-
-const completePackWizardLink = buildWizardLink({
-  product: 'complete_pack',
-  jurisdiction: 'england',
-  src: 'seo_section_21_court_pack',
-  topic: 'eviction',
-});
+const noticeOnlyHref = '/products/notice-only';
+const completePackHref = '/products/complete-pack';
 
 export const metadata: Metadata = {
   title:
@@ -207,13 +194,11 @@ export default function Page() {
         ])}
       />
 
-      <StructuredData data={faqPageSchema(faqs)} />
-
       <UniversalHero
         title="Section 21 Court Pack"
         subtitle="A practical landlord guide to what usually needs to be ready once the notice period has expired and the case is moving toward possession."
-        primaryCta={{ label: 'Start Complete Pack', href: completePackWizardLink }}
-        secondaryCta={{ label: 'Still at notice stage? Notice Only', href: noticeOnlyWizardLink }}
+        primaryCta={{ label: 'Start Complete Pack', href: completePackHref }}
+        secondaryCta={{ label: 'Still at notice stage? Notice Only', href: noticeOnlyHref }}
         mediaSrc="/images/wizard-icons/07-review-finish.png"
         mediaAlt="Section 21 court pack guide icon"
         showReviewPill
@@ -253,6 +238,10 @@ export default function Page() {
       <section className="bg-white py-12">
         <Container>
           <div className="mx-auto max-w-5xl space-y-10">
+            <SeoPageContextPanel
+              pathname="/section-21-court-pack"
+              className="border border-[#E6DBFF] bg-[#FBF8FF]"
+            />
             <Card id="quick-answer" title="Quick Answer">
               <p className="mt-4 leading-7 text-gray-700">
                 A Section 21 court pack is the set of documents a landlord usually needs once
@@ -280,6 +269,21 @@ export default function Page() {
                 In practical terms, the best Section 21 court packs usually come from landlords
                 who use the notice period to audit the whole file, organise the supporting
                 records, and remove uncertainty before the case is pushed into the court stage.
+              </p>
+              <p className="mt-4 leading-7 text-gray-700">
+                The cleanest handover usually comes from landlords who review the{' '}
+                <Link href="/section-21-ban-uk" className="font-medium text-primary hover:underline">
+                  Section 21 transition guide
+                </Link>
+                , map the court handoff against{' '}
+                <Link href="/section-21-expired-what-next" className="font-medium text-primary hover:underline">
+                  what happens after a Section 21 expires
+                </Link>
+                , and move onto the{' '}
+                <Link href="/products/complete-pack" className="font-medium text-primary hover:underline">
+                  Complete Pack product page
+                </Link>{' '}
+                once the notice stage is already behind them.
               </p>
             </Card>
 
@@ -426,9 +430,9 @@ export default function Page() {
             <CtaBand
               title="Already past the notice stage and now trying to control the wider court file?"
               body="Complete Pack is usually the stronger fit where the Section 21 notice has already been served and the file now needs broader route control, court-stage preparation, or continuity through possession. Notice Only is usually better where the main need is still the earlier notice stage itself."
-              primaryHref={completePackWizardLink}
+              primaryHref={completePackHref}
               primaryLabel="Start Complete Pack"
-              secondaryHref={noticeOnlyWizardLink}
+              secondaryHref={noticeOnlyHref}
               secondaryLabel="Still at notice stage? Notice Only"
             />
 
@@ -641,17 +645,17 @@ export default function Page() {
               is usually the wrong move.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
-              <Link
-                href={completePackWizardLink}
-                className="rounded-lg bg-primary px-5 py-3 text-white hover:opacity-95"
-              >
-                Start Complete Pack
-              </Link>
-              <Link
-                href={noticeOnlyWizardLink}
-                className="rounded-lg border border-[#E6DBFF] bg-white px-5 py-3 text-primary hover:bg-[#FCFAFF]"
-              >
-                Still at notice stage? Notice Only
+                <Link
+                  href={completePackHref}
+                  className="rounded-lg bg-primary px-5 py-3 text-white hover:opacity-95"
+                >
+                  Start Complete Pack
+                </Link>
+                <Link
+                  href={noticeOnlyHref}
+                  className="rounded-lg border border-[#E6DBFF] bg-white px-5 py-3 text-primary hover:bg-[#FCFAFF]"
+                >
+                  Still at notice stage? Notice Only
               </Link>
             </div>
           </div>

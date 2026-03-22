@@ -180,8 +180,6 @@ export default function Page() {
         ])}
       />
 
-      <StructuredData data={faqPageSchema(faqs)} />
-
       <UniversalHero
         title="Evict Tenant Not Paying Rent"
         subtitle="A landlord guide to rent arrears action, route choice, and possession planning without avoidable resets."

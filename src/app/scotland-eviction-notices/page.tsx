@@ -10,10 +10,10 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { NextLegalSteps } from '@/components/seo/NextLegalSteps';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { AskHeavenWidget } from '@/components/ask-heaven/AskHeavenWidget';
 import { productLinks, askHeavenLink } from '@/lib/seo/internal-links';
 import { scotlandEvictionFAQs } from '@/data/faqs';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { PRODUCTS } from '@/lib/pricing/products';
 import {
   AlertTriangle,
@@ -30,15 +30,9 @@ import {
 
 const canonicalUrl = getCanonicalUrl('/scotland-eviction-notices');
 
-const wizardHref = buildWizardLink({
-  product: 'notice_only',
-  topic: 'eviction',
-  jurisdiction: 'scotland',
-  src: 'seo_scotland_eviction_notices',
-});
-
-const noticeOnlyPrice = PRODUCTS.notice_only?.displayPrice ?? '£29.99';
-const completePackPrice = PRODUCTS.complete_pack?.displayPrice ?? '£79.99';
+const noticeOnlyHref = '/products/notice-only';
+const noticeOnlyPrice = PRODUCTS.notice_only?.displayPrice ?? 'ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£29.99';
+const completePackPrice = PRODUCTS.complete_pack?.displayPrice ?? 'ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£79.99';
 
 const evictionGrounds = [
   { ground: '1', description: 'Landlord intends to sell', notice: 'Usually 84 days', type: 'Mandatory' },
@@ -49,7 +43,7 @@ const evictionGrounds = [
   { ground: '6', description: 'Landlord intends religious use', notice: 'Usually 84 days', type: 'Discretionary' },
   { ground: '7', description: 'Property required for employee', notice: 'Usually 84 days', type: 'Discretionary' },
   { ground: '8', description: 'Supported accommodation no longer required', notice: 'Usually 84 days', type: 'Discretionary' },
-  { ground: '9', description: 'Property not tenant’s only or principal home', notice: 'Usually 28 days', type: 'Discretionary' },
+  { ground: '9', description: 'Property not tenantÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢s only or principal home', notice: 'Usually 28 days', type: 'Discretionary' },
   { ground: '10', description: 'Purpose-built student accommodation required', notice: 'Usually 28 days', type: 'Mandatory' },
   { ground: '11', description: 'Breach of tenancy agreement', notice: 'Usually 28 days', type: 'Discretionary' },
   { ground: '12', description: 'Three or more consecutive months of rent arrears', notice: 'Usually 28 days', type: 'Mandatory' },
@@ -61,19 +55,6 @@ const evictionGrounds = [
   { ground: '17', description: 'HMO licence revoked', notice: 'Usually 84 days', type: 'Mandatory' },
   { ground: '18', description: 'Overcrowding statutory notice', notice: 'Usually 28 days', type: 'Mandatory' },
 ];
-
-const faqSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: scotlandEvictionFAQs.map((faq) => ({
-    '@type': 'Question',
-    name: faq.question,
-    acceptedAnswer: {
-      '@type': 'Answer',
-      text: faq.answer,
-    },
-  })),
-};
 
 export const metadata: Metadata = {
   title: 'Scotland Eviction Notices | Notice to Leave & PRT Landlord Guide',
@@ -133,15 +114,13 @@ export default function ScotlandEvictionNoticesPage() {
           { name: 'Scotland Eviction Notices', url: canonicalUrl },
         ])}
       />
-      <StructuredData data={faqSchema} />
-
       <main className="min-h-screen bg-gray-50">
         <HeaderConfig mode="autoOnScroll" />
 
         <UniversalHero
           title="Scotland Eviction Notices"
           subtitle="Use this Scotland landlord guide to understand Notice to Leave rules, Private Residential Tenancy possession grounds, tribunal routing, and the mistakes that most often delay or weaken a Scottish eviction."
-          primaryCta={{ label: 'Start Scotland Notice', href: wizardHref }}
+          primaryCta={{ label: 'Start Scotland Notice', href: noticeOnlyHref }}
           secondaryCta={{
             label: 'Scotland PRT Agreements',
             href: '/private-residential-tenancy-agreement-template',
@@ -189,7 +168,29 @@ export default function ScotlandEvictionNoticesPage() {
                   landlords choose the right Scottish route early, avoid England carry-over
                   mistakes, and move into the correct document workflow before time is lost.
                 </p>
+                <p className="leading-7">
+                  Keep the wider hierarchy in view by starting with{' '}
+                  <Link href="/how-to-evict-tenant" className="font-medium text-primary hover:underline">
+                    how to evict a tenant
+                  </Link>, using the{' '}
+                  <Link href="/eviction-process-uk" className="font-medium text-primary hover:underline">
+                    eviction process UK guide
+                  </Link>{' '}
+                  for the broader stage map, and moving into{' '}
+                  <Link href="/products/notice-only" className="font-medium text-primary hover:underline">
+                    Notice Only
+                  </Link>{' '}
+                  when the immediate task is getting the Scotland notice route drafted correctly.
+                </p>
               </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="bg-white py-8">
+          <div className="container mx-auto px-4">
+            <div className="mx-auto max-w-5xl">
+              <SeoPageContextPanel pathname="/scotland-eviction-notices" />
             </div>
           </div>
         </section>
@@ -198,7 +199,7 @@ export default function ScotlandEvictionNoticesPage() {
           <div className="container mx-auto px-4">
             <div className="mx-auto max-w-4xl text-center">
               <div className="mb-6 flex items-center justify-center gap-2">
-                <span className="text-5xl">🏴</span>
+                <span className="text-5xl">ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸Ãƒâ€šÃ‚ÂÃƒâ€šÃ‚Â´</span>
               </div>
 
               <h2 className="mb-6 text-4xl font-bold lg:text-5xl">
@@ -225,10 +226,10 @@ export default function ScotlandEvictionNoticesPage() {
 
               <div className="flex flex-col justify-center gap-4 sm:flex-row">
                 <Link
-                  href={wizardHref}
+                  href={noticeOnlyHref}
                   className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-8 py-4 font-semibold text-blue-800 transition-colors hover:bg-blue-50"
                 >
-                  Get Scotland Notice — {noticeOnlyPrice}
+                  Get Scotland Notice - {noticeOnlyPrice}
                   <ArrowRight className="h-5 w-5" />
                 </Link>
                 <Link
@@ -291,8 +292,8 @@ export default function ScotlandEvictionNoticesPage() {
                   <thead className="border-b bg-gray-50">
                     <tr>
                       <th className="px-6 py-4 text-left font-semibold text-gray-900">Aspect</th>
-                      <th className="px-6 py-4 text-left font-semibold text-gray-900">🏴 Scotland</th>
-                      <th className="px-6 py-4 text-left font-semibold text-gray-900">🏴 England</th>
+                      <th className="px-6 py-4 text-left font-semibold text-gray-900">ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸Ãƒâ€šÃ‚ÂÃƒâ€šÃ‚Â´ Scotland</th>
+                      <th className="px-6 py-4 text-left font-semibold text-gray-900">ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸Ãƒâ€šÃ‚ÂÃƒâ€šÃ‚Â´ England</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
@@ -350,7 +351,7 @@ export default function ScotlandEvictionNoticesPage() {
                 <p className="leading-7 text-amber-900">
                   <strong>Commercial takeaway:</strong> the stronger Scotland page is the one
                   that sounds properly Scottish from the start. It should not read like an
-                  England eviction page with “Notice to Leave” pasted into the headings.
+                  England eviction page with ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“Notice to LeaveÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â pasted into the headings.
                 </p>
               </div>
             </div>
@@ -497,7 +498,7 @@ export default function ScotlandEvictionNoticesPage() {
                   <h3 className="text-lg font-semibold text-gray-900">Grounds often linked to landlord plans</h3>
                   <p className="mt-3 text-gray-700 leading-7">
                     Selling, moving in, or using the property differently are common examples
-                    where the landlord’s future intention matters and evidence should support it.
+                    where the landlordÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢s future intention matters and evidence should support it.
                   </p>
                 </div>
                 <div className="rounded-xl border border-gray-200 bg-gray-50 p-6">
@@ -660,7 +661,7 @@ export default function ScotlandEvictionNoticesPage() {
                 <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
                   <div className="mb-4 flex items-center gap-3">
                     <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-red-100">
-                      <span className="text-lg font-bold text-red-600">£</span>
+                      <span className="text-lg font-bold text-red-600">ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£</span>
                     </div>
                     <h3 className="text-lg font-bold text-gray-900">Rent arrears</h3>
                   </div>
@@ -755,7 +756,7 @@ export default function ScotlandEvictionNoticesPage() {
                     href="/private-residential-tenancy-agreement-template"
                     className="mt-3 inline-flex text-sm font-medium text-primary hover:underline"
                   >
-                    Review Scotland PRT rules →
+                    Review Scotland PRT rules ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢
                   </Link>
                 </div>
               </div>
@@ -786,13 +787,13 @@ export default function ScotlandEvictionNoticesPage() {
                   href={productLinks.noticeOnly.href}
                   className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-8 py-4 font-semibold text-blue-700 transition-colors hover:bg-blue-50"
                 >
-                  Get Scotland Notice — {noticeOnlyPrice}
+                  Get Scotland Notice ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â {noticeOnlyPrice}
                 </Link>
                 <Link
                   href={productLinks.completePack.href}
                   className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/30 bg-white/10 px-8 py-4 font-semibold text-white transition-colors hover:bg-white/20"
                 >
-                  Complete Pack — {completePackPrice}
+                  Complete Pack ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â {completePackPrice}
                 </Link>
               </div>
             </div>
@@ -822,11 +823,11 @@ export default function ScotlandEvictionNoticesPage() {
                 jurisdictionLabel="Scotland eviction notices"
                 scenarioLabel="Notice to Leave + Tribunal process"
                 primaryCTA={{
-                  label: `Generate Notice to Leave — ${noticeOnlyPrice}`,
+                  label: `Generate Notice to Leave ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ${noticeOnlyPrice}`,
                   href: productLinks.noticeOnly.href,
                 }}
                 secondaryCTA={{
-                  label: `Complete eviction pack — ${completePackPrice}`,
+                  label: `Complete eviction pack ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ${completePackPrice}`,
                   href: productLinks.completePack.href,
                 }}
                 relatedLinks={[

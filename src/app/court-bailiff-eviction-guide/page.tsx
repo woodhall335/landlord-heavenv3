@@ -181,8 +181,6 @@ export default function Page() {
         ])}
       />
 
-      <StructuredData data={faqPageSchema(faqs)} />
-
       <UniversalHero
         title="Court Bailiff Eviction Guide"
         subtitle="Understand how county court bailiff enforcement fits after a possession order and what landlords should prepare before the final stage."

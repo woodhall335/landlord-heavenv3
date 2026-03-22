@@ -181,8 +181,6 @@ export default function Page() {
         ])}
       />
 
-      <StructuredData data={faqPageSchema(faqs)} />
-
       <UniversalHero
         title="How to Serve a Section 21 Notice"
         subtitle="A practical landlord guide to valid service, proof of service, and avoiding notice-stage mistakes that later delay possession."

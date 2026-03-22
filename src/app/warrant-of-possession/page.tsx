@@ -3,12 +3,12 @@ import Link from 'next/link';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import {
   warrantOfPossessionRelatedLinks,
   productLinks,
   guideLinks,
 } from '@/lib/seo/internal-links';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
@@ -27,12 +27,7 @@ import {
   Download,
 } from 'lucide-react';
 
-const wizardLinkCompletePack = buildWizardLink({
-  product: 'notice_only',
-  jurisdiction: 'england',
-  src: 'seo_warrant_of_possession',
-  topic: 'eviction',
-});
+const completePackHref = '/products/complete-pack';
 
 export const metadata: Metadata = {
   title: 'Warrant of Possession UK — Bailiff Eviction Guide (2026)',
@@ -118,11 +113,19 @@ export default function WarrantOfPossessionPage() {
         <UniversalHero
           title="Warrant of Possession Guide"
           subtitle="Understand when to apply for a warrant and prepare enforcement paperwork correctly."
-          primaryCta={{ label: 'Start Enforcement Wizard', href: wizardLinkCompletePack }}
+          primaryCta={{ label: 'Get Complete Pack', href: completePackHref }}
           secondaryCta={{ label: 'Jump to key steps', href: '#when-to-apply' }}
           showTrustPositioningBar
           hideMedia
         />
+
+        <section className="bg-white py-8">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <SeoPageContextPanel pathname="/warrant-of-possession" />
+            </div>
+          </div>
+        </section>
 
         {/* Social Proof */}
         <section className="py-6 bg-gray-50 border-y border-gray-100">
@@ -145,7 +148,15 @@ export default function WarrantOfPossessionPage() {
                     <Link href="/possession-claim-guide" className="underline hover:text-amber-900">
                       possession claim guide
                     </Link>{' '}
-                    for the previous step.
+                    for the previous step, then review the wider{' '}
+                    <Link href="/eviction-process-uk" className="underline hover:text-amber-900">
+                      eviction process guide
+                    </Link>{' '}
+                    before moving into the{' '}
+                    <Link href={completePackHref} className="underline hover:text-amber-900">
+                      Complete Eviction Pack
+                    </Link>
+                    .
                   </p>
                 </div>
               </div>

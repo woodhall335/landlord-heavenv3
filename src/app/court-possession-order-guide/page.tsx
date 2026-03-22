@@ -5,6 +5,7 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { Container } from '@/components/ui/Container';
 import { FAQSection, type FAQItem } from '@/components/seo/FAQSection';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import {
   StructuredData,
@@ -140,8 +141,6 @@ export default function Page() {
         ])}
       />
 
-      <StructuredData data={faqPageSchema(faqs)} />
-
       <UniversalHero
         title="Court Possession Order Guide"
         subtitle="Understand what happens after a possession hearing and how landlords move from court decision to recovered possession."
@@ -180,6 +179,10 @@ export default function Page() {
       <section className="bg-white py-12">
         <Container>
           <div className="mx-auto max-w-5xl space-y-10">
+            <SeoPageContextPanel
+              pathname="/court-possession-order-guide"
+              className="border border-[#E6DBFF] bg-[#FBF8FF]"
+            />
 
             <Card id="quick-answer" title="Quick Answer">
               <p className="mt-4 leading-7 text-gray-700">
@@ -217,6 +220,22 @@ export default function Page() {
                 understand how this stage works usually make better decisions about
                 timelines, enforcement planning, and the next commercial steps for the
                 property.
+              </p>
+
+              <p className="mt-4 leading-7 text-gray-700">
+                For the wider sequence, use the{' '}
+                <Link href="/eviction-process-uk" className="font-medium text-primary hover:underline">
+                  eviction process UK guide
+                </Link>{' '}
+                as the main workflow, pair it with the{' '}
+                <Link href="/eviction-court-hearing-guide" className="font-medium text-primary hover:underline">
+                  eviction court hearing guide
+                </Link>{' '}
+                if you are still preparing the evidence file, and move into the{' '}
+                <Link href="/products/complete-pack" className="font-medium text-primary hover:underline">
+                  Complete Pack
+                </Link>{' '}
+                once the case needs court-ready support through order and enforcement stage.
               </p>
             </Card>
 

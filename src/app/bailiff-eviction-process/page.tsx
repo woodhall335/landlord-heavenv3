@@ -5,6 +5,7 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { Container } from '@/components/ui/Container';
 import { FAQSection, type FAQItem } from '@/components/seo/FAQSection';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import {
   StructuredData,
@@ -180,8 +181,6 @@ export default function Page() {
         ])}
       />
 
-      <StructuredData data={faqPageSchema(faqs)} />
-
       <UniversalHero
         title="Bailiff Eviction Process"
         subtitle="Understand what happens after a possession order and how landlords move from court decision to lawful recovery of the property."
@@ -225,6 +224,10 @@ export default function Page() {
       <section className="bg-white py-12">
         <Container>
           <div className="mx-auto max-w-5xl space-y-10">
+            <SeoPageContextPanel
+              pathname="/bailiff-eviction-process"
+              className="border border-[#E6DBFF] bg-[#FBF8FF]"
+            />
             <Card id="quick-answer" title="Quick Answer">
               <p className="mt-4 leading-7 text-gray-700">
                 The bailiff eviction process is the enforcement stage landlords usually
@@ -254,6 +257,21 @@ export default function Page() {
                 landlord is already thinking about service proof, possession dates,
                 enforcement timing, property handover, and post-eviction recovery before
                 the bailiff appointment is even requested.
+              </p>
+              <p className="mt-4 leading-7 text-gray-700">
+                Landlords usually keep enforcement cleaner when they track the wider{' '}
+                <Link href="/eviction-process-uk" className="font-medium text-primary hover:underline">
+                  eviction process in the UK
+                </Link>
+                , check the handoff against the{' '}
+                <Link href="/warrant-of-possession-guide" className="font-medium text-primary hover:underline">
+                  warrant of possession guide
+                </Link>
+                , and move to the{' '}
+                <Link href="/products/complete-pack" className="font-medium text-primary hover:underline">
+                  Complete Pack product page
+                </Link>{' '}
+                once the file is already in court or enforcement mode.
               </p>
             </Card>
 

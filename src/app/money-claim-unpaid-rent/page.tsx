@@ -210,8 +210,6 @@ export default function MoneyClaimUnpaidRentPage() {
         ])}
       />
 
-      <StructuredData data={faqPageSchema(faqs)} />
-
       <UniversalHero
         badge="Debt Recovery"
         title="Money Claim for Unpaid Rent"

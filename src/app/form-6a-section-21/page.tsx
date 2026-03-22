@@ -4,6 +4,8 @@ import { Container } from '@/components/ui/Container';
 import { getCanonicalUrl } from '@/lib/seo';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { form6aFAQs } from '@/data/faqs';
 import { FunnelCta } from '@/components/funnels';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
@@ -40,7 +42,7 @@ const breadcrumbs = [
   { name: 'Form 6A Section 21', url: '/form-6a-section-21' },
 ];
 
-const wizardHref = '/wizard?product=notice_only&topic=eviction&src=seo_form_6a_section_21';
+const noticeOnlyHref = '/products/notice-only';
 
 export default function Form6APage() {
 
@@ -53,6 +55,12 @@ export default function Form6APage() {
 
   return (
     <>
+      <SeoLandingWrapper
+        pagePath="/form-6a-section-21"
+        pageTitle={metadata.title as string}
+        pageType="guide"
+        jurisdiction="england"
+      />
       <StructuredData data={breadcrumbSchema(breadcrumbs)} />
 
       <div className="min-h-screen bg-gray-50">
@@ -60,7 +68,7 @@ export default function Form6APage() {
         <UniversalHero
           title="Form 6A Section 21 Guide"
           subtitle="Follow the prescribed Form 6A requirements and generate a compliance-checked Section 21 notice workflow."
-          primaryCta={{ label: 'Start Notice Only', href: wizardHref }}
+          primaryCta={{ label: 'Start Notice Only', href: noticeOnlyHref }}
           secondaryCta={{ label: 'Need full eviction support?', href: '/products/complete-pack' }}
           showTrustPositioningBar
           hideMedia
@@ -85,10 +93,28 @@ export default function Form6APage() {
 
         <Container>
           <div className="-mt-8 mb-10">
+            <div className="mb-6 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+              <SeoPageContextPanel pathname="/form-6a-section-21" />
+              <p className="mt-4 text-gray-700 leading-7">
+                England landlords usually use the{' '}
+                <Link href="/section-21-ban-uk" className="font-medium text-primary hover:underline">
+                  Section 21 transition guide
+                </Link>
+                , compare wording against the{' '}
+                <Link href="/section-21-notice-template" className="font-medium text-primary hover:underline">
+                  Section 21 notice template guide
+                </Link>
+                , and then start from the{' '}
+                <Link href="/products/notice-only" className="font-medium text-primary hover:underline">
+                  Notice Only product page
+                </Link>{' '}
+                when they need a compliance-checked Form 6A workflow.
+              </p>
+            </div>
             <FunnelCta
               title="Get a compliant Form 6A drafted and served"
               subtitle="Start with Notice Only now, and move to full possession support if the tenant stays."
-              primaryHref={wizardHref}
+              primaryHref={noticeOnlyHref}
               primaryText="Start Notice Only"
               primaryDataCta="notice-only"
               location="above-fold"

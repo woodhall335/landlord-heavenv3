@@ -3,6 +3,8 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { UniversalHero } from '@/components/landing/UniversalHero';
+import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { getCanonicalUrl } from '@/lib/seo';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { FAQSection } from '@/components/seo/FAQSection';
@@ -36,23 +38,40 @@ const breadcrumbs = [
   { name: 'Home', url: '/' },
   { name: 'How to Rent Guide', url: '/how-to-rent-guide' },
 ];
+const noticeOnlyHref = '/products/notice-only';
+const tenancyProductHref = '/products/ast';
 
 export default function HowToRentGuidePage() {
   return (
     <>
       <HeaderConfig mode="autoOnScroll" />
+      <SeoLandingWrapper
+        pagePath="/how-to-rent-guide"
+        pageTitle={metadata.title as string}
+        pageType="guide"
+        jurisdiction="england"
+      />
       <StructuredData data={breadcrumbSchema(breadcrumbs)} />
 
       <div className="min-h-screen bg-gray-50">
         {/* Hero Section */}
-                <UniversalHero
+        <UniversalHero
           badge="Landlord Guide"
           title="How to Rent Guide for Landlords"
           subtitle="Landlord-focused guide to serving and evidencing How to Rent compliance."
-          primaryCta={{ label: 'Create Tenancy Agreement', href: '/wizard?product=ast_standard&jurisdiction=england&topic=tenancy&src=product_page' }}
+          primaryCta={{ label: 'Start Notice Only', href: noticeOnlyHref }}
+          secondaryCta={{ label: 'Create tenancy agreement', href: tenancyProductHref }}
           align="center"
           showTrustPositioningBar
         />
+
+        <section className="border-b border-gray-200 bg-white py-8">
+          <Container>
+            <div className="mx-auto max-w-4xl">
+              <SeoPageContextPanel pathname="/how-to-rent-guide" />
+            </div>
+          </Container>
+        </section>
 
         {/* Main Content */}
         <Container>
@@ -97,6 +116,14 @@ export default function HowToRentGuidePage() {
                     You will not be able to use the accelerated possession procedure
                   </li>
                 </ul>
+                <p>
+                  If you are reviewing the file before service, start with our{' '}
+                  <Link href="/section-21-ban-uk">Section 21 transition guide</Link>, work through the{' '}
+                  <Link href="/section-21-validity-checklist">Section 21 validity checklist</Link>,
+                  and only then move into the{' '}
+                  <Link href={noticeOnlyHref}>Notice Only workflow</Link> once the compliance
+                  record is clean.
+                </p>
 
                 <h2>When to Provide It</h2>
                 <p>

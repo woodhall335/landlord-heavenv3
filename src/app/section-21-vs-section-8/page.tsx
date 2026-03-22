@@ -185,8 +185,6 @@ export default function Page() {
         ])}
       />
 
-      <StructuredData data={faqPageSchema(faqs)} />
-
       <UniversalHero
         title="Section 21 vs Section 8"
         subtitle="A practical landlord guide to understanding the difference between Section 21 and Section 8 and deciding which route fits the case best."

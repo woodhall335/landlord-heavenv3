@@ -8,13 +8,13 @@ import {
 import { getCanonicalUrl } from '@/lib/seo/urls';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import {
   scotlandRelatedLinks,
   productLinks,
   guideLinks,
   askHeavenLink,
 } from '@/lib/seo/internal-links';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
@@ -40,19 +40,8 @@ import {
   MessageSquare,
 } from 'lucide-react';
 
-const completePackLink = buildWizardLink({
-  product: 'complete_pack',
-  jurisdiction: 'scotland',
-  src: 'seo_eviction_process_scotland',
-  topic: 'eviction',
-});
-
-const noticeOnlyLink = buildWizardLink({
-  product: 'notice_only',
-  jurisdiction: 'scotland',
-  src: 'seo_eviction_process_scotland',
-  topic: 'eviction',
-});
+const completePackLink = '/products/complete-pack';
+const noticeOnlyLink = '/products/notice-only';
 
 export const metadata: Metadata = {
   title: 'Scotland Eviction Process | Notice to Leave & Tribunal',
@@ -125,8 +114,8 @@ export default function EvictionProcessScotlandPage() {
         <UniversalHero
           title="Eviction Process Scotland"
           subtitle="Follow the legal Scottish route from Notice to Leave through tribunal and enforcement."
-          primaryCta={{ label: 'Start Eviction Wizard', href: completePackLink }}
-          secondaryCta={{ label: 'Jump to key steps', href: '#timeline' }}
+          primaryCta={{ label: 'Start Scotland Notice Only', href: noticeOnlyLink }}
+          secondaryCta={{ label: 'Need tribunal-ready support? Complete Pack', href: completePackLink }}
           showTrustPositioningBar
           hideMedia
         />
@@ -152,8 +141,31 @@ export default function EvictionProcessScotlandPage() {
                     Section 8 which only apply in England. All private tenancies since December 2017
                     are Private Residential Tenancies (PRTs).
                   </p>
+                  <p className="mt-3 text-sm text-blue-800">
+                    Start with{' '}
+                    <Link href="/how-to-evict-tenant" className="font-medium underline underline-offset-2">
+                      how to evict a tenant
+                    </Link>{' '}
+                    for the UK-wide framework, use the{' '}
+                    <Link href="/eviction-process-uk" className="font-medium underline underline-offset-2">
+                      eviction process UK guide
+                    </Link>{' '}
+                    to compare the main stages, and choose{' '}
+                    <Link href="/products/notice-only" className="font-medium underline underline-offset-2">
+                      Notice Only
+                    </Link>{' '}
+                    when you need a Scotland-specific Notice to Leave workflow before tribunal preparation.
+                  </p>
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="bg-white py-8">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <SeoPageContextPanel pathname="/eviction-process-scotland" />
             </div>
           </div>
         </section>

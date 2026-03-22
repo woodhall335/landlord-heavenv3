@@ -120,8 +120,6 @@ export default function Page() {
         ])}
       />
 
-      <StructuredData data={faqPageSchema(faqs)} />
-
       <UniversalHero
         title="N5B Possession Claim Guide"
         subtitle="A landlord guide explaining how the accelerated possession claim works after serving a Section 21 notice."

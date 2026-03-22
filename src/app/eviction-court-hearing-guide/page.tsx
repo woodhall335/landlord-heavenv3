@@ -5,6 +5,7 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { Container } from '@/components/ui/Container';
 import { FAQSection, type FAQItem } from '@/components/seo/FAQSection';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import {
   StructuredData,
@@ -180,8 +181,6 @@ export default function Page() {
         ])}
       />
 
-      <StructuredData data={faqPageSchema(faqs)} />
-
       <UniversalHero
         title="Eviction Court Hearing Guide"
         subtitle="Prepare your hearing file, understand what the judge usually focuses on, and plan your next move before hearing day."
@@ -226,6 +225,10 @@ export default function Page() {
       <section className="bg-white py-12">
         <Container>
           <div className="mx-auto max-w-5xl space-y-10">
+            <SeoPageContextPanel
+              pathname="/eviction-court-hearing-guide"
+              className="border border-[#E6DBFF] bg-[#FBF8FF]"
+            />
             <Card id="quick-answer" title="Quick Answer">
               <p className="mt-4 leading-7 text-gray-700">
                 An eviction court hearing is the point where the possession case moves
@@ -257,6 +260,22 @@ export default function Page() {
                 tell one clean story. Judges respond well to chronology, clarity, and
                 documents that match each other. They respond badly to contradiction,
                 guesswork, and avoidable confusion.
+              </p>
+
+              <p className="mt-4 leading-7 text-gray-700">
+                It helps to frame hearing day inside the wider{' '}
+                <Link href="/eviction-process-uk" className="font-medium text-primary hover:underline">
+                  eviction process UK timeline
+                </Link>
+                , then review the{' '}
+                <Link href="/court-possession-order-guide" className="font-medium text-primary hover:underline">
+                  court possession order guide
+                </Link>{' '}
+                for what happens if the judge grants possession, and use the{' '}
+                <Link href="/products/complete-pack" className="font-medium text-primary hover:underline">
+                  Complete Pack
+                </Link>{' '}
+                when the case needs a joined-up notice, bundle, and post-hearing workflow.
               </p>
             </Card>
 

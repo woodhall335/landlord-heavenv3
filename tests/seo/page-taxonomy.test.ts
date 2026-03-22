@@ -1,8 +1,11 @@
+import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import {
   getAboveFoldCommercialDestinations,
   getAllSeoPageTaxonomyEntries,
   getCandidateRedirects,
+  getExplicitTaxonomyExemptions,
   getFreshnessPolicy,
   getPhase3SitemapExclusions,
   getPrimaryDestinationAboveFold,
@@ -89,9 +92,15 @@ describe('SEO page taxonomy', () => {
         { source: '/section-8-notice-guide', destination: '/section-8-notice' },
         { source: '/section-21-notice-guide', destination: '/section-21-notice' },
         { source: '/section-21-ban', destination: '/section-21-ban-uk' },
+        { source: '/section-21-checklist', destination: '/section-21-validity-checklist' },
         { source: '/court-bailiff-eviction-guide', destination: '/bailiff-eviction-process' },
         { source: '/eviction-timeline-uk', destination: '/how-long-does-eviction-take' },
         { source: '/eviction-notice-uk', destination: '/eviction-notice-template' },
+        { source: '/warrant-of-possession', destination: '/warrant-of-possession-guide' },
+        { source: '/n5b-form-guide', destination: '/n5b-possession-claim-guide' },
+        { source: '/tenancy-agreements/scotland', destination: '/private-residential-tenancy-agreement-template' },
+        { source: '/tenant-refusing-inspection', destination: '/tenant-refusing-access' },
+        { source: '/tenant-wont-leave', destination: '/tenant-refuses-to-leave-after-notice' },
       ])
     );
 
@@ -140,6 +149,29 @@ describe('SEO page taxonomy', () => {
         '/section-21-notice-period',
         '/section-8-vs-section-21',
         '/wales-eviction-notice-template',
+        '/eicr-landlord-requirements',
+        '/how-to-evict-a-tenant-england',
+        '/how-to-rent-guide',
+        '/rent-arrears-letter-template',
+        '/scotland-notice-to-leave-template',
+        '/tenant-breach-of-tenancy',
+        '/tenant-refuses-to-leave-after-notice',
+        '/tenant-subletting-without-permission',
+        '/tenancy-agreements',
+      ])
+    );
+  });
+
+  it('keeps explicit taxonomy exemptions available for final QA reporting', () => {
+    expect(getExplicitTaxonomyExemptions()).toEqual(
+      expect.arrayContaining([
+        '/cookies',
+        '/landlord-documents-england',
+        '/lodger-agreement-template',
+        '/privacy',
+        '/refunds',
+        '/tenancy-agreements/england-wales',
+        '/terms',
       ])
     );
   });
@@ -148,7 +180,29 @@ describe('SEO page taxonomy', () => {
     const topRecipients = getTopInternalLinkRecipients(20).map(({ pathname }) => pathname);
 
     expect(topRecipients).toContain('/eviction-process-uk');
+    expect(topRecipients).toContain('/how-to-evict-tenant');
+    expect(topRecipients).toContain('/section-8-notice');
     expect(topRecipients).toContain('/tenant-not-paying-rent');
     expect(topRecipients).toContain('/section-21-ban-uk');
+  });
+
+  it('does not leave runtime redirects pointing at retained SEO routes', async () => {
+    const configModule = await import(
+      pathToFileURL(path.join(process.cwd(), 'next.config.mjs')).href
+    );
+    const redirects = await configModule.default.redirects();
+    const retainedRoutes = new Set(
+      getRetainedSeoPageTaxonomyEntries().map((entry) => entry.pathname)
+    );
+
+    const conflicts = redirects
+      .filter((item: { source?: string }) => typeof item.source === 'string')
+      .filter((item: { source?: string }) => retainedRoutes.has(item.source as string))
+      .map((item: { source?: string; destination?: string }) => ({
+        source: item.source as string,
+        destination: item.destination as string,
+      }));
+
+    expect(conflicts).toEqual([]);
   });
 });

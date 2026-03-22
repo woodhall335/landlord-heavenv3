@@ -1,4 +1,4 @@
-import { Metadata } from 'next';
+﻿import { Metadata } from 'next';
 import Link from 'next/link';
 import {
   StructuredData,
@@ -8,8 +8,8 @@ import {
 import { getCanonicalUrl } from '@/lib/seo/urls';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { walesRelatedLinks } from '@/lib/seo/internal-links';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
@@ -34,19 +34,8 @@ import {
   Shield,
 } from 'lucide-react';
 
-const completePackLink = buildWizardLink({
-  product: 'complete_pack',
-  jurisdiction: 'wales',
-  src: 'seo_eviction_process_wales',
-  topic: 'eviction',
-});
-
-const noticeOnlyLink = buildWizardLink({
-  product: 'notice_only',
-  jurisdiction: 'wales',
-  src: 'seo_eviction_process_wales',
-  topic: 'eviction',
-});
+const completePackLink = '/products/complete-pack';
+const noticeOnlyLink = '/products/notice-only';
 
 export const metadata: Metadata = {
   title: 'Eviction Process Wales 2026 | Section 173, Breach Notices & Court Process',
@@ -130,8 +119,6 @@ export default function EvictionProcessWalesPage() {
           { name: 'Eviction Process Wales', url: getCanonicalUrl('/eviction-process-wales') },
         ])}
       />
-      <StructuredData data={faqSchema} />
-
       <main>
         <HeaderConfig mode="autoOnScroll" />
 
@@ -141,12 +128,12 @@ export default function EvictionProcessWalesPage() {
           title="Eviction Process Wales"
           subtitle={`Understand how possession works in Wales under the Renting Homes (Wales) framework. Learn when landlords use Section 173, when breach-based possession may be more suitable, and how to move from notice to court without avoidable mistakes.`}
           primaryCta={{
-            label: `Start Wales Eviction Pack — ${PRODUCTS.complete_pack.displayPrice}`,
-            href: completePackLink,
+            label: `Start Wales Notice Only â€” ${PRODUCTS.notice_only.displayPrice}`,
+            href: noticeOnlyLink,
           }}
           secondaryCta={{
-            label: `Notice Only — ${PRODUCTS.notice_only.displayPrice}`,
-            href: noticeOnlyLink,
+            label: `Need Complete Pack support? â€” ${PRODUCTS.complete_pack.displayPrice}`,
+            href: completePackLink,
           }}
           showTrustPositioningBar
           hideMedia
@@ -176,8 +163,30 @@ export default function EvictionProcessWalesPage() {
                     breach-based possession route where the contract-holder has broken the contract,
                     built up arrears, or engaged in serious misconduct.
                   </p>
+                  <p className="mt-3 text-sm leading-6 text-blue-800">
+                    Use{' '}
+                    <Link href="/how-to-evict-tenant" className="font-medium underline underline-offset-2">
+                      how to evict a tenant
+                    </Link>{' '}
+                    for the main UK workflow, compare stages in the{' '}
+                    <Link href="/eviction-process-uk" className="font-medium underline underline-offset-2">
+                      eviction process UK guide
+                    </Link>, and choose{' '}
+                    <Link href="/products/notice-only" className="font-medium underline underline-offset-2">
+                      Notice Only
+                    </Link>{' '}
+                    when the next practical step is drafting the correct Welsh notice route before court.
+                  </p>
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="bg-white py-8">
+          <div className="container mx-auto px-4">
+            <div className="max-w-5xl mx-auto">
+              <SeoPageContextPanel pathname="/eviction-process-wales" />
             </div>
           </div>
         </section>
@@ -245,8 +254,8 @@ export default function EvictionProcessWalesPage() {
 
               <div className="mt-8 prose prose-lg max-w-none text-gray-700">
                 <p>
-                  This matters for both SEO and legal accuracy. Landlords still search for “tenant
-                  eviction Wales” and “Section 21 Wales”, but the working legal route in Wales is
+                  This matters for both SEO and legal accuracy. Landlords still search for â€œtenant
+                  eviction Walesâ€ and â€œSection 21 Walesâ€, but the working legal route in Wales is
                   different. A strong Welsh eviction page therefore needs to do two things at once:
                   capture the search term the landlord uses and then quickly translate that into the
                   correct Wales-specific framework.
@@ -431,7 +440,7 @@ export default function EvictionProcessWalesPage() {
                       <h3 className="font-bold text-gray-900 mb-2">Planning ahead</h3>
                       <p className="text-gray-600 text-sm">
                         The Wales no-fault route often rewards landlords who plan earlier, not later.
-                        It is usually less forgiving than an “I’ll sort the paperwork at the end”
+                        It is usually less forgiving than an â€œIâ€™ll sort the paperwork at the endâ€
                         approach.
                       </p>
                     </div>
@@ -442,7 +451,7 @@ export default function EvictionProcessWalesPage() {
               <div className="mt-8 prose prose-lg max-w-none text-gray-700">
                 <p>
                   That is one reason this page is structured around the process rather than just the
-                  form. Competitor pages often stop at “download a notice.” The stronger landlord page
+                  form. Competitor pages often stop at â€œdownload a notice.â€ The stronger landlord page
                   explains what makes that notice usable later. In Wales, that means written statement
                   thinking, correct terminology, service discipline, and a possession file that still
                   works under scrutiny.
@@ -515,7 +524,7 @@ export default function EvictionProcessWalesPage() {
                       </p>
                       <div className="inline-block rounded-lg bg-gray-50 px-4 py-2 text-sm">
                         <span className="text-gray-600">Typical claim fee: </span>
-                        <span className="font-bold text-gray-900">£355</span>
+                        <span className="font-bold text-gray-900">Â£355</span>
                       </div>
                     </div>
                   </div>

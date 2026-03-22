@@ -5,7 +5,6 @@ import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { niTenancyMainRelatedLinks } from '@/lib/seo/internal-links';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
@@ -39,34 +38,20 @@ const standardPrice =
   productMap.tenancy_agreement_standard?.displayPrice ??
   productMap.tenancy_agreement?.displayPrice ??
   productMap.ast_standard?.displayPrice ??
-  '£14.99';
+  'Â£14.99';
 
 const premiumPrice =
   productMap.tenancy_agreement_premium?.displayPrice ??
   productMap.tenancy_agreement_plus?.displayPrice ??
   productMap.ast_premium?.displayPrice ??
-  '£24.99';
+  'Â£24.99';
 
-const wizardLinkStandard = buildWizardLink({
-  product: 'tenancy_agreement',
-  jurisdiction: 'northern-ireland',
-  src: 'seo_tenancy_agreement_northern_ireland',
-  topic: 'tenancy',
-});
-
-// If your repo has a dedicated NI premium product key, replace 'tenancy_agreement'
-// below with that exact key.
-const wizardLinkPremium = buildWizardLink({
-  product: 'tenancy_agreement',
-  jurisdiction: 'northern-ireland',
-  src: 'seo_tenancy_agreement_northern_ireland',
-  topic: 'tenancy',
-});
+const astProductHref = '/products/ast';
 
 export const metadata: Metadata = {
-  title: 'Northern Ireland Tenancy Agreement 2026 | Create Online from £14.99',
+  title: 'Northern Ireland Tenancy Agreement 2026 | Create Online from Â£14.99',
   description:
-    'Create a Northern Ireland tenancy agreement online. Written agreement wording for NI private tenancies, updated for current legislation, from £14.99.',
+    'Create a Northern Ireland tenancy agreement online. Written agreement wording for NI private tenancies, updated for current legislation, from Â£14.99.',
   keywords: [
     'tenancy agreement northern ireland',
     'northern ireland tenancy agreement',
@@ -83,7 +68,7 @@ export const metadata: Metadata = {
     canonical: 'https://landlordheaven.co.uk/tenancy-agreement-northern-ireland',
   },
   openGraph: {
-    title: 'Northern Ireland Tenancy Agreement 2026 | Create Online from £14.99',
+    title: 'Northern Ireland Tenancy Agreement 2026 | Create Online from Â£14.99',
     description:
       'Create a Northern Ireland tenancy agreement online with current NI-compliant wording and instant download.',
     type: 'website',
@@ -91,7 +76,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Northern Ireland Tenancy Agreement 2026 | Create Online from £14.99',
+    title: 'Northern Ireland Tenancy Agreement 2026 | Create Online from Â£14.99',
     description:
       'Create a Northern Ireland tenancy agreement online with current NI-compliant wording and instant download.',
   },
@@ -175,12 +160,12 @@ export default function TenancyAgreementNorthernIrelandPage() {
             </>
           }
           primaryCta={{
-            label: `Create Standard Agreement — ${standardPrice}`,
-            href: wizardLinkStandard,
+            label: `Create Standard Agreement â€” ${standardPrice}`,
+            href: astProductHref,
           }}
           secondaryCta={{
-            label: `Create Premium Agreement — ${premiumPrice}`,
-            href: wizardLinkPremium,
+            label: `Create Premium Agreement â€” ${premiumPrice}`,
+            href: astProductHref,
           }}
           variant="pastel"
         >
@@ -269,19 +254,19 @@ export default function TenancyAgreementNorthernIrelandPage() {
                         Common problems with the wrong template
                       </h3>
                       <ul className="text-sm text-amber-800 space-y-1">
-                        <li>• References the wrong legislation</li>
-                        <li>• Uses England-only or Wales-only wording</li>
-                        <li>• Misses NI-specific tenancy points</li>
-                        <li>• Creates confusion around notices and enforcement</li>
+                        <li>â€¢ References the wrong legislation</li>
+                        <li>â€¢ Uses England-only or Wales-only wording</li>
+                        <li>â€¢ Misses NI-specific tenancy points</li>
+                        <li>â€¢ Creates confusion around notices and enforcement</li>
                       </ul>
                     </div>
                     <div className="bg-white rounded-lg p-4 border border-amber-200">
                       <h3 className="font-semibold text-amber-900 mb-2">Why that matters</h3>
                       <ul className="text-sm text-amber-800 space-y-1">
-                        <li>• More risk of disputes later</li>
-                        <li>• Harder to rely on the agreement if problems arise</li>
-                        <li>• Poorer foundation for possession or arrears action</li>
-                        <li>• Greater compliance risk for landlords</li>
+                        <li>â€¢ More risk of disputes later</li>
+                        <li>â€¢ Harder to rely on the agreement if problems arise</li>
+                        <li>â€¢ Poorer foundation for possession or arrears action</li>
+                        <li>â€¢ Greater compliance risk for landlords</li>
                       </ul>
                     </div>
                   </div>
@@ -298,7 +283,7 @@ export default function TenancyAgreementNorthernIrelandPage() {
                 How Northern Ireland differs from England
               </h2>
               <p className="text-gray-600 text-center mb-12 max-w-3xl mx-auto">
-                Landlords often search for an “AST template”, but Northern Ireland works differently.
+                Landlords often search for an â€œAST templateâ€, but Northern Ireland works differently.
               </p>
 
               <div className="overflow-x-auto">
@@ -440,7 +425,7 @@ export default function TenancyAgreementNorthernIrelandPage() {
                       <h3 className="font-bold text-gray-900 mb-2">Deposit wording</h3>
                       <p className="text-gray-700 mb-3">
                         If a deposit is taken, the agreement should deal with it clearly and support
-                        the landlord’s wider deposit compliance process.
+                        the landlordâ€™s wider deposit compliance process.
                       </p>
                       <ul className="grid md:grid-cols-2 gap-2 text-sm text-gray-700">
                         <li className="flex items-center gap-2">
@@ -580,13 +565,13 @@ export default function TenancyAgreementNorthernIrelandPage() {
 
                 <p>
                   When disputes arise, one of the first things that matters is whether the original
-                  tenancy agreement was properly structured for the property’s jurisdiction. A poor
-                  template can weaken the landlord’s position at exactly the wrong time.
+                  tenancy agreement was properly structured for the propertyâ€™s jurisdiction. A poor
+                  template can weaken the landlordâ€™s position at exactly the wrong time.
                 </p>
 
                 <p>
                   This is one of the main reasons to start with a proper NI tenancy agreement rather
-                  than a generic “UK rental agreement” downloaded from elsewhere.
+                  than a generic â€œUK rental agreementâ€ downloaded from elsewhere.
                 </p>
               </div>
 
@@ -643,7 +628,7 @@ export default function TenancyAgreementNorthernIrelandPage() {
                     </li>
                   </ul>
                   <Link
-                    href={wizardLinkStandard}
+                    href={astProductHref}
                     className="block w-full text-center bg-red-600 text-white py-3 rounded-lg font-medium hover:bg-red-700 transition-colors"
                   >
                     Create Standard Agreement
@@ -682,7 +667,7 @@ export default function TenancyAgreementNorthernIrelandPage() {
                     </li>
                   </ul>
                   <Link
-                    href={wizardLinkPremium}
+                    href={astProductHref}
                     className="block w-full text-center bg-red-700 text-white py-3 rounded-lg font-medium hover:bg-red-800 transition-colors"
                   >
                     Create Premium Agreement

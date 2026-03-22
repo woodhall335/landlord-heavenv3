@@ -5,7 +5,6 @@ import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { niTenancyTemplateRelatedLinks } from '@/lib/seo/internal-links';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
@@ -30,19 +29,7 @@ const PAGE_PATH = '/tenancy-agreement-template-northern-ireland';
 const PAGE_TITLE = 'Tenancy Agreement Template Northern Ireland';
 const PAGE_TYPE = 'tenancy' as const;
 
-const wizardLinkStandard = buildWizardLink({
-  product: 'tenancy_agreement',
-  jurisdiction: 'northern-ireland',
-  src: 'seo_tenancy_agreement_template_northern_ireland',
-  topic: 'tenancy',
-});
-
-const wizardLinkPremium = buildWizardLink({
-  product: 'tenancy_agreement',
-  jurisdiction: 'northern-ireland',
-  src: 'seo_tenancy_agreement_template_northern_ireland',
-  topic: 'tenancy',
-});
+const astProductHref = '/products/ast';
 
 export const metadata: Metadata = {
   title: 'Northern Ireland Tenancy Agreement Template 2026',
@@ -116,12 +103,12 @@ export default function TenancyAgreementTemplateNorthernIrelandPage() {
             </>
           }
           primaryCta={{
-            label: `Get NI Template — ${PRODUCTS.ast_standard.displayPrice}`,
-            href: wizardLinkStandard,
+            label: `Get NI Template â€” ${PRODUCTS.ast_standard.displayPrice}`,
+            href: astProductHref,
           }}
           secondaryCta={{
             label: 'Premium Template with Extras',
-            href: wizardLinkPremium,
+            href: astProductHref,
           }}
           variant="pastel"
         >
@@ -223,21 +210,21 @@ export default function TenancyAgreementTemplateNorthernIrelandPage() {
                     <div className="bg-white rounded-lg p-4 border border-amber-200">
                       <h3 className="font-semibold text-amber-900 mb-2">Common Template Problems</h3>
                       <ul className="text-sm text-amber-800 space-y-1">
-                        <li>• Based on English Housing Act 1988</li>
-                        <li>• Include Section 21/Section 8 references</li>
-                        <li>• Missing 2022 Act statutory requirements</li>
-                        <li>• Wrong notice periods for NI</li>
-                        <li>• Outdated deposit protection rules</li>
+                        <li>â€¢ Based on English Housing Act 1988</li>
+                        <li>â€¢ Include Section 21/Section 8 references</li>
+                        <li>â€¢ Missing 2022 Act statutory requirements</li>
+                        <li>â€¢ Wrong notice periods for NI</li>
+                        <li>â€¢ Outdated deposit protection rules</li>
                       </ul>
                     </div>
                     <div className="bg-white rounded-lg p-4 border border-amber-200">
                       <h3 className="font-semibold text-amber-900 mb-2">Potential Consequences</h3>
                       <ul className="text-sm text-amber-800 space-y-1">
-                        <li>• Notice to Quit declared invalid</li>
-                        <li>• Unable to obtain possession order</li>
-                        <li>• Non-compliance penalties</li>
-                        <li>• Difficulty recovering arrears</li>
-                        <li>• Deposit disputes unresolved</li>
+                        <li>â€¢ Notice to Quit declared invalid</li>
+                        <li>â€¢ Unable to obtain possession order</li>
+                        <li>â€¢ Non-compliance penalties</li>
+                        <li>â€¢ Difficulty recovering arrears</li>
+                        <li>â€¢ Deposit disputes unresolved</li>
                       </ul>
                     </div>
                   </div>

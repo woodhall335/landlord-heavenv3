@@ -95,11 +95,6 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: '/tenancy-agreements',
-        destination: '/pricing',
-        permanent: true,
-      },
-      {
         source: '/legal-proceedings',
         destination: '/products/complete-pack',
         permanent: true,
@@ -112,18 +107,8 @@ const nextConfig = {
       },
       // True duplicate SEO landing URLs -> canonical SEO landing pages
       {
-        source: '/eviction-notice',
-        destination: '/eviction-notice-template',
-        permanent: true,
-      },
-      {
         source: '/eviction-notice-uk',
         destination: '/eviction-notice-template',
-        permanent: true,
-      },
-      {
-        source: '/joint-tenancy-agreement-england',
-        destination: '/joint-tenancy-agreement-template',
         permanent: true,
       },
       {
@@ -139,6 +124,11 @@ const nextConfig = {
       {
         source: '/section-21-ban',
         destination: '/section-21-ban-uk',
+        permanent: true,
+      },
+      {
+        source: '/section-21-checklist',
+        destination: '/section-21-validity-checklist',
         permanent: true,
       },
 
@@ -158,18 +148,8 @@ const nextConfig = {
         destination: '/money-claim-unpaid-rent',
         permanent: true,
       },
-      {
-        source: '/how-to-sue-tenant-for-unpaid-rent',
-        destination: '/money-claim-unpaid-rent',
-        permanent: true,
-      },
 
-      // Tenancy agreement pillar consolidation (jurisdiction-specific)
-      {
-        source: '/tenancy-agreement',
-        destination: '/assured-shorthold-tenancy-agreement-template',
-        permanent: true,
-      },
+      // Tenancy agreement alias consolidation (jurisdiction-specific)
       {
         source: '/assured-shorthold-tenancy-agreement',
         destination: '/assured-shorthold-tenancy-agreement-template',
@@ -186,42 +166,12 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: '/tenancy-agreements/england',
-        destination: '/assured-shorthold-tenancy-agreement-template',
-        permanent: true,
-      },
-      {
-        source: '/premium-tenancy-agreement',
-        destination: '/products/ast',
-        permanent: true,
-      },
-      {
         source: '/occupation-contract-template-wales',
         destination: '/wales-tenancy-agreement-template',
         permanent: true,
       },
       {
         source: '/standard-occupation-contract-wales',
-        destination: '/wales-tenancy-agreement-template',
-        permanent: true,
-      },
-      {
-        source: '/joint-occupation-contract-wales',
-        destination: '/wales-tenancy-agreement-template',
-        permanent: true,
-      },
-      {
-        source: '/renting-homes-wales-written-statement',
-        destination: '/wales-tenancy-agreement-template',
-        permanent: true,
-      },
-      {
-        source: '/fixed-term-periodic-occupation-contract-wales',
-        destination: '/wales-tenancy-agreement-template',
-        permanent: true,
-      },
-      {
-        source: '/update-occupation-contract-wales',
         destination: '/wales-tenancy-agreement-template',
         permanent: true,
       },
@@ -251,28 +201,18 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: '/joint-prt-tenancy-agreement-scotland',
-        destination: '/private-residential-tenancy-agreement-template',
-        permanent: true,
-      },
-      {
-        source: '/update-prt-tenancy-agreement-scotland',
-        destination: '/private-residential-tenancy-agreement-template',
-        permanent: true,
-      },
-      {
-        source: '/scotland-prt-model-agreement-guide',
-        destination: '/private-residential-tenancy-agreement-template',
-        permanent: true,
-      },
-      {
-        source: '/common-prt-tenancy-mistakes-scotland',
-        destination: '/private-residential-tenancy-agreement-template',
-        permanent: true,
-      },
-      {
         source: '/tenancy-agreements/scotland',
         destination: '/private-residential-tenancy-agreement-template',
+        permanent: true,
+      },
+      {
+        source: '/n5b-form-guide',
+        destination: '/n5b-possession-claim-guide',
+        permanent: true,
+      },
+      {
+        source: '/warrant-of-possession',
+        destination: '/warrant-of-possession-guide',
         permanent: true,
       },
       {
@@ -286,28 +226,59 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: '/fixed-term-tenancy-agreement-northern-ireland',
-        destination: '/northern-ireland-tenancy-agreement-template',
-        permanent: true,
-      },
-      {
-        source: '/joint-tenancy-agreement-northern-ireland',
-        destination: '/northern-ireland-tenancy-agreement-template',
-        permanent: true,
-      },
-      {
-        source: '/update-tenancy-agreement-northern-ireland',
-        destination: '/northern-ireland-tenancy-agreement-template',
-        permanent: true,
-      },
-      {
         source: '/ni-private-tenancy-agreement',
+        destination: '/northern-ireland-tenancy-agreement-template',
+        permanent: true,
+      },
+      {
+        source: '/ni-tenancy-agreement-template-free',
         destination: '/northern-ireland-tenancy-agreement-template',
         permanent: true,
       },
       {
         source: '/tenancy-agreements/northern-ireland',
         destination: '/northern-ireland-tenancy-agreement-template',
+        permanent: true,
+      },
+      // Final SEO closeout redirects for materially identical aliases
+      {
+        source: '/complete-eviction-pack-england',
+        destination: '/products/complete-pack',
+        permanent: true,
+      },
+      {
+        source: '/eviction-pack-england',
+        destination: '/products/complete-pack',
+        permanent: true,
+      },
+      {
+        source: '/section-21-notice-generator',
+        destination: '/section-21-notice-template',
+        permanent: true,
+      },
+      {
+        source: '/section-8-notice-generator',
+        destination: '/section-8-notice-template',
+        permanent: true,
+      },
+      {
+        source: '/n5b-possession-claim-form',
+        destination: '/n5b-possession-claim-guide',
+        permanent: true,
+      },
+      {
+        source: '/court-bailiff-eviction-guide',
+        destination: '/bailiff-eviction-process',
+        permanent: true,
+      },
+      {
+        source: '/tenant-refusing-inspection',
+        destination: '/tenant-refusing-access',
+        permanent: true,
+      },
+      {
+        source: '/tenant-wont-leave',
+        destination: '/tenant-refuses-to-leave-after-notice',
         permanent: true,
       },
       // HMO Pro is parked

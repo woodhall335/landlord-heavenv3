@@ -4,7 +4,6 @@ import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { occupationContractMainRelatedLinks } from '@/lib/seo/internal-links';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
@@ -31,19 +30,7 @@ const PAGE_PATH = '/standard-occupation-contract-wales';
 const PAGE_TITLE = 'Standard Occupation Contract Wales';
 const PAGE_TYPE = 'tenancy' as const;
 
-const wizardLinkStandard = buildWizardLink({
-  product: 'ast_standard',
-  jurisdiction: 'wales',
-  src: 'seo_standard_occupation_contract_wales',
-  topic: 'tenancy',
-});
-
-const wizardLinkPremium = buildWizardLink({
-  product: 'ast_premium',
-  jurisdiction: 'wales',
-  src: 'seo_standard_occupation_contract_wales',
-  topic: 'tenancy',
-});
+const astProductHref = '/products/ast';
 
 export const metadata: Metadata = {
   title: 'Standard Occupation Contract Wales | Create Welsh Tenancy Agreement',
@@ -121,12 +108,12 @@ export default function StandardOccupationContractWalesPage() {
             </>
           }
           primaryCta={{
-            label: `Create Occupation Contract — ${PRODUCTS.ast_standard.displayPrice}`,
-            href: wizardLinkStandard,
+            label: `Create Occupation Contract â€” ${PRODUCTS.ast_standard.displayPrice}`,
+            href: astProductHref,
           }}
           secondaryCta={{
             label: 'Premium Contract with Extra Protection',
-            href: wizardLinkPremium,
+            href: astProductHref,
           }}
         >
           {/* Trust Signals */}
@@ -645,7 +632,7 @@ export default function StandardOccupationContractWalesPage() {
                     </li>
                   </ul>
                   <Link
-                    href={wizardLinkStandard}
+                    href={astProductHref}
                     className="block w-full text-center bg-primary text-white py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors"
                   >
                     Create Standard Contract
@@ -691,7 +678,7 @@ export default function StandardOccupationContractWalesPage() {
                     </li>
                   </ul>
                   <Link
-                    href={wizardLinkPremium}
+                    href={astProductHref}
                     className="block w-full text-center bg-primary text-white py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors"
                   >
                     Create Premium Contract

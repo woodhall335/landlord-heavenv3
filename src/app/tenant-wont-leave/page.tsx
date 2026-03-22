@@ -9,6 +9,7 @@ import { UniversalHero } from '@/components/landing/UniversalHero';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import {
   CheckCircle,
   Clock,
@@ -24,6 +25,7 @@ import {
 const PAGE_PATH = '/tenant-wont-leave';
 const PAGE_TITLE = "Tenant Won't Leave After Notice";
 const PAGE_TYPE = 'problem' as const;
+const completePackProductHref = '/products/complete-pack';
 
 const faqs = [
   {
@@ -146,7 +148,7 @@ export default function TenantWontLeavePage() {
               enforcement.
             </>
           }
-          primaryCta={{ label: 'Get Court-Ready Notice — £29.99', href: '/products/notice-only' }}
+          primaryCta={{ label: 'Start complete eviction pack', href: completePackProductHref }}
           secondaryCta={{ label: 'Go to Possession Claim Guide', href: '/possession-claim-guide' }}
           variant="pastel"
         >
@@ -169,6 +171,29 @@ export default function TenantWontLeavePage() {
         <section className="py-6 bg-gray-50 border-y border-gray-100">
           <div className="container mx-auto px-4">
             <SocialProofCounter variant="total" className="justify-center" />
+          </div>
+        </section>
+
+        <section className="border-b border-gray-100 bg-white py-8">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto space-y-6">
+              <SeoPageContextPanel pathname="/tenant-wont-leave" />
+              <p className="text-gray-700">
+                For the clearest post-notice sequence, start with the wider{' '}
+                <Link href="/eviction-process-uk" className="font-medium text-primary hover:underline">
+                  eviction process guide
+                </Link>
+                , then use the dedicated{' '}
+                <Link href="/tenant-refuses-to-leave-after-notice" className="font-medium text-primary hover:underline">
+                  tenant refuses to leave after notice guide
+                </Link>{' '}
+                before moving into the{' '}
+                <Link href={completePackProductHref} className="font-medium text-primary hover:underline">
+                  complete eviction pack
+                </Link>{' '}
+                for possession and enforcement paperwork.
+              </p>
+            </div>
           </div>
         </section>
 
@@ -475,10 +500,10 @@ export default function TenantWontLeavePage() {
               <h2 className="text-xl font-bold text-gray-900 mb-3">What should you do next?</h2>
               <div className="grid sm:grid-cols-2 gap-3 text-sm">
                 <Link
-                  href="/products/notice-only"
+                  href={completePackProductHref}
                   className="rounded-lg border border-gray-200 bg-white p-3 hover:border-red-600 transition-colors"
                 >
-                  Start a compliant eviction notice
+                  Start the complete eviction pack
                 </Link>
                 <Link
                   href="/possession-claim-guide"

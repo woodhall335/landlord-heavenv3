@@ -7,7 +7,7 @@ import { Container } from '@/components/ui/Container';
 import { FAQSection, type FAQItem } from '@/components/seo/FAQSection';
 import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
-import { StructuredData, articleSchema, breadcrumbSchema, faqPageSchema } from '@/lib/seo/structured-data';
+import { StructuredData, articleSchema, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { EVICTION_ENTITIES, getAuthorityLinks } from '@/lib/seo/eviction-authority';
 
 export interface IntentSection {
@@ -60,7 +60,6 @@ export function HighIntentPageShell(props: HighIntentPageShellProps) {
       <SeoLandingWrapper pagePath={`/${props.slug}`} pageTitle={props.title} pageType="guide" jurisdiction="england" />
       <HeaderConfig mode="autoOnScroll" />
       <StructuredData data={articleSchema({ headline: props.title, description: props.description, url: canonical, datePublished: '2026-03-01', dateModified: '2026-03-01' })} />
-      <StructuredData data={faqPageSchema(props.faqs.filter((f): f is {question: string; answer: string} => typeof f.answer === 'string'))} />
       <StructuredData data={breadcrumbSchema([{ name: 'Home', url: 'https://landlordheaven.co.uk' }, { name: 'Eviction guides', url: 'https://landlordheaven.co.uk/eviction-guides' }, { name: props.heroTitle, url: canonical }])} />
       <StructuredData data={howToSchema} />
 

@@ -152,11 +152,6 @@ export default function RentArrearsCalculatorLayout({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
       />
-      {/* Schema.org JSON-LD for SEO - FAQ */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
       {/* Schema.org JSON-LD for SEO - Breadcrumb */}
       <script
         type="application/ld+json"

@@ -194,7 +194,6 @@ export default function Section21ValidatorPage() {
         jurisdiction={upsellConfig.jurisdiction}
       />
       {/* Structured Data */}
-      <StructuredData data={faqSchema} />
       <StructuredData data={howToSchema} />
       <StructuredData
         data={breadcrumbSchema([

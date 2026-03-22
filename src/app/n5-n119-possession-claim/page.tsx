@@ -185,8 +185,6 @@ export default function Page() {
         ])}
       />
 
-      <StructuredData data={faqPageSchema(faqs)} />
-
       <UniversalHero
         title="N5 and N119 Possession Claim Guide"
         subtitle="A practical landlord guide to the standard possession claim route, what evidence usually matters, and how to prepare a stronger court file."

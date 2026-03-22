@@ -174,8 +174,6 @@ export default function Page() {
           { name: 'Section 8 Notice Guide', url: canonical },
         ])}
       />
-      <StructuredData data={faqPageSchema(faqs)} />
-
       <UniversalHero
         title="Section 8 Notice Guide"
         subtitle="Grounds, timing, evidence, rent arrears, and what landlords should do next."

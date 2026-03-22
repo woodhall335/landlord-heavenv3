@@ -4,6 +4,7 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { Container } from '@/components/ui/Container';
 import { FAQSection, type FAQItem } from '@/components/seo/FAQSection';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import {
   StructuredData,
@@ -118,8 +119,6 @@ export default function HowToEvictTenantUkPage() {
           { name: 'How to Evict a Tenant in the UK', url: canonical },
         ])}
       />
-      <StructuredData data={faqPageSchema(faqs)} />
-
       <UniversalHero
         title="How to Evict a Tenant in the UK"
         subtitle="A step-by-step landlord guide covering Section 21, Section 8, court possession orders, and bailiff enforcement."
@@ -140,6 +139,7 @@ export default function HowToEvictTenantUkPage() {
       <section id="quick-answer" className="border-b border-[#E6DBFF] bg-white py-10">
         <Container>
           <div className="mx-auto max-w-5xl rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-6 md:p-8">
+            <SeoPageContextPanel pathname="/how-to-evict-a-tenant-uk" />
             <h2 className="text-2xl font-semibold text-[#2a2161]">Quick Answer</h2>
             <p className="mt-4 text-gray-700">
               The legal eviction process in the UK normally involves five main stages.
@@ -155,6 +155,21 @@ export default function HowToEvictTenantUkPage() {
               Most eviction cases fail or get delayed because of incorrect notices, missing
               documents, or poor record-keeping. Preparing a clear timeline and evidence
               pack before serving notice significantly improves success rates.
+            </p>
+            <p className="mt-4 text-gray-700">
+              For the main authority route, start with{' '}
+              <Link href="/how-to-evict-tenant" className="font-medium text-primary hover:underline">
+                how to evict a tenant
+              </Link>
+              . If you want the stage-by-stage version next, move to the{' '}
+              <Link href="/eviction-process-uk" className="font-medium text-primary hover:underline">
+                eviction process UK guide
+              </Link>
+              , and use the{' '}
+              <Link href="/products/complete-pack" className="font-medium text-primary hover:underline">
+                Complete Pack
+              </Link>{' '}
+              when the case is moving beyond basic research into notice, court, and enforcement planning.
             </p>
           </div>
         </Container>

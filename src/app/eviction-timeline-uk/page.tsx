@@ -181,8 +181,6 @@ export default function Page() {
         ])}
       />
 
-      <StructuredData data={faqPageSchema(faqs)} />
-
       <UniversalHero
         title="Eviction Timeline UK"
         subtitle="A realistic breakdown of how long each stage of eviction usually takes for landlords."

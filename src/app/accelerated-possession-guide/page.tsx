@@ -5,6 +5,7 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { Container } from '@/components/ui/Container';
 import { FAQSection, type FAQItem } from '@/components/seo/FAQSection';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import {
   StructuredData,
@@ -176,8 +177,6 @@ export default function Page() {
           { name: 'Accelerated Possession Guide', url: canonical },
         ])}
       />
-      <StructuredData data={faqPageSchema(faqs)} />
-
       <UniversalHero
         title="Accelerated Possession Guide"
         subtitle="When landlords can use it, what documents matter, and how the court process usually works."
@@ -222,6 +221,10 @@ export default function Page() {
       <section id="quick-answer" className="bg-white py-12">
         <Container>
           <div className="mx-auto max-w-5xl space-y-10">
+            <SeoPageContextPanel
+              pathname="/accelerated-possession-guide"
+              className="border border-[#E6DBFF] bg-[#FBF8FF]"
+            />
             <Card title="Quick Answer">
               <p className="mt-4 leading-7 text-gray-700">
                 Accelerated possession is a court route landlords in England often use
@@ -249,6 +252,21 @@ export default function Page() {
                 best accelerated possession claims start long before the court form is
                 filed. They start with route choice, compliance checks, and a strong paper
                 trail.
+              </p>
+              <p className="mt-4 leading-7 text-gray-700">
+                In practice, that means pressure-testing the{' '}
+                <Link href="/section-21-ban-uk" className="font-medium text-primary hover:underline">
+                  Section 21 transition guide
+                </Link>
+                , lining the court paperwork up with the{' '}
+                <Link href="/section-21-notice" className="font-medium text-primary hover:underline">
+                  Section 21 notice guide
+                </Link>
+                , and moving into the{' '}
+                <Link href="/products/complete-pack" className="font-medium text-primary hover:underline">
+                  Complete Pack product page
+                </Link>{' '}
+                once the matter is clearly beyond notice drafting and into possession planning.
               </p>
             </Card>
 

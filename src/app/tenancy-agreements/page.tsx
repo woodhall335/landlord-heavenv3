@@ -2,13 +2,15 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
+import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { Container } from '@/components/ui/Container';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 import { residentialDocumentLinks } from '@/lib/seo/internal-links';
 
 const canonicalUrl = getCanonicalUrl('/tenancy-agreements');
-const wizardHref = '/wizard?product=ast_standard&src=product_page&topic=tenancy';
+const productHref = '/products/ast';
 
 export const metadata: Metadata = {
   title: 'Tenancy Agreements Hub | Renters Rights Compliant Residential Agreements',
@@ -28,6 +30,12 @@ export default function TenancyAgreementsHubPage() {
   return (
     <div className="min-h-screen bg-white">
       <HeaderConfig mode="autoOnScroll" />
+      <SeoLandingWrapper
+        pagePath="/tenancy-agreements"
+        pageTitle={metadata.title as string}
+        pageType="tenancy"
+        jurisdiction="uk"
+      />
       <main>
         <StructuredData
           data={breadcrumbSchema([
@@ -39,18 +47,40 @@ export default function TenancyAgreementsHubPage() {
         <UniversalHero
           title="Tenancy Agreements for UK Landlords"
           subtitle="Choose the main tenancy wizard flow with Renters’ Rights compliant England Residential Tenancy Agreement wording and jurisdiction-specific UK variants."
-          primaryCta={{ label: 'Start Tenancy Wizard', href: wizardHref }}
+          primaryCta={{ label: 'Compare tenancy agreement routes', href: productHref }}
           showTrustPositioningBar
           hideMedia
         />
 
         <Container className="py-12">
           <div className="space-y-6">
+            <section className="mx-auto max-w-4xl">
+              <SeoPageContextPanel pathname="/tenancy-agreements" />
+            </section>
+
+            <section className="rounded-2xl border border-blue-200 bg-blue-50 p-6 text-sm text-gray-700">
+              <p>
+                Use this hub to compare the UK routes, then move into the{' '}
+                <Link href="/tenancy-agreements/england" className="font-semibold text-blue-700 hover:underline">
+                  England tenancy agreement hub
+                </Link>{' '}
+                for the core Residential Tenancy Agreement journey, the{' '}
+                <Link href="/private-residential-tenancy-agreement-template" className="font-semibold text-blue-700 hover:underline">
+                  Scotland PRT guide
+                </Link>{' '}
+                for Scottish lets, and the{' '}
+                <Link href={productHref} className="font-semibold text-blue-700 hover:underline">
+                  tenancy agreement product page
+                </Link>{' '}
+                when you are ready to compare live creation options.
+              </p>
+            </section>
+
             <div className="grid gap-4 sm:grid-cols-2">
               <Link href="/tenancy-agreement" className="rounded-lg border p-4 hover:bg-gray-50">Standard tenancy agreement</Link>
               <Link href="/premium-tenancy-agreement" className="rounded-lg border p-4 hover:bg-gray-50">Premium tenancy agreement</Link>
               <Link href="/periodic-tenancy-agreement" className="rounded-lg border p-4 hover:bg-gray-50">Periodic tenancy agreement</Link>
-              <Link href={wizardHref} className="rounded-lg border p-4 hover:bg-gray-50">Start wizard</Link>
+              <Link href={productHref} className="rounded-lg border p-4 hover:bg-gray-50">Compare tenancy products</Link>
             </div>
 
             <section className="rounded-2xl border border-gray-200 bg-gray-50 p-6">

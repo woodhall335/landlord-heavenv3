@@ -113,6 +113,18 @@ export const SEO_PILLAR_ROUTES = {
   tenancyAgreementsNorthernIreland: '/northern-ireland-tenancy-agreement-template',
 } as const;
 
+export const EXPLICIT_TAXONOMY_EXEMPTIONS = [
+  '/cookies',
+  '/landlord-documents-england',
+  '/lodger-agreement-template',
+  '/privacy',
+  '/refunds',
+  '/tenancy-agreements/england-wales',
+  '/terms',
+] as const;
+
+const EXPLICIT_TAXONOMY_EXEMPTION_SET = new Set<string>(EXPLICIT_TAXONOMY_EXEMPTIONS);
+
 const REVIEWED_DATE = '21 March 2026';
 
 const defaultFreshnessPolicyByJurisdiction: Record<SeoJurisdiction, Omit<FreshnessPolicy, 'legalContextNote'>> = {
@@ -269,7 +281,7 @@ function makeEntry(
 function rentArrearsEntry(
   pathname: string,
   supportingPage: string,
-  config: Partial<Omit<SeoPageTaxonomyEntry, 'pathname' | 'cluster' | 'primaryPillar' | 'supportingPage' | 'primaryProduct' | 'anchorVariants' | 'pageType' | 'pageRole' | 'jurisdiction' | 'section21TransitionEligible' | 'freshnessRequired' | 'consolidationStatus'>> &
+  config: Partial<Omit<SeoPageTaxonomyEntry, 'pathname' | 'cluster' | 'primaryPillar' | 'supportingPage' | 'primaryProduct' | 'pageType' | 'pageRole' | 'jurisdiction' | 'section21TransitionEligible' | 'freshnessRequired' | 'consolidationStatus'>> &
     Pick<SeoPageTaxonomyEntry, 'canonicalTarget'>
 ): SeoPageTaxonomyEntry {
   return makeEntry(pathname, {
@@ -305,7 +317,7 @@ function rentArrearsEntry(
 function moneyClaimEntry(
   pathname: string,
   supportingPage: string,
-  config: Partial<Omit<SeoPageTaxonomyEntry, 'pathname' | 'cluster' | 'primaryPillar' | 'supportingPage' | 'primaryProduct' | 'anchorVariants' | 'pageType' | 'pageRole' | 'jurisdiction' | 'section21TransitionEligible' | 'freshnessRequired' | 'consolidationStatus'>> &
+  config: Partial<Omit<SeoPageTaxonomyEntry, 'pathname' | 'cluster' | 'primaryPillar' | 'supportingPage' | 'primaryProduct' | 'pageType' | 'pageRole' | 'jurisdiction' | 'section21TransitionEligible' | 'freshnessRequired' | 'consolidationStatus'>> &
     Pick<SeoPageTaxonomyEntry, 'canonicalTarget'>
 ): SeoPageTaxonomyEntry {
   return makeEntry(pathname, {
@@ -342,7 +354,7 @@ function moneyClaimEntry(
 function tenancyEntry(
   pathname: string,
   supportingPage: string,
-  config: Partial<Omit<SeoPageTaxonomyEntry, 'pathname' | 'cluster' | 'primaryPillar' | 'supportingPage' | 'primaryProduct' | 'anchorVariants' | 'pageType' | 'pageRole' | 'jurisdiction' | 'section21TransitionEligible' | 'freshnessRequired' | 'consolidationStatus'>> &
+  config: Partial<Omit<SeoPageTaxonomyEntry, 'pathname' | 'cluster' | 'primaryPillar' | 'supportingPage' | 'primaryProduct' | 'pageType' | 'pageRole' | 'jurisdiction' | 'section21TransitionEligible' | 'freshnessRequired' | 'consolidationStatus'>> &
     Pick<SeoPageTaxonomyEntry, 'canonicalTarget'>
 ): SeoPageTaxonomyEntry {
   return makeEntry(pathname, {
@@ -373,7 +385,7 @@ function tenancyEntry(
 function processEntry(
   pathname: string,
   supportingPage: string,
-  config: Partial<Omit<SeoPageTaxonomyEntry, 'pathname' | 'cluster' | 'primaryPillar' | 'supportingPage' | 'primaryProduct' | 'anchorVariants' | 'pageType' | 'pageRole' | 'jurisdiction' | 'section21TransitionEligible' | 'freshnessRequired' | 'consolidationStatus'>> &
+  config: Partial<Omit<SeoPageTaxonomyEntry, 'pathname' | 'cluster' | 'primaryPillar' | 'supportingPage' | 'primaryProduct' | 'pageType' | 'pageRole' | 'jurisdiction' | 'section21TransitionEligible' | 'freshnessRequired' | 'consolidationStatus'>> &
     Pick<SeoPageTaxonomyEntry, 'canonicalTarget'>
 ): SeoPageTaxonomyEntry {
   return makeEntry(pathname, {
@@ -405,7 +417,7 @@ function processEntry(
 function section8Entry(
   pathname: string,
   supportingPage: string,
-  config: Partial<Omit<SeoPageTaxonomyEntry, 'pathname' | 'cluster' | 'primaryPillar' | 'supportingPage' | 'primaryProduct' | 'anchorVariants' | 'pageType' | 'pageRole' | 'jurisdiction' | 'section21TransitionEligible' | 'freshnessRequired' | 'consolidationStatus'>> &
+  config: Partial<Omit<SeoPageTaxonomyEntry, 'pathname' | 'cluster' | 'primaryPillar' | 'supportingPage' | 'primaryProduct' | 'pageType' | 'pageRole' | 'jurisdiction' | 'section21TransitionEligible' | 'freshnessRequired' | 'consolidationStatus'>> &
     Pick<SeoPageTaxonomyEntry, 'canonicalTarget'>
 ): SeoPageTaxonomyEntry {
   return makeEntry(pathname, {
@@ -441,7 +453,7 @@ function section8Entry(
 function section21Entry(
   pathname: string,
   supportingPage: string,
-  config: Partial<Omit<SeoPageTaxonomyEntry, 'pathname' | 'cluster' | 'primaryPillar' | 'supportingPage' | 'primaryProduct' | 'anchorVariants' | 'pageType' | 'pageRole' | 'jurisdiction' | 'section21TransitionEligible' | 'freshnessRequired' | 'consolidationStatus'>> &
+  config: Partial<Omit<SeoPageTaxonomyEntry, 'pathname' | 'cluster' | 'primaryPillar' | 'supportingPage' | 'primaryProduct' | 'pageType' | 'pageRole' | 'jurisdiction' | 'section21TransitionEligible' | 'freshnessRequired' | 'consolidationStatus'>> &
     Pick<SeoPageTaxonomyEntry, 'canonicalTarget'>
 ): SeoPageTaxonomyEntry {
   return makeEntry(pathname, {
@@ -511,7 +523,7 @@ function regionalTenancyEntry(
   cluster: Extract<SeoCluster, 'tenancy-wales' | 'tenancy-scotland' | 'tenancy-northern-ireland'>,
   primaryPillar: string,
   supportingPage: string,
-  config: Partial<Omit<SeoPageTaxonomyEntry, 'pathname' | 'cluster' | 'primaryPillar' | 'supportingPage' | 'primaryProduct' | 'anchorVariants' | 'pageType' | 'pageRole' | 'jurisdiction' | 'section21TransitionEligible' | 'freshnessRequired' | 'consolidationStatus'>> &
+  config: Partial<Omit<SeoPageTaxonomyEntry, 'pathname' | 'cluster' | 'primaryPillar' | 'supportingPage' | 'primaryProduct' | 'pageType' | 'pageRole' | 'jurisdiction' | 'section21TransitionEligible' | 'freshnessRequired' | 'consolidationStatus'>> &
     Pick<SeoPageTaxonomyEntry, 'canonicalTarget'>
 ): SeoPageTaxonomyEntry {
   const anchors = regionalTenancyAnchors[jurisdiction];
@@ -544,7 +556,7 @@ function regionalTenancyEntry(
 function section21TemplateEntry(
   pathname: string,
   supportingPage: string,
-  config: Partial<Omit<SeoPageTaxonomyEntry, 'pathname' | 'cluster' | 'primaryPillar' | 'supportingPage' | 'primaryProduct' | 'anchorVariants' | 'pageType' | 'pageRole' | 'jurisdiction' | 'section21TransitionEligible' | 'freshnessRequired' | 'consolidationStatus'>> &
+  config: Partial<Omit<SeoPageTaxonomyEntry, 'pathname' | 'cluster' | 'primaryPillar' | 'supportingPage' | 'primaryProduct' | 'pageType' | 'pageRole' | 'jurisdiction' | 'section21TransitionEligible' | 'freshnessRequired' | 'consolidationStatus'>> &
     Pick<SeoPageTaxonomyEntry, 'canonicalTarget'>
 ): SeoPageTaxonomyEntry {
   return makeEntry(pathname, {
@@ -581,7 +593,7 @@ function section21TemplateEntry(
 function section8TemplateEntry(
   pathname: string,
   supportingPage: string,
-  config: Partial<Omit<SeoPageTaxonomyEntry, 'pathname' | 'cluster' | 'primaryPillar' | 'supportingPage' | 'primaryProduct' | 'anchorVariants' | 'pageType' | 'pageRole' | 'jurisdiction' | 'section21TransitionEligible' | 'freshnessRequired' | 'consolidationStatus'>> &
+  config: Partial<Omit<SeoPageTaxonomyEntry, 'pathname' | 'cluster' | 'primaryPillar' | 'supportingPage' | 'primaryProduct' | 'pageType' | 'pageRole' | 'jurisdiction' | 'section21TransitionEligible' | 'freshnessRequired' | 'consolidationStatus'>> &
     Pick<SeoPageTaxonomyEntry, 'canonicalTarget'>
 ): SeoPageTaxonomyEntry {
   return makeEntry(pathname, {
@@ -617,7 +629,7 @@ function section8TemplateEntry(
 function genericNoticeEntry(
   pathname: string,
   supportingPage: string,
-  config: Partial<Omit<SeoPageTaxonomyEntry, 'pathname' | 'cluster' | 'primaryPillar' | 'supportingPage' | 'primaryProduct' | 'anchorVariants' | 'pageType' | 'pageRole' | 'jurisdiction' | 'section21TransitionEligible' | 'freshnessRequired' | 'consolidationStatus'>> &
+  config: Partial<Omit<SeoPageTaxonomyEntry, 'pathname' | 'cluster' | 'primaryPillar' | 'supportingPage' | 'primaryProduct' | 'pageType' | 'pageRole' | 'jurisdiction' | 'section21TransitionEligible' | 'freshnessRequired' | 'consolidationStatus'>> &
     Pick<SeoPageTaxonomyEntry, 'canonicalTarget'>
 ): SeoPageTaxonomyEntry {
   return makeEntry(pathname, {
@@ -1382,6 +1394,12 @@ const LONGTAIL_REDIRECT_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     }),
     consolidationStatus: 'candidate_redirect',
   }),
+  '/tenancy-agreements/scotland': makeEntry('/tenancy-agreements/scotland', {
+    ...regionalTenancyEntry('/tenancy-agreements/scotland', 'scotland', 'tenancy-scotland', SEO_PILLAR_ROUTES.tenancyAgreementsScotland, '/scotland-prt-model-agreement-guide', {
+      canonicalTarget: SEO_PILLAR_ROUTES.tenancyAgreementsScotland,
+    }),
+    consolidationStatus: 'candidate_redirect',
+  }),
   '/tenancy-agreement-northern-ireland': makeEntry('/tenancy-agreement-northern-ireland', {
     ...regionalTenancyEntry('/tenancy-agreement-northern-ireland', 'northern-ireland', 'tenancy-northern-ireland', SEO_PILLAR_ROUTES.tenancyAgreementsNorthernIreland, '/tenancy-agreement-template-northern-ireland', {
       canonicalTarget: SEO_PILLAR_ROUTES.tenancyAgreementsNorthernIreland,
@@ -1425,6 +1443,22 @@ const LONGTAIL_REDIRECT_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     }),
     pageType: 'court',
     pageRole: 'product-adjacent',
+    primaryProduct: SEO_PRODUCT_ROUTES.completePack,
+    secondaryProduct: SEO_PRODUCT_ROUTES.noticeOnly,
+    primaryProductByScenario: {
+      court: SEO_PRODUCT_ROUTES.completePack,
+      notice: SEO_PRODUCT_ROUTES.noticeOnly,
+      transition: SEO_PRODUCT_ROUTES.completePack,
+    },
+    anchorVariants: {
+      pillar: [...anchorSets.section21TransitionPillar],
+      supporting: [
+        'what to do after a Section 21 notice expires',
+        'accelerated possession claim guide',
+        'N5B possession claim guidance',
+      ],
+      product: [...anchorSets.completePackProduct],
+    },
     consolidationStatus: 'candidate_redirect',
   }),
   '/n5b-possession-claim-form': makeEntry('/n5b-possession-claim-form', {
@@ -1768,6 +1802,24 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     freshnessRequired: true,
     consolidationStatus: 'canonical',
   }),
+  '/tenancy-agreements': makeEntry('/tenancy-agreements', {
+    pageType: 'tenancy',
+    pageRole: 'hub',
+    jurisdiction: 'uk',
+    cluster: 'product-adjacent',
+    primaryPillar: SEO_PILLAR_ROUTES.tenancyAgreementsEngland,
+    supportingPage: SEO_PILLAR_ROUTES.tenancyAgreementsScotland,
+    primaryProduct: SEO_PRODUCT_ROUTES.ast,
+    canonicalTarget: '/tenancy-agreements',
+    anchorVariants: {
+      pillar: [...anchorSets.tenancyPillar],
+      supporting: [...regionalTenancyAnchors.scotland.pillar],
+      product: [...anchorSets.tenancyProduct],
+    },
+    section21TransitionEligible: false,
+    freshnessRequired: false,
+    consolidationStatus: 'canonical',
+  }),
   '/section-8-notice-guide': makeEntry('/section-8-notice-guide', {
     ...section8Entry('/section-8-notice-guide', '/section-8-grounds-explained', {
       canonicalTarget: SEO_PILLAR_ROUTES.section8Notice,
@@ -1806,6 +1858,57 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     },
     section21TransitionEligible: false,
     freshnessRequired: false,
+    consolidationStatus: 'supporting_live',
+  }),
+  '/how-to-evict-a-tenant-england': makeEntry('/how-to-evict-a-tenant-england', {
+    pageType: 'guide',
+    pageRole: 'bridge',
+    jurisdiction: 'england',
+    cluster: 'how-to-evict',
+    primaryPillar: SEO_PILLAR_ROUTES.howToEvictTenant,
+    supportingPage: SEO_PILLAR_ROUTES.evictionProcessUk,
+    primaryProduct: SEO_PRODUCT_ROUTES.noticeOnly,
+    secondaryProduct: SEO_PRODUCT_ROUTES.completePack,
+    primaryProductByScenario: {
+      notice: SEO_PRODUCT_ROUTES.noticeOnly,
+      court: SEO_PRODUCT_ROUTES.completePack,
+    },
+    canonicalTarget: '/how-to-evict-a-tenant-england',
+    anchorVariants: {
+      pillar: [...anchorSets.howToEvictPillar],
+      supporting: [...anchorSets.evictionProcessPillar],
+      product: [...anchorSets.noticeOnlyProduct],
+    },
+    section21TransitionEligible: true,
+    freshnessRequired: true,
+    consolidationStatus: 'bridge_live',
+  }),
+  '/how-to-rent-guide': makeEntry('/how-to-rent-guide', {
+    pageType: 'guide',
+    pageRole: 'supporting',
+    jurisdiction: 'england',
+    cluster: 'section-21-transition',
+    primaryPillar: SEO_PILLAR_ROUTES.section21BanUk,
+    supportingPage: '/section-21-validity-checklist',
+    primaryProduct: SEO_PRODUCT_ROUTES.noticeOnly,
+    secondaryProduct: SEO_PRODUCT_ROUTES.ast,
+    primaryProductByScenario: {
+      notice: SEO_PRODUCT_ROUTES.noticeOnly,
+      tenancy: SEO_PRODUCT_ROUTES.ast,
+      transition: SEO_PRODUCT_ROUTES.completePack,
+    },
+    canonicalTarget: '/how-to-rent-guide',
+    anchorVariants: {
+      pillar: [...anchorSets.section21TransitionPillar],
+      supporting: [
+        'Section 21 validity checklist',
+        'How to Rent compliance checklist',
+        'Section 21 file review guide',
+      ],
+      product: [...anchorSets.noticeOnlyProduct],
+    },
+    section21TransitionEligible: true,
+    freshnessRequired: true,
     consolidationStatus: 'supporting_live',
   }),
   '/rent-arrears-landlord-guide': rentArrearsEntry('/rent-arrears-landlord-guide', SEO_PILLAR_ROUTES.section8Notice, {
@@ -1847,6 +1950,34 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
   }),
   '/rent-arrears-eviction-guide': rentArrearsEntry('/rent-arrears-eviction-guide', '/money-claim-unpaid-rent', {
     canonicalTarget: '/rent-arrears-eviction-guide',
+  }),
+  '/rent-arrears-letter-template': makeEntry('/rent-arrears-letter-template', {
+    pageType: 'money',
+    pageRole: 'bridge',
+    jurisdiction: 'uk',
+    cluster: 'rent-arrears',
+    primaryPillar: SEO_PILLAR_ROUTES.tenantNotPayingRent,
+    supportingPage: '/money-claim-unpaid-rent',
+    primaryProduct: SEO_PRODUCT_ROUTES.moneyClaim,
+    secondaryProduct: SEO_PRODUCT_ROUTES.noticeOnly,
+    primaryProductByScenario: {
+      arrears: SEO_PRODUCT_ROUTES.moneyClaim,
+      notice: SEO_PRODUCT_ROUTES.noticeOnly,
+      court: SEO_PRODUCT_ROUTES.completePack,
+    },
+    canonicalTarget: '/rent-arrears-letter-template',
+    anchorVariants: {
+      pillar: [...anchorSets.rentArrearsPillar],
+      supporting: [
+        'money claim for unpaid rent',
+        'letter before action for rent arrears',
+        'court route for overdue rent',
+      ],
+      product: [...anchorSets.moneyClaimProduct],
+    },
+    section21TransitionEligible: false,
+    freshnessRequired: true,
+    consolidationStatus: 'bridge_live',
   }),
   '/tenant-stopped-paying-rent': makeEntry('/tenant-stopped-paying-rent', {
     ...rentArrearsEntry('/tenant-stopped-paying-rent', SEO_PILLAR_ROUTES.section8Notice, {
@@ -2004,6 +2135,27 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     freshnessRequired: true,
     consolidationStatus: 'bridge_live',
   }),
+  '/eicr-landlord-requirements': makeEntry('/eicr-landlord-requirements', {
+    ...section21Entry('/eicr-landlord-requirements', SEO_PILLAR_ROUTES.section21Notice, {
+      canonicalTarget: '/eicr-landlord-requirements',
+      primaryProductByScenario: {
+        notice: SEO_PRODUCT_ROUTES.noticeOnly,
+        transition: SEO_PRODUCT_ROUTES.completePack,
+      },
+      anchorVariants: {
+        pillar: [...anchorSets.section21TransitionPillar],
+        supporting: [
+          'Section 21 notice guide',
+          'Section 21 validity requirements',
+          'post-ban possession route for landlords',
+        ],
+        product: [...anchorSets.noticeOnlyProduct],
+      },
+    }),
+    primaryProduct: SEO_PRODUCT_ROUTES.noticeOnly,
+    secondaryProduct: SEO_PRODUCT_ROUTES.completePack,
+    freshnessRequired: true,
+  }),
   '/section-21-vs-section-8': makeEntry('/section-21-vs-section-8', {
     ...section21Entry('/section-21-vs-section-8', SEO_PILLAR_ROUTES.section8Notice, {
       canonicalTarget: '/section-21-vs-section-8',
@@ -2048,6 +2200,83 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
       supporting: [...anchorSets.howToEvictPillar],
       product: [...anchorSets.completePackProduct],
     },
+  }),
+  '/tenant-refusing-inspection': makeEntry('/tenant-refusing-inspection', {
+    ...processEntry('/tenant-refusing-inspection', '/tenant-refusing-access', {
+      canonicalTarget: '/tenant-refusing-access',
+      primaryProductByScenario: {
+        notice: SEO_PRODUCT_ROUTES.noticeOnly,
+        court: SEO_PRODUCT_ROUTES.completePack,
+      },
+    }),
+    pageType: 'problem',
+    pageRole: 'bridge',
+    cluster: 'tenant-problems',
+    primaryPillar: SEO_PILLAR_ROUTES.howToEvictTenant,
+    supportingPage: '/tenant-refusing-access',
+    primaryProduct: SEO_PRODUCT_ROUTES.noticeOnly,
+    secondaryProduct: SEO_PRODUCT_ROUTES.completePack,
+    anchorVariants: {
+      pillar: [...anchorSets.howToEvictPillar],
+      supporting: [
+        'tenant refusing access guide',
+        'landlord access rights explained',
+        'inspection access evidence steps',
+      ],
+      product: [...anchorSets.noticeOnlyProduct],
+    },
+    freshnessRequired: true,
+    consolidationStatus: 'candidate_redirect',
+  }),
+  '/tenant-refuses-to-leave-after-notice': makeEntry('/tenant-refuses-to-leave-after-notice', {
+    ...processEntry('/tenant-refuses-to-leave-after-notice', SEO_PILLAR_ROUTES.howToEvictTenant, {
+      canonicalTarget: '/tenant-refuses-to-leave-after-notice',
+      primaryProductByScenario: {
+        notice: SEO_PRODUCT_ROUTES.noticeOnly,
+        court: SEO_PRODUCT_ROUTES.completePack,
+      },
+    }),
+    pageType: 'problem',
+    pageRole: 'bridge',
+    cluster: 'tenant-problems',
+    primaryPillar: SEO_PILLAR_ROUTES.evictionProcessUk,
+    supportingPage: SEO_PILLAR_ROUTES.howToEvictTenant,
+    primaryProduct: SEO_PRODUCT_ROUTES.completePack,
+    secondaryProduct: SEO_PRODUCT_ROUTES.noticeOnly,
+    anchorVariants: {
+      pillar: [...anchorSets.evictionProcessPillar],
+      supporting: [...anchorSets.howToEvictPillar],
+      product: [...anchorSets.completePackProduct],
+    },
+    freshnessRequired: true,
+    consolidationStatus: 'bridge_live',
+  }),
+  '/tenant-wont-leave': makeEntry('/tenant-wont-leave', {
+    ...processEntry('/tenant-wont-leave', '/tenant-refuses-to-leave-after-notice', {
+      canonicalTarget: '/tenant-refuses-to-leave-after-notice',
+      primaryProductByScenario: {
+        notice: SEO_PRODUCT_ROUTES.noticeOnly,
+        court: SEO_PRODUCT_ROUTES.completePack,
+      },
+    }),
+    pageType: 'problem',
+    pageRole: 'bridge',
+    cluster: 'tenant-problems',
+    primaryPillar: SEO_PILLAR_ROUTES.evictionProcessUk,
+    supportingPage: '/tenant-refuses-to-leave-after-notice',
+    primaryProduct: SEO_PRODUCT_ROUTES.completePack,
+    secondaryProduct: SEO_PRODUCT_ROUTES.noticeOnly,
+    anchorVariants: {
+      pillar: [...anchorSets.evictionProcessPillar],
+      supporting: [
+        'tenant refuses to leave after notice',
+        'post-notice possession guide',
+        'what landlords do when notice expires',
+      ],
+      product: [...anchorSets.completePackProduct],
+    },
+    freshnessRequired: true,
+    consolidationStatus: 'candidate_redirect',
   }),
   '/tenant-abandoned-property': makeEntry('/tenant-abandoned-property', {
     ...processEntry('/tenant-abandoned-property', '/tenant-left-without-paying-rent', {
@@ -2115,6 +2344,69 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     section21TransitionEligible: false,
     freshnessRequired: false,
     consolidationStatus: 'supporting_live',
+  }),
+  '/scotland-notice-to-leave-template': makeEntry('/scotland-notice-to-leave-template', {
+    pageType: 'notice',
+    pageRole: 'supporting',
+    jurisdiction: 'scotland',
+    cluster: 'regional-eviction',
+    primaryPillar: SEO_PILLAR_ROUTES.evictionProcessUk,
+    supportingPage: '/scotland-eviction-notices',
+    primaryProduct: SEO_PRODUCT_ROUTES.noticeOnly,
+    secondaryProduct: SEO_PRODUCT_ROUTES.ast,
+    primaryProductByScenario: {
+      notice: SEO_PRODUCT_ROUTES.noticeOnly,
+      tenancy: SEO_PRODUCT_ROUTES.ast,
+    },
+    canonicalTarget: '/scotland-notice-to-leave-template',
+    anchorVariants: {
+      pillar: [...anchorSets.evictionProcessPillar],
+      supporting: [
+        'Scotland eviction notices',
+        'Notice to Leave process in Scotland',
+        'Scottish possession notice guide',
+      ],
+      product: [...anchorSets.noticeOnlyProduct],
+    },
+    section21TransitionEligible: false,
+    freshnessRequired: true,
+    consolidationStatus: 'supporting_live',
+  }),
+  '/tenant-breach-of-tenancy': makeEntry('/tenant-breach-of-tenancy', {
+    ...section8Entry('/tenant-breach-of-tenancy', SEO_PILLAR_ROUTES.howToEvictTenant, {
+      canonicalTarget: '/tenant-breach-of-tenancy',
+    }),
+    pageType: 'problem',
+    pageRole: 'bridge',
+    cluster: 'tenant-problems',
+    supportingPage: SEO_PILLAR_ROUTES.howToEvictTenant,
+    anchorVariants: {
+      pillar: [...anchorSets.section8Pillar],
+      supporting: [...anchorSets.howToEvictPillar],
+      product: [...anchorSets.section8NoticeProduct],
+    },
+    freshnessRequired: true,
+    consolidationStatus: 'bridge_live',
+  }),
+  '/tenant-subletting-without-permission': makeEntry('/tenant-subletting-without-permission', {
+    ...section8Entry('/tenant-subletting-without-permission', SEO_PILLAR_ROUTES.howToEvictTenant, {
+      canonicalTarget: '/tenant-subletting-without-permission',
+    }),
+    pageType: 'problem',
+    pageRole: 'bridge',
+    cluster: 'tenant-problems',
+    supportingPage: SEO_PILLAR_ROUTES.howToEvictTenant,
+    anchorVariants: {
+      pillar: [...anchorSets.section8Pillar],
+      supporting: [
+        'how to evict a tenant legally',
+        'unauthorised subletting landlord guide',
+        'tenancy breach evidence steps',
+      ],
+      product: [...anchorSets.section8NoticeProduct],
+    },
+    freshnessRequired: true,
+    consolidationStatus: 'bridge_live',
   }),
   '/tenant-ignores-section-21': section21Entry('/tenant-ignores-section-21', SEO_PILLAR_ROUTES.section21Notice, {
     canonicalTarget: '/tenant-ignores-section-21',
@@ -2765,6 +3057,14 @@ export function getTopInternalLinkRecipients(
 
 export function getPhase3SitemapExclusions(): string[] {
   return getCandidateRedirects().map((item) => item.source);
+}
+
+export function getExplicitTaxonomyExemptions(): string[] {
+  return [...EXPLICIT_TAXONOMY_EXEMPTIONS];
+}
+
+export function isExplicitTaxonomyExemption(pathname: string): boolean {
+  return EXPLICIT_TAXONOMY_EXEMPTION_SET.has(pathname);
 }
 
 export function isMappedPublicContentPath(pathname: string): boolean {

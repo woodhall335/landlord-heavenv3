@@ -15,6 +15,7 @@ import { UniversalHero } from '@/components/landing/UniversalHero';
 import { Container } from '@/components/ui';
 import { Section21Countdown } from '@/components/ui/Section21Countdown';
 import { FAQSection, type FAQItem } from '@/components/seo/FAQSection';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import {
   StructuredData,
@@ -24,20 +25,13 @@ import {
 } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 import { PRODUCTS } from '@/lib/pricing/products';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 
 const canonical = getCanonicalUrl('/section-21-ban');
 
 const noticeOnlyPrice = PRODUCTS.notice_only?.displayPrice ?? '£29.99';
 const completePackPrice = PRODUCTS.complete_pack?.displayPrice ?? '£79.99';
 
-const noticeWizardHref = buildWizardLink({
-  product: 'notice_only',
-  jurisdiction: 'england',
-  src: 'seo_section_21_ban',
-  topic: 'eviction',
-});
-
+const noticeOnlyHref = '/products/notice-only';
 const completePackHref = '/products/complete-pack';
 
 export const metadata: Metadata = {
@@ -181,8 +175,6 @@ export default function Section21BanPage() {
           { name: 'Section 21 Ban', url: canonical },
         ])}
       />
-      <StructuredData data={faqPageSchema(faqs)} />
-
       <main>
         <UniversalHero
           badge="England Possession Deadline Guide"
@@ -193,12 +185,12 @@ export default function Section21BanPage() {
           hideMedia
           showTrustPositioningBar
           primaryCta={{
-            label: `Start Section 21 Workflow — ${noticeOnlyPrice}`,
-            href: noticeWizardHref,
-          }}
-          secondaryCta={{
             label: `Complete Eviction Pack — ${completePackPrice}`,
             href: completePackHref,
+          }}
+          secondaryCta={{
+            label: `Start Section 21 Workflow — ${noticeOnlyPrice}`,
+            href: noticeOnlyHref,
           }}
           variant="pastel"
         >
@@ -208,6 +200,14 @@ export default function Section21BanPage() {
             no-fault route closes.
           </p>
         </UniversalHero>
+
+        <section className="bg-white py-8">
+          <Container>
+            <div className="mx-auto max-w-5xl">
+              <SeoPageContextPanel pathname="/section-21-ban" />
+            </div>
+          </Container>
+        </section>
 
         <section className="border-b border-[#E6DBFF] bg-white py-8">
           <Container>
@@ -257,6 +257,21 @@ export default function Section21BanPage() {
                   from Section 8, why the final window is commercially important, and why a
                   compliance-checked notice workflow is usually safer than trying to improvise
                   close to the line.
+                </p>
+                <p className="mt-4 leading-7 text-gray-700">
+                  For the live authority version of this topic, use the{' '}
+                  <Link href="/section-21-ban-uk" className="font-medium text-primary hover:underline">
+                    Section 21 ban guide
+                  </Link>
+                  . If you still need the legacy notice mechanics, review the{' '}
+                  <Link href="/section-21-notice" className="font-medium text-primary hover:underline">
+                    Section 21 notice guide
+                  </Link>{' '}
+                  before moving into the{' '}
+                  <Link href={completePackHref} className="font-medium text-primary hover:underline">
+                    Complete Eviction Pack
+                  </Link>{' '}
+                  for the broader post-ban route.
                 </p>
               </Card>
 
@@ -520,7 +535,7 @@ export default function Section21BanPage() {
                 </p>
                 <div className="mt-5 flex flex-wrap gap-3">
                   <Link
-                    href={noticeWizardHref}
+                    href={noticeOnlyHref}
                     className="rounded-lg bg-primary px-5 py-3 text-white hover:opacity-95"
                   >
                     {`Start Section 21 Workflow — ${noticeOnlyPrice}`}
@@ -552,7 +567,7 @@ export default function Section21BanPage() {
               </div>
 
               <div className="flex flex-col justify-center gap-4 sm:flex-row">
-                <Link href={noticeWizardHref} className="hero-btn-primary">
+                <Link href={noticeOnlyHref} className="hero-btn-primary">
                   {`Start Your Section 21 Workflow — ${noticeOnlyPrice}`}
                 </Link>
                 <Link href={completePackHref} className="hero-btn-secondary">
@@ -595,7 +610,7 @@ export default function Section21BanPage() {
 
               <div className="mt-6 flex flex-wrap gap-3">
                 <Link
-                  href={noticeWizardHref}
+                  href={noticeOnlyHref}
                   className="rounded-lg bg-primary px-5 py-3 text-white hover:opacity-95"
                 >
                   {`Start Section 21 Workflow — ${noticeOnlyPrice}`}

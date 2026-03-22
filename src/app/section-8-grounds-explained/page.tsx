@@ -5,6 +5,7 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { Container } from '@/components/ui/Container';
 import { FAQSection, type FAQItem } from '@/components/seo/FAQSection';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import {
   StructuredData,
@@ -140,8 +141,6 @@ export default function Page() {
         ])}
       />
 
-      <StructuredData data={faqPageSchema(faqs)} />
-
       <UniversalHero
         title="Section 8 Grounds Explained"
         subtitle="Understand the legal eviction grounds landlords rely on when a tenant breaches the tenancy."
@@ -185,6 +184,10 @@ export default function Page() {
       <section className="bg-white py-12">
         <Container>
           <div className="mx-auto max-w-5xl space-y-10">
+            <SeoPageContextPanel
+              pathname="/section-8-grounds-explained"
+              className="border border-[#E6DBFF] bg-[#FBF8FF]"
+            />
             <Card id="quick-answer" title="Quick Answer">
               <p className="mt-4 leading-7 text-gray-700">
                 Section 8 eviction allows landlords in England to recover possession of a
@@ -215,6 +218,21 @@ export default function Page() {
                 chronology, and hearing readiness than a typical Section 21 possession
                 claim. Landlords who treat the case like a structured legal workflow
                 usually do far better than landlords who treat the notice as the whole job.
+              </p>
+              <p className="mt-4 leading-7 text-gray-700">
+                Strong ground selection usually starts with the{' '}
+                <Link href="/section-8-notice" className="font-medium text-primary hover:underline">
+                  Section 8 notice guide
+                </Link>
+                , checks the breach scenario against{' '}
+                <Link href="/tenant-not-paying-rent" className="font-medium text-primary hover:underline">
+                  tenant not paying rent
+                </Link>{' '}
+                or the closest supporting scenario, and then uses the{' '}
+                <Link href="/products/notice-only" className="font-medium text-primary hover:underline">
+                  Notice Only product page
+                </Link>{' '}
+                when the immediate need is getting the grounds and notice right.
               </p>
             </Card>
 

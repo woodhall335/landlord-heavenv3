@@ -187,8 +187,6 @@ export default function Page() {
         ])}
       />
 
-      <StructuredData data={faqPageSchema(faqs)} />
-
       <UniversalHero
         title="How to Serve a Section 8 Notice"
         subtitle="A practical landlord guide to choosing grounds carefully, serving the notice properly, and preparing the evidence needed for a stronger possession case."

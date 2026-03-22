@@ -6,10 +6,8 @@ import { FAQSection } from '@/components/seo/FAQSection';
 import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/ast-tenancy-agreement-template');
-const wizardHref =
-  '/wizard?product=ast_standard&jurisdiction=england&src=seo_ast_tenancy_agreement_template&topic=tenancy';
-const premiumWizardHref =
-  '/wizard?product=ast_premium&jurisdiction=england&src=seo_ast_tenancy_agreement_template&topic=tenancy';
+const wizardHref = '/products/ast';
+const premiumWizardHref = '/products/ast';
 
 export const metadata: Metadata = {
   title: 'AST Tenancy Agreement Template 2026 | England Agreement Updated',

@@ -7,7 +7,7 @@ import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/periodic-tenancy-agreement');
-const wizardHref = '/wizard?product=ast_standard&jurisdiction=england&topic=tenancy&src=product_page';
+const wizardHref = '/products/ast';
 
 export const metadata: Metadata = {
   title: 'Periodic Tenancy Agreement | England Residential Tenancy Agreement',

@@ -197,8 +197,6 @@ export default function SueTenantUnpaidRentPage() {
       />
 
       <StructuredData data={breadcrumbSchema(breadcrumbs)} />
-      <StructuredData data={faqPageSchema(pageFaqs)} />
-
       <UniversalHero
         badge="Legal Action"
         title="How to Sue a Tenant for Unpaid Rent"

@@ -182,8 +182,6 @@ export default function Page() {
         ])}
       />
 
-      <StructuredData data={faqPageSchema(faqs)} />
-
       <UniversalHero
         title="Tenant Left Without Paying Rent"
         subtitle="A practical landlord guide to understanding the arrears position and deciding what to do once a tenant leaves owing rent."

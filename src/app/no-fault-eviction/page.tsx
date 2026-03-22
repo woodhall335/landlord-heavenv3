@@ -4,6 +4,8 @@ import { Container } from '@/components/ui/Container';
 import { getCanonicalUrl } from '@/lib/seo';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { noFaultEvictionFAQs } from '@/data/faqs';
@@ -38,7 +40,7 @@ const breadcrumbs = [
   { name: 'No Fault Eviction', url: '/no-fault-eviction' },
 ];
 
-const wizardHref = '/wizard?product=notice_only&topic=eviction&src=seo_no_fault_eviction';
+const noticeOnlyHref = '/products/notice-only';
 
 export default function NoFaultEvictionPage() {
   return (
@@ -46,11 +48,17 @@ export default function NoFaultEvictionPage() {
       <StructuredData data={breadcrumbSchema(breadcrumbs)} />
 
       <div className="min-h-screen bg-gray-50">
+        <SeoLandingWrapper
+          pagePath="/no-fault-eviction"
+          pageTitle={metadata.title as string}
+          pageType="guide"
+          jurisdiction="england"
+        />
         <HeaderConfig mode="autoOnScroll" />
         <UniversalHero
           title="No-Fault Eviction (England): Section 21 Guide"
           subtitle="Check Section 21 eligibility, notice timing, and service steps before moving to possession proceedings."
-          primaryCta={{ label: 'Start Section 21 Wizard', href: wizardHref }}
+          primaryCta={{ label: 'Start Notice Only', href: noticeOnlyHref }}
           secondaryCta={{ label: 'Section 21 requirements', href: '#requirements' }}
           showTrustPositioningBar
           hideMedia
@@ -59,6 +67,24 @@ export default function NoFaultEvictionPage() {
         {/* Main Content */}
         <Container>
           <div className="max-w-4xl mx-auto py-12">
+            <div className="mb-8 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+              <SeoPageContextPanel pathname="/no-fault-eviction" />
+              <p className="mt-4 text-gray-700 leading-7">
+                For England no-fault files, start with the{' '}
+                <Link href="/section-21-ban-uk" className="font-medium text-primary hover:underline">
+                  Section 21 transition guide
+                </Link>
+                , cross-check the wording against the{' '}
+                <Link href="/section-21-notice-template" className="font-medium text-primary hover:underline">
+                  Section 21 notice template guide
+                </Link>
+                , and begin on the{' '}
+                <Link href="/products/notice-only" className="font-medium text-primary hover:underline">
+                  Notice Only product page
+                </Link>{' '}
+                while the matter is still at notice stage.
+              </p>
+            </div>
             <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm mb-12">
               <div className="prose prose-slate max-w-none">
                 <h2>What is a No-Fault Eviction?</h2>

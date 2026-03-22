@@ -173,8 +173,6 @@ export default function Page() {
           { name: 'Section 21 Notice Guide', url: canonical },
         ])}
       />
-      <StructuredData data={faqPageSchema(faqs)} />
-
       <UniversalHero
         title="Section 21 Notice Guide"
         subtitle="Rules, timing, validity checks, and what landlords should do next."

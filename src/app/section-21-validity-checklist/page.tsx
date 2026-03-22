@@ -184,8 +184,6 @@ export default function Page() {
         ])}
       />
 
-      <StructuredData data={faqPageSchema(faqs)} />
-
       <UniversalHero
         title="Section 21 Validity Checklist"
         subtitle="Audit your compliance file before service so you do not lose time, money, and possession momentum to an avoidable invalid notice."

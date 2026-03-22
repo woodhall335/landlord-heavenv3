@@ -33,9 +33,6 @@ export interface IntentPageConfig {
   lastUpdated?: string;
 }
 
-const noticeWizard = (src: string) => `https://landlordheaven.co.uk/wizard/flow?type=eviction&jurisdiction=england&product=notice_only&src=${src}&topic=eviction`;
-const completeWizard = (src: string) => `https://landlordheaven.co.uk/wizard/flow?type=eviction&jurisdiction=england&product=complete_pack&src=${src}&topic=eviction`;
-
 export const INTENT_PAGES: Record<string, IntentPageConfig> = {
   'section-21-notice-generator': {
     slug: 'section-21-notice-generator',
@@ -2470,12 +2467,6 @@ export const INTENT_PAGES: Record<string, IntentPageConfig> = {
   },
 
 };
-
-export function getWizardHref(config: IntentPageConfig, product?: IntentProduct, srcOverride?: string) {
-  const targetProduct = product ?? config.primaryProduct;
-  const src = srcOverride ?? config.primarySrc;
-  return targetProduct === 'notice_only' ? noticeWizard(src) : completeWizard(src);
-}
 
 export function getIntentPageMetadata(config: IntentPageConfig): Metadata {
   return generateMetadataForPageType({

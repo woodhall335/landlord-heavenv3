@@ -9,11 +9,12 @@ import {
   blogLinks,
   landingPageLinks,
 } from '@/lib/seo/internal-links';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { FunnelCta } from '@/components/funnels';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import {
   CheckCircle,
   FileText,
@@ -29,17 +30,9 @@ import {
   Shield,
 } from 'lucide-react';
 
-const wizardLinkMoneyClaim = buildWizardLink({
-  product: 'money_claim',
-  src: 'seo_rent_arrears_letter_template',
-  topic: 'debt',
-});
-
-const wizardLinkNoticeOnly = buildWizardLink({
-  product: 'notice_only',
-  src: 'seo_rent_arrears_letter_template',
-  topic: 'eviction',
-});
+const moneyClaimProductHref = '/products/money-claim';
+const noticeOnlyProductHref = '/products/notice-only';
+const completePackProductHref = '/products/complete-pack';
 
 export const metadata: Metadata = {
   title: 'Rent Arrears Letter Template UK | Free Demand Letter + Legal Next Steps',
@@ -123,23 +116,15 @@ export default function RentArrearsLetterTemplatePage() {
     url: 'https://landlordheaven.co.uk/rent-arrears-letter-template',
   };
 
-  const faqSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: faqs.map((faq) => ({
-      '@type': 'Question',
-      name: faq.question,
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: faq.answer,
-      },
-    })),
-  };
-
   return (
     <>
+      <SeoLandingWrapper
+        pagePath="/rent-arrears-letter-template"
+        pageTitle={metadata.title as string}
+        pageType="money"
+        jurisdiction="uk"
+      />
       <StructuredData data={pageSchema} />
-      <StructuredData data={faqSchema} />
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: 'https://landlordheaven.co.uk' },
@@ -158,11 +143,34 @@ export default function RentArrearsLetterTemplatePage() {
           badgeIcon={<PoundSterling className="w-4 h-4" />}
           title="Rent Arrears Letter Template UK"
           subtitle="Use a clear, professional rent arrears letter before escalating to a money claim or Section 8 action. This guide shows landlords what to send, when to send it, and what to do next if the tenant still does not pay."
-          primaryCta={{ label: 'Start Money Claim Wizard', href: wizardLinkMoneyClaim }}
-          secondaryCta={{ label: 'Section 8 route', href: wizardLinkNoticeOnly }}
+          primaryCta={{ label: 'Start money claim', href: moneyClaimProductHref }}
+          secondaryCta={{ label: 'Start Section 8 notice', href: noticeOnlyProductHref }}
           showTrustPositioningBar
           hideMedia
         />
+
+        <section className="border-y border-gray-100 bg-white py-8">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto space-y-6">
+              <SeoPageContextPanel pathname="/rent-arrears-letter-template" />
+              <p className="text-gray-700">
+                Use this letter-stage guide alongside the wider{' '}
+                <Link href="/tenant-not-paying-rent" className="font-medium text-primary hover:underline">
+                  tenant not paying rent guide
+                </Link>
+                , the court-focused{' '}
+                <Link href="/money-claim-unpaid-rent" className="font-medium text-primary hover:underline">
+                  money claim for unpaid rent route
+                </Link>
+                , and the{' '}
+                <Link href={moneyClaimProductHref} className="font-medium text-primary hover:underline">
+                  money claim product
+                </Link>{' '}
+                once reminder letters are no longer enough.
+              </p>
+            </div>
+          </div>
+        </section>
 
         <section className="py-8 bg-white">
           <div className="container mx-auto px-4">
@@ -170,13 +178,13 @@ export default function RentArrearsLetterTemplatePage() {
               <FunnelCta
                 title="Turn arrears letters into recovery action"
                 subtitle="Use Money Claim if payment is still outstanding, or choose eviction support if possession is also needed."
-                primaryHref="/products/money-claim"
+                primaryHref={moneyClaimProductHref}
                 primaryText="Recover unpaid rent"
                 primaryDataCta="money-claim"
                 location="above-fold"
                 secondaryLinks={[
                   {
-                    href: '/products/complete-pack',
+                    href: completePackProductHref,
                     text: "If the tenant won't leave / eviction support",
                     dataCta: 'complete-pack',
                   },
@@ -310,13 +318,13 @@ export default function RentArrearsLetterTemplatePage() {
               <FunnelCta
                 title="No response to your rent arrears letter?"
                 subtitle="Escalate with a money claim pack and keep your arrears evidence organised from the start."
-                primaryHref="/products/money-claim"
+                primaryHref={moneyClaimProductHref}
                 primaryText="Start money claim"
                 primaryDataCta="money-claim"
                 location="mid"
                 secondaryLinks={[
                   {
-                    href: '/products/complete-pack',
+                    href: completePackProductHref,
                     text: 'Tenant still in the property? Get eviction support',
                     dataCta: 'complete-pack',
                   },
@@ -478,7 +486,7 @@ export default function RentArrearsLetterTemplatePage() {
                     </li>
                   </ul>
                   <Link
-                    href={wizardLinkMoneyClaim}
+                    href={moneyClaimProductHref}
                     className="inline-flex items-center gap-2 text-primary font-medium hover:underline"
                   >
                     Get Money Claim Pack
@@ -515,7 +523,7 @@ export default function RentArrearsLetterTemplatePage() {
                     </li>
                   </ul>
                   <Link
-                    href={wizardLinkNoticeOnly}
+                    href={noticeOnlyProductHref}
                     className="inline-flex items-center gap-2 text-primary font-medium hover:underline"
                   >
                     Get Section 8 Notice Support
@@ -627,7 +635,7 @@ export default function RentArrearsLetterTemplatePage() {
                     </li>
                   </ul>
                   <Link
-                    href={wizardLinkMoneyClaim}
+                    href={moneyClaimProductHref}
                     className="hero-btn-primary block w-full text-center"
                   >
                     Get Money Claim Pack
@@ -831,7 +839,7 @@ export default function RentArrearsLetterTemplatePage() {
               </ul>
               <p className="bg-indigo-50 border border-indigo-200 rounded-lg p-4">
                 Need a faster route from template to action? Use our{' '}
-                <Link href="/products/money-claim" className="text-primary underline">
+                <Link href={moneyClaimProductHref} className="text-primary underline">
                   Money Claim pathway
                 </Link>{' '}
                 to move from arrears letters into a cleaner recovery workflow.
@@ -929,7 +937,7 @@ export default function RentArrearsLetterTemplatePage() {
                   Try Free Starter Document
                 </Link>
                 <Link
-                  href={wizardLinkMoneyClaim}
+                  href={moneyClaimProductHref}
                   className="hero-btn-secondary inline-flex items-center justify-center gap-2"
                 >
                   Get Money Claim Pack

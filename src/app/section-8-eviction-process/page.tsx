@@ -5,6 +5,7 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { Container } from '@/components/ui/Container';
 import { FAQSection, type FAQItem } from '@/components/seo/FAQSection';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import {
   StructuredData,
@@ -183,8 +184,6 @@ export default function Page() {
         ])}
       />
 
-      <StructuredData data={faqPageSchema(faqs)} />
-
       <UniversalHero
         title="Section 8 Eviction Process"
         subtitle="A step-by-step guide to the breach-based possession route landlords use when a tenant has broken the tenancy."
@@ -228,6 +227,10 @@ export default function Page() {
       <section className="bg-white py-12">
         <Container>
           <div className="mx-auto max-w-5xl space-y-10">
+            <SeoPageContextPanel
+              pathname="/section-8-eviction-process"
+              className="border border-[#E6DBFF] bg-[#FBF8FF]"
+            />
             <Card id="quick-answer" title="Quick Answer">
               <p className="mt-4 leading-7 text-gray-700">
                 The Section 8 eviction process is the route landlords in England use when
@@ -254,6 +257,21 @@ export default function Page() {
                 correct notice, clean service evidence, and a consistent chronology often
                 matter more than speed. In practice, the safest route is usually the one
                 least likely to fall apart once a judge looks closely at it.
+              </p>
+              <p className="mt-4 leading-7 text-gray-700">
+                That usually means starting from the{' '}
+                <Link href="/section-8-notice" className="font-medium text-primary hover:underline">
+                  Section 8 notice guide
+                </Link>
+                , keeping the broader sequence anchored to the{' '}
+                <Link href="/eviction-process-uk" className="font-medium text-primary hover:underline">
+                  eviction process in the UK
+                </Link>
+                , and switching to the{' '}
+                <Link href="/products/complete-pack" className="font-medium text-primary hover:underline">
+                  Complete Pack product page
+                </Link>{' '}
+                once the issue is clearly moving from notice into court preparation.
               </p>
             </Card>
 

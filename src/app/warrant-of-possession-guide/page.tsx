@@ -5,6 +5,7 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { Container } from '@/components/ui/Container';
 import { FAQSection, type FAQItem } from '@/components/seo/FAQSection';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import {
   StructuredData,
@@ -179,8 +180,6 @@ export default function WarrantOfPossessionGuidePage() {
         ])}
       />
 
-      <StructuredData data={faqPageSchema(faqs)} />
-
       <UniversalHero
         title="Warrant of Possession Guide"
         subtitle="Understand what landlords usually do after a possession order if the tenant still does not leave."
@@ -225,6 +224,10 @@ export default function WarrantOfPossessionGuidePage() {
       <section className="bg-white py-12">
         <Container>
           <div className="mx-auto max-w-5xl space-y-10">
+            <SeoPageContextPanel
+              pathname="/warrant-of-possession-guide"
+              className="border border-[#E6DBFF] bg-[#FBF8FF]"
+            />
             <Card id="quick-answer" title="Quick Answer">
               <p className="mt-4 leading-7 text-gray-700">
                 A warrant of possession is the enforcement step landlords usually use after
@@ -255,6 +258,21 @@ export default function WarrantOfPossessionGuidePage() {
                 eviction workflow. Notice quality, service proof, hearing preparation,
                 possession order terms, and enforcement readiness all connect. The later
                 the case gets, the more expensive early mistakes usually become.
+              </p>
+              <p className="mt-4 leading-7 text-gray-700">
+                The strongest enforcement files usually keep one eye on the wider{' '}
+                <Link href="/eviction-process-uk" className="font-medium text-primary hover:underline">
+                  eviction process in the UK
+                </Link>
+                , use the{' '}
+                <Link href="/bailiff-eviction-process" className="font-medium text-primary hover:underline">
+                  bailiff eviction process guide
+                </Link>{' '}
+                for the next operational handoff, and rely on the{' '}
+                <Link href="/products/complete-pack" className="font-medium text-primary hover:underline">
+                  Complete Pack product page
+                </Link>{' '}
+                once the matter is already beyond notice stage and into enforcement planning.
               </p>
             </Card>
 

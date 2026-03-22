@@ -4,6 +4,7 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { Container } from '@/components/ui/Container';
 import { FAQSection, type FAQItem } from '@/components/seo/FAQSection';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import {
   StructuredData,
@@ -175,8 +176,6 @@ export default function Page() {
           { name: 'Eviction Process England', url: canonical },
         ])}
       />
-      <StructuredData data={faqPageSchema(faqs)} />
-
       <UniversalHero
         title="Eviction Process England"
         subtitle="A step-by-step landlord guide covering notice routes, court stages, possession orders, and enforcement."
@@ -210,6 +209,21 @@ export default function Page() {
               consistency of the file usually determine whether the case progresses
               smoothly or becomes delayed and expensive.
             </p>
+            <p className="mt-4 leading-7 text-gray-700">
+              The clearest England route usually starts with the{' '}
+              <Link href="/eviction-process-uk" className="font-medium text-primary hover:underline">
+                eviction process in the UK
+              </Link>
+              , connects notice choice back to the{' '}
+              <Link href="/section-8-notice" className="font-medium text-primary hover:underline">
+                Section 8 notice guide
+              </Link>
+              , and keeps the commercial next step on the{' '}
+              <Link href="/products/complete-pack" className="font-medium text-primary hover:underline">
+                Complete Pack product page
+              </Link>{' '}
+              once a landlord needs one possession workflow from service through court.
+            </p>
           </div>
         </Container>
       </section>
@@ -241,6 +255,10 @@ export default function Page() {
       <section className="bg-white py-12">
         <Container>
           <div className="mx-auto max-w-5xl space-y-10">
+            <SeoPageContextPanel
+              pathname="/eviction-process-england"
+              className="border border-[#E6DBFF] bg-[#FBF8FF]"
+            />
             <Card
               id="what-the-eviction-process-in-england-looks-like"
               title="What the Eviction Process in England Looks Like"

@@ -61,19 +61,6 @@ const complianceLinks = {
   }),
 };
 
-const faqSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: howToEvictTenantFAQs.map((faq) => ({
-    '@type': 'Question',
-    name: faq.question,
-    acceptedAnswer: {
-      '@type': 'Answer',
-      text: faq.answer,
-    },
-  })),
-};
-
 export const metadata: Metadata = {
   title: 'How to Evict a Tenant | UK Landlord Guide by Jurisdiction',
   description:
@@ -132,8 +119,6 @@ export default function HowToEvictTenantPage() {
           { name: 'How to Evict a Tenant', url: canonicalUrl },
         ])}
       />
-      <StructuredData data={faqSchema} />
-
       <main className="min-h-screen bg-gray-50">
         <HeaderConfig mode="autoOnScroll" />
 
@@ -257,19 +242,19 @@ export default function HowToEvictTenantPage() {
                     href={complianceLinks.deposit}
                     className="rounded-lg border border-purple-200 bg-white px-3 py-2 text-center text-xs text-gray-700 transition-colors hover:border-primary hover:text-primary"
                   >
-                    Deposit rules for eviction ->
+                    Deposit rules for eviction {'->'}
                   </Link>
                   <Link
                     href={complianceLinks.gasSafety}
                     className="rounded-lg border border-purple-200 bg-white px-3 py-2 text-center text-xs text-gray-700 transition-colors hover:border-primary hover:text-primary"
                   >
-                    Gas safety requirements ->
+                    Gas safety requirements {'->'}
                   </Link>
                   <Link
                     href={complianceLinks.epc}
                     className="rounded-lg border border-purple-200 bg-white px-3 py-2 text-center text-xs text-gray-700 transition-colors hover:border-primary hover:text-primary"
                   >
-                    EPC requirements ->
+                    EPC requirements {'->'}
                   </Link>
                 </div>
               </div>
@@ -415,13 +400,13 @@ export default function HowToEvictTenantPage() {
                       href="/section-21-ban-uk"
                       className="text-sm font-medium text-primary hover:underline"
                     >
-                      Section 21 template ->
+                      Section 21 template {'->'}
                     </Link>
                     <Link
                       href="/section-21-notice"
                       className="text-sm font-medium text-primary hover:underline"
                     >
-                      Section 21 checker ->
+                      Section 21 checker {'->'}
                     </Link>
                   </div>
                 </div>
@@ -446,13 +431,13 @@ export default function HowToEvictTenantPage() {
                       href="/section-8-notice"
                       className="text-sm font-medium text-primary hover:underline"
                     >
-                      Section 8 template ->
+                      Section 8 template {'->'}
                     </Link>
                     <Link
                       href="/section-8-notice"
                       className="text-sm font-medium text-primary hover:underline"
                     >
-                      Section 8 checker ->
+                      Section 8 checker {'->'}
                     </Link>
                   </div>
                 </div>
@@ -539,13 +524,13 @@ export default function HowToEvictTenantPage() {
                   href="/wales-eviction-notices"
                   className="inline-flex items-center gap-2 rounded-lg bg-red-600 px-6 py-3 font-medium text-white hover:bg-red-700"
                 >
-                  Wales eviction guide ->
+                  Wales eviction guide {'->'}
                 </Link>
                 <Link
                   href="/wales-tenancy-agreement-template"
                   className="inline-flex items-center gap-2 rounded-lg border border-red-600 bg-white px-6 py-3 font-medium text-red-600 hover:bg-red-50"
                 >
-                  Wales occupation contracts ->
+                  Wales occupation contracts {'->'}
                 </Link>
               </div>
             </div>
@@ -611,13 +596,13 @@ export default function HowToEvictTenantPage() {
                   href="/scotland-eviction-notices"
                   className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-3 font-medium text-white hover:bg-blue-700"
                 >
-                  Scotland eviction guide ->
+                  Scotland eviction guide {'->'}
                 </Link>
                 <Link
                   href="/private-residential-tenancy-agreement-template"
                   className="inline-flex items-center gap-2 rounded-lg border border-blue-600 bg-white px-6 py-3 font-medium text-blue-600 hover:bg-blue-50"
                 >
-                  Scotland PRT agreements ->
+                  Scotland PRT agreements {'->'}
                 </Link>
               </div>
             </div>
@@ -677,7 +662,7 @@ export default function HowToEvictTenantPage() {
                   href="/northern-ireland-tenancy-agreement-template"
                   className="inline-flex items-center gap-2 rounded-lg bg-green-600 px-6 py-3 font-medium text-white hover:bg-green-700"
                 >
-                  Northern Ireland tenancy agreements ->
+                  Northern Ireland tenancy agreements {'->'}
                 </Link>
               </div>
             </div>
@@ -732,7 +717,7 @@ export default function HowToEvictTenantPage() {
                     href="/section-21-ban-uk"
                     className="inline-flex mt-3 text-sm font-medium text-primary hover:underline"
                   >
-                    Section 21 template ->
+                    Section 21 template {'->'}
                   </Link>
                 </div>
               </div>

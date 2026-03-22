@@ -4,6 +4,7 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { Container } from '@/components/ui/Container';
 import { FAQSection, type FAQItem } from '@/components/seo/FAQSection';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import {
   StructuredData,
@@ -173,8 +174,6 @@ export default function Page() {
           { name: 'Rent Arrears Landlord Guide', url: canonical },
         ])}
       />
-      <StructuredData data={faqPageSchema(faqs)} />
-
       <UniversalHero
         title="Rent Arrears Landlord Guide"
         subtitle="What landlords should do first, how to document arrears, and when to move from arrears management to legal action."
@@ -195,6 +194,7 @@ export default function Page() {
       <section id="quick-answer" className="border-b border-[#E6DBFF] bg-white py-10">
         <Container>
           <div className="mx-auto max-w-5xl rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-6 md:p-8">
+            <SeoPageContextPanel pathname="/rent-arrears-landlord-guide" />
             <h2 className="text-2xl font-semibold text-[#2a2161]">Quick Answer</h2>
             <p className="mt-4 leading-7 text-gray-700">
               Rent arrears should be treated as an evidence and decision-making problem,
@@ -209,6 +209,21 @@ export default function Page() {
               tenancy terms. The longer landlords wait to organise the file, the harder it
               often becomes to recover arrears cleanly or move confidently into legal
               action.
+            </p>
+            <p className="mt-4 leading-7 text-gray-700">
+              For the broader arrears workflow, use{' '}
+              <Link href="/tenant-not-paying-rent" className="font-medium text-primary hover:underline">
+                tenant not paying rent
+              </Link>{' '}
+              as the main hub, move to{' '}
+              <Link href="/section-8-notice" className="font-medium text-primary hover:underline">
+                Section 8 notice guidance
+              </Link>{' '}
+              when you are assessing notice strategy, and use{' '}
+              <Link href="/products/money-claim" className="font-medium text-primary hover:underline">
+                Money Claim
+              </Link>{' '}
+              if the main commercial goal is recovering unpaid rent alongside or after possession planning.
             </p>
           </div>
         </Container>

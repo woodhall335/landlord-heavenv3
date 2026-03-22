@@ -167,7 +167,6 @@ export default function Section8NoticeTemplatePage() {
           dateModified: '2026-03-20',
         })}
       />
-      <StructuredData data={faqPageSchema(enhancedFaqs)} />
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: getCanonicalUrl('/') },

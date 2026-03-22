@@ -14,7 +14,6 @@ import {
 } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo/urls';
 import { tenancyAgreementScotlandLinks } from '@/lib/seo/internal-links';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { PRODUCTS } from '@/lib/pricing/products';
 import {
   AlertTriangle,
@@ -40,19 +39,7 @@ const canonicalUrl = getCanonicalUrl(PAGE_PATH);
 const standardPrice = PRODUCTS.ast_standard?.displayPrice ?? '£14.99';
 const premiumPrice = PRODUCTS.ast_premium?.displayPrice ?? '£24.99';
 
-const wizardLinkStandard = buildWizardLink({
-  product: 'ast_standard',
-  jurisdiction: 'scotland',
-  src: 'seo_private_residential_tenancy_agreement_template',
-  topic: 'tenancy',
-});
-
-const wizardLinkPremium = buildWizardLink({
-  product: 'ast_premium',
-  jurisdiction: 'scotland',
-  src: 'seo_private_residential_tenancy_agreement_template',
-  topic: 'tenancy',
-});
+const productPageHref = '/products/ast';
 
 export const metadata: Metadata = {
   title:
@@ -198,11 +185,11 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
           }
           primaryCta={{
             label: `Create Standard PRT — ${standardPrice}`,
-            href: wizardLinkStandard,
+            href: productPageHref,
           }}
           secondaryCta={{
             label: `Create Premium PRT — ${premiumPrice}`,
-            href: wizardLinkPremium,
+            href: productPageHref,
           }}
           showTrustPositioningBar
           variant="pastel"
@@ -504,7 +491,7 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                     </li>
                   </ul>
                   <Link
-                    href={wizardLinkStandard}
+                    href={productPageHref}
                     className="block w-full rounded-lg bg-blue-600 py-3 text-center font-semibold text-white transition-colors hover:bg-blue-700"
                   >
                     Create Standard PRT
@@ -547,7 +534,7 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                     </li>
                   </ul>
                   <Link
-                    href={wizardLinkPremium}
+                    href={productPageHref}
                     className="block w-full rounded-lg bg-blue-700 py-3 text-center font-semibold text-white transition-colors hover:bg-blue-800"
                   >
                     Create Premium PRT

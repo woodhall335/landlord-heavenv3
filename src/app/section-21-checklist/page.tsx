@@ -6,6 +6,7 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { Container } from '@/components/ui/Container';
 import { FAQSection, type FAQItem } from '@/components/seo/FAQSection';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import {
   StructuredData,
@@ -13,23 +14,10 @@ import {
   breadcrumbSchema,
   faqPageSchema,
 } from '@/lib/seo/structured-data';
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 
 const canonical = 'https://landlordheaven.co.uk/section-21-checklist';
-
-const noticeOnlyWizardLink = buildWizardLink({
-  product: 'notice_only',
-  jurisdiction: 'england',
-  src: 'seo_section_21_checklist',
-  topic: 'eviction',
-});
-
-const completePackWizardLink = buildWizardLink({
-  product: 'complete_pack',
-  jurisdiction: 'england',
-  src: 'seo_section_21_checklist',
-  topic: 'eviction',
-});
+const noticeOnlyHref = '/products/notice-only';
+const completePackHref = '/products/complete-pack';
 
 export const metadata: Metadata = {
   title:
@@ -200,13 +188,11 @@ export default function Page() {
         ])}
       />
 
-      <StructuredData data={faqPageSchema(faqs)} />
-
       <UniversalHero
         title="Section 21 Checklist"
         subtitle="A practical landlord checklist for checking route safety, compliance, timing, and service before you serve Form 6A."
-        primaryCta={{ label: 'Start Notice Only', href: noticeOnlyWizardLink }}
-        secondaryCta={{ label: 'Need full case continuity?', href: completePackWizardLink }}
+        primaryCta={{ label: 'Start Notice Only', href: noticeOnlyHref }}
+        secondaryCta={{ label: 'Need full case continuity?', href: completePackHref }}
         mediaSrc="/images/wizard-icons/07-review-finish.png"
         mediaAlt="Section 21 checklist guide icon"
         showReviewPill
@@ -218,6 +204,14 @@ export default function Page() {
           invalid notices, and how to reduce avoidable resets later in the possession process.
         </p>
       </UniversalHero>
+
+      <section className="bg-white py-8">
+        <Container>
+          <div className="mx-auto max-w-5xl">
+            <SeoPageContextPanel pathname="/section-21-checklist" />
+          </div>
+        </Container>
+      </section>
 
       <section className="border-b border-[#E6DBFF] bg-white py-8">
         <Container>
@@ -287,6 +281,22 @@ export default function Page() {
                 In practical terms, landlords usually get the best results when they treat
                 a Section 21 checklist as a route audit that protects the whole possession
                 timeline, not just the notice stage.
+              </p>
+
+              <p className="mt-4 leading-7 text-gray-700">
+                If the wider transition position is still unclear, review the{' '}
+                <Link href="/section-21-ban-uk" className="font-medium text-primary hover:underline">
+                  Section 21 transition guide
+                </Link>{' '}
+                first, use the{' '}
+                <Link href="/section-21-validity-checklist" className="font-medium text-primary hover:underline">
+                  Section 21 validity checklist
+                </Link>{' '}
+                to audit the file, and then move into the{' '}
+                <Link href={noticeOnlyHref} className="font-medium text-primary hover:underline">
+                  Notice Only workflow
+                </Link>{' '}
+                once the route is ready to serve.
               </p>
             </Card>
 
@@ -442,9 +452,9 @@ export default function Page() {
             <CtaBand
               title="Need the Section 21 route checked properly before you serve?"
               body="If the main issue is validating the Section 21 route and generating the notice safely, Notice Only is usually the better fit. If the wider possession workflow, next-step planning, or court continuity also needs support, Complete Pack is usually the stronger option."
-              primaryHref={noticeOnlyWizardLink}
+              primaryHref={noticeOnlyHref}
               primaryLabel="Start Notice Only"
-              secondaryHref={completePackWizardLink}
+              secondaryHref={completePackHref}
               secondaryLabel="Need full case continuity?"
             />
 
@@ -697,13 +707,13 @@ export default function Page() {
 
             <div className="mt-6 flex flex-wrap gap-3">
               <Link
-                href={noticeOnlyWizardLink}
+                href={noticeOnlyHref}
                 className="rounded-lg bg-primary px-5 py-3 text-white hover:opacity-95"
               >
                 Start Notice Only
               </Link>
               <Link
-                href={completePackWizardLink}
+                href={completePackHref}
                 className="rounded-lg border border-[#E6DBFF] bg-white px-5 py-3 text-primary hover:bg-[#FCFAFF]"
               >
                 Need full case continuity?
