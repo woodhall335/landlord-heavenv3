@@ -690,7 +690,9 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
             <p className="mt-4 text-white/90">For many straightforward cases, landlords do not need to pay a solicitor hundreds or thousands just to get the starting paperwork in place. Use the guided route and move now.</p>
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <Link href={primaryHref} className="hero-btn-primary">{config.heroCta}</Link>
-              {secondaryHref ? <Link href={secondaryHref} className="hero-btn-secondary">{config.secondaryCta?.label}</Link> : null}
+              {secondaryActionHref && secondaryActionLabel ? (
+                <Link href={secondaryActionHref} className="hero-btn-secondary">{secondaryActionLabel}</Link>
+              ) : null}
             </div>
             <p className="mt-5 text-sm text-white/80">Landlord Heaven provides document generation and guidance, not legal advice or court representation.</p>
           </div>
