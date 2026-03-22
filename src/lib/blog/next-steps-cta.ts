@@ -160,7 +160,7 @@ const CURATED_NEXT_STEPS_OVERRIDES: Record<string, NextStepsCTA[]> = {
   ],
 };
 
-const PRODUCT_HREFS = new Set([
+const PRODUCT_HREFS = new Set<string>([
   SEO_PRODUCT_ROUTES.noticeOnly,
   SEO_PRODUCT_ROUTES.completePack,
   SEO_PRODUCT_ROUTES.moneyClaim,
