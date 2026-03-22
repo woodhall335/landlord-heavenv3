@@ -76,8 +76,8 @@ export function EnglandTenancyPage({
             {introTitle}
           </h2>
           <div className="mt-4 space-y-4 text-lg leading-8 text-[#546075]">
-            {introBody.map((paragraph) => (
-              <p key={paragraph}>{paragraph}</p>
+            {introBody.map((paragraph, index) => (
+              <p key={`intro-body-${index}`}>{paragraph}</p>
             ))}
           </div>
         </section>
