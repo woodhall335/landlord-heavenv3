@@ -29,7 +29,7 @@ export interface PillarPageContent {
   heroSubtitle: string;
   icon: string;
   heroBullets: string[];
-  quickAnswer: string[];
+  quickAnswer: ReactNode[];
   routeExplanation: string[];
   processSteps: Array<{ title: string; detail: string }>;
   checklists: Array<{ title: string; items: string[] }>;
@@ -75,7 +75,7 @@ export function PillarPageShell(content: PillarPageContent) {
           <div className="mx-auto max-w-5xl rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-6 md:p-8">
             <h2 className="text-2xl font-semibold text-[#2a2161]">Quick answer</h2>
             <div className="mt-4 space-y-4 text-gray-700 leading-7">
-              {content.quickAnswer.map((paragraph) => <p key={paragraph.slice(0, 40)}>{paragraph}</p>)}
+              {content.quickAnswer.map((paragraph, index) => <p key={`quick-answer-${index}`}>{paragraph}</p>)}
             </div>
           </div>
         </Container>
