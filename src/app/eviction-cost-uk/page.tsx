@@ -26,7 +26,6 @@ import {
 
 const completePackProductHref = '/products/complete-pack';
 const moneyClaimProductHref = '/products/money-claim';
-const wizardLinkNoticeOnly = completePackProductHref;
 
 
 export const metadata: Metadata = {
@@ -119,7 +118,7 @@ export default function EvictionCostUkPage() {
         <UniversalHero
           title="Eviction Cost UK Guide"
           subtitle="Estimate realistic eviction costs across notice, court, and enforcement stages before you start."
-          primaryCta={{ label: 'Start Complete Eviction Pack', href: wizardLinkNoticeOnly }}
+          primaryCta={{ label: 'Start Complete Eviction Pack', href: completePackProductHref }}
           secondaryCta={{ label: 'Tenant already left? Start Money Claim', href: moneyClaimProductHref }}
           showTrustPositioningBar
           hideMedia
@@ -131,14 +130,8 @@ export default function EvictionCostUkPage() {
           badgeIcon={<PoundSterling className="w-4 h-4" />}
           title="How Much Does Eviction Cost UK?"
           subtitle={<>Budget between <strong>£500 and £3,000+</strong> depending on your approach. Here&apos;s the full breakdown with full statutory process cost breakdown.</>}
-          primaryCTA={{ label: 'Save £1,000+ — DIY Pack from £29.99', href: wizardLinkNoticeOnly }}
+          primaryCTA={{ label: 'Start Complete Eviction Pack', href: completePackProductHref }}
           secondaryCTA={{ label: 'Tenant already left? Start Money Claim', href: moneyClaimProductHref }}
-          {...{
-            primaryCTA: {
-              label: 'Start Complete Eviction Pack',
-              href: completePackProductHref,
-            },
-          }}
           variant="pastel"
         >
           {/* Trust Signals */}

@@ -27,7 +27,6 @@ import {
 
 const completePackProductHref = '/products/complete-pack';
 const moneyClaimProductHref = '/products/money-claim';
-const wizardLinkNoticeOnly = completePackProductHref;
 
 export const metadata: Metadata = {
   title: 'County Court Claim Form Guide UK 2026 — N1, N5, N5B Forms Explained',
@@ -121,14 +120,8 @@ export default function CountyCourtClaimFormGuidePage() {
           badgeIcon={<Scale className="w-4 h-4" />}
           title="County Court Claim Form Guide UK"
           subtitle={<>Not sure which <strong>county court claim form</strong> to use? This guide explains Form N1, N5, and N5B — so you file the right claim the first time.</>}
-          primaryCta={{ label: 'Create Eviction Notice — £29.99', href: wizardLinkNoticeOnly }}
+          primaryCta={{ label: 'Start Complete Eviction Pack', href: completePackProductHref }}
           secondaryCta={{ label: 'Debt-only case? Start Money Claim', href: moneyClaimProductHref }}
-          {...{
-            primaryCta: {
-              label: 'Start Complete Eviction Pack',
-              href: completePackProductHref,
-            },
-          }}
           variant="pastel"
         >
           {/* Trust Signals */}
