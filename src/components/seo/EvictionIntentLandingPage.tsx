@@ -130,6 +130,7 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
       ? '/products/notice-only'
       : '/products/complete-pack'
     : null;
+  const fallbackSecondaryActionHref = configSecondaryProductRoute ?? '/products/complete-pack';
   const primaryHref = taxonomyEntry
     ? getPrimaryDestinationAboveFold(taxonomyEntry)
     : configPrimaryProductRoute;
@@ -142,7 +143,7 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
       : null;
   const secondaryActionHref = taxonomyEntry
     ? heroSecondaryHref
-    : heroSecondaryHref ?? '/products/complete-pack';
+    : fallbackSecondaryActionHref;
   const pageType = taxonomyEntry?.pageType ?? 'problem';
   const jurisdiction = taxonomyEntry?.jurisdiction ?? 'england';
   const primaryProductRoute = taxonomyEntry?.primaryProduct
@@ -161,7 +162,7 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
     : null;
   const secondaryActionLabel = taxonomyEntry
     ? heroSecondaryLabel
-    : config.secondaryCta?.label ?? getProductCtaLabel(secondaryActionHref);
+    : config.secondaryCta?.label ?? getProductCtaLabel(fallbackSecondaryActionHref);
   const canonical = `https://landlordheaven.co.uk/${config.slug}`;
   const lastUpdated = config.lastUpdated ?? DEFAULT_UPDATED;
 
