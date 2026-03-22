@@ -16,6 +16,7 @@ import { FAQSection } from '@/components/seo/FAQSection';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
+import { Container } from '@/components/ui/Container';
 import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { moneyClaimHeroConfig } from '@/components/landing/heroConfigs';
 import { moneyClaimGuides, productLinks } from '@/lib/seo/internal-links';

@@ -17,6 +17,7 @@ import {
 import { FAQSection } from '@/components/seo/FAQSection';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
+import { Container } from '@/components/ui/Container';
 import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { moneyClaimHeroConfig } from '@/components/landing/heroConfigs';
 import { NextLegalSteps } from '@/components/seo/NextLegalSteps';
