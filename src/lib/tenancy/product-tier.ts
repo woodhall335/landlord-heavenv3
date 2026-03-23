@@ -1,4 +1,8 @@
 import { PRODUCTS } from '@/lib/pricing/products';
+import {
+  ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL,
+  ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL,
+} from './england-agreement-constants';
 
 export type TenancyJurisdiction = 'england' | 'wales' | 'scotland' | 'northern-ireland';
 
@@ -29,8 +33,8 @@ export function getTenancyTierLabelForSku(
     return sku === 'ast_premium' ? 'Premium NI Private Tenancy' : 'Standard NI Private Tenancy';
   }
   return sku === 'ast_premium'
-    ? 'Premium Residential Tenancy Agreement (HMO / student-ready)'
-    : 'Standard Residential Tenancy Agreement';
+    ? ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL
+    : ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL;
 }
 
 export function inferTenancySkuFromTierLabel(

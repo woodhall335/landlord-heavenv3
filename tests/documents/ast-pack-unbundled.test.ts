@@ -6,6 +6,10 @@ import {
   type ASTDocumentPack,
 } from '@/lib/documents/ast-generator';
 import { mapWizardToASTData } from '@/lib/documents/ast-wizard-mapper';
+import {
+  ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL,
+  ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL,
+} from '@/lib/tenancy/england-agreement-constants';
 
 // Mock the generator module to avoid actual PDF generation in tests
 vi.mock('@/lib/documents/generator', async () => {
@@ -55,7 +59,7 @@ describe('AST Pack - Unbundled Document Generation', () => {
   } as any;
 
   describe('generateStandardASTDocuments', () => {
-    it('generates 3 separate documents for England Standard pack', async () => {
+    it('generates 5 separate documents for England Standard pack', async () => {
       const astData = {
         ...mapWizardToASTData(baseWizardFacts),
         jurisdiction_england: true,
@@ -66,13 +70,13 @@ describe('AST Pack - Unbundled Document Generation', () => {
 
       expect(pack.tier).toBe('standard');
       expect(pack.case_id).toBe('test-case-id');
-      expect(pack.documents).toHaveLength(3);
+      expect(pack.documents).toHaveLength(5);
 
       // Document 1: Main Agreement
       const agreement = pack.documents.find((d) => d.category === 'agreement');
       expect(agreement).toBeDefined();
       expect(agreement?.document_type).toBe('ast_agreement');
-      expect(agreement?.title).toBe('Assured Shorthold Tenancy Agreement');
+      expect(agreement?.title).toBe(ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL);
       expect(agreement?.file_name).toBe('tenancy_agreement.pdf');
 
       // Document 2: Inventory Schedule
@@ -87,6 +91,16 @@ describe('AST Pack - Unbundled Document Generation', () => {
       expect(checklist).toBeDefined();
       expect(checklist?.document_type).toBe('pre_tenancy_checklist_england');
       expect(checklist?.title).toContain('Compliance Checklist');
+
+      const depositCertificate = pack.documents.find(
+        (d) => d.document_type === 'deposit_protection_certificate'
+      );
+      expect(depositCertificate?.file_name).toBe('deposit_protection_certificate.pdf');
+
+      const prescribedInformation = pack.documents.find(
+        (d) => d.document_type === 'tenancy_deposit_information'
+      );
+      expect(prescribedInformation?.file_name).toBe('prescribed_information_pack.pdf');
     }, 20000);
 
     it('generates 3 separate documents for Wales Standard pack', async () => {
@@ -108,7 +122,7 @@ describe('AST Pack - Unbundled Document Generation', () => {
       expect(checklist?.document_type).toBe('pre_tenancy_checklist_wales');
     }, 20000);
 
-    it('generates 3 separate documents for Scotland Standard pack', async () => {
+    it('generates 4 separate documents for Scotland Standard pack', async () => {
       const astData = {
         ...mapWizardToASTData(baseWizardFacts),
         jurisdiction_england: false,
@@ -119,7 +133,7 @@ describe('AST Pack - Unbundled Document Generation', () => {
 
       const pack = await generateStandardASTDocuments(astData, 'test-case-id');
 
-      expect(pack.documents).toHaveLength(3);
+      expect(pack.documents).toHaveLength(4);
 
       const agreement = pack.documents.find((d) => d.category === 'agreement');
       expect(agreement?.document_type).toBe('prt_agreement');
@@ -150,7 +164,11 @@ describe('AST Pack - Unbundled Document Generation', () => {
     }, 20000);
 
     it('includes PDF buffer for all documents', async () => {
-      const astData = mapWizardToASTData(baseWizardFacts);
+      const astData = {
+        ...mapWizardToASTData(baseWizardFacts),
+        jurisdiction_england: true,
+        jurisdiction_wales: false,
+      };
 
       const pack = await generateStandardASTDocuments(astData, 'test-case-id');
 
@@ -176,7 +194,7 @@ describe('AST Pack - Unbundled Document Generation', () => {
       guarantor_phone: '07000000003',
     };
 
-    it('generates 3 separate documents for England Premium pack', async () => {
+    it('generates 5 separate documents for England Premium pack', async () => {
       const astData = {
         ...mapWizardToASTData(premiumWizardFacts),
         jurisdiction_england: true,
@@ -187,13 +205,13 @@ describe('AST Pack - Unbundled Document Generation', () => {
 
       expect(pack.tier).toBe('premium');
       expect(pack.case_id).toBe('test-case-id');
-      expect(pack.documents).toHaveLength(3);
+      expect(pack.documents).toHaveLength(5);
 
       // Document 1: HMO Agreement
       const agreement = pack.documents.find((d) => d.category === 'agreement');
       expect(agreement).toBeDefined();
       expect(agreement?.document_type).toBe('ast_agreement_hmo');
-      expect(agreement?.title).toContain('HMO');
+      expect(agreement?.title).toBe(ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL);
       expect(agreement?.file_name).toBe('tenancy_agreement_hmo.pdf');
 
       // Document 2: Inventory Schedule
@@ -206,6 +224,13 @@ describe('AST Pack - Unbundled Document Generation', () => {
       const checklist = pack.documents.find((d) => d.category === 'checklist');
       expect(checklist).toBeDefined();
       expect(checklist?.document_type).toBe('pre_tenancy_checklist_england');
+
+      expect(
+        pack.documents.some((d) => d.document_type === 'deposit_protection_certificate')
+      ).toBe(true);
+      expect(
+        pack.documents.some((d) => d.document_type === 'tenancy_deposit_information')
+      ).toBe(true);
     }, 20000);
 
     it('generates 3 separate documents for Wales Premium pack', async () => {
@@ -224,7 +249,7 @@ describe('AST Pack - Unbundled Document Generation', () => {
       expect(agreement?.title).toContain('HMO');
     }, 20000);
 
-    it('generates 3 separate documents for Scotland Premium pack', async () => {
+    it('generates 4 separate documents for Scotland Premium pack', async () => {
       const astData = {
         ...mapWizardToASTData(premiumWizardFacts),
         jurisdiction_england: false,
@@ -234,7 +259,7 @@ describe('AST Pack - Unbundled Document Generation', () => {
 
       const pack = await generatePremiumASTDocuments(astData, 'test-case-id');
 
-      expect(pack.documents).toHaveLength(3);
+      expect(pack.documents).toHaveLength(4);
 
       const agreement = pack.documents.find((d) => d.category === 'agreement');
       expect(agreement?.document_type).toBe('prt_agreement_hmo');
@@ -325,6 +350,8 @@ describe('AST Pack - Unbundled Document Generation', () => {
       expect(documentTypes).toContain('ast_agreement');
       expect(documentTypes).toContain('inventory_schedule');
       expect(documentTypes).toContain('pre_tenancy_checklist_england');
+      expect(documentTypes).toContain('deposit_protection_certificate');
+      expect(documentTypes).toContain('tenancy_deposit_information');
     }, 20000);
 
     it('Premium England document types match pack-contents keys', async () => {
@@ -344,6 +371,8 @@ describe('AST Pack - Unbundled Document Generation', () => {
       expect(documentTypes).toContain('ast_agreement_hmo');
       expect(documentTypes).toContain('inventory_schedule');
       expect(documentTypes).toContain('pre_tenancy_checklist_england');
+      expect(documentTypes).toContain('deposit_protection_certificate');
+      expect(documentTypes).toContain('tenancy_deposit_information');
     }, 20000);
   });
 });

@@ -12,6 +12,10 @@
  */
 
 import type { CanonicalJurisdiction } from '@/lib/jurisdiction/normalize';
+import {
+  ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL,
+  ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL,
+} from './england-agreement-constants';
 
 // Re-export for convenience
 export type { CanonicalJurisdiction };
@@ -101,8 +105,8 @@ export const PAYMENT_TO_DISPLAY_SKU: Record<CanonicalJurisdiction, Record<Tenanc
  */
 export const PRODUCT_DISPLAY_LABELS: Record<CanonicalJurisdiction, Record<ProductTier, string>> = {
   england: {
-    standard: 'Standard Residential Tenancy Agreement',
-    premium: 'Premium Residential Tenancy Agreement',
+    standard: ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL,
+    premium: ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL,
   },
   wales: {
     standard: 'Standard Occupation Contract',

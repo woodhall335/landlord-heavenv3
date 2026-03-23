@@ -171,21 +171,21 @@
   </div>
 
   <div class="warning-box">
-    <strong>⚠️ IMPORTANT: Key Deadlines</strong>
+    <strong>IMPORTANT: Key Deadlines</strong>
     <ul style="margin-top: 10px; margin-left: 20px; line-height: 1.8;">
-      <li><strong>Notice Period:</strong> You must give proper written notice as per your tenancy agreement</li>
-      <li><strong>Final Day:</strong> {{format_date tenancy_end_date}}</li>
+      <li><strong>Notice Period:</strong> Give written notice in accordance with the statutory requirements and your tenancy documents.</li>
+      <li><strong>Final Checkout Date:</strong> {{#if tenancy_end_date}}{{format_date tenancy_end_date}}{{else}}The date stated in your notice or otherwise agreed for checkout{{/if}}</li>
       <li><strong>Key Return:</strong> {{key_return_deadline}}</li>
       <li><strong>Deposit Return:</strong> {{deposit_return_timeline}} (if no disputes)</li>
     </ul>
   </div>
 
   <div class="section">
-    <div class="section-title">📅 Move-Out Timeline</div>
+    <div class="section-title">Move-Out Timeline</div>
 
     <div class="timeline">
       <div class="timeline-item">
-        <strong>4 Weeks Before:</strong> Give notice to landlord (if required), book professional cleaners if needed, contact utility companies
+        <strong>4 Weeks Before:</strong> Give notice if required, plan any cleaning or remedial works that may reasonably be needed, and contact utility companies
       </div>
       <div class="timeline-item">
         <strong>2 Weeks Before:</strong> Start deep cleaning, arrange forwarding mail, update address with banks/DVLA, book checkout inspection
@@ -203,12 +203,12 @@
   </div>
 
   <div class="section">
-    <div class="section-title">🧹 Cleaning Requirements</div>
+    <div class="section-title">Cleaning Requirements</div>
 
     <div class="info-box">
       <strong>Cleaning Standard Required:</strong>
       {{#if professional_cleaning_standard}}
-      Professional cleaning standard required - the property must be returned in the same immaculate condition as when you moved in.
+      A professional standard of cleanliness may be expected if that reflects the recorded move-in condition, but you may meet that standard by cleaning yourself or by instructing cleaners.
       {{else}}
       The property should be clean and tidy, in the same condition as at the start of your tenancy (allowing for fair wear and tear).
       {{/if}}
@@ -216,7 +216,7 @@
 
     <h3>Kitchen Cleaning Checklist</h3>
     <ul class="checklist">
-      <li>Oven professionally cleaned (inside, racks, door, glass){{#if oven_cleaning_required}} - PROFESSIONAL CLEAN REQUIRED{{/if}}</li>
+      <li>Oven cleaned inside, including racks, door, and glass{{#if oven_cleaning_required}}; arrange specialist cleaning only if reasonably needed to restore the recorded move-in standard{{/if}}</li>
       <li>Hob, extractor hood, and splashbacks cleaned and degreased</li>
       <li>Microwave cleaned inside and out</li>
       <li>Fridge/freezer defrosted, cleaned, and dried (leave doors open)</li>
@@ -246,7 +246,7 @@
 
     <h3>Living Areas & Bedrooms Cleaning Checklist</h3>
     <ul class="checklist">
-      <li>Carpets vacuumed{{#if carpet_cleaning_required}} and PROFESSIONALLY CLEANED{{/if}}</li>
+      <li>Carpets vacuumed{{#if carpet_cleaning_required}} and deep-cleaned where reasonably needed to restore the recorded move-in standard{{/if}}</li>
       <li>Hard floors swept and mopped</li>
       <li>All surfaces dusted (shelves, windowsills, radiators)</li>
       <li>Windows cleaned inside (glass and frames)</li>
@@ -283,10 +283,10 @@
 
   {{#if cleaning_cost_estimates}}
   <div class="section">
-    <div class="section-title">💷 Professional Cleaning Costs (Reference)</div>
+    <div class="section-title">Optional Cleaning Costs (Reference)</div>
 
     <div class="info-box">
-      If you choose to hire professional cleaners instead of cleaning yourself, typical costs are approximately <strong>£{{cleaning_cost_estimates}}</strong>. Ensure you use reputable cleaners and get a receipt.
+      If you choose to hire cleaners instead of cleaning yourself, typical costs are approximately <strong>&pound;{{cleaning_cost_estimates}}</strong>. Ensure you use reputable cleaners and get a receipt.
     </div>
 
     <table class="cost-table">
@@ -296,23 +296,23 @@
       </tr>
       <tr>
         <td>End of Tenancy Clean ({{number_of_bedrooms}} bed)</td>
-        <td>£150 - £300</td>
+        <td>&pound;150 - &pound;300</td>
       </tr>
       {{#if carpet_cleaning_required}}
       <tr>
         <td>Professional Carpet Clean</td>
-        <td>£80 - £150</td>
+        <td>&pound;80 - &pound;150</td>
       </tr>
       {{/if}}
       {{#if oven_cleaning_required}}
       <tr>
         <td>Professional Oven Clean</td>
-        <td>£60 - £90</td>
+        <td>&pound;60 - &pound;90</td>
       </tr>
       {{/if}}
       <tr>
         <td>Window Cleaning (exterior)</td>
-        <td>£40 - £80</td>
+        <td>&pound;40 - &pound;80</td>
       </tr>
     </table>
 
@@ -323,7 +323,7 @@
   {{/if}}
 
   <div class="section">
-    <div class="section-title">🔧 Repairs & Maintenance</div>
+    <div class="section-title">Repairs & Maintenance</div>
 
     <ul class="checklist">
       <li>Check for any damage you've caused and arrange repairs</li>
@@ -341,7 +341,7 @@
   </div>
 
   <div class="section">
-    <div class="section-title">📋 Administrative Tasks</div>
+    <div class="section-title">Administrative Tasks</div>
 
     <ul class="checklist">
       <li>Notify landlord of your move-out date</li>
@@ -366,7 +366,7 @@
   </div>
 
   <div class="section">
-    <div class="section-title">🔑 Keys & Access</div>
+    <div class="section-title">Keys & Access</div>
 
     <div class="warning-box">
       <strong>⚠️ ALL KEYS MUST BE RETURNED BY: {{key_return_deadline}}</strong>
@@ -431,7 +431,7 @@
     <div class="info-box">
       <strong>Timeline:</strong> {{deposit_return_timeline}}<br/>
       <strong>Protected with:</strong> {{deposit_scheme_name}}<br/>
-      <strong>Amount:</strong> £{{deposit_amount}}
+      <strong>Amount:</strong> &pound;{{deposit_amount}}
     </div>
 
     <p style="margin: 15px 0;">Your deposit will be returned according to the following process:</p>
@@ -447,9 +447,9 @@
 
     <h3>Common Deductions You Can Avoid:</h3>
     <ul class="checklist">
-      <li>Professional cleaning costs (clean thoroughly yourself)</li>
-      <li>Carpet cleaning ({{#if carpet_cleaning_required}}get professional clean{{else}}vacuum thoroughly{{/if}})</li>
-      <li>Oven cleaning ({{#if oven_cleaning_required}}get professional clean{{else}}deep clean yourself{{/if}})</li>
+      <li>Additional cleaning costs (clean thoroughly yourself or instruct cleaners if you prefer)</li>
+      <li>Carpet cleaning ({{#if carpet_cleaning_required}}deep clean where reasonably needed to restore the move-in standard{{else}}vacuum thoroughly{{/if}})</li>
+      <li>Oven cleaning ({{#if oven_cleaning_required}}deep clean where reasonably needed to restore the move-in standard{{else}}deep clean yourself{{/if}})</li>
       <li>Key replacement (return all keys on time)</li>
       <li>Garden maintenance (leave in same condition as move-in)</li>
       <li>Damage repairs (fix before moving out)</li>
@@ -458,7 +458,7 @@
   </div>
 
   <div class="section">
-    <div class="section-title">✅ Final Checklist - Day of Move-Out</div>
+    <div class="section-title">Final Checklist - Day of Move-Out</div>
 
     <ul class="checklist">
       <li>Property completely empty of your belongings</li>
@@ -480,7 +480,7 @@
   <div class="footer">
     <p><strong>Questions about move-out?</strong></p>
     <p>Contact: {{landlord_full_name}} | Phone: {{landlord_phone}} | Email: {{landlord_email}}</p>
-    <p style="margin-top: 10px;">This Checkout Procedure forms part of your Premium AST tenancy</p>
+    <p style="margin-top: 10px;">This Checkout Procedure forms part of your Premium Assured Periodic tenancy</p>
     <p>Following this checklist will help ensure a smooth move-out and full deposit return</p>
   </div>
 </body>

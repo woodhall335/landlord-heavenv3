@@ -23,6 +23,10 @@ import {
 import { GuidanceTips } from './GuidanceTips';
 import type { WizardQuestion as BaseWizardQuestion } from '@/lib/ai/fact-finder';
 import { getSessionTokenHeaders } from '@/lib/session-token';
+import {
+  ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL,
+  ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL,
+} from '@/lib/tenancy/england-agreement-constants';
 
 // Extend the base WizardQuestion type with optional fields that come from MQS/backend
 type WizardQuestion = BaseWizardQuestion & {
@@ -49,9 +53,9 @@ function getDocumentTypeName(caseType: string, product?: string): string {
       case 'money_claim':
         return 'Money Claim Pack';
       case 'ast_standard':
-        return 'Standard Residential Tenancy Agreement';
+        return ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL;
       case 'ast_premium':
-        return 'Premium Residential Tenancy Agreement';
+        return ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL;
       default:
         break;
     }

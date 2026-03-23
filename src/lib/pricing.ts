@@ -138,6 +138,11 @@ export function formatPrice(price: number): string {
   return `£${price.toFixed(2)}`;
 }
 
+import {
+  ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL,
+  ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL,
+} from '@/lib/tenancy/england-agreement-constants';
+
 /**
  * Product IDs for Stripe integration
  */
@@ -157,7 +162,7 @@ export const PRODUCT_NAMES = {
   [PRODUCT_IDS.NOTICE_ONLY]: 'Notice Only',
   [PRODUCT_IDS.COMPLETE_PACK]: 'Complete Eviction Pack',
   [PRODUCT_IDS.MONEY_CLAIM]: 'Money Claim Pack',
-  [PRODUCT_IDS.AST_STANDARD]: 'Standard Residential Tenancy Agreement',
-  [PRODUCT_IDS.AST_PREMIUM]: 'Premium Residential Tenancy Agreement',
+  [PRODUCT_IDS.AST_STANDARD]: ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL,
+  [PRODUCT_IDS.AST_PREMIUM]: ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL,
   [PRODUCT_IDS.HMO_PRO]: 'HMO Pro',
 } as const;

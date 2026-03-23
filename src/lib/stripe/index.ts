@@ -11,6 +11,10 @@
 
 import Stripe from 'stripe';
 import { HMO_PRO_ENABLED } from '@/lib/feature-flags';
+import {
+  ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL,
+  ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL,
+} from '@/lib/tenancy/england-agreement-constants';
 
 // Initialize Stripe client
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_placeholder', {
@@ -61,12 +65,12 @@ export const PRODUCT_METADATA: Record<string, { name: string; type: string; cate
     category: 'money_claim',
   },
   [PRICE_IDS.STANDARD_AST]: {
-    name: 'Standard Residential Tenancy Agreement',
+    name: ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL,
     type: 'one_time',
     category: 'tenancy_agreement',
   },
   [PRICE_IDS.PREMIUM_AST]: {
-    name: 'Premium Residential Tenancy Agreement',
+    name: ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL,
     type: 'one_time',
     category: 'tenancy_agreement',
   },

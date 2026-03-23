@@ -89,7 +89,7 @@ describe('generateTenancyPreview', () => {
       error: null,
     });
     generateStandardASTMock.mockResolvedValue({
-      html: '<html><body>Residential Tenancy Agreement</body></html>',
+      html: '<html><body>Assured Periodic Tenancy Agreement</body></html>',
       pdf: Buffer.from('pdf'),
     });
 

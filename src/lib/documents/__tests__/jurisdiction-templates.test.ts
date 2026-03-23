@@ -213,7 +213,7 @@ describe('Jurisdiction Config Metadata', () => {
   test('England config has correct agreement title and type', () => {
     const config = getJurisdictionConfig('england');
 
-    expect(config.agreementTitle).toBe('Assured Shorthold Tenancy Agreement');
+    expect(config.agreementTitle).toBe('Assured Periodic Tenancy Agreement');
     expect(config.agreementDocumentType).toBe('ast_agreement');
     expect(config.legalFramework).toContain('Housing Act 1988');
   });

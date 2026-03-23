@@ -51,6 +51,10 @@ import {
 } from '@/lib/validation/notice-only-case-validator';
 import { getSelectedGrounds } from '@/lib/grounds';
 import { normalizeRoute } from '@/lib/wizard/route-normalizer';
+import {
+  ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL,
+  ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL,
+} from '@/lib/tenancy/england-agreement-constants';
 
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
@@ -1014,7 +1018,7 @@ export async function POST(request: Request) {
           generatedDoc = await generateStandardAST(astData);
           documentTitle =
             canonicalJurisdiction === 'england'
-              ? 'Residential Tenancy Agreement - Standard'
+              ? ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL
               : 'Tenancy Agreement - Standard';
           break;
         }
@@ -1055,7 +1059,7 @@ export async function POST(request: Request) {
           generatedDoc = await generatePremiumAST(astData);
           documentTitle =
             canonicalJurisdiction === 'england'
-              ? 'Residential Tenancy Agreement - Premium'
+              ? ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL
               : 'Tenancy Agreement - Premium';
           break;
         }

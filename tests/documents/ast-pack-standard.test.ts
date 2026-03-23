@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { generateStandardAST } from '@/lib/documents/ast-generator';
 import { mapWizardToASTData } from '@/lib/documents/ast-wizard-mapper';
+import { ENGLAND_ASSURED_PERIODIC_AGREEMENT_TITLE } from '@/lib/tenancy/england-agreement-constants';
 
 vi.mock('@/lib/documents/generator', async () => {
   const actual = await vi.importActual<typeof import('@/lib/documents/generator')>(
@@ -113,8 +114,9 @@ describe('AST pack - Standard', () => {
     const astData = mapWizardToASTData(wizardFacts);
     const generated = await generateStandardAST(astData, true);
 
-    expect(generated.html).toContain('Residential Tenancy Agreement');
+    expect(generated.html).toContain(ENGLAND_ASSURED_PERIODIC_AGREEMENT_TITLE);
     expect(generated.html).toContain('1 May 2026');
+    expect(generated.html).not.toContain('Residential Tenancy Agreement');
     expect(generated.html).not.toContain('Section 21 (no-fault');
   }, 20000);
 });

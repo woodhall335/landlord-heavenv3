@@ -109,7 +109,7 @@ beforeEach(async () => {
       <html>
       <head><title>AST Agreement</title></head>
       <body>
-        <h1>Assured Shorthold Tenancy Agreement</h1>
+        <h1>Assured Periodic Tenancy Agreement</h1>
         <p>This agreement is made on 1 February 2026</p>
         <h2>1. Parties</h2>
         <p>Landlord: Integration Test Landlord</p>
@@ -128,7 +128,7 @@ beforeEach(async () => {
       <html>
       <head><title>Premium AST Agreement</title></head>
       <body>
-        <h1>Premium Assured Shorthold Tenancy Agreement</h1>
+        <h1>Assured Periodic Tenancy Agreement</h1>
         ${Array(50).fill('<p>Premium tenancy content.</p>').join('\n')}
       </body>
       </html>

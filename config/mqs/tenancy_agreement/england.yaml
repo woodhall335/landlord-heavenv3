@@ -1,6 +1,6 @@
-﻿# config/mqs/tenancy_agreement/england.yaml
+# config/mqs/tenancy_agreement/england.yaml
 #
-# ENGLAND-ONLY Residential Tenancy Agreement
+# ENGLAND-ONLY Assured Periodic Tenancy Agreement
 # Split from england-wales.yaml as part of canonical jurisdiction implementation
 # Version 2.0.2 - England jurisdiction
 
@@ -29,8 +29,8 @@ questions:
     question: "Which tenancy agreement do you need?"
     inputType: select
     options:
-      - "Standard Residential Tenancy Agreement"
-      - "Premium Residential Tenancy Agreement (HMO / student-ready)"
+      - "Standard Assured Periodic Tenancy Agreement"
+      - "Premium Assured Periodic Tenancy Agreement"
     helperText: "Standard covers straightforward England lets. Premium adds HMO, student, guarantor, rent review and tighter control clauses."
     validation:
       required: true
@@ -46,7 +46,7 @@ questions:
       - "new_agreement"
       - "existing_written_tenancy"
       - "existing_verbal_tenancy"
-    helperText: "Use the new agreement flow for a fresh England Residential Tenancy Agreement. Existing written tenancies usually auto-roll on 1 May 2026 and need transition information rather than a full replacement."
+    helperText: "Use the new agreement flow for a fresh England Assured Periodic Tenancy Agreement. Existing written tenancies usually auto-roll on 1 May 2026 and need transition information rather than a full replacement."
     validation:
       required: true
     maps_to:
@@ -213,7 +213,7 @@ questions:
     section: Landlord Details
     question: "Landlord contact details"
     inputType: group
-    helperText: "Used on the Residential Tenancy Agreement, checklist and notices."
+    helperText: "Used on the Assured Periodic Tenancy Agreement, checklist and notices."
     fields:
       - id: landlord_full_name
         label: "Full name"
@@ -277,7 +277,7 @@ questions:
     section: Landlord Details
     question: "Are you using a letting agent?"
     inputType: yes_no
-    helperText: "If yes, their details can appear on the Residential Tenancy Agreement for rent collection and management."
+    helperText: "If yes, their details can appear on the Assured Periodic Tenancy Agreement for rent collection and management."
     validation:
       required: true
     maps_to:
@@ -704,7 +704,7 @@ questions:
         label: "Deposit amount"
         inputType: currency
         placeholder: "1400"
-        helperText: "âš ï¸ TENANT FEES ACT 2019: Maximum deposit is 5 weeks' rent (or 6 weeks if annual rent exceeds Â£50,000). Excess deposits are unlawful."
+        helperText: "⚠️ TENANT FEES ACT 2019: Maximum deposit is 5 weeks' rent (or 6 weeks if annual rent exceeds £50,000). Excess deposits are unlawful."
         validation:
           required: true
           min: 0
@@ -1191,7 +1191,7 @@ questions:
     inputType: yes_no
     dependsOn:
       questionId: ast_tier
-      value: "Premium Residential Tenancy Agreement (HMO / student-ready)"
+      value: "Premium Assured Periodic Tenancy Agreement"
     validation:
       required: true
     maps_to:
@@ -1255,7 +1255,7 @@ questions:
     inputType: yes_no
     dependsOn:
       questionId: ast_tier
-      value: "Premium Residential Tenancy Agreement (HMO / student-ready)"
+      value: "Premium Assured Periodic Tenancy Agreement"
     helperText: "Recommended when there is more than one tenant."
     maps_to:
       - joint_and_several_liability
@@ -1266,7 +1266,7 @@ questions:
     inputType: group
     dependsOn:
       questionId: ast_tier
-      value: "Premium Residential Tenancy Agreement (HMO / student-ready)"
+      value: "Premium Assured Periodic Tenancy Agreement"
     helperText: "Premium England agreement adds HMO-ready clauses."
     fields:
       - id: is_hmo
@@ -1325,7 +1325,7 @@ questions:
     inputType: select
     dependsOn:
       questionId: ast_tier
-      value: "Premium Residential Tenancy Agreement (HMO / student-ready)"
+      value: "Premium Assured Periodic Tenancy Agreement"
     options:
       - "Required"
       - "Strongly recommended"
@@ -1340,7 +1340,7 @@ questions:
     inputType: textarea
     dependsOn:
       questionId: ast_tier
-      value: "Premium Residential Tenancy Agreement (HMO / student-ready)"
+      value: "Premium Assured Periodic Tenancy Agreement"
     helperText: "Describe any detailed inventory or schedule you will attach."
     maps_to:
       - inventory_schedule_notes
@@ -1355,7 +1355,7 @@ questions:
     inputType: group
     dependsOn:
       questionId: ast_tier
-      value: "Premium Residential Tenancy Agreement (HMO / student-ready)"
+      value: "Premium Assured Periodic Tenancy Agreement"
     helperText: "Set terms for late rent payments (must comply with statutory limits)."
     fields:
       - id: late_payment_interest_applicable
@@ -1383,7 +1383,7 @@ questions:
           value: true
         width: half
       - id: late_payment_admin_fee
-        label: "Administrative fee (Â£)"
+        label: "Administrative fee (£)"
         inputType: number
         placeholder: "e.g., 50"
         helperText: "Fee for processing late payment (must be reasonable)"
@@ -1403,7 +1403,7 @@ questions:
     inputType: group
     dependsOn:
       questionId: ast_tier
-      value: "Premium Residential Tenancy Agreement (HMO / student-ready)"
+      value: "Premium Assured Periodic Tenancy Agreement"
     helperText: "Record all keys and access cards provided to tenant."
     fields:
       - id: number_of_front_door_keys
@@ -1434,7 +1434,7 @@ questions:
         placeholder: "e.g., 2"
         width: half
       - id: key_replacement_cost
-        label: "Key replacement cost (Â£ per key)"
+        label: "Key replacement cost (£ per key)"
         inputType: number
         placeholder: "e.g., 25"
         validation:
@@ -1460,7 +1460,7 @@ questions:
     inputType: group
     dependsOn:
       questionId: ast_tier
-      value: "Premium Residential Tenancy Agreement (HMO / student-ready)"
+      value: "Premium Assured Periodic Tenancy Agreement"
     helperText: "Define terms for contractors accessing property for repairs."
     fields:
       - id: contractor_access_notice_period
@@ -1504,7 +1504,7 @@ questions:
     inputType: group
     dependsOn:
       questionId: ast_tier
-      value: "Premium Residential Tenancy Agreement (HMO / student-ready)"
+      value: "Premium Assured Periodic Tenancy Agreement"
     helperText: "Essential emergency contact information and procedures."
     fields:
       - id: emergency_landlord_phone
@@ -1571,7 +1571,7 @@ questions:
     inputType: group
     dependsOn:
       questionId: ast_tier
-      value: "Premium Residential Tenancy Agreement (HMO / student-ready)"
+      value: "Premium Assured Periodic Tenancy Agreement"
     helperText: "Define regular maintenance responsibilities and schedule."
     fields:
       - id: boiler_service_frequency
@@ -1642,7 +1642,7 @@ questions:
     inputType: group
     dependsOn:
       questionId: ast_tier
-      value: "Premium Residential Tenancy Agreement (HMO / student-ready)"
+      value: "Premium Assured Periodic Tenancy Agreement"
     helperText: "Define garden maintenance responsibilities (if applicable)."
     fields:
       - id: lawn_mowing_frequency
@@ -1699,7 +1699,7 @@ questions:
     inputType: group
     dependsOn:
       questionId: ast_tier
-      value: "Premium Residential Tenancy Agreement (HMO / student-ready)"
+      value: "Premium Assured Periodic Tenancy Agreement"
     helperText: "Define pre-tenancy and move-in requirements."
     fields:
       - id: pre_tenancy_meeting_required
@@ -1760,7 +1760,7 @@ questions:
     inputType: group
     dependsOn:
       questionId: ast_tier
-      value: "Premium Residential Tenancy Agreement (HMO / student-ready)"
+      value: "Premium Assured Periodic Tenancy Agreement"
     helperText: "Define end-of-tenancy requirements and procedures."
     fields:
       - id: checkout_inspection_required
@@ -1839,7 +1839,7 @@ questions:
     inputType: group
     dependsOn:
       questionId: ast_tier
-      value: "Premium Residential Tenancy Agreement (HMO / student-ready)"
+      value: "Premium Assured Periodic Tenancy Agreement"
     helperText: "Define expected cleaning standards during and at end of tenancy."
     fields:
       - id: regular_cleaning_expectations
@@ -1868,7 +1868,7 @@ questions:
           required: true
         width: half
       - id: cleaning_cost_estimates
-        label: "Estimated professional cleaning costs (Â£)"
+        label: "Estimated professional cleaning costs (£)"
         inputType: number
         placeholder: "e.g., 250"
         helperText: "For tenant's reference if they choose professional cleaning"
@@ -1891,4 +1891,5 @@ questions:
     maps_to:
       - evidence.tenancy_agreement_uploaded
       - evidence.other_evidence_uploaded
+
 

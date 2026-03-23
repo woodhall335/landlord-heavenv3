@@ -1,4 +1,4 @@
-﻿{{!--
+{{!--
   Premium England tenancy agreement template with clause markers for verifier parity.
 --}}
 
@@ -7,16 +7,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Premium England Residential Tenancy Agreement</title>
+  <title>Premium Assured Periodic Tenancy Agreement</title>
   <style>
     @page { size: A4; margin: 25mm 20mm 25mm 20mm; }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: "Georgia", "Times New Roman", serif; font-size: 11pt; line-height: 1.5; color: #1a1a1a; background: white; }
+    body { font-family: "Georgia", "Times New Roman", serif; font-size: 11pt; line-height: 1.5; color: #1a1a1a; background: white; font-variant-ligatures: none; font-feature-settings: "liga" 0, "clig" 0; }
     h1, h2, h3, h4 { font-family: "Arial", "Helvetica", sans-serif; font-weight: 600; margin-top: 0; page-break-after: avoid; }
     h1 { font-size: 18pt; text-align: center; margin-bottom: 6pt; text-transform: uppercase; letter-spacing: 1pt; }
     h2 { font-size: 13pt; border-bottom: 1pt solid #333; padding-bottom: 4pt; margin: 20pt 0 12pt 0; text-transform: uppercase; }
     h3 { font-size: 11pt; margin: 14pt 0 8pt 0; }
-    p { margin: 0 0 8pt 0; text-align: justify; hyphens: auto; }
+    p { margin: 0 0 8pt 0; text-align: left; hyphens: none; -webkit-hyphens: none; word-break: normal; overflow-wrap: break-word; }
     .doc-header { text-align: center; border-bottom: 2pt solid #333; padding-bottom: 15pt; margin-bottom: 20pt; }
     .doc-subtitle { font-size: 10pt; color: #555; margin: 5pt 0; }
     .doc-date { font-size: 10pt; margin-top: 10pt; }
@@ -24,7 +24,7 @@
     .parties-section { margin: 15pt 0; }
     .party-block { margin: 10pt 0; padding-left: 20pt; }
     .party-role { font-weight: bold; text-transform: uppercase; font-size: 9pt; letter-spacing: 0.5pt; margin-bottom: 3pt; }
-    .party-details-text { line-height: 1.6; }
+    .party-details-text { line-height: 1.6; word-break: normal; overflow-wrap: break-word; }
     .definitions-list { list-style: none; margin: 0; padding: 0; }
     .definitions-list li { margin: 6pt 0; }
     .defined-term { font-weight: bold; }
@@ -40,7 +40,7 @@
     .data-table th, .data-table td { border: 0.5pt solid #666; padding: 6pt 8pt; text-align: left; vertical-align: top; }
     .data-table th { background: #f5f5f5; font-weight: bold; font-size: 9pt; text-transform: uppercase; }
     .data-table td.label { width: 35%; font-weight: 500; background: #fafafa; }
-    .data-table td.value { width: 65%; word-wrap: break-word; overflow-wrap: anywhere; }
+    .data-table td.value { width: 65%; word-wrap: break-word; overflow-wrap: break-word; word-break: normal; }
     .schedule { page-break-before: always; margin-top: 0; }
     .schedule-header { text-align: center; border: 1pt solid #333; padding: 10pt; margin-bottom: 15pt; background: #f8f8f8; }
     .schedule-header h2 { border: none; margin: 0; padding: 0; }
@@ -71,7 +71,8 @@
 </head>
 <body>
   <div class="doc-header">
-    <h1>Residential Tenancy Agreement</h1>
+    <h1>Assured Periodic Tenancy Agreement</h1>
+    <div class="doc-subtitle">Premium Assured Periodic Tenancy Agreement</div>
     <div class="doc-subtitle">England private rented sector tenancy</div>
     <div class="doc-subtitle">England</div>
     <div class="premium-badge">Premium Edition</div>
@@ -84,11 +85,6 @@
     <p>{{england_reform_warning}}</p>
   </div>
   {{/if}}
-
-  <div class="legal-notice">
-    <div class="legal-notice-title">About This Agreement</div>
-    <p>This document is drafted for an England residential tenancy governed by the upgraded assured periodic regime, is intended to operate as a professionally drafted Residential Tenancy Agreement, and is not intended to create a new assured shorthold tenancy.</p>
-  </div>
 
   <h2>1. Parties</h2>
   <div class="parties-section">
@@ -121,7 +117,7 @@
 
   <h2>2. Definitions and Interpretation</h2>
   <ul class="definitions-list">
-    <li><span class="defined-term">"Agreement"</span> means this tenancy agreement and the Schedules attached to it.</li>
+    <li><span class="defined-term">"Agreement"</span> means this assured periodic tenancy agreement and the Schedules attached to it.</li>
     <li><span class="defined-term">"Property"</span> means {{property_address}} together with the contents and common parts described in this Agreement.</li>
     <li><span class="defined-term">"Tenant"</span> means {{#each tenants}}{{this.full_name}}{{#unless @last}}, {{/unless}}{{/each}}{{#if multiple_tenants}} jointly and severally{{/if}}.</li>
     <li><span class="defined-term">"Rent"</span> means the sum of &pound;{{rent_amount}} per {{rent_period}} payable in accordance with this Agreement.</li>
@@ -137,8 +133,11 @@
   <p class="clause"><span class="clause-num">3.1</span> The Landlord lets the Property to the Tenant for use as a private residence only.</p>
   <p class="clause"><span class="clause-num">3.2</span> The Tenant is granted exclusive occupation of the Property, subject to the Landlord's rights of access contained in this Agreement and any rights affecting communal areas.</p>
   <p class="clause"><span class="clause-num">3.3</span> The tenancy begins on <strong>{{formatUKDate tenancy_start_date}}</strong> as a periodic assured tenancy under the law in force in England at that date and is not intended to create a new assured shorthold tenancy.</p>
-  <p class="clause"><span class="clause-num">3.4</span> The Landlord may only recover possession or terminate the tenancy by following the statutory procedure in force from time to time and obtaining any court order required by law.</p>
-  <p class="clause"><span class="clause-num">3.5</span> The Tenant may end the tenancy by giving not less than two months' written notice, or any shorter agreed notice period stated in this Agreement where that is lawful, expiring at the end of a rental period where applicable.</p>
+  <p class="clause"><span class="clause-num">3.4</span> This tenancy does not have a fixed end date and continues until ended in accordance with statute.</p>
+  <p class="clause"><span class="clause-num">3.5</span> The Landlord may only seek possession where a lawful statutory ground applies, including any relevant rent arrears, anti-social behaviour, sale, landlord occupation, or other statutory ground in force at the relevant time.</p>
+  <p class="clause"><span class="clause-num">3.6</span> The Landlord may only recover possession or terminate the tenancy through the court-led statutory process in force at the relevant time and by obtaining any court order required by law.</p>
+  <p class="clause"><span class="clause-num">3.7</span> The Tenant has the right to remain in the Property unless and until the Landlord establishes a lawful statutory ground for possession and obtains any court order required by law.</p>
+  <p class="clause"><span class="clause-num">3.8</span> The Tenant may end the tenancy by giving written notice in accordance with the statutory requirements in force at the relevant time.</p>
 
   <h2>4. Rent</h2>
   <p class="clause"><span class="clause-num">4.1</span> The Tenant shall pay the Rent of <strong>&pound;{{rent_amount}}</strong> per {{rent_period}} in advance on the <strong>{{rent_due_day}}</strong> of each {{rent_period}}.</p>
@@ -147,7 +146,7 @@
   <div class="premium-section">
     <div class="premium-label">Premium: Rent Administration</div>
     <p class="clause"><span class="clause-num">4.4</span> If rent remains unpaid for 14 days after the due date, interest may accrue on the overdue sum at 3% above the Bank of England base rate per annum, so far as lawful.</p>
-    <p class="clause"><span class="clause-num">4.5</span> Any rent review or increase must comply with the statutory procedure in force at the relevant time and nothing in this Agreement authorises a prohibited fee or charge.</p>
+    <p class="clause"><span class="clause-num">4.5</span> If the Landlord proposes a new rent, the Landlord will serve notice in accordance with section 13 of the Housing Act 1988 or any replacement statutory procedure in force at the relevant time. Nothing in this Agreement authorises a prohibited fee or charge.</p>
   </div>
 
   <h2>5. Deposit</h2>
@@ -168,8 +167,8 @@
   <!-- CLAUSE:PETS_CLAUSE -->
   <div class="premium-section">
     <div class="premium-label">Premium: Pets</div>
-    <p class="clause"><span class="clause-num">6.7</span> {{#if pets_allowed}}The following pet arrangements are authorised: {{#if approved_pets}}{{approved_pets}}{{else}}approved domestic pet(s) described in writing between the parties{{/if}}.{{else}}No pet may be kept at the Property without the Landlord's prior written consent, such consent not to be unreasonably withheld where the request is reasonable and the Property is suitable.{{/if}}</p>
-    <p class="clause"><span class="clause-num">6.8</span> The Tenant remains liable for pet-related nuisance, fouling, smell, scratching, staining, infestation, or other damage. Professional cleaning may assist in meeting the required end-of-tenancy standard but is not mandatory.</p>
+    <p class="clause"><span class="clause-num">6.7</span> {{#if pets_allowed}}The following pet arrangements are authorised: {{#if approved_pets}}{{approved_pets}}{{else}}approved domestic pet(s) described in writing between the parties{{/if}}. Any authorised pet is permitted subject to this Agreement and any lawful reasonable conditions the Landlord may impose in writing, having regard to the request and the suitability of the Property.{{else}}No pet may be kept at the Property without the Landlord's prior written consent. Consent is not to be unreasonably refused where the request is reasonable and the Property is suitable. The Landlord may impose lawful reasonable conditions in writing, having regard to the type, number, and size of the pet and the suitability of the Property.{{/if}}</p>
+    <p class="clause"><span class="clause-num">6.8</span> The Tenant remains responsible for any pet-related damage, nuisance, fouling, infestation, smell, scratching, staining, or other related loss. The Landlord may require reasonable cleaning, treatment, or remediation where needed to restore the Property to the standard required by this Agreement, but nothing in this clause requires a prohibited payment or mandatory professional cleaning in every case.</p>
   </div>
 
   <!-- CLAUSE:ANTI_SUBLET -->
@@ -179,7 +178,7 @@
   <p class="clause"><span class="clause-num">7.1</span> Permit the Tenant quiet enjoyment of the Property without unlawful interruption.</p>
   <p class="clause"><span class="clause-num">7.2</span> Keep in repair the structure and exterior and the installations for water, gas, electricity, sanitation, space heating, and hot water, in accordance with section 11 of the Landlord and Tenant Act 1985 and any other applicable duty.</p>
   <p class="clause"><span class="clause-num">7.3</span> Comply with duties relating to gas safety, electrical safety, smoke alarms, carbon monoxide alarms, and deposit protection.</p>
-  <p class="clause"><span class="clause-num">7.4</span> Provide the Tenant with the information and documents required by law for the tenancy regime applying at the start date, including the tenant notice period, rent increase route, landlord possession process, pets position, bills handling, the current How to Rent guide where legally relevant, the EPC, Gas Safety Certificate, EICR where required, and deposit prescribed information.</p>
+  <p class="clause"><span class="clause-num">7.4</span> Provide the Tenant with the documents and information required by law for the tenancy regime applying at the start date, including information about the tenant notice requirements, the section 13 rent increase route or any replacement statutory route in force at the relevant time, the landlord possession process, the pets position, bills handling, the current How to Rent guide where legally relevant, the EPC, Gas Safety Certificate, EICR where required, and deposit prescribed information.</p>
   <p class="clause"><span class="clause-num">7.5</span> Carry out Right to Rent checks under the Immigration Act 2014 where required. Nothing in this Agreement makes the Tenant responsible for the Landlord's statutory compliance.</p>
 
   {{#if multiple_tenants}}
@@ -212,11 +211,11 @@
     <div class="warning-title">Notice to Guarantor</div>
     <p>By signing this Agreement the Guarantor gives a legally binding guarantee and should take independent legal advice before signing.</p>
   </div>
-  <p class="clause"><span class="clause-num">9.1</span> The Guarantor guarantees payment of the Rent and performance of the Tenant obligations and agrees to indemnify the Landlord against losses arising from breach.</p>
-  <p class="clause"><span class="clause-num">9.2</span> The Landlord may pursue the Guarantor directly without first taking action against the Tenant.</p>
-  <p class="clause"><span class="clause-num">9.3</span> This is a continuing guarantee which extends to any lawful continuation, renewal, replacement, or variation of the tenancy unless the Landlord expressly releases the Guarantor in writing.</p>
-  <p class="clause"><span class="clause-num">9.4</span> The Guarantor's liability is capped at {{#if guarantor_max_liability}}{{guarantor_max_liability}}{{else}}twelve months' rent together with reasonable enforcement costs{{/if}}, save for accrued liabilities arising before release.</p>
-  <p class="clause"><span class="clause-num">9.5</span> The Guarantor confirms receipt of sufficient information about the tenancy and the nature of the guaranteed obligations before signing.</p>
+  <p class="clause"><span class="clause-num">9.1</span> The Guarantor guarantees the payment of the Rent and the performance of the Tenant obligations and agrees to indemnify the Landlord against losses arising from any breach of them.</p>
+  <p class="clause"><span class="clause-num">9.2</span> The Landlord may pursue the Guarantor directly, without first taking action against the Tenant or any other person liable under this Agreement.</p>
+  <p class="clause"><span class="clause-num">9.3</span> This is a continuing guarantee. It applies to this tenancy and to any lawful continuation, statutory continuation, renewal, replacement, or variation of it unless and until the Landlord expressly releases the Guarantor in writing.</p>
+  <p class="clause"><span class="clause-num">9.4</span> The Guarantor's liability is capped at {{#if guarantor_max_liability}}{{guarantor_max_liability}}{{else}}twelve months' rent together with reasonable enforcement costs{{/if}}, save for liabilities already accrued before any written release.</p>
+  <p class="clause"><span class="clause-num">9.5</span> The Guarantor confirms receipt of sufficient information about the tenancy and is advised to take independent legal advice before signing.</p>
   {{/if}}
 
   <h2>{{#if guarantor_name}}10{{else}}9{{/if}}. General Provisions</h2>
@@ -365,7 +364,7 @@
   </section>
 
   <div class="footer-info">
-    <p><strong>Premium England Residential Tenancy Agreement</strong></p>
+    <p><strong>Premium Assured Periodic Tenancy Agreement</strong></p>
     <p>Generated: {{formatUKDate current_date}} | Reference: {{#if case_id}}{{case_id}}{{else}}{{document_id}}{{/if}}</p>
     <p>England residential landlord document drafted for professional use and updated for the Renters' Rights Act 2025 workflow. The statutory regime applicable at the tenancy start date prevails over inconsistent contractual wording.</p>
   </div>

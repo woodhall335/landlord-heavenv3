@@ -48,11 +48,15 @@ body {
   max-width: 8.5in;
   margin: 0 auto;
   padding: 0.5in;
+  font-variant-ligatures: none;
+  font-feature-settings: "liga" 0, "clig" 0;
 
   /* Prevent text overflow */
   word-wrap: break-word;
   overflow-wrap: break-word;
-  hyphens: auto;
+  word-break: normal;
+  hyphens: none;
+  -webkit-hyphens: none;
 }
 
 /* ============================================================================

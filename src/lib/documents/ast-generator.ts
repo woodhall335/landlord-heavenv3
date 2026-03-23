@@ -24,6 +24,11 @@
 import { compileAndMergeTemplates, GeneratedDocument, htmlToPdf } from './generator';
 import { runtimeTenancyVariantsSelfCheck, assertTenancyVariantsInvariant, createFileSystemTemplateGetter } from '../products/tenancy-variant-validator';
 import { detectInventoryData } from '../tenancy/product-tier';
+import {
+  ENGLAND_ASSURED_PERIODIC_AGREEMENT_TITLE,
+  ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL,
+  ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL,
+} from '../tenancy/england-agreement-constants';
 import path from 'path';
 
 // ============================================================================
@@ -123,13 +128,13 @@ interface JurisdictionConfig {
  * Configuration for each UK jurisdiction
  */
 const JURISDICTION_CONFIGS: Record<TenancyJurisdiction, JurisdictionConfig> = {
-  // ENGLAND: Uses AST terminology. Housing Act 1988 + Deregulation Act 2015.
-  // Terminology: "Landlord", "Tenant", "Premises" (NOT generic tenancy)
-  // Premium tier includes HMO-specific clauses aligned with Housing Act 2004
+  // ENGLAND: Uses the assured periodic framework for new private lets.
+  // Terminology: "Landlord", "Tenant", "Property"
+  // Premium tier includes broader shared-household wording aligned with Housing Act 2004 where relevant.
   england: {
     jurisdiction: 'england',
-    agreementTitle: 'Residential Tenancy Agreement',
-    agreementDescription: 'Solicitor-grade residential tenancy agreement with embedded schedules. Updated for the Renters\' Rights Act 2025 England regime.',
+    agreementTitle: ENGLAND_ASSURED_PERIODIC_AGREEMENT_TITLE,
+    agreementDescription: 'Solicitor-grade assured periodic tenancy agreement with embedded schedules. Updated for the Renters\' Rights Act 2025 England regime.',
     agreementDocumentType: 'ast_agreement',
     modelClausesTitle: 'Government Model Clauses',
     modelClausesDescription: 'Recommended clauses from official government guidance',
@@ -306,9 +311,7 @@ function buildEnglandTenancyReformWarning(
   if (!/^\d{4}-\d{2}-\d{2}$/.test(startDate)) return undefined;
 
   return (
-    'This England agreement is drafted for the upgraded assured periodic private rented sector model ' +
-    'and is positioned as a Renters\' Rights compliant Residential Tenancy Agreement. It is intended for ' +
-    'new England self-serve agreements generated through the updated Landlord Heaven flow.'
+    'This England agreement is positioned as a Renters\' Rights compliant Assured Periodic Tenancy Agreement.'
   );
 }
 
@@ -325,7 +328,7 @@ function getRenderedAgreementTitle(
   tenancyStartDate?: string
 ): string {
   if (isEnglandPostReformRegime(jurisdiction, tenancyStartDate)) {
-    return 'Residential Tenancy Agreement';
+    return ENGLAND_ASSURED_PERIODIC_AGREEMENT_TITLE;
   }
 
   return config.agreementTitle;
@@ -938,7 +941,11 @@ export async function generateStandardAST(
     premium: false,
     is_hmo: false,
     multiple_tenants: (data.number_of_tenants ?? data.tenants?.length ?? 0) > 1,
-    product_tier: data.product_tier || `Standard ${renderedAgreementTitle}`,
+    product_tier:
+      data.product_tier ||
+      (jurisdiction === 'england'
+        ? ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL
+        : `Standard ${renderedAgreementTitle}`),
     generation_timestamp: data.generation_timestamp || generationTimestamp,
     document_id: data.document_id || documentId,
     jurisdiction_name: config.jurisdictionLabel,
@@ -1046,7 +1053,11 @@ export async function generatePremiumAST(
     premium: true,
     is_hmo: true,
     multiple_tenants: (data.number_of_tenants ?? data.tenants?.length ?? 0) > 1,
-    product_tier: data.product_tier || `HMO ${renderedAgreementTitle}`,
+    product_tier:
+      data.product_tier ||
+      (jurisdiction === 'england'
+        ? ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL
+        : `HMO ${renderedAgreementTitle}`),
     generation_timestamp: data.generation_timestamp || generationTimestamp,
     document_id: data.document_id || documentId,
     jurisdiction_name: config.jurisdictionLabel,
@@ -1273,7 +1284,11 @@ export async function generateStandardASTDocuments(
     premium: false,
     is_hmo: false,
     multiple_tenants: (data.number_of_tenants ?? data.tenants?.length ?? 0) > 1,
-    product_tier: data.product_tier || `Standard ${renderedAgreementTitle}`,
+    product_tier:
+      data.product_tier ||
+      (jurisdiction === 'england'
+        ? ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL
+        : `Standard ${renderedAgreementTitle}`),
     generation_timestamp: generationTimestamp,
     document_id: documentId,
     jurisdiction_name: config.jurisdictionLabel,
@@ -1298,7 +1313,10 @@ export async function generateStandardASTDocuments(
       outputFormat: 'both',
     });
     documents.push({
-      title: renderedAgreementTitle,
+      title:
+        jurisdiction === 'england'
+          ? ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL
+          : renderedAgreementTitle,
       description: config.agreementDescription,
       category: 'agreement',
       document_type: config.agreementDocumentType, // jurisdiction-specific key
@@ -1469,7 +1487,10 @@ export async function generatePremiumASTDocuments(
     premium: true,
     is_hmo: true,
     multiple_tenants: (data.number_of_tenants ?? data.tenants?.length ?? 0) > 1,
-    product_tier: `HMO ${renderedAgreementTitle}`,
+    product_tier:
+      jurisdiction === 'england'
+        ? ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL
+        : `HMO ${renderedAgreementTitle}`,
     generation_timestamp: generationTimestamp,
     document_id: documentId,
     jurisdiction_name: config.jurisdictionLabel,
@@ -1502,8 +1523,14 @@ export async function generatePremiumASTDocuments(
     const hmoDocumentType = config.agreementDocumentType + '_hmo';
 
     documents.push({
-      title: `HMO ${renderedAgreementTitle}`,
-      description: `Includes HMO-specific clauses for multi-occupancy properties. Compliant with ${config.legalFramework}.`,
+      title:
+        jurisdiction === 'england'
+          ? ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL
+          : `HMO ${renderedAgreementTitle}`,
+      description:
+        jurisdiction === 'england'
+          ? `Includes broader wording for HMO, shared-household, guarantor-backed, and multi-occupancy arrangements. Compliant with ${config.legalFramework}.`
+          : `Includes HMO-specific clauses for multi-occupancy properties. Compliant with ${config.legalFramework}.`,
       category: 'agreement',
       document_type: hmoDocumentType,
       html: agreementDoc.html,

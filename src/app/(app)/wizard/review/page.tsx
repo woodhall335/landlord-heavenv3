@@ -2947,7 +2947,7 @@ function TenancyReviewContent({
 
   // Get jurisdiction-specific terminology
   const terminologyMap: Record<string, { agreementType: string; tenantLabel: string }> = {
-    england: { agreementType: 'Residential Tenancy Agreement', tenantLabel: 'tenant' },
+    england: { agreementType: 'Assured Periodic Tenancy Agreement', tenantLabel: 'tenant' },
     wales: { agreementType: 'Occupation Contract', tenantLabel: 'contract holder' },
     scotland: { agreementType: 'Private Residential Tenancy (PRT)', tenantLabel: 'tenant' },
     'northern-ireland': { agreementType: 'Private Tenancy', tenantLabel: 'tenant' },

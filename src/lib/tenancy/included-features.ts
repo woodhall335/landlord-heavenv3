@@ -1,3 +1,5 @@
+import { ENGLAND_ASSURED_PERIODIC_AGREEMENT_TITLE } from './england-agreement-constants';
+
 /**
  * Tenancy Agreement Included Features - Single Source of Truth
  *
@@ -74,10 +76,10 @@ export interface JurisdictionAgreementInfo {
  */
 export const JURISDICTION_AGREEMENT_INFO: Record<TenancyJurisdiction, JurisdictionAgreementInfo> = {
   england: {
-    agreementName: 'Residential Tenancy Agreement',
-    agreementShortName: 'RTA',
+    agreementName: ENGLAND_ASSURED_PERIODIC_AGREEMENT_TITLE,
+    agreementShortName: 'APTA',
     legalFramework: 'Housing Act 1988',
-    legalReference: 'Updated for the Renters\' Rights Act 2025 England tenancy flow',
+    legalReference: 'Updated for the Renters\' Rights Act 2025 England assured periodic tenancy flow',
   },
   wales: {
     agreementName: 'Standard Occupation Contract',

@@ -1,44 +1,45 @@
 <div style="page-break-before: always; padding: 50px 60px; font-family: 'Helvetica', 'Arial', sans-serif; color: #12323c;">
   <h1 style="margin-top: 0; font-size: 28pt; color: #1e88e5;">Legal Validity Summary</h1>
   <p style="font-size: 12pt; line-height: 1.6; margin-bottom: 20px;">
-    This section explains why the attached tenancy agreement appears compliant with core England & Wales AST
-    requirements. It is generated from the facts provided in the wizard and is designed to be read alongside the
-    Certificate of Curation.
+    This section summarises why the attached England assured periodic tenancy agreement appears aligned with the
+    post-reform private rented sector model. It is generated from the facts provided in the wizard and is designed to be
+    read alongside the Certificate of Curation.
   </p>
 
   <div style="border: 1px solid #1e88e5; border-radius: 8px; padding: 16px; margin-bottom: 18px;">
-    <h2 style="margin: 0 0 8px 0; color: #0d47a1;">🏠 Core tenancy elements</h2>
+    <h2 style="margin: 0 0 8px 0; color: #0d47a1;">Core tenancy elements</h2>
     <ul style="margin: 0; padding-left: 18px; line-height: 1.6;">
       <li><strong>Parties captured:</strong> Landlord {{landlord_full_name}} and {{tenants.length}} tenant(s) with contact details.</li>
       <li><strong>Property:</strong> {{property_address}} {{#if property_type}}({{property_type}}){{/if}}.</li>
-      <li><strong>Rent & term:</strong> £{{rent_amount}} per {{rent_period}} due {{rent_due_day}}; tenancy starts {{tenancy_start_date}}{{#if tenancy_end_date}}, ends {{tenancy_end_date}}{{/if}}.</li>
-      {{#if break_clause}}<li><strong>Break clause:</strong> Included with notice period {{break_clause_notice_period}} after {{break_clause_months}}.</li>{{/if}}
+      <li><strong>Rent and structure:</strong> &pound;{{rent_amount}} per {{rent_period}} due {{rent_due_day}}; tenancy starts {{tenancy_start_date}} and is drafted without a fixed end date.</li>
+      <li><strong>Possession model:</strong> The agreement states that possession depends on a lawful statutory ground and any court order required by law.</li>
+      <li><strong>Tenant notice:</strong> The agreement ties tenant notice to the statutory requirements in force at the relevant time.</li>
       {{#if subletting_allowed}}<li><strong>Subletting:</strong> {{subletting_allowed}}.</li>{{/if}}
-      {{#if rent_increase_clause}}<li><strong>Rent review:</strong> {{rent_increase_method}} / {{rent_increase_frequency}}.</li>{{/if}}
+      <li><strong>Rent review:</strong> The agreement references the section 13 rent increase route or any replacement statutory route in force at the relevant time.</li>
     </ul>
   </div>
 
   <div style="border: 1px solid #1e88e5; border-radius: 8px; padding: 16px; margin-bottom: 18px;">
-    <h2 style="margin: 0 0 8px 0; color: #0d47a1;">💰 Deposit & prescribed information</h2>
+    <h2 style="margin: 0 0 8px 0; color: #0d47a1;">Deposit and prescribed information</h2>
     <ul style="margin: 0; padding-left: 18px; line-height: 1.6;">
       {{#if deposit_scheme_name}}
-        <li>Deposit of £{{deposit_amount}} to be protected with <strong>{{deposit_scheme_name}}</strong>{{#if deposit_protection_date}} by {{deposit_protection_date}}{{/if}}.</li>
+        <li>Deposit of &pound;{{deposit_amount}} to be protected with <strong>{{deposit_scheme_name}}</strong>{{#if deposit_protection_date}} by {{deposit_protection_date}}{{/if}}.</li>
       {{else}}
         <li style="color: #c62828; font-weight: bold;">No deposit scheme selected. Protection within 30 days is legally required.</li>
       {{/if}}
       {{#if deposit_paid_date}}<li>Deposit due/paid on {{deposit_paid_date}}.</li>{{/if}}
-      <li>Deposit cap check: {{#if deposit_amount}}The template enforces Tenant Fees Act limits based on the rent provided.{{else}}Amount missing – cannot validate cap.{{/if}}</li>
+      <li>Deposit cap check: {{#if deposit_amount}}The template enforces Tenant Fees Act limits based on the rent provided.{{else}}Amount missing - cannot validate cap.{{/if}}</li>
     </ul>
 
     {{#unless prescribed_information_served}}
     <div style="background: #fff3cd; border: 2px solid #ffc107; border-radius: 6px; padding: 12px; margin-top: 12px;">
-      <p style="margin: 0; color: #856404; font-weight: bold; font-size: 11pt;">⚠️ CRITICAL WARNING - Prescribed Information Not Confirmed</p>
+      <p style="margin: 0; color: #856404; font-weight: bold; font-size: 11pt;">CRITICAL WARNING - Prescribed Information Not Confirmed</p>
       <p style="margin: 8px 0 0 0; color: #856404; font-size: 10pt; line-height: 1.5;">
         <strong>Legal Requirement:</strong> Prescribed information must be served to the tenant within 30 days of receiving the deposit (Housing Act 2004).
         <br><strong>Consequences of Non-Compliance:</strong>
-        <br>• Court may order you to pay the tenant 1-3× the deposit amount in compensation
-        <br>• You cannot serve a valid Section 21 notice until compliance is achieved
-        <br>• Tenant must hold the deposit for required period after compliance before S21 is valid
+        <br>- Court may order you to pay the tenant 1-3x the deposit amount in compensation.
+        <br>- Deposit non-compliance can materially weaken the landlord's position in later possession or enforcement proceedings until corrected.
+        <br>- Late or unproven service can create avoidable dispute risk.
         <br><strong>Action Required:</strong> Confirm prescribed information has been or will be served within the statutory deadline.
       </p>
     </div>
@@ -46,14 +47,14 @@
   </div>
 
   <div style="border: 1px solid #1e88e5; border-radius: 8px; padding: 16px; margin-bottom: 18px;">
-    <h2 style="margin: 0 0 8px 0; color: #0d47a1;">🛡️ Safety & statutory documents</h2>
+    <h2 style="margin: 0 0 8px 0; color: #0d47a1;">Safety and statutory information</h2>
     <ul style="margin: 0; padding-left: 18px; line-height: 1.6;">
-      <li>Gas safety certificate: {{#if gas_safety_certificate}}✅ provided{{else}}⚠️ not confirmed{{/if}}</li>
-      <li>Electrical safety (EICR): {{#if electrical_safety_certificate}}✅ provided{{else}}⚠️ not confirmed{{/if}}</li>
-      <li>EPC rating: {{#if epc_rating}}✅ {{epc_rating}}{{else}}⚠️ missing{{/if}}</li>
-      <li>Smoke alarms: {{#if smoke_alarms_fitted}}✅ confirmed{{else}}⚠️ not confirmed{{/if}}; CO alarms: {{#if carbon_monoxide_alarms}}✅ confirmed{{else}}⚠️ not confirmed{{/if}}</li>
-      <li>Right to Rent checks: {{#if right_to_rent_check_date}}✅ completed on {{right_to_rent_check_date}}{{else}}⚠️ date not recorded{{/if}}</li>
-      <li>How to Rent guide: {{#if how_to_rent_guide_provided}}✅ confirmed issued{{else}}⚠️ not confirmed{{/if}}</li>
+      <li>Gas safety certificate: {{#if gas_safety_certificate}}Confirmed provided{{else}}Not confirmed{{/if}}</li>
+      <li>Electrical safety (EICR): {{#if electrical_safety_certificate}}Confirmed provided{{else}}Not confirmed{{/if}}</li>
+      <li>EPC rating: {{#if epc_rating}}Confirmed as {{epc_rating}}{{else}}Not confirmed{{/if}}</li>
+      <li>Smoke alarms: {{#if smoke_alarms_fitted}}Confirmed{{else}}Not confirmed{{/if}}; CO alarms: {{#if carbon_monoxide_alarms}}Confirmed{{else}}Not confirmed{{/if}}</li>
+      <li>Right to Rent checks: {{#if right_to_rent_check_date}}Completed on {{right_to_rent_check_date}}{{else}}Date not recorded{{/if}}</li>
+      <li>How to Rent guide: {{#if how_to_rent_guide_provided}}Confirmed issued{{else}}Not confirmed{{/if}}</li>
       {{#if has_shared_facilities}}
         <li>HMO/shared clauses included{{#if hmo_licence_status}} (licence: {{hmo_licence_status}}){{/if}}.</li>
       {{/if}}
@@ -61,13 +62,13 @@
 
     {{#unless how_to_rent_guide_provided}}
     <div style="background: #ffebee; border: 2px solid #f44336; border-radius: 6px; padding: 12px; margin-top: 12px;">
-      <p style="margin: 0; color: #c62828; font-weight: bold; font-size: 11pt;">🚨 CRITICAL WARNING - How to Rent Guide Not Confirmed</p>
+      <p style="margin: 0; color: #c62828; font-weight: bold; font-size: 11pt;">IMPORTANT CHECK - How to Rent Guide Not Confirmed</p>
       <p style="margin: 8px 0 0 0; color: #c62828; font-size: 10pt; line-height: 1.5;">
-        <strong>Legal Requirement (England Only):</strong> You must provide the latest government "How to Rent" guide before or at the start of the tenancy (Deregulation Act 2015).
-        <br><strong>Consequence of Non-Compliance:</strong>
-        <br>• Any Section 21 notice you serve will be INVALID
-        <br>• You cannot use the accelerated possession procedure
-        <br>• You will need to use slower, more expensive court proceedings if eviction becomes necessary
+        <strong>Position:</strong> Provide the current government "How to Rent" guide where it is legally required for the tenancy.
+        <br><strong>Risk if omitted:</strong>
+        <br>- Missing prescribed information can create compliance and evidential risk.
+        <br>- The landlord may need to serve the guide before relying on it as provided information where current law requires it.
+        <br>- Proof of delivery should be retained with the tenancy file.
         <br><strong>Action Required:</strong> Download the latest "How to Rent" guide from gov.uk and provide it to the tenant immediately. Retain proof of delivery.
       </p>
     </div>
@@ -75,10 +76,10 @@
   </div>
 
   <div style="border: 1px solid #1e88e5; border-radius: 8px; padding: 16px; margin-bottom: 18px;">
-    <h2 style="margin: 0 0 8px 0; color: #0d47a1;">🧾 Inventory & property care</h2>
+    <h2 style="margin: 0 0 8px 0; color: #0d47a1;">Inventory and property care</h2>
     <ul style="margin: 0; padding-left: 18px; line-height: 1.6;">
-      <li>Inventory: {{#if inventory_attached}}✅ schedule to be attached{{else}}⚠️ not confirmed{{/if}}</li>
-      <li>Cleaning: {{#if professional_cleaning_required}}Professional cleaning required on exit{{else}}General cleaning obligations included{{/if}}</li>
+      <li>Inventory: {{#if inventory_attached}}Schedule to be attached{{else}}Not confirmed{{/if}}</li>
+      <li>Cleaning: The tenancy materials require the property to be returned to the recorded move-in standard, allowing for fair wear and tear, with additional cleaning or treatment only where reasonably needed.</li>
       {{#if inventory_schedule_notes}}<li>Notes: {{inventory_schedule_notes}}</li>{{/if}}
     </ul>
   </div>
@@ -86,6 +87,6 @@
   <p style="font-size: 10pt; color: #555; line-height: 1.6;">
     This summary is informational and based solely on the data provided. It is not legal advice. Landlords must ensure all
     statutory documents are served correctly and retain evidence of service in line with the Housing Act 1988, Tenant Fees
-    Act 2019, Deregulation Act 2015, and related regulations.
+    Act 2019, Housing Act 2004, and related regulations.
   </p>
 </div>

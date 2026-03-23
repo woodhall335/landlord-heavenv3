@@ -47,6 +47,10 @@ import {
   type TenancyJurisdiction,
 } from '@/lib/tenancy/product-tier';
 import { assertCaseWriteAccess } from '@/lib/auth/case-access';
+import {
+  ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL,
+  ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL,
+} from '@/lib/tenancy/england-agreement-constants';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -135,11 +139,11 @@ function validateCriticalAnswer(
     // Critical field: AST tier (product selection)
     if (questionId === 'ast_tier' && caseType === 'tenancy_agreement') {
       const schema = z.enum([
-        'Standard Residential Tenancy Agreement',
-        'Premium Residential Tenancy Agreement (HMO / student-ready)',
+        ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL,
+        ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL,
       ], {
         message:
-          'England tenancy tier must be "Standard Residential Tenancy Agreement" or "Premium Residential Tenancy Agreement (HMO / student-ready)"',
+          `England tenancy tier must be "${ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL}" or "${ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL}"`,
       });
       schema.parse(answer);
       return { ok: true };

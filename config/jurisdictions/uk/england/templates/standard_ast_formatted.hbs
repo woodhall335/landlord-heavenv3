@@ -1,10 +1,9 @@
-﻿{{!--
+{{!--
   ============================================================================
-  STANDARD RESIDENTIAL TENANCY AGREEMENT
+  STANDARD ASSURED PERIODIC TENANCY AGREEMENT
   England Only - Solicitor-Grade Professional Edition
 
-  LEGAL NOTE: This Residential Tenancy Agreement applies to England ONLY and is
-  drafted for the upgraded assured periodic England private rented sector flow.
+  LEGAL NOTE: This Assured Periodic Tenancy Agreement applies to England ONLY.
 
   STRUCTURE:
   1. Cover/Title
@@ -21,7 +20,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Residential Tenancy Agreement</title>
+  <title>Standard Assured Periodic Tenancy Agreement</title>
   <style>
     /* ===== PAGE SETUP ===== */
     @page {
@@ -41,6 +40,8 @@
       line-height: 1.5;
       color: #1a1a1a;
       background: white;
+      font-variant-ligatures: none;
+      font-feature-settings: "liga" 0, "clig" 0;
     }
 
     /* ===== TYPOGRAPHY ===== */
@@ -74,8 +75,11 @@
 
     p {
       margin: 0 0 8pt 0;
-      text-align: justify;
-      hyphens: auto;
+      text-align: left;
+      hyphens: none;
+      -webkit-hyphens: none;
+      word-break: normal;
+      overflow-wrap: break-word;
     }
 
     /* ===== DOCUMENT HEADER ===== */
@@ -195,7 +199,8 @@
     .data-table td.value {
       width: 65%;
       word-wrap: break-word;
-      overflow-wrap: anywhere;
+      overflow-wrap: break-word;
+      word-break: normal;
     }
 
     /* ===== SCHEDULES ===== */
@@ -299,7 +304,8 @@
     /* ===== TEXT OVERFLOW ===== */
     .wrap-text, .email-text, .address-text {
       word-wrap: break-word;
-      overflow-wrap: anywhere;
+      overflow-wrap: break-word;
+      word-break: normal;
     }
 
     /* ===== FOOTER ===== */
@@ -377,7 +383,8 @@
 
   <!-- ===== COVER / TITLE ===== -->
   <div class="doc-header">
-    <h1>Residential Tenancy Agreement</h1>
+    <h1>Assured Periodic Tenancy Agreement</h1>
+    <div class="doc-subtitle">Standard Assured Periodic Tenancy Agreement</div>
     <div class="doc-subtitle">England private rented sector tenancy</div>
     <div class="doc-subtitle">England</div>
     <div class="doc-date">Dated: <strong>{{formatUKDate agreement_date}}</strong></div>
@@ -439,7 +446,7 @@
   <h2>2. Definitions and Interpretation</h2>
   <p>In this Agreement, unless the context requires otherwise:</p>
   <ul class="definitions-list">
-    <li><span class="defined-term">"Agreement"</span> means this tenancy agreement and the Schedules attached.</li>
+    <li><span class="defined-term">"Agreement"</span> means this assured periodic tenancy agreement and the Schedules attached.</li>
     <li><span class="defined-term">"Landlord"</span> means {{landlord_full_name}} and successors in title.</li>
     {{#if agent_name}}<li><span class="defined-term">"Agent"</span> means {{agent_name}}, the Landlord's authorised agent.</li>{{/if}}
     <li><span class="defined-term">"Tenant"</span> means {{#each tenants}}{{this.full_name}}{{#unless @last}}, {{/unless}}{{/each}}{{#if multiple_tenants}} (jointly and severally){{/if}}.</li>
@@ -463,9 +470,11 @@
   <!-- ===== 4. THE TERM ===== -->
   <h2>4. The Term</h2>
   <p class="clause"><span class="clause-num">4.1</span> The tenancy begins on <strong>{{formatUKDate tenancy_start_date}}</strong> as a periodic assured tenancy under the law in force in England at that date and is not intended to create a new assured shorthold tenancy.</p>
-  <p class="clause"><span class="clause-num">4.2</span> The tenancy continues until brought to an end in accordance with statute and this Agreement.</p>
-  <p class="clause"><span class="clause-num">4.3</span> The Landlord may only recover possession or terminate the tenancy by following the statutory procedure in force from time to time and obtaining any court order required by law.</p>
-  <p class="clause"><span class="clause-num">4.4</span> The Tenant may end the tenancy by giving at least two months' written notice, or any shorter agreed notice period stated in this Agreement where that is lawful, expiring at the end of a rental period where applicable.</p>
+  <p class="clause"><span class="clause-num">4.2</span> This tenancy does not have a fixed end date and continues until ended in accordance with statute.</p>
+  <p class="clause"><span class="clause-num">4.3</span> The Landlord may only seek possession where a lawful statutory ground applies, including any relevant rent arrears, anti-social behaviour, sale, landlord occupation, or other statutory ground in force at the relevant time.</p>
+  <p class="clause"><span class="clause-num">4.4</span> The Landlord may only recover possession or terminate the tenancy through the court-led statutory process in force at the relevant time and by obtaining any court order required by law.</p>
+  <p class="clause"><span class="clause-num">4.5</span> The Tenant has the right to remain in the Property unless and until the Landlord establishes a lawful statutory ground for possession and obtains any court order required by law.</p>
+  <p class="clause"><span class="clause-num">4.6</span> The Tenant may end the tenancy by giving written notice in accordance with the statutory requirements in force at the relevant time.</p>
 
   <!-- ===== 5. RENT ===== -->
   <h2>5. Rent</h2>
@@ -473,6 +482,7 @@
   <p class="clause"><span class="clause-num">5.2</span> Payment shall be made by {{payment_method}} to the account specified in Schedule 2.</p>
   <p class="clause"><span class="clause-num">5.3</span> The first payment is due on or before {{formatUKDate tenancy_start_date}}.</p>
   <p class="clause"><span class="clause-num">5.4</span> If rent remains unpaid for 14 days after the due date, interest may accrue at 3% above the Bank of England base rate per annum.</p>
+  <p class="clause"><span class="clause-num">5.5</span> If the Landlord proposes a new rent, the Landlord will serve notice in accordance with section 13 of the Housing Act 1988 or any replacement statutory procedure in force at the relevant time.</p>
 
   <!-- ===== 6. DEPOSIT ===== -->
   <h2>6. Deposit</h2>
@@ -500,7 +510,7 @@
   <p class="clause"><span class="clause-num">8.2</span> <strong>Repairs:</strong> Keep the structure, exterior, and installations for water, gas, electricity, heating, and sanitation in repair and proper working order.</p>
   <p class="clause"><span class="clause-num">8.3</span> <strong>Safety:</strong> Ensure the Property has valid Gas Safety Certificate, Electrical Installation Condition Report, smoke and carbon monoxide alarms, and an Energy Performance Certificate rating of E or above.</p>
   <p class="clause"><span class="clause-num">8.4</span> <strong>Deposit:</strong> Protect the Deposit in a government-authorised scheme and provide prescribed information within 30 days.</p>
-  <p class="clause"><span class="clause-num">8.5</span> <strong>Documents:</strong> Provide the Tenant with the documents and written information required for the tenancy regime applying at the start date, including the tenant notice period, rent increase route, landlord possession process, pets position, bills handling, the current How to Rent guide where legally relevant, the EPC, Gas Safety Certificate, and EICR before the tenancy starts or as soon as reasonably practicable.</p>
+  <p class="clause"><span class="clause-num">8.5</span> <strong>Documents:</strong> Provide the Tenant with the documents and information required for the tenancy regime applying at the start date, including information about the tenant notice requirements, the section 13 rent increase route or any replacement statutory route in force at the relevant time, the landlord possession process, the pets position, bills handling, the current How to Rent guide where legally relevant, the EPC, Gas Safety Certificate, and EICR before the tenancy starts or as soon as reasonably practicable.</p>
   <p class="clause"><span class="clause-num">8.6</span> <strong>Insurance:</strong> Maintain buildings insurance for the Property.</p>
   <p class="clause"><span class="clause-num">8.7</span> <strong>Right to Rent:</strong> The Landlord confirms that the required Right to Rent checks have been carried out in accordance with the Immigration Act 2014 before the Tenant occupies the Property. Nothing in this Agreement makes the Tenant responsible for the Landlord's compliance with Right to Rent requirements.</p>
 
@@ -859,7 +869,7 @@
 
   <!-- ===== FOOTER ===== -->
   <div class="doc-footer">
-    <p>Residential Tenancy Agreement &mdash; England, updated for the Renters' Rights Act 2025 flow</p>
+    <p>Standard Assured Periodic Tenancy Agreement</p>
     <p>Generated: {{formatUKDate current_date}} | Reference: {{#if case_id}}{{case_id}}{{else}}{{document_id}}{{/if}}</p>
     <p>Drafted for the England post-reform assured periodic tenancy regime, subject to the Housing Act 1988 as amended and other applicable law.</p>
   </div>

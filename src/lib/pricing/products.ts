@@ -1,6 +1,11 @@
 // src/lib/pricing/products.ts
 // Single source of truth for display pricing, labels, descriptions, and wizard hrefs
 
+import {
+  ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL,
+  ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL,
+} from '@/lib/tenancy/england-agreement-constants';
+
 /**
  * SEO_PRICES - Canonical pricing for landing pages and SEO content
  *
@@ -143,9 +148,9 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
   },
   ast_standard: {
     sku: 'ast_standard',
-    label: 'Standard Residential Tenancy Agreement',
-    shortLabel: 'Residential Agreement',
-    description: 'Renters’ Rights compliant England residential tenancy agreement, with jurisdiction-aware variants for the rest of the UK',
+    label: ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL,
+    shortLabel: 'Periodic Agreement',
+    description: 'Renters’ Rights compliant England assured periodic tenancy agreement, with jurisdiction-aware variants for the rest of the UK',
     price: SEO_PRICES.tenancyStandard.amount,
     displayPrice: SEO_PRICES.tenancyStandard.display,
     wizardHref: '/wizard?product=ast_standard&src=product_page&topic=tenancy',
@@ -153,9 +158,9 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
   },
   ast_premium: {
     sku: 'ast_premium',
-    label: 'Premium Residential Tenancy Agreement (HMO / student-ready)',
-    shortLabel: 'Premium Residential',
-    description: 'Renters’ Rights compliant England premium residential tenancy agreement with HMO, shared-living, and student-ready clauses',
+    label: ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL,
+    shortLabel: 'Premium Periodic',
+    description: 'Renters’ Rights compliant England premium assured periodic tenancy agreement with HMO, shared-living, and student-ready clauses',
     price: SEO_PRICES.tenancyPremium.amount,
     displayPrice: SEO_PRICES.tenancyPremium.display,
     wizardHref: '/wizard?product=ast_premium&src=product_page&topic=tenancy',
@@ -453,3 +458,4 @@ export function getProductLandingHref(
 
   return landingRoute;
 }
+

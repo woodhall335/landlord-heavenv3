@@ -32,6 +32,10 @@ import {
   RESIDENTIAL_LETTING_PRODUCTS,
 } from '@/lib/residential-letting/products';
 import { PRODUCTS } from '@/lib/pricing/products';
+import {
+  ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL,
+  ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL,
+} from '@/lib/tenancy/england-agreement-constants';
 
 const RESIDENTIAL_PRODUCTS = [...RESIDENTIAL_LETTING_PRODUCT_SKUS] as const;
 type ResidentialProduct = (typeof RESIDENTIAL_PRODUCTS)[number];
@@ -116,13 +120,13 @@ const resolveProductTier = (
       if (jurisdiction === 'scotland')
         return 'Standard Scottish Private Residential Tenancy';
       if (jurisdiction === 'northern-ireland') return 'Standard NI Private Tenancy';
-      return 'Standard Residential Tenancy Agreement';
+      return ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL;
 
     case 'ast_premium':
       if (jurisdiction === 'scotland')
         return 'Premium Scottish Private Residential Tenancy';
       if (jurisdiction === 'northern-ireland') return 'Premium NI Private Tenancy';
-      return 'Premium Residential Tenancy Agreement (HMO / student-ready)';
+      return ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL;
     case 'guarantor_agreement':
     case 'residential_sublet_agreement':
     case 'lease_amendment':

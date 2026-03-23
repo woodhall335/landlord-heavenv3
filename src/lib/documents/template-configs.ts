@@ -1,3 +1,8 @@
+import {
+  ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL,
+  ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL,
+} from '@/lib/tenancy/england-agreement-constants';
+
 /**
  * Template Configuration
  *
@@ -283,10 +288,10 @@ export function getASTTemplates(jurisdiction: string, tier: 'standard' | 'premiu
   if (jurisdiction === 'england') {
     templates.push({
       id: 'tenancy-agreement',
-      templatePath: tier === 'premium' ? 'uk/england/templates/premium_ast.hbs' : 'uk/england/templates/standard_ast.hbs',
-      title: tier === 'premium' ? 'Premium Residential Tenancy Agreement' : 'Standard Residential Tenancy Agreement',
+      templatePath: tier === 'premium' ? 'uk/england/templates/premium_ast_formatted.hbs' : 'uk/england/templates/standard_ast_formatted.hbs',
+      title: tier === 'premium' ? ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL : ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL,
       type: 'agreement',
-      description: 'Residential Tenancy Agreement',
+      description: 'Assured Periodic Tenancy Agreement',
       category: 'notice', // Using 'notice' for main docs
     });
   } else if (jurisdiction === 'wales') {

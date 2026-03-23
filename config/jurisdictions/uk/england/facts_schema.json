@@ -197,8 +197,8 @@
     "product_tier": {
       "type": "enum",
       "values": [
-        "Standard Residential Tenancy Agreement",
-        "Premium Residential Tenancy Agreement (HMO / student-ready)"
+        "Standard Assured Periodic Tenancy Agreement",
+        "Premium Assured Periodic Tenancy Agreement"
       ],
       "required": true
     },
@@ -345,7 +345,7 @@
     },
     "guarantor_name": {
       "type": "string",
-      "required_if": "product_tier == 'Premium Residential Tenancy Agreement (HMO / student-ready)' && guarantor_required == true"
+      "required_if": "product_tier == 'Premium Assured Periodic Tenancy Agreement' && guarantor_required == true"
     },
     "guarantor_required": {
       "type": "boolean",
@@ -353,7 +353,7 @@
     },
     "is_hmo": {
       "type": "boolean",
-      "required_if": "product_tier == 'Premium Residential Tenancy Agreement (HMO / student-ready)'"
+      "required_if": "product_tier == 'Premium Assured Periodic Tenancy Agreement'"
     },
     "number_of_sharers": {
       "type": "number",
@@ -3374,3 +3374,4 @@
     "total_claim_amount": { "type": "currency", "required": false, "description": "Flat mapping for wizard - total money claim amount" }
   }
 }
+

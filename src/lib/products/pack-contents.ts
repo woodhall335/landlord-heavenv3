@@ -5,6 +5,11 @@
  * based on product type, jurisdiction, and route.
  */
 
+import {
+  ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL,
+  ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL,
+} from '@/lib/tenancy/england-agreement-constants';
+
 export type PackItemCategory =
   | 'Notice'
   | 'Court forms'
@@ -398,16 +403,16 @@ function getEnglandASTContents(tier: 'standard' | 'premium', hasInventoryData?: 
   if (tier === 'standard') {
     items.push({
       key: 'ast_agreement',
-      title: 'Residential Tenancy Agreement',
-      description: 'Solicitor-grade England residential tenancy agreement with all embedded schedules. Updated for the Renters\' Rights Act 2025 flow.',
+      title: ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL,
+      description: 'Solicitor-grade England assured periodic tenancy agreement with all embedded schedules. Updated for the Renters\' Rights Act 2025 flow.',
       category: 'Tenancy agreement',
       required: true,
     });
   } else {
     items.push({
       key: 'ast_agreement_hmo',
-      title: 'Premium Residential Tenancy Agreement',
-      description: 'Includes HMO-specific clauses for multi-occupancy properties. Updated for the England Residential Tenancy Agreement flow.',
+      title: ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL,
+      description: 'Includes broader wording for HMO, shared-household, guarantor-backed, and multi-occupancy arrangements in the England assured periodic tenancy flow.',
       category: 'Tenancy agreement',
       required: true,
     });

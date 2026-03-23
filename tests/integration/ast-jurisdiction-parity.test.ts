@@ -130,9 +130,9 @@ describe('AST Jurisdiction Configuration', () => {
   });
 
   describe('Agreement titles are jurisdiction-specific', () => {
-    it('England uses "Assured Shorthold Tenancy Agreement"', () => {
+    it('England uses "Assured Periodic Tenancy Agreement"', () => {
       const config = getJurisdictionConfig('england');
-      expect(config.agreementTitle).toBe('Assured Shorthold Tenancy Agreement');
+      expect(config.agreementTitle).toBe('Assured Periodic Tenancy Agreement');
     });
 
     it('Wales uses "Standard Occupation Contract"', () => {
@@ -228,7 +228,13 @@ describe('Pack-Contents AST Document Keys', () => {
 
   describe('Agreement bundles include compliance docs alongside the agreement', () => {
     const expectedStandardKeys: Record<string, string[]> = {
-      england: ['ast_agreement', 'inventory_schedule', 'pre_tenancy_checklist_england'],
+      england: [
+        'ast_agreement',
+        'inventory_schedule',
+        'pre_tenancy_checklist_england',
+        'deposit_protection_certificate',
+        'tenancy_deposit_information',
+      ],
       wales: ['soc_agreement', 'inventory_schedule', 'pre_tenancy_checklist_wales'],
       scotland: [
         'prt_agreement',
@@ -258,7 +264,13 @@ describe('Pack-Contents AST Document Keys', () => {
 
   describe('Premium documents include agreement plus compliance docs', () => {
     const expectedPremiumKeys: Record<string, string[]> = {
-      england: ['ast_agreement_hmo', 'inventory_schedule', 'pre_tenancy_checklist_england'],
+      england: [
+        'ast_agreement_hmo',
+        'inventory_schedule',
+        'pre_tenancy_checklist_england',
+        'deposit_protection_certificate',
+        'tenancy_deposit_information',
+      ],
       wales: ['soc_agreement_hmo', 'inventory_schedule', 'pre_tenancy_checklist_wales'],
       scotland: [
         'prt_agreement_hmo',

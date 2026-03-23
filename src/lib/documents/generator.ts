@@ -13,6 +13,34 @@ import puppeteerCore from 'puppeteer-core';
 import { SITE_CONFIG } from '@/lib/site-config';
 import { normalizeDatesForRender, sanitizeISODatesInHTML, validateHtmlForPdfTextLayer } from './date-normalizer';
 
+const PDF_RENDER_INVISIBLE_BREAK_CHARS = /[\u00AD\u200B\u200C\u200D\u2060\uFEFF]/g;
+const PDF_RENDER_NON_BREAKING_SPACES = /[\u00A0\u202F]/g;
+const PDF_RENDER_NON_BREAKING_HYPHENS = /\u2011/g;
+const PDF_RENDER_LINE_SEPARATOR_CHARS = /[\u2028\u2029]/g;
+const PDF_RENDER_CONTROL_CHARS = /[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g;
+
+export function sanitizeTextForPdfRendering(input: string): string {
+  if (!input || typeof input !== 'string') {
+    return '';
+  }
+
+  return input
+    .normalize('NFC')
+    .replace(PDF_RENDER_INVISIBLE_BREAK_CHARS, '')
+    .replace(PDF_RENDER_NON_BREAKING_SPACES, ' ')
+    .replace(PDF_RENDER_NON_BREAKING_HYPHENS, '-')
+    .replace(PDF_RENDER_LINE_SEPARATOR_CHARS, '\n')
+    .replace(PDF_RENDER_CONTROL_CHARS, '');
+}
+
+export function sanitizeHtmlForPdfRendering(html: string): string {
+  if (!html || typeof html !== 'string') {
+    return '';
+  }
+
+  return sanitizeTextForPdfRendering(html);
+}
+
 // Use 'any' for browser type to avoid conflicts between puppeteer and puppeteer-core types
 type BrowserInstance = Awaited<ReturnType<typeof puppeteerCore.launch>>;
 
@@ -789,7 +817,7 @@ export function safeText(value: any): string {
     return '';
   }
   if (typeof value === 'string') {
-    return value;
+    return sanitizeTextForPdfRendering(value);
   }
   if (typeof value === 'number' || typeof value === 'boolean') {
     return String(value);
@@ -807,17 +835,17 @@ export function safeText(value: any): string {
         value.state || value.county,
         value.postcode || value.postal_code || value.zip,
         value.country,
-      ].filter(Boolean);
+      ].filter(Boolean).map((part) => sanitizeTextForPdfRendering(String(part)));
       return parts.join(', ');
     }
     // Fallback: try JSON stringify
     try {
-      return JSON.stringify(value);
+      return sanitizeTextForPdfRendering(JSON.stringify(value));
     } catch {
       return '[Complex Object]';
     }
   }
-  return String(value);
+  return sanitizeTextForPdfRendering(String(value));
 }
 
 // Debug flag for PDF generation tracing
@@ -903,7 +931,7 @@ export function compileTemplate(templateContent: string, data: Record<string, an
 
     const template = Handlebars.compile(templateContent);
     let html = template(safeData);
-    html = normalizeCurrencySymbolsInHtml(html);
+    html = sanitizeHtmlForPdfRendering(normalizeCurrencySymbolsInHtml(html));
 
     if (PDF_DEBUG) {
       console.log('[PDF_DEBUG] Compiled HTML first 300 chars:', html.substring(0, 300));
@@ -915,7 +943,7 @@ export function compileTemplate(templateContent: string, data: Record<string, an
     if (!isFullHtmlDocument(html)) {
       // Convert markdown to HTML for PDF rendering
       html = markdownToHtml(html);
-      html = normalizeCurrencySymbolsInHtml(html);
+      html = sanitizeHtmlForPdfRendering(normalizeCurrencySymbolsInHtml(html));
       if (PDF_DEBUG) {
         console.log('[PDF_DEBUG] Applied markdownToHtml (not a full HTML doc)');
       }
@@ -925,7 +953,7 @@ export function compileTemplate(templateContent: string, data: Record<string, an
       }
     }
 
-    return normalizeCurrencySymbolsInHtml(html);
+    return sanitizeHtmlForPdfRendering(normalizeCurrencySymbolsInHtml(html));
   } catch (error: any) {
     throw new Error(`Failed to compile template: ${error.message}`);
   }
@@ -1054,12 +1082,13 @@ export async function htmlToPdf(
   }
 ): Promise<Buffer> {
   let browser;
+  const sanitizedInputHtml = sanitizeHtmlForPdfRendering(normalizeCurrencySymbolsInHtml(html));
 
   if (PDF_DEBUG) {
     console.log('[PDF_DEBUG] htmlToPdf() called');
-    console.log('[PDF_DEBUG] Input HTML length:', html.length);
-    console.log('[PDF_DEBUG] Input HTML first 300 chars:', html.substring(0, 300));
-    console.log('[PDF_DEBUG] isFullHtmlDocument in htmlToPdf:', isFullHtmlDocument(html));
+    console.log('[PDF_DEBUG] Input HTML length:', sanitizedInputHtml.length);
+    console.log('[PDF_DEBUG] Input HTML first 300 chars:', sanitizedInputHtml.substring(0, 300));
+    console.log('[PDF_DEBUG] isFullHtmlDocument in htmlToPdf:', isFullHtmlDocument(sanitizedInputHtml));
   }
 
   try {
@@ -1070,7 +1099,7 @@ export async function htmlToPdf(
     // Determine what HTML to use for PDF generation
     let finalHtml: string;
 
-    if (isFullHtmlDocument(html)) {
+    if (isFullHtmlDocument(sanitizedInputHtml)) {
       if (PDF_DEBUG) {
         console.log('[PDF_DEBUG] Full HTML document detected - passing through without wrapper');
       }
@@ -1079,7 +1108,7 @@ export async function htmlToPdf(
 
       // Only inject @page rules if NOT already present in the HTML
       // This preserves the template's intended margins (e.g., from print.css)
-      const hasPageRules = /@page\s*\{/i.test(html);
+      const hasPageRules = /@page\s*\{/i.test(sanitizedInputHtml);
 
       if (hasPageRules) {
         // Template has its own @page rules - use HTML as-is
@@ -1087,7 +1116,7 @@ export async function htmlToPdf(
         if (PDF_DEBUG) {
           console.log('[PDF_DEBUG] @page rules already present - using HTML as-is');
         }
-        finalHtml = html;
+        finalHtml = sanitizedInputHtml;
       } else {
         // No @page rules in template
         // Only inject @page rules when explicitly requested via options.margins
@@ -1108,17 +1137,17 @@ export async function htmlToPdf(
     }`;
 
           // Inject @page rules before </style> or </head> if they exist
-          if (html.includes('</style>')) {
-            finalHtml = html.replace('</style>', `${pageRules}\n  </style>`);
-          } else if (html.toLowerCase().includes('</head>')) {
+          if (sanitizedInputHtml.includes('</style>')) {
+            finalHtml = sanitizedInputHtml.replace('</style>', `${pageRules}\n  </style>`);
+          } else if (sanitizedInputHtml.toLowerCase().includes('</head>')) {
             // Inject a style block before </head>
-            finalHtml = html.replace(
+            finalHtml = sanitizedInputHtml.replace(
               /<\/head>/i,
               `<style>${pageRules}\n  </style>\n</head>`
             );
           } else {
             // Fallback: use as-is (rare case)
-            finalHtml = html;
+            finalHtml = sanitizedInputHtml;
           }
         } else {
           // No explicit margins - inject minimal @page with 0 margins
@@ -1133,17 +1162,17 @@ export async function htmlToPdf(
     }`;
 
           // Inject @page rules before </style> or </head> if they exist
-          if (html.includes('</style>')) {
-            finalHtml = html.replace('</style>', `${pageRules}\n  </style>`);
-          } else if (html.toLowerCase().includes('</head>')) {
+          if (sanitizedInputHtml.includes('</style>')) {
+            finalHtml = sanitizedInputHtml.replace('</style>', `${pageRules}\n  </style>`);
+          } else if (sanitizedInputHtml.toLowerCase().includes('</head>')) {
             // Inject a style block before </head>
-            finalHtml = html.replace(
+            finalHtml = sanitizedInputHtml.replace(
               /<\/head>/i,
               `<style>${pageRules}\n  </style>\n</head>`
             );
           } else {
             // Fallback: use as-is (rare case)
-            finalHtml = html;
+            finalHtml = sanitizedInputHtml;
           }
         }
       }
@@ -1166,6 +1195,12 @@ export async function htmlToPdf(
       max-width: 100%;
       margin: 0;
       padding: 0;
+      word-break: normal;
+      overflow-wrap: break-word;
+      hyphens: none;
+      -webkit-hyphens: none;
+      font-variant-ligatures: none;
+      font-feature-settings: "liga" 0, "clig" 0;
     }
     h1 {
       font-size: 16pt;
@@ -1192,6 +1227,7 @@ export async function htmlToPdf(
     }
     p {
       margin: 8px 0;
+      text-align: left;
     }
     table {
       width: 100%;
@@ -1283,7 +1319,7 @@ export async function htmlToPdf(
   </style>
 </head>
 <body>
-${html}
+${sanitizedInputHtml}
 </body>
 </html>
       `;
@@ -1318,6 +1354,11 @@ ${html}
       waitUntil: 'networkidle2',
       timeout: 45000  // Explicit 45s timeout (up from default 30s)
     });
+    await page.evaluate(async () => {
+      if (typeof document !== 'undefined' && 'fonts' in document && document.fonts?.ready) {
+        await document.fonts.ready;
+      }
+    });
 
     // ====================================================================================
     // WATERMARK REMOVED - Simplified UX Change
@@ -1330,7 +1371,7 @@ ${html}
 
     // For full HTML templates, prefer CSS @page rules so template controls margins
     // For non-full HTML (wrapped content), use format option
-    const isFullHtml = isFullHtmlDocument(html);
+    const isFullHtml = isFullHtmlDocument(sanitizedInputHtml);
 
     // IMPORTANT: For full HTML templates, do NOT pass margin option at all.
     // Let the template's @page CSS rules control margins entirely.

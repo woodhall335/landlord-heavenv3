@@ -408,15 +408,18 @@ describe('Jurisdiction Cross-Contamination Prevention', () => {
     expect(premiumTemplate).toContain('First-tier Tribunal');
   });
 
-  it('England templates should contain AST terminology', () => {
+  it('England templates should contain assured periodic terminology', () => {
     const standardTemplate = loadTemplate(STANDARD_TEMPLATES.england);
     const premiumTemplate = loadTemplate(PREMIUM_TEMPLATES.england);
 
-    // Must reference AST
-    expect(standardTemplate.toLowerCase()).toContain('assured shorthold');
-    expect(premiumTemplate.toLowerCase()).toContain('assured shorthold');
-
-    // Must reference Housing Act 1988
+    expect(standardTemplate.toLowerCase()).toContain('assured periodic tenancy');
+    expect(premiumTemplate.toLowerCase()).toContain('assured periodic tenancy');
+    expect(standardTemplate).toContain('not intended to create a new assured shorthold tenancy');
+    expect(premiumTemplate).toContain('not intended to create a new assured shorthold tenancy');
+    expect(standardTemplate).not.toContain('Section 21');
+    expect(premiumTemplate).not.toContain('Section 21');
+    expect(standardTemplate.toLowerCase()).not.toContain('fixed term');
+    expect(premiumTemplate.toLowerCase()).not.toContain('fixed term');
     expect(standardTemplate).toContain('Housing Act 1988');
     expect(premiumTemplate).toContain('Housing Act 1988');
   });

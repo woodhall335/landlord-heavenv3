@@ -1,5 +1,9 @@
 import { DocumentInfo } from '@/components/preview/DocumentCard';
 import { PRODUCTS } from '@/lib/pricing/products';
+import {
+  ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL,
+  ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL,
+} from '@/lib/tenancy/england-agreement-constants';
 
 // ============================================
 // NOTICE ONLY DOCUMENTS (4 per jurisdiction)
@@ -519,12 +523,12 @@ export function getASTDocuments(
   const agreementNames: Record<string, { standard: { title: string; description: string }; hmo: { title: string; description: string } }> = {
     'england': {
       standard: {
-        title: 'Residential Tenancy Agreement',
-        description: 'Solicitor-grade England residential tenancy agreement with all embedded schedules.'
+        title: ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL,
+        description: 'Solicitor-grade England assured periodic tenancy agreement with all embedded schedules.'
       },
       hmo: {
-        title: 'Premium Residential Tenancy Agreement',
-        description: 'Includes HMO-specific clauses for multi-occupancy properties in the England residential tenancy flow.'
+        title: ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL,
+        description: 'Includes broader wording for HMO, shared-household, guarantor-backed, and multi-occupancy arrangements in the England assured periodic tenancy flow.'
       }
     },
     'wales': {

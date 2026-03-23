@@ -5,7 +5,7 @@
  * section-based flow with tab navigation (matching MoneyClaimSectionFlow design).
  *
  * Jurisdiction-aware terminology:
- * - England: Residential Tenancy Agreement - upgraded assured periodic England flow
+ * - England: Assured Periodic Tenancy Agreement - upgraded assured periodic England flow
  * - Wales: Occupation Contract - Renting Homes (Wales) Act 2016
  * - Scotland: Private Residential Tenancy (PRT) - Private Housing (Tenancies) Act 2016
  * - Northern Ireland: Private Tenancy - Private Tenancies Act (Northern Ireland) 2022
@@ -81,7 +81,7 @@ interface TenancySectionFlowProps {
 /**
  * Jurisdiction-specific terminology for tenancy agreements
  *
- * - England: Residential Tenancy Agreement - upgraded assured periodic England flow
+ * - England: Assured Periodic Tenancy Agreement - upgraded assured periodic England flow
  * - Wales: Occupation Contract - Renting Homes (Wales) Act 2016
  * - Scotland: Private Residential Tenancy (PRT) - Private Housing (Tenancies) Act 2016
  * - Northern Ireland: Private Tenancy - Private Tenancies Act (Northern Ireland) 2022
@@ -151,16 +151,16 @@ const getJurisdictionTerminology = (jurisdiction: Jurisdiction) => {
     case 'england':
     default:
       return {
-        agreementType: 'Residential Tenancy Agreement',
-        standardTier: 'Standard Residential Tenancy Agreement',
-        premiumTier: 'Premium Residential Tenancy Agreement (HMO / student-ready)',
+        agreementType: 'Assured Periodic Tenancy Agreement',
+        standardTier: 'Standard Assured Periodic Tenancy Agreement',
+        premiumTier: 'Premium Assured Periodic Tenancy Agreement',
         suitabilityTitle: 'England tenancy suitability check',
         suitabilityDescription: 'Basic checks to ensure this is suitable for the upgraded England residential tenancy flow.',
-        standardDescription: 'Renters’ Rights compliant England residential tenancy agreement for standard lets.',
-        premiumDescription: 'Premium England residential tenancy agreement with HMO, student, guarantor, and enhanced terms support.',
-        landlordWarning: 'If the landlord lives at the property, this may be a lodger arrangement rather than the main England residential tenancy flow.',
-        holidayWarning: 'Holiday lets and licence arrangements are outside the main England residential tenancy flow.',
-        landlordHelperText: 'If yes, this may not be the right England residential tenancy agreement',
+        standardDescription: 'Renters\' Rights compliant England assured periodic tenancy agreement for standard lets.',
+        premiumDescription: 'Premium England assured periodic tenancy agreement with HMO, student, guarantor, and enhanced terms support.',
+        landlordWarning: 'If the landlord lives at the property, this may be a lodger arrangement rather than the main England assured periodic tenancy flow.',
+        holidayWarning: 'Holiday lets and licence arrangements are outside the main England assured periodic tenancy flow.',
+        landlordHelperText: 'If yes, this may not be the right England assured periodic tenancy agreement',
         holidayHelperText: 'If yes, a different agreement may be more appropriate',
         tenantLabel: 'tenant',
       };
@@ -730,7 +730,7 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
       case 'northern-ireland':
         return 'Northern Ireland Private Tenancy';
       default:
-        return 'England Residential Tenancy Agreement';
+        return 'England Assured Periodic Tenancy Agreement';
     }
   }, [jurisdiction]);
 

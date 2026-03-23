@@ -197,10 +197,10 @@
   </div>
 
   <div class="section">
-    <div class="section-title">📞 Emergency Contacts</div>
+    <div class="section-title">Emergency Contacts</div>
 
     <div class="emergency-box">
-      <div class="emergency-title">🚨 IN CASE OF EMERGENCY</div>
+      <div class="emergency-title">IN CASE OF EMERGENCY</div>
 
       <div class="contact-box">
         <div class="info-label">Emergency Landlord Contact</div>
@@ -250,27 +250,27 @@
   </div>
 
   <div class="section">
-    <div class="section-title">🔧 Essential Property Information</div>
+    <div class="section-title">Essential Property Information</div>
 
     <h3 style="color: #2c5282; margin: 20px 0 10px 0;">Utility Shutoff Locations</h3>
     <div class="info-grid">
       {{#if water_shutoff_location}}
       <div class="info-item">
-        <span class="info-label">💧 Water Main Shutoff:</span>
+        <span class="info-label">Water Main Shutoff:</span>
         <span class="info-value">{{water_shutoff_location}}</span>
       </div>
       {{/if}}
 
       {{#if electricity_fuse_box_location}}
       <div class="info-item">
-        <span class="info-label">⚡ Electricity Fuse Box:</span>
+        <span class="info-label">Electricity Fuse Box:</span>
         <span class="info-value">{{electricity_fuse_box_location}}</span>
       </div>
       {{/if}}
 
       {{#if gas_shutoff_location}}
       <div class="info-item">
-        <span class="info-label">🔥 Gas Meter/Shutoff:</span>
+        <span class="info-label">Gas Meter/Shutoff:</span>
         <span class="info-value">{{gas_shutoff_location}}</span>
       </div>
       {{/if}}
@@ -310,7 +310,7 @@
   </div>
 
   <div class="section">
-    <div class="section-title">✅ Move-In Checklist</div>
+    <div class="section-title">Move-In Checklist</div>
 
     <p style="margin-bottom: 15px;">Please complete these tasks within your first week:</p>
 
@@ -333,12 +333,12 @@
   </div>
 
   <div class="section">
-    <div class="section-title">💰 Rent Payment Details</div>
+    <div class="section-title">Rent Payment Details</div>
 
     <div class="info-grid">
       <div class="info-item">
         <span class="info-label">Monthly Rent:</span>
-        <span class="info-value">£{{rent_amount}}</span>
+        <span class="info-value">&pound;{{rent_amount}}</span>
       </div>
       <div class="info-item">
         <span class="info-label">Due Date:</span>
@@ -367,17 +367,15 @@
       <strong>Late Payment Terms:</strong><br/>
       Grace period: {{grace_period_days}} days<br/>
       {{#if late_payment_interest_rate}}
-      Interest rate on late payments: {{late_payment_interest_rate}}%<br/>
+      Interest on late payments may be charged at {{late_payment_interest_rate}}% where lawful.<br/>
       {{/if}}
-      {{#if late_payment_admin_fee}}
-      Administrative fee for late payment: £{{late_payment_admin_fee}}
-      {{/if}}
+      No separate administrative fee is payable for late payment unless a specific charge is lawful and expressly permitted by the tenancy documents in force at the relevant time.
     </div>
     {{/if}}
   </div>
 
   <div class="section">
-    <div class="section-title">🏠 Property Maintenance</div>
+    <div class="section-title">Property Maintenance</div>
 
     <h3 style="color: #2c5282; margin: 20px 0 10px 0;">Maintenance Schedule</h3>
 
@@ -427,7 +425,7 @@
 
   {{#if has_garden}}
   <div class="section">
-    <div class="section-title">🌳 Garden Maintenance</div>
+    <div class="section-title">Garden Maintenance</div>
 
     <div class="info-grid">
       {{#if lawn_mowing_frequency}}
@@ -460,7 +458,7 @@
   {{/if}}
 
   <div class="section">
-    <div class="section-title">📋 House Rules & Responsibilities</div>
+    <div class="section-title">House Rules & Responsibilities</div>
 
     <div class="info-grid">
       <div class="info-item">
@@ -483,7 +481,7 @@
 
     {{#if tenant_insurance_required}}
     <div class="info-box" style="background: #fff5f5; border-color: #e53e3e;">
-      <strong>⚠️ Contents Insurance Required</strong><br/>
+      <strong>Contents Insurance Required</strong><br/>
       You must maintain valid contents insurance throughout your tenancy.
     </div>
     {{/if}}
@@ -492,7 +490,7 @@
   <div class="footer">
     <p><strong>Questions or Concerns?</strong></p>
     <p>Contact: {{landlord_full_name}} | Phone: {{landlord_phone}} | Email: {{landlord_email}}</p>
-    <p style="margin-top: 10px;">This Welcome Pack forms part of your Premium AST tenancy</p>
+    <p style="margin-top: 10px;">This Welcome Pack forms part of your Premium Assured Periodic tenancy</p>
     <p>Tenancy Start Date: {{format_date tenancy_start_date}}</p>
   </div>
 </body>

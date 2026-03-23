@@ -13,6 +13,10 @@
 
 import fs from 'fs';
 import path from 'path';
+import {
+  ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL,
+  ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL,
+} from '../tenancy/england-agreement-constants';
 
 // ============================================================================
 // TYPES
@@ -59,7 +63,7 @@ export const TENANCY_VARIANT_CONFIGS: Record<TenancyJurisdiction, JurisdictionVa
       tier: 'standard',
       templatePath: 'uk/england/templates/standard_ast_formatted.hbs',
       documentKey: 'ast_agreement',
-      documentTitle: 'Residential Tenancy Agreement',
+      documentTitle: ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL,
       mustHaveHMO: false,
       mustNotHaveHMO: true,
     },
@@ -68,7 +72,7 @@ export const TENANCY_VARIANT_CONFIGS: Record<TenancyJurisdiction, JurisdictionVa
       tier: 'premium',
       templatePath: 'uk/england/templates/premium_ast_formatted.hbs',
       documentKey: 'ast_agreement_hmo',
-      documentTitle: 'Premium Residential Tenancy Agreement',
+      documentTitle: ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL,
       mustHaveHMO: true,
       mustNotHaveHMO: false,
     },
@@ -402,8 +406,8 @@ export function validateFromFileSystem(configDir: string): ValidationResult {
  */
 export const EXPECTED_PACK_CONTENTS: Record<TenancyJurisdiction, Record<TenancyTier, { key: string; title: string }>> = {
   england: {
-  standard: { key: 'ast_agreement', title: 'Residential Tenancy Agreement' },
-  premium: { key: 'ast_agreement_hmo', title: 'Premium Residential Tenancy Agreement' },
+  standard: { key: 'ast_agreement', title: ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL },
+  premium: { key: 'ast_agreement_hmo', title: ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL },
   },
   wales: {
     standard: { key: 'soc_agreement', title: 'Standard Occupation Contract' },

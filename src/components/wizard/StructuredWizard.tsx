@@ -21,6 +21,10 @@ import { getSessionTokenHeaders } from '@/lib/session-token';
 import { validateStepInline, type InlineGuidance } from '@/lib/validation/noticeOnlyInlineValidator';
 import { extractWizardUxIssues, type InlineWarning } from '@/lib/validation/noticeOnlyWizardUxIssues';
 import type { CanonicalJurisdiction } from '@/lib/types/jurisdiction';
+import {
+  ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL,
+  ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL,
+} from '@/lib/tenancy/england-agreement-constants';
 import { RiCheckboxCircleLine, RiAlertLine } from 'react-icons/ri';
 
 // ====================================================================================
@@ -3100,14 +3104,14 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
       ? 'Northern Ireland Private Tenancy'
       : jurisdiction === 'wales'
       ? 'Occupation Contract (Wales)'
-      : 'England Residential Tenancy Agreement');
+      : 'England Assured Periodic Tenancy Agreement');
 
   const productLabel = (() => {
     switch (originalProduct) {
       case 'ast_standard':
-        return 'Standard Residential Tenancy Agreement';
+        return ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL;
       case 'ast_premium':
-        return 'Premium Residential Tenancy Agreement';
+        return ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL;
       default:
         return 'Tenancy agreement';
     }
