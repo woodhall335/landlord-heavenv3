@@ -10,6 +10,24 @@ import { getDynamicReviewCount, REVIEW_RATING } from '@/lib/reviews/reviewStats'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://landlordheaven.co.uk";
 
+function toStructuredDataUrl(url: string): string {
+  const trimmedUrl = url.trim();
+
+  if (!trimmedUrl) {
+    return SITE_URL;
+  }
+
+  if (/^https?:\/\//i.test(trimmedUrl)) {
+    return trimmedUrl;
+  }
+
+  if (trimmedUrl === '/') {
+    return SITE_URL;
+  }
+
+  return `${SITE_URL}${trimmedUrl.startsWith('/') ? trimmedUrl : `/${trimmedUrl}`}`;
+}
+
 
 /**
  * Get a date 1 year from now in ISO format (YYYY-MM-DD)
@@ -317,7 +335,7 @@ export function breadcrumbSchema(items: Array<{ name: string; url: string }>) {
       "@type": "ListItem",
       "position": index + 1,
       "name": item.name,
-      "item": item.url
+      "item": toStructuredDataUrl(item.url)
     }))
   };
 }

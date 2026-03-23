@@ -88,14 +88,14 @@ function getHeroContent(product: string | null, jurisdiction: string | null): He
             ? 'Standard Occupation Contract for Wales'
             : jurisdiction === 'northern-ireland'
               ? 'Private Tenancy Agreement for NI'
-        : 'England tenancy agreement designed for the assured periodic framework from 1 May 2026',
+        : 'Updated England tenancy agreement designed for the assured periodic framework from 1 May 2026 instead of relying on outdated wording or structure',
         eyebrow: jurisdiction === 'scotland' ? 'PRT' : jurisdiction === 'wales' ? 'Occupation Contract' : jurisdiction === 'england' ? 'England Agreement' : 'Tenancy Agreement',
       };
     case 'ast_premium':
       return {
         title: jurisdiction === 'england' ? 'Premium England Tenancy Agreement' : 'Premium Tenancy Agreement',
         subtitle: jurisdiction === 'england'
-        ? 'England tenancy agreement for HMOs, student lets, and more complex households under the assured periodic framework'
+        ? 'Updated England tenancy agreement for HMOs, student lets, and more complex households where older wording may be harder to rely on'
           : 'Occupation Contract (Wales), PRT (Scotland), or NI private tenancy with compliance checklist',
         eyebrow: 'Premium',
       };

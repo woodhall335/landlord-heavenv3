@@ -62,6 +62,11 @@ const faqs = [
       'Yes. This page is deliberately built to capture assured shorthold tenancy agreement and AST template search intent, then guide landlords into the current England agreement route.',
   },
   {
+    question: 'Can I keep using an older tenancy agreement?',
+    answer:
+      'While many older tenancy agreements still exist, they may not be legally enforceable in the way landlords expect if they rely on outdated structures or wording. Using an agreement that does not reflect the current England framework can lead to weaker protection or complications if issues arise.',
+  },
+  {
     question: 'When should I use the standard England agreement route?',
     answer:
       'The standard route is usually the best fit for a more straightforward new England let where the property and occupier setup are relatively simple and you want an efficient route into the main agreement flow.',
