@@ -532,7 +532,6 @@ export default function ASTProductPage() {
         }
         mediaSrc="/images/tenancy_agreements.webp"
         mediaAlt="Preview of Landlord Heaven tenancy agreement documents"
-        showTrustPositioningBar
       />
 
       <section className="relative z-20 -mt-8 sm:-mt-10">
