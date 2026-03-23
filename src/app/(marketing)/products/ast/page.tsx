@@ -511,7 +511,7 @@ export default function ASTProductPage() {
 
       <UniversalHero
         title="Tenancy agreement designed to meet the new Renters' Rights framework"
-        subtitle="Create the correct agreement for your property, including an England tenancy agreement designed for the new assured periodic tenancy framework from 1 May 2026. Many older or generic templates rely on outdated structures and may not reflect how tenancies now operate, and may not be legally enforceable in the way landlords expect, leading to weaker protection or complications if issues arise."
+        subtitle="Create the correct agreement for your property, including an England tenancy agreement designed for the new assured periodic tenancy framework from 1 May 2026."
         trustText="Renters Right Act Compliant"
         actionsSlot={
           <div className="grid w-full gap-3 sm:grid-cols-2 lg:max-w-2xl">
@@ -519,17 +519,11 @@ export default function ASTProductPage() {
               <Link href={standardWizardHref} className="hero-btn-primary flex w-full justify-center text-center">
                 Start Standard Tenancy Agreement
               </Link>
-              <p className="mt-2 text-center text-sm text-white/80">
-                For straightforward lets
-              </p>
             </div>
             <div className="rounded-2xl border border-white/20 bg-white/10 p-3 backdrop-blur-sm">
               <Link href={premiumWizardHref} className="hero-btn-secondary flex w-full justify-center text-center">
                 Start Premium Tenancy Agreement
               </Link>
-              <p className="mt-2 text-center text-sm text-white/80">
-                For HMOs, guarantors, sharers, student lets, or higher-risk setups
-              </p>
             </div>
           </div>
         }
