@@ -1,6 +1,7 @@
 ﻿import type { Metadata } from 'next';
 import Link from 'next/link';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { TenancyPackSection } from '@/components/value-proposition';
 import { getCanonicalUrl } from '@/lib/seo/urls';
 
 const PRICE_VALID_UNTIL = '2026-12-31';
@@ -202,6 +203,14 @@ export default function NorthernIrelandTenancyPage() {
               </Link>
             </div>
           </div>
+        </section>
+
+        <section className="container mx-auto px-4 py-12">
+          <TenancyPackSection
+            defaultJurisdiction="northern-ireland"
+            lockJurisdiction
+            intro="You get more than a Northern Ireland tenancy agreement. Landlord Heaven builds a practical NI tenancy pack with the agreement, setup documents, and preview-before-payment flow so the product is more useful than a generic download."
+          />
         </section>
 
         {/* 2025 Legal Updates Highlight */}

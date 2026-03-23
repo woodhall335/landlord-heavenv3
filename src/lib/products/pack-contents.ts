@@ -166,6 +166,32 @@ function getEnglandResidentialLettingContents(product: string): PackItem[] {
   }
 }
 
+function getPremiumSupportPackItems(jurisdictionLabel: string): PackItem[] {
+  return [
+    {
+      key: 'key_schedule',
+      title: 'Key Receipt & Handover Schedule',
+      description: `Practical record of keys, access devices, and handover details for the ${jurisdictionLabel} tenancy pack`,
+      category: 'Guidance',
+      required: true,
+    },
+    {
+      key: 'property_maintenance_guide',
+      title: 'Property Maintenance Guide',
+      description: `Practical maintenance and reporting guidance for the ${jurisdictionLabel} tenancy pack`,
+      category: 'Guidance',
+      required: true,
+    },
+    {
+      key: 'checkout_procedure',
+      title: 'Checkout Procedure',
+      description: `End-of-tenancy checkout steps and handback guidance for the ${jurisdictionLabel} tenancy pack`,
+      category: 'Guidance',
+      required: true,
+    },
+  ];
+}
+
 // =============================================================================
 // ENGLAND PACK CONTENTS
 // =============================================================================
@@ -412,7 +438,7 @@ function getEnglandASTContents(tier: 'standard' | 'premium', hasInventoryData?: 
     items.push({
       key: 'ast_agreement_hmo',
       title: ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL,
-      description: 'Includes broader wording for HMO, shared-household, guarantor-backed, and multi-occupancy arrangements in the England assured periodic tenancy flow.',
+      description: 'Broader drafting for shared households, HMOs, guarantor-backed lets, and other more complex England tenancy arrangements.',
       category: 'Tenancy agreement',
       required: true,
     });
@@ -466,6 +492,10 @@ function getEnglandASTContents(tier: 'standard' | 'premium', hasInventoryData?: 
     category: 'Guidance',
     required: true,
   });
+
+  if (tier === 'premium') {
+    items.push(...getPremiumSupportPackItems('England'));
+  }
 
   return items;
 }
@@ -637,8 +667,8 @@ function getWalesSOCContents(tier: 'standard' | 'premium', hasInventoryData?: bo
   } else {
     items.push({
       key: 'soc_agreement_hmo',
-      title: 'HMO Occupation Contract',
-      description: 'Includes HMO-specific clauses for multi-occupancy properties. Compliant with RH(W)A 2016 & Housing Act 2004.',
+      title: 'Premium Occupation Contract',
+      description: 'Broader drafting for shared households, HMOs, guarantor-backed lets, students, and other more complex Welsh occupation arrangements.',
       category: 'Tenancy agreement',
       required: true,
     });
@@ -673,6 +703,10 @@ function getWalesSOCContents(tier: 'standard' | 'premium', hasInventoryData?: bo
     category: 'Checklists',
     required: true,
   });
+
+  if (tier === 'premium') {
+    items.push(...getPremiumSupportPackItems('Wales'));
+  }
 
   return items;
 }
@@ -848,8 +882,8 @@ function getScotlandPRTContents(tier: 'standard' | 'premium', hasInventoryData?:
   } else {
     items.push({
       key: 'prt_agreement_hmo',
-      title: 'HMO Private Residential Tenancy Agreement',
-      description: 'Includes HMO-specific clauses for multi-occupancy properties. Compliant with PH(T)(S)A 2016.',
+      title: 'Premium Private Residential Tenancy Agreement',
+      description: 'Broader drafting for shared households, HMOs, guarantor-backed lets, students, and other more complex Scottish tenancy arrangements.',
       category: 'Tenancy agreement',
       required: true,
     });
@@ -895,6 +929,10 @@ function getScotlandPRTContents(tier: 'standard' | 'premium', hasInventoryData?:
     required: true,
   });
 
+  if (tier === 'premium') {
+    items.push(...getPremiumSupportPackItems('Scotland'));
+  }
+
   return items;
 }
 
@@ -937,8 +975,8 @@ function getNorthernIrelandTenancyContents(tier: 'standard' | 'premium', hasInve
   } else {
     items.push({
       key: 'private_tenancy_agreement_hmo',
-      title: 'HMO Private Tenancy Agreement',
-      description: 'Includes HMO-specific clauses for multi-occupancy properties where legally permitted in NI.',
+      title: 'Premium Private Tenancy Agreement',
+      description: 'Broader drafting for shared households, HMOs, guarantor-backed lets, and other more complex Northern Ireland tenancy arrangements.',
       category: 'Tenancy agreement',
       required: true,
     });
@@ -973,6 +1011,10 @@ function getNorthernIrelandTenancyContents(tier: 'standard' | 'premium', hasInve
     category: 'Checklists',
     required: true,
   });
+
+  if (tier === 'premium') {
+    items.push(...getPremiumSupportPackItems('Northern Ireland'));
+  }
 
   return items;
 }

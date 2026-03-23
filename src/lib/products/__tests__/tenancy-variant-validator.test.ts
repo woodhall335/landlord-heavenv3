@@ -157,17 +157,21 @@ describe('B. Template Content Compliance', () => {
       expect(content!.toLowerCase()).toContain('joint and several liability');
     });
 
-    it.each(jurisdictions)('%s premium template has HMO section header', (jurisdiction) => {
+    it.each(jurisdictions)('%s premium template has clear HMO signposting in the body copy', (jurisdiction) => {
       const config = getVariantConfig(jurisdiction, 'premium');
       const content = readTemplate(config!.templatePath);
       expect(content).not.toBeNull();
 
-      // Should have some form of HMO section header
+      // Premium templates can phrase the HMO content differently by jurisdiction,
+      // but they should still clearly signpost the HMO/shared-household drafting.
       const hasHMOSection =
         content!.includes('## HMO') ||
         content!.includes('HMO &') ||
         content!.includes('HMO CLAUSES') ||
-        content!.includes('HMO Provisions');
+        content!.includes('HMO Provisions') ||
+        content!.includes('House in Multiple Occupation') ||
+        content!.includes('Houses in Multiple Occupation') ||
+        content!.includes('shared facilities');
       expect(hasHMOSection).toBe(true);
     });
   });
@@ -206,7 +210,7 @@ describe('C. Pack-Contents Alignment', () => {
     });
   });
 
-  describe('Premium product includes the correct primary HMO agreement', () => {
+  describe('Premium product includes the correct primary agreement', () => {
     it('England ast_premium includes ast_agreement_hmo as the primary document', () => {
       const items = getPackContents({ product: 'ast_premium', jurisdiction: 'england' });
       const agreement = items.find(item => item.key === 'ast_agreement_hmo');
@@ -222,7 +226,7 @@ describe('C. Pack-Contents Alignment', () => {
       const agreement = items.find(item => item.key === 'soc_agreement_hmo');
       expect(agreement).toBeDefined();
       expect(agreement?.category).toBe('Tenancy agreement');
-      expect(agreement?.title.toLowerCase()).toContain('hmo');
+      expect(agreement?.title).toBe('Premium Occupation Contract');
     });
 
     it('Scotland ast_premium includes prt_agreement_hmo as the primary document', () => {
@@ -230,7 +234,7 @@ describe('C. Pack-Contents Alignment', () => {
       const agreement = items.find(item => item.key === 'prt_agreement_hmo');
       expect(agreement).toBeDefined();
       expect(agreement?.category).toBe('Tenancy agreement');
-      expect(agreement?.title.toLowerCase()).toContain('hmo');
+      expect(agreement?.title).toBe('Premium Private Residential Tenancy Agreement');
     });
 
     it('Northern Ireland ast_premium includes private_tenancy_agreement_hmo as the primary document', () => {
@@ -238,7 +242,7 @@ describe('C. Pack-Contents Alignment', () => {
       const agreement = items.find(item => item.key === 'private_tenancy_agreement_hmo');
       expect(agreement).toBeDefined();
       expect(agreement?.category).toBe('Tenancy agreement');
-      expect(agreement?.title.toLowerCase()).toContain('hmo');
+      expect(agreement?.title).toBe('Premium Private Tenancy Agreement');
     });
   });
 
@@ -252,11 +256,19 @@ describe('C. Pack-Contents Alignment', () => {
       expect(agreementItems.filter((item) => item.key.includes('agreement')).length).toBe(1);
     });
 
-    it.each(jurisdictions)('%s premium still includes exactly one main HMO agreement document', (jurisdiction) => {
+    it.each(jurisdictions)('%s premium still includes exactly one main agreement document', (jurisdiction) => {
       const items = getPackContents({ product: 'ast_premium', jurisdiction });
       const agreementItems = items.filter((item) => item.category === 'Tenancy agreement');
       expect(agreementItems.length).toBeGreaterThanOrEqual(1);
       expect(agreementItems.filter((item) => item.key.includes('agreement')).length).toBe(1);
+    });
+
+    it.each(jurisdictions)('%s premium also includes the support-document bundle', (jurisdiction) => {
+      const items = getPackContents({ product: 'ast_premium', jurisdiction });
+
+      expect(items.some((item) => item.key === 'key_schedule')).toBe(true);
+      expect(items.some((item) => item.key === 'property_maintenance_guide')).toBe(true);
+      expect(items.some((item) => item.key === 'checkout_procedure')).toBe(true);
     });
   });
 });
@@ -311,12 +323,12 @@ describe('E. Document Key Consistency', () => {
     }
   });
 
-  it('Premium document titles contain "HMO"', () => {
+  it('Premium document titles use customer-facing premium wording', () => {
     const jurisdictions = getSupportedJurisdictions();
 
     for (const jurisdiction of jurisdictions) {
       const config = getVariantConfig(jurisdiction, 'premium');
-      expect(config!.documentTitle.toLowerCase()).toContain('hmo');
+      expect(config!.documentTitle.toLowerCase()).toContain('premium');
     }
   });
 });

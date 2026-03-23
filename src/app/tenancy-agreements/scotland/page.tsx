@@ -7,6 +7,7 @@ import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
+import { TenancyPackSection } from '@/components/value-proposition';
 import {
   StructuredData,
   articleSchema,
@@ -214,6 +215,16 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
         <section className="border-y border-gray-100 bg-white/80 py-6">
           <div className="container mx-auto px-4">
             <SocialProofCounter variant="total" className="justify-center" />
+          </div>
+        </section>
+
+        <section className="py-12">
+          <div className="container mx-auto px-4">
+            <TenancyPackSection
+              defaultJurisdiction="scotland"
+              lockJurisdiction
+              intro="You get more than a Scottish PRT. Landlord Heaven builds a practical Scotland tenancy pack with the agreement, Easy Read Notes, setup documents, and preview-before-payment flow so you can handle real move-in and record-keeping more cleanly."
+            />
           </div>
         </section>
 

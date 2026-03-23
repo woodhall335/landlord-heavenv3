@@ -278,17 +278,18 @@ describe('getPackContents', () => {
       expect(items.find(i => i.key === 'pre_tenancy_checklist_wales')).toBeDefined();
     });
 
-    it('returns agreement, inventory, and checklist for Scotland', () => {
+    it('returns agreement, inventory, checklist, and easy read notes for Scotland', () => {
       const args: GetPackContentsArgs = {
         product: 'ast_standard',
         jurisdiction: 'scotland',
       };
       const items = getPackContents(args);
 
-      expect(items.length).toBe(3);
+      expect(items.length).toBe(4);
       expect(items.find(i => i.key === 'prt_agreement')).toBeDefined();
       expect(items.find(i => i.key === 'inventory_schedule')).toBeDefined();
       expect(items.find(i => i.key === 'pre_tenancy_checklist_scotland')).toBeDefined();
+      expect(items.find(i => i.key === 'easy_read_notes_scotland')).toBeDefined();
     });
 
     it('returns agreement, inventory, and checklist for Northern Ireland', () => {
@@ -317,55 +318,71 @@ describe('getPackContents', () => {
   });
 
   describe('ast_premium product', () => {
-    it('returns HMO agreement, inventory, checklist, and deposit docs for England', () => {
+    it('returns premium agreement, core documents, deposit docs, and support docs for England', () => {
       const args: GetPackContentsArgs = {
         product: 'ast_premium',
         jurisdiction: 'england',
       };
       const items = getPackContents(args);
 
-      expect(items.length).toBe(5);
+      expect(items.length).toBe(8);
       expect(items.find(i => i.key === 'ast_agreement_hmo')).toBeDefined();
       expect(items.find(i => i.key === 'inventory_schedule')).toBeDefined();
       expect(items.find(i => i.key === 'pre_tenancy_checklist_england')).toBeDefined();
       expect(items.find(i => i.key === 'deposit_protection_certificate')).toBeDefined();
       expect(items.find(i => i.key === 'tenancy_deposit_information')).toBeDefined();
+      expect(items.find(i => i.key === 'key_schedule')).toBeDefined();
+      expect(items.find(i => i.key === 'property_maintenance_guide')).toBeDefined();
+      expect(items.find(i => i.key === 'checkout_procedure')).toBeDefined();
     });
 
-    it('returns HMO agreement, inventory, and checklist for Wales', () => {
+    it('returns premium agreement, checklist, and support docs for Wales', () => {
       const args: GetPackContentsArgs = {
         product: 'ast_premium',
         jurisdiction: 'wales',
       };
       const items = getPackContents(args);
 
-      expect(items.length).toBe(3);
+      expect(items.length).toBe(6);
       expect(items.find(i => i.key === 'soc_agreement_hmo')).toBeDefined();
       expect(items.find(i => i.key === 'inventory_schedule')).toBeDefined();
+      expect(items.find(i => i.key === 'pre_tenancy_checklist_wales')).toBeDefined();
+      expect(items.find(i => i.key === 'key_schedule')).toBeDefined();
+      expect(items.find(i => i.key === 'property_maintenance_guide')).toBeDefined();
+      expect(items.find(i => i.key === 'checkout_procedure')).toBeDefined();
     });
 
-    it('returns HMO agreement, inventory, and checklist for Scotland', () => {
+    it('returns premium agreement, easy read notes, and support docs for Scotland', () => {
       const args: GetPackContentsArgs = {
         product: 'ast_premium',
         jurisdiction: 'scotland',
       };
       const items = getPackContents(args);
 
-      expect(items.length).toBe(3);
+      expect(items.length).toBe(7);
       expect(items.find(i => i.key === 'prt_agreement_hmo')).toBeDefined();
       expect(items.find(i => i.key === 'inventory_schedule')).toBeDefined();
+      expect(items.find(i => i.key === 'pre_tenancy_checklist_scotland')).toBeDefined();
+      expect(items.find(i => i.key === 'easy_read_notes_scotland')).toBeDefined();
+      expect(items.find(i => i.key === 'key_schedule')).toBeDefined();
+      expect(items.find(i => i.key === 'property_maintenance_guide')).toBeDefined();
+      expect(items.find(i => i.key === 'checkout_procedure')).toBeDefined();
     });
 
-    it('returns HMO agreement, inventory, and checklist for Northern Ireland', () => {
+    it('returns premium agreement, checklist, and support docs for Northern Ireland', () => {
       const args: GetPackContentsArgs = {
         product: 'ast_premium',
         jurisdiction: 'northern-ireland',
       };
       const items = getPackContents(args);
 
-      expect(items.length).toBe(3);
+      expect(items.length).toBe(6);
       expect(items.find(i => i.key === 'private_tenancy_agreement_hmo')).toBeDefined();
       expect(items.find(i => i.key === 'inventory_schedule')).toBeDefined();
+      expect(items.find(i => i.key === 'pre_tenancy_checklist_northern_ireland')).toBeDefined();
+      expect(items.find(i => i.key === 'key_schedule')).toBeDefined();
+      expect(items.find(i => i.key === 'property_maintenance_guide')).toBeDefined();
+      expect(items.find(i => i.key === 'checkout_procedure')).toBeDefined();
     });
 
     it('shows ready to complete copy for premium tier without inventory data', () => {
@@ -392,7 +409,7 @@ describe('getPackContents', () => {
       expect(inventory?.description).toContain('wizard-completed');
     });
 
-    it('England packs include deposit support docs while other jurisdictions stay on the core 3-doc bundle', () => {
+    it('premium packs add support docs by jurisdiction while standard packs stay unchanged', () => {
       const jurisdictions = ['england', 'wales', 'scotland', 'northern-ireland'];
 
       for (const jur of jurisdictions) {
@@ -401,17 +418,25 @@ describe('getPackContents', () => {
 
         if (jur === 'england') {
           expect(standardItems.length).toBe(5);
-          expect(premiumItems.length).toBe(5);
+          expect(premiumItems.length).toBe(8);
           expect(standardItems.find(i => i.key === 'deposit_protection_certificate')).toBeDefined();
           expect(premiumItems.find(i => i.key === 'tenancy_deposit_information')).toBeDefined();
+        } else if (jur === 'scotland') {
+          expect(standardItems.length).toBe(4);
+          expect(premiumItems.length).toBe(7);
+          expect(standardItems.find(i => i.key === 'easy_read_notes_scotland')).toBeDefined();
+          expect(premiumItems.find(i => i.key === 'easy_read_notes_scotland')).toBeDefined();
         } else {
           expect(standardItems.length).toBe(3);
-          expect(premiumItems.length).toBe(3);
+          expect(premiumItems.length).toBe(6);
         }
 
         // Both should have inventory_schedule
         expect(standardItems.find(i => i.key === 'inventory_schedule')).toBeDefined();
         expect(premiumItems.find(i => i.key === 'inventory_schedule')).toBeDefined();
+        expect(premiumItems.find(i => i.key === 'key_schedule')).toBeDefined();
+        expect(premiumItems.find(i => i.key === 'property_maintenance_guide')).toBeDefined();
+        expect(premiumItems.find(i => i.key === 'checkout_procedure')).toBeDefined();
       }
     });
   });

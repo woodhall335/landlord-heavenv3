@@ -1,6 +1,7 @@
 ﻿import type { Metadata } from 'next';
 import Link from 'next/link';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { TenancyPackSection } from '@/components/value-proposition';
 import { getCanonicalUrl } from '@/lib/seo/urls';
 
 const PRICE_VALID_UNTIL = '2026-12-31';
@@ -253,6 +254,14 @@ export default function WalesOccupationContractPage() {
               Instant download â€¢ Written statement included â€¢ No subscription required
             </p>
           </div>
+        </section>
+
+        <section className="container mx-auto px-4 py-12">
+          <TenancyPackSection
+            defaultJurisdiction="wales"
+            lockJurisdiction
+            intro="You get more than a Wales occupation contract. Landlord Heaven builds a practical Welsh tenancy pack with the contract, setup documents, and preview-before-payment flow so you are not left adapting a generic file by hand."
+          />
         </section>
 
         {/* Intro / What is it */}

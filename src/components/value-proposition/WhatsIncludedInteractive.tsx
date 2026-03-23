@@ -13,6 +13,11 @@ import type {
 } from '@/lib/previews/noticeOnlyPreviews';
 import type { CompletePackPreviewData, CompletePackVariantKey } from '@/lib/previews/completePackPreviews';
 import type { MoneyClaimPreviewData } from '@/lib/previews/moneyClaimPreviews';
+import type {
+  TenancyAgreementPreviewData,
+  TenancyPreviewJurisdiction,
+  TenancyPreviewTier,
+} from '@/lib/previews/tenancyAgreementPreviews';
 
 type WhatsIncludedInteractiveProps =
   | {
@@ -43,6 +48,18 @@ type WhatsIncludedInteractiveProps =
       showIntro?: boolean;
       ctaHref?: string;
       ctaLabel?: string;
+    }
+  | {
+      product: 'ast';
+      defaultJurisdiction?: TenancyPreviewJurisdiction;
+      defaultTier?: TenancyPreviewTier;
+      previews: TenancyAgreementPreviewData;
+      titleOverride?: string;
+      subtitleOverride?: string;
+      showIntro?: boolean;
+      ctaHref?: string;
+      ctaLabel?: string;
+      lockJurisdiction?: boolean;
     };
 
 type NoticeVariant = {
@@ -56,6 +73,20 @@ type JurisdictionConfig = {
   legalNote: string;
   noticeVariants: NoticeVariant[];
 };
+
+type TenancyTierOption = {
+  key: TenancyPreviewTier;
+  label: string;
+  description: string;
+};
+
+type TenancyJurisdictionConfig = {
+  label: string;
+  legalNote: string;
+  tierOptions: TenancyTierOption[];
+};
+
+type InteractiveJurisdictionKey = JurisdictionKey | TenancyPreviewJurisdiction;
 
 const NOTICE_ONLY_CONFIG: Record<JurisdictionKey, JurisdictionConfig> = {
   england: {
@@ -103,7 +134,80 @@ const NOTICE_ONLY_CONFIG: Record<JurisdictionKey, JurisdictionConfig> = {
   },
 };
 
+const TENANCY_CONFIG: Record<TenancyPreviewJurisdiction, TenancyJurisdictionConfig> = {
+  england: {
+    label: 'England',
+    legalNote: 'Assured periodic tenancy pack for England',
+    tierOptions: [
+      {
+        key: 'standard',
+        label: 'Standard',
+        description: 'Core 5-document pack for straightforward England lets.',
+      },
+      {
+        key: 'premium',
+        label: 'Premium',
+        description: 'Core pack plus support documents and broader drafting for complex lets.',
+      },
+    ],
+  },
+  wales: {
+    label: 'Wales',
+    legalNote: 'Occupation contract pack for Wales',
+    tierOptions: [
+      {
+        key: 'standard',
+        label: 'Standard',
+        description: 'Core pack for straightforward Welsh occupation contracts.',
+      },
+      {
+        key: 'premium',
+        label: 'Premium',
+        description: 'Core pack plus support documents for more complex Welsh lets.',
+      },
+    ],
+  },
+  scotland: {
+    label: 'Scotland',
+    legalNote: 'Private Residential Tenancy pack for Scotland',
+    tierOptions: [
+      {
+        key: 'standard',
+        label: 'Standard',
+        description: 'Core pack including Easy Read Notes for straightforward Scottish lets.',
+      },
+      {
+        key: 'premium',
+        label: 'Premium',
+        description: 'Core Scottish pack plus support documents for more complex lets.',
+      },
+    ],
+  },
+  'northern-ireland': {
+    label: 'Northern Ireland',
+    legalNote: 'Private tenancy pack for Northern Ireland',
+    tierOptions: [
+      {
+        key: 'standard',
+        label: 'Standard',
+        description: 'Core pack for straightforward Northern Ireland lets.',
+      },
+      {
+        key: 'premium',
+        label: 'Premium',
+        description: 'Core pack plus support documents for more complex Northern Ireland lets.',
+      },
+    ],
+  },
+};
+
 const jurisdictionOrder: JurisdictionKey[] = ['england', 'wales', 'scotland'];
+const tenancyJurisdictionOrder: TenancyPreviewJurisdiction[] = [
+  'england',
+  'wales',
+  'scotland',
+  'northern-ireland',
+];
 
 const COMPLETE_PACK_VARIANTS: NoticeVariant[] = [
   {
@@ -125,6 +229,9 @@ const getDefaultTitle = (product: WhatsIncludedInteractiveProps['product']) => {
   if (product === 'complete_pack') {
     return "What's included in your eviction pack";
   }
+  if (product === 'ast') {
+    return "What's included in your tenancy agreement pack";
+  }
   return "What's included in your money claim pack";
 };
 
@@ -135,11 +242,25 @@ const getDefaultSubtitle = (product: WhatsIncludedInteractiveProps['product']) =
   if (product === 'complete_pack') {
     return 'England-only pack. Choose Section 8 or Section 21, then preview every document.';
   }
+  if (product === 'ast') {
+    return 'Select your jurisdiction and product level, then preview every document in the pack.';
+  }
   return 'England-only pack. Preview every document before you buy.';
 };
 
 const getDocumentDescription = (document: PreviewDoc) => {
+  if (document.description) return document.description;
+
   const haystack = `${document.key} ${document.title}`.toLowerCase();
+
+  if (haystack.includes('agreement') || haystack.includes('contract') || haystack.includes('tenancy')) {
+    return 'Core agreement document generated from your property and tenancy details.';
+  }
+  if (haystack.includes('inventory')) return 'Record of condition, contents, and handover evidence for check-in.';
+  if (haystack.includes('deposit')) return 'Deposit-compliance document included in the tenancy pack.';
+  if (haystack.includes('key')) return 'Key and access handover record for the tenancy file.';
+  if (haystack.includes('maintenance')) return 'Practical guidance for repairs, reporting, and property care.';
+  if (haystack.includes('checkout')) return 'End-of-tenancy handback and checkout process guidance.';
   if (haystack.includes('service')) return 'How to serve your documents correctly.';
   if (haystack.includes('validity') || haystack.includes('checklist')) return 'Checks to reduce avoidable compliance mistakes.';
   if (haystack.includes('witness')) return 'AI-assisted draft witness statement for court.';
@@ -156,11 +277,26 @@ const getDocumentDescription = (document: PreviewDoc) => {
   if (haystack.includes('section') || haystack.includes('notice') || haystack.includes('form-6a') || haystack.includes('form-3')) {
     return 'Primary legal notice generated from your case details.';
   }
+
   return 'Included document in your generated pack.';
 };
 
 const getDocumentIcon = (document: PreviewDoc) => {
   const haystack = `${document.key} ${document.title}`.toLowerCase();
+
+  if (haystack.includes('agreement') || haystack.includes('contract') || haystack.includes('tenancy')) {
+    return '/images/wizard-icons/06-notice-details.png';
+  }
+  if (haystack.includes('inventory') || haystack.includes('condition')) {
+    return '/images/wizard-icons/38-evidence-pack.png';
+  }
+  if (haystack.includes('deposit') || haystack.includes('prescribed')) {
+    return '/images/wizard-icons/05-compliance.png';
+  }
+  if (haystack.includes('key')) return '/images/wizard-icons/17-service-proof.png';
+  if (haystack.includes('maintenance') || haystack.includes('checkout')) {
+    return '/images/wizard-icons/20-enforcement.png';
+  }
   if (haystack.includes('service')) return '/images/wizard-icons/17-service-proof.png';
   if (haystack.includes('validity') || haystack.includes('checklist')) return '/images/wizard-icons/05-compliance.png';
   if (haystack.includes('witness') || haystack.includes('evidence')) return '/images/wizard-icons/38-evidence-pack.png';
@@ -168,6 +304,7 @@ const getDocumentIcon = (document: PreviewDoc) => {
   if (haystack.includes('court') || haystack.includes('n1') || haystack.includes('n5')) return '/images/wizard-icons/09-court.png';
   if (haystack.includes('arrears') || haystack.includes('rent')) return '/images/wizard-icons/15-rent-arrears.png';
   if (haystack.includes('financial')) return '/images/wizard-icons/37-payment-plan.png';
+
   return '/images/wizard-icons/06-notice-details.png';
 };
 
@@ -216,39 +353,58 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
   const { product, previews } = props;
   const isNoticeOnly = product === 'notice_only';
   const isCompletePack = product === 'complete_pack';
+  const isAst = product === 'ast';
   const showIntro = props.showIntro ?? true;
-  const initialJurisdiction = isNoticeOnly ? props.defaultJurisdiction ?? 'england' : 'england';
+  const initialJurisdiction: InteractiveJurisdictionKey = isNoticeOnly
+    ? props.defaultJurisdiction ?? 'england'
+    : isAst
+      ? props.defaultJurisdiction ?? 'england'
+      : 'england';
   const initialPackVariant = isCompletePack ? props.defaultVariant ?? 'section21' : 'section21';
+  const initialTenancyTier = isAst ? props.defaultTier ?? 'standard' : 'standard';
 
-  const [selectedJurisdiction, setSelectedJurisdiction] = useState<JurisdictionKey>(initialJurisdiction);
-  const defaultNoticeVariantKey = NOTICE_ONLY_CONFIG[selectedJurisdiction].noticeVariants[0].key;
+  const [selectedJurisdiction, setSelectedJurisdiction] = useState<InteractiveJurisdictionKey>(initialJurisdiction);
+  const defaultNoticeVariantKey = isNoticeOnly
+    ? NOTICE_ONLY_CONFIG[selectedJurisdiction as JurisdictionKey].noticeVariants[0].key
+    : 'section21';
   const [selectedNoticeVariant, setSelectedNoticeVariant] = useState<NoticeVariantKey>(defaultNoticeVariantKey);
   const [selectedPackVariant, setSelectedPackVariant] = useState<CompletePackVariantKey>(initialPackVariant);
+  const [selectedTenancyTier, setSelectedTenancyTier] = useState<TenancyPreviewTier>(initialTenancyTier);
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
   const [selectedDocKey, setSelectedDocKey] = useState<string>(() => {
     if (product === 'notice_only') {
       const noticePreviews = previews as NoticeOnlyPreviewData;
-      return noticePreviews[initialJurisdiction]?.[defaultNoticeVariantKey]?.[0]?.key ?? 'preview-placeholder';
+      return noticePreviews[initialJurisdiction as JurisdictionKey]?.[defaultNoticeVariantKey]?.[0]?.key
+        ?? 'preview-placeholder';
     }
     if (isCompletePack) {
       const packPreviews = previews as CompletePackPreviewData;
       return packPreviews[initialPackVariant]?.[0]?.key ?? 'preview-placeholder';
     }
+    if (isAst) {
+      const tenancyPreviews = previews as TenancyAgreementPreviewData;
+      return tenancyPreviews[initialJurisdiction as TenancyPreviewJurisdiction]?.[initialTenancyTier]?.[0]?.key
+        ?? 'preview-placeholder';
+    }
+
     const moneyClaimPreviews = previews as MoneyClaimPreviewData;
     return moneyClaimPreviews[0]?.key ?? 'preview-placeholder';
   });
 
-  const jurisdictionConfig = isNoticeOnly ? NOTICE_ONLY_CONFIG[selectedJurisdiction] : null;
+  const jurisdictionConfig = isNoticeOnly ? NOTICE_ONLY_CONFIG[selectedJurisdiction as JurisdictionKey] : null;
+  const tenancyConfig = isAst ? TENANCY_CONFIG[selectedJurisdiction as TenancyPreviewJurisdiction] : null;
   const noticeVariants = jurisdictionConfig?.noticeVariants ?? [];
   const effectiveNoticeVariant = noticeVariants.some((variant) => variant.key === selectedNoticeVariant)
     ? selectedNoticeVariant
     : noticeVariants[0]?.key;
 
   const documents = isNoticeOnly
-    ? (previews as NoticeOnlyPreviewData)[selectedJurisdiction]?.[effectiveNoticeVariant ?? 'section21'] ?? []
+    ? (previews as NoticeOnlyPreviewData)[selectedJurisdiction as JurisdictionKey]?.[effectiveNoticeVariant ?? 'section21'] ?? []
     : isCompletePack
       ? (previews as CompletePackPreviewData)[selectedPackVariant] ?? []
-      : (previews as MoneyClaimPreviewData);
+      : isAst
+        ? (previews as TenancyAgreementPreviewData)[selectedJurisdiction as TenancyPreviewJurisdiction]?.[selectedTenancyTier] ?? []
+        : (previews as MoneyClaimPreviewData);
 
   const effectiveDocKey = documents.some((document) => document.key === selectedDocKey)
     ? selectedDocKey
@@ -258,24 +414,26 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
   const title = props.titleOverride ?? getDefaultTitle(product);
   const subtitle = props.subtitleOverride ?? getDefaultSubtitle(product);
   const showNoticeTypeSelector = isCompletePack || (isNoticeOnly && selectedJurisdiction !== 'scotland');
+  const lockJurisdiction = isAst ? props.lockJurisdiction ?? false : false;
+  const legalNote = isNoticeOnly ? jurisdictionConfig?.legalNote : isAst ? tenancyConfig?.legalNote : 'England only';
 
-  const ctaDefaults = {
-    notice_only: {
-      href: 'https://landlordheaven.co.uk/wizard?product=notice_only&src=product_page&topic=evictio',
-      label: 'Generate my notice bundle →',
-    },
-    complete_pack: {
-      href: 'https://landlordheaven.co.uk/wizard?product=complete_pack&src=product_page&topic=eviction',
-      label: 'Start your complete pack →',
-    },
-    money_claim: {
-      href: 'https://landlordheaven.co.uk/wizard?product=money_claim&topic=debt&src=product_page',
-      label: 'Start my money claim pack →',
-    },
-  } as const;
+  let defaultCtaHref = 'https://landlordheaven.co.uk/wizard?product=money_claim&topic=debt&src=product_page';
+  let defaultCtaLabel = 'Start my money claim pack ->';
 
-  const ctaHref = props.ctaHref ?? ctaDefaults[product].href;
-  const ctaLabel = props.ctaLabel ?? ctaDefaults[product].label;
+  if (product === 'notice_only') {
+    defaultCtaHref = 'https://landlordheaven.co.uk/wizard?product=notice_only&src=product_page&topic=eviction';
+    defaultCtaLabel = 'Generate my notice bundle ->';
+  } else if (product === 'complete_pack') {
+    defaultCtaHref = 'https://landlordheaven.co.uk/wizard?product=complete_pack&src=product_page&topic=eviction';
+    defaultCtaLabel = 'Start your complete pack ->';
+  } else if (product === 'ast') {
+    defaultCtaHref = `https://landlordheaven.co.uk/wizard?product=${selectedTenancyTier === 'premium' ? 'ast_premium' : 'ast_standard'}&jurisdiction=${selectedJurisdiction}&src=product_page&topic=tenancy`;
+    defaultCtaLabel =
+      selectedTenancyTier === 'premium' ? 'Start my premium tenancy pack ->' : 'Start my standard tenancy pack ->';
+  }
+
+  const ctaHref = props.ctaHref ?? defaultCtaHref;
+  const ctaLabel = props.ctaLabel ?? defaultCtaLabel;
 
   const documentEntries = documents.map((document) => ({
     ...document,
@@ -337,6 +495,32 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
                 </div>
               ) : null}
 
+              {isAst && !lockJurisdiction ? (
+                <div>
+                  <h3 className="text-sm font-semibold uppercase tracking-wide text-[#5b4b7a]">Jurisdiction</h3>
+                  <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
+                    {tenancyJurisdictionOrder.map((jurisdiction) => {
+                      const isActive = selectedJurisdiction === jurisdiction;
+                      return (
+                        <button
+                          key={jurisdiction}
+                          type="button"
+                          className={`rounded-xl border px-4 py-3 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7c3aed] focus-visible:ring-offset-2 ${
+                            isActive
+                              ? 'border-[#7c3aed]/60 bg-[#f4efff] text-[#2f0d68]'
+                              : 'border-gray-200 bg-white text-gray-700 hover:border-[#7c3aed]/35'
+                          }`}
+                          aria-pressed={isActive}
+                          onClick={() => setSelectedJurisdiction(jurisdiction)}
+                        >
+                          {TENANCY_CONFIG[jurisdiction].label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              ) : null}
+
               {showNoticeTypeSelector ? (
                 <div>
                   <h3 className="text-sm font-semibold uppercase tracking-wide text-[#5b4b7a]">Notice type</h3>
@@ -370,11 +554,38 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
                 </div>
               ) : null}
 
+              {isAst ? (
+                <div>
+                  <h3 className="text-sm font-semibold uppercase tracking-wide text-[#5b4b7a]">Product level</h3>
+                  <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                    {tenancyConfig?.tierOptions.map((tier) => {
+                      const isActive = selectedTenancyTier === tier.key;
+                      return (
+                        <button
+                          key={tier.key}
+                          type="button"
+                          className={`min-w-0 rounded-xl border p-4 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7c3aed] focus-visible:ring-offset-2 ${
+                            isActive
+                              ? 'border-[#7c3aed]/60 bg-[#f4efff] shadow-sm'
+                              : 'border-gray-200 bg-white hover:border-[#7c3aed]/35'
+                          }`}
+                          aria-pressed={isActive}
+                          onClick={() => setSelectedTenancyTier(tier.key)}
+                        >
+                          <p className="text-base font-semibold text-[#2f0d68] break-words">{tier.label}</p>
+                          <p className="mt-1 text-sm text-gray-600 break-words">{tier.description}</p>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              ) : null}
+
               <div className="rounded-2xl border border-[#eee7ff] bg-[#fcfbff] p-4 md:p-5">
                 <div className="flex flex-wrap items-start justify-between gap-2 sm:items-center sm:gap-3">
                   <h3 className="min-w-0 text-lg font-semibold text-[#2f0d68]">Documents included in your pack</h3>
                   <span className="max-w-full whitespace-normal break-words rounded-full bg-[#f3e8ff] px-3 py-1 text-xs font-semibold text-[#6f3dd6] sm:text-right">
-                    {isNoticeOnly ? jurisdictionConfig?.legalNote : 'England only'}
+                    {legalNote}
                   </span>
                 </div>
 

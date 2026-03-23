@@ -8,6 +8,7 @@ import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
+import { TenancyPackSection } from '@/components/value-proposition';
 import {
   StructuredData,
   articleSchema,
@@ -265,6 +266,16 @@ export default function EnglandTenancyAgreementsPage() {
                 weaker protection or complications if issues arise.
               </p>
             </div>
+          </div>
+        </section>
+
+        <section id="whats-included" className="bg-white py-12">
+          <div className="container mx-auto px-4">
+            <TenancyPackSection
+              defaultJurisdiction="england"
+              lockJurisdiction
+              intro="You get more than an England tenancy agreement. Landlord Heaven builds a practical England tenancy pack with the agreement, setup documents, and preview-before-payment flow that is easier to use than relying on an old AST-style template."
+            />
           </div>
         </section>
 

@@ -22,3 +22,6 @@ export type { WhatYouGetProps, ProductType as WhatYouGetProductType } from './Wh
 
 export { WhatsIncludedInteractive } from './WhatsIncludedInteractive';
 export type { JurisdictionKey, NoticeVariantKey } from '@/lib/previews/noticeOnlyPreviews';
+
+export { TenancyPackSection } from './TenancyPackSection';
+export type { TenancyPackSectionProps } from './TenancyPackSection';

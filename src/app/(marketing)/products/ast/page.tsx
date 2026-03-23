@@ -6,6 +6,7 @@ import { FAQSection, type FAQItem } from '@/components/seo/FAQSection';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { Container } from '@/components/ui/Container';
+import { TenancyPackSection } from '@/components/value-proposition';
 import { getCanonicalUrl } from '@/lib/seo';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { PRODUCTS } from '@/lib/pricing/products';
@@ -57,11 +58,6 @@ type FeaturePoint = {
   body: string;
 };
 
-type IncludedItem = {
-  title: string;
-  body: string;
-};
-
 type ComparisonRow = {
   label: string;
   landlordHeaven: string;
@@ -106,10 +102,10 @@ const productOptions: ProductCardData[] = [
     kicker: 'Best for straightforward lets',
     bestFor: 'Single-household and lower-complexity lets where you want the right jurisdiction-specific agreement without paying for broader drafting you do not need.',
     description:
-      'Standard is the right choice for most everyday lets. It gives you the correct agreement structure for the property location and a guided setup process, without relying on an old or generic template.',
+      'Standard is the right choice for most everyday lets. It gives you the correct agreement structure for the property location plus the core supporting pack for move-in, compliance, and record-keeping.',
     points: [
       'Designed for most straightforward residential lets',
-      'Jurisdiction-specific agreement for the property location',
+      'Jurisdiction-specific agreement plus supporting pack documents',
       'England route aligned to the assured periodic framework from 1 May 2026',
       'Guided setup with preview before payment',
       'Saved in your account after purchase',
@@ -124,10 +120,11 @@ const productOptions: ProductCardData[] = [
     bestFor:
       'HMOs, student lets, shared households, guarantor-backed lets, and arrangements that need broader wording from the start.',
     description:
-      'Choose Premium when the let is more complex, more operationally involved, or when you want stronger wording in place from day one rather than discovering later that a simpler agreement leaves gaps.',
+      'Choose Premium when the let is more complex, more operationally involved, or when you want the core pack plus broader drafting and extra support documents from day one.',
     points: [
       'Better suited to HMOs, student lets, and shared households',
       'Broader wording for multi-tenant and shared-living arrangements',
+      'Includes extra support documents for handover, maintenance, and checkout',
       'Useful where guarantors or extra house rules matter',
       'Saved in your account and easy to revisit later',
     ],
@@ -206,33 +203,6 @@ const jurisdictions: JurisdictionCardData[] = [
   },
 ];
 
-const includedItems: IncludedItem[] = [
-  {
-    title: 'Landlord, tenant, and property details',
-    body: 'Set out who the agreement is between, the rental property address, and the core details of the let in a clear, usable format.',
-  },
-  {
-    title: 'Rent, deposit, and payment terms',
-    body: 'Cover the rent amount, payment timing, deposit position, and the key financial terms that matter from the outset.',
-  },
-  {
-    title: 'Tenancy structure and occupation setup',
-    body: 'Start with the correct agreement route for the property jurisdiction and the household setup you are actually creating, instead of adapting the wrong framework by hand.',
-  },
-  {
-    title: 'Day-to-day rules and responsibilities',
-    body: 'Include the practical terms that usually matter during the tenancy, such as property use, maintenance expectations, and the core responsibilities both sides need to understand.',
-  },
-  {
-    title: 'Extra wording for more complex arrangements',
-    body: 'Premium is better suited to HMOs, student lets, shared households, guarantor-backed lets, and setups where broader wording is useful from the beginning rather than patched in later.',
-  },
-  {
-    title: 'Preview and account access',
-    body: 'Preview before payment, then keep the finished agreement in your account so you can return to it later.',
-  },
-];
-
 const featurePoints: FeaturePoint[] = [
   {
     title: 'Your existing agreement may be out of date',
@@ -268,9 +238,9 @@ const howItWorks: FeaturePoint[] = [
 ];
 
 const comparisonHighlights = [
-  'Current England wording',
-  'Correct jurisdiction from the outset',
-  'Standard or Premium matched to the tenancy',
+  'Correct agreement route',
+  'Supporting documents included',
+  'Preview before payment',
 ];
 
 const comparisonRows: ComparisonRow[] = [
@@ -291,9 +261,9 @@ const comparisonRows: ComparisonRow[] = [
   {
     label: 'What you are relying on',
     landlordHeaven:
-      'Core tenancy terms, financial terms, jurisdiction-specific structure, guided setup, preview before payment, and account access afterwards.',
+      'A practical pack: the agreement, inventory, compliance checklist, England deposit documents where applicable, premium support documents where selected, preview before payment, and account access afterwards.',
     genericTemplate:
-      'Usually just a file, with the landlord left to decide whether the wording is current, complete, or suitable for the let.',
+      'Usually just a file, with the landlord left to work out what else is needed for setup, compliance, and record-keeping.',
   },
   {
     label: 'England positioning',
@@ -338,7 +308,7 @@ const faqs: FAQItem[] = [
   {
     question: 'What is included in the agreement?',
     answer:
-      'The agreement is built through guided setup and usually covers the main tenancy details, the property and parties, rent and deposit terms, day-to-day tenancy wording, and the correct structure for the property jurisdiction. Premium is aimed at more complex arrangements such as HMOs, student lets, and shared households.',
+      'You get more than a single agreement file. The tenancy pack can include the jurisdiction-specific agreement or contract, an inventory and schedule of condition, a pre-tenancy compliance checklist, and for England the deposit protection certificate and prescribed information pack. Premium adds broader drafting for more complex lets plus extra support documents such as the key schedule, property maintenance guide, and checkout procedure.',
   },
   {
     question: 'What is the difference between Standard and Premium?',
@@ -348,7 +318,7 @@ const faqs: FAQItem[] = [
   {
     question: 'Can I preview before paying?',
     answer:
-      'Yes. You can preview before payment and the finished agreement is then saved in your account after purchase.',
+      'Yes. You can preview the pack structure and sample documents before payment, then the finished tenancy pack is saved in your account after purchase.',
   },
   {
     question: 'Why use this instead of a free tenancy template?',
@@ -689,39 +659,12 @@ export default function ASTProductPage() {
           </div>
         </section>
 
-        <section className="mb-16 md:mb-20">
-          <div className="mx-auto max-w-4xl text-center">
-            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#5B56E8]">
-              What you get
-            </p>
-            <h2 className="mt-3 text-4xl font-bold tracking-tight text-[#141B2D] md:text-5xl">
-              Everything you need to build the agreement properly
-            </h2>
-            <p className="mt-5 text-lg leading-8 text-[#546075]">
-              You are not buying a blank template. The agreement is built from the details you
-              provide, with the right structure for the property jurisdiction and the main tenancy
-              terms set out clearly.
-            </p>
-          </div>
-
-          <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-            {includedItems.map((item) => (
-              <div
-                key={item.title}
-                className="rounded-[1.8rem] border border-[#E9E2D7] bg-white/92 p-6 shadow-[0_14px_32px_rgba(31,41,55,0.05)]"
-              >
-                <div className="flex items-start gap-3">
-                  <div className="mt-1 rounded-full bg-[#EEE7FF] p-2">
-                    <RiCheckboxCircleLine className="h-4 w-4 text-[#5B56E8]" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-[#141B2D]">{item.title}</h3>
-                    <p className="mt-3 text-sm leading-7 text-[#546075]">{item.body}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+        <section id="whats-included" className="mb-16 scroll-mt-24 md:mb-20">
+          <TenancyPackSection
+            title="What's included"
+            subtitle="What's included in your tenancy agreement pack"
+            intro="You get more than a tenancy agreement. Landlord Heaven builds a practical tenancy document pack for the property, tenancy setup, and jurisdiction you choose, so you can preview the documents before paying and avoid relying on a generic one-file template."
+          />
         </section>
 
         <section className="mb-16 md:mb-20">
@@ -799,12 +742,12 @@ export default function ASTProductPage() {
                 Comparison
               </p>
               <h2 className="mt-3 text-4xl font-bold tracking-tight text-[#141B2D]">
-                More than a generic tenancy template
+                Why this is better than a generic template
               </h2>
               <p className="mt-5 text-lg leading-8 text-[#546075]">
-                The difference is not just presentation. It is the difference between starting with
-                the correct agreement route for the property and trying to adapt a generic document
-                after the fact.
+                The difference is not just presentation. It is the difference between starting
+                with the correct agreement route and supporting documents for the property,
+                or trying to adapt a generic file after the fact.
               </p>
             </div>
 

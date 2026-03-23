@@ -93,7 +93,7 @@ export const TENANCY_VARIANT_CONFIGS: Record<TenancyJurisdiction, JurisdictionVa
       tier: 'premium',
       templatePath: 'uk/wales/templates/occupation_contract_hmo.hbs',
       documentKey: 'soc_agreement_hmo',
-      documentTitle: 'HMO Occupation Contract',
+      documentTitle: 'Premium Occupation Contract',
       mustHaveHMO: true,
       mustNotHaveHMO: false,
     },
@@ -114,7 +114,7 @@ export const TENANCY_VARIANT_CONFIGS: Record<TenancyJurisdiction, JurisdictionVa
       tier: 'premium',
       templatePath: 'uk/scotland/templates/prt_agreement_hmo_premium.hbs',
       documentKey: 'prt_agreement_hmo',
-      documentTitle: 'HMO Private Residential Tenancy Agreement',
+      documentTitle: 'Premium Private Residential Tenancy Agreement',
       mustHaveHMO: true,
       mustNotHaveHMO: false,
     },
@@ -135,7 +135,7 @@ export const TENANCY_VARIANT_CONFIGS: Record<TenancyJurisdiction, JurisdictionVa
       tier: 'premium',
       templatePath: 'uk/northern-ireland/templates/private_tenancy_premium.hbs',
       documentKey: 'private_tenancy_agreement_hmo',
-      documentTitle: 'HMO Private Tenancy Agreement',
+      documentTitle: 'Premium Private Tenancy Agreement',
       mustHaveHMO: true,
       mustNotHaveHMO: false,
     },
@@ -411,15 +411,15 @@ export const EXPECTED_PACK_CONTENTS: Record<TenancyJurisdiction, Record<TenancyT
   },
   wales: {
     standard: { key: 'soc_agreement', title: 'Standard Occupation Contract' },
-    premium: { key: 'soc_agreement_hmo', title: 'HMO Occupation Contract' },
+    premium: { key: 'soc_agreement_hmo', title: 'Premium Occupation Contract' },
   },
   scotland: {
     standard: { key: 'prt_agreement', title: 'Private Residential Tenancy Agreement' },
-    premium: { key: 'prt_agreement_hmo', title: 'HMO Private Residential Tenancy Agreement' },
+    premium: { key: 'prt_agreement_hmo', title: 'Premium Private Residential Tenancy Agreement' },
   },
   'northern-ireland': {
     standard: { key: 'private_tenancy_agreement', title: 'Private Tenancy Agreement' },
-    premium: { key: 'private_tenancy_agreement_hmo', title: 'HMO Private Tenancy Agreement' },
+    premium: { key: 'private_tenancy_agreement_hmo', title: 'Premium Private Tenancy Agreement' },
   },
 };
 

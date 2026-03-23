@@ -11,6 +11,7 @@ export type PreviewDoc = {
   title: string;
   src: string;
   alt: string;
+  description?: string;
 };
 
 export type NoticeOnlyPreviewData = Record<JurisdictionKey, Record<NoticeVariantKey, PreviewDoc[]>>;

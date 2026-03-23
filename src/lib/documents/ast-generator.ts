@@ -480,6 +480,68 @@ async function appendEnglandDepositSupportDocuments(
   }
 }
 
+const PREMIUM_SUPPORT_DOCUMENTS = [
+  {
+    title: 'Key Receipt & Handover Schedule',
+    description: 'Record the keys, access devices, and handover arrangements for the tenancy.',
+    documentType: 'key_schedule',
+    templatePathKey: 'keySchedule' as const,
+    fileName: 'key_schedule.pdf',
+  },
+  {
+    title: 'Property Maintenance Guide',
+    description: 'Practical maintenance, reporting, and care guidance to support the tenancy setup.',
+    documentType: 'property_maintenance_guide',
+    templatePathKey: 'maintenanceGuide' as const,
+    fileName: 'property_maintenance_guide.pdf',
+  },
+  {
+    title: 'Checkout Procedure',
+    description: 'End-of-tenancy checkout steps, records, and handback guidance for the tenancy file.',
+    documentType: 'checkout_procedure',
+    templatePathKey: 'checkoutProcedure' as const,
+    fileName: 'checkout_procedure.pdf',
+  },
+] as const;
+
+async function appendPremiumSupportDocuments(
+  documents: ASTPackDocument[],
+  config: JurisdictionConfig,
+  enrichedData: Record<string, any>,
+  caseId: string,
+  documentId: string
+): Promise<void> {
+  const { generateDocument } = await import('./generator');
+
+  for (const supportDocument of PREMIUM_SUPPORT_DOCUMENTS) {
+    try {
+      const generatedDoc = await generateDocument({
+        templatePath: config.templatePaths[supportDocument.templatePathKey],
+        data: {
+          ...enrichedData,
+          case_id: caseId || documentId,
+          timestamp: Date.now(),
+        },
+        isPreview: false,
+        outputFormat: 'both',
+      });
+
+      documents.push({
+        title: supportDocument.title,
+        description: supportDocument.description,
+        category: 'guidance',
+        document_type: supportDocument.documentType,
+        html: generatedDoc.html,
+        pdf: generatedDoc.pdf,
+        file_name: supportDocument.fileName,
+      });
+    } catch (err) {
+      console.error(`Failed to generate ${supportDocument.documentType}:`, err);
+      console.warn(`[AST Generator] ${supportDocument.documentType} generation failed but continuing without it`);
+    }
+  }
+}
+
 // ============================================================================
 // TYPES
 // ============================================================================
@@ -1642,6 +1704,14 @@ export async function generatePremiumASTDocuments(
   }
 
   console.log(`✅ Generated ${documents.length} documents for ${config.jurisdictionLabel} HMO Premium pack`);
+
+  await appendPremiumSupportDocuments(
+    documents,
+    config,
+    enrichedData,
+    caseId || documentId,
+    documentId
+  );
 
   return {
     case_id: caseId || documentId,

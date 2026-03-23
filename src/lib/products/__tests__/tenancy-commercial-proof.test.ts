@@ -18,16 +18,25 @@ describe('Tenancy premium commercial proof points', () => {
     expect(REGIONAL_PRODUCT_AVAILABILITY.ast_premium.available).toEqual(JURISDICTIONS);
   });
 
-  it.each(JURISDICTIONS)('premium tier is materially HMO-focused in %s pack contents', (jurisdiction) => {
+  it.each(JURISDICTIONS)('premium tier is materially broader in %s pack contents', (jurisdiction) => {
     const docs = getASTDocuments(jurisdiction, 'premium', { hasInventoryData: true });
     const agreement = docs[0];
 
     expect(agreement.id).toContain('hmo');
-    expect(agreement.title.toLowerCase()).toContain('hmo');
+    expect(agreement.title.toLowerCase()).toContain('premium');
+    expect(agreement.description.toLowerCase()).toContain('broader drafting');
     expect(agreement.pages).toBe('20-25 pages');
 
     const inventory = docs.find((doc) => doc.id === 'inventory-schedule');
     expect(inventory?.description.toLowerCase()).toContain('wizard-completed');
+
+    expect(docs.find((doc) => doc.id === 'key-schedule')).toBeDefined();
+    expect(docs.find((doc) => doc.id === 'property-maintenance-guide')).toBeDefined();
+    expect(docs.find((doc) => doc.id === 'checkout-procedure')).toBeDefined();
+
+    if (jurisdiction === 'scotland') {
+      expect(docs.find((doc) => doc.id === 'easy-read-notes-scotland')).toBeDefined();
+    }
   });
 
   it.each(JURISDICTIONS)('premium template and document key are jurisdiction-specific in %s', (jurisdiction) => {

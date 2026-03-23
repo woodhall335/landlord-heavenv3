@@ -528,7 +528,7 @@ export function getASTDocuments(
       },
       hmo: {
         title: ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL,
-        description: 'Includes broader wording for HMO, shared-household, guarantor-backed, and multi-occupancy arrangements in the England assured periodic tenancy flow.'
+        description: 'Broader drafting for shared households, HMOs, guarantor-backed lets, and other more complex England tenancy arrangements.'
       }
     },
     'wales': {
@@ -537,8 +537,8 @@ export function getASTDocuments(
         description: 'Solicitor-grade occupation contract with all embedded schedules. Compliant with Renting Homes (Wales) Act 2016.'
       },
       hmo: {
-        title: 'HMO Occupation Contract',
-        description: 'Includes HMO-specific clauses for multi-occupancy properties. Compliant with RH(W)A 2016 & Housing Act 2004.'
+        title: 'Premium Occupation Contract',
+        description: 'Broader drafting for shared households, HMOs, guarantor-backed lets, students, and other more complex Welsh occupation arrangements.'
       }
     },
     'scotland': {
@@ -547,8 +547,8 @@ export function getASTDocuments(
         description: 'Solicitor-grade PRT agreement with all embedded schedules. Compliant with Private Housing (Tenancies) (Scotland) Act 2016.'
       },
       hmo: {
-        title: 'HMO Private Residential Tenancy Agreement',
-        description: 'Includes HMO-specific clauses for multi-occupancy properties. Compliant with PH(T)(S)A 2016.'
+        title: 'Premium Private Residential Tenancy Agreement',
+        description: 'Broader drafting for shared households, HMOs, guarantor-backed lets, students, and other more complex Scottish tenancy arrangements.'
       }
     },
     'northern-ireland': {
@@ -557,8 +557,8 @@ export function getASTDocuments(
         description: 'Solicitor-grade tenancy agreement with all embedded schedules. Compliant with Private Tenancies Act (NI) 2022.'
       },
       hmo: {
-        title: 'HMO Private Tenancy Agreement',
-        description: 'Includes HMO-specific clauses for multi-occupancy properties where legally permitted in NI.'
+        title: 'Premium Private Tenancy Agreement',
+        description: 'Broader drafting for shared households, HMOs, guarantor-backed lets, and other more complex Northern Ireland tenancy arrangements.'
       }
     },
   };
@@ -657,6 +657,46 @@ export function getASTDocuments(
         description: 'Standalone tenancy deposit prescribed information pack for England compliance and tenant service.',
         icon: 'guidance',
         pages: '4-6 pages',
+        category: 'Guidance',
+      }
+    );
+  }
+
+  if (jurisdiction === 'scotland') {
+    documents.push({
+      id: 'easy-read-notes-scotland',
+      title: 'Easy Read Notes',
+      description: 'Plain-language guidance included with the Scotland tenancy pack.',
+      icon: 'guidance',
+      pages: '2-4 pages',
+      category: 'Guidance',
+    });
+  }
+
+  if (tier === 'premium') {
+    documents.push(
+      {
+        id: 'key-schedule',
+        title: 'Key Receipt & Handover Schedule',
+        description: 'Record of keys, access devices, and handover arrangements for the tenancy setup.',
+        icon: 'guidance',
+        pages: '1-3 pages',
+        category: 'Guidance',
+      },
+      {
+        id: 'property-maintenance-guide',
+        title: 'Property Maintenance Guide',
+        description: 'Practical maintenance, reporting, and care guidance to support the tenancy after move-in.',
+        icon: 'guidance',
+        pages: '2-4 pages',
+        category: 'Guidance',
+      },
+      {
+        id: 'checkout-procedure',
+        title: 'Checkout Procedure',
+        description: 'End-of-tenancy checkout steps, records, and handback guidance for the tenancy file.',
+        icon: 'guidance',
+        pages: '2-4 pages',
         category: 'Guidance',
       }
     );
