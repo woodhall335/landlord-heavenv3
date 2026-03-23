@@ -116,8 +116,8 @@ const ASK_HEAVEN_CTA_COPY: Partial<Record<AskHeavenCtaKey, AskHeavenCtaCopy>> = 
   },
   'tenancy_agreement:england:tenancy': {
     product: 'tenancy_agreement',
-    title: 'Create a Residential Tenancy Agreement',
-    description: `Generate a Renters’ Rights compliant England Residential Tenancy Agreement (${SEO_PRICES.tenancyStandard.display}).`,
+    title: 'Create an England tenancy agreement',
+    description: `Generate an England tenancy agreement designed for the assured periodic framework (${SEO_PRICES.tenancyStandard.display}).`,
     buttonText: 'Start Agreement Wizard',
     displayPrice: `from ${SEO_PRICES.tenancyStandard.display}`,
     priceNote: TENANCY_PRICE_NOTE,

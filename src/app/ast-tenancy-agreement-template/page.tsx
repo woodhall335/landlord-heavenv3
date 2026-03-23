@@ -6,13 +6,13 @@ import { FAQSection } from '@/components/seo/FAQSection';
 import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/ast-tenancy-agreement-template');
-const wizardHref = '/products/ast';
-const premiumWizardHref = '/products/ast';
+const wizardHref = '/wizard?product=ast_standard&src=ast_tenancy_agreement_template&topic=tenancy';
+const premiumWizardHref = '/wizard?product=ast_premium&src=ast_tenancy_agreement_template&topic=tenancy';
 
 export const metadata: Metadata = {
   title: 'AST Tenancy Agreement Template 2026 | England Agreement Updated',
   description:
-    "Create the updated 2026 England Tenancy Agreement online. Built for landlords searching for an AST tenancy agreement template, with newer England wording and Renters' Rights compliant positioning.",
+    'Create the updated 2026 England tenancy agreement online. Built for landlords searching for an AST tenancy agreement template, with wording designed for the assured periodic framework from 1 May 2026.',
   keywords: [
     'ast tenancy agreement template',
     'ast template england',
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'AST Tenancy Agreement Template 2026 | England Agreement Updated',
     description:
-      "Use the updated 2026 England tenancy agreement flow for AST tenancy agreement template searches, with newer wording and Renters' Rights compliant positioning.",
+      'Use the updated 2026 England tenancy agreement flow for AST tenancy agreement template searches, with wording designed for the assured periodic framework from 1 May 2026.',
     url: canonicalUrl,
     type: 'website',
   },
@@ -55,7 +55,7 @@ const faqs = [
   {
     question: 'How does this relate to Renters’ Rights compliant wording?',
     answer:
-      "The page is positioned around a newer England agreement route with Renters' Rights compliant wording. Before publishing any exact compliance claim, your legal or compliance owner should confirm the final approved wording for the live product.",
+      'The page is positioned around a newer England agreement route designed for the assured periodic framework from 1 May 2026. It should be sold as a current-law route rather than as a new fixed-term AST product in the old sense.',
   },
   {
     question: 'What should an England tenancy agreement include?',

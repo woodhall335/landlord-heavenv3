@@ -12,6 +12,8 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 
 const astProductHref = '/products/ast';
+const standardWizardHref = '/wizard?product=ast_standard&jurisdiction=scotland&src=prt_template&topic=tenancy';
+const premiumWizardHref = '/wizard?product=ast_premium&jurisdiction=scotland&src=prt_template&topic=tenancy';
 
 export const metadata: Metadata = {
   title: 'Private Residential Tenancy Agreement 2026 | Legally Validated PRT',
@@ -114,7 +116,8 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
         <UniversalHero
           title="Private Residential Tenancy Agreement (Scotland)"
           subtitle="Create a legally validated, solicitor-grade PRT agreement that is compliance-checked for Scotland."
-          primaryCta={{ label: 'View tenancy agreement packs', href: astProductHref }}
+          primaryCta={{ label: 'Start Standard PRT', href: standardWizardHref }}
+          secondaryCta={{ label: 'Start Premium PRT', href: premiumWizardHref }}
           showTrustPositioningBar
           hideMedia
         />
@@ -154,13 +157,13 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
             </p>
             <div className="flex gap-4 justify-center flex-wrap">
               <Link
-                href={astProductHref}
+                href={standardWizardHref}
                 className="inline-flex items-center gap-2 bg-white border-2 border-blue-600 text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors"
               >
                 Standard PRT — £14.99
               </Link>
               <Link
-                href={astProductHref}
+                href={premiumWizardHref}
                 className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
               >
                 Premium PRT — £24.99
@@ -327,7 +330,7 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                 <h3 className="font-semibold text-gray-900">Scotland Notice to Leave — £29.99</h3>
                 <p className="text-sm text-gray-600">All 18 eviction grounds with correct notice periods</p>
               </Link>
-              <Link href="/products/ast" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+              <Link href={premiumWizardHref} className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
                 <h3 className="font-semibold text-gray-900">Premium PRT — £24.99</h3>
                 <p className="text-sm text-gray-600">HMO-ready clauses and enhanced tenancy protections</p>
               </Link>

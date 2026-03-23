@@ -209,11 +209,11 @@ function getJurisdictionInfo(product: ProductType): JurisdictionInfo[] {
           flag: '/gb-eng.svg',
           available: true,
           documents: [
-            'Residential Tenancy Agreement',
+            'England tenancy agreement',
             'Standard: agreement, inventory schedule, compliance checklist, deposit protection certificate, and prescribed information pack',
             'Premium: HMO and student-ready wording with enhanced shared-living and operational clauses',
           ],
-          notes: 'England flow now uses Residential Tenancy Agreement wording with Renters’ Rights compliant public positioning.',
+          notes: 'England flow now uses current England tenancy agreement wording aligned to the assured periodic framework.',
         },
         {
           name: 'Wales',

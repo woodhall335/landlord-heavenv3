@@ -12,6 +12,8 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 
 const astProductHref = '/products/ast';
+const standardWizardHref = '/wizard?product=ast_standard&jurisdiction=wales&src=wales_tenancy_template&topic=tenancy';
+const premiumWizardHref = '/wizard?product=ast_premium&jurisdiction=wales&src=wales_tenancy_template&topic=tenancy';
 
 export const metadata: Metadata = {
   title: 'Wales Tenancy Agreement 2026 | Legally Validated Occupation Contract',
@@ -122,7 +124,8 @@ export default function WalesTenancyAgreementTemplatePage() {
         <UniversalHero
           title="Wales Tenancy Agreement"
           subtitle="Create a legally validated Wales occupation contract with solicitor-grade and compliance-checked wording."
-          primaryCta={{ label: 'View tenancy agreement packs', href: astProductHref }}
+          primaryCta={{ label: 'Start Standard Wales contract', href: standardWizardHref }}
+          secondaryCta={{ label: 'Start Premium Wales contract', href: premiumWizardHref }}
           showTrustPositioningBar
           hideMedia
         />
@@ -162,13 +165,13 @@ export default function WalesTenancyAgreementTemplatePage() {
             </p>
             <div className="flex gap-4 justify-center flex-wrap">
               <Link
-                href={astProductHref}
+                href={standardWizardHref}
                 className="inline-flex items-center gap-2 bg-white border-2 border-red-600 text-red-600 px-6 py-3 rounded-lg font-semibold hover:bg-red-50 transition-colors"
               >
                 Standard Contract — £14.99
               </Link>
               <Link
-                href={astProductHref}
+                href={premiumWizardHref}
                 className="inline-flex items-center gap-2 bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors"
               >
                 Premium Contract — £24.99
@@ -346,7 +349,7 @@ export default function WalesTenancyAgreementTemplatePage() {
                 <p className="text-sm text-gray-600 mb-2">Section 173 & 181 notices</p>
                 <span className="text-red-600 font-medium">£24.99</span>
               </Link>
-              <Link href="/products/ast" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+              <Link href={premiumWizardHref} className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
                 <h3 className="font-semibold text-gray-900">Premium Occupation Contract</h3>
                 <p className="text-sm text-gray-600 mb-2">Extra clauses for HMOs and complex lets</p>
                 <span className="text-red-600 font-medium">£24.99</span>

@@ -6,13 +6,13 @@ import { FAQSection } from '@/components/seo/FAQSection';
 import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/assured-shorthold-tenancy-agreement');
-const wizardHref = '/products/ast';
-const premiumWizardHref = '/products/ast';
+const wizardHref = '/wizard?product=ast_standard&src=assured_shorthold_tenancy_agreement&topic=tenancy';
+const premiumWizardHref = '/wizard?product=ast_premium&src=assured_shorthold_tenancy_agreement&topic=tenancy';
 
 export const metadata: Metadata = {
   title: 'Assured Shorthold Tenancy Agreement 2026 | England Agreement Updated',
   description:
-    "Create the updated 2026 England Tenancy Agreement online. Built for landlords searching for an assured shorthold tenancy agreement, with newer England wording and Renters' Rights compliant positioning.",
+    'Create the updated 2026 England tenancy agreement online. Built for landlords searching for an assured shorthold tenancy agreement, with wording designed for the assured periodic framework from 1 May 2026.',
   keywords: [
     'assured shorthold tenancy agreement',
     'ast agreement england',
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Assured Shorthold Tenancy Agreement 2026 | England Agreement Updated',
     description:
-      "Use the updated 2026 England tenancy agreement flow for assured shorthold tenancy agreement searches, with newer wording and Renters' Rights compliant positioning.",
+      'Use the updated 2026 England tenancy agreement flow for assured shorthold tenancy agreement searches, with wording designed for the assured periodic framework from 1 May 2026.',
     url: canonicalUrl,
     type: 'website',
   },
@@ -53,9 +53,9 @@ const faqs = [
       'Because many landlords in England still search using assured shorthold tenancy agreement terminology. This page keeps that search demand while moving users into the newer England agreement flow with more modern wording and stronger product positioning.',
   },
   {
-    question: "How does this relate to Renters' Rights compliant wording?",
+    question: 'How does this relate to the 1 May 2026 England changes?',
     answer:
-      "The page is positioned around a newer England agreement route with Renters' Rights compliant wording. Before publishing any exact compliance claim, your legal or compliance owner should confirm the final approved wording for the live product.",
+      'The page is positioned around a newer England agreement route designed for the assured periodic framework from 1 May 2026. It should not be sold as a new fixed-term AST product in the old sense.',
   },
   {
     question: 'What should an England tenancy agreement include?',

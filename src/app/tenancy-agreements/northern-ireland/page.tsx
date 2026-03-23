@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+﻿import type { Metadata } from 'next';
 import Link from 'next/link';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { getCanonicalUrl } from '@/lib/seo/urls';
@@ -166,7 +166,7 @@ export default function NorthernIrelandTenancyPage() {
           <nav className="text-sm text-gray-600">
             <Link href="/" className="hover:text-red-600">Home</Link>
             <span className="mx-2">/</span>
-            <Link href="/products/ast" className="hover:text-red-600">Tenancy Agreements</Link>
+            <Link href="/tenancy-agreements" className="hover:text-red-600">Tenancy Agreements</Link>
             <span className="mx-2">/</span>
             <span className="text-gray-900">Northern Ireland</span>
           </nav>
@@ -189,13 +189,13 @@ export default function NorthernIrelandTenancyPage() {
             </div>
             <div className="flex gap-4 justify-center flex-wrap">
               <Link
-                href="/products/ast"
+                href="/wizard?product=ast_standard&jurisdiction=northern-ireland&src=ni_tenancy_hub&topic=tenancy"
                 className="hero-btn-secondary"
               >
                 Create Standard - Â£14.99
               </Link>
               <Link
-                href="/products/ast"
+                href="/wizard?product=ast_premium&jurisdiction=northern-ireland&src=ni_tenancy_hub&topic=tenancy"
                 className="hero-btn-primary"
               >
                 Create Premium - Â£24.99
@@ -269,7 +269,7 @@ export default function NorthernIrelandTenancyPage() {
                 </p>
                 <ul className="list-disc list-inside text-gray-700 mt-2 space-y-1">
                   <li>Private Tenancy Agreement (NI)</li>
-                  <li>Residential Tenancy Agreement (Northern Ireland)</li>
+                  <li>Private rental agreement (Northern Ireland)</li>
                   <li>Rental Agreement</li>
                   <li>Letting Agreement</li>
                   <li>Fixed-Term Tenancy (if applicable)</li>
@@ -749,7 +749,7 @@ export default function NorthernIrelandTenancyPage() {
                     <li>âœ“ Clear, professional formatting</li>
                   </ul>
                   <Link
-                    href="/products/ast"
+                    href="/wizard?product=ast_standard&jurisdiction=northern-ireland&src=ni_tenancy_hub&topic=tenancy"
                     className="mt-4 block text-center bg-white text-red-600 px-6 py-3 rounded-lg font-semibold hover:bg-red-50 transition-colors"
                   >
                     Create Standard
@@ -773,7 +773,7 @@ export default function NorthernIrelandTenancyPage() {
                     <li className="font-semibold text-yellow-300">âœ“ Covers HMOs (Houses in Multiple Occupation)</li>
                   </ul>
                   <Link
-                    href="/products/ast"
+                    href="/wizard?product=ast_premium&jurisdiction=northern-ireland&src=ni_tenancy_hub&topic=tenancy"
                     className="mt-4 block text-center bg-white text-purple-600 px-6 py-3 rounded-lg font-semibold hover:bg-purple-50 transition-colors"
                   >
                     Create Premium
@@ -1062,13 +1062,13 @@ export default function NorthernIrelandTenancyPage() {
             </p>
             <div className="flex gap-6 justify-center flex-wrap">
               <Link
-                href="/products/ast"
+                href="/wizard?product=ast_standard&jurisdiction=northern-ireland&src=ni_tenancy_hub&topic=tenancy"
                 className="bg-white text-red-600 px-8 py-4 rounded-lg font-semibold hover:bg-red-50 transition-colors text-lg shadow-lg"
               >
                 Standard - Â£14.99
               </Link>
               <Link
-                href="/products/ast"
+                href="/wizard?product=ast_premium&jurisdiction=northern-ireland&src=ni_tenancy_hub&topic=tenancy"
                 className="bg-yellow-400 text-gray-900 px-8 py-4 rounded-lg font-semibold hover:bg-yellow-300 transition-colors text-lg shadow-lg"
               >
                 Premium - Â£24.99 â­

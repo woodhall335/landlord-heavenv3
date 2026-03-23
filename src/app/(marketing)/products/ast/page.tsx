@@ -11,8 +11,10 @@ import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { PRODUCTS } from '@/lib/pricing/products';
 
 const canonicalUrl = getCanonicalUrl('/products/ast');
-const standardWizardHref = '/wizard?product=ast_standard&src=product_page&topic=tenancy';
-const premiumWizardHref = '/wizard?product=ast_premium&src=product_page&topic=tenancy';
+const standardWizardHref =
+  'https://landlordheaven.co.uk/wizard?product=ast_standard&src=product_page&topic=tenancy';
+const premiumWizardHref =
+  'https://landlordheaven.co.uk/wizard?product=ast_premium&src=product_page&topic=tenancy';
 
 const PRIMARY_BUTTON_CLASS =
   'hero-btn-primary inline-flex items-center justify-center text-center text-base font-semibold';
@@ -68,56 +70,57 @@ type ExplainerPoint = {
 };
 
 const proofPoints = [
-  'Correct agreement type for the property jurisdiction',
-  'Preview before payment',
-  'Saved in your account',
-  'Standard and Premium options for different tenancy setups',
+  'England wording designed for the assured periodic framework from 1 May 2026',
+  'Correct agreement type for England, Wales, Scotland, or Northern Ireland',
+  'Standard for straightforward lets and Premium for higher-risk or more complex setups',
+  'Older wording may lead to weaker protection or complications if issues arise',
 ];
 
 const explainerPoints: ExplainerPoint[] = [
   {
-    title: 'A tenancy agreement sets the rules for the let',
-    body: 'A tenancy agreement is the written contract between landlord and tenant. It usually covers the property, the parties, the rent, the deposit, the tenancy term, and the practical rules that apply during the tenancy.',
+    title: 'The agreement has to match the property jurisdiction',
+    body: 'England, Wales, Scotland, and Northern Ireland use different tenancy frameworks. Starting with the wrong country or using a recycled template from another jurisdiction can leave you with wording that does not reflect the property you are actually letting.',
   },
   {
-    title: 'The correct agreement depends on where the property is',
-    body: 'England, Wales, Scotland, and Northern Ireland do not all use the same residential tenancy framework. Starting with the correct jurisdiction-specific agreement matters.',
+    title: 'England wording has changed',
+    body: 'From 1 May 2026, new England tenancy agreements generally move into the assured periodic framework. Landlords still search for AST wording, but using old fixed-term AST assumptions as the default sales story is no longer the right starting point.',
   },
   {
-    title: 'Written terms reduce confusion and disputes',
-    body: 'A clear written agreement helps show what was agreed on rent, deposits, notice expectations, property use, and the day-to-day responsibilities during the tenancy.',
+    title: 'Old or generic templates can create hidden risk',
+    body: 'While many older tenancy agreements still exist, they may not be legally enforceable in the way landlords expect if they rely on outdated structures or wording. Using an agreement that does not reflect the current England framework can lead to weaker protection or complications if issues arise.',
   },
   {
-    title: 'Generic templates often need too much manual adaptation',
-    body: 'Editing a blank or outdated template can create uncertainty and extra work. Landlord Heaven helps you start with the right structure and wording for the property instead.',
+    title: 'Choosing the right product level matters too',
+    body: 'Some lets are straightforward. Others need stronger wording because of sharers, guarantors, student occupation, or HMO-style risk. Standard and Premium help you choose the right level of cover from the start.',
   },
 ];
 
 const productOptions: ProductCardData[] = [
   {
-    name: 'Standard Residential Tenancy Agreement',
+    name: 'Standard Tenancy Agreement',
     price: PRODUCTS.ast_standard.displayPrice,
-    kicker: 'Most landlords start here',
-    bestFor: 'Straightforward lets, single households, and most standard tenancy setups.',
+    kicker: 'Best for straightforward lets',
+    bestFor: 'Single-household and lower-complexity lets where you want the right jurisdiction-specific agreement without paying for broader drafting you do not need.',
     description:
-      'Use Standard when the tenancy is relatively simple and you want the right agreement for the property without paying for broader clause coverage you do not need.',
+      'Use Standard when the tenancy is relatively simple and you want wording designed for the current legal framework, including the updated England position, without relying on an old or generic template.',
     points: [
-      'Suitable for most standard residential lets',
+      'Designed for most straightforward residential lets',
       'Jurisdiction-specific agreement for the property location',
+      'England route aligned to the new assured periodic framework from 1 May 2026',
       'Guided setup with preview before payment',
       'Saved in your account after purchase',
     ],
     href: standardWizardHref,
-    ctaLabel: `Start Standard - ${PRODUCTS.ast_standard.displayPrice}`,
+    ctaLabel: `Start Standard Tenancy Agreement - ${PRODUCTS.ast_standard.displayPrice}`,
   },
   {
-    name: 'Premium Residential Tenancy Agreement (HMO / student-ready)',
+    name: 'Premium Tenancy Agreement',
     price: PRODUCTS.ast_premium.displayPrice,
     kicker: 'More cover for complex lets',
     bestFor:
       'HMOs, student lets, shared households, guarantor-backed lets, and arrangements that need broader wording from the start.',
     description:
-      'Choose Premium when there are more people, more moving parts, or more risk, and you want broader wording from the start rather than trying to bolt it on later.',
+      'Choose Premium when the let is more complex, the risk profile is higher, or you do not want to discover too late that a simpler agreement leaves gaps in the wording you expected to rely on.',
     points: [
       'Better fit for HMOs, student lets, and shared households',
       'Broader wording for multi-tenant and shared-living setups',
@@ -125,7 +128,7 @@ const productOptions: ProductCardData[] = [
       'Saved in your account and easy to revisit later',
     ],
     href: premiumWizardHref,
-    ctaLabel: `Start Premium - ${PRODUCTS.ast_premium.displayPrice}`,
+    ctaLabel: `Start Premium Tenancy Agreement - ${PRODUCTS.ast_premium.displayPrice}`,
     featured: true,
   },
 ];
@@ -134,13 +137,13 @@ const jurisdictions: JurisdictionCardData[] = [
   {
     name: 'England',
     flag: '/gb-eng.svg',
-    agreementType: 'Residential Tenancy Agreement',
+    agreementType: 'England tenancy agreement',
     summary:
-      "If the property is in England, Landlord Heaven uses a Residential Tenancy Agreement updated for the Renters' Rights Act 2025 and designed for the current England tenancy system.",
+      'For England, Landlord Heaven uses agreement wording designed for the assured periodic tenancy framework that applies to new private lets from 1 May 2026, while still helping landlords who arrive using older AST search language.',
     points: [
-      "Updated for the Renters' Rights Act 2025",
+      "Designed to reflect the Renters' Rights Act changes in England",
       'England-specific wording and structure',
-      'Not positioned as an assured shorthold tenancy for new agreements',
+      'Not sold as a new fixed-term AST in the old sense',
     ],
     href: '/wizard?product=ast_standard&jurisdiction=england&src=product_page&topic=tenancy',
     ctaLabel: `Create England agreement - ${PRODUCTS.ast_standard.displayPrice}`,
@@ -210,15 +213,15 @@ const includedItems: IncludedItem[] = [
   },
   {
     title: 'Tenancy term and occupation structure',
-    body: 'Start with the correct agreement route for the property jurisdiction and the household setup you are actually creating.',
+    body: 'Start with the correct agreement route for the property jurisdiction and the household setup you are actually creating, rather than adapting the wrong legal framework by hand.',
   },
   {
     title: 'Day-to-day rules and responsibilities',
-    body: 'Include the practical terms that usually matter during the tenancy, such as property use, maintenance expectations, and core landlord and tenant obligations.',
+    body: 'Include the practical terms that usually matter during the tenancy, such as property use, maintenance expectations, and the core rights and responsibilities landlords expect the agreement to set out clearly.',
   },
   {
     title: 'Extra wording for more complex arrangements',
-    body: 'Premium is better suited to HMOs, student lets, shared households, guarantor-backed lets, and setups where broader wording is useful from the start.',
+    body: 'Premium is better suited to HMOs, student lets, shared households, guarantor-backed lets, and setups where broader wording is useful from the start rather than being patched in later.',
   },
   {
     title: 'Preview and account access',
@@ -228,20 +231,20 @@ const includedItems: IncludedItem[] = [
 
 const featurePoints: FeaturePoint[] = [
   {
-    title: 'Start with the correct legal route',
-    body: 'The agreement generated depends on where the property is located, so you are not trying to adapt the wrong UK framework by hand.',
+    title: 'Your existing agreement may be out of date',
+    body: 'If your agreement is old, adapted from a free download, or built around pre-2026 England assumptions, it may not be legally enforceable in the way landlords expect if it relies on outdated wording or structure.',
   },
   {
-    title: 'Build it around the actual tenancy',
-    body: 'Answer structured questions about the property, the parties, and the tenancy setup instead of editing a blank document manually.',
+    title: 'The wrong UK template can create risk',
+    body: 'An England tenancy agreement, a Welsh occupation contract, a Scottish PRT, and a Northern Ireland private tenancy agreement are not interchangeable. Using the wrong route can leave gaps in the wording from day one.',
   },
   {
-    title: 'Choose Standard or Premium',
-    body: 'Use Standard for most straightforward lets, or Premium where there are more occupants, more house rules, or a more complex risk profile.',
+    title: 'Choose Standard or Premium deliberately',
+    body: 'Standard suits most straightforward lets. Premium is the stronger fit where sharers, guarantors, student occupation, HMOs, or more operational complexity mean broader wording matters.',
   },
   {
-    title: 'Keep access after purchase',
-    body: 'Your agreement is saved in your Landlord Heaven account so it is easier to revisit later than a one-time generic download.',
+    title: 'Do not rely on a one-off file',
+    body: 'Preview before payment, then keep the finished agreement in your account so you are not left hunting for an old document when you need it later.',
   },
 ];
 
@@ -261,16 +264,18 @@ const howItWorks: FeaturePoint[] = [
 ];
 
 const comparisonHighlights = [
-  'Correct agreement route from the outset',
-  'Structured setup instead of manual editing',
-  'Saved in your account after purchase',
+  'Current England wording',
+  'Correct jurisdiction from the outset',
+  'Standard or Premium matched to the let',
 ];
 
 const comparisonRows: ComparisonRow[] = [
   {
-    label: 'Agreement route',
-    landlordHeaven: 'Built for the correct UK jurisdiction and tenancy framework from the start.',
-    genericTemplate: 'Often starts as a broad tenancy file that needs manual adaptation.',
+    label: 'Legal framing',
+    landlordHeaven:
+      'Designed to reflect the current tenancy framework for the property, including England’s assured periodic shift from 1 May 2026.',
+    genericTemplate:
+      'Often starts with old AST assumptions or broad UK wording that still needs manual judgment.',
   },
   {
     label: 'Setup process',
@@ -280,16 +285,18 @@ const comparisonRows: ComparisonRow[] = [
       'Usually relies on manual editing and working out what should be added or changed.',
   },
   {
-    label: 'What is covered',
+    label: 'What you are relying on',
     landlordHeaven:
-      'Core tenancy terms, financial terms, jurisdiction-specific structure, preview before payment, and account access.',
-    genericTemplate: 'Usually just a document file with limited guidance and no managed workflow.',
+      'Core tenancy terms, financial terms, jurisdiction-specific structure, a guided workflow, preview before payment, and account access afterwards.',
+    genericTemplate:
+      'Usually just a file, with the landlord left to decide whether the clauses are current, complete, or suited to the actual let.',
   },
   {
     label: 'England positioning',
     landlordHeaven:
-      'England is presented as a Residential Tenancy Agreement with current England-first framing.',
-    genericTemplate: 'Often still leans on older AST-era positioning and terminology.',
+      'England is sold as an England tenancy agreement designed for the assured periodic framework, with AST used only as legacy search clarification.',
+    genericTemplate:
+      'Often still leans on old fixed-term AST positioning or leaves the landlord to work out what changed.',
   },
   {
     label: 'After purchase',
@@ -307,7 +314,7 @@ const faqs: FAQItem[] = [
   {
     question: 'Which agreement do I get for my region?',
     answer:
-      'England properties use a Residential Tenancy Agreement. Wales uses an Occupation Contract. Scotland uses a Private Residential Tenancy. Northern Ireland uses a Private Tenancy Agreement.',
+      'England properties use an England tenancy agreement designed for the assured periodic framework from 1 May 2026. Wales uses an Occupation Contract. Scotland uses a Private Residential Tenancy. Northern Ireland uses a Private Tenancy Agreement.',
   },
   {
     question: 'Are the agreements jurisdiction specific?',
@@ -317,7 +324,12 @@ const faqs: FAQItem[] = [
   {
     question: 'Is this still an AST for England?',
     answer:
-      'For new England agreements, Landlord Heaven does not position this as an AST-first product. The England route is presented as a Residential Tenancy Agreement designed for the current England tenancy system.',
+      'Landlords still search using AST language, but from 1 May 2026 new England tenancy agreements generally move into the assured periodic model. Landlord Heaven therefore presents the England route as an England tenancy agreement designed for that current framework rather than as a new fixed-term AST sale.',
+  },
+  {
+    question: 'Can I keep using an older tenancy agreement?',
+    answer:
+      'While many older tenancy agreements still exist, they may not be legally enforceable in the way landlords expect if they rely on outdated structures or wording. Using an agreement that does not reflect the current England framework can lead to weaker protection or complications if issues arise.',
   },
   {
     question: 'What is included in the agreement?',
@@ -337,14 +349,14 @@ const faqs: FAQItem[] = [
   {
     question: 'Why use this instead of a free tenancy template?',
     answer:
-      'The main difference is that Landlord Heaven builds the agreement around the property jurisdiction and tenancy setup you are actually creating, rather than leaving you to adapt a generic blank file by hand.',
+      'Because an old or generic template may no longer reflect the current legal position, may contain outdated clauses, or may use the wrong jurisdiction’s wording. Landlord Heaven builds the agreement around the property, the jurisdiction, and the tenancy setup you are actually creating.',
   },
 ];
 
 export const metadata: Metadata = {
-  title: `Tenancy Agreement UK | Residential Tenancy Agreement, Occupation Contract & PRT | From ${PRODUCTS.ast_standard.displayPrice}`,
+  title: `Tenancy Agreements UK | England Assured Periodic Framework, Wales Occupation Contract & PRT | From ${PRODUCTS.ast_standard.displayPrice}`,
   description:
-    'Create the right tenancy agreement for England, Wales, Scotland, or Northern Ireland. Build a Residential Tenancy Agreement, Occupation Contract, Private Residential Tenancy, or Private Tenancy Agreement with guided setup, preview before payment, and account access.',
+    'Choose the right tenancy agreement for England, Wales, Scotland, or Northern Ireland. Older agreements may not be legally enforceable in the way landlords expect if they rely on outdated wording or structure, so Landlord Heaven uses current England agreement wording designed for the assured periodic framework from 1 May 2026.',
   keywords: [
     'tenancy agreement uk',
     'residential tenancy agreement england',
@@ -359,9 +371,9 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: canonicalUrl },
   openGraph: {
-    title: 'Tenancy Agreement UK | Create the Right Agreement for Your Property',
+    title: 'Tenancy Agreements UK | Current England, Wales, Scotland and NI Routes',
     description:
-      'Build the correct tenancy agreement for England, Wales, Scotland, or Northern Ireland with guided setup, preview before payment, and saved account access.',
+      'Create the right tenancy agreement for the property jurisdiction and avoid relying on outdated wording or structure, with current England agreement wording from 1 May 2026.',
     url: canonicalUrl,
     type: 'website',
   },
@@ -498,20 +510,32 @@ export default function ASTProductPage() {
       <div className="pointer-events-none absolute left-[18%] top-[95rem] h-56 w-56 rounded-full bg-[#ECE6FF] opacity-55 blur-3xl" />
 
       <UniversalHero
-        title="Create the right tenancy agreement for your UK rental property"
-        subtitle="Build the correct landlord agreement for England, Wales, Scotland, or Northern Ireland. Landlord Heaven guides you through the setup and generates the right document for the property jurisdiction, with current wording, clear structure, and preview before payment."
-        trustText="Jurisdiction-specific agreement types - Current housing law framing - Preview before payment - Saved in your account"
-        primaryCta={{
-          label: `Create your tenancy agreement - ${PRODUCTS.ast_standard.displayPrice}`,
-          href: standardWizardHref,
-        }}
-        secondaryCta={{
-          label: 'See UK agreement types',
-          href: '#jurisdictions',
-        }}
+        title="Use a tenancy agreement designed for the current rules"
+        subtitle="Choose the right agreement for the property jurisdiction, including an England tenancy agreement designed for the new assured periodic tenancy framework from 1 May 2026. Older or generic templates may not be legally enforceable in the way landlords expect if they rely on outdated wording or structure."
+        trustText="Current England framework from 1 May 2026 - Older wording may lead to weaker protection if issues arise - Preview before payment"
+        actionsSlot={
+          <div className="grid w-full gap-3 sm:grid-cols-2 lg:max-w-2xl">
+            <div className="rounded-2xl border border-white/20 bg-white/10 p-3 backdrop-blur-sm">
+              <Link href={standardWizardHref} className="hero-btn-primary flex w-full justify-center text-center">
+                Start Standard Tenancy Agreement
+              </Link>
+              <p className="mt-2 text-center text-sm text-white/80">
+                For straightforward lets
+              </p>
+            </div>
+            <div className="rounded-2xl border border-white/20 bg-white/10 p-3 backdrop-blur-sm">
+              <Link href={premiumWizardHref} className="hero-btn-secondary flex w-full justify-center text-center">
+                Start Premium Tenancy Agreement
+              </Link>
+              <p className="mt-2 text-center text-sm text-white/80">
+                For HMOs, guarantors, sharers, student lets, or higher-risk setups
+              </p>
+            </div>
+          </div>
+        }
         mediaSrc="/images/tenancy_agreements.webp"
         mediaAlt="Preview of Landlord Heaven tenancy agreement documents"
-        feature="Create a Residential Tenancy Agreement for England, an Occupation Contract for Wales, a Private Residential Tenancy for Scotland, or a Private Tenancy Agreement for Northern Ireland."
+        feature="England: assured periodic tenancy framework. Wales: occupation contract. Scotland: private residential tenancy. Northern Ireland: private tenancy agreement."
         showTrustPositioningBar
       />
 
@@ -612,16 +636,18 @@ export default function ASTProductPage() {
                   England update
                 </p>
                 <h2 className="mt-3 text-4xl font-bold tracking-tight md:text-5xl">
-                  Residential Tenancy Agreement for England
+                  England agreements designed for the new assured periodic framework
                 </h2>
                 <p className="mt-5 max-w-3xl text-lg leading-8 text-[#E1DBF8]">
-                  If the property is in England, this is no longer sold as an AST-first product.
-                  Landlord Heaven now builds a Residential Tenancy Agreement updated for the
-                  Renters&apos; Rights Act 2025 and designed for the current England tenancy system.
+                  From <strong>1 May 2026</strong>, new England tenancy agreements generally move
+                  into the assured periodic framework. Landlord Heaven therefore sells the England
+                  route as a current England tenancy agreement designed for that framework, not as
+                  a new fixed-term AST in the old sense.
                 </p>
                 <p className="mt-5 max-w-3xl text-lg leading-8 text-[#E1DBF8]">
-                  That means England-specific wording, the right structure for new lets going
-                  forward, and a clearer starting point than relying on older AST-era templates.
+                  Landlords still search using AST language, and we keep that intent visible where
+                  it helps. But the commercial route is built around current England wording so you
+                  are not relying on old template assumptions when the agreement matters most.
                 </p>
 
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
@@ -629,13 +655,13 @@ export default function ASTProductPage() {
                     href="/wizard?product=ast_standard&jurisdiction=england&src=product_page&topic=tenancy"
                     className={PRIMARY_BUTTON_CLASS}
                   >
-                    Start England agreement
+                    Start Standard England agreement
                   </Link>
                   <Link
                     href="/wizard?product=ast_premium&jurisdiction=england&src=product_page&topic=tenancy"
                     className={DARK_SECONDARY_BUTTON_CLASS}
                   >
-                    Start premium England agreement
+                    Start Premium England agreement
                   </Link>
                 </div>
               </div>
@@ -646,10 +672,10 @@ export default function ASTProductPage() {
                 </p>
                 <ul className="mt-5 space-y-4">
                   {[
-                    'Residential Tenancy Agreement for England',
-                    "Updated for the Renters' Rights Act 2025",
-                    'Designed for the current England tenancy system',
-                    'Not positioned as an assured shorthold tenancy for new agreements',
+                    'England wording designed for the assured periodic framework from 1 May 2026',
+                    "Designed to reflect the Renters' Rights Act changes in England",
+                    'Legacy AST search language handled without selling old fixed-term assumptions',
+                    'Clear Standard and Premium routes depending on the let',
                   ].map((item) => (
                     <li
                       key={item}
@@ -733,19 +759,25 @@ export default function ASTProductPage() {
           <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
             <div className="rounded-[2.2rem] bg-gradient-to-br from-[#FBF7F0] via-white to-[#F5F0FF] p-8 shadow-[0_18px_46px_rgba(31,41,55,0.06)]">
               <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#5B56E8]">
-                Why Landlord Heaven
+                Why landlords switch from old templates
               </p>
               <h2 className="mt-3 text-4xl font-bold tracking-tight text-[#141B2D]">
-                Why landlords use this instead of editing a template
+                Your current tenancy agreement may no longer say what you think it says
               </h2>
               <p className="mt-5 text-lg leading-8 text-[#546075]">
-                The main advantage is simple: you start with the right agreement route, answer
-                structured questions, choose the level of cover that fits the let, and keep the
-                finished document in your account afterwards.
+                If your agreement is old, adapted from a free download, or built for the wrong UK
+                jurisdiction, it may not be legally enforceable in the way landlords expect if it
+                relies on outdated structures or wording. Using an agreement that does not reflect
+                the current England framework can lead to weaker protection or complications if
+                issues arise. Landlord Heaven helps you start with the right jurisdiction, the right
+                wording, and the right level of cover from the beginning.
               </p>
-              <div className="mt-8">
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                 <Link href={standardWizardHref} className={PRIMARY_BUTTON_CLASS}>
-                  Start your tenancy agreement
+                  Start Standard Tenancy Agreement
+                </Link>
+                <Link href={premiumWizardHref} className={LIGHT_SECONDARY_BUTTON_CLASS}>
+                  Start Premium Tenancy Agreement
                 </Link>
               </div>
             </div>
@@ -859,20 +891,24 @@ export default function ASTProductPage() {
               Ready when you are
             </p>
             <h2 className="mt-3 text-3xl font-bold tracking-tight md:text-5xl">
-              Create the right tenancy agreement for the property
+              Choose the right tenancy agreement before an old template catches you out
             </h2>
             <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-[#E3DCF8]">
-              Start with the correct jurisdiction, pick Standard or Premium, and preview the
-              agreement before you pay.
+              Start with the correct jurisdiction, pick Standard for a straightforward let or
+              Premium for a more complex one, and do not rely on an older template if the wording
+              or structure no longer reflects the current framework.
             </p>
-            <div className="mt-8">
+            <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <Link href={standardWizardHref} className={PRIMARY_BUTTON_CLASS}>
-                Create your tenancy agreement
+                Start Standard Tenancy Agreement
+              </Link>
+              <Link href={premiumWizardHref} className={DARK_SECONDARY_BUTTON_CLASS}>
+                Start Premium Tenancy Agreement
               </Link>
             </div>
             <p className="mt-4 text-sm text-white/75">
-              Standard from {PRODUCTS.ast_standard.displayPrice} - Premium available for HMOs,
-              student lets, and shared households
+              Standard is designed for straightforward lets. Premium is stronger for HMOs, student
+              lets, guarantors, sharers, and other higher-risk arrangements.
             </p>
           </div>
         </Container>

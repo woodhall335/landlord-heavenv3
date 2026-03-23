@@ -24,6 +24,8 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 
 const astProductHref = '/products/ast';
+const standardWizardHref = '/wizard?product=ast_standard&jurisdiction=northern-ireland&src=ni_tenancy_template&topic=tenancy';
+const premiumWizardHref = '/wizard?product=ast_premium&jurisdiction=northern-ireland&src=ni_tenancy_template&topic=tenancy';
 
 export const metadata: Metadata = {
   title: 'Northern Ireland Tenancy Agreement 2026 | Legally Validated',
@@ -141,8 +143,9 @@ export default function NorthernIrelandTenancyAgreementTemplatePage() {
       <main className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
         <UniversalHero
           title="Northern Ireland Tenancy Agreement"
-          subtitle="Generate a legally validated tenancy agreement for Northern Ireland that is compliance-checked and court-ready."
-          primaryCta={{ label: 'View tenancy agreement packs', href: astProductHref }}
+          subtitle="Generate a legally validated tenancy agreement for Northern Ireland with current private-tenancy wording and clearer Standard or Premium purchase routes."
+          primaryCta={{ label: 'Start Standard NI agreement', href: standardWizardHref }}
+          secondaryCta={{ label: 'Start Premium NI agreement', href: premiumWizardHref }}
           showTrustPositioningBar
           hideMedia
         />
@@ -180,19 +183,19 @@ export default function NorthernIrelandTenancyAgreementTemplatePage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
-                href={astProductHref}
+                href={standardWizardHref}
                 className="inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold px-8 py-4 rounded-lg transition-colors"
               >
                 <RiFileTextLine className="w-5 h-5" />
-                Create Your Agreement
+                Create Standard Agreement
                 <RiArrowRightLine className="w-5 h-5" />
               </Link>
               <Link
-                href="#template-details"
+                href={premiumWizardHref}
                 className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold px-8 py-4 rounded-lg transition-colors"
               >
                 <RiQuestionLine className="w-5 h-5" />
-                View Template Details
+                Create Premium Agreement
               </Link>
             </div>
             <p className="mt-4 text-sm text-emerald-100">
@@ -689,11 +692,11 @@ export default function NorthernIrelandTenancyAgreementTemplatePage() {
               Get a fully compliant Private Tenancy Agreement in under 5 minutes.
             </p>
             <Link
-              href={astProductHref}
+              href={standardWizardHref}
               className="inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold px-8 py-4 rounded-lg transition-colors"
             >
               <RiDownloadLine className="w-5 h-5" />
-              Create Your Agreement
+              Create Standard Agreement
               <RiArrowRightLine className="w-5 h-5" />
             </Link>
           </section>

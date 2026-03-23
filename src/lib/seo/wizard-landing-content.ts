@@ -621,12 +621,12 @@ export const moneyClaimContent: WizardLandingContent = {
  */
 export const astStandardContent: WizardLandingContent = {
   slug: 'tenancy-agreement',
-  title: `Tenancy Agreement Generator 2026 | Residential Tenancy Agreement, Occupation Contract, PRT | ${SEO_PRICES.tenancyStandard.display}`,
+  title: `Tenancy Agreement Generator 2026 | England Tenancy Agreement, Occupation Contract, PRT | ${SEO_PRICES.tenancyStandard.display}`,
   description:
-    "Jurisdiction-specific tenancy agreements: Residential Tenancy Agreement (England), Occupation Contract (Wales), Private Residential Tenancy (Scotland), and Private Tenancy Agreement (Northern Ireland). Updated England wording for the Renters' Rights Act 2025 position.",
+    'Jurisdiction-specific tenancy agreements: England tenancy agreement designed for the assured periodic framework, Occupation Contract (Wales), Private Residential Tenancy (Scotland), and Private Tenancy Agreement (Northern Ireland). Older agreements may not be legally enforceable in the way landlords expect if they rely on outdated wording or structure.',
   h1: 'Tenancy Agreement Generator',
   subheading:
-    "Jurisdiction-specific agreements with updated England Residential Tenancy Agreement wording and the correct terminology for Wales, Scotland, and Northern Ireland",
+    'Jurisdiction-specific agreements with current England tenancy agreement wording and the correct terminology for Wales, Scotland, and Northern Ireland',
 
   product: 'ast_standard',
   wizardUrl: '/wizard?product=ast_standard&src=product_page&topic=tenancy',
@@ -638,16 +638,16 @@ export const astStandardContent: WizardLandingContent = {
     {
       name: 'England',
       flag: 'England',
-      agreementType: 'Residential Tenancy Agreement',
-      legalBasis: "Updated England product wording aligned to the Renters' Rights Act 2025 position",
+      agreementType: 'England tenancy agreement',
+      legalBasis: 'Current England agreement wording aligned to the assured periodic framework from 1 May 2026',
       keyFeatures: [
-        'Updated Residential Tenancy Agreement wording for new England agreements',
+        'Current England tenancy agreement wording for new England agreements',
         'Deposit protection and written-information guidance captured in the wizard',
         'Tenant notice and landlord possession wording updated for the current England product position',
         'No live AST-first or Section 21-led sales positioning in the public England flow',
         'Routes existing written and verbal tenancies into separate England guidance paths',
       ],
-      notes: 'Public England product now sold as a Residential Tenancy Agreement.',
+      notes: 'Public England product now uses current England tenancy agreement wording.',
     },
     {
       name: 'Wales',
@@ -695,7 +695,7 @@ export const astStandardContent: WizardLandingContent = {
 
   whatYouGet: [
     'Tenancy agreement in the correct legal format for your jurisdiction',
-    'Correct agreement type: Residential Tenancy Agreement (England), Occupation Contract (Wales), PRT (Scotland), Private Tenancy (NI)',
+    'Correct agreement type: England tenancy agreement, Occupation Contract (Wales), PRT (Scotland), Private Tenancy (NI)',
     "Core statutory terms required by each jurisdiction's legislation",
     'Property schedules: address, inventory reference, and utilities',
     'Rent and deposit schedule with payment terms',
@@ -709,9 +709,9 @@ export const astStandardContent: WizardLandingContent = {
   whyUseThis: {
     heading: 'Why Jurisdiction-Specific Not A Generic Template',
     intro:
-      "Using the wrong terminology or law for your jurisdiction creates disputes and compliance problems. The live England product now uses Residential Tenancy Agreement wording, while Wales needs an Occupation Contract, Scotland needs a PRT, and Northern Ireland needs its own private tenancy wording.",
+      'Using the wrong terminology or law for your jurisdiction creates disputes and compliance problems. Older agreements may not be legally enforceable in the way landlords expect if they rely on outdated wording or structure. The live England product now uses current England tenancy agreement wording, while Wales needs an Occupation Contract, Scotland needs a PRT, and Northern Ireland needs its own private tenancy wording.',
     benefits: [
-      'Correct agreement type: Residential Tenancy Agreement (England), Standard Occupation Contract (Wales), PRT (Scotland), Private Tenancy (NI)',
+      'Correct agreement type: England tenancy agreement, Standard Occupation Contract (Wales), PRT (Scotland), Private Tenancy (NI)',
       'Correct terminology for each nation instead of generic UK wording',
       'Correct legislation referenced for each jurisdiction',
       'Core statutory terms included: rent, deposit, duration, repair obligations, and termination information',
@@ -762,7 +762,7 @@ export const astStandardContent: WizardLandingContent = {
     {
       question: 'What agreement type do I get for each region?',
       answer:
-        "England: Residential Tenancy Agreement wording in the updated Landlord Heaven public flow. Wales: Standard Occupation Contract. Scotland: Private Residential Tenancy. Northern Ireland: Private Tenancy Agreement.",
+        'England: current England tenancy agreement wording in the updated Landlord Heaven public flow. Wales: Standard Occupation Contract. Scotland: Private Residential Tenancy. Northern Ireland: Private Tenancy Agreement.',
     },
     {
       question: 'Why does using the correct agreement type matter?',
@@ -813,7 +813,7 @@ export const astPremiumContent: WizardLandingContent = {
   slug: 'premium-tenancy-agreement',
   title: `Premium Tenancy Agreement 2026 | HMO Clauses & Guarantor Provisions | ${SEO_PRICES.tenancyPremium.display}`,
   description:
-    "Premium tenancy agreements with HMO clauses, guarantor provisions, inventory and schedule of condition, and compliance checklist. England now uses Residential Tenancy Agreement wording in the public flow.",
+    'Premium tenancy agreements with HMO clauses, guarantor provisions, inventory and schedule of condition, and compliance checklist. England now uses current England tenancy agreement wording in the public flow, and older agreements may not be legally enforceable in the way landlords expect if they rely on outdated wording or structure.',
   h1: 'Premium Tenancy Agreement',
   subheading:
     'HMO clauses, guarantor provisions, inventory and schedule of condition, and compliance checklist for all UK jurisdictions',
@@ -828,10 +828,10 @@ export const astPremiumContent: WizardLandingContent = {
     {
       name: 'England',
       flag: 'England',
-      agreementType: 'Premium Residential Tenancy Agreement',
-      legalBasis: "Updated England product wording with HMO and guarantor support",
+      agreementType: 'Premium England tenancy agreement',
+      legalBasis: 'Current England agreement wording with HMO and guarantor support',
       keyFeatures: [
-        'All Standard Residential clauses plus HMO-ready provisions',
+        'All Standard England agreement clauses plus HMO-ready provisions',
         'Joint and several liability for multi-tenant',
         'Shared facilities rules and responsibilities',
         'Guarantor clauses with clear liability terms',
@@ -982,7 +982,7 @@ export const astPremiumContent: WizardLandingContent = {
     {
       question: 'Which laws apply to each jurisdiction?',
       answer:
-        "England uses updated Residential Tenancy Agreement wording in the current public flow. Wales follows the Renting Homes (Wales) Act 2016. Scotland follows the Private Housing (Tenancies) (Scotland) Act 2016. Northern Ireland follows the Private Tenancies Act (NI) 2022 and related HMO rules where relevant.",
+        'England uses current England tenancy agreement wording in the current public flow. Wales follows the Renting Homes (Wales) Act 2016. Scotland follows the Private Housing (Tenancies) (Scotland) Act 2016. Northern Ireland follows the Private Tenancies Act (NI) 2022 and related HMO rules where relevant.',
     },
     {
       question: 'Do Premium agreements work for single tenants?',

@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+﻿import type { Metadata } from 'next';
 import Link from 'next/link';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
@@ -6,13 +6,13 @@ import { FAQSection } from '@/components/seo/FAQSection';
 import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/ast-template-england');
-const wizardHref = '/products/ast';
-const premiumWizardHref = '/products/ast';
+const wizardHref = '/wizard?product=ast_standard&src=ast_template_england&topic=tenancy';
+const premiumWizardHref = '/wizard?product=ast_premium&src=ast_template_england&topic=tenancy';
 
 export const metadata: Metadata = {
   title: 'England Tenancy Agreement 2026 | AST Template England Updated',
   description:
-    'Create the new 2026 England Tenancy Agreement online. Built for landlords searching for an AST template in England, with updated wording and Renters Rights Bill compliant positioning.',
+    'Create the new 2026 England tenancy agreement online. Built for landlords searching for an AST template in England, with wording designed for the assured periodic framework from 1 May 2026.',
   keywords: [
     'ast template england',
     'assured shorthold tenancy template england',
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'England Tenancy Agreement 2026 | AST Template England Updated',
     description:
-      'Use the new 2026 England Tenancy Agreement flow for AST template England searches, with updated landlord wording and Renters Rights Bill compliant positioning.',
+      'Use the new 2026 England tenancy agreement flow for AST template England searches, with wording designed for the assured periodic framework from 1 May 2026.',
     type: 'website',
     url: canonicalUrl,
   },
@@ -55,9 +55,9 @@ const faqs = [
       'Landlord Heaven now uses broader, more modern England tenancy agreement language so the page better reflects current landlord search intent, updated product positioning, and expected legal change rather than relying only on legacy AST terminology.',
   },
   {
-    question: 'How does this relate to the Renters Rights Bill?',
+    question: 'How does this relate to the 1 May 2026 England changes?',
     answer:
-      'This page is positioned around Renters Rights Bill compliant wording and the updated England agreement flow. Before publishing any legal compliance claim, your compliance owner should confirm the exact approved wording for your product and current legislative status.',
+      'This page is positioned around current England agreement wording designed for the assured periodic framework from 1 May 2026. It should be sold as a current-law route, not as a fixed-term AST product in the old sense.',
   },
   {
     question: 'What should an England tenancy agreement include?',
@@ -125,7 +125,7 @@ export default function ASTTemplateEnglandPage() {
                 If you are searching for an <strong>AST template in England</strong>, this is the
                 updated route. Landlord Heaven now positions the live product as the{' '}
                 <strong>new 2026 England Tenancy Agreement</strong> with{' '}
-                <strong>Renters Rights Bill compliant</strong> wording.
+                <strong>current England agreement wording designed for the assured periodic framework from 1 May 2026</strong>.
               </p>
 
               <p className="text-lg text-gray-600 max-w-3xl mx-auto mb-8">
@@ -265,8 +265,8 @@ export default function ASTTemplateEnglandPage() {
                 How it relates to the Renters’ Rights Bill
               </h2>
               <p className="text-gray-700 text-center mb-10 max-w-3xl mx-auto">
-                The updated England route is positioned around <strong>Renters Rights Bill compliant</strong>{' '}
-                wording rather than older AST-only product framing.
+                The updated England route is positioned around <strong>current England agreement wording designed for the assured periodic framework from 1 May 2026</strong>{' '}
+                rather than older AST-only product framing.
               </p>
 
               <div className="space-y-5 text-gray-700 leading-relaxed">
@@ -280,8 +280,8 @@ export default function ASTTemplateEnglandPage() {
                 <p>
                   Positioning the page around the <strong>new 2026 England Tenancy Agreement</strong>{' '}
                   lets Landlord Heaven keep historic AST search relevance while moving the product
-                  language into a more modern framework that references{' '}
-                  <strong>Renters Rights Bill</strong> expectations.
+                  language into a more modern framework that reflects the{' '}
+                  <strong>current England position from 1 May 2026</strong>.
                 </p>
 
                 <p>
@@ -292,8 +292,9 @@ export default function ASTTemplateEnglandPage() {
 
                 <p>
                   For publication, make sure your compliance owner is happy with the exact phrase
-                  “Renters Rights Bill compliant.” If they prefer softer language, replace it with
-                  “bill-ready” or “updated for Renters’ Rights Bill changes.”
+                  “current England agreement wording designed for the assured periodic framework from 1 May 2026.”
+                  If they prefer softer language, replace it with “built around the current England framework”
+                  or “designed to reflect the current England position.”
                 </p>
               </div>
             </div>

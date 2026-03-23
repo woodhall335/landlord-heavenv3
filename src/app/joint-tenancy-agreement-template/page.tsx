@@ -5,25 +5,24 @@ import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/joint-tenancy-agreement-template');
-const standardHref = '/products/ast';
-const premiumHref = '/premium-tenancy-agreement';
+const standardWizardHref = '/wizard?product=ast_standard&src=england_tenancy_page&topic=tenancy';
+const premiumWizardHref = '/wizard?product=ast_premium&src=england_tenancy_page&topic=tenancy';
 
 export const metadata: Metadata = {
   title: 'Joint Tenancy Agreement England 2026 | Multiple Tenant Agreement',
   description:
-    "Create a joint tenancy agreement for England with updated Residential Tenancy Agreement wording, multiple-tenant clauses, and Renters' Rights compliant positioning.",
+    'Create a joint tenancy agreement for England with current England wording, multiple-tenant clauses, and a clear Standard or Premium route depending on the complexity of the let.',
   keywords: [
     'joint tenancy agreement template',
     'joint tenancy agreement england',
     'multiple tenants tenancy agreement',
     'shared house tenancy agreement',
-    'new tenancy agreement england',
   ],
   alternates: { canonical: canonicalUrl },
   openGraph: {
     title: 'Joint Tenancy Agreement England 2026 | Multiple Tenant Agreement',
     description:
-      'England joint tenancy agreement page for multiple tenants, couples, and shared households using the updated Residential Tenancy Agreement flow.',
+      'England joint tenancy agreement page for multiple tenants, couples, and shared households using the current England agreement routes.',
     url: canonicalUrl,
     type: 'website',
   },
@@ -42,26 +41,26 @@ export default function JointTenancyAgreementTemplatePage() {
       <EnglandTenancyPage
         pagePath="/joint-tenancy-agreement-template"
         title="Joint Tenancy Agreement England"
-        subtitle="Create England tenancy paperwork for couples, flatmates, and multi-tenant households through the updated Residential Tenancy Agreement flow."
-        primaryCtaLabel="Create standard joint agreement"
-        primaryCtaHref={standardHref}
-        secondaryCtaLabel="Use premium HMO or student-ready flow"
-        secondaryCtaHref={premiumHref}
-        introTitle="Multiple tenants, updated England wording"
+        subtitle="Create England tenancy paperwork for couples, flatmates, and multi-tenant households through the current England agreement routes."
+        primaryCtaLabel="Start Standard joint agreement"
+        primaryCtaHref={standardWizardHref}
+        secondaryCtaLabel="Start Premium joint agreement"
+        secondaryCtaHref={premiumWizardHref}
+        introTitle="Multiple tenants, current England wording"
         introBody={[
           'This page targets landlords who need a joint tenancy agreement for England without falling back to old AST-first sales language.',
-          'The live Landlord Heaven route now uses Residential Tenancy Agreement wording, while still supporting multiple tenants, shared households, and premium HMO or student-ready drafting where needed.',
+          'The live Landlord Heaven routes now use current England agreement wording, while still supporting multiple tenants, shared households, and Premium drafting where the arrangement is more complex.',
         ]}
         highlights={[
           'Multiple-tenant and joint liability drafting support',
-          'England Residential Tenancy Agreement wording instead of live AST sales copy',
-          'Premium HMO or student-ready route available for more complex lets',
-          'Built to capture joint tenancy search demand while keeping the updated England product position',
+          'Current England wording instead of live AST sales copy',
+          'Premium route available for more complex sharer, HMO, or student lets',
+          'Built to capture joint tenancy search demand while keeping the current England product position',
         ]}
         compliancePoints={[
-          "Aligned to the Renters' Rights compliant England tenancy rollout",
+          'Aligned to the current England tenancy rollout',
           'Keeps joint tenancy search coverage without reverting to AST-first public copy',
-          'Routes landlords into the updated wizard labels and support documents',
+          'Routes landlords into the updated Standard and Premium flows',
         ]}
         keywordTargets={[
           'joint tenancy agreement template',
@@ -73,22 +72,20 @@ export default function JointTenancyAgreementTemplatePage() {
           {
             question: 'Can I still use this for multiple tenants in one property?',
             answer:
-              'Yes. The page still targets shared-house and joint-tenancy demand, but the live England document path now uses Residential Tenancy Agreement wording.',
+              'Yes. The page still targets shared-house and joint-tenancy demand, but the live England document path now uses current England agreement wording.',
           },
           {
             question: 'Should I use the premium version for student or HMO cases?',
             answer:
-              'Usually yes. The premium England route is the better fit where you need HMO-ready or student-oriented clauses on top of the updated core agreement wording.',
+              'Usually yes. The Premium England route is the better fit where you need HMO-ready or student-oriented clauses on top of the current core agreement wording.',
           },
           {
             question: 'Does this page still sell joint ASTs as the live product?',
             answer:
-              'No. It now sells the updated England Residential Tenancy Agreement flow for joint tenants and shared households.',
+              'No. It now sells the current England agreement flow for joint tenants and shared households.',
           },
         ]}
       />
     </div>
   );
 }
-
-

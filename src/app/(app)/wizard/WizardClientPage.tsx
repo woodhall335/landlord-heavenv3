@@ -81,21 +81,21 @@ function getHeroContent(product: string | null, jurisdiction: string | null): He
       };
     case 'ast_standard':
       return {
-        title: jurisdiction === 'england' ? 'Standard Residential Tenancy Agreement' : 'Standard Tenancy Agreement',
+        title: jurisdiction === 'england' ? 'Standard England Tenancy Agreement' : 'Standard Tenancy Agreement',
         subtitle: jurisdiction === 'scotland'
           ? 'Private Residential Tenancy (PRT) for Scotland'
           : jurisdiction === 'wales'
             ? 'Standard Occupation Contract for Wales'
             : jurisdiction === 'northern-ireland'
               ? 'Private Tenancy Agreement for NI'
-        : "Renters' Rights compliant England Residential Tenancy Agreement",
-        eyebrow: jurisdiction === 'scotland' ? 'PRT' : jurisdiction === 'wales' ? 'Occupation Contract' : jurisdiction === 'england' ? 'Residential Agreement' : 'Tenancy Agreement',
+        : 'England tenancy agreement designed for the assured periodic framework from 1 May 2026',
+        eyebrow: jurisdiction === 'scotland' ? 'PRT' : jurisdiction === 'wales' ? 'Occupation Contract' : jurisdiction === 'england' ? 'England Agreement' : 'Tenancy Agreement',
       };
     case 'ast_premium':
       return {
-        title: jurisdiction === 'england' ? 'Premium Residential Tenancy Agreement' : 'Premium Tenancy Agreement',
+        title: jurisdiction === 'england' ? 'Premium England Tenancy Agreement' : 'Premium Tenancy Agreement',
         subtitle: jurisdiction === 'england'
-        ? "Renters' Rights compliant England residential tenancy agreement with HMO, student-ready, and premium compliance wording"
+        ? 'England tenancy agreement for HMOs, student lets, and more complex households under the assured periodic framework'
           : 'Occupation Contract (Wales), PRT (Scotland), or NI private tenancy with compliance checklist',
         eyebrow: 'Premium',
       };
@@ -171,7 +171,7 @@ const documentOptions: DocumentOption[] = [
   {
     type: 'tenancy_agreement',
     title: 'Tenancy Agreements',
-    description: 'Residential Tenancy Agreement (England), Occupation Contract (Wales), PRT (Scotland), or NI private tenancy agreement pack',
+    description: 'England tenancy agreement, Occupation Contract (Wales), PRT (Scotland), or NI private tenancy agreement pack',
     icon: RiFileCheckLine,
     price: `From ${PRODUCTS.ast_standard.displayPrice}`,
   },

@@ -48,7 +48,7 @@ export function EnglandTenancyPage({
     <main className="min-h-screen bg-[#FCFBF8]">
       <UniversalHero
         badge="England tenancy agreements"
-        trustText="Legally compliant - Updated for current housing law - England tenancy route"
+        trustText="Updated England tenancy agreement wording - Assured periodic framework from 1 May 2026 - Older wording may be harder to rely on if issues arise"
         title={title}
         subtitle={subtitle}
         primaryCta={{ label: primaryCtaLabel, href: primaryCtaHref }}
@@ -57,7 +57,7 @@ export function EnglandTenancyPage({
             ? { label: secondaryCtaLabel, href: secondaryCtaHref }
             : undefined
         }
-        feature="Updated England wording, guided setup, preview before payment, and account access after purchase."
+        feature="Older agreements may not be legally enforceable in the way landlords expect if they rely on outdated wording or structure."
         showTrustPositioningBar
         hideMedia
       />
@@ -99,7 +99,7 @@ export function EnglandTenancyPage({
 
           <div className="rounded-[2rem] border border-[#D9D7F7] bg-gradient-to-br from-[#F5F1FF] via-white to-[#F7F8FF] p-6 shadow-[0_14px_32px_rgba(91,86,232,0.08)]">
             <h2 className="text-2xl font-bold tracking-tight text-[#141B2D]">
-              How the England route is framed
+              Why landlords update older England agreements
             </h2>
             <ul className="mt-5 space-y-3 text-[#465066]">
               {compliancePoints.map((item) => (
@@ -115,7 +115,7 @@ export function EnglandTenancyPage({
         {faqs.length ? (
           <FAQSection
             title="England tenancy agreement FAQs"
-            intro="Clear answers on the England route, the updated terminology, and which version to choose."
+            intro="Clear answers on the England route, the updated terminology, and why older wording may be harder to rely on."
             faqs={faqs}
             showContactCTA={false}
             variant="gray"
@@ -124,11 +124,13 @@ export function EnglandTenancyPage({
 
         <section className="mt-12 rounded-[2.2rem] bg-gradient-to-br from-[#201739] via-[#31205B] to-[#5641A4] p-8 text-center text-white shadow-[0_28px_72px_rgba(46,29,86,0.28)] md:p-10">
           <h2 className="text-2xl font-bold tracking-tight md:text-3xl">
-            Start the England agreement
+            Choose the right England agreement route
           </h2>
           <p className="mx-auto mt-3 max-w-2xl text-base leading-8 text-[#E1DBF8] md:text-lg">
-            Use the live England Residential Tenancy Agreement route, answer the setup questions,
-            and generate the version that fits the property and household.
+            Start with the route that fits the let now, not the template language you may have
+            used years ago. Older agreements may be harder to rely on if wording or structure is
+            outdated. Use Standard for straightforward England lets and Premium where the
+            household or risk profile is more complex.
           </p>
           <div className="mt-6 flex flex-wrap items-center justify-center gap-4">
             <Link

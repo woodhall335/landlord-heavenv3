@@ -37,14 +37,14 @@ const PAGE_TYPE = 'tenancy' as const;
 
 const canonicalUrl = getCanonicalUrl(PAGE_PATH);
 
-const wizardLinkStandard = '/products/ast';
-const wizardLinkPremium = '/premium-tenancy-agreement';
+const wizardLinkStandard = '/wizard?product=ast_standard&src=england_tenancy_hub&topic=tenancy';
+const wizardLinkPremium = '/wizard?product=ast_premium&src=england_tenancy_hub&topic=tenancy';
 
 const faqs = [
   {
     question: 'What is this England tenancy agreements page for?',
     answer:
-      'This is the main England landing page for landlords comparing the standard and premium Landlord Heaven agreement routes before starting the wizard. It is designed to capture tenancy agreement and AST search demand while leading users into the current Residential Tenancy Agreement positioning for new England lets.',
+      'This is the main England landing page for landlords comparing the standard and premium Landlord Heaven agreement routes before starting the wizard. It is designed to capture tenancy agreement and AST search demand while leading users into the current England agreement route for new England lets.',
   },
   {
     question: 'Is this page only for properties in England?',
@@ -52,9 +52,9 @@ const faqs = [
       'Yes. This page is for England only. Wales, Scotland, and Northern Ireland each use different legal frameworks, terminology, and agreement structures, so landlords should use the page that matches the location of the property.',
   },
   {
-    question: 'Why does this page use Residential Tenancy Agreement wording instead of only saying AST?',
+    question: 'Why does this page use current England agreement wording instead of only saying AST?',
     answer:
-      'Because many landlords still search with AST wording, but the stronger live England product position for new agreements is now framed around Residential Tenancy Agreement language. The page still serves legacy AST search intent, but it does not need to present old AST-first sales wording as the main live product story.',
+      'Because many landlords still search with AST wording, but the stronger live England product position for new agreements is now framed around current England agreement wording. The page still serves legacy AST search intent, but it does not need to present old AST-first sales wording as the main live product story.',
   },
   {
     question: 'Can I still use this page if I searched for an assured shorthold tenancy agreement?',
@@ -95,9 +95,9 @@ const faqs = [
 
 export const metadata: Metadata = {
   title:
-    'Tenancy Agreements England | Residential Tenancy Agreement for Landlords',
+    'Tenancy Agreements England | Current England Agreement Routes',
   description:
-    'Compare England tenancy agreement routes for landlords. Understand legacy AST search language, current Residential Tenancy Agreement wording, and when to choose a standard or premium England agreement.',
+    'Compare updated England tenancy agreement routes for landlords. Older agreements may not be legally enforceable in the way landlords expect if they rely on outdated wording or structure, so this page explains the current England agreement route and when to choose Standard or Premium.',
   keywords: [
     'tenancy agreements england',
     'england tenancy agreement',
@@ -115,9 +115,9 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title:
-      'Tenancy Agreements England | Residential Tenancy Agreement for Landlords',
+      'Tenancy Agreements England | Current England Agreement Routes',
     description:
-      'Choose the right England tenancy agreement route for a straightforward or more complex let, with stronger Residential Tenancy Agreement positioning and clear standard-vs-premium guidance.',
+      'Choose the right England tenancy agreement route for a straightforward or more complex let and avoid relying on outdated wording or structure.',
     url: canonicalUrl,
     type: 'article',
     siteName: 'Landlord Heaven',
@@ -126,9 +126,9 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title:
-      'Tenancy Agreements England | Residential Tenancy Agreement for Landlords',
+      'Tenancy Agreements England | Current England Agreement Routes',
     description:
-      'Compare standard and premium England tenancy agreement routes and start the right drafting flow.',
+      'Compare standard and premium England tenancy agreement routes and avoid relying on outdated wording or structure.',
   },
   robots: {
     index: true,
@@ -151,9 +151,9 @@ export default function EnglandTenancyAgreementsPage() {
       <StructuredData
         data={articleSchema({
           headline:
-            'Tenancy Agreements England | Residential Tenancy Agreement for Landlords',
+            'Tenancy Agreements England | Current England Agreement Routes',
           description:
-            'Main England tenancy agreements landing page comparing standard and premium Residential Tenancy Agreement routes for landlords.',
+            'Main England tenancy agreements landing page comparing standard and premium current England agreement routes for landlords.',
           url: canonicalUrl,
           datePublished: '2026-03-01',
           dateModified: '2026-03-20',
@@ -176,9 +176,11 @@ export default function EnglandTenancyAgreementsPage() {
             <>
               Use this page to compare the main <strong>England tenancy agreement</strong>{' '}
               routes for new lets, understand the move from legacy <strong>AST</strong>{' '}
-              search language to current <strong>Residential Tenancy Agreement</strong>{' '}
+              search language to current <strong>England agreement</strong>{' '}
               wording, and choose the right path for a straightforward or more complex
-              tenancy.
+              tenancy under the assured periodic framework from <strong>1 May 2026</strong>.
+              Older agreements may not be legally enforceable in the way landlords expect
+              if they rely on outdated wording or structure.
             </>
           }
           primaryCta={{
@@ -195,7 +197,7 @@ export default function EnglandTenancyAgreementsPage() {
           <div className="mt-6 flex flex-wrap items-center justify-center gap-6 text-sm text-gray-700">
             <span className="flex items-center gap-2">
               <CheckCircle className="h-4 w-4 text-green-500" />
-              England-specific wording
+              Updated England framework from 1 May 2026
             </span>
             <span className="flex items-center gap-2">
               <Shield className="h-4 w-4 text-green-500" />
@@ -203,7 +205,7 @@ export default function EnglandTenancyAgreementsPage() {
             </span>
             <span className="flex items-center gap-2">
               <Clock className="h-4 w-4 text-green-500" />
-              Instant online creation
+              Older wording may be harder to rely on
             </span>
           </div>
         </UniversalHero>
@@ -246,10 +248,16 @@ export default function EnglandTenancyAgreementsPage() {
               <p className="mt-4 leading-7 text-gray-700">
                 It also handles a terminology shift. Many landlords still search using
                 AST-led language because that is how the market spoke for years. The live
-                England product story now sits more naturally under Residential Tenancy
-                Agreement wording for new agreements. This page keeps the legacy search
+                England product story now sits more naturally under current England
+                agreement wording for new agreements. This page keeps the legacy search
                 language visible for discoverability, but it leads users into the current
                 product direction rather than pretending nothing has changed.
+              </p>
+              <p className="mt-4 leading-7 text-gray-700">
+                That matters because older agreements may not be legally enforceable in the
+                way landlords expect if they rely on outdated wording or structure. Using
+                an agreement that does not reflect the current England framework can lead to
+                weaker protection or complications if issues arise.
               </p>
             </div>
           </div>
@@ -269,7 +277,7 @@ export default function EnglandTenancyAgreementsPage() {
                   What this page is for
                 </a>
                 <a href="#ast-vs-residential-wording" className="rounded-lg border border-[#E6DBFF] px-4 py-3 text-primary hover:bg-[#F8F4FF]">
-                  AST wording vs Residential Tenancy Agreement
+                  AST wording vs current England agreement wording
                 </a>
                 <a href="#standard-vs-premium" className="rounded-lg border border-[#E6DBFF] px-4 py-3 text-primary hover:bg-[#F8F4FF]">
                   Standard vs premium
@@ -329,7 +337,7 @@ export default function EnglandTenancyAgreementsPage() {
                   makes clear that this is an England-only route, not a UK-wide page with
                   loose wording recycled from other jurisdictions. Second, it explains the
                   terminology and product-positioning shift from older AST-led search
-                  language to current Residential Tenancy Agreement wording for new
+                  language to current England tenancy agreement wording for new
                   England agreements. Third, it helps landlords compare standard and
                   premium in practical terms, based on the complexity of the tenancy they
                   are actually about to grant.
@@ -356,7 +364,8 @@ export default function EnglandTenancyAgreementsPage() {
                   <h3 className="text-xl font-semibold text-gray-900">Current product framing</h3>
                   <p className="mt-3 leading-7 text-gray-700">
                     It explains why legacy AST search terms still matter while the live
-                    route is positioned around Residential Tenancy Agreement wording.
+                    route is positioned around current England agreement wording, and why
+                    older wording may be harder to rely on if issues arise.
                   </p>
                 </div>
 
@@ -379,7 +388,7 @@ export default function EnglandTenancyAgreementsPage() {
           <div className="container mx-auto px-4">
             <div className="mx-auto max-w-5xl">
               <h2 className="text-3xl font-bold text-gray-900">
-                Legacy AST search language vs current Residential Tenancy Agreement wording
+                Legacy AST search language vs current England agreement wording
               </h2>
               <div className="mt-6 space-y-6 text-gray-700">
                 <p className="leading-7">
@@ -401,7 +410,7 @@ export default function EnglandTenancyAgreementsPage() {
                   on AST-first sales copy.
                 </p>
                 <p className="leading-7">
-                  Residential Tenancy Agreement wording gives the England offer a stronger
+                  Current England agreement wording gives the England offer a stronger
                   and more modern public-facing identity. It allows the page to rank for
                   the language users still type into search while gradually moving the
                   customer journey onto wording that is easier to sustain as the wider
@@ -439,7 +448,7 @@ export default function EnglandTenancyAgreementsPage() {
                     <tr>
                       <td className="p-4 text-gray-700">User wants a current England product page</td>
                       <td className="p-4 text-gray-700">
-                        Lead with Residential Tenancy Agreement wording for new agreements.
+                        Lead with current England agreement wording for new agreements.
                       </td>
                     </tr>
                     <tr>

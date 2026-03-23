@@ -5,24 +5,25 @@ import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/fixed-term-periodic-tenancy-england');
-const wizardHref = '/products/ast';
+const wizardHref = '/wizard?product=ast_standard&src=fixed_term_periodic_tenancy_england&topic=tenancy';
+const premiumWizardHref = '/wizard?product=ast_premium&src=fixed_term_periodic_tenancy_england&topic=tenancy';
 
 export const metadata: Metadata = {
-  title: 'Fixed Term vs Periodic Tenancy England | Legacy Structure Guide',
+  title: 'Fixed Term vs Periodic Tenancy England | Legacy Search Guide 2026',
   description:
-    "England guide for landlords searching fixed-term or periodic tenancy structures. The live Landlord Heaven route now uses a Residential Tenancy Agreement flow instead of fixed-term AST-first product positioning.",
+    'England guide for landlords comparing fixed-term and periodic tenancy search language. From 1 May 2026, new agreements generally move into the assured periodic framework.',
   keywords: [
     'fixed term tenancy agreement england',
     'periodic tenancy agreement england',
     'fixed term vs periodic tenancy',
     'rolling tenancy england',
-    'new tenancy agreement england',
+    'assured periodic tenancy england',
   ],
   alternates: { canonical: canonicalUrl },
   openGraph: {
-    title: 'Fixed Term vs Periodic Tenancy England | Legacy Structure Guide',
+    title: 'Fixed Term vs Periodic Tenancy England | Legacy Search Guide 2026',
     description:
-      'Compare fixed-term and rolling search intent while moving into the updated England Residential Tenancy Agreement flow.',
+      'Compare fixed-term and rolling search intent while moving into the current England agreement route designed for the assured periodic framework.',
     url: canonicalUrl,
     type: 'website',
   },
@@ -41,27 +42,27 @@ export default function FixedTermPeriodicTenancyEnglandPage() {
       <EnglandTenancyPage
         pagePath="/fixed-term-periodic-tenancy-england"
         title="Fixed Term vs Periodic Tenancy England"
-        subtitle="This England guide stays live for fixed-term and rolling-tenancy search demand, but the live Landlord Heaven product is now the updated Residential Tenancy Agreement flow."
-        primaryCtaLabel="Start England agreement"
+        subtitle="This page stays live for fixed-term and rolling-tenancy search demand, but from 1 May 2026 new England agreements generally move into the assured periodic framework rather than a new fixed-term AST model."
+        primaryCtaLabel="Start Standard England agreement"
         primaryCtaHref={wizardHref}
-        secondaryCtaLabel="View the main England agreement page"
-        secondaryCtaHref="/tenancy-agreement"
-        legacyNotice="Fixed-term and rolling-tenancy search demand still matters in England, but Landlord Heaven no longer positions a fixed-term AST as the core self-serve product route."
-        introTitle="Legacy tenancy-structure query, updated England product"
+        secondaryCtaLabel="Start Premium England agreement"
+        secondaryCtaHref={premiumWizardHref}
+        legacyNotice="Landlords still search for fixed-term and rolling tenancy language, but Landlord Heaven no longer sells a new fixed-term AST as the core England product route."
+        introTitle="Legacy structure search, current England wording"
         introBody={[
           'Landlords still search for fixed-term and periodic tenancy structures, so this page remains live as an explainer rather than a fixed-term AST sales page.',
-          "The live England route now uses Residential Tenancy Agreement wording and Renters' Rights compliant product positioning instead of promoting fixed-term AST structures as the default path.",
+          'The live England route now uses current England tenancy agreement wording designed for the assured periodic framework from 1 May 2026.',
         ]}
         highlights={[
           'Captures fixed-term and rolling-tenancy search intent for England',
-          'Routes landlords into the updated Residential Tenancy Agreement wizard',
-          'Explains the terminology shift without keeping live AST-first sales copy',
-          'Supports the updated England tenancy product position across SEO pages',
+          'Routes landlords into the current Standard or Premium England agreement flow',
+          'Explains the terminology shift without keeping outdated AST sales copy',
+          'Helps landlords compare old search language with the current framework',
         ]}
         compliancePoints={[
-          "Makes clear that fixed-term AST language is now legacy search framing on Landlord Heaven's England pages",
-          "Keeps the live CTA path on the updated England Residential Tenancy Agreement flow",
-          "Avoids live Section 21-led tenancy framing on the page itself",
+          'Makes clear that fixed-term AST language is now legacy search framing on Landlord Heaven England pages',
+          'Keeps the live CTA path on the current England agreement flow',
+          'Avoids presenting a new fixed-term AST as the default England route',
         ]}
         keywordTargets={[
           'fixed term tenancy agreement england',
@@ -73,22 +74,20 @@ export default function FixedTermPeriodicTenancyEnglandPage() {
           {
             question: 'Does Landlord Heaven still sell fixed-term ASTs as the main England product?',
             answer:
-              'No. This page now exists to handle search intent and explain the topic, while the live product route is the updated Residential Tenancy Agreement flow.',
+              'No. This page now exists to handle search intent and explain the topic, while the live product route is the current England agreement flow designed for the assured periodic framework.',
           },
           {
-            question: 'Why keep this page live if the product has changed?',
+            question: 'Why keep this page live if the product position changed?',
             answer:
-              'Because landlords still search for fixed-term and periodic tenancy terms. Keeping the page live preserves rankings while steering users into the updated England path.',
+              'Because landlords still search for fixed-term and periodic tenancy terms. Keeping the page live preserves rankings while steering users into the current England path.',
           },
           {
             question: 'Where do I start the current England agreement flow?',
             answer:
-              'Use the CTA on this page to open the live England tenancy wizard, which now uses Residential Tenancy Agreement wording throughout the public flow.',
+              'Use the CTA on this page to open the live England tenancy wizard and then choose the Standard or Premium route that matches the let.',
           },
         ]}
       />
     </div>
   );
 }
-
-

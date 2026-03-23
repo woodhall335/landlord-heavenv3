@@ -5,24 +5,25 @@ import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/tenancy-agreement');
-const wizardHref = '/products/ast';
+const standardWizardHref = '/wizard?product=ast_standard&src=england_tenancy_page&topic=tenancy';
+const premiumWizardHref = '/wizard?product=ast_premium&src=england_tenancy_page&topic=tenancy';
 
 export const metadata: Metadata = {
-  title: 'New Tenancy Agreement England | Residential Tenancy Agreement',
+  title: 'New England Tenancy Agreement | Standard and Premium Routes',
   description:
-    "Create a new tenancy agreement England landlords can use now through the Residential Tenancy Agreement route updated for the Renters' Rights Act 2025.",
+    'Create an updated England tenancy agreement designed for the assured periodic framework from 1 May 2026. Older agreements may not be legally enforceable in the way landlords expect if they rely on outdated wording or structure.',
   keywords: [
     'new tenancy agreement england',
-    'renters rights compliant tenancy agreement',
+    'england tenancy agreement assured periodic',
     'renters rights act tenancy agreement',
-    'new residential tenancy agreement',
+    'current england tenancy agreement',
     'england tenancy agreement 2026',
   ],
   alternates: { canonical: canonicalUrl },
   openGraph: {
-    title: 'New Tenancy Agreement England | Residential Tenancy Agreement',
+    title: 'New England Tenancy Agreement | Standard and Premium Routes',
     description:
-      'Create a new England Residential Tenancy Agreement for standard new lets through the updated England route.',
+      'Create an updated England tenancy agreement designed for the assured periodic framework from 1 May 2026 instead of relying on outdated wording or structure.',
     url: canonicalUrl,
     type: 'website',
   },
@@ -41,27 +42,27 @@ export default function TenancyAgreementPage() {
       <EnglandTenancyPage
         pagePath="/tenancy-agreement"
         title="New Tenancy Agreement England"
-        subtitle="Create a new tenancy agreement for England through the Residential Tenancy Agreement route updated for the Renters' Rights Act 2025. This is the main entry point for standard new lets."
-        primaryCtaLabel="Create standard agreement"
-        primaryCtaHref={wizardHref}
-        secondaryCtaLabel="View premium agreement"
-        secondaryCtaHref="/premium-tenancy-agreement"
+        subtitle="Create an updated England tenancy agreement designed for the assured periodic framework from 1 May 2026. Older agreements may not be legally enforceable in the way landlords expect if they rely on outdated wording or structure, so start with Standard for straightforward lets or move to Premium when the household or risk profile is more complex."
+        primaryCtaLabel="Start Standard tenancy agreement"
+        primaryCtaHref={standardWizardHref}
+        secondaryCtaLabel="Start Premium tenancy agreement"
+        secondaryCtaHref={premiumWizardHref}
         introTitle="New tenancy agreement for England"
         introBody={[
           'If you need a new tenancy agreement for a property in England, this is the main Landlord Heaven route for a standard new let.',
-          'It uses the Residential Tenancy Agreement model rather than old AST-first sales wording, and it is designed for the current England tenancy system.',
+          'Landlords still search using AST language, but from 1 May 2026 new England agreements generally move into the assured periodic model. Older agreements may not be legally enforceable in the way landlords expect if they rely on outdated wording or structure, so this page uses current England wording instead of selling a new fixed-term AST in the old sense.',
         ]}
         highlights={[
-          'Main entry point for standard new England lets',
-          'Residential Tenancy Agreement wording for England',
+          'Updated England agreement route for standard new lets',
+          'Current England tenancy agreement wording',
+          'Avoid relying on outdated wording or structure',
           'Guided setup with preview before payment',
-          'Saved in your account after purchase',
         ]}
         compliancePoints={[
-          "Updated for the Renters' Rights Act 2025",
-          'Designed for the new England tenancy system',
-          'Not positioned as an assured shorthold tenancy for new agreements',
-          'No live Section 21 positioning in the core England tenancy product path',
+          "Designed to reflect the Renters' Rights Act changes from 1 May 2026",
+          'Built for the assured periodic framework used for new England lets',
+          'Using wording that does not reflect the current England framework can lead to weaker protection or complications if issues arise',
+          'AST kept only as legacy search language, not the live product framing',
         ]}
         faqs={[
           {
@@ -72,7 +73,12 @@ export default function TenancyAgreementPage() {
           {
             question: 'Is this still an AST?',
             answer:
-              "No. For new England agreements, the live product is positioned as a Residential Tenancy Agreement updated for the Renters' Rights Act 2025 rather than an AST-first product.",
+              'Landlords still search using AST language, but the live route is now framed as an England tenancy agreement designed for the assured periodic framework from 1 May 2026 rather than as a new fixed-term AST product.',
+          },
+          {
+            question: 'Can I keep using an older tenancy agreement?',
+            answer:
+              'While many older tenancy agreements still exist, they may not be legally enforceable in the way landlords expect if they rely on outdated structures or wording. Using an agreement that does not reflect the current England framework can lead to weaker protection or complications if issues arise.',
           },
           {
             question: 'What if I need a more complex England agreement?',

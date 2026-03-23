@@ -81,6 +81,15 @@ const HERO_POOL_BUCKETS: Array<{
 
 const heroesByTemplateKey = new Map(manifest.heroes.map((entry) => [entry.templateKey, toPublicPath(entry.path)]));
 const ogByTemplateKey = new Map(manifest.og.map((entry) => [entry.templateKey, toPublicPath(entry.path)]));
+const SLUG_IMAGE_OVERRIDES = new Map([
+  [
+    'do-landlords-need-a-new-tenancy-agreement-after-1-may-2026',
+    {
+      hero: '/images/blog/heroes/lh-blog-tenancy-agreements-v1.webp',
+      og: '/images/blog/og/lh-blog-tenancy-agreements-v1-og.webp',
+    },
+  ],
+]);
 
 const placeholderVariants = manifest.placeholders
   .map((entry) => ({ file: entry.file, path: toPublicPath(entry.path) }))
@@ -141,6 +150,17 @@ function getRotatedTemplateKey(input: BlogImageInput) {
 }
 
 export function resolveBlogImageSet(input: BlogImageInput): BlogImageResolution {
+  const slugOverride = SLUG_IMAGE_OVERRIDES.get(input.slug);
+  if (slugOverride) {
+    return {
+      hero: slugOverride.hero,
+      og: slugOverride.og,
+      placeholder: getPlaceholderBySlug(input.slug).hero,
+      strategy: 'explicit',
+      templateKey: `slug:${input.slug}`,
+    };
+  }
+
   const explicitTemplateKey = getExplicitTemplateKey(input);
 
   if (explicitTemplateKey && heroesByTemplateKey.has(explicitTemplateKey) && ogByTemplateKey.has(explicitTemplateKey)) {

@@ -39,7 +39,8 @@ const canonicalUrl = getCanonicalUrl(PAGE_PATH);
 const standardPrice = PRODUCTS.ast_standard?.displayPrice ?? '£14.99';
 const premiumPrice = PRODUCTS.ast_premium?.displayPrice ?? '£24.99';
 
-const productPageHref = '/products/ast';
+const standardWizardHref = '/wizard?product=ast_standard&jurisdiction=scotland&src=tenancy_hub&topic=tenancy';
+const premiumWizardHref = '/wizard?product=ast_premium&jurisdiction=scotland&src=tenancy_hub&topic=tenancy';
 
 export const metadata: Metadata = {
   title:
@@ -185,11 +186,11 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
           }
           primaryCta={{
             label: `Create Standard PRT — ${standardPrice}`,
-            href: productPageHref,
+            href: standardWizardHref,
           }}
           secondaryCta={{
             label: `Create Premium PRT — ${premiumPrice}`,
-            href: productPageHref,
+            href: premiumWizardHref,
           }}
           showTrustPositioningBar
           variant="pastel"
@@ -491,7 +492,7 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                     </li>
                   </ul>
                   <Link
-                    href={productPageHref}
+                    href={standardWizardHref}
                     className="block w-full rounded-lg bg-blue-600 py-3 text-center font-semibold text-white transition-colors hover:bg-blue-700"
                   >
                     Create Standard PRT
@@ -534,7 +535,7 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                     </li>
                   </ul>
                   <Link
-                    href={productPageHref}
+                    href={premiumWizardHref}
                     className="block w-full rounded-lg bg-blue-700 py-3 text-center font-semibold text-white transition-colors hover:bg-blue-800"
                   >
                     Create Premium PRT

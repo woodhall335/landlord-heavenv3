@@ -5,22 +5,23 @@ import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/renters-rights-bill-tenancy-agreement');
-const wizardHref = '/products/ast';
+const standardWizardHref = '/wizard?product=ast_standard&src=england_tenancy_page&topic=tenancy';
+const premiumWizardHref = '/wizard?product=ast_premium&src=england_tenancy_page&topic=tenancy';
 
 export const metadata: Metadata = {
   title: 'Renters Rights Bill Tenancy Agreement | Updated England Agreement',
   description:
-    'Looking for a Renters Rights Bill tenancy agreement? This page explains the law is now the Renters’ Rights Act 2025 and links into the updated England Residential Tenancy Agreement flow.',
+    'Looking for a Renters Rights Bill tenancy agreement? This page captures that older search phrase and directs landlords into the current England agreement routes designed for the assured periodic framework from 1 May 2026.',
   keywords: [
     'renters rights bill tenancy agreement',
     'renters rights act tenancy agreement',
-    'renters rights compliant tenancy agreement',
+    'england tenancy agreement 2026',
   ],
   alternates: { canonical: canonicalUrl },
   openGraph: {
     title: 'Renters Rights Bill Tenancy Agreement | Updated England Agreement',
     description:
-      'Search-intent page for landlords looking for a Renters Rights Bill tenancy agreement, now updated to the Act wording and England Residential Tenancy Agreement flow.',
+      'Search-intent page for landlords looking for a Renters Rights Bill tenancy agreement, now routed into the current England agreement flows.',
     url: canonicalUrl,
     type: 'website',
   },
@@ -39,34 +40,32 @@ export default function RentersRightsBillTenancyAgreementPage() {
       <EnglandTenancyPage
         pagePath="/renters-rights-bill-tenancy-agreement"
         title="Renters Rights Bill Tenancy Agreement"
-        subtitle="Landlords still search for the Bill phrasing, but the law is now the Renters’ Rights Act 2025. This page directs that search intent into the updated England Residential Tenancy Agreement flow."
-        primaryCtaLabel="Start updated England agreement"
-        primaryCtaHref={wizardHref}
-        secondaryCtaLabel="Read the main England page"
-        secondaryCtaHref="/tenancy-agreement"
-        introTitle="Bill keyword, Act wording"
+        subtitle="Landlords still search using Bill phrasing, but from 1 May 2026 new England agreements generally move into the assured periodic framework. This page captures the old search language and directs it into the current England agreement routes."
+        primaryCtaLabel="Start Standard England agreement"
+        primaryCtaHref={standardWizardHref}
+        secondaryCtaLabel="Start Premium England agreement"
+        secondaryCtaHref={premiumWizardHref}
+        introTitle="Bill keyword, current England route"
         introBody={[
-          'This page intentionally targets the keyword renters rights bill tenancy agreement because that is still a live search term used by landlords.',
-          'In the body copy and product messaging, we use the correct current wording: Renters’ Rights Act 2025 and England Residential Tenancy Agreement.',
+          'This page intentionally targets the phrase renters rights bill tenancy agreement because that remains a live search term used by landlords.',
+          'The product wording itself now focuses on the current England position from 1 May 2026 and routes landlords into the right Standard or Premium agreement flow instead of keeping them in older AST-era language.',
         ]}
         highlights={[
-          'Dedicated page for the renters rights bill tenancy agreement search query',
-          'Explains the Bill phrasing has become Act wording in current public copy',
-          'Routes users into the updated England tenancy wizard rather than legacy AST sales pages',
+          'Dedicated page for the Bill-era search query',
+          'Explains the terminology shift without dropping the search intent',
+          'Routes users into the current England agreement flows rather than legacy AST sales pages',
         ]}
         compliancePoints={[
-          'Uses Act terminology in legal/customer copy',
+          'Uses current England transition wording in customer copy',
           'Keeps Bill phrasing for search-intent targeting only',
-          'Supports the updated England Residential Tenancy Agreement position',
+          'Supports the assured periodic framework used for new England lets from 1 May 2026',
         ]}
         keywordTargets={[
           'renters rights bill tenancy agreement',
           'renters rights act tenancy agreement',
-          'renters rights compliant tenancy agreement',
+          'england tenancy agreement 2026',
         ]}
       />
     </div>
   );
 }
-
-

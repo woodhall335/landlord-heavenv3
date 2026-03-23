@@ -180,8 +180,8 @@ function getTenancyCopy(jurisdiction: WizardJurisdiction): {
       };
     default:
       return {
-        title: 'Create a Residential Tenancy Agreement',
-        description: "Generate a Renters' Rights compliant England Residential Tenancy Agreement",
+        title: 'Create an England tenancy agreement',
+        description: 'Generate an England tenancy agreement designed for the assured periodic framework',
         buttonText: 'Start Agreement Wizard',
       };
   }

@@ -9,8 +9,8 @@ import {
 import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/tenancy-agreement-template');
-const wizardHref = '/products/ast';
-const mainProductHref = '/products/ast';
+const standardWizardHref = '/wizard?product=ast_standard&src=england_tenancy_template&topic=tenancy';
+const premiumWizardHref = '/wizard?product=ast_premium&src=england_tenancy_template&topic=tenancy';
 
 const faqs = [
   {
@@ -79,7 +79,7 @@ export const metadata: Metadata = {
   title:
     'Tenancy Agreement Template 2026 | England Residential Tenancy Agreement',
   description:
-    "Start with our tenancy agreement template 2026 route for England and generate a Residential Tenancy Agreement aligned with current Renters' Rights reform messaging. This page also links directly to the main tenancy agreement product at /products/ast.",
+    'Start with our England tenancy agreement template route and move into a current England agreement designed for the assured periodic framework from 1 May 2026, with clear Standard and Premium options.',
   keywords: [
     '2026 tenancy agreement',
     'tenancy agreement template 2026',
@@ -144,12 +144,12 @@ export default function TenancyAgreementTemplatePage() {
       <EnglandTenancyPage
         pagePath="/tenancy-agreement-template"
         title="2026 Tenancy Agreement Template"
-        subtitle="Start with our England tenancy agreement template route if you searched for a 2026 template, an AST template, or a Renters’ Rights reform agreement. This page is built to capture template-style search intent, explain why guided generation is stronger than editing a static file, and direct landlords into both the live England workflow and the main tenancy agreement product at /products/ast."
-        primaryCtaLabel="Use 2026 template flow"
-        primaryCtaHref={wizardHref}
-        secondaryCtaLabel="View main tenancy agreement product"
-        secondaryCtaHref={mainProductHref}
-        legacyNotice="Many landlords still search for AST template, tenancy agreement template 2026, assured shorthold tenancy template, or Renters’ Rights Bill agreement wording. This page keeps that search intent visible, but routes landlords into the current England agreement workflow and clearly links to /products/ast as the main tenancy agreement product."
+        subtitle="Start here if you searched for a 2026 template, an AST template, or a Renters’ Rights Act-era agreement. This page keeps that legacy search intent visible, but moves landlords into the current England agreement routes designed for the assured periodic framework from 1 May 2026."
+        primaryCtaLabel="Start Standard template flow"
+        primaryCtaHref={standardWizardHref}
+        secondaryCtaLabel="Start Premium template flow"
+        secondaryCtaHref={premiumWizardHref}
+        legacyNotice="Many landlords still search for AST template, tenancy agreement template 2026, assured shorthold tenancy template, or Renters’ Rights Bill wording. This page keeps that search intent visible, but routes landlords into the current England agreement paths instead of a thin fixed-term AST template sale."
         introTitle="Looking for a tenancy agreement template in England?"
         introBody={[
           'If you searched for a tenancy agreement template, a 2026 tenancy agreement, a new AST template, an assured shorthold tenancy agreement template, or a Renters’ Rights-era landlord contract for England, this is the right starting point. But a high-intent page like this should not just hand you a thin blank file and hope for the best. The stronger route for most landlords is no longer downloading a static document and editing it manually. It is using a guided England agreement workflow that reflects current product positioning, current landlord search behaviour, and current reform messaging much more clearly than old-style template pages do.',

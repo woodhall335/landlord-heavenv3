@@ -1,6 +1,7 @@
-import Link from 'next/link';
+﻿import Link from 'next/link';
 import { ImagePlaceholder } from '@/components/blog/ImagePlaceholder';
 import { BlogCTA } from '@/components/blog/BlogCTA';
+import { AlertTriangle, BadgeCheck, Clock3, FileText } from 'lucide-react';
 import { BlogPost } from './types';
 
 const section21TemplateCta = (
@@ -2306,441 +2307,200 @@ export const blogPosts: BlogPost[] = [
   // ============================================
   {
     slug: 'england-assured-shorthold-tenancy-guide',
-    title: 'Assured Shorthold Tenancy (AST) Guide - England 2026',
-    description: 'Complete guide to Assured Shorthold Tenancies in England. Learn the legal requirements, landlord obligations, tenant rights, and how the Renters Rights Act 2025 changes everything.',
-    metaDescription: 'Complete AST guide for England 2026. Legal requirements, landlord obligations, deposit rules, and Renters Rights Act changes. Create compliant tenancy agreements.',
+    title: 'Assured Shorthold Tenancy (AST) Guide - England Legacy Search Explainer 2026',
+    description: 'England landlords still search for AST agreements, but from 1 May 2026 new agreements generally move into the assured periodic framework. This guide explains what changed and when old wording may need review.',
+    metaDescription: 'England AST guide 2026. Understand legacy AST search language, the 1 May 2026 assured periodic change, and when old tenancy wording may need review.',
     date: '2026-01-03',
-    updatedDate: '2026-01-03',
-    readTime: '12 min read',
-    wordCount: 1650,
+    updatedDate: '2026-03-22',
+    readTime: '11 min read',
+    wordCount: 1620,
     category: 'Tenancy Agreements',
-    tags: ['AST', 'Assured Shorthold Tenancy', 'England', 'Tenancy Agreement', 'Landlord Guide', 'Renters Rights Act'],
+    tags: ['AST', 'Assured Shorthold Tenancy', 'England', 'Tenancy Agreement', 'Renters Rights Act', 'Assured Periodic'],
     author: {
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
     heroImage: '/images/blog/ast-england.svg',
-    heroImageAlt: 'Assured Shorthold Tenancy Guide England 2026',
+    heroImageAlt: 'England tenancy agreement and AST legacy search guide',
     showUrgencyBanner: false,
     targetKeyword: 'assured shorthold tenancy',
-    secondaryKeywords: ['AST agreement', 'tenancy agreement england', 'landlord tenancy contract', 'AST requirements', 'shorthold tenancy'],
+    secondaryKeywords: ['AST agreement', 'England tenancy agreement', 'assured periodic tenancy', 'legacy AST wording', 'tenancy agreement England 2026'],
     tableOfContents: [
-      { id: 'what-is-ast', title: 'What Is an Assured Shorthold Tenancy?', level: 2 },
-      { id: 'ast-requirements', title: 'Legal Requirements for an AST', level: 2 },
-      { id: 'landlord-obligations', title: 'Landlord Obligations', level: 2 },
-      { id: 'tenant-rights', title: 'Tenant Rights Under an AST', level: 2 },
-      { id: 'deposit-protection', title: 'Deposit Protection Rules', level: 2 },
-      { id: 'ending-ast', title: 'How to End an AST', level: 2 },
-      { id: 'renters-rights-changes', title: 'Renters Rights Act 2025 Changes', level: 2 },
+      { id: 'why-landlords-still-search-ast', title: 'Why Landlords Still Search for AST Agreements', level: 2 },
+      { id: 'what-changed-may-2026', title: 'What Changed on 1 May 2026', level: 2 },
+      { id: 'when-old-wording-may-be-outdated', title: 'When Old Wording May Be Outdated', level: 2 },
+      { id: 'standard-vs-premium', title: 'Should You Use Standard or Premium?', level: 2 },
+      { id: 'england-only-warning', title: 'England Only: Do Not Reuse Across the UK', level: 2 },
       { id: 'ast-faq', title: 'FAQ', level: 2 },
     ],
-    relatedPosts: ['what-is-section-21-notice', 'section-21-vs-section-8', 'renters-reform-bill-what-landlords-need-to-know'],
+    relatedPosts: ['uk-tenancy-agreements-guide', 'do-landlords-need-a-new-tenancy-agreement-after-1-may-2026', 'renters-reform-bill-what-landlords-need-to-know'],
+    sources: [
+      {
+        title: 'GOV.UK tenancy agreements overview',
+        url: 'https://www.gov.uk/guidance/renting-out-your-property-guidance-for-landlords-and-letting-agents/tenancy-agreements-overview',
+        type: 'government',
+      },
+      {
+        title: 'GOV.UK tenancy types',
+        url: 'https://www.gov.uk/guidance/renting-out-your-property-guidance-for-landlords-and-letting-agents/tenancy-types',
+        type: 'government',
+      },
+    ],
     content: (
       <>
         <p className="text-xl text-gray-700 leading-relaxed">
-          An <strong>Assured Shorthold Tenancy (AST)</strong> is the most common type of tenancy agreement used in
-          the private rented sector in England. If you&apos;re a landlord letting residential property, or a tenant
-          renting privately, you&apos;re almost certainly dealing with an AST. This guide explains everything you
-          need to know about ASTs in 2026, including the significant changes brought by the Renters&apos; Rights Act 2025.
+          Landlords still search for <strong>AST agreements</strong>, <strong>assured shorthold tenancy templates</strong>,
+          and <strong>fixed-term AST wording</strong>. That search language still matters. But from <strong>1 May 2026</strong>,
+          new England tenancy agreements generally move into the <strong>assured periodic framework</strong>, so the right
+          job now is to explain the old term clearly without selling new England lets as old fixed-term AST paperwork.
         </p>
 
         <div className="bg-purple-50 border-l-4 border-purple-500 p-6 my-8 rounded-r-lg">
-          <p className="font-semibold text-purple-800 text-lg mb-2">England Only</p>
+          <p className="font-semibold text-purple-800 text-lg mb-2">England only</p>
           <p className="text-purple-700">
-            This guide covers ASTs in <strong>England only</strong>. Scotland uses Private Residential Tenancies (PRTs),
-            Wales uses Standard Occupation Contracts under the Renting Homes (Wales) Act 2016, and Northern Ireland
-            has its own Private Tenancy regime. See our jurisdiction-specific guides for other UK nations.
+            This article is for <strong>England</strong>. Wales uses <strong>Occupation Contracts</strong>, Scotland uses
+            <strong> Private Residential Tenancies</strong>, and Northern Ireland uses its own <strong>Private Tenancy Agreement</strong>
+            structure. The wording is not interchangeable.
           </p>
         </div>
 
         <ImagePlaceholder
           src="/images/blog/ast-overview.svg"
-          alt="Assured Shorthold Tenancy Overview - England"
-          caption="The AST has been the standard tenancy type in England since 1997"
+          alt="England tenancy agreement guide for landlords still searching AST wording"
+          caption="AST is still common search language, but current England agreement wording has moved on"
           aspectRatio="hero"
         />
 
-        <h2 id="what-is-ast" className="scroll-mt-24">What Is an Assured Shorthold Tenancy?</h2>
+        <h2 id="why-landlords-still-search-ast" className="scroll-mt-24">Why Landlords Still Search for AST Agreements</h2>
 
         <p>
-          An Assured Shorthold Tenancy is a type of tenancy created by the <strong>Housing Act 1988</strong> and
-          amended by the <strong>Housing Act 1996</strong>. Since 28 February 1997, any new tenancy automatically
-          becomes an AST unless the landlord specifically creates a different type of tenancy or certain
-          exclusions apply.
+          AST terminology has been used for years, so landlords still search for it when they want to create a new
+          tenancy agreement, review old paperwork, or compare templates. Search behaviour does not change overnight.
+          That is why AST pages should remain live as <strong>legacy search explainers</strong>.
         </p>
 
         <p>
-          For a tenancy to be an AST, all of the following conditions must be met:
+          What should change is the sales story. A landlord looking for an AST agreement in 2026 is usually trying to
+          solve a broader problem: they want wording that reflects the <strong>current England position</strong>, uses the
+          right structure for the tenancy they are granting, and does not lean on clauses or assumptions that may now
+          be out of date.
         </p>
 
-        <ul>
-          <li>The property is let as a <strong>separate dwelling</strong></li>
-          <li>The tenant (or at least one joint tenant) occupies it as their <strong>only or principal home</strong></li>
-          <li>The tenant is an <strong>individual</strong>, not a company</li>
-          <li>The annual rent is between £250 and £100,000 (outside London) or between £1,000 and £100,000 (in London)</li>
-          <li>The landlord does not live in the same building (unless it&apos;s a purpose-built block of flats)</li>
-        </ul>
-
-        <h3>What Makes an AST Different from Other Tenancies?</h3>
+        <h2 id="what-changed-may-2026" className="scroll-mt-24">What Changed on 1 May 2026</h2>
 
         <p>
-          The key feature of an AST has traditionally been the landlord&apos;s ability to regain possession using
-          Section 21—the &quot;no-fault&quot; eviction route. However, with the <strong>Renters&apos; Rights Act 2025</strong>
-          abolishing Section 21 from 1 May 2026, this distinction is becoming less relevant.
-        </p>
-
-        <p>
-          Other types of tenancy you might encounter include:
+          From <strong>1 May 2026</strong>, existing assured shorthold tenancies in England move into the assured periodic
+          model, and new private rented sector agreements are generally framed around that same assured periodic
+          structure. That means landlords should be careful about relying on old fixed-term AST wording as if nothing
+          has changed.
         </p>
 
         <div className="overflow-x-auto my-8">
           <table className="min-w-full border-collapse">
             <thead>
               <tr>
-                <th className="text-left p-4 bg-gray-100 font-semibold">Tenancy Type</th>
-                <th className="text-left p-4 bg-gray-100 font-semibold">Key Features</th>
-                <th className="text-left p-4 bg-gray-100 font-semibold">When Used</th>
+                <th className="text-left p-4 bg-gray-100 font-semibold">Search language</th>
+                <th className="text-left p-4 bg-gray-100 font-semibold">Current explanation</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td className="p-4 border-b font-medium">Assured Shorthold (AST)</td>
-                <td className="p-4 border-b">Standard private rental, Section 21 available (until May 2026)</td>
-                <td className="p-4 border-b">Most private lettings</td>
+                <td className="p-4 border-b font-medium">AST agreement</td>
+                <td className="p-4 border-b">Legacy search term that many landlords still use when they really mean a current England tenancy agreement.</td>
               </tr>
               <tr>
-                <td className="p-4 border-b font-medium">Assured Tenancy</td>
-                <td className="p-4 border-b">Greater security, no Section 21</td>
-                <td className="p-4 border-b">Pre-1997 tenancies, some housing associations</td>
+                <td className="p-4 border-b font-medium">Fixed-term AST template</td>
+                <td className="p-4 border-b">No longer the right default way to sell a new England agreement after 1 May 2026.</td>
               </tr>
               <tr>
-                <td className="p-4 border-b font-medium">Regulated Tenancy</td>
-                <td className="p-4 border-b">Rent control, very strong security</td>
-                <td className="p-4 border-b">Pre-1989 tenancies (rare)</td>
-              </tr>
-              <tr>
-                <td className="p-4 border-b font-medium">Excluded Tenancy/Licence</td>
-                <td className="p-4 border-b">Fewer protections, landlord lives in property</td>
-                <td className="p-4 border-b">Lodgers, live-in landlords</td>
+                <td className="p-4 border-b font-medium">England tenancy agreement</td>
+                <td className="p-4 border-b">Stronger current-language description for new England agreements designed around the assured periodic framework.</td>
               </tr>
             </tbody>
           </table>
         </div>
 
-        <h2 id="ast-requirements" className="scroll-mt-24">Legal Requirements for an AST</h2>
-
-        <p>
-          While an AST can technically be created verbally, a <strong>written tenancy agreement</strong> is strongly
-          recommended—and in many cases, practically essential for compliance with other legal requirements.
-        </p>
-
-        <h3>Essential Terms to Include</h3>
-
-        <p>
-          Your AST agreement should clearly state:
-        </p>
-
-        <ul>
-          <li><strong>Names</strong> of all landlords and tenants</li>
-          <li><strong>Property address</strong> and description of what&apos;s included</li>
-          <li><strong>Start date</strong> and whether it&apos;s fixed-term or periodic</li>
-          <li><strong>Rent amount</strong>, payment frequency, and due date</li>
-          <li><strong>Deposit amount</strong> and which scheme protects it</li>
-          <li><strong>Break clause</strong> terms (if applicable)</li>
-          <li><strong>Responsibilities</strong> for repairs and maintenance</li>
-          <li><strong>Rules</strong> about pets, smoking, subletting, etc.</li>
-        </ul>
-
         <ImagePlaceholder
-          src="/images/blog/ast-document.svg"
-          alt="AST Tenancy Agreement Document"
-          caption="A well-drafted AST protects both landlord and tenant"
+          src="/images/blog/tenancy-agreement-signing.svg"
+          alt="Landlord reviewing whether old tenancy wording is still current"
+          caption="Old tenancy wording may still look familiar while no longer reflecting the current England position"
         />
 
-        <h3>Fixed-Term vs Periodic ASTs</h3>
+        <h2 id="when-old-wording-may-be-outdated" className="scroll-mt-24">When Old Wording May Be Outdated</h2>
 
         <p>
-          An AST can be either:
+          An older agreement is not automatically worthless, but it <strong>may no longer reflect the current legal position</strong>,
+          may still assume an older fixed-term AST structure, and may contain clauses a landlord expects to help later
+          but which do not work as cleanly as expected. That becomes more important when the tenancy turns difficult.
         </p>
 
-        <ul>
-          <li><strong>Fixed-term:</strong> Runs for a set period (e.g., 6 or 12 months). Neither party can end
-          it early unless there&apos;s a break clause or the other party agrees.</li>
-          <li><strong>Periodic:</strong> Rolls on week-to-week or month-to-month with no fixed end date.
-          Either party can end it with proper notice.</li>
-        </ul>
-
         <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8 rounded-r-lg">
-          <p className="font-semibold text-amber-800 text-lg mb-2">Important: May 2026 Changes</p>
-          <p className="text-amber-700">
-            From <strong>1 May 2026</strong>, the Renters&apos; Rights Act 2025 converts all ASTs to periodic tenancies.
-            Fixed terms will no longer prevent tenants from leaving with 2 months&apos; notice. This is a fundamental
-            change to how ASTs work.
-          </p>
+          <p className="font-semibold text-amber-800 text-lg mb-2">Risk check for landlords</p>
+          <ul className="list-disc pl-6 text-amber-700 space-y-2">
+            <li>Your agreement still assumes a classic fixed end date AST approach.</li>
+            <li>Your template was downloaded years ago and only lightly edited.</li>
+            <li>The wording was built for the wrong UK jurisdiction.</li>
+            <li>You are relying on broad clauses that may be harder to use or explain later.</li>
+          </ul>
         </div>
 
         <BlogCTA variant="default" />
 
-        <h2 id="landlord-obligations" className="scroll-mt-24">Landlord Obligations</h2>
+        <h2 id="standard-vs-premium" className="scroll-mt-24">Should You Use Standard or Premium?</h2>
 
         <p>
-          As a landlord with an AST, you have numerous legal obligations. Failure to comply can result in fines,
-          prevent you from evicting tenants, or even lead to criminal prosecution.
+          The real choice for many landlords is no longer &quot;AST or not.&quot; It is whether the tenancy is straightforward
+          enough for the <Link href="/products/ast" className="text-primary font-semibold hover:underline">Standard agreement route</Link>,
+          or whether the property and tenant profile justify the <Link href="/products/ast" className="text-primary font-semibold hover:underline">Premium agreement route</Link>.
         </p>
 
-        <h3>Before the Tenancy Starts</h3>
-
-        <ul>
-          <li><strong>Right to Rent checks:</strong> Verify the tenant has the legal right to rent in the UK</li>
-          <li><strong>Energy Performance Certificate (EPC):</strong> Provide an EPC rated E or above</li>
-          <li><strong>Gas Safety Certificate:</strong> Annual CP12 certificate from a Gas Safe engineer</li>
-          <li><strong>EICR:</strong> Electrical Installation Condition Report (valid for 5 years)</li>
-          <li><strong>How to Rent guide:</strong> Provide the government&apos;s &quot;How to Rent&quot; checklist</li>
-          <li><strong>Deposit protection:</strong> Protect the deposit within 30 days (see below)</li>
-        </ul>
-
-        <h3>During the Tenancy</h3>
-
-        <ul>
-          <li>Keep the property in <strong>good repair</strong> (structure, exterior, installations)</li>
-          <li>Maintain <strong>gas and electrical safety</strong> annually</li>
-          <li>Give <strong>24 hours&apos; notice</strong> before visiting (except emergencies)</li>
-          <li>Not <strong>harass the tenant</strong> or illegally evict them</li>
-          <li>Handle <strong>repairs promptly</strong> when reported</li>
-        </ul>
-
-        <ImagePlaceholder
-          src="/images/blog/landlord-checklist.svg"
-          alt="Landlord Obligations Checklist"
-          caption="Compliance checklist for landlords with AST tenancies"
-        />
-
-        <h2 id="tenant-rights" className="scroll-mt-24">Tenant Rights Under an AST</h2>
-
-        <p>
-          Tenants with an AST have significant legal protections:
-        </p>
-
-        <ul>
-          <li><strong>Quiet enjoyment:</strong> The right to live in the property without interference</li>
-          <li><strong>Protection from eviction:</strong> Can only be evicted through proper court procedures</li>
-          <li><strong>Deposit protection:</strong> Deposit must be in a government-approved scheme</li>
-          <li><strong>Repairs:</strong> Landlord must maintain the property&apos;s structure and installations</li>
-          <li><strong>Fair treatment:</strong> Protection from discrimination and harassment</li>
-          <li><strong>Information:</strong> Right to know the landlord&apos;s name and address</li>
-        </ul>
-
-        <h3>New Rights from 2026</h3>
-
-        <p>
-          The Renters&apos; Rights Act 2025 introduces additional tenant rights:
-        </p>
-
-        <ul>
-          <li><strong>Pets:</strong> Landlords cannot unreasonably refuse pet requests</li>
-          <li><strong>No fixed terms:</strong> Tenants can leave with 2 months&apos; notice at any time</li>
-          <li><strong>Rent increases:</strong> Limited to once per year via Section 13 notice</li>
-          <li><strong>Ombudsman:</strong> Access to the new PRS Ombudsman for complaints</li>
-        </ul>
-
-        <h2 id="deposit-protection" className="scroll-mt-24">Deposit Protection Rules</h2>
-
-        <p>
-          If you take a deposit for an AST in England, you <strong>must</strong> protect it in one of the three
-          government-approved tenancy deposit schemes within <strong>30 days</strong> of receiving it.
-        </p>
-
-        <h3>Approved Deposit Schemes</h3>
-
-        <div className="overflow-x-auto my-8">
-          <table className="min-w-full border-collapse">
-            <thead>
-              <tr>
-                <th className="text-left p-4 bg-gray-100 font-semibold">Scheme</th>
-                <th className="text-left p-4 bg-gray-100 font-semibold">Type</th>
-                <th className="text-left p-4 bg-gray-100 font-semibold">Cost</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td className="p-4 border-b font-medium">Deposit Protection Service (DPS)</td>
-                <td className="p-4 border-b">Custodial (free) or Insured</td>
-                <td className="p-4 border-b">Free (custodial) / Paid (insured)</td>
-              </tr>
-              <tr>
-                <td className="p-4 border-b font-medium">MyDeposits</td>
-                <td className="p-4 border-b">Insured or Custodial</td>
-                <td className="p-4 border-b">From £20.40 per deposit</td>
-              </tr>
-              <tr>
-                <td className="p-4 border-b font-medium">Tenancy Deposit Scheme (TDS)</td>
-                <td className="p-4 border-b">Insured or Custodial</td>
-                <td className="p-4 border-b">Free (custodial) / Paid (insured)</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <h3>Prescribed Information</h3>
-
-        <p>
-          Within 30 days, you must also give the tenant the <strong>Prescribed Information</strong>, which includes:
-        </p>
-
-        <ul>
-          <li>The deposit amount and address of the property</li>
-          <li>The name and contact details of the scheme</li>
-          <li>How to apply for release of the deposit</li>
-          <li>What to do if there&apos;s a dispute</li>
-          <li>The purpose of the deposit</li>
-        </ul>
-
-        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8 rounded-r-lg">
-          <p className="font-semibold text-red-800 text-lg mb-2">Warning: Non-Compliance Penalties</p>
-          <p className="text-red-700">
-            If you fail to protect the deposit or provide Prescribed Information, you <strong>cannot serve
-            a valid Section 21 notice</strong> and the tenant can sue for compensation of <strong>1-3 times
-            the deposit amount</strong>. This applies until the deposit is properly protected.
-          </p>
-        </div>
-
-        <h2 id="ending-ast" className="scroll-mt-24">How to End an AST</h2>
-
-        <p>
-          There are several ways an AST can end:
-        </p>
-
-        <h3>Landlord Ending the Tenancy (Current Rules)</h3>
-
-        <ul>
-          <li><strong>Section 21:</strong> No-fault eviction with 2 months&apos; notice (ending 30 April 2026)</li>
-          <li><strong>Section 8:</strong> Eviction based on specific grounds (e.g., rent arrears, breach)</li>
-          <li><strong>Mutual agreement:</strong> Both parties agree to end the tenancy early</li>
-        </ul>
-
-        <h3>Tenant Ending the Tenancy</h3>
-
-        <ul>
-          <li><strong>Fixed-term:</strong> Wait until the end of the fixed term, or use a break clause</li>
-          <li><strong>Periodic:</strong> Give notice equal to one rental period (usually 1 month)</li>
-          <li><strong>From May 2026:</strong> Give 2 months&apos; notice at any time</li>
-        </ul>
-
-        <p>
-          <Link href="/products/notice-only" className="text-primary hover:underline font-medium">
-            Need to serve an eviction notice? Generate court-ready documents →
-          </Link>
-        </p>
-
-        <h2 id="renters-rights-changes" className="scroll-mt-24">Renters&apos; Rights Act 2025 Changes</h2>
-
-        <p>
-          The Renters&apos; Rights Act 2025 fundamentally changes how ASTs work in England. Key changes include:
-        </p>
-
-        <h3>From 1 May 2026</h3>
-
-        <ul>
-          <li><strong>Section 21 abolished:</strong> No more no-fault evictions</li>
-          <li><strong>All tenancies periodic:</strong> Fixed terms no longer binding on tenants</li>
-          <li><strong>New Section 8 grounds:</strong> Amended grounds for landlord selling or moving in</li>
-          <li><strong>Tenant notice:</strong> Tenants can leave with 2 months&apos; notice</li>
-        </ul>
-
-        <h3>Already in Effect</h3>
-
-        <ul>
-          <li><strong>Rent increases:</strong> Once per year maximum, via Section 13 only</li>
-          <li><strong>Pet requests:</strong> Cannot unreasonably refuse</li>
-        </ul>
-
-        <p>
-          <Link href="/blog/renters-reform-bill-what-landlords-need-to-know" className="text-primary hover:underline font-medium">
-            Read our complete guide to the Renters&apos; Rights Act 2025 →
-          </Link>
-        </p>
-
-        <ImagePlaceholder
-          src="/images/blog/2026-changes.svg"
-          alt="AST Changes 2026 - Renters Rights Act"
-          caption="Major changes to ASTs coming in May 2026"
-        />
-
-        <h2 id="ast-faq" className="scroll-mt-24">Assured Shorthold Tenancy FAQ</h2>
-
-        <div className="space-y-6 my-8">
-          <div className="bg-gray-50 rounded-lg p-6">
-            <h3 className="font-semibold text-gray-900 mb-2">Does an AST need to be in writing?</h3>
-            <p className="text-gray-600">
-              Legally, no—an AST can be verbal. However, a written agreement is strongly recommended as it
-              provides evidence of the agreed terms, is required for some legal compliance, and is expected
-              by deposit schemes, mortgage lenders, and courts.
+        <div className="grid gap-6 md:grid-cols-2 my-8">
+          <div className="rounded-xl border border-gray-200 bg-white p-6">
+            <h3 className="text-xl font-semibold text-gray-900 mb-3">Standard</h3>
+            <p className="text-gray-700">
+              Usually the right fit for straightforward lets where the landlord wants current England wording without
+              extra complexity.
             </p>
           </div>
-
-          <div className="bg-gray-50 rounded-lg p-6">
-            <h3 className="font-semibold text-gray-900 mb-2">What&apos;s the minimum term for an AST?</h3>
-            <p className="text-gray-600">
-              There is no legal minimum term. You can create a 1-month AST if you wish. However, most landlords
-              use 6 or 12-month fixed terms. From May 2026, fixed terms will no longer prevent tenants from leaving early.
-            </p>
-          </div>
-
-          <div className="bg-gray-50 rounded-lg p-6">
-            <h3 className="font-semibold text-gray-900 mb-2">Can I refuse to rent to tenants with pets?</h3>
-            <p className="text-gray-600">
-              Under the Renters&apos; Rights Act 2025, you cannot &quot;unreasonably refuse&quot; a tenant&apos;s request to keep a pet.
-              You can require pet damage insurance and may refuse for genuine reasons (e.g., lease restrictions,
-              property unsuitability), but blanket &quot;no pets&quot; policies are no longer enforceable.
-            </p>
-          </div>
-
-          <div className="bg-gray-50 rounded-lg p-6">
-            <h3 className="font-semibold text-gray-900 mb-2">How much deposit can I take?</h3>
-            <p className="text-gray-600">
-              The maximum deposit is <strong>5 weeks&apos; rent</strong> if the annual rent is under £50,000, or
-              <strong> 6 weeks&apos; rent</strong> if the annual rent is £50,000 or more. This limit applies to the
-              total of all deposits (security deposit plus any other deposits).
-            </p>
-          </div>
-
-          <div className="bg-gray-50 rounded-lg p-6">
-            <h3 className="font-semibold text-gray-900 mb-2">What happens when the fixed term ends?</h3>
-            <p className="text-gray-600">
-              If neither party takes action, the AST automatically becomes a <Link href="/rolling-tenancy-agreement" className="text-primary hover:underline">statutory periodic tenancy</Link>
-              running on the same terms, usually month-to-month. You don&apos;t need to sign a new agreement unless you
-              want to change the terms.
-            </p>
-          </div>
-
-          <div className="bg-gray-50 rounded-lg p-6">
-            <h3 className="font-semibold text-gray-900 mb-2">Can I increase the rent during a fixed term?</h3>
-            <p className="text-gray-600">
-              Only if the tenancy agreement includes a <strong>rent review clause</strong>. Otherwise, you must
-              wait until the tenancy becomes periodic and use a Section 13 notice. From 2026, rent increases are
-              limited to once per year regardless of what the agreement says.
+          <div className="rounded-xl border border-red-200 bg-red-50 p-6">
+            <h3 className="text-xl font-semibold text-gray-900 mb-3">Premium</h3>
+            <p className="text-gray-700">
+              Better where the let is more complex, higher-risk, shared, student-led, guarantor-backed, or where the
+              landlord wants broader drafting and extra practical protection.
             </p>
           </div>
         </div>
 
-        <div className="bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl p-8 my-8">
-          <h3 className="text-xl font-bold text-gray-900 mb-4">Need a Compliant Tenancy Agreement?</h3>
-          <p className="text-gray-700 mb-6">
-            Our AST generator creates legally compliant tenancy agreements for England, with all required clauses
-            and customisation options. Updated for the Renters&apos; Rights Act 2025.
-          </p>
-          <Link
-            href="/products/ast"
-            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
-          >
-            Create Your Tenancy Agreement →
-          </Link>
-        </div>
+        <h2 id="england-only-warning" className="scroll-mt-24">England Only: Do Not Reuse Across the UK</h2>
+
+        <p>
+          One of the most common landlord mistakes is assuming a generic UK template will do for every property.
+          That is risky. Wales, Scotland, and Northern Ireland all use different tenancy frameworks, notice systems,
+          and terminology. A document drafted for England may be the wrong starting point elsewhere.
+        </p>
+
+        <h2 id="ast-faq" className="scroll-mt-24">FAQ</h2>
+
+        <h3>Is AST still the right main term for new England agreements?</h3>
+        <p>
+          It is still important legacy search language, but it is no longer the best main way to describe new England
+          agreements after 1 May 2026.
+        </p>
+
+        <h3>Does every landlord need a brand-new agreement immediately?</h3>
+        <p>
+          Not always, but many landlords should review what they are using. If the wording is old, generic, or built
+          around outdated assumptions, it may be time to replace it.
+        </p>
+
+        <h3>Where should I start if I want the current England route?</h3>
+        <p>
+          Start with the <Link href="/products/ast" className="text-primary font-semibold hover:underline">Landlord Heaven tenancy agreement product page</Link>
+          to compare the current Standard and Premium routes.
+        </p>
       </>
     ),
   },
-
-  // ============================================
   // POST 7: England Section 21 Process
   // Target: 1,500+ words | Batch 1, Article 2
   // ============================================
@@ -27518,369 +27278,184 @@ export const blogPosts: BlogPost[] = [
   // Article 73: UK Tenancy Agreements Guide
   {
     slug: 'uk-tenancy-agreements-guide',
-    title: 'UK Tenancy Agreements - Complete Landlord Guide 2026',
-    description: 'Essential guide to tenancy agreements for UK landlords. Learn about AST terms, clauses, legal requirements, and how to create enforceable contracts.',
-    metaDescription: 'UK tenancy agreement guide 2026. AST essentials, key clauses, legal requirements, break clauses, and creating enforceable contracts explained.',
+    title: 'UK Tenancy Agreements Guide 2026 | England, Wales, Scotland and Northern Ireland',
+    description: 'Compare the main tenancy agreement frameworks across England, Wales, Scotland, and Northern Ireland so you choose the right wording for the property jurisdiction.',
+    metaDescription: 'UK tenancy agreements guide 2026. Compare England assured periodic wording, Wales occupation contracts, Scotland PRTs, and Northern Ireland private tenancy agreements.',
     date: '2026-01-03',
-    readTime: '14 min read',
-    wordCount: 1750,
-    category: 'Legal Compliance',
-    tags: ['tenancy agreements', 'AST', 'landlord contracts', 'tenancy terms', 'UK property'],
+    updatedDate: '2026-03-22',
+    readTime: '12 min read',
+    wordCount: 1680,
+    category: 'Tenancy Agreements',
+    tags: ['tenancy agreements', 'UK landlord guide', 'England tenancy agreement', 'occupation contract', 'PRT', 'Northern Ireland tenancy agreement'],
     author: {
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
     },
     heroImage: '/images/blog/tenancy-agreement.svg',
-    heroImageAlt: 'UK Tenancy Agreement Guide',
+    heroImageAlt: 'UK tenancy agreement comparison guide',
     showUrgencyBanner: false,
     targetKeyword: 'tenancy agreement UK landlords',
-    secondaryKeywords: ['AST agreement', 'tenancy contract', 'tenancy clauses', 'rental agreement UK'],
+    secondaryKeywords: ['England tenancy agreement', 'Wales occupation contract', 'Scotland PRT', 'Northern Ireland private tenancy agreement'],
     tableOfContents: [
-      { id: 'types-of-tenancy', title: 'Types of Tenancy', level: 2 },
-      { id: 'essential-terms', title: 'Essential Terms', level: 2 },
-      { id: 'key-clauses', title: 'Key Clauses Explained', level: 2 },
-      { id: 'break-clauses', title: 'Break Clauses', level: 2 },
-      { id: 'unfair-terms', title: 'Unfair Terms to Avoid', level: 2 },
-      { id: 'how-to-rent', title: 'How to Rent Guide', level: 2 },
-      { id: 'signing-process', title: 'Signing Process', level: 2 },
-      { id: 'renewals', title: 'Renewals and Periodic Tenancies', level: 2 },
-      { id: 'agreement-faq', title: 'Tenancy Agreement FAQ', level: 2 },
+      { id: 'why-jurisdiction-matters', title: 'Why Jurisdiction Matters', level: 2 },
+      { id: 'england-framework', title: 'England: Assured Periodic Framework', level: 2 },
+      { id: 'wales-framework', title: 'Wales: Occupation Contracts', level: 2 },
+      { id: 'scotland-framework', title: 'Scotland: Private Residential Tenancies', level: 2 },
+      { id: 'ni-framework', title: 'Northern Ireland: Private Tenancy Agreements', level: 2 },
+      { id: 'how-to-choose', title: 'How to Choose the Right Route', level: 2 },
+      { id: 'agreement-faq', title: 'FAQ', level: 2 },
     ],
-    relatedPosts: ['uk-deposit-protection-guide', 'uk-tenant-referencing-guide', 'england-section-21-guide'],
+    relatedPosts: ['england-assured-shorthold-tenancy-guide', 'do-landlords-need-a-new-tenancy-agreement-after-1-may-2026', 'uk-tenant-referencing-guide'],
     content: (
       <>
         <p className="lead">
-          A well-drafted tenancy agreement is the foundation of a successful landlord-tenant
-          relationship. It sets out the rights and responsibilities of both parties and provides
-          the framework for managing the tenancy. This guide covers everything you need to know
-          about creating enforceable, compliant tenancy agreements in the UK.
+          A tenancy agreement is not just a template with the property address changed. The right agreement depends on
+          <strong> where the property is</strong>, what the local legal framework requires, and whether the wording still
+          reflects the current position for that jurisdiction.
         </p>
 
         <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
-          <h4 className="font-semibold text-blue-900 mb-2">Why Written Agreements Matter</h4>
-          <ul className="list-disc ml-4 text-blue-800 space-y-1">
-            <li>Clear expectations for both parties</li>
-            <li>Evidence in case of disputes</li>
-            <li>Required for certain legal processes</li>
-            <li>Protection for landlord and tenant</li>
-          </ul>
+          <h4 className="font-semibold text-blue-900 mb-2">Main landlord takeaway</h4>
+          <p className="text-blue-800">
+            There is no single generic UK tenancy agreement that safely covers England, Wales, Scotland, and Northern
+            Ireland. Using the wrong jurisdiction&apos;s wording may create avoidable risk and may leave landlords relying on
+            clauses that do not do what they expect.
+          </p>
         </div>
 
         <ImagePlaceholder
           src="/images/blog/tenancy-agreement-signing.svg"
-          alt="Signing a tenancy agreement"
-          caption="Written tenancy agreements protect both landlords and tenants"
+          alt="Comparing tenancy agreement frameworks across the UK"
+          caption="The same landlord question leads to different agreement routes depending on the nation"
           aspectRatio="hero"
         />
 
-        <h2 id="types-of-tenancy" className="scroll-mt-24">Types of Tenancy</h2>
+        <h2 id="why-jurisdiction-matters" className="scroll-mt-24">Why Jurisdiction Matters</h2>
 
         <p>
-          Understanding the type of tenancy you're creating determines which laws apply and
-          what rights exist. The most common type for private rentals is the Assured Shorthold
-          Tenancy (AST).
+          Landlords often search with broad phrases such as <strong>tenancy agreement UK</strong> or <strong>rental agreement template</strong>.
+          The problem is that those searches flatten four different legal frameworks into one phrase. That can lead to
+          outdated assumptions, especially where old AST language is reused for properties outside England.
         </p>
 
         <div className="overflow-x-auto my-8">
           <table className="min-w-full border-collapse">
             <thead>
               <tr className="bg-gray-100">
-                <th className="border p-3 text-left font-semibold">Tenancy Type</th>
-                <th className="border p-3 text-left font-semibold">When It Applies</th>
-                <th className="border p-3 text-left font-semibold">Key Features</th>
+                <th className="border p-3 text-left font-semibold">Jurisdiction</th>
+                <th className="border p-3 text-left font-semibold">Current tenancy framework</th>
+                <th className="border p-3 text-left font-semibold">Main terminology to use</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td className="border p-3">Assured Shorthold (AST)</td>
-                <td className="border p-3">Most private lets in England</td>
-                <td className="border p-3">Section 21 available, deposit protection required</td>
+                <td className="border p-3">England</td>
+                <td className="border p-3">Assured periodic framework from 1 May 2026</td>
+                <td className="border p-3">England tenancy agreement / assured periodic</td>
               </tr>
               <tr className="bg-gray-50">
-                <td className="border p-3">Assured Tenancy</td>
-                <td className="border p-3">Older tenancies, some housing associations</td>
-                <td className="border p-3">Greater tenant security, limited grounds for possession</td>
+                <td className="border p-3">Wales</td>
+                <td className="border p-3">Renting Homes (Wales) Act 2016</td>
+                <td className="border p-3">Occupation contract</td>
               </tr>
               <tr>
-                <td className="border p-3">Excluded Tenancy/Licence</td>
-                <td className="border p-3">Lodgers in your home</td>
-                <td className="border p-3">Less tenant protection, easier to end</td>
+                <td className="border p-3">Scotland</td>
+                <td className="border p-3">Private Housing (Tenancies) (Scotland) Act 2016</td>
+                <td className="border p-3">Private residential tenancy (PRT)</td>
               </tr>
               <tr className="bg-gray-50">
-                <td className="border p-3">Company Let</td>
-                <td className="border p-3">Tenant is a company</td>
-                <td className="border p-3">Not an AST, contractual terms govern</td>
+                <td className="border p-3">Northern Ireland</td>
+                <td className="border p-3">Private tenancy regime</td>
+                <td className="border p-3">Private tenancy agreement</td>
               </tr>
             </tbody>
           </table>
         </div>
 
-        <p>
-          If you let to an individual who pays rent, the property is their only or main home,
-          and you don't live there, it's almost certainly an AST unless specific exclusions apply.
-        </p>
-
-        <h2 id="essential-terms" className="scroll-mt-24">Essential Terms</h2>
+        <h2 id="england-framework" className="scroll-mt-24">England: Assured Periodic Framework</h2>
 
         <p>
-          Every tenancy agreement should include certain fundamental terms that define the
-          basic parameters of the tenancy.
+          England landlords still search for AST wording, but from <strong>1 May 2026</strong> new agreements generally
+          move into the assured periodic model. That means old fixed-term AST phrasing is best treated as legacy search
+          language rather than the default way to sell new England agreements.
         </p>
 
-        <div className="bg-green-50 border-l-4 border-green-500 p-6 my-8">
-          <h4 className="font-semibold text-green-900 mb-2">Must-Have Information</h4>
-          <ul className="list-disc ml-4 text-green-800 space-y-2">
-            <li>Full names of landlord and all tenants</li>
-            <li>Property address and description</li>
-            <li>Start date and duration (fixed term or periodic)</li>
-            <li>Rent amount, payment date, and method</li>
-            <li>Deposit amount and protection scheme details</li>
-            <li>Who is responsible for bills and council tax</li>
-            <li>Landlord's contact address for notices</li>
-          </ul>
-        </div>
+        <p>
+          If the property is in England, start with the <Link href="/products/ast" className="text-primary font-semibold hover:underline">England tenancy agreement route</Link>
+          and decide whether Standard or Premium is the better fit for the tenancy.
+        </p>
+
+        <h2 id="wales-framework" className="scroll-mt-24">Wales: Occupation Contracts</h2>
+
+        <p>
+          Wales does not use the England AST structure. Private landlords generally use a <strong>Standard Occupation Contract</strong>.
+          The written statement, the statutory terms, and the possession language are all part of a different regime.
+        </p>
+
+        <h2 id="scotland-framework" className="scroll-mt-24">Scotland: Private Residential Tenancies</h2>
+
+        <p>
+          Scotland uses the <strong>Private Residential Tenancy</strong> framework. PRTs are open-ended by law and do not
+          operate like old fixed-term AST assumptions in England. If the property is in Scotland, use Scottish wording and
+          Scottish possession logic from the start.
+        </p>
+
+        <h2 id="ni-framework" className="scroll-mt-24">Northern Ireland: Private Tenancy Agreements</h2>
+
+        <p>
+          Northern Ireland has its own private tenancy regime, its own notice rules, and its own compliance expectations.
+          If the property is in Northern Ireland, the landlord should use a <strong>Private Tenancy Agreement</strong> built
+          for NI rather than reusing English or Welsh paperwork.
+        </p>
 
         <ImagePlaceholder
           src="/images/blog/tenancy-essential-terms.svg"
-          alt="Essential tenancy agreement terms"
-          caption="Include all essential terms to create a valid agreement"
+          alt="Choosing the right tenancy agreement for the property jurisdiction"
+          caption="The right agreement starts with the property jurisdiction, not a generic template download"
           aspectRatio="hero"
         />
 
-        <h2 id="key-clauses" className="scroll-mt-24">Key Clauses Explained</h2>
+        <h2 id="how-to-choose" className="scroll-mt-24">How to Choose the Right Route</h2>
 
         <p>
-          Beyond the essentials, specific clauses address important aspects of the tenancy
-          relationship.
+          Start with the location of the property. Then ask whether the let is straightforward or whether it needs broader
+          drafting and extra protection. That is where Landlord Heaven&apos;s Standard and Premium split becomes useful.
         </p>
 
-        <div className="space-y-4 my-6">
-          <div className="border-l-4 border-blue-500 pl-4">
-            <h4 className="font-semibold">Rent Review Clause</h4>
-            <p className="text-gray-600">Explains how and when rent can be increased. For fixed terms,
-            rent usually can't increase unless the agreement specifically allows it.</p>
-          </div>
-
-          <div className="border-l-4 border-blue-500 pl-4">
-            <h4 className="font-semibold">Pets Clause</h4>
-            <p className="text-gray-600">States whether pets are allowed and any conditions. Consider
-            the Tenant Fees Act limits on pet deposits (can't charge extra deposit, but can
-            require pet damage insurance).</p>
-          </div>
-
-          <div className="border-l-4 border-blue-500 pl-4">
-            <h4 className="font-semibold">Subletting Clause</h4>
-            <p className="text-gray-600">Usually prohibits subletting without landlord consent.
-            Important for maintaining control over who occupies the property.</p>
-          </div>
-
-          <div className="border-l-4 border-blue-500 pl-4">
-            <h4 className="font-semibold">Maintenance Responsibilities</h4>
-            <p className="text-gray-600">Clarifies who handles what repairs. Landlord responsibilities
-            under statute (structure, utilities) can't be contracted out.</p>
-          </div>
-
-          <div className="border-l-4 border-blue-500 pl-4">
-            <h4 className="font-semibold">Access Clause</h4>
-            <p className="text-gray-600">Outlines landlord's right to access with reasonable notice
-            (typically 24-48 hours) for inspections, repairs, or viewings.</p>
-          </div>
-        </div>
-
-        <h2 id="break-clauses" className="scroll-mt-24">Break Clauses</h2>
-
-        <p>
-          Break clauses allow either party to end the tenancy before the fixed term expires.
-          They must be drafted carefully to be enforceable.
-        </p>
+        <ul>
+          <li><strong>Standard:</strong> usually the better fit for straightforward lets.</li>
+          <li><strong>Premium:</strong> stronger where the let is shared, higher-risk, guarantor-backed, or otherwise more complex.</li>
+        </ul>
 
         <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8">
-          <h4 className="font-semibold text-amber-900 mb-2">Break Clause Requirements</h4>
-          <ul className="list-disc ml-4 text-amber-800 space-y-2">
-            <li>Specify the earliest date the break can be exercised</li>
-            <li>State the notice period required (commonly 2 months)</li>
-            <li>Be clear about who can exercise it (landlord, tenant, or both)</li>
-            <li>Specify any conditions (e.g., rent up to date)</li>
-            <li>Match the notice to what's legally required for Section 21</li>
-          </ul>
-        </div>
-
-        <p>
-          Be cautious with conditions - if a break clause requires "strict compliance" with
-          all terms, minor breaches might prevent its use.
-        </p>
-
-        <BlogCTA variant="inline" />
-
-        <h2 id="unfair-terms" className="scroll-mt-24">Unfair Terms to Avoid</h2>
-
-        <p>
-          The Consumer Rights Act 2015 protects tenants from unfair contract terms. Unfair
-          terms are not enforceable and can damage your case in court.
-        </p>
-
-        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8">
-          <h4 className="font-semibold text-red-900 mb-2">Potentially Unfair Terms</h4>
-          <ul className="list-disc ml-4 text-red-800 space-y-2">
-            <li>Excessive penalty fees (e.g., £100 for late rent)</li>
-            <li>Requiring professional cleaning regardless of condition</li>
-            <li>Forfeiting deposit for early departure</li>
-            <li>Banning all visitors or overnight guests</li>
-            <li>Requiring permission for minor decoration</li>
-            <li>Excessive restrictions on reasonable lifestyle</li>
-          </ul>
-        </div>
-
-        <p>
-          Courts will consider whether terms create a significant imbalance between landlord
-          and tenant rights. Stick to reasonable, proportionate clauses.
-        </p>
-
-        <ImagePlaceholder
-          src="/images/blog/fair-tenancy-terms.svg"
-          alt="Fair vs unfair tenancy terms"
-          caption="Ensure your agreement contains only fair, enforceable terms"
-          aspectRatio="hero"
-        />
-
-        <h2 id="how-to-rent" className="scroll-mt-24">How to Rent Guide</h2>
-
-        <p>
-          In England, you must provide tenants with the government's "How to Rent" guide
-          before or at the start of the tenancy. This is a Section 21 requirement.
-        </p>
-
-        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
-          <h4 className="font-semibold text-blue-900 mb-2">How to Rent Compliance</h4>
-          <ul className="list-disc ml-4 text-blue-800 space-y-2">
-            <li>Provide the current version (check gov.uk for latest)</li>
-            <li>Give a paper copy or email with link to the online version</li>
-            <li>Provide before the tenancy starts or on the day it starts</li>
-            <li>Keep proof of when and how you provided it</li>
-            <li>Re-provide if the guide is updated during periodic tenancy</li>
-          </ul>
-        </div>
-
-        <p>
-          Without proof of providing this document, you cannot serve a valid Section 21
-          notice to end the tenancy.
-        </p>
-
-        <h2 id="signing-process" className="scroll-mt-24">Signing Process</h2>
-
-        <p>
-          A properly executed agreement requires attention to detail. Follow these steps
-          to ensure your agreement is valid and enforceable.
-        </p>
-
-        <ol className="list-decimal ml-6 space-y-3 my-4">
-          <li>
-            <strong>Review with tenant:</strong> Go through the agreement together,
-            explaining key terms and answering questions.
-          </li>
-          <li>
-            <strong>Sign all copies:</strong> Both parties sign and date every copy.
-            Each tenant should sign if multiple tenants.
-          </li>
-          <li>
-            <strong>Witness signatures:</strong> Not legally required but adds evidential weight.
-          </li>
-          <li>
-            <strong>Provide copies:</strong> Give each tenant a signed copy immediately.
-          </li>
-          <li>
-            <strong>Store securely:</strong> Keep your signed copy with other tenancy documents.
-          </li>
-        </ol>
-
-        <h2 id="renewals" className="scroll-mt-24">Renewals and Periodic Tenancies</h2>
-
-        <p>
-          When a fixed-term ends, the tenancy typically becomes periodic (rolling monthly)
-          unless a new fixed term is signed.
-        </p>
-
-        <div className="overflow-x-auto my-8">
-          <table className="min-w-full border-collapse">
-            <thead>
-              <tr className="bg-gray-100">
-                <th className="border p-3 text-left font-semibold">Option</th>
-                <th className="border p-3 text-left font-semibold">Advantages</th>
-                <th className="border p-3 text-left font-semibold">Disadvantages</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td className="border p-3">New fixed term</td>
-                <td className="border p-3">Certainty, locked-in tenant, can update terms</td>
-                <td className="border p-3">Less flexibility, renewal admin</td>
-              </tr>
-              <tr className="bg-gray-50">
-                <td className="border p-3">Allow periodic</td>
-                <td className="border p-3">Flexibility, no admin, same terms continue</td>
-                <td className="border p-3">Tenant can leave with notice, less certainty</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
-          <h3 className="text-xl font-bold text-gray-900 mb-4">Professional Tenancy Agreements</h3>
-          <p className="text-gray-700 mb-6">
-            Landlord Heaven provides professionally drafted tenancy agreement templates,
-            customizable clauses, and compliance checklists to protect your interests.
+          <h4 className="font-semibold text-amber-900 mb-2">Do not reuse the wrong UK template</h4>
+          <p className="text-amber-800">
+            If a landlord uses the wrong jurisdiction&apos;s wording, the agreement may no longer reflect the current legal position,
+            may contain outdated clauses, and may be harder to rely on later.
           </p>
-          <Link
-            href="/products/notice-only"
-            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
-          >
-            View Agreement Templates →
-          </Link>
         </div>
 
-        <h2 id="agreement-faq" className="scroll-mt-24">Tenancy Agreement FAQ</h2>
+        <BlogCTA variant="default" />
 
-        <div className="space-y-6 my-8">
-          <div className="bg-gray-50 rounded-lg p-6">
-            <h3 className="font-semibold text-gray-900 mb-2">Is a verbal agreement valid?</h3>
-            <p className="text-gray-600">
-              Legally, yes - an AST can be verbal. However, without written evidence, proving
-              terms becomes extremely difficult. Always use a written agreement to protect
-              both parties.
-            </p>
-          </div>
+        <h2 id="agreement-faq" className="scroll-mt-24">FAQ</h2>
 
-          <div className="bg-gray-50 rounded-lg p-6">
-            <h3 className="font-semibold text-gray-900 mb-2">Can I change terms during a tenancy?</h3>
-            <p className="text-gray-600">
-              Not unilaterally during a fixed term. Both parties must agree to any changes
-              in writing. For periodic tenancies, you can propose changes, but the tenant
-              can refuse.
-            </p>
-          </div>
+        <h3>Can I use one tenancy agreement template across the whole UK?</h3>
+        <p>No. The framework and terminology change between England, Wales, Scotland, and Northern Ireland.</p>
 
-          <div className="bg-gray-50 rounded-lg p-6">
-            <h3 className="font-semibold text-gray-900 mb-2">What if a tenant breaks agreement terms?</h3>
-            <p className="text-gray-600">
-              Address breaches promptly in writing. Depending on severity, you may seek
-              possession under Section 8 grounds. However, minor breaches rarely justify
-              ending the tenancy.
-            </p>
-          </div>
+        <h3>Does England still use AST as the main current product language?</h3>
+        <p>
+          Landlords still search for AST, but new England agreements should now be explained using current England
+          tenancy agreement wording designed for the assured periodic framework.
+        </p>
 
-          <div className="bg-gray-50 rounded-lg p-6">
-            <h3 className="font-semibold text-gray-900 mb-2">Do I need a solicitor to draft agreements?</h3>
-            <p className="text-gray-600">
-              Not necessarily. Many landlords use quality template agreements. However,
-              for complex situations (company lets, unusual terms), legal advice is valuable
-              to ensure enforceability.
-            </p>
-          </div>
-        </div>
+        <h3>Where should I start if I am unsure?</h3>
+        <p>
+          Start with the <Link href="/products/ast" className="text-primary font-semibold hover:underline">Landlord Heaven tenancy agreement page</Link>,
+          then choose the route for the property jurisdiction.
+        </p>
       </>
     ),
   },
-
   // Article 74: UK Property Maintenance Obligations
   {
     slug: 'uk-property-maintenance-obligations',
@@ -39842,6 +39417,220 @@ export const blogPosts: BlogPost[] = [
       </>
     ),
   },
+  // Article: England tenancy agreement review after 1 May 2026
+  {
+    slug: 'do-landlords-need-a-new-tenancy-agreement-after-1-may-2026',
+    title: 'Do Landlords Need a New Tenancy Agreement After 1 May 2026? England Guide',
+    description: 'England landlords should review whether older tenancy agreements still reflect the assured periodic framework from 1 May 2026 and whether outdated clauses may now be weaker than expected.',
+    metaDescription: 'Do landlords need a new tenancy agreement after 1 May 2026? England guide to outdated clauses, assured periodic wording, and when to review or replace old templates.',
+    date: '2026-03-22',
+    updatedDate: '2026-03-22',
+    readTime: '10 min read',
+    wordCount: 1540,
+    category: 'Tenancy Agreements',
+    tags: ['England tenancy agreement', 'Renters Rights Act', 'assured periodic tenancy', 'landlord guide', 'AST legacy search'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/heroes/lh-blog-tenancy-agreements-v1.webp',
+    heroImageAlt: 'England landlord reviewing tenancy agreement after 1 May 2026',
+    showUrgencyBanner: false,
+    targetKeyword: 'new tenancy agreement after 1 May 2026',
+    secondaryKeywords: ['England tenancy agreement 2026', 'assured periodic tenancy agreement', 'old tenancy agreement outdated', 'review tenancy agreement England'],
+    tableOfContents: [
+      { id: 'what-changed', title: 'What Changed on 1 May 2026', level: 2 },
+      { id: 'do-you-need-new-agreement', title: 'Do You Always Need a New Agreement?', level: 2 },
+      { id: 'signs-old-agreement-outdated', title: 'Signs an Old Agreement May Be Outdated', level: 2 },
+      { id: 'review-vs-replace', title: 'Review vs Replace', level: 2 },
+      { id: 'standard-vs-premium', title: 'Should You Choose Standard or Premium?', level: 2 },
+      { id: 'faq', title: 'FAQ', level: 2 },
+    ],
+    relatedPosts: ['england-assured-shorthold-tenancy-guide', 'uk-tenancy-agreements-guide', 'renters-reform-bill-what-landlords-need-to-know'],
+    faqs: [
+      {
+        question: 'Do all landlords need a brand-new tenancy agreement on 1 May 2026?',
+        answer: 'Not automatically. But many landlords should review what they are using because old wording may no longer reflect the current England position.',
+      },
+      {
+        question: 'Can an old AST template still cause problems?',
+        answer: 'Yes. Older AST-first wording may contain outdated assumptions, may not reflect the assured periodic framework, and may be harder to rely on later.',
+      },
+      {
+        question: 'When is Premium more suitable than Standard?',
+        answer: 'Premium is usually the better fit where the let is more complex, higher-risk, guarantor-backed, shared, student-led, or where broader drafting matters.',
+      },
+    ],
+    sources: [
+      {
+        title: 'GOV.UK tenancy types',
+        url: 'https://www.gov.uk/guidance/renting-out-your-property-guidance-for-landlords-and-letting-agents/tenancy-types',
+        type: 'government',
+      },
+      {
+        title: 'GOV.UK tenancy agreements overview',
+        url: 'https://www.gov.uk/guidance/renting-out-your-property-guidance-for-landlords-and-letting-agents/tenancy-agreements-overview',
+        type: 'government',
+      },
+    ],
+    content: (
+      <>
+        <p className="lead">
+          The short answer is <strong>not always</strong>, but many England landlords should review what they are using.
+          From <strong>1 May 2026</strong>, new England tenancy agreements generally move into the assured periodic framework.
+          If your paperwork is old, generic, lightly edited, or still built around fixed-term AST assumptions, it may no
+          longer reflect the current position and may not give you the protection you expect.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/heroes/lh-blog-tenancy-agreements-v1.webp"
+          alt="England tenancy agreement review after 1 May 2026"
+          caption="A current tenancy agreement review is often safer than relying on an old template with familiar wording"
+          aspectRatio="hero"
+        />
+
+        <div className="grid gap-4 md:grid-cols-2 my-8">
+          <div className="rounded-2xl border border-amber-200 bg-amber-50 p-6">
+            <AlertTriangle className="h-5 w-5 text-amber-700 mb-3" />
+            <h3 className="text-lg font-semibold text-amber-900 mb-2">Old wording may no longer fit</h3>
+            <p className="text-amber-800">
+              Legacy AST assumptions, stale clauses, and generic wording may now be weaker or less useful than the landlord expects.
+            </p>
+          </div>
+          <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-6">
+            <BadgeCheck className="h-5 w-5 text-emerald-700 mb-3" />
+            <h3 className="text-lg font-semibold text-emerald-900 mb-2">Current wording gives clearer direction</h3>
+            <p className="text-emerald-800">
+              A current England agreement route is designed to reflect the assured periodic framework and the current public-law position.
+            </p>
+          </div>
+          <div className="rounded-2xl border border-slate-200 bg-white p-6">
+            <Clock3 className="h-5 w-5 text-slate-700 mb-3" />
+            <h3 className="text-lg font-semibold text-slate-900 mb-2">Review before the next let</h3>
+            <p className="text-slate-700">
+              The best time to review or replace the agreement is before you grant the next tenancy, not after a dispute has started.
+            </p>
+          </div>
+          <div className="rounded-2xl border border-red-200 bg-red-50 p-6">
+            <FileText className="h-5 w-5 text-red-700 mb-3" />
+            <h3 className="text-lg font-semibold text-red-900 mb-2">The wrong template can create risk</h3>
+            <p className="text-red-800">
+              England, Wales, Scotland, and Northern Ireland each use different tenancy frameworks, so the wrong jurisdiction&apos;s wording is a real problem.
+            </p>
+          </div>
+        </div>
+
+        <h2 id="what-changed" className="scroll-mt-24">What Changed on 1 May 2026</h2>
+
+        <p>
+          From 1 May 2026, the way England tenancy agreements are described and structured changes materially. Existing
+          assured shorthold tenancies move into the assured periodic model, and new private rented sector agreements are
+          generally framed around that same assured periodic structure.
+        </p>
+
+        <p>
+          That matters because many landlords still keep old files labelled AST agreement, fixed-term tenancy agreement,
+          or six-month AST template. Those documents may still feel familiar while no longer reflecting the current legal
+          position as clearly as a landlord would want.
+        </p>
+
+        <h2 id="do-you-need-new-agreement" className="scroll-mt-24">Do You Always Need a New Agreement?</h2>
+
+        <p>
+          Not every landlord needs to tear up every historic file immediately. But many should review what they are using,
+          especially if the agreement was downloaded years ago, adapted from a generic template, or drafted around old
+          fixed-term AST assumptions.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">A practical test</h4>
+          <p className="text-blue-800">
+            If you cannot confidently explain why the wording still matches the current England framework, it is usually
+            worth reviewing or replacing it before you rely on it again.
+          </p>
+        </div>
+
+        <h2 id="signs-old-agreement-outdated" className="scroll-mt-24">Signs an Old Agreement May Be Outdated</h2>
+
+        <ul>
+          <li>The agreement is still sold or described mainly as a fixed-term AST.</li>
+          <li>The wording was downloaded from a generic template site and lightly edited.</li>
+          <li>The document was written for the wrong UK jurisdiction.</li>
+          <li>You are expecting the old wording to carry more protection than it really gives.</li>
+          <li>You are not sure whether the clauses were updated to reflect the current England position.</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/tenancy-essential-terms.svg"
+          alt="Checklist for reviewing old England tenancy agreement wording"
+          caption="A tenancy agreement review should focus on whether the wording still reflects the current England framework"
+          aspectRatio="hero"
+        />
+
+        <h2 id="review-vs-replace" className="scroll-mt-24">Review vs Replace</h2>
+
+        <p>
+          Sometimes a review is enough. In other cases, replacement is cleaner and safer. If the agreement is heavily tied
+          to old AST-first assumptions, a fresh current-law route is often the better commercial decision.
+        </p>
+
+        <p>
+          That is also where guided generation helps. Landlords using old templates often spend time trying to work out
+          which clauses to keep, which language is stale, and what should now change. A guided route reduces that guesswork.
+        </p>
+
+        <BlogCTA variant="default" />
+
+        <h2 id="standard-vs-premium" className="scroll-mt-24">Should You Choose Standard or Premium?</h2>
+
+        <p>
+          For straightforward lets, the <Link href="/products/ast" className="text-primary font-semibold hover:underline">Standard tenancy agreement route</Link>
+          will often be enough. For more complex or higher-risk lets, the <Link href="/products/ast" className="text-primary font-semibold hover:underline">Premium route</Link>
+          is usually the stronger choice.
+        </p>
+
+        <div className="grid gap-6 md:grid-cols-2 my-8">
+          <div className="rounded-xl border border-gray-200 bg-white p-6">
+            <h3 className="text-xl font-semibold text-gray-900 mb-3">Choose Standard for:</h3>
+            <ul className="space-y-2 text-gray-700">
+              <li>Single household lets</li>
+              <li>Straightforward property use</li>
+              <li>Landlords who want current wording without extra complexity</li>
+            </ul>
+          </div>
+          <div className="rounded-xl border border-red-200 bg-red-50 p-6">
+            <h3 className="text-xl font-semibold text-gray-900 mb-3">Choose Premium for:</h3>
+            <ul className="space-y-2 text-gray-700">
+              <li>Shared households, HMOs, or student lets</li>
+              <li>Guarantor-backed arrangements</li>
+              <li>Landlords who want broader wording and more detailed protection</li>
+            </ul>
+          </div>
+        </div>
+
+        <h2 id="faq" className="scroll-mt-24">FAQ</h2>
+
+        <h3>Does every old agreement become useless on 1 May 2026?</h3>
+        <p>
+          No. But many older agreements may no longer reflect the current position as clearly as landlords expect, which is
+          why review or replacement is often sensible.
+        </p>
+
+        <h3>Can I still rely on an old AST template I downloaded years ago?</h3>
+        <p>
+          You may be relying on outdated assumptions or clauses. That does not automatically make it worthless, but it is a
+          strong reason to review the wording before you use it again.
+        </p>
+
+        <h3>Where should I start if I want the current England route?</h3>
+        <p>
+          Start with the <Link href="/products/ast" className="text-primary font-semibold hover:underline">Landlord Heaven tenancy agreement page</Link>
+          and compare the Standard and Premium routes.
+        </p>
+      </>
+    ),
+  },
+
 ];
 
 export function getBlogPost(slug: string): BlogPost | undefined {

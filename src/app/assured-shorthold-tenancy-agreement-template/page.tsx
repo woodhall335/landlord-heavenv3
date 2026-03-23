@@ -5,23 +5,24 @@ import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/assured-shorthold-tenancy-agreement-template');
-const wizardHref = '/products/ast';
+const standardWizardHref = '/wizard?product=ast_standard&src=england_tenancy_page&topic=tenancy';
+const premiumWizardHref = '/wizard?product=ast_premium&src=england_tenancy_page&topic=tenancy';
 
 export const metadata: Metadata = {
   title: 'Assured Shorthold Tenancy Agreement Template | Legacy AST Explainer',
   description:
-    'Legacy AST explainer page for landlords searching assured shorthold tenancy agreement template. The live England product is now a Residential Tenancy Agreement updated for the Renters’ Rights Act 2025.',
+    'Legacy AST explainer page for landlords searching assured shorthold tenancy agreement template. The live England routes now use current wording designed for the assured periodic framework from 1 May 2026.',
   keywords: [
     'assured shorthold tenancy agreement template',
     'ast template england',
     'assured shorthold tenancy agreement',
-    'residential tenancy agreement england',
+    'england tenancy agreement',
   ],
   alternates: { canonical: canonicalUrl },
   openGraph: {
     title: 'Assured Shorthold Tenancy Agreement Template | Legacy AST Explainer',
     description:
-      'Legacy AST explainer page that now routes England landlords into the updated Residential Tenancy Agreement flow.',
+      'Legacy AST explainer page that routes England landlords into the current Standard and Premium agreement flows.',
     url: canonicalUrl,
     type: 'article',
   },
@@ -40,29 +41,27 @@ export default function AssuredShortholdTenancyAgreementTemplatePage() {
       <EnglandTenancyPage
         pagePath="/assured-shorthold-tenancy-agreement-template"
         title="Assured Shorthold Tenancy Agreement Template"
-        subtitle="AST is now legacy search language for England. Use this explainer page to understand the terminology shift, then move into the updated Residential Tenancy Agreement flow."
-        primaryCtaLabel="Use updated England agreement"
-        primaryCtaHref={wizardHref}
-        secondaryCtaLabel="See main England page"
-        secondaryCtaHref="/tenancy-agreement"
-        legacyNotice="Landlord Heaven keeps this AST page live for search demand, but the live England self-serve tenancy product is now sold as a Residential Tenancy Agreement updated for the Renters’ Rights Act 2025."
-        introTitle="AST search intent, updated England route"
+        subtitle="AST is now largely legacy search language for England. Use this explainer page to understand the terminology shift, then move into the current Standard or Premium England agreement route designed for the assured periodic framework from 1 May 2026."
+        primaryCtaLabel="Start Standard England agreement"
+        primaryCtaHref={standardWizardHref}
+        secondaryCtaLabel="Start Premium England agreement"
+        secondaryCtaHref={premiumWizardHref}
+        legacyNotice="Landlord Heaven keeps this AST page live for search demand, but the live England self-serve routes are now sold using current agreement wording designed for the assured periodic framework."
+        introTitle="AST search intent, current England route"
         introBody={[
           'Many landlords still search for an assured shorthold tenancy agreement template because that was the familiar England label for years.',
-          'The live England product has now been repositioned to reflect the updated public compliance stance: Renters’ Rights compliant Residential Tenancy Agreement.',
+          'From 1 May 2026 new England agreements generally move into the assured periodic model, so the live routes now use current England agreement wording rather than selling a new fixed-term AST in the old sense.',
         ]}
         highlights={[
           'Legacy AST explainer preserved for ranking',
-          'Clear routing into the current England Residential Tenancy Agreement flow',
+          'Clear routing into the current Standard and Premium England agreement flows',
           'Updated page copy explains why AST is now legacy search terminology',
         ]}
         compliancePoints={[
-          'Act wording in body copy, AST wording kept only for legacy query capture',
-          'England product messaging now centres on the updated Residential Tenancy Agreement',
+          'AST wording kept only for legacy query capture while current-law wording leads the product journey',
+          'England product messaging now centres on the assured periodic framework from 1 May 2026',
         ]}
       />
     </div>
   );
 }
-
-
