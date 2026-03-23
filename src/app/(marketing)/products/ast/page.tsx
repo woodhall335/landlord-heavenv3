@@ -512,7 +512,6 @@ export default function ASTProductPage() {
       <UniversalHero
         title="Tenancy agreement designed to meet the new Renters' Rights framework"
         subtitle="Create the correct agreement for your property, including an England tenancy agreement designed for the new assured periodic tenancy framework from 1 May 2026."
-        trustText="Updated England tenancy agreement wording - Assured periodic framework from 1 May 2026 - Older wording may be harder to rely on"
         actionsSlot={
           <div className="grid w-full gap-3 sm:grid-cols-2 lg:max-w-2xl">
             <div className="rounded-2xl border border-white/20 bg-white/10 p-3 backdrop-blur-sm">
@@ -529,7 +528,6 @@ export default function ASTProductPage() {
         }
         mediaSrc="/images/tenancy_agreements.webp"
         mediaAlt="Preview of Landlord Heaven tenancy agreement documents"
-        feature="England: assured periodic tenancy framework. Wales: occupation contract. Scotland: private residential tenancy. Northern Ireland: private tenancy agreement."
         showTrustPositioningBar
       />
 
