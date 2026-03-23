@@ -90,7 +90,7 @@ describe('/products/ast page', () => {
     expect(
       screen.getByRole('heading', {
         level: 1,
-        name: "Renters' Rights Act Compliant Assured Periodic Tenancy Agreement",
+        name: "New Renters' Rights Act Compliant Assured Periodic Tenancy Agreement",
       }),
     ).toBeInTheDocument();
 

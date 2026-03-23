@@ -358,7 +358,7 @@ const faqs: FAQItem[] = [
 ];
 
 export const metadata: Metadata = {
-  title: `Tenancy Agreements UK | Standard or Premium by Jurisdiction | From ${PRODUCTS.ast_standard.displayPrice}`,
+  title: "New Renters' Rights Act Compliant Assured Periodic Tenancy Agreement",
   description:
     'Choose the right tenancy agreement for England, Wales, Scotland, or Northern Ireland. Start with the correct jurisdiction, choose Standard for straightforward lets or Premium for more complex ones, and use the England route aligned to the assured periodic framework from 1 May 2026.',
   keywords: [
@@ -375,7 +375,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: canonicalUrl },
   openGraph: {
-    title: 'Tenancy Agreements UK | The right agreement for each part of the UK',
+    title: "New Renters' Rights Act Compliant Assured Periodic Tenancy Agreement",
     description:
       'Choose the right tenancy agreement for each UK jurisdiction, with Standard and Premium routes and England wording aligned to the assured periodic framework from 1 May 2026.',
     url: canonicalUrl,
@@ -514,7 +514,7 @@ export default function ASTProductPage() {
       <div className="pointer-events-none absolute left-[18%] top-[95rem] h-56 w-56 rounded-full bg-[#ECE6FF] opacity-55 blur-3xl" />
 
       <UniversalHero
-        title="Renters' Rights Act Compliant Assured Periodic Tenancy Agreement"
+        title="New Renters' Rights Act Compliant Assured Periodic Tenancy Agreement"
         subtitle="Don't get caught out by changes from 1 May 2026. Create a new Assured Periodic Tenancy Agreement now and ensure legal compliance without any stress."
         actionsSlot={
           <div className="grid w-full gap-3 sm:grid-cols-2 lg:max-w-2xl">
