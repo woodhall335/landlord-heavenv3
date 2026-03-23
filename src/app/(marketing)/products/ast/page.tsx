@@ -137,7 +137,7 @@ const jurisdictions: JurisdictionCardData[] = [
   {
     name: 'England',
     flag: '/gb-eng.svg',
-    agreementType: 'England tenancy agreement',
+    agreementType: 'Updated England tenancy agreement',
     summary:
       'For England, Landlord Heaven uses agreement wording designed for the assured periodic tenancy framework that applies to new private lets from 1 May 2026, while still helping landlords who arrive using older AST search language.',
     points: [
