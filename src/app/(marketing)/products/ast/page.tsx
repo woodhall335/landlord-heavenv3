@@ -512,7 +512,7 @@ export default function ASTProductPage() {
       <UniversalHero
         title="Tenancy agreement designed to meet the new Renters' Rights framework"
         subtitle="Create the correct agreement for your property, including an England tenancy agreement designed for the new assured periodic tenancy framework from 1 May 2026. Many older or generic templates rely on outdated structures and may not reflect how tenancies now operate, and may not be legally enforceable in the way landlords expect, leading to weaker protection or complications if issues arise."
-        trustText="Current England framework from 1 May 2026 - Older wording may lead to weaker protection if issues arise - Preview before payment"
+        trustText="Renters Right Act Compliant"
         actionsSlot={
           <div className="grid w-full gap-3 sm:grid-cols-2 lg:max-w-2xl">
             <div className="rounded-2xl border border-white/20 bg-white/10 p-3 backdrop-blur-sm">
