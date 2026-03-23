@@ -22,6 +22,10 @@ const LIGHT_SECONDARY_BUTTON_CLASS =
   'inline-flex items-center justify-center rounded-xl border border-[#D9D4EA] bg-white/85 px-4 py-3 text-center text-base font-semibold text-[#2A3550] transition hover:border-[#BDAFE8] hover:bg-white';
 const DARK_SECONDARY_BUTTON_CLASS =
   'inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-base font-semibold text-white transition hover:border-white/40 hover:bg-white/15';
+const ENGLAND_UPDATE_BUTTON_BASE_CLASS =
+  'inline-flex min-h-[60px] w-full items-center justify-center rounded-xl px-6 py-4 text-center text-base font-semibold transition sm:w-[19rem]';
+const ENGLAND_UPDATE_PRIMARY_BUTTON_CLASS = `${ENGLAND_UPDATE_BUTTON_BASE_CLASS} border border-[#8B7BFF] bg-white text-[#2D2152] shadow-[0_14px_30px_rgba(12,10,24,0.18)] hover:border-white hover:bg-[#F7F4FF]`;
+const ENGLAND_UPDATE_SECONDARY_BUTTON_CLASS = `${ENGLAND_UPDATE_BUTTON_BASE_CLASS} border border-white/25 bg-white/10 text-white hover:border-white/40 hover:bg-white/15`;
 
 type ProductCardData = {
   name: string;
@@ -510,8 +514,8 @@ export default function ASTProductPage() {
       <div className="pointer-events-none absolute left-[18%] top-[95rem] h-56 w-56 rounded-full bg-[#ECE6FF] opacity-55 blur-3xl" />
 
       <UniversalHero
-        title="Choose the right tenancy agreement for the property"
-        subtitle="Start with the correct jurisdiction-specific agreement for the property, then choose Standard for a straightforward let or Premium for a more complex one. For England, new private lets follow the assured periodic framework from 1 May 2026."
+        title="Renters' Rights Act Compliant Assured Periodic Tenancy Agreement"
+        subtitle="Don't get caught out by changes from 1 May 2026. Create a new Assured Periodic Tenancy Agreement now and ensure legal compliance without any stress."
         actionsSlot={
           <div className="grid w-full gap-3 sm:grid-cols-2 lg:max-w-2xl">
             <div className="rounded-2xl border border-white/20 bg-white/10 p-3 backdrop-blur-sm">
@@ -648,13 +652,13 @@ export default function ASTProductPage() {
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                   <Link
                     href="/wizard?product=ast_standard&jurisdiction=england&src=product_page&topic=tenancy"
-                    className={PRIMARY_BUTTON_CLASS}
+                    className={ENGLAND_UPDATE_PRIMARY_BUTTON_CLASS}
                   >
                     Start Standard England agreement
                   </Link>
                   <Link
                     href="/wizard?product=ast_premium&jurisdiction=england&src=product_page&topic=tenancy"
-                    className={DARK_SECONDARY_BUTTON_CLASS}
+                    className={ENGLAND_UPDATE_SECONDARY_BUTTON_CLASS}
                   >
                     Start Premium England agreement
                   </Link>

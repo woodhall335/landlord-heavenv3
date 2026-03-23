@@ -90,13 +90,13 @@ describe('/products/ast page', () => {
     expect(
       screen.getByRole('heading', {
         level: 1,
-        name: 'Choose the right tenancy agreement for the property',
+        name: "Renters' Rights Act Compliant Assured Periodic Tenancy Agreement",
       }),
     ).toBeInTheDocument();
 
     expect(
       screen.getByText(
-        /Start with the correct jurisdiction-specific agreement for the property, then choose Standard for a straightforward let or Premium for a more complex one\./i,
+        /Don't get caught out by changes from 1 May 2026\. Create a new Assured Periodic Tenancy Agreement now and ensure legal compliance without any stress\./i,
       ),
     ).toBeInTheDocument();
 
