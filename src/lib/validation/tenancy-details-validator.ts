@@ -1,4 +1,9 @@
 import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
+import {
+  getEnglandTenancyPurpose,
+  isEnglandPostReformTenancy,
+  normalizeIsoDateString,
+} from '@/lib/tenancy/england-reform';
 
 export const REQUIRED_TENANCY_FIELDS = [
   'landlord_full_name',
@@ -30,8 +35,7 @@ function isBlankString(value: unknown): boolean {
 }
 
 function hasValidDate(value: unknown): boolean {
-  if (typeof value !== 'string' || value.trim().length === 0) return false;
-  return !Number.isNaN(new Date(value).getTime());
+  return normalizeIsoDateString(value) !== undefined;
 }
 
 function isIsoDate(value: unknown): value is string {
@@ -45,6 +49,17 @@ function toFiniteNumber(value: unknown): number | null {
     return Number.isFinite(parsed) ? parsed : null;
   }
   return null;
+}
+
+function toOptionalBoolean(value: unknown): boolean | undefined {
+  if (typeof value === 'boolean') return value;
+  if (typeof value === 'string') {
+    const normalized = value.trim().toLowerCase();
+    if (normalized === 'true' || normalized === 'yes') return true;
+    if (normalized === 'false' || normalized === 'no') return false;
+  }
+
+  return undefined;
 }
 
 /**
@@ -120,7 +135,34 @@ export function validateTenancyRequiredFacts(
       ? wizardFacts.is_fixed_term
       : caseFacts.tenancy.fixed_term;
 
-  const englandPostReformStart = jurisdiction === 'england';
+  const englandTenancyPurpose = getEnglandTenancyPurpose(wizardFacts.england_tenancy_purpose);
+  const englandPostReformStart = isEnglandPostReformTenancy({
+    jurisdiction,
+    tenancyStartDate: startDate,
+    purpose: englandTenancyPurpose,
+  });
+  const existingWrittenTransitionAcknowledged = toOptionalBoolean(
+    wizardFacts.existing_written_tenancy_transition
+  );
+  const existingVerbalTransitionAcknowledged = toOptionalBoolean(
+    wizardFacts.existing_verbal_tenancy_summary
+  );
+
+  if (jurisdiction === 'england' && englandTenancyPurpose === 'existing_written_tenancy') {
+    if (existingWrittenTransitionAcknowledged === undefined) {
+      missing.add('existing_written_tenancy_transition');
+    } else if (existingWrittenTransitionAcknowledged !== true) {
+      invalid.add('existing_written_tenancy_transition');
+    }
+  }
+
+  if (jurisdiction === 'england' && englandTenancyPurpose === 'existing_verbal_tenancy') {
+    if (existingVerbalTransitionAcknowledged === undefined) {
+      missing.add('existing_verbal_tenancy_summary');
+    } else if (existingVerbalTransitionAcknowledged !== true) {
+      invalid.add('existing_verbal_tenancy_summary');
+    }
+  }
 
   if (englandPostReformStart && isFixedTerm === true) {
     invalid.add('is_fixed_term');

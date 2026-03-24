@@ -59,6 +59,21 @@ describe('validateTenancyRequiredFacts', () => {
     );
   });
 
+  it('rejects partial or non-calendar tenancy dates deterministically', () => {
+    const partialDate = validateTenancyRequiredFacts({
+      ...completeFacts,
+      tenancy_start_date: '2026-05',
+    }, { jurisdiction: 'england' });
+
+    const impossibleDate = validateTenancyRequiredFacts({
+      ...completeFacts,
+      tenancy_start_date: '2026-02-30',
+    }, { jurisdiction: 'england' });
+
+    expect(partialDate.invalid_fields).toContain('tenancy_start_date');
+    expect(impossibleDate.invalid_fields).toContain('tenancy_start_date');
+  });
+
   it('requires tenant contact fields and non-empty tenant array', () => {
     const noTenants = validateTenancyRequiredFacts({ ...completeFacts, tenants: [] }, { jurisdiction: 'england' });
     expect(noTenants.missing_fields).toContain('tenants');
@@ -89,6 +104,7 @@ describe('validateTenancyRequiredFacts', () => {
     const result = validateTenancyRequiredFacts({
       ...completeFacts,
       tenancy_start_date: '2026-05-02',
+      england_tenancy_purpose: 'new_agreement',
       is_fixed_term: true,
       tenancy_end_date: '2027-05-01',
       term_length: '12 months',
@@ -97,6 +113,44 @@ describe('validateTenancyRequiredFacts', () => {
     expect(result.invalid_fields).toContain('is_fixed_term');
     expect(result.missing_fields).not.toContain('tenancy_end_date');
     expect(result.missing_fields).not.toContain('term_length');
+  });
+
+  it('does not block existing written England transition cases from carrying legacy fixed-term data', () => {
+    const result = validateTenancyRequiredFacts({
+      ...completeFacts,
+      tenancy_start_date: '2026-05-02',
+      england_tenancy_purpose: 'existing_written_tenancy',
+      existing_written_tenancy_transition: true,
+      is_fixed_term: true,
+      tenancy_end_date: '2027-05-01',
+      term_length: '12 months',
+    }, { jurisdiction: 'england' });
+
+    expect(result.invalid_fields).not.toContain('is_fixed_term');
+    expect(result.missing_fields).not.toContain('tenancy_end_date');
+    expect(result.missing_fields).not.toContain('term_length');
+  });
+
+  it('requires the verbal tenancy written-information acknowledgement for England transition cases', () => {
+    const result = validateTenancyRequiredFacts({
+      ...completeFacts,
+      tenancy_start_date: '2026-05-02',
+      england_tenancy_purpose: 'existing_verbal_tenancy',
+      existing_verbal_tenancy_summary: false,
+    }, { jurisdiction: 'england' });
+
+    expect(result.invalid_fields).toContain('existing_verbal_tenancy_summary');
+  });
+
+  it('does not enforce England transition acknowledgements outside England', () => {
+    const result = validateTenancyRequiredFacts({
+      ...completeFacts,
+      __meta: { jurisdiction: 'wales' },
+      england_tenancy_purpose: 'existing_written_tenancy',
+    }, { jurisdiction: 'wales' });
+
+    expect(result.missing_fields).not.toContain('existing_written_tenancy_transition');
+    expect(result.invalid_fields).not.toContain('existing_written_tenancy_transition');
   });
 
   it('does not require fixed-term fields for Scotland PRT', () => {

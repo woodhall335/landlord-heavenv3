@@ -11,6 +11,7 @@ import React from 'react';
 import { RiHomeLine, RiUser3Line, RiTeamLine, RiCalendarLine, RiWallet3Line, RiShieldCheckLine, RiFileListLine } from 'react-icons/ri';
 import { Card } from '@/components/ui/Card';
 import type { CanonicalJurisdiction } from '@/lib/tenancy/product-normalization';
+import { getEnglandMissingPurposeWarning } from '@/lib/tenancy/england-reform';
 
 interface TenancySummaryPanelProps {
   /** Case collected_facts from the database */
@@ -164,9 +165,9 @@ function getAgreementTypeLabel(jurisdiction: CanonicalJurisdiction, isHmo: boole
     case 'england':
     default:
       if (isHmo || isPremium) {
-        return 'HMO Assured Shorthold Tenancy';
+        return 'Premium England Assured Periodic Tenancy';
       }
-      return 'Assured Shorthold Tenancy';
+      return 'England Assured Periodic Tenancy';
   }
 }
 
@@ -220,6 +221,11 @@ export function TenancySummaryPanel({
   const rentDueDay = collectedFacts.rent_due_day;
   const depositAmount = collectedFacts.deposit_amount;
   const depositScheme = getDepositSchemeDisplay(collectedFacts);
+  const englandMissingPurposeWarning = getEnglandMissingPurposeWarning({
+    jurisdiction,
+    tenancyStartDate: startDate,
+    purpose: collectedFacts.england_tenancy_purpose,
+  });
 
   return (
     <Card padding="large" className="mb-6">
@@ -234,6 +240,12 @@ export function TenancySummaryPanel({
           </p>
         </div>
       </div>
+
+      {englandMissingPurposeWarning && (
+        <div className="mb-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3">
+          <p className="text-sm text-amber-800">{englandMissingPurposeWarning}</p>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Agreement Type */}

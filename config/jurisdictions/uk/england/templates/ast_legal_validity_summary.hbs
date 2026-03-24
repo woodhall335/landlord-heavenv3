@@ -54,7 +54,7 @@
       <li>EPC rating: {{#if epc_rating}}Confirmed as {{epc_rating}}{{else}}Not confirmed{{/if}}</li>
       <li>Smoke alarms: {{#if smoke_alarms_fitted}}Confirmed{{else}}Not confirmed{{/if}}; CO alarms: {{#if carbon_monoxide_alarms}}Confirmed{{else}}Not confirmed{{/if}}</li>
       <li>Right to Rent checks: {{#if right_to_rent_check_date}}Completed on {{right_to_rent_check_date}}{{else}}Date not recorded{{/if}}</li>
-      <li>How to Rent guide: {{#if how_to_rent_guide_provided}}Confirmed issued{{else}}Not confirmed{{/if}}</li>
+      <li>England written information or government guidance recorded: {{#if how_to_rent_guide_provided}}Recorded{{else}}Not confirmed{{/if}}</li>
       {{#if has_shared_facilities}}
         <li>HMO/shared clauses included{{#if hmo_licence_status}} (licence: {{hmo_licence_status}}){{/if}}.</li>
       {{/if}}
@@ -62,14 +62,14 @@
 
     {{#unless how_to_rent_guide_provided}}
     <div style="background: #ffebee; border: 2px solid #f44336; border-radius: 6px; padding: 12px; margin-top: 12px;">
-      <p style="margin: 0; color: #c62828; font-weight: bold; font-size: 11pt;">IMPORTANT CHECK - How to Rent Guide Not Confirmed</p>
+      <p style="margin: 0; color: #c62828; font-weight: bold; font-size: 11pt;">IMPORTANT CHECK - England Written Information or Guidance Not Confirmed</p>
       <p style="margin: 8px 0 0 0; color: #c62828; font-size: 10pt; line-height: 1.5;">
-        <strong>Position:</strong> Provide the current government "How to Rent" guide where it is legally required for the tenancy.
+        <strong>Position:</strong> Record any England written information or government guidance you provide for this tenancy route, where applicable.
         <br><strong>Risk if omitted:</strong>
         <br>- Missing prescribed information can create compliance and evidential risk.
-        <br>- The landlord may need to serve the guide before relying on it as provided information where current law requires it.
+        <br>- The landlord may later need to prove what written information or guidance was supplied to the tenant.
         <br>- Proof of delivery should be retained with the tenancy file.
-        <br><strong>Action Required:</strong> Download the latest "How to Rent" guide from gov.uk and provide it to the tenant immediately. Retain proof of delivery.
+        <br><strong>Action Required:</strong> Confirm what written information or guidance was given, when it was given, and how delivery was evidenced in the tenancy file.
       </p>
     </div>
     {{/unless}}

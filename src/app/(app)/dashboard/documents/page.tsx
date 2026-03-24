@@ -321,8 +321,8 @@ export default function DocumentsPage() {
                             {doc.metadata.pack_type === 'notice_only' ? 'Notice Pack' :
                              doc.metadata.pack_type === 'complete_pack' ? 'Complete Pack' :
                              doc.metadata.pack_type === 'money_claim' ? 'Money Claim' :
-                             doc.metadata.pack_type === 'ast_standard' ? 'Standard AST' :
-                             doc.metadata.pack_type === 'ast_premium' ? 'Premium AST' :
+                             doc.metadata.pack_type === 'ast_standard' ? 'England Assured Periodic Tenancy' :
+                             doc.metadata.pack_type === 'ast_premium' ? 'England Assured Periodic Tenancy (Premium)' :
                              doc.metadata.pack_type}
                           </Badge>
                         )}

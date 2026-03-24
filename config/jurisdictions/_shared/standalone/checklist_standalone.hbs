@@ -323,24 +323,49 @@
   </table>
   <p class="legal-ref">Electrical Safety Standards in the Private Rented Sector (England) Regulations 2020</p>
 
-  <h3 class="page-break-before">5. How to Rent Guide (Mandatory)</h3>
+  <h3 class="page-break-before">5. England Written Information and Transition Duties</h3>
   <table class="checklist-table">
     <tr>
       <td class="checkbox-cell">&#9744;</td>
       <td>
-        <strong>Current "How to Rent" guide provided</strong><br>
-        <span class="guidance-text">The latest version of the government's "How to Rent" checklist must be provided to tenants at the start of the tenancy. Non-compliance may affect enforceability.</span>
+        <strong>England written information prepared for this tenancy route</strong><br>
+        <span class="guidance-text">For a new England agreement, ensure the tenancy paperwork explains the tenant notice period, section 13 rent increase route, landlord possession process, pets position, bills handling, and the main repair and safety duties.</span>
       </td>
     </tr>
     <tr>
       <td class="checkbox-cell">&#9744;</td>
       <td>
-        <strong>Proof of provision retained</strong><br>
-        <span class="guidance-text">Keep evidence (email receipt, signed acknowledgement) that the guide was provided.</span>
+        <strong>Proof of delivery retained for any statutory information you give</strong><br>
+        <span class="guidance-text">Keep evidence of delivery such as an email receipt, signed acknowledgement, or dated handover note.</span>
+      </td>
+    </tr>
+    {{#if (eq england_tenancy_purpose "existing_written_tenancy")}}
+    <tr>
+      <td class="checkbox-cell">&#9744;</td>
+      <td>
+        <strong>Exact Information Sheet 2026 PDF given to every named tenant</strong><br>
+        <span class="guidance-text">For an existing written or partly written England tenancy created before 1 May 2026, give every named tenant the exact government "Renters' Rights Act Information Sheet 2026" PDF by 31 May 2026. Do not replace it with a link or edited version.</span>
+      </td>
+    </tr>
+    {{/if}}
+    {{#if (eq england_tenancy_purpose "existing_verbal_tenancy")}}
+    <tr>
+      <td class="checkbox-cell">&#9744;</td>
+      <td>
+        <strong>Required written information given for the existing verbal tenancy</strong><br>
+        <span class="guidance-text">For an existing verbal England tenancy created before 1 May 2026, give the tenant the required written information about the key terms and statutory position by 31 May 2026.</span>
+      </td>
+    </tr>
+    {{/if}}
+    <tr>
+      <td class="checkbox-cell">&#9744;</td>
+      <td>
+        <strong>Any additional England written information or government guidance recorded</strong><br>
+        <span class="guidance-text">If you issue any additional England written information or government guidance for the tenancy, keep proof of delivery with the tenancy file.</span>
       </td>
     </tr>
   </table>
-  <p class="legal-ref">Deregulation Act 2015 | Assured Shorthold Tenancy Notices and Prescribed Requirements (England) Regulations 2015</p>
+  <p class="legal-ref">Renters' Rights Act 2025 guidance | Written information that must be given to tenants</p>
 
   <h3>6. Right to Rent Checks (Mandatory)</h3>
   <table class="checklist-table">
@@ -755,7 +780,17 @@
     </tr>
     {{#if (eq jurisdiction "england")}}
     <tr>
-      <td>How to Rent Guide provided</td>
+      <td>
+        {{#if (eq england_tenancy_purpose "existing_written_tenancy")}}
+          Information Sheet 2026 given to every named tenant
+        {{else}}
+          {{#if (eq england_tenancy_purpose "existing_verbal_tenancy")}}
+            Required written information given to tenant
+          {{else}}
+            England written information included
+          {{/if}}
+        {{/if}}
+      </td>
       <td>&#9744; Yes</td>
       <td>______________</td>
     </tr>

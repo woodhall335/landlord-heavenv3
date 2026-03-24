@@ -2,6 +2,18 @@ import {
   ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL,
   ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL,
 } from '@/lib/tenancy/england-agreement-constants';
+import { normalizeEnglandTenancyPurpose } from '@/lib/tenancy/england-reform';
+
+function assertNoDeprecatedEnglandAgreementTemplatePath(templatePath: string): string {
+  if (
+    /uk\/england\/templates\/deprecated\//.test(templatePath) ||
+    /uk\/england\/templates\/(standard_ast|premium_ast)\.hbs$/.test(templatePath)
+  ) {
+    throw new Error(`Deprecated England tenancy template path cannot be used in active config: ${templatePath}`);
+  }
+
+  return templatePath;
+}
 
 /**
  * Template Configuration
@@ -281,14 +293,21 @@ export function getCompletePackTemplates(jurisdiction: string, noticeRoute: stri
 // AST TEMPLATES
 // ============================================
 
-export function getASTTemplates(jurisdiction: string, tier: 'standard' | 'premium'): TemplateConfig[] {
+export function getASTTemplates(
+  jurisdiction: string,
+  tier: 'standard' | 'premium',
+  options: { englandTenancyPurpose?: string } = {}
+): TemplateConfig[] {
   const templates: TemplateConfig[] = [];
+  const englandTenancyPurpose = normalizeEnglandTenancyPurpose(options.englandTenancyPurpose);
 
   // Main agreement template
   if (jurisdiction === 'england') {
     templates.push({
       id: 'tenancy-agreement',
-      templatePath: tier === 'premium' ? 'uk/england/templates/premium_ast_formatted.hbs' : 'uk/england/templates/standard_ast_formatted.hbs',
+      templatePath: assertNoDeprecatedEnglandAgreementTemplatePath(
+        tier === 'premium' ? 'uk/england/templates/premium_ast_formatted.hbs' : 'uk/england/templates/standard_ast_formatted.hbs'
+      ),
       title: tier === 'premium' ? ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL : ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL,
       type: 'agreement',
       description: 'Assured Periodic Tenancy Agreement',
@@ -324,6 +343,16 @@ export function getASTTemplates(jurisdiction: string, tier: 'standard' | 'premiu
         description: 'Recommended clauses from official guidance',
         category: 'guidance',
       },
+      ...(englandTenancyPurpose === 'existing_written_tenancy'
+        ? [{
+            id: 'renters-rights-information-sheet-2026',
+            templatePath: 'mqs/tenancy_agreement/The_Renters__Rights_Act_Information_Sheet_2026.pdf',
+            title: 'Renters\' Rights Act Information Sheet 2026',
+            type: 'guidance',
+            description: 'Exact government PDF for existing written England tenancy transition cases.',
+            category: 'guidance' as const,
+          }]
+        : []),
       {
         id: 'deposit-protection-cert',
         templatePath: 'uk/england/templates/deposit_protection_certificate.hbs',

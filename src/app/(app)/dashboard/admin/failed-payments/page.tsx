@@ -115,8 +115,8 @@ export default async function AdminFailedPaymentsPage({ searchParams }: AdminFai
       notice_only: "Notice Only",
       complete_pack: "Complete Eviction Pack",
       money_claim: "Money Claim Pack",
-      ast_standard: "Standard AST",
-      ast_premium: "Premium AST",
+      ast_standard: "England Assured Periodic Tenancy",
+      ast_premium: "England Assured Periodic Tenancy (Premium)",
     };
     return names[productType] || productType;
   }

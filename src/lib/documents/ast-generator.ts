@@ -29,6 +29,10 @@ import {
   ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL,
   ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL,
 } from '../tenancy/england-agreement-constants';
+import type { EnglandTenancyPurpose } from '../tenancy/england-reform';
+import { isEnglandPostReformTenancy } from '../tenancy/england-reform';
+import { shouldIncludeEnglandInformationSheet } from '../tenancy/england-reform';
+import { readFile } from 'fs/promises';
 import path from 'path';
 
 // ============================================================================
@@ -122,6 +126,7 @@ interface JurisdictionConfig {
   checklistDocumentType: string;
   /** Document type key for Easy Read Notes (Scotland only, must match pack-contents) */
   easyReadNotesDocumentType?: string;
+  rentersRightsInformationSheet2026Path?: string;
 }
 
 /**
@@ -158,6 +163,7 @@ const JURISDICTION_CONFIGS: Record<TenancyJurisdiction, JurisdictionConfig> = {
       maintenanceGuide: 'uk/england/templates/premium/property_maintenance_guide.hbs',
       checkoutProcedure: 'uk/england/templates/premium/checkout_procedure.hbs',
     },
+    rentersRightsInformationSheet2026Path: 'mqs/tenancy_agreement/The_Renters__Rights_Act_Information_Sheet_2026.pdf',
   },
   // WALES: Uses Occupation Contract terminology. Renting Homes (Wales) Act 2016.
   // Terminology: "Landlord", "Contract-holder" (NOT Tenant), "Dwelling"
@@ -303,12 +309,18 @@ export function getJurisdictionConfig(jurisdiction: TenancyJurisdiction): Jurisd
 
 function buildEnglandTenancyReformWarning(
   jurisdiction: TenancyJurisdiction,
-  tenancyStartDate?: string
+  tenancyStartDate?: string,
+  purpose?: EnglandTenancyPurpose
 ): string | undefined {
-  if (jurisdiction !== 'england') return undefined;
-
-  const startDate = (tenancyStartDate || '').trim();
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(startDate)) return undefined;
+  if (
+    !isEnglandPostReformTenancy({
+      jurisdiction,
+      tenancyStartDate,
+      purpose,
+    })
+  ) {
+    return undefined;
+  }
 
   return (
     'This England agreement is positioned as a Renters\' Rights compliant Assured Periodic Tenancy Agreement.'
@@ -317,17 +329,23 @@ function buildEnglandTenancyReformWarning(
 
 function isEnglandPostReformRegime(
   jurisdiction: TenancyJurisdiction,
-  tenancyStartDate?: string
+  tenancyStartDate?: string,
+  purpose?: EnglandTenancyPurpose
 ): boolean {
-  return jurisdiction === 'england';
+  return isEnglandPostReformTenancy({
+    jurisdiction,
+    tenancyStartDate,
+    purpose,
+  });
 }
 
 function getRenderedAgreementTitle(
   config: JurisdictionConfig,
   jurisdiction: TenancyJurisdiction,
-  tenancyStartDate?: string
+  tenancyStartDate?: string,
+  purpose?: EnglandTenancyPurpose
 ): string {
-  if (isEnglandPostReformRegime(jurisdiction, tenancyStartDate)) {
+  if (isEnglandPostReformRegime(jurisdiction, tenancyStartDate, purpose)) {
     return ENGLAND_ASSURED_PERIODIC_AGREEMENT_TITLE;
   }
 
@@ -480,6 +498,49 @@ async function appendEnglandDepositSupportDocuments(
   }
 }
 
+function buildEnglandInformationSheetPlaceholderHtml(): string {
+  return [
+    '<!doctype html>',
+    '<html lang="en">',
+    '<head><meta charset="utf-8"><title>Renters\' Rights Act Information Sheet 2026</title></head>',
+    '<body style="font-family: Arial, sans-serif; padding: 32px; color: #111827;">',
+    '<h1>Renters\' Rights Act Information Sheet 2026</h1>',
+    '<p>This bundle includes the exact government PDF stored locally in the repository.</p>',
+    '<p>Give this PDF to every named tenant for an existing written England tenancy transition case.</p>',
+    '</body>',
+    '</html>',
+  ].join('');
+}
+
+async function appendEnglandInformationSheetDocument(
+  documents: ASTPackDocument[],
+  config: JurisdictionConfig,
+  data: ASTData
+): Promise<void> {
+  if (
+    !shouldIncludeEnglandInformationSheet({
+      jurisdiction: config.jurisdiction,
+      purpose: data.england_tenancy_purpose,
+    }) ||
+    !config.rentersRightsInformationSheet2026Path
+  ) {
+    return;
+  }
+
+  const pdfPath = path.join(process.cwd(), 'config', config.rentersRightsInformationSheet2026Path);
+  const pdf = await readFile(pdfPath);
+
+  documents.push({
+    title: 'Renters\' Rights Act Information Sheet 2026',
+    description: 'Exact government PDF for existing written assured or assured shorthold tenancies transitioning into the new England regime.',
+    category: 'guidance',
+    document_type: 'renters_rights_information_sheet_2026',
+    html: buildEnglandInformationSheetPlaceholderHtml(),
+    pdf,
+    file_name: 'renters_rights_information_sheet_2026.pdf',
+  });
+}
+
 const PREMIUM_SUPPORT_DOCUMENTS = [
   {
     title: 'Key Receipt & Handover Schedule',
@@ -612,6 +673,7 @@ export interface ASTData {
 
   // Term
   tenancy_start_date: string;
+  england_tenancy_purpose?: EnglandTenancyPurpose;
   is_fixed_term: boolean;
   tenancy_end_date?: string; // Required if fixed term
   term_length?: string; // e.g., "12 months"
@@ -852,22 +914,22 @@ export function validateASTSuitability(data: ASTData): ASTSuitabilityResult {
 
   // Check if tenant is an individual
   if (data.tenant_is_individual === false) {
-    reasons.push('Tenant must be an individual (not a company) for an AST');
+    reasons.push('Tenant must be an individual (not a company) for this tenancy agreement route');
   }
 
   // Check if it's the tenant's main home
   if (data.main_home === false) {
-    reasons.push('The property must be the tenant\'s main home for an AST');
+    reasons.push('The property must be the tenant\'s main home for this tenancy agreement route');
   }
 
   // Check if landlord lives at property (lodger/licence scenario)
   if (data.landlord_lives_at_property === true) {
-    reasons.push('If the landlord lives at the property, this is likely a lodger or licence arrangement, not an AST');
+    reasons.push('If the landlord lives at the property, this is likely a lodger or licence arrangement, not this tenancy agreement route');
   }
 
   // Check if it's a holiday let or licence
   if (data.holiday_or_licence === true) {
-    reasons.push('Holiday lets and licence arrangements are not covered by AST regulations');
+    reasons.push('Holiday lets and licence arrangements are not covered by this tenancy agreement route');
   }
 
   return {
@@ -979,11 +1041,17 @@ export async function generateStandardAST(
     data.rent_period = 'month';
   }
 
+  const englandPostReformRegime = isEnglandPostReformRegime(
+    jurisdiction,
+    data.tenancy_start_date,
+    data.england_tenancy_purpose
+  );
+
   if (!data.tenant_notice_period) {
-    data.tenant_notice_period = jurisdiction === 'england' ? '2 months' : '1 month';
+    data.tenant_notice_period = englandPostReformRegime ? '2 months' : '1 month';
   }
 
-  if (jurisdiction === 'england') {
+  if (englandPostReformRegime) {
     data.is_fixed_term = false;
     data.tenancy_end_date = undefined;
     data.term_length = undefined;
@@ -994,8 +1062,12 @@ export async function generateStandardAST(
 
   const generationTimestamp = new Date().toISOString();
   const documentId = `${jurisdiction.toUpperCase()}-STD-${Date.now()}`;
-  const englandPostReformRegime = isEnglandPostReformRegime(jurisdiction, data.tenancy_start_date);
-  const renderedAgreementTitle = getRenderedAgreementTitle(config, jurisdiction, data.tenancy_start_date);
+  const renderedAgreementTitle = getRenderedAgreementTitle(
+    config,
+    jurisdiction,
+    data.tenancy_start_date,
+    data.england_tenancy_purpose
+  );
 
   // Add metadata flags
   const enrichedData = {
@@ -1014,7 +1086,11 @@ export async function generateStandardAST(
     jurisdiction: jurisdiction,
     legal_framework: config.legalFramework,
     england_post_reform_regime: englandPostReformRegime,
-    england_reform_warning: buildEnglandTenancyReformWarning(jurisdiction, data.tenancy_start_date),
+    england_reform_warning: buildEnglandTenancyReformWarning(
+      jurisdiction,
+      data.tenancy_start_date,
+      data.england_tenancy_purpose
+    ),
     // Flag for inventory: standard tier always uses blank inventory
     inventory_wizard_completed: false,
     current_date: new Date().toLocaleDateString('en-GB', {
@@ -1088,11 +1164,17 @@ export async function generatePremiumAST(
     data.rent_period = 'month';
   }
 
+  const englandPostReformRegime = isEnglandPostReformRegime(
+    jurisdiction,
+    data.tenancy_start_date,
+    data.england_tenancy_purpose
+  );
+
   if (!data.tenant_notice_period) {
-    data.tenant_notice_period = jurisdiction === 'england' ? '2 months' : '1 month';
+    data.tenant_notice_period = englandPostReformRegime ? '2 months' : '1 month';
   }
 
-  if (jurisdiction === 'england') {
+  if (englandPostReformRegime) {
     data.is_fixed_term = false;
     data.tenancy_end_date = undefined;
     data.term_length = undefined;
@@ -1103,8 +1185,12 @@ export async function generatePremiumAST(
 
   const generationTimestamp = new Date().toISOString();
   const documentId = `${jurisdiction.toUpperCase()}-HMO-${Date.now()}`;
-  const englandPostReformRegime = isEnglandPostReformRegime(jurisdiction, data.tenancy_start_date);
-  const renderedAgreementTitle = getRenderedAgreementTitle(config, jurisdiction, data.tenancy_start_date);
+  const renderedAgreementTitle = getRenderedAgreementTitle(
+    config,
+    jurisdiction,
+    data.tenancy_start_date,
+    data.england_tenancy_purpose
+  );
 
   // Use shared utility for consistent inventory detection across review/preview/generation
   const hasInventoryData = detectInventoryData(data as Record<string, any>);
@@ -1126,7 +1212,11 @@ export async function generatePremiumAST(
     jurisdiction: jurisdiction,
     legal_framework: config.legalFramework,
     england_post_reform_regime: englandPostReformRegime,
-    england_reform_warning: buildEnglandTenancyReformWarning(jurisdiction, data.tenancy_start_date),
+    england_reform_warning: buildEnglandTenancyReformWarning(
+      jurisdiction,
+      data.tenancy_start_date,
+      data.england_tenancy_purpose
+    ),
     // Flag for inventory: premium tier uses wizard-completed if data exists
     inventory_wizard_completed: hasInventoryData,
     current_date: new Date().toLocaleDateString('en-GB', {
@@ -1325,9 +1415,15 @@ export async function generateStandardASTDocuments(
   console.log(`[AST Generator] Using jurisdiction: ${jurisdiction} (${config.legalFramework})`);
 
   // Set defaults
+  const englandPostReformRegime = isEnglandPostReformRegime(
+    jurisdiction,
+    data.tenancy_start_date,
+    data.england_tenancy_purpose
+  );
+
   if (!data.rent_period) data.rent_period = 'month';
-  if (!data.tenant_notice_period) data.tenant_notice_period = jurisdiction === 'england' ? '2 months' : '1 month';
-  if (jurisdiction === 'england') {
+  if (!data.tenant_notice_period) data.tenant_notice_period = englandPostReformRegime ? '2 months' : '1 month';
+  if (englandPostReformRegime) {
     data.is_fixed_term = false;
     data.tenancy_end_date = undefined;
     data.term_length = undefined;
@@ -1338,8 +1434,12 @@ export async function generateStandardASTDocuments(
 
   const generationTimestamp = new Date().toISOString();
   const documentId = `${jurisdiction.toUpperCase()}-STD-${Date.now()}`;
-  const englandPostReformRegime = isEnglandPostReformRegime(jurisdiction, data.tenancy_start_date);
-  const renderedAgreementTitle = getRenderedAgreementTitle(config, jurisdiction, data.tenancy_start_date);
+  const renderedAgreementTitle = getRenderedAgreementTitle(
+    config,
+    jurisdiction,
+    data.tenancy_start_date,
+    data.england_tenancy_purpose
+  );
 
   const enrichedData = {
     ...data,
@@ -1357,7 +1457,11 @@ export async function generateStandardASTDocuments(
     jurisdiction: jurisdiction,
     legal_framework: config.legalFramework,
     england_post_reform_regime: englandPostReformRegime,
-    england_reform_warning: buildEnglandTenancyReformWarning(jurisdiction, data.tenancy_start_date),
+    england_reform_warning: buildEnglandTenancyReformWarning(
+      jurisdiction,
+      data.tenancy_start_date,
+      data.england_tenancy_purpose
+    ),
     current_date: new Date().toISOString().split('T')[0],
   };
 
@@ -1447,6 +1551,8 @@ export async function generateStandardASTDocuments(
     console.warn(`[AST Generator] Checklist generation failed but continuing without it`);
   }
 
+  await appendEnglandInformationSheetDocument(documents, config, data);
+
   await appendEnglandDepositSupportDocuments(
     documents,
     config,
@@ -1525,9 +1631,15 @@ export async function generatePremiumASTDocuments(
   console.log(`[AST Generator] Using jurisdiction: ${jurisdiction} (${config.legalFramework}) - HMO Premium`);
 
   // Set defaults
+  const englandPostReformRegime = isEnglandPostReformRegime(
+    jurisdiction,
+    data.tenancy_start_date,
+    data.england_tenancy_purpose
+  );
+
   if (!data.rent_period) data.rent_period = 'month';
-  if (!data.tenant_notice_period) data.tenant_notice_period = jurisdiction === 'england' ? '2 months' : '1 month';
-  if (jurisdiction === 'england') {
+  if (!data.tenant_notice_period) data.tenant_notice_period = englandPostReformRegime ? '2 months' : '1 month';
+  if (englandPostReformRegime) {
     data.is_fixed_term = false;
     data.tenancy_end_date = undefined;
     data.term_length = undefined;
@@ -1538,8 +1650,12 @@ export async function generatePremiumASTDocuments(
 
   const generationTimestamp = new Date().toISOString();
   const documentId = `${jurisdiction.toUpperCase()}-HMO-${Date.now()}`;
-  const englandPostReformRegime = isEnglandPostReformRegime(jurisdiction, data.tenancy_start_date);
-  const renderedAgreementTitle = getRenderedAgreementTitle(config, jurisdiction, data.tenancy_start_date);
+  const renderedAgreementTitle = getRenderedAgreementTitle(
+    config,
+    jurisdiction,
+    data.tenancy_start_date,
+    data.england_tenancy_purpose
+  );
 
   // Use shared utility for consistent inventory detection across review/preview/generation
   const hasInventoryData = detectInventoryData(data as Record<string, any>);
@@ -1559,7 +1675,11 @@ export async function generatePremiumASTDocuments(
     jurisdiction: jurisdiction,
     legal_framework: config.legalFramework,
     england_post_reform_regime: englandPostReformRegime,
-    england_reform_warning: buildEnglandTenancyReformWarning(jurisdiction, data.tenancy_start_date),
+    england_reform_warning: buildEnglandTenancyReformWarning(
+      jurisdiction,
+      data.tenancy_start_date,
+      data.england_tenancy_purpose
+    ),
     current_date: new Date().toISOString().split('T')[0],
     // Flag for inventory template to know if wizard data is present
     inventory_wizard_completed: hasInventoryData,
@@ -1663,6 +1783,8 @@ export async function generatePremiumASTDocuments(
     // Don't throw - checklist should never block generation
     console.warn(`[AST Generator] Checklist generation failed but continuing without it`);
   }
+
+  await appendEnglandInformationSheetDocument(documents, config, data);
 
   await appendEnglandDepositSupportDocuments(
     documents,

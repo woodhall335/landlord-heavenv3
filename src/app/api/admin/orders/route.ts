@@ -25,8 +25,8 @@ const PRODUCT_NAMES: Record<string, string> = {
   complete_pack: 'Complete Eviction Pack',
   money_claim: 'Money Claim Pack',
   sc_money_claim: 'Simple Procedure Pack (Scotland)',
-  ast_standard: 'Standard AST Agreement',
-  ast_premium: 'Premium AST Agreement',
+  ast_standard: 'England Assured Periodic Tenancy',
+  ast_premium: 'England Assured Periodic Tenancy (Premium)',
 };
 
 export async function GET(request: NextRequest) {

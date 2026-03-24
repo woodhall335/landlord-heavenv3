@@ -12,6 +12,10 @@
 import { ASTData, TenantInfo } from './ast-generator';
 import type { WizardFacts, CaseFacts } from '@/lib/case-facts/schema';
 import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
+import {
+  getEnglandTenancyPurpose,
+  isEnglandPostReformTenancy,
+} from '@/lib/tenancy/england-reform';
 
 type AnyRecord = Record<string, any>;
 
@@ -252,7 +256,16 @@ export function mapWizardToASTData(
     getValueAtPath(wizardFacts, 'property_country') ||
     getValueAtPath(wizardFacts, '__meta.jurisdiction') ||
     undefined;
-  const englandUpgradeNow = resolvedJurisdiction === 'england';
+  const englandTenancyPurpose = getEnglandTenancyPurpose(
+    getValueAtPath(wizardFacts, 'england_tenancy_purpose')
+  );
+  const englandPostReform = isEnglandPostReformTenancy({
+    jurisdiction: resolvedJurisdiction,
+    tenancyStartDate: caseFacts.tenancy.start_date || getValueAtPath(wizardFacts, 'tenancy_start_date'),
+    purpose: englandTenancyPurpose,
+  });
+  const tenancyStartDate =
+    caseFacts.tenancy.start_date || getValueAtPath(wizardFacts, 'tenancy_start_date') || '';
 
   // Extract tenants (hybrid approach for fields not yet in CaseFacts)
   const tenants = normalizeTenants(caseFacts, wizardFacts);
@@ -283,7 +296,7 @@ export function mapWizardToASTData(
     holiday_or_licence: coerceBoolean(getValueAtPath(wizardFacts, 'tenancy.ast_suitability.holiday_or_licence')),
 
     // Dates - use CaseFacts
-    agreement_date: getValueAtPath(wizardFacts, 'agreement_date') || caseFacts.tenancy.start_date || '',
+    agreement_date: getValueAtPath(wizardFacts, 'agreement_date') || tenancyStartDate,
     landlord_full_name: caseFacts.parties.landlord.name || '',
     landlord_address,
     landlord_address_line1: caseFacts.parties.landlord.address_line1 ?? undefined,
@@ -323,10 +336,11 @@ export function mapWizardToASTData(
     garden_maintenance: getValueAtPath(wizardFacts, 'garden_maintenance'),
 
     // Tenancy - use CaseFacts where available
-    tenancy_start_date: caseFacts.tenancy.start_date || '',
-    is_fixed_term: englandUpgradeNow ? false : (caseFacts.tenancy.fixed_term ?? false),
-    tenancy_end_date: englandUpgradeNow ? undefined : (caseFacts.tenancy.end_date ?? undefined),
-    term_length: englandUpgradeNow ? undefined : getValueAtPath(wizardFacts, 'term_length'),
+    tenancy_start_date: tenancyStartDate,
+    england_tenancy_purpose: englandTenancyPurpose,
+    is_fixed_term: englandPostReform ? false : (caseFacts.tenancy.fixed_term ?? false),
+    tenancy_end_date: englandPostReform ? undefined : (caseFacts.tenancy.end_date ?? undefined),
+    term_length: englandPostReform ? undefined : getValueAtPath(wizardFacts, 'term_length'),
 
     // Rent - use CaseFacts
     rent_amount: caseFacts.tenancy.rent_amount ?? 0,
@@ -425,14 +439,14 @@ export function mapWizardToASTData(
     emergency_contact: getValueAtPath(wizardFacts, 'emergency_contact'),
 
     // Clauses
-    break_clause: englandUpgradeNow ? false : coerceBoolean(getValueAtPath(wizardFacts, 'break_clause')),
-    break_clause_months: englandUpgradeNow ? undefined : getValueAtPath(wizardFacts, 'break_clause_months'),
-    break_clause_notice_period: englandUpgradeNow ? undefined : getValueAtPath(wizardFacts, 'break_clause_notice_period'),
+    break_clause: englandPostReform ? false : coerceBoolean(getValueAtPath(wizardFacts, 'break_clause')),
+    break_clause_months: englandPostReform ? undefined : getValueAtPath(wizardFacts, 'break_clause_months'),
+    break_clause_notice_period: englandPostReform ? undefined : getValueAtPath(wizardFacts, 'break_clause_notice_period'),
     subletting_allowed: getValueAtPath(wizardFacts, 'subletting_allowed'),
     rent_increase_clause: coerceBoolean(getValueAtPath(wizardFacts, 'rent_increase_clause')),
     rent_increase_method: getValueAtPath(wizardFacts, 'rent_increase_method'),
     rent_increase_frequency: getValueAtPath(wizardFacts, 'rent_increase_frequency'),
-    tenant_notice_period: getValueAtPath(wizardFacts, 'tenant_notice_period') || (englandUpgradeNow ? '2 months' : undefined),
+    tenant_notice_period: getValueAtPath(wizardFacts, 'tenant_notice_period') || (englandPostReform ? '2 months' : undefined),
     additional_terms: getValueAtPath(wizardFacts, 'additional_terms'),
 
     // Insurance

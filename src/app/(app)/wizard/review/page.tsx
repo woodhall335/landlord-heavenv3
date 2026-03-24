@@ -65,6 +65,11 @@ import {
   detectInventoryData,
   type TenancyProductSku,
 } from '@/lib/tenancy/product-tier';
+import {
+  getEnglandMissingPurposeWarning,
+  getEnglandTenancyPurpose,
+  isEnglandPostReformTenancy,
+} from '@/lib/tenancy/england-reform';
 
 // Jurisdiction-aware product normalization - ensures Scotland never shows "AST" labels
 import {
@@ -2722,10 +2727,11 @@ function buildTenancyValidation(facts: any, jurisdiction: string) {
     : typeof facts.start_date === 'string'
       ? facts.start_date
       : '';
-  const englandPostReformStart =
-    jurisdiction === 'england' &&
-    /^\d{4}-\d{2}-\d{2}$/.test(tenancyStartDate) &&
-    tenancyStartDate >= '2026-05-01';
+  const englandPostReformStart = isEnglandPostReformTenancy({
+    jurisdiction,
+    tenancyStartDate,
+    purpose: getEnglandTenancyPurpose(facts.england_tenancy_purpose),
+  });
 
   if (
     englandPostReformStart &&
@@ -2789,7 +2795,7 @@ function getJurisdictionObligations(jurisdiction: string): Array<{ title: string
           items: [
             'Protect the deposit in a government-approved scheme within 30 days',
             'Provide the tenant with prescribed deposit information',
-            'Give the tenant the "How to Rent" guide',
+            'Record any England written information or government guidance given to the tenant',
             'Provide a valid Energy Performance Certificate (EPC)',
             'Provide a valid Gas Safety Certificate (if gas appliances present)',
             'Ensure all electrical installations are safe (EICR required)',
@@ -2961,6 +2967,17 @@ function TenancyReviewContent({
     scotland: 'Scotland',
     'northern-ireland': 'Northern Ireland',
   }[jurisdiction] || jurisdiction;
+  const englandTenancyPurpose = getEnglandTenancyPurpose(facts.england_tenancy_purpose);
+  const englandMissingPurposeWarning = getEnglandMissingPurposeWarning({
+    jurisdiction,
+    tenancyStartDate:
+      typeof facts.tenancy_start_date === 'string'
+        ? facts.tenancy_start_date
+        : typeof facts.start_date === 'string'
+          ? facts.start_date
+          : undefined,
+    purpose: facts.england_tenancy_purpose,
+  });
 
   // Documents included in pack
   const standardDocs = [
@@ -2968,6 +2985,12 @@ function TenancyReviewContent({
     { title: 'Property Details Schedule', included: true },
     { title: 'Deposit Protection Information', included: true },
     { title: 'Prescribed Information Template', included: jurisdiction === 'england' || jurisdiction === 'wales' },
+    {
+      title: 'Renters\' Rights Act Information Sheet 2026',
+      included:
+        jurisdiction === 'england' &&
+        englandTenancyPurpose === 'existing_written_tenancy',
+    },
     { title: 'Easy Read Notes', included: jurisdiction === 'scotland' },
     { title: 'Landlord Obligations Checklist', included: true },
   ].filter(d => d.included);
@@ -2985,7 +3008,7 @@ function TenancyReviewContent({
     { title: inventoryTitle, included: true, description: inventoryDescription },
     { title: 'Check-in/Check-out Form', included: true },
     { title: 'HMO Additional Terms', included: facts.is_hmo, description: 'Multi-occupancy clauses and shared facilities rules' },
-    { title: 'Rent Review Schedule', included: true, description: 'Annual CPI/RPI-linked rent review clause' },
+    { title: 'Section 13 Rent Increase Guidance', included: true, description: 'England rent increases are handled through the section 13 statutory process rather than CPI, RPI or fixed review clauses.' },
     { title: 'Maintenance Request Form', included: true },
     { title: 'Notice Templates Pack', included: true },
   ].filter(d => d.included);
@@ -3173,8 +3196,8 @@ function TenancyReviewContent({
               <div className="flex items-start gap-3">
                 <RiCheckboxCircleLine className="w-5 h-5 text-purple-600 mt-0.5 shrink-0" />
                 <div>
-                  <p className="font-medium text-gray-900">Annual Rent Review Clause</p>
-                  <p className="text-sm text-gray-600">CPI/RPI-capped increases to protect your rental income against inflation</p>
+                  <p className="font-medium text-gray-900">Section 13 Rent Increase Process</p>
+                  <p className="text-sm text-gray-600">Uses the England statutory rent increase route instead of CPI, RPI or fixed review clauses</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
@@ -3316,6 +3339,21 @@ function TenancyReviewContent({
                 </li>
               ))}
             </ul>
+            {jurisdiction === 'england' && englandTenancyPurpose === 'existing_written_tenancy' && (
+              <p className="mt-3 text-sm text-amber-800 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
+                Give every named tenant the exact local Information Sheet 2026 PDF by 31 May 2026.
+              </p>
+            )}
+            {jurisdiction === 'england' && englandTenancyPurpose === 'existing_verbal_tenancy' && (
+              <p className="mt-3 text-sm text-amber-800 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
+                Give the tenant the required written information about the key terms by 31 May 2026.
+              </p>
+            )}
+            {englandMissingPurposeWarning && (
+              <p className="mt-3 text-sm text-amber-800 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
+                {englandMissingPurposeWarning}
+              </p>
+            )}
           </div>
           {isPremium && (
             <div>

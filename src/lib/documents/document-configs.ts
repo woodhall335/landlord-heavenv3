@@ -4,6 +4,7 @@ import {
   ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL,
   ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL,
 } from '@/lib/tenancy/england-agreement-constants';
+import { normalizeEnglandTenancyPurpose } from '@/lib/tenancy/england-reform';
 
 // ============================================
 // NOTICE ONLY DOCUMENTS (4 per jurisdiction)
@@ -490,6 +491,8 @@ export function getMoneyClaimDocuments(jurisdiction: string): DocumentInfo[] {
 export interface ASTDocumentOptions {
   /** Was inventory data completed via wizard? */
   hasInventoryData?: boolean;
+  /** England transition branch for conditional support documents */
+  englandTenancyPurpose?: string;
 }
 
 /**
@@ -518,6 +521,7 @@ export function getASTDocuments(
 ): DocumentInfo[] {
   const documents: DocumentInfo[] = [];
   const { hasInventoryData } = options;
+  const englandTenancyPurpose = normalizeEnglandTenancyPurpose(options.englandTenancyPurpose);
 
   // Agreement name based on jurisdiction
   const agreementNames: Record<string, { standard: { title: string; description: string }; hmo: { title: string; description: string } }> = {
@@ -640,6 +644,17 @@ export function getASTDocuments(
     pages: '2-3 pages',
     category: 'Guidance',
   });
+
+  if (jurisdiction === 'england' && englandTenancyPurpose === 'existing_written_tenancy') {
+    documents.push({
+      id: 'renters-rights-information-sheet-2026',
+      title: 'Renters\' Rights Act Information Sheet 2026',
+      description: 'Exact government PDF for existing written England tenancies transitioning into the new regime.',
+      icon: 'guidance',
+      pages: '4 pages',
+      category: 'Guidance',
+    });
+  }
 
   if (jurisdiction === 'england') {
     documents.push(

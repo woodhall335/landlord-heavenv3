@@ -31,7 +31,7 @@ questions:
     options:
       - "Standard Assured Periodic Tenancy Agreement"
       - "Premium Assured Periodic Tenancy Agreement"
-    helperText: "Standard covers straightforward England lets. Premium adds HMO, student, guarantor, rent review and tighter control clauses."
+    helperText: "Standard covers straightforward England lets. Premium adds HMO, student, guarantor, section 13 rent increase guidance and tighter control clauses."
     validation:
       required: true
     maps_to:
@@ -560,18 +560,24 @@ questions:
           required: true
         width: half
       - id: existing_written_tenancy_transition
-        label: "If this relates to an existing written tenancy, will you provide the transition information sheet when available?"
+        label: "Existing written tenancy: will you give every named tenant the exact 'Renters' Rights Act Information Sheet 2026' PDF by 31 May 2026?"
         inputType: yes_no
+        helperText: "Choose Yes only if you will provide the exact local PDF to every named tenant for the pre-1 May 2026 written tenancy transition."
         dependsOn:
           questionId: england_tenancy_purpose
           value: "existing_written_tenancy"
+        validation:
+          required: true
         width: full
       - id: existing_verbal_tenancy_summary
-        label: "If this relates to an existing verbal tenancy, should we prepare a written summary of the key terms?"
+        label: "Existing verbal tenancy: will you give the tenant the required written information about the key terms by 31 May 2026?"
         inputType: yes_no
+        helperText: "Choose Yes only if you will provide the written information needed for the pre-1 May 2026 verbal tenancy transition."
         dependsOn:
           questionId: england_tenancy_purpose
           value: "existing_verbal_tenancy"
+        validation:
+          required: true
         width: full
       - id: tenancy_regime_confirmation
         label: "England tenancy structure"
@@ -946,17 +952,20 @@ questions:
           required: true
         width: half
       - id: how_to_rent_guide_provided
-        label: "Latest 'How to Rent' guide given? (England only)"
+        label: "England written information or government guidance recorded? (new agreements)"
         inputType: yes_no
         defaultValue: false
-        helperText: "You should provide the latest government 'How to Rent' guide before or at the start of the tenancy and keep proof of delivery."
+        helperText: "Record whether you have given any England written information or government guidance you plan to rely on for this new tenancy, and keep proof of delivery on file."
+        dependsOn:
+          questionId: england_tenancy_purpose
+          value: "new_agreement"
         validation:
           required: true
         width: half
       - id: how_to_rent_guide_date
-        label: "Date 'How to Rent' guide provided"
+        label: "Date written information or guidance provided"
         inputType: date
-        helperText: "Must be on or before the tenancy start date"
+        helperText: "Record the date you gave the information or guidance for the tenancy file."
         dependsOn:
           questionId: how_to_rent_guide_provided
           value: true
@@ -1135,27 +1144,24 @@ questions:
       - smoking_allowed
       - subletting_allowed
 
-  # 13. Rent reviews
+  # 13. Rent increases
   - id: rent_increase
-    section: Rent Reviews
+    section: Rent Increases
     question: "Rent increase provisions"
     inputType: group
-    helperText: "Premium England agreements can include index-linked or Section 13-based rent review wording."
+    helperText: "For new England assured periodic tenancies, rent increases should be handled through the section 13 rent increase process rather than CPI, RPI or fixed contractual review clauses."
     fields:
       - id: rent_increase_clause
-        label: "Include a rent increase clause?"
+        label: "Include section 13 rent increase guidance?"
         inputType: yes_no
         validation:
           required: true
         width: half
       - id: rent_increase_method
-        label: "Method"
+        label: "Process"
         inputType: select
         options:
-          - "RPI"
-          - "CPI"
-          - "Section 13"
-          - "Fixed review"
+          - "Section 13 rent increase process (Housing Act 1988)"
         dependsOn:
           questionId: rent_increase_clause
           value: true

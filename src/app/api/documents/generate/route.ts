@@ -1003,9 +1003,9 @@ export async function POST(request: Request) {
             return NextResponse.json(
               {
                 code: 'AST_NOT_SUITABLE',
-                error: 'AST suitability checks failed',
+                error: 'Tenancy agreement suitability checks failed',
                 user_message:
-                  'This scenario is not appropriate for an AST. ' +
+                  'This scenario is not appropriate for this tenancy agreement route. ' +
                   suitabilityResult.reasons.join('. ') +
                   '. You may need a lodger or licence agreement instead.',
                 blocking_issues: suitabilityResult.reasons,
@@ -1044,9 +1044,9 @@ export async function POST(request: Request) {
             return NextResponse.json(
               {
                 code: 'AST_NOT_SUITABLE',
-                error: 'AST suitability checks failed',
+                error: 'Tenancy agreement suitability checks failed',
                 user_message:
-                  'This scenario is not appropriate for an AST. ' +
+                  'This scenario is not appropriate for this tenancy agreement route. ' +
                   suitabilityResult.reasons.join('. ') +
                   '. You may need a lodger or licence agreement instead.',
                 blocking_issues: suitabilityResult.reasons,

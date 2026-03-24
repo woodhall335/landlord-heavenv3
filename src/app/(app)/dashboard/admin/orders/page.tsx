@@ -205,8 +205,8 @@ export default function AdminOrdersPage() {
       notice_only: "Notice Only",
       complete_pack: "Complete Eviction Pack",
       money_claim: "Money Claim Pack",
-      ast_standard: "Standard AST",
-      ast_premium: "Premium AST",
+      ast_standard: "England Assured Periodic Tenancy",
+      ast_premium: "England Assured Periodic Tenancy (Premium)",
     };
     return names[productType] || productType;
   }
@@ -277,8 +277,8 @@ export default function AdminOrdersPage() {
                 <option value="notice_only">Notice Only</option>
                 <option value="complete_pack">Complete Pack</option>
                 <option value="money_claim">Money Claim</option>
-                <option value="ast_standard">Standard AST</option>
-                <option value="ast_premium">Premium AST</option>
+                <option value="ast_standard">England Assured Periodic Tenancy</option>
+                <option value="ast_premium">England Assured Periodic Tenancy (Premium)</option>
               </select>
             </div>
 

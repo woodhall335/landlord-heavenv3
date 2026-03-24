@@ -45,11 +45,11 @@ const JURISDICTION_INFO: Record<CanonicalJurisdiction, JurisdictionInfo> = {
   england: {
     legislation: 'Housing Act 1988',
     noticePeriod: '2 months (Section 21) or 2 weeks–2 months (Section 8)',
-    tenancyType: 'Assured Shorthold Tenancy (AST)',
+    tenancyType: 'England Assured Periodic Tenancy',
     keyDifferences: [
-      'Section 21 (no-fault) eviction available',
+      'New England tenancies from 1 May 2026 use the assured periodic framework',
       'Deposit cap: 5 weeks rent (6 weeks if annual rent over £50,000)',
-      'EPC, Gas Safety Certificate, and How to Rent guide required',
+      'Written information and key safety documents should be tracked with proof of delivery',
     ],
   },
   wales: {

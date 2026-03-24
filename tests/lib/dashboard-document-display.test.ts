@@ -15,6 +15,9 @@ describe('dashboard document display mapping', () => {
 
   it('maps required tenancy pack docs to friendly titles', () => {
     expect(getDashboardDocumentTitle('inventory_schedule')).toBe('Inventory Schedule');
+    expect(getDashboardDocumentTitle('renters_rights_information_sheet_2026')).toBe(
+      'Renters\' Rights Act Information Sheet 2026'
+    );
     expect(getDashboardDocumentTitle('pre_tenancy_checklist_england')).toBe(
       'Pre-Tenancy Checklist (England)'
     );

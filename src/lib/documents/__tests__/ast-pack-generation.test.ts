@@ -72,6 +72,44 @@ describe('AST document pack generation', () => {
     ]);
   });
 
+  it('adds the 2026 information sheet for existing written England transition packs', async () => {
+    const pack = await generateStandardASTDocuments({
+      ...createBaseASTData('england'),
+      england_tenancy_purpose: 'existing_written_tenancy',
+    }, 'eng-std-transition-pack');
+
+    expect(pack.documents.map((document) => document.document_type)).toEqual([
+      'ast_agreement',
+      'inventory_schedule',
+      'pre_tenancy_checklist_england',
+      'renters_rights_information_sheet_2026',
+      'deposit_protection_certificate',
+      'tenancy_deposit_information',
+    ]);
+  });
+
+  it('does not add the 2026 information sheet for new England agreements', async () => {
+    const pack = await generateStandardASTDocuments({
+      ...createBaseASTData('england'),
+      england_tenancy_purpose: 'new_agreement',
+    }, 'eng-std-new-pack');
+
+    expect(pack.documents.map((document) => document.document_type)).not.toContain(
+      'renters_rights_information_sheet_2026'
+    );
+  });
+
+  it('does not add the 2026 information sheet for existing verbal England tenancies', async () => {
+    const pack = await generateStandardASTDocuments({
+      ...createBaseASTData('england'),
+      england_tenancy_purpose: 'existing_verbal_tenancy',
+    }, 'eng-std-verbal-pack');
+
+    expect(pack.documents.map((document) => document.document_type)).not.toContain(
+      'renters_rights_information_sheet_2026'
+    );
+  });
+
   it('adds the premium support documents to every premium jurisdiction pack', async () => {
     const expectedCounts = {
       england: 8,

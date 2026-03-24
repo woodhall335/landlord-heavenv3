@@ -300,6 +300,8 @@ describe('England assured periodic output templates', () => {
     expect(rendered.summary).toContain('section 13 rent increase route');
     expect(rendered.summary).not.toContain('Section 21');
     expect(rendered.summary).not.toContain('England & Wales AST');
+    expect(rendered.summary).not.toContain('How to Rent');
+    expect(rendered.summary).toContain('England written information or government guidance recorded');
 
     expect(rendered.keySchedule).toContain('Premium Assured Periodic - Supplementary Document');
     expect(rendered.keySchedule).not.toContain('Premium AST');

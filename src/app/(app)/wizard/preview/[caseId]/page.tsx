@@ -46,6 +46,7 @@ import {
   getResidentialProductMeta,
 } from '@/lib/residential-letting/document-config';
 import { PRODUCTS, isValidProductSku, type ProductSku } from '@/lib/pricing/products';
+import { normalizeEnglandTenancyPurpose } from '@/lib/tenancy/england-reform';
 
 interface CaseData {
   id: string;
@@ -109,7 +110,7 @@ function ASTCheckoutButton({
       agreement_date: 'Agreement date',
       landlord_registration_number: 'Landlord registration number',
       tenants: 'Tenant details',
-      is_fixed_term: 'Fixed-term AST selection for a new England tenancy starting on or after 1 May 2026',
+      is_fixed_term: 'Fixed-term selection for a new England assured periodic tenancy starting on or after 1 May 2026',
     };
 
     if (labels[field]) return labels[field];
@@ -832,7 +833,8 @@ export default function WizardPreviewPage() {
     const includeArrearsSchedule = shouldIncludeArrearsSchedule();
 
     // Use shared utility for consistent inventory detection across review/preview/generation
-    const hasInventoryData = detectInventoryData(facts);
+  const hasInventoryData = detectInventoryData(facts);
+  const englandTenancyPurpose = normalizeEnglandTenancyPurpose(facts.england_tenancy_purpose);
 
     switch (product) {
       case 'notice_only':
@@ -847,10 +849,16 @@ export default function WizardPreviewPage() {
         break;
       case 'ast_standard':
       case 'tenancy_agreement':
-        baseDocuments = getASTDocuments(jurisdiction, 'standard', { hasInventoryData });
+        baseDocuments = getASTDocuments(jurisdiction, 'standard', {
+          hasInventoryData,
+          englandTenancyPurpose,
+        });
         break;
       case 'ast_premium':
-        baseDocuments = getASTDocuments(jurisdiction, 'premium', { hasInventoryData });
+        baseDocuments = getASTDocuments(jurisdiction, 'premium', {
+          hasInventoryData,
+          englandTenancyPurpose,
+        });
         break;
       default:
         if (isResidentialLettingProductSku(product)) {
@@ -858,7 +866,10 @@ export default function WizardPreviewPage() {
         } else if (caseType === 'money_claim') {
           baseDocuments = getMoneyClaimDocuments(jurisdiction);
         } else if (caseType === 'tenancy_agreement') {
-          baseDocuments = getASTDocuments(jurisdiction, 'standard', { hasInventoryData });
+          baseDocuments = getASTDocuments(jurisdiction, 'standard', {
+            hasInventoryData,
+            englandTenancyPurpose,
+          });
         } else {
           baseDocuments = getNoticeOnlyDocuments(jurisdiction, noticeRoute);
         }

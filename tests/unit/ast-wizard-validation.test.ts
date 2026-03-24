@@ -67,6 +67,7 @@ const sampleTenancySectionFlowFacts: WizardFacts = {
   ],
 
   // Tenancy
+  england_tenancy_purpose: 'new_agreement',
   tenancy_start_date: '2026-02-01',
   is_fixed_term: true,
   term_length: '6 months',
@@ -167,8 +168,35 @@ describe('AST Wizard Validation Fix', () => {
       const astData = mapWizardToASTData(sampleTenancySectionFlowFacts);
 
       expect(astData.tenancy_start_date).toBe('2026-02-01');
+      expect(astData.england_tenancy_purpose).toBe('new_agreement');
       expect(astData.is_fixed_term).toBe(true);
       expect(astData.tenancy_end_date).toBe('2026-08-01');
+    });
+
+    it('should collapse fixed-term fields only for post-reform England new agreements', () => {
+      const astData = mapWizardToASTData({
+        ...sampleTenancySectionFlowFacts,
+        tenancy_start_date: '2026-05-02',
+        england_tenancy_purpose: 'new_agreement',
+      });
+
+      expect(astData.england_tenancy_purpose).toBe('new_agreement');
+      expect(astData.is_fixed_term).toBe(false);
+      expect(astData.tenancy_end_date).toBeUndefined();
+      expect(astData.term_length).toBeUndefined();
+    });
+
+    it('should preserve legacy fixed-term data for England transition cases', () => {
+      const astData = mapWizardToASTData({
+        ...sampleTenancySectionFlowFacts,
+        tenancy_start_date: '2026-05-02',
+        england_tenancy_purpose: 'existing_written_tenancy',
+      });
+
+      expect(astData.england_tenancy_purpose).toBe('existing_written_tenancy');
+      expect(astData.is_fixed_term).toBe(true);
+      expect(astData.tenancy_end_date).toBe('2026-08-01');
+      expect(astData.term_length).toBe('6 months');
     });
   });
 

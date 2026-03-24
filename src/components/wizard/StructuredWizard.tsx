@@ -1091,23 +1091,23 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
       const warnings: string[] = [];
 
       if (currentAnswer.tenant_is_individual === false) {
-        warnings.push('Tenant must be an individual (not a company) for an AST');
+        warnings.push('Tenant must be an individual (not a company) for this tenancy agreement route');
       }
       if (currentAnswer.main_home === false) {
-        warnings.push("Property must be the tenant's main home for an AST");
+        warnings.push("Property must be the tenant's main home for this tenancy agreement route");
       }
       if (currentAnswer.landlord_lives_at_property === true) {
         warnings.push(
-          'If landlord lives at property, this is likely a lodger/licence arrangement, not an AST',
+          'If landlord lives at property, this is likely a lodger/licence arrangement, not this tenancy agreement route',
         );
       }
       if (currentAnswer.holiday_or_licence === true) {
-        warnings.push('Holiday lets and licence arrangements are not covered by AST regulations');
+        warnings.push('Holiday lets and licence arrangements are not covered by this tenancy agreement route');
       }
 
       if (warnings.length > 0) {
         setAstSuitabilityWarning(
-          `⚠️ AST SUITABILITY WARNING: ${warnings.join(
+          `Tenancy suitability warning: ${warnings.join(
             '. ',
           )}. You may need a different type of agreement.`,
         );
@@ -1448,7 +1448,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     // Block progression if AST suitability warning exists
     if (astSuitabilityWarning) {
       setError(
-        'This scenario is not appropriate for an AST. Please review the suitability checks and adjust your answers, or consider a different type of agreement.',
+        'This scenario is not appropriate for this tenancy agreement route. Please review the suitability checks and adjust your answers, or consider a different type of agreement.',
       );
       return;
     }

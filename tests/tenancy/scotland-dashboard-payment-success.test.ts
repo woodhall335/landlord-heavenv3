@@ -39,7 +39,7 @@ describe('Scotland Tenancy Agreement Dashboard', () => {
           return isPremium ? 'HMO Private Tenancy' : 'Private Tenancy';
         case 'england':
         default:
-          return isPremium ? 'HMO Assured Shorthold Tenancy' : 'Assured Shorthold Tenancy';
+          return isPremium ? 'England Assured Periodic Tenancy (Premium)' : 'England Assured Periodic Tenancy';
       }
     }
 
@@ -70,8 +70,8 @@ describe('Scotland Tenancy Agreement Dashboard', () => {
     });
 
     it('returns jurisdiction-appropriate labels for all jurisdictions', () => {
-      expect(getTenancyAgreementRouteLabel('england', false)).toBe('Assured Shorthold Tenancy');
-      expect(getTenancyAgreementRouteLabel('england', true)).toBe('HMO Assured Shorthold Tenancy');
+      expect(getTenancyAgreementRouteLabel('england', false)).toBe('England Assured Periodic Tenancy');
+      expect(getTenancyAgreementRouteLabel('england', true)).toBe('England Assured Periodic Tenancy (Premium)');
       expect(getTenancyAgreementRouteLabel('wales', false)).toBe('Standard Occupation Contract');
       expect(getTenancyAgreementRouteLabel('wales', true)).toBe('HMO Occupation Contract');
       expect(getTenancyAgreementRouteLabel('northern-ireland', false)).toBe('Private Tenancy');
@@ -144,8 +144,8 @@ describe('Scotland Tenancy Agreement Dashboard', () => {
           if (isHmo || isPremium) return 'HMO Private Tenancy (Northern Ireland)';
           return 'Private Tenancy (Northern Ireland)';
         default:
-          if (isHmo || isPremium) return 'HMO Assured Shorthold Tenancy';
-          return 'Assured Shorthold Tenancy';
+          if (isHmo || isPremium) return 'England Assured Periodic Tenancy (Premium)';
+          return 'England Assured Periodic Tenancy';
       }
     }
 

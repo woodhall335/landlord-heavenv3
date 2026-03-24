@@ -103,6 +103,27 @@ describe('AST Pack - Unbundled Document Generation', () => {
       expect(prescribedInformation?.file_name).toBe('prescribed_information_pack.pdf');
     }, 20000);
 
+    it('includes the official 2026 information sheet for existing written England standard transition packs', async () => {
+      const astData = {
+        ...mapWizardToASTData({
+          ...baseWizardFacts,
+          england_tenancy_purpose: 'existing_written_tenancy',
+        }),
+        jurisdiction_england: true,
+        jurisdiction_wales: false,
+      };
+
+      const pack = await generateStandardASTDocuments(astData, 'test-case-id');
+
+      expect(pack.documents).toHaveLength(6);
+      const informationSheet = pack.documents.find(
+        (d) => d.document_type === 'renters_rights_information_sheet_2026'
+      );
+      expect(informationSheet?.title).toBe('Renters\' Rights Act Information Sheet 2026');
+      expect(informationSheet?.file_name).toBe('renters_rights_information_sheet_2026.pdf');
+      expect(informationSheet?.pdf).toBeInstanceOf(Buffer);
+    }, 20000);
+
     it('generates 3 separate documents for Wales Standard pack', async () => {
       const astData = {
         ...mapWizardToASTData(baseWizardFacts),
@@ -194,7 +215,7 @@ describe('AST Pack - Unbundled Document Generation', () => {
       guarantor_phone: '07000000003',
     };
 
-    it('generates 5 separate documents for England Premium pack', async () => {
+    it('generates 8 separate documents for England Premium pack', async () => {
       const astData = {
         ...mapWizardToASTData(premiumWizardFacts),
         jurisdiction_england: true,
@@ -205,7 +226,7 @@ describe('AST Pack - Unbundled Document Generation', () => {
 
       expect(pack.tier).toBe('premium');
       expect(pack.case_id).toBe('test-case-id');
-      expect(pack.documents).toHaveLength(5);
+      expect(pack.documents).toHaveLength(8);
 
       // Document 1: HMO Agreement
       const agreement = pack.documents.find((d) => d.category === 'agreement');
@@ -233,7 +254,25 @@ describe('AST Pack - Unbundled Document Generation', () => {
       ).toBe(true);
     }, 20000);
 
-    it('generates 3 separate documents for Wales Premium pack', async () => {
+    it('includes the official 2026 information sheet for existing written England premium transition packs', async () => {
+      const astData = {
+        ...mapWizardToASTData({
+          ...premiumWizardFacts,
+          england_tenancy_purpose: 'existing_written_tenancy',
+        }),
+        jurisdiction_england: true,
+        jurisdiction_wales: false,
+      };
+
+      const pack = await generatePremiumASTDocuments(astData, 'test-case-id');
+
+      expect(pack.documents).toHaveLength(9);
+      expect(
+        pack.documents.some((d) => d.document_type === 'renters_rights_information_sheet_2026')
+      ).toBe(true);
+    }, 20000);
+
+    it('generates 6 separate documents for Wales Premium pack', async () => {
       const astData = {
         ...mapWizardToASTData(premiumWizardFacts),
         jurisdiction_wales: true,
@@ -242,14 +281,14 @@ describe('AST Pack - Unbundled Document Generation', () => {
 
       const pack = await generatePremiumASTDocuments(astData, 'test-case-id');
 
-      expect(pack.documents).toHaveLength(3);
+      expect(pack.documents).toHaveLength(6);
 
       const agreement = pack.documents.find((d) => d.category === 'agreement');
       expect(agreement?.document_type).toBe('soc_agreement_hmo');
       expect(agreement?.title).toContain('HMO');
     }, 20000);
 
-    it('generates 4 separate documents for Scotland Premium pack', async () => {
+    it('generates 7 separate documents for Scotland Premium pack', async () => {
       const astData = {
         ...mapWizardToASTData(premiumWizardFacts),
         jurisdiction_england: false,
@@ -259,13 +298,13 @@ describe('AST Pack - Unbundled Document Generation', () => {
 
       const pack = await generatePremiumASTDocuments(astData, 'test-case-id');
 
-      expect(pack.documents).toHaveLength(4);
+      expect(pack.documents).toHaveLength(7);
 
       const agreement = pack.documents.find((d) => d.category === 'agreement');
       expect(agreement?.document_type).toBe('prt_agreement_hmo');
     }, 20000);
 
-    it('generates 3 separate documents for Northern Ireland Premium pack', async () => {
+    it('generates 6 separate documents for Northern Ireland Premium pack', async () => {
       const astData = {
         ...mapWizardToASTData(premiumWizardFacts),
         jurisdiction_england: false,
@@ -275,7 +314,7 @@ describe('AST Pack - Unbundled Document Generation', () => {
 
       const pack = await generatePremiumASTDocuments(astData, 'test-case-id');
 
-      expect(pack.documents).toHaveLength(3);
+      expect(pack.documents).toHaveLength(6);
 
       const agreement = pack.documents.find((d) => d.category === 'agreement');
       expect(agreement?.document_type).toBe('private_tenancy_agreement_hmo');

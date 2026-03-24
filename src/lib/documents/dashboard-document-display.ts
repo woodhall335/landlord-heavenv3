@@ -13,6 +13,7 @@ const TENANCY_SUPPORT_DOCUMENT_TYPES = new Set([
   'pre_tenancy_checklist_wales',
   'pre_tenancy_checklist_scotland',
   'pre_tenancy_checklist_northern_ireland',
+  'renters_rights_information_sheet_2026',
   'deposit_protection_certificate',
   'tenancy_deposit_information',
 ]);
@@ -100,6 +101,7 @@ export function getDashboardDocumentTitle(documentType: string): string {
   const explicitTitles: Record<string, string> = {
     inventory_schedule: 'Inventory Schedule',
     inventory_schedule_condition: 'Inventory & Schedule of Condition',
+    renters_rights_information_sheet_2026: 'Renters\' Rights Act Information Sheet 2026',
     deposit_protection_certificate: 'Deposit Protection Certificate',
     tenancy_deposit_information: 'Prescribed Information Pack',
     pre_tenancy_checklist_england: 'Pre-Tenancy Checklist (England)',

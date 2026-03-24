@@ -8,7 +8,7 @@
  * for the tenancy agreement product page, checkout confirmation, and dashboard.
  *
  * Supports:
- * - England: Assured Shorthold Tenancy (Housing Act 1988)
+ * - England: Assured Periodic Tenancy (Housing Act 1988 / Renters' Rights flow)
  * - Wales: Standard Occupation Contract (Renting Homes (Wales) Act 2016)
  * - Scotland: Private Residential Tenancy (Private Housing (Tenancies) (Scotland) Act 2016)
  * - Northern Ireland: Private Tenancy Agreement (Private Tenancies Act (NI) 2022)

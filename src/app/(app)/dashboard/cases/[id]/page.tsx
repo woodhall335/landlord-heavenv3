@@ -89,7 +89,7 @@ function getTenancyAgreementRouteLabel(
       return isPremium ? 'HMO Private Tenancy' : 'Private Tenancy';
     case 'england':
     default:
-      return isPremium ? 'HMO Assured Shorthold Tenancy' : 'Assured Shorthold Tenancy';
+      return isPremium ? 'England Assured Periodic Tenancy (Premium)' : 'England Assured Periodic Tenancy';
   }
 }
 

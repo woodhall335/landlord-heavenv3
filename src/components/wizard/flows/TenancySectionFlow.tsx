@@ -405,9 +405,13 @@ const SECTIONS: WizardSection[] = [
       facts.electrical_safety_certificate !== undefined,
     hasBlockers: (facts) => {
       const blockers: string[] = [];
-      if (facts.how_to_rent_guide_provided === false && facts.__meta?.jurisdiction === 'england') {
+      if (
+        facts.__meta?.jurisdiction === 'england' &&
+        facts.england_tenancy_purpose === 'new_agreement' &&
+        facts.how_to_rent_guide_provided === false
+      ) {
         blockers.push(
-          "'How to Rent' guidance should be recorded for England pre-tenancy information compliance",
+          'England written information or any government guidance you provide should be recorded for the tenancy file',
         );
       }
       return blockers;
@@ -1844,13 +1848,13 @@ const ComplianceSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdicti
             onChange={(v) => onUpdate({ carbon_monoxide_alarms: v })}
             required
           />
-          {jurisdiction === 'england' && (
+          {jurisdiction === 'england' && facts.england_tenancy_purpose === 'new_agreement' && (
             <div className="md:col-span-2">
               <YesNoField
-                label="Latest 'How to Rent' guide given?"
+                label="England written information or government guidance recorded?"
                 value={facts.how_to_rent_guide_provided}
                 onChange={(v) => onUpdate({ how_to_rent_guide_provided: v })}
-                helperText="Record this for England pre-tenancy information and compliance tracking"
+                helperText="Record any England written information or government guidance you give for this new tenancy, and keep proof of delivery"
                 required
               />
             </div>
@@ -2182,10 +2186,10 @@ const PremiumSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction 
         {facts.rent_increase_clause && (
           <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
             <SelectField
-              label="Method"
+              label="Process"
               value={facts.rent_increase_method}
               onChange={(v) => onUpdate({ rent_increase_method: v })}
-              options={['RPI', 'CPI', 'Section 13', 'Fixed review']}
+              options={['Section 13 rent increase process (Housing Act 1988)']}
             />
             <SelectField
               label="Frequency"
