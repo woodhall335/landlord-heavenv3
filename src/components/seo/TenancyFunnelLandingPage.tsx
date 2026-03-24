@@ -6,7 +6,7 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { FAQSection, type FAQItem } from '@/components/seo/FAQSection';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
-import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
+import { SeoCtaBlock } from '@/components/seo/SeoCtaBlock';
 import { Container } from '@/components/ui/Container';
 import { StructuredData } from '@/lib/seo/structured-data';
 
@@ -179,8 +179,6 @@ export function TenancyFunnelLandingPage({
           variant="list"
           className="mt-12"
         />
-
-        <SeoDisclaimer />
       </Container>
     </main>
   );

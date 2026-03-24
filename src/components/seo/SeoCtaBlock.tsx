@@ -8,7 +8,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowRight, Shield, Clock, FileText, Gavel, PoundSterling } from 'lucide-react';
+import { ArrowRight, Shield, FileText, Gavel, PoundSterling } from 'lucide-react';
 import {
   PRODUCTS,
   TENANCY_AGREEMENT_FROM_PRICE,
@@ -479,18 +479,7 @@ export function SeoCtaBlock({
  * Required on all informational pages
  */
 export function SeoDisclaimer({ className = '' }: { className?: string }) {
-  return (
-    <div className={`text-sm text-gray-500 border-t border-gray-200 pt-6 mt-8 ${className}`}>
-      <p className="flex items-start gap-2">
-        <Clock className="w-4 h-4 flex-shrink-0 mt-0.5" />
-        <span>
-          <strong>For general information only.</strong> This page provides educational content about
-          UK landlord law and is not legal advice. Laws vary by jurisdiction and change over time.
-          For advice specific to your situation, consult a qualified solicitor.
-        </span>
-      </p>
-    </div>
-  );
+  return className ? <div className={className} /> : null;
 }
 
 export default SeoCtaBlock;
