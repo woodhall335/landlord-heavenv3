@@ -154,6 +154,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/money-claim-pap-financial-statement', priority: 0.7, changeFrequency: 'monthly' as const },
     // Tenancy Agreement SEO Pages - England (Q1 2026)
     { path: '/assured-shorthold-tenancy-agreement-template', priority: 0.85, changeFrequency: 'weekly' as const },
+    { path: '/ast-agreement-template', priority: 0.85, changeFrequency: 'weekly' as const },
+    { path: '/tenancy-agreement-template-uk', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/tenancy-agreement-england-2026', priority: 0.85, changeFrequency: 'weekly' as const },
+    { path: '/assured-periodic-tenancy-agreement', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/hmo-tenancy-agreement-template', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/tenancy-agreement-template-free', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/joint-tenancy-agreement-template', priority: 0.8, changeFrequency: 'weekly' as const },
     // Tenancy Agreement SEO Pages - Wales (Q1 2026)

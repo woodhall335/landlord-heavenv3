@@ -1131,6 +1131,44 @@ export const tenancySeoEnglandPages = {
   },
 };
 
+export const tenancyFunnelPages = {
+  astAgreementTemplate: {
+    href: '/ast-agreement-template',
+    title: 'AST Agreement Template',
+    description: 'AST search intent routed into the current England agreement path.',
+    icon: 'document' as const,
+    type: 'page' as const,
+  },
+  tenancyAgreementTemplateUk: {
+    href: '/tenancy-agreement-template-uk',
+    title: 'Tenancy Agreement Template UK',
+    description: 'UK tenancy template guide with England-first product routing.',
+    icon: 'document' as const,
+    type: 'page' as const,
+  },
+  tenancyAgreementEngland2026: {
+    href: '/tenancy-agreement-england-2026',
+    title: 'England Tenancy Agreement 2026',
+    description: 'Transition guide for landlords after 1 May 2026.',
+    icon: 'legal' as const,
+    type: 'page' as const,
+  },
+  assuredPeriodicTenancyAgreement: {
+    href: '/assured-periodic-tenancy-agreement',
+    title: 'Assured Periodic Tenancy Agreement',
+    description: 'Plain-English explainer for the current England route.',
+    icon: 'document' as const,
+    type: 'page' as const,
+  },
+  hmoTenancyAgreementTemplate: {
+    href: '/hmo-tenancy-agreement-template',
+    title: 'HMO Tenancy Agreement Template',
+    description: 'Premium-led page for HMOs, sharers, and complex lets.',
+    icon: 'home' as const,
+    type: 'page' as const,
+  },
+};
+
 // Scotland PRT SEO Pages
 export const tenancySeoScotlandPages = {
   prtMain: {
@@ -1301,6 +1339,44 @@ export const renewUpdateEnglandRelatedLinks = [
   residentialDocumentLinks.documentsHub,
   landingPageLinks.section21Template,
   guideLinks.howToEvictTenant,
+  askHeavenLink,
+];
+
+export const tenancyProductMoneyPageLinks = [
+  tenancyFunnelPages.astAgreementTemplate,
+  tenancyFunnelPages.tenancyAgreementEngland2026,
+  tenancyFunnelPages.assuredPeriodicTenancyAgreement,
+  tenancyFunnelPages.hmoTenancyAgreementTemplate,
+];
+
+export const astAgreementTemplateRelatedLinks = [
+  tenancyFunnelPages.tenancyAgreementEngland2026,
+  tenancyFunnelPages.assuredPeriodicTenancyAgreement,
+  askHeavenLink,
+];
+
+export const tenancyAgreementTemplateUkRelatedLinks = [
+  tenancyFunnelPages.astAgreementTemplate,
+  tenancyFunnelPages.assuredPeriodicTenancyAgreement,
+  askHeavenLink,
+];
+
+export const tenancyAgreementEngland2026RelatedLinks = [
+  tenancyFunnelPages.astAgreementTemplate,
+  tenancyFunnelPages.assuredPeriodicTenancyAgreement,
+  askHeavenLink,
+];
+
+export const assuredPeriodicTenancyAgreementRelatedLinks = [
+  tenancyFunnelPages.astAgreementTemplate,
+  tenancyFunnelPages.tenancyAgreementEngland2026,
+  askHeavenLink,
+];
+
+export const hmoTenancyAgreementTemplateRelatedLinks = [
+  tenancyFunnelPages.astAgreementTemplate,
+  tenancyFunnelPages.tenancyAgreementEngland2026,
+  toolLinks.hmoChecker,
   askHeavenLink,
 ];
 

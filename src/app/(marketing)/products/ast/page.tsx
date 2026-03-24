@@ -3,10 +3,12 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { RiCheckboxCircleLine } from 'react-icons/ri';
 import { FAQSection, type FAQItem } from '@/components/seo/FAQSection';
+import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { Container } from '@/components/ui/Container';
 import { TenancyPackSection } from '@/components/value-proposition';
+import { tenancyProductMoneyPageLinks } from '@/lib/seo/internal-links';
 import { getCanonicalUrl } from '@/lib/seo';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { PRODUCTS } from '@/lib/pricing/products';
@@ -70,24 +72,49 @@ type ExplainerPoint = {
 };
 
 const proofPoints = [
-  'Jurisdiction-specific agreement for the property location',
-  'England route aligned to the assured periodic framework from 1 May 2026',
-  'Standard for straightforward lets and Premium for more complex arrangements',
+  'England-first tenancy agreement for new lets from 1 May 2026',
+  'Choose Standard for straightforward lets and Premium for more complex arrangements',
+  'Avoid using outdated agreements when the current framework should be reflected',
   'Preview before payment and keep the finished agreement in your account',
+];
+
+const englandChangePoints = [
+  'New tenancies use the assured periodic route',
+  'Many landlords still search using AST language, but this product reflects the current framework',
+  'Older tenancies usually transition rather than being replaced',
+];
+
+const premiumReasons: FeaturePoint[] = [
+  {
+    title: 'HMOs and shared houses',
+    body: 'Premium is the stronger fit where the property setup, house rules, and shared occupation create more drafting complexity than a straightforward single-household let.',
+  },
+  {
+    title: 'Sharers and student households',
+    body: 'Where multiple occupiers, turnover risk, or day-to-day management detail matter more, Premium gives landlords broader wording from the start.',
+  },
+  {
+    title: 'Guarantors and higher-risk setups',
+    body: 'If the tenancy depends on guarantor support or has more operational friction built in, Premium gives the landlord a more suitable product level for that reality.',
+  },
+  {
+    title: 'When you want more support documents',
+    body: 'Premium adds extra support documents and broader wording, which is often the better commercial choice when the let is more involved and the landlord wants fewer loose ends later.',
+  },
 ];
 
 const explainerPoints: ExplainerPoint[] = [
   {
     title: 'The legal framework depends on where the property is',
-    body: 'England, Wales, Scotland, and Northern Ireland each use different tenancy frameworks. A generic UK template or a document copied from another jurisdiction can leave you with wording that does not match the property you are actually letting.',
+    body: 'England, Wales, Scotland, and Northern Ireland each use different tenancy frameworks. A broad template copied across jurisdictions can leave you with wording that does not match the property you are actually letting.',
   },
   {
     title: 'England has changed from 1 May 2026',
-    body: 'For new private lets in England, the legal position has moved into the assured periodic framework. Many landlords still search using AST language, but old fixed-term assumptions are no longer the best starting point for new agreements.',
+    body: 'For new private lets in England, the starting point has moved into the assured periodic route. Many landlords still search using AST language, but old fixed-term assumptions are no longer the best way to frame a new agreement.',
   },
   {
     title: 'Old templates can create avoidable problems',
-    body: 'An older agreement or free download may contain outdated wording, the wrong structure, or clauses that no longer reflect the current framework. That can create uncertainty at exactly the point where clear wording matters most.',
+    body: 'An older agreement or free download may contain outdated wording, the wrong structure, or clauses that no longer reflect the current framework. That can create avoidable uncertainty at exactly the point where clear wording matters most.',
   },
   {
     title: 'Choose the level that fits the tenancy',
@@ -105,8 +132,8 @@ const productOptions: ProductCardData[] = [
       'Standard is the right choice for most everyday lets. It gives you the correct agreement structure for the property location plus the core supporting pack for move-in, compliance, and record-keeping.',
     points: [
       'Designed for most straightforward residential lets',
-      'Jurisdiction-specific agreement plus supporting pack documents',
-      'England route aligned to the assured periodic framework from 1 May 2026',
+      'Correct agreement route plus supporting pack documents',
+      'England wording built for the current position from 1 May 2026',
       'Guided setup with preview before payment',
       'Saved in your account after purchase',
     ],
@@ -140,10 +167,10 @@ const jurisdictions: JurisdictionCardData[] = [
     flag: '/gb-eng.svg',
     agreementType: 'Periodic tenancy agreement',
     summary:
-      'For properties in England, Landlord Heaven uses wording designed for the assured periodic tenancy framework applying to new private lets from 1 May 2026, while still helping landlords who arrive using older AST search terms.',
+      'For properties in England, Landlord Heaven uses wording designed for the current route for new private lets from 1 May 2026, while still helping landlords who arrive using older AST search terms.',
     points: [
       "Designed to reflect the Renters' Rights changes in England",
-      'England-specific wording and structure',
+      'England-first wording and structure',
       'Periodic agreement with no fixed duration',
     ],
     href: '/wizard?product=ast_standard&jurisdiction=england&src=product_page&topic=tenancy',
@@ -268,9 +295,9 @@ const comparisonRows: ComparisonRow[] = [
   {
     label: 'England positioning',
     landlordHeaven:
-      'England is presented as a current England tenancy agreement built for the assured periodic framework, with AST used only as search clarification where helpful.',
+      'England is presented as a current England tenancy agreement built for the present route, with AST used only as search clarification where helpful.',
     genericTemplate:
-      'Often still leans on old fixed-term AST positioning or leaves the landlord to work out what changed.',
+      'Often still leans on outdated AST positioning or leaves the landlord to work out what changed.',
   },
   {
     label: 'After purchase',
@@ -288,7 +315,7 @@ const faqs: FAQItem[] = [
   {
     question: 'Which agreement do I get for my region?',
     answer:
-      'England properties use an England tenancy agreement designed for the assured periodic framework from 1 May 2026. Wales uses an Occupation Contract. Scotland uses a Private Residential Tenancy. Northern Ireland uses a Private Tenancy Agreement.',
+      'England properties use an England tenancy agreement designed for the current route from 1 May 2026. Wales uses an Occupation Contract. Scotland uses a Private Residential Tenancy. Northern Ireland uses a Private Tenancy Agreement.',
   },
   {
     question: 'Are the agreements jurisdiction-specific?',
@@ -298,12 +325,12 @@ const faqs: FAQItem[] = [
   {
     question: 'Is this still an AST for England?',
     answer:
-      'Many landlords still search using AST language. But from 1 May 2026, new England tenancy agreements generally move into the assured periodic model. Landlord Heaven therefore presents the England route as a current England tenancy agreement built for that framework, rather than as a traditional new fixed-term AST.',
+      'Many landlords still search using AST language. But from 1 May 2026, new England tenancy agreements generally move into the assured periodic model. Landlord Heaven therefore presents the England route as a current England tenancy agreement built for that framework, rather than as an older AST-style starting point.',
   },
   {
     question: 'Can I keep using an older tenancy agreement?',
     answer:
-      'Older agreements still exist, but they may rely on wording, structure, or assumptions that no longer reflect the current framework. If you are unsure, it is safer to start with wording designed for the property and jurisdiction you are actually letting.',
+      'Older agreements still exist, but they may rely on wording, structure, or assumptions that no longer reflect the current framework. If you are creating a new England tenancy now, it is safer to start with wording designed for the current route and the property you are actually letting.',
   },
   {
     question: 'What is included in the agreement?',
@@ -328,11 +355,13 @@ const faqs: FAQItem[] = [
 ];
 
 export const metadata: Metadata = {
-  title: "New Renters' Rights Act Compliant Assured Periodic Tenancy Agreement",
+  title: 'Assured Periodic Tenancy Agreement for England | Updated for 1 May 2026',
   description:
-    'Choose the right tenancy agreement for England, Wales, Scotland, or Northern Ireland. Start with the correct jurisdiction, choose Standard for straightforward lets or Premium for more complex ones, and use the England route aligned to the assured periodic framework from 1 May 2026.',
+    'Assured Periodic Tenancy Agreement for England updated for the Renters\' Rights Act from 1 May 2026. Compare Standard and Premium, keep AST search guidance visible, and still support Wales, Scotland, and Northern Ireland.',
   keywords: [
+    'assured periodic tenancy agreement england',
     'tenancy agreement uk',
+    'ast agreement template',
     'residential tenancy agreement england',
     'occupation contract wales',
     'private residential tenancy scotland',
@@ -345,9 +374,9 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: canonicalUrl },
   openGraph: {
-    title: "New Renters' Rights Act Compliant Assured Periodic Tenancy Agreement",
+    title: 'Assured Periodic Tenancy Agreement for England | Updated for 1 May 2026',
     description:
-      'Choose the right tenancy agreement for each UK jurisdiction, with Standard and Premium routes and England wording aligned to the assured periodic framework from 1 May 2026.',
+      'Compare Standard and Premium England tenancy agreement options updated for 1 May 2026, with AST search intent still supported and other UK jurisdictions available lower on the page.',
     url: canonicalUrl,
     type: 'website',
   },
@@ -484,8 +513,8 @@ export default function ASTProductPage() {
       <div className="pointer-events-none absolute left-[18%] top-[95rem] h-56 w-56 rounded-full bg-[#ECE6FF] opacity-55 blur-3xl" />
 
       <UniversalHero
-        title="New Renters' Rights Act Compliant Assured Periodic Tenancy Agreement"
-        subtitle="Don't get caught out by changes from 1 May 2026. Create a new Assured Periodic Tenancy Agreement now and ensure legal compliance without any stress."
+        title="Assured Periodic Tenancy Agreement for England"
+        subtitle="Updated for the Renters' Rights Act from 1 May 2026. Create a compliant England tenancy agreement with Standard and Premium options."
         actionsSlot={
           <div className="grid w-full gap-3 sm:grid-cols-2 lg:max-w-2xl">
             <div className="rounded-2xl border border-white/20 bg-white/10 p-3 backdrop-blur-sm">
@@ -524,6 +553,131 @@ export default function ASTProductPage() {
 
       <Container className="relative z-10 py-16 md:py-20">
         <section className="mb-16 md:mb-20">
+          <div className="rounded-[2rem] border border-[#E8DCC0] bg-[#FFF8EA] p-6 shadow-[0_12px_28px_rgba(43,33,12,0.06)] md:p-8">
+            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#8A6234]">
+              England transition note
+            </p>
+            <p className="mt-3 text-lg leading-8 text-[#5A4720]">
+              If your England tenancy started before <strong>1 May 2026</strong>, you will not
+              usually start again with a new agreement. Depending on the tenancy, you may instead
+              need to provide updated written information.
+            </p>
+          </div>
+        </section>
+
+        <section className="mb-16 md:mb-20">
+          <div className="overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-[#1B1730] via-[#2D2152] to-[#5640A3] px-6 py-8 text-white shadow-[0_28px_70px_rgba(41,31,77,0.35)] md:px-10 md:py-12">
+            <div className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-start">
+              <div>
+                <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#C4B6FF]">
+                  What changed for England from 1 May 2026
+                </p>
+                <h2 className="mt-3 text-4xl font-bold tracking-tight md:text-5xl">
+                  England is now the lead story on this page
+                </h2>
+                <p className="mt-5 max-w-3xl text-lg leading-8 text-[#E1DBF8]">
+                  For new England tenancies from <strong>1 May 2026</strong>, the starting point is
+                  no longer the old AST assumption. Landlord Heaven therefore presents
+                  the England route around the assured periodic tenancy agreement so landlords can
+                  start with wording designed for the current framework.
+                </p>
+                <p className="mt-5 max-w-3xl text-lg leading-8 text-[#E1DBF8]">
+                  Many landlords still search using AST language, and we keep that search intent
+                  visible across the URL, metadata, and FAQ. But the live product is positioned
+                  around the current England route so landlords can avoid using outdated agreements
+                  when they should be reflecting the framework from <strong>1 May 2026</strong>.
+                </p>
+
+                <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                  <Link
+                    href="/wizard?product=ast_standard&jurisdiction=england&src=product_page&topic=tenancy"
+                    className={ENGLAND_UPDATE_PRIMARY_BUTTON_CLASS}
+                  >
+                    Start Standard England agreement
+                  </Link>
+                  <Link
+                    href="/wizard?product=ast_premium&jurisdiction=england&src=product_page&topic=tenancy"
+                    className={ENGLAND_UPDATE_SECONDARY_BUTTON_CLASS}
+                  >
+                    Start Premium England agreement
+                  </Link>
+                </div>
+              </div>
+
+              <div className="rounded-[2rem] border border-white/10 bg-white/10 p-6 backdrop-blur-sm">
+                <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#C4B6FF]">
+                  What changed
+                </p>
+                <ul className="mt-5 space-y-4">
+                  {englandChangePoints.map((item) => (
+                    <li
+                      key={item}
+                      className="flex items-start gap-3 text-[15px] leading-7 text-[#F0ECFF]"
+                    >
+                      <RiCheckboxCircleLine className="mt-1 h-5 w-5 shrink-0 text-[#C4B6FF]" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="compare-options" className="mb-16 md:mb-20">
+          <div className="mx-auto max-w-4xl text-center">
+            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#5B56E8]">
+              Choose your product level
+            </p>
+            <h2 className="mt-3 text-4xl font-bold tracking-tight text-[#141B2D] md:text-5xl">
+              Standard for straightforward lets. Premium for more complex ones.
+            </h2>
+            <p className="mt-5 text-lg leading-8 text-[#546075]">
+              Choose Standard for most ordinary residential lets. Choose Premium when the
+              household setup, property type, or risk profile is more complex and you want broader
+              wording from the start.
+            </p>
+          </div>
+
+          <div className="mt-10 grid gap-6 xl:grid-cols-2">
+            {productOptions.map((option) => (
+              <ProductCard key={option.name} {...option} />
+            ))}
+          </div>
+        </section>
+
+        <section className="mb-16 md:mb-20">
+          <div className="rounded-[2.2rem] border border-[#E4DED3] bg-white/92 p-6 shadow-[0_18px_42px_rgba(31,41,55,0.05)] md:p-8">
+            <div className="mx-auto max-w-4xl text-center">
+              <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#5B56E8]">
+                When Premium is the better choice
+              </p>
+              <h2 className="mt-3 text-4xl font-bold tracking-tight text-[#141B2D] md:text-5xl">
+                Choose Premium when the tenancy is more involved
+              </h2>
+              <p className="mt-5 text-lg leading-8 text-[#546075]">
+                Some tenancies need more than the lightest document route. If the let involves
+                HMOs, sharers, guarantors, or higher-risk household arrangements, Premium is often
+                the clearer commercial choice because it gives the landlord broader wording and more
+                support from the outset.
+              </p>
+            </div>
+
+            <div className="mt-10 grid gap-4 sm:grid-cols-2">
+              {premiumReasons.map((reason) => (
+                <div
+                  key={reason.title}
+                  className="rounded-[1.8rem] border border-[#E6E0D6] bg-[#FCFBF8] p-6"
+                >
+                  <h3 className="text-lg font-semibold text-[#141B2D]">{reason.title}</h3>
+                  <p className="mt-3 text-sm leading-7 text-[#546075]">{reason.body}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="mb-16 md:mb-20">
           <div className="mx-auto max-w-4xl text-center">
             <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#5B56E8]">
               Understanding tenancy agreements
@@ -549,113 +703,6 @@ export default function ASTProductPage() {
                 <p className="mt-3 text-sm leading-7 text-[#546075]">{item.body}</p>
               </div>
             ))}
-          </div>
-        </section>
-
-        <section id="compare-options" className="mb-16 md:mb-20">
-          <div className="mx-auto max-w-4xl text-center">
-            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#5B56E8]">
-              Choose your product level
-            </p>
-            <h2 className="mt-3 text-4xl font-bold tracking-tight text-[#141B2D] md:text-5xl">
-              Standard for straightforward lets. Premium for more complex ones.
-            </h2>
-            <p className="mt-5 text-lg leading-8 text-[#546075]">
-              Choose Standard for most ordinary residential lets. Choose Premium when the household
-              setup, property type, or risk profile is more complex and you want broader wording
-              from the start.
-            </p>
-          </div>
-
-          <div className="mt-10 grid gap-6 xl:grid-cols-2">
-            {productOptions.map((option) => (
-              <ProductCard key={option.name} {...option} />
-            ))}
-          </div>
-        </section>
-
-        <section id="jurisdictions" className="mb-16 md:mb-20">
-          <div className="mx-auto mb-8 max-w-3xl text-center">
-            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#5B56E8]">
-              Choose your jurisdiction
-            </p>
-            <h2 className="mt-3 text-4xl font-bold tracking-tight text-[#141B2D] md:text-5xl">
-              The right agreement for each part of the UK
-            </h2>
-            <p className="mt-5 text-lg leading-8 text-[#546075]">
-              You are not buying a generic UK tenancy template. The agreement depends on where the
-              property is located, so you start with the right framework, terminology, and
-              structure from the beginning.
-            </p>
-          </div>
-
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-            {jurisdictions.map((jurisdiction) => (
-              <JurisdictionCard key={jurisdiction.name} {...jurisdiction} />
-            ))}
-          </div>
-        </section>
-
-        <section className="mb-16 md:mb-20">
-          <div className="overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-[#1B1730] via-[#2D2152] to-[#5640A3] px-6 py-8 text-white shadow-[0_28px_70px_rgba(41,31,77,0.35)] md:px-10 md:py-12">
-            <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-start">
-              <div>
-                <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#C4B6FF]">
-                  England update
-                </p>
-                <h2 className="mt-3 text-4xl font-bold tracking-tight md:text-5xl">
-                  England agreements built for the new periodic framework
-                </h2>
-                <p className="mt-5 max-w-3xl text-lg leading-8 text-[#E1DBF8]">
-                  From <strong>1 May 2026</strong>, new England tenancy agreements generally move
-                  into the assured periodic framework. Landlord Heaven therefore presents the
-                  England route as a current England tenancy agreement built for that framework,
-                  rather than as a traditional new fixed-term AST.
-                </p>
-                <p className="mt-5 max-w-3xl text-lg leading-8 text-[#E1DBF8]">
-                  Landlords still search using AST language, and we keep that intent visible where
-                  it helps. But the product itself is built around current England wording, so you
-                  are not relying on outdated assumptions when the agreement matters most.
-                </p>
-
-                <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-                  <Link
-                    href="/wizard?product=ast_standard&jurisdiction=england&src=product_page&topic=tenancy"
-                    className={ENGLAND_UPDATE_PRIMARY_BUTTON_CLASS}
-                  >
-                    Start Standard England agreement
-                  </Link>
-                  <Link
-                    href="/wizard?product=ast_premium&jurisdiction=england&src=product_page&topic=tenancy"
-                    className={ENGLAND_UPDATE_SECONDARY_BUTTON_CLASS}
-                  >
-                    Start Premium England agreement
-                  </Link>
-                </div>
-              </div>
-
-              <div className="rounded-[2rem] border border-white/10 bg-white/10 p-6 backdrop-blur-sm">
-                <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#C4B6FF]">
-                  Why this route stands out
-                </p>
-                <ul className="mt-5 space-y-4">
-                  {[
-                    'England wording designed for the assured periodic framework from 1 May 2026',
-                    "Designed to reflect the Renters' Rights changes in England",
-                    'Legacy AST search intent supported without selling old fixed-term assumptions',
-                    'Clear Standard and Premium routes depending on the tenancy',
-                  ].map((item) => (
-                    <li
-                      key={item}
-                      className="flex items-start gap-3 text-[15px] leading-7 text-[#F0ECFF]"
-                    >
-                      <RiCheckboxCircleLine className="mt-1 h-5 w-5 shrink-0 text-[#C4B6FF]" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
           </div>
         </section>
 
@@ -813,6 +860,34 @@ export default function ASTProductPage() {
             </div>
           </div>
         </section>
+
+        <section id="jurisdictions" className="mb-16 md:mb-20">
+          <div className="mx-auto mb-8 max-w-3xl text-center">
+            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#5B56E8]">
+              Other UK jurisdictions
+            </p>
+            <h2 className="mt-3 text-4xl font-bold tracking-tight text-[#141B2D] md:text-5xl">
+              This product also supports Wales, Scotland, and Northern Ireland.
+            </h2>
+            <p className="mt-5 text-lg leading-8 text-[#546075]">
+              England leads this page because the biggest terminology shift happened from{' '}
+              <strong>1 May 2026</strong>. But the same product still supports the correct agreement
+              route for Wales, Scotland, and Northern Ireland when the property is outside England.
+            </p>
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+            {jurisdictions.map((jurisdiction) => (
+              <JurisdictionCard key={jurisdiction.name} {...jurisdiction} />
+            ))}
+          </div>
+        </section>
+
+        <RelatedLinks
+          title="Keep exploring the England tenancy agreement funnel"
+          links={tenancyProductMoneyPageLinks}
+          variant="list"
+        />
       </Container>
 
       <FAQSection
@@ -830,12 +905,12 @@ export default function ASTProductPage() {
               Ready when you are
             </p>
             <h2 className="mt-3 text-3xl font-bold tracking-tight md:text-5xl">
-              Choose the right tenancy agreement before an old template catches you out
+              Choose the right tenancy agreement before an outdated agreement slows you down
             </h2>
             <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-[#E3DCF8]">
-              Start with the correct jurisdiction, choose Standard for a straightforward let or
-              Premium for a more complex one, and avoid relying on wording that may no longer match
-              the framework for the property.
+              Start with the current England route, compare Standard and Premium clearly, and keep
+              the other UK jurisdictions in view if the property is outside England. That helps you
+              avoid relying on wording that may no longer match the framework for the tenancy.
             </p>
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <Link href={standardWizardHref} className={PRIMARY_BUTTON_CLASS}>

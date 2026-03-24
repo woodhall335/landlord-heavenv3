@@ -90,43 +90,47 @@ describe('/products/ast page', () => {
     expect(
       screen.getByRole('heading', {
         level: 1,
-        name: "New Renters' Rights Act Compliant Assured Periodic Tenancy Agreement",
+        name: 'Assured Periodic Tenancy Agreement for England',
       }),
     ).toBeInTheDocument();
 
     expect(
       screen.getByText(
-        /Don't get caught out by changes from 1 May 2026\. Create a new Assured Periodic Tenancy Agreement now and ensure legal compliance without any stress\./i,
+        /Updated for the Renters' Rights Act from 1 May 2026\. Create a compliant England tenancy agreement with Standard and Premium options\./i,
+      ),
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByText(
+        /If your England tenancy started before 1 May 2026, you will not usually start again with a new agreement\./i,
       ),
     ).toBeInTheDocument();
 
     expect(
       screen.getByRole('heading', {
         level: 2,
-        name: 'Start with the right agreement for the property',
+        name: 'England is now the lead story on this page',
       }),
     ).toBeInTheDocument();
 
     expect(
       screen.getByRole('heading', {
         level: 2,
-        name: 'Standard for straightforward lets. Premium for more complex ones.',
+        name: 'Choose Premium when the tenancy is more involved',
       }),
     ).toBeInTheDocument();
 
     expect(
       screen.getByRole('heading', {
         level: 2,
-        name: 'England agreements built for the new periodic framework',
+        name: 'This product also supports Wales, Scotland, and Northern Ireland.',
       }),
     ).toBeInTheDocument();
 
-    expect(
-      screen.getByRole('heading', {
-        level: 2,
-        name: 'Build your agreement in three simple steps',
-      }),
-    ).toBeInTheDocument();
+    expect(screen.getByAltText('Preview of Landlord Heaven tenancy agreement documents')).toHaveAttribute(
+      'src',
+      '/images/tenancy_agreements.webp',
+    );
   });
 
   it('routes product and jurisdiction CTAs with the refreshed labels', () => {
@@ -168,10 +172,10 @@ describe('/products/ast page', () => {
     render(<ASTProductPage />);
 
     expect(
-      screen.getByText(/Landlords still search using AST language, and we keep that intent visible where it helps\./i),
+      screen.getByText(/Many landlords still search using AST language, but this product reflects the current framework/i),
     ).toBeInTheDocument();
     expect(
-      screen.getByText(/Legacy AST search intent supported without selling old fixed-term assumptions/i),
+      screen.getByText(/New tenancies use the assured periodic route/i),
     ).toBeInTheDocument();
 
     expect(
@@ -188,7 +192,7 @@ describe('/products/ast page', () => {
 
     expect(
       screen.getByText(
-        /Start with the correct jurisdiction, choose Standard for a straightforward let or Premium for a more complex one/i,
+        /Start with the current England route, compare Standard and Premium clearly, and keep the other UK jurisdictions in view/i,
       ),
     ).toBeInTheDocument();
     expect(
@@ -196,5 +200,8 @@ describe('/products/ast page', () => {
         /Standard is designed for straightforward lets\. Premium is the stronger fit for HMOs, student lets, guarantors, sharers, and other more complex arrangements\./i,
       ),
     ).toBeInTheDocument();
+
+    const wordCount = document.body.textContent?.trim().split(/\s+/).length ?? 0;
+    expect(wordCount).toBeGreaterThan(1100);
   });
 });
