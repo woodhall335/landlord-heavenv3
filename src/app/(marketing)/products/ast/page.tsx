@@ -7,7 +7,6 @@ import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { Container } from '@/components/ui/Container';
-import { TenancyPackSection } from '@/components/value-proposition';
 import { tenancyProductMoneyPageLinks } from '@/lib/seo/internal-links';
 import { getCanonicalUrl } from '@/lib/seo';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
@@ -127,7 +126,8 @@ const productOptions: ProductCardData[] = [
     name: 'Standard Tenancy Agreement',
     price: PRODUCTS.ast_standard.displayPrice,
     kicker: 'Best for straightforward lets',
-    bestFor: 'Single-household and lower-complexity lets where you want the right jurisdiction-specific agreement without paying for broader drafting you do not need.',
+    bestFor:
+      'Single-household and lower-complexity lets where you want the right jurisdiction-specific agreement without paying for broader drafting you do not need.',
     description:
       'Standard is the right choice for most everyday lets. It gives you the correct agreement structure for the property location plus the core supporting pack for move-in, compliance, and record-keeping.',
     points: [
@@ -175,7 +175,8 @@ const jurisdictions: JurisdictionCardData[] = [
     ],
     href: '/wizard?product=ast_standard&jurisdiction=england&src=product_page&topic=tenancy',
     ctaLabel: `Create England agreement - ${PRODUCTS.ast_standard.displayPrice}`,
-    secondaryHref: '/wizard?product=ast_premium&jurisdiction=england&src=product_page&topic=tenancy',
+    secondaryHref:
+      '/wizard?product=ast_premium&jurisdiction=england&src=product_page&topic=tenancy',
     secondaryLabel: `Create premium England agreement - ${PRODUCTS.ast_premium.displayPrice}`,
     featured: true,
   },
@@ -208,7 +209,8 @@ const jurisdictions: JurisdictionCardData[] = [
     ],
     href: '/wizard?product=ast_standard&jurisdiction=scotland&src=product_page&topic=tenancy',
     ctaLabel: `Create Scotland agreement - ${PRODUCTS.ast_standard.displayPrice}`,
-    secondaryHref: '/wizard?product=ast_premium&jurisdiction=scotland&src=product_page&topic=tenancy',
+    secondaryHref:
+      '/wizard?product=ast_premium&jurisdiction=scotland&src=product_page&topic=tenancy',
     secondaryLabel: `Create premium Scotland agreement - ${PRODUCTS.ast_premium.displayPrice}`,
   },
   {
@@ -251,16 +253,16 @@ const featurePoints: FeaturePoint[] = [
 
 const howItWorks: FeaturePoint[] = [
   {
-    title: '1. Tell us about the property and tenancy',
-    body: 'Choose the property jurisdiction and answer the key setup questions about the tenancy you are creating.',
+    title: '1. Enter tenancy details',
+    body: 'Answer a few guided questions so nothing important is missed.',
   },
   {
-    title: '2. We generate the right agreement type',
-    body: 'Landlord Heaven builds the correct agreement structure for England, Wales, Scotland, or Northern Ireland instead of leaving you to adapt a generic file yourself.',
+    title: '2. We build your agreement',
+    body: 'The system creates the correct legal structure for your property, without guesswork or manual editing.',
   },
   {
-    title: '3. Preview, pay, and keep access',
-    body: 'Preview before payment, then access the finished agreement in your account afterwards.',
+    title: '3. Preview and complete',
+    body: 'Check everything before you pay, then keep full access in your account.',
   },
 ];
 
@@ -357,7 +359,7 @@ const faqs: FAQItem[] = [
 export const metadata: Metadata = {
   title: 'Assured Periodic Tenancy Agreement for England | Updated for 1 May 2026',
   description:
-    'Assured Periodic Tenancy Agreement for England updated for the Renters\' Rights Act from 1 May 2026. Compare Standard and Premium, keep AST search guidance visible, and still support Wales, Scotland, and Northern Ireland.',
+    "Assured Periodic Tenancy Agreement for England updated for the Renters' Rights Act from 1 May 2026. Compare Standard and Premium, keep AST search guidance visible, and still support Wales, Scotland, and Northern Ireland.",
   keywords: [
     'assured periodic tenancy agreement england',
     'tenancy agreement uk',
@@ -518,12 +520,18 @@ export default function ASTProductPage() {
         actionsSlot={
           <div className="grid w-full gap-3 sm:grid-cols-2 lg:max-w-2xl">
             <div className="rounded-2xl border border-white/20 bg-white/10 p-3 backdrop-blur-sm">
-              <Link href={standardWizardHref} className="hero-btn-primary flex w-full justify-center text-center">
+              <Link
+                href={standardWizardHref}
+                className="hero-btn-primary flex w-full justify-center text-center"
+              >
                 Start Standard Tenancy Agreement
               </Link>
             </div>
             <div className="rounded-2xl border border-white/20 bg-white/10 p-3 backdrop-blur-sm">
-              <Link href={premiumWizardHref} className="hero-btn-secondary flex w-full justify-center text-center">
+              <Link
+                href={premiumWizardHref}
+                className="hero-btn-secondary flex w-full justify-center text-center"
+              >
                 Start Premium Tenancy Agreement
               </Link>
             </div>
@@ -553,14 +561,42 @@ export default function ASTProductPage() {
 
       <Container className="relative z-10 py-16 md:py-20">
         <section className="mb-16 md:mb-20">
-          <div className="rounded-[2rem] border border-[#E8DCC0] bg-[#FFF8EA] p-6 shadow-[0_12px_28px_rgba(43,33,12,0.06)] md:p-8">
-            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#8A6234]">
-              England transition note
+          <div className="rounded-[1.9rem] border border-[#F1D8D8] bg-[#FFF7F7] p-6 shadow-[0_12px_28px_rgba(80,26,26,0.05)] md:p-8">
+            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#A33A3A]">
+              Already have a tenancy?
             </p>
-            <p className="mt-3 text-lg leading-8 text-[#5A4720]">
-              If your England tenancy started before <strong>1 May 2026</strong>, you will not
-              usually start again with a new agreement. Depending on the tenancy, you may instead
-              need to provide updated written information.
+            <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#2A1414] md:text-4xl">
+              Older paperwork can leave you exposed without you realising it
+            </h2>
+            <p className="mt-4 text-lg leading-8 text-[#6B3B3B]">
+              If your tenancy started before <strong>1 May 2026</strong>, you may not need to
+              replace the agreement entirely — but that does not mean your current paperwork is safe
+              to rely on.
+            </p>
+            <p className="mt-4 text-lg leading-8 text-[#6B3B3B]">
+              If the wording, supporting documents, or written information do not reflect the
+              current position, you risk finding out later that your agreement does not protect you
+              in the way you expected.
+            </p>
+            <ul className="mt-6 grid gap-3 md:grid-cols-2">
+              {[
+                'Unclear or unenforceable terms',
+                'Compliance gaps that are easy to miss at the start',
+                'Disputes where your paperwork does not say what you think it says',
+                'Problems later when you need to rely on the agreement',
+              ].map((item) => (
+                <li
+                  key={item}
+                  className="flex items-start gap-3 rounded-2xl bg-white px-4 py-4 text-sm font-semibold leading-6 text-[#5A2F2F] shadow-sm"
+                >
+                  <RiCheckboxCircleLine className="mt-0.5 h-5 w-5 shrink-0 text-[#C14B4B]" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-6 text-base leading-7 text-[#6B3B3B]">
+              Even where a full replacement is not required, landlords are often expected to provide
+              updated written information — and missing that step can create avoidable exposure.
             </p>
           </div>
         </section>
@@ -577,9 +613,9 @@ export default function ASTProductPage() {
                 </h2>
                 <p className="mt-5 max-w-3xl text-lg leading-8 text-[#E1DBF8]">
                   For new England tenancies from <strong>1 May 2026</strong>, the starting point is
-                  no longer the old AST assumption. Landlord Heaven therefore presents
-                  the England route around the assured periodic tenancy agreement so landlords can
-                  start with wording designed for the current framework.
+                  no longer the old AST assumption. Landlord Heaven therefore presents the England
+                  route around the assured periodic tenancy agreement so landlords can start with
+                  wording designed for the current framework.
                 </p>
                 <p className="mt-5 max-w-3xl text-lg leading-8 text-[#E1DBF8]">
                   Many landlords still search using AST language, and we keep that search intent
@@ -633,9 +669,9 @@ export default function ASTProductPage() {
               Standard for straightforward lets. Premium for more complex ones.
             </h2>
             <p className="mt-5 text-lg leading-8 text-[#546075]">
-              Choose Standard for most ordinary residential lets. Choose Premium when the
-              household setup, property type, or risk profile is more complex and you want broader
-              wording from the start.
+              Choose Standard for most ordinary residential lets. Choose Premium when the household
+              setup, property type, or risk profile is more complex and you want broader wording
+              from the start.
             </p>
           </div>
 
@@ -707,11 +743,67 @@ export default function ASTProductPage() {
         </section>
 
         <section id="whats-included" className="mb-16 scroll-mt-24 md:mb-20">
-          <TenancyPackSection
-            title="What's included"
-            subtitle="What's included in your tenancy agreement pack"
-            intro="You get more than a tenancy agreement. Landlord Heaven builds a practical tenancy document pack for the property, tenancy setup, and jurisdiction you choose, so you can preview the documents before paying and avoid relying on a generic one-file template."
-          />
+          <div className="rounded-[2.2rem] border border-[#E4DED3] bg-white/92 p-6 shadow-[0_18px_42px_rgba(31,41,55,0.05)] md:p-8">
+            <div className="mx-auto max-w-4xl text-center">
+              <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#5B56E8]">
+                What you get
+              </p>
+              <h2 className="mt-3 text-4xl font-bold tracking-tight text-[#141B2D] md:text-5xl">
+                More than a tenancy agreement. A pack built to protect your position.
+              </h2>
+              <p className="mt-5 text-lg leading-8 text-[#546075]">
+                This is not just a document download. Each purchase gives you a practical tenancy
+                pack designed to reduce missed steps, tighten your paperwork, and give you stronger
+                support from the start.
+              </p>
+            </div>
+
+            <div className="mt-10 grid gap-6 lg:grid-cols-2">
+              <div className="rounded-[1.8rem] border border-[#E6E0D6] bg-[#FCFBF8] p-6">
+                <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#5B56E8]">
+                  Standard pack includes
+                </p>
+                <ul className="mt-5 space-y-3">
+                  {[
+                    'Assured Periodic Tenancy Agreement built for current England law',
+                    'Inventory & Schedule of Condition to support deposit disputes',
+                    'Pre-Tenancy Compliance Checklist to help avoid missed legal steps',
+                    'Deposit Protection Certificate as evidence of compliance',
+                    'Prescribed Information Pack for tenant service and record-keeping',
+                  ].map((item) => (
+                    <li
+                      key={item}
+                      className="flex items-start gap-3 text-sm leading-7 text-[#1E2A44]"
+                    >
+                      <RiCheckboxCircleLine className="mt-1 h-5 w-5 shrink-0 text-[#5B56E8]" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="rounded-[1.8rem] border border-[#DCCFFF] bg-gradient-to-br from-[#F8F3FF] to-[#FFFFFF] p-6 shadow-[0_12px_32px_rgba(91,86,232,0.08)]">
+                <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#5B35B3]">
+                  Premium adds
+                </p>
+                <ul className="mt-5 space-y-3">
+                  {[
+                    'Stronger clauses for shared living, HMOs, and higher-risk setups',
+                    'Additional documents for handover, maintenance, and checkout',
+                    'Broader protection where a simple agreement may fall short',
+                  ].map((item) => (
+                    <li
+                      key={item}
+                      className="flex items-start gap-3 text-sm leading-7 text-[#1E2A44]"
+                    >
+                      <RiCheckboxCircleLine className="mt-1 h-5 w-5 shrink-0 text-[#5B56E8]" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
         </section>
 
         <section className="mb-16 md:mb-20">
@@ -721,11 +813,11 @@ export default function ASTProductPage() {
                 How it works
               </p>
               <h2 className="mt-3 text-4xl font-bold tracking-tight text-[#141B2D] md:text-5xl">
-                Build your agreement in three simple steps
+                Get the right agreement without the guesswork
               </h2>
               <p className="mt-5 text-lg leading-8 text-[#546075]">
-                Landlord Heaven helps you start with the correct agreement route for the property,
-                without the manual editing that often comes with generic templates.
+                Landlord Heaven helps you avoid the manual editing, second-guessing, and missed
+                details that often come with generic templates.
               </p>
             </div>
 
@@ -750,13 +842,12 @@ export default function ASTProductPage() {
                 Why landlords switch from old templates
               </p>
               <h2 className="mt-3 text-4xl font-bold tracking-tight text-[#141B2D]">
-                Your current agreement may no longer say what you think it says
+                Free templates can create problems you only notice when it is too late
               </h2>
               <p className="mt-5 text-lg leading-8 text-[#546075]">
-                If your agreement is old, adapted from a free download, or based on the wrong UK
-                framework, it may no longer reflect the legal position you expect. Landlord Heaven
-                helps you start with the right jurisdiction, the right wording, and the right level
-                of cover from the beginning.
+                A free or outdated template can look fine at first glance, then fail when you need
+                it most. Missing documents, outdated wording, and manual edits often create
+                problems that only surface during disputes, compliance checks, or enforcement.
               </p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                 <Link href={standardWizardHref} className={PRIMARY_BUTTON_CLASS}>
@@ -792,9 +883,9 @@ export default function ASTProductPage() {
                 Why this is better than a generic template
               </h2>
               <p className="mt-5 text-lg leading-8 text-[#546075]">
-                The difference is not just presentation. It is the difference between starting
-                with the correct agreement route and supporting documents for the property,
-                or trying to adapt a generic file after the fact.
+                The difference is not just presentation. It is the difference between starting with
+                the correct agreement route and supporting documents for the property, or trying to
+                adapt a generic file after the fact.
               </p>
             </div>
 
@@ -823,13 +914,17 @@ export default function ASTProductPage() {
                       <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#5B56E8]">
                         Landlord Heaven
                       </p>
-                      <p className="mt-3 text-sm leading-7 text-[#465066]">{row.landlordHeaven}</p>
+                      <p className="mt-3 text-sm leading-7 text-[#465066]">
+                        {row.landlordHeaven}
+                      </p>
                     </div>
                     <div className="rounded-2xl bg-[#F4F1EA] p-4">
                       <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#7A7A72]">
                         Generic template
                       </p>
-                      <p className="mt-3 text-sm leading-7 text-[#5E677B]">{row.genericTemplate}</p>
+                      <p className="mt-3 text-sm leading-7 text-[#5E677B]">
+                        {row.genericTemplate}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -871,8 +966,9 @@ export default function ASTProductPage() {
             </h2>
             <p className="mt-5 text-lg leading-8 text-[#546075]">
               England leads this page because the biggest terminology shift happened from{' '}
-              <strong>1 May 2026</strong>. But the same product still supports the correct agreement
-              route for Wales, Scotland, and Northern Ireland when the property is outside England.
+              <strong>1 May 2026</strong>. But the same product still supports the correct
+              agreement route for Wales, Scotland, and Northern Ireland when the property is
+              outside England.
             </p>
           </div>
 
