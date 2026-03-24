@@ -609,20 +609,21 @@ export default function ASTProductPage() {
                   What changed for England from 1 May 2026
                 </p>
                 <h2 className="mt-3 text-4xl font-bold tracking-tight md:text-5xl">
-                  England is now the lead story on this page
+                    New England tenancies no longer start with old AST assumptions
+
                 </h2>
-                <p className="mt-5 max-w-3xl text-lg leading-8 text-[#E1DBF8]">
-                  For new England tenancies from <strong>1 May 2026</strong>, the starting point is
-                  no longer the old AST assumption. Landlord Heaven therefore presents the England
-                  route around the assured periodic tenancy agreement so landlords can start with
-                  wording designed for the current framework.
-                </p>
-                <p className="mt-5 max-w-3xl text-lg leading-8 text-[#E1DBF8]">
-                  Many landlords still search using AST language, and we keep that search intent
-                  visible across the URL, metadata, and FAQ. But the live product is positioned
-                  around the current England route so landlords can avoid using outdated agreements
-                  when they should be reflecting the framework from <strong>1 May 2026</strong>.
-                </p>
+<p className="mt-5 max-w-3xl text-lg leading-8 text-[#E1DBF8]">
+  From <strong>1 May 2026</strong>, new private tenancies in England are no longer
+  best framed using older fixed-term AST wording. The starting point has moved to
+  an <strong>assured periodic tenancy structure</strong>.
+</p>
+
+<p className="mt-5 max-w-3xl text-lg leading-8 text-[#E1DBF8]">
+  That means if you are creating a new tenancy now, using an older-style agreement
+  can lead to the wrong structure or unnecessary confusion. This product is built
+  around the current England position, so you start with wording that reflects how
+  tenancies are now set up.
+</p>
 
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                   <Link
