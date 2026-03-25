@@ -159,6 +159,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/tenancy-agreement-england-2026', priority: 0.85, changeFrequency: 'weekly' as const },
     { path: '/assured-periodic-tenancy-agreement', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/hmo-tenancy-agreement-template', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/renters-rights-act-information-sheet-2026', priority: 0.82, changeFrequency: 'weekly' as const },
     { path: '/tenancy-agreement-template-free', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/joint-tenancy-agreement-template', priority: 0.8, changeFrequency: 'weekly' as const },
     // Tenancy Agreement SEO Pages - Wales (Q1 2026)

@@ -27,7 +27,7 @@ describe('England terms step mapping guard', () => {
 });
 
 describe('England terms step copy contract', () => {
-  it('uses England-specific pets, access, and cleaning wording and hides break clause UI', async () => {
+  it('uses England-specific pets, access, and cleaning wording, hides break clause UI, and standardises section headers', async () => {
     const fs = await import('fs');
     const path = await import('path');
 
@@ -54,6 +54,15 @@ describe('England terms step copy contract', () => {
     expect(source).toContain(
       'Do not require a paid professional clean in every case.',
     );
+    expect(source).toContain('<InlineSectionHeaderV3');
+    expect(source).toContain('title="House Rules"');
+    expect(source).toContain('title="Access Rules"');
+    expect(source).toContain('iconSlug="calendar-timeline"');
+    expect(source).toContain('title="Repairs and Maintenance"');
+    expect(source).toContain('iconSlug="property"');
+    expect(source).toContain('title="Inventory and Cleaning"');
+    expect(source).toContain('title="Additional Terms"');
+    expect(source).toContain('iconSlug="summary-cards"');
     expect(source).toContain('{!isEngland && (');
   });
 

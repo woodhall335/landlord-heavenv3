@@ -755,7 +755,7 @@ questions:
     section: Deposit
     question: "Prescribed information compliance"
     inputType: yes_no
-    helperText: "STATUTORY REQUIREMENT: You must serve prescribed information to the tenant within 30 days of receiving the deposit. Keep evidence that this was done."
+    helperText: "Statutory requirement: you must give the tenant the prescribed deposit information within 30 days of receiving the deposit. If you do not, a court can order you to repay or protect the deposit and pay compensation of up to 3 times the deposit. Keep evidence that this was done."
     validation:
       required: true
     maps_to:

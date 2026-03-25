@@ -1167,6 +1167,13 @@ export const tenancyFunnelPages = {
     icon: 'home' as const,
     type: 'page' as const,
   },
+  rentersRightsInformationSheet2026: {
+    href: '/renters-rights-act-information-sheet-2026',
+    title: "Renters' Rights Act Information Sheet 2026",
+    description: 'Free PDF download page for the official England tenant information sheet.',
+    icon: 'document' as const,
+    type: 'page' as const,
+  },
 };
 
 // Scotland PRT SEO Pages
@@ -1378,6 +1385,13 @@ export const hmoTenancyAgreementTemplateRelatedLinks = [
   tenancyFunnelPages.tenancyAgreementEngland2026,
   toolLinks.hmoChecker,
   askHeavenLink,
+];
+
+export const rentersRightsInformationSheet2026RelatedLinks = [
+  productLinks.tenancyAgreement,
+  tenancyFunnelPages.tenancyAgreementEngland2026,
+  tenancyFunnelPages.assuredPeriodicTenancyAgreement,
+  residentialDocumentLinks.documentsHub,
 ];
 
 // Scotland PRT Related Links

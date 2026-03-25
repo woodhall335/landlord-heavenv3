@@ -1837,7 +1837,11 @@ const DepositSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction 
       </div>
 
       <div className="border-t border-gray-200 pt-6">
-        <h3 className="text-lg font-medium text-gray-900 mb-4">Prescribed Information</h3>
+        <InlineSectionHeaderV3
+          title="Prescribed Information"
+          iconSlug="deposit"
+          subtitle="Record the deposit information you give the tenant and keep evidence on file."
+        />
         <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-4">
           <p className="text-sm text-amber-800">
             {isScotland ? (
@@ -1849,9 +1853,10 @@ const DepositSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction 
               </>
             ) : (
               <>
-                <strong>STATUTORY REQUIREMENT:</strong> You MUST serve prescribed information to the tenant
-                within 30 days of receiving the deposit. Failure to comply can result in compensation
-                of 1-3x the deposit amount and other enforcement or possession risks.
+                <strong>Statutory requirement:</strong> You must give the tenant the prescribed deposit
+                information within 30 days of receiving the deposit. If you do not, a court can order you
+                to repay or protect the deposit and pay compensation of up to 3 times the deposit. Keep
+                evidence that this was done.
               </>
             )}
           </p>
@@ -2074,12 +2079,15 @@ const TermsSection: React.FC<SectionProps> = ({ facts, onUpdate, caseId, jurisdi
     <div className="space-y-6">
       {/* Property Rules */}
       <div>
-        <InlineSectionHeaderV3 title="House Rules" iconSlug="terms" />
-        <p className="text-sm text-gray-500 mb-4">
-          {isEngland
-            ? 'Set agreed pet, smoking, and subletting rules. For England, pet requests should be considered reasonably and recorded in writing.'
-            : 'Pets, smoking and subletting policies.'}
-        </p>
+        <InlineSectionHeaderV3
+          title="House Rules"
+          iconSlug="terms"
+          subtitle={
+            isEngland
+              ? 'Set agreed pet, smoking, and subletting rules. For England, pet requests should be considered reasonably and recorded in writing.'
+              : 'Pets, smoking and subletting policies.'
+          }
+        />
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <YesNoField
             label={isEngland ? 'Will any pets be authorised at the start?' : 'Are pets allowed?'}
@@ -2121,12 +2129,15 @@ const TermsSection: React.FC<SectionProps> = ({ facts, onUpdate, caseId, jurisdi
 
       {/* Access & Inspections */}
       <div className="border-t border-gray-200 pt-6">
-        <h3 className="text-lg font-medium text-gray-900 mb-4">Access Rules</h3>
-        <p className="text-sm text-gray-500 mb-4">
-          {isEngland
-            ? "For England, non-emergency entry should usually be on at least 24 hours' notice and at a reasonable time."
-            : 'Notice periods for entry and inspections.'}
-        </p>
+        <InlineSectionHeaderV3
+          title="Access Rules"
+          iconSlug="calendar-timeline"
+          subtitle={
+            isEngland
+              ? "For England, non-emergency entry should usually be on at least 24 hours' notice and at a reasonable time."
+              : 'Notice periods for entry and inspections.'
+          }
+        />
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <SelectField
             label={isEngland ? 'Notice before non-emergency access' : 'Notice before access'}
@@ -2154,7 +2165,11 @@ const TermsSection: React.FC<SectionProps> = ({ facts, onUpdate, caseId, jurisdi
 
       {/* Maintenance & Repairs */}
       <div className="border-t border-gray-200 pt-6">
-        <h3 className="text-lg font-medium text-gray-900 mb-4">Repairs and Maintenance</h3>
+        <InlineSectionHeaderV3
+          title="Repairs and Maintenance"
+          iconSlug="property"
+          subtitle="What the landlord handles, how tenants report repairs, and who to contact out of hours."
+        />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="md:col-span-2 space-y-2">
             <TextareaField
@@ -2192,12 +2207,15 @@ const TermsSection: React.FC<SectionProps> = ({ facts, onUpdate, caseId, jurisdi
 
       {/* Inventory & Condition */}
       <div className="border-t border-gray-200 pt-6">
-        <InlineSectionHeaderV3 title="Inventory and Cleaning" iconSlug="inventory" />
-        {isEngland && (
-          <p className="text-sm text-gray-500 mb-4">
-            Set the expected return standard and any inventory schedule. Do not require a paid professional clean in every case.
-          </p>
-        )}
+        <InlineSectionHeaderV3
+          title="Inventory and Cleaning"
+          iconSlug="inventory"
+          subtitle={
+            isEngland
+              ? 'Set the expected return standard and any inventory schedule. Do not require a paid professional clean in every case.'
+              : undefined
+          }
+        />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <YesNoField
             label="Will you attach an inventory schedule?"
@@ -2261,13 +2279,16 @@ const TermsSection: React.FC<SectionProps> = ({ facts, onUpdate, caseId, jurisdi
 
       {/* Additional Terms */}
       <div className="border-t border-gray-200 pt-6">
-        <h3 className="text-lg font-medium text-gray-900 mb-4">Additional Terms</h3>
+        <InlineSectionHeaderV3
+          title="Additional Terms"
+          iconSlug="summary-cards"
+          subtitle="Optional bespoke clauses to insert into the agreement."
+        />
         <div className="space-y-2">
           <TextareaField
             label="Any additional bespoke terms?"
             value={facts.additional_terms}
             onChange={(v) => onUpdate({ additional_terms: v })}
-            helperText="Optional bespoke clauses to insert into the agreement."
           />
           <AskHeavenInlineEnhancer
             caseId={caseId}

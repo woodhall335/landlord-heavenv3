@@ -40,7 +40,7 @@ describe('England deposit cap validation', () => {
 });
 
 describe('England deposit step copy contract', () => {
-  it('shows the England deposit cap explanation in the live tenancy wizard', async () => {
+  it('shows the England deposit cap explanation and updated prescribed-information warning in the live tenancy wizard', async () => {
     const fs = await import('fs');
     const path = await import('path');
 
@@ -49,10 +49,31 @@ describe('England deposit step copy contract', () => {
       'utf8',
     );
 
-    expect(source).toContain(
-      "For England, the deposit must not exceed 5 weeks' rent, or 6 weeks if the annual rent is £50,000 or more.",
-    );
+    expect(source).toContain("For England, the deposit must not exceed 5 weeks' rent");
     expect(source).toContain('England deposit cap:');
-    expect(source).toContain("Deposit exceeds the England legal cap");
+    expect(source).toContain('Deposit exceeds the England legal cap');
+    expect(source).toContain(
+      'You must give the tenant the prescribed deposit information within 30 days of receiving the deposit.'
+    );
+    expect(source).toContain('pay compensation of up to 3 times the deposit');
+    expect(source).not.toContain('1-3x the deposit amount');
+    expect(source).not.toContain('other enforcement or possession risks');
+  });
+
+  it('keeps the England MQS prescribed-information helper aligned with the live wizard wording', async () => {
+    const fs = await import('fs');
+    const path = await import('path');
+
+    const source = fs.readFileSync(
+      path.join(process.cwd(), 'config/mqs/tenancy_agreement/england.yaml'),
+      'utf8',
+    );
+
+    expect(source).toContain(
+      'Statutory requirement: you must give the tenant the prescribed deposit information within 30 days of receiving the deposit.',
+    );
+    expect(source).toContain('pay compensation of up to 3 times the deposit');
+    expect(source).not.toContain('1-3x the deposit amount');
+    expect(source).not.toContain('other enforcement or possession risks');
   });
 });
