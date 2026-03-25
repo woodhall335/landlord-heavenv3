@@ -132,7 +132,7 @@
   <h2>3. Letting and Term</h2>
   <p class="clause"><span class="clause-num">3.1</span> The Landlord lets the Property to the Tenant for use as a private residence only.</p>
   <p class="clause"><span class="clause-num">3.2</span> The Tenant is granted exclusive occupation of the Property, subject to the Landlord's rights of access contained in this Agreement and any rights affecting communal areas.</p>
-  <p class="clause"><span class="clause-num">3.3</span> The tenancy begins on <strong>{{formatUKDate tenancy_start_date}}</strong> as a periodic assured tenancy under the law in force in England at that date and is not intended to create a new assured shorthold tenancy.</p>
+  <p class="clause"><span class="clause-num">3.3</span> The tenancy begins on <strong>{{formatUKDate tenancy_start_date}}</strong> as a periodic assured tenancy under the law in force in England at that date.</p>
   <p class="clause"><span class="clause-num">3.4</span> This tenancy does not have a fixed end date and continues until ended in accordance with statute.</p>
   <p class="clause"><span class="clause-num">3.5</span> The Landlord may only seek possession where a lawful statutory ground applies, including any relevant rent arrears, anti-social behaviour, sale, landlord occupation, or other statutory ground in force at the relevant time.</p>
   <p class="clause"><span class="clause-num">3.6</span> The Landlord may only recover possession or terminate the tenancy through the court-led statutory process in force at the relevant time and by obtaining any court order required by law.</p>
@@ -178,7 +178,7 @@
   <p class="clause"><span class="clause-num">7.1</span> Permit the Tenant quiet enjoyment of the Property without unlawful interruption.</p>
   <p class="clause"><span class="clause-num">7.2</span> Keep in repair the structure and exterior and the installations for water, gas, electricity, sanitation, space heating, and hot water, in accordance with section 11 of the Landlord and Tenant Act 1985 and any other applicable duty.</p>
   <p class="clause"><span class="clause-num">7.3</span> Comply with duties relating to gas safety, electrical safety, smoke alarms, carbon monoxide alarms, and deposit protection.</p>
-  <p class="clause"><span class="clause-num">7.4</span> Provide the Tenant with the documents and information required by law for the tenancy regime applying at the start date, including information about the tenant notice requirements, the section 13 rent increase route or any replacement statutory route in force at the relevant time, the landlord possession process, the pets position, bills handling, the current How to Rent guide where legally relevant, the EPC, Gas Safety Certificate, EICR where required, and deposit prescribed information.</p>
+  <p class="clause"><span class="clause-num">7.4</span> Provide the Tenant with the documents and information required by law for the tenancy regime applying at the start date, including information about the tenant notice requirements, the section 13 rent increase route or any replacement statutory route in force at the relevant time, the landlord possession process, the pets position, bills handling, any England statutory tenant information or government guidance required by law for the tenancy route, the EPC, Gas Safety Certificate, EICR where required, and deposit prescribed information.</p>
   <p class="clause"><span class="clause-num">7.5</span> Carry out Right to Rent checks under the Immigration Act 2014 where required. Nothing in this Agreement makes the Tenant responsible for the Landlord's statutory compliance.</p>
 
   {{#if multiple_tenants}}
@@ -355,7 +355,7 @@
       <div class="schedule-title">Statutory Information and Contacts</div>
     </div>
     <table class="data-table">
-      <tr><td class="label">How to Rent Guide</td><td class="value">Provide any England statutory tenant information required by law at the tenancy start date, including the current How to Rent guide if legally applicable.</td></tr>
+      <tr><td class="label">Tenant information / government guidance</td><td class="value">Provide any England statutory tenant information or government guidance required by law for the tenancy route, including the Renters' Rights Act Information Sheet 2026 or other prescribed written information where applicable.</td></tr>
       <tr><td class="label">Right to Rent</td><td class="value">{{#if right_to_rent_check_date}}Checks completed on {{formatUKDate right_to_rent_check_date}}.{{else}}Checks to be completed before occupation where required under the Immigration Act 2014.{{/if}}</td></tr>
       <tr><td class="label">Repairs Reporting</td><td class="value">{{#if repairs_reporting_method}}{{repairs_reporting_method}}{{else}}Report repairs promptly to the Landlord or Agent in writing.{{/if}}</td></tr>
       <tr><td class="label">Emergency Contact</td><td class="value">{{#if emergency_contact}}{{emergency_contact}}{{else}}{{#if agent_name}}{{agent_phone}}{{else}}{{landlord_phone}}{{/if}}{{/if}}</td></tr>

@@ -56,6 +56,11 @@ import { detectPremiumRecommendation } from '@/lib/utils/premium-recommendation'
 import { PremiumRecommendationBanner } from '@/components/tenancy/PremiumRecommendationBanner';
 import { ClauseDiffPreview } from '@/components/tenancy/ClauseDiffPreview';
 import { validateTenancyRequiredFacts } from '@/lib/validation/tenancy-details-validator';
+import { calculateDepositCap } from '@/lib/validation/mqs-field-validator';
+import {
+  getEnglandTenancyPurpose,
+  isEnglandPostReformTenancy,
+} from '@/lib/tenancy/england-reform';
 import {
   isResidentialLettingProductSku,
   RESIDENTIAL_LETTING_PRODUCTS,
@@ -95,6 +100,45 @@ const isPremiumTier = (productTier: string | undefined): boolean => {
 };
 
 const GBP_SYMBOL = '\u00A3';
+
+function toFiniteNumber(value: unknown): number | undefined {
+  if (typeof value === 'number' && Number.isFinite(value)) return value;
+  if (typeof value === 'string' && value.trim().length > 0) {
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : undefined;
+  }
+  return undefined;
+}
+
+function getEnglandDepositCapResult(facts: Record<string, any>) {
+  if (facts.__meta?.jurisdiction !== 'england') return null;
+
+  const rentAmount = toFiniteNumber(facts.rent_amount);
+  const depositAmount = toFiniteNumber(facts.deposit_amount);
+  const rentFrequency =
+    (typeof facts.rent_period === 'string' && facts.rent_period) ||
+    (typeof facts.rent_frequency === 'string' && facts.rent_frequency) ||
+    'monthly';
+
+  if (rentAmount === undefined || depositAmount === undefined) {
+    return null;
+  }
+
+  return calculateDepositCap(rentAmount, rentFrequency, depositAmount);
+}
+
+function isEnglandPostReformNewAgreementCase(
+  facts: Record<string, any>,
+  jurisdictionOverride?: Jurisdiction
+) {
+  const jurisdiction = jurisdictionOverride ?? facts.__meta?.jurisdiction;
+
+  return isEnglandPostReformTenancy({
+    jurisdiction,
+    tenancyStartDate: facts.tenancy_start_date,
+    purpose: getEnglandTenancyPurpose(facts.england_tenancy_purpose),
+  });
+}
 
 function getResidentialStandaloneProduct(facts: Record<string, any>): ResidentialLettingProductSku | null {
   const candidate = facts?.__meta?.original_product || facts?.__meta?.document_kind;
@@ -156,8 +200,8 @@ const getJurisdictionTerminology = (jurisdiction: Jurisdiction) => {
         premiumTier: 'Premium Assured Periodic Tenancy Agreement',
         suitabilityTitle: 'England tenancy suitability check',
         suitabilityDescription: 'Basic checks to ensure this is suitable for the upgraded England residential tenancy flow.',
-        standardDescription: 'Renters\' Rights compliant England assured periodic tenancy agreement for standard lets.',
-        premiumDescription: 'Premium England assured periodic tenancy agreement with HMO, student, guarantor, and enhanced terms support.',
+        standardDescription: 'England assured periodic tenancy agreement updated for the current framework on standard lets.',
+        premiumDescription: 'Premium England assured periodic tenancy agreement with HMO, student, guarantor, and enhanced terms support, updated for the current framework.',
         landlordWarning: 'If the landlord lives at the property, this may be a lodger arrangement rather than the main England assured periodic tenancy flow.',
         holidayWarning: 'Holiday lets and licence arrangements are outside the main England assured periodic tenancy flow.',
         landlordHelperText: 'If yes, this may not be the right England assured periodic tenancy agreement',
@@ -179,11 +223,45 @@ function getTenancyValidationBlockers(facts: Record<string, unknown>, jurisdicti
   const invalidFields = [...validation.invalid_fields];
   if (jurisdiction === 'england' && invalidFields.includes('is_fixed_term')) {
     blockers.push(
-      'New England self-serve agreements should be generated as upgraded assured periodic residential tenancies, not fixed-term tenancy agreements.'
+      'New England self-serve agreements should be created as assured periodic tenancies, not fixed-term tenancy agreements.'
     );
   }
 
-  const genericInvalidFields = invalidFields.filter((field) => field !== 'is_fixed_term');
+  if (jurisdiction === 'england' && invalidFields.includes('deposit_amount')) {
+    const depositCap = getEnglandDepositCapResult(facts as Record<string, any>);
+    if (depositCap?.exceeds) {
+      blockers.push(
+        `Deposit exceeds the England legal cap. Maximum allowed: ${GBP_SYMBOL}${depositCap.maxDeposit.toFixed(2)} (${depositCap.maxWeeks} weeks' rent).`
+      );
+    }
+  }
+
+  if (jurisdiction === 'england' && invalidFields.includes('england_rent_in_advance_compliant')) {
+    blockers.push(
+      "For a new England tenancy from 1 May 2026, do not ask for more than one month's rent in advance."
+    );
+  }
+
+  if (jurisdiction === 'england' && invalidFields.includes('england_no_bidding_confirmed')) {
+    blockers.push(
+      'For a new England tenancy from 1 May 2026, do not invite or accept rental bids above the advertised rent.'
+    );
+  }
+
+  if (jurisdiction === 'england' && invalidFields.includes('england_no_discrimination_confirmed')) {
+    blockers.push(
+      'For a new England tenancy from 1 May 2026, do not refuse applicants because they have children or receive benefits.'
+    );
+  }
+
+  const genericInvalidFields = invalidFields.filter(
+    (field) =>
+      field !== 'is_fixed_term' &&
+      field !== 'deposit_amount' &&
+      field !== 'england_rent_in_advance_compliant' &&
+      field !== 'england_no_bidding_confirmed' &&
+      field !== 'england_no_discrimination_confirmed'
+  );
   if (genericInvalidFields.length > 0) {
     blockers.push(`Invalid tenancy facts: ${genericInvalidFields.join(', ')}`);
   }
@@ -259,14 +337,14 @@ const SECTIONS: WizardSection[] = [
   {
     id: 'tenancy',
     label: 'Tenancy',
-    description: 'Tenancy start date and term',
+    description: 'Tenancy start date',
     isComplete: (facts) => {
       // Start date is always required
       if (!facts.tenancy_start_date) return false;
-      // Scotland PRTs are open-ended by law - no is_fixed_term required
+      // Scotland PRTs and England assured periodic tenancies do not require a fixed-term selection
       const jurisdiction = facts.__meta?.jurisdiction;
-      if (jurisdiction === 'scotland') {
-        return true; // Only start date required for Scotland
+      if (jurisdiction === 'scotland' || jurisdiction === 'england') {
+        return true; // Only start date required for Scotland and England
       }
       // Other jurisdictions require fixed term selection
       return facts.is_fixed_term !== undefined;
@@ -285,8 +363,21 @@ const SECTIONS: WizardSection[] = [
     id: 'deposit',
     label: 'Deposit',
     description: 'Deposit and protection scheme',
-    isComplete: (facts) =>
-      facts.deposit_amount !== undefined && Boolean(facts.deposit_scheme_name),
+    isComplete: (facts) => {
+      if (facts.deposit_amount === undefined || !facts.deposit_scheme_name) return false;
+      const depositCap = getEnglandDepositCapResult(facts);
+      if (depositCap?.exceeds) return false;
+      return true;
+    },
+    hasBlockers: (facts) => {
+      const depositCap = getEnglandDepositCapResult(facts);
+      if (depositCap?.exceeds) {
+        return [
+          `Deposit exceeds the England legal cap of ${GBP_SYMBOL}${depositCap.maxDeposit.toFixed(2)} (${depositCap.maxWeeks} weeks' rent). Reduce the deposit before continuing.`,
+        ];
+      }
+      return [];
+    },
   },
   {
     id: 'document_details',
@@ -399,19 +490,46 @@ const SECTIONS: WizardSection[] = [
     id: 'compliance',
     label: 'Compliance',
     description: 'Safety certificates and legal requirements',
-    isComplete: (facts) =>
-      Boolean(facts.epc_rating) &&
-      facts.gas_safety_certificate !== undefined &&
-      facts.electrical_safety_certificate !== undefined,
+    isComplete: (facts) => {
+      const baseComplete =
+        Boolean(facts.epc_rating) &&
+        facts.gas_safety_certificate !== undefined &&
+        facts.electrical_safety_certificate !== undefined;
+
+      if (!baseComplete) return false;
+      if (!isEnglandPostReformNewAgreementCase(facts)) return true;
+
+      return (
+        facts.how_to_rent_guide_provided !== undefined &&
+        facts.england_rent_in_advance_compliant !== undefined &&
+        facts.england_no_bidding_confirmed !== undefined &&
+        facts.england_no_discrimination_confirmed !== undefined
+      );
+    },
     hasBlockers: (facts) => {
       const blockers: string[] = [];
-      if (
-        facts.__meta?.jurisdiction === 'england' &&
-        facts.england_tenancy_purpose === 'new_agreement' &&
-        facts.how_to_rent_guide_provided === false
-      ) {
+      if (!isEnglandPostReformNewAgreementCase(facts)) {
+        return blockers;
+      }
+
+      if (facts.how_to_rent_guide_provided === false) {
         blockers.push(
           'England written information or any government guidance you provide should be recorded for the tenancy file',
+        );
+      }
+      if (facts.england_rent_in_advance_compliant === false) {
+        blockers.push(
+          "For a new England tenancy from 1 May 2026, do not ask for more than one month's rent in advance."
+        );
+      }
+      if (facts.england_no_bidding_confirmed === false) {
+        blockers.push(
+          'For a new England tenancy from 1 May 2026, do not invite or accept rental bids above the advertised rent.'
+        );
+      }
+      if (facts.england_no_discrimination_confirmed === false) {
+        blockers.push(
+          'For a new England tenancy from 1 May 2026, do not refuse applicants because they have children or receive benefits.'
         );
       }
       return blockers;
@@ -1478,11 +1596,14 @@ const TenantsSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
 const TenancySection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction }) => {
   const terms = getJurisdictionTerminology(jurisdiction || 'england');
   const isScotland = jurisdiction === 'scotland';
+  const isEngland = jurisdiction === 'england';
 
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-medium text-gray-900 mb-4">Tenancy Start and Term</h3>
+        <h3 className="text-lg font-medium text-gray-900 mb-4">
+          {isEngland ? 'Tenancy Start Date' : 'Tenancy Start and Term'}
+        </h3>
 
         {/* Scotland PRT Informational Banner */}
         {isScotland && (
@@ -1505,7 +1626,13 @@ const TenancySection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction 
           </div>
         )}
 
-        {!isScotland && (
+        {isEngland && (
+          <p className="text-sm text-gray-500 mb-4">
+            For new England tenancies from 1 May 2026, the agreement is created as an assured periodic tenancy. Enter the tenancy start date below.
+          </p>
+        )}
+
+        {!isScotland && !isEngland && (
           <p className="text-sm text-gray-500 mb-4">
             We tailor the {terms.agreementType} for fixed term vs periodic.
           </p>
@@ -1520,8 +1647,8 @@ const TenancySection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction 
             required
           />
 
-          {/* Fixed term question - NOT shown for Scotland (PRTs are always open-ended) */}
-          {!isScotland && (
+          {/* Fixed term question - NOT shown for Scotland or England */}
+          {!isScotland && !isEngland && (
             <YesNoField
               label="Is this a fixed term tenancy?"
               value={facts.is_fixed_term}
@@ -1530,8 +1657,8 @@ const TenancySection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction 
             />
           )}
 
-          {/* Fixed term details - only for non-Scotland jurisdictions when fixed term is selected */}
-          {!isScotland && facts.is_fixed_term && (
+          {/* Fixed term details - only for jurisdictions that still allow fixed term selection */}
+          {!isScotland && !isEngland && facts.is_fixed_term && (
             <>
               <SelectField
                 label="Fixed term length"
@@ -1637,6 +1764,8 @@ const RentSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
 // Deposit Section
 const DepositSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction }) => {
   const isScotland = jurisdiction === 'scotland';
+  const isEngland = jurisdiction === 'england';
+  const englandDepositCap = getEnglandDepositCapResult({ ...facts, __meta: { ...(facts.__meta || {}), jurisdiction } });
 
   // Jurisdiction-specific deposit schemes
   const depositSchemeOptions = isScotland
@@ -1650,7 +1779,9 @@ const DepositSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction 
         <p className="text-sm text-gray-500 mb-4">
           {isScotland
             ? 'Scottish deposits must be protected within 30 WORKING days. Maximum deposit is 2 months rent.'
-            : 'We include the deposit limit warning and scheme certificate.'}
+            : isEngland
+              ? "For England, the deposit must not exceed 5 weeks' rent, or 6 weeks if the annual rent is £50,000 or more."
+              : 'We include the deposit limit warning and scheme certificate.'}
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <CurrencyField
@@ -1693,6 +1824,16 @@ const DepositSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction 
             />
           )}
         </div>
+        {isEngland && englandDepositCap && (
+          <div className={`mt-4 rounded-lg border p-4 ${englandDepositCap.exceeds ? 'border-red-200 bg-red-50' : 'border-emerald-200 bg-emerald-50'}`}>
+            <p className={`text-sm ${englandDepositCap.exceeds ? 'text-red-800' : 'text-emerald-800'}`}>
+              <strong>England deposit cap:</strong> Maximum {GBP_SYMBOL}{englandDepositCap.maxDeposit.toFixed(2)} ({englandDepositCap.maxWeeks} weeks&apos; rent).
+              {englandDepositCap.exceeds
+                ? ` The amount entered exceeds the legal cap by ${GBP_SYMBOL}${(englandDepositCap.excessAmount ?? 0).toFixed(2)}.`
+                : ' The amount entered is within the legal cap.'}
+            </p>
+          </div>
+        )}
       </div>
 
       <div className="border-t border-gray-200 pt-6">
@@ -1801,6 +1942,8 @@ const BillsSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
 
 // Compliance Section
 const ComplianceSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction }) => {
+  const isEnglandOperationalStep = isEnglandPostReformNewAgreementCase(facts, jurisdiction);
+
   return (
     <div className="space-y-6">
       <div>
@@ -1848,7 +1991,7 @@ const ComplianceSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdicti
             onChange={(v) => onUpdate({ carbon_monoxide_alarms: v })}
             required
           />
-          {jurisdiction === 'england' && facts.england_tenancy_purpose === 'new_agreement' && (
+          {isEnglandOperationalStep && (
             <div className="md:col-span-2">
               <YesNoField
                 label="England written information or government guidance recorded?"
@@ -1859,6 +2002,46 @@ const ComplianceSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdicti
               />
             </div>
           )}
+          {isEnglandOperationalStep && (
+            <>
+              <div className="md:col-span-2 rounded-lg border border-amber-200 bg-amber-50 p-4">
+                <h4 className="text-sm font-semibold text-amber-900">
+                  England checks for new tenancies from 1 May 2026
+                </h4>
+                <p className="mt-1 text-sm text-amber-800">
+                  Use these confirmations to keep the tenancy file aligned with the current England
+                  rules before you issue the agreement.
+                </p>
+              </div>
+              <div className="md:col-span-2">
+                <YesNoField
+                  label="Will you avoid asking for more than one month's rent in advance?"
+                  value={facts.england_rent_in_advance_compliant}
+                  onChange={(v) => onUpdate({ england_rent_in_advance_compliant: v })}
+                  helperText="For a new England tenancy from 1 May 2026, do not require more than one month's rent in advance."
+                  required
+                />
+              </div>
+              <div className="md:col-span-2">
+                <YesNoField
+                  label="Will you avoid inviting or accepting rental bids above the advertised rent?"
+                  value={facts.england_no_bidding_confirmed}
+                  onChange={(v) => onUpdate({ england_no_bidding_confirmed: v })}
+                  helperText="For a new England tenancy from 1 May 2026, keep the advertised rent fixed and do not ask tenants to outbid each other."
+                  required
+                />
+              </div>
+              <div className="md:col-span-2">
+                <YesNoField
+                  label="Will you avoid refusing applicants because they have children or receive benefits?"
+                  value={facts.england_no_discrimination_confirmed}
+                  onChange={(v) => onUpdate({ england_no_discrimination_confirmed: v })}
+                  helperText="For a new England tenancy from 1 May 2026, do not reject applicants on this basis."
+                  required
+                />
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>
@@ -1867,19 +2050,46 @@ const ComplianceSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdicti
 
 // Terms Section - with Ask Heaven inline enhancement for narrative text fields
 const TermsSection: React.FC<SectionProps> = ({ facts, onUpdate, caseId, jurisdiction = 'england' }) => {
+  const isEngland = jurisdiction === 'england';
+
+  useEffect(() => {
+    if (!isEngland) return;
+
+    if (facts.break_clause || facts.break_clause_months || facts.break_clause_notice_period) {
+      onUpdate({
+        break_clause: false,
+        break_clause_months: undefined,
+        break_clause_notice_period: undefined,
+      });
+    }
+  }, [
+    facts.break_clause,
+    facts.break_clause_months,
+    facts.break_clause_notice_period,
+    isEngland,
+    onUpdate,
+  ]);
+
   return (
     <div className="space-y-6">
       {/* Property Rules */}
       <div>
         <InlineSectionHeaderV3 title="House Rules" iconSlug="terms" />
         <p className="text-sm text-gray-500 mb-4">
-          Pets, smoking and subletting policies.
+          {isEngland
+            ? 'Set agreed pet, smoking, and subletting rules. For England, pet requests should be considered reasonably and recorded in writing.'
+            : 'Pets, smoking and subletting policies.'}
         </p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <YesNoField
-            label="Are pets allowed?"
+            label={isEngland ? 'Will any pets be authorised at the start?' : 'Are pets allowed?'}
             value={facts.pets_allowed}
             onChange={(v) => onUpdate({ pets_allowed: v })}
+            helperText={
+              isEngland
+                ? 'A tenant can still ask for written pet consent later, and requests should be considered reasonably.'
+                : undefined
+            }
             required
           />
           {facts.pets_allowed && (
@@ -1913,14 +2123,17 @@ const TermsSection: React.FC<SectionProps> = ({ facts, onUpdate, caseId, jurisdi
       <div className="border-t border-gray-200 pt-6">
         <h3 className="text-lg font-medium text-gray-900 mb-4">Access Rules</h3>
         <p className="text-sm text-gray-500 mb-4">
-          Notice periods for entry and inspections.
+          {isEngland
+            ? "For England, non-emergency entry should usually be on at least 24 hours' notice and at a reasonable time."
+            : 'Notice periods for entry and inspections.'}
         </p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <SelectField
-            label="Notice before access"
+            label={isEngland ? 'Notice before non-emergency access' : 'Notice before access'}
             value={facts.landlord_access_notice}
             onChange={(v) => onUpdate({ landlord_access_notice: v })}
             options={['24 hours', '48 hours', '72 hours']}
+            helperText={isEngland ? '24 hours is the usual minimum for routine access unless there is an emergency.' : undefined}
             required
           />
           <SelectField
@@ -1931,7 +2144,7 @@ const TermsSection: React.FC<SectionProps> = ({ facts, onUpdate, caseId, jurisdi
             required
           />
           <YesNoField
-            label="Allow end-of-tenancy viewings?"
+            label={isEngland ? 'Allow viewings once the tenancy is ending?' : 'Allow end-of-tenancy viewings?'}
             value={facts.end_of_tenancy_viewings}
             onChange={(v) => onUpdate({ end_of_tenancy_viewings: v })}
             required
@@ -1980,6 +2193,11 @@ const TermsSection: React.FC<SectionProps> = ({ facts, onUpdate, caseId, jurisdi
       {/* Inventory & Condition */}
       <div className="border-t border-gray-200 pt-6">
         <InlineSectionHeaderV3 title="Inventory and Cleaning" iconSlug="inventory" />
+        {isEngland && (
+          <p className="text-sm text-gray-500 mb-4">
+            Set the expected return standard and any inventory schedule. Do not require a paid professional clean in every case.
+          </p>
+        )}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <YesNoField
             label="Will you attach an inventory schedule?"
@@ -1988,9 +2206,18 @@ const TermsSection: React.FC<SectionProps> = ({ facts, onUpdate, caseId, jurisdi
             required
           />
           <YesNoField
-            label="Require professional cleaning at end?"
+            label={
+              isEngland
+                ? 'Require return to the same standard of cleanliness at the end?'
+                : 'Require professional cleaning at end?'
+            }
             value={facts.professional_cleaning_required}
             onChange={(v) => onUpdate({ professional_cleaning_required: v })}
+            helperText={
+              isEngland
+                ? 'Use this to record the expected cleaning standard, not to require a paid cleaning service in every case.'
+                : undefined
+            }
             required
           />
           <SelectField
@@ -2004,31 +2231,33 @@ const TermsSection: React.FC<SectionProps> = ({ facts, onUpdate, caseId, jurisdi
       </div>
 
       {/* Break Clause */}
-      <div className="border-t border-gray-200 pt-6">
-        <h3 className="text-lg font-medium text-gray-900 mb-4">Break Clause</h3>
-        <YesNoField
-          label="Include a break clause?"
-          value={facts.break_clause}
-          onChange={(v) => onUpdate({ break_clause: v })}
-          required
-        />
-        {facts.break_clause && (
-          <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-            <SelectField
-              label="Can be exercised after"
-              value={facts.break_clause_months}
-              onChange={(v) => onUpdate({ break_clause_months: v })}
-              options={['6 months', '9 months', '12 months']}
-            />
-            <SelectField
-              label="Notice required"
-              value={facts.break_clause_notice_period}
-              onChange={(v) => onUpdate({ break_clause_notice_period: v })}
-              options={['1 month', '2 months', '3 months']}
-            />
-          </div>
-        )}
-      </div>
+      {!isEngland && (
+        <div className="border-t border-gray-200 pt-6">
+          <h3 className="text-lg font-medium text-gray-900 mb-4">Break Clause</h3>
+          <YesNoField
+            label="Include a break clause?"
+            value={facts.break_clause}
+            onChange={(v) => onUpdate({ break_clause: v })}
+            required
+          />
+          {facts.break_clause && (
+            <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+              <SelectField
+                label="Can be exercised after"
+                value={facts.break_clause_months}
+                onChange={(v) => onUpdate({ break_clause_months: v })}
+                options={['6 months', '9 months', '12 months']}
+              />
+              <SelectField
+                label="Notice required"
+                value={facts.break_clause_notice_period}
+                onChange={(v) => onUpdate({ break_clause_notice_period: v })}
+                options={['1 month', '2 months', '3 months']}
+              />
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Additional Terms */}
       <div className="border-t border-gray-200 pt-6">

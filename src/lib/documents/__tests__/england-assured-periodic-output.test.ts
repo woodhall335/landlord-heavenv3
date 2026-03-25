@@ -163,9 +163,16 @@ describe('England assured periodic output templates', () => {
     expect(document.html).toContain(
       'including information about the tenant notice requirements, the section 13 rent increase route or any replacement statutory route in force at the relevant time, the landlord possession process'
     );
+    expect(document.html).toContain(
+      'any England statutory tenant information or government guidance required by law for the tenancy route'
+    );
+    expect(document.html).toContain(
+      "including the Renters' Rights Act Information Sheet 2026 or other prescribed written information where applicable"
+    );
     expect(countOccurrences(document.html, 'section 13 of the Housing Act 1988')).toBeGreaterThanOrEqual(2);
     expect(document.html).not.toContain("at least two months' written notice");
     expect(document.html).not.toContain('expiring at the end of a rental period where applicable');
+    expect(document.html).not.toContain('How to Rent guide where legally applicable');
     expect(htmlToPdf).toHaveBeenCalled();
   });
 
@@ -237,9 +244,16 @@ describe('England assured periodic output templates', () => {
     expect(document.html).toContain(
       'including information about the tenant notice requirements, the section 13 rent increase route or any replacement statutory route in force at the relevant time, the landlord possession process'
     );
+    expect(document.html).toContain(
+      'any England statutory tenant information or government guidance required by law for the tenancy route'
+    );
+    expect(document.html).toContain(
+      'Tenant information / government guidance'
+    );
     expect(countOccurrences(document.html, 'section 13 of the Housing Act 1988')).toBeGreaterThanOrEqual(2);
     expect(document.html).not.toContain("not less than two months' written notice");
     expect(document.html).not.toContain('expiring at the end of a rental period where applicable');
+    expect(document.html).not.toContain('How to Rent Guide</td>');
     expect(htmlToPdf).toHaveBeenCalled();
   });
 
@@ -322,6 +336,9 @@ describe('England assured periodic output templates', () => {
       'No separate administrative fee is payable for late payment unless a specific charge is lawful and expressly permitted by the tenancy documents in force at the relevant time.'
     );
     expect(rendered.welcome).not.toContain('Administrative fee for late payment:');
+    expect(rendered.welcome).toContain('Contents Insurance Reminder');
+    expect(rendered.welcome).not.toContain('Contents Insurance Required');
+    expect(rendered.welcome).not.toContain('You must maintain valid contents insurance throughout your tenancy.');
     expect(rendered.welcome).not.toContain('Premium AST');
 
     expect(rendered.depositCertificate).not.toContain('Â£');

@@ -509,7 +509,7 @@ export interface ASTDocumentOptions {
  * - Embedded Schedules: Property, Rent, Utilities, Inventory, House Rules
  *
  * Jurisdiction handling:
- * - England: Assured Shorthold Tenancy (Housing Act 1988)
+ * - England: Assured periodic tenancy (Housing Act 1988 as amended)
  * - Wales: Standard Occupation Contract (Renting Homes (Wales) Act 2016)
  * - Scotland: Private Residential Tenancy (Private Housing (Tenancies) (Scotland) Act 2016)
  * - NI: Private Tenancy Agreement (Private Tenancies Act (NI) 2022)
@@ -619,7 +619,7 @@ export function getASTDocuments(
   const checklistInfo: Record<string, { title: string; description: string }> = {
     'england': {
       title: 'Pre-Tenancy Compliance Checklist (England)',
-      description: 'Non-contractual guidance covering deposit protection, gas safety, EPC, EICR, How to Rent Guide, and Right to Rent',
+      description: 'Non-contractual guidance covering deposit protection, gas safety, EPC, EICR, Right to Rent, and England written-information or government-guidance duties.',
     },
     'wales': {
       title: 'Pre-Tenancy Compliance Checklist (Wales)',

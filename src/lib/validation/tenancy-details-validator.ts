@@ -1,4 +1,5 @@
 import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
+import { calculateDepositCap } from '@/lib/validation/mqs-field-validator';
 import {
   getEnglandTenancyPurpose,
   isEnglandPostReformTenancy,
@@ -130,6 +131,18 @@ export function validateTenancyRequiredFacts(
     (caseFacts.property.country as ValidateOptions['jurisdiction']) ||
     null;
 
+  const rentFrequency =
+    (caseFacts.tenancy as any).rent_frequency ||
+    (wizardFacts.rent_period as string | undefined) ||
+    (wizardFacts.rent_frequency as string | undefined);
+
+  if (jurisdiction === 'england' && rentAmount !== null && depositAmount !== null && depositAmount > 0) {
+    const depositCap = calculateDepositCap(rentAmount, rentFrequency, depositAmount);
+    if (depositCap?.exceeds) {
+      invalid.add('deposit_amount');
+    }
+  }
+
   const isFixedTerm =
     typeof wizardFacts.is_fixed_term === 'boolean'
       ? wizardFacts.is_fixed_term
@@ -146,6 +159,15 @@ export function validateTenancyRequiredFacts(
   );
   const existingVerbalTransitionAcknowledged = toOptionalBoolean(
     wizardFacts.existing_verbal_tenancy_summary
+  );
+  const englandRentInAdvanceCompliant = toOptionalBoolean(
+    wizardFacts.england_rent_in_advance_compliant
+  );
+  const englandNoBiddingConfirmed = toOptionalBoolean(
+    wizardFacts.england_no_bidding_confirmed
+  );
+  const englandNoDiscriminationConfirmed = toOptionalBoolean(
+    wizardFacts.england_no_discrimination_confirmed
   );
 
   if (jurisdiction === 'england' && englandTenancyPurpose === 'existing_written_tenancy') {
@@ -179,6 +201,26 @@ export function validateTenancyRequiredFacts(
     const termLength = (wizardFacts.term_length as string | undefined) || (wizardFacts.tenancy_fixed_term_months as string | undefined);
     if (isBlankString(termLength)) {
       missing.add('term_length');
+    }
+  }
+
+  if (englandPostReformStart) {
+    if (englandRentInAdvanceCompliant === undefined) {
+      missing.add('england_rent_in_advance_compliant');
+    } else if (englandRentInAdvanceCompliant !== true) {
+      invalid.add('england_rent_in_advance_compliant');
+    }
+
+    if (englandNoBiddingConfirmed === undefined) {
+      missing.add('england_no_bidding_confirmed');
+    } else if (englandNoBiddingConfirmed !== true) {
+      invalid.add('england_no_bidding_confirmed');
+    }
+
+    if (englandNoDiscriminationConfirmed === undefined) {
+      missing.add('england_no_discrimination_confirmed');
+    } else if (englandNoDiscriminationConfirmed !== true) {
+      invalid.add('england_no_discrimination_confirmed');
     }
   }
 

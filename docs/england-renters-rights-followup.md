@@ -35,13 +35,6 @@
   - Validator enforcement in `src/lib/validation/tenancy-details-validator.ts`
   - Review reminder in `src/app/(app)/wizard/review/page.tsx`
   - Checklist wording in `config/jurisdictions/_shared/standalone/checklist_standalone.hbs`
-- Not yet generated as a formal annex or schedule
-  - There is no dedicated England written-information annex for existing verbal tenancies in the generated agreement output.
-  - The current output relies on acknowledgement, checklist, review reminder, and general tenancy wording rather than a separate formal written-information schedule.
-- If legal asks for a formal annex or schedule
-  - Update `config/jurisdictions/uk/england/templates/standard_ast_formatted.hbs`
-  - Update `config/jurisdictions/uk/england/templates/premium_ast_formatted.hbs`
-  - Consider adding a shared England written-information partial and wiring it in `src/lib/documents/ast-generator.ts`
 
 ## Intentionally not covered here
 
@@ -53,7 +46,6 @@
 ## Legal and product signoff still needed
 
 - Whether the current new-agreement guidance-tracking prompt should remain blocking or become advisory only
-- Whether existing verbal tenancies need a formal generated written-information schedule in addition to the current acknowledgement and reminder flow
 - Whether any shared explanatory surfaces should mention optional government guidance separately or leave that entirely to operational process
 
 ## Tests covering the change

@@ -59,6 +59,30 @@ describe('validateTenancyRequiredFacts', () => {
     );
   });
 
+  it('rejects England deposits that exceed the legal cap', () => {
+    const result = validateTenancyRequiredFacts({
+      ...completeFacts,
+      __meta: { jurisdiction: 'england' },
+      rent_amount: 1000,
+      rent_period: 'monthly',
+      deposit_amount: 2000,
+    }, { jurisdiction: 'england' });
+
+    expect(result.invalid_fields).toContain('deposit_amount');
+  });
+
+  it('accepts England deposits that stay within the legal cap', () => {
+    const result = validateTenancyRequiredFacts({
+      ...completeFacts,
+      __meta: { jurisdiction: 'england' },
+      rent_amount: 1000,
+      rent_period: 'monthly',
+      deposit_amount: 1000,
+    }, { jurisdiction: 'england' });
+
+    expect(result.invalid_fields).not.toContain('deposit_amount');
+  });
+
   it('rejects partial or non-calendar tenancy dates deterministically', () => {
     const partialDate = validateTenancyRequiredFacts({
       ...completeFacts,
@@ -151,6 +175,63 @@ describe('validateTenancyRequiredFacts', () => {
 
     expect(result.missing_fields).not.toContain('existing_written_tenancy_transition');
     expect(result.invalid_fields).not.toContain('existing_written_tenancy_transition');
+  });
+
+  it('requires the England operational confirmations for new tenancies starting on or after 1 May 2026', () => {
+    const result = validateTenancyRequiredFacts({
+      ...completeFacts,
+      tenancy_start_date: '2026-05-02',
+      england_tenancy_purpose: 'new_agreement',
+    }, { jurisdiction: 'england' });
+
+    expect(result.missing_fields).toEqual(
+      expect.arrayContaining([
+        'england_rent_in_advance_compliant',
+        'england_no_bidding_confirmed',
+        'england_no_discrimination_confirmed',
+      ])
+    );
+  });
+
+  it('rejects negative England operational confirmations for new tenancies starting on or after 1 May 2026', () => {
+    const result = validateTenancyRequiredFacts({
+      ...completeFacts,
+      tenancy_start_date: '2026-05-02',
+      england_tenancy_purpose: 'new_agreement',
+      england_rent_in_advance_compliant: false,
+      england_no_bidding_confirmed: false,
+      england_no_discrimination_confirmed: false,
+    }, { jurisdiction: 'england' });
+
+    expect(result.invalid_fields).toEqual(
+      expect.arrayContaining([
+        'england_rent_in_advance_compliant',
+        'england_no_bidding_confirmed',
+        'england_no_discrimination_confirmed',
+      ])
+    );
+  });
+
+  it('does not enforce the England operational confirmations for pre-reform or non-England cases', () => {
+    const preReformEngland = validateTenancyRequiredFacts({
+      ...completeFacts,
+      tenancy_start_date: '2026-04-30',
+      england_tenancy_purpose: 'new_agreement',
+    }, { jurisdiction: 'england' });
+
+    const wales = validateTenancyRequiredFacts({
+      ...completeFacts,
+      __meta: { jurisdiction: 'wales' },
+      tenancy_start_date: '2026-05-02',
+      england_tenancy_purpose: 'new_agreement',
+    }, { jurisdiction: 'wales' });
+
+    expect(preReformEngland.missing_fields).not.toContain('england_rent_in_advance_compliant');
+    expect(preReformEngland.missing_fields).not.toContain('england_no_bidding_confirmed');
+    expect(preReformEngland.missing_fields).not.toContain('england_no_discrimination_confirmed');
+    expect(wales.missing_fields).not.toContain('england_rent_in_advance_compliant');
+    expect(wales.invalid_fields).not.toContain('england_no_bidding_confirmed');
+    expect(wales.invalid_fields).not.toContain('england_no_discrimination_confirmed');
   });
 
   it('does not require fixed-term fields for Scotland PRT', () => {

@@ -42,6 +42,21 @@ function coerceBoolean(value: any): boolean | undefined {
   return Boolean(value);
 }
 
+function normalizeEnglandTenantInsurancePreference(
+  jurisdiction: string | undefined,
+  value: any,
+): string | undefined {
+  if (jurisdiction !== 'england') return value;
+  if (value === undefined || value === null || value === '' || value === 'Not required') {
+    return undefined;
+  }
+  if (value === true || value === 'true' || value === 'yes' || value === 'Yes' || value === 'Required') {
+    return 'Strongly recommended';
+  }
+  if (typeof value === 'string') return value;
+  return 'Strongly recommended';
+}
+
 function normalizeTenants(caseFacts: CaseFacts, wizardFacts: WizardFacts): TenantInfo[] {
   // Try nested CaseFacts first
   if (caseFacts.parties.tenants && caseFacts.parties.tenants.length > 0) {
@@ -451,7 +466,10 @@ export function mapWizardToASTData(
 
     // Insurance
     landlord_insurance: coerceBoolean(getValueAtPath(wizardFacts, 'landlord_insurance')),
-    tenant_insurance_required: getValueAtPath(wizardFacts, 'tenant_insurance_required'),
+    tenant_insurance_required: normalizeEnglandTenantInsurancePreference(
+      resolvedJurisdiction,
+      getValueAtPath(wizardFacts, 'tenant_insurance_required')
+    ),
 
     // Access
     landlord_access_notice: getValueAtPath(wizardFacts, 'landlord_access_notice'),
@@ -478,7 +496,10 @@ export function mapWizardToASTData(
     late_payment_interest_applicable: coerceBoolean(getValueAtPath(wizardFacts, 'late_payment_interest_applicable')),
     late_payment_interest_rate: Number(getValueAtPath(wizardFacts, 'late_payment_interest_rate')) ?? 0,
     grace_period_days: Number(getValueAtPath(wizardFacts, 'grace_period_days')) ?? 0,
-    late_payment_admin_fee: Number(getValueAtPath(wizardFacts, 'late_payment_admin_fee')) ?? 0,
+    late_payment_admin_fee:
+      resolvedJurisdiction === 'england'
+        ? 0
+        : Number(getValueAtPath(wizardFacts, 'late_payment_admin_fee')) ?? 0,
 
     // Premium Enhanced Features - Key Schedule
     number_of_front_door_keys: Number(getValueAtPath(wizardFacts, 'number_of_front_door_keys')) ?? 0,

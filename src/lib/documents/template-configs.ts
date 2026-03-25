@@ -335,14 +335,6 @@ export function getASTTemplates(
 
   if (jurisdiction === 'england') {
     templates.push(
-      {
-        id: 'government-model-clauses',
-        templatePath: 'uk/england/templates/government_model_clauses.hbs',
-        title: 'Government Model Clauses',
-        type: 'schedule',
-        description: 'Recommended clauses from official guidance',
-        category: 'guidance',
-      },
       ...(englandTenancyPurpose === 'existing_written_tenancy'
         ? [{
             id: 'renters-rights-information-sheet-2026',

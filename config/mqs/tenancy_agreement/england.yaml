@@ -972,6 +972,36 @@ questions:
         validation:
           required: true
         width: half
+      - id: england_rent_in_advance_compliant
+        label: "Will you avoid asking for more than one month's rent in advance? (new agreements)"
+        inputType: yes_no
+        helperText: "For a new England tenancy from 1 May 2026, do not require more than one month's rent in advance."
+        dependsOn:
+          questionId: england_tenancy_purpose
+          value: "new_agreement"
+        validation:
+          required: true
+        width: half
+      - id: england_no_bidding_confirmed
+        label: "Will you avoid inviting or accepting rental bids above the advertised rent? (new agreements)"
+        inputType: yes_no
+        helperText: "For a new England tenancy from 1 May 2026, keep the advertised rent fixed and do not ask tenants to outbid each other."
+        dependsOn:
+          questionId: england_tenancy_purpose
+          value: "new_agreement"
+        validation:
+          required: true
+        width: half
+      - id: england_no_discrimination_confirmed
+        label: "Will you avoid refusing applicants because they have children or receive benefits? (new agreements)"
+        inputType: yes_no
+        helperText: "For a new England tenancy from 1 May 2026, do not reject applicants on this basis."
+        dependsOn:
+          questionId: england_tenancy_purpose
+          value: "new_agreement"
+        validation:
+          required: true
+        width: full
     maps_to:
       - gas_safety_certificate
       - compliance.gas_cert_date
@@ -985,6 +1015,9 @@ questions:
       - carbon_monoxide_alarms
       - how_to_rent_guide_provided
       - compliance.how_to_rent_date
+      - england_rent_in_advance_compliant
+      - england_no_bidding_confirmed
+      - england_no_discrimination_confirmed
       - right_to_rent_check_date
 
   # 9. Maintenance & repairs
@@ -1024,7 +1057,7 @@ questions:
     section: Inventory & Condition
     question: "Inventory and cleaning"
     inputType: group
-    helperText: "Helps us generate the inventory and cleaning clauses."
+    helperText: "Set the expected return standard and any inventory schedule. Do not require a paid professional clean in every case."
     fields:
       - id: inventory_attached
         label: "Will you attach an inventory schedule?"
@@ -1033,8 +1066,9 @@ questions:
           required: true
         width: half
       - id: professional_cleaning_required
-        label: "Require professional cleaning at end?"
+        label: "Require return to the same standard of cleanliness at the end?"
         inputType: yes_no
+        helperText: "Use this to record the expected cleaning standard, not to require a paid cleaning service in every case."
         validation:
           required: true
         width: half
@@ -1042,9 +1076,9 @@ questions:
         label: "Decoration/alterations policy"
         inputType: select
         options:
-          - "No alterations allowed"
+          - "No general alterations without written permission"
           - "With written permission only"
-          - "Minor alterations allowed"
+          - "Minor non-structural alterations allowed"
         validation:
           required: true
         width: half
@@ -1063,11 +1097,12 @@ questions:
     section: Access & Inspections
     question: "Access rules"
     inputType: group
-    helperText: "Notice periods for entry and inspections."
+    helperText: "For England, non-emergency entry should usually be on at least 24 hours' notice and at a reasonable time."
     fields:
       - id: landlord_access_notice
-        label: "Notice before access"
+        label: "Notice before non-emergency access"
         inputType: select
+        helperText: "24 hours is the usual minimum for routine access unless there is an emergency."
         options:
           - "24 hours"
           - "48 hours"
@@ -1087,7 +1122,7 @@ questions:
           required: true
         width: third
       - id: end_of_tenancy_viewings
-        label: "Allow end-of-tenancy viewings?"
+        label: "Allow viewings once the tenancy is ending?"
         inputType: yes_no
         validation:
           required: true
@@ -1102,11 +1137,12 @@ questions:
     section: Property Rules
     question: "House rules"
     inputType: group
-    helperText: "Pets, smoking and subletting policies."
+    helperText: "Set agreed pet, smoking, and subletting rules. For England, pet requests should be considered reasonably and recorded in writing."
     fields:
       - id: pets_allowed
-        label: "Are pets allowed?"
+        label: "Will any pets be authorised at the start?"
         inputType: yes_no
+        helperText: "A tenant can still ask for written pet consent later, and requests should be considered reasonably."
         validation:
           required: true
         width: third
@@ -1333,10 +1369,10 @@ questions:
       questionId: ast_tier
       value: "Premium Assured Periodic Tenancy Agreement"
     options:
-      - "Required"
       - "Strongly recommended"
-      - "Not required"
-    helperText: "Premium England agreement can mandate contents insurance."
+      - "Optional information only"
+      - "Not requested"
+    helperText: "You can recommend contents insurance, but do not make it a compulsory paid service or a condition of the tenancy."
     maps_to:
       - tenant_insurance_required
 
@@ -1362,7 +1398,7 @@ questions:
     dependsOn:
       questionId: ast_tier
       value: "Premium Assured Periodic Tenancy Agreement"
-    helperText: "Set terms for late rent payments (must comply with statutory limits)."
+    helperText: "Set terms for late rent interest only. In England, separate late-payment admin fees are generally prohibited."
     fields:
       - id: late_payment_interest_applicable
         label: "Apply interest on late payments?"
@@ -1383,16 +1419,16 @@ questions:
         label: "Grace period (days)"
         inputType: number
         placeholder: "e.g., 14"
-        helperText: "Number of days before interest applies"
+        helperText: "Interest should usually only be charged once the rent is at least 14 days overdue."
         dependsOn:
           questionId: late_payment_interest_applicable
           value: true
         width: half
       - id: late_payment_admin_fee
-        label: "Administrative fee (£)"
+        label: "Administrative fee (leave blank for England)"
         inputType: number
         placeholder: "e.g., 50"
-        helperText: "Fee for processing late payment (must be reasonable)"
+        helperText: "Leave blank for England tenancy agreements. Separate late-payment admin fees are generally prohibited."
         dependsOn:
           questionId: late_payment_interest_applicable
           value: true
@@ -1776,19 +1812,20 @@ questions:
           required: true
         width: half
       - id: professional_cleaning_standard
-        label: "Professional cleaning standard required?"
+        label: "Detailed checkout cleaning checklist required?"
         inputType: yes_no
+        helperText: "Do not require a paid professional cleaning service in every case."
         validation:
           required: true
         width: half
       - id: carpet_cleaning_required
-        label: "Professional carpet cleaning required?"
+        label: "Mention specialist carpet cleaning only if reasonably needed?"
         inputType: yes_no
         validation:
           required: true
         width: half
       - id: oven_cleaning_required
-        label: "Professional oven cleaning required?"
+        label: "Mention specialist oven cleaning only if reasonably needed?"
         inputType: yes_no
         validation:
           required: true
@@ -1846,7 +1883,7 @@ questions:
     dependsOn:
       questionId: ast_tier
       value: "Premium Assured Periodic Tenancy Agreement"
-    helperText: "Define expected cleaning standards during and at end of tenancy."
+    helperText: "Define expected cleaning standards during and at end of tenancy without requiring a paid professional service in every case."
     fields:
       - id: regular_cleaning_expectations
         label: "Regular cleaning expectations"
@@ -1862,8 +1899,8 @@ questions:
           - "Kitchen appliances (oven, hob, extractor)"
           - "Bathrooms (tiles, grout, fixtures)"
           - "Windows (inside and out)"
-          - "Carpets (professional clean)"
-          - "Hard floors (professional clean)"
+          - "Carpets (specialist clean if needed)"
+          - "Hard floors (specialist clean if needed)"
           - "Curtains/blinds"
           - "Skirting boards and doors"
         width: full
@@ -1877,7 +1914,7 @@ questions:
         label: "Estimated professional cleaning costs (£)"
         inputType: number
         placeholder: "e.g., 250"
-        helperText: "For tenant's reference if they choose professional cleaning"
+        helperText: "For the tenant's reference only if they choose to arrange optional specialist cleaning."
         width: half
     maps_to:
       - regular_cleaning_expectations

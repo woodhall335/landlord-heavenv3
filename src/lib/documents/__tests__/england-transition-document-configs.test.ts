@@ -64,4 +64,23 @@ describe('England transition document configs', () => {
       expect(template.templatePath).not.toBe('uk/england/templates/deprecated/premium_ast.hbs');
     });
   });
+
+  it('does not include the stale government model clauses appendix in active England tenancy packs', () => {
+    const standardTemplates = getASTTemplates('england', 'standard');
+    const premiumTemplates = getASTTemplates('england', 'premium');
+
+    expect(standardTemplates.some((template) => template.id === 'government-model-clauses')).toBe(false);
+    expect(premiumTemplates.some((template) => template.id === 'government-model-clauses')).toBe(false);
+  });
+
+  it('uses updated England checklist preview wording instead of the old How to Rent checklist label', () => {
+    const docs = getASTDocuments('england', 'standard', {
+      englandTenancyPurpose: 'new_agreement',
+    });
+
+    const checklist = docs.find((doc) => doc.id === 'compliance-checklist');
+
+    expect(checklist?.description).toContain('England written-information or government-guidance duties');
+    expect(checklist?.description).not.toContain('How to Rent Guide');
+  });
 });
