@@ -17,7 +17,7 @@ const premiumWizardHref = '/wizard?product=ast_premium&src=tenancy_hub&topic=ten
 export const metadata: Metadata = {
   title: 'Tenancy Agreements Hub | Current UK Agreement Routes for Landlords',
   description:
-    'Compare the main UK tenancy agreement routes, including England wording designed for the assured periodic framework from 1 May 2026, plus Wales occupation contracts, Scotland PRTs, and Northern Ireland private tenancy agreements.',
+    'Compare the main UK tenancy agreement routes, including England wording designed for the assured periodic framework from 1 May 2026.',
   alternates: { canonical: canonicalUrl },
   openGraph: {
     title: 'Tenancy Agreements Hub | Current UK Agreement Routes for Landlords',

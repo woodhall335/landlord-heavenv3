@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   title:
     'Section 21 Court Pack 2026 | Court-Ready Possession File for Landlords | LandlordHeaven',
   description:
-    'A practical guide to the Section 21 court pack in England. Learn what landlords usually need after notice expires, what causes delay, and why landlords with a valid notice should act promptly while Section 21 is being phased out.',
+    'A practical guide to the Section 21 court pack in England.',
   alternates: {
     canonical,
   },

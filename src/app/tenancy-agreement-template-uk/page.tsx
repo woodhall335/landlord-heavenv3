@@ -33,7 +33,7 @@ const faqs = [
 export const metadata: Metadata = {
   title: 'Tenancy Agreement Template UK | England Updated for 1 May 2026',
   description:
-    'Compare tenancy agreement template options across the UK, with England-first guidance for the changes from 1 May 2026 and a clear route into the main product page.',
+    'Compare UK tenancy agreement template options with England-first guidance for 1 May 2026 and a clear route into the main product page.',
   keywords: [
     'tenancy agreement template uk',
     'uk tenancy agreement',

@@ -11,7 +11,7 @@ const premiumWizardHref = '/wizard?product=ast_premium&src=england_tenancy_page&
 export const metadata: Metadata = {
   title: 'Rolling Tenancy Agreement England 2026 | Periodic Guide',
   description:
-    'Guide to rolling tenancy agreement and periodic tenancy wording in England, updated for the assured periodic framework used for new England agreements from 1 May 2026. Older agreements may not be legally enforceable in the way landlords expect if they rely on outdated wording or structure.',
+    'Guide to rolling tenancy agreement and periodic tenancy wording in England, updated for the assured periodic framework used for new England agreements from 1.',
   keywords: [
     'rolling tenancy agreement',
     'periodic tenancy agreement',

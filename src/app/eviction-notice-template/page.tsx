@@ -43,7 +43,7 @@ const completePackProductHref = '/products/complete-pack';
 export const metadata: Metadata = {
   title: 'Eviction Notice Template UK | Jurisdiction-Specific Landlord Notice Builder',
   description:
-    'Generate the correct eviction notice template for England, Wales, or Scotland. Learn what a valid notice should include, how service works, and build jurisdiction-specific possession notices with compliance checks.',
+    'Generate the correct eviction notice template for England, Wales, or Scotland.',
   keywords: [
     'eviction notice template uk',
     'eviction notice template',

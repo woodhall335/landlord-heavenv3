@@ -59,7 +59,7 @@ const evictionGrounds = [
 export const metadata: Metadata = {
   title: 'Scotland Eviction Notices | Notice to Leave & PRT Landlord Guide',
   description:
-    'Landlord guide to Scotland eviction notices, Notice to Leave requirements, PRT grounds, tribunal steps, notice logic, and common mistakes under the Scottish private rented framework.',
+    'Landlord guide to Scotland eviction notices, Notice to Leave requirements, PRT grounds, tribunal steps, notice logic.',
   keywords: [
     'notice to leave scotland',
     'scotland eviction notice',

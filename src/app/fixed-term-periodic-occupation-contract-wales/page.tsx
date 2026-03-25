@@ -33,7 +33,7 @@ const astProductHref = '/products/ast';
 export const metadata: Metadata = {
   title: 'Fixed Term vs Periodic Occupation Contract Wales | Which to Choose in 2026',
   description:
-    'Compare fixed-term and periodic occupation contracts in Wales. Learn which contract type suits your letting, what happens when a fixed term ends, and when Section 173 notice rules apply.',
+    'Compare fixed-term and periodic occupation contracts in Wales.',
   keywords: [
     'fixed term occupation contract wales',
     'periodic occupation contract wales',

@@ -12,7 +12,7 @@ const premiumWizardHref = '/wizard?product=ast_premium&src=assured_shorthold_ten
 export const metadata: Metadata = {
   title: 'Assured Shorthold Tenancy Agreement 2026 | England Agreement Updated',
   description:
-    'Create the updated 2026 England tenancy agreement online. Built for landlords searching for an assured shorthold tenancy agreement, with wording designed for the assured periodic framework from 1 May 2026.',
+    'Create the updated 2026 England tenancy agreement online. Built for landlords searching for an assured shorthold tenancy agreement.',
   keywords: [
     'assured shorthold tenancy agreement',
     'ast agreement england',

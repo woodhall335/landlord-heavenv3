@@ -33,7 +33,7 @@ const faqs = [
 export const metadata: Metadata = {
   title: 'Assured Periodic Tenancy Agreement | England Explainer',
   description:
-    'Learn what an assured periodic tenancy agreement means for England landlords from 1 May 2026 and move into the main tenancy agreement product page.',
+    'Learn what an assured periodic tenancy agreement means in England from 1 May 2026 and move into the main product page.',
   keywords: [
     'assured periodic tenancy agreement',
     'what is an assured periodic tenancy agreement',

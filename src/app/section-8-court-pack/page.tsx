@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   title:
     'Section 8 Court Pack 2026 | Court-Ready Possession File for Landlords | LandlordHeaven',
   description:
-    'A practical guide to the Section 8 court pack in England. Learn what documents landlords usually need, what evidence matters most, what causes court-stage delay, and how to prepare a cleaner possession file.',
+    'A practical guide to the Section 8 court pack in England.',
   alternates: {
     canonical,
   },

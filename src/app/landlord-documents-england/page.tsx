@@ -49,7 +49,7 @@ const DOCUMENT_GROUPS: Array<{
 export const metadata: Metadata = {
   title: 'England Landlord Documents | Agreements, Arrears, Inspection and Inventory',
   description:
-    'Browse England landlord document builders for guarantor agreements, tenancy amendments, assignments, rent arrears letters, repayment plans, inspection reports, inventories, flatmate agreements, and renewal documents.',
+    'Browse England landlord document builders for guarantor agreements, tenancy amendments, assignments, rent arrears letters, repayment plans.',
   alternates: { canonical: canonicalUrl },
   openGraph: {
     title: 'England Landlord Documents | Landlord Heaven',

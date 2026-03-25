@@ -16,7 +16,7 @@ import {
 export const metadata: Metadata = {
   title: 'How to Evict a Tenant in the UK | Complete Landlord Guide | LandlordHeaven',
   description:
-    'Learn how to evict a tenant in the UK with a clear, legal step-by-step process covering Section 21, Section 8, possession orders, timelines, bailiffs, rent arrears, and the documents landlords should prepare.',
+    'Learn how to evict a tenant in the UK with a clear, legal step-by-step process covering Section 21, Section 8, possession orders, timelines, bailiffs.',
   alternates: {
     canonical: 'https://landlordheaven.co.uk/how-to-evict-a-tenant-uk',
   },

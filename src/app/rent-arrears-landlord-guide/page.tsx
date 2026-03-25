@@ -18,7 +18,7 @@ const canonical = 'https://landlordheaven.co.uk/rent-arrears-landlord-guide';
 export const metadata: Metadata = {
   title: 'Rent Arrears Landlord Guide | Recovery, Notices, Section 8 and Next Steps | LandlordHeaven',
   description:
-    'A complete rent arrears landlord guide covering what to do when tenants fall behind, how to document arrears, when to use Section 8, what evidence courts expect, and when to choose Notice Only or the Complete Eviction Pack.',
+    'A complete rent arrears landlord guide covering what to do when tenants fall behind, how to document arrears, when to use Section 8.',
   alternates: {
     canonical,
   },

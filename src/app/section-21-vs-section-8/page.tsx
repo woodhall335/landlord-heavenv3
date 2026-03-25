@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   title:
     'Section 21 vs Section 8 | Which Eviction Notice Should Landlords Use? | LandlordHeaven',
   description:
-    'Understand the difference between Section 21 and Section 8 eviction notices in England. Learn when landlords use each route, what evidence matters, what risks apply, and how to decide which notice fits the case.',
+    'Understand the difference between Section 21 and Section 8 eviction notices in England.',
   alternates: { canonical },
   openGraph: {
     title:

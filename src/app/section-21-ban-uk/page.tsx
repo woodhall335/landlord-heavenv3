@@ -8,7 +8,7 @@ const canonical = getCanonicalUrl('/section-21-ban-uk');
 export const metadata: Metadata = {
   title: 'Section 21 Ban UK: What Landlords Must Do Now (2026 England Guide)',
   description:
-    'England landlord guide to the end of Section 21, including what changed on 1 May 2026, the 31 July 2026 court-start cutoff for older notices, what replaces Section 21, and what landlords should do now.',
+    'England landlord guide to the end of Section 21, including what changed on 1 May 2026, the 31 July 2026 court-start cutoff for older notices.',
   alternates: { canonical },
   openGraph: {
     title: 'Section 21 Ban UK: What Landlords Must Do Now (2026 England Guide)',

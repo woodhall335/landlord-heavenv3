@@ -11,7 +11,7 @@ const premiumWizardHref = '/wizard?product=ast_premium&src=england_tenancy_page&
 export const metadata: Metadata = {
   title: 'New England Tenancy Agreement | Standard and Premium Routes',
   description:
-    'Create an updated England tenancy agreement designed for the assured periodic framework from 1 May 2026. Older agreements may not be legally enforceable in the way landlords expect if they rely on outdated wording or structure.',
+    'Create an updated England tenancy agreement designed for the assured periodic framework from 1 May 2026.',
   keywords: [
     'new tenancy agreement england',
     'england tenancy agreement assured periodic',

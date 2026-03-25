@@ -40,7 +40,7 @@ const noticeOnlyLink = '/products/notice-only';
 export const metadata: Metadata = {
   title: 'Eviction Process Wales 2026 | Section 173, Breach Notices & Court Process',
   description:
-    'Complete guide to the eviction process in Wales for landlords. Learn Section 173 no-fault possession, breach-based eviction routes, written statement rules, court process, timelines, and what to do if the contract-holder will not leave.',
+    'Complete guide to the eviction process in Wales for landlords.',
   keywords: [
     'eviction process wales',
     'how to evict a tenant in wales',

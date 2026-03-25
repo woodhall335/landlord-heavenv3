@@ -89,8 +89,13 @@ describe('UniversalHero', () => {
     const mobileMascot = mascotImages.find(
       (image) => image.getAttribute('aria-hidden') === 'true',
     );
+    const desktopMascot = mascotImages.find(
+      (image) => image.getAttribute('aria-hidden') !== 'true',
+    );
     expect(mobileMascot).toBeTruthy();
     expect(mobileMascot).toHaveAttribute('alt', '');
+    expect(desktopMascot).toBeTruthy();
+    expect(desktopMascot).toHaveAttribute('alt', baseProps.mascotAlt);
   });
 
   it('overrides the default aria-label when ariaLabel is provided', () => {
@@ -111,10 +116,20 @@ describe('UniversalHero', () => {
       container.querySelectorAll(`img[src="${baseProps.mascotSrc}"]`),
     );
     expect(mascotImages).toHaveLength(2);
-    mascotImages.forEach((image) => {
+    const decorativeImages = mascotImages.filter(
+      (image) => image.getAttribute('aria-hidden') === 'true',
+    );
+    expect(decorativeImages.length).toBeGreaterThan(0);
+    decorativeImages.forEach((image) => {
       expect(image).toHaveAttribute('alt', '');
       expect(image.closest('div')).toHaveAttribute('aria-hidden', 'true');
     });
+  });
+
+  it('does not render an empty heading when title is blank', () => {
+    render(<UniversalHero {...baseProps} title="" highlightTitle={undefined} />);
+    expect(screen.queryByRole('heading', { level: 1 })).not.toBeInTheDocument();
+    expect(screen.getByText(baseProps.subtitle)).toBeInTheDocument();
   });
 
   it('warns when mascotAlt is empty while the desktop mascot is not decorative', () => {
@@ -123,7 +138,7 @@ describe('UniversalHero', () => {
     const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
     render(<UniversalHero {...baseProps} mascotAlt="   " />);
     expect(warnSpy).toHaveBeenCalledWith(
-      expect.stringContaining('mascotAlt should be non-empty when mascotDecorativeOnDesktop is false'),
+      expect.stringContaining('mediaAlt should be non-empty when media is not decorative'),
     );
     process.env.NODE_ENV = previousEnv;
   });

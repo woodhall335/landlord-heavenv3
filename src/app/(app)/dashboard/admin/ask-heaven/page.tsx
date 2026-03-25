@@ -117,7 +117,7 @@ export default function AskHeavenAdminListPage() {
       <div className="min-h-screen bg-gray-50 py-16">
         <div className="max-w-5xl mx-auto px-4">
           <div className="bg-white border border-gray-200 rounded-xl p-8">
-            <h1 className="text-xl font-semibold text-gray-900 mb-2">Access denied</h1>
+            <h2 className="text-xl font-semibold text-gray-900 mb-2">Access denied</h2>
             <p className="text-sm text-gray-600">
               You do not have permission to view Ask Heaven admin tools.
             </p>

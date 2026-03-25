@@ -21,7 +21,7 @@ const price = product.displayPrice;
 export const metadata: Metadata = {
   title: `Eviction Notice Template Bundle — Jurisdiction-Specific | England, Wales & Scotland | ${price}`,
   description:
-    `Jurisdiction-specific eviction notice template bundles for England, Wales, and Scotland. Includes service instructions, validity checklist, and preview before purchase. ${price}.`,
+    `Jurisdiction-specific eviction notice template bundles for England, Wales, and Scotland.`,
   openGraph: {
     title: `Eviction Notice 2026 | England, Wales & Scotland | ${price}`,
     description: "Eviction notice template bundle for England (Section 21/8), Wales (Section 173), and Scotland (Notice to Leave). Includes service instructions, validity checklist, and preview before purchase.",

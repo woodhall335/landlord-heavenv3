@@ -47,7 +47,7 @@ export const metadata: Metadata = {
   title:
     'Private Residential Tenancy Agreement Scotland | Create a PRT Online',
   description:
-    'Create a Scotland Private Residential Tenancy agreement online. Compare standard and premium PRT routes, understand landlord registration, deposit limits, Repairing Standard duties, and choose the right agreement for your Scottish let.',
+    'Create a Scotland Private Residential Tenancy agreement online.',
   keywords: [
     'private residential tenancy agreement',
     'PRT agreement Scotland',

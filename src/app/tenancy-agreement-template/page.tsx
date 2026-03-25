@@ -79,7 +79,7 @@ export const metadata: Metadata = {
   title:
     'Tenancy Agreement Template 2026 | England Residential Tenancy Agreement',
   description:
-    'Start with our England tenancy agreement template route and move into a current England agreement designed for the assured periodic framework from 1 May 2026, with clear Standard and Premium options.',
+    'Start with our England tenancy agreement template route and move into a current England agreement designed for the assured periodic framework from 1 May 2026.',
   keywords: [
     '2026 tenancy agreement',
     'tenancy agreement template 2026',

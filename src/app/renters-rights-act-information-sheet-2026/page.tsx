@@ -51,7 +51,7 @@ const faqs: FAQItem[] = [
 export const metadata: Metadata = {
   title: "Renters' Rights Act Information Sheet 2026 | Free PDF Download",
   description:
-    "Free England PDF download of the Renters' Rights Act Information Sheet 2026, with landlord guidance on who must receive it before 31 May 2026 and what to do after 1 May 2026.",
+    "Free PDF download of England's Renters' Rights Act Information Sheet 2026. See who must receive it by 31 May 2026 and what changes from 1 May 2026.",
   keywords: [
     'renters rights act information sheet 2026',
     'renters rights information sheet pdf',
@@ -105,6 +105,8 @@ export default function RentersRightsInformationSheet2026Page() {
           secondaryCta={{ label: 'View England tenancy agreements', href: '/products/ast' }}
           mediaSrc="/images/wizard-icons/05-compliance.png"
           mediaAlt="Illustration showing tenancy compliance checks and document review"
+          mascotDecorativeOnMobile={false}
+          mascotDecorativeOnDesktop={false}
           showTrustPositioningBar
           trustText="England landlord guidance updated for the current Renters' Rights position"
         />
@@ -114,9 +116,9 @@ export default function RentersRightsInformationSheet2026Page() {
             <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#5B56E8]">
               Free official document
             </p>
-            <h1 className="mt-3 text-3xl font-bold tracking-tight text-[#141B2D] md:text-5xl">
+            <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#141B2D] md:text-5xl">
               Free download of the Renters' Rights Act Information Sheet 2026
-            </h1>
+            </h2>
             <div className="mt-5 space-y-4 text-lg leading-8 text-[#546075]">
               <p>
                 Looking for the Renters' Rights Act Information Sheet 2026? This page gives England

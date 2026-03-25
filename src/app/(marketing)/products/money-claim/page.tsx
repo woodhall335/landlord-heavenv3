@@ -26,7 +26,7 @@ const price = product.displayPrice;
 export const metadata: Metadata = {
   title: `Money Claim Pack 2026 for England Landlords | ${price}`,
   description:
-    `Recover unpaid rent, property damage, cleaning costs and other tenant debts through English courts. N1 form, PAP-DEBT Letter Before Claim, interest calculator, and enforcement guidance. England only - ${price} one-time.`,
+    `Recover unpaid rent, property damage, cleaning costs and other tenant debts through English courts.`,
   openGraph: {
     title: `Money Claim Pack 2026 for England Landlords | ${price}`,
     description: "Money claim pack for England landlords to recover rent arrears, property damage, cleaning costs and other tenant debts. N1 form, Letter Before Claim, interest calculator, and court-ready guidance included.",

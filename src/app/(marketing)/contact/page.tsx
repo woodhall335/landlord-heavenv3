@@ -49,7 +49,7 @@ export default function ContactPage() {
         <div className="absolute inset-0 z-0">
           <Image
             src="/images/bg.webp"
-            alt=""
+            alt="Landlord Heaven support background"
             fill
             className="object-cover object-center"
             priority

@@ -186,7 +186,7 @@ export default function CasesListPage() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <Card padding="large" className="max-w-md mx-auto text-center">
           <RiLoginBoxLine className="w-16 h-16 text-primary mx-auto mb-4" />
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Login Required</h1>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Login Required</h2>
           <p className="text-gray-600 mb-6">
             Please log in to view your cases.
           </p>

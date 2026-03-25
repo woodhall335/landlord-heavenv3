@@ -11,7 +11,7 @@ const premiumWizardHref = '/wizard?product=ast_premium&src=england_tenancy_page&
 export const metadata: Metadata = {
   title: 'Premium Tenancy Agreement England | HMO and Student Lets',
   description:
-    'Create a Premium England tenancy agreement for HMOs, student lets, shared households, and guarantor-backed tenancies under the assured periodic framework from 1 May 2026. Older agreements may not be legally enforceable in the way landlords expect if they rely on outdated wording or structure.',
+    'Create a Premium England tenancy agreement for HMOs, student lets, shared households.',
   keywords: [
     'hmo tenancy agreement england',
     'student tenancy agreement england 2026',

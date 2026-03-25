@@ -11,7 +11,7 @@ const premiumWizardHref = '/wizard?product=ast_premium&src=fixed_term_periodic_t
 export const metadata: Metadata = {
   title: 'Fixed Term vs Periodic Tenancy England | Legacy Search Guide 2026',
   description:
-    'England guide for landlords comparing fixed-term and periodic tenancy search language. From 1 May 2026, new agreements generally move into the assured periodic framework.',
+    'England guide for landlords comparing fixed-term and periodic tenancy search language.',
   keywords: [
     'fixed term tenancy agreement england',
     'periodic tenancy agreement england',

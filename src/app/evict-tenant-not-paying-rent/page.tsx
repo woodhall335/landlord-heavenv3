@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   title:
     'Evict Tenant Not Paying Rent | Landlord Rent Arrears Guide | LandlordHeaven',
   description:
-    'A plain-English guide for landlords in England dealing with tenants not paying rent. Learn when to act, how Section 8 arrears cases work, what evidence matters, timelines, common delay points, and how to move toward possession without avoidable resets.',
+    'A plain-English guide for landlords in England dealing with tenants not paying rent.',
   alternates: {
     canonical,
   },

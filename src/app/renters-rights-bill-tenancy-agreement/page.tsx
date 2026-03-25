@@ -11,7 +11,7 @@ const premiumWizardHref = '/wizard?product=ast_premium&src=england_tenancy_page&
 export const metadata: Metadata = {
   title: 'Renters Rights Bill Tenancy Agreement | Updated England Agreement',
   description:
-    'Looking for a Renters Rights Bill tenancy agreement? This page captures that older search phrase and directs landlords into the current England agreement routes designed for the assured periodic framework from 1 May 2026.',
+    'Looking for a Renters Rights Bill tenancy agreement?',
   keywords: [
     'renters rights bill tenancy agreement',
     'renters rights act tenancy agreement',

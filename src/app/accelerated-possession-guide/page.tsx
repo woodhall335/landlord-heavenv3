@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   title:
     'Accelerated Possession Guide | Section 21 Court Process for Landlords | LandlordHeaven',
   description:
-    'A complete accelerated possession guide for landlords in England covering when it applies, how the court process works, required documents, timelines, common mistakes, and when to choose Notice Only or the Complete Eviction Pack.',
+    'A complete accelerated possession guide for landlords in England covering when it applies, how the court process works, required documents, timelines.',
   alternates: {
     canonical,
   },

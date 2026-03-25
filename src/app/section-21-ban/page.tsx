@@ -37,7 +37,7 @@ const completePackHref = '/products/complete-pack';
 export const metadata: Metadata = {
   title: 'Section 21 Ban | England Landlord Deadline Guide',
   description:
-    'England landlord guide to the Section 21 transition. Understand deadline-sensitive no-fault possession messaging, what changes after the ban, and when to use Section 21 or Section 8 routes.',
+    'England landlord guide to the Section 21 transition.',
   keywords: [
     'section 21 ban',
     'section 21 ending',

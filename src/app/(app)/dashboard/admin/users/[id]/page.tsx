@@ -131,7 +131,7 @@ export default function AdminUserDetailPage() {
       <div className="min-h-screen bg-gray-50 py-12">
         <Container size="large">
           <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h1 className="text-2xl font-bold text-charcoal mb-2">Unauthorized</h1>
+            <h2 className="text-2xl font-bold text-charcoal mb-2">Unauthorized</h2>
             <p className="text-gray-600 mb-4">You do not have permission to view this user.</p>
             <Link href="/dashboard/admin/users" className="text-primary hover:underline">
               Back to users
@@ -147,7 +147,7 @@ export default function AdminUserDetailPage() {
       <div className="min-h-screen bg-gray-50 py-12">
         <Container size="large">
           <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h1 className="text-2xl font-bold text-charcoal mb-2">User not found</h1>
+            <h2 className="text-2xl font-bold text-charcoal mb-2">User not found</h2>
             <p className="text-gray-600 mb-4">The requested user does not exist.</p>
             <Link href="/dashboard/admin/users" className="text-primary hover:underline">
               Back to users

@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   title:
     'Section 21 Checklist | Landlord Compliance, Service and Possession Readiness | LandlordHeaven',
   description:
-    'A practical Section 21 checklist for landlords in England. Learn what to check before serving Form 6A, which documents matter, what commonly makes a notice invalid, and how to prepare a cleaner possession file.',
+    'A practical Section 21 checklist for landlords in England.',
   alternates: {
     canonical,
   },

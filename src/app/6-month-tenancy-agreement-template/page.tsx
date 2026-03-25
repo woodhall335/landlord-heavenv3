@@ -11,7 +11,7 @@ const premiumWizardHref = '/wizard?product=ast_premium&src=england_tenancy_page&
 export const metadata: Metadata = {
   title: '6 Month Tenancy Agreement Template | Legacy England Explainer',
   description:
-    'Legacy 6 month tenancy agreement search page for England. The live England routes now use current agreement wording designed for the assured periodic framework from 1 May 2026.',
+    'Legacy 6 month tenancy agreement search page for England.',
   keywords: [
     '6 month tenancy agreement',
     '6 month tenancy agreement template',

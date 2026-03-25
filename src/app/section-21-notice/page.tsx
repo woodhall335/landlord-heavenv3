@@ -8,7 +8,7 @@ const canonical = getCanonicalUrl('/section-21-notice');
 export const metadata: Metadata = {
   title: 'Section 21 Notice: Legacy Route, Transition, and What Landlords Do Now',
   description:
-    'England bridge page for Section 21 notice intent, explaining the post-1 May 2026 position, the 31 July 2026 court-start cutoff for older notices, and where landlords go next.',
+    'England bridge page for Section 21 notice intent, explaining the post-1 May 2026 position, the 31 July 2026 court-start cutoff for older notices.',
   alternates: { canonical },
   openGraph: {
     title: 'Section 21 Notice: Legacy Route, Transition, and What Landlords Do Now',

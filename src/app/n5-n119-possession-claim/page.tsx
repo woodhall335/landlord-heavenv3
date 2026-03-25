@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   title:
     'N5 and N119 Possession Claim Guide | Standard Possession Claim for Landlords | LandlordHeaven',
   description:
-    'A practical landlord guide to the N5 and N119 possession claim in England. Learn when landlords use the standard possession route, what evidence matters, what goes in the court file, and what commonly causes delay.',
+    'A practical landlord guide to the N5 and N119 possession claim in England.',
   alternates: {
     canonical,
   },

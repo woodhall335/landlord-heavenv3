@@ -33,7 +33,7 @@ const faqs = [
 export const metadata: Metadata = {
   title: 'HMO Tenancy Agreement Template | Premium England Route',
   description:
-    'Premium-focused page for HMO, sharer, student, and guarantor-backed England lets, with a direct route into the main tenancy agreement product.',
+    'Premium-focused page for HMO, sharer, student, and guarantor-backed England lets, with a direct route into the main product page.',
   keywords: [
     'hmo tenancy agreement template',
     'student tenancy agreement england',

@@ -73,7 +73,7 @@ const faqs = [
 export const metadata: Metadata = {
   title: "Tenant Won't Leave After Notice? What England Landlords Should Do Next",
   description:
-    "What to do if your tenant won't leave after notice in England. Learn the legal next steps, possession order process, bailiff enforcement, and what landlords must not do.",
+    "What to do if your tenant won't leave after notice in England.",
   keywords: [
     "tenant won't leave",
     'tenant refuses to leave',

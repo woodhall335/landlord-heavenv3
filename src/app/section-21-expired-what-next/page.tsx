@@ -77,7 +77,7 @@ const faqs = [
 export const metadata: Metadata = {
   title: 'Section 21 Expired: What Next If Tenant Stays? | England Guide 2026',
   description:
-    "Section 21 expired but the tenant is still in the property? Learn what England landlords usually do next, including possession order steps, N5B route checks, likely delays and enforcement stage guidance.",
+    "Section 21 expired but the tenant is still in the property?",
   keywords: [
     'section 21 expired what next',
     'tenant ignored section 21',

@@ -103,7 +103,7 @@ export const metadata: Metadata = {
   title:
     'Tenancy Agreements England | Current England Agreement Routes',
   description:
-    'Compare updated England tenancy agreement routes for landlords. Older agreements may not be legally enforceable in the way landlords expect if they rely on outdated wording or structure, so this page explains the current England agreement route and when to choose Standard or Premium.',
+    'Compare updated England tenancy agreement routes for landlords.',
   keywords: [
     'tenancy agreements england',
     'england tenancy agreement',

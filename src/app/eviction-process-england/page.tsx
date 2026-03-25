@@ -18,7 +18,7 @@ const canonical = 'https://landlordheaven.co.uk/eviction-process-england';
 export const metadata: Metadata = {
   title: 'Eviction Process England | Step-by-Step Landlord Guide | LandlordHeaven',
   description:
-    'A complete guide to the eviction process in England covering Section 21, Section 8, notice periods, possession orders, bailiffs, timelines, common mistakes, and when to choose Notice Only or the Complete Eviction Pack.',
+    'A complete guide to the eviction process in England covering Section 21, Section 8, notice periods, possession orders, bailiffs, timelines, common mistakes.',
   alternates: {
     canonical,
   },

@@ -30,7 +30,7 @@ export default function HelpPage() {
         <div className="absolute inset-0 z-0">
           <Image
             src="/images/bg.webp"
-            alt=""
+            alt="Landlord Heaven help centre background"
             fill
             className="object-cover object-center"
             priority

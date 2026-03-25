@@ -66,12 +66,24 @@ describe("renters' rights information sheet page", () => {
     render(<RentersRightsInformationSheet2026Page />);
 
     expect(
-      screen.getByRole('heading', { level: 1, name: "Renters’ Rights Act Information Sheet 2026" })
+      screen.getByRole('heading', {
+        level: 1,
+        name: "Renters' Rights Act Information Sheet 2026",
+      })
     ).toBeInTheDocument();
+    expect(screen.getAllByRole('heading', { level: 1 })).toHaveLength(1);
+    expect(
+      screen.getAllByAltText('Illustration showing tenancy compliance checks and document review')
+        .length
+    ).toBeGreaterThan(0);
 
     const downloadLinks = screen
       .getAllByRole('link')
-      .filter((link) => link.getAttribute('href') === '/downloads/renters-rights-act-information-sheet-2026');
+      .filter(
+        (link) =>
+          link.getAttribute('href') ===
+          '/downloads/renters-rights-act-information-sheet-2026'
+      );
     expect(downloadLinks.length).toBeGreaterThanOrEqual(2);
 
     expect(screen.getByText(/20 March 2026/)).toBeInTheDocument();

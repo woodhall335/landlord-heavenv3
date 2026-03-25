@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   title:
     'Recover Rent Arrears After Eviction | Landlord Guide to Post-Eviction Debt Recovery | LandlordHeaven',
   description:
-    'A plain-English guide for landlords in England on recovering rent arrears after eviction. Learn what changes once possession is back, what evidence matters, realistic timelines, common delay points, and how to plan post-eviction debt recovery properly.',
+    'A plain-English guide for landlords in England on recovering rent arrears after eviction.',
   alternates: {
     canonical,
   },

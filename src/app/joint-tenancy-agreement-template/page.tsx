@@ -11,7 +11,7 @@ const premiumWizardHref = '/wizard?product=ast_premium&src=england_tenancy_page&
 export const metadata: Metadata = {
   title: 'Joint Tenancy Agreement England 2026 | Multiple Tenant Agreement',
   description:
-    'Create a joint tenancy agreement for England with current England wording, multiple-tenant clauses, and a clear Standard or Premium route depending on the complexity of the let.',
+    'Create a joint tenancy agreement for England with current England wording, multiple-tenant clauses.',
   keywords: [
     'joint tenancy agreement template',
     'joint tenancy agreement england',

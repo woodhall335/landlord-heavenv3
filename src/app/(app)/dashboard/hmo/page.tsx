@@ -181,7 +181,7 @@ export default function HMOProDashboardPage() {
       <div className="min-h-screen bg-gray-50">
         <div className="bg-gradient-to-r from-purple-600 to-indigo-700 text-white py-8">
           <Container size="large" className="text-center">
-            <h1 className="text-4xl font-extrabold mb-4">🚧 HMO Pro - Coming in V2</h1>
+            <h2 className="text-4xl font-extrabold mb-4">🚧 HMO Pro - Coming in V2</h2>
             <p className="text-xl opacity-90">
               This feature is currently under development
             </p>
@@ -242,7 +242,7 @@ export default function HMOProDashboardPage() {
       <div className="min-h-screen bg-gray-50">
         <div className="bg-gradient-to-r from-secondary to-primary text-white">
           <Container size="large" className="py-12 text-center">
-            <h1 className="text-4xl font-extrabold mb-4">🏘️ HMO Pro Dashboard</h1>
+            <h2 className="text-4xl font-extrabold mb-4">🏘️ HMO Pro Dashboard</h2>
             <p className="text-xl opacity-90">
               Professional HMO property and tenant management
             </p>

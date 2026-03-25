@@ -64,7 +64,7 @@ const complianceLinks = {
 export const metadata: Metadata = {
   title: 'How to Evict a Tenant | UK Landlord Guide by Jurisdiction',
   description:
-    'Landlord guide to evicting a tenant in England, Wales, Scotland, or Northern Ireland. Compare notice routes, timelines, common mistakes, compliance checks, and the right next legal step.',
+    'Landlord guide to evicting a tenant in England, Wales, Scotland, or Northern Ireland.',
   keywords: [
     'how to evict a tenant',
     'evict tenant UK',

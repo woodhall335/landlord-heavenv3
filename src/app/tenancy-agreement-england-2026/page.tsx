@@ -33,7 +33,7 @@ const faqs = [
 export const metadata: Metadata = {
   title: 'Do I Need a New Tenancy Agreement After 1 May 2026? | England Guide',
   description:
-    'England landlords asking whether they need a new tenancy agreement after 1 May 2026 can use this guide to understand the transition and move into the current product route.',
+    'England guide to whether you need a new tenancy agreement after 1 May 2026, with a clear route into the current product page.',
   keywords: [
     'do i need a new tenancy agreement after 1 May 2026',
     'tenancy agreement england 2026',

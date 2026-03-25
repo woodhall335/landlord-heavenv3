@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   title:
     'Section 8 Grounds Explained | Eviction Grounds Guide for Landlords | LandlordHeaven',
   description:
-    'A plain-English guide to Section 8 eviction grounds for landlords in England. Learn what each ground means, when landlords use them, how the court process works, and the mistakes that commonly delay possession claims.',
+    'A plain-English guide to Section 8 eviction grounds for landlords in England.',
   alternates: {
     canonical,
   },

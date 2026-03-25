@@ -36,7 +36,7 @@ const completePackPrice = PRODUCTS.complete_pack?.displayPrice ?? 'ÃƒÆ’Ã¢
 export const metadata: Metadata = {
   title: 'Wales Eviction Notices | Landlord Guide to Possession Routes',
   description:
-    'Landlord guide to Wales eviction notices under the Renting Homes (Wales) Act. Understand occupation contracts, contract-holder terminology, notice routes, timelines, common mistakes, and the right next legal step.',
+    'Landlord guide to Wales eviction notices under the Renting Homes (Wales) Act.',
   keywords: [
     'wales eviction notice',
     'eviction notice wales landlord',

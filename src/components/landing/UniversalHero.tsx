@@ -110,7 +110,7 @@ export function UniversalHero({
   const resolvedMediaSrc = mediaSrc ?? mascotSrc ?? '/images/laptop.webp';
   const resolvedMediaAlt =
     mediaAlt ?? mascotAlt ?? 'Laptop showing legal workflow dashboard';
-  const isDecorativeMedia = mascotDecorativeOnDesktop || mascotDecorativeOnMobile;
+  const shouldRenderHeading = Boolean(title || highlightTitle);
   const shouldShowReviewPill = showReviewPill ?? true;
   const shouldShowUsageCounter = showUsageCounter ?? Boolean(trustText);
   const resolvedTrustText = trustText ?? 'Updated for current housing law';
@@ -131,10 +131,19 @@ export function UniversalHero({
       warnOnce('UniversalHero: ariaLabel should be non-empty when provided.');
     }
 
-    if (!isDecorativeMedia && resolvedMediaAlt.trim() === '') {
+    if (
+      (!mascotDecorativeOnDesktop || !mascotDecorativeOnMobile) &&
+      resolvedMediaAlt.trim() === ''
+    ) {
       warnOnce('UniversalHero: mediaAlt should be non-empty when media is not decorative.');
     }
-  }, [ariaLabel, isDecorativeMedia, isValidHeading, resolvedMediaAlt]);
+  }, [
+    ariaLabel,
+    isValidHeading,
+    mascotDecorativeOnDesktop,
+    mascotDecorativeOnMobile,
+    resolvedMediaAlt,
+  ]);
 
   return (
     <section className={SECTION_WRAP_CLASSES} aria-label={ariaLabel} id={id}>
@@ -215,51 +224,53 @@ export function UniversalHero({
               </p>
             )}
 
-            <HeadingTag
-              className={clsx(
-                'mt-5 text-[2.125rem] font-bold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-6xl',
-                shouldRenderMedia ? 'max-w-none' : 'max-w-[18ch] lg:max-w-none'
-              )}
-            >
-              <span className="sm:hidden">
-                {hasLegalDocumentsInTitle ? (
-                  <>
-                    {mobileTitleParts[0]}
-                    <span className="whitespace-nowrap">Legal Documents</span>
-                    {mobileTitleParts.slice(1).join('Legal Documents')}
-                  </>
-                ) : (
-                  title
+            {shouldRenderHeading && (
+              <HeadingTag
+                className={clsx(
+                  'mt-5 text-[2.125rem] font-bold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-6xl',
+                  shouldRenderMedia ? 'max-w-none' : 'max-w-[18ch] lg:max-w-none'
                 )}
-              </span>
-              <span className="hidden sm:inline">{title}</span>
-              {highlightTitle && (
-                <span className="block text-white">
-                  <span className="sm:hidden">
-                    {shouldForceMobileHighlightBreak && mobileHighlightParts.length === 2 ? (
-                      <>
-                        {mobileHighlightParts[0]},
-                        <br />
-                        {mobileHighlightParts[1]}
-                      </>
-                    ) : (
-                      highlightTitle
-                    )}
-                  </span>
-                  <span className="hidden sm:inline">{highlightTitle}</span>
+              >
+                <span className="sm:hidden">
+                  {hasLegalDocumentsInTitle ? (
+                    <>
+                      {mobileTitleParts[0]}
+                      <span className="whitespace-nowrap">Legal Documents</span>
+                      {mobileTitleParts.slice(1).join('Legal Documents')}
+                    </>
+                  ) : (
+                    title
+                  )}
                 </span>
-              )}
-            </HeadingTag>
+                <span className="hidden sm:inline">{title}</span>
+                {highlightTitle && (
+                  <span className="block text-white">
+                    <span className="sm:hidden">
+                      {shouldForceMobileHighlightBreak && mobileHighlightParts.length === 2 ? (
+                        <>
+                          {mobileHighlightParts[0]},
+                          <br />
+                          {mobileHighlightParts[1]}
+                        </>
+                      ) : (
+                        highlightTitle
+                      )}
+                    </span>
+                    <span className="hidden sm:inline">{highlightTitle}</span>
+                  </span>
+                )}
+              </HeadingTag>
+            )}
 
             {shouldRenderMedia && (
               <div
                 className={MOBILE_MEDIA_WRAP_CLASSES}
-                aria-hidden={mascotDecorativeOnDesktop ? 'true' : undefined}
+                aria-hidden={mascotDecorativeOnMobile ? 'true' : undefined}
               >
                 <Image
                   src={resolvedMediaSrc}
-                  alt={isDecorativeMedia ? '' : resolvedMediaAlt}
-                  aria-hidden={isDecorativeMedia ? 'true' : undefined}
+                  alt={mascotDecorativeOnMobile ? '' : resolvedMediaAlt}
+                  aria-hidden={mascotDecorativeOnMobile ? 'true' : undefined}
                   width={980}
                   height={650}
                   priority={mediaPriority}
@@ -345,8 +356,8 @@ export function UniversalHero({
             >
               <Image
                 src={resolvedMediaSrc}
-                alt={isDecorativeMedia ? '' : resolvedMediaAlt}
-                aria-hidden={isDecorativeMedia ? 'true' : undefined}
+                alt={mascotDecorativeOnDesktop ? '' : resolvedMediaAlt}
+                aria-hidden={mascotDecorativeOnDesktop ? 'true' : undefined}
                 width={980}
                 height={650}
                 priority={mediaPriority}

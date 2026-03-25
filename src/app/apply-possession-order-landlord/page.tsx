@@ -79,7 +79,7 @@ const faqs = [
 export const metadata: Metadata = {
   title: 'Apply for Possession Order | N5B, N5 and Court Process Explained',
   description:
-    'How to apply for a possession order in England. Learn the difference between N5B and N5, what documents landlords need, likely timelines, court fees and what happens after the order is granted.',
+    'How to apply for a possession order in England, including N5B and N5 routes.',
   keywords: [
     'apply for possession order landlord',
     'possession order landlord england',

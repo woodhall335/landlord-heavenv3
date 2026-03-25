@@ -11,7 +11,7 @@ const premiumWizardHref = '/wizard?product=ast_premium&src=england_tenancy_page&
 export const metadata: Metadata = {
   title: 'Assured Shorthold Tenancy Agreement Template | Legacy AST Explainer',
   description:
-    'Legacy AST explainer page for landlords searching assured shorthold tenancy agreement template. The live England routes now use current wording designed for the assured periodic framework from 1 May 2026.',
+    'Legacy AST explainer page for landlords searching assured shorthold tenancy agreement template.',
   keywords: [
     'assured shorthold tenancy agreement template',
     'ast template england',

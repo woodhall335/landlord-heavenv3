@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   title:
     'Eviction Court Hearing Guide | Bundle, Evidence and What to Expect | LandlordHeaven',
   description:
-    'A plain-English eviction court hearing guide for landlords in England. Learn how to prepare your hearing bundle, present your case clearly, handle tenant defences, and plan the next steps after the judge’s decision.',
+    'A plain-English eviction court hearing guide for landlords in England.',
   alternates: {
     canonical,
   },

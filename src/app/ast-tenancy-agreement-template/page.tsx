@@ -12,7 +12,7 @@ const premiumWizardHref = '/wizard?product=ast_premium&src=ast_tenancy_agreement
 export const metadata: Metadata = {
   title: 'AST Tenancy Agreement Template 2026 | England Agreement Updated',
   description:
-    'Create the updated 2026 England tenancy agreement online. Built for landlords searching for an AST tenancy agreement template, with wording designed for the assured periodic framework from 1 May 2026.',
+    'Create the updated 2026 England tenancy agreement online. Built for landlords searching for an AST tenancy agreement template.',
   keywords: [
     'ast tenancy agreement template',
     'ast template england',

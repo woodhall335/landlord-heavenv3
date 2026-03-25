@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   title:
     'Tenant Left Without Paying Rent | What Landlords Should Do Next | LandlordHeaven',
   description:
-    'A practical guide for landlords in England when a tenant leaves owing rent. Learn how to confirm the final balance, gather evidence, understand the next steps, avoid weak arrears files, and decide whether recovery is worth pursuing.',
+    'A practical guide for landlords in England when a tenant leaves owing rent.',
   alternates: {
     canonical,
   },

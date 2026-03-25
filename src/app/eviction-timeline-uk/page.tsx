@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   title:
     'Eviction Timeline UK | How Long the Eviction Process Takes for Landlords | LandlordHeaven',
   description:
-    'A detailed eviction timeline for UK landlords explaining how long each stage of the eviction process usually takes, from notice through possession orders and bailiff enforcement.',
+    'A detailed eviction timeline for UK landlords explaining how long each stage of the eviction process usually takes.',
   alternates: {
     canonical,
   },

@@ -24,7 +24,7 @@ const moneyClaimPrice = PRODUCTS.money_claim?.displayPrice ?? '£79.99';
 export const metadata: Metadata = {
   title: 'Money Claim for Unpaid Rent | Landlord Court Recovery Guide',
   description:
-    'Landlord guide to making a money claim for unpaid rent in England. Understand pre-action protocol, letters before claim, arrears schedules, MCOL, county court judgment, enforcement, timing, and common mistakes.',
+    'Landlord guide to making a money claim for unpaid rent in England.',
   keywords: [
     'money claim unpaid rent',
     'money claim for unpaid rent',

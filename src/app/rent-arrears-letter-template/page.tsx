@@ -37,7 +37,7 @@ const completePackProductHref = '/products/complete-pack';
 export const metadata: Metadata = {
   title: 'Rent Arrears Letter Template UK | Free Demand Letter + Legal Next Steps',
   description:
-    'Use a rent arrears letter template UK landlords can rely on. Learn when to send a reminder, formal demand, or final warning, and when to escalate to MCOL or Section 8.',
+    'Use a rent arrears letter template UK landlords can rely on.',
   keywords: [
     'rent arrears letter template',
     'rent arrears letter uk',

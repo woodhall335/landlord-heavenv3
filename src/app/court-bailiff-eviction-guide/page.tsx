@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   title:
     'Court Bailiff Eviction Guide | County Court Enforcement for Landlords | LandlordHeaven',
   description:
-    'A plain-English court bailiff eviction guide for landlords in England. Learn when county court bailiffs are needed, how enforcement works after a possession order, timelines, common delays, and what to expect on eviction day.',
+    'A plain-English court bailiff eviction guide for landlords in England.',
   alternates: {
     canonical,
   },

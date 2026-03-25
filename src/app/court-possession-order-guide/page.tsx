@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   title:
     'Court Possession Order Guide | What Happens After a Possession Hearing | LandlordHeaven',
   description:
-    'A landlord guide to court possession orders in England. Learn what happens after a possession hearing, what types of possession orders exist, timelines, enforcement, and next steps.',
+    'A landlord guide to court possession orders in England.',
   alternates: {
     canonical,
   },

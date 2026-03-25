@@ -53,7 +53,7 @@ const noticeOnlyProductHref = '/products/notice-only';
 export const metadata: Metadata = {
   title: 'Section 8 Notice Template | Form 3 Guide for Landlords in England',
   description:
-    'Section 8 notice template and Form 3 landlord guide for England. Learn what a valid Section 8 notice should include, how grounds work, how service works, and when to use Notice Only or the full court bundle.',
+    'Section 8 notice template and Form 3 landlord guide for England.',
   keywords: [
     'section 8 notice',
     'section 8 notice template',

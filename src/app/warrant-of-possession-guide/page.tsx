@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   title:
     'Warrant of Possession Guide | What Landlords Do After a Possession Order | LandlordHeaven',
   description:
-    'A plain-English warrant of possession guide for landlords in England. Learn when a warrant is needed, how it fits after a possession order, timelines, enforcement steps, common delays, and what happens on eviction day.',
+    'A plain-English warrant of possession guide for landlords in England.',
   alternates: {
     canonical,
   },

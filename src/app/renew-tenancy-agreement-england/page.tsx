@@ -11,7 +11,7 @@ const premiumWizardHref = '/wizard?product=ast_premium&src=england_tenancy_page&
 export const metadata: Metadata = {
   title: 'Renew Tenancy Agreement England | Existing Tenancy Update Guide',
   description:
-    'England guide to updating tenancy paperwork for existing tenants. Covers auto-rolling written tenancies, when a fresh agreement is actually needed, and the current England agreement routes.',
+    'England guide to updating tenancy paperwork for existing tenants. Covers auto-rolling written tenancies, when a fresh agreement is actually needed.',
   keywords: [
     'renew tenancy agreement england',
     'update tenancy agreement landlord',

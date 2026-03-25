@@ -102,7 +102,7 @@ export default function BlogPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-3xl">
               <p className="mb-3 inline-flex rounded-full border border-[#e3d3ff] bg-white px-3 py-1 text-xs font-semibold uppercase tracking-wide text-[#692ed4]">LandlordHeaven Blog</p>
-              <h1 className="text-3xl font-bold tracking-tight text-slate-900 lg:text-4xl">Landlord help that turns advice into action</h1>
+              <h2 className="text-3xl font-bold tracking-tight text-slate-900 lg:text-4xl">Landlord help that turns advice into action</h2>
               <p className="mt-4 text-lg text-slate-600">Read the problem in plain English, understand your options, then jump straight to the right product flow: eviction notice, complete eviction pack, or money claim.</p>
             </div>
           </div>

@@ -154,6 +154,7 @@ export function TenancyFunnelLandingPage({
           title={faqTitle}
           intro={faqIntro}
           faqs={faqs}
+          includeSchema={false}
           showContactCTA={false}
           variant="gray"
         />

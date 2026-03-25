@@ -69,7 +69,7 @@ const faqs = [
 export const metadata: Metadata = {
   title: 'N5B Form Guide 2026 | Accelerated Possession for Landlords',
   description:
-    'Complete guide to Form N5B for accelerated possession in England. Learn when landlords use it, how it differs from N5, what documents are needed, and what happens after filing.',
+    'Complete guide to Form N5B for accelerated possession in England.',
   keywords: [
     'n5b form',
     'form n5b',

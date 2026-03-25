@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   title:
     'Tenant Stopped Paying Rent 2026 | Landlord Action Plan for Arrears and Possession | LandlordHeaven',
   description:
-    'A high-intent landlord guide for when a tenant stops paying rent. Learn what to do first, how to build an arrears evidence pack, when Section 8 may be the stronger route, how Section 21 fits in, and how to move toward possession with fewer avoidable delays.',
+    'A high-intent landlord guide for when a tenant stops paying rent.',
   alternates: {
     canonical,
   },

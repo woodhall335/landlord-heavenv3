@@ -23,7 +23,7 @@ const moneyClaimProductLink = '/products/money-claim';
 export const metadata: Metadata = {
   title: 'How to Sue a Tenant for Unpaid Rent 2026 | Landlord Debt Claim Guide',
   description:
-    'A practical guide for landlords in England on suing a tenant for unpaid rent. Learn the pre-action protocol, county court process, court fees, judgment, enforcement, and how to prepare a stronger arrears claim.',
+    'A practical guide for landlords in England on suing a tenant for unpaid rent.',
   keywords: [
     'how to sue tenant for unpaid rent',
     'sue tenant for rent arrears',

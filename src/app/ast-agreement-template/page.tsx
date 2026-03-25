@@ -33,7 +33,7 @@ const faqs = [
 export const metadata: Metadata = {
   title: 'AST Agreement Template UK | England Updated for 1 May 2026',
   description:
-    'Looking for an AST agreement template? This England-first page explains what changed from 1 May 2026 and routes landlords into the current assured periodic tenancy agreement product.',
+    'Looking for an AST agreement template? This England-first page explains the 1 May 2026 change and routes landlords into the current agreement product.',
   keywords: [
     'ast agreement template',
     'ast template england',

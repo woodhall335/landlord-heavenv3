@@ -19,7 +19,7 @@ const canonical = 'https://landlordheaven.co.uk/section-8-eviction-process';
 export const metadata: Metadata = {
   title: 'Section 8 Eviction Process 2026 | Step-by-Step Guide for Landlords',
   description:
-    'A practical Section 8 eviction process guide for landlords in England. Learn the notice stage, court claim stage, hearing preparation, timelines, common mistakes, and whether to use Notice Only or the Complete Eviction Pack.',
+    'A practical Section 8 eviction process guide for landlords in England.',
   alternates: {
     canonical,
   },

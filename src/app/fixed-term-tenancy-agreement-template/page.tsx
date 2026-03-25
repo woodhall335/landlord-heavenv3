@@ -11,7 +11,7 @@ const premiumWizardHref = '/wizard?product=ast_premium&src=england_tenancy_page&
 export const metadata: Metadata = {
   title: 'Fixed Term Tenancy Agreement Template | Legacy England Explainer',
   description:
-    'Legacy explainer for landlords searching fixed term tenancy agreement template in England. The live England routes now use current agreement wording designed for the assured periodic framework from 1 May 2026.',
+    'Legacy explainer for landlords searching fixed term tenancy agreement template in England.',
   keywords: [
     'fixed term tenancy agreement',
     'fixed term tenancy agreement template',

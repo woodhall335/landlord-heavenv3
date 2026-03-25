@@ -359,7 +359,7 @@ const faqs: FAQItem[] = [
 export const metadata: Metadata = {
   title: 'Assured Periodic Tenancy Agreement for England | Updated for 1 May 2026',
   description:
-    "Assured Periodic Tenancy Agreement for England updated for the Renters' Rights Act from 1 May 2026. Compare Standard and Premium, keep AST search guidance visible, and still support Wales, Scotland, and Northern Ireland.",
+    "Assured Periodic Tenancy Agreement for England, updated for 1 May 2026. Compare Standard and Premium, keep AST guidance, and view other UK jurisdictions.",
   keywords: [
     'assured periodic tenancy agreement england',
     'tenancy agreement uk',
