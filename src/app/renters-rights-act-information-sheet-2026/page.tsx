@@ -9,7 +9,6 @@ import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import {
   StructuredData,
   breadcrumbSchema,
-  faqPageSchema,
   getCanonicalUrl,
 } from '@/lib/seo';
 import { articleSchema } from '@/lib/seo/structured-data';
@@ -28,24 +27,24 @@ const faqs: FAQItem[] = [
       "It must be given for England assured or assured shorthold tenancies that were created before 1 May 2026 and have a wholly or partly written record of terms. A copy should be given to every named tenant.",
   },
   {
-    question: "When does the Information Sheet have to be given?",
+    question: 'When does the Information Sheet have to be given?',
     answer:
-      "For qualifying England tenancies, it must be given by 31 May 2026. Landlords and agents should keep evidence of how and when it was sent or handed over.",
+      'For qualifying England tenancies, it must be given by 31 May 2026. Landlords and agents should keep evidence of how and when it was sent or handed over.',
   },
   {
     question: 'Can I just text or email a link to the PDF?',
     answer:
-      "No. GOV.UK says a link alone is not valid. The tenant should receive the exact PDF itself, either as a hard copy or as an electronic attachment.",
+      'No. GOV.UK says a link alone is not valid. The tenant should receive the exact PDF itself, either as a hard copy or as an electronic attachment.',
   },
   {
     question: 'Do I need to replace the tenancy agreement as well?',
     answer:
-      "No. GOV.UK says landlords do not need to reissue an existing written tenancy agreement just because of this Information Sheet requirement.",
+      'No. GOV.UK says landlords do not need to reissue an existing written tenancy agreement just because of this Information Sheet requirement.',
   },
   {
     question: 'What if the tenancy was entirely verbal before 1 May 2026?',
     answer:
-      "In that case this Information Sheet should not be used as the substitute. GOV.UK says certain written information about the key terms of the tenancy should be provided instead.",
+      'In that case this Information Sheet should not be used as the substitute. GOV.UK says certain written information about the key terms of the tenancy should be provided instead.',
   },
 ];
 
@@ -96,19 +95,18 @@ export default function RentersRightsInformationSheet2026Page() {
           dateModified: '2026-03-25',
         })}
       />
-      <StructuredData data={faqPageSchema(faqs)} />
 
       <main className="min-h-screen bg-[#FCFBF8]">
         <UniversalHero
           badge="Free England PDF Download"
-          title="Renters’ Rights Act Information Sheet 2026"
+          title="Renters' Rights Act Information Sheet 2026"
           subtitle="Download the official England tenant information sheet as a free PDF, then see when it must be given, who must receive it, and how Landlord Heaven supports the current England tenancy framework."
           primaryCta={{ label: 'Download free PDF', href: downloadHref }}
           secondaryCta={{ label: 'View England tenancy agreements', href: '/products/ast' }}
           mediaSrc="/images/wizard-icons/05-compliance.png"
           mediaAlt="Illustration showing tenancy compliance checks and document review"
           showTrustPositioningBar
-          trustText="England landlord guidance updated for the current Renters’ Rights position"
+          trustText="England landlord guidance updated for the current Renters' Rights position"
         />
 
         <Container className="py-12 md:py-16">
@@ -117,11 +115,11 @@ export default function RentersRightsInformationSheet2026Page() {
               Free official document
             </p>
             <h1 className="mt-3 text-3xl font-bold tracking-tight text-[#141B2D] md:text-5xl">
-              Free download of the Renters’ Rights Act Information Sheet 2026
+              Free download of the Renters' Rights Act Information Sheet 2026
             </h1>
             <div className="mt-5 space-y-4 text-lg leading-8 text-[#546075]">
               <p>
-                Looking for the Renters’ Rights Act Information Sheet 2026? This page gives England
+                Looking for the Renters' Rights Act Information Sheet 2026? This page gives England
                 landlords a free PDF download together with the key rules on when it must be used.
                 The Information Sheet was published on <strong>20 March 2026</strong> and is part of the
                 England transition into the new private renting framework from <strong>1 May 2026</strong>.
@@ -154,7 +152,7 @@ export default function RentersRightsInformationSheet2026Page() {
             </h2>
             <div className="mt-5 space-y-4 text-lg leading-8 text-[#546075]">
               <p>
-                The Renters’ Rights Act Information Sheet 2026 is the government document that
+                The Renters' Rights Act Information Sheet 2026 is the government document that
                 explains to tenants how their tenancy may be affected by the changes introduced under
                 the new England regime. It is a tenant-facing document, but landlords and letting
                 agents need to know exactly when it has to be given and how to keep a proper record
@@ -262,7 +260,7 @@ export default function RentersRightsInformationSheet2026Page() {
               </p>
               <p>
                 Our Standard and Premium England tenancy agreements are updated for the current
-                Renters’ Rights legislation and the current England framework. That means landlords
+                Renters' Rights legislation and the current England framework. That means landlords
                 can move beyond a single free PDF and into a document flow built around current
                 tenancy structure, transition handling, prescribed information, and the wider bundle
                 of paperwork they may actually need.
@@ -270,25 +268,37 @@ export default function RentersRightsInformationSheet2026Page() {
             </div>
 
             <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-              <Link href="/products/ast" className="rounded-2xl border border-[#D9D7F7] bg-white p-5 transition hover:border-[#5B56E8] hover:shadow-md">
+              <Link
+                href="/products/ast"
+                className="rounded-2xl border border-[#D9D7F7] bg-white p-5 transition hover:border-[#5B56E8] hover:shadow-md"
+              >
                 <h3 className="text-lg font-semibold text-[#141B2D]">England tenancy agreements</h3>
                 <p className="mt-2 text-sm leading-6 text-[#546075]">
                   Compare Standard and Premium England agreement routes.
                 </p>
               </Link>
-              <Link href="/products/notice-only" className="rounded-2xl border border-[#D9D7F7] bg-white p-5 transition hover:border-[#5B56E8] hover:shadow-md">
+              <Link
+                href="/products/notice-only"
+                className="rounded-2xl border border-[#D9D7F7] bg-white p-5 transition hover:border-[#5B56E8] hover:shadow-md"
+              >
                 <h3 className="text-lg font-semibold text-[#141B2D]">Notice Only</h3>
                 <p className="mt-2 text-sm leading-6 text-[#546075]">
                   Generate the right notice once the tenancy file is in order.
                 </p>
               </Link>
-              <Link href="/products/complete-pack" className="rounded-2xl border border-[#D9D7F7] bg-white p-5 transition hover:border-[#5B56E8] hover:shadow-md">
+              <Link
+                href="/products/complete-pack"
+                className="rounded-2xl border border-[#D9D7F7] bg-white p-5 transition hover:border-[#5B56E8] hover:shadow-md"
+              >
                 <h3 className="text-lg font-semibold text-[#141B2D]">Complete Eviction Pack</h3>
                 <p className="mt-2 text-sm leading-6 text-[#546075]">
                   End-to-end England possession paperwork and guidance.
                 </p>
               </Link>
-              <Link href="/products/money-claim" className="rounded-2xl border border-[#D9D7F7] bg-white p-5 transition hover:border-[#5B56E8] hover:shadow-md">
+              <Link
+                href="/products/money-claim"
+                className="rounded-2xl border border-[#D9D7F7] bg-white p-5 transition hover:border-[#5B56E8] hover:shadow-md"
+              >
                 <h3 className="text-lg font-semibold text-[#141B2D]">Money Claim Pack</h3>
                 <p className="mt-2 text-sm leading-6 text-[#546075]">
                   Recover rent arrears, damage costs, and other tenant debt.
@@ -308,7 +318,7 @@ export default function RentersRightsInformationSheet2026Page() {
 
           <div className="mx-auto mt-12 max-w-5xl">
             <FAQSection
-              title="Renters’ Rights Act Information Sheet 2026 FAQs"
+              title="Renters' Rights Act Information Sheet 2026 FAQs"
               intro="Short answers for landlords who need the free PDF and want the key England rules in one place."
               faqs={faqs}
               showContactCTA={false}
