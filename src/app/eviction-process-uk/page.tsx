@@ -162,7 +162,7 @@ const content: PillarPageContent = {
     { label: 'Bailiff eviction process', href: '/bailiff-eviction-process' },
   ],
   toolLinks: [
-    { label: 'Section 8 validator', href: '/tools/validators/section-8' },
+    { label: 'Eviction notice pack', href: '/eviction-notice' },
     { label: 'Rent arrears calculator', href: '/tools/rent-arrears-calculator' },
   ],
   productLink: { label: 'Complete eviction pack for England', href: '/products/complete-pack' },

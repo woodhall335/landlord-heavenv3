@@ -145,8 +145,8 @@ const content: PillarPageContent = {
     { label: 'Tenant not paying rent in the UK', href: '/tenant-not-paying-rent' },
   ],
   toolLinks: [
-    { label: 'Section 21 validity checker', href: '/tools/validators/section-21' },
-    { label: 'Section 8 validator', href: '/tools/validators/section-8' },
+    { label: 'Eviction notice pack', href: '/eviction-notice' },
+    { label: 'Rent arrears calculator', href: '/tools/rent-arrears-calculator' },
   ],
   productLink: { label: 'Complete pack for post-ban possession', href: '/products/complete-pack' },
   primaryCta: { label: 'Get Complete Eviction Pack', href: '/products/complete-pack' },

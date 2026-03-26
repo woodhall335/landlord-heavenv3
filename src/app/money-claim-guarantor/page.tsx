@@ -414,7 +414,7 @@ export default function MoneyClaimGuarantorPage() {
               </h2>
               <RelatedLinks
                 links={[
-                  residentialDocumentLinks.guarantorAgreement,
+                  productLinks.tenancyAgreement,
                   moneyClaimGuides.unpaidRent,
                   moneyClaimGuides.formerTenant,
                   moneyClaimGuides.ccjEnforcement,

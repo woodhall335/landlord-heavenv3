@@ -123,7 +123,7 @@ export default function Form3Section8Page() {
                 Select your grounds and get a completed Form 3 with correct notice periods.
               </p>
               <Link
-                href="/tools/free-section-8-notice-generator"
+                href="/eviction-notice"
                 className="hero-btn-primary inline-block"
               >
                 Generate Free Notice
@@ -269,8 +269,8 @@ export default function Form3Section8Page() {
                 Generate a completed Form 3 with correct grounds and notice periods.
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Link href="/tools/free-section-8-notice-generator" className="hero-btn-primary">
-                  Free Generator
+                <Link href="/eviction-notice" className="hero-btn-primary">
+                  Start Notice Pack
                 </Link>
                 <Link href="/products/complete-pack" className="hero-btn-secondary" data-cta="complete-pack" data-cta-location="bottom">
                   Need the full case bundle?

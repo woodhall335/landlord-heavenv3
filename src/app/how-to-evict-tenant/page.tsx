@@ -406,7 +406,7 @@ export default function HowToEvictTenantPage() {
                       href="/section-21-notice"
                       className="text-sm font-medium text-primary hover:underline"
                     >
-                      Section 21 checker {'->'}
+                      Section 21 guide {'->'}
                     </Link>
                   </div>
                 </div>
@@ -437,7 +437,7 @@ export default function HowToEvictTenantPage() {
                       href="/section-8-notice"
                       className="text-sm font-medium text-primary hover:underline"
                     >
-                      Section 8 checker {'->'}
+                      Section 8 guide {'->'}
                     </Link>
                   </div>
                 </div>

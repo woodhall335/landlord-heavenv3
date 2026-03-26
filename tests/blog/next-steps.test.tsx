@@ -20,7 +20,7 @@ import { NextSteps } from '@/components/blog/NextSteps';
 // =============================================================================
 
 describe('NextSteps - Section 21 Cluster', () => {
-  it('renders Section 21 template link for section-21 posts', () => {
+  it('renders Section 21 transition guide for section-21 posts', () => {
     render(
       <NextSteps
         slug="england-section-21-process"
@@ -29,11 +29,11 @@ describe('NextSteps - Section 21 Cluster', () => {
       />
     );
 
-    expect(screen.getByText('Section 21 Notice Template')).toBeInTheDocument();
-    expect(screen.getByText(/Free Form 6A template/)).toBeInTheDocument();
+    const transitionGuide = screen.getByRole('link', { name: /Section 21 Notice Transition Guide/ });
+    expect(transitionGuide).toHaveAttribute('href', '/section-21-notice');
   });
 
-  it('renders Section 21 validator link for section-21 posts', () => {
+  it('renders Section 21 bridge guide for section-21 posts', () => {
     render(
       <NextSteps
         slug="what-is-section-21-notice"
@@ -42,7 +42,8 @@ describe('NextSteps - Section 21 Cluster', () => {
       />
     );
 
-    expect(screen.getByText('Section 21 Validity Checker')).toBeInTheDocument();
+    const bridgeGuide = screen.getByRole('link', { name: /Section 21 Ban UK Guide/ });
+    expect(bridgeGuide).toHaveAttribute('href', '/section-21-ban-uk');
   });
 
   it('renders Section 21 product link for section-21 posts', () => {
@@ -70,7 +71,7 @@ describe('NextSteps - Section 21 Cluster', () => {
 // =============================================================================
 
 describe('NextSteps - Section 8 Cluster', () => {
-  it('renders Section 8 template link for section-8 posts', () => {
+  it('renders Section 8 guide link for section-8 posts', () => {
     render(
       <NextSteps
         slug="england-section-8-process"
@@ -79,10 +80,11 @@ describe('NextSteps - Section 8 Cluster', () => {
       />
     );
 
-    expect(screen.getByText('Section 8 Notice Template')).toBeInTheDocument();
+    const section8Guide = screen.getByRole('link', { name: /Section 8 Notice Guide/ });
+    expect(section8Guide).toHaveAttribute('href', '/section-8-notice');
   });
 
-  it('renders Section 8 validator link for section-8 posts', () => {
+  it('renders supporting eviction guide for section-8 posts', () => {
     render(
       <NextSteps
         slug="england-section-8-ground-8"
@@ -91,10 +93,11 @@ describe('NextSteps - Section 8 Cluster', () => {
       />
     );
 
-    expect(screen.getByText('Section 8 Grounds Checker')).toBeInTheDocument();
+    const evictionGuide = screen.getByRole('link', { name: /How to Evict a Tenant Guide/ });
+    expect(evictionGuide).toHaveAttribute('href', '/how-to-evict-tenant');
   });
 
-  it('renders Complete Eviction Pack for section-8 posts', () => {
+  it('renders Notice Only Bundle for section-8 posts', () => {
     render(
       <NextSteps
         slug="england-section-8-ground-14"
@@ -103,7 +106,8 @@ describe('NextSteps - Section 8 Cluster', () => {
       />
     );
 
-    expect(screen.getByText('Complete Eviction Pack')).toBeInTheDocument();
+    const noticeOnlyBundle = screen.getByRole('link', { name: /Notice Only Bundle/ });
+    expect(noticeOnlyBundle).toHaveAttribute('href', '/products/notice-only');
   });
 });
 
@@ -124,7 +128,7 @@ describe('NextSteps - Rent Arrears Cluster', () => {
     expect(screen.getByText('Money Claim Pack')).toBeInTheDocument();
   });
 
-  it('renders Rent Arrears Calculator for arrears posts', () => {
+  it('renders Section 8 arrears guidance for arrears posts', () => {
     render(
       <NextSteps
         slug="uk-rent-arrears-guide"
@@ -133,7 +137,7 @@ describe('NextSteps - Rent Arrears Cluster', () => {
       />
     );
 
-    expect(screen.getByText('Rent Arrears Calculator')).toBeInTheDocument();
+    expect(screen.getByText('Section 8 Notice for Rent Arrears')).toBeInTheDocument();
   });
 
   it('renders Money Claim Pack for money-claim posts', () => {
@@ -154,7 +158,7 @@ describe('NextSteps - Rent Arrears Cluster', () => {
 // =============================================================================
 
 describe('NextSteps - Tenancy Agreement Cluster', () => {
-  it('renders Tenancy Agreement Generator for AST posts', () => {
+  it('renders England tenancy guide for AST posts', () => {
     render(
       <NextSteps
         slug="england-assured-shorthold-tenancy-guide"
@@ -163,7 +167,7 @@ describe('NextSteps - Tenancy Agreement Cluster', () => {
       />
     );
 
-    expect(screen.getByText('Tenancy Agreement Pack')).toBeInTheDocument();
+    expect(screen.getByText('England Tenancy Agreement Guide')).toBeInTheDocument();
   });
 
   // SKIP: pre-existing failure - Agreement Validator component changed, test needs update (TICKET-001)
@@ -314,7 +318,7 @@ describe('NextSteps - Jurisdiction-Specific', () => {
     expect(screen.getByText('Wales Notice Validator')).toBeInTheDocument();
   });
 
-  it('renders Ask Heaven NI CTA for Northern Ireland eviction posts', () => {
+  it('renders live eviction CTAs for Northern Ireland eviction posts', () => {
     render(
       <NextSteps
         slug="northern-ireland-eviction-process"
@@ -323,10 +327,8 @@ describe('NextSteps - Jurisdiction-Specific', () => {
       />
     );
 
-    // NI eviction posts get the Complete Eviction Pack (from eviction check)
-    // plus NI-specific Ask Heaven
     expect(screen.getByText('Complete Eviction Pack')).toBeInTheDocument();
-    expect(screen.getByText('Ask Heaven for NI')).toBeInTheDocument();
+    expect(screen.getByText('How to Evict a Tenant Guide')).toBeInTheDocument();
   });
 
   it('renders Tenancy Agreement Generator for Northern Ireland tenancy posts', () => {
@@ -442,7 +444,7 @@ describe('NextSteps - Link Attributes', () => {
     );
   });
 
-  it('Validator links point to correct validator pages', () => {
+  it('section 21 next-step links point to the live bridge guide route', () => {
     render(
       <NextSteps
         slug="what-is-section-21-notice"
@@ -451,11 +453,11 @@ describe('NextSteps - Link Attributes', () => {
       />
     );
 
-    const validatorLink = screen.getByRole('link', { name: /Section 21 Validity Checker/ });
-    expect(validatorLink).toHaveAttribute('href', '/tools/validators/section-21');
+    const noticeGuideLink = screen.getByRole('link', { name: /Section 21 Notice Transition Guide/ });
+    expect(noticeGuideLink).toHaveAttribute('href', '/section-21-notice');
   });
 
-  it('Template links point to correct template pages', () => {
+  it('Section 8 guide links point to the current guide page', () => {
     render(
       <NextSteps
         slug="england-section-8-process"
@@ -464,8 +466,8 @@ describe('NextSteps - Link Attributes', () => {
       />
     );
 
-    const templateLink = screen.getByRole('link', { name: /Section 8 Notice Template/ });
-    expect(templateLink).toHaveAttribute('href', '/section-8-notice-template');
+    const guideLink = screen.getByRole('link', { name: /Section 8 Notice Guide/ });
+    expect(guideLink).toHaveAttribute('href', '/section-8-notice');
   });
 });
 

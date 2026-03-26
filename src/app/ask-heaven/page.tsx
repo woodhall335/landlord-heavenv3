@@ -417,22 +417,22 @@ export default async function AskHeavenPage({
                   <span className="text-xs text-gray-500">Complete UK guide</span>
                 </Link>
                 <Link
-                  href="/tools/validators/section-21"
+                  href="/eviction-notice"
                   className="p-4 bg-white rounded-xl border border-gray-200 hover:border-primary/30 hover:shadow-md transition-all group"
                 >
                   <span className="font-medium text-gray-900 group-hover:text-primary block">
-                    Section 21 Checker
+                    Eviction Notice Pack
                   </span>
-                  <span className="text-xs text-gray-500">Check notice validity</span>
+                  <span className="text-xs text-gray-500">Create a court-ready eviction notice</span>
                 </Link>
                 <Link
-                  href="/tools/validators/section-8"
+                  href="/section-8-notice"
                   className="p-4 bg-white rounded-xl border border-gray-200 hover:border-primary/30 hover:shadow-md transition-all group"
                 >
                   <span className="font-medium text-gray-900 group-hover:text-primary block">
-                    Section 8 Checker
+                    Section 8 Notice Guide
                   </span>
-                  <span className="text-xs text-gray-500">Verify grounds & periods</span>
+                  <span className="text-xs text-gray-500">Understand grounds, periods, and next steps</span>
                 </Link>
                 <Link
                   href="/money-claim-unpaid-rent"

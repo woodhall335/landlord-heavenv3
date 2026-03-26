@@ -1,4 +1,5 @@
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
+import { isRetiredPublicSku } from '@/lib/public-retirements';
 
 export const RESIDENTIAL_LETTING_STANDARD_PRICE = 9.99;
 export const RESIDENTIAL_LETTING_PREMIUM_PRICE = 12.99;
@@ -126,7 +127,7 @@ export const RESIDENTIAL_LETTING_PRODUCT_SKUS = Object.keys(
 ) as ResidentialLettingProductSku[];
 
 export const PUBLIC_RESIDENTIAL_LETTING_PRODUCT_SKUS = RESIDENTIAL_LETTING_PRODUCT_SKUS.filter(
-  (sku) => sku !== 'residential_tenancy_application'
+  (sku) => sku !== 'residential_tenancy_application' && !isRetiredPublicSku(sku)
 );
 
 export function isResidentialLettingProductSku(
@@ -162,16 +163,4 @@ export function getResidentialLandingHref(product: ResidentialLettingProductSku)
 export const RESIDENTIAL_WIZARD_UPSELLS: Record<
   string,
   ResidentialLettingProductSku[]
-> = {
-  ast_standard: [
-    'guarantor_agreement',
-    'inventory_schedule_condition',
-    'rental_inspection_report',
-  ],
-  ast_premium: ['inventory_schedule_condition', 'rental_inspection_report'],
-  renewal_tenancy_agreement: ['lease_amendment'],
-  lease_amendment: ['renewal_tenancy_agreement'],
-  residential_sublet_agreement: ['flatmate_agreement'],
-  rent_arrears_letter: ['repayment_plan_agreement'],
-  repayment_plan_agreement: ['rent_arrears_letter'],
-};
+> = {};

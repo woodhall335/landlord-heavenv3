@@ -480,17 +480,17 @@ export default function HomeContent() {
                 </Link>
                 {" • "}
                 <Link
-                  href="/tools/free-section-8-notice-generator"
+                  href="/eviction-notice"
                   className="text-primary hover:underline font-medium"
                 >
-                  Generator
+                  Eviction Notice Pack
                 </Link>
                 {" • "}
                 <Link
-                  href="/tools/validators/section-8"
+                  href="/eviction-notice"
                   className="text-primary hover:underline font-medium"
                 >
-                  Checker
+                  Paid Notice Route
                 </Link>
               </p>
             </div>

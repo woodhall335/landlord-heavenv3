@@ -12,7 +12,12 @@
  */
 
 import { Metadata } from 'next';
+import { redirect } from 'next/navigation';
 import { SEO_PRICES, SEO_LANDING_ROUTES } from '@/lib/pricing/products';
+import {
+  getRetiredPublicSkuRedirectDestination,
+  isRetiredPublicSku,
+} from '@/lib/public-retirements';
 import WizardClientPage from './WizardClientPage';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 
@@ -170,7 +175,18 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
   };
 }
 
-export default function WizardPage() {
+export default async function WizardPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const params = await searchParams;
+  const product = typeof params.product === 'string' ? params.product : undefined;
+
+  if (product && isRetiredPublicSku(product)) {
+    redirect(getRetiredPublicSkuRedirectDestination(product) ?? '/tenancy-agreement');
+  }
+
   return (
     <>
       <HeaderConfig mode="autoOnScroll" />

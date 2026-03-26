@@ -656,10 +656,10 @@ export default function Page() {
                 Legacy notice route only
               </Link>
               <Link
-                href="/tools/validators/section-21"
+                href="/eviction-notice"
                 className="rounded-lg border border-[#E6DBFF] bg-white px-5 py-3 text-primary hover:bg-[#FCFAFF]"
               >
-                Use Section 21 Validity Checker
+                Start eviction notice pack
               </Link>
             </div>
           </div>

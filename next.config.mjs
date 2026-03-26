@@ -1,9 +1,17 @@
 /** @type {import('next').NextConfig} */
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import retiredPublicRoutes from './config/retired-public-routes.json' with { type: 'json' };
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const retiredPublicRedirects = Object.entries(retiredPublicRoutes.routeRedirects).map(
+  ([source, destination]) => ({
+    source,
+    destination,
+    permanent: true,
+  })
+);
 
 const nextConfig = {
   /* config options here */
@@ -29,6 +37,7 @@ const nextConfig = {
   },
   async redirects() {
     return [
+      ...retiredPublicRedirects,
       // Legacy/old URLs that were indexed by search engines
 
       // NOTE: /section-21-vs-section-8 is now an active SEO landing page route.
@@ -91,7 +100,7 @@ const nextConfig = {
       },
       {
         source: '/tools/section-21-validator',
-        destination: '/tools/validators/section-21',
+        destination: '/eviction-notice',
         permanent: true,
       },
       {

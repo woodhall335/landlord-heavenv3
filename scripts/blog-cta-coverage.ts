@@ -33,11 +33,8 @@ const EXISTING_ROUTES = new Set([
   '/products/complete-pack',
   '/products/money-claim',
   '/products/ast',
-  '/tools/validators/section-21',
-  '/tools/validators/section-8',
+  '/eviction-notice',
   '/tools/rent-arrears-calculator',
-  '/tools/free-section-21-notice-generator',
-  '/tools/free-section-8-notice-generator',
   '/tools/free-rent-demand-letter',
   '/tools/hmo-license-checker',
   '/section-21-notice-template',
@@ -134,7 +131,7 @@ function isMeaningfulCTA(href: string): boolean {
 }
 
 function hasMissingRoute(steps: StepLink[]): boolean {
-  return steps.some(s => MISSING_VALIDATORS.has(s.href));
+  return steps.some((step) => MISSING_VALIDATORS.has(step.href));
 }
 
 function escapeCSV(str: string): string {

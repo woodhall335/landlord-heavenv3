@@ -1216,9 +1216,9 @@ export default function Section8NoticeTemplatePage() {
                     Already have a Section 8 notice?
                   </p>
                   <p className="text-gray-600">
-                    Use our free{' '}
-                    <Link href="/tools/validators/section-8" className="text-primary font-medium hover:underline">
-                      Section 8 grounds checker
+                    Use our{' '}
+                    <Link href="/eviction-notice" className="text-primary font-medium hover:underline">
+                      eviction notice pack
                     </Link>{' '}
                     to review your ground selection and notice logic before service or court escalation.
                   </p>

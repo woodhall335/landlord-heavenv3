@@ -380,10 +380,10 @@ export function ValidatorPage({
             {/* Back to Hub */}
             <div className="mt-8 text-center">
               <Link
-                href="/tools/validators"
+                href="/tools"
                 className="text-sm text-gray-600 hover:text-primary-600 transition-colors"
               >
-                ← Back to all validators
+                ← Back to tools
               </Link>
             </div>
           </div>

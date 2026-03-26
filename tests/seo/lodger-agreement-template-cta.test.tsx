@@ -60,23 +60,23 @@ vi.mock('@/components/seo/FAQSection', () => ({
 }));
 
 describe('LodgerAgreementPage CTAs', () => {
-  it('routes page CTAs to the flatmate agreement landing page', () => {
+  it('routes page CTAs to the surviving tenancy agreement landing page', () => {
     render(<LodgerAgreementPage />);
 
     expect(
       screen.getByRole('link', { name: 'Create Lodger Agreement' })
-    ).toHaveAttribute('href', '/flatmate-agreement-england');
+    ).toHaveAttribute('href', '/tenancy-agreement');
 
     expect(
-      screen.getByRole('link', { name: 'flatmate agreement builder' })
-    ).toHaveAttribute('href', '/flatmate-agreement-england');
+      screen.getByRole('link', { name: 'tenancy agreement route' })
+    ).toHaveAttribute('href', '/tenancy-agreement');
 
     expect(
-      screen.getByRole('link', { name: 'recommended flatmate agreement pathway' })
-    ).toHaveAttribute('href', '/flatmate-agreement-england');
+      screen.getByRole('link', { name: 'recommended tenancy agreement pathway' })
+    ).toHaveAttribute('href', '/tenancy-agreement');
 
     expect(
       screen.getByRole('link', { name: 'Get Lodger Agreement' })
-    ).toHaveAttribute('href', '/flatmate-agreement-england');
+    ).toHaveAttribute('href', '/tenancy-agreement');
   });
 });

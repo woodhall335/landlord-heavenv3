@@ -492,19 +492,11 @@ export function NextBestActionCard({
             {jurisdiction === 'england' && (
               <>
                 <Link
-                  href="/tools/validators/section-21"
+                  href="/eviction-notice"
                   className="text-xs text-primary hover:underline"
-                  onClick={() => onCtaClick?.('validator', '/tools/validators/section-21', 'Section 21 Validator')}
+                  onClick={() => onCtaClick?.('product', '/eviction-notice', 'Eviction Notice Pack')}
                 >
-                  Section 21 Checker
-                </Link>
-                <span className="text-gray-300">|</span>
-                <Link
-                  href="/tools/validators/section-8"
-                  className="text-xs text-primary hover:underline"
-                  onClick={() => onCtaClick?.('validator', '/tools/validators/section-8', 'Section 8 Validator')}
-                >
-                  Section 8 Checker
+                  Eviction Notice Pack
                 </Link>
               </>
             )}

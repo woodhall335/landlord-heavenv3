@@ -30,6 +30,10 @@ import {
   isResidentialLettingProductSku,
   type ResidentialLettingProductSku,
 } from '@/lib/residential-letting/products';
+import {
+  getRetiredPublicSkuRedirectDestination,
+  isRetiredPublicSku,
+} from '@/lib/public-retirements';
 
 // Feature flags: Use new section-based flows
 // Set to true to enable the redesigned wizards, false to use legacy StructuredWizard
@@ -118,10 +122,15 @@ function WizardFlowContent() {
   const hasRequiredParams = Boolean(type && jurisdiction);
 
   useEffect(() => {
+    if (!editCaseId && product && isRetiredPublicSku(product)) {
+      router.replace(getRetiredPublicSkuRedirectDestination(product) ?? '/tenancy-agreement');
+      return;
+    }
+
     if (!hasRequiredParams) {
       router.push('/wizard');
     }
-  }, [hasRequiredParams, router]);
+  }, [editCaseId, hasRequiredParams, product, router]);
 
   // Normalize product for Ask Heaven / wizard - use effectiveProduct (order-aware)
   const normalizedProduct = effectiveProduct;
@@ -203,6 +212,11 @@ function WizardFlowContent() {
     setStartError(null);
 
     try {
+      if (!editCaseId && product && isRetiredPublicSku(product)) {
+        router.replace(getRetiredPublicSkuRedirectDestination(product) ?? '/tenancy-agreement');
+        return;
+      }
+
       // Resume existing case if editing
       if (editCaseId) {
         setCaseId(editCaseId);
@@ -256,6 +270,10 @@ function WizardFlowContent() {
       const data = await response.json();
 
       if (!response.ok) {
+        if (data?.redirect_to) {
+          router.replace(data.redirect_to);
+          return;
+        }
         const message = data?.error || `Failed to start wizard: ${response.status}`;
         setStartError(message);
         throw new Error(message);

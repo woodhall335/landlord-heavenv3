@@ -46,11 +46,11 @@ const COURT_PROCESS = [
 ];
 
 const TOOLS = [
-  { href: '/tools/free-section-21-notice-generator', label: 'Free Section 21 Notice Generator' },
-  { href: '/tools/free-section-8-notice-generator', label: 'Free Section 8 Notice Generator' },
+  { href: '/eviction-notice', label: 'Eviction Notice Pack' },
+  { href: '/eviction-notice-template', label: 'Eviction Notice Template' },
   { href: '/tools/rent-arrears-calculator', label: 'Rent Arrears Calculator' },
   { href: '/tools/free-rent-demand-letter', label: 'Free Rent Demand Letter Tool' },
-  { href: '/tools/validators/section-21', label: 'Section 21 Validity Checker' },
+  { href: '/ask-heaven', label: 'Ask Heaven' },
 ];
 
 export const metadata: Metadata = {
@@ -171,7 +171,7 @@ export default function EvictionGuidesPage() {
 
             <article className="rounded-2xl border border-[#CAB6FF] bg-[#F8F4FF] p-6 md:p-8">
               <h2 className="text-2xl font-semibold text-charcoal">Tools</h2>
-              <p className="mt-2 text-gray-700">Use free landlord tools to reduce drafting errors and improve notice-to-court continuity.</p>
+              <p className="mt-2 text-gray-700">Use landlord tools and live commercial routes to move from research into action without dead-end validators or free-generator pages.</p>
               <div className="mt-4 grid gap-3 md:grid-cols-2 lg:grid-cols-3">
                 {TOOLS.map((guide) => (
                   <Link key={guide.href} href={guide.href} className="rounded-xl border border-[#CDBBFF] bg-white p-4 text-primary font-medium hover:underline">

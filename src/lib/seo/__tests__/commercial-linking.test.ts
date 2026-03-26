@@ -113,7 +113,7 @@ describe('Commercial Linking - Intent Detection', () => {
     });
 
     it('should detect Section 21 intent from path', () => {
-      const intents = detectIntent('', '/tools/section-21-validator');
+      const intents = detectIntent('', '/eviction-notice');
       expect(intents.some((i) => i.intent === 'eviction_notice')).toBe(true);
     });
   });

@@ -181,8 +181,8 @@ export default function HowToRentGuidePage() {
                   <li>Provide a valid Energy Performance Certificate (EPC)</li>
                 </ul>
                 <p>
-                  <Link href="/tools/validators/section-21">
-                    Check your Section 21 compliance with our validator
+                  <Link href="/eviction-notice">
+                    Start the eviction notice pack once your Section 21 compliance file is ready
                   </Link>
                 </p>
               </div>
@@ -208,11 +208,11 @@ export default function HowToRentGuidePage() {
                 Make sure you&apos;ve provided the How to Rent guide, then generate your notice.
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Link href="/tools/free-section-21-notice-generator" className="hero-btn-primary">
+                <Link href="/eviction-notice" className="hero-btn-primary">
                   Generate Section 21 Notice
                 </Link>
-                <Link href="/tools/validators/section-21" className="hero-btn-secondary">
-                  Check Compliance
+                <Link href="/eviction-notice" className="hero-btn-secondary">
+                  Start Notice Pack
                 </Link>
               </div>
             </div>

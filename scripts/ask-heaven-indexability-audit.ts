@@ -220,14 +220,14 @@ function buildAnswerTemplates(sql: string) {
   return {
     england_eviction: (question: string, slug: string) => {
       const s21Url = addUtm(
-        'https://landlordheaven.co.uk/tools/free-section-21-notice-generator',
+        'https://landlordheaven.co.uk/eviction-notice',
         slug
       );
       const s8Url = addUtm(
-        'https://landlordheaven.co.uk/tools/free-section-8-notice-generator',
+        'https://landlordheaven.co.uk/eviction-notice',
         slug
       );
-      const validatorUrl = addUtm('https://landlordheaven.co.uk/tools/validators', slug);
+      const validatorUrl = addUtm('https://landlordheaven.co.uk/eviction-notice', slug);
       const packUrl = addUtm('https://landlordheaven.co.uk/products/complete-pack', slug);
       const wizardUrl = addUtm(
         'https://landlordheaven.co.uk/wizard?product=notice_only&src=product_page&topic=eviction',
@@ -265,7 +265,7 @@ function buildAnswerTemplates(sql: string) {
       );
       const moneyClaimUrl = addUtm('https://landlordheaven.co.uk/products/money-claim', slug);
       const s8Url = addUtm(
-        'https://landlordheaven.co.uk/tools/free-section-8-notice-generator',
+        'https://landlordheaven.co.uk/eviction-notice',
         slug
       );
       const wizardUrl = addUtm(
@@ -295,7 +295,7 @@ function buildAnswerTemplates(sql: string) {
     },
     tenancy: (question: string, slug: string) => {
       const tenancyUrl = addUtm('https://landlordheaven.co.uk/products/ast', slug);
-      const validatorUrl = addUtm('https://landlordheaven.co.uk/tools/validators', slug);
+      const validatorUrl = addUtm('https://landlordheaven.co.uk/eviction-notice', slug);
 
       const args = [question, tenancyUrl, validatorUrl, tenancyUrl, validatorUrl];
       return formatTemplate(templateTenancy, args);

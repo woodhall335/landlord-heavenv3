@@ -1,0 +1,43 @@
+{
+  "routeRedirects": {
+    "/guarantor-agreement-england": "/tenancy-agreement",
+    "/residential-sublet-agreement-england": "/tenancy-agreement",
+    "/lease-amendment-england": "/tenancy-agreement",
+    "/lease-assignment-agreement-england": "/tenancy-agreement",
+    "/rent-arrears-letter-england": "/money-claim",
+    "/repayment-plan-agreement-england": "/money-claim",
+    "/rental-inspection-report-england": "/tenancy-agreement",
+    "/inventory-schedule-of-condition-england": "/tenancy-agreement",
+    "/flatmate-agreement-england": "/tenancy-agreement",
+    "/renewal-tenancy-agreement-england": "/tenancy-agreement",
+    "/tools/validators": "/eviction-notice",
+    "/tools/validators/section-21": "/eviction-notice",
+    "/tools/validators/section-8": "/eviction-notice",
+    "/tools/free-section-21-notice-generator": "/eviction-notice",
+    "/tools/free-section-8-notice-generator": "/eviction-notice"
+  },
+  "retiredEnglandDocumentSkus": [
+    "guarantor_agreement",
+    "residential_sublet_agreement",
+    "lease_amendment",
+    "lease_assignment_agreement",
+    "rent_arrears_letter",
+    "repayment_plan_agreement",
+    "rental_inspection_report",
+    "inventory_schedule_condition",
+    "flatmate_agreement",
+    "renewal_tenancy_agreement"
+  ],
+  "retiredEnglandDocumentSkuRedirects": {
+    "guarantor_agreement": "/tenancy-agreement",
+    "residential_sublet_agreement": "/tenancy-agreement",
+    "lease_amendment": "/tenancy-agreement",
+    "lease_assignment_agreement": "/tenancy-agreement",
+    "rent_arrears_letter": "/money-claim",
+    "repayment_plan_agreement": "/money-claim",
+    "rental_inspection_report": "/tenancy-agreement",
+    "inventory_schedule_condition": "/tenancy-agreement",
+    "flatmate_agreement": "/tenancy-agreement",
+    "renewal_tenancy_agreement": "/tenancy-agreement"
+  }
+}

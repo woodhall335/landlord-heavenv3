@@ -683,10 +683,10 @@ export const UploadField: React.FC<UploadFieldProps> = ({
                 {validationSummary.blockers?.some(b => b.code === 'S21-WRONG-DOC-TYPE') ? (
                   <>
                     <a
-                      href={`/tools/validators/section-8${caseId ? `?caseId=${caseId}` : ''}`}
+                      href="/eviction-notice"
                       className="rounded bg-purple-600 px-3 py-2 text-xs font-medium text-white hover:bg-purple-700"
                     >
-                      Switch to Section 8 Validator
+                      Start eviction notice pack
                     </a>
                     <button
                       type="button"
@@ -702,10 +702,10 @@ export const UploadField: React.FC<UploadFieldProps> = ({
                 ) : (
                   <>
                     <a
-                      href={`/tools/validators/section-21${caseId ? `?caseId=${caseId}` : ''}`}
+                      href="/eviction-notice"
                       className="rounded bg-purple-600 px-3 py-2 text-xs font-medium text-white hover:bg-purple-700"
                     >
-                      Switch to Section 21 Validator
+                      Start eviction notice pack
                     </a>
                     <button
                       type="button"
@@ -860,8 +860,8 @@ export const UploadField: React.FC<UploadFieldProps> = ({
                   const derivedValidatorKey =
                     validationSummary.validator_key ?? questionId.replace('validator_', '');
                   const generatorLinks: Record<string, string> = {
-                    section_21: '/tools/free-section-21-notice-generator',
-                    section_8: '/tools/free-section-8-notice-generator',
+                    section_21: '/eviction-notice',
+                    section_8: '/eviction-notice',
                   };
                   const generatorLink = generatorLinks[derivedValidatorKey];
                   const ctas = getWizardCta({
@@ -896,7 +896,7 @@ export const UploadField: React.FC<UploadFieldProps> = ({
                           href={generatorLink}
                           className="rounded border border-purple-200 bg-white px-3 py-2 text-xs font-medium text-purple-700"
                         >
-                          Try free generator
+                          Start paid notice route
                         </a>
                       )}
                     </div>

@@ -128,6 +128,27 @@ describe('POST /api/wizard/start anonymous resume', () => {
     expect(response.status).toBe(404);
   });
 
+  it('returns redirect metadata when a retired public sku is requested', async () => {
+    const request = new Request('http://localhost/api/wizard/start', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        'x-session-token': 'good-token',
+      },
+      body: JSON.stringify({
+        product: 'guarantor_agreement',
+        jurisdiction: 'england',
+      }),
+    });
+
+    const response = await POST(request);
+    const body = await response.json();
+
+    expect(response.status).toBe(409);
+    expect(body.reason).toBe('retired_public_product');
+    expect(body.redirect_to).toBe('/tenancy-agreement');
+  });
+
   it('returns 200 with correct token', async () => {
     const request = new Request('http://localhost/api/wizard/start', {
       method: 'POST',

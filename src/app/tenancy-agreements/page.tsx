@@ -7,7 +7,6 @@ import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { Container } from '@/components/ui/Container';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
-import { residentialDocumentLinks } from '@/lib/seo/internal-links';
 
 const canonicalUrl = getCanonicalUrl('/tenancy-agreements');
 const productHref = '/products/ast';
@@ -119,17 +118,17 @@ export default function TenancyAgreementsHubPage() {
             <section className="rounded-2xl border border-gray-200 bg-white p-6">
               <h2 className="mb-3 text-xl font-bold text-gray-900">Other England landlord documents</h2>
               <div className="grid gap-3 text-sm sm:grid-cols-2">
-                <Link href={residentialDocumentLinks.documentsHub.href} className="rounded-lg border border-gray-200 bg-gray-50 p-3 transition-colors hover:border-primary">
-                  Browse the England landlord documents hub
+                <Link href="/landlord-documents-england" className="rounded-lg border border-gray-200 bg-gray-50 p-3 transition-colors hover:border-primary">
+                  Browse the streamlined England documents bridge
                 </Link>
-                <Link href={residentialDocumentLinks.leaseAmendment.href} className="rounded-lg border border-gray-200 bg-gray-50 p-3 transition-colors hover:border-primary">
-                  Amend selected tenancy clauses
+                <Link href="/tenancy-agreement" className="rounded-lg border border-gray-200 bg-gray-50 p-3 transition-colors hover:border-primary">
+                  Start the standard England tenancy agreement
                 </Link>
-                <Link href={residentialDocumentLinks.guarantorAgreement.href} className="rounded-lg border border-gray-200 bg-gray-50 p-3 transition-colors hover:border-primary">
-                  Add a separate guarantor agreement
+                <Link href="/premium-tenancy-agreement" className="rounded-lg border border-gray-200 bg-gray-50 p-3 transition-colors hover:border-primary">
+                  Use the premium route for more complex tenancies
                 </Link>
-                <Link href={residentialDocumentLinks.inventoryScheduleCondition.href} className="rounded-lg border border-gray-200 bg-gray-50 p-3 transition-colors hover:border-primary">
-                  Create an inventory or schedule of condition
+                <Link href="/money-claim" className="rounded-lg border border-gray-200 bg-gray-50 p-3 transition-colors hover:border-primary">
+                  Move arrears-focused matters into the money-claim route
                 </Link>
               </div>
             </section>

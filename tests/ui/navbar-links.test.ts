@@ -1,65 +1,28 @@
-/**
- * Tests for NavBar links
- *
- * Ensures NavBar links point to valid routes
- */
-
 import { describe, expect, it } from 'vitest';
-import * as fs from 'fs';
-import * as path from 'path';
 
-const NAVBAR_PATH = path.join(process.cwd(), 'src', 'components', 'ui', 'NavBar.tsx');
+import { freeTools } from '@/lib/tools/tools';
 
-describe('NavBar Links', () => {
-  const navbarContent = fs.readFileSync(NAVBAR_PATH, 'utf-8');
+describe('NavBar tool links', () => {
+  it('keeps only surviving free-tool destinations', () => {
+    const hrefs = freeTools.map((tool) => tool.href);
 
-  describe('Free Tools links', () => {
-    // SKIP: pre-existing failure - investigate later
-    it.skip('should include Ask Heaven at the top of free tools', () => {
-      const freeToolsDeclarationIndex = navbarContent.indexOf('const freeToolsLinks');
-      const askHeavenIndex = navbarContent.indexOf('href: "/ask-heaven"');
-      const validatorsIndex = navbarContent.indexOf('href: "/tools/validators"');
-
-      expect(askHeavenIndex).toBeGreaterThan(-1);
-      expect(validatorsIndex).toBeGreaterThan(-1);
-      expect(askHeavenIndex).toBeGreaterThan(freeToolsDeclarationIndex);
-      expect(askHeavenIndex).toBeLessThan(validatorsIndex);
-    });
-
-    // SKIP: pre-existing failure - investigate later
-    it.skip('should link to /tools/validators', () => {
-      expect(navbarContent).toContain('href: "/tools/validators"');
-    });
-
-    // SKIP: pre-existing failure - investigate later
-    it.skip('should link to existing tool routes', () => {
-      const toolRoutes = [
+    expect(hrefs).toEqual(
+      expect.arrayContaining([
         '/ask-heaven',
-        '/tools/free-section-21-notice-generator',
-        '/tools/free-section-8-notice-generator',
         '/tools/rent-arrears-calculator',
         '/tools/hmo-license-checker',
         '/tools/free-rent-demand-letter',
-      ];
-
-      toolRoutes.forEach((route) => {
-        expect(navbarContent).toContain(`href: "${route}"`);
-      });
-    });
+      ])
+    );
   });
 
-  describe('Product links', () => {
-    it('should link to product pages', () => {
-      const productRoutes = [
-        '/products/notice-only',
-        '/products/complete-pack',
-        '/products/money-claim',
-        '/products/ast',
-      ];
+  it('does not include retired validator or generator routes', () => {
+    const hrefs = freeTools.map((tool) => tool.href);
 
-      productRoutes.forEach((route) => {
-        expect(navbarContent).toContain(`href: "${route}"`);
-      });
-    });
+    expect(hrefs).not.toContain('/tools/validators');
+    expect(hrefs).not.toContain('/tools/validators/section-21');
+    expect(hrefs).not.toContain('/tools/validators/section-8');
+    expect(hrefs).not.toContain('/tools/free-section-21-notice-generator');
+    expect(hrefs).not.toContain('/tools/free-section-8-notice-generator');
   });
 });

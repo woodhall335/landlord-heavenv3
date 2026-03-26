@@ -205,7 +205,7 @@ const FAQ_DUPLICATE_AFFECTED_ROUTES = [
   '/tools/rent-arrears-calculator',
   '/rent-arrears-letter-template',
   '/how-long-does-eviction-take',
-  '/tools/validators/section-21',
+  '/section-21-notice',
 ] as const;
 const FAQ_PUBLIC_ROUTE_PREFIX_EXCLUSIONS = ['/api', '/auth', '/checkout', '/dashboard', '/success', '/wizard'];
 const APP_SOURCE_ROOT = path.join(process.cwd(), 'src', 'app');

@@ -33,6 +33,10 @@ import {
 } from '@/lib/residential-letting/products';
 import { PRODUCTS } from '@/lib/pricing/products';
 import {
+  getRetiredPublicSkuRedirectDestination,
+  isRetiredPublicSku,
+} from '@/lib/public-retirements';
+import {
   ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL,
   ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL,
 } from '@/lib/tenancy/england-agreement-constants';
@@ -62,7 +66,7 @@ const startWizardSchema = z.object({
   ]),
   jurisdiction: z.enum(['england', 'wales', 'scotland', 'northern-ireland']),
   case_id: z.string().uuid().optional(),
-  // Used by standalone validators (e.g., /tools/validators/section-21) to set the notice route
+  // Used by standalone validators (e.g., /eviction-notice) to set the notice route
   // so runLegalValidator knows which validator to apply
   validator_key: z.string().optional(),
   // Additional metadata from validator pages
@@ -188,6 +192,18 @@ export async function POST(request: Request) {
 
     const { product, jurisdiction, case_id, validator_key, product_variant } =
       validationResult.data;
+
+    if (!case_id && isRetiredPublicSku(product)) {
+      const redirectTo = getRetiredPublicSkuRedirectDestination(product) ?? '/tenancy-agreement';
+      return NextResponse.json(
+        {
+          error: 'This product has been retired from the public site.',
+          reason: 'retired_public_product',
+          redirect_to: redirectTo,
+        },
+        { status: 409 }
+      );
+    }
 
     const resolvedCaseType = productToCaseType(product as StartProduct);
     const normalizedProduct = normalizeProduct(product as StartProduct);

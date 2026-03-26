@@ -43,15 +43,15 @@ LANGUAGE plpgsql
 AS $$
 DECLARE
   wizard_url text := ask_heaven_add_utm('https://landlordheaven.co.uk/wizard?product=notice_only&src=product_page&topic=eviction', slug);
-  s21_url text := ask_heaven_add_utm('https://landlordheaven.co.uk/tools/free-section-21-notice-generator', slug);
-  s8_url text := ask_heaven_add_utm('https://landlordheaven.co.uk/tools/free-section-8-notice-generator', slug);
-  validator_url text := ask_heaven_add_utm('https://landlordheaven.co.uk/tools/validators', slug);
+  s21_url text := ask_heaven_add_utm('https://landlordheaven.co.uk/eviction-notice', slug);
+  s8_url text := ask_heaven_add_utm('https://landlordheaven.co.uk/eviction-notice', slug);
+  validator_url text := ask_heaven_add_utm('https://landlordheaven.co.uk/eviction-notice', slug);
   pack_url text := ask_heaven_add_utm('https://landlordheaven.co.uk/products/complete-pack', slug);
   tenancy_url text := ask_heaven_add_utm('https://landlordheaven.co.uk/products/ast', slug);
 BEGIN
   RETURN format($template$
 ## TL;DR
-You asked: "%s". In England, possession usually starts with the right notice and clean compliance records. If you have a straightforward no‑fault route, a Section 21 notice (Form 6A) can be right, but only if the tenancy is an AST and you have complied with deposit protection, prescribed information, EPC, gas safety, and How to Rent requirements. If the tenant has breached the tenancy (rent arrears or other grounds), a Section 8 notice (Form 3) may be the correct route. Use the free tools to sense‑check before you serve anything: [Free Section 21 generator](%s), [Free Section 8 generator](%s), and the [Free eviction notice checker](%s). When you need a full court bundle for England, the [Complete eviction pack](%s) keeps everything consistent. If you want a guided flow, start with the [notice‑only wizard](%s). You can always [Ask a follow‑up in Ask Heaven](/ask-heaven).
+You asked: "%s". In England, possession usually starts with the right notice and clean compliance records. If you have a straightforward no‑fault route, a Section 21 notice (Form 6A) can be right, but only if the tenancy is an AST and you have complied with deposit protection, prescribed information, EPC, gas safety, and How to Rent requirements. If the tenant has breached the tenancy (rent arrears or other grounds), a Section 8 notice (Form 3) may be the correct route. Use the free tools to sense‑check before you serve anything: [Section 21 notice pack](%s), [Section 8 notice pack](%s), and the [eviction notice route](%s). When you need a full court bundle for England, the [Complete eviction pack](%s) keeps everything consistent. If you want a guided flow, start with the [notice‑only wizard](%s). You can always [Ask a follow‑up in Ask Heaven](/ask-heaven).
 
 ## What the law generally says
 Possession in England is a legal process. You cannot change locks, remove belongings, or pressure a tenant to leave without a court order. Notices must be valid and served correctly, and the court will dismiss or delay cases when compliance is missing or the notice period is wrong. A Section 21 claim is usually “accelerated” (N5B) if it is genuinely no‑fault and no rent arrears are claimed in the same action. A Section 8 claim is “standard” possession and requires you to prove the ground(s). Both routes require documentary evidence such as the tenancy agreement, deposit compliance certificate, prescribed information, gas safety records, and EPCs. Always keep a clear paper trail. For practical comparisons, see [Section 21 validity checklist (Form 6A)](/ask-heaven/section-21-validity-checklist-form-6a) and [Section 8 Ground 8 mandatory arrears](/ask-heaven/section-8-ground-8-mandatory-arrears).
@@ -80,12 +80,12 @@ England uses assured shorthold tenancy (AST) terminology. Section 21 is served o
 - Ignoring the possibility of a tenant defense or a disrepair counterclaim.
 
 ## What happens if you get it wrong
-Invalid notices waste time and money, and the court may dismiss your claim. You might have to re‑serve a notice and wait out a new notice period. A poor paper trail can also create risks if the tenant raises issues such as disrepair, deposit non‑compliance, or retaliatory eviction. In some cases, failing to follow the correct legal steps could expose you to claims of unlawful eviction or harassment. That is why it is worth sense‑checking the notice with the [Free eviction notice checker](%s) before you serve.
+Invalid notices waste time and money, and the court may dismiss your claim. You might have to re‑serve a notice and wait out a new notice period. A poor paper trail can also create risks if the tenant raises issues such as disrepair, deposit non‑compliance, or retaliatory eviction. In some cases, failing to follow the correct legal steps could expose you to claims of unlawful eviction or harassment. That is why it is worth sense‑checking the notice with the [eviction notice route](%s) before you serve.
 
 ## Next steps + tools/templates
 - Start with the guided [notice‑only wizard](%s) if you want the flow to ask you the right questions.
-- Draft the correct notice: [Free Section 21 generator](%s) or [Free Section 8 generator](%s).
-- Validate your draft notice with the [Free eviction notice checker](%s).
+- Draft the correct notice: [Section 21 notice pack](%s) or [Section 8 notice pack](%s).
+- Validate your draft notice with the [eviction notice route](%s).
 - If your case is England and you want a full bundle, the [Complete eviction pack](%s) includes court forms and checklists.
 - Keep your tenancy paperwork tight with a compliant [tenancy agreement](%s).
 - For related guidance, see [Section 21 validity checklist](/ask-heaven/section-21-validity-checklist-form-6a), [Section 8 notice periods](/ask-heaven/section-8-notice-periods-england-2025), and [accelerated possession costs](/ask-heaven/accelerated-possession-costs-fees).
@@ -116,12 +116,12 @@ DECLARE
   arrears_calc_url text := ask_heaven_add_utm('https://landlordheaven.co.uk/tools/rent-arrears-calculator', slug);
   demand_letter_url text := ask_heaven_add_utm('https://landlordheaven.co.uk/tools/free-rent-demand-letter', slug);
   money_claim_url text := ask_heaven_add_utm('https://landlordheaven.co.uk/products/money-claim', slug);
-  s8_url text := ask_heaven_add_utm('https://landlordheaven.co.uk/tools/free-section-8-notice-generator', slug);
+  s8_url text := ask_heaven_add_utm('https://landlordheaven.co.uk/eviction-notice', slug);
   wizard_url text := ask_heaven_add_utm('https://landlordheaven.co.uk/wizard?product=notice_only&src=product_page&topic=eviction', slug);
 BEGIN
   RETURN format($template$
 ## TL;DR
-You asked: "%s". For England rent arrears, start with clear numbers, then decide whether you need a repayment plan, a Section 8 notice, or a money claim. Use the [rent arrears calculator](%s) to build a precise schedule and send a [free rent demand letter](%s) to document the arrears. If the arrears meet Ground 8, a Section 8 notice (Form 3) can be appropriate; you can draft it with the [Free Section 8 generator](%s). If you need the court to order payment, the [Money claim product](%s) helps with MCOL‑ready documents. You can also start with the [notice‑only wizard](%s) to choose the right route. Ask follow‑ups in [Ask Heaven](/ask-heaven).
+You asked: "%s". For England rent arrears, start with clear numbers, then decide whether you need a repayment plan, a Section 8 notice, or a money claim. Use the [rent arrears calculator](%s) to build a precise schedule and send a [free rent demand letter](%s) to document the arrears. If the arrears meet Ground 8, a Section 8 notice (Form 3) can be appropriate; you can draft it with the [Section 8 notice pack](%s). If you need the court to order payment, the [Money claim product](%s) helps with MCOL‑ready documents. You can also start with the [notice‑only wizard](%s) to choose the right route. Ask follow‑ups in [Ask Heaven](/ask-heaven).
 
 ## What the law generally says
 Arrears recovery is a mix of good documentation and the correct legal route. In England, rent arrears often link to Section 8 grounds (Ground 8 mandatory, Grounds 10 and 11 discretionary). If you are pursuing possession and arrears at the same time, you need evidence of the arrears at the notice date and at the hearing. If you are seeking money only, Money Claim Online (MCOL) is a standard route for many landlords. Courts will expect a clear rent schedule, tenancy agreement, and records of attempts to resolve the arrears. For a parallel possession route, see [Section 8 Ground 8 mandatory arrears](/ask-heaven/section-8-ground-8-mandatory-arrears).
@@ -133,7 +133,7 @@ England uses Form 3 for Section 8 notices and Form 6A for Section 21. For arrear
 1. Calculate the arrears precisely with the [rent arrears calculator](%s).
 2. Send a written demand and keep proof of delivery (email plus letter is common). Use the [free rent demand letter](%s).
 3. Decide whether you need a repayment plan or a notice. If you want possession, check whether Ground 8 applies.
-4. Draft the notice correctly if you need possession: [Free Section 8 generator](%s).
+4. Draft the notice correctly if you need possession: [Section 8 notice pack](%s).
 5. Serve the notice using the service clause in the tenancy.
 6. Prepare evidence: tenancy agreement, rent schedule, bank statements, and any communications.
 7. If you are seeking payment only, prepare for MCOL or a court claim using the [Money claim product](%s).
@@ -153,7 +153,7 @@ Errors in arrears calculations or notice periods can lead to adjournments or dis
 ## Next steps + tools/templates
 - [Rent arrears calculator](%s) for accurate numbers.
 - [Free rent demand letter](%s) to document the arrears.
-- [Free Section 8 generator](%s) if you need a notice.
+- [Section 8 notice pack](%s) if you need a notice.
 - [Money claim product](%s) for MCOL‑ready documents (England only).
 - Review related guidance: [MCOL process for rent arrears](/ask-heaven/mcol-process-for-rent-arrears-england), [small claims evidence checklist](/ask-heaven/small-claims-for-rent-arrears-evidence), [rent arrears and Section 8 grounds](/ask-heaven/rent-arrears-and-section-8-grounds).
 - Ask follow‑ups in [Ask Heaven](/ask-heaven).
@@ -199,11 +199,11 @@ LANGUAGE plpgsql
 AS $$
 DECLARE
   tenancy_url text := ask_heaven_add_utm('https://landlordheaven.co.uk/products/ast', slug);
-  validator_url text := ask_heaven_add_utm('https://landlordheaven.co.uk/tools/validators', slug);
+  validator_url text := ask_heaven_add_utm('https://landlordheaven.co.uk/eviction-notice', slug);
 BEGIN
   RETURN format($template$
 ## TL;DR
-You asked: "%s". Tenancy paperwork is the foundation for every later step, including arrears recovery and notice service. In the UK, the right document depends on jurisdiction: ASTs in England, occupation contracts in Wales, and Private Residential Tenancy (PRT) agreements in Scotland. Start with a compliant template and keep written records of any variations. For a ready‑made document, use the [tenancy agreement product](%s). If you later need to serve notice, you can sense‑check with the [Free eviction notice checker](%s). Ask follow‑ups in [Ask Heaven](/ask-heaven).
+You asked: "%s". Tenancy paperwork is the foundation for every later step, including arrears recovery and notice service. In the UK, the right document depends on jurisdiction: ASTs in England, occupation contracts in Wales, and Private Residential Tenancy (PRT) agreements in Scotland. Start with a compliant template and keep written records of any variations. For a ready‑made document, use the [tenancy agreement product](%s). If you later need to serve notice, you can sense‑check with the [eviction notice route](%s). Ask follow‑ups in [Ask Heaven](/ask-heaven).
 
 ## What the law generally says
 A tenancy agreement should set out the parties, rent, term, notice provisions, and repair responsibilities. Many landlord obligations (such as safety certificates or deposit protection rules) sit outside the contract but are closely linked to whether you can use certain notice routes later. The agreement also governs how you serve notices and what evidence you will need in court. Keeping a clean, current agreement helps avoid disputes.
@@ -235,7 +235,7 @@ A weak or incorrect agreement can make enforcement slower and risk disputes. In 
 
 ## Next steps + tools/templates
 - Build a compliant contract with the [tenancy agreement product](%s).
-- For notice validation later, use the [Free eviction notice checker](%s).
+- For notice drafting later, use the [eviction notice route](%s).
 - Related reading: [AST vs periodic tenancy](/ask-heaven/ast-vs-periodic-tenancy-england), [Wales occupation contract overview](/ask-heaven/wales-occupation-contract-vs-tenancy), and [Scotland PRT overview](/ask-heaven/scotland-prt-vs-short-assured).
 - Ask follow‑ups in [Ask Heaven](/ask-heaven).
 

@@ -136,11 +136,6 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/tools/validators" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
-                  Document Validators
-                </Link>
-              </li>
-              <li>
                 <Link href="/section-21-notice-template" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
                   Section 21 Template
                 </Link>

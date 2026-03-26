@@ -20,7 +20,6 @@ import MoneyClaimOnlineMcolPage from '@/app/money-claim-online-mcol/page';
 import MoneyClaimUnpaidRentPage from '@/app/money-claim-unpaid-rent/page';
 import BlogSlugPage from '@/app/(marketing)/blog/[slug]/page';
 import RentArrearsCalculatorPage from '@/app/tools/rent-arrears-calculator/page';
-import Section21NoticeGeneratorPage from '@/app/tools/free-section-21-notice-generator/page';
 import AskHeavenPage from '@/app/ask-heaven/page';
 import { blogPosts } from '@/lib/blog/posts';
 
@@ -150,7 +149,6 @@ describe('critical routes render exactly one h1', () => {
       () => BlogSlugPage({ params: Promise.resolve({ slug: blogPosts[0].slug }) }),
     ],
     ['/tools/rent-arrears-calculator', () => <RentArrearsCalculatorPage />],
-    ['/tools/free-section-21-notice-generator', () => <Section21NoticeGeneratorPage />],
     ['/ask-heaven', () => AskHeavenPage({ searchParams: Promise.resolve({}) })],
   ])('renders a single h1 for %s', async (_route, renderer) => {
     const { container } = await renderPage(renderer);

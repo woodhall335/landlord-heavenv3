@@ -174,10 +174,6 @@ export const ENGLAND_ONLY_URLS = [
   SEO_PILLAR_ROUTES.section8Notice,
   '/section-21-notice-template',
   '/section-8-notice-template',
-  '/tools/validators/section-21',
-  '/tools/validators/section-8',
-  '/tools/free-section-21-notice-generator',
-  '/tools/free-section-8-notice-generator',
 ];
 
 // Map compliance topics to Ask Heaven topics and prompts

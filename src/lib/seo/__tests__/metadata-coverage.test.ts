@@ -246,9 +246,9 @@ describe('generateMetadataForPageType', () => {
 
   it('should use tool keywords for tool pages', () => {
     const metadata = generateMetadataForPageType({
-      title: 'Free Section 21 Generator',
-      description: 'Generate a Section 21 notice for free',
-      path: '/tools/free-section-21-notice-generator',
+      title: 'Eviction Notice Pack',
+      description: 'Start the paid eviction notice route for landlords',
+      path: '/eviction-notice',
       pageType: 'tool',
     });
 
@@ -367,7 +367,7 @@ describe('Keyword constants', () => {
 describe('Representative page metadata', () => {
   const representativePages = [
     { path: '/products/notice-only', title: 'Notice Only Pack', type: 'product' as const },
-    { path: '/tools/free-section-21-notice-generator', title: 'Section 21 Generator', type: 'tool' as const },
+    { path: '/eviction-notice', title: 'Eviction Notice Pack', type: 'tool' as const },
     { path: '/blog/what-is-section-21-notice', title: 'What is Section 21', type: 'blog' as const },
     { path: '/how-to-evict-tenant', title: 'How to Evict Tenant', type: 'seo_landing' as const },
   ];

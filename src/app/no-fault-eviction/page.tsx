@@ -189,11 +189,11 @@ export default function NoFaultEvictionPage() {
                 Ready to Start Your No-Fault Eviction?
               </h2>
               <p className="text-gray-600 mb-6">
-                Generate a valid Section 21 notice in minutes with our free tool.
+                Start the paid eviction notice route in minutes with the current England workflow.
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Link href="/tools/free-section-21-notice-generator" className="hero-btn-primary">
-                  Free Section 21 Generator
+                <Link href="/eviction-notice" className="hero-btn-primary">
+                  Start Eviction Notice Pack
                 </Link>
                 <Link href="/products/notice-only" className="hero-btn-secondary">
                   Full Notice Pack

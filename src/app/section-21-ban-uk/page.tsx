@@ -167,7 +167,7 @@ const content: PillarPageContent = {
     { label: 'Section 8 grounds explained', href: '/section-8-grounds-explained' },
   ],
   toolLinks: [
-    { label: 'Section 8 validator', href: '/tools/validators/section-8' },
+    { label: 'Eviction notice pack', href: '/eviction-notice' },
     { label: 'Rent arrears calculator', href: '/tools/rent-arrears-calculator' },
   ],
   productLink: { label: 'Complete pack for post-ban possession', href: '/products/complete-pack' },

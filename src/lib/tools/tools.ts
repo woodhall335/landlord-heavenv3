@@ -15,29 +15,11 @@ export const freeTools: ToolLink[] = [
     featured: true,
   },
   {
-    href: '/tools/validators',
-    label: 'Document Validators',
-    description: 'Upload documents for instant compliance checks.',
-    category: 'validator',
-    featured: true,
-  },
-  {
-    href: '/tools/free-section-21-notice-generator',
-    label: 'Section 21 Notice Generator',
-    description: 'Create a basic Section 21 notice template.',
-    category: 'generator',
-  },
-  {
-    href: '/tools/free-section-8-notice-generator',
-    label: 'Section 8 Notice Generator',
-    description: 'Generate a Section 8 notice with grounds.',
-    category: 'generator',
-  },
-  {
     href: '/tools/rent-arrears-calculator',
     label: 'Rent Arrears Calculator',
     description: 'Calculate arrears totals and interest.',
     category: 'calculator',
+    featured: true,
   },
   {
     href: '/tools/hmo-license-checker',
@@ -53,9 +35,4 @@ export const freeTools: ToolLink[] = [
   },
 ];
 
-// Only include validators that have actual pages built
-// Wales, Scotland, Tenancy Agreement, and Money Claim validators are not being built
-export const validatorToolRoutes = [
-  '/tools/validators/section-21',
-  '/tools/validators/section-8',
-];
+export const validatorToolRoutes: string[] = [];

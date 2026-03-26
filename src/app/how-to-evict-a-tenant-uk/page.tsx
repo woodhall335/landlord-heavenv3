@@ -123,7 +123,7 @@ export default function HowToEvictTenantUkPage() {
         title="How to Evict a Tenant in the UK"
         subtitle="A step-by-step landlord guide covering Section 21, Section 8, court possession orders, and bailiff enforcement."
         primaryCta={{ label: 'Start complete eviction pack', href: '/products/complete-pack' }}
-        secondaryCta={{ label: 'Validate your route first', href: '/tools/validators' }}
+        secondaryCta={{ label: 'Validate your route first', href: '/eviction-notice' }}
         mediaSrc="/images/wizard-icons/11-calendar-timeline.png"
         mediaAlt="How to Evict a Tenant in the UK icon"
         showReviewPill
@@ -267,7 +267,7 @@ export default function HowToEvictTenantUkPage() {
               </p>
               <div className="mt-5 flex flex-wrap gap-3">
                 <Link
-                  href="/tools/validators"
+                  href="/eviction-notice"
                   className="rounded-lg bg-primary px-5 py-3 text-white hover:opacity-95"
                 >
                   Validate your eviction route
@@ -794,7 +794,7 @@ export default function HowToEvictTenantUkPage() {
                 Start your eviction route check
               </Link>
               <Link
-                href="/tools/validators"
+                href="/eviction-notice"
                 className="rounded-lg border border-[#E6DBFF] bg-white px-5 py-3 text-primary hover:bg-[#F8F4FF]"
               >
                 Validate your notice route

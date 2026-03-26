@@ -34,7 +34,7 @@ export const PASS1_PAGES: Record<string, HighIntentPageContent> = {
     relatedLinks: [
       { label: 'Section 8 grounds explained', href: '/section-8-grounds-explained' },
       { label: 'Rent arrears eviction guide', href: '/rent-arrears-eviction-guide' },
-      { label: 'Section 8 validator tool', href: '/tools/validators/section-8' },
+      { label: 'Eviction notice pack', href: '/eviction-notice' },
       { label: 'Tenant abandoned property', href: '/tenant-abandoned-property' },
     ],
     sections: [

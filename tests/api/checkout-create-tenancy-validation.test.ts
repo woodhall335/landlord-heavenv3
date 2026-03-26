@@ -148,4 +148,23 @@ describe('POST /api/checkout/create tenancy gate', () => {
     expect(body.invalid_fields).toEqual(expect.arrayContaining(['is_fixed_term']));
     expect(body.missing_fields).toEqual(expect.arrayContaining(['is_fixed_term']));
   });
+
+  it('fails closed when a retired England standalone sku is posted to checkout', async () => {
+    const { POST } = await import('@/app/api/checkout/create/route');
+
+    const request = new Request('http://localhost/api/checkout/create', {
+      method: 'POST',
+      body: JSON.stringify({
+        product_type: 'guarantor_agreement',
+        case_id: mockCaseId,
+      }),
+      headers: { 'content-type': 'application/json' },
+    });
+
+    const response = await POST(request);
+    const body = await response.json();
+
+    expect(response.status).toBe(400);
+    expect(body.error).toBe('Validation failed');
+  });
 });

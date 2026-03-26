@@ -285,7 +285,7 @@ const profiles: Record<ResidentialLettingProductSku, ResidentialStandaloneProfil
       internalLinks: [
         {
           label: 'Flatmate agreement',
-          href: '/flatmate-agreement-england',
+        href: '/tenancy-agreement',
           description: 'Use this when the facts are really shared living, not a true sublet.',
         },
       ],
@@ -383,7 +383,7 @@ const profiles: Record<ResidentialLettingProductSku, ResidentialStandaloneProfil
       internalLinks: [
         {
           label: 'Renewal tenancy agreement',
-          href: '/renewal-tenancy-agreement-england',
+        href: '/tenancy-agreement',
           description: 'Use renewal instead where a new term is actually intended.',
         },
       ],
@@ -481,7 +481,7 @@ const profiles: Record<ResidentialLettingProductSku, ResidentialStandaloneProfil
       internalLinks: [
         {
           label: 'Residential sublet agreement',
-          href: '/residential-sublet-agreement-england',
+        href: '/tenancy-agreement',
           description: 'Use this instead where the tenancy is not actually being assigned.',
         },
       ],
@@ -587,7 +587,7 @@ const profiles: Record<ResidentialLettingProductSku, ResidentialStandaloneProfil
       internalLinks: [
         {
           label: 'Repayment plan agreement',
-          href: '/repayment-plan-agreement-england',
+        href: '/money-claim',
           description: 'Use this when the tenant is engaging and a signed plan becomes realistic.',
         },
       ],
@@ -685,7 +685,7 @@ const profiles: Record<ResidentialLettingProductSku, ResidentialStandaloneProfil
       internalLinks: [
         {
           label: 'Rent arrears letter',
-          href: '/rent-arrears-letter-england',
+        href: '/money-claim',
           description: 'Use this first when the matter is still at formal demand stage.',
         },
       ],
@@ -781,7 +781,7 @@ const profiles: Record<ResidentialLettingProductSku, ResidentialStandaloneProfil
       internalLinks: [
         {
           label: 'Guarantor agreement',
-          href: '/guarantor-agreement-england',
+        href: '/tenancy-agreement',
           description: 'Add this if the application points toward a guarantor requirement.',
         },
       ],
@@ -870,7 +870,7 @@ const profiles: Record<ResidentialLettingProductSku, ResidentialStandaloneProfil
       internalLinks: [
         {
           label: 'Inventory & schedule of condition',
-          href: '/inventory-schedule-of-condition-england',
+        href: '/tenancy-agreement',
           description: 'Pair the inspection report with a stronger check-in inventory baseline.',
         },
       ],
@@ -972,7 +972,7 @@ const profiles: Record<ResidentialLettingProductSku, ResidentialStandaloneProfil
       internalLinks: [
         {
           label: 'Rental inspection report',
-          href: '/rental-inspection-report-england',
+        href: '/tenancy-agreement',
           description: 'Pair it with an inspection report for an even stronger evidence file.',
         },
       ],
@@ -1070,7 +1070,7 @@ const profiles: Record<ResidentialLettingProductSku, ResidentialStandaloneProfil
       internalLinks: [
         {
           label: 'Residential sublet agreement',
-          href: '/residential-sublet-agreement-england',
+        href: '/tenancy-agreement',
           description: 'Use this instead where the facts point to a true sublet.',
         },
       ],
@@ -1173,7 +1173,7 @@ const profiles: Record<ResidentialLettingProductSku, ResidentialStandaloneProfil
       internalLinks: [
         {
           label: 'Lease amendment',
-          href: '/lease-amendment-england',
+        href: '/tenancy-agreement',
           description: 'Use this instead where you are only changing selected terms.',
         },
       ],

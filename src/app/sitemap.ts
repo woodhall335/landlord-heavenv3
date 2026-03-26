@@ -16,14 +16,17 @@
 import { MetadataRoute } from 'next';
 import { blogPosts } from '@/lib/blog/posts';
 import { SITE_ORIGIN } from '@/lib/seo';
-import { freeTools, validatorToolRoutes } from '@/lib/tools/tools';
+import { freeTools } from '@/lib/tools/tools';
 import { createSupabaseAdminQuestionRepository } from '@/lib/ask-heaven/questions';
 import { getPostRegion } from '@/lib/blog/categories';
 import { getValidTopicHubs } from '@/lib/blog/topic-hubs';
 import { getBlogSeoConfig } from '@/lib/blog/seo';
 import { discoverStaticPageRoutes } from '@/lib/seo/static-route-inventory';
-import { getResidentialLandingSlugs } from '@/lib/seo/residential-product-landing-content';
 import { getPhase3SitemapExclusions } from '@/lib/seo/page-taxonomy';
+import {
+  RETIRED_PUBLIC_ROUTES,
+  isRetiredPublicRoute,
+} from '@/lib/public-retirements';
 import sitemapAllowlist from '../../scripts/seo-sitemap-allowlist.json';
 
 // Force this metadata route to run dynamically (avoids static render + fetch cache issues).
@@ -46,6 +49,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/tools/validators/tenancy-agreement',
     '/tenancy-agreements/premium',
     '/$',
+    ...RETIRED_PUBLIC_ROUTES,
     ...phase3SitemapExclusions,
   ]);
 
@@ -79,11 +83,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/eviction-pack-england', priority: 0.95, changeFrequency: 'weekly' as const },
     { path: '/money-claim', priority: 0.95, changeFrequency: 'weekly' as const },
     { path: '/eviction-guides', priority: 0.9, changeFrequency: 'weekly' as const },
-    ...getResidentialLandingSlugs().map((slug) => ({
-      path: `/${slug}`,
-      priority: 0.82,
-      changeFrequency: 'weekly' as const,
-    })),
   ];
 
   // Tenancy agreement pages - individual jurisdiction pages
@@ -273,10 +272,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   toolPagesList.push({ path: '/tools', priority: 0.7, changeFrequency: 'monthly' as const });
   toolPaths.add('/tools');
 
-  // Add validators hub page (high priority)
-  toolPagesList.push({ path: '/tools/validators', priority: 0.85, changeFrequency: 'weekly' as const });
-  toolPaths.add('/tools/validators');
-
   // Add individual free tools (excluding duplicates)
   freeTools
     .filter((tool) => tool.href.startsWith('/tools') && !toolPaths.has(tool.href))
@@ -287,18 +282,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         changeFrequency: 'weekly' as const,
       });
       toolPaths.add(tool.href);
-    });
-
-  // Add validator pages with higher priority (0.9) for SEO ranking
-  validatorToolRoutes
-    .filter((path) => !toolPaths.has(path))
-    .forEach((path) => {
-      toolPagesList.push({
-        path,
-        priority: 0.9,
-        changeFrequency: 'weekly' as const,
-      });
-      toolPaths.add(path);
     });
 
   const toolPages = toolPagesList;
@@ -364,6 +347,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     !excludedPrefixes.some((prefix) => path === prefix || path.startsWith(`${prefix}/`)) &&
     !noindexPaths.includes(path) &&
     !retiredPaths.has(path) &&
+    !isRetiredPublicRoute(path) &&
     !intentionalStaticRouteExclusions.has(path);
 
   // Build sitemap entries

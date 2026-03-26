@@ -1328,7 +1328,7 @@ This notice was served on: 01/01/2026
  *
  * The completed form fixtures can be used for manual testing:
  *
- * 1. Navigate to /tools/validators/section-8
+ * 1. Navigate to /eviction-notice
  *    - Upload completed_section_8_form_3.pdf
  *    - Verify: Document type detected as Section 8 / Form 3
  *    - Verify: Extracted fields show:
@@ -1348,7 +1348,7 @@ This notice was served on: 01/01/2026
  *    - Verify: Level A questions do NOT include rent_amount, rent_frequency, or current_arrears
  *      (since these were already extracted from the document)
  *
- * 2. Navigate to /tools/validators/section-21
+ * 2. Navigate to /eviction-notice
  *    - Upload completed_section_21_form_6a.pdf
  *    - Verify: Document type detected as Section 21 / Form 6A
  *    - Verify: Extracted fields show tenant (Sonia Shezadi), property address

@@ -32,6 +32,9 @@ export function RelatedLinks({
   variant = 'cards',
   className = ''
 }: RelatedLinksProps) {
+  const dedupedLinks = links.filter(
+    (link, index, allLinks) => allLinks.findIndex((candidate) => candidate.href === link.href) === index
+  );
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -48,7 +51,7 @@ export function RelatedLinks({
   }, []);
 
   const itemsPerView = isMobile ? 1 : 3;
-  const maxIndex = Math.max(0, links.length - itemsPerView);
+  const maxIndex = Math.max(0, dedupedLinks.length - itemsPerView);
 
   const goToNext = useCallback(() => {
     setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
@@ -60,25 +63,25 @@ export function RelatedLinks({
 
   // Auto-slide effect
   useEffect(() => {
-    if (variant !== 'cards' || isHovered || links.length <= itemsPerView) return;
+    if (variant !== 'cards' || isHovered || dedupedLinks.length <= itemsPerView) return;
 
     const interval = setInterval(() => {
       goToNext();
     }, 4000);
 
     return () => clearInterval(interval);
-  }, [variant, isHovered, links.length, itemsPerView, goToNext]);
+  }, [variant, isHovered, dedupedLinks.length, itemsPerView, goToNext]);
 
   if (variant === 'inline') {
     return (
       <div className={`my-6 ${className}`}>
         <span className="text-gray-600">Related: </span>
-        {links.map((link, i) => (
+        {dedupedLinks.map((link, i) => (
           <span key={link.href}>
             <Link href={link.href} className="text-primary hover:underline">
               {link.title}
             </Link>
-            {i < links.length - 1 && <span className="text-gray-400"> &bull; </span>}
+            {i < dedupedLinks.length - 1 && <span className="text-gray-400"> &bull; </span>}
           </span>
         ))}
       </div>
@@ -90,7 +93,7 @@ export function RelatedLinks({
       <div className={`my-8 ${className}`}>
         <h3 className="font-semibold text-gray-900 mb-4">{title}</h3>
         <ul className="space-y-2">
-          {links.map((link) => (
+          {dedupedLinks.map((link) => (
             <li key={link.href}>
               <Link
                 href={link.href}
@@ -107,7 +110,7 @@ export function RelatedLinks({
   }
 
   // Cards variant with slider
-  const showControls = links.length > itemsPerView;
+  const showControls = dedupedLinks.length > itemsPerView;
 
   return (
     <section className={`pb-16 md:pb-20 ${className}`}>
@@ -147,7 +150,7 @@ export function RelatedLinks({
                 transform: `translateX(-${currentIndex * (100 / itemsPerView)}%)`,
               }}
             >
-              {links.map((link) => {
+              {dedupedLinks.map((link) => {
                 const Icon = link.icon ? iconMap[link.icon] : FileText;
                 return (
                   <div

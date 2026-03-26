@@ -181,29 +181,7 @@ export const TOPIC_TO_PRODUCTS_MAP: Record<AskHeavenPrimaryTopic, ProductLinkCon
  * Used to generate "Related Tools" section on question pages.
  */
 export const TOPIC_TO_TOOLS_MAP: Record<AskHeavenPrimaryTopic, ToolLinkConfig[]> = {
-  eviction: [
-    {
-      tool: 'section-21-validator',
-      name: 'Free eviction notice checker',
-      href: 'https://landlordheaven.co.uk/tools/validators',
-      description: 'Check if your Section 21 notice is valid',
-      isFree: true,
-    },
-    {
-      tool: 'section-8-validator',
-      name: 'Free Section 8 generator',
-      href: 'https://landlordheaven.co.uk/tools/free-section-8-notice-generator',
-      description: 'Verify Section 8 grounds and notice periods',
-      isFree: true,
-    },
-    {
-      tool: 'section-21-generator',
-      name: 'Free Section 21 generator',
-      href: 'https://landlordheaven.co.uk/tools/free-section-21-notice-generator',
-      description: 'Create a free Section 21 notice for England',
-      isFree: true,
-    },
-  ],
+  eviction: [],
   arrears: [
     {
       tool: 'rent-demand-letter',
@@ -224,15 +202,7 @@ export const TOPIC_TO_TOOLS_MAP: Record<AskHeavenPrimaryTopic, ToolLinkConfig[]>
   tenancy: [],
   compliance: [],
   damage_claim: [],
-  notice_periods: [
-    {
-      tool: 'section-21-validator',
-      name: 'Free eviction notice checker',
-      href: 'https://landlordheaven.co.uk/tools/validators',
-      description: 'Calculate correct notice periods',
-      isFree: true,
-    },
-  ],
+  notice_periods: [],
   court_process: [],
   tenant_rights: [],
   landlord_obligations: [],
@@ -241,9 +211,9 @@ export const TOPIC_TO_TOOLS_MAP: Record<AskHeavenPrimaryTopic, ToolLinkConfig[]>
 
 const TOOL_JURISDICTION_RESTRICTIONS: Record<AskHeavenJurisdiction, string[]> = {
   england: [],
-  wales: ['section-21-validator', 'section-8-validator', 'section-21-generator'],
-  scotland: ['section-21-validator', 'section-8-validator', 'section-21-generator'],
-  'northern-ireland': ['section-21-validator', 'section-8-validator', 'section-21-generator'],
+  wales: [],
+  scotland: [],
+  'northern-ireland': [],
   'uk-wide': [],
 };
 

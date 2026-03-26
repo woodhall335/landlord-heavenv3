@@ -62,7 +62,7 @@ function buildFaqs(topic: string): FAQItem[] {
     { question: 'What if the tenant raises a defence?', answer: 'Map likely defence themes in advance and prepare fact-based rebuttals linked directly to your documents and timeline.' },
     { question: 'When should I apply for a warrant?', answer: 'If the possession date passes and the tenant remains in occupation, progress to enforcement promptly with complete supporting documents.' },
     { question: 'Is accelerated possession always faster?', answer: 'It can be faster where Section 21 compliance is strong, but errors in forms or evidence can remove that advantage quickly.' },
-    { question: 'Should I use landlord tools before filing?', answer: 'Yes. Validation and generator tools reduce drafting errors and improve consistency before court documents are issued.' },
+    { question: 'Should I use landlord tools before filing?', answer: 'Yes. A current paid notice route plus landlord tools reduce drafting errors and improve consistency before court documents are issued.' },
     { question: 'When should I choose full managed support?', answer: 'Choose full support when the case is complex, heavily defended, or commercially critical and you need route confidence and document control.' },
   ];
 }
@@ -164,8 +164,8 @@ const seeds: Seed[] = [
       { label: 'Eviction cost UK', href: '/eviction-cost-uk' },
     ],
     toolLinks: [
-      { label: 'Section 21 validator', href: '/tools/validators/section-21' },
-      { label: 'Section 8 validator', href: '/tools/validators/section-8' },
+      { label: 'Eviction notice pack', href: '/eviction-notice' },
+      { label: 'Eviction notice pack', href: '/eviction-notice' },
     ],
     productLink: { label: 'Landlord Complete Pack', href: '/products/complete-pack' },
   },
@@ -191,8 +191,8 @@ const seeds: Seed[] = [
       { label: 'Section 21 court pack', href: '/section-21-court-pack' },
     ],
     toolLinks: [
-      { label: 'Free Section 21 notice generator', href: '/tools/free-section-21-notice-generator' },
-      { label: 'Section 21 validator', href: '/tools/validators/section-21' },
+      { label: 'Eviction notice pack', href: '/eviction-notice' },
+      { label: 'Eviction notice pack', href: '/eviction-notice' },
     ],
     productLink: { label: 'Notice Only product', href: '/products/notice-only' },
   },
@@ -218,8 +218,8 @@ const seeds: Seed[] = [
       { label: 'Evict tenant not paying rent', href: '/evict-tenant-not-paying-rent' },
     ],
     toolLinks: [
-      { label: 'Free Section 8 notice generator', href: '/tools/free-section-8-notice-generator' },
-      { label: 'Section 8 validator', href: '/tools/validators/section-8' },
+      { label: 'Eviction notice pack', href: '/eviction-notice' },
+      { label: 'Eviction notice pack', href: '/eviction-notice' },
     ],
     productLink: { label: 'Complete eviction pack', href: '/products/complete-pack' },
   },
@@ -272,8 +272,8 @@ const seeds: Seed[] = [
       { label: 'Landlord eviction checklist', href: '/landlord-eviction-checklist' },
     ],
     toolLinks: [
-      { label: 'Section 21 validator', href: '/tools/validators/section-21' },
-      { label: 'Section 8 validator', href: '/tools/validators/section-8' },
+      { label: 'Eviction notice pack', href: '/eviction-notice' },
+      { label: 'Eviction notice pack', href: '/eviction-notice' },
     ],
     productLink: { label: 'Complete Pack product', href: '/products/complete-pack' },
   },

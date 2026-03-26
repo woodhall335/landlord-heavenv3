@@ -51,17 +51,7 @@ export const SEO_LANDING_ROUTES = {
   money_claim: '/money-claim',
   ast_standard: '/tenancy-agreement',
   ast_premium: '/premium-tenancy-agreement',
-  guarantor_agreement: '/guarantor-agreement-england',
-  residential_sublet_agreement: '/residential-sublet-agreement-england',
-  lease_amendment: '/lease-amendment-england',
-  lease_assignment_agreement: '/lease-assignment-agreement-england',
-  rent_arrears_letter: '/rent-arrears-letter-england',
-  repayment_plan_agreement: '/repayment-plan-agreement-england',
-  residential_tenancy_application: '/residential-tenancy-application-england',
-  rental_inspection_report: '/rental-inspection-report-england',
-  inventory_schedule_condition: '/inventory-schedule-of-condition-england',
-  flatmate_agreement: '/flatmate-agreement-england',
-  renewal_tenancy_agreement: '/renewal-tenancy-agreement-england',
+  residential_tenancy_application: '/tenancy-agreement',
 } as const;
 
 export type ProductSku =
@@ -71,17 +61,8 @@ export type ProductSku =
   | 'sc_money_claim'
   | 'ast_standard'
   | 'ast_premium'
-  | 'guarantor_agreement'
-  | 'residential_sublet_agreement'
-  | 'lease_amendment'
-  | 'lease_assignment_agreement'
-  | 'rent_arrears_letter'
-  | 'repayment_plan_agreement'
   | 'residential_tenancy_application'
-  | 'rental_inspection_report'
-  | 'inventory_schedule_condition'
-  | 'flatmate_agreement'
-  | 'renewal_tenancy_agreement';
+  ;
 
 export type AskHeavenRecommendation =
   | 'notice_only'
@@ -166,72 +147,6 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
     wizardHref: '/wizard?product=ast_premium&src=product_page&topic=tenancy',
     productPageHref: SEO_LANDING_ROUTES.ast_premium,
   },
-  guarantor_agreement: {
-    sku: 'guarantor_agreement',
-    label: 'Guarantor Agreement',
-    shortLabel: 'Guarantor',
-    description: 'Standalone guarantor agreement for an England residential tenancy',
-    price: SEO_PRICES.residentialLettingPremium.amount,
-    displayPrice: SEO_PRICES.residentialLettingPremium.display,
-    priceNote: 'England only',
-    wizardHref: '/wizard?product=guarantor_agreement&jurisdiction=england',
-    productPageHref: SEO_LANDING_ROUTES.guarantor_agreement,
-  },
-  residential_sublet_agreement: {
-    sku: 'residential_sublet_agreement',
-    label: 'Residential Sublet Agreement',
-    shortLabel: 'Sublet',
-    description: 'England residential sublet agreement',
-    price: SEO_PRICES.residentialLettingPremium.amount,
-    displayPrice: SEO_PRICES.residentialLettingPremium.display,
-    priceNote: 'England only',
-    wizardHref: '/wizard?product=residential_sublet_agreement&jurisdiction=england',
-    productPageHref: SEO_LANDING_ROUTES.residential_sublet_agreement,
-  },
-  lease_amendment: {
-    sku: 'lease_amendment',
-    label: 'Lease Amendment',
-    shortLabel: 'Amendment',
-    description: 'England lease amendment for an existing tenancy',
-    price: SEO_PRICES.residentialLettingPremium.amount,
-    displayPrice: SEO_PRICES.residentialLettingPremium.display,
-    priceNote: 'England only',
-    wizardHref: '/wizard?product=lease_amendment&jurisdiction=england',
-    productPageHref: SEO_LANDING_ROUTES.lease_amendment,
-  },
-  lease_assignment_agreement: {
-    sku: 'lease_assignment_agreement',
-    label: 'Lease Assignment Agreement',
-    shortLabel: 'Assignment',
-    description: 'England assignment agreement for a residential tenancy',
-    price: SEO_PRICES.residentialLettingPremium.amount,
-    displayPrice: SEO_PRICES.residentialLettingPremium.display,
-    priceNote: 'England only',
-    wizardHref: '/wizard?product=lease_assignment_agreement&jurisdiction=england',
-    productPageHref: SEO_LANDING_ROUTES.lease_assignment_agreement,
-  },
-  rent_arrears_letter: {
-    sku: 'rent_arrears_letter',
-    label: 'Rent Arrears Letter',
-    shortLabel: 'Arrears Letter',
-    description: 'Formal England rent arrears letter and letter before action',
-    price: SEO_PRICES.residentialLettingPremium.amount,
-    displayPrice: SEO_PRICES.residentialLettingPremium.display,
-    priceNote: 'England only',
-    wizardHref: '/wizard?product=rent_arrears_letter&jurisdiction=england',
-    productPageHref: SEO_LANDING_ROUTES.rent_arrears_letter,
-  },
-  repayment_plan_agreement: {
-    sku: 'repayment_plan_agreement',
-    label: 'Repayment Plan Agreement',
-    shortLabel: 'Repayment Plan',
-    description: 'England repayment plan agreement for rent arrears',
-    price: SEO_PRICES.residentialLettingPremium.amount,
-    displayPrice: SEO_PRICES.residentialLettingPremium.display,
-    priceNote: 'England only',
-    wizardHref: '/wizard?product=repayment_plan_agreement&jurisdiction=england',
-    productPageHref: SEO_LANDING_ROUTES.repayment_plan_agreement,
-  },
   residential_tenancy_application: {
     sku: 'residential_tenancy_application',
     label: 'Residential Tenancy Application',
@@ -242,50 +157,6 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
     priceNote: 'Legacy product',
     wizardHref: '/wizard?product=residential_tenancy_application&jurisdiction=england',
     productPageHref: SEO_LANDING_ROUTES.residential_tenancy_application,
-  },
-  rental_inspection_report: {
-    sku: 'rental_inspection_report',
-    label: 'Rental Inspection Report',
-    shortLabel: 'Inspection',
-    description: 'England rental inspection report for move-in or move-out',
-    price: SEO_PRICES.residentialLettingStandard.amount,
-    displayPrice: SEO_PRICES.residentialLettingStandard.display,
-    priceNote: 'England only',
-    wizardHref: '/wizard?product=rental_inspection_report&jurisdiction=england',
-    productPageHref: SEO_LANDING_ROUTES.rental_inspection_report,
-  },
-  inventory_schedule_condition: {
-    sku: 'inventory_schedule_condition',
-    label: 'Inventory & Schedule of Condition',
-    shortLabel: 'Inventory',
-    description: 'England inventory and schedule of condition',
-    price: SEO_PRICES.residentialLettingStandard.amount,
-    displayPrice: SEO_PRICES.residentialLettingStandard.display,
-    priceNote: 'England only',
-    wizardHref: '/wizard?product=inventory_schedule_condition&jurisdiction=england',
-    productPageHref: SEO_LANDING_ROUTES.inventory_schedule_condition,
-  },
-  flatmate_agreement: {
-    sku: 'flatmate_agreement',
-    label: 'Flatmate Agreement',
-    shortLabel: 'Flatmate',
-    description: 'England flatmate agreement for shared occupation',
-    price: SEO_PRICES.residentialLettingStandard.amount,
-    displayPrice: SEO_PRICES.residentialLettingStandard.display,
-    priceNote: 'England only',
-    wizardHref: '/wizard?product=flatmate_agreement&jurisdiction=england',
-    productPageHref: SEO_LANDING_ROUTES.flatmate_agreement,
-  },
-  renewal_tenancy_agreement: {
-    sku: 'renewal_tenancy_agreement',
-    label: 'Renewal Tenancy Agreement',
-    shortLabel: 'Renewal',
-    description: 'England renewal agreement for a residential tenancy',
-    price: SEO_PRICES.residentialLettingStandard.amount,
-    displayPrice: SEO_PRICES.residentialLettingStandard.display,
-    priceNote: 'England only',
-    wizardHref: '/wizard?product=renewal_tenancy_agreement&jurisdiction=england',
-    productPageHref: SEO_LANDING_ROUTES.renewal_tenancy_agreement,
   },
 };
 
@@ -353,49 +224,9 @@ export const REGIONAL_PRODUCT_AVAILABILITY: Record<
   ast_premium: {
     available: ['england', 'wales', 'scotland', 'northern-ireland'],
   },
-  guarantor_agreement: {
-    available: ['england'],
-    badge: 'England only',
-  },
-  residential_sublet_agreement: {
-    available: ['england'],
-    badge: 'England only',
-  },
-  lease_amendment: {
-    available: ['england'],
-    badge: 'England only',
-  },
-  lease_assignment_agreement: {
-    available: ['england'],
-    badge: 'England only',
-  },
-  rent_arrears_letter: {
-    available: ['england'],
-    badge: 'England only',
-  },
-  repayment_plan_agreement: {
-    available: ['england'],
-    badge: 'England only',
-  },
   residential_tenancy_application: {
     available: [],
     badge: 'Legacy only',
-  },
-  rental_inspection_report: {
-    available: ['england'],
-    badge: 'England only',
-  },
-  inventory_schedule_condition: {
-    available: ['england'],
-    badge: 'England only',
-  },
-  flatmate_agreement: {
-    available: ['england'],
-    badge: 'England only',
-  },
-  renewal_tenancy_agreement: {
-    available: ['england'],
-    badge: 'England only',
   },
 };
 

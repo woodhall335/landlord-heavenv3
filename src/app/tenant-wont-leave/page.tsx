@@ -300,10 +300,10 @@ export default function TenantWontLeavePage() {
                       </ul>
                       <div className="mt-4">
                         <Link
-                          href="/tools/validators/section-21"
+                          href="/eviction-notice"
                           className="inline-flex items-center gap-2 text-red-600 font-medium hover:underline"
                         >
-                          Check your notice validity
+                          Start the eviction notice pack
                           <ArrowRight className="w-4 h-4" />
                         </Link>
                       </div>

@@ -8,17 +8,16 @@ import { analyzeContent } from '@/lib/seo/commercial-linking';
 import { Section21ComplianceTimingPanel } from '@/components/products/Section21ComplianceTimingPanel';
 
 export const metadata = generateMetadata({
-  title: 'Free Landlord Tools UK | Eviction, Arrears & HMO Checks',
+  title: 'Free Landlord Tools UK | Arrears, HMO Checks & Landlord Help',
   description:
-    'Use free landlord tools for Section 21, Section 8, rent arrears, HMO licensing, notice checks, and landlord compliance workflows in the UK.',
+    'Use free landlord tools for rent arrears, HMO licensing, rent demand letters, and Ask Heaven landlord guidance in the UK.',
   path: '/tools',
   keywords: [
     'free landlord tools',
-    'section 21 generator',
-    'section 8 generator',
     'rent arrears calculator',
     'HMO checker',
-    'eviction notice checker',
+    'rent demand letter generator',
+    'ask heaven landlord help',
     'landlord compliance tools',
   ],
 });
@@ -29,10 +28,10 @@ const otherTools = freeTools.filter((tool) => !tool.featured);
 // Analyze page for commercial linking - tools pages relate to eviction/rent arrears products
 const commercialLinkingResult = analyzeContent({
   pathname: '/tools',
-  title: 'Free Landlord Tools UK | Calculators, Generators & Checkers',
-  description: 'Free tools for UK landlords: rent arrears calculator, eviction notice generators, HMO licence checker, and Section 21/Section 8 validity checkers.',
+  title: 'Free Landlord Tools UK | Calculators, Letters & Checkers',
+  description: 'Free tools for UK landlords: rent arrears calculator, rent demand letters, HMO licence checks, and Ask Heaven guidance.',
   heading: 'Free Tools for UK Landlords',
-  bodyText: 'eviction notice generator section 21 section 8 rent arrears calculator money claim',
+  bodyText: 'rent arrears calculator rent demand letter hmo checker ask heaven landlord help money claim',
 });
 
 export default function ToolsHubPage() {
@@ -53,7 +52,7 @@ export default function ToolsHubPage() {
             <div className="text-center mb-10">
               <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Featured Tools</h2>
               <p className="text-gray-600 mt-2">
-                Start with the most popular tools and validators.
+                Start with the most popular landlord tools and guided helpers.
               </p>
             </div>
             <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">

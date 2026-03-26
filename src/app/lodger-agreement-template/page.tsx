@@ -58,7 +58,7 @@ export default function LodgerAgreementPage() {
           badge="Landlord Guide"
           title="Lodger Agreement Template UK"
           subtitle="Lodger agreements for live-in landlords in the UK."
-          primaryCta={{ label: 'Create Lodger Agreement', href: '/flatmate-agreement-england' }}
+          primaryCta={{ label: 'Create Lodger Agreement', href: '/tenancy-agreement' }}
           align="center"
           showTrustPositioningBar
         />
@@ -125,7 +125,7 @@ export default function LodgerAgreementPage() {
 
                 <p className="bg-purple-50 border border-purple-200 rounded-lg p-4">
                   If you want a faster route from free starter document to signed paperwork, use our
-                  <Link href="/flatmate-agreement-england" className="text-primary hover:underline"> flatmate agreement builder</Link>
+                  <Link href="/tenancy-agreement" className="text-primary hover:underline"> tenancy agreement route</Link>
                   to generate and download your final document in one flow.
                 </p>
 
@@ -288,7 +288,7 @@ export default function LodgerAgreementPage() {
                 <li>Chronology document mapping each event to supporting evidence.</li>
                 <li>Settlement record where payment plans were offered or negotiated.</li>
               </ul>
-              <p className="bg-indigo-50 border border-indigo-200 rounded-lg p-4">Need a faster route from guidance to action? Use our <Link href="/flatmate-agreement-england" className="text-primary underline">recommended flatmate agreement pathway</Link> to generate compliance-checked documents and keep service evidence aligned for next steps.</p>
+              <p className="bg-indigo-50 border border-indigo-200 rounded-lg p-4">Need a faster route from guidance to action? Use our <Link href="/tenancy-agreement" className="text-primary underline">recommended tenancy agreement pathway</Link> to generate compliance-checked documents and keep service evidence aligned for next steps.</p>
             </div>
           </div>
         </section>
@@ -410,7 +410,7 @@ export default function LodgerAgreementPage() {
               <p className="text-gray-600 mb-6">
                 Get a professionally drafted lodger agreement template.
               </p>
-              <Link href="/flatmate-agreement-england" className="hero-btn-primary">
+              <Link href="/tenancy-agreement" className="hero-btn-primary">
                 Get Lodger Agreement
               </Link>
             </div>

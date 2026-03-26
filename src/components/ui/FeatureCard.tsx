@@ -20,7 +20,7 @@ interface FeatureCardProps {
  *   icon={<ScaleIcon className="h-6 w-6" />}
  *   title="Free Section 21 Generator"
  *   description="Generate a basic Section 21 notice template"
- *   href="/tools/free-section-21-notice-generator"
+ *   href="/eviction-notice"
  * />
  * ```
  */

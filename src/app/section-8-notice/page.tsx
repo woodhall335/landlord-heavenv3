@@ -161,7 +161,7 @@ const content: PillarPageContent = {
     { label: 'What happens after Section 8', href: '/what-happens-after-section-8' },
   ],
   toolLinks: [
-    { label: 'Section 8 validator', href: '/tools/validators/section-8' },
+    { label: 'Eviction notice pack', href: '/eviction-notice' },
     { label: 'Rent arrears calculator', href: '/tools/rent-arrears-calculator' },
   ],
   productLink: { label: 'Court-ready Section 8 notice', href: '/products/notice-only' },
