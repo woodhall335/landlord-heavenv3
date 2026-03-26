@@ -31,7 +31,7 @@ const GROUPS = [
         href: buildWizardLink({
           product: 'ast_standard',
           jurisdiction: 'england',
-          src: 'documents_hub',
+          src: 'seo_landing',
           topic: 'tenancy',
         }),
         label: 'Start the tenancy wizard',
