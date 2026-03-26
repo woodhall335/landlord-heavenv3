@@ -52,45 +52,6 @@ questions:
     maps_to:
       - england_tenancy_purpose
 
-  # 2. England tenancy suitability
-  - id: ast_suitability
-    section: "Tenancy Type Check"
-    question: "England tenancy suitability check"
-    inputType: group
-    helperText: "Basic checks to ensure this is suitable for the upgraded England residential tenancy flow."
-    fields:
-      - id: tenant_is_individual
-        label: "Is the tenant an individual (not a company)?"
-        inputType: yes_no
-        validation:
-          required: true
-        width: half
-      - id: main_home
-        label: "Will this be the tenant's main home?"
-        inputType: yes_no
-        validation:
-          required: true
-        width: half
-      - id: landlord_lives_at_property
-        label: "Does the landlord live at the property?"
-        inputType: yes_no
-        helperText: "If yes, this may be a lodger or licence arrangement instead."
-        validation:
-          required: true
-        width: half
-      - id: holiday_or_licence
-        label: "Is this a holiday let or licence arrangement?"
-        inputType: yes_no
-        helperText: "If yes, a different agreement may be needed."
-        validation:
-          required: true
-        width: half
-    maps_to:
-      - tenancy.ast_suitability.tenant_is_individual
-      - tenancy.ast_suitability.main_home
-      - tenancy.ast_suitability.landlord_lives_at_property
-      - tenancy.ast_suitability.holiday_or_licence
-
   # 2. Property details
   - id: property_address
     section: Property Details
@@ -1934,5 +1895,4 @@ questions:
     maps_to:
       - evidence.tenancy_agreement_uploaded
       - evidence.other_evidence_uploaded
-
 

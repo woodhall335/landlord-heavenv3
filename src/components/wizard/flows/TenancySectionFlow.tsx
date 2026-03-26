@@ -152,45 +152,24 @@ const getJurisdictionTerminology = (jurisdiction: Jurisdiction) => {
         agreementType: 'Occupation Contract',
         standardTier: 'Standard Occupation Contract',
         premiumTier: 'Premium Occupation Contract',
-        suitabilityTitle: 'Occupation Contract Suitability Check',
-        suitabilityDescription: 'Basic checks to ensure this is a valid occupation contract under the Renting Homes (Wales) Act 2016.',
         standardDescription: 'Simple, straightforward occupation contract for most lets.',
         premiumDescription: 'Advanced features: guarantor clauses, HMO support, rent reviews, detailed schedules.',
-        landlordWarning: 'If the landlord lives at the property, this may be a lodger arrangement rather than a standard occupation contract.',
-        holidayWarning: 'Holiday lets and licence arrangements are not standard occupation contracts. Different rules apply.',
-        landlordHelperText: 'If yes, this may not be a standard occupation contract',
-        holidayHelperText: 'If yes, an occupation contract may not be appropriate',
-        tenantLabel: 'contract holder', // Wales terminology
       };
     case 'scotland':
       return {
         agreementType: 'Private Residential Tenancy',
         standardTier: 'Standard PRT',
         premiumTier: 'Premium PRT',
-        suitabilityTitle: 'PRT Suitability Check',
-        suitabilityDescription: 'Basic checks to ensure this is a valid Private Residential Tenancy under the Private Housing (Tenancies) (Scotland) Act 2016.',
         standardDescription: 'Simple, straightforward PRT for most lets.',
         premiumDescription: 'Advanced features: guarantor clauses, HMO support, detailed maintenance schedules.',
-        landlordWarning: 'If the landlord lives at the property, this may be a lodger arrangement rather than a PRT.',
-        holidayWarning: 'Holiday lets and licence arrangements are not PRTs. Different rules apply.',
-        landlordHelperText: 'If yes, this may not be a PRT',
-        holidayHelperText: 'If yes, a PRT may not be appropriate',
-        tenantLabel: 'tenant',
       };
     case 'northern-ireland':
       return {
         agreementType: 'Private Tenancy',
         standardTier: 'Standard NI Private Tenancy',
         premiumTier: 'Premium NI Private Tenancy',
-        suitabilityTitle: 'NI Private Tenancy Suitability Check',
-        suitabilityDescription: 'Basic checks to ensure this is a valid private tenancy under the Private Tenancies Act (Northern Ireland) 2022.',
         standardDescription: 'Simple, straightforward private tenancy for most lets.',
         premiumDescription: 'Advanced features: guarantor clauses, HMO support, detailed maintenance schedules.',
-        landlordWarning: 'If the landlord lives at the property, this may be a lodger arrangement rather than a private tenancy.',
-        holidayWarning: 'Holiday lets and licence arrangements are not private tenancies. Different rules apply.',
-        landlordHelperText: 'If yes, this may not be a private tenancy',
-        holidayHelperText: 'If yes, a private tenancy may not be appropriate',
-        tenantLabel: 'tenant',
       };
     case 'england':
     default:
@@ -198,15 +177,8 @@ const getJurisdictionTerminology = (jurisdiction: Jurisdiction) => {
         agreementType: 'Assured Periodic Tenancy Agreement',
         standardTier: 'Standard Assured Periodic Tenancy Agreement',
         premiumTier: 'Premium Assured Periodic Tenancy Agreement',
-        suitabilityTitle: 'England tenancy suitability check',
-        suitabilityDescription: 'Basic checks to ensure this is suitable for the upgraded England residential tenancy flow.',
         standardDescription: 'England assured periodic tenancy agreement updated for the current framework on standard lets.',
         premiumDescription: 'Premium England assured periodic tenancy agreement with HMO, student, guarantor, and enhanced terms support, updated for the current framework.',
-        landlordWarning: 'If the landlord lives at the property, this may be a lodger arrangement rather than the main England assured periodic tenancy flow.',
-        holidayWarning: 'Holiday lets and licence arrangements are outside the main England assured periodic tenancy flow.',
-        landlordHelperText: 'If yes, this may not be the right England assured periodic tenancy agreement',
-        holidayHelperText: 'If yes, a different agreement may be more appropriate',
-        tenantLabel: 'tenant',
       };
   }
 };
@@ -1148,57 +1120,6 @@ const ProductSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction 
         </div>
       )}
 
-      {/* Suitability Check - jurisdiction-aware */}
-      <div className="border-t border-gray-200 pt-6">
-        <h3 className="text-lg font-medium text-gray-900 mb-4">{terms.suitabilityTitle}</h3>
-        <p className="text-sm text-gray-500 mb-4">
-          {terms.suitabilityDescription}
-        </p>
-        <div className="space-y-4">
-          <YesNoField
-            label={`Is the ${terms.tenantLabel} an individual (not a company)?`}
-            value={facts.tenant_is_individual}
-            onChange={(v) => onUpdate({ tenant_is_individual: v })}
-            required
-          />
-          <YesNoField
-            label={`Will this be the ${terms.tenantLabel}'s main home?`}
-            value={facts.main_home}
-            onChange={(v) => onUpdate({ main_home: v })}
-            required
-          />
-          <YesNoField
-            label="Does the landlord live at the property?"
-            value={facts.landlord_lives_at_property}
-            onChange={(v) => onUpdate({ landlord_lives_at_property: v })}
-            helperText={terms.landlordHelperText}
-            required
-          />
-          <YesNoField
-            label="Is this a holiday let or licence arrangement?"
-            value={facts.holiday_or_licence}
-            onChange={(v) => onUpdate({ holiday_or_licence: v })}
-            helperText={terms.holidayHelperText}
-            required
-          />
-        </div>
-
-        {/* Warnings - jurisdiction-aware */}
-        {facts.landlord_lives_at_property === true && (
-          <div className="mt-4 p-4 bg-amber-50 border border-amber-200 rounded-lg">
-            <p className="text-sm text-amber-800">
-              <strong>Warning:</strong> {terms.landlordWarning}
-            </p>
-          </div>
-        )}
-        {facts.holiday_or_licence === true && (
-          <div className="mt-4 p-4 bg-amber-50 border border-amber-200 rounded-lg">
-            <p className="text-sm text-amber-800">
-              <strong>Warning:</strong> {terms.holidayWarning}
-            </p>
-          </div>
-        )}
-      </div>
     </div>
   );
 };
@@ -3545,5 +3466,3 @@ const YesNoField: React.FC<FieldProps> = ({
 );
 
 export default TenancySectionFlow;
-
-

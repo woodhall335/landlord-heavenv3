@@ -39,45 +39,6 @@ questions:
     maps_to:
       - product_tier
 
-  # 1. PRT Suitability Check
-  - id: prt_suitability
-    section: "Tenancy Type Check"
-    question: "PRT suitability check"
-    inputType: group
-    helperText: "Basic checks to ensure this is a valid Private Residential Tenancy. For validation/warnings only."
-    fields:
-      - id: tenant_is_individual
-        label: "Is the tenant an individual (not a company)?"
-        inputType: yes_no
-        validation:
-          required: true
-        width: half
-      - id: main_home
-        label: "Will this be the tenant's main or only home?"
-        inputType: yes_no
-        validation:
-          required: true
-        width: half
-      - id: landlord_lives_at_property
-        label: "Does the landlord live at the property?"
-        inputType: yes_no
-        helperText: "If yes, this may not be a PRT"
-        validation:
-          required: true
-        width: half
-      - id: holiday_or_licence
-        label: "Is this a holiday let or licence arrangement?"
-        inputType: yes_no
-        helperText: "If yes, a PRT may not be appropriate"
-        validation:
-          required: true
-        width: half
-    maps_to:
-      - tenancy.prt_suitability.tenant_is_individual
-      - tenancy.prt_suitability.main_home
-      - tenancy.prt_suitability.landlord_lives_at_property
-      - tenancy.prt_suitability.holiday_or_licence
-
   # 2. Property details
   - id: property_address
     section: Property Details
