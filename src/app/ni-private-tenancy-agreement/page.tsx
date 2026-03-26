@@ -62,7 +62,7 @@ const faqs = [
   },
   {
     question: 'Do I need to register as a landlord in Northern Ireland?',
-    answer: 'Yes, all private landlords in Northern Ireland must register with their local council\'s Landlord Registration Scheme within one month of a tenancy starting. Registration costs Â£70 and lasts for 3 years. Your registration number must be included in the tenancy agreement. Unregistered landlords cannot legally evict tenants and face fines up to Â£2,500. You can check if a landlord is registered via the NI Direct landlord registration checker.'
+    answer: 'Yes, all private landlords in Northern Ireland must register with their local council\'s Landlord Registration Scheme within one month of a tenancy starting. Registration costs £70 and lasts for 3 years. Your registration number must be included in the tenancy agreement. Unregistered landlords cannot legally evict tenants and face fines up to £2,500. You can check if a landlord is registered via the NI Direct landlord registration checker.'
   },
   {
     question: 'What is the maximum deposit in Northern Ireland?',
@@ -372,17 +372,17 @@ export default function NIPrivateTenancyAgreementPage() {
                     <div>
                       <strong>Fixed Penalty Notices:</strong>
                       <ul className="mt-2 space-y-1 text-sm">
-                        <li>â€¢ No written agreement: Â£500</li>
-                        <li>â€¢ Unregistered landlord: Â£500</li>
-                        <li>â€¢ Deposit not protected: Â£500</li>
+                        <li>• No written agreement: £500</li>
+                        <li>• Unregistered landlord: £500</li>
+                        <li>• Deposit not protected: £500</li>
                       </ul>
                     </div>
                     <div>
                       <strong>Court Prosecution:</strong>
                       <ul className="mt-2 space-y-1 text-sm">
-                        <li>â€¢ Fines up to Â£2,500</li>
-                        <li>â€¢ Criminal record</li>
-                        <li>â€¢ Cannot evict tenants</li>
+                        <li>• Fines up to £2,500</li>
+                        <li>• Criminal record</li>
+                        <li>• Cannot evict tenants</li>
                       </ul>
                     </div>
                   </div>

@@ -33,7 +33,7 @@ export default function RollingTenancyAgreementPage() {
       <EnglandTenancyPage
         pagePath="/rolling-tenancy-agreement"
         title="Rolling Tenancy Agreement"
-        subtitle="Periodic tenancy remains a strong search term. This page supports that demand while aligning landlords with the current England agreement routes designed for the assured periodic framework from 1 May 2026. Older rolling or fixed-term wording may not be legally enforceable in the way landlords expect if it relies on outdated structure."
+        subtitle="Periodic tenancy remains a strong search term. This page supports that demand while aligning landlords with the current England agreement routes designed for the assured periodic framework from 1 May 2026. Older rolling or fixed-term wording may be harder to rely on if it uses outdated structure."
         primaryCtaLabel="Start Standard periodic agreement"
         primaryCtaHref={standardWizardHref}
         secondaryCtaLabel="Start Premium periodic agreement"
@@ -51,13 +51,13 @@ export default function RollingTenancyAgreementPage() {
         compliancePoints={[
           'Designed for the assured periodic framework used for new England lets from 1 May 2026',
           'Periodic and rolling concepts used as education, not as legacy AST sales language',
-          'Older agreements may not be legally enforceable in the way landlords expect if they rely on outdated wording or structure',
+          'Older agreements may be harder to rely on if they use outdated wording or structure',
         ]}
         faqs={[
           {
             question: 'Can I keep using an older rolling tenancy agreement?',
             answer:
-              'While many older tenancy agreements still exist, they may not be legally enforceable in the way landlords expect if they rely on outdated structures or wording. Using an agreement that does not reflect the current England framework can lead to weaker protection or complications if issues arise.',
+              'Many older tenancy agreements still exist, but they may be harder to rely on if they use outdated wording or structure. Using an agreement that does not reflect the current England framework can create avoidable uncertainty if issues arise.',
           },
         ]}
       />

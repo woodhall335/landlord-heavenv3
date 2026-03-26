@@ -108,7 +108,7 @@ export default function PrtTenancyAgreementTemplateScotlandPage() {
             </>
           }
           primaryCta={{
-            label: `Create PRT Template â€” ${PRODUCTS.ast_standard.displayPrice}`,
+            label: `Create PRT Template — ${PRODUCTS.ast_standard.displayPrice}`,
             href: astProductHref,
           }}
           secondaryCta={{
@@ -409,8 +409,8 @@ export default function PrtTenancyAgreementTemplateScotlandPage() {
                       <p className="text-gray-600">
                         Full names and addresses of the landlord and all tenants. For joint
                         tenancies, all tenants should be named. The landlord&apos;s registration
-                        number must be included â€” letting property without registration is a
-                        criminal offence in Scotland with fines up to Â£50,000.
+                        number must be included — letting property without registration is a
+                        criminal offence in Scotland with fines up to £50,000.
                       </p>
                     </div>
                   </div>
@@ -476,7 +476,7 @@ export default function PrtTenancyAgreementTemplateScotlandPage() {
                   </div>
                   <p className="text-gray-600">
                     Enter the full property address, what is included in the let (furnished items,
-                    parking, garden), and any property-specific details. Be thorough â€” unclear
+                    parking, garden), and any property-specific details. Be thorough — unclear
                     property descriptions cause disputes later.
                   </p>
                 </div>
@@ -490,7 +490,7 @@ export default function PrtTenancyAgreementTemplateScotlandPage() {
                   </div>
                   <p className="text-gray-600">
                     Enter your details as landlord, including your registration number from the
-                    Scottish Landlord Register. Add all tenant names â€” for joint tenancies, every
+                    Scottish Landlord Register. Add all tenant names — for joint tenancies, every
                     tenant must be named as they are all liable for the rent.
                   </p>
                 </div>
@@ -518,7 +518,7 @@ export default function PrtTenancyAgreementTemplateScotlandPage() {
                   </div>
                   <p className="text-gray-600">
                     Both parties sign and date the agreement. You must provide the tenant with a
-                    copy within 28 days of the tenancy starting. Keep your signed copy safe â€” you
+                    copy within 28 days of the tenancy starting. Keep your signed copy safe — you
                     will need it if you ever apply to the Tribunal.
                   </p>
                 </div>
@@ -543,7 +543,7 @@ export default function PrtTenancyAgreementTemplateScotlandPage() {
                     <p className="text-gray-600 mb-4">
                       All private landlords in Scotland must be registered with the local council.
                       Your registration number should appear in your PRT agreement. Letting property
-                      without registration is a criminal offence with penalties up to Â£50,000.
+                      without registration is a criminal offence with penalties up to £50,000.
                     </p>
                     <div className="space-y-3">
                       <div className="flex items-start gap-2 text-gray-600">

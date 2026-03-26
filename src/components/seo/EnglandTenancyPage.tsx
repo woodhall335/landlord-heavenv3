@@ -48,7 +48,7 @@ export function EnglandTenancyPage({
     <main className="min-h-screen bg-[#FCFBF8]">
       <UniversalHero
         badge="England tenancy agreements"
-        trustText="Updated England tenancy agreement wording - Assured periodic framework from 1 May 2026 - Older wording may be harder to rely on if issues arise"
+        trustText="Updated England tenancy agreement wording - Current framework from 1 May 2026 - Older wording may be harder to rely on if issues arise"
         title={title}
         subtitle={subtitle}
         primaryCta={{ label: primaryCtaLabel, href: primaryCtaHref }}
@@ -57,7 +57,7 @@ export function EnglandTenancyPage({
             ? { label: secondaryCtaLabel, href: secondaryCtaHref }
             : undefined
         }
-        feature="Older agreements may not be legally enforceable in the way landlords expect if they rely on outdated wording or structure."
+        feature="Older agreements can create avoidable uncertainty if they rely on outdated wording or structure."
         showTrustPositioningBar
         hideMedia
       />

@@ -129,12 +129,12 @@ export default function RefundsPage() {
                   <div>
                     <p className="font-semibold text-charcoal mb-1">Include These Details</p>
                     <p className="text-sm text-gray-700">
-                      â€¢ Your email address (registered account)
+                      • Your email address (registered account)
                       <br />
-                      â€¢ Order number or transaction ID
+                      • Order number or transaction ID
                       <br />
-                      â€¢ Description of the issue
-                      <br />â€¢ Screenshots if applicable
+                      • Description of the issue
+                      <br />• Screenshots if applicable
                     </p>
                   </div>
                 </div>
@@ -250,7 +250,7 @@ export default function RefundsPage() {
               Please contact us before filing a chargeback. Chargebacks:
             </p>
             <ul className="list-disc pl-6 mb-4 text-gray-700 space-y-2">
-              <li>Cost us significant fees (Â£15-30 per chargeback)</li>
+              <li>Cost us significant fees (£15-30 per chargeback)</li>
               <li>Take longer to process than directly contacting us</li>
               <li>May result in account suspension pending investigation</li>
               <li>Are only appropriate for unauthorized or fraudulent transactions</li>

@@ -128,11 +128,11 @@ export default function EvictionProcessWalesPage() {
           title="Eviction Process Wales"
           subtitle={`Understand how possession works in Wales under the Renting Homes (Wales) framework. Learn when landlords use Section 173, when breach-based possession may be more suitable, and how to move from notice to court without avoidable mistakes.`}
           primaryCta={{
-            label: `Start Wales Notice Only â€” ${PRODUCTS.notice_only.displayPrice}`,
+            label: `Start Wales Notice Only — ${PRODUCTS.notice_only.displayPrice}`,
             href: noticeOnlyLink,
           }}
           secondaryCta={{
-            label: `Need Complete Pack support? â€” ${PRODUCTS.complete_pack.displayPrice}`,
+            label: `Need Complete Pack support? — ${PRODUCTS.complete_pack.displayPrice}`,
             href: completePackLink,
           }}
           showTrustPositioningBar
@@ -254,8 +254,8 @@ export default function EvictionProcessWalesPage() {
 
               <div className="mt-8 prose prose-lg max-w-none text-gray-700">
                 <p>
-                  This matters for both SEO and legal accuracy. Landlords still search for â€œtenant
-                  eviction Walesâ€ and â€œSection 21 Walesâ€, but the working legal route in Wales is
+                  This matters for both SEO and legal accuracy. Landlords still search for “tenant
+                  eviction Wales” and “Section 21 Wales”, but the working legal route in Wales is
                   different. A strong Welsh eviction page therefore needs to do two things at once:
                   capture the search term the landlord uses and then quickly translate that into the
                   correct Wales-specific framework.
@@ -440,7 +440,7 @@ export default function EvictionProcessWalesPage() {
                       <h3 className="font-bold text-gray-900 mb-2">Planning ahead</h3>
                       <p className="text-gray-600 text-sm">
                         The Wales no-fault route often rewards landlords who plan earlier, not later.
-                        It is usually less forgiving than an â€œIâ€™ll sort the paperwork at the endâ€
+                        It is usually less forgiving than an “I’ll sort the paperwork at the end”
                         approach.
                       </p>
                     </div>
@@ -451,7 +451,7 @@ export default function EvictionProcessWalesPage() {
               <div className="mt-8 prose prose-lg max-w-none text-gray-700">
                 <p>
                   That is one reason this page is structured around the process rather than just the
-                  form. Competitor pages often stop at â€œdownload a notice.â€ The stronger landlord page
+                  form. Competitor pages often stop at “download a notice.” The stronger landlord page
                   explains what makes that notice usable later. In Wales, that means written statement
                   thinking, correct terminology, service discipline, and a possession file that still
                   works under scrutiny.
@@ -524,7 +524,7 @@ export default function EvictionProcessWalesPage() {
                       </p>
                       <div className="inline-block rounded-lg bg-gray-50 px-4 py-2 text-sm">
                         <span className="text-gray-600">Typical claim fee: </span>
-                        <span className="font-bold text-gray-900">Â£355</span>
+                        <span className="font-bold text-gray-900">£355</span>
                       </div>
                     </div>
                   </div>

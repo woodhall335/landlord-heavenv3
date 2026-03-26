@@ -165,35 +165,6 @@ export function getNoticeOnlyDocuments(
         }
       );
     }
-    // Wales Section 8 (still available under Housing Act until property becomes occupation contract)
-    if (noticeRoute === 'section_8' || noticeRoute === 'section-8') {
-      documents.push(
-        {
-          id: 'notice-section-8',
-          title: 'Section 8 Notice (Form 3)',
-          description: 'Grounds-based possession notice with your selected eviction grounds',
-          icon: 'notice',
-          pages: '4-5 pages',
-          category: 'Notice',
-        },
-        {
-          id: 'service-instructions-s8',
-          title: 'Service Instructions',
-          description: 'Step-by-step guide on how to legally serve your Section 8 notice',
-          icon: 'guidance',
-          pages: '2 pages',
-          category: 'Guidance',
-        },
-        {
-          id: 'validity-checklist-s8',
-          title: 'Service & Validity Checklist',
-          description: 'Pre-service checklist to ensure your notice meets all legal requirements',
-          icon: 'checklist',
-          pages: '2 pages',
-          category: 'Checklists',
-        }
-      );
-    }
   }
 
   // SCOTLAND

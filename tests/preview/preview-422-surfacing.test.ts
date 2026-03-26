@@ -123,6 +123,13 @@ describe("Complete Pack Document Manifest", () => {
       expect(docIds).not.toContain("form-n5b");
     });
   });
+
+  describe("Wales notice-only routes", () => {
+    it("Section 8 no longer exposes a Wales notice-only manifest", () => {
+      const documents = getNoticeOnlyDocuments("wales", "section_8");
+      expect(documents).toEqual([]);
+    });
+  });
 });
 
 describe("Notice Only Document Manifest", () => {
@@ -176,6 +183,22 @@ describe("Preview Document Types Generation", () => {
 
     const getNoticeType = (): string => {
       if (jurisdiction === "scotland") return "notice_to_leave";
+      if (jurisdiction === "wales") {
+        if (
+          noticeRoute === "section_173" ||
+          noticeRoute === "section-173" ||
+          noticeRoute === "wales_section_173"
+        ) {
+          return "section173_notice";
+        }
+        if (
+          noticeRoute === "fault_based" ||
+          noticeRoute === "fault-based" ||
+          noticeRoute === "wales_fault_based"
+        ) {
+          return "fault_based_notice";
+        }
+      }
       if (noticeRoute === "section_21" || noticeRoute === "accelerated_possession") return "section21_notice";
       return "section8_notice";
     };
@@ -264,6 +287,20 @@ describe("Preview Document Types Generation", () => {
     it("includes tribunal_lodging_guide (not court_filing_guide)", () => {
       expect(types).toContain("tribunal_lodging_guide");
       expect(types).not.toContain("court_filing_guide");
+    });
+  });
+
+  describe("Wales complete_pack routes", () => {
+    it("maps section 173 to the Wales notice type", () => {
+      const types = getDocumentTypesForProduct("complete_pack", "wales", "section_173");
+      expect(types).toContain("section173_notice");
+      expect(types).not.toContain("section8_notice");
+    });
+
+    it("maps fault-based to the Wales notice type", () => {
+      const types = getDocumentTypesForProduct("complete_pack", "wales", "wales_fault_based");
+      expect(types).toContain("fault_based_notice");
+      expect(types).not.toContain("section8_notice");
     });
   });
 });

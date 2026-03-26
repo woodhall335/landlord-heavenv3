@@ -107,7 +107,7 @@ export default function PrivateResidentialTenancyAgreementScotlandPage() {
             </>
           }
           primaryCta={{
-            label: `Create PRT Agreement â€” ${PRODUCTS.ast_standard.displayPrice}`,
+            label: `Create PRT Agreement — ${PRODUCTS.ast_standard.displayPrice}`,
             href: astProductHref,
           }}
           secondaryCta={{
@@ -210,19 +210,19 @@ export default function PrivateResidentialTenancyAgreementScotlandPage() {
                         Problems with English Templates
                       </h3>
                       <ul className="text-sm text-amber-800 space-y-1">
-                        <li>â€¢ Reference wrong legislation (Housing Act 1988)</li>
-                        <li>â€¢ Include Section 21/Section 8 terms</li>
-                        <li>â€¢ Missing mandatory Scottish terms</li>
-                        <li>â€¢ Invalid eviction procedures</li>
+                        <li>• Reference wrong legislation (Housing Act 1988)</li>
+                        <li>• Include Section 21/Section 8 terms</li>
+                        <li>• Missing mandatory Scottish terms</li>
+                        <li>• Invalid eviction procedures</li>
                       </ul>
                     </div>
                     <div className="bg-white rounded-lg p-4 border border-amber-200">
                       <h3 className="font-semibold text-amber-900 mb-2">Consequences</h3>
                       <ul className="text-sm text-amber-800 space-y-1">
-                        <li>â€¢ Notice to Leave may be invalid</li>
-                        <li>â€¢ Tribunal may refuse eviction</li>
-                        <li>â€¢ Tenant could challenge agreement</li>
-                        <li>â€¢ Potential financial penalties</li>
+                        <li>• Notice to Leave may be invalid</li>
+                        <li>• Tribunal may refuse eviction</li>
+                        <li>• Tenant could challenge agreement</li>
+                        <li>• Potential financial penalties</li>
                       </ul>
                     </div>
                   </div>
@@ -259,7 +259,7 @@ export default function PrivateResidentialTenancyAgreementScotlandPage() {
                   <tbody className="divide-y divide-gray-100">
                     <tr>
                       <td className="p-4 text-gray-600">Tenancy end date</td>
-                      <td className="p-4 text-gray-900">No end date â€” continues indefinitely</td>
+                      <td className="p-4 text-gray-900">No end date — continues indefinitely</td>
                       <td className="p-4 text-gray-900">Fixed term or periodic</td>
                     </tr>
                     <tr>
@@ -522,7 +522,7 @@ export default function PrivateResidentialTenancyAgreementScotlandPage() {
                     <p className="text-gray-600 mb-4">
                       All private landlords in Scotland must be registered with the local
                       council before letting property. Letting without registration is a
-                      criminal offence with penalties up to Â£50,000.
+                      criminal offence with penalties up to £50,000.
                     </p>
                     <div className="space-y-3">
                       <div className="flex items-start gap-2 text-gray-600">

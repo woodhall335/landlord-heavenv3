@@ -65,7 +65,7 @@ const faqs = [
   {
     question: 'Can I keep using an older tenancy agreement?',
     answer:
-      'While many older tenancy agreements still exist, they may not be legally enforceable in the way landlords expect if they rely on outdated structures or wording. Using an agreement that does not reflect the current England framework can lead to weaker protection or complications if issues arise.',
+      'Many older tenancy agreements still exist, but they may be harder to rely on if they use outdated wording or structure. Using an agreement that does not reflect the current England framework can create avoidable uncertainty if issues arise.',
   },
   {
     question: 'When should I use the standard England agreement route?',
@@ -185,8 +185,8 @@ export default function EnglandTenancyAgreementsPage() {
               search language to current <strong>England agreement</strong>{' '}
               wording, and choose the right path for a straightforward or more complex
               tenancy under the assured periodic framework from <strong>1 May 2026</strong>.
-              Older agreements may not be legally enforceable in the way landlords expect
-              if they rely on outdated wording or structure.
+              Older agreements may be harder to rely on if they use outdated wording or
+              structure.
             </>
           }
           primaryCta={{
@@ -260,10 +260,9 @@ export default function EnglandTenancyAgreementsPage() {
                 product direction rather than pretending nothing has changed.
               </p>
               <p className="mt-4 leading-7 text-gray-700">
-                That matters because older agreements may not be legally enforceable in the
-                way landlords expect if they rely on outdated wording or structure. Using
-                an agreement that does not reflect the current England framework can lead to
-                weaker protection or complications if issues arise.
+                That matters because older agreements may be harder to rely on if they use
+                outdated wording or structure. Using an agreement that does not reflect the
+                current England framework can create avoidable uncertainty if issues arise.
               </p>
             </div>
           </div>

@@ -137,7 +137,19 @@ describe('redirects', () => {
 
     it('returns preview page with cancelled flag when caseId provided', () => {
       const url = getCancelUrl({ product: 'notice_only', caseId });
-      expect(url).toBe('https://landlordheaven.co.uk/wizard/preview/case-123?payment=cancelled');
+      expect(url).toBe('https://landlordheaven.co.uk/wizard/preview/case-123?payment=cancelled&product=notice_only');
+    });
+
+    it('preserves selected add-ons on the cancel redirect', () => {
+      const url = getCancelUrl({
+        product: 'ast_standard',
+        caseId,
+        addOns: ['rent-schedule', 'guarantor-agreement'],
+      });
+
+      expect(url).toBe(
+        'https://landlordheaven.co.uk/wizard/preview/case-123?payment=cancelled&product=ast_standard&add_ons=rent-schedule%2Cguarantor-agreement'
+      );
     });
 
     it('returns dashboard when no caseId', () => {
@@ -151,7 +163,7 @@ describe('redirects', () => {
         caseId,
         baseUrl: 'http://localhost:5000',
       });
-      expect(url).toBe('http://localhost:5000/wizard/preview/case-123?payment=cancelled');
+      expect(url).toBe('http://localhost:5000/wizard/preview/case-123?payment=cancelled&product=notice_only');
     });
   });
 
@@ -161,13 +173,25 @@ describe('redirects', () => {
     it('returns both successUrl and cancelUrl for notice_only', () => {
       const result = getCheckoutRedirectUrls({ product: 'notice_only', caseId });
       expect(result.successUrl).toBe('https://landlordheaven.co.uk/dashboard/cases/case-123?payment=success');
-      expect(result.cancelUrl).toBe('https://landlordheaven.co.uk/wizard/preview/case-123?payment=cancelled');
+      expect(result.cancelUrl).toBe('https://landlordheaven.co.uk/wizard/preview/case-123?payment=cancelled&product=notice_only');
     });
 
     it('returns both successUrl and cancelUrl for complete_pack', () => {
       const result = getCheckoutRedirectUrls({ product: 'complete_pack', caseId });
       expect(result.successUrl).toBe('https://landlordheaven.co.uk/dashboard/cases/case-123?payment=success');
-      expect(result.cancelUrl).toBe('https://landlordheaven.co.uk/wizard/preview/case-123?payment=cancelled');
+      expect(result.cancelUrl).toBe('https://landlordheaven.co.uk/wizard/preview/case-123?payment=cancelled&product=complete_pack');
+    });
+
+    it('passes add-ons through to the cancel redirect', () => {
+      const result = getCheckoutRedirectUrls({
+        product: 'ast_premium',
+        caseId,
+        addOns: ['rent-schedule'],
+      });
+
+      expect(result.cancelUrl).toBe(
+        'https://landlordheaven.co.uk/wizard/preview/case-123?payment=cancelled&product=ast_premium&add_ons=rent-schedule'
+      );
     });
 
     it('returns fallback URLs when no caseId', () => {

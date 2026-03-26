@@ -9,9 +9,9 @@ const STANDARD_PRICE = '14.99';
 const PREMIUM_PRICE = '24.99';
 
 export const metadata: Metadata = {
-  title: 'Wales Occupation Contract 2026 | Tenancy Agreement Template from Â£14.99',
+  title: 'Wales Occupation Contract 2026 | Tenancy Agreement Template from £14.99',
   description:
-    'Create a Wales Occupation Contract template online. Renting Homes (Wales) Act 2016 compliant, written statement included, instant download, from Â£14.99.',
+    'Create a Wales Occupation Contract template online. Renting Homes (Wales) Act 2016 compliant, written statement included, instant download, from £14.99.',
   keywords: [
     'wales occupation contract',
     'occupation contract wales',
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     'wales landlord contract',
   ],
   openGraph: {
-    title: 'Wales Occupation Contract 2026 | Tenancy Agreement Template from Â£14.99',
+    title: 'Wales Occupation Contract 2026 | Tenancy Agreement Template from £14.99',
     description:
       'Create a Wales Occupation Contract template online with written statement wording, Renting Homes (Wales) Act compliance, and instant download.',
     type: 'website',
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Wales Occupation Contract 2026 | Tenancy Agreement Template from Â£14.99',
+    title: 'Wales Occupation Contract 2026 | Tenancy Agreement Template from £14.99',
     description:
       'Create a Wales Occupation Contract template online with written statement wording and instant download.',
   },
@@ -217,7 +217,7 @@ export default function WalesOccupationContractPage() {
             </div>
 
             <div className="inline-flex items-center rounded-full bg-red-100 px-4 py-2 text-sm font-semibold text-red-800 mb-5">
-              Updated for 2026 â€¢ Renting Homes (Wales) Act 2016 compliant
+              Updated for 2026 • Renting Homes (Wales) Act 2016 compliant
             </div>
 
             <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
@@ -240,18 +240,18 @@ export default function WalesOccupationContractPage() {
                 href="/wizard?product=ast_standard&jurisdiction=wales&src=wales_tenancy_hub&topic=tenancy"
                 className="inline-flex items-center justify-center rounded-lg border-2 border-red-600 bg-white px-6 py-3 font-semibold text-red-600 shadow-sm transition-colors hover:bg-red-50"
               >
-                Create Standard Contract - Â£14.99
+                Create Standard Contract - £14.99
               </Link>
               <Link
                 href="/wizard?product=ast_premium&jurisdiction=wales&src=wales_tenancy_hub&topic=tenancy"
                 className="inline-flex items-center justify-center rounded-lg bg-red-600 px-6 py-3 font-semibold text-white shadow-sm transition-colors hover:bg-red-700"
               >
-                Create Premium Contract - Â£24.99
+                Create Premium Contract - £24.99
               </Link>
             </div>
 
             <p className="mt-4 text-sm text-gray-600">
-              Instant download â€¢ Written statement included â€¢ No subscription required
+              Instant download • Written statement included • No subscription required
             </p>
           </div>
         </section>
@@ -639,13 +639,13 @@ export default function WalesOccupationContractPage() {
             <div className="grid md:grid-cols-2 gap-6">
               <div className="bg-white rounded-xl shadow-lg p-8 border-2 border-gray-200 text-gray-900">
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">Standard Contract</h3>
-                <p className="text-4xl font-bold text-red-600 mb-4">Â£14.99</p>
+                <p className="text-4xl font-bold text-red-600 mb-4">£14.99</p>
                 <ul className="space-y-2 text-gray-700 mb-6">
-                  <li>âœ“ Renting Homes (Wales) Act 2016 compliant wording</li>
-                  <li>âœ“ Written statement included</li>
-                  <li>âœ“ Fundamental and supplementary terms</li>
-                  <li>âœ“ Deposit wording</li>
-                  <li>âœ“ Suitable for most private Welsh landlords</li>
+                  <li>✓ Renting Homes (Wales) Act 2016 compliant wording</li>
+                  <li>✓ Written statement included</li>
+                  <li>✓ Fundamental and supplementary terms</li>
+                  <li>✓ Deposit wording</li>
+                  <li>✓ Suitable for most private Welsh landlords</li>
                 </ul>
                 <Link
                   href="/wizard?product=ast_standard&jurisdiction=wales&src=wales_tenancy_hub&topic=tenancy"
@@ -660,14 +660,14 @@ export default function WalesOccupationContractPage() {
                   RECOMMENDED
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">Premium Contract</h3>
-                <p className="text-4xl font-bold text-red-700 mb-4">Â£24.99</p>
+                <p className="text-4xl font-bold text-red-700 mb-4">£24.99</p>
                 <ul className="space-y-2 text-gray-700 mb-6">
-                  <li>âœ“ Everything in Standard plus</li>
-                  <li>âœ“ Comprehensive inventory section</li>
-                  <li>âœ“ Additional supplementary terms</li>
-                  <li>âœ“ Enhanced compliance information</li>
+                  <li>✓ Everything in Standard plus</li>
+                  <li>✓ Comprehensive inventory section</li>
+                  <li>✓ Additional supplementary terms</li>
+                  <li>✓ Enhanced compliance information</li>
                   <li className="font-semibold text-red-700">
-                    âœ“ Helpful for more complex lets and HMOs
+                    ✓ Helpful for more complex lets and HMOs
                   </li>
                 </ul>
                 <Link
@@ -817,17 +817,17 @@ export default function WalesOccupationContractPage() {
                 href="/wizard?product=ast_standard&jurisdiction=wales&src=wales_tenancy_hub&topic=tenancy"
                 className="bg-white text-red-600 px-8 py-4 rounded-lg font-semibold hover:bg-red-50 transition-colors text-lg shadow-lg"
               >
-                Standard Contract - Â£14.99
+                Standard Contract - £14.99
               </Link>
               <Link
                 href="/wizard?product=ast_premium&jurisdiction=wales&src=wales_tenancy_hub&topic=tenancy"
                 className="bg-yellow-400 text-gray-900 px-8 py-4 rounded-lg font-semibold hover:bg-yellow-300 transition-colors text-lg shadow-lg"
               >
-                Premium Contract - Â£24.99
+                Premium Contract - £24.99
               </Link>
             </div>
             <p className="mt-6 text-sm text-red-100">
-              Instant download â€¢ Legally compliant â€¢ No subscription required
+              Instant download • Legally compliant • No subscription required
             </p>
           </div>
         </section>

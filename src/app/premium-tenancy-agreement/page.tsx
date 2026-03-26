@@ -41,7 +41,7 @@ export default function PremiumTenancyAgreementPage() {
       <EnglandTenancyPage
         pagePath="/premium-tenancy-agreement"
         title="Premium Tenancy Agreement England"
-        subtitle="Choose the Premium England tenancy agreement when the let is more complex, with broader wording for HMOs, student properties, sharers, and guarantor-backed setups under the current assured periodic framework. Older agreements may not be legally enforceable in the way landlords expect if they rely on outdated wording or structure."
+        subtitle="Choose the Premium England tenancy agreement when the let is more complex, with broader wording for HMOs, student properties, sharers, and guarantor-backed setups under the current assured periodic framework. Older agreements may be harder to rely on if they use outdated wording or structure."
         primaryCtaLabel="Start Premium tenancy agreement"
         primaryCtaHref={premiumWizardHref}
         secondaryCtaLabel="Start Standard tenancy agreement"
@@ -49,7 +49,7 @@ export default function PremiumTenancyAgreementPage() {
         introTitle="Premium cover for more complex England lets"
         introBody={[
           'This page is for landlords who need more than a basic tenancy agreement. It is the stronger fit where the property is an HMO, the tenants are sharers or students, or the arrangement needs broader wording from the outset.',
-          'The Premium route uses the same current England framework as Standard, but adds broader wording where the tenancy is more complex. Older agreements may not be legally enforceable in the way landlords expect if they rely on outdated wording or structure, especially where shared occupation, guarantors, or house rules matter.',
+          'The Premium route uses the same current England framework as Standard, but adds broader wording where the tenancy is more complex. Older agreements may be harder to rely on if they use outdated wording or structure, especially where shared occupation, guarantors, or house rules matter.',
         ]}
         highlights={[
           'Built for HMOs, student lets, and shared households',
@@ -82,7 +82,7 @@ export default function PremiumTenancyAgreementPage() {
           {
             question: 'What if I am still using an older agreement?',
             answer:
-              'While many older tenancy agreements still exist, they may not be legally enforceable in the way landlords expect if they rely on outdated structures or wording. Using an agreement that does not reflect the current England framework can lead to weaker protection or complications if issues arise, especially on more complex lets.',
+              'Many older tenancy agreements still exist, but they may be harder to rely on if they use outdated wording or structure. Using an agreement that does not reflect the current England framework can create avoidable uncertainty if issues arise, especially on more complex lets.',
           },
           {
             question: 'Can I still use Standard if the let is straightforward?',

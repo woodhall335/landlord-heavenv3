@@ -39,6 +39,7 @@ export interface CheckoutRedirectInput {
   product: CheckoutProduct;
   caseId?: string;
   baseUrl?: string;
+  addOns?: string[];
 }
 
 export interface CheckoutRedirectResult {
@@ -102,12 +103,21 @@ export function getSuccessUrl(input: CheckoutRedirectInput): string {
  * @returns The cancel URL to redirect to if payment is cancelled
  */
 export function getCancelUrl(input: CheckoutRedirectInput): string {
-  const { product, caseId, baseUrl } = input;
+  const { product, caseId, baseUrl, addOns } = input;
   const base = getBaseUrl(baseUrl);
 
   // If we have a case, return to the preview page
   if (caseId) {
-    return `${base}/wizard/preview/${caseId}?payment=cancelled`;
+    const params = new URLSearchParams({
+      payment: 'cancelled',
+      product,
+    });
+
+    if (addOns && addOns.length > 0) {
+      params.set('add_ons', addOns.join(','));
+    }
+
+    return `${base}/wizard/preview/${caseId}?${params.toString()}`;
   }
 
   // Fallback: dashboard

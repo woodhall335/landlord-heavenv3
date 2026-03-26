@@ -88,6 +88,7 @@ export function PreviewPageLayout({
       const { successUrl, cancelUrl } = getCheckoutRedirectUrls({
         product: product as CheckoutProduct,
         caseId,
+        addOns,
       });
 
       // Get attribution data for checkout

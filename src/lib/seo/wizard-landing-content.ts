@@ -117,7 +117,7 @@ export const noticeOnlyContent: WizardLandingContent = {
     'Generate procedurally correct eviction notices for England (Section 21, Section 8), Wales (Section 173/181 under Renting Homes Wales Act 2016), and Scotland (Notice to Leave). Correct notice type, statutory wording, and notice periods. Official forms included.',
   h1: 'Need a Section 21 or Section 8 Notice?',
   subheading:
-    'Jurisdiction-specific eviction notices for England, Wales & Scotland â€” compliance-checked with watermarked previews before you pay.',
+    'Jurisdiction-specific eviction notices for England, Wales & Scotland — compliance-checked with watermarked previews before you pay.',
 
   product: 'notice_only',
   wizardUrl: '/wizard?product=notice_only&src=product_page&topic=eviction',
@@ -179,12 +179,12 @@ export const noticeOnlyContent: WizardLandingContent = {
     intro:
       'Incorrect eviction notices are a leading cause of failed or delayed possession claims. A single error in notice type, wording, grounds, or notice period can result in your case being struck out. Our generator reduces this risk by ensuring your notice is procedurally correct from the start.',
     benefits: [
-      'Correct notice type for your jurisdiction â€” Section 21/8 (England), Section 173/181 (Wales), or Notice to Leave (Scotland)',
-      'Statutory wording that matches current legislation â€” not outdated template language',
+      'Correct notice type for your jurisdiction — Section 21/8 (England), Section 173/181 (Wales), or Notice to Leave (Scotland)',
+      'Statutory wording that matches current legislation — not outdated template language',
       'Correct notice period calculated automatically based on tenancy start date and chosen grounds',
       'Grounds selection (Section 8/Section 181/Notice to Leave) with required wording for each ground cited',
-      'Pre-flight compliance checks flag common blockers before you serve â€” deposit protection, gas safety, EPC, How to Rent',
-      'Prepared in the correct format for service â€” reduces the risk of procedural rejection at court or tribunal',
+      'Pre-flight compliance checks flag common blockers before you serve — deposit protection, gas safety, EPC, How to Rent',
+      'Prepared in the correct format for service — reduces the risk of procedural rejection at court or tribunal',
     ],
   },
 
@@ -209,7 +209,7 @@ export const noticeOnlyContent: WizardLandingContent = {
       'Generates documents in the correct format for service or filing',
     ],
     disclaimer:
-      'This is systematic procedural validation, not legal advice. Our system checks that your notice is procedurally correct based on the information you provide. For complex situations â€” such as disputes about tenancy type, unusual lease terms, or potential defences â€” consult a qualified solicitor before serving.',
+      'This is systematic procedural validation, not legal advice. Our system checks that your notice is procedurally correct based on the information you provide. For complex situations — such as disputes about tenancy type, unusual lease terms, or potential defences — consult a qualified solicitor before serving.',
   },
 
   howValidationWorks: [
@@ -237,7 +237,7 @@ export const noticeOnlyContent: WizardLandingContent = {
     {
       question: 'What does "procedurally correct" mean?',
       answer:
-        'It means your notice uses the correct notice type, statutory wording, notice period, and prescribed form for your jurisdiction. We check: (1) Jurisdiction â€” correct notice type for your property location, (2) Grounds â€” required wording for each ground cited, (3) Notice period â€” calculated based on tenancy length, (4) Compliance â€” flags blockers like missing deposit protection. This is procedural validation, not legal advice.',
+        'It means your notice uses the correct notice type, statutory wording, notice period, and prescribed form for your jurisdiction. We check: (1) Jurisdiction — correct notice type for your property location, (2) Grounds — required wording for each ground cited, (3) Notice period — calculated based on tenancy length, (4) Compliance — flags blockers like missing deposit protection. This is procedural validation, not legal advice.',
     },
     {
       question: 'Are these official government forms?',
@@ -281,12 +281,12 @@ export const noticeOnlyContent: WizardLandingContent = {
  */
 export const completePackContent: WizardLandingContent = {
   slug: 'eviction-pack-england',
-  title: `Complete Eviction Bundle 2026 â€“ England | N5, N5B, N119 + Particulars of Claim | ${SEO_PRICES.evictionBundle.display}`,
+  title: `Complete Eviction Bundle 2026 – England | N5, N5B, N119 + Particulars of Claim | ${SEO_PRICES.evictionBundle.display}`,
   description:
-    'End-to-end eviction paperwork for England: Section 21 notice + N5B, or Section 8 notice + N5 + N119 Particulars of Claim. We create the full court route â€” not just the notice. All forms mapped and validated.',
+    'End-to-end eviction paperwork for England: Section 21 notice + N5B, or Section 8 notice + N5 + N119 Particulars of Claim. We create the full court route — not just the notice. All forms mapped and validated.',
   h1: 'Taking Your Tenant to Court? Complete Section 21 / Section 8 Eviction Pack (England)',
   subheading:
-    'Notice + N5/N5B + N119 + witness statement + filing guide â€” generated, validated, and internally consistent to reduce rejected possession claims.',
+    'Notice + N5/N5B + N119 + witness statement + filing guide — generated, validated, and internally consistent to reduce rejected possession claims.',
 
   product: 'complete_pack',
   wizardUrl: '/wizard?product=complete_pack&src=product_page&topic=eviction',
@@ -305,7 +305,7 @@ export const completePackContent: WizardLandingContent = {
       name: 'N5B Accelerated Possession',
       formNumber: 'N5B',
       description:
-        'Accelerated possession claim form for undefended Section 21 cases. Paper-only procedure â€” no hearing required if undefended. Faster than standard N5 route.',
+        'Accelerated possession claim form for undefended Section 21 cases. Paper-only procedure — no hearing required if undefended. Faster than standard N5 route.',
       route: 'section21',
     },
     {
@@ -325,7 +325,7 @@ export const completePackContent: WizardLandingContent = {
       name: 'N119 Particulars of Claim',
       formNumber: 'N119',
       description:
-        'Particulars of Claim for possession of property â€” the detailed statement of your case. Includes: grounds cited, rent arrears history with dates and amounts, tenancy details, and breach specifics. This document sets out the legal basis of your claim, including grounds and arrears schedule.',
+        'Particulars of Claim for possession of property — the detailed statement of your case. Includes: grounds cited, rent arrears history with dates and amounts, tenancy details, and breach specifics. This document sets out the legal basis of your claim, including grounds and arrears schedule.',
       route: 'section8',
     },
   ],
@@ -333,10 +333,10 @@ export const completePackContent: WizardLandingContent = {
   whatYouGet: [
     'Eviction notice (Section 21 Form 6A or Section 8 Form 3) with correct statutory wording',
     'Court claim forms: N5B for accelerated possession OR N5 + N119 for standard possession',
-    'Particulars of Claim (N119) â€” professionally structured case statement drafted in the correct legal format',
+    'Particulars of Claim (N119) — professionally structured case statement drafted in the correct legal format',
     'AI-drafted witness statement with your case details',
     'Service instructions and validity checklist',
-    'Court filing guide with step-by-step instructions â€” where to file, court fees, timelines',
+    'Court filing guide with step-by-step instructions — where to file, court fees, timelines',
     'Evidence checklist for court preparation',
     'Proof of service certificate template',
     'Unlimited regenerations with 12+ months portal storage',
@@ -344,25 +344,25 @@ export const completePackContent: WizardLandingContent = {
 
   // NEW: Why landlords use this - emphasising full court route
   whyUseThis: {
-    heading: 'Why This Bundle â€” Not Just a Notice',
+    heading: 'Why This Bundle — Not Just a Notice',
     intro:
-      'Most eviction failures happen at the court filing stage, not the notice stage. An incomplete or inconsistent court submission leads to rejected claims, wasted fees, and months of delay. This bundle prepares the FULL court route â€” from notice to filed claim â€” ensuring your documents work together.',
+      'Most eviction failures happen at the court filing stage, not the notice stage. An incomplete or inconsistent court submission leads to rejected claims, wasted fees, and months of delay. This bundle prepares the FULL court route — from notice to filed claim — ensuring your documents work together.',
     benefits: [
-      'We map your situation to the correct possession route: Section 21 â†’ N5B accelerated, or Section 8 â†’ N5 + N119 standard',
+      'We map your situation to the correct possession route: Section 21 → N5B accelerated, or Section 8 → N5 + N119 standard',
       'We draft your Particulars of Claim in the correct legal format, ensuring grounds, dates, and amounts are clearly structured.',
-      'For rent arrears: we itemise amounts, dates, and running totals in the particulars â€” exactly what the court requires',
+      'For rent arrears: we itemise amounts, dates, and running totals in the particulars — exactly what the court requires',
       'For breach grounds: we detail the specific ground(s) and supporting facts in the correct legal format',
-      'All forms are internally consistent â€” notice, claim form, and particulars align and cross-reference correctly',
+      'All forms are internally consistent — notice, claim form, and particulars align and cross-reference correctly',
       'Reduces rejected claims: forms are validated before generation to catch missing fields, date errors, and compliance issues',
     ],
   },
 
   // NEW: Procedural benefits with Particulars of Claim emphasis
   proceduralBenefits: [
-    'Generates the Particulars of Claim (N119) â€” the statement of case that sets out your grounds, arrears history, and facts in detail',
+    'Generates the Particulars of Claim (N119) — the statement of case that sets out your grounds, arrears history, and facts in detail',
     'Maps your route: Section 21 cases get Form 6A + N5B; Section 8 cases get Form 3 + N5 + N119',
     'Ensures internal consistency: notice grounds, claim form, and particulars align and reference each other correctly',
-    'Pre-fills official HMCTS forms with your case details â€” court-ready format',
+    'Pre-fills official HMCTS forms with your case details — court-ready format',
     'Calculates notice periods, court deadlines, and earliest filing dates',
     'Flags compliance blockers (deposit, gas, EPC, How to Rent) before you file',
     'Creates documents in the correct format for court filing',
@@ -379,16 +379,16 @@ export const completePackContent: WizardLandingContent = {
       'Checks compliance requirements before generation',
     ],
     disclaimer:
-      'This is systematic procedural validation, not legal advice. We ensure your forms are complete, consistent, and in the correct format. For complex cases â€” such as disputes over tenancy type, potential defences, or enforcement â€” consult a qualified solicitor.',
+      'This is systematic procedural validation, not legal advice. We ensure your forms are complete, consistent, and in the correct format. For complex cases — such as disputes over tenancy type, potential defences, or enforcement — consult a qualified solicitor.',
   },
 
   howValidationWorks: [
-    'Route mapping: Section 21 â†’ N5B accelerated route; Section 8 â†’ N5 + N119 standard route',
+    'Route mapping: Section 21 → N5B accelerated route; Section 8 → N5 + N119 standard route',
     'Form generation: Official HMCTS forms pre-filled with your case details',
     'Particulars of Claim: Grounds, arrears history, dates, and amounts drafted in legal format',
     'Compliance validation: Checks deposit, gas safety, EPC, How to Rent before generating',
     'Date calculations: Notice periods, court deadlines, and timeline guidance',
-    'Internal consistency: All documents cross-reference correctly â€” grounds match, dates align, amounts reconcile',
+    'Internal consistency: All documents cross-reference correctly — grounds match, dates align, amounts reconcile',
   ],
 
   whoThisIsFor: [
@@ -407,7 +407,7 @@ export const completePackContent: WizardLandingContent = {
     {
       question: 'What is the N119 Particulars of Claim?',
       answer:
-        'N119 is the statement of your case filed with the N5 claim form. It details: your grounds for possession, rent arrears history with dates and amounts, tenancy details, and breach specifics. This is where your case is actually made â€” a weak or missing N119 can sink an otherwise valid claim. We draft this for you.',
+        'N119 is the statement of your case filed with the N5 claim form. It details: your grounds for possession, rent arrears history with dates and amounts, tenancy details, and breach specifics. This is where your case is actually made — a weak or missing N119 can sink an otherwise valid claim. We draft this for you.',
     },
     {
       question: 'Why do you emphasise the Particulars of Claim?',
@@ -458,7 +458,7 @@ export const moneyClaimContent: WizardLandingContent = {
   title: `Money Claim Pack 2026 | Form N1 Generator | Daily Interest Rate | England Only | ${SEO_PRICES.moneyClaim.display}`,
   description:
     'Generate Form N1 claim form for rent arrears, property damage, cleaning costs, and contractual sums. England only. Automatic interest calculation with daily rate. Figures consistent across all documents. County court filing guide included.',
-  h1: 'Money Claim Pack â€” England Only',
+  h1: 'Money Claim Pack — England Only',
   subheading:
     'Form N1 claim form with automatic interest calculation, daily rate breakdown, and PAP-compliant Letter Before Claim for English county courts',
 
@@ -473,7 +473,7 @@ export const moneyClaimContent: WizardLandingContent = {
       name: 'Form N1 Claim Form',
       formNumber: 'N1',
       description:
-        'Official county court claim form for money claims. This is the form you file to start proceedings to recover tenant debts â€” rent arrears, damage, cleaning, and other contractual sums.',
+        'Official county court claim form for money claims. This is the form you file to start proceedings to recover tenant debts — rent arrears, damage, cleaning, and other contractual sums.',
     },
     {
       name: 'Particulars of Claim',
@@ -485,7 +485,7 @@ export const moneyClaimContent: WizardLandingContent = {
       name: 'Schedule of Debt',
       formNumber: 'Schedule',
       description:
-        'Itemised breakdown of all amounts claimed with dates. Courts expect a clear schedule â€” especially for rent arrears spanning multiple months.',
+        'Itemised breakdown of all amounts claimed with dates. Courts expect a clear schedule — especially for rent arrears spanning multiple months.',
     },
     {
       name: 'Interest Calculation',
@@ -496,38 +496,38 @@ export const moneyClaimContent: WizardLandingContent = {
   ],
 
   whatYouGet: [
-    'Form N1 Claim Form â€” the official county court money claim form, pre-filled with your case details',
+    'Form N1 Claim Form — the official county court money claim form, pre-filled with your case details',
     'Particulars of Claim with legal basis and factual summary',
     'Schedule of Debt itemising all amounts with dates',
-    'Automatic interest calculation at 8% statutory rate with daily rate shown (e.g., "Â£1.37 per day")',
-    'Letter Before Claim (PAP-DEBT compliant) â€” required before issuing proceedings',
+    'Automatic interest calculation at 8% statutory rate with daily rate shown (e.g., "£1.37 per day")',
+    'Letter Before Claim (PAP-DEBT compliant) — required before issuing proceedings',
     'Defendant Information Sheet',
-    'Court filing guide â€” England county court filing, court fees, and timelines',
-    'Enforcement guide â€” bailiffs, attachment of earnings, charging orders',
+    'Court filing guide — England county court filing, court fees, and timelines',
+    'Enforcement guide — bailiffs, attachment of earnings, charging orders',
     'Reply Form and Financial Statement templates',
     'Unlimited regenerations with 12+ months portal storage',
   ],
 
   // NEW: Why landlords use this
   whyUseThis: {
-    heading: 'Why This Pack â€” Not a DIY N1',
+    heading: 'Why This Pack — Not a DIY N1',
     intro:
-      'Money claims fail when figures don\'t add up, interest is calculated incorrectly, or documents are inconsistent. Courts reject claims with arithmetic errors or incomplete particulars. Our system ensures every figure is consistent across Form N1, Schedule of Debt, and Particulars of Claim â€” and calculates interest correctly with the daily rate shown.',
+      'Money claims fail when figures don\'t add up, interest is calculated incorrectly, or documents are inconsistent. Courts reject claims with arithmetic errors or incomplete particulars. Our system ensures every figure is consistent across Form N1, Schedule of Debt, and Particulars of Claim — and calculates interest correctly with the daily rate shown.',
     benefits: [
-      'Form N1 pre-filled with your claim details â€” mapped to official court format',
+      'Form N1 pre-filled with your claim details — mapped to official court format',
       'Automatic interest calculation at 8% statutory rate with correct start dates for each debt item',
-      'Daily rate shown clearly â€” courts and defendants expect this (e.g., "Â£1.37 per day continuing")',
+      'Daily rate shown clearly — courts and defendants expect this (e.g., "£1.37 per day continuing")',
       'All figures reconcile: Schedule of Debt totals match N1 claim amount and Particulars',
-      'PAP-DEBT compliant Letter Before Claim â€” required before you can issue proceedings',
+      'PAP-DEBT compliant Letter Before Claim — required before you can issue proceedings',
       'Filing guidance: Where to file in England (County Court Money Claims Centre or local county court)',
     ],
   },
 
   // NEW: Procedural benefits
   proceduralBenefits: [
-    'Generates Form N1 (Claim Form) â€” the official county court form to start money claim proceedings in England',
+    'Generates Form N1 (Claim Form) — the official county court form to start money claim proceedings in England',
     'Calculates interest automatically at 8% statutory rate with daily rate breakdown',
-    'Shows daily rate explicitly (e.g., "Â£1.37 per day") â€” required for judgment and enforcement',
+    'Shows daily rate explicitly (e.g., "£1.37 per day") — required for judgment and enforcement',
     'Ensures figures are consistent across N1, Schedule of Debt, and Particulars of Claim',
     'Creates PAP-DEBT compliant Letter Before Claim with 30-day response period',
     'England only: Guides you on where to file based on defendant address and claim type',
@@ -568,7 +568,7 @@ export const moneyClaimContent: WizardLandingContent = {
     {
       question: 'What is Form N1?',
       answer:
-        'Form N1 is the official county court claim form for money claims in England. It is the form you file to start legal proceedings to recover debts â€” including rent arrears, property damage costs, cleaning costs, and other sums owed by tenants under the tenancy agreement.',
+        'Form N1 is the official county court claim form for money claims in England. It is the form you file to start legal proceedings to recover debts — including rent arrears, property damage costs, cleaning costs, and other sums owed by tenants under the tenancy agreement.',
     },
     {
       question: 'What can I claim for?',
@@ -583,7 +583,7 @@ export const moneyClaimContent: WizardLandingContent = {
     {
       question: 'What is the daily rate and why does it matter?',
       answer:
-        'The daily rate is the interest accruing each day after filing. Calculated as: (Principal Ã— 8%) Ã· 365. For example: Â£5,000 debt accrues Â£1.10 per day. Courts expect the daily rate stated in your claim so they can calculate the final judgment amount. We include this in your N1.',
+        'The daily rate is the interest accruing each day after filing. Calculated as: (Principal × 8%) ÷ 365. For example: £5,000 debt accrues £1.10 per day. Courts expect the daily rate stated in your claim so they can calculate the final judgment amount. We include this in your N1.',
     },
     {
       question: 'Where do I file the claim?',
@@ -603,7 +603,7 @@ export const moneyClaimContent: WizardLandingContent = {
     {
       question: 'What happens after I win?',
       answer:
-        'If the tenant does not pay voluntarily after judgment, enforcement options include: County Court Bailiffs (warrant of control), High Court Enforcement Officers (for judgments over Â£600), Attachment of Earnings (deducted from wages), and Charging Orders (secured against property). Our enforcement guide covers all options.',
+        'If the tenant does not pay voluntarily after judgment, enforcement options include: County Court Bailiffs (warrant of control), High Court Enforcement Officers (for judgments over £600), Attachment of Earnings (deducted from wages), and Charging Orders (secured against property). Our enforcement guide covers all options.',
     },
   ],
 
@@ -623,7 +623,7 @@ export const astStandardContent: WizardLandingContent = {
   slug: 'tenancy-agreement',
   title: `Tenancy Agreement Generator 2026 | England Tenancy Agreement, Occupation Contract, PRT | ${SEO_PRICES.tenancyStandard.display}`,
   description:
-    'Jurisdiction-specific tenancy agreements: England tenancy agreement designed for the assured periodic framework, Occupation Contract (Wales), Private Residential Tenancy (Scotland), and Private Tenancy Agreement (Northern Ireland). Older agreements may not be legally enforceable in the way landlords expect if they rely on outdated wording or structure.',
+    'Jurisdiction-specific tenancy agreements: England tenancy agreement designed for the assured periodic framework, Occupation Contract (Wales), Private Residential Tenancy (Scotland), and Private Tenancy Agreement (Northern Ireland). Older agreements may be harder to rely on if they use outdated wording or structure.',
   h1: 'Tenancy Agreement Generator',
   subheading:
     'Jurisdiction-specific agreements with current England tenancy agreement wording and the correct terminology for Wales, Scotland, and Northern Ireland',
@@ -709,7 +709,7 @@ export const astStandardContent: WizardLandingContent = {
   whyUseThis: {
     heading: 'Why Jurisdiction-Specific Not A Generic Template',
     intro:
-      'Using the wrong terminology or law for your jurisdiction creates disputes and compliance problems. Older agreements may not be legally enforceable in the way landlords expect if they rely on outdated wording or structure. The live England product now uses current England tenancy agreement wording, while Wales needs an Occupation Contract, Scotland needs a PRT, and Northern Ireland needs its own private tenancy wording.',
+    'Using the wrong terminology or law for your jurisdiction creates disputes and compliance problems. Older agreements may be harder to rely on if they use outdated wording or structure. The live England product now uses current England tenancy agreement wording, while Wales needs an Occupation Contract, Scotland needs a PRT, and Northern Ireland needs its own private tenancy wording.',
     benefits: [
       'Correct agreement type: England tenancy agreement, Standard Occupation Contract (Wales), PRT (Scotland), Private Tenancy (NI)',
       'Correct terminology for each nation instead of generic UK wording',
@@ -813,7 +813,7 @@ export const astPremiumContent: WizardLandingContent = {
   slug: 'premium-tenancy-agreement',
   title: `Premium Tenancy Agreement 2026 | HMO Clauses & Guarantor Provisions | ${SEO_PRICES.tenancyPremium.display}`,
   description:
-    'Premium tenancy agreements with HMO clauses, guarantor provisions, inventory and schedule of condition, and compliance checklist. England now uses current England tenancy agreement wording in the public flow, and older agreements may not be legally enforceable in the way landlords expect if they rely on outdated wording or structure.',
+    'Premium tenancy agreements with HMO clauses, guarantor provisions, inventory and schedule of condition, and compliance checklist. England now uses current England tenancy agreement wording in the public flow, and older agreements may be harder to rely on if they use outdated wording or structure.',
   h1: 'Premium Tenancy Agreement',
   subheading:
     'HMO clauses, guarantor provisions, inventory and schedule of condition, and compliance checklist for all UK jurisdictions',

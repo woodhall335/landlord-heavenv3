@@ -107,7 +107,7 @@ export default function OccupationContractTemplateWalesPage() {
             </>
           }
           primaryCta={{
-            label: `Create Your Template â€” ${PRODUCTS.ast_standard.displayPrice}`,
+            label: `Create Your Template — ${PRODUCTS.ast_standard.displayPrice}`,
             href: astProductHref,
           }}
           secondaryCta={{
@@ -640,7 +640,7 @@ export default function OccupationContractTemplateWalesPage() {
                   In Wales, the person renting is a &quot;contract-holder&quot; not a
                   &quot;tenant&quot;. The agreement is an &quot;occupation contract&quot; not a
                   &quot;tenancy agreement&quot;. The property is a &quot;dwelling&quot; not
-                  &quot;the premises&quot;. These are not just cosmetic changes â€” they reflect
+                  &quot;the premises&quot;. These are not just cosmetic changes — they reflect
                   different legal concepts under Welsh law.
                 </p>
 
@@ -655,7 +655,7 @@ export default function OccupationContractTemplateWalesPage() {
                 <p>
                   While English ASTs do not require a specific format, Welsh landlords must
                   provide a written statement within 14 days containing all fundamental and
-                  supplementary terms. This is not optional â€” failure to provide it blocks
+                  supplementary terms. This is not optional — failure to provide it blocks
                   Section 173 notices.
                 </p>
 

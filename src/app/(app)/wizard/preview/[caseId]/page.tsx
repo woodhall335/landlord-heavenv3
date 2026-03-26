@@ -149,6 +149,7 @@ function ASTCheckoutButton({
       const { successUrl, cancelUrl } = getCheckoutRedirectUrls({
         product: product as CheckoutProduct,
         caseId,
+        addOns,
       });
 
       // Get attribution data for checkout
@@ -329,6 +330,22 @@ export default function WizardPreviewPage() {
     // Determine the main notice type
     const getNoticeType = (): string => {
       if (jurisdiction === 'scotland') return 'notice_to_leave';
+      if (jurisdiction === 'wales') {
+        if (
+          noticeRoute === 'section_173' ||
+          noticeRoute === 'section-173' ||
+          noticeRoute === 'wales_section_173'
+        ) {
+          return 'section173_notice';
+        }
+        if (
+          noticeRoute === 'fault_based' ||
+          noticeRoute === 'fault-based' ||
+          noticeRoute === 'wales_fault_based'
+        ) {
+          return 'fault_based_notice';
+        }
+      }
       if (noticeRoute === 'section_21' || noticeRoute === 'accelerated_possession') return 'section21_notice';
       return 'section8_notice';
     };

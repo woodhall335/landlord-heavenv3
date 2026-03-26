@@ -108,7 +108,7 @@ export default function StandardOccupationContractWalesPage() {
             </>
           }
           primaryCta={{
-            label: `Create Occupation Contract â€” ${PRODUCTS.ast_standard.displayPrice}`,
+            label: `Create Occupation Contract — ${PRODUCTS.ast_standard.displayPrice}`,
             href: astProductHref,
           }}
           secondaryCta={{

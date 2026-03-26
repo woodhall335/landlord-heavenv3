@@ -188,6 +188,12 @@ export function validateTenancyRequiredFacts(
 
   if (englandPostReformStart && isFixedTerm === true) {
     invalid.add('is_fixed_term');
+  } else if (
+    jurisdiction !== 'scotland' &&
+    !(jurisdiction === 'england' && englandPostReformStart) &&
+    isFixedTerm === undefined
+  ) {
+    missing.add('is_fixed_term');
   } else if (jurisdiction !== 'scotland' && isFixedTerm === true) {
     const endDate = (wizardFacts.tenancy_end_date as string | undefined) || caseFacts.tenancy.end_date;
     if (!hasValidDate(endDate)) {

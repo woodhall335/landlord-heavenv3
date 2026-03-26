@@ -42,7 +42,7 @@ export default function TenancyAgreementPage() {
       <EnglandTenancyPage
         pagePath="/tenancy-agreement"
         title="New Tenancy Agreement England"
-        subtitle="Create an updated England tenancy agreement designed for the assured periodic framework from 1 May 2026. Older agreements may not be legally enforceable in the way landlords expect if they rely on outdated wording or structure, so start with Standard for straightforward lets or move to Premium when the household or risk profile is more complex."
+        subtitle="Create an updated England tenancy agreement designed for the assured periodic framework from 1 May 2026. Older agreements may be harder to rely on if they use outdated wording or structure, so start with Standard for straightforward lets or move to Premium when the household or risk profile is more complex."
         primaryCtaLabel="Start Standard tenancy agreement"
         primaryCtaHref={standardWizardHref}
         secondaryCtaLabel="Start Premium tenancy agreement"
@@ -50,7 +50,7 @@ export default function TenancyAgreementPage() {
         introTitle="New tenancy agreement for England"
         introBody={[
           'If you need a new tenancy agreement for a property in England, this is the main Landlord Heaven route for a standard new let.',
-          'Landlords still search using AST language, but from 1 May 2026 new England agreements generally move into the assured periodic model. Older agreements may not be legally enforceable in the way landlords expect if they rely on outdated wording or structure, so this page uses current England wording instead of selling a new fixed-term AST in the old sense.',
+          'Landlords still search using AST language, but from 1 May 2026 new England agreements generally move into the assured periodic model. Older agreements may be harder to rely on if they use outdated wording or structure, so this page uses current England wording instead of selling a new fixed-term AST in the old sense.',
         ]}
         highlights={[
           'Updated England agreement route for standard new lets',
@@ -78,7 +78,7 @@ export default function TenancyAgreementPage() {
           {
             question: 'Can I keep using an older tenancy agreement?',
             answer:
-              'While many older tenancy agreements still exist, they may not be legally enforceable in the way landlords expect if they rely on outdated structures or wording. Using an agreement that does not reflect the current England framework can lead to weaker protection or complications if issues arise.',
+              'Many older tenancy agreements still exist, but they may be harder to rely on if they use outdated wording or structure. Using an agreement that does not reflect the current England framework can create avoidable uncertainty if issues arise.',
           },
           {
             question: 'What if I need a more complex England agreement?',

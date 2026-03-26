@@ -34,8 +34,8 @@ export const metadata: Metadata = generateMetadata({
 
 export default function AboutPage() {
   const breadcrumbs = [
-    { name: 'Home', url: 'https://landlordheaven.com' },
-    { name: 'About', url: 'https://landlordheaven.com/about' },
+    { name: 'Home', url: 'https://landlordheaven.co.uk' },
+    { name: 'About', url: 'https://landlordheaven.co.uk/about' },
   ];
 
   return (

@@ -17,6 +17,7 @@ describe('validateTenancyRequiredFacts', () => {
     property_address_town: 'London',
     property_address_postcode: 'E1 1AA',
     tenancy_start_date: '2026-01-01',
+    is_fixed_term: false,
     rent_amount: 1200,
     deposit_amount: 0,
     tenants: [
@@ -124,6 +125,33 @@ describe('validateTenancyRequiredFacts', () => {
     );
   });
 
+  it('requires tenancy structure selection for Wales, Northern Ireland, and pre-reform England', () => {
+    const preReformEngland = validateTenancyRequiredFacts({
+      ...completeFacts,
+      is_fixed_term: undefined,
+    }, { jurisdiction: 'england' });
+
+    const wales = validateTenancyRequiredFacts({
+      ...completeFacts,
+      __meta: { jurisdiction: 'wales' },
+      is_fixed_term: undefined,
+    }, { jurisdiction: 'wales' });
+
+    const northernIreland = validateTenancyRequiredFacts({
+      ...completeFacts,
+      __meta: { jurisdiction: 'northern-ireland' },
+      is_fixed_term: undefined,
+      agreement_date: '2026-01-01',
+      rent_due_day: '1',
+      payment_method: 'Bank transfer',
+      payment_details: 'Sort code 00-00-00, account 12345678',
+    }, { jurisdiction: 'northern-ireland' });
+
+    expect(preReformEngland.missing_fields).toContain('is_fixed_term');
+    expect(wales.missing_fields).toContain('is_fixed_term');
+    expect(northernIreland.missing_fields).toContain('is_fixed_term');
+  });
+
   it('blocks new England fixed-term AST structures starting on or after 1 May 2026', () => {
     const result = validateTenancyRequiredFacts({
       ...completeFacts,
@@ -137,6 +165,21 @@ describe('validateTenancyRequiredFacts', () => {
     expect(result.invalid_fields).toContain('is_fixed_term');
     expect(result.missing_fields).not.toContain('tenancy_end_date');
     expect(result.missing_fields).not.toContain('term_length');
+  });
+
+  it('does not require tenancy structure selection for new England tenancies starting on or after 1 May 2026', () => {
+    const result = validateTenancyRequiredFacts({
+      ...completeFacts,
+      tenancy_start_date: '2026-05-02',
+      england_tenancy_purpose: 'new_agreement',
+      is_fixed_term: undefined,
+      england_rent_in_advance_compliant: true,
+      england_no_bidding_confirmed: true,
+      england_no_discrimination_confirmed: true,
+    }, { jurisdiction: 'england' });
+
+    expect(result.missing_fields).not.toContain('is_fixed_term');
+    expect(result.invalid_fields).not.toContain('is_fixed_term');
   });
 
   it('does not block existing written England transition cases from carrying legacy fixed-term data', () => {
