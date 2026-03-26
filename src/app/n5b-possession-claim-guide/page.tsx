@@ -14,7 +14,6 @@ import {
   StructuredData,
   articleSchema,
   breadcrumbSchema,
-  faqPageSchema,
 } from '@/lib/seo/structured-data';
 
 const canonical =
@@ -124,15 +123,15 @@ export default function Page() {
         title="N5B Possession Claim Guide"
         subtitle="A landlord guide explaining how the accelerated possession claim works after serving a Section 21 notice."
         primaryCta={{
-          label: 'Start Complete Eviction Pack',
+          label: 'Start Complete Pack Now',
           href: completePackProductHref,
         }}
         secondaryCta={{
-          label: 'Need notice drafting first?',
+          label: 'Draft my notice first',
           href: noticeOnlyProductHref,
         }}
-        mediaSrc="/images/wizard-icons/07-review-finish.png"
-        mediaAlt="N5B possession claim guide"
+        mediaSrc="/images/Statutory-change.webp"
+        mediaAlt="Landlord reviewing statutory possession claim changes"
         showTrustPositioningBar
       />
 
