@@ -29,7 +29,7 @@ import { PRODUCTS } from '@/lib/pricing/products';
 const canonical = getCanonicalUrl('/section-21-ban');
 
 const noticeOnlyPrice = PRODUCTS.notice_only?.displayPrice ?? '£29.99';
-const completePackPrice = PRODUCTS.complete_pack?.displayPrice ?? '£79.99';
+const completePackPrice = PRODUCTS.complete_pack?.displayPrice ?? '£49.99';
 
 const noticeOnlyHref = '/products/notice-only';
 const completePackHref = '/products/complete-pack';

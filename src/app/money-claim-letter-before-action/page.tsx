@@ -399,7 +399,7 @@ export default function MoneyClaimLetterBeforeActionPage() {
                 href="/products/money-claim?topic=debt&src=seo_money_claim_letter_before_action"
                 className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
               >
-                Generate Your Documents — £59.99
+                Generate Your Documents — £29.99
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <p className="text-sm text-gray-500 mt-3">

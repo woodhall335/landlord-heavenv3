@@ -32,7 +32,7 @@ const canonicalUrl = getCanonicalUrl('/how-to-evict-tenant');
 const primaryProductHref = '/products/complete-pack';
 
 const noticeOnlyPrice = PRODUCTS.notice_only?.displayPrice ?? 'GBP29.99';
-const completePackPrice = PRODUCTS.complete_pack?.displayPrice ?? 'GBP79.99';
+const completePackPrice = PRODUCTS.complete_pack?.displayPrice ?? 'GBP49.99';
 
 const complianceLinks = {
   deposit: buildAskHeavenLink({

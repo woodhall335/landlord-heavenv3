@@ -606,7 +606,7 @@ export default function RentArrearsLetterTemplatePage() {
                     <span className="text-sm font-medium text-primary uppercase tracking-wide">
                       Money Claim Pack
                     </span>
-                    <div className="text-4xl font-bold text-gray-900 mt-2">£59.99</div>
+                    <div className="text-4xl font-bold text-gray-900 mt-2">£29.99</div>
                   </div>
                   <ul className="space-y-4 mb-8">
                     <li className="flex items-start gap-3">

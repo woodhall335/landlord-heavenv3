@@ -8,7 +8,7 @@
  * - Grounds support and evidence checklists
  * - Premium features (lifetime storage, priority support)
  *
- * Pricing: £79.99 one-time payment (England only)
+ * Pricing: £49.99 one-time payment (England only)
  * Regional Restrictions: Wales and Scotland users should use ootice Only instead
  */
 
@@ -1439,7 +1439,7 @@ async function generateScotlandEvictionPack(
  * - Timeline expectations
  * - Proof of service templates
  *
- * Price: £79.99 one-time (England only)
+ * Price: £49.99 one-time (England only)
  */
 export async function generateCompleteEvictionPack(
   wizardFacts: any

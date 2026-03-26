@@ -249,7 +249,7 @@ export default function TenantNotPayingRentPage() {
                     href="/products/money-claim"
                     className="inline-flex items-center gap-2 text-primary font-medium text-sm hover:underline"
                   >
-                    Start Money Claim - GBP59.99
+                    Start Money Claim - GBP29.99
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
@@ -519,7 +519,7 @@ export default function TenantNotPayingRentPage() {
                         className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors"
                       >
                         <Gavel className="w-5 h-5" />
-                        Get Money Claim Pack - GBP59.99
+                        Get Money Claim Pack - GBP29.99
                       </Link>
                       <Link
                         href="/money-claim-unpaid-rent"

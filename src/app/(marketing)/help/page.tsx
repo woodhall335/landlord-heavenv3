@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { Container } from "@/components/ui";
 import Link from "next/link";
 import Image from "next/image";
@@ -102,7 +102,7 @@ export default function HelpPage() {
                         <li>Choose your product category (Notices, Money Claims, Tenancy Agreements, etc.) or click "Start Wizard"</li>
                         <li>Answer questions about your case (property, tenant, dates, grounds)</li>
                         <li>Review the generated document preview</li>
-                        <li>Complete payment (£14.99 - £79.99 depending on product)</li>
+                        <li>Complete payment (£14.99 - £49.99 depending on product)</li>
                         <li>Download your documents as PDF immediately</li>
                       </ol>
                       <p className="mt-3">The entire process takes 10-15 minutes.</p>
@@ -136,7 +136,7 @@ export default function HelpPage() {
                         Leave). Tenant might leave voluntarily.
                       </li>
                       <li>
-                        <strong>Money Claims (£59.99):</strong> Tenant owes rent arrears. Includes claim forms, arrears schedules, and witness statements.
+                        <strong>Money Claims (£29.99):</strong> Tenant owes rent arrears. Includes claim forms, arrears schedules, and witness statements.
                       </li>
                       <li>
                         <strong>Standard Residential Tenancy Agreement (£14.99):</strong> Updated England residential tenancy agreement for standard lettings.

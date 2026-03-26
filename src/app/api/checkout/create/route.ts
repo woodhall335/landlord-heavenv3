@@ -4,9 +4,9 @@
  * POST /api/checkout/create
  * Creates a Stripe checkout session for one-time purchases
  *
- * IMPORTANT: Prices are controlled in Stripe Dashboard.
- * Product metadata comes from src/lib/pricing/products.ts (source of truth).
- * Stripe Price IDs come from environment variables via src/lib/stripe/index.ts.
+ * IMPORTANT: Prices are controlled in src/lib/pricing/products.ts.
+ * Stripe product/price IDs come from environment variables via src/lib/stripe/index.ts.
+ * Checkout line items use price_data so the app amount and Stripe charge stay in sync.
  *
  * IDEMPOTENCY:
  * - If case_id is provided, checkout is idempotent per (case_id, product_type)
@@ -65,8 +65,10 @@ const ADD_ON_ELIGIBLE_PRODUCTS = [
 ] as const;
 
 /**
- * Map product types to Stripe Price IDs
- * Note: money_claim is £59.99, sc_money_claim (discontinued) shares the same Stripe price ID
+ * Map product types to configured Stripe Price IDs
+ * These IDs are validated for configuration safety, while charged amounts still
+ * come from src/lib/pricing/products.ts via price_data.
+ * Note: money_claim is £29.99, sc_money_claim (discontinued) shares the same Stripe price ID
  * Jurisdiction-specific display SKUs (prt_*, occupation_*, ni_*) map to the same prices as ast_*
  */
 const PRODUCT_TO_PRICE_ID: Record<string, string> = {

@@ -31,7 +31,7 @@ const canonicalUrl = getCanonicalUrl('/wales-eviction-notices');
 
 const noticeOnlyHref = '/products/notice-only';
 const noticeOnlyPrice = PRODUCTS.notice_only?.displayPrice ?? '?29.99';
-const completePackPrice = PRODUCTS.complete_pack?.displayPrice ?? '?79.99';
+const completePackPrice = PRODUCTS.complete_pack?.displayPrice ?? '?49.99';
 
 export const metadata: Metadata = {
   title: 'Wales Eviction Notices | Landlord Guide to Possession Routes',

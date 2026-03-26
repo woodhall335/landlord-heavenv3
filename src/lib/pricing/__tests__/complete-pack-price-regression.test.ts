@@ -14,8 +14,8 @@ const CORE_PRICE_EXPECTATIONS: Record<
   { amount: number; display: string; pence: number }
 > = {
   notice_only: { amount: 29.99, display: '£29.99', pence: 2999 },
-  complete_pack: { amount: 79.99, display: '£79.99', pence: 7999 },
-  money_claim: { amount: 59.99, display: '£59.99', pence: 5999 },
+  complete_pack: { amount: 49.99, display: '£49.99', pence: 4999 },
+  money_claim: { amount: 29.99, display: '£29.99', pence: 2999 },
   ast_standard: { amount: 14.99, display: '£14.99', pence: 1499 },
   ast_premium: { amount: 24.99, display: '£24.99', pence: 2499 },
 };
@@ -88,8 +88,8 @@ describe('Pricing regression checks', () => {
     const staleHits: string[] = [];
     const staleRules: Array<{ label: string; pattern: RegExp }> = [
       { label: 'Notice Only £19.99', pattern: /(Section\s*21|Section\s*8|Notice(?:\s+Only)?|Eviction Notice)[^\n£]{0,120}£19\.99/i },
-      { label: 'Complete Pack £49.99', pattern: /Complete(?: Eviction)? Pack[^\n£]{0,120}£49\.99/i },
-      { label: 'Money Claim £34.99', pattern: /Money Claim(?:s)?[^\n£]{0,120}£34\.99/i },
+      { label: 'Complete Pack £79.99', pattern: /Complete(?: Eviction)? Pack[^\n£]{0,120}£79\.99/i },
+      { label: 'Money Claim £59.99', pattern: /Money Claim(?:s)?[^\n£]{0,120}£59\.99/i },
       { label: 'Standard tenancy £9.99', pattern: /Standard\s+(?:AST|PRT|Contract)[^\n£]{0,120}£9\.99/i },
       { label: 'Premium tenancy £19.99', pattern: /Premium\s+(?:AST|PRT|Contract)[^\n£]{0,120}£19\.99/i },
     ];

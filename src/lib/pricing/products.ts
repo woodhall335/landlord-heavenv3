@@ -14,8 +14,8 @@ import {
  */
 export const SEO_PRICES = {
   evictionNotice: { amount: 29.99, display: '£29.99' },
-  evictionBundle: { amount: 79.99, display: '£79.99' },
-  moneyClaim: { amount: 59.99, display: '£59.99' },
+  evictionBundle: { amount: 49.99, display: '£49.99' },
+  moneyClaim: { amount: 29.99, display: '£29.99' },
   tenancyStandard: { amount: 14.99, display: '£14.99' },
   tenancyPremium: { amount: 24.99, display: '£24.99' },
   residentialLettingStandard: { amount: 9.99, display: '£9.99' },
@@ -170,6 +170,13 @@ export const ASK_HEAVEN_RECOMMENDATIONS: AskHeavenRecommendation[] = [
   'money_claim',
   'tenancy_agreement',
 ];
+
+export const ASK_HEAVEN_RECOMMENDATION_MAP = {
+  notice_only: PRODUCTS.notice_only,
+  complete_pack: PRODUCTS.complete_pack,
+  money_claim: PRODUCTS.money_claim,
+  tenancy_agreement: PRODUCTS.ast_standard,
+} as const;
 
 /**
  * Get product config by SKU

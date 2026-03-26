@@ -224,13 +224,13 @@ describe('Wizard Landing Pages - Content Configuration', () => {
       expect(astStandardContent.jurisdictions).toContain('Northern Ireland');
     });
 
-    it('should use correct terminology: AST for England', () => {
+    it('should use current England tenancy agreement terminology for England', () => {
       const englandCoverage = astStandardContent.jurisdictionCoverage?.find(
         (j) => j.name === 'England'
       );
       expect(englandCoverage).toBeTruthy();
-      expect(englandCoverage?.agreementType).toContain('Assured Shorthold Tenancy');
-      expect(englandCoverage?.agreementType).toContain('AST');
+      expect(englandCoverage?.agreementType).toContain('England tenancy agreement');
+      expect(englandCoverage?.legalBasis).toContain('assured periodic framework');
     });
 
     it('should use correct terminology: Occupation Contract for Wales', () => {
@@ -319,13 +319,14 @@ describe('Wizard Landing Pages - Content Configuration', () => {
       expect(combinedText.toLowerCase()).toContain('compliance checklist');
     });
 
-    it('should mention applicable laws per jurisdiction', () => {
+    it('should mention applicable legal basis per jurisdiction', () => {
       // Check England
       const englandCoverage = astPremiumContent.jurisdictionCoverage?.find(
         (j) => j.name === 'England'
       );
-      expect(englandCoverage?.legalBasis).toContain('Housing Act 1988');
-      expect(englandCoverage?.legalBasis).toContain('Housing Act 2004');
+      expect(englandCoverage?.legalBasis).toContain('Current England agreement wording');
+      expect(englandCoverage?.legalBasis).toContain('HMO');
+      expect(englandCoverage?.legalBasis).toContain('guarantor');
 
       // Check Wales
       const walesCoverage = astPremiumContent.jurisdictionCoverage?.find(
@@ -578,12 +579,12 @@ describe('Wizard Landing Pages - Pricing Accuracy', () => {
 
   it('should use correct price for Eviction Bundle', () => {
     expect(completePackContent.price).toBe(SEO_PRICES.evictionBundle.display);
-    expect(completePackContent.price).toBe('£79.99');
+    expect(completePackContent.price).toBe('£49.99');
   });
 
   it('should use correct price for Money Claim', () => {
     expect(moneyClaimContent.price).toBe(SEO_PRICES.moneyClaim.display);
-    expect(moneyClaimContent.price).toBe('£59.99');
+    expect(moneyClaimContent.price).toBe('£29.99');
   });
 
   it('should use correct price for Standard Tenancy Agreement', () => {
@@ -598,8 +599,8 @@ describe('Wizard Landing Pages - Pricing Accuracy', () => {
 
   it('should include price in title for all products', () => {
     expect(noticeOnlyContent.title).toContain('£29.99');
-    expect(completePackContent.title).toContain('£79.99');
-    expect(moneyClaimContent.title).toContain('£59.99');
+    expect(completePackContent.title).toContain('£49.99');
+    expect(moneyClaimContent.title).toContain('£29.99');
     expect(astStandardContent.title).toContain('£14.99');
     expect(astPremiumContent.title).toContain('£24.99');
   });
@@ -751,10 +752,10 @@ describe('Wizard Landing Pages - Price Regression Guard', () => {
   });
 
   it('should include the current core prices in allowed SEO prices', () => {
-    expect(ALLOWED_SEO_PRICES.size).toBe(7);
+    expect(ALLOWED_SEO_PRICES.size).toBe(6);
     expect(ALLOWED_SEO_PRICES.has('£29.99')).toBe(true);
-    expect(ALLOWED_SEO_PRICES.has('£79.99')).toBe(true);
-    expect(ALLOWED_SEO_PRICES.has('£59.99')).toBe(true);
+    expect(ALLOWED_SEO_PRICES.has('£49.99')).toBe(true);
+    expect(ALLOWED_SEO_PRICES.has('£29.99')).toBe(true);
     expect(ALLOWED_SEO_PRICES.has('£14.99')).toBe(true);
     expect(ALLOWED_SEO_PRICES.has('£24.99')).toBe(true);
   });

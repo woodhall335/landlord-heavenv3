@@ -39,12 +39,12 @@ describe('Pricing Consistency', () => {
       expect(PRODUCTS.notice_only.price).toBe(29.99);
     });
 
-    it('Complete Eviction Pack should be £79.99 (England only)', () => {
-      expect(PRODUCTS.complete_pack.price).toBe(79.99);
+    it('Complete Eviction Pack should be £49.99 (England only)', () => {
+      expect(PRODUCTS.complete_pack.price).toBe(49.99);
     });
 
-    it('Money Claim Pack should be £59.99 (England only)', () => {
-      expect(PRODUCTS.money_claim.price).toBe(59.99);
+    it('Money Claim Pack should be £29.99 (England only)', () => {
+      expect(PRODUCTS.money_claim.price).toBe(29.99);
     });
 
     it('Standard AST should be £14.99', () => {
@@ -159,14 +159,14 @@ describe('Pricing Consistency', () => {
     });
 
     it('complete_pack should only have England pricing', () => {
-      expect(getRegionalPrice('complete_pack', 'england')).toBe(79.99);
+      expect(getRegionalPrice('complete_pack', 'england')).toBe(49.99);
       expect(getRegionalPrice('complete_pack', 'wales')).toBeNull();
       expect(getRegionalPrice('complete_pack', 'scotland')).toBeNull();
       expect(getRegionalPrice('complete_pack', 'northern_ireland')).toBeNull();
     });
 
     it('money_claim should only have England pricing', () => {
-      expect(getRegionalPrice('money_claim', 'england')).toBe(59.99);
+      expect(getRegionalPrice('money_claim', 'england')).toBe(29.99);
       expect(getRegionalPrice('money_claim', 'wales')).toBeNull();
       expect(getRegionalPrice('money_claim', 'scotland')).toBeNull();
       expect(getRegionalPrice('money_claim', 'northern_ireland')).toBeNull();

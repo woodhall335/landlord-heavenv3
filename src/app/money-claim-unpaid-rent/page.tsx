@@ -19,7 +19,7 @@ const canonical = getCanonicalUrl('/money-claim-unpaid-rent');
 
 const moneyClaimProductLink = '/products/money-claim';
 
-const moneyClaimPrice = PRODUCTS.money_claim?.displayPrice ?? '£79.99';
+const moneyClaimPrice = PRODUCTS.money_claim?.displayPrice ?? '£29.99';
 
 export const metadata: Metadata = {
   title: 'Money Claim for Unpaid Rent | Landlord Court Recovery Guide',

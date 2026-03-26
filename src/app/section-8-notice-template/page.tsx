@@ -44,7 +44,7 @@ import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 
 const canonicalUrl = getCanonicalUrl('/section-8-notice-template');
 
-const completePackPrice = PRODUCTS.complete_pack?.displayPrice ?? '£79.99';
+const completePackPrice = PRODUCTS.complete_pack?.displayPrice ?? '£49.99';
 const noticeOnlyPrice = PRODUCTS.notice_only?.displayPrice ?? '£29.99';
 
 const completePackProductHref = '/products/complete-pack';
@@ -112,7 +112,7 @@ export default function Section8NoticeTemplatePage() {
       offers: {
         '@type': 'AggregateOffer',
         lowPrice: '0',
-        highPrice: '79.99',
+        highPrice: '49.99',
         priceCurrency: 'GBP',
         offerCount: '2',
       },

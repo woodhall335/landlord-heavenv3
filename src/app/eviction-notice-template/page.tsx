@@ -35,7 +35,7 @@ import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 const canonicalUrl = getCanonicalUrl('/eviction-notice-template');
 
 const noticeOnlyPrice = PRODUCTS.notice_only?.displayPrice ?? '£29.99';
-const completePackPrice = PRODUCTS.complete_pack?.displayPrice ?? '£79.99';
+const completePackPrice = PRODUCTS.complete_pack?.displayPrice ?? '£49.99';
 
 const noticeOnlyProductHref = '/products/notice-only';
 const completePackProductHref = '/products/complete-pack';

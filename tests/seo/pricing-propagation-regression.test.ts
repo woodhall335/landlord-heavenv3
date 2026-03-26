@@ -20,8 +20,8 @@ describe('Pricing propagation regressions', () => {
     const violations: string[] = [];
     const staleRules: Array<{ label: string; pattern: RegExp }> = [
       { label: 'Notice Only £19.99', pattern: /(Section\\s*21|Section\\s*8|Notice(?:\\s+Only)?|Eviction Notice)[^\\n£]{0,120}£19\\.99/i },
-      { label: 'Complete Pack £49.99', pattern: /Complete(?: Eviction)? Pack[^\\n£]{0,120}£49\\.99/i },
-      { label: 'Money Claim £34.99', pattern: /Money Claim(?:s)?[^\\n£]{0,120}£34\\.99/i },
+      { label: 'Complete Pack £79.99', pattern: /Complete(?: Eviction)? Pack[^\\n£]{0,120}£79\\.99/i },
+      { label: 'Money Claim £59.99', pattern: /Money Claim(?:s)?[^\\n£]{0,120}£59\\.99/i },
       { label: 'Standard tenancy £9.99', pattern: /Standard\\s+(?:AST|PRT|Contract)[^\\n£]{0,120}£9\\.99/i },
       { label: 'Premium tenancy £19.99', pattern: /Premium\\s+(?:AST|PRT|Contract)[^\\n£]{0,120}£19\\.99/i },
     ];
