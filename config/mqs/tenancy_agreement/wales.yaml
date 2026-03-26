@@ -43,45 +43,6 @@ questions:
     maps_to:
       - product_tier
 
-  # 1. Occupation Contract Suitability Check
-  - id: occupation_contract_suitability
-    section: "Contract Type Check"
-    question: "Occupation contract suitability check"
-    inputType: group
-    helperText: "Basic checks to ensure this is a valid standard occupation contract under the Renting Homes (Wales) Act 2016. For validation/warnings only."
-    fields:
-      - id: tenant_is_individual
-        label: "Is the tenant an individual (not a company)?"
-        inputType: yes_no
-        validation:
-          required: true
-        width: half
-      - id: main_home
-        label: "Will this be the tenant's main home?"
-        inputType: yes_no
-        validation:
-          required: true
-        width: half
-      - id: landlord_lives_at_property
-        label: "Does the landlord live at the property?"
-        inputType: yes_no
-        helperText: "If yes, this may not be a standard occupation contract"
-        validation:
-          required: true
-        width: half
-      - id: holiday_or_licence
-        label: "Is this a holiday let or licence arrangement?"
-        inputType: yes_no
-        helperText: "If yes, an occupation contract may not be appropriate"
-        validation:
-          required: true
-        width: half
-    maps_to:
-      - tenancy.occupation_contract_suitability.tenant_is_individual
-      - tenancy.occupation_contract_suitability.main_home
-      - tenancy.occupation_contract_suitability.landlord_lives_at_property
-      - tenancy.occupation_contract_suitability.holiday_or_licence
-
   # 2. Property details
   - id: property_address
     section: Property Details

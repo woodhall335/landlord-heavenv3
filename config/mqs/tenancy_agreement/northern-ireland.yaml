@@ -39,45 +39,6 @@ questions:
     maps_to:
       - product_tier
 
-  # 1. NI Tenancy Suitability Check
-  - id: ni_suitability
-    section: "Tenancy Type Check"
-    question: "NI tenancy suitability check"
-    inputType: group
-    helperText: "Basic checks to ensure this is a valid private tenancy. For validation/warnings only."
-    fields:
-      - id: tenant_is_individual
-        label: "Is the tenant an individual (not a company)?"
-        inputType: yes_no
-        validation:
-          required: true
-        width: half
-      - id: main_home
-        label: "Will this be the tenant's main home?"
-        inputType: yes_no
-        validation:
-          required: true
-        width: half
-      - id: landlord_lives_at_property
-        label: "Does the landlord live at the property?"
-        inputType: yes_no
-        helperText: "If yes, this may affect tenancy rights"
-        validation:
-          required: true
-        width: half
-      - id: holiday_or_licence
-        label: "Is this a holiday let or licence arrangement?"
-        inputType: yes_no
-        helperText: "If yes, a private tenancy may not be appropriate"
-        validation:
-          required: true
-        width: half
-    maps_to:
-      - tenancy.ni_suitability.tenant_is_individual
-      - tenancy.ni_suitability.main_home
-      - tenancy.ni_suitability.landlord_lives_at_property
-      - tenancy.ni_suitability.holiday_or_licence
-
   # 2. Property details
   - id: property_address
     section: Property Details
