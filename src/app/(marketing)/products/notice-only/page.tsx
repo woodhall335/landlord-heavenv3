@@ -151,7 +151,7 @@ export default async function NoticeOnlyPage() {
               <div className="rounded-2xl bg-[#F3EEFF] p-5"><h3 className="font-semibold">3) Preview and generate your pack</h3><p className="mt-2 text-sm text-gray-700">Check the notice, service steps, and checklist before you serve anything.</p></div>
             </div>
             <div className="mt-8 text-center">
-              <Link href="/wizard?product=notice_only&src=product_page&topic=eviction" className="hero-btn-primary">Find out which notice you need -></Link>
+              <Link href="/wizard?product=notice_only&src=product_page&topic=eviction" className="hero-btn-primary">Find out which notice you need →</Link>
             </div>
           </div>
         </Container>
@@ -164,7 +164,7 @@ export default async function NoticeOnlyPage() {
             <p className="mt-4 text-gray-700">If your tenant is not paying or refusing to leave, the next step is getting the right notice in place. This pack gives you the right starting documents so you can move forward now.</p>
             <div className="mt-6"><WhyLandlordHeaven variant="full" /></div>
             <div className="mt-8 text-center">
-              <Link href="/wizard?product=notice_only&src=product_page&topic=eviction" className="hero-btn-primary">Find out which notice you need -></Link>
+              <Link href="/wizard?product=notice_only&src=product_page&topic=eviction" className="hero-btn-primary">Find out which notice you need →</Link>
             </div>
           </div>
         </Container>
@@ -226,7 +226,7 @@ export default async function NoticeOnlyPage() {
             <h2 className="mb-4 text-3xl font-bold md:text-4xl">Ready to serve your eviction notice?</h2>
             <p className="mb-8 text-xl text-white/90">Use the correct notice seeking possession for your situation, preview your documents, and start the landlord eviction process with confidence.</p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              <Link href="/wizard?product=notice_only&src=product_page&topic=eviction" className="hero-btn-primary">Find out which notice you need -></Link>
+              <Link href="/wizard?product=notice_only&src=product_page&topic=eviction" className="hero-btn-primary">Find out which notice you need →</Link>
             </div>
             <ul className="mt-6 flex flex-col items-center gap-2 text-sm text-white/90 md:flex-row md:justify-center md:gap-6" aria-label="Purchase reassurance">
               <li>Preview before paying</li>

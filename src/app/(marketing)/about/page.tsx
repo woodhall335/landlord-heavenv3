@@ -434,13 +434,13 @@ export default function AboutPage() {
                 href="/pricing"
                 className="hero-btn-primary"
               >
-                  View Pricing ->
+                  View Pricing →
               </Link>
               <Link
                 href="/wizard?src=about"
                 className="hero-btn-secondary"
               >
-                  Start Wizard ->
+                  Start Wizard →
               </Link>
             </div>
             <p className="mt-4 text-sm text-gray-600">Preview before you pay | Update and regenerate | One-time pricing</p>
