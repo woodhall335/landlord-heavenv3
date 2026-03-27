@@ -20,12 +20,11 @@ import {
 export const metadata: Metadata = generateMetadata({
   title: 'Contact Landlord Heaven | Landlord Document Support',
   description:
-    "Contact the Landlord Heaven team for help with Section 21 notices, Section 8 notices, tenancy agreements, money claims, and landlord document support.",
+    "Contact the Landlord Heaven team for help with Section 8 notices, tenancy agreements, money claims, and landlord document support.",
   path: '/contact',
   keywords: [
     'contact landlord heaven',
     'landlord document support',
-    'section 21 support',
     'section 8 support',
     'tenancy agreement support',
     'money claim support',
@@ -63,7 +62,7 @@ export default function ContactPage() {
             </div>
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Contact Us</h1>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              We're here to help. Choose the department that best matches your inquiry.
+              We're here to help. Tell us what you need and we will point you to the right next step.
             </p>
           </div>
         </Container>

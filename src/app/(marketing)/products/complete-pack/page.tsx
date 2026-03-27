@@ -31,7 +31,7 @@ const price = product.displayPrice;
 export const metadata: Metadata = {
   title: `Complete Eviction Case Bundle 2026 for England | Court Forms ${price}`,
   description:
-    `Full eviction bundle for England landlords: Section 21/8 notice, N5/N119 court forms, and AI witness statement. ${price} one-time.`,
+    `Full eviction bundle for England landlords: the right notice, N5/N119 court forms, and an AI witness statement draft. ${price} one-time.`,
   openGraph: {
     title: `Complete Eviction Case Bundle 2026 for England | Court Forms ${price}`,
     description: "Complete eviction pack for England landlords. Notice to possession order with N5, N119, witness statement, and court filing guidance included.",
@@ -48,7 +48,7 @@ export const runtime = 'nodejs';
 const faqs = [
   {
     question: "What documents do I get?",
-    answer: "You receive an England-only case bundle: Section 21 or Section 8 notice, Service Instructions, Service & Validity Checklist, Court Forms (N5/N5B/N119 route as applicable), AI witness statement draft, Filing Guide, Evidence Checklist, and Proof of Service Certificate."
+    answer: "You receive an England-only case bundle: the notice for your route, service instructions, a service and validity checklist, court forms (N5/N5B/N119 where applicable), an AI witness statement draft, a filing guide, an evidence checklist, and a proof of service certificate."
   },
   {
     question: "Can I preview before I pay?",
@@ -59,8 +59,8 @@ const faqs = [
     answer: "You can edit your answers and regenerate your case bundle instantly at no extra cost. Unlimited regenerations are included."
   },
   {
-    question: "Which jurisdictions do you support?",
-    answer: "England only. This pack includes Section 21/Section 8 notices plus N5, N119, N5B court forms for English courts."
+    question: "Which region does this pack cover?",
+    answer: "England only. This pack includes the notice and court forms used for English possession claims."
   },
   {
     question: "Are these genuine official court forms?",
@@ -68,7 +68,7 @@ const faqs = [
   },
   {
     question: "How long does the eviction process take?",
-    answer: "Timelines vary by route and whether the claim is defended. We include England-specific filing and timeline guidance for Section 21 and Section 8 routes."
+    answer: "Timelines vary by route and whether the claim is defended. We include England-specific filing and timeline guidance so you know what usually comes next."
   },
   {
     question: "How long are documents stored?",
@@ -119,12 +119,12 @@ export default async function CompleteEvictionPackPage() {
         <Container>
           <div className="mx-auto max-w-6xl rounded-3xl border border-[#E6DBFF] bg-white p-6 md:p-10">
             <h2 className="text-3xl font-bold text-charcoal md:text-4xl">Who this is for</h2>
-            <p className="mt-4 text-lg text-gray-700">This is for landlords who need more than just a notice and want the key possession paperwork prepared together.</p>
+            <p className="mt-4 text-lg text-gray-700">This is for you if the tenant problem is heading towards court and you do not want to piece the paperwork together yourself.</p>
             <ul className="mt-6 grid gap-3 text-gray-700 md:grid-cols-2">
-              <li>• Your tenant is in arrears or refusing to leave and you need to move from notice toward court.</li>
-              <li>• You want Section 21 or Section 8 documents plus court forms in one workflow.</li>
-              <li>• You want stronger confidence with supporting paperwork and filing guidance.</li>
-              <li>• You want to reduce errors, avoid rework, and move faster.</li>
+              <li>Your tenant is in arrears or refusing to leave and you need to move from notice towards court.</li>
+              <li>You want the notice, court forms, and evidence guidance together in one pack.</li>
+              <li>You want stronger confidence before you file, not more late-night guesswork.</li>
+              <li>You want to reduce errors, avoid rework, and keep the case moving.</li>
             </ul>
             <p className="mt-6 text-gray-700">This pack is built for landlords who want a fuller, practical eviction solution from first notice through court preparation.</p>
             <div className="mt-8">
@@ -146,7 +146,7 @@ export default async function CompleteEvictionPackPage() {
               product="complete_pack"
               previews={previews}
               titleOverride="What's included in your eviction pack"
-              subtitleOverride="England-only pack. Choose Section 8 or Section 21, then preview every document."
+              subtitleOverride="England-only pack. Check the route, then preview every document before you file."
             />
           </div>
         </Container>
@@ -178,8 +178,8 @@ export default async function CompleteEvictionPackPage() {
           <div className="mx-auto max-w-5xl rounded-3xl border border-[#E6DBFF] bg-white p-6 md:p-10">
             <h2 className="text-3xl font-bold text-charcoal md:text-4xl">How it works</h2>
             <div className="mt-6 grid gap-4 md:grid-cols-3">
-              <div className="rounded-2xl bg-[#F3EEFF] p-5"><h3 className="font-semibold">1) Choose Section 21 or Section 8 route</h3><p className="mt-2 text-sm text-gray-700">Tell us your case so the workflow follows the correct possession route.</p></div>
-              <div className="rounded-2xl bg-[#F3EEFF] p-5"><h3 className="font-semibold">2) Complete guided case details</h3><p className="mt-2 text-sm text-gray-700">Answer structured questions to generate notice, court forms, and supporting documents.</p></div>
+              <div className="rounded-2xl bg-[#F3EEFF] p-5"><h3 className="font-semibold">1) Tell us what happened</h3><p className="mt-2 text-sm text-gray-700">We map the pack around the route your case actually needs.</p></div>
+              <div className="rounded-2xl bg-[#F3EEFF] p-5"><h3 className="font-semibold">2) Answer plain-English questions</h3><p className="mt-2 text-sm text-gray-700">We collect the case details needed for the notice, court forms, and supporting documents.</p></div>
               <div className="rounded-2xl bg-[#F3EEFF] p-5"><h3 className="font-semibold">3) Preview, generate, and file</h3><p className="mt-2 text-sm text-gray-700">Check everything, download your pack, then use the filing guidance to keep moving.</p></div>
             </div>
           </div>
@@ -189,7 +189,7 @@ export default async function CompleteEvictionPackPage() {
               href="/wizard?product=complete_pack&src=product_page&topic=eviction"
               className="hero-btn-primary"
             >
-              Start Your Complete Pack →
+              Start your court pack -&gt;
             </Link>
           </div>
         </Container>
@@ -229,7 +229,7 @@ export default async function CompleteEvictionPackPage() {
                 <div>
                   <h3 className="text-lg font-semibold text-charcoal mb-2">Serve Notice (Day 0)</h3>
                   <p className="text-gray-600">
-                    Deliver the England possession notice to the tenant. Notice periods depend on route and grounds (for example Section 8 arrears routes vs Section 21).
+                    Deliver the England possession notice to the tenant. Notice periods depend on the route and grounds you are relying on.
                   </p>
                 </div>
               </div>
@@ -459,10 +459,9 @@ export default async function CompleteEvictionPackPage() {
               links={[
                 productLinks.noticeOnly,
                 productLinks.moneyClaim,
-                toolLinks.section21Generator,
                 toolLinks.section8Generator,
                 blogLinks.evictionTimeline,
-                landingPageLinks.section21Template,
+                landingPageLinks.section8Template,
               ]}
             />
           </div>
@@ -475,24 +474,24 @@ export default async function CompleteEvictionPackPage() {
           <div className="mx-auto max-w-3xl rounded-3xl border border-[#E6DBFF] bg-gradient-to-br from-[#692ED4] via-[#7A3BE5] to-[#5a21be] p-8 text-center text-white shadow-[0_24px_60px_rgba(105,46,212,0.35)] md:p-12">
             <h2 className="mb-4 text-3xl font-bold md:text-4xl">Ready to start your complete eviction pack?</h2>
             <p className="mb-8 text-xl text-white/90">
-              If you need a complete eviction pack with Section 21 or Section 8 routes plus court-ready supporting documents, this is your fastest next step.
+              If you need the notice, the court forms, and the filing guidance lined up together, this is your fastest next step.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
                 href="/wizard?product=complete_pack&src=product_page&topic=eviction"
                 className="hero-btn-primary"
               >
-                Start your eviction pack - {price} →
+                Start your court pack - {price} -&gt;
               </Link>
               <Link
                 href="/products/notice-only"
                 className="hero-btn-secondary"
               >
-                Or Just Get Notice - {PRODUCTS.notice_only.displayPrice}
+                Only need the notice? - {PRODUCTS.notice_only.displayPrice}
               </Link>
             </div>
             <p className="mt-4 text-sm text-white/80">
-              One-time payment • Unlimited regenerations • No subscription
+              One-time payment - Unlimited regenerations - No subscription
             </p>
           </div>
         </Container>
@@ -500,5 +499,6 @@ export default async function CompleteEvictionPackPage() {
     </div>
   );
 }
+
 
 

@@ -127,7 +127,7 @@ const productOptions: ProductCardData[] = [
     price: PRODUCTS.ast_standard.displayPrice,
     kicker: 'Best for straightforward lets',
     bestFor:
-      'Single-household and lower-complexity lets where you want the right jurisdiction-specific agreement without paying for broader drafting you do not need.',
+      'Single-household and lower-complexity lets where you want the right agreement for the property without paying for broader drafting you do not need.',
     description:
       'Standard is the right choice for most everyday lets. It gives you the correct agreement structure for the property location plus the core supporting pack for move-in, compliance, and record-keeping.',
     points: [
@@ -320,7 +320,7 @@ const faqs: FAQItem[] = [
       'England properties use an England tenancy agreement designed for the current route from 1 May 2026. Wales uses an Occupation Contract. Scotland uses a Private Residential Tenancy. Northern Ireland uses a Private Tenancy Agreement.',
   },
   {
-    question: 'Are the agreements jurisdiction-specific?',
+    question: 'Do the agreements match where the property is\?',
     answer:
       'Yes. The agreement generated depends on whether the property is in England, Wales, Scotland, or Northern Ireland. You are not getting a one-size-fits-all UK template.',
   },
@@ -337,7 +337,7 @@ const faqs: FAQItem[] = [
   {
     question: 'What is included in the agreement?',
     answer:
-      'You get more than a single agreement file. The tenancy pack can include the jurisdiction-specific agreement or contract, an inventory and schedule of condition, a pre-tenancy compliance checklist, and for England the deposit protection certificate and prescribed information pack. Premium adds broader drafting for more complex lets plus extra support documents such as the key schedule, property maintenance guide, and checkout procedure.',
+      'You get more than a single agreement file. The tenancy pack can include the right agreement or contract for the property, an inventory and schedule of condition, a pre-tenancy compliance checklist, and for England the deposit protection certificate and prescribed information pack. Premium adds broader drafting for more complex lets plus extra support documents such as the key schedule, property maintenance guide, and checkout procedure.',
   },
   {
     question: 'What is the difference between Standard and Premium?',

@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+﻿import type { Metadata } from 'next';
 import Link from 'next/link';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
@@ -147,7 +147,7 @@ export default function AssuredShortholdTenancyAgreementPage() {
               </div>
 
               <p className="mt-4 text-sm text-gray-600">
-                Legacy AST query capture • Updated England wording • Modern landlord flow
+                Legacy AST query capture â€¢ Updated England wording â€¢ Modern landlord flow
               </p>
             </div>
           </div>
@@ -281,8 +281,8 @@ export default function AssuredShortholdTenancyAgreementPage() {
 
                 <p>
                   Before publishing, your legal or compliance owner should approve the exact wording of
-                  any compliance claim. If they prefer a softer formulation, replace “compliant” with a
-                  phrase like “bill-ready” or “updated for Renters’ Rights changes.”
+                  any compliance claim. If they prefer a softer formulation, replace â€œcompliantâ€ with a
+                  phrase like â€œbill-readyâ€ or â€œupdated for Rentersâ€™ Rights changes.â€
                 </p>
               </div>
             </div>
@@ -310,7 +310,7 @@ export default function AssuredShortholdTenancyAgreementPage() {
                 </div>
 
                 <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-                  <h3 className="text-xl font-semibold text-gray-900 mb-3">Landlords replacing older workflows</h3>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-3">Landlords replacing older routes</h3>
                   <p className="text-gray-700">
                     Ideal if your previous process relied on outdated AST-only landing pages and you
                     want a stronger 2026 agreement route.
@@ -410,7 +410,7 @@ export default function AssuredShortholdTenancyAgreementPage() {
               </h2>
               <p className="text-gray-600 text-center mb-12 max-w-3xl mx-auto">
                 One reason to modernise the page is that many landlords still rely on weak legacy
-                template workflows.
+                template routes.
               </p>
 
               <div className="grid md:grid-cols-2 gap-6">
@@ -501,7 +501,7 @@ export default function AssuredShortholdTenancyAgreementPage() {
                     <tr>
                       <td className="px-4 py-3 text-gray-700">Compliance narrative</td>
                       <td className="px-4 py-3 text-gray-700">Older AST-only framing</td>
-                      <td className="px-4 py-3 text-gray-700">Renters’ Rights positioning</td>
+                      <td className="px-4 py-3 text-gray-700">Rentersâ€™ Rights positioning</td>
                     </tr>
                     <tr>
                       <td className="px-4 py-3 text-gray-700">User expectation</td>
@@ -552,10 +552,10 @@ export default function AssuredShortholdTenancyAgreementPage() {
                     Suitable for many straightforward England lets using the updated 2026 agreement flow.
                   </p>
                   <ul className="space-y-3 text-gray-700 mb-6">
-                    <li>✓ Updated England agreement route</li>
-                    <li>✓ AST search capture with modern product language</li>
-                    <li>✓ Core landlord wording for many standard lets</li>
-                    <li>✓ Stronger than a thin legacy AST landing page</li>
+                    <li>âœ“ Updated England agreement route</li>
+                    <li>âœ“ AST search capture with modern product language</li>
+                    <li>âœ“ Core landlord wording for many standard lets</li>
+                    <li>âœ“ Stronger than a thin legacy AST landing page</li>
                   </ul>
                   <Link
                     href={wizardHref}
@@ -575,10 +575,10 @@ export default function AssuredShortholdTenancyAgreementPage() {
                     drafting for real-world scenarios.
                   </p>
                   <ul className="space-y-3 text-gray-700 mb-6">
-                    <li>✓ Everything in the standard route</li>
-                    <li>✓ More detailed commercial coverage</li>
-                    <li>✓ Broader drafting for practical landlord situations</li>
-                    <li>✓ Stronger premium positioning for 2026</li>
+                    <li>âœ“ Everything in the standard route</li>
+                    <li>âœ“ More detailed commercial coverage</li>
+                    <li>âœ“ Broader drafting for practical landlord situations</li>
+                    <li>âœ“ Stronger premium positioning for 2026</li>
                   </ul>
                   <Link
                     href={premiumWizardHref}
@@ -626,7 +626,7 @@ export default function AssuredShortholdTenancyAgreementPage() {
               </div>
 
               <p className="mt-6 text-sm text-red-100">
-                Updated 2026 wording • AST search coverage • England landlord flow
+                Updated 2026 wording â€¢ AST search coverage â€¢ England landlord flow
               </p>
             </div>
           </div>
@@ -635,3 +635,4 @@ export default function AssuredShortholdTenancyAgreementPage() {
     </div>
   );
 }
+

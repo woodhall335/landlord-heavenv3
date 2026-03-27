@@ -18,12 +18,11 @@ import { BLOG_TOPIC_HUBS } from '@/lib/blog/topic-hubs';
 export const metadata = generateMetadata({
   title: 'UK Landlord Guides | Eviction, Tenancy & Rent Arrears',
   description:
-    'Read UK landlord guides on Section 21, Section 8, eviction notices, rent arrears, tenancy agreements, possession claims, and compliance updates.',
+    'Read UK landlord guides on Section 8, eviction notices, rent arrears, tenancy agreements, possession claims, and compliance updates.',
   path: '/blog',
   keywords: [
     'how to evict a tenant',
     'eviction notice',
-    'section 21',
     'section 8',
     'rent arrears',
     'tenancy agreement',
@@ -102,8 +101,8 @@ export default function BlogPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-3xl">
               <p className="mb-3 inline-flex rounded-full border border-[#e3d3ff] bg-white px-3 py-1 text-xs font-semibold uppercase tracking-wide text-[#692ed4]">LandlordHeaven Blog</p>
-              <h2 className="text-3xl font-bold tracking-tight text-slate-900 lg:text-4xl">Landlord help that turns advice into action</h2>
-              <p className="mt-4 text-lg text-slate-600">Read the problem in plain English, understand your options, then jump straight to the right product flow: eviction notice, complete eviction pack, or money claim.</p>
+              <h2 className="text-3xl font-bold tracking-tight text-slate-900 lg:text-4xl">Landlord help that tells you what to do next</h2>
+              <p className="mt-4 text-lg text-slate-600">Start with the problem in plain English, then move to the right next step when you are ready.</p>
             </div>
           </div>
         </section>
@@ -176,9 +175,9 @@ export default function BlogPage() {
 
         <section id="blog-topic-hubs" className="border-b border-gray-100 bg-white py-10 lg:py-14">
           <div className="container mx-auto px-4">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4 text-center">Browse by Topic Cluster</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4 text-center">Browse by Problem</h2>
             <p className="text-gray-600 text-center mb-8 max-w-2xl mx-auto">
-              Follow the eviction authority pathways by topic: Section 21, Section 8, rent arrears, and jurisdiction-specific landlord guides.
+              Pick the problem you are dealing with: Section 8, rent arrears, tenancy setup, or region-specific rules.
             </p>
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
               {Object.values(BLOG_TOPIC_HUBS).map((hub) => (
@@ -228,7 +227,7 @@ export default function BlogPage() {
                 Need help choosing your next landlord step?
               </h2>
               <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-                Start with the route that matches your problem: serve an eviction notice, use a complete eviction pack, or recover rent arrears with a money claim.
+                Start with the route that matches your problem: serve the right notice, prepare the court stage, or recover unpaid rent.
               </p>
 
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-8">
@@ -236,13 +235,13 @@ export default function BlogPage() {
                   href="/products/notice-only"
                   className="hero-btn-primary"
                 >
-                  Generate Eviction Bundle — {PRODUCTS.notice_only.displayPrice} →
+                  Generate your eviction notice — {PRODUCTS.notice_only.displayPrice} →
                 </Link>
                 <Link
                   href="/products/complete-pack"
                   className="hero-btn-secondary"
                 >
-                  Complete Pack — {PRODUCTS.complete_pack.displayPrice} →
+                  See the court pack — {PRODUCTS.complete_pack.displayPrice} →
                 </Link>
               </div>
 
@@ -254,7 +253,7 @@ export default function BlogPage() {
                 </span>
                 <span className="flex items-center gap-2">
                   <Image src="/images/wizard-icons/05-compliance.png" alt="Court-ready" width={20} height={20} className="h-5 w-5" />
-                  Court-ready guarantee
+                  Built on the forms courts expect
                 </span>
                 <span className="flex items-center gap-2">
                   <Image src="/images/wizard-icons/46-premium.png" alt="All UK jurisdictions" width={20} height={20} className="h-5 w-5" />

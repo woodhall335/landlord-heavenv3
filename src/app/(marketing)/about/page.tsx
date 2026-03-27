@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { Container, TealHero } from "@/components/ui";
 import Link from "next/link";
 import Image from "next/image";
@@ -21,12 +21,11 @@ import {
 export const metadata: Metadata = generateMetadata({
   title: "About Landlord Heaven | UK Landlord Document Platform",
   description:
-    "Learn how Landlord Heaven helps UK landlords create Section 21 notices, Section 8 notices, tenancy agreements, and court-ready possession documents faster.",
+    "Learn how Landlord Heaven helps UK landlords create eviction notices, tenancy agreements, money claims, and court paperwork faster.",
   path: "/about",
   keywords: [
     "about landlord heaven",
     "UK landlord documents",
-    "section 21 notices",
     "section 8 notices",
     "tenancy agreements",
     "possession documents",
@@ -45,8 +44,8 @@ export default function AboutPage() {
       <StructuredData data={aboutPageSchema()} />
       <div className="min-h-screen bg-gray-50">
         <TealHero
-        title="Case preparation should be statutory-grounded"
-        subtitle="We make professional-grade landlord paperwork accessible, affordable, and compliant across the UK."
+        title="You should not need a solicitor just to get the paperwork started"
+        subtitle="We help you get the paperwork moving without paying solicitor rates just to start."
         eyebrow="About Landlord Heaven"
       />
 
@@ -68,7 +67,7 @@ export default function AboutPage() {
               </p>
 
               <p className="text-xl leading-relaxed">
-                Landlord Heaven generates court-ready, jurisdiction-specific case bundles in minutes, not hours. We've made
+                Landlord Heaven generates court-ready document packs for the right region in minutes, not hours. We've made
                 professional-quality eviction notices, tenancy agreements, and court claims accessible to every UK
                 landlord - at a fraction of solicitor costs.
               </p>
@@ -138,10 +137,10 @@ export default function AboutPage() {
                   and generates court-ready documents.
                 </p>
                 <ul className="text-sm text-gray-700 space-y-2">
-                  <li>✓ Analyzes 18 eviction grounds in seconds</li>
-                  <li>✓ Validates notice periods automatically</li>
-                  <li>✓ Checks deposit protection compliance</li>
-                  <li>✓ Suggests grounds based on your case</li>
+                  <li>Analyzes 18 eviction grounds in seconds</li>
+                  <li>Validates notice periods automatically</li>
+                  <li>Checks deposit protection compliance</li>
+                  <li>Suggests grounds based on your case</li>
                 </ul>
               </div>
 
@@ -181,10 +180,10 @@ export default function AboutPage() {
                   solicitors, delivered instantly.
                 </p>
                 <ul className="text-sm text-gray-700 space-y-2">
-                  <li>✓ Average completion time: 12 minutes</li>
-                  <li>✓ Instant PDF download</li>
-                  <li>✓ Save £200-400 vs solicitors</li>
-                  <li>✓ Professionally curated documents</li>
+                  <li>Average completion time: 12 minutes</li>
+                  <li>Instant PDF download</li>
+                  <li>Save £200-400 vs solicitors</li>
+                  <li>Professionally curated documents</li>
                 </ul>
               </div>
 
@@ -198,10 +197,10 @@ export default function AboutPage() {
                   Thousands of successful cases.
                 </p>
                 <ul className="text-sm text-gray-700 space-y-2">
-                  <li>✓ Official Form 6A, N5, AT6 formats</li>
-                  <li>✓ Comply with latest legislation</li>
-                  <li>✓ Smart validation before generation</li>
-                  <li>✓ Accepted by all UK courts</li>
+                  <li>Official Form 6A, N5, AT6 formats</li>
+                  <li>Comply with latest legislation</li>
+                  <li>Smart validation before generation</li>
+                  <li>Accepted by all UK courts</li>
                 </ul>
               </div>
             </div>
@@ -299,16 +298,16 @@ export default function AboutPage() {
             </div>
 
             <div className="bg-success/10 border-l-4 border-success p-6 rounded-r-lg mb-8">
-              <h3 className="font-semibold text-charcoal mb-2">✅ Eviction Notice Testimonial</h3>
+              <h3 className="font-semibold text-charcoal mb-2">Eviction Notice Testimonial</h3>
               <blockquote className="text-gray-700 italic">
-                "Saved me £350 vs my solicitor. The Section 21 notice was accepted by court first time. Took 10 minutes
+                "Saved me £350 vs my solicitor. The notice was accepted by court first time. Took 10 minutes
                 to generate. Absolutely brilliant service."
               </blockquote>
               <p className="text-sm text-gray-600 mt-2">- Manchester Landlord, 3 properties</p>
             </div>
 
             <div className="bg-success/10 border-l-4 border-success p-6 rounded-r-lg">
-              <h3 className="font-semibold text-charcoal mb-2">✅ HMO Compliance Testimonial</h3>
+              <h3 className="font-semibold text-charcoal mb-2">HMO Compliance Testimonial</h3>
               <blockquote className="text-gray-700 italic">
                 "I manage 12 HMOs. HMO Pro has saved me from missing two license renewals (£30k+ fines avoided). Best
                 £30/month I spend."
@@ -413,7 +412,7 @@ export default function AboutPage() {
                 </ul>
                 <p className="mt-3">
                   <strong>For legal advice, consult a qualified solicitor.</strong> Our service is designed for
-                  straightforward cases where landlords are confident in their position and want jurisdiction-specific statutory guidance for
+                  straightforward cases where landlords are confident in their position and want clear guidance on the documents you need for
                   document preparation.
                 </p>
               </div>
@@ -435,16 +434,16 @@ export default function AboutPage() {
                 href="/pricing"
                 className="hero-btn-primary"
               >
-                View Pricing →
+                  View Pricing ->
               </Link>
               <Link
                 href="/wizard?src=about"
                 className="hero-btn-secondary"
               >
-                Start Wizard →
+                  Start Wizard ->
               </Link>
             </div>
-            <p className="mt-4 text-sm text-gray-600">Court-ready case bundles • AI-powered • statutory-grounded preparation</p>
+            <p className="mt-4 text-sm text-gray-600">Preview before you pay | Update and regenerate | One-time pricing</p>
           </div>
         </Container>
       </section>
@@ -452,4 +451,5 @@ export default function AboutPage() {
     </>
   );
 }
+
 

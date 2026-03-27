@@ -1,5 +1,17 @@
 import Link from 'next/link';
-import { Children, cloneElement, isValidElement, PropsWithChildren, ReactElement, ReactNode } from 'react';
+import {
+  Children,
+  cloneElement,
+  Fragment,
+  isValidElement,
+  type PropsWithChildren,
+  type ReactElement,
+  type ReactNode,
+} from 'react';
+import { BlogCTA } from './BlogCTA';
+import { BlogInlineProductCard } from './BlogInlineProductCard';
+import type { ProductCtaConfig } from '@/lib/blog/product-cta-map';
+import type { BlogPost } from '@/lib/blog/types';
 
 const blogProseClassName = [
   'blog-prose prose prose-lg max-w-none overflow-x-clip [overflow-wrap:anywhere]',
@@ -35,6 +47,13 @@ const CONTEXTUAL_LINKS = [
   { href: '/how-to-evict-a-tenant-uk', anchor: 'step-by-step UK eviction process', pattern: /\b(eviction process|possession process|possession hearing|eviction timeline|court hearing)\b/i },
   { href: '/money-claim-unpaid-rent', anchor: 'money claim for unpaid rent', pattern: /\b(money claim|mcol|debt recovery|recover rent arrears|county court claim)\b/i },
 ] as const;
+
+type BlogProseProps = PropsWithChildren<{
+  post: Pick<BlogPost, 'slug' | 'title' | 'targetKeyword' | 'category' | 'tags'>;
+  cta: ProductCtaConfig;
+  postSlug: string;
+  category: string;
+}>;
 
 function linkTextNode(text: string, usedHrefs: Set<string>): ReactNode {
   for (const link of CONTEXTUAL_LINKS) {
@@ -95,7 +114,185 @@ function wrapScrollableContent(node: ReactNode, usedHrefs: Set<string>, inAnchor
   return cloneElement(element, { children: wrappedChildren });
 }
 
-export function BlogProse({ children }: PropsWithChildren) {
+function flattenTopLevel(node: ReactNode): ReactNode[] {
+  if (node === null || node === undefined || typeof node === 'boolean') {
+    return [];
+  }
+
+  if (Array.isArray(node)) {
+    return node.flatMap((child) => flattenTopLevel(child));
+  }
+
+  if (isValidElement<{ children?: ReactNode }>(node) && node.type === Fragment) {
+    return flattenTopLevel(node.props.children);
+  }
+
+  return [node];
+}
+
+function stripLegacyBlogCtas(node: ReactNode): ReactNode | null {
+  if (node === null || node === undefined || typeof node === 'boolean') {
+    return null;
+  }
+
+  if (!isValidElement<{ children?: ReactNode }>(node)) {
+    return node;
+  }
+
+  if (node.type === BlogCTA) {
+    return null;
+  }
+
+  const element = node as ReactElement<{ children?: ReactNode }>;
+  const cleanedChildren = element.props.children
+    ? Children.toArray(element.props.children)
+        .map((child) => stripLegacyBlogCtas(child))
+        .filter((child) => child !== null)
+    : element.props.children;
+
+  return cloneElement(element, { children: cleanedChildren });
+}
+
+function buildSituationFirstOpener(
+  post: Pick<BlogPost, 'title' | 'targetKeyword' | 'category' | 'tags'>
+): string {
+  const haystack = `${post.title} ${post.targetKeyword} ${post.category} ${post.tags.join(' ')}`.toLowerCase();
+  const keyword = post.targetKeyword.toLowerCase();
+
+  if (haystack.includes('section 21')) {
+    return 'You may have searched for Section 21 because you need your property back fast. Since Section 21 ends in England on 1 May 2026, this guide explains what changed and what to do next.';
+  }
+
+  if (haystack.includes('section 8') || haystack.includes('ground 8') || haystack.includes('ground 10') || haystack.includes('ground 11')) {
+    if (haystack.includes('arrears') || haystack.includes('rent')) {
+      return 'Your tenant owes rent and you need to know whether a Section 8 notice is the right move. This guide explains how it works, what can trip you up, and what to do next.';
+    }
+
+    return 'Your tenant is breaching the tenancy and you need to know whether Section 8 is the right route. This guide explains how it works, what evidence matters, and what to do next.';
+  }
+
+  if (
+    haystack.includes('money claim') ||
+    haystack.includes('arrears') ||
+    haystack.includes('unpaid rent') ||
+    haystack.includes('letter before action') ||
+    haystack.includes('mcol') ||
+    haystack.includes('debt')
+  ) {
+    return 'Your tenant owes you money and you need to know the fastest lawful way to chase it. This guide explains the route, the paperwork, and the mistakes that can slow you down.';
+  }
+
+  if (
+    haystack.includes('tenancy agreement') ||
+    haystack.includes('assured periodic') ||
+    haystack.includes('ast') ||
+    haystack.includes('occupation contract') ||
+    haystack.includes('prt')
+  ) {
+    return 'You are setting up a new tenancy and you do not want to rely on an old template. This guide explains which agreement you need and what to sort before the tenant moves in.';
+  }
+
+  if (
+    haystack.includes('deposit') ||
+    haystack.includes('epc') ||
+    haystack.includes('gas safety') ||
+    haystack.includes('eicr') ||
+    haystack.includes('right to rent') ||
+    haystack.includes('smoke') ||
+    haystack.includes('alarm') ||
+    haystack.includes('compliance')
+  ) {
+    return `You are trying to sort ${keyword} before it causes a bigger problem later. This guide explains what you need to do, when it matters, and how it affects the rest of your case.`;
+  }
+
+  return `You are trying to work out what to do about ${keyword}. This guide explains the route in plain English, the common mistakes, and what to do next.`;
+}
+
+function isTag(node: ReactNode, tagName: string): boolean {
+  return isValidElement(node) && typeof node.type === 'string' && node.type === tagName;
+}
+
+function isCtaAnchor(node: ReactNode): boolean {
+  if (!isValidElement(node) || typeof node.type !== 'string') {
+    return false;
+  }
+
+  return ['p', 'ul', 'ol', 'blockquote', 'div'].includes(node.type);
+}
+
+function replaceFirstParagraph(nodes: ReactNode[], opener: string): ReactNode[] {
+  let replaced = false;
+
+  return nodes.map((node, index) => {
+    if (!replaced && isTag(node, 'p')) {
+      replaced = true;
+      const element = node as ReactElement<{ children?: ReactNode }>;
+      return cloneElement(element, { key: element.key ?? `opener-${index}`, children: opener });
+    }
+
+    return node;
+  });
+}
+
+function findCtaInsertionIndex(nodes: ReactNode[]): number {
+  const firstH2Index = nodes.findIndex((node) => isTag(node, 'h2'));
+
+  if (firstH2Index !== -1) {
+    for (let index = firstH2Index + 1; index < nodes.length; index += 1) {
+      if (isCtaAnchor(nodes[index])) {
+        return index + 1;
+      }
+    }
+
+    return firstH2Index + 1;
+  }
+
+  const paragraphIndexes = nodes
+    .map((node, index) => (isTag(node, 'p') ? index : -1))
+    .filter((index) => index >= 0);
+
+  if (paragraphIndexes.length >= 2) {
+    return paragraphIndexes[1] + 1;
+  }
+
+  return Math.min(2, nodes.length);
+}
+
+export function BlogProse({
+  children,
+  post,
+  cta,
+  postSlug,
+  category,
+}: BlogProseProps) {
+  const opener = buildSituationFirstOpener(post);
+  const flattenedNodes = flattenTopLevel(children)
+    .map((node) => stripLegacyBlogCtas(node))
+    .filter((node) => node !== null);
+
+  const nodesWithOpener = replaceFirstParagraph(flattenedNodes, opener);
+  const ctaInsertionIndex = findCtaInsertionIndex(nodesWithOpener);
+  const ctaCard = (
+    <BlogInlineProductCard
+      key="blog-inline-product-card"
+      cta={cta}
+      postSlug={postSlug}
+      category={category}
+    />
+  );
+  const nodesWithSingleCta = [
+    ...nodesWithOpener.slice(0, ctaInsertionIndex),
+    ctaCard,
+    ...nodesWithOpener.slice(ctaInsertionIndex),
+  ];
+
   const usedHrefs = new Set<string>();
-  return <div className={blogProseClassName}>{Children.map(children, (child) => wrapScrollableContent(child, usedHrefs))}</div>;
+
+  return (
+    <div className={blogProseClassName}>
+      {nodesWithSingleCta.map((child, index) => (
+        <Fragment key={index}>{wrapScrollableContent(child, usedHrefs)}</Fragment>
+      ))}
+    </div>
+  );
 }

@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { RiCheckLine, RiShieldCheckFill } from 'react-icons/ri';
 import { UsageTodayCounter } from '@/components/seo/UsageTodayCounter';
 import { TrustPositioningBar } from '@/components/marketing/TrustPositioningBar';
+import type { PositioningPreset } from '@/lib/marketing/positioning';
 import { getDynamicReviewCount, REVIEW_RATING } from '@/lib/reviews/reviewStats';
 import { clsx } from 'clsx';
 
@@ -54,6 +55,8 @@ export type UniversalHeroProps = {
   showUsageCounter?: boolean;
   backgroundImageSrc?: string;
   showTrustPositioningBar?: boolean;
+  trustPositioningPreset?: PositioningPreset;
+  trustPositioningHeadline?: string;
 };
 
 const warnedMessages = new Set<string>();
@@ -99,6 +102,8 @@ export function UniversalHero({
   showUsageCounter,
   backgroundImageSrc = '/images/bg.webp',
   showTrustPositioningBar = false,
+  trustPositioningPreset = 'default',
+  trustPositioningHeadline,
 }: UniversalHeroProps) {
   const mobileTitleParts = title.split('Legal Documents');
   const hasLegalDocumentsInTitle = mobileTitleParts.length > 1;
@@ -337,7 +342,12 @@ export function UniversalHero({
             )}
 
             {showTrustPositioningBar ? (
-              <TrustPositioningBar variant="compact" className="mx-auto mt-6 max-w-5xl" />
+              <TrustPositioningBar
+                variant="compact"
+                preset={trustPositioningPreset}
+                headline={trustPositioningHeadline}
+                className="mx-auto mt-6 max-w-5xl"
+              />
             ) : null}
 
             {children}

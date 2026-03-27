@@ -33,11 +33,11 @@ export const BLOG_TOPIC_HUBS: Record<BlogTopicHubSlug, BlogTopicHubConfig> = {
     slug: 'eviction-guides',
     title: 'Eviction Guides Hub | Section 21, Section 8 & Possession',
     name: 'Eviction Guides',
-    description: 'Core eviction process content mapped to notice, court, and possession next steps.',
+    description: 'Guides to help you choose the right notice, understand court steps, and get your property back.',
     metaDescription:
       'Explore eviction guides for UK landlords covering Section 21, Section 8, court hearings, possession timelines, and enforcement next steps.',
     intro:
-      'Start with the upgraded core guides first, then move into notice drafting, court pack preparation, or possession claim execution using the linked pillar routes.',
+      'Start here if you need to work out how to evict a tenant, which notice applies, or what happens after the notice expires.',
     pillarLinks: [
       { href: '/how-to-evict-tenant', label: 'How to evict a tenant in the UK' },
       { href: '/section-21-ban-uk', label: 'Section 21 ban guide for landlords' },
@@ -49,11 +49,11 @@ export const BLOG_TOPIC_HUBS: Record<BlogTopicHubSlug, BlogTopicHubConfig> = {
     slug: 'rent-arrears',
     title: 'Rent Arrears Guides | Section 8, Claims & Recovery',
     name: 'Rent Arrears',
-    description: 'Arrears recovery content for notice strategy, debt claim, and possession sequencing.',
+    description: 'Guides on unpaid rent, Section 8 for arrears, money claims, and what to do first.',
     metaDescription:
       'Explore rent arrears guides for landlords covering Section 8 grounds, money claims, recovery strategy, evidence, and post-judgment enforcement.',
     intro:
-      'This cluster prioritises upgraded arrears posts first so landlords can move from missed rent triage to Section 8 and money-claim recovery in the right sequence.',
+      'Start here if your tenant has stopped paying and you need to know whether to serve notice, send a letter, or start a claim.',
     pillarLinks: [
       { href: '/tenant-not-paying-rent', label: 'Tenant not paying rent in the UK' },
       { href: '/section-8-notice', label: 'Section 8 notice for rent arrears' },
@@ -65,11 +65,11 @@ export const BLOG_TOPIC_HUBS: Record<BlogTopicHubSlug, BlogTopicHubConfig> = {
     slug: 'section-21',
     title: 'Section 21 Guides | Notice, Validity & Possession',
     name: 'Section 21',
-    description: 'No-fault possession guides covering validity, Form 6A, service, and court follow-on.',
+    description: 'Guides explaining what Section 21 was, what changed, and what landlords now need to use instead.',
     metaDescription:
       'Explore Section 21 guides for landlords covering Form 6A validity, notice periods, service proof, accelerated possession, and common mistakes.',
     intro:
-      'Section 21 transition content is consolidated here so landlords can understand what changed on 1 May 2026 in England, what replaces Section 21, and which route matters now.',
+      'If you searched for Section 21, this hub explains the change from 1 May 2026 and points you to the live routes that replace it in England.',
     pillarLinks: [
       { href: '/section-21-ban-uk', label: 'Section 21 ban UK guide' },
       { href: '/section-21-notice', label: 'Section 21 notice transition guide' },
@@ -81,11 +81,11 @@ export const BLOG_TOPIC_HUBS: Record<BlogTopicHubSlug, BlogTopicHubConfig> = {
     slug: 'section-8',
     title: 'Section 8 Guides | Grounds, Form 3 & Arrears',
     name: 'Section 8',
-    description: 'Grounds-based possession content including arrears, anti-social behaviour, and court preparation.',
+    description: 'Guides on Section 8 grounds, arrears, anti-social behaviour, and what happens after notice.',
     metaDescription:
       'Explore Section 8 guides for landlords covering Form 3, rent arrears grounds, service, evidence, hearings, and possession strategy.',
     intro:
-      'Section 8 is evidence-led. This hub now surfaces upgraded grounds and process guides first, then routes landlords into service, court prep, and arrears recovery.',
+      'Start here if Section 8 is likely to be your route and you need to know which grounds fit, what evidence matters, and what to do next.',
     pillarLinks: [
       { href: '/section-8-notice', label: 'Section 8 notice guide' },
       { href: '/section-8-grounds-explained', label: 'Section 8 grounds explained' },
@@ -97,11 +97,11 @@ export const BLOG_TOPIC_HUBS: Record<BlogTopicHubSlug, BlogTopicHubConfig> = {
     slug: 'landlord-compliance',
     title: 'Landlord Compliance Guides | Deposits, EPC & Safety',
     name: 'Landlord Compliance',
-    description: 'Safety, documentation, and legal compliance explainers that support valid possession routes.',
+    description: 'Guides on deposits, EPC, gas safety, EICR, and other checks that can affect your case later.',
     metaDescription:
       'Explore landlord compliance guides covering gas safety, deposits, EPC, EICR, right to rent checks, and tenancy paperwork requirements.',
     intro:
-      'Compliance gaps are a major reason eviction routes fail. Use these guides to close prerequisites before issuing notice or filing in court.',
+      'Use these guides to sort the checks and documents that can trip you up later if they are missing or late.',
     pillarLinks: [
       { href: '/how-to-evict-tenant', label: 'Eviction process overview' },
       { href: '/section-21-ban-uk', label: 'Section 21 transition and compliance dependencies' },
@@ -113,11 +113,11 @@ export const BLOG_TOPIC_HUBS: Record<BlogTopicHubSlug, BlogTopicHubConfig> = {
     slug: 'wales-landlord-guides',
     title: 'Wales Landlord Guides | Possession & Occupation Contracts',
     name: 'Wales Landlord Guides',
-    description: 'Renting Homes (Wales) focused posts for possession, contracts, and compliance.',
+    description: 'Wales-specific guides on possession, occupation contracts, and Renting Homes Act rules.',
     metaDescription:
       'Explore Wales landlord guides covering occupation contracts, the Renting Homes Act, possession process, and Rent Smart Wales compliance.',
     intro:
-      'Browse Wales-specific landlord content built around the Renting Homes Act, Welsh notice routes, and tribunal-aware compliance steps.',
+      'Browse Wales-specific landlord guidance if your property is in Wales and you need the right contract or notice route.',
     pillarLinks: [
       { href: '/wales-eviction-notices', label: 'Wales eviction notices guide' },
       { href: '/wales-tenancy-agreement-template', label: 'Wales tenancy agreement template' },
@@ -129,11 +129,11 @@ export const BLOG_TOPIC_HUBS: Record<BlogTopicHubSlug, BlogTopicHubConfig> = {
     slug: 'scotland-landlord-guides',
     title: 'Scotland Landlord Guides | PRT, Notice to Leave & Tribunal',
     name: 'Scotland Landlord Guides',
-    description: 'Scottish landlord guidance for PRT, Notice to Leave, and tribunal process.',
+    description: 'Scotland-specific guides on PRTs, Notice to Leave, and tribunal steps.',
     metaDescription:
       'Explore Scotland landlord guides covering PRT rules, Notice to Leave, tribunal timelines, evidence, and landlord compliance steps.',
     intro:
-      'Find Scotland-specific guidance for PRT tenancies, Notice to Leave drafting, and First-tier Tribunal possession preparation.',
+      'Browse Scotland-specific guidance if your property is in Scotland and you need the right tenancy or possession route.',
     pillarLinks: [
       { href: '/scotland-eviction-notices', label: 'Scotland eviction notice guide' },
       { href: '/private-residential-tenancy-agreement-template', label: 'PRT agreement template' },
@@ -145,11 +145,11 @@ export const BLOG_TOPIC_HUBS: Record<BlogTopicHubSlug, BlogTopicHubConfig> = {
     slug: 'northern-ireland-landlord-guides',
     title: 'Northern Ireland Landlord Guides | Tenancy & Possession',
     name: 'Northern Ireland Landlord Guides',
-    description: 'Northern Ireland tenancy and possession guides for compliant landlord workflows.',
+    description: 'Northern Ireland guides on tenancy setup, notice rules, and landlord obligations.',
     metaDescription:
       'Explore Northern Ireland landlord guides covering private tenancy notices, deposit compliance, possession procedure, and landlord obligations.',
     intro:
-      'This hub gathers Northern Ireland landlord guidance for notice handling, tenancy compliance, and jurisdiction-specific possession steps.',
+      'Browse Northern Ireland guidance if you need the rules that apply there rather than England, Wales, or Scotland.',
     pillarLinks: [
       { href: '/northern-ireland-eviction-notice', label: 'Northern Ireland eviction notice guide' },
       { href: '/northern-ireland-tenancy-agreement-template', label: 'NI tenancy agreement template' },

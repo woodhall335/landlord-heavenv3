@@ -1,6 +1,6 @@
 ﻿import type { Metadata } from "next";
-import { Container } from "@/components/ui";
 import Link from "next/link";
+import { Container } from "@/components/ui";
 import { generateMetadata } from "@/lib/seo";
 import { FAQSection } from "@/components/seo/FAQSection";
 import { StructuredData, pricingItemListSchema } from "@/lib/seo/structured-data";
@@ -18,25 +18,131 @@ import {
 export const metadata: Metadata = generateMetadata({
   title: "Pricing | UK Eviction and Landlord Document Packs",
   description:
-    "Compare eviction notice, money claim, tenancy agreement, and complete pack pricing against typical solicitor costs for UK landlords.",
+    "Compare eviction notice, money claim, tenancy agreement, and complete pack pricing for UK landlords.",
   path: "/pricing",
   keywords: [
     "landlord document pricing",
     "eviction notice cost",
+    "section 8 notice price",
     "tenancy agreement price",
     "money claim pack price",
-    "section 21 notice price",
     "complete eviction pack",
-  ]
+  ],
 });
 
+type PackageCard = {
+  name: string;
+  price: string;
+  coverage: string;
+  bestFor: string;
+  points: string[];
+  href: string;
+  cta: string;
+  featured?: boolean;
+};
+
+const packageCards: PackageCard[] = [
+  {
+    name: "Eviction Notice Pack",
+    price: PRODUCTS.notice_only.displayPrice,
+    coverage: "England, Wales, and Scotland",
+    bestFor: "You need the right notice in place tonight.",
+    points: [
+      "Notice pack, service instructions, and validity checklist",
+      "Preview before you pay",
+      "Useful when you need to start the case without paying for court paperwork yet",
+    ],
+    href: "/wizard?product=notice_only&src=pricing&topic=eviction",
+    cta: "Find out which notice you need ->",
+  },
+  {
+    name: "Complete Pack",
+    price: PRODUCTS.complete_pack.displayPrice,
+    coverage: "England only",
+    bestFor: "You need the notice, court forms, and filing guidance together.",
+    points: [
+      "Built for landlords already thinking about court",
+      "Includes the notice, core court forms, and filing guidance",
+      "Helps you avoid piecing the case together across multiple documents",
+    ],
+    href: "/wizard?product=complete_pack&src=pricing&topic=eviction",
+    cta: "Start your court pack ->",
+    featured: true,
+  },
+  {
+    name: "Money Claim Pack",
+    price: PRODUCTS.money_claim.displayPrice,
+    coverage: "England only",
+    bestFor: "You need to recover unpaid rent.",
+    points: [
+      "Built for unpaid rent and arrears claims",
+      "Includes claim paperwork and arrears support documents",
+      "Useful when the property issue and the money issue need separate action",
+    ],
+    href: "/wizard?product=money_claim&src=pricing&topic=arrears",
+    cta: "Start recovering your rent ->",
+  },
+  {
+    name: "Standard Tenancy Agreement",
+    price: PRODUCTS.ast_standard.displayPrice,
+    coverage: "All UK regions, including Northern Ireland",
+    bestFor: "You need a straightforward tenancy agreement for a new let.",
+    points: [
+      "Built around where the property is",
+      "England wording updated for the law from 1 May 2026",
+      "Best for most standard residential lets",
+    ],
+    href: "/wizard?product=ast_standard&src=pricing&topic=tenancy",
+    cta: "Create your tenancy agreement ->",
+  },
+  {
+    name: "Premium Tenancy Agreement",
+    price: PRODUCTS.ast_premium.displayPrice,
+    coverage: "All UK regions, including Northern Ireland",
+    bestFor: "You need broader wording for a more complex let.",
+    points: [
+      "Useful for HMOs, guarantors, sharers, and more complex setups",
+      "Adds broader drafting and extra support documents",
+      "Better fit when you want fewer loose ends later",
+    ],
+    href: "/wizard?product=ast_premium&src=pricing&topic=tenancy",
+    cta: "See the premium agreement ->",
+  },
+];
+
+const solicitorComparison = [
+  {
+    label: "Typical cost",
+    solicitor: "Often GBP300-GBP2,500+",
+    heaven: LANDLORD_DOCUMENT_PRICE_RANGE,
+  },
+  {
+    label: "Speed",
+    solicitor: "Usually days or weeks",
+    heaven: "Usually minutes",
+  },
+  {
+    label: "Preview before payment",
+    solicitor: "Rare",
+    heaven: "Yes",
+  },
+  {
+    label: "Make changes and regenerate",
+    solicitor: "Usually extra time and extra cost",
+    heaven: "Included",
+  },
+  {
+    label: "Keep documents in one account",
+    solicitor: "Varies",
+    heaven: "Yes",
+  },
+];
+
 export default function PricingPage() {
-  const noticePrice = PRODUCTS.notice_only.displayPrice;
-  const completePackPrice = PRODUCTS.complete_pack.displayPrice;
-  const moneyClaimPrice = PRODUCTS.money_claim.displayPrice;
-  const standardAstPrice = PRODUCTS.ast_standard.displayPrice;
-  const premiumAstPrice = PRODUCTS.ast_premium.displayPrice;
-  const residentialProducts = PUBLIC_RESIDENTIAL_LETTING_PRODUCT_SKUS.map((sku) => RESIDENTIAL_LETTING_PRODUCTS[sku]);
+  const residentialProducts = PUBLIC_RESIDENTIAL_LETTING_PRODUCT_SKUS.map(
+    (sku) => RESIDENTIAL_LETTING_PRODUCTS[sku]
+  );
+
   const pricingSchema = pricingItemListSchema([
     { sku: "notice_only", name: "Eviction Notice Pack", url: "/products/notice-only" },
     { sku: "complete_pack", name: "Complete Eviction Pack", url: "/products/complete-pack" },
@@ -50,361 +156,60 @@ export default function PricingPage() {
       <StructuredData data={pricingSchema} />
       <HeaderConfig mode="autoOnScroll" />
 
-      {/* Hero Section */}
       <StandardHero
         badge="Transparent Pricing"
-        title="Simple, Transparent Pricing"
-        subtitle="Compare solicitor workflows and AI-validated case bundle preparation."
+        title="See what each pack costs before you commit"
+        subtitle="Compare the packs side by side, see what each one includes, and choose the one that fits your problem tonight."
         variant="pastel"
       >
         <p className="text-sm text-white">All prices are one-time payments</p>
-        <p className="mt-2 text-sm text-white">Notices: England/Wales/Scotland. Complete Pack + Money Claims: England-only. Tenancy agreements: all UK (incl. NI).</p>
+        <p className="mt-2 text-sm text-white">
+          Notices: England, Wales, and Scotland. Complete Pack and Money Claims: England only. Tenancy agreements: all UK, including Northern Ireland.
+        </p>
       </StandardHero>
 
       <Container size="large" className="py-12">
-
-        {/* Comparison Table - Desktop */}
-        <div className="hidden lg:block overflow-x-auto mb-12">
-          <table className="w-full table-fixed bg-white shadow-lg rounded-lg overflow-hidden">
-            <thead>
-              <tr className="bg-gray-100">
-                <th className="text-left p-6 font-semibold text-charcoal">Feature</th>
-                <th className="text-center p-6">
-                  <div className="font-semibold text-charcoal mb-2">Notices</div>
-                  <div className="text-2xl font-bold text-primary mb-1">{noticePrice}</div>
-                  <div className="text-sm text-gray-600">One-time</div>
-                </th>
-                <th className="text-center p-6">
-                  <div className="font-semibold text-charcoal mb-2">Complete Pack</div>
-                  <div className="text-2xl font-bold text-primary mb-1">{completePackPrice}</div>
-                  <div className="text-xs text-amber-600 font-medium">England only</div>
-                  <div className="text-sm text-gray-600">One-time</div>
-                </th>
-                <th className="text-center p-6">
-                  <div className="font-semibold text-charcoal mb-2">Money Claims</div>
-                  <div className="text-2xl font-bold text-primary mb-1">{moneyClaimPrice}</div>
-                  <div className="text-xs text-amber-600 font-medium">England only</div>
-                  <div className="text-sm text-gray-600">One-time</div>
-                </th>
-                <th className="text-center p-6">
-                  <div className="font-semibold text-charcoal mb-2">Standard Residential Tenancy Agreement</div>
-                  <div className="text-2xl font-bold text-primary mb-1">{standardAstPrice}</div>
-                  <div className="text-sm text-gray-600">One-time</div>
-                </th>
-                <th className="text-center p-6">
-                  <div className="font-semibold text-charcoal mb-2">Premium Residential Tenancy Agreement</div>
-                  <div className="text-2xl font-bold text-primary mb-1">{premiumAstPrice}</div>
-                  <div className="text-sm text-gray-600">One-time</div>
-                </th>
-                {/* HMO Pro column removed - parked for later review */}
-              </tr>
-            </thead>
-            <tbody className="text-sm">
-              <tr className="border-t">
-                <td className="p-4 font-semibold text-charcoal bg-gray-50" colSpan={6}>
-                  Eviction Documents
-                </td>
-              </tr>
-              <tr className="border-t">
-                <td className="p-4 text-gray-700">Section 8/21 Notice</td>
-                <td className="text-center p-4">✅</td>
-                <td className="text-center p-4">✅</td>
-                <td className="text-center p-4">❌</td>
-                <td className="text-center p-4">❌</td>
-                <td className="text-center p-4">❌</td>
-              </tr>
-              <tr className="border-t bg-gray-50">
-                <td className="p-4 text-gray-700">Court Possession Claim (N5/N5B)</td>
-                <td className="text-center p-4">❌</td>
-                <td className="text-center p-4">✅</td>
-                <td className="text-center p-4">❌</td>
-                <td className="text-center p-4">❌</td>
-                <td className="text-center p-4">❌</td>
-              </tr>
-              <tr className="border-t">
-                <td className="p-4 text-gray-700">Witness Statement</td>
-                <td className="text-center p-4">❌</td>
-                <td className="text-center p-4">✅</td>
-                <td className="text-center p-4">✅</td>
-                <td className="text-center p-4">❌</td>
-                <td className="text-center p-4">❌</td>
-              </tr>
-              <tr className="border-t bg-gray-50">
-                <td className="p-4 text-gray-700">Money Claim for Arrears</td>
-                <td className="text-center p-4">❌</td>
-                <td className="text-center p-4">❌</td>
-                <td className="text-center p-4">✅</td>
-                <td className="text-center p-4">❌</td>
-                <td className="text-center p-4">❌</td>
-              </tr>
-              <tr className="border-t">
-                <td className="p-4 text-gray-700">Rent Arrears Schedule</td>
-                <td className="text-center p-4">❌</td>
-                <td className="text-center p-4">❌</td>
-                <td className="text-center p-4">✅</td>
-                <td className="text-center p-4">❌</td>
-                <td className="text-center p-4">❌</td>
-              </tr>
-
-              <tr className="border-t">
-                <td className="p-4 font-semibold text-charcoal bg-gray-50" colSpan={6}>
-                  Tenancy Agreements
-                </td>
-              </tr>
-              <tr className="border-t">
-                <td className="p-4 text-gray-700">England Residential Tenancy Agreement</td>
-                <td className="text-center p-4">❌</td>
-                <td className="text-center p-4">❌</td>
-                <td className="text-center p-4">❌</td>
-                <td className="text-center p-4">✅</td>
-                <td className="text-center p-4">✅</td>
-              </tr>
-              <tr className="border-t bg-gray-50">
-                <td className="p-4 text-gray-700">Scotland PRT / NI Agreement</td>
-                <td className="text-center p-4">❌</td>
-                <td className="text-center p-4">❌</td>
-                <td className="text-center p-4">❌</td>
-                <td className="text-center p-4">✅</td>
-                <td className="text-center p-4">✅</td>
-              </tr>
-              <tr className="border-t">
-                <td className="p-4 text-gray-700">HMO Clauses & Guarantors</td>
-                <td className="text-center p-4">❌</td>
-                <td className="text-center p-4">❌</td>
-                <td className="text-center p-4">❌</td>
-                <td className="text-center p-4">❌</td>
-                <td className="text-center p-4">✅</td>
-              </tr>
-              <tr className="border-t bg-gray-50">
-                <td className="p-4 text-gray-700">Rent Increase Provisions</td>
-                <td className="text-center p-4">❌</td>
-                <td className="text-center p-4">❌</td>
-                <td className="text-center p-4">❌</td>
-                <td className="text-center p-4">❌</td>
-                <td className="text-center p-4">✅</td>
-              </tr>
-
-              <tr className="border-t">
-                <td className="p-4 font-semibold text-charcoal bg-gray-50" colSpan={6}>
-                  Support & Features
-                </td>
-              </tr>
-              <tr className="border-t">
-                <td className="p-4 text-gray-700">Smart Document Generation</td>
-                <td className="text-center p-4">✅</td>
-                <td className="text-center p-4">✅</td>
-                <td className="text-center p-4">✅</td>
-                <td className="text-center p-4">✅</td>
-                <td className="text-center p-4">✅</td>
-              </tr>
-              <tr className="border-t bg-gray-50">
-                <td className="p-4 text-gray-700">Jurisdiction-specific scope</td>
-                <td className="text-center p-4">England/Wales/Scotland notices</td>
-                <td className="text-center p-4">England only</td>
-                <td className="text-center p-4">England only</td>
-                <td className="text-center p-4">All UK tenancy agreements</td>
-                <td className="text-center p-4">All UK tenancy agreements</td>
-              </tr>
-              <tr className="border-t">
-                <td className="p-4 text-gray-700">Instant Download</td>
-                <td className="text-center p-4">✅</td>
-                <td className="text-center p-4">✅</td>
-                <td className="text-center p-4">✅</td>
-                <td className="text-center p-4">✅</td>
-                <td className="text-center p-4">✅</td>
-              </tr>
-              <tr className="border-t bg-gray-50">
-                <td className="p-4 text-gray-700">Email Support</td>
-                <td className="text-center p-4">✅</td>
-                <td className="text-center p-4">✅</td>
-                <td className="text-center p-4">✅</td>
-                <td className="text-center p-4">✅</td>
-                <td className="text-center p-4">✅</td>
-              </tr>
-              <tr className="border-t">
-                <td className="p-4 text-gray-700">Document Storage</td>
-                <td className="text-center p-4">12+ months</td>
-                <td className="text-center p-4">12+ months</td>
-                <td className="text-center p-4">12+ months</td>
-                <td className="text-center p-4">12+ months</td>
-                <td className="text-center p-4">12+ months</td>
-              </tr>
-
-              <tr className="border-t bg-gray-100">
-                <td className="p-6 font-semibold text-charcoal">Best For:</td>
-                <td className="text-center p-6 text-xs text-gray-700">Simple eviction notices</td>
-                <td className="text-center p-6 text-xs text-gray-700">Full eviction process</td>
-                <td className="text-center p-6 text-xs text-gray-700">Rent arrears claims</td>
-                <td className="text-center p-6 text-xs text-gray-700">Standard lettings</td>
-                <td className="text-center p-6 text-xs text-gray-700">HMOs & complex</td>
-              </tr>
-
-            </tbody>
-            <tfoot>
-              <tr className="border-t bg-white align-middle">
-                <td className="p-4 text-sm font-semibold text-charcoal">Get started</td>
-                <td className="p-4 align-middle">
-                  <Link
-                    href="/wizard?product=notice_only&src=pricing&topic=eviction"
-                    className="hero-btn-primary flex w-full min-h-[52px] items-center justify-center px-3 py-3 text-center text-[13px] leading-snug [overflow-wrap:anywhere] sm:min-h-[56px] sm:px-3 sm:py-3 sm:text-sm"
-                    aria-label="Start notice wizard"
-                  >
-                    Start Notice Bundle Wizard →
-                  </Link>
-                </td>
-                <td className="p-4 align-middle">
-                  <Link
-                    href="/wizard?product=complete_pack&src=pricing&topic=eviction"
-                    className="hero-btn-primary flex w-full min-h-[52px] items-center justify-center px-3 py-3 text-center text-[13px] leading-snug [overflow-wrap:anywhere] sm:min-h-[56px] sm:px-3 sm:py-3 sm:text-sm"
-                    aria-label="Start eviction pack wizard"
-                  >
-                    Start England Complete Pack Wizard →
-                  </Link>
-                </td>
-                <td className="p-4 align-middle">
-                  <Link
-                    href="/wizard?product=money_claim&src=pricing&topic=arrears"
-                    className="hero-btn-primary flex w-full min-h-[52px] items-center justify-center px-3 py-3 text-center text-[13px] leading-snug [overflow-wrap:anywhere] sm:min-h-[56px] sm:px-3 sm:py-3 sm:text-sm"
-                    aria-label="Start money claim wizard"
-                  >
-                    Start England Money Claim Wizard →
-                  </Link>
-                </td>
-                <td className="p-4 align-middle">
-                  <Link
-                    href="/wizard?product=ast_standard&src=pricing&topic=tenancy"
-                    className="hero-btn-primary flex w-full min-h-[52px] items-center justify-center px-3 py-3 text-center text-[13px] leading-snug [overflow-wrap:anywhere] sm:min-h-[56px] sm:px-3 sm:py-3 sm:text-sm"
-                    aria-label="Create standard tenancy agreement"
-                  >
-                    Create Tenancy Agreement →
-                  </Link>
-                </td>
-                <td className="p-4 align-middle">
-                  <Link
-                    href="/wizard?product=ast_premium&src=pricing&topic=tenancy"
-                    className="hero-btn-primary flex w-full min-h-[52px] items-center justify-center px-3 py-3 text-center text-[13px] leading-snug [overflow-wrap:anywhere] sm:min-h-[56px] sm:px-3 sm:py-3 sm:text-sm"
-                    aria-label="Create premium tenancy agreement"
-                  >
-                    Create Tenancy Agreement →
-                  </Link>
-                </td>
-              </tr>
-            </tfoot>
-          </table>
-
-        </div>
-
-        {/* Mobile Cards */}
-        <div className="lg:hidden space-y-6 mb-12">
-          {/* Notices */}
-          <div className="bg-white rounded-lg border-2 border-gray-200 p-6">
-            <h3 className="text-2xl font-bold text-charcoal mb-2">Notices</h3>
-            <div className="text-3xl font-bold text-primary mb-4">{noticePrice} <span className="text-sm text-gray-600">one-time</span></div>
-            <ul className="space-y-2 mb-6 text-sm">
-              <li>✅ Section 8/21 Notice</li>
-              <li>✅ England/Wales/Scotland notices</li>
-              <li>✅ Instant Download</li>
-              <li>✅ 12-Month Storage</li>
-            </ul>
-            <Link
-              href="/wizard?product=notice_only&src=pricing&topic=eviction"
-              className="hero-btn-primary block w-full text-center"
-              aria-label="Start notice wizard"
+        <div className="grid gap-6 xl:grid-cols-2">
+          {packageCards.map((card) => (
+            <section
+              key={card.name}
+              className={`rounded-2xl border p-6 shadow-sm ${card.featured ? "border-primary bg-[#faf6ff]" : "border-gray-200 bg-white"}`}
             >
-              Start Notice Bundle Wizard →
-            </Link>
-          </div>
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                <div>
+                  <h2 className="text-2xl font-bold text-charcoal">{card.name}</h2>
+                  <p className="mt-2 text-sm font-semibold text-primary">{card.coverage}</p>
+                </div>
+                <div className="rounded-xl bg-gray-100 px-4 py-3 text-right">
+                  <div className="text-xs uppercase tracking-[0.12em] text-gray-500">One-time</div>
+                  <div className="text-2xl font-bold text-charcoal">{card.price}</div>
+                </div>
+              </div>
 
-          {/* Complete Eviction Pack */}
-          <div className="bg-white rounded-lg border-2 border-gray-200 p-6">
-            <h3 className="text-2xl font-bold text-charcoal mb-2">Complete Pack</h3>
-            <div className="text-3xl font-bold text-primary mb-2">{completePackPrice} <span className="text-sm text-gray-600">one-time</span></div>
-            <div className="text-xs text-amber-600 font-medium mb-4">England only</div>
-            <ul className="space-y-2 mb-6 text-sm">
-              <li>✅ Section 8/21 Notice</li>
-              <li>✅ Court Possession Claim</li>
-              <li>✅ Witness Statement</li>
-              <li>✅ Full Eviction Bundle</li>
-            </ul>
-            <Link
-              href="/wizard?product=complete_pack&src=pricing&topic=eviction"
-              className="hero-btn-primary block w-full text-center"
-              aria-label="Start eviction pack wizard"
-            >
-              Start England Complete Pack Wizard →
-            </Link>
-          </div>
+              <p className="mt-5 text-base font-semibold text-charcoal">{card.bestFor}</p>
+              <ul className="mt-4 space-y-3 text-sm text-gray-700">
+                {card.points.map((point) => (
+                  <li key={point}>{point}</li>
+                ))}
+              </ul>
 
-          {/* Money Claims */}
-          <div className="bg-white rounded-lg border-2 border-gray-200 p-6">
-            <h3 className="text-2xl font-bold text-charcoal mb-2">Money Claims</h3>
-            <div className="text-3xl font-bold text-primary mb-2">{moneyClaimPrice} <span className="text-sm text-gray-600">one-time</span></div>
-            <div className="text-xs text-amber-600 font-medium mb-4">England only</div>
-            <ul className="space-y-2 mb-6 text-sm">
-              <li>✅ Money Claim Forms</li>
-              <li>✅ Arrears Schedule</li>
-              <li>✅ Witness Statement</li>
-              <li>✅ Enforcement Tools</li>
-            </ul>
-            <Link
-              href="/wizard?product=money_claim&src=pricing&topic=arrears"
-              className="hero-btn-primary block w-full text-center"
-              aria-label="Start money claim wizard"
-            >
-              Start England Money Claim Wizard →
-            </Link>
-          </div>
-
-          {/* Standard Residential Tenancy Agreement */}
-          <div className="bg-white rounded-lg border-2 border-gray-200 p-6">
-            <h3 className="text-2xl font-bold text-charcoal mb-2">Standard Residential Tenancy Agreement</h3>
-            <div className="text-3xl font-bold text-primary mb-4">{standardAstPrice} <span className="text-sm text-gray-600">one-time</span></div>
-            <ul className="space-y-2 mb-6 text-sm">
-              <li>✅ England Residential / PRT / NI Agreement</li>
-              <li>✅ Core Clauses</li>
-              <li>✅ UK tenancy agreements (incl. NI)</li>
-              <li>✅ 12+ Month Storage</li>
-            </ul>
-            <Link
-              href="/wizard?product=ast_standard&src=pricing&topic=tenancy"
-              className="hero-btn-primary block w-full text-center"
-              aria-label="Create standard tenancy agreement"
-            >
-              Create Tenancy Agreement →
-            </Link>
-          </div>
-
-          {/* Premium Residential Tenancy Agreement */}
-          <div className="bg-white rounded-lg border-2 border-gray-200 p-6">
-            <h3 className="text-2xl font-bold text-charcoal mb-2">Premium Residential Tenancy Agreement</h3>
-            <div className="text-3xl font-bold text-primary mb-4">{premiumAstPrice} <span className="text-sm text-gray-600">one-time</span></div>
-            <ul className="space-y-2 mb-6 text-sm">
-              <li>✅ Everything in Standard</li>
-              <li>✅ HMO Clauses</li>
-              <li>✅ Guarantor Provisions</li>
-              <li>✅ Rent Increases</li>
-              <li>✅ Advanced Protection</li>
-            </ul>
-            <Link
-              href="/wizard?product=ast_premium&src=pricing&topic=tenancy"
-              className="hero-btn-primary block w-full text-center"
-              aria-label="Create premium tenancy agreement"
-            >
-              Create Tenancy Agreement →
-            </Link>
-          </div>
-
-          {/* HMO Pro removed - parked for later review */}
+              <div className="mt-6">
+                <Link href={card.href} className="hero-btn-primary inline-flex w-full justify-center sm:w-auto">
+                  {card.cta}
+                </Link>
+              </div>
+            </section>
+          ))}
         </div>
       </Container>
 
       <Container size="large" className="pb-12">
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+        <section className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
           <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
             <div>
-              <h2 className="text-2xl font-bold text-charcoal">Residential Landlord Documents</h2>
+              <h2 className="text-2xl font-bold text-charcoal">Residential landlord documents</h2>
               <p className="mt-2 max-w-3xl text-sm text-gray-600">
-                Each England-only residential add-on now has its own product page and wizard entry point. Use the product page for focused intent, then move into the shared residential wizard.
+                Need one specific residential document instead of a full pack? These add-on pages let you go straight to the document you need.
               </p>
             </div>
             <p className="text-sm text-gray-500">Per-document pricing {RESIDENTIAL_LETTING_PRICE_RANGE}</p>
@@ -422,120 +227,96 @@ export default function PricingPage() {
                 </div>
 
                 <div className="mt-4 flex flex-col gap-2 sm:flex-row">
-                  <Link
-                    href={getResidentialLandingHref(product.sku)}
-                    className="hero-btn-secondary flex-1 text-center"
-                  >
+                  <Link href={getResidentialLandingHref(product.sku)} className="hero-btn-secondary flex-1 text-center">
                     View page
                   </Link>
-                  <Link
-                    href={getResidentialWizardHref(product.sku)}
-                    className="hero-btn-primary flex-1 text-center"
-                  >
-                    Start wizard
+                  <Link href={getResidentialWizardHref(product.sku)} className="hero-btn-primary flex-1 text-center">
+                    Start now
                   </Link>
                 </div>
               </div>
             ))}
           </div>
-        </div>
+        </section>
       </Container>
 
-
-      <Container size="large" className="pb-4">
-        <div className="bg-white rounded-lg border border-gray-200 p-6 mb-2 overflow-x-auto">
-          <h2 className="text-2xl font-bold text-charcoal mb-4">Solicitor vs Landlord Heaven</h2>
-          <table className="w-full text-sm">
-            <thead><tr className="border-b"><th className="text-left py-2">Metric</th><th className="text-center">Solicitor</th><th className="text-center">Landlord Heaven</th></tr></thead>
-            <tbody>
-              <tr className="border-b"><td className="py-2">Cost</td><td className="text-center">£300–£2,500</td><td className="text-center">{LANDLORD_DOCUMENT_PRICE_RANGE}</td></tr>
-              <tr className="border-b"><td className="py-2">Time</td><td className="text-center">3–5 days</td><td className="text-center">10 minutes</td></tr>
-              <tr className="border-b"><td className="py-2">Complete Case File</td><td className="text-center">❌ Often staged</td><td className="text-center">✅ Yes</td></tr>
-              <tr className="border-b"><td className="py-2">Jurisdiction-Specific</td><td className="text-center">✅</td><td className="text-center">✅</td></tr>
-              <tr className="border-b"><td className="py-2">Compliance Validation</td><td className="text-center">✅</td><td className="text-center">✅ AI-validated</td></tr>
-              <tr className="border-b"><td className="py-2">Reform-Aware</td><td className="text-center">Varies</td><td className="text-center">✅</td></tr>
-              <tr><td className="py-2">Ready to File</td><td className="text-center">❌</td><td className="text-center">✅</td></tr>
-            </tbody>
-          </table>
-        </div>
+      <Container size="large" className="pb-12">
+        <section className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+          <h2 className="text-2xl font-bold text-charcoal">Why landlords compare us with a solicitor</h2>
+          <div className="mt-6 overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b">
+                  <th className="py-3 text-left">Metric</th>
+                  <th className="py-3 text-center">Solicitor</th>
+                  <th className="py-3 text-center">Landlord Heaven</th>
+                </tr>
+              </thead>
+              <tbody>
+                {solicitorComparison.map((row) => (
+                  <tr key={row.label} className="border-b last:border-b-0">
+                    <td className="py-3 text-gray-700">{row.label}</td>
+                    <td className="py-3 text-center text-gray-600">{row.solicitor}</td>
+                    <td className="py-3 text-center font-medium text-charcoal">{row.heaven}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
       </Container>
 
-      {/* FAQ Section */}
-      {/* FAQ schema must be rendered exactly once (via FAQSection). */}
       <FAQSection
         title="Pricing FAQs"
         faqs={[
           {
             question: "Are there any hidden fees?",
-            answer: "No. The prices shown are what you pay. No setup fees, no processing fees, no surprise charges. The only additional cost is court fees (paid directly to the court when filing)."
+            answer: "No. The price shown is the price you pay. Court fees are separate and are paid directly to the court when you file.",
           },
           {
             question: "What is your refund policy?",
             answer: (
               <>
-                All products are instantly delivered digital documents. Due to the instant nature of our digital products, we cannot offer refunds once documents have been generated and delivered. Refunds are only available for technical errors, duplicate charges, or unauthorized transactions. See our{" "}
-                <Link href="/refunds" className="text-primary hover:underline">full refund policy</Link>{" "}
-                for details.
+                These are instant digital products, so refunds are not available once documents have been generated and delivered. Refunds are only available for technical errors, duplicate charges, or unauthorised transactions. See our <Link href="/refunds" className="text-primary hover:underline">full refund policy</Link> for details.
               </>
-            )
+            ),
           },
           {
             question: "Do you offer discounts for multiple documents?",
-            answer: "For portfolio landlords needing multiple documents per month, contact sales@landlordheaven.co.uk for custom pricing and volume discounts."
+            answer: "If you need multiple documents each month, contact sales@landlordheaven.co.uk for volume pricing.",
           },
           {
-            question: "How much do solicitors charge for the same services?",
-            answer: (
-              <>
-                <p className="mb-2">Typical solicitor fees:</p>
-                <ul className="list-disc pl-5 space-y-1">
-                  <li>Eviction notice: £200-300</li>
-                  <li>Court claim preparation: £300-500</li>
-                  <li>Money claim: £200-350</li>
-                  <li>Tenancy agreement: £150-400</li>
-                  <li>HMO compliance consultation: £500+ per year</li>
-                </ul>
-                <p className="mt-2"><strong>You save £200-400 per case</strong> using Landlord Heaven.</p>
-              </>
-            )
+            question: "How much do solicitors charge for similar work?",
+            answer: "Typical solicitor pricing is often several hundred pounds per case. That is why many landlords use Landlord Heaven when they want to get the paperwork moving without paying solicitor rates upfront.",
           },
           {
-            question: "Can I purchase additional products later?",
-            answer: "Yes! You can purchase any product at any time. Each product is independent and addresses different landlord needs. If you need assistance choosing the right products, contact support@landlordheaven.co.uk for guidance."
-          }
+            question: "Can I buy another product later?",
+            answer: "Yes. You can buy another product whenever your situation changes.",
+          },
         ]}
         showContactCTA={false}
         variant="white"
       />
 
-      {/* CTA */}
       <section className="py-16 md:py-20 bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50">
         <Container>
           <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Still Have Questions?</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Still not sure which pack fits?</h2>
             <p className="text-xl mb-8 text-gray-600">
-              Not sure which product is right for you? Our support team is here to help.
+              Tell us what has gone wrong, and we will help you narrow the next step.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              <Link
-                href="/contact"
-                className="hero-btn-primary"
-              >
-                Contact Us →
+              <Link href="/contact" className="hero-btn-primary">
+                Contact support ->
               </Link>
-              <Link
-                href="/help"
-                className="hero-btn-secondary"
-              >
-                Browse FAQ →
+              <Link href="/help" className="hero-btn-secondary">
+                Browse the help centre ->
               </Link>
             </div>
-            <p className="mt-4 text-sm text-gray-600">Quick response • Expert guidance • No obligation</p>
+            <p className="mt-4 text-sm text-gray-600">Quick response | Straight answers | No obligation</p>
           </div>
         </Container>
       </section>
     </div>
   );
 }
-
-

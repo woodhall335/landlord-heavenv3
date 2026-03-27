@@ -44,15 +44,16 @@ const trustBadges = [
   },
   {
     icon: <RiLockLine className="h-5 w-5" />,
-    label: 'Section 21 & Section 8 Bundles',
+    label: 'England Section 8 Route Updated',
+    sublabel: 'Section 21 ended on 1 May 2026',
   },
   {
     icon: <RiShieldCheckLine className="h-5 w-5" />,
-    label: 'Welsh Renting Homes Act Compliant',
+    label: 'Welsh Renting Homes Act Forms',
   },
   {
     icon: <RiMapPinLine className="h-5 w-5" />,
-    label: 'Scottish PRT Tribunal Ready',
+    label: 'Scottish Tribunal-Ready Notices',
   },
 ];
 

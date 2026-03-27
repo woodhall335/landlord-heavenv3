@@ -203,7 +203,7 @@ const faqItems = [
   {
     question: 'Which jurisdictions does Ask Heaven cover?',
     answer:
-      'Ask Heaven covers England, Wales, Scotland, and Northern Ireland with jurisdiction-specific guidance for each legal system.',
+      'Ask Heaven covers England, Wales, Scotland, and Northern Ireland with guidance that matches each legal system.',
   },
   {
     question: 'Can I generate a case bundle from Ask Heaven?',
@@ -295,9 +295,10 @@ export default async function AskHeavenPage({
       <StructuredData data={complianceTopicsItemListSchema()} />
 
       <UniversalHero
-        title="Ask Heaven: Legally Validated Landlord Q&A"
-        subtitle="Get solicitor-grade, compliance-checked and court-ready guidance, then move straight into the right workflow."
-        primaryCta={{ label: 'Start Wizard', href: '/wizard?product=notice_only&topic=eviction&src=seo_ask_heaven' }}
+        title="Ask Heaven: Ask Your Landlord Question in Plain English"
+        subtitle="Get a straight answer on notices, arrears, tenancy agreements, and compliance, then move to the right next step when you are ready."
+        primaryCta={{ label: 'Ask about your case ->', href: '/ask-heaven?q=My%20tenant%20has%20stopped%20paying%20rent' }}
+        trustPositioningPreset="ask_heaven"
         showTrustPositioningBar
         hideMedia
       />
@@ -320,12 +321,13 @@ export default async function AskHeavenPage({
                 Free UK Landlord Advice
               </div>
               <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-4">
-                Your Questions, Answered
+                Ask the question you actually have
               </h2>
               <p className="text-gray-600 max-w-2xl mx-auto">
-                Get instant, plain-English answers to your landlord-tenant questions. Ask Heaven
-                covers <strong>England</strong>, <strong>Wales</strong>, <strong>Scotland</strong>,
-                and <strong>Northern Ireland</strong>.
+                Use Ask Heaven when you need a quick answer on notices, unpaid rent,
+                tenancy agreements, or compliance. It covers <strong>England</strong>,{' '}
+                <strong>Wales</strong>, <strong>Scotland</strong>, and{' '}
+                <strong>Northern Ireland</strong>.
               </p>
             </div>
 
@@ -336,7 +338,7 @@ export default async function AskHeavenPage({
                   <Image src="/gb-eng.svg" alt="England flag" width={40} height={28} className="w-full h-full object-cover" />
                 </div>
                 <h3 className="font-semibold text-gray-900">England</h3>
-                <p className="text-xs text-gray-500 mt-1">Section 21 & 8, ASTs, MCOL</p>
+                <p className="text-xs text-gray-500 mt-1">Section 8, arrears, agreements, MCOL</p>
               </div>
               <div className="bg-gray-50 rounded-xl p-4 border border-gray-100">
                 <div className="w-10 h-7 mb-2 overflow-hidden rounded">
@@ -382,7 +384,7 @@ export default async function AskHeavenPage({
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-primary font-bold">•</span>
-                  Which eviction notice should I use?
+                  How do I evict a tenant without Section 21?
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-primary font-bold">•</span>

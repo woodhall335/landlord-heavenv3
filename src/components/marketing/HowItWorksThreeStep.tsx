@@ -5,46 +5,44 @@ const steps = [
     iconSrc: "/images/howitworks1.webp",
     title: "Answer Questions",
     description:
-      "Tell us about your situation. Our wizard asks simple questions about your property, tenant, and what you need.",
+      "Tell us what has happened in plain English. We ask the questions that matter so you do not have to work out the legal route yourself.",
     time: "5-10 minutes",
   },
   {
     iconSrc: "/images/howitworks2.webp",
-    title: "Review & Validate",
+    title: "Check the Route",
     description:
-      "We generate your jurisdiction-specific case file and validate key compliance checks before you approve.",
+      "We flag the problems that could trip you up before you generate anything, so you do not serve the wrong notice or miss a key detail.",
     time: "2-3 minutes",
   },
   {
     iconSrc: "/images/howitworks3.webp",
-    title: "File & Proceed",
+    title: "Generate and Act",
     description:
-      "Pay securely and generate your complete case bundle with filing instructions, evidence checklist, and service guidance.",
+      "Generate the documents, service guidance, and next-step checklist you need to move the case forward tonight.",
     time: "Instant",
   },
 ];
 
 export function HowItWorksThreeStep() {
   return (
-    <div className="max-w-5xl mx-auto">
-      <div className="text-center mb-14">
-        <div className="inline-block bg-primary/10 rounded-full px-4 py-2 mb-4">
-          <span className="text-sm font-semibold text-primary">
-            Simple 3-Step Process
-          </span>
+    <div className="mx-auto max-w-5xl">
+      <div className="mb-14 text-center">
+        <div className="mb-4 inline-block rounded-full bg-primary/10 px-4 py-2">
+          <span className="text-sm font-semibold text-primary">Three clear steps</span>
         </div>
-        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-          Complete UK Eviction Case Bundles in Minutes
+        <h2 className="mb-4 text-3xl font-bold text-gray-900 md:text-4xl">
+          Your tenant is not paying. Here is how you get moving.
         </h2>
-        <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-          Generate a complete, jurisdiction-specific court bundle with
-          statutory-grounded checks for England, Wales, or Scotland.
+        <p className="mx-auto max-w-2xl text-xl text-gray-600">
+          Work out the right next step, avoid the mistakes that cause delay, and
+          generate the documents you need without wading through legal jargon.
         </p>
       </div>
 
-      <div className="grid md:grid-cols-3 gap-8 md:gap-12">
+      <div className="grid gap-8 md:grid-cols-3 md:gap-12">
         {steps.map((step) => (
-          <div key={step.title} className="text-center group">
+          <div key={step.title} className="group text-center">
             <div className="relative z-10">
               <div className="mx-auto mb-6 flex items-center justify-center transition-all duration-300 group-hover:scale-110">
                 <Image
@@ -52,15 +50,15 @@ export function HowItWorksThreeStep() {
                   alt={step.title}
                   width={96}
                   height={96}
-                  className="h-[72px] w-[72px] md:h-[96px] md:w-[96px] object-contain"
+                  className="h-[72px] w-[72px] object-contain md:h-[96px] md:w-[96px]"
                 />
               </div>
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors">
+            <h3 className="mb-3 text-xl font-bold text-gray-900 transition-colors group-hover:text-primary">
               {step.title}
             </h3>
             <p className="text-gray-600">{step.description}</p>
-            <p className="text-sm text-primary mt-2 font-medium">{step.time}</p>
+            <p className="mt-2 text-sm font-medium text-primary">{step.time}</p>
           </div>
         ))}
       </div>

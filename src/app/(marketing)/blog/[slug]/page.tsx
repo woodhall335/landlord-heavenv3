@@ -34,7 +34,6 @@ import { FAQInline } from '@/components/seo/FAQSection';
 import { landingPageLinks, productLinks, guideLinks } from '@/lib/seo/internal-links';
 import Image from 'next/image';
 import { BlogReadingProgress } from '@/components/blog/BlogReadingProgress';
-import { BlogInlineProductCard } from '@/components/blog/BlogInlineProductCard';
 import { BlogBackToTop } from '@/components/blog/BlogBackToTop';
 import { BlogStickySlots } from '@/components/blog/BlogStickySlots';
 import { BlogProse } from '@/components/blog/BlogProse';
@@ -140,13 +139,6 @@ function getComplianceTopicForPost(slug: string): { topic: AskHeavenTopic; promp
 const MAX_RELATED_GUIDES = 12;
 const BLOG_STICKY_TOP_OFFSET = '7rem';
 
-
-const PRODUCT_LABELS: Record<(typeof BLOG_PRODUCT_ROUTES)[keyof typeof BLOG_PRODUCT_ROUTES], string> = {
-  [BLOG_PRODUCT_ROUTES.noticeOnly]: 'Start your eviction notice',
-  [BLOG_PRODUCT_ROUTES.completePack]: 'Start your complete eviction pack',
-  [BLOG_PRODUCT_ROUTES.moneyClaim]: 'Start your money claim',
-  [BLOG_PRODUCT_ROUTES.ast]: 'Start tenancy agreement pack',
-};
 
 const CORE_EVICTION_GUIDES = [
   { href: '/section-21-notice-guide', label: 'Section 21 notice guide' },
@@ -985,20 +977,13 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
               </div>
 
               <div className="mt-5 rounded-2xl border border-[#e6dbff] bg-white/90 p-4 sm:p-5">
-                <p className="text-xs font-semibold uppercase tracking-wide text-[#692ed4]">Problem → education → solution → action</p>
-                <p className="mt-2 text-sm text-slate-700">
-                  If you are dealing with this right now, use this guide to understand your options quickly, then move straight into the right landlord workflow.
+                <p className="text-xs font-semibold uppercase tracking-wide text-[#692ed4]">
+                  Read this first
                 </p>
-                <div className="mt-3 flex flex-wrap items-center gap-2">
-                  <Link href={productCta.primaryProductHref} className="inline-flex rounded-lg bg-[#692ed4] px-4 py-2 text-sm font-semibold text-white hover:bg-[#5b24be]">
-                    {PRODUCT_LABELS[productCta.primaryProductHref]} →
-                  </Link>
-                  {productCta.secondaryProductHref && (
-                    <Link href={productCta.secondaryProductHref} className="inline-flex rounded-lg border border-[#cdb8f6] px-4 py-2 text-sm font-medium text-[#692ed4] hover:bg-[#f8f1ff]">
-                      See alternative route →
-                    </Link>
-                  )}
-                </div>
+                <p className="mt-2 text-sm text-slate-700">
+                  This guide explains the problem in plain English first, then
+                  shows you the next practical step when you are ready.
+                </p>
               </div>
             </div>
           </div>
@@ -1011,8 +996,8 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-center sm:text-left">
                 <span className="font-semibold">Section 21 ends 1 May 2026 —</span>
                 <Section21Countdown variant="compact" className="text-white font-bold" />
-                <Link href={BLOG_PRODUCT_ROUTES.noticeOnly} className="text-white underline hover:no-underline font-medium">
-                  Serve Your Notice Now
+                <Link href="/section-21-ban" className="text-white underline hover:no-underline font-medium">
+                  See what replaces it
                 </Link>
               </div>
             </div>
@@ -1039,8 +1024,6 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
                 role={post.author.role}
                 image={post.author.image}
               />
-
-              <BlogInlineProductCard cta={productCta} postSlug={slug} category={post.category} />
 
               {quickAnswer && (
                 <section className="mt-8 rounded-2xl border border-[#e9dcff] bg-white p-5 shadow-sm md:p-6" aria-label="Quick answer">
@@ -1070,7 +1053,12 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
               )}
 
               <BlogCtaProvider value={{ cta: productCta, postSlug: slug, category: post.category }}>
-                <BlogProse>
+                <BlogProse
+                  post={post}
+                  cta={productCta}
+                  postSlug={slug}
+                  category={post.category}
+                >
                   {post.content}
                 </BlogProse>
               </BlogCtaProvider>
@@ -1080,7 +1068,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
               <section className="mt-10 rounded-2xl border border-[#e9dcff] bg-[#f8f1ff] p-5 shadow-sm md:p-6" aria-label="Core eviction guides">
                 <h2 className="text-xl font-bold text-gray-900">Core eviction guides for next steps</h2>
                 <p className="mt-2 text-sm text-gray-700">
-                  Keep your case strategy connected with the core possession guides most landlords need during arrears and notice workflows.
+                  Keep your case connected with the core possession guides most landlords need during arrears and notice problems.
                 </p>
                 <ul className="mt-4 space-y-2 text-sm">
                   {CORE_EVICTION_GUIDES.map((guide) => (

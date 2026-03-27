@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+﻿import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import Link from 'next/link';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
@@ -89,7 +89,7 @@ const faqs: FAQItem[] = [
   {
     question: 'Should I use Notice Only or the Complete Eviction Pack?',
     answer:
-      'Notice Only is often the better fit where the route is clear and you mainly need the Section 21 notice workflow handled properly. The Complete Eviction Pack is usually stronger where you want broader support from validation through possession planning and enforcement readiness.',
+      'Notice Only is often the better fit where the route is clear and you mainly need the Section 21 notice route handled properly. The Complete Eviction Pack is usually stronger where you want broader support from validation through possession planning and enforcement readiness.',
   },
 ];
 
@@ -279,7 +279,7 @@ export default function Page() {
                 the papers without requiring a hearing in every case.
               </p>
               <p className="mt-4 leading-7 text-gray-700">
-                The word “accelerated” can make the route sound automatic, but that is not
+                The word â€œacceleratedâ€ can make the route sound automatic, but that is not
                 how it works in practice. The route is only efficient where the documents
                 are consistent, the notice is valid, and service can be shown clearly. If
                 the court sees problems in the file, it can still slow down, request
@@ -301,7 +301,7 @@ export default function Page() {
               <p className="mt-4 leading-7 text-gray-700">
                 Landlords sometimes assume accelerated possession means a judge will simply
                 wave the case through. In reality, the route is efficient because it is
-                strict. It works best when the paperwork answers the court’s likely
+                strict. It works best when the paperwork answers the courtâ€™s likely
                 questions before the questions even arise.
               </p>
             </Card>
@@ -339,7 +339,7 @@ export default function Page() {
               <p className="mt-4 leading-7 text-gray-700">
                 It also suits landlords who understand that speed comes from preparation,
                 not from rushing. A carefully prepared Section 21 file can make this route
-                feel controlled. A badly prepared file can make even an “accelerated” claim
+                feel controlled. A badly prepared file can make even an â€œacceleratedâ€ claim
                 drag on longer than a better-chosen route would have done.
               </p>
             </Card>
@@ -379,15 +379,15 @@ export default function Page() {
               <p className="mt-4 leading-7 text-gray-700">
                 This is why route discipline matters. Choosing the wrong route is not just
                 a technical error. It can cost months of time, more rent loss, and a full
-                restart. Landlords get better outcomes when they ask, “What route does this
-                file genuinely support?” rather than “Which route sounds quickest on
-                paper?”
+                restart. Landlords get better outcomes when they ask, â€œWhat route does this
+                file genuinely support?â€ rather than â€œWhich route sounds quickest on
+                paper?â€
               </p>
             </Card>
 
             <CtaBand
               title="Need the Section 21 route handled properly before court?"
-              body="Use Notice Only if your Section 21 route is already clear and you mainly need a compliant notice workflow. Use the Complete Eviction Pack if you want broader validation, stronger preparation, and support across the wider possession process."
+              body="Use Notice Only if your Section 21 route is already clear and you mainly need a compliant notice route. Use the Complete Eviction Pack if you want broader validation, stronger preparation, and support across the wider possession process."
               primaryHref="/products/notice-only"
               primaryLabel="Start Notice Only"
               secondaryHref="/products/complete-pack"
@@ -412,7 +412,7 @@ export default function Page() {
                 the strength of the claim.
               </p>
               <p className="mt-4 leading-7 text-gray-700">
-                The landlord’s file should also be internally consistent. Dates on the
+                The landlordâ€™s file should also be internally consistent. Dates on the
                 notice, tenancy terms, communications, and service records should all align
                 cleanly. Where one part of the file contradicts another, the court may
                 question the reliability of the claim or require further information.
@@ -576,22 +576,22 @@ export default function Page() {
               </div>
               <p className="mt-4 leading-7 text-gray-700">
                 The key reason some claims feel quick and others feel slow is not just the
-                court’s speed. It is whether the file was clear enough to be processed
+                courtâ€™s speed. It is whether the file was clear enough to be processed
                 without unnecessary friction.
               </p>
               <p className="mt-4 leading-7 text-gray-700">
                 Landlords should avoid building their expectations around the absolute best
-                case. A straightforward file may move well, but even then the court’s
+                case. A straightforward file may move well, but even then the courtâ€™s
                 workload still matters. A listed hearing, a defence, or missing information
                 can add further time. The safer commercial approach is to work from a
                 realistic timeline and treat good preparation as the main thing within the
-                landlord’s control.
+                landlordâ€™s control.
               </p>
               <p className="mt-4 leading-7 text-gray-700">
                 In other words, the fastest route is usually the route least likely to
                 trigger delay. That is why paper quality matters so much in accelerated
                 possession. A smoother claim often comes from better discipline, not just
-                from choosing a route with “accelerated” in the name.
+                from choosing a route with â€œacceleratedâ€ in the name.
               </p>
             </Card>
 
@@ -631,7 +631,7 @@ export default function Page() {
 
             <CtaBand
               title="Already know you want the Section 21 route done properly?"
-              body="Notice Only is usually the cleaner fit where the Section 21 route is already settled and you mainly need the notice workflow handled correctly. The Complete Eviction Pack is usually better where you want broader possession-stage support as well."
+              body="Notice Only is usually the cleaner fit where the Section 21 route is already settled and you mainly need the notice route handled correctly. The Complete Eviction Pack is usually better where you want broader possession-stage support as well."
               primaryHref="/products/notice-only"
               primaryLabel="Go to Notice Only"
               secondaryHref="/products/complete-pack"
@@ -713,13 +713,13 @@ export default function Page() {
               <p className="mt-2 leading-7 text-gray-700">
                 Notice Only is usually the better fit where the route is already clear, the
                 landlord knows Section 21 is appropriate, and the main need is a compliant
-                notice workflow. It often suits landlords who already understand the wider
+                notice route. It often suits landlords who already understand the wider
                 possession path.
               </p>
               <p className="mt-2 leading-7 text-gray-700">
                 It is a strong fit where the landlord mainly needs the first formal stage
                 handled properly and does not need as much support across the wider court
-                and enforcement workflow. In cleaner cases, that can be the right level of
+                and enforcement route. In cleaner cases, that can be the right level of
                 help.
               </p>
 
@@ -729,7 +729,7 @@ export default function Page() {
               <p className="mt-2 leading-7 text-gray-700">
                 The Complete Eviction Pack is usually the stronger fit where the landlord
                 wants broader validation, stronger evidence preparation, and a more managed
-                end-to-end workflow from notice through possession and possible
+                end-to-end route from notice through possession and possible
                 enforcement.
               </p>
               <p className="mt-2 leading-7 text-gray-700">
@@ -741,12 +741,12 @@ export default function Page() {
 
               <p className="mt-4 leading-7 text-gray-700">
                 In practical terms, Notice Only is for clearer notice-led cases. Complete
-                Pack is for cases where the wider possession workflow still needs to be
+                Pack is for cases where the wider possession route still needs to be
                 organised carefully.
               </p>
               <p className="mt-4 leading-7 text-gray-700">
                 The better choice is not the one with the bigger label. It is the one that
-                matches the case stage, the landlord’s confidence level, and the amount of
+                matches the case stage, the landlordâ€™s confidence level, and the amount of
                 support needed to keep the route clean from notice to possession.
               </p>
             </Card>
@@ -801,3 +801,4 @@ export default function Page() {
     </div>
   );
 }
+

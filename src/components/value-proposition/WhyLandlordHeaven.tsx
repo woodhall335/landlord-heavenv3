@@ -3,32 +3,21 @@
  *
  * Consistent "Why Landlord Heaven" differentiators block used across all product,
  * template, and tool pages.
- *
- * TRUE DIFFERENTIATORS (as of Jan 2026):
- * - Preview before you buy (watermarked preview)
- * - Edit answers + regenerate instantly (unlimited)
- * - Stored in your portal for at least 12 months
- * - Correct forms for England, Wales, Scotland (NI tenancy agreements only)
- * - Ask Heaven legal assistant for guidance
- * - One-time payment (no subscription)
  */
 
 import { RiCheckboxCircleLine } from 'react-icons/ri';
 import {
+  BadgePoundSterling,
   Eye,
-  RefreshCw,
   FolderOpen,
   Globe,
   MessageSquare,
-  BadgePoundSterling,
+  RefreshCw,
 } from 'lucide-react';
 
 export interface WhyLandlordHeavenProps {
-  /** Variant for different display contexts */
   variant?: 'full' | 'compact';
-  /** Optional custom title */
   title?: string;
-  /** Show/hide specific differentiators */
   showPreview?: boolean;
   showRegenerate?: boolean;
   showStorage?: boolean;
@@ -45,7 +34,7 @@ interface Differentiator {
 
 export function WhyLandlordHeaven({
   variant = 'full',
-  title = 'Why Landlord Heaven',
+  title = 'Why you use Landlord Heaven when this needs sorting fast',
   showPreview = true,
   showRegenerate = true,
   showStorage = true,
@@ -57,61 +46,65 @@ export function WhyLandlordHeaven({
 
   if (showPreview) {
     differentiators.push({
-      icon: <Eye className="w-5 h-5 text-primary" />,
-      text: 'Preview before you buy (watermarked preview)',
-      description: 'See exactly what you get before paying',
+      icon: <Eye className="h-5 w-5 text-primary" />,
+      text: 'See the documents before you pay',
+      description: 'Check the pack first so you are not paying blind.',
     });
   }
 
   if (showRegenerate) {
     differentiators.push({
-      icon: <RefreshCw className="w-5 h-5 text-primary" />,
-      text: 'Edit answers + regenerate instantly (unlimited)',
-      description: 'Make changes and regenerate at no extra cost',
+      icon: <RefreshCw className="h-5 w-5 text-primary" />,
+      text: 'Change your answers and regenerate fast',
+      description:
+        'If the facts change, you can update the paperwork without starting again.',
     });
   }
 
   if (showStorage) {
     differentiators.push({
-      icon: <FolderOpen className="w-5 h-5 text-primary" />,
-      text: 'Stored in your portal for at least 12 months',
-      description: 'Download and save documents any time',
+      icon: <FolderOpen className="h-5 w-5 text-primary" />,
+      text: 'Keep your documents in your account for at least 12 months',
+      description:
+        'Come back when you need to download, check, or resend something.',
     });
   }
 
   if (showJurisdictions) {
     differentiators.push({
-      icon: <Globe className="w-5 h-5 text-primary" />,
-      text: 'Correct forms for England, Wales and Scotland',
-      description: 'NI supported for tenancy agreements only',
+      icon: <Globe className="h-5 w-5 text-primary" />,
+      text: 'Use documents that match the rules where your property is',
+      description:
+        'England, Wales, and Scotland are covered. Northern Ireland is tenancy agreements only.',
     });
   }
 
   if (showAskHeaven) {
     differentiators.push({
-      icon: <MessageSquare className="w-5 h-5 text-primary" />,
-      text: 'Ask Heaven legal assistant helps you avoid invalid notices and rejected applications',
-      description: 'Guidance on compliance blockers, routes, and dates',
+      icon: <MessageSquare className="h-5 w-5 text-primary" />,
+      text: 'Ask Heaven helps you sense-check the route before you act',
+      description:
+        'Use it to spot blockers before you serve an invalid notice or file the wrong claim.',
     });
   }
 
   if (showOneTimePayment) {
     differentiators.push({
-      icon: <BadgePoundSterling className="w-5 h-5 text-primary" />,
-      text: 'One-time payment — no subscription',
-      description: 'Pay once, get your documents, done',
+      icon: <BadgePoundSterling className="h-5 w-5 text-primary" />,
+      text: 'Pay once for the documents you need',
+      description: 'No subscription hanging around after the job is done.',
     });
   }
 
   if (variant === 'compact') {
     return (
-      <div className="bg-primary-subtle rounded-lg border border-primary/20 p-6">
-        <h3 className="text-lg font-semibold text-charcoal mb-4">{title}</h3>
+      <div className="rounded-lg border border-primary/20 bg-primary-subtle p-6">
+        <h3 className="mb-4 text-lg font-semibold text-charcoal">{title}</h3>
         <ul className="space-y-2">
-          {differentiators.map((diff, index) => (
-            <li key={index} className="flex items-start gap-2">
-              <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
-              <span className="text-gray-700 text-sm">{diff.text}</span>
+          {differentiators.map((diff) => (
+            <li key={diff.text} className="flex items-start gap-2">
+              <RiCheckboxCircleLine className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+              <span className="text-sm text-gray-700">{diff.text}</span>
             </li>
           ))}
         </ul>
@@ -119,23 +112,22 @@ export function WhyLandlordHeaven({
     );
   }
 
-  // Full variant
   return (
-    <div className="bg-gradient-to-br from-purple-50 to-white rounded-2xl border border-primary/20 p-8">
-      <h2 className="text-2xl md:text-3xl font-bold text-charcoal mb-6 text-center">
+    <div className="rounded-2xl border border-primary/20 bg-gradient-to-br from-purple-50 to-white p-8">
+      <h2 className="mb-6 text-center text-2xl font-bold text-charcoal md:text-3xl">
         {title}
       </h2>
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {differentiators.map((diff, index) => (
-          <div key={index} className="flex items-start gap-3">
-            <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center shrink-0">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {differentiators.map((diff) => (
+          <div key={diff.text} className="flex items-start gap-3">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-purple-100">
               {diff.icon}
             </div>
             <div>
               <p className="font-medium text-charcoal">{diff.text}</p>
-              {diff.description && (
-                <p className="text-sm text-gray-600 mt-1">{diff.description}</p>
-              )}
+              {diff.description ? (
+                <p className="mt-1 text-sm text-gray-600">{diff.description}</p>
+              ) : null}
             </div>
           </div>
         ))}

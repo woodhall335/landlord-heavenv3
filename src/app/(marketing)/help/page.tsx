@@ -14,11 +14,10 @@ import { formatPrice, PRICING } from "@/lib/pricing";
 export const metadata: Metadata = generateMetadata({
   title: "Landlord Help Centre | Eviction, Arrears & Tenancy FAQs",
   description:
-    "Get help with Section 21 notices, Section 8 notices, rent arrears claims, tenancy agreements, billing, and common landlord document questions.",
+    "Get help with Section 8 notices, rent arrears claims, tenancy agreements, billing, and common landlord document questions.",
   path: "/help",
   keywords: [
     "landlord help centre",
-    "section 21 help",
     "section 8 help",
     "rent arrears help",
     "tenancy agreement help",
@@ -47,9 +46,9 @@ export default function HelpPage() {
             <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
               <span className="text-sm font-semibold text-primary">Support</span>
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Help Center</h1>
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Help Centre</h1>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Find answers to common questions about our services, documents, and processes.
+              Find quick answers about notices, arrears, tenancy agreements, billing, and what to do next.
             </p>
           </div>
         </Container>
@@ -137,8 +136,7 @@ export default function HelpPage() {
                   answer: (
                     <ul className="space-y-3">
                       <li>
-                        <strong>Notices ({PRODUCTS.notice_only.displayPrice}):</strong> Just need an eviction notice (Section 8/21, Notice to
-                        Leave). Tenant might leave voluntarily.
+                        <strong>Notices ({PRODUCTS.notice_only.displayPrice}):</strong> You need the notice itself, plus service steps and checks, before you go anywhere near court.
                       </li>
                       <li>
                         <strong>Money Claims ({PRODUCTS.money_claim.displayPrice}):</strong> Tenant owes rent arrears. Includes claim forms, arrears schedules, and witness statements.
@@ -167,7 +165,7 @@ export default function HelpPage() {
                   ),
                 },
                 {
-                  question: "What jurisdictions do you cover?",
+                  question: "Which regions do you cover?",
                   answer: (
                     <>
                       <p className="mb-3">
@@ -177,7 +175,7 @@ export default function HelpPage() {
                         <li className="flex items-start gap-2">
                           <Image src="/gb-eng.svg" alt="England" width={16} height={16} className="w-4 h-4 mt-0.5" />
                           <Image src="/gb-wls.svg" alt="Wales" width={16} height={16} className="w-4 h-4 mt-0.5" />
-                          <span><strong>England & Wales:</strong> Section 8/21 notices, ASTs, N5/N5B court forms, MCOL</span>
+                          <span><strong>England & Wales:</strong> Section 8 and other possession notices, tenancy agreements, court forms, and MCOL support where available</span>
                         </li>
                         <li className="flex items-start gap-2">
                           <Image src="/gb-sct.svg" alt="Scotland" width={16} height={16} className="w-4 h-4 mt-0.5" />
@@ -189,7 +187,7 @@ export default function HelpPage() {
                         </li>
                       </ul>
                       <p className="mt-3">
-                        Our system automatically detects your jurisdiction from the property address and generates the correct
+                        Our system automatically detects the property region and generates the correct
                         documents.
                       </p>
                     </>
@@ -213,8 +211,8 @@ export default function HelpPage() {
                   answer: (
                     <>
                       <p>
-                        <strong>Yes.</strong> Our documents are based on official government forms (Form 6A for Section 21 in England,
-                        Notice to Leave for Scotland, RHW forms for Wales) and are accepted by UK courts and tribunals. Thousands of landlords have
+                        <strong>Yes.</strong> Our documents are based on the official government forms and prescribed notice formats used in England,
+                        Scotland, and Wales, and are accepted by UK courts and tribunals. Thousands of landlords have
                         successfully used them.
                       </p>
                       <p className="mt-2 text-sm text-gray-600">

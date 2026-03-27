@@ -10,9 +10,9 @@ interface BlogCTAProps {
 }
 
 const VARIANT_LABELS: Record<NonNullable<BlogCTAProps['variant']>, string> = {
-  default: 'Recommended next step',
-  urgency: 'Take action now',
-  inline: 'Next legal step',
+  default: 'Next step',
+  urgency: 'Need to act now?',
+  inline: 'What to do next',
 };
 
 /**

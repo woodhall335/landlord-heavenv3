@@ -14,14 +14,14 @@ const standardWizardHref = '/wizard?product=ast_standard&src=tenancy_hub&topic=t
 const premiumWizardHref = '/wizard?product=ast_premium&src=tenancy_hub&topic=tenancy';
 
 export const metadata: Metadata = {
-  title: 'Tenancy Agreements Hub | Current UK Agreement Routes for Landlords',
+  title: 'Tenancy Agreement UK | Find the Right Agreement for Your Property',
   description:
-    'Compare the main UK tenancy agreement routes, including England wording designed for the assured periodic framework from 1 May 2026.',
+    'Find the tenancy agreement you need for England, Wales, Scotland, or Northern Ireland, including the England changes from 1 May 2026.',
   alternates: { canonical: canonicalUrl },
   openGraph: {
-    title: 'Tenancy Agreements Hub | Current UK Agreement Routes for Landlords',
+    title: 'Tenancy Agreement UK | Find the Right Agreement for Your Property',
     description:
-      'Compare the main UK tenancy agreement routes with England, Wales, Scotland, and Northern Ireland terminology handled correctly from the start.',
+      'Choose the agreement that matches where the property is, with England wording updated for the law from 1 May 2026.',
     url: canonicalUrl,
     type: 'website',
   },
@@ -46,11 +46,12 @@ export default function TenancyAgreementsHubPage() {
         />
 
         <UniversalHero
-          title="Choose the right tenancy agreement for the property jurisdiction"
-          subtitle="Use the UK tenancy hub to compare the correct route for England, Wales, Scotland, or Northern Ireland. Old or generic templates may use the wrong legal framework, especially now that new England agreements generally move into the assured periodic model from 1 May 2026."
-          primaryCta={{ label: 'Start Standard tenancy agreement', href: standardWizardHref }}
-          secondaryCta={{ label: 'Start Premium tenancy agreement', href: premiumWizardHref }}
+          title="Need a tenancy agreement for a new let?"
+          subtitle="Choose the agreement that matches where the property is. If the property is in England, the rules changed on 1 May 2026, so an old AST template can leave you starting with the wrong wording."
+          primaryCta={{ label: 'Create your tenancy agreement ->', href: standardWizardHref }}
+          secondaryCta={{ label: 'See the premium agreement ->', href: premiumWizardHref }}
           showTrustPositioningBar
+          trustPositioningPreset="ast"
           hideMedia
         />
 
@@ -62,13 +63,13 @@ export default function TenancyAgreementsHubPage() {
 
             <section className="rounded-2xl border border-blue-200 bg-blue-50 p-6 text-sm text-gray-700">
               <p>
-                Use this hub to compare the UK routes, then move into the{' '}
+                Start with where the property is, then move into the page that matches it: the{' '}
                 <Link href="/tenancy-agreements/england" className="font-semibold text-blue-700 hover:underline">
-                  England tenancy agreement hub
+                  England tenancy agreement guide
                 </Link>{' '}
-                for the assured periodic England route, the{' '}
+                if the property is in England, the{' '}
                 <Link href="/wales-tenancy-agreement-template" className="font-semibold text-blue-700 hover:underline">
-                  Wales occupation contract route
+                  Wales occupation contract guide
                 </Link>{' '}
                 for Welsh lets, the{' '}
                 <Link href="/private-residential-tenancy-agreement-template" className="font-semibold text-blue-700 hover:underline">
@@ -76,9 +77,9 @@ export default function TenancyAgreementsHubPage() {
                 </Link>{' '}
                 for Scottish lets, and the{' '}
                 <Link href="/northern-ireland-tenancy-agreement-template" className="font-semibold text-blue-700 hover:underline">
-                  Northern Ireland private tenancy route
+                  Northern Ireland tenancy agreement guide
                 </Link>{' '}
-                when you need the correct local framework from the start.
+                for Northern Ireland. That way you do not start with the wrong template and discover it later.
               </p>
             </section>
 
@@ -90,45 +91,45 @@ export default function TenancyAgreementsHubPage() {
                 Premium England tenancy agreement
               </Link>
               <Link href="/rolling-tenancy-agreement" className="rounded-lg border p-4 hover:bg-gray-50">
-                England periodic and rolling agreement guide
+                England periodic tenancy guide
               </Link>
               <Link href={productHref} className="rounded-lg border p-4 hover:bg-gray-50">
-                Compare all tenancy agreement routes
+                Compare Standard and Premium
               </Link>
             </div>
 
             <section className="rounded-2xl border border-gray-200 bg-gray-50 p-6">
-              <h2 className="mb-3 text-xl font-bold text-gray-900">Next steps after creating your agreement</h2>
+              <h2 className="mb-3 text-xl font-bold text-gray-900">What you may need next</h2>
               <div className="grid gap-3 text-sm sm:grid-cols-2">
                 <Link href="/renew-tenancy-agreement-england" className="rounded-lg border border-gray-200 bg-white p-3 transition-colors hover:border-primary">
-                  Review whether an existing England tenancy needs fresh paperwork
+                  Check whether an existing England tenancy needs updated paperwork
                 </Link>
                 <Link href="/update-tenancy-agreement-northern-ireland" className="rounded-lg border border-gray-200 bg-white p-3 transition-colors hover:border-primary">
-                  Update agreement terms for current Northern Ireland tenancies
+                  Update terms for a Northern Ireland tenancy
                 </Link>
                 <Link href="/section-8-notice-template" className="rounded-lg border border-gray-200 bg-white p-3 transition-colors hover:border-primary">
-                  Use Section 8 if the tenant breaches agreement clauses
+                  Use Section 8 if the tenant breaches the agreement
                 </Link>
                 <Link href="/eviction-notice-uk" className="rounded-lg border border-gray-200 bg-white p-3 transition-colors hover:border-primary">
-                  Check eviction notice routes before enforcement
+                  Check which eviction notice you need
                 </Link>
               </div>
             </section>
 
             <section className="rounded-2xl border border-gray-200 bg-white p-6">
-              <h2 className="mb-3 text-xl font-bold text-gray-900">Other England landlord documents</h2>
+              <h2 className="mb-3 text-xl font-bold text-gray-900">Other landlord documents you may need</h2>
               <div className="grid gap-3 text-sm sm:grid-cols-2">
                 <Link href="/landlord-documents-england" className="rounded-lg border border-gray-200 bg-gray-50 p-3 transition-colors hover:border-primary">
-                  Browse the streamlined England documents bridge
+                  Browse England landlord documents
                 </Link>
                 <Link href="/tenancy-agreement" className="rounded-lg border border-gray-200 bg-gray-50 p-3 transition-colors hover:border-primary">
-                  Start the standard England tenancy agreement
+                  Create the standard England agreement
                 </Link>
                 <Link href="/premium-tenancy-agreement" className="rounded-lg border border-gray-200 bg-gray-50 p-3 transition-colors hover:border-primary">
-                  Use the premium route for more complex tenancies
+                  Use the premium agreement for more complex lets
                 </Link>
                 <Link href="/money-claim" className="rounded-lg border border-gray-200 bg-gray-50 p-3 transition-colors hover:border-primary">
-                  Move arrears-focused matters into the money-claim route
+                  Start recovering unpaid rent
                 </Link>
               </div>
             </section>

@@ -1,11 +1,13 @@
-﻿import type { ReactNode } from 'react';
-import { PRODUCTS } from '@/lib/pricing/products';
+import type { ReactNode } from 'react';
 import type { HeaderMode } from '@/components/layout/HeaderModeContext';
+import type { PositioningPreset } from '@/lib/marketing/positioning';
+import { PRODUCTS } from '@/lib/pricing/products';
 import type { UniversalHeroProps } from './UniversalHero';
 
 export type HeroConfig = Pick<
   UniversalHeroProps,
   | 'trustText'
+  | 'trustPositioningPreset'
   | 'title'
   | 'highlightTitle'
   | 'subtitle'
@@ -24,9 +26,10 @@ const astPremiumPrice = PRODUCTS.ast_premium.displayPrice;
 
 const astSubtitle: ReactNode = (
   <>
-    Generate a jurisdiction-specific tenancy agreement: Residential Tenancy Agreement (England),
-    Occupation Contract (Wales), PRT (Scotland), and NI private tenancy -
-    tailored to your jurisdiction and compliance requirements.
+    Create the right tenancy agreement for your property tonight. Use a tenancy
+    agreement for England, an occupation contract for Wales, a PRT for Scotland,
+    or a private tenancy agreement for Northern Ireland without digging through
+    old templates.
   </>
 );
 
@@ -36,33 +39,38 @@ const defaultHeroMedia = {
   headerMode: 'autoOnScroll' as HeaderMode,
 };
 
+function withPreset(
+  trustPositioningPreset: PositioningPreset
+): Pick<HeroConfig, 'trustPositioningPreset'> {
+  return { trustPositioningPreset };
+}
+
 /* ============================================================
    HOME HERO
    ============================================================ */
 
 export const homeHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
-  trustText:
-    'Built for landlords - Updated for current housing law',
+  ...withPreset('home'),
+  trustText: 'Built for landlords under pressure | Updated for current housing law',
   title: 'Tenant Not Paying or',
   highlightTitle: 'Refusing to Leave?',
   subtitle: (
     <>
-      Use plain-English guidance to decide between a <strong>Section 21 notice</strong>,
-      <strong> Section 8 notice</strong>, or a <strong>money claim</strong> to recover rent arrears.
-      Start in minutes and generate the right documents for your next step.
+      Work out tonight whether you need a <strong>section 8 notice</strong>, a{' '}
+      <strong>money claim</strong> for unpaid rent, or a new tenancy agreement,
+      then generate the right documents without guessing.
     </>
   ),
   primaryCta: {
-    label: 'See which notice you need?',
-    href: '/wizard?product',
+    label: 'Find out which notice you need ->',
+    href: '/wizard?product=notice_only&topic=eviction&src=seo_homepage',
   },
   secondaryCta: {
-    label: 'Recover unpaid rent?',
+    label: 'Start recovering your rent ->',
     href: '/wizard?product=money_claim&topic=debt&src=seo_homepage',
   },
-  feature:
-    'Legally validated landlord documents with compliance checks, filing guidance, and jurisdiction-specific outputs.',
+  feature: 'Answer plain-English questions. We handle the legal logic.',
 };
 
 /* ============================================================
@@ -71,22 +79,22 @@ export const homeHeroConfig: HeroConfig = {
 
 export const astHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
+  ...withPreset('ast'),
   mediaSrc: '/images/tenancy_agreements.webp',
-  trustText:
-    'Legally compliant - Updated for current housing law - England, Wales, Scotland & Northern Ireland',
-  title: 'Legally Compliant',
-  highlightTitle: 'Tenancy Agreements',
+  trustText: 'Updated for current housing law | England, Wales, Scotland and Northern Ireland',
+  title: 'Need a New',
+  highlightTitle: 'Tenancy Agreement?',
   subtitle: astSubtitle,
   primaryCta: {
-    label: 'Generate my tenancy agreement',
+    label: 'Create your tenancy agreement ->',
     href: '/wizard?product=ast_standard&src=product_page&topic=tenancy',
   },
   secondaryCta: {
-    label: `Premium (HMO-Ready) - ${astPremiumPrice}`,
+    label: `See the Premium agreement - ${astPremiumPrice}`,
     href: '/wizard?product=ast_premium&src=product_page&topic=tenancy',
   },
   feature:
-    'Residential Tenancy Agreement (England), Occupation Contract (Wales), PRT (Scotland), and NI jurisdiction-specific agreements.',
+    'Use the right agreement now so you do not have to fix it when the tenancy goes wrong.',
 };
 
 /* ============================================================
@@ -95,19 +103,18 @@ export const astHeroConfig: HeroConfig = {
 
 export const noticeOnlyHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
+  ...withPreset('notice_only'),
   mediaSrc: '/images/notice_bundles.webp',
-  trustText:
-    'Court-ready - Updated for current housing law - England, Wales & Scotland',
-  title: 'Serve the Right',
-  highlightTitle: 'Eviction Notice',
+  trustText: 'Updated for current housing law | England, Wales and Scotland',
+  title: 'Need an',
+  highlightTitle: 'Eviction Notice UK?',
   subtitle:
-    'Need to evict a tenant in England, Wales, or Scotland? Get the correct possession notice with guided checks for Section 21 notice and Section 8 notice routes so you can act quickly and avoid preventable mistakes.',
+    'Your tenant is still in the property and you need to act. We help you choose the right section 8 notice for England, or the right notice for Wales or Scotland, so you do not lose weeks on the wrong route.',
   primaryCta: {
-    label: 'Start your eviction notice',
+    label: 'Generate your eviction notice ->',
     href: '/wizard?product=notice_only&src=product_page&topic=eviction',
   },
-  feature:
-    'Built against statutory frameworks with reform-aware validation and filing guidance.',
+  feature: 'We flag problems before you serve anything, so you do not have to start again.',
 };
 
 /* ============================================================
@@ -116,18 +123,18 @@ export const noticeOnlyHeroConfig: HeroConfig = {
 
 export const completePackHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
+  ...withPreset('complete_pack'),
   mediaSrc: '/images/eviction_packs.webp',
-  trustText: 'Court-ready - Updated for current housing law - England-only',
+  trustText: 'Updated for current housing law | England-only',
   title: 'Need to Evict a Tenant',
   highlightTitle: 'Complete Eviction Pack',
   subtitle:
-    'From possession notice to court filing, this complete eviction pack gives landlords the full Section 21 / Section 8 route with supporting documents, court forms, and step-by-step guidance.',
+    'Section 21 is gone in England from 1 May 2026. If you need the full section 8 eviction route, this pack helps you move from notice to court without piecing the whole case together yourself.',
   primaryCta: {
-    label: 'Start your eviction pack',
+    label: 'Start your section 8 pack ->',
     href: '/wizard?product=complete_pack&src=product_page&topic=eviction',
   },
-  feature:
-    'Section 21/8 notice workflows, N5B claim path, evidence checklist, and filing instructions in one structured case file.',
+  feature: 'Keep your notice, court forms, and evidence lined up from the start.',
 };
 
 /* ============================================================
@@ -136,18 +143,18 @@ export const completePackHeroConfig: HeroConfig = {
 
 export const moneyClaimHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
+  ...withPreset('money_claim'),
   mediaSrc: '/images/money_claims.webp',
-  trustText: 'Court-ready - Updated for current housing law - England-only',
+  trustText: 'Updated for current housing law | England-only',
   title: 'Tenant Not Paying Rent?',
   highlightTitle: 'Start a Money Claim',
   subtitle:
-    'Recover rent arrears, unpaid bills, and property damage through a guided England money claim flow. Build your claim in plain English and download court-ready documents.',
+    'If the arrears keep rising, this helps you build a money claim for unpaid rent, bills, or damage in plain English and get the paperwork ready tonight.',
   primaryCta: {
-    label: 'Start your money claim',
+    label: 'Start recovering your rent ->',
     href: '/wizard?product=money_claim&topic=debt&src=product_page',
   },
-  feature:
-    'N1 claim form, PAP-DEBT letter, interest calculation, and structured particulars of claim included.',
+  feature: 'Set out what is owed clearly before the numbers get harder to untangle.',
 };
 
 /* ============================================================
@@ -156,13 +163,13 @@ export const moneyClaimHeroConfig: HeroConfig = {
 
 export const blogHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
-  trustText: 'Landlord Guides & Insights',
-  title: 'Landlord Guides',
-  highlightTitle: 'Built for Confident Decisions',
+  ...withPreset('blog'),
+  trustText: 'Plain-English landlord guides',
+  title: 'How to Evict a Tenant,',
+  highlightTitle: 'Deal With Arrears, and Act Faster',
   subtitle:
-    'Practical guidance on evictions, tenancy law, and landlord compliance across the UK.',
-  primaryCta: { label: 'Browse Guides', href: '/blog' },
-  secondaryCta: { label: 'View Latest Posts', href: '/blog?view=latest' },
-  feature: 'Step-by-step legal guidance updated for current UK regulations.',
+    'Read what matters in plain English, then move to the right next step when you are ready.',
+  primaryCta: { label: 'Browse landlord guides ->', href: '/blog' },
+  secondaryCta: { label: 'See the latest guides ->', href: '/blog?view=latest' },
+  feature: 'Start with the problem, not the legal definition.',
 };
-

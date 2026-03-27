@@ -18,16 +18,29 @@ const CTA_ICONS: Record<NonNullable<ProductCtaConfig['iconKey']>, string> = {
   ast: '/images/wizard-icons/04-tenancy.png',
 };
 
-export function BlogInlineProductCard({ cta, postSlug, category }: BlogInlineProductCardProps) {
+export function BlogInlineProductCard({
+  cta,
+  postSlug,
+  category,
+}: BlogInlineProductCardProps) {
   const iconSrc = CTA_ICONS[cta.iconKey ?? 'notice'];
 
   return (
     <section className="my-10 rounded-3xl border border-[#e8ddfb] bg-[#f8f1ff] p-6 shadow-[0_10px_30px_rgba(105,46,212,0.08)]">
-      <p className="text-xs font-semibold uppercase tracking-wide text-[#692ed4]">Problem → solution</p>
+      <p className="text-xs font-semibold uppercase tracking-wide text-[#692ed4]">
+        {cta.eyebrow}
+      </p>
       <div className="mt-2 flex items-center gap-3">
-        <Image src={iconSrc} alt="Product recommendation" width={28} height={28} className="h-7 w-7" />
-        <h3 className="text-xl font-bold text-slate-900">Need to act on this now?</h3>
+        <Image
+          src={iconSrc}
+          alt="Recommended next step"
+          width={28}
+          height={28}
+          className="h-7 w-7"
+        />
+        <h3 className="text-xl font-bold text-slate-900">{cta.heading}</h3>
       </div>
+      <p className="mt-3 text-sm text-slate-700">{cta.intro}</p>
       <ul className="mt-4 space-y-2 text-sm text-slate-700">
         {cta.bullets.map((bullet) => (
           <li key={bullet} className="flex items-start gap-2">

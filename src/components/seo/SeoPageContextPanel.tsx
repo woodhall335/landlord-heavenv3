@@ -38,47 +38,51 @@ export function SeoPageContextPanel({
       {freshness ? (
         <div className="grid gap-4 md:grid-cols-3">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-primary">Reviewed</p>
+            <p className="text-xs font-semibold uppercase tracking-wide text-primary">
+              Reviewed
+            </p>
             <p className="mt-2 text-sm text-gray-700">{freshness.reviewedDate}</p>
           </div>
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-primary">Scope</p>
+            <p className="text-xs font-semibold uppercase tracking-wide text-primary">
+              Applies to
+            </p>
             <p className="mt-2 text-sm text-gray-700">{freshness.jurisdictionScope}</p>
           </div>
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-primary">Legal Context</p>
+            <p className="text-xs font-semibold uppercase tracking-wide text-primary">
+              Current position
+            </p>
             <p className="mt-2 text-sm text-gray-700">{freshness.legalContextNote}</p>
           </div>
         </div>
       ) : null}
 
-      <div className={freshness ? 'mt-6 space-y-4 text-gray-700 leading-7' : 'space-y-4 text-gray-700 leading-7'}>
-        {entry.pageRole === 'pillar' ? (
-          <p>
-            This page is the main authority route for this topic cluster. Use it as the core reference,
-            then pair it with{' '}
-            <Link href={entry.supportingPage} className="text-primary font-medium hover:underline">
-              {supportingAnchor}
-            </Link>{' '}
-            when you need the next practical step, a narrower supporting guide, or a scenario-led follow-on page.
-          </p>
-        ) : (
-          <p>
-            Use this page with the wider landlord workflow in mind. For the main authority route,
-            start with{' '}
-            <Link href={entry.primaryPillar} className="text-primary font-medium hover:underline">
-              {pillarAnchor}
-            </Link>
-            . If you need the adjacent step next, move to{' '}
-            <Link href={entry.supportingPage} className="text-primary font-medium hover:underline">
-              {supportingAnchor}
-            </Link>
-            .
-          </p>
-        )}
+      <div
+        className={
+          freshness
+            ? 'mt-6 space-y-4 leading-7 text-gray-700'
+            : 'space-y-4 leading-7 text-gray-700'
+        }
+      >
         <p>
-          When you are ready to act, the product-first route for this topic is{' '}
-          <Link href={productHref} className="text-primary font-medium hover:underline">
+          Start here if you need the main guide on this issue. If your situation is
+          narrower or you want the next practical step, go to{' '}
+          <Link href={entry.supportingPage} className="font-medium text-primary hover:underline">
+            {supportingAnchor}
+          </Link>
+          .
+        </p>
+        <p>
+          If you want the wider background first, read{' '}
+          <Link href={entry.primaryPillar} className="font-medium text-primary hover:underline">
+            {pillarAnchor}
+          </Link>
+          .
+        </p>
+        <p>
+          Ready to act? The quickest route from here is{' '}
+          <Link href={productHref} className="font-medium text-primary hover:underline">
             {productAnchor}
           </Link>
           .

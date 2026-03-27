@@ -19,12 +19,12 @@ const product = PRODUCTS.notice_only;
 const price = product.displayPrice;
 
 export const metadata: Metadata = {
-  title: `Eviction Notice Template Bundle — Jurisdiction-Specific | England, Wales & Scotland | ${price}`,
+  title: `Eviction Notice UK | Section 8 and Possession Notices | ${price}`,
   description:
-    `Jurisdiction-specific eviction notice template bundles for England, Wales, and Scotland.`,
+    `Get the right eviction notice for England, Wales, or Scotland with service guidance and checks before you serve.`,
   openGraph: {
     title: `Eviction Notice 2026 | England, Wales & Scotland | ${price}`,
-    description: "Eviction notice template bundle for England (Section 21/8), Wales (Section 173), and Scotland (Notice to Leave). Includes service instructions, validity checklist, and preview before purchase.",
+    description: "Eviction notice pack for England, Wales, and Scotland. Includes the notice itself, service instructions, a validity checklist, and preview before purchase.",
     url: getCanonicalUrl('/products/notice-only'),
   },
   alternates: {
@@ -37,7 +37,7 @@ export const runtime = 'nodejs';
 const faqs = [
   {
     question: "What documents do I get?",
-    answer: "You receive 3 documents: (1) Your eviction notice (Section 21, Section 8, Section 173, or Notice to Leave depending on jurisdiction), (2) Service Instructions explaining how to legally serve your notice, and (3) Service & Validity Checklist to verify compliance before serving."
+    answer: "You receive 3 documents: (1) the notice for your case and region, (2) service instructions explaining how to serve it, and (3) a service and validity checklist so you can spot problems before you send anything."
   },
   {
     question: "Can I preview before I pay?",
@@ -48,12 +48,12 @@ const faqs = [
     answer: "You can edit your answers and regenerate your case bundle instantly at no extra cost. Unlimited regenerations are included."
   },
   {
-    question: "Which jurisdictions do you support?",
-    answer: "England (Section 21/Section 8), Wales (Section 173/fault-based notices), and Scotland (Notice to Leave)."
+    question: "Which regions do you support?",
+    answer: "England, Wales, and Scotland. We prepare the notice that matches where the property is and the route you are taking."
   },
   {
     question: "Are these the official government forms?",
-    answer: "Yes. We use official government forms: Form 6A for Section 21 (England), Form 3 for Section 8 (England), official RHW forms for Wales, and the prescribed Notice to Leave format for Scotland."
+    answer: "Yes. We use the official government forms and prescribed notice formats used in England, Wales, and Scotland."
   },
   {
     question: "What if my notice is invalid?",
@@ -77,7 +77,7 @@ export default async function NoticeOnlyPage() {
       <HeaderConfig mode="autoOnScroll" />
       <StructuredData data={productSchema({
         name: "AI-Validated Eviction Case Bundle",
-        description: "Complete eviction case bundles for UK landlords: Section 21, Section 8, Section 173, and Notice to Leave workflows with statutory-grounded validation.",
+        description: "Eviction notice packs for landlords in England, Wales, and Scotland with checks before you serve.",
         price: product.price.toString(),
         url: "https://landlordheaven.co.uk/products/notice-only"
       })} />
@@ -106,17 +106,17 @@ export default async function NoticeOnlyPage() {
         <Container>
           <div className="mx-auto max-w-6xl rounded-3xl border border-[#E6DBFF] bg-white p-6 md:p-10">
             <h2 className="text-3xl font-bold text-charcoal md:text-4xl">Who this is for</h2>
-            <p className="mt-4 text-lg text-gray-700">This pack is for landlords who need to start possession correctly without guessing paperwork.</p>
+            <p className="mt-4 text-lg text-gray-700">This pack is for you if the tenant problem is live now and you need the right first step in place tonight.</p>
             <ul className="mt-6 grid gap-3 text-gray-700 md:grid-cols-2">
-              <li>• Your tenant is not paying rent and you need to act now.</li>
-              <li>• Your tenant will not leave and you need the right first step.</li>
-              <li>• You are unsure whether Section 21 or Section 8 is right.</li>
-              <li>• You are worried about serving the wrong notice and losing time.</li>
+              <li>Your tenant is not paying rent and you need to start the rent arrears eviction route.</li>
+              <li>Your tenant will not leave and you want to stop guessing which notice applies.</li>
+              <li>You are worried about serving the wrong paperwork and losing months.</li>
+              <li>You want the notice, service steps, and checks lined up before you press print.</li>
             </ul>
             <p className="mt-6 text-gray-700">Serving the correct notice is what starts your eviction route. A mistake here can delay the whole case.</p>
             <div className="mt-8">
-              <h3 className="mb-4 text-xl font-semibold text-charcoal">Need help choosing Section 21 vs Section 8?</h3>
-              <p className="mb-4 text-gray-700">Use this guidance panel to understand timelines and route differences before generating your notice.</p>
+              <h3 className="mb-4 text-xl font-semibold text-charcoal">Need help working out the England route?</h3>
+              <p className="mb-4 text-gray-700">Check the route first, then generate the notice that matches your case and your region.</p>
             </div>
             <Section21ComplianceTimingPanel />
           </div>
@@ -135,7 +135,7 @@ export default async function NoticeOnlyPage() {
               defaultJurisdiction="england"
               previews={previews}
               titleOverride="What's included in your eviction notice pack"
-              subtitleOverride="Select your jurisdiction, then preview every document in the pack."
+              subtitleOverride="Choose the region, then preview every document in the pack."
             />
           </div>
         </Container>
@@ -146,12 +146,12 @@ export default async function NoticeOnlyPage() {
           <div className="mx-auto max-w-5xl rounded-3xl border border-[#E6DBFF] bg-white p-6 md:p-10">
             <h2 className="text-3xl font-bold text-charcoal md:text-4xl">How it works</h2>
             <div className="mt-6 grid gap-4 md:grid-cols-3">
-              <div className="rounded-2xl bg-[#F3EEFF] p-5"><h3 className="font-semibold">1) Choose your notice route</h3><p className="mt-2 text-sm text-gray-700">Pick Section 21, Section 8, Wales, or Scotland based on your tenancy and issue.</p></div>
-              <div className="rounded-2xl bg-[#F3EEFF] p-5"><h3 className="font-semibold">2) Answer guided questions</h3><p className="mt-2 text-sm text-gray-700">We guide you through key facts and flag common compliance blockers before you generate.</p></div>
-              <div className="rounded-2xl bg-[#F3EEFF] p-5"><h3 className="font-semibold">3) Preview and generate your pack</h3><p className="mt-2 text-sm text-gray-700">Check your documents, then generate and serve your notice pack confidently.</p></div>
+              <div className="rounded-2xl bg-[#F3EEFF] p-5"><h3 className="font-semibold">1) Tell us what has gone wrong</h3><p className="mt-2 text-sm text-gray-700">We help you narrow the route based on arrears, breach, refusal to leave, and where the property is.</p></div>
+              <div className="rounded-2xl bg-[#F3EEFF] p-5"><h3 className="font-semibold">2) Answer plain-English questions</h3><p className="mt-2 text-sm text-gray-700">We collect the details that matter and flag obvious blockers before you generate.</p></div>
+              <div className="rounded-2xl bg-[#F3EEFF] p-5"><h3 className="font-semibold">3) Preview and generate your pack</h3><p className="mt-2 text-sm text-gray-700">Check the notice, service steps, and checklist before you serve anything.</p></div>
             </div>
             <div className="mt-8 text-center">
-              <Link href="/wizard?product=notice_only&src=product_page&topic=eviction" className="hero-btn-primary">Start your eviction notice →</Link>
+              <Link href="/wizard?product=notice_only&src=product_page&topic=eviction" className="hero-btn-primary">Find out which notice you need -></Link>
             </div>
           </div>
         </Container>
@@ -164,7 +164,7 @@ export default async function NoticeOnlyPage() {
             <p className="mt-4 text-gray-700">If your tenant is not paying or refusing to leave, the next step is getting the right notice in place. This pack gives you the right starting documents so you can move forward now.</p>
             <div className="mt-6"><WhyLandlordHeaven variant="full" /></div>
             <div className="mt-8 text-center">
-              <Link href="/wizard?product=notice_only&src=product_page&topic=eviction" className="hero-btn-primary">Start your eviction notice →</Link>
+              <Link href="/wizard?product=notice_only&src=product_page&topic=eviction" className="hero-btn-primary">Find out which notice you need -></Link>
             </div>
           </div>
         </Container>
@@ -187,7 +187,7 @@ export default async function NoticeOnlyPage() {
                   <div className="rounded-2xl border border-[#E6DBFF] bg-[#F3EEFF] p-6 shadow-[0_12px_30px_rgba(105,46,212,0.07)]">
                     <div className="w-14 h-14 bg-white rounded-xl border border-[#E6DBFF] flex items-center justify-center mb-4"><CheckCircle2 className="w-7 h-7 text-[#692ED4]" /></div>
                     <h3 className="text-xl font-semibold text-charcoal mb-2">Official Forms</h3>
-                    <p className="text-gray-700">Government-approved forms: Form 6A (Section 21), Form 3 (Section 8), RHW forms (Wales), Notice to Leave (Scotland).</p>
+                    <p className="text-gray-700">Built on the official forms and prescribed notice formats used in England, Wales, and Scotland.</p>
                   </div>
 
                   <div className="rounded-2xl border border-[#E6DBFF] bg-[#F3EEFF] p-6 shadow-[0_12px_30px_rgba(105,46,212,0.07)]">
@@ -226,13 +226,13 @@ export default async function NoticeOnlyPage() {
             <h2 className="mb-4 text-3xl font-bold md:text-4xl">Ready to serve your eviction notice?</h2>
             <p className="mb-8 text-xl text-white/90">Use the correct notice seeking possession for your situation, preview your documents, and start the landlord eviction process with confidence.</p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              <Link href="/wizard?product=notice_only&src=product_page&topic=eviction" className="hero-btn-primary">Start your eviction notice →</Link>
+              <Link href="/wizard?product=notice_only&src=product_page&topic=eviction" className="hero-btn-primary">Find out which notice you need -></Link>
             </div>
             <ul className="mt-6 flex flex-col items-center gap-2 text-sm text-white/90 md:flex-row md:justify-center md:gap-6" aria-label="Purchase reassurance">
-              <li>✓ Preview before paying</li>
-              <li>✓ Unlimited regenerations</li>
-              <li>✓ Stored 12+ months</li>
-              <li>✓ One-time payment — no subscription</li>
+              <li>Preview before paying</li>
+              <li>Unlimited regenerations</li>
+              <li>Stored 12+ months</li>
+              <li>One-time payment - no subscription</li>
             </ul>
           </div>
         </Container>
@@ -240,3 +240,4 @@ export default async function NoticeOnlyPage() {
     </div>
   );
 }
+

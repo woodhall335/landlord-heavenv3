@@ -7,6 +7,7 @@ import React from 'react';
 import { clsx } from 'clsx';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { TrustPositioningBar } from '@/components/marketing/TrustPositioningBar';
+import type { PositioningPreset } from '@/lib/marketing/positioning';
 
 export interface StandardHeroCTA {
   label: string;
@@ -27,6 +28,8 @@ export interface StandardHeroProps {
   children?: React.ReactNode;
   className?: string;
   showTrustPositioningBar?: boolean;
+  trustPositioningPreset?: PositioningPreset;
+  trustPositioningHeadline?: string;
 }
 
 function normalizeTitle(title: React.ReactNode): { title: string; highlightTitle?: string } {
@@ -50,6 +53,8 @@ export function StandardHero({
   children,
   className,
   showTrustPositioningBar = true,
+  trustPositioningPreset = 'default',
+  trustPositioningHeadline,
 }: StandardHeroProps) {
   const normalized = normalizeTitle(title);
 
@@ -68,10 +73,18 @@ export function StandardHero({
           backgroundImageSrc={variant === 'pastel' ? '/images/bg.webp' : '/images/bg.webp'}
           showReviewPill={false}
           showUsageCounter={false}
+          trustPositioningPreset={trustPositioningPreset}
+          trustPositioningHeadline={trustPositioningHeadline}
         >
           <div className={clsx('mt-2 text-white', align === 'center' ? 'text-center' : 'text-left')}>
             <div className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight text-white">{title}</div>
-            {showTrustPositioningBar ? <TrustPositioningBar variant="compact" /> : null}
+            {showTrustPositioningBar ? (
+              <TrustPositioningBar
+                variant="compact"
+                preset={trustPositioningPreset}
+                headline={trustPositioningHeadline}
+              />
+            ) : null}
         {children}
           </div>
         </UniversalHero>
@@ -94,8 +107,16 @@ export function StandardHero({
         backgroundImageSrc={variant === 'pastel' ? '/images/bg.webp' : '/images/bg.webp'}
         showReviewPill={false}
         showUsageCounter={false}
+        trustPositioningPreset={trustPositioningPreset}
+        trustPositioningHeadline={trustPositioningHeadline}
       >
-        {showTrustPositioningBar ? <TrustPositioningBar variant="compact" /> : null}
+        {showTrustPositioningBar ? (
+          <TrustPositioningBar
+            variant="compact"
+            preset={trustPositioningPreset}
+            headline={trustPositioningHeadline}
+          />
+        ) : null}
         {children}
       </UniversalHero>
     </section>
