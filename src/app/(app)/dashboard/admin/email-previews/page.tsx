@@ -5,6 +5,8 @@ import { Container } from "@/components/ui";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { HMO_PRO_FROM_PRICE_PER_MONTH } from "@/lib/pricing";
+import { PRODUCTS } from "@/lib/pricing/products";
 
 interface EmailTemplate {
   id: string;
@@ -345,7 +347,7 @@ export default function AdminEmailPreviewsPage() {
                   </tr>
                   <tr>
                     <td style="padding: 10px 0; font-family: Arial, Helvetica, sans-serif; font-size: 16px; font-weight: bold; color: ${COLORS.white};">Total Paid:</td>
-                    <td style="padding: 10px 0; font-family: Arial, Helvetica, sans-serif; font-size: 18px; font-weight: bold; color: ${COLORS.primary}; text-align: right;">£19.99</td>
+                    <td style="padding: 10px 0; font-family: Arial, Helvetica, sans-serif; font-size: 18px; font-weight: bold; color: ${COLORS.primary}; text-align: right;">${PRODUCTS.notice_only.displayPrice}</td>
                   </tr>
                 </table>
               </td>
@@ -416,7 +418,7 @@ export default function AdminEmailPreviewsPage() {
               </td>
             </tr>
           </table>
-          ${getInfoBox(`<strong style="color: ${COLORS.white};">Pricing:</strong><br>From £19.99/month for 1-5 properties<br>Cancel anytime, no long-term commitment`)}
+          ${getInfoBox(`<strong style="color: ${COLORS.white};">Pricing:</strong><br>${HMO_PRO_FROM_PRICE_PER_MONTH} for 1-5 properties<br>Cancel anytime, no long-term commitment`)}
           <p style="margin: 30px 0 0 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: ${COLORS.mutedGray};">Questions? Reply to this email anytime.<br><strong style="color: ${COLORS.lightGray};">The Landlord Heaven Team</strong></p>
         `,
         true

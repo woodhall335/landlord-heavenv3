@@ -45,7 +45,12 @@ import {
   getResidentialDocumentList,
   getResidentialProductMeta,
 } from '@/lib/residential-letting/document-config';
-import { PRODUCTS, isValidProductSku, type ProductSku } from '@/lib/pricing/products';
+import {
+  formatPriceLabel,
+  PRODUCTS,
+  isValidProductSku,
+  type ProductSku,
+} from '@/lib/pricing/products';
 import { normalizeEnglandTenancyPurpose } from '@/lib/tenancy/england-reform';
 
 interface CaseData {
@@ -896,7 +901,9 @@ export default function WizardPreviewPage() {
       const addOnDocuments = selectedAddOns.flatMap((sku) =>
         isResidentialLettingProductSku(sku)
           ? getResidentialDocumentList(sku as ResidentialLettingProductSku)
-          : []
+          : sku === 'money_claim'
+            ? getMoneyClaimDocuments(jurisdiction)
+            : []
       );
       const seenDocumentIds = new Set(baseDocuments.map((doc) => doc.id));
 
@@ -1175,7 +1182,7 @@ export default function WizardPreviewPage() {
       ? PRODUCTS[baseProductSku].price + addOnProducts.reduce((sum, item) => sum + item.price, 0)
       : null;
   const selectionPriceDisplay =
-    selectionTotal !== null ? `£${selectionTotal.toFixed(2)}` : resolvedProductMeta.price;
+    selectionTotal !== null ? formatPriceLabel(selectionTotal) : resolvedProductMeta.price;
 
   // Dynamically add rent schedule feature if included in documents
   const hasRentSchedule = documents.some(doc => doc.id === 'arrears-schedule');

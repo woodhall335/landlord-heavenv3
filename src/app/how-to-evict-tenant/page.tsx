@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+﻿import type { Metadata } from 'next';
 import Link from 'next/link';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
@@ -31,8 +31,8 @@ const canonicalUrl = getCanonicalUrl('/how-to-evict-tenant');
 
 const primaryProductHref = '/products/complete-pack';
 
-const noticeOnlyPrice = PRODUCTS.notice_only?.displayPrice ?? 'GBP29.99';
-const completePackPrice = PRODUCTS.complete_pack?.displayPrice ?? 'GBP49.99';
+const noticeOnlyPrice = PRODUCTS.notice_only.displayPrice;
+const completePackPrice = PRODUCTS.complete_pack.displayPrice;
 
 const complianceLinks = {
   deposit: buildAskHeavenLink({
@@ -340,7 +340,7 @@ export default function HowToEvictTenantPage() {
           <div className="container mx-auto px-4">
             <div className="mx-auto max-w-5xl">
               <div className="flex items-center gap-3 mb-6">
-                <span className="text-4xl">🏴</span>
+                <span className="text-4xl">ðŸ´</span>
                 <h2 className="text-3xl font-bold text-gray-900">
                   Evicting a tenant in England
                 </h2>
@@ -470,7 +470,7 @@ export default function HowToEvictTenantPage() {
           <div className="container mx-auto px-4">
             <div className="mx-auto max-w-5xl">
               <div className="flex items-center gap-3 mb-6">
-                <span className="text-4xl">🏴</span>
+                <span className="text-4xl">ðŸ´</span>
                 <h2 className="text-3xl font-bold text-gray-900">
                   Evicting a contract-holder in Wales
                 </h2>
@@ -541,7 +541,7 @@ export default function HowToEvictTenantPage() {
           <div className="container mx-auto px-4">
             <div className="mx-auto max-w-5xl">
               <div className="flex items-center gap-3 mb-6">
-                <span className="text-4xl">🏴</span>
+                <span className="text-4xl">ðŸ´</span>
                 <h2 className="text-3xl font-bold text-gray-900">
                   Evicting a tenant in Scotland
                 </h2>
@@ -613,7 +613,7 @@ export default function HowToEvictTenantPage() {
           <div className="container mx-auto px-4">
             <div className="mx-auto max-w-5xl">
               <div className="flex items-center gap-3 mb-6">
-                <span className="text-4xl">🇬🇧</span>
+                <span className="text-4xl">ðŸ‡¬ðŸ‡§</span>
                 <h2 className="text-3xl font-bold text-gray-900">
                   Evicting a tenant in Northern Ireland
                 </h2>
@@ -836,5 +836,6 @@ export default function HowToEvictTenantPage() {
     </>
   );
 }
+
 
 

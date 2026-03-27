@@ -38,6 +38,7 @@ import {
   PUBLIC_RESIDENTIAL_LETTING_PRODUCT_SKUS,
   isPublicResidentialLettingProductSku,
 } from '@/lib/residential-letting/products';
+import { isMoneyClaimAddOnEligible } from '@/lib/wizard-crosssell';
 
 /**
  * Normalize display SKUs to payment SKUs for order storage
@@ -68,7 +69,7 @@ const ADD_ON_ELIGIBLE_PRODUCTS = [
  * Map product types to configured Stripe Price IDs
  * These IDs are validated for configuration safety, while charged amounts still
  * come from src/lib/pricing/products.ts via price_data.
- * Note: money_claim is £29.99, sc_money_claim (discontinued) shares the same Stripe price ID
+ * Note: money_claim and sc_money_claim (discontinued) share the same Stripe price ID.
  * Jurisdiction-specific display SKUs (prt_*, occupation_*, ni_*) map to the same prices as ast_*
  */
 const PRODUCT_TO_PRICE_ID: Record<string, string> = {
@@ -269,7 +270,7 @@ export async function POST(request: Request) {
     const adminSupabase = createAdminClient();
 
     const normalizedProductType = normalizeToPaymentSku(product_type);
-    const normalizedAddOns = Array.from(
+    const requestedAddOnSkus = Array.from(
       new Set(
         (add_ons || [])
           .map((sku) => normalizeToPaymentSku(sku))
@@ -329,10 +330,11 @@ export async function POST(request: Request) {
     // Map sc_money_claim to money_claim for product config lookup
     const productSku: ProductSku = normalizedProductType === 'sc_money_claim' ? 'sc_money_claim' : normalizedProductType as ProductSku;
     const product = PRODUCTS[productSku];
-    const addOnProducts = normalizedAddOns
-      .filter((sku) => (ADD_ON_ELIGIBLE_PRODUCTS as readonly string[]).includes(sku))
-      .map((sku) => PRODUCTS[sku]);
-    const totalAmount = product.price + addOnProducts.reduce((sum, item) => sum + item.price, 0);
+    let permittedAddOnSkus = requestedAddOnSkus.filter((sku) =>
+      (ADD_ON_ELIGIBLE_PRODUCTS as readonly string[]).includes(sku)
+    );
+    let addOnProducts = permittedAddOnSkus.map((sku) => PRODUCTS[sku]);
+    let totalAmount = product.price + addOnProducts.reduce((sum, item) => sum + item.price, 0);
 
     // If case_id provided, validate jurisdiction match and ownership
     if (case_id) {
@@ -555,6 +557,36 @@ export async function POST(request: Request) {
             }
           }
         }
+
+        const collectedFacts = ((caseData as any).collected_facts || {}) as Record<string, unknown>;
+        const moneyClaimAddOnRequested = requestedAddOnSkus.includes('money_claim');
+        const moneyClaimAddOnEligible = isMoneyClaimAddOnEligible({
+          productFlow: normalizedProductType,
+          jurisdiction: caseData.jurisdiction,
+          caseType: caseData.case_type,
+          collectedFacts,
+        });
+
+        if (moneyClaimAddOnRequested && !moneyClaimAddOnEligible) {
+          return NextResponse.json(
+            {
+              error:
+                'Money Claim can only be added to eligible England rent arrears eviction cases.',
+            },
+            { status: 400 }
+          );
+        }
+
+        permittedAddOnSkus = Array.from(
+          new Set([
+            ...permittedAddOnSkus,
+            ...(moneyClaimAddOnRequested && moneyClaimAddOnEligible
+              ? (['money_claim'] as const)
+              : []),
+          ])
+        ) as ProductSku[];
+        addOnProducts = permittedAddOnSkus.map((sku) => PRODUCTS[sku]);
+        totalAmount = product.price + addOnProducts.reduce((sum, item) => sum + item.price, 0);
       }
     }
 
@@ -669,7 +701,7 @@ export async function POST(request: Request) {
     // Generate idempotency key for Stripe API call (if case_id provided)
     // Use normalizedProductType for consistent idempotency keys
     const idempotencyKey = case_id
-      ? generateIdempotencyKey(case_id, normalizedProductType, user.id, normalizedAddOns)
+      ? generateIdempotencyKey(case_id, normalizedProductType, user.id, permittedAddOnSkus)
       : undefined;
 
     // Create order record using admin client to avoid RLS issues
@@ -696,7 +728,7 @@ export async function POST(request: Request) {
         first_touch_at: first_touch_at || null,
         ga_client_id: ga_client_id || null,
         metadata: {
-          add_ons: normalizedAddOns,
+          add_ons: permittedAddOnSkus,
           requested_product_type: product_type,
         },
       };
@@ -804,7 +836,7 @@ export async function POST(request: Request) {
           user_id: user.id,
           order_id: (order as any).id,
           product_type,
-          add_ons: normalizedAddOns.join(','),
+          add_ons: permittedAddOnSkus.join(','),
           case_id: case_id || '',
           // Attribution for webhook processing (Stripe metadata max 500 chars per value)
           landing_path: (landing_path || '').substring(0, 500),

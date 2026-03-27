@@ -10,10 +10,14 @@ import { tenancyAgreementWalesLinks } from '@/lib/seo/internal-links';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
+import { PRODUCTS } from '@/lib/pricing/products';
 
 const astProductHref = '/products/ast';
 const standardWizardHref = '/wizard?product=ast_standard&jurisdiction=wales&src=wales_tenancy_template&topic=tenancy';
 const premiumWizardHref = '/wizard?product=ast_premium&jurisdiction=wales&src=wales_tenancy_template&topic=tenancy';
+const standardPrice = PRODUCTS.ast_standard.displayPrice;
+const premiumPrice = PRODUCTS.ast_premium.displayPrice;
+const noticeOnlyPrice = PRODUCTS.notice_only.displayPrice;
 
 export const metadata: Metadata = {
   title: 'Wales Tenancy Agreement 2026 | Legally Validated Occupation Contract',
@@ -160,7 +164,7 @@ export default function WalesTenancyAgreementTemplatePage() {
             </h2>
             <p className="text-xl text-gray-700 mb-8 max-w-3xl mx-auto">
               Looking for a <strong>tenancy agreement for Wales</strong>? Since December 2022,
-              Welsh properties require <strong>Occupation Contracts</strong> — not ASTs.
+              Welsh properties require <strong>Occupation Contracts</strong> â€” not ASTs.
               Our template is fully compliant with the Renting Homes (Wales) Act 2016.
             </p>
             <div className="flex gap-4 justify-center flex-wrap">
@@ -168,13 +172,13 @@ export default function WalesTenancyAgreementTemplatePage() {
                 href={standardWizardHref}
                 className="inline-flex items-center gap-2 bg-white border-2 border-red-600 text-red-600 px-6 py-3 rounded-lg font-semibold hover:bg-red-50 transition-colors"
               >
-                Standard Contract — £14.99
+                {`Standard Contract â€” ${standardPrice}`}
               </Link>
               <Link
                 href={premiumWizardHref}
                 className="inline-flex items-center gap-2 bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors"
               >
-                Premium Contract — £24.99
+                {`Premium Contract â€” ${premiumPrice}`}
               </Link>
             </div>
             <p className="mt-3 text-sm text-gray-600">
@@ -184,7 +188,7 @@ export default function WalesTenancyAgreementTemplatePage() {
               </Link>
               .
             </p>
-            <p className="mt-4 text-sm text-gray-500">Renting Homes Act compliant • Written statement included • Instant PDF</p>
+            <p className="mt-4 text-sm text-gray-500">Renting Homes Act compliant â€¢ Written statement included â€¢ Instant PDF</p>
           </div>
         </section>
 
@@ -270,7 +274,7 @@ export default function WalesTenancyAgreementTemplatePage() {
             <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">What&apos;s Included in Your Wales Agreement</h2>
             <div className="grid md:grid-cols-2 gap-6">
               <div className="p-6 rounded-xl border border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Standard Contract (£14.99)</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">{`Standard Contract (${standardPrice})`}</h3>
                 <ul className="space-y-2 text-gray-600">
                   <li className="flex items-start gap-2">
                     <svg className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
@@ -298,7 +302,7 @@ export default function WalesTenancyAgreementTemplatePage() {
                 <div className="inline-block bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-xs font-bold mb-3">
                   RECOMMENDED
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Premium Contract (£24.99)</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">{`Premium Contract (${premiumPrice})`}</h3>
                 <ul className="space-y-2 text-gray-600">
                   <li className="flex items-start gap-2">
                     <svg className="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
@@ -347,12 +351,12 @@ export default function WalesTenancyAgreementTemplatePage() {
               <Link href="/products/notice-only" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
                 <h3 className="font-semibold text-gray-900">Welsh Eviction Notices</h3>
                 <p className="text-sm text-gray-600 mb-2">Section 173 & 181 notices</p>
-                <span className="text-red-600 font-medium">£24.99</span>
+                <span className="text-red-600 font-medium">{premiumPrice}</span>
               </Link>
               <Link href={premiumWizardHref} className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
                 <h3 className="font-semibold text-gray-900">Premium Occupation Contract</h3>
                 <p className="text-sm text-gray-600 mb-2">Extra clauses for HMOs and complex lets</p>
-                <span className="text-red-600 font-medium">£24.99</span>
+                <span className="text-red-600 font-medium">{noticeOnlyPrice}</span>
               </Link>
               <Link href="/ask-heaven" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
                 <h3 className="font-semibold text-gray-900">Ask Heaven for Wales</h3>

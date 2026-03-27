@@ -23,7 +23,7 @@ import {
   BadgeCheck,
   XCircle,
 } from 'lucide-react';
-import { PRODUCTS } from '@/lib/pricing/products';
+import { PRODUCTS, TENANCY_AGREEMENT_FROM_PRICE } from '@/lib/pricing/products';
 
 // Page constants for analytics
 const PAGE_PATH = '/tenancy-agreement-northern-ireland';
@@ -38,20 +38,20 @@ const standardPrice =
   productMap.tenancy_agreement_standard?.displayPrice ??
   productMap.tenancy_agreement?.displayPrice ??
   productMap.ast_standard?.displayPrice ??
-  '?14.99';
+  PRODUCTS.ast_standard.displayPrice;
 
 const premiumPrice =
   productMap.tenancy_agreement_premium?.displayPrice ??
   productMap.tenancy_agreement_plus?.displayPrice ??
   productMap.ast_premium?.displayPrice ??
-  '?24.99';
+  PRODUCTS.ast_premium.displayPrice;
 
 const astProductHref = '/products/ast';
 
 export const metadata: Metadata = {
-  title: 'Northern Ireland Tenancy Agreement 2026 | Create Online from £14.99',
+  title: `Northern Ireland Tenancy Agreement 2026 | Create Online ${TENANCY_AGREEMENT_FROM_PRICE}`,
   description:
-    'Create a Northern Ireland tenancy agreement online. Written agreement wording for NI private tenancies, updated for current legislation, from £14.99.',
+    `Create a Northern Ireland tenancy agreement online. Written agreement wording for NI private tenancies, updated for current legislation, ${TENANCY_AGREEMENT_FROM_PRICE.toLowerCase()}.`,
   keywords: [
     'tenancy agreement northern ireland',
     'northern ireland tenancy agreement',
@@ -68,7 +68,7 @@ export const metadata: Metadata = {
     canonical: 'https://landlordheaven.co.uk/tenancy-agreement-northern-ireland',
   },
   openGraph: {
-    title: 'Northern Ireland Tenancy Agreement 2026 | Create Online from £14.99',
+    title: `Northern Ireland Tenancy Agreement 2026 | Create Online ${TENANCY_AGREEMENT_FROM_PRICE}`,
     description:
       'Create a Northern Ireland tenancy agreement online with current NI-compliant wording and instant download.',
     type: 'website',
@@ -76,7 +76,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Northern Ireland Tenancy Agreement 2026 | Create Online from £14.99',
+    title: `Northern Ireland Tenancy Agreement 2026 | Create Online ${TENANCY_AGREEMENT_FROM_PRICE}`,
     description:
       'Create a Northern Ireland tenancy agreement online with current NI-compliant wording and instant download.',
   },

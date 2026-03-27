@@ -13,6 +13,7 @@ import { FAQSection } from '@/components/seo/FAQSection';
 import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { tenantNotPayingRentFAQs } from '@/data/faqs';
 import { NeedHelpChoosing, FunnelCta } from '@/components/funnels';
+import { PRODUCTS } from '@/lib/pricing/products';
 import {
   CheckCircle,
   Clock,
@@ -26,6 +27,8 @@ import {
 } from 'lucide-react';
 
 const faqs = tenantNotPayingRentFAQs;
+const noticeOnlyPrice = PRODUCTS.notice_only.displayPrice;
+const moneyClaimPrice = PRODUCTS.money_claim.displayPrice;
 
 export const metadata: Metadata = {
   title: 'Tenant Not Paying Rent? Solicitor-Style Options Guide',
@@ -216,7 +219,7 @@ export default function TenantNotPayingRentPage() {
                     href="/products/notice-only"
                     className="inline-flex items-center gap-2 text-primary font-medium text-sm hover:underline"
                   >
-                    Get Section 8 Notice - GBP29.99
+                    {`Get Section 8 Notice - ${noticeOnlyPrice}`}
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
@@ -249,7 +252,7 @@ export default function TenantNotPayingRentPage() {
                     href="/products/money-claim"
                     className="inline-flex items-center gap-2 text-primary font-medium text-sm hover:underline"
                   >
-                    Start Money Claim - GBP29.99
+                    {`Start Money Claim - ${moneyClaimPrice}`}
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
@@ -519,7 +522,7 @@ export default function TenantNotPayingRentPage() {
                         className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors"
                       >
                         <Gavel className="w-5 h-5" />
-                        Get Money Claim Pack - GBP29.99
+                        {`Get Money Claim Pack - ${moneyClaimPrice}`}
                       </Link>
                       <Link
                         href="/money-claim-unpaid-rent"

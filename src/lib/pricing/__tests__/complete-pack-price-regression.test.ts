@@ -1,4 +1,4 @@
-import fs from 'node:fs';
+﻿import fs from 'node:fs';
 import path from 'node:path';
 
 import { PRICING, REGIONAL_PRICING } from '@/lib/pricing';
@@ -116,3 +116,5 @@ describe('Pricing regression checks', () => {
     expect(staleHits).toEqual([]);
   });
 });
+
+

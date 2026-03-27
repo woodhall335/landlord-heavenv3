@@ -1,4 +1,8 @@
-import { SEO_PRICES } from '@/lib/pricing/products';
+import { formatPriceLabel, SEO_PRICES } from '@/lib/pricing/products';
+import {
+  ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL,
+  ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL,
+} from '@/lib/tenancy/england-agreement-constants';
 
 /**
  * PRICING CONFIGURATION
@@ -7,11 +11,7 @@ import { SEO_PRICES } from '@/lib/pricing/products';
  * Display pricing should come from src/lib/pricing/products.ts.
  *
  * Regional Pricing (March 2026 - Updated):
- * - Notice Only: £29.99 (England, Wales, Scotland)
- * - Eviction Pack: £49.99 (England only)
- * - Money Claim: £29.99 (England only)
- * - Tenancy Agreement: £14.99 (all UK regions) - Standardised
- * - Premium TA (HMO): £24.99 (all UK regions)
+ * See SEO_PRICES below for the current product amounts by SKU and region.
  */
 
 export type Jurisdiction = 'england' | 'wales' | 'scotland' | 'northern_ireland';
@@ -99,7 +99,7 @@ export const PRICING = {
     TIER_2: { properties: '6-10', price: 24.99, label: '6-10 HMOs' },
     TIER_3: { properties: '11-15', price: 29.99, label: '11-15 HMOs' },
     TIER_4: { properties: '16-20', price: 34.99, label: '16-20 HMOs' },
-    // Formula: +£5 per 5 HMOs after tier 4
+    // Formula: +Ã‚Â£5 per 5 HMOs after tier 4
     BASE_PRICE: 19.99,
     INCREMENT_PER_5_PROPERTIES: 5.00,
   },
@@ -114,7 +114,7 @@ export function calculateHMOProPrice(propertyCount: number): number {
   if (propertyCount <= 15) return PRICING.HMO_PRO.TIER_3.price;
   if (propertyCount <= 20) return PRICING.HMO_PRO.TIER_4.price;
 
-  // Calculate for 21+ properties: £34.99 + (extra tiers * £5)
+  // Calculate for 21+ properties from the tier-4 base price plus extra 5-property increments.
   const extraProperties = propertyCount - 20;
   const extraTiers = Math.ceil(extraProperties / 5);
   return PRICING.HMO_PRO.TIER_4.price + (extraTiers * PRICING.HMO_PRO.INCREMENT_PER_5_PROPERTIES);
@@ -132,16 +132,18 @@ export function getHMOProTier(propertyCount: number): string {
 }
 
 /**
- * Format price for display (£XX.XX)
+ * Format price for display (Ã‚Â£XX.XX)
  */
 export function formatPrice(price: number): string {
-  return `£${price.toFixed(2)}`;
+  return formatPriceLabel(price);
 }
 
-import {
-  ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL,
-  ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL,
-} from '@/lib/tenancy/england-agreement-constants';
+export function getHMOProTierPriceLabel(propertyCount: number): string {
+  return formatPrice(calculateHMOProPrice(propertyCount));
+}
+
+export const HMO_PRO_STARTING_PRICE = getHMOProTierPriceLabel(1);
+export const HMO_PRO_FROM_PRICE_PER_MONTH = `From ${HMO_PRO_STARTING_PRICE}/month`;
 
 /**
  * Product IDs for Stripe integration
@@ -166,3 +168,5 @@ export const PRODUCT_NAMES = {
   [PRODUCT_IDS.AST_PREMIUM]: ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL,
   [PRODUCT_IDS.HMO_PRO]: 'HMO Pro',
 } as const;
+
+

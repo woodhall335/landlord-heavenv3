@@ -8,6 +8,7 @@
 import { createAdminClient, requireServerAuth } from '@/lib/supabase/server';
 import { isAdmin } from '@/lib/auth';
 import { NextResponse } from 'next/server';
+import { PRICING } from '@/lib/pricing';
 
 export async function GET() {
   try {
@@ -89,8 +90,8 @@ export async function GET() {
       )
       .reduce((sum: number, o: any) => sum + o.total_amount, 0) || 0;
 
-    // Calculate MRR from subscriptions (assuming £9.99/month for HMO Pro)
-    const subscriptionsMRR = totalSubscribers * 999; // £9.99 in pence
+    // Calculate MRR from subscriptions using the configured base HMO Pro tier.
+    const subscriptionsMRR = totalSubscribers * PRICING.HMO_PRO.TIER_1.price * 100;
 
     // Fetch email leads stats
     const { count: totalLeads } = await adminClient

@@ -16,6 +16,9 @@ import { NextStepWidget } from '@/components/journey/NextStepWidget';
 import { trackToolComplete } from '@/lib/journey/events';
 import { setJourneyState, type StageEstimate } from '@/lib/journey/state';
 import { bucketArrears, bucketMonthsInArrears } from '@/lib/journey/stage';
+import { PRODUCTS } from '@/lib/pricing/products';
+
+const noticeOnlyPrice = PRODUCTS.notice_only.displayPrice;
 
 // Note: Metadata moved to layout.tsx (client components cannot export metadata)
 
@@ -73,7 +76,7 @@ export default function RentArrearsCalculator() {
     toolName: 'Rent Arrears Calculator',
     toolType: 'calculator' as const,
     productName: 'Money Claim Pack',
-    ctaLabel: 'Upgrade to court-ready pack — £29.99',
+    ctaLabel: `Upgrade to court-ready pack — ${noticeOnlyPrice}`,
     ctaHref: '/products/money-claim',
     jurisdiction: 'uk',
     freeIncludes: [

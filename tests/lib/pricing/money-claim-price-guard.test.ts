@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Money Claim Price Guard Tests
  *
  * CRITICAL: These tests ensure Money Claim is consistently priced at £29.99
@@ -119,3 +119,4 @@ describe('Money Claim Price Guard Tests', () => {
     });
   });
 });
+

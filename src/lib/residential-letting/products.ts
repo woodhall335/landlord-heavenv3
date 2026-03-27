@@ -1,11 +1,27 @@
 import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { isRetiredPublicSku } from '@/lib/public-retirements';
+import {
+  formatFromPriceLabel,
+  formatPriceLabel,
+  formatPriceRangeLabel,
+} from '@/lib/pricing/products';
 
 export const RESIDENTIAL_LETTING_STANDARD_PRICE = 9.99;
 export const RESIDENTIAL_LETTING_PREMIUM_PRICE = 12.99;
 
-export const RESIDENTIAL_LETTING_STANDARD_DISPLAY = '\u00A39.99';
-export const RESIDENTIAL_LETTING_PREMIUM_DISPLAY = '\u00A312.99';
+export const RESIDENTIAL_LETTING_STANDARD_DISPLAY = formatPriceLabel(
+  RESIDENTIAL_LETTING_STANDARD_PRICE
+);
+export const RESIDENTIAL_LETTING_PREMIUM_DISPLAY = formatPriceLabel(
+  RESIDENTIAL_LETTING_PREMIUM_PRICE
+);
+export const RESIDENTIAL_LETTING_FROM_PRICE = formatFromPriceLabel(
+  RESIDENTIAL_LETTING_STANDARD_PRICE
+);
+export const RESIDENTIAL_LETTING_PRICE_RANGE = formatPriceRangeLabel([
+  RESIDENTIAL_LETTING_STANDARD_PRICE,
+  RESIDENTIAL_LETTING_PREMIUM_PRICE,
+]);
 
 export const RESIDENTIAL_LETTING_PRODUCTS = {
   guarantor_agreement: {

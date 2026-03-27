@@ -47,7 +47,8 @@ import { BLOG_PRODUCT_ROUTES, getBlogProductCta } from '@/lib/blog/product-cta-m
 import { getPostsForTopicHub, getTopicHubConfig, getValidTopicHubs } from '@/lib/blog/topic-hubs';
 import { getImagePlaceholderBlocks, getIntentRoutedLinks, getTop30QuickAnswer, getTop30Rank, getTop30SupplementalFaqs, getUpgradedPostVariant, isTop30UpgradedPost } from '@/lib/blog/top30-upgrades';
 import type { StageEstimate } from '@/lib/journey/state';
-import type { CSSProperties } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
+import { isValidElement } from 'react';
 
 interface BlogPageProps {
   params: Promise<{ slug: string }>;
@@ -154,6 +155,75 @@ const CORE_EVICTION_GUIDES = [
   { href: '/evict-tenant-not-paying-rent', label: 'Evicting a tenant not paying rent' },
   { href: '/tenant-stopped-paying-rent', label: 'Tenant stopped paying rent playbook' },
 ] as const;
+
+function extractTextContent(node: ReactNode): string {
+  if (typeof node === 'string' || typeof node === 'number') {
+    return String(node);
+  }
+
+  if (Array.isArray(node)) {
+    return node.map(extractTextContent).join(' ').replace(/\s+/g, ' ').trim();
+  }
+
+  if (isValidElement(node)) {
+    const element = node as React.ReactElement<{ children?: ReactNode }>;
+    return extractTextContent(element.props.children);
+  }
+
+  return '';
+}
+
+function collectFaqCandidateBlocks(
+  node: ReactNode,
+  blocks: Array<{ type: 'h3' | 'p'; text: string }>
+): void {
+  if (Array.isArray(node)) {
+    node.forEach((child) => collectFaqCandidateBlocks(child, blocks));
+    return;
+  }
+
+  if (!isValidElement(node)) {
+    return;
+  }
+
+  const element = node as React.ReactElement<{ children?: ReactNode }>;
+
+  if (element.type === 'h3' || element.type === 'p') {
+    const text = extractTextContent(element.props.children);
+    if (text.trim()) {
+      blocks.push({ type: element.type, text: text.trim() });
+    }
+  }
+
+  collectFaqCandidateBlocks(element.props.children, blocks);
+}
+
+function extractFaqsFromContent(content: ReactNode): Array<{ question: string; answer: string }> {
+  const blocks: Array<{ type: 'h3' | 'p'; text: string }> = [];
+  collectFaqCandidateBlocks(content, blocks);
+
+  const extracted: Array<{ question: string; answer: string }> = [];
+
+  for (let index = 0; index < blocks.length - 1; index += 1) {
+    const current = blocks[index];
+    const next = blocks[index + 1];
+
+    if (current.type !== 'h3' || next.type !== 'p') {
+      continue;
+    }
+
+    if (!current.text.endsWith('?')) {
+      continue;
+    }
+
+    extracted.push({
+      question: current.text,
+      answer: next.text,
+    });
+  }
+
+  return extracted;
+}
 
 
 function inferBlogStageHint(post: BlogPost): StageEstimate {
@@ -699,7 +769,12 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
   });
   const heroSrc = manifestImages.hero || post.heroImage;
   const productCta = getBlogProductCta(post);
-  const resolvedFaqs = [...(post.faqs ?? []), ...getTop30SupplementalFaqs(post)];
+  const extractedFaqs = extractFaqsFromContent(post.content);
+  const resolvedFaqs = [
+    ...(post.faqs ?? []),
+    ...extractedFaqs,
+    ...getTop30SupplementalFaqs(post),
+  ];
   const sanitizedFaqs = resolvedFaqs
     .filter((faq) => faq.question.trim().length > 0 && faq.answer.trim().length > 0)
     .filter((faq, index, arr) => arr.findIndex((candidate) => candidate.question.trim().toLowerCase() === faq.question.trim().toLowerCase()) === index);

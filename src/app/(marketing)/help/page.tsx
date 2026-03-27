@@ -5,6 +5,11 @@ import Image from "next/image";
 import { FAQInline } from "@/components/seo/FAQSection";
 import { ASK_HEAVEN_CTA } from "@/constants/askHeavenCta";
 import { generateMetadata } from "@/lib/seo";
+import {
+  LANDLORD_DOCUMENT_PRICE_RANGE,
+  PRODUCTS,
+} from "@/lib/pricing/products";
+import { formatPrice, PRICING } from "@/lib/pricing";
 
 export const metadata: Metadata = generateMetadata({
   title: "Landlord Help Centre | Eviction, Arrears & Tenancy FAQs",
@@ -102,7 +107,7 @@ export default function HelpPage() {
                         <li>Choose your product category (Notices, Money Claims, Tenancy Agreements, etc.) or click "Start Wizard"</li>
                         <li>Answer questions about your case (property, tenant, dates, grounds)</li>
                         <li>Review the generated document preview</li>
-                        <li>Complete payment (£14.99 - £49.99 depending on product)</li>
+                        <li>Complete payment ({LANDLORD_DOCUMENT_PRICE_RANGE} depending on product)</li>
                         <li>Download your documents as PDF immediately</li>
                       </ol>
                       <p className="mt-3">The entire process takes 10-15 minutes.</p>
@@ -132,17 +137,17 @@ export default function HelpPage() {
                   answer: (
                     <ul className="space-y-3">
                       <li>
-                        <strong>Notices (£29.99):</strong> Just need an eviction notice (Section 8/21, Notice to
+                        <strong>Notices ({PRODUCTS.notice_only.displayPrice}):</strong> Just need an eviction notice (Section 8/21, Notice to
                         Leave). Tenant might leave voluntarily.
                       </li>
                       <li>
-                        <strong>Money Claims (£29.99):</strong> Tenant owes rent arrears. Includes claim forms, arrears schedules, and witness statements.
+                        <strong>Money Claims ({PRODUCTS.money_claim.displayPrice}):</strong> Tenant owes rent arrears. Includes claim forms, arrears schedules, and witness statements.
                       </li>
                       <li>
-                        <strong>Standard Residential Tenancy Agreement (£14.99):</strong> Updated England residential tenancy agreement for standard lettings.
+                        <strong>Standard Residential Tenancy Agreement ({PRODUCTS.ast_standard.displayPrice}):</strong> Updated England residential tenancy agreement for standard lettings.
                       </li>
                       <li>
-                        <strong>Premium Residential Tenancy Agreement (£24.99):</strong> Advanced tenancy with HMO clauses, guarantors, rent
+                        <strong>Premium Residential Tenancy Agreement ({PRODUCTS.ast_premium.displayPrice}):</strong> Advanced tenancy with HMO clauses, guarantors, rent
                         increases.
                       </li>
                       <li>
@@ -285,7 +290,7 @@ export default function HelpPage() {
                         to purchase separately for each.
                       </p>
                       <p className="mt-2">
-                        <strong>Exception:</strong> HMO Pro (£19.99/month) covers unlimited HMO properties.
+                        <strong>Exception:</strong> HMO Pro ({formatPrice(PRICING.HMO_PRO.TIER_1.price)}/month) covers unlimited HMO properties.
                       </p>
                     </>
                   ),
@@ -500,7 +505,7 @@ export default function HelpPage() {
                         charged
                       </li>
                       <li>
-                        <strong>After Trial:</strong> £19.99/month, billed on same day each month
+                        <strong>After Trial:</strong> {formatPrice(PRICING.HMO_PRO.TIER_1.price)}/month, billed on same day each month
                       </li>
                       <li>
                         <strong>Cancellation:</strong> Cancel anytime from dashboard. No further billing. Keep access
@@ -523,7 +528,7 @@ export default function HelpPage() {
                       </p>
                       <p className="mt-3">
                         <strong>Best value:</strong>
-                        <br />- HMO Pro (£19.99/month) covers unlimited compliance tracking
+                        <br />- HMO Pro ({formatPrice(PRICING.HMO_PRO.TIER_1.price)}/month) covers unlimited compliance tracking
                         <br />- Volume discounts available for portfolio landlords
                       </p>
                       <p className="mt-3 text-sm text-gray-600">

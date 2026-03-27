@@ -22,6 +22,9 @@ import { tenancyAgreementNILinks } from '@/lib/seo/internal-links';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
+import { PRODUCTS, TENANCY_AGREEMENT_FROM_PRICE } from '@/lib/pricing/products';
+
+const standardPrice = PRODUCTS.ast_standard.displayPrice;
 
 export const metadata: Metadata = {
   title: 'Northern Ireland Tenancy Agreement 2026 | Legally Validated',
@@ -396,18 +399,18 @@ export default function NITenancyAgreementTemplateFreeComparisonPage() {
                 <h3 className="font-semibold text-emerald-900 mb-4">Cost of Getting It Right</h3>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-2">
-                    <span className="font-semibold text-emerald-700 w-20">£14.99</span>
+                    <span className="font-semibold text-emerald-700 w-20">{standardPrice}</span>
                     <span className="text-emerald-800">Standard NI template</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="font-semibold text-emerald-700 w-20">£14.99</span>
+                    <span className="font-semibold text-emerald-700 w-20">{standardPrice}</span>
                     <span className="text-emerald-800">Premium with extras</span>
                   </li>
                 </ul>
                 <div className="mt-8 pt-4 border-t border-emerald-300">
                   <div className="flex justify-between">
                     <span className="font-semibold text-emerald-900">One-time cost:</span>
-                    <span className="font-bold text-emerald-700">From £14.99</span>
+                    <span className="font-bold text-emerald-700">{TENANCY_AGREEMENT_FROM_PRICE}</span>
                   </div>
                 </div>
                 <p className="text-sm text-emerald-700 mt-4">
@@ -500,7 +503,7 @@ export default function NITenancyAgreementTemplateFreeComparisonPage() {
               className="inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold px-8 py-4 rounded-lg transition-colors"
             >
               <RiDownloadLine className="w-5 h-5" />
-              Create Your Agreement - £14.99
+              {`Create Your Agreement - ${standardPrice}`}
               <RiArrowRightLine className="w-5 h-5" />
             </Link>
           </section>

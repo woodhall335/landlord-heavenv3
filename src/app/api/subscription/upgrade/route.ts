@@ -10,6 +10,7 @@ import { createClient } from '@/lib/supabase/server';
 import { z } from 'zod';
 import Stripe from 'stripe';
 import { HMO_PRO_DISABLED_RESPONSE, HMO_PRO_ENABLED } from '@/lib/feature-flags';
+import { formatPrice, PRICING } from '@/lib/pricing';
 
 const UpgradeSchema = z.object({
   newTier: z.enum(['hmo_pro_1_5', 'hmo_pro_6_10', 'hmo_pro_11_15', 'hmo_pro_16_20']),
@@ -121,10 +122,10 @@ export async function POST(request: NextRequest) {
 
     // Map tier to property limits for response
     const tierLimits: Record<string, { min: number; max: number; price: string }> = {
-      'hmo_pro_1_5': { min: 1, max: 5, price: '£19.99' },
-      'hmo_pro_6_10': { min: 6, max: 10, price: '£19.99' },
-      'hmo_pro_11_15': { min: 11, max: 15, price: '£19.99' },
-      'hmo_pro_16_20': { min: 16, max: 20, price: '£34.99' },
+      'hmo_pro_1_5': { min: 1, max: 5, price: formatPrice(PRICING.HMO_PRO.TIER_1.price) },
+      'hmo_pro_6_10': { min: 6, max: 10, price: formatPrice(PRICING.HMO_PRO.TIER_2.price) },
+      'hmo_pro_11_15': { min: 11, max: 15, price: formatPrice(PRICING.HMO_PRO.TIER_3.price) },
+      'hmo_pro_16_20': { min: 16, max: 20, price: formatPrice(PRICING.HMO_PRO.TIER_4.price) },
     };
 
     const tierInfo = tierLimits[newTier];

@@ -5,6 +5,7 @@ import { Container } from "@/components/ui";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { calculateHMOProPrice, formatPrice } from "@/lib/pricing";
 
 // Subscription info from users table (HMO Pro is parked for now)
 interface UserSubscription {
@@ -167,13 +168,8 @@ export default function BillingPage() {
     }
   }
 
-  function getTierPrice(tier: string, propertyCount: number): string {
-    if (propertyCount <= 5) return "£19.99";
-    if (propertyCount <= 10) return "£19.99";
-    if (propertyCount <= 15) return "£19.99";
-    if (propertyCount <= 20) return "£34.99";
-    const extraTiers = Math.ceil((propertyCount - 20) / 5);
-    return `£${(34.99 + extraTiers * 5).toFixed(2)}`;
+  function getTierPrice(_tier: string, propertyCount: number): string {
+    return formatPrice(calculateHMOProPrice(propertyCount));
   }
 
   function getProductName(productType: string): string {
@@ -259,7 +255,7 @@ export default function BillingPage() {
                         </td>
                         <td className="p-3 text-sm text-gray-700">{getProductName(order.product_type)}</td>
                         <td className="p-3 text-sm font-semibold text-charcoal">
-                          £{order.total_amount.toFixed(2)}
+                          {formatPrice(order.total_amount)}
                         </td>
                         <td className="p-3 text-sm">
                           <span

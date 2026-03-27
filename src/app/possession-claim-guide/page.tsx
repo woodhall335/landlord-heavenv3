@@ -15,6 +15,7 @@ import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { PRODUCTS } from '@/lib/pricing/products';
 import {
   CheckCircle,
   Clock,
@@ -440,7 +441,7 @@ export default function PossessionClaimGuidePage() {
 
               <div className="mt-6 text-center">
                 <p className="text-gray-600 text-sm">
-                  Plus our Complete Pack (£49.99) — <strong>save £850-1,550</strong> vs solicitor fees
+                  {`Plus our Complete Pack (${PRODUCTS.complete_pack.displayPrice})`} — <strong>save £850-1,550</strong> vs solicitor fees
                 </p>
                 <Link
                   href="/eviction-cost-uk"

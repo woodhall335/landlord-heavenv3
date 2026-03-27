@@ -18,6 +18,7 @@ import Link from "next/link";
 import { Container } from "@/components/ui";
 import { TrustBar, CostComparison, Testimonials } from "@/components/landing";
 import { FAQSection } from "@/components/seo/FAQSection";
+import { PRODUCTS, TENANCY_AGREEMENT_FROM_PRICE } from "@/lib/pricing/products";
 import { RiFileTextLine, RiScales3Line, RiMoneyPoundCircleLine, RiClipboardLine, RiCheckLine, RiArrowRightLine, RiTimeLine, RiShieldCheckLine, RiGlobalLine, RiFlashlightLine } from 'react-icons/ri';
 
 export default function Home() {
@@ -163,7 +164,7 @@ export default function Home() {
               href="/products/notice-only"
               title="Eviction Notices"
               description="Section 8, Section 21, and devolved equivalents with service instructions."
-              price="£29.99"
+              price={PRODUCTS.notice_only.displayPrice}
               solicitorPrice="£200-300"
               icon={<RiFileTextLine className="w-7 h-7" />}
             />
@@ -171,7 +172,7 @@ export default function Home() {
               href="/products/complete-pack"
               title="Complete Eviction Pack"
               description="Full bundle from notice to possession order with court forms and guidance."
-              price="£49.99"
+              price={PRODUCTS.complete_pack.displayPrice}
               solicitorPrice="£1,500-2,500"
               icon={<RiScales3Line className="w-7 h-7" />}
               popular
@@ -180,7 +181,7 @@ export default function Home() {
               href="/products/money-claim"
               title="Money Claim Pack"
               description="Rent arrears claims with evidence checklists and particulars of claim."
-              price="£29.99"
+              price={PRODUCTS.money_claim.displayPrice}
               solicitorPrice="£400-600"
               icon={<RiMoneyPoundCircleLine className="w-7 h-7" />}
             />
@@ -188,7 +189,7 @@ export default function Home() {
               href="/products/ast"
               title="Tenancy Agreements"
               description="Compliant ASTs with optional clauses for HMOs and students."
-              price="From £14.99"
+              price={TENANCY_AGREEMENT_FROM_PRICE}
               solicitorPrice="£150-400"
               icon={<RiClipboardLine className="w-7 h-7" />}
             />
@@ -286,7 +287,7 @@ export default function Home() {
           },
           {
             question: "What's included in each pack?",
-            answer: "Notice Only (£29.99): The appropriate eviction notice for your situation plus service instructions. Complete Pack (£49.99): Everything from notice through to court claim forms, witness statements, and filing guidance. Money Claim (£29.99): Pre-action letters, claim forms, evidence templates, and enforcement guidance."
+            answer: `Notice Only (${PRODUCTS.notice_only.displayPrice}): The appropriate eviction notice for your situation plus service instructions. Complete Pack (${PRODUCTS.complete_pack.displayPrice}): Everything from notice through to court claim forms, witness statements, and filing guidance. Money Claim (${PRODUCTS.money_claim.displayPrice}): Pre-action letters, claim forms, evidence templates, and enforcement guidance.`
           },
         ]}
         showContactCTA={true}

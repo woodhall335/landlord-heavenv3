@@ -1,4 +1,5 @@
-import { Metadata } from 'next';
+﻿import { Metadata } from 'next';
+import { PRODUCT_PRICE_AMOUNT_STRINGS, PRODUCTS } from '@/lib/pricing/products';
 import Link from 'next/link';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
@@ -23,6 +24,7 @@ import {
 } from 'lucide-react';
 
 const noticeOnlyProductHref = '/products/notice-only';
+const noticeOnlyPrice = PRODUCTS.notice_only.displayPrice;
 
 export const metadata: Metadata = {
   title: 'Wales Eviction Notice Template 2026 | Renting Homes Act Landlords',
@@ -91,7 +93,7 @@ export default function WalesEvictionNoticeTemplatePage() {
       description: 'Court-ready Wales eviction notices for landlords under the Renting Homes Act',
       offers: {
         '@type': 'Offer',
-        price: '29.99',
+        price: PRODUCT_PRICE_AMOUNT_STRINGS.notice_only,
         priceCurrency: 'GBP',
       },
     },
@@ -140,7 +142,7 @@ export default function WalesEvictionNoticeTemplatePage() {
               landlords.
             </>
           }
-          primaryCTA={{ label: 'Get Wales Notice — £29.99', href: noticeOnlyProductHref }}
+          primaryCTA={{ label: `Get Wales Notice — ${noticeOnlyPrice}`, href: noticeOnlyProductHref }}
           secondaryCTA={{ label: 'Learn About Wales Eviction', href: '/wales-eviction-notices' }}
           variant="pastel"
         >
@@ -404,7 +406,7 @@ export default function WalesEvictionNoticeTemplatePage() {
                   href={noticeOnlyProductHref}
                   className="bg-white text-red-700 font-semibold py-3 px-6 rounded-lg hover:bg-red-50 transition-colors inline-flex items-center justify-center gap-2"
                 >
-                  Get Wales Notice — £29.99
+                  {`Get Wales Notice — ${noticeOnlyPrice}`}
                   <ArrowRight className="w-5 h-5" />
                 </Link>
                 <Link
@@ -459,4 +461,5 @@ export default function WalesEvictionNoticeTemplatePage() {
     </>
   );
 }
+
 

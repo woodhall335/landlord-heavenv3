@@ -42,11 +42,12 @@ import {
 
 const completePackLink = '/products/complete-pack';
 const noticeOnlyLink = '/products/notice-only';
+const noticeOnlyPrice = PRODUCTS.notice_only.displayPrice;
 
 export const metadata: Metadata = {
   title: 'Scotland Eviction Process | Notice to Leave & Tribunal',
   description:
-    'Complete guide to evicting a tenant in Scotland. Notice to Leave, 18 eviction grounds, First-tier Tribunal process. Get court-ready documents from £29.99.',
+    `Complete guide to evicting a tenant in Scotland. Notice to Leave, 18 eviction grounds, First-tier Tribunal process. Get court-ready documents from ${noticeOnlyPrice}.`,
   keywords: [
     'eviction process scotland landlord',
     'eviction tribunal scotland',

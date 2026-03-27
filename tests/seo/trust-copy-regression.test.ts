@@ -1,4 +1,4 @@
-import fs from 'fs';
+﻿import fs from 'fs';
 import path from 'path';
 
 describe('Trust copy regressions', () => {
@@ -52,10 +52,13 @@ describe('Trust copy regressions', () => {
       'Northern Ireland properties currently support tenancy agreements only.'
     );
     expect(wizard).toContain(
-      'Different rules apply in each jurisdiction. Northern Ireland currently supports tenancy agreements only.'
+      'Different rules apply in each jurisdiction. Northern Ireland shows a tenancy-agreements-only note on eviction and money-claim entry paths.'
     );
     expect(wizard).toContain(
-      'Tenancy agreements are available now. Eviction notices and money claim packs are not currently live for Northern Ireland.'
+      'Tenancy agreements only'
+    );
+    expect(wizard).toContain(
+      'If you continue from an eviction or money-claim entry point, we’ll switch you to the tenancy agreement flow.'
     );
   });
 
@@ -74,3 +77,5 @@ describe('Trust copy regressions', () => {
     expect(redesign).toContain('availability differs by product');
   });
 });
+
+

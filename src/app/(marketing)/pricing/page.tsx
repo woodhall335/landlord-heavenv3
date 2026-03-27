@@ -3,12 +3,14 @@ import { Container } from "@/components/ui";
 import Link from "next/link";
 import { generateMetadata } from "@/lib/seo";
 import { FAQSection } from "@/components/seo/FAQSection";
+import { StructuredData, pricingItemListSchema } from "@/lib/seo/structured-data";
 import { StandardHero } from "@/components/marketing/StandardHero";
 import { HeaderConfig } from "@/components/layout/HeaderConfig";
-import { PRODUCTS } from "@/lib/pricing/products";
+import { LANDLORD_DOCUMENT_PRICE_RANGE, PRODUCTS } from "@/lib/pricing/products";
 import {
   PUBLIC_RESIDENTIAL_LETTING_PRODUCT_SKUS,
   RESIDENTIAL_LETTING_PRODUCTS,
+  RESIDENTIAL_LETTING_PRICE_RANGE,
   getResidentialLandingHref,
   getResidentialWizardHref,
 } from "@/lib/residential-letting/products";
@@ -35,9 +37,17 @@ export default function PricingPage() {
   const standardAstPrice = PRODUCTS.ast_standard.displayPrice;
   const premiumAstPrice = PRODUCTS.ast_premium.displayPrice;
   const residentialProducts = PUBLIC_RESIDENTIAL_LETTING_PRODUCT_SKUS.map((sku) => RESIDENTIAL_LETTING_PRODUCTS[sku]);
+  const pricingSchema = pricingItemListSchema([
+    { sku: "notice_only", name: "Eviction Notice Pack", url: "/products/notice-only" },
+    { sku: "complete_pack", name: "Complete Eviction Pack", url: "/products/complete-pack" },
+    { sku: "money_claim", name: "Money Claim Pack", url: "/products/money-claim" },
+    { sku: "ast_standard", name: "Standard Residential Tenancy Agreement", url: "/products/ast" },
+    { sku: "ast_premium", name: "Premium Residential Tenancy Agreement", url: "/products/ast" },
+  ]);
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <StructuredData data={pricingSchema} />
       <HeaderConfig mode="autoOnScroll" />
 
       {/* Hero Section */}
@@ -397,7 +407,7 @@ export default function PricingPage() {
                 Each England-only residential add-on now has its own product page and wizard entry point. Use the product page for focused intent, then move into the shared residential wizard.
               </p>
             </div>
-            <p className="text-sm text-gray-500">Per-document pricing from {"\u00A39.99"} to {"\u00A312.99"}</p>
+            <p className="text-sm text-gray-500">Per-document pricing {RESIDENTIAL_LETTING_PRICE_RANGE}</p>
           </div>
 
           <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -438,7 +448,7 @@ export default function PricingPage() {
           <table className="w-full text-sm">
             <thead><tr className="border-b"><th className="text-left py-2">Metric</th><th className="text-center">Solicitor</th><th className="text-center">Landlord Heaven</th></tr></thead>
             <tbody>
-              <tr className="border-b"><td className="py-2">Cost</td><td className="text-center">£300–£2,500</td><td className="text-center">{standardAstPrice}–{completePackPrice}</td></tr>
+              <tr className="border-b"><td className="py-2">Cost</td><td className="text-center">£300–£2,500</td><td className="text-center">{LANDLORD_DOCUMENT_PRICE_RANGE}</td></tr>
               <tr className="border-b"><td className="py-2">Time</td><td className="text-center">3–5 days</td><td className="text-center">10 minutes</td></tr>
               <tr className="border-b"><td className="py-2">Complete Case File</td><td className="text-center">❌ Often staged</td><td className="text-center">✅ Yes</td></tr>
               <tr className="border-b"><td className="py-2">Jurisdiction-Specific</td><td className="text-center">✅</td><td className="text-center">✅</td></tr>

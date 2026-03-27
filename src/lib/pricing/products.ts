@@ -6,6 +6,28 @@ import {
   ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL,
 } from '@/lib/tenancy/england-agreement-constants';
 
+export interface PriceDefinition {
+  amount: number;
+  display: string;
+}
+
+export function formatPriceLabel(amount: number): string {
+  return `\u00A3${amount.toFixed(2)}`;
+}
+
+export function formatPriceAmount(amount: number): string {
+  return amount.toFixed(2);
+}
+
+export function formatFromPriceLabel(amount: number): string {
+  return `From ${formatPriceLabel(amount)}`;
+}
+
+export function formatPriceRangeLabel(amounts: readonly number[]): string {
+  const [lowest, highest] = [...amounts].sort((a, b) => a - b);
+  return `${formatPriceLabel(lowest)} - ${formatPriceLabel(highest)}`;
+}
+
 /**
  * SEO_PRICES - Canonical pricing for landing pages and SEO content
  *
@@ -13,14 +35,14 @@ import {
  * Update ONLY here when prices change. All landing pages reference these values.
  */
 export const SEO_PRICES = {
-  evictionNotice: { amount: 29.99, display: '£29.99' },
-  evictionBundle: { amount: 49.99, display: '£49.99' },
-  moneyClaim: { amount: 29.99, display: '£29.99' },
-  tenancyStandard: { amount: 14.99, display: '£14.99' },
-  tenancyPremium: { amount: 24.99, display: '£24.99' },
-  residentialLettingStandard: { amount: 9.99, display: '£9.99' },
-  residentialLettingPremium: { amount: 12.99, display: '£12.99' },
-} as const;
+  evictionNotice: { amount: 29.99, display: formatPriceLabel(29.99) },
+  evictionBundle: { amount: 49.99, display: formatPriceLabel(49.99) },
+  moneyClaim: { amount: 29.99, display: formatPriceLabel(29.99) },
+  tenancyStandard: { amount: 14.99, display: formatPriceLabel(14.99) },
+  tenancyPremium: { amount: 24.99, display: formatPriceLabel(24.99) },
+  residentialLettingStandard: { amount: 9.99, display: formatPriceLabel(9.99) },
+  residentialLettingPremium: { amount: 12.99, display: formatPriceLabel(12.99) },
+} as const satisfies Record<string, PriceDefinition>;
 
 /**
  * ALLOWED_SEO_PRICES - Set of valid price strings for regression testing
@@ -35,9 +57,6 @@ export const ALLOWED_SEO_PRICES = new Set([
   SEO_PRICES.residentialLettingStandard.display,
   SEO_PRICES.residentialLettingPremium.display,
 ]);
-
-export const TENANCY_AGREEMENT_PRICE_RANGE = `${SEO_PRICES.tenancyStandard.display} - ${SEO_PRICES.tenancyPremium.display}`;
-export const TENANCY_AGREEMENT_FROM_PRICE = `From ${SEO_PRICES.tenancyStandard.display}`;
 
 /**
  * SEO_LANDING_ROUTES - Clean canonical landing routes for products
@@ -131,7 +150,7 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
     sku: 'ast_standard',
     label: ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL,
     shortLabel: 'Periodic Agreement',
-    description: 'Renters’ Rights compliant England assured periodic tenancy agreement, with jurisdiction-aware variants for the rest of the UK',
+    description: 'RentersÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ Rights compliant England assured periodic tenancy agreement, with jurisdiction-aware variants for the rest of the UK',
     price: SEO_PRICES.tenancyStandard.amount,
     displayPrice: SEO_PRICES.tenancyStandard.display,
     wizardHref: '/wizard?product=ast_standard&src=product_page&topic=tenancy',
@@ -141,7 +160,7 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
     sku: 'ast_premium',
     label: ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL,
     shortLabel: 'Premium Periodic',
-    description: 'Renters’ Rights compliant England premium assured periodic tenancy agreement with HMO, shared-living, and student-ready clauses',
+    description: 'RentersÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ Rights compliant England premium assured periodic tenancy agreement with HMO, shared-living, and student-ready clauses',
     price: SEO_PRICES.tenancyPremium.amount,
     displayPrice: SEO_PRICES.tenancyPremium.display,
     wizardHref: '/wizard?product=ast_premium&src=product_page&topic=tenancy',
@@ -159,6 +178,42 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
     productPageHref: SEO_LANDING_ROUTES.residential_tenancy_application,
   },
 };
+
+export const PRODUCT_PRICE_LABELS = {
+  notice_only: PRODUCTS.notice_only.displayPrice,
+  complete_pack: PRODUCTS.complete_pack.displayPrice,
+  money_claim: PRODUCTS.money_claim.displayPrice,
+  sc_money_claim: PRODUCTS.sc_money_claim.displayPrice,
+  ast_standard: PRODUCTS.ast_standard.displayPrice,
+  ast_premium: PRODUCTS.ast_premium.displayPrice,
+  residential_tenancy_application: PRODUCTS.residential_tenancy_application.displayPrice,
+} as const;
+
+export const PRODUCT_PRICE_AMOUNT_STRINGS = {
+  notice_only: formatPriceAmount(PRODUCTS.notice_only.price),
+  complete_pack: formatPriceAmount(PRODUCTS.complete_pack.price),
+  money_claim: formatPriceAmount(PRODUCTS.money_claim.price),
+  sc_money_claim: formatPriceAmount(PRODUCTS.sc_money_claim.price),
+  ast_standard: formatPriceAmount(PRODUCTS.ast_standard.price),
+  ast_premium: formatPriceAmount(PRODUCTS.ast_premium.price),
+  residential_tenancy_application: formatPriceAmount(
+    PRODUCTS.residential_tenancy_application.price
+  ),
+} as const;
+
+export const TENANCY_AGREEMENT_PRICE_RANGE = formatPriceRangeLabel([
+  PRODUCTS.ast_standard.price,
+  PRODUCTS.ast_premium.price,
+]);
+
+export const TENANCY_AGREEMENT_FROM_PRICE = formatFromPriceLabel(
+  PRODUCTS.ast_standard.price
+);
+
+export const LANDLORD_DOCUMENT_PRICE_RANGE = formatPriceRangeLabel([
+  PRODUCTS.ast_standard.price,
+  PRODUCTS.complete_pack.price,
+]);
 
 /**
  * Maps Ask Heaven AI recommendation codes to actual product SKUs
@@ -296,4 +351,5 @@ export function getProductLandingHref(
 
   return landingRoute;
 }
+
 

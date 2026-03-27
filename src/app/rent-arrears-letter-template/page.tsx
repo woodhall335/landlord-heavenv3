@@ -15,6 +15,7 @@ import { FunnelCta } from '@/components/funnels';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
+import { PRODUCTS } from '@/lib/pricing/products';
 import {
   CheckCircle,
   FileText,
@@ -33,6 +34,7 @@ import {
 const moneyClaimProductHref = '/products/money-claim';
 const noticeOnlyProductHref = '/products/notice-only';
 const completePackProductHref = '/products/complete-pack';
+const moneyClaimPrice = PRODUCTS.money_claim.displayPrice;
 
 export const metadata: Metadata = {
   title: 'Rent Arrears Letter Template UK | Free Demand Letter + Legal Next Steps',
@@ -606,7 +608,7 @@ export default function RentArrearsLetterTemplatePage() {
                     <span className="text-sm font-medium text-primary uppercase tracking-wide">
                       Money Claim Pack
                     </span>
-                    <div className="text-4xl font-bold text-gray-900 mt-2">£29.99</div>
+                    <div className="text-4xl font-bold text-gray-900 mt-2">{moneyClaimPrice}</div>
                   </div>
                   <ul className="space-y-4 mb-8">
                     <li className="flex items-start gap-3">

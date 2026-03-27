@@ -3,15 +3,20 @@ import Link from 'next/link';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { TenancyPackSection } from '@/components/value-proposition';
 import { getCanonicalUrl } from '@/lib/seo/urls';
+import {
+  PRODUCT_PRICE_AMOUNT_STRINGS,
+  PRODUCTS,
+  TENANCY_AGREEMENT_FROM_PRICE,
+} from '@/lib/pricing/products';
 
 const PRICE_VALID_UNTIL = '2026-12-31';
-const STANDARD_PRICE = '14.99';
-const PREMIUM_PRICE = '24.99';
+const standardPrice = PRODUCTS.ast_standard.displayPrice;
+const premiumPrice = PRODUCTS.ast_premium.displayPrice;
 
 export const metadata: Metadata = {
-  title: 'Wales Occupation Contract 2026 | Tenancy Agreement Template from £14.99',
+  title: `Wales Occupation Contract 2026 | Tenancy Agreement Template from ${TENANCY_AGREEMENT_FROM_PRICE}`,
   description:
-    'Create a Wales Occupation Contract template online. Renting Homes (Wales) Act 2016 compliant, written statement included, instant download, from £14.99.',
+    `Create a Wales Occupation Contract template online. Renting Homes (Wales) Act 2016 compliant, written statement included, instant download, from ${TENANCY_AGREEMENT_FROM_PRICE}.`,
   keywords: [
     'wales occupation contract',
     'occupation contract wales',
@@ -25,7 +30,7 @@ export const metadata: Metadata = {
     'wales landlord contract',
   ],
   openGraph: {
-    title: 'Wales Occupation Contract 2026 | Tenancy Agreement Template from £14.99',
+    title: `Wales Occupation Contract 2026 | Tenancy Agreement Template from ${TENANCY_AGREEMENT_FROM_PRICE}`,
     description:
       'Create a Wales Occupation Contract template online with written statement wording, Renting Homes (Wales) Act compliance, and instant download.',
     type: 'website',
@@ -33,7 +38,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Wales Occupation Contract 2026 | Tenancy Agreement Template from £14.99',
+    title: `Wales Occupation Contract 2026 | Tenancy Agreement Template from ${TENANCY_AGREEMENT_FROM_PRICE}`,
     description:
       'Create a Wales Occupation Contract template online with written statement wording and instant download.',
   },
@@ -109,7 +114,7 @@ export default function WalesOccupationContractPage() {
       {
         '@type': 'Offer',
         name: 'Standard Occupation Contract',
-        price: STANDARD_PRICE,
+        price: PRODUCT_PRICE_AMOUNT_STRINGS.ast_standard,
         priceCurrency: 'GBP',
         priceValidUntil: PRICE_VALID_UNTIL,
         availability: 'https://schema.org/InStock',
@@ -133,7 +138,7 @@ export default function WalesOccupationContractPage() {
       {
         '@type': 'Offer',
         name: 'Premium Occupation Contract',
-        price: PREMIUM_PRICE,
+        price: PRODUCT_PRICE_AMOUNT_STRINGS.ast_premium,
         priceCurrency: 'GBP',
         priceValidUntil: PRICE_VALID_UNTIL,
         availability: 'https://schema.org/InStock',
@@ -240,13 +245,13 @@ export default function WalesOccupationContractPage() {
                 href="/wizard?product=ast_standard&jurisdiction=wales&src=wales_tenancy_hub&topic=tenancy"
                 className="inline-flex items-center justify-center rounded-lg border-2 border-red-600 bg-white px-6 py-3 font-semibold text-red-600 shadow-sm transition-colors hover:bg-red-50"
               >
-                Create Standard Contract - £14.99
+                {`Create Standard Contract - ${standardPrice}`}
               </Link>
               <Link
                 href="/wizard?product=ast_premium&jurisdiction=wales&src=wales_tenancy_hub&topic=tenancy"
                 className="inline-flex items-center justify-center rounded-lg bg-red-600 px-6 py-3 font-semibold text-white shadow-sm transition-colors hover:bg-red-700"
               >
-                Create Premium Contract - £24.99
+                {`Create Premium Contract - ${premiumPrice}`}
               </Link>
             </div>
 
@@ -639,7 +644,7 @@ export default function WalesOccupationContractPage() {
             <div className="grid md:grid-cols-2 gap-6">
               <div className="bg-white rounded-xl shadow-lg p-8 border-2 border-gray-200 text-gray-900">
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">Standard Contract</h3>
-                <p className="text-4xl font-bold text-red-600 mb-4">£14.99</p>
+                <p className="text-4xl font-bold text-red-600 mb-4">{standardPrice}</p>
                 <ul className="space-y-2 text-gray-700 mb-6">
                   <li>✓ Renting Homes (Wales) Act 2016 compliant wording</li>
                   <li>✓ Written statement included</li>
@@ -660,7 +665,7 @@ export default function WalesOccupationContractPage() {
                   RECOMMENDED
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">Premium Contract</h3>
-                <p className="text-4xl font-bold text-red-700 mb-4">£24.99</p>
+                <p className="text-4xl font-bold text-red-700 mb-4">{premiumPrice}</p>
                 <ul className="space-y-2 text-gray-700 mb-6">
                   <li>✓ Everything in Standard plus</li>
                   <li>✓ Comprehensive inventory section</li>
@@ -817,13 +822,13 @@ export default function WalesOccupationContractPage() {
                 href="/wizard?product=ast_standard&jurisdiction=wales&src=wales_tenancy_hub&topic=tenancy"
                 className="bg-white text-red-600 px-8 py-4 rounded-lg font-semibold hover:bg-red-50 transition-colors text-lg shadow-lg"
               >
-                Standard Contract - £14.99
+                {`Standard Contract - ${standardPrice}`}
               </Link>
               <Link
                 href="/wizard?product=ast_premium&jurisdiction=wales&src=wales_tenancy_hub&topic=tenancy"
                 className="bg-yellow-400 text-gray-900 px-8 py-4 rounded-lg font-semibold hover:bg-yellow-300 transition-colors text-lg shadow-lg"
               >
-                Premium Contract - £24.99
+                {`Premium Contract - ${premiumPrice}`}
               </Link>
             </div>
             <p className="mt-6 text-sm text-red-100">

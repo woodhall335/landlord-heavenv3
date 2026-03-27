@@ -28,8 +28,8 @@ import { PRODUCTS } from '@/lib/pricing/products';
 
 const canonical = getCanonicalUrl('/section-21-ban');
 
-const noticeOnlyPrice = PRODUCTS.notice_only?.displayPrice ?? '£29.99';
-const completePackPrice = PRODUCTS.complete_pack?.displayPrice ?? '£49.99';
+const noticeOnlyPrice = PRODUCTS.notice_only.displayPrice;
+const completePackPrice = PRODUCTS.complete_pack.displayPrice;
 
 const noticeOnlyHref = '/products/notice-only';
 const completePackHref = '/products/complete-pack';
@@ -185,11 +185,11 @@ export default function Section21BanPage() {
           hideMedia
           showTrustPositioningBar
           primaryCta={{
-            label: `Complete Eviction Pack — ${completePackPrice}`,
+            label: `Complete Eviction Pack â€” ${completePackPrice}`,
             href: completePackHref,
           }}
           secondaryCta={{
-            label: `Start Section 21 Workflow — ${noticeOnlyPrice}`,
+            label: `Start Section 21 Workflow â€” ${noticeOnlyPrice}`,
             href: noticeOnlyHref,
           }}
           variant="pastel"
@@ -275,7 +275,7 @@ export default function Section21BanPage() {
                 </p>
               </Card>
 
-              <Card id="what-changes" title="What’s Changing for Landlords in England">
+              <Card id="what-changes" title="Whatâ€™s Changing for Landlords in England">
                 <p className="mt-4 leading-7 text-gray-700">
                   The major shift is that landlords can no longer assume a no-fault route
                   will remain available indefinitely. Once Section 21 falls away, the main
@@ -292,7 +292,7 @@ export default function Section21BanPage() {
                   slower-feeling, and more documentation-heavy for many users.
                 </p>
                 <p className="mt-4 leading-7 text-gray-700">
-                  A strong landing page should therefore do more than say “the law is changing.”
+                  A strong landing page should therefore do more than say â€œthe law is changing.â€
                   It should help landlords understand what practical advantage still exists in
                   acting early, why the Section 21 file needs to be valid before service, and
                   what changes once the no-fault option is gone.
@@ -328,7 +328,7 @@ export default function Section21BanPage() {
                   <div className="rounded-xl border-2 border-primary bg-white p-6 text-center shadow-sm">
                     <AlertTriangle className="mx-auto mb-4 h-10 w-10 text-primary" />
                     <div className="mb-2 text-2xl font-bold text-primary">1 May 2026</div>
-                    <p className="text-gray-600">Section 21 ban takes effect in the page’s transition messaging</p>
+                    <p className="text-gray-600">Section 21 ban takes effect in the pageâ€™s transition messaging</p>
                   </div>
 
                   <div className="rounded-xl bg-white p-6 text-center shadow-sm border border-[#E6DBFF]">
@@ -462,8 +462,8 @@ export default function Section21BanPage() {
                   One of the biggest myths in this area is that the deadline is the only thing
                   that matters. It is not. A rushed but invalid Section 21 notice is not a win.
                   A stronger page should therefore push landlords toward file quality as well as
-                  speed. The right question is not “Can I serve today?” but “Can I serve a
-                  valid notice today?”
+                  speed. The right question is not â€œCan I serve today?â€ but â€œCan I serve a
+                  valid notice today?â€
                 </p>
 
                 <ul className="mt-4 list-disc space-y-2 pl-5 text-gray-700">
@@ -538,13 +538,13 @@ export default function Section21BanPage() {
                     href={noticeOnlyHref}
                     className="rounded-lg bg-primary px-5 py-3 text-white hover:opacity-95"
                   >
-                    {`Start Section 21 Workflow — ${noticeOnlyPrice}`}
+                    {`Start Section 21 Workflow â€” ${noticeOnlyPrice}`}
                   </Link>
                   <Link
                     href={completePackHref}
                     className="rounded-lg border border-[#E6DBFF] bg-white px-5 py-3 text-primary hover:bg-[#FCFAFF]"
                   >
-                    {`Complete Eviction Pack — ${completePackPrice}`}
+                    {`Complete Eviction Pack â€” ${completePackPrice}`}
                   </Link>
                 </div>
               </div>
@@ -568,10 +568,10 @@ export default function Section21BanPage() {
 
               <div className="flex flex-col justify-center gap-4 sm:flex-row">
                 <Link href={noticeOnlyHref} className="hero-btn-primary">
-                  {`Start Your Section 21 Workflow — ${noticeOnlyPrice}`}
+                  {`Start Your Section 21 Workflow â€” ${noticeOnlyPrice}`}
                 </Link>
                 <Link href={completePackHref} className="hero-btn-secondary">
-                  {`Complete Eviction Pack — ${completePackPrice}`}
+                  {`Complete Eviction Pack â€” ${completePackPrice}`}
                 </Link>
               </div>
             </div>
@@ -613,13 +613,13 @@ export default function Section21BanPage() {
                   href={noticeOnlyHref}
                   className="rounded-lg bg-primary px-5 py-3 text-white hover:opacity-95"
                 >
-                  {`Start Section 21 Workflow — ${noticeOnlyPrice}`}
+                  {`Start Section 21 Workflow â€” ${noticeOnlyPrice}`}
                 </Link>
                 <Link
                   href={completePackHref}
                   className="rounded-lg border border-[#E6DBFF] bg-white px-5 py-3 text-primary hover:bg-[#FCFAFF]"
                 >
-                  {`Complete Eviction Pack — ${completePackPrice}`}
+                  {`Complete Eviction Pack â€” ${completePackPrice}`}
                 </Link>
               </div>
             </div>

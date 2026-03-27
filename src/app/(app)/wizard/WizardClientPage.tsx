@@ -185,6 +185,20 @@ const allJurisdictions: JurisdictionOption[] = [
   { value: 'northern-ireland', label: 'Northern Ireland', flag: '/gb-nir.svg' },
 ];
 
+const NORTHERN_IRELAND_TENANCY_ONLY_BADGE = 'Tenancy agreements only';
+const NORTHERN_IRELAND_TENANCY_ONLY_NOTE =
+  'Northern Ireland currently supports tenancy agreements only. If you continue from an eviction or money-claim entry point, we’ll switch you to the tenancy agreement flow.';
+
+function showsNorthernIrelandTenancyOnlyBadge(
+  documentType: DocumentOption['type'] | null
+): boolean {
+  return (
+    documentType === 'notice_only' ||
+    documentType === 'complete_pack' ||
+    documentType === 'money_claim'
+  );
+}
+
 // Check if a jurisdiction is enabled for a document type
 // Regional product restrictions (January 2026):
 // - complete_pack and money_claim: England only
@@ -448,15 +462,32 @@ function WizardPageInner() {
     () => getEffectiveWizardProduct(productParam, selectedDocument?.type ?? null),
     [productParam, selectedDocument]
   );
+  const showNorthernIrelandTenancyOnlyBadge = showsNorthernIrelandTenancyOnlyBadge(
+    selectedDocument?.type ?? null
+  );
+  const showInfoOnlyNorthernIrelandTransitionNote =
+    selectedJurisdiction?.value === 'northern-ireland' &&
+    showNorthernIrelandTenancyOnlyBadge &&
+    !standaloneProfile;
 
   // Filter jurisdictions to only show those available for the selected document type
   const availableJurisdictions = useMemo(() => {
     return allJurisdictions.filter((jur) => {
-      const documentEnabled = !selectedDocument || isJurisdictionEnabled(jur.value, selectedDocument.type);
-      const productEnabled = !effectiveWizardProduct || isProductSupportedInJurisdiction(effectiveWizardProduct, jur.value);
+      const showNiInfoOnlyOption =
+        jur.value === 'northern-ireland' &&
+        showNorthernIrelandTenancyOnlyBadge &&
+        !standaloneProfile;
+      const documentEnabled =
+        showNiInfoOnlyOption ||
+        !selectedDocument ||
+        isJurisdictionEnabled(jur.value, selectedDocument.type);
+      const productEnabled =
+        showNiInfoOnlyOption ||
+        !effectiveWizardProduct ||
+        isProductSupportedInJurisdiction(effectiveWizardProduct, jur.value);
       return documentEnabled && productEnabled;
     });
-  }, [effectiveWizardProduct, selectedDocument]);
+  }, [effectiveWizardProduct, selectedDocument, showNorthernIrelandTenancyOnlyBadge, standaloneProfile]);
 
   const isJurisdictionLocked = availableJurisdictions.length === 1;
 
@@ -491,7 +522,12 @@ function WizardPageInner() {
   const handleDocumentSelect = (doc: DocumentOption) => {
     setSelectedDocument(doc);
     // Reset jurisdiction if not compatible
-    if (selectedJurisdiction && !isJurisdictionEnabled(selectedJurisdiction.value, doc.type)) {
+    const canKeepSelectedJurisdiction =
+      selectedJurisdiction &&
+      (isJurisdictionEnabled(selectedJurisdiction.value, doc.type) ||
+        (selectedJurisdiction.value === 'northern-ireland' &&
+          showsNorthernIrelandTenancyOnlyBadge(doc.type)));
+    if (selectedJurisdiction && !canKeepSelectedJurisdiction) {
       setSelectedJurisdiction(null);
     }
     setStep(2);
@@ -503,10 +539,22 @@ function WizardPageInner() {
 
   const handleStart = () => {
     if (selectedDocument && selectedJurisdiction) {
-      const flowType = getWizardFlowType(selectedDocument.type);
+      const infoOnlyNorthernIrelandSelection =
+        selectedJurisdiction.value === 'northern-ireland' &&
+        showsNorthernIrelandTenancyOnlyBadge(selectedDocument.type) &&
+        !standaloneProfile;
+      const fallbackNiProduct =
+        autoSwitchedProduct ||
+        getFallbackProduct((productParam || selectedDocument.type) as WizardProduct, 'northern-ireland') ||
+        'ast_standard';
+      const flowType = infoOnlyNorthernIrelandSelection
+        ? getWizardFlowType('tenancy_agreement')
+        : getWizardFlowType(selectedDocument.type);
 
       // Get the product to use (may have been auto-switched)
-      const effectiveProduct = autoSwitchedProduct || productParam || selectedDocument.type;
+      const effectiveProduct = infoOnlyNorthernIrelandSelection
+        ? fallbackNiProduct
+        : autoSwitchedProduct || productParam || selectedDocument.type;
 
       // Update attribution with selected product and jurisdiction
       const attribution = setWizardAttribution({
@@ -715,7 +763,7 @@ function WizardPageInner() {
             <p className="text-center text-gray-600 mb-8">
               {isJurisdictionLocked
                 ? 'This wizard is currently available for England properties only.'
-                : 'Different rules apply in each jurisdiction. Northern Ireland currently supports tenancy agreements only.'}
+                : 'Different rules apply in each jurisdiction. Northern Ireland shows a tenancy-agreements-only note on eviction and money-claim entry paths.'}
             </p>
 
             <div className="space-y-4">
@@ -741,7 +789,14 @@ function WizardPageInner() {
                     />
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-lg font-semibold text-charcoal">{jur.label}</h3>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <h3 className="text-lg font-semibold text-charcoal">{jur.label}</h3>
+                      {jur.value === 'northern-ireland' && showNorthernIrelandTenancyOnlyBadge ? (
+                        <span className="rounded-full bg-amber-100 px-2.5 py-1 text-[11px] font-medium uppercase tracking-[0.08em] text-amber-800">
+                          {NORTHERN_IRELAND_TENANCY_ONLY_BADGE}
+                        </span>
+                      ) : null}
+                    </div>
                     {standaloneProfile && isJurisdictionLocked ? (
                       <p className="mt-1 text-sm text-slate-600">
                         This document is drafted for England residential lettings only, so the wizard is locked to England.
@@ -749,7 +804,9 @@ function WizardPageInner() {
                     ) : null}
                     {jur.value === 'northern-ireland' && !standaloneProfile ? (
                       <p className="mt-1 text-sm text-amber-700">
-                        Tenancy agreements are available now. Eviction notices and money claim packs are not currently live for Northern Ireland.
+                        {showNorthernIrelandTenancyOnlyBadge
+                          ? NORTHERN_IRELAND_TENANCY_ONLY_NOTE
+                          : 'Tenancy agreements are available now. Eviction notices and money claim packs are not currently live for Northern Ireland.'}
                       </p>
                     ) : null}
                   </div>
@@ -766,6 +823,12 @@ function WizardPageInner() {
                 </button>
               ))}
             </div>
+
+            {showInfoOnlyNorthernIrelandTransitionNote ? (
+              <p className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+                {NORTHERN_IRELAND_TENANCY_ONLY_NOTE}
+              </p>
+            ) : null}
 
             {/* Start Button */}
             {selectedJurisdiction && (

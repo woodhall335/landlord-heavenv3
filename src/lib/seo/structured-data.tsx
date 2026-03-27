@@ -5,7 +5,11 @@
  */
 
 import React from 'react';
-import { PRODUCTS } from '@/lib/pricing/products';
+import {
+  PRODUCTS,
+  PRODUCT_PRICE_AMOUNT_STRINGS,
+  type ProductSku,
+} from '@/lib/pricing/products';
 import { getDynamicReviewCount, REVIEW_RATING } from '@/lib/reviews/reviewStats';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://landlordheaven.co.uk";
@@ -48,6 +52,13 @@ export interface Product {
   url: string;
   image?: string;
   priceValidUntil?: string;
+}
+
+export interface PricingItemListEntry {
+  sku: ProductSku;
+  name?: string;
+  description?: string;
+  url: string;
 }
 
 export interface FAQItem {
@@ -178,6 +189,33 @@ export function productSchema(product: Product) {
       "ratingValue": REVIEW_RATING,
       "reviewCount": reviewCount.toString()
     }
+  };
+}
+
+export function pricingItemListSchema(items: PricingItemListEntry[]) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    itemListElement: items.map((item, index) => {
+      const product = PRODUCTS[item.sku];
+      return {
+        '@type': 'ListItem',
+        position: index + 1,
+        url: toStructuredDataUrl(item.url),
+        item: {
+          '@type': 'Product',
+          name: item.name || product.label,
+          description: item.description || product.description,
+          offers: {
+            '@type': 'Offer',
+            price: PRODUCT_PRICE_AMOUNT_STRINGS[item.sku],
+            priceCurrency: 'GBP',
+            availability: 'https://schema.org/InStock',
+            url: toStructuredDataUrl(item.url),
+          },
+        },
+      };
+    }),
   };
 }
 
@@ -377,11 +415,11 @@ export function localBusinessSchema() {
 export function softwareApplicationSchema() {
   // Calculate actual price range from products
   const prices = [
-    PRODUCTS.ast_standard.price,  // £14.99 (lowest)
-    PRODUCTS.ast_premium.price,   // £24.99
-    PRODUCTS.notice_only.price,   // £29.99
-    PRODUCTS.money_claim.price,   // £29.99
-    PRODUCTS.complete_pack.price, // £49.99 (highest)
+    PRODUCTS.ast_standard.price,  // lowest-priced product
+    PRODUCTS.ast_premium.price,
+    PRODUCTS.notice_only.price,
+    PRODUCTS.money_claim.price,
+    PRODUCTS.complete_pack.price, // highest-priced product
   ];
   const lowPrice = Math.min(...prices).toFixed(2);
   const highPrice = Math.max(...prices).toFixed(2);
@@ -508,7 +546,7 @@ export const HOWTO_SCHEMAS = {
       { name: 'Gather evidence', text: 'Compile tenancy agreement, rent statements, photos of damage, and calculate total owed.' },
       { name: 'Enter defendant details', text: 'Fill in the tenant\'s full name and last known address.' },
       { name: 'Write particulars of claim', text: 'Describe what the claim is for, when the debt arose, and the breakdown.' },
-      { name: 'Pay the court fee', text: 'Pay the fee based on claim amount (£35 for up to £300, up to £455 for up to £10,000).' },
+      { name: 'Pay the court fee', text: 'Pay the fee based on claim amount (Â£35 for up to Â£300, up to Â£455 for up to Â£10,000).' },
       { name: 'Submit and wait for response', text: 'Defendant has 14 days to respond. Request default judgment if they don\'t.' },
     ],
   }),
@@ -598,4 +636,6 @@ export function StructuredData({ data }: { data: object }) {
     />
   );
 }
+
+
 

@@ -1,0 +1,128 @@
+[
+  {
+    "file": "src\\lib\\blog\\posts.tsx",
+    "line": 633,
+    "phrase": "act before",
+    "match": "act before"
+  },
+  {
+    "file": "src\\lib\\blog\\posts.tsx",
+    "line": 977,
+    "phrase": "Section 21 will be",
+    "match": "Section 21 will be"
+  },
+  {
+    "file": "src\\lib\\blog\\posts.tsx",
+    "line": 1109,
+    "phrase": "Section 21 will be",
+    "match": "Section 21 will be"
+  },
+  {
+    "file": "src\\lib\\blog\\posts.tsx",
+    "line": 2114,
+    "phrase": "Section 21 will be",
+    "match": "Section 21 will be"
+  },
+  {
+    "file": "src\\lib\\blog\\posts.tsx",
+    "line": 2511,
+    "phrase": "before May 2026",
+    "match": "before May 2026"
+  },
+  {
+    "file": "src\\lib\\blog\\posts.tsx",
+    "line": 2511,
+    "phrase": "act before",
+    "match": "act before"
+  },
+  {
+    "file": "src\\lib\\blog\\posts.tsx",
+    "line": 3375,
+    "phrase": "before May 2026",
+    "match": "Before May 2026"
+  },
+  {
+    "file": "src\\lib\\blog\\posts.tsx",
+    "line": 3375,
+    "phrase": "still available",
+    "match": "still available"
+  },
+  {
+    "file": "src\\lib\\blog\\posts.tsx",
+    "line": 6389,
+    "phrase": "still available",
+    "match": "still available"
+  },
+  {
+    "file": "src\\lib\\blog\\posts.tsx",
+    "line": 6416,
+    "phrase": "still available",
+    "match": "still available"
+  },
+  {
+    "file": "src\\lib\\blog\\posts.tsx",
+    "line": 6912,
+    "phrase": "before May 2026",
+    "match": "before May 2026"
+  },
+  {
+    "file": "src\\lib\\blog\\posts.tsx",
+    "line": 6912,
+    "phrase": "still available",
+    "match": "still available"
+  },
+  {
+    "file": "src\\app\\accelerated-possession-guide\\page.tsx",
+    "line": 425,
+    "phrase": "act before",
+    "match": "act before"
+  },
+  {
+    "file": "src\\app\\fixed-term-periodic-occupation-contract-wales\\page.tsx",
+    "line": 81,
+    "phrase": "act before",
+    "match": "act before"
+  },
+  {
+    "file": "src\\app\\rent-arrears-landlord-guide\\page.tsx",
+    "line": 59,
+    "phrase": "act before",
+    "match": "act before"
+  },
+  {
+    "file": "src\\app\\section-21-ban\\page.tsx",
+    "line": 81,
+    "phrase": "act before",
+    "match": "act before"
+  },
+  {
+    "file": "src\\app\\section-21-ban\\page.tsx",
+    "line": 396,
+    "phrase": "still available",
+    "match": "still available"
+  },
+  {
+    "file": "src\\app\\section-21-ban\\page.tsx",
+    "line": 428,
+    "phrase": "still available",
+    "match": "still available"
+  },
+  {
+    "file": "src\\app\\section-21-ban\\page.tsx",
+    "line": 532,
+    "phrase": "still available",
+    "match": "still available"
+  },
+  {
+    "file": "src\\app\\section-21-court-pack\\page.tsx",
+    "line": 311,
+    "phrase": "still available",
+    "match": "still available"
+  },
+  {
+    "file": "src\\app\\section-21-notice\\page.tsx",
+    "line": 117,
+    "phrase": "Section 21 remains",
+    "match": "Section 21 remains"
+  }
+]

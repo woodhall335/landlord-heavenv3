@@ -12,6 +12,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Loading } from '@/components/ui';
+import { HMO_PRO_FROM_PRICE_PER_MONTH } from '@/lib/pricing';
 
 interface HMOProUpsellModalProps {
   isOpen: boolean;
@@ -179,7 +180,7 @@ export const HMOProUpsellModal: React.FC<HMOProUpsellModalProps> = ({
           <div className="text-center py-3 bg-white rounded-lg border-2 border-blue-300">
             <p className="text-2xl font-bold text-blue-600 mb-1">Start Your Free Trial</p>
             <p className="text-sm text-gray-600">
-              <strong>7 days free</strong>, then from £19.99/month • Cancel anytime
+              <strong>7 days free</strong>, then {HMO_PRO_FROM_PRICE_PER_MONTH} • Cancel anytime
             </p>
           </div>
         </div>

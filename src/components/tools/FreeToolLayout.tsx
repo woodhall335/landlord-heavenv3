@@ -30,7 +30,7 @@ interface FreeToolLayoutProps {
  *   title="Free Section 21 Notice Generator"
  *   description="Generate a basic Section 21 notice template"
  *   paidVersion={{
- *     price: '£14.99',
+ *     price: PRODUCTS.ast_standard.displayPrice,
  *     features: ['Court-ready formatting', 'AI validation', ...],
  *     href: '/products/notice-only?product=section21'
  *   }}

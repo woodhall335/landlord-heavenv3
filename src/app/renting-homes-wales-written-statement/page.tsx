@@ -10,6 +10,7 @@ import { tenancyAgreementWalesLinks } from '@/lib/seo/internal-links';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
+import { PRODUCTS, TENANCY_AGREEMENT_FROM_PRICE } from '@/lib/pricing/products';
 
 const PAGE_PATH = '/renting-homes-wales-written-statement';
 const PAGE_TITLE = 'Renting Homes Wales Written Statement';
@@ -18,7 +19,7 @@ const astProductHref = '/products/ast';
 
 export const metadata: Metadata = {
   title: 'Wales Written Statement 2026 | Legal Requirements',
-  description: 'Written statement requirements under the Renting Homes (Wales) Act 2016. 14-day deadline, required content, and compliant template from £14.99.',
+  description: `Written statement requirements under the Renting Homes (Wales) Act 2016. 14-day deadline, required content, and compliant template ${TENANCY_AGREEMENT_FROM_PRICE.toLowerCase()}.`,
   keywords: [
     'renting homes Wales written statement',
     'Wales written statement requirement',
@@ -36,7 +37,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'Wales Written Statement 2026 | Legal Requirements',
-    description: 'Understand written statement requirements under the Renting Homes (Wales) Act 2016. Compliant template from £14.99.',
+    description: `Understand written statement requirements under the Renting Homes (Wales) Act 2016. Compliant template ${TENANCY_AGREEMENT_FROM_PRICE.toLowerCase()}.`,
     type: 'article',
     url: getCanonicalUrl('/renting-homes-wales-written-statement'),
   },
@@ -168,7 +169,7 @@ export default function RentingHomesWalesWrittenStatementPage() {
                 href={astProductHref}
                 className="inline-flex items-center gap-2 bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors"
               >
-                Get Compliant Written Statement — £14.99
+                {`Get Compliant Written Statement — ${PRODUCTS.ast_standard.displayPrice}`}
               </Link>
             </div>
             <p className="mt-4 text-sm text-gray-500">Includes all fundamental & supplementary terms required by law</p>

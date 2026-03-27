@@ -56,7 +56,8 @@
     "blog:images": "node scripts/blog-image-manifest.mjs",
     "blog:cta-smoke": "node --loader ts-node/esm scripts/blog-cta-smoke.mjs",
     "blog:images:distribution": "node scripts/blog-image-distribution.mjs",
-    "audit:blog-surface": "node scripts/blog-surface-audit.mjs"
+    "audit:blog-surface": "node scripts/blog-surface-audit.mjs",
+    "audit:s21": "npx -p node@20 -p tsx tsx scripts/audit-s21-content.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.70.1",

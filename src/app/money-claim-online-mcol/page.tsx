@@ -11,6 +11,7 @@ import { FAQSection } from '@/components/seo/FAQSection';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { FunnelCta, CrossSellBar } from '@/components/funnels';
 import { moneyClaimGuides, productLinks } from '@/lib/seo/internal-links';
+import { PRODUCTS } from '@/lib/pricing/products';
 import {
   BadgePoundSterling,
   ShieldCheck,
@@ -431,7 +432,7 @@ export default function MoneyClaimOnlineMCOLPage() {
                   href="/products/money-claim?topic=debt&src=seo_money_claim_online_mcol"
                   className="hero-btn-primary"
                 >
-                  Prepare my claim — £29.99 →
+                  Prepare my claim — {PRODUCTS.money_claim.displayPrice} →
                 </Link>
                 <p className="text-sm text-gray-600">
                   Court fees are extra (paid directly to MCOL). You can usually claim them back.

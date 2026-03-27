@@ -1,4 +1,5 @@
-import { Metadata } from 'next';
+﻿import { Metadata } from 'next';
+import { PRODUCT_PRICE_AMOUNT_STRINGS, PRODUCTS } from '@/lib/pricing/products';
 import Link from 'next/link';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
@@ -24,6 +25,7 @@ import {
 } from 'lucide-react';
 
 const noticeOnlyProductHref = '/products/notice-only';
+const noticeOnlyPrice = PRODUCTS.notice_only.displayPrice;
 
 export const metadata: Metadata = {
   title: 'Scotland Notice to Leave Template 2026 | PRT Eviction Landlords',
@@ -83,7 +85,7 @@ export default function ScotlandNoticeToLeaveTemplatePage() {
         'Court-ready Notice to Leave for Scottish landlords under the PRT framework',
       offers: {
         '@type': 'Offer',
-        price: '29.99',
+        price: PRODUCT_PRICE_AMOUNT_STRINGS.notice_only,
         priceCurrency: 'GBP',
       },
     },
@@ -131,7 +133,7 @@ export default function ScotlandNoticeToLeaveTemplatePage() {
               Housing (Tenancies) Act 2016. All 18 eviction grounds with correct notice periods.
             </>
           }
-          primaryCTA={{ label: 'Get Scotland Notice — £29.99', href: noticeOnlyProductHref }}
+          primaryCTA={{ label: `Get Scotland Notice — ${noticeOnlyPrice}`, href: noticeOnlyProductHref }}
           secondaryCTA={{
             label: 'Learn About Scotland Eviction',
             href: '/scotland-eviction-notices',
@@ -274,7 +276,7 @@ export default function ScotlandNoticeToLeaveTemplatePage() {
                   href="/scotland-eviction-notices"
                   className="text-primary hover:underline"
                 >
-                  See all 18 grounds →
+                  See all 18 grounds â†’
                 </Link>
               </p>
 
@@ -409,7 +411,7 @@ export default function ScotlandNoticeToLeaveTemplatePage() {
                   href={noticeOnlyProductHref}
                   className="bg-white text-blue-700 font-semibold py-3 px-6 rounded-lg hover:bg-blue-50 transition-colors inline-flex items-center justify-center gap-2"
                 >
-                  Get Scotland Notice — £29.99
+                  {`Get Scotland Notice — ${noticeOnlyPrice}`}
                   <ArrowRight className="w-5 h-5" />
                 </Link>
                 <Link
@@ -463,4 +465,5 @@ export default function ScotlandNoticeToLeaveTemplatePage() {
     </>
   );
 }
+
 

@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+﻿import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import {
@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 import { StructuredData, breadcrumbSchema, articleSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
-import { PRODUCTS } from '@/lib/pricing/products';
+import { PRODUCT_PRICE_AMOUNT_STRINGS, PRODUCTS } from '@/lib/pricing/products';
 import { Section21Countdown } from '@/components/ui/Section21Countdown';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, toolLinks, blogLinks } from '@/lib/seo/internal-links';
@@ -34,8 +34,8 @@ import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 
 const canonicalUrl = getCanonicalUrl('/eviction-notice-template');
 
-const noticeOnlyPrice = PRODUCTS.notice_only?.displayPrice ?? '£29.99';
-const completePackPrice = PRODUCTS.complete_pack?.displayPrice ?? '£49.99';
+const noticeOnlyPrice = PRODUCTS.notice_only.displayPrice;
+const completePackPrice = PRODUCTS.complete_pack.displayPrice;
 
 const noticeOnlyProductHref = '/products/notice-only';
 const completePackProductHref = '/products/complete-pack';
@@ -128,8 +128,8 @@ export default async function EvictionNoticeTemplatePage() {
         'Jurisdiction-specific landlord eviction notice bundles with compliance checks and preview-first workflow.',
       offers: {
         '@type': 'AggregateOffer',
-        lowPrice: '29.99',
-        highPrice: '29.99',
+        lowPrice: PRODUCT_PRICE_AMOUNT_STRINGS.notice_only,
+        highPrice: PRODUCT_PRICE_AMOUNT_STRINGS.notice_only,
         priceCurrency: 'GBP',
         offerCount: '1',
       },
@@ -168,8 +168,8 @@ export default async function EvictionNoticeTemplatePage() {
           badge="Jurisdiction-Specific Notice Builder"
           title="Eviction Notice Template UK"
           subtitle="Generate the correct possession notice route for England, Wales, or Scotland with solicitor-grade, jurisdiction-specific workflow checks before service."
-          primaryCta={{ label: `Start Notice Only — ${noticeOnlyPrice}`, href: noticeOnlyProductHref }}
-          secondaryCta={{ label: `Need the full court bundle? — ${completePackPrice}`, href: completePackProductHref }}
+          primaryCta={{ label: `Start Notice Only â€” ${noticeOnlyPrice}`, href: noticeOnlyProductHref }}
+          secondaryCta={{ label: `Need the full court bundle? â€” ${completePackPrice}`, href: completePackProductHref }}
           showTrustPositioningBar
           hideMedia
           variant="pastel"
@@ -274,7 +274,7 @@ export default async function EvictionNoticeTemplatePage() {
                     href="/products/notice-only"
                     className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-3 text-white hover:opacity-95"
                   >
-                    Use Notice Only — {noticeOnlyPrice}
+                    Use Notice Only â€” {noticeOnlyPrice}
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
@@ -409,7 +409,7 @@ export default async function EvictionNoticeTemplatePage() {
                   href="/products/notice-only"
                   className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-3 text-white hover:opacity-95"
                 >
-                  Start with Notice Only — {noticeOnlyPrice}
+                  Start with Notice Only â€” {noticeOnlyPrice}
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
@@ -630,7 +630,7 @@ export default async function EvictionNoticeTemplatePage() {
                     href="/products/notice-only"
                     className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-3 text-white hover:opacity-95"
                   >
-                    Go to Notice Only — {noticeOnlyPrice}
+                    Go to Notice Only â€” {noticeOnlyPrice}
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
@@ -700,7 +700,7 @@ export default async function EvictionNoticeTemplatePage() {
                   <div>
                     <h3 className="font-semibold text-green-900">What stronger pages do better</h3>
                     <p className="mt-2 text-green-900/90 leading-7">
-                      Better-performing landlord pages do not just say “download your notice.”
+                      Better-performing landlord pages do not just say â€œdownload your notice.â€
                       They explain why route accuracy matters, why jurisdiction discipline is
                       commercially important, and why clean notice generation is often the first
                       thing that separates a smoother possession path from a delayed one.
@@ -724,7 +724,7 @@ export default async function EvictionNoticeTemplatePage() {
                     href="/products/notice-only"
                     className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-3 text-white hover:opacity-95"
                   >
-                    Use Notice Only — {noticeOnlyPrice}
+                    Use Notice Only â€” {noticeOnlyPrice}
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
@@ -765,7 +765,7 @@ export default async function EvictionNoticeTemplatePage() {
                       href="/products/notice-only"
                       className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-3 text-white hover:opacity-95"
                     >
-                      Notice Only — {noticeOnlyPrice}
+                      Notice Only â€” {noticeOnlyPrice}
                       <ArrowRight className="w-4 h-4" />
                     </Link>
                   </div>
@@ -792,7 +792,7 @@ export default async function EvictionNoticeTemplatePage() {
                       href="/products/complete-pack"
                       className="inline-flex items-center gap-2 rounded-lg border border-[#E6DBFF] bg-white px-5 py-3 text-primary hover:bg-[#FCFAFF]"
                     >
-                      Complete Pack — {completePackPrice}
+                      Complete Pack â€” {completePackPrice}
                       <ArrowRight className="w-4 h-4" />
                     </Link>
                   </div>
@@ -800,7 +800,7 @@ export default async function EvictionNoticeTemplatePage() {
               </div>
 
               <p className="mt-8 text-gray-700 leading-7">
-                For most users landing on an “eviction notice template” page, the most natural
+                For most users landing on an â€œeviction notice templateâ€ page, the most natural
                 product push is still{' '}
                 <Link href="/products/notice-only" className="font-semibold text-primary hover:underline">
                   /products/notice-only
@@ -823,7 +823,7 @@ export default async function EvictionNoticeTemplatePage() {
               <Section21Countdown variant="large" className="mb-8 [&_*]:text-white" />
               <IntentProductCTA
                 intent={{ product: 'notice_only', src: 'seo_eviction_notice_template', topic: 'eviction' }}
-                label={`Generate Court-Ready Notice — ${noticeOnlyPrice}`}
+                label={`Generate Court-Ready Notice â€” ${noticeOnlyPrice}`}
                 className="hero-btn-secondary inline-flex items-center gap-2"
               />
             </div>
@@ -883,11 +883,11 @@ export default async function EvictionNoticeTemplatePage() {
               </p>
               <IntentProductCTA
                 intent={{ product: 'notice_only', src: 'seo_eviction_notice_template', topic: 'eviction' }}
-                label={`Generate Court-Ready Notice — ${noticeOnlyPrice}`}
+                label={`Generate Court-Ready Notice â€” ${noticeOnlyPrice}`}
                 className="hero-btn-secondary inline-flex items-center justify-center gap-2"
               />
               <p className="mt-8 text-white/70 text-sm">
-                Preview before paying (watermarked) • Compliance checks • Jurisdiction-specific formatting
+                Preview before paying (watermarked) â€¢ Compliance checks â€¢ Jurisdiction-specific formatting
               </p>
             </div>
           </div>
@@ -914,3 +914,4 @@ export default async function EvictionNoticeTemplatePage() {
     </div>
   );
 }
+

@@ -8,6 +8,11 @@ import { tenancyAgreementScotlandLinks } from '@/lib/seo/internal-links';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
+import { PRODUCTS } from '@/lib/pricing/products';
+
+const standardPrice = PRODUCTS.ast_standard.displayPrice;
+const premiumPrice = PRODUCTS.ast_premium.displayPrice;
+const noticeOnlyPrice = PRODUCTS.notice_only.displayPrice;
 
 export const metadata: Metadata = {
   title: 'PRT Agreement Scotland 2026 | Legally Validated',
@@ -82,7 +87,7 @@ const faqs = [
   },
   {
     question: 'Does the PRT template work for HMOs in Scotland?',
-    answer: 'Our Premium PRT (£24.99) includes HMO-specific provisions for properties with 3+ unrelated tenants. Scotland has its own HMO licensing requirements through local councils. You need both an HMO licence and landlord registration. The Premium template includes shared area responsibilities and room allocation terms.',
+    answer: `Our Premium PRT (${premiumPrice}) includes HMO-specific provisions for properties with 3+ unrelated tenants. Scotland has its own HMO licensing requirements through local councils. You need both an HMO licence and landlord registration. The Premium template includes shared area responsibilities and room allocation terms.`,
   },
 ];
 
@@ -149,13 +154,13 @@ export default function PrtTemplateScotlandPage() {
                 href="/products/ast"
                 className="inline-flex items-center gap-2 bg-white border-2 border-indigo-600 text-indigo-600 px-6 py-3 rounded-lg font-semibold hover:bg-indigo-50 transition-colors"
               >
-                Standard PRT — £14.99
+                {`Standard PRT — ${standardPrice}`}
               </Link>
               <Link
                 href="/products/ast"
                 className="inline-flex items-center gap-2 bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors"
               >
-                Premium PRT — £24.99
+                {`Premium PRT — ${premiumPrice}`}
               </Link>
             </div>
             <p className="mt-4 text-sm text-gray-500">10-minute wizard • Instant download • Tribunal-ready</p>
@@ -248,12 +253,12 @@ export default function PrtTemplateScotlandPage() {
               <Link href="/products/notice-only" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
                 <h3 className="font-semibold text-gray-900">Scottish Notice to Leave</h3>
                 <p className="text-sm text-gray-600 mb-2">All 18 grounds with correct notice periods</p>
-                <span className="text-indigo-600 font-medium">£24.99</span>
+                <span className="text-indigo-600 font-medium">{noticeOnlyPrice}</span>
               </Link>
               <Link href="/products/ast" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
                 <h3 className="font-semibold text-gray-900">Premium PRT</h3>
                 <p className="text-sm text-gray-600 mb-2">HMO-ready clauses and enhanced protections</p>
-                <span className="text-indigo-600 font-medium">£24.99</span>
+                <span className="text-indigo-600 font-medium">{premiumPrice}</span>
               </Link>
               <Link href="/ask-heaven" className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
                 <h3 className="font-semibold text-gray-900">Ask Heaven for Scotland</h3>

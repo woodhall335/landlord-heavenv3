@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+﻿import { describe, it, expect } from 'vitest';
 import fs from 'fs';
 import path from 'path';
 
@@ -46,3 +46,5 @@ describe('Pricing propagation regressions', () => {
     expect(violations).toEqual([]);
   });
 });
+
+

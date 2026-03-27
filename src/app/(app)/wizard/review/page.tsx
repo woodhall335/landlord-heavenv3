@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { Suspense, useEffect, useState, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
@@ -84,10 +84,33 @@ import {
 } from '@/lib/residential-letting/products';
 import {
   getResidentialUpsellRecommendations,
-  type ResidentialUpsellRecommendation,
 } from '@/lib/residential-letting/recommendations';
 import { getResidentialStandaloneProfile } from '@/lib/residential-letting/standalone-profiles';
 import { getResidentialStandaloneThemeVars } from '@/lib/residential-letting/standalone-theme';
+import { PRODUCTS } from '@/lib/pricing/products';
+import {
+  buildMoneyClaimAddOnRecommendation,
+  isMoneyClaimAddOnEligible,
+} from '@/lib/wizard-crosssell';
+
+interface ReviewAddOnRecommendation {
+  sku: string;
+  label: string;
+  description: string;
+  displayPrice: string;
+  reason: string;
+}
+
+const gbpFormatter = new Intl.NumberFormat('en-GB', {
+  style: 'currency',
+  currency: 'GBP',
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});
+
+function formatCurrencyAmount(amount: number): string {
+  return gbpFormatter.format(amount);
+}
 
 function ReviewPageInner() {
   const searchParams = useSearchParams();
@@ -125,9 +148,22 @@ function ReviewPageInner() {
   const isTenancyFlow = product === 'tenancy_agreement' || product === 'ast_standard' || product === 'ast_premium' || caseType === 'tenancy_agreement';
   const isResidentialStandaloneFlow = isResidentialLettingProductSku(product);
   const tenancyFacts = analysis?.case_facts || {};
-  const residentialRecommendations = isTenancyFlow
+  const residentialRecommendations: ReviewAddOnRecommendation[] = isTenancyFlow
     ? getResidentialUpsellRecommendations(product, tenancyFacts)
     : [];
+  const evictionAddOnRecommendations: ReviewAddOnRecommendation[] =
+    !isTenancyFlow &&
+    isMoneyClaimAddOnEligible({
+      productFlow: product,
+      jurisdiction,
+      caseType,
+      collectedFacts: tenancyFacts,
+    })
+      ? [buildMoneyClaimAddOnRecommendation()]
+      : [];
+  const reviewRecommendations = isTenancyFlow
+    ? residentialRecommendations
+    : evictionAddOnRecommendations;
 
   // Compute hasBlockingIssues safely (false when analysis is null)
   const hasBlockingIssues = analysis
@@ -440,6 +476,9 @@ function ReviewPageInner() {
       hasAcknowledgedBlockers={hasAcknowledgedBlockers}
       onAcknowledgeBlockers={setHasAcknowledgedBlockers}
       onFixIssues={handleFixIssues}
+      recommendations={reviewRecommendations}
+      selectedAddOns={selectedAddOns}
+      onToggleAddOn={toggleAddOn}
       onEdit={handleEdit}
       onProceed={handleProceed}
       isPaid={isPaid}
@@ -456,7 +495,7 @@ function ReviewPageInner() {
         analysis={analysis}
         jurisdiction={jurisdiction}
         product={product}
-        recommendations={residentialRecommendations}
+        recommendations={reviewRecommendations}
         selectedAddOns={selectedAddOns}
         onToggleAddOn={toggleAddOn}
         onEdit={handleEdit}
@@ -472,7 +511,7 @@ function ReviewPageInner() {
       analysis={analysis}
       jurisdiction={jurisdiction}
       product={product}
-      recommendations={residentialRecommendations}
+      recommendations={reviewRecommendations}
       selectedAddOns={selectedAddOns}
       onToggleAddOn={toggleAddOn}
       onEdit={handleEdit}
@@ -499,6 +538,9 @@ function ReviewPageInner() {
     hasAcknowledgedBlockers={hasAcknowledgedBlockers}
     onAcknowledgeBlockers={setHasAcknowledgedBlockers}
     onFixIssues={handleFixIssues}
+    recommendations={reviewRecommendations}
+    selectedAddOns={selectedAddOns}
+    onToggleAddOn={toggleAddOn}
     onEdit={handleEdit}
     onProceed={handleProceed}
     isPaid={isPaid}
@@ -680,20 +722,20 @@ function MoneyClaimReviewContent({
           <div className="p-4 bg-gray-50 rounded-lg">
             <p className="text-sm text-gray-500 mb-1">Rent Arrears</p>
             <p className="text-2xl font-bold text-gray-900">
-              £{totalArrears.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
+              {formatCurrencyAmount(totalArrears)}
             </p>
           </div>
           <div className="p-4 bg-gray-50 rounded-lg">
             <p className="text-sm text-gray-500 mb-1">Damages</p>
             <p className="text-2xl font-bold text-gray-900">
-              £{damages.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
+              {formatCurrencyAmount(damages)}
             </p>
           </div>
           {claimInterest ? (
             <div className="p-4 bg-gray-50 rounded-lg">
               <p className="text-sm text-gray-500 mb-1">Interest ({interestRate}%)</p>
               <p className="text-2xl font-bold text-gray-900">
-                £{estimatedInterest.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
+                {formatCurrencyAmount(estimatedInterest)}
               </p>
               <p className="text-xs text-gray-400 mt-1">Estimated to date</p>
             </div>
@@ -706,7 +748,7 @@ function MoneyClaimReviewContent({
           <div className="p-4 bg-primary/10 rounded-lg border-2 border-primary">
             <p className="text-sm text-gray-500 mb-1">Total Claim</p>
             <p className="text-2xl font-bold text-primary">
-              £{totalClaim.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
+              {formatCurrencyAmount(totalClaim)}
             </p>
             <p className="text-xs text-gray-500 mt-1">Excluding court fees</p>
           </div>
@@ -746,7 +788,7 @@ function MoneyClaimReviewContent({
               <ul className="space-y-2">
                 {risks.map((risk: any, i: number) => (
                   <li key={i} className="text-sm text-amber-800">
-                    • {risk.message || risk.title}
+                    â€¢ {risk.message || risk.title}
                   </li>
                 ))}
               </ul>
@@ -899,7 +941,7 @@ function MoneyClaimReviewContent({
           <ul className="space-y-1">
             {positives.map((positive: string, i: number) => (
               <li key={i} className="text-sm text-green-800">
-                ✓ {positive}
+                âœ“ {positive}
               </li>
             ))}
           </ul>
@@ -916,7 +958,7 @@ function MoneyClaimReviewContent({
                 <h3 className="text-sm font-medium text-amber-800 mb-2">Red flags</h3>
                 <ul className="space-y-1 text-sm text-amber-900">
                   {redFlags.map((item, i) => (
-                    <li key={i}>• {item}</li>
+                    <li key={i}>â€¢ {item}</li>
                   ))}
                 </ul>
               </div>
@@ -926,7 +968,7 @@ function MoneyClaimReviewContent({
                 <h3 className="text-sm font-medium text-red-800 mb-2">Compliance issues</h3>
                 <ul className="space-y-1 text-sm text-red-900">
                   {complianceIssues.map((item, i) => (
-                    <li key={i}>• {item}</li>
+                    <li key={i}>â€¢ {item}</li>
                   ))}
                 </ul>
               </div>
@@ -970,7 +1012,7 @@ function MoneyClaimReviewContent({
               <ul className="space-y-1">
                 {warnings.map((warning: any, i: number) => (
                   <li key={i} className="text-sm text-yellow-800">
-                    • {warning.message || warning}
+                    â€¢ {warning.message || warning}
                   </li>
                 ))}
               </ul>
@@ -1046,6 +1088,9 @@ interface EvictionReviewContentProps {
   hasAcknowledgedBlockers: boolean;
   onAcknowledgeBlockers: (acknowledged: boolean) => void;
   onFixIssues: () => void;
+  recommendations: ReviewAddOnRecommendation[];
+  selectedAddOns: string[];
+  onToggleAddOn: (sku: string) => void;
   onEdit: () => void;
   onProceed: () => void;
   isPaid?: boolean;
@@ -1076,6 +1121,9 @@ function EvictionReviewContent({
   hasAcknowledgedBlockers,
   onAcknowledgeBlockers,
   onFixIssues,
+  recommendations,
+  selectedAddOns,
+  onToggleAddOn,
   onEdit,
   onProceed,
   isPaid,
@@ -1509,7 +1557,7 @@ function EvictionReviewContent({
             </p>
             {(analysis.red_flags?.length > 0 || analysis.compliance_issues?.length > 0) && (
               <p className="text-sm text-amber-700 mt-2">
-                ⚠️ See &quot;Things to Fix or Improve&quot; below for compliance concerns.
+                âš ï¸ See &quot;Things to Fix or Improve&quot; below for compliance concerns.
               </p>
             )}
           </div>
@@ -1527,7 +1575,7 @@ function EvictionReviewContent({
                 <h3 className="text-sm font-medium text-amber-800 mb-2">Red flags</h3>
                 <ul className="space-y-1 text-sm text-amber-900">
                   {redFlags.map((item, i) => (
-                    <li key={i}>• {item}</li>
+                    <li key={i}>â€¢ {item}</li>
                   ))}
                 </ul>
               </div>
@@ -1537,7 +1585,7 @@ function EvictionReviewContent({
                 <h3 className="text-sm font-medium text-red-800 mb-2">Compliance issues</h3>
                 <ul className="space-y-1 text-sm text-red-900">
                   {complianceIssues.map((item, i) => (
-                    <li key={i}>• {item}</li>
+                    <li key={i}>â€¢ {item}</li>
                   ))}
                 </ul>
               </div>
@@ -1581,7 +1629,7 @@ function EvictionReviewContent({
               <p className="text-xs text-gray-600">
                 {evidence.tenancy_agreement_uploaded
                   ? 'Marked as provided in your case facts.'
-                  : 'Not uploaded yet – strongly recommended so the judge can see the contract.'}
+                  : 'Not uploaded yet â€“ strongly recommended so the judge can see the contract.'}
               </p>
             </div>
           </div>
@@ -1597,7 +1645,7 @@ function EvictionReviewContent({
               <p className="text-xs text-gray-600">
                 {evidence.rent_schedule_uploaded
                   ? 'Arrears schedule recorded for the claim.'
-                  : 'Not uploaded yet – courts expect a clear chronology of missed payments.'}
+                  : 'Not uploaded yet â€“ courts expect a clear chronology of missed payments.'}
               </p>
             </div>
           </div>
@@ -1613,7 +1661,7 @@ function EvictionReviewContent({
               <p className="text-xs text-gray-600">
                 {evidence.bank_statements_uploaded
                   ? 'Supporting payment history has been flagged.'
-                  : 'Not flagged yet – optional, but helpful to prove what was paid or missed.'}
+                  : 'Not flagged yet â€“ optional, but helpful to prove what was paid or missed.'}
               </p>
             </div>
           </div>
@@ -1629,7 +1677,7 @@ function EvictionReviewContent({
               <p className="text-xs text-gray-600">
                 {evidence.other_evidence_uploaded
                   ? 'You have flagged additional documents (photos, quotes, correspondence, etc.).'
-                  : 'Not flagged yet – think about emails, texts, photos or reports that support your case.'}
+                  : 'Not flagged yet â€“ think about emails, texts, photos or reports that support your case.'}
               </p>
             </div>
           </div>
@@ -1724,13 +1772,21 @@ function EvictionReviewContent({
               <ul className="space-y-1">
                 {analysis.decision_engine.warnings.map((warning: string, i: number) => (
                   <li key={i} className="text-sm text-yellow-800">
-                    • {warning}
+                    â€¢ {warning}
                   </li>
                 ))}
               </ul>
             </div>
           </div>
         </Card>
+      )}
+
+      {recommendations.length > 0 && !isPaid && (
+        <RecommendationBasketCard
+          recommendations={recommendations}
+          selectedAddOns={selectedAddOns}
+          onToggleAddOn={onToggleAddOn}
+        />
       )}
 
       {/* Action Buttons */}
@@ -1783,6 +1839,9 @@ interface NoticeOnlyReviewContentProps {
   hasAcknowledgedBlockers: boolean;
   onAcknowledgeBlockers: (acknowledged: boolean) => void;
   onFixIssues: () => void;
+  recommendations: ReviewAddOnRecommendation[];
+  selectedAddOns: string[];
+  onToggleAddOn: (sku: string) => void;
   onEdit: () => void;
   onProceed: () => void;
   isPaid?: boolean;
@@ -1801,6 +1860,9 @@ function NoticeOnlyReviewContent({
   hasAcknowledgedBlockers,
   onAcknowledgeBlockers,
   onFixIssues,
+  recommendations,
+  selectedAddOns,
+  onToggleAddOn,
   onEdit,
   onProceed,
   isPaid,
@@ -1927,7 +1989,7 @@ function NoticeOnlyReviewContent({
       <div className="text-center pb-6 border-b">
         <h1 className="text-3xl font-bold text-gray-900">Notice Review</h1>
         <p className="text-gray-600 mt-2">
-          {jurisdictionLabel} • {recommendedRouteLabel}
+          {jurisdictionLabel} â€¢ {recommendedRouteLabel}
         </p>
         {isSection8 && includedGroundCodes.length > 0 && (
           <p className="text-sm text-gray-500 mt-1">
@@ -1977,7 +2039,7 @@ function NoticeOnlyReviewContent({
           <ul className="space-y-3">
             {blockingIssues.map((issue: any, index: number) => (
               <li key={index} className="flex items-start gap-3 bg-white p-4 rounded border border-red-100">
-                <span className="text-red-500 mt-0.5">✕</span>
+                <span className="text-red-500 mt-0.5">âœ•</span>
                 <div>
                   <p className="font-medium text-red-900">{issue.description || issue}</p>
                   {issue.action_required && (
@@ -2023,7 +2085,7 @@ function NoticeOnlyReviewContent({
               <div className="space-y-3 mb-4">
                 {s21Validation.blockers.map((blocker, index) => (
                   <div key={index} className="flex items-start gap-3 p-4 bg-white rounded border border-red-200">
-                    <span className="text-red-500 mt-0.5">✕</span>
+                    <span className="text-red-500 mt-0.5">âœ•</span>
                     <div className="flex-1">
                       <p className="font-medium text-red-900">{blocker.code.replace('S21_', '').replace(/_/g, ' ')}</p>
                       <p className="text-sm text-red-700 mt-1">{blocker.message}</p>
@@ -2079,11 +2141,11 @@ function NoticeOnlyReviewContent({
               ].map((item, index) => (
                 <div key={index} className="flex items-center gap-3">
                   {item.notApplicable ? (
-                    <span className="text-gray-400 text-xl">—</span>
+                    <span className="text-gray-400 text-xl">â€”</span>
                   ) : item.passed ? (
-                    <span className="text-green-500 text-xl">✓</span>
+                    <span className="text-green-500 text-xl">âœ“</span>
                   ) : (
-                    <span className="text-red-500 text-xl">✕</span>
+                    <span className="text-red-500 text-xl">âœ•</span>
                   )}
                   <span className={
                     item.notApplicable
@@ -2106,7 +2168,7 @@ function NoticeOnlyReviewContent({
                 <ul className="space-y-2">
                   {s21Validation.warnings.map((warning, index) => (
                     <li key={index} className="text-sm text-amber-800">
-                      • {warning.message}
+                      â€¢ {warning.message}
                     </li>
                   ))}
                 </ul>
@@ -2399,7 +2461,7 @@ function NoticeOnlyReviewContent({
           <ul className="space-y-2">
             {complianceIssues.map((issue: string, index: number) => (
               <li key={index} className="flex items-start gap-2 text-blue-900">
-                <span>•</span>
+                <span>â€¢</span>
                 <span>{issue}</span>
               </li>
             ))}
@@ -2414,7 +2476,7 @@ function NoticeOnlyReviewContent({
           <ul className="space-y-2">
             {redFlags.map((flag: string, index: number) => (
               <li key={index} className="flex items-start gap-2 text-amber-900">
-                <span>•</span>
+                <span>â€¢</span>
                 <span>{flag}</span>
               </li>
             ))}
@@ -2429,7 +2491,7 @@ function NoticeOnlyReviewContent({
           <ul className="space-y-2">
             {warnings.map((warning: string, index: number) => (
               <li key={index} className="flex items-start gap-2 text-blue-900">
-                <span>•</span>
+                <span>â€¢</span>
                 <span>{warning}</span>
               </li>
             ))}
@@ -2554,7 +2616,7 @@ function NoticeOnlyReviewContent({
         </ul>
         <div className="mt-4 pt-4 border-t">
           <p className="text-gray-600">
-            Price: <span className="font-semibold text-gray-900">£29.99</span>
+            Price: <span className="font-semibold text-gray-900">{PRODUCTS.notice_only.displayPrice}</span>
           </p>
         </div>
       </Card>
@@ -2567,6 +2629,14 @@ function NoticeOnlyReviewContent({
             summary={analysis.case_facts.__smart_review.summary}
           />
         </Card>
+      )}
+
+      {recommendations.length > 0 && !isPaid && (
+        <RecommendationBasketCard
+          recommendations={recommendations}
+          selectedAddOns={selectedAddOns}
+          onToggleAddOn={onToggleAddOn}
+        />
       )}
 
       {/* Action Buttons */}
@@ -2622,7 +2692,7 @@ interface TenancyReviewContentProps {
   analysis: any;
   jurisdiction: string;
   product: string;
-  recommendations: ResidentialUpsellRecommendation[];
+  recommendations: ReviewAddOnRecommendation[];
   selectedAddOns: string[];
   onToggleAddOn: (sku: string) => void;
   onEdit: () => void;
@@ -2939,7 +3009,7 @@ function TenancyReviewContent({
   const obligations = getJurisdictionObligations(jurisdiction);
 
   // SINGLE SOURCE OF TRUTH: Resolve effective product using consistent priority order
-  // Priority: purchased_product → URL product param → inferred from facts → default to standard
+  // Priority: purchased_product â†’ URL product param â†’ inferred from facts â†’ default to standard
   const effectiveProduct = resolveEffectiveProduct({
     purchasedProduct: analysis.purchased_product,
     urlProduct: product,
@@ -3075,7 +3145,7 @@ function TenancyReviewContent({
       <div className="text-center pb-6 border-b">
         <h1 className="text-3xl font-bold text-gray-900">Tenancy Agreement Review</h1>
         <p className="text-gray-600 mt-2">
-          {jurisdictionLabel} • {terminology.agreementType}
+          {jurisdictionLabel} â€¢ {terminology.agreementType}
           {isPremium && <span className="ml-2 px-2 py-1 bg-purple-100 text-purple-800 rounded text-sm font-medium">Premium</span>}
         </p>
         <div className="mt-4">
@@ -3151,7 +3221,7 @@ function TenancyReviewContent({
             <div className="p-4 bg-gray-50 rounded-lg">
               <p className="text-sm text-gray-500 mb-1">Rent</p>
               <p className="text-sm font-medium text-gray-900">
-                £{Number(rentAmount).toLocaleString('en-GB', { minimumFractionDigits: 2 })} {rentFrequency}
+                {formatCurrencyAmount(Number(rentAmount))} {rentFrequency}
               </p>
             </div>
           )}
@@ -3159,7 +3229,7 @@ function TenancyReviewContent({
             <div className="p-4 bg-gray-50 rounded-lg">
               <p className="text-sm text-gray-500 mb-1">Deposit</p>
               <p className="text-sm font-medium text-gray-900">
-                £{Number(depositAmount).toLocaleString('en-GB', { minimumFractionDigits: 2 })}
+                {formatCurrencyAmount(Number(depositAmount))}
               </p>
             </div>
           )}
@@ -3304,7 +3374,7 @@ function TenancyReviewContent({
               <ul className="space-y-1">
                 {section.items.slice(0, 4).map((item, itemIndex) => (
                   <li key={itemIndex} className="text-sm text-blue-700 flex items-start gap-2">
-                    <span>•</span>
+                    <span>â€¢</span>
                     <span>{item}</span>
                   </li>
                 ))}
@@ -3433,7 +3503,7 @@ function RecommendationBasketCard({
   selectedAddOns,
   onToggleAddOn,
 }: {
-  recommendations: ResidentialUpsellRecommendation[];
+  recommendations: ReviewAddOnRecommendation[];
   selectedAddOns: string[];
   onToggleAddOn: (sku: string) => void;
 }) {
@@ -3474,7 +3544,7 @@ interface ResidentialLettingReviewContentProps {
   analysis: any;
   jurisdiction: string;
   product: string;
-  recommendations: ResidentialUpsellRecommendation[];
+  recommendations: ReviewAddOnRecommendation[];
   selectedAddOns: string[];
   onToggleAddOn: (sku: string) => void;
   onEdit: () => void;
@@ -3511,7 +3581,10 @@ function ResidentialLettingReviewContent({
   const headlineFacts = [
     { label: 'Property', value: propertyAddress || 'Not specified' },
     { label: 'Tenant / occupier', value: people.join(', ') || 'Not specified' },
-    { label: 'Rent', value: facts.rent_amount ? `£${facts.rent_amount}` : 'Not specified' },
+    {
+      label: 'Rent',
+      value: facts.rent_amount ? formatCurrencyAmount(Number(facts.rent_amount)) : 'Not specified',
+    },
     { label: 'Start date', value: facts.tenancy_start_date || 'Not specified' },
   ];
 
@@ -3520,7 +3593,7 @@ function ResidentialLettingReviewContent({
       <div className="text-center pb-6 border-b">
         <h1 className="text-3xl font-bold text-gray-900">{productMeta?.label || 'Residential Letting Document'} Review</h1>
         <p className="text-gray-600 mt-2">
-          {jurisdiction === 'england' ? 'England' : jurisdiction} • {productMeta?.displayPrice || ''}
+          {jurisdiction === 'england' ? 'England' : jurisdiction} â€¢ {productMeta?.displayPrice || ''}
         </p>
       </div>
 
@@ -3614,10 +3687,7 @@ function ResidentialStandaloneReviewContent({
   const formatMoney = (value: unknown) => {
     const numeric = Number(value);
     if (!Number.isFinite(numeric) || numeric <= 0) return 'Not specified';
-    return `£${numeric.toLocaleString('en-GB', {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    })}`;
+    return formatCurrencyAmount(numeric);
   };
 
   const formatDate = (value: unknown) => {
@@ -4025,4 +4095,5 @@ export default function ReviewPage() {
     </Suspense>
   );
 }
+
 

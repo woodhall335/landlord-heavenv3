@@ -40,6 +40,8 @@
  */
 
 import { Resend } from 'resend';
+import { HMO_PRO_FROM_PRICE_PER_MONTH } from '@/lib/pricing';
+import { formatPriceLabel } from '@/lib/pricing/products';
 
 let resendClient: Resend | null = null;
 
@@ -409,7 +411,7 @@ export async function sendPurchaseConfirmation(params: {
             </tr>
             <tr>
               <td style="padding: 10px 0; font-family: Arial, Helvetica, sans-serif; font-size: 16px; font-weight: bold; color: ${COLORS.white};">Total Paid:</td>
-              <td style="padding: 10px 0; font-family: Arial, Helvetica, sans-serif; font-size: 18px; font-weight: bold; color: ${COLORS.primary}; text-align: right;">£${(amount / 100).toFixed(2)}</td>
+              <td style="padding: 10px 0; font-family: Arial, Helvetica, sans-serif; font-size: 18px; font-weight: bold; color: ${COLORS.primary}; text-align: right;">${formatPriceLabel(amount / 100)}</td>
             </tr>
           </table>
         </td>
@@ -462,7 +464,7 @@ Thank you for your purchase!
 Order Summary:
 - Order Number: #${orderNumber}
 - Product: ${productName}
-- Total Paid: £${(amount / 100).toFixed(2)}
+- Total Paid: ${formatPriceLabel(amount / 100)}
 
 Download your documents: ${downloadUrl}
 
@@ -642,19 +644,19 @@ export async function sendTrialReminderEmail(params: {
         <td bgcolor="${COLORS.cardBgAlt}" style="background-color: ${COLORS.cardBgAlt}; padding: 20px; border-radius: 6px;">
           <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
             <tr>
-              <td style="padding: 8px 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: ${COLORS.white};">• <strong>Automated compliance reminders</strong> (90/30/7 days advance)</td>
+              <td style="padding: 8px 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: ${COLORS.white};">â€¢ <strong>Automated compliance reminders</strong> (90/30/7 days advance)</td>
             </tr>
             <tr>
-              <td style="padding: 8px 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: ${COLORS.white};">• <strong>Multi-property management</strong></td>
+              <td style="padding: 8px 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: ${COLORS.white};">â€¢ <strong>Multi-property management</strong></td>
             </tr>
             <tr>
-              <td style="padding: 8px 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: ${COLORS.white};">• <strong>Council-specific HMO license applications</strong></td>
+              <td style="padding: 8px 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: ${COLORS.white};">â€¢ <strong>Council-specific HMO license applications</strong></td>
             </tr>
             <tr>
-              <td style="padding: 8px 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: ${COLORS.white};">• <strong>Tenant document portal</strong></td>
+              <td style="padding: 8px 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: ${COLORS.white};">â€¢ <strong>Tenant document portal</strong></td>
             </tr>
             <tr>
-              <td style="padding: 8px 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: ${COLORS.white};">• <strong>Priority support</strong></td>
+              <td style="padding: 8px 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: ${COLORS.white};">â€¢ <strong>Priority support</strong></td>
             </tr>
           </table>
         </td>
@@ -676,7 +678,7 @@ export async function sendTrialReminderEmail(params: {
       </tr>
     </table>
 
-    ${getInfoBox(`<strong style="color: ${COLORS.white};">Pricing:</strong><br>From £19.99/month for 1-5 properties<br>Cancel anytime, no long-term commitment`)}
+    ${getInfoBox(`<strong style="color: ${COLORS.white};">Pricing:</strong><br>${HMO_PRO_FROM_PRICE_PER_MONTH} for 1-5 properties<br>Cancel anytime, no long-term commitment`)}
 
     <p style="margin: 30px 0 0 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: ${COLORS.mutedGray};">Questions? Reply to this email anytime.<br><strong style="color: ${COLORS.lightGray};">The Landlord Heaven Team</strong></p>
   `;
@@ -703,7 +705,7 @@ Your HMO Pro 7-day trial expires in ${daysLeft} days. Don't lose access to:
 
 Continue with HMO Pro: ${upgradeUrl}
 
-Pricing: From £19.99/month for 1-5 properties
+Pricing: ${HMO_PRO_FROM_PRICE_PER_MONTH} for 1-5 properties
 Cancel anytime, no long-term commitment.
 
 Questions? Reply to this email anytime.

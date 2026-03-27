@@ -3,6 +3,7 @@ import { Container, TealHero } from "@/components/ui";
 import Link from "next/link";
 import Image from "next/image";
 import { generateMetadata, StructuredData, breadcrumbSchema, aboutPageSchema } from "@/lib/seo";
+import { LANDLORD_DOCUMENT_PRICE_RANGE } from "@/lib/pricing/products";
 import {
   BadgePoundSterling,
   Clock,
@@ -176,7 +177,7 @@ export default function AboutPage() {
                 </div>
                 <h3 className="text-2xl font-semibold text-charcoal mb-4">Fast & Affordable</h3>
                 <p className="text-gray-700 mb-4">
-                  Generate professional documents in 10-15 minutes for £14.99-£49.99. That's 95% cheaper than
+                  Generate professional documents in 10-15 minutes for {LANDLORD_DOCUMENT_PRICE_RANGE}. That's 95% cheaper than
                   solicitors, delivered instantly.
                 </p>
                 <ul className="text-sm text-gray-700 space-y-2">

@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+﻿import type { Metadata } from 'next';
 import Link from 'next/link';
 import {
   CheckCircle,
@@ -25,7 +25,7 @@ import {
   faqPageSchema,
 } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
-import { PRODUCTS } from '@/lib/pricing/products';
+import { PRODUCT_PRICE_AMOUNT_STRINGS, PRODUCTS } from '@/lib/pricing/products';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import {
@@ -44,8 +44,8 @@ import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 
 const canonicalUrl = getCanonicalUrl('/section-8-notice-template');
 
-const completePackPrice = PRODUCTS.complete_pack?.displayPrice ?? '£49.99';
-const noticeOnlyPrice = PRODUCTS.notice_only?.displayPrice ?? '£29.99';
+const completePackPrice = PRODUCTS.complete_pack.displayPrice;
+const noticeOnlyPrice = PRODUCTS.notice_only.displayPrice;
 
 const completePackProductHref = '/products/complete-pack';
 const noticeOnlyProductHref = '/products/notice-only';
@@ -112,7 +112,7 @@ export default function Section8NoticeTemplatePage() {
       offers: {
         '@type': 'AggregateOffer',
         lowPrice: '0',
-        highPrice: '49.99',
+        highPrice: PRODUCT_PRICE_AMOUNT_STRINGS.complete_pack,
         priceCurrency: 'GBP',
         offerCount: '2',
       },
@@ -181,8 +181,8 @@ export default function Section8NoticeTemplatePage() {
         <UniversalHero
           title="Section 8 Notice Template"
           subtitle="Learn how Section 8 Form 3 works, what a valid grounds-based notice should include, and when to use a court-ready Notice Only workflow instead of relying on a generic template."
-          primaryCta={{ label: `Start Notice Only — ${noticeOnlyPrice}`, href: noticeOnlyProductHref }}
-          secondaryCta={{ label: `Complete eviction path — ${completePackPrice}`, href: completePackProductHref }}
+          primaryCta={{ label: `Start Notice Only â€” ${noticeOnlyPrice}`, href: noticeOnlyProductHref }}
+          secondaryCta={{ label: `Complete eviction path â€” ${completePackPrice}`, href: completePackProductHref }}
           showTrustPositioningBar
           hideMedia
           variant="pastel"
@@ -236,9 +236,9 @@ export default function Section8NoticeTemplatePage() {
                 </p>
                 <p className="leading-7">
                   For that reason, the strongest commercial push on this page should not be
-                  “download a free form and hope for the best.” It should be “use the Notice Only
+                  â€œdownload a free form and hope for the best.â€ It should be â€œuse the Notice Only
                   workflow if you want the correct Section 8 notice built around your facts before
-                  service.”
+                  service.â€
                 </p>
               </div>
 
@@ -257,7 +257,7 @@ export default function Section8NoticeTemplatePage() {
                     href="/products/notice-only"
                     className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-3 text-white hover:opacity-95"
                   >
-                    Start Notice Only — {noticeOnlyPrice}
+                    Start Notice Only â€” {noticeOnlyPrice}
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
@@ -273,13 +273,13 @@ export default function Section8NoticeTemplatePage() {
                 title="Prepare your Section 8 notice bundle"
                 subtitle="Use Notice Only for compliant Form 3 drafting, or choose a full case bundle for court paperwork guidance."
                 primaryHref="/products/notice-only"
-                primaryText={`Start Notice Only — ${noticeOnlyPrice}`}
+                primaryText={`Start Notice Only â€” ${noticeOnlyPrice}`}
                 primaryDataCta="notice-only"
                 location="above-fold"
                 secondaryLinks={[
                   {
                     href: '/products/complete-pack',
-                    text: `Need the full case bundle? — ${completePackPrice}`,
+                    text: `Need the full case bundle? â€” ${completePackPrice}`,
                     dataCta: 'complete-pack',
                   },
                 ]}
@@ -347,7 +347,7 @@ export default function Section8NoticeTemplatePage() {
               <h2 className="text-3xl font-bold text-gray-900 mb-6">What a valid Section 8 notice should usually include</h2>
               <p className="text-gray-700 leading-7 mb-8">
                 This is the educational core many landlords actually need. A Section 8 notice is
-                not just “Form 3 filled in.” A stronger notice usually includes the correct party
+                not just â€œForm 3 filled in.â€ A stronger notice usually includes the correct party
                 details, the correct property details, the correct grounds, the correct dates, and
                 the correct service logic. If any of those are wrong, the case can become weaker
                 before court even starts.
@@ -375,7 +375,7 @@ export default function Section8NoticeTemplatePage() {
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle className="w-4 h-4 mt-0.5 text-primary" />
-                      Ground facts linked to the tenant’s conduct or arrears position
+                      Ground facts linked to the tenantâ€™s conduct or arrears position
                     </li>
                   </ul>
                 </div>
@@ -422,7 +422,7 @@ export default function Section8NoticeTemplatePage() {
                   href="/products/notice-only"
                   className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-3 text-white hover:opacity-95"
                 >
-                  Build Section 8 with Notice Only — {noticeOnlyPrice}
+                  Build Section 8 with Notice Only â€” {noticeOnlyPrice}
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
@@ -628,7 +628,7 @@ export default function Section8NoticeTemplatePage() {
                     href="/how-to-evict-tenant"
                     className="text-primary text-sm font-medium hover:underline inline-flex mt-3"
                   >
-                    See the full eviction process →
+                    See the full eviction process â†’
                   </Link>
                 </div>
               </div>
@@ -659,7 +659,7 @@ export default function Section8NoticeTemplatePage() {
                   <tbody className="divide-y divide-gray-200">
                     <tr>
                       <td className="p-4 text-gray-700">Reason required?</td>
-                      <td className="p-4 text-center text-gray-700">Yes — grounds must be stated</td>
+                      <td className="p-4 text-center text-gray-700">Yes â€” grounds must be stated</td>
                       <td className="p-4 text-center text-gray-700">No-fault logic where available</td>
                     </tr>
                     <tr>
@@ -877,13 +877,13 @@ export default function Section8NoticeTemplatePage() {
                 title="Ready to move this forward?"
                 subtitle="Serve the right Section 8 notice now and keep your court options open."
                 primaryHref="/products/notice-only"
-                primaryText={`Create Section 8 notice — ${noticeOnlyPrice}`}
+                primaryText={`Create Section 8 notice â€” ${noticeOnlyPrice}`}
                 primaryDataCta="notice-only"
                 location="bottom"
                 secondaryLinks={[
                   {
                     href: '/products/complete-pack',
-                    text: `Need the full case bundle? — ${completePackPrice}`,
+                    text: `Need the full case bundle? â€” ${completePackPrice}`,
                     dataCta: 'complete-pack',
                   },
                 ]}
@@ -1127,8 +1127,8 @@ export default function Section8NoticeTemplatePage() {
                 that preserves options instead of forcing a weak single-ground strategy too early.
               </p>
               <p>
-                In rent arrears cases, the commercial question is often not “Can I use Section 8?”
-                but “Which grounds make the notice more resilient if the arrears move before hearing?”
+                In rent arrears cases, the commercial question is often not â€œCan I use Section 8?â€
+                but â€œWhich grounds make the notice more resilient if the arrears move before hearing?â€
                 In breach cases, the question is often whether the breach is clear enough to justify
                 the route and whether the evidence file is strong enough to support it.
               </p>
@@ -1189,18 +1189,18 @@ export default function Section8NoticeTemplatePage() {
                   className="hero-btn-secondary inline-flex items-center justify-center gap-2"
                 >
                   <FileText className="w-5 h-5" />
-                  Notice Only — {noticeOnlyPrice}
+                  Notice Only â€” {noticeOnlyPrice}
                 </Link>
                 <Link
                   href={completePackProductHref}
                   className="hero-btn-secondary inline-flex items-center justify-center gap-2"
                 >
-                  Complete Pack — {completePackPrice}
+                  Complete Pack â€” {completePackPrice}
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               </div>
               <p className="mt-8 text-white/70 text-sm">
-                Grounds-based route • Cleaner service workflow • Better fit than a generic template for live cases
+                Grounds-based route â€¢ Cleaner service workflow â€¢ Better fit than a generic template for live cases
               </p>
             </div>
           </div>
@@ -1210,7 +1210,7 @@ export default function Section8NoticeTemplatePage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <div className="flex items-center gap-4">
-                <span className="text-4xl">✅</span>
+                <span className="text-4xl">âœ…</span>
                 <div>
                   <p className="font-semibold text-gray-900 mb-1">
                     Already have a Section 8 notice?
@@ -1232,7 +1232,7 @@ export default function Section8NoticeTemplatePage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <div className="flex items-center gap-4">
-                <span className="text-4xl">☁️</span>
+                <span className="text-4xl">â˜ï¸</span>
                 <div>
                   <p className="font-semibold text-gray-900 mb-1">
                     Not sure which eviction ground applies?
@@ -1274,3 +1274,4 @@ export default function Section8NoticeTemplatePage() {
     </>
   );
 }
+

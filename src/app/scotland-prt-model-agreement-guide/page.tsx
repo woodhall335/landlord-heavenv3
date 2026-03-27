@@ -10,6 +10,7 @@ import { tenancyAgreementScotlandLinks } from '@/lib/seo/internal-links';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
+import { TENANCY_AGREEMENT_PRICE_RANGE } from '@/lib/pricing/products';
 
 const PAGE_PATH = '/scotland-prt-model-agreement-guide';
 const PAGE_TITLE = 'Scotland PRT Model Agreement Guide';
@@ -81,7 +82,7 @@ const faqs = [
   },
   {
     question: 'Is the government model agreement free to use?',
-    answer: 'Yes, the Scottish Government model agreement is free to download. However, "free" has costs: you need to customise it yourself (risking errors), you don\'t get inventory sections, and you don\'t have integration with eviction or money claim processes. Many landlords find the £14.99-24.99 for a professional template is well worth avoiding these issues.',
+    answer: `Yes, the Scottish Government model agreement is free to download. However, "free" has costs: you need to customise it yourself (risking errors), you don\'t get inventory sections, and you don\'t have integration with eviction or money claim processes. Many landlords find the ${TENANCY_AGREEMENT_PRICE_RANGE} for a professional template is well worth avoiding these issues.`,
   },
   {
     question: 'Can I use the government model and add your inventory sections?',
@@ -233,7 +234,7 @@ export default function ScotlandPrtModelAgreementGuidePage() {
                   <tr className="bg-gray-100 font-semibold">
                     <td className="px-6 py-4">Price</td>
                     <td className="px-6 py-4 text-center">Free (+ your time)</td>
-                    <td className="px-6 py-4 text-center bg-blue-100 text-blue-800">£14.99 - £24.99</td>
+                    <td className="px-6 py-4 text-center bg-blue-100 text-blue-800">{TENANCY_AGREEMENT_PRICE_RANGE}</td>
                   </tr>
                 </tbody>
               </table>
