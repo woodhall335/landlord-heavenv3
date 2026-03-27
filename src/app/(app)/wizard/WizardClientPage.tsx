@@ -657,6 +657,9 @@ function WizardPageInner() {
             <h2 className="text-2xl font-bold text-charcoal text-center mb-8">
               What do you need help with?
             </h2>
+            <p className="mx-auto mb-8 max-w-3xl rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-center text-sm text-amber-900">
+              Northern Ireland properties currently support tenancy agreements only. Eviction notices and money claim packs are not currently live for NI.
+            </p>
 
             {/* Filter products based on pre-selected jurisdiction (from URL param) */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -712,7 +715,7 @@ function WizardPageInner() {
             <p className="text-center text-gray-600 mb-8">
               {isJurisdictionLocked
                 ? 'This wizard is currently available for England properties only.'
-                : 'Different rules apply in each jurisdiction'}
+                : 'Different rules apply in each jurisdiction. Northern Ireland currently supports tenancy agreements only.'}
             </p>
 
             <div className="space-y-4">
@@ -742,6 +745,11 @@ function WizardPageInner() {
                     {standaloneProfile && isJurisdictionLocked ? (
                       <p className="mt-1 text-sm text-slate-600">
                         This document is drafted for England residential lettings only, so the wizard is locked to England.
+                      </p>
+                    ) : null}
+                    {jur.value === 'northern-ireland' && !standaloneProfile ? (
+                      <p className="mt-1 text-sm text-amber-700">
+                        Tenancy agreements are available now. Eviction notices and money claim packs are not currently live for Northern Ireland.
                       </p>
                     ) : null}
                   </div>

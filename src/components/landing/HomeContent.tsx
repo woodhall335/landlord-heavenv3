@@ -93,6 +93,10 @@ export default function HomeContent() {
               Whether you need to evict a tenant, serve a Section 21 or Section 8 notice, or recover rent arrears with a money claim, choose the fastest route below.
             </p>
 
+            <div className="mt-5 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+              Northern Ireland properties currently support tenancy agreements only. Eviction notices and money claim packs are not currently live for NI.
+            </div>
+
             <div className="mt-8 grid gap-4 md:grid-cols-3">
               {primaryPaths.map((path) => (
                 <Link

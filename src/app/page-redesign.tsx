@@ -58,6 +58,10 @@ export default function Home() {
               </Link>
             </div>
 
+            <p className="mt-4 text-sm text-amber-800">
+              Northern Ireland currently supports tenancy agreements only. Eviction notices and money claim packs are not currently live for NI.
+            </p>
+
             {/* Trust Indicators */}
             <p className="mt-4 text-sm text-gray-600">
               Instant download • Court-ready format • All UK jurisdictions • No legal experience needed
@@ -245,7 +249,7 @@ export default function Home() {
             <JurisdictionCard
               flag="/gb-nir.svg"
               title="Northern Ireland"
-              forms={["Private Tenancy Agreement", "Notice to Quit", "Private Tenancies Order", "Court Forms"]}
+              forms={["Private Tenancy Agreement", "Tenancy agreements only", "Eviction notices not yet live", "Money claims not yet live"]}
             />
           </div>
         </Container>
@@ -274,7 +278,7 @@ export default function Home() {
           },
           {
             question: "What jurisdictions do you cover?",
-            answer: "We cover all four UK jurisdictions: England, Wales, Scotland, and Northern Ireland. Each has different housing laws, and our system automatically generates the correct documents for your region. For example, we use Section 21/Section 8 for England, Section 173 for Wales, Notice to Leave for Scotland."
+            answer: "We cover all four UK jurisdictions, but availability differs by product. England, Wales, and Scotland support eviction notice workflows where available, while Northern Ireland currently supports tenancy agreements only. Each jurisdiction uses its own housing framework, so we generate the correct document set for the route and region you select."
           },
           {
             question: "Can I speak to someone if I need help?",
