@@ -53,7 +53,7 @@ const packageCards: PackageCard[] = [
       "Useful when you need to start the case without paying for court paperwork yet",
     ],
     href: "/wizard?product=notice_only&src=pricing&topic=eviction",
-    cta: "Find out which notice you need ->",
+    cta: "Find out which notice you need →",
   },
   {
     name: "Complete Pack",
@@ -66,7 +66,7 @@ const packageCards: PackageCard[] = [
       "Helps you avoid piecing the case together across multiple documents",
     ],
     href: "/wizard?product=complete_pack&src=pricing&topic=eviction",
-    cta: "Start your court pack ->",
+    cta: "Start your court pack →",
     featured: true,
   },
   {
@@ -80,7 +80,7 @@ const packageCards: PackageCard[] = [
       "Useful when the property issue and the money issue need separate action",
     ],
     href: "/wizard?product=money_claim&src=pricing&topic=arrears",
-    cta: "Start recovering your rent ->",
+    cta: "Start recovering your rent →",
   },
   {
     name: "Standard Tenancy Agreement",
@@ -93,7 +93,7 @@ const packageCards: PackageCard[] = [
       "Best for most standard residential lets",
     ],
     href: "/wizard?product=ast_standard&src=pricing&topic=tenancy",
-    cta: "Create your tenancy agreement ->",
+    cta: "Create your tenancy agreement →",
   },
   {
     name: "Premium Tenancy Agreement",
@@ -106,7 +106,7 @@ const packageCards: PackageCard[] = [
       "Better fit when you want fewer loose ends later",
     ],
     href: "/wizard?product=ast_premium&src=pricing&topic=tenancy",
-    cta: "See the premium agreement ->",
+    cta: "See the premium agreement →",
   },
 ];
 
@@ -307,10 +307,10 @@ export default function PricingPage() {
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link href="/contact" className="hero-btn-primary">
-                Contact support ->
+                Contact support →
               </Link>
               <Link href="/help" className="hero-btn-secondary">
-                Browse the help centre ->
+                Browse the help centre →
               </Link>
             </div>
             <p className="mt-4 text-sm text-gray-600">Quick response | Straight answers | No obligation</p>
