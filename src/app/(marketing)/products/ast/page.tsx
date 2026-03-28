@@ -40,7 +40,7 @@ const DARK_SECONDARY_BUTTON_CLASS =
   'inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-base font-semibold text-white transition hover:border-white/40 hover:bg-white/15';
 const ENGLAND_UPDATE_BUTTON_BASE_CLASS =
   'inline-flex min-h-[60px] w-full items-center justify-center rounded-xl px-6 py-4 text-center text-base font-semibold transition sm:w-[19rem]';
-const ENGLAND_UPDATE_PRIMARY_BUTTON_CLASS = `${ENGLAND_UPDATE_BUTTON_BASE_CLASS} border border-[#8B7BFF] bg-white text-[#2D2152] shadow-[0_14px_30px_rgba(12,10,24,0.18)] hover:border-white hover:bg-[#F7F4FF]`;
+const ENGLAND_UPDATE_PRIMARY_BUTTON_CLASS = `${ENGLAND_UPDATE_BUTTON_BASE_CLASS} border border-[#7C3AED] bg-white text-[#2D2152] shadow-[0_14px_30px_rgba(12,10,24,0.18)] hover:border-white hover:bg-[#F7F4FF]`;
 const ENGLAND_UPDATE_SECONDARY_BUTTON_CLASS = `${ENGLAND_UPDATE_BUTTON_BASE_CLASS} border border-white/25 bg-white/10 text-white hover:border-white/40 hover:bg-white/15`;
 
 type ProductCardData = {
@@ -515,7 +515,7 @@ function ProductCard({
       <div className="flex items-start justify-between gap-4">
         <div>
           <span
-            className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] ${featured ? 'bg-[#EEE6FF] text-[#5B35B3]' : 'bg-[#F1ECE4] text-[#5F5A4E]'}`}
+            className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] ${featured ? 'bg-[#EEE6FF] text-[#7C3AED]' : 'bg-[#F1ECE4] text-[#5F5A4E]'}`}
           >
             {kicker}
           </span>
@@ -538,7 +538,7 @@ function ProductCard({
       <ul className="mt-6 flex-1 space-y-3">
         {points.map((point) => (
           <li key={point} className="flex items-start gap-3 text-[15px] leading-7 text-[#1E2A44]">
-            <RiCheckboxCircleLine className="mt-1 h-5 w-5 shrink-0 text-[#5B56E8]" />
+            <RiCheckboxCircleLine className="mt-1 h-5 w-5 shrink-0 text-[#7C3AED]" />
             <span>{point}</span>
           </li>
         ))}
@@ -580,7 +580,7 @@ function JurisdictionCard({
           />
         </div>
         <div>
-          <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#5B56E8]">
+          <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">
             {name}
           </p>
           <h3 className="text-xl font-bold text-[#141B2D]">{agreementType}</h3>
@@ -592,7 +592,7 @@ function JurisdictionCard({
       <ul className="mt-6 flex-1 space-y-3 rounded-2xl bg-white/70 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.7)]">
         {points.map((point) => (
           <li key={point} className="flex items-start gap-3 text-sm leading-6 text-[#1F2937]">
-            <RiCheckboxCircleLine className="mt-0.5 h-5 w-5 shrink-0 text-[#5B56E8]" />
+            <RiCheckboxCircleLine className="mt-0.5 h-5 w-5 shrink-0 text-[#7C3AED]" />
             <span>{point}</span>
           </li>
         ))}
@@ -638,10 +638,10 @@ function TenancyFunnelGrid({
               className="group rounded-[1.6rem] border border-[#E6E0D6] bg-white px-5 py-5 transition hover:-translate-y-0.5 hover:border-[#CFC2EE] hover:shadow-[0_16px_34px_rgba(91,86,232,0.08)]"
             >
               <div className="flex items-start justify-between gap-3">
-                <h4 className="text-lg font-semibold leading-7 text-[#141B2D] transition group-hover:text-[#5B35B3]">
+                <h4 className="text-lg font-semibold leading-7 text-[#141B2D] transition group-hover:text-[#7C3AED]">
                   {link.title}
                 </h4>
-                <span className="shrink-0 text-lg text-[#6D52D9] transition group-hover:translate-x-0.5">
+                <span className="shrink-0 text-lg text-[#7C3AED] transition group-hover:translate-x-0.5">
                   →
                 </span>
               </div>
@@ -712,7 +712,7 @@ export default function ASTProductPage() {
                   key={point}
                   className="flex items-center gap-3 rounded-2xl bg-[#F7F3ED] px-4 py-3 text-sm font-semibold text-[#354056]"
                 >
-                  <RiCheckboxCircleLine className="h-5 w-5 shrink-0 text-[#5B56E8]" />
+                  <RiCheckboxCircleLine className="h-5 w-5 shrink-0 text-[#7C3AED]" />
                   <span>{point}</span>
                 </div>
               ))}
@@ -816,7 +816,7 @@ export default function ASTProductPage() {
 
         <section id="compare-options" className="mb-16 md:mb-20">
           <div className="mx-auto max-w-4xl text-center">
-            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#5B56E8]">
+            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">
               Choose your product level
             </p>
             {/* Standard, Premium, Student, HMO / Shared House, and Room Let / Lodger */}
@@ -859,7 +859,7 @@ export default function ASTProductPage() {
         <section className="mb-16 md:mb-20">
           <div className="rounded-[2.2rem] border border-[#E4DED3] bg-white/92 p-6 shadow-[0_18px_42px_rgba(31,41,55,0.05)] md:p-8">
             <div className="mx-auto max-w-4xl text-center">
-              <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#5B56E8]">
+              <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">
                 When Premium is the better choice
               </p>
               <h2 className="mt-3 text-4xl font-bold tracking-tight text-[#141B2D] md:text-5xl">
@@ -889,7 +889,7 @@ export default function ASTProductPage() {
 
         <section className="mb-16 md:mb-20">
           <div className="mx-auto max-w-4xl text-center">
-            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#5B56E8]">
+            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">
               Understanding tenancy agreements
             </p>
             <h2 className="mt-3 text-4xl font-bold tracking-tight text-[#141B2D] md:text-5xl">
@@ -919,7 +919,7 @@ export default function ASTProductPage() {
         <section id="whats-included" className="mb-16 scroll-mt-24 md:mb-20">
           <div className="rounded-[2.2rem] border border-[#E4DED3] bg-white/92 p-6 shadow-[0_18px_42px_rgba(31,41,55,0.05)] md:p-8">
             <div className="mx-auto max-w-4xl text-center">
-              <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#5B56E8]">
+              <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">
                 What you get
               </p>
               <h2 className="mt-3 text-4xl font-bold tracking-tight text-[#141B2D] md:text-5xl">
@@ -934,7 +934,7 @@ export default function ASTProductPage() {
 
             <div className="mt-10 grid gap-6 lg:grid-cols-3">
               <div className="rounded-[1.8rem] border border-[#E6E0D6] bg-[#FCFBF8] p-6">
-                <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#5B56E8]">
+                <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">
                   Standard pack includes
                 </p>
                 <ul className="mt-5 space-y-3">
@@ -949,7 +949,7 @@ export default function ASTProductPage() {
                       key={item}
                       className="flex items-start gap-3 text-sm leading-7 text-[#1E2A44]"
                     >
-                      <RiCheckboxCircleLine className="mt-1 h-5 w-5 shrink-0 text-[#5B56E8]" />
+                      <RiCheckboxCircleLine className="mt-1 h-5 w-5 shrink-0 text-[#7C3AED]" />
                       <span>{item}</span>
                     </li>
                   ))}
@@ -957,7 +957,7 @@ export default function ASTProductPage() {
               </div>
 
               <div className="rounded-[1.8rem] border border-[#DCCFFF] bg-gradient-to-br from-[#F8F3FF] to-[#FFFFFF] p-6 shadow-[0_12px_32px_rgba(91,86,232,0.08)]">
-                <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#5B35B3]">
+                <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">
                   Premium adds
                 </p>
                 <ul className="mt-5 space-y-3">
@@ -971,7 +971,7 @@ export default function ASTProductPage() {
                       key={item}
                       className="flex items-start gap-3 text-sm leading-7 text-[#1E2A44]"
                     >
-                      <RiCheckboxCircleLine className="mt-1 h-5 w-5 shrink-0 text-[#5B56E8]" />
+                      <RiCheckboxCircleLine className="mt-1 h-5 w-5 shrink-0 text-[#7C3AED]" />
                       <span>{item}</span>
                     </li>
                   ))}
@@ -979,7 +979,7 @@ export default function ASTProductPage() {
               </div>
 
               <div className="rounded-[1.8rem] border border-[#E6E0D6] bg-[#FCFBF8] p-6">
-                <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#5B56E8]">
+                <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">
                   Specialist routes also available
                 </p>
                 <ul className="mt-5 space-y-3">
@@ -993,7 +993,7 @@ export default function ASTProductPage() {
                       key={item}
                       className="flex items-start gap-3 text-sm leading-7 text-[#1E2A44]"
                     >
-                      <RiCheckboxCircleLine className="mt-1 h-5 w-5 shrink-0 text-[#5B56E8]" />
+                      <RiCheckboxCircleLine className="mt-1 h-5 w-5 shrink-0 text-[#7C3AED]" />
                       <span>{item}</span>
                     </li>
                   ))}
@@ -1006,7 +1006,7 @@ export default function ASTProductPage() {
         <section className="mb-16 md:mb-20">
           <div className="rounded-[2.2rem] border border-[#E4DED3] bg-white/92 p-6 shadow-[0_18px_42px_rgba(31,41,55,0.05)] md:p-8">
             <div className="mx-auto max-w-4xl text-center">
-              <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#5B56E8]">
+              <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">
                 How it works
               </p>
               <h2 className="mt-3 text-4xl font-bold tracking-tight text-[#141B2D] md:text-5xl">
@@ -1035,7 +1035,7 @@ export default function ASTProductPage() {
         <section className="mb-16 md:mb-20">
           <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
             <div className="rounded-[2.2rem] bg-gradient-to-br from-[#FBF7F0] via-white to-[#F5F0FF] p-8 shadow-[0_18px_46px_rgba(31,41,55,0.06)]">
-              <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#5B56E8]">
+              <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">
                 Why landlords switch from old templates
               </p>
               <h2 className="mt-3 text-4xl font-bold tracking-tight text-[#141B2D]">
@@ -1073,7 +1073,7 @@ export default function ASTProductPage() {
         <section className="mb-16 md:mb-20">
           <div className="rounded-[2.2rem] border border-[#E4DED3] bg-white/92 p-6 shadow-[0_18px_42px_rgba(31,41,55,0.05)] md:p-8">
             <div className="max-w-4xl">
-              <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#5B56E8]">
+              <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">
                 Comparison
               </p>
               <h2 className="mt-3 text-4xl font-bold tracking-tight text-[#141B2D]">
@@ -1108,7 +1108,7 @@ export default function ASTProductPage() {
                   </div>
                   <div className="grid gap-4 p-5">
                     <div className="rounded-2xl bg-white p-4 shadow-sm">
-                      <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#5B56E8]">
+                      <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">
                         Landlord Heaven
                       </p>
                       <p className="mt-3 text-sm leading-7 text-[#465066]">
@@ -1155,7 +1155,7 @@ export default function ASTProductPage() {
 
         <section id="jurisdictions" className="mb-16 md:mb-20">
           <div className="mx-auto mb-8 max-w-3xl text-center">
-            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#5B56E8]">
+            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">
               Other UK jurisdictions
             </p>
             <h2 className="mt-3 text-4xl font-bold tracking-tight text-[#141B2D] md:text-5xl">

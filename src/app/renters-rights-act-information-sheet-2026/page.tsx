@@ -113,7 +113,7 @@ export default function RentersRightsInformationSheet2026Page() {
 
         <Container className="py-12 md:py-16">
           <section className="mx-auto max-w-5xl rounded-[2rem] border border-[#D9D7F7] bg-gradient-to-br from-[#F5F1FF] via-white to-[#F7F8FF] p-6 shadow-[0_14px_32px_rgba(91,86,232,0.08)] md:p-8">
-            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#5B56E8]">
+              <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">
               Free official document
             </p>
             <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#141B2D] md:text-5xl">
@@ -247,7 +247,7 @@ export default function RentersRightsInformationSheet2026Page() {
           </section>
 
           <section className="mx-auto mt-10 max-w-5xl rounded-[2rem] border border-[#D9D7F7] bg-gradient-to-br from-[#F5F1FF] via-white to-[#F7F8FF] p-6 shadow-[0_14px_32px_rgba(91,86,232,0.08)] md:p-8">
-            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#5B56E8]">
+              <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">
               Need more than the free Information Sheet?
             </p>
             <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#141B2D] md:text-4xl">
@@ -273,7 +273,7 @@ export default function RentersRightsInformationSheet2026Page() {
             <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
               <Link
                 href="/products/ast"
-                className="rounded-2xl border border-[#D9D7F7] bg-white p-5 transition hover:border-[#5B56E8] hover:shadow-md"
+                className="rounded-2xl border border-[#D9D7F7] bg-white p-5 transition hover:border-[#7C3AED] hover:shadow-md"
               >
                 <h3 className="text-lg font-semibold text-[#141B2D]">England tenancy agreements</h3>
                 <p className="mt-2 text-sm leading-6 text-[#546075]">
@@ -282,7 +282,7 @@ export default function RentersRightsInformationSheet2026Page() {
               </Link>
               <Link
                 href="/products/notice-only"
-                className="rounded-2xl border border-[#D9D7F7] bg-white p-5 transition hover:border-[#5B56E8] hover:shadow-md"
+                className="rounded-2xl border border-[#D9D7F7] bg-white p-5 transition hover:border-[#7C3AED] hover:shadow-md"
               >
                 <h3 className="text-lg font-semibold text-[#141B2D]">Notice Only</h3>
                 <p className="mt-2 text-sm leading-6 text-[#546075]">
@@ -291,7 +291,7 @@ export default function RentersRightsInformationSheet2026Page() {
               </Link>
               <Link
                 href="/products/complete-pack"
-                className="rounded-2xl border border-[#D9D7F7] bg-white p-5 transition hover:border-[#5B56E8] hover:shadow-md"
+                className="rounded-2xl border border-[#D9D7F7] bg-white p-5 transition hover:border-[#7C3AED] hover:shadow-md"
               >
                 <h3 className="text-lg font-semibold text-[#141B2D]">Complete Eviction Pack</h3>
                 <p className="mt-2 text-sm leading-6 text-[#546075]">
@@ -300,7 +300,7 @@ export default function RentersRightsInformationSheet2026Page() {
               </Link>
               <Link
                 href="/products/money-claim"
-                className="rounded-2xl border border-[#D9D7F7] bg-white p-5 transition hover:border-[#5B56E8] hover:shadow-md"
+                className="rounded-2xl border border-[#D9D7F7] bg-white p-5 transition hover:border-[#7C3AED] hover:shadow-md"
               >
                 <h3 className="text-lg font-semibold text-[#141B2D]">Money Claim Pack</h3>
                 <p className="mt-2 text-sm leading-6 text-[#546075]">

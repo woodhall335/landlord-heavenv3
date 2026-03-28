@@ -138,7 +138,7 @@ export function EnglandTenancyPage({
             <ul className="mt-5 space-y-3 text-[#465066]">
               {highlights.map((item) => (
                 <li key={item} className="flex items-start gap-3 leading-7">
-                  <RiCheckboxCircleLine className="mt-1 h-5 w-5 shrink-0 text-[#5B56E8]" />
+                  <RiCheckboxCircleLine className="mt-1 h-5 w-5 shrink-0 text-[#7C3AED]" />
                   <span>{item}</span>
                 </li>
               ))}
@@ -152,7 +152,7 @@ export function EnglandTenancyPage({
             <ul className="mt-5 space-y-3 text-[#465066]">
               {compliancePoints.map((item) => (
                 <li key={item} className="flex items-start gap-3 leading-7">
-                  <RiCheckboxCircleLine className="mt-1 h-5 w-5 shrink-0 text-[#5B56E8]" />
+                  <RiCheckboxCircleLine className="mt-1 h-5 w-5 shrink-0 text-[#7C3AED]" />
                   <span>{item}</span>
                 </li>
               ))}
