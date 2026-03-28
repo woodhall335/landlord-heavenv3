@@ -10,7 +10,6 @@ import {
 } from "@/lib/seo/structured-data";
 import { PopupProvider } from "@/components/providers/PopupProvider";
 import { TrackingPixels } from "@/components/analytics/TrackingPixels";
-import { Section21HeaderBanner } from "@/components/ui/Section21HeaderBanner";
 import { Analytics } from "@vercel/analytics/next";
 import { HeaderModeProvider } from "@/components/layout/HeaderModeContext";
 import { JourneyProvider } from "@/components/journey/JourneyProvider";
@@ -71,7 +70,6 @@ export default async function RootLayout({
       </head>
       <body className="font-sans antialiased flex flex-col min-h-screen overflow-x-hidden">
         <HeaderModeProvider>
-          <Section21HeaderBanner />
           <PopupProvider>
             <Header user={headerUser} />
             <main className="flex-1">
