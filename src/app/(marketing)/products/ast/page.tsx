@@ -1219,13 +1219,6 @@ export default function ASTProductPage() {
               House, and Lodger routes are separate products.
             </p>
           </div>
-
-          <RelatedLinks
-            title="England tenancy explainers and support pages"
-            links={tenancyProductMoneyPageLinks}
-            variant="list"
-            className="mt-12"
-          />
         </Container>
       </section>
     </div>
