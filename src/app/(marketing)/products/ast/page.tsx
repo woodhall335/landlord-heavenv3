@@ -640,10 +640,10 @@ export default function ASTProductPage() {
             </div>
             <div className="rounded-2xl border border-white/20 bg-white/10 p-3 backdrop-blur-sm">
               <Link
-                href={premiumWizardHref}
+                href={chooserWizardHref}
                 className="hero-btn-secondary flex w-full justify-center text-center"
               >
-                Start Premium Tenancy Agreement
+                Explore all tenancy agreements
               </Link>
             </div>
           </div>
