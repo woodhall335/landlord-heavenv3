@@ -653,7 +653,7 @@ function commonEnglandTenancyPurposeStep(productLabel: string): StandaloneStepCo
   return {
     id: 'england_tenancy_purpose',
     title: 'Tenancy purpose',
-    description: `Tell us whether this England ${productLabel.toLowerCase()} is for a new tenancy, an existing written tenancy, or an existing verbal tenancy that now needs written terms.`,
+    description: `Tell us whether this England ${productLabel.toLowerCase()} is for a new tenancy or for an existing verbal tenancy that now needs written terms.`,
     fields: [
       {
         id: 'england_tenancy_purpose',
@@ -662,11 +662,10 @@ function commonEnglandTenancyPurposeStep(productLabel: string): StandaloneStepCo
         required: true,
         options: [
           { value: 'new_agreement', label: 'Create a new tenancy agreement' },
-          { value: 'existing_written_tenancy', label: 'Handle an existing written tenancy transition' },
           { value: 'existing_verbal_tenancy', label: 'Prepare written terms for an existing verbal tenancy' },
         ],
         helpText:
-          'From 1 May 2026, existing written England assured tenancies usually need the government information sheet, while existing verbal tenancies need written terms recorded by 31 May 2026.',
+          'From 1 May 2026, new England tenancies generally use the assured periodic route, and existing verbal tenancies need written terms recorded by 31 May 2026.',
       },
       {
         id: 'existing_written_tenancy_transition_note',

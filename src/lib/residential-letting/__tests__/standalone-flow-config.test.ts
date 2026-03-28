@@ -102,6 +102,20 @@ describe('residential standalone flow config', () => {
     expect(visibleSteps.some((step) => step.id === 'england_pre_tenancy_compliance')).toBe(true);
   });
 
+  it('does not offer the existing written tenancy transition as a live tenancy-purpose option', () => {
+    const config = getResidentialStandaloneFlowConfig('england_standard_tenancy_agreement');
+    const purposeStep = config.steps.find((step) => step.id === 'england_tenancy_purpose');
+    const purposeField = purposeStep?.fields?.find((field) => field.id === 'england_tenancy_purpose');
+
+    expect(purposeField?.options).toEqual([
+      { value: 'new_agreement', label: 'Create a new tenancy agreement' },
+      {
+        value: 'existing_verbal_tenancy',
+        label: 'Prepare written terms for an existing verbal tenancy',
+      },
+    ]);
+  });
+
   it('uses the transition-only step for existing written England assured tenancies', () => {
     const visibleSteps = getResidentialStandaloneVisibleSteps('england_student_tenancy_agreement', {
       england_tenancy_purpose: 'existing_written_tenancy',
