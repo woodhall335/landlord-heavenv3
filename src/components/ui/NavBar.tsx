@@ -10,11 +10,6 @@ import type { AuthChangeEvent, Session } from '@supabase/supabase-js';
 import { getSupabaseBrowserClient } from '@/lib/supabase/client';
 import { freeTools } from '@/lib/tools/tools';
 import type { HeaderMode } from '@/components/layout/HeaderModeContext';
-import {
-  PUBLIC_RESIDENTIAL_LETTING_PRODUCT_SKUS,
-  RESIDENTIAL_LETTING_PRODUCTS,
-  getResidentialLandingHref,
-} from '@/lib/residential-letting/products';
 
 interface NavItem {
   href: string;
@@ -42,12 +37,12 @@ const primaryLinks: NavItem[] = [
 ];
 
 const tenancyAgreementLinks: NavItem[] = [
-  { href: '/products/ast', label: 'Tenancy Agreement' },
+  { href: '/tenancy-agreement', label: 'All England Agreement Routes' },
+  { href: '/standard-tenancy-agreement', label: 'Standard Tenancy Agreement' },
   { href: '/premium-tenancy-agreement', label: 'Premium Tenancy Agreement' },
-  ...PUBLIC_RESIDENTIAL_LETTING_PRODUCT_SKUS.map((sku) => ({
-    href: getResidentialLandingHref(sku),
-    label: RESIDENTIAL_LETTING_PRODUCTS[sku].label,
-  })),
+  { href: '/student-tenancy-agreement', label: 'Student Tenancy Agreement' },
+  { href: '/hmo-shared-house-tenancy-agreement', label: 'HMO / Shared House Tenancy Agreement' },
+  { href: '/lodger-agreement', label: 'Room Let / Lodger Agreement' },
 ];
 
 const freeToolsLinks: NavItem[] = freeTools.map((tool) => ({
@@ -196,7 +191,8 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
 
   const useWizardDarkHeader = isWizardFlowRoute;
   const isSolid = effectiveHeaderState === 'solid' && !useWizardDarkHeader;
-  const isTenancyMenuActive = tenancyAgreementLinks.some((item) => pathname === item.href);
+  const isTenancyMenuActive =
+    pathname === '/products/ast' || tenancyAgreementLinks.some((item) => pathname === item.href);
   const textClass = isSolid ? 'text-[#111827]' : 'text-white';
   const secondaryTextClass = isSolid ? 'text-gray-700' : 'text-white';
   const hoverTextClass = isSolid ? 'hover:text-[#692ED4]' : 'hover:text-white hover:opacity-80 focus:text-white focus:opacity-80';

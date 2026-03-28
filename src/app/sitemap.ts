@@ -152,6 +152,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/money-claim-schedule-of-debt', priority: 0.7, changeFrequency: 'monthly' as const },
     { path: '/money-claim-pap-financial-statement', priority: 0.7, changeFrequency: 'monthly' as const },
     // Tenancy Agreement SEO Pages - England (Q1 2026)
+    { path: '/tenancy-agreement', priority: 0.9, changeFrequency: 'weekly' as const },
+    { path: '/standard-tenancy-agreement', priority: 0.85, changeFrequency: 'weekly' as const },
+    { path: '/premium-tenancy-agreement', priority: 0.85, changeFrequency: 'weekly' as const },
+    { path: '/student-tenancy-agreement', priority: 0.85, changeFrequency: 'weekly' as const },
+    { path: '/hmo-shared-house-tenancy-agreement', priority: 0.82, changeFrequency: 'weekly' as const },
+    { path: '/lodger-agreement', priority: 0.82, changeFrequency: 'weekly' as const },
     { path: '/assured-shorthold-tenancy-agreement-template', priority: 0.85, changeFrequency: 'weekly' as const },
     { path: '/ast-agreement-template', priority: 0.85, changeFrequency: 'weekly' as const },
     { path: '/tenancy-agreement-template-uk', priority: 0.8, changeFrequency: 'weekly' as const },
