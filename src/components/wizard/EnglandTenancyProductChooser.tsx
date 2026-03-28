@@ -85,7 +85,7 @@ export function EnglandTenancyProductChooser({
 
                 <p className="mt-4 text-sm leading-6 text-gray-600">{config.description}</p>
 
-                <div className="mt-6">
+                <div className="mt-auto pt-6">
                   <Button onClick={() => onSelect(product)} fullWidth>
                     Start {config.shortLabel}
                   </Button>
