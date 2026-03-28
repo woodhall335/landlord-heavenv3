@@ -21,9 +21,9 @@ const canonicalUrl = getCanonicalUrl('/products/ast');
 const chooserWizardHref =
   '/wizard/flow?type=tenancy_agreement&jurisdiction=england&product=tenancy_agreement';
 const standardWizardHref =
-  '/wizard?product=ast_standard&jurisdiction=england&src=products_ast_hub&topic=tenancy';
+  '/wizard/flow?type=tenancy_agreement&jurisdiction=england&product=england_standard_tenancy_agreement&src=products_ast_hub&topic=tenancy';
 const premiumWizardHref =
-  '/wizard?product=ast_premium&jurisdiction=england&src=products_ast_hub&topic=tenancy';
+  '/wizard/flow?type=tenancy_agreement&jurisdiction=england&product=england_premium_tenancy_agreement&src=products_ast_hub&topic=tenancy';
 const studentWizardHref =
   '/wizard?product=england_student_tenancy_agreement&jurisdiction=england&src=products_ast_hub&topic=tenancy';
 const hmoWizardHref =

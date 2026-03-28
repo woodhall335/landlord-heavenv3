@@ -132,6 +132,26 @@ function WizardFlowContent() {
   const hasRequiredParams = Boolean(type && jurisdiction);
 
   useEffect(() => {
+    if (
+      editCaseId ||
+      type !== 'tenancy_agreement' ||
+      jurisdiction !== 'england' ||
+      !product
+    ) {
+      return;
+    }
+
+    const canonicalProduct = getEnglandCanonicalTenancyProduct(product);
+    if (!canonicalProduct || canonicalProduct === product) {
+      return;
+    }
+
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('product', canonicalProduct);
+    router.replace(`/wizard/flow?${params.toString()}`);
+  }, [editCaseId, jurisdiction, product, router, searchParams, type]);
+
+  useEffect(() => {
     if (!editCaseId && product && isRetiredPublicSku(product)) {
       router.replace(getRetiredPublicSkuRedirectDestination(product) ?? '/tenancy-agreement');
       return;

@@ -7,7 +7,8 @@ import { StructuredData, breadcrumbSchema, productSchema } from '@/lib/seo/struc
 import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/premium-tenancy-agreement');
-const premiumWizardHref = '/wizard?product=ast_premium&src=england_tenancy_page&topic=tenancy';
+const premiumWizardHref =
+  '/wizard/flow?type=tenancy_agreement&jurisdiction=england&product=england_premium_tenancy_agreement&src=england_tenancy_page&topic=tenancy';
 const englandHubHref = '/products/ast';
 const premiumPackDocuments = getResidentialDocumentList('england_premium_tenancy_agreement', {
   englandTenancyPurpose: 'new_agreement',
