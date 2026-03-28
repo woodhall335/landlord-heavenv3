@@ -84,6 +84,12 @@ type ExplainerPoint = {
   body: string;
 };
 
+type SeoLinkCard = {
+  href: string;
+  title: string;
+  description?: string;
+};
+
 const proofPoints = [
   'England-first tenancy agreement for new lets from 1 May 2026',
   'England now has separate Standard, Premium, Student, HMO / Shared House, and Lodger routes',
@@ -606,6 +612,51 @@ function JurisdictionCard({
   );
 }
 
+function TenancyFunnelGrid({
+  title,
+  links,
+}: {
+  title: string;
+  links: readonly SeoLinkCard[];
+}) {
+  return (
+    <section className="my-10 md:my-12">
+      <div className="rounded-[2rem] border border-[#E6E0D6] bg-[#F8F3EC] p-6 shadow-[0_14px_36px_rgba(31,41,55,0.05)] md:p-8">
+        <div className="max-w-3xl">
+          <h3 className="text-2xl font-bold tracking-tight text-[#141B2D]">{title}</h3>
+          <p className="mt-3 text-base leading-7 text-[#546075]">
+            Compare the main England tenancy-agreement routes and the supporting explainer pages in
+            one place.
+          </p>
+        </div>
+
+        <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {links.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="group rounded-[1.6rem] border border-[#E6E0D6] bg-white px-5 py-5 transition hover:-translate-y-0.5 hover:border-[#CFC2EE] hover:shadow-[0_16px_34px_rgba(91,86,232,0.08)]"
+            >
+              <div className="flex items-start justify-between gap-3">
+                <h4 className="text-lg font-semibold leading-7 text-[#141B2D] transition group-hover:text-[#5B35B3]">
+                  {link.title}
+                </h4>
+                <span className="shrink-0 text-lg text-[#6D52D9] transition group-hover:translate-x-0.5">
+                  →
+                </span>
+              </div>
+
+              {link.description ? (
+                <p className="mt-3 text-sm leading-7 text-[#546075]">{link.description}</p>
+              ) : null}
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default function ASTProductPage() {
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#F6F2EB] text-[#141B2D]">
@@ -1125,10 +1176,9 @@ export default function ASTProductPage() {
           </div>
         </section>
 
-        <RelatedLinks
+        <TenancyFunnelGrid
           title="Keep exploring the England tenancy agreement funnel"
           links={tenancyProductMoneyPageLinks}
-          variant="list"
         />
       </Container>
 
