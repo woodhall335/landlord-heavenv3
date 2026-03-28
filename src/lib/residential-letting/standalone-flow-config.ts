@@ -138,6 +138,54 @@ export function validateArrearsScheduleRows(rows: ArrearsScheduleRow[]): string[
   return issues;
 }
 
+function toOrdinalDayLabel(day: number): string {
+  if (day <= 0) return '';
+  const mod100 = day % 100;
+  if (mod100 >= 11 && mod100 <= 13) return `${day}th`;
+  const mod10 = day % 10;
+  if (mod10 === 1) return `${day}st`;
+  if (mod10 === 2) return `${day}nd`;
+  if (mod10 === 3) return `${day}rd`;
+  return `${day}th`;
+}
+
+const TENANT_COUNT_OPTIONS: StandaloneFieldOption[] = Array.from({ length: 6 }, (_, index) => ({
+  value: String(index + 1),
+  label: String(index + 1),
+}));
+
+const ENGLAND_RENT_WEEKDAY_OPTIONS: StandaloneFieldOption[] = [
+  { value: 'Monday', label: 'Monday' },
+  { value: 'Tuesday', label: 'Tuesday' },
+  { value: 'Wednesday', label: 'Wednesday' },
+  { value: 'Thursday', label: 'Thursday' },
+  { value: 'Friday', label: 'Friday' },
+  { value: 'Saturday', label: 'Saturday' },
+  { value: 'Sunday', label: 'Sunday' },
+];
+
+const ENGLAND_RENT_DAY_OF_MONTH_OPTIONS: StandaloneFieldOption[] = Array.from(
+  { length: 30 },
+  (_, index) => ({
+    value: toOrdinalDayLabel(index + 1),
+    label: toOrdinalDayLabel(index + 1),
+  })
+);
+
+const ENGLAND_PAYMENT_METHOD_OPTIONS: StandaloneFieldOption[] = [
+  { value: 'bank_transfer', label: 'Bank transfer' },
+  { value: 'cash', label: 'Cash' },
+];
+
+const INCLUDED_BILL_OPTIONS: StandaloneFieldOption[] = [
+  { value: 'council_tax', label: 'Council tax' },
+  { value: 'gas', label: 'Gas' },
+  { value: 'electricity', label: 'Electricity' },
+  { value: 'water_sewerage', label: 'Water / sewerage' },
+  { value: 'internet_broadband', label: 'Internet / broadband' },
+  { value: 'tv_licence', label: 'TV licence' },
+];
+
 function commonPropertyStep(description = 'Identify the property covered by this legal document.'): StandaloneStepConfig {
   return {
     id: 'property_details',
@@ -236,8 +284,9 @@ function commonTenantStep(title = 'Tenant details', description = 'Identify the 
       {
         id: 'number_of_tenants',
         label: 'How many named tenants will be on the agreement?',
-        type: 'number',
+        type: 'select',
         required: true,
+        options: TENANT_COUNT_OPTIONS,
         helpText: 'We will open a separate section for each tenant so they can all be named properly in the agreement.',
       },
       {
@@ -408,7 +457,6 @@ const ENGLAND_ASSURED_BASE_REQUIRED_FACTS: string[] = [
   'tenancy_start_date',
   'rent_amount',
   'rent_frequency',
-  'rent_due_day',
   'payment_method',
   'deposit_amount',
   'tenant_notice_period',
@@ -502,6 +550,18 @@ function hasSupportedAccommodationGround(facts: Record<string, any>): boolean {
     : false;
 }
 
+function requiresEnglandRentDueWeekday(facts: Record<string, any>): boolean {
+  return toFactText(facts.rent_frequency) === 'weekly';
+}
+
+function requiresEnglandRentDueDayOfMonth(facts: Record<string, any>): boolean {
+  return ['monthly', 'quarterly', 'yearly'].includes(toFactText(facts.rent_frequency));
+}
+
+function shouldRecordPriorNoticeGrounds(facts: Record<string, any>): boolean {
+  return isTruthySelection(facts.record_prior_notice_grounds);
+}
+
 function isExistingWrittenEnglandTenancy(facts: Record<string, any>): boolean {
   return getEnglandTenancyPurpose(facts.england_tenancy_purpose) === 'existing_written_tenancy';
 }
@@ -559,8 +619,18 @@ function createEnglandAssuredRequiredFacts(productSpecificFacts: string[] = []):
       required.push('existing_verbal_tenancy_summary');
     }
 
+    if (requiresEnglandRentDueWeekday(facts)) {
+      required.push('rent_due_weekday');
+    } else if (requiresEnglandRentDueDayOfMonth(facts)) {
+      required.push('rent_due_day_of_month');
+    }
+
     if (facts.bills_included_in_rent === 'yes') {
-      required.push('included_bills_notes');
+      required.push('included_bills');
+    }
+
+    if (toFactText(facts.payment_method) === 'bank_transfer') {
+      required.push('payment_account_name', 'payment_sort_code', 'payment_account_number');
     }
 
     if (isTruthySelection(facts.separate_bill_payments_taken)) {
@@ -657,8 +727,9 @@ function commonEnglandTransitionReferenceStep(): StandaloneStepConfig {
       {
         id: 'number_of_tenants',
         label: 'How many named tenants are on the current tenancy?',
-        type: 'number',
+        type: 'select',
         required: true,
+        options: TENANT_COUNT_OPTIONS,
         helpText: 'We will open a separate section for each named tenant so the transition pack names everybody clearly.',
       },
       {
@@ -707,22 +778,51 @@ function commonEnglandAssuredTenancyTermsStep(title = 'Tenancy terms'): Standalo
         ],
       },
       {
-        id: 'rent_due_day',
+        id: 'rent_due_weekday',
         label: 'Rent due day',
-        type: 'text',
+        type: 'select',
         required: true,
-        helpText: 'For example: 1st of each month or every Monday.',
+        options: ENGLAND_RENT_WEEKDAY_OPTIONS,
+        visibleWhen: (facts) => facts.rent_frequency === 'weekly',
+      },
+      {
+        id: 'rent_due_day_of_month',
+        label: 'Rent due day',
+        type: 'select',
+        required: true,
+        options: ENGLAND_RENT_DAY_OF_MONTH_OPTIONS,
+        visibleWhen: (facts) =>
+          ['monthly', 'quarterly', 'yearly'].includes(toFactText(facts.rent_frequency)),
       },
       {
         id: 'payment_method',
         label: 'Payment method',
         type: 'select',
         required: true,
-        options: [
-          { value: 'bank_transfer', label: 'Bank transfer' },
-          { value: 'standing_order', label: 'Standing order' },
-          { value: 'cash', label: 'Cash' },
-        ],
+        options: ENGLAND_PAYMENT_METHOD_OPTIONS,
+      },
+      {
+        id: 'payment_account_name',
+        label: 'Account name',
+        type: 'text',
+        required: true,
+        visibleWhen: (facts) => toFactText(facts.payment_method) === 'bank_transfer',
+      },
+      {
+        id: 'payment_sort_code',
+        label: 'Sort code',
+        type: 'text',
+        required: true,
+        placeholder: '12-34-56',
+        visibleWhen: (facts) => toFactText(facts.payment_method) === 'bank_transfer',
+      },
+      {
+        id: 'payment_account_number',
+        label: 'Account number',
+        type: 'text',
+        required: true,
+        placeholder: '12345678',
+        visibleWhen: (facts) => toFactText(facts.payment_method) === 'bank_transfer',
       },
       {
         id: 'deposit_amount',
@@ -742,7 +842,7 @@ function commonEnglandAssuredTenancyTermsStep(title = 'Tenancy terms'): Standalo
           { value: '6 weeks', label: '6 weeks' },
           { value: '28 days', label: '28 days' },
         ],
-        helpText: 'For England assured tenancies this must not exceed two months.',
+        helpText: 'For an England assured tenancy, the tenant notice period cannot be more than 2 months.',
       },
       {
         id: 'rent_increase_method',
@@ -763,11 +863,20 @@ function commonEnglandAssuredTenancyTermsStep(title = 'Tenancy terms'): Standalo
         ],
       },
       {
-        id: 'included_bills_notes',
+        id: 'included_bills',
         label: 'Which bills are included?',
-        type: 'textarea',
+        type: 'multiselect',
         required: true,
+        options: INCLUDED_BILL_OPTIONS,
         visibleWhen: (facts) => facts.bills_included_in_rent === 'yes',
+        helpText: 'Tick each bill or service included in the rent.',
+      },
+      {
+        id: 'included_bills_other_notes',
+        label: 'Other included bills or services',
+        type: 'textarea',
+        visibleWhen: (facts) => facts.bills_included_in_rent === 'yes',
+        helpText: 'Optional: add anything unusual that is included but does not fit the list above.',
       },
     ],
   };
@@ -787,7 +896,7 @@ function commonEnglandAssuredComplianceStep(): StandaloneStepConfig {
         tone: 'info',
         items: [
           'These answers drive the written information about tenant notice, rent increases, bills, possession, repairs, safety, disability adaptations, and pets.',
-          'Where prior-notice possession grounds are selected, the agreement will record that they may be used if the statutory conditions are later met.',
+          'Most tenancies can leave the specialist prior-notice possession grounds section turned off unless you actually need it for a student or supported-accommodation setup.',
         ],
       },
       {
@@ -862,31 +971,44 @@ function commonEnglandAssuredComplianceStep(): StandaloneStepConfig {
         emptyRow: { bill_type: '', amount_detail: '', due_detail: '' },
       },
       {
+        id: 'record_prior_notice_grounds',
+        label: 'Add specialist prior-notice possession grounds',
+        type: 'checkbox',
+        helpText: 'Leave this off unless you want the agreement to record specific future possession grounds from the start.',
+      },
+      {
         id: 'prior_notice_grounds',
         label: 'Prior-notice possession grounds to record at the start',
         type: 'multiselect',
         options: PRIOR_NOTICE_GROUND_OPTIONS,
+        visibleWhen: (facts) => isTruthySelection(facts.record_prior_notice_grounds),
         helpText: 'Select only the grounds you actually want the tenancy wording to flag as possible future possession grounds.',
       },
       {
         id: 'prior_notice_ground_4_details',
         label: 'Ground 4 student occupation details',
         type: 'textarea',
-        visibleWhen: (facts) => hasPriorNoticeGround(facts, 'ground_4_student_occupation'),
+        visibleWhen: (facts) =>
+          isTruthySelection(facts.record_prior_notice_grounds) &&
+          hasPriorNoticeGround(facts, 'ground_4_student_occupation'),
         helpText: 'Explain why this tenancy is being granted for student occupation and what supporting context should be recorded.',
       },
       {
         id: 'prior_notice_ground_4a_details',
         label: 'Ground 4A incoming students details',
         type: 'textarea',
-        visibleWhen: (facts) => hasPriorNoticeGround(facts, 'ground_4a_students_for_new_students'),
+        visibleWhen: (facts) =>
+          isTruthySelection(facts.record_prior_notice_grounds) &&
+          hasPriorNoticeGround(facts, 'ground_4a_students_for_new_students'),
         helpText: 'Explain the incoming-student arrangement or student turnover context that should be recorded.',
       },
       {
         id: 'prior_notice_supported_accommodation_details',
         label: 'Supported accommodation prior-notice details',
         type: 'textarea',
-        visibleWhen: (facts) => hasSupportedAccommodationGround(facts),
+        visibleWhen: (facts) =>
+          isTruthySelection(facts.record_prior_notice_grounds) &&
+          hasSupportedAccommodationGround(facts),
         helpText: 'Explain the support, accommodation type, or homelessness duty context that should appear in the wording.',
       },
       {
@@ -1062,6 +1184,13 @@ function createEnglandAssuredCompletionRules(product: ResidentialLettingProductS
     (facts) =>
       isExistingWrittenEnglandTenancy(facts)
         ? null
+        : facts.bills_included_in_rent === 'yes' &&
+            (!Array.isArray(facts.included_bills) || facts.included_bills.length === 0)
+          ? 'Select at least one bill or service included in the rent.'
+          : null,
+    (facts) =>
+      isExistingWrittenEnglandTenancy(facts)
+        ? null
         : isTruthySelection(facts.separate_bill_payments_taken) &&
             (!Array.isArray(facts.separate_bill_payment_rows) || facts.separate_bill_payment_rows.length === 0)
           ? 'Add at least one separate bill payment row where the tenant will pay permitted bills separately.'
@@ -1069,20 +1198,24 @@ function createEnglandAssuredCompletionRules(product: ResidentialLettingProductS
     (facts) =>
       isExistingWrittenEnglandTenancy(facts)
         ? null
-        : hasPriorNoticeGround(facts, 'ground_4_student_occupation') && !facts.prior_notice_ground_4_details
+        : shouldRecordPriorNoticeGrounds(facts) &&
+            hasPriorNoticeGround(facts, 'ground_4_student_occupation') &&
+            !facts.prior_notice_ground_4_details
           ? 'Add student occupation detail for prior notice ground 4.'
           : null,
     (facts) =>
       isExistingWrittenEnglandTenancy(facts)
         ? null
-        : hasPriorNoticeGround(facts, 'ground_4a_students_for_new_students') &&
+        : shouldRecordPriorNoticeGrounds(facts) &&
+            hasPriorNoticeGround(facts, 'ground_4a_students_for_new_students') &&
             !facts.prior_notice_ground_4a_details
           ? 'Add incoming-student detail for prior notice ground 4A.'
           : null,
     (facts) =>
       isExistingWrittenEnglandTenancy(facts)
         ? null
-        : hasSupportedAccommodationGround(facts) &&
+        : shouldRecordPriorNoticeGrounds(facts) &&
+            hasSupportedAccommodationGround(facts) &&
             !facts.prior_notice_supported_accommodation_details
           ? 'Add supported accommodation detail for the selected prior-notice ground.'
           : null,

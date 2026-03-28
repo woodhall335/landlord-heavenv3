@@ -560,6 +560,42 @@ export function getVisibleSectionsForFacts(
   });
 }
 
+function normalizeLegacyEnglandPaymentMethod(value: unknown): string {
+  const text = typeof value === 'string' ? value.trim().toLowerCase() : '';
+  if (text === 'standing order' || text === 'standing_order') {
+    return 'Bank Transfer';
+  }
+  if (text === 'bank transfer' || text === 'bank_transfer') {
+    return 'Bank Transfer';
+  }
+  if (text === 'cash') {
+    return 'Cash';
+  }
+  return typeof value === 'string' ? value : '';
+}
+
+function normalizeLegacyEnglandFacts(
+  facts: Record<string, any>,
+  jurisdiction: Jurisdiction
+): Record<string, any> {
+  if (jurisdiction !== 'england') {
+    return facts;
+  }
+
+  const nextFacts: Record<string, any> = {
+    ...facts,
+    payment_method: normalizeLegacyEnglandPaymentMethod(facts.payment_method),
+  };
+
+  if (nextFacts.payment_method !== 'Bank Transfer') {
+    nextFacts.bank_account_name = '';
+    nextFacts.bank_sort_code = '';
+    nextFacts.bank_account_number = '';
+  }
+
+  return nextFacts;
+}
+
 export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
   caseId,
   jurisdiction,
@@ -590,7 +626,7 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
         if (loadedFacts && Object.keys(loadedFacts).length > 0) {
           setFacts((prev: any) => ({
             ...prev,
-            ...loadedFacts,
+            ...normalizeLegacyEnglandFacts(loadedFacts, jurisdiction),
             __meta: {
               ...prev.__meta,
               ...loadedFacts.__meta,
@@ -681,10 +717,12 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
         }
       }
 
-      setFacts(next);
+      const normalizedFacts = normalizeLegacyEnglandFacts(next, jurisdiction);
+
+      setFacts(normalizedFacts);
 
       // Store the latest facts to save
-      pendingFactsRef.current = next;
+      pendingFactsRef.current = normalizedFacts;
 
       // Clear any existing debounce timeout
       if (saveTimeoutRef.current) {
@@ -699,7 +737,7 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
         }
       }, 500);
     },
-    [facts, saveFactsToServer]
+    [facts, jurisdiction, saveFactsToServer]
   );
 
   // Cleanup debounce timeout on unmount and flush pending saves
@@ -1064,8 +1102,8 @@ const ProductSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction 
       )}
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Which {jurisdiction === 'wales' ? 'occupation contract' : 'tenancy agreement'} do you need? <span className="text-red-500">*</span>
+        <label className={LEGACY_TENANCY_LABEL_CLASS}>
+          Which {jurisdiction === 'wales' ? 'occupation contract' : 'tenancy agreement'} do you need? <RequiredPill required />
         </label>
         <p className="text-sm text-gray-500 mb-4">
           {jurisdiction === 'england'
@@ -1605,11 +1643,16 @@ const TenancySection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction 
 
 // Rent Section
 const RentSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
-  const dueOptions = Array.from({ length: 28 }, (_, i) => {
-    const day = i + 1;
-    const suffix = day === 1 || day === 21 ? 'st' : day === 2 || day === 22 ? 'nd' : day === 3 || day === 23 ? 'rd' : 'th';
-    return `${day}${suffix}`;
-  }).concat(['29th', '30th', 'Last day of month']);
+  const isWeeklyRent = facts.rent_period === 'week';
+  const dueOptions = isWeeklyRent
+    ? ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+    : Array.from({ length: 30 }, (_, i) => {
+        const day = i + 1;
+        const suffix =
+          day === 1 || day === 21 ? 'st' : day === 2 || day === 22 ? 'nd' : day === 3 || day === 23 ? 'rd' : 'th';
+        return `${day}${suffix}`;
+      });
+  const usesBankTransfer = facts.payment_method === 'Bank Transfer';
 
   return (
     <div className="space-y-6">
@@ -1634,7 +1677,7 @@ const RentSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
             required
           />
           <SelectField
-            label="Payment due day"
+            label={isWeeklyRent ? 'Payment due weekday' : 'Payment due day'}
             value={facts.rent_due_day}
             onChange={(v) => onUpdate({ rent_due_day: v })}
             options={dueOptions}
@@ -1644,13 +1687,14 @@ const RentSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
             label="Preferred payment method"
             value={facts.payment_method}
             onChange={(v) => onUpdate({ payment_method: v })}
-            options={['Standing Order', 'Bank Transfer', 'Cash']}
+            options={['Bank Transfer', 'Cash']}
             required
           />
         </div>
       </div>
 
-      <div className="border-t border-gray-200 pt-6">
+      {usesBankTransfer ? (
+        <div className="border-t border-gray-200 pt-6">
         <h3 className="text-lg font-medium text-gray-900 mb-4">Bank Details</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <TextField
@@ -1679,7 +1723,8 @@ const RentSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
             />
           </div>
         </div>
-      </div>
+        </div>
+      ) : null}
     </div>
   );
 };
@@ -3310,6 +3355,20 @@ interface FieldProps {
   options?: string[];
 }
 
+const LEGACY_TENANCY_LABEL_CLASS = 'block text-sm font-medium text-gray-700 mb-2';
+const LEGACY_TENANCY_HELPER_CLASS = 'text-sm text-gray-500 mb-2';
+const LEGACY_TENANCY_REQUIRED_PILL_CLASS =
+  'ml-2 inline-flex rounded-full border border-[#ddd6fe] bg-[#f5f3ff] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#6d28d9]';
+const LEGACY_TENANCY_TEXTAREA_CLASS =
+  'england-tenancy-input w-full rounded-xl border border-[#ddd6fe] bg-[#f5f3ff] p-3 text-base text-charcoal transition-all duration-200 focus:border-[#7c3aed] focus:outline-none focus:ring-2 focus:ring-[#ede9fe] focus:ring-offset-0 min-h-20';
+const LEGACY_TENANCY_SELECT_CLASS =
+  'england-tenancy-input w-full rounded-xl border border-[#ddd6fe] bg-[#f5f3ff] p-3 text-base text-charcoal transition-all duration-200 focus:border-[#7c3aed] focus:outline-none focus:ring-2 focus:ring-[#ede9fe] focus:ring-offset-0';
+
+function RequiredPill({ required }: { required?: boolean }) {
+  if (!required) return null;
+  return <span className={LEGACY_TENANCY_REQUIRED_PILL_CLASS}>Required</span>;
+}
+
 const TextField: React.FC<FieldProps> = ({
   label,
   value,
@@ -3320,16 +3379,16 @@ const TextField: React.FC<FieldProps> = ({
   type = 'text',
 }) => (
   <div>
-    <label className="block text-sm font-medium text-gray-700 mb-2">
-      {label} {required && <span className="text-red-500">*</span>}
+    <label className={LEGACY_TENANCY_LABEL_CLASS}>
+      {label} <RequiredPill required={required} />
     </label>
-    {helperText && <p className="text-sm text-gray-500 mb-2">{helperText}</p>}
+    {helperText && <p className={LEGACY_TENANCY_HELPER_CLASS}>{helperText}</p>}
     <Input
       type={type}
       value={value || ''}
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder}
-      className="w-full"
+      className="england-tenancy-input w-full rounded-xl border border-[#ddd6fe] bg-[#f5f3ff] focus:border-[#7c3aed] focus:ring-2 focus:ring-[#ede9fe] focus:ring-offset-0"
     />
   </div>
 );
@@ -3343,15 +3402,15 @@ const TextareaField: React.FC<FieldProps> = ({
   helperText,
 }) => (
   <div>
-    <label className="block text-sm font-medium text-gray-700 mb-2">
-      {label} {required && <span className="text-red-500">*</span>}
+    <label className={LEGACY_TENANCY_LABEL_CLASS}>
+      {label} <RequiredPill required={required} />
     </label>
-    {helperText && <p className="text-sm text-gray-500 mb-2">{helperText}</p>}
+    {helperText && <p className={LEGACY_TENANCY_HELPER_CLASS}>{helperText}</p>}
     <textarea
       value={value || ''}
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder}
-      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent min-h-20"
+      className={LEGACY_TENANCY_TEXTAREA_CLASS}
       rows={3}
     />
   </div>
@@ -3368,10 +3427,10 @@ const NumberField: React.FC<FieldProps> = ({
   max,
 }) => (
   <div>
-    <label className="block text-sm font-medium text-gray-700 mb-2">
-      {label} {required && <span className="text-red-500">*</span>}
+    <label className={LEGACY_TENANCY_LABEL_CLASS}>
+      {label} <RequiredPill required={required} />
     </label>
-    {helperText && <p className="text-sm text-gray-500 mb-2">{helperText}</p>}
+    {helperText && <p className={LEGACY_TENANCY_HELPER_CLASS}>{helperText}</p>}
     <Input
       type="number"
       value={value || ''}
@@ -3379,7 +3438,7 @@ const NumberField: React.FC<FieldProps> = ({
       placeholder={placeholder}
       min={min}
       max={max}
-      className="w-full"
+      className="england-tenancy-input w-full rounded-xl border border-[#ddd6fe] bg-[#f5f3ff] focus:border-[#7c3aed] focus:ring-2 focus:ring-[#ede9fe] focus:ring-offset-0"
     />
   </div>
 );
@@ -3393,10 +3452,10 @@ const CurrencyField: React.FC<FieldProps> = ({
   helperText,
 }) => (
   <div>
-    <label className="block text-sm font-medium text-gray-700 mb-2">
-      {label} {required && <span className="text-red-500">*</span>}
+    <label className={LEGACY_TENANCY_LABEL_CLASS}>
+      {label} <RequiredPill required={required} />
     </label>
-    {helperText && <p className="text-sm text-gray-500 mb-2">{helperText}</p>}
+    {helperText && <p className={LEGACY_TENANCY_HELPER_CLASS}>{helperText}</p>}
     <div className="relative">
       <span className="absolute left-3 top-3 text-gray-500">£</span>
       <Input
@@ -3404,7 +3463,7 @@ const CurrencyField: React.FC<FieldProps> = ({
         value={value || ''}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="pl-8 w-full"
+        className="england-tenancy-input pl-8 w-full rounded-xl border border-[#ddd6fe] bg-[#f5f3ff] focus:border-[#7c3aed] focus:ring-2 focus:ring-[#ede9fe] focus:ring-offset-0"
       />
     </div>
   </div>
@@ -3419,14 +3478,14 @@ const SelectField: React.FC<FieldProps> = ({
   options = [],
 }) => (
   <div>
-    <label className="block text-sm font-medium text-gray-700 mb-2">
-      {label} {required && <span className="text-red-500">*</span>}
+    <label className={LEGACY_TENANCY_LABEL_CLASS}>
+      {label} <RequiredPill required={required} />
     </label>
-    {helperText && <p className="text-sm text-gray-500 mb-2">{helperText}</p>}
+    {helperText && <p className={LEGACY_TENANCY_HELPER_CLASS}>{helperText}</p>}
     <select
       value={value || ''}
       onChange={(e) => onChange(e.target.value)}
-      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+      className={LEGACY_TENANCY_SELECT_CLASS}
     >
       <option value="">-- Select --</option>
       {options.map((opt) => (
@@ -3446,10 +3505,10 @@ const YesNoField: React.FC<FieldProps> = ({
   helperText,
 }) => (
   <div>
-    <label className="block text-sm font-medium text-gray-700 mb-2">
-      {label} {required && <span className="text-red-500">*</span>}
+    <label className={LEGACY_TENANCY_LABEL_CLASS}>
+      {label} <RequiredPill required={required} />
     </label>
-    {helperText && <p className="text-sm text-gray-500 mb-2">{helperText}</p>}
+    {helperText && <p className={LEGACY_TENANCY_HELPER_CLASS}>{helperText}</p>}
     <div className="flex gap-4">
       <Button
         onClick={() => onChange(true)}

@@ -415,11 +415,15 @@ describe('generateResidentialLettingDocuments', () => {
         ...baseFacts,
         tenancy_start_date: '2026-05-02',
         england_tenancy_purpose: 'new_agreement',
-        rent_period: 'month',
-        payment_method: 'Standing Order',
+        rent_frequency: 'monthly',
+        rent_due_day_of_month: '1st',
+        payment_method: 'bank_transfer',
+        payment_account_name: 'Landlord Heaven Client Account',
+        payment_sort_code: '12-34-56',
+        payment_account_number: '12345678',
         furnished_status: 'furnished',
         bills_included_in_rent: 'yes',
-        included_bills_notes: 'Gas, electricity, and broadband',
+        included_bills: ['gas', 'electricity', 'internet_broadband'],
         separate_bill_payments_taken: false,
         tenant_notice_period: '2 months',
         rent_increase_method: 'Section 13 rent increase process',
@@ -459,6 +463,11 @@ describe('generateResidentialLettingDocuments', () => {
     expect(html).toContain('fit for human habitation');
     expect(html).toContain('section 190(9)');
     expect(html).toContain('tenant may request consent for a pet');
+    expect(html).toContain('Bank transfer');
+    expect(html).toContain('Landlord Heaven Client Account');
+    expect(html).toContain('12-34-56');
+    expect(html).toContain('Gas, Electricity, Internet / broadband');
+    expect(html).not.toContain('Prior-Notice Grounds');
   });
 
   test('renders multiple named tenants when the England agreement is prepared for more than one tenant', async () => {
@@ -556,6 +565,46 @@ describe('generateResidentialLettingDocuments', () => {
     expect(html).toContain('granted as supported accommodation');
     expect(html).toContain('section 190(9)');
     expect(html).toContain('section 6 of the Equality Act 2010');
+  });
+
+  test('only renders prior-notice grounds when the advanced England legal section is used', async () => {
+    const pack = await generateResidentialLettingDocuments(
+      'england_student_tenancy_agreement',
+      {
+        ...baseFacts,
+        tenancy_start_date: '2026-05-02',
+        england_tenancy_purpose: 'new_agreement',
+        rent_frequency: 'monthly',
+        rent_due_day_of_month: '1st',
+        payment_method: 'cash',
+        bills_included_in_rent: 'no',
+        separate_bill_payments_taken: false,
+        tenant_notice_period: '2 months',
+        rent_increase_method: 'Section 13 rent increase process',
+        england_rent_in_advance_compliant: true,
+        england_no_bidding_confirmed: true,
+        england_no_discrimination_confirmed: true,
+        tenant_improvements_allowed_with_consent: true,
+        supported_accommodation_tenancy: false,
+        relevant_gas_fitting_present: false,
+        electrical_safety_certificate: true,
+        smoke_alarms_fitted: true,
+        carbon_monoxide_alarms: true,
+        epc_rating: 'C',
+        right_to_rent_check_date: '2026-04-25',
+        how_to_rent_provided: true,
+        record_prior_notice_grounds: true,
+        prior_notice_grounds: ['ground_4_student_occupation'],
+        prior_notice_ground_4_details: 'The property is being let to current students for occupation during the academic year.',
+      },
+      { outputFormat: 'html' }
+    );
+
+    const html = pack.documents[0].html;
+
+    expect(html).toContain('Prior-Notice Grounds');
+    expect(html).toContain('Ground 4: student occupation');
+    expect(html).toContain('The property is being let to current students');
   });
 
   test('uses the written statement variant for existing verbal England assured tenancies', async () => {

@@ -2312,10 +2312,62 @@ function formatNoticePeriod(value: unknown): string {
   return firstNonEmpty(toText(value), '2 months');
 }
 
+const ENGLAND_INCLUDED_BILL_LABELS: Record<string, string> = {
+  council_tax: 'Council tax',
+  gas: 'Gas',
+  electricity: 'Electricity',
+  water_sewerage: 'Water / sewerage',
+  internet_broadband: 'Internet / broadband',
+  tv_licence: 'TV licence',
+};
+
+function buildEnglandRentDueDayText(facts: Record<string, any>): string {
+  return firstNonEmpty(facts.rent_due_day, facts.rent_due_weekday, facts.rent_due_day_of_month);
+}
+
+function buildEnglandPaymentMethodText(facts: Record<string, any>): string {
+  const text = toText(facts.payment_method).toLowerCase().replace(/\s+/g, '_');
+  if (text === 'standing_order' || text === 'bank_transfer') {
+    return 'Bank transfer';
+  }
+  if (text === 'cash') {
+    return 'Cash';
+  }
+  return toText(facts.payment_method);
+}
+
+function buildEnglandIncludedBillsText(facts: Record<string, any>): string {
+  const selectedBills = toArrayOfText(facts.included_bills)
+    .map((value) => ENGLAND_INCLUDED_BILL_LABELS[value] || value)
+    .filter(Boolean);
+  const otherNotes = toText(facts.included_bills_other_notes);
+  const legacyNotes = toText(facts.included_bills_notes);
+
+  const parts = [
+    selectedBills.length > 0 ? selectedBills.join(', ') : '',
+    otherNotes,
+    !selectedBills.length && !otherNotes ? legacyNotes : '',
+  ].filter(Boolean);
+
+  return parts.join('. ');
+}
+
+function buildEnglandPaymentAccountRows(facts: Record<string, any>): Array<{ label: string; value: unknown }> {
+  if (buildEnglandPaymentMethodText(facts) !== 'Bank transfer') {
+    return [];
+  }
+
+  return [
+    { label: 'Account name', value: firstNonEmpty(facts.payment_account_name, facts.bank_account_name) },
+    { label: 'Sort code', value: firstNonEmpty(facts.payment_sort_code, facts.bank_sort_code) },
+    { label: 'Account number', value: firstNonEmpty(facts.payment_account_number, facts.bank_account_number) },
+  ];
+}
+
 function buildEnglandBillCoverageText(facts: Record<string, any>): string {
   if (isTruthySelection(facts.bills_included_in_rent)) {
     return firstNonEmpty(
-      facts.included_bills_notes,
+      buildEnglandIncludedBillsText(facts),
       'The rent is stated to include the bills or services identified by the landlord.'
     );
   }
@@ -2368,12 +2420,14 @@ function buildEnglandSeparateBillBullets(facts: Record<string, any>): string[] {
 }
 
 function buildEnglandPriorNoticeBullets(facts: Record<string, any>): string[] {
+  if (!isTruthySelection(facts.record_prior_notice_grounds)) {
+    return [];
+  }
+
   const grounds = toArrayOfText(facts.prior_notice_grounds);
 
   if (grounds.length === 0) {
-    return [
-      'No prior-notice possession grounds are recorded in the landlord answers for this tenancy at the date of issue.',
-    ];
+    return [];
   }
 
   const labels: Record<string, string> = {
@@ -2501,11 +2555,12 @@ function buildEnglandAssuredSections(
       heading: 'Rent, Payment Method, and Bill Treatment',
       rows: [
         { label: 'Rent', value: formatMoney(shared.rent_amount) || shared.rent_amount },
-        { label: 'Rent period', value: facts.rent_period || 'month' },
-        { label: 'Rent due day', value: facts.rent_due_day },
-        { label: 'Payment method', value: facts.payment_method },
+        { label: 'Rent period', value: firstNonEmpty(facts.rent_frequency, facts.rent_period, 'month') },
+        { label: 'Rent due day', value: buildEnglandRentDueDayText(facts) },
+        { label: 'Payment method', value: buildEnglandPaymentMethodText(facts) },
         { label: 'Bills included in rent', value: yesNoText(facts.bills_included_in_rent) },
         { label: 'Included bills detail', value: buildEnglandBillCoverageText(facts) },
+        ...buildEnglandPaymentAccountRows(facts),
       ],
       bullets: [
         'Any rent increase for an England assured tenancy should follow the Section 13 statutory route or any later replacement process required by law. CPI, RPI, or fixed review wording is not intended to override that statutory process in this product.',
@@ -2550,10 +2605,12 @@ function buildEnglandAssuredSections(
         'Where the landlord wishes to rely on a possession ground that requires prior notice at the start of the tenancy, the ground should be identified clearly in writing now and supported by the relevant factual explanation.',
       ],
     }),
-    createSection({
-      heading: 'Prior-Notice Grounds',
-      bullets: priorNoticeBullets,
-    }),
+    priorNoticeBullets.length > 0
+      ? createSection({
+          heading: 'Prior-Notice Grounds',
+          bullets: priorNoticeBullets,
+        })
+      : null,
     isTruthySelection(facts.supported_accommodation_tenancy)
       ? createSection({
           heading: 'Supported Accommodation Status',

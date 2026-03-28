@@ -46,13 +46,13 @@ const EMPTY_ROW: ArrearsScheduleRow = {
 };
 
 const FIELD_INPUT_CLASS =
-  'w-full rounded-2xl border-violet-200 bg-white text-slate-900 shadow-sm focus:border-violet-500 focus:ring-violet-200';
+  'england-tenancy-input w-full rounded-2xl border border-[#ddd6fe] bg-[#f5f3ff] text-slate-900 shadow-sm focus:border-[#7c3aed] focus:ring-4 focus:ring-[#ede9fe]';
 
 const SELECT_CLASS =
-  'mt-2 w-full rounded-2xl border border-violet-200 bg-white px-4 py-3 text-sm text-slate-900 shadow-sm outline-none transition focus:border-violet-500 focus:ring-4 focus:ring-violet-100';
+  'england-tenancy-input mt-2 w-full rounded-2xl border border-[#ddd6fe] bg-[#f5f3ff] px-4 py-3 text-sm text-slate-900 shadow-sm outline-none transition focus:border-[#7c3aed] focus:ring-4 focus:ring-[#ede9fe]';
 
 const TEXTAREA_CLASS =
-  'mt-2 w-full rounded-2xl border border-violet-200 bg-white px-4 py-3 text-sm text-slate-900 shadow-sm outline-none transition focus:border-violet-500 focus:ring-4 focus:ring-violet-100';
+  'england-tenancy-input mt-2 w-full rounded-2xl border border-[#ddd6fe] bg-[#f5f3ff] px-4 py-3 text-sm text-slate-900 shadow-sm outline-none transition focus:border-[#7c3aed] focus:ring-4 focus:ring-[#ede9fe]';
 
 function createRoom(name: string): StandaloneRoomRecord {
   return {
@@ -106,6 +106,65 @@ function sanitizeTenantRecord(value: unknown): StandaloneTenantRecord {
 function getRequestedTenantCount(facts: Record<string, any>): number {
   const numeric = Number(facts.number_of_tenants);
   return Number.isFinite(numeric) && numeric > 0 ? Math.floor(numeric) : 0;
+}
+
+function normalizePaymentMethodValue(value: unknown): string {
+  const text = toTextValue(value).toLowerCase();
+  if (text === 'standing_order' || text === 'standing order') {
+    return 'bank_transfer';
+  }
+  if (text === 'bank transfer') {
+    return 'bank_transfer';
+  }
+  if (text === 'cash') {
+    return 'cash';
+  }
+  return toTextValue(value);
+}
+
+function normalizeRentDueDayValue(facts: Record<string, any>): string {
+  const frequency = toTextValue(facts.rent_frequency).toLowerCase();
+  if (frequency === 'weekly') {
+    return toTextValue(facts.rent_due_weekday);
+  }
+  if (['monthly', 'quarterly', 'yearly'].includes(frequency)) {
+    return toTextValue(facts.rent_due_day_of_month);
+  }
+  return toTextValue(facts.rent_due_day);
+}
+
+function isEnglandTenancyStandaloneProduct(product: ResidentialLettingProductSku): boolean {
+  return [
+    'england_standard_tenancy_agreement',
+    'england_premium_tenancy_agreement',
+    'england_student_tenancy_agreement',
+    'england_hmo_shared_house_tenancy_agreement',
+    'england_lodger_agreement',
+  ].includes(product);
+}
+
+function normalizeStandaloneEnglandTenancyFacts(
+  product: ResidentialLettingProductSku,
+  facts: Record<string, any>
+): Record<string, any> {
+  if (!isEnglandTenancyStandaloneProduct(product)) {
+    return facts;
+  }
+
+  const paymentMethod = normalizePaymentMethodValue(facts.payment_method);
+  const nextFacts: Record<string, any> = {
+    ...facts,
+    payment_method: paymentMethod,
+    rent_due_day: normalizeRentDueDayValue({ ...facts, payment_method: paymentMethod }),
+  };
+
+  if (paymentMethod !== 'bank_transfer') {
+    nextFacts.payment_account_name = '';
+    nextFacts.payment_sort_code = '';
+    nextFacts.payment_account_number = '';
+  }
+
+  return nextFacts;
 }
 
 function buildTenantArrayFromFacts(
@@ -286,15 +345,15 @@ function FieldChrome({
       className={clsx(
         'standalone-premium-enter rounded-[1.75rem] border p-5 shadow-[0_18px_40px_rgba(15,23,42,0.06)]',
         accent
-          ? 'border-[var(--standalone-border)] bg-[var(--standalone-soft)]/80'
-          : 'border-slate-200 bg-white'
+          ? 'border-[var(--standalone-border)] bg-[var(--standalone-soft)]'
+          : 'border-[#ddd6fe] bg-[#f5f3ff]'
       )}
     >
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="max-w-3xl">
           <label className="text-sm font-semibold text-slate-950">{field.label}</label>
           {field.required ? (
-            <span className="ml-2 rounded-full bg-slate-950 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-white">
+            <span className="ml-2 rounded-full border border-[#ddd6fe] bg-[#f5f3ff] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#6d28d9]">
               Required
             </span>
           ) : null}
@@ -398,7 +457,7 @@ export function ResidentialStandaloneSectionFlow({ caseId, jurisdiction, product
         inventory_rooms: bootstrapLegacyRooms(loaded || {}, 'inventory_rooms'),
       };
       setFacts((current) => {
-        const nextFacts = {
+        const nextFacts = normalizeStandaloneEnglandTenancyFacts(product, {
           ...current,
           ...bootstrapFacts,
           __meta: {
@@ -408,7 +467,7 @@ export function ResidentialStandaloneSectionFlow({ caseId, jurisdiction, product
             jurisdiction,
             case_type: 'tenancy_agreement',
           },
-        };
+        });
 
         return usesTenantBuilder
           ? syncStructuredTenantFacts(nextFacts, { deriveCountFromExisting: true })
@@ -517,7 +576,7 @@ export function ResidentialStandaloneSectionFlow({ caseId, jurisdiction, product
 
   const updateFact = (key: string, value: any) => {
     setFacts((current) => {
-      const nextFacts = { ...current, [key]: value };
+      const nextFacts = normalizeStandaloneEnglandTenancyFacts(product, { ...current, [key]: value });
       return usesTenantBuilder &&
         ['number_of_tenants', 'tenants', 'tenant_full_name', 'tenant_email', 'tenant_phone'].includes(key)
         ? syncStructuredTenantFacts(nextFacts)
@@ -1362,19 +1421,19 @@ export function ResidentialStandaloneSectionFlow({ caseId, jurisdiction, product
 
     if (field.type === 'checkbox') {
       return (
-        <section className="rounded-[1.65rem] border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="rounded-[1.65rem] border border-[#ddd6fe] bg-[#f5f3ff] p-5 shadow-sm">
           <label className="flex cursor-pointer items-start gap-4">
             <input
               type="checkbox"
               checked={Boolean(facts[field.id])}
               onChange={(event) => updateFact(field.id, event.target.checked)}
-              className="mt-1 h-5 w-5 rounded border-slate-300 text-slate-950 focus:ring-slate-300"
+              className="mt-1 h-5 w-5 rounded border-[#c4b5fd] accent-[#7c3aed] focus:ring-[#ddd6fe]"
             />
             <div>
               <div className="text-sm font-semibold text-slate-950">
                 {field.label}
                 {field.required ? (
-                  <span className="ml-2 rounded-full bg-slate-950 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-white">
+                  <span className="ml-2 rounded-full border border-[#ddd6fe] bg-[#f5f3ff] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#6d28d9]">
                     Required
                   </span>
                 ) : null}
@@ -1400,8 +1459,8 @@ export function ResidentialStandaloneSectionFlow({ caseId, jurisdiction, product
                   className={clsx(
                     'standalone-premium-hover-lift rounded-[1.3rem] border px-4 py-4 text-left transition',
                     selected
-                      ? 'border-slate-950 bg-[var(--standalone-accent-strong)] text-white shadow-sm'
-                      : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'
+                      ? 'border-[#7c3aed] bg-[#7c3aed] text-white shadow-sm'
+                      : 'border-[#ddd6fe] bg-[#f5f3ff] text-slate-700 hover:border-[#c4b5fd]'
                   )}
                 >
                   <div className="text-sm font-semibold">{option.label}</div>
@@ -1427,15 +1486,15 @@ export function ResidentialStandaloneSectionFlow({ caseId, jurisdiction, product
                   className={clsx(
                     'flex cursor-pointer items-start gap-3 rounded-[1.3rem] border px-4 py-4 transition',
                     selected
-                      ? 'border-slate-950 bg-[var(--standalone-soft)] text-slate-950'
-                      : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'
+                      ? 'border-[#7c3aed] bg-[#f5f3ff] text-slate-950'
+                      : 'border-[#ddd6fe] bg-[#f5f3ff] text-slate-700 hover:border-[#c4b5fd]'
                   )}
                 >
                   <input
                     type="checkbox"
                     checked={selected}
                     onChange={(event) => toggleMultiSelectValue(field.id, option.value, event.target.checked)}
-                    className="mt-1 h-5 w-5 rounded border-slate-300 text-slate-950 focus:ring-slate-300"
+                    className="mt-1 h-5 w-5 rounded border-[#c4b5fd] accent-[#7c3aed] focus:ring-[#ddd6fe]"
                   />
                   <span className="text-sm font-medium">{option.label}</span>
                 </label>
@@ -1503,7 +1562,7 @@ export function ResidentialStandaloneSectionFlow({ caseId, jurisdiction, product
   if (loading) {
     return (
       <div
-        className="min-h-screen"
+        className="england-tenancy-standalone min-h-screen"
         style={{
           ...themeStyle,
           backgroundColor: '#150733',
@@ -1536,7 +1595,7 @@ export function ResidentialStandaloneSectionFlow({ caseId, jurisdiction, product
 
   return (
     <div
-      className="min-h-screen pb-28 lg:pb-14"
+      className="england-tenancy-standalone min-h-screen pb-28 lg:pb-14"
       style={{
         ...themeStyle,
         backgroundColor: '#150733',

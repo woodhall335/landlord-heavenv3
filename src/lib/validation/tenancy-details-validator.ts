@@ -97,6 +97,22 @@ function parseTenantNoticePeriodDays(value: unknown): number | null {
   return null;
 }
 
+function normalizePaymentMethodText(value: unknown): string {
+  const text = typeof value === 'string' ? value.trim().toLowerCase().replace(/\s+/g, '_') : '';
+  if (text === 'standing_order') return 'bank_transfer';
+  return text;
+}
+
+function requiresWeeklyRentDueSelection(value: unknown): boolean {
+  const text = typeof value === 'string' ? value.trim().toLowerCase() : '';
+  return text === 'weekly' || text === 'week';
+}
+
+function requiresPeriodicRentDueDaySelection(value: unknown): boolean {
+  const text = typeof value === 'string' ? value.trim().toLowerCase() : '';
+  return ['monthly', 'month', 'quarterly', 'quarter', 'yearly', 'year'].includes(text);
+}
+
 /**
  * Shared tenancy agreement validator used by wizard/checkout/fulfillment.
  * Accepts raw WizardFacts (flat) and/or nested shapes.
@@ -271,9 +287,11 @@ export function validateTenancyRequiredFacts(
     const tenantNoticePeriod = wizardFacts.tenant_notice_period;
     const rentIncreaseMethod = wizardFacts.rent_increase_method;
     const billsIncludedInRent = wizardFacts.bills_included_in_rent;
+    const normalizedPaymentMethod = normalizePaymentMethodText(wizardFacts.payment_method);
     const separateBillPaymentsTaken = toOptionalBoolean(
       wizardFacts.separate_bill_payments_taken
     );
+    const recordPriorNoticeGrounds = toOptionalBoolean(wizardFacts.record_prior_notice_grounds);
     const tenantImprovementsAllowedWithConsent = toOptionalBoolean(
       wizardFacts.tenant_improvements_allowed_with_consent
     );
@@ -305,10 +323,39 @@ export function validateTenancyRequiredFacts(
         }
       }
 
+      if (requiresWeeklyRentDueSelection(rentFrequency)) {
+        if (isBlankString(wizardFacts.rent_due_weekday)) {
+          missing.add('rent_due_weekday');
+        }
+      } else if (requiresPeriodicRentDueDaySelection(rentFrequency)) {
+        if (isBlankString(wizardFacts.rent_due_day_of_month)) {
+          missing.add('rent_due_day_of_month');
+        }
+      }
+
+      if (isBlankString(wizardFacts.payment_method)) {
+        missing.add('payment_method');
+      } else if (!['bank_transfer', 'cash'].includes(normalizedPaymentMethod)) {
+        invalid.add('payment_method');
+      } else if (normalizedPaymentMethod === 'bank_transfer') {
+        if (isBlankString(wizardFacts.payment_account_name)) {
+          missing.add('payment_account_name');
+        }
+        if (isBlankString(wizardFacts.payment_sort_code)) {
+          missing.add('payment_sort_code');
+        }
+        if (isBlankString(wizardFacts.payment_account_number)) {
+          missing.add('payment_account_number');
+        }
+      }
+
       if (isBlankString(billsIncludedInRent)) {
         missing.add('bills_included_in_rent');
-      } else if (String(billsIncludedInRent).trim().toLowerCase() === 'yes' && isBlankString(wizardFacts.included_bills_notes)) {
-        missing.add('included_bills_notes');
+      } else if (
+        String(billsIncludedInRent).trim().toLowerCase() === 'yes' &&
+        (!Array.isArray(wizardFacts.included_bills) || wizardFacts.included_bills.length === 0)
+      ) {
+        missing.add('included_bills');
       }
 
       if (separateBillPaymentsTaken === undefined) {
@@ -384,37 +431,39 @@ export function validateTenancyRequiredFacts(
         missing.add('deposit_scheme_name');
       }
 
-      const priorNoticeGrounds = Array.isArray(wizardFacts.prior_notice_grounds)
-        ? (wizardFacts.prior_notice_grounds as string[])
-        : [];
+      if (recordPriorNoticeGrounds === true) {
+        const priorNoticeGrounds = Array.isArray(wizardFacts.prior_notice_grounds)
+          ? (wizardFacts.prior_notice_grounds as string[])
+          : [];
 
-      if (
-        priorNoticeGrounds.includes('ground_4_student_occupation') &&
-        isBlankString(wizardFacts.prior_notice_ground_4_details)
-      ) {
-        missing.add('prior_notice_ground_4_details');
-      }
+        if (
+          priorNoticeGrounds.includes('ground_4_student_occupation') &&
+          isBlankString(wizardFacts.prior_notice_ground_4_details)
+        ) {
+          missing.add('prior_notice_ground_4_details');
+        }
 
-      if (
-        priorNoticeGrounds.includes('ground_4a_students_for_new_students') &&
-        isBlankString(wizardFacts.prior_notice_ground_4a_details)
-      ) {
-        missing.add('prior_notice_ground_4a_details');
-      }
+        if (
+          priorNoticeGrounds.includes('ground_4a_students_for_new_students') &&
+          isBlankString(wizardFacts.prior_notice_ground_4a_details)
+        ) {
+          missing.add('prior_notice_ground_4a_details');
+        }
 
-      if (
-        priorNoticeGrounds.some((ground) =>
-          [
-            'ground_5e_supported_accommodation',
-            'ground_5f_supported_dwelling_house',
-            'ground_5g_homelessness_duty',
-            'ground_5h_stepping_stone',
-            'ground_18_supported_accommodation',
-          ].includes(ground)
-        ) &&
-        isBlankString(wizardFacts.prior_notice_supported_accommodation_details)
-      ) {
-        missing.add('prior_notice_supported_accommodation_details');
+        if (
+          priorNoticeGrounds.some((ground) =>
+            [
+              'ground_5e_supported_accommodation',
+              'ground_5f_supported_dwelling_house',
+              'ground_5g_homelessness_duty',
+              'ground_5h_stepping_stone',
+              'ground_18_supported_accommodation',
+            ].includes(ground)
+          ) &&
+          isBlankString(wizardFacts.prior_notice_supported_accommodation_details)
+        ) {
+          missing.add('prior_notice_supported_accommodation_details');
+        }
       }
     }
   }

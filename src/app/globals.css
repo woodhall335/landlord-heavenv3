@@ -137,6 +137,17 @@ a[class*="text-white"]:not([class*="hover:"]):hover {
   color: #ffffff !important;
 }
 
+.england-tenancy-input {
+  accent-color: #7c3aed;
+  color-scheme: light;
+}
+
+.england-tenancy-input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 1;
+  filter: invert(27%) sepia(77%) saturate(2996%) hue-rotate(248deg) brightness(97%) contrast(98%);
+}
+
 /* Ensure all text has sufficient contrast */
 .text-gray-500 {
   color: #6b7280 !important;

@@ -139,6 +139,76 @@ describe('residential standalone flow config', () => {
     });
   });
 
+  it('uses 1 to 6 selectors for named-tenant counts in the modern England tenancy routes', () => {
+    const standard = getResidentialStandaloneFlowConfig('england_standard_tenancy_agreement');
+    const transitionStep = standard.steps.find((step) => step.id === 'england_transition_reference');
+    const tenantStep = standard.steps.find((step) => step.id === 'tenant');
+
+    expect(
+      tenantStep?.fields?.find((field) => field.id === 'number_of_tenants')
+    ).toMatchObject({
+      type: 'select',
+      options: [
+        { value: '1', label: '1' },
+        { value: '2', label: '2' },
+        { value: '3', label: '3' },
+        { value: '4', label: '4' },
+        { value: '5', label: '5' },
+        { value: '6', label: '6' },
+      ],
+    });
+    expect(
+      transitionStep?.fields?.find((field) => field.id === 'number_of_tenants')
+    ).toMatchObject({
+      type: 'select',
+    });
+  });
+
+  it('shows structured bill selections, bank details, and frequency-aware due day fields for England assured products', () => {
+    const standard = getResidentialStandaloneFlowConfig('england_standard_tenancy_agreement');
+    const termsStep = standard.steps.find((step) => step.id === 'tenancy_terms');
+    const fields = termsStep?.fields || [];
+
+    expect(fields.find((field) => field.id === 'included_bills')).toMatchObject({
+      type: 'multiselect',
+      required: true,
+    });
+    expect(
+      fields.find((field) => field.id === 'included_bills')?.visibleWhen?.({
+        bills_included_in_rent: 'yes',
+      })
+    ).toBe(true);
+    expect(
+      fields.find((field) => field.id === 'payment_account_name')?.visibleWhen?.({
+        payment_method: 'bank_transfer',
+      })
+    ).toBe(true);
+    expect(
+      fields.find((field) => field.id === 'payment_account_name')?.visibleWhen?.({
+        payment_method: 'cash',
+      })
+    ).toBe(false);
+    expect(
+      fields.find((field) => field.id === 'rent_due_weekday')?.visibleWhen?.({
+        rent_frequency: 'weekly',
+      })
+    ).toBe(true);
+    expect(
+      fields.find((field) => field.id === 'rent_due_day_of_month')?.visibleWhen?.({
+        rent_frequency: 'monthly',
+      })
+    ).toBe(true);
+  });
+
+  it('keeps prior-notice grounds hidden until the advanced legal toggle is enabled', () => {
+    const standard = getResidentialStandaloneFlowConfig('england_standard_tenancy_agreement');
+    const complianceStep = standard.steps.find((step) => step.id === 'england_written_information');
+    const priorNoticeField = complianceStep?.fields?.find((field) => field.id === 'prior_notice_grounds');
+
+    expect(priorNoticeField?.visibleWhen?.({ record_prior_notice_grounds: false })).toBe(false);
+    expect(priorNoticeField?.visibleWhen?.({ record_prior_notice_grounds: true })).toBe(true);
+  });
+
   it('captures deeper structured product-specific fields for Premium, Student, HMO, and Lodger', () => {
     const premium = getResidentialStandaloneFlowConfig('england_premium_tenancy_agreement');
     const student = getResidentialStandaloneFlowConfig('england_student_tenancy_agreement');

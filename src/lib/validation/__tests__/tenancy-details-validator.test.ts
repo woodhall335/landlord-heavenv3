@@ -286,13 +286,16 @@ describe('validateTenancyRequiredFacts', () => {
       __meta: { jurisdiction: 'england' },
       tenancy_start_date: '2026-05-02',
       england_tenancy_purpose: 'new_agreement',
+      rent_frequency: 'monthly',
+      rent_due_day_of_month: '1st',
+      payment_method: 'cash',
       england_rent_in_advance_compliant: true,
       england_no_bidding_confirmed: true,
       england_no_discrimination_confirmed: true,
       tenant_notice_period: '2 months',
       rent_increase_method: 'Section 13 rent increase process',
       bills_included_in_rent: 'yes',
-      included_bills_notes: 'Gas and broadband',
+      included_bills: ['gas', 'internet_broadband'],
       separate_bill_payments_taken: false,
       tenant_improvements_allowed_with_consent: true,
       supported_accommodation_tenancy: false,
@@ -305,6 +308,7 @@ describe('validateTenancyRequiredFacts', () => {
       carbon_monoxide_alarms: true,
       how_to_rent_provided: true,
       deposit_amount: 1200,
+      record_prior_notice_grounds: true,
       prior_notice_grounds: ['ground_4_student_occupation'],
     }, { jurisdiction: 'england', product: 'england_student_tenancy_agreement' });
 
@@ -319,6 +323,9 @@ describe('validateTenancyRequiredFacts', () => {
       __meta: { jurisdiction: 'england' },
       tenancy_start_date: '2026-05-02',
       england_tenancy_purpose: 'new_agreement',
+      rent_frequency: 'monthly',
+      rent_due_day_of_month: '1st',
+      payment_method: 'cash',
       england_rent_in_advance_compliant: true,
       england_no_bidding_confirmed: true,
       england_no_discrimination_confirmed: true,
@@ -348,6 +355,132 @@ describe('validateTenancyRequiredFacts', () => {
         'supported_accommodation_explanation',
       ])
     );
+  });
+
+  it('requires bank details and the correct rent due selector for modern England assured products', () => {
+    const bankTransferResult = validateTenancyRequiredFacts({
+      ...completeFacts,
+      __meta: { jurisdiction: 'england' },
+      tenancy_start_date: '2026-05-02',
+      england_tenancy_purpose: 'new_agreement',
+      rent_frequency: 'monthly',
+      payment_method: 'bank_transfer',
+      england_rent_in_advance_compliant: true,
+      england_no_bidding_confirmed: true,
+      england_no_discrimination_confirmed: true,
+      tenant_notice_period: '2 months',
+      rent_increase_method: 'Section 13 rent increase process',
+      bills_included_in_rent: 'no',
+      separate_bill_payments_taken: false,
+      tenant_improvements_allowed_with_consent: true,
+      supported_accommodation_tenancy: false,
+      relevant_gas_fitting_present: false,
+      epc_rating: 'C',
+      right_to_rent_check_date: '2026-04-20',
+      electrical_safety_certificate: true,
+      smoke_alarms_fitted: true,
+      carbon_monoxide_alarms: true,
+      how_to_rent_provided: true,
+    }, { jurisdiction: 'england', product: 'england_standard_tenancy_agreement' });
+
+    expect(bankTransferResult.missing_fields).toEqual(
+      expect.arrayContaining([
+        'rent_due_day_of_month',
+        'payment_account_name',
+        'payment_sort_code',
+        'payment_account_number',
+      ])
+    );
+
+    const weeklyResult = validateTenancyRequiredFacts({
+      ...completeFacts,
+      __meta: { jurisdiction: 'england' },
+      tenancy_start_date: '2026-05-02',
+      england_tenancy_purpose: 'new_agreement',
+      rent_frequency: 'weekly',
+      payment_method: 'cash',
+      england_rent_in_advance_compliant: true,
+      england_no_bidding_confirmed: true,
+      england_no_discrimination_confirmed: true,
+      tenant_notice_period: '2 months',
+      rent_increase_method: 'Section 13 rent increase process',
+      bills_included_in_rent: 'no',
+      separate_bill_payments_taken: false,
+      tenant_improvements_allowed_with_consent: true,
+      supported_accommodation_tenancy: false,
+      relevant_gas_fitting_present: false,
+      epc_rating: 'C',
+      right_to_rent_check_date: '2026-04-20',
+      electrical_safety_certificate: true,
+      smoke_alarms_fitted: true,
+      carbon_monoxide_alarms: true,
+      how_to_rent_provided: true,
+    }, { jurisdiction: 'england', product: 'england_standard_tenancy_agreement' });
+
+    expect(weeklyResult.missing_fields).toContain('rent_due_weekday');
+    expect(weeklyResult.missing_fields).not.toContain('payment_account_name');
+  });
+
+  it('requires included bill selections and only validates prior-notice detail when advanced grounds are enabled', () => {
+    const billsResult = validateTenancyRequiredFacts({
+      ...completeFacts,
+      __meta: { jurisdiction: 'england' },
+      tenancy_start_date: '2026-05-02',
+      england_tenancy_purpose: 'new_agreement',
+      rent_frequency: 'monthly',
+      rent_due_day_of_month: '1st',
+      payment_method: 'cash',
+      england_rent_in_advance_compliant: true,
+      england_no_bidding_confirmed: true,
+      england_no_discrimination_confirmed: true,
+      tenant_notice_period: '2 months',
+      rent_increase_method: 'Section 13 rent increase process',
+      bills_included_in_rent: 'yes',
+      separate_bill_payments_taken: false,
+      tenant_improvements_allowed_with_consent: true,
+      supported_accommodation_tenancy: false,
+      relevant_gas_fitting_present: false,
+      epc_rating: 'C',
+      right_to_rent_check_date: '2026-04-20',
+      electrical_safety_certificate: true,
+      smoke_alarms_fitted: true,
+      carbon_monoxide_alarms: true,
+      how_to_rent_provided: true,
+      prior_notice_grounds: ['ground_4_student_occupation'],
+    }, { jurisdiction: 'england', product: 'england_student_tenancy_agreement' });
+
+    expect(billsResult.missing_fields).toContain('included_bills');
+    expect(billsResult.missing_fields).not.toContain('prior_notice_ground_4_details');
+
+    const priorNoticeResult = validateTenancyRequiredFacts({
+      ...completeFacts,
+      __meta: { jurisdiction: 'england' },
+      tenancy_start_date: '2026-05-02',
+      england_tenancy_purpose: 'new_agreement',
+      rent_frequency: 'monthly',
+      rent_due_day_of_month: '1st',
+      payment_method: 'cash',
+      england_rent_in_advance_compliant: true,
+      england_no_bidding_confirmed: true,
+      england_no_discrimination_confirmed: true,
+      tenant_notice_period: '2 months',
+      rent_increase_method: 'Section 13 rent increase process',
+      bills_included_in_rent: 'no',
+      separate_bill_payments_taken: false,
+      tenant_improvements_allowed_with_consent: true,
+      supported_accommodation_tenancy: false,
+      relevant_gas_fitting_present: false,
+      epc_rating: 'C',
+      right_to_rent_check_date: '2026-04-20',
+      electrical_safety_certificate: true,
+      smoke_alarms_fitted: true,
+      carbon_monoxide_alarms: true,
+      how_to_rent_provided: true,
+      record_prior_notice_grounds: true,
+      prior_notice_grounds: ['ground_4_student_occupation'],
+    }, { jurisdiction: 'england', product: 'england_student_tenancy_agreement' });
+
+    expect(priorNoticeResult.missing_fields).toContain('prior_notice_ground_4_details');
   });
 
   it('does not require the expanded assured-tenancy facts for existing written England transition packs', () => {
