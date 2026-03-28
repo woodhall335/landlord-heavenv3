@@ -125,33 +125,6 @@ describe('validateTenancyRequiredFacts', () => {
     );
   });
 
-  it('requires tenancy structure selection for Wales, Northern Ireland, and pre-reform England', () => {
-    const preReformEngland = validateTenancyRequiredFacts({
-      ...completeFacts,
-      is_fixed_term: undefined,
-    }, { jurisdiction: 'england' });
-
-    const wales = validateTenancyRequiredFacts({
-      ...completeFacts,
-      __meta: { jurisdiction: 'wales' },
-      is_fixed_term: undefined,
-    }, { jurisdiction: 'wales' });
-
-    const northernIreland = validateTenancyRequiredFacts({
-      ...completeFacts,
-      __meta: { jurisdiction: 'northern-ireland' },
-      is_fixed_term: undefined,
-      agreement_date: '2026-01-01',
-      rent_due_day: '1',
-      payment_method: 'Bank transfer',
-      payment_details: 'Sort code 00-00-00, account 12345678',
-    }, { jurisdiction: 'northern-ireland' });
-
-    expect(preReformEngland.missing_fields).toContain('is_fixed_term');
-    expect(wales.missing_fields).toContain('is_fixed_term');
-    expect(northernIreland.missing_fields).toContain('is_fixed_term');
-  });
-
   it('blocks new England fixed-term AST structures starting on or after 1 May 2026', () => {
     const result = validateTenancyRequiredFacts({
       ...completeFacts,
@@ -275,6 +248,120 @@ describe('validateTenancyRequiredFacts', () => {
     expect(wales.missing_fields).not.toContain('england_rent_in_advance_compliant');
     expect(wales.invalid_fields).not.toContain('england_no_bidding_confirmed');
     expect(wales.invalid_fields).not.toContain('england_no_discrimination_confirmed');
+  });
+
+  it('requires the expanded England assured-tenancy facts for modern England products', () => {
+    const result = validateTenancyRequiredFacts({
+      ...completeFacts,
+      __meta: { jurisdiction: 'england' },
+      tenancy_start_date: '2026-05-02',
+      england_tenancy_purpose: 'new_agreement',
+      england_rent_in_advance_compliant: true,
+      england_no_bidding_confirmed: true,
+      england_no_discrimination_confirmed: true,
+    }, { jurisdiction: 'england', product: 'england_standard_tenancy_agreement' });
+
+    expect(result.missing_fields).toEqual(
+      expect.arrayContaining([
+        'tenant_notice_period',
+        'rent_increase_method',
+        'bills_included_in_rent',
+        'separate_bill_payments_taken',
+        'tenant_improvements_allowed_with_consent',
+        'supported_accommodation_tenancy',
+        'relevant_gas_fitting_present',
+        'epc_rating',
+        'right_to_rent_check_date',
+        'electrical_safety_certificate',
+        'smoke_alarms_fitted',
+        'carbon_monoxide_alarms',
+        'how_to_rent_provided',
+      ])
+    );
+  });
+
+  it('requires deposit scheme details and prior-notice context for modern England assured products when applicable', () => {
+    const result = validateTenancyRequiredFacts({
+      ...completeFacts,
+      __meta: { jurisdiction: 'england' },
+      tenancy_start_date: '2026-05-02',
+      england_tenancy_purpose: 'new_agreement',
+      england_rent_in_advance_compliant: true,
+      england_no_bidding_confirmed: true,
+      england_no_discrimination_confirmed: true,
+      tenant_notice_period: '2 months',
+      rent_increase_method: 'Section 13 rent increase process',
+      bills_included_in_rent: 'yes',
+      included_bills_notes: 'Gas and broadband',
+      separate_bill_payments_taken: false,
+      tenant_improvements_allowed_with_consent: true,
+      supported_accommodation_tenancy: false,
+      relevant_gas_fitting_present: true,
+      epc_rating: 'C',
+      right_to_rent_check_date: '2026-04-20',
+      gas_safety_certificate: true,
+      electrical_safety_certificate: true,
+      smoke_alarms_fitted: true,
+      carbon_monoxide_alarms: true,
+      how_to_rent_provided: true,
+      deposit_amount: 1200,
+      prior_notice_grounds: ['ground_4_student_occupation'],
+    }, { jurisdiction: 'england', product: 'england_student_tenancy_agreement' });
+
+    expect(result.missing_fields).toEqual(
+      expect.arrayContaining(['deposit_scheme_name', 'prior_notice_ground_4_details'])
+    );
+  });
+
+  it('accepts natural Section 13 wording and requires detailed separate bill rows plus supported accommodation explanation when applicable', () => {
+    const result = validateTenancyRequiredFacts({
+      ...completeFacts,
+      __meta: { jurisdiction: 'england' },
+      tenancy_start_date: '2026-05-02',
+      england_tenancy_purpose: 'new_agreement',
+      england_rent_in_advance_compliant: true,
+      england_no_bidding_confirmed: true,
+      england_no_discrimination_confirmed: true,
+      tenant_notice_period: '2 months',
+      rent_increase_method: 'Section 13 rent increase process',
+      bills_included_in_rent: 'no',
+      separate_bill_payments_taken: true,
+      separate_bill_payment_rows: [
+        { bill_type: 'communications', amount_detail: '', due_detail: '' },
+      ],
+      tenant_improvements_allowed_with_consent: true,
+      supported_accommodation_tenancy: true,
+      relevant_gas_fitting_present: false,
+      epc_rating: 'C',
+      right_to_rent_check_date: '2026-04-20',
+      electrical_safety_certificate: true,
+      smoke_alarms_fitted: true,
+      carbon_monoxide_alarms: true,
+      how_to_rent_provided: true,
+    }, { jurisdiction: 'england', product: 'england_standard_tenancy_agreement' });
+
+    expect(result.invalid_fields).not.toContain('rent_increase_method');
+    expect(result.missing_fields).toEqual(
+      expect.arrayContaining([
+        'separate_bill_payment_rows[0].amount_detail',
+        'separate_bill_payment_rows[0].due_detail',
+        'supported_accommodation_explanation',
+      ])
+    );
+  });
+
+  it('does not require the expanded assured-tenancy facts for existing written England transition packs', () => {
+    const result = validateTenancyRequiredFacts({
+      ...completeFacts,
+      __meta: { jurisdiction: 'england' },
+      tenancy_start_date: '2026-05-02',
+      england_tenancy_purpose: 'existing_written_tenancy',
+      existing_written_tenancy_transition: true,
+    }, { jurisdiction: 'england', product: 'england_hmo_shared_house_tenancy_agreement' });
+
+    expect(result.missing_fields).not.toContain('tenant_notice_period');
+    expect(result.missing_fields).not.toContain('rent_increase_method');
+    expect(result.missing_fields).not.toContain('epc_rating');
   });
 
   it('does not require fixed-term fields for Scotland PRT', () => {

@@ -11,6 +11,19 @@ interface EnglandTenancyFaq {
   answer: string;
 }
 
+interface EnglandTenancyPackHighlight {
+  title: string;
+  description: string;
+  supportingLabel?: string;
+}
+
+interface EnglandTenancyRouteCard {
+  title: string;
+  description: string;
+  href: string;
+  ctaLabel?: string;
+}
+
 interface EnglandTenancyPageProps {
   pagePath?: string;
   title: string;
@@ -25,7 +38,12 @@ interface EnglandTenancyPageProps {
   highlights: string[];
   compliancePoints: string[];
   keywordTargets?: string[];
+  idealFor?: string[];
+  notFor?: string[];
+  packHighlights?: EnglandTenancyPackHighlight[];
+  routeComparison?: EnglandTenancyRouteCard[];
   faqs?: EnglandTenancyFaq[];
+  finalCtaBody?: ReactNode;
 }
 
 export function EnglandTenancyPage({
@@ -41,8 +59,13 @@ export function EnglandTenancyPage({
   introBody,
   highlights,
   compliancePoints,
-  keywordTargets: _keywordTargets,
+  keywordTargets = [],
+  idealFor = [],
+  notFor = [],
+  packHighlights = [],
+  routeComparison = [],
   faqs = [],
+  finalCtaBody,
 }: EnglandTenancyPageProps) {
   return (
     <main className="min-h-screen bg-[#FCFBF8]">
@@ -82,6 +105,30 @@ export function EnglandTenancyPage({
           </div>
         </section>
 
+        {keywordTargets.length ? (
+          <section className="mb-12 rounded-[2rem] border border-[#E6E0D5] bg-white p-6 shadow-[0_14px_32px_rgba(31,41,55,0.05)] md:p-8">
+            <div className="max-w-3xl">
+              <h2 className="text-2xl font-bold tracking-tight text-[#141B2D]">
+                Common England searches this page answers
+              </h2>
+              <p className="mt-3 text-base leading-7 text-[#546075]">
+                We keep the wording aligned with how landlords actually search, while routing into
+                the correct England tenancy-agreement product.
+              </p>
+            </div>
+            <div className="mt-5 flex flex-wrap gap-3">
+              {keywordTargets.map((target) => (
+                <span
+                  key={target}
+                  className="rounded-full border border-[#D7DDF4] bg-[#F7F9FF] px-4 py-2 text-sm font-medium text-[#30446B]"
+                >
+                  {target}
+                </span>
+              ))}
+            </div>
+          </section>
+        ) : null}
+
         <section className="mb-12 grid gap-8 lg:grid-cols-2">
           <div className="rounded-[2rem] border border-[#E8E1D7] bg-white p-6 shadow-[0_14px_32px_rgba(31,41,55,0.05)]">
             <h2 className="text-2xl font-bold tracking-tight text-[#141B2D]">
@@ -112,6 +159,107 @@ export function EnglandTenancyPage({
           </div>
         </section>
 
+        {idealFor.length || notFor.length ? (
+          <section className="mb-12 grid gap-8 lg:grid-cols-2">
+            <div className="rounded-[2rem] border border-[#D9EAD7] bg-[#F5FBF2] p-6 shadow-[0_14px_32px_rgba(29,92,54,0.06)]">
+              <h2 className="text-2xl font-bold tracking-tight text-[#141B2D]">
+                Usually the right route if
+              </h2>
+              <ul className="mt-5 space-y-3 text-[#465066]">
+                {idealFor.map((item) => (
+                  <li key={item} className="flex items-start gap-3 leading-7">
+                    <RiCheckboxCircleLine className="mt-1 h-5 w-5 shrink-0 text-[#2F855A]" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="rounded-[2rem] border border-[#F0DCC7] bg-[#FFF8F1] p-6 shadow-[0_14px_32px_rgba(124,72,18,0.06)]">
+              <h2 className="text-2xl font-bold tracking-tight text-[#141B2D]">
+                Usually better to choose another route if
+              </h2>
+              <ul className="mt-5 space-y-3 text-[#465066]">
+                {notFor.map((item) => (
+                  <li key={item} className="flex items-start gap-3 leading-7">
+                    <RiCheckboxCircleLine className="mt-1 h-5 w-5 shrink-0 text-[#C26A1B]" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </section>
+        ) : null}
+
+        {packHighlights.length ? (
+          <section className="mb-12">
+            <div className="max-w-3xl">
+              <h2 className="text-3xl font-bold tracking-tight text-[#141B2D]">
+                What is included in this pack
+              </h2>
+              <p className="mt-3 text-base leading-7 text-[#546075]">
+                The tenancy agreement is the core document, but the pack is designed to carry the
+                practical handover and management paperwork that landlords usually need around it.
+              </p>
+            </div>
+            <div className="mt-6 grid gap-5 md:grid-cols-2">
+              {packHighlights.map((item) => (
+                <div
+                  key={item.title}
+                  className="rounded-[1.8rem] border border-[#E8E1D7] bg-white p-6 shadow-[0_14px_32px_rgba(31,41,55,0.05)]"
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <h3 className="text-xl font-semibold tracking-tight text-[#141B2D]">
+                      {item.title}
+                    </h3>
+                    {item.supportingLabel ? (
+                      <span className="rounded-full bg-[#F2F4FA] px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-[#4E5A70]">
+                        {item.supportingLabel}
+                      </span>
+                    ) : null}
+                  </div>
+                  <p className="mt-3 text-base leading-7 text-[#546075]">{item.description}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        ) : null}
+
+        {routeComparison.length ? (
+          <section className="mb-12">
+            <div className="max-w-3xl">
+              <h2 className="text-3xl font-bold tracking-tight text-[#141B2D]">
+                Compare England agreement routes
+              </h2>
+              <p className="mt-3 text-base leading-7 text-[#546075]">
+                Use the route that matches how the property is actually occupied. That usually
+                matters more than legacy AST or premium language.
+              </p>
+            </div>
+            <div className="mt-6 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+              {routeComparison.map((route) => (
+                <div
+                  key={route.title}
+                  className="flex h-full flex-col rounded-[1.8rem] border border-[#E5E8F0] bg-white p-6 shadow-[0_14px_32px_rgba(31,41,55,0.05)]"
+                >
+                  <h3 className="text-xl font-semibold tracking-tight text-[#141B2D]">
+                    {route.title}
+                  </h3>
+                  <p className="mt-3 flex-1 text-base leading-7 text-[#546075]">
+                    {route.description}
+                  </p>
+                  <Link
+                    href={route.href}
+                    className="mt-5 inline-flex items-center text-sm font-semibold text-[#4A46C8] transition hover:text-[#2F2BA6]"
+                  >
+                    {route.ctaLabel || 'View route'}
+                  </Link>
+                </div>
+              ))}
+            </div>
+          </section>
+        ) : null}
+
         {faqs.length ? (
           <FAQSection
             title="England tenancy agreement FAQs"
@@ -127,10 +275,14 @@ export function EnglandTenancyPage({
             Choose the right England agreement route
           </h2>
           <p className="mx-auto mt-3 max-w-2xl text-base leading-8 text-[#E1DBF8] md:text-lg">
-            Start with the route that fits the let now, not the template language you may have
-            used years ago. Older agreements may be harder to rely on if wording or structure is
-            outdated. Use Standard for straightforward England lets and Premium where the
-            household or risk profile is more complex.
+            {finalCtaBody || (
+              <>
+                Start with the route that fits the let now, not the template language you may have
+                used years ago. Older agreements may be harder to rely on if wording or structure is
+                outdated. England now has dedicated routes for Standard, Premium, Student,
+                HMO/Shared House, and Lodger agreements.
+              </>
+            )}
           </p>
           <div className="mt-6 flex flex-wrap items-center justify-center gap-4">
             <Link

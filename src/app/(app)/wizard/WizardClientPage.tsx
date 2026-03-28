@@ -5,7 +5,7 @@
  * Users select document type and jurisdiction, then start the guided flow
  *
  * Supports URL params:
- * - product: notice_only, complete_pack, money_claim, ast_standard, ast_premium, tenancy_agreement
+ * - product: notice_only, complete_pack, money_claim, tenancy_agreement, ast_standard, ast_premium, and modern standalone SKUs
  * - jurisdiction: england, wales, scotland, northern-ireland
  * - src: tracking source (product_page, template, validator, tool, blog, ask_heaven, nav, footer)
  * - topic: eviction, arrears, tenancy, deposit, compliance
@@ -95,7 +95,7 @@ function getHeroContent(product: string | null, jurisdiction: string | null): He
       return {
         title: jurisdiction === 'england' ? 'Premium England Tenancy Agreement' : 'Premium Tenancy Agreement',
         subtitle: jurisdiction === 'england'
-        ? 'Updated England tenancy agreement for HMOs, student lets, and more complex households where older wording may be harder to rely on'
+        ? 'Updated England premium residential agreement with fuller drafting for ordinary lets. Student, HMO/shared-house, and lodger routes now sit on their own dedicated products.'
           : 'Occupation Contract (Wales), PRT (Scotland), or NI private tenancy with compliance checklist',
         eyebrow: 'Premium',
       };
@@ -254,6 +254,10 @@ function getAvailableDocumentOptions(jurisdiction: string | null): DocumentOptio
 function mapProductToDocumentType(
   product: string
 ): DocumentOption['type'] | null {
+  if (isResidentialLettingProductSku(product)) {
+    return 'tenancy_agreement';
+  }
+
   switch (product) {
     case 'complete_pack':
       return 'complete_pack';
@@ -264,17 +268,6 @@ function mapProductToDocumentType(
     case 'ast_standard':
     case 'ast_premium':
     case 'tenancy_agreement':
-    case 'guarantor_agreement':
-    case 'residential_sublet_agreement':
-    case 'lease_amendment':
-    case 'lease_assignment_agreement':
-    case 'rent_arrears_letter':
-    case 'repayment_plan_agreement':
-    case 'residential_tenancy_application':
-    case 'rental_inspection_report':
-    case 'inventory_schedule_condition':
-    case 'flatmate_agreement':
-    case 'renewal_tenancy_agreement':
       return 'tenancy_agreement';
     default:
       return null;

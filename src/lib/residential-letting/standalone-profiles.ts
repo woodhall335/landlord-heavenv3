@@ -106,7 +106,459 @@ function buildCommonFaqs(productLabel: string): ResidentialFaq[] {
   ];
 }
 
+function buildEnglandTenancyProfile(params: {
+  product: ResidentialLettingProductSku;
+  eyebrow: string;
+  heroTitle: string;
+  heroSubtitle: string;
+  heroBullets: string[];
+  reviewHighlights: string[];
+  reviewSummaryLabels: string[];
+  outputSections: string[];
+  landingTitle: string;
+  landingDescription: string;
+  landingH1: string;
+  landingSubheading: string;
+  overview: string;
+  whyUseThis: string[];
+  howWizardWorks: string[];
+  whoThisIsFor: string[];
+  notFor: string[];
+  legalExplainer: string;
+  includedHighlights: string[];
+  documentPreviewAnatomy: string[];
+  internalLinks: ResidentialLandingLink[];
+  faqs?: ResidentialFaq[];
+  cautionBanner?: ResidentialCautionBanner;
+}): ResidentialStandaloneProfileSeed {
+  return {
+    product: params.product,
+    icon: icon('04-tenancy.png'),
+    reviewIcon: icon('12-summary-cards.png'),
+    eyebrow: params.eyebrow,
+    heroTitle: params.heroTitle,
+    heroSubtitle: params.heroSubtitle,
+    heroBullets: params.heroBullets,
+    reviewHighlights: params.reviewHighlights,
+    reviewSummaryLabels: params.reviewSummaryLabels,
+    outputSections: params.outputSections,
+    cautionBanner: params.cautionBanner,
+    stepIcons: {
+      suitability: icon('49-warning.png'),
+      property_details: icon('03-property.png'),
+      property_profile: icon('44-terms.png'),
+      landlord: icon('39-landlord.png'),
+      tenant: icon('40-tenants.png'),
+      tenancy_terms: icon('04-tenancy.png'),
+      premium_controls: icon('46-premium.png'),
+      student_specifics: icon('40-tenants.png'),
+      hmo_specifics: icon('44-terms.png'),
+      lodger_terms: icon('44-terms.png'),
+      rules_and_access: icon('44-terms.png'),
+    },
+    landing: {
+      title: params.landingTitle,
+      description: params.landingDescription,
+      h1: params.landingH1,
+      subheading: params.landingSubheading,
+      overview: params.overview,
+      whyUseThis: params.whyUseThis,
+      howWizardWorks: params.howWizardWorks,
+      whoThisIsFor: params.whoThisIsFor,
+      notFor: params.notFor,
+      legalExplainer: params.legalExplainer,
+      includedHighlights: params.includedHighlights,
+      documentPreviewAnatomy: params.documentPreviewAnatomy,
+      internalLinks: params.internalLinks,
+      faqs: params.faqs || buildCommonFaqs(params.eyebrow),
+    },
+  };
+}
+
 const profiles: Record<ResidentialLettingProductSku, ResidentialStandaloneProfileSeed> = {
+  england_standard_tenancy_agreement: buildEnglandTenancyProfile({
+    product: 'england_standard_tenancy_agreement',
+    eyebrow: 'Standard Tenancy Agreement',
+    heroTitle: 'Create the ordinary England residential agreement for a straightforward whole-property let.',
+    heroSubtitle:
+      'This is the baseline England tenancy product for a standard residential letting where the landlord is not resident and the setup is not student, HMO/shared-house, or lodger-led.',
+    heroBullets: [
+      'Straightforward England residential agreement',
+      'Whole-property ordinary let workflow',
+      'Clear review before checkout',
+    ],
+    reviewHighlights: [
+      'Ordinary residential use summary',
+      'Rent, deposit, and access terms',
+      'Property rules and landlord details',
+    ],
+    reviewSummaryLabels: ['Property', 'Landlord', 'Tenant', 'Start date', 'Rent'],
+    outputSections: [
+      'Property and parties',
+      'Core residential letting terms',
+      'Rent, deposit, and payment terms',
+      'Rules, repairs, and access',
+    ],
+    landingTitle: 'Standard Tenancy Agreement England | Ordinary Residential Let',
+    landingDescription:
+      'Create a Standard England tenancy agreement for an ordinary whole-property residential letting.',
+    landingH1: 'Standard Tenancy Agreement for England',
+    landingSubheading:
+      'The baseline England residential agreement for straightforward whole-property lets.',
+    overview:
+      'Use this product when you need the ordinary England residential route, not a student, HMO/shared-house, or resident-landlord agreement.',
+    whyUseThis: [
+      'Keeps the ordinary England route separate from the specialist products',
+      'Collects the property, party, and payment facts in one guided flow',
+      'Gives Standard its own product identity instead of hiding behind old AST logic',
+    ],
+    howWizardWorks: [
+      'Confirm the ordinary residential setup',
+      'Capture the property, landlord, tenant, and payment terms',
+      'Review the finished agreement summary before checkout',
+    ],
+    whoThisIsFor: [
+      'Straightforward England whole-property lets',
+      'Landlords who want the baseline England agreement product',
+    ],
+    notFor: [
+      'Resident-landlord room lets',
+      'Student-focused lets needing dedicated student drafting',
+      'HMO or shared-house setups',
+    ],
+    legalExplainer:
+      'This product is positioned as the ordinary England residential agreement route, separate from Premium, Student, HMO/Shared, and Lodger.',
+    includedHighlights: [
+      'Standard England agreement summary',
+      'Guided property and party capture',
+      'Rent, deposit, and access drafting',
+    ],
+    documentPreviewAnatomy: [
+      'Agreement cover summary',
+      'Core residential occupation terms',
+      'Payment, rules, and access sections',
+    ],
+    internalLinks: [
+      {
+        label: 'Premium tenancy agreement',
+        href: '/premium-tenancy-agreement',
+        description: 'See the fuller ordinary-residential premium route.',
+      },
+      {
+        label: 'Student tenancy agreement',
+        href: '/student-tenancy-agreement',
+        description: 'Switch to the student-specific product if the let is student-focused.',
+      },
+    ],
+  }),
+  england_premium_tenancy_agreement: buildEnglandTenancyProfile({
+    product: 'england_premium_tenancy_agreement',
+    eyebrow: 'Premium Tenancy Agreement',
+    heroTitle: 'Create the fuller ordinary-residential England agreement without treating Premium as HMO by default.',
+    heroSubtitle:
+      'Premium is now a distinct England residential product for landlords who want broader drafting and more operational detail on an otherwise ordinary let.',
+    heroBullets: [
+      'Premium ordinary-residential drafting',
+      'Operational detail beyond the Standard route',
+      'Separate from HMO, Student, and Lodger products',
+    ],
+    reviewHighlights: [
+      'Broader operational detail',
+      'Enhanced rent-review and management wording',
+      'Premium drafting without HMO assumptions',
+    ],
+    reviewSummaryLabels: ['Property', 'Landlord', 'Tenant', 'Rent', 'Premium notes'],
+    outputSections: [
+      'Property and parties',
+      'Premium operational drafting',
+      'Rent, deposit, and management detail',
+      'Inspection, repairs, keys, and contractor access',
+      'Rules, repairs, and access',
+    ],
+    landingTitle: 'Premium Tenancy Agreement England | Fuller Ordinary Residential Drafting',
+    landingDescription:
+      'Create a Premium England tenancy agreement with fuller drafting for an ordinary residential let.',
+    landingH1: 'Premium Tenancy Agreement for England',
+    landingSubheading:
+      'A fuller England residential agreement for landlords who want more drafting depth without sliding into HMO or student logic.',
+    overview:
+      'Use Premium when the let is still an ordinary residential letting, but you want more operational detail and stronger drafting than the baseline Standard route.',
+    whyUseThis: [
+      'Keeps Premium as a real product instead of a synonym for HMO',
+      'Captures operational detail that does not belong in the baseline Standard route',
+      'Creates a clearer upgrade path for ordinary residential landlords',
+    ],
+    howWizardWorks: [
+      'Confirm the ordinary residential setup',
+      'Capture the same core facts as Standard plus premium control details',
+      'Review the premium agreement summary before checkout',
+    ],
+    whoThisIsFor: [
+      'Ordinary England residential lets with more management detail',
+      'Landlords who want fuller drafting from the start',
+    ],
+    notFor: [
+      'HMO/shared-house setups',
+      'Student-focused tenancy products',
+      'Resident-landlord room lets',
+    ],
+    legalExplainer:
+      'Premium is intentionally separate from the HMO/shared-house, student, and lodger products so the product choice matches the occupation setup rather than an old “premium equals complex HMO” shortcut.',
+    includedHighlights: [
+      'Premium England agreement summary',
+      'Operational-detail capture step',
+      'Premium management schedule and handover support docs',
+      'Broader drafting on an ordinary let',
+    ],
+    documentPreviewAnatomy: [
+      'Agreement cover summary',
+      'Premium operational clauses',
+      'Management schedule, access controls, and house rules',
+    ],
+    internalLinks: [
+      {
+        label: 'HMO / Shared House tenancy agreement',
+        href: '/hmo-shared-house-tenancy-agreement',
+        description: 'Choose the dedicated shared-house route if the property is an HMO or sharer setup.',
+      },
+      {
+        label: 'Standard tenancy agreement',
+        href: '/tenancy-agreement',
+        description: 'Go back to the baseline England route if the let is straightforward.',
+      },
+    ],
+  }),
+  england_student_tenancy_agreement: buildEnglandTenancyProfile({
+    product: 'england_student_tenancy_agreement',
+    eyebrow: 'Student Tenancy Agreement',
+    heroTitle: 'Create the dedicated England student tenancy product instead of bundling student lets into Premium.',
+    heroSubtitle:
+      'Use the student route when guarantors, sharers, replacement procedure wording, and end-of-term expectations all need a proper place in the agreement.',
+    heroBullets: [
+      'Student-focused tenancy product',
+      'Guarantor and sharer detail',
+      'End-of-term expectations captured clearly',
+    ],
+    reviewHighlights: [
+      'Student occupation summary',
+      'Guarantor and replacement-procedure detail',
+      'End-of-term standards and vacation notes',
+    ],
+    reviewSummaryLabels: ['Property', 'Tenant group', 'Guarantor', 'Joint let', 'Return standard'],
+    outputSections: [
+      'Property and parties',
+      'Student-specific occupation detail',
+      'Guarantor and replacement procedure notes',
+      'End-of-term expectations',
+      'Move-out, keys, and guarantor schedule',
+    ],
+    landingTitle: 'Student Tenancy Agreement England | Dedicated Student Let Product',
+    landingDescription:
+      'Create a Student Tenancy Agreement for England with student-specific drafting and guarantor workflow support.',
+    landingH1: 'Student Tenancy Agreement for England',
+    landingSubheading:
+      'A dedicated student-focused route for England sharers, guarantors, and end-of-term expectations.',
+    overview:
+      'This product keeps student lets out of the generic Premium bucket and gives them their own drafting, review flow, and document identity.',
+    whyUseThis: [
+      'Separates student lets from the ordinary premium residential route',
+      'Captures guarantor and student replacement procedure detail cleanly',
+      'Lets end-of-term expectations be recorded explicitly',
+    ],
+    howWizardWorks: [
+      'Capture the student letting setup',
+      'Record the tenant group, guarantor need, and replacement procedure choice',
+      'Review the finished student agreement summary before checkout',
+    ],
+    whoThisIsFor: [
+      'England student houses and student sharer lets',
+      'Landlords who need student-specific drafting and workflow support',
+    ],
+    notFor: [
+      'Ordinary non-student residential lets',
+      'Resident-landlord room lets',
+      'Shared-house cases that are really HMO-led rather than student-led',
+    ],
+    legalExplainer:
+      'The student product is intended to keep student-specific wording, guarantor support, and hand-back expectations out of the generic Premium product and in a dedicated route.',
+    includedHighlights: [
+      'Student setup summary',
+      'Guarantor and replacement-procedure prompts',
+      'End-of-term return-standard capture',
+      'Student move-out and guarantor support schedule',
+    ],
+    documentPreviewAnatomy: [
+      'Agreement cover summary',
+      'Student-specific sharer and guarantor detail',
+      'Return-standard, replacement, and move-out notes',
+    ],
+    internalLinks: [
+      {
+        label: 'Guarantor agreement',
+        href: '/guarantor-agreement-england',
+        description: 'Add a separate guarantor deed if one is needed.',
+      },
+      {
+        label: 'Premium tenancy agreement',
+        href: '/premium-tenancy-agreement',
+        description: 'Use Premium if the let is ordinary residential rather than student-specific.',
+      },
+    ],
+  }),
+  england_hmo_shared_house_tenancy_agreement: buildEnglandTenancyProfile({
+    product: 'england_hmo_shared_house_tenancy_agreement',
+    eyebrow: 'HMO / Shared House Tenancy Agreement',
+    heroTitle: 'Create the dedicated England HMO / shared-house product instead of treating HMO as Premium.',
+    heroSubtitle:
+      'This route is for shared houses and HMO-style occupation where communal areas, sharers, and licensing detail need their own product path.',
+    heroBullets: [
+      'Dedicated HMO/shared-house product',
+      'Communal-area and sharer detail',
+      'Licensing-status prompts built into the flow',
+    ],
+    reviewHighlights: [
+      'Sharer and communal-area summary',
+      'HMO/licensing detail',
+      'Communal cleaning and rules capture',
+    ],
+    reviewSummaryLabels: ['Property', 'Sharers', 'Communal areas', 'Licence status', 'Cleaning'],
+    outputSections: [
+      'Property and parties',
+      'Shared-house and HMO detail',
+      'Communal-area responsibilities',
+      'Sharer controls and access',
+      'House rules appendix and operational controls',
+    ],
+    landingTitle: 'HMO / Shared House Tenancy Agreement England | Dedicated Shared-House Product',
+    landingDescription:
+      'Create a dedicated England HMO / Shared House Tenancy Agreement with communal-area, sharer, and licence-status detail.',
+    landingH1: 'HMO / Shared House Tenancy Agreement for England',
+    landingSubheading:
+      'A dedicated product for England HMO and shared-house setups, separate from Premium.',
+    overview:
+      'Use this route when the house is genuinely a sharer or HMO-style letting and you need the communal-area and occupier detail to live in the primary agreement.',
+    whyUseThis: [
+      'Separates HMO/shared-house logic from the ordinary Premium product',
+      'Captures communal-area, sharer, and cleaning detail in the right place',
+      'Makes HMO/shared-house suitability obvious at the product layer',
+    ],
+    howWizardWorks: [
+      'Capture the shared-house setup and occupier profile',
+      'Record communal areas, licence status, and cleaning arrangements',
+      'Review the finished HMO/shared-house agreement summary before checkout',
+    ],
+    whoThisIsFor: [
+      'England HMO lets and shared houses',
+      'Landlords who need sharer and communal-area drafting in the main agreement',
+    ],
+    notFor: [
+      'Ordinary whole-property residential lets',
+      'Resident-landlord room lets',
+      'Student-led cases better handled through the Student route',
+    ],
+    legalExplainer:
+      'The HMO/shared-house product exists so England HMO and sharer occupation no longer hides inside Premium. The product itself is now the primary shared-house route.',
+    includedHighlights: [
+      'HMO/shared-house setup summary',
+      'Communal-area and licence prompts',
+      'Sharer and cleaning detail in the main agreement',
+      'Dedicated HMO/shared house rules appendix',
+    ],
+    documentPreviewAnatomy: [
+      'Agreement cover summary',
+      'Shared-house and communal-area clauses',
+      'Sharer, cleaning, access, and house-rules detail',
+    ],
+    internalLinks: [
+      {
+        label: 'Student tenancy agreement',
+        href: '/student-tenancy-agreement',
+        description: 'Switch if the occupation is student-led rather than primarily HMO/shared-house led.',
+      },
+      {
+        label: 'Premium tenancy agreement',
+        href: '/premium-tenancy-agreement',
+        description: 'Choose Premium instead for an ordinary let with fuller drafting but no shared-house structure.',
+      },
+    ],
+  }),
+  england_lodger_agreement: buildEnglandTenancyProfile({
+    product: 'england_lodger_agreement',
+    eyebrow: 'Room Let / Lodger Agreement',
+    heroTitle: 'Create the dedicated resident-landlord lodger product instead of forcing a room let into AST/HMO logic.',
+    heroSubtitle:
+      'Use the lodger route when the landlord lives in the property and the occupier is taking a room with shared facilities.',
+    heroBullets: [
+      'Resident-landlord lodger route',
+      'House rules and shared-facility detail',
+      'Separate from the ordinary residential tenancy products',
+    ],
+    reviewHighlights: [
+      'Resident-landlord summary',
+      'Shared-facility and notice-period detail',
+      'House rules captured explicitly',
+    ],
+    reviewSummaryLabels: ['Property', 'Resident landlord', 'Lodger', 'Notice', 'House rules'],
+    outputSections: [
+      'Property and parties',
+      'Room-let and resident-landlord detail',
+      'House rules and shared facilities',
+      'Notice and practical occupation terms',
+      'Lodger house-rules appendix and handover record',
+    ],
+    landingTitle: 'Lodger Agreement England | Resident-Landlord Room Let Product',
+    landingDescription:
+      'Create a dedicated England Lodger Agreement for resident-landlord room lets and licence-style arrangements.',
+    landingH1: 'Room Let / Lodger Agreement for England',
+    landingSubheading:
+      'A dedicated resident-landlord agreement for England room lets, separate from the ordinary tenancy products.',
+    overview:
+      'This product is for resident-landlord room lets and lodger arrangements where the occupier shares the home with the landlord.',
+    whyUseThis: [
+      'Separates lodger agreements from the AST/HMO product family',
+      'Captures shared-facility and house-rule detail clearly',
+      'Keeps resident-landlord facts in a product built for that setup',
+    ],
+    howWizardWorks: [
+      'Confirm the resident-landlord and shared-facility setup',
+      'Capture the room-let terms, notice period, and house rules',
+      'Review the finished lodger agreement summary before checkout',
+    ],
+    whoThisIsFor: [
+      'Live-in landlords renting out a room in England',
+      'Resident-landlord room-let and lodger arrangements',
+    ],
+    notFor: [
+      'Whole-property residential lets',
+      'Non-resident shared houses or HMOs',
+      'Student joint lets that are not resident-landlord arrangements',
+    ],
+    legalExplainer:
+      'The lodger product exists so resident-landlord room lets do not have to be squeezed into the AST or HMO architecture. It is intentionally a separate route.',
+    includedHighlights: [
+      'Resident-landlord suitability prompts',
+      'House-rules and shared-space capture',
+      'Room-let notice-period wording',
+      'Handover record and lodger house-rules appendix',
+    ],
+    documentPreviewAnatomy: [
+      'Agreement cover summary',
+      'Resident-landlord and room-let terms',
+      'House rules, shared facilities, notice wording, and appendices',
+    ],
+    internalLinks: [
+      {
+        label: 'Lodger agreement template guide',
+        href: '/lodger-agreement-template',
+        description: 'Read the wider lodger guidance page.',
+      },
+      {
+        label: 'Standard tenancy agreement',
+        href: '/tenancy-agreement',
+        description: 'Switch to the ordinary residential route if the landlord is not resident.',
+      },
+    ],
+  }),
   guarantor_agreement: {
     product: 'guarantor_agreement',
     icon: icon('46-premium.png'),

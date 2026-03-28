@@ -79,19 +79,54 @@ export const WIZARD_PRODUCT_SEO: Record<string, WizardProductSEO> = {
     canonicalRoute: SEO_LANDING_ROUTES.ast_standard,
   },
   ast_premium: {
-    title: `Premium Tenancy Agreement Wizard | HMO & Guarantor Clauses | ${SEO_PRICES.tenancyPremium.display}`,
+    title: `Premium Tenancy Agreement Wizard | Fuller Residential Drafting | ${SEO_PRICES.tenancyPremium.display}`,
     description:
-      'Create a premium tenancy agreement with HMO clauses, guarantor provisions, inventory, and compliance checklist. All UK jurisdictions supported.',
+      'Create a premium tenancy agreement with fuller ordinary-residential drafting, added operational detail, and guided review. Student, HMO/shared-house, and lodger routes now have dedicated England products.',
     h1: 'Premium Tenancy Agreement Wizard',
     canonicalRoute: SEO_LANDING_ROUTES.ast_premium,
   },
   tenancy_agreement: {
     title: `Tenancy Agreement Wizard | All UK Jurisdictions | from ${SEO_PRICES.tenancyStandard.display}`,
     description:
-      'Generate a compliant tenancy agreement for England (Residential Tenancy Agreement), Wales (Occupation Contract), Scotland (PRT), or Northern Ireland. Standard or Premium options.',
+      'Generate a tenancy agreement for England, Wales, Scotland, or Northern Ireland. England now opens a dedicated chooser for Standard, Premium, Student, HMO/Shared House, and Lodger products.',
     h1: 'Tenancy Agreement Wizard',
     // Maps to standard tenancy agreement landing page
     canonicalRoute: SEO_LANDING_ROUTES.ast_standard,
+  },
+  england_standard_tenancy_agreement: {
+    title: `Standard Tenancy Agreement Wizard | England | ${SEO_PRICES.tenancyStandard.display}`,
+    description:
+      'Generate the ordinary England Standard Tenancy Agreement for a straightforward whole-property residential let.',
+    h1: 'Standard Tenancy Agreement Wizard',
+    canonicalRoute: SEO_LANDING_ROUTES.england_standard_tenancy_agreement,
+  },
+  england_premium_tenancy_agreement: {
+    title: `Premium Tenancy Agreement Wizard | England | ${SEO_PRICES.tenancyPremium.display}`,
+    description:
+      'Generate the England Premium Tenancy Agreement for an ordinary residential let needing fuller drafting and more operational detail.',
+    h1: 'Premium Tenancy Agreement Wizard',
+    canonicalRoute: SEO_LANDING_ROUTES.england_premium_tenancy_agreement,
+  },
+  england_student_tenancy_agreement: {
+    title: `Student Tenancy Agreement Wizard | England | ${SEO_PRICES.tenancyStudent.display}`,
+    description:
+      'Generate the England Student Tenancy Agreement with student-focused sharer, guarantor, and end-of-term detail.',
+    h1: 'Student Tenancy Agreement Wizard',
+    canonicalRoute: SEO_LANDING_ROUTES.england_student_tenancy_agreement,
+  },
+  england_hmo_shared_house_tenancy_agreement: {
+    title: `HMO / Shared House Tenancy Agreement Wizard | England | ${SEO_PRICES.tenancyHmoShared.display}`,
+    description:
+      'Generate the England HMO / Shared House Tenancy Agreement with communal-area and sharer-specific drafting.',
+    h1: 'HMO / Shared House Tenancy Agreement Wizard',
+    canonicalRoute: SEO_LANDING_ROUTES.england_hmo_shared_house_tenancy_agreement,
+  },
+  england_lodger_agreement: {
+    title: `Lodger Agreement Wizard | England | ${SEO_PRICES.tenancyLodger.display}`,
+    description:
+      'Generate the England Room Let / Lodger Agreement for a resident-landlord room-let or licence arrangement.',
+    h1: 'Lodger Agreement Wizard',
+    canonicalRoute: SEO_LANDING_ROUTES.england_lodger_agreement,
   },
 };
 

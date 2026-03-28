@@ -1,10 +1,7 @@
 // src/lib/pricing/products.ts
 // Single source of truth for display pricing, labels, descriptions, and wizard hrefs
 
-import {
-  ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL,
-  ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL,
-} from '@/lib/tenancy/england-agreement-constants';
+import type { EnglandModernTenancyProductSku } from '@/lib/tenancy/england-product-model';
 
 export interface PriceDefinition {
   amount: number;
@@ -40,6 +37,9 @@ export const SEO_PRICES = {
   moneyClaim: { amount: 29.99, display: formatPriceLabel(29.99) },
   tenancyStandard: { amount: 14.99, display: formatPriceLabel(14.99) },
   tenancyPremium: { amount: 24.99, display: formatPriceLabel(24.99) },
+  tenancyStudent: { amount: 24.99, display: formatPriceLabel(24.99) },
+  tenancyHmoShared: { amount: 34.99, display: formatPriceLabel(34.99) },
+  tenancyLodger: { amount: 14.99, display: formatPriceLabel(14.99) },
   residentialLettingStandard: { amount: 9.99, display: formatPriceLabel(9.99) },
   residentialLettingPremium: { amount: 12.99, display: formatPriceLabel(12.99) },
 } as const satisfies Record<string, PriceDefinition>;
@@ -54,6 +54,9 @@ export const ALLOWED_SEO_PRICES = new Set([
   SEO_PRICES.moneyClaim.display,
   SEO_PRICES.tenancyStandard.display,
   SEO_PRICES.tenancyPremium.display,
+  SEO_PRICES.tenancyStudent.display,
+  SEO_PRICES.tenancyHmoShared.display,
+  SEO_PRICES.tenancyLodger.display,
   SEO_PRICES.residentialLettingStandard.display,
   SEO_PRICES.residentialLettingPremium.display,
 ]);
@@ -70,6 +73,11 @@ export const SEO_LANDING_ROUTES = {
   money_claim: '/money-claim',
   ast_standard: '/tenancy-agreement',
   ast_premium: '/premium-tenancy-agreement',
+  england_standard_tenancy_agreement: '/tenancy-agreement',
+  england_premium_tenancy_agreement: '/premium-tenancy-agreement',
+  england_student_tenancy_agreement: '/student-tenancy-agreement',
+  england_hmo_shared_house_tenancy_agreement: '/hmo-shared-house-tenancy-agreement',
+  england_lodger_agreement: '/lodger-agreement',
   residential_tenancy_application: '/tenancy-agreement',
 } as const;
 
@@ -80,6 +88,7 @@ export type ProductSku =
   | 'sc_money_claim'
   | 'ast_standard'
   | 'ast_premium'
+  | EnglandModernTenancyProductSku
   | 'residential_tenancy_application'
   ;
 
@@ -148,9 +157,10 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
   },
   ast_standard: {
     sku: 'ast_standard',
-    label: ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL,
-    shortLabel: 'Periodic Agreement',
-    description: 'RentersÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ Rights compliant England assured periodic tenancy agreement, with jurisdiction-aware variants for the rest of the UK',
+    label: 'Standard Tenancy Agreement',
+    shortLabel: 'Standard',
+    description:
+      'Migration-safe standard tenancy agreement entry route for England, Wales, Scotland, and Northern Ireland',
     price: SEO_PRICES.tenancyStandard.amount,
     displayPrice: SEO_PRICES.tenancyStandard.display,
     wizardHref: '/wizard?product=ast_standard&src=product_page&topic=tenancy',
@@ -158,13 +168,74 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
   },
   ast_premium: {
     sku: 'ast_premium',
-    label: ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL,
-    shortLabel: 'Premium Periodic',
-    description: 'RentersÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ Rights compliant England premium assured periodic tenancy agreement with HMO, shared-living, and student-ready clauses',
+    label: 'Premium Tenancy Agreement',
+    shortLabel: 'Premium',
+    description:
+      'Migration-safe premium tenancy agreement entry route for England and premium-tier tenancy flows in the rest of the UK',
     price: SEO_PRICES.tenancyPremium.amount,
     displayPrice: SEO_PRICES.tenancyPremium.display,
     wizardHref: '/wizard?product=ast_premium&src=product_page&topic=tenancy',
     productPageHref: SEO_LANDING_ROUTES.ast_premium,
+  },
+  england_standard_tenancy_agreement: {
+    sku: 'england_standard_tenancy_agreement',
+    label: 'Standard Tenancy Agreement',
+    shortLabel: 'Standard',
+    description:
+      'Ordinary England residential tenancy agreement for a straightforward whole-property let',
+    price: SEO_PRICES.tenancyStandard.amount,
+    displayPrice: SEO_PRICES.tenancyStandard.display,
+    wizardHref:
+      '/wizard?product=england_standard_tenancy_agreement&jurisdiction=england&src=product_page&topic=tenancy',
+    productPageHref: SEO_LANDING_ROUTES.england_standard_tenancy_agreement,
+  },
+  england_premium_tenancy_agreement: {
+    sku: 'england_premium_tenancy_agreement',
+    label: 'Premium Tenancy Agreement',
+    shortLabel: 'Premium',
+    description:
+      'Ordinary England residential premium tenancy agreement with fuller drafting and management options',
+    price: SEO_PRICES.tenancyPremium.amount,
+    displayPrice: SEO_PRICES.tenancyPremium.display,
+    wizardHref:
+      '/wizard?product=england_premium_tenancy_agreement&jurisdiction=england&src=product_page&topic=tenancy',
+    productPageHref: SEO_LANDING_ROUTES.england_premium_tenancy_agreement,
+  },
+  england_student_tenancy_agreement: {
+    sku: 'england_student_tenancy_agreement',
+    label: 'Student Tenancy Agreement',
+    shortLabel: 'Student',
+    description:
+      'England student-focused tenancy agreement for sharers, guarantors, and end-of-term expectations',
+    price: SEO_PRICES.tenancyStudent.amount,
+    displayPrice: SEO_PRICES.tenancyStudent.display,
+    wizardHref:
+      '/wizard?product=england_student_tenancy_agreement&jurisdiction=england&src=product_page&topic=tenancy',
+    productPageHref: SEO_LANDING_ROUTES.england_student_tenancy_agreement,
+  },
+  england_hmo_shared_house_tenancy_agreement: {
+    sku: 'england_hmo_shared_house_tenancy_agreement',
+    label: 'HMO / Shared House Tenancy Agreement',
+    shortLabel: 'HMO / Shared',
+    description:
+      'England shared-house and HMO tenancy agreement with sharer, communal-area, and licensing detail',
+    price: SEO_PRICES.tenancyHmoShared.amount,
+    displayPrice: SEO_PRICES.tenancyHmoShared.display,
+    wizardHref:
+      '/wizard?product=england_hmo_shared_house_tenancy_agreement&jurisdiction=england&src=product_page&topic=tenancy',
+    productPageHref: SEO_LANDING_ROUTES.england_hmo_shared_house_tenancy_agreement,
+  },
+  england_lodger_agreement: {
+    sku: 'england_lodger_agreement',
+    label: 'Room Let / Lodger Agreement',
+    shortLabel: 'Lodger',
+    description:
+      'England resident-landlord lodger agreement for a room let or licence-style arrangement',
+    price: SEO_PRICES.tenancyLodger.amount,
+    displayPrice: SEO_PRICES.tenancyLodger.display,
+    wizardHref:
+      '/wizard?product=england_lodger_agreement&jurisdiction=england&src=product_page&topic=tenancy',
+    productPageHref: SEO_LANDING_ROUTES.england_lodger_agreement,
   },
   residential_tenancy_application: {
     sku: 'residential_tenancy_application',
@@ -186,6 +257,15 @@ export const PRODUCT_PRICE_LABELS = {
   sc_money_claim: PRODUCTS.sc_money_claim.displayPrice,
   ast_standard: PRODUCTS.ast_standard.displayPrice,
   ast_premium: PRODUCTS.ast_premium.displayPrice,
+  england_standard_tenancy_agreement:
+    PRODUCTS.england_standard_tenancy_agreement.displayPrice,
+  england_premium_tenancy_agreement:
+    PRODUCTS.england_premium_tenancy_agreement.displayPrice,
+  england_student_tenancy_agreement:
+    PRODUCTS.england_student_tenancy_agreement.displayPrice,
+  england_hmo_shared_house_tenancy_agreement:
+    PRODUCTS.england_hmo_shared_house_tenancy_agreement.displayPrice,
+  england_lodger_agreement: PRODUCTS.england_lodger_agreement.displayPrice,
   residential_tenancy_application: PRODUCTS.residential_tenancy_application.displayPrice,
 } as const;
 
@@ -196,18 +276,33 @@ export const PRODUCT_PRICE_AMOUNT_STRINGS = {
   sc_money_claim: formatPriceAmount(PRODUCTS.sc_money_claim.price),
   ast_standard: formatPriceAmount(PRODUCTS.ast_standard.price),
   ast_premium: formatPriceAmount(PRODUCTS.ast_premium.price),
+  england_standard_tenancy_agreement: formatPriceAmount(
+    PRODUCTS.england_standard_tenancy_agreement.price
+  ),
+  england_premium_tenancy_agreement: formatPriceAmount(
+    PRODUCTS.england_premium_tenancy_agreement.price
+  ),
+  england_student_tenancy_agreement: formatPriceAmount(
+    PRODUCTS.england_student_tenancy_agreement.price
+  ),
+  england_hmo_shared_house_tenancy_agreement: formatPriceAmount(
+    PRODUCTS.england_hmo_shared_house_tenancy_agreement.price
+  ),
+  england_lodger_agreement: formatPriceAmount(
+    PRODUCTS.england_lodger_agreement.price
+  ),
   residential_tenancy_application: formatPriceAmount(
     PRODUCTS.residential_tenancy_application.price
   ),
 } as const;
 
 export const TENANCY_AGREEMENT_PRICE_RANGE = formatPriceRangeLabel([
-  PRODUCTS.ast_standard.price,
-  PRODUCTS.ast_premium.price,
+  PRODUCTS.england_standard_tenancy_agreement.price,
+  PRODUCTS.england_hmo_shared_house_tenancy_agreement.price,
 ]);
 
 export const TENANCY_AGREEMENT_FROM_PRICE = formatFromPriceLabel(
-  PRODUCTS.ast_standard.price
+  PRODUCTS.england_standard_tenancy_agreement.price
 );
 
 export const LANDLORD_DOCUMENT_PRICE_RANGE = formatPriceRangeLabel([
@@ -285,6 +380,26 @@ export const REGIONAL_PRODUCT_AVAILABILITY: Record<
   },
   ast_premium: {
     available: ['england', 'wales', 'scotland', 'northern-ireland'],
+  },
+  england_standard_tenancy_agreement: {
+    available: ['england'],
+    badge: 'England only',
+  },
+  england_premium_tenancy_agreement: {
+    available: ['england'],
+    badge: 'England only',
+  },
+  england_student_tenancy_agreement: {
+    available: ['england'],
+    badge: 'England only',
+  },
+  england_hmo_shared_house_tenancy_agreement: {
+    available: ['england'],
+    badge: 'England only',
+  },
+  england_lodger_agreement: {
+    available: ['england'],
+    badge: 'England only',
   },
   residential_tenancy_application: {
     available: [],

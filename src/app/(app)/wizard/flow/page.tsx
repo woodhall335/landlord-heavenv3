@@ -15,6 +15,7 @@ import { EvictionSectionFlow } from '@/components/wizard/flows/EvictionSectionFl
 import { NoticeOnlySectionFlow } from '@/components/wizard/flows/NoticeOnlySectionFlow';
 import { TenancySectionFlow } from '@/components/wizard/flows/TenancySectionFlow';
 import { ResidentialStandaloneSectionFlow } from '@/components/wizard/flows/ResidentialStandaloneSectionFlow';
+import { EnglandTenancyProductChooser } from '@/components/wizard/EnglandTenancyProductChooser';
 import type { ExtendedWizardQuestion } from '@/lib/wizard/types';
 import { trackWizardStartWithAttribution } from '@/lib/analytics';
 import {
@@ -30,6 +31,10 @@ import {
   isResidentialLettingProductSku,
   type ResidentialLettingProductSku,
 } from '@/lib/residential-letting/products';
+import {
+  getEnglandCanonicalTenancyProduct,
+  type EnglandModernTenancyProductSku,
+} from '@/lib/tenancy/england-product-model';
 import {
   getRetiredPublicSkuRedirectDestination,
   isRetiredPublicSku,
@@ -86,6 +91,7 @@ function WizardFlowContent() {
   // SAFETY GUARD: For editing paid cases, use order's product_type to prevent downgrade
   const [effectiveProduct, setEffectiveProduct] = useState<string | null>(product);
   const [orderCheckDone, setOrderCheckDone] = useState(!editCaseId); // Skip check if no editCaseId
+  const [paidOrderProduct, setPaidOrderProduct] = useState<string | null>(null);
 
   // Check order status to get authoritative product_type for paid cases
   useEffect(() => {
@@ -100,17 +106,21 @@ function WizardFlowContent() {
           if (data.paid && data.product_type) {
             console.log('[WizardFlow] Paid case detected - using order product_type:', data.product_type);
             setEffectiveProduct(data.product_type);
+            setPaidOrderProduct(data.product_type);
           } else {
             // Not paid, use URL product param
             setEffectiveProduct(product);
+            setPaidOrderProduct(null);
           }
         } else {
           // API error or no order found, fall back to URL param
           setEffectiveProduct(product);
+          setPaidOrderProduct(null);
         }
       } catch (err) {
         console.error('[WizardFlow] Failed to check order status:', err);
         setEffectiveProduct(product);
+        setPaidOrderProduct(null);
       } finally {
         setOrderCheckDone(true);
       }
@@ -133,8 +143,21 @@ function WizardFlowContent() {
   }, [editCaseId, hasRequiredParams, product, router]);
 
   // Normalize product for Ask Heaven / wizard - use effectiveProduct (order-aware)
-  const normalizedProduct = effectiveProduct;
-  const isResidentialStandaloneProduct = isResidentialStandaloneTenancyProduct(normalizedProduct);
+  const isPaidLegacyEnglandTenancy =
+    paidOrderProduct === 'ast_standard' || paidOrderProduct === 'ast_premium';
+  const canonicalEnglandProduct =
+    jurisdiction === 'england' && !isPaidLegacyEnglandTenancy
+      ? getEnglandCanonicalTenancyProduct(effectiveProduct)
+      : null;
+  const normalizedProduct = canonicalEnglandProduct ?? effectiveProduct;
+  const isResidentialStandaloneProduct = isResidentialStandaloneTenancyProduct(
+    normalizedProduct
+  );
+  const showEnglandTenancyChooser =
+    type === 'tenancy_agreement' &&
+    jurisdiction === 'england' &&
+    !editCaseId &&
+    effectiveProduct === 'tenancy_agreement';
   const tenancyFlowProduct: TenancyFlowProduct =
     normalizedProduct === 'ast_standard' ||
     normalizedProduct === 'ast_premium' ||
@@ -241,7 +264,10 @@ function WizardFlowContent() {
             rawProduct === 'tenancy_agreement' ||
             isResidentialStandaloneTenancyProduct(rawProduct))
         ) {
-          startProduct = rawProduct;
+          startProduct =
+            jurisdiction === 'england' && !editCaseId
+              ? getEnglandCanonicalTenancyProduct(rawProduct) ?? rawProduct
+              : rawProduct;
         } else {
           startProduct = 'tenancy_agreement';
         }
@@ -264,7 +290,11 @@ function WizardFlowContent() {
           'Content-Type': 'application/json',
           ...getSessionTokenHeaders(),
         },
-        body: JSON.stringify({ product: startProduct, jurisdiction }),
+        body: JSON.stringify({
+          product: startProduct,
+          jurisdiction,
+          requested_product: rawProduct || startProduct,
+        }),
       });
 
       const data = await response.json();
@@ -300,6 +330,11 @@ function WizardFlowContent() {
     }
 
     // All supported case types now use structured / section flows
+    if (showEnglandTenancyChooser) {
+      setLoading(false);
+      return;
+    }
+
     if (type === 'tenancy_agreement' || type === 'money_claim' || type === 'eviction') {
       void startStructuredWizard();
     } else if (editCaseId) {
@@ -308,7 +343,7 @@ function WizardFlowContent() {
     } else {
       setLoading(false);
     }
-  }, [editCaseId, hasRequiredParams, startStructuredWizard, type]);
+  }, [editCaseId, hasRequiredParams, showEnglandTenancyChooser, startStructuredWizard, type]);
 
   // Validate params
   if (!hasRequiredParams) {
@@ -348,8 +383,21 @@ function WizardFlowContent() {
     router.push(`/wizard/preview/${completedCaseId}`);
   };
 
+  const handleSelectEnglandProduct = (selectedProduct: EnglandModernTenancyProductSku) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('type', 'tenancy_agreement');
+    params.set('jurisdiction', 'england');
+    params.set('product', selectedProduct);
+    params.delete('case_id');
+    router.push(`/wizard/flow?${params.toString()}`);
+  };
+
   // Show loading state while initializing or checking order status
   if (loading || !caseId || !orderCheckDone) {
+    if (showEnglandTenancyChooser && !editCaseId) {
+      return <EnglandTenancyProductChooser onSelect={handleSelectEnglandProduct} />;
+    }
+
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
@@ -361,6 +409,10 @@ function WizardFlowContent() {
         </div>
       </div>
     );
+  }
+
+  if (showEnglandTenancyChooser) {
+    return <EnglandTenancyProductChooser onSelect={handleSelectEnglandProduct} />;
   }
 
   // 🟦 NEW: For money_claim, use the section-based premium flow

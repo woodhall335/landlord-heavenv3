@@ -1,14 +1,14 @@
 /**
- * Tenancy Agreement Variant Validator
+ * Legacy Tenancy Tier Validator
  *
- * Deterministic validator that enforces the "2-variants only" rule:
+ * Deterministic validator for the shared legacy tier model:
  * - Standard: Base tenancy agreement ONLY, NO HMO clauses
- * - Premium: HMO-specific tenancy agreement with multi-occupancy clauses
+ * - Premium: Enhanced tier with HMO/shared-house clauses in the legacy templates
  *
- * This validator ensures consistency between:
- * - pack-contents.ts (document lists)
- * - ast-generator.ts (template paths)
- * - Actual template content (HMO markers)
+ * This validator exists to protect the historical ast_standard / ast_premium
+ * generation path and the non-England tiered tenancy model. Modern England
+ * standalone products are validated elsewhere and are intentionally NOT
+ * represented by this 2-tier configuration.
  */
 
 import fs from 'fs';
@@ -31,7 +31,7 @@ export interface TenancyVariantConfig {
   templatePath: string;
   documentKey: string;
   documentTitle: string;
-  mustHaveHMO: boolean;  // Premium must have HMO
+  mustHaveHMO: boolean;  // Legacy premium template must retain HMO/shared-house markers
   mustNotHaveHMO: boolean; // Standard must NOT have HMO
 }
 
@@ -52,8 +52,9 @@ export interface JurisdictionVariants {
 // ============================================================================
 
 /**
- * Canonical configuration for all tenancy agreement variants.
- * This is the SINGLE SOURCE OF TRUTH for what variants exist.
+ * Canonical configuration for the legacy tenancy tier model.
+ * This is the SINGLE SOURCE OF TRUTH for the historical ast_standard /
+ * ast_premium tier abstraction across the shared legacy generator stack.
  */
 export const TENANCY_VARIANT_CONFIGS: Record<TenancyJurisdiction, JurisdictionVariants> = {
   england: {
@@ -227,7 +228,7 @@ export function validateVariantConfig(
   const errors: string[] = [];
   const warnings: string[] = [];
 
-  // Check HMO requirements for premium tier
+  // Check legacy HMO/shared-house requirements for the premium tier
   if (config.mustHaveHMO) {
     const hmoCheck = templateContainsHMOMarkers(templateContent);
     if (!hmoCheck.found) {
@@ -287,11 +288,11 @@ export function validateJurisdiction(
     return { valid: false, errors, warnings };
   }
 
-  // Validate exactly 2 variants exist
+  // Validate exactly 2 legacy variants exist
   const tierCount = [variants.standard, variants.premium].filter(Boolean).length;
   if (tierCount !== 2) {
     errors.push(
-      `[${jurisdiction}] Must have exactly 2 variants (standard + premium), found ${tierCount}`
+       `[${jurisdiction}] Must have exactly 2 legacy variants (standard + premium), found ${tierCount}`
     );
   }
 
@@ -492,13 +493,13 @@ export interface AuditTableRow {
 }
 
 /**
- * COMPREHENSIVE INVARIANT ASSERTION
+ * COMPREHENSIVE LEGACY-TIER INVARIANT ASSERTION
  *
- * This is the SINGLE FUNCTION that validates ALL tenancy variant rules:
+ * This is the SINGLE FUNCTION that validates the shared legacy tier rules:
  * 1) Exactly 4 jurisdictions (england, wales, scotland, northern-ireland)
- * 2) Exactly 2 variants per jurisdiction (standard + premium)
+ * 2) Exactly 2 legacy tiers per jurisdiction (standard + premium)
  * 3) Standard templates contain NO forbidden HMO markers
- * 4) Premium templates contain ALL required HMO markers (minimum threshold)
+ * 4) Legacy premium templates contain ALL required HMO markers (minimum threshold)
  * 5) Pack-contents includes the correct primary agreement document per tier per jurisdiction
  * 6) Document keys are consistent across config, pack-contents, and generator
  *
@@ -581,29 +582,29 @@ export function assertTenancyVariantsInvariant(options: {
         standardHMOCount = forbiddenCheck.markers.length;
       }
 
-      // INVARIANT 4: Premium templates MUST have HMO
+      // INVARIANT 4: Legacy premium templates MUST keep historical HMO/shared-house markers
       if (tier === 'premium') {
         const hmoCheck = templateContainsHMOMarkers(templateContent);
         premiumHMOCount = hmoCheck.markers.length;
 
         if (!hmoCheck.found) {
           errors.push(
-            `[${jurisdiction}/premium] INVARIANT VIOLATION: Premium template missing HMO markers. ` +
-            `Premium tier MUST include HMO clauses (Joint and Several Liability, shared facilities, etc.)`
+             `[${jurisdiction}/premium] INVARIANT VIOLATION: Legacy premium template missing HMO markers. ` +
+             `Historical ast_premium generation expects HMO/shared-house clauses (Joint and Several Liability, shared facilities, etc.)`
           );
           rowStatus = 'FAIL';
         } else if (hmoCheck.markers.length < 3) {
           warnings.push(
-            `[${jurisdiction}/premium] WARNING: Premium template has only ${hmoCheck.markers.length} HMO markers. ` +
-            `Consider adding more for comprehensive HMO coverage.`
+             `[${jurisdiction}/premium] WARNING: Legacy premium template has only ${hmoCheck.markers.length} HMO markers. ` +
+             `Consider adding more for comprehensive historical HMO/shared-house coverage.`
           );
         }
 
         // Must have "Joint and Several Liability"
         if (!templateContent.toLowerCase().includes('joint and several liability')) {
           warnings.push(
-            `[${jurisdiction}/premium] WARNING: Premium template missing "Joint and Several Liability" clause. ` +
-            `This is standard for HMO agreements.`
+             `[${jurisdiction}/premium] WARNING: Legacy premium template missing "Joint and Several Liability" clause. ` +
+             `This is standard for shared-house/HMO agreements.`
           );
         }
       }
@@ -641,11 +642,11 @@ export function assertTenancyVariantsInvariant(options: {
     throw new Error(
       `Tenancy Variant Invariants FAILED!\n\n` +
       `ERRORS:\n${errors.map(e => `  - ${e}`).join('\n')}\n\n` +
-      `The 2-variants rule requires:\n` +
+       `The legacy 2-variants rule requires:\n` +
       `  1. Exactly 4 jurisdictions (england, wales, scotland, northern-ireland)\n` +
       `  2. Exactly 2 variants per jurisdiction (standard + premium)\n` +
       `  3. Standard templates: NO HMO markers\n` +
-      `  4. Premium templates: MUST have HMO markers\n` +
+       `  4. Legacy premium templates: MUST have HMO markers\n` +
       `  5. Pack-contents: exactly 1 document per tier per jurisdiction\n`
     );
   }

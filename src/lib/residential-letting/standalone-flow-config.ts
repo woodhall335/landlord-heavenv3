@@ -1,7 +1,8 @@
-import {
+﻿import {
   RESIDENTIAL_LETTING_PRODUCTS,
   type ResidentialLettingProductSku,
 } from '@/lib/residential-letting/products';
+import { getEnglandTenancyPurpose } from '@/lib/tenancy/england-reform';
 
 export type StandaloneFieldType =
   | 'text'
@@ -76,7 +77,12 @@ export interface StandaloneStepConfig {
   title: string;
   description: string;
   fields?: StandaloneFieldConfig[];
+  visibleWhen?: (facts: Record<string, any>) => boolean;
 }
+
+export type StandaloneRequiredFacts =
+  | string[]
+  | ((facts: Record<string, any>) => string[]);
 
 export interface ResidentialStandaloneFlowConfig {
   product: ResidentialLettingProductSku;
@@ -85,7 +91,7 @@ export interface ResidentialStandaloneFlowConfig {
   warnings: string[];
   upsellRecommendations: ResidentialLettingProductSku[];
   reviewSummaryFields: string[];
-  requiredFacts: string[];
+  requiredFacts: StandaloneRequiredFacts;
   completionRules: Array<(facts: Record<string, any>) => string | null>;
   steps: StandaloneStepConfig[];
 }
@@ -161,6 +167,879 @@ function commonEvidenceAdvisory(items: string[]): StandaloneFieldConfig {
   };
 }
 
+function commonPropertyProfileStep(): StandaloneStepConfig {
+  return {
+    id: 'property_profile',
+    title: 'Property profile',
+    description: 'Capture the practical setup of the property and what is being let.',
+    fields: [
+      {
+        id: 'number_of_bedrooms',
+        label: 'Number of bedrooms',
+        type: 'number',
+        required: true,
+      },
+      {
+        id: 'furnished_status',
+        label: 'Furnished status',
+        type: 'select',
+        required: true,
+        options: [
+          { value: 'furnished', label: 'Furnished' },
+          { value: 'part_furnished', label: 'Part furnished' },
+          { value: 'unfurnished', label: 'Unfurnished' },
+        ],
+      },
+      {
+        id: 'parking_available',
+        label: 'Parking included',
+        type: 'radio',
+        required: true,
+        options: [
+          { value: 'yes', label: 'Yes' },
+          { value: 'no', label: 'No' },
+        ],
+      },
+    ],
+  };
+}
+
+function commonLandlordStep(title = 'Landlord details'): StandaloneStepConfig {
+  return {
+    id: 'landlord',
+    title,
+    description: 'Capture the landlord identity and contact details for the agreement and notices.',
+    fields: [
+      { id: 'landlord_full_name', label: 'Landlord full name', type: 'text', required: true },
+      { id: 'landlord_email', label: 'Landlord email', type: 'text', required: true },
+      { id: 'landlord_phone', label: 'Landlord phone', type: 'text', required: true },
+      { id: 'landlord_address_line1', label: 'Landlord service address line 1', type: 'text', required: true },
+      { id: 'landlord_address_town', label: 'Landlord town / city', type: 'text', required: true },
+      { id: 'landlord_address_postcode', label: 'Landlord postcode', type: 'text', required: true },
+    ],
+  };
+}
+
+function commonTenantStep(title = 'Tenant details', description = 'Identify the occupier or tenant group who will sign the agreement.'): StandaloneStepConfig {
+  return {
+    id: 'tenant',
+    title,
+    description,
+    fields: [
+      { id: 'tenant_full_name', label: 'Tenant full name(s)', type: 'text', required: true, helpText: 'Use comma-separated names if there is more than one named tenant.' },
+      { id: 'tenant_email', label: 'Lead tenant email', type: 'text', required: true },
+      { id: 'tenant_phone', label: 'Lead tenant phone', type: 'text', required: true },
+      { id: 'number_of_tenants', label: 'Number of named occupiers', type: 'number', required: true },
+    ],
+  };
+}
+
+function commonTenancyCommercialsStep(title = 'Tenancy terms'): StandaloneStepConfig {
+  return {
+    id: 'tenancy_terms',
+    title,
+    description: 'Set the start date, payment cycle, and key commercial terms for the agreement.',
+    fields: [
+      { id: 'tenancy_start_date', label: 'Start date', type: 'date', required: true },
+      { id: 'rent_amount', label: 'Rent amount', type: 'currency', required: true },
+      {
+        id: 'rent_frequency',
+        label: 'Rent frequency',
+        type: 'select',
+        required: true,
+        options: [
+          { value: 'monthly', label: 'Monthly' },
+          { value: 'weekly', label: 'Weekly' },
+          { value: 'quarterly', label: 'Quarterly' },
+          { value: 'yearly', label: 'Yearly' },
+        ],
+      },
+      { id: 'rent_due_day', label: 'Rent due day', type: 'text', required: true },
+      {
+        id: 'payment_method',
+        label: 'Payment method',
+        type: 'select',
+        required: true,
+        options: [
+          { value: 'bank_transfer', label: 'Bank transfer' },
+          { value: 'standing_order', label: 'Standing order' },
+          { value: 'cash', label: 'Cash' },
+        ],
+      },
+      { id: 'deposit_amount', label: 'Deposit amount', type: 'currency', required: true },
+      {
+        id: 'bills_included_in_rent',
+        label: 'Bills included in rent',
+        type: 'radio',
+        required: true,
+        options: [
+          { value: 'yes', label: 'Yes' },
+          { value: 'no', label: 'No' },
+        ],
+      },
+      {
+        id: 'included_bills_notes',
+        label: 'Included bills details',
+        type: 'textarea',
+        visibleWhen: (facts) => facts.bills_included_in_rent === 'yes',
+      },
+    ],
+  };
+}
+
+function commonRulesAndAccessStep(): StandaloneStepConfig {
+  return {
+    id: 'rules_and_access',
+    title: 'Rules and access',
+    description: 'Capture the practical occupation rules and access expectations for the finished agreement.',
+    fields: [
+      {
+        id: 'landlord_access_notice',
+        label: 'Non-emergency access notice',
+        type: 'select',
+        required: true,
+        options: [
+          { value: '24 hours', label: '24 hours' },
+          { value: '48 hours', label: '48 hours' },
+          { value: '72 hours', label: '72 hours' },
+        ],
+      },
+      {
+        id: 'inspection_frequency',
+        label: 'Inspection frequency',
+        type: 'select',
+        required: true,
+        options: [
+          { value: 'quarterly', label: 'Quarterly' },
+          { value: 'every_6_months', label: 'Every 6 months' },
+          { value: 'annually', label: 'Annually' },
+          { value: 'as_needed', label: 'As needed' },
+        ],
+      },
+      {
+        id: 'pets_allowed',
+        label: 'Pets authorised at the start',
+        type: 'radio',
+        required: true,
+        options: [
+          { value: 'yes', label: 'Yes' },
+          { value: 'no', label: 'No' },
+        ],
+      },
+      {
+        id: 'smoking_allowed',
+        label: 'Smoking inside',
+        type: 'select',
+        required: true,
+        options: [
+          { value: 'no', label: 'No' },
+          { value: 'yes', label: 'Yes' },
+          { value: 'vaping_only', label: 'Vaping only' },
+        ],
+      },
+      {
+        id: 'subletting_allowed',
+        label: 'Subletting / Airbnb policy',
+        type: 'select',
+        required: true,
+        options: [
+          { value: 'not_allowed', label: 'Not allowed' },
+          { value: 'written_consent', label: 'Only with written consent' },
+          { value: 'allowed', label: 'Allowed' },
+        ],
+      },
+      { id: 'additional_terms', label: 'Additional bespoke terms', type: 'textarea' },
+    ],
+  };
+}
+
+const ENGLAND_ASSURED_PRODUCTS = new Set<ResidentialLettingProductSku>([
+  'england_standard_tenancy_agreement',
+  'england_premium_tenancy_agreement',
+  'england_student_tenancy_agreement',
+  'england_hmo_shared_house_tenancy_agreement',
+]);
+
+const ENGLAND_ASSURED_TRANSITION_REQUIRED_FACTS: string[] = [
+  'england_tenancy_purpose',
+  'property_address_line1',
+  'property_address_town',
+  'property_address_postcode',
+  'landlord_full_name',
+  'landlord_address_line1',
+  'landlord_address_town',
+  'landlord_address_postcode',
+  'landlord_email',
+  'landlord_phone',
+  'tenant_full_name',
+  'tenant_email',
+  'tenant_phone',
+  'number_of_tenants',
+  'tenancy_start_date',
+  'existing_written_tenancy_transition',
+] as const;
+
+const ENGLAND_ASSURED_BASE_REQUIRED_FACTS: string[] = [
+  'england_tenancy_purpose',
+  'property_address_line1',
+  'property_address_town',
+  'property_address_postcode',
+  'landlord_full_name',
+  'landlord_address_line1',
+  'landlord_address_town',
+  'landlord_address_postcode',
+  'tenant_full_name',
+  'number_of_tenants',
+  'tenancy_start_date',
+  'rent_amount',
+  'rent_frequency',
+  'rent_due_day',
+  'payment_method',
+  'deposit_amount',
+  'tenant_notice_period',
+  'rent_increase_method',
+  'bills_included_in_rent',
+  'england_rent_in_advance_compliant',
+  'england_no_bidding_confirmed',
+  'england_no_discrimination_confirmed',
+  'tenant_improvements_allowed_with_consent',
+  'supported_accommodation_tenancy',
+  'relevant_gas_fitting_present',
+  'epc_rating',
+  'right_to_rent_check_date',
+  'electrical_safety_certificate',
+  'smoke_alarms_fitted',
+  'carbon_monoxide_alarms',
+  'how_to_rent_provided',
+  'landlord_access_notice',
+  'inspection_frequency',
+  'pets_allowed',
+  'smoking_allowed',
+  'subletting_allowed',
+] as const;
+
+const PRIOR_NOTICE_GROUND_OPTIONS: StandaloneFieldOption[] = [
+  { value: 'ground_2za_superior_lease_sale', label: 'Ground 2ZA: superior lease sale provision' },
+  { value: 'ground_2zb_superior_lease_break', label: 'Ground 2ZB: superior lease break provision' },
+  { value: 'ground_2zc_superior_lease_redevelopment', label: 'Ground 2ZC: superior lease redevelopment provision' },
+  { value: 'ground_2zd_superior_lease_landlord_occupation', label: 'Ground 2ZD: superior lease occupation provision' },
+  { value: 'ground_4_student_occupation', label: 'Ground 4: student occupation' },
+  { value: 'ground_4a_students_for_new_students', label: 'Ground 4A: student property for incoming students' },
+  { value: 'ground_5_minister_of_religion', label: 'Ground 5: minister of religion' },
+  { value: 'ground_5a_agricultural_worker', label: 'Ground 5A: agricultural worker' },
+  { value: 'ground_5b_employment_requirement', label: 'Ground 5B: employment requirement' },
+  { value: 'ground_5c_end_of_landlord_employment', label: 'Ground 5C: end of landlord employment' },
+  { value: 'ground_5d_end_of_employment_requirement', label: 'Ground 5D: end of employment requirement' },
+  { value: 'ground_5e_supported_accommodation', label: 'Ground 5E: occupation as supported accommodation' },
+  { value: 'ground_5f_supported_dwelling_house', label: 'Ground 5F: dwelling occupied as supported accommodation' },
+  { value: 'ground_5g_homelessness_duty', label: 'Ground 5G: homelessness duty accommodation' },
+  { value: 'ground_5h_stepping_stone', label: 'Ground 5H: stepping-stone accommodation' },
+  { value: 'ground_18_supported_accommodation', label: 'Ground 18: supported accommodation' },
+];
+
+const SEPARATE_BILL_TYPE_OPTIONS: StandaloneFieldOption[] = [
+  { value: 'council_tax', label: 'Council tax' },
+  { value: 'gas_electric_water', label: 'Utilities: gas, electricity, water, or sewage' },
+  { value: 'tv_licence', label: 'TV licence' },
+  { value: 'communications', label: 'Communications: telephone, internet, cable, satellite' },
+  { value: 'green_deal', label: 'Green Deal energy efficiency payments' },
+];
+
+function isEnglandAssuredProduct(product: ResidentialLettingProductSku): boolean {
+  return ENGLAND_ASSURED_PRODUCTS.has(product);
+}
+
+function isTruthySelection(value: unknown): boolean {
+  if (typeof value === 'boolean') return value;
+  if (typeof value === 'string') {
+    const normalized = value.trim().toLowerCase();
+    return normalized === 'yes' || normalized === 'true' || normalized === '1';
+  }
+
+  return false;
+}
+
+function hasDepositAmount(facts: Record<string, any>): boolean {
+  const numeric = Number(facts.deposit_amount);
+  return Number.isFinite(numeric) && numeric > 0;
+}
+
+function hasPriorNoticeGround(facts: Record<string, any>, ground: string): boolean {
+  return Array.isArray(facts.prior_notice_grounds) && facts.prior_notice_grounds.includes(ground);
+}
+
+function hasSupportedAccommodationGround(facts: Record<string, any>): boolean {
+  return Array.isArray(facts.prior_notice_grounds)
+    ? facts.prior_notice_grounds.some((ground: string) =>
+        [
+          'ground_5e_supported_accommodation',
+          'ground_5f_supported_dwelling_house',
+          'ground_5g_homelessness_duty',
+          'ground_5h_stepping_stone',
+          'ground_18_supported_accommodation',
+        ].includes(ground)
+      )
+    : false;
+}
+
+function isExistingWrittenEnglandTenancy(facts: Record<string, any>): boolean {
+  return getEnglandTenancyPurpose(facts.england_tenancy_purpose) === 'existing_written_tenancy';
+}
+
+function shouldShowEnglandAssuredAgreementSteps(facts: Record<string, any>): boolean {
+  return !isExistingWrittenEnglandTenancy(facts);
+}
+
+function getConfigRequiredFacts(config: ResidentialStandaloneFlowConfig, facts: Record<string, any>) {
+  return typeof config.requiredFacts === 'function' ? config.requiredFacts(facts) : config.requiredFacts;
+}
+
+function createEnglandAssuredRequiredFacts(productSpecificFacts: string[] = []): StandaloneRequiredFacts {
+  return (facts) => {
+    const purpose = getEnglandTenancyPurpose(facts.england_tenancy_purpose);
+
+    if (purpose === 'existing_written_tenancy') {
+      return [...ENGLAND_ASSURED_TRANSITION_REQUIRED_FACTS];
+    }
+
+    const required = [...ENGLAND_ASSURED_BASE_REQUIRED_FACTS];
+
+    if (purpose === 'existing_verbal_tenancy') {
+      required.push('existing_verbal_tenancy_summary');
+    }
+
+    if (facts.bills_included_in_rent === 'yes') {
+      required.push('included_bills_notes');
+    }
+
+    if (isTruthySelection(facts.separate_bill_payments_taken)) {
+      required.push('separate_bill_payment_rows');
+    }
+
+    if (hasDepositAmount(facts)) {
+      required.push('deposit_scheme_name');
+    }
+
+    if (isTruthySelection(facts.relevant_gas_fitting_present)) {
+      required.push('gas_safety_certificate');
+    }
+
+    return [...required, ...productSpecificFacts];
+  };
+}
+
+function commonEnglandTenancyPurposeStep(productLabel: string): StandaloneStepConfig {
+  return {
+    id: 'england_tenancy_purpose',
+    title: 'Tenancy purpose',
+    description: `Tell us whether this England ${productLabel.toLowerCase()} is for a new tenancy, an existing written tenancy, or an existing verbal tenancy that now needs written terms.`,
+    fields: [
+      {
+        id: 'england_tenancy_purpose',
+        label: 'What are you doing today?',
+        type: 'select',
+        required: true,
+        options: [
+          { value: 'new_agreement', label: 'Create a new tenancy agreement' },
+          { value: 'existing_written_tenancy', label: 'Handle an existing written tenancy transition' },
+          { value: 'existing_verbal_tenancy', label: 'Prepare written terms for an existing verbal tenancy' },
+        ],
+        helpText:
+          'From 1 May 2026, existing written England assured tenancies usually need the government information sheet, while existing verbal tenancies need written terms recorded by 31 May 2026.',
+      },
+      {
+        id: 'existing_written_tenancy_transition_note',
+        label: 'Existing written tenancy route',
+        type: 'advisory',
+        tone: 'warning',
+        visibleWhen: (facts) => isExistingWrittenEnglandTenancy(facts),
+        items: [
+          'This route prepares transition guidance and includes the exact Rentersâ€™ Rights Act Information Sheet 2026 PDF instead of generating a fresh tenancy agreement.',
+          'You still need to give the information sheet to every named tenant for an existing written England assured tenancy transition case by 31 May 2026.',
+        ],
+      },
+      {
+        id: 'existing_written_tenancy_transition',
+        label: 'I understand this route is for transition guidance and the official information sheet, not a brand new tenancy agreement.',
+        type: 'checkbox',
+        required: true,
+        visibleWhen: (facts) => isExistingWrittenEnglandTenancy(facts),
+      },
+      {
+        id: 'existing_verbal_tenancy_summary_note',
+        label: 'Existing verbal tenancy route',
+        type: 'advisory',
+        tone: 'info',
+        visibleWhen: (facts) => getEnglandTenancyPurpose(facts.england_tenancy_purpose) === 'existing_verbal_tenancy',
+        items: [
+          'This route generates an England Written Statement of Terms for an existing verbal tenancy rather than pretending a brand new tenancy is being granted.',
+          'You should still check the existing facts carefully and keep evidence of when the written terms were given.',
+        ],
+      },
+      {
+        id: 'existing_verbal_tenancy_summary',
+        label: 'I understand this route records written terms for an existing verbal tenancy.',
+        type: 'checkbox',
+        required: true,
+        visibleWhen: (facts) => getEnglandTenancyPurpose(facts.england_tenancy_purpose) === 'existing_verbal_tenancy',
+      },
+    ],
+  };
+}
+
+function commonEnglandTransitionReferenceStep(): StandaloneStepConfig {
+  return {
+    id: 'england_transition_reference',
+    title: 'Transition reference',
+    description: 'Record the basic tenancy details that should appear on the transition guidance and information pack.',
+    visibleWhen: (facts) => isExistingWrittenEnglandTenancy(facts),
+    fields: [
+      { id: 'property_address_line1', label: 'Property address line 1', type: 'text', required: true },
+      { id: 'property_address_town', label: 'Town / city', type: 'text', required: true },
+      { id: 'property_address_postcode', label: 'Postcode', type: 'text', required: true },
+      { id: 'landlord_full_name', label: 'Landlord full name', type: 'text', required: true },
+      { id: 'landlord_email', label: 'Landlord email', type: 'text', required: true },
+      { id: 'landlord_phone', label: 'Landlord phone', type: 'text', required: true },
+      { id: 'landlord_address_line1', label: 'Landlord service address line 1', type: 'text', required: true },
+      { id: 'landlord_address_town', label: 'Landlord town / city', type: 'text', required: true },
+      { id: 'landlord_address_postcode', label: 'Landlord postcode', type: 'text', required: true },
+      { id: 'tenant_full_name', label: 'Tenant full name(s)', type: 'text', required: true },
+      { id: 'tenant_email', label: 'Lead tenant email', type: 'text', required: true },
+      { id: 'tenant_phone', label: 'Lead tenant phone', type: 'text', required: true },
+      { id: 'number_of_tenants', label: 'Number of named occupiers', type: 'number', required: true },
+      {
+        id: 'tenancy_start_date',
+        label: 'Original tenancy start date',
+        type: 'date',
+        required: true,
+        helpText: 'Use the date the current tenancy originally began.',
+      },
+      {
+        id: 'england_transition_delivery_notes',
+        label: 'Delivery or handover notes',
+        type: 'textarea',
+        helpText: 'Optional note for who will receive the information sheet and how you plan to serve it.',
+      },
+    ],
+  };
+}
+
+function commonEnglandAssuredTenancyTermsStep(title = 'Tenancy terms'): StandaloneStepConfig {
+  return {
+    id: 'tenancy_terms',
+    title,
+    description: 'Set the commercial terms and the written-information items that must appear in the England tenancy wording.',
+    visibleWhen: shouldShowEnglandAssuredAgreementSteps,
+    fields: [
+      { id: 'tenancy_start_date', label: 'Start date', type: 'date', required: true },
+      { id: 'rent_amount', label: 'Rent amount', type: 'currency', required: true },
+      {
+        id: 'rent_frequency',
+        label: 'Rent frequency',
+        type: 'select',
+        required: true,
+        options: [
+          { value: 'monthly', label: 'Monthly' },
+          { value: 'weekly', label: 'Weekly' },
+          { value: 'quarterly', label: 'Quarterly' },
+          { value: 'yearly', label: 'Yearly' },
+        ],
+      },
+      {
+        id: 'rent_due_day',
+        label: 'Rent due day',
+        type: 'text',
+        required: true,
+        helpText: 'For example: 1st of each month or every Monday.',
+      },
+      {
+        id: 'payment_method',
+        label: 'Payment method',
+        type: 'select',
+        required: true,
+        options: [
+          { value: 'bank_transfer', label: 'Bank transfer' },
+          { value: 'standing_order', label: 'Standing order' },
+          { value: 'cash', label: 'Cash' },
+        ],
+      },
+      {
+        id: 'deposit_amount',
+        label: 'Deposit amount',
+        type: 'currency',
+        required: true,
+        helpText: 'Enter 0 if no deposit will be taken.',
+      },
+      {
+        id: 'tenant_notice_period',
+        label: 'Tenant notice period',
+        type: 'select',
+        required: true,
+        options: [
+          { value: '2 months', label: '2 months' },
+          { value: '1 month', label: '1 month' },
+          { value: '6 weeks', label: '6 weeks' },
+          { value: '28 days', label: '28 days' },
+        ],
+        helpText: 'For England assured tenancies this must not exceed two months.',
+      },
+      {
+        id: 'rent_increase_method',
+        label: 'Rent increase method',
+        type: 'select',
+        required: true,
+        options: [{ value: 'section_13_notice', label: 'Section 13 notice process' }],
+        helpText: 'England assured tenancy wording should refer to the statutory section 13 process.',
+      },
+      {
+        id: 'bills_included_in_rent',
+        label: 'Bills included in the rent',
+        type: 'radio',
+        required: true,
+        options: [
+          { value: 'yes', label: 'Yes' },
+          { value: 'no', label: 'No' },
+        ],
+      },
+      {
+        id: 'included_bills_notes',
+        label: 'Which bills are included?',
+        type: 'textarea',
+        required: true,
+        visibleWhen: (facts) => facts.bills_included_in_rent === 'yes',
+      },
+    ],
+  };
+}
+
+function commonEnglandAssuredComplianceStep(): StandaloneStepConfig {
+  return {
+    id: 'england_written_information',
+    title: 'England written information',
+    description: 'Capture the statutory wording inputs that now need to be covered in the assured-tenancy paperwork.',
+    visibleWhen: shouldShowEnglandAssuredAgreementSteps,
+    fields: [
+      {
+        id: 'england_assured_written_information_note',
+        label: 'Written information overview',
+        type: 'advisory',
+        tone: 'info',
+        items: [
+          'These answers drive the written information about tenant notice, rent increases, bills, possession, repairs, safety, disability adaptations, and pets.',
+          'Where prior-notice possession grounds are selected, the agreement will record that they may be used if the statutory conditions are later met.',
+        ],
+      },
+      {
+        id: 'england_rent_in_advance_compliant',
+        label: 'I confirm the tenancy does not require prohibited rent-in-advance terms.',
+        type: 'radio',
+        required: true,
+        options: [
+          { value: 'yes', label: 'Yes' },
+          { value: 'no', label: 'No' },
+        ],
+      },
+      {
+        id: 'england_no_bidding_confirmed',
+        label: 'I confirm the property is not being let through prohibited bidding practices.',
+        type: 'radio',
+        required: true,
+        options: [
+          { value: 'yes', label: 'Yes' },
+          { value: 'no', label: 'No' },
+        ],
+      },
+      {
+        id: 'england_no_discrimination_confirmed',
+        label: 'I confirm the letting is not using prohibited discriminatory restrictions.',
+        type: 'radio',
+        required: true,
+        options: [
+          { value: 'yes', label: 'Yes' },
+          { value: 'no', label: 'No' },
+        ],
+      },
+      {
+        id: 'separate_bill_payments_taken',
+        label: 'Will the tenant pay any permitted bills separately to the landlord or someone connected to the landlord?',
+        type: 'radio',
+        required: true,
+        options: [
+          { value: 'yes', label: 'Yes' },
+          { value: 'no', label: 'No' },
+        ],
+      },
+      {
+        id: 'separate_bill_payment_rows',
+        label: 'Separate bill payment details',
+        type: 'repeater',
+        addLabel: 'Add bill payment detail',
+        visibleWhen: (facts) => isTruthySelection(facts.separate_bill_payments_taken),
+        columns: [
+          {
+            id: 'bill_type',
+            label: 'Bill type',
+            type: 'select',
+            required: true,
+            options: SEPARATE_BILL_TYPE_OPTIONS,
+          },
+          {
+            id: 'amount_detail',
+            label: 'Amount or pricing explanation',
+            type: 'text',
+            required: true,
+            placeholder: 'For example: £150 pcm or actual cost on invoice',
+          },
+          {
+            id: 'due_detail',
+            label: 'When it is due',
+            type: 'text',
+            required: true,
+            placeholder: 'For example: monthly with rent or on invoice within 7 days',
+          },
+        ],
+        emptyRow: { bill_type: '', amount_detail: '', due_detail: '' },
+      },
+      {
+        id: 'prior_notice_grounds',
+        label: 'Prior-notice possession grounds to record at the start',
+        type: 'multiselect',
+        options: PRIOR_NOTICE_GROUND_OPTIONS,
+        helpText: 'Select only the grounds you actually want the tenancy wording to flag as possible future possession grounds.',
+      },
+      {
+        id: 'prior_notice_ground_4_details',
+        label: 'Ground 4 student occupation details',
+        type: 'textarea',
+        visibleWhen: (facts) => hasPriorNoticeGround(facts, 'ground_4_student_occupation'),
+        helpText: 'Explain why this tenancy is being granted for student occupation and what supporting context should be recorded.',
+      },
+      {
+        id: 'prior_notice_ground_4a_details',
+        label: 'Ground 4A incoming students details',
+        type: 'textarea',
+        visibleWhen: (facts) => hasPriorNoticeGround(facts, 'ground_4a_students_for_new_students'),
+        helpText: 'Explain the incoming-student arrangement or student turnover context that should be recorded.',
+      },
+      {
+        id: 'prior_notice_supported_accommodation_details',
+        label: 'Supported accommodation prior-notice details',
+        type: 'textarea',
+        visibleWhen: (facts) => hasSupportedAccommodationGround(facts),
+        helpText: 'Explain the support, accommodation type, or homelessness duty context that should appear in the wording.',
+      },
+      {
+        id: 'tenant_improvements_allowed_with_consent',
+        label: 'Can the tenant make improvements to the property with the landlord consent?',
+        type: 'radio',
+        required: true,
+        options: [
+          { value: 'yes', label: 'Yes' },
+          { value: 'no', label: 'No' },
+        ],
+        helpText: 'This drives whether the Equality Act section 190 disability-adaptations wording should be included.',
+      },
+      {
+        id: 'supported_accommodation_tenancy',
+        label: 'Is this tenancy being granted as supported accommodation?',
+        type: 'radio',
+        required: true,
+        options: [
+          { value: 'yes', label: 'Yes' },
+          { value: 'no', label: 'No' },
+        ],
+      },
+      {
+        id: 'supported_accommodation_explanation',
+        label: 'Why it is supported accommodation',
+        type: 'textarea',
+        visibleWhen: (facts) => isTruthySelection(facts.supported_accommodation_tenancy),
+        helpText: 'Explain why the tenancy meets the supported-accommodation definition and what support or supervision is being provided.',
+      },
+      {
+        id: 'relevant_gas_fitting_present',
+        label: 'Is there a relevant gas fitting or flue installed in or serving the property?',
+        type: 'radio',
+        required: true,
+        options: [
+          { value: 'yes', label: 'Yes' },
+          { value: 'no', label: 'No' },
+        ],
+      },
+    ],
+  };
+}
+
+function commonEnglandPreTenancyComplianceStep(): StandaloneStepConfig {
+  return {
+    id: 'england_pre_tenancy_compliance',
+    title: 'Pre-tenancy compliance',
+    description: 'Record the operational compliance facts the England product pack should summarise and warn about.',
+    visibleWhen: shouldShowEnglandAssuredAgreementSteps,
+    fields: [
+      {
+        id: 'epc_rating',
+        label: 'EPC rating',
+        type: 'select',
+        required: true,
+        options: [
+          { value: 'A', label: 'A' },
+          { value: 'B', label: 'B' },
+          { value: 'C', label: 'C' },
+          { value: 'D', label: 'D' },
+          { value: 'E', label: 'E' },
+          { value: 'F', label: 'F' },
+          { value: 'G', label: 'G' },
+        ],
+      },
+      {
+        id: 'right_to_rent_check_date',
+        label: 'Right to Rent check date',
+        type: 'date',
+        required: true,
+      },
+      {
+        id: 'how_to_rent_provided',
+        label: 'Current How to Rent guide provided',
+        type: 'radio',
+        required: true,
+        options: [
+          { value: 'yes', label: 'Yes' },
+          { value: 'no', label: 'No' },
+        ],
+      },
+      {
+        id: 'gas_safety_certificate',
+        label: 'Current gas safety certificate provided',
+        type: 'radio',
+        required: true,
+        visibleWhen: (facts) => isTruthySelection(facts.relevant_gas_fitting_present),
+        options: [
+          { value: 'yes', label: 'Yes' },
+          { value: 'no', label: 'No' },
+        ],
+      },
+      {
+        id: 'electrical_safety_certificate',
+        label: 'Electrical safety report (EICR) provided',
+        type: 'radio',
+        required: true,
+        options: [
+          { value: 'yes', label: 'Yes' },
+          { value: 'no', label: 'No' },
+        ],
+      },
+      {
+        id: 'smoke_alarms_fitted',
+        label: 'Smoke alarms fitted and tested',
+        type: 'radio',
+        required: true,
+        options: [
+          { value: 'yes', label: 'Yes' },
+          { value: 'no', label: 'No' },
+        ],
+      },
+      {
+        id: 'carbon_monoxide_alarms',
+        label: 'Carbon monoxide alarms fitted where required',
+        type: 'radio',
+        required: true,
+        options: [
+          { value: 'yes', label: 'Yes' },
+          { value: 'no', label: 'No' },
+        ],
+      },
+      {
+        id: 'deposit_scheme_name',
+        label: 'Deposit protection scheme',
+        type: 'select',
+        required: true,
+        visibleWhen: (facts) => hasDepositAmount(facts),
+        options: [
+          { value: 'DPS', label: 'DPS' },
+          { value: 'MyDeposits', label: 'MyDeposits' },
+          { value: 'TDS', label: 'TDS' },
+          { value: 'Other', label: 'Other / not yet finalised' },
+        ],
+        helpText: 'Choose Other if the final scheme is not confirmed yet and you need a placeholder in the support documents.',
+      },
+      {
+        id: 'deposit_reference_number',
+        label: 'Deposit reference number',
+        type: 'text',
+        visibleWhen: (facts) => hasDepositAmount(facts),
+        helpText: 'Optional. Leave blank if the final reference has not yet been issued.',
+      },
+    ],
+  };
+}
+
+function commonEnglandRulesAndAccessStep(): StandaloneStepConfig {
+  return {
+    ...commonRulesAndAccessStep(),
+    visibleWhen: shouldShowEnglandAssuredAgreementSteps,
+    fields: [
+      ...(commonRulesAndAccessStep().fields || []),
+      {
+        id: 'end_of_tenancy_viewings',
+        label: 'Allow viewings once the tenancy is ending',
+        type: 'radio',
+        required: true,
+        options: [
+          { value: 'yes', label: 'Yes' },
+          { value: 'no', label: 'No' },
+        ],
+      },
+    ],
+  };
+}
+
+function createEnglandAssuredCompletionRules(product: ResidentialLettingProductSku): Array<(facts: Record<string, any>) => string | null> {
+  return [
+    COMMON_RULES.englandOnly,
+    (facts) =>
+      isExistingWrittenEnglandTenancy(facts)
+        ? null
+        : isTruthySelection(facts.separate_bill_payments_taken) &&
+            (!Array.isArray(facts.separate_bill_payment_rows) || facts.separate_bill_payment_rows.length === 0)
+          ? 'Add at least one separate bill payment row where the tenant will pay permitted bills separately.'
+          : null,
+    (facts) =>
+      isExistingWrittenEnglandTenancy(facts)
+        ? null
+        : hasPriorNoticeGround(facts, 'ground_4_student_occupation') && !facts.prior_notice_ground_4_details
+          ? 'Add student occupation detail for prior notice ground 4.'
+          : null,
+    (facts) =>
+      isExistingWrittenEnglandTenancy(facts)
+        ? null
+        : hasPriorNoticeGround(facts, 'ground_4a_students_for_new_students') &&
+            !facts.prior_notice_ground_4a_details
+          ? 'Add incoming-student detail for prior notice ground 4A.'
+          : null,
+    (facts) =>
+      isExistingWrittenEnglandTenancy(facts)
+        ? null
+        : hasSupportedAccommodationGround(facts) &&
+            !facts.prior_notice_supported_accommodation_details
+          ? 'Add supported accommodation detail for the selected prior-notice ground.'
+          : null,
+    (facts) =>
+      isExistingWrittenEnglandTenancy(facts)
+        ? null
+        : isTruthySelection(facts.supported_accommodation_tenancy) &&
+            !facts.supported_accommodation_explanation
+          ? 'Add an explanation of why the tenancy is granted as supported accommodation.'
+          : null,
+    (facts) =>
+      product === 'england_student_tenancy_agreement' &&
+      shouldShowEnglandAssuredAgreementSteps(facts) &&
+      facts.student_fixed_term_requested === 'yes'
+        ? 'Student fixed-term requests should stay on the assured-periodic route unless separate legal sign-off is in place.'
+        : null,
+  ];
+}
+
 function createRowId() {
   return `row_${Math.random().toString(36).slice(2, 9)}`;
 }
@@ -189,6 +1068,717 @@ const COMMON_RULES = {
 };
 
 const CONFIGS: Record<ResidentialLettingProductSku, ResidentialStandaloneFlowConfig> = {
+  england_standard_tenancy_agreement: {
+    product: 'england_standard_tenancy_agreement',
+    documentTitle: 'Standard Tenancy Agreement',
+    reviewTitle: 'Standard tenancy agreement review',
+    warnings: [
+      'Use this route for an ordinary England whole-property assured tenancy or, where relevant, a written statement of terms for an existing verbal tenancy.',
+      'If the landlord lives in the property, the lodger agreement route is usually a better fit.',
+    ],
+    upsellRecommendations: ['inventory_schedule_condition', 'rental_inspection_report'],
+    reviewSummaryFields: [
+      'england_tenancy_purpose',
+      'property_address_line1',
+      'landlord_full_name',
+      'tenant_full_name',
+      'tenancy_start_date',
+      'rent_amount',
+      'tenant_notice_period',
+    ],
+    requiredFacts: createEnglandAssuredRequiredFacts([]),
+    completionRules: createEnglandAssuredCompletionRules('england_standard_tenancy_agreement'),
+    steps: [
+      commonEnglandTenancyPurposeStep('Standard Tenancy Agreement'),
+      commonEnglandTransitionReferenceStep(),
+      {
+        id: 'suitability',
+        title: 'Suitability',
+        description: 'Use the standard route for an ordinary England residential letting.',
+        visibleWhen: shouldShowEnglandAssuredAgreementSteps,
+        fields: [
+          { id: 'tenant_is_individual', label: 'Occupier is an individual rather than a company', type: 'checkbox', required: true },
+          { id: 'main_home', label: 'Property will be the occupier main home', type: 'checkbox', required: true },
+          { id: 'landlord_lives_at_property', label: 'Landlord does not live at the property', type: 'checkbox', required: true, helpText: 'Leave unticked if you actually need the lodger route.' },
+          { id: 'holiday_or_licence', label: 'This is not intended as a holiday let or licence-only arrangement', type: 'checkbox', required: true },
+        ],
+      },
+      {
+        ...commonPropertyStep('Identify the England property covered by the agreement.'),
+        visibleWhen: shouldShowEnglandAssuredAgreementSteps,
+      },
+      {
+        ...commonPropertyProfileStep(),
+        visibleWhen: shouldShowEnglandAssuredAgreementSteps,
+      },
+      {
+        ...commonLandlordStep(),
+        visibleWhen: shouldShowEnglandAssuredAgreementSteps,
+      },
+      {
+        ...commonTenantStep(),
+        visibleWhen: shouldShowEnglandAssuredAgreementSteps,
+      },
+      commonEnglandAssuredTenancyTermsStep(),
+      commonEnglandAssuredComplianceStep(),
+      commonEnglandPreTenancyComplianceStep(),
+      commonEnglandRulesAndAccessStep(),
+    ],
+  },
+  england_premium_tenancy_agreement: {
+    product: 'england_premium_tenancy_agreement',
+    documentTitle: 'Premium Tenancy Agreement',
+    reviewTitle: 'Premium tenancy agreement review',
+    warnings: [
+      'Premium is now a fuller ordinary-residential England agreement, not the HMO shortcut.',
+      'Choose the HMO / Shared or Lodger route if the occupation setup is materially different.',
+    ],
+    upsellRecommendations: [
+      'inventory_schedule_condition',
+      'rental_inspection_report',
+      'guarantor_agreement',
+    ],
+    reviewSummaryFields: [
+      'england_tenancy_purpose',
+      'property_address_line1',
+      'landlord_full_name',
+      'tenant_full_name',
+      'tenancy_start_date',
+      'rent_amount',
+      'management_contact_channel',
+      'routine_inspection_window',
+      'premium_operational_notes',
+    ],
+    requiredFacts: createEnglandAssuredRequiredFacts([
+      'premium_operational_notes',
+      'management_contact_channel',
+      'routine_inspection_window',
+      'repair_reporting_contact',
+      'repair_response_timeframe',
+      'key_holders_summary',
+      'check_in_documentation_expectation',
+      'utilities_transfer_expectation',
+      'handover_expectations',
+    ]),
+    completionRules: [
+      ...createEnglandAssuredCompletionRules('england_premium_tenancy_agreement'),
+      (facts) =>
+        shouldShowEnglandAssuredAgreementSteps(facts) &&
+        facts.guarantor_expected === 'yes' &&
+        (!facts.guarantor_full_name || !facts.guarantor_address || !facts.guarantor_email)
+          ? 'Add the guarantor name, address, and email to include the optional guarantor deed in the Premium pack.'
+          : null,
+    ],
+    steps: [
+      commonEnglandTenancyPurposeStep('Premium Tenancy Agreement'),
+      commonEnglandTransitionReferenceStep(),
+      {
+        id: 'suitability',
+        title: 'Suitability',
+        description: 'Use Premium for an ordinary England residential let where you want fuller drafting.',
+        visibleWhen: shouldShowEnglandAssuredAgreementSteps,
+        fields: [
+          { id: 'tenant_is_individual', label: 'Occupier is an individual rather than a company', type: 'checkbox', required: true },
+          { id: 'main_home', label: 'Property will be the occupier main home', type: 'checkbox', required: true },
+          { id: 'landlord_lives_at_property', label: 'Landlord does not live at the property', type: 'checkbox', required: true, helpText: 'Choose Lodger instead if the landlord is resident.' },
+          { id: 'holiday_or_licence', label: 'This is not intended as a holiday let or bare licence arrangement', type: 'checkbox', required: true },
+        ],
+      },
+      {
+        ...commonPropertyStep('Identify the England property covered by the premium agreement.'),
+        visibleWhen: shouldShowEnglandAssuredAgreementSteps,
+      },
+      {
+        ...commonPropertyProfileStep(),
+        visibleWhen: shouldShowEnglandAssuredAgreementSteps,
+      },
+      {
+        ...commonLandlordStep(),
+        visibleWhen: shouldShowEnglandAssuredAgreementSteps,
+      },
+      {
+        ...commonTenantStep('Tenant details', 'Identify the lead tenant or named tenant group for the premium England agreement.'),
+        visibleWhen: shouldShowEnglandAssuredAgreementSteps,
+      },
+      commonEnglandAssuredTenancyTermsStep('Commercial terms'),
+      commonEnglandAssuredComplianceStep(),
+      commonEnglandPreTenancyComplianceStep(),
+      {
+        id: 'premium_controls',
+        title: 'Premium controls',
+        description: 'Capture the extra operational detail that makes Premium distinct from Standard.',
+        visibleWhen: shouldShowEnglandAssuredAgreementSteps,
+        fields: [
+          {
+            id: 'guarantor_expected',
+            label: 'Guarantor likely to be used',
+            type: 'radio',
+            required: true,
+            options: [
+              { value: 'yes', label: 'Yes' },
+              { value: 'no', label: 'No' },
+            ],
+          },
+          {
+            id: 'guarantor_full_name',
+            label: 'Guarantor full name',
+            type: 'text',
+            required: true,
+            visibleWhen: (facts) => facts.guarantor_expected === 'yes',
+          },
+          {
+            id: 'guarantor_address',
+            label: 'Guarantor address',
+            type: 'textarea',
+            required: true,
+            visibleWhen: (facts) => facts.guarantor_expected === 'yes',
+          },
+          {
+            id: 'guarantor_email',
+            label: 'Guarantor email',
+            type: 'text',
+            required: true,
+            visibleWhen: (facts) => facts.guarantor_expected === 'yes',
+          },
+          {
+            id: 'guarantor_phone',
+            label: 'Guarantor phone',
+            type: 'text',
+            visibleWhen: (facts) => facts.guarantor_expected === 'yes',
+          },
+          {
+            id: 'premium_operational_notes',
+            label: 'Operational detail to emphasise',
+            type: 'textarea',
+            required: true,
+            helpText: 'For example: access arrangements, maintenance reporting, key handling, or contractor coordination.',
+          },
+          {
+            id: 'premium_management_schedule',
+            label: 'Premium management schedule',
+            type: 'textarea',
+            helpText: 'Record any property-management expectations you want reflected in the drafting.',
+          },
+          {
+            id: 'management_contact_channel',
+            label: 'Primary management contact channel',
+            type: 'select',
+            required: true,
+            options: [
+              { value: 'email', label: 'Email' },
+              { value: 'phone', label: 'Phone' },
+              { value: 'managing_agent_portal', label: 'Managing agent portal' },
+              { value: 'mixed_channels', label: 'Mixed channels depending on issue' },
+            ],
+            helpText: 'How routine tenancy communication should ordinarily be handled.',
+          },
+          {
+            id: 'routine_inspection_window',
+            label: 'Routine inspection window',
+            type: 'select',
+            required: true,
+            options: [
+              { value: 'quarterly_weekday_daytime', label: 'Quarterly weekday daytime visits' },
+              { value: 'every_6_months_weekday_daytime', label: 'Every 6 months on weekday daytime visits' },
+              { value: 'agreed_case_by_case', label: 'Agreed case by case with the tenant' },
+              { value: 'reasonable_notice_flexible', label: 'Flexible timing with reasonable notice' },
+            ],
+            helpText: 'This strengthens the Premium schedule around inspections and planned access.',
+          },
+          {
+            id: 'repair_reporting_contact',
+            label: 'Repairs reporting contact',
+            type: 'text',
+            required: true,
+            helpText: 'Who the tenant should contact first for repairs, maintenance reports, or urgent property issues.',
+          },
+          {
+            id: 'repair_response_timeframe',
+            label: 'Repairs response expectation',
+            type: 'select',
+            required: true,
+            options: [
+              { value: 'same_day_emergencies', label: 'Same day for emergencies' },
+              { value: 'within_24_hours', label: 'Within 24 hours' },
+              { value: 'within_48_hours', label: 'Within 48 hours' },
+              { value: 'reasonable_time_by_severity', label: 'Reasonable time depending on severity' },
+            ],
+          },
+          {
+            id: 'key_holders_summary',
+            label: 'Keys and access devices held',
+            type: 'textarea',
+            required: true,
+            helpText: 'List keys, fobs, alarm details, or concierge access items that should be tracked at handover.',
+          },
+          {
+            id: 'check_in_documentation_expectation',
+            label: 'Check-in paperwork and evidence expectation',
+            type: 'textarea',
+            required: true,
+            helpText: 'Summarise which inventory, photos, meter records, or sign-off documents the tenant should review at handover.',
+          },
+          {
+            id: 'utilities_transfer_expectation',
+            label: 'Utilities and account transfer expectation',
+            type: 'textarea',
+            required: true,
+            helpText: 'Record how meter readings, council tax, broadband, and supplier handover should usually be handled.',
+          },
+          {
+            id: 'contractor_access_procedure',
+            label: 'Contractor access procedure',
+            type: 'textarea',
+            helpText: 'Record how contractors should be booked, supervised, or notified to the tenant.',
+          },
+          {
+            id: 'contractor_key_release_policy',
+            label: 'Contractor key release policy',
+            type: 'textarea',
+            helpText: 'If keys or fobs may be released temporarily for works, record the supervision or sign-out expectations.',
+          },
+          {
+            id: 'handover_expectations',
+            label: 'Move-out and hand-back expectations',
+            type: 'textarea',
+            required: true,
+            helpText: 'Summarise keys, meter readings, cleaning, rubbish removal, and forwarding-address expectations.',
+          },
+        ],
+      },
+      commonEnglandRulesAndAccessStep(),
+    ],
+  },
+  england_student_tenancy_agreement: {
+    product: 'england_student_tenancy_agreement',
+    documentTitle: 'Student Tenancy Agreement',
+    reviewTitle: 'Student tenancy agreement review',
+    warnings: [
+      'Use this route for student-focused England lettings rather than relying on Premium as a bundle.',
+      'Fixed-term student requests should be reviewed carefully before use.',
+    ],
+    upsellRecommendations: ['guarantor_agreement', 'inventory_schedule_condition', 'flatmate_agreement'],
+    reviewSummaryFields: [
+      'england_tenancy_purpose',
+      'property_address_line1',
+      'tenant_full_name',
+      'all_tenants_full_time_students',
+      'guarantor_required',
+      'student_replacement_procedure',
+    ],
+    requiredFacts: createEnglandAssuredRequiredFacts([
+      'guarantor_required',
+      'all_tenants_full_time_students',
+      'joint_tenancy',
+      'student_replacement_procedure',
+      'student_end_of_term_expectations',
+      'student_move_out_keys_process',
+      'student_cleaning_standard',
+    ]),
+    completionRules: [
+      ...createEnglandAssuredCompletionRules('england_student_tenancy_agreement'),
+      (facts) =>
+        shouldShowEnglandAssuredAgreementSteps(facts) &&
+        facts.guarantor_required === 'yes' &&
+        (!facts.guarantor_full_name || !facts.guarantor_address || !facts.guarantor_email)
+          ? 'Add the guarantor name, address, and email to include the optional guarantor deed in the student pack.'
+          : null,
+    ],
+    steps: [
+      commonEnglandTenancyPurposeStep('Student Tenancy Agreement'),
+      commonEnglandTransitionReferenceStep(),
+      {
+        id: 'suitability',
+        title: 'Student setup',
+        description: 'Capture the student-specific occupation profile for the agreement.',
+        visibleWhen: shouldShowEnglandAssuredAgreementSteps,
+        fields: [
+          { id: 'tenant_is_individual', label: 'Occupiers are individuals rather than a company', type: 'checkbox', required: true },
+          { id: 'main_home', label: 'Property is intended as the occupier main home', type: 'checkbox', required: true },
+          { id: 'landlord_lives_at_property', label: 'Landlord does not live at the property', type: 'checkbox', required: true },
+        ],
+      },
+      {
+        ...commonPropertyStep('Identify the England property covered by the student agreement.'),
+        visibleWhen: shouldShowEnglandAssuredAgreementSteps,
+      },
+      {
+        ...commonPropertyProfileStep(),
+        visibleWhen: shouldShowEnglandAssuredAgreementSteps,
+      },
+      {
+        ...commonLandlordStep(),
+        visibleWhen: shouldShowEnglandAssuredAgreementSteps,
+      },
+      {
+        ...commonTenantStep('Student tenant details', 'Name the tenant group and record the lead contact details.'),
+        visibleWhen: shouldShowEnglandAssuredAgreementSteps,
+      },
+      commonEnglandAssuredTenancyTermsStep('Student tenancy terms'),
+      commonEnglandAssuredComplianceStep(),
+      commonEnglandPreTenancyComplianceStep(),
+      {
+        id: 'student_specifics',
+        title: 'Student-specific details',
+        description: 'Capture the clauses and expectations that make the student product distinct.',
+        visibleWhen: shouldShowEnglandAssuredAgreementSteps,
+        fields: [
+          {
+            id: 'all_tenants_full_time_students',
+            label: 'All named tenants are full-time students',
+            type: 'radio',
+            required: true,
+            options: [
+              { value: 'yes', label: 'Yes' },
+              { value: 'no', label: 'No' },
+            ],
+          },
+          {
+            id: 'guarantor_required',
+            label: 'One or more tenants will have a guarantor',
+            type: 'radio',
+            required: true,
+            options: [
+              { value: 'yes', label: 'Yes' },
+              { value: 'no', label: 'No' },
+            ],
+          },
+          {
+            id: 'guarantor_full_name',
+            label: 'Guarantor full name',
+            type: 'text',
+            required: true,
+            visibleWhen: (facts) => facts.guarantor_required === 'yes',
+          },
+          {
+            id: 'guarantor_address',
+            label: 'Guarantor address',
+            type: 'textarea',
+            required: true,
+            visibleWhen: (facts) => facts.guarantor_required === 'yes',
+          },
+          {
+            id: 'guarantor_email',
+            label: 'Guarantor email',
+            type: 'text',
+            required: true,
+            visibleWhen: (facts) => facts.guarantor_required === 'yes',
+          },
+          {
+            id: 'guarantor_phone',
+            label: 'Guarantor phone',
+            type: 'text',
+            visibleWhen: (facts) => facts.guarantor_required === 'yes',
+          },
+          {
+            id: 'joint_tenancy',
+            label: 'All tenants are on one joint agreement',
+            type: 'radio',
+            required: true,
+            options: [
+              { value: 'yes', label: 'Yes' },
+              { value: 'no', label: 'No' },
+            ],
+          },
+          {
+            id: 'student_replacement_procedure',
+            label: 'Include a tenant replacement procedure',
+            type: 'radio',
+            required: true,
+            options: [
+              { value: 'yes', label: 'Yes' },
+              { value: 'no', label: 'No' },
+            ],
+          },
+          {
+            id: 'student_guarantor_scope',
+            label: 'Guarantor scope',
+            type: 'select',
+            required: true,
+            visibleWhen: (facts) => facts.guarantor_required === 'yes',
+            options: [
+              { value: 'rent_and_all_tenant_obligations', label: 'Rent and all tenant obligations' },
+              { value: 'rent_only', label: 'Rent only' },
+              { value: 'rent_and_damage', label: 'Rent and damage obligations' },
+            ],
+          },
+          {
+            id: 'replacement_notice_window',
+            label: 'Replacement request notice window',
+            type: 'select',
+            required: true,
+            visibleWhen: (facts) => facts.student_replacement_procedure === 'yes',
+            options: [
+              { value: '14_days', label: '14 days' },
+              { value: '21_days', label: '21 days' },
+              { value: '28_days', label: '28 days' },
+              { value: 'reasonable_notice', label: 'Reasonable notice' },
+            ],
+          },
+          {
+            id: 'replacement_cost_responsibility',
+            label: 'Replacement documentation costs',
+            type: 'select',
+            required: true,
+            visibleWhen: (facts) => facts.student_replacement_procedure === 'yes',
+            options: [
+              { value: 'outgoing_tenant', label: 'Outgoing tenant' },
+              { value: 'incoming_tenant', label: 'Incoming tenant' },
+              { value: 'agreed_case_by_case', label: 'Agreed case by case' },
+            ],
+          },
+          { id: 'student_end_of_term_expectations', label: 'End-of-term return standard', type: 'textarea', required: true },
+          {
+            id: 'student_move_out_keys_process',
+            label: 'Move-out keys and return process',
+            type: 'textarea',
+            required: true,
+            helpText: 'Record how keys, fobs, post, and final room access should be returned at the end of occupation.',
+          },
+          {
+            id: 'student_cleaning_standard',
+            label: 'Student cleaning and room hand-back standard',
+            type: 'textarea',
+            required: true,
+            helpText: 'Describe the practical cleaning and room-condition standard expected before departure.',
+          },
+          { id: 'vacation_period_notes', label: 'Vacation / non-occupation notes', type: 'textarea' },
+          { id: 'student_fixed_term_requested', label: 'Fixed-term student arrangement requested', type: 'radio', options: [{ value: 'yes', label: 'Yes' }, { value: 'no', label: 'No' }] },
+        ],
+      },
+      commonEnglandRulesAndAccessStep(),
+    ],
+  },
+  england_hmo_shared_house_tenancy_agreement: {
+    product: 'england_hmo_shared_house_tenancy_agreement',
+    documentTitle: 'HMO / Shared House Tenancy Agreement',
+    reviewTitle: 'HMO / shared house tenancy review',
+    warnings: [
+      'Use this route for sharer and communal-area setups instead of treating HMO as a Premium synonym.',
+      'Licensing and local HMO requirements still need factual confirmation outside the wizard.',
+    ],
+    upsellRecommendations: ['inventory_schedule_condition', 'rental_inspection_report', 'flatmate_agreement'],
+    reviewSummaryFields: [
+      'england_tenancy_purpose',
+      'property_address_line1',
+      'tenant_full_name',
+      'number_of_sharers',
+      'hmo_licence_status',
+      'communal_areas',
+    ],
+    requiredFacts: createEnglandAssuredRequiredFacts([
+      'number_of_sharers',
+      'is_hmo',
+      'communal_areas',
+      'hmo_licence_status',
+      'communal_cleaning',
+      'visitor_policy',
+      'waste_collection_arrangements',
+      'fire_safety_notes',
+    ]),
+    completionRules: createEnglandAssuredCompletionRules('england_hmo_shared_house_tenancy_agreement'),
+    steps: [
+      commonEnglandTenancyPurposeStep('HMO / Shared House Tenancy Agreement'),
+      commonEnglandTransitionReferenceStep(),
+      {
+        id: 'suitability',
+        title: 'Shared-house setup',
+        description: 'Capture the facts that distinguish the HMO/shared-house route from Standard and Premium.',
+        visibleWhen: shouldShowEnglandAssuredAgreementSteps,
+        fields: [
+          { id: 'tenant_is_individual', label: 'Occupiers are individuals rather than a company', type: 'checkbox', required: true },
+          { id: 'main_home', label: 'Property is intended as the occupier main home', type: 'checkbox', required: true },
+          { id: 'room_by_room_occupation', label: 'Occupiers are taking rooms or sharing the house in a multi-occupier arrangement', type: 'checkbox', required: true },
+          { id: 'unrelated_households', label: 'Occupiers come from separate households', type: 'checkbox', required: true },
+        ],
+      },
+      {
+        ...commonPropertyStep('Identify the England HMO or shared-house property.'),
+        visibleWhen: shouldShowEnglandAssuredAgreementSteps,
+      },
+      {
+        ...commonPropertyProfileStep(),
+        visibleWhen: shouldShowEnglandAssuredAgreementSteps,
+      },
+      {
+        ...commonLandlordStep(),
+        visibleWhen: shouldShowEnglandAssuredAgreementSteps,
+      },
+      {
+        ...commonTenantStep('Sharer details', 'Record the named tenant group or lead contact for the shared-house agreement.'),
+        visibleWhen: shouldShowEnglandAssuredAgreementSteps,
+      },
+      commonEnglandAssuredTenancyTermsStep('Shared-house tenancy terms'),
+      commonEnglandAssuredComplianceStep(),
+      commonEnglandPreTenancyComplianceStep(),
+      {
+        id: 'hmo_specifics',
+        title: 'HMO / communal areas',
+        description: 'Record the shared-house details that belong only in the HMO/shared product.',
+        visibleWhen: shouldShowEnglandAssuredAgreementSteps,
+        fields: [
+          {
+            id: 'is_hmo',
+            label: 'Property is an HMO or licensable shared house',
+            type: 'radio',
+            required: true,
+            options: [
+              { value: 'yes', label: 'Yes' },
+              { value: 'no', label: 'No' },
+            ],
+          },
+          { id: 'number_of_sharers', label: 'Number of sharers / rooms', type: 'number', required: true },
+          { id: 'communal_areas', label: 'Shared / communal areas', type: 'textarea', required: true },
+          {
+            id: 'hmo_licence_status',
+            label: 'HMO licence status',
+            type: 'select',
+            required: true,
+            options: [
+              { value: 'not_required', label: 'Not required' },
+              { value: 'currently_licensed', label: 'Currently licensed' },
+              { value: 'applied_awaiting', label: 'Applied / awaiting' },
+            ],
+          },
+          {
+            id: 'communal_cleaning',
+            label: 'Communal area cleaning',
+            type: 'select',
+            required: true,
+            options: [
+              { value: 'professional_cleaner', label: 'Professional cleaner' },
+              { value: 'tenants_share', label: 'Tenants share' },
+              { value: 'landlord', label: 'Landlord' },
+              { value: 'not_applicable', label: 'Not applicable' },
+            ],
+          },
+          { id: 'communal_rules_notes', label: 'Communal-area rules', type: 'textarea' },
+          { id: 'shared_facilities_schedule', label: 'Shared facilities schedule', type: 'textarea', helpText: 'List kitchens, bathrooms, lounges, gardens, storage, or utility spaces shared by the occupiers.' },
+          { id: 'visitor_policy', label: 'Visitor and overnight guest policy', type: 'textarea', required: true },
+          { id: 'quiet_hours', label: 'Quiet hours or noise expectations', type: 'text' },
+          { id: 'waste_collection_arrangements', label: 'Waste and recycling arrangements', type: 'textarea', required: true },
+          { id: 'fire_safety_notes', label: 'Fire safety and communal-safety notes', type: 'textarea', required: true },
+        ],
+      },
+      commonEnglandRulesAndAccessStep(),
+    ],
+  },
+  england_lodger_agreement: {
+    product: 'england_lodger_agreement',
+    documentTitle: 'Room Let / Lodger Agreement',
+    reviewTitle: 'Room let / lodger agreement review',
+    warnings: [
+      'Use this route when the landlord lives at the property and the arrangement is a resident-landlord room let.',
+      'This is separate from the ordinary residential tenancy products.',
+    ],
+    upsellRecommendations: ['inventory_schedule_condition', 'rental_inspection_report'],
+    reviewSummaryFields: [
+      'property_address_line1',
+      'landlord_full_name',
+      'tenant_full_name',
+      'resident_landlord_confirmed',
+      'licence_notice_period',
+    ],
+    requiredFacts: [
+      'property_address_line1',
+      'property_address_town',
+      'property_address_postcode',
+      'landlord_full_name',
+      'tenant_full_name',
+      'tenancy_start_date',
+      'rent_amount',
+      'rent_frequency',
+      'resident_landlord_confirmed',
+      'shared_kitchen_or_bathroom',
+      'licence_notice_period',
+      'let_room_description',
+      'house_rules_notes',
+      'guest_policy',
+      'shared_space_cleaning',
+      'key_return_expectations',
+    ],
+    completionRules: [COMMON_RULES.englandOnly],
+    steps: [
+      {
+        id: 'suitability',
+        title: 'Resident-landlord setup',
+        description: 'Use the lodger route for a room let where the landlord lives in the property.',
+        fields: [
+          { id: 'resident_landlord_confirmed', label: 'Landlord is resident in the property', type: 'checkbox', required: true },
+          { id: 'shared_kitchen_or_bathroom', label: 'Occupier shares kitchen or bathroom facilities with the landlord', type: 'checkbox', required: true },
+          { id: 'main_home', label: 'Property is the occupier main home', type: 'checkbox', required: true },
+        ],
+      },
+      commonPropertyStep('Identify the England property and room-let address.'),
+      commonLandlordStep('Resident landlord details'),
+      commonTenantStep('Lodger details', 'Identify the lodger and the main contact details for the room let.'),
+      {
+        id: 'lodger_terms',
+        title: 'Lodger terms',
+        description: 'Capture the room-let terms and house-sharing expectations.',
+        fields: [
+          { id: 'tenancy_start_date', label: 'Occupation start date', type: 'date', required: true },
+          { id: 'rent_amount', label: 'Rent amount', type: 'currency', required: true },
+          {
+            id: 'rent_frequency',
+            label: 'Payment frequency',
+            type: 'select',
+            required: true,
+            options: [
+              { value: 'monthly', label: 'Monthly' },
+              { value: 'weekly', label: 'Weekly' },
+            ],
+          },
+          {
+            id: 'licence_notice_period',
+            label: 'Licence notice period',
+            type: 'select',
+            required: true,
+            options: [
+              { value: '7 days', label: '7 days' },
+              { value: '14 days', label: '14 days' },
+              { value: '28 days', label: '28 days' },
+              { value: '1 month', label: '1 month' },
+            ],
+          },
+          { id: 'deposit_amount', label: 'Deposit amount', type: 'currency' },
+          { id: 'let_room_description', label: 'Room or area being occupied', type: 'text', required: true },
+          { id: 'services_included', label: 'Services or bills included', type: 'textarea' },
+          { id: 'house_rules_notes', label: 'House rules and shared-space notes', type: 'textarea', required: true },
+          { id: 'guest_policy', label: 'Guest and overnight stay policy', type: 'textarea', required: true },
+          { id: 'quiet_hours', label: 'Quiet hours or household timing expectations', type: 'text' },
+          { id: 'shared_space_cleaning', label: 'Shared-space cleaning arrangements', type: 'textarea', required: true },
+          { id: 'key_return_expectations', label: 'Key return and room hand-back expectations', type: 'textarea', required: true },
+        ],
+      },
+      {
+        id: 'lodger_readiness',
+        title: 'Room-let readiness',
+        description: 'Capture the practical compliance and handover points that should appear in the lodger checklist.',
+        fields: [
+          { id: 'right_to_rent_check_date', label: 'Right to Rent check date', type: 'date' },
+          {
+            id: 'smoke_alarms_fitted',
+            label: 'Smoke alarms fitted and tested',
+            type: 'radio',
+            options: [
+              { value: 'yes', label: 'Yes' },
+              { value: 'no', label: 'No' },
+            ],
+          },
+          {
+            id: 'carbon_monoxide_alarms',
+            label: 'Carbon monoxide alarms fitted where required',
+            type: 'radio',
+            options: [
+              { value: 'yes', label: 'Yes' },
+              { value: 'no', label: 'No' },
+            ],
+          },
+        ],
+      },
+    ],
+  },
   guarantor_agreement: {
     product: 'guarantor_agreement',
     documentTitle: 'Guarantor Agreement',
@@ -447,14 +2037,24 @@ export function getResidentialStandaloneFlowConfig(product: ResidentialLettingPr
   return CONFIGS[product];
 }
 
+export function getResidentialStandaloneVisibleSteps(
+  product: ResidentialLettingProductSku,
+  facts: Record<string, any>
+): StandaloneStepConfig[] {
+  const config = getResidentialStandaloneFlowConfig(product);
+  return config.steps.filter((step) => !step.visibleWhen || step.visibleWhen(facts));
+}
+
 export function getResidentialStandaloneCompletionErrors(
   product: ResidentialLettingProductSku,
   facts: Record<string, any>,
 ): string[] {
   const config = getResidentialStandaloneFlowConfig(product);
-  const missingFacts = config.requiredFacts.filter((field) => {
+  const requiredFacts = getConfigRequiredFacts(config, facts);
+  const missingFacts = requiredFacts.filter((field) => {
     const value = facts[field];
     if (typeof value === 'boolean') return value === false;
+    if (Array.isArray(value)) return value.length === 0;
     return value === undefined || value === null || value === '';
   });
 
@@ -476,3 +2076,4 @@ export function getResidentialStandaloneCompletionErrors(
 export function getResidentialStandaloneDisplayName(product: ResidentialLettingProductSku): string {
   return RESIDENTIAL_LETTING_PRODUCTS[product].label;
 }
+

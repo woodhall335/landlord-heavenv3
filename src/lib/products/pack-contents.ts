@@ -9,6 +9,7 @@ import {
   ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL,
   ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL,
 } from '@/lib/tenancy/england-agreement-constants';
+import { getEnglandTenancyPurpose } from '@/lib/tenancy/england-reform';
 
 export type PackItemCategory =
   | 'Notice'
@@ -33,7 +34,7 @@ export interface PackItem {
 }
 
 export interface GetPackContentsArgs {
-  /** Product SKU: notice_only | complete_pack | money_claim | sc_money_claim | ast_standard | ast_premium */
+  /** Product SKU for the purchased product or legacy tenancy alias */
   product: string;
   /** Jurisdiction: england | wales | scotland | northern-ireland */
   jurisdiction: string;
@@ -47,10 +48,190 @@ export interface GetPackContentsArgs {
   include_arrears_schedule?: boolean;
   /** Whether inventory data was completed via wizard (for tenancy agreements) */
   hasInventoryData?: boolean;
+  /** England tenancy purpose for the modern 2026 agreement flows */
+  englandTenancyPurpose?: string | null;
+  /** Whether a deposit is actually being taken in the relevant flow */
+  depositTaken?: boolean | null;
+  /** Whether an optional guarantor deed should be included */
+  includeGuarantorDeed?: boolean | null;
 }
+function getEnglandResidentialLettingContents(args: GetPackContentsArgs): PackItem[] {
+  const { product, englandTenancyPurpose, depositTaken, includeGuarantorDeed } = args;
+  const purpose = getEnglandTenancyPurpose(englandTenancyPurpose);
+  const isExistingWrittenTransition = purpose === 'existing_written_tenancy';
+  const isExistingVerbalTenancy = purpose === 'existing_verbal_tenancy';
+  const takesDeposit = depositTaken === true;
 
-function getEnglandResidentialLettingContents(product: string): PackItem[] {
+  const assuredAgreementTitles: Record<string, string> = {
+    england_standard_tenancy_agreement: 'Standard Tenancy Agreement',
+    england_premium_tenancy_agreement: 'Premium Tenancy Agreement',
+    england_student_tenancy_agreement: 'Student Tenancy Agreement',
+    england_hmo_shared_house_tenancy_agreement: 'HMO / Shared House Tenancy Agreement',
+  };
+
+  if (product in assuredAgreementTitles) {
+    if (isExistingWrittenTransition) {
+      return [
+        {
+          key: 'england_tenancy_transition_guidance',
+          title: 'England Tenancy Transition Guidance',
+          description: 'Transition note for an existing written England assured tenancy moving into the post-1 May 2026 regime.',
+          category: 'Guidance',
+          required: true,
+        },
+        {
+          key: 'renters_rights_information_sheet_2026',
+          title: 'Renters\' Rights Act Information Sheet 2026',
+          description: 'Exact government PDF for existing written England assured tenancies that need the 2026 information sheet.',
+          category: 'Guidance',
+          required: true,
+        },
+      ];
+    }
+
+    const items: PackItem[] = [
+      {
+        key: isExistingVerbalTenancy ? 'england_written_statement_of_terms' : product,
+        title: isExistingVerbalTenancy
+          ? 'England Written Statement of Terms'
+          : assuredAgreementTitles[product],
+        description: isExistingVerbalTenancy
+          ? 'Written statement of terms for an existing verbal England assured tenancy.'
+          : `${assuredAgreementTitles[product]} for the modern England assured-tenancy regime.`,
+        category: 'Tenancy agreement',
+        required: true,
+      },
+      {
+        key: 'pre_tenancy_checklist_england',
+        title: 'Pre-Tenancy Checklist (England)',
+        description: 'England compliance checklist covering the main pre-tenancy and written-information actions for the tenancy file.',
+        category: 'Checklists',
+        required: true,
+      },
+      {
+        key: 'england_keys_handover_record',
+        title: 'Keys & Handover Record',
+        description: 'Practical handover record for keys, access devices, and move-in confirmations.',
+        category: 'Checklists',
+        required: true,
+      },
+      {
+        key: 'england_utilities_handover_sheet',
+        title: 'Utilities & Meter Handover Sheet',
+        description: 'Record for utilities responsibility, opening readings, and account handover notes.',
+        category: 'Checklists',
+        required: true,
+      },
+      {
+        key: 'england_pet_request_addendum',
+        title: 'Pet Request / Consent Addendum',
+        description: 'Optional addendum for recording a pet request, decision, and any consent conditions.',
+        category: 'Other',
+        required: true,
+      },
+      {
+        key: 'england_tenancy_variation_record',
+        title: 'Tenancy Variation Record',
+        description: 'Simple record for agreed changes or management updates after the agreement is issued.',
+        category: 'Other',
+        required: true,
+      },
+    ];
+
+    if (takesDeposit) {
+      items.push(
+        {
+          key: 'deposit_protection_certificate',
+          title: 'Deposit Protection Certificate',
+          description: 'Standalone certificate confirming the deposit protection scheme details for England.',
+          category: 'Guidance',
+          required: true,
+        },
+        {
+          key: 'tenancy_deposit_information',
+          title: 'Prescribed Information Pack',
+          description: 'Standalone tenancy deposit prescribed information pack for England.',
+          category: 'Guidance',
+          required: true,
+        }
+      );
+    }
+
+    if (includeGuarantorDeed === true) {
+      items.push({
+        key: 'guarantor_agreement',
+        title: 'Guarantor Agreement',
+        description: 'Optional deed of guarantee generated because the tenancy answers indicate a guarantor will be used.',
+        category: 'Other',
+        required: true,
+      });
+    }
+
+    if (product === 'england_premium_tenancy_agreement') {
+      items.push({
+        key: 'england_premium_management_schedule',
+        title: 'Premium Management Schedule',
+        description: 'Premium-only schedule for inspections, repairs reporting, keys, contractor access, and hand-back expectations.',
+        category: 'Other',
+        required: true,
+      });
+    }
+
+    if (product === 'england_student_tenancy_agreement') {
+      items.push({
+        key: 'england_student_move_out_schedule',
+        title: 'Student Move-Out & Guarantor Schedule',
+        description: 'Student-only schedule for guarantor scope, replacement procedure, keys, cleaning, and end-of-term return expectations.',
+        category: 'Other',
+        required: true,
+      });
+    }
+
+    if (product === 'england_hmo_shared_house_tenancy_agreement') {
+      items.push({
+        key: 'england_hmo_house_rules_appendix',
+        title: 'HMO / Shared House Rules Appendix',
+        description: 'Shared-house appendix covering communal areas, cleaning, waste, visitors, quiet hours, and fire-safety notes.',
+        category: 'Other',
+        required: true,
+      });
+    }
+
+    return items;
+  }
+
   switch (product) {
+    case 'england_lodger_agreement':
+      return [
+        {
+          key: 'england_lodger_agreement',
+          title: 'Room Let / Lodger Agreement',
+          description: 'England resident-landlord lodger agreement for a room let or licence arrangement',
+          category: 'Tenancy agreement',
+          required: true,
+        },
+        {
+          key: 'england_lodger_checklist',
+          title: 'Room Let / Lodger Checklist',
+          description: 'Resident-landlord room-let checklist covering handover, house rules, and key practical compliance points.',
+          category: 'Checklists',
+          required: true,
+        },
+        {
+          key: 'england_keys_handover_record',
+          title: 'Keys & Handover Record',
+          description: 'Practical handover record for keys, room access, and move-in confirmations.',
+          category: 'Checklists',
+          required: true,
+        },
+        {
+          key: 'england_lodger_house_rules_appendix',
+          title: 'Lodger House Rules Appendix',
+          description: 'Resident-landlord appendix for guests, quiet hours, shared-space cleaning, and room hand-back expectations.',
+          category: 'Other',
+          required: true,
+        },
+      ];
     case 'guarantor_agreement':
       return [
         {
@@ -408,19 +589,11 @@ function getEnglandMoneyClaimContents(): PackItem[] {
 }
 
 /**
- * ENGLAND TENANCY AGREEMENT CONTENTS
+ * ENGLAND LEGACY AST CONTENTS
  *
- * Product tiers:
- * - 'standard': Tenancy agreement with blank inventory template, compliance checklist, and deposit-support docs
- * - 'premium': HMO-specific tenancy agreement with wizard-completed inventory, compliance checklist, and deposit-support docs
- *
- * Legal Framework: Housing Act 1988, Deregulation Act 2015, Housing Act 2004 (HMO)
- *
- * INTEGRATION LAYER REQUIREMENTS:
- * - Inventory: Always included (blank for standard, wizard-completed for premium)
- * - Compliance Checklist: Always included (jurisdiction-specific, non-contractual guidance)
- * - Deposit Support: England includes standalone deposit protection certificate and prescribed information pack
- * - Embedded Schedules: Property, Rent, Utilities, Inventory, House Rules
+ * These entries remain the source of truth for historical ast_standard and
+ * ast_premium orders. New England sales use the modern standalone England
+ * product SKUs above and should not be collapsed back into this 2-tier model.
  */
 function getEnglandASTContents(tier: 'standard' | 'premium', hasInventoryData?: boolean): PackItem[] {
   const items: PackItem[] = [];
@@ -1049,7 +1222,7 @@ export function getPackContents(args: GetPackContentsArgs): PackItem[] {
       case 'ast_premium':
         return getEnglandASTContents('premium', hasInventoryData);
       default:
-        return getEnglandResidentialLettingContents(product);
+        return getEnglandResidentialLettingContents(args);
     }
   }
 
@@ -1117,7 +1290,8 @@ export function getPackContents(args: GetPackContentsArgs): PackItem[] {
 export function isProductSupported(product: string, jurisdiction: string): boolean {
   const jur = jurisdiction.toLowerCase();
 
-  // Tenancy agreements supported everywhere
+  // Legacy tenancy aliases remain supported everywhere because non-England
+  // jurisdictions still use the shared tiered tenancy abstraction.
   if (product === 'ast_standard' || product === 'ast_premium') {
     return true;
   }
@@ -1136,7 +1310,7 @@ export function isProductSupported(product: string, jurisdiction: string): boole
     return jur === 'scotland';
   }
 
-  if (getEnglandResidentialLettingContents(product).length > 0) {
+  if (getEnglandResidentialLettingContents({ product, jurisdiction: jur }).length > 0) {
     return jur === 'england';
   }
 

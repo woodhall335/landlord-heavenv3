@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { Container } from "@/components/ui";
 import { useRouter } from "next/navigation";
+import { PRODUCTS } from "@/lib/pricing/products";
 
 interface Order {
   id: string;
@@ -205,8 +206,13 @@ export default function AdminOrdersPage() {
       notice_only: "Notice Only",
       complete_pack: "Complete Eviction Pack",
       money_claim: "Money Claim Pack",
-      ast_standard: "England Assured Periodic Tenancy",
-      ast_premium: "England Assured Periodic Tenancy (Premium)",
+      ast_standard: PRODUCTS.ast_standard.label,
+      ast_premium: PRODUCTS.ast_premium.label,
+      england_standard_tenancy_agreement: PRODUCTS.england_standard_tenancy_agreement.label,
+      england_premium_tenancy_agreement: PRODUCTS.england_premium_tenancy_agreement.label,
+      england_student_tenancy_agreement: PRODUCTS.england_student_tenancy_agreement.label,
+      england_hmo_shared_house_tenancy_agreement: PRODUCTS.england_hmo_shared_house_tenancy_agreement.label,
+      england_lodger_agreement: PRODUCTS.england_lodger_agreement.label,
     };
     return names[productType] || productType;
   }
@@ -277,8 +283,13 @@ export default function AdminOrdersPage() {
                 <option value="notice_only">Notice Only</option>
                 <option value="complete_pack">Complete Pack</option>
                 <option value="money_claim">Money Claim</option>
-                <option value="ast_standard">England Assured Periodic Tenancy</option>
-                <option value="ast_premium">England Assured Periodic Tenancy (Premium)</option>
+                <option value="ast_standard">{PRODUCTS.ast_standard.label}</option>
+                <option value="ast_premium">{PRODUCTS.ast_premium.label}</option>
+                <option value="england_standard_tenancy_agreement">{PRODUCTS.england_standard_tenancy_agreement.label}</option>
+                <option value="england_premium_tenancy_agreement">{PRODUCTS.england_premium_tenancy_agreement.label}</option>
+                <option value="england_student_tenancy_agreement">{PRODUCTS.england_student_tenancy_agreement.label}</option>
+                <option value="england_hmo_shared_house_tenancy_agreement">{PRODUCTS.england_hmo_shared_house_tenancy_agreement.label}</option>
+                <option value="england_lodger_agreement">{PRODUCTS.england_lodger_agreement.label}</option>
               </select>
             </div>
 

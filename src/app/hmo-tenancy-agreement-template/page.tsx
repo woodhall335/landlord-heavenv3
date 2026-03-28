@@ -6,45 +6,46 @@ import { getCanonicalUrl } from '@/lib/seo';
 
 const pagePath = '/hmo-tenancy-agreement-template';
 const canonicalUrl = getCanonicalUrl(pagePath);
+const canonicalProductPage = '/hmo-shared-house-tenancy-agreement';
 
 const faqs = [
   {
-    question: 'Why is Premium the focus on this page?',
+    question: 'Is HMO still handled through Premium?',
     answer:
-      'Because HMO, sharer, student, and guarantor-backed lets are usually where landlords need broader wording and stronger supporting documents from the start. This page is built to move complex buyers toward the Premium path instead of a thin standard template.',
+      'No. England HMOs and shared houses now have their own dedicated HMO / Shared House product instead of being bundled into Premium.',
   },
   {
-    question: 'Can I still use the main /products/ast page from here?',
+    question: 'Should I use this page for ordinary residential lets?',
     answer:
-      'Yes. The CTA points to /products/ast because that is where the Standard and Premium options are compared. The difference is that this page frames Premium as the likely better fit for complex lets.',
+      'Usually no. This page is for shared-house and HMO intent. Straightforward whole-property residential lets should use Standard or Premium instead.',
   },
   {
-    question: 'Is this page only for licensed HMOs?',
+    question: 'What if the landlord lives in the property?',
     answer:
-      'No. It is also relevant to shared houses, student lets, guarantor-backed arrangements, and any tenancy setup where broader wording and more operational detail are helpful from day one.',
+      'If the landlord is resident and sharing the home with the occupier, compare the Lodger route instead of the HMO / Shared House product.',
   },
   {
-    question: 'What if my let is straightforward after all?',
+    question: 'Does this page replace the main England chooser?',
     answer:
-      'You can still use the main product page to compare both options. This page exists because complex buyers often want a clearer signal that Premium is the stronger route when the tenancy setup is not simple.',
+      'No. It is a focused entry page for HMO and shared-house intent. You can still use the main England chooser if you want to compare all five product routes.',
   },
 ];
 
 export const metadata: Metadata = {
-  title: 'HMO Tenancy Agreement Template | Premium England Route',
+  title: 'HMO Tenancy Agreement Template | England HMO / Shared House Route',
   description:
-    'Premium-focused page for HMO, sharer, student, and guarantor-backed England lets, with a direct route into the main product page.',
+    'England HMO / Shared House tenancy agreement guidance with a direct route into the dedicated HMO/shared-house product.',
   keywords: [
     'hmo tenancy agreement template',
-    'student tenancy agreement england',
+    'hmo tenancy agreement england',
     'shared house tenancy agreement',
-    'premium tenancy agreement england',
+    'hmo shared house agreement',
   ],
   alternates: { canonical: canonicalUrl },
   openGraph: {
-    title: 'HMO Tenancy Agreement Template | Premium England Route',
+    title: 'HMO Tenancy Agreement Template | England HMO / Shared House Route',
     description:
-      'Premium-led page for landlords who need broader wording for HMOs, sharers, students, or guarantors.',
+      'England HMO / Shared House tenancy agreement guidance with a direct route into the dedicated HMO/shared-house product.',
     url: canonicalUrl,
     type: 'website',
   },
@@ -61,62 +62,59 @@ export default function HmoTenancyAgreementTemplatePage() {
         headline: 'HMO Tenancy Agreement Template',
         description: metadata.description as string,
         url: canonicalUrl,
-        datePublished: '2026-03-24',
-        dateModified: '2026-03-24',
+        datePublished: '2026-03-27',
+        dateModified: '2026-03-27',
       })}
       faqSchemaData={faqPageSchema(faqs)}
       heroTitle="HMO Tenancy Agreement Template"
-      heroSubtitle="If the tenancy is more complex, Premium is usually the better route. Use this page to understand why HMOs, sharers, guarantors, and student lets often need broader wording from the start."
+      heroSubtitle="England HMO and shared-house cases now have a dedicated product route. Use this page when the real need is communal-area and sharer-specific drafting, not just a higher-priced ordinary tenancy agreement."
       heroMediaSrc="/images/wizard-icons/46-premium.png"
-      heroMediaAlt="Illustration showing premium tenancy agreement features"
-      primaryCtaLabel="Compare Premium tenancy agreement options"
-      primaryCtaHref="/products/ast"
+      heroMediaAlt="Illustration showing HMO and shared-house agreement setup"
+      primaryCtaLabel="Start HMO / Shared House agreement"
+      primaryCtaHref={canonicalProductPage}
       pagePath={pagePath}
-      intentHookTitle="Complex lets need a stronger product signal"
+      intentHookTitle="Match HMO intent to the HMO product"
       intentHookParagraphs={[
-        'Landlords searching for an HMO tenancy agreement template are usually not looking for the same thing as a landlord with a single straightforward household let. They are often dealing with sharers, students, guarantors, extra house rules, or a setup where broader drafting matters from the start. That is why this page should push Premium clearly rather than treating all tenancies as if they sit on the same level of complexity.',
-        'This does not mean Standard disappears. It means the funnel should stop pretending complex buyers can be served well by the same light-touch message as everyone else. Premium deserves a dedicated entry page because it speaks to a landlord who is already aware that the tenancy is more operationally involved and wants a route that feels built for that reality.',
-        'The goal here is simple: match the intent immediately, explain why Premium is often the better fit, and move the user into the main product page where they can still compare both options before buying.',
+        'Landlords searching for an HMO tenancy agreement template are usually trying to solve a shared-house problem, not just buy a more detailed version of an ordinary tenancy agreement.',
+        'That is why the England HMO / Shared House route now stands on its own. It captures communal areas, sharer expectations, and house-management detail directly instead of assuming Premium can cover every higher-complexity case.',
+        'This page should move HMO intent straight to the dedicated HMO/shared-house product so the product model and the public funnel tell the same story.',
       ]}
-      currentPositionTitle="Why Premium should lead for HMOs and higher-complexity lets"
+      currentPositionTitle="Why this is no longer a Premium page"
       currentPositionParagraphs={[
-        'Complex tenancy arrangements create more room for avoidable gaps if the landlord starts from thin wording or a template that was really designed for a simpler let. That is why this page should frame Premium as the stronger starting point for HMOs, shared houses, student occupation, guarantor-backed lets, and other setups where broader drafting matters.',
-        'From a conversion perspective, that stronger signal is helpful because it reduces hesitation. Instead of making the landlord decode which product level sounds safer, the page can say clearly that Premium is usually the better choice when the tenancy structure is more demanding.',
+        'The old funnel treated Premium as the practical home for HMOs, shared houses, student lets, and other complex arrangements. That blurred together materially different England products and made it harder to route users cleanly.',
+        'The revised product system separates HMO / Shared House from Premium. Premium is now an ordinary-residential premium agreement, while HMO / Shared House handles communal sharers and shared-house-specific drafting.',
       ]}
       sections={[
         {
-          title: 'When Premium is the better choice',
+          title: 'When the HMO / Shared House route is the better fit',
           paragraphs: [
-            'Premium becomes the stronger route when the landlord already knows the let is not simple. HMOs, multiple sharers, student households, and guarantor-backed arrangements all add practical and drafting complexity that deserves more than the lightest possible agreement path.',
-            'That does not mean every complex tenancy is risky in the dramatic sense. It simply means the product should be matched to the reality of the arrangement. A landlord who already knows there will be multiple occupants, more operational detail, or more moving parts does not benefit from a page that hides the Premium route in small print.',
-            'By surfacing Premium early, this page gives that landlord permission to choose the more suitable route without feeling upsold for the sake of it. That is good for trust and good for conversion.',
+            'Use the dedicated HMO / Shared House product when the tenancy involves communal areas, sharers, HMO-style management detail, or a setup where room-by-room or shared-house practicalities need to be recorded explicitly.',
+            'This is different from choosing Premium for a fuller ordinary-residential agreement. The point is not just that the tenancy feels more complex. The point is that the shared-house structure itself needs a different product identity and drafting path.',
           ],
         },
         {
-          title: 'Why a generic HMO template is often a weak answer',
+          title: 'Why a dedicated HMO route matters',
           paragraphs: [
-            'A generic HMO or shared-house template can look convenient, but it often leaves the landlord doing most of the hard work. The landlord still has to figure out whether the wording is broad enough, whether the operational detail is clear enough, and whether the overall structure really suits the tenancy they are about to grant.',
-            'That is where a Premium-led funnel performs better. Instead of pushing a one-size-fits-all file, it starts from the assumption that complexity deserves a stronger product route. That helps the buyer feel understood and cuts down on the doubt that often follows a cheap template download.',
-            'In practice, that means this page should keep repeating a simple idea: if the tenancy is more complex, the stronger route is usually to compare the Premium option directly on the main product page rather than settle for the lightest document because it is quicker to click.',
+            'When HMO cases are funnelled through an ordinary premium product, users have to infer whether the agreement really matches communal sharers, shared facilities, and house-management expectations.',
+            'A dedicated HMO / Shared House route removes that guesswork. It names the use case directly and keeps the drafting path aligned with the actual occupation setup from the start.',
           ],
         },
         {
-          title: 'How this page fits the wider England-first funnel',
+          title: 'How this page fits the wider England chooser',
           paragraphs: [
-            'This page sits at the bottom of the search-intent pyramid. The landlord is no longer just looking for a tenancy agreement in the abstract. They are looking for something that feels suitable for a more demanding setup. That makes them one of the most commercially valuable users in the funnel.',
-            'The page therefore should not drift into broad educational copy. It should stay practical, buyer-focused, and product-led. Explain why Premium often fits better, acknowledge England\'s current framework from 1 May 2026, and then get the landlord to the main product page where the purchase decision is close.',
-            'That gives Landlord Heaven a better chance of lifting average order value as well as conversion. It matches the buyer to the product level they are more likely to need, which is exactly what a Premium use-case page should do.',
+            'This page is an intent-specific entry point, not a replacement for the wider England tenancy chooser. Standard, Premium, Student, HMO / Shared House, and Lodger all remain available from the main chooser.',
+            'If the user already knows the property is an HMO or shared house, this page should reduce friction by sending them straight into the dedicated HMO/shared-house path.',
           ],
         },
       ]}
-      ctaBlockTitle="Need broader wording for a more complex tenancy?"
-      ctaBlockDescription="Use the main product page to compare Standard and Premium, then choose the stronger route for HMOs, sharers, students, guarantors, and higher-complexity England lets."
+      ctaBlockTitle="Need HMO or shared-house drafting?"
+      ctaBlockDescription="Go straight to the dedicated England HMO / Shared House product instead of comparing it as a Premium variant."
       faqTitle="HMO tenancy agreement template FAQs"
-      faqIntro="Straight answers for landlords who want a clearer Premium route for complex England tenancies."
+      faqIntro="Short answers for landlords trying to route HMO and shared-house cases correctly in the new England product model."
       faqs={faqs}
-      finalCtaTitle="Compare Premium on the main product page"
-      finalCtaDescription="If the let is more complex than a straightforward single-household tenancy, move to the main product page and compare the Premium route directly instead of relying on a thin HMO template."
-      finalCtaLabel="View Premium-led tenancy agreement options"
+      finalCtaTitle="Open the dedicated HMO / Shared House product"
+      finalCtaDescription="If the real issue is communal sharers, shared facilities, or HMO-style occupation, use the HMO / Shared House route directly."
+      finalCtaLabel="View HMO / Shared House agreement"
       relatedLinks={hmoTenancyAgreementTemplateRelatedLinks}
     />
   );

@@ -1,12 +1,13 @@
 /**
- * Tenancy Variant Validator Tests
+ * Legacy Tenancy Tier Validator Tests
  *
- * Comprehensive tests to verify the "2-variants only" rule:
+ * Comprehensive tests to verify the legacy shared tier model:
  * - Standard: Base tenancy agreement ONLY, NO HMO clauses
- * - Premium: HMO-specific tenancy agreement with multi-occupancy clauses
+ * - Premium: Legacy enhanced tenancy agreement which, for historical
+ *   ast_premium generation, still preserves the old shared-house/HMO template path
  *
  * Tests verify:
- * A) Configuration correctness (exactly 2 variants per jurisdiction)
+ * A) Legacy configuration correctness (exactly 2 tiers per jurisdiction)
  * B) Template content compliance (HMO markers present/absent as required)
  * C) pack-contents alignment (correct document counts)
  * D) ast-generator alignment (correct template paths)
@@ -37,6 +38,10 @@ import {
 } from '../tenancy-variant-validator';
 
 import { getPackContents } from '../pack-contents';
+import {
+  ENGLAND_MODERN_TENANCY_PRODUCTS,
+  getEnglandCanonicalTenancyProduct,
+} from '@/lib/tenancy/england-product-model';
 
 // ============================================================================
 // SETUP
@@ -63,8 +68,8 @@ function readTemplate(templatePath: string): string | null {
 describe('A. Configuration Correctness', () => {
   const jurisdictions: TenancyJurisdiction[] = ['england', 'wales', 'scotland', 'northern-ireland'];
 
-  describe('Exactly 2 variants per jurisdiction', () => {
-    it.each(jurisdictions)('%s has exactly 2 variants (standard + premium)', (jurisdiction) => {
+  describe('Exactly 2 legacy tiers per jurisdiction', () => {
+    it.each(jurisdictions)('%s has exactly 2 legacy tiers (standard + premium)', (jurisdiction) => {
       const config = TENANCY_VARIANT_CONFIGS[jurisdiction];
       expect(config).toBeDefined();
       expect(config.standard).toBeDefined();
@@ -110,7 +115,7 @@ describe('A. Configuration Correctness', () => {
       expect(content!.length).toBeGreaterThan(100);
     });
 
-    it.each(jurisdictions)('%s premium (HMO) template file exists', (jurisdiction) => {
+      it.each(jurisdictions)('%s premium legacy template file exists', (jurisdiction) => {
       const config = getVariantConfig(jurisdiction, 'premium');
       const content = readTemplate(config!.templatePath);
       expect(content).not.toBeNull();
@@ -143,8 +148,8 @@ describe('B. Template Content Compliance', () => {
     });
   });
 
-  describe('Premium templates MUST contain HMO clauses', () => {
-    it.each(jurisdictions)('%s premium template has required HMO markers', (jurisdiction) => {
+  describe('Legacy premium templates keep their historical HMO/shared-house markers', () => {
+    it.each(jurisdictions)('%s premium legacy template has required HMO markers', (jurisdiction) => {
       const config = getVariantConfig(jurisdiction, 'premium');
       const content = readTemplate(config!.templatePath);
       expect(content).not.toBeNull();
@@ -157,7 +162,7 @@ describe('B. Template Content Compliance', () => {
       expect(content!.toLowerCase()).toContain('joint and several liability');
     });
 
-    it.each(jurisdictions)('%s premium template has clear HMO signposting in the body copy', (jurisdiction) => {
+    it.each(jurisdictions)('%s premium legacy template has clear HMO signposting in the body copy', (jurisdiction) => {
       const config = getVariantConfig(jurisdiction, 'premium');
       const content = readTemplate(config!.templatePath);
       expect(content).not.toBeNull();
@@ -173,6 +178,21 @@ describe('B. Template Content Compliance', () => {
         content!.includes('Houses in Multiple Occupation') ||
         content!.includes('shared facilities');
       expect(hasHMOSection).toBe(true);
+    });
+  });
+
+  describe('Modern England products are outside the legacy 2-tier validator', () => {
+    it('tracks five first-class England products separately from ast_standard and ast_premium', () => {
+      expect(ENGLAND_MODERN_TENANCY_PRODUCTS).toEqual([
+        'england_standard_tenancy_agreement',
+        'england_premium_tenancy_agreement',
+        'england_student_tenancy_agreement',
+        'england_hmo_shared_house_tenancy_agreement',
+        'england_lodger_agreement',
+      ]);
+      expect(getEnglandCanonicalTenancyProduct('ast_standard')).toBe('england_standard_tenancy_agreement');
+      expect(getEnglandCanonicalTenancyProduct('ast_premium')).toBe('england_premium_tenancy_agreement');
+      expect(getEnglandCanonicalTenancyProduct('england_student_tenancy_agreement')).toBe('england_student_tenancy_agreement');
     });
   });
 });
@@ -211,7 +231,7 @@ describe('C. Pack-Contents Alignment', () => {
   });
 
   describe('Premium product includes the correct primary agreement', () => {
-    it('England ast_premium includes ast_agreement_hmo as the primary document', () => {
+    it('England ast_premium keeps ast_agreement_hmo as the historical primary document', () => {
       const items = getPackContents({ product: 'ast_premium', jurisdiction: 'england' });
       const agreement = items.find(item => item.key === 'ast_agreement_hmo');
       expect(agreement).toBeDefined();
@@ -314,7 +334,7 @@ describe('E. Document Key Consistency', () => {
     }
   });
 
-  it('Premium document keys contain "hmo"', () => {
+  it('Legacy premium document keys preserve historical "hmo" naming', () => {
     const jurisdictions = getSupportedJurisdictions();
 
     for (const jurisdiction of jurisdictions) {
@@ -575,7 +595,7 @@ describe('I. Regression Prevention', () => {
     }
   });
 
-  it('premium templates have AT LEAST 3 HMO markers (minimum threshold)', () => {
+  it('legacy premium templates have AT LEAST 3 HMO markers (minimum threshold)', () => {
     const jurisdictions = getSupportedJurisdictions();
     const MINIMUM_HMO_MARKERS = 3;
 

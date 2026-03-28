@@ -777,7 +777,7 @@ export const astStandardContent: WizardLandingContent = {
     {
       question: 'Do I need Premium instead?',
       answer:
-        'Premium adds HMO clauses, guarantor provisions, wizard-completed inventory, and enhanced terms. It is recommended for HMOs, student lets, properties requiring guarantors, or multi-tenant situations.',
+        'For England, Premium is now the fuller ordinary-residential route, while Student, HMO / Shared House, and Lodger have their own dedicated products. In other jurisdictions, Premium still represents the broader tiered product.',
     },
     {
       question: 'Is this agreement legally compliant?',
@@ -807,16 +807,18 @@ export const astStandardContent: WizardLandingContent = {
 };
 
 /**
- * AST PREMIUM - Enhanced Tenancy Agreements with HMO/Guarantor (All 4 Jurisdictions)
+ * AST PREMIUM - Enhanced tenancy agreements across the shared UK funnel.
+ * England Premium is now the fuller ordinary-residential route, while the
+ * England Student, HMO / Shared House, and Lodger products sit separately.
  */
 export const astPremiumContent: WizardLandingContent = {
   slug: 'premium-tenancy-agreement',
-  title: `Premium Tenancy Agreement 2026 | HMO Clauses & Guarantor Provisions | ${SEO_PRICES.tenancyPremium.display}`,
+  title: `Premium Tenancy Agreement 2026 | Fuller Residential Drafting | ${SEO_PRICES.tenancyPremium.display}`,
   description:
-    'Premium tenancy agreements with HMO clauses, guarantor provisions, inventory and schedule of condition, and compliance checklist. England now uses current England tenancy agreement wording in the public flow, and older agreements may be harder to rely on if they use outdated wording or structure.',
+    'Premium tenancy agreements with fuller drafting, inventory support, and compliance guidance. In England, Premium is now the ordinary-residential premium route, while Student, HMO / Shared House, and Lodger products are separate.',
   h1: 'Premium Tenancy Agreement',
   subheading:
-    'HMO clauses, guarantor provisions, inventory and schedule of condition, and compliance checklist for all UK jurisdictions',
+    'Fuller drafting, inventory support, and enhanced operational detail for premium tenancy agreements',
 
   product: 'ast_premium',
   wizardUrl: '/wizard?product=ast_premium&src=product_page&topic=tenancy',
@@ -829,13 +831,13 @@ export const astPremiumContent: WizardLandingContent = {
       name: 'England',
       flag: 'England',
       agreementType: 'Premium England tenancy agreement',
-      legalBasis: 'Current England agreement wording with HMO and guarantor support',
+      legalBasis: 'Current England agreement wording for the ordinary-residential premium route',
       keyFeatures: [
-        'All Standard England agreement clauses plus HMO-ready provisions',
-        'Joint and several liability for multi-tenant',
-        'Shared facilities rules and responsibilities',
-        'Guarantor clauses with clear liability terms',
-        'Rent review mechanisms (CPI/RPI-linked)',
+        'All Standard England agreement clauses plus fuller operational drafting',
+        'More detailed property management and practical wording',
+        'Optional detail for notices, inspections, and day-to-day operation',
+        'Guarantor-friendly drafting where selected in the ordinary residential flow',
+        'Current England rent increase and review wording',
         'Anti-subletting and short-let prohibition',
       ],
     },
@@ -881,26 +883,26 @@ export const astPremiumContent: WizardLandingContent = {
   ],
 
   whatYouGet: [
-    'Premium tenancy agreement with all Standard clauses plus HMO provisions',
-    'HMO clauses: joint and several liability, shared facilities rules, and tenant replacement procedure',
-    'Guarantor clauses with clear liability terms and extent of guarantee',
-    'Inventory and schedule of condition completed through the wizard',
+    'Premium tenancy agreement with fuller drafting than the Standard route',
+    'Enhanced operational wording for ordinary residential lets',
+    'Guarantor-friendly drafting where selected in the supported flow',
+    'Inventory and schedule of condition completed through the wizard where supported',
     'Compliance checklist for jurisdiction-specific pre-tenancy requirements',
     'Tenant notes and guidance explaining obligations clearly',
-    'Rent review mechanisms: CPI/RPI-linked increases and annual review process',
+    'Rent review and operational wording suited to the selected jurisdiction',
     'Anti-subletting clause and short-let prohibition',
     'Late payment provisions with reasonable charges',
-    'Enhanced house rules for multi-tenant properties',
+    'Enhanced house rules and property-management detail',
     'Unlimited regenerations with 12+ months portal storage',
   ],
 
   whyUseThis: {
     heading: 'Why Premium Not Just Standard',
     intro:
-      'Standard agreements are designed for single-household lets. If you have multiple tenants sharing, require a guarantor, or operate an HMO, you need provisions that Standard does not include. Premium adds HMO clauses, guarantor provisions, and supporting documents that help you in disputes and protect you if things go wrong.',
+      'Premium is for landlords who want fuller drafting, clearer operational detail, and a more tailored agreement than the baseline Standard route. In England, HMO/shared-house, student, and lodger cases now have their own dedicated products instead of being folded into Premium.',
     benefits: [
-      'HMO clauses for shared properties: joint and several liability, shared facilities rules, and tenant replacement procedure',
-      'Guarantor clauses with clear liability terms for third-party guarantors',
+      'Fuller drafting for inspections, property use, and day-to-day management',
+      'Guarantor-friendly wording where the supported flow captures that detail',
       'Inventory and schedule of condition completed through the wizard to support deposit disputes',
       'Compliance checklist so you do not miss pre-tenancy requirements',
       'Tenant guidance notes that reduce disputes by setting expectations clearly',
@@ -909,8 +911,8 @@ export const astPremiumContent: WizardLandingContent = {
   },
 
   proceduralBenefits: [
-    'Includes HMO clauses for multi-tenant properties: joint and several liability, shared facilities rules, and tenant replacement',
-    'Includes guarantor clauses: guarantor identification, liability scope, duration, and recovery provisions',
+    'Includes fuller drafting for the premium route rather than only the baseline standard wording',
+    'Includes guarantor-friendly wording where selected in the supported flow',
     'Generates inventory and schedule of condition with the wizard instead of leaving it blank',
     'Creates jurisdiction-specific compliance checklist for pre-tenancy requirements',
     'Includes tenant guidance notes explaining obligations',
@@ -921,18 +923,18 @@ export const astPremiumContent: WizardLandingContent = {
   legalValidationExplainer: {
     whatItMeans: [
       'Generates the correct agreement type for your jurisdiction with Premium additions',
-      "Adapts HMO clauses to each nation's legislation where relevant",
+      'Keeps premium drafting aligned with the jurisdiction-specific agreement type',
       'Structures guarantor provisions with clear liability scope',
       'Creates the inventory and schedule of condition through the wizard',
       'Builds a compliance checklist specific to the selected jurisdiction',
       'Applies all Standard validation plus Premium-specific provisions',
     ],
     disclaimer:
-      'This is systematic procedural validation, not legal advice. Premium agreements are drafted for typical HMO and multi-tenant situations. For complex arrangements such as commercial HMOs, licence agreements, or unusual guarantee structures, consult a qualified solicitor.',
+      'This is systematic procedural validation, not legal advice. Premium agreements are drafted for the supported premium residential workflow in each jurisdiction. For complex arrangements such as commercial HMOs, licence agreements, or unusual guarantee structures, consult a qualified solicitor.',
   },
 
   howValidationWorks: [
-    'Jurisdiction-specific drafting: HMO clauses adapted to each nation where relevant',
+    'Jurisdiction-specific drafting: premium wording stays aligned with the selected nation',
     'Cross-jurisdiction safety: the selected jurisdiction keeps the right terminology and compliance framing',
     'Guarantor validation: ensures guarantor details and liability scope are captured',
     'Inventory workflow: converts guided answers into a usable schedule of condition',
@@ -941,18 +943,18 @@ export const astPremiumContent: WizardLandingContent = {
   ],
 
   whoThisIsFor: [
-    'HMO landlords with shared facilities or multi-tenant occupation',
-    'Student accommodation landlords',
-    'Landlords requiring guarantors',
+    'Landlords wanting fuller drafting than the baseline standard route',
+    'Ordinary residential lets needing more operational detail',
+    'Landlords requiring guarantor-friendly wording in the supported flow',
     'Professional landlords wanting more detailed protection in disputes',
-    'Properties that need stronger multi-tenant or shared-house documentation',
+    'Landlords who want a more detailed product without switching into a separate England HMO, Student, or Lodger route',
   ],
 
   faqs: [
     {
-      question: 'What HMO clauses are included?',
+      question: 'Does Premium still include HMO clauses in England?',
       answer:
-        'Premium includes joint and several liability, shared facilities rules, tenant replacement wording, and other shared-house provisions that are commonly needed in multi-tenant arrangements.',
+        'No. England now routes HMO / Shared House cases to their own dedicated product. Premium remains the fuller ordinary-residential route.',
     },
     {
       question: 'What are guarantor clauses?',
@@ -967,7 +969,7 @@ export const astPremiumContent: WizardLandingContent = {
     {
       question: 'Is Premium required for HMOs?',
       answer:
-        'It is not mandatory in every case, but it is usually the better fit where you need shared-house, guarantor, or student-ready provisions on top of the core agreement.',
+        'For England, no. HMOs now have their own dedicated HMO / Shared House product. In other jurisdictions the premium tier may still be the broader enhanced route.',
     },
     {
       question: 'What is joint and several liability?',
@@ -987,7 +989,7 @@ export const astPremiumContent: WizardLandingContent = {
     {
       question: 'Do Premium agreements work for single tenants?',
       answer:
-        'Yes. Premium includes all Standard clauses, so it can still be used where you mainly want the extra guidance, inventory support, or guarantor provisions.',
+        'Yes. Premium remains suitable for ordinary residential lets where you mainly want fuller drafting, stronger operational detail, or the broader premium package.',
     },
   ],
 

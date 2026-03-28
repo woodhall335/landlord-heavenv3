@@ -70,6 +70,7 @@ import {
   getEnglandTenancyPurpose,
   isEnglandPostReformTenancy,
 } from '@/lib/tenancy/england-reform';
+import { getEnglandCanonicalTenancyProduct } from '@/lib/tenancy/england-product-model';
 
 // Jurisdiction-aware product normalization - ensures Scotland never shows "AST" labels
 import {
@@ -87,6 +88,7 @@ import {
 } from '@/lib/residential-letting/recommendations';
 import { getResidentialStandaloneProfile } from '@/lib/residential-letting/standalone-profiles';
 import { getResidentialStandaloneThemeVars } from '@/lib/residential-letting/standalone-theme';
+import { getResidentialDocumentList } from '@/lib/residential-letting/document-config';
 import { PRODUCTS } from '@/lib/pricing/products';
 import {
   buildMoneyClaimAddOnRecommendation,
@@ -140,14 +142,25 @@ function ReviewPageInner() {
   // This ensures hooks are called in the same order on every render
   const jurisdiction = analysis?.jurisdiction;
   const caseType = analysis?.case_type ?? 'eviction';
-  const product: string = productParam || analysis?.product || 'complete_pack';
+  const tenancyFacts = analysis?.case_facts || {};
+  const rawProduct: string = productParam || analysis?.product || 'complete_pack';
+  const canonicalEnglandProduct =
+    caseType === 'tenancy_agreement' && jurisdiction === 'england'
+      ? getEnglandCanonicalTenancyProduct(
+          tenancyFacts.__meta?.canonical_product ||
+          tenancyFacts.__meta?.product ||
+          tenancyFacts.product ||
+          analysis?.purchased_product ||
+          rawProduct
+        )
+      : null;
+  const product: string = canonicalEnglandProduct || rawProduct;
 
   // Detect flow type based on product
   const isMoneyClaimFlow = product === 'money_claim' || product === 'sc_money_claim' || caseType === 'money_claim';
   const isNoticeOnlyFlow = product === 'notice_only';
   const isTenancyFlow = product === 'tenancy_agreement' || product === 'ast_standard' || product === 'ast_premium' || caseType === 'tenancy_agreement';
   const isResidentialStandaloneFlow = isResidentialLettingProductSku(product);
-  const tenancyFacts = analysis?.case_facts || {};
   const residentialRecommendations: ReviewAddOnRecommendation[] = isTenancyFlow
     ? getResidentialUpsellRecommendations(product, tenancyFacts)
     : [];
@@ -290,7 +303,9 @@ function ReviewPageInner() {
     // Normalize product for jurisdiction to ensure Scotland flows use PRT, not AST
     const normalizedJurisdiction = (jurisdiction || 'england') as CanonicalJurisdiction;
     const normalizedProduct = isTenancyFlow
-      ? validateUrlProduct(product, normalizedJurisdiction)
+      ? (isResidentialLettingProductSku(product)
+          ? product
+          : validateUrlProduct(product, normalizedJurisdiction))
       : product;
 
     const params = new URLSearchParams({
@@ -788,7 +803,7 @@ function MoneyClaimReviewContent({
               <ul className="space-y-2">
                 {risks.map((risk: any, i: number) => (
                   <li key={i} className="text-sm text-amber-800">
-                    â€¢ {risk.message || risk.title}
+                    &bull; {risk.message || risk.title}
                   </li>
                 ))}
               </ul>
@@ -958,7 +973,7 @@ function MoneyClaimReviewContent({
                 <h3 className="text-sm font-medium text-amber-800 mb-2">Red flags</h3>
                 <ul className="space-y-1 text-sm text-amber-900">
                   {redFlags.map((item, i) => (
-                    <li key={i}>â€¢ {item}</li>
+                    <li key={i}>&bull; {item}</li>
                   ))}
                 </ul>
               </div>
@@ -968,7 +983,7 @@ function MoneyClaimReviewContent({
                 <h3 className="text-sm font-medium text-red-800 mb-2">Compliance issues</h3>
                 <ul className="space-y-1 text-sm text-red-900">
                   {complianceIssues.map((item, i) => (
-                    <li key={i}>â€¢ {item}</li>
+                    <li key={i}>&bull; {item}</li>
                   ))}
                 </ul>
               </div>
@@ -1012,7 +1027,7 @@ function MoneyClaimReviewContent({
               <ul className="space-y-1">
                 {warnings.map((warning: any, i: number) => (
                   <li key={i} className="text-sm text-yellow-800">
-                    â€¢ {warning.message || warning}
+                    &bull; {warning.message || warning}
                   </li>
                 ))}
               </ul>
@@ -1575,7 +1590,7 @@ function EvictionReviewContent({
                 <h3 className="text-sm font-medium text-amber-800 mb-2">Red flags</h3>
                 <ul className="space-y-1 text-sm text-amber-900">
                   {redFlags.map((item, i) => (
-                    <li key={i}>â€¢ {item}</li>
+                    <li key={i}>&bull; {item}</li>
                   ))}
                 </ul>
               </div>
@@ -1585,7 +1600,7 @@ function EvictionReviewContent({
                 <h3 className="text-sm font-medium text-red-800 mb-2">Compliance issues</h3>
                 <ul className="space-y-1 text-sm text-red-900">
                   {complianceIssues.map((item, i) => (
-                    <li key={i}>â€¢ {item}</li>
+                    <li key={i}>&bull; {item}</li>
                   ))}
                 </ul>
               </div>
@@ -1772,7 +1787,7 @@ function EvictionReviewContent({
               <ul className="space-y-1">
                 {analysis.decision_engine.warnings.map((warning: string, i: number) => (
                   <li key={i} className="text-sm text-yellow-800">
-                    â€¢ {warning}
+                    &bull; {warning}
                   </li>
                 ))}
               </ul>
@@ -1989,7 +2004,7 @@ function NoticeOnlyReviewContent({
       <div className="text-center pb-6 border-b">
         <h1 className="text-3xl font-bold text-gray-900">Notice Review</h1>
         <p className="text-gray-600 mt-2">
-          {jurisdictionLabel} â€¢ {recommendedRouteLabel}
+          {jurisdictionLabel} &middot; {recommendedRouteLabel}
         </p>
         {isSection8 && includedGroundCodes.length > 0 && (
           <p className="text-sm text-gray-500 mt-1">
@@ -2168,7 +2183,7 @@ function NoticeOnlyReviewContent({
                 <ul className="space-y-2">
                   {s21Validation.warnings.map((warning, index) => (
                     <li key={index} className="text-sm text-amber-800">
-                      â€¢ {warning.message}
+                      &bull; {warning.message}
                     </li>
                   ))}
                 </ul>
@@ -2461,7 +2476,7 @@ function NoticeOnlyReviewContent({
           <ul className="space-y-2">
             {complianceIssues.map((issue: string, index: number) => (
               <li key={index} className="flex items-start gap-2 text-blue-900">
-                <span>â€¢</span>
+                <span>&bull;</span>
                 <span>{issue}</span>
               </li>
             ))}
@@ -2476,7 +2491,7 @@ function NoticeOnlyReviewContent({
           <ul className="space-y-2">
             {redFlags.map((flag: string, index: number) => (
               <li key={index} className="flex items-start gap-2 text-amber-900">
-                <span>â€¢</span>
+                <span>&bull;</span>
                 <span>{flag}</span>
               </li>
             ))}
@@ -2491,7 +2506,7 @@ function NoticeOnlyReviewContent({
           <ul className="space-y-2">
             {warnings.map((warning: string, index: number) => (
               <li key={index} className="flex items-start gap-2 text-blue-900">
-                <span>â€¢</span>
+                <span>&bull;</span>
                 <span>{warning}</span>
               </li>
             ))}
@@ -3077,9 +3092,10 @@ function TenancyReviewContent({
     { title: 'Guarantor Agreement', included: true, description: 'Full guarantor deed with joint and several liability' },
     { title: inventoryTitle, included: true, description: inventoryDescription },
     { title: 'Check-in/Check-out Form', included: true },
-    { title: 'HMO Additional Terms', included: facts.is_hmo, description: 'Multi-occupancy clauses and shared facilities rules' },
+    { title: 'Premium Management Schedule', included: true, description: 'Operational notes for access, repairs, keys, and management arrangements' },
     { title: 'Section 13 Rent Increase Guidance', included: true, description: 'England rent increases are handled through the section 13 statutory process rather than CPI, RPI or fixed review clauses.' },
-    { title: 'Maintenance Request Form', included: true },
+    { title: 'Maintenance Reporting Form', included: true },
+    { title: 'Tenancy Variation Record', included: true },
     { title: 'Notice Templates Pack', included: true },
   ].filter(d => d.included);
 
@@ -3145,7 +3161,7 @@ function TenancyReviewContent({
       <div className="text-center pb-6 border-b">
         <h1 className="text-3xl font-bold text-gray-900">Tenancy Agreement Review</h1>
         <p className="text-gray-600 mt-2">
-          {jurisdictionLabel} â€¢ {terminology.agreementType}
+          {jurisdictionLabel} &middot; {terminology.agreementType}
           {isPremium && <span className="ml-2 px-2 py-1 bg-purple-100 text-purple-800 rounded text-sm font-medium">Premium</span>}
         </p>
         <div className="mt-4">
@@ -3252,7 +3268,7 @@ function TenancyReviewContent({
             What This Premium Agreement Includes
           </h2>
           <p className="text-gray-600 text-sm mb-4">
-            Your Premium agreement provides enhanced legal protections not available in the Standard version:
+            Your Premium agreement adds fuller ordinary-residential drafting and operational detail beyond the Standard version:
           </p>
           <div className="grid md:grid-cols-2 gap-4">
             <div className="space-y-3">
@@ -3279,15 +3295,20 @@ function TenancyReviewContent({
               </div>
             </div>
             <div className="space-y-3">
-              {facts.is_hmo && (
-                <div className="flex items-start gap-3">
-                  <RiCheckboxCircleLine className="w-5 h-5 text-purple-600 mt-0.5 shrink-0" />
-                  <div>
-                    <p className="font-medium text-gray-900">HMO & Shared Facilities Rules</p>
-                    <p className="text-sm text-gray-600">Multi-occupancy clauses covering communal areas, cleaning rotas, and house rules</p>
-                  </div>
+              <div className="flex items-start gap-3">
+                <RiCheckboxCircleLine className="w-5 h-5 text-purple-600 mt-0.5 shrink-0" />
+                <div>
+                  <p className="font-medium text-gray-900">Inspection & Access Controls</p>
+                  <p className="text-sm text-gray-600">Pre-agreed rules for landlord inspections, contractor entry, and emergency access</p>
                 </div>
-              )}
+              </div>
+              <div className="flex items-start gap-3">
+                <RiCheckboxCircleLine className="w-5 h-5 text-purple-600 mt-0.5 shrink-0" />
+                <div>
+                  <p className="font-medium text-gray-900">Keys, Handover & Management Notes</p>
+                  <p className="text-sm text-gray-600">Operational drafting for keys, reporting lines, contractor coordination, and hand-back expectations</p>
+                </div>
+              </div>
               <div className="flex items-start gap-3">
                 <RiCheckboxCircleLine className="w-5 h-5 text-purple-600 mt-0.5 shrink-0" />
                 <div>
@@ -3310,8 +3331,8 @@ function TenancyReviewContent({
           </div>
           <div className="mt-4 pt-4 border-t border-purple-100">
             <p className="text-sm text-purple-800">
-              <strong>Why Premium?</strong> These clauses are essential for HMO landlords, properties with guarantors,
-              or anyone wanting maximum legal protection. Standard agreements don&apos;t include these provisions.
+              <strong>Why Premium?</strong> Premium is the fuller ordinary-residential route. It gives you broader operational drafting,
+              stronger day-to-day management wording, and more detailed schedules without treating Premium as the HMO, student, or lodger product.
             </p>
           </div>
         </Card>
@@ -3374,7 +3395,7 @@ function TenancyReviewContent({
               <ul className="space-y-1">
                 {section.items.slice(0, 4).map((item, itemIndex) => (
                   <li key={itemIndex} className="text-sm text-blue-700 flex items-start gap-2">
-                    <span>â€¢</span>
+                    <span>&bull;</span>
                     <span>{item}</span>
                   </li>
                 ))}
@@ -3593,7 +3614,7 @@ function ResidentialLettingReviewContent({
       <div className="text-center pb-6 border-b">
         <h1 className="text-3xl font-bold text-gray-900">{productMeta?.label || 'Residential Letting Document'} Review</h1>
         <p className="text-gray-600 mt-2">
-          {jurisdiction === 'england' ? 'England' : jurisdiction} â€¢ {productMeta?.displayPrice || ''}
+          {jurisdiction === 'england' ? 'England' : jurisdiction} &middot; {productMeta?.displayPrice || ''}
         </p>
       </div>
 
@@ -3671,6 +3692,21 @@ function ResidentialStandaloneReviewContent({
     ? getResidentialStandaloneProfile(product)
     : null;
   const themeStyle = profile ? getResidentialStandaloneThemeVars(profile.theme) : undefined;
+  const englandTenancyPurpose = getEnglandTenancyPurpose(facts.england_tenancy_purpose);
+  const depositTaken = Number(facts.deposit_amount || 0) > 0;
+  const includeGuarantorDeed =
+    product === 'england_student_tenancy_agreement'
+      ? facts.guarantor_required === 'yes' || facts.guarantor_required === true
+      : product === 'england_premium_tenancy_agreement'
+        ? facts.guarantor_expected === 'yes' || facts.guarantor_expected === true
+        : false;
+  const documentList = isResidentialLettingProductSku(product)
+    ? getResidentialDocumentList(product, {
+        englandTenancyPurpose,
+        depositTaken,
+        includeGuarantorDeed,
+      })
+    : [];
 
   const people = Array.isArray(facts.tenants)
     ? facts.tenants.map((tenant: any) => tenant.full_name).filter(Boolean)
@@ -3733,6 +3769,21 @@ function ResidentialStandaloneReviewContent({
     (Array.isArray(facts.changed_terms_schedule) ? facts.changed_terms_schedule.length : 0) +
     (Array.isArray(facts.follow_up_items) ? facts.follow_up_items.length : 0) +
     (Array.isArray(facts.arrears_schedule_rows) ? facts.arrears_schedule_rows.length : 0);
+  const summaryStats =
+    profile && product.startsWith('england_')
+      ? [
+          { label: 'Pack docs', value: documentList.length },
+          {
+            label: product === 'england_lodger_agreement' ? 'Occupier' : 'Occupiers',
+            value: people.length || Number(facts.number_of_tenants) || 1,
+          },
+          { label: 'Schedules', value: profile.outputSections.length },
+        ]
+      : [
+          { label: 'Rooms', value: roomCount },
+          { label: 'Evidence', value: uploadCount },
+          { label: 'Schedules', value: scheduleCount },
+        ];
 
   const headlineFacts = (() => {
     switch (product) {
@@ -3959,18 +4010,12 @@ function ResidentialStandaloneReviewContent({
           </div>
         </div>
         <div className="mt-5 grid gap-3 sm:grid-cols-3">
-          <div className="rounded-2xl border border-violet-100 bg-violet-50/60 px-4 py-3">
-            <div className="text-xs uppercase tracking-[0.18em] text-violet-700">Rooms</div>
-            <div className="mt-1 text-2xl font-semibold text-violet-950">{roomCount}</div>
-          </div>
-          <div className="rounded-2xl border border-violet-100 bg-violet-50/60 px-4 py-3">
-            <div className="text-xs uppercase tracking-[0.18em] text-violet-700">Evidence</div>
-            <div className="mt-1 text-2xl font-semibold text-violet-950">{uploadCount}</div>
-          </div>
-          <div className="rounded-2xl border border-violet-100 bg-violet-50/60 px-4 py-3">
-            <div className="text-xs uppercase tracking-[0.18em] text-violet-700">Schedules</div>
-            <div className="mt-1 text-2xl font-semibold text-violet-950">{scheduleCount}</div>
-          </div>
+          {summaryStats.map((stat) => (
+            <div key={stat.label} className="rounded-2xl border border-violet-100 bg-violet-50/60 px-4 py-3">
+              <div className="text-xs uppercase tracking-[0.18em] text-violet-700">{stat.label}</div>
+              <div className="mt-1 text-2xl font-semibold text-violet-950">{stat.value}</div>
+            </div>
+          ))}
         </div>
       </Card>
 
@@ -4008,6 +4053,37 @@ function ResidentialStandaloneReviewContent({
           </div>
         </Card>
       </div>
+
+      {documentList.length > 0 && (
+        <Card className="p-6">
+          <h2 className="text-lg font-semibold mb-4">Pack contents</h2>
+          <div className="grid gap-3 md:grid-cols-2">
+            {documentList.map((document) => (
+              <div key={document.id} className="rounded-2xl border border-slate-200 bg-white px-4 py-3">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="text-sm font-medium text-slate-900">{document.title}</p>
+                    <p className="mt-1 text-sm text-slate-600">{document.description}</p>
+                  </div>
+                  <span className="whitespace-nowrap rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600">
+                    {document.pages}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+          {profile?.landing.includedHighlights.length ? (
+            <div className="mt-4 grid gap-3 md:grid-cols-2">
+              {profile.landing.includedHighlights.map((feature: string) => (
+                <div key={feature} className="flex items-start gap-3 rounded-2xl bg-slate-50 px-4 py-3">
+                  <RiCheckboxCircleLine className="mt-0.5 h-5 w-5 text-[#7C3AED]" />
+                  <p className="text-sm text-slate-700">{feature}</p>
+                </div>
+              ))}
+            </div>
+          ) : null}
+        </Card>
+      )}
 
       <Card className="p-6">
         <h2 className="text-lg font-semibold mb-4">Captured facts</h2>

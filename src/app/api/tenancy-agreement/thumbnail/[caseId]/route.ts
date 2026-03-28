@@ -26,8 +26,13 @@
 import { NextResponse } from 'next/server';
 import { createAdminClient, createServerSupabaseClient, tryGetServerUser } from '@/lib/supabase/server';
 import { htmlToPreviewThumbnail, generateDocument } from '@/lib/documents/generator';
+import { generateResidentialLettingDocuments } from '@/lib/documents/residential-letting-generator';
 import { deriveCanonicalJurisdiction, type CanonicalJurisdiction } from '@/lib/types/jurisdiction';
 import { getJurisdictionConfig, type TenancyJurisdiction, validateASTData } from '@/lib/documents/ast-generator';
+import {
+  isResidentialLettingProductSku,
+  type ResidentialLettingProductSku,
+} from '@/lib/residential-letting/products';
 
 // Force Node.js runtime - Puppeteer/@sparticuz/chromium cannot run on Edge
 export const runtime = 'nodejs';
@@ -107,6 +112,7 @@ export async function GET(
     // Parse query params
     const url = new URL(request.url);
     const tier = (url.searchParams.get('tier') || 'standard') as 'standard' | 'premium';
+    const requestedProduct = url.searchParams.get('product');
 
     if (!caseId) {
       return errorResponse('MISSING_CASE_ID', 'Case ID is required', 400);
@@ -133,12 +139,64 @@ export async function GET(
 
     const caseRow = data as any;
     const facts = caseRow.collected_facts || caseRow.wizard_facts || caseRow.facts || {};
+    const modernEnglandProduct = [
+      requestedProduct,
+      facts.__meta?.canonical_product,
+      facts.__meta?.product,
+      facts.product,
+      facts.original_product,
+    ].find(
+      (value): value is ResidentialLettingProductSku => isResidentialLettingProductSku(value)
+    );
 
     // Determine jurisdiction
     const jurisdiction = deriveCanonicalJurisdiction(caseRow.jurisdiction, facts) as TenancyJurisdiction;
 
     if (!jurisdiction) {
       return errorResponse('INVALID_JURISDICTION', 'Invalid or missing jurisdiction', 422);
+    }
+
+    if (jurisdiction === 'england' && modernEnglandProduct) {
+      console.log('[Tenancy-Agreement-Thumbnail] Modern England thumbnail path:', {
+        caseId,
+        product: modernEnglandProduct,
+      });
+
+      const generatedPack = await generateResidentialLettingDocuments(modernEnglandProduct, facts, {
+        outputFormat: 'html',
+      });
+      const primaryDocument = generatedPack.documents[0];
+
+      if (!primaryDocument?.html) {
+        return errorResponse(
+          'THUMBNAIL_GENERATION_FAILED',
+          'No previewable document generated for the modern England product',
+          500,
+          { caseId, product: modernEnglandProduct }
+        );
+      }
+
+      const thumbnail = await htmlToPreviewThumbnail(primaryDocument.html, {
+        quality: 75,
+        watermarkText: 'PREVIEW',
+      });
+
+      const headers: Record<string, string> = {
+        'Content-Type': 'image/jpeg',
+        'Content-Disposition': 'inline; filename="preview.jpg"',
+        'X-Content-Type-Options': 'nosniff',
+        'Cache-Control': 'public, max-age=3600, s-maxage=3600',
+        'X-Thumbnail-Runtime': 'nodejs',
+        'X-Jurisdiction': jurisdiction,
+        'X-Tier': modernEnglandProduct,
+        'X-Product': modernEnglandProduct,
+      };
+
+      if (!isVercel) {
+        headers['Content-Length'] = thumbnail.length.toString();
+      }
+
+      return new NextResponse(new Uint8Array(thumbnail), { status: 200, headers });
     }
 
     // Get jurisdiction configuration

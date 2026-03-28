@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { Container } from "@/components/ui";
 import { createAdminClient, requireServerAuth } from "@/lib/supabase/server";
 import { isAdmin } from "@/lib/auth";
+import { PRODUCTS } from "@/lib/pricing/products";
 
 interface FailedPayment {
   id: string;
@@ -115,8 +116,13 @@ export default async function AdminFailedPaymentsPage({ searchParams }: AdminFai
       notice_only: "Notice Only",
       complete_pack: "Complete Eviction Pack",
       money_claim: "Money Claim Pack",
-      ast_standard: "England Assured Periodic Tenancy",
-      ast_premium: "England Assured Periodic Tenancy (Premium)",
+      ast_standard: PRODUCTS.ast_standard.label,
+      ast_premium: PRODUCTS.ast_premium.label,
+      england_standard_tenancy_agreement: PRODUCTS.england_standard_tenancy_agreement.label,
+      england_premium_tenancy_agreement: PRODUCTS.england_premium_tenancy_agreement.label,
+      england_student_tenancy_agreement: PRODUCTS.england_student_tenancy_agreement.label,
+      england_hmo_shared_house_tenancy_agreement: PRODUCTS.england_hmo_shared_house_tenancy_agreement.label,
+      england_lodger_agreement: PRODUCTS.england_lodger_agreement.label,
     };
     return names[productType] || productType;
   }

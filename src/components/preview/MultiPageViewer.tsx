@@ -33,7 +33,7 @@ interface MultiPageViewerProps {
   /** Product type (e.g., 'ast_standard') */
   product: string;
   /** Optional tier override */
-  tier?: 'standard' | 'premium';
+  tier?: string;
   /** Callback when viewer is closed */
   onClose?: () => void;
   /** Optional class name for the container */

@@ -225,6 +225,11 @@ describe('Product/Jurisdiction Coverage', () => {
     { product: 'sc_money_claim', jurisdictions: ['scotland'] },
     { product: 'ast_standard', jurisdictions: ['england', 'wales', 'scotland', 'northern-ireland'] },
     { product: 'ast_premium', jurisdictions: ['england', 'wales', 'scotland', 'northern-ireland'] },
+    { product: 'england_standard_tenancy_agreement', jurisdictions: ['england'] },
+    { product: 'england_premium_tenancy_agreement', jurisdictions: ['england'] },
+    { product: 'england_student_tenancy_agreement', jurisdictions: ['england'] },
+    { product: 'england_hmo_shared_house_tenancy_agreement', jurisdictions: ['england'] },
+    { product: 'england_lodger_agreement', jurisdictions: ['england'] },
   ];
 
   productJurisdictionMatrix.forEach(({ product, jurisdictions }) => {

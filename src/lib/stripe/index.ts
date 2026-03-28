@@ -34,6 +34,9 @@ export const PRICE_IDS = {
   MONEY_CLAIM: process.env.STRIPE_PRICE_ID_MONEY_CLAIM!,
   STANDARD_AST: process.env.STRIPE_PRICE_ID_STANDARD_AST!,
   PREMIUM_AST: process.env.STRIPE_PRICE_ID_PREMIUM_AST!,
+  STUDENT_TENANCY: process.env.STRIPE_PRICE_ID_STUDENT_TENANCY!,
+  HMO_SHARED_TENANCY: process.env.STRIPE_PRICE_ID_HMO_SHARED_TENANCY!,
+  LODGER_AGREEMENT: process.env.STRIPE_PRICE_ID_LODGER_AGREEMENT!,
 } as const;
 
 export const HMO_PRICE_IDS = HMO_PRO_ENABLED
@@ -71,6 +74,21 @@ export const PRODUCT_METADATA: Record<string, { name: string; type: string; cate
   },
   [PRICE_IDS.PREMIUM_AST]: {
     name: ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL,
+    type: 'one_time',
+    category: 'tenancy_agreement',
+  },
+  [PRICE_IDS.STUDENT_TENANCY]: {
+    name: 'Student Tenancy Agreement',
+    type: 'one_time',
+    category: 'tenancy_agreement',
+  },
+  [PRICE_IDS.HMO_SHARED_TENANCY]: {
+    name: 'HMO / Shared House Tenancy Agreement',
+    type: 'one_time',
+    category: 'tenancy_agreement',
+  },
+  [PRICE_IDS.LODGER_AGREEMENT]: {
+    name: 'Room Let / Lodger Agreement',
     type: 'one_time',
     category: 'tenancy_agreement',
   },

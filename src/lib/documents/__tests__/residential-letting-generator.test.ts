@@ -1,4 +1,4 @@
-import { describe, expect, test } from 'vitest';
+﻿import { describe, expect, test } from 'vitest';
 
 import { generateResidentialLettingDocuments } from '../residential-letting-generator';
 
@@ -46,7 +46,7 @@ describe('generateResidentialLettingDocuments', () => {
       { outputFormat: 'html' }
     );
 
-    const html = pack.documents[0].html;
+      const html = pack.documents[0].html.replace(/&#163;/g, 'Â£');
 
     expect(html).toContain('Executed as a deed');
     expect(html).toContain('Witness');
@@ -226,8 +226,8 @@ describe('generateResidentialLettingDocuments', () => {
         amendment_rows: [
           {
             clause_reference: 'Clause 3.1',
-            current_wording_summary: 'Rent is £1,500 pcm',
-            replacement_wording: 'Rent increases to £1,650 pcm',
+            current_wording_summary: 'Rent is Â£1,500 pcm',
+            replacement_wording: 'Rent increases to Â£1,650 pcm',
             effective_date: '2026-04-01',
           },
         ],
@@ -235,11 +235,11 @@ describe('generateResidentialLettingDocuments', () => {
       { outputFormat: 'html' }
     );
 
-    const html = pack.documents[0].html;
+    const html = pack.documents[0].html.replace(/&#163;/g, 'Â£');
 
     expect(html).toContain('Clause Amendment Matrix');
     expect(html).toContain('Clause 3.1');
-    expect(html).toContain('Rent increases to £1,650 pcm');
+    expect(html).toMatch(/Rent increases to (?:Â£|&#163;)1,650 pcm/);
   });
 
   test('renders structured inspection rooms and evidence appendix entries', async () => {
@@ -370,7 +370,7 @@ describe('generateResidentialLettingDocuments', () => {
 
     expect(html).toContain('Instalment Schedule');
     expect(html).toContain('First agreed instalment');
-    expect(html).toContain('£2,000.00');
+    expect(html).toMatch(/(?:Â£|&#163;)2,000\.00|(?:Â£|&#163;)2000\.00/);
   });
 
   test('renders attached arrears schedules when detailed arrears rows are provided', async () => {
@@ -406,6 +406,362 @@ describe('generateResidentialLettingDocuments', () => {
 
     expect(html).toContain('Attached Arrears Schedule');
     expect(html).toContain('February 2026');
-    expect(html).toContain('£1,200.00');
+    expect(html).toMatch(/(?:Â£|&#163;)1,200\.00|(?:Â£|&#163;)1200\.00/);
+  });
+  test('generates the expanded England assured-tenancy pack for the modern standard product', async () => {
+    const pack = await generateResidentialLettingDocuments(
+      'england_standard_tenancy_agreement',
+      {
+        ...baseFacts,
+        tenancy_start_date: '2026-05-02',
+        england_tenancy_purpose: 'new_agreement',
+        rent_period: 'month',
+        payment_method: 'Standing Order',
+        furnished_status: 'furnished',
+        bills_included_in_rent: 'yes',
+        included_bills_notes: 'Gas, electricity, and broadband',
+        separate_bill_payments_taken: false,
+        tenant_notice_period: '2 months',
+        rent_increase_method: 'Section 13 rent increase process',
+        england_rent_in_advance_compliant: true,
+        england_no_bidding_confirmed: true,
+        england_no_discrimination_confirmed: true,
+        tenant_improvements_allowed_with_consent: true,
+        supported_accommodation_tenancy: false,
+        relevant_gas_fitting_present: true,
+        gas_safety_certificate: true,
+        electrical_safety_certificate: true,
+        smoke_alarms_fitted: true,
+        carbon_monoxide_alarms: true,
+        epc_rating: 'C',
+        right_to_rent_check_date: '2026-04-25',
+        how_to_rent_provided: true,
+        deposit_scheme_name: 'DPS',
+      },
+      { outputFormat: 'html' }
+    );
+
+    expect(pack.documents.map((document) => document.document_type)).toEqual(
+      expect.arrayContaining([
+        'england_standard_tenancy_agreement',
+        'pre_tenancy_checklist_england',
+        'england_keys_handover_record',
+        'england_utilities_handover_sheet',
+        'england_pet_request_addendum',
+        'england_tenancy_variation_record',
+        'deposit_protection_certificate',
+        'tenancy_deposit_information',
+      ])
+    );
+
+    const html = pack.documents[0].html;
+    expect(html).toContain('Section 13');
+    expect(html).toContain('fit for human habitation');
+    expect(html).toContain('section 190(9)');
+    expect(html).toContain('tenant may request consent for a pet');
+  });
+
+  test('renders separate bill-payment details, supported accommodation statements, and fuller Equality Act wording where applicable', async () => {
+    const pack = await generateResidentialLettingDocuments(
+      'england_standard_tenancy_agreement',
+      {
+        ...baseFacts,
+        tenancy_start_date: '2026-05-02',
+        england_tenancy_purpose: 'new_agreement',
+        rent_period: 'month',
+        payment_method: 'Standing Order',
+        bills_included_in_rent: 'no',
+        separate_bill_payments_taken: true,
+        separate_bill_payment_rows: [
+          {
+            bill_type: 'communications',
+            amount_detail: 'Â£35 per month or the invoiced amount notified in writing',
+            due_detail: 'monthly with the rent unless a later written invoice date is given',
+          },
+        ],
+        tenant_notice_period: '2 months',
+        rent_increase_method: 'Section 13 rent increase process',
+        england_rent_in_advance_compliant: true,
+        england_no_bidding_confirmed: true,
+        england_no_discrimination_confirmed: true,
+        tenant_improvements_allowed_with_consent: true,
+        supported_accommodation_tenancy: true,
+        supported_accommodation_explanation: 'The tenant is being admitted to accommodation with weekly supervision and support delivered on the landlord behalf.',
+        relevant_gas_fitting_present: false,
+        electrical_safety_certificate: true,
+        smoke_alarms_fitted: true,
+        carbon_monoxide_alarms: true,
+        epc_rating: 'C',
+        right_to_rent_check_date: '2026-04-25',
+        how_to_rent_provided: true,
+      },
+      { outputFormat: 'html' }
+    );
+
+    const html = pack.documents[0].html.replace(/&#163;/g, 'Â£');
+
+    expect(html).toContain('Amount or pricing basis: Â£35 per month or the invoiced amount notified in writing.');
+    expect(html).toContain('When due or how notified: monthly with the rent unless a later written invoice date is given.');
+    expect(html).toContain('Supported Accommodation Status');
+    expect(html).toContain('granted as supported accommodation');
+    expect(html).toContain('section 190(9)');
+    expect(html).toContain('section 6 of the Equality Act 2010');
+  });
+
+  test('uses the written statement variant for existing verbal England assured tenancies', async () => {
+    const pack = await generateResidentialLettingDocuments(
+      'england_premium_tenancy_agreement',
+      {
+        ...baseFacts,
+        tenancy_start_date: '2026-05-02',
+        england_tenancy_purpose: 'existing_verbal_tenancy',
+        existing_verbal_tenancy_summary: true,
+        rent_period: 'month',
+        payment_method: 'Standing Order',
+        bills_included_in_rent: 'no',
+        separate_bill_payments_taken: false,
+        tenant_notice_period: '2 months',
+        rent_increase_method: 'Section 13 rent increase process',
+        england_rent_in_advance_compliant: true,
+        england_no_bidding_confirmed: true,
+        england_no_discrimination_confirmed: true,
+        relevant_gas_fitting_present: false,
+        electrical_safety_certificate: true,
+        smoke_alarms_fitted: true,
+        carbon_monoxide_alarms: true,
+        epc_rating: 'D',
+        right_to_rent_check_date: '2026-04-25',
+        how_to_rent_provided: true,
+        inspection_frequency: 'Every 6 months',
+      },
+      { outputFormat: 'html' }
+    );
+
+    expect(pack.documents[0].document_type).toBe('england_written_statement_of_terms');
+    expect(pack.documents[0].html).toContain('existing verbal England assured tenancy');
+    expect(pack.documents.map((document) => document.document_type)).toContain('pre_tenancy_checklist_england');
+  });
+
+  test('uses transition guidance and the information sheet for existing written England assured tenancies', async () => {
+    const pack = await generateResidentialLettingDocuments(
+      'england_student_tenancy_agreement',
+      {
+        ...baseFacts,
+        tenancy_start_date: '2025-09-01',
+        england_tenancy_purpose: 'existing_written_tenancy',
+        existing_written_tenancy_transition: true,
+      },
+      { outputFormat: 'html' }
+    );
+
+    expect(pack.documents.map((document) => document.document_type)).toEqual([
+      'england_tenancy_transition_guidance',
+      'renters_rights_information_sheet_2026',
+    ]);
+    expect(pack.documents[0].html).toContain('Renters&#x27; Rights Act Information Sheet 2026');
+    expect(pack.documents[1].pdf).toBeInstanceOf(Buffer);
+  });
+
+  test('keeps the lodger pack separate from the assured-tenancy statutory layer', async () => {
+    const pack = await generateResidentialLettingDocuments(
+      'england_lodger_agreement',
+      {
+        ...baseFacts,
+        resident_landlord_confirmed: true,
+        shared_kitchen_or_bathroom: true,
+        house_rules_notes: 'No overnight guests without prior agreement.',
+        licence_notice_period: '28 days',
+        smoke_alarms_fitted: true,
+        carbon_monoxide_alarms: true,
+      },
+      { outputFormat: 'html' }
+    );
+
+    expect(pack.documents.map((document) => document.document_type)).toEqual([
+      'england_lodger_agreement',
+      'england_lodger_checklist',
+      'england_keys_handover_record',
+      'england_lodger_house_rules_appendix',
+    ]);
+    expect(pack.documents[0].html).toContain('resident-landlord arrangement');
+    expect(pack.documents[0].html).not.toContain('Section 13');
+    expect(pack.documents[0].html).not.toContain('fit for human habitation');
+  });
+
+  test('adds the guarantor deed for the student product when selected', async () => {
+    const pack = await generateResidentialLettingDocuments(
+      'england_student_tenancy_agreement',
+      {
+        ...baseFacts,
+        tenancy_start_date: '2026-05-02',
+        england_tenancy_purpose: 'new_agreement',
+        rent_period: 'month',
+        payment_method: 'Standing Order',
+        bills_included_in_rent: 'no',
+        separate_bill_payments_taken: false,
+        tenant_notice_period: '2 months',
+        rent_increase_method: 'Section 13 rent increase process',
+        england_rent_in_advance_compliant: true,
+        england_no_bidding_confirmed: true,
+        england_no_discrimination_confirmed: true,
+        relevant_gas_fitting_present: false,
+        electrical_safety_certificate: true,
+        smoke_alarms_fitted: true,
+        carbon_monoxide_alarms: true,
+        epc_rating: 'C',
+        right_to_rent_check_date: '2026-04-25',
+        how_to_rent_provided: true,
+        guarantor_required: 'yes',
+        guarantor_full_name: 'Greg Guarantor',
+        guarantor_address: '77 Support Avenue, Bristol, BS1 4AB',
+        guarantor_email: 'greg@example.com',
+        guarantor_phone: '07000 222222',
+      },
+      { outputFormat: 'html' }
+    );
+
+    expect(pack.documents.map((document) => document.document_type)).toContain('guarantor_agreement');
+  });
+
+  test('renders richer Premium, Student, and HMO support schedules with product-specific content', async () => {
+    const premiumPack = await generateResidentialLettingDocuments(
+      'england_premium_tenancy_agreement',
+      {
+        ...baseFacts,
+        tenancy_start_date: '2026-05-02',
+        england_tenancy_purpose: 'new_agreement',
+        rent_period: 'month',
+        payment_method: 'Standing Order',
+        bills_included_in_rent: 'no',
+        separate_bill_payments_taken: false,
+        tenant_notice_period: '2 months',
+        rent_increase_method: 'Section 13 rent increase process',
+        england_rent_in_advance_compliant: true,
+        england_no_bidding_confirmed: true,
+        england_no_discrimination_confirmed: true,
+        relevant_gas_fitting_present: true,
+        gas_safety_certificate: true,
+        electrical_safety_certificate: true,
+        smoke_alarms_fitted: true,
+        carbon_monoxide_alarms: true,
+        epc_rating: 'C',
+        right_to_rent_check_date: '2026-04-25',
+        management_contact_channel: 'email',
+        routine_inspection_window: 'quarterly_weekday_daytime',
+        repair_reporting_contact: 'Landlord direct by email',
+        repair_response_timeframe: 'within_24_hours',
+        key_holders_summary: '2 front-door keys and 1 fob',
+        check_in_documentation_expectation: 'Tenant to review the signed inventory, meter readings, and key record at check-in.',
+        utilities_transfer_expectation: 'Tenant to open supplier accounts from the tenancy start date using the recorded opening readings.',
+        contractor_access_procedure: 'Tenant to be notified before contractor attendance.',
+        contractor_key_release_policy: 'Keys released to contractors only against a signed key register and same-day return expectation.',
+        handover_expectations: 'Return all keys and provide final meter readings.',
+      },
+      { outputFormat: 'html' }
+    );
+
+    const studentPack = await generateResidentialLettingDocuments(
+      'england_student_tenancy_agreement',
+      {
+        ...baseFacts,
+        tenancy_start_date: '2026-05-02',
+        england_tenancy_purpose: 'new_agreement',
+        rent_period: 'month',
+        payment_method: 'Standing Order',
+        bills_included_in_rent: 'no',
+        separate_bill_payments_taken: false,
+        tenant_notice_period: '2 months',
+        rent_increase_method: 'Section 13 rent increase process',
+        england_rent_in_advance_compliant: true,
+        england_no_bidding_confirmed: true,
+        england_no_discrimination_confirmed: true,
+        relevant_gas_fitting_present: false,
+        electrical_safety_certificate: true,
+        smoke_alarms_fitted: true,
+        carbon_monoxide_alarms: true,
+        epc_rating: 'C',
+        right_to_rent_check_date: '2026-04-25',
+        guarantor_required: 'yes',
+        guarantor_full_name: 'Greg Guarantor',
+        guarantor_address: '77 Support Avenue, Bristol, BS1 4AB',
+        guarantor_email: 'greg@example.com',
+        joint_tenancy: 'yes',
+        all_tenants_full_time_students: 'yes',
+        student_replacement_procedure: 'yes',
+        student_guarantor_scope: 'rent_and_all_tenant_obligations',
+        replacement_notice_window: '21_days',
+        replacement_cost_responsibility: 'outgoing_tenant',
+        student_end_of_term_expectations: 'Rooms to be returned clean and with all keys.',
+        student_move_out_keys_process: 'Keys to be returned to the managing agent office.',
+        student_cleaning_standard: 'Professional-clean standard for kitchen and bathrooms.',
+      },
+      { outputFormat: 'html' }
+    );
+
+    const hmoPack = await generateResidentialLettingDocuments(
+      'england_hmo_shared_house_tenancy_agreement',
+      {
+        ...baseFacts,
+        tenancy_start_date: '2026-05-02',
+        england_tenancy_purpose: 'new_agreement',
+        rent_period: 'month',
+        payment_method: 'Standing Order',
+        bills_included_in_rent: 'yes',
+        included_bills_notes: 'Utilities and broadband',
+        separate_bill_payments_taken: false,
+        tenant_notice_period: '2 months',
+        rent_increase_method: 'Section 13 rent increase process',
+        england_rent_in_advance_compliant: true,
+        england_no_bidding_confirmed: true,
+        england_no_discrimination_confirmed: true,
+        relevant_gas_fitting_present: true,
+        gas_safety_certificate: true,
+        electrical_safety_certificate: true,
+        smoke_alarms_fitted: true,
+        carbon_monoxide_alarms: true,
+        epc_rating: 'C',
+        right_to_rent_check_date: '2026-04-25',
+        is_hmo: 'yes',
+        number_of_sharers: 5,
+        communal_areas: 'Kitchen, lounge, bathroom, and garden',
+        hmo_licence_status: 'currently_licensed',
+        communal_cleaning: 'professional_cleaner',
+        visitor_policy: 'Overnight guests only with prior written approval.',
+        waste_collection_arrangements: 'Bins to be presented every Tuesday night.',
+        fire_safety_notes: 'Do not tamper with detectors and keep escape routes clear.',
+      },
+      { outputFormat: 'html' }
+    );
+
+    expect(premiumPack.documents.map((document) => document.document_type)).toContain(
+      'england_premium_management_schedule'
+    );
+    expect(
+      premiumPack.documents.find((document) => document.document_type === 'england_premium_management_schedule')?.html
+    ).toContain('Repairs reporting contact');
+    expect(
+      premiumPack.documents.find((document) => document.document_type === 'england_premium_management_schedule')?.html
+    ).toContain('Primary management contact channel');
+    expect(
+      premiumPack.documents.find((document) => document.document_type === 'england_premium_management_schedule')?.html
+    ).toContain('Check-in paperwork expectation');
+    expect(premiumPack.documents[0].html).toContain('Premium Handover, Reporting, and Evidence Protocol');
+    expect(premiumPack.documents[0].html).toContain('Utilities and account transfer expectation');
+
+    expect(studentPack.documents.map((document) => document.document_type)).toContain(
+      'england_student_move_out_schedule'
+    );
+    expect(
+      studentPack.documents.find((document) => document.document_type === 'england_student_move_out_schedule')?.html
+    ).toContain('Student Move-Out and Guarantor Schedule');
+
+    expect(hmoPack.documents.map((document) => document.document_type)).toContain(
+      'england_hmo_house_rules_appendix'
+    );
+    expect(
+      hmoPack.documents.find((document) => document.document_type === 'england_hmo_house_rules_appendix')?.html
+    ).toContain('HMO / Shared House Rules Appendix');
   });
 });
+
+

@@ -12,12 +12,15 @@ import { RiHomeLine, RiUser3Line, RiTeamLine, RiCalendarLine, RiWallet3Line, RiS
 import { Card } from '@/components/ui/Card';
 import type { CanonicalJurisdiction } from '@/lib/tenancy/product-normalization';
 import { getEnglandMissingPurposeWarning } from '@/lib/tenancy/england-reform';
+import { getEnglandCanonicalTenancyProduct, getEnglandTenancyProductLabel } from '@/lib/tenancy/england-product-model';
 
 interface TenancySummaryPanelProps {
   /** Case collected_facts from the database */
   collectedFacts: Record<string, any>;
   /** Case jurisdiction */
   jurisdiction: CanonicalJurisdiction;
+  /** Effective product, if known */
+  product?: string | null;
   /** Whether this is a premium tier purchase */
   isPremium: boolean;
 }
@@ -145,7 +148,12 @@ function getTenantNames(facts: Record<string, any>): string[] {
 /**
  * Get jurisdiction-specific agreement type label
  */
-function getAgreementTypeLabel(jurisdiction: CanonicalJurisdiction, isHmo: boolean, isPremium: boolean): string {
+function getAgreementTypeLabel(
+  jurisdiction: CanonicalJurisdiction,
+  isHmo: boolean,
+  isPremium: boolean,
+  product?: string | null
+): string {
   switch (jurisdiction) {
     case 'scotland':
       if (isHmo || isPremium) {
@@ -164,6 +172,9 @@ function getAgreementTypeLabel(jurisdiction: CanonicalJurisdiction, isHmo: boole
       return 'Private Tenancy (Northern Ireland)';
     case 'england':
     default:
+      if (getEnglandCanonicalTenancyProduct(product)) {
+        return getEnglandTenancyProductLabel(product);
+      }
       if (isHmo || isPremium) {
         return 'Premium England Assured Periodic Tenancy';
       }
@@ -209,9 +220,25 @@ function getDepositSchemeDisplay(facts: Record<string, any>): string {
 export function TenancySummaryPanel({
   collectedFacts,
   jurisdiction,
+  product,
   isPremium,
 }: TenancySummaryPanelProps) {
-  const isHmo = collectedFacts.is_hmo === true || collectedFacts.hmo_licence_status === 'licensed';
+  const canonicalEnglandProduct =
+    jurisdiction === 'england'
+      ? getEnglandCanonicalTenancyProduct(
+          product ||
+          collectedFacts.__meta?.canonical_product ||
+          collectedFacts.__meta?.product ||
+          collectedFacts.product ||
+          collectedFacts.original_product
+        )
+      : null;
+  const isHmo = canonicalEnglandProduct
+    ? canonicalEnglandProduct === 'england_hmo_shared_house_tenancy_agreement'
+    : collectedFacts.is_hmo === true || collectedFacts.hmo_licence_status === 'licensed';
+  const resolvedPremium = canonicalEnglandProduct
+    ? canonicalEnglandProduct === 'england_premium_tenancy_agreement'
+    : isPremium;
   const landlordName = collectedFacts.landlord_full_name || collectedFacts.landlord_name || '-';
   const tenantNames = getTenantNames(collectedFacts);
   const propertyAddress = buildPropertyAddress(collectedFacts);
@@ -255,7 +282,12 @@ export function TenancySummaryPanel({
             <div>
               <p className="text-sm text-gray-600">Agreement Type</p>
               <p className="font-semibold text-charcoal">
-                {getAgreementTypeLabel(jurisdiction, isHmo, isPremium)}
+                {getAgreementTypeLabel(
+                  jurisdiction,
+                  isHmo,
+                  resolvedPremium,
+                  canonicalEnglandProduct || product
+                )}
               </p>
               <p className="text-xs text-gray-500 mt-1">
                 {getTenancyDurationCopy(jurisdiction, collectedFacts)}

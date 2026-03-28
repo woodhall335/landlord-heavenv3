@@ -135,17 +135,20 @@ describe('Tenancy Included Features - Integration Layer', () => {
           expect(hasHMOClauses).toBe(false);
         });
 
-        it(`should return HMO features for ${jurisdiction} when isHMO=true`, () => {
+        it(`should return the correct HMO/shared-house behavior for ${jurisdiction} when isHMO=true`, () => {
           const features = getIncludedFeatures(jurisdiction, 'premium', { isHMO: true });
 
-          // Main agreement SHOULD be labelled as HMO
           const agreement = features.find(f => f.id === 'main_agreement');
           expect(agreement).toBeDefined();
-          expect(agreement?.label).toContain('HMO');
-
-          // Should include HMO-specific features
           const hasHMOClauses = features.some(f => f.id === 'hmo_clauses');
-          expect(hasHMOClauses).toBe(true);
+
+          if (jurisdiction === 'england') {
+            expect(agreement?.label).not.toContain('HMO');
+            expect(hasHMOClauses).toBe(false);
+          } else {
+            expect(agreement?.label).toContain('HMO');
+            expect(hasHMOClauses).toBe(true);
+          }
         });
       });
     });
@@ -427,39 +430,43 @@ describe('Tenancy Included Features - Integration Layer', () => {
   // ============================================================================
 
   describe('Tier Recommendation Tests', () => {
-    it('should recommend premium for HMO properties', () => {
-      const result = getTierRecommendation({ isHMO: true });
-      expect(result.recommendedTier).toBe('premium');
-      expect(result.reason).toContain('HMO');
+    it('should route England HMO properties to the specialist product instead of Premium', () => {
+      const result = getTierRecommendation({ isHMO: true, jurisdiction: 'england' });
+      expect(result.recommendedTier).toBe('specialist');
+      expect(result.specialistProduct).toBe('england_hmo_shared_house_tenancy_agreement');
+      expect(result.reason).toContain('HMO / Shared House');
     });
 
-    it('should recommend premium for 3+ tenants', () => {
-      const result = getTierRecommendation({ tenantCount: 3 });
-      expect(result.recommendedTier).toBe('premium');
-      expect(result.reason).toContain('3+');
+    it('should route England 3+ tenant sharer cases to the specialist HMO/shared-house product', () => {
+      const result = getTierRecommendation({ tenantCount: 3, jurisdiction: 'england' });
+      expect(result.recommendedTier).toBe('specialist');
+      expect(result.specialistProduct).toBe('england_hmo_shared_house_tenancy_agreement');
+      expect(result.reason).toContain('dedicated HMO / Shared House route');
     });
 
-    it('should recommend premium for student lets', () => {
-      const result = getTierRecommendation({ isStudentLet: true });
-      expect(result.recommendedTier).toBe('premium');
-      expect(result.reason).toContain('Student');
+    it('should route England student lets to the dedicated student product', () => {
+      const result = getTierRecommendation({ isStudentLet: true, jurisdiction: 'england' });
+      expect(result.recommendedTier).toBe('specialist');
+      expect(result.specialistProduct).toBe('england_student_tenancy_agreement');
+      expect(result.reason).toContain('Student product');
     });
 
-    it('should recommend premium if guarantor needed', () => {
-      const result = getTierRecommendation({ hasGuarantor: true });
+    it('should still recommend England Premium for ordinary-residential guarantor lets', () => {
+      const result = getTierRecommendation({ hasGuarantor: true, jurisdiction: 'england' });
       expect(result.recommendedTier).toBe('premium');
-      expect(result.reason).toContain('Guarantor');
+      expect(result.reason).toContain('guarantor-backed England lets');
     });
 
-    it('should recommend standard for simple single household', () => {
+    it('should recommend standard for a simple England single household let', () => {
       const result = getTierRecommendation({
         tenantCount: 1,
         isHMO: false,
         isStudentLet: false,
         hasGuarantor: false,
+        jurisdiction: 'england',
       });
       expect(result.recommendedTier).toBe('standard');
-      expect(result.reason).toContain('single households');
+      expect(result.reason).toContain('straightforward ordinary England residential lets');
     });
   });
 });

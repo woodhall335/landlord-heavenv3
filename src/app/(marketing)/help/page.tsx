@@ -145,8 +145,7 @@ export default function HelpPage() {
                         <strong>Standard Residential Tenancy Agreement ({PRODUCTS.ast_standard.displayPrice}):</strong> Updated England residential tenancy agreement for standard lettings.
                       </li>
                       <li>
-                        <strong>Premium Residential Tenancy Agreement ({PRODUCTS.ast_premium.displayPrice}):</strong> Advanced tenancy with HMO clauses, guarantors, rent
-                        increases.
+                        <strong>Premium Residential Tenancy Agreement ({PRODUCTS.ast_premium.displayPrice}):</strong> Fuller ordinary-residential drafting with enhanced management options. Student, HMO / Shared House, and Lodger are separate England products.
                       </li>
                       <li>
                         <strong>Free Tools:</strong> Use our notice generators, calculators, and validators to get

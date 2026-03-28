@@ -1,10 +1,26 @@
+import { readFile } from 'fs/promises';
+import path from 'path';
+
 import { generateDocument } from '@/lib/documents/generator';
+import { getPackContents } from '@/lib/products/pack-contents';
 import type { ResidentialLettingProductSku } from '@/lib/residential-letting/products';
+import {
+  getEnglandTenancyPurpose,
+  shouldIncludeEnglandInformationSheet,
+  type EnglandTenancyPurpose,
+} from '@/lib/tenancy/england-reform';
 
 export interface ResidentialGeneratedDocument {
   title: string;
   description: string;
-  category: 'agreement' | 'form' | 'report' | 'letter' | 'schedule';
+  category:
+    | 'agreement'
+    | 'form'
+    | 'report'
+    | 'letter'
+    | 'schedule'
+    | 'guidance'
+    | 'checklist';
   document_type: string;
   html: string;
   pdf?: Buffer;
@@ -130,6 +146,23 @@ interface RentArrearsLetterTemplateData {
 }
 
 const RENTERS_RIGHTS_ACT_CUTOVER = '2026-05-01';
+const ENGLAND_INFORMATION_SHEET_PDF_PATH = path.join(
+  process.cwd(),
+  'config',
+  'mqs',
+  'tenancy_agreement',
+  'The_Renters__Rights_Act_Information_Sheet_2026.pdf'
+);
+
+type EnglandAssuredResidentialProduct =
+  | 'england_standard_tenancy_agreement'
+  | 'england_premium_tenancy_agreement'
+  | 'england_student_tenancy_agreement'
+  | 'england_hmo_shared_house_tenancy_agreement';
+
+type EnglandModernTenancyProduct =
+  | EnglandAssuredResidentialProduct
+  | 'england_lodger_agreement';
 
 function joinAddress(...parts: Array<string | null | undefined>) {
   return parts.map(toText).filter(Boolean).join(', ');
@@ -196,6 +229,27 @@ function splitEntries(value: unknown): string[] {
     .split(/\r?\n|;/)
     .map((entry) => entry.trim())
     .filter(Boolean);
+}
+
+const PREMIUM_VALUE_LABELS: Record<string, string> = {
+  email: 'Email',
+  phone: 'Phone',
+  managing_agent_portal: 'Managing agent portal',
+  mixed_channels: 'Mixed channels depending on issue',
+  same_day_emergencies: 'Same day for emergencies',
+  within_24_hours: 'Within 24 hours',
+  within_48_hours: 'Within 48 hours',
+  reasonable_time_by_severity: 'Reasonable time depending on severity',
+  quarterly_weekday_daytime: 'Quarterly weekday daytime visits',
+  every_6_months_weekday_daytime: 'Every 6 months on weekday daytime visits',
+  agreed_case_by_case: 'Agreed case by case with the tenant',
+  reasonable_notice_flexible: 'Flexible timing with reasonable notice',
+};
+
+function formatPremiumOption(value: unknown): string {
+  const text = toText(value);
+  if (!text) return '';
+  return PREMIUM_VALUE_LABELS[text] || text.replace(/_/g, ' ');
 }
 
 function buildLabeledObservation(label: string, value: unknown): string | undefined {
@@ -552,6 +606,13 @@ function normalizeResidentialFacts(rawFacts: Record<string, any>): Record<string
   return {
     ...rawFacts,
     tenants,
+    separate_bill_payment_rows: Array.isArray(rawFacts.separate_bill_payment_rows)
+      ? rawFacts.separate_bill_payment_rows.map((row: Record<string, any>) => ({
+          ...row,
+          amount_detail: firstNonEmpty(row.amount_detail, row.amount_description, row.amount),
+          due_detail: firstNonEmpty(row.due_detail, row.due_description, row.due_date),
+        }))
+      : rawFacts.separate_bill_payment_rows,
     landlord_full_name: firstNonEmpty(rawFacts.landlord_full_name, rawFacts.sender_name, rawFacts.landlord_name),
     landlord_address: firstNonEmpty(rawFacts.landlord_address, rawFacts.sender_service_address),
     tenant_names: firstNonEmpty(rawFacts.tenant_names, rawFacts.tenant_full_name),
@@ -973,6 +1034,310 @@ function getTemplateSections(
   const instalmentAmount = formatMoney(facts.instalment_amount) || toText(facts.instalment_amount);
 
   switch (product) {
+    case 'england_standard_tenancy_agreement':
+      return [
+        createSection({
+          heading: 'Property, Parties, and Occupation Setup',
+          intro:
+            'This agreement is intended for an ordinary England residential letting of the Property to the named tenant group for occupation as a home.',
+          rows: [
+            { label: 'Property', value: shared.property_address },
+            { label: 'Landlord', value: shared.landlord_name },
+            { label: 'Tenant(s)', value: tenantNames },
+            { label: 'Property type', value: facts.property_type },
+            { label: 'Bedrooms', value: facts.number_of_bedrooms },
+            { label: 'Furnished status', value: facts.furnished_status },
+            { label: 'Parking included', value: facts.parking_available },
+            { label: 'Number of named occupiers', value: facts.number_of_tenants },
+          ],
+        }),
+        createSection({
+          heading: 'Core Residential Letting Terms',
+          rows: [
+            { label: 'Tenancy start date', value: shared.tenancy_start_date },
+            { label: 'Rent', value: rentDisplay },
+            { label: 'Rent frequency', value: facts.rent_frequency },
+            { label: 'Rent due day', value: facts.rent_due_day },
+            { label: 'Payment method', value: facts.payment_method },
+            { label: 'Deposit', value: depositDisplay },
+            { label: 'Included bills', value: facts.included_bills_notes },
+          ],
+          bullets: [
+            'The Property is let for residential occupation as the tenant main home and not for holiday use, business use, or short-term letting unless stated otherwise in writing.',
+            'The Tenant must pay the rent on time and comply with the obligations set out in this agreement in relation to care of the Property, reasonable conduct, and lawful occupation.',
+            firstNonEmpty(
+              facts.landlord_access_notice
+                ? `The Landlord should ordinarily give ${facts.landlord_access_notice} notice before non-emergency access and attend at a reasonable time.`
+                : '',
+              'The Landlord should ordinarily give reasonable notice before non-emergency access and attend at a reasonable time.'
+            ),
+          ],
+        }),
+        createSection({
+          heading: 'Property Rules and Practical Management',
+          rows: [
+            { label: 'Pets at the start', value: facts.pets_allowed },
+            { label: 'Smoking inside', value: facts.smoking_allowed },
+            { label: 'Subletting / Airbnb policy', value: facts.subletting_allowed },
+            { label: 'Inspection frequency', value: facts.inspection_frequency },
+          ],
+          bullets: [
+            'The Tenant must keep the Property reasonably clean, ventilated, and heated and must report defects or disrepair promptly.',
+            'The Tenant must not cause nuisance, anti-social behaviour, or unlawful activity at the Property.',
+            ...splitEntries(facts.additional_terms),
+          ],
+        }),
+      ];
+    case 'england_premium_tenancy_agreement':
+      return [
+        createSection({
+          heading: 'Property, Parties, and Premium Residential Scope',
+          intro:
+            'This premium agreement is intended for an ordinary England residential letting where the parties want fuller operational drafting than the baseline standard route.',
+          rows: [
+            { label: 'Property', value: shared.property_address },
+            { label: 'Landlord', value: shared.landlord_name },
+            { label: 'Tenant(s)', value: tenantNames },
+            { label: 'Property type', value: facts.property_type },
+            { label: 'Bedrooms', value: facts.number_of_bedrooms },
+            { label: 'Furnished status', value: facts.furnished_status },
+            { label: 'Parking included', value: facts.parking_available },
+          ],
+        }),
+        createSection({
+          heading: 'Premium Commercial and Management Terms',
+          rows: [
+            { label: 'Tenancy start date', value: shared.tenancy_start_date },
+            { label: 'Rent', value: rentDisplay },
+            { label: 'Rent frequency', value: facts.rent_frequency },
+            { label: 'Rent due day', value: facts.rent_due_day },
+            { label: 'Payment method', value: facts.payment_method },
+            { label: 'Deposit', value: depositDisplay },
+            { label: 'Rent increase wording', value: facts.rent_increase_method },
+            { label: 'Guarantor expected', value: facts.guarantor_expected },
+            { label: 'Primary management contact channel', value: formatPremiumOption(facts.management_contact_channel) },
+            { label: 'Routine inspection window', value: formatPremiumOption(facts.routine_inspection_window) },
+          ],
+          bullets: [
+            'This premium route remains an ordinary residential product and is not intended to substitute for the dedicated HMO/shared-house, student, or lodger routes where those occupation structures actually apply.',
+            'The parties intend a fuller set of management and operational expectations to be recorded in the agreement so day-to-day administration is clearer from the outset.',
+          ],
+        }),
+        createSection({
+          heading: 'Premium Operational Detail',
+          paragraphs: [
+            firstNonEmpty(
+              facts.premium_operational_notes,
+              'The parties intend the agreement to include fuller operational detail around reporting, access, management, and day-to-day occupation expectations.'
+            ),
+            toText(facts.premium_management_schedule),
+            buildLabeledObservation(
+              'Check-in paperwork and evidence expectation',
+              facts.check_in_documentation_expectation
+            ),
+            buildLabeledObservation(
+              'Utilities and account transfer expectation',
+              facts.utilities_transfer_expectation
+            ),
+          ],
+          bullets: [
+            firstNonEmpty(
+              facts.landlord_access_notice
+                ? `Non-emergency access should usually be on ${facts.landlord_access_notice} notice at a reasonable time.`
+                : '',
+              'Non-emergency access should usually be on reasonable notice at a reasonable time.'
+            ),
+            'The Tenant must report maintenance issues promptly and cooperate reasonably with access for inspections, repairs, safety checks, or contractor visits.',
+            'The Landlord should keep practical management arrangements proportionate and consistent with the tenancy structure recorded in this agreement.',
+          ],
+        }),
+        createSection({
+          heading: 'Premium Handover, Reporting, and Evidence Protocol',
+          rows: [
+            { label: 'Repairs reporting contact', value: facts.repair_reporting_contact },
+            { label: 'Repairs response expectation', value: formatPremiumOption(facts.repair_response_timeframe) },
+            { label: 'Check-in paperwork expectation', value: facts.check_in_documentation_expectation },
+            { label: 'Utilities transfer expectation', value: facts.utilities_transfer_expectation },
+            { label: 'Contractor key release policy', value: facts.contractor_key_release_policy },
+            { label: 'Hand-back expectations', value: facts.handover_expectations },
+          ],
+          bullets: [
+            'The Premium pack is designed to travel with the keys handover record, utilities handover sheet, pet-request addendum, tenancy variation record, and premium management schedule.',
+            'Where agents, contractors, or concierge teams are involved, the parties should keep the operational file aligned with the agreement and the supporting schedules.',
+          ],
+        }),
+        createSection({
+          heading: 'Property Rules and Occupation Controls',
+          rows: [
+            { label: 'Pets at the start', value: facts.pets_allowed },
+            { label: 'Smoking inside', value: facts.smoking_allowed },
+            { label: 'Subletting / Airbnb policy', value: facts.subletting_allowed },
+            { label: 'Inspection frequency', value: facts.inspection_frequency },
+          ],
+          bullets: [
+            ...splitEntries(facts.additional_terms),
+          ],
+        }),
+      ];
+    case 'england_student_tenancy_agreement':
+      return [
+        createSection({
+          heading: 'Property, Parties, and Student Letting Setup',
+          intro:
+            'This student agreement is intended for an England student-focused letting and records the student-specific occupation features chosen in the guided flow.',
+          rows: [
+            { label: 'Property', value: shared.property_address },
+            { label: 'Landlord', value: shared.landlord_name },
+            { label: 'Tenant(s)', value: tenantNames },
+            { label: 'All full-time students', value: facts.all_tenants_full_time_students },
+            { label: 'Joint agreement', value: facts.joint_tenancy },
+            { label: 'Guarantor required', value: facts.guarantor_required },
+            { label: 'Tenant replacement procedure', value: facts.student_replacement_procedure },
+          ],
+        }),
+        createSection({
+          heading: 'Student Commercial Terms',
+          rows: [
+            { label: 'Tenancy start date', value: shared.tenancy_start_date },
+            { label: 'Rent', value: rentDisplay },
+            { label: 'Rent frequency', value: facts.rent_frequency },
+            { label: 'Rent due day', value: facts.rent_due_day },
+            { label: 'Payment method', value: facts.payment_method },
+            { label: 'Deposit', value: depositDisplay },
+          ],
+          bullets: [
+            'This product is intended for student-focused residential occupation and records the student-specific features selected in the guided flow.',
+            toText(facts.student_fixed_term_requested)
+              ? 'If a fixed-term student structure is being considered, the parties should verify separately that the intended structure and wording are appropriate before relying on it.'
+              : '',
+          ],
+        }),
+        createSection({
+          heading: 'Guarantors, Sharers, and Student Replacements',
+          bullets: [
+            facts.guarantor_required === 'yes'
+              ? 'One or more tenants are expected to provide a guarantor, and any guarantor arrangements should be documented in a separate guarantor deed where required.'
+              : 'No guarantor is expected from the facts currently supplied.',
+            facts.student_replacement_procedure === 'yes'
+              ? 'The agreement is intended to include a tenant replacement procedure so that any proposed substitute occupier is handled through a defined approval process.'
+              : 'No express tenant replacement procedure has been selected in the guided flow.',
+            facts.joint_tenancy === 'yes'
+              ? 'The named tenants are intended to be recorded on one joint agreement.'
+              : 'The guided facts indicate the occupiers may not all be on one joint agreement, so the final structure should be checked carefully before use.',
+          ],
+        }),
+        createSection({
+          heading: 'End-of-Term Expectations and Practical Notes',
+          paragraphs: [
+            toText(facts.student_end_of_term_expectations),
+            toText(facts.vacation_period_notes),
+          ],
+          bullets: [
+            'Student occupation often benefits from clear expectations on keys, cleaning, hand-back condition, and practical departure arrangements at the end of occupation.',
+          ],
+        }),
+      ];
+    case 'england_hmo_shared_house_tenancy_agreement':
+      return [
+        createSection({
+          heading: 'Property, Parties, and Shared-House Setup',
+          intro:
+            'This HMO/shared-house agreement is intended for an England multi-occupier or shared-house letting where communal areas and sharer detail need to be recorded expressly.',
+          rows: [
+            { label: 'Property', value: shared.property_address },
+            { label: 'Landlord', value: shared.landlord_name },
+            { label: 'Tenant(s)', value: tenantNames },
+            { label: 'HMO or licensable shared house', value: facts.is_hmo },
+            { label: 'Number of sharers / rooms', value: facts.number_of_sharers },
+            { label: 'Unrelated households', value: facts.unrelated_households },
+            { label: 'Room-by-room / shared occupation', value: facts.room_by_room_occupation },
+          ],
+        }),
+        createSection({
+          heading: 'Shared-House Commercial Terms',
+          rows: [
+            { label: 'Tenancy start date', value: shared.tenancy_start_date },
+            { label: 'Rent', value: rentDisplay },
+            { label: 'Rent frequency', value: facts.rent_frequency },
+            { label: 'Rent due day', value: facts.rent_due_day },
+            { label: 'Payment method', value: facts.payment_method },
+            { label: 'Deposit', value: depositDisplay },
+            { label: 'HMO licence status', value: facts.hmo_licence_status },
+          ],
+        }),
+        createSection({
+          heading: 'Communal Areas and Shared Facilities',
+          rows: [
+            { label: 'Communal areas', value: facts.communal_areas },
+            { label: 'Communal cleaning', value: facts.communal_cleaning },
+          ],
+          bullets: [
+            'The communal areas should be used reasonably and kept in a condition that reflects shared occupation.',
+            'Sharers should cooperate over use of kitchens, bathrooms, corridors, external spaces, and any other shared facilities identified in this agreement.',
+            ...splitEntries(facts.communal_rules_notes),
+          ],
+        }),
+        createSection({
+          heading: 'Sharer Conduct and Access',
+          bullets: [
+            'The occupiers must not obstruct, monopolise, or misuse communal areas, fire routes, or accessways.',
+            'The Landlord may attend communal areas and the Property on reasonable notice for management, inspection, repair, safety, cleaning, or licensing-related purposes where appropriate.',
+            'House rules and day-to-day controls should reflect the shared-house nature of the occupation rather than an ordinary single-household letting.',
+          ],
+        }),
+      ];
+    case 'england_lodger_agreement':
+      return [
+        createSection({
+          heading: 'Resident-Landlord Room Let Setup',
+          intro:
+            'This lodger agreement is intended for a resident-landlord room let in England where the occupier shares the home with the landlord.',
+          rows: [
+            { label: 'Property', value: shared.property_address },
+            { label: 'Resident landlord', value: shared.landlord_name },
+            { label: 'Lodger', value: tenantNames },
+            { label: 'Resident landlord confirmed', value: facts.resident_landlord_confirmed },
+            { label: 'Shared kitchen or bathroom', value: facts.shared_kitchen_or_bathroom },
+            { label: 'Occupation start date', value: shared.tenancy_start_date },
+          ],
+        }),
+        createSection({
+          heading: 'Room Let Terms',
+          rows: [
+            { label: 'Rent', value: rentDisplay },
+            { label: 'Payment frequency', value: facts.rent_frequency },
+            { label: 'Deposit', value: depositDisplay },
+            { label: 'Licence notice period', value: facts.licence_notice_period },
+            { label: 'Services included', value: facts.services_included },
+          ],
+          bullets: [
+            'The lodger is granted permission to occupy the agreed room and to use the agreed shared facilities in common with the resident landlord and any other authorised occupiers.',
+            'This product is intended for a resident-landlord arrangement and is separate from the ordinary residential tenancy products.',
+          ],
+        }),
+        createSection({
+          heading: 'House Rules and Shared Facilities',
+          paragraphs: [
+            toText(facts.house_rules_notes),
+          ],
+          bullets: [
+            'The lodger should comply with reasonable house rules relating to guests, noise, security, cleanliness, and use of shared areas.',
+            'The resident landlord may update practical house rules from time to time provided any update is reasonable and consistent with the overall arrangement.',
+          ],
+        }),
+        createSection({
+          heading: 'Ending the Arrangement',
+          bullets: [
+            firstNonEmpty(
+              facts.licence_notice_period
+                ? `Either party may ordinarily end the arrangement on ${facts.licence_notice_period} notice unless a different written agreement is made.`
+                : '',
+              'Either party may ordinarily end the arrangement on reasonable written notice.'
+            ),
+            'When the arrangement ends, the lodger should return keys, remove personal belongings, and leave the room and shared areas in the condition required by the agreement.',
+          ],
+        }),
+      ];
     case 'guarantor_agreement':
       return [
         createSection({
@@ -1770,8 +2135,11 @@ function buildRentArrearsLetterData(
   const arrearsAmount = formatMoney(facts.arrears_amount) || toText(facts.arrears_amount);
   const letterType = toText(facts.letter_type).toLowerCase();
   const isFinalWarning = letterType.includes('final');
+  const arrearsDateText = formatIsoDateText(firstNonEmpty(facts.arrears_date, shared.current_date));
   const paymentDeadline = firstNonEmpty(facts.final_deadline, facts.response_deadline, shared.current_date);
+  const paymentDeadlineText = formatIsoDateText(paymentDeadline);
   const responseDeadline = firstNonEmpty(facts.response_deadline, facts.final_deadline, paymentDeadline);
+  const responseDeadlineText = formatIsoDateText(responseDeadline);
   const paymentMethod = firstNonEmpty(facts.payment_method, 'Bank transfer');
   const paymentDetails = firstNonEmpty(
     facts.payment_details,
@@ -1797,16 +2165,16 @@ function buildRentArrearsLetterData(
 
   const openingParagraphs = isFinalWarning
     ? [
-        `I write further to earlier requests for payment. As at ${firstNonEmpty(facts.arrears_date, shared.current_date)}, rent arrears of ${arrearsAmount || 'the stated sum'} remain outstanding on the tenancy of the Property.`,
+        `I write further to earlier requests for payment. As at ${arrearsDateText}, rent arrears of ${arrearsAmount || 'the stated sum'} remain outstanding on the tenancy of the Property.`,
         'This letter is a final warning and a request for immediate engagement so that the arrears can be resolved without formal recovery steps if possible.',
       ]
     : [
-        `Our records show that rent remains overdue on the tenancy of the Property. As at ${firstNonEmpty(facts.arrears_date, shared.current_date)}, the arrears outstanding are ${arrearsAmount || 'the stated sum'}.`,
+        `Our records show that rent remains overdue on the tenancy of the Property. As at ${arrearsDateText}, the arrears outstanding are ${arrearsAmount || 'the stated sum'}.`,
         'Please treat this letter as a formal demand for payment and contact the Landlord promptly if you dispute the amount or need to discuss repayment proposals.',
       ];
 
   const paymentRequestParagraphs = [
-    `Please pay the outstanding arrears in cleared funds by ${paymentDeadline || 'the stated deadline'}.`,
+    `Please pay the outstanding arrears in cleared funds by ${paymentDeadlineText || 'the stated deadline'}.`,
     'If full payment cannot be made immediately, you should provide a realistic written proposal, with dates and amounts, by the response deadline below.',
   ];
 
@@ -1843,7 +2211,7 @@ function buildRentArrearsLetterData(
     opening_paragraphs: openingParagraphs,
     arrears_rows: cleanRows([
       { label: 'Arrears amount', value: arrearsAmount },
-      { label: 'Arrears calculated as at', value: facts.arrears_date },
+      { label: 'Arrears calculated as at', value: arrearsDateText },
       { label: 'Current rent', value: formatMoney(shared.rent_amount) || shared.rent_amount },
       { label: 'Rent due day', value: facts.rent_due_day },
       { label: 'Missed rent periods', value: facts.missed_rent_periods },
@@ -1855,8 +2223,8 @@ function buildRentArrearsLetterData(
       { label: 'Payment reference', value: facts.payment_reference_override },
       { label: 'Landlord contact for queries', value: firstNonEmpty(shared.landlord_email, shared.landlord_phone) },
     ]) || [],
-    payment_deadline: paymentDeadline,
-    response_deadline: responseDeadline,
+    payment_deadline: paymentDeadlineText,
+    response_deadline: responseDeadlineText,
     payment_request_paragraphs: paymentRequestParagraphs,
     next_steps: nextSteps,
     detailed_arrears_rows: detailedArrearsRows,
@@ -1873,13 +2241,1483 @@ function buildRentArrearsLetterData(
   };
 }
 
+function isTruthySelection(value: unknown): boolean {
+  if (typeof value === 'boolean') return value;
+  if (typeof value === 'number') return value > 0;
+  if (typeof value === 'string') {
+    const normalized = value.trim().toLowerCase();
+    return normalized === 'yes' || normalized === 'true' || normalized === '1' || normalized === 'required';
+  }
+
+  return false;
+}
+
+function isEnglandAssuredResidentialProduct(
+  product: ResidentialLettingProductSku
+): product is EnglandAssuredResidentialProduct {
+  return (
+    product === 'england_standard_tenancy_agreement' ||
+    product === 'england_premium_tenancy_agreement' ||
+    product === 'england_student_tenancy_agreement' ||
+    product === 'england_hmo_shared_house_tenancy_agreement'
+  );
+}
+
+function isEnglandModernTenancyProduct(
+  product: ResidentialLettingProductSku
+): product is EnglandModernTenancyProduct {
+  return isEnglandAssuredResidentialProduct(product) || product === 'england_lodger_agreement';
+}
+
+function toArrayOfText(value: unknown): string[] {
+  if (Array.isArray(value)) {
+    return value.map(toText).filter(Boolean);
+  }
+
+  return splitEntries(value);
+}
+
+function formatEnglandProductLabel(product: EnglandModernTenancyProduct): string {
+  switch (product) {
+    case 'england_standard_tenancy_agreement':
+      return 'Standard Tenancy Agreement';
+    case 'england_premium_tenancy_agreement':
+      return 'Premium Tenancy Agreement';
+    case 'england_student_tenancy_agreement':
+      return 'Student Tenancy Agreement';
+    case 'england_hmo_shared_house_tenancy_agreement':
+      return 'HMO / Shared House Tenancy Agreement';
+    case 'england_lodger_agreement':
+      return 'Room Let / Lodger Agreement';
+  }
+}
+
+function cleanTemplateSections(
+  sections: Array<TemplateSection | undefined | null>
+): TemplateSection[] {
+  return sections.filter((section): section is TemplateSection => {
+    if (!section) return false;
+
+    return Boolean(
+      section.intro ||
+        (section.rows && section.rows.length > 0) ||
+        section.table ||
+        (section.bullets && section.bullets.length > 0) ||
+        (section.paragraphs && section.paragraphs.length > 0)
+    );
+  });
+}
+
+function formatNoticePeriod(value: unknown): string {
+  return firstNonEmpty(toText(value), '2 months');
+}
+
+function buildEnglandBillCoverageText(facts: Record<string, any>): string {
+  if (isTruthySelection(facts.bills_included_in_rent)) {
+    return firstNonEmpty(
+      facts.included_bills_notes,
+      'The rent is stated to include the bills or services identified by the landlord.'
+    );
+  }
+
+  return 'No bills are stated to be included in the rent unless this agreement expressly says otherwise.';
+}
+
+function buildEnglandSeparateBillBullets(facts: Record<string, any>): string[] {
+  if (!isTruthySelection(facts.separate_bill_payments_taken)) {
+    return [];
+  }
+
+  const rows = Array.isArray(facts.separate_bill_payment_rows)
+    ? facts.separate_bill_payment_rows
+    : [];
+
+  if (rows.length === 0) {
+    return [
+      'If the tenant pays any permitted bill separately to the landlord or a connected person, the tenancy terms should state what the bill covers, how the tenant will be told the amount, and when payment is due or how that due date will be notified.',
+    ];
+  }
+
+  const billTypeLabels: Record<string, string> = {
+    council_tax: 'Council tax',
+    gas_electric_water: 'Gas, electricity, water, or sewage',
+    tv_licence: 'TV licence',
+    communications: 'Telephone, broadband, cable, or satellite services',
+    green_deal: 'Green Deal energy efficiency charges',
+  };
+
+  return rows
+    .map((row: Record<string, any>) => {
+      const typeLabel = billTypeLabels[toText(row.bill_type)] || toText(row.bill_type) || 'Permitted bill';
+      const payee = firstNonEmpty(row.payee, row.collector);
+      const amount = firstNonEmpty(row.amount_detail, formatMoney(row.amount), row.amount_description);
+      const due = firstNonEmpty(row.due_detail, row.due_description, row.due_date);
+      const notes = toText(row.notes);
+
+      return [
+        `${typeLabel} is recorded as a permitted bill payment payable in addition to the rent.`,
+        amount ? `Amount or pricing basis: ${amount}.` : 'Amount or pricing basis will be notified in writing.',
+        due ? `When due or how notified: ${due}.` : 'The due date will be notified in writing.',
+        payee ? `Payee: ${payee}.` : '',
+        notes ? `Notes: ${notes}.` : '',
+      ]
+        .filter(Boolean)
+        .join(' ');
+    })
+    .filter(Boolean);
+}
+
+function buildEnglandPriorNoticeBullets(facts: Record<string, any>): string[] {
+  const grounds = toArrayOfText(facts.prior_notice_grounds);
+
+  if (grounds.length === 0) {
+    return [
+      'No prior-notice possession grounds are recorded in the landlord answers for this tenancy at the date of issue.',
+    ];
+  }
+
+  const labels: Record<string, string> = {
+    ground_2za_superior_lease_sale: 'Ground 2ZA: superior lease sale provision',
+    ground_2zb_superior_lease_break: 'Ground 2ZB: superior lease break provision',
+    ground_2zc_superior_lease_redevelopment: 'Ground 2ZC: superior lease redevelopment provision',
+    ground_2zd_superior_lease_landlord_occupation: 'Ground 2ZD: superior lease occupation provision',
+    ground_4_student_occupation: 'Ground 4: student occupation',
+    ground_4a_students_for_new_students: 'Ground 4A: student property for incoming students',
+    ground_5_minister_of_religion: 'Ground 5: minister of religion',
+    ground_5a_agricultural_worker: 'Ground 5A: agricultural worker',
+    ground_5b_employment_requirement: 'Ground 5B: employment requirement',
+    ground_5c_end_of_landlord_employment: 'Ground 5C: end of landlord employment',
+    ground_5d_end_of_employment_requirement: 'Ground 5D: end of employment requirement',
+    ground_5e_supported_accommodation: 'Ground 5E: occupation as supported accommodation',
+    ground_5f_supported_dwelling_house: 'Ground 5F: dwelling occupied as supported accommodation',
+    ground_5g_homelessness_duty: 'Ground 5G: homelessness duty accommodation',
+    ground_5h_stepping_stone: 'Ground 5H: stepping-stone accommodation',
+    ground_18_supported_accommodation: 'Ground 18: supported accommodation',
+  };
+
+  const bullets = grounds.map((ground) => labels[ground] || ground);
+
+  if (grounds.includes('ground_4_student_occupation') && toText(facts.prior_notice_ground_4_details)) {
+    bullets.push(`Ground 4 details: ${toText(facts.prior_notice_ground_4_details)}`);
+  }
+
+  if (grounds.includes('ground_4a_students_for_new_students') && toText(facts.prior_notice_ground_4a_details)) {
+    bullets.push(`Ground 4A details: ${toText(facts.prior_notice_ground_4a_details)}`);
+  }
+
+  const supportedGrounds = grounds.filter((ground) =>
+    [
+      'ground_5e_supported_accommodation',
+      'ground_5f_supported_dwelling_house',
+      'ground_5g_homelessness_duty',
+      'ground_5h_stepping_stone',
+      'ground_18_supported_accommodation',
+    ].includes(ground)
+  );
+
+  if (supportedGrounds.length > 0 && toText(facts.prior_notice_supported_accommodation_details)) {
+    bullets.push(`Supported accommodation context: ${toText(facts.prior_notice_supported_accommodation_details)}`);
+  }
+
+  return bullets;
+}
+
+function buildEnglandAssuredAdditionalTerms(shared: SharedResidentialData): string {
+  const notes = toArrayOfText(shared.facts.additional_terms);
+  return notes.length > 0 ? notes.join('\n\n') : '';
+}
+
+function buildEnglandAssuredNotes(
+  product: EnglandAssuredResidentialProduct,
+  shared: SharedResidentialData,
+  purpose: EnglandTenancyPurpose
+): string {
+  const parts = [
+    purpose === 'existing_verbal_tenancy'
+      ? 'This document is intended to provide the written statement of terms for an existing verbal England assured tenancy and should be given to the tenant alongside any supporting compliance documents.'
+      : 'This document is intended to record the written terms for an England assured periodic tenancy and should be read with any deposit, guarantor, and pre-tenancy checklist documents in the pack.',
+    Number(shared.deposit_amount) > 0 && !toText(shared.facts.deposit_reference_number)
+      ? 'Deposit protection reference: use the placeholder wording in the support documents until the final scheme reference is available, then update the served pack within the statutory deadline.'
+      : '',
+    product === 'england_student_tenancy_agreement' && isTruthySelection(shared.facts.guarantor_required)
+      ? 'Where a guarantor will be used, the guarantor deed should be signed and retained with this agreement before occupation begins or as soon as the tenancy file requires.'
+      : '',
+    product === 'england_premium_tenancy_agreement'
+      ? 'The Premium pack is intended to travel with its management schedule, keys handover record, utilities handover sheet, pet-request addendum, and tenancy variation record.'
+      : '',
+    product === 'england_student_tenancy_agreement'
+      ? 'The Student pack is intended to travel with its move-out schedule, handover record, utilities sheet, and any guarantor deed selected in the wizard.'
+      : '',
+    product === 'england_hmo_shared_house_tenancy_agreement'
+      ? 'The HMO / shared-house pack is intended to travel with its house-rules appendix, handover record, utilities sheet, and shared-house support documents.'
+      : '',
+    buildEnglandAssuredAdditionalTerms(shared),
+  ].filter(Boolean);
+
+  return parts.join('\n\n');
+}
+
+function buildEnglandAssuredSections(
+  product: EnglandAssuredResidentialProduct,
+  shared: SharedResidentialData,
+  purpose: EnglandTenancyPurpose
+): TemplateSection[] {
+  const facts = shared.facts;
+  const periodicNotice = formatNoticePeriod(facts.tenant_notice_period);
+  const separateBillBullets = buildEnglandSeparateBillBullets(facts);
+  const priorNoticeBullets = buildEnglandPriorNoticeBullets(facts);
+  const relevantGas = isTruthySelection(facts.relevant_gas_fitting_present);
+  const depositAmountDisplay = formatMoney(shared.deposit_amount) || toText(shared.deposit_amount) || 'No deposit stated';
+  const depositReference = firstNonEmpty(
+    facts.deposit_reference_number,
+    Number(shared.deposit_amount) > 0 ? 'To be completed from the scheme confirmation' : 'No deposit stated'
+  );
+  const purposeLabel =
+    purpose === 'existing_verbal_tenancy'
+      ? 'Existing verbal tenancy written statement'
+      : 'New assured periodic tenancy agreement';
+
+  return cleanTemplateSections([
+    createSection({
+      heading: 'Tenancy Status and Core Particulars',
+      intro:
+        purpose === 'existing_verbal_tenancy'
+          ? 'This written statement records the key contractual and statutory terms of an existing verbal England assured tenancy. It is intended to help the landlord provide the required written information without treating the tenancy as a fresh grant.'
+          : 'The parties intend the tenant to occupy the Property as their main home on the assured periodic basis described in this document.',
+      rows: [
+        { label: 'Document route', value: purposeLabel },
+        { label: 'Product type', value: formatEnglandProductLabel(product) },
+        { label: 'Property type', value: facts.property_type },
+        { label: 'Bedrooms', value: facts.number_of_bedrooms },
+        { label: 'Furnished status', value: facts.furnished_status },
+        { label: 'Parking included', value: yesNoText(facts.parking_available) },
+        { label: 'Tenancy start date', value: shared.tenancy_start_date },
+      ],
+      paragraphs: [
+        'The tenancy is intended to continue on a periodic basis unless lawfully brought to an end. No separate fixed-term drafting is created by this document unless a solicitor-approved route is expressly used outside this product.',
+      ],
+    }),
+    createSection({
+      heading: 'Rent, Payment Method, and Bill Treatment',
+      rows: [
+        { label: 'Rent', value: formatMoney(shared.rent_amount) || shared.rent_amount },
+        { label: 'Rent period', value: facts.rent_period || 'month' },
+        { label: 'Rent due day', value: facts.rent_due_day },
+        { label: 'Payment method', value: facts.payment_method },
+        { label: 'Bills included in rent', value: yesNoText(facts.bills_included_in_rent) },
+        { label: 'Included bills detail', value: buildEnglandBillCoverageText(facts) },
+      ],
+      bullets: [
+        'Any rent increase for an England assured tenancy should follow the Section 13 statutory route or any later replacement process required by law. CPI, RPI, or fixed review wording is not intended to override that statutory process in this product.',
+        ...separateBillBullets,
+      ],
+      paragraphs: [
+        isTruthySelection(facts.england_rent_in_advance_compliant)
+          ? 'The landlord confirms that any rent in advance taken for this tenancy is intended to stay within the limits permitted for England assured tenancies.'
+          : '',
+      ],
+    }),
+    createSection({
+      heading: 'Deposit Arrangements',
+      rows: [
+        { label: 'Deposit amount', value: depositAmountDisplay },
+        { label: 'Deposit protection scheme', value: firstNonEmpty(facts.deposit_scheme_name, Number(shared.deposit_amount) > 0 ? 'To be confirmed' : 'Not applicable') },
+        { label: 'Deposit reference', value: depositReference },
+      ],
+      paragraphs: Number(shared.deposit_amount) > 0
+        ? [
+            'If a deposit is taken, it should be protected in an authorised England scheme within the statutory timeframe and the prescribed information should be served in time. The support documents in this pack are intended to help record those details.',
+          ]
+        : [
+            'No tenancy deposit is stated in the landlord answers. If that changes before occupation, the deposit support documents and tenant information should be updated accordingly.',
+          ],
+    }),
+    createSection({
+      heading: 'Tenant Ending the Tenancy',
+      paragraphs: [
+        `The tenant may end the tenancy by giving at least ${periodicNotice} written notice, ending on the appropriate day for the tenancy period unless the law changes or the parties later agree a lawful surrender.`,
+        'The tenant should return keys, remove belongings, leave the property reasonably clean, and provide a forwarding address for deposit and final correspondence purposes.',
+      ],
+      rows: [
+        { label: 'Recorded tenant notice period', value: periodicNotice },
+        { label: 'End-of-tenancy viewings', value: yesNoText(facts.end_of_tenancy_viewings) },
+      ],
+    }),
+    createSection({
+      heading: 'Landlord Ending the Tenancy',
+      paragraphs: [
+        'The landlord cannot lawfully end the tenancy just by serving a private break clause. Any possession route must follow the England assured-tenancy statutory process then in force, including any notice, prior-notice, court, or ground-specific requirements.',
+        'Where the landlord wishes to rely on a possession ground that requires prior notice at the start of the tenancy, the ground should be identified clearly in writing now and supported by the relevant factual explanation.',
+      ],
+    }),
+    createSection({
+      heading: 'Prior-Notice Grounds',
+      bullets: priorNoticeBullets,
+    }),
+    isTruthySelection(facts.supported_accommodation_tenancy)
+      ? createSection({
+          heading: 'Supported Accommodation Status',
+          rows: [
+            {
+              label: 'Granted as supported accommodation',
+              value: yesNoText(facts.supported_accommodation_tenancy),
+            },
+          ],
+          paragraphs: [
+            'The landlord records that this tenancy is granted as supported accommodation for the purposes stated in the written information provided to the tenant.',
+            firstNonEmpty(
+              facts.supported_accommodation_explanation,
+              'The landlord should keep a written explanation of the support, supervision, or accommodation basis that makes the tenancy a supported-accommodation tenancy.'
+            ),
+          ],
+        })
+      : null,
+    createSection({
+      heading: 'Repairs, Fitness, Safety, and Access',
+      rows: [
+        { label: 'EPC rating', value: facts.epc_rating },
+        { label: 'Gas safety certificate provided', value: relevantGas ? yesNoText(facts.gas_safety_certificate) : 'No relevant gas fitting stated' },
+        { label: 'Electrical safety certificate provided', value: yesNoText(facts.electrical_safety_certificate) },
+        { label: 'Smoke alarms fitted and tested', value: yesNoText(facts.smoke_alarms_fitted) },
+        { label: 'Carbon monoxide alarms where required', value: yesNoText(facts.carbon_monoxide_alarms) },
+        { label: 'Right to rent checks completed', value: formatIsoDateText(facts.right_to_rent_check_date) },
+      ],
+      bullets: [
+        'The landlord remains responsible for keeping the structure, exterior, installations for water, gas, electricity, sanitation, space heating, and hot water in repair where section 11 or equivalent duties apply.',
+        'The property should remain fit for human habitation throughout the tenancy and the tenant should report repair issues promptly.',
+        relevantGas
+          ? 'Gas appliances and flues should continue to be checked and certificated as required by the gas safety regime.'
+          : '',
+        'Non-emergency access should normally take place on notice and at a reasonable time unless emergency circumstances justify immediate entry.',
+      ],
+      paragraphs: [
+        `Recorded access notice expectation: ${firstNonEmpty(facts.landlord_access_notice, '24 hours')}.`,
+      ],
+    }),
+    createSection({
+      heading: 'Pets, Adaptations, and Equal Treatment',
+      bullets: [
+        'The tenant may request consent for a pet, and the landlord should deal with the request reasonably and within the time required by the law then in force.',
+        isTruthySelection(facts.tenant_improvements_allowed_with_consent)
+          ? 'Where the tenant is entitled to make improvements with the landlord consent, the landlord may not unreasonably withhold consent to an improvement request where a disabled person occupies or intends to occupy the property as their only or main home and the improvement is likely to facilitate that person enjoyment of the property having regard to their disability.'
+          : '',
+        isTruthySelection(facts.tenant_improvements_allowed_with_consent)
+          ? 'The section 190 Equality Act improvement rights do not apply so far as the tenancy already makes like provision, and the tenant can refer to section 6 of the Equality Act 2010 for the meaning of disabled person and section 190(9) for the meaning of improvement.'
+          : '',
+        isTruthySelection(facts.england_no_discrimination_confirmed)
+          ? 'The landlord confirms that the tenancy was not offered or refused on an unlawful discriminatory basis in the recorded answers.'
+          : '',
+        isTruthySelection(facts.england_no_bidding_confirmed)
+          ? 'The landlord confirms that the tenancy was not granted through a prohibited bidding process in the recorded answers.'
+          : '',
+        `Pets authorised at the start: ${yesNoText(facts.pets_allowed)}.`,
+        `Smoking policy: ${firstNonEmpty(facts.smoking_allowed, 'Not stated')}.`,
+        `Subletting / short-let policy: ${firstNonEmpty(facts.subletting_allowed, 'Not stated')}.`,
+      ],
+    }),
+    createSection({
+      heading:
+        product === 'england_premium_tenancy_agreement'
+          ? 'Premium Handover, Reporting, and Evidence Protocol'
+          : 'Product-Specific Operational Terms',
+      paragraphs:
+        product === 'england_standard_tenancy_agreement'
+          ? [
+              'This standard product is intended for an ordinary whole-property residential let and records the core occupation, payment, access, and house-rule terms without the wider operational clauses used in the premium route.',
+              `Inspection frequency recorded: ${firstNonEmpty(facts.inspection_frequency, 'Not stated')}.`,
+            ]
+          : product === 'england_premium_tenancy_agreement'
+            ? [
+                'This premium product is still an ordinary residential tenancy route, but it records fuller operational detail for inspections, reporting lines, keys, hand-back expectations, and management arrangements.',
+                `Inspection frequency recorded: ${firstNonEmpty(facts.inspection_frequency, 'Not stated')}.`,
+                firstNonEmpty(
+                  facts.management_contact_channel
+                    ? `Primary management contact channel: ${formatPremiumOption(facts.management_contact_channel)}.`
+                    : '',
+                  ''
+                ),
+                firstNonEmpty(
+                  facts.routine_inspection_window
+                    ? `Routine inspection window: ${formatPremiumOption(facts.routine_inspection_window)}.`
+                    : '',
+                  ''
+                ),
+                firstNonEmpty(
+                  facts.repair_reporting_contact
+                    ? `Repairs reporting contact: ${facts.repair_reporting_contact}.`
+                    : '',
+                  ''
+                ),
+                firstNonEmpty(
+                  facts.check_in_documentation_expectation
+                    ? `Check-in paperwork and evidence expectation: ${facts.check_in_documentation_expectation}`
+                    : '',
+                  ''
+                ),
+                firstNonEmpty(
+                  facts.contractor_access_procedure
+                    ? `Contractor access procedure: ${facts.contractor_access_procedure}`
+                    : '',
+                  ''
+                ),
+                firstNonEmpty(
+                  facts.utilities_transfer_expectation
+                    ? `Utilities and account transfer expectation: ${facts.utilities_transfer_expectation}`
+                    : '',
+                  ''
+                ),
+                firstNonEmpty(
+                  facts.handover_expectations
+                    ? `Recorded hand-back expectations: ${facts.handover_expectations}`
+                    : '',
+                  ''
+                ),
+              ]
+            : product === 'england_student_tenancy_agreement'
+              ? [
+                  'This student tenancy route records sharer arrangements, guarantor expectations, and end-of-term return standards selected in the wizard.',
+                  isTruthySelection(facts.student_replacement_procedure)
+                    ? `A student tenant replacement process is intended to apply if the landlord agrees a suitable replacement and any required documents are completed. Recorded notice window: ${firstNonEmpty(facts.replacement_notice_window, 'Not stated')}. Cost position: ${firstNonEmpty(facts.replacement_cost_responsibility, 'Not stated')}.`
+                    : '',
+                  toText(facts.student_end_of_term_expectations),
+                  firstNonEmpty(
+                    facts.student_cleaning_standard
+                      ? `Cleaning and room hand-back standard: ${facts.student_cleaning_standard}`
+                      : '',
+                    ''
+                  ),
+                ].filter(Boolean)
+              : [
+                  'This HMO / shared-house route records communal-area arrangements, sharer responsibilities, and HMO-related operational detail in the main agreement.',
+                  `HMO licence status recorded: ${firstNonEmpty(facts.hmo_licence_status, 'Not stated')}.`,
+                  `Communal areas: ${firstNonEmpty(facts.communal_areas, 'Not stated')}.`,
+                  `Communal cleaning: ${firstNonEmpty(facts.communal_cleaning, 'Not stated')}.`,
+                  firstNonEmpty(
+                    facts.visitor_policy ? `Visitor policy: ${facts.visitor_policy}` : '',
+                    ''
+                  ),
+                  firstNonEmpty(
+                    facts.fire_safety_notes ? `Fire safety notes: ${facts.fire_safety_notes}` : '',
+                    ''
+                  ),
+                ].filter(Boolean),
+      rows:
+        product === 'england_student_tenancy_agreement'
+          ? cleanRows([
+              { label: 'All tenants full-time students', value: yesNoText(facts.all_tenants_full_time_students) },
+              { label: 'Joint tenancy', value: yesNoText(facts.joint_tenancy) },
+              { label: 'Guarantor required', value: yesNoText(facts.guarantor_required) },
+              { label: 'Guarantor scope', value: facts.student_guarantor_scope },
+              { label: 'Replacement request notice window', value: facts.replacement_notice_window },
+              { label: 'Replacement costs', value: facts.replacement_cost_responsibility },
+              { label: 'Vacation / non-occupation notes', value: facts.vacation_period_notes },
+              { label: 'Move-out keys and return process', value: facts.student_move_out_keys_process },
+              { label: 'Cleaning and room hand-back standard', value: facts.student_cleaning_standard },
+            ])
+          : product === 'england_premium_tenancy_agreement'
+            ? cleanRows([
+                { label: 'Primary management contact channel', value: formatPremiumOption(facts.management_contact_channel) },
+                { label: 'Routine inspection window', value: formatPremiumOption(facts.routine_inspection_window) },
+                { label: 'Repairs reporting contact', value: facts.repair_reporting_contact },
+                { label: 'Repairs response expectation', value: formatPremiumOption(facts.repair_response_timeframe) },
+                { label: 'Keys and access devices held', value: facts.key_holders_summary },
+                { label: 'Check-in paperwork expectation', value: facts.check_in_documentation_expectation },
+                { label: 'Contractor access procedure', value: facts.contractor_access_procedure },
+                { label: 'Contractor key release policy', value: facts.contractor_key_release_policy },
+                { label: 'Utilities and account transfer expectation', value: facts.utilities_transfer_expectation },
+                { label: 'Premium management schedule', value: facts.premium_management_schedule },
+                { label: 'Move-out and hand-back expectations', value: facts.handover_expectations },
+              ])
+          : product === 'england_hmo_shared_house_tenancy_agreement'
+            ? cleanRows([
+                { label: 'Property is HMO / licensable shared house', value: yesNoText(facts.is_hmo) },
+                { label: 'Number of sharers / rooms', value: facts.number_of_sharers },
+                { label: 'Communal areas', value: facts.communal_areas },
+                { label: 'Shared facilities schedule', value: facts.shared_facilities_schedule },
+                { label: 'Communal cleaning', value: facts.communal_cleaning },
+                { label: 'Visitor policy', value: facts.visitor_policy },
+                { label: 'Quiet hours', value: facts.quiet_hours },
+                { label: 'Waste and recycling arrangements', value: facts.waste_collection_arrangements },
+                { label: 'Fire safety notes', value: facts.fire_safety_notes },
+              ])
+            : cleanRows([
+                { label: 'House rules / additional operational notes', value: facts.house_rules_notes || facts.additional_terms },
+                { label: 'Access notice expectation', value: facts.landlord_access_notice },
+                { label: 'Inspection frequency', value: facts.inspection_frequency },
+              ]),
+    }),
+    createSection({
+      heading: 'Supporting Schedules and File Documents',
+      bullets:
+        product === 'england_standard_tenancy_agreement'
+          ? [
+              'This pack includes the main agreement together with a pre-tenancy checklist, keys handover record, utilities handover sheet, pet request addendum, and tenancy variation record.',
+            ]
+          : product === 'england_premium_tenancy_agreement'
+            ? [
+                'This pack includes the main agreement together with a pre-tenancy checklist, keys handover record, utilities handover sheet, pet request addendum, tenancy variation record, and a premium management schedule.',
+                shouldIncludeGuarantorDeed(product, facts)
+                  ? 'A guarantor deed is also included because the wizard answers indicate that a guarantor is expected.'
+                  : '',
+              ]
+            : product === 'england_student_tenancy_agreement'
+              ? [
+                  'This pack includes the main agreement together with a pre-tenancy checklist, keys handover record, utilities handover sheet, pet request addendum, tenancy variation record, and a student move-out / guarantor schedule.',
+                  shouldIncludeGuarantorDeed(product, facts)
+                    ? 'A guarantor deed is also included because the wizard answers indicate that a guarantor is required.'
+                    : '',
+                ]
+              : [
+                  'This pack includes the main agreement together with a pre-tenancy checklist, keys handover record, utilities handover sheet, pet request addendum, tenancy variation record, and a dedicated HMO / shared-house rules appendix.',
+                ],
+    }),
+    createSection({
+      heading: 'Notices and Service Information',
+      rows: [
+        { label: 'Landlord service address', value: shared.landlord_address },
+        { label: 'Landlord email', value: shared.landlord_email },
+        { label: 'Landlord phone', value: shared.landlord_phone },
+        { label: 'How to Rent guide provided', value: yesNoText(facts.how_to_rent_provided) },
+      ],
+      paragraphs: [
+        'Formal notices should be sent to the landlord service address stated in this document unless the landlord later gives a valid written replacement address for service.',
+      ],
+    }),
+  ]);
+}
+
+function buildEnglandTransitionGuidanceSections(
+  product: EnglandAssuredResidentialProduct,
+  shared: SharedResidentialData
+): TemplateSection[] {
+  const facts = shared.facts;
+  return cleanTemplateSections([
+    createSection({
+      heading: 'Why This Transition Pack Exists',
+      intro:
+        'This document is for an existing written England tenancy that is continuing into the post-1 May 2026 assured-tenancy regime. It is not intended to replace the existing written tenancy unless the parties take separate legal steps to do that.',
+      rows: [
+        { label: 'Underlying product route', value: formatEnglandProductLabel(product) },
+        { label: 'Existing tenancy reference date', value: shared.tenancy_start_date },
+        { label: 'Property', value: shared.property_address },
+      ],
+      paragraphs: [
+        'Give the exact government Renters\' Rights Act Information Sheet 2026 PDF to every named tenant and retain proof of service with the tenancy file.',
+      ],
+    }),
+    createSection({
+      heading: 'Immediate Actions',
+      bullets: [
+        'Check that the named tenant list, landlord service address, and rent details remain accurate.',
+        'Record the tenant notice position, landlord possession process summary, bill treatment, repair responsibilities, and safety information in the tenancy file.',
+        Number(shared.deposit_amount) > 0
+          ? 'Review deposit protection details and ensure any prescribed information or updated reference details are retained with the tenancy records.'
+          : 'If no deposit is currently taken, no deposit support document is included in this transition pack.',
+        'Retain proof that the government information sheet and any supplementary written information were delivered to the tenant.',
+      ],
+    }),
+    createSection({
+      heading: 'Matters to Review on the Existing Tenancy File',
+      rows: [
+        { label: 'Rent amount', value: formatMoney(shared.rent_amount) || shared.rent_amount },
+        { label: 'Rent increase method', value: firstNonEmpty(facts.rent_increase_method, 'Section 13 route expected for England assured tenancies') },
+        { label: 'Tenant notice period', value: formatNoticePeriod(facts.tenant_notice_period) },
+        { label: 'Bills included in rent', value: yesNoText(facts.bills_included_in_rent) },
+        { label: 'Prior-notice grounds recorded', value: toArrayOfText(facts.prior_notice_grounds).length > 0 ? 'Yes' : 'No' },
+      ],
+    }),
+    createSection({
+      heading: 'Operational and Safety Record',
+      rows: [
+        { label: 'EPC rating', value: facts.epc_rating },
+        { label: 'Right to rent check date', value: facts.right_to_rent_check_date },
+        { label: 'Gas safety certificate provided', value: yesNoText(facts.gas_safety_certificate) },
+        { label: 'Electrical safety certificate provided', value: yesNoText(facts.electrical_safety_certificate) },
+        { label: 'Smoke alarms fitted and tested', value: yesNoText(facts.smoke_alarms_fitted) },
+        { label: 'CO alarms where required', value: yesNoText(facts.carbon_monoxide_alarms) },
+      ],
+      paragraphs: [
+        'This transition note is a file-management aid only. Keep the original written tenancy, the government information sheet, and all compliance evidence together in the same tenancy record.',
+      ],
+    }),
+  ]);
+}
+
+function buildEnglandLodgerAgreementSections(shared: SharedResidentialData): TemplateSection[] {
+  const facts = shared.facts;
+
+  return cleanTemplateSections([
+    createSection({
+      heading: 'Room Let and Occupation Basis',
+      intro:
+        'The resident landlord permits the Lodger to occupy the agreed room and use the shared parts of the property on the practical terms recorded below. This product is intended for a resident-landlord arrangement and not for an assured tenancy.',
+      rows: [
+        { label: 'Room / area occupied', value: firstNonEmpty(facts.let_room_description, 'Room within the property') },
+        { label: 'Occupation start date', value: shared.tenancy_start_date },
+        { label: 'Resident landlord confirmed', value: yesNoText(facts.resident_landlord_confirmed) },
+        { label: 'Shared kitchen or bathroom with landlord', value: yesNoText(facts.shared_kitchen_or_bathroom) },
+      ],
+    }),
+    createSection({
+      heading: 'Licence Fee, Bills, and Included Services',
+      rows: [
+        { label: 'Licence fee / rent', value: formatMoney(shared.rent_amount) || shared.rent_amount },
+        { label: 'Payment frequency', value: facts.rent_period || 'month' },
+        { label: 'Payment due day', value: facts.rent_due_day },
+        { label: 'Payment method', value: facts.payment_method },
+        { label: 'Bills included', value: buildEnglandBillCoverageText(facts) },
+      ],
+      paragraphs: [
+        'The lodger should pay the licence fee on time and use the property in a clean, respectful, and domestic manner consistent with a room-let in the landlord\'s own home.',
+      ],
+    }),
+    createSection({
+      heading: 'Use of Shared Facilities and House Rules',
+      rows: [
+        { label: 'House rules and shared-space notes', value: facts.house_rules_notes },
+        { label: 'Guest policy', value: facts.guest_policy },
+        { label: 'Quiet hours', value: facts.quiet_hours },
+        { label: 'Shared-space cleaning arrangements', value: facts.shared_space_cleaning },
+        { label: 'Smoking policy', value: facts.smoking_allowed },
+        { label: 'Pets authorised at start', value: yesNoText(facts.pets_allowed) },
+      ],
+      bullets: [
+        'The Lodger should respect the resident landlord, neighbours, and any other occupiers and use shared facilities reasonably.',
+        'Any guest, overnight stay, cleaning, kitchen, bathroom, laundry, or rubbish arrangements should follow the house rules recorded in this document.',
+      ],
+    }),
+    createSection({
+      heading: 'Access, Safety, and Records',
+      rows: [
+        { label: 'Right to rent checks completed', value: formatIsoDateText(facts.right_to_rent_check_date) },
+        { label: 'Smoke alarms fitted and tested', value: yesNoText(facts.smoke_alarms_fitted) },
+        { label: 'CO alarms where required', value: yesNoText(facts.carbon_monoxide_alarms) },
+      ],
+      paragraphs: [
+        'Because the resident landlord lives at the property, day-to-day access and use of common parts should work cooperatively and reasonably. Even so, the lodger should be told about practical arrangements for privacy, quiet hours, and shared-space use.',
+      ],
+    }),
+    createSection({
+      heading: 'Notice and Ending the Room Let',
+      rows: [
+        { label: 'Licence notice period', value: firstNonEmpty(facts.licence_notice_period, '28 days') },
+        { label: 'Key return and room hand-back expectations', value: facts.key_return_expectations },
+      ],
+      paragraphs: [
+        'Either party may end the arrangement by giving the recorded notice unless a shorter period is justified by serious misconduct or both parties agree an earlier move-out date in writing.',
+        'At the end of the arrangement the lodger should return keys, clear the room, and leave any shared areas in the expected condition.',
+      ],
+    }),
+  ]);
+}
+
+function buildEnglandLodgerChecklistSections(shared: SharedResidentialData): TemplateSection[] {
+  const facts = shared.facts;
+
+  return cleanTemplateSections([
+    createSection({
+      heading: 'Before Move-In',
+      bullets: [
+        'Confirm the room to be occupied, any furniture or household items included, and the house rules applying to shared facilities.',
+        'Record the move-in date, key handover, first payment date, and any inventory or condition notes for the room.',
+        formatIsoDateText(facts.right_to_rent_check_date)
+          ? `Right to rent checks recorded on ${formatIsoDateText(facts.right_to_rent_check_date)}.`
+          : 'Complete and record any right to rent checks required for the arrangement.',
+      ],
+    }),
+    createSection({
+      heading: 'Household Management',
+      bullets: [
+        'Explain rubbish, recycling, cleaning, laundry, guest, quiet-hours, and kitchen / bathroom arrangements clearly.',
+        'Keep a written note of any shared expenses or services included in the licence fee.',
+        'Record any particular security, key, alarm, or access instructions for the household.',
+        firstNonEmpty(
+          facts.guest_policy ? `Guest policy recorded: ${facts.guest_policy}` : '',
+          ''
+        ),
+        firstNonEmpty(
+          facts.shared_space_cleaning
+            ? `Shared-space cleaning arrangement: ${facts.shared_space_cleaning}`
+            : '',
+          ''
+        ),
+      ],
+    }),
+    createSection({
+      heading: 'Safety and End-of-Let File',
+      bullets: [
+        `Smoke alarms fitted and tested: ${yesNoText(facts.smoke_alarms_fitted)}.`,
+        `CO alarms where required: ${yesNoText(facts.carbon_monoxide_alarms)}.`,
+        'Keep a dated copy of the agreement, checklist, payment record, and any inventory or move-in photographs with the room-let file.',
+      ],
+    }),
+  ]);
+}
+
+function buildEnglandKeysHandoverSections(
+  product: EnglandModernTenancyProduct,
+  shared: SharedResidentialData
+): TemplateSection[] {
+  const facts = shared.facts;
+  const occupierLabel = product === 'england_lodger_agreement' ? 'Lodger' : 'Tenant(s)';
+
+  return cleanTemplateSections([
+    createSection({
+      heading: 'Handover Summary',
+      rows: [
+        { label: 'Product route', value: formatEnglandProductLabel(product) },
+        { label: 'Property', value: shared.property_address },
+        { label: occupierLabel, value: shared.tenant_names },
+        { label: 'Start date', value: shared.tenancy_start_date },
+        { label: 'Keys and access devices', value: firstNonEmpty(facts.key_holders_summary, facts.key_return_expectations, 'Record keys, fobs, alarms, and any concierge access devices here.') },
+      ],
+      paragraphs: [
+        'Use this record to note the physical handover items provided at move-in and the items expected back at the end of occupation.',
+      ],
+    }),
+    createSection({
+      heading: 'Practical Checks',
+      bullets: [
+        'Record the number of keys, fobs, gate controls, or alarm codes handed over.',
+        'Confirm meter readings, appliance instructions, and any property-specific access rules on the handover date.',
+        'Keep the signed or acknowledged handover record with the main agreement and any inventory or move-in photos.',
+      ],
+    }),
+  ]);
+}
+
+function buildEnglandUtilitiesHandoverSections(shared: SharedResidentialData): TemplateSection[] {
+  const facts = shared.facts;
+
+  return cleanTemplateSections([
+    createSection({
+      heading: 'Utilities and Bill Responsibility',
+      rows: [
+        { label: 'Council tax', value: facts.council_tax_responsibility },
+        { label: 'Gas / electric / water', value: facts.utilities_responsibility },
+        { label: 'Internet / broadband', value: facts.internet_responsibility },
+        { label: 'Bills included in rent', value: yesNoText(facts.bills_included_in_rent) },
+        { label: 'Included bills detail', value: buildEnglandBillCoverageText(facts) },
+      ],
+    }),
+    createSection({
+      heading: 'Opening Readings and Account Handover',
+      bullets: [
+        'Record opening meter readings and photographs where relevant at the start of the occupation.',
+        'Note current suppliers, council tax reference details, and any service account numbers that need transferring.',
+        'Keep this sheet with the agreement, handover record, and any check-in paperwork.',
+      ],
+    }),
+  ]);
+}
+
+function buildEnglandPetRequestAddendumSections(shared: SharedResidentialData): TemplateSection[] {
+  const facts = shared.facts;
+
+  return cleanTemplateSections([
+    createSection({
+      heading: 'Pet Request Record',
+      rows: [
+        { label: 'Property', value: shared.property_address },
+        { label: 'Tenant(s)', value: shared.tenant_names },
+        { label: 'Pets authorised at the start', value: yesNoText(facts.pets_allowed) },
+        { label: 'Current smoking policy', value: facts.smoking_allowed },
+      ],
+      paragraphs: [
+        'Use this addendum to record a tenant pet request, the landlord response, any conditions attached to consent, and the date the request was considered.',
+        'If a pet is approved, keep the signed addendum with the main tenancy agreement and any inventory or cleaning notes.',
+      ],
+    }),
+  ]);
+}
+
+function buildEnglandVariationRecordSections(
+  product: EnglandAssuredResidentialProduct,
+  shared: SharedResidentialData
+): TemplateSection[] {
+  return cleanTemplateSections([
+    createSection({
+      heading: 'Variation Record Purpose',
+      rows: [
+        { label: 'Underlying product', value: formatEnglandProductLabel(product) },
+        { label: 'Property', value: shared.property_address },
+        { label: 'Landlord', value: shared.landlord_name },
+        { label: 'Tenant(s)', value: shared.tenant_names },
+      ],
+      paragraphs: [
+        'Use this record to note any agreed operational or administrative changes made after the agreement is issued without losing the original tenancy paperwork.',
+        'Any substantial variation should be dated, signed where appropriate, and stored with the tenancy file.',
+      ],
+    }),
+  ]);
+}
+
+function buildEnglandPremiumManagementScheduleSections(shared: SharedResidentialData): TemplateSection[] {
+  const facts = shared.facts;
+
+  return cleanTemplateSections([
+    createSection({
+      heading: 'Premium Management Schedule',
+      rows: [
+        { label: 'Primary management contact channel', value: formatPremiumOption(facts.management_contact_channel) },
+        { label: 'Repairs reporting contact', value: facts.repair_reporting_contact },
+        { label: 'Repairs response expectation', value: formatPremiumOption(facts.repair_response_timeframe) },
+        { label: 'Inspection frequency', value: facts.inspection_frequency },
+        { label: 'Routine inspection window', value: formatPremiumOption(facts.routine_inspection_window) },
+        { label: 'Keys and access devices', value: facts.key_holders_summary },
+        { label: 'Contractor access procedure', value: facts.contractor_access_procedure },
+        { label: 'Contractor key release policy', value: facts.contractor_key_release_policy },
+        { label: 'Hand-back expectations', value: facts.handover_expectations },
+      ],
+      paragraphs: [
+        'This schedule sits behind the Premium agreement and records the fuller day-to-day management detail that does not belong in the Standard route.',
+      ],
+    }),
+    createSection({
+      heading: 'Premium Check-In and Utilities Protocol',
+      rows: [
+        { label: 'Check-in paperwork expectation', value: facts.check_in_documentation_expectation },
+        { label: 'Utilities and account transfer expectation', value: facts.utilities_transfer_expectation },
+      ],
+      paragraphs: [
+        'Use this section alongside the keys handover record, utilities handover sheet, and any signed inventory or meter evidence kept with the tenancy file.',
+      ],
+    }),
+  ]);
+}
+
+function buildEnglandStudentMoveOutScheduleSections(shared: SharedResidentialData): TemplateSection[] {
+  const facts = shared.facts;
+
+  return cleanTemplateSections([
+    createSection({
+      heading: 'Student Move-Out and Guarantor Schedule',
+      rows: [
+        { label: 'Guarantor required', value: yesNoText(facts.guarantor_required) },
+        { label: 'Guarantor scope', value: facts.student_guarantor_scope },
+        { label: 'Replacement request notice window', value: facts.replacement_notice_window },
+        { label: 'Replacement costs', value: facts.replacement_cost_responsibility },
+        { label: 'Move-out keys and return process', value: facts.student_move_out_keys_process },
+        { label: 'Cleaning and room hand-back standard', value: facts.student_cleaning_standard },
+        { label: 'End-of-term return standard', value: facts.student_end_of_term_expectations },
+      ],
+    }),
+  ]);
+}
+
+function buildEnglandHmoHouseRulesSections(shared: SharedResidentialData): TemplateSection[] {
+  const facts = shared.facts;
+
+  return cleanTemplateSections([
+    createSection({
+      heading: 'HMO / Shared House Rules Appendix',
+      rows: [
+        { label: 'Communal areas', value: facts.communal_areas },
+        { label: 'Shared facilities schedule', value: facts.shared_facilities_schedule },
+        { label: 'Communal cleaning', value: facts.communal_cleaning },
+        { label: 'Visitor policy', value: facts.visitor_policy },
+        { label: 'Quiet hours', value: facts.quiet_hours },
+        { label: 'Waste and recycling arrangements', value: facts.waste_collection_arrangements },
+        { label: 'Fire safety notes', value: facts.fire_safety_notes },
+      ],
+    }),
+  ]);
+}
+
+function buildEnglandLodgerHouseRulesAppendixSections(shared: SharedResidentialData): TemplateSection[] {
+  const facts = shared.facts;
+
+  return cleanTemplateSections([
+    createSection({
+      heading: 'Lodger House Rules Appendix',
+      rows: [
+        { label: 'Room occupied', value: facts.let_room_description },
+        { label: 'House rules', value: facts.house_rules_notes },
+        { label: 'Guest policy', value: facts.guest_policy },
+        { label: 'Quiet hours', value: facts.quiet_hours },
+        { label: 'Shared-space cleaning', value: facts.shared_space_cleaning },
+        { label: 'Included services', value: facts.services_included },
+        { label: 'Key return expectations', value: facts.key_return_expectations },
+      ],
+    }),
+  ]);
+}
+
+type EnglandDepositSchemeName = 'DPS' | 'MyDeposits' | 'TDS';
+
+interface EnglandDepositSchemeDetails {
+  schemeName: EnglandDepositSchemeName;
+  schemeWebsite: string;
+}
+
+function getEnglandDepositSchemeDetails(schemeName?: string): EnglandDepositSchemeDetails {
+  const normalized = (schemeName || '').toLowerCase();
+
+  if (normalized.includes('mydeposits')) {
+    return {
+      schemeName: 'MyDeposits',
+      schemeWebsite: 'https://www.mydeposits.co.uk/',
+    };
+  }
+
+  if (normalized.includes('tds')) {
+    return {
+      schemeName: 'TDS',
+      schemeWebsite: 'https://www.tenancydepositscheme.com/',
+    };
+  }
+
+  return {
+    schemeName: 'DPS',
+    schemeWebsite: 'https://www.depositprotection.com/',
+  };
+}
+
+function buildEnglandDepositSupportData(shared: SharedResidentialData): Record<string, any> {
+  const facts = shared.facts;
+  const schemeDetails = getEnglandDepositSchemeDetails(facts.deposit_scheme_name || facts.deposit_scheme);
+  const schemeMode = `${facts.deposit_scheme || ''} ${facts.deposit_scheme_name || ''}`.toLowerCase();
+  const custodial = schemeMode.includes('custodial');
+  const insured = !custodial;
+  const depositReference = facts.deposit_reference_number || 'See scheme confirmation';
+  const protectionDate =
+    facts.deposit_protection_date ||
+    facts.prescribed_information_date ||
+    facts.deposit_paid_date ||
+    shared.tenancy_start_date;
+  const tenants = getTenantRecords(facts);
+
+  return {
+    ...facts,
+    case_id: toText(facts.case_id),
+    timestamp: Date.now(),
+    property_address: shared.property_address,
+    landlord_name: shared.landlord_name,
+    landlord_address: shared.landlord_address,
+    landlord_email: shared.landlord_email,
+    landlord_phone: shared.landlord_phone,
+    tenant_names: shared.tenant_names,
+    tenant_primary_name: shared.tenant_primary_name,
+    rent_amount: shared.rent_amount,
+    deposit_amount: shared.deposit_amount,
+    current_date: shared.current_date,
+    tenancy_start_date: shared.tenancy_start_date,
+    agent_manages: Boolean(facts.agent_name || facts.agent_address || facts.agent_email || facts.agent_phone),
+    tenants: tenants.map((tenant) => ({
+      ...tenant,
+      name: tenant.full_name,
+      address: (tenant as any).address || shared.property_address,
+    })),
+    deposit_received_date: facts.deposit_paid_date || shared.tenancy_start_date || shared.current_date,
+    scheme_name: schemeDetails.schemeName,
+    protection_date: protectionDate,
+    deposit_reference: depositReference,
+    protection_type: custodial ? 'Custodial' : 'Insured',
+    custodial,
+    insured,
+    deposit_holding_method: custodial
+      ? 'Custodial scheme - the deposit is held by the scheme'
+      : 'Insured scheme - the deposit is held by the landlord or agent and backed by the scheme',
+    scheme_address: 'See the deposit scheme website or membership confirmation for the current registered address.',
+    scheme_phone: 'See scheme website',
+    scheme_email: 'See scheme website',
+    scheme_website: schemeDetails.schemeWebsite,
+    scheme_registration: depositReference,
+    scheme_adr_name: `${schemeDetails.schemeName} ADR Service`,
+    scheme_adr_phone: 'See scheme website',
+    scheme_adr_email: 'See scheme website',
+    scheme_adr_website: schemeDetails.schemeWebsite,
+    scheme_dispute_phone: 'See scheme website',
+    scheme_dispute_email: 'See scheme website',
+    scheme_dispute_website: schemeDetails.schemeWebsite,
+    dispute_deadline: 'the deadline set by your deposit scheme',
+  };
+}
+
+function shouldIncludeGuarantorDeed(
+  product: ResidentialLettingProductSku,
+  facts: Record<string, any>
+): boolean {
+  if (product === 'england_student_tenancy_agreement') {
+    return isTruthySelection(facts.guarantor_required);
+  }
+
+  if (product === 'england_premium_tenancy_agreement') {
+    return isTruthySelection(facts.guarantor_expected);
+  }
+
+  return false;
+}
+
+async function buildEnglandInformationSheetDocument(): Promise<ResidentialGeneratedDocument> {
+  const pdf = await readFile(ENGLAND_INFORMATION_SHEET_PDF_PATH);
+  const html = [
+    '<!doctype html>',
+    '<html lang="en">',
+    '<head><meta charset="utf-8"><title>Renters\' Rights Act Information Sheet 2026</title></head>',
+    '<body style="font-family: Arial, sans-serif; padding: 32px; color: #111827;">',
+    '<h1>Renters\' Rights Act Information Sheet 2026</h1>',
+    '<p>This bundle includes the exact government PDF stored locally in the repository.</p>',
+    '<p>Give this PDF to every named tenant for an existing written England tenancy transition case.</p>',
+    '</body>',
+    '</html>',
+  ].join('');
+
+  return {
+    title: 'Renters\' Rights Act Information Sheet 2026',
+    description:
+      'Exact government PDF for existing written England assured tenancies transitioning into the new regime.',
+    category: 'guidance',
+    document_type: 'renters_rights_information_sheet_2026',
+    html,
+    pdf,
+    file_name: 'renters_rights_information_sheet_2026.pdf',
+  };
+}
+
+async function generateEnglandChecklistDocument(
+  shared: SharedResidentialData,
+  outputFormat: ResidentialDocumentOutputFormat
+): Promise<ResidentialGeneratedDocument> {
+  const rendered = await generateDocument({
+    templatePath: '_shared/standalone/checklist_standalone.hbs',
+    data: {
+      jurisdiction: 'england',
+      property_address: shared.property_address,
+      landlord_name: shared.landlord_name,
+      current_date: shared.current_date,
+      case_id: toText(shared.facts.case_id),
+      england_tenancy_purpose: getEnglandTenancyPurpose(shared.facts.england_tenancy_purpose),
+    },
+    outputFormat,
+  });
+
+  return {
+    title: 'Pre-Tenancy Checklist (England)',
+    description:
+      'England compliance checklist covering the main pre-tenancy and written-information actions for the tenancy file.',
+    category: 'checklist',
+    document_type: 'pre_tenancy_checklist_england',
+    html: rendered.html,
+    pdf: rendered.pdf,
+    file_name: 'pre_tenancy_checklist_england.pdf',
+  };
+}
+
+async function generateEnglandDepositSupportDocument(
+  documentType: 'deposit_protection_certificate' | 'tenancy_deposit_information',
+  shared: SharedResidentialData,
+  outputFormat: ResidentialDocumentOutputFormat
+): Promise<ResidentialGeneratedDocument> {
+  const config =
+    documentType === 'deposit_protection_certificate'
+      ? {
+          title: 'Deposit Protection Certificate',
+          description: 'Standalone certificate confirming the deposit protection scheme details for England.',
+          templatePath: 'uk/england/templates/deposit_protection_certificate.hbs',
+          fileName: 'deposit_protection_certificate.pdf',
+        }
+      : {
+          title: 'Prescribed Information Pack',
+          description: 'Standalone tenancy deposit prescribed information pack for England.',
+          templatePath: 'uk/england/templates/tenancy_deposit_information.hbs',
+          fileName: 'prescribed_information_pack.pdf',
+        };
+
+  const rendered = await generateDocument({
+    templatePath: config.templatePath,
+    data: buildEnglandDepositSupportData(shared),
+    outputFormat,
+  });
+
+  return {
+    title: config.title,
+    description: config.description,
+    category: 'guidance',
+    document_type: documentType,
+    html: rendered.html,
+    pdf: rendered.pdf,
+    file_name: config.fileName,
+  };
+}
+
+async function generateEnglandPackSupportDocument(
+  product: EnglandModernTenancyProduct,
+  shared: SharedResidentialData,
+  outputFormat: ResidentialDocumentOutputFormat,
+  params: {
+    title: string;
+    subtitle: string;
+    description: string;
+    documentType: string;
+    fileName: string;
+    category: ResidentialGeneratedDocument['category'];
+    natureOfDocument: string;
+    intro: string;
+    sections: TemplateSection[];
+    executionStatement?: string;
+  }
+): Promise<ResidentialGeneratedDocument> {
+  const config: TemplateConfig = {
+    title: params.title,
+    subtitle: params.subtitle,
+    intro: params.intro,
+    description: params.description,
+    category: params.category,
+    documentType: params.documentType,
+    fileName: params.fileName,
+    templatePath: 'uk/england/templates/residential/agreement_document.hbs',
+    counterpartyLabel: product === 'england_lodger_agreement' ? 'Lodger' : 'Tenant',
+    natureOfDocument: params.natureOfDocument,
+    executionStatement: params.executionStatement,
+  };
+
+  return generateTemplatedResidentialDocument(
+    product as ResidentialLettingProductSku,
+    shared,
+    config,
+    outputFormat,
+    {
+      sections: params.sections,
+      signature_parties: [
+        {
+          label: 'Prepared by',
+          name: firstNonEmpty(shared.landlord_name, 'Landlord'),
+        },
+      ],
+    }
+  );
+}
+
+async function generateModernEnglandPack(
+  product: EnglandModernTenancyProduct,
+  shared: SharedResidentialData,
+  outputFormat: ResidentialDocumentOutputFormat,
+  baseConfigs: Record<
+    Exclude<ResidentialLettingProductSku, 'inventory_schedule_condition' | 'rent_arrears_letter'>,
+    TemplateConfig
+  >
+): Promise<ResidentialGeneratedPack> {
+  const purpose = getEnglandTenancyPurpose(shared.facts.england_tenancy_purpose);
+  const packItems = getPackContents({
+    product,
+    jurisdiction: 'england',
+    englandTenancyPurpose: purpose,
+    depositTaken: Number(shared.deposit_amount) > 0,
+    includeGuarantorDeed: shouldIncludeGuarantorDeed(product, shared.facts),
+  });
+  const documents: ResidentialGeneratedDocument[] = [];
+
+  for (const item of packItems) {
+    switch (item.key) {
+      case 'england_standard_tenancy_agreement':
+      case 'england_premium_tenancy_agreement':
+      case 'england_student_tenancy_agreement':
+      case 'england_hmo_shared_house_tenancy_agreement': {
+        const assuredProduct = item.key as EnglandAssuredResidentialProduct;
+        documents.push(
+          await generateTemplatedResidentialDocument(
+            assuredProduct,
+            shared,
+            baseConfigs[assuredProduct],
+            outputFormat,
+            {
+              sections: buildEnglandAssuredSections(assuredProduct, shared, purpose),
+              notes: buildEnglandAssuredNotes(assuredProduct, shared, purpose),
+              tenancy_end_date: '',
+            }
+          )
+        );
+        break;
+      }
+      case 'england_written_statement_of_terms': {
+        const config: TemplateConfig = {
+          title: 'England Written Statement of Terms',
+          subtitle: `${formatEnglandProductLabel(product)} for an existing verbal tenancy`,
+          intro:
+            'This document records the written terms and key statutory information for an existing verbal England assured tenancy. It is intended to evidence the current arrangement without pretending a brand new tenancy has been granted.',
+          description:
+            'Written statement of terms for an existing verbal England assured tenancy.',
+          category: 'agreement',
+          documentType: 'england_written_statement_of_terms',
+          fileName: 'england-written-statement-of-terms.pdf',
+          templatePath: 'uk/england/templates/residential/agreement_document.hbs',
+          counterpartyLabel: 'Tenant',
+          natureOfDocument: 'Written statement of assured tenancy terms',
+          recitals: [
+            'The tenant already occupies the Property under an existing verbal tenancy arrangement.',
+            'The parties intend this written statement to record the key terms and statutory information for the continuing tenancy.',
+          ],
+          executionStatement:
+            'The landlord should give this written statement to the tenant and keep a copy with the tenancy records.',
+        };
+        documents.push(
+          await generateTemplatedResidentialDocument(product, shared, config, outputFormat, {
+            sections: buildEnglandAssuredSections(product as EnglandAssuredResidentialProduct, shared, purpose),
+            notes: buildEnglandAssuredNotes(product as EnglandAssuredResidentialProduct, shared, purpose),
+            tenancy_end_date: '',
+          })
+        );
+        break;
+      }
+      case 'england_tenancy_transition_guidance': {
+        const config: TemplateConfig = {
+          title: 'England Tenancy Transition Guidance',
+          subtitle: `${formatEnglandProductLabel(product)} transition note for an existing written tenancy`,
+          intro:
+            'This guidance note is intended to sit on the tenancy file for an existing written England tenancy as part of the post-1 May 2026 transition work.',
+          description:
+            'Transition note for an existing written England assured tenancy moving into the post-1 May 2026 regime.',
+          category: 'guidance',
+          documentType: 'england_tenancy_transition_guidance',
+          fileName: 'england-tenancy-transition-guidance.pdf',
+          templatePath: 'uk/england/templates/residential/agreement_document.hbs',
+          counterpartyLabel: 'Tenant',
+          natureOfDocument: 'Transition guidance note',
+          recitals: [
+            'The existing written tenancy remains the main contractual record unless the parties later agree a lawful replacement document.',
+            'This guidance note is intended to help the landlord organise the transition paperwork and supporting records for the continuing tenancy.',
+          ],
+          executionStatement:
+            'Keep this transition note with the original written tenancy, the information sheet, and the supporting compliance records.',
+        };
+        documents.push(
+          await generateTemplatedResidentialDocument(product, shared, config, outputFormat, {
+            sections: buildEnglandTransitionGuidanceSections(product as EnglandAssuredResidentialProduct, shared),
+            signature_parties: [
+              {
+                label: 'Prepared by',
+                name: firstNonEmpty(shared.landlord_name, 'Landlord'),
+              },
+            ],
+          })
+        );
+        break;
+      }
+      case 'renters_rights_information_sheet_2026':
+        if (shouldIncludeEnglandInformationSheet({ jurisdiction: 'england', purpose })) {
+          documents.push(await buildEnglandInformationSheetDocument());
+        }
+        break;
+      case 'pre_tenancy_checklist_england':
+        documents.push(await generateEnglandChecklistDocument(shared, outputFormat));
+        break;
+      case 'england_lodger_agreement':
+        documents.push(
+          await generateTemplatedResidentialDocument(
+            'england_lodger_agreement',
+            shared,
+            baseConfigs.england_lodger_agreement,
+            outputFormat,
+            {
+              sections: buildEnglandLodgerAgreementSections(shared),
+              notes: toArrayOfText(shared.facts.additional_terms).join('\n\n'),
+            }
+          )
+        );
+        break;
+      case 'england_lodger_checklist': {
+        const config: TemplateConfig = {
+          title: 'Room Let / Lodger Checklist',
+          subtitle: 'Resident-landlord handover and room-let checklist',
+          intro:
+            'This checklist is intended to sit alongside the room-let agreement and help the resident landlord keep a practical handover and occupancy record.',
+          description:
+            'Resident-landlord room-let checklist covering handover, house rules, and key practical compliance points.',
+          category: 'checklist',
+          documentType: 'england_lodger_checklist',
+          fileName: 'england-lodger-checklist.pdf',
+          templatePath: 'uk/england/templates/residential/agreement_document.hbs',
+          counterpartyLabel: 'Lodger',
+          natureOfDocument: 'Resident-landlord checklist',
+          executionStatement:
+            'Keep this checklist with the lodger agreement, key record, and any room inventory or move-in photographs.',
+        };
+        documents.push(
+          await generateTemplatedResidentialDocument(
+            'england_lodger_agreement',
+            shared,
+            config,
+            outputFormat,
+            {
+              sections: buildEnglandLodgerChecklistSections(shared),
+              signature_parties: [
+                {
+                  label: 'Prepared by',
+                  name: firstNonEmpty(shared.landlord_name, 'Landlord'),
+                },
+              ],
+            }
+          )
+        );
+        break;
+      }
+      case 'deposit_protection_certificate':
+      case 'tenancy_deposit_information':
+        documents.push(await generateEnglandDepositSupportDocument(item.key, shared, outputFormat));
+        break;
+      case 'england_keys_handover_record':
+        documents.push(
+          await generateEnglandPackSupportDocument(product, shared, outputFormat, {
+            title: 'Keys & Handover Record',
+            subtitle: `${formatEnglandProductLabel(product)} move-in handover record`,
+            description: 'Practical handover record for keys, access devices, and move-in confirmations.',
+            documentType: 'england_keys_handover_record',
+            fileName: 'england-keys-handover-record.pdf',
+            category: 'checklist',
+            natureOfDocument: 'Handover record',
+            intro: 'Use this handover record alongside the agreement to note keys, access devices, and move-in confirmations.',
+            sections: buildEnglandKeysHandoverSections(product, shared),
+            executionStatement: 'Keep this handover record with the agreement, inventory, and move-in photographs.',
+          })
+        );
+        break;
+      case 'england_utilities_handover_sheet':
+        documents.push(
+          await generateEnglandPackSupportDocument(product, shared, outputFormat, {
+            title: 'Utilities & Meter Handover Sheet',
+            subtitle: `${formatEnglandProductLabel(product)} utilities handover record`,
+            description: 'Record for utilities responsibility, opening readings, and account handover notes.',
+            documentType: 'england_utilities_handover_sheet',
+            fileName: 'england-utilities-handover-sheet.pdf',
+            category: 'checklist',
+            natureOfDocument: 'Utilities handover sheet',
+            intro: 'Use this sheet to record utility responsibility, supplier details, and opening meter readings for the tenancy file.',
+            sections: buildEnglandUtilitiesHandoverSections(shared),
+            executionStatement: 'Keep this sheet with the handover record and any meter-reading photos.',
+          })
+        );
+        break;
+      case 'england_pet_request_addendum':
+        documents.push(
+          await generateEnglandPackSupportDocument(product, shared, outputFormat, {
+            title: 'Pet Request / Consent Addendum',
+            subtitle: `${formatEnglandProductLabel(product)} pet-request record`,
+            description: 'Optional addendum for recording a pet request, decision, and any consent conditions.',
+            documentType: 'england_pet_request_addendum',
+            fileName: 'england-pet-request-addendum.pdf',
+            category: 'schedule',
+            natureOfDocument: 'Pet request addendum',
+            intro: 'Use this addendum if the tenant asks for a pet or if the landlord wants to record pet-consent conditions in writing.',
+            sections: buildEnglandPetRequestAddendumSections(shared),
+            executionStatement: 'If used, store the signed addendum with the main tenancy agreement and any updated inventory notes.',
+          })
+        );
+        break;
+      case 'england_tenancy_variation_record':
+        documents.push(
+          await generateEnglandPackSupportDocument(product, shared, outputFormat, {
+            title: 'Tenancy Variation Record',
+            subtitle: `${formatEnglandProductLabel(product)} variation record`,
+            description: 'Simple record for agreed changes or management updates after the agreement is issued.',
+            documentType: 'england_tenancy_variation_record',
+            fileName: 'england-tenancy-variation-record.pdf',
+            category: 'schedule',
+            natureOfDocument: 'Variation record',
+            intro: 'Use this record to log agreed administrative or operational changes after the main agreement is signed.',
+            sections: buildEnglandVariationRecordSections(
+              (product === 'england_lodger_agreement'
+                ? 'england_standard_tenancy_agreement'
+                : product) as EnglandAssuredResidentialProduct,
+              shared
+            ),
+            executionStatement: 'Any material change should be dated and retained with the tenancy file.',
+          })
+        );
+        break;
+      case 'england_premium_management_schedule':
+        documents.push(
+          await generateEnglandPackSupportDocument(product, shared, outputFormat, {
+            title: 'Premium Management Schedule',
+            subtitle: 'Premium operational and management schedule',
+            description: 'Premium-only schedule for inspections, repairs reporting, keys, contractor access, and hand-back expectations.',
+            documentType: 'england_premium_management_schedule',
+            fileName: 'england-premium-management-schedule.pdf',
+            category: 'schedule',
+            natureOfDocument: 'Management schedule',
+            intro: 'This Premium schedule records the operational and management detail that sits behind the main agreement.',
+            sections: buildEnglandPremiumManagementScheduleSections(shared),
+            executionStatement: 'Keep this schedule with the Premium agreement and handover file.',
+          })
+        );
+        break;
+      case 'england_student_move_out_schedule':
+        documents.push(
+          await generateEnglandPackSupportDocument(product, shared, outputFormat, {
+            title: 'Student Move-Out & Guarantor Schedule',
+            subtitle: 'Student move-out, replacement, and guarantor support schedule',
+            description: 'Student-only schedule for guarantor scope, replacement procedure, keys, cleaning, and end-of-term return expectations.',
+            documentType: 'england_student_move_out_schedule',
+            fileName: 'england-student-move-out-schedule.pdf',
+            category: 'schedule',
+            natureOfDocument: 'Student move-out schedule',
+            intro: 'This schedule records the practical end-of-term, guarantor, and replacement details selected in the student wizard.',
+            sections: buildEnglandStudentMoveOutScheduleSections(shared),
+            executionStatement: 'Keep this schedule with the student agreement, any guarantor deed, and the check-out file.',
+          })
+        );
+        break;
+      case 'england_hmo_house_rules_appendix':
+        documents.push(
+          await generateEnglandPackSupportDocument(product, shared, outputFormat, {
+            title: 'HMO / Shared House Rules Appendix',
+            subtitle: 'Communal areas and sharer house-rules appendix',
+            description: 'Shared-house appendix covering communal areas, cleaning, waste, visitors, quiet hours, and fire-safety notes.',
+            documentType: 'england_hmo_house_rules_appendix',
+            fileName: 'england-hmo-house-rules-appendix.pdf',
+            category: 'schedule',
+            natureOfDocument: 'House rules appendix',
+            intro: 'This appendix records the practical communal-area and shared-house rules selected in the HMO / shared-house wizard.',
+            sections: buildEnglandHmoHouseRulesSections(shared),
+            executionStatement: 'Keep this appendix with the HMO / shared-house agreement and any property-management notes.',
+          })
+        );
+        break;
+      case 'england_lodger_house_rules_appendix':
+        documents.push(
+          await generateEnglandPackSupportDocument(product, shared, outputFormat, {
+            title: 'Lodger House Rules Appendix',
+            subtitle: 'Resident-landlord room-let house-rules appendix',
+            description: 'Resident-landlord appendix for guests, quiet hours, shared-space cleaning, and room hand-back expectations.',
+            documentType: 'england_lodger_house_rules_appendix',
+            fileName: 'england-lodger-house-rules-appendix.pdf',
+            category: 'schedule',
+            natureOfDocument: 'House rules appendix',
+            intro: 'This appendix records the practical shared-home rules and room-let expectations selected in the lodger wizard.',
+            sections: buildEnglandLodgerHouseRulesAppendixSections(shared),
+            executionStatement: 'Keep this appendix with the lodger agreement, checklist, and key handover record.',
+          })
+        );
+        break;
+      case 'guarantor_agreement':
+        documents.push(
+          await generateTemplatedResidentialDocument(
+            'guarantor_agreement',
+            shared,
+            baseConfigs.guarantor_agreement,
+            outputFormat
+          )
+        );
+        break;
+      default:
+        break;
+    }
+  }
+
+  return { documents };
+}
+
 async function generateTemplatedResidentialDocument(
   product: ResidentialLettingProductSku,
   shared: SharedResidentialData,
   config: TemplateConfig,
-  outputFormat: ResidentialDocumentOutputFormat
+  outputFormat: ResidentialDocumentOutputFormat,
+  dataOverrides: Record<string, any> = {}
 ): Promise<ResidentialGeneratedDocument> {
-  const data = buildTemplateData(product, shared, config);
+  const data = {
+    ...buildTemplateData(product, shared, config),
+    ...dataOverrides,
+  };
   const rendered = await generateDocument({
     templatePath: config.templatePath,
     data,
@@ -1915,6 +3753,106 @@ export async function generateResidentialLettingDocuments(
     Exclude<ResidentialLettingProductSku, 'inventory_schedule_condition' | 'rent_arrears_letter'>,
     TemplateConfig
   > = {
+    england_standard_tenancy_agreement: {
+      title: 'Standard Tenancy Agreement',
+      subtitle: 'England ordinary residential tenancy agreement',
+      intro:
+        'This document records the core terms for an ordinary England residential letting of the Property to the named tenant group.',
+      description:
+        'England standard tenancy agreement for an ordinary whole-property residential let.',
+      category: 'agreement',
+      documentType: 'england_standard_tenancy_agreement',
+      fileName: 'england-standard-tenancy-agreement.pdf',
+      templatePath: agreementTemplate,
+      counterpartyLabel: 'Tenant',
+      natureOfDocument: 'Residential tenancy agreement',
+      recitals: [
+        'The Landlord agrees to let the Property to the Tenant for residential occupation on the terms set out in this agreement.',
+        'The parties intend this document to record the principal occupation, payment, and management terms for the letting.',
+      ],
+      executionStatement:
+        'This agreement should be signed by the Landlord and the Tenant and then kept with the tenancy records.',
+    },
+    england_premium_tenancy_agreement: {
+      title: 'Premium Tenancy Agreement',
+      subtitle: 'England premium residential tenancy agreement',
+      intro:
+        'This premium agreement records an ordinary England residential letting where the parties want fuller operational and management drafting than the baseline standard route.',
+      description:
+        'England premium residential tenancy agreement with fuller drafting for an ordinary let.',
+      category: 'agreement',
+      documentType: 'england_premium_tenancy_agreement',
+      fileName: 'england-premium-tenancy-agreement.pdf',
+      templatePath: agreementTemplate,
+      counterpartyLabel: 'Tenant',
+      natureOfDocument: 'Premium residential tenancy agreement',
+      recitals: [
+        'The Landlord agrees to let the Property to the Tenant for residential occupation on the terms set out in this premium agreement.',
+        'The parties intend fuller operational and management detail to be recorded in the agreement while keeping the letting within the ordinary residential product route.',
+      ],
+      executionStatement:
+        'This premium agreement should be signed by the Landlord and the Tenant and retained with the tenancy records.',
+    },
+    england_student_tenancy_agreement: {
+      title: 'Student Tenancy Agreement',
+      subtitle: 'England student-focused tenancy agreement',
+      intro:
+        'This document records a student-focused England residential letting and the student-specific features selected in the guided flow.',
+      description:
+        'England student tenancy agreement with sharer, guarantor, and end-of-term detail.',
+      category: 'agreement',
+      documentType: 'england_student_tenancy_agreement',
+      fileName: 'england-student-tenancy-agreement.pdf',
+      templatePath: agreementTemplate,
+      counterpartyLabel: 'Tenant',
+      natureOfDocument: 'Student residential tenancy agreement',
+      recitals: [
+        'The Landlord agrees to let the Property to the Tenant group for student-focused residential occupation on the terms set out in this agreement.',
+        'The parties intend student-specific sharer, guarantor, and hand-back expectations to be captured in the agreement.',
+      ],
+      executionStatement:
+        'This student agreement should be signed by the Landlord and the Tenant group and kept with any related guarantor documents.',
+    },
+    england_hmo_shared_house_tenancy_agreement: {
+      title: 'HMO / Shared House Tenancy Agreement',
+      subtitle: 'England HMO and shared-house tenancy agreement',
+      intro:
+        'This document records an England HMO or shared-house letting where communal-area and sharer detail need to be recorded expressly in the main agreement.',
+      description:
+        'England HMO / shared-house tenancy agreement with communal-area and sharer drafting.',
+      category: 'agreement',
+      documentType: 'england_hmo_shared_house_tenancy_agreement',
+      fileName: 'england-hmo-shared-house-tenancy-agreement.pdf',
+      templatePath: agreementTemplate,
+      counterpartyLabel: 'Tenant',
+      natureOfDocument: 'HMO / shared-house tenancy agreement',
+      recitals: [
+        'The Landlord agrees to let the Property to the Tenant group for shared residential occupation on the terms set out in this agreement.',
+        'The parties intend communal-area, sharer, and property-management detail to form part of the primary agreement.',
+      ],
+      executionStatement:
+        'This HMO/shared-house agreement should be signed by the Landlord and the Tenant group and retained with the property records.',
+    },
+    england_lodger_agreement: {
+      title: 'Room Let / Lodger Agreement',
+      subtitle: 'England resident-landlord lodger agreement',
+      intro:
+        'This document records a resident-landlord room let in England and the practical terms on which the lodger occupies the room and shared facilities.',
+      description:
+        'England resident-landlord lodger agreement for a room let or licence-style arrangement.',
+      category: 'agreement',
+      documentType: 'england_lodger_agreement',
+      fileName: 'england-lodger-agreement.pdf',
+      templatePath: agreementTemplate,
+      counterpartyLabel: 'Lodger',
+      natureOfDocument: 'Resident-landlord room-let agreement',
+      recitals: [
+        'The resident Landlord permits the Lodger to occupy the agreed room at the Property and to use the shared facilities identified in this agreement.',
+        'The parties intend this document to record the practical room-let terms, house rules, and notice arrangements that apply to the occupation.',
+      ],
+      executionStatement:
+        'This lodger agreement should be signed by the resident Landlord and the Lodger and kept with the room-let records.',
+    },
     guarantor_agreement: {
       title: 'Guarantor Agreement',
       subtitle: 'Deed of guarantee and indemnity for an England residential tenancy',
@@ -2082,6 +4020,10 @@ export async function generateResidentialLettingDocuments(
         'This agreement should be read together with the earlier tenancy documents and signed by the Landlord and the Tenant.',
     },
   };
+
+  if (isEnglandModernTenancyProduct(product)) {
+    return generateModernEnglandPack(product, shared, outputFormat, configs);
+  }
 
   let document: ResidentialGeneratedDocument;
 

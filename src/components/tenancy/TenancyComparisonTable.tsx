@@ -56,7 +56,7 @@ const JURISDICTION_CONFIG: Record<CanonicalJurisdiction, {
   tenantLabel: string;
 }> = {
   england: {
-    agreementName: 'Assured Shorthold Tenancy (AST)',
+    agreementName: 'Assured Periodic Tenancy Agreement',
     hmoAct: 'Housing Act 2004',
     tenantLabel: 'tenant',
   },
@@ -82,6 +82,81 @@ const JURISDICTION_CONFIG: Record<CanonicalJurisdiction, {
  */
 const getFeatures = (jurisdiction: CanonicalJurisdiction): ComparisonFeature[] => {
   const config = JURISDICTION_CONFIG[jurisdiction];
+
+  if (jurisdiction === 'england') {
+    return [
+      {
+        name: 'Core tenancy clauses',
+        standard: true,
+        premium: true,
+        description: 'Rent, deposit, duration, and basic obligations',
+        rationale: 'Essential clauses for an ordinary England residential tenancy, covering rent, payment terms, deposit handling, and the core obligations of landlord and tenant.',
+      },
+      {
+        name: 'Tenant responsibilities',
+        standard: true,
+        premium: true,
+        description: 'Property care, access, and conduct rules',
+        rationale: 'Defines tenant obligations including day-to-day property care, access for inspections, and conduct expectations.',
+      },
+      {
+        name: 'Inventory and schedules',
+        standard: true,
+        premium: true,
+        description: 'Property, rent, utility, and house-rule schedules',
+        rationale: 'Both tiers include the core schedules needed to record the property, rent terms, utilities, and day-to-day rules.',
+      },
+      {
+        name: 'Wizard-completed inventory',
+        standard: false,
+        premium: true,
+        description: 'Premium can populate the inventory from the wizard',
+        rationale: 'Premium supports a more fully prepared inventory workflow, reducing the amount of manual completion needed after purchase.',
+      },
+      {
+        name: 'Guarantor clauses',
+        standard: false,
+        premium: true,
+        description: 'Third-party guarantee provisions',
+        rationale: 'Provides clearer guarantor wording where a tenancy depends on third-party support.',
+      },
+      {
+        name: 'Enhanced rent review terms',
+        standard: false,
+        premium: true,
+        description: 'Broader payment and rent-review wording',
+        rationale: 'Premium adds fuller wording for payment control and rent review mechanics within the ordinary residential route.',
+      },
+      {
+        name: 'Enhanced anti-subletting controls',
+        standard: false,
+        premium: true,
+        description: 'Stronger restrictions on unauthorised subletting and short lets',
+        rationale: 'Premium gives landlords broader wording around unauthorised sharing, assignment, and short-term use.',
+      },
+      {
+        name: 'End-of-tenancy standards',
+        standard: false,
+        premium: true,
+        description: 'More detailed hand-back and condition wording',
+        rationale: 'Premium adds clearer end-of-tenancy condition standards, handover detail, and practical management wording.',
+      },
+      {
+        name: 'Management support documents',
+        standard: false,
+        premium: true,
+        description: 'Additional handover, maintenance, and checkout support',
+        rationale: 'Premium includes a fuller ordinary-residential support pack for handover, maintenance, and checkout workflows.',
+      },
+      {
+        name: 'Enforcement defensibility',
+        standard: 'partial',
+        premium: true,
+        description: 'Additional drafting depth for disputes and edge cases',
+        rationale: 'Premium gives the landlord more detailed drafting depth where a standard baseline agreement may leave more practical questions open.',
+      },
+    ];
+  }
 
   return [
     // Core clauses (both tiers)
@@ -376,7 +451,9 @@ export const TenancyComparisonTable: React.FC<TenancyComparisonTableProps> = ({
                 highlightPremium ? 'text-primary bg-purple-50' : 'text-gray-900'
               }`}
             >
-              HMOs &amp; multi-tenant
+              {jurisdiction === 'england'
+                ? 'Ordinary residential lets needing fuller drafting'
+                : 'HMOs &amp; multi-tenant'}
             </td>
           </tr>
         </tbody>
@@ -385,7 +462,9 @@ export const TenancyComparisonTable: React.FC<TenancyComparisonTableProps> = ({
       {/* Legal disclaimer */}
       <p className="mt-3 text-xs text-gray-500">
         Both Standard and Premium agreements are legally valid for residential lettings in {config.agreementName.includes('(') ? jurisdiction.charAt(0).toUpperCase() + jurisdiction.slice(1) : jurisdiction.charAt(0).toUpperCase() + jurisdiction.slice(1).replace('-', ' ')}.
-        Premium includes additional clauses commonly required for HMOs and multi-tenant properties under the {config.hmoAct}.
+        {jurisdiction === 'england'
+          ? ' Premium is the fuller ordinary-residential route. England Student, HMO / Shared House, and Lodger products are separate and are not bundled into this comparison.'
+          : ` Premium includes additional clauses commonly required for HMOs and multi-tenant properties under the ${config.hmoAct}.`}
         For complex situations, consider taking legal advice.
       </p>
     </div>
@@ -400,21 +479,31 @@ export const TenancyComparisonSummary: React.FC<{
 }> = ({ jurisdiction = 'england' }) => {
   const config = JURISDICTION_CONFIG[jurisdiction];
 
-  const hmoFeatures = [
-    'Joint and several liability',
-    'HMO-ready clauses',
-    'Multi-occupancy permissions',
-    'Licensing alignment',
-  ];
+  const premiumFeatures =
+    jurisdiction === 'england'
+      ? [
+          'Wizard-completed inventory',
+          'Broader ordinary-residential drafting',
+          'Guarantor and payment control wording',
+          'Extra management and checkout support',
+        ]
+      : [
+          'Joint and several liability',
+          'HMO-ready clauses',
+          'Multi-occupancy permissions',
+          'Licensing alignment',
+        ];
 
   return (
     <div className="bg-gradient-to-br from-purple-50 to-white rounded-lg border border-purple-200 p-4">
       <h4 className="font-semibold text-gray-900 mb-2">Why Choose Premium?</h4>
       <p className="text-sm text-gray-600 mb-3">
-        Includes clauses commonly required under the <strong>{config.hmoAct}</strong> for HMO and multi-tenant properties:
+        {jurisdiction === 'england'
+          ? 'Premium is the fuller ordinary-residential route for landlords who want more drafting depth and management detail. Student, HMO / Shared House, and Lodger are separate England products.'
+          : <>Includes clauses commonly required under the <strong>{config.hmoAct}</strong> for HMO and multi-tenant properties:</>}
       </p>
       <ul className="space-y-1.5 mb-3">
-        {hmoFeatures.map((feature) => (
+        {premiumFeatures.map((feature) => (
           <li key={feature} className="flex items-center gap-2 text-sm text-gray-700">
             <RiCheckboxCircleLine className="w-4 h-4 text-primary shrink-0" />
             {feature}
@@ -422,7 +511,9 @@ export const TenancyComparisonSummary: React.FC<{
         ))}
       </ul>
       <p className="text-xs text-gray-500">
-        Plus: Guarantor clauses, rent review provisions, anti-subletting, and professional cleaning requirements.
+        {jurisdiction === 'england'
+          ? 'Dedicated England specialist routes are chosen separately when the setup is student-focused, shared-house/HMO, or resident-landlord/lodger.'
+          : 'Plus: Guarantor clauses, rent review provisions, anti-subletting, and professional cleaning requirements.'}
       </p>
     </div>
   );

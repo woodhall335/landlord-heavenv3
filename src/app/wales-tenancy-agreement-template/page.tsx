@@ -164,7 +164,7 @@ export default function WalesTenancyAgreementTemplatePage() {
             </h2>
             <p className="text-xl text-gray-700 mb-8 max-w-3xl mx-auto">
               Looking for a <strong>tenancy agreement for Wales</strong>? Since December 2022,
-              Welsh properties require <strong>Occupation Contracts</strong> â€” not ASTs.
+                Welsh properties require <strong>Occupation Contracts</strong> - not ASTs.
               Our template is fully compliant with the Renting Homes (Wales) Act 2016.
             </p>
             <div className="flex gap-4 justify-center flex-wrap">
@@ -172,13 +172,13 @@ export default function WalesTenancyAgreementTemplatePage() {
                 href={standardWizardHref}
                 className="inline-flex items-center gap-2 bg-white border-2 border-red-600 text-red-600 px-6 py-3 rounded-lg font-semibold hover:bg-red-50 transition-colors"
               >
-                {`Standard Contract â€” ${standardPrice}`}
+                  {`Standard Contract - ${standardPrice}`}
               </Link>
               <Link
                 href={premiumWizardHref}
                 className="inline-flex items-center gap-2 bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors"
               >
-                {`Premium Contract â€” ${premiumPrice}`}
+                {`Premium Contract - ${premiumPrice}`}
               </Link>
             </div>
             <p className="mt-3 text-sm text-gray-600">
@@ -188,7 +188,7 @@ export default function WalesTenancyAgreementTemplatePage() {
               </Link>
               .
             </p>
-            <p className="mt-4 text-sm text-gray-500">Renting Homes Act compliant â€¢ Written statement included â€¢ Instant PDF</p>
+            <p className="mt-4 text-sm text-gray-500">Renting Homes Act compliant | Written statement included | Instant PDF</p>
           </div>
         </section>
 

@@ -29,6 +29,11 @@ import { deriveDisplayStatus } from '@/lib/case-status';
 import { validateUrlProduct, type CanonicalJurisdiction } from '@/lib/tenancy/product-normalization';
 import { doesDocumentTypeMatch, getDashboardDocumentTitle } from '@/lib/documents/dashboard-document-display';
 import { ASK_HEAVEN_CTA } from '@/constants/askHeavenCta';
+import {
+  getEnglandCanonicalTenancyProduct,
+  getEnglandTenancyProductLabel,
+} from '@/lib/tenancy/england-product-model';
+import { isResidentialLettingProductSku } from '@/lib/residential-letting/products';
 
 interface CaseDetails {
   id: string;
@@ -78,7 +83,8 @@ function isScottishTenancyAgreementCase(
  */
 function getTenancyAgreementRouteLabel(
   jurisdiction: string | undefined,
-  isPremium: boolean
+  isPremium: boolean,
+  product?: string | null
 ): string {
   switch (jurisdiction) {
     case 'scotland':
@@ -89,8 +95,38 @@ function getTenancyAgreementRouteLabel(
       return isPremium ? 'HMO Private Tenancy' : 'Private Tenancy';
     case 'england':
     default:
+      if (getEnglandCanonicalTenancyProduct(product)) {
+        return getEnglandTenancyProductLabel(product);
+      }
       return isPremium ? 'England Assured Periodic Tenancy (Premium)' : 'England Assured Periodic Tenancy';
   }
+}
+
+function isPremiumTenancyDisplay(
+  jurisdiction: string | undefined,
+  facts: Record<string, any>,
+  product?: string | null
+): boolean {
+  if (jurisdiction === 'england') {
+    const canonicalEnglandProduct = getEnglandCanonicalTenancyProduct(
+      product ||
+      facts.__meta?.canonical_product ||
+      facts.__meta?.product ||
+      facts.product ||
+      facts.original_product
+    );
+
+    if (canonicalEnglandProduct) {
+      return canonicalEnglandProduct === 'england_premium_tenancy_agreement';
+    }
+  }
+
+  return Boolean(
+    facts.tier === 'premium' ||
+    facts.product_tier?.includes('premium') ||
+    facts.__meta?.product_tier?.includes('premium') ||
+    facts.is_hmo === true
+  );
 }
 
 export default function CaseDetailPage() {
@@ -359,14 +395,24 @@ export default function CaseDetailPage() {
 
     try {
       const facts = caseDetails.collected_facts || {};
+      const canonicalEnglandProduct = getEnglandCanonicalTenancyProduct(
+        facts.__meta?.canonical_product ||
+        facts.__meta?.product ||
+        facts.product ||
+        facts.original_product
+      );
 
       // Determine product from case_type
       const product = caseDetails.case_type === 'money_claim'
         ? (caseDetails.jurisdiction === 'scotland' ? 'sc_money_claim' : 'money_claim')
         : caseDetails.case_type === 'eviction'
           ? (facts.__meta?.product || 'complete_pack')
-          : caseDetails.case_type === 'tenancy_agreement'
-            ? (facts.tier === 'premium' ? 'ast_premium' : 'ast_standard')
+        : caseDetails.case_type === 'tenancy_agreement'
+            ? (
+              canonicalEnglandProduct ||
+              getEnglandCanonicalTenancyProduct(facts.pack_type) ||
+              (facts.tier === 'premium' ? 'ast_premium' : 'ast_standard')
+            )
             : caseDetails.case_type;
 
       // Compute hasInventoryData for tenancy agreements
@@ -607,11 +653,9 @@ export default function CaseDetailPage() {
     } else if (caseType === 'tenancy_agreement') {
       // Tenancy agreement cases show the agreement type, not eviction routes
       const facts = caseDetails?.collected_facts || {};
-      const isPremium = facts.tier === 'premium' ||
-        facts.product_tier?.includes('premium') ||
-        facts.__meta?.product_tier?.includes('premium') ||
-        facts.is_hmo === true;
-      const agreementLabel = getTenancyAgreementRouteLabel(caseDetails?.jurisdiction, isPremium);
+      const effectiveProduct = getEffectiveProduct();
+      const isPremium = isPremiumTenancyDisplay(caseDetails?.jurisdiction, facts, effectiveProduct);
+      const agreementLabel = getTenancyAgreementRouteLabel(caseDetails?.jurisdiction, isPremium, effectiveProduct);
       parts.push(agreementLabel);
     }
 
@@ -676,14 +720,27 @@ export default function CaseDetailPage() {
       product = orderStatus.product_type;
     } else {
       // Fall back to facts-based inference for unpaid cases
-      product = facts.product || facts.original_product || '';
+      product =
+        facts.__meta?.canonical_product ||
+        facts.__meta?.product ||
+        facts.product ||
+        facts.original_product ||
+        '';
+
+      if (caseDetails.case_type === 'tenancy_agreement' && caseDetails.jurisdiction === 'england') {
+        product = getEnglandCanonicalTenancyProduct(product) || product;
+      }
 
       // Map case_type to product if not explicitly set
       if (!product) {
         if (caseDetails.case_type === 'money_claim') {
           product = caseDetails.jurisdiction === 'scotland' ? 'sc_money_claim' : 'money_claim';
         } else if (caseDetails.case_type === 'tenancy_agreement') {
-          product = facts.tier === 'premium' ? 'ast_premium' : 'ast_standard';
+          if (caseDetails.jurisdiction === 'england') {
+            product = 'england_standard_tenancy_agreement';
+          } else {
+            product = facts.tier === 'premium' ? 'ast_premium' : 'ast_standard';
+          }
         } else if (caseDetails.case_type === 'eviction') {
           product = facts.pack_type === 'complete_pack' ? 'complete_pack' : 'notice_only';
         } else {
@@ -831,11 +888,14 @@ export default function CaseDetailPage() {
     // Normalize product for jurisdiction to ensure Scotland flows use PRT, not AST
     const isTenancyFlow = caseDetails?.case_type === 'tenancy_agreement' ||
       product?.includes('ast') || product?.includes('prt') ||
-      product?.includes('occupation') || product?.includes('ni_');
+      product?.includes('occupation') || product?.includes('ni_') ||
+      isResidentialLettingProductSku(product);
     const jurisdiction = (caseDetails?.jurisdiction || 'england') as CanonicalJurisdiction;
 
     const normalizedProduct = isTenancyFlow && product
-      ? validateUrlProduct(product, jurisdiction)
+      ? (isResidentialLettingProductSku(product)
+          ? product
+          : validateUrlProduct(product, jurisdiction))
       : product;
 
     const productParam = normalizedProduct ? `&product=${normalizedProduct}` : '';
@@ -1335,12 +1395,12 @@ export default function CaseDetailPage() {
           <TenancySummaryPanel
             collectedFacts={caseDetails.collected_facts || {}}
             jurisdiction={(caseDetails.jurisdiction || 'england') as CanonicalJurisdiction}
-            isPremium={
-              caseDetails.collected_facts?.tier === 'premium' ||
-              caseDetails.collected_facts?.product_tier?.includes('premium') ||
-              caseDetails.collected_facts?.__meta?.product_tier?.includes('premium') ||
-              caseDetails.collected_facts?.is_hmo === true
-            }
+            product={getEffectiveProduct()}
+            isPremium={isPremiumTenancyDisplay(
+              caseDetails.jurisdiction,
+              caseDetails.collected_facts || {},
+              getEffectiveProduct()
+            )}
           />
         )}
 

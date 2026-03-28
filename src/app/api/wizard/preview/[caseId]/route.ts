@@ -8,7 +8,7 @@
  *
  * Query Parameters:
  * - product: 'ast_standard' | 'ast_premium' | etc.
- * - tier: 'standard' | 'premium' (default: 'standard')
+ * - tier: preview variant key (defaults to product-specific variant)
  * - force: 'true' to bypass cache and regenerate
  *
  * Response:
@@ -41,6 +41,8 @@ import {
   type PreviewManifest,
 } from '@/lib/documents/preview-generator';
 import { rateLimiters } from '@/lib/rate-limit';
+import { getEnglandCanonicalTenancyProduct } from '@/lib/tenancy/england-product-model';
+import { isResidentialLettingProductSku } from '@/lib/residential-letting/products';
 
 // Force Node.js runtime - Puppeteer cannot run on Edge
 export const runtime = 'nodejs';
@@ -114,6 +116,11 @@ function rateLimitResponse(
  * Map product query param to internal product name
  */
 function normalizeProduct(product: string | null): string {
+  const englandCanonicalProduct = getEnglandCanonicalTenancyProduct(product);
+  if (englandCanonicalProduct) {
+    return englandCanonicalProduct;
+  }
+
   const productMap: Record<string, string> = {
     ast_standard: 'ast_standard',
     ast_premium: 'ast_premium',
@@ -125,19 +132,24 @@ function normalizeProduct(product: string | null): string {
 }
 
 /**
- * Determine tier from product name
+ * Determine the preview variant/cache segment for a product.
  */
-function getTierFromProduct(product: string): 'standard' | 'premium' {
-  if (product.includes('premium') || product.includes('hmo')) {
-    return 'premium';
+function getPreviewVariantFromProduct(product: string): string {
+  if (isResidentialLettingProductSku(product)) {
+    return product;
   }
-  return 'standard';
+
+  return product === 'ast_premium' ? 'premium' : 'standard';
 }
 
 /**
  * Check if product is a tenancy agreement type
  */
 function isTenancyProduct(product: string): boolean {
+  if (isResidentialLettingProductSku(product)) {
+    return true;
+  }
+
   const tenancyProducts = [
     'ast_standard',
     'ast_premium',
@@ -194,7 +206,7 @@ export async function GET(
     // Parse query params
     const url = new URL(request.url);
     const productParam = url.searchParams.get('product');
-    const tierParam = url.searchParams.get('tier') as 'standard' | 'premium' | null;
+    const tierParam = url.searchParams.get('tier');
     const forceRegenerate = url.searchParams.get('force') === 'true';
 
     if (!caseId) {
@@ -222,7 +234,7 @@ export async function GET(
 
     // Normalize product name
     const product = normalizeProduct(productParam);
-    const tier = tierParam || getTierFromProduct(product);
+    const tier = tierParam || getPreviewVariantFromProduct(product);
 
     // Only support tenancy products for now
     if (!isTenancyProduct(product)) {
@@ -394,7 +406,7 @@ export async function POST(
   try {
     const body = await request.json();
     const product = normalizeProduct(body.product);
-    const tier = body.tier || getTierFromProduct(product);
+    const tier = body.tier || getPreviewVariantFromProduct(product);
     const forceRegenerate = body.force === true;
 
     if (!caseId) {

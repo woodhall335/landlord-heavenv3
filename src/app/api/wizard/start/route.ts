@@ -40,6 +40,7 @@ import {
   ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL,
   ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL,
 } from '@/lib/tenancy/england-agreement-constants';
+import { getEnglandCanonicalTenancyProduct } from '@/lib/tenancy/england-product-model';
 
 const RESIDENTIAL_PRODUCTS = [...RESIDENTIAL_LETTING_PRODUCT_SKUS] as const;
 type ResidentialProduct = (typeof RESIDENTIAL_PRODUCTS)[number];
@@ -72,6 +73,7 @@ const startWizardSchema = z.object({
   // Additional metadata from validator pages
   case_type: z.enum(['eviction', 'money_claim', 'tenancy_agreement']).optional(),
   product_variant: z.string().optional(),
+  requested_product: z.string().optional(),
 });
 
 type StartProduct =
@@ -83,6 +85,10 @@ type StartProduct =
   | ResidentialProduct;
 
 const productToCaseType = (product: StartProduct) => {
+  if (isResidentialStandaloneProduct(product)) {
+    return 'tenancy_agreement';
+  }
+
   switch (product) {
     case 'notice_only':
     case 'complete_pack':
@@ -94,17 +100,6 @@ const productToCaseType = (product: StartProduct) => {
     case 'tenancy_agreement':
     case 'ast_standard':
     case 'ast_premium':
-    case 'guarantor_agreement':
-    case 'residential_sublet_agreement':
-    case 'lease_amendment':
-    case 'lease_assignment_agreement':
-    case 'rent_arrears_letter':
-    case 'repayment_plan_agreement':
-    case 'residential_tenancy_application':
-    case 'rental_inspection_report':
-    case 'inventory_schedule_condition':
-    case 'flatmate_agreement':
-    case 'renewal_tenancy_agreement':
       return 'tenancy_agreement';
     default:
       return null;
@@ -119,6 +114,10 @@ const resolveProductTier = (
   product: StartProduct,
   jurisdiction: 'england' | 'wales' | 'scotland' | 'northern-ireland',
 ): string | null => {
+  if (isResidentialStandaloneProduct(product)) {
+    return RESIDENTIAL_LETTING_PRODUCTS[product].label;
+  }
+
   switch (product) {
     case 'ast_standard':
       if (jurisdiction === 'scotland')
@@ -131,19 +130,6 @@ const resolveProductTier = (
         return 'Premium Scottish Private Residential Tenancy';
       if (jurisdiction === 'northern-ireland') return 'Premium NI Private Tenancy';
       return ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL;
-    case 'guarantor_agreement':
-    case 'residential_sublet_agreement':
-    case 'lease_amendment':
-    case 'lease_assignment_agreement':
-    case 'rent_arrears_letter':
-    case 'repayment_plan_agreement':
-    case 'residential_tenancy_application':
-    case 'rental_inspection_report':
-    case 'inventory_schedule_condition':
-    case 'flatmate_agreement':
-    case 'renewal_tenancy_agreement':
-      return RESIDENTIAL_LETTING_PRODUCTS[product as ResidentialProduct].label;
-
     default:
       // Generic tenancy_agreement product should still ask "which version?"
       return null;
@@ -190,7 +176,14 @@ export async function POST(request: Request) {
       );
     }
 
-    const { product, jurisdiction, case_id, validator_key, product_variant } =
+    const {
+      product,
+      jurisdiction,
+      case_id,
+      validator_key,
+      product_variant,
+      requested_product,
+    } =
       validationResult.data;
 
     if (!case_id && isRetiredPublicSku(product)) {
@@ -208,6 +201,14 @@ export async function POST(request: Request) {
     const resolvedCaseType = productToCaseType(product as StartProduct);
     const normalizedProduct = normalizeProduct(product as StartProduct);
     const effectiveJurisdiction = resolveJurisdiction(product as StartProduct, jurisdiction);
+    const canonicalProduct =
+      effectiveJurisdiction === 'england'
+        ? getEnglandCanonicalTenancyProduct(product)
+        : null;
+    const storedProduct = canonicalProduct ?? product;
+    const originalRequestedProduct = requested_product ?? product;
+    const legacyRequestedProduct =
+      originalRequestedProduct !== storedProduct ? originalRequestedProduct : null;
 
     if (
       isResidentialStandaloneProduct(product) &&
@@ -233,7 +234,7 @@ export async function POST(request: Request) {
 
     // Tier label here is *jurisdiction-aware* (AST vs PRT vs NI tenancy wording)
     const tierLabel = resolveProductTier(
-      product as StartProduct,
+      storedProduct as StartProduct,
       effectiveJurisdiction as 'england' | 'wales' | 'scotland' | 'northern-ireland',
     );
 
@@ -347,8 +348,13 @@ export async function POST(request: Request) {
       const initialFacts: any = {
         ...emptyFacts,
         __meta: {
-          product: normalizedProduct as string | null,
-          original_product: product as string | null,
+          product: storedProduct as string | null,
+          original_product: originalRequestedProduct as string | null,
+          canonical_product: (canonicalProduct ?? storedProduct) as string | null,
+          ...(legacyRequestedProduct
+            ? { legacy_requested_product: legacyRequestedProduct as string | null }
+            : {}),
+          mqs_product: normalizedProduct as string | null,
           ...(tierLabel ? { product_tier: tierLabel as string | null } : {}),
           ...(validator_key ? { validator_key: validator_key as string | null } : {}),
           ...(product_variant ? { product_variant: product_variant as string | null } : {}),
@@ -392,8 +398,13 @@ export async function POST(request: Request) {
     if (!case_id) {
       const mergedMeta = {
         ...(facts.__meta ?? {}),
-        product: normalizedProduct as string | null,
-        original_product: product as string | null,
+        product: storedProduct as string | null,
+        original_product: originalRequestedProduct as string | null,
+        canonical_product: (canonicalProduct ?? storedProduct) as string | null,
+        ...(legacyRequestedProduct
+          ? { legacy_requested_product: legacyRequestedProduct as string | null }
+          : {}),
+        mqs_product: normalizedProduct as string | null,
         ...(tierLabel ? { product_tier: tierLabel as string | null } : {}),
         ...(validator_key ? { validator_key: validator_key as string | null } : {}),
         ...(product_variant ? { product_variant: product_variant as string | null } : {}),
@@ -459,7 +470,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       case_id: caseRecord.id,
-      product,
+      product: storedProduct,
       jurisdiction: effectiveJurisdiction,
       next_question: nextQuestion || null,
       is_complete: isComplete,

@@ -296,13 +296,17 @@ describe('Tenancy Agreement Integration Layer', () => {
         expect(hmoClause).toBeUndefined();
       });
 
-      it(`premium tier SHOULD include HMO clauses for ${jurisdiction} when isHMO=true`, () => {
-        // When isHMO context is provided, HMO clauses should be included
+      it(`premium tier should reflect the correct HMO/shared-house behavior for ${jurisdiction} when isHMO=true`, () => {
         const features = getIncludedFeatures(jurisdiction, 'premium', { isHMO: true });
         const hmoClause = features.find(f => f.id === 'hmo_clauses');
-        expect(hmoClause).toBeDefined();
-        expect(hmoClause?.isPremiumOnly).toBe(true);
-        expect(hmoClause?.isHMOSpecific).toBe(true);
+
+        if (jurisdiction === 'england') {
+          expect(hmoClause).toBeUndefined();
+        } else {
+          expect(hmoClause).toBeDefined();
+          expect(hmoClause?.isPremiumOnly).toBe(true);
+          expect(hmoClause?.isHMOSpecific).toBe(true);
+        }
       });
 
       it(`should include subletting prohibition in both tiers for ${jurisdiction}`, () => {

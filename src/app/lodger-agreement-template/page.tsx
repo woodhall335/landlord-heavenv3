@@ -38,6 +38,8 @@ const breadcrumbs = [
   { name: 'Lodger Agreement Template', url: '/lodger-agreement-template' },
 ];
 
+const lodgerWizardHref = '/wizard?product=england_lodger_agreement&src=lodger_template_page&topic=tenancy';
+
 export default function LodgerAgreementPage() {
 
   const enhancedFaqs = [
@@ -57,8 +59,8 @@ export default function LodgerAgreementPage() {
                 <UniversalHero
           badge="Landlord Guide"
           title="Lodger Agreement Template UK"
-          subtitle="Lodger agreements for live-in landlords in the UK."
-          primaryCta={{ label: 'Create Lodger Agreement', href: '/tenancy-agreement' }}
+          subtitle="Lodger agreement guidance for live-in landlords, with a direct route into the dedicated England Lodger product."
+          primaryCta={{ label: 'Create Lodger Agreement', href: lodgerWizardHref }}
           align="center"
           showTrustPositioningBar
         />
@@ -80,8 +82,8 @@ export default function LodgerAgreementPage() {
                   </li>
                   <li>
                     <strong>Tenant:</strong> The landlord doesn&apos;t live in the property. The tenant
-                    has exclusive possession. The tenant has full assured shorthold tenancy (AST)
-                    protections.
+                    has exclusive possession and the arrangement should be documented through the
+                    appropriate tenancy route, not a lodger agreement.
                   </li>
                 </ul>
 
@@ -89,8 +91,8 @@ export default function LodgerAgreementPage() {
                   <p className="text-amber-800 font-semibold mb-2">Important</p>
                   <p className="text-amber-700 text-sm">
                     If you don&apos;t live in the property, you cannot use a lodger agreement. You must
-                    use an Assured Shorthold Tenancy agreement instead. Using the wrong agreement
-                    could give your occupant tenant rights.
+                    use the appropriate tenancy agreement route instead. Using the wrong agreement
+                    could give your occupant rights that do not match the document you started with.
                   </p>
                 </div>
 
@@ -125,7 +127,7 @@ export default function LodgerAgreementPage() {
 
                 <p className="bg-purple-50 border border-purple-200 rounded-lg p-4">
                   If you want a faster route from free starter document to signed paperwork, use our
-                  <Link href="/tenancy-agreement" className="text-primary hover:underline"> tenancy agreement route</Link>
+                  <Link href="/lodger-agreement" className="text-primary hover:underline"> dedicated Lodger agreement route</Link>
                   to generate and download your final document in one flow.
                 </p>
 
@@ -288,7 +290,7 @@ export default function LodgerAgreementPage() {
                 <li>Chronology document mapping each event to supporting evidence.</li>
                 <li>Settlement record where payment plans were offered or negotiated.</li>
               </ul>
-              <p className="bg-indigo-50 border border-indigo-200 rounded-lg p-4">Need a faster route from guidance to action? Use our <Link href="/tenancy-agreement" className="text-primary underline">recommended tenancy agreement pathway</Link> to generate compliance-checked documents and keep service evidence aligned for next steps.</p>
+              <p className="bg-indigo-50 border border-indigo-200 rounded-lg p-4">Need a faster route from guidance to action? Use our <Link href="/lodger-agreement" className="text-primary underline">recommended Lodger agreement pathway</Link> to generate the resident-landlord document in the live England flow.</p>
             </div>
           </div>
         </section>
@@ -410,7 +412,7 @@ export default function LodgerAgreementPage() {
               <p className="text-gray-600 mb-6">
                 Get a professionally drafted lodger agreement template.
               </p>
-              <Link href="/tenancy-agreement" className="hero-btn-primary">
+              <Link href="/lodger-agreement" className="hero-btn-primary">
                 Get Lodger Agreement
               </Link>
             </div>

@@ -13,9 +13,20 @@ const TENANCY_SUPPORT_DOCUMENT_TYPES = new Set([
   'pre_tenancy_checklist_wales',
   'pre_tenancy_checklist_scotland',
   'pre_tenancy_checklist_northern_ireland',
+  'england_tenancy_transition_guidance',
+  'england_written_statement_of_terms',
+  'england_lodger_checklist',
   'renters_rights_information_sheet_2026',
   'deposit_protection_certificate',
   'tenancy_deposit_information',
+  'england_keys_handover_record',
+  'england_utilities_handover_sheet',
+  'england_pet_request_addendum',
+  'england_tenancy_variation_record',
+  'england_premium_management_schedule',
+  'england_student_move_out_schedule',
+  'england_hmo_house_rules_appendix',
+  'england_lodger_house_rules_appendix',
 ]);
 
 const LEGACY_DOCUMENT_KEY_ALIASES: Record<string, string> = {
@@ -46,7 +57,16 @@ export function toCanonicalDocumentKey(value: string | null | undefined): string
  * Group all AST agreement variants under tenancy_agreement UI category.
  */
 export function isTenancyAgreementVariant(documentType: string): boolean {
-  return documentType === 'ast_agreement' || documentType.startsWith('ast_agreement_');
+  return (
+    documentType === 'ast_agreement' ||
+    documentType.startsWith('ast_agreement_') ||
+    documentType === 'england_standard_tenancy_agreement' ||
+    documentType === 'england_premium_tenancy_agreement' ||
+    documentType === 'england_student_tenancy_agreement' ||
+    documentType === 'england_hmo_shared_house_tenancy_agreement' ||
+    documentType === 'england_lodger_agreement' ||
+    documentType === 'england_written_statement_of_terms'
+  );
 }
 
 /**
@@ -94,16 +114,28 @@ export function getDashboardDocumentCategory(documentType: string): DashboardDoc
  * Friendly fallback labels when document_title is absent/non-user-friendly.
  */
 export function getDashboardDocumentTitle(documentType: string): string {
-  if (isTenancyAgreementVariant(documentType)) {
-    return 'Tenancy Agreement';
-  }
-
   const explicitTitles: Record<string, string> = {
+    england_standard_tenancy_agreement: 'Standard Tenancy Agreement',
+    england_premium_tenancy_agreement: 'Premium Tenancy Agreement',
+    england_student_tenancy_agreement: 'Student Tenancy Agreement',
+    england_hmo_shared_house_tenancy_agreement: 'HMO / Shared House Tenancy Agreement',
+    england_lodger_agreement: 'Room Let / Lodger Agreement',
+    england_written_statement_of_terms: 'England Written Statement of Terms',
+    england_tenancy_transition_guidance: 'England Tenancy Transition Guidance',
+    england_lodger_checklist: 'Room Let / Lodger Checklist',
     inventory_schedule: 'Inventory Schedule',
     inventory_schedule_condition: 'Inventory & Schedule of Condition',
     renters_rights_information_sheet_2026: 'Renters\' Rights Act Information Sheet 2026',
     deposit_protection_certificate: 'Deposit Protection Certificate',
     tenancy_deposit_information: 'Prescribed Information Pack',
+    england_keys_handover_record: 'Keys & Handover Record',
+    england_utilities_handover_sheet: 'Utilities & Meter Handover Sheet',
+    england_pet_request_addendum: 'Pet Request / Consent Addendum',
+    england_tenancy_variation_record: 'Tenancy Variation Record',
+    england_premium_management_schedule: 'Premium Management Schedule',
+    england_student_move_out_schedule: 'Student Move-Out & Guarantor Schedule',
+    england_hmo_house_rules_appendix: 'HMO / Shared House Rules Appendix',
+    england_lodger_house_rules_appendix: 'Lodger House Rules Appendix',
     pre_tenancy_checklist_england: 'Pre-Tenancy Checklist (England)',
     pre_tenancy_checklist_wales: 'Pre-Tenancy Checklist (Wales)',
     pre_tenancy_checklist_scotland: 'Pre-Tenancy Checklist (Scotland)',
@@ -123,7 +155,15 @@ export function getDashboardDocumentTitle(documentType: string): string {
     tenancy_agreement: 'Tenancy Agreement',
   };
 
-  return explicitTitles[documentType] || documentType.replace(/_/g, ' ');
+  if (explicitTitles[documentType]) {
+    return explicitTitles[documentType];
+  }
+
+  if (isTenancyAgreementVariant(documentType)) {
+    return 'Tenancy Agreement';
+  }
+
+  return documentType.replace(/_/g, ' ');
 }
 
 /**

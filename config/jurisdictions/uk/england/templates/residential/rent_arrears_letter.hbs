@@ -244,12 +244,12 @@
         </tr>
         {{#each detailed_arrears_rows}}
           <tr>
-            <td>{{due_date}}</td>
+            <td>{{#if due_date}}{{formatUKDate due_date}}{{else}}-{{/if}}</td>
             <td>{{period_covered}}</td>
             <td>{{amount_due}}</td>
             <td>{{amount_paid}}</td>
             <td>{{amount_outstanding}}</td>
-            <td>{{payment_received_date}}</td>
+            <td>{{#if payment_received_date}}{{formatUKDate payment_received_date}}{{else}}-{{/if}}</td>
             <td>{{note}}</td>
           </tr>
         {{/each}}

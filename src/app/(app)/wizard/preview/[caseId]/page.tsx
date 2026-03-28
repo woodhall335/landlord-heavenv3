@@ -42,6 +42,9 @@ import {
   type ResidentialLettingProductSku,
 } from '@/lib/residential-letting/products';
 import {
+  getEnglandCanonicalTenancyProduct,
+} from '@/lib/tenancy/england-product-model';
+import {
   getResidentialDocumentList,
   getResidentialProductMeta,
 } from '@/lib/residential-letting/document-config';
@@ -477,6 +480,8 @@ export default function WizardPreviewPage() {
 
         // Track preview viewed (Vercel Analytics)
         const productFromFacts =
+          getEnglandCanonicalTenancyProduct((fetchedCase.collected_facts as any)?.__meta?.canonical_product) ||
+          getEnglandCanonicalTenancyProduct((fetchedCase.collected_facts as any)?.__meta?.product) ||
           (fetchedCase.collected_facts as any)?.meta?.product ||
           (fetchedCase.collected_facts as any)?.__meta?.product ||
           (fetchedCase.collected_facts as any)?.__meta?.original_product ||
@@ -502,8 +507,10 @@ export default function WizardPreviewPage() {
         let inferredProduct =
           lockedProduct ||
           urlProduct ||
+          originalMeta.canonical_product ||
           factsMeta.product ||
           originalMeta.product ||
+          originalMeta.legacy_requested_product ||
           originalMeta.original_product;
 
         // If product still not determined, infer from case characteristics
@@ -818,7 +825,13 @@ export default function WizardPreviewPage() {
     if (!caseData) return [];
 
     const facts = caseData.collected_facts as any || {};
-    const product = selectedProduct || facts.product || facts.__meta?.product || searchParams.get('product') || 'notice_only';
+    const product =
+      selectedProduct ||
+      facts.__meta?.canonical_product ||
+      facts.product ||
+      facts.__meta?.product ||
+      searchParams.get('product') ||
+      'notice_only';
     const jurisdiction = caseData.jurisdiction || 'england';
     // Use section_8 as fallback since it's the safer default (fault-based requires proving grounds)
     // Section 21 requires strict compliance which may not be met
@@ -855,8 +868,14 @@ export default function WizardPreviewPage() {
     const includeArrearsSchedule = shouldIncludeArrearsSchedule();
 
     // Use shared utility for consistent inventory detection across review/preview/generation
-  const hasInventoryData = detectInventoryData(facts);
-  const englandTenancyPurpose = normalizeEnglandTenancyPurpose(facts.england_tenancy_purpose);
+    const hasInventoryData = detectInventoryData(facts);
+    const englandTenancyPurpose = normalizeEnglandTenancyPurpose(facts.england_tenancy_purpose);
+    const depositTaken = Number(facts.deposit_amount) > 0;
+    const includeGuarantorDeed =
+      (product === 'england_student_tenancy_agreement' && facts.guarantor_required === true) ||
+      (product === 'england_student_tenancy_agreement' && facts.guarantor_required === 'yes') ||
+      (product === 'england_premium_tenancy_agreement' && facts.guarantor_expected === true) ||
+      (product === 'england_premium_tenancy_agreement' && facts.guarantor_expected === 'yes');
 
     switch (product) {
       case 'notice_only':
@@ -884,7 +903,11 @@ export default function WizardPreviewPage() {
         break;
       default:
         if (isResidentialLettingProductSku(product)) {
-          baseDocuments = getResidentialDocumentList(product as ResidentialLettingProductSku);
+          baseDocuments = getResidentialDocumentList(product as ResidentialLettingProductSku, {
+            englandTenancyPurpose,
+            depositTaken,
+            includeGuarantorDeed,
+          });
         } else if (caseType === 'money_claim') {
           baseDocuments = getMoneyClaimDocuments(jurisdiction);
         } else if (caseType === 'tenancy_agreement') {
@@ -900,7 +923,11 @@ export default function WizardPreviewPage() {
     if (selectedAddOns.length > 0) {
       const addOnDocuments = selectedAddOns.flatMap((sku) =>
         isResidentialLettingProductSku(sku)
-          ? getResidentialDocumentList(sku as ResidentialLettingProductSku)
+          ? getResidentialDocumentList(sku as ResidentialLettingProductSku, {
+              englandTenancyPurpose,
+              depositTaken,
+              includeGuarantorDeed,
+            })
           : sku === 'money_claim'
             ? getMoneyClaimDocuments(jurisdiction)
             : []
@@ -1018,7 +1045,14 @@ export default function WizardPreviewPage() {
   const getProduct = (): string => {
     if (!caseData) return 'notice_only';
     const facts = caseData.collected_facts as any || {};
-    return selectedProduct || facts.product || facts.__meta?.product || searchParams.get('product') || 'notice_only';
+    return (
+      selectedProduct ||
+      facts.__meta?.canonical_product ||
+      facts.product ||
+      facts.__meta?.product ||
+      searchParams.get('product') ||
+      'notice_only'
+    );
   };
 
   // Retry function for validation errors
@@ -1197,10 +1231,19 @@ export default function WizardPreviewPage() {
   );
 
   // Determine if this is a tenancy agreement product (uses multi-page preview)
-  const isTenancyAgreement = product === 'ast_standard' || product === 'ast_premium' || product === 'tenancy_agreement';
+  const isTenancyAgreement =
+    product === 'ast_standard' ||
+    product === 'ast_premium' ||
+    product === 'tenancy_agreement' ||
+    isResidentialLettingProductSku(product);
 
-  // Get tier for tenancy agreement preview
-  const astTier = product === 'ast_premium' ? 'premium' : 'standard';
+  // Use a product-specific preview variant for modern England products while
+  // preserving the legacy standard/premium preview cache keys for historical AST paths.
+  const previewVariant = isResidentialLettingProductSku(product)
+    ? product
+    : product === 'ast_premium'
+      ? 'premium'
+      : 'standard';
 
   return (
     <>
@@ -1223,7 +1266,7 @@ export default function WizardPreviewPage() {
                 <MultiPageViewer
                   caseId={caseId}
                   product={product}
-                  tier={astTier}
+                  tier={previewVariant}
                   className="h-[700px]"
                 />
               </div>
@@ -1250,7 +1293,7 @@ export default function WizardPreviewPage() {
                       <div>
                         <p className="text-sm font-medium text-green-900">Solicitor comparison</p>
                         <p className="text-sm text-green-800 mt-1">
-                          A property solicitor typically charges <span className="font-semibold">£150–£400</span> for tenancy agreements.
+                          A property solicitor typically charges <span className="font-semibold">£150-£400</span> for tenancy agreements.
                         </p>
                         <p className="text-xs text-green-700 mt-2">
                           You pay: <span className="font-bold text-green-900">{selectionPriceDisplay}</span>
@@ -1277,7 +1320,7 @@ export default function WizardPreviewPage() {
                     </div>
                     <div className="flex items-center gap-3 text-sm text-gray-600">
                       <Shield className="w-5 h-5 text-green-600 flex-shrink-0" />
-                      <span>Legally compliant for your jurisdiction</span>
+                      <span>Route-specific drafting and support documents included</span>
                     </div>
                     <div className="flex items-center gap-3 text-sm text-gray-600">
                       <Clock className="w-5 h-5 text-green-600 flex-shrink-0" />
@@ -1290,6 +1333,28 @@ export default function WizardPreviewPage() {
                     <div className="mt-6 pt-6 border-t">
                       <h3 className="font-semibold text-gray-800 mb-3">What&apos;s Included:</h3>
                       {(() => {
+                        if (isResidentialLettingProductSku(product)) {
+                          return (
+                            <ul className="space-y-3">
+                              {documents.map((document) => (
+                                <li key={document.id} className="flex items-start gap-2 text-sm text-gray-600">
+                                  <FileText className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+                                  <div>
+                                    <span>{document.title}</span>
+                                    <p className="text-xs text-gray-500 mt-0.5">{document.description}</p>
+                                  </div>
+                                </li>
+                              ))}
+                              {resolvedProductMeta.features.map((feature) => (
+                                <li key={feature} className="flex items-start gap-2 text-sm text-gray-600">
+                                  <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
+                                  <span>{feature}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          );
+                        }
+
                         const jurisdiction = (caseData.jurisdiction || 'england') as TenancyJurisdiction;
                         const tier = (product === 'ast_premium' ? 'premium' : 'standard') as TenancyTier;
                         const inventoryInfo = getInventoryBehaviour(tier);
@@ -1297,17 +1362,14 @@ export default function WizardPreviewPage() {
 
                         return (
                           <ul className="space-y-3">
-                            {/* Main Agreement */}
                             <li className="flex items-start gap-2 text-sm text-gray-600">
                               <FileText className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
-                              <span>{tier === 'premium' ? 'HMO ' : ''}Tenancy Agreement</span>
+                              <span>{resolvedProductMeta.name}</span>
                             </li>
-                            {/* Schedules */}
                             <li className="flex items-start gap-2 text-sm text-gray-600">
                               <List className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
                               <span>Embedded Schedules (Property, Rent, Utilities, House Rules)</span>
                             </li>
-                            {/* Inventory - tier-specific */}
                             <li className="flex items-start gap-2 text-sm text-gray-600">
                               <CheckCircle className={`w-4 h-4 ${tier === 'premium' ? 'text-purple-600' : 'text-blue-600'} flex-shrink-0 mt-0.5`} />
                               <div>
@@ -1315,7 +1377,6 @@ export default function WizardPreviewPage() {
                                 <p className="text-xs text-gray-500 mt-0.5">{inventoryInfo.description}</p>
                               </div>
                             </li>
-                            {/* Compliance Checklist */}
                             <li className="flex items-start gap-2 text-sm text-gray-600">
                               <Shield className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
                               <div>
@@ -1323,11 +1384,10 @@ export default function WizardPreviewPage() {
                                 <p className="text-xs text-gray-500 mt-0.5">Non-contractual guidance</p>
                               </div>
                             </li>
-                            {/* Premium extras */}
                             {tier === 'premium' && (
                               <li className="flex items-start gap-2 text-sm text-gray-600">
                                 <CheckCircle className="w-4 h-4 text-purple-600 flex-shrink-0 mt-0.5" />
-                                <span>Premium clauses (Guarantor, HMO terms, rent review)</span>
+                                <span>Premium clauses for fuller ordinary-residential drafting and optional detail</span>
                               </li>
                             )}
                           </ul>

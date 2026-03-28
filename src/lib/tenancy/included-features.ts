@@ -272,11 +272,12 @@ export function getIncludedFeatures(
   const complianceInfo = COMPLIANCE_CHECKLIST_INFO[jurisdiction];
   const isHMO = context?.isHMO ?? false;
   const hasInventoryData = context?.hasInventoryData ?? false;
+  const usesEnglandSpecialistSplit = jurisdiction === 'england';
 
   const features: IncludedFeature[] = [];
 
   // 1. Main agreement - only label as HMO when isHMO is true
-  const isHMOAgreement = tier === 'premium' && isHMO;
+  const isHMOAgreement = tier === 'premium' && isHMO && !usesEnglandSpecialistSplit;
   features.push({
     id: 'main_agreement',
     label: isHMOAgreement
@@ -328,7 +329,7 @@ export function getIncludedFeatures(
     // Filter: only include HMO-specific features when isHMO is true
     const applicableFeatures = PREMIUM_FEATURES.filter(f => {
       if (f.isHMOSpecific) {
-        return isHMO;
+        return isHMO && !usesEnglandSpecialistSplit;
       }
       return true;
     });
@@ -397,7 +398,8 @@ export function getIncludedSummary(
   const agreementInfo = JURISDICTION_AGREEMENT_INFO[jurisdiction];
   const isHMO = context?.isHMO ?? false;
   const hasInventoryData = context?.hasInventoryData ?? false;
-  const isHMOAgreement = tier === 'premium' && isHMO;
+  const usesEnglandSpecialistSplit = jurisdiction === 'england';
+  const isHMOAgreement = tier === 'premium' && isHMO && !usesEnglandSpecialistSplit;
 
   // Inventory headline based on tier and context
   let inventoryHeadline: string;
@@ -411,8 +413,10 @@ export function getIncludedSummary(
 
   const headline: string[] = [
     isHMOAgreement
-      ? `A solicitor-grade HMO ${agreementInfo.agreementShortName}`
-      : `A solicitor-grade ${agreementInfo.agreementShortName}`,
+      ? `A professionally structured HMO ${agreementInfo.agreementShortName}`
+      : tier === 'premium'
+        ? `A professionally structured premium ${agreementInfo.agreementShortName}`
+        : `A professionally structured ${agreementInfo.agreementShortName}`,
     inventoryHeadline,
     'Jurisdiction-specific compliance checklist',
     'All required schedules and signature sections',
@@ -425,10 +429,11 @@ export function getIncludedSummary(
         ? [
             agreementInfo.agreementName,
             'Definitions & Interpretation',
-            ...(isHMO ? ['HMO-specific clauses'] : []),
+            ...(isHMOAgreement ? ['HMO-specific clauses'] : []),
             'Guarantor provisions (activates when guarantor details are provided)',
             'Late payment & rent review terms',
             'Enhanced subletting controls',
+            ...(usesEnglandSpecialistSplit ? ['Fuller ordinary-residential management wording'] : []),
           ]
         : [
             agreementInfo.agreementName,
@@ -463,9 +468,11 @@ export function getIncludedSummary(
     const inventoryNote = hasInventoryData
       ? 'wizard-completed inventory'
       : 'inventory schedule (ready to complete)';
-    tierDifference = isHMO
+    tierDifference = isHMOAgreement
       ? `Includes ${inventoryNote}, HMO clauses, guarantor provisions, and premium terms`
-      : `Includes ${inventoryNote}, guarantor provisions, enhanced subletting controls, and premium terms`;
+      : usesEnglandSpecialistSplit
+        ? `Includes ${inventoryNote}, guarantor provisions, enhanced subletting controls, and fuller ordinary-residential premium drafting`
+        : `Includes ${inventoryNote}, guarantor provisions, enhanced subletting controls, and premium terms`;
   } else {
     tierDifference = 'Includes blank inventory template for manual completion';
   }
@@ -622,11 +629,57 @@ export function getTierRecommendation(propertyInfo: {
   isHMO?: boolean;
   isStudentLet?: boolean;
   hasGuarantor?: boolean;
+  jurisdiction?: TenancyJurisdiction;
 }): {
-  recommendedTier: TenancyTier;
+  recommendedTier: TenancyTier | 'specialist';
   reason: string;
+  specialistProduct?: 'england_student_tenancy_agreement' | 'england_hmo_shared_house_tenancy_agreement';
 } {
-  const { tenantCount, isHMO, isStudentLet, hasGuarantor } = propertyInfo;
+  const {
+    tenantCount,
+    isHMO,
+    isStudentLet,
+    hasGuarantor,
+    jurisdiction = 'england',
+  } = propertyInfo;
+
+  if (jurisdiction === 'england') {
+    if (isHMO) {
+      return {
+        recommendedTier: 'specialist',
+        specialistProduct: 'england_hmo_shared_house_tenancy_agreement',
+        reason: 'England HMO and shared-house lets should use the dedicated HMO / Shared House product rather than Premium.',
+      };
+    }
+
+    if (tenantCount && tenantCount >= 3) {
+      return {
+        recommendedTier: 'specialist',
+        specialistProduct: 'england_hmo_shared_house_tenancy_agreement',
+        reason: 'England multi-sharer lets should usually use the dedicated HMO / Shared House route rather than being treated as ordinary Premium by default.',
+      };
+    }
+
+    if (isStudentLet) {
+      return {
+        recommendedTier: 'specialist',
+        specialistProduct: 'england_student_tenancy_agreement',
+        reason: 'England student-focused lets should use the dedicated Student product rather than relying on Premium as a catch-all route.',
+      };
+    }
+
+    if (hasGuarantor) {
+      return {
+        recommendedTier: 'premium',
+        reason: 'Premium includes fuller ordinary-residential wording for guarantor-backed England lets.',
+      };
+    }
+
+    return {
+      recommendedTier: 'standard',
+      reason: 'Standard is suitable for straightforward ordinary England residential lets.',
+    };
+  }
 
   // HMO properties should use premium
   if (isHMO) {

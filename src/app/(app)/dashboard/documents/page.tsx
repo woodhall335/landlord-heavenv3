@@ -18,6 +18,7 @@ import {
   getDashboardDocumentCategory,
   getDashboardDocumentTitle,
 } from '@/lib/documents/dashboard-document-display';
+import { PRODUCTS } from '@/lib/pricing/products';
 
 interface Document {
   id: string;
@@ -321,8 +322,13 @@ export default function DocumentsPage() {
                             {doc.metadata.pack_type === 'notice_only' ? 'Notice Pack' :
                              doc.metadata.pack_type === 'complete_pack' ? 'Complete Pack' :
                              doc.metadata.pack_type === 'money_claim' ? 'Money Claim' :
-                             doc.metadata.pack_type === 'ast_standard' ? 'England Assured Periodic Tenancy' :
-                             doc.metadata.pack_type === 'ast_premium' ? 'England Assured Periodic Tenancy (Premium)' :
+                             doc.metadata.pack_type === 'ast_standard' ? PRODUCTS.ast_standard.label :
+                             doc.metadata.pack_type === 'ast_premium' ? PRODUCTS.ast_premium.label :
+                             doc.metadata.pack_type === 'england_standard_tenancy_agreement' ? PRODUCTS.england_standard_tenancy_agreement.label :
+                             doc.metadata.pack_type === 'england_premium_tenancy_agreement' ? PRODUCTS.england_premium_tenancy_agreement.label :
+                             doc.metadata.pack_type === 'england_student_tenancy_agreement' ? PRODUCTS.england_student_tenancy_agreement.label :
+                             doc.metadata.pack_type === 'england_hmo_shared_house_tenancy_agreement' ? PRODUCTS.england_hmo_shared_house_tenancy_agreement.label :
+                             doc.metadata.pack_type === 'england_lodger_agreement' ? PRODUCTS.england_lodger_agreement.label :
                              doc.metadata.pack_type}
                           </Badge>
                         )}

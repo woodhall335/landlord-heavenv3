@@ -39,6 +39,7 @@ import {
   isPublicResidentialLettingProductSku,
 } from '@/lib/residential-letting/products';
 import { isMoneyClaimAddOnEligible } from '@/lib/wizard-crosssell';
+import { isEnglandModernTenancyProductSku } from '@/lib/tenancy/england-product-model';
 
 /**
  * Normalize display SKUs to payment SKUs for order storage
@@ -79,6 +80,11 @@ const PRODUCT_TO_PRICE_ID: Record<string, string> = {
   sc_money_claim: PRICE_IDS.MONEY_CLAIM, // Same price as England/Wales money claim
   ast_standard: PRICE_IDS.STANDARD_AST,
   ast_premium: PRICE_IDS.PREMIUM_AST,
+  england_standard_tenancy_agreement: PRICE_IDS.STANDARD_AST,
+  england_premium_tenancy_agreement: PRICE_IDS.PREMIUM_AST,
+  england_student_tenancy_agreement: PRICE_IDS.STUDENT_TENANCY,
+  england_hmo_shared_house_tenancy_agreement: PRICE_IDS.HMO_SHARED_TENANCY,
+  england_lodger_agreement: PRICE_IDS.LODGER_AGREEMENT,
   tenancy_agreement: PRICE_IDS.STANDARD_AST, // Generic tenancy agreement defaults to standard
   // Jurisdiction-specific display SKUs - map to same prices as AST
   prt_standard: PRICE_IDS.STANDARD_AST,      // Scotland
@@ -101,6 +107,9 @@ function validateStripePriceIds(): void {
     { key: 'STRIPE_PRICE_ID_MONEY_CLAIM', value: PRICE_IDS.MONEY_CLAIM },
     { key: 'STRIPE_PRICE_ID_STANDARD_AST', value: PRICE_IDS.STANDARD_AST },
     { key: 'STRIPE_PRICE_ID_PREMIUM_AST', value: PRICE_IDS.PREMIUM_AST },
+    { key: 'STRIPE_PRICE_ID_STUDENT_TENANCY', value: PRICE_IDS.STUDENT_TENANCY },
+    { key: 'STRIPE_PRICE_ID_HMO_SHARED_TENANCY', value: PRICE_IDS.HMO_SHARED_TENANCY },
+    { key: 'STRIPE_PRICE_ID_LODGER_AGREEMENT', value: PRICE_IDS.LODGER_AGREEMENT },
   ];
 
   const missingIds = requiredPriceIds.filter(({ value }) => !value || value === 'undefined');
@@ -368,7 +377,10 @@ export async function POST(request: Request) {
 
 
       if (caseData) {
-        const isTenancyAgreementCheckout = normalizedProductType === 'ast_standard' || normalizedProductType === 'ast_premium';
+        const isTenancyAgreementCheckout =
+          normalizedProductType === 'ast_standard' ||
+          normalizedProductType === 'ast_premium' ||
+          isEnglandModernTenancyProductSku(normalizedProductType);
         const isTenancyAgreementCase =
           caseData.case_type === 'tenancy_agreement' ||
           (typeof caseData.case_type === 'string' && caseData.case_type.includes('tenancy_agreement'));
@@ -379,6 +391,7 @@ export async function POST(request: Request) {
           const collectedFacts = (caseData as any).collected_facts || {};
           const tenancyValidation = validateTenancyRequiredFacts(collectedFacts, {
             jurisdiction: (caseData as any).jurisdiction,
+            product: normalizedProductType,
           });
           const missingTenancyFields = [
             ...tenancyValidation.missing_fields,

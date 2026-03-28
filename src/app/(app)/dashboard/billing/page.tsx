@@ -6,6 +6,7 @@ import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { calculateHMOProPrice, formatPrice } from "@/lib/pricing";
+import { PRODUCTS } from "@/lib/pricing/products";
 
 // Subscription info from users table (HMO Pro is parked for now)
 interface UserSubscription {
@@ -177,8 +178,13 @@ export default function BillingPage() {
       notice_only: "Notice Only",
       complete_pack: "Complete Eviction Pack",
       money_claim: "Money Claim Pack",
-      ast_standard: "England Assured Periodic Tenancy",
-      ast_premium: "England Assured Periodic Tenancy (Premium)",
+      ast_standard: PRODUCTS.ast_standard.label,
+      ast_premium: PRODUCTS.ast_premium.label,
+      england_standard_tenancy_agreement: PRODUCTS.england_standard_tenancy_agreement.label,
+      england_premium_tenancy_agreement: PRODUCTS.england_premium_tenancy_agreement.label,
+      england_student_tenancy_agreement: PRODUCTS.england_student_tenancy_agreement.label,
+      england_hmo_shared_house_tenancy_agreement: PRODUCTS.england_hmo_shared_house_tenancy_agreement.label,
+      england_lodger_agreement: PRODUCTS.england_lodger_agreement.label,
     };
     return names[productType] || productType;
   }

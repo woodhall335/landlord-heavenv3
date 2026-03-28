@@ -8,12 +8,32 @@ import {
 
 export const RESIDENTIAL_LETTING_STANDARD_PRICE = 9.99;
 export const RESIDENTIAL_LETTING_PREMIUM_PRICE = 12.99;
+export const ENGLAND_STANDARD_TENANCY_PRICE = 14.99;
+export const ENGLAND_PREMIUM_TENANCY_PRICE = 24.99;
+export const ENGLAND_STUDENT_TENANCY_PRICE = 24.99;
+export const ENGLAND_HMO_SHARED_TENANCY_PRICE = 34.99;
+export const ENGLAND_LODGER_AGREEMENT_PRICE = 14.99;
 
 export const RESIDENTIAL_LETTING_STANDARD_DISPLAY = formatPriceLabel(
   RESIDENTIAL_LETTING_STANDARD_PRICE
 );
 export const RESIDENTIAL_LETTING_PREMIUM_DISPLAY = formatPriceLabel(
   RESIDENTIAL_LETTING_PREMIUM_PRICE
+);
+export const ENGLAND_STANDARD_TENANCY_DISPLAY = formatPriceLabel(
+  ENGLAND_STANDARD_TENANCY_PRICE
+);
+export const ENGLAND_PREMIUM_TENANCY_DISPLAY = formatPriceLabel(
+  ENGLAND_PREMIUM_TENANCY_PRICE
+);
+export const ENGLAND_STUDENT_TENANCY_DISPLAY = formatPriceLabel(
+  ENGLAND_STUDENT_TENANCY_PRICE
+);
+export const ENGLAND_HMO_SHARED_TENANCY_DISPLAY = formatPriceLabel(
+  ENGLAND_HMO_SHARED_TENANCY_PRICE
+);
+export const ENGLAND_LODGER_AGREEMENT_DISPLAY = formatPriceLabel(
+  ENGLAND_LODGER_AGREEMENT_PRICE
 );
 export const RESIDENTIAL_LETTING_FROM_PRICE = formatFromPriceLabel(
   RESIDENTIAL_LETTING_STANDARD_PRICE
@@ -24,6 +44,61 @@ export const RESIDENTIAL_LETTING_PRICE_RANGE = formatPriceRangeLabel([
 ]);
 
 export const RESIDENTIAL_LETTING_PRODUCTS = {
+  england_standard_tenancy_agreement: {
+    sku: 'england_standard_tenancy_agreement',
+    label: 'Standard Tenancy Agreement',
+    shortLabel: 'Standard',
+    description:
+      'Ordinary England residential tenancy agreement for a straightforward whole-property let',
+    price: ENGLAND_STANDARD_TENANCY_PRICE,
+    displayPrice: ENGLAND_STANDARD_TENANCY_DISPLAY,
+    topic: 'tenancy',
+    slug: 'tenancy-agreement',
+  },
+  england_premium_tenancy_agreement: {
+    sku: 'england_premium_tenancy_agreement',
+    label: 'Premium Tenancy Agreement',
+    shortLabel: 'Premium',
+    description:
+      'Ordinary England residential premium tenancy agreement with fuller drafting and management options',
+    price: ENGLAND_PREMIUM_TENANCY_PRICE,
+    displayPrice: ENGLAND_PREMIUM_TENANCY_DISPLAY,
+    topic: 'tenancy',
+    slug: 'premium-tenancy-agreement',
+  },
+  england_student_tenancy_agreement: {
+    sku: 'england_student_tenancy_agreement',
+    label: 'Student Tenancy Agreement',
+    shortLabel: 'Student',
+    description:
+      'Student-focused England tenancy agreement with sharer, guarantor, and end-of-term detail',
+    price: ENGLAND_STUDENT_TENANCY_PRICE,
+    displayPrice: ENGLAND_STUDENT_TENANCY_DISPLAY,
+    topic: 'tenancy',
+    slug: 'student-tenancy-agreement',
+  },
+  england_hmo_shared_house_tenancy_agreement: {
+    sku: 'england_hmo_shared_house_tenancy_agreement',
+    label: 'HMO / Shared House Tenancy Agreement',
+    shortLabel: 'HMO / Shared',
+    description:
+      'England shared-house and HMO tenancy agreement with communal-area and sharer drafting',
+    price: ENGLAND_HMO_SHARED_TENANCY_PRICE,
+    displayPrice: ENGLAND_HMO_SHARED_TENANCY_DISPLAY,
+    topic: 'tenancy',
+    slug: 'hmo-shared-house-tenancy-agreement',
+  },
+  england_lodger_agreement: {
+    sku: 'england_lodger_agreement',
+    label: 'Room Let / Lodger Agreement',
+    shortLabel: 'Lodger',
+    description:
+      'England resident-landlord lodger agreement for a room let or licence-style arrangement',
+    price: ENGLAND_LODGER_AGREEMENT_PRICE,
+    displayPrice: ENGLAND_LODGER_AGREEMENT_DISPLAY,
+    topic: 'tenancy',
+    slug: 'lodger-agreement',
+  },
   guarantor_agreement: {
     sku: 'guarantor_agreement',
     label: 'Guarantor Agreement',
@@ -179,4 +254,30 @@ export function getResidentialLandingHref(product: ResidentialLettingProductSku)
 export const RESIDENTIAL_WIZARD_UPSELLS: Record<
   string,
   ResidentialLettingProductSku[]
-> = {};
+> = {
+  england_standard_tenancy_agreement: [
+    'inventory_schedule_condition',
+    'rental_inspection_report',
+    'guarantor_agreement',
+  ],
+  england_premium_tenancy_agreement: [
+    'inventory_schedule_condition',
+    'rental_inspection_report',
+    'guarantor_agreement',
+    'lease_amendment',
+  ],
+  england_student_tenancy_agreement: [
+    'guarantor_agreement',
+    'inventory_schedule_condition',
+    'flatmate_agreement',
+  ],
+  england_hmo_shared_house_tenancy_agreement: [
+    'inventory_schedule_condition',
+    'rental_inspection_report',
+    'flatmate_agreement',
+  ],
+  england_lodger_agreement: [
+    'inventory_schedule_condition',
+    'rental_inspection_report',
+  ],
+};

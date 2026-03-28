@@ -19,14 +19,20 @@ import { createAdminClient, requireServerAuth } from '@/lib/supabase/server';
 import { isAdmin } from '@/lib/auth';
 import { NextResponse } from 'next/server';
 import { NextRequest } from 'next/server';
+import { PRODUCTS } from '@/lib/pricing/products';
 
 const PRODUCT_NAMES: Record<string, string> = {
   notice_only: 'Notice Only Pack',
   complete_pack: 'Complete Eviction Pack',
   money_claim: 'Money Claim Pack',
   sc_money_claim: 'Simple Procedure Pack (Scotland)',
-  ast_standard: 'England Assured Periodic Tenancy',
-  ast_premium: 'England Assured Periodic Tenancy (Premium)',
+  ast_standard: PRODUCTS.ast_standard.label,
+  ast_premium: PRODUCTS.ast_premium.label,
+  england_standard_tenancy_agreement: PRODUCTS.england_standard_tenancy_agreement.label,
+  england_premium_tenancy_agreement: PRODUCTS.england_premium_tenancy_agreement.label,
+  england_student_tenancy_agreement: PRODUCTS.england_student_tenancy_agreement.label,
+  england_hmo_shared_house_tenancy_agreement: PRODUCTS.england_hmo_shared_house_tenancy_agreement.label,
+  england_lodger_agreement: PRODUCTS.england_lodger_agreement.label,
 };
 
 export async function GET(request: NextRequest) {

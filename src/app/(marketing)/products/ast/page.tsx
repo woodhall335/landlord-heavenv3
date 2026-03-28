@@ -17,6 +17,7 @@ const standardWizardHref =
   'https://landlordheaven.co.uk/wizard?product=ast_standard&src=product_page&topic=tenancy';
 const premiumWizardHref =
   'https://landlordheaven.co.uk/wizard?product=ast_premium&src=product_page&topic=tenancy';
+const englandChooserHref = 'https://landlordheaven.co.uk/tenancy-agreement';
 
 const PRIMARY_BUTTON_CLASS =
   'hero-btn-primary inline-flex items-center justify-center text-center text-base font-semibold';
@@ -72,7 +73,7 @@ type ExplainerPoint = {
 
 const proofPoints = [
   'England-first tenancy agreement for new lets from 1 May 2026',
-  'Choose Standard for straightforward lets and Premium for more complex arrangements',
+  'England now has separate Standard, Premium, Student, HMO / Shared House, and Lodger routes',
   'Avoid using outdated agreements when the current framework should be reflected',
   'Preview before payment and keep the finished agreement in your account',
 ];
@@ -85,20 +86,20 @@ const englandChangePoints = [
 
 const premiumReasons: FeaturePoint[] = [
   {
-    title: 'HMOs and shared houses',
-    body: 'Premium is the stronger fit where the property setup, house rules, and shared occupation create more drafting complexity than a straightforward single-household let.',
+    title: 'Fuller ordinary-residential drafting',
+    body: 'Premium is the stronger fit where the let is still an ordinary residential whole-property tenancy but you want more detailed management wording from the start.',
   },
   {
-    title: 'Sharers and student households',
-    body: 'Where multiple occupiers, turnover risk, or day-to-day management detail matter more, Premium gives landlords broader wording from the start.',
+    title: 'Guarantors and payment control',
+    body: 'If the tenancy relies on guarantor support, clearer payment mechanics, or more operational detail, Premium gives landlords broader wording without switching into the specialist Student or HMO routes.',
   },
   {
-    title: 'Guarantors and higher-risk setups',
-    body: 'If the tenancy depends on guarantor support or has more operational friction built in, Premium gives the landlord a more suitable product level for that reality.',
+    title: 'More detailed management schedules',
+    body: 'Premium adds stronger handover, maintenance, and end-of-tenancy detail for landlords who want fewer loose ends later.',
   },
   {
-    title: 'When you want more support documents',
-    body: 'Premium adds extra support documents and broader wording, which is often the better commercial choice when the let is more involved and the landlord wants fewer loose ends later.',
+    title: 'Separate specialist products still exist',
+    body: 'If the setup is genuinely student-focused, HMO/shared-house, or resident-landlord/lodger, England now uses dedicated products for those routes rather than treating them as Premium by default.',
   },
 ];
 
@@ -117,7 +118,7 @@ const explainerPoints: ExplainerPoint[] = [
   },
   {
     title: 'Choose the level that fits the tenancy',
-    body: 'Some lets are simple. Others need broader wording because of sharers, guarantors, students, or HMO-style risk. Standard and Premium help you choose the right level from the outset.',
+    body: 'Some lets are simple. Others need fuller ordinary-residential drafting. England also now splits Student, HMO / Shared House, and Lodger into dedicated products instead of bundling them into Premium.',
   },
 ];
 
@@ -143,14 +144,14 @@ const productOptions: ProductCardData[] = [
   {
     name: 'Premium Tenancy Agreement',
     price: PRODUCTS.ast_premium.displayPrice,
-    kicker: 'More cover for complex lets',
+    kicker: 'Fuller ordinary-residential route',
     bestFor:
-      'HMOs, student lets, shared households, guarantor-backed lets, and arrangements that need broader wording from the start.',
+      'Ordinary residential lets that need fuller drafting, more operational detail, and stronger management wording than Standard.',
     description:
-      'Choose Premium when the let is more complex, more operationally involved, or when you want the core pack plus broader drafting and extra support documents from day one.',
+      'Choose Premium when the let stays within the ordinary residential route but you want broader drafting, stronger schedules, and extra support documents from day one.',
     points: [
-      'Better suited to HMOs, student lets, and shared households',
-      'Broader wording for multi-tenant and shared-living arrangements',
+      'Built for ordinary residential lets, not as a shortcut for HMO or student products',
+      'Broader wording for guarantors, payment controls, and day-to-day management detail',
       'Includes extra support documents for handover, maintenance, and checkout',
       'Useful where guarantors or extra house rules matter',
       'Saved in your account and easy to revisit later',
@@ -171,13 +172,12 @@ const jurisdictions: JurisdictionCardData[] = [
     points: [
       "Designed to reflect the Renters' Rights changes in England",
       'England-first wording and structure',
-      'Periodic agreement with no fixed duration',
+      'Five England routes: Standard, Premium, Student, HMO / Shared House, and Lodger',
     ],
-    href: '/wizard?product=ast_standard&jurisdiction=england&src=product_page&topic=tenancy',
-    ctaLabel: `Create England agreement - ${PRODUCTS.ast_standard.displayPrice}`,
-    secondaryHref:
-      '/wizard?product=ast_premium&jurisdiction=england&src=product_page&topic=tenancy',
-    secondaryLabel: `Create premium England agreement - ${PRODUCTS.ast_premium.displayPrice}`,
+    href: englandChooserHref,
+    ctaLabel: 'View England agreement routes',
+    secondaryHref: '/wizard?product=ast_premium&jurisdiction=england&src=product_page&topic=tenancy',
+    secondaryLabel: `Start England Premium - ${PRODUCTS.ast_premium.displayPrice}`,
     featured: true,
   },
   {
@@ -243,7 +243,7 @@ const featurePoints: FeaturePoint[] = [
   },
   {
     title: 'Choose Standard or Premium deliberately',
-    body: 'Standard suits most straightforward lets. Premium is the better fit where sharers, guarantors, student occupation, HMOs, or more complex arrangements mean broader wording matters.',
+    body: 'Standard suits most straightforward lets. Premium is the better fit for fuller ordinary-residential drafting. England Student, HMO / Shared House, and Lodger setups now have dedicated products.',
   },
   {
     title: 'Do not rely on a one-off file',
@@ -342,7 +342,7 @@ const faqs: FAQItem[] = [
   {
     question: 'What is the difference between Standard and Premium?',
     answer:
-      'Standard is designed for most straightforward residential lets. Premium is intended for more complex arrangements such as HMOs, student lets, shared households, guarantor-backed lets, or cases where broader wording is useful from the start.',
+      'Standard is designed for most straightforward residential lets. Premium is the ordinary-residential premium route with fuller drafting, stronger management wording, and extra support documents. England Student, HMO / Shared House, and Lodger setups are now separate products instead of being bundled into Premium.',
   },
   {
     question: 'Can I preview before paying?',
@@ -667,12 +667,13 @@ export default function ASTProductPage() {
               Choose your product level
             </p>
             <h2 className="mt-3 text-4xl font-bold tracking-tight text-[#141B2D] md:text-5xl">
-              Standard for straightforward lets. Premium for more complex ones.
+              Standard for straightforward lets. Premium for fuller ordinary-residential drafting.
             </h2>
             <p className="mt-5 text-lg leading-8 text-[#546075]">
-              Choose Standard for most ordinary residential lets. Choose Premium when the household
-              setup, property type, or risk profile is more complex and you want broader wording
-              from the start.
+              Choose Standard for most ordinary residential lets. Choose Premium when the tenancy
+              is still an ordinary residential route but you want broader wording, stronger
+              schedules, and more management detail. England Student, HMO / Shared House, and
+              Lodger routes now sit in their own dedicated products.
             </p>
           </div>
 
@@ -693,10 +694,10 @@ export default function ASTProductPage() {
                 Choose Premium when the tenancy is more involved
               </h2>
               <p className="mt-5 text-lg leading-8 text-[#546075]">
-                Some tenancies need more than the lightest document route. If the let involves
-                HMOs, sharers, guarantors, or higher-risk household arrangements, Premium is often
-                the clearer commercial choice because it gives the landlord broader wording and more
-                support from the outset.
+                Some tenancies need more than the lightest document route. If the let remains an
+                ordinary residential tenancy but you want fuller drafting, clearer payment
+                mechanics, broader management wording, and better support documents, Premium is the
+                clearer commercial choice.
               </p>
             </div>
 
@@ -789,7 +790,7 @@ export default function ASTProductPage() {
                 </p>
                 <ul className="mt-5 space-y-3">
                   {[
-                    'Stronger clauses for shared living, HMOs, and higher-risk setups',
+                    'Broader ordinary-residential drafting and stronger management wording',
                     'Additional documents for handover, maintenance, and checkout',
                     'Broader protection where a simple agreement may fall short',
                   ].map((item) => (
@@ -1018,8 +1019,9 @@ export default function ASTProductPage() {
               </Link>
             </div>
             <p className="mt-4 text-sm text-white/75">
-              Standard is designed for straightforward lets. Premium is the stronger fit for HMOs,
-              student lets, guarantors, sharers, and other more complex arrangements.
+              Standard is designed for straightforward lets. Premium is the stronger fit for
+              ordinary residential lets that need fuller drafting. England Student, HMO / Shared
+              House, and Lodger routes are separate products.
             </p>
           </div>
         </Container>

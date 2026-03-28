@@ -211,7 +211,7 @@ function getJurisdictionInfo(product: ProductType): JurisdictionInfo[] {
           documents: [
             'England tenancy agreement',
             'Standard: agreement, inventory schedule, compliance checklist, deposit protection certificate, and prescribed information pack',
-            'Premium: HMO and student-ready wording with enhanced shared-living and operational clauses',
+            'Premium: fuller ordinary-residential drafting, stronger management wording, and extra support documents. Student, HMO / Shared House, and Lodger are separate England products',
           ],
           notes: 'England flow now uses current England tenancy agreement wording aligned to the assured periodic framework.',
         },

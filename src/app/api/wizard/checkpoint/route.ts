@@ -20,6 +20,7 @@ import type { DecisionInput } from '@/lib/decision-engine';
 import { getLawProfile } from '@/lib/law-profile';
 import { deriveCanonicalJurisdiction, type CanonicalJurisdiction } from '@/lib/types/jurisdiction';
 import { validateFlow, create422Response } from '@/lib/validation/validateFlow';
+import { getEnglandCanonicalTenancyProduct } from '@/lib/tenancy/england-product-model';
 
 export const runtime = 'nodejs';
 
@@ -87,7 +88,14 @@ export async function POST(request: NextRequest) {
 
     // Read product from collected_facts.__meta where wizard stores it
     const collectedFacts = (caseData as any).collected_facts || {};
-    const metaProduct = collectedFacts.__meta?.product || collectedFacts.__meta?.original_product;
+    const metaProduct =
+      getEnglandCanonicalTenancyProduct(
+        collectedFacts.__meta?.canonical_product ||
+        collectedFacts.__meta?.product ||
+        collectedFacts.product
+      ) ||
+      collectedFacts.__meta?.product ||
+      collectedFacts.__meta?.original_product;
 
     // Priority: provided > meta from facts > case column > default based on case_type
     const product = providedProduct || metaProduct || ((caseData as any).product) || (case_type === 'money_claim' ? 'money_claim' : case_type === 'tenancy_agreement' ? 'tenancy_agreement' : 'complete_pack');
@@ -140,7 +148,19 @@ export async function POST(request: NextRequest) {
           'Northern Ireland: tenancy agreement flows only (eviction notices planned). England & Wales and Scotland support evictions (notices and court packs) and money claims where available.',
         supported: {
           'northern-ireland': ['ast_standard', 'ast_premium', 'tenancy_agreement'],
-          england: ['notice_only', 'complete_pack', 'money_claim', 'ast_standard', 'ast_premium', 'tenancy_agreement'],
+          england: [
+            'notice_only',
+            'complete_pack',
+            'money_claim',
+            'ast_standard',
+            'ast_premium',
+            'tenancy_agreement',
+            'england_standard_tenancy_agreement',
+            'england_premium_tenancy_agreement',
+            'england_student_tenancy_agreement',
+            'england_hmo_shared_house_tenancy_agreement',
+            'england_lodger_agreement',
+          ],
           wales: ['notice_only', 'complete_pack', 'money_claim', 'ast_standard', 'ast_premium', 'tenancy_agreement'],
           scotland: ['notice_only', 'complete_pack', 'money_claim', 'ast_standard', 'ast_premium', 'tenancy_agreement'],
         },

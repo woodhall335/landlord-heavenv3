@@ -186,11 +186,11 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
             </>
           }
           primaryCta={{
-            label: `Create Standard PRT â€” ${standardPrice}`,
+            label: `Create Standard PRT - ${standardPrice}`,
             href: standardWizardHref,
           }}
           secondaryCta={{
-            label: `Create Premium PRT â€” ${premiumPrice}`,
+            label: `Create Premium PRT - ${premiumPrice}`,
             href: premiumWizardHref,
           }}
           showTrustPositioningBar
@@ -269,7 +269,7 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                 </p>
                 <p>
                   The result is a page that is both more search-ready and more conversion-ready
-                  than a generic â€œtemplateâ€ page. It does not rely on reckless overclaims.
+                  than a generic "template" page. It does not rely on reckless overclaims.
                   It does not blur jurisdictions. It does not treat a Scottish tenancy as
                   though it works like an English AST with a different label on top. Instead,
                   it gives landlords a clearer route into a Scottish PRT agreement built for
@@ -352,16 +352,16 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                   Alternative search terms landlords still use
                 </h3>
                 <p className="mb-3 leading-relaxed text-blue-900/90">
-                  Not every landlord searches for â€œPrivate Residential Tenancy agreementâ€
+                  Not every landlord searches for "Private Residential Tenancy agreement"
                   first time. Common high-intent searches also include:
                 </p>
                 <div className="grid gap-2 text-sm text-blue-900 md:grid-cols-2">
-                  <div>â€¢ PRT agreement Scotland</div>
-                  <div>â€¢ Scottish tenancy agreement template</div>
-                  <div>â€¢ Scotland landlord agreement</div>
-                  <div>â€¢ private tenancy agreement Scotland</div>
-                  <div>â€¢ Scotland rental agreement</div>
-                  <div>â€¢ joint tenancy agreement Scotland</div>
+                  <div>PRT agreement Scotland</div>
+                  <div>Scottish tenancy agreement template</div>
+                  <div>Scotland landlord agreement</div>
+                  <div>private tenancy agreement Scotland</div>
+                  <div>Scotland rental agreement</div>
+                  <div>joint tenancy agreement Scotland</div>
                 </div>
               </div>
             </div>
@@ -608,7 +608,7 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                     be set up properly from the start. That includes the amount, the payment
                     frequency, and the wider handling of any deposit taken. A PRT page should
                     not pretend these are minor admin points. They are central to how the
-                    tenancy is run and how the landlordâ€™s position is documented.
+                    tenancy is run and how the landlord's position is documented.
                   </p>
                   <p className="leading-relaxed text-gray-700">
                     Good agreement wording should support clarity around payment and occupation
@@ -848,7 +848,7 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                   </h3>
                   <p className="leading-relaxed text-gray-700">
                     This is one of the most common and damaging mistakes. The page may use the
-                    phrase â€œPRTâ€ in the title, but the body copy still reads like an AST
+                    phrase "PRT" in the title, but the body copy still reads like an AST
                     landing page. That weakens trust and can create the impression that the
                     underlying document is also a light adaptation rather than a proper
                     Scottish route.
@@ -947,11 +947,11 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                       Not the right fit for
                     </h3>
                     <ul className="space-y-2 text-gray-700">
-                      <li>â€¢ Properties outside Scotland</li>
-                      <li>â€¢ Pages focused on England AST search intent</li>
-                      <li>â€¢ Welsh occupation contract use cases</li>
-                      <li>â€¢ Northern Ireland private tenancy pages</li>
-                      <li>â€¢ Lodger or resident-landlord arrangements where a different agreement is needed</li>
+                        <li>- Properties outside Scotland</li>
+                        <li>- Pages focused on England AST search intent</li>
+                        <li>- Welsh occupation contract use cases</li>
+                        <li>- Northern Ireland private tenancy pages</li>
+                        <li>- Lodger or resident-landlord arrangements where a different agreement is needed</li>
                     </ul>
                   </div>
                   <div className="rounded-xl border border-gray-200 bg-gray-50 p-5">
@@ -959,17 +959,17 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                       Better next step
                     </h3>
                     <ul className="space-y-2 text-gray-700">
-                      <li>â€¢ Use the Scotland route if the property is in Scotland</li>
-                      <li>â€¢ Use a jurisdiction-specific page for England, Wales, or NI</li>
-                      <li>â€¢ Choose premium where the household or property is more complex</li>
-                      <li>â€¢ Use the correct follow-on notice or enforcement page if the tenancy problem is no longer â€œcreate an agreementâ€</li>
+                        <li>- Use the Scotland route if the property is in Scotland</li>
+                        <li>- Use a jurisdiction-specific page for England, Wales, or NI</li>
+                        <li>- Choose premium where the household or property is more complex</li>
+                        <li>- Use the correct follow-on notice or enforcement page if the tenancy problem is no longer "create an agreement"</li>
                     </ul>
                   </div>
                 </div>
                 <p>
                   This kind of clarity helps the page rank better and convert better at the
                   same time. The right SEO page is not always the broadest one. It is the page
-                  that answers the userâ€™s actual next-step question most clearly.
+                  that answers the user's actual next-step question most clearly.
                 </p>
               </div>
             </div>

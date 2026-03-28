@@ -12,6 +12,11 @@ export type WizardProduct =
   | 'ast_standard'
   | 'ast_premium'
   | 'tenancy_agreement'
+  | 'england_standard_tenancy_agreement'
+  | 'england_premium_tenancy_agreement'
+  | 'england_student_tenancy_agreement'
+  | 'england_hmo_shared_house_tenancy_agreement'
+  | 'england_lodger_agreement'
   | 'guarantor_agreement'
   | 'residential_sublet_agreement'
   | 'lease_amendment'
@@ -123,6 +128,11 @@ export function isProductSupportedInJurisdiction(
 ): boolean {
   const englandOnlyResidentialProducts: WizardProduct[] = [
     'guarantor_agreement',
+    'england_standard_tenancy_agreement',
+    'england_premium_tenancy_agreement',
+    'england_student_tenancy_agreement',
+    'england_hmo_shared_house_tenancy_agreement',
+    'england_lodger_agreement',
     'residential_sublet_agreement',
     'lease_amendment',
     'lease_assignment_agreement',
@@ -180,6 +190,11 @@ export function getUnsupportedProductMessage(
       ast_standard: 'Tenancy agreements',
       ast_premium: 'Premium tenancy agreements',
       tenancy_agreement: 'Tenancy agreements',
+      england_standard_tenancy_agreement: 'Standard England tenancy agreements',
+      england_premium_tenancy_agreement: 'Premium England tenancy agreements',
+      england_student_tenancy_agreement: 'Student tenancy agreements',
+      england_hmo_shared_house_tenancy_agreement: 'HMO/shared-house tenancy agreements',
+      england_lodger_agreement: 'Lodger agreements',
       guarantor_agreement: 'Guarantor agreements',
       residential_sublet_agreement: 'Residential sublet agreements',
       lease_amendment: 'Lease amendments',

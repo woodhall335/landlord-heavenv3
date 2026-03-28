@@ -16,6 +16,12 @@
 
 import { createAdminClient } from '@/lib/supabase/server';
 import {
+  generateResidentialLettingDocuments,
+} from '@/lib/documents/residential-letting-generator';
+import {
+  isResidentialLettingProductSku,
+} from '@/lib/residential-letting/products';
+import {
   generatePremiumAST,
   generateStandardAST,
   type TenancyJurisdiction,
@@ -93,7 +99,7 @@ export interface PreviewManifest {
 export interface PreviewGenerationOptions {
   caseId: string;
   product: string;
-  tier?: 'standard' | 'premium';
+  tier?: string;
   userId?: string;
   userEmail?: string;
   watermarkText?: string;
@@ -183,7 +189,7 @@ function hashUserIdentifier(userId?: string, userEmail?: string): string {
  */
 function createWatermarkText(caseId: string, userHash: string): string {
   const shortCaseId = caseId.substring(0, 8);
-  return `PREVIEW • landlordheaven.co.uk • case ${shortCaseId} • ${userHash}`;
+  return `PREVIEW | landlordheaven.co.uk | case ${shortCaseId} | ${userHash}`;
 }
 
 /**
@@ -702,21 +708,34 @@ export async function generateTenancyPreview(
         context: `preview:${caseId}:${product}`,
       }).jurisdiction as TenancyJurisdiction;
 
-      const astData = mapWizardToASTData(facts as any, {
-        canonicalJurisdiction: jurisdiction,
-      });
+      let previewHtml = '';
 
-      const doc =
-        tier === 'premium'
-          ? await generatePremiumAST(astData, true)
-          : await generateStandardAST(astData, true);
+      if (isResidentialLettingProductSku(product)) {
+        const generatedPack = await generateResidentialLettingDocuments(product, facts as Record<string, any>, {
+          outputFormat: 'html',
+        });
+        const primaryDocument = generatedPack.documents[0];
+        if (!primaryDocument?.html) {
+          throw new Error(`No previewable document generated for ${product}`);
+        }
+        previewHtml = primaryDocument.html;
+      } else {
+        const astData = mapWizardToASTData(facts as any, {
+          canonicalJurisdiction: jurisdiction,
+        });
+        const legacyDoc =
+          tier === 'premium'
+            ? await generatePremiumAST(astData, true)
+            : await generateStandardAST(astData, true);
+        previewHtml = legacyDoc.html || '';
+      }
 
       // Create personalized watermark with server-side salt
       const userHash = hashUserIdentifier(userId, userEmail);
       const watermarkText = createWatermarkText(caseId, userHash);
 
       // Generate multi-page images (WebP by default)
-      const { pages, pageCount } = await generateMultiPageImages(doc.html || '', watermarkText);
+      const { pages, pageCount } = await generateMultiPageImages(previewHtml, watermarkText);
 
       console.log(`[Preview] Generated ${pageCount} pages for case ${caseId}`);
 

@@ -4,6 +4,7 @@ import {
   calculateArrearsScheduleTotal,
   getResidentialStandaloneCompletionErrors,
   getResidentialStandaloneFlowConfig,
+  getResidentialStandaloneVisibleSteps,
   validateArrearsScheduleRows,
 } from '@/lib/residential-letting/standalone-flow-config';
 import { RESIDENTIAL_LETTING_PRODUCT_SKUS } from '@/lib/residential-letting/products';
@@ -14,7 +15,9 @@ describe('residential standalone flow config', () => {
       const config = getResidentialStandaloneFlowConfig(sku);
       expect(config.product).toBe(sku);
       expect(config.steps.length).toBeGreaterThanOrEqual(5);
-      expect(config.requiredFacts.length).toBeGreaterThan(0);
+      const requiredFacts =
+        typeof config.requiredFacts === 'function' ? config.requiredFacts({}) : config.requiredFacts;
+      expect(requiredFacts.length).toBeGreaterThan(0);
       expect(config.reviewSummaryFields.length).toBeGreaterThan(0);
       expect(config.completionRules.length).toBeGreaterThan(0);
     });
@@ -86,6 +89,84 @@ describe('residential standalone flow config', () => {
 
     expect(
       errors.some((error) => error.includes('post-1 May 2026 renewal suitability warning'))
+    ).toBe(true);
+  });
+
+  it('shows the assured-tenancy purpose and compliance steps for modern England assured products', () => {
+    const visibleSteps = getResidentialStandaloneVisibleSteps('england_standard_tenancy_agreement', {
+      england_tenancy_purpose: 'new_agreement',
+    });
+
+    expect(visibleSteps.some((step) => step.id === 'england_tenancy_purpose')).toBe(true);
+    expect(visibleSteps.some((step) => step.id === 'england_written_information')).toBe(true);
+    expect(visibleSteps.some((step) => step.id === 'england_pre_tenancy_compliance')).toBe(true);
+  });
+
+  it('uses the transition-only step for existing written England assured tenancies', () => {
+    const visibleSteps = getResidentialStandaloneVisibleSteps('england_student_tenancy_agreement', {
+      england_tenancy_purpose: 'existing_written_tenancy',
+    });
+
+    expect(visibleSteps.some((step) => step.id === 'england_transition_reference')).toBe(true);
+    expect(visibleSteps.some((step) => step.id === 'england_assured_terms')).toBe(false);
+    expect(visibleSteps.some((step) => step.id === 'england_pre_tenancy_compliance')).toBe(false);
+  });
+
+  it('keeps the lodger route outside the assured-tenancy compliance step set', () => {
+    const visibleSteps = getResidentialStandaloneVisibleSteps('england_lodger_agreement', {});
+
+    expect(visibleSteps.some((step) => step.id === 'england_tenancy_purpose')).toBe(false);
+    expect(visibleSteps.some((step) => step.id === 'lodger_terms')).toBe(true);
+    expect(visibleSteps.some((step) => step.id === 'england_written_information')).toBe(false);
+  });
+
+  it('captures deeper structured product-specific fields for Premium, Student, HMO, and Lodger', () => {
+    const premium = getResidentialStandaloneFlowConfig('england_premium_tenancy_agreement');
+    const student = getResidentialStandaloneFlowConfig('england_student_tenancy_agreement');
+    const hmo = getResidentialStandaloneFlowConfig('england_hmo_shared_house_tenancy_agreement');
+    const lodger = getResidentialStandaloneFlowConfig('england_lodger_agreement');
+
+    expect(
+      premium.steps.some((step) => step.fields?.some((field) => field.id === 'management_contact_channel'))
+    ).toBe(true);
+    expect(
+      premium.steps.some((step) => step.fields?.some((field) => field.id === 'routine_inspection_window'))
+    ).toBe(true);
+    expect(
+      premium.steps.some((step) => step.fields?.some((field) => field.id === 'repair_reporting_contact'))
+    ).toBe(true);
+    expect(
+      premium.steps.some((step) => step.fields?.some((field) => field.id === 'check_in_documentation_expectation'))
+    ).toBe(true);
+    expect(
+      premium.steps.some((step) => step.fields?.some((field) => field.id === 'utilities_transfer_expectation'))
+    ).toBe(true);
+    expect(
+      premium.steps.some((step) => step.fields?.some((field) => field.id === 'handover_expectations'))
+    ).toBe(true);
+    expect(
+      student.steps.some((step) => step.fields?.some((field) => field.id === 'student_move_out_keys_process'))
+    ).toBe(true);
+    expect(
+      student.steps.some((step) => step.fields?.some((field) => field.id === 'replacement_notice_window'))
+    ).toBe(true);
+    expect(
+      hmo.steps.some((step) => step.fields?.some((field) => field.id === 'visitor_policy'))
+    ).toBe(true);
+    expect(
+      hmo.steps.some((step) => step.fields?.some((field) => field.id === 'fire_safety_notes'))
+    ).toBe(true);
+    expect(
+      lodger.steps.some((step) => step.fields?.some((field) => field.id === 'guest_policy'))
+    ).toBe(true);
+    expect(
+      lodger.steps.some((step) => step.fields?.some((field) => field.id === 'key_return_expectations'))
+    ).toBe(true);
+    expect(
+      premium.steps.some((step) => step.fields?.some((field) => field.id === 'tenant_improvements_allowed_with_consent'))
+    ).toBe(true);
+    expect(
+      premium.steps.some((step) => step.fields?.some((field) => field.id === 'supported_accommodation_tenancy'))
     ).toBe(true);
   });
 });

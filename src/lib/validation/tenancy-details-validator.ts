@@ -5,6 +5,7 @@ import {
   isEnglandPostReformTenancy,
   normalizeIsoDateString,
 } from '@/lib/tenancy/england-reform';
+import { isEnglandModernTenancyProductSku } from '@/lib/tenancy/england-product-model';
 
 export const REQUIRED_TENANCY_FIELDS = [
   'landlord_full_name',
@@ -29,6 +30,7 @@ export interface TenancyValidationResult {
 
 interface ValidateOptions {
   jurisdiction?: 'england' | 'wales' | 'scotland' | 'northern-ireland' | null;
+  product?: string | null;
 }
 
 function isBlankString(value: unknown): boolean {
@@ -61,6 +63,38 @@ function toOptionalBoolean(value: unknown): boolean | undefined {
   }
 
   return undefined;
+}
+
+function isEnglandModernAssuredProduct(value: string | null | undefined): boolean {
+  return (
+    isEnglandModernTenancyProductSku(value) &&
+    value !== 'england_lodger_agreement'
+  );
+}
+
+function parseTenantNoticePeriodDays(value: unknown): number | null {
+  const text = typeof value === 'string' ? value.trim().toLowerCase() : '';
+  if (!text) return null;
+
+  const knownValues: Record<string, number> = {
+    '28 days': 28,
+    '1 month': 31,
+    '6 weeks': 42,
+    '2 months': 62,
+  };
+
+  if (knownValues[text]) return knownValues[text];
+
+  const dayMatch = text.match(/^(\d+)\s+days?$/);
+  if (dayMatch) return Number(dayMatch[1]);
+
+  const weekMatch = text.match(/^(\d+)\s+weeks?$/);
+  if (weekMatch) return Number(weekMatch[1]) * 7;
+
+  const monthMatch = text.match(/^(\d+)\s+months?$/);
+  if (monthMatch) return Number(monthMatch[1]) * 31;
+
+  return null;
 }
 
 /**
@@ -130,6 +164,7 @@ export function validateTenancyRequiredFacts(
     (caseFacts.meta.jurisdiction as ValidateOptions['jurisdiction']) ||
     (caseFacts.property.country as ValidateOptions['jurisdiction']) ||
     null;
+  const product = options.product || (wizardFacts.__meta as any)?.canonical_product || (wizardFacts.__meta as any)?.product || null;
 
   const rentFrequency =
     (caseFacts.tenancy as any).rent_frequency ||
@@ -169,6 +204,8 @@ export function validateTenancyRequiredFacts(
   const englandNoDiscriminationConfirmed = toOptionalBoolean(
     wizardFacts.england_no_discrimination_confirmed
   );
+  const isModernEnglandAssuredProduct =
+    jurisdiction === 'england' && isEnglandModernAssuredProduct(product);
 
   if (jurisdiction === 'england' && englandTenancyPurpose === 'existing_written_tenancy') {
     if (existingWrittenTransitionAcknowledged === undefined) {
@@ -227,6 +264,158 @@ export function validateTenancyRequiredFacts(
       missing.add('england_no_discrimination_confirmed');
     } else if (englandNoDiscriminationConfirmed !== true) {
       invalid.add('england_no_discrimination_confirmed');
+    }
+  }
+
+  if (isModernEnglandAssuredProduct) {
+    const tenantNoticePeriod = wizardFacts.tenant_notice_period;
+    const rentIncreaseMethod = wizardFacts.rent_increase_method;
+    const billsIncludedInRent = wizardFacts.bills_included_in_rent;
+    const separateBillPaymentsTaken = toOptionalBoolean(
+      wizardFacts.separate_bill_payments_taken
+    );
+    const tenantImprovementsAllowedWithConsent = toOptionalBoolean(
+      wizardFacts.tenant_improvements_allowed_with_consent
+    );
+    const supportedAccommodationTenancy = toOptionalBoolean(
+      wizardFacts.supported_accommodation_tenancy
+    );
+    const relevantGasFittingPresent = toOptionalBoolean(
+      wizardFacts.relevant_gas_fitting_present
+    );
+
+    if (englandTenancyPurpose !== 'existing_written_tenancy') {
+      if (isBlankString(tenantNoticePeriod)) {
+        missing.add('tenant_notice_period');
+      } else {
+        const noticeDays = parseTenantNoticePeriodDays(tenantNoticePeriod);
+        if (noticeDays !== null && noticeDays > 62) {
+          invalid.add('tenant_notice_period');
+        }
+      }
+
+      if (isBlankString(rentIncreaseMethod)) {
+        missing.add('rent_increase_method');
+      } else {
+        const normalizedRentIncreaseMethod = String(rentIncreaseMethod)
+          .toLowerCase()
+          .replace(/\s+/g, '_');
+        if (!normalizedRentIncreaseMethod.includes('section_13')) {
+          invalid.add('rent_increase_method');
+        }
+      }
+
+      if (isBlankString(billsIncludedInRent)) {
+        missing.add('bills_included_in_rent');
+      } else if (String(billsIncludedInRent).trim().toLowerCase() === 'yes' && isBlankString(wizardFacts.included_bills_notes)) {
+        missing.add('included_bills_notes');
+      }
+
+      if (separateBillPaymentsTaken === undefined) {
+        missing.add('separate_bill_payments_taken');
+      } else if (
+        separateBillPaymentsTaken === true &&
+        (!Array.isArray(wizardFacts.separate_bill_payment_rows) ||
+          wizardFacts.separate_bill_payment_rows.length === 0)
+      ) {
+        missing.add('separate_bill_payment_rows');
+      } else if (separateBillPaymentsTaken === true) {
+        const separateBillPaymentRows = Array.isArray(wizardFacts.separate_bill_payment_rows)
+          ? (wizardFacts.separate_bill_payment_rows as Array<Record<string, unknown>>)
+          : [];
+
+        separateBillPaymentRows.forEach((row, index) => {
+          if (isBlankString(row.bill_type)) {
+            missing.add(`separate_bill_payment_rows[${index}].bill_type`);
+          }
+          if (isBlankString(row.amount_detail)) {
+            missing.add(`separate_bill_payment_rows[${index}].amount_detail`);
+          }
+          if (isBlankString(row.due_detail)) {
+            missing.add(`separate_bill_payment_rows[${index}].due_detail`);
+          }
+        });
+      }
+
+      if (tenantImprovementsAllowedWithConsent === undefined) {
+        missing.add('tenant_improvements_allowed_with_consent');
+      }
+
+      if (supportedAccommodationTenancy === undefined) {
+        missing.add('supported_accommodation_tenancy');
+      } else if (
+        supportedAccommodationTenancy === true &&
+        isBlankString(wizardFacts.supported_accommodation_explanation)
+      ) {
+        missing.add('supported_accommodation_explanation');
+      }
+
+      if (relevantGasFittingPresent === undefined) {
+        missing.add('relevant_gas_fitting_present');
+      } else if (
+        relevantGasFittingPresent === true &&
+        toOptionalBoolean(wizardFacts.gas_safety_certificate) === undefined
+      ) {
+        missing.add('gas_safety_certificate');
+      }
+
+      if (isBlankString(wizardFacts.epc_rating)) missing.add('epc_rating');
+      if (!hasValidDate(wizardFacts.right_to_rent_check_date)) {
+        if (isBlankString(wizardFacts.right_to_rent_check_date)) {
+          missing.add('right_to_rent_check_date');
+        } else {
+          invalid.add('right_to_rent_check_date');
+        }
+      }
+      if (toOptionalBoolean(wizardFacts.electrical_safety_certificate) === undefined) {
+        missing.add('electrical_safety_certificate');
+      }
+      if (toOptionalBoolean(wizardFacts.smoke_alarms_fitted) === undefined) {
+        missing.add('smoke_alarms_fitted');
+      }
+      if (toOptionalBoolean(wizardFacts.carbon_monoxide_alarms) === undefined) {
+        missing.add('carbon_monoxide_alarms');
+      }
+      if (toOptionalBoolean(wizardFacts.how_to_rent_provided) === undefined) {
+        missing.add('how_to_rent_provided');
+      }
+
+      if (depositAmount !== null && depositAmount > 0 && isBlankString(wizardFacts.deposit_scheme_name)) {
+        missing.add('deposit_scheme_name');
+      }
+
+      const priorNoticeGrounds = Array.isArray(wizardFacts.prior_notice_grounds)
+        ? (wizardFacts.prior_notice_grounds as string[])
+        : [];
+
+      if (
+        priorNoticeGrounds.includes('ground_4_student_occupation') &&
+        isBlankString(wizardFacts.prior_notice_ground_4_details)
+      ) {
+        missing.add('prior_notice_ground_4_details');
+      }
+
+      if (
+        priorNoticeGrounds.includes('ground_4a_students_for_new_students') &&
+        isBlankString(wizardFacts.prior_notice_ground_4a_details)
+      ) {
+        missing.add('prior_notice_ground_4a_details');
+      }
+
+      if (
+        priorNoticeGrounds.some((ground) =>
+          [
+            'ground_5e_supported_accommodation',
+            'ground_5f_supported_dwelling_house',
+            'ground_5g_homelessness_duty',
+            'ground_5h_stepping_stone',
+            'ground_18_supported_accommodation',
+          ].includes(ground)
+        ) &&
+        isBlankString(wizardFacts.prior_notice_supported_accommodation_details)
+      ) {
+        missing.add('prior_notice_supported_accommodation_details');
+      }
     }
   }
 

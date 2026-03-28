@@ -25,7 +25,7 @@ const GROUPS = [
         href: '/premium-tenancy-agreement',
         label: 'Premium England tenancy agreement',
         description:
-          'Use the premium route for HMOs, sharers, student lets, and more complex households.',
+          'Use the premium route for fuller ordinary-residential drafting. Student, HMO / Shared House, and Lodger now have their own England routes.',
       },
       {
         href: buildWizardLink({
@@ -93,7 +93,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'England Landlord Documents | Live Tenancy and Arrears Routes',
     description:
-      'Use the current tenancy agreement, premium tenancy, and money-claim destinations instead of the retired England document pages.',
+      'Use the current England tenancy agreement chooser, dedicated England tenancy products, and money-claim destinations instead of the retired England document pages.',
     url: canonicalUrl,
     type: 'website',
   },

@@ -1091,7 +1091,7 @@ export const tenancyFunnelPages = {
   hmoTenancyAgreementTemplate: {
     href: '/hmo-tenancy-agreement-template',
     title: 'HMO Tenancy Agreement Template',
-    description: 'Premium-led page for HMOs, sharers, and complex lets.',
+    description: 'Dedicated England HMO / Shared House entry page for sharers and communal-house lets.',
     icon: 'home' as const,
     type: 'page' as const,
   },

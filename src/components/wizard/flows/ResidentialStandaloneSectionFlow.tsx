@@ -17,6 +17,7 @@ import {
   calculateArrearsScheduleTotal,
   getResidentialStandaloneCompletionErrors,
   getResidentialStandaloneFlowConfig,
+  getResidentialStandaloneVisibleSteps,
   type ArrearsScheduleRow,
   type StandaloneFieldConfig,
   type StandaloneRepeaterColumnConfig,
@@ -331,15 +332,38 @@ export function ResidentialStandaloneSectionFlow({ caseId, jurisdiction, product
     };
   }, [facts, loading, uploading]);
 
-  const step = config.steps[activeStep];
+  const visibleSteps = useMemo(
+    () => getResidentialStandaloneVisibleSteps(product, facts),
+    [facts, product]
+  );
+
+  useEffect(() => {
+    if (visibleSteps.length === 0) {
+      if (activeStep !== 0) setActiveStep(0);
+      return;
+    }
+
+    if (activeStep > visibleSteps.length - 1) {
+      setActiveStep(visibleSteps.length - 1);
+    }
+  }, [activeStep, visibleSteps.length]);
+
+  const step =
+    visibleSteps[activeStep] ||
+    visibleSteps[0] || {
+      id: 'empty',
+      title: 'Details',
+      description: '',
+      fields: [],
+    };
   const visibleFields = useMemo(() => getVisibleFields(step, facts), [facts, step]);
   const stepCompletion = useMemo(
-    () => config.steps.map((configStep) => getStepCompletion(configStep, facts)),
-    [config.steps, facts]
+    () => visibleSteps.map((configStep) => getStepCompletion(configStep, facts)),
+    [visibleSteps, facts]
   );
   const tabs = useMemo(
     () =>
-      config.steps.map((configStep, index) => ({
+      visibleSteps.map((configStep, index) => ({
         id: configStep.id,
         label: configStep.title,
         isCurrent: index === activeStep,
@@ -347,7 +371,7 @@ export function ResidentialStandaloneSectionFlow({ caseId, jurisdiction, product
         hasIssue: index === activeStep && errors.length > 0,
         onClick: () => setActiveStep(index),
       })),
-    [activeStep, config.steps, errors.length, stepCompletion]
+    [activeStep, visibleSteps, errors.length, stepCompletion]
   );
 
   const updateFact = (key: string, value: any) => {
@@ -461,7 +485,7 @@ export function ResidentialStandaloneSectionFlow({ caseId, jurisdiction, product
     setErrors([]);
     await save();
 
-    if (activeStep < config.steps.length - 1) {
+    if (activeStep < visibleSteps.length - 1) {
       setActiveStep((current) => current + 1);
       return;
     }
@@ -1228,7 +1252,7 @@ export function ResidentialStandaloneSectionFlow({ caseId, jurisdiction, product
 
   const ctaLabel = uploading
     ? 'Uploading...'
-    : activeStep === config.steps.length - 1
+    : activeStep === visibleSteps.length - 1
       ? 'Review document'
       : 'Save & continue';
 
@@ -1293,7 +1317,7 @@ export function ResidentialStandaloneSectionFlow({ caseId, jurisdiction, product
           sectionDescription={step.description}
           stepIconPath={profile.stepIcons[step.id] || profile.icon}
           stepNumber={activeStep + 1}
-          totalSteps={config.steps.length}
+          totalSteps={visibleSteps.length}
           navigation={
             <div className="hidden lg:block">
               <WizardFooterNavV3
@@ -1310,7 +1334,7 @@ export function ResidentialStandaloneSectionFlow({ caseId, jurisdiction, product
                 }
                 centerSlot={
                   <span>
-                    {stepCompletion[activeStep].completed}/{stepCompletion[activeStep].total || 0} required answered
+                    {stepCompletion[activeStep]?.completed || 0}/{stepCompletion[activeStep]?.total || 0} required answered
                   </span>
                 }
                 rightSlot={

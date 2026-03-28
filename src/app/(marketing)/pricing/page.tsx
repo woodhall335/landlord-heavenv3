@@ -85,12 +85,12 @@ const packageCards: PackageCard[] = [
   {
     name: "Standard Tenancy Agreement",
     price: PRODUCTS.ast_standard.displayPrice,
-    coverage: "All UK regions, including Northern Ireland",
-    bestFor: "You need a straightforward tenancy agreement for a new let.",
+    coverage: "UK-wide ordinary residential route",
+    bestFor: "You need the baseline agreement for a straightforward whole-property let.",
     points: [
       "Built around where the property is",
       "England wording updated for the law from 1 May 2026",
-      "Best for most standard residential lets",
+      "Best for most ordinary residential lets",
     ],
     href: "/wizard?product=ast_standard&src=pricing&topic=tenancy",
     cta: "Create your tenancy agreement →",
@@ -98,12 +98,12 @@ const packageCards: PackageCard[] = [
   {
     name: "Premium Tenancy Agreement",
     price: PRODUCTS.ast_premium.displayPrice,
-    coverage: "All UK regions, including Northern Ireland",
-    bestFor: "You need broader wording for a more complex let.",
+    coverage: "UK-wide ordinary residential premium route",
+    bestFor: "You need fuller drafting and extra management detail for an ordinary residential let.",
     points: [
-      "Useful for HMOs, guarantors, sharers, and more complex setups",
+      "Designed for ordinary residential lets that need more detail than Standard",
       "Adds broader drafting and extra support documents",
-      "Better fit when you want fewer loose ends later",
+      "England specialist Student, HMO / Shared House, and Lodger products are listed below",
     ],
     href: "/wizard?product=ast_premium&src=pricing&topic=tenancy",
     cta: "See the premium agreement →",
@@ -149,6 +149,11 @@ export default function PricingPage() {
     { sku: "money_claim", name: "Money Claim Pack", url: "/products/money-claim" },
     { sku: "ast_standard", name: "Standard Residential Tenancy Agreement", url: "/products/ast" },
     { sku: "ast_premium", name: "Premium Residential Tenancy Agreement", url: "/products/ast" },
+    { sku: "england_standard_tenancy_agreement", name: "England Standard Tenancy Agreement", url: "/tenancy-agreement" },
+    { sku: "england_premium_tenancy_agreement", name: "England Premium Tenancy Agreement", url: "/premium-tenancy-agreement" },
+    { sku: "england_student_tenancy_agreement", name: "England Student Tenancy Agreement", url: "/student-tenancy-agreement" },
+    { sku: "england_hmo_shared_house_tenancy_agreement", name: "England HMO / Shared House Tenancy Agreement", url: "/hmo-shared-house-tenancy-agreement" },
+    { sku: "england_lodger_agreement", name: "England Lodger Agreement", url: "/lodger-agreement" },
   ]);
 
   return (
@@ -164,7 +169,7 @@ export default function PricingPage() {
       >
         <p className="text-sm text-white">All prices are one-time payments</p>
         <p className="mt-2 text-sm text-white">
-          Notices: England, Wales, and Scotland. Complete Pack and Money Claims: England only. Tenancy agreements: all UK, including Northern Ireland.
+          Notices: England, Wales, and Scotland. Complete Pack and Money Claims: England only. Tenancy agreements: UK-wide plus dedicated England Standard, Premium, Student, HMO / Shared House, and Lodger routes below.
         </p>
       </StandardHero>
 
@@ -209,7 +214,7 @@ export default function PricingPage() {
             <div>
               <h2 className="text-2xl font-bold text-charcoal">Residential landlord documents</h2>
               <p className="mt-2 max-w-3xl text-sm text-gray-600">
-                Need one specific residential document instead of a full pack? These add-on pages let you go straight to the document you need.
+                Need one specific residential document instead of a full pack? These pages include the new dedicated England tenancy routes alongside other standalone residential documents.
               </p>
             </div>
             <p className="text-sm text-gray-500">Per-document pricing {RESIDENTIAL_LETTING_PRICE_RANGE}</p>

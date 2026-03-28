@@ -613,11 +613,18 @@ export async function fulfillOrder({
     .eq('id', orderId);
 
   const isTenancyAgreementProduct = fulfillmentProducts.some(
-    (sku) => sku === 'ast_standard' || sku === 'ast_premium'
+    (sku) =>
+      sku === 'ast_standard' ||
+      sku === 'ast_premium' ||
+      sku === 'england_standard_tenancy_agreement' ||
+      sku === 'england_premium_tenancy_agreement' ||
+      sku === 'england_student_tenancy_agreement' ||
+      sku === 'england_hmo_shared_house_tenancy_agreement'
   );
   if (isTenancyAgreementProduct) {
     const tenancyValidation = validateTenancyRequiredFacts(wizardFacts as Record<string, unknown>, {
       jurisdiction: jurisdiction as any,
+      product: productType,
     });
     const missingTenancyFields = [
       ...tenancyValidation.missing_fields,

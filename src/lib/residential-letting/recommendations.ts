@@ -4,6 +4,15 @@ import {
   type ResidentialLettingProductSku,
 } from '@/lib/residential-letting/products';
 
+function isEnglandOrdinaryTenancyProduct(product: string): boolean {
+  return (
+    product === 'ast_standard' ||
+    product === 'ast_premium' ||
+    product === 'england_standard_tenancy_agreement' ||
+    product === 'england_premium_tenancy_agreement'
+  );
+}
+
 export interface ResidentialUpsellRecommendation {
   sku: string;
   label: string;
@@ -46,7 +55,7 @@ export function getResidentialUpsellRecommendations(
         }
         break;
       case 'inventory_schedule_condition':
-        if (!facts.inventory_attached || product === 'ast_standard' || product === 'ast_premium') {
+        if (!facts.inventory_attached || isEnglandOrdinaryTenancyProduct(product)) {
           recommendations.push(
             buildRecommendation(
               sku,
@@ -56,7 +65,11 @@ export function getResidentialUpsellRecommendations(
         }
         break;
       case 'rental_inspection_report':
-        if (facts.move_in_inspection_required || facts.checkout_inspection_required || product === 'ast_standard' || product === 'ast_premium') {
+        if (
+          facts.move_in_inspection_required ||
+          facts.checkout_inspection_required ||
+          isEnglandOrdinaryTenancyProduct(product)
+        ) {
           recommendations.push(
             buildRecommendation(
               sku,

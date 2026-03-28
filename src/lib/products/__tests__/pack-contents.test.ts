@@ -441,6 +441,171 @@ describe('getPackContents', () => {
     });
   });
 
+  describe('modern England tenancy agreement products', () => {
+    const englandProducts: Array<{
+      product: GetPackContentsArgs['product'];
+      key: string;
+      title: string;
+      supportKey: string;
+    }> = [
+      {
+        product: 'england_standard_tenancy_agreement',
+        key: 'england_standard_tenancy_agreement',
+        title: 'Standard Tenancy Agreement',
+        supportKey: 'pre_tenancy_checklist_england',
+      },
+      {
+        product: 'england_premium_tenancy_agreement',
+        key: 'england_premium_tenancy_agreement',
+        title: 'Premium Tenancy Agreement',
+        supportKey: 'pre_tenancy_checklist_england',
+      },
+      {
+        product: 'england_student_tenancy_agreement',
+        key: 'england_student_tenancy_agreement',
+        title: 'Student Tenancy Agreement',
+        supportKey: 'pre_tenancy_checklist_england',
+      },
+      {
+        product: 'england_hmo_shared_house_tenancy_agreement',
+        key: 'england_hmo_shared_house_tenancy_agreement',
+        title: 'HMO / Shared House Tenancy Agreement',
+        supportKey: 'pre_tenancy_checklist_england',
+      },
+      {
+        product: 'england_lodger_agreement',
+        key: 'england_lodger_agreement',
+        title: 'Room Let / Lodger Agreement',
+        supportKey: 'england_lodger_checklist',
+      },
+    ];
+
+    it.each(englandProducts)('$product returns its own primary agreement document plus its support document for England', ({ product, key, title, supportKey }) => {
+      const items = getPackContents({
+        product,
+        jurisdiction: 'england',
+      });
+
+      expect(items[0]).toMatchObject({
+        key,
+        title,
+        category: 'Tenancy agreement',
+        required: true,
+      });
+      expect(items.some((item) => item.key === supportKey)).toBe(true);
+    });
+
+    it('adds the richer handover and operational support docs to the modern England assured products', () => {
+      const premiumItems = getPackContents({
+        product: 'england_premium_tenancy_agreement',
+        jurisdiction: 'england',
+      });
+      const studentItems = getPackContents({
+        product: 'england_student_tenancy_agreement',
+        jurisdiction: 'england',
+      });
+      const hmoItems = getPackContents({
+        product: 'england_hmo_shared_house_tenancy_agreement',
+        jurisdiction: 'england',
+      });
+      const lodgerItems = getPackContents({
+        product: 'england_lodger_agreement',
+        jurisdiction: 'england',
+      });
+
+      expect(premiumItems.map((item) => item.key)).toEqual(
+        expect.arrayContaining([
+          'england_keys_handover_record',
+          'england_utilities_handover_sheet',
+          'england_pet_request_addendum',
+          'england_tenancy_variation_record',
+          'england_premium_management_schedule',
+        ])
+      );
+      expect(studentItems.map((item) => item.key)).toEqual(
+        expect.arrayContaining([
+          'england_keys_handover_record',
+          'england_utilities_handover_sheet',
+          'england_pet_request_addendum',
+          'england_tenancy_variation_record',
+          'england_student_move_out_schedule',
+        ])
+      );
+      expect(hmoItems.map((item) => item.key)).toEqual(
+        expect.arrayContaining([
+          'england_keys_handover_record',
+          'england_utilities_handover_sheet',
+          'england_pet_request_addendum',
+          'england_tenancy_variation_record',
+          'england_hmo_house_rules_appendix',
+        ])
+      );
+      expect(lodgerItems.map((item) => item.key)).toEqual(
+        expect.arrayContaining([
+          'england_lodger_checklist',
+          'england_keys_handover_record',
+          'england_lodger_house_rules_appendix',
+        ])
+      );
+      expect(lodgerItems.map((item) => item.key)).not.toContain('pre_tenancy_checklist_england');
+    });
+
+    it('uses the written statement variant for an existing verbal England assured tenancy', () => {
+      const items = getPackContents({
+        product: 'england_standard_tenancy_agreement',
+        jurisdiction: 'england',
+        englandTenancyPurpose: 'existing_verbal_tenancy',
+      });
+
+      expect(items.map((item) => item.key)).toEqual(
+        expect.arrayContaining(['england_written_statement_of_terms', 'pre_tenancy_checklist_england'])
+      );
+      expect(items.find((item) => item.key === 'england_standard_tenancy_agreement')).toBeUndefined();
+    });
+
+    it('uses the transition guidance pack for an existing written England assured tenancy', () => {
+      const items = getPackContents({
+        product: 'england_student_tenancy_agreement',
+        jurisdiction: 'england',
+        englandTenancyPurpose: 'existing_written_tenancy',
+      });
+
+      expect(items.map((item) => item.key)).toEqual([
+        'england_tenancy_transition_guidance',
+        'renters_rights_information_sheet_2026',
+      ]);
+    });
+
+    it('adds deposit support and guarantor deed where the answers require them', () => {
+      const items = getPackContents({
+        product: 'england_student_tenancy_agreement',
+        jurisdiction: 'england',
+        depositTaken: true,
+        includeGuarantorDeed: true,
+      });
+
+      expect(items.map((item) => item.key)).toEqual(
+        expect.arrayContaining([
+          'england_student_tenancy_agreement',
+          'pre_tenancy_checklist_england',
+          'england_keys_handover_record',
+          'england_student_move_out_schedule',
+          'deposit_protection_certificate',
+          'tenancy_deposit_information',
+          'guarantor_agreement',
+        ])
+      );
+    });
+
+    it('does not support modern England tenancy products outside England', () => {
+      for (const product of englandProducts.map((entry) => entry.product)) {
+        expect(isProductSupported(product, 'wales')).toBe(false);
+        expect(isProductSupported(product, 'scotland')).toBe(false);
+        expect(isProductSupported(product, 'northern-ireland')).toBe(false);
+      }
+    });
+  });
+
   // ===========================================================================
   // INVENTORY CONTEXT TESTS - Ensure correct messaging based on context
   // ===========================================================================
@@ -777,6 +942,16 @@ describe('isProductSupported', () => {
     expect(isProductSupported('ast_standard', 'scotland')).toBe(true);
     expect(isProductSupported('ast_standard', 'northern-ireland')).toBe(true);
     expect(isProductSupported('ast_premium', 'northern-ireland')).toBe(true);
+  });
+
+  it('supports modern England tenancy products in England only', () => {
+    expect(isProductSupported('england_standard_tenancy_agreement', 'england')).toBe(true);
+    expect(isProductSupported('england_premium_tenancy_agreement', 'england')).toBe(true);
+    expect(isProductSupported('england_student_tenancy_agreement', 'england')).toBe(true);
+    expect(isProductSupported('england_hmo_shared_house_tenancy_agreement', 'england')).toBe(true);
+    expect(isProductSupported('england_lodger_agreement', 'england')).toBe(true);
+    expect(isProductSupported('england_standard_tenancy_agreement', 'wales')).toBe(false);
+    expect(isProductSupported('england_student_tenancy_agreement', 'scotland')).toBe(false);
   });
 
   it('supports eviction products in England, Wales, Scotland', () => {

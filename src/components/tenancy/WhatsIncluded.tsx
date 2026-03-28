@@ -92,10 +92,12 @@ function InlineVariant({
 }) {
   const agreementInfo = JURISDICTION_AGREEMENT_INFO[jurisdiction];
   const inventoryInfo = getInventoryBehaviour(tier);
+  const premiumPrefix =
+    tier === 'premium' && jurisdiction !== 'england' ? 'Premium ' : '';
 
   return (
     <p className="text-sm text-gray-600">
-      Includes {tier === 'premium' ? 'HMO ' : ''}
+      Includes {premiumPrefix}
       {agreementInfo.agreementName}, {inventoryInfo.label.toLowerCase()}, and
       jurisdiction-specific compliance checklist.
     </p>
@@ -196,8 +198,9 @@ function FullVariant({
             Need wizard-completed inventory?
           </p>
           <p className="text-xs text-purple-700">
-            Upgrade to Premium to complete your inventory via the wizard, plus get HMO-specific
-            clauses, guarantor provisions, and more.
+            {jurisdiction === 'england'
+              ? 'Upgrade to Premium to complete your inventory via the wizard and add fuller ordinary-residential drafting, guarantor provisions, and extra management detail.'
+              : 'Upgrade to Premium to complete your inventory via the wizard, plus get HMO-specific clauses, guarantor provisions, and more.'}
           </p>
         </div>
       )}
@@ -353,6 +356,18 @@ export function TierComparisonPanel({
 }) {
   const standardSummary = getIncludedSummary(jurisdiction, 'standard');
   const premiumSummary = getIncludedSummary(jurisdiction, 'premium');
+  const premiumAdds =
+    jurisdiction === 'england'
+      ? [
+          'Wizard-completed inventory',
+          'Broader ordinary-residential drafting',
+          'Guarantor and management provisions',
+        ]
+      : [
+          'Wizard-completed inventory',
+          'HMO-specific clauses',
+          'Guarantor provisions',
+        ];
 
   if (currentTier === 'premium') {
     return null; // No upgrade needed
@@ -383,18 +398,12 @@ export function TierComparisonPanel({
             Premium Adds
           </p>
           <ul className="space-y-1">
-            <li className="text-xs text-purple-700 flex items-start gap-1">
-              <CheckCircle className="w-3 h-3 flex-shrink-0 mt-0.5" />
-              Wizard-completed inventory
-            </li>
-            <li className="text-xs text-purple-700 flex items-start gap-1">
-              <CheckCircle className="w-3 h-3 flex-shrink-0 mt-0.5" />
-              HMO-specific clauses
-            </li>
-            <li className="text-xs text-purple-700 flex items-start gap-1">
-              <CheckCircle className="w-3 h-3 flex-shrink-0 mt-0.5" />
-              Guarantor provisions
-            </li>
+            {premiumAdds.map((item) => (
+              <li key={item} className="text-xs text-purple-700 flex items-start gap-1">
+                <CheckCircle className="w-3 h-3 flex-shrink-0 mt-0.5" />
+                {item}
+              </li>
+            ))}
           </ul>
         </div>
       </div>

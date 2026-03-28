@@ -180,32 +180,69 @@ export function detectPremiumRecommendation(
   // Calculate strength and generate message
   // =========================================================================
 
-  const hasStrongIndicator = reasons.some(r =>
+  // England now has dedicated specialist products for student, HMO/shared-house,
+  // and resident-landlord routes. Do not keep recommending ordinary Premium
+  // purely because one of those specialist signals is present.
+  const englandSpecialistSignals =
+    jurisdiction === 'england' &&
+    reasons.some((reason) =>
+      [
+        'hmo_property',
+        'hmo_licensed',
+        'multiple_tenants',
+        'unrelated_tenants',
+        'room_by_room_let',
+        'shared_facilities',
+        'student_let',
+      ].includes(reason)
+    );
+
+  let effectiveReasons = reasons;
+
+  if (englandSpecialistSignals) {
+    const premiumReasons = reasons.filter((reason) =>
+      ['guarantor_needed', 'rent_review_needed', 'high_value_property'].includes(reason)
+    );
+
+    if (premiumReasons.length === 0) {
+      return {
+        isRecommended: false,
+        strength: 'none',
+        reasons,
+        message: '',
+        rationale: '',
+      };
+    }
+
+    effectiveReasons = premiumReasons;
+  }
+
+  const hasStrongIndicator = effectiveReasons.some(r =>
     ['hmo_property', 'hmo_licensed', 'multiple_tenants', 'unrelated_tenants', 'room_by_room_let'].includes(r)
   );
 
-  const hasModerateIndicator = reasons.some(r =>
+  const hasModerateIndicator = effectiveReasons.some(r =>
     ['separate_rent_payments', 'shared_facilities', 'student_let', 'guarantor_needed', 'rent_review_needed'].includes(r)
   );
 
   let strength: 'strong' | 'moderate' | 'none' = 'none';
-  if (hasStrongIndicator || reasons.length >= 3) {
+  if (hasStrongIndicator || effectiveReasons.length >= 3) {
     strength = 'strong';
-  } else if (hasModerateIndicator || reasons.length >= 2) {
+  } else if (hasModerateIndicator || effectiveReasons.length >= 2) {
     strength = 'moderate';
   }
 
   const isRecommended = strength !== 'none';
 
   // Generate jurisdiction-specific message
-  const message = generateMessage(reasons, jurisdiction, strength);
-  const rationale = generateRationale(reasons, jurisdiction, legalContext);
+  const message = generateMessage(effectiveReasons, jurisdiction, strength);
+  const rationale = generateRationale(effectiveReasons, jurisdiction, legalContext);
   const legalReference = hasStrongIndicator ? legalContext.hmoAct : undefined;
 
   return {
     isRecommended,
     strength,
-    reasons,
+    reasons: effectiveReasons,
     message,
     rationale,
     legalReference,
@@ -281,7 +318,7 @@ function generateMessage(
 
   // Student let
   if (reasons.includes('student_let')) {
-    return 'Based on your answers, the Premium agreement is recommended for student lettings. It includes guarantor clauses, anti-subletting provisions, and professional cleaning requirements commonly needed for student lets.';
+    return 'Based on your answers, the Premium agreement is recommended for the additional guarantor, anti-subletting, and management wording it includes.';
   }
 
   // Guarantor + rent review
@@ -316,7 +353,7 @@ function generateRationale(
   }
 
   if (reasons.includes('student_let')) {
-    parts.push('Student lettings typically require guarantor provisions, stricter subletting controls, and end-of-tenancy cleaning requirements to protect the landlord.');
+    parts.push('Some tenancies benefit from guarantor provisions, stricter subletting controls, and clearer end-of-tenancy condition wording.');
   }
 
   if (reasons.includes('guarantor_needed')) {
@@ -342,6 +379,31 @@ export function getPremiumFeatures(jurisdiction: CanonicalJurisdiction): {
   description: string;
   legalBasis?: string;
 }[] {
+  if (jurisdiction === 'england') {
+    return [
+      {
+        feature: 'Wizard-Completed Inventory',
+        description: 'Lets you complete more of the inventory workflow during setup rather than relying on a blank template.',
+      },
+      {
+        feature: 'Guarantor Agreement Wording',
+        description: 'Built-in guarantor provisions with clear liability terms.',
+      },
+      {
+        feature: 'Rent Review Provisions',
+        description: 'Broader rent review and payment control wording for ordinary residential lets.',
+      },
+      {
+        feature: 'Anti-Subletting Controls',
+        description: 'Explicit prohibition on unauthorised subletting and short lets.',
+      },
+      {
+        feature: 'Enhanced Management Clauses',
+        description: 'Additional handover, maintenance, and end-of-tenancy condition wording.',
+      },
+    ];
+  }
+
   const features = [
     {
       feature: 'Joint and Several Liability',
@@ -367,7 +429,7 @@ export function getPremiumFeatures(jurisdiction: CanonicalJurisdiction): {
     },
     {
       feature: 'Professional Cleaning Requirement',
-      description: 'Enforceable end-of-tenancy professional cleaning clause.',
+      description: 'Clear end-of-tenancy condition standard wording.',
     },
   ];
 

@@ -87,7 +87,7 @@ const JURISDICTION_TERMS: Record<CanonicalJurisdiction, {
   england: {
     tenant: 'Tenant',
     tenancy: 'tenancy',
-    agreement: 'Assured Shorthold Tenancy',
+    agreement: 'Assured Periodic Tenancy Agreement',
     hmoAct: 'Housing Act 2004',
   },
   wales: {
@@ -115,6 +115,55 @@ const JURISDICTION_TERMS: Record<CanonicalJurisdiction, {
  */
 const getClauses = (jurisdiction: CanonicalJurisdiction): ClauseDefinition[] => {
   const terms = JURISDICTION_TERMS[jurisdiction];
+
+  if (jurisdiction === 'england') {
+    return [
+      {
+        canonicalId: 'GUARANTOR' as ClauseId,
+        id: 'guarantor',
+        title: 'Guarantor Support Wording',
+        standardPreview: '[Added only when a fuller Premium-backed ordinary-residential route is chosen]',
+        premiumClause: `Where a guarantor is being used, the Premium agreement adds clearer wording on the guarantor's scope of liability, the sums covered, continuing responsibility, and the relationship between the guarantor support wording and the tenant's obligations.`,
+        whyItMatters: 'This gives ordinary-residential England lets more structured guarantor drafting without forcing the case into a separate student or shared-house product.',
+        legalBasis: 'Contract law - guarantee and indemnity drafting',
+        isHMO: false,
+        category: 'financial' as const,
+      },
+      {
+        canonicalId: 'RENT_REVIEW' as ClauseId,
+        id: 'rent_review',
+        title: 'Rent Review and Payment Control Detail',
+        standardPreview: '[Baseline England rent wording only]',
+        premiumClause: `Premium adds fuller wording around rent review mechanics, payment administration, late-payment handling, and the practical notices that support ordinary-residential tenancy management.`,
+        whyItMatters: 'It gives landlords more operational drafting depth than the baseline Standard route where the let is still an ordinary residential tenancy.',
+        legalBasis: 'England assured-tenancy rent and payment drafting',
+        isHMO: false,
+        category: 'financial' as const,
+      },
+      {
+        canonicalId: 'ANTI_SUBLET' as ClauseId,
+        id: 'anti_sublet',
+        title: 'Enhanced Anti-Subletting and Short-Let Controls',
+        standardPreview: `The ${terms.tenant} shall not sublet the Property without consent...`,
+        premiumClause: `Premium expands the baseline subletting restriction with clearer wording on short-lets, unauthorised occupation, online listing platforms, assignment control, and the practical consequences of breach in an ordinary-residential let.`,
+        whyItMatters: 'This helps landlords tackle Airbnb-style misuse and informal sharing without presenting Premium as the HMO/shared-house product.',
+        legalBasis: 'Contractual occupation control wording',
+        isHMO: false,
+        category: 'control' as const,
+      },
+      {
+        canonicalId: 'TENANT_OBLIGATIONS' as ClauseId,
+        id: 'management_detail',
+        title: 'Management, Access, and Hand-Back Detail',
+        standardPreview: `The ${terms.tenant} shall keep the Property reasonably clean and allow access on notice...`,
+        premiumClause: `Premium adds fuller detail for repairs reporting, contractor visits, inspection access, key handling, hand-back expectations, and day-to-day property management standards so the ordinary-residential agreement feels more complete in practice.`,
+        whyItMatters: 'This is one of the clearest differences between Standard and Premium in the modern England product split: more operational detail without turning the agreement into a student, HMO, or lodger document.',
+        legalBasis: 'Operational drafting for ordinary-residential tenancy management',
+        isHMO: false,
+        category: 'control' as const,
+      },
+    ];
+  }
 
   return [
     // JOINT AND SEVERAL LIABILITY
@@ -443,6 +492,10 @@ export const ClauseDiffPreview: React.FC<ClauseDiffPreviewProps> = ({
   };
 
   const displayClauses = variant === 'compact' ? clauses.slice(0, maxClauses) : clauses;
+  const compactClauses =
+    jurisdiction === 'england'
+      ? displayClauses.slice(0, 3)
+      : displayClauses.filter(c => c.isHMO || c.id === 'guarantor').slice(0, 3);
 
   // Compact variant (for wizard sidebar)
   if (variant === 'compact') {
@@ -454,7 +507,7 @@ export const ClauseDiffPreview: React.FC<ClauseDiffPreviewProps> = ({
         </div>
 
         <div className="space-y-3">
-          {displayClauses.filter(c => c.isHMO || c.id === 'guarantor').slice(0, 3).map((clause) => (
+          {compactClauses.map((clause) => (
             <div
               key={clause.id}
               className="p-3 bg-purple-50 border border-purple-200 rounded-lg"
@@ -538,7 +591,9 @@ export const ClauseDiffPreview: React.FC<ClauseDiffPreviewProps> = ({
       {showUpgradeCTA && (
         <div className="text-center pt-6 border-t border-gray-200">
           <p className="text-gray-600 mb-4">
-            Premium includes <strong>{clauses.filter(c => c.isHMO).length} HMO-specific clauses</strong> commonly required under the {terms.hmoAct}.
+            {jurisdiction === 'england'
+              ? 'Premium includes fuller ordinary-residential clauses for guarantor support, rent review, anti-subletting control, and day-to-day management detail.'
+              : <>Premium includes <strong>{clauses.filter(c => c.isHMO).length} HMO-specific clauses</strong> commonly required under the {terms.hmoAct}.</>}
           </p>
           <button
             onClick={handleUpgradeClick}

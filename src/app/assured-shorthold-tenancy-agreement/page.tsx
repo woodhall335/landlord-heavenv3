@@ -147,7 +147,7 @@ export default function AssuredShortholdTenancyAgreementPage() {
               </div>
 
               <p className="mt-4 text-sm text-gray-600">
-                Legacy AST query capture â€¢ Updated England wording â€¢ Modern landlord flow
+                Legacy AST query capture | Updated England wording | Modern landlord flow
               </p>
             </div>
           </div>
@@ -281,8 +281,8 @@ export default function AssuredShortholdTenancyAgreementPage() {
 
                 <p>
                   Before publishing, your legal or compliance owner should approve the exact wording of
-                  any compliance claim. If they prefer a softer formulation, replace â€œcompliantâ€ with a
-                  phrase like â€œbill-readyâ€ or â€œupdated for Rentersâ€™ Rights changes.â€
+                  any compliance claim. If they prefer a softer formulation, replace "compliant" with a
+                  phrase like "bill-ready" or "updated for Renters' Rights changes."
                 </p>
               </div>
             </div>
@@ -501,7 +501,7 @@ export default function AssuredShortholdTenancyAgreementPage() {
                     <tr>
                       <td className="px-4 py-3 text-gray-700">Compliance narrative</td>
                       <td className="px-4 py-3 text-gray-700">Older AST-only framing</td>
-                      <td className="px-4 py-3 text-gray-700">Rentersâ€™ Rights positioning</td>
+                      <td className="px-4 py-3 text-gray-700">Renters' Rights positioning</td>
                     </tr>
                     <tr>
                       <td className="px-4 py-3 text-gray-700">User expectation</td>
@@ -626,7 +626,7 @@ export default function AssuredShortholdTenancyAgreementPage() {
               </div>
 
               <p className="mt-6 text-sm text-red-100">
-                Updated 2026 wording â€¢ AST search coverage â€¢ England landlord flow
+                Updated 2026 wording | AST search coverage | England landlord flow
               </p>
             </div>
           </div>

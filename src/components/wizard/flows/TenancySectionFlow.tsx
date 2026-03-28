@@ -178,7 +178,7 @@ const getJurisdictionTerminology = (jurisdiction: Jurisdiction) => {
         standardTier: 'Standard Assured Periodic Tenancy Agreement',
         premiumTier: 'Premium Assured Periodic Tenancy Agreement',
         standardDescription: 'England assured periodic tenancy agreement updated for the current framework on standard lets.',
-        premiumDescription: 'Premium England assured periodic tenancy agreement with HMO, student, guarantor, and enhanced terms support, updated for the current framework.',
+        premiumDescription: 'Premium England assured periodic tenancy agreement with fuller ordinary-residential drafting, guarantor support, and enhanced operational terms for the current framework.',
       };
   }
 };
@@ -1068,7 +1068,9 @@ const ProductSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction 
           Which {jurisdiction === 'wales' ? 'occupation contract' : 'tenancy agreement'} do you need? <span className="text-red-500">*</span>
         </label>
         <p className="text-sm text-gray-500 mb-4">
-          Standard covers simple lets. Premium adds guarantor, HMO, rent review and tighter controls.
+          {jurisdiction === 'england'
+            ? 'Standard covers straightforward ordinary residential lets. Premium adds fuller drafting, guarantor support, rent review, and tighter controls. Student, HMO / Shared House, and Lodger now have dedicated England products.'
+            : 'Standard covers simple lets. Premium adds guarantor, HMO, rent review and tighter controls.'}
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <button
@@ -2304,7 +2306,9 @@ const PremiumSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction 
       <div className="border-t border-gray-200 pt-6">
         <h3 className="text-lg font-medium text-gray-900 mb-4">HMO / Shared Facilities</h3>
         <p className="text-sm text-gray-500 mb-4">
-          {terms.premiumTier} adds HMO-ready clauses.
+          {jurisdiction === 'england'
+            ? 'For new England HMO or shared-house cases, use the dedicated HMO / Shared House tenancy agreement. Legacy Premium cases keep their historical HMO-ready wording here.'
+            : `${terms.premiumTier} adds HMO-ready clauses.`}
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <YesNoField

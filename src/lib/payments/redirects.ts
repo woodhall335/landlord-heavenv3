@@ -23,6 +23,11 @@ export type CheckoutProduct =
   | 'sc_money_claim'
   | 'ast_standard'
   | 'ast_premium'
+  | 'england_standard_tenancy_agreement'
+  | 'england_premium_tenancy_agreement'
+  | 'england_student_tenancy_agreement'
+  | 'england_hmo_shared_house_tenancy_agreement'
+  | 'england_lodger_agreement'
   | 'guarantor_agreement'
   | 'residential_sublet_agreement'
   | 'lease_amendment'
@@ -149,13 +154,22 @@ export function getCheckoutRedirectUrls(input: CheckoutRedirectInput): CheckoutR
  * Single-transaction products: one-time purchases where the user receives
  * documents immediately without ongoing case management.
  *
- * Includes: notice_only, ast_standard, ast_premium
+ * Includes: notice_only, tenancy agreements, and standalone England tenancy products
  *
  * Note: Despite the name, these products now also redirect to the dashboard
  * on success (not a dedicated /success page) for better UX and reliability.
  */
 export function isSingleTransactionProduct(product: CheckoutProduct): boolean {
-  const singleTransactionProducts: CheckoutProduct[] = ['notice_only', 'ast_standard', 'ast_premium'];
+  const singleTransactionProducts: CheckoutProduct[] = [
+    'notice_only',
+    'ast_standard',
+    'ast_premium',
+    'england_standard_tenancy_agreement',
+    'england_premium_tenancy_agreement',
+    'england_student_tenancy_agreement',
+    'england_hmo_shared_house_tenancy_agreement',
+    'england_lodger_agreement',
+  ];
   return singleTransactionProducts.includes(product);
 }
 
